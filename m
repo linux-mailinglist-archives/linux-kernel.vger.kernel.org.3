@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B02A4B4DDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EFA94B4DF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350193AbiBNLPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:15:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44276 "EHLO
+        id S1350304AbiBNLPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:15:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350373AbiBNLPJ (ORCPT
+        with ESMTP id S1350378AbiBNLPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Feb 2022 06:15:09 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46169EFF96
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121D8EFF93
         for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:44:23 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id f18-20020a926a12000000b002be48b02bc6so11020283ilc.17
+Received: by mail-io1-f70.google.com with SMTP id ay26-20020a5d9d9a000000b006396dd81e4bso8722410iob.10
         for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:44:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=xC1uTcb/V1rcUObJ9bOyaCJyjuXg0QqdqV18HqOOmGQ=;
-        b=A2zm3TEGU9Htp2CUirHs57V9zmnksCRgXR9XQfr3ahPN1UXCh0S4mxnmycINYp1dnV
-         vzKFNikKnQF9SRO5fOO6CsukNHUOfrEGX/rA8e8uyawwU7daERWbzkxCl5hIIPbaGaZD
-         CJJKfzpdUeQvnlNBTpnTF4DIvUp9fJfg3oepc/DePwlSouLoa7gssHip5lbCbSe/hk6Z
-         vctgTSSsJsK3DtTJdZRQiBsm3wFBGfgoP2hmkVJhtYPszzHgnBElviJdE2t0z53+QT70
-         /ddKiJIRkJtrD42GzLFyBygkKFcAmduw/dgxCSD8Ot5IWrZidQcrzLe8Hqz7BN3m4676
-         tOnA==
-X-Gm-Message-State: AOAM531rg0ZPyv7folJkbeNvG5Cmt8P8URITs9ovG3eiiwc1WoRNDvLF
-        QSG17gTRy+6ALfYe1rFeUSSRTzhAKBI3zcvgr8tnP0di9MBa
-X-Google-Smtp-Source: ABdhPJw81TMExX0viITBtqp8o30BhyzKVumMZymcE0yUWohMbqRd+dN1v2QslMGCc4id8ptgtmUD8uA0OsMB3Pb4KIxTIodVpwxF
+        bh=U/K75PKZ7oRwBSg0DraF4Jz5emwI9maCTepHYeXlOoM=;
+        b=5nPeS6AfG5m9MH4xF27jjV0tqmTgkR5lGKxhCtKow2ox6Nbea53BlP0sVqm/oD6+4M
+         RFNu2d8Z0VsZ6HFN5H8sLZ4BnfkV5Zbht1uBDDD0RuI+eQZVxDNn+SduZgcdwu+lhmI0
+         hbWq+f9YqLhFdlgihBdYTj4Ywb2yrUoMYVh8vashujqx7sl0u8lPRruDK+E1cjmJgvaQ
+         y4dQyAsMpPk2HdCe4LFgnRwzNFkGdl8mxdw0QNkb8FdYmBC/R8U6i0hqhhNVWPxlUzz7
+         /vrn6x3IuQ6DVJBE0ESk9iI4pmBf744rB14VLbnRCjy43hzyVCvBVVwtkLuhHz8VTgGX
+         EyxQ==
+X-Gm-Message-State: AOAM530JAoFgTYDW5k4retscajzcHlbc0dYudzwOEORtsPQtUvkvs1zC
+        cN12RF3Oa7s0qTpCct2gxjapp42Q8gR0YuUgls1n57oq41uD
+X-Google-Smtp-Source: ABdhPJxyUdi3Tb42Ir4UEK58TVXzU+k9ISfC3Jdy2Vc8F5tPwmm5O23GuYMKZpQy2tRDFj3A7smJGdWu2vJWursXva7qLI+JGyQN
 MIME-Version: 1.0
-X-Received: by 2002:a92:b50e:: with SMTP id f14mr7727969ile.208.1644835462594;
+X-Received: by 2002:a02:a112:: with SMTP id f18mr7608688jag.51.1644835462375;
  Mon, 14 Feb 2022 02:44:22 -0800 (PST)
 Date:   Mon, 14 Feb 2022 02:44:22 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007646bd05d7f81943@google.com>
-Subject: [syzbot] kernel BUG in __text_poke
-From:   syzbot <syzbot+87f65c75f4a72db05445@syzkaller.appspotmail.com>
-To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        jgross@suse.com, jpoimboe@redhat.com, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, netdev@vger.kernel.org, peterz@infradead.org,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
+Message-ID: <00000000000072ef2c05d7f81950@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in __oom_reap_task_mm
+From:   syzbot <syzbot+2ccf63a4bd07cf39cab0@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, brauner@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,70 +57,199 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    f95f768f0af4 bpf, x86_64: Fail gracefully on bpf_jit_binar..
-git tree:       bpf-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=13fb08c2700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c40b67275bfe2a58
-dashboard link: https://syzkaller.appspot.com/bug?extid=87f65c75f4a72db05445
+HEAD commit:    e6251ab4551f Merge tag 'nfs-for-5.17-2' of git://git.linux..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1229b2f8700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=266de9da75c71a45
+dashboard link: https://syzkaller.appspot.com/bug?extid=2ccf63a4bd07cf39cab0
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
 
 Unfortunately, I don't have any reproducer for this issue yet.
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+87f65c75f4a72db05445@syzkaller.appspotmail.com
+Reported-by: syzbot+2ccf63a4bd07cf39cab0@syzkaller.appspotmail.com
 
-------------[ cut here ]------------
-kernel BUG at arch/x86/kernel/alternative.c:989!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 12993 Comm: syz-executor.1 Not tainted 5.16.0-syzkaller-11632-gf95f768f0af4 #0
+==================================================================
+BUG: KASAN: use-after-free in can_madv_lru_vma mm/internal.h:76 [inline]
+BUG: KASAN: use-after-free in __oom_reap_task_mm+0x3a4/0x400 mm/oom_kill.c:529
+Read of size 8 at addr ffff88807b868ba8 by task syz-executor.2/12778
+
+CPU: 0 PID: 12778 Comm: syz-executor.2 Not tainted 5.17.0-rc3-syzkaller-00029-ge6251ab4551f #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:__text_poke+0x343/0x8c0 arch/x86/kernel/alternative.c:989
-Code: c3 0f 86 2c fe ff ff 49 8d bc 24 00 10 00 00 e8 43 be 88 00 48 89 44 24 28 48 85 db 74 0c 48 83 7c 24 28 00 0f 85 1b fe ff ff <0f> 0b 48 b8 00 f0 ff ff ff ff 0f 00 49 21 c0 48 85 db 0f 85 c6 02
-RSP: 0018:ffffc90005e6f7a8 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff88807d1c8000 RSI: ffffffff81b3c443 RDI: 0000000000000003
-RBP: 0000000000000080 R08: 0000000000000000 R09: ffffc90005e6f7bf
-R10: ffffffff81b3c3e1 R11: 0000000000000001 R12: ffffffffa0010e00
-R13: 0000000000000080 R14: 0000000000000e80 R15: 0000000000002000
-FS:  00007fd60b1d8700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f9329383090 CR3: 000000007c3bb000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000600
 Call Trace:
  <TASK>
- text_poke_copy+0x66/0xa0 arch/x86/kernel/alternative.c:1132
- bpf_arch_text_copy+0x21/0x40 arch/x86/net/bpf_jit_comp.c:2426
- bpf_jit_binary_pack_finalize+0x43/0x170 kernel/bpf/core.c:1094
- bpf_int_jit_compile+0x9d5/0x12f0 arch/x86/net/bpf_jit_comp.c:2383
- bpf_prog_select_runtime+0x4d4/0x8a0 kernel/bpf/core.c:2159
- bpf_prog_load+0xfe6/0x2250 kernel/bpf/syscall.c:2349
- __sys_bpf+0x68a/0x59a0 kernel/bpf/syscall.c:4640
- __do_sys_bpf kernel/bpf/syscall.c:4744 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:4742 [inline]
- __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4742
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0x8d/0x336 mm/kasan/report.c:255
+ __kasan_report mm/kasan/report.c:442 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ can_madv_lru_vma mm/internal.h:76 [inline]
+ __oom_reap_task_mm+0x3a4/0x400 mm/oom_kill.c:529
+ __do_sys_process_mrelease+0x3f2/0x450 mm/oom_kill.c:1196
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
+ entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
+RIP: 0023:0xf6e70549
+Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
+RSP: 002b:00000000f586a5cc EFLAGS: 00000296 ORIG_RAX: 00000000000001c0
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+Allocated by task 12778:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ __kasan_slab_alloc+0x90/0xc0 mm/kasan/common.c:469
+ kasan_slab_alloc include/linux/kasan.h:260 [inline]
+ slab_post_alloc_hook mm/slab.h:732 [inline]
+ slab_alloc_node mm/slub.c:3230 [inline]
+ slab_alloc mm/slub.c:3238 [inline]
+ kmem_cache_alloc+0x202/0x3a0 mm/slub.c:3243
+ vm_area_dup+0x88/0x2b0 kernel/fork.c:357
+ dup_mmap kernel/fork.c:554 [inline]
+ dup_mm+0x5fa/0x13e0 kernel/fork.c:1451
+ copy_mm kernel/fork.c:1503 [inline]
+ copy_process+0x71f8/0x7300 kernel/fork.c:2164
+ kernel_clone+0xe7/0xab0 kernel/fork.c:2555
+ __do_compat_sys_ia32_clone+0xac/0xe0 arch/x86/kernel/sys_ia32.c:254
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
+ entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
+
+Freed by task 12780:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free+0x130/0x160 mm/kasan/common.c:328
+ kasan_slab_free include/linux/kasan.h:236 [inline]
+ slab_free_hook mm/slub.c:1728 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1754
+ slab_free mm/slub.c:3509 [inline]
+ kmem_cache_free+0xd8/0x340 mm/slub.c:3526
+ remove_vma+0x135/0x170 mm/mmap.c:189
+ exit_mmap+0x29a/0x670 mm/mmap.c:3186
+ __mmput+0x122/0x4b0 kernel/fork.c:1114
+ mmput+0x56/0x60 kernel/fork.c:1135
+ exit_mm kernel/exit.c:507 [inline]
+ do_exit+0xa3c/0x2a30 kernel/exit.c:793
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:935
+ get_signal+0x4b0/0x28c0 kernel/signal.c:2862
+ arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
+ handle_signal_work kernel/entry/common.c:148 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+ exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ __do_fast_syscall_32+0x72/0xf0 arch/x86/entry/common.c:181
+ do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
+ entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
+
+The buggy address belongs to the object at ffff88807b868b58
+ which belongs to the cache vm_area_struct of size 200
+The buggy address is located 80 bytes inside of
+ 200-byte region [ffff88807b868b58, ffff88807b868c20)
+The buggy address belongs to the page:
+page:ffffea0001ee1a00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7b868
+memcg:ffff88804fe94a01
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 dead000000000100 dead000000000122 ffff888140006a00
+raw: 0000000000000000 00000000000f000f 00000001ffffffff ffff88804fe94a01
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112cc0(GFP_USER|__GFP_NOWARN|__GFP_NORETRY), pid 3175, ts 344170603641, free_ts 344164018467
+ prep_new_page mm/page_alloc.c:2434 [inline]
+ get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4165
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5389
+ alloc_pages+0x1aa/0x310 mm/mempolicy.c:2271
+ alloc_slab_page mm/slub.c:1799 [inline]
+ allocate_slab mm/slub.c:1944 [inline]
+ new_slab+0x28a/0x3b0 mm/slub.c:2004
+ ___slab_alloc+0x87c/0xe90 mm/slub.c:3018
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3105
+ slab_alloc_node mm/slub.c:3196 [inline]
+ slab_alloc mm/slub.c:3238 [inline]
+ kmem_cache_alloc+0x35c/0x3a0 mm/slub.c:3243
+ vm_area_dup+0x88/0x2b0 kernel/fork.c:357
+ dup_mmap kernel/fork.c:554 [inline]
+ dup_mm+0x5fa/0x13e0 kernel/fork.c:1451
+ copy_mm kernel/fork.c:1503 [inline]
+ copy_process+0x71f8/0x7300 kernel/fork.c:2164
+ kernel_clone+0xe7/0xab0 kernel/fork.c:2555
+ __do_sys_clone+0xc8/0x110 kernel/fork.c:2672
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fd60c863059
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fd60b1d8168 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 00007fd60c975f60 RCX: 00007fd60c863059
-RDX: 0000000000000048 RSI: 0000000020000200 RDI: 0000000000000005
-RBP: 00007fd60c8bd08d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffec77d82ef R14: 00007fd60b1d8300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__text_poke+0x343/0x8c0 arch/x86/kernel/alternative.c:989
-Code: c3 0f 86 2c fe ff ff 49 8d bc 24 00 10 00 00 e8 43 be 88 00 48 89 44 24 28 48 85 db 74 0c 48 83 7c 24 28 00 0f 85 1b fe ff ff <0f> 0b 48 b8 00 f0 ff ff ff ff 0f 00 49 21 c0 48 85 db 0f 85 c6 02
-RSP: 0018:ffffc90005e6f7a8 EFLAGS: 00010246
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1352 [inline]
+ free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1404
+ free_unref_page_prepare mm/page_alloc.c:3325 [inline]
+ free_unref_page_list+0x1a9/0xfa0 mm/page_alloc.c:3441
+ release_pages+0x317/0x1220 mm/swap.c:980
+ tlb_batch_pages_flush mm/mmu_gather.c:50 [inline]
+ tlb_flush_mmu_free mm/mmu_gather.c:243 [inline]
+ tlb_flush_mmu mm/mmu_gather.c:250 [inline]
+ tlb_finish_mmu+0x165/0x8c0 mm/mmu_gather.c:341
+ exit_mmap+0x21b/0x670 mm/mmap.c:3180
+ __mmput+0x122/0x4b0 kernel/fork.c:1114
+ mmput+0x56/0x60 kernel/fork.c:1135
+ exit_mm kernel/exit.c:507 [inline]
+ do_exit+0xa3c/0x2a30 kernel/exit.c:793
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:935
+ get_signal+0x4b0/0x28c0 kernel/signal.c:2862
+ arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
+ handle_signal_work kernel/entry/common.c:148 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+ exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ __do_fast_syscall_32+0x72/0xf0 arch/x86/entry/common.c:181
+ do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
+ entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
 
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff88807d1c8000 RSI: ffffffff81b3c443 RDI: 0000000000000003
-RBP: 0000000000000080 R08: 0000000000000000 R09: ffffc90005e6f7bf
-R10: ffffffff81b3c3e1 R11: 0000000000000001 R12: ffffffffa0010e00
+Memory state around the buggy address:
+ ffff88807b868a80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88807b868b00: fb fb fb fc fc fc fc fc fc fc fc fa fb fb fb fb
+>ffff88807b868b80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                  ^
+ ffff88807b868c00: fb fb fb fb fc fc fc fc fc fc fc fc fa fb fb fb
+ ffff88807b868c80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+----------------
+Code disassembly (best guess):
+   0:	03 74 c0 01          	add    0x1(%rax,%rax,8),%esi
+   4:	10 05 03 74 b8 01    	adc    %al,0x1b87403(%rip)        # 0x1b8740d
+   a:	10 06                	adc    %al,(%rsi)
+   c:	03 74 b4 01          	add    0x1(%rsp,%rsi,4),%esi
+  10:	10 07                	adc    %al,(%rdi)
+  12:	03 74 b0 01          	add    0x1(%rax,%rsi,4),%esi
+  16:	10 08                	adc    %cl,(%rax)
+  18:	03 74 d8 01          	add    0x1(%rax,%rbx,8),%esi
+  1c:	00 00                	add    %al,(%rax)
+  1e:	00 00                	add    %al,(%rax)
+  20:	00 51 52             	add    %dl,0x52(%rcx)
+  23:	55                   	push   %rbp
+  24:	89 e5                	mov    %esp,%ebp
+  26:	0f 34                	sysenter
+  28:	cd 80                	int    $0x80
+* 2a:	5d                   	pop    %rbp <-- trapping instruction
+  2b:	5a                   	pop    %rdx
+  2c:	59                   	pop    %rcx
+  2d:	c3                   	retq
+  2e:	90                   	nop
+  2f:	90                   	nop
+  30:	90                   	nop
+  31:	90                   	nop
+  32:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
+  39:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
 
 
 ---

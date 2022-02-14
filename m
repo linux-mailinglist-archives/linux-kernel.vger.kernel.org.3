@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BB34B4711
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E827D4B4730
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244374AbiBNJkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:40:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51936 "EHLO
+        id S243983AbiBNJfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:35:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244349AbiBNJjF (ORCPT
+        with ESMTP id S244012AbiBNJes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:39:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720A2692AF;
-        Mon, 14 Feb 2022 01:35:23 -0800 (PST)
+        Mon, 14 Feb 2022 04:34:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF7F60D81;
+        Mon, 14 Feb 2022 01:32:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 960EEB80DC9;
-        Mon, 14 Feb 2022 09:35:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B358FC340E9;
-        Mon, 14 Feb 2022 09:35:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A173260DFD;
+        Mon, 14 Feb 2022 09:32:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 871F1C340E9;
+        Mon, 14 Feb 2022 09:32:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831320;
-        bh=HIPORMFuV//Hr3CiBeB8KOpD7vvvwHqgFISVkSXSIQY=;
+        s=korg; t=1644831167;
+        bh=hG9jkos58WAdkn3Ip/Te7FXuqEYEgOqyyoE7Oxk6cmw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AODVv31WNog46VZjRZWpsOEIQwNKsfiBw/fxx/7L4VVCg5zH4o0KVCRPv2IiApEGp
-         JzfhDswRF4INqMEMt7iuGax8nbGYRomp86xELiFRZMzvF1dnwEHGjqJEgfrm4NCOi5
-         Z6j1xifko54gcRwqU34sHW+ZSzPwQcoOSZZPAW2s=
+        b=Yv3n6DjeUaksi5gG88DSrkw9/OmkW2ebqX4Cu6bm0QoAsfKZAJLUnb4EyBO39djQ3
+         7kcvVgXu0hNMN9hjKFgoCegRBmkBg0bt1GztrvRA1hkFxyHvNvTVd0zFDM2x3/CH2c
+         4XDNw6/GIYv5rbO8a7AsQ3Ssjum7x1/1i3n18YOs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Raymond Jay Golo <rjgolo@gmail.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 17/71] drm: panel-orientation-quirks: Add quirk for the 1Netbook OneXPlayer
+        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: [PATCH 4.19 19/49] ARM: dts: imx23-evk: Remove MX23_PAD_SSP1_DETECT from hog group
 Date:   Mon, 14 Feb 2022 10:25:45 +0100
-Message-Id: <20220214092452.598797447@linuxfoundation.org>
+Message-Id: <20220214092448.925287014@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
+References: <20220214092448.285381753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,53 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Raymond Jay Golo <rjgolo@gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
 
-[ Upstream commit d3cbc6e323c9299d10c8d2e4127c77c7d05d07b1 ]
+commit 42c9b28e6862d16db82a56f5667cf4d1f6658cf6 upstream.
 
-The 1Netbook OneXPlayer uses a panel which has been mounted
-90 degrees rotated. Add a quirk for this.
+Currently, SD card fails to mount due to the following pinctrl error:
 
-Signed-off-by: Raymond Jay Golo <rjgolo@gmail.com>
-Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220113000619.90988-1-rjgolo@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+[   11.170000] imx23-pinctrl 80018000.pinctrl: pin SSP1_DETECT already requested by 80018000.pinctrl; cannot claim for 80010000.spi
+[   11.180000] imx23-pinctrl 80018000.pinctrl: pin-65 (80010000.spi) status -22
+[   11.190000] imx23-pinctrl 80018000.pinctrl: could not request pin 65 (SSP1_DETECT) from group mmc0-pins-fixup.0  on device 80018000.pinctrl
+[   11.200000] mxs-mmc 80010000.spi: Error applying setting, reverse things back
+
+Fix it by removing the MX23_PAD_SSP1_DETECT pin from the hog group as it
+is already been used by the mmc0-pins-fixup pinctrl group.
+
+With this change the rootfs can be mounted and the imx23-evk board can
+boot successfully.
+
+Cc: <stable@vger.kernel.org>
+Fixes: bc3875f1a61e ("ARM: dts: mxs: modify mx23/mx28 dts files to use pinctrl headers")
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/drm_panel_orientation_quirks.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ arch/arm/boot/dts/imx23-evk.dts |    1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
-index 9d1bd8f491ad7..448c2f2d803a6 100644
---- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
-+++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
-@@ -115,6 +115,12 @@ static const struct drm_dmi_panel_orientation_data lcd1280x1920_rightside_up = {
- 	.orientation = DRM_MODE_PANEL_ORIENTATION_RIGHT_UP,
- };
- 
-+static const struct drm_dmi_panel_orientation_data lcd1600x2560_leftside_up = {
-+	.width = 1600,
-+	.height = 2560,
-+	.orientation = DRM_MODE_PANEL_ORIENTATION_LEFT_UP,
-+};
-+
- static const struct dmi_system_id orientation_data[] = {
- 	{	/* Acer One 10 (S1003) */
- 		.matches = {
-@@ -261,6 +267,12 @@ static const struct dmi_system_id orientation_data[] = {
- 		  DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "Default string"),
- 		},
- 		.driver_data = (void *)&onegx1_pro,
-+	}, {	/* OneXPlayer */
-+		.matches = {
-+		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "ONE-NETBOOK TECHNOLOGY CO., LTD."),
-+		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "ONE XPLAYER"),
-+		},
-+		.driver_data = (void *)&lcd1600x2560_leftside_up,
- 	}, {	/* Samsung GalaxyBook 10.6 */
- 		.matches = {
- 		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "SAMSUNG ELECTRONICS CO., LTD."),
--- 
-2.34.1
-
+--- a/arch/arm/boot/dts/imx23-evk.dts
++++ b/arch/arm/boot/dts/imx23-evk.dts
+@@ -79,7 +79,6 @@
+ 						MX23_PAD_LCD_RESET__GPIO_1_18
+ 						MX23_PAD_PWM3__GPIO_1_29
+ 						MX23_PAD_PWM4__GPIO_1_30
+-						MX23_PAD_SSP1_DETECT__SSP1_DETECT
+ 					>;
+ 					fsl,drive-strength = <MXS_DRIVE_4mA>;
+ 					fsl,voltage = <MXS_VOLTAGE_HIGH>;
 
 

@@ -2,101 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E4A4B4F1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 777944B4F1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352669AbiBNLon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:44:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45246 "EHLO
+        id S1352557AbiBNLo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:44:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349397AbiBNLoE (ORCPT
+        with ESMTP id S233810AbiBNLoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:44:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA176476;
-        Mon, 14 Feb 2022 03:36:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2306FB80E63;
-        Mon, 14 Feb 2022 11:36:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 346BFC340E9;
-        Mon, 14 Feb 2022 11:36:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644838609;
-        bh=TlEzTKDzz5YLQbPZsQhzfVGSadqt4B9CIscYLj+LK0g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kugVbjDXHW+279ffyykAIl+lm4lroL1fP+sYFb5z/GkuL+jLxnZCzK674q5/Wn6C2
-         xjUNWDD19u30ntzVU9q9KxkAOE/zR2OxqMnT0xcEPJwLjnF29KIH0D9ip0npLUDbGW
-         R3XlYJIIsEZ2ipmVcjVXYSMxP6KajNa5BHU9VzG0=
-Date:   Mon, 14 Feb 2022 12:36:47 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Sarah Sharp <sarah.a.sharp@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_ugoswami@quicinc.com, Jung Daehwan <dh10.jung@samsung.com>
-Subject: Re: [PATCH] xhci: reduce xhci_handshake timeout in xhci_reset
-Message-ID: <Ygo+zxEu0gVh4THE@kroah.com>
-References: <1644836663-29220-1-git-send-email-quic_pkondeti@quicinc.com>
+        Mon, 14 Feb 2022 06:44:06 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 52996658E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 03:37:02 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mtapsc-3-c-H2DoQROpmCBki-_qsGZA-1; Mon, 14 Feb 2022 11:36:59 +0000
+X-MC-Unique: c-H2DoQROpmCBki-_qsGZA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Mon, 14 Feb 2022 11:36:58 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Mon, 14 Feb 2022 11:36:58 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Rasmus Villemoes' <linux@rasmusvillemoes.dk>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Miguel Ojeda <ojeda@kernel.org>
+CC:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "rust-for-linux@vger.kernel.org" <rust-for-linux@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Gary Guo <gary@garyguo.net>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        "Petr Mladek" <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Sergey Senozhatsky" <senozhatsky@chromium.org>
+Subject: RE: [PATCH v4 12/20] vsprintf: add new `%pA` format specifier
+Thread-Topic: [PATCH v4 12/20] vsprintf: add new `%pA` format specifier
+Thread-Index: AQHYIZS6su9cmqy/q0KCzLw1maUsHKyS6n8w
+Date:   Mon, 14 Feb 2022 11:36:58 +0000
+Message-ID: <2a7dff8e0efb4142849802357284af51@AcuMS.aculab.com>
+References: <20220212130410.6901-1-ojeda@kernel.org>
+ <20220212130410.6901-13-ojeda@kernel.org>
+ <YgosclY9ebD3t020@smile.fi.intel.com>
+ <dc9054f2-5e2b-0ae2-1022-23421668dd05@rasmusvillemoes.dk>
+In-Reply-To: <dc9054f2-5e2b-0ae2-1022-23421668dd05@rasmusvillemoes.dk>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1644836663-29220-1-git-send-email-quic_pkondeti@quicinc.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 04:34:23PM +0530, Pavankumar Kondeti wrote:
-> From: Daehwan Jung <dh10.jung@samsung.com>
-> 
-> xhci_reset() is called with interrupts disabled. Waiting 10 seconds for
-> controller reset and controller ready operations can be fatal to the
-> system when controller is timed out. Reduce the timeout to 1 second
-> and print a error message when the time out happens.
-> 
-> Fixes: 22ceac191211 ("xhci: Increase reset timeout for Renesas 720201 host.")
-> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-> ---
->  drivers/usb/host/xhci.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index dc357ca..ec4df72 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -196,7 +196,7 @@ int xhci_reset(struct xhci_hcd *xhci)
->  		udelay(1000);
->  
->  	ret = xhci_handshake(&xhci->op_regs->command,
-> -			CMD_RESET, 0, 10 * 1000 * 1000);
-> +			CMD_RESET, 0, 1 * 1000 * 1000);
->  	if (ret)
->  		return ret;
->  
-> @@ -210,7 +210,7 @@ int xhci_reset(struct xhci_hcd *xhci)
->  	 * than status until the "Controller Not Ready" flag is cleared.
->  	 */
->  	ret = xhci_handshake(&xhci->op_regs->status,
-> -			STS_CNR, 0, 10 * 1000 * 1000);
-> +			STS_CNR, 0, 1 * 1000 * 1000);
->  
->  	xhci->usb2_rhub.bus_state.port_c_suspend = 0;
->  	xhci->usb2_rhub.bus_state.suspended_ports = 0;
-> -- 
-> 2.7.4
-> 
+RnJvbTogUmFzbXVzIFZpbGxlbW9lcw0KPiBTZW50OiAxNCBGZWJydWFyeSAyMDIyIDEwOjUzDQo+
+IA0KPiBPbiAxNC8wMi8yMDIyIDExLjE4LCBBbmR5IFNoZXZjaGVua28gd3JvdGU6DQo+ID4gT24g
+U2F0LCBGZWIgMTIsIDIwMjIgYXQgMDI6MDM6MzhQTSArMDEwMCwgTWlndWVsIE9qZWRhIHdyb3Rl
+Og0KPiA+DQo+ID4+IEZyb206IEdhcnkgR3VvIDxnYXJ5QGdhcnlndW8ubmV0Pg0KPiA+DQo+ID4g
+Tm90IHN1cmUgSSB1bmRlcnN0YW5kIHRoaXMuLi4NCj4gPg0KPiA+PiBUaGlzIHBhdGNoIGFkZHMg
+YSBmb3JtYXQgc3BlY2lmaWVyIGAlcEFgIHRvIGB2c3ByaW50ZmAgd2hpY2ggZm9ybWF0cw0KPiA+
+PiBhIHBvaW50ZXIgYXMgYGNvcmU6OmZtdDo6QXJndW1lbnRzYC4gRG9pbmcgc28gYWxsb3dzIHVz
+IHRvIGRpcmVjdGx5DQo+ID4+IGZvcm1hdCB0byB0aGUgaW50ZXJuYWwgYnVmZmVyIG9mIGBwcmlu
+dGZgLCBzbyB3ZSBkbyBub3QgaGF2ZSB0byB1c2UNCj4gPj4gYSB0ZW1wb3JhcnkgYnVmZmVyIG9u
+IHRoZSBzdGFjayB0byBwcmUtYXNzZW1ibGUgdGhlIG1lc3NhZ2Ugb24NCj4gPj4gdGhlIFJ1c3Qg
+c2lkZS4NCj4gPj4NCj4gPj4gVGhpcyBzcGVjaWZpZXIgaXMgaW50ZW5kZWQgb25seSB0byBiZSB1
+c2VkIGZyb20gUnVzdCBhbmQgbm90IGZvciBDLCBzbw0KPiA+PiBgY2hlY2twYXRjaC5wbGAgaXMg
+aW50ZW50aW9uYWxseSB1bmNoYW5nZWQgdG8gY2F0Y2ggYW55IG1pc3VzZS4NCj4gPj4NCj4gPj4g
+Q28tZGV2ZWxvcGVkLWJ5OiBBbGV4IEdheW5vciA8YWxleC5nYXlub3JAZ21haWwuY29tPg0KPiA+
+PiBTaWduZWQtb2ZmLWJ5OiBBbGV4IEdheW5vciA8YWxleC5nYXlub3JAZ21haWwuY29tPg0KPiA+
+PiBDby1kZXZlbG9wZWQtYnk6IFdlZHNvbiBBbG1laWRhIEZpbGhvIDx3ZWRzb25hZkBnb29nbGUu
+Y29tPg0KPiA+PiBTaWduZWQtb2ZmLWJ5OiBXZWRzb24gQWxtZWlkYSBGaWxobyA8d2Vkc29uYWZA
+Z29vZ2xlLmNvbT4NCj4gPg0KPiA+PiBTaWduZWQtb2ZmLWJ5OiBHYXJ5IEd1byA8Z2FyeUBnYXJ5
+Z3VvLm5ldD4NCj4gPg0KPiA+IC4uLnRvZ2V0aGVyIHdpdGggdGhpcyBpbiB0aGUgY3VycmVudCBT
+b0IgY2hhaW4uDQo+ID4NCj4gPj4gQ28tZGV2ZWxvcGVkLWJ5OiBNaWd1ZWwgT2plZGEgPG9qZWRh
+QGtlcm5lbC5vcmc+DQo+ID4+IFNpZ25lZC1vZmYtYnk6IE1pZ3VlbCBPamVkYSA8b2plZGFAa2Vy
+bmVsLm9yZz4NCj4gPg0KPiA+IEknbSB3b25kZXJpbmcgaWYgeW91IGNvbnNpZGVyZWQgdG8gdXNl
+ICVwVi4NCj4gPg0KPiANCj4gSSB0aGluayB0aGUgcG9pbnQgaXMgZm9yIHZzbnByaW50ZigpIHRv
+IGNhbGwgKGJhY2spIGludG8gUnVzdCBjb2RlLg0KDQpEb2Vzbid0IHRoYXQgc3RhbmQgYSByZWFz
+b25hYmxlIGNoYW5jZSBvZiBibG93aW5nIHRoZSBrZXJuZWwgc3RhY2s/DQoNCnZzbnByaW50Zigp
+IGlzIGxpa2VseSB0byBiZSBvbiB0aGUgJ3dvcnN0IGNhc2UnIHN0YWNrIHBhdGggYW55d2F5Lg0K
+QW55dGhpbmcgdmFndWVseSBsaWtlIGEgcmVjdXJzaXZlIGNhbGwsIG9yIGFueXRoaW5nICdzdGFj
+ayBleHBlbnNpdmUnDQppbnNpZGUgdnNucHJpbnRmKCkgc3RhbmRzIGEgcmVhbCBjaGFuY2Ugb2Yg
+b3ZlcmZsb3dpbmcgdGhlIHN0YWNrLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNz
+IExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAx
+UFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-I do not see any "print an error message" change here.  Where is that
-addition?
-
-confused,
-
-greg k-h

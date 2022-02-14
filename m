@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D664B4BC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71CCE4B4864
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347483AbiBNKcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:32:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37286 "EHLO
+        id S1343551AbiBNJxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:53:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348745AbiBNKbE (ORCPT
+        with ESMTP id S245733AbiBNJun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:31:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A831710DF;
-        Mon, 14 Feb 2022 01:59:47 -0800 (PST)
+        Mon, 14 Feb 2022 04:50:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84CFA654AB;
+        Mon, 14 Feb 2022 01:41:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6BBA60B3F;
-        Mon, 14 Feb 2022 09:59:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7D4EC340E9;
-        Mon, 14 Feb 2022 09:59:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 429CBB80DC4;
+        Mon, 14 Feb 2022 09:41:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 515C5C340F5;
+        Mon, 14 Feb 2022 09:41:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832769;
-        bh=T7YDZ7jqaN12u6DNHfqzCT1Ns3t7VXGIw+QDvT0i+QA=;
+        s=korg; t=1644831694;
+        bh=CaxhALpc6Zc6fQlasirVdZIPuHf7qdsIgFDj1qvhJsQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x/SJH/UtaVLLnijp7GgzifHWH4qzML9qYH9TZqKg9m8p6aS9mRzOP6S2eBkZP/WoM
-         oIOqkM8FzEvKxIvuyt6gL7hKjiW4pZxK44ghVMNN///hcfFKhc/7BeyBMKgVEg1vyk
-         7CHw1tq4kQJ4x5+yT8T57fyhkNf5E8y2TYE6q6i8=
+        b=x3oZ0njqDaxt5ZBiCUi1rCem98tBHCvq4UPN68T89GqKPpwpvZVrx3Gtf1e1ubqPP
+         +OH2Xkf6tFKF8JkjGaRI7Q/Y82BtMF7zikZCD5Q5cMavd+0FmuVwL/oXgnRHYbsL6a
+         CotNt5n4f8qQpvXtk2Y9b4DW5+g3ZBf02hDZuPQg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lutz Koschorreck <theleks@ko-hh.de>,
-        Neil Armstrong <narmstrong@baylibre.com>,
+        stable@vger.kernel.org, Samuel Mendoza-Jonas <samjonas@amazon.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 119/203] arm64: dts: meson-sm1-odroid: use correct enable-gpio pin for tf-io regulator
+Subject: [PATCH 5.10 064/116] ixgbevf: Require large buffers for build_skb on 82599VF
 Date:   Mon, 14 Feb 2022 10:26:03 +0100
-Message-Id: <20220214092514.295382934@linuxfoundation.org>
+Message-Id: <20220214092500.961810621@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,68 +57,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lutz Koschorreck <theleks@ko-hh.de>
+From: Samuel Mendoza-Jonas <samjonas@amazon.com>
 
-[ Upstream commit 323ca765bfe9d637fa774373baec0bc41e51fcfa ]
+[ Upstream commit fe68195daf34d5dddacd3f93dd3eafc4beca3a0e ]
 
-The interrupt pin of the external ethernet phy is used, instead of the
-enable-gpio pin of the tf-io regulator. The GPIOE_2 pin is located in
-the gpio_ao bank.
+>From 4.17 onwards the ixgbevf driver uses build_skb() to build an skb
+around new data in the page buffer shared with the ixgbe PF.
+This uses either a 2K or 3K buffer, and offsets the DMA mapping by
+NET_SKB_PAD + NET_IP_ALIGN. When using a smaller buffer RXDCTL is set to
+ensure the PF does not write a full 2K bytes into the buffer, which is
+actually 2K minus the offset.
 
-This causes phy interrupt problems at system startup.
-[   76.645190] irq 36: nobody cared (try booting with the "irqpoll" option)
-[   76.649617] CPU: 0 PID: 1416 Comm: irq/36-0.0:00 Not tainted 5.16.0 #2
-[   76.649629] Hardware name: Hardkernel ODROID-HC4 (DT)
-[   76.649635] Call trace:
-[   76.649638]  dump_backtrace+0x0/0x1c8
-[   76.649658]  show_stack+0x14/0x60
-[   76.649667]  dump_stack_lvl+0x64/0x7c
-[   76.649676]  dump_stack+0x14/0x2c
-[   76.649683]  __report_bad_irq+0x38/0xe8
-[   76.649695]  note_interrupt+0x220/0x3a0
-[   76.649704]  handle_irq_event_percpu+0x58/0x88
-[   76.649713]  handle_irq_event+0x44/0xd8
-[   76.649721]  handle_fasteoi_irq+0xa8/0x130
-[   76.649730]  generic_handle_domain_irq+0x38/0x58
-[   76.649738]  gic_handle_irq+0x9c/0xb8
-[   76.649747]  call_on_irq_stack+0x28/0x38
-[   76.649755]  do_interrupt_handler+0x7c/0x80
-[   76.649763]  el1_interrupt+0x34/0x80
-[   76.649772]  el1h_64_irq_handler+0x14/0x20
-[   76.649781]  el1h_64_irq+0x74/0x78
-[   76.649788]  irq_finalize_oneshot.part.56+0x68/0xf8
-[   76.649796]  irq_thread_fn+0x5c/0x98
-[   76.649804]  irq_thread+0x13c/0x260
-[   76.649812]  kthread+0x144/0x178
-[   76.649822]  ret_from_fork+0x10/0x20
-[   76.649830] handlers:
-[   76.653170] [<0000000025a6cd31>] irq_default_primary_handler threaded [<0000000093580eb7>] phy_interrupt
-[   76.661256] Disabling IRQ #36
+However on the 82599 virtual function, the RXDCTL mechanism is not
+available. The driver attempts to work around this by using the SET_LPE
+mailbox method to lower the maximm frame size, but the ixgbe PF driver
+ignores this in order to keep the PF and all VFs in sync[0].
 
-Fixes: 1f80a5cf74a6 ("arm64: dts: meson-sm1-odroid: add missing enable gpio and supply for tf_io regulator")
-Signed-off-by: Lutz Koschorreck <theleks@ko-hh.de>
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-[narmstrong: removed spurious invalid & blank lines from commit message]
-Link: https://lore.kernel.org/r/20220127130537.GA187347@odroid-VirtualBox
+This means the PF will write up to the full 2K set in SRRCTL, causing it
+to write NET_SKB_PAD + NET_IP_ALIGN bytes past the end of the buffer.
+With 4K pages split into two buffers, this means it either writes
+NET_SKB_PAD + NET_IP_ALIGN bytes past the first buffer (and into the
+second), or NET_SKB_PAD + NET_IP_ALIGN bytes past the end of the DMA
+mapping.
+
+Avoid this by only enabling build_skb when using "large" buffers (3K).
+These are placed in each half of an order-1 page, preventing the PF from
+writing past the end of the mapping.
+
+[0]: Technically it only ever raises the max frame size, see
+ixgbe_set_vf_lpe() in ixgbe_sriov.c
+
+Fixes: f15c5ba5b6cd ("ixgbevf: add support for using order 1 pages to receive large frames")
+Signed-off-by: Samuel Mendoza-Jonas <samjonas@amazon.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
-index 5779e70caccd3..328f4adfaaa9d 100644
---- a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
-@@ -48,7 +48,7 @@ tf_io: gpio-regulator-tf_io {
- 		regulator-max-microvolt = <3300000>;
- 		vin-supply = <&vcc_5v>;
+diff --git a/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c b/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
+index a7d0a459969a2..2d6ac61d7a3e6 100644
+--- a/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
++++ b/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
+@@ -1992,14 +1992,15 @@ static void ixgbevf_set_rx_buffer_len(struct ixgbevf_adapter *adapter,
+ 	if (adapter->flags & IXGBEVF_FLAGS_LEGACY_RX)
+ 		return;
  
--		enable-gpio = <&gpio GPIOE_2 GPIO_ACTIVE_HIGH>;
-+		enable-gpio = <&gpio_ao GPIOE_2 GPIO_ACTIVE_HIGH>;
- 		enable-active-high;
- 		regulator-always-on;
+-	set_ring_build_skb_enabled(rx_ring);
++	if (PAGE_SIZE < 8192)
++		if (max_frame > IXGBEVF_MAX_FRAME_BUILD_SKB)
++			set_ring_uses_large_buffer(rx_ring);
  
+-	if (PAGE_SIZE < 8192) {
+-		if (max_frame <= IXGBEVF_MAX_FRAME_BUILD_SKB)
+-			return;
++	/* 82599 can't rely on RXDCTL.RLPML to restrict the size of the frame */
++	if (adapter->hw.mac.type == ixgbe_mac_82599_vf && !ring_uses_large_buffer(rx_ring))
++		return;
+ 
+-		set_ring_uses_large_buffer(rx_ring);
+-	}
++	set_ring_build_skb_enabled(rx_ring);
+ }
+ 
+ /**
 -- 
 2.34.1
 

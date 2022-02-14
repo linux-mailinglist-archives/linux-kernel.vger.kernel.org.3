@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C3C4B5840
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3814B584D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356968AbiBNRPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 12:15:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46364 "EHLO
+        id S1356992AbiBNRP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 12:15:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356955AbiBNRPC (ORCPT
+        with ESMTP id S1356970AbiBNRPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 12:15:02 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6A86517B;
-        Mon, 14 Feb 2022 09:14:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=hP69zmrWln9sFp7Qn5hjhCDPMAmpxl21/+2CAr0FVmk=; b=XKfMu41RkWGyY5mb/9G3tmIk47
-        8JTbiKP7RW4K4/rpJp1J/ILdUowIsBPs8Ik+styTlQXecQm9GnwayqvI0BOYZhE9MeOtVORpxgkHc
-        DIjgvxrqLvH48oGEIvZq/V8tjlFN99N2FL3riVobl4QtdRn+5t02PtaMGuoZAP6SEq5RvuzMAH8Bj
-        xSev9fNxt81gmt+bwMV46+PjodHxLUQyEbY6YBXI1wfmptWbGWAyzitndflH+G2I75A8joVrrQWe8
-        BL7wfrAHbmR9Yt+3Orvt9YNke7lJpZH3xweA4d13MPTmQT9Mh39fwbu2IKfUR9WOpe0Dct7ZjMPDC
-        15CAaiOQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJew0-009xHr-2G; Mon, 14 Feb 2022 17:14:44 +0000
-Message-ID: <918fe170-51ef-e214-4620-3a82b425965c@infradead.org>
-Date:   Mon, 14 Feb 2022 09:14:38 -0800
+        Mon, 14 Feb 2022 12:15:44 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6B5652C4;
+        Mon, 14 Feb 2022 09:15:35 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJewf-001kzp-JJ; Mon, 14 Feb 2022 17:15:25 +0000
+Date:   Mon, 14 Feb 2022 17:15:25 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
+        will@kernel.org, guoren@kernel.org, bcain@codeaurora.org,
+        geert@linux-m68k.org, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        nickhu@andestech.com, green.hu@gmail.com, dinguyen@kernel.org,
+        shorne@gmail.com, deller@gmx.de, mpe@ellerman.id.au,
+        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        hca@linux.ibm.com, dalias@libc.org, davem@davemloft.net,
+        richard@nod.at, x86@kernel.org, jcmvbkbc@gmail.com,
+        ebiederm@xmission.com, akpm@linux-foundation.org, ardb@kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH 07/14] uaccess: generalize access_ok()
+Message-ID: <YgqOLZbFK7/B2HJT@zeniv-ca.linux.org.uk>
+References: <20220214163452.1568807-1-arnd@kernel.org>
+ <20220214163452.1568807-8-arnd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] block: Fix non-kernel-doc comment
-Content-Language: en-US
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, rafael@kernel.org
-Cc:     pavel@ucw.cz, len.brown@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220214091522.100669-1-jiapeng.chong@linux.alibaba.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220214091522.100669-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220214163452.1568807-8-arnd@kernel.org>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,68 +59,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+On Mon, Feb 14, 2022 at 05:34:45PM +0100, Arnd Bergmann wrote:
 
-On 2/14/22 01:15, Jiapeng Chong wrote:
-> Fixes the following W=1 kernel build warning:
-> 
-> kernel/power/swap.c:120: warning: This comment starts with '/**', but
-> isn't a kernel-doc comment. Refer
-> Documentation/doc-guide/kernel-doc.rst.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> diff --git a/arch/csky/kernel/signal.c b/arch/csky/kernel/signal.c
+> index c7b763d2f526..8867ddf3e6c7 100644
+> --- a/arch/csky/kernel/signal.c
+> +++ b/arch/csky/kernel/signal.c
+> @@ -136,7 +136,7 @@ static inline void __user *get_sigframe(struct ksignal *ksig,
+>  static int
+>  setup_rt_frame(struct ksignal *ksig, sigset_t *set, struct pt_regs *regs)
+>  {
+> -	struct rt_sigframe *frame;
+> +	struct rt_sigframe __user *frame;
+>  	int err = 0;
+>  
+>  	frame = get_sigframe(ksig, regs, sizeof(*frame));
 
-The diff looks OK to me, but the Subject is quite misleading.
-There are no "block:" patch contents here, just "PM:" or
-"PM: hibernate:" according to
-$ git log --oneline kernel/power/swap.c
+Minor nit: might make sense to separate annotations (here, on nios2, etc.) from the rest...
 
-> ---
->  kernel/power/swap.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index 6c4f983cbacc..91fffdd2c7fb 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -88,7 +88,7 @@ struct swap_map_page_list {
->  	struct swap_map_page_list *next;
->  };
->  
-> -/**
-> +/*
->   *	The swap_map_handle structure is used for handling swap in
->   *	a file-alike way
->   */
-> @@ -116,7 +116,7 @@ struct swsusp_header {
->  
->  static struct swsusp_header *swsusp_header;
->  
-> -/**
-> +/*
->   *	The following functions are used for tracing the allocated
->   *	swap pages, so that they can be freed in case of an error.
->   */
-> @@ -170,7 +170,7 @@ static int swsusp_extents_insert(unsigned long swap_offset)
->  	return 0;
->  }
->  
-> -/**
-> +/*
->   *	alloc_swapdev_block - allocate a swap page and register that it has
->   *	been allocated, so that it can be freed in case of an error.
->   */
-> @@ -189,7 +189,7 @@ sector_t alloc_swapdev_block(int swap)
->  	return 0;
->  }
->  
-> -/**
-> +/*
->   *	free_all_swap_pages - free swap pages allocated for saving image data.
->   *	It also frees the extents used to register which swap entries had been
->   *	allocated.
+This, OTOH,
 
-thanks.
--- 
-~Randy
+> diff --git a/arch/sparc/include/asm/uaccess_64.h b/arch/sparc/include/asm/uaccess_64.h
+> index 5c12fb46bc61..000bac67cf31 100644
+> --- a/arch/sparc/include/asm/uaccess_64.h
+> +++ b/arch/sparc/include/asm/uaccess_64.h
+...
+> -static inline bool __chk_range_not_ok(unsigned long addr, unsigned long size, unsigned long limit)
+> -{
+> -	if (__builtin_constant_p(size))
+> -		return addr > limit - size;
+> -
+> -	addr += size;
+> -	if (addr < size)
+> -		return true;
+> -
+> -	return addr > limit;
+> -}
+> -
+> -#define __range_not_ok(addr, size, limit)                               \
+> -({                                                                      \
+> -	__chk_user_ptr(addr);                                           \
+> -	__chk_range_not_ok((unsigned long __force)(addr), size, limit); \
+> -})
+> -
+> -static inline int __access_ok(const void __user * addr, unsigned long size)
+> -{
+> -	return 1;
+> -}
+> -
+> -static inline int access_ok(const void __user * addr, unsigned long size)
+> -{
+> -	return 1;
+> -}
+> +#define __range_not_ok(addr, size, limit) (!__access_ok(addr, size))
+
+is really wrong.  For sparc64, access_ok() should always be true.
+This __range_not_ok() thing is used *only* for valid_user_frame() in
+arch/sparc/kernel/perf_event.c - it's not a part of normal access_ok()
+there.
+
+sparc64 has separate address spaces for kernel and for userland; access_ok()
+had never been useful there.  

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 143DF4B45F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB9FA4B4A0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:37:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243571AbiBNJcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:32:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43132 "EHLO
+        id S1345263AbiBNKJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:09:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243683AbiBNJcK (ORCPT
+        with ESMTP id S1345594AbiBNKGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:32:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A081ADB2;
-        Mon, 14 Feb 2022 01:31:03 -0800 (PST)
+        Mon, 14 Feb 2022 05:06:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2296474DCA;
+        Mon, 14 Feb 2022 01:49:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4AAEB80DC6;
-        Mon, 14 Feb 2022 09:31:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 027FFC340E9;
-        Mon, 14 Feb 2022 09:30:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B42F661238;
+        Mon, 14 Feb 2022 09:49:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A09D5C340EF;
+        Mon, 14 Feb 2022 09:49:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831060;
-        bh=VUVBaAGZBaqswhE6D4PLK24XkRlHN39JFF+flQEuJME=;
+        s=korg; t=1644832171;
+        bh=A4SdmNYLAnveL9cm0e3pqcw/lppUkfyaqYDwasfTHx4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zz2CSd74aromH5TGQJ8iHsQS+ajt4SZWkljSXB1x5aU8kcgPzLDOMz3oFhp9N1oek
-         WgJ9Q7BHq4TGSLlU5f0iMA/6KG+CNP92Bwr3+j15PatVO6p/bkuHcQVOkRJGC6HjOx
-         If9aixIklEYbPasXXj6utabuaun5Jfnq1acH3an0=
+        b=X5nmCx4pIw69sw+P918zfDv8N1xUweMmkYOJP7AoEHNFNumTAZHEMbfVAg/FtPSOa
+         abbWvCXOaJXgWSp+kygb73l+r2ZOv0WMcom1Mz6/AOrWP6JX8m/9FY/L4AWYXUaVa7
+         hPPpnhD9x0dque9UqpHgHjOv4yKMg+8Wv/ExrEP0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guo Zihua <guozihua@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH 4.14 03/44] ima: Allow template selection with ima_template[_fmt]= after ima_hash=
-Date:   Mon, 14 Feb 2022 10:25:26 +0100
-Message-Id: <20220214092448.021896858@linuxfoundation.org>
+        stable@vger.kernel.org, Bob Peterson <rpeterso@redhat.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>
+Subject: [PATCH 5.15 069/172] gfs2: Fix gfs2_release for non-writers regression
+Date:   Mon, 14 Feb 2022 10:25:27 +0100
+Message-Id: <20220214092508.782354238@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
-References: <20220214092447.897544753@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,84 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+From: Bob Peterson <rpeterso@redhat.com>
 
-commit bb8e52e4906f148c2faf6656b5106cf7233e9301 upstream.
+commit d3add1a9519dcacd6e644ecac741c56cf18b67f5 upstream.
 
-Commit c2426d2ad5027 ("ima: added support for new kernel cmdline parameter
-ima_template_fmt") introduced an additional check on the ima_template
-variable to avoid multiple template selection.
+When a file is opened for writing, the vfs code (do_dentry_open)
+calls get_write_access for the inode, thus incrementing the inode's write
+count. That writer normally then creates a multi-block reservation for
+the inode (i_res) that can be re-used by other writers, which speeds up
+writes for applications that stupidly loop on open/write/close.
+When the writes are all done, the multi-block reservation should be
+deleted when the file is closed by the last "writer."
 
-Unfortunately, ima_template could be also set by the setup function of the
-ima_hash= parameter, when it calls ima_template_desc_current(). This causes
-attempts to choose a new template with ima_template= or with
-ima_template_fmt=, after ima_hash=, to be ignored.
+Commit 0ec9b9ea4f83 broke that concept when it moved the call to
+gfs2_rs_delete before the check for FMODE_WRITE.  Non-writers have no
+business removing the multi-block reservations of writers. In fact, if
+someone opens and closes the file for RO while a writer has a
+multi-block reservation, the RO closer will delete the reservation
+midway through the write, and this results in:
 
-Achieve the goal of the commit mentioned with the new static variable
-template_setup_done, so that template selection requests after ima_hash=
-are not ignored.
+kernel BUG at fs/gfs2/rgrp.c:677! (or thereabouts) which is:
+BUG_ON(rs->rs_requested); from function gfs2_rs_deltree.
 
-Finally, call ima_init_template_list(), if not already done, to initialize
-the list of templates before lookup_template_desc() is called.
+This patch moves the check back inside the check for FMODE_WRITE.
 
-Reported-by: Guo Zihua <guozihua@huawei.com>
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Cc: stable@vger.kernel.org
-Fixes: c2426d2ad5027 ("ima: added support for new kernel cmdline parameter ima_template_fmt")
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Fixes: 0ec9b9ea4f83 ("gfs2: Check for active reservation in gfs2_release")
+Cc: stable@vger.kernel.org # v5.12+
+Signed-off-by: Bob Peterson <rpeterso@redhat.com>
+Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/integrity/ima/ima_template.c |   10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ fs/gfs2/file.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/security/integrity/ima/ima_template.c
-+++ b/security/integrity/ima/ima_template.c
-@@ -31,6 +31,7 @@ static struct ima_template_desc builtin_
+--- a/fs/gfs2/file.c
++++ b/fs/gfs2/file.c
+@@ -711,10 +711,11 @@ static int gfs2_release(struct inode *in
+ 	kfree(file->private_data);
+ 	file->private_data = NULL;
  
- static LIST_HEAD(defined_templates);
- static DEFINE_SPINLOCK(template_list);
-+static int template_setup_done;
- 
- static struct ima_template_field supported_fields[] = {
- 	{.field_id = "d", .field_init = ima_eventdigest_init,
-@@ -57,10 +58,11 @@ static int __init ima_template_setup(cha
- 	struct ima_template_desc *template_desc;
- 	int template_len = strlen(str);
- 
--	if (ima_template)
-+	if (template_setup_done)
- 		return 1;
- 
--	ima_init_template_list();
-+	if (!ima_template)
-+		ima_init_template_list();
- 
- 	/*
- 	 * Verify that a template with the supplied name exists.
-@@ -84,6 +86,7 @@ static int __init ima_template_setup(cha
- 	}
- 
- 	ima_template = template_desc;
-+	template_setup_done = 1;
- 	return 1;
+-	if (gfs2_rs_active(&ip->i_res))
+-		gfs2_rs_delete(ip, &inode->i_writecount);
+-	if (file->f_mode & FMODE_WRITE)
++	if (file->f_mode & FMODE_WRITE) {
++		if (gfs2_rs_active(&ip->i_res))
++			gfs2_rs_delete(ip, &inode->i_writecount);
+ 		gfs2_qa_put(ip);
++	}
+ 	return 0;
  }
- __setup("ima_template=", ima_template_setup);
-@@ -92,7 +95,7 @@ static int __init ima_template_fmt_setup
- {
- 	int num_templates = ARRAY_SIZE(builtin_templates);
  
--	if (ima_template)
-+	if (template_setup_done)
- 		return 1;
- 
- 	if (template_desc_init_fields(str, NULL, NULL) < 0) {
-@@ -103,6 +106,7 @@ static int __init ima_template_fmt_setup
- 
- 	builtin_templates[num_templates - 1].fmt = str;
- 	ima_template = builtin_templates + num_templates - 1;
-+	template_setup_done = 1;
- 
- 	return 1;
- }
 
 

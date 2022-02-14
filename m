@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8FC34B4B83
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:42:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 308784B4732
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345940AbiBNKNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:13:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42320 "EHLO
+        id S245129AbiBNJpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:45:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345655AbiBNKMo (ORCPT
+        with ESMTP id S244766AbiBNJmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:12:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09890652E4;
-        Mon, 14 Feb 2022 01:50:50 -0800 (PST)
+        Mon, 14 Feb 2022 04:42:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1AE67358;
+        Mon, 14 Feb 2022 01:37:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D6E2B80DC8;
-        Mon, 14 Feb 2022 09:50:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90FCBC340F0;
-        Mon, 14 Feb 2022 09:50:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 152F0B80DC8;
+        Mon, 14 Feb 2022 09:37:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 457CCC340EF;
+        Mon, 14 Feb 2022 09:37:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832248;
-        bh=jEmOCVJ94waLsve1mzG0F4gG1Stwn267OeTCJu9ysJw=;
+        s=korg; t=1644831466;
+        bh=5YobPaCM8h/WB3s/i+OkIl3JtUE1OkBaRkz32PsX/C8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n+jbKESeFO+QfbaeBnxOm7G9b9kAbudCoszsejuC0VOnMRZb2zoPIOMAD0huMKizd
-         e3IF3Gp1hAcwiWac+OBrqbTZpaZFUzk4TwwQaowqrB4axQAzC0BxlUHirhiH1eqZq/
-         5rbVXNvzKvcwlxBbTDRjMFZ0oO4hIH/BwjtpoDjU=
+        b=FDSXZAPIj07WcQvMAQlmMsghMU7y+CsarUQfDaGn0H/JPaZNhDKhFXyJVDucfivVw
+         WcjpBShojlhTjf8zmGyUur13WEyCGznhcE0RnXAJKFvHXZfaPFFBCJ9YX5jwWUxULp
+         K38OY3IzoELLItWC1MIMb6Wu7pOP6eC2dp2bQAco=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Wang <KevinYang.Wang@amd.com>,
-        Kenneth Feng <kenneth.feng@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 125/172] drm/amd/pm: fix hwmon node of power1_label create issue
-Date:   Mon, 14 Feb 2022 10:26:23 +0100
-Message-Id: <20220214092510.727307286@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: [PATCH 5.4 56/71] usb: ulpi: Call of_node_put correctly
+Date:   Mon, 14 Feb 2022 10:26:24 +0100
+Message-Id: <20220214092453.933562368@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Wang <KevinYang.Wang@amd.com>
+From: Sean Anderson <sean.anderson@seco.com>
 
-[ Upstream commit a8b1e8636a3252daa729762b2e3cc9015cc91a5c ]
+commit 0a907ee9d95e3ac35eb023d71f29eae0aaa52d1b upstream.
 
-it will cause hwmon node of power1_label is not created.
+of_node_put should always be called on device nodes gotten from
+of_get_*. Additionally, it should only be called after there are no
+remaining users. To address the first issue, call of_node_put if later
+steps in ulpi_register fail. To address the latter, call put_device if
+device_register fails, which will call ulpi_dev_release if necessary.
 
-v2:
-the hwmon node of "power1_label" is always needed for all ASICs.
-and the patch will remove ASIC type check for "power1_label".
-
-Fixes: ae07970a0621d6 ("drm/amd/pm: add support for hwmon control of slow and fast PPT limit on vangogh")
-
-Signed-off-by: Yang Wang <KevinYang.Wang@amd.com>
-Reviewed-by: Kenneth Feng <kenneth.feng@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
+Cc: stable <stable@vger.kernel.org>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+Link: https://lore.kernel.org/r/20220127190004.1446909-3-sean.anderson@seco.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/pm/amdgpu_pm.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/usb/common/ulpi.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/pm/amdgpu_pm.c b/drivers/gpu/drm/amd/pm/amdgpu_pm.c
-index 32a0fd5e84b73..640db5020ccc3 100644
---- a/drivers/gpu/drm/amd/pm/amdgpu_pm.c
-+++ b/drivers/gpu/drm/amd/pm/amdgpu_pm.c
-@@ -3445,8 +3445,7 @@ static umode_t hwmon_attributes_visible(struct kobject *kobj,
- 	     attr == &sensor_dev_attr_power2_cap_min.dev_attr.attr ||
- 		 attr == &sensor_dev_attr_power2_cap.dev_attr.attr ||
- 		 attr == &sensor_dev_attr_power2_cap_default.dev_attr.attr ||
--		 attr == &sensor_dev_attr_power2_label.dev_attr.attr ||
--		 attr == &sensor_dev_attr_power1_label.dev_attr.attr))
-+		 attr == &sensor_dev_attr_power2_label.dev_attr.attr))
- 		return 0;
+--- a/drivers/usb/common/ulpi.c
++++ b/drivers/usb/common/ulpi.c
+@@ -249,12 +249,16 @@ static int ulpi_register(struct device *
+ 		return ret;
  
- 	return effective_mode;
--- 
-2.34.1
-
+ 	ret = ulpi_read_id(ulpi);
+-	if (ret)
++	if (ret) {
++		of_node_put(ulpi->dev.of_node);
+ 		return ret;
++	}
+ 
+ 	ret = device_register(&ulpi->dev);
+-	if (ret)
++	if (ret) {
++		put_device(&ulpi->dev);
+ 		return ret;
++	}
+ 
+ 	dev_dbg(&ulpi->dev, "registered ULPI PHY: vendor %04x, product %04x\n",
+ 		ulpi->id.vendor, ulpi->id.product);
 
 

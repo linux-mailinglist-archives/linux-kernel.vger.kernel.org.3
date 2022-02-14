@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E5B4B4C3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9567A4B4C01
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:43:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347975AbiBNKiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:38:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43740 "EHLO
+        id S1348478AbiBNKfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:35:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347716AbiBNKeY (ORCPT
+        with ESMTP id S1348066AbiBNKej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:34:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867A0A2F18;
-        Mon, 14 Feb 2022 02:00:50 -0800 (PST)
+        Mon, 14 Feb 2022 05:34:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C11AA1AB;
+        Mon, 14 Feb 2022 01:41:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22FCD60C62;
-        Mon, 14 Feb 2022 10:00:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE731C340E9;
-        Mon, 14 Feb 2022 10:00:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25576B80DC4;
+        Mon, 14 Feb 2022 09:41:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 599FBC340E9;
+        Mon, 14 Feb 2022 09:41:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832849;
-        bh=qG8TxJIEufoTrtV8bFIDKUVwWO6LpLeVz8gYbFL9Sw4=;
+        s=korg; t=1644831672;
+        bh=DyZCzf4MLSkV/RMSq/CCyIhyjZqCMJ2VWAna2pi/fsk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JuhLnPxGi3lAvS2Q8MzXhPNea7moHse8J1nCGB5wOnhcTkWbXpXFOmUDLPb6QMzVV
-         ALxNuke9Hl8uH3YdFfHBi0H92w/yk+GUTZd90tuvb6z1B8IZ/ynehA+qHcTkzddoy3
-         lj7A43tOW2dV+awi1FqC4vZOVTnczs+3xWMwzYUQ=
+        b=UORf68Q5Jv4Yzuw8f4Cj3G9jrb00jgQy3omDY2NRRhi0S8CCLaYmQy3PYrRmWK4y6
+         HJq6+hyJNMtT3u1EK7Uy/Z9aV+0wdeXpiJMoZK7ypuBdOK54HM+IhUV0qEgOXY6aap
+         dhRSkHBAXNTux99gJszWWsf13BOoVtol6SvODsXg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Maxime Ripard <maxime@cerno.tech>,
+        stable@vger.kernel.org, John Keeping <john@metanate.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 113/203] drm/vc4: hdmi: Allow DBLCLK modes even if horz timing is odd.
+Subject: [PATCH 5.10 058/116] usb: f_fs: Fix use-after-free for epfile
 Date:   Mon, 14 Feb 2022 10:25:57 +0100
-Message-Id: <20220214092514.092096297@linuxfoundation.org>
+Message-Id: <20220214092500.747995676@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +56,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+From: Udipto Goswami <quic_ugoswami@quicinc.com>
 
-[ Upstream commit 1d118965965f89948236ebe23072bb1fca5e7832 ]
+[ Upstream commit ebe2b1add1055b903e2acd86b290a85297edc0b3 ]
 
-The 2711 pixel valve can't produce odd horizontal timings, and
-checks were added to vc4_hdmi_encoder_atomic_check and
-vc4_hdmi_encoder_mode_valid to filter out/block selection of
-such modes.
+Consider a case where ffs_func_eps_disable is called from
+ffs_func_disable as part of composition switch and at the
+same time ffs_epfile_release get called from userspace.
+ffs_epfile_release will free up the read buffer and call
+ffs_data_closed which in turn destroys ffs->epfiles and
+mark it as NULL. While this was happening the driver has
+already initialized the local epfile in ffs_func_eps_disable
+which is now freed and waiting to acquire the spinlock. Once
+spinlock is acquired the driver proceeds with the stale value
+of epfile and tries to free the already freed read buffer
+causing use-after-free.
 
-Modes with DRM_MODE_FLAG_DBLCLK double all the horizontal timing
-values before programming them into the PV. The PV values,
-therefore, can not be odd, and so the modes can be supported.
+Following is the illustration of the race:
 
-Amend the filtering appropriately.
+      CPU1                                  CPU2
 
-Fixes: 57fb32e632be ("drm/vc4: hdmi: Block odd horizontal timings")
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220127135116.298278-1-maxime@cerno.tech
+   ffs_func_eps_disable
+   epfiles (local copy)
+					ffs_epfile_release
+					ffs_data_closed
+					if (last file closed)
+					ffs_data_reset
+					ffs_data_clear
+					ffs_epfiles_destroy
+spin_lock
+dereference epfiles
+
+Fix this races by taking epfiles local copy & assigning it under
+spinlock and if epfiles(local) is null then update it in ffs->epfiles
+then finally destroy it.
+Extending the scope further from the race, protecting the ep related
+structures, and concurrent accesses.
+
+Fixes: a9e6f83c2df1 ("usb: gadget: f_fs: stop sleeping in ffs_func_eps_disable")
+Co-developed-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+Reviewed-by: John Keeping <john@metanate.com>
+Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
+Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+Link: https://lore.kernel.org/r/1643256595-10797-1-git-send-email-quic_ugoswami@quicinc.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_hdmi.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/gadget/function/f_fs.c | 56 ++++++++++++++++++++++--------
+ 1 file changed, 42 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
-index c000946996edb..24f11c07bc3c7 100644
---- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-+++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-@@ -1090,6 +1090,7 @@ static int vc4_hdmi_encoder_atomic_check(struct drm_encoder *encoder,
- 	unsigned long long tmds_rate;
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index d8652321e15e9..bb0d92837f677 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1710,16 +1710,24 @@ static void ffs_data_put(struct ffs_data *ffs)
  
- 	if (vc4_hdmi->variant->unsupported_odd_h_timings &&
-+	    !(mode->flags & DRM_MODE_FLAG_DBLCLK) &&
- 	    ((mode->hdisplay % 2) || (mode->hsync_start % 2) ||
- 	     (mode->hsync_end % 2) || (mode->htotal % 2)))
- 		return -EINVAL;
-@@ -1137,6 +1138,7 @@ vc4_hdmi_encoder_mode_valid(struct drm_encoder *encoder,
- 	struct vc4_hdmi *vc4_hdmi = encoder_to_vc4_hdmi(encoder);
+ static void ffs_data_closed(struct ffs_data *ffs)
+ {
++	struct ffs_epfile *epfiles;
++	unsigned long flags;
++
+ 	ENTER();
  
- 	if (vc4_hdmi->variant->unsupported_odd_h_timings &&
-+	    !(mode->flags & DRM_MODE_FLAG_DBLCLK) &&
- 	    ((mode->hdisplay % 2) || (mode->hsync_start % 2) ||
- 	     (mode->hsync_end % 2) || (mode->htotal % 2)))
- 		return MODE_H_ILLEGAL;
+ 	if (atomic_dec_and_test(&ffs->opened)) {
+ 		if (ffs->no_disconnect) {
+ 			ffs->state = FFS_DEACTIVATED;
+-			if (ffs->epfiles) {
+-				ffs_epfiles_destroy(ffs->epfiles,
+-						   ffs->eps_count);
+-				ffs->epfiles = NULL;
+-			}
++			spin_lock_irqsave(&ffs->eps_lock, flags);
++			epfiles = ffs->epfiles;
++			ffs->epfiles = NULL;
++			spin_unlock_irqrestore(&ffs->eps_lock,
++							flags);
++
++			if (epfiles)
++				ffs_epfiles_destroy(epfiles,
++						 ffs->eps_count);
++
+ 			if (ffs->setup_state == FFS_SETUP_PENDING)
+ 				__ffs_ep0_stall(ffs);
+ 		} else {
+@@ -1766,14 +1774,27 @@ static struct ffs_data *ffs_data_new(const char *dev_name)
+ 
+ static void ffs_data_clear(struct ffs_data *ffs)
+ {
++	struct ffs_epfile *epfiles;
++	unsigned long flags;
++
+ 	ENTER();
+ 
+ 	ffs_closed(ffs);
+ 
+ 	BUG_ON(ffs->gadget);
+ 
+-	if (ffs->epfiles) {
+-		ffs_epfiles_destroy(ffs->epfiles, ffs->eps_count);
++	spin_lock_irqsave(&ffs->eps_lock, flags);
++	epfiles = ffs->epfiles;
++	ffs->epfiles = NULL;
++	spin_unlock_irqrestore(&ffs->eps_lock, flags);
++
++	/*
++	 * potential race possible between ffs_func_eps_disable
++	 * & ffs_epfile_release therefore maintaining a local
++	 * copy of epfile will save us from use-after-free.
++	 */
++	if (epfiles) {
++		ffs_epfiles_destroy(epfiles, ffs->eps_count);
+ 		ffs->epfiles = NULL;
+ 	}
+ 
+@@ -1921,12 +1942,15 @@ static void ffs_epfiles_destroy(struct ffs_epfile *epfiles, unsigned count)
+ 
+ static void ffs_func_eps_disable(struct ffs_function *func)
+ {
+-	struct ffs_ep *ep         = func->eps;
+-	struct ffs_epfile *epfile = func->ffs->epfiles;
+-	unsigned count            = func->ffs->eps_count;
++	struct ffs_ep *ep;
++	struct ffs_epfile *epfile;
++	unsigned short count;
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&func->ffs->eps_lock, flags);
++	count = func->ffs->eps_count;
++	epfile = func->ffs->epfiles;
++	ep = func->eps;
+ 	while (count--) {
+ 		/* pending requests get nuked */
+ 		if (likely(ep->ep))
+@@ -1944,14 +1968,18 @@ static void ffs_func_eps_disable(struct ffs_function *func)
+ 
+ static int ffs_func_eps_enable(struct ffs_function *func)
+ {
+-	struct ffs_data *ffs      = func->ffs;
+-	struct ffs_ep *ep         = func->eps;
+-	struct ffs_epfile *epfile = ffs->epfiles;
+-	unsigned count            = ffs->eps_count;
++	struct ffs_data *ffs;
++	struct ffs_ep *ep;
++	struct ffs_epfile *epfile;
++	unsigned short count;
+ 	unsigned long flags;
+ 	int ret = 0;
+ 
+ 	spin_lock_irqsave(&func->ffs->eps_lock, flags);
++	ffs = func->ffs;
++	ep = func->eps;
++	epfile = ffs->epfiles;
++	count = ffs->eps_count;
+ 	while(count--) {
+ 		ep->ep->driver_data = ep;
+ 
 -- 
 2.34.1
 

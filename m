@@ -2,106 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9237F4B4590
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:23:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 364814B4593
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:24:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242825AbiBNJXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:23:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37816 "EHLO
+        id S242849AbiBNJYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:24:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbiBNJXT (ORCPT
+        with ESMTP id S231140AbiBNJYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:23:19 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8055460A86
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 01:23:11 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id t14so21289151ljh.8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 01:23:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=356urLSOZJtLDmx8ZJRvuR2tZ/D2/VwMXst9vpTFk54=;
-        b=Z+xboBH9ewqYE4OA7YRMAkbROwS4qmUA/yfeiKUplCmWDXxs4Ixnd71YT1Z1FVHX1D
-         RkCKjqDifBlW1sghevfef0cvtx7R8YCnww/905OXD0bI3rBRFl3QG8H0AH3aOm6QPt9A
-         lKSOK/lO3yAF2vQW5lnupEPLN4WpAriBQgSNOIM7pnAhzkzXlsB6uz50JDkkZTP0o9vr
-         UXO1wgzj8oT0lw22CQsU4z6lTDyeeyinIDSh9gZBrYMoyXAU8y5Z+jvRZ8PvHEmmXmrT
-         Ehu1UxASAf54ZIAA+ahcc5fRCdZq70qHcIl5Hd3aorS7zPq3pbPXFmDtYKzDlPHYvs4S
-         d63g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=356urLSOZJtLDmx8ZJRvuR2tZ/D2/VwMXst9vpTFk54=;
-        b=dwLBo0RW+EJn1v/LuWSYXz6QziUIXGV04Rn4gGIEfIAlpD21dXkOK5IX4ErlSopWAD
-         fTN6bfjRfviXcRbNVAA/NOueM6pTqb0colpl4WOzz4+SmEaJu4wRz2PFcFYf6bcD3pK2
-         uXIrRGG7p++r6sYT57+S0ab6aXFk1v7wobJwn4Yi+whRtetfges6+Z6IJdY5uLjkJzEH
-         3NPJqyUQdikNgZsXxdLIXvQ8i3R48QCt8v3dk445jSoBtqt1cgfPQXOuIsOcM8GGYZwd
-         z3TIIRVFUAmBKphm2aSLqycZTapALHiiBw/STmVcK6hwcHTfvHMcKHJ0zDHhy9A5ogmn
-         9gBA==
-X-Gm-Message-State: AOAM533fxTCG1PE9yuWhTG0RJVbQDqiRLIDVDokXcnh3av3xPIemq9EL
-        0MLFZUpNjQB81m1B5MA+fhYIP0ZURQxwlpRZcDbSiQ==
-X-Google-Smtp-Source: ABdhPJy3vcaD+3nckysYlkRQnrs/J9wyitdDSdd2mYpvMaa99GIJ/5A9elwqUUBT/4WzicPlZFl41eZtffOQOs7Mn7k=
-X-Received: by 2002:a2e:850e:: with SMTP id j14mr8440677lji.463.1644830589879;
- Mon, 14 Feb 2022 01:23:09 -0800 (PST)
+        Mon, 14 Feb 2022 04:24:06 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7728E60A87;
+        Mon, 14 Feb 2022 01:23:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644830639; x=1676366639;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bVOs35Dp7Asq5//nT0TwjwfmoTvaxxpXMLgbeKZ9q9Y=;
+  b=S4EDqU4dfrKl0XVt16bMpYWq0Lrm/+rfKGeSKVRQoTwLGt5scooFdZak
+   ZmRFT1fcpqu7FO0yYemmgjn/f6EhSxUPWDl9pn7qNXMtNSm1kPDay2oRi
+   qktL+3TGPn1lDmn7lJECLVvEG1r/RXXysix+76E995S1xgk8m2CN+eWjd
+   0j4iKMTJB1+1w+EtG0TrdFlOwr054u/t30ADsimceKMTuiwSeGyxXDLEt
+   sJjCm/j8CGGEKn8wLGFKPqJykjTOqOLhpxVHfpzoUDcZj8Cf+ohE3jIKr
+   mhVs9wZVpKWDQ85R3Z9PH9baBgzVKlt8sARjd3a01DWDRdABF5vr98rWC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="336477221"
+X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
+   d="scan'208";a="336477221"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 01:23:59 -0800
+X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
+   d="scan'208";a="570031384"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 01:23:57 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nJXZW-004OM7-8W;
+        Mon, 14 Feb 2022 11:23:02 +0200
+Date:   Mon, 14 Feb 2022 11:23:02 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Matt Ranostay <matt.ranostay@konsulko.com>
+Subject: Re: [PATCH v3 1/1] iio: chemical: atlas-ezo-sensor: Make use of
+ device properties
+Message-ID: <YgofdmXx5BED0C3f@smile.fi.intel.com>
+References: <20220207124204.11658-1-andriy.shevchenko@linux.intel.com>
+ <20220213180757.751d1350@jic23-huawei>
 MIME-Version: 1.0
-References: <20220131113743.52265-1-ulf.hansson@linaro.org>
- <b33ceac4-506a-65c8-7c80-b1b0a67ce65e@gmail.com> <CAPDyKFqsvF=Pm-vMXSUwPMPnjCr7nSYuy5AH+8rwLYm_NUPKww@mail.gmail.com>
- <400e45da-837a-c8ad-84b3-285e35f8462c@gmail.com> <CAPDyKFpLX0Jpz-tzYx3-g0YBZZNh6Bw731gQEFQub1SviLGoYg@mail.gmail.com>
- <2656099c-76bc-33a5-3b98-c46858025955@gmail.com>
-In-Reply-To: <2656099c-76bc-33a5-3b98-c46858025955@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 14 Feb 2022 10:22:32 +0100
-Message-ID: <CAPDyKFokevJSYoH009t3PA4h48tx-LK+DaWVpC_14L6xZF3iZA@mail.gmail.com>
-Subject: Re: [PATCH] PM: domains: Prevent power off for parent unless child is
- in deepest state
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Kevin Hilman <khilman@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220213180757.751d1350@jic23-huawei>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 13 Feb 2022 at 13:14, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 07.02.2022 11:43, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >> In general, such changes usually are deferred from being upstreamed
-> >> until there is a real user, otherwise there is a risk of cluttering th=
-e
-> >> code with unused features. Do you have a time estimation in regards to
-> >> when STMicro may start to benefit from this change?
-> > The STMicro folkz are working on it right now, but I can't give you
-> > any estimates for their work.
-> >
-> > Moreover, I think the important point in this regard, is that the
-> > $subject patch doesn't really hurt anything else, so then what's the
-> > point of holding this back?
->
-> If that work will never pan out, will you remove the unused code?
+On Sun, Feb 13, 2022 at 06:07:57PM +0000, Jonathan Cameron wrote:
+> On Mon,  7 Feb 2022 14:42:04 +0200
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> 
+> > Convert the module to be property provider agnostic and allow
+> > it to be used on non-OF platforms.
+> > 
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> +Cc: Matt
 
-Sure, I will continue to monitor the situation, which is what I have
-been doing for many years by now.
+Maybe he wants to become a designated reviewer for this driver?
+(Missing record in MAINTAINERS?)
 
-In the past we have agreed to add new things to genpd, even if those
-didn't have in-tree users when the changes went in. The current
-dev_pm_genpd_set_next_wakeup() inteface, for example, is still lacking
-a user upstream. It's a balance, because I certainly agree with you,
-that we don't want to carry around dead code in the kernel - unless we
-have reasons to believe it's an intermediate step before there a user
-turning up.
+> Looks straight forward to me so I'll queue it up and Matt can comment
+> after if he likes.
+> 
+> Applied to the togreg branch of iio.git and pushed out as testing for
+> all the normal checks.
 
-Kind regards
-Uffe
+Thanks!
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

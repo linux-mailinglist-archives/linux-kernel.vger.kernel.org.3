@@ -2,255 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68C004B4D1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5B84B4CF7
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348842AbiBNKsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:48:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39536 "EHLO
+        id S1348452AbiBNKtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:49:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349040AbiBNKsG (ORCPT
+        with ESMTP id S1348968AbiBNKtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:48:06 -0500
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6887FBB57E;
-        Mon, 14 Feb 2022 02:10:35 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id ABB5D580332;
-        Mon, 14 Feb 2022 05:10:34 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 14 Feb 2022 05:10:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=EnwwaeNb5+LND6+6WXD288NdXE12D61i7kfAe0
-        ieFqE=; b=CzE9rL1nAtOyYF3pwQDSQtVXJVXemJJIVUCBS+zUJ5XsNMUgAISIFz
-        Cl6TC3ydR5Bnz0eRqKYQOl+wY3Z0L8+WLlMRZo6aSjbPu9sTfpUqZxoTAnUsmuM9
-        VaPNe3Ecvrk04upczpsfSNzNxNiCY4BH6i+/uVBZTS9p4Kj7fz8ugVCkL1mMJPKM
-        QsK+0CoP1WfqOMx1r8moR0D1KeY/8apfOKkhXChdH7xu1d6qh/YIYsVcAkEyk8a0
-        TrZ/m1IgM1DVfPk/gh1wpJnZTy7VKoLHKFc7x5paHXAF/Iq10wNZe7nYyNvmXTlS
-        7ZFcbOlmpQMMplPbpB8ERUNX4TWmxsfw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=EnwwaeNb5+LND6+6W
-        XD288NdXE12D61i7kfAe0ieFqE=; b=EIaY9RDXdVZ7gbETjM4POhQxZQ3tbhFc9
-        gqV4vGONT+GXNkMCHtsFndOt0qDEZgcKYpO8FFHZRqKN3vBdhPcDjmBikAC757bc
-        HUaF/2Xdc0W8o6+ZZDwRiFutmbpDQeKyEnCH8sWgWf5dIlNxBunk7YUyQlJQUlj6
-        /GWsZASAiRoSrgtpvc7iv2gQxRaNqYUPM24lDLx9D9wr8+EWrS9RRV27eBCwlBky
-        AXQ67TZtXbFRUyYPx03bO1wM13n8FHMl57CjN8nXXWVzWTiYO0/u3SalB6w1DD5a
-        sjoH2yELynJauf7lDxQsdaP4gEb7btWU/F53SouOwW2r97XqfAnyA==
-X-ME-Sender: <xms:mSoKYsf2M0QNBOmG6Y7cCb5y2wtp1UOJ384EjRvi8mTVLe6Ynyv4VQ>
-    <xme:mSoKYuP4QBNvEL-8xRhP8iRF7Hai3ngfL6Mzp_bMiQ3vJtC1w_fNapz-bBrRxd17U
-    U2vPAg3vdXirZlGtaw>
-X-ME-Received: <xmr:mSoKYthC6tTF4o-NimBCgq--W5t_heZZRxKVmkZZhQNQg_Y9SmEQ5ZMyBWFVt53CaS4mVWmWhl9DNZMP9hyu4fxU7yFJ2_GvbOHNEDw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjedvgddtkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
-    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
-    igihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:mSoKYh_yz1MNjdRlQdmWta6qmVeq3aZNtEYMP9sH_OUKrI-ImaBicQ>
-    <xmx:mSoKYou16dW7_9G3CBD4w6LmQx70LIVbkgLTbAAdgIm-W2iJiXqrqg>
-    <xmx:mSoKYoHKp3RvZTW2mPIxR6o9UOwKzYJR6hQJuuQWR9FOlHbYmsPEUQ>
-    <xmx:mioKYo3zxUWhUvQ6BSQWDR0RJwQPH9BXQ0bj1oYLvbf-KCtD4Dxvkw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 14 Feb 2022 05:10:32 -0500 (EST)
-Date:   Mon, 14 Feb 2022 11:10:31 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>, Li Yi <liyi@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v7 1/7] drm/lsdc: add drm driver for loongson display
- controller
-Message-ID: <20220214101031.kerresldiuopil6l@houat>
-References: <20220213141649.1115987-1-15330273260@189.cn>
- <20220213141649.1115987-2-15330273260@189.cn>
+        Mon, 14 Feb 2022 05:49:04 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0C6BDA47
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:11:55 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id z17so10133466plb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:11:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TZC2zqnsGdYKa6ED3IQ9bDrMCL7iNxaV9fJORDhdXXQ=;
+        b=s68lMju5iEdQddCWAGgZ9FK5zw+gevcdYhSzhov5HJEUNazg4BACE2jOSbbjNAH8n8
+         ov/bykvpBolzaTfjrMelg9os0BIQ6zc4fjqcOJwemaUTLeQlBx+u0ZbCB9dtqEMe0Koi
+         u1iRhdu/LIjK31Rha7+WK2zTd0fLVqmBj5egOxiVqitgVA9Z/f845dcFrYPOXGiO/0DC
+         zaWyAQ3AmN3bGDAlRph7fyH8yqIo6ARx0/fg4ebruIc4f5KmE53x4vUCLFcTwaSY4vKe
+         TP6B0Mm0CNydDy0bLgCLGSk1nUL8eb7D+O1pj+Dk3r2DZNyVN7EzchZ+K26LTnNpwTrR
+         9XVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TZC2zqnsGdYKa6ED3IQ9bDrMCL7iNxaV9fJORDhdXXQ=;
+        b=Qh+UOk6ZGOkzQXDzmOFaclKEt+g5IzqmrYjG83uRGKwgE01+xBeTXx2fL2e/myrUSV
+         9NGhqposiUxdNkOGcVuq8qKiJC0AfAIdvppopGbenJ3UT/Li/qNzCZaT9dd/G7Z1fxHW
+         yKh71VZQ16Fk8FZs5daARth4ybnJqbQ9dmVIT04wdJyC9D+o3+mHMfe+8sg/Wp0Oo5fN
+         isEbkir1/GFfgh0nDNM/whQ6otnJ6skoIHe01iQKsoYU5rboqAwOGHED8UqgZdYHqrFv
+         d+tnHbre9J/uXCIbLiYnalU/Eggn0Pp4HAVdgq23GbXj4PAn5PIF5zkU8PvC/7AVglJ4
+         koMA==
+X-Gm-Message-State: AOAM532zaOh7hTISXUCkac3r7z+VH6oSHBszCMYjLdVuW5wzIvuOfnxZ
+        pQypcvrH9ecMiGU+4IxMikCb
+X-Google-Smtp-Source: ABdhPJwZs3ndm10YO39LbYVx1RxPAULC6DZ65ngqdzYWV2fW1AmJXxHQgwkikX0c8E6JiybbRc52fw==
+X-Received: by 2002:a17:90b:1c0e:: with SMTP id oc14mr8152443pjb.25.1644833515150;
+        Mon, 14 Feb 2022 02:11:55 -0800 (PST)
+Received: from thinkpad ([2409:4072:817:5a6f:3104:62c0:1941:5033])
+        by smtp.gmail.com with ESMTPSA id np15sm4359544pjb.44.2022.02.14.02.11.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 02:11:54 -0800 (PST)
+Date:   Mon, 14 Feb 2022 15:41:45 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Rob Herring <robh@kernel.org>, linux-pci@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [RFC PATCH 4/5] misc: pci_endpoint_test: Add support to pass
+ flags for buffer allocation
+Message-ID: <20220214101145.GL3494@thinkpad>
+References: <20220126195043.28376-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220126195043.28376-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="22dgeudp6wphcltc"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220213141649.1115987-2-15330273260@189.cn>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220126195043.28376-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 26, 2022 at 07:50:42PM +0000, Lad Prabhakar wrote:
+> By default GFP_KERNEL flag is used for buffer allocation in read, write
+> and copy test and then later mapped using streaming DMA api. But on
+> Renesas RZ/G2{EHMN} platforms using the default flag causes the tests to
+> fail. Allocating the buffers from DMA zone (using the GFP_DMA flag) make
+> the test cases to pass.
+> 
+> To handle such case add flags as part of struct pci_endpoint_test_data
+> so that platforms can pass the required flags based on the requirement.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> Hi All,
+> 
+> This patch is based on the conversation where switching to streaming
+> DMA api causes read/write/copy tests to fail on Renesas RZ/G2 platforms
+> when buffers are allocated using GFP_KERNEL.
+> 
+> [0] https://www.spinics.net/lists/linux-pci/msg92385.html
+> 
+> Cheers,
+> Prabhakar
+> ---
+>  drivers/misc/pci_endpoint_test.c | 16 ++++++++++++----
+>  1 file changed, 12 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
+> index 0a00d45830e9..974546992c5e 100644
+> --- a/drivers/misc/pci_endpoint_test.c
+> +++ b/drivers/misc/pci_endpoint_test.c
+> @@ -117,6 +117,7 @@ struct pci_endpoint_test {
+>  	enum pci_barno test_reg_bar;
+>  	size_t alignment;
+>  	size_t dmac_data_alignment;
+> +	gfp_t flags;
 
---22dgeudp6wphcltc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+gfp_flags? Since this is used for allocation.
 
-On Sun, Feb 13, 2022 at 10:16:43PM +0800, Sui Jingfeng wrote:
-> From: suijingfeng <suijingfeng@loongson.cn>
->=20
-> There is a display controller in loongson's LS2K1000 SoC and LS7A1000
-> bridge chip, the DC is a PCI device in those chips. It has two display
-> pipes but with only one hardware cursor. Each way has a DVO interface
-> which provide RGB888 signals, vertical & horizontal synchronisations,
-> data enable and the pixel clock. Each CRTC is able to scanout from
-> 1920x1080 resolution at 60Hz. The maxmium resolution is 2048x2048
-> according to the hardware spec.
->=20
-> Loongson display controllers are simple which require scanout buffers
-> to be physically contiguous. LS2K1000 is a SOC, Only system memory is
-> available. Therefore CMA helper based driver is intended to be use,
-> although it is possible to use VRAM helper based solution by carving
-> out part of system memory as VRAM.
->=20
-> On LS7A1000/LS7A2000 bridge chip, the DC is equipped with a dedicated
-> video memory which is typically 64MB or more. In this case, VRAM helper
-> based solution which scanout from local VRAM is reconmended to use.
-> It is reliable to use for massive production, but CMA based helper
-> solution is still usable on ls7a1000 and ls7a2000, at the price of
-> the CRTC must access the FB in RAM through the PCIe bus and HT3.0 bus.
-> This causes continuous traffic on the bus regardless of whether the FB
-> image is updating or not. Sadly, it suffer from screen flickering under
-> RAM pressure on LS7A1000. Luckily, It show extremely good condition on
-> LS7A2000 even under stressapptest, Maybe the hardware engineer resolve
-> this issue. Integrating two distict helpers based driver into one piece
-> allow code sharing.
->=20
-> We have also implemented demage update on top of CMA helper which copy
-> the demaged region from the shadow framebuffer in system RAM to the real
-> framebuffer in VRAM manually. This is intend to overcome the screen
-> flicking issue on LS7A1000, but the performance is not good.
-> Using "lsdc.dirty_update=3D1" in the kernel commmand line if you would li=
-ke
-> to have a try.
->=20
-> For LS7A1000, there are 4 dedicated GPIOs whose control register is
-> located at the DC register space, They are used to emulate two way i2c.
-> One for DVO0, another for DVO1. This is the reason why this driver is
-> not switch to drm bridge framework yet. LS2K1000 and LS2K0500 SoC don't
-> have such GPIO hardwared, they grab i2c adapter from other module,
-> either general purpose GPIO emulated i2c or hardware i2c adapter.
-> Drm bridge and drm panel driver for the external encoder is suitable for
-> those SoC. We have already implemented this on our downstream 4.19.190
-> kernel. But due to the GPIO, PWM and I2C device driver support for
-> LS2K1000 is not upstreamed yet, this driver still can be use to bring
-> the graphic environment up by providing display timings or similar things
-> in the device tree.
->=20
-> The DC in LS7A1000 has only one hardware cursor, we simply let the two
-> CRTC share it. The DC in LS7A2000 have two cursor, two built-in hdmi
-> encoder and one transparent vga encoder and more, surport for LS7A2000
-> is on the way. In short, we have built-in gpio emulated i2c support,
-> we also have hardware cursor support. LS7A2000 The kind of tiny drivers
-> in drm/tiny is not suitable for us.
->=20
->     +------+            +-----------------------------------+
->     | DDR4 |            |  +-------------------+            |
->     +------+            |  | PCIe Root complex |   LS7A1000 |
->        || MC0           |  +--++---------++----+            |
->   +----------+  HT 3.0  |     ||         ||                 |
->   | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
->   |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
->   +----------+          | +--------+  +-+--+-+    +---------+   +------+
->        || MC1           +---------------|--|----------------+
->     +------+                            |  |
->     | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
->     +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
->                       +-------+                      +------+
->=20
-> The above picture give a simple usage of LS7A1000, note that the encoder
-> is not necessary adv7125 or tfp410, it is a choice of the downstream board
-> manufacturer. Other candicate encoders can be ch7034b, sil9022 and ite661=
-21
-> lt8618 etc. Besides, the DC in both ls2k1000 and ls7k1000 has the same of
-> PCI vendor id and pci device id. Both is 0x0014:0x7a06, the reverison id
-> is also same. This is the firmware engineer's mistake, but such firmware
-> and various boards ship with such firmware already released. We choose to
-> deduce the chip's identification from information provided by device tree.
-> For lsdc, there is only a 1:1 mapping of encoders and connectors.
->=20
-> v2: fixup warnings reported by kernel test robot
->=20
-> v3: fix more grammar mistakes in Kconfig reported by Randy Dunlap and give
->     more details about lsdc.
->=20
-> v4:
->    1) Add dts required and explain why device tree is required.
->    2) Give more description about lsdc and vram helper base driver.
->    3) Fix warnings reported by kernel test robot.
->    4) Introduce stride_alignment member into struct lsdc_chip_desc, the
->       stride alignment is 256 bytes for ls7a1000, ls2k1000 and ls2k0500.
->       But ls7a2000 improve it to 32 bytes, for extend the support for the
->       device on coming
->
-> v5:
->    1) using writel and readl replace writeq and readq, to fix kernel test
->       robot report build error on other archtecture
->    2) set default fb format to XRGB8888 at crtc reset time.
->    3) fix typos.
->=20
-> v6:
->    1) Explain why we are not switch to drm dridge subsystem on ls2k1000.
->    2) Explain why tiny drm driver is not suitable for us.
->    3) Give a short description of the trival dirty uppdate implement based
->       on CMA helper.
->    4) code clean up
->=20
-> v7:
->    1) Remove select I2C_GPIO and I2C_LS2X in Kconfig, it is not ready now
->    2) Licensing issues are fixed suggested by Krzysztof Kozlowski.
->    3) lsdc_pixpll_print() is removed, part of it move to debugfs.
->    4) Set prefer_shadow to true if vram based driver is in using.
->    5) Replace double blank lines with single line in all files
->    6) Verbose cmd line parameter is replaced with drm_dbg()
->    7) All warnnings reported by ./scripts/checkpatch.pl --strict are fixed
->    8) Get edid from dtb support is removed as suggested by Maxime Ripard
->    9) Fix typos and various improvement
+Thanks,
+Mani
 
-A lot of the major comments I had haven't been fixed though: you *need*
-to have a DT bindings description, Kconfig isn't the proper place to set
-the VRAM preference, the command line isn't either, the command line
-isn't the solution for all your parameters, etc.
-
-Those things are major blockers at the moment, so ignoring them won't
-help getting this merged.
-
-Maxime
-
---22dgeudp6wphcltc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgoqlwAKCRDj7w1vZxhR
-xaupAP9QxVn4MY8fLRgh0Kvu1RZ3LspqtlVOws7AVDIeCMHy7wD/VQn/keld+Nh9
-d4Wh8dIVav3ralKQ8Aq9LaDK0Q/5rQE=
-=fvHX
------END PGP SIGNATURE-----
-
---22dgeudp6wphcltc--
+>  	const char *name;
+>  };
+>  
+> @@ -125,6 +126,7 @@ struct pci_endpoint_test_data {
+>  	size_t alignment;
+>  	int irq_type;
+>  	size_t dmac_data_alignment;
+> +	gfp_t flags;
+>  };
+>  
+>  static inline u32 pci_endpoint_test_readl(struct pci_endpoint_test *test,
+> @@ -381,7 +383,7 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
+>  		goto err;
+>  	}
+>  
+> -	orig_src_addr = kzalloc(size + alignment, GFP_KERNEL);
+> +	orig_src_addr = kzalloc(size + alignment, test->flags);
+>  	if (!orig_src_addr) {
+>  		dev_err(dev, "Failed to allocate source buffer\n");
+>  		ret = false;
+> @@ -414,7 +416,7 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
+>  
+>  	src_crc32 = crc32_le(~0, src_addr, size);
+>  
+> -	orig_dst_addr = kzalloc(size + alignment, GFP_KERNEL);
+> +	orig_dst_addr = kzalloc(size + alignment, test->flags);
+>  	if (!orig_dst_addr) {
+>  		dev_err(dev, "Failed to allocate destination address\n");
+>  		ret = false;
+> @@ -518,7 +520,7 @@ static bool pci_endpoint_test_write(struct pci_endpoint_test *test,
+>  		goto err;
+>  	}
+>  
+> -	orig_addr = kzalloc(size + alignment, GFP_KERNEL);
+> +	orig_addr = kzalloc(size + alignment, test->flags);
+>  	if (!orig_addr) {
+>  		dev_err(dev, "Failed to allocate address\n");
+>  		ret = false;
+> @@ -619,7 +621,7 @@ static bool pci_endpoint_test_read(struct pci_endpoint_test *test,
+>  		goto err;
+>  	}
+>  
+> -	orig_addr = kzalloc(size + alignment, GFP_KERNEL);
+> +	orig_addr = kzalloc(size + alignment, test->flags);
+>  	if (!orig_addr) {
+>  		dev_err(dev, "Failed to allocate destination address\n");
+>  		ret = false;
+> @@ -788,6 +790,7 @@ static int pci_endpoint_test_probe(struct pci_dev *pdev,
+>  	test->alignment = 0;
+>  	test->pdev = pdev;
+>  	test->irq_type = IRQ_TYPE_UNDEFINED;
+> +	test->flags = GFP_KERNEL;
+>  
+>  	if (no_msi)
+>  		irq_type = IRQ_TYPE_LEGACY;
+> @@ -799,6 +802,7 @@ static int pci_endpoint_test_probe(struct pci_dev *pdev,
+>  		test->alignment = data->alignment;
+>  		irq_type = data->irq_type;
+>  		test->dmac_data_alignment = data->dmac_data_alignment;
+> +		test->flags = data->flags;
+>  	}
+>  
+>  	init_completion(&test->irq_raised);
+> @@ -947,23 +951,27 @@ static const struct pci_endpoint_test_data default_data = {
+>  	.test_reg_bar = BAR_0,
+>  	.alignment = SZ_4K,
+>  	.irq_type = IRQ_TYPE_MSI,
+> +	.flags = GFP_KERNEL,
+>  };
+>  
+>  static const struct pci_endpoint_test_data am654_data = {
+>  	.test_reg_bar = BAR_2,
+>  	.alignment = SZ_64K,
+>  	.irq_type = IRQ_TYPE_MSI,
+> +	.flags = GFP_KERNEL,
+>  };
+>  
+>  static const struct pci_endpoint_test_data j721e_data = {
+>  	.alignment = 256,
+>  	.irq_type = IRQ_TYPE_MSI,
+> +	.flags = GFP_KERNEL,
+>  };
+>  
+>  static const struct pci_endpoint_test_data renesas_rzg2x_data = {
+>  	.test_reg_bar = BAR_0,
+>  	.irq_type = IRQ_TYPE_MSI,
+>  	.dmac_data_alignment = 8,
+> +	.flags = GFP_KERNEL | GFP_DMA,
+>  };
+>  
+>  static const struct pci_device_id pci_endpoint_test_tbl[] = {
+> -- 
+> 2.25.1
+> 

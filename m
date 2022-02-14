@@ -2,76 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3174B4E51
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:27:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65ACE4B4E53
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351092AbiBNL10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:27:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57304 "EHLO
+        id S1351248AbiBNL1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:27:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350880AbiBNL1M (ORCPT
+        with ESMTP id S1351252AbiBNL1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:27:12 -0500
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0404865832;
-        Mon, 14 Feb 2022 03:03:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1644836574;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=UuYelEPUUVN2By4s65pB/byvPZxpZ0/KX4emzn6gY80=;
-    b=XmHSJjW5lMjNkKyFEnYyKU3qq7w9yhrWIfJ9SJ0YWsZnK97HV6wUiNUIpmMGCCUG1Z
-    Ws01peA+jNPuHpmMwSMYY1r86bUlZJmmm4DaTIobuG4uenw1mCNAhG+U0RcSv7/AAB6S
-    ch5gyAt8xV9pVUtznXfJNXLL/iY6x4rXsHeZtH6Gygswt2J1lfBpmJQZjNp1kb7sozk0
-    0DsgVLQBn+zIe0sk+Lwq3bpG0DaJZ9Txz84GcFNIMIw4SmARxMN2pLKZ1QOJqAwmanlT
-    Q19plqv9cR5PLQray5sejrms9OcVvx3MXKJd+Tt/0tEPPa6mQET0Rd2TqGpr9HHbh9k2
-    sU1A==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3jcR+"
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.39.0 DYNA|AUTH)
-    with ESMTPSA id L29417y1EB2ryAP
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Mon, 14 Feb 2022 12:02:53 +0100 (CET)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v15 2/7] drm/ingenic: Add dw-hdmi driver specialization
- for jz4780
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <58IA7R.PZ9FQXN7FVAK@crapouillou.net>
-Date:   Mon, 14 Feb 2022 12:02:53 +0100
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <AD978522-8321-476D-955C-3CDD747EFCAC@goldelico.com>
-References: <cover.1644681054.git.hns@goldelico.com>
- <e6e1f3f44e6979a998ec9c372e329b6facaded15.1644681054.git.hns@goldelico.com>
- <58IA7R.PZ9FQXN7FVAK@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
+        Mon, 14 Feb 2022 06:27:14 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D2B4D9C7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 03:03:19 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id z14so8665266lfu.5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 03:03:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Hl87vLaLv8DngCXmqeocjtJzMqREZzh/2bzmfnbOnBI=;
+        b=THkBTvtBa5YzqrMYCgAt+L/UnKVMEuYAkIyNy2QVRc6NBrERseZejXmOU0Ao43PX3c
+         7mps+9/C0+lQJFf3rGsTbhhVg8ExBQtoFYMN88JYCs1AfCek2vtI36W5M1KFiynW7hGG
+         Mtu3kYvH9G9CensBjL6xDUC9XD1OmNciq7GY0D2VIalFGiUPApbGPSG+MfoTTJ6HKHlX
+         XvWSRoIa/0kndzqa4zfJ0VgNUtvyLBmRHg9TeHCp0mTLwxN35hpjg/6YNj3EVBd9XwER
+         RSPi4DH90Lj0sJSo7slbGLXqSHDojPNapyXIqUcgigRaw2NrN+slik8PrEB4pouLR77z
+         HKFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Hl87vLaLv8DngCXmqeocjtJzMqREZzh/2bzmfnbOnBI=;
+        b=E1bSWokJaaDIrlKrKnpejev5lKXyZfrYBehXLsVeEW6/3CnR25MBYw7Xx7DaLKkbaC
+         FfPMe6dJhCadelu0m7PIYq1O0iP3TERB8ix1vNeQqnSjSsDtSeMyJNsnn1+AMSwyXpIK
+         BLQDw3pKplAoya5spAEHKpyqq3pJkttkFEmc4wJnaRYPV4pcPMZTZ9kccTKtcvy1Ha09
+         fEGJk2J18Kn2lN2/SRtTetLD/KlXQSvZ+D1LjUry6HuHMCFowVMQzgvc6Z12I9OsBiCa
+         +hX3q1kzduDWImgHtl9vMzIIG4cJZcHCRynzPAFEeAfKBjKDenDzVyKhc+Zoq9+SGN07
+         aaZQ==
+X-Gm-Message-State: AOAM530CT8n9AdGxfDXBT2smXU1S8o5xTau2/WRpJPfMLOHW5itYo2w4
+        MrGkuBNU5zHBi1h3abuvWGO4FWzEaIXefeQ+LXkXiA==
+X-Google-Smtp-Source: ABdhPJxqmPfgf0zUncpPyAMimKP8MBRL4tzdp35/zsGPQyYVwZnu48CW+DQcQLfUuezrmzv8EOOVdSjCRR8jcjP3L2g=
+X-Received: by 2002:ac2:48b4:: with SMTP id u20mr8679229lfg.32.1644836597395;
+ Mon, 14 Feb 2022 03:03:17 -0800 (PST)
+MIME-Version: 1.0
+References: <20220208094334.16379-1-mgorman@techsingularity.net> <20220208094334.16379-3-mgorman@techsingularity.net>
+In-Reply-To: <20220208094334.16379-3-mgorman@techsingularity.net>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Mon, 14 Feb 2022 12:03:05 +0100
+Message-ID: <CAKfTPtD=ROi0mH0Z6N_wF+z2D2PoOM7ZTRtqRxWHTdi3gmzSYQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] sched/fair: Adjust the allowed NUMA imbalance when
+ SD_NUMA spans multiple LLCs
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Valentin Schneider <Valentin.Schneider@arm.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Mike Galbraith <efault@gmx.de>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        Gautham Shenoy <gautham.shenoy@amd.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,87 +74,275 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+On Tue, 8 Feb 2022 at 10:44, Mel Gorman <mgorman@techsingularity.net> wrote:
+>
+> Commit 7d2b5dd0bcc4 ("sched/numa: Allow a floating imbalance between NUMA
+> nodes") allowed an imbalance between NUMA nodes such that communicating
+> tasks would not be pulled apart by the load balancer. This works fine when
+> there is a 1:1 relationship between LLC and node but can be suboptimal
+> for multiple LLCs if independent tasks prematurely use CPUs sharing cache.
+>
+> Zen* has multiple LLCs per node with local memory channels and due to
+> the allowed imbalance, it's far harder to tune some workloads to run
+> optimally than it is on hardware that has 1 LLC per node. This patch
+> allows an imbalance to exist up to the point where LLCs should be balanced
+> between nodes.
+>
+> On a Zen3 machine running STREAM parallelised with OMP to have on instance
+> per LLC the results and without binding, the results are
+>
+>                             5.17.0-rc0             5.17.0-rc0
+>                                vanilla       sched-numaimb-v6
+> MB/sec copy-16    162596.94 (   0.00%)   580559.74 ( 257.05%)
+> MB/sec scale-16   136901.28 (   0.00%)   374450.52 ( 173.52%)
+> MB/sec add-16     157300.70 (   0.00%)   564113.76 ( 258.62%)
+> MB/sec triad-16   151446.88 (   0.00%)   564304.24 ( 272.61%)
+>
+> STREAM can use directives to force the spread if the OpenMP is new
+> enough but that doesn't help if an application uses threads and
+> it's not known in advance how many threads will be created.
+>
+> Coremark is a CPU and cache intensive benchmark parallelised with
+> threads. When running with 1 thread per core, the vanilla kernel
+> allows threads to contend on cache. With the patch;
+>
+>                                5.17.0-rc0             5.17.0-rc0
+>                                   vanilla       sched-numaimb-v5
+> Min       Score-16   368239.36 (   0.00%)   389816.06 (   5.86%)
+> Hmean     Score-16   388607.33 (   0.00%)   427877.08 *  10.11%*
+> Max       Score-16   408945.69 (   0.00%)   481022.17 (  17.62%)
+> Stddev    Score-16    15247.04 (   0.00%)    24966.82 ( -63.75%)
+> CoeffVar  Score-16        3.92 (   0.00%)        5.82 ( -48.48%)
+>
+> It can also make a big difference for semi-realistic workloads
+> like specjbb which can execute arbitrary numbers of threads without
+> advance knowledge of how they should be placed. Even in cases where
+> the average performance is neutral, the results are more stable.
+>
+>                                5.17.0-rc0             5.17.0-rc0
+>                                   vanilla       sched-numaimb-v6
+> Hmean     tput-1      71631.55 (   0.00%)    73065.57 (   2.00%)
+> Hmean     tput-8     582758.78 (   0.00%)   556777.23 (  -4.46%)
+> Hmean     tput-16   1020372.75 (   0.00%)  1009995.26 (  -1.02%)
+> Hmean     tput-24   1416430.67 (   0.00%)  1398700.11 (  -1.25%)
+> Hmean     tput-32   1687702.72 (   0.00%)  1671357.04 (  -0.97%)
+> Hmean     tput-40   1798094.90 (   0.00%)  2015616.46 *  12.10%*
+> Hmean     tput-48   1972731.77 (   0.00%)  2333233.72 (  18.27%)
+> Hmean     tput-56   2386872.38 (   0.00%)  2759483.38 (  15.61%)
+> Hmean     tput-64   2909475.33 (   0.00%)  2925074.69 (   0.54%)
+> Hmean     tput-72   2585071.36 (   0.00%)  2962443.97 (  14.60%)
+> Hmean     tput-80   2994387.24 (   0.00%)  3015980.59 (   0.72%)
+> Hmean     tput-88   3061408.57 (   0.00%)  3010296.16 (  -1.67%)
+> Hmean     tput-96   3052394.82 (   0.00%)  2784743.41 (  -8.77%)
+> Hmean     tput-104  2997814.76 (   0.00%)  2758184.50 (  -7.99%)
+> Hmean     tput-112  2955353.29 (   0.00%)  2859705.09 (  -3.24%)
+> Hmean     tput-120  2889770.71 (   0.00%)  2764478.46 (  -4.34%)
+> Hmean     tput-128  2871713.84 (   0.00%)  2750136.73 (  -4.23%)
+> Stddev    tput-1       5325.93 (   0.00%)     2002.53 (  62.40%)
+> Stddev    tput-8       6630.54 (   0.00%)    10905.00 ( -64.47%)
+> Stddev    tput-16     25608.58 (   0.00%)     6851.16 (  73.25%)
+> Stddev    tput-24     12117.69 (   0.00%)     4227.79 (  65.11%)
+> Stddev    tput-32     27577.16 (   0.00%)     8761.05 (  68.23%)
+> Stddev    tput-40     59505.86 (   0.00%)     2048.49 (  96.56%)
+> Stddev    tput-48    168330.30 (   0.00%)    93058.08 (  44.72%)
+> Stddev    tput-56    219540.39 (   0.00%)    30687.02 (  86.02%)
+> Stddev    tput-64    121750.35 (   0.00%)     9617.36 (  92.10%)
+> Stddev    tput-72    223387.05 (   0.00%)    34081.13 (  84.74%)
+> Stddev    tput-80    128198.46 (   0.00%)    22565.19 (  82.40%)
+> Stddev    tput-88    136665.36 (   0.00%)    27905.97 (  79.58%)
+> Stddev    tput-96    111925.81 (   0.00%)    99615.79 (  11.00%)
+> Stddev    tput-104   146455.96 (   0.00%)    28861.98 (  80.29%)
+> Stddev    tput-112    88740.49 (   0.00%)    58288.23 (  34.32%)
+> Stddev    tput-120   186384.86 (   0.00%)    45812.03 (  75.42%)
+> Stddev    tput-128    78761.09 (   0.00%)    57418.48 (  27.10%)
+>
+> Similarly, for embarassingly parallel problems like NPB-ep, there are
+> improvements due to better spreading across LLC when the machine is not
+> fully utilised.
+>
+>                               vanilla       sched-numaimb-v6
+> Min       ep.D       31.79 (   0.00%)       26.11 (  17.87%)
+> Amean     ep.D       31.86 (   0.00%)       26.17 *  17.86%*
+> Stddev    ep.D        0.07 (   0.00%)        0.05 (  24.41%)
+> CoeffVar  ep.D        0.22 (   0.00%)        0.20 (   7.97%)
+> Max       ep.D       31.93 (   0.00%)       26.21 (  17.91%)
+>
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
 
-> Am 14.02.2022 um 11:24 schrieb Paul Cercueil <paul@crapouillou.net>:
->=20
-> Hi,
->=20
-> Le sam., f=C3=A9vr. 12 2022 at 16:50:50 +0100, H. Nikolaus Schaller =
-<hns@goldelico.com> a =C3=A9crit :
+Good to see that you have been able to move on SD_NUMA instead of
+SD_PREFER_SIBLING.
+The allowed imbalance looks also more consistent whatever the number of LLC
 
->> +static void ingenic_dw_hdmi_cleanup(void *data)
->> +{
->> +	struct dw_hdmi *hdmi =3D (struct dw_hdmi *)data;
->> +
->> +	dw_hdmi_remove(hdmi);
->> +}
->> +
->> +static int ingenic_dw_hdmi_probe(struct platform_device *pdev)
->> +{
->> +	struct dw_hdmi *hdmi;
->> +
->> +	hdmi =3D dw_hdmi_probe(pdev, &ingenic_dw_hdmi_plat_data);
->> +	if (IS_ERR(hdmi))
->> +		return PTR_ERR(hdmi);
->> +
->> +	return devm_add_action_or_reset(&pdev->dev, =
-ingenic_dw_hdmi_cleanup, hdmi);
->=20
-> I think I said it already, but in this driver you could use a .remove =
-callback, there's not much point in using devm cleanups in such a simple =
-setup.
+Reviewed-by: Vincent Guittot <vincent.guitto@linaro.org>
 
-Well it was your suggestion after v8:
 
-https://lore.kernel.org/all/DIA33R.QE29K7RKLI2C1@crapouillou.net/
-
-So we now almost go back to RFC v1 almost 2 years ago:
-
-=
-https://patchwork.kernel.org/project/linux-mips/patch/2c131e1fb19e19f958a6=
-12f7186bc83f4afb0b0a.1582744379.git.hns@goldelico.com/
-
-Of course there was a good reason to better handle the regulator
-AND the dw_hdmi_remove() by a single mechanism.
-
-Now the regulator has gone and been replaced by the hdmi connector
-and we can go back.
-
->=20
-> In your probe you could just:
-> return PTR_ERR_OR_ZERO(hdmi);
-
-No, this does not work since we need to platform_set_drvdata().
-to be able to access the private struct in the remove callback.
-And checking errors after platform_set_drvdata() can be done but
-looks strange to me.
-
-It is up to you what you prefer.
-
->=20
->> +}
->> +
->> +static struct platform_driver ingenic_dw_hdmi_driver =3D {
->> +	.probe  =3D ingenic_dw_hdmi_probe,
->> +	.driver =3D {
->> +		.name =3D "dw-hdmi-ingenic",
->> +		.of_match_table =3D ingenic_dw_hdmi_dt_ids,
->> +	},
->> +};
->> +module_platform_driver(ingenic_dw_hdmi_driver);
->> +
->> +MODULE_DESCRIPTION("JZ4780 Specific DW-HDMI Driver Extension");
->> +MODULE_LICENSE("GPL v2");
->> +MODULE_ALIAS("platform:dwhdmi-ingenic");
->=20
-> Should probably be "platform:dw-hdmi-ingenic"?
-
-Yes, indeed. Thanks for spotting!
-
-Was also good in v1. Probably someone deleted the hyphen unnoticed =
-during editing of "jz4780" to "ingenic"...
-
-BR and thanks,
-Nikolaus
-
+> ---
+>  include/linux/sched/topology.h |  1 +
+>  kernel/sched/fair.c            | 22 +++++++-------
+>  kernel/sched/topology.c        | 53 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 66 insertions(+), 10 deletions(-)
+>
+> diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
+> index 8054641c0a7b..56cffe42abbc 100644
+> --- a/include/linux/sched/topology.h
+> +++ b/include/linux/sched/topology.h
+> @@ -93,6 +93,7 @@ struct sched_domain {
+>         unsigned int busy_factor;       /* less balancing by factor if busy */
+>         unsigned int imbalance_pct;     /* No balance until over watermark */
+>         unsigned int cache_nice_tries;  /* Leave cache hot tasks for # tries */
+> +       unsigned int imb_numa_nr;       /* Nr running tasks that allows a NUMA imbalance */
+>
+>         int nohz_idle;                  /* NOHZ IDLE status */
+>         int flags;                      /* See SD_* */
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 4592ccf82c34..538756bd8e7f 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -1489,6 +1489,7 @@ struct task_numa_env {
+>
+>         int src_cpu, src_nid;
+>         int dst_cpu, dst_nid;
+> +       int imb_numa_nr;
+>
+>         struct numa_stats src_stats, dst_stats;
+>
+> @@ -1503,7 +1504,7 @@ struct task_numa_env {
+>  static unsigned long cpu_load(struct rq *rq);
+>  static unsigned long cpu_runnable(struct rq *rq);
+>  static inline long adjust_numa_imbalance(int imbalance,
+> -                                       int dst_running, int dst_weight);
+> +                                       int dst_running, int imb_numa_nr);
+>
+>  static inline enum
+>  numa_type numa_classify(unsigned int imbalance_pct,
+> @@ -1884,7 +1885,7 @@ static void task_numa_find_cpu(struct task_numa_env *env,
+>                 dst_running = env->dst_stats.nr_running + 1;
+>                 imbalance = max(0, dst_running - src_running);
+>                 imbalance = adjust_numa_imbalance(imbalance, dst_running,
+> -                                                       env->dst_stats.weight);
+> +                                                 env->imb_numa_nr);
+>
+>                 /* Use idle CPU if there is no imbalance */
+>                 if (!imbalance) {
+> @@ -1949,8 +1950,10 @@ static int task_numa_migrate(struct task_struct *p)
+>          */
+>         rcu_read_lock();
+>         sd = rcu_dereference(per_cpu(sd_numa, env.src_cpu));
+> -       if (sd)
+> +       if (sd) {
+>                 env.imbalance_pct = 100 + (sd->imbalance_pct - 100) / 2;
+> +               env.imb_numa_nr = sd->imb_numa_nr;
+> +       }
+>         rcu_read_unlock();
+>
+>         /*
+> @@ -9003,10 +9006,9 @@ static bool update_pick_idlest(struct sched_group *idlest,
+>   * This is an approximation as the number of running tasks may not be
+>   * related to the number of busy CPUs due to sched_setaffinity.
+>   */
+> -static inline bool
+> -allow_numa_imbalance(unsigned int running, unsigned int weight)
+> +static inline bool allow_numa_imbalance(int running, int imb_numa_nr)
+>  {
+> -       return (running < (weight >> 2));
+> +       return running <= imb_numa_nr;
+>  }
+>
+>  /*
+> @@ -9146,7 +9148,7 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+>                          * allowed. If there is a real need of migration,
+>                          * periodic load balance will take care of it.
+>                          */
+> -                       if (allow_numa_imbalance(local_sgs.sum_nr_running + 1, local_sgs.group_weight))
+> +                       if (allow_numa_imbalance(local_sgs.sum_nr_running + 1, sd->imb_numa_nr))
+>                                 return NULL;
+>                 }
+>
+> @@ -9238,9 +9240,9 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
+>  #define NUMA_IMBALANCE_MIN 2
+>
+>  static inline long adjust_numa_imbalance(int imbalance,
+> -                               int dst_running, int dst_weight)
+> +                               int dst_running, int imb_numa_nr)
+>  {
+> -       if (!allow_numa_imbalance(dst_running, dst_weight))
+> +       if (!allow_numa_imbalance(dst_running, imb_numa_nr))
+>                 return imbalance;
+>
+>         /*
+> @@ -9352,7 +9354,7 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+>                 /* Consider allowing a small imbalance between NUMA groups */
+>                 if (env->sd->flags & SD_NUMA) {
+>                         env->imbalance = adjust_numa_imbalance(env->imbalance,
+> -                               local->sum_nr_running + 1, local->group_weight);
+> +                               local->sum_nr_running + 1, env->sd->imb_numa_nr);
+>                 }
+>
+>                 return;
+> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+> index d201a7052a29..e6cd55951304 100644
+> --- a/kernel/sched/topology.c
+> +++ b/kernel/sched/topology.c
+> @@ -2242,6 +2242,59 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
+>                 }
+>         }
+>
+> +       /*
+> +        * Calculate an allowed NUMA imbalance such that LLCs do not get
+> +        * imbalanced.
+> +        */
+> +       for_each_cpu(i, cpu_map) {
+> +               unsigned int imb = 0;
+> +               unsigned int imb_span = 1;
+> +
+> +               for (sd = *per_cpu_ptr(d.sd, i); sd; sd = sd->parent) {
+> +                       struct sched_domain *child = sd->child;
+> +
+> +                       if (!(sd->flags & SD_SHARE_PKG_RESOURCES) && child &&
+> +                           (child->flags & SD_SHARE_PKG_RESOURCES)) {
+> +                               struct sched_domain *top, *top_p;
+> +                               unsigned int nr_llcs;
+> +
+> +                               /*
+> +                                * For a single LLC per node, allow an
+> +                                * imbalance up to 25% of the node. This is an
+> +                                * arbitrary cutoff based on SMT-2 to balance
+> +                                * between memory bandwidth and avoiding
+> +                                * premature sharing of HT resources and SMT-4
+> +                                * or SMT-8 *may* benefit from a different
+> +                                * cutoff.
+> +                                *
+> +                                * For multiple LLCs, allow an imbalance
+> +                                * until multiple tasks would share an LLC
+> +                                * on one node while LLCs on another node
+> +                                * remain idle.
+> +                                */
+> +                               nr_llcs = sd->span_weight / child->span_weight;
+> +                               if (nr_llcs == 1)
+> +                                       imb = sd->span_weight >> 2;
+> +                               else
+> +                                       imb = nr_llcs;
+> +                               sd->imb_numa_nr = imb;
+> +
+> +                               /* Set span based on the first NUMA domain. */
+> +                               top = sd;
+> +                               top_p = top->parent;
+> +                               while (top_p && !(top_p->flags & SD_NUMA)) {
+> +                                       top = top->parent;
+> +                                       top_p = top->parent;
+> +                               }
+> +                               imb_span = top_p ? top_p->span_weight : sd->span_weight;
+> +                       } else {
+> +                               int factor = max(1U, (sd->span_weight / imb_span));
+> +
+> +                               sd->imb_numa_nr = imb * factor;
+> +                       }
+> +               }
+> +       }
+> +
+>         /* Calculate CPU capacity for physical packages and nodes */
+>         for (i = nr_cpumask_bits-1; i >= 0; i--) {
+>                 if (!cpumask_test_cpu(i, cpu_map))
+> --
+> 2.31.1
+>

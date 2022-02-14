@@ -2,330 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4C54B5357
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:30:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EFC14B535A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355142AbiBNO3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 09:29:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39168 "EHLO
+        id S241870AbiBNOa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 09:30:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355140AbiBNO3k (ORCPT
+        with ESMTP id S232558AbiBNOaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 09:29:40 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D96E9488AF
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:29:31 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96F511063;
-        Mon, 14 Feb 2022 06:29:31 -0800 (PST)
-Received: from [10.57.70.89] (unknown [10.57.70.89])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7A0393F70D;
-        Mon, 14 Feb 2022 06:29:29 -0800 (PST)
-Message-ID: <b20cd9e5-3415-4b3e-d2a7-48a5189ef114@arm.com>
-Date:   Mon, 14 Feb 2022 14:29:24 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2] iommu/iova: Separate out rcache init
-Content-Language: en-GB
-To:     John Garry <john.garry@huawei.com>, joro@8bytes.org,
-        will@kernel.org, mst@redhat.com, jasowang@redhat.com
-Cc:     xieyongji@bytedance.com, iommu@lists.linux-foundation.org,
+        Mon, 14 Feb 2022 09:30:24 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C265488AF
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:30:16 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id q198-20020a1ca7cf000000b0037bb52545c6so11769861wme.1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:30:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Qp0QN+QEErhlcS3GAx4mKpRDEEq8dEC8vvszvRmZuYs=;
+        b=jnKm8XvoIMBGarRRZ4hzi45VYlJ478uh2abfv7JlrxZ1M6wFaz7itAVx1xJ+BlMqib
+         qQC2TtbcHoCafKsj1jBoxHNnFdumz5p4amZKrLHYNs27PWfMjMD8Ph1ny/ijfkT4OvRA
+         Dk4e8CWS4ZpazAVpRJ+lMkq0Nn5+eqlZO3727SvncCzFtaQLYabnojLtYInIQU3XUqQG
+         52nE4W9F96sTI4su2+/eezi4lU4zd14RzEnrT0jhtBLMcq+sHJ44P+0CY+2Zrn7QFZsy
+         vUQVpCj1Jeg05S/pRLKh1oWTW7UOVmcYCYg9/xHreAEbGWp9skhlxzIae/CfhcasUpNE
+         jXkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Qp0QN+QEErhlcS3GAx4mKpRDEEq8dEC8vvszvRmZuYs=;
+        b=yqlXS29Or8j5AHV8VX8aBigRugJu7G9l1WckzjYBZUeYvxhFNwg0e1mgGatVXmmCWm
+         j9jlVJs+uW2uUJXOBVaKcUQR7Q5rz5grAW97MrdbfOERRqqUd9mfHUyEpJKLVA/JYqbJ
+         nW6hTQyoegDNNNDWkB5W+Rcr03BeeVWP8DEza7X1EedzcvJWvEv4dyajVMSk36w8Il01
+         Zt6oE4V6zhLAS1BmRqM+8HOO1BrWChhaaKbkg6isZ9g343EzmdEDjxvt5hVagyABMUEG
+         R4dTCvg4Ow4i3QSzgqZdm3fGgXool8RZwKzCQbOB5msGG68gu+uCjuX4Dovct5hd187R
+         Qt+g==
+X-Gm-Message-State: AOAM5330uqaKRBbnsuVSblJGk3FIs2S9A3NsjD1fBbOANdNrZhiYYRZ6
+        zZhG98Dp5c1+qRhUf066UOB2yVtNacg1eA==
+X-Google-Smtp-Source: ABdhPJxLQcXVZpjbmecg6yZuPlyk5ci26cfg2TtBYKtnC5XZytL2DW2wV5Ub0p6x+25l9jdRm5vzHA==
+X-Received: by 2002:a7b:cdfa:: with SMTP id p26mr11414512wmj.109.1644849015011;
+        Mon, 14 Feb 2022 06:30:15 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id t16sm2741411wmq.43.2022.02.14.06.30.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 06:30:14 -0800 (PST)
+Date:   Mon, 14 Feb 2022 14:30:12 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linuxarm@huawei.com
-References: <1643882360-241739-1-git-send-email-john.garry@huawei.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <1643882360-241739-1-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        kernel@pengutronix.de, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] mfd: stmfx: Improve error message triggered by regulator
+ fault in .remove()
+Message-ID: <YgpndOadzi0+5jQr@google.com>
+References: <20220207081709.27288-1-u.kleine-koenig@pengutronix.de>
+ <YgpdPTDurgsvR9mk@google.com>
+ <20220214140639.jmdldyne6ffq4dlq@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220214140639.jmdldyne6ffq4dlq@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-03 09:59, John Garry wrote:
-> Currently the rcache structures are allocated for all IOVA domains, even if
-> they do not use "fast" alloc+free interface. This is wasteful of memory.
-> 
-> In addition, fails in init_iova_rcaches() are not handled safely, which is
-> less than ideal.
-> 
-> Make "fast" users call a separate rcache init explicitly, which includes
-> error checking.
+On Mon, 14 Feb 2022, Uwe Kleine-König wrote:
 
-Reviewed-by: Robin Murphy <robin.murphy@arm.com>
-
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> ---
-> Differences to v1:
-> - Drop stubs for iova_domain_init_rcaches() and iova_domain_free_rcaches()
-> - Use put_iova_domain() in vdpa code
+> On Mon, Feb 14, 2022 at 01:46:37PM +0000, Lee Jones wrote:
+> > On Mon, 07 Feb 2022, Uwe Kleine-König wrote:
+> > 
+> > > Returning a non-zero value in an i2c remove callback results in the i2c
+> > > core emitting a very generic error message ("remove failed (-ESOMETHING),
+> > > will be ignored") and as the message indicates not further error handling
+> > > is done.
+> > > 
+> > > Instead emit a more specific error message and then return zero in
+> > > .remove().
+> > > 
+> > > The long-term goal is to make the i2c remove prototype return void, making
+> > > all implementations return 0 is preparatory work for this change.
+> > > 
+> > > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> > > ---
+> > >  drivers/mfd/stmfx.c | 16 +++++++++++-----
+> > >  1 file changed, 11 insertions(+), 5 deletions(-)
+> > > 
+> > > diff --git a/drivers/mfd/stmfx.c b/drivers/mfd/stmfx.c
+> > > index e095a3930142..16631c675f2f 100644
+> > > --- a/drivers/mfd/stmfx.c
+> > > +++ b/drivers/mfd/stmfx.c
+> > > @@ -392,17 +392,21 @@ static int stmfx_chip_init(struct i2c_client *client)
+> > >  	return ret;
+> > >  }
+> > >  
+> > > -static int stmfx_chip_exit(struct i2c_client *client)
+> > > +static void stmfx_chip_exit(struct i2c_client *client)
+> > >  {
+> > >  	struct stmfx *stmfx = i2c_get_clientdata(client);
+> > >  
+> > >  	regmap_write(stmfx->map, STMFX_REG_IRQ_SRC_EN, 0);
+> > >  	regmap_write(stmfx->map, STMFX_REG_SYS_CTRL, 0);
+> > >  
+> > > -	if (stmfx->vdd)
+> > > -		return regulator_disable(stmfx->vdd);
+> > > +	if (stmfx->vdd) {
+> > > +		int ret = regulator_disable(stmfx->vdd);
+> > >  
+> > > -	return 0;
+> > > +		if (ret)
+> > 
+> > Nit: Premise of the patch is fine, but please can you use the standard
+> > function call, check the return value format please.  Something about
+> > this is triggering my OCD! :)
+> > 
+> >      	int ret;
+> > 
+> > 	ret = regulator_disable(stmfx->vdd);
+> > 	if (ret)
+> > 		do_thing();
 > 
-> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-> index d85d54f2b549..b22034975301 100644
-> --- a/drivers/iommu/dma-iommu.c
-> +++ b/drivers/iommu/dma-iommu.c
-> @@ -525,6 +525,7 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
->   	struct iommu_dma_cookie *cookie = domain->iova_cookie;
->   	unsigned long order, base_pfn;
->   	struct iova_domain *iovad;
-> +	int ret;
->   
->   	if (!cookie || cookie->type != IOMMU_DMA_IOVA_COOKIE)
->   		return -EINVAL;
-> @@ -559,6 +560,9 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
->   	}
->   
->   	init_iova_domain(iovad, 1UL << order, base_pfn);
-> +	ret = iova_domain_init_rcaches(iovad);
-> +	if (ret)
-> +		return ret;
->   
->   	/* If the FQ fails we can simply fall back to strict mode */
->   	if (domain->type == IOMMU_DOMAIN_DMA_FQ && iommu_dma_init_fq(domain))
-> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-> index b28c9435b898..7e9c3a97c040 100644
-> --- a/drivers/iommu/iova.c
-> +++ b/drivers/iommu/iova.c
-> @@ -15,13 +15,14 @@
->   /* The anchor node sits above the top of the usable address space */
->   #define IOVA_ANCHOR	~0UL
->   
-> +#define IOVA_RANGE_CACHE_MAX_SIZE 6	/* log of max cached IOVA range size (in pages) */
+> Not sure I understand you correctly. Do you want just:
+> 
+>  	regmap_write(stmfx->map, STMFX_REG_SYS_CTRL, 0);
+>  
+>  	if (stmfx->vdd) {
+> -		int ret = regulator_disable(stmfx->vdd);
+> +		int ret;
 > +
->   static bool iova_rcache_insert(struct iova_domain *iovad,
->   			       unsigned long pfn,
->   			       unsigned long size);
->   static unsigned long iova_rcache_get(struct iova_domain *iovad,
->   				     unsigned long size,
->   				     unsigned long limit_pfn);
-> -static void init_iova_rcaches(struct iova_domain *iovad);
->   static void free_cpu_cached_iovas(unsigned int cpu, struct iova_domain *iovad);
->   static void free_iova_rcaches(struct iova_domain *iovad);
->   
-> @@ -64,8 +65,6 @@ init_iova_domain(struct iova_domain *iovad, unsigned long granule,
->   	iovad->anchor.pfn_lo = iovad->anchor.pfn_hi = IOVA_ANCHOR;
->   	rb_link_node(&iovad->anchor.node, NULL, &iovad->rbroot.rb_node);
->   	rb_insert_color(&iovad->anchor.node, &iovad->rbroot);
-> -	cpuhp_state_add_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD, &iovad->cpuhp_dead);
-> -	init_iova_rcaches(iovad);
->   }
->   EXPORT_SYMBOL_GPL(init_iova_domain);
->   
-> @@ -488,6 +487,13 @@ free_iova_fast(struct iova_domain *iovad, unsigned long pfn, unsigned long size)
->   }
->   EXPORT_SYMBOL_GPL(free_iova_fast);
->   
-> +static void iova_domain_free_rcaches(struct iova_domain *iovad)
-> +{
-> +	cpuhp_state_remove_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD,
-> +					    &iovad->cpuhp_dead);
-> +	free_iova_rcaches(iovad);
-> +}
-> +
->   /**
->    * put_iova_domain - destroys the iova domain
->    * @iovad: - iova domain in question.
-> @@ -497,9 +503,9 @@ void put_iova_domain(struct iova_domain *iovad)
->   {
->   	struct iova *iova, *tmp;
->   
-> -	cpuhp_state_remove_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD,
-> -					    &iovad->cpuhp_dead);
-> -	free_iova_rcaches(iovad);
-> +	if (iovad->rcaches)
-> +		iova_domain_free_rcaches(iovad);
-> +
->   	rbtree_postorder_for_each_entry_safe(iova, tmp, &iovad->rbroot, node)
->   		free_iova_mem(iova);
->   }
-> @@ -608,6 +614,7 @@ EXPORT_SYMBOL_GPL(reserve_iova);
->    */
->   
->   #define IOVA_MAG_SIZE 128
-> +#define MAX_GLOBAL_MAGS 32	/* magazines per bin */
->   
->   struct iova_magazine {
->   	unsigned long size;
-> @@ -620,6 +627,13 @@ struct iova_cpu_rcache {
->   	struct iova_magazine *prev;
->   };
->   
-> +struct iova_rcache {
-> +	spinlock_t lock;
-> +	unsigned long depot_size;
-> +	struct iova_magazine *depot[MAX_GLOBAL_MAGS];
-> +	struct iova_cpu_rcache __percpu *cpu_rcaches;
-> +};
-> +
->   static struct iova_magazine *iova_magazine_alloc(gfp_t flags)
->   {
->   	return kzalloc(sizeof(struct iova_magazine), flags);
-> @@ -693,28 +707,54 @@ static void iova_magazine_push(struct iova_magazine *mag, unsigned long pfn)
->   	mag->pfns[mag->size++] = pfn;
->   }
->   
-> -static void init_iova_rcaches(struct iova_domain *iovad)
-> +int iova_domain_init_rcaches(struct iova_domain *iovad)
->   {
-> -	struct iova_cpu_rcache *cpu_rcache;
-> -	struct iova_rcache *rcache;
->   	unsigned int cpu;
-> -	int i;
-> +	int i, ret;
-> +
-> +	iovad->rcaches = kcalloc(IOVA_RANGE_CACHE_MAX_SIZE,
-> +				 sizeof(struct iova_rcache),
-> +				 GFP_KERNEL);
-> +	if (!iovad->rcaches)
-> +		return -ENOMEM;
->   
->   	for (i = 0; i < IOVA_RANGE_CACHE_MAX_SIZE; ++i) {
-> +		struct iova_cpu_rcache *cpu_rcache;
-> +		struct iova_rcache *rcache;
-> +
->   		rcache = &iovad->rcaches[i];
->   		spin_lock_init(&rcache->lock);
->   		rcache->depot_size = 0;
-> -		rcache->cpu_rcaches = __alloc_percpu(sizeof(*cpu_rcache), cache_line_size());
-> -		if (WARN_ON(!rcache->cpu_rcaches))
-> -			continue;
-> +		rcache->cpu_rcaches = __alloc_percpu(sizeof(*cpu_rcache),
-> +						     cache_line_size());
-> +		if (!rcache->cpu_rcaches) {
-> +			ret = -ENOMEM;
-> +			goto out_err;
-> +		}
->   		for_each_possible_cpu(cpu) {
->   			cpu_rcache = per_cpu_ptr(rcache->cpu_rcaches, cpu);
-> +
->   			spin_lock_init(&cpu_rcache->lock);
->   			cpu_rcache->loaded = iova_magazine_alloc(GFP_KERNEL);
->   			cpu_rcache->prev = iova_magazine_alloc(GFP_KERNEL);
-> +			if (!cpu_rcache->loaded || !cpu_rcache->prev) {
-> +				ret = -ENOMEM;
-> +				goto out_err;
-> +			}
->   		}
->   	}
-> +
-> +	ret = cpuhp_state_add_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD,
-> +					       &iovad->cpuhp_dead);
-> +	if (ret)
-> +		goto out_err;
-> +	return 0;
-> +
-> +out_err:
-> +	free_iova_rcaches(iovad);
-> +	return ret;
->   }
-> +EXPORT_SYMBOL_GPL(iova_domain_init_rcaches);
->   
->   /*
->    * Try inserting IOVA range starting with 'iova_pfn' into 'rcache', and
-> @@ -831,7 +871,7 @@ static unsigned long iova_rcache_get(struct iova_domain *iovad,
->   {
->   	unsigned int log_size = order_base_2(size);
->   
-> -	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE)
-> +	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE || !iovad->rcaches)
->   		return 0;
->   
->   	return __iova_rcache_get(&iovad->rcaches[log_size], limit_pfn - size);
-> @@ -849,6 +889,8 @@ static void free_iova_rcaches(struct iova_domain *iovad)
->   
->   	for (i = 0; i < IOVA_RANGE_CACHE_MAX_SIZE; ++i) {
->   		rcache = &iovad->rcaches[i];
-> +		if (!rcache->cpu_rcaches)
-> +			break;
->   		for_each_possible_cpu(cpu) {
->   			cpu_rcache = per_cpu_ptr(rcache->cpu_rcaches, cpu);
->   			iova_magazine_free(cpu_rcache->loaded);
-> @@ -858,6 +900,9 @@ static void free_iova_rcaches(struct iova_domain *iovad)
->   		for (j = 0; j < rcache->depot_size; ++j)
->   			iova_magazine_free(rcache->depot[j]);
->   	}
-> +
-> +	kfree(iovad->rcaches);
-> +	iovad->rcaches = NULL;
->   }
->   
->   /*
-> diff --git a/drivers/vdpa/vdpa_user/iova_domain.c b/drivers/vdpa/vdpa_user/iova_domain.c
-> index 2b1143f11d8f..22f7d43f8a68 100644
-> --- a/drivers/vdpa/vdpa_user/iova_domain.c
-> +++ b/drivers/vdpa/vdpa_user/iova_domain.c
-> @@ -480,6 +480,7 @@ vduse_domain_create(unsigned long iova_limit, size_t bounce_size)
->   	struct file *file;
->   	struct vduse_bounce_map *map;
->   	unsigned long pfn, bounce_pfns;
-> +	int ret;
->   
->   	bounce_pfns = PAGE_ALIGN(bounce_size) >> PAGE_SHIFT;
->   	if (iova_limit <= bounce_size)
-> @@ -513,10 +514,20 @@ vduse_domain_create(unsigned long iova_limit, size_t bounce_size)
->   	spin_lock_init(&domain->iotlb_lock);
->   	init_iova_domain(&domain->stream_iovad,
->   			PAGE_SIZE, IOVA_START_PFN);
-> +	ret = iova_domain_init_rcaches(&domain->stream_iovad);
-> +	if (ret)
-> +		goto err_iovad_stream;
->   	init_iova_domain(&domain->consistent_iovad,
->   			PAGE_SIZE, bounce_pfns);
-> +	ret = iova_domain_init_rcaches(&domain->consistent_iovad);
-> +	if (ret)
-> +		goto err_iovad_consistent;
->   
->   	return domain;
-> +err_iovad_consistent:
-> +	put_iova_domain(&domain->stream_iovad);
-> +err_iovad_stream:
-> +	fput(file);
->   err_file:
->   	vfree(domain->bounce_maps);
->   err_map:
-> diff --git a/include/linux/iova.h b/include/linux/iova.h
-> index cea79cb9f26c..320a70e40233 100644
-> --- a/include/linux/iova.h
-> +++ b/include/linux/iova.h
-> @@ -21,18 +21,8 @@ struct iova {
->   	unsigned long	pfn_lo; /* Lowest allocated pfn */
->   };
->   
-> -struct iova_magazine;
-> -struct iova_cpu_rcache;
->   
-> -#define IOVA_RANGE_CACHE_MAX_SIZE 6	/* log of max cached IOVA range size (in pages) */
-> -#define MAX_GLOBAL_MAGS 32	/* magazines per bin */
-> -
-> -struct iova_rcache {
-> -	spinlock_t lock;
-> -	unsigned long depot_size;
-> -	struct iova_magazine *depot[MAX_GLOBAL_MAGS];
-> -	struct iova_cpu_rcache __percpu *cpu_rcaches;
-> -};
-> +struct iova_rcache;
->   
->   /* holds all the iova translations for a domain */
->   struct iova_domain {
-> @@ -46,7 +36,7 @@ struct iova_domain {
->   	unsigned long	max32_alloc_size; /* Size of last failed allocation */
->   	struct iova	anchor;		/* rbtree lookup anchor */
->   
-> -	struct iova_rcache rcaches[IOVA_RANGE_CACHE_MAX_SIZE];	/* IOVA range caches */
-> +	struct iova_rcache	*rcaches;
->   	struct hlist_node	cpuhp_dead;
->   };
->   
-> @@ -102,6 +92,7 @@ struct iova *reserve_iova(struct iova_domain *iovad, unsigned long pfn_lo,
->   	unsigned long pfn_hi);
->   void init_iova_domain(struct iova_domain *iovad, unsigned long granule,
->   	unsigned long start_pfn);
-> +int iova_domain_init_rcaches(struct iova_domain *iovad);
->   struct iova *find_iova(struct iova_domain *iovad, unsigned long pfn);
->   void put_iova_domain(struct iova_domain *iovad);
->   #else
+> +		ret = regulator_disable(stmfx->vdd);
+>  		if (ret)
+>  ...
+> 
+> squashed into the patch?
+
+Effectively, yes please.
+
+The diff would look like:
+
+> > > -	if (stmfx->vdd)
+> > > -		return regulator_disable(stmfx->vdd);
+> > > +	if (stmfx->vdd) {
+> > > +		int ret;
+> > > +
+> > > +		ret = regulator_disable(stmfx->vdd);
+> > > -
+> > > -	return 0;
+> > > +		if (ret)
+
+Thanks.
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

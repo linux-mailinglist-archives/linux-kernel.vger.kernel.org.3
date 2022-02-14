@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6FD4B45AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:28:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E664B4954
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242953AbiBNJ2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:28:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41022 "EHLO
+        id S1345101AbiBNKIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:08:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242964AbiBNJ2T (ORCPT
+        with ESMTP id S1344257AbiBNKCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:28:19 -0500
+        Mon, 14 Feb 2022 05:02:11 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FD060AA5;
-        Mon, 14 Feb 2022 01:28:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F7D3A5D5;
+        Mon, 14 Feb 2022 01:48:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0351460F8B;
-        Mon, 14 Feb 2022 09:28:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD90CC340E9;
-        Mon, 14 Feb 2022 09:28:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DCB061252;
+        Mon, 14 Feb 2022 09:48:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01443C340E9;
+        Mon, 14 Feb 2022 09:48:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644830890;
-        bh=js+fuAM4/WE8FT7Gl8fPuy4DPVo7Bz7KVm+bzuIfYAM=;
+        s=korg; t=1644832107;
+        bh=cDrmzps+EwVMIVwa4E3JRtZVdxrZkoacSvcnAIzOuQo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DQSEnNsqXrJwDsfwaEz0clrxR2qUZdu6emKPG8Cx66IQsszxIUwqGJpxaKcT5WQ3F
-         4VfowNaVwERHo5NVvUHm4NQF0/SBYdTZK7uR1bySL8C85+MojGaOu4qw3j8vFOoADS
-         4gteS3/oV9VWO/F4neRmqw9/tjIMSls2z0HtJBto=
+        b=s4TOO0VvifXRijO+kcmGOFVmW4gNlJD5urZg9fNRP6oChqQAII7gtFqSop3O++t92
+         3VikKHPg2s1tMNuY2unvWbAwwzhFkCXNlSQdVZ2PFc3IikcpO19E2Kg6TKjivccXyL
+         BtJAK04zYgUshXd0W6RTMmlGBODkm4txRyJE9fn4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 13/34] usb: dwc2: gadget: dont try to disable ep0 in dwc2_hsotg_suspend
+Subject: [PATCH 5.15 081/172] ARM: dts: meson: Fix the UART compatible strings
 Date:   Mon, 14 Feb 2022 10:25:39 +0100
-Message-Id: <20220214092446.379049043@linuxfoundation.org>
+Message-Id: <20220214092509.208659430@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
-References: <20220214092445.946718557@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +56,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-[ Upstream commit ac55d163855924aa5af9f1560977da8f346963c8 ]
+[ Upstream commit 5225e1b87432dcf0d0fc3440824b91d04c1d6cc1 ]
 
-Calling dwc2_hsotg_ep_disable on ep0 (in/out) will lead to the following
-logs before returning -EINVAL:
-dwc2 49000000.usb-otg: dwc2_hsotg_ep_disable: called for ep0
-dwc2 49000000.usb-otg: dwc2_hsotg_ep_disable: called for ep0
+The dt-bindings for the UART controller only allow the following values
+for Meson6 SoCs:
+- "amlogic,meson6-uart", "amlogic,meson-ao-uart"
+- "amlogic,meson6-uart"
 
-To avoid these two logs while suspending, start disabling the endpoint
-from the index 1, as done in dwc2_hsotg_udc_stop:
+Use the correct fallback compatible string "amlogic,meson-ao-uart" for
+AO UART. Drop the "amlogic,meson-uart" compatible string from the EE
+domain UART controllers.
 
-	/* all endpoints should be shutdown */
-	for (ep = 1; ep < hsotg->num_of_eps; ep++) {
-		if (hsotg->eps_in[ep])
-			dwc2_hsotg_ep_disable_lock(&hsotg->eps_in[ep]->ep);
-		if (hsotg->eps_out[ep])
-			dwc2_hsotg_ep_disable_lock(&hsotg->eps_out[ep]->ep);
-	}
-
-Acked-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-Link: https://lore.kernel.org/r/20211207130101.270314-1-amelie.delaunay@foss.st.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: ec9b59162fd831 ("ARM: dts: meson6: use stable UART bindings")
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20211227180026.4068352-2-martin.blumenstingl@googlemail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc2/gadget.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/meson.dtsi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index e7ad3ae4ea6bd..65bcbbad6d545 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -3979,7 +3979,7 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
- 		hsotg->gadget.speed = USB_SPEED_UNKNOWN;
- 		spin_unlock_irqrestore(&hsotg->lock, flags);
+diff --git a/arch/arm/boot/dts/meson.dtsi b/arch/arm/boot/dts/meson.dtsi
+index 3be7cba603d5a..26eaba3fa96f3 100644
+--- a/arch/arm/boot/dts/meson.dtsi
++++ b/arch/arm/boot/dts/meson.dtsi
+@@ -59,7 +59,7 @@ hwrng: rng@8100 {
+ 			};
  
--		for (ep = 0; ep < hsotg->num_of_eps; ep++) {
-+		for (ep = 1; ep < hsotg->num_of_eps; ep++) {
- 			if (hsotg->eps_in[ep])
- 				dwc2_hsotg_ep_disable(&hsotg->eps_in[ep]->ep);
- 			if (hsotg->eps_out[ep])
+ 			uart_A: serial@84c0 {
+-				compatible = "amlogic,meson6-uart", "amlogic,meson-uart";
++				compatible = "amlogic,meson6-uart";
+ 				reg = <0x84c0 0x18>;
+ 				interrupts = <GIC_SPI 26 IRQ_TYPE_EDGE_RISING>;
+ 				fifo-size = <128>;
+@@ -67,7 +67,7 @@ uart_A: serial@84c0 {
+ 			};
+ 
+ 			uart_B: serial@84dc {
+-				compatible = "amlogic,meson6-uart", "amlogic,meson-uart";
++				compatible = "amlogic,meson6-uart";
+ 				reg = <0x84dc 0x18>;
+ 				interrupts = <GIC_SPI 75 IRQ_TYPE_EDGE_RISING>;
+ 				status = "disabled";
+@@ -105,7 +105,7 @@ saradc: adc@8680 {
+ 			};
+ 
+ 			uart_C: serial@8700 {
+-				compatible = "amlogic,meson6-uart", "amlogic,meson-uart";
++				compatible = "amlogic,meson6-uart";
+ 				reg = <0x8700 0x18>;
+ 				interrupts = <GIC_SPI 93 IRQ_TYPE_EDGE_RISING>;
+ 				status = "disabled";
+@@ -228,7 +228,7 @@ ir_receiver: ir-receiver@480 {
+ 			};
+ 
+ 			uart_AO: serial@4c0 {
+-				compatible = "amlogic,meson6-uart", "amlogic,meson-ao-uart", "amlogic,meson-uart";
++				compatible = "amlogic,meson6-uart", "amlogic,meson-ao-uart";
+ 				reg = <0x4c0 0x18>;
+ 				interrupts = <GIC_SPI 90 IRQ_TYPE_EDGE_RISING>;
+ 				status = "disabled";
 -- 
 2.34.1
 

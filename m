@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E688F4B49AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F7F4B47BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344441AbiBNKDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:03:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45140 "EHLO
+        id S244940AbiBNJtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:49:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344295AbiBNJ7A (ORCPT
+        with ESMTP id S1343706AbiBNJqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:59:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7D7217;
-        Mon, 14 Feb 2022 01:46:26 -0800 (PST)
+        Mon, 14 Feb 2022 04:46:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CF765488;
+        Mon, 14 Feb 2022 01:39:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2B83B80DC7;
-        Mon, 14 Feb 2022 09:46:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3774C340EF;
-        Mon, 14 Feb 2022 09:46:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65A61611D2;
+        Mon, 14 Feb 2022 09:39:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E296C340E9;
+        Mon, 14 Feb 2022 09:39:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831983;
-        bh=/T57QsHEXzWRyz9ngAgfSuXzq9rnlQ9xNPWF7J/q3zk=;
+        s=korg; t=1644831588;
+        bh=nl3gPIYfJzLGecfMeJs3IXQ2hN/sva0u53e++ciJdV8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F7yuAMHbFzqaGgcGQKjXi1QKPgpqfb3kF+XxNsuPLFmKH/3Mb49QyvjdaNC+PHD6M
-         4Re+e10qKk4mTAhQuoMAfSE+9XEIjpxiK0lqIpV1g+pDloONUEiFR/5xCPpR+GjSK6
-         9/+94TeE0pIyP9xnpRKVAq5ZywkrgzEtMdyklRwI=
+        b=u/87ax4Aby1UzGp7paA4dgIBaXEW90FtFKhRfqiYpwBs1pA4Rsyj9PsMcicGiA1Mw
+         vsnpg4aT7z38VXgQ8pTxq/bbjaRIWCCwU8ZruGaHzRUf3G4iA3cisHMK3k/g9lPMZ9
+         nDrYnnZzpVftup5OmTXPrK/JZR0rvtlkczOKHLqM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, ZouMingzhe <mingzhe.zou@easystack.cn>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 043/172] scsi: target: iscsi: Make sure the np under each tpg is unique
-Date:   Mon, 14 Feb 2022 10:25:01 +0100
-Message-Id: <20220214092507.879629726@linuxfoundation.org>
+        stable@vger.kernel.org, Guo Zihua <guozihua@huawei.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Subject: [PATCH 5.10 003/116] ima: Allow template selection with ima_template[_fmt]= after ima_hash=
+Date:   Mon, 14 Feb 2022 10:25:02 +0100
+Message-Id: <20220214092458.789828706@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +55,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ZouMingzhe <mingzhe.zou@easystack.cn>
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-[ Upstream commit a861790afaa8b6369eee8a88c5d5d73f5799c0c6 ]
+commit bb8e52e4906f148c2faf6656b5106cf7233e9301 upstream.
 
-iscsit_tpg_check_network_portal() has nested for_each loops and is supposed
-to return true when a match is found. However, the tpg loop will still
-continue after existing the tpg_np loop. If this tpg_np is not the last the
-match value will be changed.
+Commit c2426d2ad5027 ("ima: added support for new kernel cmdline parameter
+ima_template_fmt") introduced an additional check on the ima_template
+variable to avoid multiple template selection.
 
-Break the outer loop after finding a match and make sure the np under each
-tpg is unique.
+Unfortunately, ima_template could be also set by the setup function of the
+ima_hash= parameter, when it calls ima_template_desc_current(). This causes
+attempts to choose a new template with ima_template= or with
+ima_template_fmt=, after ima_hash=, to be ignored.
 
-Link: https://lore.kernel.org/r/20220111054742.19582-1-mingzhe.zou@easystack.cn
-Signed-off-by: ZouMingzhe <mingzhe.zou@easystack.cn>
-Reviewed-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Achieve the goal of the commit mentioned with the new static variable
+template_setup_done, so that template selection requests after ima_hash=
+are not ignored.
+
+Finally, call ima_init_template_list(), if not already done, to initialize
+the list of templates before lookup_template_desc() is called.
+
+Reported-by: Guo Zihua <guozihua@huawei.com>
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Cc: stable@vger.kernel.org
+Fixes: c2426d2ad5027 ("ima: added support for new kernel cmdline parameter ima_template_fmt")
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/target/iscsi/iscsi_target_tpg.c | 3 +++
- 1 file changed, 3 insertions(+)
+ security/integrity/ima/ima_template.c |   10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/target/iscsi/iscsi_target_tpg.c b/drivers/target/iscsi/iscsi_target_tpg.c
-index 8075f60fd02c3..2d5cf1714ae05 100644
---- a/drivers/target/iscsi/iscsi_target_tpg.c
-+++ b/drivers/target/iscsi/iscsi_target_tpg.c
-@@ -443,6 +443,9 @@ static bool iscsit_tpg_check_network_portal(
- 				break;
- 		}
- 		spin_unlock(&tpg->tpg_np_lock);
-+
-+		if (match)
-+			break;
- 	}
- 	spin_unlock(&tiqn->tiqn_tpg_lock);
+--- a/security/integrity/ima/ima_template.c
++++ b/security/integrity/ima/ima_template.c
+@@ -27,6 +27,7 @@ static struct ima_template_desc builtin_
  
--- 
-2.34.1
-
+ static LIST_HEAD(defined_templates);
+ static DEFINE_SPINLOCK(template_list);
++static int template_setup_done;
+ 
+ static const struct ima_template_field supported_fields[] = {
+ 	{.field_id = "d", .field_init = ima_eventdigest_init,
+@@ -80,10 +81,11 @@ static int __init ima_template_setup(cha
+ 	struct ima_template_desc *template_desc;
+ 	int template_len = strlen(str);
+ 
+-	if (ima_template)
++	if (template_setup_done)
+ 		return 1;
+ 
+-	ima_init_template_list();
++	if (!ima_template)
++		ima_init_template_list();
+ 
+ 	/*
+ 	 * Verify that a template with the supplied name exists.
+@@ -107,6 +109,7 @@ static int __init ima_template_setup(cha
+ 	}
+ 
+ 	ima_template = template_desc;
++	template_setup_done = 1;
+ 	return 1;
+ }
+ __setup("ima_template=", ima_template_setup);
+@@ -115,7 +118,7 @@ static int __init ima_template_fmt_setup
+ {
+ 	int num_templates = ARRAY_SIZE(builtin_templates);
+ 
+-	if (ima_template)
++	if (template_setup_done)
+ 		return 1;
+ 
+ 	if (template_desc_init_fields(str, NULL, NULL) < 0) {
+@@ -126,6 +129,7 @@ static int __init ima_template_fmt_setup
+ 
+ 	builtin_templates[num_templates - 1].fmt = str;
+ 	ima_template = builtin_templates + num_templates - 1;
++	template_setup_done = 1;
+ 
+ 	return 1;
+ }
 
 

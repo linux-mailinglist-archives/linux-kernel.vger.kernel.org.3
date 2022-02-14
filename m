@@ -2,388 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C47754B3FBB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 03:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 407C94B3F73
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 03:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239764AbiBNCeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 21:34:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45728 "EHLO
+        id S239421AbiBNCbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 21:31:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239582AbiBNCdf (ORCPT
+        with ESMTP id S236408AbiBNCbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 21:33:35 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8665E60A9D;
-        Sun, 13 Feb 2022 18:32:33 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DEBA21474;
-        Sun, 13 Feb 2022 18:32:32 -0800 (PST)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.47.15])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D69533F718;
-        Sun, 13 Feb 2022 18:32:30 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch@vger.kernel.org
-Subject: [PATCH 30/30] mm/mmap: Drop ARCH_HAS_VM_GET_PAGE_PROT
-Date:   Mon, 14 Feb 2022 08:00:53 +0530
-Message-Id: <1644805853-21338-31-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1644805853-21338-1-git-send-email-anshuman.khandual@arm.com>
-References: <1644805853-21338-1-git-send-email-anshuman.khandual@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 13 Feb 2022 21:31:15 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F8B54FBF;
+        Sun, 13 Feb 2022 18:31:06 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id t14-20020a17090a3e4e00b001b8f6032d96so14371044pjm.2;
+        Sun, 13 Feb 2022 18:31:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=t7n9FdIXHmGPoeiBs9yVgPMo+2CuwYZUc11nF6CXTI8=;
+        b=e8oLG0p8ZTsA7vqCEnoNEpvy/wnJEYF/UXWvvL8WTEnfZbeIOU9MO8jVdDiFyTCmgq
+         pmGkah4eVTo9WcH4KVGnsiZWzWXnxnvJCYoXldF1dYW7+OupZ0lAQe8R7Yeenhe7NTHy
+         IGHcIEie2iaJJ2dbtXqJNIDKEvg/1Ag390kTNEDhDXTTrHRpmM2HPdTB5eeLDd8Mm8OR
+         Akt75kGxnaEKm5kMjdoddY2CM66u+aov8Va43ZEOv9gLL9TvXjA/T/hgefP5COVQf6l8
+         PgpDkZ7BI2SwvzTNt1mS2MnnGuSXqKEfKvnSKNrxtxMiTYcP+VtfwPS6BfLjVPZEkm3f
+         fRyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=t7n9FdIXHmGPoeiBs9yVgPMo+2CuwYZUc11nF6CXTI8=;
+        b=Kzbu1znflFtBM3oYRTyC05rLrLB+EfEKY6aF8sK3tAGZHiD436RHhC1RxWAD21rEGS
+         AOTvyMOMMtzItVeu4NCxpDJgsUJRMOa3LfB+pW/KSSJUXPJ9CzBR/WNfzNTih3VNaIZK
+         QqZ7oFku//kBzDFM01HoZAwMl5x6oj5k/b2GkOH5aFjpFS0GQhDGmyOvsdoPIQvy5Orb
+         onW00eNc76BuU9GhIVMsGKTo+ZAGLR2YhIa+aM254kPGQccAcBpxPmz99IjEwS2eCi4v
+         zny67XVjuNPC/iYfIbL72sBbVqbam0057B/iowgGaHk3hxH8p8rK/HruRK1Wl+JkcQkY
+         3PkA==
+X-Gm-Message-State: AOAM531QVfxyYcFpgfhk/vKxLaNYL51FFVg24zyK9SSLWoaCQ3UEKaKo
+        JUT0EdFOd+Ti9b70+fZUWSs=
+X-Google-Smtp-Source: ABdhPJziFmAkXPlAzrlbtNSzweoQAatE/m45tBeeDuCtEp1cRS6UMXy+zruE6Y2E/4xrxD5bQnY3eQ==
+X-Received: by 2002:a17:90b:3b8f:: with SMTP id pc15mr12134402pjb.165.1644805866194;
+        Sun, 13 Feb 2022 18:31:06 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:bfd9:7c7:cdd6:dcdc])
+        by smtp.gmail.com with ESMTPSA id h21sm34182893pfv.135.2022.02.13.18.31.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Feb 2022 18:31:05 -0800 (PST)
+Date:   Sun, 13 Feb 2022 18:31:02 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     Hugh Dickins <hughd@google.com>, Rajat Jain <rajatja@google.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Derek Basehore <dbasehore@chromium.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        "loic.poulain@linaro.org" <loic.poulain@linaro.org>,
+        Andrew Duggan <aduggan@synaptics.com>,
+        vincent.huang@tw.synaptics.com, cheiny@synaptics.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: 5.17-rc regression: rmi4 clients cannot deal with asynchronous
+ suspend? (was: X1 Carbon touchpad not resumed)
+Message-ID: <Ygm+5rS7Cxeea5Dp@google.com>
+References: <89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com>
+ <YgF/0QGFN4SppLKg@shikoro>
+ <CACK8Z6Etj-gq1VKpkUBstiXEETekPWG9p9gKBtuFaZF05pQEvQ@mail.gmail.com>
+ <CACK8Z6FUsceYgBoaAtN8o4m9HpZaBZMt0Nqtvw0a1Z3EuD_nWg@mail.gmail.com>
+ <YgHTYrODoo2ou49J@google.com>
+ <b76771e5-b8e-54c9-2474-d5a73d236cba@google.com>
+ <6f1103af-595c-ed0a-b946-97a9331ed148@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6f1103af-595c-ed0a-b946-97a9331ed148@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All platforms now define their own vm_get_page_prot() and also there is no
-generic version left to fallback on. Hence drop ARCH_HAS_GET_PAGE_PROT.
+Hi Hugh, Jarkko,
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- arch/alpha/Kconfig      | 1 -
- arch/arc/Kconfig        | 1 -
- arch/arm/Kconfig        | 1 -
- arch/arm64/Kconfig      | 1 -
- arch/csky/Kconfig       | 1 -
- arch/hexagon/Kconfig    | 1 -
- arch/ia64/Kconfig       | 1 -
- arch/m68k/Kconfig       | 1 -
- arch/microblaze/Kconfig | 1 -
- arch/mips/Kconfig       | 1 -
- arch/nds32/Kconfig      | 1 -
- arch/nios2/Kconfig      | 1 -
- arch/openrisc/Kconfig   | 1 -
- arch/parisc/Kconfig     | 1 -
- arch/powerpc/Kconfig    | 1 -
- arch/riscv/Kconfig      | 1 -
- arch/s390/Kconfig       | 1 -
- arch/sh/Kconfig         | 1 -
- arch/sparc/Kconfig      | 2 --
- arch/um/Kconfig         | 1 -
- arch/x86/Kconfig        | 1 -
- arch/xtensa/Kconfig     | 1 -
- mm/Kconfig              | 3 ---
- mm/mmap.c               | 3 ---
- 24 files changed, 29 deletions(-)
+On Tue, Feb 08, 2022 at 04:57:53PM +0200, Jarkko Nikula wrote:
+> Hi
+> 
+> On 2/8/22 04:50, Hugh Dickins wrote:
+> > On Mon, 7 Feb 2022, Dmitry Torokhov wrote:
+> > > On Mon, Feb 07, 2022 at 01:41:36PM -0800, Rajat Jain wrote:
+> > > > > > > Bisection led to 172d931910e1db800f4e71e8ed92281b6f8c6ee2
+> > > > > > > ("i2c: enable async suspend/resume on i2c client devices")
+> > > > > > > and reverting that fixes it for me.
+> > > > > > 
+> > > > > > Thank you for the report plus bisection and sorry for the regression!
+> > > > > 
+> > > > > +1, Thanks for the bisection, and apologies for the inconveniences.
+> > > > > 
+> > > > > The problem here seems to be that for some reason, some devices (all
+> > > > > connected to rmi4 adapter) failed to resume, but only when
+> > > > > asynchronous suspend is enabled (by 172d931910e1):
+> > > > > 
+> > > > > [   79.221064] rmi4_smbus 6-002c: failed to get SMBus version number!
+> > > > > [   79.265074] rmi4_physical rmi4-00: rmi_driver_reset_handler: Failed
+> > > > > to read current IRQ mask.
+> > > > > [   79.308330] rmi4_f01 rmi4-00.fn01: Failed to restore normal operation: -6.
+> > > > > [   79.308335] rmi4_f01 rmi4-00.fn01: Resume failed with code -6.
+> > > > > [   79.308339] rmi4_physical rmi4-00: Failed to suspend functions: -6
+> > > > > [   79.308342] rmi4_smbus 6-002c: Failed to resume device: -6
+> > > > > [   79.351967] rmi4_physical rmi4-00: Failed to read irqs, code=-6
+> > > > > 
+> 
+> v5.17-rc3 on Lenovo ThinkPad X1 Carbon 8th don't even suspend due the same
+> commit 172d931910e1. Sadly I tested the original patch on other machine(s)
+> but not on this one with rmi4 :-(
+> 
+> [   39.957293] PM: suspend entry (s2idle)
+> [   40.938666] Filesystems sync: 0.980 seconds
+> [   40.942751] Freezing user space processes ... (elapsed 0.001 seconds)
+> done.
+> [   40.945511] OOM killer disabled.
+> [   40.946111] Freezing remaining freezable tasks ... (elapsed 0.001
+> seconds) done.
+> [   40.948590] printk: Suspending console(s) (use no_console_suspend to
+> debug)
+> [   40.993123] i801_smbus 0000:00:1f.4: No response
+> [   40.993218] rmi4_f01 rmi4-00.fn01: Failed to write sleep mode: -6.
+> [   40.993232] rmi4_f01 rmi4-00.fn01: Suspend failed with code -6.
+> [   40.993241] rmi4_physical rmi4-00: Failed to suspend functions: -6
+> [   40.993404] rmi4_smbus 1-002c: Failed to suspend device: -6
+> [   40.993414] PM: dpm_run_callback(): rmi_smb_suspend+0x0/0x30 [rmi_smbus]
+> returns -6
+> [   40.993438] rmi4_smbus 1-002c: PM: failed to suspend async: error -6
+> [   41.014198] PM: Some devices failed to suspend, or early wake event
+> detected
+> [   41.021544] i801_smbus 0000:00:1f.4: No response
+> [   41.021612] rmi4_f03 rmi4-00.fn03: rmi_f03_pt_write: Failed to write to
+> F03 TX register (-6).
+> [   41.022189] i801_smbus 0000:00:1f.4: No response
+> [   41.022230] rmi4_f03 rmi4-00.fn03: rmi_f03_pt_write: Failed to write to
+> F03 TX register (-6).
+> [   41.023480] i801_smbus 0000:00:1f.4: No response
+> [   41.023542] rmi4_physical rmi4-00: rmi_driver_clear_irq_bits: Failed to
+> change enabled interrupts!
+> [   41.033850] i801_smbus 0000:00:1f.4: No response
+> [   41.034006] OOM killer enabled.
+> [   41.035449] i801_smbus 0000:00:1f.4: No response
+> [   41.035722] Restarting tasks ...
+> [   41.036705] rmi4_physical rmi4-00: rmi_driver_set_irq_bits: Failed to
+> change enabled interrupts!
+> [   41.038367] done.
+> [   41.039003] psmouse: probe of serio2 failed with error -1
+> [   41.071700] PM: suspend exit
 
-diff --git a/arch/alpha/Kconfig b/arch/alpha/Kconfig
-index 73e82fe5c770..4e87783c90ad 100644
---- a/arch/alpha/Kconfig
-+++ b/arch/alpha/Kconfig
-@@ -2,7 +2,6 @@
- config ALPHA
- 	bool
- 	default y
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_32BIT_USTAT_F_TINODE
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_MIGHT_HAVE_PC_SERIO
-diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
-index 78ff0644b343..3c2a4753d09b 100644
---- a/arch/arc/Kconfig
-+++ b/arch/arc/Kconfig
-@@ -13,7 +13,6 @@ config ARC
- 	select ARCH_HAS_SETUP_DMA_OPS
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_SUPPORTS_ATOMIC_RMW if ARC_HAS_LLSC
- 	select ARCH_32BIT_OFF_T
- 	select BUILDTIME_TABLE_SORT
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 87b2e89ef3d6..4c97cb40eebb 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -23,7 +23,6 @@ config ARM
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU if SWIOTLB || !MMU
- 	select ARCH_HAS_TEARDOWN_DMA_OPS if MMU
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAVE_CUSTOM_GPIO_H
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG if CPU_V7 || CPU_V7M || CPU_V6K
- 	select ARCH_HAS_GCOV_PROFILE_ALL
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 7e36bb32351e..675bf245c85e 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -43,7 +43,6 @@ config ARM64
- 	select ARCH_HAS_SYSCALL_WRAPPER
- 	select ARCH_HAS_TEARDOWN_DMA_OPS if IOMMU_SUPPORT
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAS_ZONE_DMA_SET if EXPERT
- 	select ARCH_HAVE_ELF_PROT
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 209dac5686dd..132f43f12dd8 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -6,7 +6,6 @@ config CSKY
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_WANT_FRAME_POINTERS if !CPU_CK610 && $(cc-option,-mbacktrace)
-diff --git a/arch/hexagon/Kconfig b/arch/hexagon/Kconfig
-index cdc5df32a1e3..15dd8f38b698 100644
---- a/arch/hexagon/Kconfig
-+++ b/arch/hexagon/Kconfig
-@@ -6,7 +6,6 @@ config HEXAGON
- 	def_bool y
- 	select ARCH_32BIT_OFF_T
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_NO_PREEMPT
- 	select DMA_GLOBAL_POOL
- 	# Other pending projects/to-do items.
-diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
-index 0ab15e8d5783..a7e01573abd8 100644
---- a/arch/ia64/Kconfig
-+++ b/arch/ia64/Kconfig
-@@ -11,7 +11,6 @@ config IA64
- 	select ARCH_HAS_DMA_MARK_CLEAN
- 	select ARCH_HAS_STRNCPY_FROM_USER
- 	select ARCH_HAS_STRNLEN_USER
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_MIGHT_HAVE_PC_SERIO
- 	select ACPI
-diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
-index 114e65164692..936e1803c7c7 100644
---- a/arch/m68k/Kconfig
-+++ b/arch/m68k/Kconfig
-@@ -11,7 +11,6 @@ config M68K
- 	select ARCH_NO_PREEMPT if !COLDFIRE
- 	select ARCH_USE_MEMTEST if MMU_MOTOROLA
- 	select ARCH_WANT_IPC_PARSE_VERSION
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select BINFMT_FLAT_ARGVP_ENVP_ON_STACK
- 	select DMA_DIRECT_REMAP if HAS_DMA && MMU && !COLDFIRE
- 	select GENERIC_ATOMIC64
-diff --git a/arch/microblaze/Kconfig b/arch/microblaze/Kconfig
-index f2c25ba8621e..59798e43cdb0 100644
---- a/arch/microblaze/Kconfig
-+++ b/arch/microblaze/Kconfig
-@@ -7,7 +7,6 @@ config MICROBLAZE
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_WANT_IPC_PARSE_VERSION
- 	select BUILDTIME_TABLE_SORT
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index fcbfc52a1567..058446f01487 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -13,7 +13,6 @@ config MIPS
- 	select ARCH_HAS_STRNLEN_USER
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_SUPPORTS_UPROBES
-diff --git a/arch/nds32/Kconfig b/arch/nds32/Kconfig
-index 576e05479925..4d1421b18734 100644
---- a/arch/nds32/Kconfig
-+++ b/arch/nds32/Kconfig
-@@ -10,7 +10,6 @@ config NDS32
- 	select ARCH_HAS_DMA_PREP_COHERENT
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_WANT_FRAME_POINTERS if FTRACE
- 	select CLKSRC_MMIO
- 	select CLONE_BACKWARDS
-diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
-index 85a58a357a3b..33fd06f5fa41 100644
---- a/arch/nios2/Kconfig
-+++ b/arch/nios2/Kconfig
-@@ -6,7 +6,6 @@ config NIOS2
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
- 	select ARCH_HAS_DMA_SET_UNCACHED
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_NO_SWAP
- 	select COMMON_CLK
- 	select TIMER_OF
-diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-index 842a61426816..f724b3f1aeed 100644
---- a/arch/openrisc/Kconfig
-+++ b/arch/openrisc/Kconfig
-@@ -10,7 +10,6 @@ config OPENRISC
- 	select ARCH_HAS_DMA_SET_UNCACHED
- 	select ARCH_HAS_DMA_CLEAR_UNCACHED
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select COMMON_CLK
- 	select OF
- 	select OF_EARLY_FLATTREE
-diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
-index de512f120b50..43c1c880def6 100644
---- a/arch/parisc/Kconfig
-+++ b/arch/parisc/Kconfig
-@@ -10,7 +10,6 @@ config PARISC
- 	select ARCH_HAS_ELF_RANDOMIZE
- 	select ARCH_HAS_STRICT_KERNEL_RWX
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_NO_SG_CHAIN
- 	select ARCH_SUPPORTS_HUGETLBFS if PA20
- 	select ARCH_SUPPORTS_MEMORY_FAILURE
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index ddb4a3687c05..b779603978e1 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -135,7 +135,6 @@ config PPC
- 	select ARCH_HAS_TICK_BROADCAST		if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UACCESS_FLUSHCACHE
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
- 	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 9391742f9286..5adcbd9b5e88 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -31,7 +31,6 @@ config RISCV
- 	select ARCH_HAS_STRICT_MODULE_RWX if MMU && !XIP_KERNEL
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
- 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
- 	select ARCH_STACKWALK
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index cb1b487e8201..be9f39fd06df 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -78,7 +78,6 @@ config S390
- 	select ARCH_HAS_SYSCALL_WRAPPER
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
- 	select ARCH_HAS_VDSO_DATA
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
- 	select ARCH_INLINE_READ_LOCK
- 	select ARCH_INLINE_READ_LOCK_BH
-diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
-index f3fcd1c5e002..2474a04ceac4 100644
---- a/arch/sh/Kconfig
-+++ b/arch/sh/Kconfig
-@@ -11,7 +11,6 @@ config SUPERH
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_HAS_PTE_SPECIAL
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HIBERNATION_POSSIBLE if MMU
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_WANT_IPC_PARSE_VERSION
-diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-index ff29156f2380..1cab1b284f1a 100644
---- a/arch/sparc/Kconfig
-+++ b/arch/sparc/Kconfig
-@@ -59,7 +59,6 @@ config SPARC32
- 	select HAVE_UID16
- 	select OLD_SIGACTION
- 	select ZONE_DMA
--	select ARCH_HAS_VM_GET_PAGE_PROT
+Sorry for the delay, but I wonder if you could try the patch below and
+tell me if that also fixes the issue for you?
+
+Also adding Hans as to make sure changes to psmouse_smbus make sense to
+him.
+
+Thanks!
+
+diff --git a/drivers/input/mouse/psmouse-smbus.c b/drivers/input/mouse/psmouse-smbus.c
+index a472489ccbad..164f6c757f6b 100644
+--- a/drivers/input/mouse/psmouse-smbus.c
++++ b/drivers/input/mouse/psmouse-smbus.c
+@@ -75,6 +75,8 @@ static void psmouse_smbus_detach_i2c_client(struct i2c_client *client)
+ 				    "Marking SMBus companion %s as gone\n",
+ 				    dev_name(&smbdev->client->dev));
+ 			smbdev->dead = true;
++			device_link_remove(&smbdev->client->dev,
++					   &smbdev->psmouse->ps2dev.serio->dev);
+ 			serio_rescan(smbdev->psmouse->ps2dev.serio);
+ 		} else {
+ 			list_del(&smbdev->node);
+@@ -174,6 +176,8 @@ static void psmouse_smbus_disconnect(struct psmouse *psmouse)
+ 		kfree(smbdev);
+ 	} else {
+ 		smbdev->dead = true;
++		device_link_remove(&smbdev->client->dev,
++				   &psmouse->ps2dev.serio->dev);
+ 		psmouse_dbg(smbdev->psmouse,
+ 			    "posting removal request for SMBus companion %s\n",
+ 			    dev_name(&smbdev->client->dev));
+@@ -270,6 +274,12 @@ int psmouse_smbus_init(struct psmouse *psmouse,
  
- config SPARC64
- 	def_bool 64BIT
-@@ -85,7 +84,6 @@ config SPARC64
- 	select PERF_USE_VMALLOC
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
- 	select HAVE_C_RECORDMCOUNT
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select HAVE_ARCH_AUDITSYSCALL
- 	select ARCH_SUPPORTS_ATOMIC_RMW
- 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC
-diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-index 5836296868a8..4d398b80aea8 100644
---- a/arch/um/Kconfig
-+++ b/arch/um/Kconfig
-@@ -9,7 +9,6 @@ config UML
- 	select ARCH_HAS_KCOV
- 	select ARCH_HAS_STRNCPY_FROM_USER
- 	select ARCH_HAS_STRNLEN_USER
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_NO_PREEMPT
- 	select HAVE_ARCH_AUDITSYSCALL
- 	select HAVE_ARCH_SECCOMP_FILTER
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index b2ea06c87708..013d8d6179e5 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -93,7 +93,6 @@ config X86
- 	select ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
- 	select ARCH_HAS_SYSCALL_WRAPPER
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAS_DEBUG_WX
- 	select ARCH_HAS_ZONE_DMA_SET if EXPERT
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
-diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-index 1608f7517546..8ac599aa6d99 100644
---- a/arch/xtensa/Kconfig
-+++ b/arch/xtensa/Kconfig
-@@ -9,7 +9,6 @@ config XTENSA
- 	select ARCH_HAS_DMA_SET_UNCACHED if MMU
- 	select ARCH_HAS_STRNCPY_FROM_USER if !KASAN
- 	select ARCH_HAS_STRNLEN_USER
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_USE_MEMTEST
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 212fb6e1ddaa..3326ee3903f3 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -744,9 +744,6 @@ config IDLE_PAGE_TRACKING
- config ARCH_HAS_CACHE_LINE_SIZE
- 	bool
+ 	if (smbdev->client) {
+ 		/* We have our companion device */
++		if (!device_link_add(&smbdev->client->dev,
++				     &psmouse->ps2dev.serio->dev,
++				     DL_FLAG_STATELESS))
++			psmouse_warn(psmouse,
++				     "failed to set up link with iSMBus companion %s\n",
++				     dev_name(&smbdev->client->dev));
+ 		return 0;
+ 	}
  
--config ARCH_HAS_VM_GET_PAGE_PROT
--	bool
--
- config ARCH_HAS_PTE_DEVMAP
- 	bool
- 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 368bc8aee45b..8c1396c3f0d6 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -81,7 +81,6 @@ static void unmap_region(struct mm_struct *mm,
- 		struct vm_area_struct *vma, struct vm_area_struct *prev,
- 		unsigned long start, unsigned long end);
- 
--#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
- /* description of effects of mapping type and prot in current implementation.
-  * this is due to the limited x86 page protection hardware.  The expected
-  * behavior is in parens:
-@@ -102,8 +101,6 @@ static void unmap_region(struct mm_struct *mm,
-  *								w: (no) no
-  *								x: (yes) yes
-  */
--#endif	/* CONFIG_ARCH_HAS_VM_GET_PAGE_PROT */
--
- static pgprot_t vm_pgprot_modify(pgprot_t oldprot, unsigned long vm_flags)
- {
- 	return pgprot_modify(oldprot, vm_get_page_prot(vm_flags));
+
 -- 
-2.25.1
-
+Dmitry

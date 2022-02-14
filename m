@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E769E4B4875
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 915AE4B46E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343741AbiBNJyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:54:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60854 "EHLO
+        id S243945AbiBNJex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:34:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343732AbiBNJvQ (ORCPT
+        with ESMTP id S244118AbiBNJeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:51:16 -0500
+        Mon, 14 Feb 2022 04:34:36 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E317766224;
-        Mon, 14 Feb 2022 01:42:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2204DA1A2;
+        Mon, 14 Feb 2022 01:32:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A26FFB80DC1;
-        Mon, 14 Feb 2022 09:41:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C166BC340E9;
-        Mon, 14 Feb 2022 09:41:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8BF03B80DCC;
+        Mon, 14 Feb 2022 09:32:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92FE0C340EF;
+        Mon, 14 Feb 2022 09:32:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831718;
-        bh=UhSIihMSSu2vmuCQjZPE4NANjKqrX8Al7bFfWHKoSt8=;
+        s=korg; t=1644831153;
+        bh=b/GaCLAENV1tdYTHB6/+xYH6uKWcAyiEtzI6xWLYlDo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dGua5wDHB11zN+s4i2opOUrIF9SLV77lTiRbUdWEfLmH+dVhNEWcMJKyR2LIyGfJE
-         9iiK6dvsaU9dGc1054PumQucAY7sg9ZZmsa4jGzVd6G7f+LNyFWGSzMSa82/cCxmru
-         a+11yTu5utPRP1GvFKo8NmvCXh8lPxgJQFSOOtL0=
+        b=OSQuvwO8Vq5BVHxd3ID72K1NdCJfWg/Do43q2qyMejyq3t9Mt9olslgeGU0i6/UHb
+         WmTD+pqt4XHwho1+dbQF5vRHLVcJ5jzO5Ised9oCVrbBplNshdHObz9cBFrnHVp4RQ
+         CLw1KAiogG3o5OboSKaQDm4E1tuXzbwvn/vbGqhg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aurelien Jarno <aurelien@aurel32.net>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 5.10 042/116] riscv: fix build with binutils 2.38
+        stable@vger.kernel.org, ZouMingzhe <mingzhe.zou@easystack.cn>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 15/49] scsi: target: iscsi: Make sure the np under each tpg is unique
 Date:   Mon, 14 Feb 2022 10:25:41 +0100
-Message-Id: <20220214092500.141729768@linuxfoundation.org>
+Message-Id: <20220214092448.799581695@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
+References: <20220214092448.285381753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aurelien Jarno <aurelien@aurel32.net>
+From: ZouMingzhe <mingzhe.zou@easystack.cn>
 
-commit 6df2a016c0c8a3d0933ef33dd192ea6606b115e3 upstream.
+[ Upstream commit a861790afaa8b6369eee8a88c5d5d73f5799c0c6 ]
 
->From version 2.38, binutils default to ISA spec version 20191213. This
-means that the csr read/write (csrr*/csrw*) instructions and fence.i
-instruction has separated from the `I` extension, become two standalone
-extensions: Zicsr and Zifencei. As the kernel uses those instruction,
-this causes the following build failure:
+iscsit_tpg_check_network_portal() has nested for_each loops and is supposed
+to return true when a match is found. However, the tpg loop will still
+continue after existing the tpg_np loop. If this tpg_np is not the last the
+match value will be changed.
 
-  CC      arch/riscv/kernel/vdso/vgettimeofday.o
-  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Assembler messages:
-  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
-  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
-  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
-  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
+Break the outer loop after finding a match and make sure the np under each
+tpg is unique.
 
-The fix is to specify those extensions explicitely in -march. However as
-older binutils version do not support this, we first need to detect
-that.
-
-Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
-Tested-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220111054742.19582-1-mingzhe.zou@easystack.cn
+Signed-off-by: ZouMingzhe <mingzhe.zou@easystack.cn>
+Reviewed-by: Mike Christie <michael.christie@oracle.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/riscv/Makefile |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/target/iscsi/iscsi_target_tpg.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -50,6 +50,12 @@ riscv-march-$(CONFIG_ARCH_RV32I)	:= rv32
- riscv-march-$(CONFIG_ARCH_RV64I)	:= rv64ima
- riscv-march-$(CONFIG_FPU)		:= $(riscv-march-y)fd
- riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
+diff --git a/drivers/target/iscsi/iscsi_target_tpg.c b/drivers/target/iscsi/iscsi_target_tpg.c
+index 101d62105c932..f3671ffdf1495 100644
+--- a/drivers/target/iscsi/iscsi_target_tpg.c
++++ b/drivers/target/iscsi/iscsi_target_tpg.c
+@@ -451,6 +451,9 @@ static bool iscsit_tpg_check_network_portal(
+ 				break;
+ 		}
+ 		spin_unlock(&tpg->tpg_np_lock);
 +
-+# Newer binutils versions default to ISA spec version 20191213 which moves some
-+# instructions from the I extension to the Zicsr and Zifencei extensions.
-+toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
-+riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
-+
- KBUILD_CFLAGS += -march=$(subst fd,,$(riscv-march-y))
- KBUILD_AFLAGS += -march=$(riscv-march-y)
++		if (match)
++			break;
+ 	}
+ 	spin_unlock(&tiqn->tiqn_tpg_lock);
  
+-- 
+2.34.1
+
 
 

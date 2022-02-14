@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CBD94B4746
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10CFC4B4B39
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244560AbiBNJmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:42:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33454 "EHLO
+        id S1347558AbiBNK3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:29:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244594AbiBNJkr (ORCPT
+        with ESMTP id S1348418AbiBNK05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:40:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2327AB861;
-        Mon, 14 Feb 2022 01:36:00 -0800 (PST)
+        Mon, 14 Feb 2022 05:26:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6028302D;
+        Mon, 14 Feb 2022 01:57:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D77D560FA2;
-        Mon, 14 Feb 2022 09:35:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE396C340F0;
-        Mon, 14 Feb 2022 09:35:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5065861291;
+        Mon, 14 Feb 2022 09:57:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30429C340E9;
+        Mon, 14 Feb 2022 09:57:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831358;
-        bh=t6eXjYA4rKPNICg4rTTpI2MzLeemt627oblOFcmf4C0=;
+        s=korg; t=1644832663;
+        bh=vLP6QBEs6yQfhcdW3YJt9BxzrxtuLathGQXDlJJ08WY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xqRgVqTbrxiKNn+JbE7EutXLkoLcp3PSJd5Z/J+ks5+bj2+yJI1UId1t0kQ2n+noZ
-         LQImdmU5xxpLL40+7dAgJltiFXd8yYC3fcBFdDjZpayiSU+OK2KmWfq+jl0K5ZFMRz
-         s7V7i5FfLDBPczUky+ZeVSp/YUqj/3mPdDEPbu+w=
+        b=R0WJRpZBDorJwDxvicIffaVyOMnBtaT0rrrRVVHFHSRDOAdMowzuaI6q5pRC6Q8dQ
+         EtzmFFJ8s8WRzjDpGnE3Zhqdb6EgKwUT8x4DFP2Ye9l5hZSp9PwEM9LVNHK5jy9jsQ
+         JvfzvGbgdy/n4Km1ojYfyUxDaOOYNO4sfLwuFptw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guo Zihua <guozihua@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH 5.4 03/71] ima: Allow template selection with ima_template[_fmt]= after ima_hash=
+        stable@vger.kernel.org, Harry Wentland <harry.wentland@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.16 087/203] drm/amdgpu/display: change pipe policy for DCN 2.0
 Date:   Mon, 14 Feb 2022 10:25:31 +0100
-Message-Id: <20220214092452.136339118@linuxfoundation.org>
+Message-Id: <20220214092513.227448126@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,84 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-commit bb8e52e4906f148c2faf6656b5106cf7233e9301 upstream.
+commit 6e7545ddb13416fd200e0b91c0acfd0404e2e27b upstream.
 
-Commit c2426d2ad5027 ("ima: added support for new kernel cmdline parameter
-ima_template_fmt") introduced an additional check on the ima_template
-variable to avoid multiple template selection.
+Fixes hangs on driver load with multiple displays on
+DCN 2.0 parts.
 
-Unfortunately, ima_template could be also set by the setup function of the
-ima_hash= parameter, when it calls ima_template_desc_current(). This causes
-attempts to choose a new template with ima_template= or with
-ima_template_fmt=, after ima_hash=, to be ignored.
-
-Achieve the goal of the commit mentioned with the new static variable
-template_setup_done, so that template selection requests after ima_hash=
-are not ignored.
-
-Finally, call ima_init_template_list(), if not already done, to initialize
-the list of templates before lookup_template_desc() is called.
-
-Reported-by: Guo Zihua <guozihua@huawei.com>
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Bug: https://bugzilla.kernel.org/show_bug.cgi?id=215511
+Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1877
+Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1886
+Fixes: ee2698cf79cc ("drm/amd/display: Changed pipe split policy to allow for multi-display pipe split")
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Cc: stable@vger.kernel.org
-Fixes: c2426d2ad5027 ("ima: added support for new kernel cmdline parameter ima_template_fmt")
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/integrity/ima/ima_template.c |   10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/security/integrity/ima/ima_template.c
-+++ b/security/integrity/ima/ima_template.c
-@@ -29,6 +29,7 @@ static struct ima_template_desc builtin_
- 
- static LIST_HEAD(defined_templates);
- static DEFINE_SPINLOCK(template_list);
-+static int template_setup_done;
- 
- static const struct ima_template_field supported_fields[] = {
- 	{.field_id = "d", .field_init = ima_eventdigest_init,
-@@ -82,10 +83,11 @@ static int __init ima_template_setup(cha
- 	struct ima_template_desc *template_desc;
- 	int template_len = strlen(str);
- 
--	if (ima_template)
-+	if (template_setup_done)
- 		return 1;
- 
--	ima_init_template_list();
-+	if (!ima_template)
-+		ima_init_template_list();
- 
- 	/*
- 	 * Verify that a template with the supplied name exists.
-@@ -109,6 +111,7 @@ static int __init ima_template_setup(cha
- 	}
- 
- 	ima_template = template_desc;
-+	template_setup_done = 1;
- 	return 1;
- }
- __setup("ima_template=", ima_template_setup);
-@@ -117,7 +120,7 @@ static int __init ima_template_fmt_setup
- {
- 	int num_templates = ARRAY_SIZE(builtin_templates);
- 
--	if (ima_template)
-+	if (template_setup_done)
- 		return 1;
- 
- 	if (template_desc_init_fields(str, NULL, NULL) < 0) {
-@@ -128,6 +131,7 @@ static int __init ima_template_fmt_setup
- 
- 	builtin_templates[num_templates - 1].fmt = str;
- 	ima_template = builtin_templates + num_templates - 1;
-+	template_setup_done = 1;
- 
- 	return 1;
- }
+--- a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c
+@@ -1069,7 +1069,7 @@ static const struct dc_debug_options deb
+ 		.timing_trace = false,
+ 		.clock_trace = true,
+ 		.disable_pplib_clock_request = true,
+-		.pipe_split_policy = MPC_SPLIT_DYNAMIC,
++		.pipe_split_policy = MPC_SPLIT_AVOID_MULT_DISP,
+ 		.force_single_disp_pipe_split = false,
+ 		.disable_dcc = DCC_ENABLE,
+ 		.vsr_support = true,
 
 

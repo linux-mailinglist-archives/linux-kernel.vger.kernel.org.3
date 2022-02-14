@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04FD64B4074
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B4F4B4077
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:44:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240094AbiBNDma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 22:42:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33960 "EHLO
+        id S240088AbiBNDof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 22:44:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236741AbiBNDm3 (ORCPT
+        with ESMTP id S229928AbiBNDoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 22:42:29 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924B455BF7;
-        Sun, 13 Feb 2022 19:42:22 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJSFp-001dbD-E1; Mon, 14 Feb 2022 03:42:21 +0000
-Date:   Mon, 14 Feb 2022 03:42:21 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Hao Lee <haolee.swjtu@gmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clean overflow checks in count_mounts() a bit
-Message-ID: <YgnPnbd6Kny5DPx4@zeniv-ca.linux.org.uk>
-References: <20220123100448.GA1468@haolee.io>
- <YgnGuy0GJzlqCSRj@zeniv-ca.linux.org.uk>
+        Sun, 13 Feb 2022 22:44:34 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F3955BF7;
+        Sun, 13 Feb 2022 19:44:27 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id qe15so13276318pjb.3;
+        Sun, 13 Feb 2022 19:44:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=L1T88FidLuaZlcuhS+PMTDghYDEh2W0752ZJLiUhucA=;
+        b=oRxyDdDKJNDKc0H2K5Ch1WeXCfehy5G5ViIxcN4wos03w40Ja/IorqoHoAyXBeNe2z
+         /rB2IezmwC2dUoUvaAXGatt/3SIYh/dn3AK70vcB/wbisaGlBOPEYEvnHIRPE03MpNpo
+         9+wjVdTEH8b4SjisCIV/yI/TCFydTs731ZwyK4Rt3qhcZGIUcUdh1ADkoN6Hb1AS3I6t
+         BOYQjM8NAmird84LvaTV6DShFzMbhUrN6fEyPj+V7zGoptFPMqzYlxbfCkUxTAwtwQNC
+         25wauWx9mCDgORt2Dkq/CnB7UIzqqo4wutass3l9TfNAE4K5PxFs0RVMDMjHjA880T7q
+         V2cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=L1T88FidLuaZlcuhS+PMTDghYDEh2W0752ZJLiUhucA=;
+        b=NiV+YMxVB5NL5jVdVvs3n7Q0LI9FxBA6RMloxM9wNsFieASubdWhk2t5kVLKh0PSBo
+         tMULTHj9gzAwHeatjkRfF3NhIpLWAlh8cf22JeqBW5WNIx5ZEzCA8+iOlMhNd6IOZxM8
+         smhWdRo688Q81I1/c8A8S6wdnVffeWwKND95J3AYDvn+gaKzmU28v4xTMAxQFET4GKE+
+         neDQsKtim0P88VEmZKqZ9yjCXccm5t5kTX+5igMmMt5G6onDSfRP00jrkMs+diTQBL9t
+         i7zZYIL+jRdkFTrETi/4k3FlIIqBme+THUKF2VcCoR6JXLS4ovSazv2mA5pdx3Bjp9uo
+         XrTA==
+X-Gm-Message-State: AOAM530bpo00tY6h9xUqqT0c5D3i2QunDOCkZCxCOXMFsFefqGQmkCcP
+        yUXhycCcYUG7qCNQtAFtGB4=
+X-Google-Smtp-Source: ABdhPJwq8SXlhmABICvW3k9U/ONzzfjpJ2DUO6Q3MF+Ohgc5gPzZIIqdL/Jda1nZYZ3MJFKNgeIk8Q==
+X-Received: by 2002:a17:902:ce04:: with SMTP id k4mr12146212plg.62.1644810267263;
+        Sun, 13 Feb 2022 19:44:27 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id ot10sm8971515pjb.3.2022.02.13.19.44.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Feb 2022 19:44:26 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Sun, 13 Feb 2022 17:44:25 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        syzbot <syzbot+831661966588c802aae9@syzkaller.appspotmail.com>,
+        jgg@ziepe.ca, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [syzbot] possible deadlock in worker_thread
+Message-ID: <YgnQGZWT/n3VAITX@slm.duckdns.org>
+References: <0000000000005975a605d7aef05e@google.com>
+ <8ea57ddf-a09c-43f2-4285-4dfb908ad967@acm.org>
+ <ccd04d8a-154b-543e-e1c3-84bc655508d1@I-love.SAKURA.ne.jp>
+ <71d6f14e-46af-cc5a-bc70-af1cdc6de8d5@acm.org>
+ <309c86b7-2a4c-1332-585f-7bcd59cfd762@I-love.SAKURA.ne.jp>
+ <aa2bf24e-981a-a811-c5d8-a75f0b8f693a@acm.org>
+ <2959649d-cfbc-bdf2-02ac-053b8e7af030@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YgnGuy0GJzlqCSRj@zeniv-ca.linux.org.uk>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <2959649d-cfbc-bdf2-02ac-053b8e7af030@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 03:04:27AM +0000, Al Viro wrote:
+Hello,
 
-> 	I don't believe it's worth the trouble.  Sure, you run that loop
-> only once, instead of once per copy.  And if that's more than noise,
-> compared to allocating the same mounts we'd been counting, connecting
-> them into tree, hashing, etc., I would be *very* surprised.
+On Mon, Feb 14, 2022 at 10:08:00AM +0900, Tetsuo Handa wrote:
+> +	destroy_workqueue(srp_tl_err_wq);
 > 
-> NAKed-by: Al Viro <viro@zeniv.linux.org.uk>
+> Then, we can call WARN_ON() if e.g. flush_workqueue() is called on system-wide workqueues.
 
-BTW, speaking of count_mounts(), the wraparound checks there are somewhat
-confused: x + y wraparound will lead to both x + y < x and x + y < y - no
-need to check both (the value of x + y is either their sum as natural
-numbers, in which case there's no wraparound and both checks are false,
-or the sum minus 2^32, in which case both checks are true since both x and
-y are below 2^32).
+Yeah, this is the right thing to do. It makes no sense at all to call
+flush_workqueue() on the shared workqueues as the caller has no idea what
+it's gonna end up waiting for. It was on my todo list a long while ago but
+slipped through the crack. If anyone wanna take a stab at it (including
+scrubbing the existing users, of course), please be my guest.
 
-IMO more straightforward code would be better here.
+Thanks.
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
-diff --git a/fs/namespace.c b/fs/namespace.c
-index 13d025a9ecf5d..42d4fc21263b2 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -2069,22 +2069,23 @@ static int invent_group_ids(struct mount *mnt, bool recurse)
- int count_mounts(struct mnt_namespace *ns, struct mount *mnt)
- {
- 	unsigned int max = READ_ONCE(sysctl_mount_max);
--	unsigned int mounts = 0, old, pending, sum;
-+	unsigned int mounts = 0;
- 	struct mount *p;
- 
-+	if (ns->mounts >= max)
-+		return -ENOSPC;
-+	max -= ns->mounts;
-+	if (ns->pending_mounts >= max)
-+		return -ENOSPC;
-+	max -= ns->pending_mounts;
-+
- 	for (p = mnt; p; p = next_mnt(p, mnt))
- 		mounts++;
- 
--	old = ns->mounts;
--	pending = ns->pending_mounts;
--	sum = old + pending;
--	if ((old > sum) ||
--	    (pending > sum) ||
--	    (max < sum) ||
--	    (mounts > (max - sum)))
-+	if (mounts > max)
- 		return -ENOSPC;
- 
--	ns->pending_mounts = pending + mounts;
-+	ns->pending_mounts += mounts;
- 	return 0;
- }
- 
+-- 
+tejun

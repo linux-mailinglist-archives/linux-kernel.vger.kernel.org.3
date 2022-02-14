@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E664B4954
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AEDA4B45B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:28:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345101AbiBNKIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:08:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54690 "EHLO
+        id S243000AbiBNJ23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:28:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344257AbiBNKCL (ORCPT
+        with ESMTP id S242973AbiBNJ2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:02:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F7D3A5D5;
-        Mon, 14 Feb 2022 01:48:28 -0800 (PST)
+        Mon, 14 Feb 2022 04:28:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E0260AAD;
+        Mon, 14 Feb 2022 01:28:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DCB061252;
-        Mon, 14 Feb 2022 09:48:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01443C340E9;
-        Mon, 14 Feb 2022 09:48:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC764B80DC4;
+        Mon, 14 Feb 2022 09:28:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7B30C340E9;
+        Mon, 14 Feb 2022 09:28:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832107;
-        bh=cDrmzps+EwVMIVwa4E3JRtZVdxrZkoacSvcnAIzOuQo=;
+        s=korg; t=1644830893;
+        bh=nwAcgOvUUbyu0b9uqfYy5jUAsPqE5sOsSIj2K8lsWbc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s4TOO0VvifXRijO+kcmGOFVmW4gNlJD5urZg9fNRP6oChqQAII7gtFqSop3O++t92
-         3VikKHPg2s1tMNuY2unvWbAwwzhFkCXNlSQdVZ2PFc3IikcpO19E2Kg6TKjivccXyL
-         BtJAK04zYgUshXd0W6RTMmlGBODkm4txRyJE9fn4=
+        b=EEzO5aoNTzMzQ+AKZjKGpCWLNC6DCqdqIiH860fhKEIOEq9pXuwDpuYIfzPb1oyol
+         tywA4VCSomF6xGX/HLgwvEfKhSl4NjYEd5179MVxCls7qdEMDxBHOS39OmDZVQZm+j
+         +9czlQOncz1nFd937IA6SrLMA9793jPRnkGaSDQg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 081/172] ARM: dts: meson: Fix the UART compatible strings
-Date:   Mon, 14 Feb 2022 10:25:39 +0100
-Message-Id: <20220214092509.208659430@linuxfoundation.org>
+        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: [PATCH 4.9 14/34] ARM: dts: imx23-evk: Remove MX23_PAD_SSP1_DETECT from hog group
+Date:   Mon, 14 Feb 2022 10:25:40 +0100
+Message-Id: <20220214092446.409556338@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
+References: <20220214092445.946718557@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,70 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+From: Fabio Estevam <festevam@gmail.com>
 
-[ Upstream commit 5225e1b87432dcf0d0fc3440824b91d04c1d6cc1 ]
+commit 42c9b28e6862d16db82a56f5667cf4d1f6658cf6 upstream.
 
-The dt-bindings for the UART controller only allow the following values
-for Meson6 SoCs:
-- "amlogic,meson6-uart", "amlogic,meson-ao-uart"
-- "amlogic,meson6-uart"
+Currently, SD card fails to mount due to the following pinctrl error:
 
-Use the correct fallback compatible string "amlogic,meson-ao-uart" for
-AO UART. Drop the "amlogic,meson-uart" compatible string from the EE
-domain UART controllers.
+[   11.170000] imx23-pinctrl 80018000.pinctrl: pin SSP1_DETECT already requested by 80018000.pinctrl; cannot claim for 80010000.spi
+[   11.180000] imx23-pinctrl 80018000.pinctrl: pin-65 (80010000.spi) status -22
+[   11.190000] imx23-pinctrl 80018000.pinctrl: could not request pin 65 (SSP1_DETECT) from group mmc0-pins-fixup.0  on device 80018000.pinctrl
+[   11.200000] mxs-mmc 80010000.spi: Error applying setting, reverse things back
 
-Fixes: ec9b59162fd831 ("ARM: dts: meson6: use stable UART bindings")
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://lore.kernel.org/r/20211227180026.4068352-2-martin.blumenstingl@googlemail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fix it by removing the MX23_PAD_SSP1_DETECT pin from the hog group as it
+is already been used by the mmc0-pins-fixup pinctrl group.
+
+With this change the rootfs can be mounted and the imx23-evk board can
+boot successfully.
+
+Cc: <stable@vger.kernel.org>
+Fixes: bc3875f1a61e ("ARM: dts: mxs: modify mx23/mx28 dts files to use pinctrl headers")
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/meson.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/arm/boot/dts/imx23-evk.dts |    1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/meson.dtsi b/arch/arm/boot/dts/meson.dtsi
-index 3be7cba603d5a..26eaba3fa96f3 100644
---- a/arch/arm/boot/dts/meson.dtsi
-+++ b/arch/arm/boot/dts/meson.dtsi
-@@ -59,7 +59,7 @@ hwrng: rng@8100 {
- 			};
- 
- 			uart_A: serial@84c0 {
--				compatible = "amlogic,meson6-uart", "amlogic,meson-uart";
-+				compatible = "amlogic,meson6-uart";
- 				reg = <0x84c0 0x18>;
- 				interrupts = <GIC_SPI 26 IRQ_TYPE_EDGE_RISING>;
- 				fifo-size = <128>;
-@@ -67,7 +67,7 @@ uart_A: serial@84c0 {
- 			};
- 
- 			uart_B: serial@84dc {
--				compatible = "amlogic,meson6-uart", "amlogic,meson-uart";
-+				compatible = "amlogic,meson6-uart";
- 				reg = <0x84dc 0x18>;
- 				interrupts = <GIC_SPI 75 IRQ_TYPE_EDGE_RISING>;
- 				status = "disabled";
-@@ -105,7 +105,7 @@ saradc: adc@8680 {
- 			};
- 
- 			uart_C: serial@8700 {
--				compatible = "amlogic,meson6-uart", "amlogic,meson-uart";
-+				compatible = "amlogic,meson6-uart";
- 				reg = <0x8700 0x18>;
- 				interrupts = <GIC_SPI 93 IRQ_TYPE_EDGE_RISING>;
- 				status = "disabled";
-@@ -228,7 +228,7 @@ ir_receiver: ir-receiver@480 {
- 			};
- 
- 			uart_AO: serial@4c0 {
--				compatible = "amlogic,meson6-uart", "amlogic,meson-ao-uart", "amlogic,meson-uart";
-+				compatible = "amlogic,meson6-uart", "amlogic,meson-ao-uart";
- 				reg = <0x4c0 0x18>;
- 				interrupts = <GIC_SPI 90 IRQ_TYPE_EDGE_RISING>;
- 				status = "disabled";
--- 
-2.34.1
-
+--- a/arch/arm/boot/dts/imx23-evk.dts
++++ b/arch/arm/boot/dts/imx23-evk.dts
+@@ -48,7 +48,6 @@
+ 						MX23_PAD_LCD_RESET__GPIO_1_18
+ 						MX23_PAD_PWM3__GPIO_1_29
+ 						MX23_PAD_PWM4__GPIO_1_30
+-						MX23_PAD_SSP1_DETECT__SSP1_DETECT
+ 					>;
+ 					fsl,drive-strength = <MXS_DRIVE_4mA>;
+ 					fsl,voltage = <MXS_VOLTAGE_HIGH>;
 
 

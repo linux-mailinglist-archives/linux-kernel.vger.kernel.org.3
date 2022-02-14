@@ -2,193 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 859F74B556A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 16:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0C64B55FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356048AbiBNPzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 10:55:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45430 "EHLO
+        id S1356324AbiBNQVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 11:21:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242711AbiBNPzk (ORCPT
+        with ESMTP id S1356296AbiBNQUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 10:55:40 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5824F4968F;
-        Mon, 14 Feb 2022 07:55:31 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id A75051F38B;
-        Mon, 14 Feb 2022 15:55:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644854129; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=k9MmC9qkXYRWrTYfRcCJEivsJms60nX4tIrMOUzEtWM=;
-        b=u2FyfK++GVdTzQOjqWcqZGLBUUzrDhYKtU57FNklJOt/e4NK7Ftz0UbOcIPXvf2tiz8yjC
-        lOg4m1lH1HgqVUk5WhL9P0848EpI0TeXdVvzmIRoxnDQUtvmgcKuSfY1LwMOO9hOAfDpie
-        JLjWKG8CZYhVYy8OF3M7nq+jfqPZ6Gw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644854129;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=k9MmC9qkXYRWrTYfRcCJEivsJms60nX4tIrMOUzEtWM=;
-        b=DZL+qoheqv/LmFulfWwBj6ooEqSB1jfA3QUYZzmGmg+dkmwxT83ob8JmlxLvtLwJu6Pvpa
-        ANP+ga/h5qpfxHCg==
-Received: from kunlun.suse.cz (unknown [10.100.128.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E4E27A3B89;
-        Mon, 14 Feb 2022 15:55:25 +0000 (UTC)
-Date:   Mon, 14 Feb 2022 16:55:24 +0100
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
-        Philipp Rudo <prudo@redhat.com>,
-        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
-        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Frank van der Linden <fllinden@amazon.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Baoquan He <bhe@redhat.com>,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v5 2/6] powerpc/kexec_file: Add KEXEC_SIG support.
-Message-ID: <20220214155524.GN3113@kunlun.suse.cz>
-References: <cover.1641900831.git.msuchanek@suse.de>
- <d95f7c6865bcad5ee37dcbec240e79aa742f5e1d.1641900831.git.msuchanek@suse.de>
- <cff97dbe262919ff709a5ad2c4af6a702cc72a95.camel@linux.ibm.com>
- <a8d717a44e5e919676e9b1e197cac781db46da87.camel@linux.ibm.com>
+        Mon, 14 Feb 2022 11:20:44 -0500
+X-Greylist: delayed 1390 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 08:20:36 PST
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D1942EE7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:20:36 -0800 (PST)
+Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21EFuV8X020516;
+        Mon, 14 Feb 2022 15:57:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pps0720; bh=P++DMPCoLYeSHVVEkYGtT1XsH/0G6lrbTxQxRb5m1lM=;
+ b=Mu5uAhGJsIb1XoS0DqT65OJI+V90s9tMan0lAcMloYeeDXEQ4vjGiReG/21ZTrQIhkhT
+ n4PGWs5O790Ra/WvNnXjC1xbIdweIl4Y8+XcZnwdX36oeDlmh7iz/2p/EXd7uzMGyws+
+ K2AUp+PhGQEGVUFSDwewINoyziyeoCYhlmYOQDsuu1UL4Jg8xm6X8VeCwa578xdmeNHp
+ n/3K0VqSsgfGMNqA2k2x2izWcd03WREPn7u2TVixkyDfZ0V1AkQXJbsd178wTGnRxnyT
+ v5WKlfqC+Hlr8aCG6H0lCOfcXG3n0Wjf1/+lXqXTIbH1SiCzDyykSS+xh2lqUzM77egx 0Q== 
+Received: from g2t2353.austin.hpe.com (g2t2353.austin.hpe.com [15.233.44.26])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3e7kkrup4q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 15:57:12 +0000
+Received: from g2t2360.austin.hpecorp.net (g2t2360.austin.hpecorp.net [16.196.225.135])
+        by g2t2353.austin.hpe.com (Postfix) with ESMTP id 95DCC82;
+        Mon, 14 Feb 2022 15:57:11 +0000 (UTC)
+Received: from hpe.com (unknown [10.207.195.135])
+        by g2t2360.austin.hpecorp.net (Postfix) with ESMTP id 029D93B;
+        Mon, 14 Feb 2022 15:57:09 +0000 (UTC)
+Date:   Mon, 14 Feb 2022 09:57:09 -0600
+From:   Dimitri Sivanich <sivanich@hpe.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Xiyu Yang <xiyuyang19@fudan.edu.cn>, linux-kernel@vger.kernel.org,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v1 1/1] misc: sgi-gru: Don't cast parameter in bit
+ operations
+Message-ID: <20220214155709.GA3858@hpe.com>
+References: <20220214153958.9721-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a8d717a44e5e919676e9b1e197cac781db46da87.camel@linux.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220214153958.9721-1-andriy.shevchenko@linux.intel.com>
+X-Proofpoint-GUID: Kw-w50yEarRKtWNI7JFKQJIVTpsUiG3R
+X-Proofpoint-ORIG-GUID: Kw-w50yEarRKtWNI7JFKQJIVTpsUiG3R
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-14_07,2022-02-14_03,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 bulkscore=0 mlxlogscore=999 clxscore=1011
+ lowpriorityscore=0 malwarescore=0 adultscore=0 priorityscore=1501
+ mlxscore=0 spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2202140097
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Acked-by: Dimitri Sivanich <sivanich@hpe.com>
 
-On Mon, Feb 14, 2022 at 10:14:16AM -0500, Mimi Zohar wrote:
-> Hi Michal,
+On Mon, Feb 14, 2022 at 05:39:58PM +0200, Andy Shevchenko wrote:
+> While in this particular case (*) it would not be an issue,
+> the pattern itself is bad and error prone in case somebody
+> blindly copies to their code.
 > 
-> On Sun, 2022-02-13 at 21:59 -0500, Mimi Zohar wrote:
+> Don't cast parameter to unsigned long pointer in the bit
+> operations. Note, new compilers might warn on this line for
+> potential outbound access.
 > 
-> > 
-> > On Tue, 2022-01-11 at 12:37 +0100, Michal Suchanek wrote:
-> > > diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> > > index dea74d7717c0..1cde9b6c5987 100644
-> > > --- a/arch/powerpc/Kconfig
-> > > +++ b/arch/powerpc/Kconfig
-> > > @@ -560,6 +560,22 @@ config KEXEC_FILE
-> > >  config ARCH_HAS_KEXEC_PURGATORY
-> > >         def_bool KEXEC_FILE
-> > >  
-> > > +config KEXEC_SIG
-> > > +       bool "Verify kernel signature during kexec_file_load() syscall"
-> > > +       depends on KEXEC_FILE && MODULE_SIG_FORMAT
-> > > +       help
-> > > +         This option makes kernel signature verification mandatory for
-
-This is actually wrong. KEXEC_SIG makes it mandatory that any signature
-that is appended is valid and made by a key that is part of the platform
-keyiring (which is also wrong, built-in keys should be also accepted).
-KEXEC_SIG_FORCE or an IMA policy makes it mandatory that the signature
-is present.
-
-> > > +         the kexec_file_load() syscall.
-> > 
-> > When KEXEC_SIG is enabled on other architectures, IMA does not define a
-> > kexec 'appraise' policy rule.  Refer to the policy rules in
-> > security/ima/ima_efi.c.  Similarly the kexec 'appraise' policy rule in
-
-I suppose you mean security/integrity/ima/ima_efi.c
-
-I also think it's misguided because KEXEC_SIG in itself does not enforce
-the signature. KEXEC_SIG_FORCE does.
-
-> > arch/powerpc/kernel/ima_policy.c should not be defined.
-
-I suppose you mean arch/powerpc/kernel/ima_arch.c - see above.
-
-
-Thanks for taking the time to reseach and summarize the differences.
-
-> The discussion shouldn't only be about IMA vs. KEXEC_SIG kernel image
-> signature verification.  Let's try and reframe the problem a bit.
+> *) it seems a dead code, so remove it all for good
 > 
-> 1. Unify and simply the existing kexec signature verification so
-> verifying the KEXEC kernel image signature works irrespective of
-> signature type - PE, appended signature.
+> Fixes: 13d19498b044 ("GRU Driver: driver internal header files")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/misc/sgi-gru/grutables.h | 6 ------
+>  1 file changed, 6 deletions(-)
 > 
-> solution: enable KEXEC_SIG  (This patch set, with the above powerpc IMA
-> policy changes.)
-> 
-> 2. Measure and include the kexec kernel image in a log for attestation,
-> if desired.
-> 
-> solution: enable IMA_ARCH_POLICY 
-> - Powerpc: requires trusted boot to be enabled.
-> - EFI:   requires  secure boot to be enabled.  The IMA efi policy
-> doesn't differentiate between secure and trusted boot.
-> 
-> 3. Carry the kexec kernel image measurement across kexec, if desired
-> and supported on the architecture.
-> 
-> solution: enable IMA_KEXEC
-> 
-> Comparison: 
-> - Are there any differences between IMA vs. KEXEC_SIG measuring the
-> kexec kernel image?
-> 
-> One of the main differences is "what" is included in the measurement
-> list differs.  In both cases, the 'd-ng' field of the IMA measurement
-> list template (e.g. ima-ng, ima-sig, ima-modsig) is the full file hash
-> including the appended signature.  With IMA and the 'ima-modsig'
-> template, an additional hash without the appended signature is defined,
-> as well as including the appended signature in the 'sig' field.
-> 
-> Including the file hash and appended signature in the measurement list
-> allows an attestation server, for example, to verify the appended
-> signature without having to know the file hash without the signature.
-
-I don't understand this part. Isn't the hash *with* signature always
-included, and the distinguishing part about IMA is the hash *without*
-signature which is the same irrespective of signature type (PE, appended
-xattr) and irrespective of the keyt used for signoing?
-
-> Other differences are already included in the Kconfig KEXEC_SIG "Notes"
-> section.
-
-Which besides what is already described above would be blacklisting
-specific binaries, which is much more effective if you have hashes of
-binaries without signature.
-
-Thanks
-
-Michal
+> diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
+> index e4c067c61251..5efc869fe59a 100644
+> --- a/drivers/misc/sgi-gru/grutables.h
+> +++ b/drivers/misc/sgi-gru/grutables.h
+> @@ -530,12 +530,6 @@ struct gru_blade_state {
+>  		for ((i) = (k)*GRU_CBR_AU_SIZE;				\
+>  				(i) < ((k) + 1) * GRU_CBR_AU_SIZE; (i)++)
+>  
+> -/* Scan each DSR in a DSR bitmap. Note: multiple DSRs in an allocation unit */
+> -#define for_each_dsr_in_allocation_map(i, map, k)			\
+> -	for_each_set_bit((k), (const unsigned long *)(map), GRU_DSR_AU)	\
+> -		for ((i) = (k) * GRU_DSR_AU_CL;				\
+> -				(i) < ((k) + 1) * GRU_DSR_AU_CL; (i)++)
+> -
+>  #define gseg_physical_address(gru, ctxnum)				\
+>  		((gru)->gs_gru_base_paddr + ctxnum * GRU_GSEG_STRIDE)
+>  #define gseg_virtual_address(gru, ctxnum)				\
+> -- 
+> 2.34.1

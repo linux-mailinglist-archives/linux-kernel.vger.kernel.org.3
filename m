@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DAEF4B46B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D87B64B498C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245237AbiBNJtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:49:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43862 "EHLO
+        id S1344997AbiBNKD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:03:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344110AbiBNJqm (ORCPT
+        with ESMTP id S1343831AbiBNJ7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:46:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEDA66612;
-        Mon, 14 Feb 2022 01:40:12 -0800 (PST)
+        Mon, 14 Feb 2022 04:59:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAD7BC0;
+        Mon, 14 Feb 2022 01:46:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50B1FB80DC1;
-        Mon, 14 Feb 2022 09:40:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 747D9C340E9;
-        Mon, 14 Feb 2022 09:40:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89E92B80DC4;
+        Mon, 14 Feb 2022 09:46:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E5EC340E9;
+        Mon, 14 Feb 2022 09:46:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831607;
-        bh=GmHD2H6wXTPw4OsDfCiRyEE9zZtwRyeGAsCLUx/cKAA=;
+        s=korg; t=1644831999;
+        bh=5iu/sAGG6wb7UUIEvchXz4hefR0zgVYDTXIjM/ieclM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oej72s+GXo2oMVdqEe3uk2nmnRXyqBJNZN2B2GNqBsuOTmy0YmK6ZatZv0nvxDl4C
-         aBDfch+pURsfBalC1ujUzrGh5EMCnvM1dCP9tJLohG2h53Otp5Ks3xQLG++eWfIEpA
-         9qJVzP9SvsNMpMIKHbF9yvJ6N4w7783j73oRunyg=
+        b=l7ncJhlX4EVeSuNUGxanbSZIGCsSTvvnhrjjAfEMqGCovEQcIa388cALQTam+4Dq8
+         qXwTd34bEI0r3bjGzufSGLjL+RJtkZSvoy+YBR6OnlfiGzNpKpTheIrtekz5f5z59q
+         X5D/x9Xk/N0lt4lnefRZGBQitsKWv7LppihdyI1c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 5.10 005/116] mmc: sdhci-of-esdhc: Check for error num after setting mask
-Date:   Mon, 14 Feb 2022 10:25:04 +0100
-Message-Id: <20220214092458.864552120@linuxfoundation.org>
+        stable@vger.kernel.org, Saurav Kashyap <skashyap@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 047/172] scsi: qedf: Change context reset messages to ratelimited
+Date:   Mon, 14 Feb 2022 10:25:05 +0100
+Message-Id: <20220214092508.011334271@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Saurav Kashyap <skashyap@marvell.com>
 
-commit 40c67c291a93f8846c4a972c9ef1b7ba4544c8d0 upstream.
+[ Upstream commit 64fd4af6274eb0f49d29772c228fffcf6bde1635 ]
 
-Because of the possible failure of the dma_supported(), the
-dma_set_mask_and_coherent() may return error num.
-Therefore, it should be better to check it and return the error if
-fails.
-And since the sdhci_setup_host() has already checked the return value of
-the enable_dma, we need not check it in sdhci_resume_host() again.
+If FCoE is not configured, libfc/libfcoe keeps on retrying FLOGI and after
+3 retries driver does a context reset and tries fipvlan again.  This leads
+to context reset message flooding the logs. Hence ratelimit the message to
+prevent flooding the logs.
 
-Fixes: 5552d7ad596c ("mmc: sdhci-of-esdhc: set proper dma mask for ls104x chips")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220112083156.1124782-1-jiasheng@iscas.ac.cn
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220117135311.6256-4-njavali@marvell.com
+Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/host/sdhci-of-esdhc.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/scsi/qedf/qedf_main.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/mmc/host/sdhci-of-esdhc.c
-+++ b/drivers/mmc/host/sdhci-of-esdhc.c
-@@ -524,12 +524,16 @@ static void esdhc_of_adma_workaround(str
+diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.c
+index 9a256dbddaf55..544401f76c079 100644
+--- a/drivers/scsi/qedf/qedf_main.c
++++ b/drivers/scsi/qedf/qedf_main.c
+@@ -911,7 +911,7 @@ void qedf_ctx_soft_reset(struct fc_lport *lport)
+ 	struct qed_link_output if_link;
  
- static int esdhc_of_enable_dma(struct sdhci_host *host)
- {
-+	int ret;
- 	u32 value;
- 	struct device *dev = mmc_dev(host->mmc);
+ 	if (lport->vport) {
+-		QEDF_ERR(NULL, "Cannot issue host reset on NPIV port.\n");
++		printk_ratelimited("Cannot issue host reset on NPIV port.\n");
+ 		return;
+ 	}
  
- 	if (of_device_is_compatible(dev->of_node, "fsl,ls1043a-esdhc") ||
--	    of_device_is_compatible(dev->of_node, "fsl,ls1046a-esdhc"))
--		dma_set_mask_and_coherent(dev, DMA_BIT_MASK(40));
-+	    of_device_is_compatible(dev->of_node, "fsl,ls1046a-esdhc")) {
-+		ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(40));
-+		if (ret)
-+			return ret;
-+	}
+@@ -3979,7 +3979,9 @@ void qedf_stag_change_work(struct work_struct *work)
+ 	struct qedf_ctx *qedf =
+ 	    container_of(work, struct qedf_ctx, stag_work.work);
  
- 	value = sdhci_readl(host, ESDHC_DMA_SYSCTL);
+-	QEDF_ERR(&qedf->dbg_ctx, "Performing software context reset.\n");
++	printk_ratelimited("[%s]:[%s:%d]:%d: Performing software context reset.",
++			dev_name(&qedf->pdev->dev), __func__, __LINE__,
++			qedf->dbg_ctx.host_no);
+ 	qedf_ctx_soft_reset(qedf->lport);
+ }
  
+-- 
+2.34.1
+
 
 

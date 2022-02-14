@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4810C4B45E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2FD4B4618
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243099AbiBNJaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:30:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42668 "EHLO
+        id S243755AbiBNJcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:32:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243300AbiBNJaW (ORCPT
+        with ESMTP id S243613AbiBNJcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:30:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4287AE77;
-        Mon, 14 Feb 2022 01:29:37 -0800 (PST)
+        Mon, 14 Feb 2022 04:32:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CCA1ADB1;
+        Mon, 14 Feb 2022 01:30:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5063460C8A;
-        Mon, 14 Feb 2022 09:29:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1691FC340F2;
-        Mon, 14 Feb 2022 09:29:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1F09B80DC6;
+        Mon, 14 Feb 2022 09:30:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7CB9C340E9;
+        Mon, 14 Feb 2022 09:30:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644830976;
-        bh=WVAeUqgrH/pNsmuq3GgGhWwHLzCf/geaD98MM19BHyA=;
+        s=korg; t=1644831054;
+        bh=LGnMrv8zyFJ9Jznd8mvnS6QMJ59LaXA+jxgRSmNbVW4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BNFNaqGiMBXRw32zAGBDaUMMYPfkYa1NTvcDqenI6KIURuq8rulRZ1woLylj9mi7P
-         s2l4RPHAvynNexihSfv42zmHUIAZbd1L2DnIsdpaqPwHBn1PMb6Lj85i5RCCWTpQrp
-         9LmUm7zTua1zEsPK9AyytrGzDnVhSqS85rz53kTc=
+        b=O0/gZ2xoSvi0VG1Tv4qhtEM7cyMsrGQYTHVRJpnpTsOxSH9bHfzXd7geu0BKsUvww
+         CCLFtgsbgwAZ13RnZrI1EnKAn8PGbM3PjURb9J74a2GMDg+QMmFz3JA8DdwYEaOhb8
+         rUqb7REla9MlohPjup7YSo0kCOBqOtajqCuvJkwc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kosuke Tatsukawa <tatsu-ab1@nec.com>
-Subject: [PATCH 4.9 25/34] n_tty: wake up poll(POLLRDNORM) on receiving data
+        stable@vger.kernel.org,
+        Selwin Sebastian <Selwin.Sebastian@amd.com>,
+        Raju Rangoju <Raju.Rangoju@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 28/44] net: amd-xgbe: disable interrupts during pci removal
 Date:   Mon, 14 Feb 2022 10:25:51 +0100
-Message-Id: <20220214092446.757731373@linuxfoundation.org>
+Message-Id: <20220214092448.821089086@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
-References: <20220214092445.946718557@linuxfoundation.org>
+In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
+References: <20220214092447.897544753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,84 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: TATSUKAWA KOSUKE (立川 江介) <tatsu-ab1@nec.com>
+From: Raju Rangoju <Raju.Rangoju@amd.com>
 
-commit c816b2e65b0e86b95011418cad334f0524fc33b8 upstream.
+[ Upstream commit 68c2d6af1f1e469544d6cbe9a601d96fb9c00e7f ]
 
-The poll man page says POLLRDNORM is equivalent to POLLIN when used as
-an event.
-$ man poll
-<snip>
-              POLLRDNORM
-                     Equivalent to POLLIN.
+Hardware interrupts are enabled during the pci probe, however,
+they are not disabled during pci removal.
 
-However, in n_tty driver, POLLRDNORM does not return until timeout even
-if there is terminal input, whereas POLLIN returns.
+Disable all hardware interrupts during pci removal to avoid any
+issues.
 
-The following test program works until kernel-3.17, but the test stops
-in poll() after commit 57087d515441 ("tty: Fix spurious poll() wakeups").
-
-[Steps to run test program]
-  $ cc -o test-pollrdnorm test-pollrdnorm.c
-  $ ./test-pollrdnorm
-  foo          <-- Type in something from the terminal followed by [RET].
-                   The string should be echoed back.
-
-  ------------------------< test-pollrdnorm.c >------------------------
-  #include <stdio.h>
-  #include <errno.h>
-  #include <poll.h>
-  #include <unistd.h>
-
-  void main(void)
-  {
-	int		n;
-	unsigned char	buf[8];
-	struct pollfd	fds[1] = {{ 0, POLLRDNORM, 0 }};
-
-	n = poll(fds, 1, -1);
-	if (n < 0)
-		perror("poll");
-	n = read(0, buf, 8);
-	if (n < 0)
-		perror("read");
-	if (n > 0)
-		write(1, buf, n);
-  }
-  ------------------------------------------------------------------------
-
-The attached patch fixes this problem.  Many calls to
-wake_up_interruptible_poll() in the kernel source code already specify
-"POLLIN | POLLRDNORM".
-
-Fixes: 57087d515441 ("tty: Fix spurious poll() wakeups")
-Cc: stable@vger.kernel.org
-Signed-off-by: Kosuke Tatsukawa <tatsu-ab1@nec.com>
-Link: https://lore.kernel.org/r/TYCPR01MB81901C0F932203D30E452B3EA5209@TYCPR01MB8190.jpnprd01.prod.outlook.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: e75377404726 ("amd-xgbe: Update PCI support to use new IRQ functions")
+Suggested-by: Selwin Sebastian <Selwin.Sebastian@amd.com>
+Signed-off-by: Raju Rangoju <Raju.Rangoju@amd.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/n_tty.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/amd/xgbe/xgbe-pci.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/tty/n_tty.c
-+++ b/drivers/tty/n_tty.c
-@@ -1377,7 +1377,7 @@ handle_newline:
- 			put_tty_queue(c, ldata);
- 			smp_store_release(&ldata->canon_head, ldata->read_head);
- 			kill_fasync(&tty->fasync, SIGIO, POLL_IN);
--			wake_up_interruptible_poll(&tty->read_wait, POLLIN);
-+			wake_up_interruptible_poll(&tty->read_wait, POLLIN | POLLRDNORM);
- 			return 0;
- 		}
- 	}
-@@ -1658,7 +1658,7 @@ static void __receive_buf(struct tty_str
+diff --git a/drivers/net/ethernet/amd/xgbe/xgbe-pci.c b/drivers/net/ethernet/amd/xgbe/xgbe-pci.c
+index 82d1f416ee2ac..569e6d3d066bf 100644
+--- a/drivers/net/ethernet/amd/xgbe/xgbe-pci.c
++++ b/drivers/net/ethernet/amd/xgbe/xgbe-pci.c
+@@ -400,6 +400,9 @@ static void xgbe_pci_remove(struct pci_dev *pdev)
  
- 	if (read_cnt(ldata)) {
- 		kill_fasync(&tty->fasync, SIGIO, POLL_IN);
--		wake_up_interruptible_poll(&tty->read_wait, POLLIN);
-+		wake_up_interruptible_poll(&tty->read_wait, POLLIN | POLLRDNORM);
- 	}
+ 	pci_free_irq_vectors(pdata->pcidev);
+ 
++	/* Disable all interrupts in the hardware */
++	XP_IOWRITE(pdata, XP_INT_EN, 0x0);
++
+ 	xgbe_free_pdata(pdata);
  }
  
+-- 
+2.34.1
+
 
 

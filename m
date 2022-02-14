@@ -2,101 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FCAB4B4E3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:27:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2833E4B4DB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345217AbiBNLZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:25:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52392 "EHLO
+        id S230202AbiBNLTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:19:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351100AbiBNLYu (ORCPT
+        with ESMTP id S1350621AbiBNLTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:24:50 -0500
-X-Greylist: delayed 503 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 03:00:40 PST
-Received: from mail-4321.protonmail.ch (mail-4321.protonmail.ch [185.70.43.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD93E6A04A
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 03:00:40 -0800 (PST)
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        by mail-4321.protonmail.ch (Postfix) with ESMTPS id 4Jy1JM4G1Nz4x0y4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:52:19 +0000 (UTC)
-Authentication-Results: mail-4321.protonmail.ch;
-        dkim=pass (2048-bit key) header.d=emersion.fr header.i=@emersion.fr header.b="LThY4lgU"
-Date:   Mon, 14 Feb 2022 10:52:13 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
-        s=protonmail2; t=1644835934;
-        bh=MlZxepE7UcCIx7JdbAa36YidmF6d5y+C8F78t64Xio0=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=LThY4lgUqhN8sGqwUbzGNFG1jSZlOqseiQAm9FRwnlotQK8Bibz9NV5fvBRzZkA6e
-         AKdMcgVjEBUpigN+wbQqLLFpMpKqwoX4f/XY+4BKYUTk9WLnDIkOhF2IYvOYMxXq4H
-         /+su7TPrhRIkglRZdbbO4kQikJA2b6Qjq8D6y/OXk1/hIsJfRqkNgbPpDFTLkhegbZ
-         iaoLIMVLTzrHznyG58N/ooRjJnqpJpXq5iboveuFIgQPg4EJtHXoDn2D6MvMkgbJTs
-         nms6hiOAFWrVqs6w8Er37CEQVw+JzcW3PYzmzFJVIQyOmoq/+Qd497VPQPxmkUH7FK
-         VPZyRvj0tT/IA==
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-From:   Simon Ser <contact@emersion.fr>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-fbdev@vger.kernel.org, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        dri-devel@lists.freedesktop.org, Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>
-Reply-To: Simon Ser <contact@emersion.fr>
-Subject: Re: [PATCH v4 1/6] drm/format-helper: Add drm_fb_xrgb8888_to_gray8_line()
-Message-ID: <aW25lLbuIQGCr0FHtnqiM-UB-VYfk-BaLhhwq3Ur9ONgrXyxHspO_JKXCIgAeI0IBhW7hqZwTdACzd9a1b8A9MIBDrn12ymzMGYjbeqcSYE=@emersion.fr>
-In-Reply-To: <YgoxFBGNsrezVxmi@smile.fi.intel.com>
-References: <20220211091927.2988283-1-javierm@redhat.com> <20220211091927.2988283-2-javierm@redhat.com> <YgY6OqN+guBlt/ED@smile.fi.intel.com> <4fa465d9-4fac-4199-9a04-d8e09d164308@redhat.com> <YgZEuXvJ2ZiOyNS+@smile.fi.intel.com> <7560cd10-0a7c-3fda-da83-9008833e3901@suse.de> <87pmnt7gm3.fsf@intel.com> <YgaDj6Wld4b7S6DF@smile.fi.intel.com> <f87ce2fa-6b18-f985-eb86-506ce7103db3@suse.de> <YgoxFBGNsrezVxmi@smile.fi.intel.com>
+        Mon, 14 Feb 2022 06:19:13 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84D3694B8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:52:40 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id p15so36496556ejc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:52:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=E/TT01vk+TwDTxyVO+CySmmufUASQrx6o6WcTn2zA6g=;
+        b=LWvXIogIhqRUhxWeVG/UvEOK/9eOLM6ssOlZy/3RDNw9vDq2wBdtU6s7kREbP0cnJC
+         gCEPNNbIxVz9Px1HgdnzYzXC8WZKL4MCivjZM5RrjKfgwDDuCtxB7G/SMndpEDk/2rfg
+         0Pgi/XwsUUXLkr419KVcuHZS58QmtN1jYdlsc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=E/TT01vk+TwDTxyVO+CySmmufUASQrx6o6WcTn2zA6g=;
+        b=JIWoOuLsWsCo6NSsAtb+EFWsGU6Bj9feEWZeuB8wHOsyujWL0hc8e14/DR6QyWjGBO
+         SI5u9DgY7RBxEnhKRVsyQzzy8K9ZRJk1im6H4ySsYyfTXtWnoTOADJuy/CXYoyZ/zQzv
+         7ZjZiK2Mf4AGzDHAXfHTHfA6x7v0hY3jz07Ffy4Gvumygr82bLmQNPP4UTGWgoIUbyh5
+         zGB7isZyLI30+JWbZ20src/qe0WAElh/zieQp3eIqFxr9X9oa0Ch1fMmbfYndPlmp0/t
+         cl6YSEv6jAF3qaqcZZWc5JbNGw1vIUDNBwIECBg7LA+SJ0+AQUnCMpM9nmgg8KB2OdcX
+         2pzg==
+X-Gm-Message-State: AOAM530En/AFK1yTeQu5UHewpFYs2n8OdOHSgHViBwnlkbnH7KKF6GBG
+        v3Dt6FYpUExK7nvIRPzXzqyDnA==
+X-Google-Smtp-Source: ABdhPJyRmRhJ+m6AufBMjvO+EAajLPaNwsbL28+VihphAK/HPcx1aafI2fcRcWVtS458a+Wge2rcZw==
+X-Received: by 2002:a17:907:7204:: with SMTP id dr4mr10860530ejc.708.1644835959219;
+        Mon, 14 Feb 2022 02:52:39 -0800 (PST)
+Received: from [192.168.1.149] ([80.208.64.233])
+        by smtp.gmail.com with ESMTPSA id q12sm14773393edv.99.2022.02.14.02.52.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 02:52:38 -0800 (PST)
+Message-ID: <dc9054f2-5e2b-0ae2-1022-23421668dd05@rasmusvillemoes.dk>
+Date:   Mon, 14 Feb 2022 11:52:37 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 12/20] vsprintf: add new `%pA` format specifier
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Gary Guo <gary@garyguo.net>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+References: <20220212130410.6901-1-ojeda@kernel.org>
+ <20220212130410.6901-13-ojeda@kernel.org>
+ <YgosclY9ebD3t020@smile.fi.intel.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <YgosclY9ebD3t020@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday, February 14th, 2022 at 11:38, Andy Shevchenko <andriy.shevchenko=
-@linux.intel.com> wrote:
+On 14/02/2022 11.18, Andy Shevchenko wrote:
+> On Sat, Feb 12, 2022 at 02:03:38PM +0100, Miguel Ojeda wrote:
+> 
+>> From: Gary Guo <gary@garyguo.net>
+> 
+> Not sure I understand this...
+> 
+>> This patch adds a format specifier `%pA` to `vsprintf` which formats
+>> a pointer as `core::fmt::Arguments`. Doing so allows us to directly
+>> format to the internal buffer of `printf`, so we do not have to use
+>> a temporary buffer on the stack to pre-assemble the message on
+>> the Rust side.
+>>
+>> This specifier is intended only to be used from Rust and not for C, so
+>> `checkpatch.pl` is intentionally unchanged to catch any misuse.
+>>
+>> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+>> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+>> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
+>> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+> 
+>> Signed-off-by: Gary Guo <gary@garyguo.net>
+> 
+> ...together with this in the current SoB chain.
+> 
+>> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+>> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> 
+> I'm wondering if you considered to use %pV.
+> 
 
-> > > > IMO *always* prefer a for loop over while or do-while.
-> > > >
-> > > > The for (i =3D 0; i < N; i++) is such a strong paradigm in C. You
-> > > > instantly know how many times you're going to loop, at a glance. No=
-t so
-> > > > with with the alternatives, which should be used sparingly.
-> > >
-> > > while () {}  _is_ a paradigm, for-loop is syntax sugar on top of it.
-> >
-> > Naw, that's not true.
->
-> In the section 3.5 "Loops - While and For" in "The C Programming
-> Language" 2nd by K&R, the authors said:
->
-> =09The for statement ... is equivalent to ... while..."
->
-> They said that for is equivalent to while, and not otherwise.
->
-> Also, syntax sugar by definition declares something that can be written a=
-s
-> a single line of code, which usually is done using more (not always).
+I think the point is for vsnprintf() to call (back) into Rust code.
 
-arr[i] is syntaxic sugar for *(arr + i), yet we keep writing the former,
-because it's way more readable. The same goes for the for vs. while loops.
-It may be obvious for you because you're a C guru, but to me it just obfusc=
-ates
-the code. Too many C projects end up becoming completely unreadable because=
- of
-patterns like these.
+That said, I don't like the !CONFIG_RUST version to return NULL, that
+will surely crash moments later.
 
-Idiomatic C code isn't written by doing pointless micro-optimizations.
+So I prefer something like
+
+[rust.h]
+// no CONFIG_RUST conditional
++char *rust_fmt_argument(char* buf, char* end, void *ptr);
+
+[vsprintf.c]
++	case 'A':
++               if (IS_ENABLED(CONFIG_RUST))
++		    return rust_fmt_argument(buf, end, ptr);
++               else
++                   return string_nocheck(buf, end, "[%pA in non-Rust
+code?!]", default_str_spec);
+
+
+Rasmus
+

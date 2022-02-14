@@ -2,103 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C75114B5D88
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 23:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0204B5D8D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 23:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbiBNWST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 17:18:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35432 "EHLO
+        id S231800AbiBNWWo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 14 Feb 2022 17:22:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiBNWSS (ORCPT
+        with ESMTP id S231791AbiBNWWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 17:18:18 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128EB12F172;
-        Mon, 14 Feb 2022 14:18:10 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id m22so12411416pfk.6;
-        Mon, 14 Feb 2022 14:18:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=71v259sMnulVDUdnFL9PvW3q7zimpbg7uPWJfoOOLmg=;
-        b=G5IqvXRvPZWwm596MQND/b5iZCjaUyRnv9LD2dOSnn0pk3xxjQ61HdvBBF8X1K23J7
-         C2oXa7julzRaipdXpaw1I+H5D5lKsLGPuRejIsCFtMm8glelFZ2B8AoIN+hUsCBSoEuT
-         ezCjQm1lH6PeAVfA8Uhzg1eJWlWtKfayrBXbHJAA73KsAVfV3rx49rxbSQqohxDcOw6n
-         QAIqgZM5USvMHDxBWWQYA9BBYWiE7ItWZcHJM1l9kyOyo94G5J+0QVj2fVuFmJSpkB8d
-         h15qNag6vvVgWa8iuseLC1RjsvBprFiX+fMWFF/NR9aI4DAxnx5GiZuqjs1Kp+qqMWeP
-         WXvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=71v259sMnulVDUdnFL9PvW3q7zimpbg7uPWJfoOOLmg=;
-        b=KobvkJ+clWnb9UQY+mf7ycSzXPbcTSf+jXmFcqYNwoCS/wtQOEtKnY9GpnESyzKHg1
-         MUGiDPBeSTFfAzbtAKNDbjEQSdqjTP80GozGI2Z/uHzgP9iEmq7HHIjfzy22CljjqVAd
-         l3ftFl1vTyhcsdaizeRYNe19SnWgao8/cRMVzXfqB+ciyK3tUXQbbEt1B8Q6zWayYxJS
-         NEY9RjB7SXDJLvchQwafI6FV8u2vCBMTv6DGdvwAdogPHgeCR+Bhzno2tTbThX3gSkA2
-         XER/9PgSWisXDiLZBy/JBAzPCu16/125+AX5YM1A7Ks4k5CiyGQWzme8WaSly7JZcdKN
-         BgCg==
-X-Gm-Message-State: AOAM533jG2w3majGtecmCERL4ihCSWuiA2uqsrpD9loqxw/jmouOABWQ
-        Dn8w+u8R1IpTFnRBvU5WZ5c=
-X-Google-Smtp-Source: ABdhPJyYFFep4lDe0JILfHNFijFDMbdT+o8UOjSl2L8kbRgZPnSww9ACOQVnd0m43jq2yq88c6U57w==
-X-Received: by 2002:a05:6a00:1588:: with SMTP id u8mr882060pfk.4.1644877089499;
-        Mon, 14 Feb 2022 14:18:09 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id 75sm321711pga.12.2022.02.14.14.18.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 14:18:08 -0800 (PST)
-Subject: Re: [PATCH 5.16 000/203] 5.16.10-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220214092510.221474733@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <36508c1c-1bc8-19c2-4448-0e11614ea26c@gmail.com>
-Date:   Mon, 14 Feb 2022 14:18:07 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 14 Feb 2022 17:22:43 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B48119405;
+        Mon, 14 Feb 2022 14:22:33 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nJjjm-0003ac-29; Mon, 14 Feb 2022 23:22:26 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2 4/6] RISC-V: Implement multi-letter ISA extension probing framework
+Date:   Mon, 14 Feb 2022 23:22:25 +0100
+Message-ID: <2413800.L4PxSk42VP@diego>
+In-Reply-To: <CAOnJCU+cWBDrN-3Z37m8xA1GPrJY+JaOweYMiZBxJ-cT7ii_5Q@mail.gmail.com>
+References: <20220210214018.55739-1-atishp@rivosinc.com> <3479483.A1skbJeUdD@diego> <CAOnJCU+cWBDrN-3Z37m8xA1GPrJY+JaOweYMiZBxJ-cT7ii_5Q@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/22 1:24 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.10 release.
-> There are 203 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Am Montag, 14. Februar 2022, 21:42:32 CET schrieb Atish Patra:
+> On Mon, Feb 14, 2022 at 12:24 PM Heiko Stübner <heiko@sntech.de> wrote:
+> >
+> > Am Montag, 14. Februar 2022, 21:14:13 CET schrieb Atish Patra:
+> > > On Mon, Feb 14, 2022 at 12:06 PM Heiko Stübner <heiko@sntech.de> wrote:
+> > > >
+> > > > Am Donnerstag, 10. Februar 2022, 22:40:16 CET schrieb Atish Patra:
+> > > > > Multi-letter extensions can be probed using exising
+> > > > > riscv_isa_extension_available API now. It doesn't support versioning
+> > > > > right now as there is no use case for it.
+> > > > > Individual extension specific implementation will be added during
+> > > > > each extension support.
+> > > > >
+> > > > > Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> > > >
+> > > > Tested-by: Heiko Stuebner <heiko@sntech.de>
+> > > >
+> > > >
+> > > > By the way, does a similar parsing exist for opensbi as well?
+> > > > Things like svpbmt as well as zicbom have CSR bits controlling how
+> > > > these functions should behave (enabling them, etc), so I guess
+> > > > opensbi also needs to parse the extensions from the ISA string?
+> > > >
+> > > >
+> > >
+> > > No. Currently, OpenSBI relies on the CSR read/write & trap method to
+> > > identify the extensions [1].
+> > >
+> > > https://github.com/riscv-software-src/opensbi/blob/master/lib/sbi/sbi_hart.c#L404
+> >
+> > I guess my question is more, who is supposed to set CBIE, CBCFE bits in the
+> > ENVCFG CSR. I.e. at it's default settings CMO instructions will cause
+> > illegal instructions until the level above does allow them.
+> >
+> > When the kernel wants to call a cache-invalidate, from my reading menvcfg
+> > needs to be modified accordingly - which would fall in SBI's court?
+> >
 > 
-> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
-> Anything received after that time might be too late.
+> I think so. I had the same question for the SSTC extension as well.
+> This is what I currently do:
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.10-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
+> 1. Detect menvcfg first, detect stimecmp
+> 2. Enable SSTC feature only if both are available
+> 3. Set the STCE bit in menvcfg if SSTC is available
 > 
-> thanks,
-> 
-> greg k-h
+> Here is the patch
+> https://github.com/atishp04/opensbi/commit/e6b185821e8302bffdceb4633b413252e0de4889
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Hmm, the CBO fields are defined as WARL (write any, read legal),
+so I guess some sort of trap won't work here.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+The priv-spec only points to the cmo-spec for these bits and the cmo-spec
+does not specifiy what the value should be when cmo is not present.
+
+
+> > > In the future, zicbom can be detected in the same manner. However,
+> > > svpbmt is a bit tricky as it doesn't
+> > > define any new CSR. Do you think OpenSBI needs to detect svpbmt for any reason ?
+> >
+> > There is the PBMTE bit in MENVCFG, which I found while looking through the
+> > zicbom-parts, which is supposed to "control wheter svpbmt is available for
+> > use". So I guess the question is the same as above :-)
+> >
+> 
+> PBMTE bit in MENVCFG says if PBMTE bit is available or not. OpenSBI
+> needs other way to
+> detect if PBMTE is available.
+> 
+> That's why, I think MENVCFG should be set correctly by the hardware
+> upon reset. What do you think
+> about that ? I couldn't find anything related to the reset state for menvcfg.
+
+me neither. Both the priv-spec as well as the cmobase spec do not
+specifiy any reset-values it seems.
+
+So I guess in the Qemu case, Qemu needs to set that bit when
+its svpbmt extension is enabled?
+
+
+Heiko
+
+
+> > > > > ---
+> > > > >  arch/riscv/include/asm/hwcap.h | 18 ++++++++++++++++++
+> > > > >  arch/riscv/kernel/cpufeature.c | 27 ++++++++++++++++++++++++---
+> > > > >  2 files changed, 42 insertions(+), 3 deletions(-)
+> > > > >
+> > > > > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> > > > > index 5ce50468aff1..170bd80da520 100644
+> > > > > --- a/arch/riscv/include/asm/hwcap.h
+> > > > > +++ b/arch/riscv/include/asm/hwcap.h
+> > > > > @@ -34,7 +34,25 @@ extern unsigned long elf_hwcap;
+> > > > >  #define RISCV_ISA_EXT_s              ('s' - 'a')
+> > > > >  #define RISCV_ISA_EXT_u              ('u' - 'a')
+> > > > >
+> > > > > +/*
+> > > > > + * Increse this to higher value as kernel support more ISA extensions.
+> > > > > + */
+> > > > >  #define RISCV_ISA_EXT_MAX    64
+> > > > > +#define RISCV_ISA_EXT_NAME_LEN_MAX 32
+> > > > > +
+> > > > > +/* The base ID for multi-letter ISA extensions */
+> > > > > +#define RISCV_ISA_EXT_BASE 26
+> > > > > +
+> > > > > +/*
+> > > > > + * This enum represent the logical ID for each multi-letter RISC-V ISA extension.
+> > > > > + * The logical ID should start from RISCV_ISA_EXT_BASE and must not exceed
+> > > > > + * RISCV_ISA_EXT_MAX. 0-25 range is reserved for single letter
+> > > > > + * extensions while all the multi-letter extensions should define the next
+> > > > > + * available logical extension id.
+> > > > > + */
+> > > > > +enum riscv_isa_ext_id {
+> > > > > +     RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
+> > > > > +};
+> > > > >
+> > > > >  unsigned long riscv_isa_extension_base(const unsigned long *isa_bitmap);
+> > > > >
+> > > > > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> > > > > index e9e3b0693d16..469b9739faf7 100644
+> > > > > --- a/arch/riscv/kernel/cpufeature.c
+> > > > > +++ b/arch/riscv/kernel/cpufeature.c
+> > > > > @@ -83,7 +83,7 @@ void __init riscv_fill_hwcap(void)
+> > > > >
+> > > > >       for_each_of_cpu_node(node) {
+> > > > >               unsigned long this_hwcap = 0;
+> > > > > -             unsigned long this_isa = 0;
+> > > > > +             uint64_t this_isa = 0;
+> > > > >
+> > > > >               if (riscv_of_processor_hartid(node) < 0)
+> > > > >                       continue;
+> > > > > @@ -169,12 +169,22 @@ void __init riscv_fill_hwcap(void)
+> > > > >                       if (*isa != '_')
+> > > > >                               --isa;
+> > > > >
+> > > > > +#define SET_ISA_EXT_MAP(name, bit)                                           \
+> > > > > +                     do {                                                    \
+> > > > > +                             if ((ext_end - ext == sizeof(name) - 1) &&      \
+> > > > > +                                  !memcmp(ext, name, sizeof(name) - 1)) {    \
+> > > > > +                                     this_isa |= (1UL << bit);               \
+> > > > > +                                     pr_info("Found ISA extension %s", name);\
+> > > > > +                             }                                               \
+> > > > > +                     } while (false)                                         \
+> > > > > +
+> > > > >                       if (unlikely(ext_err))
+> > > > >                               continue;
+> > > > >                       if (!ext_long) {
+> > > > >                               this_hwcap |= isa2hwcap[(unsigned char)(*ext)];
+> > > > >                               this_isa |= (1UL << (*ext - 'a'));
+> > > > >                       }
+> > > > > +#undef SET_ISA_EXT_MAP
+> > > > >               }
+> > > > >
+> > > > >               /*
+> > > > > @@ -187,10 +197,21 @@ void __init riscv_fill_hwcap(void)
+> > > > >               else
+> > > > >                       elf_hwcap = this_hwcap;
+> > > > >
+> > > > > -             if (riscv_isa[0])
+> > > > > +             if (riscv_isa[0]) {
+> > > > > +#if IS_ENABLED(CONFIG_32BIT)
+> > > > > +                     riscv_isa[0] &= this_isa & 0xFFFFFFFF;
+> > > > > +                     riscv_isa[1] &= this_isa >> 32;
+> > > > > +#else
+> > > > >                       riscv_isa[0] &= this_isa;
+> > > > > -             else
+> > > > > +#endif
+> > > > > +             } else {
+> > > > > +#if IS_ENABLED(CONFIG_32BIT)
+> > > > > +                     riscv_isa[0] = this_isa & 0xFFFFFFFF;
+> > > > > +                     riscv_isa[1] = this_isa >> 32;
+> > > > > +#else
+> > > > >                       riscv_isa[0] = this_isa;
+> > > > > +#endif
+> > > > > +             }
+> > > > >       }
+> > > > >
+> > > > >       /* We don't support systems with F but without D, so mask those out
+> > > > >
+> > > >
+> > > >
+> > > >
+> > > >
+> > >
+> > >
+> > >
+> >
+> >
+> >
+> >
+> 
+> 
+> 
+
+
+
+

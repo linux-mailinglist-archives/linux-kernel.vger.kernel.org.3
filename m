@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1374B4E36
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E26224B4E2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351212AbiBNLX6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 14 Feb 2022 06:23:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52126 "EHLO
+        id S1343720AbiBNLYb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 14 Feb 2022 06:24:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350702AbiBNLXi (ORCPT
+        with ESMTP id S1351016AbiBNLXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:23:38 -0500
+        Mon, 14 Feb 2022 06:23:52 -0500
 Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [207.211.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C691E6AA5D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:59:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 436FC13CDA
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:59:10 -0800 (PST)
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-347-FZQAIk2MPauVFaiMtszyBg-1; Mon, 14 Feb 2022 05:48:16 -0500
-X-MC-Unique: FZQAIk2MPauVFaiMtszyBg-1
+ us-mta-453-ZLsMLXqfOUKxfUPF7C3Pzw-1; Mon, 14 Feb 2022 05:48:20 -0500
+X-MC-Unique: ZLsMLXqfOUKxfUPF7C3Pzw-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E997D801B0E;
-        Mon, 14 Feb 2022 10:48:13 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A02421091DA1;
+        Mon, 14 Feb 2022 10:48:18 +0000 (UTC)
 Received: from x1.com (unknown [10.22.16.130])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E30AA27BDC;
-        Mon, 14 Feb 2022 10:48:01 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4422426E7E;
+        Mon, 14 Feb 2022 10:48:14 +0000 (UTC)
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
@@ -48,9 +48,9 @@ Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         linux-trace-devel@vger.kernel.org,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [RFC V2 19/21] rv/monitor: Add safe watchdog nowayout monitor
-Date:   Mon, 14 Feb 2022 11:45:10 +0100
-Message-Id: <7a810f46b6136565a364001e7d1550fb9a4ccf62.1644830251.git.bristot@kernel.org>
+Subject: [RFC V2 20/21] rv/safety_app: Add an safety_app sample
+Date:   Mon, 14 Feb 2022 11:45:11 +0100
+Message-Id: <9af372dee35cad565ccf5801645d70c2500191d4.1644830251.git.bristot@kernel.org>
 In-Reply-To: <cover.1644830251.git.bristot@kernel.org>
 References: <cover.1644830251.git.bristot@kernel.org>
 MIME-Version: 1.0
@@ -70,17 +70,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a simplification of the safe_wtd monitor, named safe_wtd_nwo.
-The difference between these two monitors is that the latter enforces
-the nowayout watchdog device option before opening the watchdog.
+This is the sample code of a safety application that uses the
+watchdog as a safety monitor and the RV monitors to monitor
+this interaction/get feedback from kernel about the watchdog states.
 
-In this way, once the watchdog is starts, the watchdog hardware will
-serve as an safety-monitor until the system shutdown.
+This tool first creates a trace instance to follow the RV events
+and then enables RV monitor. After that, the tool configures
+the watchdog and starts running the main loop.
 
-For further information, please refer to:
-        Documentation/trace/rv/watchdog-monitor.rst
+The main loop runs a use-case-specific function, like checking
+the system. If the system is running as expected, it pings the
+watchdog. After pinging the watchdog, the tool then collects
+trace information to see if the RV monitor received the expected
+events and is in a safe/safe_nwo state.
 
-The monitor specification was developed together with Gabriele Paoloni,
+For further information, run safety_app --help
+
+The safety-app specification was developed together with Gabriele Paoloni,
 in the context of the Linux Foundation Elisa Project.
 
 Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
@@ -104,501 +110,788 @@ Cc: linux-kernel@vger.kernel.org
 Cc: linux-trace-devel@vger.kernel.org
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- kernel/trace/rv/Kconfig                       |  10 +
- kernel/trace/rv/Makefile                      |   1 +
- kernel/trace/rv/monitor_safe_wtd_nwo/model.h  |  61 ++++
- .../rv/monitor_safe_wtd_nwo/safe_wtd_nwo.c    | 309 ++++++++++++++++++
- .../rv/monitor_safe_wtd_nwo/safe_wtd_nwo.h    |  64 ++++
- 5 files changed, 445 insertions(+)
- create mode 100644 kernel/trace/rv/monitor_safe_wtd_nwo/model.h
- create mode 100644 kernel/trace/rv/monitor_safe_wtd_nwo/safe_wtd_nwo.c
- create mode 100644 kernel/trace/rv/monitor_safe_wtd_nwo/safe_wtd_nwo.h
+ tools/tracing/rv/safety_app/Makefile     |  51 ++
+ tools/tracing/rv/safety_app/safety_app.c | 713 +++++++++++++++++++++++
+ 2 files changed, 764 insertions(+)
+ create mode 100644 tools/tracing/rv/safety_app/Makefile
+ create mode 100644 tools/tracing/rv/safety_app/safety_app.c
 
-diff --git a/kernel/trace/rv/Kconfig b/kernel/trace/rv/Kconfig
-index 93b36f215b2b..7e797e132f60 100644
---- a/kernel/trace/rv/Kconfig
-+++ b/kernel/trace/rv/Kconfig
-@@ -39,6 +39,16 @@ config RV_MON_SAFE_WTD
- 	  For futher information see:
- 	    Documentation/trace/rv/safety-monitor.rst
- 
-+config RV_MON_SAFE_WTD_NWO
-+	tristate "Safety watchdog nowayout"
-+	help
-+	  Enable safe_wtd_nwo, this monitor observes the interaction
-+	  between a user-space safety monitor and a watchdog device. It
-+	  enforces the usage of watchdog's nowayout config.
-+
-+	  For futher information see:
-+	    Documentation/trace/rv/safety-monitor.rst
-+
- config RV_REACTORS
- 	bool "Runtime verification reactors"
- 	default y if RV
-diff --git a/kernel/trace/rv/Makefile b/kernel/trace/rv/Makefile
-index 854d0f6e453b..44277103d178 100644
---- a/kernel/trace/rv/Makefile
-+++ b/kernel/trace/rv/Makefile
-@@ -4,6 +4,7 @@ obj-$(CONFIG_RV) += rv.o
- obj-$(CONFIG_RV_MON_WIP) += monitor_wip/wip.o
- obj-$(CONFIG_RV_MON_WWNR) += monitor_wwnr/wwnr.o
- obj-$(CONFIG_RV_MON_SAFE_WTD) += monitor_safe_wtd/safe_wtd.o
-+obj-$(CONFIG_RV_MON_SAFE_WTD_NWO) += monitor_safe_wtd_nwo/safe_wtd_nwo.o
- obj-$(CONFIG_RV_REACTORS) += rv_reactors.o
- obj-$(CONFIG_RV_REACT_PRINTK) += reactor_printk.o
- obj-$(CONFIG_RV_REACT_PANIC) += reactor_panic.o
-diff --git a/kernel/trace/rv/monitor_safe_wtd_nwo/model.h b/kernel/trace/rv/monitor_safe_wtd_nwo/model.h
+diff --git a/tools/tracing/rv/safety_app/Makefile b/tools/tracing/rv/safety_app/Makefile
 new file mode 100644
-index 000000000000..504a93e35b93
+index 000000000000..002531022e45
 --- /dev/null
-+++ b/kernel/trace/rv/monitor_safe_wtd_nwo/model.h
-@@ -0,0 +1,61 @@
-+enum states_safe_wtd_nwo {
-+	init = 0,
-+	closed_running,
-+	nwo,
-+	opened,
-+	safe,
-+	set,
-+	started,
-+	state_max
-+};
++++ b/tools/tracing/rv/safety_app/Makefile
+@@ -0,0 +1,51 @@
++NAME	:=	safety_app
++VERSION	:=	0.1
 +
-+enum events_safe_wtd_nwo {
-+	close = 0,
-+	nowayout,
-+	open,
-+	other_threads,
-+	ping,
-+	set_safe_timeout,
-+	start,
-+	event_max
-+};
++# From libtracefs:
++# Makefiles suck: This macro sets a default value of $(2) for the
++# variable named by $(1), unless the variable has been set by
++# environment or command line. This is necessary for CC and AR
++# because make sets default values, so the simpler ?= approach
++# won't work as expected.
++define allow-override
++  $(if $(or $(findstring environment,$(origin $(1))),\
++            $(findstring command line,$(origin $(1)))),,\
++    $(eval $(1) = $(2)))
++endef
 +
-+struct automaton_safe_wtd_nwo {
-+	char *state_names[state_max];
-+	char *event_names[event_max];
-+	char function[state_max][event_max];
-+	char initial_state;
-+	char final_states[state_max];
-+};
++# Allow setting CC and AR, or setting CROSS_COMPILE as a prefix.
++$(call allow-override,CC,$(CROSS_COMPILE)gcc)
++$(call allow-override,AR,$(CROSS_COMPILE)ar)
++$(call allow-override,STRIP,$(CROSS_COMPILE)strip)
++$(call allow-override,PKG_CONFIG,pkg-config)
++$(call allow-override,LD_SO_CONF_PATH,/etc/ld.so.conf.d/)
++$(call allow-override,LDCONFIG,ldconfig)
 +
-+struct automaton_safe_wtd_nwo automaton_safe_wtd_nwo = {
-+	.state_names = {
-+		"init",
-+		"closed_running",
-+		"nwo",
-+		"opened",
-+		"safe",
-+		"set",
-+		"started"
-+	},
-+	.event_names = {
-+		"close",
-+		"nowayout",
-+		"open",
-+		"other_threads",
-+		"ping",
-+		"set_safe_timeout",
-+		"start"
-+	},
-+	.function = {
-+		{             -1,            nwo,             -1,             -1,             -1,             -1,             -1 },
-+		{             -1, closed_running,        started, closed_running,             -1,             -1,             -1 },
-+		{             -1,            nwo,         opened,            nwo,             -1,             -1,             -1 },
-+		{            nwo,             -1,             -1,             -1,             -1,             -1,        started },
-+		{ closed_running,             -1,             -1,             -1,           safe,             -1,             -1 },
-+		{             -1,             -1,             -1,             -1,           safe,             -1,             -1 },
-+		{ closed_running,             -1,             -1,             -1,             -1,            set,             -1 },
-+	},
-+	.initial_state = init,
-+	.final_states = { 1, 0, 0, 0, 0, 0, 0 },
-+};
-diff --git a/kernel/trace/rv/monitor_safe_wtd_nwo/safe_wtd_nwo.c b/kernel/trace/rv/monitor_safe_wtd_nwo/safe_wtd_nwo.c
++INSTALL	=	install
++FOPTS	:=	-flto=auto -ffat-lto-objects -fexceptions -fstack-protector-strong \
++		-fasynchronous-unwind-tables -fstack-clash-protection
++WOPTS	:= 	-Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -Wno-maybe-uninitialized
++
++TRACEFS_HEADERS	:= $$($(PKG_CONFIG) --cflags libtracefs)
++
++CFLAGS	:=	-O -g -DVERSION=\"$(VERSION)\" $(FOPTS) $(WOPTS) $(TRACEFS_HEADERS)
++LDFLAGS	:=	-ggdb
++LIBS	:=	$$($(PKG_CONFIG) --libs libtracefs)
++FILES	:=	Makefile
++BINDIR	:=	/usr/bin
++
++OBJ	:=	$(NAME).o
++
++.PHONY:	all
++all:	$(OBJ)
++	$(CC) -o $(NAME) $(LDFLAGS) $(OBJ) $(LIBS)
++
++.PHONY: install
++install:
++	$(INSTALL) -d -m 755 $(DESTDIR)$(BINDIR)
++	$(INSTALL) $(NAME) -m 755 $(DESTDIR)$(BINDIR)
++	$(STRIP) $(DESTDIR)$(BINDIR)/$(NAME)
++
++.PHONY: clean
++clean:
++	@rm -rf *~ $(OBJ) $(NAME)
+diff --git a/tools/tracing/rv/safety_app/safety_app.c b/tools/tracing/rv/safety_app/safety_app.c
 new file mode 100644
-index 000000000000..e19e10da0dc1
+index 000000000000..6b23e0495cfa
 --- /dev/null
-+++ b/kernel/trace/rv/monitor_safe_wtd_nwo/safe_wtd_nwo.c
-@@ -0,0 +1,309 @@
-+#include <linux/ftrace.h>
-+#include <linux/tracepoint.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/rv.h>
-+#include <rv/da_monitor.h>
-+
++++ b/tools/tracing/rv/safety_app/safety_app.c
+@@ -0,0 +1,713 @@
++// SPDX-License-Identifier: LGPL-2.1
++/*
++ * This is the starting point for a safety monitor.
++ *
++ * The safety_check() function is where you need to add your own code.
++ *
++ * Copyright: Red Hat, Inc. Daniel Bristot de Oliveira <bristot@kernel.org>
++ */
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <stdio.h>
++#include <getopt.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/ioctl.h>
 +#include <linux/watchdog.h>
-+#include <linux/moduleparam.h>
++#include <tracefs/tracefs.h>
 +
-+#define MODULE_NAME "safe_wtd_nwo"
++#define MAX_PATH	1024
++
++static int 		config_watchdog_id;
++static char		config_watchdog_path[MAX_PATH];
++static int 		config_nowayout;
++static char 		config_nowayout_path[MAX_PATH];
++static long long	config_timeout = 10;
++static long		config_cycles;
++static long		config_monitor_period = 1;
++static char		*config_rv_monitor = "safe_wtd";
++static char		*config_rv_reactor = "panic";
++static int		config_stop_monitor = 0;
++static int		config_restart_monitor = 0;
 +
 +/*
-+ * This is the self-generated part of the monitor. Generally, there is no need
-+ * to touch this section.
++ * print_msg - print a message to stdout
 + */
-+#include "model.h"
++void print_msg(const char *fmt, ...)
++{
++	char message[1024];
++	va_list ap;
++
++	va_start(ap, fmt);
++	vsnprintf(message, sizeof(message), fmt, ap);
++	va_end(ap);
++
++	fprintf(stdout, "%s", message);
++	fflush(NULL);
++}
 +
 +/*
-+ * Declare the deterministic automata monitor.
++ * ==================================================================
++ * The code section bellow is responsible for enabling the RV monitor.
++ * ==================================================================
++ */
++
++/*
++ * __disable_rv_monitor - disables the RV monitor
 + *
-+ * The rv monitor reference is needed for the monitor declaration.
++ * Unconditionally disables the RV monitor and set the reactor to nop.
 + */
-+struct rv_monitor rv_safe_wtd_nwo;
-+DECLARE_DA_MON_GLOBAL(safe_wtd_nwo, char);
-+
-+#define CREATE_TRACE_POINTS
-+#include "safe_wtd_nwo.h"
-+
-+/*
-+ * custom: safe_timeout is the maximum value a watchdog monitor
-+ * can set. This value is registered here to duplicate the information.
-+ * In this way, a miss-behaving monitor can be detected.
-+ */
-+static int safe_timeout = ~0;
-+module_param(safe_timeout, int, 0444);
-+
-+/*
-+ * custom: if check_timeout is set, the monitor will check if the time left
-+ * in the watchdog is less than or equals to the last safe timeout set by
-+ * user-space. This check is done after each ping. In this way, if any
-+ * code by-passed the watchdog dev interface setting a higher (so unsafe)
-+ * timeout, this monitor will catch the side effect and react.
-+ */
-+static int last_timeout_set = 0;
-+static int check_timeout = 0;
-+module_param(check_timeout, int, 0444);
-+
-+/*
-+ * custom: if dont_stop is set the monitor will react if stopped.
-+ */
-+static int dont_stop = 0;
-+module_param(dont_stop, int, 0444);
-+
-+/*
-+ * custom: there are some states that are kept after the watchdog is closed.
-+ * For example, the nowayout state.
-+ *
-+ * Thus, the RV monitor needs to keep track of these states after a start/stop
-+ * of the RV monitor itself, and should not reset after each restart - keeping the
-+ * know state until the system shutdown.
-+ *
-+ * If for an unknown reason an RV monitor would like to reset the RV monitor at each
-+ * RV monitor start, set it to one.
-+ */
-+static int reset_on_restart = 0;
-+module_param(reset_on_restart, int, 0444);
-+
-+/*
-+ * open_pid takes note of the first thread that opened the watchdog.
-+ *
-+ * Any other thread that generates an event will cause an "other_threads"
-+ * event in the monitor.
-+ */
-+static int open_pid = 0;
-+
-+/*
-+ * watchdog_id: the watchdog to monitor
-+ */
-+static int watchdog_id = 0;
-+module_param(watchdog_id, int, 0444);
-+
-+static void handle_nowayout(void *data, struct watchdog_device *wdd)
++static void __disable_rv_monitor(char *monitor)
 +{
-+	if (wdd->id != watchdog_id)
-+		return;
-+
-+	da_handle_init_run_event_safe_wtd_nwo(nowayout);
-+}
-+
-+static void handle_close(void *data, struct watchdog_device *wdd)
-+{
-+	if (wdd->id != watchdog_id)
-+		return;
-+
-+	if (open_pid && current->pid != open_pid) {
-+		da_handle_init_run_event_safe_wtd_nwo(other_threads);
-+	} else {
-+		da_handle_event_safe_wtd_nwo(close);
-+		open_pid = 0;
-+	}
-+}
-+
-+static void handle_open(void *data, struct watchdog_device *wdd)
-+{
-+	if (wdd->id != watchdog_id)
-+		return;
-+
-+	if (open_pid && current->pid != open_pid) {
-+		da_handle_init_run_event_safe_wtd_nwo(other_threads);
-+	} else {
-+		da_handle_init_run_event_safe_wtd_nwo(open);
-+		open_pid = current->pid;
-+	}
-+}
-+
-+static void blocked_events(void *data, struct watchdog_device *wdd)
-+{
-+	if (wdd->id != watchdog_id)
-+		return;
-+
-+	if (open_pid && current->pid != open_pid) {
-+		da_handle_init_run_event_safe_wtd_nwo(other_threads);
-+		return;
-+	}
-+	da_handle_event_safe_wtd_nwo(other_threads);
-+}
-+
-+static void handle_ping(void *data, struct watchdog_device *wdd)
-+{
-+	char msg[128];
-+	unsigned int timeout;
-+
-+	if (wdd->id != watchdog_id)
-+		return;
-+
-+	if (open_pid && current->pid != open_pid) {
-+		da_handle_init_run_event_safe_wtd_nwo(other_threads);
-+		return;
-+	}
-+
-+	da_handle_event_safe_wtd_nwo(ping);
-+
-+	if (!check_timeout)
-+		return;
-+
-+	if (wdd->ops->get_timeleft) {
-+		timeout = wdd->ops->get_timeleft(wdd);
-+		if (timeout > last_timeout_set) {
-+			snprintf(msg, 128,
-+				 "watchdog timout is %u > than previously set (%d)\n",
-+				 timeout, last_timeout_set);
-+			cond_react(msg);
-+		}
-+	} else {
-+		snprintf(msg, 128, "error getting timeout: option not supported\n");
-+		cond_react(msg);
-+	}
-+}
-+
-+static void handle_set_safe_timeout(void *data, struct watchdog_device *wdd, unsigned long timeout)
-+{
-+	char msg[128];
-+
-+	if (wdd->id != watchdog_id)
-+		return;
-+
-+	if (open_pid && current->pid != open_pid) {
-+		da_handle_init_run_event_safe_wtd_nwo(other_threads);
-+		return;
-+	}
-+
-+	da_handle_event_safe_wtd_nwo(set_safe_timeout);
-+
-+	if (timeout > safe_timeout) {
-+		snprintf(msg, 128, "set safety timeout is too high: %d", (int) timeout);
-+		cond_react(msg);
-+	}
-+
-+	if (check_timeout)
-+		last_timeout_set = timeout;
-+}
-+
-+static void handle_start(void *data, struct watchdog_device *wdd)
-+{
-+	if (wdd->id != watchdog_id)
-+		return;
-+
-+	if (open_pid && current->pid != open_pid) {
-+		da_handle_init_run_event_safe_wtd_nwo(other_threads);
-+		return;
-+	}
-+
-+	da_handle_event_safe_wtd_nwo(start);
-+}
-+
-+#define NR_TP	9
-+static struct tracepoint_hook_helper tracepoints_to_hook[NR_TP] = {
-+	{
-+		.probe = handle_close,
-+		.name = "watchdog_close",
-+		.registered = 0
-+	},
-+	{
-+		.probe = handle_nowayout,
-+		.name = "watchdog_nowayout",
-+		.registered = 0
-+	},
-+	{
-+		.probe = handle_open,
-+		.name = "watchdog_open",
-+		.registered = 0
-+	},
-+	{
-+		.probe = handle_ping,
-+		.name = "watchdog_ping",
-+		.registered = 0
-+	},
-+	{
-+		.probe = handle_set_safe_timeout,
-+		.name = "watchdog_set_timeout",
-+		.registered = 0
-+	},
-+	{
-+		.probe = handle_start,
-+		.name = "watchdog_start",
-+		.registered = 0
-+	},
-+	{
-+		.probe = blocked_events,
-+		.name = "watchdog_stop",
-+		.registered = 0
-+	},
-+	{
-+		.probe = blocked_events,
-+		.name = "watchdog_set_keep_alive",
-+		.registered = 0
-+	},
-+	{
-+		.probe = blocked_events,
-+		.name = "watchdog_keep_alive",
-+		.registered = 0
-+	},
-+};
-+
-+static int mon_started = 0;
-+
-+static int start_safe_wtd_nwo(void)
-+{
++	char path[MAX_PATH];
 +	int retval;
 +
-+	if (!mon_started || reset_on_restart) {
-+		da_monitor_init_safe_wtd_nwo();
-+		mon_started = 1;
++	snprintf(path, MAX_PATH, "rv/monitors/%s/enable", monitor);
++	retval = tracefs_instance_file_write(NULL, path, "0\n");
++	if (retval < 0) {
++		perror("Error disabling the RV monitor");
++		return;
 +	}
 +
-+	retval = thh_hook_probes(tracepoints_to_hook, NR_TP);
-+	if (retval)
-+		goto out_err;
++	snprintf(path, MAX_PATH, "rv/monitors/%s/reactors", monitor);
++	retval = tracefs_instance_file_write(NULL, path, "nop\n");
++	if (retval < 0) {
++		perror("Error disabling the RV reactor");
++		return;
++	}
 +
-+	return 0;
-+
-+out_err:
-+	return -EINVAL;
-+}
-+
-+static void stop_safe_wtd_nwo(void)
-+{
-+	if (dont_stop)
-+		cond_react("dont_stop safe_wtd_nwo is set.");
-+
-+	rv_safe_wtd_nwo.enabled = 0;
-+	thh_unhook_probes(tracepoints_to_hook, NR_TP);
 +	return;
 +}
 +
 +/*
-+ * This is the monitor register section.
++ * disable_rv_monitor - conditionally disables the RV monitor
 + */
-+struct rv_monitor rv_safe_wtd_nwo = {
-+	.name = "safe_wtd_nwo",
-+	.description = "A watchdog monitor guarding a safety monitor actions, nowayout required.",
-+	.start = start_safe_wtd_nwo,
-+	.stop = stop_safe_wtd_nwo,
-+	.reset = da_monitor_reset_all_safe_wtd_nwo,
-+	.enabled = 0,
-+};
-+
-+int register_safe_wtd_nwo(void)
++static void disable_rv_monitor(char *monitor)
 +{
-+	rv_register_monitor(&rv_safe_wtd_nwo);
++	if (!config_stop_monitor)
++		return;
++
++	__disable_rv_monitor(monitor);
++}
++
++/*
++ * enable_rv_monitor - sets the 'reactor' and enable RV 'monitor'
++ */
++static int enable_rv_monitor(char *monitor, char *reactor)
++{
++	char buffer[MAX_PATH];
++	char path[MAX_PATH];
++	int size = 2;
++	int retval;
++	char *on;
++
++	snprintf(path, MAX_PATH, "rv/monitors/%s/enable", monitor);
++	on = tracefs_instance_file_read(NULL, path, &size);
++	if (on && on[0] == '1') {
++		if (!config_restart_monitor)
++			return 0;
++		__disable_rv_monitor(monitor);
++	}
++
++	/*
++	 * What if the user previously set a monitor, e.g., the safe_wtd_nwo
++	 * monitor, and is now setting another one?
++	 *
++	 * Well, running two RV monitors is not a problem. But if that happens,
++	 * the safety monitor will likely misbehave in one of the two.
++	 *
++	 * For instance, if the _nwo monitor was set and the watchdog once started,
++	 * the start operation will not take place in the regular safe_wtd,
++	 * and it will complain. Who's fault? The user, and the RV monitor must react.
++	 */
++	snprintf(path, MAX_PATH, "rv/monitors/%s/reactors", monitor);
++	snprintf(buffer, MAX_PATH, "%s\n", reactor);
++	retval = tracefs_instance_file_write(NULL, path, buffer);
++	if (retval < 0) {
++		perror("Error enabling the RV reactor");
++		return -1;
++	}
++
++	snprintf(path, MAX_PATH, "rv/monitors/%s/enable", monitor);
++	retval = tracefs_instance_file_write(NULL, path, "1\n");
++	if (retval < 0) {
++		perror("Error enabling the RV monitor");
++		return -1;
++	}
++
 +	return 0;
 +}
 +
-+void unregister_safe_wtd_nwo(void)
-+{
-+	if (rv_safe_wtd_nwo.enabled)
-+		stop_safe_wtd_nwo();
++/*
++ * ==================================================================
++ * The code section bellow is responsible for parsing the RV monitor output.
++ * ==================================================================
++ */
++struct trace_instance {
++	struct tracefs_instance	 *inst;
++	struct tep_handle	       *tep;
++	struct trace_seq		*seq;
++};
 +
-+	rv_unregister_monitor(&rv_safe_wtd_nwo);
++int ping_counter = 0;
++int last_state_running = 0;
++
++/*
++ * handle_safe_wtd_rv_event - parse events from the safe_wtd RV monitor
++ */
++static int
++handle_safe_wtd_rv_event(struct trace_seq *s, struct tep_record *record,
++			       struct tep_event *event, void *context)
++{
++	/*
++	 * From kernel/trace/rv/monitors/safe_wtd/model.h
++	 */
++	enum states_safe_wtd {
++		init = 0,
++		closed_running,
++		closed_running_nwo,
++		nwo,
++		opened,
++		opened_nwo,
++		reopened,
++		safe,
++		safe_nwo,
++		set,
++		set_nwo,
++		started,
++		started_nwo,
++		stoped,
++		state_max
++	};
++
++	enum events_safe_wtd {
++		close = 0,
++		nowayout,
++		open,
++		other_threads,
++		ping,
++		set_safe_timeout,
++		start,
++		stop,
++		event_max
++	};
++	unsigned long long val;
++
++
++	tep_get_field_val(s, event, "event", record, &val, 1);
++	if (val == ping)
++		ping_counter++;
++
++	tep_get_field_val(s, event, "next_state", record, &val, 1);
++	if (val == safe || val == safe_nwo)
++		last_state_running = 1;
++	else
++		last_state_running = 0;
++
++	return 0;
 +}
 +
-+module_init(register_safe_wtd_nwo);
-+module_exit(unregister_safe_wtd_nwo);
++/*
++ * handle_safe_wtd_rv_nwo_event - parse events from the safe_wtd_now RV monitor
++ */
++static int
++handle_safe_wtd_nwo_rv_event(struct trace_seq *s, struct tep_record *record,
++				   struct tep_event *event, void *context)
++{
++	/*
++	 * From kernel/trace/rv/monitors/safe_wtd_nwo/model.h
++	 */
++	enum states_safe_wtd_nwo {
++		init = 0,
++		closed_running,
++		nwo,
++		opened,
++		safe,
++		set,
++		started,
++		state_max
++	};
++	enum events_safe_wtd_nwo {
++		close = 0,
++		nowayout,
++		open,
++		other_threads,
++		ping,
++		set_safe_timeout,
++		start,
++		event_max
++	};
++	unsigned long long val;
 +
-+MODULE_LICENSE("GPL v2");
-+MODULE_AUTHOR("Daniel Bristot de Oliveira <bristot@kernel.org>");
-+MODULE_DESCRIPTION("Safe watchdog RV monitor nowayout");
-diff --git a/kernel/trace/rv/monitor_safe_wtd_nwo/safe_wtd_nwo.h b/kernel/trace/rv/monitor_safe_wtd_nwo/safe_wtd_nwo.h
-new file mode 100644
-index 000000000000..0d33800b0972
---- /dev/null
-+++ b/kernel/trace/rv/monitor_safe_wtd_nwo/safe_wtd_nwo.h
-@@ -0,0 +1,64 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM rv
++	tep_get_field_val(s, event, "event", record, &val, 1);
++	if (val == ping)
++		ping_counter++;
 +
-+#if !defined(_SAFETY_MONITOR_NWO_TRACE_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _SAFETY_MONITOR_NWO_TRACE_H
++	tep_get_field_val(s, event, "next_state", record, &val, 1);
++	if (val == safe)
++		last_state_running = 1;
++	else
++		last_state_running = 0;
 +
-+#include <linux/tracepoint.h>
++	return 0;
++}
 +
-+TRACE_EVENT(event_safe_wtd_nwo,
++/*
++ * collect_registered_events - call the existing callback function for the event
++ *
++ * If an event has a registered callback function, call it.
++ * Otherwise, ignore the event.
++ */
++static int
++collect_registered_events(struct tep_event *event, struct tep_record *record,
++			  int cpu, void *context)
++{
++	struct trace_instance *trace = context;
++	struct trace_seq *s = trace->seq;
 +
-+	TP_PROTO(char state, char event, char next_state, bool safe),
++	if (!event->handler)
++		return 0;
 +
-+	TP_ARGS(state, event, next_state, safe),
++	event->handler(s, record, event, context);
 +
-+	TP_STRUCT__entry(
-+		__field(	char,		state		)
-+		__field(	char,		event		)
-+		__field(	char,		next_state	)
-+		__field(	bool,		safe		)
-+	),
++	return 0;
++}
 +
-+	TP_fast_assign(
-+		__entry->state = state;
-+		__entry->event = event;
-+		__entry->next_state = next_state;
-+		__entry->safe = safe;
-+	),
++/*
++ * check_rv_events - parse trace events and check for the desired states
++ *
++ * Return 0 if success, 1 otherwise.
++ */
++static int check_rv_events(struct trace_instance *trace)
++{
++	int prev_ping_counter = ping_counter;
++	int retval;
++	int pings;
 +
-+	TP_printk("%s x %s -> %s %s",
-+		model_get_state_name_safe_wtd_nwo(__entry->state),
-+		model_get_event_name_safe_wtd_nwo(__entry->event),
-+		model_get_state_name_safe_wtd_nwo(__entry->next_state),
-+		__entry->safe ? "(safe)" : "")
-+);
++	retval = tracefs_iterate_raw_events(trace->tep, trace->inst, NULL, 0,
++					    collect_registered_events, trace);
++	if (retval < 0) {
++		print_msg("Error iterating on events\n");
++		return 1;
++	}
 +
-+TRACE_EVENT(error_safe_wtd_nwo,
++	pings = ping_counter - prev_ping_counter;
++	print_msg("RV read %d ping(s) and is %s the watchdog\n", pings,
++			last_state_running ? "running" : "not running");
 +
-+	TP_PROTO(char state, char event),
++	/*
++	 * If there is exactly one ping and the last state is running,
++	 * it is safe.
++	 */
++	if (pings == 1 && last_state_running) {
++		/* reset the variable */
++		last_state_running = 0;
++		return 0;
++	} else {
++		return 1;
++	}
++}
 +
-+	TP_ARGS(state, event),
++/*
++ * trace_instance_destroy - destroy and free a trace instance
++ */
++static void trace_instance_destroy(struct trace_instance *trace)
++{
++	if (!trace)
++		return;
 +
-+	TP_STRUCT__entry(
-+		__field(	char,		state		)
-+		__field(	char,		event		)
-+	),
++	if (trace->inst) {
++		tracefs_instance_destroy(trace->inst);
++		tracefs_instance_free(trace->inst);
++	}
 +
-+	TP_fast_assign(
-+		__entry->state = state;
-+		__entry->event = event;
-+	),
++	if (trace->seq)
++		free(trace->seq);
 +
-+	TP_printk("event %s not expected in the state %s",
-+		model_get_event_name_safe_wtd_nwo(__entry->event),
-+		model_get_state_name_safe_wtd_nwo(__entry->state))
-+);
++	if (trace->tep)
++		tep_free(trace->tep);
 +
-+#endif /* _SAFETY_MONITOR_NWO_H */
++	free(trace);
++}
 +
-+/* This part ust be outside protection */
-+#undef TRACE_INCLUDE_PATH
-+#define TRACE_INCLUDE_PATH ../kernel/trace/rv/monitor_safe_wtd_nwo/
-+#define TRACE_INCLUDE_FILE safe_wtd_nwo
-+#include <trace/define_trace.h>
++/*
++ * trace_instance_init - create a trace instance to read monitor's event
++ *
++ * It is more than the tracefs instance, as it contains other
++ * things required for the tracing, such as the local events and
++ * a seq file.
++ */
++static struct trace_instance *trace_instance_init(void)
++{
++	struct trace_instance *trace;
++
++	trace = calloc(1, sizeof(*trace));
++	if (!trace)
++		return NULL;
++
++	trace->seq = calloc(1, sizeof(*trace->seq));
++	if (!trace->seq)
++		goto destroy_instance;
++
++	trace_seq_init(trace->seq);
++
++	trace->inst = tracefs_instance_create("safety_app");
++	if (!trace->inst)
++		goto destroy_instance;
++
++	trace->tep = tracefs_local_events(NULL);
++	if (!trace->tep)
++		goto destroy_instance;
++
++	/*
++	 * register for both monitors, it is free.
++	 */
++	tep_register_event_handler(trace->tep, -1, "rv", "event_safe_wtd",
++				   handle_safe_wtd_rv_event, trace);
++	tracefs_event_enable(trace->inst, "rv", "event_safe_wtd");
++
++	tep_register_event_handler(trace->tep, -1, "rv", "event_safe_wtd_nwo",
++				   handle_safe_wtd_nwo_rv_event, trace);
++	tracefs_event_enable(trace->inst, "rv", "event_safe_wtd_nwo");
++
++	return trace;
++
++destroy_instance:
++	trace_instance_destroy(trace);
++	return NULL;
++}
++
++/*
++ * ==================================================================
++ * The code section bellow are helper functions to use a watchdog device.
++ * ==================================================================
++ */
++
++/*
++ * set_nowayout - set the watchdog's nowayout option
++ */
++static int set_nowayout(char *nowayout_path)
++{
++	int nowayout_fd;
++	int retval;
++
++	print_msg("nowayout\n");
++
++	nowayout_fd = open(nowayout_path, O_WRONLY);
++	if (nowayout_path < 0) {
++		perror("Error opening nowayout fd");
++		return -1;
++	}
++
++	retval = write(nowayout_fd, "1", 1);
++	if (retval != 1) {
++		perror("Error setting nowayout");
++		close(nowayout_fd);
++		return -1;
++	}
++
++	close(nowayout_fd);
++	return 0;
++}
++
++/*
++ * open_watchdog - open watchdog at the watchdog_path
++ */
++static int open_watchdog(char *watchdog_path)
++{
++	int watchdog_fd;
++
++	print_msg("open %s\n", watchdog_path);
++
++	watchdog_fd = open(watchdog_path, O_WRONLY);
++	if (watchdog_fd < 0) {
++		perror("Error opening watchdog");
++		return -1;
++	}
++
++	return watchdog_fd;
++}
++
++/*
++ * set_timeout - set the timeout in seconds for the previously opened watchdog_fd
++ */
++static int set_timeout(int watchdog_fd, int timeout)
++{
++	int retval;
++
++	print_msg("set_timeout %d\n", timeout);
++
++	retval = ioctl(watchdog_fd, WDIOC_SETTIMEOUT, &timeout);
++	if (retval) {
++		perror("Error set_timeout");
++		return -1;
++	}
++
++	return 0;
++}
++
++/*
++ * ping - ping (or pet) the watchdog
++ */
++static int ping(int watchdog_fd)
++{
++	int retval;
++
++	print_msg("ping\n");
++
++	retval = write(watchdog_fd, "1", 1);
++	if (retval != 1) {
++		perror("Error reseting watchdog");
++		return -1;
++	}
++
++	return 0;
++}
++
++/*
++ * stop - try to the watchdog
++ *
++ * Writing "V" to the watchdog is a special case. Unless nowayout is set,
++ * it will stop the watchdog device.
++ */
++static void stop(int watchdog_fd)
++{
++	int retval;
++
++	print_msg("stop\n");
++
++	retval = write(watchdog_fd, "V", 1);
++	if (retval != 1)
++		perror("Error disabling the watchdog");
++}
++
++/*
++ * usage - print usage message
++ */
++static void usage(char *usage, int exitval)
++{
++	int i;
++
++	static const char * const msg[] = {
++		"  usage: safety_app [-i id] [-t timeout in seconds ] [-n nowayout_path] \\",
++		"			[-c cycles] [-p period] [-N] \\",
++		"			[-N] [-r reactor] [-s] [-R] \\",
++		"			[-h] \\",
++		"",
++		"Watchdog options",
++		"	-i/--id:		watchdog id",
++		"	-t/--timeout:		watchdog timeout",
++		"	-n/--nowayout:		set nowayout",
++		"",
++		"Safety monitor options",
++		"	-c/--cycles:		run cycle nr ping, 0 means forever (default)",
++		"	-p/--period:		monitor loop period",
++		"",
++		"RV monitor options",
++		"	-N/--nwo-mon		use the safe_wtd_nwo monitor",
++		"	-r/--reactor		set the reactor (panic is automatically set if no other reactor is passed)",
++		"	-s/--stop-mon		stop the rv monitor at the end of the execution",
++		"	-R/--restart-mon	restart the monitor if already started",
++		"",
++		"Generic options",
++		"	-h/--help:		print help message",
++		NULL,
++	};
++
++	if (usage)
++		fprintf(stderr, "%s\n", usage);
++
++	fprintf(stderr, "sample safety monitor (version %s)\n", VERSION);
++
++	for (i = 0; msg[i]; i++)
++		fprintf(stderr, "%s\n", msg[i]);
++	exit(exitval);
++}
++
++static long long get_long_from_str(char *start)
++{
++	long value;
++	char *end;
++
++	errno = 0;
++	value = strtoll(start, &end, 10);
++	if (errno || start == end) {
++		fprintf(stderr, "Invalid value '%s'", start);
++		return -1;
++	}
++
++	return value;
++}
++
++static int parse_args(int argc, char **argv)
++{
++	int c;
++
++	while (1) {
++		static struct option long_options[] = {
++			{"help",		no_argument,	   0, 'h'},
++			{"id",			required_argument, 0, 'i'},
++			{"timeout",		required_argument, 0, 't'},
++			{"nowayout",		optional_argument, 0, 'n'},
++			{"cycles",		required_argument, 0, 'c'},
++			{"period",		required_argument, 0, 'p'},
++			{"nwo",			no_argument,	   0, 'N'},
++			{"reactor", 		required_argument, 0, 'r'},
++			{"stop-mon", 		no_argument, 	   0, 's'},
++			{"restart-mon", 	no_argument, 	   0, 'R'},
++			{0, 0, 0, 0}
++		};
++
++		/* getopt_long stores the option index here. */
++		int option_index = 0;
++
++		c = getopt_long(argc, argv, "hi:t:n::c:p:Nr:sR",
++				 long_options, &option_index);
++
++		/* Detect the end of the options. */
++		if (c == -1)
++			break;
++
++		switch (c) {
++		case 'i':
++			config_watchdog_id = get_long_from_str(optarg);
++			break;
++		case 't':
++			config_timeout = get_long_from_str(optarg);
++			break;
++		case 'n':
++			config_nowayout = 1;
++			if (optarg)
++				strncpy(config_nowayout_path, optarg, MAX_PATH);
++			break;
++		case 'c':
++			config_cycles = get_long_from_str(optarg);
++			break;
++		case 'p':
++			config_monitor_period = get_long_from_str(optarg);
++			break;
++		case 'N':
++			config_rv_monitor = "safe_wtd_nwo";
++			break;
++		case 'r':
++			config_rv_reactor = optarg;
++			break;
++		case 's':
++			config_stop_monitor = 1;
++			break;
++		case 'R':
++			config_restart_monitor = 1;
++			break;
++		case 'h':
++			usage("Help message", 0);
++			break;
++		default:
++			usage("Invalid option", 1);
++		}
++	}
++
++	if (!strlen(config_nowayout_path)) {
++		snprintf(config_nowayout_path, MAX_PATH,
++			 "/sys/devices/virtual/watchdog/watchdog%i/nowayout",
++			 config_watchdog_id);
++	}
++
++	if (config_monitor_period > config_timeout)
++		usage("It does not make sense to have a monitor period higher than the watchdog timeout.\n", 1);
++
++	snprintf(config_watchdog_path, MAX_PATH, "/dev/watchdog%d", config_watchdog_id);
++
++	return(0);
++}
++
++/*
++ * safety_check - check if the system is working properly
++ *
++ * This is the function where the system check will be actually done.
++ * It will be periodically called by the safety_app. If it returns
++ * true, the watchdog will be pinged and the system will continue running.
++ * If this function returns false, the safety_app will not ping the
++ * watchdog and will exit with an error.
++ */
++static int safety_check(void)
++{
++	/*
++	 * Add your code here.
++	 *
++	 * Return 0 to make the safety monitor to skip the watchdog ping and
++	 * exit with error, or just kill the system yourself.
++	 */
++	return 1;
++}
++
++int main(int argc, char *argv[])
++{
++	struct trace_instance *trace;
++	int exit_val = 1;
++	int watchdog_fd;
++	long cycles = 0;
++	int retval;
++
++	parse_args(argc, argv);
++
++	trace = trace_instance_init();
++
++	retval = enable_rv_monitor(config_rv_monitor, config_rv_reactor);
++	if (retval) {
++		perror("Cannot proceed without the RV monitor");
++		goto out_destroy_trace;
++	}
++
++	if (config_nowayout)
++		set_nowayout(config_nowayout_path);
++
++	watchdog_fd = open_watchdog(config_watchdog_path);
++	if (watchdog_fd < 0) {
++		perror("Error opening watchdog");
++		exit(1);
++	}
++
++	if (config_timeout) {
++		retval = set_timeout(watchdog_fd, config_timeout);
++		if (retval)
++			goto out_close_watchdog;
++	}
++
++	retval = check_rv_events(trace);
++	if (retval) {
++		print_msg("RV monitor returned a failure, it is not safe to continue\n");
++		goto out_close_watchdog;
++	}
++
++	do {
++		retval = safety_check();
++		if (!retval) {
++			goto out_close_watchdog;
++		}
++
++		retval = ping(watchdog_fd);
++		if (retval)
++			goto out_close_watchdog;
++
++		retval = check_rv_events(trace);
++		if (retval) {
++			print_msg("RV monitor returned a failure, it is not safe to continue\n");
++			goto out_close_watchdog;
++		}
++
++		sleep(config_monitor_period);
++	} while (!config_cycles || ++cycles < config_cycles);
++
++	stop(watchdog_fd);
++
++	exit_val = 0;
++
++out_close_watchdog:
++	close(watchdog_fd);
++	disable_rv_monitor(config_rv_monitor);
++out_destroy_trace:
++	trace_instance_destroy(trace);
++	return exit_val;
++}
 -- 
 2.33.1
 

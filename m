@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2AEF4B4B9A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:42:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2774B47CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347378AbiBNKaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:30:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34812 "EHLO
+        id S231915AbiBNJkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:40:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347688AbiBNK3t (ORCPT
+        with ESMTP id S243369AbiBNJjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:29:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870847091C;
-        Mon, 14 Feb 2022 01:58:44 -0800 (PST)
+        Mon, 14 Feb 2022 04:39:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103516AA41;
+        Mon, 14 Feb 2022 01:35:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C33B6B80DCF;
-        Mon, 14 Feb 2022 09:58:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0237DC340E9;
-        Mon, 14 Feb 2022 09:58:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4E046115B;
+        Mon, 14 Feb 2022 09:35:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF6BAC340E9;
+        Mon, 14 Feb 2022 09:35:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832721;
-        bh=Ps3oBb9b+xFWRMsLAGzbqJCxUR2gJJ6YgKqya6yTpKA=;
+        s=korg; t=1644831323;
+        bh=vJ41Kp7L4JmG3aLVkOGChqm6yVs8a5DCHjL5ArIC62Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RWHwhEOpv+T0IJcDx85mulKfXnFVrimojxrsu/WbQx5TQj6C1R/5xyLUrSMWIhH2b
-         +AvZ01EIC3oHUBWDpnnjMGERUEBr41nEcrGXL7AAvNkWzD2ktbM4mrEaxymjbmoNJm
-         DP59TWC3Vh3Rt6vtF4B2QU77tH03RY3WYMXrBb74=
+        b=IE6jwJ892IQAFvNVZXobk7X7eA2F4J0jBtR+bJnk4xdxgf6EHbBTLmKPDM/86vwP0
+         UyyCysfjHs09GL5MSTFBDKUeYPap7kRX86jH0/Hrp2AAlZWw+xy4WA04GDnVJwpepX
+         bjEalX1a31ejLqX2CXU316UbS4JSApRPS+QXejoo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 102/203] phy: xilinx: zynqmp: Fix bus width setting for SGMII
+        stable@vger.kernel.org, Victor Nogueira <victor@mojatatu.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 18/71] net: sched: Clarify error message when qdisc kind is unknown
 Date:   Mon, 14 Feb 2022 10:25:46 +0100
-Message-Id: <20220214092513.716954518@linuxfoundation.org>
+Message-Id: <20220214092452.631467489@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,60 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Victor Nogueira <victor@mojatatu.com>
 
-[ Upstream commit 37291f60d0822f191748c2a54ce63b0bc669020f ]
+[ Upstream commit 973bf8fdd12f0e70ea351c018e68edd377a836d1 ]
 
-TX_PROT_BUS_WIDTH and RX_PROT_BUS_WIDTH are single registers with
-separate bit fields for each lane. The code in xpsgtr_phy_init_sgmii was
-not preserving the existing register value for other lanes, so enabling
-the PHY in SGMII mode on one lane zeroed out the settings for all other
-lanes, causing other PS-GTR peripherals such as USB3 to malfunction.
+When adding a tc rule with a qdisc kind that is not supported or not
+compiled into the kernel, the kernel emits the following error: "Error:
+Specified qdisc not found.". Found via tdc testing when ETS qdisc was not
+compiled in and it was not obvious right away what the message meant
+without looking at the kernel code.
 
-Use xpsgtr_clr_set to only manipulate the desired bits in the register.
+Change the error message to be more explicit and say the qdisc kind is
+unknown.
 
-Fixes: 4a33bea00314 ("phy: zynqmp: Add PHY driver for the Xilinx ZynqMP Gigabit Transceiver")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Acked-by: Michal Simek <michal.simek@xilinx.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Link: https://lore.kernel.org/r/20220126001600.1592218-1-robert.hancock@calian.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Victor Nogueira <victor@mojatatu.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/xilinx/phy-zynqmp.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ net/sched/sch_api.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/phy/xilinx/phy-zynqmp.c b/drivers/phy/xilinx/phy-zynqmp.c
-index f478d8a17115b..9be9535ad7ab7 100644
---- a/drivers/phy/xilinx/phy-zynqmp.c
-+++ b/drivers/phy/xilinx/phy-zynqmp.c
-@@ -134,7 +134,8 @@
- #define PROT_BUS_WIDTH_10		0x0
- #define PROT_BUS_WIDTH_20		0x1
- #define PROT_BUS_WIDTH_40		0x2
--#define PROT_BUS_WIDTH_SHIFT		2
-+#define PROT_BUS_WIDTH_SHIFT(n)		((n) * 2)
-+#define PROT_BUS_WIDTH_MASK(n)		GENMASK((n) * 2 + 1, (n) * 2)
+diff --git a/net/sched/sch_api.c b/net/sched/sch_api.c
+index e70f990334083..6f36df85d23d8 100644
+--- a/net/sched/sch_api.c
++++ b/net/sched/sch_api.c
+@@ -1195,7 +1195,7 @@ static struct Qdisc *qdisc_create(struct net_device *dev,
  
- /* Number of GT lanes */
- #define NUM_LANES			4
-@@ -445,12 +446,12 @@ static void xpsgtr_phy_init_sata(struct xpsgtr_phy *gtr_phy)
- static void xpsgtr_phy_init_sgmii(struct xpsgtr_phy *gtr_phy)
- {
- 	struct xpsgtr_dev *gtr_dev = gtr_phy->dev;
-+	u32 mask = PROT_BUS_WIDTH_MASK(gtr_phy->lane);
-+	u32 val = PROT_BUS_WIDTH_10 << PROT_BUS_WIDTH_SHIFT(gtr_phy->lane);
+ 	err = -ENOENT;
+ 	if (!ops) {
+-		NL_SET_ERR_MSG(extack, "Specified qdisc not found");
++		NL_SET_ERR_MSG(extack, "Specified qdisc kind is unknown");
+ 		goto err_out;
+ 	}
  
- 	/* Set SGMII protocol TX and RX bus width to 10 bits. */
--	xpsgtr_write(gtr_dev, TX_PROT_BUS_WIDTH,
--		     PROT_BUS_WIDTH_10 << (gtr_phy->lane * PROT_BUS_WIDTH_SHIFT));
--	xpsgtr_write(gtr_dev, RX_PROT_BUS_WIDTH,
--		     PROT_BUS_WIDTH_10 << (gtr_phy->lane * PROT_BUS_WIDTH_SHIFT));
-+	xpsgtr_clr_set(gtr_dev, TX_PROT_BUS_WIDTH, mask, val);
-+	xpsgtr_clr_set(gtr_dev, RX_PROT_BUS_WIDTH, mask, val);
- 
- 	xpsgtr_bypass_scrambler_8b10b(gtr_phy);
- }
 -- 
 2.34.1
 

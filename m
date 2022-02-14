@@ -2,93 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E051E4B5365
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A854B536A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355172AbiBNOdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 09:33:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42180 "EHLO
+        id S1355188AbiBNOdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 09:33:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231570AbiBNOdJ (ORCPT
+        with ESMTP id S1355177AbiBNOdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 09:33:09 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54724A3FC;
-        Mon, 14 Feb 2022 06:33:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644849182; x=1676385182;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=0YTJsF71vVRGR3IAd/kstHbIpM3JyQ8idpkTZUwJqpE=;
-  b=M6ulQ1qlHyZ3Gdtb8960AOJzfQEutAnm6hPvk16zvRv5aZbZqKQo7HKV
-   gnnvp4thh25nN41VzJD9jfnSy2GQ/nAm2HFkgT3h3VFkCsnjYbyaZpIOC
-   W7NLYIB7JHkJH2VnFUeIGOO5OZjHPTj+BjgsXkCWrI4tdF3BS85BPHKEA
-   mvLXVoSN7FDduHCLuUhI3FjKqSJR3dfiLY+igtCuDCbVjSqDQWbM5gNiu
-   rFS+ugM3QLOfBE2OvR5qln7XLpV21JjftJrItObXwGuNHxi6RzgYauM8d
-   J5SOJyHGaJ/bwzkRZQFkawjdZYA10uTRF4j/kX8GNrGWZil6z1rQ/bNLC
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="247695190"
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="247695190"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 06:32:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="543629504"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 14 Feb 2022 06:32:43 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 9F85A30B; Mon, 14 Feb 2022 16:32:58 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 2/2] serial: sh-sci: Switch to use dev_err_probe_ptr()
-Date:   Mon, 14 Feb 2022 16:32:48 +0200
-Message-Id: <20220214143248.502-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220214143248.502-1-andriy.shevchenko@linux.intel.com>
-References: <20220214143248.502-1-andriy.shevchenko@linux.intel.com>
+        Mon, 14 Feb 2022 09:33:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1A214BFC6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:33:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644849216;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oIIRJ21BwIfvNwz0gmLQtZq6j5ywHb6my37zjrdYjEk=;
+        b=JdmyYN8NJiao2XNqO7tz8Akr1LZ8XEQX82ZxalSDsC0D+z4gF4zSNia9dfqlqP6KvY4ilG
+        tF/yL5D208SfgAQzI+YEGZXhHkKmLSV+s/AIJmuOeidg/Kn1zn8Btw5CB66kbyyYEQMR59
+        lZpmxRnQPC+dTfZoHgTQdA0JVXw001s=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-583-f4tA5gRtN5mHVZMeanHJmg-1; Mon, 14 Feb 2022 09:33:35 -0500
+X-MC-Unique: f4tA5gRtN5mHVZMeanHJmg-1
+Received: by mail-oo1-f70.google.com with SMTP id g8-20020a4aa708000000b002e8efc514a6so10733701oom.12
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:33:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oIIRJ21BwIfvNwz0gmLQtZq6j5ywHb6my37zjrdYjEk=;
+        b=AD/P0VuRgD4ZH7MA+JjhKdaUHlC9XMWuPmYe83cPMDvDE8aq5vHwl0JgLYDerOTvJs
+         TBT5C5TMnuPZwYkZ+i0P0MdzJ1iOcTFhZTUbFNm32dNKrlvaOt7gxVP060bhZ6uaiQDV
+         kN3ThA8XJa/ozImImAQ9VgYkOB1LKAJfIK45Cy/IM/s7Bg7DReAY6gG2hts/qAxhwfKD
+         ZDmGvXG8P4CTFghWjzL1Ifm/RKoonGcf02L1FTI035GwPz/Exn94CgRcnQ9M6LHra86C
+         ntWY30HXQRa0LrycAYo5LKuwX8DiVLdZ8tPzlY8b9JaeociVQg9oxno/gAnZLIkKh1Q2
+         8Hxw==
+X-Gm-Message-State: AOAM531wfMNgVQN1Eq7aGIqZ3CLrGk3anLmDAArapCKek+CeoWCMW7O1
+        j23UBjXPMONHIGd6lGwDcGjlYfpv6paD6nx756Fv0dfxGswIYxTa4gpBlt0Vs0BCJlKfN1Lqe38
+        bOUJwQaYSewrR+i5rXWuU9nqd
+X-Received: by 2002:a05:6870:c095:: with SMTP id c21mr2067589oad.245.1644849215018;
+        Mon, 14 Feb 2022 06:33:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxdVQ5IR9sHLZgVPu2QVTSPw4yaT3G8ufJi3cdC6V7G9uaFDWwCWmnk8z6rfOM7YD50C4dtNQ==
+X-Received: by 2002:a05:6870:c095:: with SMTP id c21mr2067577oad.245.1644849214794;
+        Mon, 14 Feb 2022 06:33:34 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id z4sm12449303ota.7.2022.02.14.06.33.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 06:33:34 -0800 (PST)
+From:   trix@redhat.com
+To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kuba@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, jacob.e.keller@intel.com
+Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] ice: check the return of ice_ptp_gettimex64
+Date:   Mon, 14 Feb 2022 06:33:27 -0800
+Message-Id: <20220214143327.2884183-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of
-	return ERR_PTR(dev_err_probe(...));
-call
-	return dev_err_probe_ptr(...);
+From: Tom Rix <trix@redhat.com>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Clang static analysis reports this issue
+time64.h:69:50: warning: The left operand of '+'
+  is a garbage value
+  set_normalized_timespec64(&ts_delta, lhs.tv_sec + rhs.tv_sec,
+                                       ~~~~~~~~~~ ^
+In ice_ptp_adjtime_nonatomic(), the timespec64 variable 'now'
+is set by ice_ptp_gettimex64().  This function can fail
+with -EBUSY, so 'now' can have a gargbage value.
+So check the return.
+
+Fixes: 06c16d89d2cb ("ice: register 1588 PTP clock device object for E810 devices")
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/tty/serial/sh-sci.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_ptp.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-index b610b27893a8..0fce09c13847 100644
---- a/drivers/tty/serial/sh-sci.c
-+++ b/drivers/tty/serial/sh-sci.c
-@@ -3199,8 +3199,7 @@ static struct plat_sci_port *sci_parse_dt(struct platform_device *pdev,
+diff --git a/drivers/net/ethernet/intel/ice/ice_ptp.c b/drivers/net/ethernet/intel/ice/ice_ptp.c
+index ae291d442539..000c39d163a2 100644
+--- a/drivers/net/ethernet/intel/ice/ice_ptp.c
++++ b/drivers/net/ethernet/intel/ice/ice_ptp.c
+@@ -1533,9 +1533,12 @@ ice_ptp_settime64(struct ptp_clock_info *info, const struct timespec64 *ts)
+ static int ice_ptp_adjtime_nonatomic(struct ptp_clock_info *info, s64 delta)
+ {
+ 	struct timespec64 now, then;
++	int ret;
  
- 	rstc = devm_reset_control_get_optional_exclusive(&pdev->dev, NULL);
- 	if (IS_ERR(rstc))
--		return ERR_PTR(dev_err_probe(&pdev->dev, PTR_ERR(rstc),
--					     "failed to get reset ctrl\n"));
-+		return dev_err_probe_ptr(&pdev->dev, PTR_ERR(rstc), "failed to get reset ctrl\n");
+ 	then = ns_to_timespec64(delta);
+-	ice_ptp_gettimex64(info, &now, NULL);
++	ret = ice_ptp_gettimex64(info, &now, NULL);
++	if (ret)
++		return ret;
+ 	now = timespec64_add(now, then);
  
- 	ret = reset_control_deassert(rstc);
- 	if (ret) {
+ 	return ice_ptp_settime64(info, (const struct timespec64 *)&now);
 -- 
-2.34.1
+2.26.3
 

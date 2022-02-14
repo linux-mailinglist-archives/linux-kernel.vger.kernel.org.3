@@ -2,141 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C980F4B4172
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 06:51:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F2C4B4167
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 06:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240523AbiBNFlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 00:41:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39928 "EHLO
+        id S240443AbiBNFfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 00:35:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235084AbiBNFlR (ORCPT
+        with ESMTP id S231794AbiBNFfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 00:41:17 -0500
-X-Greylist: delayed 374 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 13 Feb 2022 21:41:08 PST
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193FF4EA18;
-        Sun, 13 Feb 2022 21:41:07 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 650673200D78;
-        Mon, 14 Feb 2022 00:34:52 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Mon, 14 Feb 2022 00:34:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=themaw.net; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; bh=FwpXgRHkKOnxGk
-        gH2V9GHUXNJiCu/ssAJnUnC7PmQaI=; b=BC798HSJ7e7u3jkh9OrLq5my9B4tLn
-        tXgji4leFe0NI/Dw9Vj8wzpQko66NYAq0ikQM/jyo1WJtxpPVdCu2nx7DJYMcocK
-        WlTyLnn6kIt2cNyUc2Zs4v9GkZpNHMT7OrDeOc0M4ErnLa6VD65DAb2T7QQCr6br
-        LZMiYbZbeLU7iCeRcZDJfnOEZUd1BPyHA/iy2qHU+552006Jf7p6gnY4G94EwpLH
-        ZZ2GkQ7sCPgLmNIcXyhIENpmhYZ2RX4OR/+qTfETKIeqZkE5nj2mVVt0Nv0sGKvA
-        hfTNvXikYZFaygCeRdbyd8ufh3+td53Jdr/4qjArpw35k5qek54EEOkw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=FwpXgRHkKOnxGkgH2V9GHUXNJiCu/ssAJnUnC7PmQ
-        aI=; b=m3oOoN5bGKTNrL7MiWfJ/tln8VgqzV7RT4TlMO/dory7wzYWzBIylZi4y
-        IXpzOS5pw/3SQPbstTRd5I7VwS29ol1cngkBfDqhZRjofsNsZQpV2w6+JUo5ZWIN
-        uYemA2UA4S0becx2E+imXzw1MMcvGC3znqMb2qFlcRVhvyxKjoG3uE2NE1VjQQZW
-        O0iN3ep99eN92Dge23nRDGh+/2MW0MGb7sO3gTwexByuId7SFjvezq1KZW3Gl2VS
-        tOXttx5Czrt94V+pJlEzPQcwxLm6GYF3R0c/OM9lLyxIYyUwCdnYQ3DtBepcB2t+
-        Wrbpii2+km2KeDkuuq5sQnLEjxlkw==
-X-ME-Sender: <xms:--kJYvoZdlSChlPxCFL5GNsUPmqiYYwxGCQDIQNm4ufRWYOaUICNhw>
-    <xme:--kJYprHDRgzoV8jJwgAJqEWQKbONeRX7L6kfBAqkkT8WqkPcda3t7okLuH8lXrWd
-    eT1RgCZNXZ0>
-X-ME-Received: <xmr:--kJYsOwiiRGj5Gspm_UByqpC5YpqpZLtGzOsWiWJtbrT7uNs_g5Pth0hPNH7jVqOueyTRG651omd8tB6FxJwkbmvDxXCvLYUYem4SQgRF7dH3yQPpY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjedugdekhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhepkffuhffvffgjfhgtfggggfesthekre
-    dttderjeenucfhrhhomhepkfgrnhcumfgvnhhtuceorhgrvhgvnhesthhhvghmrgifrdhn
-    vghtqeenucggtffrrghtthgvrhhnpefgleelkeetheelgeehueejueduhfeufffgleehgf
-    evtdehhffhhffhtddugfefheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhep
-    mhgrihhlfhhrohhmpehrrghvvghnsehthhgvmhgrfidrnhgvth
-X-ME-Proxy: <xmx:--kJYi7hg3zFuw-53VOuXiFLzX2YVBZXif2wRok9NXFMiLvtSgxGPQ>
-    <xmx:--kJYu74ITcGONthlpAcjzRemZ-W2ZW3TacvMVHxnPZ3Ed5iOQ0f3w>
-    <xmx:--kJYqhta18-_ICGC6ssPuek4bNndL_Lbp_V_BPBecDcIb05RbQiKA>
-    <xmx:--kJYkSk2C6dUB63xHnWLltPpVR_iMzafZVL_5c2UxavF6djSoh9fA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 14 Feb 2022 00:34:49 -0500 (EST)
-Message-ID: <b042424ce0e68f576fdab268adeeff90d48da8a8.camel@themaw.net>
-Subject: Re: [ANNOUNCE] autofs 5.1.8 release
-From:   Ian Kent <raven@themaw.net>
-To:     NeilBrown <neilb@suse.de>
-Cc:     autofs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 14 Feb 2022 13:34:46 +0800
-In-Reply-To: <164444398868.27779.4643380819577932837@noble.neil.brown.name>
-References: <b54fb31652a4ba76b39db66b8ae795ee3af6f025.camel@themaw.net>
-         <164444398868.27779.4643380819577932837@noble.neil.brown.name>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        Mon, 14 Feb 2022 00:35:10 -0500
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5AC4E3B9
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 21:35:03 -0800 (PST)
+Received: by mail-oo1-xc30.google.com with SMTP id p190-20020a4a2fc7000000b0031820de484aso18107515oop.9
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 21:35:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=L7XXqMw0BJqSwPiX8BdrSc7e/KusNkA7RDmHju/xVA8=;
+        b=Av/BOZkalXOtnl373o4nXpwwZIQACBb4OcQ+B0AOpUyLR80QEv/C26HewhnAq6N51D
+         BYt1ZZn1+T/oPQbvb90t3FnCq+rTG9zhZTBx/aD7qKUtYcmkvMXO0Cdku64o8PRDNp2u
+         Rt3N8V9m52xI60oD9qncI93rcNaTBZP9dR3ZiiOPWZlZ9Dtnv2KKUlPaYBU/9SOBQj5I
+         +tyO5tsEwGwOPKknhsP9+xGC/HAbE18v7XxM36ThGlDB0+T2+FZC7cafv3sphrDlz4RA
+         puUPUAxLwANnO0HXMNM5cKuCjhVLbqiGYlCGMfXFZguGi9ZPc60I8a96hI4A2wJkocLK
+         PvRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=L7XXqMw0BJqSwPiX8BdrSc7e/KusNkA7RDmHju/xVA8=;
+        b=5Q+gtxbeXPciy+IQvDDNz3W9FoLGIDTLXr89V21FwiQHq9jTBieJbrWJ2OPkrm/Nto
+         Bj40416/TJOjETL1W9VQ4n2/5YiCgIsf8vHFPmfW5yPlvp9bogsGrS9pLugVplANS1di
+         i8JB3VVQPMckJnxRRV6aLZpUW7EihvK7cHrdcITy+cNX2+qBR5fPkK2CByBjd9qXU5ih
+         hYKCFfGFbQl6Y/ZgMiw4ZbRQwstzMVfLuAFplLVyfmWiOiiCVbBTahXIQ07X/nw5FMb2
+         77WsAzoJBQIMuZpMEOf7/KlI0dPtcigYrAbEZYG1dI4BmhOjyTgAlYlifZBnQQ90Zy/l
+         O6+w==
+X-Gm-Message-State: AOAM533/r3+57baQwUIXw3tXwiJjc5k5d4HDvczYuAGStoumbQ8GLAn6
+        /TK38AQ5D6iJVGfDtKNlU59NdQ==
+X-Google-Smtp-Source: ABdhPJycrdUhyCSUHMiEl3AVoXNS8IU5MHQmc97vHR5mkiRNLWftK71zRHgJH8/e1k3HiVWQ63htXw==
+X-Received: by 2002:a05:6870:61c4:: with SMTP id b4mr3648778oah.322.1644816903115;
+        Sun, 13 Feb 2022 21:35:03 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id y15sm12091337oof.37.2022.02.13.21.34.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Feb 2022 21:35:01 -0800 (PST)
+Date:   Sun, 13 Feb 2022 21:34:48 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Vlastimil Babka <vbabka@suse.cz>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Rik van Riel <riel@surriel.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 11/13] mm/munlock: page migration needs mlock pagevec
+ drained
+In-Reply-To: <f9960727-d061-8856-45ce-4e33e8ed1de6@suse.cz>
+Message-ID: <d74f2610-2595-cc51-5a35-dc037c23a28@google.com>
+References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com> <90c8962-d188-8687-dc70-628293316343@google.com> <f9960727-d061-8856-45ce-4e33e8ed1de6@suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-02-10 at 08:59 +1100, NeilBrown wrote:
-> On Tue, 19 Oct 2021, Ian Kent wrote:
-> > Hi all,
+On Fri, 11 Feb 2022, Vlastimil Babka wrote:
+> On 2/6/22 22:49, Hugh Dickins wrote:
 > > 
-> > It's time for a release, autofs-5.1.8.
-> > 
-> ...
-> > - also require TCP_REQUESTED when setting NFS port.
+> > Any new pagevec runs the risk of adding a new way of stranding, and we
+> > might discover other corners where mlock_page_drain() or lru_add_drain()
+> > would now help.  If the mlock pagevec raises doubts, we can easily add a
+> > sysctl to tune its length to 1, which reverts to synchronous operation.
 > 
-> Unfortunately that last patch is buggy.  TCP_REQUESTED is masked out
-> in
-> the caller.
+> Not a fan of adding new sysctls like those as that just pushes the failure
+> of kernel devs to poor admins :)
+> The old pagevec usage deleted by patch 1 was limited to the naturally larger
+> munlock_vma_pages_range() operation. The new per-cpu based one is more
+> general, which obviously has its advantages, but then it might bring new
+> corner cases.
+> So if this turns out to be an big problem, I would rather go back to the
+> limited scenario pagevec than a sysctl?
 
-Mmm ... sounds like I've made a mistake there.
-I'll need to sort that out, thanks for pointing it out.
+Okay, I'll delete that comment proposing a sysctl, which was more as
+a possible safety measure for our internal experimentation than for
+general use.  I just thought it was an easy way to force synchronous.
 
-> 
-> Maybe the following is best.
-> 
-> NeilBrown
-> 
-> From: NeilBrown <neilb@suse.de>
-> Subject: [PATCH] Test TCP request correctly in nfs_get_info()
-> 
-> The TCP_REQUESTED flag is masked out by the caller, so it never gets
-> to
-> nfs_get_info().
+I don't expect a big problem.  The flush in this commit deals, I think,
+with the only way it was treading on its own toes, using a pagevec at
+a level which relied on the unlikelihood of a pagevec reference.
 
-That wasn't my intent, I'll need to look at it again.
-The case I'm trying to cover is fairly specific so I will need to
-look at it again.
+But I can imagine that such-and-such a test will expect Mlocked or
+Unevictable to be exact, and this pagevec now delay it becoming exact.
+I've not seen any example so far, but it does seem possible.  Maybe
+we shall fix the test, maybe we shall add a drain.
 
-Ian
+I hadn't thought of limiting the use of pagevec to the mass operation
+(if a significant problem emerges).  Yes, that might be a better idea,
+thanks.  Anyway, we don't need to worry in advance.
 
-> We can test if TCP was requested by examining the 'proto' parameter.
-> 
-> Signed-off-by: NeilBrown <neilb@suse.de>
-> 
-> diff --git a/modules/replicated.c b/modules/replicated.c
-> index 09075dd0c1b4..3ac7ee432e73 100644
-> --- a/modules/replicated.c
-> +++ b/modules/replicated.c
-> @@ -291,7 +291,7 @@ static unsigned int get_nfs_info(unsigned logopt,
-> struct host *host,
->  
->         rpc_info->proto = proto;
->         if (port < 0) {
-> -               if ((version & NFS4_REQUESTED) && (version &
-> TCP_REQUESTED))
-> +               if ((version & NFS4_REQUESTED) && (proto ==
-> IPPROTO_TCP))
->                         rpc_info->port = NFS_PORT;
->                 else
->                         port = 0;
-> 
+A change I also had in this patch, orginally, was for
+/proc/sys/vm/stat_refresh to lru_add_drain_all() first.  I'm surprised
+that tests see good numbers without it doing so; but since I've not
+actually seen the need for it yet, dropped that - we can always add
+it later if need emerges.
 
+Hugh

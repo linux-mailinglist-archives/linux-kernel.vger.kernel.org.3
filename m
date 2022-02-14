@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7314B49FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:37:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2B94B49FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344454AbiBNKDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:03:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43266 "EHLO
+        id S1347606AbiBNKb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:31:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344287AbiBNJ7A (ORCPT
+        with ESMTP id S1348306AbiBNKav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:59:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FFC6AA73;
-        Mon, 14 Feb 2022 01:35:34 -0800 (PST)
+        Mon, 14 Feb 2022 05:30:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FD39BF7E;
+        Mon, 14 Feb 2022 01:59:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 375F0B80DCC;
-        Mon, 14 Feb 2022 09:34:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FE35C340E9;
-        Mon, 14 Feb 2022 09:34:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6B8760B34;
+        Mon, 14 Feb 2022 09:59:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6881C340E9;
+        Mon, 14 Feb 2022 09:59:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831289;
-        bh=M/5dKUxzJXnKgyxX5TYZlhdq53UpEzROZzEaWXAB0Dc=;
+        s=korg; t=1644832766;
+        bh=VPRDR3PYXiPBeYJvCUZ/lY1OC90TasViMFD935EnErY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NkpYz9RvJj8gBzuRo9PNpLb4sg/6dd6FzIJyh8fUFpqPShMUFf1eu2Xmsjx4LaY4U
-         GbnXYvd02vpn7Gi/EWoY1kjdzvsbu+TSCLgy1ko7IikozDn5+A5LQa5a84tgD4NNQU
-         YUHhs3BShazVOt8TtI1BVFg97fN0GLiD3KM+JViQ=
+        b=rYjLFcPbtY8pi16o5b9mYwii4lED/Lis1f3N7oGszGvVfOUy7zB5mZ1Fx2z1td5uG
+         1Qwhz2E/WM+cRTzXdYQeAw+RupetgFmWljavi2r7wT/uROQHb36UWvHd6esyhc3mE2
+         zrrrz9gV9MPzoZaAhL1I6dJ/8CzoLQkEu7vKm96k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH 4.19 35/49] vt_ioctl: add array_index_nospec to VT_ACTIVATE
-Date:   Mon, 14 Feb 2022 10:26:01 +0100
-Message-Id: <20220214092449.447743582@linuxfoundation.org>
+        stable@vger.kernel.org, Dongjin Kim <tobetter@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 118/203] arm64: dts: meson-g12b-odroid-n2: fix typo dio2133
+Date:   Mon, 14 Feb 2022 10:26:02 +0100
+Message-Id: <20220214092514.263808238@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
-References: <20220214092448.285381753@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakob Koschel <jakobkoschel@gmail.com>
+From: Dongjin Kim <tobetter@gmail.com>
 
-commit 28cb138f559f8c1a1395f5564f86b8bbee83631b upstream.
+[ Upstream commit bc41099f060ea74ac8d02c51bd0f5f46d969bedf ]
 
-in vt_setactivate an almost identical code path has been patched
-with array_index_nospec. In the VT_ACTIVATE path the user input
-is from a system call argument instead of a usercopy.
-For consistency both code paths should have the same mitigations
-applied.
+Typo in audio amplifier node, dioo2133 -> dio2133
 
-Kasper Acknowledgements: Jakob Koschel, Brian Johannesmeyer, Kaveh
-Razavi, Herbert Bos, Cristiano Giuffrida from the VUSec group at VU
-Amsterdam.
-
-Co-developed-by: Brian Johannesmeyer <bjohannesmeyer@gmail.com>
-Signed-off-by: Brian Johannesmeyer <bjohannesmeyer@gmail.com>
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-Link: https://lore.kernel.org/r/20220127144406.3589293-2-jakobkoschel@gmail.com
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Dongjin Kim <tobetter@gmail.com>
+Fixes: ef599f5f3e10 ("arm64: dts: meson: convert ODROID-N2 to dtsi")
+Fixes: 67d141c1f8e6 ("arm64: dts: meson: odroid-n2: add jack audio output support")
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/YfKQJejh0bfGYvof@anyang
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/vt/vt_ioctl.c |    1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/tty/vt/vt_ioctl.c
-+++ b/drivers/tty/vt/vt_ioctl.c
-@@ -691,6 +691,7 @@ int vt_ioctl(struct tty_struct *tty,
- 			ret =  -ENXIO;
- 		else {
- 			arg--;
-+			arg = array_index_nospec(arg, MAX_NR_CONSOLES);
- 			console_lock();
- 			ret = vc_allocate(arg);
- 			console_unlock();
+diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
+index 3e968b2441918..fd3fa82e4c330 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
+@@ -17,7 +17,7 @@ aliases {
+ 		rtc1 = &vrtc;
+ 	};
+ 
+-	dioo2133: audio-amplifier-0 {
++	dio2133: audio-amplifier-0 {
+ 		compatible = "simple-audio-amplifier";
+ 		enable-gpios = <&gpio_ao GPIOAO_2 GPIO_ACTIVE_HIGH>;
+ 		VCC-supply = <&vcc_5v>;
+@@ -219,7 +219,7 @@ sound {
+ 		audio-widgets = "Line", "Lineout";
+ 		audio-aux-devs = <&tdmout_b>, <&tdmout_c>, <&tdmin_a>,
+ 				 <&tdmin_b>, <&tdmin_c>, <&tdmin_lb>,
+-				 <&dioo2133>;
++				 <&dio2133>;
+ 		audio-routing = "TDMOUT_B IN 0", "FRDDR_A OUT 1",
+ 				"TDMOUT_B IN 1", "FRDDR_B OUT 1",
+ 				"TDMOUT_B IN 2", "FRDDR_C OUT 1",
+-- 
+2.34.1
+
 
 

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EADC4B4BF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:43:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E59E4B4A13
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242011AbiBNKfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:35:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43852 "EHLO
+        id S235798AbiBNKSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:18:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347953AbiBNKea (ORCPT
+        with ESMTP id S1346863AbiBNKQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:34:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE24CC9;
-        Mon, 14 Feb 2022 02:01:10 -0800 (PST)
+        Mon, 14 Feb 2022 05:16:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A18A79C72;
+        Mon, 14 Feb 2022 01:53:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E854B80DC4;
-        Mon, 14 Feb 2022 10:01:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66017C340E9;
-        Mon, 14 Feb 2022 10:01:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5EC5DB80DBF;
+        Mon, 14 Feb 2022 09:53:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 508DDC340EF;
+        Mon, 14 Feb 2022 09:53:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832868;
-        bh=/DjVnQ7jgYXBQt/wqucYtc26jeqXAAs5ubdP37etpC8=;
+        s=korg; t=1644832382;
+        bh=Gj3Z9M/ZYEBo4oID8ujH6W/lVH/mp2oAgAzRkJJzenA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O09v8fiNrg28DC/0PVBnfQLUOSCocFCltqxtikvZDMaJ/ZuF1dnrsezzGFZktLSzA
-         YGstCq0lOQEMxY8xbxJkkwuOBDIpDERx8MiqccQbm836V07R1k6FvJw/TlcMe+rBx6
-         dyyFWtI+ppuCC1h5cOjrq67i3B/uy6iR/C/tjSnw=
+        b=tmgSPty10p0oDYmnZzEGOU7kjmDqpY0olZYoZtQtNV76CtNmrru8XkH5Y3SEIoL1D
+         TnmufybLJFHRleC0K3lAEiV0Fc5yrEAvyXNxNlAJOSbL7UWi9ImJsXiJjXb+tiuTPS
+         r3+hOOF9V6QbZq8x9ltbpk6JDVOcda9L6DpNHZbs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Selwin Sebastian <Selwin.Sebastian@amd.com>,
-        Raju Rangoju <Raju.Rangoju@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 151/203] net: amd-xgbe: disable interrupts during pci removal
+        stable@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
+        Jonas Malaco <jonas@protocubo.io>
+Subject: [PATCH 5.15 137/172] eeprom: ee1004: limit i2c reads to I2C_SMBUS_BLOCK_MAX
 Date:   Mon, 14 Feb 2022 10:26:35 +0100
-Message-Id: <20220214092515.385356389@linuxfoundation.org>
+Message-Id: <20220214092511.131823707@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,41 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Raju Rangoju <Raju.Rangoju@amd.com>
+From: Jonas Malaco <jonas@protocubo.io>
 
-[ Upstream commit 68c2d6af1f1e469544d6cbe9a601d96fb9c00e7f ]
+commit c0689e46be23160d925dca95dfc411f1a0462708 upstream.
 
-Hardware interrupts are enabled during the pci probe, however,
-they are not disabled during pci removal.
+Commit effa453168a7 ("i2c: i801: Don't silently correct invalid transfer
+size") revealed that ee1004_eeprom_read() did not properly limit how
+many bytes to read at once.
 
-Disable all hardware interrupts during pci removal to avoid any
-issues.
+In particular, i2c_smbus_read_i2c_block_data_or_emulated() takes the
+length to read as an u8.  If count == 256 after taking into account the
+offset and page boundary, the cast to u8 overflows.  And this is common
+when user space tries to read the entire EEPROM at once.
 
-Fixes: e75377404726 ("amd-xgbe: Update PCI support to use new IRQ functions")
-Suggested-by: Selwin Sebastian <Selwin.Sebastian@amd.com>
-Signed-off-by: Raju Rangoju <Raju.Rangoju@amd.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+To fix it, limit each read to I2C_SMBUS_BLOCK_MAX (32) bytes, already
+the maximum length i2c_smbus_read_i2c_block_data_or_emulated() allows.
+
+Fixes: effa453168a7 ("i2c: i801: Don't silently correct invalid transfer size")
+Cc: stable@vger.kernel.org
+Reviewed-by: Heiner Kallweit <hkallweit1@gmail.com>
+Signed-off-by: Jonas Malaco <jonas@protocubo.io>
+Link: https://lore.kernel.org/r/20220203165024.47767-1-jonas@protocubo.io
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/amd/xgbe/xgbe-pci.c | 3 +++
+ drivers/misc/eeprom/ee1004.c |    3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/ethernet/amd/xgbe/xgbe-pci.c b/drivers/net/ethernet/amd/xgbe/xgbe-pci.c
-index 90cb55eb54665..014513ce00a14 100644
---- a/drivers/net/ethernet/amd/xgbe/xgbe-pci.c
-+++ b/drivers/net/ethernet/amd/xgbe/xgbe-pci.c
-@@ -418,6 +418,9 @@ static void xgbe_pci_remove(struct pci_dev *pdev)
+--- a/drivers/misc/eeprom/ee1004.c
++++ b/drivers/misc/eeprom/ee1004.c
+@@ -114,6 +114,9 @@ static ssize_t ee1004_eeprom_read(struct
+ 	if (offset + count > EE1004_PAGE_SIZE)
+ 		count = EE1004_PAGE_SIZE - offset;
  
- 	pci_free_irq_vectors(pdata->pcidev);
- 
-+	/* Disable all interrupts in the hardware */
-+	XP_IOWRITE(pdata, XP_INT_EN, 0x0);
++	if (count > I2C_SMBUS_BLOCK_MAX)
++		count = I2C_SMBUS_BLOCK_MAX;
 +
- 	xgbe_free_pdata(pdata);
+ 	return i2c_smbus_read_i2c_block_data_or_emulated(client, offset, count, buf);
  }
  
--- 
-2.34.1
-
 
 

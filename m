@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0054B46EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D794B4950
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245240AbiBNJsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:48:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43300 "EHLO
+        id S1348083AbiBNKej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:34:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244753AbiBNJpk (ORCPT
+        with ESMTP id S1348057AbiBNKeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:45:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA19860D86;
-        Mon, 14 Feb 2022 01:38:37 -0800 (PST)
+        Mon, 14 Feb 2022 05:34:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D564DA1BFB;
+        Mon, 14 Feb 2022 02:00:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5638B6118C;
-        Mon, 14 Feb 2022 09:38:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD28C340E9;
-        Mon, 14 Feb 2022 09:38:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79A9EB80DD0;
+        Mon, 14 Feb 2022 10:00:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81122C340E9;
+        Mon, 14 Feb 2022 10:00:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831516;
-        bh=Vt6o6BUJUwenqkWrho+49oDACU5otjZPlwM4QWb24DM=;
+        s=korg; t=1644832837;
+        bh=xJ39vTC6tFKpPvYTl4kRN3eaMy5FWogE2TcMQmksQmA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uH4+EO7CGxpD+41pncMS8Hn34aii/nCo6cHL4bEWbVyk8VZW1+Fm9Eovq4Tp9RADA
-         rfc7Oo6GlegOmYkFlNSxjWqqLC8NQ8mSBfU4q7hNcwT9AiRS3qCcSwGPrvnghK5p5K
-         lxhcy1jZjy+6G6ZxX2JKzO4mNcI8uAB6RxyzrapA=
+        b=1q1d8jR9vNk/vGr33d6Pv4LnfDBgK9et5ViLtzl/TxD3+G4pgRYTGMaq0s/nRStoH
+         UM8nyxNt8630h563nOgakeYv6JHQ8/G2Q/kcp+EEWxNmynbiFkyIAjkP3jzKnmyLx8
+         4N9oCTRAkAr/AFhvrZgUCHfbJgYiGOanjliLM86M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sean Anderson <sean.anderson@seco.com>
-Subject: [PATCH 5.4 55/71] usb: ulpi: Move of_node_put to ulpi_dev_release
+        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 139/203] net: dsa: seville: register the mdiobus under devres
 Date:   Mon, 14 Feb 2022 10:26:23 +0100
-Message-Id: <20220214092453.892456488@linuxfoundation.org>
+Message-Id: <20220214092514.958868552@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +56,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Anderson <sean.anderson@seco.com>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-commit 092f45b13e51666fe8ecbf2d6cd247aa7e6c1f74 upstream.
+[ Upstream commit bd488afc3b39e045ba71aab472233f2a78726e7b ]
 
-Drivers are not unbound from the device when ulpi_unregister_interface
-is called. Move of_node-freeing code to ulpi_dev_release which is called
-only after all users are gone.
+As explained in commits:
+74b6d7d13307 ("net: dsa: realtek: register the MDIO bus under devres")
+5135e96a3dd2 ("net: dsa: don't allocate the slave_mii_bus using devres")
 
-Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
-Cc: stable <stable@vger.kernel.org>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-Link: https://lore.kernel.org/r/20220127190004.1446909-2-sean.anderson@seco.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+mdiobus_free() will panic when called from devm_mdiobus_free() <-
+devres_release_all() <- __device_release_driver(), and that mdiobus was
+not previously unregistered.
+
+The Seville VSC9959 switch is a platform device, so the initial set of
+constraints that I thought would cause this (I2C or SPI buses which call
+->remove on ->shutdown) do not apply. But there is one more which
+applies here.
+
+If the DSA master itself is on a bus that calls ->remove from ->shutdown
+(like dpaa2-eth, which is on the fsl-mc bus), there is a device link
+between the switch and the DSA master, and device_links_unbind_consumers()
+will unbind the seville switch driver on shutdown.
+
+So the same treatment must be applied to all DSA switch drivers, which
+is: either use devres for both the mdiobus allocation and registration,
+or don't use devres at all.
+
+The seville driver has a code structure that could accommodate both the
+mdiobus_unregister and mdiobus_free calls, but it has an external
+dependency upon mscc_miim_setup() from mdio-mscc-miim.c, which calls
+devm_mdiobus_alloc_size() on its behalf. So rather than restructuring
+that, and exporting yet one more symbol mscc_miim_teardown(), let's work
+with devres and replace of_mdiobus_register with the devres variant.
+When we use all-devres, we can ensure that devres doesn't free a
+still-registered bus (it either runs both callbacks, or none).
+
+Fixes: ac3a68d56651 ("net: phy: don't abuse devres in devm_mdiobus_register()")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/common/ulpi.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/dsa/ocelot/seville_vsc9953.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/common/ulpi.c
-+++ b/drivers/usb/common/ulpi.c
-@@ -132,6 +132,7 @@ static const struct attribute_group *ulp
+diff --git a/drivers/net/dsa/ocelot/seville_vsc9953.c b/drivers/net/dsa/ocelot/seville_vsc9953.c
+index 5ee7d1592a721..40d6d1f2c724f 100644
+--- a/drivers/net/dsa/ocelot/seville_vsc9953.c
++++ b/drivers/net/dsa/ocelot/seville_vsc9953.c
+@@ -1109,7 +1109,7 @@ static int vsc9953_mdio_bus_alloc(struct ocelot *ocelot)
+ 	snprintf(bus->id, MII_BUS_ID_SIZE, "%s-imdio", dev_name(dev));
  
- static void ulpi_dev_release(struct device *dev)
- {
-+	of_node_put(dev->of_node);
- 	kfree(to_ulpi_dev(dev));
+ 	/* Needed in order to initialize the bus mutex lock */
+-	rc = of_mdiobus_register(bus, NULL);
++	rc = devm_of_mdiobus_register(dev, bus, NULL);
+ 	if (rc < 0) {
+ 		dev_err(dev, "failed to register MDIO bus\n");
+ 		return rc;
+@@ -1161,7 +1161,8 @@ static void vsc9953_mdio_bus_free(struct ocelot *ocelot)
+ 		mdio_device_free(pcs->mdio);
+ 		lynx_pcs_destroy(pcs);
+ 	}
+-	mdiobus_unregister(felix->imdio);
++
++	/* mdiobus_unregister and mdiobus_free handled by devres */
  }
  
-@@ -300,7 +301,6 @@ EXPORT_SYMBOL_GPL(ulpi_register_interfac
-  */
- void ulpi_unregister_interface(struct ulpi *ulpi)
- {
--	of_node_put(ulpi->dev.of_node);
- 	device_unregister(&ulpi->dev);
- }
- EXPORT_SYMBOL_GPL(ulpi_unregister_interface);
+ static const struct felix_info seville_info_vsc9953 = {
+-- 
+2.34.1
+
 
 

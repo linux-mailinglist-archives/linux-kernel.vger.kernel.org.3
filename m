@@ -2,148 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274684B4FA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:08:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1E34B4FAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:09:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243494AbiBNMGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 07:06:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35462 "EHLO
+        id S243813AbiBNMJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 07:09:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbiBNMGB (ORCPT
+        with ESMTP id S231234AbiBNMJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 07:06:01 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE15B2706
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 04:05:53 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5BD531EC01A8;
-        Mon, 14 Feb 2022 13:05:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1644840348;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:in-reply-to:
-         references; bh=Q2WswK2aoG0dYxQGFY7WgUEOKE8aFownjry5ISfZCc4=;
-        b=k66/h/tJtagFjbu2XaQqtQ0jqiMPjqSy6JQQgxkw4Rhax2OR1lpeiTstV4ozpf3nZKTm5N
-        09YTwBNdCLBMLRXIgaef3mySZi4SsNybw7MXEUr+aFxSoxO8AVBmPuN0EXlSJyZgSM0uqE
-        um1zGHN6ttnFiPEJmL6nUJOra64wCkg=
-Date:   Mon, 14 Feb 2022 13:05:49 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Andy Lutomirski <luto@kernel.org>,
-        =?utf-8?B?THXDrXM=?= Ferreira <contact@lsferreira.net>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [PATCH] x86/ptrace: Fix xfpregs_set()'s incorrect xmm clearing
-Message-ID: <YgpFnZpF01WwR8wU@zn.tnic>
+        Mon, 14 Feb 2022 07:09:54 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A36FC488A8;
+        Mon, 14 Feb 2022 04:09:46 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E8861396;
+        Mon, 14 Feb 2022 04:09:46 -0800 (PST)
+Received: from [10.57.70.89] (unknown [10.57.70.89])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3A6763F718;
+        Mon, 14 Feb 2022 04:09:41 -0800 (PST)
+Message-ID: <43f2fc07-19ea-53a4-af86-a9192a950c96@arm.com>
+Date:   Mon, 14 Feb 2022 12:09:36 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v1 1/8] iommu: Add iommu_group_replace_domain()
+Content-Language: en-GB
+To:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>
+Cc:     kvm@vger.kernel.org, rafael@kernel.org,
+        David Airlie <airlied@linux.ie>, linux-pci@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
+        iommu@lists.linux-foundation.org,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+References: <20220106022053.2406748-1-baolu.lu@linux.intel.com>
+ <20220106022053.2406748-2-baolu.lu@linux.intel.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220106022053.2406748-2-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lemme send it out as Luto looks busy.
+On 2022-01-06 02:20, Lu Baolu wrote:
+> Expose an interface to replace the domain of an iommu group for frameworks
+> like vfio which claims the ownership of the whole iommu group.
 
-If there are no complaints I'll queue it in a couple of days...
+But if the underlying point is the new expectation that 
+iommu_{attach,detach}_device() operate on the device's whole group where 
+relevant, why should we invent some special mechanism for VFIO to be 
+needlessly inconsistent?
 
-Thx.
+I said before that it's trivial for VFIO to resolve a suitable device if 
+it needs to; by now I've actually written the patch ;)
 
----
-From: Andy Lutomirski <luto@kernel.org>
-Date: Mon, 31 Jan 2022 12:38:47 -0800
-Subject: [PATCH] x86/ptrace: Fix xfpregs_set()'s incorrect xmm clearing
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+https://gitlab.arm.com/linux-arm/linux-rm/-/commit/9f37d8c17c9b606abc96e1f1001c0b97c8b93ed5
 
-xfpregs_set() handles 32-bit REGSET_XFP and 64-bit REGSET_FP. The actual
-code treats these regsets as modern FX state (i.e. the beginning part of
-XSTATE). The declarations of the regsets thought they were the legacy
-i387 format. The code thought they were the 32-bit (no xmm8..15) variant
-of XSTATE and, for good measure, made the high bits disappear by zeroing
-the wrong part of the buffer. The latter broke ptrace, and everything
-else confused anyone trying to understand the code. In particular, the
-nonsense definitions of the regsets confused me when I wrote this code.
+Robin.
 
-Clean this all up. Change the declarations to match reality (which
-shouldn't change the generated code, let alone the ABI) and fix
-xfpregs_set() to clear the correct bits and to only do so for 32-bit
-callers.
-
-Fixes: 6164331d15f7 ("x86/fpu: Rewrite xfpregs_set()")
-Reported-by: Luís Ferreira <contact@lsferreira.net>
-Signed-off-by: Andy Lutomirski <luto@kernel.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215524
----
- arch/x86/kernel/fpu/regset.c | 9 ++++-----
- arch/x86/kernel/ptrace.c     | 4 ++--
- 2 files changed, 6 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
-index 437d7c930c0b..75ffaef8c299 100644
---- a/arch/x86/kernel/fpu/regset.c
-+++ b/arch/x86/kernel/fpu/regset.c
-@@ -91,11 +91,9 @@ int xfpregs_set(struct task_struct *target, const struct user_regset *regset,
- 		const void *kbuf, const void __user *ubuf)
- {
- 	struct fpu *fpu = &target->thread.fpu;
--	struct user32_fxsr_struct newstate;
-+	struct fxregs_state newstate;
- 	int ret;
- 
--	BUILD_BUG_ON(sizeof(newstate) != sizeof(struct fxregs_state));
--
- 	if (!cpu_feature_enabled(X86_FEATURE_FXSR))
- 		return -ENODEV;
- 
-@@ -116,9 +114,10 @@ int xfpregs_set(struct task_struct *target, const struct user_regset *regset,
- 	/* Copy the state  */
- 	memcpy(&fpu->fpstate->regs.fxsave, &newstate, sizeof(newstate));
- 
--	/* Clear xmm8..15 */
-+	/* Clear xmm8..15 for 32-bit callers */
- 	BUILD_BUG_ON(sizeof(fpu->__fpstate.regs.fxsave.xmm_space) != 16 * 16);
--	memset(&fpu->fpstate->regs.fxsave.xmm_space[8], 0, 8 * 16);
-+	if (in_ia32_syscall())
-+		memset(&fpu->fpstate->regs.fxsave.xmm_space[8*4], 0, 8 * 16);
- 
- 	/* Mark FP and SSE as in use when XSAVE is enabled */
- 	if (use_xsave())
-diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
-index 6d2244c94799..8d2f2f995539 100644
---- a/arch/x86/kernel/ptrace.c
-+++ b/arch/x86/kernel/ptrace.c
-@@ -1224,7 +1224,7 @@ static struct user_regset x86_64_regsets[] __ro_after_init = {
- 	},
- 	[REGSET_FP] = {
- 		.core_note_type = NT_PRFPREG,
--		.n = sizeof(struct user_i387_struct) / sizeof(long),
-+		.n = sizeof(struct fxregs_state) / sizeof(long),
- 		.size = sizeof(long), .align = sizeof(long),
- 		.active = regset_xregset_fpregs_active, .regset_get = xfpregs_get, .set = xfpregs_set
- 	},
-@@ -1271,7 +1271,7 @@ static struct user_regset x86_32_regsets[] __ro_after_init = {
- 	},
- 	[REGSET_XFP] = {
- 		.core_note_type = NT_PRXFPREG,
--		.n = sizeof(struct user32_fxsr_struct) / sizeof(u32),
-+		.n = sizeof(struct fxregs_state) / sizeof(u32),
- 		.size = sizeof(u32), .align = sizeof(u32),
- 		.active = regset_xregset_fpregs_active, .regset_get = xfpregs_get, .set = xfpregs_set
- 	},
--- 
-2.29.2
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ---
+>   include/linux/iommu.h | 10 ++++++++++
+>   drivers/iommu/iommu.c | 37 +++++++++++++++++++++++++++++++++++++
+>   2 files changed, 47 insertions(+)
+> 
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index 408a6d2b3034..66ebce3d1e11 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -677,6 +677,9 @@ void iommu_device_unuse_dma_api(struct device *dev);
+>   int iommu_group_set_dma_owner(struct iommu_group *group, void *owner);
+>   void iommu_group_release_dma_owner(struct iommu_group *group);
+>   bool iommu_group_dma_owner_claimed(struct iommu_group *group);
+> +int iommu_group_replace_domain(struct iommu_group *group,
+> +			       struct iommu_domain *old,
+> +			       struct iommu_domain *new);
+>   
+>   #else /* CONFIG_IOMMU_API */
+>   
+> @@ -1090,6 +1093,13 @@ static inline bool iommu_group_dma_owner_claimed(struct iommu_group *group)
+>   {
+>   	return false;
+>   }
+> +
+> +static inline int
+> +iommu_group_replace_domain(struct iommu_group *group, struct iommu_domain *old,
+> +			   struct iommu_domain *new)
+> +{
+> +	return -ENODEV;
+> +}
+>   #endif /* CONFIG_IOMMU_API */
+>   
+>   /**
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 72a95dea688e..ab8ab95969f5 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -3431,3 +3431,40 @@ bool iommu_group_dma_owner_claimed(struct iommu_group *group)
+>   	return user;
+>   }
+>   EXPORT_SYMBOL_GPL(iommu_group_dma_owner_claimed);
+> +
+> +/**
+> + * iommu_group_replace_domain() - Replace group's domain
+> + * @group: The group.
+> + * @old: The previous attached domain. NULL for none.
+> + * @new: The new domain about to be attached.
+> + *
+> + * This is to support backward compatibility for vfio which manages the dma
+> + * ownership in iommu_group level.
+> + */
+> +int iommu_group_replace_domain(struct iommu_group *group,
+> +			       struct iommu_domain *old,
+> +			       struct iommu_domain *new)
+> +{
+> +	int ret = 0;
+> +
+> +	mutex_lock(&group->mutex);
+> +	if (!group->owner || group->domain != old) {
+> +		ret = -EPERM;
+> +		goto unlock_out;
+> +	}
+> +
+> +	if (old)
+> +		__iommu_detach_group(old, group);
+> +
+> +	if (new) {
+> +		ret = __iommu_attach_group(new, group);
+> +		if (ret && old)
+> +			__iommu_attach_group(old, group);
+> +	}
+> +
+> +unlock_out:
+> +	mutex_unlock(&group->mutex);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(iommu_group_replace_domain);

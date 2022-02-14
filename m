@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B24F4B5D26
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 585414B5D29
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:46:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231672AbiBNVpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:45:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59158 "EHLO
+        id S231599AbiBNVpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:45:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbiBNVpf (ORCPT
+        with ESMTP id S231557AbiBNVpc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:45:35 -0500
+        Mon, 14 Feb 2022 16:45:32 -0500
 Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [IPv6:2001:67c:2050::465:102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66C01867EE;
-        Mon, 14 Feb 2022 13:45:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B020D1867CD;
+        Mon, 14 Feb 2022 13:45:23 -0800 (PST)
 Received: from smtp102.mailbox.org (smtp102.mailbox.org [80.241.60.233])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4JyHnv3RYQz9sVw;
-        Mon, 14 Feb 2022 22:45:23 +0100 (CET)
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4JyHnt2vN8z9sSf;
+        Mon, 14 Feb 2022 22:45:22 +0100 (CET)
 X-Virus-Scanned: amavisd-new at heinlein-support.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1644875119;
+        t=1644875120;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kUZ790IxZH5Rf/nkvP12xvh7cNzalDJRK4h9CSlRTIA=;
-        b=DfbAtF/uqDJwWS+qgeDFtkepYnOtAhu6XIHMY7m67CnZNWqNlnnsjRIlwR046Vhz6K4wDv
-        FMSKiBvy/qZd3mD+MODISvYmTRHkuJh6jwfl8ih1SXrdJmcJhLfK8ZljVe6Wfds0D+9co8
-        5X/TepO7Kli1xXbjQRETffB7itpRhUh4EJAeLkMByvzjqaFCmC2sx64O1yVQcpEwvOQDX1
-        EQXZ060Vt/+cuaEkLASMDkaXZad9mtYpK+XhsewZ9AjGFstF5VJrCaAVeRGroblduyVax0
-        teBxEJQjdSt0V9RvzYCSA3DD7pPl7Sqg+hqEvBOLZVU0wxPGiqJ+5rjoTTyelw==
+        bh=o3OnkfNIlxKTfWCDh3v7NYShsHsY2PCO/uVwUGHHgd8=;
+        b=vL3AOWXHN+KPGHlRoySohmFay58jWxca4fYr8IiIrG+9o3aeAUzWrzPknMIvhbYiaPt0gL
+        B6t3tbaCACj0FY8AZK45EteP2yi8/iGEw9xASpolI6pJ7qqGsJjcJRSaMN9nu6ASsfEQS+
+        iM6B0NftLREklFaUa7iO2Yet1yvapnjLUBKLWXbOpXrUd6eJe8ZT0lvmWnYHk2m+WgvwDo
+        GkBqS6rF2ycohLAKnwPUZygGmf0bhvRvCIrPUxXPFixOkKZbsC15XgbjVynjQ0SqRz1bxJ
+        6KVp4LYF5ifioTBHbkLEiaPqpcjM1b+/Y8lIrZ/cqjYhr2e3Jqa+6m7seyKJoQ==
 From:   Marcello Sylvester Bauer <sylv@sylv.io>
 To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>
+        Jean Delvare <jdelvare@suse.com>
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        linux-doc@vger.kernel.org
-Subject: [PATCH v3 3/4] pmbus: Add support for pli1209bc
-Date:   Mon, 14 Feb 2022 22:44:55 +0100
-Message-Id: <8d44098e7b8ca5d4c13733267836d5a147539277.1644874828.git.sylv@sylv.io>
+        Marcello Sylvester Bauer <sylv@sylv.io>
+Subject: [PATCH v3 4/4] pmbus (pli1209bc): Add regulator support
+Date:   Mon, 14 Feb 2022 22:44:56 +0100
+Message-Id: <2b4127730fc53fceed0a6506900439f501ca42cf.1644874828.git.sylv@sylv.io>
 In-Reply-To: <cover.1644874828.git.sylv@sylv.io>
 References: <cover.1644874828.git.sylv@sylv.io>
 MIME-Version: 1.0
@@ -59,250 +57,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PLI1209BC is a Digital Supervisor from Vicor Corporation.
+Add regulator support for PLI1209BC Digital Supervisor.
 
 Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
 ---
- Documentation/hwmon/pli1209bc.rst |  73 +++++++++++++++++++
- drivers/hwmon/pmbus/Kconfig       |   9 +++
- drivers/hwmon/pmbus/Makefile      |   1 +
- drivers/hwmon/pmbus/pli1209bc.c   | 115 ++++++++++++++++++++++++++++++
- 4 files changed, 198 insertions(+)
- create mode 100644 Documentation/hwmon/pli1209bc.rst
- create mode 100644 drivers/hwmon/pmbus/pli1209bc.c
+ drivers/hwmon/pmbus/Kconfig     |  7 +++++++
+ drivers/hwmon/pmbus/pli1209bc.c | 31 +++++++++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/Documentation/hwmon/pli1209bc.rst b/Documentation/hwmon/pli1209bc.rst
-new file mode 100644
-index 000000000000..a3f686d03cf2
---- /dev/null
-+++ b/Documentation/hwmon/pli1209bc.rst
-@@ -0,0 +1,73 @@
-+Kernel driver pli1209bc
-+=======================
-+
-+Supported chips:
-+
-+  * Digital Supervisor PLI1209BC
-+
-+    Prefix: 'pli1209bc'
-+
-+    Addresses scanned: 0x50 - 0x5F
-+
-+    Datasheet: https://www.vicorpower.com/documents/datasheets/ds-PLI1209BCxyzz-VICOR.pdf
-+
-+Authors:
-+    - Marcello Sylvester Bauer <sylv@sylv.io>
-+
-+Description
-+-----------
-+
-+The Vicor PLI1209BC is an isolated digital power system supervisor thatprovides
-+a communication interface between a host processor and one Bus Converter Module
-+(BCM). The PLI communicates with a system controller via a PMBus compatible
-+interface over an isolated UART interface. Through the PLI, the host processor
-+can configure, set protection limits, and monitor the BCM.
-+
-+Sysfs entries
-+-------------
-+
-+======================= ========================================================
-+in1_label		"vin2"
-+in1_input		Input voltage.
-+in1_rated_min		Minimum rated input voltage.
-+in1_rated_max		Maximum rated input voltage.
-+in1_max			Maximum input voltage.
-+in1_max_alarm		Input voltage high alarm.
-+in1_crit		Critical input voltage.
-+in1_crit_alarm		Input voltage critical alarm.
-+
-+in2_label		"vout2"
-+in2_input		Output voltage.
-+in2_rated_min		Minimum rated output voltage.
-+in2_rated_max		Maximum rated output voltage.
-+in2_alarm		Output voltage alarm
-+
-+curr1_label		"iin2"
-+curr1_input		Input current.
-+curr1_max		Maximum input current.
-+curr1_max_alarm		Maximum input current high alarm.
-+curr1_crit		Critical input current.
-+curr1_crit_alarm	Input current critical alarm.
-+
-+curr2_label		"iout2"
-+curr2_input		Output current.
-+curr2_crit		Critical output current.
-+curr2_crit_alarm	Output current critical alarm.
-+curr2_max		Maximum output current.
-+curr2_max_alarm		Output current high alarm.
-+
-+power1_label		"pin2"
-+power1_input		Input power.
-+power1_alarm		Input power alarm.
-+
-+power2_label		"pout2"
-+power2_input		Output power.
-+power2_rated_max	Maximum rated output power.
-+
-+temp1_input		Die temperature.
-+temp1_alarm		Die temperature alarm.
-+temp1_max		Maximum die temperature.
-+temp1_max_alarm		Die temperature high alarm.
-+temp1_crit		Critical die temperature.
-+temp1_crit_alarm	Die temperature critical alarm.
-+======================= ========================================================
 diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index c96f7b7338bd..831db423bea0 100644
+index 831db423bea0..8b8f0d8733b2 100644
 --- a/drivers/hwmon/pmbus/Kconfig
 +++ b/drivers/hwmon/pmbus/Kconfig
-@@ -310,6 +310,15 @@ config SENSORS_PIM4328
+@@ -319,6 +319,13 @@ config SENSORS_PLI1209BC
  	  This driver can also be built as a module. If so, the module will
- 	  be called pim4328.
+ 	  be called pli1209bc.
  
-+config SENSORS_PLI1209BC
-+	tristate "Vicor PLI1209BC"
++config SENSORS_PLI1209BC_REGULATOR
++	bool "Regulator support for PLI1209BC"
++	depends on SENSORS_PLI1209BC && REGULATOR
 +	help
-+	  If you say yes here you get hardware monitoring support for Vicor
-+	  PLI1209BC Digital Supervisor.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called pli1209bc.
++	  If you say yes here you get regulator support for Vicor PLI1209BC
++	  Digital Supervisor.
 +
  config SENSORS_PM6764TR
  	tristate "ST PM6764TR"
  	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index e5935f70c9e0..7ce74e3b8552 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -34,6 +34,7 @@ obj-$(CONFIG_SENSORS_MP2888)	+= mp2888.o
- obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
- obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
- obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
-+obj-$(CONFIG_SENSORS_PLI1209BC)	+= pli1209bc.o
- obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
- obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
- obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
 diff --git a/drivers/hwmon/pmbus/pli1209bc.c b/drivers/hwmon/pmbus/pli1209bc.c
-new file mode 100644
-index 000000000000..5f8847307e55
---- /dev/null
+index 5f8847307e55..05b4ee35ba27 100644
+--- a/drivers/hwmon/pmbus/pli1209bc.c
 +++ b/drivers/hwmon/pmbus/pli1209bc.c
-@@ -0,0 +1,115 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Hardware monitoring driver for Vicor PLI1209BC Digital Supervisor
-+ *
-+ * Copyright (c) 2022 9elements GmbH
-+ */
-+
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/pmbus.h>
-+#include "pmbus.h"
-+
-+/*
-+ * The capability command is only supported at page 0. Probing the device while
-+ * the page register is set to 1 will falsely enable PEC support. Disable
-+ * capability probing accordingly, since the PLI1209BC does not have any
-+ * additional capabilities.
-+ */
-+static struct pmbus_platform_data pli1209bc_plat_data = {
-+	.flags = PMBUS_NO_CAPABILITY,
-+};
-+
-+static int pli1209bc_read_word_data(struct i2c_client *client, int page,
-+				    int phase, int reg)
-+{
-+	int data;
-+
-+	switch (reg) {
-+	/* PMBUS_READ_POUT uses a direct format with R=0 */
-+	case PMBUS_READ_POUT:
-+		data = pmbus_read_word_data(client, page, phase, reg);
+@@ -8,6 +8,7 @@
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+ #include <linux/pmbus.h>
++#include <linux/regulator/driver.h>
+ #include "pmbus.h"
+ 
+ /*
+@@ -33,11 +34,37 @@ static int pli1209bc_read_word_data(struct i2c_client *client, int page,
+ 			return data;
+ 		data = sign_extend32(data, 15) * 10;
+ 		return clamp_val(data, -32768, 32767) & 0xffff;
++	/*
++	 * PMBUS_READ_VOUT and PMBUS_READ_TEMPERATURE_1 return invalid data
++	 * when the BCM is turned off. Since it is not possible to return
++	 * ENODATA error, return zero instead.
++	 */
++	case PMBUS_READ_VOUT:
++	case PMBUS_READ_TEMPERATURE_1:
++		data = pmbus_read_word_data(client, page, phase,
++					    PMBUS_STATUS_WORD);
 +		if (data < 0)
 +			return data;
-+		data = sign_extend32(data, 15) * 10;
-+		return clamp_val(data, -32768, 32767) & 0xffff;
-+	default:
-+		return -ENODATA;
-+	}
-+}
-+
-+static struct pmbus_driver_info pli1209bc_info = {
-+	.pages = 2,
-+	.format[PSC_VOLTAGE_IN] = direct,
-+	.format[PSC_VOLTAGE_OUT] = direct,
-+	.format[PSC_CURRENT_IN] = direct,
-+	.format[PSC_CURRENT_OUT] = direct,
-+	.format[PSC_POWER] = direct,
-+	.format[PSC_TEMPERATURE] = direct,
-+	.m[PSC_VOLTAGE_IN] = 1,
-+	.b[PSC_VOLTAGE_IN] = 0,
-+	.R[PSC_VOLTAGE_IN] = 1,
-+	.m[PSC_VOLTAGE_OUT] = 1,
-+	.b[PSC_VOLTAGE_OUT] = 0,
-+	.R[PSC_VOLTAGE_OUT] = 1,
-+	.m[PSC_CURRENT_IN] = 1,
-+	.b[PSC_CURRENT_IN] = 0,
-+	.R[PSC_CURRENT_IN] = 3,
-+	.m[PSC_CURRENT_OUT] = 1,
-+	.b[PSC_CURRENT_OUT] = 0,
-+	.R[PSC_CURRENT_OUT] = 2,
-+	.m[PSC_POWER] = 1,
-+	.b[PSC_POWER] = 0,
-+	.R[PSC_POWER] = 1,
-+	.m[PSC_TEMPERATURE] = 1,
-+	.b[PSC_TEMPERATURE] = 0,
-+	.R[PSC_TEMPERATURE] = 0,
-+	/*
-+	 * Page 0 sums up all attributes except voltage readings.
-+	 * The pli1209 digital supervisor only contains a single BCM, making
-+	 * page 0 redundant.
-+	 */
-+	.func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT
-+	    | PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT
-+	    | PMBUS_HAVE_PIN | PMBUS_HAVE_POUT
-+	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
-+	    | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_INPUT,
-+	.read_word_data = pli1209bc_read_word_data,
++		if (data & PB_STATUS_POWER_GOOD_N)
++			return 0;
++		return pmbus_read_word_data(client, page, phase, reg);
+ 	default:
+ 		return -ENODATA;
+ 	}
+ }
+ 
++#if IS_ENABLED(CONFIG_SENSORS_PLI1209BC_REGULATOR)
++static const struct regulator_desc pli1209bc_reg_desc = {
++	.name = "vout2",
++	.id = 1,
++	.of_match = of_match_ptr("vout2"),
++	.regulators_node = of_match_ptr("regulators"),
++	.ops = &pmbus_regulator_ops,
++	.type = REGULATOR_VOLTAGE,
++	.owner = THIS_MODULE,
 +};
-+
-+static int pli1209bc_probe(struct i2c_client *client)
-+{
-+	client->dev.platform_data = &pli1209bc_plat_data;
-+	return pmbus_do_probe(client, &pli1209bc_info);
-+}
-+
-+static const struct i2c_device_id pli1209bc_id[] = {
-+	{"pli1209bc", 0},
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(i2c, pli1209bc_id);
-+
-+#ifdef CONFIG_OF
-+static const struct of_device_id pli1209bc_of_match[] = {
-+	{ .compatible = "vicor,pli1209bc" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, pli1209bc_of_match);
 +#endif
 +
-+static struct i2c_driver pli1209bc_driver = {
-+	.driver = {
-+		   .name = "pli1209bc",
-+		   .of_match_table = of_match_ptr(pli1209bc_of_match),
-+		   },
-+	.probe_new = pli1209bc_probe,
-+	.id_table = pli1209bc_id,
-+};
-+
-+module_i2c_driver(pli1209bc_driver);
-+
-+MODULE_AUTHOR("Marcello Sylvester Bauer <sylv@sylv.io>");
-+MODULE_DESCRIPTION("PMBus driver for Vicor PLI1209BC");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(PMBUS);
+ static struct pmbus_driver_info pli1209bc_info = {
+ 	.pages = 2,
+ 	.format[PSC_VOLTAGE_IN] = direct,
+@@ -75,6 +102,10 @@ static struct pmbus_driver_info pli1209bc_info = {
+ 	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
+ 	    | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_INPUT,
+ 	.read_word_data = pli1209bc_read_word_data,
++#if IS_ENABLED(CONFIG_SENSORS_PLI1209BC_REGULATOR)
++	.num_regulators = 1,
++	.reg_desc = &pli1209bc_reg_desc,
++#endif
+ };
+ 
+ static int pli1209bc_probe(struct i2c_client *client)
 -- 
 2.34.1
 

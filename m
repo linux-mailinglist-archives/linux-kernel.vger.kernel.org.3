@@ -2,222 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF8F4B508B
+	by mail.lfdr.de (Postfix) with ESMTP id 4D0124B508A
 	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353571AbiBNMqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 07:46:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39664 "EHLO
+        id S1353585AbiBNMqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 07:46:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245676AbiBNMqO (ORCPT
+        with ESMTP id S233510AbiBNMqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 07:46:14 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9F64B42A
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 04:46:07 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id z17so10414741plb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 04:46:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0X10fqVg5ykSsl0oa12K6qvRRlEqIFV+m6yNZED4E7A=;
-        b=rKKxy2R8fGUZxy4yN6sE3nZA0tl06MCzW2Ls++PHOTDVrPXLzygCzac8nZSMCDQyrM
-         CprDceB4vcha58qMi6w99egwcMY599n+6rvJIdQ9zM76OCGOGZY9Mdkm/vTmQ2UNLxyS
-         3ETiLInfrZfB/IgOhZ8Fd6PRzRQz917hIRlcakTbWCl9LLEF3Oval4zMV11mkhjXR5Eg
-         oMpcmm8mwP07qi2AScrsM2z3ft9FLxi+qRE+Fkq7FzDUDWd3S3YaTRZ4v/bhju5gQXi9
-         bk7AyOTUc2/elIt8DFwxUniVxI292uGSKGYnnqVP8mToeF278huGYKjGU5y3xKJ0xqBK
-         8fyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0X10fqVg5ykSsl0oa12K6qvRRlEqIFV+m6yNZED4E7A=;
-        b=TEAmRoLaBSr2/zcq6J0f4TzhCpvy9eDlTnRIVqCLPPAhmk2rLn5YC6zkC8BfU7P4p8
-         jphY/5iHvS1GT/F50Nm61HUcld4VGKumfDTyqxHiZS7+/7wc4UpHJptojgZsKTk6nlhU
-         5nbJ6wZyx0I8qQja2B0200T00G89fG2QPEIiaSbF04tcCfuAs01xk+vDcRAtNzpoamsW
-         IAQDQbIaV8VBFdjYVK505eReOYed+hR72J4Oxh0V7kH8AmZ1yz4UP37Dvx3fCCKsnYo/
-         R3zd3acIEj5kY4OvKhkDzK5LS+INJUTvwStSPMIXaCb+ohdswAv1dikfws8cMuguYtIO
-         0o2A==
-X-Gm-Message-State: AOAM530ez/NfbQ3uH64cGriKHpadEi/ECIIgEV55S5/AfeLNXs92gBDj
-        Mmgx3+BvSTKzAs8GFuBgTH6GdyVzpU9p+zHQvbuLJQ==
-X-Google-Smtp-Source: ABdhPJwpYiRviXzPnHiXUbMl+Aq+C5W/r9mv9wpZCvcR0to900oGyukQ6bFi7DWaKdzFRE6/qBHINfbErKMGwwx7t/8=
-X-Received: by 2002:a17:902:714a:: with SMTP id u10mr14145494plm.21.1644842766711;
- Mon, 14 Feb 2022 04:46:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20220213103437.3363848-1-hsinyi@chromium.org>
-In-Reply-To: <20220213103437.3363848-1-hsinyi@chromium.org>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 14 Feb 2022 13:45:55 +0100
-Message-ID: <CAG3jFyuZ4mm0UEE79vXgNoed5Z7C5-3gBzK_RCpoaYssu=KgHA@mail.gmail.com>
-Subject: Re: [PATCH v7 1/4] drm/bridge: anx7625: send DPCD command to downstream
-To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Xin Ji <xji@analogixsemi.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 14 Feb 2022 07:46:17 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9829B4B844
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 04:46:06 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 470591F38C;
+        Mon, 14 Feb 2022 12:46:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644842765; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=51rgRejm4g1o/DWcuu9XgzTIry24iGX+KhOtYI6ugKo=;
+        b=DEkvb6KZRe9YEA1GL5YO4daN+nQaNgmau7Ld1F4oTBmfT69CI0O5/czMvuVNSgK0Gl21g4
+        2idcx5pF9iqxjXbBqMiABuRHLsO2ksSa3/EfpS+f0yex64F6QVUaCtgH79RtB7MLv7GROW
+        UmnQqoaq+IMgcUUmcGyPwwjPZK4XJXk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644842765;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=51rgRejm4g1o/DWcuu9XgzTIry24iGX+KhOtYI6ugKo=;
+        b=GW3xkNZ2u0Q/AdrPhBiOcYrkxsF76r6+ZEJcK7s27yvNBbb2ow24TD04DCZpHZBixLjoIO
+        ilJ2XwEU6Zu3dbDw==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 4111AA3B83;
+        Mon, 14 Feb 2022 12:46:05 +0000 (UTC)
+Date:   Mon, 14 Feb 2022 13:46:05 +0100
+Message-ID: <s5ho839fwfm.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Julian Wollrath <jwollrath@web.de>
+Cc:     linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: Re: v5.17.0-rc3: Regression bisecting failing suspend to disk: ALSA: hda: realtek: Fix race at concurrent COEF updates
+In-Reply-To: <20220214132838.4db10fca@schienar>
+References: <20220214132838.4db10fca@schienar>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 13 Feb 2022 at 11:34, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
->
-> From: Xin Ji <xji@analogixsemi.com>
->
-> Send DPCD command to downstream before anx7625 power down,
-> let downstream monitor enter into standby mode.
->
-> Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> Reviewed-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> ---
-> v3->v4:
-> Use common DP_AUX_NATIVE_READ/WRITE
->
-> Previously in:
-> https://patchwork.kernel.org/project/dri-devel/patch/1f36f8bf0a48fb2bba17bacec23700e58c1d407d.1641891874.git.xji@analogixsemi.com/
-> ---
->  drivers/gpu/drm/bridge/analogix/anx7625.c | 42 +++++++++++++++++++----
->  drivers/gpu/drm/bridge/analogix/anx7625.h |  2 --
->  2 files changed, 35 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> index 76662fce4ce61d..17b23940549a42 100644
-> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> @@ -129,6 +129,23 @@ static int anx7625_reg_write(struct anx7625_data *ctx,
->         return ret;
->  }
->
-> +static int anx7625_reg_block_write(struct anx7625_data *ctx,
-> +                                  struct i2c_client *client,
-> +                                  u8 reg_addr, u8 len, u8 *buf)
-> +{
-> +       int ret;
-> +       struct device *dev = &client->dev;
-> +
-> +       i2c_access_workaround(ctx, client);
-> +
-> +       ret = i2c_smbus_write_i2c_block_data(client, reg_addr, len, buf);
-> +       if (ret < 0)
-> +               dev_err(dev, "write i2c block failed id=%x\n:%x",
-> +                       client->addr, reg_addr);
-> +
-> +       return ret;
-> +}
-> +
->  static int anx7625_write_or(struct anx7625_data *ctx,
->                             struct i2c_client *client,
->                             u8 offset, u8 mask)
-> @@ -214,8 +231,8 @@ static int wait_aux_op_finish(struct anx7625_data *ctx)
->         return 0;
->  }
->
-> -static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
-> -                                u32 address, u8 len, u8 *buf)
-> +static int anx7625_aux_dpcd_trans(struct anx7625_data *ctx, u8 op,
-> +                                 u32 address, u8 len, u8 *buf)
->  {
->         struct device *dev = &ctx->client->dev;
->         int ret;
-> @@ -231,8 +248,7 @@ static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
->         addrm = (address >> 8) & 0xFF;
->         addrh = (address >> 16) & 0xFF;
->
-> -       cmd = DPCD_CMD(len, DPCD_READ);
-> -       cmd = ((len - 1) << 4) | 0x09;
-> +       cmd = DPCD_CMD(len, op);
->
->         /* Set command and length */
->         ret = anx7625_reg_write(ctx, ctx->i2c.rx_p0_client,
-> @@ -246,6 +262,9 @@ static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
->         ret |= anx7625_reg_write(ctx, ctx->i2c.rx_p0_client,
->                                  AP_AUX_ADDR_19_16, addrh);
->
-> +       if (op == DP_AUX_NATIVE_WRITE)
-> +               ret |= anx7625_reg_block_write(ctx, ctx->i2c.rx_p0_client,
-> +                                              AP_AUX_BUFF_START, len, buf);
->         /* Enable aux access */
->         ret |= anx7625_write_or(ctx, ctx->i2c.rx_p0_client,
->                                 AP_AUX_CTRL_STATUS, AP_AUX_CTRL_OP_EN);
-> @@ -255,14 +274,17 @@ static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
->                 return -EIO;
->         }
->
-> -       usleep_range(2000, 2100);
-> -
->         ret = wait_aux_op_finish(ctx);
->         if (ret) {
->                 dev_err(dev, "aux IO error: wait aux op finish.\n");
->                 return ret;
->         }
->
-> +       /* Write done */
-> +       if (op == DP_AUX_NATIVE_WRITE)
-> +               return 0;
-> +
-> +       /* Read done, read out dpcd data */
->         ret = anx7625_reg_block_read(ctx, ctx->i2c.rx_p0_client,
->                                      AP_AUX_BUFF_START, len, buf);
->         if (ret < 0) {
-> @@ -845,7 +867,7 @@ static int anx7625_hdcp_enable(struct anx7625_data *ctx)
->         }
->
->         /* Read downstream capability */
-> -       anx7625_aux_dpcd_read(ctx, 0x68028, 1, &bcap);
-> +       anx7625_aux_dpcd_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
->         if (!(bcap & 0x01)) {
->                 pr_warn("downstream not support HDCP 1.4, cap(%x).\n", bcap);
->                 return 0;
-> @@ -918,6 +940,7 @@ static void anx7625_dp_stop(struct anx7625_data *ctx)
->  {
->         struct device *dev = &ctx->client->dev;
->         int ret;
-> +       u8 data;
->
->         DRM_DEV_DEBUG_DRIVER(dev, "stop dp output\n");
->
-> @@ -929,6 +952,11 @@ static void anx7625_dp_stop(struct anx7625_data *ctx)
->         ret |= anx7625_write_and(ctx, ctx->i2c.tx_p2_client, 0x08, 0x7f);
->
->         ret |= anx7625_video_mute_control(ctx, 1);
-> +
-> +       dev_dbg(dev, "notify downstream enter into standby\n");
-> +       /* Downstream monitor enter into standby mode */
-> +       data = 2;
-> +       ret |= anx7625_aux_dpcd_trans(ctx, DP_AUX_NATIVE_WRITE, 0x000600, 1, &data);
->         if (ret < 0)
->                 DRM_DEV_ERROR(dev, "IO error : mute video fail\n");
->
-> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.h b/drivers/gpu/drm/bridge/analogix/anx7625.h
-> index 56165f5b254c14..64a8ab56529404 100644
-> --- a/drivers/gpu/drm/bridge/analogix/anx7625.h
-> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.h
-> @@ -242,8 +242,6 @@
->
->  #define AP_AUX_COMMAND 0x27  /* com+len */
->  #define LENGTH_SHIFT   4
-> -#define DPCD_READ      0x09
-> -#define DPCD_WRITE     0x08
->  #define DPCD_CMD(len, cmd)     ((((len) - 1) << LENGTH_SHIFT) | (cmd))
->
->  /* Bit 0&1: 3D video structure */
-> --
-> 2.35.1.265.g69c8d7142f-goog
->
+On Mon, 14 Feb 2022 13:28:38 +0100,
+Julian Wollrath wrote:
+> 
+> Dear Takashi Iwai,
+> 
+> since v5.17.0-rc3 my system (HP Elitebook 845 G7) fails to suspend to
+> disk and instead just hangs. Rebooting via the magic sysrq keys is
+> still possible though. I bisected the regression to commit
+> b837a9f5ab3bdfab9233c9f98a6bef717673a3e5 (ALSA: hda: realtek: Fix race
+> at concurrent COEF updates). Reverting that commit removes the problem.
+> I you need more information, I am happy to provide it.
 
-Applied series to drm-misc-next.
+Does the patch below help?
+
+
+thanks,
+
+Takashi
+
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -138,6 +138,22 @@ struct alc_spec {
+  * COEF access helper functions
+  */
+ 
++static void coef_mutex_lock(struct hda_codec *codec)
++{
++	struct alc_spec *spec = codec->spec;
++
++	snd_hda_power_up_pm(codec);
++	mutex_lock(&spec->coef_mutex);
++}
++
++static void coef_mutex_unlock(struct hda_codec *codec)
++{
++	struct alc_spec *spec = codec->spec;
++
++	mutex_unlock(&spec->coef_mutex);
++	snd_hda_power_down_pm(codec);
++}
++
+ static int __alc_read_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
+ 				 unsigned int coef_idx)
+ {
+@@ -151,12 +167,11 @@ static int __alc_read_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
+ static int alc_read_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
+ 			       unsigned int coef_idx)
+ {
+-	struct alc_spec *spec = codec->spec;
+ 	unsigned int val;
+ 
+-	mutex_lock(&spec->coef_mutex);
++	coef_mutex_lock(codec);
+ 	val = __alc_read_coefex_idx(codec, nid, coef_idx);
+-	mutex_unlock(&spec->coef_mutex);
++	coef_mutex_unlock(codec);
+ 	return val;
+ }
+ 
+@@ -173,11 +188,9 @@ static void __alc_write_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
+ static void alc_write_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
+ 				 unsigned int coef_idx, unsigned int coef_val)
+ {
+-	struct alc_spec *spec = codec->spec;
+-
+-	mutex_lock(&spec->coef_mutex);
++	coef_mutex_lock(codec);
+ 	__alc_write_coefex_idx(codec, nid, coef_idx, coef_val);
+-	mutex_unlock(&spec->coef_mutex);
++	coef_mutex_unlock(codec);
+ }
+ 
+ #define alc_write_coef_idx(codec, coef_idx, coef_val) \
+@@ -198,11 +211,9 @@ static void alc_update_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
+ 				  unsigned int coef_idx, unsigned int mask,
+ 				  unsigned int bits_set)
+ {
+-	struct alc_spec *spec = codec->spec;
+-
+-	mutex_lock(&spec->coef_mutex);
++	coef_mutex_lock(codec);
+ 	__alc_update_coefex_idx(codec, nid, coef_idx, mask, bits_set);
+-	mutex_unlock(&spec->coef_mutex);
++	coef_mutex_unlock(codec);
+ }
+ 
+ #define alc_update_coef_idx(codec, coef_idx, mask, bits_set)	\
+@@ -235,9 +246,7 @@ struct coef_fw {
+ static void alc_process_coef_fw(struct hda_codec *codec,
+ 				const struct coef_fw *fw)
+ {
+-	struct alc_spec *spec = codec->spec;
+-
+-	mutex_lock(&spec->coef_mutex);
++	coef_mutex_lock(codec);
+ 	for (; fw->nid; fw++) {
+ 		if (fw->mask == (unsigned short)-1)
+ 			__alc_write_coefex_idx(codec, fw->nid, fw->idx, fw->val);
+@@ -245,7 +254,7 @@ static void alc_process_coef_fw(struct hda_codec *codec,
+ 			__alc_update_coefex_idx(codec, fw->nid, fw->idx,
+ 						fw->mask, fw->val);
+ 	}
+-	mutex_unlock(&spec->coef_mutex);
++	coef_mutex_unlock(codec);
+ }
+ 
+ /*

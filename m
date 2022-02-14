@@ -2,60 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67224B4013
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:09:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 993734B4023
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:14:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239830AbiBNDIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 22:08:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48874 "EHLO
+        id S239885AbiBNDOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 22:14:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbiBNDId (ORCPT
+        with ESMTP id S229715AbiBNDOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 22:08:33 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F9F47AF1
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 19:08:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644808107; x=1676344107;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=w3ioHYYYc2bA6RCkwSSNL72+qrbvjxnJ+T7RAA7tGv8=;
-  b=E7fxzk19f8phHjIX9BMVj8uUiofSwZqY/6EnPBOf8L+4rGEulAlWCz69
-   D8enDlohSBnCY+W5P7+sNqj7OLkLTRDBG65m0lTslTdzKsZ0AFlL9IK42
-   MrTU13kv3A0A6bVRi0TvsmXCWKcQkRCVGABF5QFidJmzPMnY+qmvRv8h3
-   S6RKl4isfQviT0HXbthGNiKkRc9+4la+FqOE4zxcSA/uRIluFFCwNg2m+
-   GuVapj2+ro1tEdcGyrAsnfOjbQJOafKtX7SDBH/PcpDmjg2okYyBJBhvU
-   CgD7o8b5SCOxF1NxjG5KthAtKB86jIHR+7yz+cZEsExE9eItcPj15CuAt
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="229963139"
-X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="229963139"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 19:08:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="495050540"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 13 Feb 2022 19:08:24 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nJRiy-000881-9Q; Mon, 14 Feb 2022 03:08:24 +0000
-Date:   Mon, 14 Feb 2022 11:07:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Thierry Reding <treding@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: drivers/gpu/drm/tegra/vic.c:326:12: error: 'vic_runtime_suspend'
- defined but not used
-Message-ID: <202202141114.QJqYTOhN-lkp@intel.com>
+        Sun, 13 Feb 2022 22:14:41 -0500
+X-Greylist: delayed 362 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 13 Feb 2022 19:14:30 PST
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5857750E3B;
+        Sun, 13 Feb 2022 19:14:30 -0800 (PST)
+Received: from localhost.localdomain (unknown [123.60.114.22])
+        by mail-app4 (Coremail) with SMTP id cS_KCgAXHQmcxwliUo4aCQ--.6446S2;
+        Mon, 14 Feb 2022 11:08:13 +0800 (CST)
+From:   lostway@zju.edu.cn
+To:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        bp@alien8.de, tony.luck@intel.com, james.morse@arm.com
+Subject: [PATCH v3] RAS: Report ARM processor information to userspace
+Date:   Mon, 14 Feb 2022 11:08:12 +0800
+Message-Id: <20220214030813.135766-1-lostway@zju.edu.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cS_KCgAXHQmcxwliUo4aCQ--.6446S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxtF4rGw1xJry8CF1UJr1DKFg_yoW3Ar43pF
+        n8CryYkr4rJFsxG3y3JayF93y3X3s5uw1DK343Xay7CFs5ur1qqFs0gr42kF93Jr98J34a
+        q3Wqgry3Ca4DJrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkYb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4kE6xkIj40Ew7xC0wCF04k2
+        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8dpnPUUUUU==
+X-CM-SenderInfo: isrxjjaqquq6lmxovvfxof0/
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,100 +54,224 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   754e0b0e35608ed5206d6a67a791563c631cec07
-commit: 1e15f5b911d6a1b4a5677e88527610946bd314dd drm/tegra: vic: Stop channel on suspend
-date:   9 weeks ago
-config: arm-randconfig-r016-20220213 (https://download.01.org/0day-ci/archive/20220214/202202141114.QJqYTOhN-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1e15f5b911d6a1b4a5677e88527610946bd314dd
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 1e15f5b911d6a1b4a5677e88527610946bd314dd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/tegra/
+From: Shengwei Luo <luoshengwei@huawei.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The original arm_event trace code only traces out ARM processor error
+information data. It's not enough for user to take appropriate action.
 
-All errors (new ones prefixed by >>):
+According to UEFI_2_9 specification chapter N2.4.4, the ARM processor
+error section includes several ARM processor error information, several
+ARM processor context information and several vendor specific error
+information structures. In addition to these info, there are error
+severity and cpu logical index about the event. Report all of these
+information to userspace via perf i/f. So that the user can do cpu core
+isolation according to error severity and other info.
 
->> drivers/gpu/drm/tegra/vic.c:326:12: error: 'vic_runtime_suspend' defined but not used [-Werror=unused-function]
-     326 | static int vic_runtime_suspend(struct device *dev)
-         |            ^~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/tegra/vic.c:292:12: error: 'vic_runtime_resume' defined but not used [-Werror=unused-function]
-     292 | static int vic_runtime_resume(struct device *dev)
-         |            ^~~~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
-
-
-vim +/vic_runtime_suspend +326 drivers/gpu/drm/tegra/vic.c
-
-77a0b09dd993c8 Thierry Reding  2019-02-01  290  
-9916612311a777 Mikko Perttunen 2021-06-10  291  
-9916612311a777 Mikko Perttunen 2021-06-10 @292  static int vic_runtime_resume(struct device *dev)
-0ae797a8ba05a2 Arto Merilainen 2016-12-14  293  {
-9916612311a777 Mikko Perttunen 2021-06-10  294  	struct vic *vic = dev_get_drvdata(dev);
-0ae797a8ba05a2 Arto Merilainen 2016-12-14  295  	int err;
-0ae797a8ba05a2 Arto Merilainen 2016-12-14  296  
-9916612311a777 Mikko Perttunen 2021-06-10  297  	err = clk_prepare_enable(vic->clk);
-0ae797a8ba05a2 Arto Merilainen 2016-12-14  298  	if (err < 0)
-0ae797a8ba05a2 Arto Merilainen 2016-12-14  299  		return err;
-0ae797a8ba05a2 Arto Merilainen 2016-12-14  300  
-9916612311a777 Mikko Perttunen 2021-06-10  301  	usleep_range(10, 20);
-9916612311a777 Mikko Perttunen 2021-06-10  302  
-9916612311a777 Mikko Perttunen 2021-06-10  303  	err = reset_control_deassert(vic->rst);
-9916612311a777 Mikko Perttunen 2021-06-10  304  	if (err < 0)
-9916612311a777 Mikko Perttunen 2021-06-10  305  		goto disable;
-9916612311a777 Mikko Perttunen 2021-06-10  306  
-9916612311a777 Mikko Perttunen 2021-06-10  307  	usleep_range(10, 20);
-9916612311a777 Mikko Perttunen 2021-06-10  308  
-77a0b09dd993c8 Thierry Reding  2019-02-01  309  	err = vic_load_firmware(vic);
-77a0b09dd993c8 Thierry Reding  2019-02-01  310  	if (err < 0)
-9916612311a777 Mikko Perttunen 2021-06-10  311  		goto assert;
-77a0b09dd993c8 Thierry Reding  2019-02-01  312  
-0ae797a8ba05a2 Arto Merilainen 2016-12-14  313  	err = vic_boot(vic);
-77a0b09dd993c8 Thierry Reding  2019-02-01  314  	if (err < 0)
-9916612311a777 Mikko Perttunen 2021-06-10  315  		goto assert;
-0ae797a8ba05a2 Arto Merilainen 2016-12-14  316  
-9916612311a777 Mikko Perttunen 2021-06-10  317  	return 0;
-9916612311a777 Mikko Perttunen 2021-06-10  318  
-9916612311a777 Mikko Perttunen 2021-06-10  319  assert:
-9916612311a777 Mikko Perttunen 2021-06-10  320  	reset_control_assert(vic->rst);
-9916612311a777 Mikko Perttunen 2021-06-10  321  disable:
-9916612311a777 Mikko Perttunen 2021-06-10  322  	clk_disable_unprepare(vic->clk);
-9916612311a777 Mikko Perttunen 2021-06-10  323  	return err;
-0ae797a8ba05a2 Arto Merilainen 2016-12-14  324  }
-0ae797a8ba05a2 Arto Merilainen 2016-12-14  325  
-9916612311a777 Mikko Perttunen 2021-06-10 @326  static int vic_runtime_suspend(struct device *dev)
-9916612311a777 Mikko Perttunen 2021-06-10  327  {
-9916612311a777 Mikko Perttunen 2021-06-10  328  	struct vic *vic = dev_get_drvdata(dev);
-9916612311a777 Mikko Perttunen 2021-06-10  329  	int err;
-9916612311a777 Mikko Perttunen 2021-06-10  330  
-1e15f5b911d6a1 Dmitry Osipenko 2021-12-01  331  	host1x_channel_stop(vic->channel);
-1e15f5b911d6a1 Dmitry Osipenko 2021-12-01  332  
-9916612311a777 Mikko Perttunen 2021-06-10  333  	err = reset_control_assert(vic->rst);
-9916612311a777 Mikko Perttunen 2021-06-10  334  	if (err < 0)
-9916612311a777 Mikko Perttunen 2021-06-10  335  		return err;
-9916612311a777 Mikko Perttunen 2021-06-10  336  
-9916612311a777 Mikko Perttunen 2021-06-10  337  	usleep_range(2000, 4000);
-9916612311a777 Mikko Perttunen 2021-06-10  338  
-9916612311a777 Mikko Perttunen 2021-06-10  339  	clk_disable_unprepare(vic->clk);
-9916612311a777 Mikko Perttunen 2021-06-10  340  
-0ae797a8ba05a2 Arto Merilainen 2016-12-14  341  	return 0;
-9916612311a777 Mikko Perttunen 2021-06-10  342  }
-77a0b09dd993c8 Thierry Reding  2019-02-01  343  
-
-:::::: The code at line 326 was first introduced by commit
-:::::: 9916612311a777cdf15a53491243589ea4fcc4e7 drm/tegra: Boot VIC during runtime PM resume
-
-:::::: TO: Mikko Perttunen <mperttunen@nvidia.com>
-:::::: CC: Thierry Reding <treding@nvidia.com>
-
+Signed-off-by: Shengwei Luo <luoshengwei@huawei.com>
+Signed-off-by: Jason Tian <jason@os.amperecomputing.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Links:
+https://lore.kernel.org/lkml/20220126030906.56765-1-lostway@zju.edu.cn/
+https://lore.kernel.org/lkml/20210205022229.313030-1-jason@os.amperecomputing.com/
+
+v2->v3:
+Add signed-off of original author.
+Fix commit message to explain why a change is being done.
+
+v1->v2:
+Cleaned up ci warnings.
+---
+ drivers/acpi/apei/ghes.c |  3 +--
+ drivers/ras/ras.c        | 46 ++++++++++++++++++++++++++++++++++++--
+ include/linux/ras.h      | 15 +++++++++++--
+ include/ras/ras_event.h  | 48 +++++++++++++++++++++++++++++++++++-----
+ 4 files changed, 101 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+index 0c5c9acc6254..f824c26057b1 100644
+--- a/drivers/acpi/apei/ghes.c
++++ b/drivers/acpi/apei/ghes.c
+@@ -490,9 +490,8 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int s
+ 	int sec_sev, i;
+ 	char *p;
+ 
+-	log_arm_hw_error(err);
+-
+ 	sec_sev = ghes_severity(gdata->error_severity);
++	log_arm_hw_error(err, sec_sev);
+ 	if (sev != GHES_SEV_RECOVERABLE || sec_sev != GHES_SEV_RECOVERABLE)
+ 		return false;
+ 
+diff --git a/drivers/ras/ras.c b/drivers/ras/ras.c
+index 95540ea8dd9d..2a7f424d59b9 100644
+--- a/drivers/ras/ras.c
++++ b/drivers/ras/ras.c
+@@ -21,9 +21,51 @@ void log_non_standard_event(const guid_t *sec_type, const guid_t *fru_id,
+ 	trace_non_standard_event(sec_type, fru_id, fru_text, sev, err, len);
+ }
+ 
+-void log_arm_hw_error(struct cper_sec_proc_arm *err)
++void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev)
+ {
+-	trace_arm_event(err);
++	u32 pei_len;
++	u32 ctx_len = 0;
++	s32 vsei_len;
++	u8 *pei_err;
++	u8 *ctx_err;
++	u8 *ven_err_data;
++	struct cper_arm_err_info *err_info;
++	struct cper_arm_ctx_info *ctx_info;
++	int n, sz;
++	int cpu;
++
++	pei_len = sizeof(struct cper_arm_err_info) * err->err_info_num;
++	pei_err = (u8 *)err + sizeof(struct cper_sec_proc_arm);
++
++	err_info = (struct cper_arm_err_info *)(err + 1);
++	ctx_info = (struct cper_arm_ctx_info *)(err_info + err->err_info_num);
++	ctx_err = (u8 *)ctx_info;
++	for (n = 0; n < err->context_info_num; n++) {
++		sz = sizeof(struct cper_arm_ctx_info) + ctx_info->size;
++		ctx_info = (struct cper_arm_ctx_info *)((long)ctx_info + sz);
++		ctx_len += sz;
++	}
++
++	vsei_len = err->section_length - (sizeof(struct cper_sec_proc_arm) +
++						pei_len + ctx_len);
++	if (vsei_len < 0) {
++		pr_warn(FW_BUG
++			"section length: %d\n", err->section_length);
++		pr_warn(FW_BUG
++			"section length is too small\n");
++		pr_warn(FW_BUG
++			"firmware-generated error record is incorrect\n");
++		vsei_len = 0;
++	}
++	ven_err_data = (u8 *)ctx_info;
++
++	cpu = GET_LOGICAL_INDEX(err->mpidr);
++	/* when return value is invalid, set cpu index to -1 */
++	if (cpu < 0)
++		cpu = -1;
++
++	trace_arm_event(err, pei_err, pei_len, ctx_err, ctx_len,
++			ven_err_data, (u32)vsei_len, sev, cpu);
+ }
+ 
+ static int __init ras_init(void)
+diff --git a/include/linux/ras.h b/include/linux/ras.h
+index 1f4048bf2674..4529775374d0 100644
+--- a/include/linux/ras.h
++++ b/include/linux/ras.h
+@@ -24,7 +24,7 @@ int __init parse_cec_param(char *str);
+ void log_non_standard_event(const guid_t *sec_type,
+ 			    const guid_t *fru_id, const char *fru_text,
+ 			    const u8 sev, const u8 *err, const u32 len);
+-void log_arm_hw_error(struct cper_sec_proc_arm *err);
++void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev);
+ #else
+ static inline void
+ log_non_standard_event(const guid_t *sec_type,
+@@ -32,7 +32,18 @@ log_non_standard_event(const guid_t *sec_type,
+ 		       const u8 sev, const u8 *err, const u32 len)
+ { return; }
+ static inline void
+-log_arm_hw_error(struct cper_sec_proc_arm *err) { return; }
++log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev) { return; }
+ #endif
+ 
++#if defined(CONFIG_ARM) || defined(CONFIG_ARM64)
++#include <asm/smp_plat.h>
++/*
++ * Include ARM specific SMP header which provides a function mapping mpidr to
++ * cpu logical index.
++ */
++#define GET_LOGICAL_INDEX(mpidr) get_logical_index(mpidr & MPIDR_HWID_BITMASK)
++#else
++#define GET_LOGICAL_INDEX(mpidr) -EINVAL
++#endif /* CONFIG_ARM || CONFIG_ARM64 */
++
+ #endif /* __RAS_H__ */
+diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
+index d0337a41141c..92cfb61bdb20 100644
+--- a/include/ras/ras_event.h
++++ b/include/ras/ras_event.h
+@@ -168,11 +168,24 @@ TRACE_EVENT(mc_event,
+  * This event is generated when hardware detects an ARM processor error
+  * has occurred. UEFI 2.6 spec section N.2.4.4.
+  */
++#define APEIL "ARM Processor Err Info data len"
++#define APEID "ARM Processor Err Info raw data"
++#define APECIL "ARM Processor Err Context Info data len"
++#define APECID "ARM Processor Err Context Info raw data"
++#define VSEIL "Vendor Specific Err Info data len"
++#define VSEID "Vendor Specific Err Info raw data"
+ TRACE_EVENT(arm_event,
+ 
+-	TP_PROTO(const struct cper_sec_proc_arm *proc),
++	TP_PROTO(const struct cper_sec_proc_arm *proc, const u8 *pei_err,
++			const u32 pei_len,
++			const u8 *ctx_err,
++			const u32 ctx_len,
++			const u8 *oem,
++			const u32 oem_len,
++			u8 sev,
++			int cpu),
+ 
+-	TP_ARGS(proc),
++	TP_ARGS(proc, pei_err, pei_len, ctx_err, ctx_len, oem, oem_len, sev, cpu),
+ 
+ 	TP_STRUCT__entry(
+ 		__field(u64, mpidr)
+@@ -180,6 +193,14 @@ TRACE_EVENT(arm_event,
+ 		__field(u32, running_state)
+ 		__field(u32, psci_state)
+ 		__field(u8, affinity)
++		__field(u32, pei_len)
++		__dynamic_array(u8, buf, pei_len)
++		__field(u32, ctx_len)
++		__dynamic_array(u8, buf1, ctx_len)
++		__field(u32, oem_len)
++		__dynamic_array(u8, buf2, oem_len)
++		__field(u8, sev)
++		__field(int, cpu)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -199,12 +220,29 @@ TRACE_EVENT(arm_event,
+ 			__entry->running_state = ~0;
+ 			__entry->psci_state = ~0;
+ 		}
++		__entry->pei_len = pei_len;
++		memcpy(__get_dynamic_array(buf), pei_err, pei_len);
++		__entry->ctx_len = ctx_len;
++		memcpy(__get_dynamic_array(buf1), ctx_err, ctx_len);
++		__entry->oem_len = oem_len;
++		memcpy(__get_dynamic_array(buf2), oem, oem_len);
++		__entry->sev = sev;
++		__entry->cpu = cpu;
+ 	),
+ 
+-	TP_printk("affinity level: %d; MPIDR: %016llx; MIDR: %016llx; "
+-		  "running state: %d; PSCI state: %d",
++	TP_printk("cpu: %d; error: %d; affinity level: %d; MPIDR: %016llx; MIDR: %016llx; "
++		  "running state: %d; PSCI state: %d; "
++		  "%s: %d; %s: %s; %s: %d; %s: %s; %s: %d; %s: %s",
++		  __entry->cpu,
++		  __entry->sev,
+ 		  __entry->affinity, __entry->mpidr, __entry->midr,
+-		  __entry->running_state, __entry->psci_state)
++		  __entry->running_state, __entry->psci_state,
++		  APEIL, __entry->pei_len, APEID,
++		  __print_hex(__get_dynamic_array(buf), __entry->pei_len),
++		  APECIL, __entry->ctx_len, APECID,
++		  __print_hex(__get_dynamic_array(buf1), __entry->ctx_len),
++		  VSEIL, __entry->oem_len, VSEID,
++		  __print_hex(__get_dynamic_array(buf2), __entry->oem_len))
+ );
+ 
+ /*
+-- 
+2.27.0
+

@@ -2,202 +2,385 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D26C74B5280
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 617DC4B5267
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354755AbiBNN6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:58:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38650 "EHLO
+        id S1354741AbiBNN5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:57:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354747AbiBNN6v (ORCPT
+        with ESMTP id S1354707AbiBNN5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:58:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBC79C4E
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:58:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644847121;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+Ya79H6TqHuWzpLyZaRYnVCACWlD+bUT2wjyTYIXjjM=;
-        b=JQPh/NQjRmIkaTAev6YvgDRoS+spRWobofloLrUu2e0L35vgpuAn+rI0Ov1rM27FuQSnWH
-        CBTljNkW4+Ww5UtGwfllBHcfYs/Xt60jgGyVXa8U/3SIXy6PqMmv8xexpCmmutAgVxAUu0
-        kJEfYG7IDGX+SD8LaDWs11J5Q4Inelw=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-IeG5-1glO8qB8paQ5WBysA-1; Mon, 14 Feb 2022 08:58:40 -0500
-X-MC-Unique: IeG5-1glO8qB8paQ5WBysA-1
-Received: by mail-ed1-f72.google.com with SMTP id g5-20020a056402090500b0040f28e1da47so10322528edz.8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:58:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+Ya79H6TqHuWzpLyZaRYnVCACWlD+bUT2wjyTYIXjjM=;
-        b=SyUZl/OsQTajyvfHDy+7eHmoDPfuHQuZQU0wHCZIqRVrTaDfYbDNE32/naH7rjyXOS
-         sHXe6YcVIX9BnHmFGRcpgIC9+we6W1aYiEunqzVdatWrkEfeCUZRSDc9a3N+GEvx62kQ
-         n4gdaul73SEJITGVP48j03TcVWNIqajRFuOUKiE5v2Hn1RUD06n5lh3Ex9MuNyy8zbc4
-         Cu2ncB8yHARww4EFxoww80sXzTdt9WlJxd7aw+4vu8GLPxFxP6pLD2vVle3EliOQPvOW
-         yQx2dncc3IeXCcpb9cLAwlRfWnqnHncqAw0cz5WRuJv6RBIoll24ay3LXdJfwdK+sAQz
-         WjIQ==
-X-Gm-Message-State: AOAM530oNTR4cngXez9LRDRj84U9ytRqKvhqXPdUhUBErVuzgcGCdfF6
-        TUvrmYArCNtzMbvi7cgKm7XuSRA/vYN3SXyboufP7vzbEQfgGjxn5fT0HUfDx+/0X/Itztyxhd5
-        19MivSGWG65C2Ju/mUjeNziBn
-X-Received: by 2002:a17:907:96aa:: with SMTP id hd42mr2192651ejc.738.1644847119348;
-        Mon, 14 Feb 2022 05:58:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxURNMgbfRCKJBXSt75Jz56tbXNymf2Sd9gMKsH7sp+2ALu4ROL/BRxIWGui59ZQC9O1R251Q==
-X-Received: by 2002:a17:907:96aa:: with SMTP id hd42mr2192624ejc.738.1644847119058;
-        Mon, 14 Feb 2022 05:58:39 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id m7sm909736ejq.10.2022.02.14.05.58.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 05:58:38 -0800 (PST)
-Message-ID: <70afbdca-12ee-1106-c4b9-136c65aaa812@redhat.com>
-Date:   Mon, 14 Feb 2022 14:58:37 +0100
+        Mon, 14 Feb 2022 08:57:06 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C3449F92;
+        Mon, 14 Feb 2022 05:56:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1644847011; x=1676383011;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=v+naBJJ9gW5tTTYZDC+I9qkLd9zec9eUkonkP5epmmQ=;
+  b=0C598M5PVS7BXA93rvw/xjYZZMDbZuqVd9KK+e0tf7S3r0OBRqopwNoI
+   MLEH9An3l8jvsAPeNNQ2prVpFrxuprbz20sA4sIYExBDRoIEP09rh0E4B
+   DNBClqAqCi+CU8bc3QsuK0ty8ITab5lGqkY3o/MFGUAZRSfPzEisbK+DZ
+   RmdtT1/d7ZgppB6XO+bldzshybmSm0k430fF7KuvG4YWfjXblIRUVnndG
+   ANzZNRZURCVuFWvjXN8iDq+CukrJk5SoSGmllPzWev6bEUMaq8RjhfplX
+   5Gw/m2p1PJqrA+WN/Sr9gQIbn+OIeWHJ5h6PFbutSxbUdXEeMGBsmg8Sv
+   Q==;
+IronPort-SDR: uFeiYPZ+hc0z2oApyHm0RKhB5Z+5ijOCKb7kqNWjhDXEZDRTL2KqgGFlGqjnDvRHsnJPEu8lvJ
+ NJO9+2QhVNPSYTSCNDNAjBRqy/RZrpGBNEZ8zZ0HRnyM6aURYBvi/r/N8813MJ3PrAMwiJxvzx
+ EzbpNDdAJeEwTXpzChwFA5HO+1wEXhZZXYJdTAq/pxxwkuezgkf9/aIq5VKC0vx59Az2Ypqgi7
+ priFTFKrDf120iIlKFJA/Z5XWmJZP4nZFCluEZDTiC7P8hEKEZSLkXpqmKKvSgMEmlcH7sYpZl
+ QFQ8fkFaYex0jXYE1yXhlq9W
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="153506441"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Feb 2022 06:56:50 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 14 Feb 2022 06:56:50 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Mon, 14 Feb 2022 06:56:44 -0700
+From:   <conor.dooley@microchip.com>
+To:     <linus.walleij@linaro.org>, <brgl@bgdev.pl>, <robh+dt@kernel.org>,
+        <jassisinghbrar@gmail.com>, <thierry.reding@gmail.com>,
+        <u.kleine-koenig@pengutronix.de>, <lee.jones@linaro.org>,
+        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <geert@linux-m68k.org>,
+        <krzysztof.kozlowski@canonical.com>, <linux-gpio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+CC:     <lewis.hanly@microchip.com>, <conor.dooley@microchip.com>,
+        <daire.mcnamara@microchip.com>, <ivan.griffin@microchip.com>,
+        <atishp@rivosinc.com>, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH v7 08/11] riscv: dts: microchip: refactor icicle kit device tree
+Date:   Mon, 14 Feb 2022 13:58:38 +0000
+Message-ID: <20220214135840.168236-9-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220214135840.168236-1-conor.dooley@microchip.com>
+References: <20220214135840.168236-1-conor.dooley@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [5.17 regression] "x86/PCI: Ignore E820 reservations for bridge
- windows on newer systems" breaks suspend/resume
-Content-Language: en-US
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        linux-acpi <linux-acpi@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>, x86@kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>
-References: <a7ad05fe-c2ab-a6d9-b66e-68e8c5688420@redhat.com>
- <697aaf96-ec60-4e11-b011-0e4151e714d7@redhat.com> <YgKcl9YX4HfjqZxS@lahna>
- <02994528-aaad-5259-1774-19aeacdd18fc@redhat.com> <YgPlQ6UK3+4/yzLk@lahna>
- <2f01e99d-e830-d03c-3a9d-30b95726cc2c@redhat.com> <YgSzNAlfgcrm8ykH@lahna>
- <039f9e8d-6e29-0288-606a-1d298e026c97@redhat.com> <YgpcYHZ1fxnBiUjV@lahna>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <YgpcYHZ1fxnBiUjV@lahna>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Conor Dooley <conor.dooley@microchip.com>
 
-On 2/14/22 14:42, Mika Westerberg wrote:
-> Hi Hans,
-> 
-> On Mon, Feb 14, 2022 at 01:42:29PM +0100, Hans de Goede wrote:
->> Hi,
->>
->> On 2/10/22 07:39, Mika Westerberg wrote:
->>> Hi Hans,
->>>
->>> On Wed, Feb 09, 2022 at 05:08:13PM +0100, Hans de Goede wrote:
->>>> As mentioned in my email from 10 seconds ago I think a better simpler
->>>> fix would be to just do:
->>>>
->>>> diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
->>>> index 9b9fb7882c20..18656f823764 100644
->>>> --- a/arch/x86/kernel/resource.c
->>>> +++ b/arch/x86/kernel/resource.c
->>>> @@ -28,6 +28,10 @@ static void remove_e820_regions(struct resource *avail)
->>>>  	int i;
->>>>  	struct e820_entry *entry;
->>>>  
->>>> +	/* Only remove E820 reservations on classic BIOS boot */
->>>> +	if (efi_enabled(EFI_MEMMAP))
->>>> +		return;
->>>> +
->>>>  	for (i = 0; i < e820_table->nr_entries; i++) {
->>>>  		entry = &e820_table->entries[i];
->>>>  
->>>>
->>>> I'm curious what you think of that?
->>>
->>> I'm not an expert in this e820 stuff but this one looks really simple
->>> and makes sense to me. So definitely should go with it assuming there
->>> are no objections from the x86 maintainers.
->>
->> Unfortunately with this suspend/resume is still broken on the ThinkPad
->> X1 carbon gen 2 of the reporter reporting the regression. The reporter
->> has been kind enough to also test in EFI mode (at my request) and then
->> the problem is back again with this patch. So just differentiating
->> between EFI / non EFI mode is not an option.
-> 
-> Thanks for the update! Too bad that it did not solve the regression, though :(
-> 
->> FYI, here is what I believe is the root-cause of the issue on the ThinkPad X1 carbon gen 2:
->>
->> The E820 reservations table has the following in both BIOS and EFI boot modes:
->>
->> [    0.000000] BIOS-e820: [mem 0x00000000dceff000-0x00000000dfa0ffff] reserved
->>
->> Which has a small overlap with:
->>
->> [    0.884684] pci_bus 0000:00: root bus resource [mem 0xdfa00000-0xfebfffff window]
->>
->> This leads to the following difference in assignments of PCI resources when honoring E820 reservations
->>
->> [    0.966573] pci 0000:00:1c.0: BAR 14: assigned [mem 0xdfb00000-0xdfcfffff]
->> [    0.966698] pci_bus 0000:02: resource 1 [mem 0xdfb00000-0xdfcfffff]
->>
->> vs the following when ignoring E820 reservations:
->>
->> [    0.966850] pci 0000:00:1c.0: BAR 14: assigned [mem 0xdfa00000-0xdfbfffff]
->> [    0.966973] pci_bus 0000:02: resource 1 [mem 0xdfa00000-0xdfbfffff]
->>
->> And the overlap of 0xdfa00000-0xdfa0ffff from the e820 reservations seems to be what is causing the suspend/resume issue.
-> 
-> Any idea what is using that range?
+Assorted minor changes to the MPFS/Icicle kit device tree:
 
-No, no clue I'm afraid.
+- rename serial to mmuart to match microchip documentation
+- move phy0 inside mac1 node to match phy configuration
+- add labels where missing (cpus, cache controller)
+- add missing address cells & interrupts to MACs
 
->> ###
->>
->> As already somewhat discussed, I'll go and prepare this solution instead:
->>
->> 1. Add E820_TYPE_MMIO to enum e820_type and modify the 2 places which check for
->>    type == reserved to treat this as reserved too, so as to not have any
->>    functional changes there
->>
->> 2. Modify the code building e820 tables from the EFI memmap to use
->>    E820_TYPE_MMIO for MMIO EFI memmap entries.
->>
->> 3. Modify arch/x86/kernel/resource.c: remove_e820_regions() to skip
->>    e820 table entries with a type of E820_TYPE_MMIO,
->>    this would actually be a functional change and should fix the
->>    issues we are trying to fix.
-> 
-> Given the above regression, I can't think of a better way to solve this.
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+---
+ .../microchip/microchip-mpfs-icicle-kit.dts   | 37 ++++++-----
+ .../boot/dts/microchip/microchip-mpfs.dtsi    | 65 +++++++++----------
+ 2 files changed, 52 insertions(+), 50 deletions(-)
 
-Ack, note I'm still waiting for efi=debug output from the X1 carbon gen 2,
-so I hope that what seems to be the conflicting range is not also marked
-as EFI_MEMORY_MAPPED_IO. Otherwise things will get a bit more complicated (*)
-
-Regards,
-
-Hans
-
-*) On the systems where the EFI_MEMORY_MAPPED_IO memmap entries are causing
-issues they fully overlap the PCI bridge window, so we can use that as an
-extra check if necessary.
-
-
-
-
-> 
+diff --git a/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts b/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
+index ab803f71626a..c51bd7cf500f 100644
+--- a/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
++++ b/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: (GPL-2.0 OR MIT)
+-/* Copyright (c) 2020 Microchip Technology Inc */
++/* Copyright (c) 2020-2021 Microchip Technology Inc */
+ 
+ /dts-v1/;
+ 
+@@ -13,11 +13,11 @@ / {
+ 	compatible = "microchip,mpfs-icicle-kit", "microchip,mpfs";
+ 
+ 	aliases {
+-		ethernet0 = &emac1;
+-		serial0 = &serial0;
+-		serial1 = &serial1;
+-		serial2 = &serial2;
+-		serial3 = &serial3;
++		ethernet0 = &mac1;
++		serial0 = &mmuart0;
++		serial1 = &mmuart1;
++		serial2 = &mmuart2;
++		serial3 = &mmuart3;
+ 	};
+ 
+ 	chosen {
+@@ -39,19 +39,19 @@ &refclk {
+ 	clock-frequency = <600000000>;
+ };
+ 
+-&serial0 {
++&mmuart0 {
+ 	status = "okay";
+ };
+ 
+-&serial1 {
++&mmuart1 {
+ 	status = "okay";
+ };
+ 
+-&serial2 {
++&mmuart2 {
+ 	status = "okay";
+ };
+ 
+-&serial3 {
++&mmuart3 {
+ 	status = "okay";
+ };
+ 
+@@ -61,7 +61,10 @@ &mmc {
+ 	bus-width = <4>;
+ 	disable-wp;
+ 	cap-sd-highspeed;
++	cap-mmc-highspeed;
+ 	card-detect-delay = <200>;
++	mmc-ddr-1_8v;
++	mmc-hs200-1_8v;
+ 	sd-uhs-sdr12;
+ 	sd-uhs-sdr25;
+ 	sd-uhs-sdr50;
+@@ -72,22 +75,22 @@ &i2c2 {
+ 	status = "okay";
+ };
+ 
+-&emac0 {
++&mac0 {
+ 	phy-mode = "sgmii";
+ 	phy-handle = <&phy0>;
+-	phy0: ethernet-phy@8 {
+-		reg = <8>;
+-		ti,fifo-depth = <0x01>;
+-	};
+ };
+ 
+-&emac1 {
++&mac1 {
+ 	status = "okay";
+ 	phy-mode = "sgmii";
+ 	phy-handle = <&phy1>;
+ 	phy1: ethernet-phy@9 {
+ 		reg = <9>;
+-		ti,fifo-depth = <0x01>;
++		ti,fifo-depth = <0x1>;
++	};
++	phy0: ethernet-phy@8 {
++		reg = <8>;
++		ti,fifo-depth = <0x1>;
+ 	};
+ };
+ 
+diff --git a/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi b/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
+index c7d73756c9b8..62bd00092bcc 100644
+--- a/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
++++ b/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: (GPL-2.0 OR MIT)
+-/* Copyright (c) 2020 Microchip Technology Inc */
++/* Copyright (c) 2020-2021 Microchip Technology Inc */
+ 
+ /dts-v1/;
+ #include "dt-bindings/clock/microchip,mpfs-clock.h"
+@@ -15,7 +15,7 @@ cpus {
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+ 
+-		cpu@0 {
++		cpu0: cpu@0 {
+ 			compatible = "sifive,e51", "sifive,rocket0", "riscv";
+ 			device_type = "cpu";
+ 			i-cache-block-size = <64>;
+@@ -33,7 +33,7 @@ cpu0_intc: interrupt-controller {
+ 			};
+ 		};
+ 
+-		cpu@1 {
++		cpu1: cpu@1 {
+ 			compatible = "sifive,u54-mc", "sifive,rocket0", "riscv";
+ 			d-cache-block-size = <64>;
+ 			d-cache-sets = <64>;
+@@ -60,7 +60,7 @@ cpu1_intc: interrupt-controller {
+ 			};
+ 		};
+ 
+-		cpu@2 {
++		cpu2: cpu@2 {
+ 			compatible = "sifive,u54-mc", "sifive,rocket0", "riscv";
+ 			d-cache-block-size = <64>;
+ 			d-cache-sets = <64>;
+@@ -87,7 +87,7 @@ cpu2_intc: interrupt-controller {
+ 			};
+ 		};
+ 
+-		cpu@3 {
++		cpu3: cpu@3 {
+ 			compatible = "sifive,u54-mc", "sifive,rocket0", "riscv";
+ 			d-cache-block-size = <64>;
+ 			d-cache-sets = <64>;
+@@ -114,7 +114,7 @@ cpu3_intc: interrupt-controller {
+ 			};
+ 		};
+ 
+-		cpu@4 {
++		cpu4: cpu@4 {
+ 			compatible = "sifive,u54-mc", "sifive,rocket0", "riscv";
+ 			d-cache-block-size = <64>;
+ 			d-cache-sets = <64>;
+@@ -152,8 +152,9 @@ soc {
+ 		compatible = "simple-bus";
+ 		ranges;
+ 
+-		cache-controller@2010000 {
++		cctrllr: cache-controller@2010000 {
+ 			compatible = "sifive,fu540-c000-ccache", "cache";
++			reg = <0x0 0x2010000 0x0 0x1000>;
+ 			cache-block-size = <64>;
+ 			cache-level = <2>;
+ 			cache-sets = <1024>;
+@@ -161,10 +162,9 @@ cache-controller@2010000 {
+ 			cache-unified;
+ 			interrupt-parent = <&plic>;
+ 			interrupts = <1>, <2>, <3>;
+-			reg = <0x0 0x2010000 0x0 0x1000>;
+ 		};
+ 
+-		clint@2000000 {
++		clint: clint@2000000 {
+ 			compatible = "sifive,fu540-c000-clint", "sifive,clint0";
+ 			reg = <0x0 0x2000000 0x0 0xC000>;
+ 			interrupts-extended = <&cpu0_intc 3>, <&cpu0_intc 7>,
+@@ -174,6 +174,15 @@ clint@2000000 {
+ 					      <&cpu4_intc 3>, <&cpu4_intc 7>;
+ 		};
+ 
++		dma@3000000 {
++			compatible = "sifive,fu540-c000-pdma";
++			reg = <0x0 0x3000000 0x0 0x8000>;
++			interrupt-parent = <&plic>;
++			interrupts = <23>, <24>, <25>, <26>, <27>, <28>, <29>,
++				     <30>;
++			#dma-cells = <1>;
++		};
++
+ 		plic: interrupt-controller@c000000 {
+ 			compatible = "sifive,fu540-c000-plic", "sifive,plic-1.0.0";
+ 			reg = <0x0 0xc000000 0x0 0x4000000>;
+@@ -188,15 +197,6 @@ plic: interrupt-controller@c000000 {
+ 			riscv,ndev = <186>;
+ 		};
+ 
+-		dma@3000000 {
+-			compatible = "sifive,fu540-c000-pdma";
+-			reg = <0x0 0x3000000 0x0 0x8000>;
+-			interrupt-parent = <&plic>;
+-			interrupts = <23>, <24>, <25>, <26>, <27>, <28>, <29>,
+-				     <30>;
+-			#dma-cells = <1>;
+-		};
+-
+ 		clkcfg: clkcfg@20002000 {
+ 			compatible = "microchip,mpfs-clkcfg";
+ 			reg = <0x0 0x20002000 0x0 0x1000>;
+@@ -204,7 +204,7 @@ clkcfg: clkcfg@20002000 {
+ 			#clock-cells = <1>;
+ 		};
+ 
+-		serial0: serial@20000000 {
++		mmuart0: serial@20000000 {
+ 			compatible = "ns16550a";
+ 			reg = <0x0 0x20000000 0x0 0x400>;
+ 			reg-io-width = <4>;
+@@ -216,7 +216,7 @@ serial0: serial@20000000 {
+ 			status = "disabled";
+ 		};
+ 
+-		serial1: serial@20100000 {
++		mmuart1: serial@20100000 {
+ 			compatible = "ns16550a";
+ 			reg = <0x0 0x20100000 0x0 0x400>;
+ 			reg-io-width = <4>;
+@@ -228,7 +228,7 @@ serial1: serial@20100000 {
+ 			status = "disabled";
+ 		};
+ 
+-		serial2: serial@20102000 {
++		mmuart2: serial@20102000 {
+ 			compatible = "ns16550a";
+ 			reg = <0x0 0x20102000 0x0 0x400>;
+ 			reg-io-width = <4>;
+@@ -240,7 +240,7 @@ serial2: serial@20102000 {
+ 			status = "disabled";
+ 		};
+ 
+-		serial3: serial@20104000 {
++		mmuart3: serial@20104000 {
+ 			compatible = "ns16550a";
+ 			reg = <0x0 0x20104000 0x0 0x400>;
+ 			reg-io-width = <4>;
+@@ -257,37 +257,36 @@ mmc: mmc@20008000 {
+ 			compatible = "microchip,mpfs-sd4hc", "cdns,sd4hc";
+ 			reg = <0x0 0x20008000 0x0 0x1000>;
+ 			interrupt-parent = <&plic>;
+-			interrupts = <88>, <89>;
++			interrupts = <88>;
+ 			clocks = <&clkcfg CLK_MMC>;
+ 			max-frequency = <200000000>;
+ 			status = "disabled";
+ 		};
+ 
+-		emac0: ethernet@20110000 {
++		mac0: ethernet@20110000 {
+ 			compatible = "cdns,macb";
+ 			reg = <0x0 0x20110000 0x0 0x2000>;
++			#address-cells = <1>;
++			#size-cells = <0>;
+ 			interrupt-parent = <&plic>;
+-			interrupts = <64>, <65>, <66>, <67>;
++			interrupts = <64>, <65>, <66>, <67>, <68>, <69>;
+ 			local-mac-address = [00 00 00 00 00 00];
+ 			clocks = <&clkcfg CLK_MAC0>, <&clkcfg CLK_AHB>;
+ 			clock-names = "pclk", "hclk";
+ 			status = "disabled";
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+ 		};
+ 
+-		emac1: ethernet@20112000 {
++		mac1: ethernet@20112000 {
+ 			compatible = "cdns,macb";
+ 			reg = <0x0 0x20112000 0x0 0x2000>;
++			#address-cells = <1>;
++			#size-cells = <0>;
+ 			interrupt-parent = <&plic>;
+-			interrupts = <70>, <71>, <72>, <73>;
++			interrupts = <70>, <71>, <72>, <73>, <74>, <75>;
+ 			local-mac-address = [00 00 00 00 00 00];
+ 			clocks = <&clkcfg CLK_MAC1>, <&clkcfg CLK_AHB>;
+-			status = "disabled";
+ 			clock-names = "pclk", "hclk";
+-			#address-cells = <1>;
+-			#size-cells = <0>;
++			status = "disabled";
+ 		};
+-
+ 	};
+ };
+-- 
+2.35.1
 

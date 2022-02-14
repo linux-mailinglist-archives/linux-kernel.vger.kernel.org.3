@@ -2,112 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38BE94B509C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:51:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E964B50B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353530AbiBNMup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 07:50:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43102 "EHLO
+        id S234450AbiBNMwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 07:52:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242811AbiBNMun (ORCPT
+        with ESMTP id S233646AbiBNMwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 07:50:43 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3FE4B873;
-        Mon, 14 Feb 2022 04:50:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644843035; x=1676379035;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=Eb6rJWw2D0/3or5NxM/OEIohDMtNNIjXLf3CGb8tFSs=;
-  b=oGAFyXjl4N6S2DGcpLM4IwF308xkIGzaX4vjfWZ5Vm72eJcScjNBBpAa
-   Ebu77i/dAf2jxSMDnZ2k2SPJALmTASrMVPWDBj9amZNn/3iKOrP/GeTBT
-   8DHibcqW6LjQbMMYMKgxVMBqZZwwX/eHjpIkNfjeurCHr/zfS7Ih4GFuA
-   ObZCKD+q1gAO/2HWd9ZVvwWPv9YZNOy7TRt56VcaDlJEurolWZiPFJHmn
-   T+SnyFhLANyQBEks+8HdtdLY59A48XXxbn5PBpgkHe9pbPnGvdWRU4DVL
-   DV3zPUVJ6GWA/8mIcyFtULCAl1bBVybQC+l0mqVL2eKNIe+sVkQP2UcRk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="274652689"
-X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="274652689"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 04:50:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="570163664"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 14 Feb 2022 04:50:17 -0800
-To:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_ugoswami@quicinc.com, Jung Daehwan <dh10.jung@samsung.com>
-References: <1644836663-29220-1-git-send-email-quic_pkondeti@quicinc.com>
- <1644841216-1468-1-git-send-email-quic_pkondeti@quicinc.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v2] xhci: reduce xhci_handshake timeout in xhci_reset
-Message-ID: <d82746d2-4096-1477-42dd-fd393e0ff827@linux.intel.com>
-Date:   Mon, 14 Feb 2022 14:51:54 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        Mon, 14 Feb 2022 07:52:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C870F390
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 04:52:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A930B80B77
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:52:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34CC5C340E9;
+        Mon, 14 Feb 2022 12:52:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644843123;
+        bh=qZZL3k/srsL0cacI2dYaRDA5v2y/I+P6sZLsJJUzXNA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NwXlG5Css/P/t5WlUetNlWNmAG0HoTD16Szv2Tnxxyc9/DRgW6bLnFULMjpdOIDpw
+         vf+n9CubAhjdXLSaD3/82rrLRhzIqHqw608fE8WG2E2rrckgu98nHA6ZwPEFJ2MKQ/
+         GsYrmUBMK0a2txnuwcASEz11KKE/xQZJkSok5EYnClp732ugrTwsQLbkNoIf2xIuc3
+         exQXqkgu3UiKUkbTOmy62ewYSYqbdHTTwC9U22TzUyitPWc5qCizEQNOm4vbfIcmUG
+         RqWghYueiugr9zMLmDRJ2JI18Vua3o39cswxRY9ehv1b/TjOxrar3ss4hswIOK5vnq
+         6nW9xOSF2CK3A==
+Date:   Mon, 14 Feb 2022 12:51:59 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     trix@redhat.com
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] regmap: irq: cleanup comments
+Message-ID: <YgpQb700FoVnuszJ@sirena.org.uk>
+References: <20220212143144.2648689-1-trix@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <1644841216-1468-1-git-send-email-quic_pkondeti@quicinc.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="l1KNKQvblXkYQ60s"
+Content-Disposition: inline
+In-Reply-To: <20220212143144.2648689-1-trix@redhat.com>
+X-Cookie: Am I in GRADUATE SCHOOL yet?
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.2.2022 14.20, Pavankumar Kondeti wrote:
-> From: Daehwan Jung <dh10.jung@samsung.com>
-> 
-> xhci_reset() is called with interrupts disabled. Waiting 10 seconds for
-> controller reset and controller ready operations can be fatal to the
-> system when controller is timed out. Reduce the timeout to 1 second
-> and print a error message when the time out happens.
-> 
-> Fixes: 22ceac191211 ("xhci: Increase reset timeout for Renesas 720201 host.")
 
+--l1KNKQvblXkYQ60s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The commit 22ceac191211 ("xhci: Increase reset timeout for Renesas 720201 host.")
-intentionally increased the timeout to 10 seconds as that host might take 9
-seconds to complete reset. This was done almost 10 years ago so I don't know
-if it really is an issue anymore.
+On Sat, Feb 12, 2022 at 06:31:44AM -0800, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+>=20
+> Replace the second 'which' with 'the'.
+> Change 'acknowleding' to 'acknowledging'.
 
-Anyways, your patch might break Renesas 72021 instead of fixing it.
+This is two separate changes sent in a single patch, please don't do
+that - send two patches if you have two changes.
 
-I agree that busylooping up to 10 seconds with interrupts disabled doesn't make sense.
+--l1KNKQvblXkYQ60s
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Lets see if there is another solution for your case.
+-----BEGIN PGP SIGNATURE-----
 
-- Does a "guard interval" after writing the reset help?
-  For example Intel xHCI needs 1ms before touching xHC after writing the reset bit
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIKUG4ACgkQJNaLcl1U
+h9CoDwf/RCz97zzMExmBE7Ym4jfJg6wzIDIG+AhJYv5Mw1gDPxQBU8r0rlVEfuYt
+9D/oA8cb08RVNg7I6uIXrPZz9+36eqFHLpE3APXlBtUepLTNilFhPU8xfv9wz1Vd
+JIuA7igc5b+RnFiREXhFaYTAPrkMzRFR7LWbEXc/3SiKhglpmSNFkD65Bsf/4uIb
+JQxZ6dQmQKYmki0OVz/eLj4S5F4e50/OxETOeDQvFzsOQF/CMdmazZkuv6s8msWP
+ZJl7+NkTt2vmXWHu+1+WQ2m/S6KuSnABXdDATVW6zq5o/0fIrkU8q7xMlBA1QWAK
+8PUHcyObXe3ZFbK5bGpjs79R24nLOQ==
+=Tn71
+-----END PGP SIGNATURE-----
 
-- Is it the CNR bit or the RESET bit that fails? could be just stuck CNR bit? 
- 
-- we only disable local interrupts when xhci_reset() is called from xhci_stop(),
-  and sometimes from xhci_shutdown() and xhci_resume() if some conditions are met.
-  Have you identified which one is the problematic case?
-
-  I think we halt the host in the above case first, meaning there should be no
-  xHC interrupts when xhci_reset() is called. So if we could guarantee xhci interrupt
-  isn't handled on this cpu, maybe we could somehow enable local interrupt after 
-  halting the host?
-
-  haven't really thought this true yet, but something like this could e investigated:
-
-  spin_lock_irqsave()
-  xhci_halt()
-  < enable interrupts, magically turn spin_lock_irqsave() to just keeping spin lock>
-  xhci_reset()
-  spin_unlock()
-
--Mathias
+--l1KNKQvblXkYQ60s--

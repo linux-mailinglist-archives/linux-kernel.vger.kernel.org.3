@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBEA94B46D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4026A4B4A5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235428AbiBNJsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:48:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43300 "EHLO
+        id S1347911AbiBNKb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:31:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245699AbiBNJqH (ORCPT
+        with ESMTP id S1348057AbiBNKap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:46:07 -0500
+        Mon, 14 Feb 2022 05:30:45 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A5365835;
-        Mon, 14 Feb 2022 01:39:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334C39BF51;
+        Mon, 14 Feb 2022 01:59:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D58AD60F87;
-        Mon, 14 Feb 2022 09:39:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B440C340E9;
-        Mon, 14 Feb 2022 09:39:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E122260A6B;
+        Mon, 14 Feb 2022 09:59:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1183C340EF;
+        Mon, 14 Feb 2022 09:59:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831566;
-        bh=UAB7gaH3NgMrAcDUBNS5Abh/HcDIdCVCCYEvBt09frA=;
+        s=korg; t=1644832741;
+        bh=OEDJNIYHkJ6QNba+OjECjhNgSeZq5mr0y+XWi/DAICA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s8qeWSCdW47RQq8EyDndLkns7oE6a34OP9ER2YgwQf6uGCSFy01eUapnSRY6Xi2u+
-         2KhIcxfKg0e5nx4ODuBcEPCNGpT/JxdaurMAV9yP4ZIPq56zGRkEpkllwq+Sx/VJlK
-         2r6mjy8jHc0RpPVmYRYdkXIZtN/FRK8df+yfWeOg=
+        b=CdQO1uR8O2vYV9zRw5PrP59xIgrOHYS8V5zbSv7uBiXSzY5+PVhvmp9VAnSrtHofd
+         BHT++CtC/Llydbm9vngq62QoRVo/QudTpbLJg2HNpvasbbsKcGHmBe5UgibMW4D2Bv
+         Owfo3NAS0vavLiHL/bP7hRYtnggfOKlrPI9T+LzI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Victor Nogueira <victor@mojatatu.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 023/116] net: sched: Clarify error message when qdisc kind is unknown
+        stable@vger.kernel.org, Bob Peterson <rpeterso@redhat.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>
+Subject: [PATCH 5.16 078/203] gfs2: Fix gfs2_release for non-writers regression
 Date:   Mon, 14 Feb 2022 10:25:22 +0100
-Message-Id: <20220214092459.484974538@linuxfoundation.org>
+Message-Id: <20220214092512.927908552@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Victor Nogueira <victor@mojatatu.com>
+From: Bob Peterson <rpeterso@redhat.com>
 
-[ Upstream commit 973bf8fdd12f0e70ea351c018e68edd377a836d1 ]
+commit d3add1a9519dcacd6e644ecac741c56cf18b67f5 upstream.
 
-When adding a tc rule with a qdisc kind that is not supported or not
-compiled into the kernel, the kernel emits the following error: "Error:
-Specified qdisc not found.". Found via tdc testing when ETS qdisc was not
-compiled in and it was not obvious right away what the message meant
-without looking at the kernel code.
+When a file is opened for writing, the vfs code (do_dentry_open)
+calls get_write_access for the inode, thus incrementing the inode's write
+count. That writer normally then creates a multi-block reservation for
+the inode (i_res) that can be re-used by other writers, which speeds up
+writes for applications that stupidly loop on open/write/close.
+When the writes are all done, the multi-block reservation should be
+deleted when the file is closed by the last "writer."
 
-Change the error message to be more explicit and say the qdisc kind is
-unknown.
+Commit 0ec9b9ea4f83 broke that concept when it moved the call to
+gfs2_rs_delete before the check for FMODE_WRITE.  Non-writers have no
+business removing the multi-block reservations of writers. In fact, if
+someone opens and closes the file for RO while a writer has a
+multi-block reservation, the RO closer will delete the reservation
+midway through the write, and this results in:
 
-Signed-off-by: Victor Nogueira <victor@mojatatu.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+kernel BUG at fs/gfs2/rgrp.c:677! (or thereabouts) which is:
+BUG_ON(rs->rs_requested); from function gfs2_rs_deltree.
+
+This patch moves the check back inside the check for FMODE_WRITE.
+
+Fixes: 0ec9b9ea4f83 ("gfs2: Check for active reservation in gfs2_release")
+Cc: stable@vger.kernel.org # v5.12+
+Signed-off-by: Bob Peterson <rpeterso@redhat.com>
+Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sched/sch_api.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/gfs2/file.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/net/sched/sch_api.c b/net/sched/sch_api.c
-index 7b24582a8a164..6758968e79327 100644
---- a/net/sched/sch_api.c
-+++ b/net/sched/sch_api.c
-@@ -1204,7 +1204,7 @@ static struct Qdisc *qdisc_create(struct net_device *dev,
+--- a/fs/gfs2/file.c
++++ b/fs/gfs2/file.c
+@@ -704,10 +704,11 @@ static int gfs2_release(struct inode *in
+ 	kfree(file->private_data);
+ 	file->private_data = NULL;
  
- 	err = -ENOENT;
- 	if (!ops) {
--		NL_SET_ERR_MSG(extack, "Specified qdisc not found");
-+		NL_SET_ERR_MSG(extack, "Specified qdisc kind is unknown");
- 		goto err_out;
- 	}
+-	if (gfs2_rs_active(&ip->i_res))
+-		gfs2_rs_delete(ip, &inode->i_writecount);
+-	if (file->f_mode & FMODE_WRITE)
++	if (file->f_mode & FMODE_WRITE) {
++		if (gfs2_rs_active(&ip->i_res))
++			gfs2_rs_delete(ip, &inode->i_writecount);
+ 		gfs2_qa_put(ip);
++	}
+ 	return 0;
+ }
  
--- 
-2.34.1
-
 
 

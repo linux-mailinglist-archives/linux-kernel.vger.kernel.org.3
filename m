@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4524B45B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:28:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEA54B4603
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242999AbiBNJ2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:28:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41182 "EHLO
+        id S234531AbiBNJbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:31:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240782AbiBNJ21 (ORCPT
+        with ESMTP id S243504AbiBNJbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:28:27 -0500
+        Mon, 14 Feb 2022 04:31:18 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F91A60AA4;
-        Mon, 14 Feb 2022 01:28:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71497BF64;
+        Mon, 14 Feb 2022 01:30:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C6EF60F6F;
-        Mon, 14 Feb 2022 09:28:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7DDAC340E9;
-        Mon, 14 Feb 2022 09:28:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05B5D60F8F;
+        Mon, 14 Feb 2022 09:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9270C340EF;
+        Mon, 14 Feb 2022 09:30:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644830896;
-        bh=hRtrWBykj6E5T6iIICRlVCXt4vP+E52UMPBoKDEpMrQ=;
+        s=korg; t=1644831018;
+        bh=nwAcgOvUUbyu0b9uqfYy5jUAsPqE5sOsSIj2K8lsWbc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JK9e577jt4KoioZQrM0QMJoJiedHtGZs/4Mdo1hcgXxj0GNYCCCCVfjFQtgtWpXi6
-         bUo2tr/YuW8NN4zJ/ANQCkT9iB/ZmauXiMwh5CrKjGjx47F88UEr96/74RWuGX6eVJ
-         RZY9YANqNsdQepSr4xtcO0A9z421Gf66jkf8dd/A=
+        b=Ny0O3+gUmhLJKOQYRXewrbFKp3kadr+oKHF59i9ihypUlnjJHGaRlbaYGIxzUphuP
+         NskXIz24yXy/Cm8yVpxJYGNPJVZtzZRH0ygn00/rMcMZj+Ief71I9028hnn4oal4YN
+         62q9rUF9dXhfynFXSF436ISb/mutVobPLdKL6xj8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 15/34] staging: fbtft: Fix error path in fbtft_driver_module_init()
+        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: [PATCH 4.14 18/44] ARM: dts: imx23-evk: Remove MX23_PAD_SSP1_DETECT from hog group
 Date:   Mon, 14 Feb 2022 10:25:41 +0100
-Message-Id: <20220214092446.440462381@linuxfoundation.org>
+Message-Id: <20220214092448.505375269@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
-References: <20220214092445.946718557@linuxfoundation.org>
+In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
+References: <20220214092447.897544753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: Fabio Estevam <festevam@gmail.com>
 
-[ Upstream commit 426aca16e903b387a0b0001d62207a745c67cfd3 ]
+commit 42c9b28e6862d16db82a56f5667cf4d1f6658cf6 upstream.
 
-If registering the platform driver fails, the function must not return
-without undoing the spi driver registration first.
+Currently, SD card fails to mount due to the following pinctrl error:
 
-Fixes: c296d5f9957c ("staging: fbtft: core support")
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Link: https://lore.kernel.org/r/20220118181338.207943-1-u.kleine-koenig@pengutronix.de
+[   11.170000] imx23-pinctrl 80018000.pinctrl: pin SSP1_DETECT already requested by 80018000.pinctrl; cannot claim for 80010000.spi
+[   11.180000] imx23-pinctrl 80018000.pinctrl: pin-65 (80010000.spi) status -22
+[   11.190000] imx23-pinctrl 80018000.pinctrl: could not request pin 65 (SSP1_DETECT) from group mmc0-pins-fixup.0  on device 80018000.pinctrl
+[   11.200000] mxs-mmc 80010000.spi: Error applying setting, reverse things back
+
+Fix it by removing the MX23_PAD_SSP1_DETECT pin from the hog group as it
+is already been used by the mmc0-pins-fixup pinctrl group.
+
+With this change the rootfs can be mounted and the imx23-evk board can
+boot successfully.
+
+Cc: <stable@vger.kernel.org>
+Fixes: bc3875f1a61e ("ARM: dts: mxs: modify mx23/mx28 dts files to use pinctrl headers")
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/fbtft/fbtft.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/imx23-evk.dts |    1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/staging/fbtft/fbtft.h b/drivers/staging/fbtft/fbtft.h
-index 0275319906748..a76723a4219a6 100644
---- a/drivers/staging/fbtft/fbtft.h
-+++ b/drivers/staging/fbtft/fbtft.h
-@@ -343,7 +343,10 @@ static int __init fbtft_driver_module_init(void)                           \
- 	ret = spi_register_driver(&fbtft_driver_spi_driver);               \
- 	if (ret < 0)                                                       \
- 		return ret;                                                \
--	return platform_driver_register(&fbtft_driver_platform_driver);    \
-+	ret = platform_driver_register(&fbtft_driver_platform_driver);     \
-+	if (ret < 0)                                                       \
-+		spi_unregister_driver(&fbtft_driver_spi_driver);           \
-+	return ret;                                                        \
- }                                                                          \
- 									   \
- static void __exit fbtft_driver_module_exit(void)                          \
--- 
-2.34.1
-
+--- a/arch/arm/boot/dts/imx23-evk.dts
++++ b/arch/arm/boot/dts/imx23-evk.dts
+@@ -48,7 +48,6 @@
+ 						MX23_PAD_LCD_RESET__GPIO_1_18
+ 						MX23_PAD_PWM3__GPIO_1_29
+ 						MX23_PAD_PWM4__GPIO_1_30
+-						MX23_PAD_SSP1_DETECT__SSP1_DETECT
+ 					>;
+ 					fsl,drive-strength = <MXS_DRIVE_4mA>;
+ 					fsl,voltage = <MXS_VOLTAGE_HIGH>;
 
 

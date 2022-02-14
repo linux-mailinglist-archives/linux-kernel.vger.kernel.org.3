@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E724B474D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 800494B488E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245192AbiBNJo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:44:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33138 "EHLO
+        id S1344354AbiBNJ4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:56:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245556AbiBNJlk (ORCPT
+        with ESMTP id S1344257AbiBNJvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:41:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F9F65824;
-        Mon, 14 Feb 2022 01:37:36 -0800 (PST)
+        Mon, 14 Feb 2022 04:51:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8F769484;
+        Mon, 14 Feb 2022 01:42:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8726AB80DC8;
-        Mon, 14 Feb 2022 09:37:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4EBEC340EF;
-        Mon, 14 Feb 2022 09:37:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85D3D61190;
+        Mon, 14 Feb 2022 09:42:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E952C340E9;
+        Mon, 14 Feb 2022 09:42:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831454;
-        bh=hBXwcKH8k+zEpg1EUB7WTJMbXB/JJNlZlsdTHpX67CY=;
+        s=korg; t=1644831761;
+        bh=7xkJakGSNhfRZ3mu004MFMQyYo6ZCPySJbHzwKQxZY0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UUGV+d9BBa+bUNUiA0tWzCtz5Qy9hE9x5Pm7JJTSN18H6ALtmjsCz+mhCUxlkdmBN
-         Jez9vUvHz7ZyPGtlwE8+UfhvF3Tkb/NUqzjALj1jwJLq+IPTqNZ+8BHdFMGcZulgq8
-         s+xNjVPNrw3SCW+8G92Ng/MGk+7VJFjXdchLL0wA=
+        b=BR/i0E0ghxETsAJ+BjEOmVUsodKbdqGjzul0WKUbsPM0cggjK4paGROG6FF/0g008
+         uE1JJvS0d9w7Tpev7RJSw5Whp4zqfdt++MRUpO0m+XDavJtlgoEDIBl8gc2gXnJ30Z
+         s8qZ4S6kNbQkXxLgtOhUTL+cWtacZZ89d2BkK4EE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Samuel Mendoza-Jonas <samjonas@amazon.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 40/71] ixgbevf: Require large buffers for build_skb on 82599VF
-Date:   Mon, 14 Feb 2022 10:26:08 +0100
-Message-Id: <20220214092453.385324672@linuxfoundation.org>
+Subject: [PATCH 5.10 070/116] net: dsa: ar9331: register the mdiobus under devres
+Date:   Mon, 14 Feb 2022 10:26:09 +0100
+Message-Id: <20220214092501.170736461@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,72 +57,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Mendoza-Jonas <samjonas@amazon.com>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-[ Upstream commit fe68195daf34d5dddacd3f93dd3eafc4beca3a0e ]
+[ Upstream commit 50facd86e9fbc4b93fe02e5fe05776047f45dbfb ]
 
->From 4.17 onwards the ixgbevf driver uses build_skb() to build an skb
-around new data in the page buffer shared with the ixgbe PF.
-This uses either a 2K or 3K buffer, and offsets the DMA mapping by
-NET_SKB_PAD + NET_IP_ALIGN. When using a smaller buffer RXDCTL is set to
-ensure the PF does not write a full 2K bytes into the buffer, which is
-actually 2K minus the offset.
+As explained in commits:
+74b6d7d13307 ("net: dsa: realtek: register the MDIO bus under devres")
+5135e96a3dd2 ("net: dsa: don't allocate the slave_mii_bus using devres")
 
-However on the 82599 virtual function, the RXDCTL mechanism is not
-available. The driver attempts to work around this by using the SET_LPE
-mailbox method to lower the maximm frame size, but the ixgbe PF driver
-ignores this in order to keep the PF and all VFs in sync[0].
+mdiobus_free() will panic when called from devm_mdiobus_free() <-
+devres_release_all() <- __device_release_driver(), and that mdiobus was
+not previously unregistered.
 
-This means the PF will write up to the full 2K set in SRRCTL, causing it
-to write NET_SKB_PAD + NET_IP_ALIGN bytes past the end of the buffer.
-With 4K pages split into two buffers, this means it either writes
-NET_SKB_PAD + NET_IP_ALIGN bytes past the first buffer (and into the
-second), or NET_SKB_PAD + NET_IP_ALIGN bytes past the end of the DMA
-mapping.
+The ar9331 is an MDIO device, so the initial set of constraints that I
+thought would cause this (I2C or SPI buses which call ->remove on
+->shutdown) do not apply. But there is one more which applies here.
 
-Avoid this by only enabling build_skb when using "large" buffers (3K).
-These are placed in each half of an order-1 page, preventing the PF from
-writing past the end of the mapping.
+If the DSA master itself is on a bus that calls ->remove from ->shutdown
+(like dpaa2-eth, which is on the fsl-mc bus), there is a device link
+between the switch and the DSA master, and device_links_unbind_consumers()
+will unbind the ar9331 switch driver on shutdown.
 
-[0]: Technically it only ever raises the max frame size, see
-ixgbe_set_vf_lpe() in ixgbe_sriov.c
+So the same treatment must be applied to all DSA switch drivers, which
+is: either use devres for both the mdiobus allocation and registration,
+or don't use devres at all.
 
-Fixes: f15c5ba5b6cd ("ixgbevf: add support for using order 1 pages to receive large frames")
-Signed-off-by: Samuel Mendoza-Jonas <samjonas@amazon.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+The ar9331 driver doesn't have a complex code structure for mdiobus
+removal, so just replace of_mdiobus_register with the devres variant in
+order to be all-devres and ensure that we don't free a still-registered
+bus.
+
+Fixes: ac3a68d56651 ("net: phy: don't abuse devres in devm_mdiobus_register()")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ drivers/net/dsa/qca/ar9331.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c b/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-index be8e6d4e376ec..9bd02766a4bcc 100644
---- a/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-+++ b/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-@@ -1979,14 +1979,15 @@ static void ixgbevf_set_rx_buffer_len(struct ixgbevf_adapter *adapter,
- 	if (adapter->flags & IXGBEVF_FLAGS_LEGACY_RX)
- 		return;
+diff --git a/drivers/net/dsa/qca/ar9331.c b/drivers/net/dsa/qca/ar9331.c
+index 661745932a539..c33bdcf7efc58 100644
+--- a/drivers/net/dsa/qca/ar9331.c
++++ b/drivers/net/dsa/qca/ar9331.c
+@@ -289,7 +289,7 @@ static int ar9331_sw_mbus_init(struct ar9331_sw_priv *priv)
+ 	if (!mnp)
+ 		return -ENODEV;
  
--	set_ring_build_skb_enabled(rx_ring);
-+	if (PAGE_SIZE < 8192)
-+		if (max_frame > IXGBEVF_MAX_FRAME_BUILD_SKB)
-+			set_ring_uses_large_buffer(rx_ring);
+-	ret = of_mdiobus_register(mbus, mnp);
++	ret = devm_of_mdiobus_register(dev, mbus, mnp);
+ 	of_node_put(mnp);
+ 	if (ret)
+ 		return ret;
+@@ -856,7 +856,6 @@ static void ar9331_sw_remove(struct mdio_device *mdiodev)
+ 	struct ar9331_sw_priv *priv = dev_get_drvdata(&mdiodev->dev);
  
--	if (PAGE_SIZE < 8192) {
--		if (max_frame <= IXGBEVF_MAX_FRAME_BUILD_SKB)
--			return;
-+	/* 82599 can't rely on RXDCTL.RLPML to restrict the size of the frame */
-+	if (adapter->hw.mac.type == ixgbe_mac_82599_vf && !ring_uses_large_buffer(rx_ring))
-+		return;
+ 	irq_domain_remove(priv->irqdomain);
+-	mdiobus_unregister(priv->mbus);
+ 	dsa_unregister_switch(&priv->ds);
  
--		set_ring_uses_large_buffer(rx_ring);
--	}
-+	set_ring_build_skb_enabled(rx_ring);
- }
- 
- /**
+ 	reset_control_assert(priv->sw_reset);
 -- 
 2.34.1
 

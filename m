@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B4F4B4788
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A71E4B49AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244960AbiBNJop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:44:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33294 "EHLO
+        id S1345414AbiBNKKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:10:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245414AbiBNJl0 (ORCPT
+        with ESMTP id S1345888AbiBNKHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:41:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB1266F8A;
-        Mon, 14 Feb 2022 01:37:24 -0800 (PST)
+        Mon, 14 Feb 2022 05:07:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9C674DE5;
+        Mon, 14 Feb 2022 01:49:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69B86B80DC8;
-        Mon, 14 Feb 2022 09:37:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 970C9C36AE3;
-        Mon, 14 Feb 2022 09:37:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47EAEB80DC4;
+        Mon, 14 Feb 2022 09:49:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AED6C340E9;
+        Mon, 14 Feb 2022 09:49:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831442;
-        bh=faZo9xrFecfMLijsvP0bmqVgrhkZwGbWLai8sP0FYK8=;
+        s=korg; t=1644832184;
+        bh=xgvGDpPtHORyw1EJlVVMNsL8hLWusH/bXXGoEfhnHQY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TI0YPc+due7XWNdCvQ8Lcr2bNd/PmbUN0X3PItmPVtw3QuntHNMRZogIR5U32OOxq
-         dH6VuxMQ3ZYJRaU6Y9JbDQRGMsijX7Z/t8jq7RH/S+wj14Nyf16119uHKXvUB0e6if
-         7qT1FdjZ3L24GR9snzU/hT6hgDtxQlUMUs3h6gOg=
+        b=ZkUMiNTbatu78ZTd+KOLbXPMmGdlWmFbbiec7tpBQYzlO4uHQ3Q4nJuuFp3T/FYC2
+         Tnmunj235cCKdTCJRQXKY500aiV0FmhRKE2kih8/UuS+h8MtX5eObxt6X6rNRvdxA/
+         naAiWMnEVihVqgoUFkjOxotZfQiboSqvPoUGpf0Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 36/71] staging: fbtft: Fix error path in fbtft_driver_module_init()
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 106/172] ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE
 Date:   Mon, 14 Feb 2022 10:26:04 +0100
-Message-Id: <20220214092453.240557164@linuxfoundation.org>
+Message-Id: <20220214092510.074083242@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-[ Upstream commit 426aca16e903b387a0b0001d62207a745c67cfd3 ]
+[ Upstream commit dc0075ba7f387fe4c48a8c674b11ab6f374a6acc ]
 
-If registering the platform driver fails, the function must not return
-without undoing the spi driver registration first.
+Commit 4a9af6cac050 ("ACPI: EC: Rework flushing of EC work while
+suspended to idle") made acpi_ec_dispatch_gpe() check
+pm_wakeup_pending(), but that is before canceling the SCI wakeup,
+so pm_wakeup_pending() is always true.  This causes the loop in
+acpi_ec_dispatch_gpe() to always terminate after one iteration which
+may not be correct.
 
-Fixes: c296d5f9957c ("staging: fbtft: core support")
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Link: https://lore.kernel.org/r/20220118181338.207943-1-u.kleine-koenig@pengutronix.de
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Address this issue by canceling the SCI wakeup earlier, from
+acpi_ec_dispatch_gpe() itself.
+
+Fixes: 4a9af6cac050 ("ACPI: EC: Rework flushing of EC work while suspended to idle")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/fbtft/fbtft.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/acpi/ec.c    | 10 ++++++++++
+ drivers/acpi/sleep.c | 14 ++++----------
+ 2 files changed, 14 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/staging/fbtft/fbtft.h b/drivers/staging/fbtft/fbtft.h
-index 9b6bdb62093d7..736cd4955b733 100644
---- a/drivers/staging/fbtft/fbtft.h
-+++ b/drivers/staging/fbtft/fbtft.h
-@@ -332,7 +332,10 @@ static int __init fbtft_driver_module_init(void)                           \
- 	ret = spi_register_driver(&fbtft_driver_spi_driver);               \
- 	if (ret < 0)                                                       \
- 		return ret;                                                \
--	return platform_driver_register(&fbtft_driver_platform_driver);    \
-+	ret = platform_driver_register(&fbtft_driver_platform_driver);     \
-+	if (ret < 0)                                                       \
-+		spi_unregister_driver(&fbtft_driver_spi_driver);           \
-+	return ret;                                                        \
- }                                                                          \
- 									   \
- static void __exit fbtft_driver_module_exit(void)                          \
+diff --git a/drivers/acpi/ec.c b/drivers/acpi/ec.c
+index 9b859ff976e89..98d1782275440 100644
+--- a/drivers/acpi/ec.c
++++ b/drivers/acpi/ec.c
+@@ -2051,6 +2051,16 @@ bool acpi_ec_dispatch_gpe(void)
+ 	if (acpi_any_gpe_status_set(first_ec->gpe))
+ 		return true;
+ 
++	/*
++	 * Cancel the SCI wakeup and process all pending events in case there
++	 * are any wakeup ones in there.
++	 *
++	 * Note that if any non-EC GPEs are active at this point, the SCI will
++	 * retrigger after the rearming in acpi_s2idle_wake(), so no events
++	 * should be missed by canceling the wakeup here.
++	 */
++	pm_system_cancel_wakeup();
++
+ 	/*
+ 	 * Dispatch the EC GPE in-band, but do not report wakeup in any case
+ 	 * to allow the caller to process events properly after that.
+diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
+index 7ae09e4b45927..245a0fa979cbb 100644
+--- a/drivers/acpi/sleep.c
++++ b/drivers/acpi/sleep.c
+@@ -739,21 +739,15 @@ bool acpi_s2idle_wake(void)
+ 			return true;
+ 		}
+ 
+-		/* Check non-EC GPE wakeups and dispatch the EC GPE. */
++		/*
++		 * Check non-EC GPE wakeups and if there are none, cancel the
++		 * SCI-related wakeup and dispatch the EC GPE.
++		 */
+ 		if (acpi_ec_dispatch_gpe()) {
+ 			pm_pr_dbg("ACPI non-EC GPE wakeup\n");
+ 			return true;
+ 		}
+ 
+-		/*
+-		 * Cancel the SCI wakeup and process all pending events in case
+-		 * there are any wakeup ones in there.
+-		 *
+-		 * Note that if any non-EC GPEs are active at this point, the
+-		 * SCI will retrigger after the rearming below, so no events
+-		 * should be missed by canceling the wakeup here.
+-		 */
+-		pm_system_cancel_wakeup();
+ 		acpi_os_wait_events_complete();
+ 
+ 		/*
 -- 
 2.34.1
 

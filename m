@@ -2,67 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A284B4046
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C04A4B404F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239991AbiBND1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 22:27:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55474 "EHLO
+        id S240000AbiBND3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 22:29:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233121AbiBND1f (ORCPT
+        with ESMTP id S231786AbiBND3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 22:27:35 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0B755489;
-        Sun, 13 Feb 2022 19:27:29 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id x3so8093403qvd.8;
-        Sun, 13 Feb 2022 19:27:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1Mk4g7a4kkGp+4mbNE5PqLoN+dulOsHzWj8LqpF9LSE=;
-        b=G01Mpr4f6OfVK0fOPp4lzC84aqgY6vPtk3GEISIKlPMcJ/WQ0ySrF5A+nd2aTcdY7d
-         2qRieK0AhBO8jDaPmxb3vGBoFByaK6WvboWBGyeEYFofALpT9ZCv6S2a56ULo7t+ef4P
-         8MA9tliHSPOVhXUQnheyq3Q1pGZGTuplN1YxHqf0He9T+wNzXUmZWxQMhJuaUwuiid2e
-         yDUpBBtOg2B2e2wM7PzuCTh/bWgWDqC3FtQpwTJjGUQip8ZETW3cHE18/7rC1R1gWMdM
-         mfxDORPVIp7RfSVy4eIRznakKzl/CCATv39NupxpkLOazTPTjCyFT6pu8ZjJ7TsMF+bc
-         l0Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1Mk4g7a4kkGp+4mbNE5PqLoN+dulOsHzWj8LqpF9LSE=;
-        b=2QPzE00re9HMgvFJISif9UyBts+9yYaJuNkt/chxib8FioIS3UZhDaKPevOCcMP+ap
-         oRnv7Q53MYbfDlzHGnzIHMbIbsA0zBkY5j8s+R5wPL3Fp2cBqvhs2gWji+AIlQ1esO2L
-         YY1MOOHGZTAUEWH/dpfuxBPvoSf2/Q4UkaksOiz+c5ybKJdamgcHZ7oJrjUxYKB4NtNS
-         zVIO69h79IUwoAs7ngriZOo0fwtZalZMToKTYlXv1Hd8fWpp4OFXnNX0X/jfzrz3uHgd
-         Swpor+ZEB8Seerz8pt60xYHmo1nKsJJGDUQ0rOwOAMGBsnJ/9Af1L6tS6qy8QZZKFkt3
-         34/Q==
-X-Gm-Message-State: AOAM531+0V7fFXgS8qk+MiC6f8eMMADW6hursvJv2d8gcDG9AuT9yBNV
-        FsqMjAXiGbk7Dz1gLQPtOVA=
-X-Google-Smtp-Source: ABdhPJyvpHHKq86EMPjgff598oi5GUBwcfc1+ZO5YI+bd4eKKIg3oe0uXcPJZD56SIsQq34JCdgO4Q==
-X-Received: by 2002:a05:6214:19e5:: with SMTP id q5mr6399886qvc.42.1644809248326;
-        Sun, 13 Feb 2022 19:27:28 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id n6sm17006667qtx.23.2022.02.13.19.27.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Feb 2022 19:27:27 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: zhang.yunkai@zte.com.cn
-To:     davem@davemloft.net
-Cc:     yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhang Yunkai <zhang.yunkai@zte.com.cn>
-Subject: [PATCH v2] ipv4: add description about martian source
-Date:   Mon, 14 Feb 2022 03:27:21 +0000
-Message-Id: <20220214032721.1716878-1-zhang.yunkai@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Sun, 13 Feb 2022 22:29:48 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B415555487;
+        Sun, 13 Feb 2022 19:29:40 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JxqTZ23tlz4xQp;
+        Mon, 14 Feb 2022 14:29:38 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1644809379;
+        bh=icM+9Xu69fBIx/89EewjmfGendiahiG7T3/u5TE2rqg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=cEz1MfXBSgoRhz3dOhD72kHtNaOLArkY7YrYmU1ORalKQrsZqpdb/p4Oarp0Z5r/h
+         BUZG7EMVCoFmPuzPMBE0xsmr+P8PZMG3G25xPdys+E27AhGIPvo5/luBIqn/su/1Zw
+         kAJUlJCA0wekk3MAc67Wi/PZu/OhfiVlDp+hWfW9sVLRjFZXsm6EGeRnvsfz/pkyGu
+         XJEnO+NvinGUcpPrNAs5iAnzH0FSoID5mzcl17CI/Bzay0BCLJeIYuzLU0m2piWPb5
+         2WuNfHhN4bAZ5flITqmxjaoCL3s5KghoHUyhtnKAkUzuJSRg75EwvSgbzAXblKXu06
+         mBkAa5IkBIglA==
+Date:   Mon, 14 Feb 2022 14:29:36 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Ajish Koshy <Ajish.Koshy@microchip.com>,
+        John Garry <john.garry@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Viswas G <Viswas.G@microchip.com>
+Subject: linux-next: manual merge of the scsi-mkp tree with Linus' tree
+Message-ID: <20220214142936.41bd3e7d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/xQ5Ke=WuXxsG1cQ003LFOS0";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,45 +53,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Yunkai <zhang.yunkai@zte.com.cn>
+--Sig_/xQ5Ke=WuXxsG1cQ003LFOS0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-When multiple containers are running in the environment and multiple
-macvlan network port are configured in each container, a lot of martian
-source prints will appear after martian_log is enabled. they are almost
-the same, and printed by net_warn_ratelimited. Each arp message will
-trigger this print on each network port.
+Hi all,
 
-Such as:
-IPv4: martian source 173.254.95.16 from 173.254.100.109,
-on dev eth0
-ll header: 00000000: ff ff ff ff ff ff 40 00 ad fe 64 6d
-08 06        ......@...dm..
-IPv4: martian source 173.254.95.16 from 173.254.100.109,
-on dev eth1
-ll header: 00000000: ff ff ff ff ff ff 40 00 ad fe 64 6d
-08 06        ......@...dm..
+Today's linux-next merge of the scsi-mkp tree got conflicts in:
 
-There is no description of this kind of source in the RFC1812.
+  drivers/scsi/pm8001/pm8001_hwi.c
+  drivers/scsi/pm8001/pm80xx_hwi.c
 
-Signed-off-by: Zhang Yunkai <zhang.yunkai@zte.com.cn>
----
- net/ipv4/fib_frontend.c | 3 +++
- 1 file changed, 3 insertions(+)
+between commit:
 
-diff --git a/net/ipv4/fib_frontend.c b/net/ipv4/fib_frontend.c
-index 4d61ddd8a0ec..3564308e849a 100644
---- a/net/ipv4/fib_frontend.c
-+++ b/net/ipv4/fib_frontend.c
-@@ -436,6 +436,9 @@ int fib_validate_source(struct sk_buff *skb, __be32 src, __be32 dst,
- 		if (net->ipv4.fib_has_custom_local_routes ||
- 		    fib4_has_custom_rules(net))
- 			goto full_check;
-+		/* Within the same container, it is regarded as a martian source,
-+		 * and the same host but different containers are not.
-+		 */
- 		if (inet_lookup_ifaddr_rcu(net, src))
- 			return -EINVAL;
- 
--- 
-2.25.1
+  c26b85ea1636 ("scsi: pm80xx: Fix double completion for SATA devices")
 
+from Linus' tree and commit:
+
+  26fc0ea74fcb ("scsi: libsas: Drop SAS_TASK_AT_INITIATOR")
+
+from the scsi-mkp tree.
+
+I fixed it up (the former removed the code modified by the latter) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/xQ5Ke=WuXxsG1cQ003LFOS0
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIJzKAACgkQAVBC80lX
+0GzJMwf9GthKj+KbjLjtI1SABGJ36+LZysPXU1k702dMXPWS7jQISXnfO/G2iDTH
+x8BOcK5HeV1Goz+FzBWBu1cj+jC7ikATkNnGnletmvf3WsZUP82SxemaKh5HyFM8
+Z4p9TlnrSV9W7F6Jtvum4Z8bvxpbQgMzgF55f8Rbd/EzklaEAzVlh8Ebh2KVJW2+
+SwQ4nUWgJihYarn7lhXdraUv8NJvD5I0Xvawsf/VT8749ZOReaCufg2dVZUdMVST
+hzvIMsaOm+7C72mkUb6mtzzuAvSJUp6c+716zlhoKLoFZh1PL2IZgODRIr7s9mB+
+dGcZNuJeRb1ZA87wiH8F6cbfQbqByQ==
+=bx/o
+-----END PGP SIGNATURE-----
+
+--Sig_/xQ5Ke=WuXxsG1cQ003LFOS0--

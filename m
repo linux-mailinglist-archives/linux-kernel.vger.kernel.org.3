@@ -2,211 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E804B5358
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4C54B5357
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355143AbiBNO3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 09:29:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39094 "EHLO
+        id S1355142AbiBNO3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 09:29:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355128AbiBNO3e (ORCPT
+        with ESMTP id S1355140AbiBNO3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 09:29:34 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001CE46668;
-        Mon, 14 Feb 2022 06:29:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644848966; x=1676384966;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=5NWlhQyNQ/br+qMk2QQrOj4n+pumeDXMw3RAlwIExE0=;
-  b=RA3ckgWMH41YeFhp+H7/fQiqSPlIN0+lBD1OWPkbPZNqi4X9OV752OAV
-   SjL1JFn4KjXkVQeJAhjXZVkinvVqGs19zeFbuxymO5XzQ8j/U+0VK+cQQ
-   l5S/+yIohhpZzyzDON2VuchiJV0f2HsBA5/AH20m9WMYbBrWIT/Sh08gH
-   kt1oARimtQt6HmgeD9xxRdS9WPqkmLCUOeKP5FEsCkS/5p+8aJZRXcTD/
-   fOwVnnalC4gy/cVu0SiXm+r79Do6qDWo0txKC+NqyD5DLk8+XJvFBHZzr
-   MwuMmJZ9c+KPqVh7jDeDzv1a4s+Y5gf2ED8qWjiy0Ht/Ju2qcTjvK2Wsq
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="274670966"
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="274670966"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 06:29:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="528205009"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga007.jf.intel.com with ESMTP; 14 Feb 2022 06:29:21 -0800
-Received: from fmsmsx605.amr.corp.intel.com (10.18.126.85) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 14 Feb 2022 06:29:21 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Mon, 14 Feb 2022 06:29:21 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.44) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Mon, 14 Feb 2022 06:29:21 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YpRzANnvPP8wWz8kPPR9V/InRM2+Pr+R0fSEeNtqL8poSxa7M4J5D7XWCbSXBldNHChU6ElmXMd0RoCBYmz0M94z64CnAl2mdtnsD5u3LGfCFnw2C+senctDhnBn8HKQvPHOjoj0FP9I3me5DM+b1hOx7PGzDmS8w4Vte/v/LbcgYOmvwcAit22moNHakdGp/TNoDIH2hunIGSZ9x5yOu/ysxcY4z0ScHUh3bL+eXoIYfwb1UZ1ATau3b5cJ1xYRoaRql1+xZk4V9xE5fQDdzhFe59soYYjNmD0l4YxnL6qkBjSCzmva+/xB8Mzeia+oQRfL0YGRgxB2XyxBNBzDUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5NWlhQyNQ/br+qMk2QQrOj4n+pumeDXMw3RAlwIExE0=;
- b=AjSyFbpLobsVsWrquNKo6TAuhVmJVTySqp2OcCIh9f3AJYH6G4XeHEwuJY1UFmfjSDD2bny1h12NDKWYEUAg+kKeMDMssH8mudlIo4eDon64OzhUzASAF784M7d9Lp8QXWrPauGjofk4fvGp0+l1cOTkgxnMfVCLNLZT0Ng0ynDGlGYwVE7USq53pmP9fJoe2wiJaGAhYkSyDyFqnOFDtFdOjBNgGGkSWMSe64ZzHBkvFNleTrcGMuanRPvNMOGUDAniGTivl64g1sDsu3M6PFBzp7RvKNyeccQFZ+eDjW5DcnlGfS+rpi7pfjh7niLjNgMWSuKpos/aEc+Fmy3L/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from MW4PR11MB5823.namprd11.prod.outlook.com (2603:10b6:303:186::12)
- by BN6PR1101MB2225.namprd11.prod.outlook.com (2603:10b6:405:58::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Mon, 14 Feb
- 2022 14:29:19 +0000
-Received: from MW4PR11MB5823.namprd11.prod.outlook.com
- ([fe80::c2e:55c2:bbfc:b47b]) by MW4PR11MB5823.namprd11.prod.outlook.com
- ([fe80::c2e:55c2:bbfc:b47b%7]) with mapi id 15.20.4975.018; Mon, 14 Feb 2022
- 14:29:19 +0000
-From:   "Winiarska, Iwona" <iwona.winiarska@intel.com>
-To:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "jdelvare@suse.com" <jdelvare@suse.com>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] hwmon: peci: Use devm_delayed_work_autocancel() to
- simplify code
-Thread-Topic: [PATCH] hwmon: peci: Use devm_delayed_work_autocancel() to
- simplify code
-Thread-Index: AQHYIRLC7mu1GsLwrE28NNtYMSHF9ayTHFkA
-Date:   Mon, 14 Feb 2022 14:29:19 +0000
-Message-ID: <1696edf17cbab06c7e0ef453cd7bc3bed3ae9299.camel@intel.com>
-References: <fd277a708ede3882d7df6831f02d2e3c0cb813b8.1644781718.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <fd277a708ede3882d7df6831f02d2e3c0cb813b8.1644781718.git.christophe.jaillet@wanadoo.fr>
-Accept-Language: en-US, pl-PL
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.40.4 (3.40.4-2.fc34) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ed94ec5c-c22f-4e89-0ab2-08d9efc66310
-x-ms-traffictypediagnostic: BN6PR1101MB2225:EE_
-x-microsoft-antispam-prvs: <BN6PR1101MB22250F455A383FDD819E42A5EC339@BN6PR1101MB2225.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5236;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vpxe81GvVhahOlNJcPeyLTABwX4q7pHigs3FAhqik1vBRk+wSxS5QR6NEA5ghguXPyPf6ISBUv3mm8C17m4oLBMToDWMKRKVw+caELl63kAYK3/4DNi+XdjsexdpQu6EaV7XJd3m0hwVsqjJr35xx/NudoPdxzVLkveLFDLPnKv2sM+xDlnf2hqxgIa7U9ss5XuNG4zAvc7UQ8xZf9thYToaU/swYgR/vLRjO63l9cCyrBaz8OpCfIETQ8GyFnfWUDRiXETPG9xpScnSp4VnrcNJSk3ZoDGZMyO38ze8jlXUfj5Yzdx7ArusU2gikFaMfsng1qos8CzJRhv9cnC3SYMkj7YQBadNXNqqt/kXfd4WZhZFMYjH37BsqW8U/Yo5pl9jngOzHzCIfhu8JGXBz69idBFQRvmC28Jl5xB7XceQOC/WTqGk97KbX1vaf6+KJOo63TxibOf+Dmn9Ss1hxheSnzBjkcrvf6kQ0cX91VnzZkbk8HrhUwoxWunItuYwndWq81vs/ff1FdUeVJLf9qrGkyZyR3TscYR94ZOriIb4JCrTvr2zQVSyHIAwZpapa05gW/O5TsS2DwabOT//VgmdZl1VIwUB/8xk1z6TR+u3OuJYQGE6NNwiLHjKzHDSjqv9cd7g8VxkySANsz6goT/VWwp+fO92Pp4DIjjUqAmI6g+LLEVsHExjs0EVhpeyK9pal+Zif0VdPUpqMA19jA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB5823.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(83380400001)(86362001)(8676002)(6486002)(91956017)(76116006)(66446008)(64756008)(66476007)(36756003)(4326008)(66556008)(66946007)(5660300002)(82960400001)(8936002)(316002)(186003)(26005)(110136005)(54906003)(38100700002)(122000001)(2906002)(2616005)(71200400001)(6512007)(38070700005)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?T2g4TWt6aEt1WHA1enhGQWsrUUZ0WjB1a0JUYzQ3TmFnN21NVHVrMHR5VzJP?=
- =?utf-8?B?WlZyeVN6RzhtbVBmMDJ2TlJKaVZSK2I3cWVNOTU4QTNXdDhzVUkzSXJYZlFC?=
- =?utf-8?B?dzdIVTVSU0hqc3ROYW9LazFNakpOYW1BTHIwSXNIVWdmYUEwVDhrTGxBYzlu?=
- =?utf-8?B?RWlxUW5DNldWd2NRMWc2QnhtUFIyb3YwT2VGNXJBMmVkUk0wSkhEWVZDSU5u?=
- =?utf-8?B?TzNGWi9IbmsvL1JvRVRsVklWaUtYVkZDbGlpaWI1QVBuVXk0L1U1VE9DMXJD?=
- =?utf-8?B?YzNwU0haSTRTc3dlcHdBMFQvaHZyYVRvaUoxV25nNER1bHNyZS9mN0s1RmNG?=
- =?utf-8?B?RHVTTWNqVjJnT3JFK0Q1OVdHTVhyd3lMYmlTakxvWWNSUmRPdVRSR2d5aVM2?=
- =?utf-8?B?Nmc0T2ZKV0lwR01HcVJJL2Q5NlRrbHEwMnpBZnQ4K0htT0VPTDBzK2dvK0xJ?=
- =?utf-8?B?NTIwMTA2dnZrYmIvRmpFSXNzV09zcHV4dzEwZXo3THJ2UGY3WWNQVjllOFZJ?=
- =?utf-8?B?aVpJTm1MOThlMVVnOGhVdUIrSU1jTnA2NDZBMGxIYUFLWmlLZzJidllKcWZM?=
- =?utf-8?B?VTBteHVPdkZkOG5FUGUyRnZ2OS82VDA5MjlteW10NVR6a3B0UnNaU0pzUEs1?=
- =?utf-8?B?WFpQbitURm15MllrRkhvOVBldTJxRmV3bjVMbHY2M3U2M2owVWx1cVlNNTZy?=
- =?utf-8?B?QjYwZmsyNm10b0JIY3FnVGZjZ2V5QXAwazVqRW9OQmNhRHdNVkkxU2x5ZDd0?=
- =?utf-8?B?Q1hsL0wzQkhGTlQvQ2drakg0T1FBcTdhaDZibHUwQ0s4d2JLUW9jTHUwZUVN?=
- =?utf-8?B?aVZXbGxPeHNKL0NLYjgxblM3SmJFbm05VDA2aGx0NzBQcUcxdnRXRG54L3lB?=
- =?utf-8?B?MXU0WTZxQkYrU0ZBSENkRW1SV0NLaG4yZGtJUWZZb2l0UmhwQUxFVGptSUFN?=
- =?utf-8?B?cUxhYmY1RVNJaHkxaFhEeTltR1gxbXl5K3JRbjVva2JPN3RHRGVMYVdMTXZj?=
- =?utf-8?B?b2pxNWw1WG5tQlFkbVFnVExFd0tOY3pIV3llTXhtd0NZdCtCUkpicWxkVVp3?=
- =?utf-8?B?d3FEYlJIcVNQa0xQaEEwZEtBNVlFekpoS1dpYTF4eDNNaDI3MnorVmhaeFBX?=
- =?utf-8?B?MHlsbUI3RHdLNTNVSjkzTFVZOHFkaC9ML0hKcFJpTkVCZ1ZNcjE5VVN5Q1JO?=
- =?utf-8?B?c3plSk5ST3VNbjg2aDJaOGZVcXZDM2MrTFQwVGl2WVZwMHhidWJpQUk0OTZi?=
- =?utf-8?B?MDFzTFBOVjlCa0JtOHhHNEZXU21YYWVaME9pZGErdFJyMWJWZG5MS3BZaks1?=
- =?utf-8?B?OGs3c3NuRTdxeHRYbEp4eVVId0FOQVNia1ZSdmdRNkE3Q0puTndFeXBqN0pw?=
- =?utf-8?B?NzVWcXh0eTU0MkNDZlNYbExtcGZtaUpQSDd1bG9lLzY3UmFBQyt2dWxySXJ6?=
- =?utf-8?B?TFhBdTdIUEcrcEZHSDkySWRNTE5BZlpidzIwWE1mRVJPamFUS2sxVk4rY3p0?=
- =?utf-8?B?WERNcDBUZ1U5OGpodTFwcGJyMll1VWcvR2lEY0RsNmtIckl3Y1Q2dlFyK05D?=
- =?utf-8?B?LzdVQk9zSjFnQmRNUzVPU3NYSEhMcFdFdmt5bFdYOTQrSEgxdVBuT2kyN1FI?=
- =?utf-8?B?cVZrazFVSXk0ZHkrQnNaSFFxclo1L0ppM1dibGljUDBHcFhtOVhneHpmZDdR?=
- =?utf-8?B?UzhlSEpoM2xsMHZkbFh5RGo0SitqOVdUUUZLVDFFc25iUi8xNVFVN1VaaVRI?=
- =?utf-8?B?NlBhMTRqYzdhMHRGZWpXUjJ0aG5oZ3I5ZEc2bmZGRWI5WlZVUS9ZWmFYeXlI?=
- =?utf-8?B?Sk00VzZaV2xuREhJWDNYSkkvS1c2OHRmR0hycEdGZlQvR2cyazFzSGlzT0FJ?=
- =?utf-8?B?d2wzZmg4QWdJYUZSaHZMczFqV2h1czcrOVI5d0c2ZkJteWl5OWprQjF1dS9i?=
- =?utf-8?B?aklFdEZUME16OTlNbkp3SmxLTE14bnU2MHFobUxveDE5elA0dXRiM2g2c3ZZ?=
- =?utf-8?B?R3ZHMVJxQTY5a29nclp0ZHc0UWp2OUErVVhDYjZmZjVxVU5jbEp4T29oU3NE?=
- =?utf-8?B?OEYySWR5QnBSSFR5bk1XU3JrVGc5dWZreTA1MEgxWUxkclBXVm80U1M0aGZN?=
- =?utf-8?B?dU9IbW9WemJYeFZXWlRZdXM2WVl1dFZUWkM2NmU2TkZxZS9yM0ZKTUR6eVlO?=
- =?utf-8?B?OGN1akh3QUhIV2xNRnFJakNwVmpLWmRNZTVXc2pYWXpxU2hHN2NPK0N2V0xj?=
- =?utf-8?Q?BL1G1q9cKCnVuSWG6tDmB2gfpC7t954/rJ7BjJh90s=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <844E0BF9F78F3544A72776BBD70360F5@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 14 Feb 2022 09:29:40 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D96E9488AF
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:29:31 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96F511063;
+        Mon, 14 Feb 2022 06:29:31 -0800 (PST)
+Received: from [10.57.70.89] (unknown [10.57.70.89])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7A0393F70D;
+        Mon, 14 Feb 2022 06:29:29 -0800 (PST)
+Message-ID: <b20cd9e5-3415-4b3e-d2a7-48a5189ef114@arm.com>
+Date:   Mon, 14 Feb 2022 14:29:24 +0000
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5823.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ed94ec5c-c22f-4e89-0ab2-08d9efc66310
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2022 14:29:19.3101
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: o3361nf2SrydML5oMmlNzGgjv/wXhCsAL0TnMUgsjWwks+7TblOldf28S3GRLPxU5WBUI0JZOhwPysyEVnV1/xDtNL+beqJgsqkhu5ibHm0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1101MB2225
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2] iommu/iova: Separate out rcache init
+Content-Language: en-GB
+To:     John Garry <john.garry@huawei.com>, joro@8bytes.org,
+        will@kernel.org, mst@redhat.com, jasowang@redhat.com
+Cc:     xieyongji@bytedance.com, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, linuxarm@huawei.com
+References: <1643882360-241739-1-git-send-email-john.garry@huawei.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <1643882360-241739-1-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gU3VuLCAyMDIyLTAyLTEzIGF0IDIwOjQ4ICswMTAwLCBDaHJpc3RvcGhlIEpBSUxMRVQgd3Jv
-dGU6DQo+IFVzZSBkZXZtX2RlbGF5ZWRfd29ya19hdXRvY2FuY2VsKCkgaW5zdGVhZCBvZiBoYW5k
-IHdyaXRpbmcgaXQuIFRoaXMgaXMNCj4gbGVzcyB2ZXJib3NlIGFuZCBzYXZlcyBhIGZldyBsaW5l
-cyBvZiBjb2RlLg0KPiANCj4gZGV2bV9kZWxheWVkX3dvcmtfYXV0b2NhbmNlbCgpIHVzZXMgZGV2
-bV9hZGRfYWN0aW9uKCkgaW5zdGVhZCBvZg0KPiBkZXZtX2FkZF9hY3Rpb25fb3JfcmVzZXQoKS4g
-VGhpcyBpcyBmaW5lLCBiZWNhdXNlIGlmIHRoZSB1bmRlcmx5aW5nIG1lbW9yeQ0KPiBhbGxvY2F0
-aW9uIGZhaWxzLCBubyB3b3JrIGhhcyBiZWVuIHNjaGVkdWxlZCB5ZXQuIFNvIHRoZXJlIGlzIG5v
-dGhpbmcgdG8NCj4gdW5kby4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IENocmlzdG9waGUgSkFJTExF
-VCA8Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI+DQoNClJldmlld2VkLWJ5OiBJd29uYSBX
-aW5pYXJza2EgPGl3b25hLndpbmlhcnNrYUBpbnRlbC5jb20+DQoNClRoYW5rcw0KLUl3b25hDQoN
-Cj4gLS0tDQo+IMKgZHJpdmVycy9od21vbi9wZWNpL2RpbW10ZW1wLmMgfCAxMyArKystLS0tLS0t
-LS0tDQo+IMKgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMTAgZGVsZXRpb25zKC0p
-DQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9od21vbi9wZWNpL2RpbW10ZW1wLmMgYi9kcml2
-ZXJzL2h3bW9uL3BlY2kvZGltbXRlbXAuYw0KPiBpbmRleCBjODIyMjM1NGMwMDUuLjk2Yjk5MTlk
-YjM1NyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9od21vbi9wZWNpL2RpbW10ZW1wLmMNCj4gKysr
-IGIvZHJpdmVycy9od21vbi9wZWNpL2RpbW10ZW1wLmMNCj4gQEAgLTQsNiArNCw3IEBADQo+IMKg
-I2luY2x1ZGUgPGxpbnV4L2F1eGlsaWFyeV9idXMuaD4NCj4gwqAjaW5jbHVkZSA8bGludXgvYml0
-ZmllbGQuaD4NCj4gwqAjaW5jbHVkZSA8bGludXgvYml0b3BzLmg+DQo+ICsjaW5jbHVkZSA8bGlu
-dXgvZGV2bS1oZWxwZXJzLmg+DQo+IMKgI2luY2x1ZGUgPGxpbnV4L2h3bW9uLmg+DQo+IMKgI2lu
-Y2x1ZGUgPGxpbnV4L2ppZmZpZXMuaD4NCj4gwqAjaW5jbHVkZSA8bGludXgvbW9kdWxlLmg+DQo+
-IEBAIC0zNzgsMTMgKzM3OSw2IEBAIHN0YXRpYyB2b2lkIGNyZWF0ZV9kaW1tX3RlbXBfaW5mb19k
-ZWxheWVkKHN0cnVjdA0KPiB3b3JrX3N0cnVjdCAqd29yaykNCj4gwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqBkZXZfZXJyKHByaXYtPmRldiwgIkZhaWxlZCB0byBwb3B1bGF0ZSBESU1N
-IHRlbXAgaW5mb1xuIik7DQo+IMKgfQ0KPiDCoA0KPiAtc3RhdGljIHZvaWQgcmVtb3ZlX2RlbGF5
-ZWRfd29yayh2b2lkICpfcHJpdikNCj4gLXsNCj4gLcKgwqDCoMKgwqDCoMKgc3RydWN0IHBlY2lf
-ZGltbXRlbXAgKnByaXYgPSBfcHJpdjsNCj4gLQ0KPiAtwqDCoMKgwqDCoMKgwqBjYW5jZWxfZGVs
-YXllZF93b3JrX3N5bmMoJnByaXYtPmRldGVjdF93b3JrKTsNCj4gLX0NCj4gLQ0KPiDCoHN0YXRp
-YyBpbnQgcGVjaV9kaW1tdGVtcF9wcm9iZShzdHJ1Y3QgYXV4aWxpYXJ5X2RldmljZSAqYWRldiwg
-Y29uc3Qgc3RydWN0DQo+IGF1eGlsaWFyeV9kZXZpY2VfaWQgKmlkKQ0KPiDCoHsNCj4gwqDCoMKg
-wqDCoMKgwqDCoHN0cnVjdCBkZXZpY2UgKmRldiA9ICZhZGV2LT5kZXY7DQo+IEBAIC00MTUsOSAr
-NDA5LDggQEAgc3RhdGljIGludCBwZWNpX2RpbW10ZW1wX3Byb2JlKHN0cnVjdCBhdXhpbGlhcnlf
-ZGV2aWNlDQo+ICphZGV2LCBjb25zdCBzdHJ1Y3QgYXV4aWwNCj4gwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICJVbmV4cGVjdGVkIFBFQ0kgcmV2aXNpb24g
-JSN4LCBzb21lIGZlYXR1cmVzIG1heSBiZQ0KPiB1bmF2YWlsYWJsZVxuIiwNCj4gwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHBlY2lfZGV2LT5pbmZvLnBl
-Y2lfcmV2aXNpb24pOw0KPiDCoA0KPiAtwqDCoMKgwqDCoMKgwqBJTklUX0RFTEFZRURfV09SSygm
-cHJpdi0+ZGV0ZWN0X3dvcmssIGNyZWF0ZV9kaW1tX3RlbXBfaW5mb19kZWxheWVkKTsNCj4gLQ0K
-PiAtwqDCoMKgwqDCoMKgwqByZXQgPSBkZXZtX2FkZF9hY3Rpb25fb3JfcmVzZXQocHJpdi0+ZGV2
-LCByZW1vdmVfZGVsYXllZF93b3JrLCBwcml2KTsNCj4gK8KgwqDCoMKgwqDCoMKgcmV0ID0gZGV2
-bV9kZWxheWVkX3dvcmtfYXV0b2NhbmNlbChwcml2LT5kZXYsICZwcml2LT5kZXRlY3Rfd29yaywN
-Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY3JlYXRlX2RpbW1fdGVtcF9pbmZvX2RlbGF5
-ZWQpOw0KPiDCoMKgwqDCoMKgwqDCoMKgaWYgKHJldCkNCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqByZXR1cm4gcmV0Ow0KPiDCoA0KDQo=
+On 2022-02-03 09:59, John Garry wrote:
+> Currently the rcache structures are allocated for all IOVA domains, even if
+> they do not use "fast" alloc+free interface. This is wasteful of memory.
+> 
+> In addition, fails in init_iova_rcaches() are not handled safely, which is
+> less than ideal.
+> 
+> Make "fast" users call a separate rcache init explicitly, which includes
+> error checking.
+
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+
+> Signed-off-by: John Garry <john.garry@huawei.com>
+> ---
+> Differences to v1:
+> - Drop stubs for iova_domain_init_rcaches() and iova_domain_free_rcaches()
+> - Use put_iova_domain() in vdpa code
+> 
+> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+> index d85d54f2b549..b22034975301 100644
+> --- a/drivers/iommu/dma-iommu.c
+> +++ b/drivers/iommu/dma-iommu.c
+> @@ -525,6 +525,7 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
+>   	struct iommu_dma_cookie *cookie = domain->iova_cookie;
+>   	unsigned long order, base_pfn;
+>   	struct iova_domain *iovad;
+> +	int ret;
+>   
+>   	if (!cookie || cookie->type != IOMMU_DMA_IOVA_COOKIE)
+>   		return -EINVAL;
+> @@ -559,6 +560,9 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
+>   	}
+>   
+>   	init_iova_domain(iovad, 1UL << order, base_pfn);
+> +	ret = iova_domain_init_rcaches(iovad);
+> +	if (ret)
+> +		return ret;
+>   
+>   	/* If the FQ fails we can simply fall back to strict mode */
+>   	if (domain->type == IOMMU_DOMAIN_DMA_FQ && iommu_dma_init_fq(domain))
+> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
+> index b28c9435b898..7e9c3a97c040 100644
+> --- a/drivers/iommu/iova.c
+> +++ b/drivers/iommu/iova.c
+> @@ -15,13 +15,14 @@
+>   /* The anchor node sits above the top of the usable address space */
+>   #define IOVA_ANCHOR	~0UL
+>   
+> +#define IOVA_RANGE_CACHE_MAX_SIZE 6	/* log of max cached IOVA range size (in pages) */
+> +
+>   static bool iova_rcache_insert(struct iova_domain *iovad,
+>   			       unsigned long pfn,
+>   			       unsigned long size);
+>   static unsigned long iova_rcache_get(struct iova_domain *iovad,
+>   				     unsigned long size,
+>   				     unsigned long limit_pfn);
+> -static void init_iova_rcaches(struct iova_domain *iovad);
+>   static void free_cpu_cached_iovas(unsigned int cpu, struct iova_domain *iovad);
+>   static void free_iova_rcaches(struct iova_domain *iovad);
+>   
+> @@ -64,8 +65,6 @@ init_iova_domain(struct iova_domain *iovad, unsigned long granule,
+>   	iovad->anchor.pfn_lo = iovad->anchor.pfn_hi = IOVA_ANCHOR;
+>   	rb_link_node(&iovad->anchor.node, NULL, &iovad->rbroot.rb_node);
+>   	rb_insert_color(&iovad->anchor.node, &iovad->rbroot);
+> -	cpuhp_state_add_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD, &iovad->cpuhp_dead);
+> -	init_iova_rcaches(iovad);
+>   }
+>   EXPORT_SYMBOL_GPL(init_iova_domain);
+>   
+> @@ -488,6 +487,13 @@ free_iova_fast(struct iova_domain *iovad, unsigned long pfn, unsigned long size)
+>   }
+>   EXPORT_SYMBOL_GPL(free_iova_fast);
+>   
+> +static void iova_domain_free_rcaches(struct iova_domain *iovad)
+> +{
+> +	cpuhp_state_remove_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD,
+> +					    &iovad->cpuhp_dead);
+> +	free_iova_rcaches(iovad);
+> +}
+> +
+>   /**
+>    * put_iova_domain - destroys the iova domain
+>    * @iovad: - iova domain in question.
+> @@ -497,9 +503,9 @@ void put_iova_domain(struct iova_domain *iovad)
+>   {
+>   	struct iova *iova, *tmp;
+>   
+> -	cpuhp_state_remove_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD,
+> -					    &iovad->cpuhp_dead);
+> -	free_iova_rcaches(iovad);
+> +	if (iovad->rcaches)
+> +		iova_domain_free_rcaches(iovad);
+> +
+>   	rbtree_postorder_for_each_entry_safe(iova, tmp, &iovad->rbroot, node)
+>   		free_iova_mem(iova);
+>   }
+> @@ -608,6 +614,7 @@ EXPORT_SYMBOL_GPL(reserve_iova);
+>    */
+>   
+>   #define IOVA_MAG_SIZE 128
+> +#define MAX_GLOBAL_MAGS 32	/* magazines per bin */
+>   
+>   struct iova_magazine {
+>   	unsigned long size;
+> @@ -620,6 +627,13 @@ struct iova_cpu_rcache {
+>   	struct iova_magazine *prev;
+>   };
+>   
+> +struct iova_rcache {
+> +	spinlock_t lock;
+> +	unsigned long depot_size;
+> +	struct iova_magazine *depot[MAX_GLOBAL_MAGS];
+> +	struct iova_cpu_rcache __percpu *cpu_rcaches;
+> +};
+> +
+>   static struct iova_magazine *iova_magazine_alloc(gfp_t flags)
+>   {
+>   	return kzalloc(sizeof(struct iova_magazine), flags);
+> @@ -693,28 +707,54 @@ static void iova_magazine_push(struct iova_magazine *mag, unsigned long pfn)
+>   	mag->pfns[mag->size++] = pfn;
+>   }
+>   
+> -static void init_iova_rcaches(struct iova_domain *iovad)
+> +int iova_domain_init_rcaches(struct iova_domain *iovad)
+>   {
+> -	struct iova_cpu_rcache *cpu_rcache;
+> -	struct iova_rcache *rcache;
+>   	unsigned int cpu;
+> -	int i;
+> +	int i, ret;
+> +
+> +	iovad->rcaches = kcalloc(IOVA_RANGE_CACHE_MAX_SIZE,
+> +				 sizeof(struct iova_rcache),
+> +				 GFP_KERNEL);
+> +	if (!iovad->rcaches)
+> +		return -ENOMEM;
+>   
+>   	for (i = 0; i < IOVA_RANGE_CACHE_MAX_SIZE; ++i) {
+> +		struct iova_cpu_rcache *cpu_rcache;
+> +		struct iova_rcache *rcache;
+> +
+>   		rcache = &iovad->rcaches[i];
+>   		spin_lock_init(&rcache->lock);
+>   		rcache->depot_size = 0;
+> -		rcache->cpu_rcaches = __alloc_percpu(sizeof(*cpu_rcache), cache_line_size());
+> -		if (WARN_ON(!rcache->cpu_rcaches))
+> -			continue;
+> +		rcache->cpu_rcaches = __alloc_percpu(sizeof(*cpu_rcache),
+> +						     cache_line_size());
+> +		if (!rcache->cpu_rcaches) {
+> +			ret = -ENOMEM;
+> +			goto out_err;
+> +		}
+>   		for_each_possible_cpu(cpu) {
+>   			cpu_rcache = per_cpu_ptr(rcache->cpu_rcaches, cpu);
+> +
+>   			spin_lock_init(&cpu_rcache->lock);
+>   			cpu_rcache->loaded = iova_magazine_alloc(GFP_KERNEL);
+>   			cpu_rcache->prev = iova_magazine_alloc(GFP_KERNEL);
+> +			if (!cpu_rcache->loaded || !cpu_rcache->prev) {
+> +				ret = -ENOMEM;
+> +				goto out_err;
+> +			}
+>   		}
+>   	}
+> +
+> +	ret = cpuhp_state_add_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD,
+> +					       &iovad->cpuhp_dead);
+> +	if (ret)
+> +		goto out_err;
+> +	return 0;
+> +
+> +out_err:
+> +	free_iova_rcaches(iovad);
+> +	return ret;
+>   }
+> +EXPORT_SYMBOL_GPL(iova_domain_init_rcaches);
+>   
+>   /*
+>    * Try inserting IOVA range starting with 'iova_pfn' into 'rcache', and
+> @@ -831,7 +871,7 @@ static unsigned long iova_rcache_get(struct iova_domain *iovad,
+>   {
+>   	unsigned int log_size = order_base_2(size);
+>   
+> -	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE)
+> +	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE || !iovad->rcaches)
+>   		return 0;
+>   
+>   	return __iova_rcache_get(&iovad->rcaches[log_size], limit_pfn - size);
+> @@ -849,6 +889,8 @@ static void free_iova_rcaches(struct iova_domain *iovad)
+>   
+>   	for (i = 0; i < IOVA_RANGE_CACHE_MAX_SIZE; ++i) {
+>   		rcache = &iovad->rcaches[i];
+> +		if (!rcache->cpu_rcaches)
+> +			break;
+>   		for_each_possible_cpu(cpu) {
+>   			cpu_rcache = per_cpu_ptr(rcache->cpu_rcaches, cpu);
+>   			iova_magazine_free(cpu_rcache->loaded);
+> @@ -858,6 +900,9 @@ static void free_iova_rcaches(struct iova_domain *iovad)
+>   		for (j = 0; j < rcache->depot_size; ++j)
+>   			iova_magazine_free(rcache->depot[j]);
+>   	}
+> +
+> +	kfree(iovad->rcaches);
+> +	iovad->rcaches = NULL;
+>   }
+>   
+>   /*
+> diff --git a/drivers/vdpa/vdpa_user/iova_domain.c b/drivers/vdpa/vdpa_user/iova_domain.c
+> index 2b1143f11d8f..22f7d43f8a68 100644
+> --- a/drivers/vdpa/vdpa_user/iova_domain.c
+> +++ b/drivers/vdpa/vdpa_user/iova_domain.c
+> @@ -480,6 +480,7 @@ vduse_domain_create(unsigned long iova_limit, size_t bounce_size)
+>   	struct file *file;
+>   	struct vduse_bounce_map *map;
+>   	unsigned long pfn, bounce_pfns;
+> +	int ret;
+>   
+>   	bounce_pfns = PAGE_ALIGN(bounce_size) >> PAGE_SHIFT;
+>   	if (iova_limit <= bounce_size)
+> @@ -513,10 +514,20 @@ vduse_domain_create(unsigned long iova_limit, size_t bounce_size)
+>   	spin_lock_init(&domain->iotlb_lock);
+>   	init_iova_domain(&domain->stream_iovad,
+>   			PAGE_SIZE, IOVA_START_PFN);
+> +	ret = iova_domain_init_rcaches(&domain->stream_iovad);
+> +	if (ret)
+> +		goto err_iovad_stream;
+>   	init_iova_domain(&domain->consistent_iovad,
+>   			PAGE_SIZE, bounce_pfns);
+> +	ret = iova_domain_init_rcaches(&domain->consistent_iovad);
+> +	if (ret)
+> +		goto err_iovad_consistent;
+>   
+>   	return domain;
+> +err_iovad_consistent:
+> +	put_iova_domain(&domain->stream_iovad);
+> +err_iovad_stream:
+> +	fput(file);
+>   err_file:
+>   	vfree(domain->bounce_maps);
+>   err_map:
+> diff --git a/include/linux/iova.h b/include/linux/iova.h
+> index cea79cb9f26c..320a70e40233 100644
+> --- a/include/linux/iova.h
+> +++ b/include/linux/iova.h
+> @@ -21,18 +21,8 @@ struct iova {
+>   	unsigned long	pfn_lo; /* Lowest allocated pfn */
+>   };
+>   
+> -struct iova_magazine;
+> -struct iova_cpu_rcache;
+>   
+> -#define IOVA_RANGE_CACHE_MAX_SIZE 6	/* log of max cached IOVA range size (in pages) */
+> -#define MAX_GLOBAL_MAGS 32	/* magazines per bin */
+> -
+> -struct iova_rcache {
+> -	spinlock_t lock;
+> -	unsigned long depot_size;
+> -	struct iova_magazine *depot[MAX_GLOBAL_MAGS];
+> -	struct iova_cpu_rcache __percpu *cpu_rcaches;
+> -};
+> +struct iova_rcache;
+>   
+>   /* holds all the iova translations for a domain */
+>   struct iova_domain {
+> @@ -46,7 +36,7 @@ struct iova_domain {
+>   	unsigned long	max32_alloc_size; /* Size of last failed allocation */
+>   	struct iova	anchor;		/* rbtree lookup anchor */
+>   
+> -	struct iova_rcache rcaches[IOVA_RANGE_CACHE_MAX_SIZE];	/* IOVA range caches */
+> +	struct iova_rcache	*rcaches;
+>   	struct hlist_node	cpuhp_dead;
+>   };
+>   
+> @@ -102,6 +92,7 @@ struct iova *reserve_iova(struct iova_domain *iovad, unsigned long pfn_lo,
+>   	unsigned long pfn_hi);
+>   void init_iova_domain(struct iova_domain *iovad, unsigned long granule,
+>   	unsigned long start_pfn);
+> +int iova_domain_init_rcaches(struct iova_domain *iovad);
+>   struct iova *find_iova(struct iova_domain *iovad, unsigned long pfn);
+>   void put_iova_domain(struct iova_domain *iovad);
+>   #else

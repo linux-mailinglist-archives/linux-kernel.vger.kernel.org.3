@@ -2,99 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 280C84B5075
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A194B507C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353419AbiBNMn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 07:43:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37964 "EHLO
+        id S1353414AbiBNMo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 07:44:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353378AbiBNMn5 (ORCPT
+        with ESMTP id S233510AbiBNMoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 07:43:57 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457B54A915
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 04:43:48 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 5197F1F4384F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644842626;
-        bh=IvY7iJXZuxVISQOzxTkzNan7PoRvkvKAMjY1GwjciqA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QXQIDpL+wlcUJSteZlDsqVfHd73wuzzjWwwDOoEFCt2econPievKZC/1oAO4p4kkI
-         Rw0W4lQ4fe47IkCH0j3J7XacuvmspOj0yZSG9NV+mDcZObophnvnWKosO5kKLfQwm3
-         SWAdkas796uUKoJn8PJauQoPFyK5U8w5KJ3m+CU2UpSPLH405q5Ic07RMybfGVeKGx
-         Zu/Wuog64S0en+WH1eYPiERDOEAEa/CdYr+Mo1tNNKxMzpwGwSrX70H/haQC71JmtV
-         s4VHzu3D1EW9XrQAYjzaDOn4GDiDAq5z6BzvHwQs/m4bKByE40tK8IXG8QvPNiSZj1
-         qorX5LpeI+OsA==
-Message-ID: <67b2e6e8-e4fe-06ca-3d12-9bba83743989@collabora.com>
-Date:   Mon, 14 Feb 2022 13:43:42 +0100
+        Mon, 14 Feb 2022 07:44:25 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9AD4AE25;
+        Mon, 14 Feb 2022 04:44:17 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id n5so12187805ilk.12;
+        Mon, 14 Feb 2022 04:44:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AdSVOhXvPflvsh6Jc0LXMR2FThi2beB719bBXF7UQpg=;
+        b=IVbEf0st+pMoHzt5k6frRYpNKaZp+57tz/hbu0enuiNNoJw5mNi00EBoMHz9DVwT6Q
+         GxYouE7wzfyu4kh3nOz+NdXpyC7PRJjUpywCDnHtr22gA2FAznDP8hh4yLkoMOYCs9Cd
+         hJ/9PFmPm9Y5ck9kZTyuENHeqJMsJccrAM0YQ0Ry+HeigYvwH30ypp0CFqNpVVeO8bQg
+         RZLS67kiMFyicu0SxMGNCQSZJqL2OMOR7sj8fVcDndUJiatvZGTfzP9hxz3zef+q38OW
+         gLRY1+iTIZUA0e2luZg/JMR0aZcJg7Q+JJhHU3b8NCbBtJRs51luwQVTpuQeMeIYFEPy
+         Inmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AdSVOhXvPflvsh6Jc0LXMR2FThi2beB719bBXF7UQpg=;
+        b=c+Etdjecy5IjqKEDGNqvm/718dWTPw+v1v3uznjID1gb8CGOZj2d/2QgBIzoKgXUFZ
+         nD5rzZHXKT5ytHQhfh0cytgmtXakhF7NmQ/FQHQJs4pdUNRSKlc0JHpUPswRgyJsiJyp
+         YL5c2zhrodCj2oG6//JBQEljlBdXykCijaOPoV5rI/6Ce8QjFlrZbksjDRjFpxb8R2IB
+         9hmCaqiT5JYrxga3r8eC41DrKxDvMOSWbTh2g5E46QZ+R4lAZoDTFQuuqqTrkVO7q8bE
+         wJiybupKievkuYoI/jNSDc5cMSzdXwa2OfrdFtECH3mc8PNJW93BP+VBCFBfWy/ARN+0
+         jf2Q==
+X-Gm-Message-State: AOAM530zuZhPZ/lIuhewY+EiyADRhEE7TCtm3OOnEZ5wlmCq6Z+bHO4k
+        0NYkDnUMRaw4i3ppbCpFap80SRAoQ6J5GNMlQG4=
+X-Google-Smtp-Source: ABdhPJxnxCpvFqcAkK1eb4qN90HrjGF7tGDYDWp/VQDGl0lHHe3UOhC6H/tACygYgV3u7p/NbqVgxS7j4QHSwdz1aHI=
+X-Received: by 2002:a05:6e02:1ba2:: with SMTP id n2mr8253361ili.5.1644842657184;
+ Mon, 14 Feb 2022 04:44:17 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 20/23] ASoC: codecs: wcd938x: Make use of the helper
- component_compare/release_of
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>, Yong Wu <yong.wu@mediatek.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        James Wang <james.qian.wang@arm.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        iommu@lists.linux-foundation.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-kernel@vger.kernel.org, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-mediatek@lists.infradead.org,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Tomasz Figa <tfiga@chromium.org>, srv_heupstream@mediatek.com,
-        Rob Clark <robdclark@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        alsa-devel@alsa-project.org
-References: <20220214060819.7334-1-yong.wu@mediatek.com>
- <20220214060819.7334-21-yong.wu@mediatek.com>
- <YgpNqLQzpx4J6d8K@sirena.org.uk>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <YgpNqLQzpx4J6d8K@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220212130410.6901-16-ojeda@kernel.org> <8baf7006-90ed-25b8-3005-69b5475215cf@gmail.com>
+In-Reply-To: <8baf7006-90ed-25b8-3005-69b5475215cf@gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 14 Feb 2022 13:44:06 +0100
+Message-ID: <CANiq72kYLEbw7s9_V8aUC0YDYtb979z2y-UgmOhFyCkgpz4cuA@mail.gmail.com>
+Subject: Re: [PATCH v4 15/20] docs: add Rust documentation
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Wu XiangCheng <bobwxc@email.cn>, Daniel Xu <dxu@dxuuu.xyz>,
+        Gary Guo <gary@garyguo.net>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Yuki Okushi <jtitor@2k36.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Finn Behrens <me@kloenk.de>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Wei Liu <wei.liu@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 14/02/22 13:40, Mark Brown ha scritto:
-> On Mon, Feb 14, 2022 at 02:08:16PM +0800, Yong Wu wrote:
->> Use the common compare/release helpers from component.
-> 
-> What's the story with dependencies here?  I've just got this one patch
-> with no cover letter...
+Hi Akira,
 
-Hello Mark,
-I agree, the cover letter should be sent to everyone; Yong, please add the
-proper Ccs to it next time.
+On Mon, Feb 14, 2022 at 11:47 AM Akira Yokosawa <akiyks@gmail.com> wrote:
+>
+> Please find inline comments WRT ReST-in-kereneldoc.
 
-Anyway, context:
-https://patchwork.kernel.org/project/linux-mediatek/cover/20220214060819.7334-1-yong.wu@mediatek.com/
+Thanks a lot for the detailed review & references. I will apply the suggestions.
 
 Cheers,
-Angelo
+Miguel

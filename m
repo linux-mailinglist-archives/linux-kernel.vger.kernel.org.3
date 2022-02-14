@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241AC4B477A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7902A4B45CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:32:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244872AbiBNJnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:43:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33484 "EHLO
+        id S243161AbiBNJ3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:29:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244799AbiBNJkx (ORCPT
+        with ESMTP id S243078AbiBNJ2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:40:53 -0500
+        Mon, 14 Feb 2022 04:28:47 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B80654B7;
-        Mon, 14 Feb 2022 01:36:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187A160AA5;
+        Mon, 14 Feb 2022 01:28:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0F440B80DCC;
-        Mon, 14 Feb 2022 09:36:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17A83C340EF;
-        Mon, 14 Feb 2022 09:36:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB788B80DC6;
+        Mon, 14 Feb 2022 09:28:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE3AAC340E9;
+        Mon, 14 Feb 2022 09:28:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831361;
-        bh=snN2LXEolAe1omZS7novdG4hFZ2Ief0Al+9cp4YeOlo=;
+        s=korg; t=1644830917;
+        bh=BVp2NYOxol68HKJUG8M/TDvYST2EW00jW0boGJsVm1w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RQ5ujsbW5NRWHmX6jljqn52jfMn2Jnx3SiqDWPW2/hgFtpRpySQtd1Nrosb1k7PG+
-         GIpPKgNsqk8iJH0PT4xQvjMQ0rib/5TyIiFDhna4Y39qmqpaDfGS8al9Pji2Co1YqQ
-         7WP/s1m/dQwvjTtDXTaDeg4jn0/998GUfTrI+ujE=
+        b=qV3hzuAR1Bu6xDjg6MVm0iACKieRblnXJqJ+41yAB1S36R8Yp9TOX2DVL4veH4UDn
+         AztcM13CdydgKS7JKgFeafAdqPbTLBMW/QEpuJPVOYczX3kRRYQ/tJ+agVWiXb+I/C
+         hERer+3P2ZVikqZ2QcJzQgJ2Jil2/sd+eJ3eQ1AY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH 5.4 04/71] ima: Do not print policy rule with inactive LSM labels
+        stable@vger.kernel.org,
+        Guillaume Bertholon <guillaume.bertholon@ens.fr>
+Subject: [PATCH 4.9 06/34] serial: sh-sci: Fix misplaced backport of "Fix late enablement of AUTORTS"
 Date:   Mon, 14 Feb 2022 10:25:32 +0100
-Message-Id: <20220214092452.169784326@linuxfoundation.org>
+Message-Id: <20220214092446.158164949@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
+References: <20220214092445.946718557@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Berger <stefanb@linux.ibm.com>
+From: Guillaume Bertholon <guillaume.bertholon@ens.fr>
 
-commit 89677197ae709eb1ab3646952c44f6a171c9e74c upstream.
+The upstream commit 5f76895e4c71 ("serial: sh-sci: Fix late enablement of
+AUTORTS") inserted a new call to .set_mctrl().
+However the backported version in stable (commit ad3faea03fdf ("serial:
+sh-sci: Fix late enablement of AUTORTS")) does not insert it at the same
+position.
 
-Before printing a policy rule scan for inactive LSM labels in the policy
-rule. Inactive LSM labels are identified by args_p != NULL and
-rule == NULL.
+This patch moves the added instructions back to where they should be
+according to the upsteam patch.
 
-Fixes: 483ec26eed42 ("ima: ima/lsm policy rule loading logic bug fixes")
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-Cc: <stable@vger.kernel.org> # v5.6+
-Acked-by: Christian Brauner <brauner@kernel.org>
-[zohar@linux.ibm.com: Updated "Fixes" tag]
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Fixes: ad3faea03fdf ("serial: sh-sci: Fix late enablement of AUTORTS")
+Signed-off-by: Guillaume Bertholon <guillaume.bertholon@ens.fr>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/integrity/ima/ima_policy.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/tty/serial/sh-sci.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -1382,6 +1382,14 @@ int ima_policy_show(struct seq_file *m,
+--- a/drivers/tty/serial/sh-sci.c
++++ b/drivers/tty/serial/sh-sci.c
+@@ -2377,6 +2377,10 @@ done:
  
- 	rcu_read_lock();
- 
-+	/* Do not print rules with inactive LSM labels */
-+	for (i = 0; i < MAX_LSM_RULES; i++) {
-+		if (entry->lsm[i].args_p && !entry->lsm[i].rule) {
-+			rcu_read_unlock();
-+			return 0;
-+		}
+ 		serial_port_out(port, SCFCR, ctrl);
+ 	}
++	if (port->flags & UPF_HARD_FLOW) {
++		/* Refresh (Auto) RTS */
++		sci_set_mctrl(port, port->mctrl);
 +	}
-+
- 	if (entry->action & MEASURE)
- 		seq_puts(m, pt(Opt_measure));
- 	if (entry->action & DONT_MEASURE)
+ 
+ 	scr_val |= s->cfg->scscr & ~(SCSCR_CKE1 | SCSCR_CKE0);
+ 	dev_dbg(port->dev, "SCSCR 0x%x\n", scr_val);
+@@ -2391,10 +2395,6 @@ done:
+ 		 */
+ 		udelay(DIV_ROUND_UP(10 * 1000000, baud));
+ 	}
+-	if (port->flags & UPF_HARD_FLOW) {
+-		/* Refresh (Auto) RTS */
+-		sci_set_mctrl(port, port->mctrl);
+-	}
+ 
+ #ifdef CONFIG_SERIAL_SH_SCI_DMA
+ 	/*
 
 

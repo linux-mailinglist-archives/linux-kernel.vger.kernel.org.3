@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC634B4EBA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:34:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 971144B4EBD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351936AbiBNLee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:34:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34846 "EHLO
+        id S1351913AbiBNLeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:34:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351552AbiBNLd6 (ORCPT
+        with ESMTP id S1351867AbiBNLd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:33:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2BB6949F;
+        Mon, 14 Feb 2022 06:33:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4CD694A2;
         Mon, 14 Feb 2022 03:20:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53D8361126;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67E6D61140;
         Mon, 14 Feb 2022 11:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B0355C340F0;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BA768C340F4;
         Mon, 14 Feb 2022 11:20:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1644837610;
-        bh=1JS+uHQPfJVpvIAzRnbf4toT/uBwKM84kUwybvkFnAM=;
+        bh=zWy0Fim2DwHOqTznLyHN/+gBuNl38IaDVjY6vI5cAbc=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ozuiVl+GXc62m/nisUzIyypmfSdUqbtwHKOweSoMhEC01AsQCyRAUwbFbtgzWitN1
-         aGv+VQhmAvs32ODMvoy9Fx95bZ21PCZeCtB2RBsvtURboGlITBqDp4lNLs1qycrNWP
-         X6Sir1zIjLfEJSKIogzYPyr9URyuUSDy4U+7VvN6ZA/hdziRkfOiTVfRDrW2HH66JX
-         Uqq/qNrYU4lYujrRUkM8G0oVcnsqvXbY1NinIrfEewi3UCpgQGzXI9Mo/AGh5rOYIi
-         xxOPUAYx/dnJ/mxsiscW/hWMIaWvyMV+3pG+uzqoghZQw06u8TXey4+g7TYs94qeQx
-         NuZom/Q9OsjWw==
+        b=ByKf4xlzTOWN4zaJBApDy94pxmz1dtM683EsWZe7YQgB+7CG3ElSqXWY2nx8IIAEa
+         gUdXdXud4e//MmD/9eOiO0xRz8oLbCJ+6NipSvWydSaDvTN2aHVHQHi+2CSy/pY4Tz
+         lHJOn3Gr7py+zZ5q4L0mdbrWB732VkCjb9BW35VGjnLl9GAYy0Q6g/xbVEXT38bkDo
+         dsA4BQERYiVCdFTdteuap97ZKUeJP8bvOWKCo+MvGXxKPh5h/Hly29lzQL6qutdWEr
+         DvQx4Lj34Ze9zO+mOgKN6R05FH5Bw/0GQEWPhxdSsYEp0e5cpk7rWcaylrHdfYjLzr
+         J3TLa3r37/N0Q==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 99AF6E6D4D5;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A44C1E7BB04;
         Mon, 14 Feb 2022 11:20:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] Generate netlink notification when default IPv6 route
- preference changes
+Subject: Re: [PATCH] etherdevice: Adjust ether_addr* prototypes to silence
+ -Wstringop-overead
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164483761062.10850.8641197863341390379.git-patchwork-notify@kernel.org>
+Message-Id: <164483761066.10850.7033053223597897963.git-patchwork-notify@kernel.org>
 Date:   Mon, 14 Feb 2022 11:20:10 +0000
-References: <20220210220935.21139-1-kalash@arista.com>
-In-Reply-To: <20220210220935.21139-1-kalash@arista.com>
-To:     Kalash Nainwal <kalash@arista.com>
-Cc:     netdev@vger.kernel.org, fruggeri@arista.com, dsahern@gmail.com,
-        davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org
+References: <20220212171449.3000885-1-keescook@chromium.org>
+In-Reply-To: <20220212171449.3000885-1-keescook@chromium.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kuba@kernel.org, mkl@pengutronix.de, davem@davemloft.net,
+        netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, linux-hardening@vger.kernel.org
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,19 +67,27 @@ Hello:
 This patch was applied to netdev/net-next.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Thu, 10 Feb 2022 14:09:35 -0800 you wrote:
-> Generate RTM_NEWROUTE netlink notification when the route preference
->  changes on an existing kernel generated default route in response to
->  RA messages. Currently netlink notifications are generated only when
->  this route is added or deleted but not when the route preference
->  changes, which can cause userspace routing application state to go
->  out of sync with kernel.
+On Sat, 12 Feb 2022 09:14:49 -0800 you wrote:
+> With GCC 12, -Wstringop-overread was warning about an implicit cast from
+> char[6] to char[8]. However, the extra 2 bytes are always thrown away,
+> alignment doesn't matter, and the risk of hitting the edge of unallocated
+> memory has been accepted, so this prototype can just be converted to a
+> regular char *. Silences:
+> 
+> net/core/dev.c: In function ‘bpf_prog_run_generic_xdp’: net/core/dev.c:4618:21: warning: ‘ether_addr_equal_64bits’ reading 8 bytes from a region of size 6 [-Wstringop-overread]
+>  4618 |         orig_host = ether_addr_equal_64bits(eth->h_dest, > skb->dev->dev_addr);
+>       |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> net/core/dev.c:4618:21: note: referencing argument 1 of type ‘const u8[8]’ {aka ‘const unsigned char[8]’}
+> net/core/dev.c:4618:21: note: referencing argument 2 of type ‘const u8[8]’ {aka ‘const unsigned char[8]’}
+> In file included from net/core/dev.c:91: include/linux/etherdevice.h:375:20: note: in a call to function ‘ether_addr_equal_64bits’
+>   375 | static inline bool ether_addr_equal_64bits(const u8 addr1[6+2],
+>       |                    ^~~~~~~~~~~~~~~~~~~~~~~
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2] Generate netlink notification when default IPv6 route preference changes
-    https://git.kernel.org/netdev/net-next/c/806c37ddcf28
+  - etherdevice: Adjust ether_addr* prototypes to silence -Wstringop-overead
+    https://git.kernel.org/netdev/net-next/c/2618a0dae09e
 
 You are awesome, thank you!
 -- 

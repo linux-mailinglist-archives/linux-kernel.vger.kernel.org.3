@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 410A54B4887
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2264B4A5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343992AbiBNJzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:55:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33252 "EHLO
+        id S1346726AbiBNKUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:20:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344756AbiBNJwB (ORCPT
+        with ESMTP id S1346683AbiBNKP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:52:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C63E6D3A3;
-        Mon, 14 Feb 2022 01:43:12 -0800 (PST)
+        Mon, 14 Feb 2022 05:15:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065F879235;
+        Mon, 14 Feb 2022 01:53:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCCB360FA2;
-        Mon, 14 Feb 2022 09:43:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C35A9C340E9;
-        Mon, 14 Feb 2022 09:43:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5156CB80DC4;
+        Mon, 14 Feb 2022 09:53:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 689E9C340E9;
+        Mon, 14 Feb 2022 09:53:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831791;
-        bh=lrgQINDT48P+sKYwHswUTTKmWWrF21F0fKyR27zr+30=;
+        s=korg; t=1644832386;
+        bh=kBk9rwrQ8IjaiqnLRz8c7PBbVQhRD4GH1Rd2rgHKem8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SfTZmarI9IqA+poNNZ8Na08LlTZ8M1qfknuSmWt7sG4VYdU+ln3Jrbl2/goC9atU8
-         w1gSCIhFzT3GU3xqXzzprgy8jknXv79V975qJiwIakOE6ZFVQQZG/M0PdtUCFQDSEV
-         XPK8UAh3iWo8E1TLEdJM2eO+6cijlvR4pjaHnqRQ=
+        b=kKhdRsbBqM5yQ56uf0qs8niOwVGxX0v8YrWr0heQ9TKoC71kevTH4Mq13k5B3aN/5
+         dCf4kUmPqR7WOLCkbwUriI02Xth07vcxlA+Of7ug68a67vL9k6axKoNR17UaY0vLct
+         xWaFvvjFGUooyepRing/+TvB2jOSon5WstSMbjps=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Adam Ford <aford173@gmail.com>
-Subject: [PATCH 5.10 097/116] usb: gadget: udc: renesas_usb3: Fix host to USB_ROLE_NONE transition
+        stable@vger.kernel.org, stable@kernel.org,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Subject: [PATCH 5.15 138/172] usb: dwc2: drd: fix soft connect when gadget is unconfigured
 Date:   Mon, 14 Feb 2022 10:26:36 +0100
-Message-Id: <20220214092502.127742382@linuxfoundation.org>
+Message-Id: <20220214092511.164824295@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adam Ford <aford173@gmail.com>
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 
-commit 459702eea6132888b5c5b64c0e9c626da4ec2493 upstream.
+commit 269cbcf7b72de6f0016806d4a0cec1d689b55a87 upstream.
 
-The support the external role switch a variety of situations were
-addressed, but the transition from USB_ROLE_HOST to USB_ROLE_NONE
-leaves the host up which can cause some error messages when
-switching from host to none, to gadget, to none, and then back
-to host again.
+When the gadget driver hasn't been (yet) configured, and the cable is
+connected to a HOST, the SFTDISCON gets cleared unconditionally, so the
+HOST tries to enumerate it.
+At the host side, this can result in a stuck USB port or worse. When
+getting lucky, some dmesg can be observed at the host side:
+ new high-speed USB device number ...
+ device descriptor read/64, error -110
 
- xhci-hcd ee000000.usb: Abort failed to stop command ring: -110
- xhci-hcd ee000000.usb: xHCI host controller not responding, assume dead
- xhci-hcd ee000000.usb: HC died; cleaning up
- usb 4-1: device not accepting address 6, error -108
- usb usb4-port1: couldn't allocate usb_device
+Fix it in drd, by checking the enabled flag before calling
+dwc2_hsotg_core_connect(). It will be called later, once configured,
+by the normal flow:
+- udc_bind_to_driver
+ - usb_gadget_connect
+   - dwc2_hsotg_pullup
+     - dwc2_hsotg_core_connect
 
-After this happens it will not act as a host again.
-Fix this by releasing the host mode when transitioning to USB_ROLE_NONE.
-
-Fixes: 0604160d8c0b ("usb: gadget: udc: renesas_usb3: Enhance role switch support")
-Cc: stable <stable@vger.kernel.org>
-Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Signed-off-by: Adam Ford <aford173@gmail.com>
-Link: https://lore.kernel.org/r/20220128223603.2362621-1-aford173@gmail.com
+Fixes: 17f934024e84 ("usb: dwc2: override PHY input signals with usb role switch support")
+Cc: stable@kernel.org
+Reviewed-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Acked-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Link: https://lore.kernel.org/r/1644423353-17859-1-git-send-email-fabrice.gasnier@foss.st.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/udc/renesas_usb3.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/dwc2/drd.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/gadget/udc/renesas_usb3.c
-+++ b/drivers/usb/gadget/udc/renesas_usb3.c
-@@ -2378,6 +2378,8 @@ static void handle_ext_role_switch_state
- 	switch (role) {
- 	case USB_ROLE_NONE:
- 		usb3->connection_state = USB_ROLE_NONE;
-+		if (cur_role == USB_ROLE_HOST)
-+			device_release_driver(host);
- 		if (usb3->driver)
- 			usb3_disconnect(usb3);
- 		usb3_vbus_out(usb3, false);
+--- a/drivers/usb/dwc2/drd.c
++++ b/drivers/usb/dwc2/drd.c
+@@ -109,8 +109,10 @@ static int dwc2_drd_role_sw_set(struct u
+ 		already = dwc2_ovr_avalid(hsotg, true);
+ 	} else if (role == USB_ROLE_DEVICE) {
+ 		already = dwc2_ovr_bvalid(hsotg, true);
+-		/* This clear DCTL.SFTDISCON bit */
+-		dwc2_hsotg_core_connect(hsotg);
++		if (hsotg->enabled) {
++			/* This clear DCTL.SFTDISCON bit */
++			dwc2_hsotg_core_connect(hsotg);
++		}
+ 	} else {
+ 		if (dwc2_is_device_mode(hsotg)) {
+ 			if (!dwc2_ovr_bvalid(hsotg, false))
 
 

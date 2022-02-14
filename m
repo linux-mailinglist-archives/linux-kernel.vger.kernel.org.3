@@ -2,32 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9CE4B4195
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 07:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E45004B41AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 07:10:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240503AbiBNGJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 01:09:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48606 "EHLO
+        id S240583AbiBNGJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 01:09:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230500AbiBNGJU (ORCPT
+        with ESMTP id S240526AbiBNGJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 01:09:20 -0500
+        Mon, 14 Feb 2022 01:09:29 -0500
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3C150E15
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 22:09:11 -0800 (PST)
-X-UUID: a3ec6c2d8e3f4609a6f077380016b41c-20220214
-X-UUID: a3ec6c2d8e3f4609a6f077380016b41c-20220214
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6709751E6B
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 22:09:22 -0800 (PST)
+X-UUID: 0ec94853483f4c80990d483d107f3624-20220214
+X-UUID: 0ec94853483f4c80990d483d107f3624-20220214
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
         (envelope-from <yong.wu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1045061193; Mon, 14 Feb 2022 14:09:05 +0800
+        with ESMTP id 1592611978; Mon, 14 Feb 2022 14:09:17 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 14 Feb 2022 14:09:03 +0800
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 14 Feb 2022 14:09:15 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 14 Feb 2022 14:09:01 +0800
+ Transport; Mon, 14 Feb 2022 14:09:13 +0800
 From:   Yong Wu <yong.wu@mediatek.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Airlie <airlied@linux.ie>,
@@ -38,13 +37,13 @@ CC:     James Wang <james.qian.wang@arm.com>,
         <iommu@lists.linux-foundation.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        <linux-kernel@vger.kernel.org>, "Joerg Roedel" <joro@8bytes.org>,
+        <linux-kernel@vger.kernel.org>, Joerg Roedel <joro@8bytes.org>,
         Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         <linux-mediatek@lists.infradead.org>,
         Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        "Stephen Boyd" <sboyd@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
         Hsin-Yi Wang <hsinyi@chromium.org>,
@@ -54,10 +53,11 @@ CC:     James Wang <james.qian.wang@arm.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Sebastian Reichel <sre@kernel.org>,
         Yong Wu <yong.wu@mediatek.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH 01/23] component: Add common helper for compare/release functions
-Date:   Mon, 14 Feb 2022 14:07:57 +0800
-Message-ID: <20220214060819.7334-2-yong.wu@mediatek.com>
+        Mihail Atanassov <mihail.atanassov@arm.com>,
+        Brian Starkey <brian.starkey@arm.com>
+Subject: [PATCH 02/23] drm/komeda: Make use of the helper component_compare_of
+Date:   Mon, 14 Feb 2022 14:07:58 +0800
+Message-ID: <20220214060819.7334-3-yong.wu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220214060819.7334-1-yong.wu@mediatek.com>
 References: <20220214060819.7334-1-yong.wu@mediatek.com>
@@ -73,114 +73,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The component requires the compare/release functions, there are so many
-copies in current kernel. Just define four common helpers for them.
+Use the common compare helper from component.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "James (Qian) Wang" <james.qian.wang@arm.com>
+Cc: Liviu Dudau <liviu.dudau@arm.com>
+Cc: Mihail Atanassov <mihail.atanassov@arm.com>
+Cc: Brian Starkey <brian.starkey@arm.com>
 Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 ---
-I have run "make htmldocs". Due to my poor english, If the grammer is
-wrong or need more comments, please help to correct or supplement.
-Thanks.
----
- drivers/base/component.c  | 58 +++++++++++++++++++++++++++++++++++++++
- include/linux/component.h |  6 ++++
- 2 files changed, 64 insertions(+)
+ drivers/gpu/drm/arm/display/komeda/komeda_drv.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/base/component.c b/drivers/base/component.c
-index 2d25a6416587..3d72d2820d7d 100644
---- a/drivers/base/component.c
-+++ b/drivers/base/component.c
-@@ -11,6 +11,7 @@
- #include <linux/device.h>
- #include <linux/list.h>
- #include <linux/mutex.h>
-+#include <linux/of.h>
- #include <linux/slab.h>
- #include <linux/debugfs.h>
- 
-@@ -287,6 +288,63 @@ static void take_down_master(struct master *master)
- 	}
- }
- 
-+/**
-+ * component_compare_of - A common component compare function for of_node
-+ * @dev: component device
-+ * @data: @compare_data from component_match_add_release()
-+ *
-+ * A common compare function when compare_data is device of_node. e.g.
-+ * component_match_add_release(masterdev, &match, component_release_of,
-+ * component_compare_of, component_dev_of_node)
-+ */
-+int component_compare_of(struct device *dev, void *data)
-+{
-+	return device_match_of_node(dev, data);
-+}
-+EXPORT_SYMBOL_GPL(component_compare_of);
-+
-+/**
-+ * component_release_of - A common component release function for of_node
-+ * @dev: component device
-+ * @data: @compare_data from component_match_add_release()
-+ *
-+ * About the example, Please see component_compare_of().
-+ */
-+void component_release_of(struct device *dev, void *data)
-+{
-+	of_node_put(data);
-+}
-+EXPORT_SYMBOL_GPL(component_release_of);
-+
-+/**
-+ * component_compare_dev - A common component compare function for dev
-+ * @dev: component device
-+ * @data: @compare_data from component_match_add_release()
-+ *
-+ * A common compare function when compare_data is struce device. e.g.
-+ * component_match_add(masterdev, &match, component_compare_dev, component_dev)
-+ */
-+int component_compare_dev(struct device *dev, void *data)
-+{
-+	return dev == data;
-+}
-+EXPORT_SYMBOL_GPL(component_compare_dev);
-+
-+/**
-+ * component_compare_dev_name - A common component compare function for device name
-+ * @dev: component device
-+ * @data: @compare_data from component_match_add_release()
-+ *
-+ * A common compare function when compare_data is device name string. e.g.
-+ * component_match_add(masterdev, &match, component_compare_dev_name,
-+ * "component_dev_name")
-+ */
-+int component_compare_dev_name(struct device *dev, void *data)
-+{
-+	return device_match_name(dev, data);
-+}
-+EXPORT_SYMBOL_GPL(component_compare_dev_name);
-+
- static void devm_component_match_release(struct device *parent, void *res)
- {
- 	struct component_match *match = res;
-diff --git a/include/linux/component.h b/include/linux/component.h
-index 16de18f473d7..6bc1c6e7f76d 100644
---- a/include/linux/component.h
-+++ b/include/linux/component.h
-@@ -82,6 +82,12 @@ struct component_master_ops {
- 	void (*unbind)(struct device *master);
+diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_drv.c b/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
+index e7933930a657..c325872699ec 100644
+--- a/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
++++ b/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
+@@ -92,11 +92,6 @@ static const struct component_master_ops komeda_master_ops = {
+ 	.unbind	= komeda_unbind,
  };
  
-+/* A set helper functions for component compare/release */
-+int component_compare_of(struct device *dev, void *data);
-+void component_release_of(struct device *dev, void *data);
-+int component_compare_dev(struct device *dev, void *data);
-+int component_compare_dev_name(struct device *dev, void *data);
-+
- void component_master_del(struct device *,
- 	const struct component_master_ops *);
+-static int compare_of(struct device *dev, void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ static void komeda_add_slave(struct device *master,
+ 			     struct component_match **match,
+ 			     struct device_node *np,
+@@ -106,7 +101,7 @@ static void komeda_add_slave(struct device *master,
  
+ 	remote = of_graph_get_remote_node(np, port, endpoint);
+ 	if (remote) {
+-		drm_of_component_match_add(master, match, compare_of, remote);
++		drm_of_component_match_add(master, match, component_compare_of, remote);
+ 		of_node_put(remote);
+ 	}
+ }
 -- 
 2.18.0
 

@@ -2,258 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC334B504D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:38:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E7F4B5055
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:39:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353258AbiBNMiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 07:38:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33882 "EHLO
+        id S1353267AbiBNMi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 07:38:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbiBNMiS (ORCPT
+        with ESMTP id S229718AbiBNMiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 07:38:18 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB1C4925B;
-        Mon, 14 Feb 2022 04:38:11 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21EBDv49029601;
-        Mon, 14 Feb 2022 12:37:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : in-reply-to : references : date : message-id : content-type :
- mime-version; s=corp-2021-07-09;
- bh=69ObOTcHVGMsRwHlvkl39NShg/KOGQ3KsCZ8OPM6x+o=;
- b=ypYfiD4tgdyTiAdHuFFl/aPRoHVbsDnti0gXT56VoilrIJ3+sdSYRjqILzONH75UadCh
- fOFWuW6kb53UaY7Y6aQMbFQIzW12oZ10jweBCP4GgmbBqB99apmtJFmPAQJxH85jybPU
- OFG7/sn5ejm+iAqlFdG0hTQeuBhm1sewR0qhxToQQ93ReqUolhBp9DCh4Gpv1EnPGjTc
- mlkHZZB9iofVLSZVX+ZsaIeE1qg90/NYPFLCEQPa/jLEE00oicoMh7m9AYo1jiGyuW1t
- 4GKTe8RHQPY06ScDR6N2OKTcQ+vbewa+wdeVAS7VYT6CZkH9Y8bF51Drq3ymkF92/dJB Gw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e63g14ba1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Feb 2022 12:37:11 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21ECV1vL012073;
-        Mon, 14 Feb 2022 12:37:10 GMT
-Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2172.outbound.protection.outlook.com [104.47.73.172])
-        by userp3020.oracle.com with ESMTP id 3e66bky3q2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Feb 2022 12:37:10 +0000
+        Mon, 14 Feb 2022 07:38:55 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2076.outbound.protection.outlook.com [40.107.94.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519654A907;
+        Mon, 14 Feb 2022 04:38:48 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gEd8Mk0iYrP8vsZNdkSLQrSrIB0NzLDTRR68vd+n4XZ5aGYeejNR2pyQdHl5GEqjRidKPeTFXgmid+opRD/8mxjmRcZD36Gn8cV+7y0zDCqhvx7iXkDm4GKH6JJJqnTZ5d2o+XXHg78L1cxvI2uMvBMQax+naTaVM5ZI0L8gpl0Pe2BICU/txFjJRAq/vIlzP36dj8P+ZZTWfuS7SdKBM/GEJ/kCB72HYV2phKVETwSSfferSCPq3cHqe8iCQiO0AvB8DoAYigaOfD/eyFeVysikeFdHNxI5pxK84zR9wHskceLSrdfJact0pWhc0cc2W26X4jwrroyrQth1F3jcog==
+ b=Yo4GOymmXieHNDBOiy1ir4bkar2fkvMhsRDPopX6s+P1FNmL5+FdhixNjO1IvlPZSKYC/L+bnvf+l0at5cfno4rUu/HBFMSt6CpWQf49Nrw3Ytnpei5ccICqE0LsEfq3V7WcphGsHSyKjN58bnnKG1tTa9hbQ6sSHJd/6fAHXqdbuMw3tlj050t01J9uRlKEI8nz0VnfufS8/ZmftxzKBuzrEp4c1b3jM3FDxXdxB+9KyHA+7AGtM6JQLqnafC++N+Z8l0wNmoKE7fbiqq5wOkS+oeKgYmKFzYYI32Bt3TcDJ5HwI7nTRqyvNTtNftyYNM7X4IT8oSx3zaRvpSJ08Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=69ObOTcHVGMsRwHlvkl39NShg/KOGQ3KsCZ8OPM6x+o=;
- b=NyBndi/BhI4gHQgOqFZaailPTDfbuSFzofRkJPAHSu0APhGEetBn5oW3WtSwxVAuip90FPrzMsV/3lYx6ik/W+PdrGdUPgXgZJbjIKUZ3iyRajPdFs667JTfTqkhMa9RBAyjSf2dHZZKpICas1uQuJX6xmkbf9SKPTab3U3DCXzMiZY5pCo58TSzvInAFBkeEm127MVgFTGUaxrg1tAiP5WLx0xjxJF9I6FDlMuxUIAfZ/VdOY4u9e772X1Dtek+OsC2uWd89FMGqOwqkzOZMqak/+o02YFOh251EjIi/RnajSvfHHgfDWVmqYZ28N88PDFbkzhm9TuMW8QbV/T3oQ==
+ bh=6UowyYfDMa5djVyTqLWTcSexa93nMb24ExQfR/9HZj8=;
+ b=nuYaLrVP07gf60whA6jnclkC4MAM7Sr3BRDUBeB7LEAMcAkRJ2QwuR7doZKixkxpo3t5Ai5iV4LBQpqxEfZ+npkY8Ata1I/Gn+e6N6M/WJXJ7kWuhvB09pooMYjeGZf+tNr4i4zEOKmJPHh5/uhW4AAv0ofFUIJeOaqyltCO/iZ61suiB+hqY4QBz1NCTPdDBpu2lX/ysQhm5PrqU/a7zCX2zgJgzW8f2lIxrxUimwkdvEr2lC4sqKVR+6otZ/c+dLfYfF3YVcauVOgIXWVvhcVyjabJDc+3R3AQuPI3L4AaxnCxEQkTNJWgHYuvbalQKoIEGpC6l8TGQhudq9ueiw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=69ObOTcHVGMsRwHlvkl39NShg/KOGQ3KsCZ8OPM6x+o=;
- b=wR86c2bbxu+78ia9eJXN6kyGhaSCi3mN8yKwgX1+b6P4IDdywrNhdrsR3cTbfspWJ5pqKN9Vo2m5KDPXiu54Dsjqnf9qoVT5ndHkP1YUEgYP3+bCKcjnauujlLkynDDyBO6Mj7r0SYUVm30c8D/Iv2MpinAv4mU3foZhh/zBWIs=
-Received: from BLAPR10MB5138.namprd10.prod.outlook.com (2603:10b6:208:322::8)
- by SN6PR10MB3437.namprd10.prod.outlook.com (2603:10b6:805:d0::10) with
+ bh=6UowyYfDMa5djVyTqLWTcSexa93nMb24ExQfR/9HZj8=;
+ b=c239871tVJBblcZe2EMPfXSZBE17t+qQnELEdfNzTn9aOYbtBj+m20fmq+GDOK592RKlZb2NMrrh3X118uqgqMdVZNuG5SmYM3yPacBkOM2W0UaR2Q7C330XtHMZwNLYjMe3vP+qpD4Rlg4VmpCx8BUBGlk9AfNh0/eqdifp6I4WA30HP6s2lLcxkaftFKlPMGpbOjWBjk+xAwy735EV/J+Wth6RRgYOE+v2vbdvsv2TDqx7X8fZZOiVAR7ZI+thTQJj2Eu/9BZD0zhF3PDoOv4rGUifShh/A+UxFss4wVxkwAZ+EVoSX5N/+SmDiH1C8o7EZE3CLKNWMOQK5tQXrw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by BN8PR12MB3281.namprd12.prod.outlook.com (2603:10b6:408:6e::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.19; Mon, 14 Feb
- 2022 12:37:07 +0000
-Received: from BLAPR10MB5138.namprd10.prod.outlook.com
- ([fe80::e1b9:9813:d7a8:8d30]) by BLAPR10MB5138.namprd10.prod.outlook.com
- ([fe80::e1b9:9813:d7a8:8d30%5]) with mapi id 15.20.4975.019; Mon, 14 Feb 2022
- 12:37:07 +0000
-From:   Darren Kenny <darren.kenny@oracle.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>, keyrings@vger.kernel.org,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        dhowells@redhat.com, dwmw2@infradead.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        jarkko@kernel.org, jmorris@namei.org, serge@hallyn.com
-Cc:     eric.snowberg@oracle.com, keescook@chromium.org,
-        torvalds@linux-foundation.org, weiyongjun1@huawei.com,
-        nayna@linux.ibm.com, ebiggers@google.com, ardb@kernel.org,
-        nramas@linux.microsoft.com, lszubowi@redhat.com, jason@zx2c4.com,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-security-module@vger.kernel.org,
-        James.Bottomley@HansenPartnership.com, pjones@redhat.com,
-        konrad.wilk@oracle.com
-Subject: Re: [PATCH v8 17/17] integrity: Only use machine keyring when
- uefi_check_trust_mok_keys is true
-In-Reply-To: <20211124044124.998170-18-eric.snowberg@oracle.com>
-References: <20211124044124.998170-1-eric.snowberg@oracle.com>
- <20211124044124.998170-18-eric.snowberg@oracle.com>
-Date:   Mon, 14 Feb 2022 12:37:01 +0000
-Message-ID: <m27d9xtyj6.fsf@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: DB6PR0501CA0004.eurprd05.prod.outlook.com
- (2603:10a6:4:8f::14) To BLAPR10MB5138.namprd10.prod.outlook.com
- (2603:10b6:208:322::8)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.17; Mon, 14 Feb
+ 2022 12:38:44 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3%4]) with mapi id 15.20.4975.019; Mon, 14 Feb 2022
+ 12:38:44 +0000
+Date:   Mon, 14 Feb 2022 08:38:42 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 07/14] PCI: Add driver dma ownership management
+Message-ID: <20220214123842.GT4160@nvidia.com>
+References: <20220104015644.2294354-1-baolu.lu@linux.intel.com>
+ <20220104015644.2294354-8-baolu.lu@linux.intel.com>
+ <Ygoo/lCt/G6tWDz9@kroah.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ygoo/lCt/G6tWDz9@kroah.com>
+X-ClientProxiedBy: BL1PR13CA0157.namprd13.prod.outlook.com
+ (2603:10b6:208:2bd::12) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6705c8e2-d503-48af-eada-08d9efb6b603
-X-MS-TrafficTypeDiagnostic: SN6PR10MB3437:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR10MB3437B04F68763241845844D0F4339@SN6PR10MB3437.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Office365-Filtering-Correlation-Id: 56129559-4e88-49a7-4b32-08d9efb6efce
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3281:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR12MB3281AC13E08B83DF5F1E8F74C2339@BN8PR12MB3281.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: G/b+Kxmq44KCQHa/0rF//dO5xv3hkcP0JgPmYb/qm+pGTEt0gJ7g8d/le8ORbHbQMnw/G0PyGsD9QR6uguod4ZIb/VnA57DjZF615tQO/o8+45hBZmZBMioytV1EMmnYsTtyy+QeJsNiZz2gYVMzhYaDE07E9l/pX2yoOsjxaxntIO/YvFAwrD8uaxn02PksKno+8Gfya1oyMaK+/lkcx6MVHHQNjIrnfBFZTZNldqw5uGwkbKLICKVAnERbC0gSyFYq+sEtJQUvART7EuIeiFXbTU25sHGZLIaxhgmnwO2ZRbGwEVRi1fMVQFEDyo9mKvyz0kiIGMLHpuZbIaQioa1VuejQS+urBaWeT3yae4vE7NE1yLGPeJ2Qo3TwPMdWq1aMkY5cGDfo/GD5seT9QKPMzDF54p0ma+vxtKpZu92QBI24/qpB0qqOYUsDKaw5xwOK4A/hDvT95GEF2YHtjvDeneU0IVVqetWP5obO7+fhj/lXa8KVg4NpT5X1eUvVaPzYoTMCVlG5JDGt13cFG1+hlixjL1X3SKt7xWijPIM4T9RQxqTRdFItNBPeVi/pr5W8M0Crcf9EmGmhGaCq/M1OerfZBzwtgE/r2oolc1qoWwVsdQ8WtvHYoaFCNGtF2qUYCzf7wT4ctQ62Z02V2hbL0m43qVuSflBnPeX1wbwwA2m4vTluuEZNLOeFO7Ao9ZssQZ9PAhVvuY3nYwXhBJ4SBsskbISh5e+gD+piT7k=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5138.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6506007)(316002)(508600001)(6486002)(83380400001)(6666004)(86362001)(6512007)(5660300002)(26005)(44832011)(186003)(2906002)(2616005)(36756003)(4001150100001)(107886003)(4326008)(8676002)(66476007)(66556008)(52116002)(921005)(66946007)(8936002)(38350700002)(7416002)(38100700002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ToTogupOe/bL6wQ4YSMGlc5GISR43WD00Ws6GpprMVg43+K677AvmVVLA5zdqUfYQ+V1JmeJJNzGEX5OHwDSqu73F6tulWqEn5VZmQh5NNiW2IREQEu+bmslEhfTC3gZkXosO674ou3UAB4mthpPhkfqU3FmGv5E7FVWm+vTqbjh5e7ASx4cUMK4OlyK7eaab4QqTZhoko6Rl0e31FUF7aIovtDs9e0IXYaNb9SOcUrUjSAamX5N2OrLP7FnIA7cQp52ZdtfN6tw2TDCyvbTt199AwxK+nU1G9PCJYDA5d4xVlesm3Rw288TtRgNK9f4V6htcRMfxKtiilIebGtGBh2GkDCf/vQ83OXBKKldXKLGLu7dPjnmkGODLp1cjqbzezkExe7OfZri3jPvv79QSRY/CjIItY+moY9PyZW6+6S5XtxChimiCJGdtKtqeJgbpGm74UNqVuB8qImLALmzHa+sZFBhTDvPCjQav6wGLzUysX4PJvVhJeSHySqGWjxolrCeHnLB5uFalSFcsaQ2LkriEDoIig0ujm8hMr0QcWIaqPvqLOVmwnnOqgfVKlRGfP2ObRSRK7H/JIZJKj8Clh+hY4xS8qHTnmEe3apWYxexP/rfjXsd5Wq9Z+TgKiA+FxkkG1k/73KZ73S+EnMN2Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(316002)(38100700002)(36756003)(2616005)(6486002)(66556008)(66476007)(4326008)(6916009)(33656002)(186003)(1076003)(26005)(7416002)(6512007)(2906002)(86362001)(54906003)(508600001)(83380400001)(5660300002)(8936002)(6506007)(8676002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?41joNoDgTFxLT40lUBiyx7gpIe90Pm+G20zlLpg203lon0gc0DtTUj+/T2O2?=
- =?us-ascii?Q?933VOL5anKU0Jq57Y3UcsMqGBw1Vf/v+bHefYsyE2+XND/+ColfQ1pmV9Bx9?=
- =?us-ascii?Q?Sfs6e+HNCV5tRxtaLrV5rmdB5f9OH1MEaaRArp5I/QZ6WvLG1Y+TeH9IudXY?=
- =?us-ascii?Q?lorFqret+PoXiqx19x6WyXLrwCPla4E5gmcMoRGfuJ5Ot5WP4ctA9/P2eGVd?=
- =?us-ascii?Q?MbyLHSreyZL3totYvKZNDnHLKQoQf2rylc27/tmPOotzRFFxwLETs3DfKLxX?=
- =?us-ascii?Q?mU8crjqlH2ZEtv0uZPHND3Rl/QGTjDSM2Nyoxgor7UWEYDH3YDbA/T7t3E9y?=
- =?us-ascii?Q?ydF6q+id21gv0NZt+0CnkjyTV1b6kZkCnkoFEM/Ff3p60ZMfgsyLEbKik0ho?=
- =?us-ascii?Q?2zKYSyFjJ/AmcAUCI8Zgv5rfJ8mjhaBOIApAqxhxvrPP/vKN3JOSwppc8USi?=
- =?us-ascii?Q?OISb7D3AqS1YBFJYtILPynwdFzg/yHtamRgv5GT+hFLPIlkXcQLNAvj3SKnW?=
- =?us-ascii?Q?8Jy9HPqOgB2lEBHrS+SHcLYSZOx+3Xi3K7UMrcAZzQtspV050d0toUOjJvVv?=
- =?us-ascii?Q?mUWh8Es7Io70yX2aTSlXJ8Ii1siCyy7lU9AqnFUrNiZBVyPyPpg8q/mzwa2g?=
- =?us-ascii?Q?W4fq6d6d1ShrJNAtKkwa9hTXHILxGOBbV8JVcsM1AOLShcHQLRETqZjv/9Vy?=
- =?us-ascii?Q?s76QR1x2HfipUE+UmBG2Ga7EqI09K4aVkf7hOYEuV1NUpYCwjD2QGX50vHbb?=
- =?us-ascii?Q?LQfgZwEpxDBG4pzkFnrE8S4VwZ5VRc6BEXP89GS6LjDUSAoNq/Dxkr+t9Qo7?=
- =?us-ascii?Q?sIt0qg3KI9VLs52PT5s4EYJ/bI5KxAKb9PrtQp1EgeMh+i7oV3SinVhgTQWL?=
- =?us-ascii?Q?i0ED3Iq1kWXbTjWdv4CqM1ZTdw2SnZd73SURRUcvHfNY4hYR8P/3n2q/K45D?=
- =?us-ascii?Q?hq5ABKGjTJmaU2Q3ghYDXtyGh9qPFNRdVb63QpJHBpvSCa68fu3bxiFVylt4?=
- =?us-ascii?Q?u7dDL4wKxjsw77dfRWH5DErP5d0hRBZikG7AtpSSh9iPtvoj/+IuWMVg2y7R?=
- =?us-ascii?Q?pwCMHn3+Dfumj73jyVqcr/hXh86BFZYQsuuqWUzQmq7+CW4XpQVeAujbCA1L?=
- =?us-ascii?Q?/90RGc3a32TgBcTcaVL9oKaR8bxW8oTztT9qUqAklA0wrSEkGKFtb7LSKrVf?=
- =?us-ascii?Q?vPgskXE27IMBNGozj+zrjRRsN9B0nvJpoFtaludn0JBHkLckkJSmY3i8ftZH?=
- =?us-ascii?Q?u/kUy+/3OPRNr7u5KsMAei9smPl8iDPsMDI28HKQw2k3TODqcjU+a707uz46?=
- =?us-ascii?Q?II2V1VYH8/jtIK2uo9Iszjm0sCaKiyreJEllS7NC1kwOBQLn6tK5J4lkQlB0?=
- =?us-ascii?Q?ZI6hEGkNeeSebyRzQyCPTbJQtRQX3OaumnMw2fo92a0dNa/qkJw9eMqLErdn?=
- =?us-ascii?Q?AYr9WPhfl3nBZ4SqqvxEu0RGAmWJ58znL2EOiR7uicpdjBnRBAbzjmwTZlfB?=
- =?us-ascii?Q?lZFVdd5Cl9cxMsOs9gVIqYDDeobmPTdq//6D2PpfOSYRTvjp8Uk8A+cGRpVY?=
- =?us-ascii?Q?krvD2ZKA/m1/CKO9LVePki+QESyTpyWbewSSD/9tNcZKPt7tIOCbDTGV2hlt?=
- =?us-ascii?Q?eWcs4zNKs+4mOphE2sppIRc=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6705c8e2-d503-48af-eada-08d9efb6b603
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5138.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tpo9Ob3LOddrzZFjC6Sh7G7U13aG2tiUlrhnesoXuMnS7m2PyKfbizFQC91S?=
+ =?us-ascii?Q?OlPWqBVt/nxrnY4EvUURqJEqbYyhesXCrHkz5Ab/9Sdvrb/v+Xnzgtf7Dm/q?=
+ =?us-ascii?Q?ONXEBUqUFQDDSEEuhWq+JlrACZxZl/HkQ0amRr14Fl7tIr5/CVieuRWFkD98?=
+ =?us-ascii?Q?bkUv9d3Rn0OnmGu8xJagXsKo+KHs1ztYypPNucC8cXa9Tc9BGXisYedWRU5w?=
+ =?us-ascii?Q?8Ol2LiUzRn0VO7wLxdozkf0cSA6GwC5Ul21Z00ubkOYjFmPOrYbm+wdKEXUC?=
+ =?us-ascii?Q?DivPuO5keeKNWKF0SGdkikdlqxOgHV5L6OkpXbXKGS6TjSkfar5AVRL5HEsd?=
+ =?us-ascii?Q?WtvNCEnD/17Jnf4NlTC2Ee8dJtjx8ev/ux4cgf68btwEAbK0SZWn6RP2pM9f?=
+ =?us-ascii?Q?wH58eaALSlUlHrXopc9lvi1U+vedwFRZ62gQ06wrqg0777916anMsvnj7i2A?=
+ =?us-ascii?Q?JmqFmYVolRg/jZ6/HWm+UCcUDQjhTNHxSSemaxFuXG4BfMp52D7KoTrKsg/0?=
+ =?us-ascii?Q?hj7PdphzlVQcCsGXj6BCNpJg0bBCyYToBcV3X7IcBRD3NmUkokR+aMgEQIE3?=
+ =?us-ascii?Q?ffaE6bCGc18uGT3XZLhLj8+4aFUxUbxuPfJYHNGY5M8Y6KNBd79u0wDHkCsC?=
+ =?us-ascii?Q?pqPqDoQBY5vMevV2MG2ximK/hU764HdR+ignbn0AxBnnfRyZr8oPaRqFTIbC?=
+ =?us-ascii?Q?hUK0DCNHhX0w11Ui+lb6MEMOa3jkzTlpAa7dyCcYToN2O3I3DYSI669OyRKn?=
+ =?us-ascii?Q?FkDt0sleSZCqb3/MzvEXlbDQpp0QcOfDui51Gc0tY+HOXpaC870PA5uJST3k?=
+ =?us-ascii?Q?kR8cA84K/kEu28m8sjF2NqbX0Jx/mOFm5bigZQE85Wl6XnqNYGr2Z/MUYdWB?=
+ =?us-ascii?Q?yjEOeSh4Cogu2o2xFvn7QeyYnoJpOUdD+87aXQsiM0IyE74dmLa00p1N1AdS?=
+ =?us-ascii?Q?jowHMOpITe7OWfb895/tozwLRcUfXhuzqpppgSQP52mAN/VhSAjFICMXPgM9?=
+ =?us-ascii?Q?J1oPrfr5hFnHJJdf3InMbzOCr9bJWZz44BjN1znPLtxcrj0fRJ217Pa/VL+H?=
+ =?us-ascii?Q?MFxm6kh4oXBsEKkmD692OniIAasyNvRFlwoGmfz0W6yAupAN5Sw4lJW3pE5T?=
+ =?us-ascii?Q?e8BQHe0hd1Ej2yROF6v+OO8s+COWt7rtJR3iu/ZC5VzUdKqVtSDPAZBfEyJz?=
+ =?us-ascii?Q?UAX8zhu+X+vhegj4SuizckBEyt6tOIE2ugpQohuC9+Qj6oBxf8yVx/QDlbXa?=
+ =?us-ascii?Q?laxHI2jjIb6OUOMc2SCwnixTpkUVK5EAHoDrOWJkOOUlXBTY34eySo1yDCbt?=
+ =?us-ascii?Q?ly+5GaH19ocZWt45CnLhYwfxSRlpg36s0IzOeh9igo9tOp0VNL/HhI18uwbJ?=
+ =?us-ascii?Q?2AVwqxxLalVUNFUFOsgFGoPJXsCg6CzyzXAR/K9bxcB3Z+CHt14ayHTXil+T?=
+ =?us-ascii?Q?mJk/DtOgmN2oRx70AQ70bMGi6Klzdpx546npGOtwNtfmjnlwIgiut5rjLIOO?=
+ =?us-ascii?Q?L0zS22nmXwV0NxzWCAIWjVdT4Hbv4+pqFqjRB5hMgzq5WyfubBYsC08Y2Ui7?=
+ =?us-ascii?Q?7MuF1zrtm9EMWiHYwGE=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56129559-4e88-49a7-4b32-08d9efb6efce
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2022 12:37:06.9556
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2022 12:38:44.0214
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qr0HlsYV/BScHYYjtEH8NiJ9b/5vCoMb1qjzQuNZV2DlR3cHXNMAJs70iyWWAEVcslWHHoxJ1HQphBx1Z9nFWw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB3437
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10257 signatures=673431
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0
- mlxlogscore=999 phishscore=0 bulkscore=0 malwarescore=0 adultscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202140076
-X-Proofpoint-GUID: Jhr5DRR5SonOkFsBXJSxseAXO9LhoXO3
-X-Proofpoint-ORIG-GUID: Jhr5DRR5SonOkFsBXJSxseAXO9LhoXO3
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: s7YFnp60sVvc6xrFUvaDXnspeYKWVJrVHx5Ux6YZCcyySQEex0XcWUua+HbBL1dM
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3281
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday, 2021-11-23 at 23:41:24 -05, Eric Snowberg wrote:
-> With the introduction of uefi_check_trust_mok_keys, it signifies the end-
-> user wants to trust the machine keyring as trusted keys.  If they have
-> chosen to trust the machine keyring, load the qualifying keys into it
-> during boot, then link it to the secondary keyring .  If the user has not
-> chosen to trust the machine keyring, it will be empty and not linked to
-> the secondary keyring.
->
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+On Mon, Feb 14, 2022 at 11:03:42AM +0100, Greg Kroah-Hartman wrote:
+> On Tue, Jan 04, 2022 at 09:56:37AM +0800, Lu Baolu wrote:
+> > Multiple PCI devices may be placed in the same IOMMU group because
+> > they cannot be isolated from each other. These devices must either be
+> > entirely under kernel control or userspace control, never a mixture. This
+> > checks and sets DMA ownership during driver binding, and release the
+> > ownership during driver unbinding.
+> > 
+> > The device driver may set a new flag (no_kernel_api_dma) to skip calling
+> > iommu_device_use_dma_api() during the binding process. For instance, the
+> > userspace framework drivers (vfio etc.) which need to manually claim
+> > their own dma ownership when assigning the device to userspace.
+> > 
+> > Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> >  include/linux/pci.h      |  5 +++++
+> >  drivers/pci/pci-driver.c | 21 +++++++++++++++++++++
+> >  2 files changed, 26 insertions(+)
+> > 
+> > diff --git a/include/linux/pci.h b/include/linux/pci.h
+> > index 18a75c8e615c..d29a990e3f02 100644
+> > +++ b/include/linux/pci.h
+> > @@ -882,6 +882,10 @@ struct module;
+> >   *              created once it is bound to the driver.
+> >   * @driver:	Driver model structure.
+> >   * @dynids:	List of dynamically added device IDs.
+> > + * @no_kernel_api_dma: Device driver doesn't use kernel DMA API for DMA.
+> > + *		Drivers which don't require DMA or want to manually claim the
+> > + *		owner type (e.g. userspace driver frameworks) could set this
+> > + *		flag.
+> 
+> Again with the bikeshedding, but this name is a bit odd.  Of course it's
+> in the kernel, this is all kernel code, so you can drop that.  And
+> again, "negative" flags are rough.  So maybe just "prevent_dma"?
 
-Reviewed-by: Darren Kenny <darren.kenny@oracle.com>
+That is misleading too, it is not that DMA is prevented, but that the
+kernel's dma_api has not been setup.
 
-> ---
-> v4: Initial version
-> v5: Rename to machine keyring
-> v6: Unmodified from v5
-> v7: Made trust_mok static
-> v8: Unmodified from v7
-> ---
->  security/integrity/digsig.c                      |  2 +-
->  security/integrity/integrity.h                   |  5 +++++
->  .../integrity/platform_certs/keyring_handler.c   |  2 +-
->  .../integrity/platform_certs/machine_keyring.c   | 16 ++++++++++++++++
->  4 files changed, 23 insertions(+), 2 deletions(-)
->
-> diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-> index 109b58840d45..1de09c7b5f93 100644
-> --- a/security/integrity/digsig.c
-> +++ b/security/integrity/digsig.c
-> @@ -116,7 +116,7 @@ static int __init __integrity_init_keyring(const unsigned int id,
->  	} else {
->  		if (id == INTEGRITY_KEYRING_PLATFORM)
->  			set_platform_trusted_keys(keyring[id]);
-> -		if (id == INTEGRITY_KEYRING_MACHINE)
-> +		if (id == INTEGRITY_KEYRING_MACHINE && trust_moklist())
->  			set_machine_trusted_keys(keyring[id]);
->  		if (id == INTEGRITY_KEYRING_IMA)
->  			load_module_cert(keyring[id]);
-> diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-> index 730771eececd..2e214c761158 100644
-> --- a/security/integrity/integrity.h
-> +++ b/security/integrity/integrity.h
-> @@ -287,9 +287,14 @@ static inline void __init add_to_platform_keyring(const char *source,
->  
->  #ifdef CONFIG_INTEGRITY_MACHINE_KEYRING
->  void __init add_to_machine_keyring(const char *source, const void *data, size_t len);
-> +bool __init trust_moklist(void);
->  #else
->  static inline void __init add_to_machine_keyring(const char *source,
->  						  const void *data, size_t len)
->  {
->  }
-> +static inline bool __init trust_moklist(void)
-> +{
-> +	return false;
-> +}
->  #endif
-> diff --git a/security/integrity/platform_certs/keyring_handler.c b/security/integrity/platform_certs/keyring_handler.c
-> index 4872850d081f..1db4d3b4356d 100644
-> --- a/security/integrity/platform_certs/keyring_handler.c
-> +++ b/security/integrity/platform_certs/keyring_handler.c
-> @@ -83,7 +83,7 @@ __init efi_element_handler_t get_handler_for_db(const efi_guid_t *sig_type)
->  __init efi_element_handler_t get_handler_for_mok(const efi_guid_t *sig_type)
->  {
->  	if (efi_guidcmp(*sig_type, efi_cert_x509_guid) == 0) {
-> -		if (IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING))
-> +		if (IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING) && trust_moklist())
->  			return add_to_machine_keyring;
->  		else
->  			return add_to_platform_keyring;
-> diff --git a/security/integrity/platform_certs/machine_keyring.c b/security/integrity/platform_certs/machine_keyring.c
-> index 09fd8f20c756..7aaed7950b6e 100644
-> --- a/security/integrity/platform_certs/machine_keyring.c
-> +++ b/security/integrity/platform_certs/machine_keyring.c
-> @@ -8,6 +8,8 @@
->  #include <linux/efi.h>
->  #include "../integrity.h"
->  
-> +static bool trust_mok;
-> +
->  static __init int machine_keyring_init(void)
->  {
->  	int rc;
-> @@ -59,3 +61,17 @@ static __init bool uefi_check_trust_mok_keys(void)
->  
->  	return false;
->  }
-> +
-> +bool __init trust_moklist(void)
-> +{
-> +	static bool initialized;
-> +
-> +	if (!initialized) {
-> +		initialized = true;
-> +
-> +		if (uefi_check_trust_mok_keys())
-> +			trust_mok = true;
-> +	}
-> +
-> +	return trust_mok;
-> +}
-> -- 
-> 2.18.4
+Though I agree the name as-is isn't great, I think the comment is good.
+
+Jason

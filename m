@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E47C4B468D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:52:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 709A44B4823
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235759AbiBNJie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:38:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52396 "EHLO
+        id S1344028AbiBNJv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:51:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244361AbiBNJfx (ORCPT
+        with ESMTP id S245087AbiBNJrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:35:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62372AE61;
-        Mon, 14 Feb 2022 01:33:40 -0800 (PST)
+        Mon, 14 Feb 2022 04:47:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A2DB842;
+        Mon, 14 Feb 2022 01:40:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2192960F87;
-        Mon, 14 Feb 2022 09:33:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF4C9C340E9;
-        Mon, 14 Feb 2022 09:33:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77A57B80DC1;
+        Mon, 14 Feb 2022 09:40:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A83BC340E9;
+        Mon, 14 Feb 2022 09:40:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831216;
-        bh=maGwADFh5ujhe3YbMq/qFuGWPGji6b+uUxhJF/LdLww=;
+        s=korg; t=1644831637;
+        bh=x5AWoXV08VpQQH7H9YVUxPssIa5vUJ4VmWGDeo3vn1I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O2gFSKOSD+kG3Qo6fWTPOdyy2AE2MT6eL8LLXcX5pgtvV2K9wSpRmXd0NYZpEfjvd
-         vlX69BVpQgn+YNfVv1QJQwgv2XR84SGQEx4+J33LIcnN/cxOiQ4s5r0W0VPtKDln7F
-         0e8DxGbqPZ3RCno6+A+0x3n9MVSUILrsFsQmH1nI=
+        b=i52xX8wxWpvDPTCo63QdobDOKt/se5LVM13ESpwB4K/XsaSZ7FMwkNVxFPGuc2DSK
+         2MNBRL5OFrEVic3p2BnGza+VPL/f2DMgFab8jsTO2pgxr6mWUSxmXkvaIdRgOevubb
+         Up+Bc3X9zpZhjy6vts92cM0OKmkowOvH2kDVt8As=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nikolay Aleksandrov <nikolay@cumulusnetworks.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 20/49] net: bridge: fix stale eth hdr pointer in br_dev_xmit
+        stable@vger.kernel.org, Michael Petlan <mpetlan@redhat.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: [PATCH 5.10 047/116] ACPI/IORT: Check node revision for PMCG resources
 Date:   Mon, 14 Feb 2022 10:25:46 +0100
-Message-Id: <20220214092448.956124456@linuxfoundation.org>
+Message-Id: <20220214092500.328287354@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
-References: <20220214092448.285381753@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nikolay Aleksandrov <nikolay@cumulusnetworks.com>
+From: Robin Murphy <robin.murphy@arm.com>
 
-commit 823d81b0fa2cd83a640734e74caee338b5d3c093 upstream.
+commit da5fb9e1ad3fbf632dce735f1bdad257ca528499 upstream.
 
-In br_dev_xmit() we perform vlan filtering in br_allowed_ingress() but
-if the packet has the vlan header inside (e.g. bridge with disabled
-tx-vlan-offload) then the vlan filtering code will use skb_vlan_untag()
-to extract the vid before filtering which in turn calls pskb_may_pull()
-and we may end up with a stale eth pointer. Moreover the cached eth header
-pointer will generally be wrong after that operation. Remove the eth header
-caching and just use eth_hdr() directly, the compiler does the right thing
-and calculates it only once so we don't lose anything.
+The original version of the IORT PMCG definition had an oversight
+wherein there was no way to describe the second register page for an
+implementation using the recommended RELOC_CTRS feature. Although the
+spec was fixed, and the final patches merged to ACPICA and Linux written
+against the new version, it seems that some old firmware based on the
+original revision has survived and turned up in the wild.
 
-Fixes: 057658cb33fb ("bridge: suppress arp pkts on BR_NEIGH_SUPPRESS ports")
-Signed-off-by: Nikolay Aleksandrov <nikolay@cumulusnetworks.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Cc: Eduardo Vela <Nava> <evn@google.com>
+Add a check for the original PMCG definition, and avoid filling in the
+second memory resource with nonsense if so. Otherwise it is likely that
+something horrible will happen when the PMCG driver attempts to probe.
+
+Reported-by: Michael Petlan <mpetlan@redhat.com>
+Fixes: 24e516049360 ("ACPI/IORT: Add support for PMCG")
+Cc: <stable@vger.kernel.org> # 5.2.x
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Link: https://lore.kernel.org/r/75628ae41c257fb73588f7bf1c4459160e04be2b.1643916258.git.robin.murphy@arm.com
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/bridge/br_device.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/acpi/arm64/iort.c |   14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
---- a/net/bridge/br_device.c
-+++ b/net/bridge/br_device.c
-@@ -39,7 +39,6 @@ netdev_tx_t br_dev_xmit(struct sk_buff *
- 	struct pcpu_sw_netstats *brstats = this_cpu_ptr(br->stats);
- 	const struct nf_br_ops *nf_ops;
- 	const unsigned char *dest;
--	struct ethhdr *eth;
- 	u16 vid = 0;
+--- a/drivers/acpi/arm64/iort.c
++++ b/drivers/acpi/arm64/iort.c
+@@ -1454,9 +1454,17 @@ static void __init arm_smmu_v3_pmcg_init
+ 	res[0].start = pmcg->page0_base_address;
+ 	res[0].end = pmcg->page0_base_address + SZ_4K - 1;
+ 	res[0].flags = IORESOURCE_MEM;
+-	res[1].start = pmcg->page1_base_address;
+-	res[1].end = pmcg->page1_base_address + SZ_4K - 1;
+-	res[1].flags = IORESOURCE_MEM;
++	/*
++	 * The initial version in DEN0049C lacked a way to describe register
++	 * page 1, which makes it broken for most PMCG implementations; in
++	 * that case, just let the driver fail gracefully if it expects to
++	 * find a second memory resource.
++	 */
++	if (node->revision > 0) {
++		res[1].start = pmcg->page1_base_address;
++		res[1].end = pmcg->page1_base_address + SZ_4K - 1;
++		res[1].flags = IORESOURCE_MEM;
++	}
  
- 	memset(skb->cb, 0, sizeof(struct br_input_skb_cb));
-@@ -60,15 +59,14 @@ netdev_tx_t br_dev_xmit(struct sk_buff *
- 	BR_INPUT_SKB_CB(skb)->brdev = dev;
- 
- 	skb_reset_mac_header(skb);
--	eth = eth_hdr(skb);
- 	skb_pull(skb, ETH_HLEN);
- 
- 	if (!br_allowed_ingress(br, br_vlan_group_rcu(br), skb, &vid))
- 		goto out;
- 
- 	if (IS_ENABLED(CONFIG_INET) &&
--	    (eth->h_proto == htons(ETH_P_ARP) ||
--	     eth->h_proto == htons(ETH_P_RARP)) &&
-+	    (eth_hdr(skb)->h_proto == htons(ETH_P_ARP) ||
-+	     eth_hdr(skb)->h_proto == htons(ETH_P_RARP)) &&
- 	    br->neigh_suppress_enabled) {
- 		br_do_proxy_suppress_arp(skb, br, vid, NULL);
- 	} else if (IS_ENABLED(CONFIG_IPV6) &&
+ 	if (pmcg->overflow_gsiv)
+ 		acpi_iort_register_irq(pmcg->overflow_gsiv, "overflow",
 
 

@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA644B45C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:32:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE024B4743
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243052AbiBNJ3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:29:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43130 "EHLO
+        id S230262AbiBNJiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:38:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243266AbiBNJ3W (ORCPT
+        with ESMTP id S245553AbiBNJgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:29:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66201ADB4;
-        Mon, 14 Feb 2022 01:29:13 -0800 (PST)
+        Mon, 14 Feb 2022 04:36:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B98652C6;
+        Mon, 14 Feb 2022 01:34:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78EE760FA6;
-        Mon, 14 Feb 2022 09:29:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5341CC340EF;
-        Mon, 14 Feb 2022 09:29:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1EDFCB80DCB;
+        Mon, 14 Feb 2022 09:34:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FB09C340E9;
+        Mon, 14 Feb 2022 09:34:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644830952;
-        bh=Mw+ysZlulMgFvMm5Acy1B2z3nAIFko+HMmtxe4JW7tc=;
+        s=korg; t=1644831283;
+        bh=qlTXMgDZRk4SlT/fqVq8NbjrNQm0Jg7jri67W8G3os0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YUImI56SpIEo23yVZEWs1VzIFldx/iYv3pZR4umpAWSa5XOl1Crbl2Hcz2DPg9o2D
-         VkLRrmybmXYhvps54PbCDQkI+eewFmgguKinx6ym/3jm3fvtQbCd9XFf7Dv8ukI1TF
-         uvQrhZA7cCzgy3aD0eAB4zfqyd6jsRXKhiCNPff4=
+        b=VMO/ZCUyvUA8gvsVct6v/kb7mGQbG0p5TTdxxb99Nt50ZC7tCqv50K7A0015BZdup
+         pjQqRaiaUQRscD1u2bzX9k/6SidPd/6zoMuSp2niVlUBoDj1r/UJ7JGFBqEUaHRr8D
+         Bf4a5IIK+K8SH9RjpHCI5zUt67hpvqbU2EvgRT6M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Scott Russell <Scott.Russell2@ncr.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 4.9 33/34] USB: serial: cp210x: add CPI Bulk Coin Recycler id
+        stable@vger.kernel.org,
+        Selwin Sebastian <Selwin.Sebastian@amd.com>,
+        Raju Rangoju <Raju.Rangoju@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 33/49] net: amd-xgbe: disable interrupts during pci removal
 Date:   Mon, 14 Feb 2022 10:25:59 +0100
-Message-Id: <20220214092447.019106888@linuxfoundation.org>
+Message-Id: <20220214092449.386726834@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
-References: <20220214092445.946718557@linuxfoundation.org>
+In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
+References: <20220214092448.285381753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Raju Rangoju <Raju.Rangoju@amd.com>
 
-commit 6ca0c6283340d819bf9c7d8e76be33c9fbd903ab upstream.
+[ Upstream commit 68c2d6af1f1e469544d6cbe9a601d96fb9c00e7f ]
 
-Add the device id for the Crane Payment Innovation / Money Controls Bulk
-Coin Recycler:
+Hardware interrupts are enabled during the pci probe, however,
+they are not disabled during pci removal.
 
-	https://www.cranepi.com/en/system/files/Support/OM_BCR_EN_V1-04_0.pdf
+Disable all hardware interrupts during pci removal to avoid any
+issues.
 
-Reported-by: Scott Russell <Scott.Russell2@ncr.com>
-Cc: stable@vger.kernel.org
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: e75377404726 ("amd-xgbe: Update PCI support to use new IRQ functions")
+Suggested-by: Selwin Sebastian <Selwin.Sebastian@amd.com>
+Signed-off-by: Raju Rangoju <Raju.Rangoju@amd.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/serial/cp210x.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/amd/xgbe/xgbe-pci.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -67,6 +67,7 @@ static const struct usb_device_id id_tab
- 	{ USB_DEVICE(0x0FCF, 0x1004) }, /* Dynastream ANT2USB */
- 	{ USB_DEVICE(0x0FCF, 0x1006) }, /* Dynastream ANT development board */
- 	{ USB_DEVICE(0x0FDE, 0xCA05) }, /* OWL Wireless Electricity Monitor CM-160 */
-+	{ USB_DEVICE(0x106F, 0x0003) },	/* CPI / Money Controls Bulk Coin Recycler */
- 	{ USB_DEVICE(0x10A6, 0xAA26) }, /* Knock-off DCU-11 cable */
- 	{ USB_DEVICE(0x10AB, 0x10C5) }, /* Siemens MC60 Cable */
- 	{ USB_DEVICE(0x10B5, 0xAC70) }, /* Nokia CA-42 USB */
+diff --git a/drivers/net/ethernet/amd/xgbe/xgbe-pci.c b/drivers/net/ethernet/amd/xgbe/xgbe-pci.c
+index 7b86240ecd5fe..c4f1fc97987ae 100644
+--- a/drivers/net/ethernet/amd/xgbe/xgbe-pci.c
++++ b/drivers/net/ethernet/amd/xgbe/xgbe-pci.c
+@@ -418,6 +418,9 @@ static void xgbe_pci_remove(struct pci_dev *pdev)
+ 
+ 	pci_free_irq_vectors(pdata->pcidev);
+ 
++	/* Disable all interrupts in the hardware */
++	XP_IOWRITE(pdata, XP_INT_EN, 0x0);
++
+ 	xgbe_free_pdata(pdata);
+ }
+ 
+-- 
+2.34.1
+
 
 

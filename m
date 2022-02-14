@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A04B84B47C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F3024B4AA9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245010AbiBNJrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:47:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33986 "EHLO
+        id S1345822AbiBNKN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:13:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245160AbiBNJoi (ORCPT
+        with ESMTP id S1345820AbiBNKNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:44:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5546D6A004;
-        Mon, 14 Feb 2022 01:38:17 -0800 (PST)
+        Mon, 14 Feb 2022 05:13:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FF7654AC;
+        Mon, 14 Feb 2022 01:51:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E40B5B80DC7;
-        Mon, 14 Feb 2022 09:38:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F41DBC340E9;
-        Mon, 14 Feb 2022 09:38:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00B75B80DC7;
+        Mon, 14 Feb 2022 09:51:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16531C340E9;
+        Mon, 14 Feb 2022 09:50:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831494;
-        bh=qZfm6FlmQrJNBnBogPMT8vdC/rWKAw7MKF7e1kyhZF4=;
+        s=korg; t=1644832260;
+        bh=bio/VUzbNm6sAKoDkp3oJQEVYXqfj5VAm9vCH8ZGrZI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OHBheOH3yKSkkPCdvhXGReM6XJTxPCMeBwAEh5dzb7feXPj/gmYLwnQtE+YwIkEPM
-         J4ELQRs96D7BlneIm+QsPw9ErmwbY+Fys3YcPKc8mXybT3vjK95Uj1rCfD2g4HLWby
-         Ew3NZs6IO0b4MCujm2PZOp2QLT7GmDN+d6tVpAjY=
+        b=zSMKi3TM3PxgK6pqy0Yskfayx2QUT59aPWPs4bAVR+bgHvdEARs/QlkSUt7ZhDYa+
+         3G6NxXPZlaW9FzUIWg9F+kUMdPEUmTf4GGAGJFuUW6shyDIubobsehDWNcFhmkrmm4
+         ee08Co5mw4r1A+WSkhEjmcDtx65ZNmqInTY/shr4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Adam Ford <aford173@gmail.com>
-Subject: [PATCH 5.4 58/71] usb: gadget: udc: renesas_usb3: Fix host to USB_ROLE_NONE transition
-Date:   Mon, 14 Feb 2022 10:26:26 +0100
-Message-Id: <20220214092453.996333395@linuxfoundation.org>
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Gurucharan G <gurucharanx.g@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 129/172] ice: fix IPIP and SIT TSO offload
+Date:   Mon, 14 Feb 2022 10:26:27 +0100
+Message-Id: <20220214092510.867266346@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +58,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adam Ford <aford173@gmail.com>
+From: Jesse Brandeburg <jesse.brandeburg@intel.com>
 
-commit 459702eea6132888b5c5b64c0e9c626da4ec2493 upstream.
+[ Upstream commit 46b699c50c0304cdbd725d7740073a7f9d5edb10 ]
 
-The support the external role switch a variety of situations were
-addressed, but the transition from USB_ROLE_HOST to USB_ROLE_NONE
-leaves the host up which can cause some error messages when
-switching from host to none, to gadget, to none, and then back
-to host again.
+The driver was avoiding offload for IPIP (at least) frames due to
+parsing the inner header offsets incorrectly when trying to check
+lengths.
 
- xhci-hcd ee000000.usb: Abort failed to stop command ring: -110
- xhci-hcd ee000000.usb: xHCI host controller not responding, assume dead
- xhci-hcd ee000000.usb: HC died; cleaning up
- usb 4-1: device not accepting address 6, error -108
- usb usb4-port1: couldn't allocate usb_device
+This length check works for VXLAN frames but fails on IPIP frames
+because skb_transport_offset points to the inner header in IPIP
+frames, which meant the subtraction of transport_header from
+inner_network_header returns a negative value (-20).
 
-After this happens it will not act as a host again.
-Fix this by releasing the host mode when transitioning to USB_ROLE_NONE.
+With the code before this patch, everything continued to work, but GSO
+was being used to segment, causing throughputs of 1.5Gb/s per thread.
+After this patch, throughput is more like 10Gb/s per thread for IPIP
+traffic.
 
-Fixes: 0604160d8c0b ("usb: gadget: udc: renesas_usb3: Enhance role switch support")
-Cc: stable <stable@vger.kernel.org>
-Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Signed-off-by: Adam Ford <aford173@gmail.com>
-Link: https://lore.kernel.org/r/20220128223603.2362621-1-aford173@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: e94d44786693 ("ice: Implement filter sync, NDO operations and bump version")
+Signed-off-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
+Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Tested-by: Gurucharan G <gurucharanx.g@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/udc/renesas_usb3.c |    2 ++
- 1 file changed, 2 insertions(+)
+ .../net/ethernet/intel/ice/ice_lan_tx_rx.h    |  1 +
+ drivers/net/ethernet/intel/ice/ice_main.c     | 25 +++++++++++++------
+ 2 files changed, 18 insertions(+), 8 deletions(-)
 
---- a/drivers/usb/gadget/udc/renesas_usb3.c
-+++ b/drivers/usb/gadget/udc/renesas_usb3.c
-@@ -2363,6 +2363,8 @@ static void handle_ext_role_switch_state
- 	switch (role) {
- 	case USB_ROLE_NONE:
- 		usb3->connection_state = USB_ROLE_NONE;
-+		if (cur_role == USB_ROLE_HOST)
-+			device_release_driver(host);
- 		if (usb3->driver)
- 			usb3_disconnect(usb3);
- 		usb3_vbus_out(usb3, false);
+diff --git a/drivers/net/ethernet/intel/ice/ice_lan_tx_rx.h b/drivers/net/ethernet/intel/ice/ice_lan_tx_rx.h
+index 80736e0ec0dca..3f635fdbfaff9 100644
+--- a/drivers/net/ethernet/intel/ice/ice_lan_tx_rx.h
++++ b/drivers/net/ethernet/intel/ice/ice_lan_tx_rx.h
+@@ -528,6 +528,7 @@ struct ice_tx_ctx_desc {
+ 			(0x3FFFFULL << ICE_TXD_CTX_QW1_TSO_LEN_S)
+ 
+ #define ICE_TXD_CTX_QW1_MSS_S	50
++#define ICE_TXD_CTX_MIN_MSS	64
+ 
+ enum ice_tx_ctx_desc_cmd_bits {
+ 	ICE_TX_CTX_DESC_TSO		= 0x01,
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index 819c32a721e84..cfddec96c91c1 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -7206,6 +7206,7 @@ ice_features_check(struct sk_buff *skb,
+ 		   struct net_device __always_unused *netdev,
+ 		   netdev_features_t features)
+ {
++	bool gso = skb_is_gso(skb);
+ 	size_t len;
+ 
+ 	/* No point in doing any of this if neither checksum nor GSO are
+@@ -7218,24 +7219,32 @@ ice_features_check(struct sk_buff *skb,
+ 	/* We cannot support GSO if the MSS is going to be less than
+ 	 * 64 bytes. If it is then we need to drop support for GSO.
+ 	 */
+-	if (skb_is_gso(skb) && (skb_shinfo(skb)->gso_size < 64))
++	if (gso && (skb_shinfo(skb)->gso_size < ICE_TXD_CTX_MIN_MSS))
+ 		features &= ~NETIF_F_GSO_MASK;
+ 
+-	len = skb_network_header(skb) - skb->data;
++	len = skb_network_offset(skb);
+ 	if (len > ICE_TXD_MACLEN_MAX || len & 0x1)
+ 		goto out_rm_features;
+ 
+-	len = skb_transport_header(skb) - skb_network_header(skb);
++	len = skb_network_header_len(skb);
+ 	if (len > ICE_TXD_IPLEN_MAX || len & 0x1)
+ 		goto out_rm_features;
+ 
+ 	if (skb->encapsulation) {
+-		len = skb_inner_network_header(skb) - skb_transport_header(skb);
+-		if (len > ICE_TXD_L4LEN_MAX || len & 0x1)
+-			goto out_rm_features;
++		/* this must work for VXLAN frames AND IPIP/SIT frames, and in
++		 * the case of IPIP frames, the transport header pointer is
++		 * after the inner header! So check to make sure that this
++		 * is a GRE or UDP_TUNNEL frame before doing that math.
++		 */
++		if (gso && (skb_shinfo(skb)->gso_type &
++			    (SKB_GSO_GRE | SKB_GSO_UDP_TUNNEL))) {
++			len = skb_inner_network_header(skb) -
++			      skb_transport_header(skb);
++			if (len > ICE_TXD_L4LEN_MAX || len & 0x1)
++				goto out_rm_features;
++		}
+ 
+-		len = skb_inner_transport_header(skb) -
+-		      skb_inner_network_header(skb);
++		len = skb_inner_network_header_len(skb);
+ 		if (len > ICE_TXD_IPLEN_MAX || len & 0x1)
+ 			goto out_rm_features;
+ 	}
+-- 
+2.34.1
+
 
 

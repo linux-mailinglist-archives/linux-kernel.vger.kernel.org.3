@@ -2,32 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE614B41AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 07:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E6A4B41AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 07:10:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240611AbiBNGJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 01:09:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48806 "EHLO
+        id S240619AbiBNGJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 01:09:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240553AbiBNGJm (ORCPT
+        with ESMTP id S240621AbiBNGJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 01:09:42 -0500
+        Mon, 14 Feb 2022 01:09:47 -0500
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67AC154BF1
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 22:09:34 -0800 (PST)
-X-UUID: ece4d621506a47b3ac8bd912a6824901-20220214
-X-UUID: ece4d621506a47b3ac8bd912a6824901-20220214
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D3C527F7
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 22:09:40 -0800 (PST)
+X-UUID: a6bf5cf8c9854c499b42223f49772842-20220214
+X-UUID: a6bf5cf8c9854c499b42223f49772842-20220214
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
         (envelope-from <yong.wu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 200696795; Mon, 14 Feb 2022 14:09:29 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 14 Feb 2022 14:09:28 +0800
+        with ESMTP id 1471447973; Mon, 14 Feb 2022 14:09:35 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 14 Feb 2022 14:09:34 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 14 Feb
+ 2022 14:09:33 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 14 Feb 2022 14:09:26 +0800
+ Transport; Mon, 14 Feb 2022 14:09:32 +0800
 From:   Yong Wu <yong.wu@mediatek.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Airlie <airlied@linux.ie>,
@@ -54,10 +56,13 @@ CC:     James Wang <james.qian.wang@arm.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Sebastian Reichel <sre@kernel.org>,
         Yong Wu <yong.wu@mediatek.com>,
-        "Russell King" <linux@armlinux.org.uk>
-Subject: [PATCH 03/23] drm/armada: Make use of the helper component_compare_of/dev_name
-Date:   Mon, 14 Feb 2022 14:07:59 +0800
-Message-ID: <20220214060819.7334-4-yong.wu@mediatek.com>
+        "Lucas Stach" <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        <etnaviv@lists.freedesktop.org>
+Subject: [PATCH 04/23] drm/etnaviv: Make use of the helper component_compare_of/dev_name
+Date:   Mon, 14 Feb 2022 14:08:00 +0800
+Message-ID: <20220214060819.7334-5-yong.wu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220214060819.7334-1-yong.wu@mediatek.com>
 References: <20220214060819.7334-1-yong.wu@mediatek.com>
@@ -75,61 +80,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Use the common compare helpers from component.
 
-Cc: Russell King <linux@armlinux.org.uk>
+Cc: Lucas Stach <l.stach@pengutronix.de>
+Cc: Russell King <linux+etnaviv@armlinux.org.uk>
+Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
+Cc: etnaviv@lists.freedesktop.org
 Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 ---
- drivers/gpu/drm/armada/armada_drv.c | 17 +++--------------
- 1 file changed, 3 insertions(+), 14 deletions(-)
+ drivers/gpu/drm/etnaviv/etnaviv_drv.c | 16 ++--------------
+ 1 file changed, 2 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/gpu/drm/armada/armada_drv.c b/drivers/gpu/drm/armada/armada_drv.c
-index 8e3e98f13db4..224607a6ae16 100644
---- a/drivers/gpu/drm/armada/armada_drv.c
-+++ b/drivers/gpu/drm/armada/armada_drv.c
-@@ -177,17 +177,6 @@ static void armada_drm_unbind(struct device *dev)
- 	drm_mm_takedown(&priv->linear);
- }
+diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+index 0b756ecb1bc2..1d2b4fb4bcf8 100644
+--- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+@@ -574,18 +574,6 @@ static const struct component_master_ops etnaviv_master_ops = {
+ 	.unbind = etnaviv_unbind,
+ };
  
 -static int compare_of(struct device *dev, void *data)
 -{
--	return dev->of_node == data;
+-	struct device_node *np = data;
+-
+-	return dev->of_node == np;
 -}
 -
--static int compare_dev_name(struct device *dev, void *data)
+-static int compare_str(struct device *dev, void *data)
 -{
--	const char *name = data;
--	return !strcmp(dev_name(dev), name);
+-	return !strcmp(dev_name(dev), data);
 -}
 -
- static void armada_add_endpoints(struct device *dev,
- 	struct component_match **match, struct device_node *dev_node)
+ static int etnaviv_pdev_probe(struct platform_device *pdev)
  {
-@@ -196,7 +185,7 @@ static void armada_add_endpoints(struct device *dev,
- 	for_each_endpoint_of_node(dev_node, ep) {
- 		remote = of_graph_get_remote_port_parent(ep);
- 		if (remote && of_device_is_available(remote))
--			drm_of_component_match_add(dev, match, compare_of,
-+			drm_of_component_match_add(dev, match, component_compare_of,
- 						   remote);
- 		of_node_put(remote);
- 	}
-@@ -213,7 +202,7 @@ static int armada_drm_probe(struct platform_device *pdev)
  	struct device *dev = &pdev->dev;
- 	int ret;
+@@ -603,14 +591,14 @@ static int etnaviv_pdev_probe(struct platform_device *pdev)
+ 				first_node = core_node;
  
--	ret = drm_of_component_probe(dev, compare_dev_name, &armada_master_ops);
-+	ret = drm_of_component_probe(dev, component_compare_dev_name, &armada_master_ops);
- 	if (ret != -EINVAL)
- 		return ret;
+ 			drm_of_component_match_add(&pdev->dev, &match,
+-						   compare_of, core_node);
++						   component_compare_of, core_node);
+ 		}
+ 	} else {
+ 		char **names = dev->platform_data;
+ 		unsigned i;
  
-@@ -223,7 +212,7 @@ static int armada_drm_probe(struct platform_device *pdev)
- 		int i;
+ 		for (i = 0; names[i]; i++)
+-			component_match_add(dev, &match, compare_str, names[i]);
++			component_match_add(dev, &match, component_compare_dev_name, names[i]);
+ 	}
  
- 		for (i = 0; devices[i]; i++)
--			component_match_add(dev, &match, compare_dev_name,
-+			component_match_add(dev, &match, component_compare_dev_name,
- 					    devices[i]);
- 
- 		if (i == 0) {
+ 	/*
 -- 
 2.18.0
 

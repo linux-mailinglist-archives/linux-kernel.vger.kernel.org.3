@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C7D4B4AF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:40:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BC44B4B18
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346495AbiBNKYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:24:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54654 "EHLO
+        id S1346564AbiBNKYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:24:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346755AbiBNKVu (ORCPT
+        with ESMTP id S1346764AbiBNKVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Feb 2022 05:21:50 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5936E4C4;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88076E4C6;
         Mon, 14 Feb 2022 01:55:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D36161423;
-        Mon, 14 Feb 2022 09:55:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F07BDC340F0;
-        Mon, 14 Feb 2022 09:55:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11E406126B;
+        Mon, 14 Feb 2022 09:55:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8662C340E9;
+        Mon, 14 Feb 2022 09:55:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832554;
-        bh=yZu/qJOBLMvlTiAEKHkZfz0IwZ2rwR8KBC/aeSLQwLU=;
+        s=korg; t=1644832557;
+        bh=L2abX2J6L4mBx7bs32Xn/5k1qnjftTG1FoPZV+6UUe4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jE9alNEVy6nKpPLA/b6G0j+2ZkQV/8kDP9vxAEtzHEMsLvEew0LQ+/IinrkGa07vJ
-         I1EwwF05xa4gbDCaJKs8GwL48ge5Os+C4Df1pD+UD2NLMfwvGSapTkre5tv/GEIn86
-         o1Cda4fzLo5hJIq7HvHgecR7AFl9TPkocA88o/rU=
+        b=D4xuFk1eg+9Zyij6pm5cTRa3kUF/K7KFSBeD9foPMrvqZddU2bcbHNV1lQ7Foz3pP
+         P41r/PrGaO7hgKo/YOuGjOvrZcei5RHfW3fDwWIpBGwbOM+AePmSujqPkxfjBMOogo
+         SmSORLpLDGZ9fww5WgS9MZcIO94A17Q4+MOHFTNQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jisheng Zhang <jszhang@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 052/203] net: stmmac: reduce unnecessary wakeups from eee sw timer
-Date:   Mon, 14 Feb 2022 10:24:56 +0100
-Message-Id: <20220214092511.991887370@linuxfoundation.org>
+Subject: [PATCH 5.16 053/203] PM: hibernate: Remove register_nosave_region_late()
+Date:   Mon, 14 Feb 2022 10:24:57 +0100
+Message-Id: <20220214092512.030572388@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
 References: <20220214092510.221474733@linuxfoundation.org>
@@ -55,73 +58,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jisheng Zhang <jszhang@kernel.org>
+From: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
 
-[ Upstream commit c74ead223deb88bdf18af8c772d7ca5a9b6c3c2b ]
+[ Upstream commit 33569ef3c754a82010f266b7b938a66a3ccf90a4 ]
 
-Currently, on EEE capable platforms, if EEE SW timer is used, the SW
-timer cause 1 wakeup/s even if the TX has successfully entered EEE.
-Remove this unnecessary wakeup by only calling mod_timer() if we
-haven't successfully entered EEE.
+It is an unused wrapper forcing kmalloc allocation for registering
+nosave regions. Also, rename __register_nosave_region() to
+register_nosave_region() now that there is no need for disambiguation.
 
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ include/linux/suspend.h | 11 +----------
+ kernel/power/snapshot.c | 21 +++++++--------------
+ 2 files changed, 8 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index c5ad28e543e43..f4015579e8adc 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -400,7 +400,7 @@ static void stmmac_lpi_entry_timer_config(struct stmmac_priv *priv, bool en)
-  * Description: this function is to verify and enter in LPI mode in case of
-  * EEE.
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index 8af13ba60c7e4..c1310c571d805 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -430,15 +430,7 @@ struct platform_hibernation_ops {
+ 
+ #ifdef CONFIG_HIBERNATION
+ /* kernel/power/snapshot.c */
+-extern void __register_nosave_region(unsigned long b, unsigned long e, int km);
+-static inline void __init register_nosave_region(unsigned long b, unsigned long e)
+-{
+-	__register_nosave_region(b, e, 0);
+-}
+-static inline void __init register_nosave_region_late(unsigned long b, unsigned long e)
+-{
+-	__register_nosave_region(b, e, 1);
+-}
++extern void register_nosave_region(unsigned long b, unsigned long e);
+ extern int swsusp_page_is_forbidden(struct page *);
+ extern void swsusp_set_page_free(struct page *);
+ extern void swsusp_unset_page_free(struct page *);
+@@ -457,7 +449,6 @@ int pfn_is_nosave(unsigned long pfn);
+ int hibernate_quiet_exec(int (*func)(void *data), void *data);
+ #else /* CONFIG_HIBERNATION */
+ static inline void register_nosave_region(unsigned long b, unsigned long e) {}
+-static inline void register_nosave_region_late(unsigned long b, unsigned long e) {}
+ static inline int swsusp_page_is_forbidden(struct page *p) { return 0; }
+ static inline void swsusp_set_page_free(struct page *p) {}
+ static inline void swsusp_unset_page_free(struct page *p) {}
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index f7a9860782135..330d499376924 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -978,8 +978,7 @@ static void memory_bm_recycle(struct memory_bitmap *bm)
+  * Register a range of page frames the contents of which should not be saved
+  * during hibernation (to be used in the early initialization code).
   */
--static void stmmac_enable_eee_mode(struct stmmac_priv *priv)
-+static int stmmac_enable_eee_mode(struct stmmac_priv *priv)
+-void __init __register_nosave_region(unsigned long start_pfn,
+-				     unsigned long end_pfn, int use_kmalloc)
++void __init register_nosave_region(unsigned long start_pfn, unsigned long end_pfn)
  {
- 	u32 tx_cnt = priv->plat->tx_queues_to_use;
- 	u32 queue;
-@@ -410,13 +410,14 @@ static void stmmac_enable_eee_mode(struct stmmac_priv *priv)
- 		struct stmmac_tx_queue *tx_q = &priv->tx_queue[queue];
+ 	struct nosave_region *region;
  
- 		if (tx_q->dirty_tx != tx_q->cur_tx)
--			return; /* still unfinished work */
-+			return -EBUSY; /* still unfinished work */
+@@ -995,18 +994,12 @@ void __init __register_nosave_region(unsigned long start_pfn,
+ 			goto Report;
+ 		}
  	}
- 
- 	/* Check and enter in LPI mode */
- 	if (!priv->tx_path_in_lpi_mode)
- 		stmmac_set_eee_mode(priv, priv->hw,
- 				priv->plat->en_tx_lpi_clockgating);
-+	return 0;
- }
- 
- /**
-@@ -448,8 +449,8 @@ static void stmmac_eee_ctrl_timer(struct timer_list *t)
- {
- 	struct stmmac_priv *priv = from_timer(priv, t, eee_ctrl_timer);
- 
--	stmmac_enable_eee_mode(priv);
--	mod_timer(&priv->eee_ctrl_timer, STMMAC_LPI_T(priv->tx_lpi_timer));
-+	if (stmmac_enable_eee_mode(priv))
-+		mod_timer(&priv->eee_ctrl_timer, STMMAC_LPI_T(priv->tx_lpi_timer));
- }
- 
- /**
-@@ -2641,8 +2642,8 @@ static int stmmac_tx_clean(struct stmmac_priv *priv, int budget, u32 queue)
- 
- 	if (priv->eee_enabled && !priv->tx_path_in_lpi_mode &&
- 	    priv->eee_sw_timer_en) {
--		stmmac_enable_eee_mode(priv);
--		mod_timer(&priv->eee_ctrl_timer, STMMAC_LPI_T(priv->tx_lpi_timer));
-+		if (stmmac_enable_eee_mode(priv))
-+			mod_timer(&priv->eee_ctrl_timer, STMMAC_LPI_T(priv->tx_lpi_timer));
- 	}
- 
- 	/* We still have pending packets, let's call for a new scheduling */
+-	if (use_kmalloc) {
+-		/* During init, this shouldn't fail */
+-		region = kmalloc(sizeof(struct nosave_region), GFP_KERNEL);
+-		BUG_ON(!region);
+-	} else {
+-		/* This allocation cannot fail */
+-		region = memblock_alloc(sizeof(struct nosave_region),
+-					SMP_CACHE_BYTES);
+-		if (!region)
+-			panic("%s: Failed to allocate %zu bytes\n", __func__,
+-			      sizeof(struct nosave_region));
+-	}
++	/* This allocation cannot fail */
++	region = memblock_alloc(sizeof(struct nosave_region),
++				SMP_CACHE_BYTES);
++	if (!region)
++		panic("%s: Failed to allocate %zu bytes\n", __func__,
++		      sizeof(struct nosave_region));
+ 	region->start_pfn = start_pfn;
+ 	region->end_pfn = end_pfn;
+ 	list_add_tail(&region->list, &nosave_regions);
 -- 
 2.34.1
 

@@ -2,98 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E55084B5307
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:18:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D604B5304
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355033AbiBNORZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 09:17:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53324 "EHLO
+        id S1355026AbiBNORp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 09:17:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234816AbiBNORX (ORCPT
+        with ESMTP id S234816AbiBNORm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 09:17:23 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A6619C2D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:17:15 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id s10so13580989wrb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:17:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=s8YquNU04gHjJdyZdqG6wS1fewBMA8c3UASp3XdZ20I=;
-        b=d7/+3WHErfiJHVs7nuciZQLFuQpqn1uH0EnhAQvlHUfiv9Jt6LsJ/fYZJQrCxvL1p9
-         OaMvHPwxZT+pPyLd6pRuiwyCeDygrpMmPrsuVUYVElbPTqmA3P1AONASmkaul1BqUXey
-         8yU9vkKcJ4cyc2TQRGYpdDfmsupF5o4+76JbFGCIB+OSAFY2l6cjxqUBDZ5dceonEMS8
-         ikLTTOPxFFMN+gwBSZ/Y8WQO5IDKI4F5ZoKXZqbeKGNPJMpUsz5XNMVKFLt7GpNLbQwU
-         L0v7io0cv5YnIY07Q+L7ql3eZ/kgl7OoWAAFTvcyLuGrI8JvxHDnjwAGIkijUfhm2gIF
-         FQRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=s8YquNU04gHjJdyZdqG6wS1fewBMA8c3UASp3XdZ20I=;
-        b=38pS32SoeY/N51TZgfplI7UBOcA4Ha9gBLKd9TarlSs8QWb/tms6LpLVaEqQZzTFIh
-         ht99qO33cpIUb2az8xyYUL2fpTtYBNMFpywVa/pMZc6xaiV3M1EuQ3lSZ6HFV/+klF2g
-         lvdy+o89r103eb+Cl0eeqkUIdF3i+lkFo9sNJ8IbuQKR5kWXhXJSwtjPaMI7tJYxAqiC
-         DgX+0xRHnhumlpWPzcYQZ7d2yH5TkHaVOlpJFM+HjP+H6ZgJ66cyJiBWEvz7OIk2GQn8
-         4kaNC/ZSv5YTFBXkSwhdUtILchowaOwwBeZhQIdIRd4wYxYOOTs7Y34HkVn51RDGnHkD
-         4suQ==
-X-Gm-Message-State: AOAM5337N8cv1pWFGqoMUdPKJA4iBGtKh6In9qIdE+CXKPRxcQ6VPS+1
-        klxwmG+oXuNCLWeSPLIVTn3Ths0s/hAKoA==
-X-Google-Smtp-Source: ABdhPJzlbYCMwZF+I5AvIrwVXEqzQejiMLKHsGIY4lGCN3MuJQQ/7sRR0ojLKZAdCZqUhQlOsUbVfQ==
-X-Received: by 2002:a5d:508c:: with SMTP id a12mr11574121wrt.379.1644848233876;
-        Mon, 14 Feb 2022 06:17:13 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id u12sm27136772wrs.2.2022.02.14.06.17.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 06:17:13 -0800 (PST)
-Date:   Mon, 14 Feb 2022 14:17:11 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Andi Shyti <andi@etezian.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Pratyush Yadav <p.yadav@ti.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v6 1/4] spi: dt-bindings: samsung: convert to dtschema
-Message-ID: <YgpkZzMWuuWpK8Tk@google.com>
-References: <20220124082347.32747-1-krzysztof.kozlowski@canonical.com>
- <20220124082347.32747-2-krzysztof.kozlowski@canonical.com>
- <YgFgQsV2bJS6mjQs@sirena.org.uk>
+        Mon, 14 Feb 2022 09:17:42 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8424949F9E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:17:34 -0800 (PST)
+Date:   Mon, 14 Feb 2022 15:17:30 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644848252;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I7th9FPBhTHINqz3uRpqzV8a/eogAXrdqgX5F7Ju6E4=;
+        b=ouyZslNgbCuTOkK5kZzEjR79vs+1sbKGDhHknUnUtfolGUAAK5mi3QDYVA0RvkfuLEqzx9
+        o4jeEnF1TaLbZ9G/tVdBB1iUlOuDMCzAnNlxbV59/Gpk3oRve/bcCgt7lWiy6O0S91xDnR
+        Q1+qqrrI/1FcQbSVKQOvigvmr2epR8EQsjsHmt3phRRMXGzdG7LhqHzeg5xitvXivyfqSG
+        95E0i38yjwmGxlK625cMEeDV2XewMi5PU+MOy3Od+5FohK69m6i6+m9TRCUFVuiB+hy8Di
+        uhyBNCk5bXEeo8pmb/GUCHgQ8R23+0GyycCo0yYTpIra2/HZzqCyZrTQyuWLGQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644848252;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I7th9FPBhTHINqz3uRpqzV8a/eogAXrdqgX5F7Ju6E4=;
+        b=HMbr81cK/bM5Rma33KsSoWPqO5rAZbWP/gdg1G66LvgMfYG+LXnzPcl5lSa27NyB8nU0+c
+        TZj/rp7bFIx5A8AQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: Re: [PATCH v2] random: set fast pool count to zero in cpuhp teardown
+Message-ID: <Ygpkej/vnMvUDIlP@linutronix.de>
+References: <CAHmME9rAnh6nSRNYo56Ty6VSrY17ej35AoNkSjunFO0AQp1D9Q@mail.gmail.com>
+ <20220214133735.966528-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YgFgQsV2bJS6mjQs@sirena.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220214133735.966528-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 07 Feb 2022, Mark Brown wrote:
+On 2022-02-14 14:37:35 [+0100], Jason A. Donenfeld wrote:
+> Rather than having to use expensive atomics, which were visibly the most
+> expensive thing in the entire irq handler, simply take care of the
+> extreme edge case of resetting count to 0 in the cpuhp teardown handler,
+> after no more interrupts will arrive on that CPU. This simplifies the
+> code a bit and lets us use vanilla variables rather than atomics, and
+> performance should be improved.
+>=20
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Theodore Ts'o <tytso@mit.edu>
+> Cc: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Cc: Sultan Alsawaf <sultan@kerneltoast.com>
+> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+> Sebastian -
+>=20
+> v2 moves the teardown to CPUHP_OFFLINE=E2=80=A6CPUHP_BRINGUP_CPU, per our
+> discussion.
 
-> On Mon, Jan 24, 2022 at 09:23:44AM +0100, Krzysztof Kozlowski wrote:
-> > Convert the Samsung SoC (S3C24xx, S3C64xx, S5Pv210, Exynos) SPI
-> > controller bindings to DT schema format.
-> 
-> Reviewed-by: Mark Brown <broonie@kernel.org>
+My suggestion was to move it to the startup handler with the code
+snippet I had.
+As I tried to explain, this may have two problems:
+- worker scheduled during CPU-UP before CPUHP_AP_WORKQUEUE_ONLINE are
+  probably unbound.
 
-Do you need a PR?
+- worker scheduled during CPU-DOWN after CPUHP_AP_WORKQUEUE_ONLINE are
+  probably unbound.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+The unbound worker may run on any CPU and thus do nothing.
+In the CPU-DOWN case before: should we rollback before
+CPUHP_RANDOM_PREPARE but after CPUHP_AP_WORKQUEUE_ONLINE then the needed
+reset (in case the worker did nothing because it was on the wrong CPU)
+will not happen.
+Therefore I think, moving it to startup, online, (as suggested in
+https://lore.kernel.org/all/Ygo3%2FpuhZFpuX91x@linutronix.de/).
+
+will not have any of this downsides/ corner cases.
+
+Sebastian

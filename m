@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C91C4B4A59
+	by mail.lfdr.de (Postfix) with ESMTP id B79F54B4A5A
 	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346496AbiBNKVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:21:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44706 "EHLO
+        id S1346235AbiBNKTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:19:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348211AbiBNKRM (ORCPT
+        with ESMTP id S1347860AbiBNKQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:17:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D9E8E1A5;
-        Mon, 14 Feb 2022 01:54:39 -0800 (PST)
+        Mon, 14 Feb 2022 05:16:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0347F7C780;
+        Mon, 14 Feb 2022 01:54:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17CCF6128D;
-        Mon, 14 Feb 2022 09:54:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E67E4C340F1;
-        Mon, 14 Feb 2022 09:54:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 02BFAB80D83;
+        Mon, 14 Feb 2022 09:54:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE67DC340F0;
+        Mon, 14 Feb 2022 09:54:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832454;
-        bh=3oCohB5C+DI7atP5lICgyf/Sq//X4dnueJT8FhtjFVA=;
+        s=korg; t=1644832457;
+        bh=d+kEBIHewkuWC6lO+UBYJFu3t9iYpHMhNr5974kvkSo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fx993mxdTWD94O9NuoINkUyYND2DCvjjMcGxFduK41JyFXqFBncSUYSD+TzW7QW2e
-         t36uUJ0/5yB4o/HHtMvrhYEPjBhi0BPkAP6Ahan0xN/McREDktPX023jvfxKhBzgPS
-         VloziEPaFTtZXHKlEuXbPbagoVm9KGGcUIe+KzR0=
+        b=FUH3ZDt03ksLWaekP7DrC0TZ8Y7paPOdqWIukq4jTb/4Jw/0nZe6d48HXxJK6x49+
+         UTs5PJkEXEPv963vq1w2APpllaEqyEhJ24FVlkHQKdmv4IaSwo1lCGeXI1iBwnTsx+
+         RUlD3sRtX+NwYIhze5CPhjW/oz5uq0DN1UNj9i2w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
+        stable@vger.kernel.org, Olga Kornievskaia <kolga@netapp.com>,
         Anna Schumaker <Anna.Schumaker@Netapp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 020/203] NFS: change nfs_access_get_cached to only report the mask
-Date:   Mon, 14 Feb 2022 10:24:24 +0100
-Message-Id: <20220214092510.902727612@linuxfoundation.org>
+Subject: [PATCH 5.16 021/203] NFSv4 only print the label when its queried
+Date:   Mon, 14 Feb 2022 10:24:25 +0100
+Message-Id: <20220214092510.934456217@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
 References: <20220214092510.221474733@linuxfoundation.org>
@@ -55,169 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: NeilBrown <neilb@suse.de>
+From: Olga Kornievskaia <kolga@netapp.com>
 
-[ Upstream commit b5e7b59c3480f355910f9d2c6ece5857922a5e54 ]
+[ Upstream commit 2c52c8376db7160a1dd8a681c61c9258405ef143 ]
 
-Currently the nfs_access_get_cached family of functions report a
-'struct nfs_access_entry' as the result, with both .mask and .cred set.
-However the .cred is never used.  This is probably good and there is no
-guarantee that it won't be freed before use.
+When the bitmask of the attributes doesn't include the security label,
+don't bother printing it. Since the label might not be null terminated,
+adjust the printing format accordingly.
 
-Change to only report the 'mask' - as this is all that is used or needed.
-
-Signed-off-by: NeilBrown <neilb@suse.de>
+Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
 Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/dir.c           | 20 +++++++++-----------
- fs/nfs/nfs4proc.c      | 18 +++++++++---------
- include/linux/nfs_fs.h |  4 ++--
- 3 files changed, 20 insertions(+), 22 deletions(-)
+ fs/nfs/nfs4xdr.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
-index 24ce5652d9be8..faf5168880223 100644
---- a/fs/nfs/dir.c
-+++ b/fs/nfs/dir.c
-@@ -2695,7 +2695,7 @@ static struct nfs_access_entry *nfs_access_search_rbtree(struct inode *inode, co
- 	return NULL;
- }
- 
--static int nfs_access_get_cached_locked(struct inode *inode, const struct cred *cred, struct nfs_access_entry *res, bool may_block)
-+static int nfs_access_get_cached_locked(struct inode *inode, const struct cred *cred, u32 *mask, bool may_block)
- {
- 	struct nfs_inode *nfsi = NFS_I(inode);
- 	struct nfs_access_entry *cache;
-@@ -2725,8 +2725,7 @@ static int nfs_access_get_cached_locked(struct inode *inode, const struct cred *
- 		spin_lock(&inode->i_lock);
- 		retry = false;
+diff --git a/fs/nfs/nfs4xdr.c b/fs/nfs/nfs4xdr.c
+index 69862bf6db001..801119b7a5964 100644
+--- a/fs/nfs/nfs4xdr.c
++++ b/fs/nfs/nfs4xdr.c
+@@ -4200,10 +4200,11 @@ static int decode_attr_security_label(struct xdr_stream *xdr, uint32_t *bitmap,
+ 		} else
+ 			printk(KERN_WARNING "%s: label too long (%u)!\n",
+ 					__func__, len);
++		if (label && label->label)
++			dprintk("%s: label=%.*s, len=%d, PI=%d, LFS=%d\n",
++				__func__, label->len, (char *)label->label,
++				label->len, label->pi, label->lfs);
  	}
--	res->cred = cache->cred;
--	res->mask = cache->mask;
-+	*mask = cache->mask;
- 	list_move_tail(&cache->lru, &nfsi->access_cache_entry_lru);
- 	err = 0;
- out:
-@@ -2738,7 +2737,7 @@ static int nfs_access_get_cached_locked(struct inode *inode, const struct cred *
- 	return -ENOENT;
- }
- 
--static int nfs_access_get_cached_rcu(struct inode *inode, const struct cred *cred, struct nfs_access_entry *res)
-+static int nfs_access_get_cached_rcu(struct inode *inode, const struct cred *cred, u32 *mask)
- {
- 	/* Only check the most recently returned cache entry,
- 	 * but do it without locking.
-@@ -2760,22 +2759,21 @@ static int nfs_access_get_cached_rcu(struct inode *inode, const struct cred *cre
- 		goto out;
- 	if (nfs_check_cache_invalid(inode, NFS_INO_INVALID_ACCESS))
- 		goto out;
--	res->cred = cache->cred;
--	res->mask = cache->mask;
-+	*mask = cache->mask;
- 	err = 0;
- out:
- 	rcu_read_unlock();
- 	return err;
- }
- 
--int nfs_access_get_cached(struct inode *inode, const struct cred *cred, struct
--nfs_access_entry *res, bool may_block)
-+int nfs_access_get_cached(struct inode *inode, const struct cred *cred,
-+			  u32 *mask, bool may_block)
- {
- 	int status;
- 
--	status = nfs_access_get_cached_rcu(inode, cred, res);
-+	status = nfs_access_get_cached_rcu(inode, cred, mask);
- 	if (status != 0)
--		status = nfs_access_get_cached_locked(inode, cred, res,
-+		status = nfs_access_get_cached_locked(inode, cred, mask,
- 		    may_block);
- 
+-	if (label && label->label)
+-		dprintk("%s: label=%s, len=%d, PI=%d, LFS=%d\n", __func__,
+-			(char *)label->label, label->len, label->pi, label->lfs);
  	return status;
-@@ -2896,7 +2894,7 @@ static int nfs_do_access(struct inode *inode, const struct cred *cred, int mask)
+ }
  
- 	trace_nfs_access_enter(inode);
- 
--	status = nfs_access_get_cached(inode, cred, &cache, may_block);
-+	status = nfs_access_get_cached(inode, cred, &cache.mask, may_block);
- 	if (status == 0)
- 		goto out_cached;
- 
-diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
-index ee3bc79f6ca3a..322ff45ad15ca 100644
---- a/fs/nfs/nfs4proc.c
-+++ b/fs/nfs/nfs4proc.c
-@@ -7611,7 +7611,7 @@ static int nfs4_xattr_set_nfs4_user(const struct xattr_handler *handler,
- 				    const char *key, const void *buf,
- 				    size_t buflen, int flags)
- {
--	struct nfs_access_entry cache;
-+	u32 mask;
- 	int ret;
- 
- 	if (!nfs_server_capable(inode, NFS_CAP_XATTR))
-@@ -7626,8 +7626,8 @@ static int nfs4_xattr_set_nfs4_user(const struct xattr_handler *handler,
- 	 * do a cached access check for the XA* flags to possibly avoid
- 	 * doing an RPC and getting EACCES back.
- 	 */
--	if (!nfs_access_get_cached(inode, current_cred(), &cache, true)) {
--		if (!(cache.mask & NFS_ACCESS_XAWRITE))
-+	if (!nfs_access_get_cached(inode, current_cred(), &mask, true)) {
-+		if (!(mask & NFS_ACCESS_XAWRITE))
- 			return -EACCES;
- 	}
- 
-@@ -7648,14 +7648,14 @@ static int nfs4_xattr_get_nfs4_user(const struct xattr_handler *handler,
- 				    struct dentry *unused, struct inode *inode,
- 				    const char *key, void *buf, size_t buflen)
- {
--	struct nfs_access_entry cache;
-+	u32 mask;
- 	ssize_t ret;
- 
- 	if (!nfs_server_capable(inode, NFS_CAP_XATTR))
- 		return -EOPNOTSUPP;
- 
--	if (!nfs_access_get_cached(inode, current_cred(), &cache, true)) {
--		if (!(cache.mask & NFS_ACCESS_XAREAD))
-+	if (!nfs_access_get_cached(inode, current_cred(), &mask, true)) {
-+		if (!(mask & NFS_ACCESS_XAREAD))
- 			return -EACCES;
- 	}
- 
-@@ -7680,13 +7680,13 @@ nfs4_listxattr_nfs4_user(struct inode *inode, char *list, size_t list_len)
- 	ssize_t ret, size;
- 	char *buf;
- 	size_t buflen;
--	struct nfs_access_entry cache;
-+	u32 mask;
- 
- 	if (!nfs_server_capable(inode, NFS_CAP_XATTR))
- 		return 0;
- 
--	if (!nfs_access_get_cached(inode, current_cred(), &cache, true)) {
--		if (!(cache.mask & NFS_ACCESS_XALIST))
-+	if (!nfs_access_get_cached(inode, current_cred(), &mask, true)) {
-+		if (!(mask & NFS_ACCESS_XALIST))
- 			return 0;
- 	}
- 
-diff --git a/include/linux/nfs_fs.h b/include/linux/nfs_fs.h
-index 05f249f20f55d..f33559acbcc28 100644
---- a/include/linux/nfs_fs.h
-+++ b/include/linux/nfs_fs.h
-@@ -533,8 +533,8 @@ extern int nfs_instantiate(struct dentry *dentry, struct nfs_fh *fh,
- 			struct nfs_fattr *fattr);
- extern int nfs_may_open(struct inode *inode, const struct cred *cred, int openflags);
- extern void nfs_access_zap_cache(struct inode *inode);
--extern int nfs_access_get_cached(struct inode *inode, const struct cred *cred, struct nfs_access_entry *res,
--				 bool may_block);
-+extern int nfs_access_get_cached(struct inode *inode, const struct cred *cred,
-+				 u32 *mask, bool may_block);
- 
- /*
-  * linux/fs/nfs/symlink.c
 -- 
 2.34.1
 

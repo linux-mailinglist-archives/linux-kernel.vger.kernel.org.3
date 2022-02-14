@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C27A4B4472
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 09:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1726B4B4476
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 09:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242198AbiBNIln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 03:41:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42552 "EHLO
+        id S242185AbiBNIma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 03:42:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241889AbiBNIlm (ORCPT
+        with ESMTP id S241889AbiBNIm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 03:41:42 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3334D9EA
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:41:34 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id p10so7390367pfo.12
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:41:34 -0800 (PST)
+        Mon, 14 Feb 2022 03:42:29 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40EA04D9EA
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:42:21 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id b8so1952993pjb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:42:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=3PDuWpWatMEsaSvbNwsNqzkAPf6BcghIhJSFC8jSD30=;
-        b=gzY3pqJhek5FzBlOdPIHTO6Zi2K/2OsE1k4GoPy0cxDgZ5eiMZT0IOILUlSj/aEB4B
-         RjD+XDpKRlfGfkd/XwIm9iSe4Y+3nP7SOyYnzFkzxTVfZMbOltHxTQIQwcsjUxgvliuV
-         RbJXxs85zzqTaHQWz1//TsTD6s0IGS66ul3McsyVMsXz87heLAK41x4z7Fg3uQQnq8gs
-         jVm4hmClESlQUful+1F5d92AmYMkmuI1xGetK5qucl6SvgNaSvpmZ39gw9Fb73LQQZT/
-         RccWidsx/F+CL0uIRPkA+2xst5I/kC1auwLVRK+xr2e8w3MCZvct39/rBc4n3iiEZo/U
-         mw4w==
+        bh=om10mUpejbJWUSl+oKv7hdu5u2DA1s9HkiMQ82sYUAw=;
+        b=DwYjUL2M5vN9u5GSZWfneFbfKYD/XtnvhQ6kdHNBAaYJeqPjkbWUq2QAQMDHEloIFd
+         RvB+mwa9JudXdD3yDgqHxY3hPy7RGthkOnhYFBoN0uws4Ih7TFa9Kvdw+xr8rDM65m/4
+         Q3svi0WFknCPUkGuNeXLXsE2zsROJ5T9jhVJScD8FyqwOnXYfMgriv/QJNMVhCHQxUtD
+         gO49U1h1Gvut+t11tOvSL4LvVz1N2k2Jsc2jSsHOy93zqvPwTjcwo1MkRN+V/kEyCtZ7
+         COGVEGfLcwszFP3G6w3ac5Y5yCvh/aaaeCO/+ogPOxoKNZJndg+eimonapqAXjkn7x0Q
+         JTfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=3PDuWpWatMEsaSvbNwsNqzkAPf6BcghIhJSFC8jSD30=;
-        b=T9zVyaNBugLs6fOOtsU2wAWT5b7OFGPwlqsYLmeDAOPF1IDs+xz6Rah9OVgY8rGHPV
-         TGYONGfd5xwFku8cC45amsRZUka3RAmVBZ3aav2QdhBZkYXrbnqzANxhNriQx+22pK38
-         hAy8rvrX6TSOs2KX7RmZAh6P+WAz9D1bBk1ao0kFRwG8oZ8EAaFzF9anDJnyheiuSiag
-         i/S7TfpMmh8pc7b+a0E+Xwue/qpEbyBJpjHQ7ZY1UsJVUR9d831UdljUVFrNiEpOPgyE
-         t98EtRS/8OLPY+51BVpikLASDIPVzpRdnsXi0iQ9+936fIYmr49XhzwfGMJKD9hYd17t
-         l3iQ==
-X-Gm-Message-State: AOAM530GR3zzrOmkBqAltnAegLtQ3/1rWXi5zm3nwD+RJbEkt5bHmsWh
-        z0dt5/FnlOzAppGWokuGKzH9ZA==
-X-Google-Smtp-Source: ABdhPJzmEmYGRRFkNZU0hWCXQ2YmoXneh7/sz9+wMy0j+UOb40vkZ+zxFyd9qfzrI5KxLYmYagM5Pg==
-X-Received: by 2002:aa7:900d:: with SMTP id m13mr13355552pfo.14.1644828093877;
-        Mon, 14 Feb 2022 00:41:33 -0800 (PST)
-Received: from sunil-ThinkPad-T490 ([49.206.7.17])
-        by smtp.gmail.com with ESMTPSA id 13sm22335469pfx.122.2022.02.14.00.41.29
+        bh=om10mUpejbJWUSl+oKv7hdu5u2DA1s9HkiMQ82sYUAw=;
+        b=sIAhEyNiOOpnYpxzyNrA83+26TsnUFOLx0iz5mg50CdT1X5nZLf6DiABtrGv0+M+gA
+         EmE6Mgi2ChoqHB1RWeUErg3JMhmY5ViB23waPr0Iq+uf3Jz6H2h+41Tspodozd4UggPe
+         odZ6UwlNn5NVteNM5dEZcKtwqTYn1/AVLLrcNRoD10txdrudSsdWFWXdbabh9p/0M8tw
+         B2IxKGQB0OU8buIzGYtkKqcE/eJ0sYy5piCKg3XFsZsHkXQP1+51EORBXhMG7kWho3Mu
+         r15D+uXYNvf0v90QF2FCAHjspign8PDTtagJUnv40/JZPTekrlDcXWMUV1MXM4Ia6yPX
+         AFfg==
+X-Gm-Message-State: AOAM531uZCJYAwqPpv70VvyraSSJyi/7MWPObv0aFU3KH3n7YAEd0n3g
+        lf6mnKUyKnCYHUshLM/2tbQQ
+X-Google-Smtp-Source: ABdhPJz2L+vYIrd6gH1aswuxDV7nrpQGPEDq4OozV3dNhmi56+qiaNU1hNR8ox/iWDFmonVtDvD8CQ==
+X-Received: by 2002:a17:902:ec8f:: with SMTP id x15mr13170014plg.10.1644828140657;
+        Mon, 14 Feb 2022 00:42:20 -0800 (PST)
+Received: from thinkpad ([2409:4072:817:5a6f:3104:62c0:1941:5033])
+        by smtp.gmail.com with ESMTPSA id a10sm8523467pfk.153.2022.02.14.00.42.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 00:41:33 -0800 (PST)
-Date:   Mon, 14 Feb 2022 14:11:24 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>
-Cc:     linux-efi@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Heinrich Schuchardt <xypron.glpk@gmx.de>,
-        Anup Patel <apatel@ventanamicro.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] riscv/efi_stub: Fix get_boot_hartid_from_fdt() return
- value
-Message-ID: <20220214084124.GA11866@sunil-ThinkPad-T490>
-References: <20220128045004.4843-1-sunilvl@ventanamicro.com>
+        Mon, 14 Feb 2022 00:42:20 -0800 (PST)
+Date:   Mon, 14 Feb 2022 14:12:14 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/8] clk: qcom: Add A7 PLL support for SDX65
+Message-ID: <20220214084214.GD3494@thinkpad>
+References: <1644821987-27343-1-git-send-email-quic_rohiagar@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220128045004.4843-1-sunilvl@ventanamicro.com>
+In-Reply-To: <1644821987-27343-1-git-send-email-quic_rohiagar@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -77,71 +72,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ard,
-   Could you please take this patch? Heinrich and Atish have added RB
-   tag. Let me know if I need to do anything.
-Thanks
-Sunil
-
-On Fri, Jan 28, 2022 at 10:20:04AM +0530, Sunil V L wrote:
-> The get_boot_hartid_from_fdt() function currently returns U32_MAX
-> for failure case which is not correct because U32_MAX is a valid
-> hartid value. This patch fixes the issue by returning error code.
+On Mon, Feb 14, 2022 at 12:29:47PM +0530, Rohit Agarwal wrote:
+> Add support for PLL found in Qualcomm SDX65 platforms which is used to
+> provide clock to the Cortex A7 CPU via a mux. This PLL can provide high
+> frequency clock to the CPU above 1GHz as compared to the other sources
+> like GPLL0.
 > 
-> Fixes: d7071743db31 ("RISC-V: Add EFI stub support.")
-> Cc: stable@vger.kernel.org
+> In this driver, the power domain is attached to the cpudev. This is
+> required for CPUFreq functionality and there seems to be no better place
+> to do other than this driver (no dedicated CPUFreq driver).
 > 
-> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
 > ---
->  drivers/firmware/efi/libstub/riscv-stub.c | 17 ++++++++++-------
->  1 file changed, 10 insertions(+), 7 deletions(-)
+>  drivers/clk/qcom/Kconfig  | 6 +++---
+>  drivers/clk/qcom/a7-pll.c | 1 +
+>  2 files changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/firmware/efi/libstub/riscv-stub.c b/drivers/firmware/efi/libstub/riscv-stub.c
-> index 380e4e251399..9c460843442f 100644
-> --- a/drivers/firmware/efi/libstub/riscv-stub.c
-> +++ b/drivers/firmware/efi/libstub/riscv-stub.c
-> @@ -25,7 +25,7 @@ typedef void __noreturn (*jump_kernel_func)(unsigned int, unsigned long);
+> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> index 6cd0634..1904ba1 100644
+> --- a/drivers/clk/qcom/Kconfig
+> +++ b/drivers/clk/qcom/Kconfig
+> @@ -29,11 +29,11 @@ config QCOM_A53PLL
+>  	  devices.
 >  
->  static u32 hartid;
+>  config QCOM_A7PLL
+> -	tristate "SDX55 A7 PLL"
+> +	tristate "SDX55 like A7 PLL"
+
+A7 PLL driver for SDX55 and SDX65
+
+>  	help
+> -	  Support for the A7 PLL on SDX55 devices. It provides the CPU with
+> +	  Support for the A7 PLL on SDX55 like devices. It provides the CPU with
+>  	  frequencies above 1GHz.
+> -	  Say Y if you want to support higher CPU frequencies on SDX55
+> +	  Say Y if you want to support higher CPU frequencies on SDX55 like
+
+Say Y if you want to support higher CPU frequencies on devices such as SDX55 and
+SDX65.
+
+Thanks,
+Mani
+
+>  	  devices.
 >  
-> -static u32 get_boot_hartid_from_fdt(void)
-> +static int get_boot_hartid_from_fdt(void)
->  {
->  	const void *fdt;
->  	int chosen_node, len;
-> @@ -33,23 +33,26 @@ static u32 get_boot_hartid_from_fdt(void)
+>  config QCOM_CLK_APCS_MSM8916
+> diff --git a/drivers/clk/qcom/a7-pll.c b/drivers/clk/qcom/a7-pll.c
+> index c4a53e5..adb2121 100644
+> --- a/drivers/clk/qcom/a7-pll.c
+> +++ b/drivers/clk/qcom/a7-pll.c
+> @@ -84,6 +84,7 @@ static int qcom_a7pll_probe(struct platform_device *pdev)
 >  
->  	fdt = get_efi_config_table(DEVICE_TREE_GUID);
->  	if (!fdt)
-> -		return U32_MAX;
-> +		return -EINVAL;
->  
->  	chosen_node = fdt_path_offset(fdt, "/chosen");
->  	if (chosen_node < 0)
-> -		return U32_MAX;
-> +		return -EINVAL;
->  
->  	prop = fdt_getprop((void *)fdt, chosen_node, "boot-hartid", &len);
->  	if (!prop || len != sizeof(u32))
-> -		return U32_MAX;
-> +		return -EINVAL;
->  
-> -	return fdt32_to_cpu(*prop);
-> +	hartid = fdt32_to_cpu(*prop);
-> +	return 0;
->  }
->  
->  efi_status_t check_platform_features(void)
->  {
-> -	hartid = get_boot_hartid_from_fdt();
-> -	if (hartid == U32_MAX) {
-> +	int ret;
-> +
-> +	ret = get_boot_hartid_from_fdt();
-> +	if (ret) {
->  		efi_err("/chosen/boot-hartid missing or invalid!\n");
->  		return EFI_UNSUPPORTED;
->  	}
+>  static const struct of_device_id qcom_a7pll_match_table[] = {
+>  	{ .compatible = "qcom,sdx55-a7pll" },
+> +	{ .compatible = "qcom,sdx65-a7pll" },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(of, qcom_a7pll_match_table);
 > -- 
-> 2.25.1
+> 2.7.4
 > 

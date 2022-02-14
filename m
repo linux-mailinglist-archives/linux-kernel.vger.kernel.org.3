@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC67C4B46BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 578694B478A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243439AbiBNJd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:33:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42704 "EHLO
+        id S242775AbiBNJiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:38:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243633AbiBNJdZ (ORCPT
+        with ESMTP id S243086AbiBNJgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:33:25 -0500
+        Mon, 14 Feb 2022 04:36:54 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6FCAE48;
-        Mon, 14 Feb 2022 01:31:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908DD652E2;
+        Mon, 14 Feb 2022 01:34:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8BB80B80DD1;
-        Mon, 14 Feb 2022 09:31:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6146C340E9;
-        Mon, 14 Feb 2022 09:31:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42CC4B80DC4;
+        Mon, 14 Feb 2022 09:34:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70EAEC340E9;
+        Mon, 14 Feb 2022 09:34:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831105;
-        bh=sjzPQJ4NRhqLJBSxXcRylQRoO81qn0Tb+LLValorUhw=;
+        s=korg; t=1644831274;
+        bh=hVUHZ5WyxrV1PseGE0Vyr2SlFfdW6bD0RR9iZNJtdkA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zfxjdOOccVhIc+EM3Cte1nebIcjAkw++zL55XkfqoWetN5kPoIZxo6FCE5soK6R+w
-         o6Us5Xw2QL/JiX52q1EgZqR51HBLCY3HXnyvT6okDaFZ5AMyxh9OJwPrpINPGqwyB7
-         4Qmehca4hsO8rkMzSOVEHXAdkOpVsmfgNBEUiHqM=
+        b=L0WknKPVtRxxDbjf4Ij7DbyeK9cC/b9s7giVRFNJlOz8ZmqjoxuZypsUkhMrR2Z+x
+         oMwM8gnoDjEqaKA/k6E9C7tt36xo3ta41rVPKZXbUPnecu5o8xUs2molBpOqOOO1m/
+         6lW44MK8L7zQxw+SiRNYeG1wvMFSzzGd5IaP45SQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sean Anderson <sean.anderson@seco.com>
-Subject: [PATCH 4.14 33/44] usb: ulpi: Call of_node_put correctly
+        stable@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>,
+        Vlad Buslov <vladbu@nvidia.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 30/49] net: fix a memleak when uncloning an skb dst and its metadata
 Date:   Mon, 14 Feb 2022 10:25:56 +0100
-Message-Id: <20220214092448.980656771@linuxfoundation.org>
+Message-Id: <20220214092449.284111169@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
-References: <20220214092447.897544753@linuxfoundation.org>
+In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
+References: <20220214092448.285381753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Anderson <sean.anderson@seco.com>
+From: Antoine Tenart <atenart@kernel.org>
 
-commit 0a907ee9d95e3ac35eb023d71f29eae0aaa52d1b upstream.
+[ Upstream commit 9eeabdf17fa0ab75381045c867c370f4cc75a613 ]
 
-of_node_put should always be called on device nodes gotten from
-of_get_*. Additionally, it should only be called after there are no
-remaining users. To address the first issue, call of_node_put if later
-steps in ulpi_register fail. To address the latter, call put_device if
-device_register fails, which will call ulpi_dev_release if necessary.
+When uncloning an skb dst and its associated metadata, a new
+dst+metadata is allocated and later replaces the old one in the skb.
+This is helpful to have a non-shared dst+metadata attached to a specific
+skb.
 
-Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
-Cc: stable <stable@vger.kernel.org>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-Link: https://lore.kernel.org/r/20220127190004.1446909-3-sean.anderson@seco.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The issue is the uncloned dst+metadata is initialized with a refcount of
+1, which is increased to 2 before attaching it to the skb. When
+tun_dst_unclone returns, the dst+metadata is only referenced from a
+single place (the skb) while its refcount is 2. Its refcount will never
+drop to 0 (when the skb is consumed), leading to a memory leak.
+
+Fix this by removing the call to dst_hold in tun_dst_unclone, as the
+dst+metadata refcount is already 1.
+
+Fixes: fc4099f17240 ("openvswitch: Fix egress tunnel info.")
+Cc: Pravin B Shelar <pshelar@ovn.org>
+Reported-by: Vlad Buslov <vladbu@nvidia.com>
+Tested-by: Vlad Buslov <vladbu@nvidia.com>
+Signed-off-by: Antoine Tenart <atenart@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/common/ulpi.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ include/net/dst_metadata.h | 1 -
+ 1 file changed, 1 deletion(-)
 
---- a/drivers/usb/common/ulpi.c
-+++ b/drivers/usb/common/ulpi.c
-@@ -252,12 +252,16 @@ static int ulpi_register(struct device *
- 		return ret;
+diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
+index b997e0c1e3627..adab27ba1ecbf 100644
+--- a/include/net/dst_metadata.h
++++ b/include/net/dst_metadata.h
+@@ -137,7 +137,6 @@ static inline struct metadata_dst *tun_dst_unclone(struct sk_buff *skb)
+ #endif
  
- 	ret = ulpi_read_id(ulpi);
--	if (ret)
-+	if (ret) {
-+		of_node_put(ulpi->dev.of_node);
- 		return ret;
-+	}
- 
- 	ret = device_register(&ulpi->dev);
--	if (ret)
-+	if (ret) {
-+		put_device(&ulpi->dev);
- 		return ret;
-+	}
- 
- 	dev_dbg(&ulpi->dev, "registered ULPI PHY: vendor %04x, product %04x\n",
- 		ulpi->id.vendor, ulpi->id.product);
+ 	skb_dst_drop(skb);
+-	dst_hold(&new_md->dst);
+ 	skb_dst_set(skb, &new_md->dst);
+ 	return new_md;
+ }
+-- 
+2.34.1
+
 
 

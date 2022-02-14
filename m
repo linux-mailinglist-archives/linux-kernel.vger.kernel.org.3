@@ -2,155 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9111F4B5209
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E374B5211
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354583AbiBNNoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:44:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57188 "EHLO
+        id S1354597AbiBNNqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:46:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354561AbiBNNoH (ORCPT
+        with ESMTP id S1354618AbiBNNpo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:44:07 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2043.outbound.protection.outlook.com [40.107.220.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A782242EE5;
-        Mon, 14 Feb 2022 05:43:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Azp4wlD2BfD1h34TOreFNjRJdcIJ/Ee7dDb+A784nbjMTc7dVPEkhowgkG3sGDfveILFsVXeAjX/FM4cfJLRK3LEswM22W/QgPpbbO5ua6WrP876UPzhM3mN2WlzGx+uLdovZRZSv6Rptk8aHQNWKHoX5AmBgU+Mqyp6rKfPClzv7J87AWe20lI2Rcxt+F4O2GHT0px/HJKOAZ0Uu1Gr6Mfzg5ypHyvKM5Qyps2/GqkQqldChEHOdS3qlV/1JXs73IoYYD9JZgTJ/Xymx7re+jdYPNiXxhLJi2A2+yzUx8eNXLR/Ps1rpYmAPVmJT10c/DUWDKWU8SP/bHRbaDRZAg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O03nopTDZ/+eLEMXCm7PD+KUdCQvg1nId9Pcks46iCY=;
- b=JfHTBds/2lruEiFwMAzeJOkXUe2uhx5fEewKj1bpalKcRw+BGC8J/2S0csAINDwNMU49cyq6RCTnGZuq5NLcfYLUr2iWftB5xg0xkA6iNOMbAw1z6SWkCeiYLVX/1vjR98HLqFSYdshJKiePqH3GcAJduEuWL//8WQBV5zC+mEwrMCWOvD92wohm0LESdHCnynYOUxgRO+3cvLLZSPu6ihAVEITv/mmDASJKZfyy71Bb8Wr2gV8oXfSwkCm9d876hc+KfDWiX7qnY06Arpc/Y/V6pL/jMeC7oQnwpY/Sk+e53EiWjHHl/7Kq0dnbtC4tKpifZ9mhc97cXnaIi8ZmJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O03nopTDZ/+eLEMXCm7PD+KUdCQvg1nId9Pcks46iCY=;
- b=HiHXdSDlDXM6uRVEd13AdVQ3sryNOaWtFEPL8SEdhaLhvzDENKKmauGtUkTjLOQ/LSIv0+ZKycIC+Oavmpqt9lpK6qBWgbNzsDzN+dDOTFy82QdM5vDDO2Vb2paXRqSUDUr36aiacUAx2ylbSxQYf8SxA9ro622kuYNNOJAo3Fnu/LRzRnp34j82QlsIIzHGX3Ks5u0qayaid7PxEEwIkLlK5RzozoETGJSyJnafXV25gWbTU9jvA9yZBeH+hwEBss0TUn55bWgt7tvmiSb2irytsLyP/E6tBMeDdcSUKIu+rChtlGohc/2KRY2P2tLlpdZ1YNMjjwqLaeNGHqY/Ng==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by MWHPR12MB1357.namprd12.prod.outlook.com (2603:10b6:300:b::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Mon, 14 Feb
- 2022 13:43:58 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::e8f4:9793:da37:1bd3]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::e8f4:9793:da37:1bd3%4]) with mapi id 15.20.4975.019; Mon, 14 Feb 2022
- 13:43:58 +0000
-Date:   Mon, 14 Feb 2022 09:43:56 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 07/14] PCI: Add driver dma ownership management
-Message-ID: <20220214134356.GB929467@nvidia.com>
-References: <20220104015644.2294354-1-baolu.lu@linux.intel.com>
- <20220104015644.2294354-8-baolu.lu@linux.intel.com>
- <Ygoo/lCt/G6tWDz9@kroah.com>
- <20220214123842.GT4160@nvidia.com>
- <YgpQOmBA7QJJu+2E@kroah.com>
- <20220214131117.GW4160@nvidia.com>
- <YgpbhlPOZsLFm4It@kroah.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgpbhlPOZsLFm4It@kroah.com>
-X-ClientProxiedBy: MN2PR01CA0063.prod.exchangelabs.com (2603:10b6:208:23f::32)
- To MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+        Mon, 14 Feb 2022 08:45:44 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C5D575F4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:45:33 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21ECVusW014630;
+        Mon, 14 Feb 2022 13:45:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=t/xh7h782UBN/jZbD91JVD9rwY0PYE6Ef7A2XaPovz0=;
+ b=LDaIM6W45eWmucJPJxrvRoAEGE7zsy9TmhAUbW33wkwMCOBMB3FHWEpm8pQwb1eCjk07
+ o0MzcUO0R//2AbtKQLXTsFF+uZJqmWNWH5lTHU2hPzMsZL32N+5LP4nunFXMuADFM3Zw
+ WV5Vu7u8/oUdF9P9K9Ble3hr1xejZUA4x2gfdWIibriBss6v9WgD/y1LePQvvNNq4FRF
+ JIv0eA8gIsjbekgx9fu4dxtciSmJFR/1SQqntiTwGZfJABdsJUMjeU3EiKriNPMxjflv
+ TzPxlbrUc2mfGjJnyZQPzt4/6qMslnFVk1VRl3uxRjIgpeLpW/yvHboAkaFIB4BeSOPJ Bg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e6rt1624p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 13:45:18 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21EDQQEf032307;
+        Mon, 14 Feb 2022 13:45:17 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e6rt1623q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 13:45:17 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21EDhnGj019890;
+        Mon, 14 Feb 2022 13:45:15 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 3e64h9nx3a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 13:45:15 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21EDjCb336110832
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Feb 2022 13:45:13 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DA19C42045;
+        Mon, 14 Feb 2022 13:45:12 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C8F584204F;
+        Mon, 14 Feb 2022 13:45:12 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon, 14 Feb 2022 13:45:12 +0000 (GMT)
+Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55390)
+        id 7F15AE02E8; Mon, 14 Feb 2022 14:45:12 +0100 (CET)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>
+Subject: [PATCH] ftrace: ensure trace buffer is at least 4096 bytes large
+Date:   Mon, 14 Feb 2022 14:44:56 +0100
+Message-Id: <20220214134456.1751749-1-svens@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 096c36bc-dcf4-4139-b93e-08d9efc00ce7
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1357:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR12MB1357895DA011590F9F0FB133C2339@MWHPR12MB1357.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /a4oBX3J/cr8xIbGoOdZf/T/XAeK0tzzHvW/CNi8LRrWnqzqndvWPeMd9yfgdmeySLiO4OA81zacfXgCbHRpE9xDQOiuLbh7CWMSfJgWVQuc2P8PLiYIXn2g9krK3QMMvnGiUeLs+ksFyVsmgqguCs/645Sz3rHNeketcWm6GvMXgqIz0WcKaHB7RZse3Z3uW00Vl78BcIypOrZXO5vxukW3EKvXfUwF0Vi9US5lzUU0js3bJDZlA2yNaNE4CDKeUNAt8Kmo/ET0A6P6/QsVfnY9hlRCQdpTsucWunN7/1M0gcKEQiubjIHnFUdSl5mK5bhLpuO0PmHYEz8FXDwiKKcXqAyg41rGFksB/wO+AN0u+FlKCb2JRclkDLC3+2TghT1jPSBneAXaa+M1LONH2WQOliMHzqn3du/oVF7dOhAzVhYiFNVWWZ77/2gW5H+f0dwHPuzXxtyaREDXWgffZygX+Qcd2p/EQqz9QU6IS1urwotUBgQ4/alHLbzttZVBGnk5+AvM58O+MJuB93MyU1IkXURtlSXwM2wsV79bVSU3pH3ER53Lc9wOm0xgWekQ59htaaAO0rcU7nfOO0Bg2TVAqShIUUvd0P1FkP8eLHxxMGlnmVKDqwvdRANFQT38LlrT/+xfyUirE0RWqtRaL1DZsqPakXb70nIKIKBnyLgveP+vafJ+fvrOPiUjbVua
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(6916009)(8936002)(54906003)(8676002)(316002)(36756003)(186003)(4326008)(508600001)(6506007)(1076003)(2616005)(6486002)(26005)(6512007)(4744005)(5660300002)(7416002)(38100700002)(33656002)(66946007)(66556008)(66476007)(86362001)(27376004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DIXKOr7w9ZSMZo3oLl5sLw+lEkBd212dVinRgQZ9cjmy+ezDftrR8mttCXCr?=
- =?us-ascii?Q?3LAUmM/cQiht18sA+4KvsxcrRHCRaWiHcyU1tHc+Vhy2MAkHweGWREXkzXVV?=
- =?us-ascii?Q?LFhp2gnf1d/OMFw/rlPL0qC8Na/JZIszj/2i4rGj+2XQKRc19L7qdr471jlb?=
- =?us-ascii?Q?GhNLMgLP8aI/W2FrP1r/tIVMOwL/Tcs7FkfYyE7NNjklN8PX2ZHJSFz4jfvD?=
- =?us-ascii?Q?ovvLTZvQ9eWh066N6hcyyvQCgn1SHA+DTtlJTtCITDEZ4yMBxUyKUl/CyW2M?=
- =?us-ascii?Q?Q7c9zjyY0NUCdY0T4m+Ezwr7ga97lDPPJrPc39emdOWizckq5dooAEFdspuG?=
- =?us-ascii?Q?D+4yUYNRsq65JwkacmLYgknsjzRJX4yBzEoEfmF3ttQ5nFa/S1ZRWN5nX/ri?=
- =?us-ascii?Q?ckh1vQ98qOg4tequHfekG1ahgszeGpewtmk6HDbydKHdGohrOETGxK9BzBKi?=
- =?us-ascii?Q?thvVRSS+TfumUg5tYnolIaye8GwhxesQFngmbZeCIBSAWOA/c7p34C8PFLXX?=
- =?us-ascii?Q?tsUXX2ZOzytOkaR33NCXxmv0Q4AKx1FPgxpXBpZdU/WNEBJgOFkKGVs0K21h?=
- =?us-ascii?Q?8nVntdgRamMOFkp8X8OC4EGzF+k1WQB5zGNE3+7b6ZPRiCVQxabPoO9Pgfxc?=
- =?us-ascii?Q?+mo6Lny1XVXfnKDmDTMMWltHkqYCoAPc9qh1/TgXamHMHmDyEGr8lrSCztr2?=
- =?us-ascii?Q?y8xWYTOwaf3NEDjDvNIiQ9FYtPYBnYlXpf0BErTvgsXj3jRwgjJdn2aOpqYr?=
- =?us-ascii?Q?y8WzcgxMApsfVLB92iSLEygPd46DbMIgPlzR6rUcpD9W7xfG9oOdHwVCR0RY?=
- =?us-ascii?Q?MyQbZcxSXFSiMMWdjbk/5DAvdVx4BQkxzn2g7T3nSF+UheoABFf2ZIdC6jgq?=
- =?us-ascii?Q?435ktiUIR/buCvYgPJhAcxLgFQU+j0/JA8r3XEv0mERdBYWBsUS5PcyWhKY/?=
- =?us-ascii?Q?y/vv69EjcbBGcs6Z+b+zm5x39qq9qDnXJmRlEBgmLHI0uyHyFYDko7BeaGJs?=
- =?us-ascii?Q?VXobgDbkBbeDyePD0aklNQNcZWew7pn21CXTUcjgGDM8vvvlWiABzq8Jo38M?=
- =?us-ascii?Q?9eEG0X/9i15u+Mc0+ZyPnqxSFJMZ2tj70oCcQA5rfS8pzzBvERSH+Plnh8Kz?=
- =?us-ascii?Q?xCZbt7BkAMESlhPbB2yU5vZOUpvbPXThYbIus2A/bIAkF8qie/CC+5pWrdE0?=
- =?us-ascii?Q?IgOYXhEpnx3AAD/0zFI2rk87yNYD8B2Ed3UC0rw/yPXAI3HM91EexKdklNAB?=
- =?us-ascii?Q?V4KYkyZj5edJxcLqGMoMDZ7Wl2izBE5ENRLoqk3CFHD9c63ZDB527E6F+d2H?=
- =?us-ascii?Q?62ZTjWW58+1Lo22d80JZva6VEaIZM6aHJCxu3lh1XhHsSEsJaMm0Bpytl0E/?=
- =?us-ascii?Q?EhmXsJSgQTpNORbdvVYqP+7UInKYfDQN2SGd1vK9OCx3lLGOYEDojtMH0kYb?=
- =?us-ascii?Q?5UOPAr25PXPdvT4FrMyyFKbZkZ8y0upwVkuewTjNkjVZEXImflqCv1jxihaq?=
- =?us-ascii?Q?C3zO7HsrPPuCvO7SiveWdcPa8kIwfsJe7pH5upWVPzCaIhFjIdYZBluVJpeL?=
- =?us-ascii?Q?Ao3ayKEJ+2VN/UBF2w4=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 096c36bc-dcf4-4139-b93e-08d9efc00ce7
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2022 13:43:58.1095
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VXUKJ1U5oX6CVceQ19H5RHmurYZQlkI6xAsHD0tOlyHpDQ9AN3+/cIDQ8itehc5J
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1357
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -0CZ3F6oPakx4SvErDd_hRaL7qjAqMzj
+X-Proofpoint-ORIG-GUID: RzYc1BmW-MYduAmjfnhD0JJV_T175gh4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-14_06,2022-02-14_03,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ impostorscore=0 suspectscore=0 priorityscore=1501 phishscore=0
+ clxscore=1015 mlxscore=0 lowpriorityscore=0 adultscore=0 spamscore=0
+ bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202140082
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 02:39:18PM +0100, Greg Kroah-Hartman wrote:
+Booting the kernel with 'trace_buf_size=1' give a warning at
+boot during the ftrace selftests:
 
-> > A driver that sets this flag can still decide to enable the dma API on
-> > its own. eg tegra drivers do this.
-> 
-> So you are just forcing the driver to manage this all on their own, so
-> how about, "driver_managed_dma", or even shorter "managed_dma"?
+[    0.892809] Running postponed tracer tests:
+[    0.892893] Testing tracer function:
+[    0.901899] Callback from call_rcu_tasks_trace() invoked.
+[    0.983829] Callback from call_rcu_tasks_rude() invoked.
+[    1.072003] .. bad ring buffer .. corrupted trace buffer ..
+[    1.091944] Callback from call_rcu_tasks() invoked.
+[    1.097695] PASSED
+[    1.097701] Testing dynamic ftrace: .. filter failed count=0 ..FAILED!
+[    1.353474] ------------[ cut here ]------------
+[    1.353478] WARNING: CPU: 0 PID: 1 at kernel/trace/trace.c:1951 run_tracer_selftest+0x13c/0x1b0
 
-Yeah, I like "driver_managed_dma" alot, it captures the entire idea
+Therefore enforce a minimum of 4096 bytes to make the selftest pass.
 
-Thanks,
-Jason
+Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+---
+ kernel/trace/trace.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 7c2578efde26..3050892d1812 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -1474,10 +1474,12 @@ static int __init set_buf_size(char *str)
+ 	if (!str)
+ 		return 0;
+ 	buf_size = memparse(str, &str);
+-	/* nr_entries can not be zero */
+-	if (buf_size == 0)
+-		return 0;
+-	trace_buf_size = buf_size;
++	/*
++	 * nr_entries can not be zero and the startup
++	 * tests require some buffer space. Therefore
++	 * ensure we have at least 4096 bytes of buffer.
++	 */
++	trace_buf_size = max(4096UL, buf_size);
+ 	return 1;
+ }
+ __setup("trace_buf_size=", set_buf_size);
+-- 
+2.32.0
+

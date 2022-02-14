@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 625184B5CC4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78D944B5CBE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:27:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbiBNVXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:23:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49334 "EHLO
+        id S231285AbiBNVXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:23:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbiBNVWm (ORCPT
+        with ESMTP id S231211AbiBNVWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:22:42 -0500
+        Mon, 14 Feb 2022 16:22:44 -0500
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EC513CED9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:22:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115A513D559
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:22:25 -0800 (PST)
 Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 55FCD407D6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 21:22:21 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 393AA407D6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 21:22:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644873741;
-        bh=BTa+7+hPQApQrGc3LBEa/6uh1gwW5m1A+xf1VQ/CZYQ=;
+        s=20210705; t=1644873743;
+        bh=2GfdITO+DKwVQsf6qkFkxVmUjntYlwpPLBCNaZvP8rs=;
         h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=ODOe/j0A0B4z405ZHqkxFJgcE3eXPSN7Hnx+P7rWe4U4Z+PIEBjlY5/rHvxX8y8PY
-         1DiC/m4IC0q/w8o9O4v/4CaTX7SZiYBp2vNnb9AsWYtqtl7+YXcLnQ7445LI89Qdxs
-         HVAb0meW/Z7Yv/GMmGwaSMcRnTYVM/5KGar5Ypuz3k3vWZufsVmchLKil+lne4Eqr2
-         C7S+sUDlMfGL/9DjERmbnF6eFTuEMbQwLym58tNc5UVaScWrMfLHn7VRAycvIPrAJE
-         ydYMPhrDHECX3hujS4LtRPAEV+ZlGN3MdOpzxqPurTgSgb7i+ysmqqTNmOqGpc76Ah
-         nPb0n4ZN0jsLA==
-Received: by mail-ed1-f71.google.com with SMTP id r11-20020a508d8b000000b00410a4fa4768so3775079edh.9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:22:21 -0800 (PST)
+        b=N1wUlV2NP+3I6QsOFoI106EbigIrDCYLhJOE7G1dH7UWuImHqgHz0FQOAHFqsPHPX
+         lAPXdiWD/kNPHwOSOHP0Ct8XHbKIQ+LSkvewAe1jdY8BcqTqCG+MJ3sBEiOMnQvTnt
+         unO2YsoIYd6rLAUmMRCh32x8rWJbYl4/1lRSykU1hG+Tb7cQ6tjjRFt4t/0u77hb/6
+         nx8JdqG2fzwKgFkdnhcTDu9/DCC0/6jH35IdBwvsM6TovQvwRUBGa8UCGXZF3lpudd
+         tc8la2C5DppYUF4FXgSPyGdnqaLBBL18q7IKpORD2tfoBgjy+uIkPPsDAYkWNpJMcL
+         K+JPQ1Wel0UJA==
+Received: by mail-ed1-f71.google.com with SMTP id g3-20020a056402424300b004107aa941ffso6525402edb.14
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:22:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BTa+7+hPQApQrGc3LBEa/6uh1gwW5m1A+xf1VQ/CZYQ=;
-        b=iV/KSepD8e/6SGsAVgz2qgaBHyPFJHLBzqJ/9P7t8pH9oQh/e7n4CQVu85cFY/4D3A
-         cEWCFtCK1jHZn5dC8m4Cl0FT0NfKLfXhmvpmR22cmD48PwN8KhPMlX4wGiml4mymk8Bl
-         AD6lZm1YcSbMOHEcQ0fQORtoMrmJw6B9hzUTdb3vdC5cB79r7gUkiosjlpAZTdzZymcI
-         VENVzXDDOGwAdyNTcm9XWwDEoT67OVp9PMVwufAzHuMlBZaxALUzfEl+EmLJMpcVfCB6
-         PzfUQUpLplUG4UWuP2RfOzuE6vEcwCGR8JrFPBDNauEKZkE4lMqsQqK61Ajtpw2qCnAf
-         JmvA==
-X-Gm-Message-State: AOAM533RjQV9HiAbvfCCC2Dao5cYvTpYmm9QJ+DHfs+kFsjBzviPSrHL
-        rnlM8z66f9gqgCTNEKY6V5JrpjPqcz+e/VEEh0KtHSXl7oe3KKWGfv+UcubfeNEYGmtCNYSS1eU
-        v1XMlzUPTF6itmk74zxW9Ay8XP3qJ2a0pHJwbO8121g==
-X-Received: by 2002:a05:6402:f1b:: with SMTP id i27mr797191eda.275.1644873740823;
-        Mon, 14 Feb 2022 13:22:20 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxI0exot3yoiNzuz9PwDF81XbTxvVVt2KMAZVFpKvmztfJkcydX4q8g7gpBrGY0uRI8V9/sXA==
-X-Received: by 2002:a05:6402:f1b:: with SMTP id i27mr797171eda.275.1644873740690;
-        Mon, 14 Feb 2022 13:22:20 -0800 (PST)
+        bh=2GfdITO+DKwVQsf6qkFkxVmUjntYlwpPLBCNaZvP8rs=;
+        b=JNb06hjInPMeNwOeOZzkSocDMMXaeZdukTD6cJDF7jdu8OxzU0PwT8NExLV2Pk5Ile
+         KC3oCzIGzqoqg73rJyFEwpUIBq7WZJBX4v6Gtb+7K21QlvYm+95Qt3W9GpHLu5yoYqpY
+         oZIV8oqcGp1iUqLULTSbXIf/dAzhIPYPd+4Am9o6pcyUno5wTLa5uZ9oqBP2V+kgj1d0
+         dE7hJ9S2CU+vWsrHlPd4CC18xJDZGA/hgR2MDgP84HzZwFaoOzwVVORVsiGcuyeEAvtg
+         DPFltfWUFaHsh77kXIwLdaC8L2xwWLkZLO34if6c7bFDGNWqFRf5aC3Q9UbNzVKXmGle
+         tr1g==
+X-Gm-Message-State: AOAM532o29vN1bGmWDNbP/yaQ9hAfjYRLguW36I4fSoEG1Rr+SE90HBs
+        2ZFYFZcnDGbwXewqZF0G2v8b7FGgrHyk/D/1CHA4/GY2/8UlHg9nwotxAjG6JsBr/fHR/8cN7HG
+        K2YReVd1YqqzYpVKFFhTCf+vrOJC/aI5MfN2qjtEMcg==
+X-Received: by 2002:a05:6402:518e:: with SMTP id q14mr795804edd.155.1644873742493;
+        Mon, 14 Feb 2022 13:22:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxF3h26z/5uxDbEq+54Opag5L4k/zFtMBfvScttTAdV5Yv9njK8Ir/cF1x90gGCn8KuufGFTA==
+X-Received: by 2002:a05:6402:518e:: with SMTP id q14mr795759edd.155.1644873742300;
+        Mon, 14 Feb 2022 13:22:22 -0800 (PST)
 Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id v24sm2327203ejf.7.2022.02.14.13.22.18
+        by smtp.gmail.com with ESMTPSA id v24sm2327203ejf.7.2022.02.14.13.22.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 13:22:20 -0800 (PST)
+        Mon, 14 Feb 2022 13:22:21 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
@@ -91,9 +91,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-riscv@lists.infradead.org
-Subject: [PATCH v2 12/15] dt-bindings: pwm: samsung: Do not require pwm-cells twice
-Date:   Mon, 14 Feb 2022 22:21:51 +0100
-Message-Id: <20220214212154.8853-13-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v2 13/15] dt-bindings: pwm: tiecap: Do not require pwm-cells twice
+Date:   Mon, 14 Feb 2022 22:21:52 +0100
+Message-Id: <20220214212154.8853-14-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220214212154.8853-1-krzysztof.kozlowski@canonical.com>
 References: <20220214212154.8853-1-krzysztof.kozlowski@canonical.com>
@@ -113,21 +113,21 @@ pwm-cells property is already required by pwm.yaml schema.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- Documentation/devicetree/bindings/pwm/pwm-samsung.yaml | 1 -
+ Documentation/devicetree/bindings/pwm/pwm-tiecap.yaml | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/pwm/pwm-samsung.yaml b/Documentation/devicetree/bindings/pwm/pwm-samsung.yaml
-index 188679cb8b8c..fe603fb1b2cc 100644
---- a/Documentation/devicetree/bindings/pwm/pwm-samsung.yaml
-+++ b/Documentation/devicetree/bindings/pwm/pwm-samsung.yaml
-@@ -86,7 +86,6 @@ required:
+diff --git a/Documentation/devicetree/bindings/pwm/pwm-tiecap.yaml b/Documentation/devicetree/bindings/pwm/pwm-tiecap.yaml
+index ed35b6cc48d5..3840ae709bc6 100644
+--- a/Documentation/devicetree/bindings/pwm/pwm-tiecap.yaml
++++ b/Documentation/devicetree/bindings/pwm/pwm-tiecap.yaml
+@@ -47,7 +47,6 @@ properties:
+ required:
+   - compatible
+   - reg
+-  - "#pwm-cells"
    - clocks
    - clock-names
-   - compatible
--  - "#pwm-cells"
-   - reg
  
- additionalProperties: false
 -- 
 2.32.0
 

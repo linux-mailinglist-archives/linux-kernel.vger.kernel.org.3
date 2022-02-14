@@ -2,236 +2,472 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8C34B51D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3765E4B5348
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:27:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343837AbiBNNiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:38:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51122 "EHLO
+        id S1355124AbiBNO1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 09:27:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354372AbiBNNiG (ORCPT
+        with ESMTP id S233881AbiBNO1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:38:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D56860D85
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:37:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3FF55B80E6C
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:37:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 544B8C340F0;
-        Mon, 14 Feb 2022 13:37:48 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="G/06a6/J"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644845866;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SWMo73bjvqGYEo58ZAdcrqxkbIDjXkOZjL9LLm5eZMo=;
-        b=G/06a6/J4rZBMIfe+vKNnJhj8LpG9DdTHRInWOK2/NToVXu0fgyDcvup5kT5sRlaJ8ytek
-        ECdGikCWmPpSn6MfxTvVEux1xPMPUh3tlh27WfrBXHcfjEo/VFq2AsuusBf+IbtWczNWTS
-        mVCXnRZG5FHqxzGNNTHb2egYjTTdJ0A=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 381a6391 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 14 Feb 2022 13:37:45 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     bigeasy@linutronix.de, linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: [PATCH v2] random: set fast pool count to zero in cpuhp teardown
-Date:   Mon, 14 Feb 2022 14:37:35 +0100
-Message-Id: <20220214133735.966528-1-Jason@zx2c4.com>
-In-Reply-To: <CAHmME9rAnh6nSRNYo56Ty6VSrY17ej35AoNkSjunFO0AQp1D9Q@mail.gmail.com>
-References: <CAHmME9rAnh6nSRNYo56Ty6VSrY17ej35AoNkSjunFO0AQp1D9Q@mail.gmail.com>
+        Mon, 14 Feb 2022 09:27:48 -0500
+X-Greylist: delayed 1815 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 06:27:37 PST
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A50DF2B;
+        Mon, 14 Feb 2022 06:27:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding;
+        bh=YBqBmfTUNMOSDsCwa37ezng4xrljInfkYc9e/d69sbY=;
+        b=j2WFDmpcCPcpsWjN9ydjcqGH8DphrTMmMHaSsBZaW9AnH9EpVfZ/SvYTAOSWxMB6/XDlmCQjCtcI4
+         OW7Vf6NkuUuv8u3VXGgm7rlxTkm8pVG/aXiUNsOEeHVt2eX/IASMVeqVgUcHYMgKWr7fyKRHFPYWkv
+         0tReyax3eFe4OhhG/Y6SBk4sMGYLyZouEsH5EwBtyMAcuisC7TRJGv4jDbfXWu7Ec/RowNqFPL2vhR
+         ohJ3jfbxzQyVedPzYDPwDQJEUqB1L+k5AUZmVQRHmXad2f1nX90M23AeSXtB5QVlWOYwKguWfJep4D
+         tz25tgFqFxWuT/mHnaiYAzCPrCgt/Hg==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.1.1366, Stamp: 3], Multi: [Enabled, t: (0.000010,0.030719)], BW: [Enabled, t: (0.000024,0.000002)], RTDA: [Enabled, t: (0.067068), Hit: No, Details: v2.25.0; Id: 15.52k4n6.1frs8bldb.t9t1; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from localhost.localdomain ([178.70.66.234])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Mon, 14 Feb 2022 16:57:05 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org, system@metrotek.ru,
+        Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Subject: [PATCH] fpga: microsemi-spi: add Microsemi FPGA manager
+Date:   Mon, 14 Feb 2022 16:38:35 +0300
+Message-Id: <20220214133835.25097-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than having to use expensive atomics, which were visibly the most
-expensive thing in the entire irq handler, simply take care of the
-extreme edge case of resetting count to 0 in the cpuhp teardown handler,
-after no more interrupts will arrive on that CPU. This simplifies the
-code a bit and lets us use vanilla variables rather than atomics, and
-performance should be improved.
+Add support to the FPGA manager for programming Microsemi Polarfire
+FPGAs over slave SPI interface.
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Sultan Alsawaf <sultan@kerneltoast.com>
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
 ---
-Sebastian -
+ drivers/fpga/Kconfig         |   9 +
+ drivers/fpga/Makefile        |   1 +
+ drivers/fpga/microsemi-spi.c | 366 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 376 insertions(+)
+ create mode 100644 drivers/fpga/microsemi-spi.c
 
-v2 moves the teardown to CPUHP_OFFLINE…CPUHP_BRINGUP_CPU, per our
-discussion.
-
-This was *way* simpler than I had anticipated, and I wish it
-were done this way originally. If this looks good to you and you ack it,
-I'll wind up merging this commit into the previous one in my branch,
-since the intermediate atomic_t stage isn't really that interesting
-any more, now that I've seen the light. Please take a look and let me
-know what you think.
-
--Jason
-
- drivers/char/random.c      | 33 ++++++++++++++++++---------------
- include/linux/cpuhotplug.h |  1 +
- include/linux/random.h     |  2 ++
- kernel/cpu.c               |  6 ++++++
- 4 files changed, 27 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index bf6e8627b74e..df5aef93da34 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1179,7 +1179,7 @@ struct fast_pool {
- 	unsigned long pool[16 / sizeof(long)];
- 	struct work_struct mix;
- 	unsigned long last;
--	atomic_t count;
-+	unsigned int count;
- 	u16 reg_idx;
- };
+diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+index 991b3f361ec9..25c2631a387c 100644
+--- a/drivers/fpga/Kconfig
++++ b/drivers/fpga/Kconfig
+@@ -243,4 +243,13 @@ config FPGA_MGR_VERSAL_FPGA
+ 	  configure the programmable logic(PL).
  
-@@ -1215,6 +1215,19 @@ static void fast_mix(u32 pool[4])
+ 	  To compile this as a module, choose M here.
++
++config FPGA_MGR_MICROSEMI_SPI
++	tristate "Microsemi FPGA manager"
++	depends on SPI
++	select CRC_CCITT
++	help
++	  FPGA manager driver support for Microsemi Polarfire FPGAs
++	  programming over slave SPI interface.
++
+ endif # FPGA
+diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+index 0bff783d1b61..8b3d818546a6 100644
+--- a/drivers/fpga/Makefile
++++ b/drivers/fpga/Makefile
+@@ -19,6 +19,7 @@ obj-$(CONFIG_FPGA_MGR_XILINX_SPI)	+= xilinx-spi.o
+ obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
+ obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
+ obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)      += versal-fpga.o
++obj-$(CONFIG_FPGA_MGR_MICROSEMI_SPI)	+= microsemi-spi.o
+ obj-$(CONFIG_ALTERA_PR_IP_CORE)         += altera-pr-ip-core.o
+ obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)    += altera-pr-ip-core-plat.o
  
- static DEFINE_PER_CPU(struct fast_pool, irq_randomness);
- 
-+int random_dead_cpu(unsigned int cpu)
+diff --git a/drivers/fpga/microsemi-spi.c b/drivers/fpga/microsemi-spi.c
+new file mode 100644
+index 000000000000..02c3dc6d6b0d
+--- /dev/null
++++ b/drivers/fpga/microsemi-spi.c
+@@ -0,0 +1,366 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Microsemi Polarfire FPGA programming over slave SPI interface.
++ */
++
++#include <linux/module.h>
++#include <linux/spi/spi.h>
++#include <linux/of_device.h>
++#include <linux/fpga/fpga-mgr.h>
++#include <linux/delay.h>
++#include <linux/crc-ccitt.h>
++
++#define	SPI_ISC_ENABLE		0x0B
++#define	SPI_ISC_DISABLE		0x0C
++#define	SPI_READ_STATUS		0x00
++#define	SPI_READ_DATA		0x01
++#define	SPI_FRAME_INIT		0xAE
++#define	SPI_FRAME		0xEE
++#define	SPI_PRG_MODE		0x01
++#define	SPI_RELEASE		0x23
++
++#define	SPI_FRAME_SIZE	16
++
++#define	HEADER_SIZE_OFFSET		24
++#define	DATA_SIZE_OFFSET		55
++
++#define	LOOKUP_TABLE_RECORD_SIZE	9
++#define	LOOKUP_TABLE_BLOCK_ID_OFFSET	0
++#define	LOOKUP_TABLE_BLOCK_START_OFFSET	1
++
++#define	COMPONENTS_SIZE_ID	5
++#define	BITSTREAM_ID		8
++
++#define	BITS_PER_COMPONENT_SIZE	22
++
++#define	STATUS_POLL_TIMEOUT_MS	1000
++#define	STATUS_BUSY		BIT(0)
++#define	STATUS_READY		BIT(1)
++#define	STATUS_SPI_VIOLATION	BIT(2)
++#define	STATUS_SPI_ERROR	BIT(3)
++
++struct microsemi_fpga_priv {
++	struct spi_device *spi;
++	bool program_mode;
++};
++
++static enum fpga_mgr_states microsemi_fpga_ops_state(struct fpga_manager *mgr)
 +{
-+	/*
-+	 * Set the count to zero after offlining the CPU for two
-+	 * reasons: 1) so that all new accumulated irqs are fresh
-+	 * when it comes back online, and 2) so that its worker is
-+	 * permitted to schedule again when it comes back online,
-+	 * since the MIX_INFLIGHT flag will be cleared.
-+	 */
-+	per_cpu_ptr(&irq_randomness, cpu)->count = 0;
++	struct microsemi_fpga_priv *priv = mgr->priv;
++	struct spi_device *spi = priv->spi;
++	bool program_mode = priv->program_mode;
++	ssize_t status;
++
++	status = spi_w8r8(spi, SPI_READ_STATUS);
++
++	if (!program_mode && !status)
++		return FPGA_MGR_STATE_OPERATING;
++
++	return FPGA_MGR_STATE_UNKNOWN;
++}
++
++static int poll_status_not_busy(struct spi_device *spi, u8 mask)
++{
++	ssize_t status, timeout = STATUS_POLL_TIMEOUT_MS;
++
++	while (timeout--) {
++		status = spi_w8r8(spi, SPI_READ_STATUS);
++		if (status < 0)
++			return status;
++
++		if (mask) {
++			if (!(status & STATUS_BUSY) && (status & mask))
++				return status;
++		} else {
++			if (!(status & STATUS_BUSY))
++				return status;
++		}
++
++		mdelay(1);
++	}
++
++	return -EBUSY;
++}
++
++static int microsemi_spi_write(struct spi_device *spi, const void *buf,
++			       size_t buf_size)
++{
++	int status = poll_status_not_busy(spi, 0);
++
++	if (status < 0)
++		return status;
++
++	return spi_write(spi, buf, buf_size);
++}
++
++static int microsemi_spi_write_then_read(struct spi_device *spi,
++					 const void *txbuf, size_t txbuf_size,
++					 void *rxbuf, size_t rxbuf_size)
++{
++	const u8 read_command[] = { SPI_READ_DATA };
++	int ret;
++
++	ret = microsemi_spi_write(spi, txbuf, txbuf_size);
++	if (ret)
++		return ret;
++
++	ret = poll_status_not_busy(spi, STATUS_READY);
++	if (ret < 0)
++		return ret;
++
++	return spi_write_then_read(spi, read_command, sizeof(read_command),
++				   rxbuf, rxbuf_size);
++}
++
++static int microsemi_fpga_ops_write_init(struct fpga_manager *mgr,
++					 struct fpga_image_info *info,
++					 const char *buf, size_t count)
++{
++	const u8 isc_en_command[] = { SPI_ISC_ENABLE };
++	const u8 program_mode[] = { SPI_FRAME_INIT, SPI_PRG_MODE };
++	struct microsemi_fpga_priv *priv = mgr->priv;
++	struct spi_device *spi = priv->spi;
++	struct device *dev = &mgr->dev;
++	u32 isc_ret;
++	int ret;
++
++	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
++		dev_err(dev, "Partial reconfiguration is not supported\n");
++
++		return -EOPNOTSUPP;
++	}
++
++	ret = microsemi_spi_write_then_read(spi, isc_en_command,
++					    sizeof(isc_en_command),
++					    &isc_ret, sizeof(isc_ret));
++	if (ret || isc_ret) {
++		dev_err(dev, "Failed to enable ISC: %d\n", ret ? ret : isc_ret);
++
++		return -EFAULT;
++	}
++
++	ret = microsemi_spi_write(spi, program_mode, sizeof(program_mode));
++	if (ret) {
++		dev_err(dev, "Failed to enter program mode: %d\n", ret);
++
++		return ret;
++	}
++
++	priv->program_mode = true;
++
 +	return 0;
 +}
 +
- static u32 get_reg(struct fast_pool *f, struct pt_regs *regs)
- {
- 	u32 *ptr = (u32 *)regs;
-@@ -1239,15 +1252,6 @@ static void mix_interrupt_randomness(struct work_struct *work)
- 	local_irq_disable();
- 	if (fast_pool != this_cpu_ptr(&irq_randomness)) {
- 		local_irq_enable();
--		/*
--		 * If we are unlucky enough to have been moved to another CPU,
--		 * during CPU hotplug while the CPU was shutdown then we set
--		 * our count to zero atomically so that when the CPU comes
--		 * back online, it can enqueue work again. The _release here
--		 * pairs with the atomic_inc_return_acquire in
--		 * add_interrupt_randomness().
--		 */
--		atomic_set_release(&fast_pool->count, 0);
- 		return;
- 	}
- 
-@@ -1256,7 +1260,7 @@ static void mix_interrupt_randomness(struct work_struct *work)
- 	 * consistent view, before we reenable irqs again.
- 	 */
- 	memcpy(pool, fast_pool->pool, sizeof(pool));
--	atomic_set(&fast_pool->count, 0);
-+	fast_pool->count = 0;
- 	fast_pool->last = jiffies;
- 	local_irq_enable();
- 
-@@ -1288,14 +1292,13 @@ void add_interrupt_randomness(int irq)
- 	}
- 
- 	fast_mix((u32 *)fast_pool->pool);
--	/* The _acquire here pairs with the atomic_set_release in mix_interrupt_randomness(). */
--	new_count = (unsigned int)atomic_inc_return_acquire(&fast_pool->count);
-+	new_count = ++fast_pool->count;
- 
- 	if (unlikely(crng_init == 0)) {
- 		if (new_count >= 64 &&
- 		    crng_pre_init_inject(fast_pool->pool, sizeof(fast_pool->pool),
- 					 true, true) > 0) {
--			atomic_set(&fast_pool->count, 0);
-+			fast_pool->count = 0;
- 			fast_pool->last = now;
- 			if (spin_trylock(&input_pool.lock)) {
- 				_mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
-@@ -1313,7 +1316,7 @@ void add_interrupt_randomness(int irq)
- 
- 	if (unlikely(!fast_pool->mix.func))
- 		INIT_WORK(&fast_pool->mix, mix_interrupt_randomness);
--	atomic_or(MIX_INFLIGHT, &fast_pool->count);
-+	fast_pool->count |= MIX_INFLIGHT;
- 	queue_work_on(raw_smp_processor_id(), system_highpri_wq, &fast_pool->mix);
- }
- EXPORT_SYMBOL_GPL(add_interrupt_randomness);
-diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
-index 411a428ace4d..38294af566e4 100644
---- a/include/linux/cpuhotplug.h
-+++ b/include/linux/cpuhotplug.h
-@@ -127,6 +127,7 @@ enum cpuhp_state {
- 	CPUHP_MM_ZSWP_POOL_PREPARE,
- 	CPUHP_KVM_PPC_BOOK3S_PREPARE,
- 	CPUHP_ZCOMP_PREPARE,
-+	CPUHP_RANDOM_PREPARE,
- 	CPUHP_TIMERS_PREPARE,
- 	CPUHP_MIPS_SOC_PREPARE,
- 	CPUHP_BP_PREPARE_DYN,
-diff --git a/include/linux/random.h b/include/linux/random.h
-index d7354de9351e..fd8c354bae8e 100644
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -35,6 +35,8 @@ extern void add_interrupt_randomness(int irq) __latent_entropy;
- extern void add_hwgenerator_randomness(const void *buffer, size_t count,
- 				       size_t entropy);
- 
-+extern int random_dead_cpu(unsigned int cpu);
++static ssize_t lookup_block_start(int id, const char *buf, size_t buf_size)
++{
++	u8 header_size, blocks_num, block_id;
++	u32 block_start, i;
 +
- extern void get_random_bytes(void *buf, size_t nbytes);
- extern int wait_for_random_bytes(void);
- extern int __init rand_initialize(void);
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 407a2568f35e..f83ae4ae7275 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -34,6 +34,7 @@
- #include <linux/scs.h>
- #include <linux/percpu-rwsem.h>
- #include <linux/cpuset.h>
-+#include <linux/random.h>
- 
- #include <trace/events/power.h>
- #define CREATE_TRACE_POINTS
-@@ -1689,6 +1690,11 @@ static struct cpuhp_step cpuhp_hp_states[] = {
- 		.startup.single		= rcutree_prepare_cpu,
- 		.teardown.single	= rcutree_dead_cpu,
- 	},
-+	[CPUHP_RANDOM_PREPARE] = {
-+		.name			= "random:prepare",
-+		.startup.single		= NULL,
-+		.teardown.single	= random_dead_cpu,
++	header_size = *(buf + HEADER_SIZE_OFFSET);
++
++	if (header_size > buf_size)
++		return -EFAULT;
++
++	blocks_num = *(buf + header_size - 1);
++
++	if (header_size + blocks_num * LOOKUP_TABLE_RECORD_SIZE > buf_size)
++		return -EFAULT;
++
++	for (i = 0; i < blocks_num; i++) {
++		block_id = *(buf + header_size + LOOKUP_TABLE_RECORD_SIZE * i +
++			     LOOKUP_TABLE_BLOCK_ID_OFFSET);
++
++		if (block_id == id) {
++			memcpy(&block_start,
++			       buf + header_size +
++			       LOOKUP_TABLE_RECORD_SIZE * i +
++			       LOOKUP_TABLE_BLOCK_START_OFFSET,
++			       sizeof(block_start));
++
++			return le32_to_cpu(block_start);
++		}
++	}
++
++	return -EFAULT;
++}
++
++static ssize_t parse_bitstream_size(const char *buf, size_t buf_size)
++{
++	ssize_t	bitstream_size = 0, components_size_start = 0,
++		component_size_byte_num, component_size_byte_off, i;
++	u16 components_num;
++	u32 component_size;
++
++	memcpy(&components_num, buf + DATA_SIZE_OFFSET, sizeof(components_num));
++	components_num = le16_to_cpu(components_num);
++
++	components_size_start = lookup_block_start(COMPONENTS_SIZE_ID, buf,
++						   buf_size);
++	if (components_size_start < 0)
++		return components_size_start;
++
++	if (components_size_start +
++	    DIV_ROUND_UP(components_num * BITS_PER_COMPONENT_SIZE,
++			 BITS_PER_BYTE) > buf_size)
++		return -EFAULT;
++
++	for (i = 0; i < components_num; i++) {
++		component_size_byte_num =
++			(i * BITS_PER_COMPONENT_SIZE) / BITS_PER_BYTE;
++		component_size_byte_off =
++			(i * BITS_PER_COMPONENT_SIZE) % BITS_PER_BYTE;
++
++		memcpy(&component_size,
++		       buf + components_size_start + component_size_byte_num,
++		       sizeof(component_size));
++		component_size = le32_to_cpu(component_size);
++		component_size >>= component_size_byte_off;
++		component_size &= GENMASK(BITS_PER_COMPONENT_SIZE - 1, 0);
++
++		bitstream_size += component_size;
++	}
++
++	return bitstream_size;
++}
++
++static int microsemi_fpga_ops_write(struct fpga_manager *mgr, const char *buf,
++				    size_t count)
++{
++	ssize_t bitstream_start = 0, bitstream_size;
++	struct microsemi_fpga_priv *priv = mgr->priv;
++	struct spi_device *spi = priv->spi;
++	struct device *dev = &mgr->dev;
++	u8 tmp_buf[SPI_FRAME_SIZE + 1];
++	int ret, i;
++
++	if (crc_ccitt(0, buf, count)) {
++		dev_err(dev, "CRC error\n");
++
++		return -EINVAL;
++	}
++
++	bitstream_start = lookup_block_start(BITSTREAM_ID, buf, count);
++	if (bitstream_start < 0) {
++		dev_err(dev, "Failed to find bitstream start %d\n",
++			bitstream_start);
++
++		return bitstream_start;
++	}
++
++	bitstream_size = parse_bitstream_size(buf, count);
++	if (bitstream_size < 0) {
++		dev_err(dev, "Failed to parse bitstream size %d\n",
++			bitstream_size);
++
++		return bitstream_size;
++	}
++
++	if (bitstream_start + bitstream_size * SPI_FRAME_SIZE > count) {
++		dev_err(dev,
++			"Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
++			bitstream_start, bitstream_size * SPI_FRAME_SIZE, count);
++
++		return -EFAULT;
++	}
++
++	for (i = 0; i < bitstream_size; i++) {
++		tmp_buf[0] = SPI_FRAME;
++		memcpy(tmp_buf + 1, buf + bitstream_start + i * SPI_FRAME_SIZE,
++		       SPI_FRAME_SIZE);
++
++		ret = microsemi_spi_write(spi, tmp_buf, sizeof(tmp_buf));
++		if (ret) {
++			dev_err(dev,
++				"Failed to write bitstream frame number %d of %d\n",
++				i, bitstream_size);
++
++			return ret;
++		}
++	}
++
++	return 0;
++}
++
++static int microsemi_fpga_ops_write_complete(struct fpga_manager *mgr,
++					     struct fpga_image_info *info)
++{
++	const u8 isc_dis_command[] = { SPI_ISC_DISABLE };
++	const u8 release_command[] = { SPI_RELEASE };
++	struct microsemi_fpga_priv *priv = mgr->priv;
++	struct spi_device *spi = priv->spi;
++	struct device *dev = &mgr->dev;
++	int ret;
++
++	ret = microsemi_spi_write(spi, isc_dis_command,
++				  sizeof(isc_dis_command));
++	if (ret) {
++		dev_err(dev, "Failed to disable ISC: %d\n", ret);
++
++		return ret;
++	}
++
++	mdelay(1);
++
++	ret = microsemi_spi_write(spi, release_command,
++				  sizeof(release_command));
++	if (ret) {
++		dev_err(dev, "Failed to exit program mode: %d\n", ret);
++
++		return ret;
++	}
++
++	priv->program_mode = false;
++
++	return 0;
++}
++
++static const struct fpga_manager_ops microsemi_fpga_ops = {
++	.state = microsemi_fpga_ops_state,
++	.write_init = microsemi_fpga_ops_write_init,
++	.write = microsemi_fpga_ops_write,
++	.write_complete = microsemi_fpga_ops_write_complete,
++};
++
++static int microsemi_fpga_probe(struct spi_device *spi)
++{
++	struct microsemi_fpga_priv *priv;
++	struct device *dev = &spi->dev;
++	struct fpga_manager *mgr;
++
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->spi = spi;
++
++	mgr = devm_fpga_mgr_register(dev, "Microsemi FPGA Manager",
++				     &microsemi_fpga_ops, priv);
++
++	return PTR_ERR_OR_ZERO(mgr);
++}
++
++static const struct spi_device_id microsemi_fpga_spi_ids[] = {
++	{ .name = "polarfire-fpga-mgr", },
++	{},
++};
++MODULE_DEVICE_TABLE(spi, microsemi_fpga_spi_ids);
++
++static const struct of_device_id microsemi_fpga_of_ids[] = {
++	{ .compatible = "mscc,polarfire-fpga-mgr" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, microsemi_fpga_of_ids);
++
++static struct spi_driver microsemi_fpga_driver = {
++	.probe = microsemi_fpga_probe,
++	.id_table = microsemi_fpga_spi_ids,
++	.driver = {
++		.name = "microsemi_fpga_manager",
++		.of_match_table = of_match_ptr(microsemi_fpga_of_ids),
 +	},
- 	/*
- 	 * On the tear-down path, timers_dead_cpu() must be invoked
- 	 * before blk_mq_queue_reinit_notify() from notify_dead(),
++};
++
++module_spi_driver(microsemi_fpga_driver);
++
++MODULE_DESCRIPTION("Microsemi FPGA Manager");
++MODULE_LICENSE("GPL");
 -- 
-2.35.0
+2.34.1
+
 

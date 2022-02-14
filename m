@@ -2,96 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E047B4B4D7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2804B4D2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349602AbiBNKxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:53:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43846 "EHLO
+        id S1349685AbiBNKx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:53:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349230AbiBNKwZ (ORCPT
+        with ESMTP id S1349297AbiBNKxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:52:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C49B6D4F3;
-        Mon, 14 Feb 2022 02:17:28 -0800 (PST)
+        Mon, 14 Feb 2022 05:53:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBF46D94D;
+        Mon, 14 Feb 2022 02:17:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0BE7B80CE1;
-        Mon, 14 Feb 2022 10:17:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 294DFC340E9;
-        Mon, 14 Feb 2022 10:17:25 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="GMTy9/EB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644833843;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jw405377p5pf78FxoLUva1syQCUGCgspeYSlO0IejV4=;
-        b=GMTy9/EB5tvbuSzl4i1XKCjQG22qMWmmiWB8Q58w0XqR+nii/eKMIhotStFOmv4KY2OBN6
-        EquKXuFi7KfMaCw8qrdT86DvNbBT06mgQrXpHtXOV+vO8wZxyHfoEMXrtr/F9xNqQLE//8
-        V22IUBtaU+ur+GAOhx8pMm3Cx/tk0lI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id cbe58d8c (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 14 Feb 2022 10:17:23 +0000 (UTC)
-Received: by mail-yb1-f175.google.com with SMTP id y129so44506406ybe.7;
-        Mon, 14 Feb 2022 02:17:22 -0800 (PST)
-X-Gm-Message-State: AOAM531Zj1WK4Jf1vUTLCheS+MTrUDHffZ+aNaeNfGl+M9nc1kfEXHN5
-        YX5u0Ggcg4LZZQjDXfhJ5aGQ1X2a5P7xySPiweY=
-X-Google-Smtp-Source: ABdhPJypKR734I9ZoaN1nIvZPaPH70+bSE5lKqUpay4t8mJCk+EWO5LpYh+k6Jm4Xufe+s0nfpAKcWEa/qD1EiRVksw=
-X-Received: by 2002:a25:c006:: with SMTP id c6mr11165505ybf.457.1644833841790;
- Mon, 14 Feb 2022 02:17:21 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a05:7110:88a:b0:15e:9450:8ed4 with HTTP; Mon, 14 Feb 2022
- 02:17:20 -0800 (PST)
-In-Reply-To: <YgoeBYJ5nwc8BTG3@linutronix.de>
-References: <YgZ6IEbiDgz5X1ON@linutronix.de> <20220211162515.554867-1-Jason@zx2c4.com>
- <YgaSYlVEBOxfJbSD@linutronix.de> <CAHmME9rC_q4LGq2JaAAeGbtRA2cibTe9bnvhMLng+QnzAy2DVg@mail.gmail.com>
- <YgaV0UZO1KfmtLLh@linutronix.de> <CAHmME9rsOWuprpYqo9G9eUboQwUxRgWqYRYgyHG7cNOG16c5EA@mail.gmail.com>
- <YgoeBYJ5nwc8BTG3@linutronix.de>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 14 Feb 2022 11:17:20 +0100
-X-Gmail-Original-Message-ID: <CAHmME9otmV1QCX29D_DXsHB-41puTKurWtyZ39huPZtD4mt5ng@mail.gmail.com>
-Message-ID: <CAHmME9otmV1QCX29D_DXsHB-41puTKurWtyZ39huPZtD4mt5ng@mail.gmail.com>
-Subject: Re: [PATCH v6] random: defer fast pool mixing to worker
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DA2761175;
+        Mon, 14 Feb 2022 10:17:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FF33C340E9;
+        Mon, 14 Feb 2022 10:17:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644833868;
+        bh=Bd6563qakfMdmj15vig4Q1sz4MW1UKmd2W6/fruhJec=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=teMl9bcL/WSPL1BKbQA9S71chpnkvdJ7NUfCpI3MjZG8e9rQ+4gsERQulgCVyAf9n
+         30Tc5hYfL2pPUUD9hMCUZs6Wv2qxcPsCYA80LVdlIZ8WN8ykmeVFzxPNyarQsmOVr5
+         5hrlsWUenbX0yH0BliKYNFyoJe9v/+ZZSM6Lxasbrh8o7hsqU0dmHqg2MaZqXpXQgg
+         v1yOMt6k05EZJSC64DSCDUMpTduS7SpCE9Qzf61edRrrliSr/e+tWtoutxiWNMMHT9
+         dBMRM+KNTI3Etw+nZTllwm412S5bVgoP2K8R2ONhhpm5YpLovE+pcLtK+VMM5UHAUP
+         AZgFLrI8V1OcQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nJYQT-007iID-HE; Mon, 14 Feb 2022 10:17:45 +0000
+Date:   Mon, 14 Feb 2022 10:17:45 +0000
+Message-ID: <87o8394ura.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] of/irq: Use interrupts-extended to find parent
+In-Reply-To: <20220214051318.2273-1-samuel@sholland.org>
+References: <20220214051318.2273-1-samuel@sholland.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: samuel@sholland.org, tglx@linutronix.de, robh+dt@kernel.org, frowand.list@gmail.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/22, Sebastian Andrzej Siewior <bigeasy@linutronix.de> wrote:
-> to
-> | - Does anything anywhere call get_random_xx() before the worker has a
-> |   chance to run?
+On Mon, 14 Feb 2022 05:13:17 +0000,
+Samuel Holland <samuel@sholland.org> wrote:
+> 
+> Some OF irqchips, such as the RISC-V PLIC, use interrupts-extended to
+> specify their parent domain(s). That binding does not allow using the
+> interrupt-parent property in the irqchip node, which prevents
+> of_irq_init from properly detecting the irqchip hierarchy.
+
+Is this because there is more than a single interrupt parent?
+
+> 
+> If no interrupt-parent property is present in the enclosing bus or root
+> node, then desc->interrupt_parent will be NULL for both the per-CPU
+> RISC-V INTCs (the actual root domains) and the RISC-V PLIC. Similarly,
+> if the bus or root node specifies `interrupt-parent = <&plic>`, then
+> of_irq_init will hit the `desc->interrupt_parent == np` check, and again
+> all parents will be NULL. So things happen to work today for some boards
+> due to Makefile ordering.
+> 
+> However, things break when another irqchip ("foo") is stacked on top of
+> the PLIC. The bus/root node will have `interrupt-parent = <&foo>`,
+> since that is what all of the other peripherals need. When of_irq_init
+> runs, it will try to find the PLIC's parent domain. But because
+> of_irq_find_parent ignores interrupts-extended, it will fall back to
+> using the interrupt-parent property of the PLIC's parent node (i.e. the
+> bus or root node), and see "foo" as the PLIC's parent domain. But this
+> is wrong, because "foo" is actually the PLIC's child domain!
+
+Let me see if I parsed this correctly. You have:
+
+             int-parent        int-extended
+	foo -----------> PLIC --------------> root-irqchip
+
+Is that correct?
+
+> 
+> So of_irq_init wrongly attempts to init the stacked irqchip before the
+> PLIC. This fails and breaks boot.
+> 
+> Fix this by having of_irq_find_parent return the first node referenced
+> by interrupts-extended when that property is present. Even if the
+> property references multiple different IRQ domains, this will still work
+> reliably in of_irq_init as long as all referenced domains are the same
+> distance away from some root domain (e.g. the RISC-V INTCs referenced by
+> the PLIC's interrupts-extended are always all root domains).
+
+I'm a bit worried that the distance assumption may not always hold.
+Maybe it isn't something we need to deal with right now, but a comment
+wouldn't hurt to make this assumption clear.
+
 >
-> Once you queue a work item I don't think that the scheduler needs to put
-> it on the CPU right away. It may have already have other tasks waiting
-> including some with a RT priority.
-> Also, the lock is irqsave() so they can be users in an interrupt
-> handler. I remember the original reason why I made it irqsave is because
-> something did kmalloc() and SLUB somehow asked for random bits.
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+> 
+>  drivers/of/irq.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/of/irq.c b/drivers/of/irq.c
+> index 2b07677a386b..0c20e22b91f5 100644
+> --- a/drivers/of/irq.c
+> +++ b/drivers/of/irq.c
+> @@ -60,7 +60,8 @@ struct device_node *of_irq_find_parent(struct device_node *child)
+>  		return NULL;
+>  
+>  	do {
+> -		if (of_property_read_u32(child, "interrupt-parent", &parent)) {
+> +		if (of_property_read_u32(child, "interrupt-parent", &parent) &&
+> +		    of_property_read_u32(child, "interrupts-extended", &parent)) {
+>  			p = of_get_parent(child);
+>  		} else	{
+>  			if (of_irq_workarounds & OF_IMAP_NO_PHANDLE)
 
-Right. So there are two sides of the questions: 1) how bad is this
-actual race, and are there any drivers that do regularly get bit by
-this? 2) There's a largeish window between workqueue_init_early()
-setting up the system highprio workqueue, and workqueue_init()
-enabling queued workers to actually run. Interrupts also get enabled
-in the interim. Does anything get bit by that window?
+With the comment added:
 
-Jason
+Acked-by: Marc Zyngier <maz@kernel.org>
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

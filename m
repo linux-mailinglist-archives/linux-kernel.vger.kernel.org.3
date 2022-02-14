@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 457D24B4A3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:38:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2894B4C88
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346176AbiBNKR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:17:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42286 "EHLO
+        id S1346578AbiBNKnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:43:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346274AbiBNKPn (ORCPT
+        with ESMTP id S1348970AbiBNKko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:15:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E147B561;
-        Mon, 14 Feb 2022 01:52:41 -0800 (PST)
+        Mon, 14 Feb 2022 05:40:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1572666CB3;
+        Mon, 14 Feb 2022 02:04:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C46E0B80DC8;
-        Mon, 14 Feb 2022 09:52:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7F1DC340E9;
-        Mon, 14 Feb 2022 09:52:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8860B80DC8;
+        Mon, 14 Feb 2022 10:04:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF2ECC340E9;
+        Mon, 14 Feb 2022 10:04:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832358;
-        bh=PJHeGXva5+VseX84sjTYD+TkWsdaeyJBakqXYhk9zg0=;
+        s=korg; t=1644833062;
+        bh=mBqp5tWS/GEDaL2hMDTrZkhFXFJUE9ZWagq9X9n9vjE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v1SXIjjjibVtD3tayCiI7Kf1wh2A1pw+SUccf9ZUXPO0IMYGN4veb80SbNwZcmygN
-         G3lp2+x9K/opuQOXKVIUARmURpQ3sIS6BqtBl0ozBhKOiVuPhAfn6QxubiZZLGWaHq
-         Ic+CNlKFnX3+h90HiN5E3zhkpF1k3Pi3vxMY63o8=
+        b=HSf+mZLXsJTAWD8tbfSHKO1Uu1W2t8CV6e+OMrlkcv+OEh2XDM+MDB8x5mAUJOXZb
+         qWNHE2ObMvdvPOwQ8mcAs1GApFnSydeRQaP6VKpqZ1nYCkOXrjdmr+dkBZuSc7EL4X
+         GSdGCG/U0PdkOXnl2zi0i2VUw1ks9Yk5QL/PpOtw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Jan Hoeppner <hoeppner@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Subject: [PATCH 5.15 160/172] s390/cio: verify the driver availability for path_event call
-Date:   Mon, 14 Feb 2022 10:26:58 +0100
-Message-Id: <20220214092511.914738642@linuxfoundation.org>
+        stable@vger.kernel.org, Pavel Hofman <pavel.hofman@ivitera.com>
+Subject: [PATCH 5.16 175/203] usb: gadget: f_uac2: Define specific wTerminalType
+Date:   Mon, 14 Feb 2022 10:26:59 +0100
+Message-Id: <20220214092516.189804956@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +53,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vineeth Vijayan <vneethv@linux.ibm.com>
+From: Pavel Hofman <pavel.hofman@ivitera.com>
 
-commit dd9cb842fa9d90653a9b48aba52f89c069f3bc50 upstream.
+commit 5432184107cd0013761bdfa6cb6079527ef87b95 upstream.
 
-If no driver is attached to a device or the driver does not provide the
-path_event function, an FCES path-event on this device could end up in a
-kernel-panic. Verify the driver availability before the path_event
-function call.
+Several users have reported that their Win10 does not enumerate UAC2
+gadget with the existing wTerminalType set to
+UAC_INPUT_TERMINAL_UNDEFINED/UAC_INPUT_TERMINAL_UNDEFINED, e.g.
+https://github.com/raspberrypi/linux/issues/4587#issuecomment-926567213.
+While the constant is officially defined by the USB terminal types
+document, e.g. XMOS firmware for UAC2 (commonly used for Win10) defines
+no undefined output terminal type in its usbaudio20.h header.
 
-Fixes: 32ef938815c1 ("s390/cio: Add support for FCES status notification")
-Cc: stable@vger.kernel.org
-Signed-off-by: Vineeth Vijayan <vneethv@linux.ibm.com>
-Suggested-by: Peter Oberparleiter <oberpar@linux.ibm.com>
-Reviewed-by: Jan Hoeppner <hoeppner@linux.ibm.com>
-Reviewed-by: Peter Oberparleiter <oberpar@linux.ibm.com>
-Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
+Therefore wTerminalType of EP-IN is set to
+UAC_INPUT_TERMINAL_MICROPHONE and wTerminalType of EP-OUT to
+UAC_OUTPUT_TERMINAL_SPEAKER for the UAC2 gadget.
+
+Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+Cc: stable <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220131071813.7433-1-pavel.hofman@ivitera.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/s390/cio/device.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/gadget/function/f_uac2.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/s390/cio/device.c
-+++ b/drivers/s390/cio/device.c
-@@ -1194,7 +1194,7 @@ static int io_subchannel_chp_event(struc
- 			else
- 				path_event[chpid] = PE_NONE;
- 		}
--		if (cdev)
-+		if (cdev && cdev->drv && cdev->drv->path_event)
- 			cdev->drv->path_event(cdev, path_event);
- 		break;
- 	}
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -203,7 +203,7 @@ static struct uac2_input_terminal_descri
+ 
+ 	.bDescriptorSubtype = UAC_INPUT_TERMINAL,
+ 	/* .bTerminalID = DYNAMIC */
+-	.wTerminalType = cpu_to_le16(UAC_INPUT_TERMINAL_UNDEFINED),
++	.wTerminalType = cpu_to_le16(UAC_INPUT_TERMINAL_MICROPHONE),
+ 	.bAssocTerminal = 0,
+ 	/* .bCSourceID = DYNAMIC */
+ 	.iChannelNames = 0,
+@@ -231,7 +231,7 @@ static struct uac2_output_terminal_descr
+ 
+ 	.bDescriptorSubtype = UAC_OUTPUT_TERMINAL,
+ 	/* .bTerminalID = DYNAMIC */
+-	.wTerminalType = cpu_to_le16(UAC_OUTPUT_TERMINAL_UNDEFINED),
++	.wTerminalType = cpu_to_le16(UAC_OUTPUT_TERMINAL_SPEAKER),
+ 	.bAssocTerminal = 0,
+ 	/* .bSourceID = DYNAMIC */
+ 	/* .bCSourceID = DYNAMIC */
 
 

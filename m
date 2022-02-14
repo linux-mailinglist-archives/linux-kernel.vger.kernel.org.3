@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4842F4B4C4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:44:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5462B4B4C63
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348732AbiBNKjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:39:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48134 "EHLO
+        id S1348321AbiBNKkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:40:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348918AbiBNKgD (ORCPT
+        with ESMTP id S1348950AbiBNKgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:36:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15EB65793;
-        Mon, 14 Feb 2022 02:02:25 -0800 (PST)
+        Mon, 14 Feb 2022 05:36:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB32988B20;
+        Mon, 14 Feb 2022 02:02:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E1986077B;
-        Mon, 14 Feb 2022 10:02:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65C96C340E9;
-        Mon, 14 Feb 2022 10:02:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AEDF60C71;
+        Mon, 14 Feb 2022 10:02:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60ED2C340E9;
+        Mon, 14 Feb 2022 10:02:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832944;
-        bh=NMjWGwPSU2DDunwZRA4fzUKy64zLoxOq04HsvxNVkF0=;
+        s=korg; t=1644832948;
+        bh=iVVprejHhTHrKXydZFMArGB8nKpVGa/J/tekSOuOWgU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=03qq2bwQl3GbyS2JY8YLwnNI8FAdsnRvsgZXRvSuU+1f9L3CMrdz1nnlqaUUzT6NZ
-         yyxZE8NpE0iaFBz7Lety0Uj4qB+zz0l7LcFo/p+98iZvRTOfLv5am6YUL7zy47TVhz
-         aKNykEyNQUf7iUO5/UZP+ITdZ86rEPoWHiMw0lMI=
+        b=dNIreoc6mYSj22Kpag/ieTqREbHaTwIoWFhRfGwb6J7N5tQyHeTG2Xdj1HXma6cgi
+         gq0KEAnNi/EY0X9CQUgeaoNwzSdF2zHf1+iUZW3+5ozIvrO6JbiQPHMSBa5cxLsOt7
+         MDNK8wnULmAWfgmb24gFKOUnDcf/ofrj87iG5hiQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Szymon Heidrich <szymon.heidrich@gmail.com>, stable@kernel.org
-Subject: [PATCH 5.16 173/203] USB: gadget: validate interface OS descriptor requests
-Date:   Mon, 14 Feb 2022 10:26:57 +0100
-Message-Id: <20220214092516.122068022@linuxfoundation.org>
+Subject: [PATCH 5.16 174/203] usb: gadget: rndis: check size of RNDIS_MSG_SET command
+Date:   Mon, 14 Feb 2022 10:26:58 +0100
+Message-Id: <20220214092516.158278972@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
 References: <20220214092510.221474733@linuxfoundation.org>
@@ -54,31 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Szymon Heidrich <szymon.heidrich@gmail.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit 75e5b4849b81e19e9efe1654b30d7f3151c33c2c upstream.
+commit 38ea1eac7d88072bbffb630e2b3db83ca649b826 upstream.
 
-Stall the control endpoint in case provided index exceeds array size of
-MAX_CONFIG_INTERFACES or when the retrieved function pointer is null.
+Check the size of the RNDIS_MSG_SET command given to us before
+attempting to respond to an invalid message size.
 
-Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+Reported-by: Szymon Heidrich <szymon.heidrich@gmail.com>
 Cc: stable@kernel.org
+Tested-by: Szymon Heidrich <szymon.heidrich@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/composite.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/gadget/function/rndis.c |    9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -1975,6 +1975,9 @@ unknown:
- 				if (w_index != 0x5 || (w_value >> 8))
- 					break;
- 				interface = w_value & 0xFF;
-+				if (interface >= MAX_CONFIG_INTERFACES ||
-+				    !os_desc_cfg->interface[interface])
-+					break;
- 				buf[6] = w_index;
- 				count = count_ext_prop(os_desc_cfg,
- 					interface);
+--- a/drivers/usb/gadget/function/rndis.c
++++ b/drivers/usb/gadget/function/rndis.c
+@@ -637,14 +637,17 @@ static int rndis_set_response(struct rnd
+ 	rndis_set_cmplt_type *resp;
+ 	rndis_resp_t *r;
+ 
++	BufLength = le32_to_cpu(buf->InformationBufferLength);
++	BufOffset = le32_to_cpu(buf->InformationBufferOffset);
++	if ((BufLength > RNDIS_MAX_TOTAL_SIZE) ||
++	    (BufOffset + 8 >= RNDIS_MAX_TOTAL_SIZE))
++		    return -EINVAL;
++
+ 	r = rndis_add_response(params, sizeof(rndis_set_cmplt_type));
+ 	if (!r)
+ 		return -ENOMEM;
+ 	resp = (rndis_set_cmplt_type *)r->buf;
+ 
+-	BufLength = le32_to_cpu(buf->InformationBufferLength);
+-	BufOffset = le32_to_cpu(buf->InformationBufferOffset);
+-
+ #ifdef	VERBOSE_DEBUG
+ 	pr_debug("%s: Length: %d\n", __func__, BufLength);
+ 	pr_debug("%s: Offset: %d\n", __func__, BufOffset);
 
 

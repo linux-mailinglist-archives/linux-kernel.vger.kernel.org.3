@@ -2,107 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C542C4B5D79
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 23:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2A24B5D83
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 23:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbiBNWNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 17:13:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60698 "EHLO
+        id S231777AbiBNWOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 17:14:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbiBNWNs (ORCPT
+        with ESMTP id S230227AbiBNWO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 17:13:48 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BDBE13DE23
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 14:13:39 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-3-0IuFZHXpM1-VcUsNfepTpQ-1; Mon, 14 Feb 2022 22:13:36 +0000
-X-MC-Unique: 0IuFZHXpM1-VcUsNfepTpQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Mon, 14 Feb 2022 22:13:34 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Mon, 14 Feb 2022 22:13:34 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@kernel.org>
-CC:     Mark Rutland <mark.rutland@arm.com>, Rich Felker <dalias@libc.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>, Guo Ren <guoren@kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        "Brian Cain" <bcain@codeaurora.org>,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        "Christoph Hellwig" <hch@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Arnd Bergmann <arnd@arndb.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Greentime Hu <green.hu@gmail.com>,
-        Stafford Horne <shorne@gmail.com>,
-        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        David Miller <davem@davemloft.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: RE: [PATCH 04/14] x86: use more conventional access_ok() definition
-Thread-Topic: [PATCH 04/14] x86: use more conventional access_ok() definition
-Thread-Index: AQHYIeHe9n+22PBgtUWxf89GrdwkK6yTmyQw
-Date:   Mon, 14 Feb 2022 22:13:34 +0000
-Message-ID: <2dda07f893cb4ef9b5ea2265adccb98f@AcuMS.aculab.com>
-References: <20220214163452.1568807-1-arnd@kernel.org>
- <20220214163452.1568807-5-arnd@kernel.org> <YgqLFYqIqkIsNC92@infradead.org>
- <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
- <CAHk-=whq6_Nh3cB3FieP481VcRyCu69X3=wO1yLHGmcZEj69SA@mail.gmail.com>
- <CAHk-=wgYu67OwP4LhcrPdDVxv2mOsx-Xsc2DKoVW6GZwKFtOYQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wgYu67OwP4LhcrPdDVxv2mOsx-Xsc2DKoVW6GZwKFtOYQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 14 Feb 2022 17:14:27 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D986113DE2B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 14:14:16 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id qx21so483060ejb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 14:14:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=a0Er9PU0s586qqj351/Wl2YCEXP6TU1XLfq7ouOmNCA=;
+        b=6SKs+0iAcbrRFKimrSzd538mPpXpjsh/geHE/Cl38q5kPBC6B8qUaPJ643a+KN7xV/
+         EmFK3EegJYYkNhAP1fQjORjLNY6EmzkrPYjfBt5EQX2630aZWSQsWPabLs/z295meZj8
+         qnG108hQG2twJbLv+FzL/ikyPx4nFUNB/w7SOXmm9YcaVNY5NS3ZS9iFmKxGxcGhjQvi
+         uEemueEO3wiycNTs6RQ4KBIs7QH3DGud2jH9H+yO+h7ibwbRFGYk6YcxKuq5fbXcff1O
+         blM9h5Eyv8YYSJl7oFdKS6EAecfSzWcW/pPvlL65HvsZ5nfb4gHNqqvNqMZ/1XwdFlxG
+         s3lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=a0Er9PU0s586qqj351/Wl2YCEXP6TU1XLfq7ouOmNCA=;
+        b=qd6cAe951YYz/sYv3wUHIZsEpUdN3nlPL5W38Wc+QaGaJGc6js18Nc6x5Jz2dI2Y2t
+         WwrlNgQXu+ooBTJZFxitFoYc8wm5sWoq5mJNh+kVyFJN7kjh0DcrV6DXPF7XsiiIu38w
+         wHbl2c9M5SYIWCUvJjoEEfQh1ADvO6b0/x06zgywxNCS7Rb1pLjRc/KcEd3E4gJphBUd
+         y+vUJDw90UtDg6p/kMy7jFfC/JBEYtF7TiX/QI1MUUOPIdzycga+SuM9VsmvWmfoUeRV
+         wkKhnKVpuMHmfCYZ2tJNeU9l8US0/2UEanImgo4MurEvZ+aSqJ0rs/x5+IoCrl13TLHh
+         kpmA==
+X-Gm-Message-State: AOAM532drEhlgdvEjLL0RerJ5prdSUYVsgfqIcWVLWNzJmUqkhGb4sqs
+        WGsfMc8KahBz16JbOG9BK9TjUyZpRzoSUsqmN6Sr
+X-Google-Smtp-Source: ABdhPJzGiYp5cTjKKRmNx3BZuObAKxt9Gb5NP26z94DZjO1BpJRUS4y8pzzpdn/2U4WR8IF+c4ZWQSr+9bBhHusaKEg=
+X-Received: by 2002:a17:907:3e8a:: with SMTP id hs10mr718007ejc.112.1644876855348;
+ Mon, 14 Feb 2022 14:14:15 -0800 (PST)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+References: <20220212175922.665442-1-omosnace@redhat.com> <20220212175922.665442-3-omosnace@redhat.com>
+In-Reply-To: <20220212175922.665442-3-omosnace@redhat.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 14 Feb 2022 17:14:04 -0500
+Message-ID: <CAHC9VhT90617FoqQJBCrDQ8gceVVA6a1h74h6T4ZOwNk6RVB3g@mail.gmail.com>
+Subject: Re: [PATCH net v3 2/2] security: implement sctp_assoc_established
+ hook in selinux
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        selinux@vger.kernel.org, Xin Long <lucien.xin@gmail.com>,
+        Richard Haines <richard_c_haines@btinternet.com>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        linux-sctp@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prashanth Prahlad <pprahlad@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,17 +72,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMTQgRmVicnVhcnkgMjAyMiAyMDoyNA0KPiA+
-DQo+ID4geDg2LTY0IGhhcyBhbHdheXMoKikgdXNlZCBUQVNLX1NJWkVfTUFYIGZvciBhY2Nlc3Nf
-b2soKSwgYW5kIHRoZQ0KPiA+IGdldF91c2VyKCkgYXNzZW1ibGVyIGltcGxlbWVudGF0aW9uIGRv
-ZXMgdGhlIHNhbWUuDQo+IA0KPiBTaWRlIG5vdGU6IHdlIGNvdWxkIGp1c3QgY2hlY2sgdGhlIHNp
-Z24gYml0IGluc3RlYWQsIGFuZCBhdm9pZCBiaWcNCj4gY29uc3RhbnRzIHRoYXQgd2F5Lg0KDQpU
-aGUgY2hlYXAgdGVzdCBmb3IgbW9zdCA2NGJpdCBpcyAoYWRkciB8IHNpemUpID4+IDYyICE9IDAu
-DQoNCkkgZGlkIHNvbWUgdGVzdHMgbGFzdCB3ZWVrIGFuZCB0aGUgY29tcGlsZXJzIGNvcnJlY3Rs
-eSBvcHRpbWlzZQ0Kb3V0IGNvbnN0YW50IHNpemUuDQoNCkRvZXNuJ3Qgc3BhcmM2NCBzdGlsbCBu
-ZWVkIGEgd3JhcCB0ZXN0Pw0KT3IgaXMgdGhhdCBhc3N1bWVkIGJlY2F1c2UgdGhlcmUgaXMgYWx3
-YXlzIGFuIHVubWFwcGVkIHBhZ2UNCmFuZCB0cmFuc2ZlciBhcmUgJ2FkZXF1YXRlbHknIGRvbmUg
-b24gaW5jcmVhc2luZyBhZGRyZXNzZXM/DQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJl
-c3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsx
-IDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On Sat, Feb 12, 2022 at 12:59 PM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+>
+> Do this by extracting the peer labeling per-association logic from
+> selinux_sctp_assoc_request() into a new helper
+> selinux_sctp_process_new_assoc() and use this helper in both
+> selinux_sctp_assoc_request() and selinux_sctp_assoc_established(). This
+> ensures that the peer labeling behavior as documented in
+> Documentation/security/SCTP.rst is applied both on the client and server
+> side:
+> """
+> An SCTP socket will only have one peer label assigned to it. This will be
+> assigned during the establishment of the first association. Any further
+> associations on this socket will have their packet peer label compared to
+> the sockets peer label, and only if they are different will the
+> ``association`` permission be validated. This is validated by checking the
+> socket peer sid against the received packets peer sid to determine whether
+> the association should be allowed or denied.
+> """
+>
+> At the same time, it also ensures that the peer label of the association
+> is set to the correct value, such that if it is peeled off into a new
+> socket, the socket's peer label  will then be set to the association's
+> peer label, same as it already works on the server side.
+>
+> While selinux_inet_conn_established() (which we are replacing by
+> selinux_sctp_assoc_established() for SCTP) only deals with assigning a
+> peer label to the connection (socket), in case of SCTP we need to also
+> copy the (local) socket label to the association, so that
+> selinux_sctp_sk_clone() can then pick it up for the new socket in case
+> of SCTP peeloff.
+>
+> Careful readers will notice that the selinux_sctp_process_new_assoc()
+> helper also includes the "IPv4 packet received over an IPv6 socket"
+> check, even though it hadn't been in selinux_sctp_assoc_request()
+> before. While such check is not necessary in
+> selinux_inet_conn_request() (because struct request_sock's family field
+> is already set according to the skb's family), here it is needed, as we
+> don't have request_sock and we take the initial family from the socket.
+> In selinux_sctp_assoc_established() it is similarly needed as well (and
+> also selinux_inet_conn_established() already has it).
+>
+> Fixes: 72e89f50084c ("security: Add support for SCTP security hooks")
+> Reported-by: Prashanth Prahlad <pprahlad@redhat.com>
+> Based-on-patch-by: Xin Long <lucien.xin@gmail.com>
+> Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+> ---
+>  security/selinux/hooks.c | 90 +++++++++++++++++++++++++++++-----------
+>  1 file changed, 66 insertions(+), 24 deletions(-)
 
+This patch, and patch 1/2, look good to me; I'm assuming this resolves
+all of the known SELinux/SCTP problems identified before the new year?
+
+If I can get an ACK from one of the SCTP and/or netdev folks I'll
+merge this into the selinux/next branch.
+
+-- 
+paul-moore.com

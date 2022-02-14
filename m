@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC1E4B49CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E494B4BA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:42:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344052AbiBNKCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:02:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43730 "EHLO
+        id S1346946AbiBNKYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:24:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241081AbiBNJ6d (ORCPT
+        with ESMTP id S1346886AbiBNKWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:58:33 -0500
+        Mon, 14 Feb 2022 05:22:37 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B01C65839;
-        Mon, 14 Feb 2022 01:46:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3B26E4D7;
+        Mon, 14 Feb 2022 01:56:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AD3B60FA2;
-        Mon, 14 Feb 2022 09:46:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4190C340E9;
-        Mon, 14 Feb 2022 09:46:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC3C661374;
+        Mon, 14 Feb 2022 09:56:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FEE9C340E9;
+        Mon, 14 Feb 2022 09:55:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831971;
-        bh=2/SoHm4dUzIUl91r/mOgRB3n+Cf0sjPHHhog8Keii2Q=;
+        s=korg; t=1644832561;
+        bh=x+JzvzguncQCVOMX0Rg/FQ3pS1phGr2bvV9dF2BG57s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MndDzb8+SPyg3zz/hYO3c5m+8v8HgnsaHF2i2vdtgioYxAU8T9RJHJlGQ4tajrR9H
-         Y0AZHjKLmEMRcID6pYjX/07EpwCaye2kGUl3tF3ECHttWAcpxsO7z0doxBZ21hSdmu
-         2GVJxhmm+HsSgNRezWn3vUUBdQbsSLcRcqbub7jc=
+        b=ZBHvPtzXjKlU6dDUf/U++lEUrdX8wkcH6RQYNX/wixRndh+l80ZKOz1XXemzqLHN3
+         Hwc8bOevVHEJ4Ty2u0E6sXTeQpDEq40enmqp3eQMFCLHDHJ/knuFXpJChOY9ass2wJ
+         IhCYUCmbYE15yHfG9n8avJY2LFkP5W5sCk+er7Kw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
+        stable@vger.kernel.org, Zhan Liu <zhan.liu@amd.com>,
+        Charlene Liu <charlene.liu@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 039/172] drm/vc4: Fix deadlock on DSI device attach error
-Date:   Mon, 14 Feb 2022 10:24:57 +0100
-Message-Id: <20220214092507.747476363@linuxfoundation.org>
+Subject: [PATCH 5.16 054/203] drm/amd/display: Correct MPC split policy for DCN301
+Date:   Mon, 14 Feb 2022 10:24:58 +0100
+Message-Id: <20220214092512.069959392@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,118 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
+From: Zhan Liu <zhan.liu@amd.com>
 
-[ Upstream commit 0a3d12ab5097b1d045e693412e6b366b7e82031b ]
+[ Upstream commit ac46d93235074a6c5d280d35771c23fd8620e7d9 ]
 
-DSI device attach to DSI host will be done with host device's lock
-held.
+[Why]
+DCN301 has seamless boot enabled. With MPC split enabled
+at the same time, system will hang.
 
-Un-registering host in "device attach" error path (ex: probe retry)
-will result in deadlock with below call trace and non operational
-DSI display.
+[How]
+Revert MPC split policy back to "MPC_SPLIT_AVOID". Since we have
+ODM combine enabled on DCN301, pipe split is not necessary here.
 
-Startup Call trace:
-[   35.043036]  rt_mutex_slowlock.constprop.21+0x184/0x1b8
-[   35.043048]  mutex_lock_nested+0x7c/0xc8
-[   35.043060]  device_del+0x4c/0x3e8
-[   35.043075]  device_unregister+0x20/0x40
-[   35.043082]  mipi_dsi_remove_device_fn+0x18/0x28
-[   35.043093]  device_for_each_child+0x68/0xb0
-[   35.043105]  mipi_dsi_host_unregister+0x40/0x90
-[   35.043115]  vc4_dsi_host_attach+0xf0/0x120 [vc4]
-[   35.043199]  mipi_dsi_attach+0x30/0x48
-[   35.043209]  tc358762_probe+0x128/0x164 [tc358762]
-[   35.043225]  mipi_dsi_drv_probe+0x28/0x38
-[   35.043234]  really_probe+0xc0/0x318
-[   35.043244]  __driver_probe_device+0x80/0xe8
-[   35.043254]  driver_probe_device+0xb8/0x118
-[   35.043263]  __device_attach_driver+0x98/0xe8
-[   35.043273]  bus_for_each_drv+0x84/0xd8
-[   35.043281]  __device_attach+0xf0/0x150
-[   35.043290]  device_initial_probe+0x1c/0x28
-[   35.043300]  bus_probe_device+0xa4/0xb0
-[   35.043308]  deferred_probe_work_func+0xa0/0xe0
-[   35.043318]  process_one_work+0x254/0x700
-[   35.043330]  worker_thread+0x4c/0x448
-[   35.043339]  kthread+0x19c/0x1a8
-[   35.043348]  ret_from_fork+0x10/0x20
-
-Shutdown Call trace:
-[  365.565417] Call trace:
-[  365.565423]  __switch_to+0x148/0x200
-[  365.565452]  __schedule+0x340/0x9c8
-[  365.565467]  schedule+0x48/0x110
-[  365.565479]  schedule_timeout+0x3b0/0x448
-[  365.565496]  wait_for_completion+0xac/0x138
-[  365.565509]  __flush_work+0x218/0x4e0
-[  365.565523]  flush_work+0x1c/0x28
-[  365.565536]  wait_for_device_probe+0x68/0x158
-[  365.565550]  device_shutdown+0x24/0x348
-[  365.565561]  kernel_restart_prepare+0x40/0x50
-[  365.565578]  kernel_restart+0x20/0x70
-[  365.565591]  __do_sys_reboot+0x10c/0x220
-[  365.565605]  __arm64_sys_reboot+0x2c/0x38
-[  365.565619]  invoke_syscall+0x4c/0x110
-[  365.565634]  el0_svc_common.constprop.3+0xfc/0x120
-[  365.565648]  do_el0_svc+0x2c/0x90
-[  365.565661]  el0_svc+0x4c/0xf0
-[  365.565671]  el0t_64_sync_handler+0x90/0xb8
-[  365.565682]  el0t_64_sync+0x180/0x184
-
-Signed-off-by: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220118005127.29015-1-treasure4paddy@gmail.com
+Signed-off-by: Zhan Liu <zhan.liu@amd.com>
+Reviewed-by: Charlene Liu <charlene.liu@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_dsi.c | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
+ drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_dsi.c b/drivers/gpu/drm/vc4/vc4_dsi.c
-index a185027911ce5..d09c1ea60c04e 100644
---- a/drivers/gpu/drm/vc4/vc4_dsi.c
-+++ b/drivers/gpu/drm/vc4/vc4_dsi.c
-@@ -1262,7 +1262,6 @@ static int vc4_dsi_host_attach(struct mipi_dsi_host *host,
- 			       struct mipi_dsi_device *device)
- {
- 	struct vc4_dsi *dsi = host_to_dsi(host);
--	int ret;
- 
- 	dsi->lanes = device->lanes;
- 	dsi->channel = device->channel;
-@@ -1297,18 +1296,15 @@ static int vc4_dsi_host_attach(struct mipi_dsi_host *host,
- 		return 0;
- 	}
- 
--	ret = component_add(&dsi->pdev->dev, &vc4_dsi_ops);
--	if (ret) {
--		mipi_dsi_host_unregister(&dsi->dsi_host);
--		return ret;
--	}
--
--	return 0;
-+	return component_add(&dsi->pdev->dev, &vc4_dsi_ops);
- }
- 
- static int vc4_dsi_host_detach(struct mipi_dsi_host *host,
- 			       struct mipi_dsi_device *device)
- {
-+	struct vc4_dsi *dsi = host_to_dsi(host);
-+
-+	component_del(&dsi->pdev->dev, &vc4_dsi_ops);
- 	return 0;
- }
- 
-@@ -1706,9 +1702,7 @@ static int vc4_dsi_dev_remove(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct vc4_dsi *dsi = dev_get_drvdata(dev);
- 
--	component_del(&pdev->dev, &vc4_dsi_ops);
- 	mipi_dsi_host_unregister(&dsi->dsi_host);
--
- 	return 0;
- }
- 
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c b/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
+index 9254da120e615..36814d44b19cf 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
+@@ -686,7 +686,7 @@ static const struct dc_debug_options debug_defaults_drv = {
+ 	.disable_clock_gate = true,
+ 	.disable_pplib_clock_request = true,
+ 	.disable_pplib_wm_range = true,
+-	.pipe_split_policy = MPC_SPLIT_DYNAMIC,
++	.pipe_split_policy = MPC_SPLIT_AVOID,
+ 	.force_single_disp_pipe_split = false,
+ 	.disable_dcc = DCC_ENABLE,
+ 	.vsr_support = true,
 -- 
 2.34.1
 

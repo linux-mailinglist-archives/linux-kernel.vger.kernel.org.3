@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F574B4BDE
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:43:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BB74B47D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344308AbiBNJ6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:58:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34748 "EHLO
+        id S244394AbiBNJhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:37:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236955AbiBNJwR (ORCPT
+        with ESMTP id S245204AbiBNJge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:52:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6389692B3;
-        Mon, 14 Feb 2022 01:43:40 -0800 (PST)
+        Mon, 14 Feb 2022 04:36:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C288467347;
+        Mon, 14 Feb 2022 01:34:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81937B80DBF;
-        Mon, 14 Feb 2022 09:43:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FE90C340E9;
-        Mon, 14 Feb 2022 09:43:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47BB5B80DA9;
+        Mon, 14 Feb 2022 09:34:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 811FEC340E9;
+        Mon, 14 Feb 2022 09:34:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831818;
-        bh=2gnv4tFeuIC+cqbvOWLqsFj8h80UvyqNMNBh+KR1MTk=;
+        s=korg; t=1644831264;
+        bh=npV7+7qWHd5WvacA6RlehkZNwnLWwdwZj0cIKganXdc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZxlpRUm+dPesp6w6UIhvZAPfFe1/kq1WDhYJ3txUPNcVuxA/F9057ksY5+AOMY581
-         +YRORKzdRxNB0FnIDpsJJC2VupT3w7igDfi/dxacCUhg7V+/OChzOG5TEfjMhn//5h
-         RUZnZm3o7+fDOx/HTtZKdsaOGQ2xwhm1RRbNP640=
+        b=UlA9uRuwk+QtZlGjWmvVd/NvCcre72MvtJEa3SEXZMVduWj/A1g1Mu7dAEn7Vh0w+
+         7Lmdt/x3SbGOBEQVMXR26U5qKgPOdDc0pgN/KhW7SAN3EmpmqlQ83fwuFaKq/El2++
+         EFP+ZoQIbohcEMtX3L+neUHnbNDI8iB0BD9qkk+A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Louis Peens <louis.peens@corigine.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 075/116] nfp: flower: fix ida_idx not being released
+        stable@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 4.19 48/49] hwmon: (dell-smm) Speed up setting of fan speed
 Date:   Mon, 14 Feb 2022 10:26:14 +0100
-Message-Id: <20220214092501.349352848@linuxfoundation.org>
+Message-Id: <20220214092449.900018489@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
+References: <20220214092448.285381753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,82 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Louis Peens <louis.peens@corigine.com>
+From: Armin Wolf <W_Armin@gmx.de>
 
-[ Upstream commit 7db788ad627aabff2b74d4f1a3b68516d0fee0d7 ]
+commit c0d79987a0d82671bff374c07f2201f9bdf4aaa2 upstream.
 
-When looking for a global mac index the extra NFP_TUN_PRE_TUN_IDX_BIT
-that gets set if nfp_flower_is_supported_bridge is true is not taken
-into account. Consequently the path that should release the ida_index
-in cleanup is never triggered, causing messages like:
+When setting the fan speed, i8k_set_fan() calls i8k_get_fan_status(),
+causing an unnecessary SMM call since from the two users of this
+function, only i8k_ioctl_unlocked() needs to know the new fan status
+while dell_smm_write() ignores the new fan status.
+Since SMM calls can be very slow while also making error reporting
+difficult for dell_smm_write(), remove the function call from
+i8k_set_fan() and call it separately in i8k_ioctl_unlocked().
 
-    nfp 0000:02:00.0: nfp: Failed to offload MAC on br-ex.
-    nfp 0000:02:00.0: nfp: Failed to offload MAC on br-ex.
-    nfp 0000:02:00.0: nfp: Failed to offload MAC on br-ex.
+Tested on a Dell Inspiron 3505.
 
-after NFP_MAX_MAC_INDEX number of reconfigs. Ultimately this lead to
-new tunnel flows not being offloaded.
-
-Fix this by unsetting the NFP_TUN_PRE_TUN_IDX_BIT before checking if
-the port is of type OTHER.
-
-Fixes: 2e0bc7f3cb55 ("nfp: flower: encode mac indexes with pre-tunnel rule check")
-Signed-off-by: Louis Peens <louis.peens@corigine.com>
-Signed-off-by: Simon Horman <simon.horman@corigine.com>
-Link: https://lore.kernel.org/r/20220208101453.321949-1-simon.horman@corigine.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+Reviewed-by: Pali Rohár <pali@kernel.org>
+Link: https://lore.kernel.org/r/20211021190531.17379-6-W_Armin@gmx.de
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../net/ethernet/netronome/nfp/flower/tunnel_conf.c  | 12 ++++++++----
+ drivers/hwmon/dell-smm-hwmon.c |   12 ++++++++----
  1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-index d19c02e991145..d3d5b663a4a3c 100644
---- a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-+++ b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-@@ -1011,6 +1011,7 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
- 	struct nfp_flower_repr_priv *repr_priv;
- 	struct nfp_tun_offloaded_mac *entry;
- 	struct nfp_repr *repr;
-+	u16 nfp_mac_idx;
- 	int ida_idx;
+--- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -304,7 +304,7 @@ static int i8k_get_fan_nominal_speed(int
+ }
  
- 	entry = nfp_tunnel_lookup_offloaded_macs(app, mac);
-@@ -1029,8 +1030,6 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
- 		entry->bridge_count--;
+ /*
+- * Set the fan speed (off, low, high). Returns the new fan status.
++ * Set the fan speed (off, low, high, ...).
+  */
+ static int i8k_set_fan(int fan, int speed)
+ {
+@@ -316,7 +316,7 @@ static int i8k_set_fan(int fan, int spee
+ 	speed = (speed < 0) ? 0 : ((speed > i8k_fan_max) ? i8k_fan_max : speed);
+ 	regs.ebx = (fan & 0xff) | (speed << 8);
  
- 		if (!entry->bridge_count && entry->ref_count) {
--			u16 nfp_mac_idx;
--
- 			nfp_mac_idx = entry->index & ~NFP_TUN_PRE_TUN_IDX_BIT;
- 			if (__nfp_tunnel_offload_mac(app, mac, nfp_mac_idx,
- 						     false)) {
-@@ -1046,7 +1045,6 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
+-	return i8k_smm(&regs) ? : i8k_get_fan_status(fan);
++	return i8k_smm(&regs);
+ }
  
- 	/* If MAC is now used by 1 repr set the offloaded MAC index to port. */
- 	if (entry->ref_count == 1 && list_is_singular(&entry->repr_list)) {
--		u16 nfp_mac_idx;
- 		int port, err;
+ static int i8k_get_temp_type(int sensor)
+@@ -430,7 +430,7 @@ static int
+ i8k_ioctl_unlocked(struct file *fp, unsigned int cmd, unsigned long arg)
+ {
+ 	int val = 0;
+-	int speed;
++	int speed, err;
+ 	unsigned char buff[16];
+ 	int __user *argp = (int __user *)arg;
  
- 		repr_priv = list_first_entry(&entry->repr_list,
-@@ -1074,8 +1072,14 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
- 	WARN_ON_ONCE(rhashtable_remove_fast(&priv->tun.offloaded_macs,
- 					    &entry->ht_node,
- 					    offloaded_macs_params));
+@@ -491,7 +491,11 @@ i8k_ioctl_unlocked(struct file *fp, unsi
+ 		if (copy_from_user(&speed, argp + 1, sizeof(int)))
+ 			return -EFAULT;
+ 
+-		val = i8k_set_fan(val, speed);
++		err = i8k_set_fan(val, speed);
++		if (err < 0)
++			return err;
 +
-+	if (nfp_flower_is_supported_bridge(netdev))
-+		nfp_mac_idx = entry->index & ~NFP_TUN_PRE_TUN_IDX_BIT;
-+	else
-+		nfp_mac_idx = entry->index;
-+
- 	/* If MAC has global ID then extract and free the ida entry. */
--	if (nfp_tunnel_is_mac_idx_global(entry->index)) {
-+	if (nfp_tunnel_is_mac_idx_global(nfp_mac_idx)) {
- 		ida_idx = nfp_tunnel_get_ida_from_global_mac_idx(entry->index);
- 		ida_simple_remove(&priv->tun.mac_off_ids, ida_idx);
- 	}
--- 
-2.34.1
-
++		val = i8k_get_fan_status(val);
+ 		break;
+ 
+ 	default:
 
 

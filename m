@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 616254B462A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C00F4B4999
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243031AbiBNJ2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:28:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41374 "EHLO
+        id S1344275AbiBNKIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:08:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243024AbiBNJ2a (ORCPT
+        with ESMTP id S1344908AbiBNKDR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:28:30 -0500
+        Mon, 14 Feb 2022 05:03:17 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D1960AA5;
-        Mon, 14 Feb 2022 01:28:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028D7B851;
+        Mon, 14 Feb 2022 01:48:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D45E60F6F;
-        Mon, 14 Feb 2022 09:28:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10347C340E9;
-        Mon, 14 Feb 2022 09:28:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90F0B6126B;
+        Mon, 14 Feb 2022 09:48:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FD57C340F0;
+        Mon, 14 Feb 2022 09:48:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644830902;
-        bh=/CiVd4L2TQFjdRRZsgg7Yry6nYmJ+8enyPL1HjltIro=;
+        s=korg; t=1644832124;
+        bh=/kvuUnbi5mWqDPHzY3HwB9slTUfUSoIsVvCWl1dVzJI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EkMqboEyN3CZDEqIDg9twEYLHCzV2RpS/aIljhS7kl9Orn/SL3Dcv92S5qMRbFAJr
-         /Jnh7N7ZUBubBamxvAWF8t7kfYcR0zs5a5ZLapHusIhYaMzFmtmuFnWuQn7m7Np0Gb
-         4flAikqRSOw/r6u0UjZjSf1MXrdjRce+a2otM5PU=
+        b=aDk7lW73NdG7CjHe2TiEwPztl/xEj7c0qtRZxsoZDA6e7Td2ApMR7RxwBxBxnccPz
+         9Y2u6HZDUWzJ6WGeT3WZ3OcNez+JOjy3LRnU5sZUsk0tKreKfWtmZDmpeRWTuFEXtZ
+         HUZ4bAot2o9d25g9rCNwq+cqLqNit0xIGro+WX+8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mahesh Bandewar <maheshb@google.com>,
-        Jay Vosburgh <jay.vosburgh@canonical.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 17/34] bonding: pair enable_port with slave_arr_updates
-Date:   Mon, 14 Feb 2022 10:25:43 +0100
-Message-Id: <20220214092446.502266045@linuxfoundation.org>
+Subject: [PATCH 5.15 086/172] ARM: dts: imx6qdl-udoo: Properly describe the SD card detect
+Date:   Mon, 14 Feb 2022 10:25:44 +0100
+Message-Id: <20220214092509.382566374@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
-References: <20220214092445.946718557@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,52 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mahesh Bandewar <maheshb@google.com>
+From: Fabio Estevam <festevam@gmail.com>
 
-[ Upstream commit 23de0d7b6f0e3f9a6283a882594c479949da1120 ]
+[ Upstream commit 993d66140f8d1c1853a3b58b77b43b681eb64dee ]
 
-When 803.2ad mode enables a participating port, it should update
-the slave-array. I have observed that the member links are participating
-and are part of the active aggregator while the traffic is egressing via
-only one member link (in a case where two links are participating). Via
-kprobes I discovered that slave-arr has only one link added while
-the other participating link wasn't part of the slave-arr.
+GPIO7_IO00 is used as SD card detect.
 
-I couldn't see what caused that situation but the simple code-walk
-through provided me hints that the enable_port wasn't always associated
-with the slave-array update.
+Properly describe this in the devicetree.
 
-Fixes: ee6377147409 ("bonding: Simplify the xmit function for modes that use xmit_hash")
-Signed-off-by: Mahesh Bandewar <maheshb@google.com>
-Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
-Link: https://lore.kernel.org/r/20220207222901.1795287-1-maheshb@google.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 40cdaa542cf0 ("ARM: dts: imx6q-udoo: Add initial board support")
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/bonding/bond_3ad.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/imx6qdl-udoo.dtsi | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
-index 1e2ee97b92406..578d8e12e2d21 100644
---- a/drivers/net/bonding/bond_3ad.c
-+++ b/drivers/net/bonding/bond_3ad.c
-@@ -971,8 +971,8 @@ static void ad_mux_machine(struct port *port, bool *update_slave_arr)
- 				if (port->aggregator &&
- 				    port->aggregator->is_active &&
- 				    !__port_is_enabled(port)) {
--
- 					__enable_port(port);
-+					*update_slave_arr = true;
- 				}
- 			}
- 			break;
-@@ -1724,6 +1724,7 @@ static void ad_agg_selection_logic(struct aggregator *agg,
- 			     port = port->next_port_in_aggregator) {
- 				__enable_port(port);
- 			}
-+			*update_slave_arr = true;
- 		}
- 	}
+diff --git a/arch/arm/boot/dts/imx6qdl-udoo.dtsi b/arch/arm/boot/dts/imx6qdl-udoo.dtsi
+index d07d8f83456d2..ccfa8e320be62 100644
+--- a/arch/arm/boot/dts/imx6qdl-udoo.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-udoo.dtsi
+@@ -5,6 +5,8 @@
+  * Author: Fabio Estevam <fabio.estevam@freescale.com>
+  */
+ 
++#include <dt-bindings/gpio/gpio.h>
++
+ / {
+ 	aliases {
+ 		backlight = &backlight;
+@@ -226,6 +228,7 @@ MX6QDL_PAD_SD3_DAT0__SD3_DATA0		0x17059
+ 				MX6QDL_PAD_SD3_DAT1__SD3_DATA1		0x17059
+ 				MX6QDL_PAD_SD3_DAT2__SD3_DATA2		0x17059
+ 				MX6QDL_PAD_SD3_DAT3__SD3_DATA3		0x17059
++				MX6QDL_PAD_SD3_DAT5__GPIO7_IO00		0x1b0b0
+ 			>;
+ 		};
+ 
+@@ -304,7 +307,7 @@ &usbotg {
+ &usdhc3 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_usdhc3>;
+-	non-removable;
++	cd-gpios = <&gpio7 0 GPIO_ACTIVE_LOW>;
+ 	status = "okay";
+ };
  
 -- 
 2.34.1

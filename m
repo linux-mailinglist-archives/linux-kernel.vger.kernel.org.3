@@ -2,103 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 240874B4EB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF27A4B4EAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:34:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348486AbiBNL2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:28:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57320 "EHLO
+        id S1351019AbiBNL2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:28:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351340AbiBNL14 (ORCPT
+        with ESMTP id S1350808AbiBNL2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:27:56 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255987092A;
-        Mon, 14 Feb 2022 03:04:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644836672; x=1676372672;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=X7QB/5ocd9eTWpaSxg9A+irnC81s5hPMRWP18JitWno=;
-  b=GYCDeh3XWPVCrsNj5dgq7o+bDsmS0N+2k/F8CeTPrYd+HURoIoTcx7yA
-   KYg8LGbdfQ7PXYSvzmZ+1jXiWQABPOEE7UAkFGDw4REmCLZYx8ijOxUoY
-   cWXFrlARqnYt9W/zyckdfWmliVdJDk81b9kSaSV4I2HlnkOpIndvxHx3y
-   M=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 14 Feb 2022 03:04:32 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 03:04:32 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Mon, 14 Feb 2022 03:04:31 -0800
-Received: from quicinc.com (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 14 Feb
- 2022 03:04:28 -0800
-From:   Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Sarah Sharp <sarah.a.sharp@linux.intel.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ugoswami@quicinc.com>, Jung Daehwan <dh10.jung@samsung.com>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-Subject: [PATCH] xhci: reduce xhci_handshake timeout in xhci_reset
-Date:   Mon, 14 Feb 2022 16:34:23 +0530
-Message-ID: <1644836663-29220-1-git-send-email-quic_pkondeti@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Mon, 14 Feb 2022 06:28:07 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACABC6BDE4;
+        Mon, 14 Feb 2022 03:05:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1644836710;
+        bh=/jEI0qa5et1A5fI5AP02quv5hC2xHhHOiKa1B7BmQpY=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=Vc/Z2Y4nQv7sFots98IcQCiTdEZZbwjXU650/1G/9ZssKOFBIbJtOfAj4Kuvbb2aN
+         vVIKnL3zslcEqlqDPeQobhRoZ4ec79wJKwRULO2vYEyevgy9+pQzzQhxeFZqQkfgHi
+         dHU7ZRQrv6jhpfJX4amBI/4saUgt5rfLhY5xtjoc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.168.11]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M4s0j-1nKNqU3qop-001x2X; Mon, 14
+ Feb 2022 12:05:09 +0100
+Message-ID: <ffebaea4-8135-6e2e-fca1-8e9f118ef70b@gmx.de>
+Date:   Mon, 14 Feb 2022 12:05:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] fat: Use pointer to d_name[0] in put_user() for compat
+ case
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>
+References: <YgmB01p+p45Cihhg@p100>
+ <49a26b7a30254d9fb9653c2f815eaa28@AcuMS.aculab.com>
+ <0ecb87dcc4cf42328f1f5a7d6abd08ed@AcuMS.aculab.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <0ecb87dcc4cf42328f1f5a7d6abd08ed@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:AONVuZwsErb6wKyc0u0ZjdTu/g4fjzt+2aSTAeYXCLwWk3OOGTH
+ GPVQdm/wadZSzxXBacz+2n0780srvUVhG2XiNWsVbgD6OQm28vEeWsAHJk+WHmsm4QMy9yX
+ oD7XxUqGLr63EvDMUhR/DNplZifM46ZDbWBz/QYPuSQeTRoNngJGY/6NEH5OVfkZBdRlqQJ
+ 2/lFQdZQm0PdfS/+Z/7Ng==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3M2sH2Q9UIY=:afp2wr2FwYnyB758PMvNhv
+ 4rzNw1+08QTUCBM48Mp+55HJyDr2ZMga2Rnf9QsAa21n9EJpVs8tczkKLQIm3zgy0NUF0Tva6
+ P+p/TQRYgryu9wt87SwJvwgYfyN7UVbLGRjrUlOqWqc6LhgJRJUfqdI6Va3SlM76cEBYy7TwI
+ 5poEhJRGRucUPqWS9Sl+4bi0nz6u+yD5gzE21SKvIZpx2Qeugf1e3CAUNQ+USFVVSehfCVaS/
+ kIHmGtXpMS6Q4CHYQHza0A5sPDqh7QTsWvpUVKfoZvZKPE22KaQKD02zqxZZTx2A5x/P4qssq
+ 2lymyz12kKBLI7btoqz2NemKgWWlAiEypRsK1oL9aAIBM49jxaY3ryAWeYYhSbQhsoY3eKzFL
+ xRDh7yD9o0Uwus1HpgELCccVX/GJwKB7qAeM9emxlgvYiREvcvKhB6GP7YIRPZDo4we9n/ipu
+ upZmwj6HbNj0RN55RMK2PGOqPqVurQpu3jqE3FSN0l/luibxf85kstDxaOhwMISYfYBCCmnkX
+ p+5FgeTAGSMSNPiOSvdfeJ7tunMgsLZljJRGstGzX75yq5GFbaqSptMvdEHdQbm33isBm0IHu
+ RomQvBeSvMNyKkI5e7+Dpvprivd6Hftx9Ep+ihoN8JGRcldasICwyCg4lhRuJ0VczCiO5wA53
+ CuvO8Y5a8UGpGSqltUU2n3ZveN+7MfEX4EX8U4Rae2Z6mWYx1Pa1n/T9N7sepcZdnUXkEDQMu
+ 7GqJkwB5BfxMeWbFe8UX+6AvLDKXkLMVjrfiKiZz0zp516Ufs0/SDKgDYfPSYcmjFRdFO/BXj
+ dRBP5NrSCusXv1PO82ja54NnHSmVGlMRfT3P7c9PT1FkLe/GjwjMuYtu4nqUuppX2HdbihlV1
+ yjx283lktqZqKHfOuEQnXlAN+RzLJYzABSyyEdjWIVW8y5qzJZnmNxEaDSjKt8tEA9uCrkC52
+ Z092y7NLt1QoyRjIphmCRqP0XkSnFw7GaFa8UBjlKwuwHoVdKDtn5GT6BPEurlsZfDhaGkF1k
+ duKE7HfsvKRo3J26O0/yGQojDpdu3zVzTrN/l6uzDf95piaF/iml8BKpeIIRgo5VgKVmoC21Z
+ g6zsYggJw7U1sU=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daehwan Jung <dh10.jung@samsung.com>
+On 2/14/22 10:26, David Laight wrote:
+> From: David Laight
+>> Sent: 14 February 2022 09:12
+>>
+>> From: Helge Deller
+>>> Sent: 13 February 2022 22:10
+>>>
+>>> The put_user(val,ptr) macro wants a pointer in the second parameter, b=
+ut in
+>>> fat_ioctl_filldir() the d_name field references a whole "array of char=
+s".
+>>> Usually the compiler automatically converts it and uses a pointer to t=
+hat
+>>> array, but it's more clean to explicitly give the real pointer to wher=
+e someting
+>>> is put, which is in this case the first character of the d_name[] arra=
+y.
+>>
+>> That just isn't true.
+>>
+>> In C both x->char_array and &x->char_array[0] have the same type
+>> 'char *'.
+>>
+>> The 'bug' is caused by put_user() trying to do:
+>> 	__typeof__(ptr) __ptr =3D ptr;
+>> where __typeof__ is returning char[n] not char *.
+>>
+>> I've tried a few things but can't get __typeof__ to
+>> generate a suitable type for both a simple type and array.
+>
+> Actually the issue is that put_user() writes a single variable
+> and needs a pointer to one.
+> So changing to:
+> 	put_user(0, &array[0]);
+> is probably fine.
 
-xhci_reset() is called with interrupts disabled. Waiting 10 seconds for
-controller reset and controller ready operations can be fatal to the
-system when controller is timed out. Reduce the timeout to 1 second
-and print a error message when the time out happens.
+Ok.
 
-Fixes: 22ceac191211 ("xhci: Increase reset timeout for Renesas 720201 host.")
-Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
----
- drivers/usb/host/xhci.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> But the description is all wrong.
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index dc357ca..ec4df72 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -196,7 +196,7 @@ int xhci_reset(struct xhci_hcd *xhci)
- 		udelay(1000);
- 
- 	ret = xhci_handshake(&xhci->op_regs->command,
--			CMD_RESET, 0, 10 * 1000 * 1000);
-+			CMD_RESET, 0, 1 * 1000 * 1000);
- 	if (ret)
- 		return ret;
- 
-@@ -210,7 +210,7 @@ int xhci_reset(struct xhci_hcd *xhci)
- 	 * than status until the "Controller Not Ready" flag is cleared.
- 	 */
- 	ret = xhci_handshake(&xhci->op_regs->status,
--			STS_CNR, 0, 10 * 1000 * 1000);
-+			STS_CNR, 0, 1 * 1000 * 1000);
- 
- 	xhci->usb2_rhub.bus_state.port_c_suspend = 0;
- 	xhci->usb2_rhub.bus_state.suspended_ports = 0;
--- 
-2.7.4
+I agree it can be improved.
+Would you mind proposing a better description?
 
+Helge

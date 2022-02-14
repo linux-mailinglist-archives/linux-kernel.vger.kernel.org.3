@@ -2,128 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E5D4B5B71
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 21:52:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F4A4B5B5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 21:52:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbiBNUtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 15:49:09 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59620 "EHLO
+        id S229688AbiBNUtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 15:49:06 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiBNUtF (ORCPT
+        with ESMTP id S229715AbiBNUtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Feb 2022 15:49:05 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4390F1275FF
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:48:45 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id f37so6711918lfv.8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:48:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wAGH315FsgjXdEGosIxU9yIWVg26bgKxObDK7qxcQ9o=;
-        b=EU778RaLDa/8FhJux3O09PvW3/LCZKPXp2DEFIoy3E0/73tubhMvN6FLWVL/0bcIJW
-         kmCnl5Rc6b20E+xTOO/KCGrPDECOpDCo/nXmeIOuENhZ10zOy0IF3Ph387b1C8fJzq5D
-         +WjvseaeLKZ8mgXil65+h1q2t7pc8gvHirSGUwM9w31eIQ4CFgJL4tlDfb98dwjLGGaI
-         oKjbNkxktCSCXTv4prlhEbo9s9sT7DZTHxj6OpsP3QwYf4mqyLx0SJJnVML5/95sQgyb
-         lYEW9dTjF6nZxRSHVkN/BN9o2g2BHt5B8QNM0gL8UjDYHW8ypcP+fBvoFUxYojQxDjSt
-         GgWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wAGH315FsgjXdEGosIxU9yIWVg26bgKxObDK7qxcQ9o=;
-        b=FgbtObHAM6Ru9BIw3Oy2X71RUgUbMfo3/vZuXURhlJIxFVnWNKWGx4okPOGvZ7inlQ
-         zhJNrV2Xr9QTXzWqd98B42R5pZOkNv9t7et0CNcYbqDmB2KIUgJWgU8grumtZIZP0xKl
-         oAYnV8tQACSztHTAJ/1ZxSYU716j6KlZH0XJiaG5Ob1aZ8PF7siIpTNcWILzMSVZGDz9
-         WYTmfsMEU6Y5UFte2V/08byjVCECh8pUJr09XOqlUSNzcu6RBZumyNHDTqIp9R08A84y
-         0OcLDzqrMCx3kXtOVEH1spGONLAOlYu7aS8OFyKLEzScQgP6M//vaxCPqbJpDLhrR/Se
-         fMuA==
-X-Gm-Message-State: AOAM531JgUJU5DR7ArvVJo08cATX32mcBP17Wj07mw3AFyNIi8MSpdCJ
-        glWxtP07eSVEsXKOR5ATFPNbRo8G0NEfaT2xLcKGYUZQvm2TYQ==
-X-Google-Smtp-Source: ABdhPJybrY+AtUQHWjp3j2rvRJhBPEQOOF5VWwSAKp+0WfViYgyz3tPMp/imOig+wlvQ20J5Rfsw3M7JV5CsRYOdaJU=
-X-Received: by 2002:a05:6512:4012:: with SMTP id br18mr536955lfb.533.1644871042491;
- Mon, 14 Feb 2022 12:37:22 -0800 (PST)
-MIME-Version: 1.0
-References: <20220211161831.3493782-1-tjmercier@google.com>
- <20220211161831.3493782-7-tjmercier@google.com> <Ygdfe3XSvN8iFuUc@kroah.com>
- <CAHRSSEwoJ67Sr_=gtSaP91cbpjJjZdOo57cfAhv3r-ye0da7PA@mail.gmail.com>
- <CAJuCfpHf=Ewm0e9kguY3MEGVHU_cyviVXByi0oQtq7kTtOOD=A@mail.gmail.com> <CAHRSSEzsn-EVKXTRfmpbPR9u0wNpdvdZoX64Tm_mB1DQMRSUPQ@mail.gmail.com>
-In-Reply-To: <CAHRSSEzsn-EVKXTRfmpbPR9u0wNpdvdZoX64Tm_mB1DQMRSUPQ@mail.gmail.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Mon, 14 Feb 2022 12:37:11 -0800
-Message-ID: <CALAqxLVeLsv9ESCL2EoZQ8-tRgp0V+tmdYbkyakFetf=ewTH+A@mail.gmail.com>
-Subject: Re: [RFC v2 6/6] android: binder: Add a buffer flag to relinquish
- ownership of fds
-To:     Todd Kjos <tkjos@google.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "T.J. Mercier" <tjmercier@google.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        DRI mailing list <dri-devel@lists.freedesktop.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        cgroups mailinglist <cgroups@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FBA0D0B57;
+        Mon, 14 Feb 2022 12:48:38 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id C929C58045E;
+        Mon, 14 Feb 2022 15:37:53 -0500 (EST)
+Received: from imap49 ([10.202.2.99])
+  by compute2.internal (MEProxy); Mon, 14 Feb 2022 15:37:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sladewatkins.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=fvb3ktE3Gr/xOs
+        apIiaveTmnPwWHzlBe7MHVZfBd8/8=; b=Be5WEXK8CvTF1UXpIGg69ARDjoLHAO
+        1PRkTNJuAXhOIw6GPISzILNEnGqB79diDkRMP/zP+zOK0A/zOhJmjlU7DNHc5Pik
+        jVB35u0cWNTeZWI9JMFRpkKXiG7xNkn+6vzSLbgtBKdykCXIXcazX3VeymKX48Th
+        b6BYA52QT6DAYbnzsRwuo3biGNh36F/eazFc57RBLsY1WWhuy2y+aXhYGxH6tKRm
+        j+i8HJHNtEwbM0Hdv4mBSzgb55VNGnVW9MLd9OazAn77qfl8ARteYErq/keEc5ej
+        kc8/on8jej7Tw+y0ORBgC0PILz9UojAuHjIPt3YZ5DOV3kUdXRs3HntA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=fvb3ktE3Gr/xOsapI
+        iaveTmnPwWHzlBe7MHVZfBd8/8=; b=MvYKnymfyw7HtJwX5YO4TvaYl13s6dzna
+        P0FHQYA/tkn/tP0UItzaa0oMXA51a6L6tjj2jqWZC6vqV7sKllTQD5ClRVGcqGmx
+        0/lc0MWeAk3myT9xrzNYB/U73/LNcvI9Hex6ZwzS1zIDdlL5w6ZUQPZ++m2/wN24
+        nErYdbvYWyDX1/DJTCDo3bx9m7h0odoW+TViJ9K72tQWRH0GNqquyiY3MuB7xiJw
+        wHp4Vt74mQQolQ7tdCA3MRCI0lrBtLEt3c0V8HzhCICKcVwJ7be8tfzjJz6A3Idi
+        ExspxzhQSkYYJA/QvK+6oYVBXfx5OMEtCqXfRXcLNSVSQrgCsvzHg==
+X-ME-Sender: <xms:ob0KYvXk6hY1daMiWoSpWVGAZRPLPyHSue4OvzPTJIByrrPUqU4vow>
+    <xme:ob0KYnm2iZvXTd1M9av8Vu7oNsBhcclINy34uqgDeO9-OXCwg6MUFn1sOJIbwtmff
+    DRA5KsJyWpArW78y8E>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjedvgddufeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfulhgr
+    uggvucghrghtkhhinhhsfdcuoehslhgruggvsehslhgruggvfigrthhkihhnshdrtghomh
+    eqnecuggftrfgrthhtvghrnhepueeiffetjeeitefgveetleehveduheetiefhhfethedt
+    teelgeettddvvedvudegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepshhlrgguvgesshhlrgguvgifrghtkhhinhhsrdgtohhm
+X-ME-Proxy: <xmx:ob0KYra_fxC7M2bPNYoFVJm54FZDkgHDEu2OFauYnBDlfjF6lcaGjA>
+    <xmx:ob0KYqWQTaGnCY4rd9mTkvh85aIqv1LvvVfbYjuwzpQfwAjOeQujMQ>
+    <xmx:ob0KYpmYWgj6CWOCbb4_kln249o327mFWRr-dqwCebVbzjnX4p_jEw>
+    <xmx:ob0KYieD7OnqXEOJrX4Y7kJsrqsVzAUEoCG_YEfuwP1ihmWS7qWaQQzlP5c>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 308F3F6007E; Mon, 14 Feb 2022 15:37:53 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4748-g31a5b5f50e-fm-cal2020-20220204.001-g31a5b5f5
+Mime-Version: 1.0
+Message-Id: <2a5e8c17-39a7-4ecf-bda7-22fad961063a@www.fastmail.com>
+In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
+References: <20220214092445.946718557@linuxfoundation.org>
+Date:   Mon, 14 Feb 2022 15:37:52 -0500
+From:   "Slade Watkins" <slade@sladewatkins.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Guenter Roeck" <linux@roeck-us.net>, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        "Pavel Machek" <pavel@denx.de>,
+        "Jon Hunter" <jonathanh@nvidia.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>
+Subject: Re: [PATCH 4.9 00/34] 4.9.302-rc1 review
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 12:19 PM Todd Kjos <tkjos@google.com> wrote:
-> On Mon, Feb 14, 2022 at 11:29 AM Suren Baghdasaryan <surenb@google.com> wrote:
-> > On Mon, Feb 14, 2022 at 10:33 AM Todd Kjos <tkjos@google.com> wrote:
-> > >
-> > > Since we are creating a new gpu cgroup abstraction, couldn't this
-> > > "transfer" be done in userspace by the target instead of in the kernel
-> > > driver? Then this patch would reduce to just a flag on the buffer
-> > > object.
-> >
-> > Are you suggesting to have a userspace accessible cgroup interface for
-> > transferring buffer charges and the target process to use that
-> > interface for requesting the buffer to be charged to its cgroup?
+On Mon, Feb 14, 2022, at 4:25 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.302 release.
+> There are 34 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> Well, I'm asking why we need to do these cgroup-ish actions in the
-> kernel when it seems more natural to do it in userspace.
->
+> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
+> Anything received after that time might be too late.
 
-In case its useful, some additional context from some of the Linux
-Plumber's discussions last fall:
+4.9.302-rc1 on my x86_64 test system compiled and booted with no errors or regressions.
 
-Daniel Stone outlines some concerns with the cgroup userland handling
-for accounting:
-  https://youtu.be/3OqllZONTiQ?t=3430
+Tested-by: Slade Watkins <slade@sladewatkins.com>
 
-And the binder ownership transfer bit was suggested here by Daniel Vetter:
-  https://youtu.be/3OqllZONTiQ?t=3730
-
-thanks
--john
+Thanks,
+Slade

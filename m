@@ -2,231 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7DB84B5BC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:01:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F06334B5D8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 23:22:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiBNVAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:00:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34466 "EHLO
+        id S231789AbiBNWWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 17:22:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbiBNVAn (ORCPT
+        with ESMTP id S229470AbiBNWWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:00:43 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A518713194B;
-        Mon, 14 Feb 2022 13:00:34 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id t4-20020a17090a510400b001b8c4a6cd5dso296884pjh.5;
-        Mon, 14 Feb 2022 13:00:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=nQ8TSkYAbvmp6Q3oaHRO6T3ykYVNUOGZKtBNrreWFLo=;
-        b=gjPryxoWPiwCiEaLQKO8x3yzqkQ+YJnYOcvgz2EmXtNKXXIuLVi2DVqX3Is2Dy9R4H
-         gw42n+xgEsswL+F+YL1ohciYqCVi/GM9S9MkGZ5EMkGtnTzo6D+gDrbCHrPMI889N8Yq
-         WukgFIXeRFzLQ/U8cAwb/gizAkWL3rfhwdPK0lO8nbndmcp7UMuca0EM2Ir55aGlYglK
-         t1IUBeRmjyxziKxJdXFLqHIbPfuRqKVgDRlBDvRNyoY2apSb8C+ITVTM/jt5xxCyKYZD
-         tFcm7SKK6aaVsPb58tw+w6tcQDKj2yzf0V7E5gFWoSHnARTYi/hCLPn1bTXs7M7v8BIs
-         2afQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=nQ8TSkYAbvmp6Q3oaHRO6T3ykYVNUOGZKtBNrreWFLo=;
-        b=CiAmdZ1+huo8KkVuTzzTKTzurPJ4hrQKIOO9UgURA6jWJFVdEQXDIUy51UH4+WUjPg
-         GRq+qkNQ+HWyjb10ds9Klu9ZIZ6jynN39Dws0phHpd9Zqp/OZg+5RHWD9jce9NNT7L9x
-         msGzHaNPuSRpNQTZ57S6qT0pVAKF60kZuxnj1R6OoW/38yzBlnUg2cluvhAjl2hlOeQT
-         A6GxCuRR5JdnvYYZUbKVA2aXqb8FvrB+4Pc8xVtm2h2I/nUEqMlLZGh6ZPeYya6HnQBj
-         xjlOTFzdVR5Qjs1ZDnh7bjJH8OaWQswBiscy+d0Ta4+Ka1OPB45y2jH3OH6pKL3JFQYf
-         JZnQ==
-X-Gm-Message-State: AOAM530sLnM8mNn14Cmyd6+7J5TBP4Y8SDBXSoet6fQXGnJWj68sbyvj
-        8V2qf39akc5H3y2tA9r8J+bZotQaf02Iug==
-X-Google-Smtp-Source: ABdhPJzs2dcp3QbYCWrCen4ErUKUVrFhyM9P4jNJSqL+XDqe+2UVjDQT6gadl/VQZUTaTUjglAr59Q==
-X-Received: by 2002:a05:6a00:15cd:: with SMTP id o13mr681299pfu.54.1644868379513;
-        Mon, 14 Feb 2022 11:52:59 -0800 (PST)
-Received: from jagath-PC ([27.4.59.114])
-        by smtp.gmail.com with ESMTPSA id e28sm359521pgm.23.2022.02.14.11.52.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 14 Feb 2022 11:52:59 -0800 (PST)
-Date:   Tue, 15 Feb 2022 01:22:54 +0530
-From:   Jagath Jog J <jagathjog1996@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>, jic23@kernel.org
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Slawomir Stepien <sst@poczta.fm>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/4] iio: potentiometer: Add support for Maxim DS3502
-Message-ID: <20220214195252.GA7374@jagath-PC>
-References: <20220214033620.4059-1-jagathjog1996@gmail.com>
- <20220214033620.4059-4-jagathjog1996@gmail.com>
- <CAHp75VcWym5vyDAVyTUCpj=Qkm28VUaqdqJ7VuFL_bsb0fmhaA@mail.gmail.com>
+        Mon, 14 Feb 2022 17:22:37 -0500
+X-Greylist: delayed 4198 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 14:22:27 PST
+Received: from cn13.ncable.net.au (cn13.gex.ncable.net.au [203.208.88.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E64F2119403
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 14:22:27 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by cn13.ncable.net.au (Postfix) with ESMTP id 1EC8439502;
+        Tue, 15 Feb 2022 06:56:09 +1100 (EST)
+X-Virus-Scanned: Debian amavisd-new at cn11.gex.ncable.net.au
+Received: from cn13.ncable.net.au ([127.0.0.1])
+        by localhost (cn13.gex.ncable.net.au [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id HnZG7EIKavgc; Tue, 15 Feb 2022 06:56:08 +1100 (EST)
+Received: from webmail.ncable.net.au (localhost [127.0.0.1])
+        by cn13.ncable.net.au (Postfix) with ESMTP id 8D8AF394EE;
+        Tue, 15 Feb 2022 06:55:57 +1100 (EST)
+Received: from 193.48.127.13
+        (SquirrelMail authenticated user rosmac@ncable.net.au)
+        by webmail.ncable.net.au with HTTP;
+        Tue, 15 Feb 2022 06:56:08 +1100
+Message-ID: <0e9e06b9dbe4e357ac2dc138914cd09a.squirrel@webmail.ncable.net.au>
+Date:   Tue, 15 Feb 2022 06:56:08 +1100
+Subject: Delivery Failure Notification
+From:   "USPS" <info@wmtel.net>
+User-Agent: SquirrelMail/1.4.21
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHp75VcWym5vyDAVyTUCpj=Qkm28VUaqdqJ7VuFL_bsb0fmhaA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Priority: 3 (Normal)
+Importance: Normal
+To:     undisclosed-recipients:;
+X-Spam-Status: No, score=3.0 required=5.0 tests=BAYES_60,BODY_EMPTY,
+        KHOP_HELO_FCRDNS,SPF_HELO_NONE,TVD_SPACE_RATIO,T_SPF_PERMERROR,XPRIO
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Andy,
 
-On Mon, Feb 14, 2022 at 01:32:14PM +0200, Andy Shevchenko wrote:
-> On Mon, Feb 14, 2022 at 5:36 AM Jagath Jog J <jagathjog1996@gmail.com> wrote:
-> >
-> > The DS3502 is a 7-bit, nonvolatile digital potentiometer featuring
-> > an output voltage range of up to 15.5V.
-> > DS3502 support is implemented into existing ds1803 driver
-> 
-> Be consistent here and in other commit messages with how you refer to
-> the IC parts, i.e.
-> DS1803. Don't forget English grammar and punctuation, i.e. missed period above.
-> 
 
-I will fix this in v3
 
-> > Datasheet: https://datasheets.maximintegrated.com/en/ds/DS3502.pdf
-> 
-> >
-> 
-> A tag block may not have blank lines. Drop it.
-> 
-> > Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
-> 
-> ...
-> 
-> > -       tristate "Maxim Integrated DS1803 Digital Potentiometer driver"
-> > +       tristate "Maxim Integrated DS1803 and similar Digital Potentiometer driver"
-> 
-> Please, list them like other drivers do:
-> 
->        tristate "Maxim Integrated DS1803/DS... Digital Potentiometer driver"
-> 
-> ...
-> 
-> > -         Say yes here to build support for the Maxim Integrated DS1803
-> > -         digital potentiometer chip.
-> > +         Say yes here to build support for the Maxim Integrated DS1803 and
-> > +         similar digital potentiometer chip.
-> 
-> Same here.
-> 
-> ...
-> 
-> > - * Maxim Integrated DS1803 digital potentiometer driver
-> > + * Maxim Integrated DS1803 and similar digital potentiometer driver
-> 
-> Same here.
-
-Based on Jonathan suggestion for the previous patch version I used 
-"and similar" wording here.
-
-> 
-> ...
-> 
-> > -#define DS1803_MAX_POS         255
-> > -#define DS1803_WRITE(chan)     (0xa8 | ((chan) + 1))
-> 
-> Not sure why these were removed (or moved?)
-
-Since max wiper position is present in avail array of ds1803_cfg structure
-and that is being used for read scale so DS1803_MAX_POS is removed.
-
-Since each wiper address of both parts is assigned to the address
-member of iio_chan_spec struct so DS1803_WRITE(chan) is removed.
-
-> 
-> ...
-> 
-> > +static const struct ds1803_cfg ds1803_cfg[] = {
-> > +       [DS1803_010] = { .wipers = 2, .avail = { 0, 1, 255 }, .kohms =  10,
-> > +                        .channels = ds1803_channels,
-> > +                        .num_channels = ARRAY_SIZE(ds1803_channels) },
-> > +       [DS1803_050] = { .wipers = 2, .avail = { 0, 1, 255 }, .kohms =  50,
-> > +                        .channels = ds1803_channels,
-> > +                        .num_channels = ARRAY_SIZE(ds1803_channels) },
-> > +       [DS1803_100] = { .wipers = 2, .avail = { 0, 1, 255 }, .kohms = 100,
-> > +                        .channels = ds1803_channels,
-> > +                        .num_channels = ARRAY_SIZE(ds1803_channels) },
-> > +       [DS3502] =     { .wipers = 1, .avail = { 0, 1, 127 }, .kohms =  10,
-> > +                        .channels = ds3502_channels,
-> > +                        .num_channels = ARRAY_SIZE(ds3502_channels) },
-> >  };
-> 
-> Split this on a per type basis. I believe it won't be too much work,
-> also, consider adding channels as a separate preparatory patch as you
-> did with avail.
-
-Based on Jonathan suggestion for the previous patch version to avoid
-having different chip type related structures so channels and num_channels
-are added into ds1803_cfg structure.
-
-Sure for channels I will split into separate patch for old part in v3.
-
->
-> ...
-> 
-> > -       data->cfg = &ds1803_cfg[id->driver_data];
-> > +       data->chip_type = (uintptr_t)device_get_match_data(dev);
-> > +       if (data->chip_type < DS1803_010 || data->chip_type > DS3502)
-> > +               data->chip_type = id->driver_data;
-> 
-> Split it into a separate patch and use pointer validation instead:
-> 
-> data->cfg = ...
-> if (!data->cfg)
->   data->cfg = ...id->driver_data;
-> 
-> ...
-> 
-> > -       { .compatible = "maxim,ds1803-010", .data = &ds1803_cfg[DS1803_010] },
-> > -       { .compatible = "maxim,ds1803-050", .data = &ds1803_cfg[DS1803_050] },
-> > -       { .compatible = "maxim,ds1803-100", .data = &ds1803_cfg[DS1803_100] },
-
-To get the chip specific structure I can use previous structure method for data
-and validation as you shown above.
-But it is necessary to get the chip_type also because of dependency in 
-ds1803_raw_read().
-
-To get the chip_type can I use 
-data->chip_type = id->driver_data
-
-> > +       { .compatible = "maxim,ds1803-010", .data = (void *)DS1803_010 },
-> > +       { .compatible = "maxim,ds1803-050", .data = (void *)DS1803_050 },
-> > +       { .compatible = "maxim,ds1803-100", .data = (void *)DS1803_100 },
-> 
-> This is not good, please use pointers as it was before.
-> 
-> > +       { .compatible = "maxim,ds3502",     .data = (void *)DS3502 },
-> 
-> Ditto. Create a new, separate structure for this type.
-> 
-> ...
-> 
-> >         { "ds1803-010", DS1803_010 },
-> >         { "ds1803-050", DS1803_050 },
-> >         { "ds1803-100", DS1803_100 },
-> > +       { "ds3502",     DS3502     },
-> 
-> Too many spaces.
-> Besides this, please create a new prerequisite patch to convert this
-> to use pointers as above.
-
-Sure I will split this patch in v3.
-Thanks for feedback.
-
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-
-Best Regards,
-Jagath

@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 511134B4B16
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 450034B4780
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233662AbiBNKLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:11:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35990 "EHLO
+        id S232955AbiBNJnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:43:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345383AbiBNKKR (ORCPT
+        with ESMTP id S245087AbiBNJlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:10:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745E285973;
-        Mon, 14 Feb 2022 01:50:30 -0800 (PST)
+        Mon, 14 Feb 2022 04:41:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78D2A1B9;
+        Mon, 14 Feb 2022 01:37:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12D26612BF;
-        Mon, 14 Feb 2022 09:50:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB7D0C340E9;
-        Mon, 14 Feb 2022 09:50:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F4A5B80DA9;
+        Mon, 14 Feb 2022 09:37:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F05C340E9;
+        Mon, 14 Feb 2022 09:37:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832229;
-        bh=hVUHZ5WyxrV1PseGE0Vyr2SlFfdW6bD0RR9iZNJtdkA=;
+        s=korg; t=1644831424;
+        bh=oot8H8SG+fLifHmlvEmUgAK75vhWQy+DzZGm3AcsJhI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZLy0j9sDqrV/H4UKDbv6FTsyh77AutLZT2e0Xt16P9ZXS8Q249pPoEBk2aX0jPnTc
-         iKsdh6YkZjqPEHGrZgVWClWBD3rN+b6H7s6fpOKii8LK199xPWWu6Ee+Qe0P9tbN+w
-         qQVXwgvYswr0f6l5zPiH+wTFO5akrjyXrP3ShrH8=
+        b=sZrrydqyyOX4VKaO1ifYNTyVXiLFrnuScez57OSMsHDvYMAE90DmMw7m4vjU8xGMf
+         kAm+Rjbn+YDfZH/0vgNBx2VHxyDtBJoMhwFlM/EcguDoFdaq9SQrL4cganF9WZfQ7d
+         lJNKuvIC50ZPir0o/gWmY0QMO6khdWOk6OeicEv0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>,
-        Vlad Buslov <vladbu@nvidia.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 120/172] net: fix a memleak when uncloning an skb dst and its metadata
+        stable@vger.kernel.org,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>
+Subject: [PATCH 5.4 50/71] vt_ioctl: fix array_index_nospec in vt_setactivate
 Date:   Mon, 14 Feb 2022 10:26:18 +0100
-Message-Id: <20220214092510.568806493@linuxfoundation.org>
+Message-Id: <20220214092453.731026197@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,49 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Antoine Tenart <atenart@kernel.org>
+From: Jakob Koschel <jakobkoschel@gmail.com>
 
-[ Upstream commit 9eeabdf17fa0ab75381045c867c370f4cc75a613 ]
+commit 61cc70d9e8ef5b042d4ed87994d20100ec8896d9 upstream.
 
-When uncloning an skb dst and its associated metadata, a new
-dst+metadata is allocated and later replaces the old one in the skb.
-This is helpful to have a non-shared dst+metadata attached to a specific
-skb.
+array_index_nospec ensures that an out-of-bounds value is set to zero
+on the transient path. Decreasing the value by one afterwards causes
+a transient integer underflow. vsa.console should be decreased first
+and then sanitized with array_index_nospec.
 
-The issue is the uncloned dst+metadata is initialized with a refcount of
-1, which is increased to 2 before attaching it to the skb. When
-tun_dst_unclone returns, the dst+metadata is only referenced from a
-single place (the skb) while its refcount is 2. Its refcount will never
-drop to 0 (when the skb is consumed), leading to a memory leak.
+Kasper Acknowledgements: Jakob Koschel, Brian Johannesmeyer, Kaveh
+Razavi, Herbert Bos, Cristiano Giuffrida from the VUSec group at VU
+Amsterdam.
 
-Fix this by removing the call to dst_hold in tun_dst_unclone, as the
-dst+metadata refcount is already 1.
-
-Fixes: fc4099f17240 ("openvswitch: Fix egress tunnel info.")
-Cc: Pravin B Shelar <pshelar@ovn.org>
-Reported-by: Vlad Buslov <vladbu@nvidia.com>
-Tested-by: Vlad Buslov <vladbu@nvidia.com>
-Signed-off-by: Antoine Tenart <atenart@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Co-developed-by: Brian Johannesmeyer <bjohannesmeyer@gmail.com>
+Signed-off-by: Brian Johannesmeyer <bjohannesmeyer@gmail.com>
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+Link: https://lore.kernel.org/r/20220127144406.3589293-1-jakobkoschel@gmail.com
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/dst_metadata.h | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/tty/vt/vt_ioctl.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
-index b997e0c1e3627..adab27ba1ecbf 100644
---- a/include/net/dst_metadata.h
-+++ b/include/net/dst_metadata.h
-@@ -137,7 +137,6 @@ static inline struct metadata_dst *tun_dst_unclone(struct sk_buff *skb)
- #endif
- 
- 	skb_dst_drop(skb);
--	dst_hold(&new_md->dst);
- 	skb_dst_set(skb, &new_md->dst);
- 	return new_md;
- }
--- 
-2.34.1
-
+--- a/drivers/tty/vt/vt_ioctl.c
++++ b/drivers/tty/vt/vt_ioctl.c
+@@ -715,9 +715,9 @@ int vt_ioctl(struct tty_struct *tty,
+ 		if (vsa.console == 0 || vsa.console > MAX_NR_CONSOLES)
+ 			ret = -ENXIO;
+ 		else {
+-			vsa.console = array_index_nospec(vsa.console,
+-							 MAX_NR_CONSOLES + 1);
+ 			vsa.console--;
++			vsa.console = array_index_nospec(vsa.console,
++							 MAX_NR_CONSOLES);
+ 			console_lock();
+ 			ret = vc_allocate(vsa.console);
+ 			if (ret == 0) {
 
 

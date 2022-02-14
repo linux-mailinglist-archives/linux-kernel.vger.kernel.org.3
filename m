@@ -2,78 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D11B44B59E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 19:30:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF2A4B59E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 19:30:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357447AbiBNS3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 13:29:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38270 "EHLO
+        id S1349367AbiBNS37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 13:29:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348672AbiBNS3i (ORCPT
+        with ESMTP id S245266AbiBNS34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 13:29:38 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42D25F8F3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:29:29 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id de39so5602382qkb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:29:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LujYmaOiAVKwbl24zDMRkVK0oOkNk6En6jjb4+6/vg0=;
-        b=sC41pwYIZcsyHeM4riL2XhpIwlYfMGBje75Rj+HudxZHIhKM+E6rYHKZqe+/7fbMT+
-         IiJxF8OqiOEi5sA9qhyg3pIM97O+MxOOsl4X+5viD6G/qNFQvYYIaskxoepLqJ1F65ko
-         dxegh1kp4yymDcZpQn3XLrLdbzGyweXesCRZU6mjvoIZq5zEoaw8cpYWcRYH7NoRR4ir
-         Emijcxz+RJXdwIVnPYbDgHts6B6YXi7vruntHvYZM6ik2t7/SdoKUHYza+K4LGR2+Stk
-         PWxFR8Ibr0dNM1yr+BJO2lekEBlsvqeGP1PCxGKgLIyFAaDmgKaaRS7yWztnyfOyjUCX
-         lUbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LujYmaOiAVKwbl24zDMRkVK0oOkNk6En6jjb4+6/vg0=;
-        b=eZsuBOTy3a9aeZQxCpNKCtPxt5rjyR4S0FvN9biFXHzuT0kfsyyLrXDHHWme6yN7k0
-         aF8msRnAXFZLbc8mhiVEWQFLsJsg/cWhLlQ0oijwGZvggrDUR2IlMjgBdwn2aJTVIQJJ
-         l4mf1n+Up4CP557fb7t9XZgmD9QMZXYYFK3wzs4EMx8R256Aq7vhZmJDRZb5kKO8k3Dh
-         VgS44am9IEnuGdOILKZF5usA0q1D/IuFuxoF/oEomHG8mw/nr91jZ82sEeSqaAzoyZmF
-         KxK+oms9E0rGr97NxlI5430xg6TYTxPAIu7kObJvFinb5NTPCLMBF8ui5mUclGzkk67d
-         Eg5g==
-X-Gm-Message-State: AOAM5306p50tQ6+TOIGO8fBzuhXV0iM4+9K7+2DsszeHdnWTivyKJ47x
-        CjJ5ouu+d3p4hy2zjtmViDHgKob3qydkmnf8JIsCMQ==
-X-Google-Smtp-Source: ABdhPJy0e45Pw9dVPsMbq1vVzeaoeYU+q23A4Yig8yos82am8dbn6uM2XBQC9vV7XwtSdU+xYqb4NM0PlWiPwKQhB0Q=
-X-Received: by 2002:a05:620a:470a:: with SMTP id bs10mr77702qkb.583.1644863368736;
- Mon, 14 Feb 2022 10:29:28 -0800 (PST)
+        Mon, 14 Feb 2022 13:29:56 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344B460DAC;
+        Mon, 14 Feb 2022 10:29:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1644863369;
+        bh=2Oe69+MHLDiamZ+2fbh46K9b90yf+diNILJSlNDYeaU=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=khqmvqAbKBT8ECK7rw/9I9bQUZbjco785NF2BcXsgrtORRzd5Q2DM/cRCpoNgEQM6
+         cyLuRIE2gMg5Da9AIR+0gjjMDUjH9y82YXSyzJPBl6z3OqW3gB3A2mdRvPCzTMWi+s
+         yeUbf08VDppmDWsYS1VM4pR6x4R0ksIvq8X5YumQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.168.11]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M4JmN-1nJx5E1jUH-000JLM; Mon, 14
+ Feb 2022 19:29:29 +0100
+Message-ID: <e9b503e0-19b9-68a4-1edc-646abc279b5a@gmx.de>
+Date:   Mon, 14 Feb 2022 19:29:21 +0100
 MIME-Version: 1.0
-References: <20220201205534.1962784-1-haoluo@google.com> <20220201205534.1962784-6-haoluo@google.com>
- <20220203180414.blk6ou3ccmod2qck@ast-mbp.dhcp.thefacebook.com>
- <CA+khW7jkJbvQrTx4oPJAoBZ0EOCtr3C2PKbrzhxj-7euBK8ojg@mail.gmail.com>
- <CAADnVQLZZ3SM2CDxnzgOnDgRtGU7+6wT9u5v4oFas5MnZF6DsQ@mail.gmail.com>
- <CA+khW7i+TScwPZ6-rcFKiXtxMm8hiZYJGH-wYb=7jBvDWg8pJQ@mail.gmail.com>
- <CAADnVQ+-29CS7nSXghKMgZjKte84L0nRDegUE0ObFm3d7E=eWw@mail.gmail.com>
- <CA+khW7iWd5MzZW_mCfgqHESi8okjNRiRMr0TM=CQzLkMsa_a5g@mail.gmail.com> <CAADnVQJcTAgcbwrOWO8EnbTdAcQ91HQmtpn7aKJGwHc=mEpJ1g@mail.gmail.com>
-In-Reply-To: <CAADnVQJcTAgcbwrOWO8EnbTdAcQ91HQmtpn7aKJGwHc=mEpJ1g@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Mon, 14 Feb 2022 10:29:17 -0800
-Message-ID: <CA+khW7i46Rg8q=8goXdmuJuZ+NOuZ5AP6fSbSVzyqcU3C5iX4A@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next v2 5/5] selftests/bpf: test for pinning for
- cgroup_view link
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Joe Burton <jevburton.kernel@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] serial: parisc: GSC: fix build when PCI_LBA is not set
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        linux-parisc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>
+References: <20220213193903.8815-1-rdunlap@infradead.org>
+ <0baabcbc-196e-08fa-e2db-b7e925993cc1@gmx.de>
+ <55c73cb4-21ae-7307-7b14-a19cf270f4d6@infradead.org>
+ <1e43c3b9-c5b7-de77-dd28-981d60a4d97d@gmx.de>
+ <0ffc9f5f-546a-a797-01bf-d62953e6d26c@infradead.org>
+ <e8781486-b3ce-b2dd-2c84-f0b2a651556f@gmx.de>
+ <4c716eda-a081-2ae3-9358-a5e35bd4d951@gmx.de>
+ <e99b77aa-7742-08f5-8acc-3ff381d1b17f@infradead.org>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <e99b77aa-7742-08f5-8acc-3ff381d1b17f@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Hg9cH3SBBQvG6gSf4Z11oAIl6AEzxHxwieXB1WHx2fLJ6DE6/KA
+ c6xAHmtwjyj7at3FeY0gumrvPaQ7gnLX9LBl1RazAZInYO6J1ue0sdPKjFhrE/QGkSLhGcH
+ /IY135g8qUUY/1vqQEQiR+LcbvU0u0YKb0T0khLuv4EW358KAnFYuNr8WPTaIU8GGgCLJEp
+ ZLXOLNlIz4mKMjYwJofag==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:aJdZRDr7mcA=:lqv8Hd7u8/6loRdWh3yOv9
+ pEGZCmyqqA590VYCRbtqIcvsvudHh9YJJgemiRNCtLhL96f+BEN+9fVzYqSdcSJQPs74zj4iV
+ XFIQUMxdqAwx6VjEnIej0+QT4BNtJsbFfGJa0o4V9PvOtLk07Op8kE2I/wtEfkXu4Zgddje4B
+ eeiS5T9iuvh9I07YfWQbyqLiwKwkIV99+bCjCIOz0S68Rr1fqVqk6wRr5Ea4x/dFHiFqPqJdc
+ 1H8HnaCy+kZaJbRlTnIqXUst1ziGWSDhqgOBPe6UR70iws+P4u0RuyLHhNpxU6b5wvrQSAtZF
+ 6/Y7UTnIwrf/pVltsq732NlxWAvWeGpbszEE8jy0ouYw3K1c4M4GAC0/12l+kiZoLn+p/9ukl
+ 3A6kq9XQqfNe+W8ZaLMyYdsGZYgRuflg9q6kZ8rpeJhBP+WMwo9dRdQIqH0J8qD5OZWrl0FfT
+ k3Ud0U6Os71T9kJVBwg1BaigT783jBY61NsKYrOBeYyoHm41DFVRg6Yv44YfYTYrLsDqLJ90H
+ oldBRpN2rNGkNoSYbd2hol0iz8YsCNH6Dn4RdRoMDZ3G1foGSvTIvfSAiCq3PQ2R72f7R1hr5
+ NcldKAa1Je465lYwCKcWHdZ9LPo6AvSROjpBJpSQVESLYq1BONf8/KDiwmXXA0/DUusKUxjwW
+ wHaqsPCEEdmXJiFY9zFUbVaVCPoNGwp0rZROLCNFbChArlvEj3vudS2HMb22jiHKna8+7MgO2
+ RWAlI3IRKngF+Ay/EE2ymzOpXm+ZkhCpCLN5tIjujrk19/vTFObN+zOlmKrO5JDe2y/kO9rMP
+ q4MiX3A4NaeMFD/qJ3pVxD2J6wjwXs/WHdXXOMMoH5gfBfv5Ciqra7J4dba3zYzxUFwFvGKhf
+ CRIq7t2UVfAUuLYzxvH91cisClspZH1r3DXgN0cHA2HZVsR+F3jmNbSAZdT90cAaUSWDE65Qg
+ i+Oomk2BsTtUPBQuZIB1730cuXe0eLvWVnlMksz5UYMEqnXcovZDIu2LkMiDbZ4QAHuL1OWVG
+ xwadyVsE6nEd2jDFjFU8SEPUvPY9v7jlPcC9AIrqcmw9yUn1ws0nA4vy2XT9sX46NVQmC2ilA
+ Fv1b0ZmJ+g5f00=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,113 +83,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 1:20 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On 2/14/22 18:47, Randy Dunlap wrote:
+> Hi Helge,
 >
-> On Tue, Feb 8, 2022 at 12:07 PM Hao Luo <haoluo@google.com> wrote:
-> >
-> > On Sat, Feb 5, 2022 at 8:29 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Fri, Feb 4, 2022 at 10:27 AM Hao Luo <haoluo@google.com> wrote:
-> > > > >
-> > > > > > In our use case, we can't ask the users who create cgroups to do the
-> > > > > > pinning. Pinning requires root privilege. In our use case, we have
-> > > > > > non-root users who can create cgroup directories and still want to
-> > > > > > read bpf stats. They can't do pinning by themselves. This is why
-> > > > > > inheritance is a requirement for us. With inheritance, they only need
-> > > > > > to mkdir in cgroupfs and bpffs (unprivileged operations), no pinning
-> > > > > > operation is required. Patch 1-4 are needed to implement inheritance.
-> > > > > >
-> > > > > > It's also not a good idea in our use case to add a userspace
-> > > > > > privileged process to monitor cgroupfs operations and perform the
-> > > > > > pinning. It's more complex and has a higher maintenance cost and
-> > > > > > runtime overhead, compared to the solution of asking whoever makes
-> > > > > > cgroups to mkdir in bpffs. The other problem is: if there are nodes in
-> > > > > > the data center that don't have the userspace process deployed, the
-> > > > > > stats will be unavailable, which is a no-no for some of our users.
-> > > > >
-> > > > > The commit log says that there will be a daemon that does that
-> > > > > monitoring of cgroupfs. And that daemon needs to mkdir
-> > > > > directories in bpffs when a new cgroup is created, no?
-> > > > > The kernel is only doing inheritance of bpf progs into
-> > > > > new dirs. I think that daemon can pin as well.
-> > > > >
-> > > > > The cgroup creation is typically managed by an agent like systemd.
-> > > > > Sounds like you have your own agent that creates cgroups?
-> > > > > If so it has to be privileged and it can mkdir in bpffs and pin too ?
-> > > >
-> > > > Ah, yes, we have our own daemon to manage cgroups. That daemon creates
-> > > > the top-level cgroup for each job to run inside. However, the job can
-> > > > create its own cgroups inside the top-level cgroup, for fine grained
-> > > > resource control. This doesn't go through the daemon. The job-created
-> > > > cgroups don't have the pinned objects and this is a no-no for our
-> > > > users.
-> > >
-> > > We can whitelist certain tracepoints to be sleepable and extend
-> > > tp_btf prog type to include everything from prog_type_syscall.
-> > > Such prog would attach to cgroup_mkdir and cgroup_release
-> > > and would call bpf_sys_bpf() helper to pin progs in new bpffs dirs.
-> > > We can allow prog_type_syscall to do mkdir in bpffs as well.
-> > >
-> > > This feature could be useful for similar monitoring/introspection tasks.
-> > > We can write a program that would monitor bpf prog load/unload
-> > > and would pin an iterator prog that would show debug info about a prog.
-> > > Like cat /sys/fs/bpf/progs.debug shows a list of loaded progs.
-> > > With this feature we can implement:
-> > > ls /sys/fs/bpf/all_progs.debug/
-> > > and each loaded prog would have a corresponding file.
-> > > The file name would be a program name, for example.
-> > > cat /sys/fs/bpf/all_progs.debug/my_prog
-> > > would pretty print info about 'my_prog' bpf program.
-> > >
-> > > This way the kernfs/cgroupfs specific logic from patches 1-4
-> > > will not be necessary.
-> > >
-> > > wdyt?
+> On 2/14/22 04:24, Helge Deller wrote:
+>> On 2/14/22 13:05, Helge Deller wrote:
+>>> On 2/14/22 01:15, Randy Dunlap wrote:
+>>>> Hi,
+>>>>
+>>>> On 2/13/22 14:15, Helge Deller wrote:
+>>>>> On 2/13/22 22:07, Randy Dunlap wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 2/13/22 12:35, Helge Deller wrote:
+>>>>>>> Hi Randy,
+>>>>>>>
+>>>>>>> On 2/13/22 20:39, Randy Dunlap wrote:
+>>>>>>>> There is a build error when using a kernel .config file from
+>>>>>>>> 'kernel test robot' for a different build problem:
+>>>>>>>>
+>>>>>>>> hppa64-linux-ld: drivers/tty/serial/8250/8250_gsc.o: in function =
+`.LC3':
+>>>>>>>> (.data.rel.ro+0x18): undefined reference to `iosapic_serial_irq'
+>>>>>>>>
+>>>>>>>> when:
+>>>>>>>>   CONFIG_GSC=3Dy
+>>>>>>>>   CONFIG_SERIO_GSCPS2=3Dy
+>>>>>>>>   CONFIG_SERIAL_8250_GSC=3Dy
+>>>>>>>>   CONFIG_PCI is not set
+>>>>>>>>     and hence PCI_LBA is not set.
+>>>>>>>>   IOSAPIC depends on PCI_LBA, so IOSAPIC is not set/enabled.
+>>>>>>>>
+>>>>>>>> Making SERIAL_8250_GSC depend on PCI_LBA prevents the build error=
+.
+>>>>>>>
+>>>>>>> It maybe makes the build error go away, but ...
+>>>>>>>
+>>>>>>>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>>>>>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>>>>>> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com=
+>
+>>>>>>>> Cc: Helge Deller <deller@gmx.de>
+>>>>>>>> Cc: linux-parisc@vger.kernel.org
+>>>>>>>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>>>>>>> Cc: linux-serial@vger.kernel.org
+>>>>>>>> Cc: Jiri Slaby <jirislaby@kernel.org>
+>>>>>>>> Cc: Johan Hovold <johan@kernel.org>
+>>>>>>>> ---
+>>>>>>>>  drivers/tty/serial/8250/Kconfig |    2 +-
+>>>>>>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>>>>
+>>>>>>>> --- linux-next-20220211.orig/drivers/tty/serial/8250/Kconfig
+>>>>>>>> +++ linux-next-20220211/drivers/tty/serial/8250/Kconfig
+>>>>>>>> @@ -118,7 +118,7 @@ config SERIAL_8250_CONSOLE
+>>>>>>>>
+>>>>>>>>  config SERIAL_8250_GSC
+>>>>>>>>  	tristate
+>>>>>>>> -	depends on SERIAL_8250 && GSC
+>>>>>>>> +	depends on SERIAL_8250 && GSC && PCI_LBA
+>>>>>>>>  	default SERIAL_8250
+>>>>>>>
+>>>>>>> The serial device is on the GSC bus, so if you make it
+>>>>>>> dependend on the PCI bus it will not be useable on machines
+>>>>>>> which only have a GSC bus...
+>>>>>>>
+>>>>>>> We need another patch.
+>>>>>>> Do you have a link to the build error?
+>>>>>>
+>>>>>>
+>>>>>> No, it's from the other build error that you just replied to,
+>>>>>> where the incorrect compiler was used.
+>>>>>>
+>>>>>> I'll recheck it and reconsider what to do, if anything.
+>>>>>
+>>>>> Ok, thank you!
+>>>>
+>>>> I dunno what to do. This:
+>>>>
+>>>> #ifdef CONFIG_64BIT
+>>>> 	if (!dev->irq && (dev->id.sversion =3D=3D 0xad))
+>>>> 		dev->irq =3D iosapic_serial_irq(dev);
+>>>> #endif
+>>>>
+>>>> makes it look like 64BIT requires IOSAPIC (hence PCI_LBA).
+>>>
+>>> Although I think all 64bit machines have a PCI bus, the better
+>>> fix is that the driver should only call iosapic_serial_irq(dev)
+>>> if CONFIG_IOSAPIC is set. This patch fixes the build:
+>>>
+>>> -#ifdef CONFIG_64BIT
+>>> +#ifdef CONFIG_IOSAPIC
+>>>         if (!dev->irq && (dev->id.sversion =3D=3D 0xad))
+>>>                 dev->irq =3D iosapic_serial_irq(dev);
+>>>  #endif
+>>
+>> That was not fully correct.
+>> It needs to be:
+>>
+>> #if defined(CONFIG_64BIT) && defined(CONFIG_IOSAPIC)
+>>
+>> Otherwise you'll get an undefined reference in the 32-bit build.
+>
+> Sure, I can send such a patch.
 
-Hi Alexei,
+Thanks!
+I see you sent it in a seperate mail.
+I can take it through the parisc tree.
 
-Actually, I found this almost worked, except that the tracepoints
-cgroup_mkdir and cgroup_rmdir are not sleepable. They are inside a
-spinlock's critical section with irq off. I guess one solution is to
-offload the sleepable part of the bpf prog into a thread context. We
-may create a dedicated kernel thread or use workqueue for this. Do you
-have any advice?
+> I would have used a bigger hammer and done something like
+>
+> 	depends on IOSAPIC if 64BIT
+>
+> Just for info, how would dev->irq be set for CONFIG_64BIT
+> when CONFIG_IOSAPIC is not set?
 
-> >
-> > Thanks Alexei. I gave it more thought in the last couple of days.
-> > Actually I think it's a good idea, more flexible. It gets rid of the
-> > need of a user space daemon for monitoring cgroup creation and
-> > destruction. We could monitor task creations and exits as well, so
-> > that we can export per-task information (e.g. task_vma_iter) more
-> > efficiently.
->
-> Yep. Monitoring task creation and exposing via bpf_iter sounds
-> useful too.
->
-> > A couple of thoughts when thinking about the details:
-> >
-> > - Regarding parameterized pinning, I don't think we can have one
-> > single bpf_iter_link object, but with different parameters. Because
-> > parameters are part of the bpf_iter_link (bpf_iter_aux_info). So every
-> > time we pin, we have to attach iter in order to get a new link object
-> > first. So we need to add attach and detach in bpf_sys_bpf().
->
-> Makes sense.
-> I'm adding bpf_link_create to bpf_sys_bpf as part of
-> the "lskel for kernel" patch set.
-> The detach is sys_close. It's already available.
->
-> > - We also need to add those syscalls for cleanup: (1) unlink for
-> > removing pinned obj and (2) rmdir for removing the directory in
-> > prog_type_syscall.
->
-> Yes. These two would be needed.
-> And obj_pin too.
->
-> > With these extensions, we can shift some of the bpf operations
-> > currently performed in system daemons into the kernel. IMHO it's a
-> > great thing, making system monitoring more flexible.
->
-> Awesome. Sounds like we're converging :)
+All found devices in the parisc system are in a device table.
+The serial driver scans those against the ones listed in
+serial_tbl[] and lasi_tbl[], and hand over the parisc_device
+pointer which usually has the irq set.
+In case the device is connected via iosapic and hasn't an irq
+already set, iosapic_serial_irq() is called to find the irq.
+The
+ 	depends on IOSAPIC if 64BIT
+would have dropped *all* serial ports on 64bit kernels, even
+those which are on the GSC bus.
+
+Helge

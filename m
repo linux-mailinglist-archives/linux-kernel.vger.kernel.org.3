@@ -2,211 +2,339 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E42254B4106
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 05:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B804B4109
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 06:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240225AbiBNE5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 23:57:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41784 "EHLO
+        id S231823AbiBNFAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 00:00:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234025AbiBNE5J (ORCPT
+        with ESMTP id S229611AbiBNFAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 23:57:09 -0500
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2433517C8
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 20:57:00 -0800 (PST)
-Received: by mail-oo1-xc32.google.com with SMTP id t75-20020a4a3e4e000000b002e9c0821d78so18141765oot.4
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 20:57:00 -0800 (PST)
+        Mon, 14 Feb 2022 00:00:38 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D128A51311;
+        Sun, 13 Feb 2022 21:00:30 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id ay7so16214726oib.8;
+        Sun, 13 Feb 2022 21:00:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=W3k5zzusyfmXH+0ijprZwALJFhBrMH89zfqIbl/b+Cs=;
-        b=OtwaZPcpMwZiYR3zL85kTdlA5BG7zQ5KIY4cq5oxg6/knim6wi27MmzsSVUzdkYlT+
-         9fElyZwlE8rDiKaVzIW4ajiWECZP3A4XZTv/pI7qu3yNfoiaQvqbYtqu7CRp5lBGoRyv
-         VPmAmn76ndOyiH/XoLf0g0JE0xiitOxPP2+PZDPWXbzyFLJcNh1rhmtWNLivt4XMaX/o
-         4R4RM+NopwdCuyUTph4ujM580SfWun1ZbpwHvAy60CqmvUotU58qp7sXw7wFNRoT2QvI
-         xVv4KO5SSPpsTnes4JUYdVdvh/10gR6zAM0/qMXhNGxAOTa0wXDToGZRjxbNfF4tSXqr
-         dFlA==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=19JXgy9EJ1Bf2yOJbEj45MBssctmxMx24Mld9QFr3NI=;
+        b=e4/2X+ipHJwTcbkDxVSD0NUkZX2jPBGoo2Wdg5P56SROLeh/CKO2KBmQ19PgG9Mc5O
+         /7C0w9T+sOVHTrcTlpBq0qd9fGGyJqsPGXgUqTR5kcdL7BmK6AOjJSDt8BMj/oKZcB9w
+         xbSuLlmN50GFRV/x805Oxtnh9E7PgjkrMHK3jsNf0X8gVxDW4JgSUd5rk+yxxYh+5zBV
+         Ni7/tO8tCMhH7m8AvbK5DH6CwDow1DRLW2pPshBiJkxttJoGfCnr1+AZOxT8HNHe8B8K
+         pAGRdFy/QEHh6UGH+Vm5Xgr1cuzH/42OFuMXjsax3s07bK44LKFRGsgoOBhTAfpchx0m
+         /9XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=W3k5zzusyfmXH+0ijprZwALJFhBrMH89zfqIbl/b+Cs=;
-        b=tpmdxdku0H623az14fUaMThdHGqDfZtsAJCbmFOUBqfzD0n+WMLcJ8HFHjiHeTK3CM
-         RBQvaf8oEgRpK8AMWCABN24qKdx0BfK03kyB8u96VgxtuYxC56cvmG2TTw7zt6WFymzJ
-         uZCP96bUpvEFz2rPF8G5/tVK2AR1CpLnTJQU3mNBRpVkIl7dkr7vxKbV3NZolemyumd7
-         UVTme/XrQ7cuCOzavkct5Mc4/JU6aKuYzDc77QZ9C0aVDzlX4zE3JZDFgpDbkyWEA3ND
-         u5NJ94lAx2V7Kacthy6eZcNjmIN7e336q5mYr7Dor7gHpDNI/2cW40pN55F7i5n9xlzR
-         Srjw==
-X-Gm-Message-State: AOAM530YM6N+cRBPwflZXQek1+abJ05SeGnz0xQpiKEoZPd09k/ePxKF
-        qnbtNllFV+5fjcwFXKnkDiLKaQZcotq2dw==
-X-Google-Smtp-Source: ABdhPJxZNoMRt/d77axd4FwIogpjRw7JYlXj4Dqw+q0pO8sRnkMlp/qaxCxi4j8RIZDli6u+YvRRSA==
-X-Received: by 2002:a05:6870:1194:: with SMTP id 20mr1240567oau.148.1644814619991;
-        Sun, 13 Feb 2022 20:56:59 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id s3sm12778139ois.19.2022.02.13.20.56.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Feb 2022 20:56:59 -0800 (PST)
-Date:   Sun, 13 Feb 2022 20:59:11 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 13/15] arm64: dts: qcom: Add MSM8953+PM8953 device tree
-Message-ID: <Ygnhn54Tl6qYzKv/@ripper>
-References: <20220112194118.178026-1-luca@z3ntu.xyz>
- <20220112194118.178026-14-luca@z3ntu.xyz>
- <YfhlCkb3XUvU8ae1@builder.lan>
- <2497719.tdWV9SEqCh@g550jk>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=19JXgy9EJ1Bf2yOJbEj45MBssctmxMx24Mld9QFr3NI=;
+        b=kd0+4Nm0LrW4l5acBqfAhLMCixMfJyp7X3CMyxU18/mh8Lib3D6/XZgwZP5F7uh7fT
+         VdkysoURuxsTDQ1jgB2ezORC0I8JwHebMchJ+IbfI6P/diXctGpWRJ3mzHQL+sLf6kDp
+         IWClQJDCnemWpxsSclSXkGSU2RgIFadFsYC2hS6mnhA2D8r8fSsIxgWmiUb12I1yzY1D
+         winxm9iVMoEpgGL4TRJw35Kep2EVJrTOWWtAWJmgTPbKRZmxorKJRV7QEBZB9Tof+86R
+         eOofxr0CuqvE2XcCSGbHuFscp2Wo6dfBoUyyLYykZjv4X3Ec032stALQIM2CgepPQ+xN
+         xhZw==
+X-Gm-Message-State: AOAM532GBcPXyPeqaYOiXoFD69qkMINHKhZqSsZMNTN2DsNE80+EmVUu
+        fd4W97CZormK3vxkt8wj7sE=
+X-Google-Smtp-Source: ABdhPJzVfHxwhhlBKzffQ8QoHMG8IU1QM/oP8+wZCk/1PhvKBp9Cq3i4O3KAcmddFmWy1uE7E+osFQ==
+X-Received: by 2002:a05:6808:168d:: with SMTP id bb13mr4849784oib.160.1644814830043;
+        Sun, 13 Feb 2022 21:00:30 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c14sm2414678ots.71.2022.02.13.21.00.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 13 Feb 2022 21:00:29 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <80c111ea-86dc-40c6-8e68-50f2b0e96ebf@roeck-us.net>
+Date:   Sun, 13 Feb 2022 21:00:27 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2497719.tdWV9SEqCh@g550jk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Alexandre Courbot <gnurou@gmail.com>, Pavel Machek <pavel@ucw.cz>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-leds@vger.kernel.org
+References: <20211212054706.80343-1-gnurou@gmail.com>
+ <20211228220727.GA17003@duo.ucw.cz>
+ <CAAVeFuJm1zO_Nfozj7uVXKVSNa2sduH5zvoFMP_ERnMLc1DzCw@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2] leds: add NCT6795D driver
+In-Reply-To: <CAAVeFuJm1zO_Nfozj7uVXKVSNa2sduH5zvoFMP_ERnMLc1DzCw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 13 Feb 12:25 PST 2022, Luca Weiss wrote:
+On 2/13/22 18:23, Alexandre Courbot wrote:
+> Hi Pavel, (+Guenter for comments about NCT6775 as he maintains the hwmon driver)
+> 
+> On Wed, Dec 29, 2021 at 7:07 AM Pavel Machek <pavel@ucw.cz> wrote:
+>>
+>> Hi!
+>>
+>>> Add support for the LED feature of the NCT6795D chip found on some
+>>> motherboards, notably MSI ones. The LEDs are typically used using a
+>>> RGB connector so this driver takes advantage of the multicolor
+>>> framework.
+>>
+>> Ok.
+>>
+>>> Signed-off-by: Alexandre Courbot <gnurou@gmail.com>
+>>> ---
+>>> Changes since v1 [1]:
+>>> - Use the multicolor framework
+>>>
+>>> [1] https://lkml.org/lkml/2020/7/13/674 (sorry, took me some time to
+>>>      come back to this patch)
+>>>
+>>>   drivers/leds/Kconfig         |  10 +
+>>>   drivers/leds/Makefile        |   1 +
+>>>   drivers/leds/leds-nct6795d.c | 442 +++++++++++++++++++++++++++++++++++
+>>>   3 files changed, 453 insertions(+)
+>>>   create mode 100644 drivers/leds/leds-nct6795d.c
+>>>
+>>> diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
+>>> index ed800f5da7d8..0db5986ca967 100644
+>>> --- a/drivers/leds/Kconfig
+>>> +++ b/drivers/leds/Kconfig
+>>> @@ -871,6 +871,16 @@ config LEDS_ACER_A500
+>>>          This option enables support for the Power Button LED of
+>>>          Acer Iconia Tab A500.
+>>
+>> Can we put it into drivers/leds/multi/? Lets group multicolor stuff there.
+> 
+> Sure. Should I create a sub-menu for multicolor leds in the Kconfig as well?
+> 
+>>
+>>> +config LEDS_NCT6795D
+>>> +     tristate "LED support for NCT6795D chipsets"
+>>> +     depends on LEDS_CLASS_MULTICOLOR
+>>> +     help
+>>> +       Enables support for the RGB LED feature of the NCT6795D chips found
+>>> +       on some MSI motherboards.
+>>> +
+>>> +       To compile this driver as a module, choose M here: the module
+>>> +       will be called leds-nct6795d.
+>>
+>> .ko?
+> 
+> The description of the other LED modules mention the module name
+> without the .ko suffix so I did the same for consistency, but let me
+> know if you prefer to have it anyway.
+> 
+>>
+>>> diff --git a/drivers/leds/leds-nct6795d.c b/drivers/leds/leds-nct6795d.c
+>>> new file mode 100644
+>>> index 000000000000..90d5d2a67cfa
+>>> --- /dev/null
+>>> +++ b/drivers/leds/leds-nct6795d.c
+>>> @@ -0,0 +1,442 @@
+>>> +// SPDX-License-Identifier: GPL-2.0+
+>>> +/*
+>>> + * NCT6795D/NCT6797D LED driver
+>>> + *
+>>> + * Copyright (c) 2021 Alexandre Courbot <gnurou@gmail.com>
+>>> + *
+>>> + * Driver to control the RGB interfaces found on some MSI motherboards.
+>>> + * This is for the most part a port of the MSI-RGB user-space program
+>>> + * by Simonas Kazlauskas (https://github.com/nagisa/msi-rgb.git) to the Linux
+>>> + * kernel LED interface.
+>>> + *
+>>> + * It is more limited than the original program due to limitations in the LED
+>>> + * interface. For now, only static colors are supported.
+>>
+>> Ok. We do have pattern trigger and hardware-accelerated blinking, if
+>> it helps. But that may be a lot of fun with multicolor.
+>>
+>>> +static inline int superio_enter(int ioreg)
+>>> +{
+>>> +     if (!request_muxed_region(ioreg, 2, "NCT6795D LED"))
+>>> +             return -EBUSY;
+>>> +
+>>> +     outb(0x87, ioreg);
+>>> +     outb(0x87, ioreg);
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static inline void superio_exit(int ioreg)
+>>> +{
+>>> +     outb(0xaa, ioreg);
+>>> +     outb(0x02, ioreg);
+>>> +     outb(0x02, ioreg + 1);
+>>> +     release_region(ioreg, 2);
+>>> +}
+>>
+>> Are these two too big for inline?
+> 
+> Removed the inline.
+> 
+>>
+>>> +static u8 init_vals[NUM_COLORS];
+>>> +module_param_named(r, init_vals[RED], byte, 0);
+>>> +MODULE_PARM_DESC(r, "Initial red intensity (default 0)");
+>>> +module_param_named(g, init_vals[GREEN], byte, 0);
+>>> +MODULE_PARM_DESC(g, "Initial green intensity (default 0)");
+>>> +module_param_named(b, init_vals[BLUE], byte, 0);
+>>> +MODULE_PARM_DESC(b, "Initial blue intensity (default 0)");
+>>
+>> Lets... not add parameters for this.
+> 
+> Removed this.
+> 
+>>
+>>> +/*
+>>> + * Return the detected chip or an error code. If no chip was detected, -ENXIO
+>>> + * is returned.
+>>> + */
+>>> +static enum nct679x_chip nct6795d_led_detect(u16 base_port)
+>>> +{
+>>
+>> "enum" return type is confusing here, as you also return errors.
+> 
+> Ack, converted this to a regular int.
+> 
+>>
+>>> +     val = superio_inb(led->base_port, 0x2c);
+>>> +     if ((val & 0x10) != 0x10)
+>>> +             superio_outb(led->base_port, 0x2c, val | 0x10);
+>>> +
+>>> +     superio_select(led->base_port, NCT6795D_RGB_BANK);
+>>> +
+>>> +     /* Check if RGB control enabled */
+>>> +     val = superio_inb(led->base_port, 0xe0);
+>>> +     if ((val & 0xe0) != 0xe0)
+>>> +             superio_outb(led->base_port, 0xe0, val | 0xe0);
+>>
+>> I'd simply do outbs unconditionally...
+> 
+> Indeed.
+> 
+>>
+>>> +/*
+>>> + * Commit all colors to the hardware.
+>>> + */
+>>> +static int nct6795d_led_commit(const struct nct6795d_led *led)
+>>> +{
+>>> +     const struct mc_subled *subled = led->subled;
+>>> +     int ret;
+>>> +
+>>> +     dev_dbg(led->dev, "setting values: R=%d G=%d B=%d\n",
+>>> +             subled[RED].brightness, subled[GREEN].brightness,
+>>> +             subled[BLUE].brightness);
+>>> +
+>>> +     ret = superio_enter(led->base_port);
+>>> +     if (ret)
+>>> +             return ret;
+>>
+>> Are you sure you want to do superio_enter() each time LED values are
+>> updated? That sounds... expensive, wrong. You have
+>> request_muxed_region() call in there.
+> 
+> This is just what other superio-based drivers do as the bus can be
+> shared between several drivers, each controlling a different function
+> (see for instance gpio-f7188x or the hwmon NCT6775 driver).
+> request_muxed_region() is used as a way to make sure they do not get
+> in the way of one another - they all acquire the region for a short
+> time and release it as soon as they are done. I agree it would be
+> better if we could arbitrate access in a more centralized way, but
+> that goes beyond the scope of this patch. There are mentions of moving
+> the superio functions to a separate file in the hwmon driver though,
+> so maybe this will happen at some point?
+> 
 
-> Hi Bjorn,
+I don't think this is ever going to happen unless someone is actually
+going to do it. And that won't be me - I just don't have the time
+(nor appetite - introducing new pieces of infrastructure seems to take
+forever nowadays).
+
+Having said that, if using request_muxed_region() is considered
+unacceptable, you'll have to find a different method to control
+superio access to the chip.
+
+>>
+>>> +static int __init nct6795d_led_init(void)
+>>> +{
+>>> +     static const u16 io_bases[] = { 0x4e, 0x2e };
+>>> +     struct resource io_res = {
+>>> +             .name = "io_base",
+>>> +             .flags = IORESOURCE_REG,
+>>> +     };
+>>> +     enum nct679x_chip detected_chip;
+>>> +     int ret;
+>>> +     int i;
+>>> +
+>>> +     for (i = 0; i < ARRAY_SIZE(io_bases); i++) {
+>>> +             detected_chip = nct6795d_led_detect(io_bases[i]);
+>>> +             if (detected_chip >= 0)
+>>> +                     break;
+>>> +     }
+>>
+>> Are you sure this won't cause problems somewhere? Could compatible
+>> mainboards be detected using DMI or something like that?
 > 
-> On Montag, 31. Jänner 2022 23:39:06 CET Bjorn Andersson wrote:
-> > On Wed 12 Jan 13:41 CST 2022, Luca Weiss wrote:
-> > > From: Vladimir Lypak <vladimir.lypak@gmail.com>
-> > > 
-> > > The combination MSM8953 + PM8953 is commonly used, so add a
-> > > device tree where common power supplies etc. can be configured.
-> > > 
-> > > Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
-> > > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > > Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> > 
-> > I would prefer if we stick with the current scheme and just push this
-> > into the device dts (or possibly some vendor-common dtsi if that's
-> > applicable).
-> > 
-> > Simply just to follow what we do on other platforms.
+> I looked at the output of dmidecode and could not find anything
+> relevant to help probing this unfortunately. Again other superio-based
+> drivers are doing the same thing for detecting the presence of the
+> chip.
 > 
-> Sure, will do in v2.
+>>
+>>
+>>> +     if (i == ARRAY_SIZE(io_bases)) {
+>>> +             pr_err(KBUILD_MODNAME ": no supported chip detected\n");
+>>> +             return -ENXIO;
+>>> +     }
+>>
+>> I don't think ENXIO is normally used like this. -ENODEV? You have this
+>> elsewhere, too.
 > 
-> > 
-> > 
-> > PS. I see some patches has been applied, but as you resubmit this
-> > series please split it per maintainer to make it obvious to each
-> > maintainer that they should pick their part(s).
+> Switched these to -ENODEV.
 > 
-> What do you mean by this? Send one series per maintainer? Or something else? 
+>>
+>>> +
+>>> +     pr_info(KBUILD_MODNAME ": found %s chip at address 0x%x\n",
+>>> +             chip_names[detected_chip], io_bases[i]);
+>>> +
+>>> +     ret = platform_driver_register(&nct6795d_led_driver);
+>>> +     if (ret)
+>>> +             return ret;
+>>> +
+>>> +     nct6795d_led_pdev =
+>>> +             platform_device_alloc(NCT6795D_DEVICE_NAME "_led", 0);
+>>> +     if (!nct6795d_led_pdev) {
+>>> +             ret = -ENOMEM;
+>>> +             goto error_pdev_alloc;
+>>> +     }
+>>
+>> Are you sure you are using platform devices in reasonable way? You
+>> probe, first, then register. That's highly unusual.
+> 
+> Agreed, but that's also what the hwmon and f7188 GPIO drivers do. The
+> more I repeat this, the more it sounds like we should wait until there
+> is a more centralized way to manage the superio bus before thinking
+> about merging this. :) Let's see what Guenter thinks.
 > 
 
-Yes, that's what I'm suggesting.
+I have no real opinion on this. The nct6775 driver first registers the
+driver, then the device, which causes it to probe. That is how hwmon
+drivers (and watchdog drivers, for that matter) have historically done
+it, and I never found a reason to change it since it just works. If that
+is considered to be wrong nowadays, I will be happy to accept patches
+if someone can tell me what exactly is wrong with it and why, and how
+it can cause problems.
 
-> Currently when making the patches I don't really "care" about who maintains 
-> what, my git send-email setup picks the relevant people for CC.
-> 
-
-You technically don't have to care, but as it's not always obvious to a
-maintainer if he/she can take the patches destined for their subsystem
-it's easy that things ends up sitting on the list for longer than
-necessary.
-
-So you're making yourself a favour of splitting things that aren't
-dependent as you send it out.
-
-> Sometimes there's also multiple maintainers/trees listed for one file, not sure 
-> what to do there... 
-> 
-
-Your current approach works, above is just a suggestion of how to make
-it easier for the maintainers, which will help you to get your patches
-land faster.
-
-Regards,
-Bjorn
-
-> Regards
-> Luca
-> 
-> > 
-> > Thanks,
-> > Bjorn
-> > 
-> > > ---
-> > > 
-> > >  arch/arm64/boot/dts/qcom/msm8953-pm8953.dtsi | 50 ++++++++++++++++++++
-> > >  1 file changed, 50 insertions(+)
-> > >  create mode 100644 arch/arm64/boot/dts/qcom/msm8953-pm8953.dtsi
-> > > 
-> > > diff --git a/arch/arm64/boot/dts/qcom/msm8953-pm8953.dtsi
-> > > b/arch/arm64/boot/dts/qcom/msm8953-pm8953.dtsi new file mode 100644
-> > > index 000000000000..b5f20fc9488e
-> > > --- /dev/null
-> > > +++ b/arch/arm64/boot/dts/qcom/msm8953-pm8953.dtsi
-> > > @@ -0,0 +1,50 @@
-> > > +// SPDX-License-Identifier: BSD-3-Clause
-> > > +/* Copyright (c) 2022, The Linux Foundation. All rights reserved. */
-> > > +
-> > > +#include "msm8953.dtsi"
-> > > +#include "pm8953.dtsi"
-> > > +
-> > > +&hsusb_phy {
-> > > +	vdd-supply = <&pm8953_l3>;
-> > > +	vdda-pll-supply = <&pm8953_l7>;
-> > > +	vdda-phy-dpdm-supply = <&pm8953_l13>;
-> > > +};
-> > > +
-> > > +&sdhc_1 {
-> > > +	vmmc-supply = <&pm8953_l8>;
-> > > +	vqmmc-supply = <&pm8953_l5>;
-> > > +};
-> > > +
-> > > +&sdhc_2 {
-> > > +	vmmc-supply = <&pm8953_l11>;
-> > > +	vqmmc-supply = <&pm8953_l12>;
-> > > +};
-> > > +
-> > > +&rpm_requests {
-> > > +	smd_rpm_regulators: pm8953-regulators {
-> > > +		compatible = "qcom,rpm-pm8953-regulators";
-> > > +
-> > > +		pm8953_s1: s1 {};
-> > > +		pm8953_s3: s3 {};
-> > > +		pm8953_s4: s4 {};
-> > > +
-> > > +		pm8953_l1: l1 {};
-> > > +		pm8953_l2: l2 {};
-> > > +		pm8953_l3: l3 {};
-> > > +		pm8953_l5: l5 {};
-> > > +		pm8953_l6: l6 {};
-> > > +		pm8953_l7: l7 {};
-> > > +		pm8953_l8: l8 {};
-> > > +		pm8953_l9: l9 {};
-> > > +		pm8953_l10: l10 {};
-> > > +		pm8953_l11: l11 {};
-> > > +		pm8953_l12: l12 {};
-> > > +		pm8953_l13: l13 {};
-> > > +		pm8953_l15: l15 {};
-> > > +		pm8953_l16: l16 {};
-> > > +		pm8953_l17: l17 {};
-> > > +		pm8953_l19: l19 {};
-> > > +		pm8953_l22: l22 {};
-> > > +		pm8953_l23: l23 {};
-> > > +	};
-> > > +};
-> 
-> 
-> 
-> 
+Thanks,
+Guenter

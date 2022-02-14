@@ -2,64 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3034B5D68
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 23:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 985CB4B5CA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231695AbiBNWEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 17:04:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48962 "EHLO
+        id S231176AbiBNV0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:26:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231654AbiBNWEd (ORCPT
+        with ESMTP id S230473AbiBNV0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 17:04:33 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022ED1B4468
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 14:04:24 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21EIxpqg099035;
-        Mon, 14 Feb 2022 12:59:51 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1644865191;
-        bh=Pz4wP+n3GDnd5dYw+LjYNjLY5RV4YQxdOk9eQvqnJ04=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=MNDzLqntzEgbm5a6KaOg1vVjSfRpGrC5z+5F3pu4eTtQ6wQzESXxGKTAp7R3N5QRv
-         uw1I+f/h3UlZl58Xl7gLbi5O6dxprmdCds8U1zbRnzqE9bnbEAjLxLGGD6WFkniOuB
-         4vrz4t8xGB1yRy/nJ9W4ZE2yfxpw/a/5t80GoF9I=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21EIxo3R013282
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 14 Feb 2022 12:59:51 -0600
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 14
- Feb 2022 12:59:50 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 14 Feb 2022 12:59:50 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21EIxnaE103038;
-        Mon, 14 Feb 2022 12:59:50 -0600
-Date:   Tue, 15 Feb 2022 00:29:49 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     <Tudor.Ambarus@microchip.com>
-CC:     <michael@walle.cc>, <linux-mtd@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <miquel.raynal@bootlin.com>,
-        <richard@nod.at>, <vigneshr@ti.com>
-Subject: Re: [PATCH v1 11/14] mtd: spi-nor: spansion: slightly rework control
- flow in late_init()
-Message-ID: <20220214185949.lp3jjifypaqyjenp@ti.com>
-References: <20220202145853.4187726-1-michael@walle.cc>
- <20220202145853.4187726-12-michael@walle.cc>
- <f004399f-36b0-2099-b2a0-8ab0ecd114b7@microchip.com>
+        Mon, 14 Feb 2022 16:26:06 -0500
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B9C2A701;
+        Mon, 14 Feb 2022 13:25:58 -0800 (PST)
+Received: by mail-oo1-xc35.google.com with SMTP id 189-20020a4a03c6000000b003179d7b30d8so20889853ooi.2;
+        Mon, 14 Feb 2022 13:25:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5/DaZmV9acYDCTgPotmTjkv5wdpuSuU2XjrOsJthBBQ=;
+        b=nWQxV8bwhbOD3UF50A117xCVxj+SdTH8j0ePhfp/vJCb8IjI9vBWg6cxXRzKNHYnA2
+         cWK3cz+qshBj6PDjeKoogB7Z176jQ/iWDg9drN0TMGnqsZjErTE8Y0fhjM2HuB0hTZ7k
+         WvoWhgELlUECaUOdFHVDVUNSFL9XTETtsx/yiLVvgbMzOxc99n7KNkG87N5dS1e59o/P
+         tG7l3iVWZoA37J/EBljjE3AvYVBP4USRavxZz22fUyPo1Fyt++TsRu3eGtHrwG5tEj67
+         0nlOi1QUyysEhYHzoj7rdRxXZjvOaS5yt/bFcOiBA9oNZ6VC7M2mvOTMw8FnY9P287O5
+         iONA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5/DaZmV9acYDCTgPotmTjkv5wdpuSuU2XjrOsJthBBQ=;
+        b=K0udV4jb+lxh1GRzYjWqNFY4apGO1MqsjTaIJbpiPq9VTLgkOLJAk3og+91QB4+WKr
+         4uXzm5DShXpMAmp12Cp3hhnG9Cl4A5Le4cwxgXVPoJEYSzKJTpMzxh2vVCrTmVXCm/kE
+         AI1+hleOzdAqOjcBxCbYfu6VYtECNwoH4kWj5ClhGlAHKYLYd49EFrPo9MDzWM8oPJR2
+         CKam1oQ0p+w0eNwOQ7984nlSUO1xsv0KQKnzCPsGmiXZitvffckATBua5aWJtYElzvfS
+         IzYjwIJiemRdvYlQ/Q+TZaPz7P2PcBCa2Oia0N9rSGP72GeZaTEJiBJAW79Ic0h60/oS
+         WaTQ==
+X-Gm-Message-State: AOAM532scMYpKdi8TLEXh1k5XPTH4goK9mRfzz9xLhFpT4mZ8zlWSBu+
+        Glp2wMIChwCjUGESU7Ujz9r7iLHrdjY=
+X-Google-Smtp-Source: ABdhPJwoikppkKPhBbf43zKKC+nQQi8QmN17ON2BtIKBG/X7Qj3NKBvQo5nyXCW7kCKLxOljb9sS1Q==
+X-Received: by 2002:a17:90a:8c8b:: with SMTP id b11mr16258736pjo.197.1644865217384;
+        Mon, 14 Feb 2022 11:00:17 -0800 (PST)
+Received: from [192.168.1.35] (71.red-83-50-68.dynamicip.rima-tde.net. [83.50.68.71])
+        by smtp.gmail.com with ESMTPSA id d8sm3507592pjr.29.2022.02.14.11.00.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 11:00:17 -0800 (PST)
+Sender: =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= 
+        <philippe.mathieu.daude@gmail.com>
+Message-ID: <5324be35-5c49-31c1-3f9a-267a5dae8c84@amsat.org>
+Date:   Mon, 14 Feb 2022 20:00:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <f004399f-36b0-2099-b2a0-8ab0ecd114b7@microchip.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.1
+Subject: Re: [PATCH mips-fixes] MIPS: smp: fill in sibling and core maps
+ earlier
+Content-Language: en-US
+To:     Alexander Lobakin <alobakin@pm.me>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Valentin Schneider <valentin.schneider@arm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220212221347.442070-1-alobakin@pm.me>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
+In-Reply-To: <20220212221347.442070-1-alobakin@pm.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,24 +82,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/22 03:26AM, Tudor.Ambarus@microchip.com wrote:
-> On 2/2/22 16:58, Michael Walle wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > Increase readability of the code. Instead of returning early if the
-> > flash size is smaller or equal than 16MiB and then do the fixups for
-> > larger flashes, do it within the condition.
-> > 
+On 12/2/22 23:21, Alexander Lobakin wrote:
+> After enabling CONFIG_SCHED_CORE (landed during 5.14 cycle),
+> 2-core 2-thread-per-core interAptiv (CPS-driven) started emitting
+> the following:
 > 
-> mm, no, I'm not sure this improves readability, I see the two equivalent.
-> The original version has the benefit of no indentation. Pratyush?
+> [    0.025698] CPU1 revision is: 0001a120 (MIPS interAptiv (multi))
+> [    0.048183] ------------[ cut here ]------------
+> [    0.048187] WARNING: CPU: 1 PID: 0 at kernel/sched/core.c:6025 sched_core_cpu_starting+0x198/0x240
+> [    0.048220] Modules linked in:
+> [    0.048233] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.17.0-rc3+ #35 b7b319f24073fd9a3c2aa7ad15fb7993eec0b26f
+> [    0.048247] Stack : 817f0000 00000004 327804c8 810eb050 00000000 00000004 00000000 c314fdd1
+> [    0.048278]         830cbd64 819c0000 81800000 817f0000 83070bf4 00000001 830cbd08 00000000
+> [    0.048307]         00000000 00000000 815fcbc4 00000000 00000000 00000000 00000000 00000000
+> [    0.048334]         00000000 00000000 00000000 00000000 817f0000 00000000 00000000 817f6f34
+> [    0.048361]         817f0000 818a3c00 817f0000 00000004 00000000 00000000 4dc33260 0018c933
+> [    0.048389]         ...
+> [    0.048396] Call Trace:
+> [    0.048399] [<8105a7bc>] show_stack+0x3c/0x140
+> [    0.048424] [<8131c2a0>] dump_stack_lvl+0x60/0x80
+> [    0.048440] [<8108b5c0>] __warn+0xc0/0xf4
+> [    0.048454] [<8108b658>] warn_slowpath_fmt+0x64/0x10c
+> [    0.048467] [<810bd418>] sched_core_cpu_starting+0x198/0x240
+> [    0.048483] [<810c6514>] sched_cpu_starting+0x14/0x80
+> [    0.048497] [<8108c0f8>] cpuhp_invoke_callback_range+0x78/0x140
+> [    0.048510] [<8108d914>] notify_cpu_starting+0x94/0x140
+> [    0.048523] [<8106593c>] start_secondary+0xbc/0x280
+> [    0.048539]
+> [    0.048543] ---[ end trace 0000000000000000 ]---
+> [    0.048636] Synchronize counters for CPU 1: done.
+> 
+> ...for each but CPU 0/boot.
+> Basic debug printks right before the mentioned line say:
+> 
+> [    0.048170] CPU: 1, smt_mask:
+> 
+> So smt_mask, which is sibling mask obviously, is empty when entering
+> the function.
+> This is critical, as sched_core_cpu_starting() calculates
+> core-scheduling parameters only once per CPU start, and it's crucial
+> to have all the parameters filled in at that moment (at least it
+> uses cpu_smt_mask() which in fact is `&cpu_sibling_map[cpu]` on
+> MIPS).
+> 
+> A bit of debugging led me to that set_cpu_sibling_map() performing
+> the actual map calculation, was being invocated after
+> notify_cpu_start(), and exactly the latter function starts CPU HP
+> callback round (sched_core_cpu_starting() is basically a CPU HP
+> callback).
+> While the flow is same on ARM64 (maps after the notifier, although
+> before calling set_cpu_online()), x86 started calculating sibling
+> maps earlier than starting the CPU HP callbacks in Linux 4.14 (see
+> [0] for the reference). Neither me nor my brief tests couldn't find
+> any potential caveats in calculating the maps right after performing
+> delay calibration, but the WARN splat is now gone.
+> The very same debug prints now yield exactly what I expected from
+> them:
+> 
+> [    0.048433] CPU: 1, smt_mask: 0-1
+> 
+> [0] https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=76ce7cfe35ef
 
-I am fine with both to be honest. But Michael's reasoning does make some 
-sense to me. So,
+Isn't it worth Cc'ing stable@vger.kernel.org here?
 
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
+> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+> ---
+>   arch/mips/kernel/smp.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+

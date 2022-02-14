@@ -2,55 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F06334B5D8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 23:22:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24C274B5C1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbiBNWWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 17:22:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37222 "EHLO
+        id S230294AbiBNVKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:10:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiBNWWh (ORCPT
+        with ESMTP id S230256AbiBNVKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 17:22:37 -0500
-X-Greylist: delayed 4198 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 14:22:27 PST
-Received: from cn13.ncable.net.au (cn13.gex.ncable.net.au [203.208.88.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E64F2119403
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 14:22:27 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by cn13.ncable.net.au (Postfix) with ESMTP id 1EC8439502;
-        Tue, 15 Feb 2022 06:56:09 +1100 (EST)
-X-Virus-Scanned: Debian amavisd-new at cn11.gex.ncable.net.au
-Received: from cn13.ncable.net.au ([127.0.0.1])
-        by localhost (cn13.gex.ncable.net.au [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id HnZG7EIKavgc; Tue, 15 Feb 2022 06:56:08 +1100 (EST)
-Received: from webmail.ncable.net.au (localhost [127.0.0.1])
-        by cn13.ncable.net.au (Postfix) with ESMTP id 8D8AF394EE;
-        Tue, 15 Feb 2022 06:55:57 +1100 (EST)
-Received: from 193.48.127.13
-        (SquirrelMail authenticated user rosmac@ncable.net.au)
-        by webmail.ncable.net.au with HTTP;
-        Tue, 15 Feb 2022 06:56:08 +1100
-Message-ID: <0e9e06b9dbe4e357ac2dc138914cd09a.squirrel@webmail.ncable.net.au>
-Date:   Tue, 15 Feb 2022 06:56:08 +1100
-Subject: Delivery Failure Notification
-From:   "USPS" <info@wmtel.net>
-User-Agent: SquirrelMail/1.4.21
+        Mon, 14 Feb 2022 16:10:11 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3226BBE1C0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:10:03 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id 13so661288oiz.12
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:10:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=O9KHV0/N+Gfd1GRgecao8wegxCnC38XHEZ75QGyEISc=;
+        b=hosVhwFvGBdDFJM59PwgE1Wy9Oe3mkF9MnrGUFJ9FoiCAhftxx37tYIU9SOTBqcsD7
+         wsSPNn3E0BoWvjzNAhs6aGwTAJpIfmq3ajNXqAsN6l9CR21k7REe7ZOUYKwd1ydYLUoC
+         rI1fJy9gv3Jjz+5gQMh75lP41vSXjq/5PKYCvS9PPjL7bfHFKLInVSA9KdF4baDlCGcF
+         W6P6zMRghtpvPi7xln6B39B/6mywe2eEhYl9L6bUnwoy0DxEN70P9DLeKGLpmwLmQiu/
+         Ji5pdoom7+afBUJqEBm0RoPL4YBYxTGYzj2lmXtkG1ptnEHTAq5yfWaxNmDLkNFb4pyX
+         1Sfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=O9KHV0/N+Gfd1GRgecao8wegxCnC38XHEZ75QGyEISc=;
+        b=4TOjLrbaitiPoyRNbl1KZDrc+khFcdJkTAVPwIL+O8FxOlnKmHBxap32Muw7iG4PMx
+         S2+6IA8XhKdsJJB2QrO76lfEqGnl5uYC2J/xSW76b0Ao26QRlUcN3ZLcfOqj8k5c+Hlf
+         BkFFH3BgUFdDENzqL51hOiuQz4wGZNveTJJ99amnRS8lCn8nBqYYD2+bo8b8acF9j7bG
+         +yMXAFzc4SwrEfh6Rqacc+0BLJ/ROFxLJ2ykdXM2XZ/tczoHSX7akh1Y/ZybnSYbgdfw
+         YToMFEhSnOXMjlqmUKhXE96dyiy6JJ0xq1LnqIkoBxftIDfgWOk2wMwzLUAJ2k7KRX2y
+         V6mg==
+X-Gm-Message-State: AOAM530oGTn6K92T8mQc4E4eIF83Ifwokou/l17dNIITEG2iuV4nCSHp
+        t7QH7PdutML5CULGBEmcv2G/WDY/706Z/Q==
+X-Google-Smtp-Source: ABdhPJzhIOI72ps9ZuG6CEVrnqdXFSMazidGQ6xcG6wA+W2GqdMXI1JFgJBqpJ/chzdS9CFqPj7wCg==
+X-Received: by 2002:a17:90b:4d84:b0:1b9:4109:7118 with SMTP id oj4-20020a17090b4d8400b001b941097118mr263383pjb.119.1644868743175;
+        Mon, 14 Feb 2022 11:59:03 -0800 (PST)
+Received: from tong-desktop.local (99-105-211-126.lightspeed.sntcca.sbcglobal.net. [99.105.211.126])
+        by smtp.googlemail.com with ESMTPSA id v2sm14663291pjt.55.2022.02.14.11.59.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 11:59:02 -0800 (PST)
+From:   Tong Zhang <ztong0001@gmail.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc:     Tong Zhang <ztong0001@gmail.com>
+Subject: [PATCH v2] drm/i915: fix build issue when using clang
+Date:   Mon, 14 Feb 2022 11:58:20 -0800
+Message-Id: <20220214195821.29809-1-ztong0001@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <YglQW7gVNoRJ7QpQ@dev-arch.archlinux-ax161>
+References: <YglQW7gVNoRJ7QpQ@dev-arch.archlinux-ax161>
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Priority: 3 (Normal)
-Importance: Normal
-To:     undisclosed-recipients:;
-X-Spam-Status: No, score=3.0 required=5.0 tests=BAYES_60,BODY_EMPTY,
-        KHOP_HELO_FCRDNS,SPF_HELO_NONE,TVD_SPACE_RATIO,T_SPF_PERMERROR,XPRIO
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+drm/i915 adds some extra cflags, namely -Wall, which causes
+instances of -Wformat-security to appear when building with clang, even
+though this warning is turned off kernel-wide in the main Makefile:
 
+> drivers/gpu/drm/i915/gt/intel_gt.c:983:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+>         GEM_TRACE("ERROR\n");
+>         ^~~~~~~~~~~~~~~~~~~~
+> ./drivers/gpu/drm/i915/i915_gem.h:76:24: note: expanded from macro 'GEM_TRACE'
+>  #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+>                        ^~~~~~~~~~~~~~~~~~~~~~~~~
+> ./include/linux/kernel.h:369:3: note: expanded from macro 'trace_printk'
+>                 do_trace_printk(fmt, ##__VA_ARGS__);    \
+>                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ./include/linux/kernel.h:383:30: note: expanded from macro 'do_trace_printk'
+>                 __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+>                                           ^~~~~~~~~~~~~~~~
+>drivers/gpu/drm/i915/gt/intel_gt.c:983:2: note: treat the string as an argument to avoid this
 
+This does not happen with GCC because it does not enable
+-Wformat-security with -Wall. Disable -Wformat-security within the i915
+Makefile so that these warnings do not show up with clang.
+
+Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+---
+
+v2: revise commit message
+
+ drivers/gpu/drm/i915/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
+index 1b62b9f65196..c04e05a3d39f 100644
+--- a/drivers/gpu/drm/i915/Makefile
++++ b/drivers/gpu/drm/i915/Makefile
+@@ -13,6 +13,7 @@
+ # will most likely get a sudden build breakage... Hopefully we will fix
+ # new warnings before CI updates!
+ subdir-ccflags-y := -Wall -Wextra
++subdir-ccflags-y += -Wno-format-security
+ subdir-ccflags-y += -Wno-unused-parameter
+ subdir-ccflags-y += -Wno-type-limits
+ subdir-ccflags-y += -Wno-missing-field-initializers
+-- 
+2.25.1
 

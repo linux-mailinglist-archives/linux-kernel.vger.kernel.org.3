@@ -2,32 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6361A4B41DE
+	by mail.lfdr.de (Postfix) with ESMTP id 181B64B41DD
 	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 07:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240823AbiBNGM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 01:12:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52838 "EHLO
+        id S240750AbiBNGNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 01:13:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240750AbiBNGMk (ORCPT
+        with ESMTP id S240818AbiBNGM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 01:12:40 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6845622D;
-        Sun, 13 Feb 2022 22:12:22 -0800 (PST)
-X-UUID: 532b5e9ab4954fe3a190f813a1171ddb-20220214
-X-UUID: 532b5e9ab4954fe3a190f813a1171ddb-20220214
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        Mon, 14 Feb 2022 01:12:57 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A13659A72
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 22:12:28 -0800 (PST)
+X-UUID: 9a7bd2dcf0dd41049c8f537e789aee7f-20220214
+X-UUID: 9a7bd2dcf0dd41049c8f537e789aee7f-20220214
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
         (envelope-from <yong.wu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1068203619; Mon, 14 Feb 2022 14:12:16 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+        with ESMTP id 1806270151; Mon, 14 Feb 2022 14:12:24 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 14 Feb 2022 14:12:15 +0800
+ 15.2.792.15; Mon, 14 Feb 2022 14:12:23 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 14 Feb
+ 2022 14:12:22 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 14 Feb 2022 14:12:13 +0800
+ Transport; Mon, 14 Feb 2022 14:12:20 +0800
 From:   Yong Wu <yong.wu@mediatek.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Airlie <airlied@linux.ie>,
@@ -53,11 +56,18 @@ CC:     James Wang <james.qian.wang@arm.com>,
         <srv_heupstream@mediatek.com>, Rob Clark <robdclark@gmail.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Sebastian Reichel <sre@kernel.org>,
-        Yong Wu <yong.wu@mediatek.com>, "Helge Deller" <deller@gmx.de>,
-        <linux-omap@vger.kernel.org>, <linux-fbdev@vger.kernel.org>
-Subject: [PATCH 22/23] video: omapfb: dss: Make use of the helper component_compare_dev
-Date:   Mon, 14 Feb 2022 14:08:18 +0800
-Message-ID: <20220214060819.7334-23-yong.wu@mediatek.com>
+        Yong Wu <yong.wu@mediatek.com>,
+        "Jaroslav Kysela" <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Jeremy Szu <jeremy.szu@canonical.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        "Hui Wang" <hui.wang@canonical.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        "Kailang Yang" <kailang@realtek.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Sami Loone <sami@loone.fi>, <alsa-devel@alsa-project.org>
+Subject: [PATCH 23/23] ALSA: hda/realtek: Make use of the helper component_compare_dev_name
+Date:   Mon, 14 Feb 2022 14:08:19 +0800
+Message-ID: <20220214060819.7334-24-yong.wu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220214060819.7334-1-yong.wu@mediatek.com>
 References: <20220214060819.7334-1-yong.wu@mediatek.com>
@@ -75,40 +85,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Use the common compare helper from component.
 
-Cc: Helge Deller <deller@gmx.de>
-Cc: linux-omap@vger.kernel.org
-Cc: linux-fbdev@vger.kernel.org
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Takashi Iwai <tiwai@suse.com>
+Cc: Jeremy Szu <jeremy.szu@canonical.com>
+Cc: Werner Sembach <wse@tuxedocomputers.com>
+Cc: Hui Wang <hui.wang@canonical.com>
+Cc: Cameron Berkenpas <cam@neo-zeon.de>
+Cc: Kailang Yang <kailang@realtek.com>
+Cc: Lucas Tanure <tanureal@opensource.cirrus.com>
+Cc: Sami Loone <sami@loone.fi>
+Cc: alsa-devel@alsa-project.org
 Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 ---
- drivers/video/fbdev/omap2/omapfb/dss/dss.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ sound/pci/hda/patch_realtek.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/video/fbdev/omap2/omapfb/dss/dss.c b/drivers/video/fbdev/omap2/omapfb/dss/dss.c
-index a6b1c1598040..45b9d3cf3860 100644
---- a/drivers/video/fbdev/omap2/omapfb/dss/dss.c
-+++ b/drivers/video/fbdev/omap2/omapfb/dss/dss.c
-@@ -1193,12 +1193,6 @@ static const struct component_master_ops dss_component_ops = {
- 	.unbind = dss_unbind,
- };
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 668274e52674..9da004d99cdb 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -6530,11 +6530,6 @@ static void alc287_fixup_legion_15imhg05_speakers(struct hda_codec *codec,
+ 	}
+ }
  
--static int dss_component_compare(struct device *dev, void *data)
+-static int comp_match_dev_name(struct device *dev, void *data)
 -{
--	struct device *child = data;
--	return dev == child;
+-	return strcmp(dev_name(dev), data) == 0;
 -}
 -
- static int dss_add_child_component(struct device *dev, void *data)
+ static int find_comp_by_dev_name(struct alc_spec *spec, const char *name)
  {
- 	struct component_match **match = data;
-@@ -1212,7 +1206,7 @@ static int dss_add_child_component(struct device *dev, void *data)
- 	if (strstr(dev_name(dev), "rfbi"))
- 		return 0;
+ 	int i;
+@@ -6595,7 +6590,7 @@ static void cs35l41_generic_fixup(struct hda_codec *cdc, int action, const char
+ 					      "%s-%s:00-cs35l41-hda.%d", bus, hid, i);
+ 			if (!name)
+ 				return;
+-			component_match_add(dev, &spec->match, comp_match_dev_name, name);
++			component_match_add(dev, &spec->match, component_compare_dev_name, name);
+ 		}
+ 		ret = component_master_add_with_match(dev, &comp_master_ops, spec->match);
+ 		if (ret)
+@@ -6644,9 +6639,9 @@ static void alc287_fixup_legion_16achg6_speakers(struct hda_codec *cdc, const st
  
--	component_match_add(dev->parent, match, dss_component_compare, dev);
-+	component_match_add(dev->parent, match, component_compare_dev, dev);
- 
- 	return 0;
- }
+ 	switch (action) {
+ 	case HDA_FIXUP_ACT_PRE_PROBE:
+-		component_match_add(dev, &spec->match, comp_match_dev_name,
++		component_match_add(dev, &spec->match, component_compare_dev_name,
+ 				    "i2c-CLSA0100:00-cs35l41-hda.0");
+-		component_match_add(dev, &spec->match, comp_match_dev_name,
++		component_match_add(dev, &spec->match, component_compare_dev_name,
+ 				    "i2c-CLSA0100:00-cs35l41-hda.1");
+ 		ret = component_master_add_with_match(dev, &comp_master_ops, spec->match);
+ 		if (ret)
 -- 
 2.18.0
 

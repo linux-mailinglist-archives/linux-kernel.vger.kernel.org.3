@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 485624B4B75
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A974B45F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347732AbiBNKbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:31:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37350 "EHLO
+        id S243734AbiBNJca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:32:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347199AbiBNKaJ (ORCPT
+        with ESMTP id S243293AbiBNJcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:30:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C78996B2;
-        Mon, 14 Feb 2022 01:59:00 -0800 (PST)
+        Mon, 14 Feb 2022 04:32:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05B81ADA5;
+        Mon, 14 Feb 2022 01:30:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6223360B33;
-        Mon, 14 Feb 2022 09:58:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D530C340E9;
-        Mon, 14 Feb 2022 09:58:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D22EB80DC4;
+        Mon, 14 Feb 2022 09:30:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7101FC340E9;
+        Mon, 14 Feb 2022 09:30:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832727;
-        bh=On09NtlxisAFDWKGqSyeGfJb1Y/OGiixVGVkNghruI0=;
+        s=korg; t=1644831048;
+        bh=qH5C2MIZZSUsnft6+Hfq14w5C40qpkh3d9Peu90YZeU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JIcDj53V3AOpUzy9vwSDWs6dIXb0H8gD6Jx0OjJzMjBhrrFxBXXWARp/nl+zLBwnl
-         WbiFaySZ9FpvK4NCgtkma/6p70JsPiJjlnX2+RGQGg+hcoCPt++Qn3BZZGc7/Ue8GB
-         rz95v/+wcqfJrDRT1KsJ0j1eS2IT07ScAlOQsyzQ=
+        b=0bYNEwJeOpbuGN1sY/NpDATz8+9TG/duQzlbv4AooQATajh4LzDsqTLLvnhwepMgW
+         tL0qBNIp6tphzu/+Z7DvQf8svo6Uk5bpu9BVNFPkQsXJ/6YkaOQzw5KojMsMqJcOxo
+         kPx36eOizWDdFv3QNsrPPjZGsO7nYzdSdAsNLgIs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>,
+        Vlad Buslov <vladbu@nvidia.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 104/203] ARM: dts: imx7ulp: Fix assigned-clocks-parents typo
-Date:   Mon, 14 Feb 2022 10:25:48 +0100
-Message-Id: <20220214092513.781966778@linuxfoundation.org>
+Subject: [PATCH 4.14 26/44] net: fix a memleak when uncloning an skb dst and its metadata
+Date:   Mon, 14 Feb 2022 10:25:49 +0100
+Message-Id: <20220214092448.756130347@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
+References: <20220214092447.897544753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Herring <robh@kernel.org>
+From: Antoine Tenart <atenart@kernel.org>
 
-[ Upstream commit 6d58c5e21a3fe355ce6d1808e96d02a610265218 ]
+[ Upstream commit 9eeabdf17fa0ab75381045c867c370f4cc75a613 ]
 
-The correct property name is 'assigned-clock-parents', not
-'assigned-clocks-parents'. Though if the platform works with the typo, one
-has to wonder if the property is even needed.
+When uncloning an skb dst and its associated metadata, a new
+dst+metadata is allocated and later replaces the old one in the skb.
+This is helpful to have a non-shared dst+metadata attached to a specific
+skb.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
-Fixes: 8b8c7d97e2c7 ("ARM: dts: imx7ulp: Add wdog1 node")
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+The issue is the uncloned dst+metadata is initialized with a refcount of
+1, which is increased to 2 before attaching it to the skb. When
+tun_dst_unclone returns, the dst+metadata is only referenced from a
+single place (the skb) while its refcount is 2. Its refcount will never
+drop to 0 (when the skb is consumed), leading to a memory leak.
+
+Fix this by removing the call to dst_hold in tun_dst_unclone, as the
+dst+metadata refcount is already 1.
+
+Fixes: fc4099f17240 ("openvswitch: Fix egress tunnel info.")
+Cc: Pravin B Shelar <pshelar@ovn.org>
+Reported-by: Vlad Buslov <vladbu@nvidia.com>
+Tested-by: Vlad Buslov <vladbu@nvidia.com>
+Signed-off-by: Antoine Tenart <atenart@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/imx7ulp.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/net/dst_metadata.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/imx7ulp.dtsi b/arch/arm/boot/dts/imx7ulp.dtsi
-index b7ea37ad4e55c..bcec98b964114 100644
---- a/arch/arm/boot/dts/imx7ulp.dtsi
-+++ b/arch/arm/boot/dts/imx7ulp.dtsi
-@@ -259,7 +259,7 @@ wdog1: watchdog@403d0000 {
- 			interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
- 			assigned-clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
--			assigned-clocks-parents = <&scg1 IMX7ULP_CLK_FIRC_BUS_CLK>;
-+			assigned-clock-parents = <&scg1 IMX7ULP_CLK_FIRC_BUS_CLK>;
- 			timeout-sec = <40>;
- 		};
+diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
+index bf820c54e7ccd..177b1aabf95d1 100644
+--- a/include/net/dst_metadata.h
++++ b/include/net/dst_metadata.h
+@@ -135,7 +135,6 @@ static inline struct metadata_dst *tun_dst_unclone(struct sk_buff *skb)
+ #endif
  
+ 	skb_dst_drop(skb);
+-	dst_hold(&new_md->dst);
+ 	skb_dst_set(skb, &new_md->dst);
+ 	return new_md;
+ }
 -- 
 2.34.1
 

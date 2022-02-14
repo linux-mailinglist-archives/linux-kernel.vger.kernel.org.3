@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA2774B47CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B035A4B4A28
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbiBNJkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:40:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53386 "EHLO
+        id S1345292AbiBNKIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:08:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243369AbiBNJjM (ORCPT
+        with ESMTP id S1344761AbiBNKEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:39:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103516AA41;
-        Mon, 14 Feb 2022 01:35:24 -0800 (PST)
+        Mon, 14 Feb 2022 05:04:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CF943496;
+        Mon, 14 Feb 2022 01:48:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4E046115B;
-        Mon, 14 Feb 2022 09:35:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF6BAC340E9;
-        Mon, 14 Feb 2022 09:35:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D8E7B80D83;
+        Mon, 14 Feb 2022 09:48:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7443AC340EF;
+        Mon, 14 Feb 2022 09:48:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831323;
-        bh=vJ41Kp7L4JmG3aLVkOGChqm6yVs8a5DCHjL5ArIC62Y=;
+        s=korg; t=1644832130;
+        bh=ZpMz6lI2fdG/Wzo5lXOmPabcTGrlBaNjRWX7oyNMaGQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IE6jwJ892IQAFvNVZXobk7X7eA2F4J0jBtR+bJnk4xdxgf6EHbBTLmKPDM/86vwP0
-         UyyCysfjHs09GL5MSTFBDKUeYPap7kRX86jH0/Hrp2AAlZWw+xy4WA04GDnVJwpepX
-         bjEalX1a31ejLqX2CXU316UbS4JSApRPS+QXejoo=
+        b=HR/4zn7Zg0pHVOSEqWYeMgX5KSLO/qxQ44X662cD5ca31JWyF4No/7Hh0WPo3A3Nw
+         PssTq+JfF7sDZ4uEzQPWWkl0B5ErEahqzkWAeiacibV3/RU5EtYZy+tTOQsqC1nXI2
+         V5EoIWHPp6gML5NM1+qM1VRkg5gTWCtxIsUqKTTA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Victor Nogueira <victor@mojatatu.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 18/71] net: sched: Clarify error message when qdisc kind is unknown
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 088/172] phy: stm32: fix a refcount leak in stm32_usbphyc_pll_enable()
 Date:   Mon, 14 Feb 2022 10:25:46 +0100
-Message-Id: <20220214092452.631467489@linuxfoundation.org>
+Message-Id: <20220214092509.450851928@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Victor Nogueira <victor@mojatatu.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 973bf8fdd12f0e70ea351c018e68edd377a836d1 ]
+[ Upstream commit cfc826c88a79e22ba5d8001556eb2c7efd8a01b6 ]
 
-When adding a tc rule with a qdisc kind that is not supported or not
-compiled into the kernel, the kernel emits the following error: "Error:
-Specified qdisc not found.". Found via tdc testing when ETS qdisc was not
-compiled in and it was not obvious right away what the message meant
-without looking at the kernel code.
+This error path needs to decrement "usbphyc->n_pll_cons.counter" before
+returning.
 
-Change the error message to be more explicit and say the qdisc kind is
-unknown.
-
-Signed-off-by: Victor Nogueira <victor@mojatatu.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 5b1af71280ab ("phy: stm32: rework PLL Lock detection")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/20220112111724.GB3019@kili
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sched/sch_api.c | 2 +-
+ drivers/phy/st/phy-stm32-usbphyc.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/sched/sch_api.c b/net/sched/sch_api.c
-index e70f990334083..6f36df85d23d8 100644
---- a/net/sched/sch_api.c
-+++ b/net/sched/sch_api.c
-@@ -1195,7 +1195,7 @@ static struct Qdisc *qdisc_create(struct net_device *dev,
+diff --git a/drivers/phy/st/phy-stm32-usbphyc.c b/drivers/phy/st/phy-stm32-usbphyc.c
+index 937a14fa7448a..da05642d3bd4a 100644
+--- a/drivers/phy/st/phy-stm32-usbphyc.c
++++ b/drivers/phy/st/phy-stm32-usbphyc.c
+@@ -225,7 +225,7 @@ static int stm32_usbphyc_pll_enable(struct stm32_usbphyc *usbphyc)
  
- 	err = -ENOENT;
- 	if (!ops) {
--		NL_SET_ERR_MSG(extack, "Specified qdisc not found");
-+		NL_SET_ERR_MSG(extack, "Specified qdisc kind is unknown");
- 		goto err_out;
+ 		ret = __stm32_usbphyc_pll_disable(usbphyc);
+ 		if (ret)
+-			return ret;
++			goto dec_n_pll_cons;
  	}
  
+ 	ret = stm32_usbphyc_regulators_enable(usbphyc);
 -- 
 2.34.1
 

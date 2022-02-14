@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC454B49CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:37:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8064B4A2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:38:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346026AbiBNKOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:14:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44754 "EHLO
+        id S1344095AbiBNJ65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:58:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345696AbiBNKNN (ORCPT
+        with ESMTP id S1343653AbiBNJxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:13:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11E6657A4;
-        Mon, 14 Feb 2022 01:51:39 -0800 (PST)
+        Mon, 14 Feb 2022 04:53:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62D46736F;
+        Mon, 14 Feb 2022 01:43:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CD0E60F65;
-        Mon, 14 Feb 2022 09:51:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F140C340E9;
-        Mon, 14 Feb 2022 09:51:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55B4F61236;
+        Mon, 14 Feb 2022 09:43:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CB76C340EF;
+        Mon, 14 Feb 2022 09:43:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832298;
-        bh=t432ehytwEm0n0pKMk01J/w73y/O1PlVDyrqrXrTCqU=;
+        s=korg; t=1644831830;
+        bh=dnqBjILIyPFJ4zWz2ADF95n2WkBQyD/RD3t0VOM3EjU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BzJP9sPMnWvjo/K8/bZuStuJd8l7WX/nQjsI3B6qqvFyd+RqFMT2bzMOaBusPjVMb
-         TPWb1uZDQPutZN+WMHL33rG+RfpfkHwuWAunFFJnvy8iSXfSSbYs59vPmdH4out38n
-         CKcDJJBxW1ISGCU0AuuyE+azr6DRPlt3VSG8u6RE=
+        b=VRD53kOg8deOB+gVNRtYKBUUqZMaZR8UxbHlx+OrkVSyCHrTM+i19OaMlV3LpDZeQ
+         +U9RXuCOlP9Fd+vRXGf531orOIZyO7ETqcHb8g2bZ/Ep5xDD7iUISwtSQUthhv1KKD
+         C+G3SylWWa2nr4sRYZ9HbZuCkK3OuxUskt67T/CY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>
-Subject: [PATCH 5.15 143/172] usb: dwc3: gadget: Prevent core from processing stale TRBs
-Date:   Mon, 14 Feb 2022 10:26:41 +0100
-Message-Id: <20220214092511.331365197@linuxfoundation.org>
+        stable@vger.kernel.org, Pawel Dembicki <paweldembicki@gmail.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.10 103/116] USB: serial: option: add ZTE MF286D modem
+Date:   Mon, 14 Feb 2022 10:26:42 +0100
+Message-Id: <20220214092502.345009198@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +54,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Udipto Goswami <quic_ugoswami@quicinc.com>
+From: Pawel Dembicki <paweldembicki@gmail.com>
 
-commit 117b4e96c7f362eb6459543883fc07f77662472c upstream.
+commit d48384c7ed6c8fe4727eaa0f3048f62afd1cd715 upstream.
 
-With CPU re-ordering on write instructions, there might
-be a chance that the HWO is set before the TRB is updated
-with the new mapped buffer address.
-And in the case where core is processing a list of TRBs
-it is possible that it fetched the TRBs when the HWO is set
-but before the buffer address is updated.
-Prevent this by adding a memory barrier before the HWO
-is updated to ensure that the core always process the
-updated TRBs.
+Modem from ZTE MF286D is an Qualcomm MDM9250 based 3G/4G modem.
 
-Fixes: f6bafc6a1c9d ("usb: dwc3: convert TRBs into bitshifts")
-Cc: stable <stable@vger.kernel.org>
-Reviewed-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
-Link: https://lore.kernel.org/r/1644207958-18287-1-git-send-email-quic_ugoswami@quicinc.com
+T:  Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
+D:  Ver= 3.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+P:  Vendor=19d2 ProdID=1485 Rev=52.87
+S:  Manufacturer=ZTE,Incorporated
+S:  Product=ZTE Technologies MSM
+S:  SerialNumber=MF286DZTED000000
+C:* #Ifs= 7 Cfg#= 1 Atr=80 MxPwr=896mA
+A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=02 Prot=ff Driver=rndis_host
+E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
+E:  Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=89(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+
+Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc3/gadget.c |   13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/usb/serial/option.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1271,6 +1271,19 @@ static void __dwc3_prepare_one_trb(struc
- 	if (usb_endpoint_xfer_bulk(dep->endpoint.desc) && dep->stream_capable)
- 		trb->ctrl |= DWC3_TRB_CTRL_SID_SOFN(stream_id);
- 
-+	/*
-+	 * As per data book 4.2.3.2TRB Control Bit Rules section
-+	 *
-+	 * The controller autonomously checks the HWO field of a TRB to determine if the
-+	 * entire TRB is valid. Therefore, software must ensure that the rest of the TRB
-+	 * is valid before setting the HWO field to '1'. In most systems, this means that
-+	 * software must update the fourth DWORD of a TRB last.
-+	 *
-+	 * However there is a possibility of CPU re-ordering here which can cause
-+	 * controller to observe the HWO bit set prematurely.
-+	 * Add a write memory barrier to prevent CPU re-ordering.
-+	 */
-+	wmb();
- 	trb->ctrl |= DWC3_TRB_CTRL_HWO;
- 
- 	dwc3_ep_inc_enq(dep);
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1649,6 +1649,8 @@ static const struct usb_device_id option
+ 	  .driver_info = RSVD(2) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(ZTE_VENDOR_ID, 0x1476, 0xff) },	/* GosunCn ZTE WeLink ME3630 (ECM/NCM mode) */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1481, 0xff, 0x00, 0x00) }, /* ZTE MF871A */
++	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1485, 0xff, 0xff, 0xff),  /* ZTE MF286D */
++	  .driver_info = RSVD(5) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1533, 0xff, 0xff, 0xff) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1534, 0xff, 0xff, 0xff) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1535, 0xff, 0xff, 0xff) },
 
 

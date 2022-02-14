@@ -2,111 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2A14B57A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:01:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5CB04B57AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:01:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356858AbiBNRBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 12:01:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38432 "EHLO
+        id S1356796AbiBNRB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 12:01:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356810AbiBNRA5 (ORCPT
+        with ESMTP id S1356794AbiBNRBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 12:00:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C94665166
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:00:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B511B6152F
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 17:00:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1318C340E9;
-        Mon, 14 Feb 2022 17:00:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644858049;
-        bh=PI1oi4wqJp519f7VqcJNgQaXQZ5sP53GHooYRli1yx0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lVCFfnn+5uB5WbG+//QIsvejjCnxpXGGNv8XZ9wHR+OtGcFra+91eRvbXQUn8Duu/
-         DTSD0fKrJZzx15b8GX88EA/Zytm8y+3AVfIEc0avsjrUPcPbiWGljVf/fNl6gWYoax
-         jF8KSThmw4e4VMlPLYU+8UvRPNqdo9+YxtZ6Axm5BpAVE6rDL0BJwipGpe1E9tFbvY
-         NoG6CaCkdazCmsc/qJKhZlVXNQoFe7fYoXQlQMj+3HMmGCQ4appzqVid4aP1YeUajW
-         1v2B5dB/Wv/h/hF3IGjwtegxqdDRjNDWURcng+ScX7r6yTbg/9Z8GTWbjb8/2AoMZi
-         OATPkIstL9Udw==
-Date:   Mon, 14 Feb 2022 10:00:44 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        kernel test robot <lkp@intel.com>,
-        chongjiapeng <jiapeng.chong@linux.alibaba.com>,
-        llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: kernel/trace/ftrace.c:7157:20: error: unused function
- 'ftrace_startup_enable'
-Message-ID: <YgqKvDM6BEuPQmKb@dev-arch.archlinux-ax161>
-References: <202202132037.4aN017dU-lkp@intel.com>
- <20220214102000.1d3af66e@gandalf.local.home>
- <Ygp64CsyyKyRykqE@dev-arch.archlinux-ax161>
- <CAK7LNAQmztEn7nN_R05zhXWc-5S44Y5nGQQjzdByTPxgDH13wA@mail.gmail.com>
+        Mon, 14 Feb 2022 12:01:25 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B347065164;
+        Mon, 14 Feb 2022 09:01:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=MrxZM+dtR1LjIHLm64CmzES4OEtfVkeNuYlvax0H88s=; b=1xI1/Fvb99aqHheC6mtY388ud6
+        9MT/bHCftGydYIWxm+hS4zGwhvbFt8OzX+edrM5UnO4tP1NBqSh70Lw78bL6Q3BsXOm/Di6JZoJYH
+        wtHggpB7JYRvrXSaY0/s1eEkO2PXvhxpwgVhrfp/eQEItM485WwqPYb5B+6tJYfNWM5IfOyU+3GNz
+        wgU3yHvVJYtieNqr2ZSULdjEvye7TyhUfxnlCnsscD5y8hniE9PulQxdXM5zxaKuNaLViAmRHCutR
+        73lx+6HTraO/VU29BXdY1lFIki5yroT8XZ/YKJV8c3pSdMpd1Wlg6zLRh5SejJ7jky/eNWrhj93gC
+        ys6P1MSw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJeis-00GF7n-M5; Mon, 14 Feb 2022 17:01:10 +0000
+Date:   Mon, 14 Feb 2022 09:01:10 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, mark.rutland@arm.com,
+        dalias@libc.org, linux-ia64@vger.kernel.org,
+        linux-sh@vger.kernel.org, peterz@infradead.org, jcmvbkbc@gmail.com,
+        guoren@kernel.org, sparclinux@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-riscv@lists.infradead.org,
+        will@kernel.org, ardb@kernel.org, linux-s390@vger.kernel.org,
+        bcain@codeaurora.org, deller@gmx.de, x86@kernel.org,
+        linux@armlinux.org.uk, linux-csky@vger.kernel.org,
+        mingo@redhat.com, geert@linux-m68k.org,
+        linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        hca@linux.ibm.com, linux-alpha@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-m68k@lists.linux-m68k.org,
+        openrisc@lists.librecores.org, green.hu@gmail.com,
+        shorne@gmail.com, linux-arm-kernel@lists.infradead.org,
+        monstr@monstr.eu, tsbogend@alpha.franken.de,
+        linux-parisc@vger.kernel.org, nickhu@andestech.com,
+        linux-mips@vger.kernel.org, stable@vger.kernel.org,
+        dinguyen@kernel.org, ebiederm@xmission.com, richard@nod.at,
+        akpm@linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
+        davem@davemloft.net
+Subject: Re: [PATCH 03/14] nds32: fix access_ok() checks in get/put_user
+Message-ID: <YgqK1ihlJvRFHJ9h@infradead.org>
+References: <20220214163452.1568807-1-arnd@kernel.org>
+ <20220214163452.1568807-4-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK7LNAQmztEn7nN_R05zhXWc-5S44Y5nGQQjzdByTPxgDH13wA@mail.gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220214163452.1568807-4-arnd@kernel.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 01:28:53AM +0900, Masahiro Yamada wrote:
-> On Tue, Feb 15, 2022 at 12:53 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > Hi Steve,
-> >
-> > On Mon, Feb 14, 2022 at 10:20:00AM -0500, Steven Rostedt wrote:
-> > > On Sun, 13 Feb 2022 21:03:29 +0800
-> > > kernel test robot <lkp@intel.com> wrote:
-> > >
-> > > > All errors (new ones prefixed by >>):
-> > > >
-> > > > >> kernel/trace/ftrace.c:7157:20: error: unused function 'ftrace_startup_enable' [-Werror,-Wunused-function]
-> > > >    static inline void ftrace_startup_enable(int command) { }
-> > > >                       ^
-> > > >    1 error generated.
-> > >
-> > > Strange. I always thought that static inline functions do not cause
-> > > warnings when not used? Especially, since they are often in headers when
-> > > things are turned off. Or is it because this is in a C file?
-> >
-> > With -Wunused-function, clang will warn about unused static inline
-> > functions within a .c file (but not .h), whereas GCC will not warn for
-> > either. The unused attribute was added to the definition of inline to
-> > make clang's behavior match GCC's.
-> >
-> > > Is this a new warning caused by a commit, or is it a new warning because
-> > > the compiler now complains about it?
-> >
-> > However, in commit 6863f5643dd7 ("kbuild: allow Clang to find unused
-> > static inline functions for W=1 build"), Masahiro made it so that the
-> > unused attribute does not get added at W=1 so that instances of unused
-> > static inline functions can be caught and eliminated (or put into use,
-> > if the function should have been used), hence this report.
+On Mon, Feb 14, 2022 at 05:34:41PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> BTW, my hope was to move this warning to W=0 someday.
-> (that is, remove __inline_maybe_unused entirely).
+> The get_user()/put_user() functions are meant to check for
+> access_ok(), while the __get_user()/__put_user() functions
+> don't.
 > 
-> I do not know how many warnings are still remaining, though.
-> Is it now more difficult due to CONFIG_WERROR?
+> This broke in 4.19 for nds32, when it gained an extraneous
+> check in __get_user(), but lost the check it needs in
+> __put_user().
 
-I have not done an audit in quite a while and I do not remember the
-results of the last one. I don't think -Werror makes it more difficult,
-it is more so just finding the time to sit down and work on it :) I
-agree that it would be nice to make this the default behavior for
-cleaner code, perhaps we can use this as a "good first issue" for
-working with clang.
-
-Cheers,
-Nathan
+Can we follow the lead of MIPS (which this was originally copied
+from I think) and kill the pointless __get/put_user_check wrapper
+that just obsfucate the code?

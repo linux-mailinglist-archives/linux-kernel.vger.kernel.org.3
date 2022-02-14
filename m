@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FCD4B5A39
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 19:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 003EE4B5A30
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 19:47:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232808AbiBNSre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 13:47:34 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:48950 "EHLO
+        id S232203AbiBNSrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 13:47:11 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232401AbiBNSra (ORCPT
+        with ESMTP id S231226AbiBNSrG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 13:47:30 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74896716E1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:47:13 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJgJt-0000Dt-0j; Mon, 14 Feb 2022 19:43:29 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJgJo-00GbG4-PO; Mon, 14 Feb 2022 19:43:24 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJgJn-003BGl-Fa; Mon, 14 Feb 2022 19:43:23 +0100
-Date:   Mon, 14 Feb 2022 19:43:20 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Nikita Travkin <nikita@trvn.ru>
-Cc:     thierry.reding@gmail.com, lee.jones@linaro.org, robh+dt@kernel.org,
-        sboyd@kernel.org, krzk@kernel.org, linus.walleij@linaro.org,
-        masneyb@onstation.org, sean.anderson@seco.com,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v5 2/2] pwm: Add clock based PWM output driver
-Message-ID: <20220214184320.ym36pfvozwdp5nbb@pengutronix.de>
-References: <20220212162342.72646-1-nikita@trvn.ru>
- <20220212162342.72646-3-nikita@trvn.ru>
+        Mon, 14 Feb 2022 13:47:06 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D973E70CEC
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:46:51 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id x6-20020a92d306000000b002bdff65a8e1so11887634ila.3
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:46:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=kBrX8LpAo7r4bs5uM8RRIDxr43yr4Z+/JxydaN+fYS4=;
+        b=MFKEgJtvpnrvDXLnde0jvy+X+3/M4SPvxeoWWpbtYpkxQmAta2zlQDvMPab2QJRrmN
+         kLREaeNU4eKpy5/gbV956BMyzVTInpY1DDRVTzuU0G6z2dsSJMFqC0lLWed/43EJ1o3+
+         nm9RY755sAnhhpm2vYBTHp0L4AYaHiXEjYjp/h6aQP/ze+JOTVWNZBWGtNXQelE+20UW
+         ZIB5bnyl97lqDAsPhqzI7dlHBNb70No4WViDkoqX/i6TvA3TdqLa6PaU1retpM2V+qd5
+         d2LdIzQ3o16ZRv/gAOS91hI93CXTPf8IhboMgFn+s2emDD5Kapz5r5tghH1ra3B/sXWo
+         wUag==
+X-Gm-Message-State: AOAM530lvFS6nbYA8ADe2GHT/T+FTUca9K3YJSh6+UYJ0t+jPxHUTZWr
+        YDtrf5rMtGD3I8AsXCtfo+Ku2GGWHsSDTgyCU9d9d1xMgu0q
+X-Google-Smtp-Source: ABdhPJz1Rl3MLan548W+pOsB3r3vRveNAIcFPhANhRh3K02sEhlo88uyJ0f+f2IA5/Hlys2behM36a7IAcVAlgzYcwPcrKUyYRGu
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oska7kglsa25a3vo"
-Content-Disposition: inline
-In-Reply-To: <20220212162342.72646-3-nikita@trvn.ru>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Received: by 2002:a05:6638:258d:: with SMTP id s13mr161476jat.221.1644864319434;
+ Mon, 14 Feb 2022 10:45:19 -0800 (PST)
+Date:   Mon, 14 Feb 2022 10:45:19 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000076b4bf05d7fed1f1@google.com>
+Subject: [syzbot] KASAN: vmalloc-out-of-bounds Read in __text_poke
+From:   syzbot <syzbot+ecb1e7e51c52f68f7481@syzkaller.appspotmail.com>
+To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        jgross@suse.com, jpoimboe@redhat.com, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, netdev@vger.kernel.org, peterz@infradead.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,215 +54,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---oska7kglsa25a3vo
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following issue on:
 
-On Sat, Feb 12, 2022 at 09:23:42PM +0500, Nikita Travkin wrote:
-> Some systems have clocks exposed to external devices. If the clock
-> controller supports duty-cycle configuration, such clocks can be used as
-> pwm outputs. In fact PWM and CLK subsystems are interfaced with in a
-> similar way and an "opposite" driver already exists (clk-pwm). Add a
-> driver that would enable pwm devices to be used via clk subsystem.
->=20
-> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
-> --
->=20
-> Changes in v2:
->  - Address Uwe's review comments:
->    - Round set clk rate up
->    - Add a description with limitations of the driver
->    - Disable and unprepare clock before removing pwmchip
-> Changes in v3:
->  - Use 64bit version of div round up
->  - Address Uwe's review comments:
->    - Reword the limitations to avoid incorrect claims
->    - Move the clk_enabled flag assignment
->    - Drop unnecessary statements
-> Changes in v5:
->  - add missed returns
-> ---
->  drivers/pwm/Kconfig   |  10 +++
->  drivers/pwm/Makefile  |   1 +
->  drivers/pwm/pwm-clk.c | 139 ++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 150 insertions(+)
->  create mode 100644 drivers/pwm/pwm-clk.c
->=20
-> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
-> index 21e3b05a5153..daa2491a4054 100644
-> --- a/drivers/pwm/Kconfig
-> +++ b/drivers/pwm/Kconfig
-> @@ -140,6 +140,16 @@ config PWM_BRCMSTB
->  	  To compile this driver as a module, choose M Here: the module
->  	  will be called pwm-brcmstb.c.
-> =20
-> +config PWM_CLK
-> +	tristate "Clock based PWM support"
-> +	depends on HAVE_CLK || COMPILE_TEST
-> +	help
-> +	  Generic PWM framework driver for outputs that can be
-> +	  muxed to clocks.
-> +
-> +	  To compile this driver as a module, choose M here: the module
-> +	  will be called pwm-clk.
-> +
->  config PWM_CLPS711X
->  	tristate "CLPS711X PWM support"
->  	depends on ARCH_CLPS711X || COMPILE_TEST
-> diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
-> index 708840b7fba8..4a860103c470 100644
-> --- a/drivers/pwm/Makefile
-> +++ b/drivers/pwm/Makefile
-> @@ -10,6 +10,7 @@ obj-$(CONFIG_PWM_BCM_KONA)	+=3D pwm-bcm-kona.o
->  obj-$(CONFIG_PWM_BCM2835)	+=3D pwm-bcm2835.o
->  obj-$(CONFIG_PWM_BERLIN)	+=3D pwm-berlin.o
->  obj-$(CONFIG_PWM_BRCMSTB)	+=3D pwm-brcmstb.o
-> +obj-$(CONFIG_PWM_CLK)		+=3D pwm-clk.o
->  obj-$(CONFIG_PWM_CLPS711X)	+=3D pwm-clps711x.o
->  obj-$(CONFIG_PWM_CRC)		+=3D pwm-crc.o
->  obj-$(CONFIG_PWM_CROS_EC)	+=3D pwm-cros-ec.o
-> diff --git a/drivers/pwm/pwm-clk.c b/drivers/pwm/pwm-clk.c
-> new file mode 100644
-> index 000000000000..e503337ad055
-> --- /dev/null
-> +++ b/drivers/pwm/pwm-clk.c
-> @@ -0,0 +1,139 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Clock based PWM controller
-> + *
-> + * Copyright (c) 2021 Nikita Travkin <nikita@trvn.ru>
-> + *
-> + * This is an "adapter" driver that allows PWM consumers to use
-> + * system clocks with duty cycle control as PWM outputs.
-> + *
-> + * Limitations:
-> + * - Glitches are possible when new pwm state is applied.
-> + * - Due to the fact that exact behavior depends on the underlying
-> + *   clock driver, various limitations are possible.
-> + * - Period depends on the clock and, in general, not guaranteed.
+HEAD commit:    e5313968c41b Merge branch 'Split bpf_sk_lookup remote_port..
+git tree:       bpf-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=173474ac700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c40b67275bfe2a58
+dashboard link: https://syzkaller.appspot.com/bug?extid=ecb1e7e51c52f68f7481
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-This sentence is broken.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> + * - Underlying clock may not be able to give 0% or 100% duty cycle
-> + *   (constant off or on), exact behavior will depend on the clock.
-> + * - When the PWM is disabled, the clock will be disabled as well,
-> + *   line state will depend on the clock.
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/math64.h>
-> +#include <linux/err.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/clk.h>
-> +#include <linux/pwm.h>
-> +
-> +struct pwm_clk_chip {
-> +	struct pwm_chip chip;
-> +	struct clk *clk;
-> +	bool clk_enabled;
-> +};
-> +
-> +#define to_pwm_clk_chip(_chip) container_of(_chip, struct pwm_clk_chip, =
-chip)
-> +
-> +static int pwm_clk_apply(struct pwm_chip *pwm_chip, struct pwm_device *p=
-wm,
-> +			 const struct pwm_state *state)
-> +{
-> +	struct pwm_clk_chip *chip =3D to_pwm_clk_chip(pwm_chip);
-> +	int ret;
-> +	u32 rate;
-> +	u64 period =3D state->period;
-> +	u64 duty_cycle =3D state->duty_cycle;
-> +
-> +	if (!state->enabled) {
-> +		if (pwm->state.enabled) {
-> +			clk_disable(chip->clk);
-> +			chip->clk_enabled =3D false;
-> +		}
-> +		return 0;
-> +	} else if (!pwm->state.enabled) {
-> +		ret =3D clk_enable(chip->clk);
-> +		if (ret)
-> +			return ret;
-> +		chip->clk_enabled =3D true;
-> +	}
-> +
-> +	rate =3D DIV64_U64_ROUND_UP(NSEC_PER_SEC, period);
-> +	ret =3D clk_set_rate(chip->clk, rate);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (state->polarity =3D=3D PWM_POLARITY_INVERSED)
-> +		duty_cycle =3D period - duty_cycle;
-> +
-> +	return clk_set_duty_cycle(chip->clk, duty_cycle, period);
-> +}
-> +
-> +static const struct pwm_ops pwm_clk_ops =3D {
-> +	.apply =3D pwm_clk_apply,
-> +	.owner =3D THIS_MODULE,
-> +};
-> +
-> +static int pwm_clk_probe(struct platform_device *pdev)
-> +{
-> +	struct pwm_clk_chip *chip;
-> +	int ret;
-> +
-> +	chip =3D devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
-> +	if (!chip)
-> +		return -ENOMEM;
-> +
-> +	chip->clk =3D devm_clk_get(&pdev->dev, NULL);
-> +	if (IS_ERR(chip->clk))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(chip->clk),
-> +				     "Failed to get clock\n");
-> +
-> +	chip->chip.dev =3D &pdev->dev;
-> +	chip->chip.ops =3D &pwm_clk_ops;
-> +	chip->chip.npwm =3D 1;
-> +
-> +	ret =3D clk_prepare(chip->clk);
-> +	if (ret < 0)
-> +		return dev_err_probe(&pdev->dev, ret, "Failed to prepare clock\n");
-> +
-> +	ret =3D pwmchip_add(&chip->chip);
-> +	if (ret < 0)
-> +		return dev_err_probe(&pdev->dev, ret, "Failed to add pwm chip\n");
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ecb1e7e51c52f68f7481@syzkaller.appspotmail.com
 
-As was already pointed out, here is some error cleanup necessary.
+==================================================================
+BUG: KASAN: vmalloc-out-of-bounds in memcmp+0x16f/0x1c0 lib/string.c:770
+Read of size 8 at addr ffffffffa0013400 by task syz-executor.3/26377
 
-> +	platform_set_drvdata(pdev, chip);
-> +	return 0;
-> +}
+CPU: 1 PID: 26377 Comm: syz-executor.3 Not tainted 5.16.0-syzkaller-11655-ge5313968c41b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xf/0x336 mm/kasan/report.c:255
+ __kasan_report mm/kasan/report.c:442 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ memcmp+0x16f/0x1c0 lib/string.c:770
+ memcmp include/linux/fortify-string.h:269 [inline]
+ __text_poke+0x5a2/0x8c0 arch/x86/kernel/alternative.c:1056
+ text_poke_copy+0x66/0xa0 arch/x86/kernel/alternative.c:1132
+ bpf_arch_text_copy+0x21/0x40 arch/x86/net/bpf_jit_comp.c:2426
+ bpf_jit_binary_pack_finalize+0x43/0x170 kernel/bpf/core.c:1098
+ bpf_int_jit_compile+0x9d5/0x12f0 arch/x86/net/bpf_jit_comp.c:2383
+ bpf_prog_select_runtime+0x4d4/0x8a0 kernel/bpf/core.c:2163
+ bpf_prog_load+0xfe6/0x2250 kernel/bpf/syscall.c:2349
+ __sys_bpf+0x68a/0x59a0 kernel/bpf/syscall.c:4640
+ __do_sys_bpf kernel/bpf/syscall.c:4744 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:4742 [inline]
+ __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4742
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f8a1c276059
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f8a1abca168 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00007f8a1c389030 RCX: 00007f8a1c276059
+RDX: 0000000000000064 RSI: 00000000202a0fb8 RDI: 0000000000000005
+RBP: 00007f8a1c2d008d R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe9ad17dff R14: 00007f8a1abca300 R15: 0000000000022000
+ </TASK>
 
-Otherwise looks good.
 
-Best regards
-Uwe
+Memory state around the buggy address:
+ ffffffffa0013300: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffffffa0013380: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>ffffffffa0013400: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+                   ^
+ ffffffffa0013480: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffffffa0013500: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+==================================================================
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---oska7kglsa25a3vo
-Content-Type: application/pgp-signature; name="signature.asc"
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIKosUACgkQwfwUeK3K
-7AmYjgf/QyMex4Vn/8dRLpTyWsyiiXn4rHVJBG96J3lzrH5SxPAL8iZFFJeBWw21
-6Hyap0eLJnmlh/6HShJd9i8kq6Z4KYCt3WknRoD7uZlkVko6mEXMawpxj5MbCFZF
-urBUc27FGCiM1QnvegSzNtALGlC8tA5Y1hTQIAKHyqlc06RJC4DpTZ4NZWpXlOXJ
-vcaz/MEjPh/HOdcABbZPh5k0XiAdQlqPC1gElHrXEAIuhRPfrVig2Avu7/O+XHHT
-1zEUAjF7JZS0iaYz6eqSl2+ghRVzGkZJIdRWKOHh/BvHYPbOm8NJzsXKjapaRcNt
-7otd9hxkn/SNxPy4nwwt1/QyRHv0yg==
-=uPXu
------END PGP SIGNATURE-----
-
---oska7kglsa25a3vo--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

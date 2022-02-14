@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD59E4B4787
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EAB24B45C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:32:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243369AbiBNJkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:40:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33274 "EHLO
+        id S239011AbiBNJaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:30:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244404AbiBNJji (ORCPT
+        with ESMTP id S243014AbiBNJ34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:39:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0567969CCC;
-        Mon, 14 Feb 2022 01:35:28 -0800 (PST)
+        Mon, 14 Feb 2022 04:29:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45153BF57;
+        Mon, 14 Feb 2022 01:29:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB15E60FA2;
-        Mon, 14 Feb 2022 09:35:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C4C6C340E9;
-        Mon, 14 Feb 2022 09:35:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7952B80DC8;
+        Mon, 14 Feb 2022 09:29:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 914E7C340E9;
+        Mon, 14 Feb 2022 09:29:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831326;
-        bh=/T57QsHEXzWRyz9ngAgfSuXzq9rnlQ9xNPWF7J/q3zk=;
+        s=korg; t=1644830962;
+        bh=LJ1sXuZ/bCb8N5WhK7UxNrm625DKnrhrSRqj0JPsg+E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UtzN9Sd8z64MuE27iIzzTtgSnItoINumPRA4OIoAAsuoAxtXMQfo5wsbQbQnBuylJ
-         N2/xqbyl/VKopZB0sLFBoC9XZ0vLSS/EDhcoAdRCggbAi3/Bb0KTDvGNNDXnM2/GRA
-         8XQe1LEdnU6A77DeEyI7BXoiqTw+7t+uKFQO+150=
+        b=hnVgB5k+n+LUuWA5RQKNm1OmRSYE5/zdP9QC68J76Zd/9VxXtVo0rUh6d6L04HLAm
+         wljwSuv6kYMYU7YetcNCb0S+waT4Rf09f0muAjMmQE+TuCv5c6GC26gaPgkakHpASJ
+         f+QeVDUz9yxZgDxVSCAtSJUxZoY0ZSPSJX/Wmbpw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, ZouMingzhe <mingzhe.zou@easystack.cn>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Jon Maloy <jmaloy@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 19/71] scsi: target: iscsi: Make sure the np under each tpg is unique
+Subject: [PATCH 4.9 21/34] tipc: rate limit warning for received illegal binding update
 Date:   Mon, 14 Feb 2022 10:25:47 +0100
-Message-Id: <20220214092452.665393505@linuxfoundation.org>
+Message-Id: <20220214092446.632050524@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
+References: <20220214092445.946718557@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ZouMingzhe <mingzhe.zou@easystack.cn>
+From: Jon Maloy <jmaloy@redhat.com>
 
-[ Upstream commit a861790afaa8b6369eee8a88c5d5d73f5799c0c6 ]
+[ Upstream commit c7223d687758462826a20e9735305d55bb874c70 ]
 
-iscsit_tpg_check_network_portal() has nested for_each loops and is supposed
-to return true when a match is found. However, the tpg loop will still
-continue after existing the tpg_np loop. If this tpg_np is not the last the
-match value will be changed.
+It would be easy to craft a message containing an illegal binding table
+update operation. This is handled correctly by the code, but the
+corresponding warning printout is not rate limited as is should be.
+We fix this now.
 
-Break the outer loop after finding a match and make sure the np under each
-tpg is unique.
-
-Link: https://lore.kernel.org/r/20220111054742.19582-1-mingzhe.zou@easystack.cn
-Signed-off-by: ZouMingzhe <mingzhe.zou@easystack.cn>
-Reviewed-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: b97bf3fd8f6a ("[TIPC] Initial merge")
+Signed-off-by: Jon Maloy <jmaloy@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/target/iscsi/iscsi_target_tpg.c | 3 +++
- 1 file changed, 3 insertions(+)
+ net/tipc/name_distr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/target/iscsi/iscsi_target_tpg.c b/drivers/target/iscsi/iscsi_target_tpg.c
-index 8075f60fd02c3..2d5cf1714ae05 100644
---- a/drivers/target/iscsi/iscsi_target_tpg.c
-+++ b/drivers/target/iscsi/iscsi_target_tpg.c
-@@ -443,6 +443,9 @@ static bool iscsit_tpg_check_network_portal(
- 				break;
+diff --git a/net/tipc/name_distr.c b/net/tipc/name_distr.c
+index 7ebcaff8c1c4f..963f607b34999 100644
+--- a/net/tipc/name_distr.c
++++ b/net/tipc/name_distr.c
+@@ -288,7 +288,7 @@ static bool tipc_update_nametbl(struct net *net, struct distr_item *i,
+ 			return true;
  		}
- 		spin_unlock(&tpg->tpg_np_lock);
-+
-+		if (match)
-+			break;
+ 	} else {
+-		pr_warn("Unrecognized name table message received\n");
++		pr_warn_ratelimited("Unknown name table message received\n");
  	}
- 	spin_unlock(&tiqn->tiqn_tpg_lock);
- 
+ 	return false;
+ }
 -- 
 2.34.1
 

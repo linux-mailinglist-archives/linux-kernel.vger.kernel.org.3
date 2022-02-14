@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 389844B475A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D3A4B4873
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244331AbiBNJjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:39:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52454 "EHLO
+        id S1343631AbiBNJyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:54:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244287AbiBNJhA (ORCPT
+        with ESMTP id S1343632AbiBNJuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:37:00 -0500
+        Mon, 14 Feb 2022 04:50:55 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C238465821;
-        Mon, 14 Feb 2022 01:35:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C97657AC;
+        Mon, 14 Feb 2022 01:41:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F30F6115B;
-        Mon, 14 Feb 2022 09:34:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F8D8C340EF;
-        Mon, 14 Feb 2022 09:34:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E85360FA2;
+        Mon, 14 Feb 2022 09:41:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13FC9C340F0;
+        Mon, 14 Feb 2022 09:41:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831299;
-        bh=SeVxQyNtXy9Wp9rjGaTR1rfv/6g68X9HcuZxVVLKI+0=;
+        s=korg; t=1644831709;
+        bh=o/sKIMrGLrAkYp8Q+KzdWoLa4OteYk6nG3L46DZRWxs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FP+83ngU7G45IeyhqaPfiRXQT0SA+5wDjXpV5Xj2wy/PHsV+F0KkSzcoGnLhSG91V
-         +2UDEPWDU39iiZyweXQQRFp3QFDgrHiBM7KBmNpYmmkJOqLqaNbYT1aP68XWz4DcOE
-         ATJNzK2MPM0QV4HsvzU9/bwyudkZ9iKGqo8ZO7GM=
+        b=OC6cmrrjfHaEj+Msf5ZX4cLINaJ7XhHNRtQiTgg6Hb0tmJQfJaMbJM9T0OGveh2ub
+         RoO19GxSE5jibbs0R1a7KgDVWqXeWP1INamRqisyb/XKdo4ICbZBJXpMA8lL8Djblf
+         OSH27SLy5S1R/we7sFapbN2bcfLZrE6JBNlHE87Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>
-Subject: [PATCH 5.4 10/71] NFSD: Fix offset type in I/O trace points
+        stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 039/116] KVM: nVMX: Also filter MSR_IA32_VMX_TRUE_PINBASED_CTLS when eVMCS
 Date:   Mon, 14 Feb 2022 10:25:38 +0100
-Message-Id: <20220214092452.375798520@linuxfoundation.org>
+Message-Id: <20220214092500.030688432@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,59 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chuck Lever <chuck.lever@oracle.com>
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-commit 6a4d333d540041d244b2fca29b8417bfde20af81 upstream.
+[ Upstream commit f80ae0ef089a09e8c18da43a382c3caac9a424a7 ]
 
-NFSv3 and NFSv4 use u64 offset values on the wire. Record these values
-verbatim without the implicit type case to loff_t.
+Similar to MSR_IA32_VMX_EXIT_CTLS/MSR_IA32_VMX_TRUE_EXIT_CTLS,
+MSR_IA32_VMX_ENTRY_CTLS/MSR_IA32_VMX_TRUE_ENTRY_CTLS pair,
+MSR_IA32_VMX_TRUE_PINBASED_CTLS needs to be filtered the same way
+MSR_IA32_VMX_PINBASED_CTLS is currently filtered as guests may solely rely
+on 'true' MSR data.
 
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Note, none of the currently existing Windows/Hyper-V versions are known
+to stumble upon the unfiltered MSR_IA32_VMX_TRUE_PINBASED_CTLS, the change
+is aimed at making the filtering future proof.
+
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Message-Id: <20220112170134.1904308-2-vkuznets@redhat.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfsd/trace.h |   14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ arch/x86/kvm/vmx/evmcs.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/fs/nfsd/trace.h
-+++ b/fs/nfsd/trace.h
-@@ -53,14 +53,14 @@ TRACE_EVENT(nfsd_compound_status,
- DECLARE_EVENT_CLASS(nfsd_io_class,
- 	TP_PROTO(struct svc_rqst *rqstp,
- 		 struct svc_fh	*fhp,
--		 loff_t		offset,
--		 unsigned long	len),
-+		 u64		offset,
-+		 u32		len),
- 	TP_ARGS(rqstp, fhp, offset, len),
- 	TP_STRUCT__entry(
- 		__field(u32, xid)
- 		__field(u32, fh_hash)
--		__field(loff_t, offset)
--		__field(unsigned long, len)
-+		__field(u64, offset)
-+		__field(u32, len)
- 	),
- 	TP_fast_assign(
- 		__entry->xid = be32_to_cpu(rqstp->rq_xid);
-@@ -68,7 +68,7 @@ DECLARE_EVENT_CLASS(nfsd_io_class,
- 		__entry->offset = offset;
- 		__entry->len = len;
- 	),
--	TP_printk("xid=0x%08x fh_hash=0x%08x offset=%lld len=%lu",
-+	TP_printk("xid=0x%08x fh_hash=0x%08x offset=%llu len=%u",
- 		  __entry->xid, __entry->fh_hash,
- 		  __entry->offset, __entry->len)
- )
-@@ -77,8 +77,8 @@ DECLARE_EVENT_CLASS(nfsd_io_class,
- DEFINE_EVENT(nfsd_io_class, nfsd_##name,	\
- 	TP_PROTO(struct svc_rqst *rqstp,	\
- 		 struct svc_fh	*fhp,		\
--		 loff_t		offset,		\
--		 unsigned long	len),		\
-+		 u64		offset,		\
-+		 u32		len),		\
- 	TP_ARGS(rqstp, fhp, offset, len))
- 
- DEFINE_NFSD_IO_EVENT(read_start);
+diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
+index c0d6fee9225fe..5b68034ec5f9c 100644
+--- a/arch/x86/kvm/vmx/evmcs.c
++++ b/arch/x86/kvm/vmx/evmcs.c
+@@ -361,6 +361,7 @@ void nested_evmcs_filter_control_msr(u32 msr_index, u64 *pdata)
+ 	case MSR_IA32_VMX_PROCBASED_CTLS2:
+ 		ctl_high &= ~EVMCS1_UNSUPPORTED_2NDEXEC;
+ 		break;
++	case MSR_IA32_VMX_TRUE_PINBASED_CTLS:
+ 	case MSR_IA32_VMX_PINBASED_CTLS:
+ 		ctl_high &= ~EVMCS1_UNSUPPORTED_PINCTRL;
+ 		break;
+-- 
+2.34.1
+
 
 

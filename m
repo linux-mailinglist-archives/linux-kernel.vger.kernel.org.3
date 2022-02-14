@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD5114B49B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6380C4B4B47
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344737AbiBNKC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:02:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43510 "EHLO
+        id S1344601AbiBNKCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:02:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344232AbiBNJ6a (ORCPT
+        with ESMTP id S1344276AbiBNJ6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Feb 2022 04:58:30 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDE56A3BE;
-        Mon, 14 Feb 2022 01:46:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BCA65836;
+        Mon, 14 Feb 2022 01:46:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD7EE61200;
-        Mon, 14 Feb 2022 09:46:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B3E5C340E9;
-        Mon, 14 Feb 2022 09:46:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B57C461200;
+        Mon, 14 Feb 2022 09:46:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B9A7C340E9;
+        Mon, 14 Feb 2022 09:46:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831965;
-        bh=mJFAQ4XWlIEWfk9/Ehgip/K6Kmf/6NuP5AUZM7Gisx8=;
+        s=korg; t=1644831968;
+        bh=Gp4lZMUWtUqof2YOT21LQIdrUUR7ioeSZppaIqJ5ESE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rCPhn4gQNQGxRLNxXK8l9znxtI/QZYMKQWCKEpK0GRMXmJ/5GwxFecstC5GuJ3plI
-         lwOFGlEqTRY8OBm6zZtJo+tisLgBz4Q90aM0ClyEiCawP+YLo7Rd8NklynB2EzY411
-         IUut0OhIQw43wnikXPOJYd1n+Qfmswc8GTnyM3d0=
+        b=MKOjcjdKHEhu4jmGotdY6sRKUjcHAsqylNie6xwz1CdI2Bl3RTrw6Yki0uy0tOK7Y
+         qTfLi4xxhdpPsaYfLM6w6Wlb7RSjM3zBrLxsMD4W1p6HyM9K9iakncwANLjv2chR/t
+         BEU19wsQ8g45KlZkxK62UaFjGsWIC+K8NrvJstUI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
+        stable@vger.kernel.org, xuhaifeng <xuhaifeng@oppo.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 037/172] x86/perf: Avoid warning for Arch LBR without XSAVE
-Date:   Mon, 14 Feb 2022 10:24:55 +0100
-Message-Id: <20220214092507.682504271@linuxfoundation.org>
+Subject: [PATCH 5.15 038/172] sched: Avoid double preemption in __cond_resched_*lock*()
+Date:   Mon, 14 Feb 2022 10:24:56 +0100
+Message-Id: <20220214092507.716840592@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
 References: <20220214092506.354292783@linuxfoundation.org>
@@ -55,36 +55,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andi Kleen <ak@linux.intel.com>
+From: Peter Zijlstra <peterz@infradead.org>
 
-[ Upstream commit 8c16dc047b5dd8f7b3bf4584fa75733ea0dde7dc ]
+[ Upstream commit 7e406d1ff39b8ee574036418a5043c86723170cf ]
 
-Some hypervisors support Arch LBR, but without the LBR XSAVE support.
-The current Arch LBR init code prints a warning when the xsave size (0) is
-unexpected. Avoid printing the warning for the "no LBR XSAVE" case.
+For PREEMPT/DYNAMIC_PREEMPT the *_unlock() will already trigger a
+preemption, no point in then calling preempt_schedule_common()
+*again*.
 
-Signed-off-by: Andi Kleen <ak@linux.intel.com>
+Use _cond_resched() instead, since this is a NOP for the preemptible
+configs while it provide a preemption point for the others.
+
+Reported-by: xuhaifeng <xuhaifeng@oppo.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20211215204029.150686-1-ak@linux.intel.com
+Link: https://lkml.kernel.org/r/YcGnvDEYBwOiV0cR@hirez.programming.kicks-ass.net
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/events/intel/lbr.c | 3 +++
- 1 file changed, 3 insertions(+)
+ kernel/sched/core.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-index 9e6d6eaeb4cb6..f455dd93f9219 100644
---- a/arch/x86/events/intel/lbr.c
-+++ b/arch/x86/events/intel/lbr.c
-@@ -1734,6 +1734,9 @@ static bool is_arch_lbr_xsave_available(void)
- 	 * Check the LBR state with the corresponding software structure.
- 	 * Disable LBR XSAVES support if the size doesn't match.
- 	 */
-+	if (xfeature_size(XFEATURE_LBR) == 0)
-+		return false;
-+
- 	if (WARN_ON(xfeature_size(XFEATURE_LBR) != get_lbr_state_size()))
- 		return false;
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 0d12ec7be3017..c2dec6ce98091 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -8199,9 +8199,7 @@ int __cond_resched_lock(spinlock_t *lock)
  
+ 	if (spin_needbreak(lock) || resched) {
+ 		spin_unlock(lock);
+-		if (resched)
+-			preempt_schedule_common();
+-		else
++		if (!_cond_resched())
+ 			cpu_relax();
+ 		ret = 1;
+ 		spin_lock(lock);
+@@ -8219,9 +8217,7 @@ int __cond_resched_rwlock_read(rwlock_t *lock)
+ 
+ 	if (rwlock_needbreak(lock) || resched) {
+ 		read_unlock(lock);
+-		if (resched)
+-			preempt_schedule_common();
+-		else
++		if (!_cond_resched())
+ 			cpu_relax();
+ 		ret = 1;
+ 		read_lock(lock);
+@@ -8239,9 +8235,7 @@ int __cond_resched_rwlock_write(rwlock_t *lock)
+ 
+ 	if (rwlock_needbreak(lock) || resched) {
+ 		write_unlock(lock);
+-		if (resched)
+-			preempt_schedule_common();
+-		else
++		if (!_cond_resched())
+ 			cpu_relax();
+ 		ret = 1;
+ 		write_lock(lock);
 -- 
 2.34.1
 

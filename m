@@ -2,107 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 677FF4B5BEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6140B4B5C0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiBNU6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 15:58:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48476 "EHLO
+        id S230499AbiBNVGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:06:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiBNU6E (ORCPT
+        with ESMTP id S230462AbiBNVG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 15:58:04 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E1911EF08;
-        Mon, 14 Feb 2022 12:57:27 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id g1so11521631pfv.1;
-        Mon, 14 Feb 2022 12:57:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8eI79aPTVtqYQhM0bTcpnqJ4UdG4+AWyiT8hNcdyv7Q=;
-        b=ZSV4ZqXKji33uFcHmgvE05zjLOm9kEVHG6oWJ7eZKZPZ4kZ2nggGrMqLqKlPL34Ek1
-         /u/NM4futt7QdWUDzgYKzfBFqB3ZZBZkwOMzOMhGC7cko+Qztmw8XHcfcb0gNwQq8MkU
-         7507ocXVBAmsp48WPhA5XpPf/bn2aWqzt0WtH8bdY9cWxbZexhWBaUs3sZd0U5bp1e3T
-         ruHrM+VNwVpvBmLdyRZvIgDd/7i3XcHwZsLkaOtpINL3arjnaQdH3B8XpxaFk+Fyctd1
-         shUZRC0TnpWCQftQMjh+GxGmupgih3F576KJYbNUbrq4yUWvlv3OvixikVZXYjiUMish
-         slvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=8eI79aPTVtqYQhM0bTcpnqJ4UdG4+AWyiT8hNcdyv7Q=;
-        b=o3eE+CYEMxE67VxanFZkAPqsQZg+QwdShIlzmrMsDPTDscgsb+V1JTgAu2XeRlGiQo
-         FyH4zrAW9ChQ5sJDpeVuTw+km3LV3olOdpHgBVnDIu1n2O0nIId7XDCtW61bJpQdaLLG
-         P02SmNdoee0lNRVmA6IjkiCjTZFSpV7yS9x5sdcDwkLcyYk8C577LFWcbsnIsnjs4eE3
-         FMLEYCdvq7VmLFJ6sfYidkyC6c1b7ooNl3UqE4WcFTPoviC9o/Cer5so+I7k4QyEZYMD
-         LP1hTjDWH1Tv3KiHEP2RPu9D8Pq/yC+lQtm/9UOlKR1laqkwBpSISYtI+PxJIuFIoldT
-         Iw/w==
-X-Gm-Message-State: AOAM533ABcdnkONUWee9QGL7nG2NFhRkd61eYyqQGxOuRso8THXsMiYb
-        1Rp7oBCuFiaZK4v0qnvNWbRLUMxMr0s=
-X-Google-Smtp-Source: ABdhPJyUfTPTFZc8hUeHI+dD4bfFcL0x2ysfp78YkPhpEXIAqKojYn5U65C+/pWyd/cczefXz/Cd4w==
-X-Received: by 2002:a63:68c1:: with SMTP id d184mr494872pgc.405.1644868241417;
-        Mon, 14 Feb 2022 11:50:41 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id q94sm3968073pja.27.2022.02.14.11.50.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 11:50:41 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 14 Feb 2022 09:50:39 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Zhang Qiao <zhangqiao22@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org, matthltc@us.ibm.com,
-        bblum@google.com, menage@google.com, akpm@linux-foundation.org,
-        longman@redhat.com, mkoutny@suse.com, zhaogongyi@huawei.com
-Subject: Re: [PATCH] cgroup/cpuset: Fix a race between cpuset_attach() and
- cpu hotplug
-Message-ID: <Ygqyj7nns+mxH81t@slm.duckdns.org>
-References: <20220121101210.84926-1-zhangqiao22@huawei.com>
+        Mon, 14 Feb 2022 16:06:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC15135486
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:06:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23CF26114D
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 19:50:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA887C340E9;
+        Mon, 14 Feb 2022 19:50:48 +0000 (UTC)
+Date:   Mon, 14 Feb 2022 14:50:47 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] ftrace: Remove unused ftrace_startup_enable() stub
+Message-ID: <20220214145047.35b9df58@gandalf.local.home>
+In-Reply-To: <20220214192847.488166-1-nathan@kernel.org>
+References: <20220214192847.488166-1-nathan@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220121101210.84926-1-zhangqiao22@huawei.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 06:12:10PM +0800, Zhang Qiao wrote:
-> As previously discussed(https://lkml.org/lkml/2022/1/20/51),
-> cpuset_attach() is affected with similar cpu hotplug race,
-> as follow scenario:
-> 
->      cpuset_attach()				cpu hotplug
->     ---------------------------            ----------------------
->     down_write(cpuset_rwsem)
->     guarantee_online_cpus() // (load cpus_attach)
-> 					sched_cpu_deactivate
-> 					  set_cpu_active()
-> 					  // will change cpu_active_mask
->     set_cpus_allowed_ptr(cpus_attach)
->       __set_cpus_allowed_ptr_locked()
->        // (if the intersection of cpus_attach and
->          cpu_active_mask is empty, will return -EINVAL)
->     up_write(cpuset_rwsem)
-> 
-> To avoid races such as described above, protect cpuset_attach() call
-> with cpu_hotplug_lock.
-> 
-> Fixes: be367d099270 ("cgroups: let ss->can_attach and ss->attach do whole threadgroups at a time")
-> Reported-by: Zhao Gongyi <zhaogongyi@huawei.com>
-> Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
+On Mon, 14 Feb 2022 12:28:47 -0700
+Nathan Chancellor <nathan@kernel.org> wrote:
 
-Applied to cgroup/for-5.17-fixes w/ stable cc'd.
+> When building with clang + CONFIG_DYNAMIC_FTRACE=n + W=1, there is a
+> warning:
+> 
+>   kernel/trace/ftrace.c:7194:20: error: unused function 'ftrace_startup_enable' [-Werror,-Wunused-function]
+>   static inline void ftrace_startup_enable(int command) { }
+>                      ^
+>   1 error generated.
+> 
+> Clang warns on instances of static inline functions in .c files with W=1
+> after commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+> inline functions for W=1 build").
+> 
+> The ftrace_startup_enable() stub has been unused since
+> commit e1effa0144a1 ("ftrace: Annotate the ops operation on update"),
+> where its use outside of the CONFIG_DYNAMIC_TRACE section was replaced
+> by ftrace_startup_all().  Remove it to resolve the warning.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Thanks and sorry about the delay.
+Thanks,
 
--- 
-tejun
+I'll queue this up for the next merge window. (After it passes all my
+testing of course).
+
+-- Steve
+
+> ---
+>  kernel/trace/ftrace.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index f9feb197b2da..a4b462b6f944 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -7191,7 +7191,6 @@ static int __init ftrace_nodyn_init(void)
+>  core_initcall(ftrace_nodyn_init);
+>  
+>  static inline int ftrace_init_dyn_tracefs(struct dentry *d_tracer) { return 0; }
+> -static inline void ftrace_startup_enable(int command) { }
+>  static inline void ftrace_startup_all(int command) { }
+>  
+>  # define ftrace_startup_sysctl()	do { } while (0)
+> 
+> base-commit: 754e0b0e35608ed5206d6a67a791563c631cec07
+

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA2A4B4784
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 448EA4B4B22
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244234AbiBNJin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:38:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50630 "EHLO
+        id S1344061AbiBNJ6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:58:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245579AbiBNJgv (ORCPT
+        with ESMTP id S235066AbiBNJwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:36:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EFAA1A4;
-        Mon, 14 Feb 2022 01:34:46 -0800 (PST)
+        Mon, 14 Feb 2022 04:52:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC3A69CD5;
+        Mon, 14 Feb 2022 01:43:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1122C6102D;
-        Mon, 14 Feb 2022 09:34:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5D70C340E9;
-        Mon, 14 Feb 2022 09:34:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB73361244;
+        Mon, 14 Feb 2022 09:43:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB3FDC340E9;
+        Mon, 14 Feb 2022 09:43:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831267;
-        bh=I8Ph0gGStHft4R/DZ1s2Vo5pyXczRsabuPR6VqIhCoU=;
+        s=korg; t=1644831821;
+        bh=h/90sFQJ4ADpeoVXdbJhADLAI2IKpcQnwVbtczvVWjg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rR9AFhcDbsQDfxoHayAukw8dAp3wHaIRwmWmW/nmik6dJbySt1XLAIFMz0DKPs+We
-         TenSWcW/w0nVDEvjx7y5jdD5SOoU5Ejyvz/aLERKTjXYkLRDY6Nzh82K2y2Fm5/93j
-         jygGh1vwY20q1qPqHOidUxdUTWL9l4vUPXxTsCEQ=
+        b=yY8uAQkxV1AM04Du9AniWv9LHkL8k2VE1iieO1Gb6FMH2hCxcL4cAaJN+qq0B/DWN
+         9SGNeKSCH0VYyEvo94xb+XM3eAaRBdeFvURhRtMBAjYSapsNeEzIfvW/Bk+ht8/BLN
+         T1ZlbI3LBSoxHthXHtPOItunizp0JrdjZMbFkXuA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Song Liu <song@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH 4.19 49/49] perf: Fix list corruption in perf_cgroup_switch()
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Vlad Buslov <vladbu@nvidia.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 076/116] net: do not keep the dst cache when uncloning an skb dst and its metadata
 Date:   Mon, 14 Feb 2022 10:26:15 +0100
-Message-Id: <20220214092449.933317340@linuxfoundation.org>
+Message-Id: <20220214092501.382151728@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
-References: <20220214092448.285381753@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +57,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Song Liu <song@kernel.org>
+From: Antoine Tenart <atenart@kernel.org>
 
-commit 5f4e5ce638e6a490b976ade4a40017b40abb2da0 upstream.
+[ Upstream commit cfc56f85e72f5b9c5c5be26dc2b16518d36a7868 ]
 
-There's list corruption on cgrp_cpuctx_list. This happens on the
-following path:
+When uncloning an skb dst and its associated metadata a new dst+metadata
+is allocated and the tunnel information from the old metadata is copied
+over there.
 
-  perf_cgroup_switch: list_for_each_entry(cgrp_cpuctx_list)
-      cpu_ctx_sched_in
-         ctx_sched_in
-            ctx_pinned_sched_in
-              merge_sched_in
-                  perf_cgroup_event_disable: remove the event from the list
+The issue is the tunnel metadata has references to cached dst, which are
+copied along the way. When a dst+metadata refcount drops to 0 the
+metadata is freed including the cached dst entries. As they are also
+referenced in the initial dst+metadata, this ends up in UaFs.
 
-Use list_for_each_entry_safe() to allow removing an entry during
-iteration.
+In practice the above did not happen because of another issue, the
+dst+metadata was never freed because its refcount never dropped to 0
+(this will be fixed in a subsequent patch).
 
-Fixes: 058fe1c0440e ("perf/core: Make cgroup switch visit only cpuctxs with cgroup events")
-Signed-off-by: Song Liu <song@kernel.org>
-Reviewed-by: Rik van Riel <riel@surriel.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220204004057.2961252-1-song@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fix this by initializing the dst cache after copying the tunnel
+information from the old metadata to also unshare the dst cache.
+
+Fixes: d71785ffc7e7 ("net: add dst_cache to ovs vxlan lwtunnel")
+Cc: Paolo Abeni <pabeni@redhat.com>
+Reported-by: Vlad Buslov <vladbu@nvidia.com>
+Tested-by: Vlad Buslov <vladbu@nvidia.com>
+Signed-off-by: Antoine Tenart <atenart@kernel.org>
+Acked-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/events/core.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ include/net/dst_metadata.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -798,7 +798,7 @@ static DEFINE_PER_CPU(struct list_head,
-  */
- static void perf_cgroup_switch(struct task_struct *task, int mode)
- {
--	struct perf_cpu_context *cpuctx;
-+	struct perf_cpu_context *cpuctx, *tmp;
- 	struct list_head *list;
- 	unsigned long flags;
+diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
+index 14efa0ded75dd..b997e0c1e3627 100644
+--- a/include/net/dst_metadata.h
++++ b/include/net/dst_metadata.h
+@@ -123,6 +123,19 @@ static inline struct metadata_dst *tun_dst_unclone(struct sk_buff *skb)
  
-@@ -809,7 +809,7 @@ static void perf_cgroup_switch(struct ta
- 	local_irq_save(flags);
- 
- 	list = this_cpu_ptr(&cgrp_cpuctx_list);
--	list_for_each_entry(cpuctx, list, cgrp_cpuctx_entry) {
-+	list_for_each_entry_safe(cpuctx, tmp, list, cgrp_cpuctx_entry) {
- 		WARN_ON_ONCE(cpuctx->ctx.nr_cgroups == 0);
- 
- 		perf_ctx_lock(cpuctx, cpuctx->task_ctx);
+ 	memcpy(&new_md->u.tun_info, &md_dst->u.tun_info,
+ 	       sizeof(struct ip_tunnel_info) + md_size);
++#ifdef CONFIG_DST_CACHE
++	/* Unclone the dst cache if there is one */
++	if (new_md->u.tun_info.dst_cache.cache) {
++		int ret;
++
++		ret = dst_cache_init(&new_md->u.tun_info.dst_cache, GFP_ATOMIC);
++		if (ret) {
++			metadata_dst_free(new_md);
++			return ERR_PTR(ret);
++		}
++	}
++#endif
++
+ 	skb_dst_drop(skb);
+ 	dst_hold(&new_md->dst);
+ 	skb_dst_set(skb, &new_md->dst);
+-- 
+2.34.1
+
 
 

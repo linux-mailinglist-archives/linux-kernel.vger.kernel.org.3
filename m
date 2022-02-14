@@ -2,122 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B141C4B59D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 19:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9845F4B59D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 19:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357429AbiBNSXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 13:23:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35752 "EHLO
+        id S1349691AbiBNS0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 13:26:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357448AbiBNSXn (ORCPT
+        with ESMTP id S232155AbiBNS0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 13:23:43 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD4460ABE
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:23:34 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJg0S-00063J-6p; Mon, 14 Feb 2022 19:23:24 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJg0K-00GbDc-9H; Mon, 14 Feb 2022 19:23:15 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJg0I-003BDB-Qj; Mon, 14 Feb 2022 19:23:14 +0100
-Date:   Mon, 14 Feb 2022 19:23:11 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     alexandre.belloni@bootlin.com, festevam@gmail.com,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        richard.genoud@gmail.com, gregkh@linuxfoundation.org,
-        s.hauer@pengutronix.de, linux@armlinux.org.uk,
-        nicolas.ferre@microchip.com, alexandre.torgue@foss.st.com,
-        ludovic.desroches@microchip.com, lukas@wunner.de,
-        linux-imx@nxp.com, mcoquelin.stm32@gmail.com,
-        linux-serial@vger.kernel.org, shawnguo@kernel.org,
-        jirislaby@kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/9] serial: core: move RS485 configuration tasks from
- drivers into core
-Message-ID: <20220214182311.xaxkdgw5x66vubvv@pengutronix.de>
-References: <20220213222737.15709-1-LinoSanfilippo@gmx.de>
- <20220213222737.15709-2-LinoSanfilippo@gmx.de>
- <20220214070622.rz5cv6yy3aarvrjv@pengutronix.de>
- <edbb9e1d-bed4-0850-08f4-029c4fcbfd5c@gmx.de>
+        Mon, 14 Feb 2022 13:26:15 -0500
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99979488B6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:26:06 -0800 (PST)
+Received: by mail-oo1-xc33.google.com with SMTP id c7-20020a4ad207000000b002e7ab4185d2so20298784oos.6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:26:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QlSvtvFbST+JRiZy0nw8qsurosZlPyiaBzL4u9A7NPg=;
+        b=HXqACW//Zm0115qK79VxKxElAYlr95AzBf3cBr6QuimTb9boq0VaCrFqwmZvXHTKI0
+         wKgj5UvN50iY0OiyrcX6/VJPFTxIBdus86P9uDgMpY7COalhtCiMDuUuNkmlHbDOMFVb
+         7c/d/mm4z92AXKDl1cngznbb7e/JgfyeqwLfiV4dnWnr9nBwruWYPE1VizPeGLJfYvWI
+         7NwGpT7iZsmEYd4jGbrlyV5wgk4jv2b7smJtuJ3GDbWT+eRbKGnewN7kUrlHZD7B1AEI
+         Oiq83ESXQFphER2f1zpQGtfPQD7KZuYuCSsMt7OAkw/q8fXEk03RR3RKro0Ww3Cc5fwz
+         yx2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QlSvtvFbST+JRiZy0nw8qsurosZlPyiaBzL4u9A7NPg=;
+        b=g+klEM2ZHGeq+Ok0QAlmXuEn7c2kOFfXQ3GcKSw37IqOavMiuxRbn7Z+ivhtEsJQIZ
+         0lRmxCd7ff3PyKLZNAPQxlVPnT6b9RTV1g9rYQH310YFAmxP28gRsYiJTeMbygiYuRWx
+         E/Qn/SB6DQm+D7DcyHa0HOHPXmYjTLOPlsi+dJ/3oLsktJmx6fUl2pW4DaINstkLZf0P
+         DgnOw63ZsiAckPNx3OL3n9uss+DI6YPDv8x94aehnn+DO7njZfI/4na5C+WfxPSDdmyz
+         9PIHBr/taJ9D9EfTF/eMlabopg7JiAEcPFvTWxoer7R5m90XoN6HlpmSW8f9uU3rgcLH
+         i4CA==
+X-Gm-Message-State: AOAM532/CUrGC5lfsH/HeeeTEGFbAFJ9eRF/+o5e/IBMz9XgGa3GPplm
+        QWfIzMd22d/sbc1n7e6SYM3bW1dnvLSRTUb8z9g=
+X-Google-Smtp-Source: ABdhPJwwkbSacvGQlLKe3Ok3VHnEV3xZS3SoGcqpH7A0COkvlXN8wexYw97Y95QA9d+schJeyBmufa9z8v8pu+r/cg8=
+X-Received: by 2002:a4a:d583:: with SMTP id z3mr20564oos.68.1644863166025;
+ Mon, 14 Feb 2022 10:26:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5yzygnvea2gsyqvu"
-Content-Disposition: inline
-In-Reply-To: <edbb9e1d-bed4-0850-08f4-029c4fcbfd5c@gmx.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220214182224.2906060-1-trix@redhat.com>
+In-Reply-To: <20220214182224.2906060-1-trix@redhat.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 14 Feb 2022 13:25:55 -0500
+Message-ID: <CADnq5_MrrTXmVPv7ukkpq-+WWn7cKbF9CHjhsBnuRzqbriUN1g@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: check return status before using stable_pstate
+To:     Tom Rix <trix@redhat.com>
+Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        xinhui pan <Xinhui.Pan@amd.com>,
+        Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Tuikov, Luben" <luben.tuikov@amd.com>,
+        "Nieto, David M" <david.nieto@amd.com>,
+        Nirmoy Das <nirmoy.das@amd.com>, "Xue, Ken" <Ken.Xue@amd.com>,
+        Roy Sun <Roy.Sun@amd.com>, "Quan, Evan" <evan.quan@amd.com>,
+        llvm@lists.linux.dev,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Applied.  Thanks!
 
---5yzygnvea2gsyqvu
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Alex
 
-Hello Lino,
-
-On Mon, Feb 14, 2022 at 04:09:53PM +0100, Lino Sanfilippo wrote:
-> On 14.02.22 at 08:06, Uwe Kleine-K=F6nig wrote:
-> > I was only Cc:d for the imx patch (patch #7) and tried to verify the
-> > claim there that "the serial core already assigns the passed
-> > configuration to the uart port". That failed when I looked at my kernel
-> > tree.
-> >
-> > So it would be great, if you sent dependencies (or at least a cover
-> > letter) to all recipients of a given patch to ease review. Also I want
-> > to suggest to mention uart_set_rs485_config() in the commit log of the
-> > imx patch (and probably the others) to simplify verifying the claim
-> > there.
->=20
-> Thanks for the review, I will correct the typos in the next version.
-> I will also cc you directly for the next version if you dont mind.
-
-I don't mind. I get so many patches by mail, I'm good at ignoring them
-;-)
-
-> get_maintainers only spit out "Pengutronix Kernel Team" so I used that
-> address for the whole series (including the cover letter).
-
-That's why I eventually found the whole series and could reply to patch
-#1.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---5yzygnvea2gsyqvu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIKngwACgkQwfwUeK3K
-7An98wf/bBKlqhAAMwMSKVu53e8nF1ZTSQ/QjAhBecE3mD4HgqyKTzgmzkKeHYFj
-KFZpNW2T05fcPMre0otOoR+7X1a2jOMv9lg2c11F6zor06DU6+RrIbtgMuzCFKJW
-tpM9//kD8f+OcUSESal/ZRzAS683pu+nO0x2N06+h4kRiUVfb6y2UToQhiCniQjO
-PtPtboM3S+ZistvDYzuo2sVXaYA7C8pTcGVbY8fO2dhWqvbwb//kIQt3ZsFvDnhj
-g8xi+7QVAJvKcQy9FpB0SKAcCpIx/gy+AnoezVMbbshQejDbrVQ+SYPq7wtka2PB
-L9NSe4gLIQM2kMMxpd8Fprm67oy+Rw==
-=KXKx
------END PGP SIGNATURE-----
-
---5yzygnvea2gsyqvu--
+On Mon, Feb 14, 2022 at 1:22 PM <trix@redhat.com> wrote:
+>
+> From: Tom Rix <trix@redhat.com>
+>
+> Clang static analysis reports this problem
+> amdgpu_ctx.c:616:26: warning: Assigned value is garbage
+>   or undefined
+>   args->out.pstate.flags = stable_pstate;
+>                          ^ ~~~~~~~~~~~~~
+> amdgpu_ctx_stable_pstate can fail without setting
+> stable_pstate.  So check.
+>
+> Fixes: 8cda7a4f96e4 ("drm/amdgpu/UAPI: add new CTX OP to get/set stable pstates")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c
+> index 1c72f6095f08..f522b52725e4 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c
+> @@ -613,7 +613,8 @@ int amdgpu_ctx_ioctl(struct drm_device *dev, void *data,
+>                 if (args->in.flags)
+>                         return -EINVAL;
+>                 r = amdgpu_ctx_stable_pstate(adev, fpriv, id, false, &stable_pstate);
+> -               args->out.pstate.flags = stable_pstate;
+> +               if (!r)
+> +                       args->out.pstate.flags = stable_pstate;
+>                 break;
+>         case AMDGPU_CTX_OP_SET_STABLE_PSTATE:
+>                 if (args->in.flags & ~AMDGPU_CTX_STABLE_PSTATE_FLAGS_MASK)
+> --
+> 2.26.3
+>

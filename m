@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E704B4B57
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A87B34B46AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347324AbiBNK1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:27:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53378 "EHLO
+        id S245438AbiBNJrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:47:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiBNKY6 (ORCPT
+        with ESMTP id S245352AbiBNJpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:24:58 -0500
+        Mon, 14 Feb 2022 04:45:53 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD886A077;
-        Mon, 14 Feb 2022 01:56:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918B360DAB;
+        Mon, 14 Feb 2022 01:38:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9E1AB80DBE;
-        Mon, 14 Feb 2022 09:56:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78F05C340E9;
-        Mon, 14 Feb 2022 09:56:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C858B80DC8;
+        Mon, 14 Feb 2022 09:38:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18943C340F0;
+        Mon, 14 Feb 2022 09:38:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832610;
-        bh=paGR/fTnLUhrSaJbD5c1gmkz5uWTtOGJJZJk4wXLwB8=;
+        s=korg; t=1644831535;
+        bh=GCdiwcHJxc44qO0oq8fxrKc9ryWiEsWakzCADUO6jcs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rYWqOpoQazwA6JQEFIMqmAkQn8pPjWSGFBtFtmoyC37mmYmq/xm821H/81gXSbDbP
-         6bc8U/AD1SuY6PUtuyWYBBeqRPFqgca3BVtKbCUMd/87YaZbPdUrFD5ob/AUn2etGd
-         /ehCrzMfu29gPFpEkQvUCeOZPfCqgDsBrYnGeUkA=
+        b=dTTFY47WYxFVwedFVWB20BGpuT9+MdarMajoSFJqD+hlAnRLTZmC/LHwFelKxyPUp
+         LMCkkis0Zrj/gJXErepKEc0fRZBdvxu29ippjYFXRcygo0t/yWJTTtOtpByrd2XwMH
+         kKwLJnkRdtuOUASaUMHyOdI/488sCkOYWCXdoFBs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 068/203] KVM: nVMX: eVMCS: Filter out VM_EXIT_SAVE_VMX_PREEMPTION_TIMER
-Date:   Mon, 14 Feb 2022 10:25:12 +0100
-Message-Id: <20220214092512.575994619@linuxfoundation.org>
+Subject: [PATCH 5.10 014/116] NFS: change nfs_access_get_cached to only report the mask
+Date:   Mon, 14 Feb 2022 10:25:13 +0100
+Message-Id: <20220214092459.176858139@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +55,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: NeilBrown <neilb@suse.de>
 
-[ Upstream commit 7a601e2cf61558dfd534a9ecaad09f5853ad8204 ]
+[ Upstream commit b5e7b59c3480f355910f9d2c6ece5857922a5e54 ]
 
-Enlightened VMCS v1 doesn't have VMX_PREEMPTION_TIMER_VALUE field,
-PIN_BASED_VMX_PREEMPTION_TIMER is also filtered out already so it makes
-sense to filter out VM_EXIT_SAVE_VMX_PREEMPTION_TIMER too.
+Currently the nfs_access_get_cached family of functions report a
+'struct nfs_access_entry' as the result, with both .mask and .cred set.
+However the .cred is never used.  This is probably good and there is no
+guarantee that it won't be freed before use.
 
-Note, none of the currently existing Windows/Hyper-V versions are known
-to enable 'save VMX-preemption timer value' when eVMCS is in use, the
-change is aimed at making the filtering future proof.
+Change to only report the 'mask' - as this is all that is used or needed.
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20220112170134.1904308-3-vkuznets@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: NeilBrown <neilb@suse.de>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/vmx/evmcs.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ fs/nfs/dir.c           | 20 +++++++++-----------
+ fs/nfs/nfs4proc.c      | 18 +++++++++---------
+ include/linux/nfs_fs.h |  4 ++--
+ 3 files changed, 20 insertions(+), 22 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
-index 6255fa7167720..8d70f9aea94bc 100644
---- a/arch/x86/kvm/vmx/evmcs.h
-+++ b/arch/x86/kvm/vmx/evmcs.h
-@@ -59,7 +59,9 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
- 	 SECONDARY_EXEC_SHADOW_VMCS |					\
- 	 SECONDARY_EXEC_TSC_SCALING |					\
- 	 SECONDARY_EXEC_PAUSE_LOOP_EXITING)
--#define EVMCS1_UNSUPPORTED_VMEXIT_CTRL (VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL)
-+#define EVMCS1_UNSUPPORTED_VMEXIT_CTRL					\
-+	(VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL |				\
-+	 VM_EXIT_SAVE_VMX_PREEMPTION_TIMER)
- #define EVMCS1_UNSUPPORTED_VMENTRY_CTRL (VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL)
- #define EVMCS1_UNSUPPORTED_VMFUNC (VMX_VMFUNC_EPTP_SWITCHING)
+diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
+index a23b7a5dec9ee..682c7b45d8b71 100644
+--- a/fs/nfs/dir.c
++++ b/fs/nfs/dir.c
+@@ -2489,7 +2489,7 @@ static struct nfs_access_entry *nfs_access_search_rbtree(struct inode *inode, co
+ 	return NULL;
+ }
  
+-static int nfs_access_get_cached_locked(struct inode *inode, const struct cred *cred, struct nfs_access_entry *res, bool may_block)
++static int nfs_access_get_cached_locked(struct inode *inode, const struct cred *cred, u32 *mask, bool may_block)
+ {
+ 	struct nfs_inode *nfsi = NFS_I(inode);
+ 	struct nfs_access_entry *cache;
+@@ -2519,8 +2519,7 @@ static int nfs_access_get_cached_locked(struct inode *inode, const struct cred *
+ 		spin_lock(&inode->i_lock);
+ 		retry = false;
+ 	}
+-	res->cred = cache->cred;
+-	res->mask = cache->mask;
++	*mask = cache->mask;
+ 	list_move_tail(&cache->lru, &nfsi->access_cache_entry_lru);
+ 	err = 0;
+ out:
+@@ -2532,7 +2531,7 @@ static int nfs_access_get_cached_locked(struct inode *inode, const struct cred *
+ 	return -ENOENT;
+ }
+ 
+-static int nfs_access_get_cached_rcu(struct inode *inode, const struct cred *cred, struct nfs_access_entry *res)
++static int nfs_access_get_cached_rcu(struct inode *inode, const struct cred *cred, u32 *mask)
+ {
+ 	/* Only check the most recently returned cache entry,
+ 	 * but do it without locking.
+@@ -2554,22 +2553,21 @@ static int nfs_access_get_cached_rcu(struct inode *inode, const struct cred *cre
+ 		goto out;
+ 	if (nfs_check_cache_invalid(inode, NFS_INO_INVALID_ACCESS))
+ 		goto out;
+-	res->cred = cache->cred;
+-	res->mask = cache->mask;
++	*mask = cache->mask;
+ 	err = 0;
+ out:
+ 	rcu_read_unlock();
+ 	return err;
+ }
+ 
+-int nfs_access_get_cached(struct inode *inode, const struct cred *cred, struct
+-nfs_access_entry *res, bool may_block)
++int nfs_access_get_cached(struct inode *inode, const struct cred *cred,
++			  u32 *mask, bool may_block)
+ {
+ 	int status;
+ 
+-	status = nfs_access_get_cached_rcu(inode, cred, res);
++	status = nfs_access_get_cached_rcu(inode, cred, mask);
+ 	if (status != 0)
+-		status = nfs_access_get_cached_locked(inode, cred, res,
++		status = nfs_access_get_cached_locked(inode, cred, mask,
+ 		    may_block);
+ 
+ 	return status;
+@@ -2690,7 +2688,7 @@ static int nfs_do_access(struct inode *inode, const struct cred *cred, int mask)
+ 
+ 	trace_nfs_access_enter(inode);
+ 
+-	status = nfs_access_get_cached(inode, cred, &cache, may_block);
++	status = nfs_access_get_cached(inode, cred, &cache.mask, may_block);
+ 	if (status == 0)
+ 		goto out_cached;
+ 
+diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
+index 3106bd28b1132..d222a980164b7 100644
+--- a/fs/nfs/nfs4proc.c
++++ b/fs/nfs/nfs4proc.c
+@@ -7597,7 +7597,7 @@ static int nfs4_xattr_set_nfs4_user(const struct xattr_handler *handler,
+ 				    const char *key, const void *buf,
+ 				    size_t buflen, int flags)
+ {
+-	struct nfs_access_entry cache;
++	u32 mask;
+ 	int ret;
+ 
+ 	if (!nfs_server_capable(inode, NFS_CAP_XATTR))
+@@ -7612,8 +7612,8 @@ static int nfs4_xattr_set_nfs4_user(const struct xattr_handler *handler,
+ 	 * do a cached access check for the XA* flags to possibly avoid
+ 	 * doing an RPC and getting EACCES back.
+ 	 */
+-	if (!nfs_access_get_cached(inode, current_cred(), &cache, true)) {
+-		if (!(cache.mask & NFS_ACCESS_XAWRITE))
++	if (!nfs_access_get_cached(inode, current_cred(), &mask, true)) {
++		if (!(mask & NFS_ACCESS_XAWRITE))
+ 			return -EACCES;
+ 	}
+ 
+@@ -7634,14 +7634,14 @@ static int nfs4_xattr_get_nfs4_user(const struct xattr_handler *handler,
+ 				    struct dentry *unused, struct inode *inode,
+ 				    const char *key, void *buf, size_t buflen)
+ {
+-	struct nfs_access_entry cache;
++	u32 mask;
+ 	ssize_t ret;
+ 
+ 	if (!nfs_server_capable(inode, NFS_CAP_XATTR))
+ 		return -EOPNOTSUPP;
+ 
+-	if (!nfs_access_get_cached(inode, current_cred(), &cache, true)) {
+-		if (!(cache.mask & NFS_ACCESS_XAREAD))
++	if (!nfs_access_get_cached(inode, current_cred(), &mask, true)) {
++		if (!(mask & NFS_ACCESS_XAREAD))
+ 			return -EACCES;
+ 	}
+ 
+@@ -7666,13 +7666,13 @@ nfs4_listxattr_nfs4_user(struct inode *inode, char *list, size_t list_len)
+ 	ssize_t ret, size;
+ 	char *buf;
+ 	size_t buflen;
+-	struct nfs_access_entry cache;
++	u32 mask;
+ 
+ 	if (!nfs_server_capable(inode, NFS_CAP_XATTR))
+ 		return 0;
+ 
+-	if (!nfs_access_get_cached(inode, current_cred(), &cache, true)) {
+-		if (!(cache.mask & NFS_ACCESS_XALIST))
++	if (!nfs_access_get_cached(inode, current_cred(), &mask, true)) {
++		if (!(mask & NFS_ACCESS_XALIST))
+ 			return 0;
+ 	}
+ 
+diff --git a/include/linux/nfs_fs.h b/include/linux/nfs_fs.h
+index aff5cd382fef5..1e0a3497bdb46 100644
+--- a/include/linux/nfs_fs.h
++++ b/include/linux/nfs_fs.h
+@@ -501,8 +501,8 @@ extern int nfs_instantiate(struct dentry *dentry, struct nfs_fh *fh,
+ 			struct nfs_fattr *fattr, struct nfs4_label *label);
+ extern int nfs_may_open(struct inode *inode, const struct cred *cred, int openflags);
+ extern void nfs_access_zap_cache(struct inode *inode);
+-extern int nfs_access_get_cached(struct inode *inode, const struct cred *cred, struct nfs_access_entry *res,
+-				 bool may_block);
++extern int nfs_access_get_cached(struct inode *inode, const struct cred *cred,
++				 u32 *mask, bool may_block);
+ 
+ /*
+  * linux/fs/nfs/symlink.c
 -- 
 2.34.1
 

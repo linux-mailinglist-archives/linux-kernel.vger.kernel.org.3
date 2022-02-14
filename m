@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E34E04B4B3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C20D4B484A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348196AbiBNKeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:34:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43868 "EHLO
+        id S243313AbiBNJxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:53:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348172AbiBNKeA (ORCPT
+        with ESMTP id S245509AbiBNJuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:34:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C9EA2F01;
-        Mon, 14 Feb 2022 02:00:41 -0800 (PST)
+        Mon, 14 Feb 2022 04:50:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FD5A1B2;
+        Mon, 14 Feb 2022 01:41:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CFAFF60A53;
-        Mon, 14 Feb 2022 10:00:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E41C340E9;
-        Mon, 14 Feb 2022 10:00:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AAF2B611B8;
+        Mon, 14 Feb 2022 09:41:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FEF7C340E9;
+        Mon, 14 Feb 2022 09:41:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832840;
-        bh=xXZmEyAX8sqclo30hcbh/KtpPKJbBa4Qr/6DXqtVy0c=;
+        s=korg; t=1644831667;
+        bh=iPR46toKRaybBG1ZVK3CBILUGx+GNDjIARheSgboNc4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dZHIi65BDR7ry8kLA27YeYcqEB2NVHb8T/HLEBQbDiL2kaML3Mcolpvgv4kgApe4Y
-         V1ww/czNx7Szu4q2iF/38OsW/gjfCGHYjOEuuNMieHyNkeis1EeKRseXIRh90H4gNp
-         wt3zxaq2vD4bwRjUVf07Nqsni8XpeIt6szy8y3HU=
+        b=FpDezGbSitP+dJTpmXYZjxp+j/hknZBCIv7/GsIHXVO0BmbNNq3KkqHAOxI4WJ0e1
+         y+urcOKq16gEDTD+oL5jAXM4DFLhdGsEAcTr8exdXhDdrypHqBeCJzE2M/iSIpWlqU
+         LgHfuxTpq1v9kOzVi5RR+2i67n05RpRfZ2r8PNCI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 110/203] NFS: Dont overfill uncached readdir pages
-Date:   Mon, 14 Feb 2022 10:25:54 +0100
-Message-Id: <20220214092513.986287740@linuxfoundation.org>
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 056/116] phy: xilinx: zynqmp: Fix bus width setting for SGMII
+Date:   Mon, 14 Feb 2022 10:25:55 +0100
+Message-Id: <20220214092500.669503172@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: trondmy@kernel.org <trondmy@kernel.org>
+From: Robert Hancock <robert.hancock@calian.com>
 
-[ Upstream commit d9c4e39c1f8f8a8ebaccf00b8f22c14364b2d27e ]
+[ Upstream commit 37291f60d0822f191748c2a54ce63b0bc669020f ]
 
-If we're doing an uncached read of the directory, then we ideally want
-to read only the exact set of entries that will fit in the buffer
-supplied by the getdents() system call. So unlike the case where we're
-reading into the page cache, let's send only one READDIR call, before
-trying to fill up the buffer.
+TX_PROT_BUS_WIDTH and RX_PROT_BUS_WIDTH are single registers with
+separate bit fields for each lane. The code in xpsgtr_phy_init_sgmii was
+not preserving the existing register value for other lanes, so enabling
+the PHY in SGMII mode on one lane zeroed out the settings for all other
+lanes, causing other PS-GTR peripherals such as USB3 to malfunction.
 
-Fixes: 35df59d3ef69 ("NFS: Reduce number of RPC calls when doing uncached readdir")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Use xpsgtr_clr_set to only manipulate the desired bits in the register.
+
+Fixes: 4a33bea00314 ("phy: zynqmp: Add PHY driver for the Xilinx ZynqMP Gigabit Transceiver")
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Acked-by: Michal Simek <michal.simek@xilinx.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Link: https://lore.kernel.org/r/20220126001600.1592218-1-robert.hancock@calian.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/dir.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/phy/xilinx/phy-zynqmp.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
-index faf5168880223..13740f1e3972e 100644
---- a/fs/nfs/dir.c
-+++ b/fs/nfs/dir.c
-@@ -866,7 +866,8 @@ static int nfs_readdir_xdr_to_array(struct nfs_readdir_descriptor *desc,
+diff --git a/drivers/phy/xilinx/phy-zynqmp.c b/drivers/phy/xilinx/phy-zynqmp.c
+index 2b0f921b6ee3d..b8ccac6f31467 100644
+--- a/drivers/phy/xilinx/phy-zynqmp.c
++++ b/drivers/phy/xilinx/phy-zynqmp.c
+@@ -134,7 +134,8 @@
+ #define PROT_BUS_WIDTH_10		0x0
+ #define PROT_BUS_WIDTH_20		0x1
+ #define PROT_BUS_WIDTH_40		0x2
+-#define PROT_BUS_WIDTH_SHIFT		2
++#define PROT_BUS_WIDTH_SHIFT(n)		((n) * 2)
++#define PROT_BUS_WIDTH_MASK(n)		GENMASK((n) * 2 + 1, (n) * 2)
  
- 		status = nfs_readdir_page_filler(desc, entry, pages, pglen,
- 						 arrays, narrays);
--	} while (!status && nfs_readdir_page_needs_filling(page));
-+	} while (!status && nfs_readdir_page_needs_filling(page) &&
-+		page_mapping(page));
+ /* Number of GT lanes */
+ #define NUM_LANES			4
+@@ -443,12 +444,12 @@ static void xpsgtr_phy_init_sata(struct xpsgtr_phy *gtr_phy)
+ static void xpsgtr_phy_init_sgmii(struct xpsgtr_phy *gtr_phy)
+ {
+ 	struct xpsgtr_dev *gtr_dev = gtr_phy->dev;
++	u32 mask = PROT_BUS_WIDTH_MASK(gtr_phy->lane);
++	u32 val = PROT_BUS_WIDTH_10 << PROT_BUS_WIDTH_SHIFT(gtr_phy->lane);
  
- 	nfs_readdir_free_pages(pages, array_size);
- out:
+ 	/* Set SGMII protocol TX and RX bus width to 10 bits. */
+-	xpsgtr_write(gtr_dev, TX_PROT_BUS_WIDTH,
+-		     PROT_BUS_WIDTH_10 << (gtr_phy->lane * PROT_BUS_WIDTH_SHIFT));
+-	xpsgtr_write(gtr_dev, RX_PROT_BUS_WIDTH,
+-		     PROT_BUS_WIDTH_10 << (gtr_phy->lane * PROT_BUS_WIDTH_SHIFT));
++	xpsgtr_clr_set(gtr_dev, TX_PROT_BUS_WIDTH, mask, val);
++	xpsgtr_clr_set(gtr_dev, RX_PROT_BUS_WIDTH, mask, val);
+ 
+ 	xpsgtr_bypass_scrambler_8b10b(gtr_phy);
+ }
 -- 
 2.34.1
 

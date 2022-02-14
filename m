@@ -2,53 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 348B04B4AB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DFDD4B4AB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346959AbiBNKZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:25:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34374 "EHLO
+        id S1344818AbiBNKEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:04:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346941AbiBNKYl (ORCPT
+        with ESMTP id S1343842AbiBNJ72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:24:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C146A04E;
-        Mon, 14 Feb 2022 01:56:42 -0800 (PST)
+        Mon, 14 Feb 2022 04:59:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8578C2C;
+        Mon, 14 Feb 2022 01:46:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9649560FA2;
-        Mon, 14 Feb 2022 09:56:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41299C340E9;
-        Mon, 14 Feb 2022 09:56:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44F7361287;
+        Mon, 14 Feb 2022 09:46:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4059C340E9;
+        Mon, 14 Feb 2022 09:46:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832601;
-        bh=eZzWSHHPhuyrfHRIaehmCfV5KOXZOFvWuve5S+I0rBA=;
+        s=korg; t=1644832014;
+        bh=KkVFtQgWDU8kC8bkFKYteuVKgn36OiBQyAW0ygsQ71w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dl+GQtVFq96OynaV7b9Pw6YUx1Wv2XGrhjhaH869vmzG4Y6bi6H+VStpKyn6mYs0j
-         XF1WPvXXMEinRbnZZRtPU4TvKM7VoX28bl18vNmH4uERiXmMKgbQgUBU0uoor8TXvo
-         t4Sb3zAzUAH3Po/nxqfA5NakWNn5LkDC5kLc17Xg=
+        b=2wEsnRRzy2OozEIEZ4ObpMKh7oNqhKBbqiTmicFb8sbJv8Ptrdql3s9gjhKeF2RHL
+         9jr/Q1ZGpnfmlBELnbNfeq2K+SELKyZI3XUEGsNSbbngomygVFSJsABs07G4rCOEsL
+         O2noxFUagGHYvl1Wku8YQ+uPCKMqWyKEAImpckHM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marco Elver <elver@google.com>,
-        Nico Pache <npache@redhat.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org, Jisheng Zhang <jszhang@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 066/203] kasan: test: fix compatibility with FORTIFY_SOURCE
+Subject: [PATCH 5.15 052/172] net: stmmac: reduce unnecessary wakeups from eee sw timer
 Date:   Mon, 14 Feb 2022 10:25:10 +0100
-Message-Id: <20220214092512.500026966@linuxfoundation.org>
+Message-Id: <20220214092508.180040913@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -63,92 +55,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marco Elver <elver@google.com>
+From: Jisheng Zhang <jszhang@kernel.org>
 
-[ Upstream commit 09c6304e38e440b93a9ebf3f3cf75cd6cb529f91 ]
+[ Upstream commit c74ead223deb88bdf18af8c772d7ca5a9b6c3c2b ]
 
-With CONFIG_FORTIFY_SOURCE enabled, string functions will also perform
-dynamic checks using __builtin_object_size(ptr), which when failed will
-panic the kernel.
+Currently, on EEE capable platforms, if EEE SW timer is used, the SW
+timer cause 1 wakeup/s even if the TX has successfully entered EEE.
+Remove this unnecessary wakeup by only calling mod_timer() if we
+haven't successfully entered EEE.
 
-Because the KASAN test deliberately performs out-of-bounds operations,
-the kernel panics with FORTIFY_SOURCE, for example:
-
- | kernel BUG at lib/string_helpers.c:910!
- | invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
- | CPU: 1 PID: 137 Comm: kunit_try_catch Tainted: G    B             5.16.0-rc3+ #3
- | Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
- | RIP: 0010:fortify_panic+0x19/0x1b
- | ...
- | Call Trace:
- |  kmalloc_oob_in_memset.cold+0x16/0x16
- |  ...
-
-Fix it by also hiding `ptr` from the optimizer, which will ensure that
-__builtin_object_size() does not return a valid size, preventing
-fortified string functions from panicking.
-
-Link: https://lkml.kernel.org/r/20220124160744.1244685-1-elver@google.com
-Signed-off-by: Marco Elver <elver@google.com>
-Reported-by: Nico Pache <npache@redhat.com>
-Reviewed-by: Nico Pache <npache@redhat.com>
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc: Alexander Potapenko <glider@google.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>
-Cc: Brendan Higgins <brendanhiggins@google.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/test_kasan.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/lib/test_kasan.c b/lib/test_kasan.c
-index 0643573f86862..2ef2948261bf8 100644
---- a/lib/test_kasan.c
-+++ b/lib/test_kasan.c
-@@ -492,6 +492,7 @@ static void kmalloc_oob_in_memset(struct kunit *test)
- 	ptr = kmalloc(size, GFP_KERNEL);
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 161e65333ed94..e6af26b2dcb81 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -400,7 +400,7 @@ static void stmmac_lpi_entry_timer_config(struct stmmac_priv *priv, bool en)
+  * Description: this function is to verify and enter in LPI mode in case of
+  * EEE.
+  */
+-static void stmmac_enable_eee_mode(struct stmmac_priv *priv)
++static int stmmac_enable_eee_mode(struct stmmac_priv *priv)
+ {
+ 	u32 tx_cnt = priv->plat->tx_queues_to_use;
+ 	u32 queue;
+@@ -410,13 +410,14 @@ static void stmmac_enable_eee_mode(struct stmmac_priv *priv)
+ 		struct stmmac_tx_queue *tx_q = &priv->tx_queue[queue];
  
-+	OPTIMIZER_HIDE_VAR(ptr);
- 	OPTIMIZER_HIDE_VAR(size);
- 	KUNIT_EXPECT_KASAN_FAIL(test,
- 				memset(ptr, 0, size + KASAN_GRANULE_SIZE));
-@@ -515,6 +516,7 @@ static void kmalloc_memmove_negative_size(struct kunit *test)
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
+ 		if (tx_q->dirty_tx != tx_q->cur_tx)
+-			return; /* still unfinished work */
++			return -EBUSY; /* still unfinished work */
+ 	}
  
- 	memset((char *)ptr, 0, 64);
-+	OPTIMIZER_HIDE_VAR(ptr);
- 	OPTIMIZER_HIDE_VAR(invalid_size);
- 	KUNIT_EXPECT_KASAN_FAIL(test,
- 		memmove((char *)ptr, (char *)ptr + 4, invalid_size));
-@@ -531,6 +533,7 @@ static void kmalloc_memmove_invalid_size(struct kunit *test)
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
+ 	/* Check and enter in LPI mode */
+ 	if (!priv->tx_path_in_lpi_mode)
+ 		stmmac_set_eee_mode(priv, priv->hw,
+ 				priv->plat->en_tx_lpi_clockgating);
++	return 0;
+ }
  
- 	memset((char *)ptr, 0, 64);
-+	OPTIMIZER_HIDE_VAR(ptr);
- 	KUNIT_EXPECT_KASAN_FAIL(test,
- 		memmove((char *)ptr, (char *)ptr + 4, invalid_size));
- 	kfree(ptr);
-@@ -869,6 +872,7 @@ static void kasan_memchr(struct kunit *test)
- 	ptr = kmalloc(size, GFP_KERNEL | __GFP_ZERO);
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
+ /**
+@@ -448,8 +449,8 @@ static void stmmac_eee_ctrl_timer(struct timer_list *t)
+ {
+ 	struct stmmac_priv *priv = from_timer(priv, t, eee_ctrl_timer);
  
-+	OPTIMIZER_HIDE_VAR(ptr);
- 	OPTIMIZER_HIDE_VAR(size);
- 	KUNIT_EXPECT_KASAN_FAIL(test,
- 		kasan_ptr_result = memchr(ptr, '1', size + 1));
-@@ -895,6 +899,7 @@ static void kasan_memcmp(struct kunit *test)
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
- 	memset(arr, 0, sizeof(arr));
+-	stmmac_enable_eee_mode(priv);
+-	mod_timer(&priv->eee_ctrl_timer, STMMAC_LPI_T(priv->tx_lpi_timer));
++	if (stmmac_enable_eee_mode(priv))
++		mod_timer(&priv->eee_ctrl_timer, STMMAC_LPI_T(priv->tx_lpi_timer));
+ }
  
-+	OPTIMIZER_HIDE_VAR(ptr);
- 	OPTIMIZER_HIDE_VAR(size);
- 	KUNIT_EXPECT_KASAN_FAIL(test,
- 		kasan_int_result = memcmp(ptr, arr, size+1));
+ /**
+@@ -2637,8 +2638,8 @@ static int stmmac_tx_clean(struct stmmac_priv *priv, int budget, u32 queue)
+ 
+ 	if (priv->eee_enabled && !priv->tx_path_in_lpi_mode &&
+ 	    priv->eee_sw_timer_en) {
+-		stmmac_enable_eee_mode(priv);
+-		mod_timer(&priv->eee_ctrl_timer, STMMAC_LPI_T(priv->tx_lpi_timer));
++		if (stmmac_enable_eee_mode(priv))
++			mod_timer(&priv->eee_ctrl_timer, STMMAC_LPI_T(priv->tx_lpi_timer));
+ 	}
+ 
+ 	/* We still have pending packets, let's call for a new scheduling */
 -- 
 2.34.1
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8021D4B4622
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 700FB4B4BB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:42:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243300AbiBNJal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:30:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43046 "EHLO
+        id S1345157AbiBNKKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:10:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243315AbiBNJa2 (ORCPT
+        with ESMTP id S1344617AbiBNKEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:30:28 -0500
+        Mon, 14 Feb 2022 05:04:50 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082591AD97;
-        Mon, 14 Feb 2022 01:29:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8DF4BFDF;
+        Mon, 14 Feb 2022 01:49:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9731D60DFD;
-        Mon, 14 Feb 2022 09:29:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A7DAC340E9;
-        Mon, 14 Feb 2022 09:29:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC8D861284;
+        Mon, 14 Feb 2022 09:49:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5490C340E9;
+        Mon, 14 Feb 2022 09:49:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644830980;
-        bh=drmrAjMBS4/4+KGRaliNlKHw6jc6/KCWTqv+/6f4d/g=;
+        s=korg; t=1644832152;
+        bh=LDr9fet3QinOPzrvjIlFRpO51oUaf2hH9I6poxqYFRs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m6sASpi8nNx8TfxxBPZdrHy+/RuMUvCPnuMl5HTphS+l8ZtmAOHkNqJ58nflDezBb
-         cDjSc6MNDqbzX/v4F+YG4uUOPgkIB+8wMTO6TbAsXQy13MMSOWuTDDuw7tC3bIgjxA
-         9rwNjdXM2M5Ap6ijGtNnvH2rHNVo6iFyuYtzAeTk=
+        b=pdtHBmV5fE8HGwnlxGV0RkVGCn6nIHn3KlTjS/PZAt6FOG7K5/q+IaazBld0DRyM0
+         6LKVOJmusYV5DqhZwXlar7n/REEC5LjGfhvd5BqAP6DKSnVs6Tw/Fw6K7HuhznCFKx
+         1JD1s2yCP4w/NAAGXzn7bMxFLWZgDQtbN4EN0T8Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>
-Subject: [PATCH 4.9 26/34] usb: dwc3: gadget: Prevent core from processing stale TRBs
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 094/172] NFS: Dont overfill uncached readdir pages
 Date:   Mon, 14 Feb 2022 10:25:52 +0100
-Message-Id: <20220214092446.789301420@linuxfoundation.org>
+Message-Id: <20220214092509.650004231@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
-References: <20220214092445.946718557@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Udipto Goswami <quic_ugoswami@quicinc.com>
+From: trondmy@kernel.org <trondmy@kernel.org>
 
-commit 117b4e96c7f362eb6459543883fc07f77662472c upstream.
+[ Upstream commit d9c4e39c1f8f8a8ebaccf00b8f22c14364b2d27e ]
 
-With CPU re-ordering on write instructions, there might
-be a chance that the HWO is set before the TRB is updated
-with the new mapped buffer address.
-And in the case where core is processing a list of TRBs
-it is possible that it fetched the TRBs when the HWO is set
-but before the buffer address is updated.
-Prevent this by adding a memory barrier before the HWO
-is updated to ensure that the core always process the
-updated TRBs.
+If we're doing an uncached read of the directory, then we ideally want
+to read only the exact set of entries that will fit in the buffer
+supplied by the getdents() system call. So unlike the case where we're
+reading into the page cache, let's send only one READDIR call, before
+trying to fill up the buffer.
 
-Fixes: f6bafc6a1c9d ("usb: dwc3: convert TRBs into bitshifts")
-Cc: stable <stable@vger.kernel.org>
-Reviewed-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
-Link: https://lore.kernel.org/r/1644207958-18287-1-git-send-email-quic_ugoswami@quicinc.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 35df59d3ef69 ("NFS: Reduce number of RPC calls when doing uncached readdir")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/gadget.c |   13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ fs/nfs/dir.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -902,6 +902,19 @@ static void dwc3_prepare_one_trb(struct
- 	if (usb_endpoint_xfer_bulk(dep->endpoint.desc) && dep->stream_capable)
- 		trb->ctrl |= DWC3_TRB_CTRL_SID_SOFN(req->request.stream_id);
+diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
+index db6abd4733bfb..af7881bc6b3e6 100644
+--- a/fs/nfs/dir.c
++++ b/fs/nfs/dir.c
+@@ -870,7 +870,8 @@ static int nfs_readdir_xdr_to_array(struct nfs_readdir_descriptor *desc,
  
-+	/*
-+	 * As per data book 4.2.3.2TRB Control Bit Rules section
-+	 *
-+	 * The controller autonomously checks the HWO field of a TRB to determine if the
-+	 * entire TRB is valid. Therefore, software must ensure that the rest of the TRB
-+	 * is valid before setting the HWO field to '1'. In most systems, this means that
-+	 * software must update the fourth DWORD of a TRB last.
-+	 *
-+	 * However there is a possibility of CPU re-ordering here which can cause
-+	 * controller to observe the HWO bit set prematurely.
-+	 * Add a write memory barrier to prevent CPU re-ordering.
-+	 */
-+	wmb();
- 	trb->ctrl |= DWC3_TRB_CTRL_HWO;
+ 		status = nfs_readdir_page_filler(desc, entry, pages, pglen,
+ 						 arrays, narrays);
+-	} while (!status && nfs_readdir_page_needs_filling(page));
++	} while (!status && nfs_readdir_page_needs_filling(page) &&
++		page_mapping(page));
  
- 	trace_dwc3_prepare_trb(dep, trb);
+ 	nfs_readdir_free_pages(pages, array_size);
+ out_release_label:
+-- 
+2.34.1
+
 
 

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 210A74B461D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3304B4750
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243711AbiBNJct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:32:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41894 "EHLO
+        id S1343570AbiBNJuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:50:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243595AbiBNJcQ (ORCPT
+        with ESMTP id S1343678AbiBNJqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:32:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCB060AA5;
-        Mon, 14 Feb 2022 01:31:08 -0800 (PST)
+        Mon, 14 Feb 2022 04:46:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA6C25C4D;
+        Mon, 14 Feb 2022 01:39:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE94F60F83;
-        Mon, 14 Feb 2022 09:31:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95B93C340E9;
-        Mon, 14 Feb 2022 09:31:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DBB9FB80DA9;
+        Mon, 14 Feb 2022 09:39:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5952C340E9;
+        Mon, 14 Feb 2022 09:39:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831067;
-        bh=RuHWb3w5sWFdomNRagX+hTJL7q/b3BKZNtbnuV1Auew=;
+        s=korg; t=1644831585;
+        bh=DliUIAbOhT7PflrHsH2KMRlmp6VOx0lJtRmJdkFXJXI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Yb/8WwrENztGT1qCGnZ+foFPRevIWJm/U4dPgQwyEyV8HL/EeUmfXIN4YFYp8/dZh
-         vG7ZYYWlA3TXVfl9l4VFt2wqqezVZw9VUWmMX757ed0iUixaSbkIZcuN0boN8ZNfyi
-         aLZNrFYSCTDNgUQquc1Iq10jFfm9fgcQzRXL8TWQ=
+        b=M4cb2aFoH1IFGQhQ37GrstAaOvIJF8zO5lMJ9qTO6o2O3jmz/gGBc+wcYgVW9LniQ
+         SDDxNCAUxsAZvLut9upX45Y8Ssm8qyIvzHmhtynA+I1S6SOu0vy9VpFmCBbVZFLS2q
+         d1iTdGzsJXKpxbJV0gTTYb9tqxL+JgRz8Ochqr1U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 4.14 04/44] mmc: sdhci-of-esdhc: Check for error num after setting mask
-Date:   Mon, 14 Feb 2022 10:25:27 +0100
-Message-Id: <20220214092448.054893540@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        John Garry <john.garry@huawei.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 029/116] scsi: pm8001: Fix bogus FW crash for maxcpus=1
+Date:   Mon, 14 Feb 2022 10:25:28 +0100
+Message-Id: <20220214092459.689498513@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
-References: <20220214092447.897544753@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +57,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: John Garry <john.garry@huawei.com>
 
-commit 40c67c291a93f8846c4a972c9ef1b7ba4544c8d0 upstream.
+[ Upstream commit 62afb379a0fee7e9c2f9f68e1abeb85ceddf51b9 ]
 
-Because of the possible failure of the dma_supported(), the
-dma_set_mask_and_coherent() may return error num.
-Therefore, it should be better to check it and return the error if
-fails.
-And since the sdhci_setup_host() has already checked the return value of
-the enable_dma, we need not check it in sdhci_resume_host() again.
+According to the comment in check_fw_ready() we should not check the
+IOP1_READY field in register SCRATCH_PAD_1 for 8008 or 8009 controllers.
 
-Fixes: 5552d7ad596c ("mmc: sdhci-of-esdhc: set proper dma mask for ls104x chips")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220112083156.1124782-1-jiasheng@iscas.ac.cn
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+However we check this very field in process_oq() for processing the highest
+index interrupt vector. The highest interrupt vector is checked as the FW
+is programmed to signal fatal errors through this irq.
+
+Change that function to not check IOP1_READY for those mentioned
+controllers, but do check ILA_READY in both cases.
+
+The reason I assume that this was not hit earlier was because we always
+allocated 64 MSI(X), and just did not pass the vector index check in
+process_oq(), i.e.  the handler never ran for vector index 63.
+
+Link: https://lore.kernel.org/r/1642508105-95432-1-git-send-email-john.garry@huawei.com
+Tested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: John Garry <john.garry@huawei.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/host/sdhci-of-esdhc.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 16 ++++++++++++++--
+ drivers/scsi/pm8001/pm80xx_hwi.h |  6 +++++-
+ 2 files changed, 19 insertions(+), 3 deletions(-)
 
---- a/drivers/mmc/host/sdhci-of-esdhc.c
-+++ b/drivers/mmc/host/sdhci-of-esdhc.c
-@@ -427,12 +427,16 @@ static void esdhc_of_adma_workaround(str
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index a203a4fc2674a..b22a8ab754faa 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -4057,10 +4057,22 @@ static int process_oq(struct pm8001_hba_info *pm8001_ha, u8 vec)
+ 	unsigned long flags;
+ 	u32 regval;
  
- static int esdhc_of_enable_dma(struct sdhci_host *host)
- {
-+	int ret;
- 	u32 value;
- 	struct device *dev = mmc_dev(host->mmc);
++	/*
++	 * Fatal errors are programmed to be signalled in irq vector
++	 * pm8001_ha->max_q_num - 1 through pm8001_ha->main_cfg_tbl.pm80xx_tbl.
++	 * fatal_err_interrupt
++	 */
+ 	if (vec == (pm8001_ha->max_q_num - 1)) {
++		u32 mipsall_ready;
++
++		if (pm8001_ha->chip_id == chip_8008 ||
++		    pm8001_ha->chip_id == chip_8009)
++			mipsall_ready = SCRATCH_PAD_MIPSALL_READY_8PORT;
++		else
++			mipsall_ready = SCRATCH_PAD_MIPSALL_READY_16PORT;
++
+ 		regval = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
+-		if ((regval & SCRATCH_PAD_MIPSALL_READY) !=
+-					SCRATCH_PAD_MIPSALL_READY) {
++		if ((regval & mipsall_ready) != mipsall_ready) {
+ 			pm8001_ha->controller_fatal_error = true;
+ 			pm8001_dbg(pm8001_ha, FAIL,
+ 				   "Firmware Fatal error! Regval:0x%x\n",
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.h b/drivers/scsi/pm8001/pm80xx_hwi.h
+index 701951a0f715b..0dfe9034f7e7f 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.h
++++ b/drivers/scsi/pm8001/pm80xx_hwi.h
+@@ -1391,8 +1391,12 @@ typedef struct SASProtocolTimerConfig SASProtocolTimerConfig_t;
+ #define SCRATCH_PAD_BOOT_LOAD_SUCCESS	0x0
+ #define SCRATCH_PAD_IOP0_READY		0xC00
+ #define SCRATCH_PAD_IOP1_READY		0x3000
+-#define SCRATCH_PAD_MIPSALL_READY	(SCRATCH_PAD_IOP1_READY | \
++#define SCRATCH_PAD_MIPSALL_READY_16PORT	(SCRATCH_PAD_IOP1_READY | \
+ 					SCRATCH_PAD_IOP0_READY | \
++					SCRATCH_PAD_ILA_READY | \
++					SCRATCH_PAD_RAAE_READY)
++#define SCRATCH_PAD_MIPSALL_READY_8PORT	(SCRATCH_PAD_IOP0_READY | \
++					SCRATCH_PAD_ILA_READY | \
+ 					SCRATCH_PAD_RAAE_READY)
  
- 	if (of_device_is_compatible(dev->of_node, "fsl,ls1043a-esdhc") ||
--	    of_device_is_compatible(dev->of_node, "fsl,ls1046a-esdhc"))
--		dma_set_mask_and_coherent(dev, DMA_BIT_MASK(40));
-+	    of_device_is_compatible(dev->of_node, "fsl,ls1046a-esdhc")) {
-+		ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(40));
-+		if (ret)
-+			return ret;
-+	}
- 
- 	value = sdhci_readl(host, ESDHC_DMA_SYSCTL);
- 
+ /* boot loader state */
+-- 
+2.34.1
+
 
 

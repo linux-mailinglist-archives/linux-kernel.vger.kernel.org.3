@@ -2,156 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74FC54B5215
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:47:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 882894B521A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354620AbiBNNqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:46:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58960 "EHLO
+        id S1354607AbiBNNs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:48:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354613AbiBNNqt (ORCPT
+        with ESMTP id S233624AbiBNNs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:46:49 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A730DBCBF
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:46:41 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id p9so6410149wra.12
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:46:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=w7Y2pezxBsweg1F5I/VGY695nV4P7xVufo9MH/6yH4w=;
-        b=xbBzSuDMBF4QcBOgUYmHXwtJ8dWcuIuUf140cvSkvLow8cj8kYcFB4do4WkalZa3XS
-         8d9s0BtXVhj3b8h6vy6UlCEgZBLcU1/Qom1uZyeHgFKh9kfdDacWzy1LL/pmKExd690W
-         DETyv+xXrlYN2SNwheJSZM/VepnFWEYOloLT6xeK9Bw98s5hum78ZHjN6uh7GYctQI4a
-         U3Rm5lvrfoTlw9jO4MeePvBBmUeo5GQsY0C27x0TzmhYHiUaaPw7f6MeL1bwOouJldMM
-         0QAC00Gg6se2kiBkKRFwpZ2P/QYpJ+5/64PI6ibT4QIq94fnmN4bLjEZbJrcmwrx3sek
-         tXgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=w7Y2pezxBsweg1F5I/VGY695nV4P7xVufo9MH/6yH4w=;
-        b=0GBqHDr72PDPwU06c1qXQQTjq3ZcZOoEZXCGO7t4GU8njXMCOtvbfqIC61qYsd1N9r
-         2s9ZEwb/mI9a/hlUWMuPl7n4GI+40IFX9S5aiEnNCohFiKuzyLxENkC3fg4MsZcHeSf1
-         vUY4vRCHTtOsKPeAEo5w3RAT6kMeWS+EPA8ZHjJsn3kODHwy5CgztLlGYhUBJUhoSPwI
-         /vpEQf1GSoQYz4cJ5yEDyufk4bplHTh9b+Kemhpd51uZ/8AWZSMgV0h1vId7BbdwQjVX
-         1lYR9T+836Z2cXqP4KlcdPKSyfBVkLykUvdljPlguYuJXsauj+9kIoYuuw5WGPxM2Tyf
-         +5TQ==
-X-Gm-Message-State: AOAM5303d5AY3615RJx6u58PVvR0k5XT0Ihs+NfFJPYeki0aHm/y1Yml
-        AEvECMBkBIsrwOifcpYDVYcsAQ==
-X-Google-Smtp-Source: ABdhPJzXEeknb6ILWxHf2R1dA6zSDZITWc+9hhismzIz4RJI7wlJaYVzhoqbDzYnJ6jvnEucUApvXw==
-X-Received: by 2002:a5d:4745:: with SMTP id o5mr11466614wrs.275.1644846400191;
-        Mon, 14 Feb 2022 05:46:40 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id b15sm25416656wri.96.2022.02.14.05.46.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 05:46:39 -0800 (PST)
-Date:   Mon, 14 Feb 2022 13:46:37 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH] mfd: stmfx: Improve error message triggered by regulator
- fault in .remove()
-Message-ID: <YgpdPTDurgsvR9mk@google.com>
-References: <20220207081709.27288-1-u.kleine-koenig@pengutronix.de>
+        Mon, 14 Feb 2022 08:48:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80AC0BCBF
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:48:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3468CB80EE1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:48:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 716E6C340E9;
+        Mon, 14 Feb 2022 13:48:47 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="j8Bhg8un"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644846526;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=cOMdCmNV4mNS64vF6rK6hBr6/XZqlUrl4jKwhxROapo=;
+        b=j8Bhg8unZgSuUsrd4Co+LRkA1sOJyWPIC6shMwLLa5Tst6VY1nFwmom5QbG1ZAvLd7wadE
+        a09jEBS8xy9zC9HvnrxQoCjyOJTTDK48vw63nKr6aQY9vcy0hUs0JVCkDY1v6H21F+n8Ao
+        NJt74hQ5UVBLqBBRykc8c1YWNU+K/JE=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3ff68864 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 14 Feb 2022 13:48:45 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux@dominikbrodowski.net
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: [PATCH] random: invalidate crngs and batches on cpuhp teardown
+Date:   Mon, 14 Feb 2022 14:48:38 +0100
+Message-Id: <20220214134838.980159-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220207081709.27288-1-u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 07 Feb 2022, Uwe Kleine-König wrote:
+Now that we have a cpuhp teardown notifier, we can invalidate the keys
+used by the per-cpu crngs and the batches used by per-cpu batched
+entropy, so that if the cpus come back online, and the generation
+counter happens to have cycled all the way around to where it was
+before, it doesn't mistakenly use the old data. The chances of this
+happening are exceedingly rare, but since we now have the notifier
+setup, doing this is basically free.
 
-> Returning a non-zero value in an i2c remove callback results in the i2c
-> core emitting a very generic error message ("remove failed (-ESOMETHING),
-> will be ignored") and as the message indicates not further error handling
-> is done.
-> 
-> Instead emit a more specific error message and then return zero in
-> .remove().
-> 
-> The long-term goal is to make the i2c remove prototype return void, making
-> all implementations return 0 is preparatory work for this change.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/mfd/stmfx.c | 16 +++++++++++-----
->  1 file changed, 11 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/mfd/stmfx.c b/drivers/mfd/stmfx.c
-> index e095a3930142..16631c675f2f 100644
-> --- a/drivers/mfd/stmfx.c
-> +++ b/drivers/mfd/stmfx.c
-> @@ -392,17 +392,21 @@ static int stmfx_chip_init(struct i2c_client *client)
->  	return ret;
->  }
->  
-> -static int stmfx_chip_exit(struct i2c_client *client)
-> +static void stmfx_chip_exit(struct i2c_client *client)
->  {
->  	struct stmfx *stmfx = i2c_get_clientdata(client);
->  
->  	regmap_write(stmfx->map, STMFX_REG_IRQ_SRC_EN, 0);
->  	regmap_write(stmfx->map, STMFX_REG_SYS_CTRL, 0);
->  
-> -	if (stmfx->vdd)
-> -		return regulator_disable(stmfx->vdd);
-> +	if (stmfx->vdd) {
-> +		int ret = regulator_disable(stmfx->vdd);
->  
-> -	return 0;
-> +		if (ret)
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Sultan Alsawaf <sultan@kerneltoast.com>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Nit: Premise of the patch is fine, but please can you use the standard
-function call, check the return value format please.  Something about
-this is triggering my OCD! :)
-
-     	int ret;
-
-	ret = regulator_disable(stmfx->vdd);
-	if (ret)
-		do_thing();
-
-> +			dev_err(&client->dev,
-> +				"Failed to disable vdd regulator: %pe\n",
-> +				ERR_PTR(ret));
-> +	}
->  }
->  
->  static int stmfx_probe(struct i2c_client *client,
-> @@ -466,7 +470,9 @@ static int stmfx_remove(struct i2c_client *client)
->  {
->  	stmfx_irq_exit(client);
->  
-> -	return stmfx_chip_exit(client);
-> +	stmfx_chip_exit(client);
-> +
-> +	return 0;
->  }
->  
->  #ifdef CONFIG_PM_SLEEP
-> 
-> base-commit: dcb85f85fa6f142aae1fe86f399d4503d49f2b60
-
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index df5aef93da34..ce199af9bc56 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1225,6 +1225,15 @@ int random_dead_cpu(unsigned int cpu)
+ 	 * since the MIX_INFLIGHT flag will be cleared.
+ 	 */
+ 	per_cpu_ptr(&irq_randomness, cpu)->count = 0;
++
++	/*
++	 * We also want to invalidate per-cpu crngs and batches,
++	 * so that if the CPU does come back online, it uses
++	 * fresh entropy.
++	 */
++	per_cpu_ptr(&crngs, cpu)->generation = ULONG_MAX;
++	per_cpu_ptr(&batched_entropy_u32, cpu)->position = UINT_MAX;
++	per_cpu_ptr(&batched_entropy_u64, cpu)->position = UINT_MAX;
+ 	return 0;
+ }
+ 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.35.0
+

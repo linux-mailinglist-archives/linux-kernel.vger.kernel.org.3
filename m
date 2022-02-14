@@ -2,163 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4B84B5C7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6BF24B5C8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230441AbiBNVS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:18:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36200 "EHLO
+        id S230464AbiBNVVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:21:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230396AbiBNVSY (ORCPT
+        with ESMTP id S230213AbiBNVVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:18:24 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2991D13C243
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:18:14 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id 4so18772716oil.11
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:18:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lUDAX0UaDPTHJ9u8BBzfbhja83Bgj8HqOrB2yYnjOXM=;
-        b=VFULTseLnwoWoQSLrikwObkqrgWEDJsgEoShox8nAP9wuMRLYLSmINgZVPuS4zJCYq
-         AY+rJI2tTabEed97CNniygA5XGKmOrXxLL+dqf5LJsVaIMA+QxlQKmlOxLVW3MPyEQOW
-         ZtZ4oDJOQLly/BilNjT4JcO3Qc4hVnFdspg2L6GzChP02kiowqdnpSk3qcJBLKZzsP0E
-         LQOUETeZSPr1OgoOyaK1JtHOTBP1ihk0bK5wukpFaWyN8SjOlX96peTYbEzeUHuSIcP3
-         kErjTwCsp+aGM83fy1ZyKBkFtKkFORMEFCjsOWRHwsOb1sx0pkSNSAWQmxneJL40R6Rz
-         fXKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lUDAX0UaDPTHJ9u8BBzfbhja83Bgj8HqOrB2yYnjOXM=;
-        b=x4BjQYd41J76UTSPC3ac8L9oysTAKVksMbjFlGYgnzqXGk3cPO7YmRYimx19iv3mib
-         Pqm8rUOFPTpFrDKXO5qNaF6y/xKhInunHJGAHvZOZ3i/BWRuRef2GpNNYPpGQPfMCwEA
-         AHSDiDptahWS5qLuHXatiXrFXU1XUbVI0ilSq/SshAIKuIwUqta278Rmv1wMgT62Tfln
-         7Q1rZ/eEcCIYL7vmBpvgzfa1s2uvODqSGFwHwVPPQ9QBgZB4nWqU3obKh4HOSFUCUy9W
-         jJoNizX+7f8YUb7/H8ZagHF8CniYwKnE11vRPB6vBDff0NRbEu4bc0u/7IACRAqpfl/6
-         OqeA==
-X-Gm-Message-State: AOAM532MguSng4hI9xB1droneinrwY9w5CMSTyske4NHVyahl2q8L5Es
-        GF9PaDnVpYaF9At7C31iOkCU8nBaXwKfFw==
-X-Google-Smtp-Source: ABdhPJxxpY4/tEbGo0g+V8BNk8kQ7NowXtqTBM2bOEDe8a9owPVdSth3Obtc2+mwubfJzK+qB57Q9Q==
-X-Received: by 2002:a17:90a:1b2c:b0:1b8:ab57:309f with SMTP id q41-20020a17090a1b2c00b001b8ab57309fmr248913pjq.48.1644866647585;
-        Mon, 14 Feb 2022 11:24:07 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id nn16sm15099137pjb.2.2022.02.14.11.24.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 11:24:06 -0800 (PST)
-Date:   Mon, 14 Feb 2022 19:24:03 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com
-Subject: Re: [PATCH 12/12] KVM: x86: do not unload MMU roots on all role
- changes
-Message-ID: <YgqsU8j80M1ZpWPx@google.com>
-References: <20220209170020.1775368-1-pbonzini@redhat.com>
- <20220209170020.1775368-13-pbonzini@redhat.com>
- <YgavcP/jb5njjKKn@google.com>
- <5f42d1ef-f6b7-c339-32b9-f4cf48c21841@redhat.com>
+        Mon, 14 Feb 2022 16:21:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0927913C390;
+        Mon, 14 Feb 2022 13:21:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E93F6111F;
+        Mon, 14 Feb 2022 19:25:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8984C340F4;
+        Mon, 14 Feb 2022 19:25:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644866741;
+        bh=zLWY4rc6tKJzkfOHU66+tSLIxceIVdBozj8MWHl9tz8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dahbLYzx2Cck5kbI+J06pUjtONQgq4wac0B/zMHO2t8H4+atEXbbC3nQoEeMZmjvT
+         itq7QzJ+hcqJRhHre9S0Rv1ba7ESMo4l9io+gmxznvUC35vP0sSOIkYlCR+0otG3GN
+         tdNTUG6Qu0hKopOLGNe9r6lsk3LXktZTgdyM6DDF4qnI4CaboAovPMzaA5UAbOEp8B
+         APnMM/NoSUEX7k/TbfFZOMIAXqeOgVfYlaUUwS5IVx/KX2WaZSUcXBZdLbU9c3dXWc
+         B7yscltnO9vN4AE6rtNUxs37L8HmCFQQ4zLTncxcS+Y4byxc1hWLvKupRncU1kUVIh
+         Se79TuvvAK7PA==
+Received: by mail-wr1-f41.google.com with SMTP id e3so28621725wra.0;
+        Mon, 14 Feb 2022 11:25:41 -0800 (PST)
+X-Gm-Message-State: AOAM533lGBGdzQ2n4n/+tiFsDCW6M+1s0S1dxwkv7EnqcNwoNPD/D0To
+        g73TG23bEoHghzGuOFucaeUtVTcCMiOXD2j8fXA=
+X-Google-Smtp-Source: ABdhPJwrOpkav7UeztG9pweW7/OWsS+hZNYg7RZgUDmgoSoPSixwWLgUERuof4XivnroH6SdfUIEp08YoMpfbv7qa3w=
+X-Received: by 2002:a5d:5446:: with SMTP id w6mr422520wrv.12.1644866740020;
+ Mon, 14 Feb 2022 11:25:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5f42d1ef-f6b7-c339-32b9-f4cf48c21841@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220214163452.1568807-1-arnd@kernel.org> <20220214163452.1568807-8-arnd@kernel.org>
+ <YgqOLZbFK7/B2HJT@zeniv-ca.linux.org.uk>
+In-Reply-To: <YgqOLZbFK7/B2HJT@zeniv-ca.linux.org.uk>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Mon, 14 Feb 2022 20:25:24 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a36U35DK22UT6id=WawWaJa-2+_W9HFgmwdDJ_tVYE5NQ@mail.gmail.com>
+Message-ID: <CAK8P3a36U35DK22UT6id=WawWaJa-2+_W9HFgmwdDJ_tVYE5NQ@mail.gmail.com>
+Subject: Re: [PATCH 07/14] uaccess: generalize access_ok()
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Rich Felker <dalias@libc.org>,
+        David Miller <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022, Paolo Bonzini wrote:
-> On 2/11/22 19:48, Sean Christopherson wrote:
-> > On Wed, Feb 09, 2022, Paolo Bonzini wrote:
-> > > @@ -5045,8 +5046,8 @@ void kvm_mmu_after_set_cpuid(struct kvm_vcpu *vcpu)
-> > >   void kvm_mmu_reset_context(struct kvm_vcpu *vcpu)
-> > >   {
-> > > -	kvm_mmu_unload(vcpu);
-> > >   	kvm_init_mmu(vcpu);
-> > > +	kvm_mmu_new_pgd(vcpu, vcpu->arch.cr3);
-> > 
-> > This is too risky IMO, there are far more flows than just MOV CR0/CR4 that are
-> > affected, e.g. SMM transitions, KVM_SET_SREG, etc...
-> 
-> SMM exit does flush the TLB because RSM clears CR0.PG (I did check this :)).
-> SMM re-entry then does not need to flush.  But I don't think SMM exit should
-> flush the TLB *for non-SMM roles*.
+On Mon, Feb 14, 2022 at 6:15 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> On Mon, Feb 14, 2022 at 05:34:45PM +0100, Arnd Bergmann wrote:
+>
+> > diff --git a/arch/csky/kernel/signal.c b/arch/csky/kernel/signal.c
+> > index c7b763d2f526..8867ddf3e6c7 100644
+> > --- a/arch/csky/kernel/signal.c
+> > +++ b/arch/csky/kernel/signal.c
+> > @@ -136,7 +136,7 @@ static inline void __user *get_sigframe(struct ksignal *ksig,
+> >  static int
+> >  setup_rt_frame(struct ksignal *ksig, sigset_t *set, struct pt_regs *regs)
+> >  {
+> > -     struct rt_sigframe *frame;
+> > +     struct rt_sigframe __user *frame;
+> >       int err = 0;
+> >
+> >       frame = get_sigframe(ksig, regs, sizeof(*frame));
+>
+> Minor nit: might make sense to separate annotations (here, on nios2, etc.) from the rest...
 
-I'm not concerned about the TLB flush aspects so much as the addition of
-kvm_mmu_new_pgd() in new paths.
+Done.
 
-> For KVM_SET_SREGS I'm not sure if it should flush the TLB, but I agree it is
-> certainly safer to keep it that way.
-> 
-> > Given that kvm_post_set_cr{0,4}() and kvm_vcpu_reset() explicitly handle CR0.PG
-> > and CR4.SMEP toggling, I highly doubt the other flows are correct in all instances.
-> > The call to kvm_mmu_new_pgd() is also
-> 
-> *white noise*
-> 
-> > To minimize risk, we should leave kvm_mmu_reset_context() as is (rename it if
-> > necessary) and instead add a new helper to handle kvm_post_set_cr{0,4}().  In
-> > the future we can/should work on avoiding unload in all paths, but again, future
-> > problem.
-> 
-> I disagree on this.  There aren't many calls to kvm_mmu_reset_context.
+> > -}
+> > -
+> > -static inline int access_ok(const void __user * addr, unsigned long size)
+> > -{
+> > -     return 1;
+> > -}
+> > +#define __range_not_ok(addr, size, limit) (!__access_ok(addr, size))
+>
+> is really wrong.  For sparc64, access_ok() should always be true.
+> This __range_not_ok() thing is used *only* for valid_user_frame() in
+> arch/sparc/kernel/perf_event.c - it's not a part of normal access_ok()
+> there.
+>
+> sparc64 has separate address spaces for kernel and for userland; access_ok()
+> had never been useful there.
 
-All the more reason to do things incrementally.  I have no objection to allowing
-all flows to reuse a cached (or current) root, I'm objecting to converting them
-all in a single patch.  
+Ok, fixed as well now. I had the access_ok() bit right, the definition just
+moved around here so it comes before the #include, but I missed the
+bit about __range_not_ok(), which I have now reverted back to the
+correct version in my tree.
 
-> > > -	if ((cr0 ^ old_cr0) & KVM_MMU_CR0_ROLE_BITS)
-> > > +	if ((cr0 ^ old_cr0) & KVM_MMU_CR0_ROLE_BITS) {
-> > > +		/* Flush the TLB if CR0 is changed 1 -> 0.  */
-> > > +		if ((old_cr0 & X86_CR0_PG) && !(cr0 & X86_CR0_PG))
-> > > +			kvm_mmu_unload(vcpu);
-> > 
-> > Calling kvm_mmu_unload() instead of requesting a flush isn't coherent with respect
-> > to the comment, or with SMEP handling.  And the SMEP handling isn't coherent with
-> > respect to the changelog.  Please elaborate :-)
-> 
-> Yep, will do (the CR0.PG=0 case is similar to the CR0.PCIDE=0 case below).
-
-Oh, you're freeing all roots to ensure a future MOV CR3 with NO_FLUSH and PCIDE=1
-can't reuse a stale root.  That's necessary if and only if the MMU is shadowing
-the guest, non-nested TDP MMUs just need to flush the guest's TLB.  The same is
-true for the PCIDE case, i.e. we could optimize that too, though the main motivation
-would be to clarify why all roots are unloaded.
-
-> Using kvm_mmu_unload() avoids loading a cached root just to throw it away
-> immediately after,
-
-The shadow paging case will throw it away, but not the non-nested TDP MMU case?
-
-> but I can change this to a new KVM_REQ_MMU_UPDATE_ROOT flag that does
-> 
-> 	kvm_mmu_new_pgd(vcpu, vcpu->arch.cr3);
-
-I don't think that's necessary, I was just confused by the discrepancy.
-
-> By the way, I have a possibly stupid question.  In kvm_set_cr3 (called e.g.
-> from emulator_set_cr()) there is
-> 
->  	if (cr3 != kvm_read_cr3(vcpu))
-> 		kvm_mmu_new_pgd(vcpu, cr3);
-> 
-> What makes this work if mmu_is_nested(vcpu)?
-
-Hmm, nothing.  VMX is "broken" anyways because it will kick out to userspace with
-X86EMUL_UNHANDLEABLE due to the CR3 intercept check.  SVM is also broken in that
-it doesn't check INTERCEPT_CR3_WRITE, e.g. will do the wrong thing even if L1 wants
-to intercept CR3 accesses.
-
-> Should this also have an "if (... & !tdp_enabled)"?
-
-Yes?  That should avoid the nested mess.  This patch also needs to handle CR0 and
-CR4 modifications if L2 is active, e.g. if L1 choose not to intercept CR0/CR4.
-kvm_post_set_cr_reinit_mmu() would be a lovely landing spot for that check :-D
+        Arnd

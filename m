@@ -2,124 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C274B5C1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 175774B5C28
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:13:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbiBNVKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:10:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38938 "EHLO
+        id S230165AbiBNVHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:07:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbiBNVKL (ORCPT
+        with ESMTP id S229693AbiBNVHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:10:11 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3226BBE1C0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:10:03 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id 13so661288oiz.12
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:10:03 -0800 (PST)
+        Mon, 14 Feb 2022 16:07:15 -0500
+Received: from mail-vs1-xe4a.google.com (mail-vs1-xe4a.google.com [IPv6:2607:f8b0:4864:20::e4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28833107D03
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:07:07 -0800 (PST)
+Received: by mail-vs1-xe4a.google.com with SMTP id u25-20020a67f659000000b0031aa82b8e6cso1678213vso.16
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:07:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=O9KHV0/N+Gfd1GRgecao8wegxCnC38XHEZ75QGyEISc=;
-        b=hosVhwFvGBdDFJM59PwgE1Wy9Oe3mkF9MnrGUFJ9FoiCAhftxx37tYIU9SOTBqcsD7
-         wsSPNn3E0BoWvjzNAhs6aGwTAJpIfmq3ajNXqAsN6l9CR21k7REe7ZOUYKwd1ydYLUoC
-         rI1fJy9gv3Jjz+5gQMh75lP41vSXjq/5PKYCvS9PPjL7bfHFKLInVSA9KdF4baDlCGcF
-         W6P6zMRghtpvPi7xln6B39B/6mywe2eEhYl9L6bUnwoy0DxEN70P9DLeKGLpmwLmQiu/
-         Ji5pdoom7+afBUJqEBm0RoPL4YBYxTGYzj2lmXtkG1ptnEHTAq5yfWaxNmDLkNFb4pyX
-         1Sfg==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ImRH9XpLCVO1AMuO+0vNf/s5u0DDeswWDZhxgck4GTg=;
+        b=ia0I32JcmImFFnzIt0dqwG5SCKqP3qmsRwXloN2N+PGLZBEGdTIaEiefH7BWNWqVDV
+         XMS+2Qp8Gn8onGXQeidk1/eyV4BGFi+iJhdN5bKvPJSt2bg+7rhKiGoeYBxP9FhA8CTR
+         ZWoyXjaKKmoBd+EBuh92636y9JchIAmpQ3EhRAMYKrxLuOo3E0MC5nisdofLJORwfLTW
+         FCDE8f34hR/2mfBaRfsTXU9/JO6WZYM/AUOz11NiIoVBd3A8lbSxa736AgJ+yBIv6y5d
+         lcdtYUtgEQeM49nnc+LcevfvZeXK1740krM6xLH5nTDNjp2PbKluWQJP+muJeHu0xTS/
+         9cPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=O9KHV0/N+Gfd1GRgecao8wegxCnC38XHEZ75QGyEISc=;
-        b=4TOjLrbaitiPoyRNbl1KZDrc+khFcdJkTAVPwIL+O8FxOlnKmHBxap32Muw7iG4PMx
-         S2+6IA8XhKdsJJB2QrO76lfEqGnl5uYC2J/xSW76b0Ao26QRlUcN3ZLcfOqj8k5c+Hlf
-         BkFFH3BgUFdDENzqL51hOiuQz4wGZNveTJJ99amnRS8lCn8nBqYYD2+bo8b8acF9j7bG
-         +yMXAFzc4SwrEfh6Rqacc+0BLJ/ROFxLJ2ykdXM2XZ/tczoHSX7akh1Y/ZybnSYbgdfw
-         YToMFEhSnOXMjlqmUKhXE96dyiy6JJ0xq1LnqIkoBxftIDfgWOk2wMwzLUAJ2k7KRX2y
-         V6mg==
-X-Gm-Message-State: AOAM530oGTn6K92T8mQc4E4eIF83Ifwokou/l17dNIITEG2iuV4nCSHp
-        t7QH7PdutML5CULGBEmcv2G/WDY/706Z/Q==
-X-Google-Smtp-Source: ABdhPJzhIOI72ps9ZuG6CEVrnqdXFSMazidGQ6xcG6wA+W2GqdMXI1JFgJBqpJ/chzdS9CFqPj7wCg==
-X-Received: by 2002:a17:90b:4d84:b0:1b9:4109:7118 with SMTP id oj4-20020a17090b4d8400b001b941097118mr263383pjb.119.1644868743175;
-        Mon, 14 Feb 2022 11:59:03 -0800 (PST)
-Received: from tong-desktop.local (99-105-211-126.lightspeed.sntcca.sbcglobal.net. [99.105.211.126])
-        by smtp.googlemail.com with ESMTPSA id v2sm14663291pjt.55.2022.02.14.11.59.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 11:59:02 -0800 (PST)
-From:   Tong Zhang <ztong0001@gmail.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc:     Tong Zhang <ztong0001@gmail.com>
-Subject: [PATCH v2] drm/i915: fix build issue when using clang
-Date:   Mon, 14 Feb 2022 11:58:20 -0800
-Message-Id: <20220214195821.29809-1-ztong0001@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <YglQW7gVNoRJ7QpQ@dev-arch.archlinux-ax161>
-References: <YglQW7gVNoRJ7QpQ@dev-arch.archlinux-ax161>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ImRH9XpLCVO1AMuO+0vNf/s5u0DDeswWDZhxgck4GTg=;
+        b=gZga9Zk1ucEFOK++QmN6lSKlwRf9UMBrua5NHQnxrs3HnYzRttjazzox1IfJy3mDHa
+         xrYNk7xV6T8Ye8IkB4rC4vpgjFUy0vdgzZQK3Y/1+4j9+RIAHAbfRRHF+vKGk5GMq2C2
+         /YpvZ8n7I7FWcxZ3DsLVGkmwC0+doKv6BK2oLLvf6a1BbKa0NUbfQGazdE4lIgDVGRyJ
+         DV3Ll2JM0be54cwalsMQ5mqUnhdK44Kl53e+IYXbE946lPnPwITQjXDaAejMbTEcrZK6
+         7X6LAZ2EyOe8wFzeAsICQDrifL7m1YHakak2vmEH9yQF+bbrxRTpLAXnI/uVaZVDEQKL
+         2sVA==
+X-Gm-Message-State: AOAM5326LVxDGxy5uMSN1st3vr1NQQe39f7uJ+RkNCd1qoPhaMA61p6+
+        xwGebNd67P2MB2JP70cp7QVJLCPlS3nT
+X-Google-Smtp-Source: ABdhPJw4BEO7Wb+8vsvCdbSI6yFU0rSYMXuBhd6tOWudkdTVun04vOC8de/M5fPlrqu4GEYS3RMYa2UPop+A
+X-Received: from kalutes-cloudtop-1.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f1])
+ (user=kalutes job=sendgmr) by 2002:a05:6a00:a87:: with SMTP id
+ b7mr470587pfl.51.1644868771650; Mon, 14 Feb 2022 11:59:31 -0800 (PST)
+Date:   Mon, 14 Feb 2022 19:59:08 +0000
+Message-Id: <20220214195908.4070138-1-kalutes@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+Subject: [PATCH] Virtio-balloon: add user space API for sizing
+From:   Kameron Lutes <kalutes@google.com>
+To:     "Michael S . Tsirkin" <mst@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, virtio-dev@lists.oasis-open.org,
+        kvm@vger.kernel.org
+Cc:     Suleiman Souhlal <suleiman@chromium.org>,
+        Charles William Dick <cwd@google.com>,
+        Kameron Lutes <kalutes@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drm/i915 adds some extra cflags, namely -Wall, which causes
-instances of -Wformat-security to appear when building with clang, even
-though this warning is turned off kernel-wide in the main Makefile:
+This new linux API will allow user space applications to directly
+control the size of the virtio-balloon. This is useful in
+situations where the guest must quickly respond to drastically
+increased memory pressure and cannot wait for the host to adjust
+the balloon's size.
 
-> drivers/gpu/drm/i915/gt/intel_gt.c:983:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
->         GEM_TRACE("ERROR\n");
->         ^~~~~~~~~~~~~~~~~~~~
-> ./drivers/gpu/drm/i915/i915_gem.h:76:24: note: expanded from macro 'GEM_TRACE'
->  #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
->                        ^~~~~~~~~~~~~~~~~~~~~~~~~
-> ./include/linux/kernel.h:369:3: note: expanded from macro 'trace_printk'
->                 do_trace_printk(fmt, ##__VA_ARGS__);    \
->                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ./include/linux/kernel.h:383:30: note: expanded from macro 'do_trace_printk'
->                 __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
->                                           ^~~~~~~~~~~~~~~~
->drivers/gpu/drm/i915/gt/intel_gt.c:983:2: note: treat the string as an argument to avoid this
+Under the current wording of the Virtio spec, guest driven
+behavior such as this is permitted:
 
-This does not happen with GCC because it does not enable
--Wformat-security with -Wall. Disable -Wformat-security within the i915
-Makefile so that these warnings do not show up with clang.
+VIRTIO Version 1.1 Section 5.5.6
+"The device is driven either by the receipt of a configuration
+change notification, or by changing guest memory needs, such as
+performing memory compaction or responding to out of memory
+conditions."
 
-Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+The intended use case for this API is one where the host
+communicates a deflation limit to the guest. The guest may then
+choose to respond to memory pressure by deflating its balloon down
+to the guest's allowable limit.
+
+Signed-off-by: Kameron Lutes <kalutes@google.com>
 ---
+ drivers/virtio/virtio_balloon.c | 55 +++++++++++++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-v2: revise commit message
-
- drivers/gpu/drm/i915/Makefile | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
-index 1b62b9f65196..c04e05a3d39f 100644
---- a/drivers/gpu/drm/i915/Makefile
-+++ b/drivers/gpu/drm/i915/Makefile
-@@ -13,6 +13,7 @@
- # will most likely get a sudden build breakage... Hopefully we will fix
- # new warnings before CI updates!
- subdir-ccflags-y := -Wall -Wextra
-+subdir-ccflags-y += -Wno-format-security
- subdir-ccflags-y += -Wno-unused-parameter
- subdir-ccflags-y += -Wno-type-limits
- subdir-ccflags-y += -Wno-missing-field-initializers
+diff --git a/drivers/virtio/virtio_balloon.c b/drivers/virtio/virtio_balloon.c
+index f4c34a2a6b8e..aa06305a3137 100644
+--- a/drivers/virtio/virtio_balloon.c
++++ b/drivers/virtio/virtio_balloon.c
+@@ -878,6 +878,54 @@ static int virtio_balloon_register_shrinker(struct virtio_balloon *vb)
+ 	return register_shrinker(&vb->shrinker);
+ }
+ 
++static ssize_t balloon_size_show(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	struct virtio_device *vdev = container_of(dev, struct virtio_device, dev);
++	u32 num_pages;
++
++	/*
++	 * Read the size directly from the balloon's configuration.
++	 * The caller expects the balloon size enforced by the host,
++	 * not the actual balloon size
++	 */
++	virtio_cread(vdev, struct virtio_balloon_config, num_pages,
++		     &num_pages);
++
++	return sprintf(buf, "0x%x", num_pages);
++}
++
++static ssize_t balloon_size_store(struct device *dev,
++				  struct device_attribute *attr,
++				  const char *buf, size_t count)
++{
++	struct virtio_device *vdev = container_of(dev, struct virtio_device, dev);
++	u32 num_pages;
++	int err;
++
++	err = kstrtou32(buf, 0, &num_pages);
++
++	if (err < 0) {
++		dev_err(dev, "Failed to read balloon size from file\n");
++		return err;
++	}
++
++	/*
++	 * Write num_pages back to the balloon's config section
++	 */
++	virtio_cwrite_le(vdev, struct virtio_balloon_config, num_pages,
++		      &num_pages);
++
++	/*
++	 * Signal to the balloon that the configuration has changed.
++	 * This triggers any necessary resizing actions
++	 */
++	virtballoon_changed(vdev);
++
++	return count;
++}
++static DEVICE_ATTR_RW(balloon_size);
++
+ static int virtballoon_probe(struct virtio_device *vdev)
+ {
+ 	struct virtio_balloon *vb;
+@@ -1015,12 +1063,19 @@ static int virtballoon_probe(struct virtio_device *vdev)
+ 			goto out_unregister_oom;
+ 	}
+ 
++	err = device_create_file(&vb->vdev->dev, &dev_attr_balloon_size);
++	if (err)
++		goto out_unregister_page_reporting;
++
+ 	virtio_device_ready(vdev);
+ 
+ 	if (towards_target(vb))
+ 		virtballoon_changed(vdev);
+ 	return 0;
+ 
++out_unregister_page_reporting:
++	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_REPORTING))
++		page_reporting_unregister(&vb->pr_dev_info);
+ out_unregister_oom:
+ 	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
+ 		unregister_oom_notifier(&vb->oom_nb);
 -- 
-2.25.1
+2.35.1.265.g69c8d7142f-goog
 

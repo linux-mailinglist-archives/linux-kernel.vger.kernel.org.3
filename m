@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3014B48AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 534DD4B49E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:37:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343708AbiBNJ5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:57:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34404 "EHLO
+        id S1345982AbiBNKN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:13:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344930AbiBNJwH (ORCPT
+        with ESMTP id S1345675AbiBNKNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:52:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B598C7B568;
-        Mon, 14 Feb 2022 01:43:28 -0800 (PST)
+        Mon, 14 Feb 2022 05:13:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DD0657A3;
+        Mon, 14 Feb 2022 01:51:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C2BCB80DC4;
-        Mon, 14 Feb 2022 09:43:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79F83C340E9;
-        Mon, 14 Feb 2022 09:43:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B45EB80D83;
+        Mon, 14 Feb 2022 09:51:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35B18C340E9;
+        Mon, 14 Feb 2022 09:51:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831806;
-        bh=h6DUSLEzM5nWMlU2QZLed3g8W6f2bQcqsOY1Ce/iF+I=;
+        s=korg; t=1644832295;
+        bh=Fp5vAxXHRBbOwHfsRp8stdkbEaQvx5accB522RMWaN0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BLHXGviOmKQYecad+yERLkHmIH7NqnWuklPAH53auepInl18BUNhovBkv29Igfyx2
-         Hbbvb+fVaAgT6oLfH/kUFuqjcDYZZnixyxaFdSZ3h7TUOcnW1HacxauPUPL0c/glb+
-         m0zeMVEQyA2slK6hPXdmYXgOCEIfhBUehR5FG/Jg=
+        b=Nu8Q7RXe0RLLZq5LRgErKJEK8IpWmYk17g2QALn4jsewKaEXyphXFccgzfGeq8Yye
+         PEWRN6FmlIR6wLu6JF843ZOXaza/gw2eOD68eymznYijDOFuPF+LrVbmp109yA8pZl
+         NCDuSWHVXFU2ogRgtH7Qgxe3FweSdorc/0rLBSLs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrey Konovalov <andreyknvl@gmail.com>,
-        Jann Horn <jannh@google.com>
-Subject: [PATCH 5.10 101/116] usb: raw-gadget: fix handling of dual-direction-capable endpoints
+        stable@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: [PATCH 5.15 142/172] usb: ulpi: Call of_node_put correctly
 Date:   Mon, 14 Feb 2022 10:26:40 +0100
-Message-Id: <20220214092502.270989110@linuxfoundation.org>
+Message-Id: <20220214092511.298217529@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,44 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+From: Sean Anderson <sean.anderson@seco.com>
 
-commit 292d2c82b105d92082c2120a44a58de9767e44f1 upstream.
+commit 0a907ee9d95e3ac35eb023d71f29eae0aaa52d1b upstream.
 
-Under dummy_hcd, every available endpoint is *either* IN or OUT capable.
-But with some real hardware, there are endpoints that support both IN and
-OUT. In particular, the PLX 2380 has four available endpoints that each
-support both IN and OUT.
+of_node_put should always be called on device nodes gotten from
+of_get_*. Additionally, it should only be called after there are no
+remaining users. To address the first issue, call of_node_put if later
+steps in ulpi_register fail. To address the latter, call put_device if
+device_register fails, which will call ulpi_dev_release if necessary.
 
-raw-gadget currently gets confused and thinks that any endpoint that is
-usable as an IN endpoint can never be used as an OUT endpoint.
-
-Fix it by looking at the direction in the configured endpoint descriptor
-instead of looking at the hardware capabilities.
-
-With this change, I can use the PLX 2380 with raw-gadget.
-
-Fixes: f2c2e717642c ("usb: gadget: add raw-gadget interface")
+Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
 Cc: stable <stable@vger.kernel.org>
-Tested-by: Andrey Konovalov <andreyknvl@gmail.com>
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
-Signed-off-by: Jann Horn <jannh@google.com>
-Link: https://lore.kernel.org/r/20220126205214.2149936-1-jannh@google.com
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+Link: https://lore.kernel.org/r/20220127190004.1446909-3-sean.anderson@seco.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/legacy/raw_gadget.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/common/ulpi.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/gadget/legacy/raw_gadget.c
-+++ b/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -1003,7 +1003,7 @@ static int raw_process_ep_io(struct raw_
- 		ret = -EBUSY;
- 		goto out_unlock;
- 	}
--	if ((in && !ep->ep->caps.dir_in) || (!in && ep->ep->caps.dir_in)) {
-+	if (in != usb_endpoint_dir_in(ep->ep->desc)) {
- 		dev_dbg(&dev->gadget->dev, "fail, wrong direction\n");
- 		ret = -EINVAL;
- 		goto out_unlock;
+--- a/drivers/usb/common/ulpi.c
++++ b/drivers/usb/common/ulpi.c
+@@ -248,12 +248,16 @@ static int ulpi_register(struct device *
+ 		return ret;
+ 
+ 	ret = ulpi_read_id(ulpi);
+-	if (ret)
++	if (ret) {
++		of_node_put(ulpi->dev.of_node);
+ 		return ret;
++	}
+ 
+ 	ret = device_register(&ulpi->dev);
+-	if (ret)
++	if (ret) {
++		put_device(&ulpi->dev);
+ 		return ret;
++	}
+ 
+ 	dev_dbg(&ulpi->dev, "registered ULPI PHY: vendor %04x, product %04x\n",
+ 		ulpi->id.vendor, ulpi->id.product);
 
 

@@ -2,131 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9954B3EDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 02:18:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A604B3EE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 02:30:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239000AbiBNBTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 20:19:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36940 "EHLO
+        id S238968AbiBNB3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 20:29:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiBNBS7 (ORCPT
+        with ESMTP id S229532AbiBNB3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 20:18:59 -0500
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60064.outbound.protection.outlook.com [40.107.6.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F00D527DC;
-        Sun, 13 Feb 2022 17:18:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IWItzQGk5V1eM2encOutpYeXJQpFc/eKEh/KHuUzrnbbJD4Lmc3uEuR6Kj7VexYzPBVqigYd7LrGDQ5iLgXmSymzpJDOmwixyS4Lw7Idy9v48NplEacRbclTowbyqy257jnr3k++o/O7Gue/qTMOBdoCQn0q6X30tPmymSJsy4MJxMP2OSOU63Y5nzkRCBq7pDE7mgLqf23v8/MCUhRFTpforCWVrVcvg7WdSsXcJLUgdQZIYTFwebg26QxyfA82eqmr/F2VWpaJy24c3ThjpzwmZAIHZZI9IcI1PwV6n2jKjz+bs8hOkWjaHjrS8k/eylQ2kFzKKmqQ5NFTrzoSfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zakRBcW+1rfmmyGZUaHjS9jx5CGYKW2X+ohvPvb9AgQ=;
- b=Jr0PEsixOBqpAfy/9cPLYCUFMgxBJX8grPybdHSb+d0PGk0QphHp2cetYzeSbmz/iDviJcUyd1amTiQnVn8kZsLhDRPDYfFiqgIddnsepWor+rWnM5EmAX2r74TUQuwqDqdT7qoZOvwPZ8RJXj9gyWKZaGvp4R8+trLZOKu1mfHfSmnTP57XxLKT+35+c86gQjSnEWnEXC7Rx3DLVcUWqhT/UcpplsM3EsO0hV/8OEJhTQKMBwhhV/vyvz+zUKhLdjQD4l6RMgwTrcuyRQqzhg9YJJmo9vdLOjpDFgDZqgNRyxnhfaMbCyqTMqeHvIpCQlevJweHXcd9L7rtXMIO9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zakRBcW+1rfmmyGZUaHjS9jx5CGYKW2X+ohvPvb9AgQ=;
- b=WWiIzTGDk0vFYKxBj2jQfwX2UoBdVn5xefdD5Ik+HritcWmD6xGW41xQY6HmNoXiDHU6Z0yTC64EaTONEj0RAOKsZavF4tsq7Ll0B3dzsD22hGSTHwvNYMBsCUuQkaPWxupfNQZMkOeoOBJh+q4XDHWCqjcx5KwR3LAY1WyoaTY=
-Received: from AS8PR04MB8676.eurprd04.prod.outlook.com (2603:10a6:20b:42b::10)
- by PA4PR04MB9224.eurprd04.prod.outlook.com (2603:10a6:102:2a3::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.18; Mon, 14 Feb
- 2022 01:18:49 +0000
-Received: from AS8PR04MB8676.eurprd04.prod.outlook.com
- ([fe80::3d1c:b479:1c58:199]) by AS8PR04MB8676.eurprd04.prod.outlook.com
- ([fe80::3d1c:b479:1c58:199%7]) with mapi id 15.20.4975.018; Mon, 14 Feb 2022
- 01:18:49 +0000
-From:   Hongxing Zhu <hongxing.zhu@nxp.com>
-To:     Shawn Guo <shawnguo@kernel.org>
-CC:     "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH v2 1/2] ARM: dts: imx6qp-sabresd: Enable PCIe support
-Thread-Topic: [PATCH v2 1/2] ARM: dts: imx6qp-sabresd: Enable PCIe support
-Thread-Index: AQHYHx4Al/jcwVa94ECJzobIRwmI7ayQ5wwAgAFbLQA=
-Date:   Mon, 14 Feb 2022 01:18:49 +0000
-Message-ID: <AS8PR04MB86766395B896FB1F398B81718C339@AS8PR04MB8676.eurprd04.prod.outlook.com>
-References: <1644564779-8448-1-git-send-email-hongxing.zhu@nxp.com>
- <20220213043143.GN4909@dragon>
-In-Reply-To: <20220213043143.GN4909@dragon>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 94fa9405-bee1-4c98-052e-08d9ef57f49d
-x-ms-traffictypediagnostic: PA4PR04MB9224:EE_
-x-microsoft-antispam-prvs: <PA4PR04MB9224CC9129B4CDFD5D5EA3C48C339@PA4PR04MB9224.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: j4UVMHwACrB/rqVDez3Fari3VWflRaFtIjRQdoZUWsJ56qbIQxAoeIxBk7fHEdGs6uXjORx990tAWVgoLbwMkcPu1pqLCoPI2QiYgPc9+aoLeywk0PvnSDw26yA4xj2/cksp+pYEjfTVbx2UV201lzEsltFIi8OSTxuOZYnzaIiN1lZEKz/B2Pb4ic6grjOL7CiY+Ve4eogVVdJ8Ea2UH+lbYg78sH4eKlAvO/pnI6lqU/cEd1K1vpy/5eYTWoUOLNW/1ku/W7w9WqkYrqQPMldWl/i8UQ5YBrC3yJ+4b6sfxAJzdjVkCljJKYNTMcsaiqdxPc8xIzAahHF1UqxY+G6t6qv54nHPBtlEemzXnYUI7trT5tHacWrUB16zeK9Gu4bdm/3JCBYRtw5Fizhmr9LDFZBTbwCY48wFpDSazIPoNwLLlAAxlgB5BLlDByNQn5Yz0QbaNSEUSOO8C/dE7ayMG7xkMu3nET1zQfNiAQ8D1ZMeVsJ1R/b7brZYJfYfn7GUpL6ePvdXFBcIeKrsHctmc3pLkxGvsWoGYTBxreyUiBrPkzLTMfmQp6/6kKpFcPZ9BgsDaP3iPW3/FmTZsRCXQzVbwpu8ov3x8UtC6iaKTJBzJB4/thhV+uTRm9kyi/ZQYG8HMYeEXJeqaTkWBfaEXP0ndWrBBmmVGVEFNTyLC7fuMc3cPJgAJXITxXyQA2r10R1mNY3cqwCC3MQgK1pui/EouZ6hHQLtrmB+fMc=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8676.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(83380400001)(86362001)(316002)(6916009)(54906003)(33656002)(66946007)(66556008)(8676002)(66446008)(64756008)(66476007)(186003)(26005)(4326008)(76116006)(52536014)(2906002)(38100700002)(6506007)(7696005)(5660300002)(55016003)(8936002)(71200400001)(53546011)(122000001)(38070700005)(44832011)(508600001)(9686003)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?b1FJRTdmalpWbG53cnlmQWhNKytPVk4raG15cVdSL2NaRndIUTZGaUdtdlVU?=
- =?gb2312?B?R1lRNEh2ajJtRDRpWjJpNmovdmQ5NzF1NndKdHR3QjBLOWQ1c1BMZnlwbHdW?=
- =?gb2312?B?SzdBQTUrSWV4ZFVLOVJxUGNRbHUza2VKUkhTRHlwTkc2QTVLT0dnS0Z4dkpQ?=
- =?gb2312?B?RjF4eDBHMmJxOU54eUdiNFg3VDF5eHdzZXYzeG1Wczl5N3REU3JYU3k2ei9B?=
- =?gb2312?B?SVhFVHhDQ1VDc3hlN3JVTitta1hCcGsrb1FXZDJWM05KUnBxVFIxeW96Y0FY?=
- =?gb2312?B?bGxZSDZRb1RHTVkzLzQ5S3BGSkNBcFUxMnlCUzlENCtkTERnNDJTNWtVSjJQ?=
- =?gb2312?B?aTF2ZDNpUXArQXJyNHlNa2c2WGpDTmJvZFpzaUNIaG9BVTNnZ3dvalc0QTha?=
- =?gb2312?B?RFZOYjRUci84dkZHcWtMOFJkVWlGUzNTempmRXkyOGxkSWZ4aXpjdW9EZWhY?=
- =?gb2312?B?dTBXTEJ2LzlpblJYRkdPQ1R1eHFVUllDaFY1aGpGbzdtamp2d2VWRTU0U3JO?=
- =?gb2312?B?VmJHNTdFWm44Ukd1bGFDb0hrQXhnT2hTVlB6Q2laTjVYWi85K1E1QmJCQnp4?=
- =?gb2312?B?RGk1NVlaRmFxbSs5TnMxSHh4dXF0U1F1dTB0K0QranU1N0RTZHh4UEJrcTFE?=
- =?gb2312?B?ZXVYLzV6RVBhZUNOQllqaDYwOU1DM3lrTW1PVG85YTNqcE5oeFlBR2tCRlp1?=
- =?gb2312?B?ZmdvL2VGdzVRNHM5bkhXcjdmamNkQ05UUC8wWCtNTElkSjBFM2lUdHk1M01W?=
- =?gb2312?B?UENXL3llaTlVR1VPNzg4d3NsWkZoblRrZ0s1Umdid0lXUTRsWGlUWG1LdTBZ?=
- =?gb2312?B?bDZUb0NuS25VRG5QbWVBV1hJeEk5Y281VmJGalQvZW93aWd1NGJ3RE0waWNL?=
- =?gb2312?B?bmpERjQzbSs3Y0JabVNRY0dZZmN5OWMvVSsvNWthTUlwcXl2MEFIYnBtOWNW?=
- =?gb2312?B?a21nQXhlOXdPeUhML3hQbVJXdnhDRGJkRDM2d3pZY1ZkKzFScCtJOHdVRWJz?=
- =?gb2312?B?R0pRL0huaXR6K0lvTnVzSzF3V2RreGhtcWoxY0pkaFVJZ1JLU0dsKzNORHlV?=
- =?gb2312?B?em4zWGo4MEhxNVpWUitMeHRmbXVWM1ExaDBsQTEwV3dQNUlEZ1p6NzVUdHhl?=
- =?gb2312?B?YkVHN24xbjhpYVY2c2RKRUNiTm1KbHdYUkdjTk9SYTU0b21tUWRCZTY3MkFM?=
- =?gb2312?B?WnJQS0RaQUc4NVRYNlhFZ3ZLb1VCN2tSV2FOQ21OZHg5L2pTam5WZUMwbFYv?=
- =?gb2312?B?WlFscDIweGN1QzVOMzQzVGlGbnRYTHlYTHNyei9OYlVqSnFCRjk0UG5qMU5L?=
- =?gb2312?B?cXNwWk1rdHJLS1hVdWxhUXgxbWNXaUpobnBBVmQxZkRwVmEwcVRNaDBzVTV0?=
- =?gb2312?B?YnF5bThiM0xpcTVsdUlHb29PRXJ6ZXowcWVvcDNla0UvMU41dEZlYmIvcEhE?=
- =?gb2312?B?MkNIbXFlMFNKL0trcVRIYmNFNFd1STZXS2M1dUs0cUxuOGpTWkZTK0RicEU1?=
- =?gb2312?B?UUZJbjNrQVQvcXY1aElMZEhMeEduTzZjRXVaU294MGdrSVRsdFhrTzNqTVFv?=
- =?gb2312?B?WkgxWTg3aHNYR2JraGNjaDBLSnNBWld4ZElqU0pYUnF0YUVoZ2NDUWNxeFho?=
- =?gb2312?B?aWFacUFOdjZ3UjRQbWUvWXNBRjJiQ1FodFh5MDBxWldjdTVtUk9kcDhzcFZI?=
- =?gb2312?B?cEVMNU5IMEs0S2hRRDZEMjgyck5NUlhyRW5EdTFHRTB5TUVPN05xTEZqcVdD?=
- =?gb2312?B?ZTIvWkUyZUNRYzY4amthMExOUUZ3Qjd6ZWJrZER4ZzRmajdkRERVSnE0Kzhs?=
- =?gb2312?B?dkxOMWpBVWdvUEFCRmtLa1o5SHcvdm84UTNGV0VPa2M0UUZXWnN1SUxpbytK?=
- =?gb2312?B?WFpYNzM4UUpqdEdrL3JQT0pSYUszUThxSVRCTlhNUXVGYUY3TUJEdEZneDdZ?=
- =?gb2312?B?ZzdoSGVyM0pwcVN5MUFKZVFvRlpnTVZyRFNBcE9pcUdWRkpabWxRNHF5d0JF?=
- =?gb2312?B?TTg1R3A4SGlKZnhQblBFSUtUcXo2Ny9NcXlTNUhQMFk2R0NvUWlNY3hWdkpz?=
- =?gb2312?B?RzlaamlYclBzMFBybWlVc1k5NmVvYUZoZHdtL2wyK0tRcmFRTEZRTTBaeEtF?=
- =?gb2312?B?SzFMbUx4L29oUU1QZWkyRVl3V3ZZN3RKN2xKODM1em0wZVIvdS9iMVZUOXUz?=
- =?gb2312?B?b1E9PQ==?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Sun, 13 Feb 2022 20:29:30 -0500
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC615527E8
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 17:29:23 -0800 (PST)
+Received: by mail-ua1-x92a.google.com with SMTP id u77so7380586uau.6
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 17:29:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YbBn6hVdDrIYewHKWlLGHAJSksMmM5XP0nlu0JS5cLg=;
+        b=JkUTiQpYq5GifwK6IkZadP4PRY/WPFeg6qLbNp1Oo7Etl5CxxZX5QKALdylzWBF/Sr
+         RMW5d7Z4NSOqbNuJvvRLTDsQiQC/suyUgMAbQvM6DFHkTPgyf2uTAndc4+XAlOnXGs7d
+         /7+PtwF2imm1t51tGYLt7zxOhtSScGBckIsQ0JNyABIRoePHYixrHa/4492zkd95Apuc
+         jwVCEgjfprxlHNyAZ70sUGMa/jJWRSJObp3bZn11/VyHEzTYx83DXSHN+41h1Mpa7pIA
+         N2MzzWqKqZxbMJ/t/zc7zCaH7jBflwPrStJs/ty/iacYHq36crr8z77/Gb1ZqTBwK5q1
+         5nrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YbBn6hVdDrIYewHKWlLGHAJSksMmM5XP0nlu0JS5cLg=;
+        b=UcNceqHFna7Y4EG98UrNYib2MDSy5Hq+fkLiy6CG44GvFWtiK6768en4GOcbBSz7Ts
+         roaK3SF04Jz9eBoUysIdSK+Linaf7oSxY1IgzaULUGf9+2qZkVJraLkKguB6jV0t6fGZ
+         0fGmQByp9fEVw0oCYVjTxVLmW2LzPRvWkFb+ORv2RXJBOUq7pOwsOOZt//5s+T9+uiid
+         mYNz3T1b62jQywBvskZWLqhO0rxzuGKyMxoyNUcTRgRvdMct08HIX/cD0rLverjcfP18
+         Xp4yEeGi5vDKanjwFWAOzHRjUNOLNmiolMKI5dXLR0yastkfKAVDfwBQXMYjDcTaVEYV
+         MIKw==
+X-Gm-Message-State: AOAM530suKACxoxvJpSizTHaxEaX8BO6z9Xw2y4+Y3hpr4a9HFtgjxAO
+        hmxkNGNj6zXh3KY0hwpxSLO6tANfqYQ=
+X-Google-Smtp-Source: ABdhPJzPSsNp4W3z1bAys6RURvxCnhbcS5WBKrDGtflCiA2Yk2YuMeQoQYwwwMKIihP4MTr9LMeMLg==
+X-Received: by 2002:a9f:3224:: with SMTP id x33mr3018280uad.79.1644802162730;
+        Sun, 13 Feb 2022 17:29:22 -0800 (PST)
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com. [209.85.217.53])
+        by smtp.gmail.com with ESMTPSA id m185sm5316931vke.30.2022.02.13.17.29.22
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 13 Feb 2022 17:29:22 -0800 (PST)
+Received: by mail-vs1-f53.google.com with SMTP id r20so17144118vsn.0
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 17:29:22 -0800 (PST)
+X-Received: by 2002:a67:cc14:: with SMTP id q20mr635459vsl.74.1644802161746;
+ Sun, 13 Feb 2022 17:29:21 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8676.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 94fa9405-bee1-4c98-052e-08d9ef57f49d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2022 01:18:49.3822
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tDedIjs+DnP3Mi884wH5Ts5yMUVGWiXpUoRk3wgWJRVCcrjOFCeYW+o837LjpBjaG+5di/Iy1BuItMCLmYiOnQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9224
+References: <20220213150234.31602-1-thomas.liu@ucloud.cn>
+In-Reply-To: <20220213150234.31602-1-thomas.liu@ucloud.cn>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Sun, 13 Feb 2022 20:28:45 -0500
+X-Gmail-Original-Message-ID: <CA+FuTSdODATw3hSAMv9aZUmJNM8ZE-YP58pr17bO9rGJUgfegw@mail.gmail.com>
+Message-ID: <CA+FuTSdODATw3hSAMv9aZUmJNM8ZE-YP58pr17bO9rGJUgfegw@mail.gmail.com>
+Subject: Re: [PATCH] gso: do not skip outer ip header in case of ipip and net_failover
+To:     Tao Liu <thomas.liu@ucloud.cn>
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, edumazet@google.com, sridhar.samudrala@intel.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -134,45 +76,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBTaGF3biBHdW8gPHNoYXduZ3Vv
-QGtlcm5lbC5vcmc+DQo+IFNlbnQ6IDIwMjLE6jLUwjEzyNUgMTI6MzINCj4gVG86IEhvbmd4aW5n
-IFpodSA8aG9uZ3hpbmcuemh1QG54cC5jb20+DQo+IENjOiBsLnN0YWNoQHBlbmd1dHJvbml4LmRl
-OyBiaGVsZ2Fhc0Bnb29nbGUuY29tOw0KPiBsb3JlbnpvLnBpZXJhbGlzaUBhcm0uY29tOyBsaW51
-eC1wY2lAdmdlci5rZXJuZWwub3JnOw0KPiBsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVh
-ZC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7DQo+IGtlcm5lbEBwZW5ndXRyb25p
-eC5kZTsgZGwtbGludXgtaW14IDxsaW51eC1pbXhAbnhwLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQ
-QVRDSCB2MiAxLzJdIEFSTTogZHRzOiBpbXg2cXAtc2FicmVzZDogRW5hYmxlIFBDSWUgc3VwcG9y
-dA0KPiANCj4gT24gRnJpLCBGZWIgMTEsIDIwMjIgYXQgMDM6MzI6NThQTSArMDgwMCwgUmljaGFy
-ZCBaaHUgd3JvdGU6DQo+ID4gSW4gdGhlIGkuTVg2UVAgc2FicmVzZCBib2FyZChzY2gtMjg4NTcp
-IGRlc2lnbiwgb25lIGV4dGVybmFsDQo+ID4gb3NjaWxsYXRvciBpcyB1c2VkIGFzIHRoZSBQQ0ll
-IHJlZmVyZW5jZSBjbG9jayBzb3VyY2UgYnkgdGhlIGVuZHBvaW50IGRldmljZS4NCj4gPg0KPiA+
-IElmIFJDIHVzZXMgdGhpcyBvc2NpbGxhdG9yIGFzIHJlZmVyZW5jZSBjbG9jayB0b28sIFBMTDYo
-RU5FVCBQTEwpDQo+ID4gd291bGQgaGFzIHRvIGJlIGluIGJ5cGFzcyBtb2RlLCBhbmQgRU5FVCBj
-bG9ja3Mgd291bGQgYmUgbWVzc2VkIHVwLg0KPiA+DQo+ID4gVG8ga2VlcCB0aGluZ3Mgc2ltcGxl
-LCBsZXQgUkMgdXNlIHRoZSBpbnRlcm5hbCBQTEwgYXMgcmVmZXJlbmNlIGNsb2NrDQo+ID4gYW5k
-IGFsd2F5cyBlbmFibGUgdGhlIGV4dGVybmFsIG9zY2lsbGF0b3IgZm9yIGVuZHBvaW50IGRldmlj
-ZSBvbg0KPiA+IGkuTVg2UVAgc2FicmVzZCBib2FyZC4NCj4gPg0KPiA+IE5PVEU6IFRoaXMgcmVm
-ZXJlbmNlIGNsb2NrIHNldHVwIGlzIHVzZWQgdG8gcGFzcyB0aGUgR0VOMiBUWA0KPiA+IGNvbXBs
-aWFuY2UgdGVzdHMsIGFuZCBpc24ndCByZWNvbW1lbmRlZCBhcyBhIHNldHVwIGluIHRoZSBlbmQt
-dXNlciBkZXNpZ24uDQo+IA0KPiBJIGRvIG5vdCBxdWl0ZSBmb2xsb3cuICBUaGUgY29tbWl0IGxv
-ZyBpcyBhbGwgdGFsa2luZyBhYm91dCBleHRlcm5hbCBvc2NpbGxhdG9yDQo+IHJlZmVyZW5jZSBj
-bG9jaywgd2hpbGUgY29kZSBpcyBwbGF5aW5nICd2Z2VuMycgcmVndWxhdG9yLg0KSGkgU2hhd246
-DQpUaGUgdmdlbjMgaXMgdGhlIHBvd2VyLXN1cHBseSB1c2VkIHRvIHBvd2VyIHVwIHRoZSBleHRl
-cm5hbCBPU0MgY2lyY3VpdCBvbg0KIHRoZSBib2FyZC4NClNldCB2Z2VuMiBhbHdheXMgb24gdG8g
-dG9nZ2xlIHRoZSBleHRlcm5hbCBPU0MgYW5kIHByb3ZpZGUgdGhlIFJFRiBjbG9jaw0KIGZvciBF
-UCBkZXZpY2Ugb25jZSB0aGUgYm9hcmQgaXMgcG93ZXJlZCB1cC4NCg0KVGhhbmtzLg0KQmVzdCBS
-ZWdhcmRzDQpSaWNoYXJkDQo+IA0KPiBTaGF3bg0KPiANCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6
-IFJpY2hhcmQgWmh1IDxob25neGluZy56aHVAbnhwLmNvbT4NCj4gPiAtLS0NCj4gPiAgYXJjaC9h
-cm0vYm9vdC9kdHMvaW14NnFwLXNhYnJlc2QuZHRzIHwgOCArKysrKysrLQ0KPiA+ICAxIGZpbGUg
-Y2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+ID4NCj4gPiBkaWZmIC0t
-Z2l0IGEvYXJjaC9hcm0vYm9vdC9kdHMvaW14NnFwLXNhYnJlc2QuZHRzDQo+ID4gYi9hcmNoL2Fy
-bS9ib290L2R0cy9pbXg2cXAtc2FicmVzZC5kdHMNCj4gPiBpbmRleCA0ODBlNzMxODNmNmIuLjA4
-M2NmOTBiY2FiNSAxMDA2NDQNCj4gPiAtLS0gYS9hcmNoL2FybS9ib290L2R0cy9pbXg2cXAtc2Fi
-cmVzZC5kdHMNCj4gPiArKysgYi9hcmNoL2FybS9ib290L2R0cy9pbXg2cXAtc2FicmVzZC5kdHMN
-Cj4gPiBAQCAtNTAsOCArNTAsMTQgQEAgTVg2UURMX1BBRF9TRDNfREFUN19fU0QzX0RBVEE3DQo+
-IAkweDE3MDU5DQo+ID4gIAl9Ow0KPiA+ICB9Ow0KPiA+DQo+ID4gKyZ2Z2VuM19yZWcgew0KPiA+
-ICsJcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8MTgwMDAwMD47DQo+ID4gKwlyZWd1bGF0b3It
-bWF4LW1pY3Jvdm9sdCA9IDwzMzAwMDAwPjsNCj4gPiArCXJlZ3VsYXRvci1hbHdheXMtb247DQo+
-ID4gK307DQo+ID4gKw0KPiA+ICAmcGNpZSB7DQo+ID4gLQlzdGF0dXMgPSAiZGlzYWJsZWQiOw0K
-PiA+ICsJc3RhdHVzID0gIm9rYXkiOw0KPiA+ICB9Ow0KPiA+DQo+ID4gICZzYXRhIHsNCj4gPiAt
-LQ0KPiA+IDIuMjUuMQ0KPiA+DQo=
+On Sun, Feb 13, 2022 at 10:10 AM Tao Liu <thomas.liu@ucloud.cn> wrote:
+>
+> We encouter a tcp drop issue in our cloud environment. Packet GROed in host
+> forwards to a VM virtio_net nic with net_failover enabled. VM acts as a
+> IPVS LB with ipip encapsulation. The full path like:
+> host gro -> vm virtio_net rx -> net_failover rx -> ipvs fullnat
+>  -> ipip encap -> net_failover tx -> virtio_net tx
+>
+> When net_failover transmits a ipip pkt (gso_type = 0x0103), there is no gso
+> performed because it supports TSO and GSO_IPXIP4. But network_header has
+> been pointing to inner ip header.
+
+If the packet is configured correctly, and net_failover advertises
+that it can handle TSO packets with IPIP encap, then still virtio_net
+should not advertise it and software GSO be applied on its
+dev_queue_xmit call.
+
+This is assuming that the packet not only has SKB_GSO_IPXIP4 correctly
+set, but also tunneling fields like skb->encapsulated and
+skb_inner_network_header.
+
+> ---
+>  net/ipv4/af_inet.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+> index 9c465ba..f8b3f8a 100644
+> --- a/net/ipv4/af_inet.c
+> +++ b/net/ipv4/af_inet.c
+> @@ -1425,10 +1425,18 @@ struct sk_buff *inet_gso_segment(struct sk_buff *skb,
+>  static struct sk_buff *ipip_gso_segment(struct sk_buff *skb,
+>                                         netdev_features_t features)
+>  {
+> +       struct sk_buff *segs;
+> +       int nhoff;
+> +
+>         if (!(skb_shinfo(skb)->gso_type & SKB_GSO_IPXIP4))
+>                 return ERR_PTR(-EINVAL);
+>
+> -       return inet_gso_segment(skb, features);
+> +       nhoff = skb_network_header(skb) - skb_mac_header(skb);
+> +       segs = inet_gso_segment(skb, features);
+> +       if (!segs)
+> +               skb->network_header = skb_mac_header(skb) + nhoff - skb->head;
+> +
+> +       return segs;
+>  }
+
+If this would be needed for IPIP, then the same would be needed for SIT, etc.
+
+Is the skb_network_header
+
+1. correctly pointing to the outer header of the TSO packet before the
+call to inet_gso_segment
+2. incorrectly pointing to the inner header of the (still) TSO packet
+after the call to inet_gso_segment
+
+inet_gso_segment already does the same operation: save nhoff, pull
+network header, call callbacks.gso_segment (which can be
+ipip_gso_segment->inet_gso_segment), then place the network header
+back at nhoff.

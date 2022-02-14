@@ -2,106 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A71F64B55DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:16:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE3C4B55E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345008AbiBNQQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 11:16:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58696 "EHLO
+        id S1355233AbiBNQSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 11:18:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiBNQQD (ORCPT
+        with ESMTP id S229945AbiBNQSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 11:16:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77929D48
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:15:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5C64614BC
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 16:15:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D88B9C340EE
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 16:15:53 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="J3pJHqss"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644855350;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BEj4LEQNjT5w6i+nrVdETHT6q2Q2BpQcUA4gmY11BTs=;
-        b=J3pJHqssyfiYGuFmVoy3hJrMucYk3N0eRz7VEWL7xK5i0gaEbqKlHo+HjtkprzxKNTddCL
-        iqzNOyX1XLwMwbkJEmiRo5CE+g9CbYTt1xct4HYXyA5jvbaFP1z4FZbPNUt7cH3znqEcM5
-        Z2AGZIlaYO1bXExWCPfz89kn45MMnn8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fde401f1 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Mon, 14 Feb 2022 16:15:50 +0000 (UTC)
-Received: by mail-yb1-f175.google.com with SMTP id p19so47604081ybc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:15:50 -0800 (PST)
-X-Gm-Message-State: AOAM533Iwh7YdQ1SW+uf+j2Bb8eIKvQljt2l5ema5ewfgIArm5mQIhCV
-        O/T2Lpl8Ev3Mjsi70/+BkldNwOCVRaS3QeD6q8s=
-X-Google-Smtp-Source: ABdhPJy1kra1Qp5vQH8qSXKIQrqs5nft0TI1FHnE7Pb3ogx3kMJS0+5WcM7KjoPbr8MhaiIokNDDhnrQ+hAnGJuYmwA=
-X-Received: by 2002:a81:f10b:: with SMTP id h11mr405157ywm.396.1644855348864;
- Mon, 14 Feb 2022 08:15:48 -0800 (PST)
+        Mon, 14 Feb 2022 11:18:06 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B96C73;
+        Mon, 14 Feb 2022 08:17:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=znrDaV5Pp8tpOYrjAn4pOH6aYRp8gwmkoLn2zKCQqvQ=; b=PcyT0t+eD5LLS9UJgGQMfmdjFJ
+        TnHDYVyUnmjJbua/G/sKncKzs2u2jdNelv6SUTTo/5Y4tZevv7V2ZtgsFmbj+kYzkjmaSGsHDurIT
+        VC1quvjwjbvF8Dagps5LTgmbbWLmWNSysZ0YwZnkq7fLP8X5BXBB6aTrmkJ0sYqI5WIIiIMl4uxW/
+        3qtk4WjOLcEKTlaMnjiAKnrqaugxrsV33SjXprE+2fKwW9+9cMhaaV3qjCBg+ny55TrBXZ7O26jcO
+        /icGLutz8LqeGoFwQV8N2tyYrTjUfLzF7yI95xabFD+EqTQZEkvi9YnUJBcBK6hadjpHrb0FDFpTf
+        JGmfOewg==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJe2r-009we3-FJ; Mon, 14 Feb 2022 16:17:46 +0000
+Message-ID: <3d6bb73c-2486-f862-129e-877a571cce28@infradead.org>
+Date:   Mon, 14 Feb 2022 08:17:39 -0800
 MIME-Version: 1.0
-References: <CAHmME9rAnh6nSRNYo56Ty6VSrY17ej35AoNkSjunFO0AQp1D9Q@mail.gmail.com>
- <20220214133735.966528-1-Jason@zx2c4.com> <Ygpkej/vnMvUDIlP@linutronix.de>
- <CAHmME9ruM85U+dp4coBRJUBdk=iHXFZq3ZvHSiDXmpV+BoZEVw@mail.gmail.com>
- <Ygpr9Xg0I+ZVzp9v@linutronix.de> <CAHmME9rp+O3+yjX_q-BS8y06PigbkEgi4vn=nzLACnBAWZt-vA@mail.gmail.com>
- <Ygpv/kLWCmTzUTki@linutronix.de> <CAHmME9qrhpRCox2mR2UEStWxev2Zu14htBkpv3mdFEkVqacvVQ@mail.gmail.com>
- <YgpybD+PeQ5Az7CJ@linutronix.de>
-In-Reply-To: <YgpybD+PeQ5Az7CJ@linutronix.de>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 14 Feb 2022 17:15:38 +0100
-X-Gmail-Original-Message-ID: <CAHmME9qXE_t-O1X9yX_QeY1cQqNtWCHn12UiGYrE18vrab9Pvw@mail.gmail.com>
-Message-ID: <CAHmME9qXE_t-O1X9yX_QeY1cQqNtWCHn12UiGYrE18vrab9Pvw@mail.gmail.com>
-Subject: Re: [PATCH v2] random: set fast pool count to zero in cpuhp teardown
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 1/1] csky: Fix versioncheck warnings
+Content-Language: en-US
+To:     wonder_rock@126.com
+Cc:     axboe@kernel.dk, guoren@kernel.org, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <98208fa3-4b28-cdeb-7699-dbd9d66bfa60@infradead.org>
+ <20220214120250.10256-1-wonder_rock@126.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220214120250.10256-1-wonder_rock@126.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
 
-On Mon, Feb 14, 2022 at 4:17 PM Sebastian Andrzej Siewior
-<bigeasy@linutronix.de> wrote:
-> > I'd like to do only one method here, so we can set those fields in
-> > startup, provided it happens early enough.
-> > > > So I think it seems better to keep it before CPUHP_TIMERS_PREPARE, =
-but
-> > > > do it on startup rather than teardown. Seem reasonable? Would that
-> > > > mean we zero out before IRQs are enabled?
-> > > I would only zero it if the upper-most bit is there.
-> >
-> > I still don't quite understand: why can't we just unconditionally
-> > zero, always, before CPUHP_TIMERS_PREPARE?
->
-> If you have a rollback before CPUHP_TIMERS_PREPARE you don't notice it
-> and your worker may have skipped this work because it run on the wrong
-> CPU. Also, I *think* that if you happen to have 64 interrupts between
->    CPUHP_AP_ONLINE_IDLE =E2=80=A6 CPUHP_AP_WORKQUEUE_ONLINE
->
-> then the scheduled worker is unbound and may run on the "wrong" CPU.
 
-I'm talking about in the context of unconditionally zeroing during
-*startup*, just before CPUHP_TIMERS_PREPARE. That's what I sent in
-this patch series:
-https://lore.kernel.org/lkml/20220214151415.1108141-1-Jason@zx2c4.com/t/#u
+On 2/14/22 04:02, wonder_rock@126.com wrote:
+> From: Deyan Wang <wonder_rock@126.com>
+> 
+> arch/csky/include/asm/io.h: 8 linux/version.h not needed.
+> arch/csky/kernel/process.c: 5 linux/version.h not needed.
+> arch/csky/mm/dma-mapping.c: 12 linux/version.h not needed.
+> 
+> Signed-off-by: Deyan Wang <wonder_rock@126.com>
 
-Jason
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
+> ---
+>  arch/csky/include/asm/io.h | 1 -
+>  arch/csky/kernel/process.c | 1 -
+>  arch/csky/mm/dma-mapping.c | 1 -
+>  3 files changed, 3 deletions(-)
+> 
+> diff --git a/arch/csky/include/asm/io.h b/arch/csky/include/asm/io.h
+> index f82654053dc0..ed53f0b47388 100644
+> --- a/arch/csky/include/asm/io.h
+> +++ b/arch/csky/include/asm/io.h
+> @@ -5,7 +5,6 @@
+>  
+>  #include <linux/pgtable.h>
+>  #include <linux/types.h>
+> -#include <linux/version.h>
+>  
+>  /*
+>   * I/O memory access primitives. Reads are ordered relative to any
+> diff --git a/arch/csky/kernel/process.c b/arch/csky/kernel/process.c
+> index 3d0ca22cd0e2..5de04707aa07 100644
+> --- a/arch/csky/kernel/process.c
+> +++ b/arch/csky/kernel/process.c
+> @@ -2,7 +2,6 @@
+>  // Copyright (C) 2018 Hangzhou C-SKY Microsystems co.,ltd.
+>  
+>  #include <linux/module.h>
+> -#include <linux/version.h>
+>  #include <linux/sched.h>
+>  #include <linux/sched/task_stack.h>
+>  #include <linux/sched/debug.h>
+> diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
+> index c3a775a7e8f9..82447029feb4 100644
+> --- a/arch/csky/mm/dma-mapping.c
+> +++ b/arch/csky/mm/dma-mapping.c
+> @@ -9,7 +9,6 @@
+>  #include <linux/mm.h>
+>  #include <linux/scatterlist.h>
+>  #include <linux/types.h>
+> -#include <linux/version.h>
+>  #include <asm/cache.h>
+>  
+>  static inline void cache_op(phys_addr_t paddr, size_t size,
+
+-- 
+~Randy

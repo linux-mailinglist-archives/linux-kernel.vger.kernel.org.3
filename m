@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5DC74B4BE5
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14AED4B4B50
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347056AbiBNK3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:29:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33274 "EHLO
+        id S1345402AbiBNKGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:06:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348232AbiBNK0u (ORCPT
+        with ESMTP id S1345669AbiBNKBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:26:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C707811AD;
-        Mon, 14 Feb 2022 01:57:50 -0800 (PST)
+        Mon, 14 Feb 2022 05:01:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977631EC6C;
+        Mon, 14 Feb 2022 01:48:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF038B80DBE;
-        Mon, 14 Feb 2022 09:57:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD9E0C340EF;
-        Mon, 14 Feb 2022 09:57:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2798861252;
+        Mon, 14 Feb 2022 09:48:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 040B3C36AE7;
+        Mon, 14 Feb 2022 09:48:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832667;
-        bh=UImdhe0lzIBcuJU5o3NtutfAaJZJjpWz8OLIQz63P+c=;
+        s=korg; t=1644832082;
+        bh=N3T3q2dVigTnrrBC916Z3kDWsICXJCmLkqSPQOiA/64=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WmSmtdoe5153onrnpzBPS4kgF5E54kPSg7Scd9cTtw3LXSfdteem0u7fdSJo0KeqA
-         R0oBHEbNeAYepBzLWQjpq4vZZ9fdl1cbCfL3Ah3jV6ibFa/vx5C47k/MkP1/ERkWe0
-         4YAaoaDawSfsh+c1Z4stOCg/+Hou2VupFn8mIoB8=
+        b=vngEcNpFjP7FlMnZfxGe9+t3D8HHakXIW+3JWNyIU48bVQfskfXslWJyaodEOCFRn
+         5E156fKg3oOEgE7Q+jICTHxo11yPqfzSCgCJHDZSI5kZYj3pGA7A8wtCAovDM00rNI
+         3KZ4k5WSBG9boqZou1sKs2WjPB4eHNl06N1c30nI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH 5.16 088/203] drm/rockchip: vop: Correct RK3399 VOP register fields
+        stable@vger.kernel.org, Michael Petlan <mpetlan@redhat.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: [PATCH 5.15 074/172] ACPI/IORT: Check node revision for PMCG resources
 Date:   Mon, 14 Feb 2022 10:25:32 +0100
-Message-Id: <20220214092513.258735233@linuxfoundation.org>
+Message-Id: <20220214092508.962459721@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,73 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Norris <briannorris@chromium.org>
+From: Robin Murphy <robin.murphy@arm.com>
 
-commit 9da1e9ab82c92d0e89fe44cad2cd7c2d18d64070 upstream.
+commit da5fb9e1ad3fbf632dce735f1bdad257ca528499 upstream.
 
-Commit 7707f7227f09 ("drm/rockchip: Add support for afbc") switched up
-the rk3399_vop_big[] register windows, but it did so incorrectly.
+The original version of the IORT PMCG definition had an oversight
+wherein there was no way to describe the second register page for an
+implementation using the recommended RELOC_CTRS feature. Although the
+spec was fixed, and the final patches merged to ACPICA and Linux written
+against the new version, it seems that some old firmware based on the
+original revision has survived and turned up in the wild.
 
-The biggest problem is in rk3288_win23_data[] vs.
-rk3368_win23_data[] .format field:
+Add a check for the original PMCG definition, and avoid filling in the
+second memory resource with nonsense if so. Otherwise it is likely that
+something horrible will happen when the PMCG driver attempts to probe.
 
-  RK3288's format: VOP_REG(RK3288_WIN2_CTRL0, 0x7, 1)
-  RK3368's format: VOP_REG(RK3368_WIN2_CTRL0, 0x3, 5)
-
-Bits 5:6 (i.e., shift 5, mask 0x3) are correct for RK3399, according to
-the TRM.
-
-There are a few other small differences between the 3288 and 3368
-definitions that were swapped in commit 7707f7227f09. I reviewed them to
-the best of my ability according to the RK3399 TRM and fixed them up.
-
-This fixes IOMMU issues (and display errors) when testing with BG24
-color formats.
-
-Fixes: 7707f7227f09 ("drm/rockchip: Add support for afbc")
-Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Tested-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220119161104.1.I1d01436bef35165a8cdfe9308789c0badb5ff46a@changeid
+Reported-by: Michael Petlan <mpetlan@redhat.com>
+Fixes: 24e516049360 ("ACPI/IORT: Add support for PMCG")
+Cc: <stable@vger.kernel.org> # 5.2.x
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Link: https://lore.kernel.org/r/75628ae41c257fb73588f7bf1c4459160e04be2b.1643916258.git.robin.murphy@arm.com
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/rockchip/rockchip_vop_reg.c |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/acpi/arm64/iort.c |   14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
---- a/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
-@@ -902,6 +902,7 @@ static const struct vop_win_phy rk3399_w
- 	.enable = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 0),
- 	.format = VOP_REG(RK3288_WIN0_CTRL0, 0x7, 1),
- 	.rb_swap = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 12),
-+	.x_mir_en = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 21),
- 	.y_mir_en = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 22),
- 	.act_info = VOP_REG(RK3288_WIN0_ACT_INFO, 0x1fff1fff, 0),
- 	.dsp_info = VOP_REG(RK3288_WIN0_DSP_INFO, 0x0fff0fff, 0),
-@@ -912,6 +913,7 @@ static const struct vop_win_phy rk3399_w
- 	.uv_vir = VOP_REG(RK3288_WIN0_VIR, 0x3fff, 16),
- 	.src_alpha_ctl = VOP_REG(RK3288_WIN0_SRC_ALPHA_CTRL, 0xff, 0),
- 	.dst_alpha_ctl = VOP_REG(RK3288_WIN0_DST_ALPHA_CTRL, 0xff, 0),
-+	.channel = VOP_REG(RK3288_WIN0_CTRL2, 0xff, 0),
- };
+--- a/drivers/acpi/arm64/iort.c
++++ b/drivers/acpi/arm64/iort.c
+@@ -1361,9 +1361,17 @@ static void __init arm_smmu_v3_pmcg_init
+ 	res[0].start = pmcg->page0_base_address;
+ 	res[0].end = pmcg->page0_base_address + SZ_4K - 1;
+ 	res[0].flags = IORESOURCE_MEM;
+-	res[1].start = pmcg->page1_base_address;
+-	res[1].end = pmcg->page1_base_address + SZ_4K - 1;
+-	res[1].flags = IORESOURCE_MEM;
++	/*
++	 * The initial version in DEN0049C lacked a way to describe register
++	 * page 1, which makes it broken for most PMCG implementations; in
++	 * that case, just let the driver fail gracefully if it expects to
++	 * find a second memory resource.
++	 */
++	if (node->revision > 0) {
++		res[1].start = pmcg->page1_base_address;
++		res[1].end = pmcg->page1_base_address + SZ_4K - 1;
++		res[1].flags = IORESOURCE_MEM;
++	}
  
- /*
-@@ -922,11 +924,11 @@ static const struct vop_win_phy rk3399_w
- static const struct vop_win_data rk3399_vop_win_data[] = {
- 	{ .base = 0x00, .phy = &rk3399_win01_data,
- 	  .type = DRM_PLANE_TYPE_PRIMARY },
--	{ .base = 0x40, .phy = &rk3288_win01_data,
-+	{ .base = 0x40, .phy = &rk3368_win01_data,
- 	  .type = DRM_PLANE_TYPE_OVERLAY },
--	{ .base = 0x00, .phy = &rk3288_win23_data,
-+	{ .base = 0x00, .phy = &rk3368_win23_data,
- 	  .type = DRM_PLANE_TYPE_OVERLAY },
--	{ .base = 0x50, .phy = &rk3288_win23_data,
-+	{ .base = 0x50, .phy = &rk3368_win23_data,
- 	  .type = DRM_PLANE_TYPE_CURSOR },
- };
- 
+ 	if (pmcg->overflow_gsiv)
+ 		acpi_iort_register_irq(pmcg->overflow_gsiv, "overflow",
 
 

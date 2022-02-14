@@ -2,112 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE324B5B3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 21:51:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E054B5B1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 21:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiBNUs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 15:48:59 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:58390 "EHLO
+        id S229623AbiBNUXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 15:23:01 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:53562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiBNUsw (ORCPT
+        with ESMTP id S229446AbiBNUXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 15:48:52 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBCA15FC87;
-        Mon, 14 Feb 2022 12:48:27 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21EI7w7w001562;
-        Mon, 14 Feb 2022 20:03:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=1pJI+ix99l7/rXF96NBURmzsCZLTmUmqrMwjJzasCG0=;
- b=C1bDcPyd47Ps/ucOG0vzZZpw5wLQNfRu9sAxsPUbwxdePlL5ZkHNCxdbhF+EIrTTAyQJ
- yvjHEpil9pDYbMXNK0cZRzdetM4rd0d0WqTJYQZYgYfGUgWIUNn4DitSdmVC5jcPuCt3
- OxXom30rXLMQmCjz0njRmfHtQejZNzpgdq1VR0l5vI34uMtRlAq4oNu5M4qlOW1p6GUP
- KFiAkN6grVpTsMIV9keh1B4OkGZhMe2HhuL3LncHVR1L5GjOTjUWJmCdYov0msVCFYvM
- nekfS6NIvX964JtQaR/gbFr3xVhNZwPAJ2YfudrIkq2ydrO6LxSX9kOwJbVZwmGxiYKr dw== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e7cje8nr5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 20:03:39 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21EK1rxK027551;
-        Mon, 14 Feb 2022 20:03:38 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma03dal.us.ibm.com with ESMTP id 3e64hahga8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 20:03:38 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21EK3bML28377520
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Feb 2022 20:03:37 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1738528058;
-        Mon, 14 Feb 2022 20:03:37 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E579E28060;
-        Mon, 14 Feb 2022 20:03:36 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Feb 2022 20:03:36 +0000 (GMT)
-Message-ID: <ea619561-fe29-6864-0a07-a49dee8549ab@linux.ibm.com>
-Date:   Mon, 14 Feb 2022 15:03:36 -0500
+        Mon, 14 Feb 2022 15:23:00 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F931E6822
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:21:20 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id d187so31131036pfa.10
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:21:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=DF9WT/Vv+v/rFZpH2c7Do8/144JbYcaXb42/q6Y+A0U=;
+        b=QIyQthQljzLDrV1j/8Di/lSTC4O9i7AJ4h+RyA0Gbr4rcktlIyiBLn6GTX8uKH6LcT
+         jHb/KGlZVkhdQXIFz3E2u6cgJcFB9mYMV6IHktSAy+pSDAun9LkQRlfDlpWDNdv8isxg
+         OKtqc7zE/vmR6+ggIAD2GVAjrM2eJ1Mjo6GLo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=DF9WT/Vv+v/rFZpH2c7Do8/144JbYcaXb42/q6Y+A0U=;
+        b=rLFidTy6tKJ2aN4QjuHBrTGfISAw161eaTMJLtO4I8dgFqMTmcCuzkaM/hLTd5VhgA
+         xwr6UssqlyJwjAcBk4dG8BogpgQIeQPG9jvJmKBMqaPkrqgnvPfF6mc5k8qZHArHOiuk
+         0FhQnCNeIe5T5MnW8lzeyJoe+hFnY/fCrfMOOYg/9TyCcD1VL+WTcTZYqWY1pq0Qm4zr
+         Gt0ZMBcrZ0R7Rjom1QIYYii7la3z79z9i6qkY3JwLpHQW2hpVGdpAM+sedrqVHZT/hgi
+         wWBWEXeVzQ7JZn3K7MijE0f7Wd8y+T1JHigty5mWB3yVx8f0AOhsNApY4A+G57j0vDuj
+         8yJA==
+X-Gm-Message-State: AOAM533d5WGAfk737MKdwEpL6YQoeiKQmOgUnZQoka8lLPDa/1Bmhepn
+        T9/rEWiee/WC8ge7+hCFGE2j7U+z2tlo9Q==
+X-Google-Smtp-Source: ABdhPJyGvGVuw3HE04nf6pE0tMBuCUxgl2p9O4asWDDxJJCfFsjyzXK4t7nX3MjYl8E01F0Y9HZ41Q==
+X-Received: by 2002:a17:903:2281:: with SMTP id b1mr686528plh.158.1644869246223;
+        Mon, 14 Feb 2022 12:07:26 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id lw16sm9718884pjb.51.2022.02.14.12.07.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 12:07:25 -0800 (PST)
+Date:   Mon, 14 Feb 2022 12:07:25 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Robert =?utf-8?B?xZp3acSZY2tp?= <robert@swiecki.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Jann Horn <jannh@google.com>, Will Drewry <wad@chromium.org>,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [RFC] Get siginfo from unreaped task
+Message-ID: <202202141152.6296CD7F@keescook>
+References: <CAP145phC6S6Zda-ZWLH1s4ZfDPh79rtf_7vzs-yvt1vykUCP4A@mail.gmail.com>
+ <CF5167CE-FA1C-4CEC-9EA8-5EE8041FE7C4@amacapital.net>
+ <20220213085212.cwzuqlrabpgbnbac@wittgenstein>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5 1/8] ima: rename IMA_ACTION_FLAGS to
- IMA_NONACTION_FLAGS
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220211214310.119257-1-zohar@linux.ibm.com>
- <20220211214310.119257-2-zohar@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220211214310.119257-2-zohar@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: T4YCMHvcv5xJtau2XmjWltnHNOqfi_Jo
-X-Proofpoint-ORIG-GUID: T4YCMHvcv5xJtau2XmjWltnHNOqfi_Jo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-14_07,2022-02-14_03,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- suspectscore=0 mlxlogscore=999 mlxscore=0 priorityscore=1501 bulkscore=0
- malwarescore=0 lowpriorityscore=0 adultscore=0 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202140116
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220213085212.cwzuqlrabpgbnbac@wittgenstein>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Feb 13, 2022 at 09:52:12AM +0100, Christian Brauner wrote:
+> On Sat, Feb 12, 2022 at 06:32:08PM -0800, Andy Lutomirski wrote:
+> > 
+> > > On Feb 12, 2022, at 3:24 AM, Robert Święcki <robert@swiecki.net> wrote:
+> > > 
+> > > ﻿sob., 12 lut 2022 o 05:28 Kees Cook <keescook@chromium.org> napisał(a):
+> > >> 
+> > >> Make siginfo available through PTRACE_GETSIGINFO after process death,
+> > >> without needing to have already used PTRACE_ATTACH. Uses 48 more bytes
+> > >> in task_struct, though I bet there might be somewhere else we could
+> > >> stash a copy of it?
+> > > 
+> > > An alternative way of accessing this info could be abusing the
+> > > waitid() interface, with some additional, custom to Linux, flag
+> > > 
+> > > waitid(P_ALL, 0, &si, __WCHILDSIGINFO);
+> > > 
+> > > which would change what is put into si.
+> > > 
+> > > But maybe ptrace() is better, because it's mostly incompatible with
+> > > other OSes anyway on the behavior/flag level, while waitd() seems to
+> > > be POSIX/BSD standard, even if Linux specifies some additional flags.
+> > > 
+> > > 
+> > 
+> > I had a kind of opposite thought, which is that it would be very nice
+> > to be able to get all the waitid() data without reaping a process or
+> > even necessarily being its parent.  Maybe these can be combined?  A
+> > new waitid() option like you’re suggesting could add siginfo (and
+> > might need permissions).  And we could have a different waitid() flag
+> > that says “maybe not my child, don’t reap” (and also needs
+> > permissions).
+> > 
+> > Although the “don’t reap” thing is fundamentally racy. What a sane
+> > process manager actually wants is an interface to read all this info
+> > from a pidfd, which means it all needs to get stuck in struct pid. And
+> 
+> /me briefly pops out from vacation
+> 
+> Agreed and not just siginfo I would expect(?). We already came to that
+> conclusion when we first introduced them.
+> 
+> > task_struct needs a completion or wait queue so you can actually wait
+> > for a pidfd to exit (unless someone already did this — I had patches a
+> > while back).  And this would be awesome.
+> 
+> Currently, you can wait for a pidfd to exit via polling and you can use
+> a pidfd to pass it to waitid(P_PIDFD, pidfd, ...).
+> 
+> /me pops back into vacation
 
-On 2/11/22 16:43, Mimi Zohar wrote:
-> Simple policy rule options, such as fowner, uid, or euid, can be checked
-> immediately, while other policy rule options, such as requiring a file
-> signature, need to be deferred.
->
-> The 'flags' field in the integrity_iint_cache struct contains the policy
-> action', 'subaction', and non action/subaction.
->
-> action: measure/measured, appraise/appraised, (collect)/collected,
->          audit/audited
-> subaction: appraise status for each hook (e.g. file, mmap, bprm, read,
->          creds)
-> non action/subaction: deferred policy rule options and state
->
-> Rename the IMA_ACTION_FLAGS to IMA_NONACTION_FLAGS.
->
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+Right, so waitid already has all the infrastructure for this, so I think
+adding it there makes a lot of sense. Here's what I've got:
 
 
+
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index f5b2be39a78c..e40789e801ef 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1178,6 +1178,7 @@ struct task_struct {
+ #endif
+ 	/* Ptrace state: */
+ 	unsigned long			ptrace_message;
++	kernel_siginfo_t		death_siginfo;
+ 	kernel_siginfo_t		*last_siginfo;
+ 
+ 	struct task_io_accounting	ioac;
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 9b04631acde8..41f6ba6b7aa7 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -2825,6 +2825,10 @@ bool get_signal(struct ksignal *ksig)
+ 		}
+ 
+ 	fatal:
++		/* Allow siginfo to be queried until reaped. */
++		copy_siginfo(&current->death_siginfo, &ksig->info);
++		current->last_siginfo = &current->death_siginfo;
++
+ 		spin_unlock_irq(&sighand->siglock);
+ 		if (unlikely(cgroup_task_frozen(current)))
+ 			cgroup_leave_frozen(true);
+diff --git a/include/uapi/linux/wait.h b/include/uapi/linux/wait.h
+index 85b809fc9f11..7258cd4510ba 100644
+--- a/include/uapi/linux/wait.h
++++ b/include/uapi/linux/wait.h
+@@ -9,6 +9,7 @@
+ #define WCONTINUED	0x00000008
+ #define WNOWAIT		0x01000000	/* Don't reap, just poll status.  */
+ 
++#define __WCHILDSIGINFO	0x10000000	/* Report child's siginfo. */
+ #define __WNOTHREAD	0x20000000	/* Don't wait on children of other threads in this group */
+ #define __WALL		0x40000000	/* Wait on all children, regardless of type */
+ #define __WCLONE	0x80000000	/* Wait only on non-SIGCHLD children */
+diff --git a/kernel/exit.c b/kernel/exit.c
+index d54efddd378b..70ecb996cecd 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -953,6 +953,7 @@ struct waitid_info {
+ 	uid_t uid;
+ 	int status;
+ 	int cause;
++	kernel_siginfo_t siginfo;
+ };
+ 
+ struct wait_opts {
+@@ -964,7 +965,7 @@ struct wait_opts {
+ 	int			wo_stat;
+ 	struct rusage		*wo_rusage;
+ 
+-	wait_queue_entry_t		child_wait;
++	wait_queue_entry_t	child_wait;
+ 	int			notask_error;
+ };
+ 
+@@ -1012,11 +1013,16 @@ static int wait_task_zombie(struct wait_opts *wo, struct task_struct *p)
+ 	int state, status;
+ 	pid_t pid = task_pid_vnr(p);
+ 	uid_t uid = from_kuid_munged(current_user_ns(), task_uid(p));
+-	struct waitid_info *infop;
++	struct waitid_info *infop = wo->wo_info;
+ 
+ 	if (!likely(wo->wo_flags & WEXITED))
+ 		return 0;
+ 
++	/* Before WNOWAIT so a copy can be extracted without reaping. */
++	if (unlikely(wo->wo_flags & __WCHILDSIGINFO)) {
++		if (infop && p->last_siginfo)
++			copy_siginfo(&infop->siginfo, p->last_siginfo);
++	}
+ 	if (unlikely(wo->wo_flags & WNOWAIT)) {
+ 		status = (p->signal->flags & SIGNAL_GROUP_EXIT)
+ 			? p->signal->group_exit_code : p->exit_code;
+@@ -1121,7 +1127,6 @@ static int wait_task_zombie(struct wait_opts *wo, struct task_struct *p)
+ 		release_task(p);
+ 
+ out_info:
+-	infop = wo->wo_info;
+ 	if (infop) {
+ 		if ((status & 0x7f) == 0) {
+ 			infop->cause = CLD_EXITED;
+@@ -1564,7 +1569,7 @@ static long kernel_waitid(int which, pid_t upid, struct waitid_info *infop,
+ 	unsigned int f_flags = 0;
+ 
+ 	if (options & ~(WNOHANG|WNOWAIT|WEXITED|WSTOPPED|WCONTINUED|
+-			__WNOTHREAD|__WCLONE|__WALL))
++			__WNOTHREAD|__WCLONE|__WALL|__WCHILDSIGINFO))
+ 		return -EINVAL;
+ 	if (!(options & (WEXITED|WSTOPPED|WCONTINUED)))
+ 		return -EINVAL;
+@@ -1638,6 +1645,10 @@ SYSCALL_DEFINE5(waitid, int, which, pid_t, upid, struct siginfo __user *,
+ 	if (!infop)
+ 		return err;
+ 
++	/* __WCHILDSIGINFO */
++	if (info->siginfo.signo)
++		return copy_siginfo_to_user(infop, &info->siginfo);
++
+ 	if (!user_write_access_begin(infop, sizeof(*infop)))
+ 		return -EFAULT;
+ 
+@@ -1781,6 +1792,12 @@ COMPAT_SYSCALL_DEFINE5(waitid,
+ 	if (!infop)
+ 		return err;
+ 
++	/* __WCHILDSIGINFO */
++	if (info->siginfo.signo)
++		return copy_siginfo_to_user32(
++				(struct compat_siginfo __user *)infop,
++				&info->siginfo);
++
+ 	if (!user_write_access_begin(infop, sizeof(*infop)))
+ 		return -EFAULT;
+ 
+
+
+One usability question I have is:
+
+- if the process just exited normally, should it return an empty
+  siginfo, or should it ignore __WCHILDSIGINFO? (I have it ignoring it
+  above.)
+
+
+-- 
+Kees Cook

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC19A4B4966
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2CDD4B4879
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345532AbiBNKNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:13:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42332 "EHLO
+        id S1343857AbiBNJyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:54:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345690AbiBNKNC (ORCPT
+        with ESMTP id S1344190AbiBNJve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:13:02 -0500
+        Mon, 14 Feb 2022 04:51:34 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B07B652ED;
-        Mon, 14 Feb 2022 01:50:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA3A69481;
+        Mon, 14 Feb 2022 01:42:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D9ACB80DC6;
-        Mon, 14 Feb 2022 09:50:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68290C340E9;
-        Mon, 14 Feb 2022 09:50:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36D58B80DA9;
+        Mon, 14 Feb 2022 09:42:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AA4BC340F0;
+        Mon, 14 Feb 2022 09:42:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832250;
-        bh=RNW7lziP8hHQMXesXCoIj9j7p+l+ivLfmH9sDjIYos4=;
+        s=korg; t=1644831755;
+        bh=wtFwdW9jsRjiSqdfyCsgNjsrqeSzJXPvR8e564Zrr1g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sxQOciq82vwn/b/sYwN5iZyDWz6eI83PyB1Np73oerGvGDdx4KrLk7Lup0wJTkfmJ
-         VjvLGQJH+7SYcCgMKZ6ZUfBthuVcpVGxHS0aLMcjPM7vJed3SkH0ES7XCxEylJBInT
-         Zyzbyo1PKrGFD7/Bp46ccpvJ4lUhQTXOLQoQqmHA=
+        b=Vl4MQTyh644652cWTFXtffQjbokiwSC+Oncy1Au7ZJeWSyVoFYMMwDobLCWyBYu+1
+         V+MfkQT2MUyS3H/asTQhAEtc85KrCSHyo/Q5gsBUMkS40K2hUeHatGVg86Qh4AUCWF
+         4ZbQxjbA1Fpzamqs/qpESbnWAtctUUCV5zwHBiwY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Geliang Tang <geliang.tang@suse.com>,
-        Kishen Maloor <kishen.maloor@intel.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        stable@vger.kernel.org, Rafael Richter <rafael.richter@gin.de>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 126/172] mptcp: netlink: process IPv6 addrs in creating listening sockets
-Date:   Mon, 14 Feb 2022 10:26:24 +0100
-Message-Id: <20220214092510.763599377@linuxfoundation.org>
+Subject: [PATCH 5.10 086/116] net: dsa: mv88e6xxx: fix use-after-free in mv88e6xxx_mdios_unregister
+Date:   Mon, 14 Feb 2022 10:26:25 +0100
+Message-Id: <20220214092501.737937599@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,49 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kishen Maloor <kishen.maloor@intel.com>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-[ Upstream commit 029744cd4bc6e9eb3bd833b4a033348296d34645 ]
+[ Upstream commit 51a04ebf21122d5c76a716ecd9bfc33ea44b2b39 ]
 
-This change updates mptcp_pm_nl_create_listen_socket() to create
-listening sockets bound to IPv6 addresses (where IPv6 is supported).
+Since struct mv88e6xxx_mdio_bus *mdio_bus is the bus->priv of something
+allocated with mdiobus_alloc_size(), this means that mdiobus_free(bus)
+will free the memory backing the mdio_bus as well. Therefore, the
+mdio_bus->list element is freed memory, but we continue to iterate
+through the list of MDIO buses using that list element.
 
-Fixes: 1729cf186d8a ("mptcp: create the listening socket for new port")
-Acked-by: Geliang Tang <geliang.tang@suse.com>
-Signed-off-by: Kishen Maloor <kishen.maloor@intel.com>
-Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+To fix this, use the proper list iterator that handles element deletion
+by keeping a copy of the list element next pointer.
+
+Fixes: f53a2ce893b2 ("net: dsa: mv88e6xxx: don't use devres for mdiobus")
+Reported-by: Rafael Richter <rafael.richter@gin.de>
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Link: https://lore.kernel.org/r/20220210174017.3271099-1-vladimir.oltean@nxp.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mptcp/pm_netlink.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/net/dsa/mv88e6xxx/chip.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
-index 2137b7460deaa..320f89b5c59dd 100644
---- a/net/mptcp/pm_netlink.c
-+++ b/net/mptcp/pm_netlink.c
-@@ -878,6 +878,7 @@ static int mptcp_pm_nl_append_new_local_addr(struct pm_nl_pernet *pernet,
- static int mptcp_pm_nl_create_listen_socket(struct sock *sk,
- 					    struct mptcp_pm_addr_entry *entry)
- {
-+	int addrlen = sizeof(struct sockaddr_in);
- 	struct sockaddr_storage addr;
- 	struct mptcp_sock *msk;
- 	struct socket *ssock;
-@@ -902,8 +903,11 @@ static int mptcp_pm_nl_create_listen_socket(struct sock *sk,
- 	}
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+index 9b451b820d7a6..1992be77522ac 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -3122,10 +3122,10 @@ static int mv88e6xxx_mdio_register(struct mv88e6xxx_chip *chip,
+ static void mv88e6xxx_mdios_unregister(struct mv88e6xxx_chip *chip)
  
- 	mptcp_info2sockaddr(&entry->addr, &addr, entry->addr.family);
--	err = kernel_bind(ssock, (struct sockaddr *)&addr,
--			  sizeof(struct sockaddr_in));
-+#if IS_ENABLED(CONFIG_MPTCP_IPV6)
-+	if (entry->addr.family == AF_INET6)
-+		addrlen = sizeof(struct sockaddr_in6);
-+#endif
-+	err = kernel_bind(ssock, (struct sockaddr *)&addr, addrlen);
- 	if (err) {
- 		pr_warn("kernel_bind error, err=%d", err);
- 		goto out;
+ {
+-	struct mv88e6xxx_mdio_bus *mdio_bus;
++	struct mv88e6xxx_mdio_bus *mdio_bus, *p;
+ 	struct mii_bus *bus;
+ 
+-	list_for_each_entry(mdio_bus, &chip->mdios, list) {
++	list_for_each_entry_safe(mdio_bus, p, &chip->mdios, list) {
+ 		bus = mdio_bus->bus;
+ 
+ 		if (!mdio_bus->external)
 -- 
 2.34.1
 

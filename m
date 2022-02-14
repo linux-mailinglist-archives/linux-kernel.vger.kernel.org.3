@@ -2,209 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B864B5CF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:37:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFADC4B5CE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbiBNVfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:35:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34088 "EHLO
+        id S231513AbiBNVfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:35:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbiBNVe7 (ORCPT
+        with ESMTP id S231511AbiBNVfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:34:59 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A5315720F
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:32:13 -0800 (PST)
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 397B7407BD
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 21:32:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644874332;
-        bh=Vpk09spyV9imDGj1kfUzd1GTJIyfhaN7DgNwXJd/bD0=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=e60NqLzyZV697QIjr9gD8+zn8IrsHL1ZzR6zifawktptCcEAwwDezFbPv/rcvfegL
-         YHjZz6Dw8tLgtclLzCOSJqnt30ciTOGqIiNVlF3DF1Fx+sNCDy7y6DK6zASXPn59Rq
-         UDJ9x3W+rG1I8PtUxFafBIt/A3N/rqOtVA1uD2gADBmCSY4UFBp8/nWHPGR3f+KrBQ
-         /vcskUVtn82dBXNBbURNNUi2AOna799rPxsKglqCdd2DLbzEAkT2H8ZfpZ0f6vDzEd
-         zyKBiOVn49p1jweSKCySzJNzypXS30DfRy6i9RGaMkoLQjv7g5pjyQnfn4D5+JL0Q1
-         zgCEro8Lz4MvQ==
-Received: by mail-ej1-f71.google.com with SMTP id qa30-20020a170907869e00b006cee5e080easo1349506ejc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:32:12 -0800 (PST)
+        Mon, 14 Feb 2022 16:35:00 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60B2158798;
+        Mon, 14 Feb 2022 13:32:26 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id c192so10338847wma.4;
+        Mon, 14 Feb 2022 13:32:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AYGIU0lBgl4d0sNWP4gNGrwgFdAF2VqmrC+fnt5WHX8=;
+        b=lEibEIIHHaNkCIBCOonaCkB5WT0qXvdINVme8DbMAQ4gXD8Y8gZ7MmRFtd+jeI340G
+         P3yf2zfHNl4eNYBwgYS2eODg+RA4I5mMh1mCS+Lsd+UlvDz55haq+BGGz2DX4ZB3rtAo
+         B7HUaJ0ax5xaUp++lwEdMWrz65Ju6n935WWXFf38LS6uYUOqNAD5fRcTd3xzF2R3J3CZ
+         L5pZq0TOkqyPaqpej5PXp/t89XLsmWFHUYxavOGXBPiE0pNqlCvoX0ifpawuBMaanR7a
+         hAU0T9yUZknzlJnd9XDhiGBMjpXYDKAzF+6oK2uqe197+OOhOiRiJba/J48mBYHoIjwn
+         XcVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Vpk09spyV9imDGj1kfUzd1GTJIyfhaN7DgNwXJd/bD0=;
-        b=gn26s9Yl0rjVCxxNI5Kd3p0J+W0KNDIFkWg0io7257KfXnkwBhnqijaXXpvj6PJiyk
-         CgJwRFeAPVsp30Zer3jR36w1eX52xAt+7KWf/i3D6dTgHAtTrIpJ2nMOQgFqJZM2ogo0
-         6M31OTdhGbMQHX4hwVbpkxgaTPUGn8DzsVPCSEhpGQJzzTzx8VciV2q8bRiK2vX0n2SG
-         K8+l+mV+vP0R+iroeOEztkmw6nAaUWR7n/hjAC/tGtDra17uJh7Cl42+MsHNTSKCiNWZ
-         dAv7U1BiJbYEbOPqfl3flOghOtJBvSVKBgjH0f3Ngj7da9qwX88PLaMUD+X2QY03LXf4
-         8hgA==
-X-Gm-Message-State: AOAM5329DpSQaqNB0hnryuifxQxsaNALXQ7Vr1t1lk9DW1ASUvY0aC2G
-        klgaH6RNRrg1xTA1QwJ7Te5OKjzLW/ThU9fwNyz+TTsUKvWTPidHBcI94EQWSMlDM/SCM4ScJCl
-        9xYrEiiAyzU5KB773lAl3V388Njp6IdxSwSTRV5+TyA==
-X-Received: by 2002:a17:907:9687:: with SMTP id hd7mr561411ejc.715.1644874331561;
-        Mon, 14 Feb 2022 13:32:11 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyqnjThzRbcUFM+c4bi7NwvMvdAFVVUVTZmoKvJUlbWhdI51H+3uTCCB+/iNFrzs2cm1lQjfg==
-X-Received: by 2002:a17:907:9687:: with SMTP id hd7mr561405ejc.715.1644874331369;
-        Mon, 14 Feb 2022 13:32:11 -0800 (PST)
-Received: from [192.168.0.106] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id h11sm3910302edb.68.2022.02.14.13.32.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 13:32:10 -0800 (PST)
-Message-ID: <af2405be-5af5-1e5b-66f2-93842eb8cde5@canonical.com>
-Date:   Mon, 14 Feb 2022 22:32:09 +0100
+        bh=AYGIU0lBgl4d0sNWP4gNGrwgFdAF2VqmrC+fnt5WHX8=;
+        b=rb3yvXW62IM0hvQQX7fAgqOjBtKs82xeoP/E4OgUPtalPg0/0amQmJ0d98b/4Lveqm
+         fv5FcNLz2dIyXq2IS7R0l5P2Qp8IXyi8l74+WHup3nW2AjKtA8mDWQM1RgxEDD8H3SXk
+         7lPxm1o62i/AqcO8s1IHez8Lg2rxVA5txFvuTIdyYkjR4b6IZ58jGQP3bYoSF6nD/mlH
+         W9HRV74kbG9EViHRxbGhjL5bFeLFPS/h5617+74HIvEkWdoL/xiwoVVF1FOYYktPBTrV
+         eSdx5cuLFKASIXbE/3S/tM6Okr63DFzzu4IpN9bY7lxqjpySH8s17ub+NgoMHLSBSKYW
+         /LIw==
+X-Gm-Message-State: AOAM533zGAbPUrun+KQ1KOwGxpwLN+JGvWv1YtszM2sK5u0WsHUayA6N
+        KJnbVUnDMMfCnV9EVaXl9GE=
+X-Google-Smtp-Source: ABdhPJzA+5buwGThU/StogQFez2aB+m4K2P39OqNL7jF9GJPAEIJXA4IsgbPmSGM6C562aVhBfktGg==
+X-Received: by 2002:a1c:7318:0:b0:37b:fa1b:1472 with SMTP id d24-20020a1c7318000000b0037bfa1b1472mr496215wmb.57.1644874345208;
+        Mon, 14 Feb 2022 13:32:25 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id 3sm26537410wrz.86.2022.02.14.13.32.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 13:32:24 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        alsa-devel@alsa-project.org, linux-tegra@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: tegra20: spdif: make const array rates static
+Date:   Mon, 14 Feb 2022 21:32:23 +0000
+Message-Id: <20220214213223.65780-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [1/1] dt-bindings: pwm:Convert pwm-mtk-disp.txt format file to
- pwm-mtk-disp.yaml format file
-Content-Language: en-US
-To:     xinlei.lee@mediatek.com, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
-        robh+dt@kernel.org, matthias.bgg@gmail.com
-Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <1644847276-27622-1-git-send-email-xinlei.lee@mediatek.com>
- <1644847276-27622-2-git-send-email-xinlei.lee@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <1644847276-27622-2-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2022 15:01, xinlei.lee@mediatek.com wrote:
-> From: xinlei lee <xinlei.lee@mediatek.com>
+Don't populate the read-only const array rates on the stack but
+instead it static. Also makes the object code a little smaller.
 
-Commit msg is needed.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ sound/soc/tegra/tegra20_spdif.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Subject - missing space after ':' and it is too long. No need to say
-"format file" twice.
+diff --git a/sound/soc/tegra/tegra20_spdif.c b/sound/soc/tegra/tegra20_spdif.c
+index d09cd7ee6879..64c2f304f254 100644
+--- a/sound/soc/tegra/tegra20_spdif.c
++++ b/sound/soc/tegra/tegra20_spdif.c
+@@ -186,7 +186,7 @@ static int tegra20_spdif_filter_rates(struct snd_pcm_hw_params *params,
+ 	struct snd_soc_dai *dai = rule->private;
+ 	struct tegra20_spdif *spdif = dev_get_drvdata(dai->dev);
+ 	struct clk *parent = clk_get_parent(spdif->clk_spdif_out);
+-	const unsigned int rates[] = { 32000, 44100, 48000 };
++	static const unsigned int rates[] = { 32000, 44100, 48000 };
+ 	long i, parent_rate, valid_rates = 0;
+ 
+ 	parent_rate = clk_get_rate(parent);
+-- 
+2.34.1
 
-You miss "PATCH" in subject. Using `git format-patch` is the easiest way
-to create proper patches.
-
-> 
-> Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
-> ---
->  .../devicetree/bindings/pwm/pwm-mtk-disp.yaml      | 60 ++++++++++++++++++++++
->  1 file changed, 60 insertions(+)
-
-I do not see the conversion here... You only add one file. Where is the
-removal?
-
->  create mode 100644 Documentation/devicetree/bindings/pwm/pwm-mtk-disp.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pwm/pwm-mtk-disp.yaml b/Documentation/devicetree/bindings/pwm/pwm-mtk-disp.yaml
-> new file mode 100644
-> index 0000000..2f1183e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pwm/pwm-mtk-disp.yaml
-
-Let's name the file as with most bindings, so with vendor:
-"mediatek,pwm-disp.yaml"
-
-> @@ -0,0 +1,60 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pwm/pwm-mtk-disp.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: mediatek PWM Controller Device Tree Bindings
-> +
-> +maintainers:
-> +  - Thierry Reding <thierry.reding@gmail.com>
-> +  - Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> +  - Lee Jones <lee.jones@linaro.org>
-> +  - Rob Herring <robh+dt@kernel.org>
-> +
-
-allOf referencing pwm.yaml
-
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt2701-disp-pwm
-> +      - mediatek,mt6595-disp-pwm
-> +      - mediatek,mt8173-disp-pwm
-> +      - mediatek,mt8183-disp-pwm
-> +      - mediatek,mt8186-disp-pwm
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: Main Clock
-> +      - description: Mm Clock
-> +
-
-
-This schema was not tested. Please run it against your DTS files (make
-dtbs_check). You need pwm-cells and power-domains. Maybe more...
-
-> +  clock-names:
-> +    items:
-> +      - const: main
-> +      - const: mm
-
-Blank line.
-
-> +required:
-
-"compatible" is required, put it first in the list.
-
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/mt8186-clk.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-
-Blank line.
-
-> +    disp_pwm: disp_pwm0@1100e000 {
-
-node name: "pwm" (generic as schema and devicetree specification ask for).
-
-> +        compatible = "mediatek,mt8183-disp-pwm";
-> +        reg = <0x1100e000 0x1000>;
-> +        interrupts = <GIC_SPI 143 IRQ_TYPE_LEVEL_HIGH>;
-> +        clocks = <&topckgen CLK_TOP_DISP_PWM>,
-> +                 <&infracfg_ao CLK_INFRA_AO_DISP_PWM>;
-> +        clock-names = "main", "mm";
-> +        status = "okay";
-
-No need for status.
-
-> +    };
-> \ No newline at end of file
-
-
-Best regards,
-Krzysztof

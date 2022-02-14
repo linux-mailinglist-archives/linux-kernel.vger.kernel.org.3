@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6714B4C76
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F050B4B4B20
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:40:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348753AbiBNKmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:42:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49108 "EHLO
+        id S1346043AbiBNKSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:18:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241787AbiBNKjv (ORCPT
+        with ESMTP id S1347184AbiBNKQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:39:51 -0500
+        Mon, 14 Feb 2022 05:16:21 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA34403F6;
-        Mon, 14 Feb 2022 02:04:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB8E6D86F;
+        Mon, 14 Feb 2022 01:53:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3370DB80CE1;
-        Mon, 14 Feb 2022 10:04:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45886C340EF;
-        Mon, 14 Feb 2022 10:04:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3F99CB80DBF;
+        Mon, 14 Feb 2022 09:53:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E053C340E9;
+        Mon, 14 Feb 2022 09:53:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644833040;
-        bh=dnqBjILIyPFJ4zWz2ADF95n2WkBQyD/RD3t0VOM3EjU=;
+        s=korg; t=1644832416;
+        bh=J4TfmdW9SmmCxPVvKGSAjHUPbDY8uIQC53QynwaK9Pk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dy1lcOl4QacOrDwMnp5K0LG7G4ksqT/tlLHk0+oHQgqlfCXB5t/4Rs96QC6u867GU
-         qHLeHxTrWer4lLG9EIvWjsBct5lHaGZaVPnAJTUo3NBSAMQ8/ibHoXlvOBOXU+miND
-         JVDtwakjsAAKynfZeCcub3PCNWU+2nrVqF2vyu2M=
+        b=yIVHU0ziXghpd8yCMWVcRqb2iNzGNBXQvI69r/0RZZeSX1vPPPGrqXAJvyDWEJGYU
+         RTXG3hL9sJ8WD2Wvv1kYFM/C0q36ghY4zczIVMJcVR+Wwih4st3R6Ihrwlyqa6/ZEq
+         8BL6fYbCKM5t7/AG95LdUeGIG1ET9aULQRf1bY6A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pawel Dembicki <paweldembicki@gmail.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.16 178/203] USB: serial: option: add ZTE MF286D modem
-Date:   Mon, 14 Feb 2022 10:27:02 +0100
-Message-Id: <20220214092516.295938960@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: [PATCH 5.15 165/172] sched/fair: Fix fault in reweight_entity
+Date:   Mon, 14 Feb 2022 10:27:03 +0100
+Message-Id: <20220214092512.081826010@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,62 +57,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pawel Dembicki <paweldembicki@gmail.com>
+From: Tadeusz Struk <tadeusz.struk@linaro.org>
 
-commit d48384c7ed6c8fe4727eaa0f3048f62afd1cd715 upstream.
+commit 13765de8148f71fa795e0a6607de37c49ea5915a upstream.
 
-Modem from ZTE MF286D is an Qualcomm MDM9250 based 3G/4G modem.
+Syzbot found a GPF in reweight_entity. This has been bisected to
+commit 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid
+sched_task_group")
 
-T:  Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
-D:  Ver= 3.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-P:  Vendor=19d2 ProdID=1485 Rev=52.87
-S:  Manufacturer=ZTE,Incorporated
-S:  Product=ZTE Technologies MSM
-S:  SerialNumber=MF286DZTED000000
-C:* #Ifs= 7 Cfg#= 1 Atr=80 MxPwr=896mA
-A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
-I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=02 Prot=ff Driver=rndis_host
-E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
-E:  Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=89(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+There is a race between sched_post_fork() and setpriority(PRIO_PGRP)
+within a thread group that causes a null-ptr-deref in
+reweight_entity() in CFS. The scenario is that the main process spawns
+number of new threads, which then call setpriority(PRIO_PGRP, 0, -20),
+wait, and exit.  For each of the new threads the copy_process() gets
+invoked, which adds the new task_struct and calls sched_post_fork()
+for it.
 
-Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
+In the above scenario there is a possibility that
+setpriority(PRIO_PGRP) and set_one_prio() will be called for a thread
+in the group that is just being created by copy_process(), and for
+which the sched_post_fork() has not been executed yet. This will
+trigger a null pointer dereference in reweight_entity(), as it will
+try to access the run queue pointer, which hasn't been set.
+
+Before the mentioned change the cfs_rq pointer for the task  has been
+set in sched_fork(), which is called much earlier in copy_process(),
+before the new task is added to the thread_group.  Now it is done in
+the sched_post_fork(), which is called after that.  To fix the issue
+the remove the update_load param from the update_load param() function
+and call reweight_task() only if the task flag doesn't have the
+TASK_NEW flag set.
+
+Fixes: 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
+Reported-by: syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Link: https://lkml.kernel.org/r/20220203161846.1160750-1-tadeusz.struk@linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/option.c |    2 ++
- 1 file changed, 2 insertions(+)
+ kernel/sched/core.c |   11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1649,6 +1649,8 @@ static const struct usb_device_id option
- 	  .driver_info = RSVD(2) },
- 	{ USB_DEVICE_INTERFACE_CLASS(ZTE_VENDOR_ID, 0x1476, 0xff) },	/* GosunCn ZTE WeLink ME3630 (ECM/NCM mode) */
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1481, 0xff, 0x00, 0x00) }, /* ZTE MF871A */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1485, 0xff, 0xff, 0xff),  /* ZTE MF286D */
-+	  .driver_info = RSVD(5) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1533, 0xff, 0xff, 0xff) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1534, 0xff, 0xff, 0xff) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x1535, 0xff, 0xff, 0xff) },
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -1199,8 +1199,9 @@ int tg_nop(struct task_group *tg, void *
+ }
+ #endif
+ 
+-static void set_load_weight(struct task_struct *p, bool update_load)
++static void set_load_weight(struct task_struct *p)
+ {
++	bool update_load = !(READ_ONCE(p->__state) & TASK_NEW);
+ 	int prio = p->static_prio - MAX_RT_PRIO;
+ 	struct load_weight *load = &p->se.load;
+ 
+@@ -4358,7 +4359,7 @@ int sched_fork(unsigned long clone_flags
+ 			p->static_prio = NICE_TO_PRIO(0);
+ 
+ 		p->prio = p->normal_prio = p->static_prio;
+-		set_load_weight(p, false);
++		set_load_weight(p);
+ 
+ 		/*
+ 		 * We don't need the reset flag anymore after the fork. It has
+@@ -6902,7 +6903,7 @@ void set_user_nice(struct task_struct *p
+ 		put_prev_task(rq, p);
+ 
+ 	p->static_prio = NICE_TO_PRIO(nice);
+-	set_load_weight(p, true);
++	set_load_weight(p);
+ 	old_prio = p->prio;
+ 	p->prio = effective_prio(p);
+ 
+@@ -7193,7 +7194,7 @@ static void __setscheduler_params(struct
+ 	 */
+ 	p->rt_priority = attr->sched_priority;
+ 	p->normal_prio = normal_prio(p);
+-	set_load_weight(p, true);
++	set_load_weight(p);
+ }
+ 
+ /*
+@@ -9431,7 +9432,7 @@ void __init sched_init(void)
+ #endif
+ 	}
+ 
+-	set_load_weight(&init_task, false);
++	set_load_weight(&init_task);
+ 
+ 	/*
+ 	 * The boot idle thread does lazy MMU switching as well:
 
 

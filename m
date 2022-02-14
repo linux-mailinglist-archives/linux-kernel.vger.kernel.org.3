@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA0E4B4F4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 284E84B4F57
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351437AbiBNLtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:49:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41572 "EHLO
+        id S1352075AbiBNLs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:48:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352043AbiBNLja (ORCPT
+        with ESMTP id S1351704AbiBNLjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:39:30 -0500
+        Mon, 14 Feb 2022 06:39:31 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2151EE0EE;
-        Mon, 14 Feb 2022 03:29:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B385B13DE1;
+        Mon, 14 Feb 2022 03:30:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2B3D611AF;
-        Mon, 14 Feb 2022 11:29:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D912C340E9;
-        Mon, 14 Feb 2022 11:29:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644838192;
-        bh=X/vj9bZ7G1cVDoVme5LRY1sPodeCFxRDwg34D93ziYw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Uv5SsfQuTXs2i2R1L8ykWa/fJBxk/gBL4Sh+B28sSyioGyDt1WYw0BULm3wuSExGJ
-         j5dm8CUpeYPJpQv0a8NhxxyFyAeoX5QczTroGqwGWw+L4/Ii3WrABUWpVS6l0UTLxV
-         LQP3eEbzrmSOZFmPhZ5fMop+O12c7LGD8IaqZSlo=
-Date:   Mon, 14 Feb 2022 12:29:49 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Daehwan Jung <dh10.jung@samsung.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
-        Thinh.Nguyen@synopsys.com
-Subject: Re: [PATCH v2 1/2] usb: dwc3: Not set DWC3_EP_END_TRANSFER_PENDING
- in ep cmd fails
-Message-ID: <Ygo9LZg8lxitTE8J@kroah.com>
-References: <1644836933-141376-1-git-send-email-dh10.jung@samsung.com>
- <CGME20220214111149epcas2p1a1faeda037991885fd6f2f026fa44ec5@epcas2p1.samsung.com>
- <1644836933-141376-2-git-send-email-dh10.jung@samsung.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52A24611BC;
+        Mon, 14 Feb 2022 11:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B177CC340F0;
+        Mon, 14 Feb 2022 11:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644838210;
+        bh=WMoynI5WXAeTD6YHq4DWDKMnxC4EGldppjWd4ecx7PU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=m7kLgs0iJvCnzVa6qCiteJMYfcvEaY8H8sgnpbNDoKfLat9mAWyWPBR/0ZhmiRd+j
+         zV+iVQLWpeUbFwKzVr16FA7gWNP5j0pDJN5spBvZR1Wyk4/YtoeXCVx4vR1pzdNnlz
+         cs2iCyr4FbLzHCdeq449eUBgQhXhgMRTNU/NZExaIuLngNuwdRrHCAP8UksFwXh9hV
+         rksGeoQzJJQfnPLzjuku2oRNjSuGZPZIrt/Umv67OvvD6vT7T1W1+Mk5UWgP4n7OAa
+         bGUXhsKU3Fbv/qsvh1Fh1Qlh2Xy/HyVI15vy3N2wHGxNrS+qHvGuoAealL33yxIaWn
+         khaUj/4WLQXJA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9F332E6D4D5;
+        Mon, 14 Feb 2022 11:30:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1644836933-141376-2-git-send-email-dh10.jung@samsung.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v20, 0/2] ADD DM9051 ETHERNET DRIVER
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164483821064.17157.12984377309696778794.git-patchwork-notify@kernel.org>
+Date:   Mon, 14 Feb 2022 11:30:10 +0000
+References: <20220211092756.27274-1-josright123@gmail.com>
+In-Reply-To: <20220211092756.27274-1-josright123@gmail.com>
+To:     Joseph CHAMG <josright123@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
+        joseph_chang@davicom.com.tw, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andy.shevchenko@gmail.com, andrew@lunn.ch, leon@kernel.org
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,20 +59,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 08:08:52PM +0900, Daehwan Jung wrote:
-> It always sets DWC3_EP_END_TRANSFER_PENDING in dwc3_stop_active_transfer
-> even if dwc3_send_gadget_ep_cmd fails. It can cause some problems like
-> skipping clear stall commmand or giveback from dequeue. We fix to set it
-> only when ep cmd success. Additionally, We clear DWC3_EP_TRANSFER_STARTED
-> for next trb to start transfer not update transfer.
+Hello:
 
-So is this two different changes?
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
+On Fri, 11 Feb 2022 17:27:54 +0800 you wrote:
+> DM9051 is a spi interface chip,
+> need cs/mosi/miso/clock with an interrupt gpio pin
 > 
-> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> Joseph CHAMG (2):
+>   dt-bindings: net: Add Davicom dm9051 SPI ethernet controller
+>   net: Add dm9051 driver
+> 
+> [...]
 
-What commit id does this fix?
+Here is the summary with links:
+  - [v20,1/2] dt-bindings: net: Add Davicom dm9051 SPI ethernet controller
+    https://git.kernel.org/netdev/net-next/c/759856e961e4
+  - [v20,2/2] net: Add dm9051 driver
+    https://git.kernel.org/netdev/net-next/c/2dc95a4d30ed
 
-thanks,
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-greg k-h
+

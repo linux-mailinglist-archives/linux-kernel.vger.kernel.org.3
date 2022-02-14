@@ -2,106 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DC24B5341
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:26:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C0834B5360
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:32:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355119AbiBNO0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 09:26:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59042 "EHLO
+        id S1355160AbiBNOc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 09:32:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344651AbiBNO02 (ORCPT
+        with ESMTP id S231570AbiBNOcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 09:26:28 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B05090
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:26:19 -0800 (PST)
-Date:   Mon, 14 Feb 2022 15:26:16 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644848778;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ANNwHcEmklNb9ltMcO9wOVA9vxRmsCTRrzWaq5I/G74=;
-        b=GwSWYETWyxBpIVBqUKtpFDGNtQleTMzRu+0fjzb9jXUoGO+S0ia1rK0TYll780tnjCHjea
-        0W73KQ/kgKfQPFyYXo3u1KI2PraLLyfvIRDg5eRbZZYyyyggQ95B01GTfKMr/JlR0lYwYU
-        vw9jW4xh/8wUf1MnM6f/6OfAA5UT35ugmrfSwPTFuX7DGLYwRZlzWU34ZPhCgKxGEyNbRc
-        jjNwWNKRkwnZhXRkmui3F+ZwwCzjitsLwULdiiiMQMQDpYqf7XEjELkUGmPKH5WP2gt+Tn
-        ecMMOxhRTaNpgH+0oczvVMGtuJ/Wbr6OVTHdJE82U3h6ihz/+hL6Vs2/CEORfg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644848778;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ANNwHcEmklNb9ltMcO9wOVA9vxRmsCTRrzWaq5I/G74=;
-        b=mCTXLEmUJXQTFFHijKLzCownR39N70jOqdcPxz9p/+iu9HokZr6pj7H92whmLCGn1aL/5f
-        7KKIBA+UWI0zqBDg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux@dominikbrodowski.net,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [PATCH] random: invalidate crngs and batches on cpuhp teardown
-Message-ID: <YgpmiMURsT3OQLtM@linutronix.de>
-References: <20220214134838.980159-1-Jason@zx2c4.com>
+        Mon, 14 Feb 2022 09:32:23 -0500
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B4A41991;
+        Mon, 14 Feb 2022 06:32:15 -0800 (PST)
+Received: by mail-qk1-f172.google.com with SMTP id m25so14460832qka.9;
+        Mon, 14 Feb 2022 06:32:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+D9TDb8zgo7SYyd9U66f/5PMXdHiP4mRfXaTW0S+zdU=;
+        b=f4byYKflNUzTLr72E+3GStpf2gLhBp60fh42HnSbM9yTeLwE4rotE2d60zbRyHg8dS
+         dhpQWJycSL2RwO/tAg/lei1hUhQJOVrOF+AzZOsan1EzLCx+Rwvfot39CEx5EOBLUeA/
+         r35BFZGmHVoNdZchrCO+fNjPw8OeU3C6qD0oRswRI1kHxF6HODPk8Yzu/kjuSdSTP4NN
+         IMXshtVgMZe5FS8NCv2jMIH9+BdQR3HjXhojK+MD5T2GBu6Ifsk2b4f8pby89Xo3ITVd
+         CV4xLIaHslCf/DScQE3AyaN0i6kP6hTdpOph694CDPB8juBYOkgHfF2hG66e2ihanuTz
+         dG/g==
+X-Gm-Message-State: AOAM5329TfO2xG30G4w9phlV1ZBz2fejt+yU0OD8AvU0UijIZUjjmeET
+        dao24ATtBo3xkKiyc1Kv1B+CrcYq4YWhKsuP
+X-Google-Smtp-Source: ABdhPJzgHQw0kWDsRpHgdImRm6LVfnu2ylZ8LNmFcGR9mbXut5XGz74HRkaaBhWodGcWtPvpF+3P6Q==
+X-Received: by 2002:a05:620a:24d0:: with SMTP id m16mr7167670qkn.558.1644849134281;
+        Mon, 14 Feb 2022 06:32:14 -0800 (PST)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id f20sm18099940qtf.39.2022.02.14.06.32.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 06:32:14 -0800 (PST)
+Received: by mail-yb1-f173.google.com with SMTP id p19so46606414ybc.6;
+        Mon, 14 Feb 2022 06:32:14 -0800 (PST)
+X-Received: by 2002:ab0:384c:: with SMTP id h12mr3670905uaw.122.1644848795466;
+ Mon, 14 Feb 2022 06:26:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220214134838.980159-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220211210757.612595-1-Jason@zx2c4.com> <fcab986b-d0bd-c798-de17-266abcdc7da2@gentoo.org>
+ <CAHmME9ooEbgiv3DRk87ei+rUoVNMJthY7UuG_xCgm=kfMZAajw@mail.gmail.com>
+In-Reply-To: <CAHmME9ooEbgiv3DRk87ei+rUoVNMJthY7UuG_xCgm=kfMZAajw@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 14 Feb 2022 15:26:24 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXDj+BVCs4Syg39vjnHGKcwJnCgDxrGoOiEFM_T4ojwPg@mail.gmail.com>
+Message-ID: <CAMuHMdXDj+BVCs4Syg39vjnHGKcwJnCgDxrGoOiEFM_T4ojwPg@mail.gmail.com>
+Subject: Re: [PATCH RFC v0] random: block in /dev/urandom
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Joshua Kinard <kumba@gentoo.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Theodore Ts'o" <tytso@mit.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-14 14:48:38 [+0100], Jason A. Donenfeld wrote:
-> Now that we have a cpuhp teardown notifier, we can invalidate the keys
-> used by the per-cpu crngs and the batches used by per-cpu batched
-> entropy, so that if the cpus come back online, and the generation
-> counter happens to have cycled all the way around to where it was
-> before, it doesn't mistakenly use the old data. The chances of this
-> happening are exceedingly rare, but since we now have the notifier
-> setup, doing this is basically free.
+Hi Jason,
 
-Wasn't aware that random bits get bad over time ;)
+On Mon, Feb 14, 2022 at 3:05 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> On Sun, Feb 13, 2022 at 12:06 AM Joshua Kinard <kumba@gentoo.org> wrote:
+> > The R6000/R6000A CPU only ever existed in systems in the late 1980's that
+> > were fairly large, and I don't think there is a complete, working unit out
+> > there that can actually boot up, let alone boot a Linux kernel.
+>
+> So from what you've written, it sounds like MIPS is actually not a problem here.
+>
+> So the only systems we're actually talking about without a good cycle
+> counter are non-Amiga m68k? If so, that'd be a pretty terrific
+> finding. It'd mean that this idea can move forward, and we only need
+> to worry about some m68k museum pieces with misconfigured
+> userspaces...
 
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: Sultan Alsawaf <sultan@kerneltoast.com>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: Theodore Ts'o <tytso@mit.edu>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  drivers/char/random.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/char/random.c b/drivers/char/random.c
-> index df5aef93da34..ce199af9bc56 100644
-> --- a/drivers/char/random.c
-> +++ b/drivers/char/random.c
-> @@ -1225,6 +1225,15 @@ int random_dead_cpu(unsigned int cpu)
->  	 * since the MIX_INFLIGHT flag will be cleared.
->  	 */
->  	per_cpu_ptr(&irq_randomness, cpu)->count = 0;
-> +
-> +	/*
-> +	 * We also want to invalidate per-cpu crngs and batches,
-> +	 * so that if the CPU does come back online, it uses
-> +	 * fresh entropy.
-> +	 */
-> +	per_cpu_ptr(&crngs, cpu)->generation = ULONG_MAX;
-> +	per_cpu_ptr(&batched_entropy_u32, cpu)->position = UINT_MAX;
-> +	per_cpu_ptr(&batched_entropy_u64, cpu)->position = UINT_MAX;
+I'm afraid you missed one important detail.  You wrote:
 
-I think if you want to do this, then it would also make sense to put it
-into the startup callback. If there is an user doing get_random_u32()
-then you would preload the "old" entropy. But on your way "online" you
-would preload it with the new entropy.
+> On every platform, random_get_entropy() is connected to get_cycles(),
+> except for three: m68k, MIPS, and RISC-V.
 
->  	return 0;
->  }
->  
+The default implementation in include/asm-generic/timex.h is:
 
-Sebastian
+    static inline cycles_t get_cycles(void)
+    {
+            return 0;
+    }
+
+Several architectures do not implement get_cycles(), or implement it
+with a variant that's very similar or identical to the generic version.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

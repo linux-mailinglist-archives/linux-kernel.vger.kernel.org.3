@@ -2,124 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F174B5AC4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 20:59:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E374B5AD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 21:10:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiBNT5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 14:57:46 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59936 "EHLO
+        id S229772AbiBNUHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 15:07:33 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:55130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiBNT5o (ORCPT
+        with ESMTP id S229770AbiBNUHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 14:57:44 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5E81375AC;
-        Mon, 14 Feb 2022 11:57:27 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id u5so184508ple.3;
-        Mon, 14 Feb 2022 11:57:27 -0800 (PST)
+        Mon, 14 Feb 2022 15:07:32 -0500
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DB111ACE3;
+        Mon, 14 Feb 2022 12:07:17 -0800 (PST)
+Received: by mail-oi1-f178.google.com with SMTP id r27so18618073oiw.4;
+        Mon, 14 Feb 2022 12:07:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=faMCUXgtmx+3AXg49JAI78UUXqy95249g9sm+/df9gg=;
-        b=U1A+Bb18rPgucS1CdIquKO/KQlC0eR27NKxSUImY8Oiy7D1wNhaId2KoUHB4btYKEU
-         4u9Zjg2eEAKHQ5kHwKidGlgPI8du5J16z8F+sJNHr6Uj2ZVwdwXJqvgp42B7LBkHCpLx
-         fNsVnT2Gql7nO2NdBASFWTya/UuczDhwp9ARH9586d51DW8lEZyTnCfiXIfX1WYapWOE
-         GeJhsm3lrs67uSDfIXrlZ1Pf7MRr5EXBs0AUNlNK+7KuWL5jxyEP+eaDXzmgQ6WOcWcS
-         c73Yf/mPhRfRVhubGjsd9Yc1/pEuF8KVnxRvakBP5HkToeXTv1SCmGYbuc43TkrLsQRI
-         zsHg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=p+qaLj5PeJFZmiJ725JeU6P2tttdbBuvpV2cQ0sO28w=;
+        b=HRaK5XDjfwgK07M+uIki6Hy3scx/ZNV3tSk5ugGAPnaWNgB1kcaO4X5LjC3AK3dGSB
+         /2YubVyCCs/QL8epvMOPDGhWDbdMAPZRegrNiwGo1aYBItCy+AbIzPD5+X9y92kTK9xN
+         mwzpDadGRImpO0OTvp64bqEr50T08Ms2LXw9vA1dVxjDVkcPhGh8Aw6y5ehK7cctyz4I
+         C+pEL+ScxlB4v6ZHkr7gMiGNxnppf68osRxiZVX0WMcXJPh6EitaScsXW4N12nYey9E+
+         /S73g9BaZhk9yZp17a1Q3Halqi4DT4U+dlEaTu/GP6zgv+3mgnFqaKlNBK2IArBSt6hv
+         YpRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=faMCUXgtmx+3AXg49JAI78UUXqy95249g9sm+/df9gg=;
-        b=Z68GLA3IWjogcmQjxZVXMzZrER/4jqKKoRU+CaiTCIAU69rNUeqO0865+5M+dOP7VY
-         E473qWv80eJz9R4R6kr1GePkwiXaLIQqsZkeF3j0t8HOOpC8SbdRSyoBAYuacCBJxNSr
-         o7Da0y73sWj+vBdKju4wdsRn3BtbmvaFyXj+ON6gfJdJA8XhyYGfiIwwJDmwzuuCNvrB
-         sbHMB54DVAAyU84pL30MgDykzEP3XAGft/YEqRVN0s4P/xqSbziGLgMHeh6EIT8NpXFD
-         AyyAEGskzn63eT3wZtaK4S8z3Z16mL9F4S2hED3KziY+HQQCuj8s7kJCkKnnlaLD3pdp
-         Psbw==
-X-Gm-Message-State: AOAM530qFsQO/sMvWkknidWCE+ocymo8sfjBqgDu/fU9DNrgWIbteHfe
-        I1GNyTU46+jSyYE53eXcDsiR+7/mgJ4=
-X-Google-Smtp-Source: ABdhPJzskEVgewovivQ93Yqm7pSL4EIc60jw8YJ4dfnBLxmZUnSxdbyKGDwkIVVRUcEgmSDV1Gt4LQ==
-X-Received: by 2002:a05:6a00:1c42:: with SMTP id s2mr343232pfw.3.1644866602102;
-        Mon, 14 Feb 2022 11:23:22 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id g19sm19524769pfc.109.2022.02.14.11.23.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 11:23:21 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 14 Feb 2022 09:23:20 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     "T.J. Mercier" <tjmercier@google.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, kaleshsingh@google.com,
-        Kenny.Ho@amd.com, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        cgroups@vger.kernel.org
-Subject: Re: [RFC v2 0/6] Proposal for a GPU cgroup controller
-Message-ID: <YgqsKHS0wbZFrDkO@slm.duckdns.org>
-References: <20220211161831.3493782-1-tjmercier@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=p+qaLj5PeJFZmiJ725JeU6P2tttdbBuvpV2cQ0sO28w=;
+        b=2WtE20FljNJ7CCJIbycs3S+HKd4WKEmtepg68y3WC5wwhDGevjiePi1a8D2pcNqCAv
+         xQfNCrnmVTeshw93Hi747zzk6yS9Wtv8A0lxyyPiijI6cP8iu1qCe50q3xitJNZ3fzsT
+         JcTl5509nZBXYmvz38hFcfrFVz/SQvVt8HgAFKbolgRbhcX2zsDRz1tbXw/q1VvrhQNI
+         UfCVzuFM4OiNmgheZXYh94WqUWO9WvCZQTg1qSg5FVenqGqqbYbfKshGnLxfPrg6/aZB
+         KNEH6y1qLfvHO/WDA6ms0qyouAtNHaQjq3ne+JFvSdlbSBAm6s9bzEmYdrqETugDSeC2
+         C4LA==
+X-Gm-Message-State: AOAM533qFcZ81W6XTMTH3dx5RkHDgSrJ2prLWN1Oe4Vv7g5IiHWzh9sD
+        k7lDWocmkpk6cCMCwhSadsnp+hkwvhVHGI+/Dcb6qL/cHOA=
+X-Google-Smtp-Source: ABdhPJxkdJufelV5+Wulm+FPE68886UfKNvwL/u6QTOcUjhbFtvpANs+EwHHjny3HwHpiYb8Vh6woKOgUKLhncksRUI=
+X-Received: by 2002:a17:90b:1d84:b0:1b4:dc8e:2cc2 with SMTP id
+ pf4-20020a17090b1d8400b001b4dc8e2cc2mr192125pjb.122.1644866701752; Mon, 14
+ Feb 2022 11:25:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220211161831.3493782-1-tjmercier@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220201205534.1962784-1-haoluo@google.com> <20220201205534.1962784-6-haoluo@google.com>
+ <20220203180414.blk6ou3ccmod2qck@ast-mbp.dhcp.thefacebook.com>
+ <CA+khW7jkJbvQrTx4oPJAoBZ0EOCtr3C2PKbrzhxj-7euBK8ojg@mail.gmail.com>
+ <CAADnVQLZZ3SM2CDxnzgOnDgRtGU7+6wT9u5v4oFas5MnZF6DsQ@mail.gmail.com>
+ <CA+khW7i+TScwPZ6-rcFKiXtxMm8hiZYJGH-wYb=7jBvDWg8pJQ@mail.gmail.com>
+ <CAADnVQ+-29CS7nSXghKMgZjKte84L0nRDegUE0ObFm3d7E=eWw@mail.gmail.com>
+ <CA+khW7iWd5MzZW_mCfgqHESi8okjNRiRMr0TM=CQzLkMsa_a5g@mail.gmail.com>
+ <CAADnVQJcTAgcbwrOWO8EnbTdAcQ91HQmtpn7aKJGwHc=mEpJ1g@mail.gmail.com> <CA+khW7i46Rg8q=8goXdmuJuZ+NOuZ5AP6fSbSVzyqcU3C5iX4A@mail.gmail.com>
+In-Reply-To: <CA+khW7i46Rg8q=8goXdmuJuZ+NOuZ5AP6fSbSVzyqcU3C5iX4A@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 14 Feb 2022 11:24:50 -0800
+Message-ID: <CAADnVQK+Eh9qCuoBWZ1cRQ4h+fS5J+zy+GePEGXijZ_BD_5Q3w@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next v2 5/5] selftests/bpf: test for pinning for
+ cgroup_view link
+To:     Hao Luo <haoluo@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Feb 14, 2022 at 10:29 AM Hao Luo <haoluo@google.com> wrote:
+> Hi Alexei,
+>
+> Actually, I found this almost worked, except that the tracepoints
+> cgroup_mkdir and cgroup_rmdir are not sleepable. They are inside a
+> spinlock's critical section with irq off. I guess one solution is to
+> offload the sleepable part of the bpf prog into a thread context. We
+> may create a dedicated kernel thread or use workqueue for this. Do you
+> have any advice?
 
-On Fri, Feb 11, 2022 at 04:18:23PM +0000, T.J. Mercier wrote:
-> The GPU/DRM cgroup controller came into being when a consensus[1]
-> was reached that the resources it tracked were unsuitable to be integrated
-> into memcg. Originally, the proposed controller was specific to the DRM
-> subsystem and was intended to track GEM buffers and GPU-specific
-> resources[2]. In order to help establish a unified memory accounting model
-> for all GPU and all related subsystems, Daniel Vetter put forth a
-> suggestion to move it out of the DRM subsystem so that it can be used by
-> other DMA-BUF exporters as well[3]. This RFC proposes an interface that
-> does the same.
-> 
-> [1]: https://patchwork.kernel.org/project/dri-devel/cover/20190501140438.9506-1-brian.welty@intel.com/#22624705
-> [2]: https://lore.kernel.org/amd-gfx/20210126214626.16260-1-brian.welty@intel.com/
-> [3]: https://lore.kernel.org/amd-gfx/YCVOl8%2F87bqRSQei@phenom.ffwll.local/
-
-IIRC, the only consensus was that it needs to be a separate controller and
-folks had trouble agreeing on resource types, control mechanism and
-interface. Imma keep an eye on how the discussion develops among GPU folks.
-Please feel free to ping if there's an area my input may be useful.
-
-Thanks.
-
--- 
-tejun
+Are you referring to spin_lock in TRACE_CGROUP_PATH
+that protects global trace_cgroup_path[] buffer?
+That is fixable.
+Do you actually need the string path returned by cgroup_path() in bpf prog?
+Maybe prog can call cgroup_path() by itself when necessary.
+Parsing strings isn't great anyway. The bpf prog probably needs the last
+part of the dir only. So cgrp->kn->name would do it?
+The TRACE_CGROUP_PATH wasn't designed to be turned on 24/7.
+That global spin_lock is not great for production use.
+No need to delegate sleepable bpf to thread context.
+Let's refactor that tracepoint a bit.

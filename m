@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CDFF4B4AE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:40:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0054B46EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344913AbiBNKNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:13:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43966 "EHLO
+        id S245240AbiBNJsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:48:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235917AbiBNKMM (ORCPT
+        with ESMTP id S244753AbiBNJpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:12:12 -0500
+        Mon, 14 Feb 2022 04:45:40 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158AE6541D;
-        Mon, 14 Feb 2022 01:50:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA19860D86;
+        Mon, 14 Feb 2022 01:38:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A607661238;
-        Mon, 14 Feb 2022 09:50:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89B3BC340EF;
-        Mon, 14 Feb 2022 09:50:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5638B6118C;
+        Mon, 14 Feb 2022 09:38:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD28C340E9;
+        Mon, 14 Feb 2022 09:38:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832242;
-        bh=/DjVnQ7jgYXBQt/wqucYtc26jeqXAAs5ubdP37etpC8=;
+        s=korg; t=1644831516;
+        bh=Vt6o6BUJUwenqkWrho+49oDACU5otjZPlwM4QWb24DM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=waCoVNG7HUTxmBDKMSORBAnj9ufPEGA+SSWO1NeoGn6hFxwDlz0zxQUxZUQXHERHM
-         T4zegbXRAslsWOWve3R7VdFlj40XUXkbGiFZcX1uIGoJdTu7N+y20mqpS0aMcSzkII
-         kkC4TUsTLMvtJDMernnvkmMEibdwM+AJ2+sov0T8=
+        b=uH4+EO7CGxpD+41pncMS8Hn34aii/nCo6cHL4bEWbVyk8VZW1+Fm9Eovq4Tp9RADA
+         rfc7Oo6GlegOmYkFlNSxjWqqLC8NQ8mSBfU4q7hNcwT9AiRS3qCcSwGPrvnghK5p5K
+         lxhcy1jZjy+6G6ZxX2JKzO4mNcI8uAB6RxyzrapA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Selwin Sebastian <Selwin.Sebastian@amd.com>,
-        Raju Rangoju <Raju.Rangoju@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 124/172] net: amd-xgbe: disable interrupts during pci removal
-Date:   Mon, 14 Feb 2022 10:26:22 +0100
-Message-Id: <20220214092510.696909905@linuxfoundation.org>
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: [PATCH 5.4 55/71] usb: ulpi: Move of_node_put to ulpi_dev_release
+Date:   Mon, 14 Feb 2022 10:26:23 +0100
+Message-Id: <20220214092453.892456488@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,41 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Raju Rangoju <Raju.Rangoju@amd.com>
+From: Sean Anderson <sean.anderson@seco.com>
 
-[ Upstream commit 68c2d6af1f1e469544d6cbe9a601d96fb9c00e7f ]
+commit 092f45b13e51666fe8ecbf2d6cd247aa7e6c1f74 upstream.
 
-Hardware interrupts are enabled during the pci probe, however,
-they are not disabled during pci removal.
+Drivers are not unbound from the device when ulpi_unregister_interface
+is called. Move of_node-freeing code to ulpi_dev_release which is called
+only after all users are gone.
 
-Disable all hardware interrupts during pci removal to avoid any
-issues.
-
-Fixes: e75377404726 ("amd-xgbe: Update PCI support to use new IRQ functions")
-Suggested-by: Selwin Sebastian <Selwin.Sebastian@amd.com>
-Signed-off-by: Raju Rangoju <Raju.Rangoju@amd.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
+Cc: stable <stable@vger.kernel.org>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+Link: https://lore.kernel.org/r/20220127190004.1446909-2-sean.anderson@seco.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/amd/xgbe/xgbe-pci.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/common/ulpi.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/amd/xgbe/xgbe-pci.c b/drivers/net/ethernet/amd/xgbe/xgbe-pci.c
-index 90cb55eb54665..014513ce00a14 100644
---- a/drivers/net/ethernet/amd/xgbe/xgbe-pci.c
-+++ b/drivers/net/ethernet/amd/xgbe/xgbe-pci.c
-@@ -418,6 +418,9 @@ static void xgbe_pci_remove(struct pci_dev *pdev)
+--- a/drivers/usb/common/ulpi.c
++++ b/drivers/usb/common/ulpi.c
+@@ -132,6 +132,7 @@ static const struct attribute_group *ulp
  
- 	pci_free_irq_vectors(pdata->pcidev);
- 
-+	/* Disable all interrupts in the hardware */
-+	XP_IOWRITE(pdata, XP_INT_EN, 0x0);
-+
- 	xgbe_free_pdata(pdata);
+ static void ulpi_dev_release(struct device *dev)
+ {
++	of_node_put(dev->of_node);
+ 	kfree(to_ulpi_dev(dev));
  }
  
--- 
-2.34.1
-
+@@ -300,7 +301,6 @@ EXPORT_SYMBOL_GPL(ulpi_register_interfac
+  */
+ void ulpi_unregister_interface(struct ulpi *ulpi)
+ {
+-	of_node_put(ulpi->dev.of_node);
+ 	device_unregister(&ulpi->dev);
+ }
+ EXPORT_SYMBOL_GPL(ulpi_unregister_interface);
 
 

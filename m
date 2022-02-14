@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAFF4B4878
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E65F4B47F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242619AbiBNJyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:54:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33310 "EHLO
+        id S244943AbiBNJoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:44:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343971AbiBNJv1 (ORCPT
+        with ESMTP id S245341AbiBNJlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:51:27 -0500
+        Mon, 14 Feb 2022 04:41:23 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CE56580C;
-        Mon, 14 Feb 2022 01:42:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A3F657AA;
+        Mon, 14 Feb 2022 01:37:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21AF961172;
-        Mon, 14 Feb 2022 09:42:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC93C340E9;
-        Mon, 14 Feb 2022 09:42:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C137D60FA2;
+        Mon, 14 Feb 2022 09:37:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1207C340E9;
+        Mon, 14 Feb 2022 09:37:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831742;
-        bh=veH/rM47JN9wSPQuqR4WOFq5vn7iCDGrjKB+dEHAJG8=;
+        s=korg; t=1644831439;
+        bh=eVBA3Z48eoFmYSlqGiWbfuA3dEczhe99XS1mT4zahPU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ik1WgBk1w0+9jL0Tq229MyrBG/g3CeZoUs6NsFyUIR+9y85sO8Tm+rNhxHF3sO7Hb
-         DwPcSSqeRSwk0n1hiEdNRCcE2g5XX4WGnWSwNR/0hsqNamMsAgt2exhST5b0jYYybV
-         av+210+HCGhx218aStjqO+CTZiOB0HX4ymA8Yf7Q=
+        b=t5GFnBfAAhxAJnlm+yDedg//C0q+hjqVrt5bxmzZ/O8YaJcw3DxSrawMfRlHwqIhV
+         Mp2cTY2rURfVDug+8mvIu+SL3No4r3HEcVoJHdpWxXlVQ7tF1i0nVMWOGb+I//hBbX
+         zr0S7jJuorULDsCULbhVwSlVszIL8otcY8qCbtKg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Robert-Ionut Alexa <robert-ionut.alexa@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 082/116] dpaa2-eth: unregister the netdev before disconnecting from the PHY
-Date:   Mon, 14 Feb 2022 10:26:21 +0100
-Message-Id: <20220214092501.598954427@linuxfoundation.org>
+        stable@vger.kernel.org, stable@kernel.org,
+        Jann Horn <jannh@google.com>
+Subject: [PATCH 5.4 54/71] net: usb: ax88179_178a: Fix out-of-bounds accesses in RX fixup
+Date:   Mon, 14 Feb 2022 10:26:22 +0100
+Message-Id: <20220214092453.860444773@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,45 +54,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert-Ionut Alexa <robert-ionut.alexa@nxp.com>
+From: Jann Horn <jannh@google.com>
 
-[ Upstream commit 9ccc6e0c8959a019bb40f6b18704b142c04b19a8 ]
+commit 57bc3d3ae8c14df3ceb4e17d26ddf9eeab304581 upstream.
 
-The netdev should be unregistered before we are disconnecting from the
-MAC/PHY so that the dev_close callback is called and the PHY and the
-phylink workqueues are actually stopped before we are disconnecting and
-destroying the phylink instance.
+ax88179_rx_fixup() contains several out-of-bounds accesses that can be
+triggered by a malicious (or defective) USB device, in particular:
 
-Fixes: 719479230893 ("dpaa2-eth: add MAC/PHY support through phylink")
-Signed-off-by: Robert-Ionut Alexa <robert-ionut.alexa@nxp.com>
-Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+ - The metadata array (hdr_off..hdr_off+2*pkt_cnt) can be out of bounds,
+   causing OOB reads and (on big-endian systems) OOB endianness flips.
+ - A packet can overlap the metadata array, causing a later OOB
+   endianness flip to corrupt data used by a cloned SKB that has already
+   been handed off into the network stack.
+ - A packet SKB can be constructed whose tail is far beyond its end,
+   causing out-of-bounds heap data to be considered part of the SKB's
+   data.
+
+I have tested that this can be used by a malicious USB device to send a
+bogus ICMPv6 Echo Request and receive an ICMPv6 Echo Reply in response
+that contains random kernel heap data.
+It's probably also possible to get OOB writes from this on a
+little-endian system somehow - maybe by triggering skb_cow() via IP
+options processing -, but I haven't tested that.
+
+Fixes: e2ca90c276e1 ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
+Cc: stable@kernel.org
+Signed-off-by: Jann Horn <jannh@google.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/usb/ax88179_178a.c |   68 +++++++++++++++++++++++------------------
+ 1 file changed, 39 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-index f06d88c471d0f..f917bc9c87969 100644
---- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-+++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-@@ -4405,12 +4405,12 @@ static int dpaa2_eth_remove(struct fsl_mc_device *ls_dev)
- #ifdef CONFIG_DEBUG_FS
- 	dpaa2_dbg_remove(priv);
- #endif
-+
-+	unregister_netdev(net_dev);
- 	rtnl_lock();
- 	dpaa2_eth_disconnect_mac(priv);
- 	rtnl_unlock();
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -1361,58 +1361,68 @@ static int ax88179_rx_fixup(struct usbne
+ 	u16 hdr_off;
+ 	u32 *pkt_hdr;
  
--	unregister_netdev(net_dev);
+-	/* This check is no longer done by usbnet */
+-	if (skb->len < dev->net->hard_header_len)
++	/* At the end of the SKB, there's a header telling us how many packets
++	 * are bundled into this buffer and where we can find an array of
++	 * per-packet metadata (which contains elements encoded into u16).
++	 */
++	if (skb->len < 4)
+ 		return 0;
 -
- 	dpaa2_eth_dl_port_del(priv);
- 	dpaa2_eth_dl_traps_unregister(priv);
- 	dpaa2_eth_dl_unregister(priv);
--- 
-2.34.1
-
+ 	skb_trim(skb, skb->len - 4);
+ 	rx_hdr = get_unaligned_le32(skb_tail_pointer(skb));
+-
+ 	pkt_cnt = (u16)rx_hdr;
+ 	hdr_off = (u16)(rx_hdr >> 16);
++
++	if (pkt_cnt == 0)
++		return 0;
++
++	/* Make sure that the bounds of the metadata array are inside the SKB
++	 * (and in front of the counter at the end).
++	 */
++	if (pkt_cnt * 2 + hdr_off > skb->len)
++		return 0;
+ 	pkt_hdr = (u32 *)(skb->data + hdr_off);
+ 
+-	while (pkt_cnt--) {
++	/* Packets must not overlap the metadata array */
++	skb_trim(skb, hdr_off);
++
++	for (; ; pkt_cnt--, pkt_hdr++) {
+ 		u16 pkt_len;
+ 
+ 		le32_to_cpus(pkt_hdr);
+ 		pkt_len = (*pkt_hdr >> 16) & 0x1fff;
+ 
+-		/* Check CRC or runt packet */
+-		if ((*pkt_hdr & AX_RXHDR_CRC_ERR) ||
+-		    (*pkt_hdr & AX_RXHDR_DROP_ERR)) {
+-			skb_pull(skb, (pkt_len + 7) & 0xFFF8);
+-			pkt_hdr++;
+-			continue;
+-		}
+-
+-		if (pkt_cnt == 0) {
+-			skb->len = pkt_len;
+-			/* Skip IP alignment pseudo header */
+-			skb_pull(skb, 2);
+-			skb_set_tail_pointer(skb, skb->len);
+-			skb->truesize = pkt_len + sizeof(struct sk_buff);
+-			ax88179_rx_checksum(skb, pkt_hdr);
+-			return 1;
+-		}
++		if (pkt_len > skb->len)
++			return 0;
+ 
+-		ax_skb = skb_clone(skb, GFP_ATOMIC);
+-		if (ax_skb) {
++		/* Check CRC or runt packet */
++		if (((*pkt_hdr & (AX_RXHDR_CRC_ERR | AX_RXHDR_DROP_ERR)) == 0) &&
++		    pkt_len >= 2 + ETH_HLEN) {
++			bool last = (pkt_cnt == 0);
++
++			if (last) {
++				ax_skb = skb;
++			} else {
++				ax_skb = skb_clone(skb, GFP_ATOMIC);
++				if (!ax_skb)
++					return 0;
++			}
+ 			ax_skb->len = pkt_len;
+ 			/* Skip IP alignment pseudo header */
+ 			skb_pull(ax_skb, 2);
+ 			skb_set_tail_pointer(ax_skb, ax_skb->len);
+ 			ax_skb->truesize = pkt_len + sizeof(struct sk_buff);
+ 			ax88179_rx_checksum(ax_skb, pkt_hdr);
++
++			if (last)
++				return 1;
++
+ 			usbnet_skb_return(dev, ax_skb);
+-		} else {
+-			return 0;
+ 		}
+ 
+-		skb_pull(skb, (pkt_len + 7) & 0xFFF8);
+-		pkt_hdr++;
++		/* Trim this packet away from the SKB */
++		if (!skb_pull(skb, (pkt_len + 7) & 0xFFF8))
++			return 0;
+ 	}
+-	return 1;
+ }
+ 
+ static struct sk_buff *
 
 

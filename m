@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3024B4AA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E141A4B488D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345822AbiBNKN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:13:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44100 "EHLO
+        id S1344231AbiBNJ4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:56:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345820AbiBNKNG (ORCPT
+        with ESMTP id S1344306AbiBNJvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:13:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FF7654AC;
-        Mon, 14 Feb 2022 01:51:03 -0800 (PST)
+        Mon, 14 Feb 2022 04:51:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DED694B1;
+        Mon, 14 Feb 2022 01:42:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00B75B80DC7;
-        Mon, 14 Feb 2022 09:51:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16531C340E9;
-        Mon, 14 Feb 2022 09:50:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D711E6120B;
+        Mon, 14 Feb 2022 09:42:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4F1CC340E9;
+        Mon, 14 Feb 2022 09:42:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832260;
-        bh=bio/VUzbNm6sAKoDkp3oJQEVYXqfj5VAm9vCH8ZGrZI=;
+        s=korg; t=1644831764;
+        bh=IFK8yREHeBdWrhNcSpfKJd0kZcJEtrINbBXrpWbv/kA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zSMKi3TM3PxgK6pqy0Yskfayx2QUT59aPWPs4bAVR+bgHvdEARs/QlkSUt7ZhDYa+
-         3G6NxXPZlaW9FzUIWg9F+kUMdPEUmTf4GGAGJFuUW6shyDIubobsehDWNcFhmkrmm4
-         ee08Co5mw4r1A+WSkhEjmcDtx65ZNmqInTY/shr4=
+        b=R3eVUy8yPLA9OMXXLOFFBqXCM56+R0hqxi7W7QxUaOalDd3htFfiS60OGXl/f7BJZ
+         Nx4ZecAzpqDF/8CJC/nUNPehBGlpXqB4LOkhMph3c3AsYFAp3MonMTQq+MtjA59Xim
+         svmTCz5uyesI1CZUK2M+Js4kihH+FLJ50F5rE1Ko=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Gurucharan G <gurucharanx.g@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 129/172] ice: fix IPIP and SIT TSO offload
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>
+Subject: [PATCH 5.10 088/116] vt_ioctl: add array_index_nospec to VT_ACTIVATE
 Date:   Mon, 14 Feb 2022 10:26:27 +0100
-Message-Id: <20220214092510.867266346@linuxfoundation.org>
+Message-Id: <20220214092501.803818348@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,102 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jesse Brandeburg <jesse.brandeburg@intel.com>
+From: Jakob Koschel <jakobkoschel@gmail.com>
 
-[ Upstream commit 46b699c50c0304cdbd725d7740073a7f9d5edb10 ]
+commit 28cb138f559f8c1a1395f5564f86b8bbee83631b upstream.
 
-The driver was avoiding offload for IPIP (at least) frames due to
-parsing the inner header offsets incorrectly when trying to check
-lengths.
+in vt_setactivate an almost identical code path has been patched
+with array_index_nospec. In the VT_ACTIVATE path the user input
+is from a system call argument instead of a usercopy.
+For consistency both code paths should have the same mitigations
+applied.
 
-This length check works for VXLAN frames but fails on IPIP frames
-because skb_transport_offset points to the inner header in IPIP
-frames, which meant the subtraction of transport_header from
-inner_network_header returns a negative value (-20).
+Kasper Acknowledgements: Jakob Koschel, Brian Johannesmeyer, Kaveh
+Razavi, Herbert Bos, Cristiano Giuffrida from the VUSec group at VU
+Amsterdam.
 
-With the code before this patch, everything continued to work, but GSO
-was being used to segment, causing throughputs of 1.5Gb/s per thread.
-After this patch, throughput is more like 10Gb/s per thread for IPIP
-traffic.
-
-Fixes: e94d44786693 ("ice: Implement filter sync, NDO operations and bump version")
-Signed-off-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
-Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Tested-by: Gurucharan G <gurucharanx.g@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Co-developed-by: Brian Johannesmeyer <bjohannesmeyer@gmail.com>
+Signed-off-by: Brian Johannesmeyer <bjohannesmeyer@gmail.com>
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+Link: https://lore.kernel.org/r/20220127144406.3589293-2-jakobkoschel@gmail.com
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../net/ethernet/intel/ice/ice_lan_tx_rx.h    |  1 +
- drivers/net/ethernet/intel/ice/ice_main.c     | 25 +++++++++++++------
- 2 files changed, 18 insertions(+), 8 deletions(-)
+ drivers/tty/vt/vt_ioctl.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_lan_tx_rx.h b/drivers/net/ethernet/intel/ice/ice_lan_tx_rx.h
-index 80736e0ec0dca..3f635fdbfaff9 100644
---- a/drivers/net/ethernet/intel/ice/ice_lan_tx_rx.h
-+++ b/drivers/net/ethernet/intel/ice/ice_lan_tx_rx.h
-@@ -528,6 +528,7 @@ struct ice_tx_ctx_desc {
- 			(0x3FFFFULL << ICE_TXD_CTX_QW1_TSO_LEN_S)
+--- a/drivers/tty/vt/vt_ioctl.c
++++ b/drivers/tty/vt/vt_ioctl.c
+@@ -945,6 +945,7 @@ int vt_ioctl(struct tty_struct *tty,
+ 			return -ENXIO;
  
- #define ICE_TXD_CTX_QW1_MSS_S	50
-+#define ICE_TXD_CTX_MIN_MSS	64
- 
- enum ice_tx_ctx_desc_cmd_bits {
- 	ICE_TX_CTX_DESC_TSO		= 0x01,
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index 819c32a721e84..cfddec96c91c1 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -7206,6 +7206,7 @@ ice_features_check(struct sk_buff *skb,
- 		   struct net_device __always_unused *netdev,
- 		   netdev_features_t features)
- {
-+	bool gso = skb_is_gso(skb);
- 	size_t len;
- 
- 	/* No point in doing any of this if neither checksum nor GSO are
-@@ -7218,24 +7219,32 @@ ice_features_check(struct sk_buff *skb,
- 	/* We cannot support GSO if the MSS is going to be less than
- 	 * 64 bytes. If it is then we need to drop support for GSO.
- 	 */
--	if (skb_is_gso(skb) && (skb_shinfo(skb)->gso_size < 64))
-+	if (gso && (skb_shinfo(skb)->gso_size < ICE_TXD_CTX_MIN_MSS))
- 		features &= ~NETIF_F_GSO_MASK;
- 
--	len = skb_network_header(skb) - skb->data;
-+	len = skb_network_offset(skb);
- 	if (len > ICE_TXD_MACLEN_MAX || len & 0x1)
- 		goto out_rm_features;
- 
--	len = skb_transport_header(skb) - skb_network_header(skb);
-+	len = skb_network_header_len(skb);
- 	if (len > ICE_TXD_IPLEN_MAX || len & 0x1)
- 		goto out_rm_features;
- 
- 	if (skb->encapsulation) {
--		len = skb_inner_network_header(skb) - skb_transport_header(skb);
--		if (len > ICE_TXD_L4LEN_MAX || len & 0x1)
--			goto out_rm_features;
-+		/* this must work for VXLAN frames AND IPIP/SIT frames, and in
-+		 * the case of IPIP frames, the transport header pointer is
-+		 * after the inner header! So check to make sure that this
-+		 * is a GRE or UDP_TUNNEL frame before doing that math.
-+		 */
-+		if (gso && (skb_shinfo(skb)->gso_type &
-+			    (SKB_GSO_GRE | SKB_GSO_UDP_TUNNEL))) {
-+			len = skb_inner_network_header(skb) -
-+			      skb_transport_header(skb);
-+			if (len > ICE_TXD_L4LEN_MAX || len & 0x1)
-+				goto out_rm_features;
-+		}
- 
--		len = skb_inner_transport_header(skb) -
--		      skb_inner_network_header(skb);
-+		len = skb_inner_network_header_len(skb);
- 		if (len > ICE_TXD_IPLEN_MAX || len & 0x1)
- 			goto out_rm_features;
- 	}
--- 
-2.34.1
-
+ 		arg--;
++		arg = array_index_nospec(arg, MAX_NR_CONSOLES);
+ 		console_lock();
+ 		ret = vc_allocate(arg);
+ 		console_unlock();
 
 

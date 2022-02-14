@@ -2,164 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F5E4B5E41
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 00:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4134B5E53
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 00:37:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232141AbiBNX3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 18:29:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50916 "EHLO
+        id S231387AbiBNXhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 18:37:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbiBNX3F (ORCPT
+        with ESMTP id S229495AbiBNXhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 18:29:05 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7A413CA0E;
-        Mon, 14 Feb 2022 15:28:56 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1A6F31EC0545;
-        Tue, 15 Feb 2022 00:28:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1644881331;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=bw0Cg0Vb0ckQBMrs6FQYYmT/dLrW2QZDQ9x37mTqLAI=;
-        b=IGCcz0PtuqfdIcFq70dUFsEUqYK0NFMjrfPystBUacOo7vzN87O4UMt32RqwGL+gUP1xVG
-        GxCZBJ9ssoQ55HhLZSHaw55OfCfK5oKaIbJ2nQ7LTUzvddcDvFIXJHlMpLjAGsNFS3/ykm
-        NdcPAZDhyrmcsf/2lr8UMv7ZIe+u+YQ=
-Date:   Tue, 15 Feb 2022 00:28:53 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
-        antonio.gomez.iglesias@linux.intel.com, neelima.krishnan@intel.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] x86/tsx: Use MSR_TSX_CTRL to clear CPUID bits
-Message-ID: <YgrltbToK8+tG2qK@zn.tnic>
-References: <5bd785a1d6ea0b572250add0c6617b4504bc24d1.1644440311.git.pawan.kumar.gupta@linux.intel.com>
- <YgqToxbGQluNHABF@zn.tnic>
- <20220214224121.ilhu23cfjdyhvahk@guptapa-mobl1.amr.corp.intel.com>
+        Mon, 14 Feb 2022 18:37:05 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2088.outbound.protection.outlook.com [40.107.92.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AD9113AD0;
+        Mon, 14 Feb 2022 15:36:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VLAMcde3sQK+vXa0Jg25q/eQcmDru+/3CdzvvKxY/80LNctMvd1ppjWnlFfzbwt0L5KCd822FCyoov9MqiegnwqFOxd2gJmJ3pH/vPdhQmivN2WoUCBc3xUXbIX35KCT37/0axg7TiVHXdRKJUEpm9Bi87o/P+EqaHX5oEOb+vqLD1z2BBhUafEYb7r8q6EgMUmIpiETc7pysZwzcxSTZM24pbHVgiNnke9hY7xthyrQbxwJx8cCYBjdUTsdq2BqrXVgCRvVjntvsuCnEoszESwYwMwmY4ybImqoUDZMGCOywTEFCwhuEp1FywqMwojEzVeDKcRcnrAQUcNcdO6Fug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lRu18LNznql3VdxQHphONQbka39Z4b/Xd0dHBKzhSmA=;
+ b=TG1ZTowjSIsz19F1MRqg/DXP4iBSmJJc/n33ezlJ5D9LOIOU9qF5eXXPbZUJviGyDQ1gqizrcFVQ+Kv4nk0KzXk3lD4w+cy0KuxNRXOQHCo6C2XTZJo0YXKYV+9o5fK3Qqi8RauKJnb6793xUTAQl0u2CMRC9kuf0PyCi67p453+GWS4TAZvsq1RYnW48RVE5KcmcFPcY/R42xG8lsCnls/FZ+UCeoo2emA0dpbrb8Uocc4uoP6sjQDpkTjFJxNY7aq3zGyKm5anSgVsXeA2GTrNcCcLe6adyIE/6IzuqSzkbydFzyFXWDckyiWsSiQ6FG2zhBobmGhV0f3pyYfoWw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lRu18LNznql3VdxQHphONQbka39Z4b/Xd0dHBKzhSmA=;
+ b=HQlihoKyaQSnBCeM7IyWaTcAiSt/uAiWL5Gbxil/F6pqMje2TzchDPYuiiq2WeX5ZPEAvXbRpZxhdQxJJulCaazBZ1GrkZt8/Q1usa00cgYzjVlXzwQVXEdDjxufFTByZ+3cR+ALPvNmID1iHDxjIYIe4D0o8gCpE53HECJb0CU=
+Received: from MWHPR13CA0009.namprd13.prod.outlook.com (2603:10b6:300:16::19)
+ by PH0PR12MB5499.namprd12.prod.outlook.com (2603:10b6:510:d5::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.15; Mon, 14 Feb
+ 2022 23:36:54 +0000
+Received: from CO1NAM11FT007.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:300:16:cafe::1c) by MWHPR13CA0009.outlook.office365.com
+ (2603:10b6:300:16::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.6 via Frontend
+ Transport; Mon, 14 Feb 2022 23:36:54 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT007.mail.protection.outlook.com (10.13.174.131) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4975.11 via Frontend Transport; Mon, 14 Feb 2022 23:36:53 +0000
+Received: from ethanolx50f7host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 14 Feb
+ 2022 17:36:52 -0600
+From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+To:     <x86@kernel.org>, <linux-edac@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Tony Luck <tony.luck@intel.com>, "H . Peter Anvin" <hpa@zytor.com>,
+        "Yazen Ghannam" <yazen.ghannam@amd.com>,
+        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Subject: [PATCH v4 0/2] x86/mce: Handle error injection failure in mce-inject module
+Date:   Mon, 14 Feb 2022 17:36:38 -0600
+Message-ID: <20220214233640.70510-1-Smita.KoralahalliChannabasappa@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220214224121.ilhu23cfjdyhvahk@guptapa-mobl1.amr.corp.intel.com>
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4c855095-5115-4c58-e4e7-08d9f012e203
+X-MS-TrafficTypeDiagnostic: PH0PR12MB5499:EE_
+X-Microsoft-Antispam-PRVS: <PH0PR12MB549937BDB8F3B8B07CED794590339@PH0PR12MB5499.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /jLpnOENcWxQFx1WdKh2DriewFqVeEKJ1Ne2qNwsAof5xcnJJwNzRN7SmGNV5GI6+tI/yg+gKMDXg/viZG43ihrG1CHFj3U6hG0HE74KBQUreaVyje0w9u0rMkHKkQ10SAZUkb11OdNoVs9iWP5Ea1DHLwApmPEIr6EMdbIYKMwAvfUriX66bom6MROekxx42Im/B+T3lnpCqfvzEDbo481BjpbFR+3OMzenv+kdpy8WA0Sf/NjrmqboM5sSdcAOHYYICxeY0p/BUmnVc4gAgDDwFMh01/7W+gdT5n4A+ov8t0ZGWhYmxio3QtzLz6Br4FGs7WGgU/usJdhtFnp+rJ72yUPfUa65xWNYAC4NjV3LQO4d8jdNb/K4kWtRiBKPjdrfksHFq5nCliAeXNdTkJ81TNsg3CmnFRbqeHqCI7J0ty/qU6IWc55J7Ak+umBU6zgk5ogJGx4F1zQwa37Sm01G7VjA5G5kyqG5tDsINfoS3qApj6/M1mAwJt52kEwMdR+BCxDabv6ZNU/rn9NfkLWIWlAXG4Fy4n4QksMraUSUvggWp3GLqynMvPJ0CrXzi3GznEcn6cQ3lwenkuqrGcZHxIJG6zXJCm9fJMJ5+MK3OJ8FnlT0lHXGiQVJQOvTFBaRyRMhhpQAxWQEgezKp4KAxZ6saU6BQhau1JRjXJvLRTFrJ50o/Mp+V+GuHlM43Mn8J14l2LZrpD7rs0a9MA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(7696005)(2616005)(70586007)(70206006)(8676002)(26005)(1076003)(54906003)(110136005)(508600001)(86362001)(6666004)(82310400004)(36860700001)(316002)(81166007)(356005)(83380400001)(16526019)(426003)(336012)(4326008)(47076005)(40460700003)(8936002)(36756003)(5660300002)(2906002)(186003)(4744005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2022 23:36:53.5994
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c855095-5115-4c58-e4e7-08d9f012e203
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT007.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5499
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 02:41:21PM -0800, Pawan Gupta wrote:
-> Yes, this needs to be backported to a few kernels that have the commit
-> 293649307ef9 ("x86/tsx: Clear CPUID bits when TSX always force aborts").
-> Once this is reviewed, I will send a separate email to stable@ with the
-> list of stable kernels.
+This set of patches handles a scenario where error injection fails silently
+on mce-inject module and returns appropriate error code to userspace.
 
-You don't have to send a separate email - CC: stable and the Fixes tag
-is enough for a patch to be picked up by the stable folks.
+Error injection fails if the platform enforces write ignored behavior on
+status registers and the first patch checks for writes ignored from
+MCA_STATUS register and returns appropriate error code to user.
 
-> X86_FEATURE_RTM_ALWAYS_ABORT is the precondition for
-> MSR_TFA_TSX_CPUID_CLEAR bit to exist. For current callers of
-> tsx_clear_cpuid() this condition is met, and test for
-> X86_FEATURE_RTM_ALWAYS_ABORT can be removed. But, all the future callers
-> must also have this check, otherwise the MSR write will fault.
+The second patch assigns and returns the error code to userspace when none
+of the CPUs are online.
 
-I meant something like this (completely untested):
+Smita Koralahalli (2):
+  x86/mce: Check for writes ignored in MCA_STATUS register
+  x86/mce/mce-inject: Return appropriate error code if CPUs are offline
 
-diff --git a/arch/x86/kernel/cpu/tsx.c b/arch/x86/kernel/cpu/tsx.c
-index c2343ea911e8..9d08a6b1726a 100644
---- a/arch/x86/kernel/cpu/tsx.c
-+++ b/arch/x86/kernel/cpu/tsx.c
-@@ -84,7 +84,7 @@ static enum tsx_ctrl_states x86_get_tsx_auto_mode(void)
- 	return TSX_CTRL_ENABLE;
- }
- 
--void tsx_clear_cpuid(void)
-+bool tsx_clear_cpuid(void)
- {
- 	u64 msr;
- 
-@@ -97,11 +97,14 @@ void tsx_clear_cpuid(void)
- 		rdmsrl(MSR_TSX_FORCE_ABORT, msr);
- 		msr |= MSR_TFA_TSX_CPUID_CLEAR;
- 		wrmsrl(MSR_TSX_FORCE_ABORT, msr);
-+		return true;
- 	} else if (tsx_ctrl_is_supported()) {
- 		rdmsrl(MSR_IA32_TSX_CTRL, msr);
- 		msr |= TSX_CTRL_CPUID_CLEAR;
- 		wrmsrl(MSR_IA32_TSX_CTRL, msr);
-+		return true;
- 	}
-+	return false;
- }
- 
- void __init tsx_init(void)
-@@ -114,9 +117,8 @@ void __init tsx_init(void)
- 	 * RTM_ALWAYS_ABORT is set. In this case, it is better not to enumerate
- 	 * CPUID.RTM and CPUID.HLE bits. Clear them here.
- 	 */
--	if (boot_cpu_has(X86_FEATURE_RTM_ALWAYS_ABORT)) {
-+	if (tsx_clear_cpuid()) {
- 		tsx_ctrl_state = TSX_CTRL_RTM_ALWAYS_ABORT;
--		tsx_clear_cpuid();
- 		setup_clear_cpu_cap(X86_FEATURE_RTM);
- 		setup_clear_cpu_cap(X86_FEATURE_HLE);
- 		return;
-
----
-
-but I'm guessing TSX should be disabled by default during boot only when
-X86_FEATURE_RTM_ALWAYS_ABORT is set.
-
-If those CPUs which support only disabling TSX through MSR_IA32_TSX_CTRL
-but don't have MSR_TSX_FORCE_ABORT - if those CPUs set
-X86_FEATURE_RTM_ALWAYS_ABORT too, then this should work.
-
-> There are certain cases where this will leave the system in an
-> inconsistent state, for example smt toggle after a late microcode update
-
-What is a "smt toggle"?
-
-You mean late microcode update and then offlining and onlining all
-logical CPUs except the BSP which would re-detect CPUID features?
-
-> that adds CPUID.RTM_ALWAYS_ABORT=1. During an smt toggle, if we
-> unconditionally clear CPUID.RTM and CPUID.HLE in init_intel(), half of
-> the CPUs will report TSX feature and other half will not.
-
-That is important and should be documented. Something like this perhaps:
-
----
-
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index 8321c43554a1..6c7bca9d6f2e 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -722,6 +722,13 @@ static void init_intel(struct cpuinfo_x86 *c)
- 	else if (tsx_ctrl_state == TSX_CTRL_DISABLE)
- 		tsx_disable();
- 	else if (tsx_ctrl_state == TSX_CTRL_RTM_ALWAYS_ABORT)
-+		/*
-+		 * This call doesn't clear RTM and HLE X86_FEATURE bits because
-+		 * a late microcode reload adding MSR_TSX_FORCE_ABORT can cause
-+		 * for those bits to get cleared - something which the kernel
-+		 * cannot do due to userspace potentially already using said
-+		 * features.
-+		 */
- 		tsx_clear_cpuid();
- 
- 	split_lock_init();
+ arch/x86/kernel/cpu/mce/core.c   |  1 +
+ arch/x86/kernel/cpu/mce/inject.c | 42 +++++++++++++++++++++++++++++---
+ 2 files changed, 39 insertions(+), 4 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.17.1
 
-https://people.kernel.org/tglx/notes-about-netiquette

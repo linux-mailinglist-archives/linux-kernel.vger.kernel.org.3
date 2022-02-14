@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 449924B4BA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA01D4B4841
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:56:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347946AbiBNKbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:31:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41532 "EHLO
+        id S1343521AbiBNJw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:52:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348114AbiBNKaq (ORCPT
+        with ESMTP id S245582AbiBNJto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:30:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511169BF59;
-        Mon, 14 Feb 2022 01:59:20 -0800 (PST)
+        Mon, 14 Feb 2022 04:49:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC20A18A;
+        Mon, 14 Feb 2022 01:41:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D347760921;
-        Mon, 14 Feb 2022 09:59:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0ADEC340E9;
-        Mon, 14 Feb 2022 09:59:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90100B80DC1;
+        Mon, 14 Feb 2022 09:40:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF32C340E9;
+        Mon, 14 Feb 2022 09:40:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832757;
-        bh=QUTNVwz+yVHcljh6bmE8p4c9DR9JYaIcZoW8VimMowk=;
+        s=korg; t=1644831652;
+        bh=vmEnoJjJemr2GbGbuiqI4inK0d3Gt0pQwm+A2/oBbGI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nbbT5LjaKP8tVo2f5y5eDjga3J39Sb1+HhpgVR/Oxp99qM9PR/hju42F1SXEnodl+
-         G4RsRGndicu2DwOED+dK7rUz/zo8gOnezpO805ssTi28fL3RO8NgMJYwObylsMi2Og
-         C3IndlSZH/zNJI9TtdFDTgWwiTpqos6kDw865I14=
+        b=vEeIxdfAkUfYH7CYxNNM6lHkmnoHJizuWDCiaULMLg3tOcXkCn4zixRTGYa+P66Vo
+         ykF/AskH//oPqphaJRSv7ixjoZYBcY4+OiOgJoQN9Zqt1coFIFT9yCHGwpyey/MNUB
+         OTkwu/hw9zWfRq3czKEXFJEAaw0pmYemnoSfKgjk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        stable@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 107/203] arm64: Enable Cortex-A510 erratum 2051678 by default
+Subject: [PATCH 5.10 052/116] ARM: dts: meson8: Fix the UART device-tree schema validation
 Date:   Mon, 14 Feb 2022 10:25:51 +0100
-Message-Id: <20220214092513.882562722@linuxfoundation.org>
+Message-Id: <20220214092500.509481858@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +56,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-[ Upstream commit a4b92cebc31d49b7e6ef0ce584c7f2a2e112877d ]
+[ Upstream commit 57007bfb5469ba31cacf69d52195e8b75f43e32d ]
 
-The recently added configuration option for Cortex A510 erratum 2051678 does
-not have a "default y" unlike other errata fixes. This appears to simply be
-an oversight since the help text suggests enabling the option if unsure and
-there's nothing in the commit log to suggest it is intentional.
+The dt-bindings for the UART controller only allow the following values
+for Meson8 SoCs:
+- "amlogic,meson8-uart", "amlogic,meson-ao-uart"
+- "amlogic,meson8-uart"
 
-Fixes: 297ae1eb23b0 ("arm64: cpufeature: List early Cortex-A510 parts as having broken dbm")
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20220201144838.20037-1-broonie@kernel.org
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Use the correct fallback compatible string "amlogic,meson-ao-uart" for
+AO UART. Drop the "amlogic,meson-uart" compatible string from the EE
+domain UART controllers.
+
+Also update the order of the clocks to match the order defined in the
+yaml schema.
+
+Fixes: 6ca77502050eff ("ARM: dts: meson8: use stable UART bindings with correct gate clock")
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20211227180026.4068352-3-martin.blumenstingl@googlemail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/boot/dts/meson8.dtsi | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 38e7f19df14d4..ae0e93871ee5f 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -672,6 +672,7 @@ config ARM64_WORKAROUND_TRBE_OVERWRITE_FILL_MODE
+diff --git a/arch/arm/boot/dts/meson8.dtsi b/arch/arm/boot/dts/meson8.dtsi
+index 740a6c816266c..08533116a39ce 100644
+--- a/arch/arm/boot/dts/meson8.dtsi
++++ b/arch/arm/boot/dts/meson8.dtsi
+@@ -598,27 +598,27 @@ &timer_abcde {
+ };
  
- config ARM64_ERRATUM_2051678
- 	bool "Cortex-A510: 2051678: disable Hardware Update of the page table dirty bit"
-+	default y
- 	help
- 	  This options adds the workaround for ARM Cortex-A510 erratum ARM64_ERRATUM_2051678.
- 	  Affected Coretex-A510 might not respect the ordering rules for
+ &uart_AO {
+-	compatible = "amlogic,meson8-uart", "amlogic,meson-uart";
+-	clocks = <&clkc CLKID_CLK81>, <&xtal>, <&clkc CLKID_CLK81>;
+-	clock-names = "baud", "xtal", "pclk";
++	compatible = "amlogic,meson8-uart", "amlogic,meson-ao-uart";
++	clocks = <&xtal>, <&clkc CLKID_CLK81>, <&clkc CLKID_CLK81>;
++	clock-names = "xtal", "pclk", "baud";
+ };
+ 
+ &uart_A {
+-	compatible = "amlogic,meson8-uart", "amlogic,meson-uart";
+-	clocks = <&clkc CLKID_CLK81>, <&xtal>, <&clkc CLKID_UART0>;
+-	clock-names = "baud", "xtal", "pclk";
++	compatible = "amlogic,meson8-uart";
++	clocks = <&xtal>, <&clkc CLKID_UART0>, <&clkc CLKID_CLK81>;
++	clock-names = "xtal", "pclk", "baud";
+ };
+ 
+ &uart_B {
+-	compatible = "amlogic,meson8-uart", "amlogic,meson-uart";
+-	clocks = <&clkc CLKID_CLK81>, <&xtal>, <&clkc CLKID_UART1>;
+-	clock-names = "baud", "xtal", "pclk";
++	compatible = "amlogic,meson8-uart";
++	clocks = <&xtal>, <&clkc CLKID_UART0>, <&clkc CLKID_CLK81>;
++	clock-names = "xtal", "pclk", "baud";
+ };
+ 
+ &uart_C {
+-	compatible = "amlogic,meson8-uart", "amlogic,meson-uart";
+-	clocks = <&clkc CLKID_CLK81>, <&xtal>, <&clkc CLKID_UART2>;
+-	clock-names = "baud", "xtal", "pclk";
++	compatible = "amlogic,meson8-uart";
++	clocks = <&xtal>, <&clkc CLKID_UART0>, <&clkc CLKID_CLK81>;
++	clock-names = "xtal", "pclk", "baud";
+ };
+ 
+ &usb0 {
 -- 
 2.34.1
 

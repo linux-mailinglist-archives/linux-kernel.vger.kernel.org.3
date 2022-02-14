@@ -2,45 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE7A4B4AA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3374B4C69
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:44:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347150AbiBNKUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:20:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44698 "EHLO
+        id S1349586AbiBNKlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:41:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347061AbiBNKQR (ORCPT
+        with ESMTP id S1350109AbiBNKgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:16:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A52C6D4F4;
-        Mon, 14 Feb 2022 01:53:31 -0800 (PST)
+        Mon, 14 Feb 2022 05:36:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD2FA66C5;
+        Mon, 14 Feb 2022 02:03:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0270760DFE;
-        Mon, 14 Feb 2022 09:53:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C23B3C340E9;
-        Mon, 14 Feb 2022 09:53:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0BB560C78;
+        Mon, 14 Feb 2022 10:02:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B63FC340E9;
+        Mon, 14 Feb 2022 10:02:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832410;
-        bh=XHsiq3PFMyIQmhdaRWxgmjhLZbm1cobgoXAss8jZOOw=;
+        s=korg; t=1644832979;
+        bh=YzWY9DyK/NtUaJJtUxtgpppL0Zx34Zk2t0AZEQEWWjc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z/1+mNZu510jc/r63Iva38LJEy0HfBP9JyKhLRx+fv9GqGpbMsWHJ5z6Cz0tMPBzF
-         Ys+P2+y1JGz5sCKlN/fHjw80t/M/B8eraCfjeOtNOBTYYP1rlbXPhaBjtweXaUB//n
-         LKE7lDL2nokq9N6kPddfBc1qKNPRb2Alvt5i6SZ0=
+        b=TdOFCHeYQaf10RHHHNEYxqS47Fq/vyLrNkccTlfBC/jtdDqgX4eak3iWfjlfj52oC
+         sIaBKvL0uGCnG/QHDPQjk51fahidjbs5oYJ4jkytikqga+DMMomBLUMHQBZn+/nRfk
+         aN4t475WxPlzlfcAVs/E/SiScBL1KYeCTY6txeBs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Song Liu <song@kernel.org>,
+        stable@vger.kernel.org, Mel Gorman <mgorman@suse.de>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        David Rientjes <rientjes@google.com>,
+        Hugh Dickins <hughd@google.com>,
         Rik van Riel <riel@surriel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH 5.15 171/172] perf: Fix list corruption in perf_cgroup_switch()
-Date:   Mon, 14 Feb 2022 10:27:09 +0100
-Message-Id: <20220214092512.292969197@linuxfoundation.org>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.16 186/203] mm: vmscan: remove deadlock due to throttling failing to make progress
+Date:   Mon, 14 Feb 2022 10:27:10 +0100
+Message-Id: <20220214092516.564535162@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +60,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Song Liu <song@kernel.org>
+From: Mel Gorman <mgorman@suse.de>
 
-commit 5f4e5ce638e6a490b976ade4a40017b40abb2da0 upstream.
+commit b485c6f1f9f54b81443efda5f3d8a5036ba2cd91 upstream.
 
-There's list corruption on cgrp_cpuctx_list. This happens on the
-following path:
+A soft lockup bug in kcompactd was reported in a private bugzilla with
+the following visible in dmesg;
 
-  perf_cgroup_switch: list_for_each_entry(cgrp_cpuctx_list)
-      cpu_ctx_sched_in
-         ctx_sched_in
-            ctx_pinned_sched_in
-              merge_sched_in
-                  perf_cgroup_event_disable: remove the event from the list
+  watchdog: BUG: soft lockup - CPU#33 stuck for 26s! [kcompactd0:479]
+  watchdog: BUG: soft lockup - CPU#33 stuck for 52s! [kcompactd0:479]
+  watchdog: BUG: soft lockup - CPU#33 stuck for 78s! [kcompactd0:479]
+  watchdog: BUG: soft lockup - CPU#33 stuck for 104s! [kcompactd0:479]
 
-Use list_for_each_entry_safe() to allow removing an entry during
-iteration.
+The machine had 256G of RAM with no swap and an earlier failed
+allocation indicated that node 0 where kcompactd was run was potentially
+unreclaimable;
 
-Fixes: 058fe1c0440e ("perf/core: Make cgroup switch visit only cpuctxs with cgroup events")
-Signed-off-by: Song Liu <song@kernel.org>
-Reviewed-by: Rik van Riel <riel@surriel.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220204004057.2961252-1-song@kernel.org
+  Node 0 active_anon:29355112kB inactive_anon:2913528kB active_file:0kB
+    inactive_file:0kB unevictable:64kB isolated(anon):0kB isolated(file):0kB
+    mapped:8kB dirty:0kB writeback:0kB shmem:26780kB shmem_thp:
+    0kB shmem_pmdmapped: 0kB anon_thp: 23480320kB writeback_tmp:0kB
+    kernel_stack:2272kB pagetables:24500kB all_unreclaimable? yes
+
+Vlastimil Babka investigated a crash dump and found that a task
+migrating pages was trying to drain PCP lists;
+
+  PID: 52922  TASK: ffff969f820e5000  CPU: 19  COMMAND: "kworker/u128:3"
+  Call Trace:
+     __schedule
+     schedule
+     schedule_timeout
+     wait_for_completion
+     __flush_work
+     __drain_all_pages
+     __alloc_pages_slowpath.constprop.114
+     __alloc_pages
+     alloc_migration_target
+     migrate_pages
+     migrate_to_node
+     do_migrate_pages
+     cpuset_migrate_mm_workfn
+     process_one_work
+     worker_thread
+     kthread
+     ret_from_fork
+
+This failure is specific to CONFIG_PREEMPT=n builds.  The root of the
+problem is that kcompact0 is not rescheduling on a CPU while a task that
+has isolated a large number of the pages from the LRU is waiting on
+kcompact0 to reschedule so the pages can be released.  While
+shrink_inactive_list() only loops once around too_many_isolated, reclaim
+can continue without rescheduling if sc->skipped_deactivate == 1 which
+could happen if there was no file LRU and the inactive anon list was not
+low.
+
+Link: https://lkml.kernel.org/r/20220203100326.GD3301@suse.de
+Fixes: d818fca1cac3 ("mm/vmscan: throttle reclaim and compaction when too may pages are isolated")
+Signed-off-by: Mel Gorman <mgorman@suse.de>
+Debugged-by: Vlastimil Babka <vbabka@suse.cz>
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+Acked-by: Michal Hocko <mhocko@suse.com>
+Acked-by: David Rientjes <rientjes@google.com>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Rik van Riel <riel@surriel.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/events/core.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ mm/vmscan.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -839,7 +839,7 @@ static DEFINE_PER_CPU(struct list_head,
-  */
- static void perf_cgroup_switch(struct task_struct *task, int mode)
- {
--	struct perf_cpu_context *cpuctx;
-+	struct perf_cpu_context *cpuctx, *tmp;
- 	struct list_head *list;
- 	unsigned long flags;
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -1066,8 +1066,10 @@ void reclaim_throttle(pg_data_t *pgdat,
+ 	 * forward progress (e.g. journalling workqueues or kthreads).
+ 	 */
+ 	if (!current_is_kswapd() &&
+-	    current->flags & (PF_IO_WORKER|PF_KTHREAD))
++	    current->flags & (PF_IO_WORKER|PF_KTHREAD)) {
++		cond_resched();
+ 		return;
++	}
  
-@@ -850,7 +850,7 @@ static void perf_cgroup_switch(struct ta
- 	local_irq_save(flags);
- 
- 	list = this_cpu_ptr(&cgrp_cpuctx_list);
--	list_for_each_entry(cpuctx, list, cgrp_cpuctx_entry) {
-+	list_for_each_entry_safe(cpuctx, tmp, list, cgrp_cpuctx_entry) {
- 		WARN_ON_ONCE(cpuctx->ctx.nr_cgroups == 0);
- 
- 		perf_ctx_lock(cpuctx, cpuctx->task_ctx);
+ 	/*
+ 	 * These figures are pulled out of thin air.
 
 

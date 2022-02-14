@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B035A4B4A28
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD59E4B4787
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345292AbiBNKIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:08:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53606 "EHLO
+        id S243369AbiBNJkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:40:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344761AbiBNKEK (ORCPT
+        with ESMTP id S244404AbiBNJji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:04:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CF943496;
-        Mon, 14 Feb 2022 01:48:52 -0800 (PST)
+        Mon, 14 Feb 2022 04:39:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0567969CCC;
+        Mon, 14 Feb 2022 01:35:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7D8E7B80D83;
-        Mon, 14 Feb 2022 09:48:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7443AC340EF;
-        Mon, 14 Feb 2022 09:48:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB15E60FA2;
+        Mon, 14 Feb 2022 09:35:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C4C6C340E9;
+        Mon, 14 Feb 2022 09:35:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832130;
-        bh=ZpMz6lI2fdG/Wzo5lXOmPabcTGrlBaNjRWX7oyNMaGQ=;
+        s=korg; t=1644831326;
+        bh=/T57QsHEXzWRyz9ngAgfSuXzq9rnlQ9xNPWF7J/q3zk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HR/4zn7Zg0pHVOSEqWYeMgX5KSLO/qxQ44X662cD5ca31JWyF4No/7Hh0WPo3A3Nw
-         PssTq+JfF7sDZ4uEzQPWWkl0B5ErEahqzkWAeiacibV3/RU5EtYZy+tTOQsqC1nXI2
-         V5EoIWHPp6gML5NM1+qM1VRkg5gTWCtxIsUqKTTA=
+        b=UtzN9Sd8z64MuE27iIzzTtgSnItoINumPRA4OIoAAsuoAxtXMQfo5wsbQbQnBuylJ
+         N2/xqbyl/VKopZB0sLFBoC9XZ0vLSS/EDhcoAdRCggbAi3/Bb0KTDvGNNDXnM2/GRA
+         8XQe1LEdnU6A77DeEyI7BXoiqTw+7t+uKFQO+150=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 088/172] phy: stm32: fix a refcount leak in stm32_usbphyc_pll_enable()
-Date:   Mon, 14 Feb 2022 10:25:46 +0100
-Message-Id: <20220214092509.450851928@linuxfoundation.org>
+        stable@vger.kernel.org, ZouMingzhe <mingzhe.zou@easystack.cn>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 19/71] scsi: target: iscsi: Make sure the np under each tpg is unique
+Date:   Mon, 14 Feb 2022 10:25:47 +0100
+Message-Id: <20220214092452.665393505@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: ZouMingzhe <mingzhe.zou@easystack.cn>
 
-[ Upstream commit cfc826c88a79e22ba5d8001556eb2c7efd8a01b6 ]
+[ Upstream commit a861790afaa8b6369eee8a88c5d5d73f5799c0c6 ]
 
-This error path needs to decrement "usbphyc->n_pll_cons.counter" before
-returning.
+iscsit_tpg_check_network_portal() has nested for_each loops and is supposed
+to return true when a match is found. However, the tpg loop will still
+continue after existing the tpg_np loop. If this tpg_np is not the last the
+match value will be changed.
 
-Fixes: 5b1af71280ab ("phy: stm32: rework PLL Lock detection")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/20220112111724.GB3019@kili
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Break the outer loop after finding a match and make sure the np under each
+tpg is unique.
+
+Link: https://lore.kernel.org/r/20220111054742.19582-1-mingzhe.zou@easystack.cn
+Signed-off-by: ZouMingzhe <mingzhe.zou@easystack.cn>
+Reviewed-by: Mike Christie <michael.christie@oracle.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/st/phy-stm32-usbphyc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/target/iscsi/iscsi_target_tpg.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/phy/st/phy-stm32-usbphyc.c b/drivers/phy/st/phy-stm32-usbphyc.c
-index 937a14fa7448a..da05642d3bd4a 100644
---- a/drivers/phy/st/phy-stm32-usbphyc.c
-+++ b/drivers/phy/st/phy-stm32-usbphyc.c
-@@ -225,7 +225,7 @@ static int stm32_usbphyc_pll_enable(struct stm32_usbphyc *usbphyc)
- 
- 		ret = __stm32_usbphyc_pll_disable(usbphyc);
- 		if (ret)
--			return ret;
-+			goto dec_n_pll_cons;
+diff --git a/drivers/target/iscsi/iscsi_target_tpg.c b/drivers/target/iscsi/iscsi_target_tpg.c
+index 8075f60fd02c3..2d5cf1714ae05 100644
+--- a/drivers/target/iscsi/iscsi_target_tpg.c
++++ b/drivers/target/iscsi/iscsi_target_tpg.c
+@@ -443,6 +443,9 @@ static bool iscsit_tpg_check_network_portal(
+ 				break;
+ 		}
+ 		spin_unlock(&tpg->tpg_np_lock);
++
++		if (match)
++			break;
  	}
+ 	spin_unlock(&tiqn->tiqn_tpg_lock);
  
- 	ret = stm32_usbphyc_regulators_enable(usbphyc);
 -- 
 2.34.1
 

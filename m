@@ -2,278 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC7B4B515D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A8334B5181
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354113AbiBNNQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:16:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58956 "EHLO
+        id S1343995AbiBNNTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:19:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354066AbiBNNQa (ORCPT
+        with ESMTP id S231583AbiBNNTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:16:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1268612A
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:16:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644844580;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iqNmpg70p2b2V5lE1nmJofIjQpAsHoyhWq+TCOBlI0Q=;
-        b=RDsrhAzBDCokIvsoI5ay/boAZU8MldjoHrSGxwYK9zdGVPQAmfX2/3COiR2dW0NirwpVjN
-        EGgDtw8bNqFoq/GZuNCyqGRrxpGMm5O+NDxLyT7SsYEXewEwlWU1PpNZjRFZFfg7aASR7b
-        Q4kkIU9Hmjx+nL+MrPpCfpowAnsk0XU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-624-9ttHUNPCPK-fK_AABUPCAQ-1; Mon, 14 Feb 2022 08:16:19 -0500
-X-MC-Unique: 9ttHUNPCPK-fK_AABUPCAQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 093F81853026;
-        Mon, 14 Feb 2022 13:16:18 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id ADD08106F75B;
-        Mon, 14 Feb 2022 13:16:17 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     seanjc@google.com
-Subject: [PATCH v2 5/5] KVM: x86: allow defining return-0 static calls
-Date:   Mon, 14 Feb 2022 08:16:14 -0500
-Message-Id: <20220214131614.3050333-6-pbonzini@redhat.com>
-In-Reply-To: <20220214131614.3050333-1-pbonzini@redhat.com>
-References: <20220214131614.3050333-1-pbonzini@redhat.com>
+        Mon, 14 Feb 2022 08:19:05 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2085.outbound.protection.outlook.com [40.107.220.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EE03FDA7;
+        Mon, 14 Feb 2022 05:18:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WQW35npnfVAtOk1qoACyqv1/a9oey0w1+UvJscnMisQvGpvLKq9DwFIzggNu1TIaux9faC4LboIAoGGuT/IyaZFVnBxuDVtJzqI73n7TXC5DDbybNyFra4nU5qPC2SaFDtn0uUd3LdN9JRMl9eRzCxScgvx8owkMMWMxeJnDoogTnCU0hY8Da/gfeoNeEu4/++d+NhszuBG2yj8EZT7H7Aj+HxDXo/SbaTXpVtWA1Fgee8EOTFTRu0OM2u62t9TwqqMtsOx3JWzN6kurGlma6sbZuqfavcn4OmZdwzD4FsC0FJ9x9GV5mtsch0CATIynADFeLutI52r+vuPKM+tuBw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TT5XBJ3cY/2m+zwOP+jTftkbAP+1h7MeEolixefMEOs=;
+ b=l9qRjrlTLcjju2yuf1mIU5SUBRoqmHmNZIH4I1qkFyMmXSQyMvFMXdUeFqzHoz6MX8GspWf54HBiruOMmYdzMH9OcStfQqulLxmP0J1oPTvUyC2REQbNFBHHwp3D8TrvHeBhwGVYmwR0DLgxCyrLa9JEPHBh+7MsfQLRxrLo50xyKqWowcs5PJWIVsqdAX69cFK/dYI7Z1LS3FLvtVZ6drwvSa8eTNB6NtYyciu8JR0JiVenerkrsyOd5VF5Btup94kKgYQFaaHaP3hQk76cnefVqBCDiuC300Mk0Mxs3HVggI2+1iONCDpshsYVfew6RS+mkjrP/A9HSqVS6zV0wA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TT5XBJ3cY/2m+zwOP+jTftkbAP+1h7MeEolixefMEOs=;
+ b=nXL5ELbpcQt2nkg1lb0YYpALKiO3Hxg4xPccWTsdrOjuD8qC+xlTcK0t0VGA82FSD1kPrcaoZ4zc7EdpqJyAXv/STAMIWM9rh0UDrcJG7aJAd/GDbjO8lxvr/cq2pUvWc7mOCSsZKKu5X+5nUiDpDK77m0Uy7KmI/k0mc2MRXIzumP1s8WiTKej/2HA/gYfBod0yuFpfmYThsPgjNg/D81oIYlsZEcxnK0zBREqWkq5PjNuYY1VR44yzQnOGCndcYf1WTq0NAEziaMzRuAJkFCUO+HPR+lUIxuaDFrDJ/koNgfciL82Tl4ZXD5BtswK9TIc4oe56F3NGb1g1/rEEPw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by BL1PR12MB5971.namprd12.prod.outlook.com (2603:10b6:208:39a::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Mon, 14 Feb
+ 2022 13:18:54 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3%4]) with mapi id 15.20.4975.019; Mon, 14 Feb 2022
+ 13:18:54 +0000
+Date:   Mon, 14 Feb 2022 09:18:53 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 04/14] driver core: platform: Add driver dma ownership
+ management
+Message-ID: <20220214131853.GY4160@nvidia.com>
+References: <20220104015644.2294354-1-baolu.lu@linux.intel.com>
+ <20220104015644.2294354-5-baolu.lu@linux.intel.com>
+ <YgooFjSWLTSapuIs@kroah.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgooFjSWLTSapuIs@kroah.com>
+X-ClientProxiedBy: BL0PR01CA0015.prod.exchangelabs.com (2603:10b6:208:71::28)
+ To MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8bcf9f7d-ce89-4617-8028-08d9efbc8cd6
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5971:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB5971F2951DC83F7EBDEE7521C2339@BL1PR12MB5971.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2512;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VkaAGP5r2WxgLNerXnT0GoAEiXJ56sVXSAXlVRSiPuQq6WVG+G0U4iTvS35nNJT1REa6JlPshlDfRi/XteU+nApt9FlqtvTnjuqV/o8WLcBVFLRQ0la1RXVaWNMAryL4dlTiMVaYFR9JlLtKiHbu/pu9JbW+V/IYBeiutPKIiI4z6+At5tgsR3cnDNR+JpgyA9f6tfnIhwIJE70lbAOuKhmMI7bQTng8Cq03X/sqCurh++IJ0NqNSWvQ3sFIR9hLTUMBW3Hy3Y0NWPfXUwIGoF+gblwvtnCRn+KK71JqD/tH4yX5sI+9nGDrQEtSTtk6SYOQBVrmFfBbOLkQjhS1cpsas34aoExOXMuj434nn6VYVkvW4xgEqFkR21bYJDXGwN2xRCD3SETdIXTvL1OgRY2o6+J/Ea+r1ILcgRgoQuFiKY5OFZ0ffzososayu0bHTvRKJX5+kxrj5ABjVJvcMAhEbdc1dFXlrzp1R0oOVd3FBRJbZaHVlWDkMzSbM6khkqAtOlV04w2xvPP8YiIRYSqEnc0v3JoeoKI1LiOs5jR/ZOIjDduAIz/3FWI5xrjYnjsg08p0TLn+F2BqmacmR5CPVwPDgwdOH1UM4/Ovw4EAew7uyEBf6kehMaCnyH6fBBRoz6nL2tUMYmohlA1VrA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2616005)(6506007)(86362001)(4326008)(4744005)(1076003)(186003)(8936002)(83380400001)(66946007)(6512007)(33656002)(66476007)(66556008)(8676002)(26005)(316002)(5660300002)(7416002)(508600001)(2906002)(38100700002)(36756003)(6916009)(54906003)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TIlzLL90VWCGCWBrCIB25krCuNL6TDSeVLaU6nr/bceMID8s3MbZRE9wPDAg?=
+ =?us-ascii?Q?BV0tD1587dtwEZTGZB5XYuRMYtFAnQJAs/ZmQCcQXCPO0drptFjuxaMzw/lX?=
+ =?us-ascii?Q?mcaYAd+pCR+lAPgWG3NHbH/IRsJY+GzpkpjZVZlvTkfNtR/nre0nmZA8f4jG?=
+ =?us-ascii?Q?6iO17QSNY4GZ747KUAJ+Xah+z3Yvs2q4dYuRs8FluFbUXhATqUuUCgfoHISx?=
+ =?us-ascii?Q?wRuUriWbQdLNLEYmKorvgYsdcBO7f0/nwUTddrUNJhMMIGV+Vm79kurMwXQg?=
+ =?us-ascii?Q?tizC571KiEKwUo3ongY6Vtmnp/WtiWnXIzWhtGqhH2awxPlclwvoLhXRkoxR?=
+ =?us-ascii?Q?8g0m3IdwexqPLoSIRd90YxzoJEY/ZUXUcfEhPaYloafAAuh2Xxpl/qPPbq66?=
+ =?us-ascii?Q?iwC8Fut5iWUuZHHQzF6pGOB28ufA0cKWoBq9nWzPNt5ARnK/+ov1qNBGqFsY?=
+ =?us-ascii?Q?PWV5gQNxSlJ5txpszajuKXdKO0doGpqecyRUE9OUcwLxn+QBLlSytqUr7ceK?=
+ =?us-ascii?Q?AHUg6aE6l6l+t15fS0OMc6nCtrNVHFFb5SCubigmgb2rCg+c+OZewEH7pafD?=
+ =?us-ascii?Q?ajRuGXixhQSXv+A0CyNcFXv7QZweF2X+Ln9OaaiHaebyN2gpzGW+xekt223R?=
+ =?us-ascii?Q?xgNVp7D7NjqZ9Gn8lxPyKIJ+WqkUSViDwQ+eBiz4BWsb3wYAth6tNu6u4dBN?=
+ =?us-ascii?Q?cL+HFjil4Y8WWZgvuYUyJDZ91epw/qz0Nrp2IOLw3/gAZHGgra34/fx/h48q?=
+ =?us-ascii?Q?FA4bcRCs8tE9jbAqryIXtipoynBUAlzf2rv9mHt39mc2yocfCApXheob7FtL?=
+ =?us-ascii?Q?COzcQtBcimPpCwAsiMX+AKgJWzVG2/eHbcIErXtocoGO+9I1RwkqPnHthFL4?=
+ =?us-ascii?Q?0UWXMVykADQv1G/b5TjTlovv7pwsO6DsurFiPfUS8eVGZKyWrUpd6F10zGlB?=
+ =?us-ascii?Q?TYDkeMwwZ9LDQIGHNuMbUnjitTJwJYDM9rpp67s8qS5ZzpzpCF5Qv7DxQnIK?=
+ =?us-ascii?Q?RK1Akm+cPG4Ct8GuJYQbwxANJX/x6IkE+4OLDEes+KT0mf+HwZ/7eyjut/AB?=
+ =?us-ascii?Q?3sczHBlJCigzHH71hOxRSpJplpLt56gBx6pI3/1OAorX2Hq05/FlKeoW369U?=
+ =?us-ascii?Q?f1mS3C3gKvha6ZGcyR32r0DsmjBRT3mb3N9LRiYhAhhZhSVYTjz13qfftTl3?=
+ =?us-ascii?Q?YDwuBVAIiSOzkiwqt38kd6kN1mHx+B3wYRwLPEpIKq8w22QuVqkewZ473CEf?=
+ =?us-ascii?Q?SX+ijnyqNYc804HSsmJH4OhCiB9EZlwEYb9CeI0yVoRXlbEgKDfOc8jQGcCd?=
+ =?us-ascii?Q?ET1OTk3JOlIQpliHwNMazgXfAchifOHrBaYdokqa8aNrovOl0Ofis/G9eN7G?=
+ =?us-ascii?Q?pHdJjSbYXnKmAfLAI0yBudFj0tDE/DKlJPZl1A/c7yJpIs/8/D05YDxiPT5a?=
+ =?us-ascii?Q?abAdc+3Bn0UAmvn4qoHNCJ6/3rNyUzM8TsYIhxEmGrj3NobbquMwxB0K9zx6?=
+ =?us-ascii?Q?Iimv/nc4qkEdXksVHjLAZE7YbMndo07VAZIcmwjBHcpymexdaalbonRavdyi?=
+ =?us-ascii?Q?Go/SMCskCS0bEV7WN+U=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8bcf9f7d-ce89-4617-8028-08d9efbc8cd6
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2022 13:18:54.7893
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DnyNu40OFe9kc3MP1VLuPK+17XF4FA29IsrTo5y7/RuQEgzm0fR/FTM4dfgdVSlY
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5971
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A few vendor callbacks are only used by VMX, but they return an integer
-or bool value.  Introduce KVM_X86_OP_RET0 for them: a NULL value in
-struct kvm_x86_ops will be changed to __static_call_return0.
+On Mon, Feb 14, 2022 at 10:59:50AM +0100, Greg Kroah-Hartman wrote:
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/include/asm/kvm-x86-ops.h | 20 +++++++++++++-------
- arch/x86/include/asm/kvm_host.h    |  4 ++++
- arch/x86/kvm/svm/avic.c            |  5 -----
- arch/x86/kvm/svm/svm.c             | 26 --------------------------
- arch/x86/kvm/x86.c                 |  2 +-
- kernel/static_call.c               |  1 +
- 6 files changed, 19 insertions(+), 39 deletions(-)
+> > +	if (ret && !drv->no_kernel_api_dma)
+> > +		iommu_device_unuse_dma_api(dev);
+> 
+> So you are now going to call this for every platform driver _unless_
+> they set this flag?
 
-diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-index 0a074354aaf7..ad75ff5ac220 100644
---- a/arch/x86/include/asm/kvm-x86-ops.h
-+++ b/arch/x86/include/asm/kvm-x86-ops.h
-@@ -6,14 +6,19 @@ BUILD_BUG_ON(1)
- /*
-  * KVM_X86_OP() and KVM_X86_OP_OPTIONAL() are used to help generate
-  * "static_call()"s. They are also intended for use when defining
-- * the vmx/svm kvm_x86_ops. KVM_X86_OP_OPTIONAL() can be used for those
-+ * the vmx/svm kvm_x86_ops.
-+ *
-+ * KVM_X86_OP_OPTIONAL() can be used for those
-  * functions that can have a NULL definition, for example if
-  * "static_call_cond()" will be used at the call sites.
-+ * KVM_X86_OP_OPTIONAL_RET0() can be used likewise to make
-+ * a definition optional, but in this case the default will 
-+ * be __static_call_return0.
-  */
- KVM_X86_OP(hardware_enable)
- KVM_X86_OP(hardware_disable)
- KVM_X86_OP(hardware_unsetup)
--KVM_X86_OP(cpu_has_accelerated_tpr)
-+KVM_X86_OP_OPTIONAL_RET0(cpu_has_accelerated_tpr)
- KVM_X86_OP(has_emulated_msr)
- KVM_X86_OP(vcpu_after_set_cpuid)
- KVM_X86_OP(vm_init)
-@@ -76,15 +81,15 @@ KVM_X86_OP(check_apicv_inhibit_reasons)
- KVM_X86_OP(refresh_apicv_exec_ctrl)
- KVM_X86_OP_OPTIONAL(hwapic_irr_update)
- KVM_X86_OP_OPTIONAL(hwapic_isr_update)
--KVM_X86_OP_OPTIONAL(guest_apic_has_interrupt)
-+KVM_X86_OP_OPTIONAL_RET0(guest_apic_has_interrupt)
- KVM_X86_OP_OPTIONAL(load_eoi_exitmap)
- KVM_X86_OP_OPTIONAL(set_virtual_apic_mode)
- KVM_X86_OP_OPTIONAL(set_apic_access_page_addr)
- KVM_X86_OP(deliver_interrupt)
- KVM_X86_OP_OPTIONAL(sync_pir_to_irr)
--KVM_X86_OP(set_tss_addr)
--KVM_X86_OP(set_identity_map_addr)
--KVM_X86_OP(get_mt_mask)
-+KVM_X86_OP_OPTIONAL_RET0(set_tss_addr)
-+KVM_X86_OP_OPTIONAL_RET0(set_identity_map_addr)
-+KVM_X86_OP_OPTIONAL_RET0(get_mt_mask)
- KVM_X86_OP(load_mmu_pgd)
- KVM_X86_OP(has_wbinvd_exit)
- KVM_X86_OP(get_l2_tsc_offset)
-@@ -102,7 +107,7 @@ KVM_X86_OP_OPTIONAL(vcpu_unblocking)
- KVM_X86_OP_OPTIONAL(pi_update_irte)
- KVM_X86_OP_OPTIONAL(pi_start_assignment)
- KVM_X86_OP_OPTIONAL(apicv_post_state_restore)
--KVM_X86_OP_OPTIONAL(dy_apicv_has_pending_interrupt)
-+KVM_X86_OP_OPTIONAL_RET0(dy_apicv_has_pending_interrupt)
- KVM_X86_OP_OPTIONAL(set_hv_timer)
- KVM_X86_OP_OPTIONAL(cancel_hv_timer)
- KVM_X86_OP(setup_mce)
-@@ -126,3 +131,4 @@ KVM_X86_OP(vcpu_deliver_sipi_vector)
- 
- #undef KVM_X86_OP
- #undef KVM_X86_OP_OPTIONAL
-+#undef KVM_X86_OP_OPTIONAL_RET0
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 5dce6fbd9ab6..a0d2925b6651 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1542,12 +1542,16 @@ extern struct kvm_x86_ops kvm_x86_ops;
- #define KVM_X86_OP(func) \
- 	DECLARE_STATIC_CALL(kvm_x86_##func, *(((struct kvm_x86_ops *)0)->func));
- #define KVM_X86_OP_OPTIONAL KVM_X86_OP
-+#define KVM_X86_OP_OPTIONAL_RET0 KVM_X86_OP
- #include <asm/kvm-x86-ops.h>
- 
- static inline void kvm_ops_static_call_update(void)
- {
- #define KVM_X86_OP_OPTIONAL(func) \
- 	static_call_update(kvm_x86_##func, kvm_x86_ops.func);
-+#define KVM_X86_OP_OPTIONAL_RET0(func) \
-+	static_call_update(kvm_x86_##func, kvm_x86_ops.func ? : \
-+			   (void *) __static_call_return0);
- #define KVM_X86_OP(func) \
- 	WARN_ON(!kvm_x86_ops.func); KVM_X86_OP_OPTIONAL(func)
- #include <asm/kvm-x86-ops.h>
-diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-index 4245cb99b497..d4fa8c4f3a9a 100644
---- a/arch/x86/kvm/svm/avic.c
-+++ b/arch/x86/kvm/svm/avic.c
-@@ -650,11 +650,6 @@ void avic_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu)
- 	avic_set_pi_irte_mode(vcpu, activated);
- }
- 
--bool avic_dy_apicv_has_pending_interrupt(struct kvm_vcpu *vcpu)
--{
--	return false;
--}
--
- static void svm_ir_list_del(struct vcpu_svm *svm, struct amd_iommu_pi_data *pi)
- {
- 	unsigned long flags;
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 4fa385490f22..7038c76fa841 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -3528,16 +3528,6 @@ static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
- 	svm->vmcb->save.rflags |= (X86_EFLAGS_TF | X86_EFLAGS_RF);
- }
- 
--static int svm_set_tss_addr(struct kvm *kvm, unsigned int addr)
--{
--	return 0;
--}
--
--static int svm_set_identity_map_addr(struct kvm *kvm, u64 ident_addr)
--{
--	return 0;
--}
--
- static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
- {
- 	struct vcpu_svm *svm = to_svm(vcpu);
-@@ -3912,11 +3902,6 @@ static int __init svm_check_processor_compat(void)
- 	return 0;
- }
- 
--static bool svm_cpu_has_accelerated_tpr(void)
--{
--	return false;
--}
--
- /*
-  * The kvm parameter can be NULL (module initialization, or invocation before
-  * VM creation). Be sure to check the kvm parameter before using it.
-@@ -3939,11 +3924,6 @@ static bool svm_has_emulated_msr(struct kvm *kvm, u32 index)
- 	return true;
- }
- 
--static u64 svm_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
--{
--	return 0;
--}
--
- static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
- {
- 	struct vcpu_svm *svm = to_svm(vcpu);
-@@ -4529,7 +4509,6 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
- 	.hardware_unsetup = svm_hardware_unsetup,
- 	.hardware_enable = svm_hardware_enable,
- 	.hardware_disable = svm_hardware_disable,
--	.cpu_has_accelerated_tpr = svm_cpu_has_accelerated_tpr,
- 	.has_emulated_msr = svm_has_emulated_msr,
- 
- 	.vcpu_create = svm_vcpu_create,
-@@ -4599,10 +4578,6 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
- 	.check_apicv_inhibit_reasons = avic_check_apicv_inhibit_reasons,
- 	.apicv_post_state_restore = avic_apicv_post_state_restore,
- 
--	.set_tss_addr = svm_set_tss_addr,
--	.set_identity_map_addr = svm_set_identity_map_addr,
--	.get_mt_mask = svm_get_mt_mask,
--
- 	.get_exit_info = svm_get_exit_info,
- 
- 	.vcpu_after_set_cpuid = svm_vcpu_after_set_cpuid,
-@@ -4627,7 +4602,6 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
- 	.nested_ops = &svm_nested_ops,
- 
- 	.deliver_interrupt = svm_deliver_interrupt,
--	.dy_apicv_has_pending_interrupt = avic_dy_apicv_has_pending_interrupt,
- 	.pi_update_irte = avic_pi_update_irte,
- 	.setup_mce = svm_setup_mce,
- 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index c921d68fc244..9a9006226501 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -131,6 +131,7 @@ struct kvm_x86_ops kvm_x86_ops __read_mostly;
- 	DEFINE_STATIC_CALL_NULL(kvm_x86_##func,			     \
- 				*(((struct kvm_x86_ops *)0)->func));
- #define KVM_X86_OP_OPTIONAL KVM_X86_OP
-+#define KVM_X86_OP_OPTIONAL_RET0 KVM_X86_OP
- #include <asm/kvm-x86-ops.h>
- EXPORT_STATIC_CALL_GPL(kvm_x86_get_cs_db_l_bits);
- EXPORT_STATIC_CALL_GPL(kvm_x86_cache_reg);
-@@ -12018,7 +12019,6 @@ void kvm_arch_flush_shadow_memslot(struct kvm *kvm,
- static inline bool kvm_guest_apic_has_interrupt(struct kvm_vcpu *vcpu)
- {
- 	return (is_guest_mode(vcpu) &&
--			kvm_x86_ops.guest_apic_has_interrupt &&
- 			static_call(kvm_x86_guest_apic_has_interrupt)(vcpu));
- }
- 
-diff --git a/kernel/static_call.c b/kernel/static_call.c
-index 43ba0b1e0edb..76abd46fe6ee 100644
---- a/kernel/static_call.c
-+++ b/kernel/static_call.c
-@@ -503,6 +503,7 @@ long __static_call_return0(void)
- {
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(__static_call_return0)
- 
- #ifdef CONFIG_STATIC_CALL_SELFTEST
- 
--- 
-2.31.1
+Yes, it is necessary because VFIO supports platform devices as well
+and needs to ensure security. Conflicting kernel driver attachements
+must be blocked, just like for PCI.
 
+Jason

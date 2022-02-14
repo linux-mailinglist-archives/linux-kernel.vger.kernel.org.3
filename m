@@ -2,233 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E359C4B50FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:04:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F14E4B5129
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353873AbiBNNEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:04:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52304 "EHLO
+        id S1353913AbiBNNHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:07:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353867AbiBNNEo (ORCPT
+        with ESMTP id S233705AbiBNNHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:04:44 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051B54E398;
-        Mon, 14 Feb 2022 05:04:36 -0800 (PST)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21ECpd7T011255;
-        Mon, 14 Feb 2022 13:04:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=FMWzaTJXRrGBJi1FUbvAo3f2Gs05BJSDjHdhP6H1xuw=;
- b=rbfWZj3WkMgLOSPVbwn4tzx8sXpT5XtEPmGOzPWHgHiDpPMcOoMA5Y7pSW4dcJrEvjlJ
- r1BvZh9HnFgK8xZzi34eihWI3/RW80g/TJTDvzDa53C6oj066VwCZY9NjVEcxuVG5UDV
- XpsfsTNOHPAvQatWiLTDQW8fqmWTTWUHKZ3Y8ej/offPqPxYlBmuLNGTMPKF6y7LEi2/
- kAmQ5kk8KrxKwMcZW62d0l4CpD4Vik+D5sOxbbHXCroPDmAyZvkYopJZs/fcMGT8l8JS
- 0JYahynCW+SdNoAez4RpZcx7eU8e3tC0vUxCf33R2afq8qBRzEZpDbEyS46q3sBo3PZX pA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e6thxkdf8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 13:04:36 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21ECfEh0015734;
-        Mon, 14 Feb 2022 13:04:35 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e6thxkden-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 13:04:35 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21ED3lSx029719;
-        Mon, 14 Feb 2022 13:04:34 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3e64h9nhr4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 13:04:33 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21ED4TrF43319602
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Feb 2022 13:04:29 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F1D40A4065;
-        Mon, 14 Feb 2022 13:04:28 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EB271A4062;
-        Mon, 14 Feb 2022 13:04:27 +0000 (GMT)
-Received: from [9.171.42.254] (unknown [9.171.42.254])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Feb 2022 13:04:27 +0000 (GMT)
-Message-ID: <0fce8189-8a02-16d2-6f37-7e435c6b8024@linux.ibm.com>
-Date:   Mon, 14 Feb 2022 14:06:40 +0100
+        Mon, 14 Feb 2022 08:07:22 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463AE4BFDF;
+        Mon, 14 Feb 2022 05:07:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644844029; x=1676380029;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=cmRpyW5YxpRg0c6HVe02t3+JA7Epz3P6WvJ1r9gZPiM=;
+  b=fwnRiMLdnK/rmaMb7i6Y8iHrmqfh05bm8jOVB+xUxzKzpjVXqo6YXCAM
+   tP2aebyqD3f2Kov0sU36MQ6VugzMbpZiEMB24R4mQW5D4p6Q4bxn3GfDp
+   nscKJRZ23130KaUivYRP5tWZ5Ya3gjKJbO06iV02TBtuUkfd73tGMQ+m3
+   UE1S1Asn0wFByk6osL1SwBfOOsjt/0GE9JsNRzY7vQipL6fH+9+VsVxm5
+   zaQ1QiDvgw5UHTQDJPk2ni2hKttiGdMi4A4mojvmuPoZ54Qx2pL93pLm0
+   25Ax/qAYIcc37W5kR3/VqctpXpcsJcOJhHnVVQCFRhrwMbITXA7s6Qf3q
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="230721425"
+X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
+   d="scan'208";a="230721425"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 05:07:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
+   d="scan'208";a="543555384"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.151])
+  by orsmga008.jf.intel.com with SMTP; 14 Feb 2022 05:07:04 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Mon, 14 Feb 2022 15:07:03 +0200
+Date:   Mon, 14 Feb 2022 15:07:03 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     linux-fbdev@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sam Ravnborg <sam@ravnborg.org>
+Subject: Re: [PATCH v4 1/6] drm/format-helper: Add
+ drm_fb_xrgb8888_to_gray8_line()
+Message-ID: <YgpT91j+WajkuqXm@intel.com>
+References: <4fa465d9-4fac-4199-9a04-d8e09d164308@redhat.com>
+ <YgZEuXvJ2ZiOyNS+@smile.fi.intel.com>
+ <7560cd10-0a7c-3fda-da83-9008833e3901@suse.de>
+ <87pmnt7gm3.fsf@intel.com>
+ <YgaDj6Wld4b7S6DF@smile.fi.intel.com>
+ <f87ce2fa-6b18-f985-eb86-506ce7103db3@suse.de>
+ <YgoxFBGNsrezVxmi@smile.fi.intel.com>
+ <5ee24960-7843-827a-2c47-b93a4b4798e3@suse.de>
+ <YgpPR/lObRWwkjNN@intel.com>
+ <65010c63-ef8a-4fff-00e4-73a9b6fd05b8@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v3 18/30] KVM: s390: mechanism to enable guest zPCI
- Interpretation
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220204211536.321475-1-mjrosato@linux.ibm.com>
- <20220204211536.321475-19-mjrosato@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <20220204211536.321475-19-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: wvX9Z-lcXqz_-Jolf_8p63MTrlG8QPsK
-X-Proofpoint-ORIG-GUID: jrjA06zhDR9356g7ZVOFpCzNqlvEQbgl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-14_06,2022-02-14_03,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- lowpriorityscore=0 clxscore=1015 mlxlogscore=999 priorityscore=1501
- malwarescore=0 phishscore=0 suspectscore=0 spamscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202140076
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <65010c63-ef8a-4fff-00e4-73a9b6fd05b8@suse.de>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/4/22 22:15, Matthew Rosato wrote:
-> The guest must have access to certain facilities in order to allow
-> interpretive execution of zPCI instructions and adapter event
-> notifications.  However, there are some cases where a guest might
-> disable interpretation -- provide a mechanism via which we can defer
-> enabling the associated zPCI interpretation facilities until the guest
-> indicates it wishes to use them.
+On Mon, Feb 14, 2022 at 01:54:59PM +0100, Thomas Zimmermann wrote:
+> Hi
 > 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-
-Didn't you forget my ACK?
-
-
-Acked-by: Pierre Morel <pmorel@linux.ibm.com>
-
-> ---
->   arch/s390/include/asm/kvm_host.h |  4 ++++
->   arch/s390/kvm/kvm-s390.c         | 40 ++++++++++++++++++++++++++++++++
->   arch/s390/kvm/kvm-s390.h         | 10 ++++++++
->   3 files changed, 54 insertions(+)
+> Am 14.02.22 um 13:47 schrieb Ville Syrjälä:
+> > On Mon, Feb 14, 2022 at 01:12:48PM +0100, Thomas Zimmermann wrote:
+> >> Hi
+> >>
+> >> Am 14.02.22 um 11:38 schrieb Andy Shevchenko:
+> >>> On Mon, Feb 14, 2022 at 10:03:53AM +0100, Thomas Zimmermann wrote:
+> >>>> Am 11.02.22 um 16:41 schrieb Andy Shevchenko:
+> >>>
+> >>> ...
+> >>>
+> >>>>>> IMO *always* prefer a for loop over while or do-while.
+> >>>>>>
+> >>>>>> The for (i = 0; i < N; i++) is such a strong paradigm in C. You
+> >>>>>> instantly know how many times you're going to loop, at a glance. Not so
+> >>>>>> with with the alternatives, which should be used sparingly.
+> >>>>>
+> >>>>> while () {}  _is_ a paradigm, for-loop is syntax sugar on top of it.
+> >>>>
+> >>>> Naw, that's not true.
+> >>>
+> >>> In the section 3.5 "Loops - While and For" in "The C Programming
+> >>> Language" 2nd by K&R, the authors said:
+> >>
+> >> Year of publication: 1988 . It's not the most up-to-date reference for C
+> >> programming.
+> >>
+> >>>
+> >>> 	The for statement ... is equivalent to ... while..."
+> >>>
+> >>> They said that for is equivalent to while, and not otherwise.
+> >>
+> >> Even leaving readability aside, it's not equivalent. You can declare
+> >> variables as part of the for statement. (I know it's not the kernel's
+> >> style.) Also, 'continue' statements are not well-suited in for loops,
+> >> because it's non-obvious if the loop's update statement is being
+> >> executed. (It isn't.)
+> > 
+> > It is.
+> > 
+> > 'continue' is just shorthand for 'goto end_of_loop_body'.
 > 
-> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
-> index b468d3a2215e..bf61ab05f98c 100644
-> --- a/arch/s390/include/asm/kvm_host.h
-> +++ b/arch/s390/include/asm/kvm_host.h
-> @@ -252,7 +252,10 @@ struct kvm_s390_sie_block {
->   #define ECB2_IEP	0x20
->   #define ECB2_PFMFI	0x08
->   #define ECB2_ESCA	0x04
-> +#define ECB2_ZPCI_LSI	0x02
->   	__u8    ecb2;                   /* 0x0062 */
-> +#define ECB3_AISI	0x20
-> +#define ECB3_AISII	0x10
->   #define ECB3_DEA 0x08
->   #define ECB3_AES 0x04
->   #define ECB3_RI  0x01
-> @@ -938,6 +941,7 @@ struct kvm_arch{
->   	int use_cmma;
->   	int use_pfmfi;
->   	int use_skf;
-> +	int use_zpci_interp;
->   	int user_cpu_state_ctrl;
->   	int user_sigp;
->   	int user_stsi;
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 24837d6050dc..208b09d08385 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -1029,6 +1029,44 @@ static int kvm_s390_vm_set_crypto(struct kvm *kvm, struct kvm_device_attr *attr)
->   	return 0;
->   }
->   
-> +static void kvm_s390_vcpu_pci_setup(struct kvm_vcpu *vcpu)
-> +{
-> +	/* Only set the ECB bits after guest requests zPCI interpretation */
-> +	if (!vcpu->kvm->arch.use_zpci_interp)
-> +		return;
-> +
-> +	vcpu->arch.sie_block->ecb2 |= ECB2_ZPCI_LSI;
-> +	vcpu->arch.sie_block->ecb3 |= ECB3_AISII + ECB3_AISI;
-> +}
-> +
-> +void kvm_s390_vcpu_pci_enable_interp(struct kvm *kvm)
-> +{
-> +	struct kvm_vcpu *vcpu;
-> +	unsigned long i;
-> +
-> +	/*
-> +	 * If host is configured for PCI and the necessary facilities are
-> +	 * available, turn on interpretation for the life of this guest
-> +	 */
-> +	if (!IS_ENABLED(CONFIG_VFIO_PCI_ZDEV) || !sclp.has_zpci_lsi ||
-> +	    !sclp.has_aisii || !sclp.has_aeni || !sclp.has_aisi)
-> +		return;
-> +
-> +	mutex_lock(&kvm->lock);
-> +
-> +	kvm->arch.use_zpci_interp = 1;
-> +
-> +	kvm_s390_vcpu_block_all(kvm);
-> +
-> +	kvm_for_each_vcpu(i, vcpu, kvm) {
-> +		kvm_s390_vcpu_pci_setup(vcpu);
-> +		kvm_s390_sync_request(KVM_REQ_VSIE_RESTART, vcpu);
-> +	}
-> +
-> +	kvm_s390_vcpu_unblock_all(kvm);
-> +	mutex_unlock(&kvm->lock);
-> +}
-> +
->   static void kvm_s390_sync_request_broadcast(struct kvm *kvm, int req)
->   {
->   	unsigned long cx;
-> @@ -3236,6 +3274,8 @@ static int kvm_s390_vcpu_setup(struct kvm_vcpu *vcpu)
->   
->   	kvm_s390_vcpu_crypto_setup(vcpu);
->   
-> +	kvm_s390_vcpu_pci_setup(vcpu);
-> +
->   	mutex_lock(&vcpu->kvm->lock);
->   	if (kvm_s390_pv_is_protected(vcpu->kvm)) {
->   		rc = kvm_s390_pv_create_cpu(vcpu, &uvrc, &uvrrc);
-> diff --git a/arch/s390/kvm/kvm-s390.h b/arch/s390/kvm/kvm-s390.h
-> index 098831e815e6..14bb2539f837 100644
-> --- a/arch/s390/kvm/kvm-s390.h
-> +++ b/arch/s390/kvm/kvm-s390.h
-> @@ -496,6 +496,16 @@ void kvm_s390_reinject_machine_check(struct kvm_vcpu *vcpu,
->    */
->   void kvm_s390_vcpu_crypto_reset_all(struct kvm *kvm);
->   
-> +/**
-> + * kvm_s390_vcpu_pci_enable_interp
-> + *
-> + * Set the associated PCI attributes for each vcpu to allow for zPCI Load/Store
-> + * interpretation as well as adapter interruption forwarding.
-> + *
-> + * @kvm: the KVM guest
-> + */
-> +void kvm_s390_vcpu_pci_enable_interp(struct kvm *kvm);
-> +
->   /**
->    * diag9c_forwarding_hz
->    *
+> Well, indeed. lol
 > 
+> Fun fact: I actually had to look this up and still got it wrong. Let me 
+> just count it under proving-my-point: continue in a for statement is a 
+> bad idea and for isn't equivalent to while.
+
+Nah. We use 'continue' a *lot* in for loops in kms/atomic code.
+I'd be surprised if you can find many loops without a 'continue'.
+
+Looking at the loc stats I was a bit surprised to see more 'break'
+but then I realized switch() is bloating up those numbers quite
+a bit.
 
 -- 
-Pierre Morel
-IBM Lab Boeblingen
+Ville Syrjälä
+Intel

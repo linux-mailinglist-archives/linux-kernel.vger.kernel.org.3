@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2D14B4F51
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA6B4B4F58
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352666AbiBNLuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:50:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50692 "EHLO
+        id S1351940AbiBNLud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:50:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351877AbiBNLuM (ORCPT
+        with ESMTP id S1352648AbiBNLuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:50:12 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE48C5B
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 03:48:16 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id i6so26870283pfc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 03:48:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ACeEDhjbHou3oxxSi+z3/EFjDqtxOJyqeUY/TfA+geY=;
-        b=maJJV4uuDmViELDnZ8rGFDbSt54X8jw9p/lpD+DvonMOEbQn4ISNEYpBPzV42bHC3R
-         q/Ue1reO9qQhC7MLSbhEnrgprt/+Q5gnnjd6iiOnXD8ME/hGJ87Tzffnz8zdPUp3jfLH
-         CF6DbvM7DWmhiqP23YjVssFf1+rLmzWGlb+iVC9iAFuXWhMQQXBnhdq9ZA1iKXIzQoAp
-         o4GlgqcJP+lmjx4j5h0Fgav7G/E/ylF1Q+Uc7nMOX9VJsuChmtz79ERir3C44pD92uHO
-         IqLmJypWwIBfaiIFCdHIbLfay2A/x2sKQcl8LOZOfjfDqk4BZWGbJmVqxw2Hce62iwpb
-         rlWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ACeEDhjbHou3oxxSi+z3/EFjDqtxOJyqeUY/TfA+geY=;
-        b=bny+n/Vi5e4tSff3Jkq4R++5RdcGkKqS5jRcUb7pNzlDEI3vfuzpmI0HGcljpxXlnK
-         UGQTFy/DVB3gxLkH25kM1S3xrOegEE2MNWOcchkk9GLM9lBWfh4d1kilsrn9Zkr3+eOC
-         +fgzXOJqE+evCxW8DZvVC6HiCs3JR39hkvqFkANn5U9eCtMjWmBK8miXvU7Hmjcy/kK4
-         hNIjkpYD+pP+eteLjmlWi3VEoK/i/zlNhRFIELLO4lWgGrQVl775XbmEpJ2KbAgWPg4k
-         Ux4+uTtwwbhJ290jcho2d6+AyGvATZjabRcG83j5MawDjumQV/zBwoBZ0/Pu88Epo9+2
-         dowA==
-X-Gm-Message-State: AOAM531PLfDNK2LkjZog8eeVMw3WgCNJT7jGhZk7ouplX35XYQJ/FDO7
-        LT7HY0v6sfMKm9Sa7oWFNfBtJVZnP8rxsP0BnsPalw==
-X-Google-Smtp-Source: ABdhPJzyht2sLOqKatKCERaOVqnbRYQqbqkfmAliRfq7yt5zPALxS4EABZfzEIoZB0kXepbCSRhVO9Xi7MZI3OAC6WQ=
-X-Received: by 2002:a05:6a00:1682:: with SMTP id k2mr14191457pfc.69.1644839296340;
- Mon, 14 Feb 2022 03:48:16 -0800 (PST)
+        Mon, 14 Feb 2022 06:50:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CF794;
+        Mon, 14 Feb 2022 03:49:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4AB461286;
+        Mon, 14 Feb 2022 11:49:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFDC8C340E9;
+        Mon, 14 Feb 2022 11:49:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644839353;
+        bh=ofMA+waGTo/pG7F7s4Rwg0xTEsFwMBbjf3Abpr2J8pY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E889Q//CBY6NBKWMSby39FcMy9/J65+2X2/SzPwe/ZFHUScNLXZyzxG2yYp6lnkS/
+         A722jm33WcI/TL3pH56kWVcHagKXfvpmqXmU0VDJPA8kZRPVD/moiXf1UsbCiFxHb0
+         2gT5kmjEcI3bBYlIqy/WmSb/5z4U4NPMpr59hShV2NIw51eiBjFupapA6hMrJJei6X
+         hAwsNVurVLrb6KRFzYLIguPcBjltw1YAjtVoJz5+PvPfb0qrwXuYhstt7ZDWd6mWoD
+         iJVSwydrsNUdzbzsbV7yr4tMq03kjy2tfaguGZhWR9yX3QEJ8lOtACcMCXhcPEbhhN
+         MImPupZ5mrNLg==
+Received: by pali.im (Postfix)
+        id 890D9CAA; Mon, 14 Feb 2022 12:49:10 +0100 (CET)
+Date:   Mon, 14 Feb 2022 12:49:10 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Ray Jui <ray.jui@broadcom.com>,
+        Roman Bacik <roman.bacik@broadcom.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: iproc: Set all 24 bits of PCI class code
+Message-ID: <20220214114910.vaez3coyyfztabni@pali>
+References: <20220105093552.27542-1-pali@kernel.org>
+ <244e74d9-1b46-2abc-6c2a-c089fa5b68b4@broadcom.com>
+ <20220105181306.mkratasqg36tjf4e@pali>
+ <20220211162317.GC448@lpieralisi>
 MIME-Version: 1.0
-References: <20220210091053.2045809-1-yangyingliang@huawei.com>
-In-Reply-To: <20220210091053.2045809-1-yangyingliang@huawei.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Mon, 14 Feb 2022 12:48:05 +0100
-Message-ID: <CAHUa44GPbzw_usSZcSqtZodaz6AKVbFGWjkDzJ3FiT5LMx8=KQ@mail.gmail.com>
-Subject: Re: [PATCH -next] tee: optee: fix error return code in probe function
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        sumit.garg@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220211162317.GC448@lpieralisi>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,58 +66,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 10:00 AM Yang Yingliang
-<yangyingliang@huawei.com> wrote:
->
-> If teedev_open() fails, probe function need return
-> error code.
->
-> Fixes: aceeafefff73 ("optee: use driver internal tee_context for some rpc")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  drivers/tee/optee/ffa_abi.c | 4 +++-
->  drivers/tee/optee/smc_abi.c | 4 +++-
->  2 files changed, 6 insertions(+), 2 deletions(-)
+On Friday 11 February 2022 16:23:17 Lorenzo Pieralisi wrote:
+> On Wed, Jan 05, 2022 at 07:13:06PM +0100, Pali Rohár wrote:
+> > Hello!
+> > 
+> > On Wednesday 05 January 2022 09:51:48 Ray Jui wrote:
+> > > Hi Pali,
+> > > 
+> > > On 1/5/2022 1:35 AM, Pali Rohár wrote:
+> > > > Register 0x43c in its low 24 bits contains PCI class code.
+> > > > 
+> > > > Update code to set all 24 bits of PCI class code and not only upper 16 bits
+> > > > of PCI class code.
+> > > > 
+> > > > Use a new macro PCI_CLASS_BRIDGE_PCI_NORMAL which represents whole 24 bits
+> > > > of normal PCI bridge class.
+> > > > 
+> > > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > > 
+> > > > ---
+> > > > Roman helped me with this change and confirmed that class code is stored
+> > > > really in bits [23:0] of custom register 0x43c (normally class code is
+> > > > stored in bits [31:8] of pci register 0x08).
+> > > > 
+> > > > This patch depends on patch which adds PCI_CLASS_BRIDGE_PCI_NORMAL macro:
+> > > > https://lore.kernel.org/linux-pci/20211220145140.31898-1-pali@kernel.org/
+> > > > ---
+> > > >  drivers/pci/controller/pcie-iproc.c | 9 ++++-----
+> > > >  1 file changed, 4 insertions(+), 5 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/pci/controller/pcie-iproc.c b/drivers/pci/controller/pcie-iproc.c
+> > > > index 3df4ab209253..2519201b0e51 100644
+> > > > --- a/drivers/pci/controller/pcie-iproc.c
+> > > > +++ b/drivers/pci/controller/pcie-iproc.c
+> > > > @@ -789,14 +789,13 @@ static int iproc_pcie_check_link(struct iproc_pcie *pcie)
+> > > >  		return -EFAULT;
+> > > >  	}
+> > > >  
+> > > > -	/* force class to PCI_CLASS_BRIDGE_PCI (0x0604) */
+> > > > +	/* force class to PCI_CLASS_BRIDGE_PCI_NORMAL (0x060400) */
+> > > >  #define PCI_BRIDGE_CTRL_REG_OFFSET	0x43c
+> > > > -#define PCI_CLASS_BRIDGE_MASK		0xffff00
+> > > > -#define PCI_CLASS_BRIDGE_SHIFT		8
+> > > > +#define PCI_BRIDGE_CTRL_REG_CLASS_MASK	0xffffff
+> > > >  	iproc_pci_raw_config_read32(pcie, 0, PCI_BRIDGE_CTRL_REG_OFFSET,
+> > > >  				    4, &class);
+> > > > -	class &= ~PCI_CLASS_BRIDGE_MASK;
+> > > > -	class |= (PCI_CLASS_BRIDGE_PCI << PCI_CLASS_BRIDGE_SHIFT);
+> > > > +	class &= ~PCI_BRIDGE_CTRL_REG_CLASS_MASK;
+> > > > +	class |= PCI_CLASS_BRIDGE_PCI_NORMAL;
+> > > >  	iproc_pci_raw_config_write32(pcie, 0, PCI_BRIDGE_CTRL_REG_OFFSET,
+> > > >  				     4, class);
+> > > >  
+> > > 
+> > > I have two comments:
+> > > 
+> > > 1. You do not seem to generate the email list using the
+> > > get_maintainer.pl script, so the two maintainers for Broadcom ARM
+> > > architecture (Ray Jui and Scott Branden) are left out.
+> > 
+> > Ou, sorry for that! I have generated this patch for U-Boot and Linux
+> > kernel and probably mixed or forgot to include correct recipients for
+> > correct project.
+> > 
+> > > 2. I suppose 'PCI_CLASS_BRIDGE_PCI_NORMAL' is defined in some common PCI
+> > > header in a separate patch as described in the commit message. Then how
+> > > come these patches are not constructed with a patch series?
+> > 
+> > Yes, PCI_CLASS_BRIDGE_PCI_NORMAL is a new constant for common pci header
+> > file defined in patch linked in commit message.
+> > https://lore.kernel.org/linux-pci/20211220145140.31898-1-pali@kernel.org/
+> > 
+> > Originally I included this change in v1 of linked patch in December but
+> > I realized that it does not match standard PCI config space (different
+> > offset 0x43c vs 0x08 and also different shift 0x8 vs 0x0) and probably
+> > there is something either incorrect or really non-standard. So later in
+> > December I dropped iproc_pcie_check_link() change in v2 of the linked
+> > patch where is introduced PCI_CLASS_BRIDGE_PCI_NORMAL and now sent new
+> > change for iproc_pcie_check_link() separately.
+> > 
+> > Technically, linked patch in commit message is just extracting code into
+> > the common macros without any functional changed. But change in this
+> > iproc_pcie_check_link() has also functional change as now also lower 8
+> > bits of class code are changed. So in my opinion this patch should be
+> > really separate of linked patch.
+> > 
+> > I hope that Lorenzo and Bjorn take patches in correct order...
+> 
+> Can you resend the patches in a series please, I will drop this one.
 
-Well spotted, I'm picking up this.
+Done!
+https://lore.kernel.org/linux-pci/20220214114109.26809-2-pali@kernel.org/T/#u
 
-Thanks,
-Jens
-
->
-> diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-> index f2bf6c61197f..f744ab15bf2c 100644
-> --- a/drivers/tee/optee/ffa_abi.c
-> +++ b/drivers/tee/optee/ffa_abi.c
-> @@ -869,8 +869,10 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
->         optee_supp_init(&optee->supp);
->         ffa_dev_set_drvdata(ffa_dev, optee);
->         ctx = teedev_open(optee->teedev);
-> -       if (IS_ERR(ctx))
-> +       if (IS_ERR(ctx)) {
-> +               rc = PTR_ERR(ctx);
->                 goto err_rhashtable_free;
-> +       }
->         optee->ctx = ctx;
->         rc = optee_notif_init(optee, OPTEE_DEFAULT_MAX_NOTIF_VALUE);
->         if (rc)
-> diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-> index 1a55339c7072..c517d310249f 100644
-> --- a/drivers/tee/optee/smc_abi.c
-> +++ b/drivers/tee/optee/smc_abi.c
-> @@ -1417,8 +1417,10 @@ static int optee_probe(struct platform_device *pdev)
->
->         platform_set_drvdata(pdev, optee);
->         ctx = teedev_open(optee->teedev);
-> -       if (IS_ERR(ctx))
-> +       if (IS_ERR(ctx)) {
-> +               rc = PTR_ERR(ctx);
->                 goto err_supp_uninit;
-> +       }
->         optee->ctx = ctx;
->         rc = optee_notif_init(optee, max_notif_value);
->         if (rc)
-> --
-> 2.25.1
->
+> Thanks,
+> Lorenzo
+> 
+> > > Other than, the change itself is exactly what I sent to Roman and looks
+> > > good to me. Thanks.
+> > > 
+> > > Acked-by: Ray Jui <ray.jui@broadcom.com>
+> > 
+> > Perfect!

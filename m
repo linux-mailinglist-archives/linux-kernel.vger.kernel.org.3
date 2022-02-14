@@ -2,232 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F044B4572
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B22E4B456D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbiBNJRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:17:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34852 "EHLO
+        id S242789AbiBNJR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:17:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242765AbiBNJRU (ORCPT
+        with ESMTP id S242772AbiBNJRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:17:20 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6205606F4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 01:17:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=hopjPdEQ21YAHQe/Ftjkj8oLhBkLX1H2j1JGz1hcasA=; b=TxlqycyEZ5xy6Mq5bdtvzih7js
-        eQj+5RrowwgFsWO9TkJBTxBHEWXXAGnXar5ukf1B8/o4rTea8kbKhOohVLnBZHownybjdFErsmSvg
-        Cxjcp45iyjzC+r2/nl7m54gLuW2uiFGPm/wbBvih/0TE2kT4OoYEmUq6Q6wop1bn3hFp2lg1/P2g6
-        MYWrgXpsvFSnFLFvWaZK2GmKu/2hr4U5oSgK8krXNY168K4KplwuR+jG9vxbO36tpp3UI6j7dsD/V
-        UaXpnqeXzVruQCsgzG5O/atMr+cASXvp0QdspLjch05oC4A8jbaYEptLJ1lyjEjtFCW3uRNbnJIFi
-        r8oTPBQA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJXTf-009sL7-1l; Mon, 14 Feb 2022 09:16:59 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B0A403002C5;
-        Mon, 14 Feb 2022 10:16:57 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9235B203C074A; Mon, 14 Feb 2022 10:16:57 +0100 (CET)
-Date:   Mon, 14 Feb 2022 10:16:57 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Borislav Petkov <bp@suse.de>,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        zhangqiao22@huawei.com, tj@kernel.org, dietmar.eggemann@arm.com
-Subject: Re: [GIT PULL] sched/urgent for 5.17-rc4
-Message-ID: <YgoeCbwj5mbCR0qA@hirez.programming.kicks-ass.net>
-References: <Ygj7feK+vdtPw6zj@zn.tnic>
- <CAHk-=wiHUWHHcPLCvyXQKf2wbL3L1SOQSGVuCdf-py6QZGnuqQ@mail.gmail.com>
- <YgoWoh6pIzlsQx6d@hirez.programming.kicks-ass.net>
+        Mon, 14 Feb 2022 04:17:24 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC00606E8;
+        Mon, 14 Feb 2022 01:17:16 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id b11so4555358lfb.12;
+        Mon, 14 Feb 2022 01:17:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version;
+        bh=l9h0FTYLGGXap1dzR54tfKoCeVF0BWZXnPqUVsNDnPk=;
+        b=DkvwKpBhCufekGCIS5SQfzSw8JRCD5NCeSGrPcE9I6Po6jAmlGlUzZTeRka4A91X60
+         WnIiBro4xCKDtdUeNalV6JEU2KSM7JzyWIDz4kmSW0BYHi87Aqj7vd+2tIfxTxbPI8/g
+         05+r82GG9u8cYov5oGUZfMDtob2UsCFFcMsK6emvgWvxIF6P/dZ6LeVk8X0xOxPSHI2H
+         Pmy9A0dKDxP2VvsVsUl1WxfxR1xUqhPN3W4dcIGjgB11vReOpgnFmr52Ykl7CtJUhJSU
+         wJ/pXLQ0Qerjqyqj8Adelkp0i1Fe2B3PmlXGpgQ6RgBaa0P8LA2jh0FKg9c1VcymaSUL
+         0OZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version;
+        bh=l9h0FTYLGGXap1dzR54tfKoCeVF0BWZXnPqUVsNDnPk=;
+        b=LnogE/cXsms1fYnlNRGbV+3WMxV6i4qObd/lDIylO/kK7xyf3dynX2KpQsCxzE4izo
+         Ab6BBJOc9liCD7Jyzq4/KUmhHMd5o1c9CzmSQigZeCxbbiSCMzKhm9s8Ptq4+RlWuhIe
+         8PtycnS+PnRjEC3UsAy84lCoMGhdimFsa03FuPhms3qYZTfZzYi0PJpA+V+EWEwbYZUB
+         Hep6Mf6mR0d3ZLsBHR7mcvIfGQ9nzXTccQZ2cSOR9gr0f7ItZsXyhRNULuIiZHWUMNHP
+         cOZ3WjKRzRcbPcbq0za2xhA6JNYppXnOlS3Cgny+0wTdVRPYJEH3KGSNaVZHgU4YQwBs
+         v1RA==
+X-Gm-Message-State: AOAM5335hrGRsmY1dC4HhDOn4aN7B4vSVRKLyudXspskwsc0nREAbc+Z
+        xlHYm2+0zE9erG4FpUTBvVE=
+X-Google-Smtp-Source: ABdhPJzY8VlEHMbQ0UPAMjV8gwTcFMkOtUQgC/50Zjpwrr8X7TpLyvwll4U+DinwVSe89ZzzHh+MWw==
+X-Received: by 2002:a05:6512:39c4:: with SMTP id k4mr10352957lfu.69.1644830234620;
+        Mon, 14 Feb 2022 01:17:14 -0800 (PST)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id v6sm4049956lfq.181.2022.02.14.01.17.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 01:17:14 -0800 (PST)
+Date:   Mon, 14 Feb 2022 11:17:11 +0200
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        linux-fbdev@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Noralf =?UTF-8?B?VHLDuG5uZXM=?= <noralf@tronnes.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>
+Subject: Re: [PATCH v4 1/6] drm/format-helper: Add
+ drm_fb_xrgb8888_to_gray8_line()
+Message-ID: <20220214111711.6536b4b6@eldfell>
+In-Reply-To: <YgaccFjPfJO0Mj6a@smile.fi.intel.com>
+References: <20220211091927.2988283-1-javierm@redhat.com>
+        <20220211091927.2988283-2-javierm@redhat.com>
+        <YgY6OqN+guBlt/ED@smile.fi.intel.com>
+        <4fa465d9-4fac-4199-9a04-d8e09d164308@redhat.com>
+        <YgZEuXvJ2ZiOyNS+@smile.fi.intel.com>
+        <7560cd10-0a7c-3fda-da83-9008833e3901@suse.de>
+        <87pmnt7gm3.fsf@intel.com>
+        <YgaDj6Wld4b7S6DF@smile.fi.intel.com>
+        <87fsop74lu.fsf@intel.com>
+        <YgaccFjPfJO0Mj6a@smile.fi.intel.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgoWoh6pIzlsQx6d@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/4exzfizoYWTXAR0xVEcWx0+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 09:45:22AM +0100, Peter Zijlstra wrote:
-> On Sun, Feb 13, 2022 at 10:02:22AM -0800, Linus Torvalds wrote:
-> > On Sun, Feb 13, 2022 at 4:37 AM Borislav Petkov <bp@suse.de> wrote:
+--Sig_/4exzfizoYWTXAR0xVEcWx0+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, 11 Feb 2022 19:27:12 +0200
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+
+> On Fri, Feb 11, 2022 at 06:25:17PM +0200, Jani Nikula wrote:
+> > On Fri, 11 Feb 2022, Andy Shevchenko <andriy.shevchenko@linux.intel.com=
+> wrote: =20
+> > > On Fri, Feb 11, 2022 at 02:05:56PM +0200, Jani Nikula wrote: =20
+> > >> On Fri, 11 Feb 2022, Thomas Zimmermann <tzimmermann@suse.de> wrote: =
+=20
+> > >> > Am 11.02.22 um 12:12 schrieb Andy Shevchenko: =20
+> > >> >> On Fri, Feb 11, 2022 at 11:40:13AM +0100, Javier Martinez Canilla=
+s wrote: =20
+> > >> >>> On 2/11/22 11:28, Andy Shevchenko wrote: =20
+> > >> >>>> On Fri, Feb 11, 2022 at 10:19:22AM +0100, Javier Martinez Canil=
+las wrote: =20
 > > >
-> > > Tadeusz Struk (1):
-> > >       sched/fair: Fix fault in reweight_entity
-> > 
-> > I've pulled this, but this really smells bad to me.
-> > 
-> > If set_load_weight() can see a process that hasn't even had the
-> > runqueue pointer set yet, then what keeps *others* from the same
-> > thing?
-> 
-> Urgh, I think you're right, the moment we enter the pidhash and become
-> visible we should be complete. That means the previous commit
-> (4ef0c5c6b5ba) is buggered... Let me try and make sense of all that
-> cgroup stuff again :-(
+> > > ...
+> > > =20
+> > >> >>>>> +static void drm_fb_xrgb8888_to_gray8_line(u8 *dst, const u32 =
+*src, unsigned int pixels)
+> > >> >>>>> +{
+> > >> >>>>> +	unsigned int x;
+> > >> >>>>> +
+> > >> >>>>> +	for (x =3D 0; x < pixels; x++) {
+> > >> >>>>> +		u8 r =3D (*src & 0x00ff0000) >> 16;
+> > >> >>>>> +		u8 g =3D (*src & 0x0000ff00) >> 8;
+> > >> >>>>> +		u8 b =3D  *src & 0x000000ff;
+> > >> >>>>> +
+> > >> >>>>> +		/* ITU BT.601: Y =3D 0.299 R + 0.587 G + 0.114 B */
+> > >> >>>>> +		*dst++ =3D (3 * r + 6 * g + b) / 10;
+> > >> >>>>> +		src++;
+> > >> >>>>> +	} =20
+> > >> >>>>
+> > >> >>>> Can be done as
+> > >> >>>>
+> > >> >>>> 	while (pixels--) {
+> > >> >>>> 		...
+> > >> >>>> 	}
+> > >> >>>>
+> > >> >>>> or
+> > >> >>>>
+> > >> >>>> 	do {
+> > >> >>>> 		...
+> > >> >>>> 	} while (--pixels);
+> > >> >>>> =20
+> > >> >>>
+> > >> >>> I don't see why a while loop would be an improvement here TBH. =
+=20
+> > >> >>=20
+> > >> >> Less letters to parse when reading the code. =20
+> > >> >
+> > >> > It's a simple refactoring of code that has worked well so far. Let=
+'s=20
+> > >> > leave it as-is for now. =20
+> > >>=20
+> > >> IMO *always* prefer a for loop over while or do-while.
+> > >>=20
+> > >> The for (i =3D 0; i < N; i++) is such a strong paradigm in C. You
+> > >> instantly know how many times you're going to loop, at a glance. Not=
+ so
+> > >> with with the alternatives, which should be used sparingly. =20
+> > >
+> > > while () {}  _is_ a paradigm, for-loop is syntax sugar on top of it. =
+=20
+> >=20
+> > And while() is just syntax sugar for goto. :p
+> >=20
+> > The for loop written as for (i =3D 0; i < N; i++) is hands down the most
+> > obvious counting loop pattern there is in C.
+> >  =20
+> > >> And yes, the do-while suggested above is buggy, and you actually nee=
+d to
+> > >> stop and think to see why. =20
+> > >
+> > > It depends if pixels can be 0 or not and if it's not, then does it co=
+ntain last
+> > > or number.
+> > >
+> > > The do {} while (--pixels); might be buggy iff pixels may be 0. =20
+> >=20
+> > Yeah. And how long does it take to figure that out? =20
+>=20
+> Okay, I made a mistake to drop the explanation. So, I (mistakenly) assumed
+> that people know this difference between post-decrement and pre-decrement
+> (note, while-loop here is not what is problematic).
 
-Zhang, Tadeusz, TJ, how does this look?
+That was not the question.
 
----
- include/linux/sched/task.h |  4 ++--
- kernel/fork.c              |  9 ++++++++-
- kernel/sched/core.c        | 34 +++++++++++++++++++++-------------
- 3 files changed, 31 insertions(+), 16 deletions(-)
+The question was, how long does it take to figure out if pixels can or
+cannot be zero?
 
-diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
-index b9198a1b3a84..e84e54d1b490 100644
---- a/include/linux/sched/task.h
-+++ b/include/linux/sched/task.h
-@@ -54,8 +54,8 @@ extern asmlinkage void schedule_tail(struct task_struct *prev);
- extern void init_idle(struct task_struct *idle, int cpu);
- 
- extern int sched_fork(unsigned long clone_flags, struct task_struct *p);
--extern void sched_post_fork(struct task_struct *p,
--			    struct kernel_clone_args *kargs);
-+extern void sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs);
-+extern void sched_post_fork(struct task_struct *p);
- extern void sched_dead(struct task_struct *p);
- 
- void __noreturn do_task_dead(void);
-diff --git a/kernel/fork.c b/kernel/fork.c
-index d75a528f7b21..05faebafe2b5 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -2266,6 +2266,13 @@ static __latent_entropy struct task_struct *copy_process(
- 	if (retval)
- 		goto bad_fork_put_pidfd;
- 
-+	/*
-+	 * Now that the cgroups are pinned, re-clone the parent cgroup and put
-+	 * the new task on the correct runqueue. All this *before* the task
-+	 * becomes visible.
-+	 */
-+	sched_cgroup_fork(p, args);
-+
- 	/*
- 	 * From this point on we must avoid any synchronous user-space
- 	 * communication until we take the tasklist-lock. In particular, we do
-@@ -2376,7 +2383,7 @@ static __latent_entropy struct task_struct *copy_process(
- 	write_unlock_irq(&tasklist_lock);
- 
- 	proc_fork_connector(p);
--	sched_post_fork(p, args);
-+	sched_post_fork(p);
- 	cgroup_post_fork(p, args);
- 	perf_event_fork(p);
- 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index fcf0c180617c..dd97a42b1eee 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1214,9 +1214,8 @@ int tg_nop(struct task_group *tg, void *data)
- }
- #endif
- 
--static void set_load_weight(struct task_struct *p)
-+static void set_load_weight(struct task_struct *p, bool update_load)
- {
--	bool update_load = !(READ_ONCE(p->__state) & TASK_NEW);
- 	int prio = p->static_prio - MAX_RT_PRIO;
- 	struct load_weight *load = &p->se.load;
- 
-@@ -4407,7 +4406,7 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
- 			p->static_prio = NICE_TO_PRIO(0);
- 
- 		p->prio = p->normal_prio = p->static_prio;
--		set_load_weight(p);
-+		set_load_weight(p, false);
- 
- 		/*
- 		 * We don't need the reset flag anymore after the fork. It has
-@@ -4425,6 +4424,7 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
- 
- 	init_entity_runnable_average(&p->se);
- 
-+
- #ifdef CONFIG_SCHED_INFO
- 	if (likely(sched_info_on()))
- 		memset(&p->sched_info, 0, sizeof(p->sched_info));
-@@ -4440,18 +4440,23 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
- 	return 0;
- }
- 
--void sched_post_fork(struct task_struct *p, struct kernel_clone_args *kargs)
-+void sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs)
- {
- 	unsigned long flags;
--#ifdef CONFIG_CGROUP_SCHED
--	struct task_group *tg;
--#endif
- 
-+	/*
-+	 * Because we're not yet on the pid-hash, p->pi_lock isn't strictly
-+	 * required yet, but lockdep gets upset if rules are violated.
-+	 */
- 	raw_spin_lock_irqsave(&p->pi_lock, flags);
- #ifdef CONFIG_CGROUP_SCHED
--	tg = container_of(kargs->cset->subsys[cpu_cgrp_id],
--			  struct task_group, css);
--	p->sched_task_group = autogroup_task_group(p, tg);
-+	if (1) {
-+		struct task_group *tg;
-+		tg = container_of(kargs->cset->subsys[cpu_cgrp_id],
-+				  struct task_group, css);
-+		tg = autogroup_task_group(p, tg);
-+		p->sched_task_group = autogroup_task_group(p, tg);
-+	}
- #endif
- 	rseq_migrate(p);
- 	/*
-@@ -4462,7 +4467,10 @@ void sched_post_fork(struct task_struct *p, struct kernel_clone_args *kargs)
- 	if (p->sched_class->task_fork)
- 		p->sched_class->task_fork(p);
- 	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
-+}
- 
-+void sched_post_fork(struct task_struct *p)
-+{
- 	uclamp_post_fork(p);
- }
- 
-@@ -6922,7 +6930,7 @@ void set_user_nice(struct task_struct *p, long nice)
- 		put_prev_task(rq, p);
- 
- 	p->static_prio = NICE_TO_PRIO(nice);
--	set_load_weight(p);
-+	set_load_weight(p, true);
- 	old_prio = p->prio;
- 	p->prio = effective_prio(p);
- 
-@@ -7213,7 +7221,7 @@ static void __setscheduler_params(struct task_struct *p,
- 	 */
- 	p->rt_priority = attr->sched_priority;
- 	p->normal_prio = normal_prio(p);
--	set_load_weight(p);
-+	set_load_weight(p, true);
- }
- 
- /*
-@@ -9446,7 +9454,7 @@ void __init sched_init(void)
- #endif
- 	}
- 
--	set_load_weight(&init_task);
-+	set_load_weight(&init_task, false);
- 
- 	/*
- 	 * The boot idle thread does lazy MMU switching as well:
+Code is styled for humans other than the author, not for compilers.
+
+Having to stop to think about the difference between post- and
+pre-decrement to figure out when the while-loop runs does take me a few
+more brain cycles to understand, even though I know the rules very well.
+
+I would call that brain cycle optimization, and leave the CPU cycle
+optimization for the compiler in these cases.
+
+
+Thanks,
+pq
+
+--Sig_/4exzfizoYWTXAR0xVEcWx0+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmIKHhcACgkQI1/ltBGq
+qqdGXQ/8Ce5+VDdFo8ZqWQRABxsfdcoBZkUB3cRRRD8YTXpIMW1qCfd4hY4Pc/XL
+JacypoitZ/9Oy9pctixUmmle4U9J9e1mXtkS5IGbCaZpGq/TkeGBHBQ8IuObt00r
+PzjKU7dkAsGHrWqKfozMegK/h/upIaGrO3Q24TtRu6mlKGQGMq2eeIJ1bl9XI36C
+DEgHzqM6vWkYk6nIDNNSiQmltdHlzWm2CfTsqe5tVTNvYKTO/zqKkOfJ21PY3LNX
+bl8IO+E7RPGGzBs0VV1W+AbgF8ZPX8YmHLjfRjYAk5jWARcMr2Cz4cKqB5GIo/sw
+YUabXM4dsnxBrPXDMyHgg+nwZXbQrdW0Vizn6JwPTUxQJWQ0arjewgUJv5YLygB+
+eDO/PoBaKU7rbh/ybaTmF06wVan7nDxD8sw8spNrAqb5+u7Lwt2v9ZwMenqrAC0s
+z/wrKFN91apZcuVMPWnskdktdl0dJJ2ZeyqDOXHdXa9mkIrqZ1cM5wBgfStonlbg
+d4g9I0Tmct/S4WuphGO4NCLm7vPahH0UtKqvWiK2K3DZVJf8rAOp6ePu4zKKMu80
+0pnrdhbzTtDiDJb0RGPGDQQ1Y08BS213Uc0gI11TQu2MEMaofvpptUsxXqqcr41H
+aSvDOqtOg42lKNTjHTfKOpObwScIrtRB7zPkr0kmOQxg3WZ00hc=
+=NCW9
+-----END PGP SIGNATURE-----
+
+--Sig_/4exzfizoYWTXAR0xVEcWx0+--

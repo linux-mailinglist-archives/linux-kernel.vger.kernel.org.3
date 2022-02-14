@@ -2,82 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A184E4B3ECB
+	by mail.lfdr.de (Postfix) with ESMTP id ED1714B3ECC
 	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 02:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238954AbiBNBGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 20:06:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32886 "EHLO
+        id S238967AbiBNBIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 20:08:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232401AbiBNBGJ (ORCPT
+        with ESMTP id S231489AbiBNBI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 20:06:09 -0500
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAFE527CE
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 17:06:02 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R541e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V4JW9p0_1644800759;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V4JW9p0_1644800759)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 14 Feb 2022 09:06:00 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     benh@kernel.crashing.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] macintosh: Fix warning comparing pointer to 0
-Date:   Mon, 14 Feb 2022 09:05:58 +0800
-Message-Id: <20220214010558.130201-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Sun, 13 Feb 2022 20:08:27 -0500
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B973527D0;
+        Sun, 13 Feb 2022 17:08:20 -0800 (PST)
+Received: from fsav314.sakura.ne.jp (fsav314.sakura.ne.jp [153.120.85.145])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 21E183vd050563;
+        Mon, 14 Feb 2022 10:08:03 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav314.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav314.sakura.ne.jp);
+ Mon, 14 Feb 2022 10:08:03 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav314.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 21E1825Z050560
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 14 Feb 2022 10:08:03 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <2959649d-cfbc-bdf2-02ac-053b8e7af030@I-love.SAKURA.ne.jp>
+Date:   Mon, 14 Feb 2022 10:08:00 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [syzbot] possible deadlock in worker_thread
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>,
+        syzbot <syzbot+831661966588c802aae9@syzkaller.appspotmail.com>,
+        jgg@ziepe.ca, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+References: <0000000000005975a605d7aef05e@google.com>
+ <8ea57ddf-a09c-43f2-4285-4dfb908ad967@acm.org>
+ <ccd04d8a-154b-543e-e1c3-84bc655508d1@I-love.SAKURA.ne.jp>
+ <71d6f14e-46af-cc5a-bc70-af1cdc6de8d5@acm.org>
+ <309c86b7-2a4c-1332-585f-7bcd59cfd762@I-love.SAKURA.ne.jp>
+ <aa2bf24e-981a-a811-c5d8-a75f0b8f693a@acm.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <aa2bf24e-981a-a811-c5d8-a75f0b8f693a@acm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following coccicheck warnings:
-./drivers/macintosh/via-cuda.c:240:16-17: WARNING comparing pointer to 0
-./drivers/macintosh/via-cuda.c:243:16-17: WARNING comparing pointer to
-0, suggest !E
-./drivers/macintosh/via-cuda.c:521:23-24: WARNING comparing pointer to 0
+On 2022/02/14 8:06, Bart Van Assche wrote:
+> On 2/12/22 09:14, Tetsuo Handa wrote:
+>> How can reviewing all flush_workqueue(system_long_wq) calls help?
+> 
+> It is allowed to queue blocking actions on system_long_wq.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/macintosh/via-cuda.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Correct.
 
-diff --git a/drivers/macintosh/via-cuda.c b/drivers/macintosh/via-cuda.c
-index 3d0d0b9d471d..a9feb7d5a068 100644
---- a/drivers/macintosh/via-cuda.c
-+++ b/drivers/macintosh/via-cuda.c
-@@ -237,10 +237,10 @@ int __init find_via_cuda(void)
-     const u32 *reg;
-     int err;
- 
--    if (vias != 0)
-+    if (vias)
- 	return 1;
-     vias = of_find_node_by_name(NULL, "via-cuda");
--    if (vias == 0)
-+    if (!vias)
- 	return 0;
- 
-     reg = of_get_property(vias, "reg", NULL);
-@@ -518,7 +518,7 @@ cuda_write(struct adb_request *req)
-     req->reply_len = 0;
- 
-     spin_lock_irqsave(&cuda_lock, flags);
--    if (current_req != 0) {
-+    if (current_req) {
- 	last_req->next = req;
- 	last_req = req;
-     } else {
--- 
-2.20.1.7.g153144c
+> flush_workqueue(system_long_wq) can make a lower layer (e.g. ib_srp)
+> wait on a blocking action from a higher layer (e.g. the loop driver)
+> and thereby cause a deadlock.
+
+Correct.
+
+> Hence my proposal to review all flush_workqueue(system_long_wq) calls.
+
+Maybe I'm misunderstanding what the "review" means.
+
+My proposal is to "rewrite" any module which needs to call flush_workqueue()
+on system-wide workqueues or call flush_work()/flush_*_work() which will
+depend on system-wide workqueues.
+
+That is, for example, "rewrite" ib_srp module not to call flush_workqueue(system_long_wq).
+
++	srp_tl_err_wq = alloc_workqueue("srp_tl_err_wq", 0, 0);
+
+-	queue_work(system_long_wq, &target->tl_err_work);
++	queue_work(srp_tl_err_wq, &target->tl_err_work);
+
+-	flush_workqueue(system_long_wq);
++	flush_workqueue(srp_tl_err_wq);
+
++	destroy_workqueue(srp_tl_err_wq);
+
+Then, we can call WARN_ON() if e.g. flush_workqueue() is called on system-wide workqueues.
 

@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAAE04B46AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 009474B4961
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244705AbiBNJmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:42:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33310 "EHLO
+        id S1344956AbiBNKH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:07:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244926AbiBNJlA (ORCPT
+        with ESMTP id S1345834AbiBNKB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:41:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF6B66234;
-        Mon, 14 Feb 2022 01:36:18 -0800 (PST)
+        Mon, 14 Feb 2022 05:01:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C9621814;
+        Mon, 14 Feb 2022 01:48:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB72D60F87;
-        Mon, 14 Feb 2022 09:36:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE4F6C340E9;
-        Mon, 14 Feb 2022 09:36:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C02F612B9;
+        Mon, 14 Feb 2022 09:48:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 727EFC340E9;
+        Mon, 14 Feb 2022 09:48:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831377;
-        bh=rODwbTObuywosNAKoXivl40aDKZ2BkptAWjtxmTIK44=;
+        s=korg; t=1644832098;
+        bh=MbSHCHXogXO/l9udJIk4KccQimuLH1gcj/TSEWYt/1U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rP5l7XVawGu9lViXkxHhpcQH4j8/JGxPLonpLx+lHzQkxYB8V4seb81bUJaoqArdQ
-         0Uq1g5THZmwoYsjDKO5lV3fJo/XoLC1vTusqqvQcGb7qldYJXpGjU+y9VinzMN6j7E
-         Ah3HcnxeVVdf8CL6fDopYslU8K7jnoCQKc/7BZrc=
+        b=kCzvxMMUho8RmknQVUx60cMF2IF/3uVO2NJsJtVuMPoJSw0or/T/i2mqEyp2+rVF5
+         fb1pi816WZ6zdD9+wl749Hk0eKxdO/pobpO3tONhhulC8nyUwgHtb0DzPjAYRCEtun
+         JDQETn3vNpdAwQ0l8QIXo0SfPIXW2Mb9nSNNfzXk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>
-Subject: [PATCH 5.4 09/71] NFSD: Clamp WRITE offsets
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: [PATCH 5.15 079/172] drm/i915: Populate pipe dbuf slices more accurately during readout
 Date:   Mon, 14 Feb 2022 10:25:37 +0100
-Message-Id: <20220214092452.344663290@linuxfoundation.org>
+Message-Id: <20220214092509.136792344@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,51 +57,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chuck Lever <chuck.lever@oracle.com>
+From: Ville Syrjälä <ville.syrjala@linux.intel.com>
 
-commit 6260d9a56ab352b54891ec66ab0eced57d55abc6 upstream.
+commit 85bb289215cf37e05e9581b39b114db1293f9ecd upstream.
 
-Ensure that a client cannot specify a WRITE range that falls in a
-byte range outside what the kernel's internal types (such as loff_t,
-which is signed) can represent. The kiocb iterators, invoked in
-nfsd_vfs_write(), should properly limit write operations to within
-the underlying file system's s_maxbytes.
+During readout we cannot assume the planes are actually using the
+slices they are supposed to use. The BIOS may have misprogrammed
+things and put the planes onto the wrong dbuf slices. So let's
+do the readout more carefully to make sure we really know which
+dbuf slices are actually in use by the pipe at the time.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+Cc: <stable@vger.kernel.org> # v5.14+
+Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220204141818.1900-2-ville.syrjala@linux.intel.com
+Reviewed-by: Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>
+(cherry picked from commit b3dcc6dc0f32612d04839c2fb32e94d0ebf92c98)
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfsd/nfs3proc.c |    5 +++++
- fs/nfsd/nfs4proc.c |    5 +++--
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/i915/intel_pm.c |   13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
---- a/fs/nfsd/nfs3proc.c
-+++ b/fs/nfsd/nfs3proc.c
-@@ -195,6 +195,11 @@ nfsd3_proc_write(struct svc_rqst *rqstp)
- 				(unsigned long long) argp->offset,
- 				argp->stable? " stable" : "");
+--- a/drivers/gpu/drm/i915/intel_pm.c
++++ b/drivers/gpu/drm/i915/intel_pm.c
+@@ -6634,6 +6634,7 @@ void skl_wm_get_hw_state(struct drm_i915
+ 		enum pipe pipe = crtc->pipe;
+ 		unsigned int mbus_offset;
+ 		enum plane_id plane_id;
++		u8 slices;
  
-+	resp->status = nfserr_fbig;
-+	if (argp->offset > (u64)OFFSET_MAX ||
-+	    argp->offset + argp->len > (u64)OFFSET_MAX)
-+		return rpc_success;
+ 		skl_pipe_wm_get_hw_state(crtc, &crtc_state->wm.skl.optimal);
+ 		crtc_state->wm.skl.raw = crtc_state->wm.skl.optimal;
+@@ -6653,20 +6654,22 @@ void skl_wm_get_hw_state(struct drm_i915
+ 			skl_ddb_entry_union(&dbuf_state->ddb[pipe], ddb_uv);
+ 		}
+ 
+-		dbuf_state->slices[pipe] =
+-			skl_compute_dbuf_slices(crtc, dbuf_state->active_pipes,
+-						dbuf_state->joined_mbus);
+-
+ 		dbuf_state->weight[pipe] = intel_crtc_ddb_weight(crtc_state);
+ 
+ 		/*
+ 		 * Used for checking overlaps, so we need absolute
+ 		 * offsets instead of MBUS relative offsets.
+ 		 */
+-		mbus_offset = mbus_ddb_offset(dev_priv, dbuf_state->slices[pipe]);
++		slices = skl_compute_dbuf_slices(crtc, dbuf_state->active_pipes,
++						 dbuf_state->joined_mbus);
++		mbus_offset = mbus_ddb_offset(dev_priv, slices);
+ 		crtc_state->wm.skl.ddb.start = mbus_offset + dbuf_state->ddb[pipe].start;
+ 		crtc_state->wm.skl.ddb.end = mbus_offset + dbuf_state->ddb[pipe].end;
+ 
++		/* The slices actually used by the planes on the pipe */
++		dbuf_state->slices[pipe] =
++			skl_ddb_dbuf_slice_mask(dev_priv, &crtc_state->wm.skl.ddb);
 +
- 	fh_copy(&resp->fh, &argp->fh);
- 	resp->committed = argp->stable;
- 	nvecs = svc_fill_write_vector(rqstp, rqstp->rq_arg.pages,
---- a/fs/nfsd/nfs4proc.c
-+++ b/fs/nfsd/nfs4proc.c
-@@ -992,8 +992,9 @@ nfsd4_write(struct svc_rqst *rqstp, stru
- 	unsigned long cnt;
- 	int nvecs;
- 
--	if (write->wr_offset >= OFFSET_MAX)
--		return nfserr_inval;
-+	if (write->wr_offset > (u64)OFFSET_MAX ||
-+	    write->wr_offset + write->wr_buflen > (u64)OFFSET_MAX)
-+		return nfserr_fbig;
- 
- 	cnt = write->wr_buflen;
- 	trace_nfsd_write_start(rqstp, &cstate->current_fh,
+ 		drm_dbg_kms(&dev_priv->drm,
+ 			    "[CRTC:%d:%s] dbuf slices 0x%x, ddb (%d - %d), active pipes 0x%x, mbus joined: %s\n",
+ 			    crtc->base.base.id, crtc->base.name,
 
 

@@ -2,53 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284E84B4F57
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:51:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A1E4B4F2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352075AbiBNLs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:48:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41612 "EHLO
+        id S1352193AbiBNLsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:48:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351704AbiBNLjb (ORCPT
+        with ESMTP id S1351970AbiBNLjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:39:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B385B13DE1;
-        Mon, 14 Feb 2022 03:30:11 -0800 (PST)
+        Mon, 14 Feb 2022 06:39:40 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDD414086;
+        Mon, 14 Feb 2022 03:30:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52A24611BC;
-        Mon, 14 Feb 2022 11:30:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B177CC340F0;
-        Mon, 14 Feb 2022 11:30:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644838210;
-        bh=WMoynI5WXAeTD6YHq4DWDKMnxC4EGldppjWd4ecx7PU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=m7kLgs0iJvCnzVa6qCiteJMYfcvEaY8H8sgnpbNDoKfLat9mAWyWPBR/0ZhmiRd+j
-         zV+iVQLWpeUbFwKzVr16FA7gWNP5j0pDJN5spBvZR1Wyk4/YtoeXCVx4vR1pzdNnlz
-         cs2iCyr4FbLzHCdeq449eUBgQhXhgMRTNU/NZExaIuLngNuwdRrHCAP8UksFwXh9hV
-         rksGeoQzJJQfnPLzjuku2oRNjSuGZPZIrt/Umv67OvvD6vT7T1W1+Mk5UWgP4n7OAa
-         bGUXhsKU3Fbv/qsvh1Fh1Qlh2Xy/HyVI15vy3N2wHGxNrS+qHvGuoAealL33yxIaWn
-         khaUj/4WLQXJA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9F332E6D4D5;
-        Mon, 14 Feb 2022 11:30:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1ADEECE130F;
+        Mon, 14 Feb 2022 11:30:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC5D7C340E9;
+        Mon, 14 Feb 2022 11:30:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644838235;
+        bh=h/tLqKI+kSgP4V2Ob7fIJ54EMGn25h4EBw9QAxLYA9I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MV9CfUo4SJgnR3hhU1XdAnESN3u1XnC6Ufn1cSDCy0OgfnG7r8o4b9gg9Q/JXvOjr
+         ZB4+Rpopl+Y4rrOQTuhciz3DRsrXterdGxLI6GmAkBPqb1BSir/MFCia1wJl89luIz
+         3P8EI0JNeI79zOWWRDn7XkCXzYjxMydF7EbgENnI=
+Date:   Mon, 14 Feb 2022 12:30:32 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Daehwan Jung <dh10.jung@samsung.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        Thinh.Nguyen@synopsys.com
+Subject: Re: [PATCH v2 2/2] usb: dwc3: Prevent cleanup cancelled requests at
+ the same time.
+Message-ID: <Ygo9WMCVRNp/4/Ry@kroah.com>
+References: <1644836933-141376-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20220214111149epcas2p29b9e39b84d7203572422531beb3c39ed@epcas2p2.samsung.com>
+ <1644836933-141376-3-git-send-email-dh10.jung@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v20, 0/2] ADD DM9051 ETHERNET DRIVER
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164483821064.17157.12984377309696778794.git-patchwork-notify@kernel.org>
-Date:   Mon, 14 Feb 2022 11:30:10 +0000
-References: <20220211092756.27274-1-josright123@gmail.com>
-In-Reply-To: <20220211092756.27274-1-josright123@gmail.com>
-To:     Joseph CHAMG <josright123@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
-        joseph_chang@davicom.com.tw, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andy.shevchenko@gmail.com, andrew@lunn.ch, leon@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1644836933-141376-3-git-send-email-dh10.jung@samsung.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,30 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri, 11 Feb 2022 17:27:54 +0800 you wrote:
-> DM9051 is a spi interface chip,
-> need cs/mosi/miso/clock with an interrupt gpio pin
+On Mon, Feb 14, 2022 at 08:08:53PM +0900, Daehwan Jung wrote:
+> We added cleanup cancelled requests when ep cmd timeout on ep dequeue
+> because there's no complete interrupt then. But, we find out new case
+> that complete interrupt comes up later. list_for_each_entry_safe is
+> used when cleanup cancelled requests and it has vulnerabilty on multi-core
+> environment. dwc3_gadget_giveback unlocks dwc->lock temporarily and other
+> core(ISR) can get lock and try to cleanup them again. It could cause
+> list_del corruption and we use DWC3_EP_END_TRANSFER_PENDING to prevent it.
 > 
-> Joseph CHAMG (2):
->   dt-bindings: net: Add Davicom dm9051 SPI ethernet controller
->   net: Add dm9051 driver
+> 1. MTP server cancels -> ep dequeue -> ep cmd timeout(END_TRANSFER)
+> 	-> cleanup cancelled requests -> dwc3_gadget_giveback ->
+> 	list_del -> release lock temporarily
+> 2. Complete with END_TRANSFER -> ISR(dwc3_gadget_endpoint_command_complete)
+> 	gets lock -> cleanup cancelled requests -> dwc3_gadget_giveback
+> 	-> list_del
+> 3. MTP server process gets lock again
+> 	-> tries to access POISON list(list_del corruption)
 > 
-> [...]
+> [2: MtpServer: 5032] dwc3 10b00000.dwc3: request cancelled
+> 						with wrong reason:5
+> [2: MtpServer: 5032] list_del corruption,
+> 		ffffff88b6963968->next is LIST_POISON1 (dead000000000100)
+> 
+> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> ---
+>  drivers/usb/dwc3/gadget.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
 
-Here is the summary with links:
-  - [v20,1/2] dt-bindings: net: Add Davicom dm9051 SPI ethernet controller
-    https://git.kernel.org/netdev/net-next/c/759856e961e4
-  - [v20,2/2] net: Add dm9051 driver
-    https://git.kernel.org/netdev/net-next/c/2dc95a4d30ed
+What commit id does this fix?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+thanks,
 
-
+greg k-h

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA284B460A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3CE4B488A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243051AbiBNJ2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:28:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41274 "EHLO
+        id S1344094AbiBNJzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:55:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242991AbiBNJ22 (ORCPT
+        with ESMTP id S1343746AbiBNJvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:28:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B9460D85;
-        Mon, 14 Feb 2022 01:28:20 -0800 (PST)
+        Mon, 14 Feb 2022 04:51:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA3A66227;
+        Mon, 14 Feb 2022 01:42:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F3B160DFD;
-        Mon, 14 Feb 2022 09:28:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F045EC340E9;
-        Mon, 14 Feb 2022 09:28:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB80C611F3;
+        Mon, 14 Feb 2022 09:42:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6B46C340E9;
+        Mon, 14 Feb 2022 09:42:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644830899;
-        bh=PxAmF0SKGpeqELjz1UDvowOi6GjdGdS2hFerTKhDzi8=;
+        s=korg; t=1644831721;
+        bh=hG9jkos58WAdkn3Ip/Te7FXuqEYEgOqyyoE7Oxk6cmw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WbX5AZm1S0qj/5g9m+uuRMAj/AQ/qFkMoXbttXm8FPIpw+fVNw4P8UbYusbnLVoLO
-         6pQ/KQubJg4A3EpwaF2EOGGxfRf/9HbOe9brGciURFGTT+eGG35y2wQkdKMrsJjfcS
-         Aw0u5D3VQKSciGT14GTOnR7B2LRIxs1jemjAvwKc=
+        b=d/Plt2lkpjfAaUB6+XgdUGIlGPEfV5ofrimDG50A6+I028x539eg1surTafMOvv/K
+         UcjRB8gOXi7z60XBgPbJDmIlLfUjPr0DaCvVYMll8kJNEcWYbyx67bUZ66LXt/xa2r
+         9duj57piaXnijKpFjYlEhb3cK9eq/qnd3yT8edM4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 16/34] ARM: dts: imx6qdl-udoo: Properly describe the SD card detect
+        Shawn Guo <shawnguo@kernel.org>
+Subject: [PATCH 5.10 043/116] ARM: dts: imx23-evk: Remove MX23_PAD_SSP1_DETECT from hog group
 Date:   Mon, 14 Feb 2022 10:25:42 +0100
-Message-Id: <20220214092446.470999405@linuxfoundation.org>
+Message-Id: <20220214092500.177939491@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
-References: <20220214092445.946718557@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,52 +56,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Fabio Estevam <festevam@gmail.com>
 
-[ Upstream commit 993d66140f8d1c1853a3b58b77b43b681eb64dee ]
+commit 42c9b28e6862d16db82a56f5667cf4d1f6658cf6 upstream.
 
-GPIO7_IO00 is used as SD card detect.
+Currently, SD card fails to mount due to the following pinctrl error:
 
-Properly describe this in the devicetree.
+[   11.170000] imx23-pinctrl 80018000.pinctrl: pin SSP1_DETECT already requested by 80018000.pinctrl; cannot claim for 80010000.spi
+[   11.180000] imx23-pinctrl 80018000.pinctrl: pin-65 (80010000.spi) status -22
+[   11.190000] imx23-pinctrl 80018000.pinctrl: could not request pin 65 (SSP1_DETECT) from group mmc0-pins-fixup.0  on device 80018000.pinctrl
+[   11.200000] mxs-mmc 80010000.spi: Error applying setting, reverse things back
 
-Fixes: 40cdaa542cf0 ("ARM: dts: imx6q-udoo: Add initial board support")
+Fix it by removing the MX23_PAD_SSP1_DETECT pin from the hog group as it
+is already been used by the mmc0-pins-fixup pinctrl group.
+
+With this change the rootfs can be mounted and the imx23-evk board can
+boot successfully.
+
+Cc: <stable@vger.kernel.org>
+Fixes: bc3875f1a61e ("ARM: dts: mxs: modify mx23/mx28 dts files to use pinctrl headers")
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Shawn Guo <shawnguo@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/imx6qdl-udoo.dtsi | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/imx23-evk.dts |    1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/imx6qdl-udoo.dtsi b/arch/arm/boot/dts/imx6qdl-udoo.dtsi
-index fc4ae2e423bd7..b0fdcae66ead3 100644
---- a/arch/arm/boot/dts/imx6qdl-udoo.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-udoo.dtsi
-@@ -9,6 +9,8 @@
-  *
-  */
- 
-+#include <dt-bindings/gpio/gpio.h>
-+
- / {
- 	aliases {
- 		backlight = &backlight;
-@@ -201,6 +203,7 @@ MX6QDL_PAD_SD3_DAT0__SD3_DATA0		0x17059
- 				MX6QDL_PAD_SD3_DAT1__SD3_DATA1		0x17059
- 				MX6QDL_PAD_SD3_DAT2__SD3_DATA2		0x17059
- 				MX6QDL_PAD_SD3_DAT3__SD3_DATA3		0x17059
-+				MX6QDL_PAD_SD3_DAT5__GPIO7_IO00		0x1b0b0
- 			>;
- 		};
- 
-@@ -267,7 +270,7 @@ &usbh1 {
- &usdhc3 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_usdhc3>;
--	non-removable;
-+	cd-gpios = <&gpio7 0 GPIO_ACTIVE_LOW>;
- 	status = "okay";
- };
- 
--- 
-2.34.1
-
+--- a/arch/arm/boot/dts/imx23-evk.dts
++++ b/arch/arm/boot/dts/imx23-evk.dts
+@@ -79,7 +79,6 @@
+ 						MX23_PAD_LCD_RESET__GPIO_1_18
+ 						MX23_PAD_PWM3__GPIO_1_29
+ 						MX23_PAD_PWM4__GPIO_1_30
+-						MX23_PAD_SSP1_DETECT__SSP1_DETECT
+ 					>;
+ 					fsl,drive-strength = <MXS_DRIVE_4mA>;
+ 					fsl,voltage = <MXS_VOLTAGE_HIGH>;
 
 

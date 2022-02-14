@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 206434B40B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 05:26:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 257384B40D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 05:29:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240272AbiBNE0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 23:26:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58382 "EHLO
+        id S240368AbiBNE1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 23:27:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240205AbiBNE0L (ORCPT
+        with ESMTP id S240225AbiBNE0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 23:26:11 -0500
-Received: from APC01-HK2-obe.outbound.protection.outlook.com (mail-eopbgr1300132.outbound.protection.outlook.com [40.107.130.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A984F449;
-        Sun, 13 Feb 2022 20:26:04 -0800 (PST)
+        Sun, 13 Feb 2022 23:26:14 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2136.outbound.protection.outlook.com [40.107.255.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55304F9C4;
+        Sun, 13 Feb 2022 20:26:07 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mtsQwKq30gFDbr7lG8CBv1WBKeyWXHf3uiJNpzmUzFVeUdAixZyEDnbjJW4AywAd9hKMVNFWBXLpzUY3ou1nO7BSaXlm4PtOWNyuDCstBYi331q6qJZlN796fKL6mEm2cCdafiyFxYl/nZ8K05A8VC0IbUbCsktO3hOrWAm3mx8CkPsvhr6oq9U3pv2/arehdyUC+AzltxgKtA5ARArEcY7E3WJggrM2aAh6HSPSNGZp0IhfpvGaXW0kmZImQlZzVE4QfiqvNvPfTb9oYtnQF/Lj3qAcwzUp8VRVjVGnwdaU34LF3gFIUmhnBuWeRJEQnebFcLvxkodDkCSFUgrxCQ==
+ b=GcZmOzkeILkgEO+sC5ePHqFC+P1GGS4gAM/Fhec2qM7QM+pRdW7rgF2EWmdeqXOvB87rCpqj13wnaRePqwWegAqopbknl6fJZ9F8i+5wuw1lyjy5KvQSEdPuOolDKQ+aR1A3e7PDpR5aCiLKRsQWqCKJZ93oWzuwv6eX4XxkUrDM5nMm+nOEU+iN9yZAOHr896vK/OG0YraaEGUbp0CJBtzwSvhj57Jv2WWiMpb1esa6ANs9AfZCADa6Y9hFrHt/JUm5MxxjU0TnOr/uopfjGNR+UmHNEGqfr2tahkIgFIu+lBKsPkjDwk4R/EoK/UQPBt3xNBgqywLq1erCpRvqLQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ym26i91zXYG3NZ5T+ENx691CMP+Yj4da2kmQwEnVa7c=;
- b=XgQ2GmxotpR3z//3X9AupAUCq6Bo0bYqvN2RcPHHgxCn/ul9eOpdOsLQwcHXl+xFCeVhGqOUig2ATXr/npNjUjBffO3iSfl2ArcsFgFLwuxTGrI2I2iHMHSBFWRw/FEb0s6masah7Fwejl2y6XUAmsFK3dlbNLIJuJ3YqR8yuN9bF6ntWHN2EI1fFwoBt1vaCUO6KYhM2LE7Z4vMa+nipkNIG+AyUlt3Z4uIzntnEaqsRT+wr5mgYRwNaPdh8fUU5OYCuxk9qWZG7oORV7NTlUwqWy5aE+eJu6D4C6y8dBIO8kd50dDu+J2aTeuCoKtXc3nkGBgdGMhASmIEoVrilw==
+ bh=KdUJBmwjU5W2iari+ueVI/TTp3sc1eWteK4je1O4ZtQ=;
+ b=l/aaqOI3SOwo/o9FeyFq9hMH56IZ4Kmx9wbrIhNjg6QO6n+zuDNNNkSpoCvusn5iU2f85LAGD/sR+0NtaP8IGz0kptW9QnU0V6MYj8p3QW3LtlNXGHwkq1glcno3icUmNh1eNOFuOHPLfxCFvA0FOtG0OkX5oZIMvG0fjyULo5fwAi9SrBWSY0mIECuEMX1D7L/DlEty/1NmaomicDEiA3xDrZ7hSw9v9IAW90VdpB4SJBODyNTJ8D74xwKtCFHz37G2qiJNGy1Pb8+fBundjmqF1B2BhJEwRH7N74Ndf0UOJ8AHN8l7KZv8P+WyGhJTYh3LoEXtQVJJxD3BP8aQag==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=quantacorp.onmicrosoft.com; s=selector2-quantacorp-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ym26i91zXYG3NZ5T+ENx691CMP+Yj4da2kmQwEnVa7c=;
- b=swp3SODLUIKfS2y8cxrog9dCsYWAiYfTbACScWZLfTNu+0uahU5RU8RHM4WEQQ7xAblBwAK0mSG6NvM4QXkf1N5Bgy8bBZiPsry432XJ9rpL3Fd/2rb09SI0ILBV57qk5LHGS00lzzh0wYyIbPY4WPDDcPhd5+ZW+7bzRJOHNC0=
+ bh=KdUJBmwjU5W2iari+ueVI/TTp3sc1eWteK4je1O4ZtQ=;
+ b=seDpWwH9yVQgDthzaF8spSrPjpUr0LzgRttfTis6ujw5yxCNMVOm6xhjst9408ibP6KpS3t2BcO53V53CRu5ZLNvJke1qRTUUYnNi1acbntIsDn9zCVx6KX4xg939/Rt2wZ8PDBZ1uIaO3N7GDNu89BJFpVO4PAvaYRepfkjE3Q=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=quantatw.com;
 Received: from HK0PR04MB3282.apcprd04.prod.outlook.com (2603:1096:203:89::17)
- by HK0PR04MB2579.apcprd04.prod.outlook.com (2603:1096:203:64::10) with
+ by HK0PR04MB2451.apcprd04.prod.outlook.com (2603:1096:203:47::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.14; Mon, 14 Feb
- 2022 04:26:00 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Mon, 14 Feb
+ 2022 04:26:01 +0000
 Received: from HK0PR04MB3282.apcprd04.prod.outlook.com
  ([fe80::ec21:c033:761d:3e03]) by HK0PR04MB3282.apcprd04.prod.outlook.com
  ([fe80::ec21:c033:761d:3e03%4]) with mapi id 15.20.4975.018; Mon, 14 Feb 2022
- 04:25:58 +0000
+ 04:26:00 +0000
 From:   Potin Lai <potin.lai@quantatw.com>
 To:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
         Andrew Jeffery <andrew@aj.id.au>
@@ -47,9 +47,9 @@ Cc:     Patrick Williams <patrick@stwcx.xyz>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         Potin Lai <potin.lai@quantatw.com>
-Subject: [PATCH v2 02/10] arch: arm: dts: bletchley: separate leds into multiple groups
-Date:   Mon, 14 Feb 2022 12:25:30 +0800
-Message-Id: <20220214042538.12132-3-potin.lai@quantatw.com>
+Subject: [PATCH v2 03/10] arch: arm: dts: bletchley: update gpio-line-names
+Date:   Mon, 14 Feb 2022 12:25:31 +0800
+Message-Id: <20220214042538.12132-4-potin.lai@quantatw.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220214042538.12132-1-potin.lai@quantatw.com>
 References: <20220214042538.12132-1-potin.lai@quantatw.com>
@@ -59,256 +59,206 @@ X-ClientProxiedBy: HK2PR02CA0127.apcprd02.prod.outlook.com
  (2603:1096:203:89::17)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b52aa814-a5bb-430b-d000-08d9ef721901
-X-MS-TrafficTypeDiagnostic: HK0PR04MB2579:EE_
-X-Microsoft-Antispam-PRVS: <HK0PR04MB2579A5F39E728A924828D02B8E339@HK0PR04MB2579.apcprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:820;
+X-MS-Office365-Filtering-Correlation-Id: 8bb8af9e-6187-49cd-f179-08d9ef721965
+X-MS-TrafficTypeDiagnostic: HK0PR04MB2451:EE_
+X-Microsoft-Antispam-PRVS: <HK0PR04MB24517CAA4F60DDFD62506D7E8E339@HK0PR04MB2451.apcprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:569;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: B2YEUYiJWtoB4eGZQTL3miniuGkWDgTTmB1uAQ/eTrqvrj0BKJl4FOFoQneKUIVH3T+VigdNbajxbzDdUL0VC0ZgEF7vmcZ2JfPyk7VnU8PARHmvhwke57QMVYfSruSVq+A3HTQjnOLNvnB3mkzdl2V4YKK0F7Uoa4jBApLmlQlANZBfF3/I6iNElDUAHZ6+yFG8gSHG7mkdZY8NWwE3od4Ma/c759NT9KFmc5D8HMoqYchu3k7NpANdzDbGFF0aQ3l8T2R2G5QCWFLwQYeiZpq1/7U9NTd1+AgCjJwcDqeCRsN7PfpHPObPHP4ICYIG/PybjxxqVBDR3eskw9FzxjtF26sd5/0Uv53YnLCpJ1QCSLe3J+kyuqSsK84lu7U7D+J6DKApVP9VVxdp/rqiRLIUs15si16c/yPNLsRRKnffvxu+thZQpLIBNjz+8luGvGQMxIlVEz3MNPlyG4CY1S4BwizlNK14NK8WT5hhpG2HHeIj/OiIgW8403PjS1/VOG1NImKoDNJBaOlkov/d6mNfUY/+bEe+zsAFDeaQDTduRUqX6nUSP1CyrNRHPfJ+aSd0CngQrDzznuDof6zNJJ0oE7QUlfna1krY8Tko1S6e9FtPSGj4n0NzTTApd6ECEMj7+AKGRgqIli0qm8E59d0YwuShMC0tT4xjBmoGaLoeVkreGzRn5+EF1yWHSyZsMuioyhO+guUawhSHiMSgvg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR04MB3282.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(6666004)(83380400001)(4326008)(44832011)(107886003)(86362001)(36756003)(2906002)(5660300002)(66556008)(66476007)(8936002)(8676002)(52116002)(38350700002)(110136005)(38100700002)(54906003)(6512007)(6506007)(6486002)(1076003)(186003)(2616005)(26005)(508600001)(316002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: PRt3LwzD3jYJHu9YtihaRHwynVkMh2NOvAbzNO4Sq4tc2aLu7HCIyfx1SeE2Hzl2QOdF7vx68FNWiKS4j73VeZjws+oYwDGWr1dzTCx0xPY+UTkvzvfhBURiXdX7qF1mdc1h80b0zZQtVw3QTwXn0A0/8Z0qIwWw/Wkt4UxreXHl4j/G6fHpPaWmk/dAFJzvYExR683VTIw3Pxa/FZpc3A/HR8RcAS8mjuTilg3QOhC5Irofpr7PQKwjZg19lHCoLt1zBTkmW75jPk2D1Ynktx8HSEp0LzlLsnqgTmXAH+veXsVSIW2uJJgF2LQXS8GMoLqKZdWSzllQmsSX++IXWROJVQz8zCzOV1wXoET3TdeQReFmv1H1VKFut3pnZx2HMkFETTNx9RHidfvyDAYbsmDZlQLjXveX3ndi3gkjkz1aJCOIRik1ip+w96XYnlJiCYUkTKIuWRegOyi+4uxy6xxs78w8d9F/5QCrhN8adxfshR3okEE62afyD2cpMHjWsTLtISLvMaN3qECFmmJeIWTBqCsSRKIJzPVU7V+NOulEUVV+Pn2WiGiWiDcUMc0Rp1HnAPzeaSvr2+T4cM7GtL0SIMACb9IRLJLrJ0s99tfgG9IDJScBRpg7h4m9GFYF41QHzjnx75Fpp8rgb1JAwuoKTNWeHpN2RP+S4OslX8nXP5JLKP5p0MNDfAmLwds/JNIiPDCx/Qz0sT77pabSiQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR04MB3282.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(2906002)(52116002)(6506007)(36756003)(5660300002)(38100700002)(38350700002)(6486002)(4326008)(8676002)(83380400001)(6666004)(66556008)(66476007)(86362001)(66946007)(186003)(26005)(15650500001)(107886003)(54906003)(2616005)(110136005)(1076003)(508600001)(8936002)(6512007)(44832011);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?04Zsi9NTFqPL/wUf51he4nbQNJKGUyN4nCCrpJpmVlLF3se0RXALTYea1mxY?=
- =?us-ascii?Q?7sjYk1o7gd+Ojb0otxvtP1ECHuGXYWhJHTrlSYEICRHj/CqdU+4oX1cTH9z3?=
- =?us-ascii?Q?xDVHHLUQmDMOJNZvhxZJEa2niWaUYOh8J9KCQ8vTqM1ojU7jgl+ePA6IVfv9?=
- =?us-ascii?Q?gAvueiF3L62Yk22mdoAcJy38H5vXx1/nQNAsgl8SVFVGHkU8rVkXWlWaeSLq?=
- =?us-ascii?Q?5KMyqzHTaBH7/aIE+iu3M7dqpzYdnLgs+1n43dHi4ogVB9fTU+5sfH4UFJ2H?=
- =?us-ascii?Q?d3jFbocsNTpBRyexUh5yp1/U7RWNK/bg/wvxxeJBrdwLhZwKv11CQCkioNPu?=
- =?us-ascii?Q?Y35WrmXRhy15HHOHyaWS7uS5daqeJ6Psvcfwt7UcUTgdrbVpS1IhhCJ7V+1+?=
- =?us-ascii?Q?CcD8NJojG224KKZZcMvr0KjC0s0g7ARngCQHH5J0qWLNxnW5jXauemanqEHD?=
- =?us-ascii?Q?Pexrb+Qt5iBnX25AQAV1e8h2YBDToVys1Xy3gPg41Dg4eXYZjH4LEqeOg4nr?=
- =?us-ascii?Q?80OUfl0xnAxn95cQ7Ir1fBpRI1Nm9n4Z+6kO3ru/d2PuQdcUqFJy9aPJahH9?=
- =?us-ascii?Q?/BPL6gAuDRvEzyR81iMR83R+Q4o5gi2ObAXo9iD77sSPXeskLAoJeV/hVtbm?=
- =?us-ascii?Q?K+VZduIeGC/dQCecA6rDWWPxVvpp3obbQRbHJyRB6mR4wwp1kQUgP0QPqcsa?=
- =?us-ascii?Q?ug99eTr5ST70VzAlidYhh2wl8mZ5dmAdb3h01nQ/2T80zC00126WsQ2bEVX5?=
- =?us-ascii?Q?UHh++/EuoAbEYP0JhdO6cUF2jtSOgS7dfXFmO1847k0h8Rl9r7EYrhP81AUs?=
- =?us-ascii?Q?gor7WBQbq8Y9yDyXDXo+pNZWugsb9SJxlNNdAtqmOe/qXb/L/4+KwPNsQTd9?=
- =?us-ascii?Q?NlLPWOvC13DvKHEO/IZ6ibZCZ7GbDvZaXJY2VufXK27PlAqBgPCsuzansGHL?=
- =?us-ascii?Q?BKscql7WrAwcoXV/DrSU7SGQIf+9vd8+LsqNeqCMzqtx6zhStXZPIEAfghiR?=
- =?us-ascii?Q?h8MfUuyfiE1RhgUo04XWq4nGWGi9nM233nLyeXVe101TAelY+CwLxp8S/9mz?=
- =?us-ascii?Q?9nB3X9WoJ4NphxIajKu60dvdLl5+YUJvz8izcClfV5cdbqSqLEXO4t9VhiEj?=
- =?us-ascii?Q?5tva6O/jAv5hlp1OQRRTQTGZ+0hX+8zih7oiGuO9+evq4g83Tc/zW+IneTIz?=
- =?us-ascii?Q?/D+C1CkSz3z/3mP8AL31GGrnm+AjLAWX4iU1lDf7LDrTIcYGjo+zJOUZ+xyR?=
- =?us-ascii?Q?kGlYQrxrqpJY0o+2kYNgKi8V23zEjmCtt485GxJFlmDGhpbDHd8oawdsmMS5?=
- =?us-ascii?Q?zfFoASnS+U5lFnh3JQDNlsTFMCMjcwjvEylHdKkIzyZYz6GTXqx90dmsb96r?=
- =?us-ascii?Q?sQgdZWFTpTqAWwqmclABg0dxMjUKpOBkLbUroNk9uZpqGi5x/gX70iHSRy6w?=
- =?us-ascii?Q?fCIGFxznBWzPCnvldy3qzT7SLvN3km2cft456L879vlI52PLKwbFyT6CS8Ra?=
- =?us-ascii?Q?tkItwS0GNIWSNHJY5tXdf3boCQgsAjzh2SE6upLex1wlwTUHBExZwdee/jGa?=
- =?us-ascii?Q?0moP+sXoCPtqEtqJ9q7YFinpuBrN8UWOPnaf5iijSlL9mThQ45SnleFyCGLC?=
- =?us-ascii?Q?JtFBHmKCPF7ldDgfb8/37cI=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uZthlGl8E0zvbvEEV3qb+MSw5Oewbl7kGn1by2pQjlNKkiOGGdbp2t3+6NjC?=
+ =?us-ascii?Q?jLxmuHoHXrZrpPJs0jw9EBaPWltTMbok6oXg6f/79RmH4bfFnVeowowp3HxZ?=
+ =?us-ascii?Q?zSGKw3ky80QS6tAMXSlPAT0zk+ypF95D2wVXYQOZgbfEDOVTk/tfRzynzY0/?=
+ =?us-ascii?Q?9jVdYjMXEmDylGq4HJGDt3kIeb933Aiu2DFBcgrIUc9A3y76HTKxFubdMS3G?=
+ =?us-ascii?Q?//e6MIdR/ktjySESzU+yWQfNUJJBcWPvHTnX7z18uSJytNRi2gl9UT2sKbWZ?=
+ =?us-ascii?Q?Robp0Jh0rTmXFMv/Rza9RLPL3TJi1T4gEWnFI4vKvmosvsTiinRmfDwXTnaV?=
+ =?us-ascii?Q?oo+CgvRFuzaCPqX/r+wyu9tULSyMTZXo3c0SODxWJBu2L+EeXnzrSSYp0tKF?=
+ =?us-ascii?Q?0922MQl0jA9gAra0qS2lIhW91+4eWaJKwTMhFjjv17Z41D+bL1I6t0p8qlsc?=
+ =?us-ascii?Q?ygh+iSg/VkW7gQxRu5+FPwx0I3v/2UfjHLDBPBOIBJKWexRU6zvQC8uBnl4p?=
+ =?us-ascii?Q?TpEEc7o7++Zr/hqhJSOx3AvoWvDD3BqNLYquPKHr9W2oZxeA/JUm6CwAngB3?=
+ =?us-ascii?Q?Jg1b3/kfPA+l/e4VotatCEoyPptuljF8xFO9DdopZtGpTByEyzv9819Lf3O6?=
+ =?us-ascii?Q?fNxbwWWcwX5A22aRoMRJoqJaCsqhJsUCVfwuS3cjwE1ShxwqfhvtlpEJ2a7h?=
+ =?us-ascii?Q?vKwZLcZyrwM+kjZII+CpthEadeta/W6MkkBqIPz4usefYOC4XI5hAeDqOOHL?=
+ =?us-ascii?Q?kFS9M2u4y7A9Bga0ZPW9+eVrX4DCzNU8KHCBh61YqkNYzA/kXP7CNCfU8dto?=
+ =?us-ascii?Q?+34M7kA2nJwrY5+PcyK9cdTxYP3LJuPbcuAdw+KSqZVlgfNPJfb55tpxRD7z?=
+ =?us-ascii?Q?gnSglVYjsA8Hi+GMdpvWYQ6YgDQVoUMrLlvzVQfttra5u+iXsdrqe8qmzibf?=
+ =?us-ascii?Q?OfadD5GPU6GvOgGxvX8E9d97C9+5QTgr9RE6HE2TTSURt6IU1PaBjqfq5CfL?=
+ =?us-ascii?Q?bknKk8owulmqtV9meOpQPK5Y0CRPO5VdPBDXJpcYsB9mo4tkZNWdl+QHz9oX?=
+ =?us-ascii?Q?qK7wX/GrFCK9onYaz6BaavAmqbfd7teO/3heRWdS/j3bQEKLicE943I0q/QU?=
+ =?us-ascii?Q?GHmJTGZ6x8yZkRkf/Ma1RwgckDpNknJQJW1R5wApK6aIHT19DZnN5E8NIU5k?=
+ =?us-ascii?Q?EWwLT3MQ3j1QZ02bXiO6BkRThNPkDgHDXofSbHhX0TM9aAe8kd20DUba7nNU?=
+ =?us-ascii?Q?GLLcJQjiw89HI4YrxajCW7vm8nyvoSkqqVmlRY7ANCJqR9xL9vqH7CmSdOcr?=
+ =?us-ascii?Q?7EfLvwrfmAfobe5ZYd0jvoKH4cYUVpQLwS4mReHly/dHPnrUzGoccE4Suet/?=
+ =?us-ascii?Q?Q2XtRGMmwUH7IrZaAbnmQkKXSA6PeW+YZFw0H4rzoU+HZMBuHb7hPxyVAWj1?=
+ =?us-ascii?Q?bmqQt/ZSfHrshxKBxQDtp59CxJzxcOwMQdcBhBm/w0B8w7Mb5KpBegsi1HAb?=
+ =?us-ascii?Q?ggvdAqrhnEgDvRFwCXoxhGNNdUjZEjWikIQ0OjYJ5E8Hg4kl2U/afPhuuD1l?=
+ =?us-ascii?Q?kl63Gk7vfcz/3eH4m8HN6dTBd+ANcafbVMGK+tVJ+2jsy0l9Z6IZcZ6vcs8q?=
+ =?us-ascii?Q?rk49WNZELMidJZL3YYQkLaw=3D?=
 X-OriginatorOrg: quantatw.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b52aa814-a5bb-430b-d000-08d9ef721901
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8bb8af9e-6187-49cd-f179-08d9ef721965
 X-MS-Exchange-CrossTenant-AuthSource: HK0PR04MB3282.apcprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2022 04:25:57.6682
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2022 04:25:58.3557
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 179b0327-07fc-4973-ac73-8de7313561b2
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JIQAyCzsDVgxehUA5Rvof3vyU8g807Tk7kwQlWIbFU8w+8HuZ8iLYLt9QoqR43R9pc9fc16nKqF5ZB1ye7u79w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR04MB2579
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2cmlDhH4EaqEg7PM3gtlaIm26Z9xQvzI5lX8PgMvfWH09Fo9O6VaPdjbR1xPOYGdaiMyBLQRVnvUSXrD5/gHzg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR04MB2451
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,WEIRD_QUOTING autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Separate gpio-leds by each io expander chip.
-To avoid entire gpio-leds bind failed due to single chip not available
+update gpio-line-names based on EVT HW schematic
+
+- gpio0:
+  - BSM_FRU_WP (G0, out)
+  - PWRGD_P1V05_VDDCORE (G4, in)
+  - PWRGD_P1V5_VDD (G5, in)
+  - BSM_FLASH_WP_STATUS (I5, in)
+  - BMC_TPM_PRES (I6, in)
+  - BMC_RTC_INT (L5, in)
+  - BMC_HEARTBEAT (P7, out)
+  - PWRGD_CNS_PSU (V0, in)
+  - PSU_PRSNT (V3, in)
+  - BMC_SELF_HW_RST (Y0, out)
+  - BSM_PRSNT (Y1, in)
+
+- sled1_led pca9522:
+  - SLED1_MD_REF_PWM (3, out)
+
+- sled2_led pca9522:
+  - SLED2_MD_REF_PWM (3, out)
+
+- sled3_led pca9522:
+  - SLED3_MD_REF_PWM (3, out)
+
+- sled4_led pca9522:
+  - SLED4_MD_REF_PWM (3, out)
+
+- sled5_led pca9522:
+  - SLED5_MD_REF_PWM (3, out)
+
+- sled6_led pca9522:
+  - SLED6_MD_REF_PWM (3, out)
 
 Signed-off-by: Potin Lai <potin.lai@quantatw.com>
 ---
- .../dts/aspeed-bmc-facebook-bletchley.dts     | 77 +++++++++++++------
- 1 file changed, 52 insertions(+), 25 deletions(-)
+ .../dts/aspeed-bmc-facebook-bletchley.dts     | 26 ++++++++++---------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
 
 diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
-index e77736ed5c4c..ebd2430a3bdd 100644
+index ebd2430a3bdd..fc0690ccdb0a 100644
 --- a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
 +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
-@@ -5,6 +5,7 @@
- #include "aspeed-g6.dtsi"
- #include <dt-bindings/gpio/aspeed-gpio.h>
- #include <dt-bindings/usb/pd.h>
-+#include <dt-bindings/leds/leds-pca955x.h>
+@@ -270,7 +270,7 @@
+ 		#gpio-cells = <2>;
  
- / {
- 	model = "Facebook Bletchley BMC";
-@@ -53,112 +54,138 @@
- 		// Fixed link
- 	};
+ 		gpio-line-names =
+-		"led-sled1-amber","led-sled1-blue","SLED1_RST_IOEXP","",
++		"led-sled1-amber","led-sled1-blue","SLED1_RST_IOEXP","SLED1_MD_REF_PWM",
+ 		"","","","",
+ 		"","","","",
+ 		"","","","";
+@@ -333,7 +333,7 @@
+ 		#gpio-cells = <2>;
  
--	leds {
-+	front_gpio_leds {
- 		compatible = "gpio-leds";
--
- 		sys_log_id {
--			retain-state-shutdown;
--			default-state = "keep";
-+			default-state = "off";
- 			gpios = <&front_leds 0 GPIO_ACTIVE_HIGH>;
- 		};
-+	};
-+
-+	fan_gpio_leds {
-+		compatible = "gpio-leds";
- 		fan0_blue {
- 			retain-state-shutdown;
- 			default-state = "on";
--			gpios = <&fan_ioexp 8 GPIO_ACTIVE_HIGH>;
-+			gpios = <&fan_leds 8 GPIO_ACTIVE_HIGH>;
- 		};
- 		fan1_blue {
- 			retain-state-shutdown;
- 			default-state = "on";
--			gpios = <&fan_ioexp 9 GPIO_ACTIVE_HIGH>;
-+			gpios = <&fan_leds 9 GPIO_ACTIVE_HIGH>;
- 		};
- 		fan2_blue {
- 			retain-state-shutdown;
- 			default-state = "on";
--			gpios = <&fan_ioexp 10 GPIO_ACTIVE_HIGH>;
-+			gpios = <&fan_leds 10 GPIO_ACTIVE_HIGH>;
- 		};
- 		fan3_blue {
- 			retain-state-shutdown;
- 			default-state = "on";
--			gpios = <&fan_ioexp 11 GPIO_ACTIVE_HIGH>;
-+			gpios = <&fan_leds 11 GPIO_ACTIVE_HIGH>;
- 		};
- 		fan0_amber {
- 			retain-state-shutdown;
- 			default-state = "off";
--			gpios = <&fan_ioexp 12 GPIO_ACTIVE_HIGH>;
-+			gpios = <&fan_leds 12 GPIO_ACTIVE_HIGH>;
- 		};
- 		fan1_amber {
- 			retain-state-shutdown;
- 			default-state = "off";
--			gpios = <&fan_ioexp 13 GPIO_ACTIVE_HIGH>;
-+			gpios = <&fan_leds 13 GPIO_ACTIVE_HIGH>;
- 		};
- 		fan2_amber {
- 			retain-state-shutdown;
- 			default-state = "off";
--			gpios = <&fan_ioexp 14 GPIO_ACTIVE_HIGH>;
-+			gpios = <&fan_leds 14 GPIO_ACTIVE_HIGH>;
- 		};
- 		fan3_amber {
- 			retain-state-shutdown;
- 			default-state = "off";
--			gpios = <&fan_ioexp 15 GPIO_ACTIVE_HIGH>;
-+			gpios = <&fan_leds 15 GPIO_ACTIVE_HIGH>;
- 		};
-+	};
-+
-+	sled1_gpio_leds {
-+		compatible = "gpio-leds";
- 		sled1_amber {
- 			retain-state-shutdown;
--			default-state = "off";
-+			default-state = "keep";
- 			gpios = <&sled1_leds 0 GPIO_ACTIVE_LOW>;
- 		};
- 		sled1_blue {
- 			retain-state-shutdown;
--			default-state = "off";
-+			default-state = "keep";
- 			gpios = <&sled1_leds 1 GPIO_ACTIVE_LOW>;
- 		};
-+	};
-+
-+	sled2_gpio_leds {
-+		compatible = "gpio-leds";
- 		sled2_amber {
- 			retain-state-shutdown;
--			default-state = "off";
-+			default-state = "keep";
- 			gpios = <&sled2_leds 0 GPIO_ACTIVE_LOW>;
- 		};
- 		sled2_blue {
- 			retain-state-shutdown;
--			default-state = "off";
-+			default-state = "keep";
- 			gpios = <&sled2_leds 1 GPIO_ACTIVE_LOW>;
- 		};
-+	};
-+
-+	sled3_gpio_leds {
-+		compatible = "gpio-leds";
- 		sled3_amber {
- 			retain-state-shutdown;
--			default-state = "off";
-+			default-state = "keep";
- 			gpios = <&sled3_leds 0 GPIO_ACTIVE_LOW>;
- 		};
- 		sled3_blue {
- 			retain-state-shutdown;
--			default-state = "off";
-+			default-state = "keep";
- 			gpios = <&sled3_leds 1 GPIO_ACTIVE_LOW>;
- 		};
-+	};
-+
-+	sled4_gpio_leds {
-+		compatible = "gpio-leds";
- 		sled4_amber {
- 			retain-state-shutdown;
--			default-state = "off";
-+			default-state = "keep";
- 			gpios = <&sled4_leds 0 GPIO_ACTIVE_LOW>;
- 		};
- 		sled4_blue {
- 			retain-state-shutdown;
--			default-state = "off";
-+			default-state = "keep";
- 			gpios = <&sled4_leds 1 GPIO_ACTIVE_LOW>;
- 		};
-+	};
-+
-+	sled5_gpio_leds {
-+		compatible = "gpio-leds";
- 		sled5_amber {
- 			retain-state-shutdown;
--			default-state = "off";
-+			default-state = "keep";
- 			gpios = <&sled5_leds 0 GPIO_ACTIVE_LOW>;
- 		};
- 		sled5_blue {
- 			retain-state-shutdown;
--			default-state = "off";
-+			default-state = "keep";
- 			gpios = <&sled5_leds 1 GPIO_ACTIVE_LOW>;
- 		};
-+	};
-+
-+	sled6_gpio_leds {
-+		compatible = "gpio-leds";
- 		sled6_amber {
- 			retain-state-shutdown;
--			default-state = "off";
-+			default-state = "keep";
- 			gpios = <&sled6_leds 0 GPIO_ACTIVE_LOW>;
- 		};
- 		sled6_blue {
- 			retain-state-shutdown;
--			default-state = "off";
-+			default-state = "keep";
- 			gpios = <&sled6_leds 1 GPIO_ACTIVE_LOW>;
- 		};
- 	};
-@@ -667,7 +694,7 @@
- 		reg = <0x4d>;
- 	};
+ 		gpio-line-names =
+-		"led-sled2-amber","led-sled2-blue","SLED2_RST_IOEXP","",
++		"led-sled2-amber","led-sled2-blue","SLED2_RST_IOEXP","SLED2_MD_REF_PWM",
+ 		"","","","",
+ 		"","","","",
+ 		"","","","";
+@@ -400,7 +400,7 @@
+ 		#gpio-cells = <2>;
  
--	fan_ioexp: pca9552@67 {
-+	fan_leds: pca9552@67 {
- 		compatible = "nxp,pca9552";
- 		reg = <0x67>;
- 		#address-cells = <1>;
+ 		gpio-line-names =
+-		"led-sled3-amber","led-sled3-blue","SLED3_RST_IOEXP","",
++		"led-sled3-amber","led-sled3-blue","SLED3_RST_IOEXP","SLED3_MD_REF_PWM",
+ 		"","","","",
+ 		"","","","",
+ 		"","","","";
+@@ -463,7 +463,7 @@
+ 		#gpio-cells = <2>;
+ 
+ 		gpio-line-names =
+-		"led-sled4-amber","led-sled4-blue","SLED4_RST_IOEXP","",
++		"led-sled4-amber","led-sled4-blue","SLED4_RST_IOEXP","SLED4_MD_REF_PWM",
+ 		"","","","",
+ 		"","","","",
+ 		"","","","";
+@@ -526,7 +526,7 @@
+ 		#gpio-cells = <2>;
+ 
+ 		gpio-line-names =
+-		"led-sled5-amber","led-sled5-blue","SLED5_RST_IOEXP","",
++		"led-sled5-amber","led-sled5-blue","SLED5_RST_IOEXP","SLED5_MD_REF_PWM",
+ 		"","","","",
+ 		"","","","",
+ 		"","","","";
+@@ -589,7 +589,7 @@
+ 		#gpio-cells = <2>;
+ 
+ 		gpio-line-names =
+-		"led-sled6-amber","led-sled6-blue","SLED6_RST_IOEXP","",
++		"led-sled6-amber","led-sled6-blue","SLED6_RST_IOEXP","SLED6_MD_REF_PWM",
+ 		"","","","",
+ 		"","","","",
+ 		"","","","";
+@@ -727,16 +727,17 @@
+ 	/*D0-D7*/	"","","","","","","","",
+ 	/*E0-E7*/	"","","","","","","","",
+ 	/*F0-F7*/	"","","","","","","","",
+-	/*G0-G7*/	"","SWITCH_FRU_MUX","","","","","","",
++	/*G0-G7*/	"BSM_FRU_WP","SWITCH_FRU_MUX","","",
++			"PWRGD_P1V05_VDDCORE","PWRGD_P1V5_VDD","","",
+ 	/*H0-H7*/	"presence-riser1","presence-riser2",
+ 			"presence-sled1","presence-sled2",
+ 			"presence-sled3","presence-sled4",
+ 			"presence-sled5","presence-sled6",
+ 	/*I0-I7*/	"REV_ID0","","REV_ID1","REV_ID2",
+-			"","","","",
++			"","BSM_FLASH_WP_STATUS","BMC_TPM_PRES","",
+ 	/*J0-J7*/	"","","","","","","","",
+ 	/*K0-K7*/	"","","","","","","","",
+-	/*L0-L7*/	"","","","","","","","",
++	/*L0-L7*/	"","","","","","BMC_RTC_INT","","",
+ 	/*M0-M7*/	"ALERT_SLED1","ALERT_SLED2",
+ 			"ALERT_SLED3","ALERT_SLED4",
+ 			"ALERT_SLED5","ALERT_SLED6",
+@@ -744,19 +745,20 @@
+ 	/*N0-N7*/	"","","","","","","","",
+ 	/*O0-O7*/	"","","","",
+ 			"","BOARD_ID0","BOARD_ID1","BOARD_ID2",
+-	/*P0-P7*/	"","","","","","","","",
++	/*P0-P7*/	"","","","","","","","BMC_HEARTBEAT",
+ 	/*Q0-Q7*/	"","","","","","","","",
+ 	/*R0-R7*/	"","","","","","","","",
+ 	/*S0-S7*/	"","","","BAT_DETECT",
+ 			"BMC_BT_WP0","BMC_BT_WP1","","",
+ 	/*T0-T7*/	"","","","","","","","",
+ 	/*U0-U7*/	"","","","","","","","",
+-	/*V0-V7*/	"","RST_BMC_MVL","","",
++	/*V0-V7*/	"PWRGD_CNS_PSU","RST_BMC_MVL","","PSU_PRSNT",
+ 			"USB2_SEL0_A","USB2_SEL1_A",
+ 			"USB2_SEL0_B","USB2_SEL1_B",
+ 	/*W0-W7*/	"RST_FRONT_IOEXP","","","","","","","",
+ 	/*X0-X7*/	"","","","","","","","",
+-	/*Y0-Y7*/	"","","BSM_FLASH_LATCH","","","","","",
++	/*Y0-Y7*/	"BMC_SELF_HW_RST","BSM_PRSNT","BSM_FLASH_LATCH","",
++			"","","","",
+ 	/*Z0-Z7*/	"","","","","","","","";
+ };
+ 
 -- 
 2.17.1
 

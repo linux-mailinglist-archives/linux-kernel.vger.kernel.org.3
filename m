@@ -2,83 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E11594B4EAD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A504B4E94
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:34:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239810AbiBNLdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:33:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34852 "EHLO
+        id S1351744AbiBNLcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:32:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352266AbiBNLbV (ORCPT
+        with ESMTP id S1352057AbiBNLbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:31:21 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39D4A185;
-        Mon, 14 Feb 2022 03:15:53 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id jg20so11714779ejc.3;
-        Mon, 14 Feb 2022 03:15:53 -0800 (PST)
+        Mon, 14 Feb 2022 06:31:13 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A6BAE76
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 03:15:06 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id bx31so21769972ljb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 03:15:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=drdL+ntYxWFrqHpoDzo7iEOV0dA7qeSrScjSO9IDrFw=;
-        b=UPWppfvY196XnTeDZQyFmBWgbXPWlJPdiNg1uw+xCw/sZmugGupQXfqDHe0g95QoYB
-         oerX8C3HaZXgq3oThTKTmPHGqTnRK/sWrf3XAZoCRWvMnyudQKhRZ7rsntZgsTXVS9jx
-         5WioIynTmuxq6c5xAVVhac541c9F2/Bs/sXt5RFVy8MmyrGboWF3tvGlTe6TDZZYp4/A
-         NtL4AvoXshVXUMuYyq1onkHo6HfOsnaidDQKuL8gX6MukjdwIzw3A8mAUhaLAb9nnYNU
-         TU8hwhNMRl5QIoAg0qKctM1i/eW2SbXSoBTQV0YB4iW3WNkuCGdfbvqwthw95OYiwCgF
-         DKZw==
+        d=kempniu.pl; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=/gvyvLv0L7lIbtDKzPDBQ3PnEIpy4XvEbEZzW6NXC+g=;
+        b=AZV1BkAsEdGRrs9twRIwoaLNpw3pBbcqFotnGiE8hRUgcJbPChrSAN0nKtNUEg4p6G
+         F9ac4XIr3moL5HhS1MHGpcDLz3pflsjdb/wxp+26J72Y/YYqjX1oGhT6Ixl7mftAQ+SE
+         LWQbc3TITf0zfw6SA64Qru8GAYieTOTg02PoI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=drdL+ntYxWFrqHpoDzo7iEOV0dA7qeSrScjSO9IDrFw=;
-        b=60JcdwLp03MLwYkLp9KFLybRJqpxGI+MID9nWh2d+oIQ2eqroQoTsRuWSw/4LU2pC1
-         WbaiKTEGcEr6YPvynoEe1c+e0JeYXLfcBEFZycB3+1b+SRP7IHPzPcBP+D+OAycab79Z
-         ZKcWEGHdYmtfeNE0Y1zzTJBHTbY7MkpuUFY+4+mfAlmArE215vELBVjQwzJMgsV5RYyo
-         4oJzWj8CUC7g0dazF3ZVpRIOO+3R7tDaleGbcB2SfpKa/7mypK58OPOoBxUA8jjns4r1
-         iQUSdGUVgx0UpO9is+W+H5U2F1gNohiFG5wo99WjLjOdPUx4oTJAclemgLs7mM0vr3sT
-         AYXg==
-X-Gm-Message-State: AOAM5300zl8uvlo88FUoiOSqJtd45EVHbdaUJWIrZCZbmnLgayN+WLju
-        xdu1GrGm1ccV5s3aeW/ETCepRBwus2AU2QcnM2GSdt17tzNmow==
-X-Google-Smtp-Source: ABdhPJwcuQMhcG5C2fm3oewmHxc0bevrBbpzNL8s+Ztyii6FZnBdTQApnkpVXcsxv6IYINT9wKJn/TVb+u1i4Rpqe8Y=
-X-Received: by 2002:a17:907:2d92:: with SMTP id gt18mr10662467ejc.579.1644837352086;
- Mon, 14 Feb 2022 03:15:52 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=/gvyvLv0L7lIbtDKzPDBQ3PnEIpy4XvEbEZzW6NXC+g=;
+        b=yBNcvSrAeklEODkLmNEFKnHuGfaSaJ/j7mMNtLwS8h9lh//cjKvxq6KvaePMzHDYe9
+         36SQopafA2Xg8JJ9wwnyxYaJ2t6I3BU8mEfcagB1AMIs+WxqpqyN4nuGk9kbewyRSWze
+         L/dqg+enRxRgCGx4NP0nTUR6xVoz66DHeTmQCA/iVpUjD8dJchFc2uBKg1f2lqE0m1W7
+         qz3VRaEHGI5sMnJtGkthWswYnv4BKn6lVdeiVezbNZwhg5aVeT8axA1vCpUZ6vlOuQXw
+         AKe/3ceWrNZl3/jrkOaF02bvNe5tjbfU19c44zJPcfZ47HgBry3s8rPrnRdAPbJ4Fka+
+         A6qg==
+X-Gm-Message-State: AOAM531opeiHnk5Cp6zii7vh9hSG/mG27rbUygajjhLfr6vqdFVbbf8n
+        fjVkvU71zmka54HdzgtY8AughiDc3cJTMQ==
+X-Google-Smtp-Source: ABdhPJxRoBE3cIUrCU9X1zU2YRXoewWnjgMuJxW4V+IlP2JD8glHc5xw6ubK/RupzjCRv9d8nhumbQ==
+X-Received: by 2002:a2e:9619:: with SMTP id v25mr6303279ljh.92.1644837305128;
+        Mon, 14 Feb 2022 03:15:05 -0800 (PST)
+Received: from larwa.hq.kempniu.pl ([2001:470:64df:111::e02])
+        by smtp.gmail.com with ESMTPSA id o14sm517491lfr.176.2022.02.14.03.15.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 03:15:04 -0800 (PST)
+Date:   Mon, 14 Feb 2022 12:15:02 +0100
+From:   =?utf-8?B?TWljaGHFgiBLxJlwaWXFhA==?= <kernel@kempniu.pl>
+To:     Richard Weinberger <richard@nod.at>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 4/4] mtdchar: add MEMREAD ioctl
+Message-ID: <Ygo5tta48poc0IOB@larwa.hq.kempniu.pl>
+References: <20220125104822.8420-1-kernel@kempniu.pl>
+ <20220125104822.8420-5-kernel@kempniu.pl>
+ <1173246756.12597.1643879936765.JavaMail.zimbra@nod.at>
 MIME-Version: 1.0
-References: <20220214033620.4059-1-jagathjog1996@gmail.com> <20220214033620.4059-2-jagathjog1996@gmail.com>
-In-Reply-To: <20220214033620.4059-2-jagathjog1996@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 14 Feb 2022 13:14:23 +0200
-Message-ID: <CAHp75VeD7rB3RPZ4TYJzvq3=Ush=FFERchJWwD-VY7q1c1Aupw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] iio: potentiometer: Alignment to match the open parenthesis
-To:     Jagath Jog J <jagathjog1996@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Slawomir Stepien <sst@poczta.fm>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1173246756.12597.1643879936765.JavaMail.zimbra@nod.at>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 5:36 AM Jagath Jog J <jagathjog1996@gmail.com> wrote:
->
-> Fix following checkpatch.pl check by removing black space
-> CHECK: Alignment should match open parenthesis
+Richard,
 
-I believe in some cases you may make them more compact, like join
-lines (it will be slightly longer, but still readable). OTOH, it
-depends on the style of the entire driver.
+Thank you for taking a look at this patch series.
+
+> > +	if (req.start + req.len > mtd->size) {
+> 
+> I think this can overflow since both req.start and req.len are u64.
+> So an evil-doer might bypass this check.
+
+You are right, thanks.  I adopted this check from mtd_check_oob_ops()
+and your comment made me think that maybe the MEMREADOOB64/MEMWRITEOOB64
+ioctls are affected as well, but it looks like 'len' is a 32-bit integer
+in those other cases, so they look safe to me.
+
+However, the MEMWRITE ioctl does seem to be affected by the same issue
+since commit f6562bca84d22525f792305e3106571f8714d057 ("mtdchar: prevent
+unbounded allocation in MEMWRITE ioctl"), see mtdchar_write_ioctl().
+
+Changing the 'len' and 'ooblen' fields of struct mtd_{read,write}_req to
+u32 would break userspace, so that is not an option.  Would truncating
+req.len to 32 bits (req.len &= 0xffffffff) early in the two relevant
+functions be the way to go?  I guess such a change should be reflected
+in include/uapi/mtd/mtd-abi.h, too.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Best regards,
+Michał Kępień

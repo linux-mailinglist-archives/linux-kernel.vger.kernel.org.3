@@ -2,81 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599104B4F7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6AB4B4F87
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343588AbiBNL66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:58:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58064 "EHLO
+        id S1352136AbiBNMAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 07:00:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234179AbiBNL6z (ORCPT
+        with ESMTP id S234179AbiBNMAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:58:55 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B7ACEE;
-        Mon, 14 Feb 2022 03:58:48 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 5E6861F438DD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644839927;
-        bh=8cN9fggBLeZHIC7ObN4/himXYzclTb/eCG6XMz5tAxs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oRgCnVqyp6odre1PtPBARC3do0X2Fjwi21iInARGcHlyCHIgLYYd44J375n6IkgxK
-         4PixSUoSSuqqiaYI0Ph8Z53c07l3BUhsCvmYBo9PQYxLWShwzavYse184v8G/i2sjh
-         /mOEnf9K0QKqVzgtLHlF7jF9IokVlmXQSOMUJfUeZel976Hhpvu7UGZHiupKshK7d5
-         29Ui7JFNi21MU4ziijeGLqNKQJ/3w06tbFf1Z5Kd0HaWnbIW2u5IF43zRm/3ToCaoz
-         o/4IWQO9bgOZ6BdESjR/OJCD2qa91mXZ6IwBO8f1ANMzO0HoWlcuvNGJRJZAoegzKb
-         CgLntompS2AHQ==
-Message-ID: <b22540e3-e8da-6878-64e3-04767c5327c2@collabora.com>
-Date:   Mon, 14 Feb 2022 12:58:44 +0100
+        Mon, 14 Feb 2022 07:00:36 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B8DCFA;
+        Mon, 14 Feb 2022 04:00:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=vrno95ckgyNZyTDaz0cxWeVMJf3/5VGWMZm2iflspMA=; b=DbFyDh73sddokDaXx0Lfi0R3f9
+        3LM/8QuYShYk70AL/7BQOgCR6JoVl6UlqVGlhOvQNd+AVIW/BMBTryCH+Cu5IDioUss955Yt7ynk9
+        /7BjDllCHbIHhQeeXrOb2egSffpeatjS9x0whRRwCjx6Z2+7h0PbeCD80iYuzpb2B1K+pTsmYQHpy
+        x2k6fZXbtf2V9mTxncO0kDw0Xga/JMR2o9iROVt5EZJlXBB3EULFOArIPe0iJVULIvI2oScz6vEsC
+        eid+p2o5HJ2qaE7tyGpH+W6kr92OaoLnuYUo5OCKUCCCkSjMgwMlxdJQXdmdkgPoGpFI0AcYVKFow
+        XkHiBb+w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJa17-009tm8-Bi; Mon, 14 Feb 2022 11:59:41 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A43F53002C5;
+        Mon, 14 Feb 2022 12:59:35 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8E9D12D1EC148; Mon, 14 Feb 2022 12:59:35 +0100 (CET)
+Date:   Mon, 14 Feb 2022 12:59:35 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v10 10/15] FG-KASLR: use a scripted approach to handle
+ .text.* sections
+Message-ID: <YgpEJ7BmuYtHkayT@hirez.programming.kicks-ass.net>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
+ <20220209185752.1226407-11-alexandr.lobakin@intel.com>
+ <20220211153706.GW23216@worktop.programming.kicks-ass.net>
+ <20220214113434.5256-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v9 1/1] i2c: mediatek: modify bus speed calculation
- formula
-Content-Language: en-US
-To:     Kewei Xu <kewei.xu@mediatek.com>, wsa@the-dreams.de
-Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        leilk.liu@mediatek.com, qii.wang@mediatek.com,
-        liguo.zhang@mediatek.com, caiyu.chen@mediatek.com,
-        housong.zhang@mediatek.com, yuhan.wei@mediatek.com,
-        ryan-jh.yu@mediatek.com, david-yh.chiu@mediatek.com
-References: <1644400447-6215-1-git-send-email-kewei.xu@mediatek.com>
- <1644400447-6215-2-git-send-email-kewei.xu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <1644400447-6215-2-git-send-email-kewei.xu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220214113434.5256-1-alexandr.lobakin@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 09/02/22 10:54, Kewei Xu ha scritto:
-> When clock-div is 0 or greater than 1, the bus speed
-> calculated by the old speed calculation formula will be
-> larger than the target speed. So we update the formula.
-> 
-> Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
-> Change-Id: Ic0d9b8ab036bcf215d3a5066f2b91c7b8b128ba6
+On Mon, Feb 14, 2022 at 12:34:34PM +0100, Alexander Lobakin wrote:
 
-Please remove Change-Id tag, this is inappropriate and it's also irrelevant here.
+> Re "won't do" -- sorry for trying to hijack this thread a bit, but
+> did I miss something? The last comments I've read were that LLVM
+> tools need to change their approach for CFI on x86, and Sami went
+> redo it, but I can't recall any "life-time" nacks.
 
-After removing that tag:
+Won't as in the lclang-cfi as it exists today. And I've understood that
+this CFI model is a keeper. It is true that Sami has been working on an
+alternative KCFI, but the little I can make of this proposal, it
+still needs serious work. Also see here:
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+  https://lkml.kernel.org/r/20220211133803.GV23216@worktop.programming.kicks-ass.net
 
-> ---
->   drivers/i2c/busses/i2c-mt65xx.c | 51 +++++++++++++++++++++++++++++++++--------
->   1 file changed, 41 insertions(+), 10 deletions(-)
-> 
+Specifically, I object to the existence of any __*cfi_check_fail symbol
+on the grounds that it will bloat the code (and makes thinking about the
+whole speculation angle more painful than it needs to be).

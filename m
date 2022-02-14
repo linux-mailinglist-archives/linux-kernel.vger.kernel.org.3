@@ -2,122 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF27A4B4EAF
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:34:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6714B4EB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351019AbiBNL2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:28:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59196 "EHLO
+        id S1351346AbiBNL2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:28:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350808AbiBNL2H (ORCPT
+        with ESMTP id S1351237AbiBNL2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:28:07 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACABC6BDE4;
-        Mon, 14 Feb 2022 03:05:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1644836710;
-        bh=/jEI0qa5et1A5fI5AP02quv5hC2xHhHOiKa1B7BmQpY=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=Vc/Z2Y4nQv7sFots98IcQCiTdEZZbwjXU650/1G/9ZssKOFBIbJtOfAj4Kuvbb2aN
-         vVIKnL3zslcEqlqDPeQobhRoZ4ec79wJKwRULO2vYEyevgy9+pQzzQhxeFZqQkfgHi
-         dHU7ZRQrv6jhpfJX4amBI/4saUgt5rfLhY5xtjoc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.168.11]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M4s0j-1nKNqU3qop-001x2X; Mon, 14
- Feb 2022 12:05:09 +0100
-Message-ID: <ffebaea4-8135-6e2e-fca1-8e9f118ef70b@gmx.de>
-Date:   Mon, 14 Feb 2022 12:05:00 +0100
+        Mon, 14 Feb 2022 06:28:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8935CC7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 03:06:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644836777;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=E/YpHuLzrUWFj5TanGTnC9HK9BdBVrDfvGFNAraLJPY=;
+        b=Xyggv5UjSygDatRP5oPCnv4j3mZq1wIFX1+65h25lZu+BcZm+DNkDUPIuovMEBcltyT6su
+        d1R9vdXwZLHj3NuaDvUcGVM6T+x1VhWINQTO3wYxFc7k2p6coSEXCOG9RxOiBqUxLhOrUX
+        e7q1K3Mvc7re/4BooDcUotBDt5+ukbI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-404-IGc_LG5PMPiiz7KszaeE2A-1; Mon, 14 Feb 2022 06:06:13 -0500
+X-MC-Unique: IGc_LG5PMPiiz7KszaeE2A-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C186C1091DA1;
+        Mon, 14 Feb 2022 11:06:12 +0000 (UTC)
+Received: from ws.net.home (unknown [10.36.112.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E81B66E1F8;
+        Mon, 14 Feb 2022 11:06:11 +0000 (UTC)
+Date:   Mon, 14 Feb 2022 12:06:09 +0100
+From:   Karel Zak <kzak@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        util-linux@vger.kernel.org
+Subject: [ANNOUNCE] util-linux v2.37.4
+Message-ID: <20220214110609.msiwlm457ngoic6w@ws.net.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] fat: Use pointer to d_name[0] in put_user() for compat
- case
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>
-References: <YgmB01p+p45Cihhg@p100>
- <49a26b7a30254d9fb9653c2f815eaa28@AcuMS.aculab.com>
- <0ecb87dcc4cf42328f1f5a7d6abd08ed@AcuMS.aculab.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <0ecb87dcc4cf42328f1f5a7d6abd08ed@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:AONVuZwsErb6wKyc0u0ZjdTu/g4fjzt+2aSTAeYXCLwWk3OOGTH
- GPVQdm/wadZSzxXBacz+2n0780srvUVhG2XiNWsVbgD6OQm28vEeWsAHJk+WHmsm4QMy9yX
- oD7XxUqGLr63EvDMUhR/DNplZifM46ZDbWBz/QYPuSQeTRoNngJGY/6NEH5OVfkZBdRlqQJ
- 2/lFQdZQm0PdfS/+Z/7Ng==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3M2sH2Q9UIY=:afp2wr2FwYnyB758PMvNhv
- 4rzNw1+08QTUCBM48Mp+55HJyDr2ZMga2Rnf9QsAa21n9EJpVs8tczkKLQIm3zgy0NUF0Tva6
- P+p/TQRYgryu9wt87SwJvwgYfyN7UVbLGRjrUlOqWqc6LhgJRJUfqdI6Va3SlM76cEBYy7TwI
- 5poEhJRGRucUPqWS9Sl+4bi0nz6u+yD5gzE21SKvIZpx2Qeugf1e3CAUNQ+USFVVSehfCVaS/
- kIHmGtXpMS6Q4CHYQHza0A5sPDqh7QTsWvpUVKfoZvZKPE22KaQKD02zqxZZTx2A5x/P4qssq
- 2lymyz12kKBLI7btoqz2NemKgWWlAiEypRsK1oL9aAIBM49jxaY3ryAWeYYhSbQhsoY3eKzFL
- xRDh7yD9o0Uwus1HpgELCccVX/GJwKB7qAeM9emxlgvYiREvcvKhB6GP7YIRPZDo4we9n/ipu
- upZmwj6HbNj0RN55RMK2PGOqPqVurQpu3jqE3FSN0l/luibxf85kstDxaOhwMISYfYBCCmnkX
- p+5FgeTAGSMSNPiOSvdfeJ7tunMgsLZljJRGstGzX75yq5GFbaqSptMvdEHdQbm33isBm0IHu
- RomQvBeSvMNyKkI5e7+Dpvprivd6Hftx9Ep+ihoN8JGRcldasICwyCg4lhRuJ0VczCiO5wA53
- CuvO8Y5a8UGpGSqltUU2n3ZveN+7MfEX4EX8U4Rae2Z6mWYx1Pa1n/T9N7sepcZdnUXkEDQMu
- 7GqJkwB5BfxMeWbFe8UX+6AvLDKXkLMVjrfiKiZz0zp516Ufs0/SDKgDYfPSYcmjFRdFO/BXj
- dRBP5NrSCusXv1PO82ja54NnHSmVGlMRfT3P7c9PT1FkLe/GjwjMuYtu4nqUuppX2HdbihlV1
- yjx283lktqZqKHfOuEQnXlAN+RzLJYzABSyyEdjWIVW8y5qzJZnmNxEaDSjKt8tEA9uCrkC52
- Z092y7NLt1QoyRjIphmCRqP0XkSnFw7GaFa8UBjlKwuwHoVdKDtn5GT6BPEurlsZfDhaGkF1k
- duKE7HfsvKRo3J26O0/yGQojDpdu3zVzTrN/l6uzDf95piaF/iml8BKpeIIRgo5VgKVmoC21Z
- g6zsYggJw7U1sU=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/22 10:26, David Laight wrote:
-> From: David Laight
->> Sent: 14 February 2022 09:12
->>
->> From: Helge Deller
->>> Sent: 13 February 2022 22:10
->>>
->>> The put_user(val,ptr) macro wants a pointer in the second parameter, b=
-ut in
->>> fat_ioctl_filldir() the d_name field references a whole "array of char=
-s".
->>> Usually the compiler automatically converts it and uses a pointer to t=
-hat
->>> array, but it's more clean to explicitly give the real pointer to wher=
-e someting
->>> is put, which is in this case the first character of the d_name[] arra=
-y.
->>
->> That just isn't true.
->>
->> In C both x->char_array and &x->char_array[0] have the same type
->> 'char *'.
->>
->> The 'bug' is caused by put_user() trying to do:
->> 	__typeof__(ptr) __ptr =3D ptr;
->> where __typeof__ is returning char[n] not char *.
->>
->> I've tried a few things but can't get __typeof__ to
->> generate a suitable type for both a simple type and array.
->
-> Actually the issue is that put_user() writes a single variable
-> and needs a pointer to one.
-> So changing to:
-> 	put_user(0, &array[0]);
-> is probably fine.
 
-Ok.
+The util-linux release v2.37.4 is available at
+            
+  http://www.kernel.org/pub/linux/utils/util-linux/v2.37/
+ 
+Feedback and bug reports, as always, are welcomed.
 
-> But the description is all wrong.
 
-I agree it can be improved.
-Would you mind proposing a better description?
+This release fixes security issue in chsh(1) and chfn(8) when
+util-linux compiled with libreadline.
 
-Helge
+CVE-2022-0563
+
+  The readline library uses INPUTRC= environment variable to get a path
+  to the library config file. When the library cannot parse the
+  specified file, it prints an error message containing data from the
+  file.
+
+  Unfortunately, the library does not use secure_getenv() (or a similar
+  concept), or sanitize the config file path to avoid vulnerabilities that
+  could occur if set-user-ID or set-group-ID programs.
+
+
+Note, this vulnerability has been reproduced on chfn(8), but this command
+requires enabled CHFN_RESTRICT setting in /etc/login.defs. This setting 
+may be disabled by default.
+
+
+-- 
+ Karel Zak  <kzak@redhat.com>
+ http://karelzak.blogspot.com
+

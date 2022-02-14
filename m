@@ -2,86 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1B94B5B61
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 21:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA9A14B5B84
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:01:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiBNUq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 15:46:28 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:39114 "EHLO
+        id S229937AbiBNUxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 15:53:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiBNUp6 (ORCPT
+        with ESMTP id S229880AbiBNUxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 15:45:58 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076FE23A1BA;
-        Mon, 14 Feb 2022 12:44:00 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJhmV-001mcz-Ba; Mon, 14 Feb 2022 20:17:07 +0000
-Date:   Mon, 14 Feb 2022 20:17:07 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rich Felker <dalias@libc.org>, linux-ia64@vger.kernel.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Max Filippov <jcmvbkbc@gmail.com>, Guo Ren <guoren@kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Helge Deller <deller@gmx.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        linux-csky@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Greentime Hu <green.hu@gmail.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Richard Weinberger <richard@nod.at>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        David Miller <davem@davemloft.net>
-Subject: Re: [PATCH 04/14] x86: use more conventional access_ok() definition
-Message-ID: <Ygq4wy9fikDYmuHU@zeniv-ca.linux.org.uk>
-References: <20220214163452.1568807-1-arnd@kernel.org>
- <20220214163452.1568807-5-arnd@kernel.org>
- <YgqLFYqIqkIsNC92@infradead.org>
- <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
- <CAHk-=whq6_Nh3cB3FieP481VcRyCu69X3=wO1yLHGmcZEj69SA@mail.gmail.com>
+        Mon, 14 Feb 2022 15:53:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E743F192F31
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:52:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD973B81686
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 20:17:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 821D1C340F3;
+        Mon, 14 Feb 2022 20:17:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644869850;
+        bh=bXedr7UYLlyWE7FAXfDmfEHymhA7Ze+P5ADWEtsZEic=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=XPCbTkjP1VOKsDUMzqRYehjXZhYthTIrtpBGr8H0ZzYaQftPi9E96AvzWlsECj3od
+         ybGN/h2z0/9LE0PHegdMnRe2GK0jn48FgZs4vur8NnXdyaaUNX82APoekloLzGGa+l
+         BmRXENTBjJJZMx0HUAho4F4DG+Se2O87upjPEDZhSFi7FYFdDiUVJi4uWNUmHGHZME
+         zvdOhhONFmU6NrbBkfcCcr6fDLTyYAytGzRsivGOedC8KJE/XGAInWwyeemT11Gkdn
+         RIcq7MT3ZG17lyIF9uthSy4H6AhbdKG/3DLgeLJA43ZKQzjBqVDX4Qzqq2CkIBxxXY
+         nBOvy3QArrg5Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 472305C0388; Mon, 14 Feb 2022 12:17:30 -0800 (PST)
+Date:   Mon, 14 Feb 2022 12:17:30 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 12/42] tools/nolibc/types: make FD_SETSIZE configurable
+Message-ID: <20220214201730.GA4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220207162354.14293-1-w@1wt.eu>
+ <20220207162354.14293-13-w@1wt.eu>
+ <20220213085301.GB31914@1wt.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=whq6_Nh3cB3FieP481VcRyCu69X3=wO1yLHGmcZEj69SA@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220213085301.GB31914@1wt.eu>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,20 +58,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 12:01:05PM -0800, Linus Torvalds wrote:
-> On Mon, Feb 14, 2022 at 11:46 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> >
-> > As Al pointed out, they turned out to be necessary on sparc64, but the only
-> > definitions are on sparc64 and x86, so it's possible that they serve a similar
-> > purpose here, in which case changing the limit from TASK_SIZE to
-> > TASK_SIZE_MAX is probably wrong as well.
+On Sun, Feb 13, 2022 at 09:53:01AM +0100, Willy Tarreau wrote:
+> The macro was hard-coded to 256 but it's common to see it redefined.
+> Let's support this and make sure we always allocate enough entries for
+> the cases where it wouldn't be multiple of 32.
 > 
-> x86-64 has always(*) used TASK_SIZE_MAX for access_ok(), and the
-> get_user() assembler implementation does the same.
-> 
-> I think any __range_not_ok() users that use TASK_SIZE are entirely
-> historical, and should be just fixed.
+> Signed-off-by: Willy Tarreau <w@1wt.eu>
 
-IIRC, that was mostly userland stack trace collection in perf.
-I'll try to dig in archives and see what shows up - it's been
-a while ago...
+I queued both in place of their earlier versions, thank you!
+
+							Thanx, Paul
+
+> ---
+> v2:
+> - rebase on top of v2 of previous patch
+> ---
+>  tools/include/nolibc/types.h | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
+> index a4dda0a22fc2..563dbbad0496 100644
+> --- a/tools/include/nolibc/types.h
+> +++ b/tools/include/nolibc/types.h
+> @@ -45,7 +45,9 @@
+>  #define DT_SOCK        0xc
+>  
+>  /* commonly an fd_set represents 256 FDs */
+> +#ifndef FD_SETSIZE
+>  #define FD_SETSIZE     256
+> +#endif
+>  
+>  /* Special FD used by all the *at functions */
+>  #ifndef AT_FDCWD
+> @@ -72,7 +74,7 @@
+>  
+>  /* for select() */
+>  typedef struct {
+> -	uint32_t fd32[FD_SETSIZE / 32];
+> +	uint32_t fd32[(FD_SETSIZE + 31) / 32];
+>  } fd_set;
+>  
+>  #define FD_CLR(fd, set) do {                                            \
+> @@ -101,7 +103,7 @@ typedef struct {
+>  #define FD_ZERO(set) do {                                               \
+>  		fd_set *__set = (set);                                  \
+>  		int __idx;                                              \
+> -		for (__idx = 0; __idx < FD_SETSIZE / 32; __idx ++)      \
+> +		for (__idx = 0; __idx < (FD_SETSIZE+31) / 32; __idx ++) \
+>  			__set->fd32[__idx] = 0;                         \
+>  	} while (0)
+>  
+> -- 
+> 2.35.1

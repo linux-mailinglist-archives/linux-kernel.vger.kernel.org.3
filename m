@@ -2,206 +2,523 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FAAF4B539F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD13E4B53A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:47:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355330AbiBNOqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 09:46:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49892 "EHLO
+        id S1355294AbiBNOqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 09:46:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353435AbiBNOp7 (ORCPT
+        with ESMTP id S229517AbiBNOql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 09:45:59 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2040.outbound.protection.outlook.com [40.107.93.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285614BFC6;
-        Mon, 14 Feb 2022 06:45:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Pk1xk5ZSIZhbQ73MnDOBxgs43+xtZwR49JSPtV8NLQADXahj9LfmSZNEEDFDdtKzQm6ycOjPW7PGrGK85Wv3CmlupTMqcMXhM3c+5RDf6fdd/lr+ck+/XCSQNv49w2WbjWxvBR3l+s+Kgl4lbb1FHC9ic0F2J0ThXtUAIfTQJwvqWZWiuEng19/OR8jc6xkg2lFhaqnqLLZ9WEAlUUxSdO4pEV6vG51oHbbFeqnjK7CmYzdSHxRHbmPHW9GZ6yDQpvjK6IlYXO29hCwbleKUvimr0Fq/f6Uo1uzCIxf63hrTff74Btq0wxZlfn92iJm7un0N9OmBeyXNRwqHaqeNgQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5YvLm4C9y+H+y0r6WDprxyq97qgCsqEcJn81pqcTF3o=;
- b=lWZ1v9Il/ypk9uaL6iaDxW6dkmCn25H/isNS3E8BNiCIJEsvz2/y/NNiVWeV46P8yYclCEdmJWqCxY9BA11g8W/PnFEyqWAcaagGXlC4VedbM5pc0cHaEjW4qVONF4OrxIJamTKvit0CjWirTeQLFySX36ZqHK0eqs3aC5U38/wMbMZBM/M8HkaENjyZzNmDHk7M4IngALOtcDbGdNKThJXFNBCDffJ8axadNDR2RN9ReNd0sYB8wLz/J5LOHS02MLwrphhaAbdUcZeWED2FrqeECPfaZfbrV+4DslyDG0P/8eD/eDZqbIrFkKlWez2Lzk7Qg3PUkrsN1yTm61LqvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5YvLm4C9y+H+y0r6WDprxyq97qgCsqEcJn81pqcTF3o=;
- b=HgPAGlg/ftvmLexYaaVg3CNPvCO6tu3kvs0zvYVaddtE6gTHjJLIScJaPY+sRRqD77QCk1DWz2eybHpczNw8MG76SbYyOp4Wbiie2BzrmiNigZ7ZJibPGMSxTbxfkytQIP8JgyzvZyFNi3lYnWNczJb/I/GR4XCcsOJoOU0RXcNDpXQx03vJWtrlQ3lsydKyxl7tK90sNABsywwM7Jhfl8OGR4s2kaEY/U1Sb5XntPpHas/xejMhxWdF1RfKwkal6/KRb+uXbtMTj1M4sO5Aytk+K1Nop2BA4WIrxFKqwDYe3kpoxj94yKlrKZd7+gxRHCybgzLC/QSh/P6YpRQYuw==
-Received: from PH0PR12MB5481.namprd12.prod.outlook.com (2603:10b6:510:d4::15)
- by CY4PR12MB1848.namprd12.prod.outlook.com (2603:10b6:903:11d::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.18; Mon, 14 Feb
- 2022 14:45:50 +0000
-Received: from PH0PR12MB5481.namprd12.prod.outlook.com
- ([fe80::8527:54fa:c63d:16b]) by PH0PR12MB5481.namprd12.prod.outlook.com
- ([fe80::8527:54fa:c63d:16b%5]) with mapi id 15.20.4975.019; Mon, 14 Feb 2022
- 14:45:49 +0000
-From:   Parav Pandit <parav@nvidia.com>
-To:     Jakub Kicinski <kuba@kernel.org>, Moshe Shemesh <moshe@nvidia.com>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH net-next v2 0/4] net/mlx5: Introduce devlink param to
- disable SF aux dev probe
-Thread-Topic: [PATCH net-next v2 0/4] net/mlx5: Introduce devlink param to
- disable SF aux dev probe
-Thread-Index: AQHYHyi7LP1bSM9810iOk5A08UDRx6yPHP2AgAPzdgA=
-Date:   Mon, 14 Feb 2022 14:45:48 +0000
-Message-ID: <PH0PR12MB548137BB5A70195983DFF74EDC339@PH0PR12MB5481.namprd12.prod.outlook.com>
-References: <1644571221-237302-1-git-send-email-moshe@nvidia.com>
- <20220211171251.29c7c241@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220211171251.29c7c241@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0102c106-e547-45ec-89df-08d9efc8b0f5
-x-ms-traffictypediagnostic: CY4PR12MB1848:EE_
-x-microsoft-antispam-prvs: <CY4PR12MB18482E096347204EA5D94A82DC339@CY4PR12MB1848.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QD+U/vnnJqpmqHRs3MNA7Ftrs2olJqnaKeGih7jNoR5iwWK2mzI2JaDlxyDBlzVjyAHbVJ0rTdITTSH+pvi0Xpc0PGrKLkrP+yA8qDMeblPuF04gNaFz0AQBi2UhASjk40ywXcOMHx6gE2BX3mSR+LcpIVMMlQHrcFx6R3stC8dvV8lC6oVblCCKzNBFZ4DX9ogLVOLHrl/LOJ4aQXY4PcTdrlUJbjG/eeZzAbjyLdOESGIMp/uNmQYEWg7T0hFW4ieQmiwvHYd0CxiovOzoG9eWAFbMTDUm+h7H75/NwNAxgUmVqdRjDccBBZzxsj9h70R/gPDGL3WRf+rzurSlJ0EMkgyTw6dzBI/mnc2TcX0dykF4/vXTlZCb7b+jtG/EPXc99chuwlhv0tbMgXJBi/h+anBhI81GUBpSwzlVDAbg9yAaD/hj93g4uIZiZL7VXL7JmFYzvdpLiSp5N9sZlB1LdpLTLZvUFVmZ8pwhCeeSup29XCBRAO/mZg20ictC9+mnB5USdWUkP7ahivCSM0GUy/Oi6jijd5swckwGIEWKGVasxbSEYlJ7MN0wD/U8ihdvbo7GaFdYrxYlvKg7rdkqC9+pBnug2HCulLoxrfZQyJI+6HYhdO5GhjJTOn6PKEvQi/xr7kHlRZ+pDM9Mn7pPuRu0EnlgJTYylaqYXHLb3Rpmfrxn6NGkOvRp8Isvdzg5cEmSh941dzTUoXNMcw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB5481.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(76116006)(7696005)(6506007)(9686003)(66476007)(33656002)(71200400001)(64756008)(83380400001)(66446008)(186003)(26005)(52536014)(2906002)(8936002)(5660300002)(66556008)(4326008)(508600001)(66946007)(8676002)(38100700002)(86362001)(6636002)(54906003)(110136005)(55016003)(38070700005)(122000001)(316002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?CzGBHcVODYjxhwlBfHVUE0czb8hYccSU0wOSY3HJ1MxGjFF/Q2XB4ZGI/dKO?=
- =?us-ascii?Q?XlxLl8p1VMZqzyFwW6p2kr6TrvMvbUrVjvdb2DR+SJUXY7wj3VfRUhflLijS?=
- =?us-ascii?Q?L+3izl7UWrCvFhQpv2Xd+Q7NPOlvR8NiEFbDWD2Dl52SMxtyLRueu8PcCUNO?=
- =?us-ascii?Q?a/a+QAnTu7+n+GdJAUOCtCCGdeovOoAOsFf9XAL+yla32oVvph4mMc/PPnWE?=
- =?us-ascii?Q?0PK18DLjU/TGQZbhflPQzYXQAfW9KZ22qfr9Zd+4mG3FcfQWfpa3mfhQCsrS?=
- =?us-ascii?Q?vzLTVOpy6Ud76yPwKgyUUKf28rJzQy+tUII6Q+Yb0NRT+IQUFjOVk1986fcP?=
- =?us-ascii?Q?ewEM4m7rwe1/0lyCAz+RJbk+i3kCEcam+9MXMO20P6s+JLWm/DpdRi980hf/?=
- =?us-ascii?Q?0r5vqKmm03HbtQWzOnLrU7GeUuzEPu0RizcOb5c5ou8VHwaHFR4tRHJ83MET?=
- =?us-ascii?Q?2hQMpBfhpsMxFOAOyWGowNV4xKpSzOXU0GGGqI2M6oVS98YgLZLOAAiVLp0D?=
- =?us-ascii?Q?ExhvXe7ZjBZGlFuvG73/MaPV2YY+yIiQTSsgVo3Bl66Bk6yaRvWZjfWU0adU?=
- =?us-ascii?Q?OxdzGmDA9R54kC+TzIFBq8iSeeh0HepSEICT8sQ1NwYEfwhmThDvksKeeKPT?=
- =?us-ascii?Q?UIizKO4avS8/7Pw+VdfUGSR7dLRlfEKktn/cVDh3XglO8Ltk0EhaiQVFnqh0?=
- =?us-ascii?Q?s+68g8AWM/PSlDH3HiIp4t53X2dXEQld7FPZYj+sR8/QR1/0pzZ1vt4orkZi?=
- =?us-ascii?Q?1UavGbQtrxUPmIUwf2NRh7vbQ9ok3dWC178cmeYLsu61e86NY3MqRTJLNjgr?=
- =?us-ascii?Q?qeiZVMWJ1Mkf8RRlLNlq11O+6AT09/s8rhfyt/A+0m5kZOQI3a0GdeatP4hp?=
- =?us-ascii?Q?LX2oDaL38pEsJCSL46nfAYpHLcZ8QDK3u5ZDhAjs59iBKxLowgGNZYuKl+fN?=
- =?us-ascii?Q?j72fTyMhapZq5mZWn0LyvBCbFtG1pxB48G7a7JmeWWnaTmJ/vWFOL2IuXeYr?=
- =?us-ascii?Q?8vKPJpeGuut+c+5GB3diWabYoQG25EuWFKwRuFV/C0YtMcR4XUgC2iHQhBb1?=
- =?us-ascii?Q?GmfNF0HgPKes3ee5vd6wOzNounZ0iTHDOOAJsoBsLsuy7Q20yZIwH8iwmAS2?=
- =?us-ascii?Q?vO1yMGnaQaSdGJQfw+o9S6vdKmyDCukfn0oWUCBV1rLzJZ10EU9OHPtgbqVE?=
- =?us-ascii?Q?551KRqrSF6hCWtAeF4hiT/M5Q6PbqzuTk7GFkldlH9DFYd6n4lo21spcyIqm?=
- =?us-ascii?Q?w6QRLqPH4RlrjLdbr5Etk5DOUZ2Mguk7TAlC/CQ3Jp64Zb5ILTfjcmERpDkr?=
- =?us-ascii?Q?ifqFvwDyCyRgRpLs5wJdpTKOIv68OOGijziz1vLWfoplmEwOLrdZwhr8KA3F?=
- =?us-ascii?Q?xxhrGiSMK/IHrLD/6Uhz/myDyNTADAsM4ViVRY2irhckhmLBeSE9xovqU9eF?=
- =?us-ascii?Q?5qeIbTB3OARYSolQftHxD1DTA545lfQL/MmPJQQecoEgvXNFlKzDteZm6R/+?=
- =?us-ascii?Q?wchcZqL1TL3jsq6UipOjuO3vooXiLh3MFVdiSlTvaKI/6E/u9jAYD/LovZ98?=
- =?us-ascii?Q?BwPSliONXzfIXtcBIXaUeLEcJESL5crczo1i6ur+pitdtFSn3WDZo6tJ+BXr?=
- =?us-ascii?Q?plc2Lv+dFCHk4AmGz6W2Kmc=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 14 Feb 2022 09:46:41 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1546C18;
+        Mon, 14 Feb 2022 06:46:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644849993; x=1676385993;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=UioHNKOamLEzVQqagLlvBdF3O89wVl/2Sp+gH7hPNK4=;
+  b=k0SzLCHdRWKkd8tZy1YlBGDK3rWBybf4lTzMoEakeNrlk0GxH8GHidjL
+   WrAyZuy7Ow/R+uk1g3yD2Xx3CdWpLdIDqtb6kFaQSfRgQqPFGoHqvInLu
+   icwJ/f9YQimdSOn0Id8Zl5HJUsQ/dtKaS/5BGQXsdClEZRPfl1toy93ga
+   s=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Feb 2022 06:46:33 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 06:46:33 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 14 Feb 2022 06:46:32 -0800
+Received: from deesin-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 14 Feb 2022 06:46:29 -0800
+From:   Deepak Kumar Singh <quic_deesin@quicinc.com>
+To:     <bjorn.andersson@linaro.org>, <quic_clew@quicinc.com>,
+        <mathieu.poirier@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        Deepak Kumar Singh <quic_deesin@quicinc.com>,
+        Andy Gross <agross@kernel.org>
+Subject: [PATCH V4 1/2] soc: qcom: smem: map only partitions used by local HOST
+Date:   Mon, 14 Feb 2022 20:16:13 +0530
+Message-ID: <1644849974-8043-1-git-send-email-quic_deesin@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR12MB5481.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0102c106-e547-45ec-89df-08d9efc8b0f5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2022 14:45:49.0077
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8JG76y8qqxSTJUYKdas97TCXbMvw9E0flbmNfFJ2iLMOwyOIRyaxR/RBt130wlGTLlE+nAMQT+mLyUXkD/eilQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1848
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+SMEM driver is IO mapping complete region and CPU is doing a speculative
+read into a partition where local HOST does not have permission resulting
+in a NOC error.
 
-> From: Jakub Kicinski <kuba@kernel.org>
-> Sent: Saturday, February 12, 2022 6:43 AM
->=20
-> On Fri, 11 Feb 2022 11:20:17 +0200 Moshe Shemesh wrote:
-> > v1->v2:
-> >  - updated example to make clear SF port and SF device creation PFs
-> >  - added example when SF port and device creation PFs are on different
-> > hosts
->=20
-> How does this address my comments?
->
-Which one?
-Your suggestion in [1] to specify vnet during port function spawning time?
-Or=20
-Your suggestion in [2] to add "noprobe" option?
+Map only those partitions which are accessibly to local HOST.
 
-> We will not define Linux APIs based on what your firmware can or cannot d=
-o
-> today.=20
-Sure. I just answered and clarified what it is the device capable to do.
-We can possibly enhance the fw if it looks correct.
+Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
+---
+ drivers/soc/qcom/smem.c | 227 +++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 165 insertions(+), 62 deletions(-)
 
-> Otherwise, why the global policy and all the hoops to jump thru?
-> User wants a device with a vnet, give them a device with a vnet.
->
-User wants a device with specific attributes.
-Do you suggest to tunnel those params at port spawning time to share to dif=
-ferent host via fw?
-Some are HW/FW capabilities, and some are hints.
-Some are hints because vnet also uses some eth resources by its very nature=
- of being vnet.
+diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
+index e2057d8..96444ff 100644
+--- a/drivers/soc/qcom/smem.c
++++ b/drivers/soc/qcom/smem.c
+@@ -195,6 +195,20 @@ struct smem_partition_header {
+ 	__le32 reserved[3];
+ };
+ 
++/**
++ * struct smem_partition - describes smem partition
++ * @virt_base:	starting virtual address of partition
++ * @phys_base:	starting physical address of partition
++ * @cacheline:	alignment for "cached" entries
++ * @size:	size of partition
++ */
++struct smem_partition {
++	void __iomem *virt_base;
++	phys_addr_t phys_base;
++	size_t cacheline;
++	size_t size;
++};
++
+ static const u8 SMEM_PART_MAGIC[] = { 0x24, 0x50, 0x52, 0x54 };
+ 
+ /**
+@@ -250,11 +264,9 @@ struct smem_region {
+  * struct qcom_smem - device data for the smem device
+  * @dev:	device pointer
+  * @hwlock:	reference to a hwspinlock
+- * @global_partition:	pointer to global partition when in use
+- * @global_cacheline:	cacheline size for global partition
+- * @partitions:	list of pointers to partitions affecting the current
+- *		processor/host
+- * @cacheline:	list of cacheline sizes for each host
++ * @ptable: virtual base of partition table
++ * @global_partition: describes for global partition when in use
++ * @partitions: list of partitions of current processor/host
+  * @item_count: max accepted item number
+  * @socinfo:	platform device pointer
+  * @num_regions: number of @regions
+@@ -265,12 +277,11 @@ struct qcom_smem {
+ 
+ 	struct hwspinlock *hwlock;
+ 
+-	struct smem_partition_header *global_partition;
+-	size_t global_cacheline;
+-	struct smem_partition_header *partitions[SMEM_HOST_COUNT];
+-	size_t cacheline[SMEM_HOST_COUNT];
+ 	u32 item_count;
+ 	struct platform_device *socinfo;
++	struct smem_ptable *ptable;
++	struct smem_partition global_partition;
++	struct smem_partition partitions[SMEM_HOST_COUNT];
+ 
+ 	unsigned num_regions;
+ 	struct smem_region regions[];
+@@ -348,14 +359,17 @@ static struct qcom_smem *__smem;
+ #define HWSPINLOCK_TIMEOUT	1000
+ 
+ static int qcom_smem_alloc_private(struct qcom_smem *smem,
+-				   struct smem_partition_header *phdr,
++				   struct smem_partition *part,
+ 				   unsigned item,
+ 				   size_t size)
+ {
+ 	struct smem_private_entry *hdr, *end;
++	struct smem_partition_header *phdr;
+ 	size_t alloc_size;
+ 	void *cached;
+ 
++	phdr = (struct smem_partition_header __force *)part->virt_base;
++
+ 	hdr = phdr_to_first_uncached_entry(phdr);
+ 	end = phdr_to_last_uncached_entry(phdr);
+ 	cached = phdr_to_last_cached_entry(phdr);
+@@ -442,7 +456,7 @@ static int qcom_smem_alloc_global(struct qcom_smem *smem,
+  */
+ int qcom_smem_alloc(unsigned host, unsigned item, size_t size)
+ {
+-	struct smem_partition_header *phdr;
++	struct smem_partition *part;
+ 	unsigned long flags;
+ 	int ret;
+ 
+@@ -464,12 +478,12 @@ int qcom_smem_alloc(unsigned host, unsigned item, size_t size)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (host < SMEM_HOST_COUNT && __smem->partitions[host]) {
+-		phdr = __smem->partitions[host];
+-		ret = qcom_smem_alloc_private(__smem, phdr, item, size);
+-	} else if (__smem->global_partition) {
+-		phdr = __smem->global_partition;
+-		ret = qcom_smem_alloc_private(__smem, phdr, item, size);
++	if (host < SMEM_HOST_COUNT && __smem->partitions[host].virt_base) {
++		part = &__smem->partitions[host];
++		ret = qcom_smem_alloc_private(__smem, part, item, size);
++	} else if (__smem->global_partition.virt_base) {
++		part = &__smem->global_partition;
++		ret = qcom_smem_alloc_private(__smem, part, item, size);
+ 	} else {
+ 		ret = qcom_smem_alloc_global(__smem, item, size);
+ 	}
+@@ -511,12 +525,14 @@ static void *qcom_smem_get_global(struct qcom_smem *smem,
+ }
+ 
+ static void *qcom_smem_get_private(struct qcom_smem *smem,
+-				   struct smem_partition_header *phdr,
+-				   size_t cacheline,
++				   struct smem_partition *part,
+ 				   unsigned item,
+ 				   size_t *size)
+ {
+ 	struct smem_private_entry *e, *end;
++	struct smem_partition_header *phdr;
++
++	phdr = (struct smem_partition_header __force *)part->virt_base;
+ 
+ 	e = phdr_to_first_uncached_entry(phdr);
+ 	end = phdr_to_last_uncached_entry(phdr);
+@@ -538,7 +554,7 @@ static void *qcom_smem_get_private(struct qcom_smem *smem,
+ 
+ 	/* Item was not found in the uncached list, search the cached list */
+ 
+-	e = phdr_to_first_cached_entry(phdr, cacheline);
++	e = phdr_to_first_cached_entry(phdr, part->cacheline);
+ 	end = phdr_to_last_cached_entry(phdr);
+ 
+ 	while (e > end) {
+@@ -553,7 +569,7 @@ static void *qcom_smem_get_private(struct qcom_smem *smem,
+ 			return cached_entry_to_item(e);
+ 		}
+ 
+-		e = cached_entry_next(e, cacheline);
++		e = cached_entry_next(e, part->cacheline);
+ 	}
+ 
+ 	return ERR_PTR(-ENOENT);
+@@ -576,9 +592,8 @@ static void *qcom_smem_get_private(struct qcom_smem *smem,
+  */
+ void *qcom_smem_get(unsigned host, unsigned item, size_t *size)
+ {
+-	struct smem_partition_header *phdr;
++	struct smem_partition *part;
+ 	unsigned long flags;
+-	size_t cacheln;
+ 	int ret;
+ 	void *ptr = ERR_PTR(-EPROBE_DEFER);
+ 
+@@ -594,14 +609,12 @@ void *qcom_smem_get(unsigned host, unsigned item, size_t *size)
+ 	if (ret)
+ 		return ERR_PTR(ret);
+ 
+-	if (host < SMEM_HOST_COUNT && __smem->partitions[host]) {
+-		phdr = __smem->partitions[host];
+-		cacheln = __smem->cacheline[host];
+-		ptr = qcom_smem_get_private(__smem, phdr, cacheln, item, size);
+-	} else if (__smem->global_partition) {
+-		phdr = __smem->global_partition;
+-		cacheln = __smem->global_cacheline;
+-		ptr = qcom_smem_get_private(__smem, phdr, cacheln, item, size);
++	if (host < SMEM_HOST_COUNT && __smem->partitions[host].virt_base) {
++		part = &__smem->partitions[host];
++		ptr = qcom_smem_get_private(__smem, part, item, size);
++	} else if (__smem->global_partition.virt_base) {
++		part = &__smem->global_partition;
++		ptr = qcom_smem_get_private(__smem, part, item, size);
+ 	} else {
+ 		ptr = qcom_smem_get_global(__smem, item, size);
+ 	}
+@@ -622,6 +635,7 @@ EXPORT_SYMBOL(qcom_smem_get);
+  */
+ int qcom_smem_get_free_space(unsigned host)
+ {
++	struct smem_partition *part;
+ 	struct smem_partition_header *phdr;
+ 	struct smem_header *header;
+ 	unsigned ret;
+@@ -629,12 +643,14 @@ int qcom_smem_get_free_space(unsigned host)
+ 	if (!__smem)
+ 		return -EPROBE_DEFER;
+ 
+-	if (host < SMEM_HOST_COUNT && __smem->partitions[host]) {
+-		phdr = __smem->partitions[host];
++	if (host < SMEM_HOST_COUNT && __smem->partitions[host].virt_base) {
++		part = &__smem->partitions[host];
++		phdr = part->virt_base;
+ 		ret = le32_to_cpu(phdr->offset_free_cached) -
+ 		      le32_to_cpu(phdr->offset_free_uncached);
+-	} else if (__smem->global_partition) {
+-		phdr = __smem->global_partition;
++	} else if (__smem->global_partition.virt_base) {
++		part = &__smem->global_partition;
++		phdr = part->virt_base;
+ 		ret = le32_to_cpu(phdr->offset_free_cached) -
+ 		      le32_to_cpu(phdr->offset_free_uncached);
+ 	} else {
+@@ -646,6 +662,11 @@ int qcom_smem_get_free_space(unsigned host)
+ }
+ EXPORT_SYMBOL(qcom_smem_get_free_space);
+ 
++static bool addr_in_range(void __iomem *base, size_t size, void *addr)
++{
++	return base && (addr >= base && addr < base + size);
++}
++
+ /**
+  * qcom_smem_virt_to_phys() - return the physical address associated
+  * with an smem item pointer (previously returned by qcom_smem_get()
+@@ -655,17 +676,36 @@ EXPORT_SYMBOL(qcom_smem_get_free_space);
+  */
+ phys_addr_t qcom_smem_virt_to_phys(void *p)
+ {
+-	unsigned i;
++	struct smem_partition *part;
++	struct smem_region *area;
++	u64 offset;
++	u32 i;
++
++	for (i = 0; i < SMEM_HOST_COUNT; i++) {
++		part = &__smem->partitions[i];
++
++		if (addr_in_range(part->virt_base, part->size, p)) {
++			offset = p - part->virt_base;
++
++			return (phys_addr_t)part->phys_base + offset;
++		}
++	}
++
++	part = &__smem->global_partition;
++
++	if (addr_in_range(part->virt_base, part->size, p)) {
++		offset = p - part->virt_base;
++
++		return (phys_addr_t)part->phys_base + offset;
++	}
+ 
+ 	for (i = 0; i < __smem->num_regions; i++) {
+-		struct smem_region *region = &__smem->regions[i];
++		area = &__smem->regions[i];
+ 
+-		if (p < region->virt_base)
+-			continue;
+-		if (p < region->virt_base + region->size) {
+-			u64 offset = p - region->virt_base;
++		if (addr_in_range(area->virt_base, area->size, p)) {
++			offset = p - area->virt_base;
+ 
+-			return region->aux_base + offset;
++			return (phys_addr_t)area->aux_base + offset;
+ 		}
+ 	}
+ 
+@@ -689,7 +729,7 @@ static struct smem_ptable *qcom_smem_get_ptable(struct qcom_smem *smem)
+ 	struct smem_ptable *ptable;
+ 	u32 version;
+ 
+-	ptable = smem->regions[0].virt_base + smem->regions[0].size - SZ_4K;
++	ptable = smem->ptable;
+ 	if (memcmp(ptable->magic, SMEM_PTABLE_MAGIC, sizeof(ptable->magic)))
+ 		return ERR_PTR(-ENOENT);
+ 
+@@ -728,9 +768,14 @@ qcom_smem_partition_header(struct qcom_smem *smem,
+ 		struct smem_ptable_entry *entry, u16 host0, u16 host1)
+ {
+ 	struct smem_partition_header *header;
++	u32 phys_addr;
+ 	u32 size;
+ 
+-	header = smem->regions[0].virt_base + le32_to_cpu(entry->offset);
++	phys_addr = smem->regions[0].aux_base + le32_to_cpu(entry->offset);
++	header = devm_ioremap_wc(smem->dev, phys_addr, le32_to_cpu(entry->size));
++
++	if (!header)
++		return NULL;
+ 
+ 	if (memcmp(header->magic, SMEM_PART_MAGIC, sizeof(header->magic))) {
+ 		dev_err(smem->dev, "bad partition magic %4ph\n", header->magic);
+@@ -772,7 +817,7 @@ static int qcom_smem_set_global_partition(struct qcom_smem *smem)
+ 	bool found = false;
+ 	int i;
+ 
+-	if (smem->global_partition) {
++	if (smem->global_partition.virt_base) {
+ 		dev_err(smem->dev, "Already found the global partition\n");
+ 		return -EINVAL;
+ 	}
+@@ -807,8 +852,11 @@ static int qcom_smem_set_global_partition(struct qcom_smem *smem)
+ 	if (!header)
+ 		return -EINVAL;
+ 
+-	smem->global_partition = header;
+-	smem->global_cacheline = le32_to_cpu(entry->cacheline);
++	smem->global_partition.virt_base = (void __iomem *)header;
++	smem->global_partition.phys_base = smem->regions[0].aux_base +
++								le32_to_cpu(entry->offset);
++	smem->global_partition.size = le32_to_cpu(entry->size);
++	smem->global_partition.cacheline = le32_to_cpu(entry->cacheline);
+ 
+ 	return 0;
+ }
+@@ -848,7 +896,7 @@ qcom_smem_enumerate_partitions(struct qcom_smem *smem, u16 local_host)
+ 			return -EINVAL;
+ 		}
+ 
+-		if (smem->partitions[remote_host]) {
++		if (smem->partitions[remote_host].virt_base) {
+ 			dev_err(smem->dev, "duplicate host %hu\n", remote_host);
+ 			return -EINVAL;
+ 		}
+@@ -857,13 +905,48 @@ qcom_smem_enumerate_partitions(struct qcom_smem *smem, u16 local_host)
+ 		if (!header)
+ 			return -EINVAL;
+ 
+-		smem->partitions[remote_host] = header;
+-		smem->cacheline[remote_host] = le32_to_cpu(entry->cacheline);
++		smem->partitions[remote_host].virt_base = (void __iomem *)header;
++		smem->partitions[remote_host].phys_base = smem->regions[0].aux_base +
++										le32_to_cpu(entry->offset);
++		smem->partitions[remote_host].size = le32_to_cpu(entry->size);
++		smem->partitions[remote_host].cacheline = le32_to_cpu(entry->cacheline);
+ 	}
+ 
+ 	return 0;
+ }
+ 
++static int qcom_smem_map_toc(struct qcom_smem *smem, struct smem_region *region)
++{
++	u32 ptable_start;
++	int ret;
++
++	/* map starting 4K for smem header */
++	region->virt_base = devm_ioremap_wc(dev, region->aux_base, SZ_4K);
++	ptable_start = region->aux_base + region->size - SZ_4K;
++	/* map last 4k for toc */
++	smem->ptable = devm_ioremap_wc(dev, ptable_start, SZ_4K);
++
++	if (!region->virt_base || !smem->ptable)
++		return -ENOMEM;
++
++	return 0;
++}
++
++static int qcom_smem_map_global(struct qcom_smem *smem, u32 size)
++{
++	u32 phys_addr;
++
++	phys_addr = smem->regions[0].aux_base;
++
++	smem->regions[0].size = size;
++	smem->regions[0].virt_base = devm_ioremap_wc(smem->dev, phys_addr, size);
++
++	if (!smem->regions[0].virt_base)
++		return -ENOMEM;
++
++	return 0;
++}
++
+ static int qcom_smem_resolve_mem(struct qcom_smem *smem, const char *name,
+ 				 struct smem_region *region)
+ {
+@@ -894,10 +977,12 @@ static int qcom_smem_probe(struct platform_device *pdev)
+ 	struct smem_header *header;
+ 	struct reserved_mem *rmem;
+ 	struct qcom_smem *smem;
++	unsigned long flags;
+ 	size_t array_size;
+ 	int num_regions;
+ 	int hwlock_id;
+ 	u32 version;
++	u32 size;
+ 	int ret;
+ 	int i;
+ 
+@@ -933,7 +1018,12 @@ static int qcom_smem_probe(struct platform_device *pdev)
+ 			return ret;
+ 	}
+ 
+-	for (i = 0; i < num_regions; i++) {
++
++	ret = qcom_smem_map_toc(smem, &smem->regions[0]);
++ 	if (ret)
++ 		return ret;
++
++	for (i = 1; i < num_regions; i++) {
+ 		smem->regions[i].virt_base = devm_ioremap_wc(&pdev->dev,
+ 							     smem->regions[i].aux_base,
+ 							     smem->regions[i].size);
+@@ -950,7 +1040,30 @@ static int qcom_smem_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 	}
+ 
++	hwlock_id = of_hwspin_lock_get_id(pdev->dev.of_node, 0);
++	if (hwlock_id < 0) {
++		if (hwlock_id != -EPROBE_DEFER)
++			dev_err(&pdev->dev, "failed to retrieve hwlock\n");
++		return hwlock_id;
++	}
++
++	smem->hwlock = hwspin_lock_request_specific(hwlock_id);
++	if (!smem->hwlock)
++		return -ENXIO;
++
++	ret = hwspin_lock_timeout_irqsave(smem->hwlock, HWSPINLOCK_TIMEOUT, &flags);
++	if (ret)
++		return ret;
++	size = readl_relaxed(&header->available) + readl_relaxed(&header->free_offset);
++	hwspin_unlock_irqrestore(smem->hwlock, &flags);
++
+ 	version = qcom_smem_get_sbl_version(smem);
++	/*
++	 * smem header mapping is required only in heap version scheme, so unmap
++	 * it here. It will be remapped in qcom_smem_map_global() when whole
++	 * partition is mapped again.
++	 */
++	devm_iounmap(smem->dev, smem->regions[0].virt_base);
+ 	switch (version >> 16) {
+ 	case SMEM_GLOBAL_PART_VERSION:
+ 		ret = qcom_smem_set_global_partition(smem);
+@@ -959,6 +1072,7 @@ static int qcom_smem_probe(struct platform_device *pdev)
+ 		smem->item_count = qcom_smem_get_item_count(smem);
+ 		break;
+ 	case SMEM_GLOBAL_HEAP_VERSION:
++		qcom_smem_map_global(smem, size);
+ 		smem->item_count = SMEM_ITEM_COUNT;
+ 		break;
+ 	default:
+@@ -971,17 +1085,6 @@ static int qcom_smem_probe(struct platform_device *pdev)
+ 	if (ret < 0 && ret != -ENOENT)
+ 		return ret;
+ 
+-	hwlock_id = of_hwspin_lock_get_id(pdev->dev.of_node, 0);
+-	if (hwlock_id < 0) {
+-		if (hwlock_id != -EPROBE_DEFER)
+-			dev_err(&pdev->dev, "failed to retrieve hwlock\n");
+-		return hwlock_id;
+-	}
+-
+-	smem->hwlock = hwspin_lock_request_specific(hwlock_id);
+-	if (!smem->hwlock)
+-		return -ENXIO;
+-
+ 	__smem = smem;
+ 
+ 	smem->socinfo = platform_device_register_data(&pdev->dev, "qcom-socinfo",
+-- 
+2.7.4
 
-Lets discuss two use cases.
-Use case -1:
-User wants params of [3] to below value.
-eth=3Dfalse, vnet=3Dfalse, rdma=3Dtrue, roce=3Dfalse, io_eq_size=3D4, event=
-_eq_size=3D256, max_macs=3D1.
-
-Use case -2:
-User wants params of [3] be below value.
-eth=3Dtrue, vnet=3Dfalse, rdma=3Dtrue, roce=3Dtrue, rest=3Ddon't care.
-
-Last year, when we added "roce" in [4] on the eswitch side, you commented i=
-n [4] to leave the decision on the SF side.
-Based on this feedback, you can see growth of such params on the SF side in=
- [5], [6] and reusing existing params in [7].
-(instead of doing them on port spawning side)
-
-Port spawning time attributes should cover minimum of below attributes of [=
-3].
-(a) enable_vnet,eth,roce,rdma,iwarp (b) io_eq_size, (c) event_eq_size (d) m=
-ax_macs.
-
-Do you agree if above list is worth addition as port function attributes?
-If not, its not addressing the user needs.
-
-Did you get a chance to read my reply in [8]?
-In future when user wants to change the cpu affinity of a SF, user needs to=
- perform devlink reload.
-And params of [3] + any new devlink params also benefit from single devlink=
- reload?
-For example, which and how many cpus to use is something best decided by th=
-e depending on the workload and use case.
-
-> You left out from your steps how ESW learns that the device has to be
-> spawned.=20
-I read above note few times, but didn't understand. Can you please explain?
-
-> Given there's some form of communication between user intent and
-> ESW the location of the two is completely irrelevant.
-I find it difficult to have all attributes on the port function, specially =
-knobs which are very host specific.
-Few valid knobs that I see on host side are=20
-(a) cpu affinity mask
-(b) number of msix vectors to consume within driver internally vs map to us=
-er space
-
-At present I see knobs on both sides.
-Saeed is offline this week, and I want to gather his feedback as well on pa=
-ssing hints from port spawning side to host side.

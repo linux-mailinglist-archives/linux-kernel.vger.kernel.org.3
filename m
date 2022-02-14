@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6680B4B4B37
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C44A24B4A7D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345692AbiBNKKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:10:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36314 "EHLO
+        id S1347675AbiBNKcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:32:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345957AbiBNKHQ (ORCPT
+        with ESMTP id S1348906AbiBNKbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:07:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F314474DFD;
-        Mon, 14 Feb 2022 01:49:55 -0800 (PST)
+        Mon, 14 Feb 2022 05:31:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B1D9DD54;
+        Mon, 14 Feb 2022 01:59:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2052B80DC6;
-        Mon, 14 Feb 2022 09:49:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE517C340F3;
-        Mon, 14 Feb 2022 09:49:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32FC4B80DCE;
+        Mon, 14 Feb 2022 09:59:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6714AC340E9;
+        Mon, 14 Feb 2022 09:59:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832193;
-        bh=3UEe5fMMHX7Zx1snaaS1yRSYxwXrqkfm5SBnrj3gR2w=;
+        s=korg; t=1644832782;
+        bh=kBKRvywjjqjNpuL5Kwxupm6Ld+fvT0fycBmoWsPxpms=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sLTS1u8/e1ITZyZy9zB+kivGSiJlKUS/k5qZezYyrx4mWyivosXMy4oKQ/jrYLIkJ
-         F/dSYR5ezYYeu7IW86UP+l0zLHPk3iJKw1Is61qFEyXIBXyfcIF0P/JZ7F4VbOa5h6
-         n+7/O1GJ6aK+hu4Xs59te8FbpfCOHX1pdCFrQMVY=
+        b=f1NeO0WwjnmdrcLIglKw4oP43gB1tUvkNyVXHvyJqiD+ct+nMOw5avyocmLrL8fZC
+         L60jcwd+3pu35cjICBqLPikFjo4mQAz0L5p7T3yz3+XHvYtxXg32EGbUuFiXLmkvDh
+         +ewEPdyjzBtt3GJGctTJA6TpsQQgaXdiZKIgEk+M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Helge Deller <deller@gmx.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        Talal Ahmad <talalahmad@google.com>,
+        Arjun Roy <arjunroy@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 109/172] fbcon: Avoid cap set but not used warning
+Subject: [PATCH 5.16 123/203] tcp: take care of mixed splice()/sendmsg(MSG_ZEROCOPY) case
 Date:   Mon, 14 Feb 2022 10:26:07 +0100
-Message-Id: <20220214092510.192509674@linuxfoundation.org>
+Message-Id: <20220214092514.420537078@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,60 +60,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit 50b10528aad568c95f772039d4b3093b4aea7439 ]
+[ Upstream commit f8d9d938514f46c4892aff6bfe32f425e84d81cc ]
 
-Fix this kernel test robot warning:
+syzbot found that mixing sendpage() and sendmsg(MSG_ZEROCOPY)
+calls over the same TCP socket would again trigger the
+infamous warning in inet_sock_destruct()
 
-  drivers/video/fbdev/core/fbcon.c: In function 'fbcon_init':
-  drivers/video/fbdev/core/fbcon.c:1028:6: warning: variable 'cap' set but not used [-Wunused-but-set-variable]
+	WARN_ON(sk_forward_alloc_get(sk));
 
-The cap variable is only used when CONFIG_FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION
-is enabled. Drop the temporary variable and use info->flags instead.
+While Talal took into account a mix of regular copied data
+and MSG_ZEROCOPY one in the same skb, the sendpage() path
+has been forgotten.
 
-Fixes: 87ab9f6b7417 ("Revert "fbcon: Disable accelerated scrolling")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
-Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Link: https://patchwork.freedesktop.org/patch/msgid/YgFB4xqI+As196FR@p100
+We want the charging to happen for sendpage(), because
+pages could be coming from a pipe. What is missing is the
+downgrading of pure zerocopy status to make sure
+sk_forward_alloc will stay synced.
+
+Add tcp_downgrade_zcopy_pure() helper so that we can
+use it from the two callers.
+
+Fixes: 9b65b17db723 ("net: avoid double accounting for pure zerocopy skbs")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Cc: Talal Ahmad <talalahmad@google.com>
+Cc: Arjun Roy <arjunroy@google.com>
+Cc: Willem de Bruijn <willemb@google.com>
+Acked-by: Soheil Hassas Yeganeh <soheil@google.com>
+Link: https://lore.kernel.org/r/20220203225547.665114-1-eric.dumazet@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/core/fbcon.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ net/ipv4/tcp.c | 33 +++++++++++++++++++--------------
+ 1 file changed, 19 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
-index f7b7d35953e81..a53c1f6906f09 100644
---- a/drivers/video/fbdev/core/fbcon.c
-+++ b/drivers/video/fbdev/core/fbcon.c
-@@ -1025,7 +1025,7 @@ static void fbcon_init(struct vc_data *vc, int init)
- 	struct vc_data *svc = *default_mode;
- 	struct fbcon_display *t, *p = &fb_display[vc->vc_num];
- 	int logo = 1, new_rows, new_cols, rows, cols;
--	int cap, ret;
-+	int ret;
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 94cbba9fb12b1..28abb0bb1c515 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -936,6 +936,22 @@ void tcp_remove_empty_skb(struct sock *sk)
+ 	}
+ }
  
- 	if (WARN_ON(info_idx == -1))
- 	    return;
-@@ -1034,7 +1034,6 @@ static void fbcon_init(struct vc_data *vc, int init)
- 		con2fb_map[vc->vc_num] = info_idx;
++/* skb changing from pure zc to mixed, must charge zc */
++static int tcp_downgrade_zcopy_pure(struct sock *sk, struct sk_buff *skb)
++{
++	if (unlikely(skb_zcopy_pure(skb))) {
++		u32 extra = skb->truesize -
++			    SKB_TRUESIZE(skb_end_offset(skb));
++
++		if (!sk_wmem_schedule(sk, extra))
++			return -ENOMEM;
++
++		sk_mem_charge(sk, extra);
++		skb_shinfo(skb)->flags &= ~SKBFL_PURE_ZEROCOPY;
++	}
++	return 0;
++}
++
+ static struct sk_buff *tcp_build_frag(struct sock *sk, int size_goal, int flags,
+ 				      struct page *page, int offset, size_t *size)
+ {
+@@ -971,7 +987,7 @@ static struct sk_buff *tcp_build_frag(struct sock *sk, int size_goal, int flags,
+ 		tcp_mark_push(tp, skb);
+ 		goto new_segment;
+ 	}
+-	if (!sk_wmem_schedule(sk, copy))
++	if (tcp_downgrade_zcopy_pure(sk, skb) || !sk_wmem_schedule(sk, copy))
+ 		return NULL;
  
- 	info = registered_fb[con2fb_map[vc->vc_num]];
--	cap = info->flags;
+ 	if (can_coalesce) {
+@@ -1319,19 +1335,8 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
  
- 	if (logo_shown < 0 && console_loglevel <= CONSOLE_LOGLEVEL_QUIET)
- 		logo_shown = FBCON_LOGO_DONTSHOW;
-@@ -1137,8 +1136,8 @@ static void fbcon_init(struct vc_data *vc, int init)
- 	ops->graphics = 0;
+ 			copy = min_t(int, copy, pfrag->size - pfrag->offset);
  
- #ifdef CONFIG_FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION
--	if ((cap & FBINFO_HWACCEL_COPYAREA) &&
--	    !(cap & FBINFO_HWACCEL_DISABLED))
-+	if ((info->flags & FBINFO_HWACCEL_COPYAREA) &&
-+	    !(info->flags & FBINFO_HWACCEL_DISABLED))
- 		p->scrollmode = SCROLL_MOVE;
- 	else /* default to something safe */
- 		p->scrollmode = SCROLL_REDRAW;
+-			/* skb changing from pure zc to mixed, must charge zc */
+-			if (unlikely(skb_zcopy_pure(skb))) {
+-				u32 extra = skb->truesize -
+-					    SKB_TRUESIZE(skb_end_offset(skb));
+-
+-				if (!sk_wmem_schedule(sk, extra))
+-					goto wait_for_space;
+-
+-				sk_mem_charge(sk, extra);
+-				skb_shinfo(skb)->flags &= ~SKBFL_PURE_ZEROCOPY;
+-			}
+-
+-			if (!sk_wmem_schedule(sk, copy))
++			if (tcp_downgrade_zcopy_pure(sk, skb) ||
++			    !sk_wmem_schedule(sk, copy))
+ 				goto wait_for_space;
+ 
+ 			err = skb_copy_to_page_nocache(sk, &msg->msg_iter, skb,
 -- 
 2.34.1
 

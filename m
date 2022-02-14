@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C16174B4007
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:05:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A28A4B4002
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239788AbiBNDDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 22:03:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45278 "EHLO
+        id S239800AbiBNDEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 22:04:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236937AbiBNDDq (ORCPT
+        with ESMTP id S229460AbiBNDEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 22:03:46 -0500
+        Sun, 13 Feb 2022 22:04:10 -0500
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1969D50E02;
-        Sun, 13 Feb 2022 19:03:38 -0800 (PST)
-X-UUID: c752b54efb3e473dbc9dbce78ba4f3a4-20220214
-X-UUID: c752b54efb3e473dbc9dbce78ba4f3a4-20220214
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1920650E02;
+        Sun, 13 Feb 2022 19:04:02 -0800 (PST)
+X-UUID: c0cc346dcdef40718578236a9f63c992-20220214
+X-UUID: c0cc346dcdef40718578236a9f63c992-20220214
 Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
         (envelope-from <guodong.liu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1639215548; Mon, 14 Feb 2022 11:03:35 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 14 Feb 2022 11:03:34 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 14 Feb
- 2022 11:03:33 +0800
+        with ESMTP id 1061529773; Mon, 14 Feb 2022 11:04:01 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 14 Feb 2022 11:03:59 +0800
 Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 14 Feb 2022 11:03:29 +0800
-Message-ID: <77feef2c0b8b5523ef0acc342d394f05f6caabb3.camel@mediatek.com>
-Subject: Re: [PATCH v3 3/3] pinctrl: canonical rsel resistance selection
- property
+ Transport; Mon, 14 Feb 2022 11:03:58 +0800
+Message-ID: <ab823da2bff2dddcbf563083c787631c9ef842b7.camel@mediatek.com>
+Subject: Re: [PATCH v3 1/3] dt-bindings: pinctrl: mt8186: add pinctrl file
+ and binding document
 From:   Guodong Liu <guodong.liu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>
-CC:     Sean Wang <sean.wang@mediatek.com>, <linux-gpio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
+To:     Rob Herring <robh@kernel.org>
+CC:     Linus Walleij <linus.walleij@linaro.org>,
+        Sean Wang <sean.wang@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 14 Feb 2022 11:03:29 +0800
-In-Reply-To: <8c5cf4b7-dd73-49f6-60dd-b62b3fc3ecdb@collabora.com>
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-gpio@vger.kernel.org>, Sean Wang <sean.wang@kernel.org>,
+        <devicetree@vger.kernel.org>
+Date:   Mon, 14 Feb 2022 11:03:58 +0800
+In-Reply-To: <1644504472.320340.2624780.nullmailer@robh.at.kernel.org>
 References: <20220210062122.23974-1-guodong.liu@mediatek.com>
-         <20220210062122.23974-4-guodong.liu@mediatek.com>
-         <8c5cf4b7-dd73-49f6-60dd-b62b3fc3ecdb@collabora.com>
+         <20220210062122.23974-2-guodong.liu@mediatek.com>
+         <1644504472.320340.2624780.nullmailer@robh.at.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
@@ -66,68 +63,78 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 -----Original Message-----
-From: AngeloGioacchino Del Regno <
-angelogioacchino.delregno@collabora.com>
-To: Guodong Liu <guodong.liu@mediatek.com>, Linus Walleij <
-linus.walleij@linaro.org>, Rob Herring <robh+dt@kernel.org>, Matthias
-Brugger <matthias.bgg@gmail.com>, Sean Wang <sean.wang@kernel.org>
-Cc: Sean Wang <sean.wang@mediatek.com>, linux-gpio@vger.kernel.org, 
-devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, 
-Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v3 3/3] pinctrl: canonical rsel resistance
-selection property
-Date: Thu, 10 Feb 2022 09:50:45 +0100
+From: Rob Herring <robh@kernel.org>
+To: Guodong Liu <guodong.liu@mediatek.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>, Sean Wang <
+sean.wang@mediatek.com>, linux-mediatek@lists.infradead.org, Rob
+Herring <robh+dt@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+linux-kernel@vger.kernel.org, 
+Project_Global_Chrome_Upstream_Group@mediatek.com, Matthias Brugger <
+matthias.bgg@gmail.com>, linux-gpio@vger.kernel.org, Sean Wang <
+sean.wang@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] dt-bindings: pinctrl: mt8186: add pinctrl
+file and binding document
+Date: Thu, 10 Feb 2022 08:47:52 -0600
 
-Il 10/02/22 07:21, Guodong Liu ha scritto:
-> Change "mediatek,rsel_resistance_in_si_unit" to "mediatek,rsel-
-> resistance-in-si-unit"
+On Thu, 10 Feb 2022 14:21:20 +0800, Guodong Liu wrote:
+> 1. This patch adds pinctrl file for mt8186.
+> 2. This patch adds mt8186 compatible node in binding document.
 > 
 > Signed-off-by: Guodong Liu <guodong.liu@mediatek.com>
+> ---
+>  .../bindings/pinctrl/pinctrl-mt8186.yaml      |  313 +++++
+>  include/dt-bindings/pinctrl/mt8186-pinfunc.h  | 1174
+> +++++++++++++++++
+>  2 files changed, 1487 insertions(+)
+>  create mode 100644
+> Documentation/devicetree/bindings/pinctrl/pinctrl-mt8186.yaml
+>  create mode 100644 include/dt-bindings/pinctrl/mt8186-pinfunc.h
+> 
 
-Hello Guodong,
-thanks for the patch!
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-However, you forgot to add the required Fixes tag to this one; this
-patch
-should be fixing fb34a9ae383a ("pinctrl: mediatek: support rsel
-feature").
+yamllint warnings/errors:
 
-Please add the required tag.
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-
+review/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8186.yaml:
+properties:reg-names: {'description': 'Gpio base register names.\n',
+'items': [{'const': 'iocfg0'}, {'const': 'iocfg_bm'}, {'const':
+'iocfg_bl'}, {'const': 'iocfg_br'}, {'const': 'iocfg_lm'}, {'const':
+'iocfg_rb'}, {'const': 'iocfg_tl'}, {'const': 'eint'}], 'maxItems': 8}
+should not be valid under {'required': ['maxItems']}
+	hint: "maxItems" is not needed with an "items" list
+	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+/builds/robherring/linux-dt-
+review/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8186.yaml:
+ignoring, error in schema: properties: reg-names
+Documentation/devicetree/bindings/pinctrl/pinctrl-
+mt8186.example.dt.yaml:0:0: /example-0/pinctrl@10005000: failed to
+match any schema with compatible: ['mediatek,mt8186-pinctrl']
 
-Thanks,
-Angelo
+doc reference errors (make refcheckdocs):
 
-Hi Angelo
+See https://patchwork.ozlabs.org/patch/1590838
 
-We will update it for next version.
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
+Hi Rob
+
+Thank you fou your useful information, and we will update it for next
+version.
 
 Thanks
 Guodong
-> ---
->   drivers/pinctrl/mediatek/pinctrl-paris.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c
-> b/drivers/pinctrl/mediatek/pinctrl-paris.c
-> index d4e02c5d74a8..38c0f0c4cf95 100644
-> --- a/drivers/pinctrl/mediatek/pinctrl-paris.c
-> +++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
-> @@ -989,7 +989,7 @@ int mtk_paris_pinctrl_probe(struct
-> platform_device *pdev,
->   	hw->nbase = hw->soc->nbase_names;
->   
->   	if (of_find_property(hw->dev->of_node,
-> -			     "mediatek,rsel_resistance_in_si_unit",
-> NULL))
-> +			     "mediatek,rsel-resistance-in-si-unit",
-> NULL))
->   		hw->rsel_si_unit = true;
->   	else
->   		hw->rsel_si_unit = false;
-> 
-
-
 
 
 

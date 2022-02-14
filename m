@@ -2,153 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C924B5A64
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 20:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9CD4B5A68
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 20:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiBNTFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 14:05:14 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54868 "EHLO
+        id S230032AbiBNTFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 14:05:45 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiBNTE4 (ORCPT
+        with ESMTP id S230438AbiBNTFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 14:04:56 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BD28EB5C;
-        Mon, 14 Feb 2022 11:04:38 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id u12so11249892plf.13;
-        Mon, 14 Feb 2022 11:04:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5/DaZmV9acYDCTgPotmTjkv5wdpuSuU2XjrOsJthBBQ=;
-        b=nWQxV8bwhbOD3UF50A117xCVxj+SdTH8j0ePhfp/vJCb8IjI9vBWg6cxXRzKNHYnA2
-         cWK3cz+qshBj6PDjeKoogB7Z176jQ/iWDg9drN0TMGnqsZjErTE8Y0fhjM2HuB0hTZ7k
-         WvoWhgELlUECaUOdFHVDVUNSFL9XTETtsx/yiLVvgbMzOxc99n7KNkG87N5dS1e59o/P
-         tG7l3iVWZoA37J/EBljjE3AvYVBP4USRavxZz22fUyPo1Fyt++TsRu3eGtHrwG5tEj67
-         0nlOi1QUyysEhYHzoj7rdRxXZjvOaS5yt/bFcOiBA9oNZ6VC7M2mvOTMw8FnY9P287O5
-         iONA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5/DaZmV9acYDCTgPotmTjkv5wdpuSuU2XjrOsJthBBQ=;
-        b=tJUuEKtMIdqTVgAUrnvnoQwjRRJp/4POslhuKcwRFyixzE5iEinnZQGYtcILC2AMOf
-         cuUqg1WycPMxGsfXcx73LMuQ/0nwkbmVhsQgTH31Q2En1mQI9nhHHg8w3NkazhXxCrk7
-         SFvFgdoi2XIDvlPQMLbD0pLdLu2gKcbTAFMm0SC3TQ67vHgnV5PDk3sFr1OuuB8tNW/P
-         UsOw7jJtz+NwT/fwl3j7WdeYDXtMNvVzsFsw/tZs0oO1okXQXfkI/bLTSOfZI2FaT8SY
-         +kS3dGKBq07bQpEBmTUQSvO7KrXbsWNej2gm2bvGMsUHfxVIUtgwHDb+wWWOb+DqnNfY
-         FS3g==
-X-Gm-Message-State: AOAM531/hdXLCQO+cjC9+xLAnT6K5wvT+lPrjTdXoLv705LiShcU7POZ
-        8cCjSmLFMBEHZWZRpugVnLs=
-X-Google-Smtp-Source: ABdhPJwoikppkKPhBbf43zKKC+nQQi8QmN17ON2BtIKBG/X7Qj3NKBvQo5nyXCW7kCKLxOljb9sS1Q==
-X-Received: by 2002:a17:90a:8c8b:: with SMTP id b11mr16258736pjo.197.1644865217384;
-        Mon, 14 Feb 2022 11:00:17 -0800 (PST)
-Received: from [192.168.1.35] (71.red-83-50-68.dynamicip.rima-tde.net. [83.50.68.71])
-        by smtp.gmail.com with ESMTPSA id d8sm3507592pjr.29.2022.02.14.11.00.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 11:00:17 -0800 (PST)
-Sender: =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= 
-        <philippe.mathieu.daude@gmail.com>
-Message-ID: <5324be35-5c49-31c1-3f9a-267a5dae8c84@amsat.org>
-Date:   Mon, 14 Feb 2022 20:00:12 +0100
+        Mon, 14 Feb 2022 14:05:39 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07CD8594D;
+        Mon, 14 Feb 2022 11:05:21 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8961847F;
+        Mon, 14 Feb 2022 20:01:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1644865302;
+        bh=HaePsS3lXNpHcPj5MPmXkT342o0zhEQout96BKmcGfA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DVZ/ILvxxW3X4E8dem/WjuOYpafbvnIvf4TYhA/KEYE24g7k7byr7cTV94RGQC9lT
+         4zOQ7MNsybURE0h0YS57sz6MGWYcjssC8xdVU7UeqRw2+JV/h6yIotI0ew8GUH0e2w
+         7TAU6lOn/13+Lzl24I7pjGI3wCK+nxyX3zaEwbKo=
+Date:   Mon, 14 Feb 2022 21:01:36 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/9] media: imx: Store the type of hardware
+ implementation
+Message-ID: <YgqnEFhdBIAqnYXv@pendragon.ideasonboard.com>
+References: <20220211142752.779952-1-alexander.stein@ew.tq-group.com>
+ <20220211142752.779952-2-alexander.stein@ew.tq-group.com>
+ <20220214185035.uomrdkzth7adkw5c@uno.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH mips-fixes] MIPS: smp: fill in sibling and core maps
- earlier
-Content-Language: en-US
-To:     Alexander Lobakin <alobakin@pm.me>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Valentin Schneider <valentin.schneider@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220212221347.442070-1-alobakin@pm.me>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
-In-Reply-To: <20220212221347.442070-1-alobakin@pm.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220214185035.uomrdkzth7adkw5c@uno.localdomain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/22 23:21, Alexander Lobakin wrote:
-> After enabling CONFIG_SCHED_CORE (landed during 5.14 cycle),
-> 2-core 2-thread-per-core interAptiv (CPS-driven) started emitting
-> the following:
-> 
-> [    0.025698] CPU1 revision is: 0001a120 (MIPS interAptiv (multi))
-> [    0.048183] ------------[ cut here ]------------
-> [    0.048187] WARNING: CPU: 1 PID: 0 at kernel/sched/core.c:6025 sched_core_cpu_starting+0x198/0x240
-> [    0.048220] Modules linked in:
-> [    0.048233] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.17.0-rc3+ #35 b7b319f24073fd9a3c2aa7ad15fb7993eec0b26f
-> [    0.048247] Stack : 817f0000 00000004 327804c8 810eb050 00000000 00000004 00000000 c314fdd1
-> [    0.048278]         830cbd64 819c0000 81800000 817f0000 83070bf4 00000001 830cbd08 00000000
-> [    0.048307]         00000000 00000000 815fcbc4 00000000 00000000 00000000 00000000 00000000
-> [    0.048334]         00000000 00000000 00000000 00000000 817f0000 00000000 00000000 817f6f34
-> [    0.048361]         817f0000 818a3c00 817f0000 00000004 00000000 00000000 4dc33260 0018c933
-> [    0.048389]         ...
-> [    0.048396] Call Trace:
-> [    0.048399] [<8105a7bc>] show_stack+0x3c/0x140
-> [    0.048424] [<8131c2a0>] dump_stack_lvl+0x60/0x80
-> [    0.048440] [<8108b5c0>] __warn+0xc0/0xf4
-> [    0.048454] [<8108b658>] warn_slowpath_fmt+0x64/0x10c
-> [    0.048467] [<810bd418>] sched_core_cpu_starting+0x198/0x240
-> [    0.048483] [<810c6514>] sched_cpu_starting+0x14/0x80
-> [    0.048497] [<8108c0f8>] cpuhp_invoke_callback_range+0x78/0x140
-> [    0.048510] [<8108d914>] notify_cpu_starting+0x94/0x140
-> [    0.048523] [<8106593c>] start_secondary+0xbc/0x280
-> [    0.048539]
-> [    0.048543] ---[ end trace 0000000000000000 ]---
-> [    0.048636] Synchronize counters for CPU 1: done.
-> 
-> ...for each but CPU 0/boot.
-> Basic debug printks right before the mentioned line say:
-> 
-> [    0.048170] CPU: 1, smt_mask:
-> 
-> So smt_mask, which is sibling mask obviously, is empty when entering
-> the function.
-> This is critical, as sched_core_cpu_starting() calculates
-> core-scheduling parameters only once per CPU start, and it's crucial
-> to have all the parameters filled in at that moment (at least it
-> uses cpu_smt_mask() which in fact is `&cpu_sibling_map[cpu]` on
-> MIPS).
-> 
-> A bit of debugging led me to that set_cpu_sibling_map() performing
-> the actual map calculation, was being invocated after
-> notify_cpu_start(), and exactly the latter function starts CPU HP
-> callback round (sched_core_cpu_starting() is basically a CPU HP
-> callback).
-> While the flow is same on ARM64 (maps after the notifier, although
-> before calling set_cpu_online()), x86 started calculating sibling
-> maps earlier than starting the CPU HP callbacks in Linux 4.14 (see
-> [0] for the reference). Neither me nor my brief tests couldn't find
-> any potential caveats in calculating the maps right after performing
-> delay calibration, but the WARN splat is now gone.
-> The very same debug prints now yield exactly what I expected from
-> them:
-> 
-> [    0.048433] CPU: 1, smt_mask: 0-1
-> 
-> [0] https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=76ce7cfe35ef
+Hi Jacopo,
 
-Isn't it worth Cc'ing stable@vger.kernel.org here?
+On Mon, Feb 14, 2022 at 07:50:35PM +0100, Jacopo Mondi wrote:
+> On Fri, Feb 11, 2022 at 03:27:44PM +0100, Alexander Stein wrote:
+> > From: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+> >
+> > The driver covers i.MX5/6, as well as i.MX7/8 hardware.
+> > Those implementations differ, e.g. in the sizes of buffers they accept.
+> >
+> > Some functionality should be abstracted, and storing type achieves that.
+> >
+> > Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > ---
+> > Changes in v2:
+> > * Switch back to using enum
+> >
+> >  drivers/staging/media/imx/imx-ic-prpencvf.c   | 3 ++-
+> >  drivers/staging/media/imx/imx-media-capture.c | 5 ++++-
+> >  drivers/staging/media/imx/imx-media-csi.c     | 3 ++-
+> >  drivers/staging/media/imx/imx-media.h         | 8 +++++++-
+> >  drivers/staging/media/imx/imx7-media-csi.c    | 3 ++-
+> >  5 files changed, 17 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/staging/media/imx/imx-ic-prpencvf.c b/drivers/staging/media/imx/imx-ic-prpencvf.c
+> > index 9b81cfbcd777..671bb9a681aa 100644
+> > --- a/drivers/staging/media/imx/imx-ic-prpencvf.c
+> > +++ b/drivers/staging/media/imx/imx-ic-prpencvf.c
+> > @@ -1266,7 +1266,8 @@ static int prp_registered(struct v4l2_subdev *sd)
+> >
+> >  	priv->vdev = imx_media_capture_device_init(ic_priv->ipu_dev,
+> >  						   &ic_priv->sd,
+> > -						   PRPENCVF_SRC_PAD, true);
+> > +						   PRPENCVF_SRC_PAD, true,
+> > +						   DEVICE_TYPE_IMX56);
+> >  	if (IS_ERR(priv->vdev))
+> >  		return PTR_ERR(priv->vdev);
+> >
+> > diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
+> > index 93ba09236010..65dc95a48ecc 100644
+> > --- a/drivers/staging/media/imx/imx-media-capture.c
+> > +++ b/drivers/staging/media/imx/imx-media-capture.c
+> > @@ -34,6 +34,7 @@ struct capture_priv {
+> >
+> >  	struct imx_media_video_dev vdev;	/* Video device */
+> >  	struct media_pad vdev_pad;		/* Video device pad */
+> > +	enum imx_media_device_type type;	/* Type of hardware implementation */
+> >
+> >  	struct v4l2_subdev *src_sd;		/* Source subdev */
+> >  	int src_sd_pad;				/* Source subdev pad */
+> > @@ -957,7 +958,8 @@ EXPORT_SYMBOL_GPL(imx_media_capture_device_unregister);
+> >
+> >  struct imx_media_video_dev *
+> >  imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
+> > -			      int pad, bool legacy_api)
+> > +			      int pad, bool legacy_api,
+> > +			      enum imx_media_device_type type)
+> >  {
+> >  	struct capture_priv *priv;
+> >  	struct video_device *vfd;
+> > @@ -972,6 +974,7 @@ imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
+> >  	priv->src_sd_pad = pad;
+> >  	priv->dev = dev;
+> >  	priv->legacy_api = legacy_api;
+> > +	priv->type = type;
+> >
+> >  	mutex_init(&priv->mutex);
+> >  	INIT_LIST_HEAD(&priv->ready_q);
+> > diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
+> > index bd7f156f2d52..d5557bb4913d 100644
+> > --- a/drivers/staging/media/imx/imx-media-csi.c
+> > +++ b/drivers/staging/media/imx/imx-media-csi.c
+> > @@ -1803,7 +1803,8 @@ static int csi_registered(struct v4l2_subdev *sd)
+> >  	}
+> >
+> >  	priv->vdev = imx_media_capture_device_init(priv->sd.dev, &priv->sd,
+> > -						   CSI_SRC_PAD_IDMAC, true);
+> > +						   CSI_SRC_PAD_IDMAC, true,
+> > +						   DEVICE_TYPE_IMX56);
+> >  	if (IS_ERR(priv->vdev)) {
+> >  		ret = PTR_ERR(priv->vdev);
+> >  		goto free_fim;
+> > diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
+> > index f263fc3adbb9..e4c22b3ccd57 100644
+> > --- a/drivers/staging/media/imx/imx-media.h
+> > +++ b/drivers/staging/media/imx/imx-media.h
+> > @@ -96,6 +96,11 @@ enum imx_pixfmt_sel {
+> >  	PIXFMT_SEL_ANY = PIXFMT_SEL_YUV | PIXFMT_SEL_RGB | PIXFMT_SEL_BAYER,
+> >  };
+> >
+> > +enum imx_media_device_type {
+> > +	DEVICE_TYPE_IMX56,
+> > +	DEVICE_TYPE_IMX78,
+> > +};
+> > +
+> 
+> Isn't this too coarse as a distinction ?
+> 
+> I tried adding per-soc identifiers here:
+> https://lore.kernel.org/linux-media/20220214184318.409208-5-jacopo@jmondi.org/T/#u
+> 
+> Maybe they can help ?
 
-> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> ---
->   arch/mips/kernel/smp.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+I'd really prefer not mixing the two. This enumeration is meant to
+select which backend to use in helpers that should not be shared in the
+first place. I've started decoupling the i.MX6 and i.MX7+ code, but it
+will still take some time (the work in progress is available at [1] if
+anyone is interested). In the meantime I'm OK with this patch, but any
+need for additional device identification should be limited to the
+imx7-media-csi driver or the i.MX6-specific code, not added to shared
+helpers.
 
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+[1] https://gitlab.com/ideasonboard/nxp/linux/-/tree/pinchartl/csi-bridge/destage
 
+> >  struct imx_media_buffer {
+> >  	struct vb2_v4l2_buffer vbuf; /* v4l buffer must be first */
+> >  	struct list_head  list;
+> > @@ -282,7 +287,8 @@ int imx_media_ic_unregister(struct v4l2_subdev *sd);
+> >  /* imx-media-capture.c */
+> >  struct imx_media_video_dev *
+> >  imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
+> > -			      int pad, bool legacy_api);
+> > +			      int pad, bool legacy_api,
+> > +			      enum imx_media_device_type type);
+> >  void imx_media_capture_device_remove(struct imx_media_video_dev *vdev);
+> >  int imx_media_capture_device_register(struct imx_media_video_dev *vdev,
+> >  				      u32 link_flags);
+> > diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+> > index 32311fc0e2a4..173dd014c2d6 100644
+> > --- a/drivers/staging/media/imx/imx7-media-csi.c
+> > +++ b/drivers/staging/media/imx/imx7-media-csi.c
+> > @@ -1039,7 +1039,8 @@ static int imx7_csi_registered(struct v4l2_subdev *sd)
+> >  	}
+> >
+> >  	csi->vdev = imx_media_capture_device_init(csi->sd.dev, &csi->sd,
+> > -						  IMX7_CSI_PAD_SRC, false);
+> > +						  IMX7_CSI_PAD_SRC, false,
+> > +						  DEVICE_TYPE_IMX78);
+> >  	if (IS_ERR(csi->vdev))
+> >  		return PTR_ERR(csi->vdev);
+> >
+
+-- 
+Regards,
+
+Laurent Pinchart

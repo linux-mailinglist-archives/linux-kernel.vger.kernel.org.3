@@ -2,358 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D6F4B5197
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:26:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7D14B51A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354303AbiBNN0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:26:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44254 "EHLO
+        id S1353981AbiBNN1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:27:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349573AbiBNN0U (ORCPT
+        with ESMTP id S1347310AbiBNN07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:26:20 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33D848892
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:26:11 -0800 (PST)
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jy4jV4F9Dz6H6r4;
-        Mon, 14 Feb 2022 21:25:50 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 14 Feb 2022 14:26:09 +0100
-Received: from [10.47.81.62] (10.47.81.62) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.21; Mon, 14 Feb
- 2022 13:26:08 +0000
-Message-ID: <966c8e40-168c-9ee4-faeb-1f8c942eaea5@huawei.com>
-Date:   Mon, 14 Feb 2022 13:26:10 +0000
+        Mon, 14 Feb 2022 08:26:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B6D4EA00
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:26:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2FB1B80EB9
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:26:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40864C340E9;
+        Mon, 14 Feb 2022 13:26:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644845208;
+        bh=lIrfx2bjIVzBroorw8gWz1CV5zkUStBQnJFwuv5QWbY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iWubYAaco3rO+HmfxzeLMCCBfIfEPLpCbZCIFFSCw3iIm9FgFccls9Rg+u8Y+8+tO
+         wIZInhHOJ6s3l3gR3N8V+2saKL8VzSSDIMKi+7157l6bHxBAptj0H9TiqUNvLWi2sp
+         zSUDGdu+FjgFsYJK/ffZrormdbbrLrteuoSb1T7tYnowEG1XCaOCEEHW2RFMr7awgC
+         noehj5XyYDFJ3NQN5bXScZZRHlKFFY2pbd0syiAkkzojFcYjhXFRuGrVJdcJPaeeeP
+         lSFB1Heov1Appp8Objo0Hz14mLzGsnr0zmxzpdkbWKc4daD7aKMcz+rjbDASxsgJwJ
+         zkwxPlNGNX3IQ==
+From:   Oded Gabbay <ogabbay@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     hdanton@sina.com, Ohad Sharabi <osharabi@habana.ai>
+Subject: [PATCH v2 1/2] habanalabs: use kernel-doc for memory ioctl documentation
+Date:   Mon, 14 Feb 2022 15:26:41 +0200
+Message-Id: <20220214132642.4032856-1-ogabbay@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2] iommu/iova: Separate out rcache init
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-CC:     <joro@8bytes.org>, <will@kernel.org>, <jasowang@redhat.com>,
-        <robin.murphy@arm.com>, <xieyongji@bytedance.com>,
-        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>, <linuxarm@huawei.com>
-References: <1643882360-241739-1-git-send-email-john.garry@huawei.com>
- <20220203063345-mutt-send-email-mst@kernel.org>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220203063345-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.81.62]
-X-ClientProxiedBy: lhreml703-chm.china.huawei.com (10.201.108.52) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/02/2022 11:34, Michael S. Tsirkin wrote:
-> On Thu, Feb 03, 2022 at 05:59:20PM +0800, John Garry wrote:
->> Currently the rcache structures are allocated for all IOVA domains, even if
->> they do not use "fast" alloc+free interface. This is wasteful of memory.
->>
->> In addition, fails in init_iova_rcaches() are not handled safely, which is
->> less than ideal.
->>
->> Make "fast" users call a separate rcache init explicitly, which includes
->> error checking.
->>
->> Signed-off-by: John Garry <john.garry@huawei.com>
-> 
-> virtio things:
-> 
-> Acked-by: Michael S. Tsirkin <mst@redhat.com>
+From: Ohad Sharabi <osharabi@habana.ai>
 
-Cheers
+Re-format the comments for the memory ioctl structure to be in
+kernel-doc style.
 
-Hi Robin,
+Signed-off-by: Ohad Sharabi <osharabi@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+---
+ include/uapi/misc/habanalabs.h | 111 +++++++++++++++++----------------
+ 1 file changed, 57 insertions(+), 54 deletions(-)
 
-Can you kindly give this your blessing if you are happy with it?
-
-Thanks!
-
-> 
->> ---
->> Differences to v1:
->> - Drop stubs for iova_domain_init_rcaches() and iova_domain_free_rcaches()
->> - Use put_iova_domain() in vdpa code
->>
->> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
->> index d85d54f2b549..b22034975301 100644
->> --- a/drivers/iommu/dma-iommu.c
->> +++ b/drivers/iommu/dma-iommu.c
->> @@ -525,6 +525,7 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
->>   	struct iommu_dma_cookie *cookie = domain->iova_cookie;
->>   	unsigned long order, base_pfn;
->>   	struct iova_domain *iovad;
->> +	int ret;
->>   
->>   	if (!cookie || cookie->type != IOMMU_DMA_IOVA_COOKIE)
->>   		return -EINVAL;
->> @@ -559,6 +560,9 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
->>   	}
->>   
->>   	init_iova_domain(iovad, 1UL << order, base_pfn);
->> +	ret = iova_domain_init_rcaches(iovad);
->> +	if (ret)
->> +		return ret;
->>   
->>   	/* If the FQ fails we can simply fall back to strict mode */
->>   	if (domain->type == IOMMU_DOMAIN_DMA_FQ && iommu_dma_init_fq(domain))
->> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
->> index b28c9435b898..7e9c3a97c040 100644
->> --- a/drivers/iommu/iova.c
->> +++ b/drivers/iommu/iova.c
->> @@ -15,13 +15,14 @@
->>   /* The anchor node sits above the top of the usable address space */
->>   #define IOVA_ANCHOR	~0UL
->>   
->> +#define IOVA_RANGE_CACHE_MAX_SIZE 6	/* log of max cached IOVA range size (in pages) */
->> +
->>   static bool iova_rcache_insert(struct iova_domain *iovad,
->>   			       unsigned long pfn,
->>   			       unsigned long size);
->>   static unsigned long iova_rcache_get(struct iova_domain *iovad,
->>   				     unsigned long size,
->>   				     unsigned long limit_pfn);
->> -static void init_iova_rcaches(struct iova_domain *iovad);
->>   static void free_cpu_cached_iovas(unsigned int cpu, struct iova_domain *iovad);
->>   static void free_iova_rcaches(struct iova_domain *iovad);
->>   
->> @@ -64,8 +65,6 @@ init_iova_domain(struct iova_domain *iovad, unsigned long granule,
->>   	iovad->anchor.pfn_lo = iovad->anchor.pfn_hi = IOVA_ANCHOR;
->>   	rb_link_node(&iovad->anchor.node, NULL, &iovad->rbroot.rb_node);
->>   	rb_insert_color(&iovad->anchor.node, &iovad->rbroot);
->> -	cpuhp_state_add_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD, &iovad->cpuhp_dead);
->> -	init_iova_rcaches(iovad);
->>   }
->>   EXPORT_SYMBOL_GPL(init_iova_domain);
->>   
->> @@ -488,6 +487,13 @@ free_iova_fast(struct iova_domain *iovad, unsigned long pfn, unsigned long size)
->>   }
->>   EXPORT_SYMBOL_GPL(free_iova_fast);
->>   
->> +static void iova_domain_free_rcaches(struct iova_domain *iovad)
->> +{
->> +	cpuhp_state_remove_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD,
->> +					    &iovad->cpuhp_dead);
->> +	free_iova_rcaches(iovad);
->> +}
->> +
->>   /**
->>    * put_iova_domain - destroys the iova domain
->>    * @iovad: - iova domain in question.
->> @@ -497,9 +503,9 @@ void put_iova_domain(struct iova_domain *iovad)
->>   {
->>   	struct iova *iova, *tmp;
->>   
->> -	cpuhp_state_remove_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD,
->> -					    &iovad->cpuhp_dead);
->> -	free_iova_rcaches(iovad);
->> +	if (iovad->rcaches)
->> +		iova_domain_free_rcaches(iovad);
->> +
->>   	rbtree_postorder_for_each_entry_safe(iova, tmp, &iovad->rbroot, node)
->>   		free_iova_mem(iova);
->>   }
->> @@ -608,6 +614,7 @@ EXPORT_SYMBOL_GPL(reserve_iova);
->>    */
->>   
->>   #define IOVA_MAG_SIZE 128
->> +#define MAX_GLOBAL_MAGS 32	/* magazines per bin */
->>   
->>   struct iova_magazine {
->>   	unsigned long size;
->> @@ -620,6 +627,13 @@ struct iova_cpu_rcache {
->>   	struct iova_magazine *prev;
->>   };
->>   
->> +struct iova_rcache {
->> +	spinlock_t lock;
->> +	unsigned long depot_size;
->> +	struct iova_magazine *depot[MAX_GLOBAL_MAGS];
->> +	struct iova_cpu_rcache __percpu *cpu_rcaches;
->> +};
->> +
->>   static struct iova_magazine *iova_magazine_alloc(gfp_t flags)
->>   {
->>   	return kzalloc(sizeof(struct iova_magazine), flags);
->> @@ -693,28 +707,54 @@ static void iova_magazine_push(struct iova_magazine *mag, unsigned long pfn)
->>   	mag->pfns[mag->size++] = pfn;
->>   }
->>   
->> -static void init_iova_rcaches(struct iova_domain *iovad)
->> +int iova_domain_init_rcaches(struct iova_domain *iovad)
->>   {
->> -	struct iova_cpu_rcache *cpu_rcache;
->> -	struct iova_rcache *rcache;
->>   	unsigned int cpu;
->> -	int i;
->> +	int i, ret;
->> +
->> +	iovad->rcaches = kcalloc(IOVA_RANGE_CACHE_MAX_SIZE,
->> +				 sizeof(struct iova_rcache),
->> +				 GFP_KERNEL);
->> +	if (!iovad->rcaches)
->> +		return -ENOMEM;
->>   
->>   	for (i = 0; i < IOVA_RANGE_CACHE_MAX_SIZE; ++i) {
->> +		struct iova_cpu_rcache *cpu_rcache;
->> +		struct iova_rcache *rcache;
->> +
->>   		rcache = &iovad->rcaches[i];
->>   		spin_lock_init(&rcache->lock);
->>   		rcache->depot_size = 0;
->> -		rcache->cpu_rcaches = __alloc_percpu(sizeof(*cpu_rcache), cache_line_size());
->> -		if (WARN_ON(!rcache->cpu_rcaches))
->> -			continue;
->> +		rcache->cpu_rcaches = __alloc_percpu(sizeof(*cpu_rcache),
->> +						     cache_line_size());
->> +		if (!rcache->cpu_rcaches) {
->> +			ret = -ENOMEM;
->> +			goto out_err;
->> +		}
->>   		for_each_possible_cpu(cpu) {
->>   			cpu_rcache = per_cpu_ptr(rcache->cpu_rcaches, cpu);
->> +
->>   			spin_lock_init(&cpu_rcache->lock);
->>   			cpu_rcache->loaded = iova_magazine_alloc(GFP_KERNEL);
->>   			cpu_rcache->prev = iova_magazine_alloc(GFP_KERNEL);
->> +			if (!cpu_rcache->loaded || !cpu_rcache->prev) {
->> +				ret = -ENOMEM;
->> +				goto out_err;
->> +			}
->>   		}
->>   	}
->> +
->> +	ret = cpuhp_state_add_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD,
->> +					       &iovad->cpuhp_dead);
->> +	if (ret)
->> +		goto out_err;
->> +	return 0;
->> +
->> +out_err:
->> +	free_iova_rcaches(iovad);
->> +	return ret;
->>   }
->> +EXPORT_SYMBOL_GPL(iova_domain_init_rcaches);
->>   
->>   /*
->>    * Try inserting IOVA range starting with 'iova_pfn' into 'rcache', and
->> @@ -831,7 +871,7 @@ static unsigned long iova_rcache_get(struct iova_domain *iovad,
->>   {
->>   	unsigned int log_size = order_base_2(size);
->>   
->> -	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE)
->> +	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE || !iovad->rcaches)
->>   		return 0;
->>   
->>   	return __iova_rcache_get(&iovad->rcaches[log_size], limit_pfn - size);
->> @@ -849,6 +889,8 @@ static void free_iova_rcaches(struct iova_domain *iovad)
->>   
->>   	for (i = 0; i < IOVA_RANGE_CACHE_MAX_SIZE; ++i) {
->>   		rcache = &iovad->rcaches[i];
->> +		if (!rcache->cpu_rcaches)
->> +			break;
->>   		for_each_possible_cpu(cpu) {
->>   			cpu_rcache = per_cpu_ptr(rcache->cpu_rcaches, cpu);
->>   			iova_magazine_free(cpu_rcache->loaded);
->> @@ -858,6 +900,9 @@ static void free_iova_rcaches(struct iova_domain *iovad)
->>   		for (j = 0; j < rcache->depot_size; ++j)
->>   			iova_magazine_free(rcache->depot[j]);
->>   	}
->> +
->> +	kfree(iovad->rcaches);
->> +	iovad->rcaches = NULL;
->>   }
->>   
->>   /*
->> diff --git a/drivers/vdpa/vdpa_user/iova_domain.c b/drivers/vdpa/vdpa_user/iova_domain.c
->> index 2b1143f11d8f..22f7d43f8a68 100644
->> --- a/drivers/vdpa/vdpa_user/iova_domain.c
->> +++ b/drivers/vdpa/vdpa_user/iova_domain.c
->> @@ -480,6 +480,7 @@ vduse_domain_create(unsigned long iova_limit, size_t bounce_size)
->>   	struct file *file;
->>   	struct vduse_bounce_map *map;
->>   	unsigned long pfn, bounce_pfns;
->> +	int ret;
->>   
->>   	bounce_pfns = PAGE_ALIGN(bounce_size) >> PAGE_SHIFT;
->>   	if (iova_limit <= bounce_size)
->> @@ -513,10 +514,20 @@ vduse_domain_create(unsigned long iova_limit, size_t bounce_size)
->>   	spin_lock_init(&domain->iotlb_lock);
->>   	init_iova_domain(&domain->stream_iovad,
->>   			PAGE_SIZE, IOVA_START_PFN);
->> +	ret = iova_domain_init_rcaches(&domain->stream_iovad);
->> +	if (ret)
->> +		goto err_iovad_stream;
->>   	init_iova_domain(&domain->consistent_iovad,
->>   			PAGE_SIZE, bounce_pfns);
->> +	ret = iova_domain_init_rcaches(&domain->consistent_iovad);
->> +	if (ret)
->> +		goto err_iovad_consistent;
->>   
->>   	return domain;
->> +err_iovad_consistent:
->> +	put_iova_domain(&domain->stream_iovad);
->> +err_iovad_stream:
->> +	fput(file);
->>   err_file:
->>   	vfree(domain->bounce_maps);
->>   err_map:
->> diff --git a/include/linux/iova.h b/include/linux/iova.h
->> index cea79cb9f26c..320a70e40233 100644
->> --- a/include/linux/iova.h
->> +++ b/include/linux/iova.h
->> @@ -21,18 +21,8 @@ struct iova {
->>   	unsigned long	pfn_lo; /* Lowest allocated pfn */
->>   };
->>   
->> -struct iova_magazine;
->> -struct iova_cpu_rcache;
->>   
->> -#define IOVA_RANGE_CACHE_MAX_SIZE 6	/* log of max cached IOVA range size (in pages) */
->> -#define MAX_GLOBAL_MAGS 32	/* magazines per bin */
->> -
->> -struct iova_rcache {
->> -	spinlock_t lock;
->> -	unsigned long depot_size;
->> -	struct iova_magazine *depot[MAX_GLOBAL_MAGS];
->> -	struct iova_cpu_rcache __percpu *cpu_rcaches;
->> -};
->> +struct iova_rcache;
->>   
->>   /* holds all the iova translations for a domain */
->>   struct iova_domain {
->> @@ -46,7 +36,7 @@ struct iova_domain {
->>   	unsigned long	max32_alloc_size; /* Size of last failed allocation */
->>   	struct iova	anchor;		/* rbtree lookup anchor */
->>   
->> -	struct iova_rcache rcaches[IOVA_RANGE_CACHE_MAX_SIZE];	/* IOVA range caches */
->> +	struct iova_rcache	*rcaches;
->>   	struct hlist_node	cpuhp_dead;
->>   };
->>   
->> @@ -102,6 +92,7 @@ struct iova *reserve_iova(struct iova_domain *iovad, unsigned long pfn_lo,
->>   	unsigned long pfn_hi);
->>   void init_iova_domain(struct iova_domain *iovad, unsigned long granule,
->>   	unsigned long start_pfn);
->> +int iova_domain_init_rcaches(struct iova_domain *iovad);
->>   struct iova *find_iova(struct iova_domain *iovad, unsigned long pfn);
->>   void put_iova_domain(struct iova_domain *iovad);
->>   #else
->> -- 
->> 2.26.2
-> 
-> .
+diff --git a/include/uapi/misc/habanalabs.h b/include/uapi/misc/habanalabs.h
+index e21db03196ae..a2a953a91b5e 100644
+--- a/include/uapi/misc/habanalabs.h
++++ b/include/uapi/misc/habanalabs.h
+@@ -1116,98 +1116,101 @@ union hl_wait_cs_args {
+ #define HL_MEM_USERPTR		0x4
+ #define HL_MEM_FORCE_HINT	0x8
+ 
++/**
++ * structure hl_mem_in - structure that handle input args for memory IOCTL
++ * @union arg: union of structures to be used based on the input operation
++ * @op: specify the requested memory operation (one of the HL_MEM_OP_* definitions).
++ * @flags: flags for the memory operation (one of the HL_MEM_* definitions).
++ *         For the HL_MEM_OP_EXPORT_DMABUF_FD opcode, this field holds the DMA-BUF file/FD flags.
++ * @ctx_id: context ID - currently not in use.
++ * @num_of_elements: number of timestamp elements used only with HL_MEM_OP_TS_ALLOC opcode.
++ */
+ struct hl_mem_in {
+ 	union {
+-		/* HL_MEM_OP_ALLOC- allocate device memory */
++		/**
++		 * structure for device memory allocation (used with the HL_MEM_OP_ALLOC op)
++		 * @mem_size: memory size to allocate
++		 */
+ 		struct {
+-			/* Size to alloc */
+ 			__u64 mem_size;
+ 		} alloc;
+ 
+-		/* HL_MEM_OP_FREE - free device memory */
++		/**
++		 * structure for free-ing device memory (used with the HL_MEM_OP_FREE op)
++		 * @handle: handle returned from HL_MEM_OP_ALLOC
++		 */
+ 		struct {
+-			/* Handle returned from HL_MEM_OP_ALLOC */
+ 			__u64 handle;
+ 		} free;
+ 
+-		/* HL_MEM_OP_MAP - map device memory */
++		/**
++		 * structure for mapping device memory (used with the HL_MEM_OP_MAP op)
++		 * @hint_addr: requested virtual address of mapped memory.
++		 *             the driver will try to map the requested region to this hint
++		 *             address, as long as the address is valid and not already mapped.
++		 *             the user should check the returned address of the IOCTL to make
++		 *             sure he got the hint address.
++		 *             passing 0 here means that the driver will choose the address itself.
++		 * @handle: handle returned from HL_MEM_OP_ALLOC.
++		 */
+ 		struct {
+-			/*
+-			 * Requested virtual address of mapped memory.
+-			 * The driver will try to map the requested region to
+-			 * this hint address, as long as the address is valid
+-			 * and not already mapped. The user should check the
+-			 * returned address of the IOCTL to make sure he got
+-			 * the hint address. Passing 0 here means that the
+-			 * driver will choose the address itself.
+-			 */
+ 			__u64 hint_addr;
+-			/* Handle returned from HL_MEM_OP_ALLOC */
+ 			__u64 handle;
+ 		} map_device;
+ 
+-		/* HL_MEM_OP_MAP - map host memory */
++		/**
++		 * structure for mapping host memory (used with the HL_MEM_OP_MAP op)
++		 * @host_virt_addr: address of allocated host memory.
++		 * @hint_addr: requested virtual address of mapped memory.
++		 *             the driver will try to map the requested region to this hint
++		 *             address, as long as the address is valid and not already mapped.
++		 *             the user should check the returned address of the IOCTL to make
++		 *             sure he got the hint address.
++		 *             passing 0 here means that the driver will choose the address itself.
++		 * @size: size of allocated host memory.
++		 */
+ 		struct {
+-			/* Address of allocated host memory */
+ 			__u64 host_virt_addr;
+-			/*
+-			 * Requested virtual address of mapped memory.
+-			 * The driver will try to map the requested region to
+-			 * this hint address, as long as the address is valid
+-			 * and not already mapped. The user should check the
+-			 * returned address of the IOCTL to make sure he got
+-			 * the hint address. Passing 0 here means that the
+-			 * driver will choose the address itself.
+-			 */
+ 			__u64 hint_addr;
+-			/* Size of allocated host memory */
+ 			__u64 mem_size;
+ 		} map_host;
+ 
+-		/* HL_MEM_OP_MAP_BLOCK - map a hw block */
++		/**
++		 * structure for mapping hw block (used with the HL_MEM_OP_MAP_BLOCK op)
++		 * @block_addr:HW block address to map, a handle and size will be returned
++		 *             to the user and will be used to mmap the relevant block.
++		 *             only addresses from configuration space are allowed.
++		 */
+ 		struct {
+-			/*
+-			 * HW block address to map, a handle and size will be
+-			 * returned to the user and will be used to mmap the
+-			 * relevant block. Only addresses from configuration
+-			 * space are allowed.
+-			 */
+ 			__u64 block_addr;
+ 		} map_block;
+ 
+-		/* HL_MEM_OP_UNMAP - unmap host memory */
++		/**
++		 * structure for unmapping host memory (used with the HL_MEM_OP_UNMAP op)
++		 * @device_virt_addr: virtual address returned from HL_MEM_OP_MAP
++		 */
+ 		struct {
+-			/* Virtual address returned from HL_MEM_OP_MAP */
+ 			__u64 device_virt_addr;
+ 		} unmap;
+ 
+-		/* HL_MEM_OP_EXPORT_DMABUF_FD */
++		/**
++		 * structure for exporting DMABUF object (used with
++		 * the HL_MEM_OP_EXPORT_DMABUF_FD op)
++		 * @handle: handle returned from HL_MEM_OP_ALLOC.
++		 *          in Gaudi, where we don't have MMU for the device memory, the
++		 *          driver expects a physical address (instead of a handle) in the
++		 *          device memory space.
++		 * @mem_size: size of memory allocation. Relevant only for GAUDI
++		 */
+ 		struct {
+-			/* Handle returned from HL_MEM_OP_ALLOC. In Gaudi,
+-			 * where we don't have MMU for the device memory, the
+-			 * driver expects a physical address (instead of
+-			 * a handle) in the device memory space.
+-			 */
+ 			__u64 handle;
+-			/* Size of memory allocation. Relevant only for GAUDI */
+ 			__u64 mem_size;
+ 		} export_dmabuf_fd;
+ 	};
+ 
+-	/* HL_MEM_OP_* */
+ 	__u32 op;
+-	/* HL_MEM_* flags.
+-	 * For the HL_MEM_OP_EXPORT_DMABUF_FD opcode, this field holds the
+-	 * DMA-BUF file/FD flags.
+-	 */
+ 	__u32 flags;
+-
+-	/* Context ID - Currently not in use */
+ 	__u32 ctx_id;
+-
+-	/* number of timestamp elements
+-	 * used only when HL_MEM_OP_TS_ALLOC opcode
+-	 */
+ 	__u32 num_of_elements;
+ };
+ 
+-- 
+2.25.1
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 825E54B4B34
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C35D4B4943
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347350AbiBNK2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:28:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34784 "EHLO
+        id S231917AbiBNKFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:05:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347325AbiBNKZu (ORCPT
+        with ESMTP id S1345140AbiBNKBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:25:50 -0500
+        Mon, 14 Feb 2022 05:01:25 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8996EF0D;
-        Mon, 14 Feb 2022 01:57:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB34E0CA;
+        Mon, 14 Feb 2022 01:47:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 220E3B80DD5;
-        Mon, 14 Feb 2022 09:57:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F337C340E9;
-        Mon, 14 Feb 2022 09:57:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C434DB80DC4;
+        Mon, 14 Feb 2022 09:47:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4276C340EF;
+        Mon, 14 Feb 2022 09:47:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832628;
-        bh=Y4I1XbzZkketrSB1+LOJA9GxTunIlw/Msl9gsyKUgh8=;
+        s=korg; t=1644832047;
+        bh=SeiQ8rRzQyBwPXJWscgWn7Gf9uDRWBYWJf02DAfTknA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LDcR5evzA+pMzv41ed4nV2ogNyfh2QF1zxYBSwrMhDLNDa3MSltzmnGiV49xC7ubJ
-         +SqLgLFgTHJDH1lHHt32g7uYIReP43fpR7/lqlTwHJTTHg4qlKaKg/JXbHJdJrrxPk
-         8zwrjCVWRUklX7ZhXdbmEyDycTnERnwtKKon+ruE=
+        b=Qcg9N0ewWpdO6sI94FuBbH1VwDPFSFEN0+zkmc4E+3ZxILMLiaUMQwRrgIZrBkZU2
+         ey+tYDxZY/wQTytYsU0DEHSwG+FsoIH+kHb7FLnvtGTAJl7P46T2YRYDlG/Rooucso
+         xzxh5fx9GZeMIawuu5fPVxHy0ILmBrgUta8tmZcU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bean Huo <beanhuo@micron.com>,
-        Xiaoke Wang <xkernel.wang@foxmail.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Olga Kornievskaia <kolga@netapp.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 044/203] scsi: ufs: ufshcd-pltfrm: Check the return value of devm_kstrdup()
-Date:   Mon, 14 Feb 2022 10:24:48 +0100
-Message-Id: <20220214092511.713387573@linuxfoundation.org>
+Subject: [PATCH 5.15 031/172] NFSv4 handle port presence in fs_location server string
+Date:   Mon, 14 Feb 2022 10:24:49 +0100
+Message-Id: <20220214092507.476379392@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +55,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+From: Olga Kornievskaia <kolga@netapp.com>
 
-[ Upstream commit a65b32748f4566f986ba2495a8236c141fa42a26 ]
+[ Upstream commit a8d54baba7c65db2d3278873def61f8d3753d766 ]
 
-devm_kstrdup() returns pointer to allocated string on success, NULL on
-failure. So it is better to check the return value of it.
+An fs_location attribute returns a string that can be ipv4, ipv6,
+or DNS name. An ip location can have a port appended to it and if
+no port is present a default port needs to be set. If rpc_pton()
+fails to parse, try calling rpc_uaddr2socaddr() that can convert
+an universal address.
 
-Link: https://lore.kernel.org/r/tencent_4257E15D4A94FF9020DDCC4BB9B21C041408@qq.com
-Reviewed-by: Bean Huo <beanhuo@micron.com>
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/ufs/ufshcd-pltfrm.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ fs/nfs/nfs4_fs.h       |  2 +-
+ fs/nfs/nfs4namespace.c | 17 +++++++++++------
+ 2 files changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
-index 8b16bbbcb806c..87975d1a21c8b 100644
---- a/drivers/scsi/ufs/ufshcd-pltfrm.c
-+++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
-@@ -92,6 +92,11 @@ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
- 		clki->min_freq = clkfreq[i];
- 		clki->max_freq = clkfreq[i+1];
- 		clki->name = devm_kstrdup(dev, name, GFP_KERNEL);
-+		if (!clki->name) {
-+			ret = -ENOMEM;
-+			goto out;
+diff --git a/fs/nfs/nfs4_fs.h b/fs/nfs/nfs4_fs.h
+index 0eb8e5d2ec395..f8672a34fd635 100644
+--- a/fs/nfs/nfs4_fs.h
++++ b/fs/nfs/nfs4_fs.h
+@@ -282,7 +282,7 @@ int nfs4_submount(struct fs_context *, struct nfs_server *);
+ int nfs4_replace_transport(struct nfs_server *server,
+ 				const struct nfs4_fs_locations *locations);
+ size_t nfs_parse_server_name(char *string, size_t len, struct sockaddr *sa,
+-			     size_t salen, struct net *net);
++			     size_t salen, struct net *net, int port);
+ /* nfs4proc.c */
+ extern int nfs4_handle_exception(struct nfs_server *, int, struct nfs4_exception *);
+ extern int nfs4_async_handle_error(struct rpc_task *task,
+diff --git a/fs/nfs/nfs4namespace.c b/fs/nfs/nfs4namespace.c
+index f1ed4f60a7f33..3680c8da510c9 100644
+--- a/fs/nfs/nfs4namespace.c
++++ b/fs/nfs/nfs4namespace.c
+@@ -165,15 +165,20 @@ static int nfs4_validate_fspath(struct dentry *dentry,
+ }
+ 
+ size_t nfs_parse_server_name(char *string, size_t len, struct sockaddr *sa,
+-			     size_t salen, struct net *net)
++			     size_t salen, struct net *net, int port)
+ {
+ 	ssize_t ret;
+ 
+ 	ret = rpc_pton(net, string, len, sa, salen);
+ 	if (ret == 0) {
+-		ret = nfs_dns_resolve_name(net, string, len, sa, salen);
+-		if (ret < 0)
+-			ret = 0;
++		ret = rpc_uaddr2sockaddr(net, string, len, sa, salen);
++		if (ret == 0) {
++			ret = nfs_dns_resolve_name(net, string, len, sa, salen);
++			if (ret < 0)
++				ret = 0;
 +		}
-+
- 		if (!strcmp(name, "ref_clk"))
- 			clki->keep_link_active = true;
- 		dev_dbg(dev, "%s: min %u max %u name %s\n", "freq-table-hz",
-@@ -127,6 +132,8 @@ static int ufshcd_populate_vreg(struct device *dev, const char *name,
- 		return -ENOMEM;
++	} else if (port) {
++		rpc_set_port(sa, port);
+ 	}
+ 	return ret;
+ }
+@@ -328,7 +333,7 @@ static int try_location(struct fs_context *fc,
+ 			nfs_parse_server_name(buf->data, buf->len,
+ 					      &ctx->nfs_server.address,
+ 					      sizeof(ctx->nfs_server._address),
+-					      fc->net_ns);
++					      fc->net_ns, 0);
+ 		if (ctx->nfs_server.addrlen == 0)
+ 			continue;
  
- 	vreg->name = devm_kstrdup(dev, name, GFP_KERNEL);
-+	if (!vreg->name)
-+		return -ENOMEM;
+@@ -496,7 +501,7 @@ static int nfs4_try_replacing_one_location(struct nfs_server *server,
+ 			continue;
  
- 	snprintf(prop_name, MAX_PROP_SIZE, "%s-max-microamp", name);
- 	if (of_property_read_u32(np, prop_name, &vreg->max_uA)) {
+ 		salen = nfs_parse_server_name(buf->data, buf->len,
+-						sap, addr_bufsize, net);
++						sap, addr_bufsize, net, 0);
+ 		if (salen == 0)
+ 			continue;
+ 		rpc_set_port(sap, NFS_PORT);
 -- 
 2.34.1
 

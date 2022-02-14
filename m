@@ -2,115 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F034B4181
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 06:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC384B4182
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 06:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240552AbiBNFxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 00:53:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44042 "EHLO
+        id S240572AbiBNFxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 00:53:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231709AbiBNFxC (ORCPT
+        with ESMTP id S240561AbiBNFxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 00:53:02 -0500
-X-Greylist: delayed 8768 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 13 Feb 2022 21:52:52 PST
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id B871C5004F;
-        Sun, 13 Feb 2022 21:52:52 -0800 (PST)
-Received: from jleng.ambarella.net (unknown [180.169.129.130])
-        by mail-app3 (Coremail) with SMTP id cC_KCgBXHlAa7gliTn84DQ--.59543S2;
-        Mon, 14 Feb 2022 13:52:30 +0800 (CST)
-From:   3090101217@zju.edu.cn
-To:     laurent.pinchart@ideasonboard.com, balbi@kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jing Leng <jleng@ambarella.com>
-Subject: [PATCH] usb: gadget: f_uvc: fix superspeedplus transfer
-Date:   Mon, 14 Feb 2022 13:52:24 +0800
-Message-Id: <20220214055224.18075-1-3090101217@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgBXHlAa7gliTn84DQ--.59543S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFWrGFWrAFy5AryUKrWxZwb_yoW8tF13pa
-        15A3Z5ArW5JFs5J34UAan5Cry3Xa1Sva1DKFZFq3yY9r4ftas5Ar92yryFga47XF43Zr40
-        yFs3J3ySkw1jkr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBqb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAac4AC62xK8xCEY4vEwIxC4wAac4AC6xC2jxv24VCS
-        YI8q64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-        WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-        bVWUJVW8JwACjcxG0xvY0x0EwIxGrwAKzVCY07xG64k0F24lc2xSY4AK67AK6r4rMxAIw2
-        8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
-        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrw
-        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
-        80aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8NTmDUUUUU==
-X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwQRBVNG3FHYyQAJsT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 14 Feb 2022 00:53:14 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F1C5007A;
+        Sun, 13 Feb 2022 21:53:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644817987; x=1676353987;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=G1w/3HQfAzk9kDPixP2ODj7i3Qd2EPVt0FxpEGfaxRI=;
+  b=hYu/pQ73W4mQ85tnCpWgqKpH+b5hnvxDQgZ/WLettH7TeafcBUkyNs31
+   vWXj6uTshIgd7ZSSXo51R2rGkE2wLClZckRd3DrtjPu+ZvpsjiALDdsCb
+   GYBTxASEdZzIRJfOxfdjIkVcDR/uq1IFwRMu5zimGY/ceT0m1qSEF2Q7O
+   U=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Feb 2022 21:53:06 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 21:53:06 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Sun, 13 Feb 2022 21:53:06 -0800
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Sun, 13 Feb 2022 21:53:03 -0800
+Date:   Mon, 14 Feb 2022 11:22:59 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Jung Daehwan <dh10.jung@samsung.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ugoswami@quicinc.com>
+Subject: Re: usb: host: Reduce xhci_handshake timeout in xhci_reset
+Message-ID: <20220214055259.GA19990@hu-pkondeti-hyd.qualcomm.com>
+References: <1624361096-41282-1-git-send-email-dh10.jung@samsung.com>
+ <YNJAZDwuFmEoTJHe@kroah.com>
+ <20210628022548.GA69289@ubuntu>
+ <YNlxzj7KXG43Uyrp@kroah.com>
+ <20210628065553.GA83203@ubuntu>
+ <496c9d86-70d7-1050-5bbb-9f841e4b464a@intel.com>
+ <20220211064630.GA20567@hu-pkondeti-hyd.qualcomm.com>
+ <20220211074331.GA12625@hu-pkondeti-hyd.qualcomm.com>
+ <20220214040838.GA8039@hu-pkondeti-hyd.qualcomm.com>
+ <YgnnCOwmrPprkWoJ@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YgnnCOwmrPprkWoJ@kroah.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jing Leng <jleng@ambarella.com>
+Hi Greg,
 
-UVC driver doesn't set ssp_descriptors in struct usb_function,
-If we use ssp UDC (e.g. cdnsp), UVC doesn't work.
+On Mon, Feb 14, 2022 at 06:22:16AM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Feb 14, 2022 at 09:38:38AM +0530, Pavan Kondeti wrote:
+> > Hi Greg,
+> > 
+> > On Fri, Feb 11, 2022 at 01:13:31PM +0530, Pavan Kondeti wrote:
+> > > Sorry for the spam. I have added an incorrect email address in my previous
+> > > email.
+> > > 
+> > > On Fri, Feb 11, 2022 at 12:16:30PM +0530, Pavan Kondeti wrote:
+> > > > On Mon, Jun 28, 2021 at 10:49:00AM +0300, Mathias Nyman wrote:
+> > > > > On 28.6.2021 9.55, Jung Daehwan wrote:
+> > > > > > On Mon, Jun 28, 2021 at 08:53:02AM +0200, Greg Kroah-Hartman wrote:
+> > > > > >> On Mon, Jun 28, 2021 at 11:25:48AM +0900, Jung Daehwan wrote:
+> > > > > >>> On Tue, Jun 22, 2021 at 09:56:20PM +0200, Greg Kroah-Hartman wrote:
+> > > > > >>>> On Tue, Jun 22, 2021 at 08:24:56PM +0900, Daehwan Jung wrote:
+> 
+> <snip>
+> 
+> > Can you please consider including this change? Let us know if you want this
+> > patch to be resent again with error message and Fixes tag included.
+> 
+> You are responding to an email thread from 6 months ago, without any
+> change in it at all, so I have no idea what you are referring to here,
+> sorry.
+> 
+> Please resend any patch you wish to have reviewed, as obviously it is no
+> longer in our queue and might not even be relevant anymore (you have
+> tested 5.17-rc4, right?)
 
-Signed-off-by: Jing Leng <jleng@ambarella.com>
----
- drivers/usb/gadget/function/f_uvc.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+Thanks Greg for the reply. We will test the patch on the latest tree and
+resend it.
 
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 71bb5e477dba..8fc9b035481e 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -478,6 +478,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
- 	void *mem;
- 
- 	switch (speed) {
-+	case USB_SPEED_SUPER_PLUS:
- 	case USB_SPEED_SUPER:
- 		uvc_control_desc = uvc->desc.ss_control;
- 		uvc_streaming_cls = uvc->desc.ss_streaming;
-@@ -521,7 +522,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
- 	      + uvc_control_ep.bLength + uvc_control_cs_ep.bLength
- 	      + uvc_streaming_intf_alt0.bLength;
- 
--	if (speed == USB_SPEED_SUPER) {
-+	if (speed == USB_SPEED_SUPER || speed == USB_SPEED_SUPER_PLUS) {
- 		bytes += uvc_ss_control_comp.bLength;
- 		n_desc = 6;
- 	} else {
-@@ -565,7 +566,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
- 	uvc_control_header->baInterfaceNr[0] = uvc->streaming_intf;
- 
- 	UVC_COPY_DESCRIPTOR(mem, dst, &uvc_control_ep);
--	if (speed == USB_SPEED_SUPER)
-+	if (speed == USB_SPEED_SUPER || speed == USB_SPEED_SUPER_PLUS)
- 		UVC_COPY_DESCRIPTOR(mem, dst, &uvc_ss_control_comp);
- 
- 	UVC_COPY_DESCRIPTOR(mem, dst, &uvc_control_cs_ep);
-@@ -727,6 +728,15 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 		}
- 	}
- 
-+	if (gadget_is_superspeed_plus(c->cdev->gadget)) {
-+		f->ssp_descriptors = uvc_copy_descriptors(uvc, USB_SPEED_SUPER_PLUS);
-+		if (IS_ERR(f->ssp_descriptors)) {
-+			ret = PTR_ERR(f->ssp_descriptors);
-+			f->ssp_descriptors = NULL;
-+			goto error;
-+		}
-+	}
-+
- 	/* Preallocate control endpoint request. */
- 	uvc->control_req = usb_ep_alloc_request(cdev->gadget->ep0, GFP_KERNEL);
- 	uvc->control_buf = kmalloc(UVC_MAX_REQUEST_SIZE, GFP_KERNEL);
--- 
-2.17.1
-
+Thanks,
+Pavan

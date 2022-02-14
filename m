@@ -2,140 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BCC4B4D27
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D63934B4CDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:11:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350277AbiBNLIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:08:18 -0500
+        id S1350055AbiBNLJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:09:14 -0500
 Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350070AbiBNLHt (ORCPT
+        with ESMTP id S1344989AbiBNLJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:07:49 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5B471597;
-        Mon, 14 Feb 2022 02:37:12 -0800 (PST)
-Date:   Mon, 14 Feb 2022 10:37:09 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644835030;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vKt/WAuCNj+bvLGLjCVMNQYEW9Arn1l1s0yZ7NByIho=;
-        b=mQ3+VkCAOBMmVBmVPkb8kmJ1kiaFbGPaBBPspJhSDgtdH9vyF7EmDXjEU6ZQ+MAbd+bGGg
-        idRqoSdMHeKyBLkj+BaMOpntdMoOg/qZVpjRg5GQM+id7P9+RRT19cUxLEvLSLmkg0jPN2
-        /quxfatO2PRNZg3ekyrjoVSQ+P4qOkTa3k+uAJSdbgmDWaNPazxsHg6fcq6iW/I6u5PLho
-        EQk+fdISV+rvM2ubwAQISn39rnuPmS7EkvLW2p/PmuRitzBTSS4FnFBlvwaRE1DQYkjS40
-        GUy+VmvkanAWJ4rSTZ4rueSgnPQ13ZPvtDqw4HpIDS+eHOgXVQhMj0X8SURkRw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644835030;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vKt/WAuCNj+bvLGLjCVMNQYEW9Arn1l1s0yZ7NByIho=;
-        b=HZNCu23M/2RopYGDQNcMZq0x4rSMIpXmNGmPfk6gpVw/NecOyhsWAD76qrUEmPc9qIFtXQ
-        +tu2IVDCudEaudAg==
-From:   "tip-bot2 for Cheng Jui Wang" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/urgent] lockdep: Correct lock_classes index mapping
-Cc:     Cheng Jui Wang <cheng-jui.wang@mediatek.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220210105011.21712-1-cheng-jui.wang@mediatek.com>
-References: <20220210105011.21712-1-cheng-jui.wang@mediatek.com>
+        Mon, 14 Feb 2022 06:09:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1A5DD943;
+        Mon, 14 Feb 2022 02:38:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31E9DB80E04;
+        Mon, 14 Feb 2022 10:37:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30DB9C340EF;
+        Mon, 14 Feb 2022 10:37:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644835067;
+        bh=sAhyEkEtiuyJYz6mXmbObP3UouIsoVZZu36wiNw/T8s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fqqT3TaKiMwKgu5rMfM5hWbBED4IG4BjRngeaFUMI+UYO5cyliQgcZFUColerXD8j
+         SMdEN1r/HAI1Wi/OGnE9pkpMHNZwnmQMDpEs0mOyoqAnj/GGRXQvflkQOfCJWu55sn
+         6MVBd05oNlpA4R58dxhfVSBl3YfNXf4QXmb0y3MI=
+Date:   Mon, 14 Feb 2022 11:37:44 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     3090101217@zju.edu.cn
+Cc:     laurent.pinchart@ideasonboard.com, balbi@kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jing Leng <jleng@ambarella.com>
+Subject: Re: [PATCH] usb: gadget: f_uvc: fix superspeedplus transfer
+Message-ID: <Ygow+EB1P84VflBb@kroah.com>
+References: <20220214055224.18075-1-3090101217@zju.edu.cn>
 MIME-Version: 1.0
-Message-ID: <164483502963.16921.13140671629073762108.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220214055224.18075-1-3090101217@zju.edu.cn>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/urgent branch of tip:
+On Mon, Feb 14, 2022 at 01:52:24PM +0800, 3090101217@zju.edu.cn wrote:
+> From: Jing Leng <jleng@ambarella.com>
+> 
+> UVC driver doesn't set ssp_descriptors in struct usb_function,
+> If we use ssp UDC (e.g. cdnsp), UVC doesn't work.
 
-Commit-ID:     28df029d53a2fd80c1b8674d47895648ad26dcfb
-Gitweb:        https://git.kernel.org/tip/28df029d53a2fd80c1b8674d47895648ad26dcfb
-Author:        Cheng Jui Wang <cheng-jui.wang@mediatek.com>
-AuthorDate:    Thu, 10 Feb 2022 18:50:11 +08:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 11 Feb 2022 23:30:02 +01:00
+I do not understand this text, sorry.  Please try to reword it to have
+more descriptions.
 
-lockdep: Correct lock_classes index mapping
+thanks,
 
-A kernel exception was hit when trying to dump /proc/lockdep_chains after
-lockdep report "BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!":
-
-Unable to handle kernel paging request at virtual address 00054005450e05c3
-...
-00054005450e05c3] address between user and kernel address ranges
-...
-pc : [0xffffffece769b3a8] string+0x50/0x10c
-lr : [0xffffffece769ac88] vsnprintf+0x468/0x69c
-...
- Call trace:
-  string+0x50/0x10c
-  vsnprintf+0x468/0x69c
-  seq_printf+0x8c/0xd8
-  print_name+0x64/0xf4
-  lc_show+0xb8/0x128
-  seq_read_iter+0x3cc/0x5fc
-  proc_reg_read_iter+0xdc/0x1d4
-
-The cause of the problem is the function lock_chain_get_class() will
-shift lock_classes index by 1, but the index don't need to be shifted
-anymore since commit 01bb6f0af992 ("locking/lockdep: Change the range
-of class_idx in held_lock struct") already change the index to start
-from 0.
-
-The lock_classes[-1] located at chain_hlocks array. When printing
-lock_classes[-1] after the chain_hlocks entries are modified, the
-exception happened.
-
-The output of lockdep_chains are incorrect due to this problem too.
-
-Fixes: f611e8cf98ec ("lockdep: Take read/write status in consideration when generate chainkey")
-Signed-off-by: Cheng Jui Wang <cheng-jui.wang@mediatek.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
-Link: https://lore.kernel.org/r/20220210105011.21712-1-cheng-jui.wang@mediatek.com
----
- kernel/locking/lockdep.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 4a882f8..f8a0212 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -3462,7 +3462,7 @@ struct lock_class *lock_chain_get_class(struct lock_chain *chain, int i)
- 	u16 chain_hlock = chain_hlocks[chain->base + i];
- 	unsigned int class_idx = chain_hlock_class_idx(chain_hlock);
- 
--	return lock_classes + class_idx - 1;
-+	return lock_classes + class_idx;
- }
- 
- /*
-@@ -3530,7 +3530,7 @@ static void print_chain_keys_chain(struct lock_chain *chain)
- 		hlock_id = chain_hlocks[chain->base + i];
- 		chain_key = print_chain_key_iteration(hlock_id, chain_key);
- 
--		print_lock_name(lock_classes + chain_hlock_class_idx(hlock_id) - 1);
-+		print_lock_name(lock_classes + chain_hlock_class_idx(hlock_id));
- 		printk("\n");
- 	}
- }
+greg k-h

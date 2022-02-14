@@ -2,101 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A4D4B51C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8C34B51D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354252AbiBNNhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:37:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50410 "EHLO
+        id S1343837AbiBNNiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:38:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354238AbiBNNhg (ORCPT
+        with ESMTP id S1354372AbiBNNiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:37:36 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFB14E39C
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:37:27 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id i14so26847495wrc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:37:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=DVb0TjCZn7Jwz2Kvb88Txv79YRQ7aVyO7Xh13MCDcfU=;
-        b=o/luYf0gyID+7LZyTrPreb7cMHrVoJghgl647Qt37SSGJyT4ry6EEACx/kQW4wLs6z
-         +sKA6Rx0H4CfQlgVjAc2cSUY2rEXOrRE7zbuMu5X8QvmrvSwQVGHqJqpkP74HDMF/K1Q
-         sWVtvpmyfq6keIpFaAFzKv52BP8PAdNZyxSX/DvY8EWa9wP1q9L53+icRsFTNd5jAj2M
-         Nu5FoAEP7fcyuSyAxROnKDigjG7d1ddtiBHTz/Gkv29A39pbGIN21f4PlN1uixb/2R42
-         w3R3AlR9EiS2RGR1hb3KZsJaNQOcfGJP/Y1HJozfyX6pTcxCs1GfVLx8jQUu460Xr8/f
-         Hv2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=DVb0TjCZn7Jwz2Kvb88Txv79YRQ7aVyO7Xh13MCDcfU=;
-        b=gBHz4U4l81wgSZlFEEZT8tuhzd/h+xunpzFxyGjrCVYgKkm4T2MIse4SwUoEQd3Xzs
-         82RS5t15JoPBCleqPwokLrpuezId2dawtCFoCiGIZEtiHg2pzLhxnbnbTPr8oJrx6XIP
-         h0q/wVZdDaCr1WgVaJoNYPsDM6utDu+81mxo11PR4ThWe6f8m1qaqCATPIM+MrlkuIsk
-         IXhyT28mkBFHhOmrHNlFYrsrPgWwEce3qTk4vvSlse0u/OzbD5ICzxsthVakxux9vfDk
-         pmwh8zoUl9Pq/RnBlQherT217ykZ4y00Km6kOa39PllFOkeffgSzzG2H1oITZNVGzHTq
-         e4zw==
-X-Gm-Message-State: AOAM530GMIKBt5YFQJFLj/bfdBS05Kh2G0unAdFdT4VfxZ6DsQXZM6H+
-        YqBXChLWs+WeE688oYaY4SiAhw==
-X-Google-Smtp-Source: ABdhPJyApp5kdwLN/OTISwHFu7CwGa8aipnhNkJvlBAgJXesku784CqUVnug80kdEUvSt8t4tke8wA==
-X-Received: by 2002:a5d:46c5:: with SMTP id g5mr10974611wrs.406.1644845845568;
-        Mon, 14 Feb 2022 05:37:25 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id b10sm30996044wrd.8.2022.02.14.05.37.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 05:37:25 -0800 (PST)
-Date:   Mon, 14 Feb 2022 13:37:23 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 3/3] dt-bindings: mfd: samsung,exynos5433-lpass:
- Convert to dtschema
-Message-ID: <YgpbE+xn/AL8R11J@google.com>
-References: <20220202151310.285561-1-krzysztof.kozlowski@canonical.com>
- <20220202151310.285561-4-krzysztof.kozlowski@canonical.com>
+        Mon, 14 Feb 2022 08:38:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D56860D85
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:37:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3FF55B80E6C
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:37:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 544B8C340F0;
+        Mon, 14 Feb 2022 13:37:48 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="G/06a6/J"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644845866;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SWMo73bjvqGYEo58ZAdcrqxkbIDjXkOZjL9LLm5eZMo=;
+        b=G/06a6/J4rZBMIfe+vKNnJhj8LpG9DdTHRInWOK2/NToVXu0fgyDcvup5kT5sRlaJ8ytek
+        ECdGikCWmPpSn6MfxTvVEux1xPMPUh3tlh27WfrBXHcfjEo/VFq2AsuusBf+IbtWczNWTS
+        mVCXnRZG5FHqxzGNNTHb2egYjTTdJ0A=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 381a6391 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 14 Feb 2022 13:37:45 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     bigeasy@linutronix.de, linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: [PATCH v2] random: set fast pool count to zero in cpuhp teardown
+Date:   Mon, 14 Feb 2022 14:37:35 +0100
+Message-Id: <20220214133735.966528-1-Jason@zx2c4.com>
+In-Reply-To: <CAHmME9rAnh6nSRNYo56Ty6VSrY17ej35AoNkSjunFO0AQp1D9Q@mail.gmail.com>
+References: <CAHmME9rAnh6nSRNYo56Ty6VSrY17ej35AoNkSjunFO0AQp1D9Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220202151310.285561-4-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 02 Feb 2022, Krzysztof Kozlowski wrote:
+Rather than having to use expensive atomics, which were visibly the most
+expensive thing in the entire irq handler, simply take care of the
+extreme edge case of resetting count to 0 in the cpuhp teardown handler,
+after no more interrupts will arrive on that CPU. This simplifies the
+code a bit and lets us use vanilla variables rather than atomics, and
+performance should be improved.
 
-> Convert the Exynos5433 LPASS bindings to DT schema format.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/mfd/samsung,exynos5433-lpass.txt |  72 -----------
->  .../mfd/samsung,exynos5433-lpass.yaml         | 117 ++++++++++++++++++
->  2 files changed, 117 insertions(+), 72 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mfd/samsung,exynos5433-lpass.txt
->  create mode 100644 Documentation/devicetree/bindings/mfd/samsung,exynos5433-lpass.yaml
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Sultan Alsawaf <sultan@kerneltoast.com>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Sebastian -
 
-Applied, thanks.
+v2 moves the teardown to CPUHP_OFFLINE…CPUHP_BRINGUP_CPU, per our
+discussion.
 
+This was *way* simpler than I had anticipated, and I wish it
+were done this way originally. If this looks good to you and you ack it,
+I'll wind up merging this commit into the previous one in my branch,
+since the intermediate atomic_t stage isn't really that interesting
+any more, now that I've seen the light. Please take a look and let me
+know what you think.
+
+-Jason
+
+ drivers/char/random.c      | 33 ++++++++++++++++++---------------
+ include/linux/cpuhotplug.h |  1 +
+ include/linux/random.h     |  2 ++
+ kernel/cpu.c               |  6 ++++++
+ 4 files changed, 27 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index bf6e8627b74e..df5aef93da34 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1179,7 +1179,7 @@ struct fast_pool {
+ 	unsigned long pool[16 / sizeof(long)];
+ 	struct work_struct mix;
+ 	unsigned long last;
+-	atomic_t count;
++	unsigned int count;
+ 	u16 reg_idx;
+ };
+ 
+@@ -1215,6 +1215,19 @@ static void fast_mix(u32 pool[4])
+ 
+ static DEFINE_PER_CPU(struct fast_pool, irq_randomness);
+ 
++int random_dead_cpu(unsigned int cpu)
++{
++	/*
++	 * Set the count to zero after offlining the CPU for two
++	 * reasons: 1) so that all new accumulated irqs are fresh
++	 * when it comes back online, and 2) so that its worker is
++	 * permitted to schedule again when it comes back online,
++	 * since the MIX_INFLIGHT flag will be cleared.
++	 */
++	per_cpu_ptr(&irq_randomness, cpu)->count = 0;
++	return 0;
++}
++
+ static u32 get_reg(struct fast_pool *f, struct pt_regs *regs)
+ {
+ 	u32 *ptr = (u32 *)regs;
+@@ -1239,15 +1252,6 @@ static void mix_interrupt_randomness(struct work_struct *work)
+ 	local_irq_disable();
+ 	if (fast_pool != this_cpu_ptr(&irq_randomness)) {
+ 		local_irq_enable();
+-		/*
+-		 * If we are unlucky enough to have been moved to another CPU,
+-		 * during CPU hotplug while the CPU was shutdown then we set
+-		 * our count to zero atomically so that when the CPU comes
+-		 * back online, it can enqueue work again. The _release here
+-		 * pairs with the atomic_inc_return_acquire in
+-		 * add_interrupt_randomness().
+-		 */
+-		atomic_set_release(&fast_pool->count, 0);
+ 		return;
+ 	}
+ 
+@@ -1256,7 +1260,7 @@ static void mix_interrupt_randomness(struct work_struct *work)
+ 	 * consistent view, before we reenable irqs again.
+ 	 */
+ 	memcpy(pool, fast_pool->pool, sizeof(pool));
+-	atomic_set(&fast_pool->count, 0);
++	fast_pool->count = 0;
+ 	fast_pool->last = jiffies;
+ 	local_irq_enable();
+ 
+@@ -1288,14 +1292,13 @@ void add_interrupt_randomness(int irq)
+ 	}
+ 
+ 	fast_mix((u32 *)fast_pool->pool);
+-	/* The _acquire here pairs with the atomic_set_release in mix_interrupt_randomness(). */
+-	new_count = (unsigned int)atomic_inc_return_acquire(&fast_pool->count);
++	new_count = ++fast_pool->count;
+ 
+ 	if (unlikely(crng_init == 0)) {
+ 		if (new_count >= 64 &&
+ 		    crng_pre_init_inject(fast_pool->pool, sizeof(fast_pool->pool),
+ 					 true, true) > 0) {
+-			atomic_set(&fast_pool->count, 0);
++			fast_pool->count = 0;
+ 			fast_pool->last = now;
+ 			if (spin_trylock(&input_pool.lock)) {
+ 				_mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
+@@ -1313,7 +1316,7 @@ void add_interrupt_randomness(int irq)
+ 
+ 	if (unlikely(!fast_pool->mix.func))
+ 		INIT_WORK(&fast_pool->mix, mix_interrupt_randomness);
+-	atomic_or(MIX_INFLIGHT, &fast_pool->count);
++	fast_pool->count |= MIX_INFLIGHT;
+ 	queue_work_on(raw_smp_processor_id(), system_highpri_wq, &fast_pool->mix);
+ }
+ EXPORT_SYMBOL_GPL(add_interrupt_randomness);
+diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+index 411a428ace4d..38294af566e4 100644
+--- a/include/linux/cpuhotplug.h
++++ b/include/linux/cpuhotplug.h
+@@ -127,6 +127,7 @@ enum cpuhp_state {
+ 	CPUHP_MM_ZSWP_POOL_PREPARE,
+ 	CPUHP_KVM_PPC_BOOK3S_PREPARE,
+ 	CPUHP_ZCOMP_PREPARE,
++	CPUHP_RANDOM_PREPARE,
+ 	CPUHP_TIMERS_PREPARE,
+ 	CPUHP_MIPS_SOC_PREPARE,
+ 	CPUHP_BP_PREPARE_DYN,
+diff --git a/include/linux/random.h b/include/linux/random.h
+index d7354de9351e..fd8c354bae8e 100644
+--- a/include/linux/random.h
++++ b/include/linux/random.h
+@@ -35,6 +35,8 @@ extern void add_interrupt_randomness(int irq) __latent_entropy;
+ extern void add_hwgenerator_randomness(const void *buffer, size_t count,
+ 				       size_t entropy);
+ 
++extern int random_dead_cpu(unsigned int cpu);
++
+ extern void get_random_bytes(void *buf, size_t nbytes);
+ extern int wait_for_random_bytes(void);
+ extern int __init rand_initialize(void);
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index 407a2568f35e..f83ae4ae7275 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -34,6 +34,7 @@
+ #include <linux/scs.h>
+ #include <linux/percpu-rwsem.h>
+ #include <linux/cpuset.h>
++#include <linux/random.h>
+ 
+ #include <trace/events/power.h>
+ #define CREATE_TRACE_POINTS
+@@ -1689,6 +1690,11 @@ static struct cpuhp_step cpuhp_hp_states[] = {
+ 		.startup.single		= rcutree_prepare_cpu,
+ 		.teardown.single	= rcutree_dead_cpu,
+ 	},
++	[CPUHP_RANDOM_PREPARE] = {
++		.name			= "random:prepare",
++		.startup.single		= NULL,
++		.teardown.single	= random_dead_cpu,
++	},
+ 	/*
+ 	 * On the tear-down path, timers_dead_cpu() must be invoked
+ 	 * before blk_mq_queue_reinit_notify() from notify_dead(),
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.35.0
+

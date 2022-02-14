@@ -2,83 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DC04B4E4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3174B4E51
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:27:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350797AbiBNL1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:27:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57810 "EHLO
+        id S1351092AbiBNL10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:27:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345773AbiBNL1L (ORCPT
+        with ESMTP id S1350880AbiBNL1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:27:11 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4211F70906
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 03:02:50 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id d27so22378207wrb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 03:02:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=rY6QvvVRqOvPAGc/v6yuZaAnxNGOJih1tbWFe0TRT+8=;
-        b=r+EpbXVhOjAUFCGJgqRB9cfXnZf47V3kY8RXt+P+9ENGtagytayFrd9RZbDfVGDgmk
-         qyyusJ4t5L/SlK3KnY2WaxccqVbEfz7b9isdtipuw76VyT9/MEB/BEgkEvVBUz8FBDbu
-         iZjCmTaxy6s194lR2+n+zgv66SjUzG2cwkk25+r9tkynU/eYhtY+Zzzby6atYwRXMRiF
-         ZBqur0WyMl/MPLRf4n4mj2VvMvZ6TOd4LZLiMOo+0nXN7pCgKRueCJcIlTOx0hGVez0J
-         x9BY67unoRW2Jbxme4NUc+NC7kNqcaqdi5EMm3ILeZgO70oIu9c+DHnvCl+lwW4NNjq7
-         quvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rY6QvvVRqOvPAGc/v6yuZaAnxNGOJih1tbWFe0TRT+8=;
-        b=BpBzWjpQCKhXtBSezRMZpQjNCggQM/w0PeoGI8Wth7+m48gQ28j+SULxPpt5UVd34h
-         Exjv37ADtL9wAoO1vrDYF975rroNctw8f6ilVuSNfhQAtt7xD+ECKmSmOQPGdv9tNxjK
-         i7XBavAGEzZ5IM37HpSWctLujybkqZsGinvV/1yuWm5AmSqeLFqxxZUHcR/j17CnueXx
-         1sYt5aLHq+97l/XqkWPNd9I6zQn0y2N5v9T9ve3ZhFqtUPZ5CoqibTcwMpIxICesS2Oh
-         EsH63i/6JjsFMuZL5Phe3bo34lSedZ4rS+BpGMPqgZjvkoH3LoA9KUwUVhz3D4drECOw
-         p3Eg==
-X-Gm-Message-State: AOAM531LZbXy8h3uQvllXxSZR0s9UP4BrDujQXEH4VT2y80jCn4poHj0
-        Zfqx1ugwv5tQCD5RCoyZUR8X6Q==
-X-Google-Smtp-Source: ABdhPJxLurLedRSdtH+QhxXlsrZ9XXK/g0KEduGYx1QwiEKeQ+rKMBO3/YugsxGdBwwWLZUUHjaGsA==
-X-Received: by 2002:a5d:5386:: with SMTP id d6mr10249921wrv.392.1644836568786;
-        Mon, 14 Feb 2022 03:02:48 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:1088:8527:61da:d6b? ([2a01:e34:ed2f:f020:1088:8527:61da:d6b])
-        by smtp.googlemail.com with ESMTPSA id r11sm7189107wmb.19.2022.02.14.03.02.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 03:02:48 -0800 (PST)
-Message-ID: <c0b863ee-cf40-3dc9-f1d0-0f036b560cbd@linaro.org>
-Date:   Mon, 14 Feb 2022 12:02:45 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 0/5] clocksource/drivers/imx: several updates
-Content-Language: en-US
-To:     Peng Fan <peng.fan@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20211214120737.1611955-1-peng.fan@oss.nxp.com>
- <DU0PR04MB94177F777E854B92C665303488519@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <DU0PR04MB9417BA24DB13CD6C98BE47CF88209@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <c7584787-838f-97b8-5e2a-c7f271d8a406@linaro.org>
- <DU0PR04MB9417CFE2BBFDB2FDC32CA8F088329@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <DU0PR04MB9417CFE2BBFDB2FDC32CA8F088329@DU0PR04MB9417.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Mon, 14 Feb 2022 06:27:12 -0500
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0404865832;
+        Mon, 14 Feb 2022 03:03:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1644836574;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=UuYelEPUUVN2By4s65pB/byvPZxpZ0/KX4emzn6gY80=;
+    b=XmHSJjW5lMjNkKyFEnYyKU3qq7w9yhrWIfJ9SJ0YWsZnK97HV6wUiNUIpmMGCCUG1Z
+    Ws01peA+jNPuHpmMwSMYY1r86bUlZJmmm4DaTIobuG4uenw1mCNAhG+U0RcSv7/AAB6S
+    ch5gyAt8xV9pVUtznXfJNXLL/iY6x4rXsHeZtH6Gygswt2J1lfBpmJQZjNp1kb7sozk0
+    0DsgVLQBn+zIe0sk+Lwq3bpG0DaJZ9Txz84GcFNIMIw4SmARxMN2pLKZ1QOJqAwmanlT
+    Q19plqv9cR5PLQray5sejrms9OcVvx3MXKJd+Tt/0tEPPa6mQET0Rd2TqGpr9HHbh9k2
+    sU1A==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3jcR+"
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.39.0 DYNA|AUTH)
+    with ESMTPSA id L29417y1EB2ryAP
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Mon, 14 Feb 2022 12:02:53 +0100 (CET)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v15 2/7] drm/ingenic: Add dw-hdmi driver specialization
+ for jz4780
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <58IA7R.PZ9FQXN7FVAK@crapouillou.net>
+Date:   Mon, 14 Feb 2022 12:02:53 +0100
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <AD978522-8321-476D-955C-3CDD747EFCAC@goldelico.com>
+References: <cover.1644681054.git.hns@goldelico.com>
+ <e6e1f3f44e6979a998ec9c372e329b6facaded15.1644681054.git.hns@goldelico.com>
+ <58IA7R.PZ9FQXN7FVAK@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,33 +79,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2022 00:46, Peng Fan wrote:
->> Subject: Re: [PATCH 0/5] clocksource/drivers/imx: several updates
->>
->>
->> On 26/01/2022 09:24, Peng Fan wrote:
->>> Daniel,
->>>
->>>> Subject: RE: [PATCH 0/5] clocksource/drivers/imx: several updates
->>>
->>> Do you have time to give a look?
->>
->> Yeah, sorry for the delay
->>
->> They sounds good, I'll pick them up
-> 
-> Still not in your tree? Or later?
+Hi Paul,
 
-Just pushed my branch
+> Am 14.02.2022 um 11:24 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+> Hi,
+>=20
+> Le sam., f=C3=A9vr. 12 2022 at 16:50:50 +0100, H. Nikolaus Schaller =
+<hns@goldelico.com> a =C3=A9crit :
 
-https://git.linaro.org/people/daniel.lezcano/linux.git/log/?h=timers/drivers/next
+>> +static void ingenic_dw_hdmi_cleanup(void *data)
+>> +{
+>> +	struct dw_hdmi *hdmi =3D (struct dw_hdmi *)data;
+>> +
+>> +	dw_hdmi_remove(hdmi);
+>> +}
+>> +
+>> +static int ingenic_dw_hdmi_probe(struct platform_device *pdev)
+>> +{
+>> +	struct dw_hdmi *hdmi;
+>> +
+>> +	hdmi =3D dw_hdmi_probe(pdev, &ingenic_dw_hdmi_plat_data);
+>> +	if (IS_ERR(hdmi))
+>> +		return PTR_ERR(hdmi);
+>> +
+>> +	return devm_add_action_or_reset(&pdev->dev, =
+ingenic_dw_hdmi_cleanup, hdmi);
+>=20
+> I think I said it already, but in this driver you could use a .remove =
+callback, there's not much point in using devm cleanups in such a simple =
+setup.
 
-It will land in linux-next
+Well it was your suggestion after v8:
 
+https://lore.kernel.org/all/DIA33R.QE29K7RKLI2C1@crapouillou.net/
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+So we now almost go back to RFC v1 almost 2 years ago:
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+=
+https://patchwork.kernel.org/project/linux-mips/patch/2c131e1fb19e19f958a6=
+12f7186bc83f4afb0b0a.1582744379.git.hns@goldelico.com/
+
+Of course there was a good reason to better handle the regulator
+AND the dw_hdmi_remove() by a single mechanism.
+
+Now the regulator has gone and been replaced by the hdmi connector
+and we can go back.
+
+>=20
+> In your probe you could just:
+> return PTR_ERR_OR_ZERO(hdmi);
+
+No, this does not work since we need to platform_set_drvdata().
+to be able to access the private struct in the remove callback.
+And checking errors after platform_set_drvdata() can be done but
+looks strange to me.
+
+It is up to you what you prefer.
+
+>=20
+>> +}
+>> +
+>> +static struct platform_driver ingenic_dw_hdmi_driver =3D {
+>> +	.probe  =3D ingenic_dw_hdmi_probe,
+>> +	.driver =3D {
+>> +		.name =3D "dw-hdmi-ingenic",
+>> +		.of_match_table =3D ingenic_dw_hdmi_dt_ids,
+>> +	},
+>> +};
+>> +module_platform_driver(ingenic_dw_hdmi_driver);
+>> +
+>> +MODULE_DESCRIPTION("JZ4780 Specific DW-HDMI Driver Extension");
+>> +MODULE_LICENSE("GPL v2");
+>> +MODULE_ALIAS("platform:dwhdmi-ingenic");
+>=20
+> Should probably be "platform:dw-hdmi-ingenic"?
+
+Yes, indeed. Thanks for spotting!
+
+Was also good in v1. Probably someone deleted the hyphen unnoticed =
+during editing of "jz4780" to "ingenic"...
+
+BR and thanks,
+Nikolaus
+

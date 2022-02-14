@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62ADD4B49E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F04E94B474C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347735AbiBNKah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:30:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41280 "EHLO
+        id S243577AbiBNJjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:39:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347710AbiBNKaG (ORCPT
+        with ESMTP id S244072AbiBNJfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:30:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC337093D;
-        Mon, 14 Feb 2022 01:58:51 -0800 (PST)
+        Mon, 14 Feb 2022 04:35:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5D165490;
+        Mon, 14 Feb 2022 01:33:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D63BB80DC8;
-        Mon, 14 Feb 2022 09:58:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 740A4C340E9;
-        Mon, 14 Feb 2022 09:58:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16EBB60FFD;
+        Mon, 14 Feb 2022 09:32:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1537C340EF;
+        Mon, 14 Feb 2022 09:32:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832712;
-        bh=JfL+GhWxwE5F5v6NmdagFTHsk5XA1TJAJFpQryMWtWs=;
+        s=korg; t=1644831162;
+        bh=/B6+WjfcfMGeepH/SkiMyvv2wJxkQNqQQ0x6gqPOa38=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XILD0+U/KaiC2gYfkrFyBkD417RQrH+0ZnAwFHz1iuidu1JDdYnPi+BupgansWVyd
-         MjjEhpbg3Iw1+unJQbpOoQVuRvv58hQuzvcjigk/dBRIE4XcodlkIkFTDyL99Y3uEr
-         UejIO3zvA/6n+J6DOyp0KEAUM6WZNocrUNifAxmM=
+        b=yk4EhUw7G55Ak0EAZRV+m0594HPLpBT/CED5A3QXaqExEZ3OE5bksKW4mVNkd/FJF
+         /8zxg5hdGrpN3a2Mqxzfy5hGzpEcIUJwNCC3vJY3wlsbtQ/YgF9TZsxhTd+yLpSbAB
+         WUQ72O2+HCAvlufRlR9RPkXBcmSYw7oxbtq3F5VA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 100/203] staging: fbtft: Fix error path in fbtft_driver_module_init()
+        stable@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Frank van der Linden <fllinden@amazon.com>
+Subject: [PATCH 4.19 18/49] bpf: Add kconfig knob for disabling unpriv bpf by default
 Date:   Mon, 14 Feb 2022 10:25:44 +0100
-Message-Id: <20220214092513.650977713@linuxfoundation.org>
+Message-Id: <20220214092448.894309962@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
+References: <20220214092448.285381753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +55,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: Daniel Borkmann <daniel@iogearbox.net>
 
-[ Upstream commit 426aca16e903b387a0b0001d62207a745c67cfd3 ]
+commit 08389d888287c3823f80b0216766b71e17f0aba5 upstream.
 
-If registering the platform driver fails, the function must not return
-without undoing the spi driver registration first.
+Add a kconfig knob which allows for unprivileged bpf to be disabled by default.
+If set, the knob sets /proc/sys/kernel/unprivileged_bpf_disabled to value of 2.
 
-Fixes: c296d5f9957c ("staging: fbtft: core support")
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Link: https://lore.kernel.org/r/20220118181338.207943-1-u.kleine-koenig@pengutronix.de
+This still allows a transition of 2 -> {0,1} through an admin. Similarly,
+this also still keeps 1 -> {1} behavior intact, so that once set to permanently
+disabled, it cannot be undone aside from a reboot.
+
+We've also added extra2 with max of 2 for the procfs handler, so that an admin
+still has a chance to toggle between 0 <-> 2.
+
+Either way, as an additional alternative, applications can make use of CAP_BPF
+that we added a while ago.
+
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/74ec548079189e4e4dffaeb42b8987bb3c852eee.1620765074.git.daniel@iogearbox.net
+[fllinden@amazon.com: backported to 4.19]
+Signed-off-by: Frank van der Linden <fllinden@amazon.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/fbtft/fbtft.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ Documentation/sysctl/kernel.txt |   21 +++++++++++++++++++++
+ init/Kconfig                    |   10 ++++++++++
+ kernel/bpf/syscall.c            |    3 ++-
+ kernel/sysctl.c                 |   29 +++++++++++++++++++++++++----
+ 4 files changed, 58 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/staging/fbtft/fbtft.h b/drivers/staging/fbtft/fbtft.h
-index 6869f3603b0e6..9a6c906820f22 100644
---- a/drivers/staging/fbtft/fbtft.h
-+++ b/drivers/staging/fbtft/fbtft.h
-@@ -334,7 +334,10 @@ static int __init fbtft_driver_module_init(void)                           \
- 	ret = spi_register_driver(&fbtft_driver_spi_driver);               \
- 	if (ret < 0)                                                       \
- 		return ret;                                                \
--	return platform_driver_register(&fbtft_driver_platform_driver);    \
-+	ret = platform_driver_register(&fbtft_driver_platform_driver);     \
-+	if (ret < 0)                                                       \
-+		spi_unregister_driver(&fbtft_driver_spi_driver);           \
-+	return ret;                                                        \
- }                                                                          \
- 									   \
- static void __exit fbtft_driver_module_exit(void)                          \
--- 
-2.34.1
-
+--- a/Documentation/sysctl/kernel.txt
++++ b/Documentation/sysctl/kernel.txt
+@@ -94,6 +94,7 @@ show up in /proc/sys/kernel:
+ - sysctl_writes_strict
+ - tainted
+ - threads-max
++- unprivileged_bpf_disabled
+ - unknown_nmi_panic
+ - watchdog
+ - watchdog_thresh
+@@ -1041,6 +1042,26 @@ available RAM pages threads-max is reduc
+ 
+ ==============================================================
+ 
++unprivileged_bpf_disabled:
++
++Writing 1 to this entry will disable unprivileged calls to bpf();
++once disabled, calling bpf() without CAP_SYS_ADMIN will return
++-EPERM. Once set to 1, this can't be cleared from the running kernel
++anymore.
++
++Writing 2 to this entry will also disable unprivileged calls to bpf(),
++however, an admin can still change this setting later on, if needed, by
++writing 0 or 1 to this entry.
++
++If BPF_UNPRIV_DEFAULT_OFF is enabled in the kernel config, then this
++entry will default to 2 instead of 0.
++
++  0 - Unprivileged calls to bpf() are enabled
++  1 - Unprivileged calls to bpf() are disabled without recovery
++  2 - Unprivileged calls to bpf() are disabled
++
++==============================================================
++
+ unknown_nmi_panic:
+ 
+ The value in this file affects behavior of handling NMI. When the
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1474,6 +1474,16 @@ config BPF_JIT_ALWAYS_ON
+ 	  Enables BPF JIT and removes BPF interpreter to avoid
+ 	  speculative execution of BPF instructions by the interpreter
+ 
++config BPF_UNPRIV_DEFAULT_OFF
++	bool "Disable unprivileged BPF by default"
++	depends on BPF_SYSCALL
++	help
++	  Disables unprivileged BPF by default by setting the corresponding
++	  /proc/sys/kernel/unprivileged_bpf_disabled knob to 2. An admin can
++	  still reenable it by setting it to 0 later on, or permanently
++	  disable it by setting it to 1 (from which no other transition to
++	  0 is possible anymore).
++
+ config USERFAULTFD
+ 	bool "Enable userfaultfd() system call"
+ 	select ANON_INODES
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -48,7 +48,8 @@ static DEFINE_SPINLOCK(prog_idr_lock);
+ static DEFINE_IDR(map_idr);
+ static DEFINE_SPINLOCK(map_idr_lock);
+ 
+-int sysctl_unprivileged_bpf_disabled __read_mostly;
++int sysctl_unprivileged_bpf_disabled __read_mostly =
++	IS_BUILTIN(CONFIG_BPF_UNPRIV_DEFAULT_OFF) ? 2 : 0;
+ 
+ static const struct bpf_map_ops * const bpf_map_types[] = {
+ #define BPF_PROG_TYPE(_id, _ops)
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -250,6 +250,28 @@ static int sysrq_sysctl_handler(struct c
+ 
+ #endif
+ 
++#ifdef CONFIG_BPF_SYSCALL
++static int bpf_unpriv_handler(struct ctl_table *table, int write,
++                             void *buffer, size_t *lenp, loff_t *ppos)
++{
++	int ret, unpriv_enable = *(int *)table->data;
++	bool locked_state = unpriv_enable == 1;
++	struct ctl_table tmp = *table;
++
++	if (write && !capable(CAP_SYS_ADMIN))
++		return -EPERM;
++
++	tmp.data = &unpriv_enable;
++	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
++	if (write && !ret) {
++		if (locked_state && unpriv_enable != 1)
++			return -EPERM;
++		*(int *)table->data = unpriv_enable;
++	}
++	return ret;
++}
++#endif
++
+ static struct ctl_table kern_table[];
+ static struct ctl_table vm_table[];
+ static struct ctl_table fs_table[];
+@@ -1220,10 +1242,9 @@ static struct ctl_table kern_table[] = {
+ 		.data		= &sysctl_unprivileged_bpf_disabled,
+ 		.maxlen		= sizeof(sysctl_unprivileged_bpf_disabled),
+ 		.mode		= 0644,
+-		/* only handle a transition from default "0" to "1" */
+-		.proc_handler	= proc_dointvec_minmax,
+-		.extra1		= &one,
+-		.extra2		= &one,
++		.proc_handler	= bpf_unpriv_handler,
++		.extra1		= &zero,
++		.extra2		= &two,
+ 	},
+ #endif
+ #if defined(CONFIG_TREE_RCU) || defined(CONFIG_PREEMPT_RCU)
 
 

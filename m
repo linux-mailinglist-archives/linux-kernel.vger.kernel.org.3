@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 105164B4861
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1A54B45D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:32:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240092AbiBNJxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:53:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60854 "EHLO
+        id S243297AbiBNJaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:30:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245297AbiBNJuS (ORCPT
+        with ESMTP id S243112AbiBNJ3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:50:18 -0500
+        Mon, 14 Feb 2022 04:29:38 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62856652CE;
-        Mon, 14 Feb 2022 01:41:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62C760AAF;
+        Mon, 14 Feb 2022 01:29:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 955E8B80DC1;
-        Mon, 14 Feb 2022 09:41:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAD73C340E9;
-        Mon, 14 Feb 2022 09:41:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1578FB80DC5;
+        Mon, 14 Feb 2022 09:29:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BF4BC340E9;
+        Mon, 14 Feb 2022 09:29:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831681;
-        bh=GxuuGnP9KrUM6DZlJqqZTvE/JpWjy0vuXMwK9DCF/zI=;
+        s=korg; t=1644830955;
+        bh=vKR3XLW8cjvpm8Z/9x3036EkCMG759mpw8h0+7mcmx4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cCFimEG3qYoD8uOoF3tcMCGYRjcXf5tEnGZYs8n8gCYEN/L3dLscBcn1WE/oKD6WD
-         EX6B0IzHlXxG494lhKliVIsGjZC3VXTRHvLOYmVSbKgcIF9NDfgCLX1RCiPsU9dOgP
-         KweLTHIu6yupfK/eQDB6wpc6Z1CMYo2JNft/p9z4=
+        b=LknpxJ+mLeCdvnhrisnzYzAsRmGYVjV4/JzAk5G/O27MK3pvlMlqQMWKD26FJpygM
+         82ecXLPTjAHv+ouhbGCFgvG1tpZscTjIhIIV9/XhnTY0nTIr4fVpoc7rG77h8G7bxJ
+         GCeyOobc8oeKDfRdSS3dDQ3e4JNv/tpqNqZzgS/M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Mathias Krause <minipli@grsecurity.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 061/116] misc: fastrpc: avoid double fput() on failed usercopy
+        stable@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 4.9 34/34] hwmon: (dell-smm) Speed up setting of fan speed
 Date:   Mon, 14 Feb 2022 10:26:00 +0100
-Message-Id: <20220214092500.853984909@linuxfoundation.org>
+Message-Id: <20220214092447.051660332@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
+References: <20220214092445.946718557@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,55 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathias Krause <minipli@grsecurity.net>
+From: Armin Wolf <W_Armin@gmx.de>
 
-[ Upstream commit 46963e2e0629cb31c96b1d47ddd89dc3d8990b34 ]
+commit c0d79987a0d82671bff374c07f2201f9bdf4aaa2 upstream.
 
-If the copy back to userland fails for the FASTRPC_IOCTL_ALLOC_DMA_BUFF
-ioctl(), we shouldn't assume that 'buf->dmabuf' is still valid. In fact,
-dma_buf_fd() called fd_install() before, i.e. "consumed" one reference,
-leaving us with none.
+When setting the fan speed, i8k_set_fan() calls i8k_get_fan_status(),
+causing an unnecessary SMM call since from the two users of this
+function, only i8k_ioctl_unlocked() needs to know the new fan status
+while dell_smm_write() ignores the new fan status.
+Since SMM calls can be very slow while also making error reporting
+difficult for dell_smm_write(), remove the function call from
+i8k_set_fan() and call it separately in i8k_ioctl_unlocked().
 
-Calling dma_buf_put() will therefore put a reference we no longer own,
-leading to a valid file descritor table entry for an already released
-'file' object which is a straight use-after-free.
+Tested on a Dell Inspiron 3505.
 
-Simply avoid calling dma_buf_put() and rely on the process exit code to
-do the necessary cleanup, if needed, i.e. if the file descriptor is
-still valid.
-
-Fixes: 6cffd79504ce ("misc: fastrpc: Add support for dmabuf exporter")
-Acked-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Mathias Krause <minipli@grsecurity.net>
-Link: https://lore.kernel.org/r/20220127130218.809261-1-minipli@grsecurity.net
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+Reviewed-by: Pali Rohár <pali@kernel.org>
+Link: https://lore.kernel.org/r/20211021190531.17379-6-W_Armin@gmx.de
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/fastrpc.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/hwmon/dell-smm-hwmon.c |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-index ef49ac8d91019..d0471fec37fbb 100644
---- a/drivers/misc/fastrpc.c
-+++ b/drivers/misc/fastrpc.c
-@@ -1284,7 +1284,14 @@ static int fastrpc_dmabuf_alloc(struct fastrpc_user *fl, char __user *argp)
- 	}
+--- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -294,7 +294,7 @@ static int i8k_get_fan_nominal_speed(int
+ }
  
- 	if (copy_to_user(argp, &bp, sizeof(bp))) {
--		dma_buf_put(buf->dmabuf);
-+		/*
-+		 * The usercopy failed, but we can't do much about it, as
-+		 * dma_buf_fd() already called fd_install() and made the
-+		 * file descriptor accessible for the current process. It
-+		 * might already be closed and dmabuf no longer valid when
-+		 * we reach this point. Therefore "leak" the fd and rely on
-+		 * the process exit path to do any required cleanup.
-+		 */
- 		return -EFAULT;
- 	}
+ /*
+- * Set the fan speed (off, low, high). Returns the new fan status.
++ * Set the fan speed (off, low, high, ...).
+  */
+ static int i8k_set_fan(int fan, int speed)
+ {
+@@ -303,7 +303,7 @@ static int i8k_set_fan(int fan, int spee
+ 	speed = (speed < 0) ? 0 : ((speed > i8k_fan_max) ? i8k_fan_max : speed);
+ 	regs.ebx = (fan & 0xff) | (speed << 8);
  
--- 
-2.34.1
-
+-	return i8k_smm(&regs) ? : i8k_get_fan_status(fan);
++	return i8k_smm(&regs);
+ }
+ 
+ static int i8k_get_temp_type(int sensor)
+@@ -417,7 +417,7 @@ static int
+ i8k_ioctl_unlocked(struct file *fp, unsigned int cmd, unsigned long arg)
+ {
+ 	int val = 0;
+-	int speed;
++	int speed, err;
+ 	unsigned char buff[16];
+ 	int __user *argp = (int __user *)arg;
+ 
+@@ -478,7 +478,11 @@ i8k_ioctl_unlocked(struct file *fp, unsi
+ 		if (copy_from_user(&speed, argp + 1, sizeof(int)))
+ 			return -EFAULT;
+ 
+-		val = i8k_set_fan(val, speed);
++		err = i8k_set_fan(val, speed);
++		if (err < 0)
++			return err;
++
++		val = i8k_get_fan_status(val);
+ 		break;
+ 
+ 	default:
 
 

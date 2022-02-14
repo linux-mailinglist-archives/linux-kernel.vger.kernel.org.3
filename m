@@ -2,105 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A304B4B82
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 650464B4AF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:40:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346472AbiBNKXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:23:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50562 "EHLO
+        id S1346863AbiBNKZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:25:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346722AbiBNKVu (ORCPT
+        with ESMTP id S1346429AbiBNKYQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:21:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C217DE36;
-        Mon, 14 Feb 2022 01:55:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9017BB80DBE;
-        Mon, 14 Feb 2022 09:55:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3184C340E9;
-        Mon, 14 Feb 2022 09:55:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644832555;
-        bh=za+znYSgbhf0ycyD96oqYNU6ulxWPNb7LNxbXB3qlyo=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=UV/d/E5DqMrcjwq2gyPTgsTVJ2O2VOKhR1K5uE6hIbFAqwyntn1IyxXoNAL7E1ccD
-         A1gScG/iu9cPZziLQHZZxBaQGPtvnJWopYDRUdDjcTAQ8O2Z3Mq05QhG0JJUYgxlCd
-         BeWXhhPJ4EQQuaSNQL/bfphY6h4Gh6Rk5UoqvOQ+MDhzKt+WXbDZ1oL6G/Tk1bR9oh
-         1E9k6r3VwjojLR884/D5RSU1EaDpszAdrxq0DTlywNzyLajvIICF4olvmJyk57uQL/
-         b0Iw6wBdYFeCzRA3jGvcEkQYCi6N8w5A0YtnlC/V9zD6Z/6d2TaRwXrb7aku5T8Sv3
-         zMqygAXXDO0ug==
-Date:   Mon, 14 Feb 2022 10:55:51 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Aditya Garg <gargaditya08@live.com>
-cc:     "alexhenrie24@gmail.com" <alexhenrie24@gmail.com>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "paul@mrarm.io" <paul@mrarm.io>, Aun-Ali Zaidi <admin@kodeit.net>,
-        Orlando Chamberlain <redecorating@protonmail.com>
-Subject: Re: [PATCH v2 1/3] HID: apple: Add support for keyboard backlight
- on certain T2 Macs.
-In-Reply-To: <1088ECFE-B356-4731-AC8A-09A4421DD7D1@live.com>
-Message-ID: <nycvar.YFH.7.76.2202141054070.11721@cbobk.fhfr.pm>
-References: <67E7EA8B-CF21-4794-B7B4-96873EE70EF6@live.com> <1088ECFE-B356-4731-AC8A-09A4421DD7D1@live.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Mon, 14 Feb 2022 05:24:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 402A06CA7A
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 01:56:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644832587;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SLsDc3qsko5ZStHVuXDISh4k8xIj3+jxUHxwlaY2EiI=;
+        b=NYI4pBft6JemInqhvFoDFDQtScG9nLEndl6OzxfW1XHu/h36TT/TOr+rrfdATbr0zharpy
+        c/TbQNSMmoU+PqZWc726BzniMuIf67HAt9LETUZ/Ea6J6b1o8/6jN0ck14EXaSDIe+7Oav
+        JnASm7tiULAqnDiHQcgY8QHHAw63apQ=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-660-o338R-O5Oe2XuGanSvktBQ-1; Mon, 14 Feb 2022 04:56:25 -0500
+X-MC-Unique: o338R-O5Oe2XuGanSvktBQ-1
+Received: by mail-ed1-f70.google.com with SMTP id m4-20020a50cc04000000b0040edb9d147cso9929809edi.15
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 01:56:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SLsDc3qsko5ZStHVuXDISh4k8xIj3+jxUHxwlaY2EiI=;
+        b=C0XX//U+Fc/5w3gemkEjk2OU4Xqpbor9PVtFkMbKiHUEEl2iZdm0UAnEZD4sRtRNTr
+         OdY28wrbpoRQKZ9C1m3FRg/0etMYH0RdtvrpLZ1Bm2wjmVp+NViLHVveb1o9UyIiggnf
+         XeRXdRCF19NHFRZtc29GLEA2XExCg4epYOeAtKAigCP+uE/XZlUlxvD0zWf656sCFCNZ
+         TwhelqiL21ewvv15/pc4jQrOzULhBf7swyljJVc/0+A939GQvSauey1oTmcgtmr8A8wQ
+         ok1WXLoqf2cZxMLzDW/s9192L4TDsEWU4+48n9B7tqLXE0R701YYQWeo/yGQq7i3QsTF
+         noYQ==
+X-Gm-Message-State: AOAM530qQSvzXpUIJoqYf98DMHCB56rjgIi3oKAbwghimhl6Jdy6nXnZ
+        9EW9d9rUiAdu6/3EPnYqkWZNHe5IuuEOfvKfVYMSZYjdkKqqJZBkDuDgmn2GZQXj5i5b7mSE5nU
+        GaSDo/mGcCIWyGHf0d1cShN7R
+X-Received: by 2002:a17:906:72c1:: with SMTP id m1mr11186703ejl.721.1644832584389;
+        Mon, 14 Feb 2022 01:56:24 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzPSJr86OR0bAWvwpiFB7zD0OSccAYHsOwUsAXyqCn+3n/QqJQgehBaRd5o7nYGukbbYNzaBw==
+X-Received: by 2002:a17:906:72c1:: with SMTP id m1mr11186678ejl.721.1644832584157;
+        Mon, 14 Feb 2022 01:56:24 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id j5sm1792136ejs.69.2022.02.14.01.56.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 01:56:23 -0800 (PST)
+Message-ID: <6bee793c-f7fc-2ede-0405-7a5d7968b175@redhat.com>
+Date:   Mon, 14 Feb 2022 10:56:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 1/1] x86/kvm/fpu: Mask guest fpstate->xfeatures with
+ guest_supported_xcr0
+Content-Language: en-US
+To:     David Edmondson <david.edmondson@oracle.com>
+Cc:     Leonardo Bras <leobras@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Yang Zhong <yang.zhong@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20220211060742.34083-1-leobras@redhat.com>
+ <5fd84e2f-8ebc-9a4c-64bf-8d6a2c146629@redhat.com>
+ <cunsfslpyvh.fsf@oracle.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <cunsfslpyvh.fsf@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Feb 2022, Aditya Garg wrote:
-
+On 2/14/22 10:43, David Edmondson wrote:
+> Sorry if this is a daft question:
 > 
+> In what situations will there be bits set in
+> vcpu->arch.guest_supported_xcr0 that are not set in
+> vcpu->arch.guest_fpu.fpstate->xfeatures ?
 > 
-> > On 24-Jan-2022, at 8:38 PM, Aditya Garg <gargaditya08@live.com> wrote:
-> > 
-> > From: Paul Pawlowski <paul@mrarm.io>
-> > 
-> > This patch introduces the requisite plumbing for supporting keyboard
-> > backlight on T2-attached, USB exposed models. The quirk mechanism was
-> > used to reuse the existing hid-apple driver.
-> > 
-> > Signed-off-by: Paul Pawlowski <paul@mrarm.io>
-> > Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
-> > Signed-off-by: Aditya Garg <gargaditya08@live.com>
-> > ---
-> > drivers/hid/hid-apple.c | 125 ++++++++++++++++++++++++++++++++++++++++
-> > 1 file changed, 125 insertions(+)
-> > 
-> > diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
-> > index 24802a4a6..c22d445a9 100644
-> > --- a/drivers/hid/hid-apple.c
-> > +++ b/drivers/hid/hid-apple.c
-> > @@ -7,6 +7,7 @@
-> >  *  Copyright (c) 2005 Michael Haboustak <mike-@cinci.rr.com> for Concept2, Inc
-> >  *  Copyright (c) 2006-2007 Jiri Kosina
-> >  *  Copyright (c) 2008 Jiri Slaby <jirislaby@gmail.com>
-> > + *  Copyright (c) 2019 Paul Pawlowski <paul@mrarm.io>
-> >  */
-> > 
-> > /*
-> > @@ -33,6 +34,7 @@
-> > /* BIT(7) reserved, was: APPLE_IGNORE_HIDINPUT */
-> > #define APPLE_NUMLOCK_EMULATION	BIT(8)
-> > #define APPLE_RDESC_BATTERY	BIT(9)
-> > +#define APPLE_BACKLIGHT_CTL	0x0200
-> Jiri, should it be BIT(10)? 0x0200 is BIT(9) if I ain’t wrong.
+> guest_supported_xcr0 is filtered based on supported_xcr0, which I would
+> expect to weed out all bits that are not set in ->xfeatures.
 
-Yes, please use BIT(10). Thanks,
+Good point, so we can do just
 
--- 
-Jiri Kosina
-SUSE Labs
+	vcpu->arch.guest_fpu.fpstate->user_xfeatures =
+		vcpu->arch.guest_supported_xcr0;
+
+On top of this patch, we can even replace vcpu->arch.guest_supported_xcr0
+with vcpu->arch.guest_fpu.fpstate->user_xfeatures.  Probably with local
+variables or wrapper functions though, so as to keep the code readable.
+For example:
+
+static inline u64 kvm_guest_supported_xfd()
+{
+	u64 guest_supported_xcr0 = vcpu->arch.guest_fpu.fpstate->user_xfeatures;
+
+	return guest_supported_xcr0 & XFEATURE_MASK_USER_DYNAMIC;
+}
+
+Also, already in this patch fpstate_realloc should do
+
+         newfps->user_xfeatures = curfps->user_xfeatures | xfeatures;
+
+only if !guest_fpu.  In other words, the user_xfeatures of the guest FPU
+should be controlled exclusively by KVM_SET_CPUID2.
+
+Thanks,
+
+Paolo
 

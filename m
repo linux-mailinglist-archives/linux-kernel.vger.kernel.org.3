@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A7564B4E27
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:27:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1374B4E36
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:27:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235653AbiBNLYV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 14 Feb 2022 06:24:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52390 "EHLO
+        id S1351212AbiBNLX6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 14 Feb 2022 06:23:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351133AbiBNLXy (ORCPT
+        with ESMTP id S1350702AbiBNLXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:23:54 -0500
+        Mon, 14 Feb 2022 06:23:38 -0500
 Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [207.211.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 63FED6E8D3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:59:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C691E6AA5D
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:59:01 -0800 (PST)
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-411-44ZWpe3aNdC9Y1CzlxKSoQ-1; Mon, 14 Feb 2022 05:48:03 -0500
-X-MC-Unique: 44ZWpe3aNdC9Y1CzlxKSoQ-1
+ us-mta-347-FZQAIk2MPauVFaiMtszyBg-1; Mon, 14 Feb 2022 05:48:16 -0500
+X-MC-Unique: FZQAIk2MPauVFaiMtszyBg-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5FD802F26;
-        Mon, 14 Feb 2022 10:48:01 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E997D801B0E;
+        Mon, 14 Feb 2022 10:48:13 +0000 (UTC)
 Received: from x1.com (unknown [10.22.16.130])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4C64226E7E;
-        Mon, 14 Feb 2022 10:47:57 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E30AA27BDC;
+        Mon, 14 Feb 2022 10:48:01 +0000 (UTC)
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
@@ -48,9 +48,9 @@ Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         linux-trace-devel@vger.kernel.org,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [RFC V2 18/21] rv/monitor: Add safe watchdog monitor
-Date:   Mon, 14 Feb 2022 11:45:09 +0100
-Message-Id: <58ee9f31836a6b31c93ca34d5c0bab2919ab4c34.1644830251.git.bristot@kernel.org>
+Subject: [RFC V2 19/21] rv/monitor: Add safe watchdog nowayout monitor
+Date:   Mon, 14 Feb 2022 11:45:10 +0100
+Message-Id: <7a810f46b6136565a364001e7d1550fb9a4ccf62.1644830251.git.bristot@kernel.org>
 In-Reply-To: <cover.1644830251.git.bristot@kernel.org>
 References: <cover.1644830251.git.bristot@kernel.org>
 MIME-Version: 1.0
@@ -70,58 +70,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The watchdog is an essential building block for the usage of Linux in
-safety-critical systems because it allows the system to be monitored from
-an external element - the watchdog hardware, acting as a safety-monitor.
+This is a simplification of the safe_wtd monitor, named safe_wtd_nwo.
+The difference between these two monitors is that the latter enforces
+the nowayout watchdog device option before opening the watchdog.
 
-A user-space application controls the watchdog device via the watchdog
-interface. This application, hereafter safety_app, enables the watchdog
-and periodically pets the watchdog upon correct completion of the safety
-related processing.
-
-If the safety_app, for any reason, stops pinging the watchdog,
-the watchdog hardware can set the system in a fail-safe state. For
-example, shutting the system down.
-
-Given the importance of the safety_app / watchdog hardware couple,
-the interaction between these software pieces also needs some
-sort of monitoring. In other words, "who monitors the monitor?"
-
-The safe watchdog (safe_wtd) RV monitor monitors the interaction between
-the safety_app and the watchdog device, enforcing the correct sequence of
-events that leads the system to a safe state.
-
-Furthermore, the safety_app can monitor the RV monitor by collecting the
-events generated by the RV monitor itself via tracing interface. In this way,
-closing the monitoring loop with the safety_app.
-
-To reach a safe state, the safe_wtd RV monitor requires the
-safety_app to:
-
-	- Open the watchdog device
-	- Start the watchdog
-	- Set a timeout
-	- ping at least once
-
-The RV monitor also avoids some undesired actions. For example, to have
-other threads to touch the watchdog.
-
-The monitor also has a set of options, enabled via kernel command
-line/module options. They are:
-
-	- watchdog_id: the device id to monitor (default 0).
-	- dont_stop: once enabled, do not allow the RV monitor to be stopped
-		(default off);
-	- safe_timeout: define a maximum safe value that an user-space
-		application can set as the watchdog timeout
-		(default unlimited).
-	- check_timeout: After every ping, check if the time left in the
-		watchdog is less than or equal to the last timeout set
-		for the watchdog. It only works for watchdog devices that
-		provide the get_timeleft() function (default off).
+In this way, once the watchdog is starts, the watchdog hardware will
+serve as an safety-monitor until the system shutdown.
 
 For further information, please refer to:
-	Documentation/trace/rv/watchdog-monitor.rst
+        Documentation/trace/rv/watchdog-monitor.rst
 
 The monitor specification was developed together with Gabriele Paoloni,
 in the context of the Linux Foundation Elisa Project.
@@ -147,29 +104,30 @@ Cc: linux-kernel@vger.kernel.org
 Cc: linux-trace-devel@vger.kernel.org
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- kernel/trace/rv/Kconfig                     |   9 +
- kernel/trace/rv/Makefile                    |   1 +
- kernel/trace/rv/monitor_safe_wtd/model.h    |  84 +++++
- kernel/trace/rv/monitor_safe_wtd/safe_wtd.c | 322 ++++++++++++++++++++
- kernel/trace/rv/monitor_safe_wtd/safe_wtd.h |  64 ++++
- 5 files changed, 480 insertions(+)
- create mode 100644 kernel/trace/rv/monitor_safe_wtd/model.h
- create mode 100644 kernel/trace/rv/monitor_safe_wtd/safe_wtd.c
- create mode 100644 kernel/trace/rv/monitor_safe_wtd/safe_wtd.h
+ kernel/trace/rv/Kconfig                       |  10 +
+ kernel/trace/rv/Makefile                      |   1 +
+ kernel/trace/rv/monitor_safe_wtd_nwo/model.h  |  61 ++++
+ .../rv/monitor_safe_wtd_nwo/safe_wtd_nwo.c    | 309 ++++++++++++++++++
+ .../rv/monitor_safe_wtd_nwo/safe_wtd_nwo.h    |  64 ++++
+ 5 files changed, 445 insertions(+)
+ create mode 100644 kernel/trace/rv/monitor_safe_wtd_nwo/model.h
+ create mode 100644 kernel/trace/rv/monitor_safe_wtd_nwo/safe_wtd_nwo.c
+ create mode 100644 kernel/trace/rv/monitor_safe_wtd_nwo/safe_wtd_nwo.h
 
 diff --git a/kernel/trace/rv/Kconfig b/kernel/trace/rv/Kconfig
-index a6545a84df13..93b36f215b2b 100644
+index 93b36f215b2b..7e797e132f60 100644
 --- a/kernel/trace/rv/Kconfig
 +++ b/kernel/trace/rv/Kconfig
-@@ -30,6 +30,15 @@ config RV_MON_WWNR
- 	  illustrates the usage of per-task monitor. The model is
- 	  broken on purpose: it serves to test reactors.
+@@ -39,6 +39,16 @@ config RV_MON_SAFE_WTD
+ 	  For futher information see:
+ 	    Documentation/trace/rv/safety-monitor.rst
  
-+config RV_MON_SAFE_WTD
-+	tristate "Safety watchdog"
++config RV_MON_SAFE_WTD_NWO
++	tristate "Safety watchdog nowayout"
 +	help
-+	  Enable safe_wtd, this monitor observes the interaction
-+	  between a user-space safety monitor and a watchdog device.
++	  Enable safe_wtd_nwo, this monitor observes the interaction
++	  between a user-space safety monitor and a watchdog device. It
++	  enforces the usage of watchdog's nowayout config.
 +
 +	  For futher information see:
 +	    Documentation/trace/rv/safety-monitor.rst
@@ -178,42 +136,35 @@ index a6545a84df13..93b36f215b2b 100644
  	bool "Runtime verification reactors"
  	default y if RV
 diff --git a/kernel/trace/rv/Makefile b/kernel/trace/rv/Makefile
-index 1f5747f065ce..854d0f6e453b 100644
+index 854d0f6e453b..44277103d178 100644
 --- a/kernel/trace/rv/Makefile
 +++ b/kernel/trace/rv/Makefile
-@@ -3,6 +3,7 @@
- obj-$(CONFIG_RV) += rv.o
+@@ -4,6 +4,7 @@ obj-$(CONFIG_RV) += rv.o
  obj-$(CONFIG_RV_MON_WIP) += monitor_wip/wip.o
  obj-$(CONFIG_RV_MON_WWNR) += monitor_wwnr/wwnr.o
-+obj-$(CONFIG_RV_MON_SAFE_WTD) += monitor_safe_wtd/safe_wtd.o
+ obj-$(CONFIG_RV_MON_SAFE_WTD) += monitor_safe_wtd/safe_wtd.o
++obj-$(CONFIG_RV_MON_SAFE_WTD_NWO) += monitor_safe_wtd_nwo/safe_wtd_nwo.o
  obj-$(CONFIG_RV_REACTORS) += rv_reactors.o
  obj-$(CONFIG_RV_REACT_PRINTK) += reactor_printk.o
  obj-$(CONFIG_RV_REACT_PANIC) += reactor_panic.o
-diff --git a/kernel/trace/rv/monitor_safe_wtd/model.h b/kernel/trace/rv/monitor_safe_wtd/model.h
+diff --git a/kernel/trace/rv/monitor_safe_wtd_nwo/model.h b/kernel/trace/rv/monitor_safe_wtd_nwo/model.h
 new file mode 100644
-index 000000000000..04377b165c96
+index 000000000000..504a93e35b93
 --- /dev/null
-+++ b/kernel/trace/rv/monitor_safe_wtd/model.h
-@@ -0,0 +1,84 @@
-+enum states_safe_wtd {
++++ b/kernel/trace/rv/monitor_safe_wtd_nwo/model.h
+@@ -0,0 +1,61 @@
++enum states_safe_wtd_nwo {
 +	init = 0,
 +	closed_running,
-+	closed_running_nwo,
 +	nwo,
 +	opened,
-+	opened_nwo,
-+	reopened,
 +	safe,
-+	safe_nwo,
 +	set,
-+	set_nwo,
 +	started,
-+	started_nwo,
-+	stopped,
 +	state_max
 +};
 +
-+enum events_safe_wtd {
++enum events_safe_wtd_nwo {
 +	close = 0,
 +	nowayout,
 +	open,
@@ -221,11 +172,10 @@ index 000000000000..04377b165c96
 +	ping,
 +	set_safe_timeout,
 +	start,
-+	stop,
 +	event_max
 +};
 +
-+struct automaton_safe_wtd {
++struct automaton_safe_wtd_nwo {
 +	char *state_names[state_max];
 +	char *event_names[event_max];
 +	char function[state_max][event_max];
@@ -233,22 +183,15 @@ index 000000000000..04377b165c96
 +	char final_states[state_max];
 +};
 +
-+struct automaton_safe_wtd automaton_safe_wtd = {
++struct automaton_safe_wtd_nwo automaton_safe_wtd_nwo = {
 +	.state_names = {
 +		"init",
 +		"closed_running",
-+		"closed_running_nwo",
 +		"nwo",
 +		"opened",
-+		"opened_nwo",
-+		"reopened",
 +		"safe",
-+		"safe_nwo",
 +		"set",
-+		"set_nwo",
-+		"started",
-+		"started_nwo",
-+		"stopped"
++		"started"
 +	},
 +	.event_names = {
 +		"close",
@@ -257,35 +200,26 @@ index 000000000000..04377b165c96
 +		"other_threads",
 +		"ping",
 +		"set_safe_timeout",
-+		"start",
-+		"stop"
++		"start"
 +	},
 +	.function = {
-+		{                 -1,                nwo,             opened,               init,                 -1,                 -1,                 -1,                 -1 },
-+		{                 -1, closed_running_nwo,           reopened,     closed_running,                 -1,                 -1,                 -1,                 -1 },
-+		{                 -1, closed_running_nwo,        started_nwo, closed_running_nwo,                 -1,                 -1,                 -1,                 -1 },
-+		{                 -1,                nwo,         opened_nwo,                nwo,                 -1,                 -1,                 -1,                 -1 },
-+		{               init,                 -1,                 -1,                 -1,                 -1,                 -1,            started,                 -1 },
-+		{                nwo,                 -1,                 -1,                 -1,                 -1,                 -1,        started_nwo,                 -1 },
-+		{     closed_running,                 -1,                 -1,                 -1,                 -1,                set,                 -1,             opened },
-+		{     closed_running,                 -1,                 -1,                 -1,               safe,                 -1,                 -1,             stopped },
-+		{ closed_running_nwo,                 -1,                 -1,                 -1,           safe_nwo,                 -1,                 -1,                 -1 },
-+		{                 -1,                 -1,                 -1,                 -1,               safe,                 -1,                 -1,                 -1 },
-+		{                 -1,                 -1,                 -1,                 -1,           safe_nwo,                 -1,                 -1,                 -1 },
-+		{     closed_running,                 -1,                 -1,                 -1,                 -1,                set,                 -1,             stopped },
-+		{ closed_running_nwo,                 -1,                 -1,                 -1,                 -1,            set_nwo,                 -1,                 -1 },
-+		{               init,                 -1,                 -1,                 -1,                 -1,                 -1,                 -1,                 -1 },
++		{             -1,            nwo,             -1,             -1,             -1,             -1,             -1 },
++		{             -1, closed_running,        started, closed_running,             -1,             -1,             -1 },
++		{             -1,            nwo,         opened,            nwo,             -1,             -1,             -1 },
++		{            nwo,             -1,             -1,             -1,             -1,             -1,        started },
++		{ closed_running,             -1,             -1,             -1,           safe,             -1,             -1 },
++		{             -1,             -1,             -1,             -1,           safe,             -1,             -1 },
++		{ closed_running,             -1,             -1,             -1,             -1,            set,             -1 },
 +	},
 +	.initial_state = init,
-+	.final_states = { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
++	.final_states = { 1, 0, 0, 0, 0, 0, 0 },
 +};
-\ No newline at end of file
-diff --git a/kernel/trace/rv/monitor_safe_wtd/safe_wtd.c b/kernel/trace/rv/monitor_safe_wtd/safe_wtd.c
+diff --git a/kernel/trace/rv/monitor_safe_wtd_nwo/safe_wtd_nwo.c b/kernel/trace/rv/monitor_safe_wtd_nwo/safe_wtd_nwo.c
 new file mode 100644
-index 000000000000..2916d17f8de9
+index 000000000000..e19e10da0dc1
 --- /dev/null
-+++ b/kernel/trace/rv/monitor_safe_wtd/safe_wtd.c
-@@ -0,0 +1,322 @@
++++ b/kernel/trace/rv/monitor_safe_wtd_nwo/safe_wtd_nwo.c
+@@ -0,0 +1,309 @@
 +#include <linux/ftrace.h>
 +#include <linux/tracepoint.h>
 +#include <linux/kernel.h>
@@ -297,7 +231,7 @@ index 000000000000..2916d17f8de9
 +#include <linux/watchdog.h>
 +#include <linux/moduleparam.h>
 +
-+#define MODULE_NAME "safe_wtd"
++#define MODULE_NAME "safe_wtd_nwo"
 +
 +/*
 + * This is the self-generated part of the monitor. Generally, there is no need
@@ -310,11 +244,11 @@ index 000000000000..2916d17f8de9
 + *
 + * The rv monitor reference is needed for the monitor declaration.
 + */
-+struct rv_monitor rv_safe_wtd;
-+DECLARE_DA_MON_GLOBAL(safe_wtd, char);
++struct rv_monitor rv_safe_wtd_nwo;
++DECLARE_DA_MON_GLOBAL(safe_wtd_nwo, char);
 +
 +#define CREATE_TRACE_POINTS
-+#include "safe_wtd.h"
++#include "safe_wtd_nwo.h"
 +
 +/*
 + * custom: safe_timeout is the maximum value a watchdog monitor
@@ -374,7 +308,7 @@ index 000000000000..2916d17f8de9
 +	if (wdd->id != watchdog_id)
 +		return;
 +
-+	da_handle_init_run_event_safe_wtd(nowayout);
++	da_handle_init_run_event_safe_wtd_nwo(nowayout);
 +}
 +
 +static void handle_close(void *data, struct watchdog_device *wdd)
@@ -383,9 +317,9 @@ index 000000000000..2916d17f8de9
 +		return;
 +
 +	if (open_pid && current->pid != open_pid) {
-+		da_handle_init_run_event_safe_wtd(other_threads);
++		da_handle_init_run_event_safe_wtd_nwo(other_threads);
 +	} else {
-+		da_handle_event_safe_wtd(close);
++		da_handle_event_safe_wtd_nwo(close);
 +		open_pid = 0;
 +	}
 +}
@@ -396,9 +330,9 @@ index 000000000000..2916d17f8de9
 +		return;
 +
 +	if (open_pid && current->pid != open_pid) {
-+		da_handle_init_run_event_safe_wtd(other_threads);
++		da_handle_init_run_event_safe_wtd_nwo(other_threads);
 +	} else {
-+		da_handle_init_run_event_safe_wtd(open);
++		da_handle_init_run_event_safe_wtd_nwo(open);
 +		open_pid = current->pid;
 +	}
 +}
@@ -409,10 +343,10 @@ index 000000000000..2916d17f8de9
 +		return;
 +
 +	if (open_pid && current->pid != open_pid) {
-+		da_handle_init_run_event_safe_wtd(other_threads);
++		da_handle_init_run_event_safe_wtd_nwo(other_threads);
 +		return;
 +	}
-+	da_handle_event_safe_wtd(other_threads);
++	da_handle_event_safe_wtd_nwo(other_threads);
 +}
 +
 +static void handle_ping(void *data, struct watchdog_device *wdd)
@@ -424,11 +358,11 @@ index 000000000000..2916d17f8de9
 +		return;
 +
 +	if (open_pid && current->pid != open_pid) {
-+		da_handle_init_run_event_safe_wtd(other_threads);
++		da_handle_init_run_event_safe_wtd_nwo(other_threads);
 +		return;
 +	}
 +
-+	da_handle_event_safe_wtd(ping);
++	da_handle_event_safe_wtd_nwo(ping);
 +
 +	if (!check_timeout)
 +		return;
@@ -437,7 +371,7 @@ index 000000000000..2916d17f8de9
 +		timeout = wdd->ops->get_timeleft(wdd);
 +		if (timeout > last_timeout_set) {
 +			snprintf(msg, 128,
-+				 "watchdog timeout is %u > than previously set (%d)\n",
++				 "watchdog timout is %u > than previously set (%d)\n",
 +				 timeout, last_timeout_set);
 +			cond_react(msg);
 +		}
@@ -455,11 +389,11 @@ index 000000000000..2916d17f8de9
 +		return;
 +
 +	if (open_pid && current->pid != open_pid) {
-+		da_handle_init_run_event_safe_wtd(other_threads);
++		da_handle_init_run_event_safe_wtd_nwo(other_threads);
 +		return;
 +	}
 +
-+	da_handle_event_safe_wtd(set_safe_timeout);
++	da_handle_event_safe_wtd_nwo(set_safe_timeout);
 +
 +	if (timeout > safe_timeout) {
 +		snprintf(msg, 128, "set safety timeout is too high: %d", (int) timeout);
@@ -476,27 +410,14 @@ index 000000000000..2916d17f8de9
 +		return;
 +
 +	if (open_pid && current->pid != open_pid) {
-+		da_handle_init_run_event_safe_wtd(other_threads);
++		da_handle_init_run_event_safe_wtd_nwo(other_threads);
 +		return;
 +	}
 +
-+	da_handle_event_safe_wtd(start);
++	da_handle_event_safe_wtd_nwo(start);
 +}
 +
-+static void handle_stop(void *data, struct watchdog_device *wdd)
-+{
-+	if (wdd->id != watchdog_id)
-+		return;
-+
-+	if (open_pid && current->pid != open_pid) {
-+		da_handle_init_run_event_safe_wtd(other_threads);
-+		return;
-+	}
-+
-+	da_handle_event_safe_wtd(stop);
-+}
-+
-+#define NR_TP   9
++#define NR_TP	9
 +static struct tracepoint_hook_helper tracepoints_to_hook[NR_TP] = {
 +	{
 +		.probe = handle_close,
@@ -529,7 +450,7 @@ index 000000000000..2916d17f8de9
 +		.registered = 0
 +	},
 +	{
-+		.probe = handle_stop,
++		.probe = blocked_events,
 +		.name = "watchdog_stop",
 +		.registered = 0
 +	},
@@ -547,12 +468,12 @@ index 000000000000..2916d17f8de9
 +
 +static int mon_started = 0;
 +
-+static int start_safe_wtd(void)
++static int start_safe_wtd_nwo(void)
 +{
 +	int retval;
 +
 +	if (!mon_started || reset_on_restart) {
-+		da_monitor_init_safe_wtd();
++		da_monitor_init_safe_wtd_nwo();
 +		mon_started = 1;
 +	}
 +
@@ -566,12 +487,12 @@ index 000000000000..2916d17f8de9
 +	return -EINVAL;
 +}
 +
-+static void stop_safe_wtd(void)
++static void stop_safe_wtd_nwo(void)
 +{
 +	if (dont_stop)
-+		cond_react("dont_stop safe_wtd is set.");
++		cond_react("dont_stop safe_wtd_nwo is set.");
 +
-+	rv_safe_wtd.enabled = 0;
++	rv_safe_wtd_nwo.enabled = 0;
 +	thh_unhook_probes(tracepoints_to_hook, NR_TP);
 +	return;
 +}
@@ -579,51 +500,51 @@ index 000000000000..2916d17f8de9
 +/*
 + * This is the monitor register section.
 + */
-+struct rv_monitor rv_safe_wtd = {
-+	.name = "safe_wtd",
-+	.description = "A watchdog monitor guarding a safety monitor actions",
-+	.start = start_safe_wtd,
-+	.stop = stop_safe_wtd,
-+	.reset = da_monitor_reset_all_safe_wtd,
++struct rv_monitor rv_safe_wtd_nwo = {
++	.name = "safe_wtd_nwo",
++	.description = "A watchdog monitor guarding a safety monitor actions, nowayout required.",
++	.start = start_safe_wtd_nwo,
++	.stop = stop_safe_wtd_nwo,
++	.reset = da_monitor_reset_all_safe_wtd_nwo,
 +	.enabled = 0,
 +};
 +
-+int register_safe_wtd(void)
++int register_safe_wtd_nwo(void)
 +{
-+	rv_register_monitor(&rv_safe_wtd);
++	rv_register_monitor(&rv_safe_wtd_nwo);
 +	return 0;
 +}
 +
-+void unregister_safe_wtd(void)
++void unregister_safe_wtd_nwo(void)
 +{
-+	if (rv_safe_wtd.enabled)
-+		stop_safe_wtd();
++	if (rv_safe_wtd_nwo.enabled)
++		stop_safe_wtd_nwo();
 +
-+	rv_unregister_monitor(&rv_safe_wtd);
++	rv_unregister_monitor(&rv_safe_wtd_nwo);
 +}
 +
-+module_init(register_safe_wtd);
-+module_exit(unregister_safe_wtd);
++module_init(register_safe_wtd_nwo);
++module_exit(unregister_safe_wtd_nwo);
 +
 +MODULE_LICENSE("GPL v2");
 +MODULE_AUTHOR("Daniel Bristot de Oliveira <bristot@kernel.org>");
-+MODULE_DESCRIPTION("Safe watchdog RV monitor");
-diff --git a/kernel/trace/rv/monitor_safe_wtd/safe_wtd.h b/kernel/trace/rv/monitor_safe_wtd/safe_wtd.h
++MODULE_DESCRIPTION("Safe watchdog RV monitor nowayout");
+diff --git a/kernel/trace/rv/monitor_safe_wtd_nwo/safe_wtd_nwo.h b/kernel/trace/rv/monitor_safe_wtd_nwo/safe_wtd_nwo.h
 new file mode 100644
-index 000000000000..8d758b9ab445
+index 000000000000..0d33800b0972
 --- /dev/null
-+++ b/kernel/trace/rv/monitor_safe_wtd/safe_wtd.h
++++ b/kernel/trace/rv/monitor_safe_wtd_nwo/safe_wtd_nwo.h
 @@ -0,0 +1,64 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +#undef TRACE_SYSTEM
 +#define TRACE_SYSTEM rv
 +
-+#if !defined(_SAFETY_MONITOR_TRACE_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _SAFETY_MONITOR_TRACE_H
++#if !defined(_SAFETY_MONITOR_NWO_TRACE_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _SAFETY_MONITOR_NWO_TRACE_H
 +
 +#include <linux/tracepoint.h>
 +
-+TRACE_EVENT(event_safe_wtd,
++TRACE_EVENT(event_safe_wtd_nwo,
 +
 +	TP_PROTO(char state, char event, char next_state, bool safe),
 +
@@ -644,13 +565,13 @@ index 000000000000..8d758b9ab445
 +	),
 +
 +	TP_printk("%s x %s -> %s %s",
-+		model_get_state_name_safe_wtd(__entry->state),
-+		model_get_event_name_safe_wtd(__entry->event),
-+		model_get_state_name_safe_wtd(__entry->next_state),
++		model_get_state_name_safe_wtd_nwo(__entry->state),
++		model_get_event_name_safe_wtd_nwo(__entry->event),
++		model_get_state_name_safe_wtd_nwo(__entry->next_state),
 +		__entry->safe ? "(safe)" : "")
 +);
 +
-+TRACE_EVENT(error_safe_wtd,
++TRACE_EVENT(error_safe_wtd_nwo,
 +
 +	TP_PROTO(char state, char event),
 +
@@ -667,16 +588,16 @@ index 000000000000..8d758b9ab445
 +	),
 +
 +	TP_printk("event %s not expected in the state %s",
-+		model_get_event_name_safe_wtd(__entry->event),
-+		model_get_state_name_safe_wtd(__entry->state))
++		model_get_event_name_safe_wtd_nwo(__entry->event),
++		model_get_state_name_safe_wtd_nwo(__entry->state))
 +);
 +
-+#endif /* _SAFETY_MONITOR_H */
++#endif /* _SAFETY_MONITOR_NWO_H */
 +
 +/* This part ust be outside protection */
 +#undef TRACE_INCLUDE_PATH
-+#define TRACE_INCLUDE_PATH ../kernel/trace/rv/monitor_safe_wtd/
-+#define TRACE_INCLUDE_FILE safe_wtd
++#define TRACE_INCLUDE_PATH ../kernel/trace/rv/monitor_safe_wtd_nwo/
++#define TRACE_INCLUDE_FILE safe_wtd_nwo
 +#include <trace/define_trace.h>
 -- 
 2.33.1

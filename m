@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946564B45EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22ACA4B486B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239293AbiBNJbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:31:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42648 "EHLO
+        id S1343682AbiBNJx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:53:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243633AbiBNJbA (ORCPT
+        with ESMTP id S245721AbiBNJun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:31:00 -0500
+        Mon, 14 Feb 2022 04:50:43 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACCF655C3;
-        Mon, 14 Feb 2022 01:30:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F0265490;
+        Mon, 14 Feb 2022 01:41:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E636B80DC9;
-        Mon, 14 Feb 2022 09:30:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A709DC340E9;
-        Mon, 14 Feb 2022 09:30:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52EEFB80DC4;
+        Mon, 14 Feb 2022 09:41:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D74AC340E9;
+        Mon, 14 Feb 2022 09:41:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831002;
-        bh=sRCeHRUcEVzofXBICCRpX95loDW+YUQQzIAVjutA1HM=;
+        s=korg; t=1644831691;
+        bh=X/BFUlpcGhyLwAO9j1bzq1Q46bsIUcjSuLw8ydqvLzM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2BnO9T2jHrMgxj7ZdpnQTMm1f4gqySWlEsxdeLIBMqq5RM5BCNLt0TBFlBkJD1QS7
-         VzUz+T7p1ClEy6y3LuD2Ir70lMHmjAHwRNrrKI6K0fkQ4QzDSO6pD5TcoRje8W4+il
-         4ox2Mhhl41I8tgTXcRsfwgIYEUEB671PPrKnoHcQ=
+        b=bOWva5TcHr0k7VojK/Gu16btMj3+dNTyua2PcZhYWEOKBrH5M+OKeTf7TvBkkzIHf
+         OaYLEDUvRN6rPKx9HY1245pbXSek5sLDJ9fRojacZE1AmAdiDj1gGqP9+PLcrv+okc
+         IpjNbrq+t++PMC1IqJgE85YJ7px7YTxyNixKYxbs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, ZouMingzhe <mingzhe.zou@easystack.cn>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Hou Wenlong <houwenlong93@linux.alibaba.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 13/44] scsi: target: iscsi: Make sure the np under each tpg is unique
+Subject: [PATCH 5.10 037/116] KVM: eventfd: Fix false positive RCU usage warning
 Date:   Mon, 14 Feb 2022 10:25:36 +0100
-Message-Id: <20220214092448.341657325@linuxfoundation.org>
+Message-Id: <20220214092459.965271910@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
-References: <20220214092447.897544753@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +56,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ZouMingzhe <mingzhe.zou@easystack.cn>
+From: Hou Wenlong <houwenlong93@linux.alibaba.com>
 
-[ Upstream commit a861790afaa8b6369eee8a88c5d5d73f5799c0c6 ]
+[ Upstream commit 6a0c61703e3a5d67845a4b275e1d9d7bc1b5aad7 ]
 
-iscsit_tpg_check_network_portal() has nested for_each loops and is supposed
-to return true when a match is found. However, the tpg loop will still
-continue after existing the tpg_np loop. If this tpg_np is not the last the
-match value will be changed.
+Fix the following false positive warning:
+ =============================
+ WARNING: suspicious RCU usage
+ 5.16.0-rc4+ #57 Not tainted
+ -----------------------------
+ arch/x86/kvm/../../../virt/kvm/eventfd.c:484 RCU-list traversed in non-reader section!!
 
-Break the outer loop after finding a match and make sure the np under each
-tpg is unique.
+ other info that might help us debug this:
 
-Link: https://lore.kernel.org/r/20220111054742.19582-1-mingzhe.zou@easystack.cn
-Signed-off-by: ZouMingzhe <mingzhe.zou@easystack.cn>
-Reviewed-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+ rcu_scheduler_active = 2, debug_locks = 1
+ 3 locks held by fc_vcpu 0/330:
+  #0: ffff8884835fc0b0 (&vcpu->mutex){+.+.}-{3:3}, at: kvm_vcpu_ioctl+0x88/0x6f0 [kvm]
+  #1: ffffc90004c0bb68 (&kvm->srcu){....}-{0:0}, at: vcpu_enter_guest+0x600/0x1860 [kvm]
+  #2: ffffc90004c0c1d0 (&kvm->irq_srcu){....}-{0:0}, at: kvm_notify_acked_irq+0x36/0x180 [kvm]
+
+ stack backtrace:
+ CPU: 26 PID: 330 Comm: fc_vcpu 0 Not tainted 5.16.0-rc4+
+ Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0x44/0x57
+  kvm_notify_acked_gsi+0x6b/0x70 [kvm]
+  kvm_notify_acked_irq+0x8d/0x180 [kvm]
+  kvm_ioapic_update_eoi+0x92/0x240 [kvm]
+  kvm_apic_set_eoi_accelerated+0x2a/0xe0 [kvm]
+  handle_apic_eoi_induced+0x3d/0x60 [kvm_intel]
+  vmx_handle_exit+0x19c/0x6a0 [kvm_intel]
+  vcpu_enter_guest+0x66e/0x1860 [kvm]
+  kvm_arch_vcpu_ioctl_run+0x438/0x7f0 [kvm]
+  kvm_vcpu_ioctl+0x38a/0x6f0 [kvm]
+  __x64_sys_ioctl+0x89/0xc0
+  do_syscall_64+0x3a/0x90
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Since kvm_unregister_irq_ack_notifier() does synchronize_srcu(&kvm->irq_srcu),
+kvm->irq_ack_notifier_list is protected by kvm->irq_srcu. In fact,
+kvm->irq_srcu SRCU read lock is held in kvm_notify_acked_irq(), making it
+a false positive warning. So use hlist_for_each_entry_srcu() instead of
+hlist_for_each_entry_rcu().
+
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Hou Wenlong <houwenlong93@linux.alibaba.com>
+Message-Id: <f98bac4f5052bad2c26df9ad50f7019e40434512.1643265976.git.houwenlong.hwl@antgroup.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/target/iscsi/iscsi_target_tpg.c | 3 +++
- 1 file changed, 3 insertions(+)
+ virt/kvm/eventfd.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/target/iscsi/iscsi_target_tpg.c b/drivers/target/iscsi/iscsi_target_tpg.c
-index 16e7516052a44..2b78843091a2e 100644
---- a/drivers/target/iscsi/iscsi_target_tpg.c
-+++ b/drivers/target/iscsi/iscsi_target_tpg.c
-@@ -448,6 +448,9 @@ static bool iscsit_tpg_check_network_portal(
- 				break;
- 		}
- 		spin_unlock(&tpg->tpg_np_lock);
-+
-+		if (match)
-+			break;
- 	}
- 	spin_unlock(&tiqn->tiqn_tpg_lock);
+diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
+index c2323c27a28b5..518cd8dc390e2 100644
+--- a/virt/kvm/eventfd.c
++++ b/virt/kvm/eventfd.c
+@@ -451,8 +451,8 @@ bool kvm_irq_has_notifier(struct kvm *kvm, unsigned irqchip, unsigned pin)
+ 	idx = srcu_read_lock(&kvm->irq_srcu);
+ 	gsi = kvm_irq_map_chip_pin(kvm, irqchip, pin);
+ 	if (gsi != -1)
+-		hlist_for_each_entry_rcu(kian, &kvm->irq_ack_notifier_list,
+-					 link)
++		hlist_for_each_entry_srcu(kian, &kvm->irq_ack_notifier_list,
++					  link, srcu_read_lock_held(&kvm->irq_srcu))
+ 			if (kian->gsi == gsi) {
+ 				srcu_read_unlock(&kvm->irq_srcu, idx);
+ 				return true;
+@@ -468,8 +468,8 @@ void kvm_notify_acked_gsi(struct kvm *kvm, int gsi)
+ {
+ 	struct kvm_irq_ack_notifier *kian;
  
+-	hlist_for_each_entry_rcu(kian, &kvm->irq_ack_notifier_list,
+-				 link)
++	hlist_for_each_entry_srcu(kian, &kvm->irq_ack_notifier_list,
++				  link, srcu_read_lock_held(&kvm->irq_srcu))
+ 		if (kian->gsi == gsi)
+ 			kian->irq_acked(kian);
+ }
 -- 
 2.34.1
 

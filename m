@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F0FD4B585E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7FE24B585D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:20:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356591AbiBNRUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 12:20:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49226 "EHLO
+        id S1356998AbiBNRUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 12:20:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237047AbiBNRUk (ORCPT
+        with ESMTP id S1356997AbiBNRUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 12:20:40 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70774652D4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:20:32 -0800 (PST)
+        Mon, 14 Feb 2022 12:20:24 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE44652D7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:20:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644859232; x=1676395232;
+  t=1644859216; x=1676395216;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KbM5Fe5c3mdB4yDzDaP/4hUQUtRmyMGrS8a/5fb9PBo=;
-  b=AZB9ZbdKahUzLBONe+/TvmGldr1vIVgR2zxt9i3ZUFSG59bHirmaRLDe
-   BRzOpfwxb8ENz2Mb2dISV3VRnmshJj0Ufwxlyz1v5JslDnX19CW8jVUnG
-   GsbzGsWBopI2yMAo4aZf7NYi805puJ+MLhs8Vk80vwYR4YTgeCpM7VOrK
-   LFVLO9MghatymxKrx6iPGRM+8c1GLSxGonbEp8XMfkKpO5y/1Bk6D4w+f
-   y1gl2CLSP67n0NU7ShAezOKwm7HnOytuPS3oKuFuROiR+ZpPgWUb5+7Hp
-   P5XI2OWt8E+xLKHA8WDcSEk1G9+UXxsPrqqGqvpkGsA2kI0eg4UWqlmGN
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="249887908"
+  bh=BAeNsOY0uqTmM7se1dt63YdDCvDLcIoZUPwATxAwt14=;
+  b=j6KqKx0c/2QrF2fo/mLgGwA1hEuA3WoC8iCCxbUJTPD1rP/4wuU2HTRr
+   pNCXLcHmH8GqSdZRZp/xD+Cx5UgI6XOqEHRF2ywaeR+i4DeIj07/71rG3
+   V/d3ymiud11e1nrkBo7sswcmeTYcxicAK0x4BDL038zYcumwWJGOpDVFq
+   zAh0MPrzMX1ClDgfys2q7Zja1KKFq0JQ8ouT278yTeGz+eDG1EHG3T1Fj
+   KQoASDKZ2bwQbZgdTUeGvjuUwkgNu08mOLBUtYGgCx2A5OmGliol2T11D
+   0IHg1XyDwvlNPLNKlVg7gCV4brlIOOzCzLEoCC8SdXSNKoYRZJwUgr5SR
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="237548048"
 X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="249887908"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 09:20:16 -0800
+   d="scan'208";a="237548048"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 09:20:16 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="680606165"
+   d="scan'208";a="528303945"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Feb 2022 09:20:14 -0800
+  by orsmga007.jf.intel.com with ESMTP; 14 Feb 2022 09:20:14 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nJf1J-0008ms-WD; Mon, 14 Feb 2022 17:20:13 +0000
-Date:   Tue, 15 Feb 2022 01:19:26 +0800
+        id 1nJf1K-0008n6-3h; Mon, 14 Feb 2022 17:20:14 +0000
+Date:   Tue, 15 Feb 2022 01:19:29 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [willy-pagecache:for-next 58/85] mm/folio-compat.c:181:9: error:
- implicit declaration of function 'folio_mlock'; did you mean 'folio_lock'?
-Message-ID: <202202142352.7A4VgqBz-lkp@intel.com>
+To:     Watson Chow <watson.chow@avnet.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: drivers/regulator/max20086-regulator.c:288:34: error:
+ 'max20086_dt_ids' defined but not used
+Message-ID: <202202142332.ciTQ7uCd-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -61,59 +63,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.infradead.org/users/willy/pagecache for-next
-head:   c267b33d0001488f1d9dad12d6a87655e174d914
-commit: 2cefeaf011db4a95ecb515cc2ca61d091a792ac1 [58/85] mm/rmap: Turn page_mlock() into folio_mlock()
-config: h8300-alldefconfig (https://download.01.org/0day-ci/archive/20220214/202202142352.7A4VgqBz-lkp@intel.com/config)
-compiler: h8300-linux-gcc (GCC) 11.2.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   754e0b0e35608ed5206d6a67a791563c631cec07
+commit: bfff546aae50ae68ed395bf0e0848188d27b0ba3 regulator: Add MAX20086-MAX20089 driver
+date:   5 weeks ago
+config: xtensa-randconfig-c004-20220213 (https://download.01.org/0day-ci/archive/20220214/202202142332.ciTQ7uCd-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add willy-pagecache git://git.infradead.org/users/willy/pagecache
-        git fetch --no-tags willy-pagecache for-next
-        git checkout 2cefeaf011db4a95ecb515cc2ca61d091a792ac1
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bfff546aae50ae68ed395bf0e0848188d27b0ba3
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout bfff546aae50ae68ed395bf0e0848188d27b0ba3
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=h8300 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash arch/xtensa/ drivers/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   mm/folio-compat.c:169:6: warning: no previous prototype for 'clear_page_mlock' [-Wmissing-prototypes]
-     169 | void clear_page_mlock(struct page *page)
-         |      ^~~~~~~~~~~~~~~~
-   mm/folio-compat.c:174:6: error: redefinition of 'mlock_vma_page'
-     174 | void mlock_vma_page(struct page *page)
-         |      ^~~~~~~~~~~~~~
-   In file included from mm/folio-compat.c:11:
-   mm/internal.h:503:20: note: previous definition of 'mlock_vma_page' with type 'void(struct page *)'
-     503 | static inline void mlock_vma_page(struct page *page) { }
-         |                    ^~~~~~~~~~~~~~
-   mm/folio-compat.c: In function 'mlock_vma_page':
-   mm/folio-compat.c:176:9: error: implicit declaration of function 'mlock_vma_folio'; did you mean 'mlock_vma_page'? [-Werror=implicit-function-declaration]
-     176 |         mlock_vma_folio(page_folio(page));
-         |         ^~~~~~~~~~~~~~~
-         |         mlock_vma_page
-   mm/folio-compat.c: At top level:
-   mm/folio-compat.c:179:6: warning: no previous prototype for 'page_mlock' [-Wmissing-prototypes]
-     179 | void page_mlock(struct page *page)
-         |      ^~~~~~~~~~
-   mm/folio-compat.c: In function 'page_mlock':
->> mm/folio-compat.c:181:9: error: implicit declaration of function 'folio_mlock'; did you mean 'folio_lock'? [-Werror=implicit-function-declaration]
-     181 |         folio_mlock(page_folio(page));
-         |         ^~~~~~~~~~~
-         |         folio_lock
-   cc1: some warnings being treated as errors
+>> drivers/regulator/max20086-regulator.c:288:34: error: 'max20086_dt_ids' defined but not used [-Werror=unused-const-variable=]
+     288 | static const struct of_device_id max20086_dt_ids[] = {
+         |                                  ^~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
 
 
-vim +181 mm/folio-compat.c
+vim +/max20086_dt_ids +288 drivers/regulator/max20086-regulator.c
 
-   178	
-   179	void page_mlock(struct page *page)
-   180	{
- > 181		folio_mlock(page_folio(page));
+   287	
+ > 288	static const struct of_device_id max20086_dt_ids[] = {
+   289		{
+   290			.compatible = "maxim,max20086",
+   291			.data = &(const struct max20086_chip_info) {
+   292				.id = MAX20086_DEVICE_ID_MAX20086,
+   293				.num_outputs = 4,
+   294			}
+   295		}, {
+   296			.compatible = "maxim,max20087",
+   297			.data = &(const struct max20086_chip_info) {
+   298				.id = MAX20086_DEVICE_ID_MAX20087,
+   299				.num_outputs = 4,
+   300			}
+   301		}, {
+   302			.compatible = "maxim,max20088",
+   303			.data = &(const struct max20086_chip_info) {
+   304				.id = MAX20086_DEVICE_ID_MAX20088,
+   305				.num_outputs = 2,
+   306			}
+   307		}, {
+   308			.compatible = "maxim,max20089",
+   309			.data = &(const struct max20086_chip_info) {
+   310				.id = MAX20086_DEVICE_ID_MAX20089,
+   311				.num_outputs = 2,
+   312			}
+   313		},
+   314		{ /* Sentinel */ },
+   315	};
+   316	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

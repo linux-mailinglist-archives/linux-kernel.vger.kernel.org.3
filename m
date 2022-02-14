@@ -2,66 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2FC4B3E9A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 01:27:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC0C4B3E9C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 01:28:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238865AbiBNA16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 19:27:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43710 "EHLO
+        id S238876AbiBNA2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 19:28:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236632AbiBNA15 (ORCPT
+        with ESMTP id S235413AbiBNA15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 13 Feb 2022 19:27:57 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE16C13EB0
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006E913F3A
         for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 16:27:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644798470; x=1676334470;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=kcElbae+RGFK/QaqPxibrAKD4Hv4dczBgQ4u6tcccQU=;
-  b=dykdR9aNnrZP/+cYPFlkmnzksagKrhO94QxEA5be5n80Nim1+blP9i9f
-   ubJIDSVfa+JwTf7uMvagnVtGcdGi43UwIDiXH12G5PN3bS+JM/jNCjNlv
-   7rIEM/NmMXpO3h8FSXX+/LBkMGMxYCmjjQ2EbQluCn4HGKafSqiwTMq7X
-   EVRYL3MEPAcZIiGGwfXRNrF7anYhL2sEOC8gG9Q2JrdekJPHGekan5UE/
-   EREykuaVmmGjNTUzCYN1ckGZrNNcy0Rg0Hy+9SDFEzyvTCSljL+rBkUTx
-   syJeuEwMyso/qnYkMY+XdO3VpYIZ/y1dAXt3c7pJqvKuSexbXiGj0J4N1
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="336411066"
-X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="336411066"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 16:27:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="680101107"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by fmsmga001.fm.intel.com with ESMTP; 13 Feb 2022 16:27:48 -0800
-Message-ID: <574b5298-005e-a083-284b-9b6b52c600f5@linux.intel.com>
-Date:   Mon, 14 Feb 2022 08:26:31 +0800
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D5B4D40337
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:27:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644798469;
+        bh=ej9ajKafdGwYpCYGQHrOi84wn2e/P4L47SMVJrwt6j4=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=dgToTokZ+aa+7I/VTtm8bKASud+h9N+Crq2HNTW0a23E5ZtadUtWJ8luckHd5p3xl
+         Svqb6U+gb7A+VxyzyUZSol+F6MJekUmpWqLm2oldCB/EPrPyH9WA/noIdjIq/NS8hz
+         6B0LRhDeNUcwb+XFwAeNSVEuBNdsdoknF2TlYclxk0LBBfxUigV1DKbcedjqHL+JUt
+         oST1nQ3N4+vcMElxV9Iww9ULyilNuqFVB+u7jf/5Vn1OTvGFwJrLGbE+ThK/411e/y
+         dEiVVvcYbgWTGR0YzxhffvxsxrCt5KHyarVv+1Ogqqi01K8FlGFiStI43xuZOTBmj/
+         euovf6Cvc8e2w==
+Received: by mail-ot1-f69.google.com with SMTP id a4-20020a9d5c84000000b005a1daff4564so9466048oti.2
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 16:27:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ej9ajKafdGwYpCYGQHrOi84wn2e/P4L47SMVJrwt6j4=;
+        b=XRFL10vlHEuSVemMO1XcrFZfJC5ExpFGjqGO7r8tRQAEMSqLqMWnz4gWxnQhi2klAC
+         wGh8FeeK1DcLLWFD8OtUV0hrxY29O/SCHbpkRPVqu/tfUamA9/BmMI1dBXhzUfJtMSez
+         UtiBNg/5gBcIOipc15Tc1bZn0u9GBSYO7XHhJILkkeNFLHNbAagfA8NB8c0Qc7aKBTb0
+         P+F8QX226BsFlDq2Ds9YAHJ6cV9mE76NvMJ5AscaOIxZ5HbcGuJ0NARyUcqerKKKKFN7
+         V8pU97gokAYBfMQTUEAmkWxvmno63BOyZTvInPq5v8vpqxgJKuCfHTgVJnn6nXrEzNRx
+         udgQ==
+X-Gm-Message-State: AOAM531lZvN2jvILg65xnO+ZXqd20hIKFniHLiCJubsGkvJE5CjvDlQl
+        awegdFjM5sGxWw+qZl0qnHb0QCoQ+7IXW/Qk44oyklQD04npLzfbZQDRyq6HwXvZVvLPSO9BAuK
+        I7BuVdPZqcrqqWEiFcbEAbxiVuelzuAYhZFW/l/MO1v76BUG5GR4nplDJcw==
+X-Received: by 2002:a9d:1ca5:: with SMTP id l37mr4209235ota.233.1644798468559;
+        Sun, 13 Feb 2022 16:27:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyN1ZSAVS0GC78LiPm5hAJLWowe6qWTFLHN8Mj+qs0vO1FBPjaBZJa9R1QvrGkgKJJIQGrW81OKX3Z0Ufukxwg=
+X-Received: by 2002:a9d:1ca5:: with SMTP id l37mr4209230ota.233.1644798468296;
+ Sun, 13 Feb 2022 16:27:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Liu Yi L <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 00/10] iommu/vt-d: Some Intel IOMMU cleanups
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220207064142.1092846-1-baolu.lu@linux.intel.com>
- <20220211130144.GM4160@nvidia.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220211130144.GM4160@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220209213638.GA587920@bhelgaas> <b6032dd3-eb49-50dc-5847-484d8cc35195@linux.dev>
+In-Reply-To: <b6032dd3-eb49-50dc-5847-484d8cc35195@linux.dev>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Mon, 14 Feb 2022 08:27:37 +0800
+Message-ID: <CAAd53p6GoVaKKU1DGaYy0wonSQ22w61nbg+x72Xr0aV6gff3bg@mail.gmail.com>
+Subject: Re: [PATCH v3] PCI: vmd: Honor ACPI _OSC on PCIe features
+To:     Jonathan Derrick <jonathan.derrick@linux.dev>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Nirmal Patel <nirmal.patel@linux.intel.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,24 +83,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+On Fri, Feb 11, 2022 at 1:53 AM Jonathan Derrick
+<jonathan.derrick@linux.dev> wrote:
+>
+>
+>
+> On 2/9/2022 2:36 PM, Bjorn Helgaas wrote:
+> > On Tue, Dec 07, 2021 at 02:15:04PM +0100, Rafael J. Wysocki wrote:
+> >> On Tue, Dec 7, 2021 at 12:12 AM Keith Busch <kbusch@kernel.org> wrote:
+> >>> On Fri, Dec 03, 2021 at 11:15:41AM +0800, Kai-Heng Feng wrote:
+> >>>> When Samsung PCIe Gen4 NVMe is connected to Intel ADL VMD, the
+> >>>> combination causes AER message flood and drags the system performance
+> >>>> down.
+> >>>>
+> >>>> The issue doesn't happen when VMD mode is disabled in BIOS, since AER
+> >>>> isn't enabled by acpi_pci_root_create() . When VMD mode is enabled, AER
+> >>>> is enabled regardless of _OSC:
+> >>>> [    0.410076] acpi PNP0A08:00: _OSC: platform does not support [AER]
+> >>>> ...
+> >>>> [    1.486704] pcieport 10000:e0:06.0: AER: enabled with IRQ 146
+> >>>>
+> >>>> Since VMD is an aperture to regular PCIe root ports, honor ACPI _OSC to
+> >>>> disable PCIe features accordingly to resolve the issue.
+> >>>
+> >>> At least for some versions of this hardare, I recall ACPI is unaware of
+> >>> any devices in the VMD domain; the platform can not see past the VMD
+> >>> endpoint, so I throught the driver was supposed to always let the VMD
+> >>> domain use OS native support regardless of the parent's ACPI _OSC.
+> >>
+> >> This is orthogonal to whether or not ACPI is aware of the VMD domain
+> >> or the devices in it.
+> >>
+> >> If the platform firmware does not allow the OS to control specific
+> >> PCIe features at the physical host bridge level, that extends to the
+> >> VMD "bus", because it is just a way to expose a hidden part of the
+> >> PCIe hierarchy.
+> >
+> > I don't understand what's going on here.  Do we understand the AER
+> > message flood?  Are we just papering over it by disabling AER?
+> >
+> > If an error occurs below a VMD, who notices and reports it?  If we
+> > disable native AER below VMD because of _OSC, as this patch does, I
+> > guess we're assuming the platform will handle AER events below VMD.
+> > Is that really true?  Does the platform know how to find AER log
+> > registers of devices below VMD?
+> ACPI (and the specific UEFI implementation) might remain unaware of
+> VMD domains. It's possible that the system management mode (SMM)
+> controller which typically handles firmware-first errors would be
+> capable of handling VMD errors in the vendor-specific manner.
+> However if _OSC hadn't taken into account VMD ports, SMM wouldn't
+> be capable of handling those errors and silently disabling AER on
+> VMD domains is a bad idea.
 
-On 2/11/22 9:01 PM, Jason Gunthorpe wrote:
-> On Mon, Feb 07, 2022 at 02:41:32PM +0800, Lu Baolu wrote:
->> Hi folks,
->>
->> After a long time of evolution, the drivers/iommu/intel/iommu.c becomes
->> fat and a bit messy. This series tries to cleanup and refactor the
->> driver to make it more concise. Your comments are very appreciated.
-> 
-> I wanted to take a closer look at what you are trying to do with rcu,
-> but these patches don't apply. Please always sent patches against a
-> well known tree like v5.17-rc or the iommu tree, or something.
-> 
-> Anyhow, I think you should split the last 4 patches out of this series
-> and send them seperately.
+Are VMD ports on server platforms also 'apertures' for root ports like
+those on consumer platforms?
 
-Sure! I will resend this series soon.
+>
+> The bugzilla made it sound like a specific platform/drive combination.
+> What about a DMI match to mask the Corrected Physical Layer bits?
 
-Best regards,
-baolu
+We confirmed _all_ PCIe Gen4 NVMes on that platform have the issue. So
+using DMI to match won't scale...
+
+Kai-Heng
+
+>
+> >
+> >> The platform firmware does that through ACPI _OSC under the host
+> >> bridge device (not under the VMD device) which it is very well aware
+> >> of.

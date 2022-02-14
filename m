@@ -2,75 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67E64B51EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AFF4B51E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:40:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354332AbiBNNjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:39:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52790 "EHLO
+        id S1354393AbiBNNjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:39:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232787AbiBNNjb (ORCPT
+        with ESMTP id S245609AbiBNNjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:39:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A544F9E2;
-        Mon, 14 Feb 2022 05:39:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 384C0B80EBA;
-        Mon, 14 Feb 2022 13:39:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 426C2C340E9;
-        Mon, 14 Feb 2022 13:39:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644845961;
-        bh=4U+A1gw9pHI8+F1lRx72vcSbg59p+z2E+RDWPKyoPxk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VvTuMQbyYZ+oxoBg9e7TOef1M4ivC4+20f8nXQhpZ/l1FFQB8pk4gMFSguknC5UTG
-         DDMjq9zO15j6PI+WRGN+ygfcoJnD4iUh/bCu00K998ZP92NBi7im/xSt+51loqvxdd
-         ObfQNYeFBG3xEAgCtvkEmb/rUjEPZ4Ug1Ji9f83o=
-Date:   Mon, 14 Feb 2022 14:39:18 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 07/14] PCI: Add driver dma ownership management
-Message-ID: <YgpbhlPOZsLFm4It@kroah.com>
-References: <20220104015644.2294354-1-baolu.lu@linux.intel.com>
- <20220104015644.2294354-8-baolu.lu@linux.intel.com>
- <Ygoo/lCt/G6tWDz9@kroah.com>
- <20220214123842.GT4160@nvidia.com>
- <YgpQOmBA7QJJu+2E@kroah.com>
- <20220214131117.GW4160@nvidia.com>
+        Mon, 14 Feb 2022 08:39:46 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DF74C43C
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:39:38 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id c192so9667371wma.4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:39:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=q2xtWcTzY3fGlUDVCwgpXaikGTqqdVJF0/bajHnvT9c=;
+        b=LXObhA7CkZldKpmJtEIVyeLqTUnGJJ+OV4THrg0bz4HYxjLuVoytkNE4rj6N2ZGsmx
+         z+KkPM7bpnuzFWFnOx5Kq5F1NEA5HIITJDNABELF3rZ6bHYoxb22vk/u8KLV5lCERQF9
+         SkPCUHCmgZZkbAj1yX308h9fjCJdnpdqE2VXJpTbOgft5k/eMUXmMf17ya07Q203ZABn
+         ggEyEKW/AZ0drKaLAiLhi/6HBgHGhALQdspsRMCBd2ZMhkXpGbIjjtNP+KLOpZvcJQYa
+         3CDUYeFLx+C015uvwo4tVLa/VbaJ5npsh/NA3JbCn23fqGSmNWtGNiHDgxdplgX7LzJ0
+         QfTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=q2xtWcTzY3fGlUDVCwgpXaikGTqqdVJF0/bajHnvT9c=;
+        b=tbWTpBAi2aNiYd9AyQfqSxIZX9elGWSNox/vOzlXbP8U9Li+2RunNf1XHxDjWEyV/j
+         bDATrdfKptkFM25oFDBnOAji13JksabsfToO5Pd/FnSBpc1G3CuGy4cUXhEa/a/tREX3
+         bhW0KRuOorrlZagPEV55WdN0bzmgBEDfZh0srlMpVwJof0O+g4rZv9PWRb20tmvPfCTd
+         iW00wNxTs080ZiqWHWUKWaLfijwb1HZHnE2lQYCHefMhbdk+YEoevKQi51tIdY7f1w/m
+         vb5OQsplt5k9rt8VqOJ0EXJb9Z5EFRFnsWlOHMJb/wxIU2GxZB777lDPE0J1IFeKRDuw
+         Ce3Q==
+X-Gm-Message-State: AOAM532Z+DqtojjMzQrQT4UDlzqh7Xe+rfpPj+sB0lHQyGfr6MaD2BzH
+        qFWh3O6wvHwyuXoIxR+P/uAedVq2uGsk8Q==
+X-Google-Smtp-Source: ABdhPJz6XTNaTVeZypQMsL8H4LbZtEGF7tz7EdWyK1/Em9NjbpCUd9iH/ks8ltgR5rz3uSVfJn1YSw==
+X-Received: by 2002:a1c:f309:: with SMTP id q9mr11290076wmq.173.1644845977531;
+        Mon, 14 Feb 2022 05:39:37 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id az21sm11878848wmb.11.2022.02.14.05.39.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 05:39:37 -0800 (PST)
+Date:   Mon, 14 Feb 2022 13:39:35 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Johnson Wang <johnson.wang@mediatek.com>
+Cc:     robh+dt@kernel.org, broonie@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH 1/4] mfd: Add support for the MediaTek MT6366 PMIC
+Message-ID: <Ygpbl/pxEVAug6jl@google.com>
+References: <20220106065407.16036-1-johnson.wang@mediatek.com>
+ <20220106065407.16036-2-johnson.wang@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220214131117.GW4160@nvidia.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220106065407.16036-2-johnson.wang@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,79 +75,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 09:11:17AM -0400, Jason Gunthorpe wrote:
-> On Mon, Feb 14, 2022 at 01:51:06PM +0100, Greg Kroah-Hartman wrote:
-> > On Mon, Feb 14, 2022 at 08:38:42AM -0400, Jason Gunthorpe wrote:
-> > > On Mon, Feb 14, 2022 at 11:03:42AM +0100, Greg Kroah-Hartman wrote:
-> > > > On Tue, Jan 04, 2022 at 09:56:37AM +0800, Lu Baolu wrote:
-> > > > > Multiple PCI devices may be placed in the same IOMMU group because
-> > > > > they cannot be isolated from each other. These devices must either be
-> > > > > entirely under kernel control or userspace control, never a mixture. This
-> > > > > checks and sets DMA ownership during driver binding, and release the
-> > > > > ownership during driver unbinding.
-> > > > > 
-> > > > > The device driver may set a new flag (no_kernel_api_dma) to skip calling
-> > > > > iommu_device_use_dma_api() during the binding process. For instance, the
-> > > > > userspace framework drivers (vfio etc.) which need to manually claim
-> > > > > their own dma ownership when assigning the device to userspace.
-> > > > > 
-> > > > > Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> > > > >  include/linux/pci.h      |  5 +++++
-> > > > >  drivers/pci/pci-driver.c | 21 +++++++++++++++++++++
-> > > > >  2 files changed, 26 insertions(+)
-> > > > > 
-> > > > > diff --git a/include/linux/pci.h b/include/linux/pci.h
-> > > > > index 18a75c8e615c..d29a990e3f02 100644
-> > > > > +++ b/include/linux/pci.h
-> > > > > @@ -882,6 +882,10 @@ struct module;
-> > > > >   *              created once it is bound to the driver.
-> > > > >   * @driver:	Driver model structure.
-> > > > >   * @dynids:	List of dynamically added device IDs.
-> > > > > + * @no_kernel_api_dma: Device driver doesn't use kernel DMA API for DMA.
-> > > > > + *		Drivers which don't require DMA or want to manually claim the
-> > > > > + *		owner type (e.g. userspace driver frameworks) could set this
-> > > > > + *		flag.
-> > > > 
-> > > > Again with the bikeshedding, but this name is a bit odd.  Of course it's
-> > > > in the kernel, this is all kernel code, so you can drop that.  And
-> > > > again, "negative" flags are rough.  So maybe just "prevent_dma"?
-> > > 
-> > > That is misleading too, it is not that DMA is prevented, but that the
-> > > kernel's dma_api has not been setup.
-> > 
-> > "has not been" or "will not be"?
-> 
-> "has not been" as that action was supposed to happen before probe(),
-> but the flag skips it.
-> 
-> A driver that sets this flag can still decide to enable the dma API on
-> its own. eg tegra drivers do this.
+On Thu, 06 Jan 2022, Johnson Wang wrote:
 
-So you are just forcing the driver to manage this all on their own, so
-how about, "driver_managed_dma", or even shorter "managed_dma"?
+> This adds support for the MediaTek MT6366 PMIC. This is a
+> multifunction device with the following sub modules:
+> 
+> - Regulator
+> - RTC
+> - Codec
+> - Interrupt
+> 
+> It is interfaced to the host controller using SPI interface
+> by a proprietary hardware called PMIC wrapper or pwrap.
+> MT6366 MFD is a child device of the pwrap.
+> 
+> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> ---
+>  drivers/mfd/mt6358-irq.c             | 1 +
+>  include/linux/mfd/mt6358/registers.h | 7 +++++++
+>  include/linux/mfd/mt6397/core.h      | 1 +
+>  3 files changed, 9 insertions(+)
 
-> > What you want to prevent is the iommu core claiming the device
-> > automatically, right?  So how about "prevent_iommu_dma"?
-> 
-> "claim" is not a good description. iommu always "claims" the device -
-> eg sets a domain, sets the dev and bus parameters, etc.
-> 
-> This really is only about setting up the in-kernel dma api, eg
-> allowing dma_map_sg()/etc to work.
-> 
-> dma api is just one way to operate the iommu, there are others too.
-> 
-> Think of this flag as 
->   false = the driver is going to use the dma api (most common)
->   true = the driver will decide how to use the iommu by itself
-> 
-> Does it help think of a clearer name?
+Applied, thanks.
 
-See above, you want a driver author to know instantly what this is and
-not have to look anything up.
-"I_will_manage_the_dma_myself_as_I_really_know_what_I_am_doing" might be
-good, but a bit too long :)
-
-thanks,
-
-greg k-h
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

@@ -2,63 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1114F4B4DE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:21:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F2A4B4DAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350281AbiBNLPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:15:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45268 "EHLO
+        id S237255AbiBNLPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:15:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350208AbiBNLPM (ORCPT
+        with ESMTP id S1350209AbiBNLPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Feb 2022 06:15:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B1D673D0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:44:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D58C1B80A0A
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:44:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88B97C340F1;
-        Mon, 14 Feb 2022 10:44:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644835482;
-        bh=AUVszgovKphgBWrf1HKIDKsHgWZewjn5bxYg+MWsw8A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AxiZ9Up3ZHZBdQxrwzfOuHcrpCFJy2o1tCPaisl8caiVcdPkaNKeTvvzlD+85AJF9
-         BQwrEOm5X3UaqYxXzrJK3TQSLDiTGc6FyGbylevhzCKdSagclSU1NENxWWWJ6mBDAA
-         BJ5Gzj/KNcgaNNsc4nWCssWCXkuUvTtwxoUkmtVtb5vv1gNbq1wjPjHPfOzuzwCxAT
-         +IYxVbzlzgNpK2/aHT11B+UldejrVB7+1A30LMPr8TEVtvFUVCvRsXlg6TbTAauask
-         RKsRjikhVkQ85ALH28hCZq4KwINb5N2Nz+4qRVFO+cSA3TQn6JCBKIE9nmwOC/W4wh
-         bUME5HMdSGC5g==
-Date:   Mon, 14 Feb 2022 12:44:32 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Zi Yan <ziy@nvidia.com>
-Cc:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org,
-        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>
-Subject: Re: [PATCH v5 1/6] mm: page_isolation: move has_unmovable_pages() to
- mm/page_isolation.c
-Message-ID: <YgoykFBUnEJ6Ynro@kernel.org>
-References: <20220211164135.1803616-1-zi.yan@sent.com>
- <20220211164135.1803616-2-zi.yan@sent.com>
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77556673CF
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:44:44 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id e3so26173007wra.0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:44:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=wEYNEIYPdcnYLYEy0iaUdFs9a34YcPpJNldEuNyBzNY=;
+        b=cJ0oJ3rKrxXIhRNwAfNrvQ1ql3yhxuZMVcNb7XaPbDJK11oq6dEPOmugLzFs0HLWp4
+         tAPoqRAYetyA7fb1X9auua3A/pQABKYbLKzK52UfyWlYzt1oYNZeV7Okyi7qICzfg4Qm
+         5suMSeSlRY1dUlEFtAvAclAABcKe1PxLzPlWTdNq/idr8hzriDBYfKnH8FFg6D5tglBS
+         kCIWOBmvpw0Na0Gu+o/5OgSMwfERrVeGBV7PzPa4tfo1moWdHR1Br6Lo9zLmwTwDZo2+
+         K1Die44/3JlbkEA9b0iwQsfpOMZiGQcpNIXP/1TAdTRoC0WYiNkFm2u+Apq3HmHq3JDh
+         n3Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wEYNEIYPdcnYLYEy0iaUdFs9a34YcPpJNldEuNyBzNY=;
+        b=EY8LD5Uh3SFYAp/5wVoH8Au5c6v76uQbrJEW+hyKWLXthQ/YB28mfR5KxzUubOv5db
+         PpAjkFb+usSf8GHie3p5MFs4j8053QbEBV7QfARg4BNuQQpJFqtZVqxR5u5VsIV7i4FQ
+         yyWv2jhE/Poyeyh32rqUtI4EmJsk+6pjd/CmE8j9bdiQkumI6uSNpLT0KNjnXJXl0hKT
+         Bo1P4UzBQ92DOWJ8CzuEt8A8av7kxPGZXWbbvhv9XqQSjAAgnifzmTlGiQPQxWNawDAh
+         1oqagQ4kC5zR3P+oKD9MC5PnlThHPlg9C8ucnORkLiIwz6KsQZ9HCIU46NyiyD6aBfyY
+         STTQ==
+X-Gm-Message-State: AOAM533P+iy+1ebTP9Ud6ivqNFOsUlt9bO0InTrWaGdIC7hwcBF4IB81
+        GB/Td4ABh2c4Dd82eHQJXHcTjA==
+X-Google-Smtp-Source: ABdhPJx6Dji8PxUO8kXtpblQL8nxXOxK/bexvq1pUZNZ0MtxAeirvsDmvH1b8hpWNM/Vl6Lm+3eisA==
+X-Received: by 2002:adf:f3d1:: with SMTP id g17mr9553978wrp.518.1644835483008;
+        Mon, 14 Feb 2022 02:44:43 -0800 (PST)
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id z3sm13747208wmp.42.2022.02.14.02.44.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 02:44:42 -0800 (PST)
+Message-ID: <e1dd400d-0b8c-8bcd-d729-5f07976e468a@linaro.org>
+Date:   Mon, 14 Feb 2022 10:44:41 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220211164135.1803616-2-zi.yan@sent.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] doc: nvmem: Remove references to regmap
+Content-Language: en-US
+To:     Sean Anderson <sean.anderson@seco.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>
+References: <20220208162657.724119-1-sean.anderson@seco.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220208162657.724119-1-sean.anderson@seco.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,300 +74,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 11:41:30AM -0500, Zi Yan wrote:
-> From: Zi Yan <ziy@nvidia.com>
-> 
-> has_unmovable_pages() is only used in mm/page_isolation.c. Move it from
-> mm/page_alloc.c and make it static.
-> 
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
-> Reviewed-by: Oscar Salvador <osalvador@suse.de>
+Hi Sean,
+Thanks for the patch,
 
-Reviewed-by: Mike Rapoport <rppt@linux.ibm.com>
+On 08/02/2022 16:26, Sean Anderson wrote:
+> Since commit 795ddd18d38f ("nvmem: core: remove regmap dependency"),
+> nvmem devices do not use the regmap API. Remove references to it from
+> the documentation. Additionally, update the example to reflect the new
+> API.  I have chosen the brcm-nvram driver since it seems to be simpler
+> than the qfprom driver.
+> 
 
+Please split this into two patches.
+
+
+--srini
+
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
 > ---
->  include/linux/page-isolation.h |   2 -
->  mm/page_alloc.c                | 119 ---------------------------------
->  mm/page_isolation.c            | 119 +++++++++++++++++++++++++++++++++
->  3 files changed, 119 insertions(+), 121 deletions(-)
 > 
-> diff --git a/include/linux/page-isolation.h b/include/linux/page-isolation.h
-> index 572458016331..e14eddf6741a 100644
-> --- a/include/linux/page-isolation.h
-> +++ b/include/linux/page-isolation.h
-> @@ -33,8 +33,6 @@ static inline bool is_migrate_isolate(int migratetype)
->  #define MEMORY_OFFLINE	0x1
->  #define REPORT_FAILURE	0x2
->  
-> -struct page *has_unmovable_pages(struct zone *zone, struct page *page,
-> -				 int migratetype, int flags);
->  void set_pageblock_migratetype(struct page *page, int migratetype);
->  int move_freepages_block(struct zone *zone, struct page *page,
->  				int migratetype, int *num_movable);
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index cface1d38093..e2c6a67fc386 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -8962,125 +8962,6 @@ void *__init alloc_large_system_hash(const char *tablename,
->  	return table;
->  }
->  
-> -/*
-> - * This function checks whether pageblock includes unmovable pages or not.
-> - *
-> - * PageLRU check without isolation or lru_lock could race so that
-> - * MIGRATE_MOVABLE block might include unmovable pages. And __PageMovable
-> - * check without lock_page also may miss some movable non-lru pages at
-> - * race condition. So you can't expect this function should be exact.
-> - *
-> - * Returns a page without holding a reference. If the caller wants to
-> - * dereference that page (e.g., dumping), it has to make sure that it
-> - * cannot get removed (e.g., via memory unplug) concurrently.
-> - *
-> - */
-> -struct page *has_unmovable_pages(struct zone *zone, struct page *page,
-> -				 int migratetype, int flags)
-> -{
-> -	unsigned long iter = 0;
-> -	unsigned long pfn = page_to_pfn(page);
-> -	unsigned long offset = pfn % pageblock_nr_pages;
-> -
-> -	if (is_migrate_cma_page(page)) {
-> -		/*
-> -		 * CMA allocations (alloc_contig_range) really need to mark
-> -		 * isolate CMA pageblocks even when they are not movable in fact
-> -		 * so consider them movable here.
-> -		 */
-> -		if (is_migrate_cma(migratetype))
-> -			return NULL;
-> -
-> -		return page;
-> -	}
-> -
-> -	for (; iter < pageblock_nr_pages - offset; iter++) {
-> -		page = pfn_to_page(pfn + iter);
-> -
-> -		/*
-> -		 * Both, bootmem allocations and memory holes are marked
-> -		 * PG_reserved and are unmovable. We can even have unmovable
-> -		 * allocations inside ZONE_MOVABLE, for example when
-> -		 * specifying "movablecore".
-> -		 */
-> -		if (PageReserved(page))
-> -			return page;
-> -
-> -		/*
-> -		 * If the zone is movable and we have ruled out all reserved
-> -		 * pages then it should be reasonably safe to assume the rest
-> -		 * is movable.
-> -		 */
-> -		if (zone_idx(zone) == ZONE_MOVABLE)
-> -			continue;
-> -
-> -		/*
-> -		 * Hugepages are not in LRU lists, but they're movable.
-> -		 * THPs are on the LRU, but need to be counted as #small pages.
-> -		 * We need not scan over tail pages because we don't
-> -		 * handle each tail page individually in migration.
-> -		 */
-> -		if (PageHuge(page) || PageTransCompound(page)) {
-> -			struct page *head = compound_head(page);
-> -			unsigned int skip_pages;
-> -
-> -			if (PageHuge(page)) {
-> -				if (!hugepage_migration_supported(page_hstate(head)))
-> -					return page;
-> -			} else if (!PageLRU(head) && !__PageMovable(head)) {
-> -				return page;
-> -			}
-> -
-> -			skip_pages = compound_nr(head) - (page - head);
-> -			iter += skip_pages - 1;
-> -			continue;
-> -		}
-> -
-> -		/*
-> -		 * We can't use page_count without pin a page
-> -		 * because another CPU can free compound page.
-> -		 * This check already skips compound tails of THP
-> -		 * because their page->_refcount is zero at all time.
-> -		 */
-> -		if (!page_ref_count(page)) {
-> -			if (PageBuddy(page))
-> -				iter += (1 << buddy_order(page)) - 1;
-> -			continue;
-> -		}
-> -
-> -		/*
-> -		 * The HWPoisoned page may be not in buddy system, and
-> -		 * page_count() is not 0.
-> -		 */
-> -		if ((flags & MEMORY_OFFLINE) && PageHWPoison(page))
-> -			continue;
-> -
-> -		/*
-> -		 * We treat all PageOffline() pages as movable when offlining
-> -		 * to give drivers a chance to decrement their reference count
-> -		 * in MEM_GOING_OFFLINE in order to indicate that these pages
-> -		 * can be offlined as there are no direct references anymore.
-> -		 * For actually unmovable PageOffline() where the driver does
-> -		 * not support this, we will fail later when trying to actually
-> -		 * move these pages that still have a reference count > 0.
-> -		 * (false negatives in this function only)
-> -		 */
-> -		if ((flags & MEMORY_OFFLINE) && PageOffline(page))
-> -			continue;
-> -
-> -		if (__PageMovable(page) || PageLRU(page))
-> -			continue;
-> -
-> -		/*
-> -		 * If there are RECLAIMABLE pages, we need to check
-> -		 * it.  But now, memory offline itself doesn't call
-> -		 * shrink_node_slabs() and it still to be fixed.
-> -		 */
-> -		return page;
-> -	}
-> -	return NULL;
-> -}
-> -
->  #ifdef CONFIG_CONTIG_ALLOC
->  static unsigned long pfn_max_align_down(unsigned long pfn)
->  {
-> diff --git a/mm/page_isolation.c b/mm/page_isolation.c
-> index f67c4c70f17f..b34f1310aeaa 100644
-> --- a/mm/page_isolation.c
-> +++ b/mm/page_isolation.c
-> @@ -15,6 +15,125 @@
->  #define CREATE_TRACE_POINTS
->  #include <trace/events/page_isolation.h>
->  
-> +/*
-> + * This function checks whether pageblock includes unmovable pages or not.
-> + *
-> + * PageLRU check without isolation or lru_lock could race so that
-> + * MIGRATE_MOVABLE block might include unmovable pages. And __PageMovable
-> + * check without lock_page also may miss some movable non-lru pages at
-> + * race condition. So you can't expect this function should be exact.
-> + *
-> + * Returns a page without holding a reference. If the caller wants to
-> + * dereference that page (e.g., dumping), it has to make sure that it
-> + * cannot get removed (e.g., via memory unplug) concurrently.
-> + *
-> + */
-> +static struct page *has_unmovable_pages(struct zone *zone, struct page *page,
-> +				 int migratetype, int flags)
-> +{
-> +	unsigned long iter = 0;
-> +	unsigned long pfn = page_to_pfn(page);
-> +	unsigned long offset = pfn % pageblock_nr_pages;
-> +
-> +	if (is_migrate_cma_page(page)) {
-> +		/*
-> +		 * CMA allocations (alloc_contig_range) really need to mark
-> +		 * isolate CMA pageblocks even when they are not movable in fact
-> +		 * so consider them movable here.
-> +		 */
-> +		if (is_migrate_cma(migratetype))
-> +			return NULL;
-> +
-> +		return page;
-> +	}
-> +
-> +	for (; iter < pageblock_nr_pages - offset; iter++) {
-> +		page = pfn_to_page(pfn + iter);
-> +
-> +		/*
-> +		 * Both, bootmem allocations and memory holes are marked
-> +		 * PG_reserved and are unmovable. We can even have unmovable
-> +		 * allocations inside ZONE_MOVABLE, for example when
-> +		 * specifying "movablecore".
-> +		 */
-> +		if (PageReserved(page))
-> +			return page;
-> +
-> +		/*
-> +		 * If the zone is movable and we have ruled out all reserved
-> +		 * pages then it should be reasonably safe to assume the rest
-> +		 * is movable.
-> +		 */
-> +		if (zone_idx(zone) == ZONE_MOVABLE)
-> +			continue;
-> +
-> +		/*
-> +		 * Hugepages are not in LRU lists, but they're movable.
-> +		 * THPs are on the LRU, but need to be counted as #small pages.
-> +		 * We need not scan over tail pages because we don't
-> +		 * handle each tail page individually in migration.
-> +		 */
-> +		if (PageHuge(page) || PageTransCompound(page)) {
-> +			struct page *head = compound_head(page);
-> +			unsigned int skip_pages;
-> +
-> +			if (PageHuge(page)) {
-> +				if (!hugepage_migration_supported(page_hstate(head)))
-> +					return page;
-> +			} else if (!PageLRU(head) && !__PageMovable(head)) {
-> +				return page;
-> +			}
-> +
-> +			skip_pages = compound_nr(head) - (page - head);
-> +			iter += skip_pages - 1;
-> +			continue;
-> +		}
-> +
-> +		/*
-> +		 * We can't use page_count without pin a page
-> +		 * because another CPU can free compound page.
-> +		 * This check already skips compound tails of THP
-> +		 * because their page->_refcount is zero at all time.
-> +		 */
-> +		if (!page_ref_count(page)) {
-> +			if (PageBuddy(page))
-> +				iter += (1 << buddy_order(page)) - 1;
-> +			continue;
-> +		}
-> +
-> +		/*
-> +		 * The HWPoisoned page may be not in buddy system, and
-> +		 * page_count() is not 0.
-> +		 */
-> +		if ((flags & MEMORY_OFFLINE) && PageHWPoison(page))
-> +			continue;
-> +
-> +		/*
-> +		 * We treat all PageOffline() pages as movable when offlining
-> +		 * to give drivers a chance to decrement their reference count
-> +		 * in MEM_GOING_OFFLINE in order to indicate that these pages
-> +		 * can be offlined as there are no direct references anymore.
-> +		 * For actually unmovable PageOffline() where the driver does
-> +		 * not support this, we will fail later when trying to actually
-> +		 * move these pages that still have a reference count > 0.
-> +		 * (false negatives in this function only)
-> +		 */
-> +		if ((flags & MEMORY_OFFLINE) && PageOffline(page))
-> +			continue;
-> +
-> +		if (__PageMovable(page) || PageLRU(page))
-> +			continue;
-> +
-> +		/*
-> +		 * If there are RECLAIMABLE pages, we need to check
-> +		 * it.  But now, memory offline itself doesn't call
-> +		 * shrink_node_slabs() and it still to be fixed.
-> +		 */
-> +		return page;
-> +	}
-> +	return NULL;
-> +}
-> +
->  static int set_migratetype_isolate(struct page *page, int migratetype, int isol_flags)
->  {
->  	struct zone *zone = page_zone(page);
-> -- 
-> 2.34.1
+> Changes in v2:
+> - Replace spaces with tabs
 > 
-
--- 
-Sincerely yours,
-Mike.
+>   Documentation/driver-api/nvmem.rst | 28 ++++++++++++----------------
+>   1 file changed, 12 insertions(+), 16 deletions(-)
+> 
+> diff --git a/Documentation/driver-api/nvmem.rst b/Documentation/driver-api/nvmem.rst
+> index 287e86819640..a8a58b61709b 100644
+> --- a/Documentation/driver-api/nvmem.rst
+> +++ b/Documentation/driver-api/nvmem.rst
+> @@ -26,9 +26,7 @@ was a rather big abstraction leak.
+>   
+>   This framework aims at solve these problems. It also introduces DT
+>   representation for consumer devices to go get the data they require (MAC
+> -Addresses, SoC/Revision ID, part numbers, and so on) from the NVMEMs. This
+> -framework is based on regmap, so that most of the abstraction available in
+> -regmap can be reused, across multiple types of buses.
+> +Addresses, SoC/Revision ID, part numbers, and so on) from the NVMEMs.
+>   
+>   NVMEM Providers
+>   +++++++++++++++
+> @@ -45,24 +43,22 @@ nvmem_device pointer.
+>   
+>   nvmem_unregister(nvmem) is used to unregister a previously registered provider.
+>   
+> -For example, a simple qfprom case::
+> +For example, a simple nvram case::
+>   
+> -  static struct nvmem_config econfig = {
+> -	.name = "qfprom",
+> -	.owner = THIS_MODULE,
+> -  };
+> -
+> -  static int qfprom_probe(struct platform_device *pdev)
+> +  static int brcm_nvram_probe(struct platform_device *pdev)
+>     {
+> +	struct nvmem_config config = {
+> +		.name = "brcm-nvram",
+> +		.reg_read = brcm_nvram_read,
+> +	};
+>   	...
+> -	econfig.dev = &pdev->dev;
+> -	nvmem = nvmem_register(&econfig);
+> -	...
+> +	config.dev = &pdev->dev;
+> +	config.priv = priv;
+> +	config.size = resource_size(res);
+> +
+> +	devm_nvmem_register(&econfig);
+>     }
+>   
+> -It is mandatory that the NVMEM provider has a regmap associated with its
+> -struct device. Failure to do would return error code from nvmem_register().
+> -
+>   Users of board files can define and register nvmem cells using the
+>   nvmem_cell_table struct::
+>   

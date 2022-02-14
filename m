@@ -2,111 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9A14B5B84
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D800C4B5B92
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:01:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbiBNUxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 15:53:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54570 "EHLO
+        id S229581AbiBNU4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 15:56:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbiBNUxP (ORCPT
+        with ESMTP id S229647AbiBNU4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 15:53:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E743F192F31
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:52:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD973B81686
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 20:17:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 821D1C340F3;
-        Mon, 14 Feb 2022 20:17:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644869850;
-        bh=bXedr7UYLlyWE7FAXfDmfEHymhA7Ze+P5ADWEtsZEic=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=XPCbTkjP1VOKsDUMzqRYehjXZhYthTIrtpBGr8H0ZzYaQftPi9E96AvzWlsECj3od
-         ybGN/h2z0/9LE0PHegdMnRe2GK0jn48FgZs4vur8NnXdyaaUNX82APoekloLzGGa+l
-         BmRXENTBjJJZMx0HUAho4F4DG+Se2O87upjPEDZhSFi7FYFdDiUVJi4uWNUmHGHZME
-         zvdOhhONFmU6NrbBkfcCcr6fDLTyYAytGzRsivGOedC8KJE/XGAInWwyeemT11Gkdn
-         RIcq7MT3ZG17lyIF9uthSy4H6AhbdKG/3DLgeLJA43ZKQzjBqVDX4Qzqq2CkIBxxXY
-         nBOvy3QArrg5Q==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 472305C0388; Mon, 14 Feb 2022 12:17:30 -0800 (PST)
-Date:   Mon, 14 Feb 2022 12:17:30 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 12/42] tools/nolibc/types: make FD_SETSIZE configurable
-Message-ID: <20220214201730.GA4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220207162354.14293-1-w@1wt.eu>
- <20220207162354.14293-13-w@1wt.eu>
- <20220213085301.GB31914@1wt.eu>
+        Mon, 14 Feb 2022 15:56:13 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1519DBD16
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:55:48 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id a42so8600292ljq.13
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:55:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0OkHBiaZEL4gbI88uAFjC4BevdegDkSw2mEVoE6XUQM=;
+        b=o/c8WGQ7vgEvxtzZSzEGkFFVcPUiHrl0G51Eg5NUiYHpcN3AIktYX1CzP78vLb2HCv
+         LyiqVlMYdkmHuBOpsyo/3V9Cj1FG5i2UtaP2pa4VVE7DPWVR0qrTIeuZJzSShHz31KtV
+         aG2q2Q+V1pIZOhlqrMm86Ieu10aJTAtNG3yAp85NUacZ5B9enUnoF98FgCEJuYwGuOR1
+         t/YcS4wqhUQgpObHz7ewBESmzKaLyvkXbT7E+XnLM/nDVEbqTumoE8kp9c32zg+fZ/Cm
+         kD09NV6hr9tEchdA4EsbPzDQ4YuOHJVTlkhoDxtAqfFcgQJzv29t30e/mp0RRlaVif14
+         p9DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0OkHBiaZEL4gbI88uAFjC4BevdegDkSw2mEVoE6XUQM=;
+        b=NCGG2unQE9gh/4QZ03pVLvg7V3vpmmuJcjwvV/Wx1KdmubQrg7PBaOPW4UvIGYtvhN
+         sCXjaixEsmm+CGTFgghQxs94w22/QxHDmSrae9oKJPFAojUsfLMXq2Dx9WJ1r7Q5PAR0
+         IwRdfQRCtI+sPKAjS7P97Uw455SAlRc2Z7GAgsKLZH21vo28vI6wB5IsjjJw1eSHMMrh
+         9a3PwUqmY35klsDh8uTWgRGVNAEDS3/IkLdELzC1P1c4vzU9EaoqJGKRClMhkR1/GNGH
+         Glllw/2LmFT9Ndj1cdKtYcnLp6ZvrKiGLp/MsXxTtFSsbd691URaOd6TZ8YTTWxSgKtX
+         WJ6A==
+X-Gm-Message-State: AOAM531gMRmvn6ey0yWhrNOjYyi+sdzPDzXUU+sEeIlmFBsFJgxbZ6tm
+        5CV/wRXQiH7U4SgFoH6Mu1fNMQH1KgHDbzFDdsUvZT4q/Ag=
+X-Google-Smtp-Source: ABdhPJx8lRnGEvo2BKjuadxx0kxXF47MC+omvIOvGqqY/xfT6A0YxtvN/5OElk6DOL9teF9tVH9vVeya6dhvDDCanxQ=
+X-Received: by 2002:a05:6512:139e:: with SMTP id p30mr572513lfa.502.1644869981206;
+ Mon, 14 Feb 2022 12:19:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220213085301.GB31914@1wt.eu>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220211161831.3493782-1-tjmercier@google.com>
+ <20220211161831.3493782-7-tjmercier@google.com> <Ygdfe3XSvN8iFuUc@kroah.com>
+ <CAHRSSEwoJ67Sr_=gtSaP91cbpjJjZdOo57cfAhv3r-ye0da7PA@mail.gmail.com> <CAJuCfpHf=Ewm0e9kguY3MEGVHU_cyviVXByi0oQtq7kTtOOD=A@mail.gmail.com>
+In-Reply-To: <CAJuCfpHf=Ewm0e9kguY3MEGVHU_cyviVXByi0oQtq7kTtOOD=A@mail.gmail.com>
+From:   Todd Kjos <tkjos@google.com>
+Date:   Mon, 14 Feb 2022 12:19:28 -0800
+Message-ID: <CAHRSSEzsn-EVKXTRfmpbPR9u0wNpdvdZoX64Tm_mB1DQMRSUPQ@mail.gmail.com>
+Subject: Re: [RFC v2 6/6] android: binder: Add a buffer flag to relinquish
+ ownership of fds
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "T.J. Mercier" <tjmercier@google.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        DRI mailing list <dri-devel@lists.freedesktop.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 13, 2022 at 09:53:01AM +0100, Willy Tarreau wrote:
-> The macro was hard-coded to 256 but it's common to see it redefined.
-> Let's support this and make sure we always allocate enough entries for
-> the cases where it wouldn't be multiple of 32.
-> 
-> Signed-off-by: Willy Tarreau <w@1wt.eu>
+On Mon, Feb 14, 2022 at 11:29 AM Suren Baghdasaryan <surenb@google.com> wro=
+te:
+>
+> On Mon, Feb 14, 2022 at 10:33 AM Todd Kjos <tkjos@google.com> wrote:
+> >
+> > On Fri, Feb 11, 2022 at 11:19 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Fri, Feb 11, 2022 at 04:18:29PM +0000, T.J. Mercier wrote:
+> >
+> > Title: "android: binder: Add a buffer flag to relinquish ownership of f=
+ds"
+> >
+> > Please drop the "android:" from the title.
+> >
+> > > > This patch introduces a buffer flag BINDER_BUFFER_FLAG_SENDER_NO_NE=
+ED
+> > > > that a process sending an fd array to another process over binder I=
+PC
+> > > > can set to relinquish ownership of the fds being sent for memory
+> > > > accounting purposes. If the flag is found to be set during the fd a=
+rray
+> > > > translation and the fd is for a DMA-BUF, the buffer is uncharged fr=
+om
+> > > > the sender's cgroup and charged to the receiving process's cgroup
+> > > > instead.
+> > > >
+> > > > It is up to the sending process to ensure that it closes the fds
+> > > > regardless of whether the transfer failed or succeeded.
+> > > >
+> > > > Most graphics shared memory allocations in Android are done by the
+> > > > graphics allocator HAL process. On requests from clients, the HAL p=
+rocess
+> > > > allocates memory and sends the fds to the clients over binder IPC.
+> > > > The graphics allocator HAL will not retain any references to the
+> > > > buffers. When the HAL sets the BINDER_BUFFER_FLAG_SENDER_NO_NEED fo=
+r fd
+> > > > arrays holding DMA-BUF fds, the gpu cgroup controller will be able =
+to
+> > > > correctly charge the buffers to the client processes instead of the
+> > > > graphics allocator HAL.
+> > > >
+> > > > From: Hridya Valsaraju <hridya@google.com>
+> > > > Signed-off-by: Hridya Valsaraju <hridya@google.com>
+> > > > Co-developed-by: T.J. Mercier <tjmercier@google.com>
+> > > > Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> > > > ---
+> > > > changes in v2
+> > > > - Move dma-buf cgroup charge transfer from a dma_buf_op defined by =
+every
+> > > > heap to a single dma-buf function for all heaps per Daniel Vetter a=
+nd
+> > > > Christian K=C3=B6nig.
+> > > >
+> > > >  drivers/android/binder.c            | 26 +++++++++++++++++++++++++=
++
+> > > >  include/uapi/linux/android/binder.h |  1 +
+> > > >  2 files changed, 27 insertions(+)
+> > > >
+> > > > diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+> > > > index 8351c5638880..f50d88ded188 100644
+> > > > --- a/drivers/android/binder.c
+> > > > +++ b/drivers/android/binder.c
+> > > > @@ -42,6 +42,7 @@
+> > > >
+> > > >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> > > >
+> > > > +#include <linux/dma-buf.h>
+> > > >  #include <linux/fdtable.h>
+> > > >  #include <linux/file.h>
+> > > >  #include <linux/freezer.h>
+> > > > @@ -2482,8 +2483,10 @@ static int binder_translate_fd_array(struct =
+list_head *pf_head,
+> > > >  {
+> > > >       binder_size_t fdi, fd_buf_size;
+> > > >       binder_size_t fda_offset;
+> > > > +     bool transfer_gpu_charge =3D false;
+> > > >       const void __user *sender_ufda_base;
+> > > >       struct binder_proc *proc =3D thread->proc;
+> > > > +     struct binder_proc *target_proc =3D t->to_proc;
+> > > >       int ret;
+> > > >
+> > > >       fd_buf_size =3D sizeof(u32) * fda->num_fds;
+> > > > @@ -2521,8 +2524,15 @@ static int binder_translate_fd_array(struct =
+list_head *pf_head,
+> > > >       if (ret)
+> > > >               return ret;
+> > > >
+> > > > +     if (IS_ENABLED(CONFIG_CGROUP_GPU) &&
+> > > > +             parent->flags & BINDER_BUFFER_FLAG_SENDER_NO_NEED)
+> > > > +             transfer_gpu_charge =3D true;
+> > > > +
+> > > >       for (fdi =3D 0; fdi < fda->num_fds; fdi++) {
+> > > >               u32 fd;
+> > > > +             struct dma_buf *dmabuf;
+> > > > +             struct gpucg *gpucg;
+> > > > +
+> > > >               binder_size_t offset =3D fda_offset + fdi * sizeof(fd=
+);
+> > > >               binder_size_t sender_uoffset =3D fdi * sizeof(fd);
+> > > >
+> > > > @@ -2532,6 +2542,22 @@ static int binder_translate_fd_array(struct =
+list_head *pf_head,
+> > > >                                                 in_reply_to);
+> > > >               if (ret)
+> > > >                       return ret > 0 ? -EINVAL : ret;
+> > > > +
+> > > > +             if (!transfer_gpu_charge)
+> > > > +                     continue;
+> > > > +
+> > > > +             dmabuf =3D dma_buf_get(fd);
+> > > > +             if (IS_ERR(dmabuf))
+> > > > +                     continue;
+> > > > +
+> > > > +             gpucg =3D gpucg_get(target_proc->tsk);
+> > > > +             ret =3D dma_buf_charge_transfer(dmabuf, gpucg);
+> > > > +             if (ret) {
+> > > > +                     pr_warn("%d:%d Unable to transfer DMA-BUF fd =
+charge to %d",
+> > > > +                             proc->pid, thread->pid, target_proc->=
+pid);
+> > > > +                     gpucg_put(gpucg);
+> > > > +             }
+> > > > +             dma_buf_put(dmabuf);
+> >
+> > Since we are creating a new gpu cgroup abstraction, couldn't this
+> > "transfer" be done in userspace by the target instead of in the kernel
+> > driver? Then this patch would reduce to just a flag on the buffer
+> > object.
+>
+> Are you suggesting to have a userspace accessible cgroup interface for
+> transferring buffer charges and the target process to use that
+> interface for requesting the buffer to be charged to its cgroup?
 
-I queued both in place of their earlier versions, thank you!
+Well, I'm asking why we need to do these cgroup-ish actions in the
+kernel when it seems more natural to do it in userspace.
 
-							Thanx, Paul
+> I'm worried about the case when the target process does not request
+> the transfer after receiving the buffer with this flag set. The charge
+> would stay with the wrong process and accounting will be invalid.
 
-> ---
-> v2:
-> - rebase on top of v2 of previous patch
-> ---
->  tools/include/nolibc/types.h | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
-> index a4dda0a22fc2..563dbbad0496 100644
-> --- a/tools/include/nolibc/types.h
-> +++ b/tools/include/nolibc/types.h
-> @@ -45,7 +45,9 @@
->  #define DT_SOCK        0xc
->  
->  /* commonly an fd_set represents 256 FDs */
-> +#ifndef FD_SETSIZE
->  #define FD_SETSIZE     256
-> +#endif
->  
->  /* Special FD used by all the *at functions */
->  #ifndef AT_FDCWD
-> @@ -72,7 +74,7 @@
->  
->  /* for select() */
->  typedef struct {
-> -	uint32_t fd32[FD_SETSIZE / 32];
-> +	uint32_t fd32[(FD_SETSIZE + 31) / 32];
->  } fd_set;
->  
->  #define FD_CLR(fd, set) do {                                            \
-> @@ -101,7 +103,7 @@ typedef struct {
->  #define FD_ZERO(set) do {                                               \
->  		fd_set *__set = (set);                                  \
->  		int __idx;                                              \
-> -		for (__idx = 0; __idx < FD_SETSIZE / 32; __idx ++)      \
-> +		for (__idx = 0; __idx < (FD_SETSIZE+31) / 32; __idx ++) \
->  			__set->fd32[__idx] = 0;                         \
->  	} while (0)
->  
-> -- 
-> 2.35.1
+I suspect this would be implemented in libbinder wherever the fd array
+object is handled, so it wouldn't require changes to every process.
+
+>
+> Technically, since the proposed cgroup supports charge transfer from
+> the very beginning, the userspace can check if the cgroup is mounted
+> and if so then it knows this feature is supported.
+
+Has some userspace code for this been written? I'd like to be
+convinced that these changes need to be in the binder kernel driver
+instead of in userspace.
+
+>
+> > This also solves the issue that Greg brought up about
+> > userspace needing to know whether the kernel implements this feature
+> > (older kernel running with newer userspace). I think we could just
+> > reserve some flags for userspace to use (and since those flags are
+> > "reserved" for older kernels, this would enable this feature even for
+> > old kernels)
+> >
+> > > >       }
+> > > >       return 0;
+> > > >  }
+> > > > diff --git a/include/uapi/linux/android/binder.h b/include/uapi/lin=
+ux/android/binder.h
+> > > > index 3246f2c74696..169fd5069a1a 100644
+> > > > --- a/include/uapi/linux/android/binder.h
+> > > > +++ b/include/uapi/linux/android/binder.h
+> > > > @@ -137,6 +137,7 @@ struct binder_buffer_object {
+> > > >
+> > > >  enum {
+> > > >       BINDER_BUFFER_FLAG_HAS_PARENT =3D 0x01,
+> > > > +     BINDER_BUFFER_FLAG_SENDER_NO_NEED =3D 0x02,
+> > > >  };
+> > > >
+> > > >  /* struct binder_fd_array_object - object describing an array of f=
+ds in a buffer
+> > > > --
+> > > > 2.35.1.265.g69c8d7142f-goog
+> > > >
+> > >
+> > > How does userspace know that binder supports this new flag?  And wher=
+e
+> > > is the userspace test for this new feature?  Isn't there a binder tes=
+t
+> > > framework somewhere?
+> > >
+> > > thanks,
+> > >
+> > > greg k-h

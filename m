@@ -2,125 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0834B5360
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:32:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 210614B5350
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:29:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355160AbiBNOc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 09:32:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41794 "EHLO
+        id S1355134AbiBNO3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 09:29:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231570AbiBNOcX (ORCPT
+        with ESMTP id S234891AbiBNO3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 09:32:23 -0500
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B4A41991;
-        Mon, 14 Feb 2022 06:32:15 -0800 (PST)
-Received: by mail-qk1-f172.google.com with SMTP id m25so14460832qka.9;
-        Mon, 14 Feb 2022 06:32:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+D9TDb8zgo7SYyd9U66f/5PMXdHiP4mRfXaTW0S+zdU=;
-        b=f4byYKflNUzTLr72E+3GStpf2gLhBp60fh42HnSbM9yTeLwE4rotE2d60zbRyHg8dS
-         dhpQWJycSL2RwO/tAg/lei1hUhQJOVrOF+AzZOsan1EzLCx+Rwvfot39CEx5EOBLUeA/
-         r35BFZGmHVoNdZchrCO+fNjPw8OeU3C6qD0oRswRI1kHxF6HODPk8Yzu/kjuSdSTP4NN
-         IMXshtVgMZe5FS8NCv2jMIH9+BdQR3HjXhojK+MD5T2GBu6Ifsk2b4f8pby89Xo3ITVd
-         CV4xLIaHslCf/DScQE3AyaN0i6kP6hTdpOph694CDPB8juBYOkgHfF2hG66e2ihanuTz
-         dG/g==
-X-Gm-Message-State: AOAM5329TfO2xG30G4w9phlV1ZBz2fejt+yU0OD8AvU0UijIZUjjmeET
-        dao24ATtBo3xkKiyc1Kv1B+CrcYq4YWhKsuP
-X-Google-Smtp-Source: ABdhPJzgHQw0kWDsRpHgdImRm6LVfnu2ylZ8LNmFcGR9mbXut5XGz74HRkaaBhWodGcWtPvpF+3P6Q==
-X-Received: by 2002:a05:620a:24d0:: with SMTP id m16mr7167670qkn.558.1644849134281;
-        Mon, 14 Feb 2022 06:32:14 -0800 (PST)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id f20sm18099940qtf.39.2022.02.14.06.32.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 06:32:14 -0800 (PST)
-Received: by mail-yb1-f173.google.com with SMTP id p19so46606414ybc.6;
-        Mon, 14 Feb 2022 06:32:14 -0800 (PST)
-X-Received: by 2002:ab0:384c:: with SMTP id h12mr3670905uaw.122.1644848795466;
- Mon, 14 Feb 2022 06:26:35 -0800 (PST)
+        Mon, 14 Feb 2022 09:29:33 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F80E46668;
+        Mon, 14 Feb 2022 06:29:25 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21ED7Oqe003826;
+        Mon, 14 Feb 2022 14:29:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=542JyrrlYASj0FwWw5x3m6JHNYhpRl4FEwUfuX2UgTk=;
+ b=eBG68axvwXDNPzbD3IeeSXJyXuOB89KkPPjE5OeA5sdUoyNyRRHZ+8viHjbcjNSd0qcF
+ 5ljGOjES27i3F51uVVI6mIAipPbOsGNAUxsAAvn5sgNvVY7xa/iPpXDJ6f/8/VckWVjh
+ IZmyUeFcTOtithXsJRRKjGiUjkFQnoj/HBaUhxx5DG0ySOUHt5wNfGRVqfbKigbFXZhu
+ c6Ud0NRss2O700BaJfVaXgpbBM5U+0OlRuchNOocD0r01YTfHM/X1ecaKeX32zhDahVd
+ SXSthfOZcKmHdnv5yxKKC0AuRthNfjYSL6nVdP1mLSUi3fsjm8s5xnIQMzTCiQONh94A rw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e6rt177v5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 14:29:24 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21EDW4ox023998;
+        Mon, 14 Feb 2022 14:29:22 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e6rt177u7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 14:29:22 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21EERo9i028257;
+        Mon, 14 Feb 2022 14:29:20 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma05fra.de.ibm.com with ESMTP id 3e64h9deuk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 14:29:20 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21EETHDd41746788
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Feb 2022 14:29:17 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F2C504C04E;
+        Mon, 14 Feb 2022 14:29:16 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5302B4C040;
+        Mon, 14 Feb 2022 14:29:16 +0000 (GMT)
+Received: from [9.171.14.134] (unknown [9.171.14.134])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 14 Feb 2022 14:29:16 +0000 (GMT)
+Message-ID: <a53da545-220f-10bd-9ae0-09e6430cabd9@linux.ibm.com>
+Date:   Mon, 14 Feb 2022 15:29:16 +0100
 MIME-Version: 1.0
-References: <20220211210757.612595-1-Jason@zx2c4.com> <fcab986b-d0bd-c798-de17-266abcdc7da2@gentoo.org>
- <CAHmME9ooEbgiv3DRk87ei+rUoVNMJthY7UuG_xCgm=kfMZAajw@mail.gmail.com>
-In-Reply-To: <CAHmME9ooEbgiv3DRk87ei+rUoVNMJthY7UuG_xCgm=kfMZAajw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 14 Feb 2022 15:26:24 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXDj+BVCs4Syg39vjnHGKcwJnCgDxrGoOiEFM_T4ojwPg@mail.gmail.com>
-Message-ID: <CAMuHMdXDj+BVCs4Syg39vjnHGKcwJnCgDxrGoOiEFM_T4ojwPg@mail.gmail.com>
-Subject: Re: [PATCH RFC v0] random: block in /dev/urandom
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Joshua Kinard <kumba@gentoo.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Theodore Ts'o" <tytso@mit.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 08/10] KVM: s390: Add capability for storage key
+ extension of MEM_OP IOCTL
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>
+Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+References: <20220211182215.2730017-1-scgl@linux.ibm.com>
+ <20220211182215.2730017-9-scgl@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20220211182215.2730017-9-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: eatC7XqVY6vLXRYUdxC7HdHyU9MYJmYO
+X-Proofpoint-ORIG-GUID: g0R5qTujNCK5NDreEkA_JPIdZQvfwJ6M
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-14_06,2022-02-14_03,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ impostorscore=0 suspectscore=0 priorityscore=1501 phishscore=0
+ clxscore=1015 mlxscore=0 lowpriorityscore=0 adultscore=0 spamscore=0
+ bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202140086
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+Am 11.02.22 um 19:22 schrieb Janis Schoetterl-Glausch:
+> Availability of the KVM_CAP_S390_MEM_OP_EXTENSION capability signals that:
+> * The vcpu MEM_OP IOCTL supports storage key checking.
+> * The vm MEM_OP IOCTL exists.
+> 
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-On Mon, Feb 14, 2022 at 3:05 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> On Sun, Feb 13, 2022 at 12:06 AM Joshua Kinard <kumba@gentoo.org> wrote:
-> > The R6000/R6000A CPU only ever existed in systems in the late 1980's that
-> > were fairly large, and I don't think there is a complete, working unit out
-> > there that can actually boot up, let alone boot a Linux kernel.
->
-> So from what you've written, it sounds like MIPS is actually not a problem here.
->
-> So the only systems we're actually talking about without a good cycle
-> counter are non-Amiga m68k? If so, that'd be a pretty terrific
-> finding. It'd mean that this idea can move forward, and we only need
-> to worry about some m68k museum pieces with misconfigured
-> userspaces...
+Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
 
-I'm afraid you missed one important detail.  You wrote:
-
-> On every platform, random_get_entropy() is connected to get_cycles(),
-> except for three: m68k, MIPS, and RISC-V.
-
-The default implementation in include/asm-generic/timex.h is:
-
-    static inline cycles_t get_cycles(void)
-    {
-            return 0;
-    }
-
-Several architectures do not implement get_cycles(), or implement it
-with a variant that's very similar or identical to the generic version.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> ---
+>   arch/s390/kvm/kvm-s390.c | 1 +
+>   include/uapi/linux/kvm.h | 1 +
+>   2 files changed, 2 insertions(+)
+> 
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 773bccdd446c..c2c26c2aad64 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -564,6 +564,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>   	case KVM_CAP_S390_VCPU_RESETS:
+>   	case KVM_CAP_SET_GUEST_DEBUG:
+>   	case KVM_CAP_S390_DIAG318:
+> +	case KVM_CAP_S390_MEM_OP_EXTENSION:
+>   		r = 1;
+>   		break;
+>   	case KVM_CAP_SET_GUEST_DEBUG2:
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 4bc7623def87..08756eeea065 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -1140,6 +1140,7 @@ struct kvm_ppc_resize_hpt {
+>   #define KVM_CAP_VM_GPA_BITS 207
+>   #define KVM_CAP_XSAVE2 208
+>   #define KVM_CAP_SYS_ATTRIBUTES 209
+> +#define KVM_CAP_S390_MEM_OP_EXTENSION 210
+>   
+>   #ifdef KVM_CAP_IRQ_ROUTING
+>   

@@ -2,45 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9DBC4B40DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 05:33:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7653A4B40EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 05:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240246AbiBNEdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 23:33:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34312 "EHLO
+        id S240328AbiBNEei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 23:34:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231367AbiBNEdq (ORCPT
+        with ESMTP id S229878AbiBNEed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 23:33:46 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77254F9DE
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 20:33:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=YWfsS/Ud5X+wEl1SN02/jV0RlU7lg5m7I8cMWVWhSiE=; b=eop54UwcxRz3PgsOYt+YcaCLBM
-        NT/bbNNnh/rI05IyyMZA3rVtTb+XZmTTmwGc8Lu4y9vLBl709B/Mw9ZDVBkG890IZELyQfkF5WoAl
-        FfFeTA/3qlMRMk64vj00rEZwoOF6fEfXjGScjE9n/VkiCTD/Jo8j3SyCmq+i2GYiye6OqPrARkJyL
-        5bdOQO+9fp2xOjbHIWAmeJKKCmYpDHn6CuW8jXQZgk7D6YU3l8L+Esoi4cCPy6tQSs0pnc7/u5I7y
-        XglOhALxCKML2dBOQAjcFjU432D/dwHZrBYy+1wxvMes16dshvd7G6bQ7qoNjGDURyqSik0dINyPF
-        s4LVLlxA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJT3P-00CYbm-Kh; Mon, 14 Feb 2022 04:33:35 +0000
-Date:   Mon, 14 Feb 2022 04:33:35 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/75] MM folio patches for 5.18
-Message-ID: <YgnbnzrWfHr7AC9s@casper.infradead.org>
-References: <20220204195852.1751729-1-willy@infradead.org>
+        Sun, 13 Feb 2022 23:34:33 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF9B4F9E2;
+        Sun, 13 Feb 2022 20:34:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644813266; x=1676349266;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=tqblgDln9FFLcD+YS00qRXm5MVr6enXli7vep0cN/6w=;
+  b=xL3qDdA1do7bSkBch30I9D8qQsDAQVCk6S1ncfnLf++5cJAkQe5j4hLy
+   uzNasfKmtOdKQ1gfJB7nWijjgTGs4I5kGI588lh57qZhJ2FTPlgIUF+jx
+   k6b4pUPE/oSxWSSXW9Ri2/ODe3v3XfUj7h+TPz65xiyNoqrhQDSvPek8D
+   8=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 13 Feb 2022 20:34:26 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 20:34:25 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Sun, 13 Feb 2022 20:34:25 -0800
+Received: from blr-ubuntu-87.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Sun, 13 Feb 2022 20:34:20 -0800
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+To:     <bjorn.andersson@linaro.org>, <robh+dt@kernel.org>
+CC:     <ohad@wizery.com>, <agross@kernel.org>,
+        <mathieu.poirier@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <evgreen@chromium.org>,
+        <dianders@chromium.org>, <swboyd@chromium.org>, <mka@chromium.org>,
+        <krzysztof.kozlowski@canonical.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>
+Subject: [PATCH 0/3] Add support for proxy interconnect bandwidth votes
+Date:   Mon, 14 Feb 2022 10:04:09 +0530
+Message-ID: <1644813252-12897-1-git-send-email-quic_sibis@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220204195852.1751729-1-willy@infradead.org>
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,22 +65,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 07:57:37PM +0000, Matthew Wilcox (Oracle) wrote:
-> Whole series availabke through git, and shortly in linux-next:
-> https://git.infradead.org/users/willy/pagecache.git/shortlog/refs/heads/for-next
-> or git://git.infradead.org/users/willy/pagecache.git for-next
+Add support for proxy interconnect bandwidth votes during modem bootup on
+SC7280 SoCs.
 
-I've just pushed out a new version to infradead.  I'll probably forget
-a few things, but major differences:
+Sibi Sankar (3):
+  dt-bindings: remoteproc: qcom: Add interconnects property
+  remoteproc: qcom_q6v5_mss: Add support for interconnect bandwidth
+    voting
+  arm64: dts: qcom: sc7280: Add proxy interconnect requirements for
+    modem
 
- - Incorporate various fixes from others including:
-   - Implement pmd_pfn() for various arches from Mike Rapoport
-   - lru_to_folio() now a function from Christoph Hellwig
-   - Change a unpin_user_page() call to gup_put_folio() from Mark Hemment
- - Use DEFINE_PAGE_VMA_WALK() and DEFINE_FOLIO_VMA_WALK() instead of the
-   pvmw_set_page()/folio() calls that were in this patch set.
- - A new set of ten patches around invalidate_inode_page().  I'll send
-   them out as a fresh patchset tomorrow.
- - Add various Reviewed-by trailers.
- - Updated to -rc4.
+ .../devicetree/bindings/remoteproc/qcom,q6v5.txt   | 23 ++++++
+ arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi |  2 +
+ drivers/remoteproc/qcom_q6v5_mss.c                 | 95 +++++++++++++++++++++-
+ 3 files changed, 119 insertions(+), 1 deletion(-)
+
+-- 
+2.7.4
 

@@ -2,57 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A734B3E91
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 01:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EE234B3E95
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 01:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238846AbiBNAPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 19:15:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36110 "EHLO
+        id S238854AbiBNAXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 19:23:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiBNAPm (ORCPT
+        with ESMTP id S236632AbiBNAXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 19:15:42 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8354251E6B;
-        Sun, 13 Feb 2022 16:15:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=Z0izQ77ae4vChC3LwyWqgLvukFSg3zMmsdvzhzmiFoA=; b=G4PjChidQJRQi2NVbEZyyeTMh0
-        X3UnnyyM3mGdXXgMo0LWl183MPMT8g3EXPa3KE0DjsPHnONFIk222ugmAT5hhJDMvFz8UICd6/ZDx
-        iqv0fCaOtwmv7OM4QCJ+Nxg+mBTEtuYgxHzuLl6im3XTnRr8LfuVEASoC7gSty9nGAlSyUgnfcBqv
-        VCQsfW6XkWeUqKEtOWVULZ3ofuIbx2tQ4WoQKEGa06pbwQBg5uoGB8t3rWQ6zX6GPRxXuhWobPNaU
-        lqs+zlhZL9P+P+hpMmwyPjmD8WO0JsFOjY++AHcqKPu6E5Ux0aDg2ZiwkXS7DJwwWT5j64DiASMin
-        A+ji6evw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJP1g-00CNcF-C5; Mon, 14 Feb 2022 00:15:32 +0000
-Message-ID: <0ffc9f5f-546a-a797-01bf-d62953e6d26c@infradead.org>
-Date:   Sun, 13 Feb 2022 16:15:27 -0800
+        Sun, 13 Feb 2022 19:23:22 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA48951E71
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 16:23:15 -0800 (PST)
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 272EC3F4B4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:23:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644798194;
+        bh=FKWnfN/WbjqhqsAVtrMRiodDo/GKGytdhw0dhlXasS4=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=Dj2gJWYxvriIXtVYXLiDtVPcZyrMckFLoRILBvNqHmkxUi/2UAqqXRhah713YblhT
+         tFb6WH3ALVVRig8mBq/HovIL415sYtiT7SDliFN6nFvtnvhpvpGKDItK/EVI7i2SaP
+         53Hc7swDu4TBOgO5Tnh2T8m8k9gtQqV9Uc6U9Fc6wFSMa/Zkg7vCMPsgyI9zjAFHzW
+         nKW6iSiJuDnlBryPxLz3Th9LW52YTbsJKSwFJERurVIhdvLlHUjXh11zdu4xCTG2V2
+         oJCiGvUidAj/Im4DYQU7VTbckjWjqp7mEIUOzKgLpSe0SH18f4IvW7LKxUV+i9kOik
+         EG4iat0f8a1mA==
+Received: by mail-ot1-f69.google.com with SMTP id q8-20020a056830232800b005ab75f5e906so9417543otg.18
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 16:23:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FKWnfN/WbjqhqsAVtrMRiodDo/GKGytdhw0dhlXasS4=;
+        b=4Cjl1OCJjwYF6BniBVeJDztRakdC/o+9jUGJyYoiIyfQYYuJi702u+ZwoN3EbF/fag
+         i1wU+R8xxWq2gfukCEPRp6pBmFZTgKX2IbtAgsmk4ZZ11wyh/2OCRtFM5CtbCbeujCZa
+         gkQ5Tz/cRAu7NLKzpRhY3NuYYIPRZojo483j99kOyaZTzwbKA4oSXudeiMg3rCsY7RFF
+         35gNnazTVSzbbDy+5JSr6ahoo2sdc8Ku5X2Rj0omOaY5gogeNlU6nED4cmjp8SPOyhP5
+         euaD1mmosY4kefBAnsSMA5YPDy90GPGCNKZvdaQHk4x0JSoHONw0JFuRszpd1bpwg/Qq
+         0ZRg==
+X-Gm-Message-State: AOAM530lznsgjCXBIM/vscVV7fahMMn5JbEb8QZri3iaMA5NpsUpIoWh
+        qmGBIr6jFsECJuB/pJDzeLp2vbLBJLjy9H6xsSTWjPonbcdr85NjYAhqqPPP/V/L7HsjnDkaps0
+        NVmlKsz82N/ifnccSxLAokijD4T+DHotOaulRsVEo2BsuKCHKAx6nY1rl+Q==
+X-Received: by 2002:a05:6870:a3c5:: with SMTP id h5mr3114905oak.247.1644798192977;
+        Sun, 13 Feb 2022 16:23:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw+WuYF9eEYmGhM2K/IEWyKKIk8WvmBdOMqhcZL6iQKfdtQKTg6lvvYzeqTIHyChu1WimbvB+VCETfqFVx8z7c=
+X-Received: by 2002:a05:6870:a3c5:: with SMTP id h5mr3114897oak.247.1644798192676;
+ Sun, 13 Feb 2022 16:23:12 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] serial: parisc: GSC: fix build when PCI_LBA is not set
-Content-Language: en-US
-To:     Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        linux-parisc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>
-References: <20220213193903.8815-1-rdunlap@infradead.org>
- <0baabcbc-196e-08fa-e2db-b7e925993cc1@gmx.de>
- <55c73cb4-21ae-7307-7b14-a19cf270f4d6@infradead.org>
- <1e43c3b9-c5b7-de77-dd28-981d60a4d97d@gmx.de>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <1e43c3b9-c5b7-de77-dd28-981d60a4d97d@gmx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <CAJZ5v0gUFY8fFKFhqmRHLKvaRA7mqDwkx7q=7soSGmu51dSD_Q@mail.gmail.com>
+ <20220209213638.GA587920@bhelgaas>
+In-Reply-To: <20220209213638.GA587920@bhelgaas>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Mon, 14 Feb 2022 08:23:05 +0800
+Message-ID: <CAAd53p6hATV8TOcJ9Qi2rMwVi=y_9+tQu6KhDkAm6Y8=cQ_xoA@mail.gmail.com>
+Subject: Re: [PATCH v3] PCI: vmd: Honor ACPI _OSC on PCIe features
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Nirmal Patel <nirmal.patel@linux.intel.com>,
+        Jonathan Derrick <jonathan.derrick@linux.dev>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,88 +84,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Bjorn,
 
-On 2/13/22 14:15, Helge Deller wrote:
-> On 2/13/22 22:07, Randy Dunlap wrote:
->>
->>
->> On 2/13/22 12:35, Helge Deller wrote:
->>> Hi Randy,
->>>
->>> On 2/13/22 20:39, Randy Dunlap wrote:
->>>> There is a build error when using a kernel .config file from
->>>> 'kernel test robot' for a different build problem:
->>>>
->>>> hppa64-linux-ld: drivers/tty/serial/8250/8250_gsc.o: in function `.LC3':
->>>> (.data.rel.ro+0x18): undefined reference to `iosapic_serial_irq'
->>>>
->>>> when:
->>>>   CONFIG_GSC=y
->>>>   CONFIG_SERIO_GSCPS2=y
->>>>   CONFIG_SERIAL_8250_GSC=y
->>>>   CONFIG_PCI is not set
->>>>     and hence PCI_LBA is not set.
->>>>   IOSAPIC depends on PCI_LBA, so IOSAPIC is not set/enabled.
->>>>
->>>> Making SERIAL_8250_GSC depend on PCI_LBA prevents the build error.
->>>
->>> It maybe makes the build error go away, but ...
->>>
->>>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->>>> Reported-by: kernel test robot <lkp@intel.com>
->>>> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
->>>> Cc: Helge Deller <deller@gmx.de>
->>>> Cc: linux-parisc@vger.kernel.org
->>>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>>> Cc: linux-serial@vger.kernel.org
->>>> Cc: Jiri Slaby <jirislaby@kernel.org>
->>>> Cc: Johan Hovold <johan@kernel.org>
->>>> ---
->>>>  drivers/tty/serial/8250/Kconfig |    2 +-
->>>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> --- linux-next-20220211.orig/drivers/tty/serial/8250/Kconfig
->>>> +++ linux-next-20220211/drivers/tty/serial/8250/Kconfig
->>>> @@ -118,7 +118,7 @@ config SERIAL_8250_CONSOLE
->>>>
->>>>  config SERIAL_8250_GSC
->>>>  	tristate
->>>> -	depends on SERIAL_8250 && GSC
->>>> +	depends on SERIAL_8250 && GSC && PCI_LBA
->>>>  	default SERIAL_8250
->>>
->>> The serial device is on the GSC bus, so if you make it
->>> dependend on the PCI bus it will not be useable on machines
->>> which only have a GSC bus...
->>>
->>> We need another patch.
->>> Do you have a link to the build error?
->>
->>
->> No, it's from the other build error that you just replied to,
->> where the incorrect compiler was used.
->>
->> I'll recheck it and reconsider what to do, if anything.
-> 
-> Ok, thank you!
+On Thu, Feb 10, 2022 at 5:36 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Tue, Dec 07, 2021 at 02:15:04PM +0100, Rafael J. Wysocki wrote:
+> > On Tue, Dec 7, 2021 at 12:12 AM Keith Busch <kbusch@kernel.org> wrote:
+> > > On Fri, Dec 03, 2021 at 11:15:41AM +0800, Kai-Heng Feng wrote:
+> > > > When Samsung PCIe Gen4 NVMe is connected to Intel ADL VMD, the
+> > > > combination causes AER message flood and drags the system performance
+> > > > down.
+> > > >
+> > > > The issue doesn't happen when VMD mode is disabled in BIOS, since AER
+> > > > isn't enabled by acpi_pci_root_create() . When VMD mode is enabled, AER
+> > > > is enabled regardless of _OSC:
+> > > > [    0.410076] acpi PNP0A08:00: _OSC: platform does not support [AER]
+> > > > ...
+> > > > [    1.486704] pcieport 10000:e0:06.0: AER: enabled with IRQ 146
+> > > >
+> > > > Since VMD is an aperture to regular PCIe root ports, honor ACPI _OSC to
+> > > > disable PCIe features accordingly to resolve the issue.
+> > >
+> > > At least for some versions of this hardare, I recall ACPI is unaware of
+> > > any devices in the VMD domain; the platform can not see past the VMD
+> > > endpoint, so I throught the driver was supposed to always let the VMD
+> > > domain use OS native support regardless of the parent's ACPI _OSC.
+> >
+> > This is orthogonal to whether or not ACPI is aware of the VMD domain
+> > or the devices in it.
+> >
+> > If the platform firmware does not allow the OS to control specific
+> > PCIe features at the physical host bridge level, that extends to the
+> > VMD "bus", because it is just a way to expose a hidden part of the
+> > PCIe hierarchy.
+>
+> I don't understand what's going on here.  Do we understand the AER
+> message flood?  Are we just papering over it by disabling AER?
 
-I dunno what to do. This:
+To be more precise, AER is disabled by the platform vendor in BIOS to
+paper over the issue.
+The only viable solution for us is to follow their settings. We may
+never know what really happens underneath.
 
-#ifdef CONFIG_64BIT
-	if (!dev->irq && (dev->id.sversion == 0xad))
-		dev->irq = iosapic_serial_irq(dev);
-#endif
+Disabling ASPM/AER/PME etc is a normal practice for ODMs unfortunately.
 
-makes it look like 64BIT requires IOSAPIC (hence PCI_LBA).
+Kai-Heng
 
-
-> By the way, I just sent another patch (and added it to the parisc for-next tree)
-> which should at least give a better error message if someone uses the wrong compiler:
-> https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git/commit/?h=for-next&id=b160628e9ebcdc85d0db9d7f423c26b3c7c179d0
-
-Yes, I applied that, but that's not the problem here.
-It is a 64BIT config and parisc64 compiler.
-
--- 
-~Randy
+>
+> If an error occurs below a VMD, who notices and reports it?  If we
+> disable native AER below VMD because of _OSC, as this patch does, I
+> guess we're assuming the platform will handle AER events below VMD.
+> Is that really true?  Does the platform know how to find AER log
+> registers of devices below VMD?
+>
+> > The platform firmware does that through ACPI _OSC under the host
+> > bridge device (not under the VMD device) which it is very well aware
+> > of.

@@ -2,160 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065344B5231
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B874B527D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234297AbiBNNy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:54:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34692 "EHLO
+        id S243796AbiBNN6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:58:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbiBNNyX (ORCPT
+        with ESMTP id S1353936AbiBNN6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:54:23 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE0565A2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:54:15 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 25ABD1F38C;
-        Mon, 14 Feb 2022 13:54:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1644846854; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e2o7MEUIkoygVgLeQ0bNCev85H24dkeL8bX3B9U4B08=;
-        b=QwGWEUa0R6RurWrTbcNK5iokHhXau98F8dWQ9GNJyaRX73zMj8cyxDLXIl3DVjNRhU1t4T
-        Djk2L+ARgHyPXFDgdkBo2o8+cwhbEuZ6Sg2wqCO38zy8QacQIJdEqWv20ZtSXYgbEqRywl
-        Jcy16q1OsOxHdBj2op6KJITVd+nCjjo=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id CD972A3B83;
-        Mon, 14 Feb 2022 13:54:13 +0000 (UTC)
-Date:   Mon, 14 Feb 2022 14:54:10 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>
-Subject: Re: [PATCH v4 0/4] printk: reduce deadlocks during panic
-Message-ID: <YgpfAsC1EZSbpDOv@alley>
-References: <20220202171821.179394-1-stephen.s.brennan@oracle.com>
- <YgTZPQEay6T/nhu6@alley>
- <8f08bb64-ee8a-9555-f4a1-6d55d3c77531@oracle.com>
+        Mon, 14 Feb 2022 08:58:07 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60760C4E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:58:00 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJbqA-0006T5-AI; Mon, 14 Feb 2022 14:56:30 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJbq0-00GYf6-Ms; Mon, 14 Feb 2022 14:56:19 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJbpy-0038Nh-VX; Mon, 14 Feb 2022 14:56:18 +0100
+Date:   Mon, 14 Feb 2022 14:56:18 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>, kvm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, alsa-devel@alsa-project.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
+        John Garry <john.garry@huawei.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>, linux-gpio@vger.kernel.org,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Eric Auger <eric.auger@redhat.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        openipmi-developer@lists.sourceforge.net,
+        Jaroslav Kysela <perex@perex.cz>,
+        Benson Leung <bleung@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Brian Norris <computersforpeace@gmail.com>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] platform: make platform_get_irq_optional()
+ optional
+Message-ID: <20220214135618.kdiikxi3j4j4erks@pengutronix.de>
+References: <20220212201631.12648-1-s.shtylyov@omp.ru>
+ <20220212201631.12648-2-s.shtylyov@omp.ru>
+ <20220214071351.pcvstrzkwqyrg536@pengutronix.de>
+ <YgorLXUr8aT+1ttv@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="woc7fbustut2ntcm"
 Content-Disposition: inline
-In-Reply-To: <8f08bb64-ee8a-9555-f4a1-6d55d3c77531@oracle.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YgorLXUr8aT+1ttv@smile.fi.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-02-10 12:06:44, Stephen Brennan wrote:
-> On 2/10/22 01:22, Petr Mladek wrote:
-> > On Wed 2022-02-02 09:18:17, Stephen Brennan wrote:
-> > > When a caller writes heavily to the kernel log (e.g. writing to
-> > > /dev/kmsg in a loop) while another panics, there's currently a high
-> > > likelihood of a deadlock (see patch 2 for the full description of this
-> > > deadlock).
-> > > 
-> > > The principle fix is to disable the optimistic spin once panic_cpu is
-> > > set, so the panic CPU doesn't spin waiting for a halted CPU to hand over
-> > > the console_sem.
-> > > 
-> > > However, this exposed us to a livelock situation, where the panic CPU
-> > > holds the console_sem, and another CPU could fill up the log buffer
-> > > faster than the consoles could drain it, preventing the panic from
-> > > progressing and halting the other CPUs. To avoid this, patch 3 adds a
-> > > mechanism to suppress printk (from non-panic-CPU) during panic, if we
-> > > reach a threshold of dropped messages.
-> > > 
-> > > A major goal with all of these patches is to try to decrease the
-> > > likelihood that another CPU is holding the console_sem when we halt it
-> > > in panic(). This reduces the odds of needing to break locks and
-> > > potentially encountering further deadlocks with the console drivers.
-> > > 
-> > > To test, I use the following script, kmsg_panic.sh:
-> > > 
-> > >      #!/bin/bash
-> > >      date
-> > >      # 991 chars (based on log buffer size):
-> > >      chars="$(printf 'a%.0s' {1..991})"
-> > >      while :; do
-> > >          echo $chars > /dev/kmsg
-> > >      done &
-> > >      echo c > /proc/sysrq-trigger &
-> > >      date
-> > >      exit
-> > > 
-> > > I defined a hang as any time the system did not reboot to a login prompt
-> > > on the serial console within 60 seconds. Here are the statistics on
-> > > hangs using this script, before and after the patch.
-> > > 
-> > > before:  776 hangs / 1484 trials - 52.3%
-> > > after :    0 hangs /  15k trials -  0.0%
-> > > 
-> > > Stephen Brennan (4):
-> > >    printk: Add panic_in_progress helper
-> > >    printk: disable optimistic spin during panic
-> > >    printk: Avoid livelock with heavy printk during panic
-> > >    printk: Drop console_sem during panic
-> > > 
-> > >   kernel/printk/printk.c | 55 +++++++++++++++++++++++++++++++++++++++++-
-> > >   1 file changed, 54 insertions(+), 1 deletion(-)
-> > 
-> > For the entire patchset:
-> > 
-> > Reviewed-by: Petr Mladek <pmladek@suse.com>
-> > 
-> > It looks ready for linux-next from my POV. I am going to push it early
-> > next week unless anyone complains in the meantime.
 
-The patchset is committed in printk/linux.git, branch for-5.18-panic-deadlocks.
+--woc7fbustut2ntcm
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Thank you Petr! It occurs to me that some of this could be stable-worthy,
-> depending on your feelings on it. Patches 1-3 resolve real bugs on customer
-> systems, and they'd apply back a decent way. 1-2 apply all the way back to
-> 4.14, and 3 would apply with some minor changes. I suppose the question is
-> whether they are simple enough. Patch 4 is useful but I don't have a real
-> reproducer for a bug it fixes, so I wouldn't say it's stable worthy.
+Hello Andy,
 
-Good question. If you saw these deadlocks on customer systems in
-the real life then it might be worth it.
+On Mon, Feb 14, 2022 at 12:13:01PM +0200, Andy Shevchenko wrote:
+> On Mon, Feb 14, 2022 at 08:13:51AM +0100, Uwe Kleine-K=F6nig wrote:
+> > On Sat, Feb 12, 2022 at 11:16:30PM +0300, Sergey Shtylyov wrote:
+> > > This patch is based on the former Andy Shevchenko's patch:
+> > >=20
+> > > https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchenko=
+@linux.intel.com/
+> > >=20
+> > > Currently platform_get_irq_optional() returns an error code even if I=
+RQ
+> > > resource simply has not been found.  It prevents the callers from bei=
+ng
+> > > error code agnostic in their error handling:
+> > >=20
+> > > 	ret =3D platform_get_irq_optional(...);
+> > > 	if (ret < 0 && ret !=3D -ENXIO)
+> > > 		return ret; // respect deferred probe
+> > > 	if (ret > 0)
+> > > 		...we get an IRQ...
+> > >=20
+> > > All other *_optional() APIs seem to return 0 or NULL in case an optio=
+nal
+> > > resource is not available.  Let's follow this good example, so that t=
+he
+> > > callers would look like:
+> > >=20
+> > > 	ret =3D platform_get_irq_optional(...);
+> > > 	if (ret < 0)
+> > > 		return ret;
+> > > 	if (ret > 0)
+> > > 		...we get an IRQ...
+> > >=20
+> > > Reported-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> > > Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> >=20
+> > While this patch is better than v1, I still don't like it for the
+> > reasons discussed for v1. (i.e. 0 isn't usable as a dummy value which I
+> > consider the real advantage for the other _get_optional() functions.)
+>=20
+> I think you haven't reacted anyhow to my point that you mixing apples and
+> bananas together when comparing this 0 to the others _optional APIs.
 
-I newer saw them. But they hard to debug and report. Also they are
-visible only when CPUs are stopped by NMI. And the default
-smp_send_stop() tries to stop CPUs using normal IRQ first.
+Is this a question to me or Sergey?
 
-Anyway, the patches 1,2,4 are pretty straightforward and should be
-safe. Feel free to send them to stable.
+I fully agree, when the 0 of platform_get_irq_optional is an apple and
+the NULL of gpio_get_optional is a banana, I doubt "All other
+*_optional() APIs seem to return 0 or NULL in case an optional resource
+is not available.  Let's follow this good example, [...]".
 
-3rd patch is a heuristic. It tries to prevent livelock and the cost
-is a possible loss of information. I am not 100% sure that it will
-do the right thing in all situations. I would wait one or two release
-cycles before we backport it to older stable releases.
+Best regards
+Uwe
 
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-> Of course we have the logbuf_lock in 5.10 and previous, and if a CPU is
-> halted holding that lock, then printk hangs even before the optimistic
-> spinning. I have patches which reinitialize those locks after the CPUs are
-> halted if necessary. I think they are reasonable for stable - printk is
-> guaranteed to hang without doing this, so in the worst case you trade a hang
-> during a panic, with some other sort of printk log buffer bug during a
-> panic. But in the common case, you eliminate the hang. I can send that patch
-> to linux-stable as well.
+--woc7fbustut2ntcm
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The main problem is that the locks can be safely re-initialized only
-when the other CPUs were stopped using NMI. Otherwise, there is
-a risk of double unlock. Such a patch would need to be arch-dependent.
+-----BEGIN PGP SIGNATURE-----
 
-Also stable people do not like much solutions that were not used
-in the mainline. So, it might be a waste of time.
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIKX38ACgkQwfwUeK3K
+7AnLpgf9EdBYBZTRjJVoNGFFTEqmmhehKa4KFk5v/UfvgXZenr00B/u2K/MHO4lF
+HHazTdjZ6XfXR0zlckqQaisXEU2TXb/YxxUC3K7hBgh1k2dtS14XlUQHbh2zQXQI
+HKw3Yitn6vDghQH9WkSROTJNBOvMg3PcAg8i5h8g17e0D9BI5sdJERnMTFNeMzpz
+cY95lA6BqyVoJn2GW+QxAKYiYCMB5CSNw3yIxV8nd8CKPKMUQNt4aX4EFwglsJKP
+dB7ddBCRW0+mJcywV7mjkU7B7q6hTtPyAkNBQrWYtaAY4xcsIH7E2T64AaNc4Rah
+C/iCiRD7LGScn9QG72fV+C+upY3/gg==
+=VmOP
+-----END PGP SIGNATURE-----
 
-Best Regards,
-Petr
+--woc7fbustut2ntcm--

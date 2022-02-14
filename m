@@ -2,81 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3053F4B4712
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 451AF4B46BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240126AbiBNJmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:42:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34464 "EHLO
+        id S244318AbiBNJlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:41:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244595AbiBNJkr (ORCPT
+        with ESMTP id S244489AbiBNJk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:40:47 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54A1B85D;
-        Mon, 14 Feb 2022 01:35:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/kVIgFJ8ubFPieTzVWtZtI9HqscvRt6tDLYaMfGuR94=; b=r8H/h8Igq0GzYQRu9lX+4vZpkz
-        PZT8xyiFTwmYfH8zubh1ywbnAQuGsxBwPjrNNrXA/o5U2JjK2PG0V0xRX/sJIDHEu54dC9/6UiQmL
-        F+Y3JW1EqyYpAxhmND0M+vmbJxIzO/juCEX+l1Qxgp3yY0pks+vRezLo8UnjVQpQDnV21BZMIq5eU
-        cLBiNTmqSIIC6wmCTCn7UcAw94DlAlbMufV+uEMoQM32jv5F+3qmu69tvjWwB6IZXb47Xsbg77XjX
-        QWG7HLXHrI/r9z3omtqEEq49GOXiD1gj/PIcUnY9oVdJvwe1GhbBV1iVjaieum7WgA5MFUOuUx9Vo
-        TDY7Hsgw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJXlV-00CkQY-Gv; Mon, 14 Feb 2022 09:35:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CF6CF300472;
-        Mon, 14 Feb 2022 10:35:22 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 94416203C074A; Mon, 14 Feb 2022 10:35:22 +0100 (CET)
-Date:   Mon, 14 Feb 2022 10:35:22 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jason Baron <jbaron@akamai.com>, rcu@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>, christophe.leroy@csgroup.eu
-Subject: Re: BUG: sleeping function called from invalid context at
- include/linux/sched/mm.h:256
-Message-ID: <YgoiWlNZvTusk1B9@hirez.programming.kicks-ass.net>
-References: <244218af-df6a-236e-0a52-268247dd8271@molgen.mpg.de>
+        Mon, 14 Feb 2022 04:40:29 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F0FAE54;
+        Mon, 14 Feb 2022 01:35:51 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id i14so25711225wrc.10;
+        Mon, 14 Feb 2022 01:35:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/4o0Sh/HDw28K29dhWptIQG7sJvv6LA5ikZvkukruHE=;
+        b=MwgSTZgnHotojaZgn5Sp7lQFJP83AHlDASXB7/1KYjjda8kjGHs9bIYBCcAmML8x0e
+         PwKf8EV+q6zr7osLYlY0/qeHeNvcXePbtftCPgMcLsQiAwM6ZK40uLL8S1ylRg5kVXBs
+         M64EDQrvp1cjYZxftr2qaYjcciNKBHWGvsdx49ZBjlDsFTf7yvP2b0RPBJW5+gD6c42e
+         sQkj1pjWEcUuVgjLzvKw7obGVyx0u7/lNS66TilSdahadgfbd1mvTwZ9EuNeUUWTze1s
+         IrdoPMGfsdrHt18T9ZFUFVmxlLdezW1qmmmbv1YjMWkRNTHkHwRm2pvj/Y/TrQQ37+iV
+         UINQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/4o0Sh/HDw28K29dhWptIQG7sJvv6LA5ikZvkukruHE=;
+        b=FXHBUR3yUkkX0XioPZUWarWS/3exYqSG2H7gJ43pO/8OXwUa1yoktP/iknHAEEU6wz
+         AdrDIA8Mhd2PJ7ZugChwhz1MaYjD8sJFPILGDs5dDSWTV4Mh2ZkriDyrzNram2rxlOLD
+         /EItDwIhCXILjHGh3hd1LtYkauzifeU8KDh4zVxTzPXYdAtuHD27LwW5Abg11Fsor3kt
+         rwcJb7dP7qH+DozOGnZTfshqci7kFpXVYg54GpvmAfrMJHQdoLYWahuxQuOhKad1vIdP
+         8g42TBMjQyRfj0GURo9QuzmjAuWQrec1QLnYzSDHUrWhDJBcD2J1PpNAYJuJtSPyKldh
+         DnIQ==
+X-Gm-Message-State: AOAM532J3ADagDmXjg7cphojc4bWYPX3CYTRdbFeAKhphjMC/E+EFuPE
+        ZyVIErB63tH8e6mtkJQDVW8=
+X-Google-Smtp-Source: ABdhPJwXHkfo0LVYpx7SEv6O1F58w6UNsO73U42vtQ17B2CQMPqe4CDwDvgTvyspI1UeUCCcFqjjxg==
+X-Received: by 2002:a5d:4fc4:: with SMTP id h4mr10734960wrw.481.1644831348777;
+        Mon, 14 Feb 2022 01:35:48 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id u16sm3192017wmq.41.2022.02.14.01.35.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 01:35:48 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] perf tools: Fix spelling mistake "commpressor" -> "compressor"
+Date:   Mon, 14 Feb 2022 09:35:47 +0000
+Message-Id: <20220214093547.44590-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <244218af-df6a-236e-0a52-268247dd8271@molgen.mpg.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 13, 2022 at 12:05:50AM +0100, Paul Menzel wrote:
+There is a spelling mistake in a debug message. Fix it.
 
-> [    0.012154][    T1] BUG: sleeping function called from invalid context at
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/perf/util/mmap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> [    0.022443][    T1] [c0000000084837d0] [c000000000961aac] > dump_stack_lvl+0xa0/0xec (unreliable)
-> [    0.023356][    T1] [c000000008483820] [c00000000019b314] > __might_resched+0x2f4/0x310
-> [    0.024174][    T1] [c0000000084838b0] [c0000000004c0c70] > kmem_cache_alloc+0x220/0x4b0
-> [    0.025000][    T1] [c000000008483920] [c000000000448af4] > __pud_alloc+0x74/0x1d0
-> [    0.025772][    T1] [c000000008483970] [c00000000008fe3c] > hash__map_kernel_page+0x2cc/0x390
-> [    0.026643][    T1] [c000000008483a20] [c0000000000a9944] > do_patch_instruction+0x134/0x4a0
+diff --git a/tools/perf/util/mmap.c b/tools/perf/util/mmap.c
+index 4cb5f2f159cc..50502b4a7ca4 100644
+--- a/tools/perf/util/mmap.c
++++ b/tools/perf/util/mmap.c
+@@ -298,7 +298,7 @@ int mmap__mmap(struct mmap *map, struct mmap_params *mp, int fd, struct perf_cpu
+ 	map->comp_level = mp->comp_level;
+ #ifndef PYTHON_PERF
+ 	if (zstd_init(&map->zstd_data, map->comp_level)) {
+-		pr_debug2("failed to init mmap commpressor, error %d\n", errno);
++		pr_debug2("failed to init mmap compressor, error %d\n", errno);
+ 		return -1;
+ 	}
+ #endif
+-- 
+2.34.1
 
-do_patch_instruction() rightfully disables IRQs, but then it goes and
-tries a memory alloc, which seems a bit daft.
-
-I'm thinking Christophe might know more... he's recently been poking at
-Power text poking..

@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 009474B4961
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E61A4B45B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344956AbiBNKH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:07:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54778 "EHLO
+        id S242957AbiBNJ2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:28:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345834AbiBNKB4 (ORCPT
+        with ESMTP id S242933AbiBNJ2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:01:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C9621814;
-        Mon, 14 Feb 2022 01:48:19 -0800 (PST)
+        Mon, 14 Feb 2022 04:28:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF7460A97;
+        Mon, 14 Feb 2022 01:28:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C02F612B9;
-        Mon, 14 Feb 2022 09:48:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 727EFC340E9;
-        Mon, 14 Feb 2022 09:48:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFD3360F88;
+        Mon, 14 Feb 2022 09:28:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80DFDC340E9;
+        Mon, 14 Feb 2022 09:28:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832098;
-        bh=MbSHCHXogXO/l9udJIk4KccQimuLH1gcj/TSEWYt/1U=;
+        s=korg; t=1644830884;
+        bh=b8fL2XaRMWu5qFtd651cHRo05HAtGXpuzwwU+BnIfXw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kCzvxMMUho8RmknQVUx60cMF2IF/3uVO2NJsJtVuMPoJSw0or/T/i2mqEyp2+rVF5
-         fb1pi816WZ6zdD9+wl749Hk0eKxdO/pobpO3tONhhulC8nyUwgHtb0DzPjAYRCEtun
-         JDQETn3vNpdAwQ0l8QIXo0SfPIXW2Mb9nSNNfzXk=
+        b=tENigmtAVPUXfOgYhJodVaz5FSoobfHR4Hj7BlZwvNSV++LQ0tWrss3XnRx9XgQ6a
+         qoa2IYtvr7WhUhDsaCL2Qgkgz87HoWwivgHlKS+uzKFEHcMhA38MBmHsMQjZ05R+FD
+         Mg4Vrx/PPzTIr1I4mNGoYziJxlMoCtdJGP6YLDOQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: [PATCH 5.15 079/172] drm/i915: Populate pipe dbuf slices more accurately during readout
+        stable@vger.kernel.org, Olga Kornievskaia <kolga@netapp.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 11/34] NFSv4 remove zero number of fs_locations entries error check
 Date:   Mon, 14 Feb 2022 10:25:37 +0100
-Message-Id: <20220214092509.136792344@linuxfoundation.org>
+Message-Id: <20220214092446.312024985@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
+References: <20220214092445.946718557@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,64 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ville Syrjälä <ville.syrjala@linux.intel.com>
+From: Olga Kornievskaia <kolga@netapp.com>
 
-commit 85bb289215cf37e05e9581b39b114db1293f9ecd upstream.
+[ Upstream commit 90e12a3191040bd3854d3e236c35921e4e92a044 ]
 
-During readout we cannot assume the planes are actually using the
-slices they are supposed to use. The BIOS may have misprogrammed
-things and put the planes onto the wrong dbuf slices. So let's
-do the readout more carefully to make sure we really know which
-dbuf slices are actually in use by the pipe at the time.
+Remove the check for the zero length fs_locations reply in the
+xdr decoding, and instead check for that in the migration code.
 
-Cc: <stable@vger.kernel.org> # v5.14+
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220204141818.1900-2-ville.syrjala@linux.intel.com
-Reviewed-by: Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>
-(cherry picked from commit b3dcc6dc0f32612d04839c2fb32e94d0ebf92c98)
-Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/intel_pm.c |   13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ fs/nfs/nfs4state.c | 3 +++
+ fs/nfs/nfs4xdr.c   | 2 --
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/gpu/drm/i915/intel_pm.c
-+++ b/drivers/gpu/drm/i915/intel_pm.c
-@@ -6634,6 +6634,7 @@ void skl_wm_get_hw_state(struct drm_i915
- 		enum pipe pipe = crtc->pipe;
- 		unsigned int mbus_offset;
- 		enum plane_id plane_id;
-+		u8 slices;
+diff --git a/fs/nfs/nfs4state.c b/fs/nfs/nfs4state.c
+index 4e63daeef6339..466c07bd06295 100644
+--- a/fs/nfs/nfs4state.c
++++ b/fs/nfs/nfs4state.c
+@@ -1985,6 +1985,9 @@ static int nfs4_try_migration(struct nfs_server *server, struct rpc_cred *cred)
+ 	}
  
- 		skl_pipe_wm_get_hw_state(crtc, &crtc_state->wm.skl.optimal);
- 		crtc_state->wm.skl.raw = crtc_state->wm.skl.optimal;
-@@ -6653,20 +6654,22 @@ void skl_wm_get_hw_state(struct drm_i915
- 			skl_ddb_entry_union(&dbuf_state->ddb[pipe], ddb_uv);
- 		}
- 
--		dbuf_state->slices[pipe] =
--			skl_compute_dbuf_slices(crtc, dbuf_state->active_pipes,
--						dbuf_state->joined_mbus);
--
- 		dbuf_state->weight[pipe] = intel_crtc_ddb_weight(crtc_state);
- 
- 		/*
- 		 * Used for checking overlaps, so we need absolute
- 		 * offsets instead of MBUS relative offsets.
- 		 */
--		mbus_offset = mbus_ddb_offset(dev_priv, dbuf_state->slices[pipe]);
-+		slices = skl_compute_dbuf_slices(crtc, dbuf_state->active_pipes,
-+						 dbuf_state->joined_mbus);
-+		mbus_offset = mbus_ddb_offset(dev_priv, slices);
- 		crtc_state->wm.skl.ddb.start = mbus_offset + dbuf_state->ddb[pipe].start;
- 		crtc_state->wm.skl.ddb.end = mbus_offset + dbuf_state->ddb[pipe].end;
- 
-+		/* The slices actually used by the planes on the pipe */
-+		dbuf_state->slices[pipe] =
-+			skl_ddb_dbuf_slice_mask(dev_priv, &crtc_state->wm.skl.ddb);
+ 	result = -NFS4ERR_NXIO;
++	if (!locations->nlocations)
++		goto out;
 +
- 		drm_dbg_kms(&dev_priv->drm,
- 			    "[CRTC:%d:%s] dbuf slices 0x%x, ddb (%d - %d), active pipes 0x%x, mbus joined: %s\n",
- 			    crtc->base.base.id, crtc->base.name,
+ 	if (!(locations->fattr.valid & NFS_ATTR_FATTR_V4_LOCATIONS)) {
+ 		dprintk("<-- %s: No fs_locations data, migration skipped\n",
+ 			__func__);
+diff --git a/fs/nfs/nfs4xdr.c b/fs/nfs/nfs4xdr.c
+index 29dbb14b6fd11..b50c97c6aecb3 100644
+--- a/fs/nfs/nfs4xdr.c
++++ b/fs/nfs/nfs4xdr.c
+@@ -3633,8 +3633,6 @@ static int decode_attr_fs_locations(struct xdr_stream *xdr, uint32_t *bitmap, st
+ 	if (unlikely(!p))
+ 		goto out_overflow;
+ 	n = be32_to_cpup(p);
+-	if (n <= 0)
+-		goto out_eio;
+ 	for (res->nlocations = 0; res->nlocations < n; res->nlocations++) {
+ 		u32 m;
+ 		struct nfs4_fs_location *loc;
+-- 
+2.34.1
+
 
 

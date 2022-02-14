@@ -2,72 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD824B51E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0AA04B51E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354395AbiBNNkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:40:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53076 "EHLO
+        id S1354455AbiBNNkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:40:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbiBNNkI (ORCPT
+        with ESMTP id S231216AbiBNNkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:40:08 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B9F4A3CB
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:40:00 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id l67-20020a1c2546000000b00353951c3f62so10868665wml.5
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:40:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=rMeJGTPLV4p5Tp7DaVbfqVcY08kZOJPbVdTXvGtRNBc=;
-        b=aTQvC94T+4hLmbUP5ne+1nnxGO5slFq/CcjZI53DJsx12d9mFc9B+m6jrQG89VZBWr
-         Q00Io8p1gyLzlk6LFKMN1bfDB0FwT7QcsNPOoww7eU3PbhlsGGNVIyVn5FaSIJtu3/fQ
-         OwgIqecL3sadqGvoyNpHaoP6FbyT8gyZY8tBbCWBO6dJWIBYhBE+3amKT+CpXoUi/7Ve
-         icUFYEQjnid26p21bDAYZN/Yv7S5tdAGTpAsqOw1N7aPSSRTdjFBNgwg1MAy2g1cFDDs
-         YoSrtrJZQV6y/cSVTPa6mjHEHP/2s1XlcJOkPQp9lpLbX/WPlxd93pLvoLkLmatCJxW+
-         PpZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=rMeJGTPLV4p5Tp7DaVbfqVcY08kZOJPbVdTXvGtRNBc=;
-        b=yEYFWfeUEifAJfkjL+kZYiLfEW+vBDv5axMz/ta7mhS5ltfXkgK8lHDNAkZLYM3f+Q
-         Nzu4z3DpcmHjrEUxgrTXV0SS1qHtXGM9H3e21ueJ6+uYq8v4+IJia62Hmujj5AVcv4Ym
-         kGkHBMzJlAfNjiEpfRo8twPM342WUPtKvWQQK9P3EcQJibDSaBRlDRjX8GJjcnIRZc9z
-         M3+MAx/8BLAI2nOImQ23mVuatxYu3cqaauEw6a7a6GR1Frq7aAYrWnoosnylQHjrHfNK
-         IXaZySjxZX/nKVcoBlXiyAvmXTMBuSLkjhsYjQ2J7fbk4ZouVlx7jzbY1kidZr4hUX3I
-         4U/w==
-X-Gm-Message-State: AOAM531Sf/q5vX3MjFp+JQFP9FAqCapkXzDP+KS29/r8BraaKYh2HCBp
-        n5aMloMHofKeIjR0hLE4Jc6h7w==
-X-Google-Smtp-Source: ABdhPJyDZTKnKIpflWM8nlDBTCK9MeSmS3Ct60VsMMPiP3Dsw91w5J79nOlLruKTTROA4E2LwFGqog==
-X-Received: by 2002:a05:600c:3c89:: with SMTP id bg9mr11215826wmb.194.1644845999574;
-        Mon, 14 Feb 2022 05:39:59 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id y6sm3577479wrd.30.2022.02.14.05.39.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 05:39:59 -0800 (PST)
-Date:   Mon, 14 Feb 2022 13:39:57 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Johnson Wang <johnson.wang@mediatek.com>
-Cc:     robh+dt@kernel.org, broonie@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH 3/4] dt-bindings: mfd: Add compatible for the MediaTek
- MT6366 PMIC
-Message-ID: <YgpbrWEwCtCQlez+@google.com>
-References: <20220106065407.16036-1-johnson.wang@mediatek.com>
- <20220106065407.16036-4-johnson.wang@mediatek.com>
+        Mon, 14 Feb 2022 08:40:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58385621C;
+        Mon, 14 Feb 2022 05:40:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 719F9614FD;
+        Mon, 14 Feb 2022 13:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D58A7C36AE3;
+        Mon, 14 Feb 2022 13:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644846009;
+        bh=t+3A7IemZeIy2izi4BzkNKp+rbO8ID2k2gzjcH33Apk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Si76sOSy0APJPpUgebjXIL54VMSVC2yfSVrlH/2Lmrthaa9OcMnhUpgDRKWFzjtEm
+         bZq1AuFActM4qVBkM7KVLtMs78Nwp1xyY4E+vkTAKuqAVetxGwrO9gCmKDXgHwiCJO
+         LZaZ7c1obNLc3E7vj++1Rl6ptjnsGYAY7aPvikZp3/lloHO9bXFd26s/QlwZUuQe12
+         QsRHQdW9VLuCRKbl6kIPBbriTHYiCrcXTgzeueTT6V8ZnTTXAwySfoDYFcxbxRUuaF
+         ee6Z1K51rP/OVdqOajqb4RUNIeuNHxRPRxhZUZc1xAAcYHca0KV32gAQ2G4ewuej9o
+         zKkkx0ihr4fjg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C06A1E5D09D;
+        Mon, 14 Feb 2022 13:40:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220106065407.16036-4-johnson.wang@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH] ipv6: mcast: use rcu-safe version of ipv6_get_lladdr()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164484600978.23487.12151105643711844035.git-patchwork-notify@kernel.org>
+Date:   Mon, 14 Feb 2022 13:40:09 +0000
+References: <20220211173042.112852-1-ignat@cloudflare.com>
+In-Reply-To: <20220211173042.112852-1-ignat@cloudflare.com>
+To:     Ignat Korchagin <ignat@cloudflare.com>
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@cloudflare.com,
+        dpini@cloudflare.com
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,19 +59,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Jan 2022, Johnson Wang wrote:
+Hello:
 
-> This adds compatible for the MediaTek MT6366 PMIC.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Fri, 11 Feb 2022 17:30:42 +0000 you wrote:
+> Some time ago 8965779d2c0e ("ipv6,mcast: always hold idev->lock before mca_lock")
+> switched ipv6_get_lladdr() to __ipv6_get_lladdr(), which is rcu-unsafe
+> version. That was OK, because idev->lock was held for these codepaths.
 > 
-> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> ---
->  Documentation/devicetree/bindings/mfd/mt6397.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> In 88e2ca308094 ("mld: convert ifmcaddr6 to RCU") these external locks were
+> removed, so we probably need to restore the original rcu-safe call.
+> 
+> [...]
 
-Applied, thanks.
+Here is the summary with links:
+  - ipv6: mcast: use rcu-safe version of ipv6_get_lladdr()
+    https://git.kernel.org/netdev/net/c/26394fc118d6
 
+You are awesome, thank you!
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

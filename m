@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4804B45FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC3D4B478C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243180AbiBNJ3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:29:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42486 "EHLO
+        id S240837AbiBNJeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:34:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243235AbiBNJ3R (ORCPT
+        with ESMTP id S243812AbiBNJdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:29:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089101AD8B;
-        Mon, 14 Feb 2022 01:29:07 -0800 (PST)
+        Mon, 14 Feb 2022 04:33:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F509BF6D;
+        Mon, 14 Feb 2022 01:31:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97CD860F86;
-        Mon, 14 Feb 2022 09:29:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73885C340E9;
-        Mon, 14 Feb 2022 09:29:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3E42B80DD1;
+        Mon, 14 Feb 2022 09:31:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7B2FC340E9;
+        Mon, 14 Feb 2022 09:31:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644830946;
-        bh=zUqqORih3FzTB/susdM0OZh53RgjIz5LRSat4of2STc=;
+        s=korg; t=1644831108;
+        bh=am5yNQtyIYQDH+bydUQ02sPjeH53/Ufx0EW0u8104+8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nFhb6Tg05wJsHtCYam6qNR0VtMyhV1AdvHGdWXfl134w+Tdvh4Wz8kaaYNRhOCpD1
-         XW2o6tIzQuzGfA4+zsGwxUzQJrJu6SVWjLlNGTlDxRvw/cJXLT4q4VGivZfOEmRM7M
-         SFnrgPLDPYkrUi5e4cFpa+lnHekkf3uOWMI046Mk=
+        b=eNjwSNQgPcfQK0GBYu0Ph1UXXsn3CoNd0Vp47mIVrw31MYjoyEYhMLsub/fzhcR/m
+         E8ALV95eP98XLeSE3TxZ/tUhXwuEnecmOqpvTlo30xom4HN02WeObcmDw16QUaQAia
+         rbsJqBaZ83hHlLLm9GsW1++yOBuYL1Dm1GWtL8qM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Stephan Brunner <s.brunner@stephan-brunner.net>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 4.9 31/34] USB: serial: ch341: add support for GW Instek USB2.0-Serial devices
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>
+Subject: [PATCH 4.14 34/44] usb: dwc3: gadget: Prevent core from processing stale TRBs
 Date:   Mon, 14 Feb 2022 10:25:57 +0100
-Message-Id: <20220214092446.952547567@linuxfoundation.org>
+Message-Id: <20220214092449.011455274@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
-References: <20220214092445.946718557@linuxfoundation.org>
+In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
+References: <20220214092447.897544753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephan Brunner <s.brunner@stephan-brunner.net>
+From: Udipto Goswami <quic_ugoswami@quicinc.com>
 
-commit fa77ce201f7f2d823b07753575122d1ae5597fbe upstream.
+commit 117b4e96c7f362eb6459543883fc07f77662472c upstream.
 
-Programmable lab power supplies made by GW Instek, such as the
-GPP-2323, have a USB port exposing a serial port to control the device.
+With CPU re-ordering on write instructions, there might
+be a chance that the HWO is set before the TRB is updated
+with the new mapped buffer address.
+And in the case where core is processing a list of TRBs
+it is possible that it fetched the TRBs when the HWO is set
+but before the buffer address is updated.
+Prevent this by adding a memory barrier before the HWO
+is updated to ensure that the core always process the
+updated TRBs.
 
-Stringing the supplied Windows driver, references to the ch341 chip are
-found. Binding the existing ch341 driver to the VID/PID of the GPP-2323
-("GW Instek USB2.0-Serial" as per the USB product name) works out of the
-box, communication and control is now possible.
-
-This patch should work with any GPP series power supply due to
-similarities in the product line.
-
-Signed-off-by: Stephan Brunner <s.brunner@stephan-brunner.net>
-Link: https://lore.kernel.org/r/4a47b864-0816-6f6a-efee-aa20e74bcdc6@stephan-brunner.net
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Fixes: f6bafc6a1c9d ("usb: dwc3: convert TRBs into bitshifts")
+Cc: stable <stable@vger.kernel.org>
+Reviewed-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+Link: https://lore.kernel.org/r/1644207958-18287-1-git-send-email-quic_ugoswami@quicinc.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/ch341.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/dwc3/gadget.c |   13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
---- a/drivers/usb/serial/ch341.c
-+++ b/drivers/usb/serial/ch341.c
-@@ -74,6 +74,7 @@ static const struct usb_device_id id_tab
- 	{ USB_DEVICE(0x1a86, 0x5523) },
- 	{ USB_DEVICE(0x1a86, 0x7522) },
- 	{ USB_DEVICE(0x1a86, 0x7523) },
-+	{ USB_DEVICE(0x2184, 0x0057) },
- 	{ USB_DEVICE(0x4348, 0x5523) },
- 	{ USB_DEVICE(0x9986, 0x7523) },
- 	{ },
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1004,6 +1004,19 @@ static void __dwc3_prepare_one_trb(struc
+ 	if (usb_endpoint_xfer_bulk(dep->endpoint.desc) && dep->stream_capable)
+ 		trb->ctrl |= DWC3_TRB_CTRL_SID_SOFN(stream_id);
+ 
++	/*
++	 * As per data book 4.2.3.2TRB Control Bit Rules section
++	 *
++	 * The controller autonomously checks the HWO field of a TRB to determine if the
++	 * entire TRB is valid. Therefore, software must ensure that the rest of the TRB
++	 * is valid before setting the HWO field to '1'. In most systems, this means that
++	 * software must update the fourth DWORD of a TRB last.
++	 *
++	 * However there is a possibility of CPU re-ordering here which can cause
++	 * controller to observe the HWO bit set prematurely.
++	 * Add a write memory barrier to prevent CPU re-ordering.
++	 */
++	wmb();
+ 	trb->ctrl |= DWC3_TRB_CTRL_HWO;
+ 
+ 	dwc3_ep_inc_enq(dep);
 
 

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 349BC4B4777
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 206944B45FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344318AbiBNJvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:51:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43918 "EHLO
+        id S243508AbiBNJcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:32:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245318AbiBNJrT (ORCPT
+        with ESMTP id S242948AbiBNJcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:47:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5052AE6B;
-        Mon, 14 Feb 2022 01:40:44 -0800 (PST)
+        Mon, 14 Feb 2022 04:32:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32B81AD88;
+        Mon, 14 Feb 2022 01:30:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D39C86117D;
-        Mon, 14 Feb 2022 09:40:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1532C340E9;
-        Mon, 14 Feb 2022 09:40:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8849260F8F;
+        Mon, 14 Feb 2022 09:30:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47A37C340E9;
+        Mon, 14 Feb 2022 09:30:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831643;
-        bh=pvQvL86pNurP4n/DoHviID1KeDX0M1Jc5g2X2Aax/54=;
+        s=korg; t=1644831045;
+        bh=iWIBNLBJO5CJdZKiHtFwcviHl/A29NlmVmJ+y4S9YPM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QxH2VKWtyDN+fWtqasx3WoWngoi3qB/nY6tL1GY0fD6ZzuDNpKTjImLeJBLDsIJ/+
-         qq2dO6n+zTw1JQOU8/5Bj3Txekcy7O0LeBxxDXP0XpOBcO1FE01XbZEPrVdzyRn3dV
-         fGWid6A1kfejxANBgbwDRJvHfHM8I9ruobSp61Rs=
+        b=NVjST7WT1Hnl9zydBskqyYXGmt5Aq/epCiHkjRyHi9CiWvtbYAk+HD+Yo0aiwJKGF
+         SetvrqrHDNgqjfOm94RYcI3SjFMfgHRui4dsTfZp83hn8hkRF5AXmuUUiY+aHHkgvE
+         aKp4Oh1U2yX/JO2VQzPmH5wFr+Cq7f0AVJcFHFK0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH 5.10 049/116] drm/rockchip: vop: Correct RK3399 VOP register fields
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Vlad Buslov <vladbu@nvidia.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 25/44] net: do not keep the dst cache when uncloning an skb dst and its metadata
 Date:   Mon, 14 Feb 2022 10:25:48 +0100
-Message-Id: <20220214092500.407595604@linuxfoundation.org>
+Message-Id: <20220214092448.724623719@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
+References: <20220214092447.897544753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,73 +57,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Norris <briannorris@chromium.org>
+From: Antoine Tenart <atenart@kernel.org>
 
-commit 9da1e9ab82c92d0e89fe44cad2cd7c2d18d64070 upstream.
+[ Upstream commit cfc56f85e72f5b9c5c5be26dc2b16518d36a7868 ]
 
-Commit 7707f7227f09 ("drm/rockchip: Add support for afbc") switched up
-the rk3399_vop_big[] register windows, but it did so incorrectly.
+When uncloning an skb dst and its associated metadata a new dst+metadata
+is allocated and the tunnel information from the old metadata is copied
+over there.
 
-The biggest problem is in rk3288_win23_data[] vs.
-rk3368_win23_data[] .format field:
+The issue is the tunnel metadata has references to cached dst, which are
+copied along the way. When a dst+metadata refcount drops to 0 the
+metadata is freed including the cached dst entries. As they are also
+referenced in the initial dst+metadata, this ends up in UaFs.
 
-  RK3288's format: VOP_REG(RK3288_WIN2_CTRL0, 0x7, 1)
-  RK3368's format: VOP_REG(RK3368_WIN2_CTRL0, 0x3, 5)
+In practice the above did not happen because of another issue, the
+dst+metadata was never freed because its refcount never dropped to 0
+(this will be fixed in a subsequent patch).
 
-Bits 5:6 (i.e., shift 5, mask 0x3) are correct for RK3399, according to
-the TRM.
+Fix this by initializing the dst cache after copying the tunnel
+information from the old metadata to also unshare the dst cache.
 
-There are a few other small differences between the 3288 and 3368
-definitions that were swapped in commit 7707f7227f09. I reviewed them to
-the best of my ability according to the RK3399 TRM and fixed them up.
-
-This fixes IOMMU issues (and display errors) when testing with BG24
-color formats.
-
-Fixes: 7707f7227f09 ("drm/rockchip: Add support for afbc")
-Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Tested-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220119161104.1.I1d01436bef35165a8cdfe9308789c0badb5ff46a@changeid
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d71785ffc7e7 ("net: add dst_cache to ovs vxlan lwtunnel")
+Cc: Paolo Abeni <pabeni@redhat.com>
+Reported-by: Vlad Buslov <vladbu@nvidia.com>
+Tested-by: Vlad Buslov <vladbu@nvidia.com>
+Signed-off-by: Antoine Tenart <atenart@kernel.org>
+Acked-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/rockchip/rockchip_vop_reg.c |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ include/net/dst_metadata.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
---- a/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
-@@ -873,6 +873,7 @@ static const struct vop_win_phy rk3399_w
- 	.enable = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 0),
- 	.format = VOP_REG(RK3288_WIN0_CTRL0, 0x7, 1),
- 	.rb_swap = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 12),
-+	.x_mir_en = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 21),
- 	.y_mir_en = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 22),
- 	.act_info = VOP_REG(RK3288_WIN0_ACT_INFO, 0x1fff1fff, 0),
- 	.dsp_info = VOP_REG(RK3288_WIN0_DSP_INFO, 0x0fff0fff, 0),
-@@ -883,6 +884,7 @@ static const struct vop_win_phy rk3399_w
- 	.uv_vir = VOP_REG(RK3288_WIN0_VIR, 0x3fff, 16),
- 	.src_alpha_ctl = VOP_REG(RK3288_WIN0_SRC_ALPHA_CTRL, 0xff, 0),
- 	.dst_alpha_ctl = VOP_REG(RK3288_WIN0_DST_ALPHA_CTRL, 0xff, 0),
-+	.channel = VOP_REG(RK3288_WIN0_CTRL2, 0xff, 0),
- };
+diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
+index 0b3c2aaed3c82..bf820c54e7ccd 100644
+--- a/include/net/dst_metadata.h
++++ b/include/net/dst_metadata.h
+@@ -121,6 +121,19 @@ static inline struct metadata_dst *tun_dst_unclone(struct sk_buff *skb)
  
- /*
-@@ -893,11 +895,11 @@ static const struct vop_win_phy rk3399_w
- static const struct vop_win_data rk3399_vop_win_data[] = {
- 	{ .base = 0x00, .phy = &rk3399_win01_data,
- 	  .type = DRM_PLANE_TYPE_PRIMARY },
--	{ .base = 0x40, .phy = &rk3288_win01_data,
-+	{ .base = 0x40, .phy = &rk3368_win01_data,
- 	  .type = DRM_PLANE_TYPE_OVERLAY },
--	{ .base = 0x00, .phy = &rk3288_win23_data,
-+	{ .base = 0x00, .phy = &rk3368_win23_data,
- 	  .type = DRM_PLANE_TYPE_OVERLAY },
--	{ .base = 0x50, .phy = &rk3288_win23_data,
-+	{ .base = 0x50, .phy = &rk3368_win23_data,
- 	  .type = DRM_PLANE_TYPE_CURSOR },
- };
- 
+ 	memcpy(&new_md->u.tun_info, &md_dst->u.tun_info,
+ 	       sizeof(struct ip_tunnel_info) + md_size);
++#ifdef CONFIG_DST_CACHE
++	/* Unclone the dst cache if there is one */
++	if (new_md->u.tun_info.dst_cache.cache) {
++		int ret;
++
++		ret = dst_cache_init(&new_md->u.tun_info.dst_cache, GFP_ATOMIC);
++		if (ret) {
++			metadata_dst_free(new_md);
++			return ERR_PTR(ret);
++		}
++	}
++#endif
++
+ 	skb_dst_drop(skb);
+ 	dst_hold(&new_md->dst);
+ 	skb_dst_set(skb, &new_md->dst);
+-- 
+2.34.1
+
 
 

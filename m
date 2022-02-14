@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D6B4B4C37
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 229B94B49C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:37:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348526AbiBNKiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:38:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41890 "EHLO
+        id S1346161AbiBNKPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:15:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348343AbiBNKes (ORCPT
+        with ESMTP id S1345765AbiBNKNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:34:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADF6116A;
-        Mon, 14 Feb 2022 02:01:44 -0800 (PST)
+        Mon, 14 Feb 2022 05:13:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF21B60AA3;
+        Mon, 14 Feb 2022 01:51:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCC3860909;
-        Mon, 14 Feb 2022 10:01:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C09C340EF;
-        Mon, 14 Feb 2022 10:01:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A6AB60F25;
+        Mon, 14 Feb 2022 09:51:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C2FFC340E9;
+        Mon, 14 Feb 2022 09:51:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832903;
-        bh=hrcrTy0cRXNwgEcLdpsqXuhhWEcEWyiPMkeNf8MiMww=;
+        s=korg; t=1644832314;
+        bh=7dywxaiY+M967eUBC6Mz+LePl1QSR7NFa4x8qm8PoNw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eC1jJAzUd+pVOOspYzsyvv+L16D4x3rI3dfQ5nl+nAW/oak3Jok0WegHAGzE7EWZY
-         UQZINjzRcISXxlnUaksu72Cihur/2+9BfbMrrZnxIGXeI7eh++wLSeb3kp3VrCRxRn
-         +uSttIFg1vylxmEk/Cz6+VQFjZBHrWpQ89+v0yNg=
+        b=KNYQhdtTLLeUBQuzOGPF0RNRyHWuEU78g0Qj0ddKawGcda6r3UMc2Jom41pVc0nA0
+         TNtwD/7ix8T9DMrbe/0AGajW0asuhFSwwDALI9rHklXNUpG7ZeD+EMfr5yCAEzT+qM
+         goIItSVgzUqFPrvL0d1eGUaOOxKIxCsBacU0qzn4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rafael Richter <rafael.richter@gin.de>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 161/203] net: dsa: mv88e6xxx: fix use-after-free in mv88e6xxx_mdios_unregister
-Date:   Mon, 14 Feb 2022 10:26:45 +0100
-Message-Id: <20220214092515.706740856@linuxfoundation.org>
+        stable@vger.kernel.org, Andrey Konovalov <andreyknvl@gmail.com>,
+        Jann Horn <jannh@google.com>
+Subject: [PATCH 5.15 148/172] usb: raw-gadget: fix handling of dual-direction-capable endpoints
+Date:   Mon, 14 Feb 2022 10:26:46 +0100
+Message-Id: <20220214092511.495970058@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Jann Horn <jannh@google.com>
 
-[ Upstream commit 51a04ebf21122d5c76a716ecd9bfc33ea44b2b39 ]
+commit 292d2c82b105d92082c2120a44a58de9767e44f1 upstream.
 
-Since struct mv88e6xxx_mdio_bus *mdio_bus is the bus->priv of something
-allocated with mdiobus_alloc_size(), this means that mdiobus_free(bus)
-will free the memory backing the mdio_bus as well. Therefore, the
-mdio_bus->list element is freed memory, but we continue to iterate
-through the list of MDIO buses using that list element.
+Under dummy_hcd, every available endpoint is *either* IN or OUT capable.
+But with some real hardware, there are endpoints that support both IN and
+OUT. In particular, the PLX 2380 has four available endpoints that each
+support both IN and OUT.
 
-To fix this, use the proper list iterator that handles element deletion
-by keeping a copy of the list element next pointer.
+raw-gadget currently gets confused and thinks that any endpoint that is
+usable as an IN endpoint can never be used as an OUT endpoint.
 
-Fixes: f53a2ce893b2 ("net: dsa: mv88e6xxx: don't use devres for mdiobus")
-Reported-by: Rafael Richter <rafael.richter@gin.de>
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Link: https://lore.kernel.org/r/20220210174017.3271099-1-vladimir.oltean@nxp.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fix it by looking at the direction in the configured endpoint descriptor
+instead of looking at the hardware capabilities.
+
+With this change, I can use the PLX 2380 with raw-gadget.
+
+Fixes: f2c2e717642c ("usb: gadget: add raw-gadget interface")
+Cc: stable <stable@vger.kernel.org>
+Tested-by: Andrey Konovalov <andreyknvl@gmail.com>
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+Signed-off-by: Jann Horn <jannh@google.com>
+Link: https://lore.kernel.org/r/20220126205214.2149936-1-jannh@google.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/dsa/mv88e6xxx/chip.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/gadget/legacy/raw_gadget.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index fcd648d0f6372..70cea1b95298a 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -3465,10 +3465,10 @@ static int mv88e6xxx_mdio_register(struct mv88e6xxx_chip *chip,
- static void mv88e6xxx_mdios_unregister(struct mv88e6xxx_chip *chip)
- 
- {
--	struct mv88e6xxx_mdio_bus *mdio_bus;
-+	struct mv88e6xxx_mdio_bus *mdio_bus, *p;
- 	struct mii_bus *bus;
- 
--	list_for_each_entry(mdio_bus, &chip->mdios, list) {
-+	list_for_each_entry_safe(mdio_bus, p, &chip->mdios, list) {
- 		bus = mdio_bus->bus;
- 
- 		if (!mdio_bus->external)
--- 
-2.34.1
-
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -1004,7 +1004,7 @@ static int raw_process_ep_io(struct raw_
+ 		ret = -EBUSY;
+ 		goto out_unlock;
+ 	}
+-	if ((in && !ep->ep->caps.dir_in) || (!in && ep->ep->caps.dir_in)) {
++	if (in != usb_endpoint_dir_in(ep->ep->desc)) {
+ 		dev_dbg(&dev->gadget->dev, "fail, wrong direction\n");
+ 		ret = -EINVAL;
+ 		goto out_unlock;
 
 

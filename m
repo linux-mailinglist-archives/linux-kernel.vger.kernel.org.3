@@ -2,235 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33244B5D12
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A614B5D17
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:41:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbiBNVip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:38:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54880 "EHLO
+        id S231501AbiBNVl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:41:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbiBNVii (ORCPT
+        with ESMTP id S231487AbiBNVl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:38:38 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E60516BFB1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:38:26 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id p6so11360795plf.10
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:38:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Jxd3QRS6hHDImaBiK0k+S4F6Xjbk4YW+HJgrNXY9Kbg=;
-        b=Nmw+A+ntyvaKALUT3mnOI9ct+iUH/qh1duzCURRxJmmXg9PhW9yh7YXU0mdQxeq7zL
-         mFSt1NihLKxjkxHV1cd26vJE6LXRIxtzDfnkU1oxeE/CPxBl5yMmDsUphIfmc89FHyKT
-         ADn5CVifma+Y0my7Sj0IaPyrzW8qhzcCdrP+8=
+        Mon, 14 Feb 2022 16:41:27 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B621732D7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:41:19 -0800 (PST)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 16B0E3F33A
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 21:41:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644874878;
+        bh=D4g4uyjwJpcXoUc2SbfFfY5PU28t1w1ZkaJouv3Cwjo=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Efw+woMdORGERdh/7KSVE4CVHndA+CrTiZlkd/UtVMPEqXdQFcInqmKzfUuaYzRN/
+         1UfH1CnVYUWSGB9+NFIhvNbC6LyGCnoBYgFftHdNY8xQ5x9PWDhjbxPBktVCa3S6rU
+         xZ2PvTpvj3K2IlTrHXEyuCZ5WEzXrwlDzscTqzUIxCwuPLGJRPWpshzoCu7amnGJZh
+         WiliS6HOyXDFgyNZ3wMfWiZ3KDdzsVtAy2zMolNWVimDGeQCmWPwiADg0+ydKdb+oH
+         tAnHqxIRNdm5GkbBdhu64Y7/jQ+cYAA12lroS20qOhgY7F4+qm5i2iZofUPrStVGTf
+         9JDxX5xXX3ZIQ==
+Received: by mail-ed1-f71.google.com with SMTP id l3-20020a50cbc3000000b0041083c11173so5748593edi.4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:41:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Jxd3QRS6hHDImaBiK0k+S4F6Xjbk4YW+HJgrNXY9Kbg=;
-        b=2xdyXwYU8ex2j7OrsmkKpTQ7/IcKcmhNCuqQYhLDPQDHyqEwxBmo5a2hQQqXCFN5ZV
-         L0BWVC0AUhJBUim69keDFf1DifUIjmenBI6a2kgt2t6nNMnaHRJ747EzP4mAEfV904Lp
-         MOuGLgEq6RYgKz44HpxOobS5sUtK3ffbbFdaz43XEG1TJc/1P3qEzh6f4ZMFRNty+J10
-         rwOatOeZjBtPH0vMH0AFkNw60LEVISNHa9gPuqKxWiQk8PyHqeMedgfAp8XOKBGBS3Qz
-         wkdBys2HRT+BP1E1DWgqSGgBmzcggEQN1OvcH8rGgWfYUkoSfoexemPIlP4h4nY3TbON
-         0/RQ==
-X-Gm-Message-State: AOAM530AdulrX/lvc7UiqNDX7Subc6voS0BiiTw3ZKKRaJn2mD5J0qWm
-        1auYc/yhFcJfCXbz894/4H0pDQ==
-X-Google-Smtp-Source: ABdhPJwz9qXp1ylwUoyvV6NLsQOMgokGT4/s/UfbmxTZl0nKGjMTqrC+/GbTLFs+9+7SU8SObuoyww==
-X-Received: by 2002:a17:903:404a:: with SMTP id n10mr787760pla.132.1644874705810;
-        Mon, 14 Feb 2022 13:38:25 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id mm15sm14469213pjb.46.2022.02.14.13.38.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 13:38:25 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        =?UTF-8?q?Robert=20=C5=9Awi=C4=99cki?= <robert@swiecki.net>,
-        Jann Horn <jannh@google.com>, Oleg Nesterov <oleg@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH 2/2] selftests/seccomp: Check for waitid() behavior
-Date:   Mon, 14 Feb 2022 13:38:23 -0800
-Message-Id: <20220214213823.3297816-3-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220214213823.3297816-1-keescook@chromium.org>
-References: <20220214213823.3297816-1-keescook@chromium.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=D4g4uyjwJpcXoUc2SbfFfY5PU28t1w1ZkaJouv3Cwjo=;
+        b=K3x1e1xp7qzweKQZBHwfVTBb1xYU2N+d9zMuX491T6C2ksQf4TncD+g5DmtvXP5ZUz
+         saHEmfQGGYzwGCr6j4Vca0r9P/HoBhmVRsRYkc+3QD6hbCWB6bBuPRbe13NX0nvAaSnf
+         hTgSbeGW7eSsf4A0xXqGUortm2ZCNCKqVU2GrjXO2mV/hq7kLaAbnn3kswgAwcdJUkSj
+         ufZvCwdvDMZH5yuHayIzF0TC1U7Be6SJuL/SDunpzexv3E9cm5XGB4D4902Vgp0ZZNT1
+         5b2JyS1LDKkNi7pN613mJghJ/ns3vkh2ZtjMy91l1WB+CnmR4S1f7NITOJ15bM8B6inR
+         F7Xw==
+X-Gm-Message-State: AOAM533sdDENZ31xrH/gKd36Ejm/QB8iUduf82BnJnV2raLk/HUoucxP
+        Z6Qgb5xluLKcLVhqlIyxlxUQ7d3NYUsFZ7m/Qz0Xa2Ogc/6Tan5cMmf+paQnR91wmv+dkMEVn55
+        RXgC+r52hrgFj7TrwS0PgsDB0sApnQail4+2dp+3gmQ==
+X-Received: by 2002:a05:6402:23a2:: with SMTP id j34mr877919eda.5.1644874877711;
+        Mon, 14 Feb 2022 13:41:17 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJysYArRm8bTpnwhgJNzUQ66tXM4Ay9eBAC+mx4aM8YJcNxRd6BkdPDXkiyh+B0XPzUUbIAzUw==
+X-Received: by 2002:a05:6402:23a2:: with SMTP id j34mr877841eda.5.1644874876553;
+        Mon, 14 Feb 2022 13:41:16 -0800 (PST)
+Received: from [192.168.0.106] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id t5sm5525750edd.7.2022.02.14.13.41.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 13:41:16 -0800 (PST)
+Message-ID: <1dff6f62-88dd-00e9-c9c0-bc148f4fb0b1@canonical.com>
+Date:   Mon, 14 Feb 2022 22:41:15 +0100
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4605; h=from:subject; bh=1jqSKIchLphxFjjuynG3rVmJRqaoV1aHoQ0an0zs1aY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiCsvOFMcXnKRiEKhw2szLrF2Z3h7sVbX2lUpHshEi whsVA8OJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYgrLzgAKCRCJcvTf3G3AJpqCEA CLx5A+9dJE2NBfupspC7K0qqT/WttH9IM9v4weJG/vJVZVxxfPEEpHkVjtDZWVZk2jKWguUFcWOs7M 2y24VcIkFTma4HdENkUZEt3rjjYxQMJMrFu3g7cqWyVKZCNh6t+lwJGhPnSYpiDVnHTlEQMyIh9u9K XP5r+pl71QLNw3/uLkyON9RMLJlWbf8IAfvrws1Hldfc087+NSeaXzc78QUmvuKYzGSNYBhuFNZFO8 N1rsZP2VtAST2REJLAicCGFBQp56T/z4TWr7wmsXDsnaobKZoOpvh0OvXRaf7ucCyc1EAgO01RmPvO jrnyOdzk6crXnsQY4SL+fkBepoUfvZjqF2T1sg/WeUSCeLCyf53jdUR9ZM+pzyEVK+rWQg5qfyXuR7 Uw4Gm8AHjH/eQ1e58L/Gi4WGbLP4TJg+wu00/o+5DczbPYpdlDC48WjC2tEADEdtSohiu2pSS9dvIm FG9XV3n28zAJmwby9K/Q2UlCOkl1gKG3FoveE9tthK6Sof/2rYO+yFti3uDW/8mjeqnOG5RFZz9lXw 0k1LO5FSHqSnEjspvjno9n68zfyg3PsdmJYahZA91DKba9vImYXEZlc91VanCrVTrhAHbRAyT45o+Y +xK2Y3ttmq4OToA2tXbuTmGZ4Sj5hbtlhHFfmPtYFkulvvf3uYiQbexCypLw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v7 2/4] dt-bindings:iio:frequency: add admv1014 binding
+Content-Language: en-US
+To:     Antoniu Miclaus <antoniu.miclaus@analog.com>, jic23@kernel.org,
+        robh+dt@kernel.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh@kernel.org>
+References: <20220214073418.4528-1-antoniu.miclaus@analog.com>
+ <20220214073418.4528-2-antoniu.miclaus@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220214073418.4528-2-antoniu.miclaus@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Verify we can fetch child's siginfo_t from waitid() with __WCHILDSIGINFO.
-Skip if it's not available.
+On 14/02/2022 08:34, Antoniu Miclaus wrote:
+> Add device tree bindings for the ADMV1014 Upconverter.
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 130 ++++++++++++++++++
- 1 file changed, 130 insertions(+)
+Add spaces in subject after ':'.
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 9d126d7fabdb..0c803c2b450e 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -268,6 +268,14 @@ struct seccomp_notif_addfd_big {
- #define SECCOMP_FILTER_FLAG_TSYNC_ESRCH (1UL << 4)
- #endif
- 
-+#ifndef SYS_SECCOMP
-+#define SYS_SECCOMP	1
-+#endif
-+
-+#ifndef __WCHILDSIGINFO
-+#define __WCHILDSIGINFO	0x10000000
-+#endif
-+
- #ifndef seccomp
- int seccomp(unsigned int op, unsigned int flags, void *args)
- {
-@@ -765,6 +773,128 @@ TEST_SIGNAL(KILL_one_arg_six, SIGSYS)
- 	close(fd);
- }
- 
-+FIXTURE(SIGINFO) {
-+	pid_t child_pid;
-+};
-+
-+FIXTURE_SETUP(SIGINFO)
-+{
-+	self->child_pid = 0;
-+}
-+
-+FIXTURE_TEARDOWN(SIGINFO)
-+{
-+	if (self->child_pid > 0)
-+		waitpid(self->child_pid, NULL, WNOHANG);
-+}
-+
-+TEST_F(SIGINFO, child)
-+{
-+	int status;
-+	siginfo_t info = { };
-+	/* Kill only when calling __NR_prctl. */
-+	struct sock_filter filter[] = {
-+		BPF_STMT(BPF_LD|BPF_W|BPF_ABS,
-+			offsetof(struct seccomp_data, nr)),
-+		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_prctl, 0, 1),
-+		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_KILL_PROCESS | 0xBA),
-+		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_ALLOW),
-+	};
-+	struct sock_fprog prog = {
-+		.len = (unsigned short)ARRAY_SIZE(filter),
-+		.filter = filter,
-+	};
-+
-+	self->child_pid = fork();
-+	ASSERT_LE(0, self->child_pid);
-+	if (self->child_pid == 0) {
-+		ASSERT_EQ(0, prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0)) {
-+			TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
-+		}
-+		ASSERT_EQ(0, seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog));
-+		prctl(PR_GET_SECCOMP, 0, 0, 0, 0);
-+		/* Should have died now. */
-+		_exit(37);
-+	}
-+
-+	/* Check siginfo_t contents. */
-+	EXPECT_EQ(waitid(P_PID, self->child_pid, &info, WEXITED | WNOWAIT), 0);
-+#if 0
-+	struct {
-+		int si_signo;
-+		int si_code;
-+		int si_errno;
-+		union __sifields _sifields;
-+	}
-+
-+	/* SIGCHLD */
-+	struct {
-+		__kernel_pid_t _pid;	/* which child */
-+		__kernel_uid32_t _uid;	/* sender's uid */
-+		int _status;		/* exit code */
-+		__ARCH_SI_CLOCK_T _utime;
-+		__ARCH_SI_CLOCK_T _stime;
-+	} _sigchld;
-+#endif
-+	ASSERT_EQ(info.si_signo, SIGCHLD);
-+	EXPECT_TRUE(info.si_code == CLD_KILLED || info.si_code == CLD_DUMPED);
-+	EXPECT_TRUE(info.si_errno == 0);
-+	EXPECT_EQ(info.si_pid, self->child_pid);
-+
-+	ASSERT_TRUE(WIFSIGNALED(info.si_status));
-+	/* TODO: why doesn't this WCOREDUMP() agree with below? */
-+	/* EXPECT_TRUE(WCOREDUMP(status)); */
-+	EXPECT_EQ(WTERMSIG(info.si_status), SIGSYS);
-+
-+
-+	memset(&info, 0, sizeof(info));
-+	status = waitid(P_PID, self->child_pid, &info,
-+			WEXITED | WNOWAIT | __WCHILDSIGINFO);
-+	EXPECT_EQ(status, 0) {
-+		if (status < 0 && errno == EINVAL)
-+			SKIP(goto skip_siginfo, "Kernel does not support waitid() with __WCHILDSIGINFO");
-+	}
-+#if 0
-+	/* SIGSYS */
-+	struct {
-+		void __user *_call_addr;/* calling user insn */
-+		int _syscall;		/* triggering system call number */
-+		unsigned int _arch;	/* AUDIT_ARCH_* of syscall */
-+	} _sigsys;
-+
-+	info.si_signo = SIGSYS;
-+	info.si_code = SYS_SECCOMP;
-+	info.si_call_addr = (void __user *)KSTK_EIP(current);
-+	info.si_errno = reason;
-+	info.si_arch = syscall_get_arch(current);
-+	info.si_syscall = syscall;
-+
-+#endif
-+	ASSERT_EQ(info.si_signo, SIGSYS);
-+	EXPECT_EQ(info.si_code, SYS_SECCOMP);
-+	/* EXPECT_EQ(info.si_arch, ...native arch...); */
-+	EXPECT_EQ(info.si_syscall, __NR_prctl);
-+	/*
-+	 * The syscall will have happened somewhere near the libc
-+	 * prctl implementation.
-+	 */
-+	EXPECT_TRUE(info.si_call_addr >= (void *)prctl &&
-+		    info.si_call_addr <= (void *)prctl + PAGE_SIZE) {
-+		TH_LOG("info.si_call_addr: %p", info.si_call_addr);
-+		TH_LOG("prctl            : %p", prctl);
-+	}
-+	EXPECT_EQ(info.si_errno, 0xBA);
-+
-+skip_siginfo:
-+	/* Check status contents. */
-+	ASSERT_EQ(waitpid(self->child_pid, &status, 0), self->child_pid);
-+	ASSERT_TRUE(WIFSIGNALED(status));
-+	/* TODO: why doesn't this WCOREDUMP() agree with above? */
-+	/* EXPECT_TRUE(WCOREDUMP(status)); */
-+	EXPECT_EQ(WTERMSIG(status), SIGSYS);
-+	self->child_pid = 0;
-+}
-+
- /* This is a thread task to die via seccomp filter violation. */
- void *kill_thread(void *data)
- {
--- 
-2.30.2
+> 
+> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+> changes in v7:
+>  - add Reviewed-by tag
+>  .../bindings/iio/frequency/adi,admv1014.yaml  | 137 ++++++++++++++++++
+>  1 file changed, 137 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml b/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
+> new file mode 100644
+> index 000000000000..fe352c01dd94
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
+> @@ -0,0 +1,137 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/frequency/adi,admv1014.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ADMV1014 Microwave Downconverter
+> +
+> +maintainers:
+> +  - Antoniu Miclaus <antoniu.miclaus@analog.com>
+> +
+> +description: |
+> +   Wideband, microwave downconverter optimized for point to point microwave
+> +   radio designs operating in the 24 GHz to 44 GHz frequency range.
+> +
+> +   https://www.analog.com/en/products/admv1014.html
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,admv1014
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  spi-max-frequency:
+> +    maximum: 1000000
+> +
+> +  clocks:
+> +    minItems: 1
 
+maxItems: 1
+... or do you expect more clocks?
+
+> +
+> +  clock-names:
+> +    items:
+> +      - const: lo_in
+> +    description:
+> +      External clock that provides the Local Oscilator input.
+> +
+> +  vcm-supply:
+> +    description:
+> +      Common-mode voltage regulator.
+> +
+> +  vcc-if-bb-supply:
+> +    description:
+> +      BB and IF supply voltage regulator.
+> +
+> +  vcc-vga-supply:
+> +    description:
+> +      RF Amplifier supply voltage regulator.
+> +
+> +  vcc-vva-supply:
+> +    description:
+> +      VVA Control Circuit supply voltage regulator.
+> +
+> +  vcc-lna-3p3-supply:
+> +    description:
+> +      Low Noise Amplifier 3.3V supply voltage regulator.
+> +
+> +  vcc-lna-1p5-supply:
+> +    description:
+> +      Low Noise Amplifier 1.5V supply voltage regulator.
+> +
+> +  vcc-bg-supply:
+> +    description:
+> +      Band Gap Circuit supply voltage regulator.
+> +
+> +  vcc-quad-supply:
+> +    description:
+> +      Quadruple supply voltage regulator.
+> +
+> +  vcc-mixer-supply:
+> +    description:
+> +      Mixer supply voltage regulator.
+> +
+> +  adi,input-mode:
+> +    description:
+> +      Select the input mode.
+> +      iq - in-phase quadrature (I/Q) input
+> +      if - complex intermediate frequency (IF) input
+> +    enum: [iq, if]
+> +
+> +  adi,detector-enable:
+> +    description:
+> +      Digital Rx Detector Enable. The Square Law Detector output is
+> +      available at output pin VDET.
+> +    type: boolean
+> +
+> +  adi,p1db-compensation-enable:
+> +    description:
+> +      Turn on bits to optimize P1dB.
+> +    type: boolean
+> +
+> +  adi,quad-se-mode:
+> +    description:
+> +      Switch the LO path from differential to single-ended operation.
+> +      se-neg - Single-Ended Mode, Negative Side Disabled.
+> +      se-pos - Single-Ended Mode, Positive Side Disabled.
+> +      diff - Differential Mode.
+> +    enum: [se-neg, se-pos, diff]
+> +
+> +  '#clock-cells':
+> +    const: 0
+
+Is this really a clock provider?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - vcm-supply
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    spi {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +      admv1014@0{
+
+Generic node name (see Devicetree spec), so a "converter"? "wifi"?
+"sensor"? "radio"?
+
+> +        compatible = "adi,admv1014";
+> +        reg = <0>;
+> +        spi-max-frequency = <1000000>;
+> +        clocks = <&admv1014_lo>;
+> +        clock-names = "lo_in";
+> +        vcm-supply = <&vcm>;
+> +        vcc-if-bb-supply = <&vcc_if_bb>;
+> +        vcc-vga-supply = <&vcc_vga>;
+> +        vcc-vva-supply = <&vcc_vva>;
+> +        vcc-lna-3p3-supply = <&vcc_lna_3p3>;
+> +        vcc-lna-1p5-supply = <&vcc_lna_1p5>;
+> +        vcc-bg-supply = <&vcc_bg>;
+> +        vcc-quad-supply = <&vcc_quad>;
+> +        vcc-mixer-supply = <&vcc_mixer>;
+> +        adi,quad-se-mode = "diff";
+> +        adi,detector-enable;
+> +        adi,p1db-compensation-enable;
+> +      };
+> +    };
+> +...
+
+
+Best regards,
+Krzysztof

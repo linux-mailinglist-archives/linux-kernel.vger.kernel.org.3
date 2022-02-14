@@ -2,155 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2292C4B5964
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 19:10:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9474B5968
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 19:11:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357342AbiBNSKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 13:10:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56678 "EHLO
+        id S1357356AbiBNSK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 13:10:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235368AbiBNSKS (ORCPT
+        with ESMTP id S231703AbiBNSK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 13:10:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B0BB652E2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:10:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644862209;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CGNOFCt1MU85Ts1xBeqV0FyWp/WQxMTDQKYlq49a4uc=;
-        b=QM6ImguIZ8zc4cCkdJFURHD34Ls3owlDOTdkpmfFPgjf55xKBNBA68rwYbbjrIYv/QDw+v
-        i6wOfxzcl2LAc+dz8o8yepmuHSQ3n0axurH5sFJdnctgJkXXp6Q4I2GmZaOOEUsy68xWzO
-        rnAC4vYaOXo+04ubSRO5X2yxRAoGoY8=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-148-megoJQvKP4Kxl0Xq1PoTrg-1; Mon, 14 Feb 2022 13:10:07 -0500
-X-MC-Unique: megoJQvKP4Kxl0Xq1PoTrg-1
-Received: by mail-qt1-f200.google.com with SMTP id x5-20020ac84d45000000b002cf826b1a18so13160511qtv.2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:10:07 -0800 (PST)
+        Mon, 14 Feb 2022 13:10:56 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495196541B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:10:48 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id v5-20020a17090a4ec500b001b8b702df57so19665046pjl.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:10:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fsT7lSAVYkp9weLcsjjFUcpaz6KeRlFgjOc+jPp5SLw=;
+        b=SSDPNr8/MHlLHsdeCjQIWLjj54yWgtlyyGDG3JWsl3RrdXDL9ccmj3ra0peSk8liJX
+         OI9gCUedBiCr9nDwvTpN1Nd+uLVhOCNh4EvC68Wixq0o02daALU3MRYM+YOxQYD27rit
+         Im01CHx4qHtVcw2Tl43YIhFxJDvPmMNdB1iyBRjoY9zQEL37vE8fUQ9z1mavkAnOuVcq
+         R+wReTg5aubxbsrgzJcnRJgxf/9dSWNfwMgF0h5rUakd0uuCWe7nMwUpaCBJDzBXW7RX
+         cvODpFc7YBc0+IqdViTfNgPiGVthko6mHd3EnYyFKsZFP2Jp/y7zB9ngc7BMdG8RgFiV
+         pnxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CGNOFCt1MU85Ts1xBeqV0FyWp/WQxMTDQKYlq49a4uc=;
-        b=HFuFUO8lJFtk0ZJBmgjMCsT7eKvGqGPbMK8acVx+ol0s7qj0q2zjScYVrLfH+V/0jK
-         eGig+tZPyvkMCmNeii/4/sfIi3lKYq0DM+wB7rl4lwfoSrRYK40i36LxPDHEXE23zoCb
-         K84IwUXEFAfuzOYIImLSJ7DGA+hb+TAUtJPKmWBrBZSa7neffJTYmPaG3rQUQmztMPER
-         zhTN5+5l3yKMBcD5mJrxsP2O5vbKtDRiAtT/HgfXDN0uhHJS1jinybTSBZWClc60A9i2
-         pkOAhep3pbTNa5Q4NaT0BPz+FVf68AyBGEKuKd6AvI+MDbwt1AA2DSdwQj2ByQC9FyIf
-         R//w==
-X-Gm-Message-State: AOAM532qSuXqdpj7GbXsEn4XBbUOAZi5La0213eCbeiXoFHK+JbNGEgT
-        XiSRNmVdE5H2Wkf/P90aoV0Kz+uEHw048SGYCSG0qhCmYWycxjYcFbGXwGvFuNCXRggJSda7Ocd
-        PVTuggFUAP0t+DWP08/AX/RPd
-X-Received: by 2002:a05:6214:762:: with SMTP id f2mr693741qvz.24.1644862206859;
-        Mon, 14 Feb 2022 10:10:06 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx/vy40rnBwdMoVvt1Kva6lhknBX3yMZ/S5wMQcb4vy84dEW8nb/n8AHTcudHMUidnRHHxsJw==
-X-Received: by 2002:a05:6214:762:: with SMTP id f2mr693693qvz.24.1644862206520;
-        Mon, 14 Feb 2022 10:10:06 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::35])
-        by smtp.gmail.com with ESMTPSA id br30sm16056253qkb.67.2022.02.14.10.10.02
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=fsT7lSAVYkp9weLcsjjFUcpaz6KeRlFgjOc+jPp5SLw=;
+        b=KK6fcCg+Bfu66r30PQXnQBhTCgB8HT1uwHWgQ2IpIuY7vLl5XkXA9YiJWCf6Xo6U/O
+         uIyXsmei3KCst0RVUo818bX6IWK0FiZlBjkMA+ccKVFWPLYSpsbAIGYYxYXJVXJxU+Fm
+         VAXo6H2iCPOUYJ4M5E6iYNkv2WNI/oq4QIhMk6aRWC/1oMJieBgcvaHmc2I+vjm9bGZU
+         vqwm5f+9HM8+kHIEkwtlF5ME7+D8gw7u2H//9GVLvd7BQMyA70RCtf3kJh2+7+Ouv73n
+         VXtf04o5GWs7KUPb57Zyg61WeOYU2nYyPHdfHHhM0nYJHN0cnVxd3R9EzGpUqjMJBM5r
+         fh+g==
+X-Gm-Message-State: AOAM532jr8mIC6PxCIqEjEWwvxXBI7OaMajqaskWgUVbzIQYafeHwcPr
+        uPMO7e5aFPYy6jT6vlSie/o=
+X-Google-Smtp-Source: ABdhPJyRevZISbVVEODjyftiRPR9ISk40D+7cKnW09JRPf63npZqU5VSfgstAIffRDeyxL/fbBLwvQ==
+X-Received: by 2002:a17:90a:5210:: with SMTP id v16mr16337719pjh.107.1644862247647;
+        Mon, 14 Feb 2022 10:10:47 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id t200sm3533608pfc.35.2022.02.14.10.10.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 10:10:05 -0800 (PST)
-Date:   Mon, 14 Feb 2022 10:10:00 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
- unique-symbol` is available
-Message-ID: <20220214181000.xln2qgyzgswjxwcz@treble>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
- <20220209185752.1226407-3-alexandr.lobakin@intel.com>
- <20220211174130.xxgjoqr2vidotvyw@treble>
- <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
- <20220211183529.q7qi2qmlyuscxyto@treble>
- <20220214122433.288910-1-alexandr.lobakin@intel.com>
+        Mon, 14 Feb 2022 10:10:46 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 14 Feb 2022 08:10:45 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 6/7] kernfs: Introduce hashed rw-sem to replace per-fs
+ kernfs_rwsem.
+Message-ID: <YgqbJS64XpsnOeHH@slm.duckdns.org>
+References: <20220214120322.2402628-1-imran.f.khan@oracle.com>
+ <20220214120322.2402628-7-imran.f.khan@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220214122433.288910-1-alexandr.lobakin@intel.com>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220214120322.2402628-7-imran.f.khan@oracle.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 01:24:33PM +0100, Alexander Lobakin wrote:
-> > One idea I mentioned before, it may be worth exploring changing the "F"
-> > in FGKASLR to "File" instead of "Function".  In other words, only
-> > shuffle at an object-file granularity.  Then, even with duplicates, the
-> > <file+function> symbol pair doesn't change in the symbol table.  And as
-> > a bonus, it should help FGKASLR i-cache performance, significantly.
-> 
-> Yeah, I keep that in mind. However, this wouldn't solve the
-> duplicate static function names problem, right?
-> Let's say you have a static function f() in file1 and f() in file2,
-> then the layout each boot can be
-> 
-> .text.file1  or  .text.file2
-> f()              f()
-> .text.file2      .text.file1
-> f()              f()
-> 
-> and position-based search won't work anyway, right?
+On Mon, Feb 14, 2022 at 11:03:21PM +1100, Imran Khan wrote:
+> +/**
+> + * up_write_kernfs_rwsem_for_two_nodes() - Release hashed rwsem for 2 nodes
+> + *
+> + * @kn1: kernfs_node for which hashed rwsem needs to be released
+> + * @kn2: kernfs_node for which hashed rwsem needs to be released
+> + *
+> + * In case of nested locking, rwsem with higher address is released first.
+> + */
+> +static inline void up_write_kernfs_rwsem_for_two_nodes(struct kernfs_node *kn1,
+> +						       struct kernfs_node *kn2)
+> +{
+> +	struct rw_semaphore *rwsem1 = kernfs_rwsem_ptr(kn1);
+> +	struct rw_semaphore *rwsem2 = kernfs_rwsem_ptr(kn2);
+> +
+> +	if (rwsem1 == rwsem2)
+> +		up_write(rwsem1);
+> +	else {
+> +		if (rwsem1 > rwsem2) {
+> +			up_write(rwsem1);
+> +			up_write(rwsem2);
+> +		} else {
+> +			up_write(rwsem2);
+> +			up_write(rwsem1);
+> +		}
+> +	}
+> +
+> +	kernfs_put(kn1);
+> +	kernfs_put(kn2);
+> +}
 
-Right, so we'd have to abandon position-based search in favor of
-file+func based search.
+You don't need to order unlocks.
 
-It's not perfect because there are still a few file+func duplicates.
-But it might be good enough.  We would presumably just refuse to patch a
-duplicate.  Or we could remove them (and enforce their continued removal
-with tooling-based warnings).
+> +/**
+> + * down_read_kernfs_rwsem_for_two_nodes() - Acquire hashed rwsem for 2 nodes
+> + *
+> + * @kn1: kernfs_node for which hashed rwsem needs to be taken
+> + * @kn2: kernfs_node for which hashed rwsem needs to be taken
+> + *
+> + * In certain cases we need to acquire hashed rwsem for 2 nodes that don't have a
+> + * parent child relationship. This is one of the cases of nested locking involving
+> + * hashed rwsem and rwsem with lower address is acquired first.
+> + */
+> +static inline void down_read_kernfs_rwsem_for_two_nodes(struct kernfs_node *kn1,
+> +							struct kernfs_node *kn2)
 
-Another variant of this which I described here
+Maybe something like kernfs_down_read_double_nodes() is enough as the name?
+up/down already imply rwsem.
 
-  https://lore.kernel.org/all/20210125172124.awabevkpvq4poqxf@treble/
+> +static inline void down_read_kernfs_rwsem(struct kernfs_node *kn,
+> +				      enum kernfs_rwsem_lock_pattern ptrn)
+> +{
+> +	struct rw_semaphore *p_rwsem = NULL;
+> +	struct rw_semaphore *rwsem = kernfs_rwsem_ptr(kn);
+> +	int lock_parent = 0;
 
-would be to keep it function-granular, but have kallsyms keep track of
-what file each func belongs to.  Then livepatch could still do the
-file+func based search.
+bool?
+
+> +
+> +	if (ptrn == KERNFS_RWSEM_LOCK_SELF_AND_PARENT && kn->parent)
+
+I wonder whether it'd be clearer to separate the double lock case into its
+own function. The backend implementation being shared is fine but if we had
+e.g. kernfs_down_read() and kernfs_down_read_double(), wouldn't that be
+simpler?
+
+> +		lock_parent = 1;
+> +
+> +	if (lock_parent)
+> +		p_rwsem = kernfs_rwsem_ptr(kn->parent);
+> +
+> +	if (!lock_parent || rwsem == p_rwsem) {
+> +		down_read_nested(rwsem, 0);
+> +		kernfs_get(kn);
+> +		kn->unlock_parent = 0;
+> +	} else {
+> +		/**
+> +		 * In case of nested locking, locks are taken in order of their
+> +		 * addresses. lock with lower address is taken first, followed
+> +		 * by lock with higher address.
+> +		 */
+> +		if (rwsem < p_rwsem) {
+> +			down_read_nested(rwsem, 0);
+> +			down_read_nested(p_rwsem, 1);
+> +		} else {
+> +			down_read_nested(p_rwsem, 0);
+> +			down_read_nested(rwsem, 1);
+> +		}
+> +		kernfs_get(kn);
+> +		kernfs_get(kn->parent);
+> +		kn->unlock_parent = 1;
+
+I wouldn't put this inside kernfs_node. Either make the same decision
+(whether it has a parent) in up() or return something which can be passed to
+up() by the caller.
+
+> +/**
+> + * down_write_kernfs_rwsem_rename_ns() - take hashed rwsem during
+
+kernfs_down_write_triple()?
+
+> +static inline void up_write_kernfs_rwsem_rename_ns(struct kernfs_node *kn,
+> +					struct kernfs_node *current_parent,
+> +					struct kernfs_node *old_parent)
+> +{
+> +	struct rw_semaphore *array[3];
+> +
+> +	array[0] = kernfs_rwsem_ptr(kn);
+> +	array[1] = kernfs_rwsem_ptr(current_parent);
+> +	array[2] = kernfs_rwsem_ptr(old_parent);
+
+So, we had sth like the following:
+
+struct kernfs_rwsem_token {
+       struct kernfs_node held[3];
+};
+
+which the down functions return (probably as out argument), wouldn't we be
+able to share up() for all variants and make the code simpler?
+
+> +static inline void down_read_kernfs_rwsem_rename_ns(struct kernfs_node *kn,
+> +					struct kernfs_node *current_parent,
+> +					struct kernfs_node *new_parent)
+> +{
+> +	struct rw_semaphore *array[3];
+> +
+> +	array[0] = kernfs_rwsem_ptr(kn);
+> +	array[1] = kernfs_rwsem_ptr(current_parent);
+> +	array[2] = kernfs_rwsem_ptr(new_parent);
+> +
+> +	if (array[0] == array[1] && array[0] == array[2]) {
+> +		/* All 3 nodes hash to same rwsem */
+> +		down_read_nested(array[0], 0);
+> +	} else {
+> +		/**
+> +		 * All 3 nodes are not hashing to the same rwsem, so sort the
+> +		 * array.
+> +		 */
+> +		kernfs_sort_rwsems(array);
+> +
+> +		if (array[0] == array[1] || array[1] == array[2]) {
+> +			/**
+> +			 * Two nodes hash to same rwsem, and these
+> +			 * will occupy consecutive places in array after
+> +			 * sorting.
+> +			 */
+> +			down_read_nested(array[0], 0);
+> +			down_read_nested(array[2], 1);
+> +		} else {
+> +			/* All 3 nodes hashe to different rwsems */
+> +			down_read_nested(array[0], 0);
+> +			down_read_nested(array[1], 1);
+> +			down_read_nested(array[2], 2);
+> +		}
+> +	}
+
+How about factoring out "am I locking one, two or three?" into a function -
+e.g. the sort function takes the array, sort & uniq's them into locking
+token so that the down functions (for both double and triple) just do what's
+the token says.
+
+Thanks.
 
 -- 
-Josh
-
+tejun

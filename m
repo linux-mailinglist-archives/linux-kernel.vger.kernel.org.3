@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC8E4B4AC1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:40:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B861C4B481E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:56:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343955AbiBNKEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:04:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43464 "EHLO
+        id S245658AbiBNJuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:50:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344044AbiBNJ7d (ORCPT
+        with ESMTP id S245307AbiBNJpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:59:33 -0500
+        Mon, 14 Feb 2022 04:45:53 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6830C39;
-        Mon, 14 Feb 2022 01:47:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845AF60DA0;
+        Mon, 14 Feb 2022 01:38:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69C8D61287;
-        Mon, 14 Feb 2022 09:47:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EEA4C340E9;
-        Mon, 14 Feb 2022 09:47:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20D82611BC;
+        Mon, 14 Feb 2022 09:38:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0C6DC340E9;
+        Mon, 14 Feb 2022 09:38:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832020;
-        bh=a9hRDb8jeBX3+CfUzzLMVZKn6WHEX5RbBWJPBjc8rVk=;
+        s=korg; t=1644831532;
+        bh=rmFaxeqV0WmNFAlFuIswJzBEHxPusxQB4kPuyZQRoGM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fhAlvnpSADhfNokPN9NH9K8fr9XPBUyKPaJaFj+ml1XB0OTxZogTLfr+5ev47njQk
-         4fGnPKSaw0iQ6SA1+edEBCfApeatRNWgisBHv25LP583KfiS1rJMR/zR2kycXBI68V
-         NOMOI8eR9nBy/FOOsn3NrODSg/Ke22KyZGtYzk5g=
+        b=0iARKuZQ4ssUFCPolUDnifxeZszQfQkpGZ8yZDr72A2zNQA8X1Hu59wzkt5zTibS9
+         6Y80f5ucQd/HW4PV6QuYzJKEeQPAhYC38wlGcPQwMXLEufVQfpGL5fHqliOXoL3yCv
+         ryPPmDBgOBUvaTpUZEYWVloR/bTBdYilUC8BdHxE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhan Liu <zhan.liu@amd.com>,
-        Charlene Liu <charlene.liu@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 054/172] drm/amd/display: Correct MPC split policy for DCN301
+        stable@vger.kernel.org, Yordan Karadzhov <ykaradzhov@vmware.com>,
+        Tom Zanussi <zanussi@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH 5.10 013/116] tracing: Propagate is_signed to expression
 Date:   Mon, 14 Feb 2022 10:25:12 +0100
-Message-Id: <20220214092508.258889793@linuxfoundation.org>
+Message-Id: <20220214092459.143523020@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhan Liu <zhan.liu@amd.com>
+From: Tom Zanussi <zanussi@kernel.org>
 
-[ Upstream commit ac46d93235074a6c5d280d35771c23fd8620e7d9 ]
+commit 097f1eefedeab528cecbd35586dfe293853ffb17 upstream.
 
-[Why]
-DCN301 has seamless boot enabled. With MPC split enabled
-at the same time, system will hang.
+During expression parsing, a new expression field is created which
+should inherit the properties of the operands, such as size and
+is_signed.
 
-[How]
-Revert MPC split policy back to "MPC_SPLIT_AVOID". Since we have
-ODM combine enabled on DCN301, pipe split is not necessary here.
+is_signed propagation was missing, causing spurious errors with signed
+operands.  Add it in parse_expr() and parse_unary() to fix the problem.
 
-Signed-off-by: Zhan Liu <zhan.liu@amd.com>
-Reviewed-by: Charlene Liu <charlene.liu@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lkml.kernel.org/r/f4dac08742fd7a0920bf80a73c6c44042f5eaa40.1643319703.git.zanussi@kernel.org
+
+Cc: stable@vger.kernel.org
+Fixes: 100719dcef447 ("tracing: Add simple expression support to hist triggers")
+Reported-by: Yordan Karadzhov <ykaradzhov@vmware.com>
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215513
+Signed-off-by: Tom Zanussi <zanussi@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+[sudip: adjust context]
+Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/trace/trace_events_hist.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c b/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
-index 9e2f18a0c9483..26ebe00a55f67 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
-@@ -863,7 +863,7 @@ static const struct dc_debug_options debug_defaults_drv = {
- 	.disable_clock_gate = true,
- 	.disable_pplib_clock_request = true,
- 	.disable_pplib_wm_range = true,
--	.pipe_split_policy = MPC_SPLIT_DYNAMIC,
-+	.pipe_split_policy = MPC_SPLIT_AVOID,
- 	.force_single_disp_pipe_split = false,
- 	.disable_dcc = DCC_ENABLE,
- 	.vsr_support = true,
--- 
-2.34.1
-
+--- a/kernel/trace/trace_events_hist.c
++++ b/kernel/trace/trace_events_hist.c
+@@ -2154,6 +2154,8 @@ static struct hist_field *parse_unary(st
+ 		(HIST_FIELD_FL_TIMESTAMP | HIST_FIELD_FL_TIMESTAMP_USECS);
+ 	expr->fn = hist_field_unary_minus;
+ 	expr->operands[0] = operand1;
++	expr->size = operand1->size;
++	expr->is_signed = operand1->is_signed;
+ 	expr->operator = FIELD_OP_UNARY_MINUS;
+ 	expr->name = expr_str(expr, 0);
+ 	expr->type = kstrdup(operand1->type, GFP_KERNEL);
+@@ -2293,6 +2295,7 @@ static struct hist_field *parse_expr(str
+ 
+ 	/* The operand sizes should be the same, so just pick one */
+ 	expr->size = operand1->size;
++	expr->is_signed = operand1->is_signed;
+ 
+ 	expr->operator = field_op;
+ 	expr->name = expr_str(expr, 0);
 
 

@@ -2,226 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87ED44B4DF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B02A4B4DDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:20:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350273AbiBNLPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:15:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45916 "EHLO
+        id S1350193AbiBNLPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:15:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350369AbiBNLPJ (ORCPT
+        with ESMTP id S1350373AbiBNLPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Feb 2022 06:15:09 -0500
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61934EFF91
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:44:22 -0800 (PST)
-Received: by mail-il1-f173.google.com with SMTP id e11so11018428ils.3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:44:22 -0800 (PST)
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46169EFF96
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:44:23 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id f18-20020a926a12000000b002be48b02bc6so11020283ilc.17
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:44:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=8UlwMVVLWhmPlE/PNpTYvysOndyoiHtzqJZyRftJj4M=;
-        b=AVM+oRgDoJvmVS47nh8NK0cfXTK4BGEzKeYJPO2OtIcgzHLMVwIApM4le/RFKmNTou
-         i9AonBvIoui/OY1JxTZH4C6T0iEc4GPsqlP6mcBCrUysMXpc21EfiG+fGnY9fwdKU95L
-         576NpKGc0f+Yijj3Ep33RJPQeI1vexmdkJFgTt8jD5t/mDZ/MdMCjSF2euWzUzGxfpVE
-         lGu2JNJcLKtl8oMgB9O9d755MxrjgjIz7IahNUwu8qh80dipa5Bl5ljPvhqm0o/qiwj8
-         lcKh6+YyytgqfLV4+L+h3S6a6+rT2IVGeJdgFeN+97mDCKKeWv6bkIX+oTNR+F79GupU
-         gsWw==
-X-Gm-Message-State: AOAM530j+tqmHYQFC10X59lP0dadPL6GtgUtbyTPrkhFjYT+ZpfYsVhX
-        6yRUo2FWhtx5tChs0A4IcTTqjZT5oaxy1jHn5rDprkE=
-X-Google-Smtp-Source: ABdhPJxXnRbdKYAk/eQEjSASB4PhnFbCrNay6Iay1SGwgHXpGogu4ezLDXvE+rYrzbw3+Midtc7CBkSj6bDX8P8UwbY=
-X-Received: by 2002:a05:6e02:2199:: with SMTP id j25mr7941276ila.296.1644835461287;
- Mon, 14 Feb 2022 02:44:21 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=xC1uTcb/V1rcUObJ9bOyaCJyjuXg0QqdqV18HqOOmGQ=;
+        b=A2zm3TEGU9Htp2CUirHs57V9zmnksCRgXR9XQfr3ahPN1UXCh0S4mxnmycINYp1dnV
+         vzKFNikKnQF9SRO5fOO6CsukNHUOfrEGX/rA8e8uyawwU7daERWbzkxCl5hIIPbaGaZD
+         CJJKfzpdUeQvnlNBTpnTF4DIvUp9fJfg3oepc/DePwlSouLoa7gssHip5lbCbSe/hk6Z
+         vctgTSSsJsK3DtTJdZRQiBsm3wFBGfgoP2hmkVJhtYPszzHgnBElviJdE2t0z53+QT70
+         /ddKiJIRkJtrD42GzLFyBygkKFcAmduw/dgxCSD8Ot5IWrZidQcrzLe8Hqz7BN3m4676
+         tOnA==
+X-Gm-Message-State: AOAM531rg0ZPyv7folJkbeNvG5Cmt8P8URITs9ovG3eiiwc1WoRNDvLF
+        QSG17gTRy+6ALfYe1rFeUSSRTzhAKBI3zcvgr8tnP0di9MBa
+X-Google-Smtp-Source: ABdhPJw81TMExX0viITBtqp8o30BhyzKVumMZymcE0yUWohMbqRd+dN1v2QslMGCc4id8ptgtmUD8uA0OsMB3Pb4KIxTIodVpwxF
 MIME-Version: 1.0
-References: <CAJtcoLbNJrTjjHpFxgXwe+aJaw4=Und37yuym89RKSBCwSyCSQ@mail.gmail.com>
-In-Reply-To: <CAJtcoLbNJrTjjHpFxgXwe+aJaw4=Und37yuym89RKSBCwSyCSQ@mail.gmail.com>
-From:   Martin Knoblauch <knobi@knobisoft.de>
-Date:   Mon, 14 Feb 2022 11:44:10 +0100
-Message-ID: <CAJtcoLbmF1vT6HQ3ZhQJW6cYpp6c=GEakeegQOwUXrO8dSHoOQ@mail.gmail.com>
-Subject: Re: Possible regression on suspend (mem/s2idle) between 5.15 and 5.16
-To:     linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org
+X-Received: by 2002:a92:b50e:: with SMTP id f14mr7727969ile.208.1644835462594;
+ Mon, 14 Feb 2022 02:44:22 -0800 (PST)
+Date:   Mon, 14 Feb 2022 02:44:22 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007646bd05d7f81943@google.com>
+Subject: [syzbot] kernel BUG in __text_poke
+From:   syzbot <syzbot+87f65c75f4a72db05445@syzkaller.appspotmail.com>
+To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        jgross@suse.com, jpoimboe@redhat.com, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, netdev@vger.kernel.org, peterz@infradead.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
- sorry for top posting, but this is likely important enough. The
-problem seems to be gone with 5.17-rc4. So I guess there is some
-potential for putting a fix into 5.16.x. If that rings a bell, I am
-happy to test that. Unfortunately I do not have the time for
-bisection.
+syzbot found the following issue on:
 
-Adding the Nouveau list
+HEAD commit:    f95f768f0af4 bpf, x86_64: Fail gracefully on bpf_jit_binar..
+git tree:       bpf-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=13fb08c2700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c40b67275bfe2a58
+dashboard link: https://syzkaller.appspot.com/bug?extid=87f65c75f4a72db05445
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Cheers
-Martin
+Unfortunately, I don't have any reproducer for this issue yet.
 
-On Fri, Feb 11, 2022 at 4:26 PM Martin Knoblauch <knobi@knobisoft.de> wrote:
->
-> Hi,
->
->  sorry for the likely insufficient report. I am running Tumbleweed on
-> a Dell Notebook with a TU117GLM gfx, using the Nouveau driver. Kernel
-> is homegrown. Ever since going from 5.15.12 to 5.16.x (x now 9),
-> suspend stopped working reliably. After a maximum of three
-> suspend/resume cycles the box would reboot spontaneously.
->
-> I have found the following in dmesg output:
->
-> # cat > bad-suspend.txt
-> [   87.120765] PM: suspend entry (s2idle)
-> [   87.124895] Filesystems sync: 0.004 seconds
-> [   87.155826] Freezing user space processes ... (elapsed 0.001 seconds) done.
-> [   87.157424] OOM killer disabled.
-> [   87.157424] Freezing remaining freezable tasks ... (elapsed 0.001
-> seconds) done.
-> [   87.158520] printk: Suspending console(s) (use no_console_suspend to debug)
-> [   87.159501] e1000e: EEE TX LPI TIMER: 00000011
-> [   87.164889] sd 4:0:0:0: [sda] Synchronizing SCSI cache
-> [   87.164980] sd 4:0:0:0: [sda] Stopping disk
-> ==> [   87.169576] nouveau 0000:01:00.0: acr: unload binary failed
-> [   87.622136] ACPI: EC: interrupt blocked
-> [   99.986273] ACPI: EC: interrupt unblocked
-> [  102.826726] sd 4:0:0:0: [sda] Starting disk
-> [  102.836370] nouveau 0000:01:00.0: fifo: fault 00 [VIRT_READ] at
-> 0000000000000000 engine 0e [sec2] client 16 [HUB/SEC] reason 00 [PDE]
-> on channel -1 [00ffe5d000 unknown]
-> [  102.836389] nouveau 0000:01:00.0: fifo: runlist 3: scheduled for recovery
-> [  102.836395] nouveau 0000:01:00.0: fifo: engine 3: scheduled for recovery
-> [  102.936294] ------------[ cut here ]------------
-> [  102.936295] nouveau 0000:01:00.0: timeout
-> [  102.936312] WARNING: CPU: 3 PID: 3734 at
-> drivers/gpu/drm/nouveau/nvkm/falcon/v1.c:247
-> nvkm_falcon_v1_wait_for_halt+0xb7/0xc0 [nouveau]
-> [  102.936351] Modules linked in: uvcvideo videobuf2_vmalloc
-> snd_usb_audio videobuf2_memops videobuf2_v4l2 snd_usbmidi_lib
-> videobuf2_common snd_rawmidi cmac algif_hash algif_skcipher af_alg
-> bnep af_packet btusb btrtl btbcm btintel bluetooth ecdh_generic ecc
-> vboxnetadp(O) vboxnetflt(O) vboxdrv(O) iwlmvm mac80211 libarc4
-> iTCO_wdt iTCO_vendor_support x86_pkg_temp_thermal intel_powerclamp
-> coretemp dell_smm_hwmon kvm_intel iwlwifi snd_ctl_led
-> snd_hda_codec_realtek kvm snd_hda_codec_generic ledtrig_audio
-> snd_hda_codec_hdmi irqbypass sha256_ssse3 sha256_generic libsha256
-> pcspkr wmi_bmof snd_hda_intel cfg80211 snd_intel_dspcfg e1000e
-> i2c_i801 snd_hda_codec i2c_smbus rfkill snd_hwdep snd_hda_core snd_pcm
-> snd_timer mei_me snd mei soundcore thermal battery ac nls_iso8859_1
-> nls_cp437 vfat fat squashfs loop fuse configfs crct10dif_pclmul
-> crc32_pclmul ghash_clmulni_intel aesni_intel nouveau crypto_simd i915
-> cryptd drm_ttm_helper mxm_wmi i2c_algo_bit ttm serio_raw
-> drm_kms_helper nvme xhci_pci nvme_core
-> [  102.936378]  drm xhci_hcd wmi video button btrfs blake2b_generic
-> libcrc32c crc32c_intel xor raid6_pq zstd_compress sg dm_multipath
-> dm_mod scsi_dh_rdac scsi_dh_emc scsi_dh_alua
-> [  102.936385] CPU: 3 PID: 3734 Comm: kworker/u24:53 Tainted: G
->    O      5.16.9-1-default #1
-> [  102.936386] Hardware name: Dell Inc. Precision 7540/0JWGT7, BIOS
-> 1.7.0 01/07/2020
-> [  102.936387] Workqueue: events_unbound async_run_entry_fn
-> [  102.936391] RIP: 0010:nvkm_falcon_v1_wait_for_halt+0xb7/0xc0 [nouveau]
-> [  102.936422] Code: 8b 40 10 48 8b 78 10 4c 8b 67 50 4d 85 e4 75 03
-> 4c 8b 27 e8 cb 90 dd e0 4c 89 e2 48 c7 c7 32 35 a7 a0 48 89 c6 e8 e0
-> 8a 12 e1 <0f> 0b eb a7 e8 40 ee 17 e1 0f 1f 44 00 00 41 54 be 80 96 98
-> 00 55
-> [  102.936422] RSP: 0018:ffffc90002aebb70 EFLAGS: 00010246
-> [  102.936424] RAX: 0000000000000000 RBX: ffffffffffffff92 RCX: 0000000000000000
-> [  102.936425] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-> [  102.936425] RBP: ffff88810bbdfc98 R08: 0000000000000000 R09: 0000000000000000
-> [  102.936426] R10: 0000000000000000 R11: 0000000000000000 R12: ffff888101d83bc0
-> [  102.936426] R13: 0000000000000000 R14: 0000000000000000 R15: ffff888102f13400
-> [  102.936427] FS:  0000000000000000(0000) GS:ffff88887c2c0000(0000)
-> knlGS:0000000000000000
-> [  102.936428] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  102.936429] CR2: 0000562dd42c70a2 CR3: 000000000560a001 CR4: 00000000003706e0
-> [  102.936430] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [  102.936430] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [  102.936431] Call Trace:
-> [  102.936432]  <TASK>
-> [  102.936434]  gm200_acr_hsfw_boot+0xc6/0x170 [nouveau]
-> [  102.936466]  nvkm_acr_hsf_boot+0x82/0x100 [nouveau]
-> [  102.936496]  tu102_acr_init+0x15/0x30 [nouveau]
-> [  102.936526]  nvkm_acr_load+0x3e/0x110 [nouveau]
-> [  102.936555]  ? nvkm_notify_get+0x5c/0x70 [nouveau]
-> [  102.936583]  ? ktime_get+0x39/0xa0
-> [  102.936586]  nvkm_subdev_init+0x97/0xe0 [nouveau]
-> [  102.936614]  ? ktime_get+0x39/0xa0
-> [  102.936616]  nvkm_device_init+0x127/0x1d0 [nouveau]
-> [  102.936664]  nvkm_udevice_init+0x45/0x70 [nouveau]
-> [  102.936709]  nvkm_object_init+0x3b/0x130 [nouveau]
-> [  102.936738]  nvkm_object_init+0x73/0x130 [nouveau]
-> [  102.936766]  nvkm_object_init+0x73/0x130 [nouveau]
-> [  102.936795]  nouveau_do_resume+0x2b/0xc0 [nouveau]
-> [  102.936842]  nouveau_pmops_resume+0x67/0x90 [nouveau]
-> [  102.936888]  ? pci_legacy_resume+0x80/0x80
-> [  102.936891]  dpm_run_callback+0x49/0x150
-> [  102.936893]  device_resume+0x105/0x280
-> [  102.936895]  ? pm_dev_err+0x34/0x34
-> [  102.936897]  async_resume+0x19/0x30
-> [  102.936899]  async_run_entry_fn+0x2b/0x110
-> [  102.936901]  process_one_work+0x1e5/0x3b0
-> [  102.936903]  worker_thread+0x4d/0x3e0
-> [  102.936904]  ? rescuer_thread+0x3a0/0x3a0
-> [  102.936905]  kthread+0x146/0x170
-> [  102.936906]  ? set_kthread_struct+0x50/0x50
-> [  102.936907]  ret_from_fork+0x1f/0x30
-> [  102.936910]  </TASK>
-> [  102.936910] ---[ end trace e592260dfc1c79fb ]---
-> [  102.936912] nouveau 0000:01:00.0: acr: AHESASC binary failed
-> [  102.936913] nouveau 0000:01:00.0: acr: init failed, -110
-> [  102.937027] nouveau 0000:01:00.0: init failed with -110
-> [  102.937028] nouveau: Xorg.bin[1996]:00000000:00000080: init failed with -110
-> [  102.937029] nouveau: DRM-master:00000000:00000000: init failed with -110
-> [  102.937029] nouveau: DRM-master:00000000:00000000: init failed with -110
-> [  102.937030] nouveau 0000:01:00.0: DRM: Client resume failed with error: -110
-> [  102.937032] PM: dpm_run_callback(): pci_pm_resume+0x0/0xe0 returns -110
-> [  102.937040] nouveau 0000:01:00.0: PM: failed to resume async: error -110
-> [  103.134577] ata5: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-> [  103.137666] ata5.00: ACPI cmd ef/10:06:00:00:00:00 (SET FEATURES) succeeded
-> [  103.137670] ata5.00: ACPI cmd f5/00:00:00:00:00:00 (SECURITY FREEZE
-> LOCK) filtered out
-> [  103.137672] ata5.00: ACPI cmd b1/c1:00:00:00:00:00 (DEVICE
-> CONFIGURATION OVERLAY) filtered out
-> [  103.137838] ata5.00: ACPI cmd 00/00:00:00:00:00:a0 (NOP) rejected
-> by device (Stat=0x51 Err=0x04)
-> [  103.138290] ata5.00: supports DRM functions and may not be fully accessible
-> [  103.139265] ata5.00: disabling queued TRIM support
-> [  103.143959] ata5.00: ACPI cmd ef/10:06:00:00:00:00 (SET FEATURES) succeeded
-> [  103.143963] ata5.00: ACPI cmd f5/00:00:00:00:00:00 (SECURITY FREEZE
-> LOCK) filtered out
-> [  103.143964] ata5.00: ACPI cmd b1/c1:00:00:00:00:00 (DEVICE
-> CONFIGURATION OVERLAY) filtered out
-> [  103.144103] ata5.00: ACPI cmd 00/00:00:00:00:00:a0 (NOP) rejected
-> by device (Stat=0x51 Err=0x04)
-> [  103.144532] ata5.00: supports DRM functions and may not be fully accessible
-> [  103.145328] ata5.00: disabling queued TRIM support
-> [  103.148888] ata5.00: configured for UDMA/133
-> [  103.159132] ahci 0000:00:17.0: port does not support device sleep
-> [  103.159591] ata5.00: Enabling discard_zeroes_data
-> [  103.674691] OOM killer enabled.
-> [  103.674692] Restarting tasks ... done.
-> [  103.719371] PM: suspend exit
-> [  103.992941] [drm:lspcon_init [i915]] *ERROR* Failed to probe lspcon
-> [  103.993000] [drm:intel_dp_detect_dpcd [i915]] *ERROR* LSPCON init
-> failed on port D
-> [  106.221326] e1000e 0000:00:1f.6 em1: NIC Link is Up 1000 Mbps Full
-> Duplex, Flow Control: Rx/Tx
->
-> The unusual thing is the "nouveau 0000:01:00.0: acr: unload binary
-> failed" message. This does not happen with 5.15.x kernels. Has anybody
-> else seen this with 5.16?
->
-> Happy weekend
-> Martin
-> --
-> ------------------------------------------------------
-> Martin Knoblauch
-> email: k n o b i AT knobisoft DOT de
-> www: http://www.knobisoft.de
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+87f65c75f4a72db05445@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+kernel BUG at arch/x86/kernel/alternative.c:989!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 12993 Comm: syz-executor.1 Not tainted 5.16.0-syzkaller-11632-gf95f768f0af4 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:__text_poke+0x343/0x8c0 arch/x86/kernel/alternative.c:989
+Code: c3 0f 86 2c fe ff ff 49 8d bc 24 00 10 00 00 e8 43 be 88 00 48 89 44 24 28 48 85 db 74 0c 48 83 7c 24 28 00 0f 85 1b fe ff ff <0f> 0b 48 b8 00 f0 ff ff ff ff 0f 00 49 21 c0 48 85 db 0f 85 c6 02
+RSP: 0018:ffffc90005e6f7a8 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88807d1c8000 RSI: ffffffff81b3c443 RDI: 0000000000000003
+RBP: 0000000000000080 R08: 0000000000000000 R09: ffffc90005e6f7bf
+R10: ffffffff81b3c3e1 R11: 0000000000000001 R12: ffffffffa0010e00
+R13: 0000000000000080 R14: 0000000000000e80 R15: 0000000000002000
+FS:  00007fd60b1d8700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f9329383090 CR3: 000000007c3bb000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000600
+Call Trace:
+ <TASK>
+ text_poke_copy+0x66/0xa0 arch/x86/kernel/alternative.c:1132
+ bpf_arch_text_copy+0x21/0x40 arch/x86/net/bpf_jit_comp.c:2426
+ bpf_jit_binary_pack_finalize+0x43/0x170 kernel/bpf/core.c:1094
+ bpf_int_jit_compile+0x9d5/0x12f0 arch/x86/net/bpf_jit_comp.c:2383
+ bpf_prog_select_runtime+0x4d4/0x8a0 kernel/bpf/core.c:2159
+ bpf_prog_load+0xfe6/0x2250 kernel/bpf/syscall.c:2349
+ __sys_bpf+0x68a/0x59a0 kernel/bpf/syscall.c:4640
+ __do_sys_bpf kernel/bpf/syscall.c:4744 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:4742 [inline]
+ __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4742
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fd60c863059
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fd60b1d8168 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00007fd60c975f60 RCX: 00007fd60c863059
+RDX: 0000000000000048 RSI: 0000000020000200 RDI: 0000000000000005
+RBP: 00007fd60c8bd08d R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffec77d82ef R14: 00007fd60b1d8300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__text_poke+0x343/0x8c0 arch/x86/kernel/alternative.c:989
+Code: c3 0f 86 2c fe ff ff 49 8d bc 24 00 10 00 00 e8 43 be 88 00 48 89 44 24 28 48 85 db 74 0c 48 83 7c 24 28 00 0f 85 1b fe ff ff <0f> 0b 48 b8 00 f0 ff ff ff ff 0f 00 49 21 c0 48 85 db 0f 85 c6 02
+RSP: 0018:ffffc90005e6f7a8 EFLAGS: 00010246
+
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88807d1c8000 RSI: ffffffff81b3c443 RDI: 0000000000000003
+RBP: 0000000000000080 R08: 0000000000000000 R09: ffffc90005e6f7bf
+R10: ffffffff81b3c3e1 R11: 0000000000000001 R12: ffffffffa0010e00
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

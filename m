@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D754B4C4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:44:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E72F4B4766
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348876AbiBNKjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:39:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44096 "EHLO
+        id S245075AbiBNJrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:47:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349420AbiBNKgb (ORCPT
+        with ESMTP id S245205AbiBNJo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:36:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC73715A5;
-        Mon, 14 Feb 2022 02:02:45 -0800 (PST)
+        Mon, 14 Feb 2022 04:44:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D986A02E;
+        Mon, 14 Feb 2022 01:38:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CA9B7B80CE0;
-        Mon, 14 Feb 2022 10:02:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AC02C340EF;
-        Mon, 14 Feb 2022 10:02:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AAB056102D;
+        Mon, 14 Feb 2022 09:38:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EF2FC340E9;
+        Mon, 14 Feb 2022 09:38:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832954;
-        bh=7LDs95ymi7OV85+xbBS8SAoB5UAExAJyb74/cAjDU14=;
+        s=korg; t=1644831504;
+        bh=FrmbRpw4yMtPFrZtcLJTy2zpIJYaSZTPwnuhF0NyZ0c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GqkafSEHdbwWoTbJr5MbAyR+p2TOiA11Z+mNVUgLFnax/KQV8mkKj8mI4vFZMYpuS
-         UztVVBqB9zPbU16NHlQm89+/7IO9dlkjoRoYQvacB1njIHiv3PdOZESZGoJHp/UZhA
-         p7LunvBB95ssRal8sp4RlLoZscp3ooekhuU5ml/o=
+        b=iWlH3xDZB2PJTP+Awlw+6sR/7YBRiWaCVXOGscd6K67SPN+4F6yZlt5g7vdqzzi7+
+         xDkfuuuOpmONhRnFuyG4CGjnL3F2I/1uqqXuWZNsKsBic2nrTrdfNKDl3QOsO9bdn+
+         jAsvJKTNJqZfbOWmaTjwdx5Qi4HPxW7sLGExxUI4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Louis Peens <louis.peens@corigine.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 145/203] nfp: flower: fix ida_idx not being released
+        stable@vger.kernel.org, Pavel Hofman <pavel.hofman@ivitera.com>
+Subject: [PATCH 5.4 61/71] usb: gadget: f_uac2: Define specific wTerminalType
 Date:   Mon, 14 Feb 2022 10:26:29 +0100
-Message-Id: <20220214092515.168524215@linuxfoundation.org>
+Message-Id: <20220214092454.090637841@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,82 +53,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Louis Peens <louis.peens@corigine.com>
+From: Pavel Hofman <pavel.hofman@ivitera.com>
 
-[ Upstream commit 7db788ad627aabff2b74d4f1a3b68516d0fee0d7 ]
+commit 5432184107cd0013761bdfa6cb6079527ef87b95 upstream.
 
-When looking for a global mac index the extra NFP_TUN_PRE_TUN_IDX_BIT
-that gets set if nfp_flower_is_supported_bridge is true is not taken
-into account. Consequently the path that should release the ida_index
-in cleanup is never triggered, causing messages like:
+Several users have reported that their Win10 does not enumerate UAC2
+gadget with the existing wTerminalType set to
+UAC_INPUT_TERMINAL_UNDEFINED/UAC_INPUT_TERMINAL_UNDEFINED, e.g.
+https://github.com/raspberrypi/linux/issues/4587#issuecomment-926567213.
+While the constant is officially defined by the USB terminal types
+document, e.g. XMOS firmware for UAC2 (commonly used for Win10) defines
+no undefined output terminal type in its usbaudio20.h header.
 
-    nfp 0000:02:00.0: nfp: Failed to offload MAC on br-ex.
-    nfp 0000:02:00.0: nfp: Failed to offload MAC on br-ex.
-    nfp 0000:02:00.0: nfp: Failed to offload MAC on br-ex.
+Therefore wTerminalType of EP-IN is set to
+UAC_INPUT_TERMINAL_MICROPHONE and wTerminalType of EP-OUT to
+UAC_OUTPUT_TERMINAL_SPEAKER for the UAC2 gadget.
 
-after NFP_MAX_MAC_INDEX number of reconfigs. Ultimately this lead to
-new tunnel flows not being offloaded.
-
-Fix this by unsetting the NFP_TUN_PRE_TUN_IDX_BIT before checking if
-the port is of type OTHER.
-
-Fixes: 2e0bc7f3cb55 ("nfp: flower: encode mac indexes with pre-tunnel rule check")
-Signed-off-by: Louis Peens <louis.peens@corigine.com>
-Signed-off-by: Simon Horman <simon.horman@corigine.com>
-Link: https://lore.kernel.org/r/20220208101453.321949-1-simon.horman@corigine.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+Cc: stable <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220131071813.7433-1-pavel.hofman@ivitera.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../net/ethernet/netronome/nfp/flower/tunnel_conf.c  | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/usb/gadget/function/f_uac2.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-index dfb4468fe287a..0a326e04e6923 100644
---- a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-+++ b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-@@ -1011,6 +1011,7 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
- 	struct nfp_flower_repr_priv *repr_priv;
- 	struct nfp_tun_offloaded_mac *entry;
- 	struct nfp_repr *repr;
-+	u16 nfp_mac_idx;
- 	int ida_idx;
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -176,7 +176,7 @@ static struct uac2_input_terminal_descri
  
- 	entry = nfp_tunnel_lookup_offloaded_macs(app, mac);
-@@ -1029,8 +1030,6 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
- 		entry->bridge_count--;
+ 	.bDescriptorSubtype = UAC_INPUT_TERMINAL,
+ 	/* .bTerminalID = DYNAMIC */
+-	.wTerminalType = cpu_to_le16(UAC_INPUT_TERMINAL_UNDEFINED),
++	.wTerminalType = cpu_to_le16(UAC_INPUT_TERMINAL_MICROPHONE),
+ 	.bAssocTerminal = 0,
+ 	/* .bCSourceID = DYNAMIC */
+ 	.iChannelNames = 0,
+@@ -204,7 +204,7 @@ static struct uac2_output_terminal_descr
  
- 		if (!entry->bridge_count && entry->ref_count) {
--			u16 nfp_mac_idx;
--
- 			nfp_mac_idx = entry->index & ~NFP_TUN_PRE_TUN_IDX_BIT;
- 			if (__nfp_tunnel_offload_mac(app, mac, nfp_mac_idx,
- 						     false)) {
-@@ -1046,7 +1045,6 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
- 
- 	/* If MAC is now used by 1 repr set the offloaded MAC index to port. */
- 	if (entry->ref_count == 1 && list_is_singular(&entry->repr_list)) {
--		u16 nfp_mac_idx;
- 		int port, err;
- 
- 		repr_priv = list_first_entry(&entry->repr_list,
-@@ -1074,8 +1072,14 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
- 	WARN_ON_ONCE(rhashtable_remove_fast(&priv->tun.offloaded_macs,
- 					    &entry->ht_node,
- 					    offloaded_macs_params));
-+
-+	if (nfp_flower_is_supported_bridge(netdev))
-+		nfp_mac_idx = entry->index & ~NFP_TUN_PRE_TUN_IDX_BIT;
-+	else
-+		nfp_mac_idx = entry->index;
-+
- 	/* If MAC has global ID then extract and free the ida entry. */
--	if (nfp_tunnel_is_mac_idx_global(entry->index)) {
-+	if (nfp_tunnel_is_mac_idx_global(nfp_mac_idx)) {
- 		ida_idx = nfp_tunnel_get_ida_from_global_mac_idx(entry->index);
- 		ida_simple_remove(&priv->tun.mac_off_ids, ida_idx);
- 	}
--- 
-2.34.1
-
+ 	.bDescriptorSubtype = UAC_OUTPUT_TERMINAL,
+ 	/* .bTerminalID = DYNAMIC */
+-	.wTerminalType = cpu_to_le16(UAC_OUTPUT_TERMINAL_UNDEFINED),
++	.wTerminalType = cpu_to_le16(UAC_OUTPUT_TERMINAL_SPEAKER),
+ 	.bAssocTerminal = 0,
+ 	/* .bSourceID = DYNAMIC */
+ 	/* .bCSourceID = DYNAMIC */
 
 

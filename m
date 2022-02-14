@@ -2,120 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D93A4B3F2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 03:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 078634B3F2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 03:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239237AbiBNCCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 21:02:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34740 "EHLO
+        id S239254AbiBNCFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 21:05:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239230AbiBNCCJ (ORCPT
+        with ESMTP id S233484AbiBNCFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 21:02:09 -0500
-Received: from mg.sunplus.com (mswedge1.sunplus.com [60.248.182.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 56C2953B56;
-        Sun, 13 Feb 2022 18:02:00 -0800 (PST)
-X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
-        ,3)
-Received: from 172.17.9.202
-        by mg01.sunplus.com with MailGates ESMTP Server V5.0(29719:0:AUTH_RELAY)
-        (envelope-from <tony.huang@sunplus.com>); Mon, 14 Feb 2022 10:02:09 +0800 (CST)
-Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
- sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
- 15.0.1497.26; Mon, 14 Feb 2022 10:02:09 +0800
-Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
- sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
- 15.00.1497.026; Mon, 14 Feb 2022 10:02:09 +0800
-From:   =?utf-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>
-CC:     Tony Huang <tonyhuang.sunplus@gmail.com>,
-        "lhjeff911@gmail.com" <lhjeff911@gmail.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        =?utf-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
-Subject: RE: [PATCH v3 1/2] dt-binding: mmc: Add mmc yaml file for Sunplus
- SP7021
-Thread-Topic: [PATCH v3 1/2] dt-binding: mmc: Add mmc yaml file for Sunplus
- SP7021
-Thread-Index: AQHYHaGbHjb6ERvO1kGc6F944DDDK6yLDxUAgAEMUcCAAa/MAIAEfxTg
-Date:   Mon, 14 Feb 2022 02:02:09 +0000
-Message-ID: <1dffd14796b84ffe92aa248fa994b0a4@sphcmbx02.sunplus.com.tw>
-References: <cover.1644398657.git.tonyhuang.sunplus@gmail.com>
- <f8b89f9981e17c023ce530afedb1f2b599edec0f.1644398657.git.tonyhuang.sunplus@gmail.com>
- <YgQQ2nJa12xblXBX@robh.at.kernel.org>
- <40d202104eec46d2a35445e0128a124f@sphcmbx02.sunplus.com.tw>
- <CAPDyKFqPcpVr-JZF-9-4Jxq9fbsVbLYsh8TjEJffRfueczq=uQ@mail.gmail.com>
-In-Reply-To: <CAPDyKFqPcpVr-JZF-9-4Jxq9fbsVbLYsh8TjEJffRfueczq=uQ@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [172.25.108.54]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Sun, 13 Feb 2022 21:05:11 -0500
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55E353B56
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 18:05:03 -0800 (PST)
+Received: by mail-qk1-x735.google.com with SMTP id b35so13282951qkp.6
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 18:05:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aH45NlfdWRTfweoUutUuJvBXViZnbk5RQ/1+2Xcuqxg=;
+        b=PeEKjS6mLh0yV+FjsVcrUmmAf98M9Ce7Z+8NDNQ+UmEtnI7mHx3A7T/CULb0a5uxGi
+         od82XtsfRt28HryZe67RGewDJr6AtVJ1VxxlzFHm+bAc4A+HL0GcARixvYPdtG7wKBME
+         xRb09UXgR0ylwGumT7cMc1SWuN1YfFAdofEWFnEiqLcEkthQGImMD0QO02dkhfUba6In
+         O1Uwll6ee1Q2kZiStzg3K/Uee7yncwPyeGNMP9oF7GuXcP4Dinrde5WV5gBhgapzkrO5
+         FFAwEf2fk3SlcLDCG3u/ZCZe90Tx/ZwX9o8unwfWL7020xu5hqXPA2QBtOyL/pRsKlVO
+         eYRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aH45NlfdWRTfweoUutUuJvBXViZnbk5RQ/1+2Xcuqxg=;
+        b=v3Ip9UK0PRCgBw4zpIj/F4uWumQ0i2v4tt9fYCnZXBwjmQIRtdAQWjr/B2btcUWjQO
+         qnLD7EHOJjP+WKPrFK0ZGHNV/ElDqyr3ojP73kvedtg6D+Cl0atuG5TpntTEWiF0dLuf
+         lH4m4AwTi4koQeiDTBER9Uk3Bd6cjaUYXzD8NWARnuOFG7eC3VmsQX7BIaMKyQyMhxIg
+         i8A8q7vC3pCmZq9E+acoGjnCu4HZMWzFTjjEIYxETN6zXh27jAFX8pAsySR5reFtTW5j
+         soTOaT7A1WD0EhYgJSeKpa6h7Og+o94vm8l18TjZ+YyUK5+A9VCu66hkZhaPMqw8W/4J
+         qYIg==
+X-Gm-Message-State: AOAM531xMKzP6zjlwtA1abGVtJ7yQExdIn9CdeNMU9p0W23ReB2qOb7w
+        VwM/PoHjcC7KK3NpVpHJ/hA=
+X-Google-Smtp-Source: ABdhPJwnbbKlb6/+9IP4/B70ReOp8eVtnIAo8INn36B5rGjuPolaQSEqwMy798c1jC/joZUZwXPeyg==
+X-Received: by 2002:ae9:e642:: with SMTP id x2mr3160677qkl.29.1644804302805;
+        Sun, 13 Feb 2022 18:05:02 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id j19sm12424487qkp.120.2022.02.13.18.04.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Feb 2022 18:05:02 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     joel@jms.id.au
+Cc:     airlied@linux.ie, daniel@ffwll.ch, andrew@aj.id.au,
+        linux-aspeed@lists.ozlabs.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] drm/aspeed: Use of_device_get_match_data()
+Date:   Mon, 14 Feb 2022 02:04:54 +0000
+Message-Id: <20220214020454.1714560-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RGVhciBVZmZlOg0KDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjMgMS8yXSBkdC1iaW5kaW5nOiBt
-bWM6IEFkZCBtbWMgeWFtbCBmaWxlIGZvciBTdW5wbHVzDQo+IFNQNzAyMQ0KPiANCj4gT24gVGh1
-LCAxMCBGZWIgMjAyMiBhdCAwOTo1NiwgVG9ueSBIdWFuZyDpu4Pmh7fljpoNCj4gPHRvbnkuaHVh
-bmdAc3VucGx1cy5jb20+IHdyb3RlOg0KPiA+DQo+ID4gRGVhciBSb2JoOg0KPiA+DQo+ID4gPiBT
-dWJqZWN0OiBSZTogW1BBVENIIHYzIDEvMl0gZHQtYmluZGluZzogbW1jOiBBZGQgbW1jIHlhbWwg
-ZmlsZSBmb3INCj4gPiA+IFN1bnBsdXMNCj4gPiA+IFNQNzAyMQ0KPiA+ID4NCj4gPiA+IE9uIFdl
-ZCwgRmViIDA5LCAyMDIyIGF0IDA2OjQxOjA2UE0gKzA4MDAsIFRvbnkgSHVhbmcgd3JvdGU6DQo+
-ID4gPiA+IEFkZCBtbWMgeWFtbCBmaWxlIGZvciBTdW5wbHVzIFNQNzAyMQ0KPiA+ID4gPg0KPiA+
-ID4gPiBTaWduZWQtb2ZmLWJ5OiBUb255IEh1YW5nIDx0b255aHVhbmcuc3VucGx1c0BnbWFpbC5j
-b20+DQo+ID4gPiA+IC0tLQ0KPiA+ID4gPiBDaGFuZ2VzIGluIHYzOg0KPiA+ID4gPiAgLSBjb21i
-aW5lIHNkY2FyZCBhbmQgZU1NQyBpbnRvIG9uZSBkcml2ZXIuDQo+ID4gPiA+DQo+ID4gPiA+ICAu
-Li4vZGV2aWNldHJlZS9iaW5kaW5ncy9tbWMvc3VucGx1cy1tbWMueWFtbCAgICAgICB8IDc2DQo+
-ID4gPiArKysrKysrKysrKysrKysrKysrKysrDQo+ID4gPiA+ICBNQUlOVEFJTkVSUyAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA2ICsrDQo+ID4gPiA+ICAyIGZpbGVz
-IGNoYW5nZWQsIDgyIGluc2VydGlvbnMoKykgIGNyZWF0ZSBtb2RlIDEwMDY0NA0KPiA+ID4gPiBE
-b2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbW1jL3N1bnBsdXMtbW1jLnlhbWwNCj4g
-PiA+ID4NCj4gPiA+ID4gZGlmZiAtLWdpdA0KPiA+ID4gPiBhL0RvY3VtZW50YXRpb24vZGV2aWNl
-dHJlZS9iaW5kaW5ncy9tbWMvc3VucGx1cy1tbWMueWFtbA0KPiA+ID4gPiBiL0RvY3VtZW50YXRp
-b24vZGV2aWNldHJlZS9iaW5kaW5ncy9tbWMvc3VucGx1cy1tbWMueWFtbA0KPiA+ID4gPiBuZXcg
-ZmlsZSBtb2RlIDEwMDY0NA0KPiA+ID4gPiBpbmRleCAwMDAwMDAwLi44ZjQ0ZDEzDQo+ID4gPiA+
-IC0tLSAvZGV2L251bGwNCj4gPiA+ID4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2Jp
-bmRpbmdzL21tYy9zdW5wbHVzLW1tYy55YW1sDQo+ID4gPiA+IEBAIC0wLDAgKzEsNzYgQEANCj4g
-PiA+ID4gKyMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IChHUEwtMi4wLW9ubHkgT1IgQlNELTIt
-Q2xhdXNlKSAjDQo+ID4gPiA+ICtDb3B5cmlnaHQNCj4gPiA+ID4gKyhDKSBTdW5wbHVzIEx0ZC4g
-Q28uIDIwMjEgJVlBTUwgMS4yDQo+ID4gPiA+ICstLS0NCj4gPiA+ID4gKyRpZDogaHR0cDovL2Rl
-dmljZXRyZWUub3JnL3NjaGVtYXMvbW1jL3N1bnBsdXMtbW1jLnlhbWwjDQo+ID4gPiA+ICskc2No
-ZW1hOiBodHRwOi8vZGV2aWNldHJlZS5vcmcvbWV0YS1zY2hlbWFzL2NvcmUueWFtbCMNCj4gPiA+
-ID4gKw0KPiA+ID4gPiArdGl0bGU6IHN1bnBsdXMgTU1DIGNvbnRyb2xsZXINCj4gPiA+ID4gKw0K
-PiA+ID4gPiArYWxsT2Y6DQo+ID4gPiA+ICsgIC0gJHJlZjogIm1tYy1jb250cm9sbGVyLnlhbWwi
-DQo+ID4gPiA+ICsNCj4gPiA+ID4gK21haW50YWluZXJzOg0KPiA+ID4gPiArICAtIFRvbnkgSHVh
-bmcgPHRvbnlodWFuZy5zdW5wbHVzQGdtYWlsLmNvbT4NCj4gPiA+ID4gKyAgLSBMaS1oYW8gS3Vv
-IDxsaGplZmY5MTFAZ21haWwuY29tPg0KPiA+ID4gPiArDQo+ID4gPiA+ICtwcm9wZXJ0aWVzOg0K
-PiA+ID4gPiArICBjb21wYXRpYmxlOg0KPiA+ID4gPiArICAgIGVudW06DQo+ID4gPiA+ICsgICAg
-ICAtIHN1bnBsdXMsc3A3MDIxLWVtbWMNCj4gPiA+ID4gKyAgICAgIC0gc3VucGx1cyxzcDcwMjEt
-c2RoY2kNCj4gPiA+DQo+ID4gPiBXaHkgYXJlIHRoZXNlIHN0aWxsIGRpZmZlcmVudD8gTG9va2lu
-ZyBhdCB0aGUgZHJpdmVyLCBpdCBzZWVtcyB0aGUNCj4gPiA+IHNldHRpbmdzIGFyZSB0aGUgc2Ft
-ZSBmb3IgYm90aC4gQW5kIGZvciBjbG9jayBzcGVlZHMsIHdlIGhhdmUNCj4gPiA+IHByb3BlcnRp
-ZXMgdG8gY29udHJvbCB0aGVtIGFzIHRoZXkgY2FuIGJlIGJvYXJkIHNwZWNpZmljLg0KPiA+ID4N
-Cj4gPg0KPiA+IFRoZSByZWdpc3RlciBiYXNlIGFkZHJlc3Mgb2YgZW1tYyBhbmQgc2QgY2FyZCBh
-cmUgZGlmZmVyZW50Lg0KPiA+IGVNTUMgYW5kIHNkY2FyZCBhcmUgaW5kaXZpZHVhbCBoYXJkd2Fy
-ZSBzZXR0aW5ncw0KPiANCj4gV2hlbiBJIGxvb2tlZCBhdCB0aGUgcHJldmlvdXMgdmVyc2lvbiBv
-ZiB0aGUgZHJpdmVyKHMpIHRoYXQgd2FzIHBvc3RlZCwgSSBnb3QgdGhlDQo+IGltcHJlc3Npb24g
-dGhhdCB5b3UgaGF2ZSBzb21lIHJlZ2lzdGVycyBpbiB0aGUgY29udHJvbGxlciB0aGF0IGFyZSBz
-cGVjaWZpYyBmb3INCj4gZU1NQywgU0Qgb3IgU0RJTy4NCj4gDQo+IFNvLCBkZXBlbmRpbmcgb24g
-aG93IHRoZSBjb250cm9sbGVyIGlzIGdvaW5nIHRvIGJlIHVzZWQgKGZvciBlTU1DLCBTRCBvciBT
-RElPKQ0KPiBpdCdzIG5lZWRzIHRvIGJlIGNvbmZpZ3VyZWQgZGlmZmVyZW50bHkuIFJpZ2h0Pw0K
-PiANCj4gSWYgSSBnb3QgdGhpcyByaWdodCwgSSB0aGluayB5b3UgY2FuIGluc3RlYWQgdXNlIHRo
-ZSBleGlzdGluZyBjb21tb24gRFQNCj4gcHJvcGVydGllcywgIm5vLXNkIiwgIm5vLXNkaW8iLCAi
-bm8tbW1jIiB0byBleHBsYWluIGhvdyBlYWNoIGNvbnRyb2xsZXIgaXMNCj4gY29uZmlndXJlZC4N
-Cj4gDQoNCk9LLCBJIHdpbGwgdXNlIERUPiBwcm9wZXJ0aWVzLCAibm8tc2QiLCAibm8tc2RpbyIs
-ICJuby1tbWMiICB0byBleHBsYWluIGhvdyANCmVhY2ggY29udHJvbGxlciBpcyBjb25maWd1cmVk
-Lg0KVGhhbmtzDQo=
+From: "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>
+
+Use of_device_get_match_data() to simplify the code.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+---
+ drivers/gpu/drm/aspeed/aspeed_gfx_drv.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c b/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c
+index 65f172807a0d..9fe1983bd9c3 100644
+--- a/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c
++++ b/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c
+@@ -132,7 +132,6 @@ static int aspeed_gfx_load(struct drm_device *drm)
+ 	struct aspeed_gfx *priv = to_aspeed_gfx(drm);
+ 	struct device_node *np = pdev->dev.of_node;
+ 	const struct aspeed_gfx_config *config;
+-	const struct of_device_id *match;
+ 	struct resource *res;
+ 	int ret;
+ 
+@@ -141,10 +140,7 @@ static int aspeed_gfx_load(struct drm_device *drm)
+ 	if (IS_ERR(priv->base))
+ 		return PTR_ERR(priv->base);
+ 
+-	match = of_match_device(aspeed_gfx_match, &pdev->dev);
+-	if (!match)
+-		return -EINVAL;
+-	config = match->data;
++	config = of_device_get_match_data(&pdev->dev);
+ 
+ 	priv->dac_reg = config->dac_reg;
+ 	priv->vga_scratch_reg = config->vga_scratch_reg;
+-- 
+2.25.1
+

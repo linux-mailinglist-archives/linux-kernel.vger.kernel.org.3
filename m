@@ -2,182 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1BB64B50E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 166144B507B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353770AbiBNM67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 07:58:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48902 "EHLO
+        id S1353338AbiBNMmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 07:42:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234368AbiBNM64 (ORCPT
+        with ESMTP id S234721AbiBNMmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 07:58:56 -0500
-X-Greylist: delayed 873 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 04:58:48 PST
-Received: from mo-csw-fb.securemx.jp (mo-csw-fb1115.securemx.jp [210.130.202.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223634BFDA;
-        Mon, 14 Feb 2022 04:58:47 -0800 (PST)
-Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1115) id 21ECiGbL023335; Mon, 14 Feb 2022 21:44:16 +0900
-Received: by mo-csw.securemx.jp (mx-mo-csw1114) id 21ECgOE7018633; Mon, 14 Feb 2022 21:42:24 +0900
-X-Iguazu-Qid: 2wGqsbWW1lOZcRLAJu
-X-Iguazu-QSIG: v=2; s=0; t=1644842543; q=2wGqsbWW1lOZcRLAJu; m=k5V7XzWVQj0SP0R98mV1AosP2jRUJYY7UC11k9IQftQ=
-Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
-        by relay.securemx.jp (mx-mr1111) id 21ECgIUs021987
-        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 14 Feb 2022 21:42:18 +0900
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j8xJ+lWPhAb97lsYnAgz9k7ZdOwhnzfz2p8+cjKtOiPo6URXdCFjSdZpfNqI5Czzv6fzmnKLWQX0rOFhJNx96extPQxX43Z1lyR2PxnKUpL4F4Xl4omPmS/CfaXOAMraWsXTeq/KFINudufmsFXJ8FurjtMed2Lg5g0C8vvgK5/yk0+FWjcNVvg5E4UsVFFv2SZzSt5ppJQnnEt9/ZLhl8zw0/oe0eUYUTLWdyPeYJadtNzZTsCgcVv+9/V3/SQ0ho8m/+JqSVnsT3NcHl+B1PV6V200MUevJ2GAXz5RpkB4E9Xadq/tX+w5Hzk9lN6mvoGJsG8Q4wpIqxdGTz4OOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=E3ncVM72lBMCHEb/R5gUeOjq5dsjnGfltu2dRJoPvzo=;
- b=oGH1vM+N+0Oeyqe7EYhahgwVi3wuhKlcGbz7h+ROTQS6ukq63kvwuMhKUHCdmZ9O8aWAoSRmKsFdTIuIWUQhboG0V2CgYjZbtW687xJP1KJ8lRNfWU7KTTeUbdP/wgqLeadmbV4OohnXLED+cpEGJ8YFsFaTddUd7lBJf6PmdQHckLSk9c0o3a2IGipakinwoFpOCrkR9W5fPsvw+Boq0anAD4XxS777yzJJ+oBPHidOlOO1A1KQ9xd7O+D5FiCCJzEQhhAaU/q4qq3FjpiDF7w77oN3P3d/YuXUU/8OL9heyQOuuLLOhjS3Wv3rxGIoMQs9y3UgJpMWugvXGQ1aFw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-From:   <nobuhiro1.iwamatsu@toshiba.co.jp>
-To:     <krzysztof.kozlowski@canonical.com>, <thierry.reding@gmail.com>,
-        <u.kleine-koenig@pengutronix.de>, <lee.jones@linaro.org>,
-        <robh+dt@kernel.org>, <mripard@kernel.org>, <wens@csie.org>,
-        <jernej.skrabec@gmail.com>, <f.fainelli@gmail.com>,
-        <bcm-kernel-feedback-list@broadcom.com>, <shawnguo@kernel.org>,
-        <s.hauer@pengutronix.de>, <kernel@pengutronix.de>,
-        <festevam@gmail.com>, <linux-imx@nxp.com>, <heiko@sntech.de>,
-        <palmer@dabbelt.com>, <paul.walmsley@sifive.com>,
-        <p.zabel@pengutronix.de>, <anson.huang@nxp.com>,
-        <vijayakannan.ayyathurai@intel.com>, <rtanwar@maxlinear.com>,
-        <jeff@labundy.com>, <yash.shah@sifive.com>,
-        <sagar.kadam@sifive.com>, <vigneshr@ti.com>,
-        <yoshihiro.shimoda.uh@renesas.com>,
-        <laurent.pinchart+renesas@ideasonboard.com>,
-        <linux-pwm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>
-Subject: RE: [PATCH 09/15] dt-bindings: pwm: toshiba,visconti: include generic
- pwm schema
-Thread-Topic: [PATCH 09/15] dt-bindings: pwm: toshiba,visconti: include
- generic pwm schema
-Thread-Index: AQHYIXtI+0MD+2w0uUqc+2gBlwMjwKyS/QgQ
-Date:   Mon, 14 Feb 2022 12:42:14 +0000
-X-TSB-HOP2: ON
-Message-ID: <TYAPR01MB625242DAA48BB652D839FC8392339@TYAPR01MB6252.jpnprd01.prod.outlook.com>
-References: <20220214081605.161394-1-krzysztof.kozlowski@canonical.com>
- <20220214081605.161394-9-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220214081605.161394-9-krzysztof.kozlowski@canonical.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=toshiba.co.jp;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 787aa248-3849-4121-ac0c-08d9efb76d9a
-x-ms-traffictypediagnostic: TYAPR01MB3088:EE_
-x-microsoft-antispam-prvs: <TYAPR01MB3088E56D37BD27D870A1570E92339@TYAPR01MB3088.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:125;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Jkc3VXfs4Nn5Z580T8rD4BOxd5I9Uvdei6JnMWANi8AQv09LLUvBWTxMMAI4AmcdbXtX2iqPE3EH5yHD3tq6KN8fr6Lx/+KdBftqOPFQK39eQh2gTKDh54wfKLzUqFtAnygjujCgiJBojharX3Szl/GMe/D0yjXtBdEkIQrmOokyiOSgbKxJ7ZVdobeMWhQDK4k5r5uy9PSlxznO6DZyDg8621lj2t/xeMG6By3M5VoglTbuNVL0VrftxoGEqMmz+vxa7nBI8NNncNchGyNFpLi7GjOVAgdtb91mnNYwyNu4VugGEfatn6BuKr2F7SwuzsZ2IrbdnHwUJBoLQhoPvv2CcRFDS15UhauznbpgbS9hBf4IleY7DhALa/2A3LvH8XBCwXSDCRiXviXkqt0JoFzpf99XW88/PwamvTFw3aNNuz3L73mBEgj5rp753hOYPhB+bxx4Gj4JNPouHn+PXXaP/bkbzV1u8sC4zGkU0FfEw/kp6lwF4dJvtGYTXqknZkgAzChudtnwzYs671jH5LJmlMJdJm8JmRRPFp7zSzY6mmKOiG8X9kvWfqb6P9Cj1jj/KjR7xcSDeFQKX3aTOa2PvGU3AgON1uZYv1gsZWflyngicXX9FY7IAKXh/BxttOuxU3HySYSCe/RZqsDf9MH62eMuepfJdVDtUKgi9Hy6z5YTBivs4yNcNAqyUJ0v2QvtDY9k6hBVntoBIx2ZA85CmkRyUNTOGVIJV3YudfCp2jIgJmj063QJ3mRXrsI8
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB6252.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(66446008)(2906002)(38070700005)(66556008)(76116006)(66946007)(6506007)(64756008)(122000001)(508600001)(921005)(186003)(26005)(5660300002)(8676002)(71200400001)(7416002)(7406005)(8936002)(52536014)(38100700002)(83380400001)(7696005)(86362001)(9686003)(33656002)(110136005)(55016003)(53546011)(316002)(41533002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?b1JKaDZvdStlRGdhb3FPTEIrRDBENWFQdGhXa1pFZmpGTlRraXVEOFpBdldB?=
- =?utf-8?B?Z05nWlowczRiZEVybm1ueVY4bHMxRGdiektGWW1PRmxNYjdUVkVpQ2hzYzFt?=
- =?utf-8?B?eEtONHRTd3RVTEpWSUxtMERtMnVqb0N3dnpST0EzYXgxQ2RoekZUckErMjhx?=
- =?utf-8?B?Yi9SbE5WbUVvZFJ5d09vc2R6b2R3UDg1OWlzckpmNnFTa3pTMFRPdk9ZQXdB?=
- =?utf-8?B?aDdkaDlNYk00K1dWenNjeWdIMkhacmhFSW9NbS9xU21UNVVQaHRCOVhGMGt2?=
- =?utf-8?B?eHJLd25hajN3Rm9WWHIzUDJpT2NtNFBERklyOWc0Z0tWMDBSQ3U1MHo4YmVx?=
- =?utf-8?B?RnY0UGJZZVFiWkZOUFVjY3R3d2RBL0Y2dkNQc3dqRnBlWEpSWjRpYTc0aGxT?=
- =?utf-8?B?UjRVcmgvS0p0TmdkdStmd05XaXgvNGVQVXdFQXhvaUQxR1psSGlJeU4ycHo3?=
- =?utf-8?B?RWpSbjZqd2FEcm56OEhpTS9CZDk1MzRlWEs1bWYvTEF1M281czZwaGdrSEMw?=
- =?utf-8?B?SDIxWUJad04wai9LZFlLZGFSYXlUcGo4KytIY1Jja2dOUkhFd3RSdktKUTRI?=
- =?utf-8?B?cFhycG9yajFsKzU5ZnVqTGdVRnBOMmpZM29LTDZnWnJxZWZNSjBOeDdwOGdL?=
- =?utf-8?B?d3Zvd3JsNkxHcXptQUEwd0NSK2twNk5Xd1lWY0RlZHlhaGJuUkJPVlMwakgz?=
- =?utf-8?B?SmQ2NHk0YVcrNU5BdkhlSGwycTJ2QldZYXhEam50cjNkUTdFSTNUbjZURjV2?=
- =?utf-8?B?d3pJVkd4YUEvaCtZNlkrZzZidlBnTkFQZDROSWhQQ01TL2RVUVY4aVZGM0hK?=
- =?utf-8?B?cERsQm9CNDF2K0VlNFF5MCtXTlhQTzFaYy9MQkRnYUZuaTRWOHR2bFNiY253?=
- =?utf-8?B?UC8yMFdwYm5BYTRqSmk2RXh0UGUrS21Ld3pyQ21wRHg3Mm9UTjIweldYamdu?=
- =?utf-8?B?T1JGdDlOQjg5aUEvYnY4YUIvbDNVSVU3SGVqYmdTTmVkTXdKS1F5TDB4YVBl?=
- =?utf-8?B?ZTZld29HOU95Qk13VGR3K0d0cVZMVUdmSlV2d2txdXd0T0dBWDlPYThhMUU3?=
- =?utf-8?B?NDQ5VlFnZ0VNNFJSZGFYcTNidUJQbFZ3anFFeU9JQ3U4US9nZ1ZCUTRQZDRK?=
- =?utf-8?B?YWVjbVd4NWs2emdCc3c4ZHUwYUJPNkVabzIvNGpldUg4bTRmZkUzR3NNU29Y?=
- =?utf-8?B?eXdweHJJVmg2UFlNSDVUa1lMY1k4WDZ2dTN4eEhvQ0xHNUdRS0dXSWFUT0w0?=
- =?utf-8?B?TWlzbkd3eHpYaTVETmM2emMyb1d6M08rNnhvbHZjeGF3aUtEWWJ6Qjh3cVpW?=
- =?utf-8?B?eTNFa0lmK0p4VmtYTkErS2YwRmZxY1plYjJFb24xT05lWDhPV2JjOTJJWTNk?=
- =?utf-8?B?VWJRZi81UTk4L21tNmlDRzF5VFgzdFUvY1gzQ0p3WmMyMzdhNXJqeTRHZWZt?=
- =?utf-8?B?UDhUZjNPM0J5bnRmUkpMMnA3SkJwNEhBY3dIVUt0U3FFRHprOS9NREFoZVBM?=
- =?utf-8?B?clBOWlFqbzhVRmFFalJuZEUxZWxST3E0V09ZekZZZFNaZ0w2eXBhWi96dEl4?=
- =?utf-8?B?SGVYK0hGNUFWK3RDMnE1RERIVnUwN0xiNmJ3THJnNGFFNElaQ2N5U2RpWW45?=
- =?utf-8?B?SGRJWWR6Q1JCejRVVVlkN1d4VmJobkNQOHU2TmpwVmFqSExUcGNDM0ZSN2FK?=
- =?utf-8?B?ZVkrVGdxS2hPUHFNYkNXbnd3NW5TcmQvN3BZTUw0cldTTUNJend2Q1JYN1hv?=
- =?utf-8?B?WlY0U1hYK2dGd3dLMWJyaWErV0lWNi91bjE2RVhPYThvV0xBTTQ5SmNxcFRE?=
- =?utf-8?B?UVNqTGRUTHVwaDgzOUladXArLzNwVG1xc080TllZY09tZENBckVXRm85eTlI?=
- =?utf-8?B?RUF1STlqeHRvYnZwdDdRK2MrK0dTall6YjRLWGJiRzZMMDNmc21SeHZZTlVB?=
- =?utf-8?B?T3NYdXFrclVpUUdSSFJKQnFZR0VmU29YUWpLMTdHTHJiS1F1TVVneTVrN1Yz?=
- =?utf-8?B?cklkNEhRRHBnTUZ2Z2lpSEM2T1ZLUUxhcnY5bHd0czYrR0s1ZkFJalhKWmZm?=
- =?utf-8?B?dVM0bXZnT1ZlT2IxcTNoYllzRzFtTkdPdjhVL3pqajJ3K1BCL0R4Qno1WE1S?=
- =?utf-8?B?K2xUWkhmTFlGYk5iL2hxM0NpcGprZG9BOGFyczFoNUM5VUVROEM2OWcxUjJj?=
- =?utf-8?B?a1dYRTdiRXBBQUZkQlpEOTdxc1NQaFhpbEJvajRKU3NWa0t2YWVVbjFGUk9R?=
- =?utf-8?B?N3ZGT0p0RW9zNWFLbFVFNkpBZVBxN2JKMjQ0TjBheDEvN0puN25GRTNYd0tX?=
- =?utf-8?Q?e509+Ogktf7eTqwBsw?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 14 Feb 2022 07:42:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A44349279
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 04:42:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644842553;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X1Jpjwwox5k5370KtI4j1QtTVVVbkixYWe+bK2EarXk=;
+        b=EyamBed5oWg3TvufrkDnZPUJb7lweEi4Xn4FXJPwMFEnF/0wIAywFoCTxAXKcB5lfeIz0h
+        Epd11zxQ0i2ilzmobZDbz1aRSP+zpLieL21zV6xYgtMtFOb/mdD7tB9QBug/+TrvkRkwhc
+        t/0ds+Oj54pHK50VZf1Xp9M4r1hOxno=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-251-nWFaa9fIN06n_jXoP-_3aQ-1; Mon, 14 Feb 2022 07:42:32 -0500
+X-MC-Unique: nWFaa9fIN06n_jXoP-_3aQ-1
+Received: by mail-ed1-f72.google.com with SMTP id d11-20020a50c88b000000b00410ba7a14acso1517915edh.6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 04:42:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=X1Jpjwwox5k5370KtI4j1QtTVVVbkixYWe+bK2EarXk=;
+        b=qiShP55mTgDWDoyxUg1kgvRu04dL98CIHBZhVWF/8eP8gBkTUBNwo9Catu8NPJsYa6
+         j1I2MCZjOAHVkvs3MmeLaZg9e2AADf0hmMwnu0c2cq4XwESnDPOpPJS4hvhTPv9PAloF
+         +Z76iXkmFFiZ9iJd1oQ6zsp9vfU7CVppPzPDzy2o1doQPHnr7pHvrkzxedhvGW3aPYoj
+         1NahhtRqRjVvZCN+vM6KWgAJXW6/sQ6dM00g8bBYl5NBt/9sbWNJ3LPIWCoFVQnSuye4
+         THpAb1dDdoBNo2Ln+V9SYQq8ZbmaT8kaGs1ym50ZgS1yBoFwGw7K0TWkQkAicg8wqaBT
+         aEVw==
+X-Gm-Message-State: AOAM531fMwujTSaqtwAgAgHbCFeJ3AU7taMQURF/RtwupzTeMpTiKFQr
+        MLCsPG+gLwd3fpS4PWBBVWOiRmbmRs5EdDIIbl3vOTzskxWSe5rKWRxPdTrRfxN292IcV0GbTFd
+        Mv58oQZWQ6+Yhudg3ddgefpzO
+X-Received: by 2002:aa7:c50c:: with SMTP id o12mr724066edq.371.1644842551360;
+        Mon, 14 Feb 2022 04:42:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyj/l4tfOptcU/CYAsP61RQdEKzffgL3aoTinb5HoXeMc77SQL0GNkvMZVC2W7G+of0QpBr4A==
+X-Received: by 2002:aa7:c50c:: with SMTP id o12mr724052edq.371.1644842551154;
+        Mon, 14 Feb 2022 04:42:31 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id 29sm6336686ejk.147.2022.02.14.04.42.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 04:42:30 -0800 (PST)
+Message-ID: <039f9e8d-6e29-0288-606a-1d298e026c97@redhat.com>
+Date:   Mon, 14 Feb 2022 13:42:29 +0100
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYAPR01MB6252.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 787aa248-3849-4121-ac0c-08d9efb76d9a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2022 12:42:14.5444
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: f109924e-fb71-4ba0-b2cc-65dcdf6fbe4f
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: EEowhYL3L+R0Hg9QCz4VF6Th38PmHsk4dfsIXDK3BLQEbbhO3qmyDWPJIFLWAyib/NJi7iXxQ3Y1aWRIJ1bWGrZV/7o2RupeK1bqTPcasHj/6idMpMWPQCAsNyVGYvaC
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB3088
-X-OriginatorOrg: toshiba.co.jp
-MSSCP.TransferMailToMossAgent: 103
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [5.17 regression] "x86/PCI: Ignore E820 reservations for bridge
+ windows on newer systems" breaks suspend/resume
+Content-Language: en-US
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        linux-acpi <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>, x86@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>
+References: <a7ad05fe-c2ab-a6d9-b66e-68e8c5688420@redhat.com>
+ <697aaf96-ec60-4e11-b011-0e4151e714d7@redhat.com> <YgKcl9YX4HfjqZxS@lahna>
+ <02994528-aaad-5259-1774-19aeacdd18fc@redhat.com> <YgPlQ6UK3+4/yzLk@lahna>
+ <2f01e99d-e830-d03c-3a9d-30b95726cc2c@redhat.com> <YgSzNAlfgcrm8ykH@lahna>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <YgSzNAlfgcrm8ykH@lahna>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBLcnp5c3p0b2YgS296bG93c2tp
-IDxrcnp5c3p0b2Yua296bG93c2tpQGNhbm9uaWNhbC5jb20+DQo+IFNlbnQ6IE1vbmRheSwgRmVi
-cnVhcnkgMTQsIDIwMjIgNToxNiBQTQ0KPiBUbzogVGhpZXJyeSBSZWRpbmcgPHRoaWVycnkucmVk
-aW5nQGdtYWlsLmNvbT47IFV3ZSBLbGVpbmUtS8O2bmlnDQo+IDx1LmtsZWluZS1rb2VuaWdAcGVu
-Z3V0cm9uaXguZGU+OyBMZWUgSm9uZXMgPGxlZS5qb25lc0BsaW5hcm8ub3JnPjsgUm9iDQo+IEhl
-cnJpbmcgPHJvYmgrZHRAa2VybmVsLm9yZz47IEtyenlzenRvZiBLb3psb3dza2kNCj4gPGtyenlz
-enRvZi5rb3psb3dza2lAY2Fub25pY2FsLmNvbT47IE1heGltZSBSaXBhcmQNCj4gPG1yaXBhcmRA
-a2VybmVsLm9yZz47IENoZW4tWXUgVHNhaSA8d2Vuc0Bjc2llLm9yZz47IEplcm5laiBTa3JhYmVj
-DQo+IDxqZXJuZWouc2tyYWJlY0BnbWFpbC5jb20+OyBGbG9yaWFuIEZhaW5lbGxpIDxmLmZhaW5l
-bGxpQGdtYWlsLmNvbT47DQo+IGJjbS1rZXJuZWwtZmVlZGJhY2stbGlzdEBicm9hZGNvbS5jb207
-IFNoYXduIEd1bw0KPiA8c2hhd25ndW9Aa2VybmVsLm9yZz47IFNhc2NoYSBIYXVlciA8cy5oYXVl
-ckBwZW5ndXRyb25peC5kZT47DQo+IFBlbmd1dHJvbml4IEtlcm5lbCBUZWFtIDxrZXJuZWxAcGVu
-Z3V0cm9uaXguZGU+OyBGYWJpbyBFc3RldmFtDQo+IDxmZXN0ZXZhbUBnbWFpbC5jb20+OyBOWFAg
-TGludXggVGVhbSA8bGludXgtaW14QG54cC5jb20+OyBIZWlrbw0KPiBTdHVlYm5lciA8aGVpa29A
-c250ZWNoLmRlPjsgUGFsbWVyIERhYmJlbHQgPHBhbG1lckBkYWJiZWx0LmNvbT47IFBhdWwNCj4g
-V2FsbXNsZXkgPHBhdWwud2FsbXNsZXlAc2lmaXZlLmNvbT47IGl3YW1hdHN1IG5vYnVoaXJvKOWy
-qeadviDkv6HmtIsg4pah77yzDQo+IO+8t++8o+KXr++8oe+8o++8tCkgPG5vYnVoaXJvMS5pd2Ft
-YXRzdUB0b3NoaWJhLmNvLmpwPjsgUGhpbGlwcCBaYWJlbA0KPiA8cC56YWJlbEBwZW5ndXRyb25p
-eC5kZT47IEFuc29uIEh1YW5nIDxhbnNvbi5odWFuZ0BueHAuY29tPjsNCj4gVmlqYXlha2FubmFu
-IEF5eWF0aHVyYWkgPHZpamF5YWthbm5hbi5heXlhdGh1cmFpQGludGVsLmNvbT47IFJhaHVsIFRh
-bndhcg0KPiA8cnRhbndhckBtYXhsaW5lYXIuY29tPjsgSmVmZiBMYUJ1bmR5IDxqZWZmQGxhYnVu
-ZHkuY29tPjsgWWFzaCBTaGFoDQo+IDx5YXNoLnNoYWhAc2lmaXZlLmNvbT47IFNhZ2FyIEthZGFt
-IDxzYWdhci5rYWRhbUBzaWZpdmUuY29tPjsgVmlnbmVzaA0KPiBSIDx2aWduZXNockB0aS5jb20+
-OyBZb3NoaWhpcm8gU2hpbW9kYQ0KPiA8eW9zaGloaXJvLnNoaW1vZGEudWhAcmVuZXNhcy5jb20+
-OyBMYXVyZW50IFBpbmNoYXJ0DQo+IDxsYXVyZW50LnBpbmNoYXJ0K3JlbmVzYXNAaWRlYXNvbmJv
-YXJkLmNvbT47IGxpbnV4LXB3bUB2Z2VyLmtlcm5lbC5vcmc7DQo+IGRldmljZXRyZWVAdmdlci5r
-ZXJuZWwub3JnOyBsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmc7DQo+IGxpbnV4
-LXN1bnhpQGxpc3RzLmxpbnV4LmRldjsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsNCj4g
-bGludXgtcm9ja2NoaXBAbGlzdHMuaW5mcmFkZWFkLm9yZzsgbGludXgtcmlzY3ZAbGlzdHMuaW5m
-cmFkZWFkLm9yZw0KPiBTdWJqZWN0OiBbUEFUQ0ggMDkvMTVdIGR0LWJpbmRpbmdzOiBwd206IHRv
-c2hpYmEsdmlzY29udGk6IGluY2x1ZGUgZ2VuZXJpYw0KPiBwd20gc2NoZW1hDQo+IA0KPiBJbmNs
-dWRlIGdlbmVyaWMgcHdtLnlhbWwgc2NoZW1hLCB3aGljaCBlbmZvcmNlcyBQV00gbm9kZSBuYW1p
-bmcgYW5kDQo+IGJyaW5ncyBwd20tY2VsbHMgcmVxdWlyZW1lbnQuDQo+IA0KPiBTaWduZWQtb2Zm
-LWJ5OiBLcnp5c3p0b2YgS296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGNhbm9uaWNhbC5j
-b20+DQoNClJldmlld2VkLWJ5OiBOb2J1aGlybyBJd2FtYXRzdSA8bm9idWhpcm8xLml3YW1hdHN1
-QHRvc2hpYmEuY28uanA+DQoNCkJlc3QgcmVnYXJkcywNCiAgTm9idWhpcm8NCg0K
+Hi,
+
+On 2/10/22 07:39, Mika Westerberg wrote:
+> Hi Hans,
+> 
+> On Wed, Feb 09, 2022 at 05:08:13PM +0100, Hans de Goede wrote:
+>> As mentioned in my email from 10 seconds ago I think a better simpler
+>> fix would be to just do:
+>>
+>> diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
+>> index 9b9fb7882c20..18656f823764 100644
+>> --- a/arch/x86/kernel/resource.c
+>> +++ b/arch/x86/kernel/resource.c
+>> @@ -28,6 +28,10 @@ static void remove_e820_regions(struct resource *avail)
+>>  	int i;
+>>  	struct e820_entry *entry;
+>>  
+>> +	/* Only remove E820 reservations on classic BIOS boot */
+>> +	if (efi_enabled(EFI_MEMMAP))
+>> +		return;
+>> +
+>>  	for (i = 0; i < e820_table->nr_entries; i++) {
+>>  		entry = &e820_table->entries[i];
+>>  
+>>
+>> I'm curious what you think of that?
+> 
+> I'm not an expert in this e820 stuff but this one looks really simple
+> and makes sense to me. So definitely should go with it assuming there
+> are no objections from the x86 maintainers.
+
+Unfortunately with this suspend/resume is still broken on the ThinkPad X1 carbon gen 2 of the reporter reporting the regression. The reporter has been kind enough to also test in EFI mode (at my request) and then the problem is back again with this patch. So just differentiating between EFI / non EFI mode is not an option.
+
+FYI, here is what I believe is the root-cause of the issue on the ThinkPad X1 carbon gen 2:
+
+The E820 reservations table has the following in both BIOS and EFI boot modes:
+
+[    0.000000] BIOS-e820: [mem 0x00000000dceff000-0x00000000dfa0ffff] reserved
+
+Which has a small overlap with:
+
+[    0.884684] pci_bus 0000:00: root bus resource [mem 0xdfa00000-0xfebfffff window]
+
+This leads to the following difference in assignments of PCI resources when honoring E820 reservations
+
+[    0.966573] pci 0000:00:1c.0: BAR 14: assigned [mem 0xdfb00000-0xdfcfffff]
+[    0.966698] pci_bus 0000:02: resource 1 [mem 0xdfb00000-0xdfcfffff]
+
+vs the following when ignoring E820 reservations:
+
+[    0.966850] pci 0000:00:1c.0: BAR 14: assigned [mem 0xdfa00000-0xdfbfffff]
+[    0.966973] pci_bus 0000:02: resource 1 [mem 0xdfa00000-0xdfbfffff]
+
+And the overlap of 0xdfa00000-0xdfa0ffff from the e820 reservations seems to be what is causing the suspend/resume issue.
+
+###
+
+As already somewhat discussed, I'll go and prepare this solution instead:
+
+1. Add E820_TYPE_MMIO to enum e820_type and modify the 2 places which check for
+   type == reserved to treat this as reserved too, so as to not have any
+   functional changes there
+
+2. Modify the code building e820 tables from the EFI memmap to use
+   E820_TYPE_MMIO for MMIO EFI memmap entries.
+
+3. Modify arch/x86/kernel/resource.c: remove_e820_regions() to skip
+   e820 table entries with a type of E820_TYPE_MMIO,
+   this would actually be a functional change and should fix the
+   issues we are trying to fix.
+
+Regards,
+
+Hans
 

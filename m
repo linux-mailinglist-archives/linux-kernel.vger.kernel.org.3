@@ -2,60 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A043D4B56E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED834B570E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:39:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356617AbiBNQhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 11:37:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43502 "EHLO
+        id S1356761AbiBNQit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 11:38:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356579AbiBNQh2 (ORCPT
+        with ESMTP id S1356670AbiBNQiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 11:37:28 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213B46515B;
-        Mon, 14 Feb 2022 08:37:13 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 419021F43601
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644856632;
-        bh=xtCoDMldrBj2wzxfrRVgsB4LaKOaG5qDFCWlCS3lxaw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PHkGIZlzuLMY3au0OU09JwwwDc+7TtKA8yHhQ4RZwmqVZ1oVJXqWwVsfDy5n8K0jl
-         lhM0z+EW+Vpart5pM9pBdnT6Kl5o/mcS3KTjMxhwORH5YFXKsCNpNWTmPbiyPdrouu
-         ZG3Rs0vSNo8q4xtJyaBZjSLg7LrM7Gbbk21oeMSZPxlb4GvqTOqpeEEUzeFlPBr9D5
-         5qfh4l1895y2FdoeDFjEX9dtWRYt2mynMKNtfBIhKJFdjkcZgCneiIbvZo5aFobfuD
-         uZ2o4dzVwpPEVnzGHIEmQV7GcORMRP/wavoUgBFBkWRWqmvnTOnjyKySVMSjsvpJeL
-         2pj6E+trme9FQ==
-Received: by mercury (Postfix, from userid 1000)
-        id 6684510603FD; Mon, 14 Feb 2022 17:37:10 +0100 (CET)
-Date:   Mon, 14 Feb 2022 17:37:10 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 2/4] dt-bindings: power: supply: maxim,max14577:
- convert to dtschema
-Message-ID: <20220214163710.g5brep7jkvwf44ih@mercury.elektranox.org>
-References: <20220111174337.223320-1-krzysztof.kozlowski@canonical.com>
- <20220111174337.223320-3-krzysztof.kozlowski@canonical.com>
- <20220112112905.n6zb36kwop2kfm2n@earth.universe>
- <YgpkgSmxAWCNHW9l@google.com>
+        Mon, 14 Feb 2022 11:38:01 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4496965157
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:37:53 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id o24so25161090wro.3
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:37:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=GERI15kAg2IEXoXQSm/7wU4UYh+dy6tber8xEGG/84I=;
+        b=JkfmwJB79wq+zNYYz8o87uqDLMrzGJhti7dpAN6UzOBawUaQDpRpwRHO2X9vU1kuVN
+         21aLq+N7KaXEPcNiCbnJGrm4ApbdbmD46HH2MXIXcPDc4IGwllRBWmKkdjxxDWS8CK4k
+         uQEBkoBJAEUjJRZY/nCjSyO+daj3ZoZtMC2Vu/fJ+XdqzZdrbYettSDHHuPY5pVhZC7p
+         +6iwP4D8wNPgtL1JrfSZB2MvfRCtxWbmPNuIrkLsY7vLFJ36brN0JziwUgo6yZNmQsxK
+         ZN5Ev7xlmj8s/NiifAnZGguyGNZvfRFOPprPwl9LAKtq9ml/iPnbTv2NjPR2cH5leuje
+         zdCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GERI15kAg2IEXoXQSm/7wU4UYh+dy6tber8xEGG/84I=;
+        b=b9Ko3fq58X4vnffNa7SM9KmxyqvFnfGJW+SsL3Oym1YCgftOCXhtExzlfG5YBJxXtj
+         vcAdoU8vYB580vjEOwcVcNwiq5513Kad2dTPSI7YapU/ktJ8HEYUU8iEGjfrvJjapsUY
+         /Chw2RSCe80288KEkbhSWxOZ3Huw0AQUgPMbUWhOnA85ZpOgT7OSPBt7wVKyEwHSRfR+
+         /owMSPeIYIA6pMkisPdzJMR1inXcPGKUQhHsW7tzvQi5UiB3og2zK0aH5+19g2619hQp
+         BXDzY2tX64Xu7WPYJa2zd3089E6XBB+gIkELYbHQhtuLFW4oG5k0ibFG0Ar5HwI3fChj
+         xATw==
+X-Gm-Message-State: AOAM532ILQHcXwo1rQqHmrxsbZmj/eS55V3j6+BlviCQg0TmXAJcEBMt
+        rAlm1YZkuFihIZ7CMo1SEE267T90/wA8XQ==
+X-Google-Smtp-Source: ABdhPJw9cTWj/LL6u1NQ/d+t4lZJ/jQdpvDErbpRn7xv3ZvwdqN1IElBWCX322eq42d0Hjdc8Ujaxw==
+X-Received: by 2002:a5d:69c1:: with SMTP id s1mr361263wrw.159.1644856671867;
+        Mon, 14 Feb 2022 08:37:51 -0800 (PST)
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id e4sm10084008wrp.25.2022.02.14.08.37.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 08:37:51 -0800 (PST)
+Message-ID: <649ddfe5-09a0-90e9-d3c3-f6c1a452545d@linaro.org>
+Date:   Mon, 14 Feb 2022 16:37:50 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lbjfw46sz4tz7akt"
-Content-Disposition: inline
-In-Reply-To: <YgpkgSmxAWCNHW9l@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 1/2] doc: nvmem: Remove references to regmap
+Content-Language: en-US
+To:     Sean Anderson <sean.anderson@seco.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>
+References: <20220214163514.435142-1-sean.anderson@seco.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220214163514.435142-1-sean.anderson@seco.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,52 +75,50 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---lbjfw46sz4tz7akt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi Lee,
+On 14/02/2022 16:35, Sean Anderson wrote:
+> Since commit 795ddd18d38f ("nvmem: core: remove regmap dependency"),
+> nvmem devices do not use the regmap API. Remove references to it from
+> the documentation.
+> 
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
 
-On Mon, Feb 14, 2022 at 02:17:37PM +0000, Lee Jones wrote:
-> On Wed, 12 Jan 2022, Sebastian Reichel wrote:
-> > On Tue, Jan 11, 2022 at 06:43:35PM +0100, Krzysztof Kozlowski wrote:
-> > > Convert the Charger bindings of Maxim MAX14577/MAX77836 MUIC to DT
-> > > schema format.  The existing bindings were defined in
-> > > ../bindings/mfd/max14577.txt.
-> > >=20
-> > > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> > > Reviewed-by: Rob Herring <robh@kernel.org>
-> > > ---
-> >=20
-> > I expect this to be merged through MFD:
-> >=20
-> > Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->=20
-> Do you need a PR?
 
-No, Not needed.
+Applied both thanks,
 
--- Sebastian
-
---lbjfw46sz4tz7akt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIKhSIACgkQ2O7X88g7
-+pq9MA/+JkCCsNVnqwkgph6JTIH9cztGiu1Jhcm6dR1hCLceMuXV1S3jVlaM9z2I
-yvzMmrh7IuIxSqEOlGrtZIxkemcg2v27VdkzNOooQXKEphKsV632WuaoGQr8N+sO
-jvg0al6n6PDPsUwb1MkphrRzQeHYhRJ58hZv1JgWeHMSvCwOAy6PT1NwruoSjjg/
-iG7QUwk6RaWOlYWqmVcLx0oFpjtHHQOjmZSgyBViK2cDo6DlNv4tjaCWe1Nys3Zj
-qmzgRWdh2VjAzFDLANzhZxoLa6h2HfiI4lohgGP+F8p16MxY1OJzMQm4fh3CHM7t
-vO2cd3P8910VDCk+6GtQHxzHgUQxRBNqwUqPIA1uwW3r/BOz50DRpG+oBvyWW8u2
-usglqyE53tUJD/m58C33fERAUsqoin2TGaM+2TqyR0HYFxuNQ/q+xVU6c/Uh+tDP
-mkQkVdfbJFgUf/O3v6+aQhLJd+kNQ/kRNO3M9aMeK4VQABmrEbMe0J800/UqFuas
-iSjFRKJcZNLIhmxpRnAfJxV4FqY+dDvOsdBFxYrHRdDDasn7n5R0+5N+p4vrpv8B
-1xcyRumGHzrnzV7Aq+H2dUsgd2wRQXgY+khi1Bnw/Zl+Wa5xHzmBI7PLvD8Q3Y7A
-Ap5IosC/AcUwb7hSwuGJaObVmOgogotgeoZ46fJputXcOdowthU=
-=yjeI
------END PGP SIGNATURE-----
-
---lbjfw46sz4tz7akt--
+--srini
+> ---
+> 
+> (no changes since v2)
+> 
+> Changes in v2:
+> - Replace spaces with tabs
+> 
+>   Documentation/driver-api/nvmem.rst | 7 +------
+>   1 file changed, 1 insertion(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/driver-api/nvmem.rst b/Documentation/driver-api/nvmem.rst
+> index 287e86819640..56352ad1b1b0 100644
+> --- a/Documentation/driver-api/nvmem.rst
+> +++ b/Documentation/driver-api/nvmem.rst
+> @@ -26,9 +26,7 @@ was a rather big abstraction leak.
+>   
+>   This framework aims at solve these problems. It also introduces DT
+>   representation for consumer devices to go get the data they require (MAC
+> -Addresses, SoC/Revision ID, part numbers, and so on) from the NVMEMs. This
+> -framework is based on regmap, so that most of the abstraction available in
+> -regmap can be reused, across multiple types of buses.
+> +Addresses, SoC/Revision ID, part numbers, and so on) from the NVMEMs.
+>   
+>   NVMEM Providers
+>   +++++++++++++++
+> @@ -60,9 +58,6 @@ For example, a simple qfprom case::
+>   	...
+>     }
+>   
+> -It is mandatory that the NVMEM provider has a regmap associated with its
+> -struct device. Failure to do would return error code from nvmem_register().
+> -
+>   Users of board files can define and register nvmem cells using the
+>   nvmem_cell_table struct::
+>   

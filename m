@@ -2,195 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73BBE4B576F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B826A4B5776
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356785AbiBNQxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 11:53:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33532 "EHLO
+        id S1347981AbiBNQyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 11:54:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356757AbiBNQwz (ORCPT
+        with ESMTP id S235809AbiBNQyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 11:52:55 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F09836517A
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:52:43 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A0F0114BF;
-        Mon, 14 Feb 2022 08:52:43 -0800 (PST)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A60613F70D;
-        Mon, 14 Feb 2022 08:52:41 -0800 (PST)
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     ardb@kernel.org, bp@alien8.de, catalin.marinas@arm.com,
-        dave.hansen@linux.intel.com, frederic@kernel.org,
-        james.morse@arm.com, joey.gouly@arm.com, juri.lelli@redhat.com,
-        linux-kernel@vger.kernel.org, luto@kernel.org,
-        mark.rutland@arm.com, mingo@redhat.com, peterz@infradead.org,
-        tglx@linutronix.de, valentin.schneider@arm.com, will@kernel.org
-Subject: [PATCH v4 7/7] arm64: support PREEMPT_DYNAMIC
-Date:   Mon, 14 Feb 2022 16:52:16 +0000
-Message-Id: <20220214165216.2231574-8-mark.rutland@arm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220214165216.2231574-1-mark.rutland@arm.com>
-References: <20220214165216.2231574-1-mark.rutland@arm.com>
+        Mon, 14 Feb 2022 11:54:12 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C94E65151
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:54:04 -0800 (PST)
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id ECC323F1AE
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 16:54:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644857642;
+        bh=Z4S/EJbvQ1weqsHWE/JQuNYq7y3Ue8zFIgR4/tFO2mA=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=J0qkiwb6AibsOrSjn/aEavL3of8cxZDZue0oxMGcMbYUUqHCVMjWfyunYxmlUqho4
+         1weusaZwbF42fsAd24g72p+sQDNXg3JGt4xJC5dXGaJ2CgjEp70LHdPLCYtgw8gqmZ
+         Ehnhw/LfLy+rqLw8NiJMZw4Aat1+jB8/VtqC9xhvH5aD+jA3SdPYtiXck2Xtg99ZPW
+         atpff4/eP+lNEWJz4SC17FiM9Cgs2ptWBoNJJKQWxttz4k64cs313j1C1EE/fj6QxY
+         WymKBKH0BNoOVsH1RF8QfKQ2HqINbRcZtQFmeSWQ8MNjlJEhPEemOiSDdvOz3ymGzT
+         UcE3Ameh4aJbw==
+Received: by mail-wm1-f71.google.com with SMTP id r16-20020a05600c2c5000b0037bb20c50b8so5243674wmg.3
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:54:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Z4S/EJbvQ1weqsHWE/JQuNYq7y3Ue8zFIgR4/tFO2mA=;
+        b=f9MF7lIcKHCVvjt4dR/sWoDh8q51LODZL5iK+j2UX1RK9Y84zqj2sf5/3XfsOZCLr2
+         C8/JNFkIGYScO5Y7xXRptSXY+ydns5o1h8MBeZZP65lGxQFp45PbfE5hBuyZ+cLqkfnx
+         HJiBrC4DhOcutoljtVXYA8t5vJefM6i0WzT92aPSf98jA8uVYiwQHit+M2XIxGeaBxGX
+         lilSM4I7d7PxQ87efUyEvSfkKBTNbvBCXOIMGZ8Gcx0mXLRvIIcWGoQj2OICfrm6YO+X
+         Nq55XH9zJ4ASsNLZH949+uga/uHbJfInyuYpUuMzmv3xwQVqVhlp7yIP99Yfyc9HNDdJ
+         J66g==
+X-Gm-Message-State: AOAM532D/A0/P6XTEsMfhszgbd1wsp2gzaW1Ah4rNNSuyKFigiLeWVRR
+        ApLl2Z3gSE9G8mEbS9lTyjlL6XE7ZKkN1yFAMle+WfMev/l0ej4eA/UfdNgQuoG6NpH87DHm7Fh
+        h3Ff3kra1TDCCcemodQW/MCpsTYeo5hjST5kA3LWfqg==
+X-Received: by 2002:a5d:4485:: with SMTP id j5mr406252wrq.495.1644857642743;
+        Mon, 14 Feb 2022 08:54:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzSf3b2QSKeODIAdKKEC369EQy5hjdyp/pGhW6kuWrBv4X2cL2F9qX6q7z2Gv0yC52ifPjbYQ==
+X-Received: by 2002:a5d:4485:: with SMTP id j5mr406243wrq.495.1644857642592;
+        Mon, 14 Feb 2022 08:54:02 -0800 (PST)
+Received: from [192.168.0.106] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id y17sm12488792wma.5.2022.02.14.08.54.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 08:54:01 -0800 (PST)
+Message-ID: <79ecad6e-d9c9-c798-0933-43da4dff9dd6@canonical.com>
+Date:   Mon, 14 Feb 2022 17:54:01 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 3/4] regulator: dt-bindings: maxim,max14577: convert to
+ dtschema
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+References: <20220111174337.223320-1-krzysztof.kozlowski@canonical.com>
+ <20220111174337.223320-4-krzysztof.kozlowski@canonical.com>
+ <YgqGy7a/kq2+jZQm@sirena.org.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <YgqGy7a/kq2+jZQm@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables support for PREEMPT_DYNAMIC on arm64, allowing the
-preemption model to be chosen at boot time.
+On 14/02/2022 17:43, Mark Brown wrote:
+> On Tue, Jan 11, 2022 at 06:43:36PM +0100, Krzysztof Kozlowski wrote:
+> 
+>> +    required:
+>> +      - regulator-name
+> 
+> Why is regulator-name required?  While it's a good idea for users to
+> document names for supplies on their boards it shouldn't be a
+> requirement or something that a driver would care about.
 
-Specifically, this patch selects HAVE_PREEMPT_DYNAMIC_KEY, so that each
-preemption function is an out-of-line call with an early return
-depending upon a static key. This leaves almost all the codegen up to
-the compiler, and side-steps a number of pain points with static calls
-(e.g. interaction with CFI schemes). This should have no worse overhead
-than using non-inline static calls, as those use out-of-line trampolines
-with early returns.
+Indeed, there is no need for requiring the name. I guess I copied it
+from other schemas.
 
-For example, the dynamic_cond_resched() wrapper looks as follows when
-enabled. When disabled, the first `B` is replaced with a `NOP`,
-resulting in an early return.
+I think this was not applied yet, so I'll send a v3.
 
-| <dynamic_cond_resched>:
-|        bti     c
-|        b       <dynamic_cond_resched+0x10>     // or `nop`
-|        mov     w0, #0x0
-|        ret
-|        mrs     x0, sp_el0
-|        ldr     x0, [x0, #8]
-|        cbnz    x0, <dynamic_cond_resched+0x8>
-|        paciasp
-|        stp     x29, x30, [sp, #-16]!
-|        mov     x29, sp
-|        bl      <preempt_schedule_common>
-|        mov     w0, #0x1
-|        ldp     x29, x30, [sp], #16
-|        autiasp
-|        ret
-
-... compared to the regular form of the function:
-
-| <__cond_resched>:
-|        bti     c
-|        mrs     x0, sp_el0
-|        ldr     x1, [x0, #8]
-|        cbz     x1, <__cond_resched+0x18>
-|        mov     w0, #0x0
-|        ret
-|        paciasp
-|        stp     x29, x30, [sp, #-16]!
-|        mov     x29, sp
-|        bl      <preempt_schedule_common>
-|        mov     w0, #0x1
-|        ldp     x29, x30, [sp], #16
-|        autiasp
-|        ret
-
-Since arm64 does not yet use the generic entry code, we must define our
-own `sk_dynamic_irqentry_exit_cond_resched`, which will be
-enabled/disabled by the common code in kernel/sched/core.c. All other
-preemption functions and associated static keys are defined there.
-
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Frederic Weisbecker <frederic@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Joey Gouly <joey.gouly@arm.com>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Valentin Schneider <valentin.schneider@arm.com>
-Cc: Will Deacon <will@kernel.org>
----
- arch/arm64/Kconfig               |  1 +
- arch/arm64/include/asm/preempt.h | 19 +++++++++++++++++--
- arch/arm64/kernel/entry-common.c | 10 +++++++++-
- 3 files changed, 27 insertions(+), 3 deletions(-)
-
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index f2b5a4abef21..3831d922a81d 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -192,6 +192,7 @@ config ARM64
- 	select HAVE_PERF_EVENTS
- 	select HAVE_PERF_REGS
- 	select HAVE_PERF_USER_STACK_DUMP
-+	select HAVE_PREEMPT_DYNAMIC_KEY
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_POSIX_CPU_TIMERS_TASK_WORK
- 	select HAVE_FUNCTION_ARG_ACCESS_API
-diff --git a/arch/arm64/include/asm/preempt.h b/arch/arm64/include/asm/preempt.h
-index e83f0982b99c..0159b625cc7f 100644
---- a/arch/arm64/include/asm/preempt.h
-+++ b/arch/arm64/include/asm/preempt.h
-@@ -2,6 +2,7 @@
- #ifndef __ASM_PREEMPT_H
- #define __ASM_PREEMPT_H
- 
-+#include <linux/jump_label.h>
- #include <linux/thread_info.h>
- 
- #define PREEMPT_NEED_RESCHED	BIT(32)
-@@ -80,10 +81,24 @@ static inline bool should_resched(int preempt_offset)
- }
- 
- #ifdef CONFIG_PREEMPTION
-+
- void preempt_schedule(void);
--#define __preempt_schedule() preempt_schedule()
- void preempt_schedule_notrace(void);
--#define __preempt_schedule_notrace() preempt_schedule_notrace()
-+
-+#ifdef CONFIG_PREEMPT_DYNAMIC
-+
-+DECLARE_STATIC_KEY_TRUE(sk_dynamic_irqentry_exit_cond_resched);
-+void dynamic_preempt_schedule(void);
-+#define __preempt_schedule()		dynamic_preempt_schedule()
-+void dynamic_preempt_schedule_notrace(void);
-+#define __preempt_schedule_notrace()	dynamic_preempt_schedule_notrace()
-+
-+#else /* CONFIG_PREEMPT_DYNAMIC */
-+
-+#define __preempt_schedule()		preempt_schedule()
-+#define __preempt_schedule_notrace()	preempt_schedule_notrace()
-+
-+#endif /* CONFIG_PREEMPT_DYNAMIC */
- #endif /* CONFIG_PREEMPTION */
- 
- #endif /* __ASM_PREEMPT_H */
-diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
-index 2c639b6b676d..675352ec1368 100644
---- a/arch/arm64/kernel/entry-common.c
-+++ b/arch/arm64/kernel/entry-common.c
-@@ -220,9 +220,17 @@ static void noinstr arm64_exit_el1_dbg(struct pt_regs *regs)
- 		lockdep_hardirqs_on(CALLER_ADDR0);
- }
- 
-+#ifdef CONFIG_PREEMPT_DYNAMIC
-+DEFINE_STATIC_KEY_TRUE(sk_dynamic_irqentry_exit_cond_resched);
-+#define need_irq_preemption() \
-+	(static_branch_unlikely(&sk_dynamic_irqentry_exit_cond_resched))
-+#else
-+#define need_irq_preemption()	(IS_ENABLED(CONFIG_PREEMPTION))
-+#endif
-+
- static void __sched arm64_preempt_schedule_irq(void)
- {
--	if (!IS_ENABLED(CONFIG_PREEMPTION))
-+	if (!need_irq_preemption())
- 		return;
- 
- 	/*
--- 
-2.30.2
-
+Best regards,
+Krzysztof

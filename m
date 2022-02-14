@@ -2,96 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1110A4B5839
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:13:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F604B583E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356952AbiBNRNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 12:13:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45428 "EHLO
+        id S1356962AbiBNROl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 12:14:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231450AbiBNRNO (ORCPT
+        with ESMTP id S1356955AbiBNROj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 12:13:14 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB28F4C43C;
-        Mon, 14 Feb 2022 09:13:05 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id qk11so18481492ejb.2;
-        Mon, 14 Feb 2022 09:13:05 -0800 (PST)
+        Mon, 14 Feb 2022 12:14:39 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3ABC65173
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:14:31 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id b8so3293447pjb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:14:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=3Fk8twNCDj+wvRPPnauS0r1tDhPrGepWuPsXEFLTKTk=;
-        b=NDAe7fCLf6sA/zxhNxQ77owR34T8UGjUGbAzZikk4FcorqiCJK7lWuW/PEigNr6TDZ
-         tT+BBY45s4+cKDEYBWfD61KxSAsdIsalAEo26xD37BJMrWH8ichvKOaVbNtpNSG3e+O1
-         OFP+uRStpbszEyHXQH4E7zmSB5F1o/g9/1OcJ1LJVXVSMwfpJC+Z7QdB7457m+aeGtss
-         eVwivFzm1n31yfxocGOGwnuiv73LrZIksNQx/Ko+HDM3JZihJpE08XV1/n7RXrZzlXG2
-         2RZ0Gc0PSH9UXf5IY4wI7xqoRzyIs1C6YZXHdi7T1aQs2LLpwFGUkRVN5dA09LDjTVQJ
-         7gVA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=auHdDKcE/HC+BDwZpCPvw9X/g5EzgIbYvOhoHY8/cJY=;
+        b=JbvD4yatDBiI12WQDdeOK5f0z8ngSNl6pVxPJJnhEgNasmDkLcTlLZcpmzyfzAlJFa
+         MetFFN9apMVPRUdfITZo7Euk4O4YzfwoPU+M2d0VQhg/3e+RF4PfjKj8SBcERdDVFUxo
+         kYTP8O8GVkrjlu0Z2kYe6W1ZkVCOLGGcBuJ8WU/8CiCXyFP+pGT3zZXNmQlTEp2+9LNc
+         uCtfng0MRDpXhl7s8DCo4+MPagjhhfH0v4HLXgkx/9LBDqXT6P7PuRTUGtd9usCULgyk
+         ILDKui5NWOzFiO8twcW5SPuMKuaoDwaunCs6x6QkEh4np2NzN7uwC1YUcjtDfeplP+ej
+         DByg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3Fk8twNCDj+wvRPPnauS0r1tDhPrGepWuPsXEFLTKTk=;
-        b=mmJfe2Efw3IQnpfuF4CRcQxbupONM2YBkmpyz7WHfVDdNAksv5fNAUGaeQrgPmcnfg
-         9yBKWt0uKJ1Y1MnsrGraTvFIjh6naRkPEmlPegM3Jw5VW8G6Y3h9N3fK1pF/Sp6REYED
-         aUSLe2saoXf6iSQQfNjNORdw+cCnG+HCz2LpEa+YRgMnfjGIXbEp//FNrnTog/iwn8aP
-         TadmX3c8MGtGbG516NtJNNi5p/7XXPAhUI4r9xyusVNcsuaFc1TGNS8yWJfo5oWgtoAg
-         ftxJYTl0fA4d5IriI2pM1f4fkXcZ7WnhXziIvko95q76TFb9pzLgSsAdencRibXg8oPv
-         Dldg==
-X-Gm-Message-State: AOAM533nEVoDfWgxhpVPibIcUmnCrnOwXU3NselTXojEeUP9QXL89SJc
-        xmMz4XSueYsb/TxRdmJCXLY=
-X-Google-Smtp-Source: ABdhPJzg4slRDT/mw7ZOBMAOQzMQYAcNt8auS9xTWhsl5NDb/5V8h4eVpjx6YXnsY8ve32KgLbEa+A==
-X-Received: by 2002:a17:907:a428:: with SMTP id sg40mr512036ejc.128.1644858784198;
-        Mon, 14 Feb 2022 09:13:04 -0800 (PST)
-Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id 23sm2427068ejg.209.2022.02.14.09.13.02
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=auHdDKcE/HC+BDwZpCPvw9X/g5EzgIbYvOhoHY8/cJY=;
+        b=wO9saaORDdpjpw/HHpvl4zomojiU9SEZMd/q0LxpOL6tKfHCzeYWZRWn5J2n7TiVXo
+         1bn8bqfugeFtwUIfXq+CfTTQoPPVnDgitqxpUMRJO6b/ghsGXicehlOCU8ISwkBl4JJn
+         7u/R0ECCZA9EzlDC7l0AFyuX8YN0yIDWARG3mYhLRXzslpeAEIHidv3XoeP0ERAouXrC
+         w696e0dSG1MqpqPHxODpYq/ZSoSPlrB9D1EfUgg8F3govMjcCseE05TvuEA83bcSlSs6
+         YsQChrwlXbbLMcqQk5AJiN1hW/8rbR3GRbKFNrMutEZNRPkGJ6pQkdxW7jXDiSCWTr4r
+         mpKg==
+X-Gm-Message-State: AOAM532HjGoyhyW4VpQZpCefxvKrQGdUcv36jbeFmFaW2u3uFVHb1Ypa
+        iLI6fd74/iIHyXC6JoIQVZc7zw==
+X-Google-Smtp-Source: ABdhPJzdzHWiOyC2Kri7/kYcALouqtq1nTXz3EXMpUbYNwNQVqhhju24GuUtyviHjqlDyupx7DWUlA==
+X-Received: by 2002:a17:90b:1d84:: with SMTP id pf4mr6833277pjb.124.1644858871225;
+        Mon, 14 Feb 2022 09:14:31 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k9sm34903413pfi.134.2022.02.14.09.14.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 09:13:03 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Anson Huang <anson.huang@nxp.com>,
-        Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>,
-        Rahul Tanwar <rtanwar@maxlinear.com>,
-        Jeff LaBundy <jeff@labundy.com>,
-        Yash Shah <yash.shah@sifive.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Vignesh R <vigneshr@ti.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 01/15] dt-bindings: pwm: allwinner,sun4i-a10: include generic pwm schema
-Date:   Mon, 14 Feb 2022 18:13:01 +0100
-Message-ID: <3485219.R56niFO833@kista>
-In-Reply-To: <20220214081605.161394-1-krzysztof.kozlowski@canonical.com>
-References: <20220214081605.161394-1-krzysztof.kozlowski@canonical.com>
+        Mon, 14 Feb 2022 09:14:30 -0800 (PST)
+Date:   Mon, 14 Feb 2022 17:14:27 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Woodhouse, David" <dwmw@amazon.co.uk>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] KVM: Don't actually set a request when evicting vCPUs
+ for GFN cache invd
+Message-ID: <YgqN87rqc/vogbFE@google.com>
+References: <d79aacb5-9069-4647-9332-86f7d74b747a@email.android.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d79aacb5-9069-4647-9332-86f7d74b747a@email.android.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,92 +79,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne ponedeljek, 14. februar 2022 ob 09:15:51 CET je Krzysztof Kozlowski 
-napisal(a):
-> Include generic pwm.yaml schema, which enforces PWM node naming and
-> brings pwm-cells requirement.
+On Sat, Feb 12, 2022, Woodhouse, David wrote:
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Best regards,
-Jernej
-
-> ---
->  .../bindings/pwm/allwinner,sun4i-a10-pwm.yaml | 53 ++++++++++---------
->  1 file changed, 28 insertions(+), 25 deletions(-)
+> (Apologies if this is HTML but I'm half-way to Austria and the laptop is
+> buried somewhere in the car, and access to work email with sane email apps is
+> difficult.)
 > 
-> diff --git a/Documentation/devicetree/bindings/pwm/allwinner,sun4i-a10-
-pwm.yaml b/Documentation/devicetree/bindings/pwm/allwinner,sun4i-a10-pwm.yaml
-> index 800d511502c4..e93e935564fb 100644
-> --- a/Documentation/devicetree/bindings/pwm/allwinner,sun4i-a10-pwm.yaml
-> +++ b/Documentation/devicetree/bindings/pwm/allwinner,sun4i-a10-pwm.yaml
-> @@ -52,33 +52,36 @@ properties:
->    resets:
->      maxItems: 1
->  
-> -if:
-> -  properties:
-> -    compatible:
-> -      contains:
-> -        const: allwinner,sun50i-h6-pwm
-> -
-> -then:
-> -  properties:
-> -    clocks:
-> -      maxItems: 2
-> -
-> -    clock-names:
-> -      items:
-> -        - const: mod
-> -        - const: bus
-> -
-> -  required:
-> -    - clock-names
-> -    - resets
-> -
-> -else:
-> -  properties:
-> -    clocks:
-> -      maxItems: 1
-> +
-> +allOf:
-> +  - $ref: pwm.yaml#
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: allwinner,sun50i-h6-pwm
-> +
-> +    then:
-> +      properties:
-> +        clocks:
-> +          maxItems: 2
-> +
-> +        clock-names:
-> +          items:
-> +            - const: mod
-> +            - const: bus
-> +
-> +      required:
-> +        - clock-names
-> +        - resets
-> +
-> +    else:
-> +      properties:
-> +        clocks:
-> +          maxItems: 1
->  
->  required:
-> -  - "#pwm-cells"
->    - compatible
->    - reg
->    - clocks
-> -- 
-> 2.32.0
+> On 12 Feb 2022 03:05, Sean Christopherson <seanjc@google.com> wrote:
+> 
+> Don't actually set a request bit in vcpu->requests when making a request
+> purely to force a vCPU to exit the guest.  Logging the request but not
+> actually consuming it causes the vCPU to get stuck in an infinite loop
+> during KVM_RUN because KVM sees a pending request and bails from VM-Enter
+> to service the request.
 > 
 > 
+> Right, but there is no extant code which does this. The guest_uses_pa flag is
+> unused.
 
+Grr.  A WARN or something would have been nice to have.  Oh well.
 
+> The series came with a proof-of-concept that attempted using it for
+> fixing nesting UAFs but it was just that — a proof of concept to demonstrate
+> that the new design of GPC was sufficient to address that problem.
+> 
+> IIRC, said proof of concept did also actually consume the req in question,
+
+It did.  I saw that, but obviously didn't connect the dots to guest_uses_pa.
+
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -9826,6 +9826,8 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+
+                if (kvm_check_request(KVM_REQ_UPDATE_CPU_DIRTY_LOGGING, vcpu))
+                        static_call(kvm_x86_update_cpu_dirty_logging)(vcpu);
++               if (kvm_check_request(KVM_REQ_GPC_INVALIDATE, vcpu))
++                       ; /* Nothing to do. It just wanted to wake us */
+
+> and one of the existing test cases did exercise it with an additional mmap
+> torture added? Of course until we have kernel code that *does* this, it's
+> hard to exercise it from userspace :)
+
+Indeed.  I'll send a new version with a different changelog, that way we're not
+leaving a trap for developers and each architecture doesn't need to manually handle
+the request.
+
+Thanks!

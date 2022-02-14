@@ -2,88 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4007E4B4947
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D164B4A9D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:39:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344211AbiBNKDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:03:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44370 "EHLO
+        id S231869AbiBNKHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:07:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344288AbiBNJ7A (ORCPT
+        with ESMTP id S1345833AbiBNKB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:59:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0A8216;
-        Mon, 14 Feb 2022 01:46:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 823CDB80DBF;
-        Mon, 14 Feb 2022 09:46:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16C1CC340E9;
-        Mon, 14 Feb 2022 09:46:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644831983;
-        bh=OSVkyrM6ZHWyAjiNiE+eVqLtoVxlU5X7JMWjSKFGqCs=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=md3S/d6/Die/Mp6ro9Hpc5Xc/c4F5mCuuc9SttsSVusPikCNFj+9bI7BK6miZCqJS
-         /9SB3rV6RQg6ciX6+JRHl94jTeZ+d8iccILBA9f4HXg/Y2rlAhdiN3h+rG367TVZDz
-         k++R6rhWqXSvOp5nvhwDr2tJUmrh8YkNqTKy10z93AMB6LYylV5sSYEgTJdUEOkyKh
-         Z/fEGYwTL7ODY1UFYSLPC36vsnyc/58wC1Oyh90vqrtZbE0Bg/2W2bTp5IDd0EmSW9
-         gUIg/LZkF0CxAeqkXFqFAfhwtyHbIQaT+H1Fe23oWco9YKva+PYkHjkjkqjK2UU2gA
-         M0tzxsKUh/3Rw==
-Date:   Mon, 14 Feb 2022 10:46:19 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Angela Czubak <acz@semihalf.com>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 00/12] i2c-hid: fixes for unnumbered reports and other
- improvements
-In-Reply-To: <CAO-hwJK8O+yYMxCdx6DFd9cpF6McW4KC+uERQ6EsTY14JVr5-g@mail.gmail.com>
-Message-ID: <nycvar.YFH.7.76.2202141045240.11721@cbobk.fhfr.pm>
-References: <20220118072628.1617172-1-dmitry.torokhov@gmail.com> <nycvar.YFH.7.76.2202021456020.11721@cbobk.fhfr.pm> <CAO-hwJJ08vfMTEhU03VEef8Ejx=Ts+akUwGMKTUGqMWwOK3QoA@mail.gmail.com> <CAO-hwJK8O+yYMxCdx6DFd9cpF6McW4KC+uERQ6EsTY14JVr5-g@mail.gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Mon, 14 Feb 2022 05:01:56 -0500
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC28F21809;
+        Mon, 14 Feb 2022 01:48:18 -0800 (PST)
+Received: by mail-vs1-f51.google.com with SMTP id i27so461787vsr.10;
+        Mon, 14 Feb 2022 01:48:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sVctF2TLthiqqvEqHlD1AtmIxo0t7StGx/mG39a8KA8=;
+        b=Omicg4dZeiSI5ckDJ3d/jOfQKgyohi7mVaiN8Zryu69Vp55HDWzwHGtZrKndX/LJ3e
+         aO4ViHztGz5QtOJnNProV1T1Kj7Rcj6JLjYb7w7yWLf/pUo5bn1nFTboWJVToOoGLnyx
+         NibK1BvOEsZn4Ak6mnjvfdwqpm+0jPRAEn8m1X5tTPQbiWqcKOxmYx7xATz807zJsBov
+         XzQsO3zvEZyjcj2zeXJagmMEvVyvCRh+ZcvF0O9jW7Kl98L+jzfHz4sZzxVLHCRPDRYS
+         iyxjtkYdVtLzoMOkBNOtoeOByE1j3sCtlskdEhdgktis3Xh5wdPjX0bBfBEfBzXvFB8m
+         2ELg==
+X-Gm-Message-State: AOAM531JK2SXFV0Yg+iK4hC8G8/g6pVH56ckJooxv1QWlOr9LEYPF3/i
+        GKjJNXzcId0C2em9JZqXvoO+wWhWG1J0tA==
+X-Google-Smtp-Source: ABdhPJxK1yoGjORC2jMYqIjSeLaQXh0GndnYrnTpHuyh84ceIWoMDuE38NCVZBSsbnQyGfxUF+YD6A==
+X-Received: by 2002:a05:6102:3e90:: with SMTP id m16mr3348863vsv.4.1644832097754;
+        Mon, 14 Feb 2022 01:48:17 -0800 (PST)
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com. [209.85.217.51])
+        by smtp.gmail.com with ESMTPSA id p196sm78903vke.27.2022.02.14.01.48.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 01:48:17 -0800 (PST)
+Received: by mail-vs1-f51.google.com with SMTP id g21so5359152vsp.6;
+        Mon, 14 Feb 2022 01:48:17 -0800 (PST)
+X-Received: by 2002:a05:6102:440d:: with SMTP id df13mr981415vsb.5.1644832097058;
+ Mon, 14 Feb 2022 01:48:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1644805853-21338-1-git-send-email-anshuman.khandual@arm.com> <1644805853-21338-31-git-send-email-anshuman.khandual@arm.com>
+In-Reply-To: <1644805853-21338-31-git-send-email-anshuman.khandual@arm.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 14 Feb 2022 10:48:06 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVqeyFhzJHLvE+erA4dO+eqpqzx8hVUj9LDk0iPwR1ByQ@mail.gmail.com>
+Message-ID: <CAMuHMdVqeyFhzJHLvE+erA4dO+eqpqzx8hVUj9LDk0iPwR1ByQ@mail.gmail.com>
+Subject: Re: [PATCH 30/30] mm/mmap: Drop ARCH_HAS_VM_GET_PAGE_PROT
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Feb 2022, Benjamin Tissoires wrote:
+Hi Anshuman,
 
-> OK, So I applied the series on my development laptop.
-> I had to apply it on top of v5.16 and then rebase on top of
-> hid.git/for-next because there is a minor conflict.
-> 
-> I changed the register as mentioned in 5/12, and gave it a try.
-> Both the Elan touchpad and the Wacom panel on my XPS-13 are behaving
-> properly, suspend/resume works also as expected.
-> 
-> Tested-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> 
-> I gave a quick look at the individual patches, they all seem sane to
-> me, but haven't dug into enough detail to be able to formally give my
-> reviewed-by.
-> Note that I have a small comment on patch 2, but if you want to apply
-> it nevertheless Jiri (with the change in 5/12) it should be fine.
+On Mon, Feb 14, 2022 at 7:54 AM Anshuman Khandual
+<anshuman.khandual@arm.com> wrote:
+> All platforms now define their own vm_get_page_prot() and also there is no
+> generic version left to fallback on. Hence drop ARCH_HAS_GET_PAGE_PROT.
+>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-Thanks a lot for testing. I've tested in on my I2C hardware, and haven't 
-spotted any issues either.
+Thanks for your patch!
 
-I plan to finish going through the whole set today and tomorrow, and apply 
-it right afterwards with the 5/12 change.
+> -       select ARCH_HAS_VM_GET_PAGE_PROT
 
-Thanks,
+So before, all architectures selected ARCH_HAS_VM_GET_PAGE_PROT...
 
--- 
-Jiri Kosina
-SUSE Labs
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -81,7 +81,6 @@ static void unmap_region(struct mm_struct *mm,
+>                 struct vm_area_struct *vma, struct vm_area_struct *prev,
+>                 unsigned long start, unsigned long end);
+>
+> -#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
 
+... hence the block below was not included.
+
+>  /* description of effects of mapping type and prot in current implementation.
+>   * this is due to the limited x86 page protection hardware.  The expected
+>   * behavior is in parens:
+> @@ -102,8 +101,6 @@ static void unmap_region(struct mm_struct *mm,
+>   *                                                             w: (no) no
+>   *                                                             x: (yes) yes
+>   */
+> -#endif /* CONFIG_ARCH_HAS_VM_GET_PAGE_PROT */
+> -
+
+So shouldn't the whole block be removed instead?
+Do I need more coffee??
+
+>  static pgprot_t vm_pgprot_modify(pgprot_t oldprot, unsigned long vm_flags)
+>  {
+>         return pgprot_modify(oldprot, vm_get_page_prot(vm_flags));
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

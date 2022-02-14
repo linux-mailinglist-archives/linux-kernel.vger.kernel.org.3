@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7E64B4703
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB404B4B5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343932AbiBNJv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:51:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44778 "EHLO
+        id S1344744AbiBNKEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:04:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244895AbiBNJrJ (ORCPT
+        with ESMTP id S1344355AbiBNJ72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:47:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DDCBC89;
-        Mon, 14 Feb 2022 01:40:40 -0800 (PST)
+        Mon, 14 Feb 2022 04:59:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F65C2B;
+        Mon, 14 Feb 2022 01:46:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36939B80DC4;
-        Mon, 14 Feb 2022 09:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAC66C340E9;
-        Mon, 14 Feb 2022 09:40:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE709B80D83;
+        Mon, 14 Feb 2022 09:46:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7C9EC340EF;
+        Mon, 14 Feb 2022 09:46:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831619;
-        bh=9UIpJ7Qr40wlvc0HkfKJnCStF6n4rMmoiv/CVWW4p4k=;
+        s=korg; t=1644832011;
+        bh=HaqVs4QPEEUCzW8Zpf+6cvRAf3Kw8e0KtqSsmrSwqOA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VFponCiBbfdzM05yI1e6BPWUQCCZOPz4uHdFrQwu7CA0ieUugDovRB9Rb+9P3R/X8
-         hPf1aIyCStwVFeMis48E6lya9D7XNI9Ys4n+5yRnvBDB/Jkfb8/IzLGB+yF/m2rWs0
-         vwrGUZiqn3V7m3S7IzOdqp8Ns3+AKueUaMJuux38=
+        b=tHdLAnvQEC+EKhvZSYUEIvBWqz9deiHymni9w0+igvD9M3E6aMas0Dj8wG/Iu/GpX
+         sqi2pNqXf5lRHYp0qSWaHH+Bm2/xuEfhXWKGX6Wki+pph1nEJo6ZjfedwhZN5BZN29
+         hVZCbOalVPHX5eHN2KfKR5et2VR7I7z46hfyzw/I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>
-Subject: [PATCH 5.10 009/116] NFS: Fix initialisation of nfs_client cl_flags field
-Date:   Mon, 14 Feb 2022 10:25:08 +0100
-Message-Id: <20220214092459.004095430@linuxfoundation.org>
+        stable@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
+        Tong Zhang <ztong0001@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 051/172] scsi: myrs: Fix crash in error case
+Date:   Mon, 14 Feb 2022 10:25:09 +0100
+Message-Id: <20220214092508.139689203@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Tong Zhang <ztong0001@gmail.com>
 
-commit 468d126dab45718feeb728319be20bd869a5eaa7 upstream.
+[ Upstream commit 4db09593af0b0b4d7d4805ebb3273df51d7cc30d ]
 
-For some long forgotten reason, the nfs_client cl_flags field is
-initialised in nfs_get_client() instead of being initialised at
-allocation time. This quirk was harmless until we moved the call to
-nfs_create_rpc_client().
+In myrs_detect(), cs->disable_intr is NULL when privdata->hw_init() fails
+with non-zero. In this case, myrs_cleanup(cs) will call a NULL ptr and
+crash the kernel.
 
-Fixes: dd99e9f98fbf ("NFSv4: Initialise connection to the server in nfs4_alloc_client()")
-Cc: stable@vger.kernel.org # 4.8.x
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[    1.105606] myrs 0000:00:03.0: Unknown Initialization Error 5A
+[    1.105872] myrs 0000:00:03.0: Failed to initialize Controller
+[    1.106082] BUG: kernel NULL pointer dereference, address: 0000000000000000
+[    1.110774] Call Trace:
+[    1.110950]  myrs_cleanup+0xe4/0x150 [myrs]
+[    1.111135]  myrs_probe.cold+0x91/0x56a [myrs]
+[    1.111302]  ? DAC960_GEM_intr_handler+0x1f0/0x1f0 [myrs]
+[    1.111500]  local_pci_probe+0x48/0x90
+
+Link: https://lore.kernel.org/r/20220123225717.1069538-1-ztong0001@gmail.com
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/client.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/myrs.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/fs/nfs/client.c
-+++ b/fs/nfs/client.c
-@@ -177,6 +177,7 @@ struct nfs_client *nfs_alloc_client(cons
- 	INIT_LIST_HEAD(&clp->cl_superblocks);
- 	clp->cl_rpcclient = ERR_PTR(-EINVAL);
+diff --git a/drivers/scsi/myrs.c b/drivers/scsi/myrs.c
+index 07f274afd7e5e..a4d244ee4548c 100644
+--- a/drivers/scsi/myrs.c
++++ b/drivers/scsi/myrs.c
+@@ -2265,7 +2265,8 @@ static void myrs_cleanup(struct myrs_hba *cs)
+ 	myrs_unmap(cs);
  
-+	clp->cl_flags = cl_init->init_flags;
- 	clp->cl_proto = cl_init->proto;
- 	clp->cl_nconnect = cl_init->nconnect;
- 	clp->cl_net = get_net(cl_init->net);
-@@ -426,7 +427,6 @@ struct nfs_client *nfs_get_client(const
- 			list_add_tail(&new->cl_share_link,
- 					&nn->nfs_client_list);
- 			spin_unlock(&nn->nfs_client_lock);
--			new->cl_flags = cl_init->init_flags;
- 			return rpc_ops->init_client(new, cl_init);
- 		}
- 
+ 	if (cs->mmio_base) {
+-		cs->disable_intr(cs);
++		if (cs->disable_intr)
++			cs->disable_intr(cs);
+ 		iounmap(cs->mmio_base);
+ 		cs->mmio_base = NULL;
+ 	}
+-- 
+2.34.1
+
 
 

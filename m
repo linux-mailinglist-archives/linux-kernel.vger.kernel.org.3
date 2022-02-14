@@ -2,101 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3EA4B4E71
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:34:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 240874B4EB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:34:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351280AbiBNL17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:27:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57324 "EHLO
+        id S1348486AbiBNL2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:28:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351205AbiBNL1W (ORCPT
+        with ESMTP id S1351340AbiBNL14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:27:22 -0500
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A142AE3;
-        Mon, 14 Feb 2022 03:04:03 -0800 (PST)
-Received: by mail-ua1-f53.google.com with SMTP id w18so7905646uar.8;
-        Mon, 14 Feb 2022 03:04:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rp0B1fei6v9T28LSqNLRZlACCfpViLDLxNd62kYmmtU=;
-        b=Zhs51U5Pc4S2qQ5r38L6lfXMqWqLdlbyC/hZtQESnMwqzByM0KHEJVPIMILz3Vt+ZA
-         miA5YDnY8wvSF/pOU127DXwv3SYvZ3xzHmydlPOwOMN+r81LFCgcAwMspjc17eRjiU0g
-         OJBO8n8uap4eh5aQVw/G128Fn6LZfMHYFzAk+lKtf8Fw9kFswWimRY2O4p2bxHmxOqnq
-         2mensGqGNXZqrwA7cI8jP/VqoKczZvX60wCKGgIRJzrNwF5OXWjxQfxEgtWby9s5RVOy
-         +zpN9LcSVfdfI8nJw0YwBEbFH1u1LBj9O0wLtTCsW/q5xxY+Or20c3vCTMOFRfeFHTZb
-         NpZw==
-X-Gm-Message-State: AOAM530iTCIQMeV6v0dFNODOmYafHoKTJRFdmesCoMuhxY3qvxbcRRnn
-        NNr5vNWpn5XteZkCTVUSEen0SONJclZPRg==
-X-Google-Smtp-Source: ABdhPJxizCVdcM8K3JForQeIf4vuvRe59ANPp5AIbN8KJKprqyQ5a9sXPzo/svbk0mxQIX0y6fu4Hg==
-X-Received: by 2002:a05:6130:10c:: with SMTP id h12mr1779257uag.120.1644836642141;
-        Mon, 14 Feb 2022 03:04:02 -0800 (PST)
-Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com. [209.85.217.45])
-        by smtp.gmail.com with ESMTPSA id g9sm526657vkg.28.2022.02.14.03.04.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 03:04:02 -0800 (PST)
-Received: by mail-vs1-f45.google.com with SMTP id g20so6094833vsb.9;
-        Mon, 14 Feb 2022 03:04:01 -0800 (PST)
-X-Received: by 2002:a05:6102:440d:: with SMTP id df13mr1073580vsb.5.1644836640828;
- Mon, 14 Feb 2022 03:04:00 -0800 (PST)
+        Mon, 14 Feb 2022 06:27:56 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255987092A;
+        Mon, 14 Feb 2022 03:04:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644836672; x=1676372672;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=X7QB/5ocd9eTWpaSxg9A+irnC81s5hPMRWP18JitWno=;
+  b=GYCDeh3XWPVCrsNj5dgq7o+bDsmS0N+2k/F8CeTPrYd+HURoIoTcx7yA
+   KYg8LGbdfQ7PXYSvzmZ+1jXiWQABPOEE7UAkFGDw4REmCLZYx8ijOxUoY
+   cWXFrlARqnYt9W/zyckdfWmliVdJDk81b9kSaSV4I2HlnkOpIndvxHx3y
+   M=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 14 Feb 2022 03:04:32 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 03:04:32 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 14 Feb 2022 03:04:31 -0800
+Received: from quicinc.com (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 14 Feb
+ 2022 03:04:28 -0800
+From:   Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Sarah Sharp <sarah.a.sharp@linux.intel.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ugoswami@quicinc.com>, Jung Daehwan <dh10.jung@samsung.com>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Subject: [PATCH] xhci: reduce xhci_handshake timeout in xhci_reset
+Date:   Mon, 14 Feb 2022 16:34:23 +0530
+Message-ID: <1644836663-29220-1-git-send-email-quic_pkondeti@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <9382f3ca-b49a-e900-7f21-3f10b267ee4a@omp.ru>
-In-Reply-To: <9382f3ca-b49a-e900-7f21-3f10b267ee4a@omp.ru>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 14 Feb 2022 12:03:49 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWv-ZuHttvXM7kAOeM1NoRUxita0ttXcAbHHzA9UvO4KA@mail.gmail.com>
-Message-ID: <CAMuHMdWv-ZuHttvXM7kAOeM1NoRUxita0ttXcAbHHzA9UvO4KA@mail.gmail.com>
-Subject: Re: [PATCH v2] sh: avoid using IRQ0 on SH3/4
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergey,
+From: Daehwan Jung <dh10.jung@samsung.com>
 
-On Mon, Feb 14, 2022 at 9:32 AM Sergey Shtylyov <s.shtylyov@omp.ru> wrote:
-> Using IRQ0 by the platform devices is going to be disallowed soon (see [1])
-> and the code supporting SH3/4 SoCs maps the IRQ #s starting at 0 -- modify
-> that code to start the IRQ #s from 16 instead.
->
-> [1] https://lore.kernel.org/all/5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru/
->
-> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->
-> ---
-> The patch is against Linus Torvalds' 'linux.git' repo.
->
-> Changes in version 2:
-> - changed cmp/ge to cmp/hs in the assembly code.
+xhci_reset() is called with interrupts disabled. Waiting 10 seconds for
+controller reset and controller ready operations can be fatal to the
+system when controller is timed out. Reduce the timeout to 1 second
+and print a error message when the time out happens.
 
-Thanks for the update!
+Fixes: 22ceac191211 ("xhci: Increase reset timeout for Renesas 720201 host.")
+Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+---
+ drivers/usb/host/xhci.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index dc357ca..ec4df72 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -196,7 +196,7 @@ int xhci_reset(struct xhci_hcd *xhci)
+ 		udelay(1000);
+ 
+ 	ret = xhci_handshake(&xhci->op_regs->command,
+-			CMD_RESET, 0, 10 * 1000 * 1000);
++			CMD_RESET, 0, 1 * 1000 * 1000);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -210,7 +210,7 @@ int xhci_reset(struct xhci_hcd *xhci)
+ 	 * than status until the "Controller Not Ready" flag is cleared.
+ 	 */
+ 	ret = xhci_handshake(&xhci->op_regs->status,
+-			STS_CNR, 0, 10 * 1000 * 1000);
++			STS_CNR, 0, 1 * 1000 * 1000);
+ 
+ 	xhci->usb2_rhub.bus_state.port_c_suspend = 0;
+ 	xhci->usb2_rhub.bus_state.suspended_ports = 0;
+-- 
+2.7.4
 
-Works fine on rts7751r2d (qemu) and landisk (real).
-None of them had IRQ0, though, but dmesg and /proc/interrupts
-confirm the shift by 16.
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

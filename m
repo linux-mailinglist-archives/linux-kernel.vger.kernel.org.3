@@ -2,216 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0614B5CE4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F362E4B5C85
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbiBNVgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:36:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43862 "EHLO
+        id S230476AbiBNVVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:21:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbiBNVgF (ORCPT
+        with ESMTP id S230474AbiBNVVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:36:05 -0500
-Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA2BBC8E
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:35:48 -0800 (PST)
-Received: from terra.local.svanheule.net (104.153-136-217.adsl-dyn.isp.belgacom.be [217.136.153.104])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 670EF2A25FB;
-        Mon, 14 Feb 2022 19:57:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1644865027;
+        Mon, 14 Feb 2022 16:21:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A91738BF78
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:21:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644873681;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=NWlSj3jND0Xw2BaE2cX6gEUMtrMa1vlnKfokepbt1e4=;
-        b=nXya5L0GgmhPE3+2pHiO94UCKR06POE2QGOtaucxne1rk7/Dx31b5OCoUmJ8qM26bwgdac
-        7m/se8DraRuXQfA44Cs0Kjni1yI9RY1WgJ99pj1NtQLbA60aUxXetFzbki15AIX9i4f/L+
-        rp7cDSm91ob60+QBUq8DYh46/UX0ZWKxkyT+unmgbqPW89R28p2QDm+9HxrP97osL4ViMR
-        AP3bqW41Etfad7dPg/WaetQjDJcusPyP8GRvRWlwHPW+jwICJrqlTFgTQn9kLTWqTIBsZb
-        B6r5YslRtqIQW/AfuFKVLmZsRGxziF6nd3B1by0omI0JWdkRAWC0vmiSqj/Huw==
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Birger Koblitz <mail@birger-koblitz.de>,
-        Bert Vermeulen <bert@biot.com>,
-        John Crispin <john@phrozen.org>, linux-kernel@vger.kernel.org,
-        Sander Vanheule <sander@svanheule.net>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v5 2/4] dt-bindings: interrupt-controller: realtek,rtl-intc: require parents
-Date:   Mon, 14 Feb 2022 19:56:59 +0100
-Message-Id: <a8001b64563a92cd3ca9a3c9190b87d7a3505497.1644864700.git.sander@svanheule.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1644864700.git.sander@svanheule.net>
-References: <cover.1644864700.git.sander@svanheule.net>
+        bh=Zw0m26jmgL5PSZbxc9F56RhQG8aGfeQzkdtSIlZWESE=;
+        b=DFDQq7MU/Ml96jrV35+CNJC1uE8+u8fAgeeEGMha+1O0rMpbtXcnk7uODTllTXktwMcqEe
+        Jez4RM1MGGYXd2muEC4HKopQJf1QpAKiG0By6X2O7JEYK9KiYuyHHXNpz8FPkkbT+TDJYY
+        oxifW3pxG+vt5CGZ658LW57mcpbEdkQ=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-630-3JNSnZ1VNNOH5ka-28vOIg-1; Mon, 14 Feb 2022 13:57:55 -0500
+X-MC-Unique: 3JNSnZ1VNNOH5ka-28vOIg-1
+Received: by mail-qk1-f198.google.com with SMTP id b204-20020a3767d5000000b004b2a0d2e930so9728494qkc.15
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:57:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Zw0m26jmgL5PSZbxc9F56RhQG8aGfeQzkdtSIlZWESE=;
+        b=1H7bXPBsQ4HKK3WHWHGB0KWgkGmK70plEu0aryZ8rwsC3WIWfg2yucT1xb53qYHuR1
+         qxFtKlwRLxYoRD0YAj25Yne4QT2WgopPxts7PJ6rMkdZlyqPzmAYu2iX3YA0gPR4OTyZ
+         0lGzeiQ299ZXpz5/R4IXFb3outkOLfCP0mMCX146YuKwu/Xl2027RNjIeMVRUUi+ALbs
+         pEPsxlqsaka9Zc5lBNbl6dnp+3UzBF9GSGHGbrJLqnGCDIVtKsFADzJXRgS7u+49uSep
+         spR237ZraY3AnHdAjoWmsQHC2Hqa/g2GQS+kDDcow5U2M16LCbMfXhZTafJtylfu/7Pr
+         BjxA==
+X-Gm-Message-State: AOAM533RTTDq5dF/IQylEL1ALruJokBsw7b1SmMDe6XTxKSoiy+OEZh6
+        j+4ymSJHEZUPa0kSxsv6dxGDHyoy8I5Y7zTMIBqMoEooJplDL90530S8egio7lH6An5VBFpqPFx
+        KB+v6d0rsr+HL5OH/o/t6M9oQ
+X-Received: by 2002:ad4:58f1:: with SMTP id di17mr81631qvb.36.1644865075192;
+        Mon, 14 Feb 2022 10:57:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJysuyQMRiLKO/pEhsQy4DxLU5S9UbooAkR2s9LJCJ+c5txevugMskSZ+48nNPU8AiQWi+8+Lg==
+X-Received: by 2002:ad4:58f1:: with SMTP id di17mr81584qvb.36.1644865074915;
+        Mon, 14 Feb 2022 10:57:54 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::35])
+        by smtp.gmail.com with ESMTPSA id i13sm16244149qko.91.2022.02.14.10.57.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 10:57:54 -0800 (PST)
+Date:   Mon, 14 Feb 2022 10:57:48 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
+ unique-symbol` is available
+Message-ID: <20220214185748.ite4oxkaynrvjj34@treble>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
+ <20220209185752.1226407-3-alexandr.lobakin@intel.com>
+ <20220211174130.xxgjoqr2vidotvyw@treble>
+ <20220214121447.288695-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220214121447.288695-1-alexandr.lobakin@intel.com>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The interrupt router has 32 inputs, and up to 15 outputs connected to
-the MIPS CPU's interrupts. The way these are mapped to each other is
-runtime configurable. This controller can also mask individual interrupt
-sources, and has a status register to indicate pending interrupts. This
-means the controller is not transparent, and the use of "interrupt-map"
-inappropriate. Instead, a list of parent interrupts should be specified.
+NOTE: Maybe -zunique-symbol won't get used after all, based on maskray's
+objections.  Regardless, I'm replying below, because the rest of the
+approach in this patch seems all wrong.
 
-Two-part compatibles are introduced to be able to require "interrupts"
-for new devicetrees. The relevant descriptions are extended or added to
-more clearly describe the functionality of this controller. The old
-compatible, with "interrupt-map" and "#address-cells", is deprecated.
-Interrupt specifiers for new compatibles will require two cells, to
-indicate the output selection.
+On Mon, Feb 14, 2022 at 01:14:47PM +0100, Alexander Lobakin wrote:
+> From: Josh Poimboeuf <jpoimboe@redhat.com>
+> Date: Fri, 11 Feb 2022 09:41:30 -0800
+> 
+> > On Wed, Feb 09, 2022 at 07:57:39PM +0100, Alexander Lobakin wrote:
+> > > Position-based search, which means that if there are several symbols
+> > > with the same name, the user needs to additionally provide the
+> > > "index" of a desired symbol, is fragile. For example, it breaks
+> > > when two symbols with the same name are located in different
+> > > sections.
+> > > 
+> > > Since a while, LD has a flag `-z unique-symbol` which appends
+> > > numeric suffixes to the functions with the same name (in symtab
+> > > and strtab). It can be used to effectively prevent from having
+> > > any ambiguity when referring to a symbol by its name.
+> > 
+> > In the patch description can you also give the version of binutils (and
+> > possibly other linkers) which have the flag?
+> 
+> Yeah, sure.
 
-To prevent spurious changes to the binding when more SoCs are added,
-"allOf" is used with one "if", and the compatible enum only has one
-item.
+> > > Check for its availability and always prefer when the livepatching
+> > > is on. It can be used unconditionally later on after broader testing
+> > > on a wide variety of machines, but for now let's stick to the actual
+> > > CONFIG_LIVEPATCH=y case, which is true for most of distro configs
+> > > anyways.
+> > 
+> > Has anybody objected to just enabling it for *all* configs, not just for
+> > livepatch?
+> 
+> A few folks previously.
 
-The example is updated to provide a correct example for RTL8380 SoCs.
+Why?  It would be good to document that here.
 
-Signed-off-by: Sander Vanheule <sander@svanheule.net>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
-Changes in v5:
-- Add Rob's Reviewed-by
+> > I'd much prefer that: the less "special" livepatch is (and the distros
+> > which enable it), the better.  And I think having unique symbols would
+> > benefit some other components.
+> 
+> Agree, I just want this series to be as least invasive for
+> non-FG-KASLR builds as possible.
 
-Changes in v4:
-- Indicate more clearly that the controller is not transparent.
+But in a very real sense, this patch is making the series *more*
+invasive by complexifying the config space.
 
- .../realtek,rtl-intc.yaml                     | 82 ++++++++++++++-----
- 1 file changed, 62 insertions(+), 20 deletions(-)
+Adding -zunique-symbols could have kernel-wide implications.  If there
+were bugs, we'd want to root them out, not hide them behind obscure
+config combinations we hope nobody uses.  Effectively this is
+destabilizing CONFIG_LIVEPATCH.
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
-index 9e76fff20323..f212962afd62 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
-@@ -6,6 +6,14 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Realtek RTL SoC interrupt controller devicetree bindings
- 
-+description:
-+  Interrupt controller and router for Realtek MIPS SoCs, allowing each SoC
-+  interrupt to be routed to one parent CPU (hardware) interrupt, or left
-+  disconnected.
-+  All connected input lines from SoC peripherals can be masked individually,
-+  and an interrupt status register is present to indicate which interrupts are
-+  pending.
-+
- maintainers:
-   - Birger Koblitz <mail@birger-koblitz.de>
-   - Bert Vermeulen <bert@biot.com>
-@@ -13,45 +21,79 @@ maintainers:
- 
- properties:
-   compatible:
--    const: realtek,rtl-intc
-+    oneOf:
-+      - items:
-+          - enum:
-+              - realtek,rtl8380-intc
-+          - const: realtek,rtl-intc
-+      - const: realtek,rtl-intc
-+        deprecated: true
- 
--  "#interrupt-cells":
--    const: 1
-+  "#interrupt-cells": true
- 
-   reg:
-     maxItems: 1
- 
-   interrupts:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 15
-+    description:
-+      List of parent interrupts, in the order that they are connected to this
-+      interrupt router's outputs.
- 
-   interrupt-controller: true
- 
--  "#address-cells":
--    const: 0
--
--  interrupt-map:
--    description: Describes mapping from SoC interrupts to CPU interrupts
--
- required:
-   - compatible
-   - reg
-   - "#interrupt-cells"
-   - interrupt-controller
--  - "#address-cells"
--  - interrupt-map
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          const: realtek,rtl-intc
-+    then:
-+      properties:
-+        "#interrupt-cells":
-+          const: 1
-+
-+        "#address-cells":
-+          const: 0
-+
-+        interrupt-map: true
-+      required:
-+        - "#address-cells"
-+        - interrupt-map
-+    else:
-+      properties:
-+        "#interrupt-cells":
-+          description:
-+            Two cells to specify which line to connect to, and which output it should
-+            be routed to. Both cells use a zero-based index.
-+          const: 2
-+      required:
-+        - interrupts
- 
- additionalProperties: false
- 
- examples:
-   - |
-     intc: interrupt-controller@3000 {
--      compatible = "realtek,rtl-intc";
--      #interrupt-cells = <1>;
-+      compatible = "realtek,rtl8380-intc", "realtek,rtl-intc";
-+      #interrupt-cells = <2>;
-       interrupt-controller;
--      reg = <0x3000 0x20>;
--      #address-cells = <0>;
--      interrupt-map =
--              <31 &cpuintc 2>,
--              <30 &cpuintc 1>,
--              <29 &cpuintc 5>;
-+      reg = <0x3000 0x18>;
-+
-+      interrupt-parent = <&cpuintc>;
-+      interrupts = <2>, <3>, <4>, <5>, <6>;
-+    };
-+
-+    irq-consumer@0 {
-+      reg = <0 4>;
-+      interrupt-parent = <&intc>;
-+      interrupts =
-+        <19 3>, /* IRQ 19, routed to output 3 (cpuintc 5) */
-+        <18 4>; /* IRQ 18, routed to output 4 (cpuintc 6) */
-     };
+Beyond "least invasive", we also need to consider:
+
+- What makes fgkaslr most compatible with other features?
+- What makes fgkaslr most palatable for wide use?
+- What's best for the kernel as a whole?
+
+It's much better to integrate new features properly with the kernel,
+rather than just grafting them on to the side.  Otherwise it just adds
+technical debt, with no benefit to the rest of the kernel.  Then it
+might as well just remain an out-of-tree patch set.
+
+> > > +	if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL))
+> > > +		sympos = 0;
+> > > +
+> > 
+> > Similarly, I don't see a need for this.  If the patch is legit then
+> > sympos should already be zero.  If not, an error gets reported and the
+> > patch fails to load.
+> 
+> Right, but for both those chunks the main idea is to let the
+> compiler optimize-out the code non-actual for unique-symbol builds:
+> 
+> add/remove: 0/0 grow/shrink: 1/2 up/down: 3/-80 (-77)
+> Function                                     old     new   delta
+> klp_find_callback                            139     142      +3
+> klp_find_object_symbol.cold                   85      48     -37
+> klp_find_object_symbol                       168     125     -43
+
+As I said, it's not a hot path, so there's no need to complicate the
+code with edge cases, and remove useful error checking in the process.
+
 -- 
-2.35.1
+Josh
 

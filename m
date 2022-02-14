@@ -2,123 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C394B5B99
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACFF4B5AD0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 21:07:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiBNUyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 15:54:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58582 "EHLO
+        id S229713AbiBNUBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 15:01:50 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:55202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbiBNUyR (ORCPT
+        with ESMTP id S229630AbiBNUBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 15:54:17 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E45BC9B
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:53:51 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id p7so15816449qvk.11
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:53:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=RIas+GyVDApC3xDrXULa8rp+llTjzXjwfENj9r1hIhE=;
-        b=qFTlR0PWa747IABqwNN/t8GNIse7KZphJV5hb5vFFtsGpXNfVaZtn7Hyjm+JfpF+eM
-         mwYqBmTgvYY3zZ4WSa+5bokDrFUpN7LCfTNJea82vfqeTF7DiUI/At97Ha0OfuhKOi2a
-         kUslq1/4r5JPlE/qXy4lnJ633NCJXlUuUpnDPyHDOV/oan3sqPcVJtF9W/WJKHxQyIOW
-         d9XCPDQq0pyvfqbLp2iRBcG388aYhHJSmKOKTiWQBPQF+0TwuuWX50jn02l1qrFbWPhM
-         +5T3jqdNitbG8jENnTpfEbraUbFJMa6bB9obQOAIilKXLCuvDPYffS7y0NNe6N1qCirQ
-         9VVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=RIas+GyVDApC3xDrXULa8rp+llTjzXjwfENj9r1hIhE=;
-        b=haYJ4q+lKuxiwELkAWkvWgrhi2OlnWSL1OFTotOaJzpNFmobMRozmsuvnm/K1yYQjv
-         CidqtvhKc1LTZnc9L83pEzI0xqEYEeBUEUMb13iBXrSBe8CPO3r3Lv4gPifEeknovxLJ
-         9fWGg/SmndibRt9bWawYT7QvT7/eeG4ffXJ+bHCTuworzTgqNEi+9rpuOKbWdyeZ+RzR
-         QZzqwbMbr2p/nsHKyLvpv5YxZKS2/ZyXFl1Whsn9kOZ2XpYTrnfdUFflCWZJXqg+lDgd
-         X/3YroRD+SiSZXcR66sGHz5Op5cJcXtXpzj3xc0QMKVXAsPZ4uc4ageHf7QQHP/aZrVN
-         fAAQ==
-X-Gm-Message-State: AOAM533GgKrPotYK5Mpfw27fRsYUhuB4vCVFbXmzcd90zvIBTjlI4cxo
-        0U9BhSXiEkC55wRsZal+oUE0KG02tec=
-X-Google-Smtp-Source: ABdhPJx5efBjjZxkoqMiDNkblXbHgtDCztk7rsHet1nW179xwlXvIPgrOUzNy2Dwc6k6XC2SXQOJRA==
-X-Received: by 2002:a17:903:283:: with SMTP id j3mr393533plr.132.1644867834186;
-        Mon, 14 Feb 2022 11:43:54 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id q2sm39651861pfj.94.2022.02.14.11.43.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 11:43:53 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 14 Feb 2022 09:43:52 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
-Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
-        paulmck@kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] workqueue: Fix race in schedule and flush work
-Message-ID: <Ygqw+EHo//6VGs6q@slm.duckdns.org>
-References: <20220210184319.25009-1-treasure4paddy@gmail.com>
+        Mon, 14 Feb 2022 15:01:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D02214AC8A;
+        Mon, 14 Feb 2022 12:01:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D74396115F;
+        Mon, 14 Feb 2022 19:44:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45256C340E9;
+        Mon, 14 Feb 2022 19:44:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644867881;
+        bh=jxOYiEgPWektpf5sVKihUYWrVFKV0HAUXvsI0SeCjrY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=dRO6ISvNTvfNGuc219bHukN3m5ziudzHyjjyHNwbAp4XOotmfmGfAXli6ng7PYyXw
+         sWFG+c35AJQTFFKLSn16Q72apFPWfzeJXWsQyTXV7GyHj8qifh+iwVgoIe7y+4bcaZ
+         C4bUJcxCZOTRc7HOgbfLuXmMJPQ8OIhG/Q4nSmrwdYCMNgOtpMccwOrgM7lKNHD2iv
+         6gZJt+JBJF5KoXLO6RjkRA63GJYzgtGC8cNjK8jvEhqNrd+CPsDtswo6JHWrXVfYSs
+         TynDNMULeQidgTK9AYSBvvyLAz4SEcRhTUPb159geRvTv7KbG53RWrWL7vnSo4qH9K
+         IlIVMKhhf+ZMQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 024035C0388; Mon, 14 Feb 2022 11:44:40 -0800 (PST)
+Date:   Mon, 14 Feb 2022 11:44:40 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Chris Mason <clm@fb.com>
+Cc:     Giuseppe Scrivano <gscrivan@redhat.com>,
+        "riel@surriel.com" <riel@surriel.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Kernel Team <Kernel-team@fb.com>
+Subject: Re: [PATCH RFC fs/namespace] Make kern_unmount() use
+ synchronize_rcu_expedited()
+Message-ID: <20220214194440.GZ4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220214190549.GA2815154@paulmck-ThinkPad-P17-Gen-1>
+ <C88FC9A7-D6AD-4382-B74A-175922F57852@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220210184319.25009-1-treasure4paddy@gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <C88FC9A7-D6AD-4382-B74A-175922F57852@fb.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Feb 14, 2022 at 07:26:49PM +0000, Chris Mason wrote:
+> 
+> 
+> > On Feb 14, 2022, at 2:05 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > 
+> > Experimental.  Not for inclusion.  Yet, anyway.
+> > 
+> > Freeing large numbers of namespaces in quick succession can result in
+> > a bottleneck on the synchronize_rcu() invoked from kern_unmount().
+> > This patch applies the synchronize_rcu_expedited() hammer to allow
+> > further testing and fault isolation.
+> > 
+> > Hey, at least there was no need to change the comment!  ;-)
+> > 
+> 
+> I don’t think this will be fast enough.  I think the problem is that commit e1eb26fa62d04ec0955432be1aa8722a97cb52e7 is putting all of the ipc namespace frees onto a list, and every free includes one call to synchronize_rcu()
+> 
+> The end result is that we can create new namespaces much much faster than we can free them, and eventually we run out.  I found this while debugging clone() returning ENOSPC because create_ipc_ns() was returning ENOSPC.
 
-> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-> index 33f1106b4f99..a3f53f859e9d 100644
-> --- a/kernel/workqueue.c
-> +++ b/kernel/workqueue.c
-> @@ -3326,28 +3326,38 @@ EXPORT_SYMBOL(cancel_delayed_work_sync);
->   */
->  int schedule_on_each_cpu(work_func_t func)
->  {
-> -	int cpu;
->  	struct work_struct __percpu *works;
-> +	cpumask_var_t sched_cpumask;
-> +	int cpu, ret = 0;
->  
-> -	works = alloc_percpu(struct work_struct);
-> -	if (!works)
-> +	if (!alloc_cpumask_var(&sched_cpumask, GFP_KERNEL))
->  		return -ENOMEM;
->  
-> +	works = alloc_percpu(struct work_struct);
-> +	if (!works) {
-> +		ret = -ENOMEM;
-> +		goto free_cpumask;
-> +	}
-> +
->  	cpus_read_lock();
->  
-> -	for_each_online_cpu(cpu) {
-> +	cpumask_copy(sched_cpumask, cpu_online_mask);
-> +	for_each_cpu_and(cpu, sched_cpumask, cpu_online_mask) {
+Moving from synchronize_rcu() to synchronize_rcu_expedited() does buy
+you at least an order of magnitude.  But yes, it should be possible to
+get rid of all but one call per batch, which would be better.  Maybe
+a bit more complicated, but probably not that much.
 
-This definitely would need a comment explaining what's going on cuz it looks
-weird to be copying the cpumask which is supposed to stay stable due to the
-cpus_read_lock(). Given that it can only happen during early boot and the
-online cpus can only be expanding, maybe just add sth like:
+Let me see what I can come up with.
 
-        if (early_during_boot) {
-                for_each_possible_cpu(cpu)
-                        INIT_WORK(per_cpu_ptr(works, cpu), func);
-        }
+If this is an emergency, I still suggest trying the patch as a short-term
+workaround.
 
-BTW, who's calling schedule_on_each_cpu() that early during boot. It makes
-no sense to do this while the cpumasks can't be stabilized.
-
-Thanks.
-
--- 
-tejun
+							Thanx, Paul

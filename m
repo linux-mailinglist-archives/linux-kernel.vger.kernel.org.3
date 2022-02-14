@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144C44B46F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5DC74B4BE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:43:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245228AbiBNJt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:49:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43862 "EHLO
+        id S1347056AbiBNK3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:29:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343967AbiBNJqe (ORCPT
+        with ESMTP id S1348232AbiBNK0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:46:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC47C60D8F;
-        Mon, 14 Feb 2022 01:40:03 -0800 (PST)
+        Mon, 14 Feb 2022 05:26:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C707811AD;
+        Mon, 14 Feb 2022 01:57:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99C5DB80DC6;
-        Mon, 14 Feb 2022 09:40:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99616C340E9;
-        Mon, 14 Feb 2022 09:40:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AF038B80DBE;
+        Mon, 14 Feb 2022 09:57:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD9E0C340EF;
+        Mon, 14 Feb 2022 09:57:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831601;
-        bh=ROdNpk6GGl3zwq7T6WvJRSyShTsDYOP5Ert8FCnHo9w=;
+        s=korg; t=1644832667;
+        bh=UImdhe0lzIBcuJU5o3NtutfAaJZJjpWz8OLIQz63P+c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kYVMIm/Akv07g2CzJhLjlHhfe4SlSLBLV67r86hEjOhMrhdutkSyiCwwEZfzpOW9t
-         9ksuGhBVqgc/w/0mO48Iq7Vp+frAQ1bPKfwGuLQjCB4/8yTprd2XYSySfLN0IKAKP7
-         u4ByNKER7bbqzcMMK/ZuI3EnKywpkDtPzC1MjszI=
+        b=WmSmtdoe5153onrnpzBPS4kgF5E54kPSg7Scd9cTtw3LXSfdteem0u7fdSJo0KeqA
+         R0oBHEbNeAYepBzLWQjpq4vZZ9fdl1cbCfL3Ah3jV6ibFa/vx5C47k/MkP1/ERkWe0
+         4YAaoaDawSfsh+c1Z4stOCg/+Hou2VupFn8mIoB8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 033/116] usb: dwc2: gadget: dont try to disable ep0 in dwc2_hsotg_suspend
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: [PATCH 5.16 088/203] drm/rockchip: vop: Correct RK3399 VOP register fields
 Date:   Mon, 14 Feb 2022 10:25:32 +0100
-Message-Id: <20220214092459.834245616@linuxfoundation.org>
+Message-Id: <20220214092513.258735233@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +56,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+From: Brian Norris <briannorris@chromium.org>
 
-[ Upstream commit ac55d163855924aa5af9f1560977da8f346963c8 ]
+commit 9da1e9ab82c92d0e89fe44cad2cd7c2d18d64070 upstream.
 
-Calling dwc2_hsotg_ep_disable on ep0 (in/out) will lead to the following
-logs before returning -EINVAL:
-dwc2 49000000.usb-otg: dwc2_hsotg_ep_disable: called for ep0
-dwc2 49000000.usb-otg: dwc2_hsotg_ep_disable: called for ep0
+Commit 7707f7227f09 ("drm/rockchip: Add support for afbc") switched up
+the rk3399_vop_big[] register windows, but it did so incorrectly.
 
-To avoid these two logs while suspending, start disabling the endpoint
-from the index 1, as done in dwc2_hsotg_udc_stop:
+The biggest problem is in rk3288_win23_data[] vs.
+rk3368_win23_data[] .format field:
 
-	/* all endpoints should be shutdown */
-	for (ep = 1; ep < hsotg->num_of_eps; ep++) {
-		if (hsotg->eps_in[ep])
-			dwc2_hsotg_ep_disable_lock(&hsotg->eps_in[ep]->ep);
-		if (hsotg->eps_out[ep])
-			dwc2_hsotg_ep_disable_lock(&hsotg->eps_out[ep]->ep);
-	}
+  RK3288's format: VOP_REG(RK3288_WIN2_CTRL0, 0x7, 1)
+  RK3368's format: VOP_REG(RK3368_WIN2_CTRL0, 0x3, 5)
 
-Acked-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-Link: https://lore.kernel.org/r/20211207130101.270314-1-amelie.delaunay@foss.st.com
+Bits 5:6 (i.e., shift 5, mask 0x3) are correct for RK3399, according to
+the TRM.
+
+There are a few other small differences between the 3288 and 3368
+definitions that were swapped in commit 7707f7227f09. I reviewed them to
+the best of my ability according to the RK3399 TRM and fixed them up.
+
+This fixes IOMMU issues (and display errors) when testing with BG24
+color formats.
+
+Fixes: 7707f7227f09 ("drm/rockchip: Add support for afbc")
+Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Tested-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220119161104.1.I1d01436bef35165a8cdfe9308789c0badb5ff46a@changeid
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc2/gadget.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/rockchip/rockchip_vop_reg.c |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 449f19c3633c2..ec54971063f8f 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -5032,7 +5032,7 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
- 		hsotg->gadget.speed = USB_SPEED_UNKNOWN;
- 		spin_unlock_irqrestore(&hsotg->lock, flags);
+--- a/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
++++ b/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
+@@ -902,6 +902,7 @@ static const struct vop_win_phy rk3399_w
+ 	.enable = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 0),
+ 	.format = VOP_REG(RK3288_WIN0_CTRL0, 0x7, 1),
+ 	.rb_swap = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 12),
++	.x_mir_en = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 21),
+ 	.y_mir_en = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 22),
+ 	.act_info = VOP_REG(RK3288_WIN0_ACT_INFO, 0x1fff1fff, 0),
+ 	.dsp_info = VOP_REG(RK3288_WIN0_DSP_INFO, 0x0fff0fff, 0),
+@@ -912,6 +913,7 @@ static const struct vop_win_phy rk3399_w
+ 	.uv_vir = VOP_REG(RK3288_WIN0_VIR, 0x3fff, 16),
+ 	.src_alpha_ctl = VOP_REG(RK3288_WIN0_SRC_ALPHA_CTRL, 0xff, 0),
+ 	.dst_alpha_ctl = VOP_REG(RK3288_WIN0_DST_ALPHA_CTRL, 0xff, 0),
++	.channel = VOP_REG(RK3288_WIN0_CTRL2, 0xff, 0),
+ };
  
--		for (ep = 0; ep < hsotg->num_of_eps; ep++) {
-+		for (ep = 1; ep < hsotg->num_of_eps; ep++) {
- 			if (hsotg->eps_in[ep])
- 				dwc2_hsotg_ep_disable_lock(&hsotg->eps_in[ep]->ep);
- 			if (hsotg->eps_out[ep])
--- 
-2.34.1
-
+ /*
+@@ -922,11 +924,11 @@ static const struct vop_win_phy rk3399_w
+ static const struct vop_win_data rk3399_vop_win_data[] = {
+ 	{ .base = 0x00, .phy = &rk3399_win01_data,
+ 	  .type = DRM_PLANE_TYPE_PRIMARY },
+-	{ .base = 0x40, .phy = &rk3288_win01_data,
++	{ .base = 0x40, .phy = &rk3368_win01_data,
+ 	  .type = DRM_PLANE_TYPE_OVERLAY },
+-	{ .base = 0x00, .phy = &rk3288_win23_data,
++	{ .base = 0x00, .phy = &rk3368_win23_data,
+ 	  .type = DRM_PLANE_TYPE_OVERLAY },
+-	{ .base = 0x50, .phy = &rk3288_win23_data,
++	{ .base = 0x50, .phy = &rk3368_win23_data,
+ 	  .type = DRM_PLANE_TYPE_CURSOR },
+ };
+ 
 
 

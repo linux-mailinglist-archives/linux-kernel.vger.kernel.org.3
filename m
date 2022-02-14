@@ -2,136 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E374B5211
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E2A4B5214
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354597AbiBNNqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:46:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57994 "EHLO
+        id S1354648AbiBNNqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:46:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354618AbiBNNpo (ORCPT
+        with ESMTP id S1354615AbiBNNqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:45:44 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C5D575F4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:45:33 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21ECVusW014630;
-        Mon, 14 Feb 2022 13:45:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=t/xh7h782UBN/jZbD91JVD9rwY0PYE6Ef7A2XaPovz0=;
- b=LDaIM6W45eWmucJPJxrvRoAEGE7zsy9TmhAUbW33wkwMCOBMB3FHWEpm8pQwb1eCjk07
- o0MzcUO0R//2AbtKQLXTsFF+uZJqmWNWH5lTHU2hPzMsZL32N+5LP4nunFXMuADFM3Zw
- WV5Vu7u8/oUdF9P9K9Ble3hr1xejZUA4x2gfdWIibriBss6v9WgD/y1LePQvvNNq4FRF
- JIv0eA8gIsjbekgx9fu4dxtciSmJFR/1SQqntiTwGZfJABdsJUMjeU3EiKriNPMxjflv
- TzPxlbrUc2mfGjJnyZQPzt4/6qMslnFVk1VRl3uxRjIgpeLpW/yvHboAkaFIB4BeSOPJ Bg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e6rt1624p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 13:45:18 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21EDQQEf032307;
-        Mon, 14 Feb 2022 13:45:17 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e6rt1623q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 13:45:17 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21EDhnGj019890;
-        Mon, 14 Feb 2022 13:45:15 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 3e64h9nx3a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 13:45:15 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21EDjCb336110832
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Feb 2022 13:45:13 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DA19C42045;
-        Mon, 14 Feb 2022 13:45:12 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C8F584204F;
-        Mon, 14 Feb 2022 13:45:12 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 14 Feb 2022 13:45:12 +0000 (GMT)
-Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55390)
-        id 7F15AE02E8; Mon, 14 Feb 2022 14:45:12 +0100 (CET)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>
-Subject: [PATCH] ftrace: ensure trace buffer is at least 4096 bytes large
-Date:   Mon, 14 Feb 2022 14:44:56 +0100
-Message-Id: <20220214134456.1751749-1-svens@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
+        Mon, 14 Feb 2022 08:46:50 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E0949F8D
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:46:42 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id d7so14757936qvk.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:46:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:mime-version:content-transfer-encoding
+         :content-description:subject:to:from:date:reply-to;
+        bh=ZBkk82C9Tb2n9zk35/g0fiYAIsivCgRElpKZJiIijLI=;
+        b=GuQSal4sWXnv/ElcV5N1ftkxuyRKySpgwQylLvenu8BLRlFHsCyz7EQomffu3KxJSM
+         5qJheEZCgHtCpSBLbgsh/yE29nwRFcQa/pmcVipYhpiervnM+NUsLScLbffWcM0QMIdQ
+         2S4anSzLYVizD4WMod/MQ9JrDY/WJGAs65nNq9DW/Pq0b0NXtII/vgYS9Ulc+FQWkx4d
+         NOUBu8BB0rAAtvG2z7zqIeBijntu9mkm7E0apqAUhT+S0Y12inlfCnKU8gW9qUe5N1Pc
+         9Asq8SlXvbxRSpdWURllup0ZdiHArVHXiWAe1+J5aCOBL5XLqqrp1ItBul7efgWHW3oM
+         Nf3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:content-description:subject:to:from:date
+         :reply-to;
+        bh=ZBkk82C9Tb2n9zk35/g0fiYAIsivCgRElpKZJiIijLI=;
+        b=d6gqRh2UJNnV8FRldESsbMmcPKiggSqJTW64IebNdFblNoqvtYr0nRo0wj34kO5oWg
+         bsw2wY8Q1alSvM6nKfvCZq31Y/4687cM6aphnHLKQO5vpSl8qRopazSjsjSZcb6qBiCB
+         xnQ9NuwcZf7vhPbUK727cdBNq7akXwXvxQPqlAa1Xce1B4AyWQtxTRDGTPA7/x92ep77
+         yUiu7mE+lwINPC707zm1/8fFi+rAelXOOUo7eZXmJu7Gs8Bce1+lRjehUpHeOVhHPfH4
+         KS/hEYCz9piCwMgen2V+3gKcg2oTuzkwbL8T6RdwrU4JSk8lBf2jLFqnzBaO/3Eu9Oyw
+         nOKQ==
+X-Gm-Message-State: AOAM531kQX2Gan09QDIsjvshkwd2vbcPTCLFmZo2PvFD//mAjAtF9ku4
+        5gLWjgtydosZu2bMLkrfdf0=
+X-Google-Smtp-Source: ABdhPJwQDTRU8g92uSRXJeaDrFkSmffCKLgCL3VwXQihBBQPoMCdRRprTV/hiRVKDfOrtjW7hkWFPA==
+X-Received: by 2002:ad4:4441:: with SMTP id l1mr9328976qvt.116.1644846401835;
+        Mon, 14 Feb 2022 05:46:41 -0800 (PST)
+Received: from [100.120.33.203] ([154.3.129.86])
+        by smtp.gmail.com with ESMTPSA id h1sm16302955qkn.71.2022.02.14.05.46.15
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Mon, 14 Feb 2022 05:46:40 -0800 (PST)
+Message-ID: <620a5d40.1c69fb81.45b97.658f@mx.google.com>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -0CZ3F6oPakx4SvErDd_hRaL7qjAqMzj
-X-Proofpoint-ORIG-GUID: RzYc1BmW-MYduAmjfnhD0JJV_T175gh4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-14_06,2022-02-14_03,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- impostorscore=0 suspectscore=0 priorityscore=1501 phishscore=0
- clxscore=1015 mlxscore=0 lowpriorityscore=0 adultscore=0 spamscore=0
- bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202140082
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Re:LOAN OFFER FOR 2022 3% PER MONTH
+To:     Recipients <benbernanki@gmail.com>
+From:   benbernanki@gmail.com
+Date:   Mon, 14 Feb 2022 13:45:48 +0000
+Reply-To: gs61488872039@gmail.com
+X-Spam-Status: No, score=2.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Booting the kernel with 'trace_buf_size=1' give a warning at
-boot during the ftrace selftests:
+Good day to you all I'm George Stacey from AUSTRALIA the loan manager, this=
+ is to inform everyone that we are now offering loan to the need or busines=
+s funding as a result of COVID-19 damages with 3% rate per
+month, we offer business loan,car loan,investment loan or loan to pay off y=
+our bills, contact us with your Full =
 
-[    0.892809] Running postponed tracer tests:
-[    0.892893] Testing tracer function:
-[    0.901899] Callback from call_rcu_tasks_trace() invoked.
-[    0.983829] Callback from call_rcu_tasks_rude() invoked.
-[    1.072003] .. bad ring buffer .. corrupted trace buffer ..
-[    1.091944] Callback from call_rcu_tasks() invoked.
-[    1.097695] PASSED
-[    1.097701] Testing dynamic ftrace: .. filter failed count=0 ..FAILED!
-[    1.353474] ------------[ cut here ]------------
-[    1.353478] WARNING: CPU: 0 PID: 1 at kernel/trace/trace.c:1951 run_tracer_selftest+0x13c/0x1b0
 
-Therefore enforce a minimum of 4096 bytes to make the selftest pass.
+Name:
+Phone:
+Number:
+Amount Needed:
+Duration:
+Address:
+Occupation:
+Gender:
 
-Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
----
- kernel/trace/trace.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+whatsapp us on +61-488-872-039 for easy conversation
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 7c2578efde26..3050892d1812 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -1474,10 +1474,12 @@ static int __init set_buf_size(char *str)
- 	if (!str)
- 		return 0;
- 	buf_size = memparse(str, &str);
--	/* nr_entries can not be zero */
--	if (buf_size == 0)
--		return 0;
--	trace_buf_size = buf_size;
-+	/*
-+	 * nr_entries can not be zero and the startup
-+	 * tests require some buffer space. Therefore
-+	 * ensure we have at least 4096 bytes of buffer.
-+	 */
-+	trace_buf_size = max(4096UL, buf_size);
- 	return 1;
- }
- __setup("trace_buf_size=", set_buf_size);
--- 
-2.32.0
-
+George Stacey

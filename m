@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F36C4B49A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D694B47CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236336AbiBNKdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:33:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41908 "EHLO
+        id S233057AbiBNJmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:42:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348031AbiBNKbu (ORCPT
+        with ESMTP id S245000AbiBNJlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:31:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11FFB2AD7;
-        Mon, 14 Feb 2022 02:00:14 -0800 (PST)
+        Mon, 14 Feb 2022 04:41:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB41A193;
+        Mon, 14 Feb 2022 01:36:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53C35B80DCE;
-        Mon, 14 Feb 2022 10:00:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76B90C340E9;
-        Mon, 14 Feb 2022 10:00:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C0B061172;
+        Mon, 14 Feb 2022 09:36:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4100EC340E9;
+        Mon, 14 Feb 2022 09:36:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832810;
-        bh=0cCVy52/8FGsLChq8XKfbof1AzX4yIpQTcxqagmp5gg=;
+        s=korg; t=1644831414;
+        bh=LUzrZ0HODNmYMs1a86YjqdHJIgQG8o+g6TrynlDeyVU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FUyzuvQ+0eW+mJk48ytz6oURLkMUe46SQ5Nht+LFGOv/jDPkauu0tHnzT/PkGMvcx
-         vUf3xq1u2V6iB/OhXBS4ZACDR/gyWF4od2sHX+V6kSQmM1R9JBo3SJfI7TfAE9d31o
-         4+LFDEkexx5FQw9Q79T6HuxbbENOzjtj0ukiFAHU=
+        b=W6qb8Thn9nP2kNcBlCUsowZJmRFSZdr2xHwyX+s5MDWVg9tnMrWtnwCwEGepdsTWj
+         Ig4XlCnRocEbkS0itqDbzPbaCsOZ+l1w0QXzyg7+TA4gTYtoDt1J+6THacbh7Rbkgi
+         R3tqxBiO+vdifl579SblYVY7cO1hbVecFfJSqGDA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        stable@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
+        Andrew Lunn <andrew@lunn.ch>, Andrew Jeffery <andrew@aj.id.au>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 131/203] SUNRPC: lock against ->sock changing during sysfs read
+Subject: [PATCH 5.4 47/71] net: mdio: aspeed: Add missing MODULE_DEVICE_TABLE
 Date:   Mon, 14 Feb 2022 10:26:15 +0100
-Message-Id: <20220214092514.683072285@linuxfoundation.org>
+Message-Id: <20220214092453.635370227@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,65 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: NeilBrown <neilb@suse.de>
+From: Joel Stanley <joel@jms.id.au>
 
-[ Upstream commit b49ea673e119f59c71645e2f65b3ccad857c90ee ]
+[ Upstream commit bc1c3c3b10db4f37c41e6107751a8d450d9c431c ]
 
-->sock can be set to NULL asynchronously unless ->recv_mutex is held.
-So it is important to hold that mutex.  Otherwise a sysfs read can
-trigger an oops.
-Commit 17f09d3f619a ("SUNRPC: Check if the xprt is connected before
-handling sysfs reads") appears to attempt to fix this problem, but it
-only narrows the race window.
+Fix loading of the driver when built as a module.
 
-Fixes: 17f09d3f619a ("SUNRPC: Check if the xprt is connected before handling sysfs reads")
-Fixes: a8482488a7d6 ("SUNRPC query transport's source port")
-Signed-off-by: NeilBrown <neilb@suse.de>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Fixes: f160e99462c6 ("net: phy: Add mdio-aspeed")
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Acked-by: Andrew Jeffery <andrew@aj.id.au>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sunrpc/sysfs.c    | 5 ++++-
- net/sunrpc/xprtsock.c | 7 ++++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ drivers/net/phy/mdio-aspeed.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/sunrpc/sysfs.c b/net/sunrpc/sysfs.c
-index 8f309bcdf84fe..0c28280dd3bcb 100644
---- a/net/sunrpc/sysfs.c
-+++ b/net/sunrpc/sysfs.c
-@@ -115,11 +115,14 @@ static ssize_t rpc_sysfs_xprt_srcaddr_show(struct kobject *kobj,
- 	}
+diff --git a/drivers/net/phy/mdio-aspeed.c b/drivers/net/phy/mdio-aspeed.c
+index 966c3b4ad59d1..e2273588c75b6 100644
+--- a/drivers/net/phy/mdio-aspeed.c
++++ b/drivers/net/phy/mdio-aspeed.c
+@@ -148,6 +148,7 @@ static const struct of_device_id aspeed_mdio_of_match[] = {
+ 	{ .compatible = "aspeed,ast2600-mdio", },
+ 	{ },
+ };
++MODULE_DEVICE_TABLE(of, aspeed_mdio_of_match);
  
- 	sock = container_of(xprt, struct sock_xprt, xprt);
--	if (kernel_getsockname(sock->sock, (struct sockaddr *)&saddr) < 0)
-+	mutex_lock(&sock->recv_mutex);
-+	if (sock->sock == NULL ||
-+	    kernel_getsockname(sock->sock, (struct sockaddr *)&saddr) < 0)
- 		goto out;
- 
- 	ret = sprintf(buf, "%pISc\n", &saddr);
- out:
-+	mutex_unlock(&sock->recv_mutex);
- 	xprt_put(xprt);
- 	return ret + 1;
- }
-diff --git a/net/sunrpc/xprtsock.c b/net/sunrpc/xprtsock.c
-index d8ee06a9650a1..03770e56df361 100644
---- a/net/sunrpc/xprtsock.c
-+++ b/net/sunrpc/xprtsock.c
-@@ -1641,7 +1641,12 @@ static int xs_get_srcport(struct sock_xprt *transport)
- unsigned short get_srcport(struct rpc_xprt *xprt)
- {
- 	struct sock_xprt *sock = container_of(xprt, struct sock_xprt, xprt);
--	return xs_sock_getport(sock->sock);
-+	unsigned short ret = 0;
-+	mutex_lock(&sock->recv_mutex);
-+	if (sock->sock)
-+		ret = xs_sock_getport(sock->sock);
-+	mutex_unlock(&sock->recv_mutex);
-+	return ret;
- }
- EXPORT_SYMBOL(get_srcport);
- 
+ static struct platform_driver aspeed_mdio_driver = {
+ 	.driver = {
 -- 
 2.34.1
 

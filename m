@@ -2,254 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAFFF4B4DAD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:20:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8904B4DA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:20:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345901AbiBNLO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:14:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45108 "EHLO
+        id S1350425AbiBNLPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:15:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350291AbiBNLOF (ORCPT
+        with ESMTP id S1350274AbiBNLPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:14:05 -0500
-Received: from mxout02.lancloud.ru (mxout02.lancloud.ru [45.84.86.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2337ECC71;
-        Mon, 14 Feb 2022 02:43:26 -0800 (PST)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 5B93A232DBED
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH v2 1/2] platform: make platform_get_irq_optional()
- optional
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Corey Minyard <minyard@acm.org>,
-        "Oleksij Rempel" <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        "Mun Yew Tham" <mun.yew.tham@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        "Kamal Dasu" <kdasu.kdev@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        "Miquel Raynal" <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        "Guenter Roeck" <groeck@chromium.org>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        "Liam Girdwood" <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        "Takashi Iwai" <tiwai@suse.com>,
-        <openipmi-developer@lists.sourceforge.net>,
-        <linux-iio@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mmc@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <netdev@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>,
-        <platform-driver-x86@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-References: <20220212201631.12648-1-s.shtylyov@omp.ru>
- <20220212201631.12648-2-s.shtylyov@omp.ru>
- <CAMuHMdUPxX7Tja6BCjEb4KDobNFPMcM66Fk7Z+VsO7pgb8JnjA@mail.gmail.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <41b49828-e0bc-3e7a-32d7-5ee41c778206@omp.ru>
-Date:   Mon, 14 Feb 2022 13:43:11 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <CAMuHMdUPxX7Tja6BCjEb4KDobNFPMcM66Fk7Z+VsO7pgb8JnjA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 14 Feb 2022 06:15:06 -0500
+Received: from so254-9.mailgun.net (so254-9.mailgun.net [198.61.254.9])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 8DDA9EFF84
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:43:54 -0800 (PST)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1644835435; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=rcn9ALIlWKMM2fTTA+HHH8I55YhsQbojYCrOJlAIZU4=; b=J+7iEfwFJGrg00+hUMASg8e8mxBt0mve0sCzaDONZGIwqiRp58jux1m4Akp9zETtB0lpRcX/
+ fL8DvzKOLTR6AcMIpK88O4/TYCRfb30tlj/0BlWOhS57BFmwOWwdBaJQvCmMArLLQQfEi2w3
+ aQFgFnhgV2vbaw36OJm7HR8z8S4=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 620a326519d16b66a926d08a (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 14 Feb 2022 10:43:49
+ GMT
+Sender: zijuhu=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id A12CAC43165; Mon, 14 Feb 2022 10:43:48 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
+Received: from zijuhu-gv.qualcomm.com (unknown [180.166.53.21])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: zijuhu)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id A47C4C43164;
+        Mon, 14 Feb 2022 10:43:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org A47C4C43164
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Zijun Hu <zijuhu@codeaurora.org>
+To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, c-hbandi@codeaurora.org,
+        hemantg@codeaurora.org, rjliao@codeaurora.org,
+        zijuhu@codeaurora.org, tjiang@codeaurora.org,
+        Zijun Hu <quic_zijuhu@quicinc.com>
+Subject: [PATCH v4] Bluetooth: btusb: Improve stability for QCA devices
+Date:   Mon, 14 Feb 2022 18:43:39 +0800
+Message-Id: <1644835419-23943-1-git-send-email-zijuhu@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+From: Zijun Hu <quic_zijuhu@quicinc.com>
 
-On 2/14/22 11:54 AM, Geert Uytterhoeven wrote:
+WCN6855 2.1 will reset to apply firmware downloaded, so wait
+a moment for reset done then go ahead to improve stability.
 
-[...]
+Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+---
+ drivers/bluetooth/btusb.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
->> This patch is based on the former Andy Shevchenko's patch:
->>
->> https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchenko@linux.intel.com/
->>
->> Currently platform_get_irq_optional() returns an error code even if IRQ
->> resource simply has not been found.  It prevents the callers from being
->> error code agnostic in their error handling:
->>
->>         ret = platform_get_irq_optional(...);
->>         if (ret < 0 && ret != -ENXIO)
->>                 return ret; // respect deferred probe
->>         if (ret > 0)
->>                 ...we get an IRQ...
->>
->> All other *_optional() APIs seem to return 0 or NULL in case an optional
->> resource is not available.  Let's follow this good example, so that the
->> callers would look like:
->>
->>         ret = platform_get_irq_optional(...);
->>         if (ret < 0)
->>                 return ret;
->>         if (ret > 0)
->>                 ...we get an IRQ...
->>
->> Reported-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
->> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->> ---
->> Changes in version 2:
-> 
-> Thanks for the update!
-> 
->>  drivers/base/platform.c                  | 60 +++++++++++++++---------
-> 
-> The core change LGTM.
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index ef5d52f0e123..9e0d59d4382a 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -2999,6 +2999,7 @@ static int btusb_set_bdaddr_wcn6855(struct hci_dev *hdev,
+ #define QCA_PATCH_UPDATED	0x80
+ #define QCA_DFU_TIMEOUT		3000
+ #define QCA_FLAG_MULTI_NVM      0x80
++#define QCA_BT_RESET_WAIT_MS    100
+ 
+ #define WCN6855_2_0_RAM_VERSION_GF 0x400c1200
+ #define WCN6855_2_1_RAM_VERSION_GF 0x400c1211
+@@ -3325,6 +3326,13 @@ static int btusb_setup_qca(struct hci_dev *hdev)
+ 		err = btusb_setup_qca_load_nvm(hdev, &ver, info);
+ 		if (err < 0)
+ 			return err;
++
++		/* WCN6855 2.1 will reset to apply firmware downloaded here, so
++		 * wait ~100ms for reset Done then go ahead, otherwise, it maybe
++		 * cause potential enable failure.
++		 */
++		if (info->rom_version == 0x00130201)
++			msleep(QCA_BT_RESET_WAIT_MS);
+ 	}
+ 
+ 	return 0;
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
 
-   Thanx! :-)
-
-> I'm only looking at Renesas drivers below...
-> 
->> --- a/drivers/mmc/host/sh_mmcif.c
->> +++ b/drivers/mmc/host/sh_mmcif.c
->> @@ -1465,14 +1465,14 @@ static int sh_mmcif_probe(struct platform_device *pdev)
->>         sh_mmcif_sync_reset(host);
->>         sh_mmcif_writel(host->addr, MMCIF_CE_INT_MASK, MASK_ALL);
->>
->> -       name = irq[1] < 0 ? dev_name(dev) : "sh_mmc:error";
->> +       name = irq[1] <= 0 ? dev_name(dev) : "sh_mmc:error";
-> 
-> "== 0" should be sufficient here, if the code above would bail out
-> on errors returned by platform_get_irq_optional(), which it currently
-> doesn't do.
-> As this adds missing error handling, this is to be fixed by a separate
-> patch later?
-
-   Yes.
-
-[...]
->>                 ret = devm_request_threaded_irq(dev, irq[1],
->>                                                 sh_mmcif_intr, sh_mmcif_irqt,
->>                                                 0, "sh_mmc:int", host);
-> 
->> --- a/drivers/phy/renesas/phy-rcar-gen3-usb2.c
->> +++ b/drivers/phy/renesas/phy-rcar-gen3-usb2.c
->> @@ -439,7 +439,7 @@ static int rcar_gen3_phy_usb2_init(struct phy *p)
->>         u32 val;
->>         int ret;
->>
->> -       if (!rcar_gen3_is_any_rphy_initialized(channel) && channel->irq >= 0) {
->> +       if (!rcar_gen3_is_any_rphy_initialized(channel) && channel->irq > 0) {
->>                 INIT_WORK(&channel->work, rcar_gen3_phy_usb2_work);
->>                 ret = request_irq(channel->irq, rcar_gen3_phy_usb2_irq,
->>                                   IRQF_SHARED, dev_name(channel->dev), channel);
->> @@ -486,7 +486,7 @@ static int rcar_gen3_phy_usb2_exit(struct phy *p)
->>                 val &= ~USB2_INT_ENABLE_UCOM_INTEN;
->>         writel(val, usb2_base + USB2_INT_ENABLE);
->>
->> -       if (channel->irq >= 0 && !rcar_gen3_is_any_rphy_initialized(channel))
->> +       if (channel->irq > 0 && !rcar_gen3_is_any_rphy_initialized(channel))
->>                 free_irq(channel->irq, channel);
->>
->>         return 0;
-> 
-> LGTM, but note that all errors returned by platform_get_irq_optional()
-> are currently ignored, even real errors, which should be propagated
-> up.
-> As this adds missing error handling, this is to be fixed by a separate
-> patch later?
-
-   Yes.
-
->> --- a/drivers/thermal/rcar_gen3_thermal.c
->> +++ b/drivers/thermal/rcar_gen3_thermal.c
->> @@ -432,6 +432,8 @@ static int rcar_gen3_thermal_request_irqs(struct rcar_gen3_thermal_priv *priv,
->>                 irq = platform_get_irq_optional(pdev, i);
->>                 if (irq < 0)
->>                         return irq;
->> +               if (!irq)
->> +                       return -ENXIO;
-> 
-> While correct, and preserving existing behavior, this looks strange
-> to me.  Probably this should return zero instead (i.e. the check
-> above should be changed to "<= 0"), and the caller should start caring
-> about and propagating up real errors.
-
-   Hm, you're right... should be <= 0 there, it seems.
-
-> As this adds missing error handling, this is to be fixed by a separate
-> patch later?
-
-   Propagating errors from the probe() method is a matter of separate patch, yes.
-
->>
->>                 irqname = devm_kasprintf(dev, GFP_KERNEL, "%s:ch%d",
->>                                          dev_name(dev), i);
->> diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
->> index fb65dc601b23..328ab074fd89 100644
-> 
->> --- a/drivers/tty/serial/sh-sci.c
->> +++ b/drivers/tty/serial/sh-sci.c
-> 
-> I think you missed
-> 
->     #define SCIx_IRQ_IS_MUXED(port)                 \
->             ((port)->irqs[SCIx_ERI_IRQ] ==  \
->              (port)->irqs[SCIx_RXI_IRQ]) || \
->             ((port)->irqs[SCIx_ERI_IRQ] &&  \
->              ((port)->irqs[SCIx_RXI_IRQ] < 0))
-> 
-> above? The last condition should become "<= 0".
-
-   Yes, probably... TY!
-
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-
-MBR, Sergey

@@ -2,77 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260CD4B445C
+	by mail.lfdr.de (Postfix) with ESMTP id C2A9A4B445E
 	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 09:38:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242126AbiBNIhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 03:37:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34044 "EHLO
+        id S242145AbiBNIig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 03:38:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235658AbiBNIhq (ORCPT
+        with ESMTP id S235658AbiBNIie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 03:37:46 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9816EDF6F
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:37:38 -0800 (PST)
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4AEE73F33A
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:37:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644827857;
-        bh=UeS9MvqP+4XVHpHzzOg6ayahqyEHPitjbY58dkpAMu0=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=NSjk2lG0p10BZUmenmlcPDzGQ8q5zoAeU6qrz5jfY3klFki7z2tdZJqA5oMyBAcU+
-         txrN5ghpRoS6QzFdiZGhk5cgmMc4i1hgGHLAoaAfVu11AT52wajDEaMWk+1gHqMHoy
-         LgRFJS0p9QWhvlvR+fN7C+rl0VF2c9l7OzA53QyhnaJpxjaR1cs9jRagA2r4KwEw8b
-         dhY5lYP3y1i/ki/ERc5VPpes9kW8laje3Br/HjVq20nZyVIRGPAWXt76IMUAfCG2yZ
-         c3xCBcfvRTmytWDs7UREgXmWfpHXfDm/q6In9BEEr84KHauJFojpfyr4+TI2pUX7fa
-         3qHdJG990LpTA==
-Received: by mail-ed1-f69.google.com with SMTP id z8-20020a05640240c800b0041003c827edso8155206edb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:37:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UeS9MvqP+4XVHpHzzOg6ayahqyEHPitjbY58dkpAMu0=;
-        b=1WF84o2T841uNCQewe2jc0kIGy68BJ8E1WF3i8Xh9OwAjgoeXvVyfYlB0Ly1FNNB9p
-         5BCzmt6iKG1TgYZxklejh9Ht8l7UlqPHY2t1gTTs/b0xgqqbPfpRtXItwTW+XNejwEMF
-         OJpoi9vqARJ/+ChzNIZP04mC8UtDse9JbM+lFS6rJ03mLaZQMzubVLiXjsX7VwMeugbi
-         EvGN08ktuez+qMOHvCrklGRGtT5FbTQEyZs6mwb2MrYJX2m6qbngkF6u+5gxcQA+tmRH
-         yZv2rLbzUItzRaNHIMJsZnH81cnoB6/9v98eFv1YGRgDqs5Mbrj2LGE4f9yNARC+2s+/
-         MF/Q==
-X-Gm-Message-State: AOAM530HyyCXPyhu97LR5jlC20Npf7SvFZGVgWL+OS6yMxtEQhhSEbQy
-        sRKvNdUx66K8KhX3asKqkd22yBRuEYKVFSzq+rFlDFmeFZ21cYOJ7OvgiL59tYhYqNUQ6t1Unyv
-        Ix54NGVvvJrT8wwb1zkwX/RvWsS63pD6zWcWNojX7wA==
-X-Received: by 2002:a05:6402:4313:: with SMTP id m19mr14313658edc.320.1644827857010;
-        Mon, 14 Feb 2022 00:37:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx9hR1XFJB05UFJug9MAC7FCA5IP+wUp4mjQ048N34QgP+jdO/yTjWnA6oWYkRX7X+tyG4Qzg==
-X-Received: by 2002:a05:6402:4313:: with SMTP id m19mr14313649edc.320.1644827856877;
-        Mon, 14 Feb 2022 00:37:36 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id er9sm10310087edb.77.2022.02.14.00.37.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 00:37:36 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rt-users@vger.kernel.org, joseph.salisbury@canonical.com
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v3] selftests/ftrace: Do not trace do_softirq because of PREEMPT_RT
-Date:   Mon, 14 Feb 2022 09:36:57 +0100
-Message-Id: <20220214083657.165921-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        Mon, 14 Feb 2022 03:38:34 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1A313E01;
+        Mon, 14 Feb 2022 00:38:26 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21E5Um39007645;
+        Mon, 14 Feb 2022 08:37:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=PV1Ah7wybhb+po6pDcZcuKJuHgirBmZN9KGQ/Ir+Azk=;
+ b=kTxeVqkZSLV6hLj5rdW4yAVQvMzbtf0bKECQz34mhLjlSuedbRgAhH/yOpEMxhIfzrab
+ OeEf0e0GyAcIdMtNzNW1SdPC/Xvwtlxc+dH6Q+NGRoNF76X5uKbxtGVIdkHrQY9MDMjI
+ xGddhjdSpxAlQuFUzn8MQ/aBZaV1sipO7HlB4nkgztyhdX9KOOHA9ghA71k693seA0LK
+ W+KuDlWjX4b4odo5i3U2r4NL+htVVOXoZJrTQfsFeP0jlRoCwDcHmp13kuoiHW8xgEfC
+ lv7+cERfa2nLnqdMdZsHuSpF7N0CWQsK3BSmEX1dvOisUtCaUZQP2KINFmbDDVyU47g6 bg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e7dehf242-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 08:37:52 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21E8EV2d021184;
+        Mon, 14 Feb 2022 08:37:51 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e7dehf22x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 08:37:51 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21E8XfoT018557;
+        Mon, 14 Feb 2022 08:37:49 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06fra.de.ibm.com with ESMTP id 3e645ja9v5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 08:37:48 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21E8bjkX40043002
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Feb 2022 08:37:45 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8D205AE045;
+        Mon, 14 Feb 2022 08:37:45 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4B711AE04D;
+        Mon, 14 Feb 2022 08:37:44 +0000 (GMT)
+Received: from sig-9-145-84-135.uk.ibm.com (unknown [9.145.84.135])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 14 Feb 2022 08:37:44 +0000 (GMT)
+Message-ID: <e5ec2e3be2e70e690bd9112bd23297d05a2993e6.camel@linux.ibm.com>
+Subject: Re: [PATCH] parport_pc: Also enable driver for PCI systems
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 14 Feb 2022 09:37:43 +0100
+In-Reply-To: <CAMuHMdW-utcFzCZTgqONjxs=U662nF0=aBQu7Zi7FBQouwiA3g@mail.gmail.com>
+References: <alpine.DEB.2.21.2202122313460.34636@angie.orcam.me.uk>
+         <CAMuHMdW-utcFzCZTgqONjxs=U662nF0=aBQu7Zi7FBQouwiA3g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Cj_hGZEn7CrbAL8bX6nY71tGP9Hf619O
+X-Proofpoint-ORIG-GUID: 7--hie3AmYyMErFK3wRLOvpBa0hqckt4
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-14_01,2022-02-14_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ mlxscore=0 mlxlogscore=941 priorityscore=1501 adultscore=0 malwarescore=0
+ spamscore=0 clxscore=1011 suspectscore=0 bulkscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202140052
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,52 +113,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PREEMPT_RT patchset does not use do_softirq() function thus trying
-to filter for do_softirq fails for such kernel:
+On Mon, 2022-02-14 at 09:20 +0100, Geert Uytterhoeven wrote:
+> Hi Maciej,
+> 
+> CC Niklas
+> 
+> On Sun, Feb 13, 2022 at 1:45 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
+> > Nowadays PC-style parallel ports come in the form of PCI and PCIe option
+> > cards and there are some combined parallel/serial option cards as well
+> > that we handle in the parport subsystem.  There is nothing in particular
+> > that would prevent them from being used in any system equipped with PCI
+> > or PCIe connectivity, except that we do not permit the PARPORT_PC config
+> > option to be selected for platforms for which ARCH_MIGHT_HAVE_PC_PARPORT
+> > has not been set for.
+> > 
+> > The only PCI platforms that actually can't make use of PC-style parallel
+> > port hardware are those newer PCIe systems that have no support for I/O
+> > cycles in the host bridge, required by such parallel ports.  An example
+> > of such a host bridge is the POWER9 PHB4 device, but it is an exception
+> > rather than the norm.  Also it is not clear whether the serial port side
+> 
+> Note that this hardware dependency is being addressed in
+> "[RFC 00/32] Kconfig: Introduce HAS_IOPORT and LEGACY_PCI options"
+> https://lore.kernel.org/all/20211227164317.4146918-1-schnelle@linux.ibm.com/
 
-  echo do_softirq
-  ftracetest: 81: echo: echo: I/O error
+Thanks, for Cc'ing me. Note that this series is currently in kind of a
+hold as we haven't yet found a clear direction yet. There was some
+clear opposition for the LEGACY_PCI option introduced in that series
+and only little support for HAS_IOPORT.
 
-Choose some other visible function for the test.  The function does not
-have to be actually executed during the test, because it is only testing
-filter API interface.
+> 
+> > --- linux-macro.orig/drivers/parport/Kconfig
+> > +++ linux-macro/drivers/parport/Kconfig
+> > @@ -42,7 +42,7 @@ if PARPORT
+> > 
+> >  config PARPORT_PC
+> >         tristate "PC-style hardware"
+> > -       depends on ARCH_MIGHT_HAVE_PC_PARPORT
+> > +       depends on ARCH_MIGHT_HAVE_PC_PARPORT || PCI
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+This would allow selecting PARPORT_PC on s390 e.g. for allyesconfig and
+randconfig and like POWER9 we definitely do not support I/O port
+access.
 
----
+We will also get warnings when compiling with clang. A problem my
+series was originally started to address. So I'd really like to see a
+better solution here for such a change. With the HAS_IOPORT option from
+my series this would be simple but we don't currently have that though
+maybe this is also an argument for introducing HAS_IOPORT even if we
+don't add the LEGACY_PCI option.
 
-Changes since v2:
-1. Rephrase commit msg, after comments from Sebastian.
-2. Add review tag.
+> >         help
+> >           You should say Y here if you have a PC-style parallel port. All
+> >           IBM PC compatible computers and some Alphas have PC-style
+> > @@ -77,7 +77,7 @@ config PARPORT_PC_FIFO
+> > 
+> >  config PARPORT_PC_SUPERIO
+> >         bool "SuperIO chipset support"
+> > -       depends on PARPORT_PC && !PARISC
+> > +       depends on ARCH_MIGHT_HAVE_PC_PARPORT && PARPORT_PC && !PARISC
+> >         help
+> >           Saying Y here enables some probes for Super-IO chipsets in order to
+> >           find out things like base addresses, IRQ lines and DMA channels.  It
+> > 
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
 
-Changes since v1:
-1. Use scheduler_tick.
-2. Add review tag.
-
-Notes:
-I understand that the failure does not exist on mainline kernel (only
-with PREEMPT_RT patchset) but the change does not harm it.
-
-If it is not suitable alone, please consider it for RT patchset.
----
- .../selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc      | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
-index e96e279e0533..25432b8cd5bd 100644
---- a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
-@@ -19,7 +19,7 @@ fail() { # mesg
- 
- FILTER=set_ftrace_filter
- FUNC1="schedule"
--FUNC2="do_softirq"
-+FUNC2="scheduler_tick"
- 
- ALL_FUNCS="#### all functions enabled ####"
- 
--- 
-2.32.0
 

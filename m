@@ -2,100 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A10CD4B5C32
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:13:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B55E24B5C3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbiBNVEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:04:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48434 "EHLO
+        id S229756AbiBNVDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:03:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiBNVEn (ORCPT
+        with ESMTP id S230104AbiBNVDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:04:43 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF5F102424;
-        Mon, 14 Feb 2022 13:04:31 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21EImFUe028128;
-        Mon, 14 Feb 2022 20:35:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=mXYKnZfSJ5LwXHDMeSusxqhwm2d5zqHQa8VU39II2RQ=;
- b=aPwd+tSDXQsh6ZD3uFnRUW7e7qzqrkpChRCDfYhreZ4p/w6Uzc8h0RadJBecjwHMOuWL
- Ul5FXXmYzkJjgNXg72RYDXLdh1PA5qCAjBsTOrg/9r1m0NV+vC1fUQ/gv8A1CL05qHtD
- sC/nrA05ILoHUaBp777wrYF+sKM+3WfQm3FjDWqqSegaBUV+s/iY5XJ5jzsWNWx+26KT
- wxPhGJmbrkJ6bQSMvVlZsaL/ozoJaPxPPdf092DYdZpCRvlVKtkbR/t60U0FdmiH5u4k
- f5N/KOI5Qqu7eeIlk9ut7+OJEXcwxbqZKFmgHAssSQK/FYErStbFi70xscNJ+FBTucS3 kA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e779vvytu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 20:35:46 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21EKVaKK001437;
-        Mon, 14 Feb 2022 20:35:46 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e779vvytc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 20:35:46 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21EKI01S006767;
-        Mon, 14 Feb 2022 20:35:45 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma02wdc.us.ibm.com with ESMTP id 3e64ha89tf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 20:35:45 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21EKZifq32047502
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Feb 2022 20:35:44 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 62A30BE058;
-        Mon, 14 Feb 2022 20:35:44 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D545BE053;
-        Mon, 14 Feb 2022 20:35:42 +0000 (GMT)
-Received: from [9.211.32.53] (unknown [9.211.32.53])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Feb 2022 20:35:42 +0000 (GMT)
-Message-ID: <34251cd7-7e07-f571-2790-cb1cd001813a@linux.ibm.com>
-Date:   Mon, 14 Feb 2022 15:35:41 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 17/30] KVM: s390: pci: enable host forwarding of
- Adapter Event Notifications
-Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        Mon, 14 Feb 2022 16:03:40 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD1EF8BBF;
+        Mon, 14 Feb 2022 13:03:32 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id p10so10704134pfo.12;
+        Mon, 14 Feb 2022 13:03:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Wj4WGwMqPVQKZu8zhmymyTgFJvhq0FOFAzV3VPaCu00=;
+        b=HfGCoORaO/ySEdyF600sBz3jOA2A6BUbSezFyu/1ZDvzN53ZdoCN5glKd1Kwwrirk5
+         FagPjZQzpmsX8Ah7AZzxGM42kbA8wddhZwgE9mZN3zpP0fNO+zZNKOG4P+fH972BElvt
+         kOZ6xHzO5zp1RAF1WfdiHNjaL5YhXbfOIooYe9wFHa0nJcmcay2sy4Rn4/YUw/6hK3+w
+         fER7ylEY0r6sBC5VLUlQ9Itxxoho2zWdbHs4YbJYPhM7+OcPP+KfrNiqROxbZpNhOtjU
+         8uPj/C0B0I/3B2pIRhWmU0Hcbn4PtVXtlczWBEXc+bLRauXcj1tfRqSp5h5MiPRuEAEE
+         UWwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Wj4WGwMqPVQKZu8zhmymyTgFJvhq0FOFAzV3VPaCu00=;
+        b=iyExrfMUBDVNm73nk0/jKs9rf/KsD352HIgmeZoCIEAR2Hy4fLKtVa1PB4PlDhSnjj
+         RyZRcHBnM3+NPMrHy8YC5BlNFJZA2xjrhVnSLRNrW3eQ+ze/17GN5QG1KSAkQAM8Kuyh
+         62jqu8oYCTH5+vnl75JCkJUbmSCBh/nADk4Sf2e2CaJNuY7Z8u4PoFq3UTpFf79nzNDz
+         8KK9q5KrSCymZiqjJSCy7+dcJo5DhKNPORkRvwQmTs/b6UdwNRAf5KuG3ZWF/e/my0GP
+         1fjKRyD8SIi4chLfPYPUyW5RmN9cJVoAaLKLtanByigPONAckNT1EiSF1h0jQw8nTHIU
+         3dsA==
+X-Gm-Message-State: AOAM533iJSDgFwy/ReUTGIXW0JqcR7K0fzGIZUKQMt7Xio92ZJ9tUsdo
+        4BEIDLhXhg3nJaqPXq31prtZNV6bAdg=
+X-Google-Smtp-Source: ABdhPJxYanPj40Iq/7eR2B5rmokfCDO3YI+/xoYmGzQ7veUnF2srakKEJoDn32raO2PimNGZY4ymJQ==
+X-Received: by 2002:a05:6a00:b85:: with SMTP id g5mr841297pfj.27.1644871010657;
+        Mon, 14 Feb 2022 12:36:50 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id 142sm29901059pfy.11.2022.02.14.12.36.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 12:36:50 -0800 (PST)
+Subject: Re: [PATCH 5.10 000/116] 5.10.101-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-References: <20220204211536.321475-1-mjrosato@linux.ibm.com>
- <20220204211536.321475-18-mjrosato@linux.ibm.com>
- <7ecb4a93-5a41-a9e2-0a01-9eccabfa85ad@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <7ecb4a93-5a41-a9e2-0a01-9eccabfa85ad@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: AsBaDGoJZj8JsE4eTjoKePt5zonErCD9
-X-Proofpoint-ORIG-GUID: q6wGkMeUsa3t7RTCpoM6oSHknnmNFNmu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-14_07,2022-02-14_03,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- malwarescore=0 adultscore=0 lowpriorityscore=0 mlxscore=0 clxscore=1015
- impostorscore=0 spamscore=0 suspectscore=0 priorityscore=1501
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202140118
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220214092458.668376521@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <a9e9d19c-8fed-4e1c-00ae-032c329fcb35@gmail.com>
+Date:   Mon, 14 Feb 2022 12:36:48 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,37 +78,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/22 7:59 AM, Pierre Morel wrote:
+On 2/14/22 1:24 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.101 release.
+> There are 116 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
+> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
+> Anything received after that time might be too late.
 > 
-> On 2/4/22 22:15, Matthew Rosato wrote:
-...
->> +static void aen_process_gait(u8 isc)
->> +{
->> +    bool found = false, first = true;
->> +    union zpci_sic_iib iib = {{0}};
->> +    unsigned long si, flags;
->> +
->> +    spin_lock_irqsave(&aift->gait_lock, flags);
->> +
->> +    if (!aift->gait) {
->> +        spin_unlock_irqrestore(&aift->gait_lock, flags);
->> +        return;
->> +    }
->> +
->> +    for (si = 0;;) {
->> +        /* Scan adapter summary indicator bit vector */
->> +        si = airq_iv_scan(aift->sbv, si, airq_iv_end(aift->sbv));
->> +        if (si == -1UL) {
->> +            if (first || found) {
->> +                /* Reenable interrupts. */
->> +                if (zpci_set_irq_ctrl(SIC_IRQ_MODE_SINGLE, isc,
->> +                              &iib))
->> +                    break;
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.101-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
 > 
-> I thought we agreed that the test is not useful here.
+> thanks,
+> 
+> greg k-h
 
-Oops, you are correct -- it looks like I simply failed to apply any of 
-your suggestions from that particular email, must have marked it 'done' 
-on accident -- sorry about that.  I've gone ahead and made these changes 
-already on my in-progress v4 branch.  Thanks for pointing it out.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

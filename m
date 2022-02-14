@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B50E4B4B69
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 725694B4C87
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbiBNKSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:18:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44708 "EHLO
+        id S1348917AbiBNKm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:42:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346869AbiBNKQK (ORCPT
+        with ESMTP id S1348955AbiBNKkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:16:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A95979C77;
-        Mon, 14 Feb 2022 01:53:22 -0800 (PST)
+        Mon, 14 Feb 2022 05:40:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D715B851;
+        Mon, 14 Feb 2022 02:04:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8503CB80D83;
-        Mon, 14 Feb 2022 09:53:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8EC8C340E9;
-        Mon, 14 Feb 2022 09:53:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33EB2B80CE1;
+        Mon, 14 Feb 2022 10:04:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5300FC340E9;
+        Mon, 14 Feb 2022 10:04:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832401;
-        bh=woHeya9+K5KWMwOeFHvu6OQwwp8gmiX/naS1KWLpf4I=;
+        s=korg; t=1644833056;
+        bh=4Ww7YY60vIbpvXUj1vAzBR+a7Waun+OVFOKjDCpCtdk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PrVt5K2AgtvJ2VnEoIs9zrvrXHJtSRp0QFiZ77nJHky2hMc04F8a0XwC2L1dVEUxa
-         ShRrjsDg9y0QTMM2BFXct50zzbFRpGsgx9Lw7BJYwgxVJxq+cd7Sr+86HU8jc1MF7a
-         YVdo+4jej/Fn7T/aqM2F9nUVWukg0iO2ptj83woo=
+        b=TGM2ANGUtZ+UBiqNkEh7Ic94Ui8pF66LPrANqUvFy19A2W+GPVqla0KefTe/TUqdh
+         cK85j3wQ1M1gqRhwILWiA6v2y3H+WhywFm7vUm7gOKV/6HLZ+DJhGU5Uoyd8aeGqGd
+         RksYexNZDtl0cxC6dj5tMxXdYoKDO5GMzOxi+b9c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Ewan D. Milne" <emilne@redhat.com>,
-        James Smart <jsmart2021@gmail.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.15 168/172] scsi: lpfc: Reduce log messages seen after firmware download
-Date:   Mon, 14 Feb 2022 10:27:06 +0100
-Message-Id: <20220214092512.194223863@linuxfoundation.org>
+        stable@vger.kernel.org, Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.16 183/203] phy: ti: Fix missing sentinel for clk_div_table
+Date:   Mon, 14 Feb 2022 10:27:07 +0100
+Message-Id: <20220214092516.466703675@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,62 +54,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+From: Kishon Vijay Abraham I <kishon@ti.com>
 
-commit 5852ed2a6a39c862c8a3fdf646e1f4e01b91d710 upstream.
+commit 6d1e6bcb31663ee83aaea1f171f3dbfe95dd4a69 upstream.
 
-Messages around firmware download were incorrectly tagged as being related
-to discovery trace events. Thus, firmware download status ended up dumping
-the trace log as well as the firmware update message. As there were a
-couple of log messages in this state, the trace log was dumped multiple
-times.
+_get_table_maxdiv() tries to access "clk_div_table" array out of bound
+defined in phy-j721e-wiz.c. Add a sentinel entry to prevent
+the following global-out-of-bounds error reported by enabling KASAN.
 
-Resolve this by converting from trace events to SLI events.
+[    9.552392] BUG: KASAN: global-out-of-bounds in _get_maxdiv+0xc0/0x148
+[    9.558948] Read of size 4 at addr ffff8000095b25a4 by task kworker/u4:1/38
+[    9.565926]
+[    9.567441] CPU: 1 PID: 38 Comm: kworker/u4:1 Not tainted 5.16.0-116492-gdaadb3bd0e8d-dirty #360
+[    9.576242] Hardware name: Texas Instruments J721e EVM (DT)
+[    9.581832] Workqueue: events_unbound deferred_probe_work_func
+[    9.587708] Call trace:
+[    9.590174]  dump_backtrace+0x20c/0x218
+[    9.594038]  show_stack+0x18/0x68
+[    9.597375]  dump_stack_lvl+0x9c/0xd8
+[    9.601062]  print_address_description.constprop.0+0x78/0x334
+[    9.606830]  kasan_report+0x1f0/0x260
+[    9.610517]  __asan_load4+0x9c/0xd8
+[    9.614030]  _get_maxdiv+0xc0/0x148
+[    9.617540]  divider_determine_rate+0x88/0x488
+[    9.622005]  divider_round_rate_parent+0xc8/0x124
+[    9.626729]  wiz_clk_div_round_rate+0x54/0x68
+[    9.631113]  clk_core_determine_round_nolock+0x124/0x158
+[    9.636448]  clk_core_round_rate_nolock+0x68/0x138
+[    9.641260]  clk_core_set_rate_nolock+0x268/0x3a8
+[    9.645987]  clk_set_rate+0x50/0xa8
+[    9.649499]  cdns_sierra_phy_init+0x88/0x248
+[    9.653794]  phy_init+0x98/0x108
+[    9.657046]  cdns_pcie_enable_phy+0xa0/0x170
+[    9.661340]  cdns_pcie_init_phy+0x250/0x2b0
+[    9.665546]  j721e_pcie_probe+0x4b8/0x798
+[    9.669579]  platform_probe+0x8c/0x108
+[    9.673350]  really_probe+0x114/0x630
+[    9.677037]  __driver_probe_device+0x18c/0x220
+[    9.681505]  driver_probe_device+0xac/0x150
+[    9.685712]  __device_attach_driver+0xec/0x170
+[    9.690178]  bus_for_each_drv+0xf0/0x158
+[    9.694124]  __device_attach+0x184/0x210
+[    9.698070]  device_initial_probe+0x14/0x20
+[    9.702277]  bus_probe_device+0xec/0x100
+[    9.706223]  deferred_probe_work_func+0x124/0x180
+[    9.710951]  process_one_work+0x4b0/0xbc0
+[    9.714983]  worker_thread+0x74/0x5d0
+[    9.718668]  kthread+0x214/0x230
+[    9.721919]  ret_from_fork+0x10/0x20
+[    9.725520]
+[    9.727032] The buggy address belongs to the variable:
+[    9.732183]  clk_div_table+0x24/0x440
 
-Link: https://lore.kernel.org/r/20220207180442.72836-1-jsmart2021@gmail.com
-Reviewed-by: Ewan D. Milne <emilne@redhat.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: 091876cc355d ("phy: ti: j721e-wiz: Add support for WIZ module present in TI J721E SoC")
+Cc: stable@vger.kernel.org # v5.10+
+Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
+Link: https://lore.kernel.org/r/20220117110108.4117-1-kishon@ti.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/lpfc/lpfc_init.c |    2 +-
- drivers/scsi/lpfc/lpfc_sli.c  |    8 +++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ drivers/phy/ti/phy-j721e-wiz.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -2055,7 +2055,7 @@ lpfc_handle_eratt_s4(struct lpfc_hba *ph
- 		}
- 		if (reg_err1 == SLIPORT_ERR1_REG_ERR_CODE_2 &&
- 		    reg_err2 == SLIPORT_ERR2_REG_FW_RESTART) {
--			lpfc_printf_log(phba, KERN_ERR, LOG_TRACE_EVENT,
-+			lpfc_printf_log(phba, KERN_ERR, LOG_SLI,
- 					"3143 Port Down: Firmware Update "
- 					"Detected\n");
- 			en_rn_msg = false;
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -13366,6 +13366,7 @@ lpfc_sli4_eratt_read(struct lpfc_hba *ph
- 	uint32_t uerr_sta_hi, uerr_sta_lo;
- 	uint32_t if_type, portsmphr;
- 	struct lpfc_register portstat_reg;
-+	u32 logmask;
+--- a/drivers/phy/ti/phy-j721e-wiz.c
++++ b/drivers/phy/ti/phy-j721e-wiz.c
+@@ -233,6 +233,7 @@ static const struct clk_div_table clk_di
+ 	{ .val = 1, .div = 2, },
+ 	{ .val = 2, .div = 4, },
+ 	{ .val = 3, .div = 8, },
++	{ /* sentinel */ },
+ };
  
- 	/*
- 	 * For now, use the SLI4 device internal unrecoverable error
-@@ -13416,7 +13417,12 @@ lpfc_sli4_eratt_read(struct lpfc_hba *ph
- 				readl(phba->sli4_hba.u.if_type2.ERR1regaddr);
- 			phba->work_status[1] =
- 				readl(phba->sli4_hba.u.if_type2.ERR2regaddr);
--			lpfc_printf_log(phba, KERN_ERR, LOG_TRACE_EVENT,
-+			logmask = LOG_TRACE_EVENT;
-+			if (phba->work_status[0] ==
-+				SLIPORT_ERR1_REG_ERR_CODE_2 &&
-+			    phba->work_status[1] == SLIPORT_ERR2_REG_FW_RESTART)
-+				logmask = LOG_SLI;
-+			lpfc_printf_log(phba, KERN_ERR, logmask,
- 					"2885 Port Status Event: "
- 					"port status reg 0x%x, "
- 					"port smphr reg 0x%x, "
+ static const struct wiz_clk_div_sel clk_div_sel[] = {
 
 

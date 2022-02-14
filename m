@@ -2,154 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2703D4B5D2E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:47:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3766F4B5D39
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:49:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbiBNVrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:47:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40232 "EHLO
+        id S231396AbiBNVte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:49:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbiBNVr1 (ORCPT
+        with ESMTP id S230516AbiBNVtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:47:27 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C9118C594
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:47:18 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id 4so18840657oil.11
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:47:18 -0800 (PST)
+        Mon, 14 Feb 2022 16:49:32 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B9619414D
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:49:23 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id b35so15624429qkp.6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:49:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=KZ8Tp8JYnqcpdvEmr+9vUKPtUjGKxrOWPg9ikND1TsQ=;
-        b=kEDFFQ9AnhAiPYpTrzxVGENiaHYM4WNo0h7IYAhmBWdtr2Nehv4FPMpQzGIGBTTSdT
-         V2UaMvUYGZkYk57yH9eb+iYHLKrErwgOdY4eUHXzNN6zGjZ4AEMBjYejLDsaYiKpifNI
-         ow94ZcKv1MDiVK1Cw9O4RE9jJAmxCrV45JbGI=
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HduNWSXwHF2qMp2tKTU9szIHjs3c1KQrYw+jf8BZZPM=;
+        b=215dMlHoklWFE+75szJr/Y820Jgsu6uYnJPnIt2MoQCGOJqW3qsQAALF4vXlV9bVTf
+         oaY8xA66Iez3WRkyPgpYJ3sJx9jd6pDLsWo5K6Iofc1NmBq5OSY4k07jmhOfFpT9SM6p
+         /9JaJyDct5CGz4+UyIutmyUdQFUDTMH4jFG/WLfxmBUQRnsdSk8hw5YKSyeGHnHIkEUH
+         3Rzw8AHUCnbs7Wi+ORDMhd1492oL8mFwaYTPkjLGBF1qRd+vM4lIINt6AGmoCT8JQVxw
+         MR3RWrJXhYYwa/QgmZ2012SBgF6iPaTdSiOwNh5JC9a+J4bDdec2LxCpQ7Pitsj9HTYN
+         qvqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=KZ8Tp8JYnqcpdvEmr+9vUKPtUjGKxrOWPg9ikND1TsQ=;
-        b=C1cXO8De0+hCSLduF0VdstOTJYZah1NbhNXuaIwFoOnlK7jljekb+OmUqLexfVOkLC
-         P2Wt5+uDnxXwEB6AxN1oqsCwtT5GwwR15mMUrfww6W5bIC+ypZ7n12Rhvqf4SezlyxZp
-         h6YlOsmuqvkfgFudoh/lYG8oSCuRrz8wVgV5eI/mrGfdF+7KwR6Tnmo5ums1X+bBYvAO
-         cFbKkEH86inlr8oP4OrnOte1fOkNnkYh3d8a2EDv5nisgygZ2f7eHw1RMSG3ehdxVo7R
-         peizEWRw/dJ0qGzR5O+tNuz0bSfMbWAswdWDrE7YaV8OsuKvspcOlsD6qe8AcIRKGnjn
-         YtXQ==
-X-Gm-Message-State: AOAM533p7ASX4FXv1JOzvTM3czhBIhE3r/EKIjulBygFQroIw6bW3IUX
-        BT7L84EiCTevgJugXN1f/AjoBWEytPHKSfiLy9x5tQ==
-X-Google-Smtp-Source: ABdhPJy6QtgovTMrBoMRA7cWoi8cXunIMQ3hmVjFFwyt7eXnabvshXHxsyp6QmnTk4CMzG+koej6x98aKMZeKBq0p4E=
-X-Received: by 2002:aca:df44:0:b0:2ce:285f:cb99 with SMTP id
- w65-20020acadf44000000b002ce285fcb99mr412149oig.40.1644875238208; Mon, 14 Feb
- 2022 13:47:18 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 14 Feb 2022 13:47:17 -0800
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HduNWSXwHF2qMp2tKTU9szIHjs3c1KQrYw+jf8BZZPM=;
+        b=1q6aYdtOTeu+wOQkPjvLS2i+lt6YtNuOEAsnKX8YGFV2H7RYbb/uI5y2pHgzrwTgYe
+         n77Kdm4fqSWFJ+R+4RX+/WFrYRVoWSJAOnBFeNQjCN9kCKrL+TzYEEizY1qrr01fOS7O
+         yacQGo57ddi/Oaqop8RDBw8jdU1KeHGgMuZ9z6vrEUAHHUZ9Sx2CTEkoKJgDVIV+dbZN
+         3eD9XMnPhWwfRZbim19HxvBXLkBTbua4+V0kLdAGDaqja3X3/hm/IZ1ThcLBZxt3TM/e
+         priIyTsTJ1fcmbhxEIj998gktk+JtqyviFHKEjwdIIJIK9qJVEvF1LNnL+BEPQclmCOe
+         eLAA==
+X-Gm-Message-State: AOAM531NgeqD9yBYOY+lZw7u3fyvilBrbi1HbiBUp4PwoI1hjTkzp9Wu
+        YNUTNHsDFOCJTfkpl+J1r97urA==
+X-Google-Smtp-Source: ABdhPJyiRZjNZ7NyCD66Td1gEAAhNJr5fwSQTasB43SkAUHLAcSMqVyxeErZVQxtBTjDHLDXHSpppw==
+X-Received: by 2002:a05:620a:128c:: with SMTP id w12mr560649qki.464.1644875362346;
+        Mon, 14 Feb 2022 13:49:22 -0800 (PST)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id 5sm18474167qtp.81.2022.02.14.13.49.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 13:49:22 -0800 (PST)
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, CGEL <cgel.zte@gmail.com>,
+        Minchan Kim <minchan@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Yu Zhao <yuzhao@google.com>
+Subject: [PATCH] mm: page_io: fix psi memory pressure error on cold swapins
+Date:   Mon, 14 Feb 2022 16:49:21 -0500
+Message-Id: <20220214214921.419687-1-hannes@cmpxchg.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <1644668672-29790-2-git-send-email-quic_srivasam@quicinc.com>
-References: <1644668672-29790-1-git-send-email-quic_srivasam@quicinc.com> <1644668672-29790-2-git-send-email-quic_srivasam@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 14 Feb 2022 13:47:17 -0800
-Message-ID: <CAE-0n52uBY7GzjtFwV67y5mfqZRoK9ooW-kT3=4sH=8NtVK7FQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] ASoC: codec: wcd938x: Add switch control for
- selecting CTIA/OMTP Headset
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        agross@kernel.org, alsa-devel@alsa-project.org,
-        bgoswami@codeaurora.org, bjorn.andersson@linaro.org,
-        broonie@kernel.org, devicetree@vger.kernel.org,
-        judyhsiao@chromium.org, lgirdwood@gmail.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        perex@perex.cz, quic_plai@quicinc.com, robh+dt@kernel.org,
-        rohitkr@codeaurora.org, srinivas.kandagatla@linaro.org,
-        tiwai@suse.com
-Cc:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Srinivasa Rao Mandadapu (2022-02-12 04:24:31)
-> diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
-> index eff200a..08d16a9 100644
-> --- a/sound/soc/codecs/wcd938x.c
-> +++ b/sound/soc/codecs/wcd938x.c
-> @@ -194,6 +194,7 @@ struct wcd938x_priv {
->         int ear_rx_path;
->         int variant;
->         int reset_gpio;
-> +       int us_euro_gpio;
->         u32 micb1_mv;
->         u32 micb2_mv;
->         u32 micb3_mv;
-> @@ -4196,6 +4197,33 @@ static void wcd938x_dt_parse_micbias_info(struct device *dev, struct wcd938x_pri
->                 dev_info(dev, "%s: Micbias4 DT property not found\n", __func__);
->  }
->
-> +static bool wcd938x_swap_gnd_mic(struct snd_soc_component *component, bool active)
-> +{
-> +       int value;
-> +
-> +       struct wcd938x_priv *wcd938x;
-> +
-> +       if (!component) {
+Once upon a time, all swapins counted toward memory pressure[1]. Then
+Joonsoo introduced workingset detection for anonymous pages and we
+gained the ability to distinguish hot from cold swapins[2][3]. But we
+failed to update swap_readpage() accordingly, and now we account
+partial memory pressure in the swapin path of cold memory.
 
-So component is NULL
+Not for all situations - which adds more inconsistency: paths using
+the conventional submit_bio() and lock_page() route will not see much
+pressure - unless storage itself is heavily congested and the bio
+submissions stall. ZRAM and ZSWAP do most of the work directly from
+swap_readpage() and will see all swapins reflected as pressure.
 
-> +               dev_err(component->dev, "%s component is NULL\n", __func__);
+Restore consistency by making all swapin stall accounting conditional
+on the page actually being part of the workingset.
 
-And now we deref component. Great NULL pointer exception Batman! Please
-test your code and remove useless checks. It makes the code harder to
-read and slows things down.
+[1] commit 937790699be9 ("mm/page_io.c: annotate refault stalls from swap_readpage")
+[2] commit aae466b0052e ("mm/swap: implement workingset detection for anonymous LRU")
+[3] commit cad8320b4b39 ("mm/swap: don't SetPageWorkingset unconditionally during swapin")
 
-> +               return false;
-> +       }
-> +
-> +       wcd938x = snd_soc_component_get_drvdata(component);
-> +       if (!wcd938x) {
-> +               dev_err(component->dev, "%s private data is NULL\n", __func__);
+Reported-by: CGEL <cgel.zte@gmail.com>
+Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Minchan Kim <minchan@google.com>
+Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Cc: Yu Zhao <yuzhao@google.com>
+---
+ mm/page_io.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Is this possible? I doubt it so can we just remove it?
+diff --git a/mm/page_io.c b/mm/page_io.c
+index 61c792f916fa..f6296ee25014 100644
+--- a/mm/page_io.c
++++ b/mm/page_io.c
+@@ -359,6 +359,7 @@ int swap_readpage(struct page *page, bool synchronous)
+ 	struct bio *bio;
+ 	int ret = 0;
+ 	struct swap_info_struct *sis = page_swap_info(page);
++	bool workingset = PageWorkingset(page);
+ 	unsigned long pflags;
+ 
+ 	VM_BUG_ON_PAGE(!PageSwapCache(page) && !synchronous, page);
+@@ -370,7 +371,8 @@ int swap_readpage(struct page *page, bool synchronous)
+ 	 * or the submitting cgroup IO-throttled, submission can be a
+ 	 * significant part of overall IO time.
+ 	 */
+-	psi_memstall_enter(&pflags);
++	if (workingset)
++		psi_memstall_enter(&pflags);
+ 	delayacct_swapin_start();
+ 
+ 	if (frontswap_load(page) == 0) {
+@@ -431,7 +433,8 @@ int swap_readpage(struct page *page, bool synchronous)
+ 	bio_put(bio);
+ 
+ out:
+-	psi_memstall_leave(&pflags);
++	if (workingset)
++		psi_memstall_leave(&pflags);
+ 	delayacct_swapin_end();
+ 	return ret;
+ }
+-- 
+2.34.1
 
-> +               return false;
-> +       }
-> +
-> +       value = gpio_get_value(wcd938x->us_euro_gpio);
-> +
-> +       gpio_set_value(wcd938x->us_euro_gpio, !value);
-> +       /* 20us sleep required after changing the gpio state*/
-
-Add a space before ending comment with */
-
-> +       usleep_range(20, 30);
-> +
-> +       return true;
-> +}
-> +
-> +
->  static int wcd938x_populate_dt_data(struct wcd938x_priv *wcd938x, struct device *dev)
->  {
->         struct wcd_mbhc_config *cfg = &wcd938x->mbhc_cfg;
-> @@ -4208,6 +4236,16 @@ static int wcd938x_populate_dt_data(struct wcd938x_priv *wcd938x, struct device
->                 return wcd938x->reset_gpio;
->         }
->
-> +       wcd938x->us_euro_gpio = of_get_named_gpio(dev->of_node, "us-euro-gpios", 0);
-
-Why do we need to use of GPIO APIs here? Can this driver be converted to
-use GPIO descriptors via the gpiod APIs?
-
-> +       if (wcd938x->us_euro_gpio < 0) {
-> +               dev_err(dev, "Failed to get us-euro-gpios gpio: err = %d\n", wcd938x->us_euro_gpio);
-> +       } else {
-> +               cfg->swap_gnd_mic = wcd938x_swap_gnd_mic;
-> +               gpio_direction_output(wcd938x->us_euro_gpio, 0);
-> +               /* 20us sleep required after pulling the reset gpio to LOW */
-> +               usleep_range(20, 30);
-> +       }
-> +

@@ -2,173 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E1A4B4F5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:52:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 168114B4F68
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:54:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241265AbiBNLvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:51:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53240 "EHLO
+        id S1346842AbiBNLwa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 14 Feb 2022 06:52:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351877AbiBNLul (ORCPT
+        with ESMTP id S235729AbiBNLwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:50:41 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6028202;
-        Mon, 14 Feb 2022 03:50:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644839433; x=1676375433;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=pwDESe15Vd1g0DPBCuoyVHda2xq39Jpz8AWqAWVhmO8=;
-  b=btkqt3QcAz7ZqTLmoY3J0Jm2AE7ZkF66RoS0obUYwjTiMHwD1WrKgT0Z
-   wZ3eZg9wJjqsUgq1kCqGgwi0By2yyz8J7SoJcQ+KcUr014eH4FWrjfpbh
-   DxicnN4kGJD4PveSzCoUBdcdBQcoVbAa888nvpJUhsMn8pixY4byAg1d0
-   HonppS8xEA908dwBT0JKYyR3l1JpXXbnQuND+k5TIxsUcsDheQzeDgZ4n
-   QtBChrggcwIs2CKpVYzCdz5kDqy8UdPbpQ8k+oONszR9ngR0Dm+LRED+k
-   Qnv/3lJxK7WYHnntYSZOGO+bB1Iy7H/tsiWKW4uyiD81GgbIDBDDExrpt
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="310811354"
-X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="310811354"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 03:50:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="538559695"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga007.fm.intel.com with ESMTP; 14 Feb 2022 03:50:25 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 21EBoMxH001918;
-        Mon, 14 Feb 2022 11:50:22 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v10 05/15] x86: support asm function sections
-Date:   Mon, 14 Feb 2022 12:49:27 +0100
-Message-Id: <20220214114927.6104-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220211154524.GX23216@worktop.programming.kicks-ass.net>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185753.1226407-6-alexandr.lobakin@intel.com> <20220211154524.GX23216@worktop.programming.kicks-ass.net>
+        Mon, 14 Feb 2022 06:52:25 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD44C34;
+        Mon, 14 Feb 2022 03:52:17 -0800 (PST)
+Date:   Mon, 14 Feb 2022 11:52:07 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 2/2] clk: ingenic-tcu: Fix missing TCU clock for X1000
+ SoC
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <VAMA7R.PG2P5IFR07772@crapouillou.net>
+In-Reply-To: <20220212150927.39513-2-aidanmacdonald.0x0@gmail.com>
+References: <20220212150927.39513-1-aidanmacdonald.0x0@gmail.com>
+        <20220212150927.39513-2-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Fri, 11 Feb 2022 16:45:24 +0100
+Hi Aidan,
 
-> On Wed, Feb 09, 2022 at 07:57:42PM +0100, Alexander Lobakin wrote:
-> > Address places which need special care and enable
-> > CONFIG_ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS.
-> > 
-> > Notably:
-> >  - propagate `--sectname-subst` to KBUILD_AFLAGS in
-> >    x86/boot/Makefile and x86/boot/compressed/Makefile as both
-> >    override them;
-> >  - symbols starting with a dot (like ".Lrelocated") should be
-> >    handled manually with SYM_*_START_SECT(.Lrelocated, relocated)
-> >    as "two dots" is a special (and CPP doesn't want to concatenate
-> >    two dots in general);
-> >  - some symbols explicitly need to reside in one section (like
-> >    kexec control code, hibernation page etc.);
-> >  - macros creating aliases for functions (like __memcpy() for
-> >    memcpy() etc.) should go after the main declaration (as
-> >    aliases should be declared in the same section and they
-> >    don't have SYM_PUSH_SECTION() inside);
-> >  - things like ".org", ".align" should be manually pushed to
-> >    the same section the next symbol goes to;
-> >  - expand indirect_thunk wildcards in vmlinux.lds.S to catch
-> >    symbols back into the "main" section;
-> >  - inline ASM functions like __raw_callee*() should be pushed
-> >    manually as well.
-> > 
-> > With these changes and `-ffunction-sections` enabled, "plain"
-> > ".text" section is empty which means that everything works
-> > right as expected.
-> > 
-> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> > ---
-> >  arch/x86/Kconfig                              |  1 +
-> >  arch/x86/boot/Makefile                        |  1 +
-> >  arch/x86/boot/compressed/Makefile             |  1 +
-> >  arch/x86/boot/compressed/head_32.S            |  2 +-
-> >  arch/x86/boot/compressed/head_64.S            | 32 ++++++++++++-------
-> >  arch/x86/boot/pmjump.S                        |  2 +-
-> >  arch/x86/crypto/aesni-intel_asm.S             |  4 +--
-> >  arch/x86/crypto/poly1305-x86_64-cryptogams.pl |  4 +++
-> >  arch/x86/include/asm/paravirt.h               |  2 ++
-> >  arch/x86/include/asm/qspinlock_paravirt.h     |  2 ++
-> >  arch/x86/kernel/head_32.S                     |  4 +--
-> >  arch/x86/kernel/head_64.S                     |  4 +--
-> >  arch/x86/kernel/kprobes/core.c                |  2 ++
-> >  arch/x86/kernel/kvm.c                         |  2 ++
-> >  arch/x86/kernel/relocate_kernel_32.S          | 10 +++---
-> >  arch/x86/kernel/relocate_kernel_64.S          | 12 ++++---
-> >  arch/x86/kernel/vmlinux.lds.S                 |  2 +-
-> >  arch/x86/kvm/emulate.c                        |  7 +++-
-> >  arch/x86/lib/copy_user_64.S                   |  2 +-
-> >  arch/x86/lib/error-inject.c                   |  2 ++
-> >  arch/x86/lib/getuser.S                        |  5 ++-
-> >  arch/x86/lib/memcpy_64.S                      |  4 +--
-> >  arch/x86/lib/memmove_64.S                     |  5 ++-
-> >  arch/x86/lib/memset_64.S                      |  5 +--
-> >  arch/x86/lib/putuser.S                        |  2 +-
-> >  arch/x86/power/hibernate_asm_32.S             | 10 +++---
-> >  arch/x86/power/hibernate_asm_64.S             | 10 +++---
-> >  27 files changed, 89 insertions(+), 50 deletions(-)
+Le sam., févr. 12 2022 at 15:09:28 +0000, Aidan MacDonald 
+<aidanmacdonald.0x0@gmail.com> a écrit :
+> The X1000 does have a TCU clock gate, so pass it to the driver.
+> Without this the TCU can be gated automatically, which prevents
+> timers from running.
 > 
-> Urgh, how much of that can you avoid by (ab)using __DISABLE_EXPORTS
-> like:
+> Fixes: dc6a81c3382f74fe ("clk: Ingenic: Add support for TCU of 
+> X1000.")
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+> I've just realized, maybe this is an ABI break. Now that the TCU 
+> clock is
+> required, the driver probe will fail if given an old device tree 
+> which is
+> missing that clock. Is it necessary to add a hack of some sort to 
+> support
+> the old device tree?
+
+Yes, that's a valid concern. The driver should then support the TCU 
+clock being missing (but only for the x1000), with a comment that 
+explain why the workaround exists.
+
+You can use of_clk_get_by_name(), and if you get -EINVAL and the 
+workaround flag is set, allow the driver to continue. Also change the 
+checks for (tcu->soc_info->has_tcu_clk) in the function's cleanup to 
+checks for (tcu->clk) so that the clk_disable_unprepare/clk_put are 
+only done on a valid pointer.
+
+Note that the x1830 also has a TCU clock that's not specified in the 
+device tree; so you could add a patch similar to your current [1/2] 
+that adds it to x1830.dtsi as well. It uses the "ingenic,x1000-tcu" 
+string as fallback, so the driver wouldn't have to be modified further.
+
+Cheers,
+-Paul
+
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?h=x86/wip.ibt&id=ab74f54f2b1f6cfeaf2b3ba6999bde7cabada9ca
+>  drivers/clk/ingenic/tcu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/ingenic/tcu.c b/drivers/clk/ingenic/tcu.c
+> index 77acfbeb4830..9c86043f673a 100644
+> --- a/drivers/clk/ingenic/tcu.c
+> +++ b/drivers/clk/ingenic/tcu.c
+> @@ -320,7 +320,7 @@ static const struct ingenic_soc_info 
+> jz4770_soc_info = {
+>  static const struct ingenic_soc_info x1000_soc_info = {
+>  	.num_channels = 8,
+>  	.has_ost = false, /* X1000 has OST, but it not belong TCU */
+> -	.has_tcu_clk = false,
+> +	.has_tcu_clk = true,
+>  };
+> 
+>  static const struct of_device_id __maybe_unused 
+> ingenic_tcu_of_match[] __initconst = {
+> --
+> 2.34.1
+> 
 
-Oh, never thought on that, looks like at least 3 of 27 files and
-35 of 139 lines, nice!
-I'll redo this one in the meantime whilst waiting for more comments
-here.
 
-Thanks!
-Al

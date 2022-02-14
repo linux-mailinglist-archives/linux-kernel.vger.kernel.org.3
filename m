@@ -2,48 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BEEE4B53CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A13664B53D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355425AbiBNO4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 09:56:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57034 "EHLO
+        id S1355429AbiBNO4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 09:56:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355426AbiBNO4G (ORCPT
+        with ESMTP id S1355435AbiBNO4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 09:56:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3363F488BC
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:55:59 -0800 (PST)
+        Mon, 14 Feb 2022 09:56:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8630C48E7C
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:56:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3237611C5
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 14:55:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B48C8C340E9;
-        Mon, 14 Feb 2022 14:55:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34593B810D6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 14:56:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD81DC340EE;
+        Mon, 14 Feb 2022 14:55:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644850558;
-        bh=ClzPXiHGSV1D78vo35GeeCpuxD0sHuhefm+2UeDa9fk=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=goysGbYO/E6BNSGxe3aWMtmFrEx9FaRj053wc7JSgtgi55QmQGG6ioP4E58NK2A7V
-         lZS9b/Jrjl6g+VSzzoGGAB9haXAh21AY5oEb0miEynxOwsupy5juGJbcrx3XZlp+5S
-         JugTZDouzwjRs/Mv/zRAPLQ9uNV/t5ZRyZlyoU4L2sruQ74sSwQ89VlLS5CwTVXvKA
-         cuoAe/fI+3DkOaC2LyWC2UxGyKrmu52ii1AXwL1xbuEjbAqZ7G9ohKS8S05kX13rWQ
-         VaaGKsizr5evLX29H6X9PiA28jHP6FI2Y1gmirz2OzU/8b3LnBkIKJmioL4h5xz5Kg
-         fPzYiYPyT1fjA==
+        s=k20201202; t=1644850560;
+        bh=y+Rr2b5WM7F6auE0BW2a+3Ab1MYhu1zzwg5gCTdAqH0=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=uhVfjJh+bKD8Lhh2LM5ApUe0IXmjlp2loNhS8irmzKR2weyQXsE+dbzbo3VnG/S31
+         uIGqxIEaSH4aAHJser2DJiBJZ/+WRMPO59ccn1JA8wyq+rI+1HXlgadEgSndi/geL8
+         jcFxWXuWgn6bcnO3MxbFM10FGfClt09QMcv9/WPDMXHQvVDkaht6MfvAendi8dea3b
+         iQVRHh7kX1CWME38u+S+KdypK0ym3loxfKQQax6zISrSWdHQdLxamtZOa02HZZZV4Z
+         rW2/iYPMCVI38hIfOX0WHyxXZdr97+v3ZdkOS1HkPCOpVhtBcEOlvnIyZJTwBgCFsv
+         25yxmJIwwJEWQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+To:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
         Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220208084220.1289836-1-nikita.yoush@cogentembedded.com>
-References: <20220208084220.1289836-1-nikita.yoush@cogentembedded.com>
-Subject: Re: [PATCH 0/4] ASoC: pcm3168a: code cleanup
-Message-Id: <164485055645.397940.4337733738992515921.b4-ty@kernel.org>
-Date:   Mon, 14 Feb 2022 14:55:56 +0000
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Shengjiu Wang <shengjiu.wang@freescale.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        alsa-devel@alsa-project.org, Takashi Iwai <tiwai@suse.com>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        patches@opensource.cirrus.com,
+        "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
+In-Reply-To: <20220208121727.4461-1-viorel.suman@oss.nxp.com>
+References: <20220208121727.4461-1-viorel.suman@oss.nxp.com>
+Subject: Re: [PATCH] ASoC: codec: wm8960: complete discharge on BIAS OFF->STANDBY
+Message-Id: <164485055842.397940.7117468372476499848.b4-ty@kernel.org>
+Date:   Mon, 14 Feb 2022 14:55:58 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,15 +60,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Feb 2022 11:42:16 +0300, Nikita Yushchenko wrote:
-> These patches clean up pcm3168a driver, without introducing any
-> functional change.
+On Tue, 8 Feb 2022 14:17:27 +0200, Viorel Suman (OSS) wrote:
+> From: Viorel Suman <viorel.suman@nxp.com>
 > 
-> Nikita Yushchenko (4):
->   ASoC: pcm3168a: cleanup unintuitive mask usage
->   ASoC: pcm3168a: refactor hw_params routine
->   ASoC: pcm3168a: refactor format handling
->   ASoC: pcm3168a: remove numeric PCM3168A_NUM_SUPPLIES
+> On BIAS STANDBY->OFF transition the current implementation sleeps
+> 600ms on suspend in order to discharge the chip. The suspend is
+> propagated from "snd_soc_suspend" call for all audio cards in a
+> serial fashion, thus in case of boards like i.MX8DXL EVK which has
+> 3 distinct WM8960 codecs the total cumulated sleep on suspend is 1.8
+> seconds.
 > 
 > [...]
 
@@ -75,14 +78,8 @@ Applied to
 
 Thanks!
 
-[1/4] ASoC: pcm3168a: cleanup unintuitive mask usage
-      commit: 0c483a07e92638aca1f7d42a4986e32c58d29ad2
-[2/4] ASoC: pcm3168a: refactor hw_params routine
-      commit: c7270209fc6fc377ba5813e8d5b2ce2b26352ee7
-[3/4] ASoC: pcm3168a: refactor format handling
-      commit: 6bfc1242ee995f23f8c167bf1308a43b86560fce
-[4/4] ASoC: pcm3168a: remove numeric PCM3168A_NUM_SUPPLIES
-      commit: 3e63d3c1a2e52fb60d66bb23cb62c92c92ad0a3f
+[1/1] ASoC: codec: wm8960: complete discharge on BIAS OFF->STANDBY
+      commit: 3c7a4c24bd0ac2dfeb4f3f9053a2207cad90c7dd
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

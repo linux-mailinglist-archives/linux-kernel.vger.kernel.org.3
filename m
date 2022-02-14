@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D694B47CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3902B4B4BD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233057AbiBNJmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:42:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33978 "EHLO
+        id S1344939AbiBNKLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:11:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245000AbiBNJlD (ORCPT
+        with ESMTP id S1345543AbiBNKJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:41:03 -0500
+        Mon, 14 Feb 2022 05:09:58 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB41A193;
-        Mon, 14 Feb 2022 01:36:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B27A85950;
+        Mon, 14 Feb 2022 01:50:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C0B061172;
-        Mon, 14 Feb 2022 09:36:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4100EC340E9;
-        Mon, 14 Feb 2022 09:36:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26E55612C6;
+        Mon, 14 Feb 2022 09:50:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 030E4C340E9;
+        Mon, 14 Feb 2022 09:50:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831414;
-        bh=LUzrZ0HODNmYMs1a86YjqdHJIgQG8o+g6TrynlDeyVU=;
+        s=korg; t=1644832223;
+        bh=74xiPK52U7PFez0TOJC7EL67qW7kQHLQUyEs17Hlpw4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W6qb8Thn9nP2kNcBlCUsowZJmRFSZdr2xHwyX+s5MDWVg9tnMrWtnwCwEGepdsTWj
-         Ig4XlCnRocEbkS0itqDbzPbaCsOZ+l1w0QXzyg7+TA4gTYtoDt1J+6THacbh7Rbkgi
-         R3tqxBiO+vdifl579SblYVY7cO1hbVecFfJSqGDA=
+        b=acqwDHvnB8rlU1rMmy2HWTZX9XhJaN29UwrxCSkvYea7hHf0Kb0pXouzUSl1B950c
+         wjUxa1TB+T1+7+wVFM/ks7iMb21FU64H4yikc1HUKsPjSXigiSwbTf8rWwWAVNm2gD
+         gu9wbVqFnjucqZjgadiAkj6pWf99cBi6IZhoTGQg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
-        Andrew Lunn <andrew@lunn.ch>, Andrew Jeffery <andrew@aj.id.au>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Louis Peens <louis.peens@corigine.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 47/71] net: mdio: aspeed: Add missing MODULE_DEVICE_TABLE
-Date:   Mon, 14 Feb 2022 10:26:15 +0100
-Message-Id: <20220214092453.635370227@linuxfoundation.org>
+Subject: [PATCH 5.15 118/172] nfp: flower: fix ida_idx not being released
+Date:   Mon, 14 Feb 2022 10:26:16 +0100
+Message-Id: <20220214092510.503853601@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,34 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joel Stanley <joel@jms.id.au>
+From: Louis Peens <louis.peens@corigine.com>
 
-[ Upstream commit bc1c3c3b10db4f37c41e6107751a8d450d9c431c ]
+[ Upstream commit 7db788ad627aabff2b74d4f1a3b68516d0fee0d7 ]
 
-Fix loading of the driver when built as a module.
+When looking for a global mac index the extra NFP_TUN_PRE_TUN_IDX_BIT
+that gets set if nfp_flower_is_supported_bridge is true is not taken
+into account. Consequently the path that should release the ida_index
+in cleanup is never triggered, causing messages like:
 
-Fixes: f160e99462c6 ("net: phy: Add mdio-aspeed")
-Signed-off-by: Joel Stanley <joel@jms.id.au>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Acked-by: Andrew Jeffery <andrew@aj.id.au>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+    nfp 0000:02:00.0: nfp: Failed to offload MAC on br-ex.
+    nfp 0000:02:00.0: nfp: Failed to offload MAC on br-ex.
+    nfp 0000:02:00.0: nfp: Failed to offload MAC on br-ex.
+
+after NFP_MAX_MAC_INDEX number of reconfigs. Ultimately this lead to
+new tunnel flows not being offloaded.
+
+Fix this by unsetting the NFP_TUN_PRE_TUN_IDX_BIT before checking if
+the port is of type OTHER.
+
+Fixes: 2e0bc7f3cb55 ("nfp: flower: encode mac indexes with pre-tunnel rule check")
+Signed-off-by: Louis Peens <louis.peens@corigine.com>
+Signed-off-by: Simon Horman <simon.horman@corigine.com>
+Link: https://lore.kernel.org/r/20220208101453.321949-1-simon.horman@corigine.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/mdio-aspeed.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../net/ethernet/netronome/nfp/flower/tunnel_conf.c  | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/phy/mdio-aspeed.c b/drivers/net/phy/mdio-aspeed.c
-index 966c3b4ad59d1..e2273588c75b6 100644
---- a/drivers/net/phy/mdio-aspeed.c
-+++ b/drivers/net/phy/mdio-aspeed.c
-@@ -148,6 +148,7 @@ static const struct of_device_id aspeed_mdio_of_match[] = {
- 	{ .compatible = "aspeed,ast2600-mdio", },
- 	{ },
- };
-+MODULE_DEVICE_TABLE(of, aspeed_mdio_of_match);
+diff --git a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
+index ab70179728f63..6521675be85ce 100644
+--- a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
++++ b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
+@@ -1011,6 +1011,7 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
+ 	struct nfp_flower_repr_priv *repr_priv;
+ 	struct nfp_tun_offloaded_mac *entry;
+ 	struct nfp_repr *repr;
++	u16 nfp_mac_idx;
+ 	int ida_idx;
  
- static struct platform_driver aspeed_mdio_driver = {
- 	.driver = {
+ 	entry = nfp_tunnel_lookup_offloaded_macs(app, mac);
+@@ -1029,8 +1030,6 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
+ 		entry->bridge_count--;
+ 
+ 		if (!entry->bridge_count && entry->ref_count) {
+-			u16 nfp_mac_idx;
+-
+ 			nfp_mac_idx = entry->index & ~NFP_TUN_PRE_TUN_IDX_BIT;
+ 			if (__nfp_tunnel_offload_mac(app, mac, nfp_mac_idx,
+ 						     false)) {
+@@ -1046,7 +1045,6 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
+ 
+ 	/* If MAC is now used by 1 repr set the offloaded MAC index to port. */
+ 	if (entry->ref_count == 1 && list_is_singular(&entry->repr_list)) {
+-		u16 nfp_mac_idx;
+ 		int port, err;
+ 
+ 		repr_priv = list_first_entry(&entry->repr_list,
+@@ -1074,8 +1072,14 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
+ 	WARN_ON_ONCE(rhashtable_remove_fast(&priv->tun.offloaded_macs,
+ 					    &entry->ht_node,
+ 					    offloaded_macs_params));
++
++	if (nfp_flower_is_supported_bridge(netdev))
++		nfp_mac_idx = entry->index & ~NFP_TUN_PRE_TUN_IDX_BIT;
++	else
++		nfp_mac_idx = entry->index;
++
+ 	/* If MAC has global ID then extract and free the ida entry. */
+-	if (nfp_tunnel_is_mac_idx_global(entry->index)) {
++	if (nfp_tunnel_is_mac_idx_global(nfp_mac_idx)) {
+ 		ida_idx = nfp_tunnel_get_ida_from_global_mac_idx(entry->index);
+ 		ida_simple_remove(&priv->tun.mac_off_ids, ida_idx);
+ 	}
 -- 
 2.34.1
 

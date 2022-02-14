@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C75004B5C4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:13:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 162984B5C09
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiBNVFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:05:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51684 "EHLO
+        id S230229AbiBNVHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:07:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbiBNVFg (ORCPT
+        with ESMTP id S230186AbiBNVFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:05:36 -0500
+        Mon, 14 Feb 2022 16:05:40 -0500
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D465F107D92;
-        Mon, 14 Feb 2022 13:05:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F60D107A9F;
+        Mon, 14 Feb 2022 13:05:30 -0800 (PST)
 Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
         by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <heiko@sntech.de>)
-        id 1nJhc4-0002le-Tx; Mon, 14 Feb 2022 21:06:20 +0100
+        id 1nJhco-0002m8-7o; Mon, 14 Feb 2022 21:07:06 +0100
 From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
 To:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
 Cc:     Atish Patra <atishp@rivosinc.com>,
@@ -34,11 +34,11 @@ Cc:     Atish Patra <atishp@rivosinc.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Rob Herring <robh+dt@kernel.org>,
         Atish Patra <atishp@rivosinc.com>
-Subject: Re: [PATCH v2 5/6] RISC-V: Do no continue isa string parsing without correct XLEN
-Date:   Mon, 14 Feb 2022 21:06:20 +0100
-Message-ID: <2355131.QFAWljMpKt@diego>
-In-Reply-To: <20220210214018.55739-6-atishp@rivosinc.com>
-References: <20220210214018.55739-1-atishp@rivosinc.com> <20220210214018.55739-6-atishp@rivosinc.com>
+Subject: Re: [PATCH v2 6/6] RISC-V: Improve /proc/cpuinfo output for ISA extensions
+Date:   Mon, 14 Feb 2022 21:07:05 +0100
+Message-ID: <1919053.afAmxgqtYg@diego>
+In-Reply-To: <20220210214018.55739-7-atishp@rivosinc.com>
+References: <20220210214018.55739-1-atishp@rivosinc.com> <20220210214018.55739-7-atishp@rivosinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -51,14 +51,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, 10. Februar 2022, 22:40:17 CET schrieb Atish Patra:
-> The isa string should begin with either rv64 or rv32. Otherwise, it is
-> an incorrect isa string. Currently, the string parsing continues even if
-> it doesnot begin with current XLEN.
+Am Donnerstag, 10. Februar 2022, 22:40:18 CET schrieb Atish Patra:
+> Currently, the /proc/cpuinfo outputs the entire riscv,isa string which
+> is not ideal when we have multiple ISA extensions present in the ISA
+> string. Some of them may not be enabled in kernel as well.
 > 
-> Fix this by checking if it found "rv64" or "rv32" in the beginning.
+> Parse only the enabled ISA extension and print them in a separate row.
 > 
 > Signed-off-by: Atish Patra <atishp@rivosinc.com>
+
+Using this for my svpbmt series, it shows the extension nicely
 
 Tested-by: Heiko Stuebner <heiko@sntech.de>
 

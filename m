@@ -2,494 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4C44B4000
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:05:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD894B4009
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239829AbiBNDEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 22:04:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46088 "EHLO
+        id S239812AbiBNDEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 22:04:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235542AbiBNDEr (ORCPT
+        with ESMTP id S229460AbiBNDEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 22:04:47 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6116B50E33;
-        Sun, 13 Feb 2022 19:04:39 -0800 (PST)
-X-UUID: 1dccdf04fa5543f4a273866eb06de347-20220214
-X-UUID: 1dccdf04fa5543f4a273866eb06de347-20220214
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <guodong.liu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 696984098; Mon, 14 Feb 2022 11:04:26 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 14 Feb 2022 11:04:25 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 14 Feb 2022 11:04:24 +0800
-Message-ID: <3a13098517b4fc3bbba3960ec9d24060460b9c34.camel@mediatek.com>
-Subject: Re: [PATCH v3 1/3] dt-bindings: pinctrl: mt8186: add pinctrl file
- and binding document
-From:   Guodong Liu <guodong.liu@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Linus Walleij <linus.walleij@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 14 Feb 2022 11:04:24 +0800
-In-Reply-To: <YgZWg6NgiuqN4H7U@robh.at.kernel.org>
-References: <20220210062122.23974-1-guodong.liu@mediatek.com>
-         <20220210062122.23974-2-guodong.liu@mediatek.com>
-         <YgZWg6NgiuqN4H7U@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sun, 13 Feb 2022 22:04:36 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E12A50E2F;
+        Sun, 13 Feb 2022 19:04:28 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJRf9-001dBJ-DX; Mon, 14 Feb 2022 03:04:27 +0000
+Date:   Mon, 14 Feb 2022 03:04:27 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Hao Lee <haolee.swjtu@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fs/namespace: eliminate unnecessary mount counting
+Message-ID: <YgnGuy0GJzlqCSRj@zeniv-ca.linux.org.uk>
+References: <20220123100448.GA1468@haolee.io>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220123100448.GA1468@haolee.io>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------Original Message-----
-From: Rob Herring <robh@kernel.org>
-To: Guodong Liu <guodong.liu@mediatek.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>, Matthias Brugger <
-matthias.bgg@gmail.com>, Sean Wang <sean.wang@kernel.org>, Sean Wang <
-sean.wang@mediatek.com>, linux-gpio@vger.kernel.org, 
-devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, 
-Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v3 1/3] dt-bindings: pinctrl: mt8186: add pinctrl
-file and binding document
-Date: Fri, 11 Feb 2022 06:28:51 -0600
+On Sun, Jan 23, 2022 at 10:04:48AM +0000, Hao Lee wrote:
+> propagate_one() counts the number of propagated mounts in each
+> propagation. We can count them in advance and use the number in
+> subsequent propagation.
 
-On Thu, Feb 10, 2022 at 02:21:20PM +0800, Guodong Liu wrote:
-> 1. This patch adds pinctrl file for mt8186.
-> 2. This patch adds mt8186 compatible node in binding document.
-> 
-> Signed-off-by: Guodong Liu <guodong.liu@mediatek.com>
-> ---
->  .../bindings/pinctrl/pinctrl-mt8186.yaml      |  313 +++++
->  include/dt-bindings/pinctrl/mt8186-pinfunc.h  | 1174
-> +++++++++++++++++
->  2 files changed, 1487 insertions(+)
->  create mode 100644
-> Documentation/devicetree/bindings/pinctrl/pinctrl-mt8186.yaml
->  create mode 100644 include/dt-bindings/pinctrl/mt8186-pinfunc.h
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/pinctrl-
-> mt8186.yaml b/Documentation/devicetree/bindings/pinctrl/pinctrl-
-> mt8186.yaml
-> new file mode 100644
-> index 000000000000..54c9508af922
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8186.yaml
-> @@ -0,0 +1,313 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/pinctrl-mt8186.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mediatek MT8186 Pin Controller
-> +
-> +maintainers:
-> +  - Sean Wang <sean.wang@mediatek.com>
-> +
-> +description: |
-> +  The Mediatek's Pin controller is used to control SoC pins.
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt8186-pinctrl
-> +
-> +  gpio-controller: true
-> +
-> +  '#gpio-cells':
-> +    description: |
-> +      Number of cells in GPIO specifier. Since the generic GPIO
-> binding is used,
-> +      the amount of cells must be specified as 2. See the below
-> +      mentioned gpio binding representation for description of
-> particular cells.
-> +    const: 2
-> +
-> +  gpio-ranges:
-> +    description: gpio valid number range.
+You are relying upon highly non-obvious assumptions.  Namely, that
+copies will have the same amount of mounts as source_mnt.  AFAICS,
+it's not true in case of mount --move - there source_mnt might very
+well contain the things that would be skipped in subsequent copies.
+E.g. anything marked unbindable.  Or mntns binds - anything that would
+be skipped by copy_tree() without special flags.
 
-Don't need generic descriptions for common properties
+Sure, we could make count_mounts() return just the number of those
+that will go into subsequent copies (with mount --move we don't add
+the original subtree - it's been in the namespace and thus is already
+counted), but
+	1) it creates an extra dependency in already convoluted code
+(copy_tree() and count_mounts() need to be kept in sync, in case we ever
+add new classes of mounts to be skipped)
+	2) I'm *NOT* certain that we won't ever run into the non-move
+cases where the original tree contains something that would be skipped
+from subsequent ones, and there we want to count the original.	Matter of
+fact, we do run into that.  Look:
 
-Hi Rob
+# arrange a private tree at /tmp/a
+mkdir /tmp/a
+mount --bind /tmp/a /tmp/a
+mount --make-rprivate /tmp/a
+# mountpoint at /tmp/a/x
+mkdir /tmp/a/x
+mount --bind /tmp/a/x /tmp/a/x
+# this will be a peer of /tmp/a/x
+mkdir /tmp/a/y
+# ... and this - a mountpoint in it
+mkdir /tmp/a/x/v
+# ... rbind fodder:
+mkdir /tmp/a/z
+touch /tmp/a/z/f
+# start a new mntns, so we won't run afoul of loop checks
+unshare -m &
+# ... and bind it on /tmp/a/z/f
+mount --bind /proc/$!/ns/mnt /tmp/a/z/f
+# now we can do the rest - it won't spread into child namespace
+# make /tmp/a/x a peer of /tmp/b/x
+mount --make-shared /tmp/a/x
+mount --bind /tmp/a/x /tmp/a/y
+# ... and rbind /tmp/a/z at /tmp/a/x/v
+# which will propagate a copy to /tmp/b/x/v
+# except that mntns bound on /tmp/a/x/v/f will *not* propagate.
+mount --rbind /tmp/a/z /tmp/a/x/v
+# verify that
+stat /tmp/a/x/v
+stat /tmp/a/y/v
+stat /tmp/a/x/v/f
+stat /tmp/a/y/v/f
 
-we will update it for next version.
+Result:
+  File: /tmp/a/x/v/
+  Size: 4096            Blocks: 8          IO Block: 4096   directory
+Device: 808h/2056d      Inode: 270607      Links: 2
+Access: (0755/drwxr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2022-02-13 21:43:45.058485130 -0500
+Modify: 2022-02-13 21:42:37.142457622 -0500
+Change: 2022-02-13 21:42:37.142457622 -0500
+ Birth: 2022-02-13 21:42:37.142457622 -0500
+  File: /tmp/a/y/v/
+  Size: 4096            Blocks: 8          IO Block: 4096   directory
+Device: 808h/2056d      Inode: 270607      Links: 2
+Access: (0755/drwxr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2022-02-13 21:43:45.058485130 -0500
+Modify: 2022-02-13 21:42:37.142457622 -0500
+Change: 2022-02-13 21:42:37.142457622 -0500
+ Birth: 2022-02-13 21:42:37.142457622 -0500
+  File: /tmp/a/x/v/f
+  Size: 0               Blocks: 0          IO Block: 4096   regular empty file
+Device: 4h/4d   Inode: 4026532237  Links: 1
+Access: (0444/-r--r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2022-02-13 21:42:37.146457624 -0500
+Modify: 2022-02-13 21:42:37.146457624 -0500
+Change: 2022-02-13 21:42:37.146457624 -0500
+ Birth: -
+  File: /tmp/a/y/v/f
+  Size: 0               Blocks: 0          IO Block: 4096   regular empty file
+Device: 808h/2056d      Inode: 270608      Links: 1
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2022-02-13 21:42:37.142457622 -0500
+Modify: 2022-02-13 21:42:37.142457622 -0500
+Change: 2022-02-13 21:42:37.142457622 -0500
+ Birth: 2022-02-13 21:42:37.142457622 -0500
 
-Thanks
-Guodong
+	Note that /tmp/a/x/v and /tmp/a/y/v resolve to the same directory
+(otherwise seen at /tmp/a/z), but /tmp/a/x/v/f and /tmp/a/y/v/f do *not*
+resolve to the same thing - the latter is a regular file on /dev/sda8
+(nothing got propagated there), while the former is *not* - it's an
+mntns descriptor we'd bound on /tmp/a/z/f
 
-> +    maxItems: 1
-> +
-> +  reg:
-> +    description: |
-> +      Physical address base for gpio base registers. There are 8
-> different GPIO
-> +      physical address base in mt8186.
-> +    maxItems: 8
-> +
-> +  reg-names:
-> +    description: |
-> +      Gpio base register names.
-> +    items:
-> +      - const: "iocfg0"
-> +      - const: "iocfg_bm"
-> +      - const: "iocfg_bl"
-> +      - const: "iocfg_br"
-> +      - const: "iocfg_lm"
-> +      - const: "iocfg_rb"
-> +      - const: "iocfg_tl"
-> +      - const: "eint"
+	IOW, the first copy has two mount nodes, the second - only one.
+Initial copy at rbind does get mntns binds copied into it - look at
+CL_COPY_MNT_NS_FILE in arguments of copy_tree() call in __do_loopback().
+However, we do *not* propagate that subsequent copies (propagate_one()
+never passes CL_COPY_MNT_NS_FILE).  So that's at least one case where we
+want different contributions from the first copy and every subsequent one.
 
-Don't need quotes
-Hi Rob
+	So we'd need to run *two* counts, the one to be used from
+attach_recursive_mnt() and another for propagate_one().  With even more
+places where the things could go wrong...
 
-We will update it for next version.
+	I don't believe it's worth the trouble.  Sure, you run that loop
+only once, instead of once per copy.  And if that's more than noise,
+compared to allocating the same mounts we'd been counting, connecting
+them into tree, hashing, etc., I would be *very* surprised.
 
-Thanks
-Guodong
-> +    maxItems: 8
-> +
-> +  interrupt-controller: true
-> +
-> +  '#interrupt-cells':
-> +    const: 2
-> +
-> +  interrupts:
-> +    description: The interrupt outputs to sysirq.
-
-Drop.
-Hi Rob
-
-We will update it for next version.
-
-Thanks
-Guodong
-> +    maxItems: 1
-> +
-> +  mediatek,rsel-resistance-in-si-unit:
-> +    type: boolean
-> +    description: |
-> +      Identifying i2c pins pull up/down type which is RSEL. It can
-> support
-> +      RSEL define or si unit value(ohm) to set different resistance.
-> +
-> +# PIN CONFIGURATION NODES
-> +patternProperties:
-> +  '-pins$':
-> +    type: object
-> +    additionalProperties: false
-> +    patternProperties:
-> +      '^pins':
-> +        type: object
-> +        additionalProperties: false
-> +        description: |
-> +          A pinctrl node should contain at least one subnodes
-> representing the
-> +          pinctrl groups available on the machine. Each subnode will
-> list the
-> +          pins it needs, and how they should be configured, with
-> regard to muxer
-> +          configuration, pullups, drive strength, input
-> enable/disable and
-> +          input schmitt.
-> +          An example of using macro:
-> +          pincontroller {
-> +            /* GPIO0 set as multifunction GPIO0 */
-> +            gpio-pins {
-> +              pins {
-> +                pinmux = <PINMUX_GPIO0__FUNC_GPIO0>;
-> +              }
-> +            };
-> +            /* GPIO128 set as multifunction SDA0 */
-> +            i2c0-pins {
-> +              pins {
-> +                pinmux = <PINMUX_GPIO128__FUNC_SDA0>;
-> +              }
-> +            };
-> +          };
-> +        $ref: "pinmux-node.yaml"
-> +
-> +        properties:
-> +          pinmux:
-> +            description: |
-> +              Integer array, represents gpio pin number and mux
-> setting.
-> +              Supported pin number and mux varies for different
-> SoCs, and are
-> +              defined as macros in dt-bindings/pinctrl/<soc>-
-> pinfunc.h
-> +              directly.
-> +
-> +          drive-strength:
-> +            enum: [2, 4, 6, 8, 10, 12, 14, 16]
-> +
-> +          mediatek,drive-strength-adv:
-> +            description: |
-> +              Describe the specific driving setup property.
-> +              For I2C pins, the existing generic driving setup can
-> only support
-> +              2/4/6/8/10/12/14/16mA driving. But in specific driving
-> setup, they
-> +              can support 0.125/0.25/0.5/1mA adjustment. If we
-> enable specific
-> +              driving setup, the existing generic setup will be
-> disabled.
-> +              The specific driving setup is controlled by E1E0EN.
-> +              When E1=0/E0=0, the strength is 0.125mA.
-> +              When E1=0/E0=1, the strength is 0.25mA.
-> +              When E1=1/E0=0, the strength is 0.5mA.
-> +              When E1=1/E0=1, the strength is 1mA.
-> +              EN is used to enable or disable the specific driving
-> setup.
-> +              Valid arguments are described as below:
-> +              0: (E1, E0, EN) = (0, 0, 0)
-> +              1: (E1, E0, EN) = (0, 0, 1)
-> +              2: (E1, E0, EN) = (0, 1, 0)
-> +              3: (E1, E0, EN) = (0, 1, 1)
-> +              4: (E1, E0, EN) = (1, 0, 0)
-> +              5: (E1, E0, EN) = (1, 0, 1)
-> +              6: (E1, E0, EN) = (1, 1, 0)
-> +              7: (E1, E0, EN) = (1, 1, 1)
-> +              So the valid arguments are from 0 to 7.
-> +            $ref: /schemas/types.yaml#/definitions/uint32
-> +            enum: [0, 1, 2, 3, 4, 5, 6, 7]
-> +
-> +          bias-pull-down:
-> +            oneOf:
-> +              - enum: [100, 101, 102, 103]
-> +              - description: mt8186 pull down PUPD/R0/R1 type define
-> value.
-> +              - enum: [200, 201, 202, 203, 204, 205, 206, 207]
-> +              - description: mt8186 pull down RSEL type define
-> value.
-> +              - enum: [75000, 5000]
-> +              - description: mt8186 pull down RSEL type si unit
-> value(ohm).
-
-This should fail validation. All the description entries are True, so 
-oneOf will be False. Drop the '-' on description so the enum and 
-description are 1 entry.
-Hi Rob
-
-We will update it for next version.
-
-Thanks
-Guodong
-> +
-> +            description: |
-> +              For pull down type is normal, it don't need add RSEL &
-> R1R0 define
-> +              and resistance value.
-> +              For pull down type is PUPD/R0/R1 type, it can add R1R0
-> define to
-> +              set different resistance. It can support
-> "MTK_PUPD_SET_R1R0_00" &
-> +              "MTK_PUPD_SET_R1R0_01" & "MTK_PUPD_SET_R1R0_10" &
-> +              "MTK_PUPD_SET_R1R0_11" define in mt8186.
-> +              For pull down type is RSEL, it can add RSEL define &
-> resistance
-> +              value(ohm) to set different resistance by identifying
-> property
-> +              "mediatek,rsel-resistance-in-si-unit".
-> +              It can support "MTK_PULL_SET_RSEL_000" &
-> "MTK_PULL_SET_RSEL_001"
-> +              & "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011"
-> +              & "MTK_PULL_SET_RSEL_100" & "MTK_PULL_SET_RSEL_101"
-> +              & "MTK_PULL_SET_RSEL_110" & "MTK_PULL_SET_RSEL_111"
-> +              define in mt8186. It can also support resistance
-> value(ohm)
-> +              "75000" & "5000" in mt8186.
-> +              An example of using RSEL define:
-
-Perhaps move this to the example.
-Hi Rob
-
-Typically, I2C will config this type of pins as : "bias-pull-up =
-<MTK_PULL_SET_RSEL_001>;", so we just move partial "bias-pull-up"
- description info to the example, and we will update it for next
-version.
-
-Thanks
-Guodong
-> +              pincontroller {
-> +                i2c0_pin {
-> +                  pins {
-> +                    pinmux = <PINMUX_GPIO128__FUNC_SDA0>;
-> +                    bias-pull-down = <MTK_PULL_SET_RSEL_001>;
-> +                  }
-> +                };
-> +              };
-> +              An example of using si unit resistance value(ohm):
-> +              &pio {
-> +                mediatek,rsel-resistance-in-si-unit;
-> +              }
-> +              pincontroller {
-> +                i2c0_pin {
-> +                  pins {
-> +                    pinmux = <PINMUX_GPIO128__FUNC_SDA0>;
-> +                    bias-pull-down = <75000>;
-> +                  }
-> +                };
-> +              };
-> +
-> +          bias-pull-up:
-> +            oneOf:
-> +              - enum: [100, 101, 102, 103]
-> +              - description: mt8186 pull up PUPD/R0/R1 type define
-> value.
-> +              - enum: [200, 201, 202, 203, 204, 205, 206, 207]
-> +              - description: mt8186 pull up RSEL type define value.
-> +              - enum: [1000, 1500, 2000, 3000, 4000, 5000, 10000,
-> 75000]
-> +              - description: mt8186 pull up RSEL type si unit
-> value(ohm).
-> +
-> +            description: |
-> +              For pull up type is normal, it don't need add RSEL &
-> R1R0 define
-> +              and resistance value.
-> +              For pull up type is PUPD/R0/R1 type, it can add R1R0
-> define to
-> +              set different resistance. It can support
-> "MTK_PUPD_SET_R1R0_00" &
-> +              "MTK_PUPD_SET_R1R0_01" & "MTK_PUPD_SET_R1R0_10" &
-> +              "MTK_PUPD_SET_R1R0_11" define in mt8186.
-> +              For pull up type is RSEL, it can add RSEL define &
-> resistance
-> +              value(ohm) to set different resistance by identifying
-> property
-> +              "mediatek,rsel-resistance-in-si-unit".
-> +              It can support "MTK_PULL_SET_RSEL_000" &
-> "MTK_PULL_SET_RSEL_001"
-> +              & "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011"
-> +              & "MTK_PULL_SET_RSEL_100" & "MTK_PULL_SET_RSEL_101"
-> +              & "MTK_PULL_SET_RSEL_110" & "MTK_PULL_SET_RSEL_111"
-> +              define in mt8186. It can also support resistance
-> value(ohm)
-> +              "1000" & "1500" & "2000" & "3000" & "4000" & "5000" &
-> "10000" &
-> +              "75000" in mt8186.
-> +              An example of using RSEL define:
-> +              pincontroller {
-> +                i2c0-pins {
-> +                  pins {
-> +                    pinmux = <PINMUX_GPIO128__FUNC_SDA0>;
-> +                    bias-pull-up = <MTK_PULL_SET_RSEL_001>;
-> +                  }
-> +                };
-> +              };
-> +              An example of using si unit resistance value(ohm):
-> +              &pio {
-> +                mediatek,rsel-resistance-in-si-unit;
-> +              }
-> +              pincontroller {
-> +                i2c0-pins {
-> +                  pins {
-> +                    pinmux = <PINMUX_GPIO128__FUNC_SDA0>;
-> +                    bias-pull-up = <1000>;
-> +                  }
-> +                };
-> +              };
-> +
-> +          bias-disable: true
-> +
-> +          output-high: true
-> +
-> +          output-low: true
-> +
-> +          input-enable: true
-> +
-> +          input-disable: true
-> +
-> +          input-schmitt-enable: true
-> +
-> +          input-schmitt-disable: true
-> +
-> +        required:
-> +          - pinmux
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-controller
-> +  - '#interrupt-cells'
-> +  - gpio-controller
-> +  - '#gpio-cells'
-> +  - gpio-ranges
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/pinctrl/mt8186-pinfunc.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    pio: pinctrl@10005000 {
-> +      compatible = "mediatek,mt8186-pinctrl";
-> +      reg = <0x10005000 0x1000>,
-> +            <0x10002000 0x0200>,
-> +            <0x10002200 0x0200>,
-> +            <0x10002400 0x0200>,
-> +            <0x10002600 0x0200>,
-> +            <0x10002A00 0x0200>,
-> +            <0x10002c00 0x0200>,
-> +            <0x1000b000 0x1000>;
-> +      reg-names = "iocfg0", "iocfg_bm", "iocfg_bl",
-> +                  "iocfg_br", "iocfg_lm", "iocfg_rb",
-> +                  "iocfg_tl", "eint";
-> +      gpio-controller;
-> +      #gpio-cells = <2>;
-> +      gpio-ranges = <&pio 0 0 185>;
-> +      interrupt-controller;
-> +      interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH 0>;
-> +      #interrupt-cells = <2>;
-> +
-> +      pio-pins {
-> +        pins {
-> +          pinmux = <PINMUX_GPIO0__FUNC_GPIO0>;
-> +          output-low;
-> +        };
-> +      };
-> +
-> +      spi0-pins {
-> +        pins-spi {
-> +          pinmux = <PINMUX_GPIO0__FUNC_SPI0_CLK_B>,
-> +                   <PINMUX_GPIO1__FUNC_SPI0_CSB_B>,
-> +                   <PINMUX_GPIO2__FUNC_SPI0_MO_B>;
-> +          bias-disable;
-> +        };
-> +        pins-spi-mi {
-> +          pinmux = <PINMUX_GPIO3__FUNC_SPI0_MI_B>;
-> +          bias-pull-down;
-> +        };
-> +      };
-> +
-> +      i2c0-pins {
-> +        pins {
-> +          pinmux = <PINMUX_GPIO127__FUNC_SCL0>,
-> +                   <PINMUX_GPIO128__FUNC_SDA0>;
-> +          bias-disable;
-> +          mediatek,drive-strength-adv = <7>;
-> +        };
-> +      };
-> +    };
-
+NAKed-by: Al Viro <viro@zeniv.linux.org.uk>

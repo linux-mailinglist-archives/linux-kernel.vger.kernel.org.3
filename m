@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5D14B4A09
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80ED74B4862
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347533AbiBNKbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:31:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41278 "EHLO
+        id S245396AbiBNJxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:53:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348307AbiBNKav (ORCPT
+        with ESMTP id S237479AbiBNJua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:30:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CDC6A3AD;
-        Mon, 14 Feb 2022 01:59:27 -0800 (PST)
+        Mon, 14 Feb 2022 04:50:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E45652D3;
+        Mon, 14 Feb 2022 01:41:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85162B80DC4;
-        Mon, 14 Feb 2022 09:59:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4916C340E9;
-        Mon, 14 Feb 2022 09:59:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D43AB60FA2;
+        Mon, 14 Feb 2022 09:41:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A5FAC340E9;
+        Mon, 14 Feb 2022 09:41:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832763;
-        bh=8qqjLMYSvueRz7AGEphev8UfHG+Nq3FEAtl2P0/Vr4g=;
+        s=korg; t=1644831685;
+        bh=z40kFjQaiXx7f71JHu8jlvlA7hqgKZhlPEtCv+lCots=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uSkfMK0LYLskW+DOkyn8TKLQUkhTMv1vZbMvuW6VIhlQ8mVflg1HgZWIHmdtBkh13
-         oGzCoTF/dMxp06I+IYPtIE6sFnjmLRVl35PU8qE885ezXMwr2U/CbPbG+XkcB0PNdl
-         ytSpr0qhc/fs7jcbfGFyGuwt3zao3J7LTGq9oMSc=
+        b=QoBmwg6JQoJkjvvttTvAC4fSLSoIR9HMefalI8P6iIikYM9t9AvhalpaNPq8mYSNF
+         6xhSSSaXQXgDOeAPQDCJ/zAy3hym8ohJ3E4x9wh0JgB8gl0IQqORZGvMyh02FHCZJF
+         zUG2VX0mLBvE4dPbB0OtO0kJ42GZSpF+2TG1O37o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,19 +36,19 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Florian Westphal <fw@strlen.de>,
         Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 117/203] netfilter: ctnetlink: disable helper autoassign
+Subject: [PATCH 5.10 062/116] netfilter: ctnetlink: disable helper autoassign
 Date:   Mon, 14 Feb 2022 10:26:01 +0100
-Message-Id: <20220214092514.230071345@linuxfoundation.org>
+Message-Id: <20220214092500.894610788@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,10 +107,10 @@ index 4b3395082d15c..26071021e986f 100644
  	IPS_HELPER = (1 << IPS_HELPER_BIT),
  
 diff --git a/net/netfilter/nf_conntrack_netlink.c b/net/netfilter/nf_conntrack_netlink.c
-index ec4164c32d270..2d7f63ad33604 100644
+index c6bcc28ae3387..eeeaa34b3e7b5 100644
 --- a/net/netfilter/nf_conntrack_netlink.c
 +++ b/net/netfilter/nf_conntrack_netlink.c
-@@ -2311,7 +2311,8 @@ ctnetlink_create_conntrack(struct net *net,
+@@ -2283,7 +2283,8 @@ ctnetlink_create_conntrack(struct net *net,
  			if (helper->from_nlattr)
  				helper->from_nlattr(helpinfo, ct);
  

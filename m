@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938424B487B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB7E4B4C4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343567AbiBNJy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:54:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60850 "EHLO
+        id S1348789AbiBNKjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:39:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344375AbiBNJvn (ORCPT
+        with ESMTP id S1349066AbiBNKgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:51:43 -0500
+        Mon, 14 Feb 2022 05:36:09 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B1966FA5;
-        Mon, 14 Feb 2022 01:42:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF93716C0;
+        Mon, 14 Feb 2022 02:02:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E50D061172;
-        Mon, 14 Feb 2022 09:42:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1599C340E9;
-        Mon, 14 Feb 2022 09:42:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFCB560C7D;
+        Mon, 14 Feb 2022 10:02:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FA79C340E9;
+        Mon, 14 Feb 2022 10:02:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831767;
-        bh=EmdIkX7A7iEE+I7vI3N50D/Fv19L8KBxC1mzjgrtM7k=;
+        s=korg; t=1644832951;
+        bh=KMZanydpN5ZzMP4ZMc7kFo32JxkD+fkWnbCNlOEFnWM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uYnhzYfqAZeEb7IU2ih068+W4CJL/GYGHL5PEE4fi6UCIQOBXjcI8TEq7mdtYcWCv
-         Q4Mr/y3ebxuFb3quFj25vKWGR7FH+yYCy8b68n13iJh5vZhq277Pf7X/lNeMpxt4H/
-         JhyqiOZ0Myj6TTlHs00lyC4LsP/kjYFtpQvxCLCg=
+        b=v3GgYcLX6phNQKm/MBqlB+rcHic4XmJH7E5ID2vTL8lpaf5WPDwTWvILG5bcwXYRV
+         aOFnD7A3gCZfrQjsyV6S2cAmjSIIi1TCzjzyMrN7sSoXZKrcGDSyFhwTL9Rfw3IP8g
+         WU9lVYmt1ZzWQexzxPOzk8eeP4jRcFYfo1270WcQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kosuke Tatsukawa <tatsu-ab1@nec.com>
-Subject: [PATCH 5.10 089/116] n_tty: wake up poll(POLLRDNORM) on receiving data
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 144/203] ipmr,ip6mr: acquire RTNL before calling ip[6]mr_free_table() on failure path
 Date:   Mon, 14 Feb 2022 10:26:28 +0100
-Message-Id: <20220214092501.842412778@linuxfoundation.org>
+Message-Id: <20220214092515.132398554@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,84 +57,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: TATSUKAWA KOSUKE (立川 江介) <tatsu-ab1@nec.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit c816b2e65b0e86b95011418cad334f0524fc33b8 upstream.
+[ Upstream commit 5611a00697c8ecc5aad04392bea629e9d6a20463 ]
 
-The poll man page says POLLRDNORM is equivalent to POLLIN when used as
-an event.
-$ man poll
-<snip>
-              POLLRDNORM
-                     Equivalent to POLLIN.
+ip[6]mr_free_table() can only be called under RTNL lock.
 
-However, in n_tty driver, POLLRDNORM does not return until timeout even
-if there is terminal input, whereas POLLIN returns.
+RTNL: assertion failed at net/core/dev.c (10367)
+WARNING: CPU: 1 PID: 5890 at net/core/dev.c:10367 unregister_netdevice_many+0x1246/0x1850 net/core/dev.c:10367
+Modules linked in:
+CPU: 1 PID: 5890 Comm: syz-executor.2 Not tainted 5.16.0-syzkaller-11627-g422ee58dc0ef #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:unregister_netdevice_many+0x1246/0x1850 net/core/dev.c:10367
+Code: 0f 85 9b ee ff ff e8 69 07 4b fa ba 7f 28 00 00 48 c7 c6 00 90 ae 8a 48 c7 c7 40 90 ae 8a c6 05 6d b1 51 06 01 e8 8c 90 d8 01 <0f> 0b e9 70 ee ff ff e8 3e 07 4b fa 4c 89 e7 e8 86 2a 59 fa e9 ee
+RSP: 0018:ffffc900046ff6e0 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888050f51d00 RSI: ffffffff815fa008 RDI: fffff520008dfece
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff815f3d6e R11: 0000000000000000 R12: 00000000fffffff4
+R13: dffffc0000000000 R14: ffffc900046ff750 R15: ffff88807b7dc000
+FS:  00007f4ab736e700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fee0b4f8990 CR3: 000000001e7d2000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ mroute_clean_tables+0x244/0xb40 net/ipv6/ip6mr.c:1509
+ ip6mr_free_table net/ipv6/ip6mr.c:389 [inline]
+ ip6mr_rules_init net/ipv6/ip6mr.c:246 [inline]
+ ip6mr_net_init net/ipv6/ip6mr.c:1306 [inline]
+ ip6mr_net_init+0x3f0/0x4e0 net/ipv6/ip6mr.c:1298
+ ops_init+0xaf/0x470 net/core/net_namespace.c:140
+ setup_net+0x54f/0xbb0 net/core/net_namespace.c:331
+ copy_net_ns+0x318/0x760 net/core/net_namespace.c:475
+ create_new_namespaces+0x3f6/0xb20 kernel/nsproxy.c:110
+ copy_namespaces+0x391/0x450 kernel/nsproxy.c:178
+ copy_process+0x2e0c/0x7300 kernel/fork.c:2167
+ kernel_clone+0xe7/0xab0 kernel/fork.c:2555
+ __do_sys_clone+0xc8/0x110 kernel/fork.c:2672
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f4ab89f9059
+Code: Unable to access opcode bytes at RIP 0x7f4ab89f902f.
+RSP: 002b:00007f4ab736e118 EFLAGS: 00000206 ORIG_RAX: 0000000000000038
+RAX: ffffffffffffffda RBX: 00007f4ab8b0bf60 RCX: 00007f4ab89f9059
+RDX: 0000000020000280 RSI: 0000000020000270 RDI: 0000000040200000
+RBP: 00007f4ab8a5308d R08: 0000000020000300 R09: 0000000020000300
+R10: 00000000200002c0 R11: 0000000000000206 R12: 0000000000000000
+R13: 00007ffc3977cc1f R14: 00007f4ab736e300 R15: 0000000000022000
+ </TASK>
 
-The following test program works until kernel-3.17, but the test stops
-in poll() after commit 57087d515441 ("tty: Fix spurious poll() wakeups").
-
-[Steps to run test program]
-  $ cc -o test-pollrdnorm test-pollrdnorm.c
-  $ ./test-pollrdnorm
-  foo          <-- Type in something from the terminal followed by [RET].
-                   The string should be echoed back.
-
-  ------------------------< test-pollrdnorm.c >------------------------
-  #include <stdio.h>
-  #include <errno.h>
-  #include <poll.h>
-  #include <unistd.h>
-
-  void main(void)
-  {
-	int		n;
-	unsigned char	buf[8];
-	struct pollfd	fds[1] = {{ 0, POLLRDNORM, 0 }};
-
-	n = poll(fds, 1, -1);
-	if (n < 0)
-		perror("poll");
-	n = read(0, buf, 8);
-	if (n < 0)
-		perror("read");
-	if (n > 0)
-		write(1, buf, n);
-  }
-  ------------------------------------------------------------------------
-
-The attached patch fixes this problem.  Many calls to
-wake_up_interruptible_poll() in the kernel source code already specify
-"POLLIN | POLLRDNORM".
-
-Fixes: 57087d515441 ("tty: Fix spurious poll() wakeups")
-Cc: stable@vger.kernel.org
-Signed-off-by: Kosuke Tatsukawa <tatsu-ab1@nec.com>
-Link: https://lore.kernel.org/r/TYCPR01MB81901C0F932203D30E452B3EA5209@TYCPR01MB8190.jpnprd01.prod.outlook.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: f243e5a7859a ("ipmr,ip6mr: call ip6mr_free_table() on failure path")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: Cong Wang <cong.wang@bytedance.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Link: https://lore.kernel.org/r/20220208053451.2885398-1-eric.dumazet@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/n_tty.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/ipv4/ipmr.c  | 2 ++
+ net/ipv6/ip6mr.c | 2 ++
+ 2 files changed, 4 insertions(+)
 
---- a/drivers/tty/n_tty.c
-+++ b/drivers/tty/n_tty.c
-@@ -1372,7 +1372,7 @@ handle_newline:
- 			put_tty_queue(c, ldata);
- 			smp_store_release(&ldata->canon_head, ldata->read_head);
- 			kill_fasync(&tty->fasync, SIGIO, POLL_IN);
--			wake_up_interruptible_poll(&tty->read_wait, EPOLLIN);
-+			wake_up_interruptible_poll(&tty->read_wait, EPOLLIN | EPOLLRDNORM);
- 			return 0;
- 		}
- 	}
-@@ -1653,7 +1653,7 @@ static void __receive_buf(struct tty_str
+diff --git a/net/ipv4/ipmr.c b/net/ipv4/ipmr.c
+index 2dda856ca2602..aea29d97f8dfa 100644
+--- a/net/ipv4/ipmr.c
++++ b/net/ipv4/ipmr.c
+@@ -261,7 +261,9 @@ static int __net_init ipmr_rules_init(struct net *net)
+ 	return 0;
  
- 	if (read_cnt(ldata)) {
- 		kill_fasync(&tty->fasync, SIGIO, POLL_IN);
--		wake_up_interruptible_poll(&tty->read_wait, EPOLLIN);
-+		wake_up_interruptible_poll(&tty->read_wait, EPOLLIN | EPOLLRDNORM);
- 	}
- }
+ err2:
++	rtnl_lock();
+ 	ipmr_free_table(mrt);
++	rtnl_unlock();
+ err1:
+ 	fib_rules_unregister(ops);
+ 	return err;
+diff --git a/net/ipv6/ip6mr.c b/net/ipv6/ip6mr.c
+index 36ed9efb88254..6a4065d81aa91 100644
+--- a/net/ipv6/ip6mr.c
++++ b/net/ipv6/ip6mr.c
+@@ -248,7 +248,9 @@ static int __net_init ip6mr_rules_init(struct net *net)
+ 	return 0;
  
+ err2:
++	rtnl_lock();
+ 	ip6mr_free_table(mrt);
++	rtnl_unlock();
+ err1:
+ 	fib_rules_unregister(ops);
+ 	return err;
+-- 
+2.34.1
+
 
 

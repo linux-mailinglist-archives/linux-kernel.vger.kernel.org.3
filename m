@@ -2,74 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7848A4B52BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF564B52C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354890AbiBNOGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 09:06:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44904 "EHLO
+        id S1354921AbiBNOHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 09:07:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354879AbiBNOGT (ORCPT
+        with ESMTP id S1354900AbiBNOGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 09:06:19 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4024A3C4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:06:12 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id l125so13259821ybl.4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:06:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9M5OW/p/N+317mqw1a7QGwFIU/E34FcnEw0pMzdlDnM=;
-        b=XX2XWY3WEwfuGdCxy/g536HNRWOaAtAH42XA+oGj+uwqJfaSZF8dQ0L2/gdNtV+7rB
-         VJDbHURITZAj7S3thHnskzdeveYUD7SBi8iM3r97pkGz0ehx3CdRcagu9RUtqM9jvJCk
-         CxbAEi6ry/UyS6B/kQ5vwGigHJ6YXvG6pZ5ivH6FznJsyD0vu1Gum+0wIhqa5dUw+xUs
-         HF4BsE+rPLn7v4RjyQBVPOh1zxRvmYJtTODZ7l1MQArcQAv55WYghBQO1kDdEgbWoEnV
-         QBcNmz5iCEhga5UbzIZLe0WxyvpVH3+BhdDGBKIAMgsa2vobgfMwaILu2cn9NZFSVbZU
-         EDiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9M5OW/p/N+317mqw1a7QGwFIU/E34FcnEw0pMzdlDnM=;
-        b=U/EHxEKuwZzSOiTggcuRDVUmrZCPH1CukHhaPBK9qNdiIFOID/ngHRL6n/LlUDe5bL
-         AhRfW0Bj8e7YJtGYx7zNWbaZqOLpD3X5LpcAzaXK6stS/J4eDyMXtrqAs+knuj6lIP3z
-         OEgwN6WwAzIRFFBkyTq/4pZBRw05BqFABvejjphG8V5Cw5TzAwWbUDyMp41G6j5lmBED
-         MVYvGyHveZ+0QJXjwKT4DvH/OsdWw/ECUB8rybY+3gqpIBZGqD/f4Mw8dh/9RioSVNJZ
-         j0OSBSZPbkmjy0CaBF3GN1A7b+4R5xYn3k1zH0WXlrQSu2OOapdqaAZxnSed5Tb8cDFg
-         5zJg==
-X-Gm-Message-State: AOAM530LUFPCRfjgXiC1B0g89/FVKdEZmGnd73f3FvPvkExeMqfwhtPB
-        MQ6d39aT//sh71dfUyC/JbkEdxtuM+1FNv4DlOZlLg==
-X-Google-Smtp-Source: ABdhPJybkgqEwTJ0yZ5TqAONojA2iJ+32VTFfDuw6K3jdn4eeVbSn+HBrHa1lvMNw+ZFvbw/Z/C9kzy+yQp4GlPqJGc=
-X-Received: by 2002:a25:f404:: with SMTP id q4mr12321552ybd.146.1644847570937;
- Mon, 14 Feb 2022 06:06:10 -0800 (PST)
+        Mon, 14 Feb 2022 09:06:54 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF009A1AE
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:06:46 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJc04-0008CA-9v; Mon, 14 Feb 2022 15:06:44 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJc01-00GZ3m-7U; Mon, 14 Feb 2022 15:06:40 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJbzz-0038PK-5F; Mon, 14 Feb 2022 15:06:39 +0100
+Date:   Mon, 14 Feb 2022 15:06:39 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        kernel@pengutronix.de, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] mfd: stmfx: Improve error message triggered by regulator
+ fault in .remove()
+Message-ID: <20220214140639.jmdldyne6ffq4dlq@pengutronix.de>
+References: <20220207081709.27288-1-u.kleine-koenig@pengutronix.de>
+ <YgpdPTDurgsvR9mk@google.com>
 MIME-Version: 1.0
-References: <720d0a9a42e33148fcac45cd39a727093a32bf32.1614965598.git.robin.murphy@arm.com>
- <a730070d718cb119f77c8ca1782a0d4189bfb3e7.1614965598.git.robin.murphy@arm.com>
- <0a1d437d-9ea0-de83-3c19-e07f560ad37c@arm.com> <20210730143431.GB1517404@mutt>
- <8b358507-dbdf-b05b-c1da-2ec9903a2912@arm.com> <CADYN=9LE2JnE+vmv_UaeyJj_RpHcp+zZUv711VuQekLSiQ2bJA@mail.gmail.com>
-In-Reply-To: <CADYN=9LE2JnE+vmv_UaeyJj_RpHcp+zZUv711VuQekLSiQ2bJA@mail.gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 14 Feb 2022 19:36:00 +0530
-Message-ID: <CA+G9fYu7ctvOfdvBkDZ1nABz0TaYZ49FUKVTctn+mBTCmk9JCQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] arm64: dts: juno: Enable more SMMUs
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Liviu Dudau <Liviu.Dudau@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-stable <stable@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        lkft-triage@lists.linaro.org,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="s563op37ko4b4dy6"
+Content-Disposition: inline
+In-Reply-To: <YgpdPTDurgsvR9mk@google.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,30 +58,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin,
 
-Since we did not get a reply on this email thread.
-and those intermittent failures are causing a lot of noise in reports summary.
-We will wait one more week and stop running 64k page size testing on
-Juno-r2 devices.
+--s563op37ko4b4dy6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > diff --git a/arch/arm64/boot/dts/arm/juno-base.dtsi b/arch/arm64/boot/dts/arm/juno-base.dtsi
-> > > index 8e7a66943b01..d3148730e951 100644
-> > > --- a/arch/arm64/boot/dts/arm/juno-base.dtsi
-> > > +++ b/arch/arm64/boot/dts/arm/juno-base.dtsi
-> > > @@ -545,8 +545,7 @@ pcie_ctlr: pcie@40000000 {
-> > >                           <0x02000000 0x00 0x50000000 0x00 0x50000000 0x0 0x08000000>,
-> > >                           <0x42000000 0x40 0x00000000 0x40 0x00000000 0x1 0x00000000>;
-> > >                  /* Standard AXI Translation entries as programmed by EDK2 */
-> > > -               dma-ranges = <0x02000000 0x0 0x2c1c0000 0x0 0x2c1c0000 0x0 0x00040000>,
-> > > -                            <0x02000000 0x0 0x80000000 0x0 0x80000000 0x0 0x80000000>,
-> > > +               dma-ranges = <0x02000000 0x0 0x80000000 0x0 0x80000000 0x0 0x80000000>,
-> > >                               <0x43000000 0x8 0x00000000 0x8 0x00000000 0x2 0x00000000>;
-> > >                  #interrupt-cells = <1>;
-> > >                  interrupt-map-mask = <0 0 0 7>;
-> > >
+On Mon, Feb 14, 2022 at 01:46:37PM +0000, Lee Jones wrote:
+> On Mon, 07 Feb 2022, Uwe Kleine-K=F6nig wrote:
+>=20
+> > Returning a non-zero value in an i2c remove callback results in the i2c
+> > core emitting a very generic error message ("remove failed (-ESOMETHING=
+),
+> > will be ignored") and as the message indicates not further error handli=
+ng
+> > is done.
+> >=20
+> > Instead emit a more specific error message and then return zero in
+> > .remove().
+> >=20
+> > The long-term goal is to make the i2c remove prototype return void, mak=
+ing
+> > all implementations return 0 is preparatory work for this change.
+> >=20
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > ---
+> >  drivers/mfd/stmfx.c | 16 +++++++++++-----
+> >  1 file changed, 11 insertions(+), 5 deletions(-)
+> >=20
+> > diff --git a/drivers/mfd/stmfx.c b/drivers/mfd/stmfx.c
+> > index e095a3930142..16631c675f2f 100644
+> > --- a/drivers/mfd/stmfx.c
+> > +++ b/drivers/mfd/stmfx.c
+> > @@ -392,17 +392,21 @@ static int stmfx_chip_init(struct i2c_client *cli=
+ent)
+> >  	return ret;
+> >  }
+> > =20
+> > -static int stmfx_chip_exit(struct i2c_client *client)
+> > +static void stmfx_chip_exit(struct i2c_client *client)
+> >  {
+> >  	struct stmfx *stmfx =3D i2c_get_clientdata(client);
+> > =20
+> >  	regmap_write(stmfx->map, STMFX_REG_IRQ_SRC_EN, 0);
+> >  	regmap_write(stmfx->map, STMFX_REG_SYS_CTRL, 0);
+> > =20
+> > -	if (stmfx->vdd)
+> > -		return regulator_disable(stmfx->vdd);
+> > +	if (stmfx->vdd) {
+> > +		int ret =3D regulator_disable(stmfx->vdd);
+> > =20
+> > -	return 0;
+> > +		if (ret)
+>=20
+> Nit: Premise of the patch is fine, but please can you use the standard
+> function call, check the return value format please.  Something about
+> this is triggering my OCD! :)
+>=20
+>      	int ret;
+>=20
+> 	ret =3D regulator_disable(stmfx->vdd);
+> 	if (ret)
+> 		do_thing();
 
-Reference email thread,
-https://lore.kernel.org/stable/0a1d437d-9ea0-de83-3c19-e07f560ad37c@arm.com/
+Not sure I understand you correctly. Do you want just:
 
-- Naresh
+ 	regmap_write(stmfx->map, STMFX_REG_SYS_CTRL, 0);
+=20
+ 	if (stmfx->vdd) {
+-		int ret =3D regulator_disable(stmfx->vdd);
++		int ret;
++
++		ret =3D regulator_disable(stmfx->vdd);
+ 		if (ret)
+ ...
+
+squashed into the patch?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--s563op37ko4b4dy6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIKYesACgkQwfwUeK3K
+7Am/agf+Ox1j1cOxSuGwS+XoEjW3j9S/sI2S+1HQq/TZ5DMu7yrdIcQm+m157Xeh
+SXiqNFcmVbXHvSU+r8gQtq1nInt6JFwjpFLdt+K/aUPPOZUsxug+3CgL+zTTnhm+
+qBVhvWTGQoZ3tkxz4Ja4oSACEiYOHiM2NhQe3GVAFXNas6jwvZGDf6wBcwLhvQhK
+am4yU8fWiiV/Wa5m1OGRB+ELOBaooi4hagB0WZVviHo1LFhQXu+o/q8gV1X7xdAN
+f/4+8al/jfZJp5dkJGbj0fWPncQ7T0dZYtYvdSDAc6sapNWYlF9l0saS+r8iZbfb
+AGWtHFSKo8ukP4MdGWnoZaIaDWlrEA==
+=RA9W
+-----END PGP SIGNATURE-----
+
+--s563op37ko4b4dy6--

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8BF34B4AB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A0C4B4A7B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346275AbiBNKPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:15:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43966 "EHLO
+        id S1344920AbiBNKBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:01:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345776AbiBNKNO (ORCPT
+        with ESMTP id S1344038AbiBNJzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:13:14 -0500
+        Mon, 14 Feb 2022 04:55:45 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6E360A9E;
-        Mon, 14 Feb 2022 01:51:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287106E4EA;
+        Mon, 14 Feb 2022 01:44:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04E2AB80D6D;
-        Mon, 14 Feb 2022 09:51:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F37ACC340F0;
-        Mon, 14 Feb 2022 09:51:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9051B80DBE;
+        Mon, 14 Feb 2022 09:44:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A301C340EF;
+        Mon, 14 Feb 2022 09:44:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832311;
-        bh=/ako78qHvG1RvoXTVwp995X+ARBRgcjJey/+7W75fHY=;
+        s=korg; t=1644831855;
+        bh=q5LWd1j9Zs3lkXGE5hEMxO6tSIR7816KEF9BxtRV9co=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dLhG+wsEYt/c62oqQ5v0nhwOQ7NZlpY+MWGYGKDdizOMQZ/djc50UfsaD3GZEo7El
-         Jm1+hMQ9Qjtr0/Wc4xgTCVhESogoeczswRsv+QuUpLlvslA5NQ/jvrBSlwi0yc4qu2
-         4I0gk38s8Qwhe09KynPaaE6QyNwfC8L5ZciOJK9s=
+        b=gAQEf3sEbZM+dNbhHqy5hi3Mm0SYhS1EMveb1PDd6khPURXBEqNQy4LtAnjcZ7pRZ
+         Bi9t+twRLdEyCdLuajKCD4c+oRhJDpc//x71R+hoSTgtXAUjBvhbZE/t+bXeIe6lIt
+         20ijGjnFOt3+JzmCYqcqABQaTHlF8LAg5ePwNOLw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Hofman <pavel.hofman@ivitera.com>
-Subject: [PATCH 5.15 147/172] usb: gadget: f_uac2: Define specific wTerminalType
+        stable@vger.kernel.org, Scott Russell <Scott.Russell2@ncr.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.10 106/116] USB: serial: cp210x: add CPI Bulk Coin Recycler id
 Date:   Mon, 14 Feb 2022 10:26:45 +0100
-Message-Id: <20220214092511.462244663@linuxfoundation.org>
+Message-Id: <20220214092502.445994845@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,49 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Hofman <pavel.hofman@ivitera.com>
+From: Johan Hovold <johan@kernel.org>
 
-commit 5432184107cd0013761bdfa6cb6079527ef87b95 upstream.
+commit 6ca0c6283340d819bf9c7d8e76be33c9fbd903ab upstream.
 
-Several users have reported that their Win10 does not enumerate UAC2
-gadget with the existing wTerminalType set to
-UAC_INPUT_TERMINAL_UNDEFINED/UAC_INPUT_TERMINAL_UNDEFINED, e.g.
-https://github.com/raspberrypi/linux/issues/4587#issuecomment-926567213.
-While the constant is officially defined by the USB terminal types
-document, e.g. XMOS firmware for UAC2 (commonly used for Win10) defines
-no undefined output terminal type in its usbaudio20.h header.
+Add the device id for the Crane Payment Innovation / Money Controls Bulk
+Coin Recycler:
 
-Therefore wTerminalType of EP-IN is set to
-UAC_INPUT_TERMINAL_MICROPHONE and wTerminalType of EP-OUT to
-UAC_OUTPUT_TERMINAL_SPEAKER for the UAC2 gadget.
+	https://www.cranepi.com/en/system/files/Support/OM_BCR_EN_V1-04_0.pdf
 
-Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
-Cc: stable <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220131071813.7433-1-pavel.hofman@ivitera.com
+Reported-by: Scott Russell <Scott.Russell2@ncr.com>
+Cc: stable@vger.kernel.org
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/function/f_uac2.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/serial/cp210x.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -202,7 +202,7 @@ static struct uac2_input_terminal_descri
- 
- 	.bDescriptorSubtype = UAC_INPUT_TERMINAL,
- 	/* .bTerminalID = DYNAMIC */
--	.wTerminalType = cpu_to_le16(UAC_INPUT_TERMINAL_UNDEFINED),
-+	.wTerminalType = cpu_to_le16(UAC_INPUT_TERMINAL_MICROPHONE),
- 	.bAssocTerminal = 0,
- 	/* .bCSourceID = DYNAMIC */
- 	.iChannelNames = 0,
-@@ -230,7 +230,7 @@ static struct uac2_output_terminal_descr
- 
- 	.bDescriptorSubtype = UAC_OUTPUT_TERMINAL,
- 	/* .bTerminalID = DYNAMIC */
--	.wTerminalType = cpu_to_le16(UAC_OUTPUT_TERMINAL_UNDEFINED),
-+	.wTerminalType = cpu_to_le16(UAC_OUTPUT_TERMINAL_SPEAKER),
- 	.bAssocTerminal = 0,
- 	/* .bSourceID = DYNAMIC */
- 	/* .bCSourceID = DYNAMIC */
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -73,6 +73,7 @@ static const struct usb_device_id id_tab
+ 	{ USB_DEVICE(0x0FCF, 0x1004) }, /* Dynastream ANT2USB */
+ 	{ USB_DEVICE(0x0FCF, 0x1006) }, /* Dynastream ANT development board */
+ 	{ USB_DEVICE(0x0FDE, 0xCA05) }, /* OWL Wireless Electricity Monitor CM-160 */
++	{ USB_DEVICE(0x106F, 0x0003) },	/* CPI / Money Controls Bulk Coin Recycler */
+ 	{ USB_DEVICE(0x10A6, 0xAA26) }, /* Knock-off DCU-11 cable */
+ 	{ USB_DEVICE(0x10AB, 0x10C5) }, /* Siemens MC60 Cable */
+ 	{ USB_DEVICE(0x10B5, 0xAC70) }, /* Nokia CA-42 USB */
 
 

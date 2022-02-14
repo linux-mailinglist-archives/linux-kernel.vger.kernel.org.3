@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 134664B4C45
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20CB84B4757
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348798AbiBNKiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:38:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49184 "EHLO
+        id S244714AbiBNJrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:47:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348688AbiBNKfy (ORCPT
+        with ESMTP id S245164AbiBNJoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:35:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81DCE193FB;
-        Mon, 14 Feb 2022 02:02:13 -0800 (PST)
+        Mon, 14 Feb 2022 04:44:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967336A00F;
+        Mon, 14 Feb 2022 01:38:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 170B160DB7;
-        Mon, 14 Feb 2022 10:02:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFC5DC340E9;
-        Mon, 14 Feb 2022 10:02:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3227761172;
+        Mon, 14 Feb 2022 09:38:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09B1EC340E9;
+        Mon, 14 Feb 2022 09:38:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832932;
-        bh=LEOfSxMZuEod8sNoK5GbKy9hMr9peXP/MVpD+L3jJ7g=;
+        s=korg; t=1644831497;
+        bh=W/rZpCwWfP2MIfCd7ghjXQZP0wpoXvZV20V3NBzfweU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h8ORmY+7ln70D5TrbjVWMqpQGeb1Upo0VhfnMxsS712GB/x/e5v1gdo3MeE1XIhOb
-         BiEkmClBm6cnxKNrdxS9UATALnG4+xJJxqBE+4nRbV3RlRjq6apb2SD0rx1BMsqdRO
-         J6nvQNXzJ5jc7D1ilkSS2JZ2w04Ojz+uxQPL+kEg=
+        b=z5O5zNgAW2JrRNAtjA1UVa23tedy30aksHWmf27YHqrdSJ3I1GMhwT9afTULP9ESK
+         ZbW4j4Rpt42YhmbQv/zocnetR5nLuTxRu9cJwctPRDyGYKvpR5AJN72PTT1SpBzkXk
+         9yeR6X1kLRbImViDmF/KmmZQIWL3jYl+bxkYbBPc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Cai Huoqing <cai.huoqing@linux.dev>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 143/203] net: ethernet: litex: Add the dependency on HAS_IOMEM
+        stable@vger.kernel.org,
+        Szymon Heidrich <szymon.heidrich@gmail.com>, stable@kernel.org
+Subject: [PATCH 5.4 59/71] USB: gadget: validate interface OS descriptor requests
 Date:   Mon, 14 Feb 2022 10:26:27 +0100
-Message-Id: <20220214092515.095578047@linuxfoundation.org>
+Message-Id: <20220214092454.028781469@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cai Huoqing <cai.huoqing@linux.dev>
+From: Szymon Heidrich <szymon.heidrich@gmail.com>
 
-[ Upstream commit 2427f03fb42f9dc14c53108f2c9b5563eb37e770 ]
+commit 75e5b4849b81e19e9efe1654b30d7f3151c33c2c upstream.
 
-The LiteX driver uses devm io function API which
-needs HAS_IOMEM enabled, so add the dependency on HAS_IOMEM.
+Stall the control endpoint in case provided index exceeds array size of
+MAX_CONFIG_INTERFACES or when the retrieved function pointer is null.
 
-Fixes: ee7da21ac4c3 ("net: Add driver for LiteX's LiteETH network interface")
-Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
-Link: https://lore.kernel.org/r/20220208013308.6563-1-cai.huoqing@linux.dev
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+Cc: stable@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/litex/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/gadget/composite.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/ethernet/litex/Kconfig b/drivers/net/ethernet/litex/Kconfig
-index f99adbf26ab4e..04345b929d8e5 100644
---- a/drivers/net/ethernet/litex/Kconfig
-+++ b/drivers/net/ethernet/litex/Kconfig
-@@ -17,7 +17,7 @@ if NET_VENDOR_LITEX
- 
- config LITEX_LITEETH
- 	tristate "LiteX Ethernet support"
--	depends on OF
-+	depends on OF && HAS_IOMEM
- 	help
- 	  If you wish to compile a kernel for hardware with a LiteX LiteEth
- 	  device then you should answer Y to this.
--- 
-2.34.1
-
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -1944,6 +1944,9 @@ unknown:
+ 				if (w_index != 0x5 || (w_value >> 8))
+ 					break;
+ 				interface = w_value & 0xFF;
++				if (interface >= MAX_CONFIG_INTERFACES ||
++				    !os_desc_cfg->interface[interface])
++					break;
+ 				buf[6] = w_index;
+ 				count = count_ext_prop(os_desc_cfg,
+ 					interface);
 
 

@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47924B47F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 977C14B49D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:37:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245522AbiBNJug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:50:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43386 "EHLO
+        id S1346629AbiBNKUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:20:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245188AbiBNJot (ORCPT
+        with ESMTP id S1346795AbiBNKQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:44:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B6E6A026;
-        Mon, 14 Feb 2022 01:38:23 -0800 (PST)
+        Mon, 14 Feb 2022 05:16:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D480C79C57;
+        Mon, 14 Feb 2022 01:53:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0AECFB80DC6;
-        Mon, 14 Feb 2022 09:38:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BDEDC340EF;
-        Mon, 14 Feb 2022 09:38:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0244A60DFE;
+        Mon, 14 Feb 2022 09:53:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0378C340E9;
+        Mon, 14 Feb 2022 09:53:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831500;
-        bh=iVVprejHhTHrKXydZFMArGB8nKpVGa/J/tekSOuOWgU=;
+        s=korg; t=1644832392;
+        bh=XqiW59tqA5tURicwKmtRFK/00GoJ67mH+dt7Y8YvL9I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TaEEx2tkrA5QJk49m2ETgbooEsqJ+A89s3lK2PbjJqkK0Hpw6Nb5lLZX0VhU51YWt
-         3StPKZMHvsVFyD2HQhnBMwWXPN33IRPxY3a/0Wvz76l6TLaCFo3ehC0uuBe3hLaqP+
-         ViOkEy+1w9YEedgDO7E1rQF9vyClH4iZ5oBi0kik=
+        b=CPvo7umNs2LkeQMJGpP003qK/b/h6YLAW7GiJue5301ZHj0lXoUELErr4f6TiuKjR
+         dWPQ/48T4y1A/NST8q/pLlRoV4OoJpqPx9nk9SGAKgM91B8insEA34sqs7dBbUC45M
+         LiedlU8GKOGjb2pE1Tem7hBf/HzbiWvNUlwT/NvY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Szymon Heidrich <szymon.heidrich@gmail.com>, stable@kernel.org
-Subject: [PATCH 5.4 60/71] usb: gadget: rndis: check size of RNDIS_MSG_SET command
+        stable@vger.kernel.org, Dave Ertman <david.m.ertman@intel.com>,
+        Jonathan Toppins <jtoppins@redhat.com>,
+        Sunitha Mekala <sunithax.d.mekala@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 130/172] ice: Fix KASAN error in LAG NETDEV_UNREGISTER handler
 Date:   Mon, 14 Feb 2022 10:26:28 +0100
-Message-Id: <20220214092454.058631155@linuxfoundation.org>
+Message-Id: <20220214092510.898803862@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +57,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Dave Ertman <david.m.ertman@intel.com>
 
-commit 38ea1eac7d88072bbffb630e2b3db83ca649b826 upstream.
+[ Upstream commit bea1898f65b9b7096cb4e73e97c83b94718f1fa1 ]
 
-Check the size of the RNDIS_MSG_SET command given to us before
-attempting to respond to an invalid message size.
+Currently, the same handler is called for both a NETDEV_BONDING_INFO
+LAG unlink notification as for a NETDEV_UNREGISTER call.  This is
+causing a problem though, since the netdev_notifier_info passed has
+a different structure depending on which event is passed.  The problem
+manifests as a call trace from a BUG: KASAN stack-out-of-bounds error.
 
-Reported-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-Cc: stable@kernel.org
-Tested-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fix this by creating a handler specific to NETDEV_UNREGISTER that only
+is passed valid elements in the netdev_notifier_info struct for the
+NETDEV_UNREGISTER event.
+
+Also included is the removal of an unbalanced dev_put on the peer_netdev
+and related braces.
+
+Fixes: 6a8b357278f5 ("ice: Respond to a NETDEV_UNREGISTER event for LAG")
+Signed-off-by: Dave Ertman <david.m.ertman@intel.com>
+Acked-by: Jonathan Toppins <jtoppins@redhat.com>
+Tested-by: Sunitha Mekala <sunithax.d.mekala@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/rndis.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_lag.c | 34 +++++++++++++++++++-----
+ 1 file changed, 28 insertions(+), 6 deletions(-)
 
---- a/drivers/usb/gadget/function/rndis.c
-+++ b/drivers/usb/gadget/function/rndis.c
-@@ -637,14 +637,17 @@ static int rndis_set_response(struct rnd
- 	rndis_set_cmplt_type *resp;
- 	rndis_resp_t *r;
+diff --git a/drivers/net/ethernet/intel/ice/ice_lag.c b/drivers/net/ethernet/intel/ice/ice_lag.c
+index e375ac849aecd..4f954db01b929 100644
+--- a/drivers/net/ethernet/intel/ice/ice_lag.c
++++ b/drivers/net/ethernet/intel/ice/ice_lag.c
+@@ -204,17 +204,39 @@ ice_lag_unlink(struct ice_lag *lag,
+ 		lag->upper_netdev = NULL;
+ 	}
  
-+	BufLength = le32_to_cpu(buf->InformationBufferLength);
-+	BufOffset = le32_to_cpu(buf->InformationBufferOffset);
-+	if ((BufLength > RNDIS_MAX_TOTAL_SIZE) ||
-+	    (BufOffset + 8 >= RNDIS_MAX_TOTAL_SIZE))
-+		    return -EINVAL;
-+
- 	r = rndis_add_response(params, sizeof(rndis_set_cmplt_type));
- 	if (!r)
- 		return -ENOMEM;
- 	resp = (rndis_set_cmplt_type *)r->buf;
- 
--	BufLength = le32_to_cpu(buf->InformationBufferLength);
--	BufOffset = le32_to_cpu(buf->InformationBufferOffset);
+-	if (lag->peer_netdev) {
+-		dev_put(lag->peer_netdev);
+-		lag->peer_netdev = NULL;
+-	}
 -
- #ifdef	VERBOSE_DEBUG
- 	pr_debug("%s: Length: %d\n", __func__, BufLength);
- 	pr_debug("%s: Offset: %d\n", __func__, BufOffset);
++	lag->peer_netdev = NULL;
+ 	ice_set_sriov_cap(pf);
+ 	ice_set_rdma_cap(pf);
+ 	lag->bonded = false;
+ 	lag->role = ICE_LAG_NONE;
+ }
+ 
++/**
++ * ice_lag_unregister - handle netdev unregister events
++ * @lag: LAG info struct
++ * @netdev: netdev reporting the event
++ */
++static void ice_lag_unregister(struct ice_lag *lag, struct net_device *netdev)
++{
++	struct ice_pf *pf = lag->pf;
++
++	/* check to see if this event is for this netdev
++	 * check that we are in an aggregate
++	 */
++	if (netdev != lag->netdev || !lag->bonded)
++		return;
++
++	if (lag->upper_netdev) {
++		dev_put(lag->upper_netdev);
++		lag->upper_netdev = NULL;
++		ice_set_sriov_cap(pf);
++		ice_set_rdma_cap(pf);
++	}
++	/* perform some cleanup in case we come back */
++	lag->bonded = false;
++	lag->role = ICE_LAG_NONE;
++}
++
+ /**
+  * ice_lag_changeupper_event - handle LAG changeupper event
+  * @lag: LAG info struct
+@@ -307,7 +329,7 @@ ice_lag_event_handler(struct notifier_block *notif_blk, unsigned long event,
+ 		ice_lag_info_event(lag, ptr);
+ 		break;
+ 	case NETDEV_UNREGISTER:
+-		ice_lag_unlink(lag, ptr);
++		ice_lag_unregister(lag, netdev);
+ 		break;
+ 	default:
+ 		break;
+-- 
+2.34.1
+
 
 

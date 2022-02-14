@@ -2,41 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38074B42FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 08:41:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC274B430F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 08:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241456AbiBNHih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 02:38:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55682 "EHLO
+        id S234157AbiBNHll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 02:41:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiBNHib (ORCPT
+        with ESMTP id S229691AbiBNHlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 02:38:31 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A274F9C3
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 23:38:24 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 7900468AFE; Mon, 14 Feb 2022 08:38:20 +0100 (CET)
-Date:   Mon, 14 Feb 2022 08:38:20 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Liu Yi L <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 10/11] iommu/vt-d: Use xarray for global
- device_domain_info
-Message-ID: <20220214073820.GF17411@lst.de>
-References: <20220214025704.3184654-1-baolu.lu@linux.intel.com> <20220214025704.3184654-11-baolu.lu@linux.intel.com>
+        Mon, 14 Feb 2022 02:41:39 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8705955480;
+        Sun, 13 Feb 2022 23:41:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DfEeiuRA+O4zf/LvJNpGuXNN8ssOeWOmggzX3CeaHXM=; b=OObqb/wgIVNv915TVDxusBoMCU
+        WJgQ/jeIAYMZgUoD6o2YTJ7Ox0of5patYEvusEixun7KO46JLZgyUr2MDxuWRGVLUmv90hrKpnAkV
+        2XwC/ZzlOIuYIRzopQRpZAJgQcOs2Z29+r3gWpGvBq/x38Ebw0Ca2OKtwT0qp9OLyb7WcSyfg0K3f
+        BRQ00zdULy0KGNC910SJNJZ/NVSYYB3+nnCUwA/llg4pFAzUhP0+xCHf+y7MdabynOIi/YuiSVqvd
+        B/fGvR7RL2UDMHtSH6+jc5hyOgQqZt1hXvl0tEA3RXgrB3ByIfkgCKUcXvQKt+WnLfuF+Kur9lEXM
+        bk8Qgotw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJVzA-00Dknm-OP; Mon, 14 Feb 2022 07:41:24 +0000
+Date:   Sun, 13 Feb 2022 23:41:24 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Stafford Horne <shorne@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH] microblaze: remove CONFIG_SET_FS
+Message-ID: <YgoHpAG0GCdccLZF@infradead.org>
+References: <CAK8P3a22ntk5fTuk6xjh1pyS-eVbGo7zDQSVkn2VG1xgp01D9g@mail.gmail.com>
+ <20220117132757.1881981-1-arnd@kernel.org>
+ <CAHTX3dKyAha8_nu=7e413pKr+SAaPBLp9=FTdQ=GZNdjQHW+zA@mail.gmail.com>
+ <CAK8P3a2Om2SYchx8q=ddkNeJ4o=1MVXD2MFSV2SGJ_vuTUcp0Q@mail.gmail.com>
+ <126ae5ee-342c-334c-9c07-c00213dd7b7e@xilinx.com>
+ <CAK8P3a2zZfFa55nNeMicWHhia7fkT0cJBzYvUi0O+v0B13BOMA@mail.gmail.com>
+ <YgROuYDWfWYlTUKD@antec>
+ <YgWrFnoOOn/B3X4k@antec>
+ <CAK8P3a0eAv168eepvdZQbYDstTQHc-Hb2_PMS3bseV3caB4oAA@mail.gmail.com>
+ <CAHk-=wj7kOxDg+2Ym1EQsTZaZqU-p7aFHiNVOmtEhNS8jjapLQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220214025704.3184654-11-baolu.lu@linux.intel.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+In-Reply-To: <CAHk-=wj7kOxDg+2Ym1EQsTZaZqU-p7aFHiNVOmtEhNS8jjapLQ@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -45,45 +69,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->  
->  const struct iommu_ops intel_iommu_ops;
-> @@ -903,7 +905,8 @@ static void pgtable_walk(struct intel_iommu *iommu, unsigned long pfn, u8 bus, u
->  	struct dmar_domain *domain;
->  	int offset, level;
->  
-> -	info = dmar_search_domain_by_dev_info(iommu->segment, bus, devfn);
-> +	info = xa_load(&device_domain_array,
-> +		       devi_idx(iommu->segment, bus, devfn));
->  	if (!info || !info->domain) {
->  		pr_info("device [%02x:%02x.%d] not probed\n",
->  			bus, PCI_SLOT(devfn), PCI_FUNC(devfn));
-> @@ -1742,14 +1745,14 @@ static int iommu_init_domains(struct intel_iommu *iommu)
+On Fri, Feb 11, 2022 at 09:46:03AM -0800, Linus Torvalds wrote:
+> Can you say why you didn't convert ia64? I don't see any set_fs() use
+> there, except for the unaligned handler, which looks trivial to
+> remove. It looks like the only reason for it is kernel-mode unaligned
+> exceptions, which we should just turn fatal, I suspect (they already
+> get logged).
+> 
+> And ia64 people could make the unaligned handling do the kernel mode
+> case in emulate_load/store_int() - it doesn't look *that* painful.
 
-Don't we need a rcu critical section here?
-
-> -	list_for_each_entry_safe(info, tmp, &device_domain_list, global) {
-> +	rcu_read_lock();
-> +	xa_for_each(&device_domain_array, index, info) {
->  		if (info->iommu != iommu)
->  			continue;
->  
-> @@ -1758,7 +1761,7 @@ static void disable_dmar_iommu(struct intel_iommu *iommu)
->  
->  		__dmar_remove_one_dev_info(info);
->  	}
-> -	spin_unlock_irqrestore(&device_domain_lock, flags);
-> +	rcu_read_unlock();
-
-__dmar_remove_one_dev_info asserts that device_domain_lock is held,
-which these two hunks remove.
-
->  	spin_lock_irqsave(&device_domain_lock, flags);
->  	dev_iommu_priv_set(dev, NULL);
-> -	list_del(&info->global);
-> +	xa_erase(&device_domain_array,
-> +		 devi_idx(info->segment, info->bus, info->devfn));
->  	spin_unlock_irqrestore(&device_domain_lock, flags);
->  
->  	kfree(info);
-
-Do we need a kfree_rcu here to allow rcu based access?
+Are there any ia64 people left? :)

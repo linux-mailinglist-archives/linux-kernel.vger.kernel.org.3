@@ -2,50 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EFA94B4DF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1114F4B4DE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:21:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350304AbiBNLPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:15:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44266 "EHLO
+        id S1350281AbiBNLPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:15:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350378AbiBNLPJ (ORCPT
+        with ESMTP id S1350208AbiBNLPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:15:09 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121D8EFF93
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:44:23 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id ay26-20020a5d9d9a000000b006396dd81e4bso8722410iob.10
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:44:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=U/K75PKZ7oRwBSg0DraF4Jz5emwI9maCTepHYeXlOoM=;
-        b=5nPeS6AfG5m9MH4xF27jjV0tqmTgkR5lGKxhCtKow2ox6Nbea53BlP0sVqm/oD6+4M
-         RFNu2d8Z0VsZ6HFN5H8sLZ4BnfkV5Zbht1uBDDD0RuI+eQZVxDNn+SduZgcdwu+lhmI0
-         hbWq+f9YqLhFdlgihBdYTj4Ywb2yrUoMYVh8vashujqx7sl0u8lPRruDK+E1cjmJgvaQ
-         y4dQyAsMpPk2HdCe4LFgnRwzNFkGdl8mxdw0QNkb8FdYmBC/R8U6i0hqhhNVWPxlUzz7
-         /vrn6x3IuQ6DVJBE0ESk9iI4pmBf744rB14VLbnRCjy43hzyVCvBVVwtkLuhHz8VTgGX
-         EyxQ==
-X-Gm-Message-State: AOAM530JAoFgTYDW5k4retscajzcHlbc0dYudzwOEORtsPQtUvkvs1zC
-        cN12RF3Oa7s0qTpCct2gxjapp42Q8gR0YuUgls1n57oq41uD
-X-Google-Smtp-Source: ABdhPJxyUdi3Tb42Ir4UEK58TVXzU+k9ISfC3Jdy2Vc8F5tPwmm5O23GuYMKZpQy2tRDFj3A7smJGdWu2vJWursXva7qLI+JGyQN
+        Mon, 14 Feb 2022 06:15:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B1D673D0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:44:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D58C1B80A0A
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:44:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88B97C340F1;
+        Mon, 14 Feb 2022 10:44:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644835482;
+        bh=AUVszgovKphgBWrf1HKIDKsHgWZewjn5bxYg+MWsw8A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AxiZ9Up3ZHZBdQxrwzfOuHcrpCFJy2o1tCPaisl8caiVcdPkaNKeTvvzlD+85AJF9
+         BQwrEOm5X3UaqYxXzrJK3TQSLDiTGc6FyGbylevhzCKdSagclSU1NENxWWWJ6mBDAA
+         BJ5Gzj/KNcgaNNsc4nWCssWCXkuUvTtwxoUkmtVtb5vv1gNbq1wjPjHPfOzuzwCxAT
+         +IYxVbzlzgNpK2/aHT11B+UldejrVB7+1A30LMPr8TEVtvFUVCvRsXlg6TbTAauask
+         RKsRjikhVkQ85ALH28hCZq4KwINb5N2Nz+4qRVFO+cSA3TQn6JCBKIE9nmwOC/W4wh
+         bUME5HMdSGC5g==
+Date:   Mon, 14 Feb 2022 12:44:32 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org,
+        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>
+Subject: Re: [PATCH v5 1/6] mm: page_isolation: move has_unmovable_pages() to
+ mm/page_isolation.c
+Message-ID: <YgoykFBUnEJ6Ynro@kernel.org>
+References: <20220211164135.1803616-1-zi.yan@sent.com>
+ <20220211164135.1803616-2-zi.yan@sent.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:a112:: with SMTP id f18mr7608688jag.51.1644835462375;
- Mon, 14 Feb 2022 02:44:22 -0800 (PST)
-Date:   Mon, 14 Feb 2022 02:44:22 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000072ef2c05d7f81950@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in __oom_reap_task_mm
-From:   syzbot <syzbot+2ccf63a4bd07cf39cab0@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, brauner@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220211164135.1803616-2-zi.yan@sent.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,209 +66,300 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Feb 11, 2022 at 11:41:30AM -0500, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
+> 
+> has_unmovable_pages() is only used in mm/page_isolation.c. Move it from
+> mm/page_alloc.c and make it static.
+> 
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> Reviewed-by: Oscar Salvador <osalvador@suse.de>
 
-syzbot found the following issue on:
+Reviewed-by: Mike Rapoport <rppt@linux.ibm.com>
 
-HEAD commit:    e6251ab4551f Merge tag 'nfs-for-5.17-2' of git://git.linux..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1229b2f8700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=266de9da75c71a45
-dashboard link: https://syzkaller.appspot.com/bug?extid=2ccf63a4bd07cf39cab0
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
+> ---
+>  include/linux/page-isolation.h |   2 -
+>  mm/page_alloc.c                | 119 ---------------------------------
+>  mm/page_isolation.c            | 119 +++++++++++++++++++++++++++++++++
+>  3 files changed, 119 insertions(+), 121 deletions(-)
+> 
+> diff --git a/include/linux/page-isolation.h b/include/linux/page-isolation.h
+> index 572458016331..e14eddf6741a 100644
+> --- a/include/linux/page-isolation.h
+> +++ b/include/linux/page-isolation.h
+> @@ -33,8 +33,6 @@ static inline bool is_migrate_isolate(int migratetype)
+>  #define MEMORY_OFFLINE	0x1
+>  #define REPORT_FAILURE	0x2
+>  
+> -struct page *has_unmovable_pages(struct zone *zone, struct page *page,
+> -				 int migratetype, int flags);
+>  void set_pageblock_migratetype(struct page *page, int migratetype);
+>  int move_freepages_block(struct zone *zone, struct page *page,
+>  				int migratetype, int *num_movable);
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index cface1d38093..e2c6a67fc386 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -8962,125 +8962,6 @@ void *__init alloc_large_system_hash(const char *tablename,
+>  	return table;
+>  }
+>  
+> -/*
+> - * This function checks whether pageblock includes unmovable pages or not.
+> - *
+> - * PageLRU check without isolation or lru_lock could race so that
+> - * MIGRATE_MOVABLE block might include unmovable pages. And __PageMovable
+> - * check without lock_page also may miss some movable non-lru pages at
+> - * race condition. So you can't expect this function should be exact.
+> - *
+> - * Returns a page without holding a reference. If the caller wants to
+> - * dereference that page (e.g., dumping), it has to make sure that it
+> - * cannot get removed (e.g., via memory unplug) concurrently.
+> - *
+> - */
+> -struct page *has_unmovable_pages(struct zone *zone, struct page *page,
+> -				 int migratetype, int flags)
+> -{
+> -	unsigned long iter = 0;
+> -	unsigned long pfn = page_to_pfn(page);
+> -	unsigned long offset = pfn % pageblock_nr_pages;
+> -
+> -	if (is_migrate_cma_page(page)) {
+> -		/*
+> -		 * CMA allocations (alloc_contig_range) really need to mark
+> -		 * isolate CMA pageblocks even when they are not movable in fact
+> -		 * so consider them movable here.
+> -		 */
+> -		if (is_migrate_cma(migratetype))
+> -			return NULL;
+> -
+> -		return page;
+> -	}
+> -
+> -	for (; iter < pageblock_nr_pages - offset; iter++) {
+> -		page = pfn_to_page(pfn + iter);
+> -
+> -		/*
+> -		 * Both, bootmem allocations and memory holes are marked
+> -		 * PG_reserved and are unmovable. We can even have unmovable
+> -		 * allocations inside ZONE_MOVABLE, for example when
+> -		 * specifying "movablecore".
+> -		 */
+> -		if (PageReserved(page))
+> -			return page;
+> -
+> -		/*
+> -		 * If the zone is movable and we have ruled out all reserved
+> -		 * pages then it should be reasonably safe to assume the rest
+> -		 * is movable.
+> -		 */
+> -		if (zone_idx(zone) == ZONE_MOVABLE)
+> -			continue;
+> -
+> -		/*
+> -		 * Hugepages are not in LRU lists, but they're movable.
+> -		 * THPs are on the LRU, but need to be counted as #small pages.
+> -		 * We need not scan over tail pages because we don't
+> -		 * handle each tail page individually in migration.
+> -		 */
+> -		if (PageHuge(page) || PageTransCompound(page)) {
+> -			struct page *head = compound_head(page);
+> -			unsigned int skip_pages;
+> -
+> -			if (PageHuge(page)) {
+> -				if (!hugepage_migration_supported(page_hstate(head)))
+> -					return page;
+> -			} else if (!PageLRU(head) && !__PageMovable(head)) {
+> -				return page;
+> -			}
+> -
+> -			skip_pages = compound_nr(head) - (page - head);
+> -			iter += skip_pages - 1;
+> -			continue;
+> -		}
+> -
+> -		/*
+> -		 * We can't use page_count without pin a page
+> -		 * because another CPU can free compound page.
+> -		 * This check already skips compound tails of THP
+> -		 * because their page->_refcount is zero at all time.
+> -		 */
+> -		if (!page_ref_count(page)) {
+> -			if (PageBuddy(page))
+> -				iter += (1 << buddy_order(page)) - 1;
+> -			continue;
+> -		}
+> -
+> -		/*
+> -		 * The HWPoisoned page may be not in buddy system, and
+> -		 * page_count() is not 0.
+> -		 */
+> -		if ((flags & MEMORY_OFFLINE) && PageHWPoison(page))
+> -			continue;
+> -
+> -		/*
+> -		 * We treat all PageOffline() pages as movable when offlining
+> -		 * to give drivers a chance to decrement their reference count
+> -		 * in MEM_GOING_OFFLINE in order to indicate that these pages
+> -		 * can be offlined as there are no direct references anymore.
+> -		 * For actually unmovable PageOffline() where the driver does
+> -		 * not support this, we will fail later when trying to actually
+> -		 * move these pages that still have a reference count > 0.
+> -		 * (false negatives in this function only)
+> -		 */
+> -		if ((flags & MEMORY_OFFLINE) && PageOffline(page))
+> -			continue;
+> -
+> -		if (__PageMovable(page) || PageLRU(page))
+> -			continue;
+> -
+> -		/*
+> -		 * If there are RECLAIMABLE pages, we need to check
+> -		 * it.  But now, memory offline itself doesn't call
+> -		 * shrink_node_slabs() and it still to be fixed.
+> -		 */
+> -		return page;
+> -	}
+> -	return NULL;
+> -}
+> -
+>  #ifdef CONFIG_CONTIG_ALLOC
+>  static unsigned long pfn_max_align_down(unsigned long pfn)
+>  {
+> diff --git a/mm/page_isolation.c b/mm/page_isolation.c
+> index f67c4c70f17f..b34f1310aeaa 100644
+> --- a/mm/page_isolation.c
+> +++ b/mm/page_isolation.c
+> @@ -15,6 +15,125 @@
+>  #define CREATE_TRACE_POINTS
+>  #include <trace/events/page_isolation.h>
+>  
+> +/*
+> + * This function checks whether pageblock includes unmovable pages or not.
+> + *
+> + * PageLRU check without isolation or lru_lock could race so that
+> + * MIGRATE_MOVABLE block might include unmovable pages. And __PageMovable
+> + * check without lock_page also may miss some movable non-lru pages at
+> + * race condition. So you can't expect this function should be exact.
+> + *
+> + * Returns a page without holding a reference. If the caller wants to
+> + * dereference that page (e.g., dumping), it has to make sure that it
+> + * cannot get removed (e.g., via memory unplug) concurrently.
+> + *
+> + */
+> +static struct page *has_unmovable_pages(struct zone *zone, struct page *page,
+> +				 int migratetype, int flags)
+> +{
+> +	unsigned long iter = 0;
+> +	unsigned long pfn = page_to_pfn(page);
+> +	unsigned long offset = pfn % pageblock_nr_pages;
+> +
+> +	if (is_migrate_cma_page(page)) {
+> +		/*
+> +		 * CMA allocations (alloc_contig_range) really need to mark
+> +		 * isolate CMA pageblocks even when they are not movable in fact
+> +		 * so consider them movable here.
+> +		 */
+> +		if (is_migrate_cma(migratetype))
+> +			return NULL;
+> +
+> +		return page;
+> +	}
+> +
+> +	for (; iter < pageblock_nr_pages - offset; iter++) {
+> +		page = pfn_to_page(pfn + iter);
+> +
+> +		/*
+> +		 * Both, bootmem allocations and memory holes are marked
+> +		 * PG_reserved and are unmovable. We can even have unmovable
+> +		 * allocations inside ZONE_MOVABLE, for example when
+> +		 * specifying "movablecore".
+> +		 */
+> +		if (PageReserved(page))
+> +			return page;
+> +
+> +		/*
+> +		 * If the zone is movable and we have ruled out all reserved
+> +		 * pages then it should be reasonably safe to assume the rest
+> +		 * is movable.
+> +		 */
+> +		if (zone_idx(zone) == ZONE_MOVABLE)
+> +			continue;
+> +
+> +		/*
+> +		 * Hugepages are not in LRU lists, but they're movable.
+> +		 * THPs are on the LRU, but need to be counted as #small pages.
+> +		 * We need not scan over tail pages because we don't
+> +		 * handle each tail page individually in migration.
+> +		 */
+> +		if (PageHuge(page) || PageTransCompound(page)) {
+> +			struct page *head = compound_head(page);
+> +			unsigned int skip_pages;
+> +
+> +			if (PageHuge(page)) {
+> +				if (!hugepage_migration_supported(page_hstate(head)))
+> +					return page;
+> +			} else if (!PageLRU(head) && !__PageMovable(head)) {
+> +				return page;
+> +			}
+> +
+> +			skip_pages = compound_nr(head) - (page - head);
+> +			iter += skip_pages - 1;
+> +			continue;
+> +		}
+> +
+> +		/*
+> +		 * We can't use page_count without pin a page
+> +		 * because another CPU can free compound page.
+> +		 * This check already skips compound tails of THP
+> +		 * because their page->_refcount is zero at all time.
+> +		 */
+> +		if (!page_ref_count(page)) {
+> +			if (PageBuddy(page))
+> +				iter += (1 << buddy_order(page)) - 1;
+> +			continue;
+> +		}
+> +
+> +		/*
+> +		 * The HWPoisoned page may be not in buddy system, and
+> +		 * page_count() is not 0.
+> +		 */
+> +		if ((flags & MEMORY_OFFLINE) && PageHWPoison(page))
+> +			continue;
+> +
+> +		/*
+> +		 * We treat all PageOffline() pages as movable when offlining
+> +		 * to give drivers a chance to decrement their reference count
+> +		 * in MEM_GOING_OFFLINE in order to indicate that these pages
+> +		 * can be offlined as there are no direct references anymore.
+> +		 * For actually unmovable PageOffline() where the driver does
+> +		 * not support this, we will fail later when trying to actually
+> +		 * move these pages that still have a reference count > 0.
+> +		 * (false negatives in this function only)
+> +		 */
+> +		if ((flags & MEMORY_OFFLINE) && PageOffline(page))
+> +			continue;
+> +
+> +		if (__PageMovable(page) || PageLRU(page))
+> +			continue;
+> +
+> +		/*
+> +		 * If there are RECLAIMABLE pages, we need to check
+> +		 * it.  But now, memory offline itself doesn't call
+> +		 * shrink_node_slabs() and it still to be fixed.
+> +		 */
+> +		return page;
+> +	}
+> +	return NULL;
+> +}
+> +
+>  static int set_migratetype_isolate(struct page *page, int migratetype, int isol_flags)
+>  {
+>  	struct zone *zone = page_zone(page);
+> -- 
+> 2.34.1
+> 
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2ccf63a4bd07cf39cab0@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: use-after-free in can_madv_lru_vma mm/internal.h:76 [inline]
-BUG: KASAN: use-after-free in __oom_reap_task_mm+0x3a4/0x400 mm/oom_kill.c:529
-Read of size 8 at addr ffff88807b868ba8 by task syz-executor.2/12778
-
-CPU: 0 PID: 12778 Comm: syz-executor.2 Not tainted 5.17.0-rc3-syzkaller-00029-ge6251ab4551f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0x8d/0x336 mm/kasan/report.c:255
- __kasan_report mm/kasan/report.c:442 [inline]
- kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
- can_madv_lru_vma mm/internal.h:76 [inline]
- __oom_reap_task_mm+0x3a4/0x400 mm/oom_kill.c:529
- __do_sys_process_mrelease+0x3f2/0x450 mm/oom_kill.c:1196
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
- entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-RIP: 0023:0xf6e70549
-Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
-RSP: 002b:00000000f586a5cc EFLAGS: 00000296 ORIG_RAX: 00000000000001c0
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-Allocated by task 12778:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- __kasan_slab_alloc+0x90/0xc0 mm/kasan/common.c:469
- kasan_slab_alloc include/linux/kasan.h:260 [inline]
- slab_post_alloc_hook mm/slab.h:732 [inline]
- slab_alloc_node mm/slub.c:3230 [inline]
- slab_alloc mm/slub.c:3238 [inline]
- kmem_cache_alloc+0x202/0x3a0 mm/slub.c:3243
- vm_area_dup+0x88/0x2b0 kernel/fork.c:357
- dup_mmap kernel/fork.c:554 [inline]
- dup_mm+0x5fa/0x13e0 kernel/fork.c:1451
- copy_mm kernel/fork.c:1503 [inline]
- copy_process+0x71f8/0x7300 kernel/fork.c:2164
- kernel_clone+0xe7/0xab0 kernel/fork.c:2555
- __do_compat_sys_ia32_clone+0xac/0xe0 arch/x86/kernel/sys_ia32.c:254
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
- entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-
-Freed by task 12780:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free+0x130/0x160 mm/kasan/common.c:328
- kasan_slab_free include/linux/kasan.h:236 [inline]
- slab_free_hook mm/slub.c:1728 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1754
- slab_free mm/slub.c:3509 [inline]
- kmem_cache_free+0xd8/0x340 mm/slub.c:3526
- remove_vma+0x135/0x170 mm/mmap.c:189
- exit_mmap+0x29a/0x670 mm/mmap.c:3186
- __mmput+0x122/0x4b0 kernel/fork.c:1114
- mmput+0x56/0x60 kernel/fork.c:1135
- exit_mm kernel/exit.c:507 [inline]
- do_exit+0xa3c/0x2a30 kernel/exit.c:793
- do_group_exit+0xd2/0x2f0 kernel/exit.c:935
- get_signal+0x4b0/0x28c0 kernel/signal.c:2862
- arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
- handle_signal_work kernel/entry/common.c:148 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
- exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
- __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
- syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
- __do_fast_syscall_32+0x72/0xf0 arch/x86/entry/common.c:181
- do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
- entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-
-The buggy address belongs to the object at ffff88807b868b58
- which belongs to the cache vm_area_struct of size 200
-The buggy address is located 80 bytes inside of
- 200-byte region [ffff88807b868b58, ffff88807b868c20)
-The buggy address belongs to the page:
-page:ffffea0001ee1a00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7b868
-memcg:ffff88804fe94a01
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 dead000000000100 dead000000000122 ffff888140006a00
-raw: 0000000000000000 00000000000f000f 00000001ffffffff ffff88804fe94a01
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112cc0(GFP_USER|__GFP_NOWARN|__GFP_NORETRY), pid 3175, ts 344170603641, free_ts 344164018467
- prep_new_page mm/page_alloc.c:2434 [inline]
- get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4165
- __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5389
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2271
- alloc_slab_page mm/slub.c:1799 [inline]
- allocate_slab mm/slub.c:1944 [inline]
- new_slab+0x28a/0x3b0 mm/slub.c:2004
- ___slab_alloc+0x87c/0xe90 mm/slub.c:3018
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3105
- slab_alloc_node mm/slub.c:3196 [inline]
- slab_alloc mm/slub.c:3238 [inline]
- kmem_cache_alloc+0x35c/0x3a0 mm/slub.c:3243
- vm_area_dup+0x88/0x2b0 kernel/fork.c:357
- dup_mmap kernel/fork.c:554 [inline]
- dup_mm+0x5fa/0x13e0 kernel/fork.c:1451
- copy_mm kernel/fork.c:1503 [inline]
- copy_process+0x71f8/0x7300 kernel/fork.c:2164
- kernel_clone+0xe7/0xab0 kernel/fork.c:2555
- __do_sys_clone+0xc8/0x110 kernel/fork.c:2672
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1352 [inline]
- free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1404
- free_unref_page_prepare mm/page_alloc.c:3325 [inline]
- free_unref_page_list+0x1a9/0xfa0 mm/page_alloc.c:3441
- release_pages+0x317/0x1220 mm/swap.c:980
- tlb_batch_pages_flush mm/mmu_gather.c:50 [inline]
- tlb_flush_mmu_free mm/mmu_gather.c:243 [inline]
- tlb_flush_mmu mm/mmu_gather.c:250 [inline]
- tlb_finish_mmu+0x165/0x8c0 mm/mmu_gather.c:341
- exit_mmap+0x21b/0x670 mm/mmap.c:3180
- __mmput+0x122/0x4b0 kernel/fork.c:1114
- mmput+0x56/0x60 kernel/fork.c:1135
- exit_mm kernel/exit.c:507 [inline]
- do_exit+0xa3c/0x2a30 kernel/exit.c:793
- do_group_exit+0xd2/0x2f0 kernel/exit.c:935
- get_signal+0x4b0/0x28c0 kernel/signal.c:2862
- arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
- handle_signal_work kernel/entry/common.c:148 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
- exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
- __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
- syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
- __do_fast_syscall_32+0x72/0xf0 arch/x86/entry/common.c:181
- do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
- entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-
-Memory state around the buggy address:
- ffff88807b868a80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88807b868b00: fb fb fb fc fc fc fc fc fc fc fc fa fb fb fb fb
->ffff88807b868b80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                  ^
- ffff88807b868c00: fb fb fb fb fc fc fc fc fc fc fc fc fa fb fb fb
- ffff88807b868c80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-----------------
-Code disassembly (best guess):
-   0:	03 74 c0 01          	add    0x1(%rax,%rax,8),%esi
-   4:	10 05 03 74 b8 01    	adc    %al,0x1b87403(%rip)        # 0x1b8740d
-   a:	10 06                	adc    %al,(%rsi)
-   c:	03 74 b4 01          	add    0x1(%rsp,%rsi,4),%esi
-  10:	10 07                	adc    %al,(%rdi)
-  12:	03 74 b0 01          	add    0x1(%rax,%rsi,4),%esi
-  16:	10 08                	adc    %cl,(%rax)
-  18:	03 74 d8 01          	add    0x1(%rax,%rbx,8),%esi
-  1c:	00 00                	add    %al,(%rax)
-  1e:	00 00                	add    %al,(%rax)
-  20:	00 51 52             	add    %dl,0x52(%rcx)
-  23:	55                   	push   %rbp
-  24:	89 e5                	mov    %esp,%ebp
-  26:	0f 34                	sysenter
-  28:	cd 80                	int    $0x80
-* 2a:	5d                   	pop    %rbp <-- trapping instruction
-  2b:	5a                   	pop    %rdx
-  2c:	59                   	pop    %rcx
-  2d:	c3                   	retq
-  2e:	90                   	nop
-  2f:	90                   	nop
-  30:	90                   	nop
-  31:	90                   	nop
-  32:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
-  39:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+Sincerely yours,
+Mike.

@@ -2,87 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 237874B5601
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A90C4B55FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:22:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356357AbiBNQWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 11:22:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34214 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356350AbiBNQWG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1356351AbiBNQWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 14 Feb 2022 11:22:06 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CAF50B23
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:21:58 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id p63so20412204iod.11
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:21:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y/lXxznWJk6t4L5VwAqaMS0+NBIKS0zk3kQAGJ/1b/k=;
-        b=JZLXUfRWra54tioTiu2lrYxDJmGtcUX8NNdySo/F7BWBvDruBVnf1bOydWNgXOogN5
-         Iz7arnCufrG1kJ9V7DcoDSRxMCbNRVV3btf8XwNiGUJYm3d1E2eS92/RlK7bOd1VQe5G
-         IQJLzFRnqEVjliOJs+NOd9nwMMPcEvNaZXjNo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y/lXxznWJk6t4L5VwAqaMS0+NBIKS0zk3kQAGJ/1b/k=;
-        b=b2kBWfeeZmaDY1lEVEQfmBxy+xvno8Ih9SObOuiSfq1ed7GyvbSJXRNcjfx5LhMGlO
-         Hf+9SK0+3VubvqVfwQa4NnKEfwtjrHFpRftWZod6+o6qXnHtBWXkGO847NzMcncpuNDM
-         skL8R5wjQg//VJr5sldlyqCq4F+PLS+T03KIXa/qvGQUt4cpIS/Dm2XRI9ji4+TNt9IF
-         SEDeq9aNug/UxYnenqvTqWGiIpqkIta7kUw64VYvxggiSVlbXZFAxTk0EOWvwyVhJyJe
-         ahBofhuGO4AlNceS2h8fL7okO3DqZlb6Fjj2x4jt/f3DeDxwF9LmlYxUBdSVeoTQV6N4
-         eRjQ==
-X-Gm-Message-State: AOAM533pMK3ez0S3b5Orkn+HsQ3XlGEUic9cguDJzd/sEqpC14Ax5Yhi
-        Di5yiUu9uWBxpB9BJxwuYccsMTb0LBuoXQ==
-X-Google-Smtp-Source: ABdhPJxI/6lrvMfTjzQ6e8M8DEhijVmyQ6zbL69JcFlMjbltR9FNFGX28T24a5XGCD8qwsLzM7EVvQ==
-X-Received: by 2002:a5e:a70e:: with SMTP id b14mr316207iod.171.1644855718167;
-        Mon, 14 Feb 2022 08:21:58 -0800 (PST)
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com. [209.85.166.171])
-        by smtp.gmail.com with ESMTPSA id y7sm13384377ila.7.2022.02.14.08.21.57
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 08:21:57 -0800 (PST)
-Received: by mail-il1-f171.google.com with SMTP id f13so12720515ilq.5
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:21:57 -0800 (PST)
-X-Received: by 2002:a05:6e02:19cf:: with SMTP id r15mr119973ill.180.1644855716786;
- Mon, 14 Feb 2022 08:21:56 -0800 (PST)
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229441AbiBNQWE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 14 Feb 2022 11:22:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7989BC31;
+        Mon, 14 Feb 2022 08:21:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26C5EB811DA;
+        Mon, 14 Feb 2022 16:21:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A90C340E9;
+        Mon, 14 Feb 2022 16:21:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644855713;
+        bh=qEwq4Wh/5idQ4A2e+iKpPVSvtXQzvCrJ5eNIEXQ4q94=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DGlivWF52HwgMNQ80euf2rG0krx0swohHpXt/fikP7GtRmSM9p2qQWlh4ySIHpQWI
+         M9NY94I6KPxgqyMXnPC1ga2oxdKEDmnzClX6/wQdTDdNQJLqFnp3zrY5/hROTew0f8
+         8Lrm3FCC9zxJrAUMKTNqpuEE/K7DXStHKcULFjvgQGeDIHi5SJ/KfNfUUpSBGwoIsi
+         C3Sfh4Y1XtZhUpnoGHgi0hlRgNWyWHPSwSqA/mexLkaUjBKxVI8pSKp546r1qlIotm
+         Zx2L+7EnAiqHwSHuBRciD9y3q6hAz/LF8n0LaIH4ewbuucOtoBHEhg4zWvkG5uJdtc
+         RO1YKv0Q925Tg==
+Date:   Mon, 14 Feb 2022 16:21:46 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        robh+dt@kernel.org, quic_plai@quicinc.com, bgoswami@codeaurora.org,
+        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
+        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v13 07/10] ASoC: qcom: Add support for codec dma driver
+Message-ID: <YgqBmvAQvh9WRMj+@sirena.org.uk>
+References: <1644832778-16064-1-git-send-email-quic_srivasam@quicinc.com>
+ <1644832778-16064-2-git-send-email-quic_srivasam@quicinc.com>
+ <YgppMcVjs0KuE5y8@sirena.org.uk>
+ <669f2d39-8c14-68b9-6d89-a26e0e2e8857@quicinc.com>
 MIME-Version: 1.0
-References: <20220214081916.162014-1-krzysztof.kozlowski@canonical.com> <20220214081916.162014-4-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220214081916.162014-4-krzysztof.kozlowski@canonical.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 14 Feb 2022 08:21:45 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=VNarYKq8cZVqWfFKccTqxH46Wmm8Tr979EVsiAoOnT_g@mail.gmail.com>
-Message-ID: <CAD=FV=VNarYKq8cZVqWfFKccTqxH46Wmm8Tr979EVsiAoOnT_g@mail.gmail.com>
-Subject: Re: [PATCH 3/4] arm64: dts: qcom: align Google CROS EC PWM node name
- with dtschema
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, chrome-platform@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-pwm <linux-pwm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="BgkULJaiFKZhJKvr"
+Content-Disposition: inline
+In-Reply-To: <669f2d39-8c14-68b9-6d89-a26e0e2e8857@quicinc.com>
+X-Cookie: Am I in GRADUATE SCHOOL yet?
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,21 +65,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Mon, Feb 14, 2022 at 12:20 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> dtschema expects PWM node name to be a generic "pwm".  This also matches
-> Devicetree specification requirements about generic node names.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi               | 2 +-
->  arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r0.dts | 2 +-
->  arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi             | 2 +-
->  arch/arm64/boot/dts/qcom/sc7280-idp-ec-h1.dtsi             | 2 +-
->  arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi                 | 2 +-
->  5 files changed, 5 insertions(+), 5 deletions(-)
+--BgkULJaiFKZhJKvr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+On Mon, Feb 14, 2022 at 08:10:20PM +0530, Srinivasa Rao Mandadapu wrote:
+> On 2/14/2022 8:07 PM, Mark Brown wrote:
+
+> > I only have this patch from both v12 and v13, which were sent very close
+> > together.  Please check what's going on here.
+
+> As only one patch has update, so sent only one patch. will do resend all
+> patches if needed.
+
+You should always send all patches in a series, sending only some
+patches at best makes it very difficult to follow what the current
+version of the series is intended to look like.
+
+--BgkULJaiFKZhJKvr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIKgZoACgkQJNaLcl1U
+h9BvMgf9FGQNXpy24DbHrBE271iFyFSYKquxP9pmvVBT6VapB9cXZsV8RFzyOWdY
+67DkWKvbsS3CckRTRXsHc2byeDyD4knoyxOYSK8Igg6hcMdliSi6whxE2C9Qj4Ew
+n5CimQJf7QkHVQQ+BodS6iqEalUyhU+pa8J54bdmXFikzd0Qi9nprpc6uhjaeS9A
+3QewvdNGEz5dtUxLdClpef/2WCuGF8qY/iGNxleotra7EgTqGg2njfvrPflDQN0L
+XEk/287Y2NOp8SMJVJWBdIBDWoEQ0CM5mLraYn8cyjg73J69E5Ss9P7SwoUZpq7o
+64XObDdLEYmLdbb6/xB8pHwtRMMwOQ==
+=Edqc
+-----END PGP SIGNATURE-----
+
+--BgkULJaiFKZhJKvr--

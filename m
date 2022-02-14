@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE8A4B4B1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E37E04B4932
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346619AbiBNKYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:24:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50546 "EHLO
+        id S1344475AbiBNKEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:04:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347041AbiBNKXU (ORCPT
+        with ESMTP id S1344333AbiBNJ7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:23:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56EC6CA5D;
-        Mon, 14 Feb 2022 01:56:20 -0800 (PST)
+        Mon, 14 Feb 2022 04:59:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C11B5B;
+        Mon, 14 Feb 2022 01:46:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 82A2960F25;
-        Mon, 14 Feb 2022 09:56:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 644EDC340E9;
-        Mon, 14 Feb 2022 09:56:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E87CDB80DBF;
+        Mon, 14 Feb 2022 09:46:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 136C8C340E9;
+        Mon, 14 Feb 2022 09:46:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832580;
-        bh=E/9jBRbIyyEtc+13I+rJm5xa1JZLQM7ZW8OBG5cbk8w=;
+        s=korg; t=1644831995;
+        bh=Oy4O9eJpPPDoYiB9FaeYRy2AABGKw16p2flSZjl9+1g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AIXF5GDAM2R/BtpeqtotWNV6bpwqu0zRUNrz3RYmzNToPnSUGGU5Ps4Vg5NxuLbni
-         GaoD8XY/Z92F5rc169M5yET94RsYFtCrH4EMCDvirUsXYgOKFWMm9IiVkHcWfqYIdz
-         XGYt2vbxxG05J8nVwhsjL7q5a4IGJdDi300DVaZ4=
+        b=WIT4fhZDhmz9aWbGMP6jBOE8rkRNJSvSdOP6da9RoNmFlZT286SO0wZ+zNQFvr1kE
+         T3fnFmUkmTwJSd0dW8zr1cUdF3L5A8gPEXE8S5MbIyfG5KY4oKzBDKySLrCOx3M7iz
+         cH9lzRFuNB+jOGKOfchxKgQmUhTwLwU4oqVTetus=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheng Wu <wu.zheng@intel.com>,
-        Ye Jinhe <jinhe.ye@intel.com>, Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 059/203] nvme-pci: add the IGNORE_DEV_SUBNQN quirk for Intel P4500/P4600 SSDs
-Date:   Mon, 14 Feb 2022 10:25:03 +0100
-Message-Id: <20220214092512.259122874@linuxfoundation.org>
+        stable@vger.kernel.org, Saurav Kashyap <skashyap@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 046/172] scsi: qedf: Fix refcount issue when LOGO is received during TMF
+Date:   Mon, 14 Feb 2022 10:25:04 +0100
+Message-Id: <20220214092507.980944868@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +56,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wu Zheng <wu.zheng@intel.com>
+From: Saurav Kashyap <skashyap@marvell.com>
 
-[ Upstream commit 25e58af4be412d59e056da65cc1cefbd89185bd2 ]
+[ Upstream commit 5239ab63f17cee643bd4bf6addfedebaa7d4f41e ]
 
-The Intel P4500/P4600 SSDs do not report a subsystem NQN despite claiming
-compliance to a standards version where reporting one is required.
+Hung task call trace was seen during LOGO processing.
 
-Add the IGNORE_DEV_SUBNQN quirk to not fail the initialization of a
-second such SSDs in a system.
+[  974.309060] [0000:00:00.0]:[qedf_eh_device_reset:868]: 1:0:2:0: LUN RESET Issued...
+[  974.309065] [0000:00:00.0]:[qedf_initiate_tmf:2422]: tm_flags 0x10 sc_cmd 00000000c16b930f op = 0x2a target_id = 0x2 lun=0
+[  974.309178] [0000:00:00.0]:[qedf_initiate_tmf:2431]: portid=016900 tm_flags =LUN RESET
+[  974.309222] [0000:00:00.0]:[qedf_initiate_tmf:2438]: orig io_req = 00000000ec78df8f xid = 0x180 ref_cnt = 1.
+[  974.309625] host1: rport 016900: Received LOGO request while in state Ready
+[  974.309627] host1: rport 016900: Delete port
+[  974.309642] host1: rport 016900: work event 3
+[  974.309644] host1: rport 016900: lld callback ev 3
+[  974.313243] [0000:61:00.2]:[qedf_execute_tmf:2383]:1: fcport is uploading, not executing flush.
+[  974.313295] [0000:61:00.2]:[qedf_execute_tmf:2400]:1: task mgmt command success...
+[  984.031088] INFO: task jbd2/dm-15-8:7645 blocked for more than 120 seconds.
+[  984.031136]       Not tainted 4.18.0-305.el8.x86_64 #1
 
-Signed-off-by: Zheng Wu <wu.zheng@intel.com>
-Signed-off-by: Ye Jinhe <jinhe.ye@intel.com>
-Reviewed-by: Keith Busch <kbusch@kernel.org>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+[  984.031166] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+[  984.031209] jbd2/dm-15-8    D    0  7645      2 0x80004080
+[  984.031212] Call Trace:
+[  984.031222]  __schedule+0x2c4/0x700
+[  984.031230]  ? unfreeze_partials.isra.83+0x16e/0x1a0
+[  984.031233]  ? bit_wait_timeout+0x90/0x90
+[  984.031235]  schedule+0x38/0xa0
+[  984.031238]  io_schedule+0x12/0x40
+[  984.031240]  bit_wait_io+0xd/0x50
+[  984.031243]  __wait_on_bit+0x6c/0x80
+[  984.031248]  ? free_buffer_head+0x21/0x50
+[  984.031251]  out_of_line_wait_on_bit+0x91/0xb0
+[  984.031257]  ? init_wait_var_entry+0x50/0x50
+[  984.031268]  jbd2_journal_commit_transaction+0x112e/0x19f0 [jbd2]
+[  984.031280]  kjournald2+0xbd/0x270 [jbd2]
+[  984.031284]  ? finish_wait+0x80/0x80
+[  984.031291]  ? commit_timeout+0x10/0x10 [jbd2]
+[  984.031294]  kthread+0x116/0x130
+[  984.031300]  ? kthread_flush_work_fn+0x10/0x10
+[  984.031305]  ret_from_fork+0x1f/0x40
+
+There was a ref count issue when LOGO is received during TMF. This leads to
+one of the I/Os hanging with the driver. Fix the ref count.
+
+Link: https://lore.kernel.org/r/20220117135311.6256-3-njavali@marvell.com
+Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/host/pci.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/scsi/qedf/qedf_io.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index ca2ee806d74b6..953ea3d5d4bfb 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -3326,7 +3326,8 @@ static const struct pci_device_id nvme_id_table[] = {
- 				NVME_QUIRK_DEALLOCATE_ZEROES, },
- 	{ PCI_VDEVICE(INTEL, 0x0a54),	/* Intel P4500/P4600 */
- 		.driver_data = NVME_QUIRK_STRIPE_SIZE |
--				NVME_QUIRK_DEALLOCATE_ZEROES, },
-+				NVME_QUIRK_DEALLOCATE_ZEROES |
-+				NVME_QUIRK_IGNORE_DEV_SUBNQN, },
- 	{ PCI_VDEVICE(INTEL, 0x0a55),	/* Dell Express Flash P4600 */
- 		.driver_data = NVME_QUIRK_STRIPE_SIZE |
- 				NVME_QUIRK_DEALLOCATE_ZEROES, },
+diff --git a/drivers/scsi/qedf/qedf_io.c b/drivers/scsi/qedf/qedf_io.c
+index 3404782988d58..bb5761ed3f511 100644
+--- a/drivers/scsi/qedf/qedf_io.c
++++ b/drivers/scsi/qedf/qedf_io.c
+@@ -2257,6 +2257,7 @@ int qedf_initiate_cleanup(struct qedf_ioreq *io_req,
+ 	    io_req->tm_flags == FCP_TMF_TGT_RESET) {
+ 		clear_bit(QEDF_CMD_OUTSTANDING, &io_req->flags);
+ 		io_req->sc_cmd = NULL;
++		kref_put(&io_req->refcount, qedf_release_cmd);
+ 		complete(&io_req->tm_done);
+ 	}
+ 
 -- 
 2.34.1
 

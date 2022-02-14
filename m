@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 478834B416A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 06:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD494B4161
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 06:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235619AbiBNFhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 00:37:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37572 "EHLO
+        id S240462AbiBNFhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 00:37:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbiBNFhc (ORCPT
+        with ESMTP id S239471AbiBNFhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 00:37:32 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59844EA11
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 21:37:25 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id b187-20020a251bc4000000b0061e15c5024fso31638504ybb.4
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 21:37:25 -0800 (PST)
+        Mon, 14 Feb 2022 00:37:38 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9324EA18
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 21:37:29 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id m10-20020a25800a000000b0061daa5b7151so31693545ybk.10
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 21:37:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=+1SwCE06M0PNqBLEJTg15X5eH7+oSoSSFiekI+9wl9s=;
-        b=VtTPVXxfex/1ySP2MQUCDrrLGS4bgo8o9gYa4yfPriMLozUesvzfOHPU9JNcSROXnZ
-         3PTCEKlwxO3xEnbzXHfcKoos8ott/okgb3eO4UDDb5Hgq0fnhYoRMEpSqFV4Pk277fJ2
-         +Nd5BHsBrYrOtYE1oe1F8NmnJOOYyYSzhBm7iowqdEfANVP0pk9K8G9JaIhlJe7ZekSu
-         9kpEwoQssXCR1UvrZQT5zNlJ5DF4OJ8uwRFWNzYIWYAWuZKd0QjWbKpL/zmBkd6fQkMq
-         a41bVuN0Wgd7EduqWuld4iSyG2TgCW8/AfcO5jxg3moU1H+YUcIzzZAWiUed0xbe9ykr
-         0LPQ==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=RM7B/VP3RiMIbRxHXAkoswg4A5f1B95tqoOVGTsgT8Q=;
+        b=TTbMKvwz6PseJb5lRAXLQiBv75QGAS10Z9JTQyCyZ32BBng4ecFDNGi05LGrA57+Fv
+         +cgxTg66+Ae6IeLW50dDVi+h2CZqYrwt9erF1a+Qa3ZqUuQnXUpkEhOLGdZEDsmEtlOD
+         aa4oKgzbTO7qdsYuMM9iefxLmoVMihDg2tb+VlAp/Hdb2c5gQwONJz1XJ01Jl5Ln9xl7
+         jq4QV7B/naowDN69QoT8aNjnfHnCL5sbZxKazEBN2lAJpA8RKeNzdRDr0T2UqrxznoZr
+         FC8aW/1Lq/VsZWV1tzNCy/EIcMbu6uaLKupmhBW6xUQeT0FcH85gsLXHR3nPNvCTJQ4R
+         vDbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=+1SwCE06M0PNqBLEJTg15X5eH7+oSoSSFiekI+9wl9s=;
-        b=3y4fHYkpk5BTJSX8xqLB8/t5lyXPa6k83RrtWNmQbY9wj/d6zS/YiGM/Jp05B/lC+r
-         xNwTytQlo+KB/JbKe4P79/stfn3s/4AOT54ngSRy0BswXDyQldGGfWgderyl1Ca8Zan2
-         vHIuOQmaxvgsRxkWEbtx54jRDyc1E50TdmWQYywoaul9qM3X4zYIY2FkH8MCGS/n/MTZ
-         B6AlhyKU6y3kIvMmjJhWbI9+tE4H6RxO5+e2R7OsFm2//vzZq5lLDpzcMTR8J/UNMKdO
-         sTJT+dFDCcIoglipsoYdsXMRLiU4BzCIkv+3qV/FuumPdeh7Qz+xrD+NqEdBcJDAjrUV
-         TwYA==
-X-Gm-Message-State: AOAM531S+xC4woVO6BsOYckqxhPHNCwJckxb6aRFJBtWPSzK0Xi8snR4
-        6tVE8Eb0hDIBCmf5JBCCEdg0GBpEQCTw
-X-Google-Smtp-Source: ABdhPJzLlnCyP8MR7Ka8mTntsMrSfWdMHHSSskLUEwG3JprtOu25ulTVq/KOFZQzyJJoH9evqR6maA8J1aHF
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=RM7B/VP3RiMIbRxHXAkoswg4A5f1B95tqoOVGTsgT8Q=;
+        b=1QS55yfjV7rllizRfsznIKyvJT8y3bsJKlpJkHXq4gghxcC4mljF506MBJpElMeNnR
+         I4m1nSbzlgcQOu1dB4GCJEREFrzpOiyD0krU0WluyAtD/m0I5H49Qfn2kct6t/TKj6UI
+         0ckpLORFOFlZnJC0iT3q6foyV2Qx91m/MCkM2SVke4wYF3fnIOnDJc6Nn+zC+8BqvHrF
+         Ph4lJiVXnafoRsN5kJD5B9Pv9jIWEI96Kos1+Ujq3rWHIWz7wOgdY9az2InGeRpZT0dh
+         xDcT8zdtsk1yf1RiDijEXmVgURktc7XN1LGT1HeKsoYF3vDrpVoesQpOfMfTDAmRvne/
+         vorw==
+X-Gm-Message-State: AOAM530RakpgGs/K5IgtJMopVJJZi1qG7L3fp9/azd+DK8gbo8Jgf/uz
+        IdqZIDl37uyv1vADiQR0UJ6aVgx6Ft+b
+X-Google-Smtp-Source: ABdhPJx+13Gw/OOKY8khKfw7V8FFpvA8xTR4gZkToZpRpsfvFKIV+UFm7cr8RGYsxDkI86AyD9bMelqUh6+q
 X-Received: from tzungbi-z840.tpe.corp.google.com ([2401:fa00:1:10:f315:f92d:e3d3:2539])
- (user=tzungbi job=sendgmr) by 2002:a25:900e:: with SMTP id
- s14mr10446908ybl.338.1644817044881; Sun, 13 Feb 2022 21:37:24 -0800 (PST)
-Date:   Mon, 14 Feb 2022 13:36:41 +0800
-Message-Id: <20220214053646.3088298-1-tzungbi@google.com>
+ (user=tzungbi job=sendgmr) by 2002:a25:e705:: with SMTP id
+ e5mr786251ybh.216.1644817049075; Sun, 13 Feb 2022 21:37:29 -0800 (PST)
+Date:   Mon, 14 Feb 2022 13:36:42 +0800
+In-Reply-To: <20220214053646.3088298-1-tzungbi@google.com>
+Message-Id: <20220214053646.3088298-2-tzungbi@google.com>
 Mime-Version: 1.0
+References: <20220214053646.3088298-1-tzungbi@google.com>
 X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH 0/5] platform/chrome: cros_kbd_led_backlight: add EC PWM backend
+Subject: [PATCH 1/5] platform/chrome: cros_kbd_led_backlight: sort headers alphabetically
 From:   Tzung-Bi Shih <tzungbi@google.com>
 To:     bleung@chromium.org, groeck@chromium.org, robh+dt@kernel.org
 Cc:     chrome-platform@lists.linux.dev, tzungbi@google.com,
@@ -63,33 +67,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The series adds EC PWM as an backend option for ChromeOS keyboard LED
-backlight.
+Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
+---
+ drivers/platform/chrome/cros_kbd_led_backlight.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The 1st patch reorder the headers alphabetically.
-
-The 2nd patch separates the ACPI backend as an independent option.
-
-The 3rd patch is the DT binding document for the proposed compatible string.
-
-The 4th patch supports OF match.
-
-The 5th patch adds EC PWM as another backend option.
-
-Tzung-Bi Shih (5):
-  platform/chrome: cros_kbd_led_backlight: sort headers alphabetically
-  platform/chrome: cros_kbd_led_backlight: separate ACPI backend
-  dt-bindings: add google,cros-kbd-led-backlight
-  platform/chrome: cros_kbd_led_backlight: support OF match
-  platform/chrome: cros_kbd_led_backlight: support EC PWM backend
-
- .../chrome/google,cros-kbd-led-backlight.yaml |  35 +++
- .../bindings/mfd/google,cros-ec.yaml          |   3 +
- drivers/platform/chrome/Kconfig               |  14 +-
- .../platform/chrome/cros_kbd_led_backlight.c  | 218 ++++++++++++++++--
- 4 files changed, 247 insertions(+), 23 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/chrome/google,cros-kbd-led-backlight.yaml
-
+diff --git a/drivers/platform/chrome/cros_kbd_led_backlight.c b/drivers/platform/chrome/cros_kbd_led_backlight.c
+index aa409f0201fb..f9587a562bb7 100644
+--- a/drivers/platform/chrome/cros_kbd_led_backlight.c
++++ b/drivers/platform/chrome/cros_kbd_led_backlight.c
+@@ -4,12 +4,12 @@
+ // Copyright (C) 2012 Google, Inc.
+ 
+ #include <linux/acpi.h>
+-#include <linux/leds.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
+-#include <linux/module.h>
+ #include <linux/init.h>
+ #include <linux/kernel.h>
++#include <linux/leds.h>
++#include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ 
 -- 
 2.35.1.265.g69c8d7142f-goog
 

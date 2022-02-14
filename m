@@ -2,119 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5F64B50CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3F24B50DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353732AbiBNMzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 07:55:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46424 "EHLO
+        id S1353767AbiBNM5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 07:57:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353712AbiBNMzb (ORCPT
+        with ESMTP id S1353738AbiBNM5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 07:55:31 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEC49FF5;
-        Mon, 14 Feb 2022 04:55:23 -0800 (PST)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Jy414298PzccxJ;
-        Mon, 14 Feb 2022 20:54:16 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 14 Feb 2022 20:55:20 +0800
-CC:     <prime.zeng@huawei.com>, <liuqi115@huawei.com>,
-        <zhangshaokun@hisilicon.com>, <linuxarm@huawei.com>,
-        <song.bao.hua@hisilicon.com>
-Subject: Re: [PATCH v3 8/8] iommu/arm-smmu-v3: Make default domain type of
- HiSilicon PTT device to identity
-To:     Yicong Yang <yangyicong@hisilicon.com>,
-        <gregkh@linuxfoundation.org>, <helgaas@kernel.org>,
-        <alexander.shishkin@linux.intel.com>, <lorenzo.pieralisi@arm.com>,
-        <will@kernel.org>, <mark.rutland@arm.com>,
-        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
-        <jonathan.cameron@huawei.com>, <daniel.thompson@linaro.org>,
-        <joro@8bytes.org>, <john.garry@huawei.com>,
-        <shameerali.kolothum.thodi@huawei.com>, <robin.murphy@arm.com>,
-        <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <coresight@lists.linaro.org>, <linux-pci@vger.kernel.org>,
-        <linux-perf-users@vger.kernel.org>,
-        <iommu@lists.linux-foundation.org>
-References: <20220124131118.17887-1-yangyicong@hisilicon.com>
- <20220124131118.17887-9-yangyicong@hisilicon.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <e58888c1-5448-77c7-7f6c-f5db999a888f@huawei.com>
-Date:   Mon, 14 Feb 2022 20:55:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Mon, 14 Feb 2022 07:57:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 243EA4BFF1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 04:57:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644843459;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oXbXKwNefXUMxjvIv7PZR4ufdZvetqDxpNnWNZX3Q9w=;
+        b=Cnt0Bq9sos2VKs4n7o3qVXMk5dcas0z612GkrnDAFWUoijRK9EPo5fZGOg4TXDYgjQ54p8
+        nnIDfdSLG0cL0hzXrKl0xnIMsqBOApABM8+Jw+YI9jgBzp2/Qz9zl+n21Plafu4He1KjlT
+        DOqSfr4ahfbE3l2BQ/5VnpzryZROhvQ=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-526-GE7DH0D4PVahpTZdWSM__g-1; Mon, 14 Feb 2022 07:57:38 -0500
+X-MC-Unique: GE7DH0D4PVahpTZdWSM__g-1
+Received: by mail-ej1-f72.google.com with SMTP id v2-20020a170906292200b006a94a27f903so5821888ejd.8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 04:57:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oXbXKwNefXUMxjvIv7PZR4ufdZvetqDxpNnWNZX3Q9w=;
+        b=TjGD2mq/75+2tgU8kQ5yFSuqga6iHnOfUgCt22NxoisOOCT4++RD60tMbw/fjpRsGn
+         8Rv4qSBgcW+Qj+ALUcX/KmOyl6DbI9lyzEiRAWw4YIS2MtZm+7jPvZTaQ9csxGAFBfTX
+         xnTfqzkBvi9tC9r33LLjyMUVOsil5MQFn2GZUZC8REn3Mp6FNKkV+mLdYMo7ldLS3RO4
+         ME+el6mUgicii8655wR00WxCQahfzJBjfWvSgz+/V4pOTfu6xhwd+r0XrhtYIUpNH4Vx
+         yk8OK18o09Zqp4M8STbjxlzDAxVzVsO/la7yOA283pv7Qv+tmQwJtezoILyOv1XDMM2g
+         Drww==
+X-Gm-Message-State: AOAM530RcqGBmxbTcHW/By/ThPog/mP0RpS4JWyIcfRW1kVZ4BNl/TWX
+        2FKvg7pve0YKFi/IGNk3clj0N9enqjjaFF77lOXXssb10ABS3agJxPHlSmPUc0daeLcXyshzX5N
+        Ch2OT/u2I9MObpskCeuSc9juA
+X-Received: by 2002:a05:6402:3489:: with SMTP id v9mr15115245edc.249.1644843456846;
+        Mon, 14 Feb 2022 04:57:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyU5DkSABeMnnwGxALr4cUufpghJY/IkWE1R3VTtIBjGPU4fKsIkDZmUYsm4G8pEfV5YGtv9A==
+X-Received: by 2002:a05:6402:3489:: with SMTP id v9mr15115232edc.249.1644843456718;
+        Mon, 14 Feb 2022 04:57:36 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id p5sm8932228ejr.105.2022.02.14.04.57.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 04:57:36 -0800 (PST)
+Message-ID: <a3008754-86a8-88d6-df7f-a2770b0a2c93@redhat.com>
+Date:   Mon, 14 Feb 2022 13:57:31 +0100
 MIME-Version: 1.0
-In-Reply-To: <20220124131118.17887-9-yangyicong@hisilicon.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] KVM: SEV: Allow SEV intra-host migration of VM with
+ mirrors
+Content-Language: en-US
+To:     Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Marc Orr <marcorr@google.com>, linux-kernel@vger.kernel.org
+References: <20220211193634.3183388-1-pgonda@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220211193634.3183388-1-pgonda@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin,
+On 2/11/22 20:36, Peter Gonda wrote:
+> +	list_cut_before(&dst->mirror_vms, &src->mirror_vms, &src->mirror_vms);
+> +	list_for_each_entry_safe(mirror, tmp, &dst->mirror_vms,
+> +				 mirror_entry) {
 
-Is this quirk ok with the SMMU v3 driver? Just want to confirm that I'm on the
-right way to dealing with the issue of our device.
+Is list_for_each_entry_safe actually necessary here?  (It would be if 
+you used list_add/list_del instead of list_cut_before).
 
-Thanks.
-
-On 2022/1/24 21:11, Yicong Yang wrote:
-> The DMA of HiSilicon PTT device can only work with identical
-> mapping. So add a quirk for the device to force the domain
-> passthrough.
-> 
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> ---
->  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> index 6dc6d8b6b368..6f67a2b1dd27 100644
-> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> @@ -2838,6 +2838,21 @@ static int arm_smmu_dev_disable_feature(struct device *dev,
->  	}
->  }
->  
-> +#define IS_HISI_PTT_DEVICE(pdev)	((pdev)->vendor == PCI_VENDOR_ID_HUAWEI && \
-> +					 (pdev)->device == 0xa12e)
-> +
-> +static int arm_smmu_def_domain_type(struct device *dev)
-> +{
-> +	if (dev_is_pci(dev)) {
-> +		struct pci_dev *pdev = to_pci_dev(dev);
-> +
-> +		if (IS_HISI_PTT_DEVICE(pdev))
-> +			return IOMMU_DOMAIN_IDENTITY;
+> +		kvm_get_kvm(dst_kvm);
+> +		kvm_put_kvm(src_kvm);
+> +		mirror->enc_context_owner = dst_kvm;
 > +	}
-> +
-> +	return 0;
-> +}
-> +
->  static struct iommu_ops arm_smmu_ops = {
->  	.capable		= arm_smmu_capable,
->  	.domain_alloc		= arm_smmu_domain_alloc,
-> @@ -2863,6 +2878,7 @@ static struct iommu_ops arm_smmu_ops = {
->  	.sva_unbind		= arm_smmu_sva_unbind,
->  	.sva_get_pasid		= arm_smmu_sva_get_pasid,
->  	.page_response		= arm_smmu_page_response,
-> +	.def_domain_type	= arm_smmu_def_domain_type,
->  	.pgsize_bitmap		= -1UL, /* Restricted during device attach */
->  	.owner			= THIS_MODULE,
->  };
-> 
+
+Thanks,
+
+Paolo
+

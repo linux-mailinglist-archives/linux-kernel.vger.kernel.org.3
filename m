@@ -2,95 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC194B4309
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 08:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E98074B4305
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 08:41:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241423AbiBNHfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 02:35:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53428 "EHLO
+        id S237521AbiBNHgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 02:36:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232889AbiBNHfa (ORCPT
+        with ESMTP id S232090AbiBNHge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 02:35:30 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C29A593BC
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 23:35:23 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id v5-20020a17090a4ec500b001b8b702df57so18078460pjl.2
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 23:35:23 -0800 (PST)
+        Mon, 14 Feb 2022 02:36:34 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A8A5A0AF
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 23:36:25 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id l14so14712838qtp.7
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 23:36:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nGe1GPQOn/zt6cMI2xANluZ+cNHKirWlYkwaEjnZGKU=;
-        b=nrwkobJvHAbDr7S2N0JO/hkqenpbA+/spa6NGzhqp4A6eEt+nPh5nLx21ewUQmt6Xc
-         StkFK3m+h+ANiGoPI97qYW590jbwN5ZIU1j+yJ4M5lRhcNOocjMP4voCWzxVbWSWeIUI
-         XKsZD8CJHjd+JeKphGLWWSXoj4t9iG9Nz3GUI=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=DJb3H9k1RoLuRCYBQIyf/S7xP16DHTTl/b/4dHlbEFk=;
+        b=SHviuUWkRdIirgu4jo+5R0jZrs2MKvJRxa0Oor/KyXjgCzhULvbTK6njE1g045X4x7
+         TWSC9Rc7Sp89V12bqLKiLbPGYFvuIBd2xqtzX7ZtohNIZeeDDpuwgMMkkstf6I2RZ2SR
+         1rpJVsB/yR0EayMPyEAf6YlVO2tFkRfykNEVWAcnT7W1tCYDCJOy2cg9vHOf+ZCRzqo5
+         PlxO++n+Dp+C22/BbWEQgKK8LJxIumborKrwEMeHxoKgp6ATWh7w7Wz5z23Ctt6UDkNa
+         nFlskOQKnOKWco0jMTKE0AA0CH1CcxrdxLs2Y8GWNSWI0z/peOx7dmYTQv6+OmVaeutF
+         +dTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nGe1GPQOn/zt6cMI2xANluZ+cNHKirWlYkwaEjnZGKU=;
-        b=XpDuHxrwG9esq3+/vr7Zf/EZPosLo+ELQ6NY8/8ZJGGQHYy5RbyEDaM5aTGaCxCFqS
-         SKx8Qs1O2QQZpdm1W9KT/7kHSZvP8qB5ou/jfHEngB8SsH3lQDoWERPGoU1RieGcgQq5
-         Rbk8io2+1TZUeST8TJH4qRkzmM7v8cA5euyAnTDA3yjQlUr3baq/ng+BgSFihfD6kSGc
-         zQzV5GI9VmTuPqScTvoVz8sON+zNQNRGp4tSvVHpvhOpVi6GjfcCnBegYSrLg2Lx7mBr
-         zMsSmo6XQ9Ivyi7So8lMTXCfQ7HlAe24MRBcquNeuo+Xjp0S68YPDmI/X/q//dCWt/hR
-         njMg==
-X-Gm-Message-State: AOAM531G1abuoAPdMmbeR/N4YPxuqnPCS/w5kz4e6Ngk4QInBhFkgZWW
-        cVMJVtlwTGKszlWQGoQgjHKLQg==
-X-Google-Smtp-Source: ABdhPJyyYgOfAyLKEq2R2MNIU3hhfWNzZUr/ZaIq47tpRHQWx8lI1JUeruJntm3HmwYJQP95vdyDrA==
-X-Received: by 2002:a17:902:d502:: with SMTP id b2mr12889818plg.111.1644824123058;
-        Sun, 13 Feb 2022 23:35:23 -0800 (PST)
-Received: from google.com ([2401:fa00:8f:203:3a3d:6c6e:58a7:8903])
-        by smtp.gmail.com with ESMTPSA id p2sm12529972pjo.38.2022.02.13.23.35.20
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=DJb3H9k1RoLuRCYBQIyf/S7xP16DHTTl/b/4dHlbEFk=;
+        b=TdUioDOFDmRRLfZkaZFipreVZ8rh10q9ixnGiXsLTzAhNahrLZD2wZB1pZAfLCbTwd
+         S8Ra9nxzIh6GhUoxV9E1TBBLjT7/BJDLsHbVAH/MZb3YlvqRFdlQSANFVQCBGYbxwJih
+         D7ewalkrtBYWDgQLXaTkmLc3niXJkP5fltVyG66K/IFPq9/cZzl+qcz8dkYj41LrIq+8
+         Ue5YXmJP6xRHpvwctJq4VzHr4M55JwAs8Ef2Dgx7eEdiPVyvaN+5yc88iMTeGNeMhhuL
+         KoBiqi2s2SxK0mpoJ7L9GMl4Q06smMAaZ2mY4S0S3jH/g+NdGwvN7fjhcbhQ8oS2aLoN
+         ZZNw==
+X-Gm-Message-State: AOAM531xqLVWrm8AjPVbPyzeyquwBrBRNjEBgIGpJLcL+LZMbg/pzBDX
+        eKD29IPcQldahoElcWxUtIKh2mkAgekSJw==
+X-Google-Smtp-Source: ABdhPJxbn/nu6Ezf0s3ZlITnHRXlxl/qzIW8mY+p63hmNzWbEOx1Vl27A/99ZQsdVeSoWQgt/hif6A==
+X-Received: by 2002:a05:622a:354:: with SMTP id r20mr8506388qtw.0.1644824184029;
+        Sun, 13 Feb 2022 23:36:24 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id 22sm17988632qtw.75.2022.02.13.23.36.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Feb 2022 23:35:22 -0800 (PST)
-Date:   Mon, 14 Feb 2022 16:35:18 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk v1 03/13] printk: use percpu flag instead of
- cpu_online()
-Message-ID: <YgoGNmYER8xni34K@google.com>
-References: <20220207194323.273637-1-john.ogness@linutronix.de>
- <20220207194323.273637-4-john.ogness@linutronix.de>
- <YgaJZtY+EH9JIGyo@alley>
+        Sun, 13 Feb 2022 23:36:23 -0800 (PST)
+Date:   Sun, 13 Feb 2022 23:36:01 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Rajat Jain <rajatja@google.com>, Wolfram Sang <wsa@kernel.org>,
+        Derek Basehore <dbasehore@chromium.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        "loic.poulain@linaro.org" <loic.poulain@linaro.org>,
+        Andrew Duggan <aduggan@synaptics.com>,
+        vincent.huang@tw.synaptics.com, cheiny@synaptics.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: 5.17-rc regression: rmi4 clients cannot deal with asynchronous
+ suspend? (was: X1 Carbon touchpad not resumed)
+In-Reply-To: <Ygm+5rS7Cxeea5Dp@google.com>
+Message-ID: <3741afae-305a-4ba-187d-eb52b039bc1a@google.com>
+References: <89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com> <YgF/0QGFN4SppLKg@shikoro> <CACK8Z6Etj-gq1VKpkUBstiXEETekPWG9p9gKBtuFaZF05pQEvQ@mail.gmail.com> <CACK8Z6FUsceYgBoaAtN8o4m9HpZaBZMt0Nqtvw0a1Z3EuD_nWg@mail.gmail.com> <YgHTYrODoo2ou49J@google.com>
+ <b76771e5-b8e-54c9-2474-d5a73d236cba@google.com> <6f1103af-595c-ed0a-b946-97a9331ed148@linux.intel.com> <Ygm+5rS7Cxeea5Dp@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgaJZtY+EH9JIGyo@alley>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/02/11 17:05), Petr Mladek wrote:
-> On Mon 2022-02-07 20:49:13, John Ogness wrote:
-[..]
-> The problem is the commit ac25575203c11145066ea ("[PATCH] CPU hotplug
-> printk fix"). It suggests that per-CPU data of slab are freed during
-> hotplug.
+On Sun, 13 Feb 2022, Dmitry Torokhov wrote:
 > 
-> There are many other things that are manipulated during cpu hotplug.
-> And there are the two notifiers "printk:dead" and "printk:online",
-> see printk_late_init(). Maybe, we should use them to decide whether
-> the non-trivial consoles are callable during CPU hotplug.
+> Sorry for the delay, but I wonder if you could try the patch below and
+> tell me if that also fixes the issue for you?
 
-Great findings. Looks like we only set __printk_percpu_data_ready to
-true and never set it back to false, relying on cpu_online() in such
-cases. But here's the thing: we have printk_percpu_data_ready() in
-__printk_recursion_counter() and in wake_up_klogd() and in
-defer_console_output(), but why we never check __printk_percpu_data_ready
-in __down_trylock_console_sem()/__up_console_sem() and more importantly
-in console_trylock_spinning() and those do access this_cpu() in printk safe
-enter/exit. Am I missing something?
+It fixes it for me, thanks Dmitry; with nothing unpleasant in dmesg.
+
+Hugh

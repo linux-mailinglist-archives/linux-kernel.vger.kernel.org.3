@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 375564B4610
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6EA4B483C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:56:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243188AbiBNJ3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:29:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42496 "EHLO
+        id S245758AbiBNJwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:52:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243126AbiBNJ3F (ORCPT
+        with ESMTP id S245490AbiBNJtz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:29:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C88B60D80;
-        Mon, 14 Feb 2022 01:28:57 -0800 (PST)
+        Mon, 14 Feb 2022 04:49:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2704A19E;
+        Mon, 14 Feb 2022 01:41:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF6D360F8A;
-        Mon, 14 Feb 2022 09:28:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE96CC340E9;
-        Mon, 14 Feb 2022 09:28:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65C16B80DC7;
+        Mon, 14 Feb 2022 09:41:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7610FC340E9;
+        Mon, 14 Feb 2022 09:41:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644830936;
-        bh=vO4Q/ESMka9w3K0f1kTJOq7adSxZDZCYb+dKNb6/x1g=;
+        s=korg; t=1644831664;
+        bh=/kvuUnbi5mWqDPHzY3HwB9slTUfUSoIsVvCWl1dVzJI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZYE01CJ33CISTe0S3ozaguTyDRhAC7Ip9DXKTvxrJ0ZSFBuopGXxT2Nrp+J6o39cs
-         NBoFWIkkIIyJ6PnP3+5EkKOzwFKfThP3SxHRGWPlr8DBlKEbU5uZNF0tKp68KhK9XJ
-         vU1Omm+VZPOz7TKdgZTxLOoVeZjvwI1rQL8fGSi0=
+        b=0z0EcF0xHvpb6wflNKIb7pIyA9pasljNfaMi3kNQshUi4Bzdpgu4lzfQrJvIAO/3O
+         jOa7LjGMadOh6+vS9qvlPAQEpX++hRD/g8aKl0NAmlLdTZ6TtUFKgEEFrRpzHj0fld
+         ywk+KLFSkUA2p2DMj0AkAMR7SkFiP3UXGuISKL7E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Szymon Heidrich <szymon.heidrich@gmail.com>, stable@kernel.org
-Subject: [PATCH 4.9 28/34] usb: gadget: rndis: check size of RNDIS_MSG_SET command
+        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 055/116] ARM: dts: imx6qdl-udoo: Properly describe the SD card detect
 Date:   Mon, 14 Feb 2022 10:25:54 +0100
-Message-Id: <20220214092446.859673261@linuxfoundation.org>
+Message-Id: <20220214092500.629084950@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
-References: <20220214092445.946718557@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Fabio Estevam <festevam@gmail.com>
 
-commit 38ea1eac7d88072bbffb630e2b3db83ca649b826 upstream.
+[ Upstream commit 993d66140f8d1c1853a3b58b77b43b681eb64dee ]
 
-Check the size of the RNDIS_MSG_SET command given to us before
-attempting to respond to an invalid message size.
+GPIO7_IO00 is used as SD card detect.
 
-Reported-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-Cc: stable@kernel.org
-Tested-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Properly describe this in the devicetree.
+
+Fixes: 40cdaa542cf0 ("ARM: dts: imx6q-udoo: Add initial board support")
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/rndis.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/imx6qdl-udoo.dtsi | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/gadget/function/rndis.c
-+++ b/drivers/usb/gadget/function/rndis.c
-@@ -642,14 +642,17 @@ static int rndis_set_response(struct rnd
- 	rndis_set_cmplt_type *resp;
- 	rndis_resp_t *r;
+diff --git a/arch/arm/boot/dts/imx6qdl-udoo.dtsi b/arch/arm/boot/dts/imx6qdl-udoo.dtsi
+index d07d8f83456d2..ccfa8e320be62 100644
+--- a/arch/arm/boot/dts/imx6qdl-udoo.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-udoo.dtsi
+@@ -5,6 +5,8 @@
+  * Author: Fabio Estevam <fabio.estevam@freescale.com>
+  */
  
-+	BufLength = le32_to_cpu(buf->InformationBufferLength);
-+	BufOffset = le32_to_cpu(buf->InformationBufferOffset);
-+	if ((BufLength > RNDIS_MAX_TOTAL_SIZE) ||
-+	    (BufOffset + 8 >= RNDIS_MAX_TOTAL_SIZE))
-+		    return -EINVAL;
++#include <dt-bindings/gpio/gpio.h>
 +
- 	r = rndis_add_response(params, sizeof(rndis_set_cmplt_type));
- 	if (!r)
- 		return -ENOMEM;
- 	resp = (rndis_set_cmplt_type *)r->buf;
+ / {
+ 	aliases {
+ 		backlight = &backlight;
+@@ -226,6 +228,7 @@ MX6QDL_PAD_SD3_DAT0__SD3_DATA0		0x17059
+ 				MX6QDL_PAD_SD3_DAT1__SD3_DATA1		0x17059
+ 				MX6QDL_PAD_SD3_DAT2__SD3_DATA2		0x17059
+ 				MX6QDL_PAD_SD3_DAT3__SD3_DATA3		0x17059
++				MX6QDL_PAD_SD3_DAT5__GPIO7_IO00		0x1b0b0
+ 			>;
+ 		};
  
--	BufLength = le32_to_cpu(buf->InformationBufferLength);
--	BufOffset = le32_to_cpu(buf->InformationBufferOffset);
--
- #ifdef	VERBOSE_DEBUG
- 	pr_debug("%s: Length: %d\n", __func__, BufLength);
- 	pr_debug("%s: Offset: %d\n", __func__, BufOffset);
+@@ -304,7 +307,7 @@ &usbotg {
+ &usdhc3 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_usdhc3>;
+-	non-removable;
++	cd-gpios = <&gpio7 0 GPIO_ACTIVE_LOW>;
+ 	status = "okay";
+ };
+ 
+-- 
+2.34.1
+
 
 

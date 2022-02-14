@@ -2,53 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A1E4B4F2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DED84B4F3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352193AbiBNLsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:48:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42232 "EHLO
+        id S234077AbiBNLr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:47:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351970AbiBNLjk (ORCPT
+        with ESMTP id S1352218AbiBNLjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:39:40 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDD414086;
-        Mon, 14 Feb 2022 03:30:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1ADEECE130F;
-        Mon, 14 Feb 2022 11:30:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC5D7C340E9;
-        Mon, 14 Feb 2022 11:30:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644838235;
-        bh=h/tLqKI+kSgP4V2Ob7fIJ54EMGn25h4EBw9QAxLYA9I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MV9CfUo4SJgnR3hhU1XdAnESN3u1XnC6Ufn1cSDCy0OgfnG7r8o4b9gg9Q/JXvOjr
-         ZB4+Rpopl+Y4rrOQTuhciz3DRsrXterdGxLI6GmAkBPqb1BSir/MFCia1wJl89luIz
-         3P8EI0JNeI79zOWWRDn7XkCXzYjxMydF7EbgENnI=
-Date:   Mon, 14 Feb 2022 12:30:32 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Daehwan Jung <dh10.jung@samsung.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
-        Thinh.Nguyen@synopsys.com
-Subject: Re: [PATCH v2 2/2] usb: dwc3: Prevent cleanup cancelled requests at
- the same time.
-Message-ID: <Ygo9WMCVRNp/4/Ry@kroah.com>
-References: <1644836933-141376-1-git-send-email-dh10.jung@samsung.com>
- <CGME20220214111149epcas2p29b9e39b84d7203572422531beb3c39ed@epcas2p2.samsung.com>
- <1644836933-141376-3-git-send-email-dh10.jung@samsung.com>
+        Mon, 14 Feb 2022 06:39:45 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0043C51;
+        Mon, 14 Feb 2022 03:30:45 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id E338D1F437F7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644838244;
+        bh=QaLaTj9ziNtqxf12oz66KYW1D7p03OX8Bk66flIHsxs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ggZon2tzhy2Vqc9LmMHVOVLHNWSS7LUED7MTJYersNyW0PsnvLKnLdtvJtCUxt5Bw
+         qIpDJmh9DzTonS45VhdVbnFEXOWOuCYIImcW9l18+iuCLiPeGi5lf43gC0fLIm04dR
+         3d9F5v7UI37CBTZiQnq4QmmGdHxu8t7PNOX4k2yYZHkgSWiJOID55Pnyx4wOa4RmXf
+         F+Y8lg+bfeeuBe+gU0GBFK3P+RoWPoZQLIn10DOtQfU6fsaRoPI1GnhID32s488D3P
+         anaw2Ro3+yCn0mJwvTWrAmm7gkZmDSdI3A4KhQqvONpnmIavSdnfb2zmYD+JwwH3tf
+         Fi4Pk3cQn8faQ==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     thierry.reding@gmail.com
+Cc:     u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        matthias.bgg@gmail.com, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 1/2] pwm: pwm-mediatek: Simplify error handling with dev_err_probe()
+Date:   Mon, 14 Feb 2022 12:30:37 +0100
+Message-Id: <20220214113038.79130-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1644836933-141376-3-git-send-email-dh10.jung@samsung.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,36 +53,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 08:08:53PM +0900, Daehwan Jung wrote:
-> We added cleanup cancelled requests when ep cmd timeout on ep dequeue
-> because there's no complete interrupt then. But, we find out new case
-> that complete interrupt comes up later. list_for_each_entry_safe is
-> used when cleanup cancelled requests and it has vulnerabilty on multi-core
-> environment. dwc3_gadget_giveback unlocks dwc->lock temporarily and other
-> core(ISR) can get lock and try to cleanup them again. It could cause
-> list_del corruption and we use DWC3_EP_END_TRANSFER_PENDING to prevent it.
-> 
-> 1. MTP server cancels -> ep dequeue -> ep cmd timeout(END_TRANSFER)
-> 	-> cleanup cancelled requests -> dwc3_gadget_giveback ->
-> 	list_del -> release lock temporarily
-> 2. Complete with END_TRANSFER -> ISR(dwc3_gadget_endpoint_command_complete)
-> 	gets lock -> cleanup cancelled requests -> dwc3_gadget_giveback
-> 	-> list_del
-> 3. MTP server process gets lock again
-> 	-> tries to access POISON list(list_del corruption)
-> 
-> [2: MtpServer: 5032] dwc3 10b00000.dwc3: request cancelled
-> 						with wrong reason:5
-> [2: MtpServer: 5032] list_del corruption,
-> 		ffffff88b6963968->next is LIST_POISON1 (dead000000000100)
-> 
-> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> ---
->  drivers/usb/dwc3/gadget.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
+Use dev_err_probe() to simplify handling errors in pwm_mediatek_probe().
 
-What commit id does this fix?
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/pwm/pwm-mediatek.c | 30 +++++++++++-------------------
+ 1 file changed, 11 insertions(+), 19 deletions(-)
 
-thanks,
+diff --git a/drivers/pwm/pwm-mediatek.c b/drivers/pwm/pwm-mediatek.c
+index 0d4dd80e9f07..c7d5ca09a684 100644
+--- a/drivers/pwm/pwm-mediatek.c
++++ b/drivers/pwm/pwm-mediatek.c
+@@ -227,18 +227,14 @@ static int pwm_mediatek_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	pc->clk_top = devm_clk_get(&pdev->dev, "top");
+-	if (IS_ERR(pc->clk_top)) {
+-		dev_err(&pdev->dev, "clock: top fail: %ld\n",
+-			PTR_ERR(pc->clk_top));
+-		return PTR_ERR(pc->clk_top);
+-	}
++	if (IS_ERR(pc->clk_top))
++		return dev_err_probe(&pdev->dev, PTR_ERR(pc->clk_top),
++				     "clock: top failed\n");
+ 
+ 	pc->clk_main = devm_clk_get(&pdev->dev, "main");
+-	if (IS_ERR(pc->clk_main)) {
+-		dev_err(&pdev->dev, "clock: main fail: %ld\n",
+-			PTR_ERR(pc->clk_main));
+-		return PTR_ERR(pc->clk_main);
+-	}
++	if (IS_ERR(pc->clk_main))
++		return dev_err_probe(&pdev->dev, PTR_ERR(pc->clk_main),
++				     "clock: main failed\n");
+ 
+ 	for (i = 0; i < pc->soc->num_pwms; i++) {
+ 		char name[8];
+@@ -246,11 +242,9 @@ static int pwm_mediatek_probe(struct platform_device *pdev)
+ 		snprintf(name, sizeof(name), "pwm%d", i + 1);
+ 
+ 		pc->clk_pwms[i] = devm_clk_get(&pdev->dev, name);
+-		if (IS_ERR(pc->clk_pwms[i])) {
+-			dev_err(&pdev->dev, "clock: %s fail: %ld\n",
+-				name, PTR_ERR(pc->clk_pwms[i]));
+-			return PTR_ERR(pc->clk_pwms[i]);
+-		}
++		if (IS_ERR(pc->clk_pwms[i]))
++			return dev_err_probe(&pdev->dev, PTR_ERR(pc->clk_pwms[i]),
++					     "clock: %s failed\n", name);
+ 	}
+ 
+ 	pc->chip.dev = &pdev->dev;
+@@ -258,10 +252,8 @@ static int pwm_mediatek_probe(struct platform_device *pdev)
+ 	pc->chip.npwm = pc->soc->num_pwms;
+ 
+ 	ret = devm_pwmchip_add(&pdev->dev, &pc->chip);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "pwmchip_add() failed: %d\n", ret);
+-		return ret;
+-	}
++	if (ret < 0)
++		return dev_err_probe(&pdev->dev, ret, "pwmchip_add() failed\n");
+ 
+ 	return 0;
+ }
+-- 
+2.33.1
 
-greg k-h

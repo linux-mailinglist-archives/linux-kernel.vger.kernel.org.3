@@ -2,92 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C864B555E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 16:53:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B37D4B5560
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 16:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355982AbiBNPxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 10:53:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44148 "EHLO
+        id S1355991AbiBNPxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 10:53:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346354AbiBNPxJ (ORCPT
+        with ESMTP id S1355985AbiBNPxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 10:53:09 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D3C49261
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 07:53:00 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id t14so22837174ljh.8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 07:53:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=czp4xRlQVF7a5IlvGOuvoLMfTt//hnBWgTmDM9cpFDc=;
-        b=AzJ9fmokf+2gLxVJnBn0KnZz4Kysr8PhrYnAtk3X5q9ScQEFzzH9yroALSS2jsMRdk
-         53jpz37ips6e/0xkO7qz6x6jAIBrc/r+JjOVx+BNrhp234NCkalie5FpoBCAUpvpdA49
-         QeJYWJKQ/BEBQ7UuEgjwM5ZIgmZzhh/ZQnkw+xuFD5JGOEOwDigmBoKzNaZTWT0Ne5zi
-         8t7ZfkQAu5OWr7AK8KkaL5SskBaKjucHAz26IJ6s0ScfGe2Q/h2peMSd+37lpg3invsc
-         hwRu3WcptmK6AOxHz11yPHE10o3JDIi/GYFKMM4dLbUHaWb5cua+WH+MMYe47CpzW2Cx
-         bAAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=czp4xRlQVF7a5IlvGOuvoLMfTt//hnBWgTmDM9cpFDc=;
-        b=du5ahPnaEl5CttIBPjPGeFCIaE/eN+qUC8VVbvgWC3h5hIu5IXOem4DhLf9hVyxpOL
-         FGPPfrnrjP5FwjQCBKdV7VqxVX4QgwyYD7A66Rnij+F45QOf6pWEuv4hFssnWsLseK+l
-         YdbA+NIjpKXLgh0kEVvJyu5ieCzzh4c0BRnTQzUdzvAJyDiwDiqoScSX1I4uUwmS6wam
-         dNM4jxsQpq5TeawEQRgVT3qdkQFgDwUw93jRAAmCfn/b28EuqzQhYDmOoqt+S7P9Nnbh
-         8GCU+sp9jHYPu4PsFJUjiPYuN4J3penRCoQUAqf5dcdIxoGvzQaNFhseByRa+GmWAvBA
-         RC/w==
-X-Gm-Message-State: AOAM531qVpWkzXjJFV5/uS04X3h3u/ZLF87NwKBNjMEkmDKZrY6b0FJc
-        +A2CeK3h4rnGlzWCqUcU5VM8FbvYKjihVFIBisQMXA==
-X-Google-Smtp-Source: ABdhPJzIj3u21dLNdlborMcqisQowJNwjXFbZYy6Y+00WhBq07QB7avDEBJtbaFeRYsHxJkB0+WiyZ/ltnllx4UxCZc=
-X-Received: by 2002:a2e:a781:: with SMTP id c1mr226346ljf.527.1644853978857;
- Mon, 14 Feb 2022 07:52:58 -0800 (PST)
+        Mon, 14 Feb 2022 10:53:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD90F60AA9
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 07:53:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 519FAB81167
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 15:53:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6A84C340E9;
+        Mon, 14 Feb 2022 15:53:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644853989;
+        bh=jLvxgQZxaKOAqXhYrM5X1Wu5kLbIgCnhJeKHmC+J/hU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lQKVAu2uhc9aOAP+y7UGrprRWpt3DynGUNCiscNmjhGuzfwwkwi5m1z+ikunfTgp0
+         A+MtOkmrXFBm+xAdXxuaxv8uXfbzijCAeWyw6P5Enw9ypt94YI6uZDKoyXPp+o+N7q
+         s4SIz0xvqbqJP5vqTHLjUnV43SmLu+NDzZ9eQqiE6U/s8dMTZ1SmDDyaBciqkQl/t2
+         STkV0H43IJluM5xai44liuwSe/z+RLXM7K8xORHhyrbhCfk4cvOYVp+czWFU0mpE0U
+         TZsFtVQRzk8Kepfpzo9uZngSH2iylG1+3YliUMp5yigVnd/zYLL3me2Aotb0NXSoeJ
+         2p3i/kiMgKCKg==
+Date:   Mon, 14 Feb 2022 08:53:04 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        chongjiapeng <jiapeng.chong@linux.alibaba.com>,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: kernel/trace/ftrace.c:7157:20: error: unused function
+ 'ftrace_startup_enable'
+Message-ID: <Ygp64CsyyKyRykqE@dev-arch.archlinux-ax161>
+References: <202202132037.4aN017dU-lkp@intel.com>
+ <20220214102000.1d3af66e@gandalf.local.home>
 MIME-Version: 1.0
-References: <20220211193634.3183388-1-pgonda@google.com> <a3008754-86a8-88d6-df7f-a2770b0a2c93@redhat.com>
-In-Reply-To: <a3008754-86a8-88d6-df7f-a2770b0a2c93@redhat.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Mon, 14 Feb 2022 08:52:47 -0700
-Message-ID: <CAMkAt6rLafSikpQEKkbbT8DW4OG_pDL63jPLtCFiO1NNtTRe+A@mail.gmail.com>
-Subject: Re: [PATCH v2] KVM: SEV: Allow SEV intra-host migration of VM with mirrors
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm list <kvm@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Marc Orr <marcorr@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220214102000.1d3af66e@gandalf.local.home>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 5:57 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 2/11/22 20:36, Peter Gonda wrote:
-> > +     list_cut_before(&dst->mirror_vms, &src->mirror_vms, &src->mirror_vms);
-> > +     list_for_each_entry_safe(mirror, tmp, &dst->mirror_vms,
-> > +                              mirror_entry) {
->
-> Is list_for_each_entry_safe actually necessary here?  (It would be if
-> you used list_add/list_del instead of list_cut_before).
+Hi Steve,
 
- I don't think so, I think we could use list_for_each_entry here. Do
-you want me to send another revision?
+On Mon, Feb 14, 2022 at 10:20:00AM -0500, Steven Rostedt wrote:
+> On Sun, 13 Feb 2022 21:03:29 +0800
+> kernel test robot <lkp@intel.com> wrote:
+> 
+> > All errors (new ones prefixed by >>):
+> > 
+> > >> kernel/trace/ftrace.c:7157:20: error: unused function 'ftrace_startup_enable' [-Werror,-Wunused-function]  
+> >    static inline void ftrace_startup_enable(int command) { }
+> >                       ^
+> >    1 error generated.
+> 
+> Strange. I always thought that static inline functions do not cause
+> warnings when not used? Especially, since they are often in headers when
+> things are turned off. Or is it because this is in a C file?
 
->
-> > +             kvm_get_kvm(dst_kvm);
-> > +             kvm_put_kvm(src_kvm);
-> > +             mirror->enc_context_owner = dst_kvm;
-> > +     }
->
-> Thanks,
->
-> Paolo
->
+With -Wunused-function, clang will warn about unused static inline
+functions within a .c file (but not .h), whereas GCC will not warn for
+either. The unused attribute was added to the definition of inline to
+make clang's behavior match GCC's.
+
+> Is this a new warning caused by a commit, or is it a new warning because
+> the compiler now complains about it?
+
+However, in commit 6863f5643dd7 ("kbuild: allow Clang to find unused
+static inline functions for W=1 build"), Masahiro made it so that the
+unused attribute does not get added at W=1 so that instances of unused
+static inline functions can be caught and eliminated (or put into use,
+if the function should have been used), hence this report.
+
+I will be honest, I don't know why the robot flagged 172f7ba9772c as the
+commit that introduced this warning but it seems legitimate if
+CONFIG_DYNAMIC_FTRACE is not enabled, since ftrace_startup_enable() is
+only ever used within an '#ifdef CONFIG_DYNAMIC_FTRACE' block so I guess
+the stub is unnecessary?
+
+Cheers,
+Nathan

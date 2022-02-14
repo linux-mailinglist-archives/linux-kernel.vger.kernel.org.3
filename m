@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD07B4B49BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:36:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3FE4B4A2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:38:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345238AbiBNKGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:06:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54780 "EHLO
+        id S1344527AbiBNKCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:02:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345363AbiBNKBg (ORCPT
+        with ESMTP id S1343949AbiBNJ5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:01:36 -0500
+        Mon, 14 Feb 2022 04:57:44 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6C313F7B;
-        Mon, 14 Feb 2022 01:47:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE8E6A39A;
+        Mon, 14 Feb 2022 01:46:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D335B80D83;
-        Mon, 14 Feb 2022 09:47:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B10CDC340E9;
-        Mon, 14 Feb 2022 09:47:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46789B80DC6;
+        Mon, 14 Feb 2022 09:46:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67A13C340E9;
+        Mon, 14 Feb 2022 09:45:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832063;
-        bh=sQixh5DIJLEptq/NRsx0AS5rxevNIJ7IbnjT13iz9LY=;
+        s=korg; t=1644831959;
+        bh=LZ/Ng8GaZeAuzefv9xIp1LyLk8VNTsIYnLOZI240d4A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ggmbgebd3EvOv/r0PVXlVEoEQ1LpKA5lHDHHQTvzZ1OZof1M7OIxP8vs4xYwmLpiV
-         2UidTgPgMwpFUck7DHQAeJCcWOCKw7LJl28zL6PRtg0KEQ/7o5Z8wR3C1V2q2jm3M6
-         nHUaAx2LsrBYFZrkUb6iuPDWR631n98WVcezecZ8=
+        b=sbCNh5eOiyzDcBVuX0fH24YGr1YaxkTKc8P5dk6N31U43WGdJLE6aAvIRD9x5J0CE
+         SymBPOPXpOES+RcY4Pn2GumGNKI10PvT2aymHcafA1XtR4UdNCxFh93z8svU7H5WaS
+         Eww32JfWyEv4uCTVNs/Bt6p2t6xItJGywvuW2fiw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, rtm@csail.mit.edu,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        stable@vger.kernel.org, Olga Kornievskaia <kolga@netapp.com>,
         Anna Schumaker <Anna.Schumaker@Netapp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 026/172] NFSv4.1: Fix uninitialised variable in devicenotify
-Date:   Mon, 14 Feb 2022 10:24:44 +0100
-Message-Id: <20220214092507.312235026@linuxfoundation.org>
+Subject: [PATCH 5.15 027/172] NFSv4 remove zero number of fs_locations entries error check
+Date:   Mon, 14 Feb 2022 10:24:45 +0100
+Message-Id: <20220214092507.344652337@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
 References: <20220214092506.354292783@linuxfoundation.org>
@@ -56,104 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Olga Kornievskaia <kolga@netapp.com>
 
-[ Upstream commit b05bf5c63b326ce1da84ef42498d8e0e292e694c ]
+[ Upstream commit 90e12a3191040bd3854d3e236c35921e4e92a044 ]
 
-When decode_devicenotify_args() exits with no entries, we need to
-ensure that the struct cb_devicenotifyargs is initialised to
-{ 0, NULL } in order to avoid problems in
-nfs4_callback_devicenotify().
+Remove the check for the zero length fs_locations reply in the
+xdr decoding, and instead check for that in the migration code.
 
-Reported-by: <rtm@csail.mit.edu>
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
 Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/callback.h      |  2 +-
- fs/nfs/callback_proc.c |  2 +-
- fs/nfs/callback_xdr.c  | 18 +++++++++---------
- 3 files changed, 11 insertions(+), 11 deletions(-)
+ fs/nfs/nfs4state.c | 3 +++
+ fs/nfs/nfs4xdr.c   | 2 --
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/fs/nfs/callback.h b/fs/nfs/callback.h
-index 6a2033131c068..ccd4f245cae24 100644
---- a/fs/nfs/callback.h
-+++ b/fs/nfs/callback.h
-@@ -170,7 +170,7 @@ struct cb_devicenotifyitem {
- };
- 
- struct cb_devicenotifyargs {
--	int				 ndevs;
-+	uint32_t			 ndevs;
- 	struct cb_devicenotifyitem	 *devs;
- };
- 
-diff --git a/fs/nfs/callback_proc.c b/fs/nfs/callback_proc.c
-index ed9d580826f5a..f2bc5b5b764b7 100644
---- a/fs/nfs/callback_proc.c
-+++ b/fs/nfs/callback_proc.c
-@@ -358,7 +358,7 @@ __be32 nfs4_callback_devicenotify(void *argp, void *resp,
- 				  struct cb_process_state *cps)
- {
- 	struct cb_devicenotifyargs *args = argp;
--	int i;
-+	uint32_t i;
- 	__be32 res = 0;
- 	struct nfs_client *clp = cps->clp;
- 	struct nfs_server *server = NULL;
-diff --git a/fs/nfs/callback_xdr.c b/fs/nfs/callback_xdr.c
-index 4c48d85f65170..ce3d1d5b1291f 100644
---- a/fs/nfs/callback_xdr.c
-+++ b/fs/nfs/callback_xdr.c
-@@ -258,11 +258,9 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
- 				void *argp)
- {
- 	struct cb_devicenotifyargs *args = argp;
-+	uint32_t tmp, n, i;
- 	__be32 *p;
- 	__be32 status = 0;
--	u32 tmp;
--	int n, i;
--	args->ndevs = 0;
- 
- 	/* Num of device notifications */
- 	p = xdr_inline_decode(xdr, sizeof(uint32_t));
-@@ -271,7 +269,7 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
- 		goto out;
+diff --git a/fs/nfs/nfs4state.c b/fs/nfs/nfs4state.c
+index f22818a80c2c7..acc1cd3e63a48 100644
+--- a/fs/nfs/nfs4state.c
++++ b/fs/nfs/nfs4state.c
+@@ -2105,6 +2105,9 @@ static int nfs4_try_migration(struct nfs_server *server, const struct cred *cred
  	}
- 	n = ntohl(*p++);
+ 
+ 	result = -NFS4ERR_NXIO;
++	if (!locations->nlocations)
++		goto out;
++
+ 	if (!(locations->fattr.valid & NFS_ATTR_FATTR_V4_LOCATIONS)) {
+ 		dprintk("<-- %s: No fs_locations data, migration skipped\n",
+ 			__func__);
+diff --git a/fs/nfs/nfs4xdr.c b/fs/nfs/nfs4xdr.c
+index 5e886518f2d45..2a1bf0a72d5bf 100644
+--- a/fs/nfs/nfs4xdr.c
++++ b/fs/nfs/nfs4xdr.c
+@@ -3693,8 +3693,6 @@ static int decode_attr_fs_locations(struct xdr_stream *xdr, uint32_t *bitmap, st
+ 	if (unlikely(!p))
+ 		goto out_eio;
+ 	n = be32_to_cpup(p);
 -	if (n <= 0)
-+	if (n == 0)
- 		goto out;
- 	if (n > ULONG_MAX / sizeof(*args->devs)) {
- 		status = htonl(NFS4ERR_BADXDR);
-@@ -330,19 +328,21 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
- 			dev->cbd_immediate = 0;
- 		}
- 
--		args->ndevs++;
--
- 		dprintk("%s: type %d layout 0x%x immediate %d\n",
- 			__func__, dev->cbd_notify_type, dev->cbd_layout_type,
- 			dev->cbd_immediate);
- 	}
-+	args->ndevs = n;
-+	dprintk("%s: ndevs %d\n", __func__, args->ndevs);
-+	return 0;
-+err:
-+	kfree(args->devs);
- out:
-+	args->devs = NULL;
-+	args->ndevs = 0;
- 	dprintk("%s: status %d ndevs %d\n",
- 		__func__, ntohl(status), args->ndevs);
- 	return status;
--err:
--	kfree(args->devs);
--	goto out;
- }
- 
- static __be32 decode_sessionid(struct xdr_stream *xdr,
+-		goto out_eio;
+ 	for (res->nlocations = 0; res->nlocations < n; res->nlocations++) {
+ 		u32 m;
+ 		struct nfs4_fs_location *loc;
 -- 
 2.34.1
 

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2390D4B43D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 09:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E6A4B43DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 09:19:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241967AbiBNIRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 03:17:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44388 "EHLO
+        id S241930AbiBNIR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 03:17:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241826AbiBNIRL (ORCPT
+        with ESMTP id S241866AbiBNIRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 03:17:11 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44A15FF0C
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:17:02 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        Mon, 14 Feb 2022 03:17:31 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD06A606EF
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:17:16 -0800 (PST)
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 8E5E14033A
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:17:01 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 6FB10407DD
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:17:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644826621;
-        bh=bOhlBRyYjdc4olCsTRd9yvmwLAfAPm/hGaoOpjTnzVA=;
+        s=20210705; t=1644826635;
+        bh=YIMchXgxrGO/KxGG+/UkFx+hf7tS1WrOyOXtJpDqg8o=;
         h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=bVnnPe6z79LbSXoIzfyudEIXqpop6oVMEsPjJDh0vHony2gshRvemnZEeAJ9BRR0n
-         oUK+0dUC5WkhvsyWvH7mv6AU+GrlElxVbIxEkGruewf+62Ug0XwuRHGYN3etHwFMH0
-         +S4H+kWqc3RAI5waTxdjSXgR6S1ZRqiS+B8jpBJgK12SbEb9nbpPVW3xyv5mhgiIiZ
-         mmq9aqqqoEZE4vTAj08SYvoG2yndMDdg1/958XmG9INnqn9erqDbhaUyVkrz1ULdA1
-         OyZTVWyxmKZ9uF7iBBvX0im6EsLyuhaMnv/CckDzYIcjuzKF6//FoDEe9tGxhIQmUT
-         kHKTdyRzExw0g==
-Received: by mail-ed1-f71.google.com with SMTP id s7-20020a508dc7000000b0040f29ccd65aso9799910edh.1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:17:01 -0800 (PST)
+        b=q68KrJxtY3MZ2TuRbvwonTQSbc5/iN1y/yB/stVqB/pcjhL8ltiUQL9h/SlplY83L
+         iUyiFIf/zxxAxSluntXt9uNsCnKbJJ8Zmy3aLmH5jyT7dfp650MirNAkdYEpltiG6g
+         e149qRZQOZuGfq/mVE3ZySLhMy5AeyCkVU+0YSKhPhHO0gxLDGRIoz1xkBMaYactzy
+         LJNvrmcHH+l0rbcolEWEusGGLV5gC+pfzYbZAOf17MokdHXa+WZgCExSDMmbuCU6f/
+         6Bix23H4YHrKaTg/OGVaG8fPkXIAr03v5U247yJmq1BHo4qmY2RS9+g3OYmYqelDx8
+         V3l6i9qUX+HbQ==
+Received: by mail-lj1-f197.google.com with SMTP id c31-20020a2ebf1f000000b0022d87a28911so5393034ljr.1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:17:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bOhlBRyYjdc4olCsTRd9yvmwLAfAPm/hGaoOpjTnzVA=;
-        b=f/GaACRD7i1NmZ3hgTuGfgekcJOJUuS9/X/E3zCZK7dGUv3Z1Bif0TPtfmDgmYWYHi
-         AakhvbygD8IwIhKkVnrRePrJhkJdbj8F36JNXss9pskrF51etNVeuBDIkZG/JNSmNVnc
-         2zenGrkqtbzSoPNOJ5vG+F4kLR3y7P+jJ4VbLSylLB75YTSviEHV5MIKDi/tW5ja+us3
-         rhe7eh2oYAhs+tXFSKjThC7cijgGqMUuIePkPtPGpoaGFSAf0Zs3C2Su+K8G2MjKnivL
-         4xeYfggysIpS6tOY1YKb2/IcimzmPAjqVK52LyAVAvTKNfyD0i5MfebZwFzmumovgSQj
-         If3Q==
-X-Gm-Message-State: AOAM531iV+7YuTa2c3h3yn/jkig7IkjK3ePoAV+arcNf7dqGJOdmRiMs
-        GFBHnmffincbpOY3hCHMSlPem5DDPKBjhEbufqNbXqF05N5uCHpAXZy7Sr5sOdADw+nn3kPO9Ts
-        uSZ/RmrEMQBCZQIkn1c/HRb8nzgPFdhWEE64FBDoNWw==
-X-Received: by 2002:a17:907:f9c:: with SMTP id kb28mr10076887ejc.213.1644826621258;
-        Mon, 14 Feb 2022 00:17:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxxVq42SC5ZUR0wG1GQiAhOdCRluJBdfCYPvNoUVrfESuZAlthB1iFEyURnQo2Crc/39Bc5gA==
-X-Received: by 2002:a17:907:f9c:: with SMTP id kb28mr10076870ejc.213.1644826621102;
-        Mon, 14 Feb 2022 00:17:01 -0800 (PST)
+        bh=YIMchXgxrGO/KxGG+/UkFx+hf7tS1WrOyOXtJpDqg8o=;
+        b=E+964PGu5DyhJ04ni5zgxtbiqInyNRoIGCvdzwrhsSGQpeQbv7nBFzcfTHm9Up/eUg
+         /tVMXZ9IrDvEpkZabJXyknRdKkfvLe04J90ZKgoy3c4UYIMlh19K7t7w9OGF7ZrSO54A
+         x5vCp2GYr/Z+qgXXzNh7QRumon/qv7l9ZmOItBxnVvlqhKaSKUCUE566TePhYBssoXU5
+         zBSk6q4Jqulv2vhAxFWgyQzZ/q6QGlrgMFMZ+FWoxPMuATP0bFxNkK5i8n8KlodttvtN
+         yW1l3BYXZFSjjdhBOZq73df6J5YYf37Teell5j5JtFVAhAUVwj4IYhRChJ0VMBuRJfDn
+         zu3Q==
+X-Gm-Message-State: AOAM532ZurPQ7NJYRbbS7sdzWr3OLGbC4SKh19GSaw+6aZ23iohLu894
+        hEItkT0gvd6UvoNHi2fRsNb8ayhfaT8IsKix4Hi8WOab0ma3bYxPGJDiEruMzqgj/cuHpMTGLAS
+        VW1/81xTwJpboLGrxiFRqmpw6y5Mbtz2DicMHutdl+Q==
+X-Received: by 2002:a17:907:3342:: with SMTP id yr2mr5958124ejb.146.1644826624455;
+        Mon, 14 Feb 2022 00:17:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzfK0aywy5WjW2583ifLTvYYWtVDcJ7Gtmfi5jkghjnk2WcWRlDFdui/O6H62E9nB+KLqqdpw==
+X-Received: by 2002:a17:907:3342:: with SMTP id yr2mr5958081ejb.146.1644826624297;
+        Mon, 14 Feb 2022 00:17:04 -0800 (PST)
 Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id t21sm3363642edd.74.2022.02.14.00.16.59
+        by smtp.gmail.com with ESMTPSA id t21sm3363642edd.74.2022.02.14.00.17.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 00:17:00 -0800 (PST)
+        Mon, 14 Feb 2022 00:17:02 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
@@ -91,9 +91,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-riscv@lists.infradead.org
-Subject: [PATCH 13/15] dt-bindings: pwm: tiecap: do not require pwm-cells
-Date:   Mon, 14 Feb 2022 09:16:03 +0100
-Message-Id: <20220214081605.161394-13-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH 14/15] dt-bindings: pwm: tiehrpwm: do not require pwm-cells
+Date:   Mon, 14 Feb 2022 09:16:04 +0100
+Message-Id: <20220214081605.161394-14-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220214081605.161394-1-krzysztof.kozlowski@canonical.com>
 References: <20220214081605.161394-1-krzysztof.kozlowski@canonical.com>
@@ -101,7 +101,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,14 +113,14 @@ pwm-cells are already required by pwm.yaml schema.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- Documentation/devicetree/bindings/pwm/pwm-tiecap.yaml | 1 -
+ Documentation/devicetree/bindings/pwm/pwm-tiehrpwm.yaml | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/pwm/pwm-tiecap.yaml b/Documentation/devicetree/bindings/pwm/pwm-tiecap.yaml
-index ed35b6cc48d5..3840ae709bc6 100644
---- a/Documentation/devicetree/bindings/pwm/pwm-tiecap.yaml
-+++ b/Documentation/devicetree/bindings/pwm/pwm-tiecap.yaml
-@@ -47,7 +47,6 @@ properties:
+diff --git a/Documentation/devicetree/bindings/pwm/pwm-tiehrpwm.yaml b/Documentation/devicetree/bindings/pwm/pwm-tiehrpwm.yaml
+index ee312cb210e6..70a8f766212e 100644
+--- a/Documentation/devicetree/bindings/pwm/pwm-tiehrpwm.yaml
++++ b/Documentation/devicetree/bindings/pwm/pwm-tiehrpwm.yaml
+@@ -48,7 +48,6 @@ properties:
  required:
    - compatible
    - reg

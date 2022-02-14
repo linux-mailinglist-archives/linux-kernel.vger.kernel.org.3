@@ -2,259 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0144B4B17
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F6B4B4AB3
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238620AbiBNKKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:10:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35470 "EHLO
+        id S1345874AbiBNKLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:11:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345357AbiBNKGI (ORCPT
+        with ESMTP id S1344939AbiBNKH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:06:08 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226327463F
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 01:49:30 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id h7-20020a17090a648700b001b927560c2bso14056394pjj.1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 01:49:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/S2BvEODEAJUahCS59ViatHoyD/cWLeqwLgA2QTvjE8=;
-        b=JUQGBXn8+euWZUwquBLidxbuLw3TdJfHMe5lIkxyYnB5E5+Phe4SJM/kzbR8LVgZLJ
-         omYavMfQGq1XrSeFoRjwnWMWMy7yRDIgbekO0KHYkv8s0gH2vh8whPhUhPxwrcZ6XVl0
-         uS0Ib/HK4qNAugHZ10eCwxmb7yWA/ZRPKv6G734jNdINZ+C6YkBZRSoRWZuykoaAmPGE
-         TnqmxBsQNvEOOpJNpyzDQlo8NySA3K8Lle/JgGhv6XZ/I9EG+nyDS9yKwJ9960el5V3+
-         Gh7T0qVbB5wEVxCp5E5TDp5a643j3lGzBzOp85KvPbiGro5WYSv/D3GfWNHGNWT/Q4DK
-         drSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/S2BvEODEAJUahCS59ViatHoyD/cWLeqwLgA2QTvjE8=;
-        b=A9taN2lxGHITQs8p6OT220C/2/82IaSC15EvAyZeaV7XBIaeNq/c7kpjO38AkVJq5Q
-         Q3hZpcmKnAhfrhiQpyzgugUMrTnJ5lUW6LJQzDnJTg5AgOSxOe8njaF9m1eG8aHWab/0
-         2ShD1uAKAZ+9vY896iZWIs0dX3QkwH6+vt98d09XTiA4KoNCuY5qSXhtIJJf5FCvneG/
-         UVzapWuBgb8yIo+Lvs7WPrDqwxEkXCusMOczlrtP3Qz46KUETnKYwrkVwYm1pgn+WyFm
-         Y7qqBEveMKSuKGHfw4q8fV8LYO250kdfk9sbHPeeBuvhNe/LAwyh5Q8WZNvj8BXOwRpB
-         lUPw==
-X-Gm-Message-State: AOAM53012vW7wvUy0nbNkrXYStZuwZS/OPm1JXnk+BLaq3btjS2+68Zs
-        YLjJMrYVwZVx+v2muReDoQ45q9ZTxlNXcQ4=
-X-Google-Smtp-Source: ABdhPJz2Lk0La4YUA438Z/uoJgqgWO5edLzBJc/ODM441MaC7A5dLjTRPudSEXvP0SyxxMxIOPKrDg==
-X-Received: by 2002:a17:903:2406:: with SMTP id e6mr13119868plo.21.1644832169511;
-        Mon, 14 Feb 2022 01:49:29 -0800 (PST)
-Received: from thinkpad ([2409:4072:817:5a6f:3104:62c0:1941:5033])
-        by smtp.gmail.com with ESMTPSA id l17sm35406780pfu.61.2022.02.14.01.49.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 01:49:29 -0800 (PST)
-Date:   Mon, 14 Feb 2022 15:19:19 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Rob Herring <robh@kernel.org>, linux-pci@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [RFC PATCH 2/5] PCI: endpoint: Add support to data transfer
- using internal dmac
-Message-ID: <20220214094919.GJ3494@thinkpad>
-References: <20220126195043.28376-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220126195043.28376-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Mon, 14 Feb 2022 05:07:57 -0500
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90053.outbound.protection.outlook.com [40.107.9.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13CCA19F;
+        Mon, 14 Feb 2022 01:50:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HVwurtrXI6thWtpp02ieVL/fXssYImd46SOadrUUzJnrjKoqQEqEoR82xTiEgSDuh9Iti5K4iZjWVklWWWEDYN0sTz6/g266HwWtfwyxgtTnzMZoasjs9rDgSyD/cvfqCP43oeP0Y7ERWXwZeYN2A1qUmkxg8vE7QGswv8mtY6xxhWme1rFSGmnfXl89DbJPXcOG4bdnySdHvLLLhX5yKPs1kJHZkszkptHiZm8N9ZC3ovuFjOTwbZZT3LaYiG4uTbz9Qn4pXGqjrtpvw2A5BaCVOcAAP4XhZIyDS0kOsJb4Qr27wajdqpAVpN2Sy3v9LFudW0gNWvdjpD+KcZdK5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zxhp1B9rFrYNbQRG/k9f5ggPlijXbahKeg1rQaRkyM0=;
+ b=iT8HwJUf2R3G4OzEJP44Slc/tz5iFebg1zk334kEkv3dAHDlWt/dWva6+OYHUVDvTz9QRPJyVHFPuVQj5/6vBcOZRMMiQthPeP+r18ZYNDdXaIo8CgOMoA4fFgWcQyRWCH6KTSdKZVuqD1SHj7btL26QjuJ7YPVgtiLd0VQ2LCStsndgfADZFa9M1z6aF5UwOsZdStWD7JDBhFuwl0e96244QvWe70VCTY6AoOtt5mXZ58XVQHvuD+6CSE39agq3e9zSLOXAIWeFhOCLKfj04I52Rp2AggHQfACAYiz9N2KZ4RQjrXeBDTPAEmCNTLIdKeZmzW3ME9LXYJbvXoJPtA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR2P264MB0160.FRAP264.PROD.OUTLOOK.COM (2603:10a6:101:7::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.15; Mon, 14 Feb
+ 2022 09:50:06 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::c9a2:1db0:5469:54e1]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::c9a2:1db0:5469:54e1%9]) with mapi id 15.20.4975.019; Mon, 14 Feb 2022
+ 09:50:06 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Michael Ellerman <mpe@ellerman.id.au>
+CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jason Baron <jbaron@akamai.com>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>
+Subject: Re: BUG: sleeping function called from invalid context at
+ include/linux/sched/mm.h:256
+Thread-Topic: BUG: sleeping function called from invalid context at
+ include/linux/sched/mm.h:256
+Thread-Index: AQHYIGUrh/GHNmjCTEyAzDxYump2zqySy5UAgAAEHgA=
+Date:   Mon, 14 Feb 2022 09:50:06 +0000
+Message-ID: <af4ecc95-8cb0-10a8-1819-cb6431b02156@csgroup.eu>
+References: <244218af-df6a-236e-0a52-268247dd8271@molgen.mpg.de>
+ <YgoiWlNZvTusk1B9@hirez.programming.kicks-ass.net>
+In-Reply-To: <YgoiWlNZvTusk1B9@hirez.programming.kicks-ass.net>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6b81f382-ba79-4d26-245b-08d9ef9f61c8
+x-ms-traffictypediagnostic: PR2P264MB0160:EE_
+x-microsoft-antispam-prvs: <PR2P264MB0160BBBB4816D4D37FF6174AED339@PR2P264MB0160.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /lmsLmNVY/qOT6K7+ozzEZMG/h3RlZy4A5HBUoZxWLmJk9Bbr5neFScxhxYyDFIIHskRXiek52KGP6YBKEMJQgZ//4OwHh+jEfgdk8WzXZPdBhQTzmzR+iWtFV4eVgz5FReejeBgPbuxOEc7SK58v0y5bNUszBkdhoXdLZHQKqnL9kmgX41vjW1xfLjQar95dPzKWCSdV+iBmj3Wl1KAJLNNXhsTcjzJAJceCupsueWVIxgO68EC/sCMZMhzr78b9OfxdCHSNOSL9wGadp92PgqJSkFNFUfqWLfE31Yjv4SosR9BXfGB5VOK7F6cQHSxoCpJav8kOtERxx9ZAxvLdRLj1U7arCclzqzFIk5tTnrHuPwiMoM3GBooa7RkzMAhVsqErHrEC+7ND0JhCnmiZoLfDQ6GLDH5DmbLux9xWs0Ko2GFRICBkvsTG+Ua0pk+mELpEOaEtrY4QA7g6pCCmUaQGPQojK/WpElPHWZRXWZ6TpRp4oF94CyVWPZJGdSIUP4e2Hbw8QxQM065MA53eqND06lbH2cBu9kMWB809ZRQ8Ykhrep/SH+QZUdW2KBNk3+5dnuq112ynWhx6HIpMDahL/Q9vZ3YRYGwzAt83EBB5uanUfIKCrZ9MMnkhgqauGNRfRHN7YkQCOjMpM4KyuQ6bkCxyBwDL134kyY4cLtVD00bNbFaarVUwPV9ZQLOndylYQS1XpcSbWbPpMPRVhDHPQO03Zlzsv7+Xku0D/7ny8tX244gHx9SDqw7dvzSo2Z7YPOhCOaf63EGg0p35Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(83380400001)(110136005)(316002)(64756008)(54906003)(38070700005)(2616005)(8676002)(4326008)(26005)(186003)(86362001)(66556008)(66476007)(66446008)(76116006)(91956017)(31696002)(66946007)(6486002)(122000001)(38100700002)(71200400001)(6506007)(6512007)(5660300002)(508600001)(31686004)(44832011)(2906002)(36756003)(7416002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?d1hBdjV3VXlJcUliZkVGTVdodjV0VjVxYzQwa0FuS0VkNHhHOEgzU0RDZWs1?=
+ =?utf-8?B?dlhsNzFkYmpsOUVCNUlYR28veHJTTDhUTnFwRUt2ZnZFL0pVc0djdzEzU2RC?=
+ =?utf-8?B?elErWUdqc2FvQ242UVRaZk5FQVNqUlQ0Sm1YWW9aYUw0Q2l1RmN6bGtPdVov?=
+ =?utf-8?B?YWNFVjV2RXcwOHhmTTFaMHl3UnJMTEk5eVdlcWlrbFR0UGtTYlIxMmRnVUxy?=
+ =?utf-8?B?dVpjSWwzUWRqcVlTNUFyS0FmZlJFVkVrbVJYaTczWlcrT3lkYnZlUEs0b0lB?=
+ =?utf-8?B?T2FBdDJMZXpGcTRYYlFrU2g3RWx3c0N5RVZPZUdkRnVTdWsyanAzK3NYcmdD?=
+ =?utf-8?B?OUpuQitsWm8zRUpsUW0xMkVQRjJmbWo3TVY0MktPME5Ta2xCbHdjQ1l1T21H?=
+ =?utf-8?B?cHpPZlEzU2Fza0lrZnpPQ0lNTGd6NnpobVRKMGs3NHpJZUpxOTNwY3Q3Q1N1?=
+ =?utf-8?B?TDJ0MzQxT1phZTFOMGVaMytRdTZtb1lEMHN4aFFaMVJ3c2tZbkNyQVVUaEJC?=
+ =?utf-8?B?VzhUd242VnMranZhVmYxMDJ0TUVVTENGWkozZGw2YjFHbG1RZkgwSm9uSnUr?=
+ =?utf-8?B?R09oZTY0VjhsQmJnaS9RREJ5QzFyTVZ0MG5WV09FNEg5Q3diT1ZOU3VDY2hH?=
+ =?utf-8?B?bEZpZG5WZUI2KzR4R203bXJMa1dWb0p3cCt5NTl4YkZmK0ZhMStEVGpQL0My?=
+ =?utf-8?B?eXYxWlFyb3c3aHZJZUhKWkxCYjlLb1lTMnM1TjRMc1dMSFN1dnhtWlVJTmZG?=
+ =?utf-8?B?ekpBcFg0ejlSSTRiN0xOUFk2dUIyaXZQUERNVmZBSGhzLzJPWHg3UHBEcVpX?=
+ =?utf-8?B?TjJZWUZxUWV2SStEc0NMTFAvaVYvL1BCN2pIbTlNejU5NStleEg4bUtadjkv?=
+ =?utf-8?B?ZW1Fa0Znb1lxTkVqdjA0Z09BZmoxekUrZGZEbGZ4UnJsaU1mY2VNdm9NcEJq?=
+ =?utf-8?B?dExtc1BaS0dkdHp3M2pqbEh4cmtpWXdPUFo1S1hlTlExLys2SStOME1Ja3Ew?=
+ =?utf-8?B?Q0NFMk5FV0ZNamNtQXZ5ZmVuWis2c2ZzbWJzQ3dBRUhhWUJwTUhRMlJXVys5?=
+ =?utf-8?B?RmNueHp1U0N1am9KZGV3M0NXa1dtVEsvMVBBVHViV3hEUmRJa1djNFVlREpR?=
+ =?utf-8?B?amRXMVFxL2VVTzg2UHBCNjVGRlBBWmwxbnBUWEtLbXc0L1ZYMit2RGhabFFt?=
+ =?utf-8?B?bmFCR3ZWSVExamo3VXdUQU5wcmtiaUxsd1MxczI4blpYRWpuVGZIT2VNaXdD?=
+ =?utf-8?B?UHhuNVdtMUpLTTlXVEh1bGNqRzE3UDhsajFmNkVBaDM5N3N0RFpacytOTSsv?=
+ =?utf-8?B?TFljbVhFbW1sN3hpK2dZRGJFYVFZTDRqNzhxeXVIRjE5cXRvRGtKZFhYN2Zq?=
+ =?utf-8?B?bHdodm8zekFJUzFkK3FGcTY0NHNxbDdJdDA2aTRyNmNkMHN4QjB1bG9mOFRL?=
+ =?utf-8?B?b01ZY09OUVdwUDlrWVUwM05rTGFaSytoK2pJMnJrVEVRYW9HRys5a1loNEtO?=
+ =?utf-8?B?bWc5TTZkeFdxOHZnemhwM1EvTDBCYjNQQ0VQU3d3OVM4RmVDOVRUeGlsUmNi?=
+ =?utf-8?B?TFIvYThpNndJM2tjTzNRZk5UbVV6Ris3MStMRGJnb1NzeTZaVHhraDg2ZCsx?=
+ =?utf-8?B?aVgzaWQ0MmZrc2FpNmFEWnhwWUZCNEtLVzJGUXJxYXZTVURYNjdieE00S1Z1?=
+ =?utf-8?B?RlJrT2lmSjZmekt4UVNDY3ZvMkpPMjZIN2E2eE9KeVpVNFlXL1Z6VmJrWCtt?=
+ =?utf-8?B?dGxla1JzQ0ZHWnJpa29hUHB3aE0rYWM1UFUrV2t1bVlzVldKVEx1SFJ4dHB6?=
+ =?utf-8?B?UnVrTWI4ODNpaUp0M0kzZ1lxY0Z2a0NDTzFOSm9xL0htRzFic3k3SnJIWUQy?=
+ =?utf-8?B?eW5tU3AvSVVTSVJydlQyNGVTM01CZ2tkaTJGaG5GZDJuMW9ROWtmL1plVmtB?=
+ =?utf-8?B?TGozMVNHblIrYlVMc1RLRHFXVkFuak45bnU5UHRLelB2MlREZnVXc0lBOGdW?=
+ =?utf-8?B?SU1iUlFKazlEZVhhVms0RVZmdjBuWjhJV3Q2NE9oLzZDK3IwdlJJY2wyaXcy?=
+ =?utf-8?B?MTBJSGVwdHVhbWFkT2c1ZkRnczE0b1RBcGg2S0V4L1IvWXFMYnJXalpMTS9j?=
+ =?utf-8?B?SkU1MG12VTFMcXFlcktIYlhsbGJzV0gxMDR0N1czVDFyOHhvelB2bFlEaVpq?=
+ =?utf-8?B?Zyt2TFViNjJZVUZPRFlBR0VtbkJQTVczMHk4OWlrMCsrQ3ZlRGc2RHQ2WEpU?=
+ =?utf-8?Q?b0OT0FnJEpSQ2gsAwuzsnGh52C8UgTlDPNcjdIKt38=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <ED5D6D17E9010E468233B008563408D3@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126195043.28376-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b81f382-ba79-4d26-245b-08d9ef9f61c8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2022 09:50:06.8355
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LFNavLzCvMZhZoGlhwNlgZCKvufBxr1XcP7k1RLcqFxhuxCiizluMMIY8b/4XqEsFVtOihxQFcVpgtoHqYqk589gXFkXUuhel577IIvf1lg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR2P264MB0160
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 07:50:40PM +0000, Lad Prabhakar wrote:
-> For PCIe EP capable with internal DMAC, transfer data using this
-> when -d option is used with pcitest.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  drivers/pci/endpoint/functions/pci-epf-test.c | 184 ++++++++++++++----
->  1 file changed, 141 insertions(+), 43 deletions(-)
-> 
-> diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-> index 90d84d3bc868..f792b1a15c44 100644
-> --- a/drivers/pci/endpoint/functions/pci-epf-test.c
-> +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-> @@ -55,6 +55,7 @@ struct pci_epf_test {
->  	struct dma_chan		*dma_chan;
->  	struct completion	transfer_complete;
->  	bool			dma_supported;
-> +	bool			internal_dmac;
-
-Please use "dma" everywhere.
-
->  	const struct pci_epc_features *epc_features;
->  };
->  
-> @@ -148,6 +149,40 @@ static int pci_epf_test_data_transfer(struct pci_epf_test *epf_test,
->  	return 0;
->  }
->  
-> +/**
-> + * pci_epf_test_internal_dmac_data_transfer() - Function that uses internal DMAC
-> + *				to transfer data between PCIe EP and remote PCIe RC
-> + * @epf_test: the EPF test device that performs the data transfer operation
-> + * @dma_dst: The destination address of the data transfer. It can be a physical
-> + *	     address given by pci_epc_mem_alloc_addr or DMA mapping APIs.
-> + * @dma_src: The source address of the data transfer. It can be a physical
-> + *	     address given by pci_epc_mem_alloc_addr or DMA mapping APIs.
-> + * @len: The size of the data transfer
-> + * @dir: Direction of data transfer
-> + *
-> + * Function that uses internal dmac supported by the controller to transfer data
-> + * between PCIe EP and remote PCIe RC.
-> + *
-> + * The function returns '0' on success and negative value on failure.
-> + */
-> +static int
-> +pci_epf_test_internal_dmac_data_transfer(struct pci_epf_test *epf_test,
-> +					 dma_addr_t dma_dst, dma_addr_t dma_src,
-> +					 size_t len, enum pci_epf_xfr_direction dir)
-> +{
-> +	struct pci_epf *epf = epf_test->epf;
-> +	int ret;
-> +
-> +	if (!epf_test->internal_dmac)
-> +		return -EINVAL;
-> +
-> +	ret = pci_epf_internal_dmac_xfr(epf, dma_dst, dma_src, len, dir);
-> +	if (ret)
-> +		return -EIO;
-
-Why can't you return "ret"?
-
-> +
-> +	return 0;
-> +}
-> +
->  /**
->   * pci_epf_test_init_dma_chan() - Function to initialize EPF test DMA channel
->   * @epf_test: the EPF test device that performs data transfer operation
-> @@ -238,6 +273,14 @@ static int pci_epf_test_copy(struct pci_epf_test *epf_test)
->  	struct pci_epc *epc = epf->epc;
->  	enum pci_barno test_reg_bar = epf_test->test_reg_bar;
->  	struct pci_epf_test_reg *reg = epf_test->reg[test_reg_bar];
-> +	bool internal_dmac = epf_test->internal_dmac;
-> +
-> +	use_dma = !!(reg->flags & FLAG_USE_DMA);
-> +
-> +	if (use_dma && internal_dmac) {
-> +		dev_err(dev, "Operation not supported\n");
-
-Here you are erroring out but below you are checking for this condition to do
-internal DMA transfer.
-
-> +		return -EINVAL;
-> +	}
->  
->  	src_addr = pci_epc_mem_alloc_addr(epc, &src_phys_addr, reg->size);
->  	if (!src_addr) {
-> @@ -272,7 +315,6 @@ static int pci_epf_test_copy(struct pci_epf_test *epf_test)
-
-Why internal DMA is not used in pci_epf_test_copy()?
-
->  	}
->  
->  	ktime_get_ts64(&start);
-> -	use_dma = !!(reg->flags & FLAG_USE_DMA);
->  	if (use_dma) {
->  		if (!epf_test->dma_supported) {
->  			dev_err(dev, "Cannot transfer data using DMA\n");
-> @@ -322,31 +364,49 @@ static int pci_epf_test_read(struct pci_epf_test *epf_test)
->  	struct device *dma_dev = epf->epc->dev.parent;
->  	enum pci_barno test_reg_bar = epf_test->test_reg_bar;
->  	struct pci_epf_test_reg *reg = epf_test->reg[test_reg_bar];
-> +	bool internal_dmac = epf_test->internal_dmac;
->  
-> -	src_addr = pci_epc_mem_alloc_addr(epc, &phys_addr, reg->size);
-> -	if (!src_addr) {
-> -		dev_err(dev, "Failed to allocate address\n");
-> -		reg->status = STATUS_SRC_ADDR_INVALID;
-> -		ret = -ENOMEM;
-> -		goto err;
-> -	}
-> +	use_dma = !!(reg->flags & FLAG_USE_DMA);
->  
-> -	ret = pci_epc_map_addr(epc, epf->func_no, epf->vfunc_no, phys_addr,
-> -			       reg->src_addr, reg->size);
-> -	if (ret) {
-> -		dev_err(dev, "Failed to map address\n");
-> -		reg->status = STATUS_SRC_ADDR_INVALID;
-> -		goto err_addr;
-> +	if (use_dma && internal_dmac) {
-
-Both are mutually exclusive, isn't it?
-
-> +		phys_addr = reg->src_addr;
-> +		src_addr = NULL;
-> +	} else {
-> +		src_addr = pci_epc_mem_alloc_addr(epc, &phys_addr, reg->size);
-> +		if (!src_addr) {
-> +			dev_err(dev, "Failed to allocate address\n");
-> +			reg->status = STATUS_SRC_ADDR_INVALID;
-> +			ret = -ENOMEM;
-> +			goto err;
-> +		}
-> +
-> +		ret = pci_epc_map_addr(epc, epf->func_no, epf->vfunc_no, phys_addr,
-> +				       reg->src_addr, reg->size);
-> +		if (ret) {
-> +			dev_err(dev, "Failed to map address\n");
-> +			reg->status = STATUS_SRC_ADDR_INVALID;
-> +			goto err_addr;
-> +		}
->  	}
->  
-
-[...]
-
->  
->  	ret = pci_epf_test_alloc_space(epf);
->  	if (ret)
-> @@ -868,11 +964,13 @@ static int pci_epf_test_bind(struct pci_epf *epf)
->  			return ret;
->  	}
->  
-> -	epf_test->dma_supported = true;
-> +	epf_test->dma_supported = false;
->  
-> -	ret = pci_epf_test_init_dma_chan(epf_test);
-> -	if (ret)
-> -		epf_test->dma_supported = false;
-> +	if (!epf_test->internal_dmac) {
-> +		ret = pci_epf_test_init_dma_chan(epf_test);
-> +		if (!ret)
-> +			epf_test->dma_supported = true;
-
-You can set this flag to true inside pci_epf_test_init_dma_chan().
-
-Thanks,
-Mani
-
-> +	}
->  
->  	if (linkup_notifier) {
->  		epf->nb.notifier_call = pci_epf_test_notifier;
-> -- 
-> 2.25.1
-> 
+DQoNCkxlIDE0LzAyLzIwMjIgw6AgMTA6MzUsIFBldGVyIFppamxzdHJhIGEgw6ljcml0wqA6DQo+
+IE9uIFN1biwgRmViIDEzLCAyMDIyIGF0IDEyOjA1OjUwQU0gKzAxMDAsIFBhdWwgTWVuemVsIHdy
+b3RlOg0KPiANCj4+IFsgICAgMC4wMTIxNTRdWyAgICBUMV0gQlVHOiBzbGVlcGluZyBmdW5jdGlv
+biBjYWxsZWQgZnJvbSBpbnZhbGlkIGNvbnRleHQgYXQNCj4gDQo+PiBbICAgIDAuMDIyNDQzXVsg
+ICAgVDFdIFtjMDAwMDAwMDA4NDgzN2QwXSBbYzAwMDAwMDAwMDk2MWFhY10gPiBkdW1wX3N0YWNr
+X2x2bCsweGEwLzB4ZWMgKHVucmVsaWFibGUpDQo+PiBbICAgIDAuMDIzMzU2XVsgICAgVDFdIFtj
+MDAwMDAwMDA4NDgzODIwXSBbYzAwMDAwMDAwMDE5YjMxNF0gPiBfX21pZ2h0X3Jlc2NoZWQrMHgy
+ZjQvMHgzMTANCj4+IFsgICAgMC4wMjQxNzRdWyAgICBUMV0gW2MwMDAwMDAwMDg0ODM4YjBdIFtj
+MDAwMDAwMDAwNGMwYzcwXSA+IGttZW1fY2FjaGVfYWxsb2MrMHgyMjAvMHg0YjANCj4+IFsgICAg
+MC4wMjUwMDBdWyAgICBUMV0gW2MwMDAwMDAwMDg0ODM5MjBdIFtjMDAwMDAwMDAwNDQ4YWY0XSA+
+IF9fcHVkX2FsbG9jKzB4NzQvMHgxZDANCj4+IFsgICAgMC4wMjU3NzJdWyAgICBUMV0gW2MwMDAw
+MDAwMDg0ODM5NzBdIFtjMDAwMDAwMDAwMDhmZTNjXSA+IGhhc2hfX21hcF9rZXJuZWxfcGFnZSsw
+eDJjYy8weDM5MA0KPj4gWyAgICAwLjAyNjY0M11bICAgIFQxXSBbYzAwMDAwMDAwODQ4M2EyMF0g
+W2MwMDAwMDAwMDAwYTk5NDRdID4gZG9fcGF0Y2hfaW5zdHJ1Y3Rpb24rMHgxMzQvMHg0YTANCj4g
+DQo+IGRvX3BhdGNoX2luc3RydWN0aW9uKCkgcmlnaHRmdWxseSBkaXNhYmxlcyBJUlFzLCBidXQg
+dGhlbiBpdCBnb2VzIGFuZA0KPiB0cmllcyBhIG1lbW9yeSBhbGxvYywgd2hpY2ggc2VlbXMgYSBi
+aXQgZGFmdC4NCj4gDQo+IEknbSB0aGlua2luZyBDaHJpc3RvcGhlIG1pZ2h0IGtub3cgbW9yZS4u
+LiBoZSdzIHJlY2VudGx5IGJlZW4gcG9raW5nIGF0DQo+IFBvd2VyIHRleHQgcG9raW5nLi4NCg0K
+DQpJIGRvbid0IGtub3cgYWxsIGRldGFpbHMgYWJvdXQgUFBDNjQsIGJ1dCBoZXJlIGl0IHNlZW1z
+IGxpa2UgDQpoYXNoX19tYXBfa2VybmVsX3BhZ2UoKSBhbGxvY2F0ZXMgaW50ZXJtZWRpYXRlIHBh
+Z2UgZGlyZWN0b3JpZXMgd2hlbiANCnRoZXJlIGlzIG5vdCBvbmUgeWV0LiBTbyBpZiB0aGF0J3Mg
+dGhlIGZpcnN0IHRpbWUgDQpoYXNoX19tYXBfa2VybmVsX3BhZ2UoKSBpcyBjYWxsZWQgZm9yIHRo
+ZSB0ZXh0X3Bva2VfYWRkcigpIGl0IGFsbG9jYXRlZCANClBVRCBhbmQgUE1EIGlmIG5lY2Vzc2Fy
+eS4NCg0KQXMgaXQgaXMga2VybmVsIG1lbW9yeSwgb25jZSBQVUQgYW5kIFBNRCBhcmUgYWxsb2Nh
+dGVkIHRoZXkgd2lsbCByZW1haW4gDQpmb3JldmVyIEkgdGhpbmsuIFNvIG1heWJlIHRoZSBvbmx5
+IHRoaW5nIHRvIGRvIGl0IHRvIHBlcmZvcm0gYSBkdW1teSANCm1hcHBpbmcvdW5tYXBwaW5nIGlu
+IHRleHRfYXJlYV9jcHVfdXAoKSB0byBlbnN1cmUgdGhlIHBhZ2UgZGlyZWN0b3J5IGFyZSANCmNy
+ZWF0ZWQgaW4gYWR2YW5jZS4NCg0KQ2hyaXN0b3BoZQ==

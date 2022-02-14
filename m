@@ -2,801 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9D44B40B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 05:25:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 700DD4B40BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 05:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240214AbiBNEXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 23:23:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56976 "EHLO
+        id S240224AbiBNE0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 23:26:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbiBNEXP (ORCPT
+        with ESMTP id S230290AbiBNE0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 23:23:15 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008264F449;
-        Sun, 13 Feb 2022 20:23:07 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 157023200E79;
-        Sun, 13 Feb 2022 23:23:07 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sun, 13 Feb 2022 23:23:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; bh=8E04u2pzWOPrlMXie2r4IUW87IJ5i7
-        53RLEZDfvfO18=; b=q/ik/pGEb//TNXemN6dlc53l/nBa9yYYfboP9egsOQP+Il
-        BcspGalFmJkZvOUS8OmApEJ+akT+g1vU51ape6l+ik1GIL69nXb9QU9jNuxjkx3J
-        aadzQBBEvlqL6ybsFqN8HGjYOq+anhwtx30w7vOv2/LGsYqXQ9EoFof6D12u5BhW
-        fSSxo95e20y8MbUdRAQpOUZpqrVVJthThtEV/XUUc/YyTfg7oz11Z1S/4lYG1t7e
-        WisoSQ5EFGls1w9X0x0JMIgVE5yVqXQaE8eyW2/HQdTOp2TXBNN8xTAe27Bkgl3P
-        4xuLV5Izpfa0saPmyD4Gs2sz080OCZ4+b7mgKOPw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=8E04u2
-        pzWOPrlMXie2r4IUW87IJ5i753RLEZDfvfO18=; b=QORR0RmJY9i8qnnoQXPKPt
-        Tk1e/UtNUNxpeVGy/u8miNs6KD7xE9jWsgTofAU89Ux8BEtDWBkboix8wSUgmDMB
-        0GwF+dufEotBqLLytycx4vEvXBaTFmLSgy8k8tAnT8VgoBTIJCeTwLA1f5Vd1LDP
-        KUlENGzsqz9OPsf3ES3A+SK+vVscAz3SyF9kzW7+2YP/5Y/QpjupZsv9VJLmA7aq
-        rv6ZROEmx5kAbdDgD/u6mYdzhlpcNAXm4LEvUIMUbrlG6FduEQ7Vcp8MwiVvSkY3
-        +Pb6dFL4lEWlMfUUoLPgKYQQiF4C+BlG3KmYTjH9kX/s8XW2U8skXrXBR1O1PQSQ
-        ==
-X-ME-Sender: <xms:KtkJYkTTNp8SP5EtC42keGXNU6b_ortGikbVqPU9Q32ovrSd-BkHFw>
-    <xme:KtkJYhwozQ68En9n-6KoQmFeASeQCfOwlYPM6AeYhIsbwRD54yVJKpFcZgH_1t4fL
-    lGXKEkQEGPLF0XofA>
-X-ME-Received: <xmr:KtkJYh2Uk9j_0raVLycozkoNpLrCnTLUUL3QQHyOx78TzcwF-qHQcZ3k80FTZnd75zvcGjLJRe2A2OET2HSodUhlf2GdXy5vYG-YPWva0xVcpWBhZH_jRMsC-sjmrIHv84LuGQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjedugdejtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
-    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
-    grthhtvghrnhepudfhjeefvdfhgfefheetgffhieeigfefhefgvddvveefgeejheejvdfg
-    jeehueeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:KtkJYoCKh8Pa5NyFh0uwtnMI9298yrJGdFQN_RUqgrM4edAKLid9nw>
-    <xmx:KtkJYti8aPGAAaAyMo8w9xlhyeqAtPeU6sY4MlWOWEGC36O8vQEPiw>
-    <xmx:KtkJYkoUScvhJDopusgluTzI07JutBtiz_9DGreTbl3YGalkrPjqIg>
-    <xmx:KtkJYtdY8fKH0s_tv1G1UtvFJySQRde2cCzR0AZ6KvU0XM017HJ6WQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 13 Feb 2022 23:23:05 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Ondrej Jirman <x@xff.cz>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 3/3] power: supply: Add a driver for Injoinic power bank ICs
-Date:   Sun, 13 Feb 2022 22:22:59 -0600
-Message-Id: <20220214042259.6646-3-samuel@sholland.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220214042259.6646-1-samuel@sholland.org>
-References: <20220214042259.6646-1-samuel@sholland.org>
+        Sun, 13 Feb 2022 23:26:09 -0500
+Received: from APC01-HK2-obe.outbound.protection.outlook.com (mail-eopbgr1300132.outbound.protection.outlook.com [40.107.130.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4763E4F449;
+        Sun, 13 Feb 2022 20:26:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kqMm85GZXRUYSxvvvOeBxrfwTfKR7tWsaVs61tPC6ESTy43SPgPU83fTuRZqAzPKYwnJRJllSomn4nEXrAqoVxz4ItCqbm+2hZ4xKQVuuug4UGtovnhVR2fDEugpVSFl/QvCGpAk0WhS1n/F9TXzYE32RxCQ63AkiQ4VB4MW6xX/MKrrxg1+lfbZuwW77J8g5jZh6Icp5U/NvmHjna3mD8B11lNIb6U0Sox9XoSjo6kUR4CV4ZghjLG9hpj6f+47Io0hN76pUFizN89pH3mOA2n8dG4wrHD7Iy8a4iEzuoTGVYEv7QCFldBJ7cYtiQEbRmlwiArYbdxVC8Yqk0Z+gQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DwPThxUa4lppSG4WcB365RJn7VMCO8VtnfeYQFpgnHk=;
+ b=T/dbIj0AD/qnlMdAdICYv2DMloRBen/8tTAt8Mn2/6DxQeroLrzV3QYNrDvEOrKu4BhCjr6MK9rgISwLx9H+Dn3ig3wc8PgQWt/1RrA9zNl6srCwcvwMl5NqoWsJ6eTT4e6mgfgn/qpdyofYc7bcG0SboL3UnI0cm/73BFWhkwy1cJCUxVqTBVM40iF8ECO79NpfrgKfKrQFKR1vySrX5NOND3IoQ6trxgUDf2hpVF8rHDab986DtiDAFurmldENi6B91zi0LFEr0lsBQwnVCt6kfhc1VpqblHMOiYoaaUUZiUUBdnTad6k08W3+2WYfW3ZSNZO7RhpNsK5bYltxMw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=quantacorp.onmicrosoft.com; s=selector2-quantacorp-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DwPThxUa4lppSG4WcB365RJn7VMCO8VtnfeYQFpgnHk=;
+ b=Qao834F0UO7bAM241PuZPgoPbnBpb4bjONFOQM4tKfwksHAVEXOj9e9d+sGfvt5JtgekGAZf3JwhGUJDtS5MMZZzPobtBTYOt7HtQ+Fpl9ALdtAoE76K2d9kqC3fNitXk267eab55QIpUVhLv/GyQ8Qok7TfzpZaFFHFC4MNtbA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=quantatw.com;
+Received: from HK0PR04MB3282.apcprd04.prod.outlook.com (2603:1096:203:89::17)
+ by HK0PR04MB2579.apcprd04.prod.outlook.com (2603:1096:203:64::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.14; Mon, 14 Feb
+ 2022 04:25:57 +0000
+Received: from HK0PR04MB3282.apcprd04.prod.outlook.com
+ ([fe80::ec21:c033:761d:3e03]) by HK0PR04MB3282.apcprd04.prod.outlook.com
+ ([fe80::ec21:c033:761d:3e03%4]) with mapi id 15.20.4975.018; Mon, 14 Feb 2022
+ 04:25:56 +0000
+From:   Potin Lai <potin.lai@quantatw.com>
+To:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>
+Cc:     Patrick Williams <patrick@stwcx.xyz>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Potin Lai <potin.lai@quantatw.com>
+Subject: [PATCH v2 00/10] update Facebook Bletchley BMC
+Date:   Mon, 14 Feb 2022 12:25:28 +0800
+Message-Id: <20220214042538.12132-1-potin.lai@quantatw.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR02CA0127.apcprd02.prod.outlook.com
+ (2603:1096:202:16::11) To HK0PR04MB3282.apcprd04.prod.outlook.com
+ (2603:1096:203:89::17)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7878a3d4-c6bd-4054-40b2-08d9ef72180c
+X-MS-TrafficTypeDiagnostic: HK0PR04MB2579:EE_
+X-Microsoft-Antispam-PRVS: <HK0PR04MB257941989200E041B938E48A8E339@HK0PR04MB2579.apcprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:590;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2L5Cn7Mq1fUXe4nVY+YwzDJWjNdxYLPOwsDffNmVt3/smVN2nSv7O3u/zUxj0MTVDn1Ux/5DzyqHmkpwLUltE9seXBKG2vdg9q91GYvxWuPBxgNrzVMRZ7DoofR1uT8RiVjcSyqJrU3rcWvkbZrfuqT8BYQSCpV1LXslf1BH0mN4YV8k9o20nSsdX256LK/bKKzJv+taurGc5lUor8QT2opos20+EQfzUnyA+CQC8/U30QftGV3ZNLGJtxH7JkLmlb5hZeg6KGxxohVhNFimK7QKjlBbvqInkXD0VeXD+55gygYI9Yhpb7TOtX1CM7a9nRrRefynZb4uQKBq5ZBTKQKriaofawlyXkr+lmLc2O6Mh692FrqwHu9B6m1kTJB/yh+wTNspCyxYq/BH5tTomJAVol0s5TPlGijtuaX2WjZ/RND9g8l0I5b+jamrTbXtxiL6oe5pCL9fMtghThqATXtMDM/IuO3k/xf9hW4nvl7dmgUa79syGYEJfvT/MGmn/66YsIdq1vV6mzeQL9MGVE+V1Kjk6XeGYHVr1r5+7enBaTP+pyTbiNjmu+t0xkT4INlDGKCGmTSdJ1C4Tl4l6FairXxbAVFBiX0Yeo/1k4qMDRGWbKiQ8SmGbbH2n5V/NjO/2s5XqOSr6hP+a15PQ0jc8k88DssyX02exZBoR8ZHXf1d1n++KaQ3sCU5mh3dTGT05Oq6PeqSDyE7TrYchIXz5NtL/+mmW1DjraRBggeBYf+5amrSaHFHwxVuoECST6Z/MLfNm3fjPU5FVLU2MV+MnUPD0dqjysx2ye0NhQw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR04MB3282.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(47680400002)(66946007)(6666004)(83380400001)(4326008)(44832011)(107886003)(86362001)(36756003)(2906002)(5660300002)(66556008)(66476007)(8936002)(15650500001)(8676002)(52116002)(38350700002)(110136005)(38100700002)(966005)(54906003)(6512007)(6506007)(6486002)(1076003)(186003)(2616005)(26005)(508600001)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6P8puICVX2FPDZhzOioiFvEHEgNO8eOHMcQtZ5SboiC96KoMixl+1hBuWJ/o?=
+ =?us-ascii?Q?WBL3olWom0CKUe63BuoI02bHXqEYEFeIs097CUUr0ilRdCYScAj1Q3ofPd1m?=
+ =?us-ascii?Q?off1qFOhOXP4aP4jSWpdVx0DcOntsPvaZ9MMoHQ1CY8mGslPWTdaECN0E/aT?=
+ =?us-ascii?Q?OvOpTdmlSiLfnY3y6OkYuT7K6bRSK/TjGEQC7ev7Ldw9rJcNOzlxNVWnIBWK?=
+ =?us-ascii?Q?qrpsQxRVaxISLXuHSjPUDNXO32XKqROEPxFK44nDcJWJxKSSiAOiHHLhwqsf?=
+ =?us-ascii?Q?wOIQjxzyjjiWwKNmV98dmDRrYDo+QEUH5/2FnzSbXaxGp+JUgCokRdwQMwid?=
+ =?us-ascii?Q?eH02WN+55YEqUOMelYW88/R6Nm5iKo+FMITvZs9M8qp64OCdLFwycO+/l+OB?=
+ =?us-ascii?Q?EVBU/erlnmj6cPfeonwDNN4WnY6CJL5SSIE8c9aF5UhXfROagELEl07mW2gl?=
+ =?us-ascii?Q?losNruWHg1qdiCViHDNOT0WQMPPSP/caDD6mjU8bn2+PDdwcwWRU8VTsv6xH?=
+ =?us-ascii?Q?IOo99fCaxz6EsOqweFinf4pHslM8Uu8zsNafodhlZlgtEKRmj7R7B0KbVzKV?=
+ =?us-ascii?Q?E+R2MuXWxig44yI7FR6tklBju11Rc1wid0KuvpNy4SUMVYq0+v/7bsXtYzLw?=
+ =?us-ascii?Q?kh5fbHG6CL9/E10TDfT35ibtT/54xVRtw+eTmFKSQuLbOKheL5vqIoYPsYty?=
+ =?us-ascii?Q?emVQDCAY6BjNdO0Vhqpo2e0DoJn1R+ZmVx6n7GcK2iB/YaUlsnpJygVDqI1T?=
+ =?us-ascii?Q?lEcSTMGtJ8HOVx0Mz2cxw9+CsJKK9FkYI6cp+pd20IQKZIKg7iNXbvDjAG8r?=
+ =?us-ascii?Q?4DQcT9awAcv597W/fyGSDZzyIMMGFlOstjWYIsjNfTDFll+bffgjWW7UJiB2?=
+ =?us-ascii?Q?eLeMbidZA4wuiuwSeBO56F4HQspwKdM7xECZ+9RLfZ0lrq2lMR+nWzTcRRK5?=
+ =?us-ascii?Q?dK3JCDvlu84rUwi9bpwxU6TWl0Ae2o8Yw/w02AhukA+ciSPVTvi8cN9hvy+z?=
+ =?us-ascii?Q?2iiO1MhOON2Yg717S4L7rT185qferVJcrQpoGtTLt7pNRzDso3sovbLjchW9?=
+ =?us-ascii?Q?wmiJZCykNLmdtnIak7qYwDZWwdsBlCDuqGYA2mAYSsHePualK0pix4uBrEIM?=
+ =?us-ascii?Q?jVFdq8vrHSdSXY4UHz+IEXLergz3EMKiAOBw1erlJluKhYPF8furiY/Av8mn?=
+ =?us-ascii?Q?TE2r5amUc+00Gi7NeMN3iwTpl2JcVltCPKaRVVX30L26gu0Eq3nz+qouanQA?=
+ =?us-ascii?Q?NLhnH1MrA7/4z2r4jaFvjVFKHxn96WJPRScMwnygKBKAymza3WMb8d0trwyG?=
+ =?us-ascii?Q?RO3p5o8gZ4rGUeKWKPTwwt2QFcEn1t5BhKPucOJ8p6R/XYmukbIa7H+rwTv3?=
+ =?us-ascii?Q?rlnGgMeywMbdmxFBpLo0PP4j4t/KM35rAksoGl4A+/ignt8f0BISXZdDYo6+?=
+ =?us-ascii?Q?u5zPpGH8bhKVuWkU6Ai6cbyp4mDYRHcJ7hPZK9lSVHthqodQWOehO4W3ShyX?=
+ =?us-ascii?Q?tFcWoy5XnTWQ7eEQ8ks56M9dH48lAE9TP6UO62i51x8zu3KtMhQHAXACOWcR?=
+ =?us-ascii?Q?2jSSMgSS/uMSIUo19pvLlXZXLox2mZNi86XyNZTQ3BA6FFzirPS+myMgHZ88?=
+ =?us-ascii?Q?bFmvovTrTo+erMxIa6mudv8=3D?=
+X-OriginatorOrg: quantatw.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7878a3d4-c6bd-4054-40b2-08d9ef72180c
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR04MB3282.apcprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2022 04:25:56.2620
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 179b0327-07fc-4973-ac73-8de7313561b2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1rO5xpxdK1Yj2XbIcm9zcE7MXHPeCZ66EFtGQB35MZmVfIrcyRxefN9PZg4TzYzgMJVBMXuePUCPCGx2ymnPxw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR04MB2579
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver supports several chip variants which all share the same I2C
-register interface. Since the chip will turn off and become inaccessible
-under conditions outside of software control (e.g. upon button press or
-input voltage removal), some special handling is needed to delay the
-initialization of the IC until it is accessible.
+This patch series update Facebook Bletchley BMC devicetree base on EVT HW
+schematioc design, and rebase SLED numbering to 1-based for OpenBMC
+multi-host.
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+- GPIO:
+  - adding more gpio line names
+  - include interrupt line in io expander for gpio interrupt monitoring
 
-Changes in v2:
- - Add check for allocation failure
- - Rename "charger" to "battery" for accuracy
- - Add separate supply for USB 5V boost output stage
- - Move POWER_SUPPLY_PROP_ONLINE to the boost supply
- - Add POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN to the boost supply
+- SPI flash:
+  - adding dual flash BSM module support
+  - switch to spi2-gpio on spi2 due to unstable signal issue
 
- MAINTAINERS                         |   5 +
- drivers/power/supply/Kconfig        |   8 +
- drivers/power/supply/Makefile       |   1 +
- drivers/power/supply/ip5xxx_power.c | 638 ++++++++++++++++++++++++++++
- 4 files changed, 652 insertions(+)
- create mode 100644 drivers/power/supply/ip5xxx_power.c
+- Hwmon Sensors:
+  - adding INA230 sensors for monitoring
+  - fix ADM1278 shunt-resistor
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fca970a46e77..5c8ef361a69b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9475,6 +9475,11 @@ F:	include/linux/mfd/ingenic-tcu.h
- F:	sound/soc/codecs/jz47*
- F:	sound/soc/jz4740/
- 
-+INJOINIC IP5xxx POWER BANK IC DRIVER
-+M:	Samuel Holland <samuel@sholland.org>
-+S:	Maintained
-+F:	drivers/power/supply/ip5xxx_power.c
-+
- INOTIFY
- M:	Jan Kara <jack@suse.cz>
- R:	Amir Goldstein <amir73il@gmail.com>
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index b366e2fd8e97..539f66018ec4 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -51,6 +51,14 @@ config GENERIC_ADC_BATTERY
- 	  Say Y here to enable support for the generic battery driver
- 	  which uses IIO framework to read adc.
- 
-+config IP5XXX_POWER
-+	tristate "Injoinic IP5xxx power bank IC driver"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  Say Y to include support for Injoinic IP5xxx power bank ICs,
-+	  which include a battery charger and a boost converter.
-+
- config MAX8925_POWER
- 	tristate "MAX8925 battery charger support"
- 	depends on MFD_MAX8925
-diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index 2c1b264b2046..7a70c740324e 100644
---- a/drivers/power/supply/Makefile
-+++ b/drivers/power/supply/Makefile
-@@ -12,6 +12,7 @@ obj-$(CONFIG_GENERIC_ADC_BATTERY)	+= generic-adc-battery.o
- obj-$(CONFIG_PDA_POWER)		+= pda_power.o
- obj-$(CONFIG_APM_POWER)		+= apm_power.o
- obj-$(CONFIG_AXP20X_POWER)	+= axp20x_usb_power.o
-+obj-$(CONFIG_IP5XXX_POWER)	+= ip5xxx_power.o
- obj-$(CONFIG_MAX8925_POWER)	+= max8925_power.o
- obj-$(CONFIG_WM831X_BACKUP)	+= wm831x_backup.o
- obj-$(CONFIG_WM831X_POWER)	+= wm831x_power.o
-diff --git a/drivers/power/supply/ip5xxx_power.c b/drivers/power/supply/ip5xxx_power.c
-new file mode 100644
-index 000000000000..218e8e689a3f
---- /dev/null
-+++ b/drivers/power/supply/ip5xxx_power.c
-@@ -0,0 +1,638 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Copyright (C) 2021 Samuel Holland <samuel@sholland.org>
-+
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/power_supply.h>
-+#include <linux/regmap.h>
-+
-+#define IP5XXX_SYS_CTL0			0x01
-+#define IP5XXX_SYS_CTL0_WLED_DET_EN		BIT(4)
-+#define IP5XXX_SYS_CTL0_WLED_EN			BIT(3)
-+#define IP5XXX_SYS_CTL0_BOOST_EN		BIT(2)
-+#define IP5XXX_SYS_CTL0_CHARGER_EN		BIT(1)
-+#define IP5XXX_SYS_CTL1			0x02
-+#define IP5XXX_SYS_CTL1_LIGHT_SHDN_EN		BIT(1)
-+#define IP5XXX_SYS_CTL1_LOAD_PWRUP_EN		BIT(0)
-+#define IP5XXX_SYS_CTL2			0x0c
-+#define IP5XXX_SYS_CTL2_LIGHT_SHDN_TH		GENMASK(7, 3)
-+#define IP5XXX_SYS_CTL3			0x03
-+#define IP5XXX_SYS_CTL3_LONG_PRESS_TIME_SEL	GENMASK(7, 6)
-+#define IP5XXX_SYS_CTL3_BTN_SHDN_EN		BIT(5)
-+#define IP5XXX_SYS_CTL4			0x04
-+#define IP5XXX_SYS_CTL4_SHDN_TIME_SEL		GENMASK(7, 6)
-+#define IP5XXX_SYS_CTL4_VIN_PULLOUT_BOOST_EN	BIT(5)
-+#define IP5XXX_SYS_CTL5			0x07
-+#define IP5XXX_SYS_CTL5_NTC_DIS			BIT(6)
-+#define IP5XXX_SYS_CTL5_WLED_MODE_SEL		BIT(1)
-+#define IP5XXX_SYS_CTL5_BTN_SHDN_SEL		BIT(0)
-+#define IP5XXX_CHG_CTL1			0x22
-+#define IP5XXX_CHG_CTL1_BOOST_UVP_SEL		GENMASK(3, 2)
-+#define IP5XXX_CHG_CTL2			0x24
-+#define IP5XXX_CHG_CTL2_BAT_TYPE_SEL		GENMASK(6, 5)
-+#define IP5XXX_CHG_CTL2_BAT_TYPE_SEL_4_2V	(0x0 << 5)
-+#define IP5XXX_CHG_CTL2_BAT_TYPE_SEL_4_3V	(0x1 << 5)
-+#define IP5XXX_CHG_CTL2_BAT_TYPE_SEL_4_35V	(0x2 << 5)
-+#define IP5XXX_CHG_CTL2_CONST_VOLT_SEL		GENMASK(2, 1)
-+#define IP5XXX_CHG_CTL4			0x26
-+#define IP5XXX_CHG_CTL4_BAT_TYPE_SEL_EN		BIT(6)
-+#define IP5XXX_CHG_CTL4A		0x25
-+#define IP5XXX_CHG_CTL4A_CONST_CUR_SEL		GENMASK(4, 0)
-+#define IP5XXX_MFP_CTL0			0x51
-+#define IP5XXX_MFP_CTL1			0x52
-+#define IP5XXX_GPIO_CTL2		0x53
-+#define IP5XXX_GPIO_CTL2A		0x54
-+#define IP5XXX_GPIO_CTL3		0x55
-+#define IP5XXX_READ0			0x71
-+#define IP5XXX_READ0_CHG_STAT			GENMASK(7, 5)
-+#define IP5XXX_READ0_CHG_STAT_IDLE		(0x0 << 5)
-+#define IP5XXX_READ0_CHG_STAT_TRICKLE		(0x1 << 5)
-+#define IP5XXX_READ0_CHG_STAT_CONST_VOLT	(0x2 << 5)
-+#define IP5XXX_READ0_CHG_STAT_CONST_CUR		(0x3 << 5)
-+#define IP5XXX_READ0_CHG_STAT_CONST_VOLT_STOP	(0x4 << 5)
-+#define IP5XXX_READ0_CHG_STAT_FULL		(0x5 << 5)
-+#define IP5XXX_READ0_CHG_STAT_TIMEOUT		(0x6 << 5)
-+#define IP5XXX_READ0_CHG_OP			BIT(4)
-+#define IP5XXX_READ0_CHG_END			BIT(3)
-+#define IP5XXX_READ0_CONST_VOLT_TIMEOUT		BIT(2)
-+#define IP5XXX_READ0_CHG_TIMEOUT		BIT(1)
-+#define IP5XXX_READ0_TRICKLE_TIMEOUT		BIT(0)
-+#define IP5XXX_READ0_TIMEOUT			GENMASK(2, 0)
-+#define IP5XXX_READ1			0x72
-+#define IP5XXX_READ1_WLED_PRESENT		BIT(7)
-+#define IP5XXX_READ1_LIGHT_LOAD			BIT(6)
-+#define IP5XXX_READ1_VIN_OVERVOLT		BIT(5)
-+#define IP5XXX_READ2			0x77
-+#define IP5XXX_READ2_BTN_PRESS			BIT(3)
-+#define IP5XXX_READ2_BTN_LONG_PRESS		BIT(1)
-+#define IP5XXX_READ2_BTN_SHORT_PRESS		BIT(0)
-+#define IP5XXX_BATVADC_DAT0		0xa2
-+#define IP5XXX_BATVADC_DAT1		0xa3
-+#define IP5XXX_BATIADC_DAT0		0xa4
-+#define IP5XXX_BATIADC_DAT1		0xa5
-+#define IP5XXX_BATOCV_DAT0		0xa8
-+#define IP5XXX_BATOCV_DAT1		0xa9
-+
-+struct ip5xxx {
-+	struct regmap *regmap;
-+	bool initialized;
-+};
-+
-+/*
-+ * The IP5xxx charger only responds on I2C when it is "awake". The charger is
-+ * generally only awake when VIN is powered or when its boost converter is
-+ * enabled. Going into shutdown resets all register values. To handle this:
-+ *  1) When any bus error occurs, assume the charger has gone into shutdown.
-+ *  2) Attempt the initialization sequence on each subsequent register access
-+ *     until it succeeds.
-+ */
-+static int ip5xxx_read(struct ip5xxx *ip5xxx, unsigned int reg,
-+		       unsigned int *val)
-+{
-+	int ret;
-+
-+	ret = regmap_read(ip5xxx->regmap, reg, val);
-+	if (ret)
-+		ip5xxx->initialized = false;
-+
-+	return ret;
-+}
-+
-+static int ip5xxx_update_bits(struct ip5xxx *ip5xxx, unsigned int reg,
-+			      unsigned int mask, unsigned int val)
-+{
-+	int ret;
-+
-+	ret = regmap_update_bits(ip5xxx->regmap, reg, mask, val);
-+	if (ret)
-+		ip5xxx->initialized = false;
-+
-+	return ret;
-+}
-+
-+static int ip5xxx_initialize(struct power_supply *psy)
-+{
-+	struct ip5xxx *ip5xxx = power_supply_get_drvdata(psy);
-+	int ret;
-+
-+	if (ip5xxx->initialized)
-+		return 0;
-+
-+	/*
-+	 * Disable shutdown under light load.
-+	 * Enable power on when under load.
-+	 */
-+	ret = ip5xxx_update_bits(ip5xxx, IP5XXX_SYS_CTL1,
-+				 IP5XXX_SYS_CTL1_LIGHT_SHDN_EN |
-+				 IP5XXX_SYS_CTL1_LOAD_PWRUP_EN,
-+				 IP5XXX_SYS_CTL1_LOAD_PWRUP_EN);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Enable shutdown after a long button press (as configured below).
-+	 */
-+	ret = ip5xxx_update_bits(ip5xxx, IP5XXX_SYS_CTL3,
-+				 IP5XXX_SYS_CTL3_BTN_SHDN_EN,
-+				 IP5XXX_SYS_CTL3_BTN_SHDN_EN);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Power on automatically when VIN is removed.
-+	 */
-+	ret = ip5xxx_update_bits(ip5xxx, IP5XXX_SYS_CTL4,
-+				 IP5XXX_SYS_CTL4_VIN_PULLOUT_BOOST_EN,
-+				 IP5XXX_SYS_CTL4_VIN_PULLOUT_BOOST_EN);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Enable the NTC.
-+	 * Configure the button for two presses => LED, long press => shutdown.
-+	 */
-+	ret = ip5xxx_update_bits(ip5xxx, IP5XXX_SYS_CTL5,
-+				 IP5XXX_SYS_CTL5_NTC_DIS |
-+				 IP5XXX_SYS_CTL5_WLED_MODE_SEL |
-+				 IP5XXX_SYS_CTL5_BTN_SHDN_SEL,
-+				 IP5XXX_SYS_CTL5_WLED_MODE_SEL |
-+				 IP5XXX_SYS_CTL5_BTN_SHDN_SEL);
-+	if (ret)
-+		return ret;
-+
-+	ip5xxx->initialized = true;
-+	dev_dbg(psy->dev.parent, "Initialized after power on\n");
-+
-+	return 0;
-+}
-+
-+static const enum power_supply_property ip5xxx_battery_properties[] = {
-+	POWER_SUPPLY_PROP_STATUS,
-+	POWER_SUPPLY_PROP_CHARGE_TYPE,
-+	POWER_SUPPLY_PROP_HEALTH,
-+	POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-+	POWER_SUPPLY_PROP_VOLTAGE_OCV,
-+	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
-+	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX,
-+	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE,
-+	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX,
-+};
-+
-+static int ip5xxx_battery_get_status(struct ip5xxx *ip5xxx, int *val)
-+{
-+	unsigned int rval;
-+	int ret;
-+
-+	ret = ip5xxx_read(ip5xxx, IP5XXX_READ0, &rval);
-+	if (ret)
-+		return ret;
-+
-+	switch (rval & IP5XXX_READ0_CHG_STAT) {
-+	case IP5XXX_READ0_CHG_STAT_IDLE:
-+		*val = POWER_SUPPLY_STATUS_DISCHARGING;
-+		break;
-+	case IP5XXX_READ0_CHG_STAT_TRICKLE:
-+	case IP5XXX_READ0_CHG_STAT_CONST_CUR:
-+	case IP5XXX_READ0_CHG_STAT_CONST_VOLT:
-+		*val = POWER_SUPPLY_STATUS_CHARGING;
-+		break;
-+	case IP5XXX_READ0_CHG_STAT_CONST_VOLT_STOP:
-+	case IP5XXX_READ0_CHG_STAT_FULL:
-+		*val = POWER_SUPPLY_STATUS_FULL;
-+		break;
-+	case IP5XXX_READ0_CHG_STAT_TIMEOUT:
-+		*val = POWER_SUPPLY_STATUS_NOT_CHARGING;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ip5xxx_battery_get_charge_type(struct ip5xxx *ip5xxx, int *val)
-+{
-+	unsigned int rval;
-+	int ret;
-+
-+	ret = ip5xxx_read(ip5xxx, IP5XXX_READ0, &rval);
-+	if (ret)
-+		return ret;
-+
-+	switch (rval & IP5XXX_READ0_CHG_STAT) {
-+	case IP5XXX_READ0_CHG_STAT_IDLE:
-+	case IP5XXX_READ0_CHG_STAT_CONST_VOLT_STOP:
-+	case IP5XXX_READ0_CHG_STAT_FULL:
-+	case IP5XXX_READ0_CHG_STAT_TIMEOUT:
-+		*val = POWER_SUPPLY_CHARGE_TYPE_NONE;
-+		break;
-+	case IP5XXX_READ0_CHG_STAT_TRICKLE:
-+		*val = POWER_SUPPLY_CHARGE_TYPE_TRICKLE;
-+		break;
-+	case IP5XXX_READ0_CHG_STAT_CONST_CUR:
-+	case IP5XXX_READ0_CHG_STAT_CONST_VOLT:
-+		*val = POWER_SUPPLY_CHARGE_TYPE_STANDARD;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ip5xxx_battery_get_health(struct ip5xxx *ip5xxx, int *val)
-+{
-+	unsigned int rval;
-+	int ret;
-+
-+	ret = ip5xxx_read(ip5xxx, IP5XXX_READ0, &rval);
-+	if (ret)
-+		return ret;
-+
-+	if (rval & IP5XXX_READ0_TIMEOUT)
-+		*val = POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE;
-+	else
-+		*val = POWER_SUPPLY_HEALTH_GOOD;
-+
-+	return 0;
-+}
-+
-+static int ip5xxx_battery_get_voltage_max(struct ip5xxx *ip5xxx, int *val)
-+{
-+	unsigned int rval;
-+	int ret;
-+
-+	ret = ip5xxx_read(ip5xxx, IP5XXX_CHG_CTL2, &rval);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * It is not clear what this will return if
-+	 * IP5XXX_CHG_CTL4_BAT_TYPE_SEL_EN is not set...
-+	 */
-+	switch (rval & IP5XXX_CHG_CTL2_BAT_TYPE_SEL) {
-+	case IP5XXX_CHG_CTL2_BAT_TYPE_SEL_4_2V:
-+		*val = 4200000;
-+		break;
-+	case IP5XXX_CHG_CTL2_BAT_TYPE_SEL_4_3V:
-+		*val = 4300000;
-+		break;
-+	case IP5XXX_CHG_CTL2_BAT_TYPE_SEL_4_35V:
-+		*val = 4350000;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ip5xxx_battery_read_adc(struct ip5xxx *ip5xxx,
-+				   u8 lo_reg, u8 hi_reg, int *val)
-+{
-+	unsigned int hi, lo;
-+	int ret;
-+
-+	ret = ip5xxx_read(ip5xxx, lo_reg, &lo);
-+	if (ret)
-+		return ret;
-+
-+	ret = ip5xxx_read(ip5xxx, hi_reg, &hi);
-+	if (ret)
-+		return ret;
-+
-+	*val = sign_extend32(hi << 8 | lo, 13);
-+
-+	return 0;
-+}
-+
-+static int ip5xxx_battery_get_property(struct power_supply *psy,
-+				       enum power_supply_property psp,
-+				       union power_supply_propval *val)
-+{
-+	struct ip5xxx *ip5xxx = power_supply_get_drvdata(psy);
-+	int raw, ret, vmax;
-+	unsigned int rval;
-+
-+	ret = ip5xxx_initialize(psy);
-+	if (ret)
-+		return ret;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_STATUS:
-+		return ip5xxx_battery_get_status(ip5xxx, &val->intval);
-+
-+	case POWER_SUPPLY_PROP_CHARGE_TYPE:
-+		return ip5xxx_battery_get_charge_type(ip5xxx, &val->intval);
-+
-+	case POWER_SUPPLY_PROP_HEALTH:
-+		return ip5xxx_battery_get_health(ip5xxx, &val->intval);
-+
-+	case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
-+		return ip5xxx_battery_get_voltage_max(ip5xxx, &val->intval);
-+
-+	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-+		ret = ip5xxx_battery_read_adc(ip5xxx, IP5XXX_BATVADC_DAT0,
-+					      IP5XXX_BATVADC_DAT1, &raw);
-+
-+		val->intval = 2600000 + DIV_ROUND_CLOSEST(raw * 26855, 100);
-+		return 0;
-+
-+	case POWER_SUPPLY_PROP_VOLTAGE_OCV:
-+		ret = ip5xxx_battery_read_adc(ip5xxx, IP5XXX_BATOCV_DAT0,
-+					      IP5XXX_BATOCV_DAT1, &raw);
-+
-+		val->intval = 2600000 + DIV_ROUND_CLOSEST(raw * 26855, 100);
-+		return 0;
-+
-+	case POWER_SUPPLY_PROP_CURRENT_NOW:
-+		ret = ip5xxx_battery_read_adc(ip5xxx, IP5XXX_BATIADC_DAT0,
-+					      IP5XXX_BATIADC_DAT1, &raw);
-+
-+		val->intval = DIV_ROUND_CLOSEST(raw * 745985, 1000);
-+		return 0;
-+
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
-+		ret = ip5xxx_read(ip5xxx, IP5XXX_CHG_CTL4A, &rval);
-+		if (ret)
-+			return ret;
-+
-+		rval &= IP5XXX_CHG_CTL4A_CONST_CUR_SEL;
-+		val->intval = 100000 * rval;
-+		return 0;
-+
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
-+		val->intval = 100000 * 0x1f;
-+		return 0;
-+
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
-+		ret = ip5xxx_battery_get_voltage_max(ip5xxx, &vmax);
-+		if (ret)
-+			return ret;
-+
-+		ret = ip5xxx_read(ip5xxx, IP5XXX_CHG_CTL2, &rval);
-+		if (ret)
-+			return ret;
-+
-+		rval &= IP5XXX_CHG_CTL2_CONST_VOLT_SEL;
-+		val->intval = vmax + 14000 * (rval >> 1);
-+		return 0;
-+
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
-+		ret = ip5xxx_battery_get_voltage_max(ip5xxx, &vmax);
-+		if (ret)
-+			return ret;
-+
-+		val->intval = vmax + 14000 * 3;
-+		return 0;
-+
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int ip5xxx_battery_set_voltage_max(struct ip5xxx *ip5xxx, int val)
-+{
-+	unsigned int rval;
-+	int ret;
-+
-+	switch (val) {
-+	case 4200000:
-+		rval = IP5XXX_CHG_CTL2_BAT_TYPE_SEL_4_2V;
-+		break;
-+	case 4300000:
-+		rval = IP5XXX_CHG_CTL2_BAT_TYPE_SEL_4_3V;
-+		break;
-+	case 4350000:
-+		rval = IP5XXX_CHG_CTL2_BAT_TYPE_SEL_4_35V;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	ret = ip5xxx_update_bits(ip5xxx, IP5XXX_CHG_CTL2,
-+				 IP5XXX_CHG_CTL2_BAT_TYPE_SEL, rval);
-+	if (ret)
-+		return ret;
-+
-+	ret = ip5xxx_update_bits(ip5xxx, IP5XXX_CHG_CTL4,
-+				 IP5XXX_CHG_CTL4_BAT_TYPE_SEL_EN,
-+				 IP5XXX_CHG_CTL4_BAT_TYPE_SEL_EN);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int ip5xxx_battery_set_property(struct power_supply *psy,
-+				       enum power_supply_property psp,
-+				       const union power_supply_propval *val)
-+{
-+	struct ip5xxx *ip5xxx = power_supply_get_drvdata(psy);
-+	unsigned int rval;
-+	int ret, vmax;
-+
-+	ret = ip5xxx_initialize(psy);
-+	if (ret)
-+		return ret;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_STATUS:
-+		switch (val->intval) {
-+		case POWER_SUPPLY_STATUS_CHARGING:
-+			rval = IP5XXX_SYS_CTL0_CHARGER_EN;
-+			break;
-+		case POWER_SUPPLY_STATUS_DISCHARGING:
-+		case POWER_SUPPLY_STATUS_NOT_CHARGING:
-+			rval = 0;
-+			break;
-+		default:
-+			return -EINVAL;
-+		}
-+		return ip5xxx_update_bits(ip5xxx, IP5XXX_SYS_CTL0,
-+					  IP5XXX_SYS_CTL0_CHARGER_EN, rval);
-+
-+	case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
-+		return ip5xxx_battery_set_voltage_max(ip5xxx, val->intval);
-+
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
-+		rval = val->intval / 100000;
-+		return ip5xxx_update_bits(ip5xxx, IP5XXX_CHG_CTL4A,
-+					  IP5XXX_CHG_CTL4A_CONST_CUR_SEL, rval);
-+
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
-+		ret = ip5xxx_battery_get_voltage_max(ip5xxx, &vmax);
-+		if (ret)
-+			return ret;
-+
-+		rval = ((val->intval - vmax) / 14000) << 1;
-+		return ip5xxx_update_bits(ip5xxx, IP5XXX_CHG_CTL2,
-+					  IP5XXX_CHG_CTL2_CONST_VOLT_SEL, rval);
-+
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int ip5xxx_battery_property_is_writeable(struct power_supply *psy,
-+						enum power_supply_property psp)
-+{
-+	return psp == POWER_SUPPLY_PROP_STATUS ||
-+	       psp == POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN ||
-+	       psp == POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT ||
-+	       psp == POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE;
-+}
-+
-+static const struct power_supply_desc ip5xxx_battery_desc = {
-+	.name			= "ip5xxx-battery",
-+	.type			= POWER_SUPPLY_TYPE_BATTERY,
-+	.properties		= ip5xxx_battery_properties,
-+	.num_properties		= ARRAY_SIZE(ip5xxx_battery_properties),
-+	.get_property		= ip5xxx_battery_get_property,
-+	.set_property		= ip5xxx_battery_set_property,
-+	.property_is_writeable	= ip5xxx_battery_property_is_writeable,
-+};
-+
-+static const enum power_supply_property ip5xxx_boost_properties[] = {
-+	POWER_SUPPLY_PROP_ONLINE,
-+	POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
-+};
-+
-+static int ip5xxx_boost_get_property(struct power_supply *psy,
-+				     enum power_supply_property psp,
-+				     union power_supply_propval *val)
-+{
-+	struct ip5xxx *ip5xxx = power_supply_get_drvdata(psy);
-+	unsigned int rval;
-+	int ret;
-+
-+	ret = ip5xxx_initialize(psy);
-+	if (ret)
-+		return ret;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		ret = ip5xxx_read(ip5xxx, IP5XXX_SYS_CTL0, &rval);
-+		if (ret)
-+			return ret;
-+
-+		val->intval = !!(rval & IP5XXX_SYS_CTL0_BOOST_EN);
-+		return 0;
-+
-+	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
-+		ret = ip5xxx_read(ip5xxx, IP5XXX_CHG_CTL1, &rval);
-+		if (ret)
-+			return ret;
-+
-+		rval &= IP5XXX_CHG_CTL1_BOOST_UVP_SEL;
-+		val->intval = 4530000 + 100000 * (rval >> 2);
-+		return 0;
-+
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int ip5xxx_boost_set_property(struct power_supply *psy,
-+				     enum power_supply_property psp,
-+				     const union power_supply_propval *val)
-+{
-+	struct ip5xxx *ip5xxx = power_supply_get_drvdata(psy);
-+	unsigned int rval;
-+	int ret;
-+
-+	ret = ip5xxx_initialize(psy);
-+	if (ret)
-+		return ret;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		rval = val->intval ? IP5XXX_SYS_CTL0_BOOST_EN : 0;
-+		return ip5xxx_update_bits(ip5xxx, IP5XXX_SYS_CTL0,
-+					  IP5XXX_SYS_CTL0_BOOST_EN, rval);
-+
-+	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
-+		rval = ((val->intval - 4530000) / 100000) << 2;
-+		return ip5xxx_update_bits(ip5xxx, IP5XXX_CHG_CTL1,
-+					  IP5XXX_CHG_CTL1_BOOST_UVP_SEL, rval);
-+
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int ip5xxx_boost_property_is_writeable(struct power_supply *psy,
-+					      enum power_supply_property psp)
-+{
-+	return true;
-+}
-+
-+static const struct power_supply_desc ip5xxx_boost_desc = {
-+	.name			= "ip5xxx-boost",
-+	.type			= POWER_SUPPLY_TYPE_USB,
-+	.properties		= ip5xxx_boost_properties,
-+	.num_properties		= ARRAY_SIZE(ip5xxx_boost_properties),
-+	.get_property		= ip5xxx_boost_get_property,
-+	.set_property		= ip5xxx_boost_set_property,
-+	.property_is_writeable	= ip5xxx_boost_property_is_writeable,
-+};
-+
-+static const struct regmap_config ip5xxx_regmap_config = {
-+	.reg_bits		= 8,
-+	.val_bits		= 8,
-+	.max_register		= IP5XXX_BATOCV_DAT1,
-+};
-+
-+static int ip5xxx_power_probe(struct i2c_client *client)
-+{
-+	struct power_supply_config psy_cfg = {};
-+	struct device *dev = &client->dev;
-+	struct power_supply *psy;
-+	struct ip5xxx *ip5xxx;
-+
-+	ip5xxx = devm_kzalloc(dev, sizeof(*ip5xxx), GFP_KERNEL);
-+	if (!ip5xxx)
-+		return -ENOMEM;
-+
-+	ip5xxx->regmap = devm_regmap_init_i2c(client, &ip5xxx_regmap_config);
-+	if (IS_ERR(ip5xxx->regmap))
-+		return PTR_ERR(ip5xxx->regmap);
-+
-+	psy_cfg.of_node = dev->of_node;
-+	psy_cfg.drv_data = ip5xxx;
-+
-+	psy = devm_power_supply_register(dev, &ip5xxx_battery_desc, &psy_cfg);
-+	if (IS_ERR(psy))
-+		return PTR_ERR(psy);
-+
-+	psy = devm_power_supply_register(dev, &ip5xxx_boost_desc, &psy_cfg);
-+	if (IS_ERR(psy))
-+		return PTR_ERR(psy);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id ip5xxx_power_of_match[] = {
-+	{ .compatible = "injoinic,ip5108" },
-+	{ .compatible = "injoinic,ip5109" },
-+	{ .compatible = "injoinic,ip5207" },
-+	{ .compatible = "injoinic,ip5209" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, ip5xxx_power_of_match);
-+
-+static struct i2c_driver ip5xxx_power_driver = {
-+	.probe_new	= ip5xxx_power_probe,
-+	.driver		= {
-+		.name		= "ip5xxx-power",
-+		.of_match_table	= ip5xxx_power_of_match,
-+	}
-+};
-+module_i2c_driver(ip5xxx_power_driver);
-+
-+MODULE_AUTHOR("Samuel Holland <samuel@sholland.org>");
-+MODULE_DESCRIPTION("Injoinic IP5xxx power bank IC driver");
-+MODULE_LICENSE("GPL");
+- MDIO Bus: enable mido3 bus
+
+- RTC: switch to external battery-backed rtc
+
+- OpenBMC: 1-based SLED numbering
+
+
+LINK: [v1] https://lore.kernel.org/all/20220211014347.24841-1-potin.lai@quantatw.com/
+
+
+Changes v1 --> v2:
+- update the details of new added gpio line names in commit message
+- add battery-backed rtc information in comment and commit message
+
+Potin Lai (10):
+  arch: arm: dts: bletchley: switch sled numbering to 1-based
+  arch: arm: dts: bletchley: separate leds into multiple groups
+  arch: arm: dts: bletchley: update gpio-line-names
+  arch: arm: dts: bletchley: update fmc configurations
+  arch: arm: dts: bletchley: switch to spi-gpio for spi2
+  arch: arm: dts: bletchley: add interrupt support for sled io expander
+  arch: arm: dts: bletchley: add shunt-resistor for ADM1278
+  arch: arm: dts: bletchley: add INA230 sensor on each sled
+  arch: arm: dts: bletchley: enable mdio3 bus
+  arch: arm: dts: bletchley: cleanup redundant nodes
+
+ .../dts/aspeed-bmc-facebook-bletchley.dts     | 303 +++++++++++-------
+ 1 file changed, 194 insertions(+), 109 deletions(-)
+
 -- 
-2.33.1
+2.17.1
 

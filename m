@@ -2,60 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D604B5304
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E52AF4B52F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355026AbiBNORp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 09:17:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53724 "EHLO
+        id S1355056AbiBNOSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 09:18:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234816AbiBNORm (ORCPT
+        with ESMTP id S1355050AbiBNOSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 09:17:42 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8424949F9E
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:17:34 -0800 (PST)
-Date:   Mon, 14 Feb 2022 15:17:30 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644848252;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I7th9FPBhTHINqz3uRpqzV8a/eogAXrdqgX5F7Ju6E4=;
-        b=ouyZslNgbCuTOkK5kZzEjR79vs+1sbKGDhHknUnUtfolGUAAK5mi3QDYVA0RvkfuLEqzx9
-        o4jeEnF1TaLbZ9G/tVdBB1iUlOuDMCzAnNlxbV59/Gpk3oRve/bcCgt7lWiy6O0S91xDnR
-        Q1+qqrrI/1FcQbSVKQOvigvmr2epR8EQsjsHmt3phRRMXGzdG7LhqHzeg5xitvXivyfqSG
-        95E0i38yjwmGxlK625cMEeDV2XewMi5PU+MOy3Od+5FohK69m6i6+m9TRCUFVuiB+hy8Di
-        uhyBNCk5bXEeo8pmb/GUCHgQ8R23+0GyycCo0yYTpIra2/HZzqCyZrTQyuWLGQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644848252;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I7th9FPBhTHINqz3uRpqzV8a/eogAXrdqgX5F7Ju6E4=;
-        b=HMbr81cK/bM5Rma33KsSoWPqO5rAZbWP/gdg1G66LvgMfYG+LXnzPcl5lSa27NyB8nU0+c
-        TZj/rp7bFIx5A8AQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: Re: [PATCH v2] random: set fast pool count to zero in cpuhp teardown
-Message-ID: <Ygpkej/vnMvUDIlP@linutronix.de>
-References: <CAHmME9rAnh6nSRNYo56Ty6VSrY17ej35AoNkSjunFO0AQp1D9Q@mail.gmail.com>
- <20220214133735.966528-1-Jason@zx2c4.com>
+        Mon, 14 Feb 2022 09:18:04 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBDD49274
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:17:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=2IRrcNjbhFft6rdMCPj7kHywiR4ZE+zmLkUlD3JOZq8=; b=TsEx//Emm3JDTP/C5Aa0895S3r
+        hkk9CLcVvYdn1S6rAzhbkB6yS1mNQdzJcQ0CexNcvuNNdM1MC2zoqPJnyxJxrK9fxPfyUlm/My/kE
+        Tqr5Tk6uyLpJMyUaqYswtMFPxnaFrRn93Z+eQvjas4f9VrEt2BdBX05/cqAXETOTJnMAdMevVi+EP
+        G9BD0AwsL1ZIziW1SZ8uWxf5n6hT4I84utdpd1nJpOpHvrlzq2FGUUvJoWJ5OCPSO48d9PBpYWhTg
+        wXRXOGFwQmWES1SKuVr+03lO6FQlRAaGpvAXnOhxyg24cvGmwi160aayMdgM1/frI33QESyla/qEv
+        9cEYwVuA==;
+Received: from 201-27-34-205.dsl.telesp.net.br ([201.27.34.205] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nJcAs-0003zt-IC; Mon, 14 Feb 2022 15:17:55 +0100
+Message-ID: <ae38ceb0-4af0-f010-5272-3bf1ca037bce@igalia.com>
+Date:   Mon, 14 Feb 2022 11:17:36 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220214133735.966528-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V5] panic: Move panic_print before kmsg dumpers
+Content-Language: en-US
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, pmladek@suse.com,
+        akpm@linux-foundation.org, anton@enomsg.org, ccross@android.com,
+        dyoung@redhat.com, feng.tang@intel.com, john.ogness@linutronix.de,
+        keescook@chromium.org, kernel@gpiccoli.net,
+        kexec@lists.infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, tony.luck@intel.com, vgoyal@redhat.com
+References: <20220211215539.822466-1-gpiccoli@igalia.com>
+ <YgoaNTnT9hc6PUjP@MiWiFi-R3L-srv>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YgoaNTnT9hc6PUjP@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,45 +61,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-14 14:37:35 [+0100], Jason A. Donenfeld wrote:
-> Rather than having to use expensive atomics, which were visibly the most
-> expensive thing in the entire irq handler, simply take care of the
-> extreme edge case of resetting count to 0 in the cpuhp teardown handler,
-> after no more interrupts will arrive on that CPU. This simplifies the
-> code a bit and lets us use vanilla variables rather than atomics, and
-> performance should be improved.
->=20
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Theodore Ts'o <tytso@mit.edu>
-> Cc: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: Sultan Alsawaf <sultan@kerneltoast.com>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
-> Sebastian -
->=20
-> v2 moves the teardown to CPUHP_OFFLINE=E2=80=A6CPUHP_BRINGUP_CPU, per our
-> discussion.
+On 14/02/2022 06:00, Baoquan He wrote:
+> [...]
+>> This patch changes that in 2 ways:
+>                                ~~~ steps?
+> 
+> Otherwise, the whole looks straightforward, clear, thanks.
+> 
+> Acked-by: Baoquan He <bhe@redhat.com>
+> 
 
-My suggestion was to move it to the startup handler with the code
-snippet I had.
-As I tried to explain, this may have two problems:
-- worker scheduled during CPU-UP before CPUHP_AP_WORKQUEUE_ONLINE are
-  probably unbound.
+Thanks a lot Baoquan, just sent a V6 including your suggestion and your
+Acked-by - I'm feeling we are close now...heheh
+Cheers,
 
-- worker scheduled during CPU-DOWN after CPUHP_AP_WORKQUEUE_ONLINE are
-  probably unbound.
 
-The unbound worker may run on any CPU and thus do nothing.
-In the CPU-DOWN case before: should we rollback before
-CPUHP_RANDOM_PREPARE but after CPUHP_AP_WORKQUEUE_ONLINE then the needed
-reset (in case the worker did nothing because it was on the wrong CPU)
-will not happen.
-Therefore I think, moving it to startup, online, (as suggested in
-https://lore.kernel.org/all/Ygo3%2FpuhZFpuX91x@linutronix.de/).
-
-will not have any of this downsides/ corner cases.
-
-Sebastian
+Guilherme

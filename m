@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56FCE4B47A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0DF4B45BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:32:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245381AbiBNJtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:49:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42958 "EHLO
+        id S243107AbiBNJ27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:28:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343846AbiBNJqa (ORCPT
+        with ESMTP id S243021AbiBNJ2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:46:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D932D69CCA;
-        Mon, 14 Feb 2022 01:40:00 -0800 (PST)
+        Mon, 14 Feb 2022 04:28:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B49B60D83;
+        Mon, 14 Feb 2022 01:28:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9061FB80DC7;
-        Mon, 14 Feb 2022 09:39:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A7B6C340E9;
-        Mon, 14 Feb 2022 09:39:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 284EC60F88;
+        Mon, 14 Feb 2022 09:28:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0978CC340E9;
+        Mon, 14 Feb 2022 09:28:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831598;
-        bh=ojmiylI0YjC8wN3pyGRx1nGh82RjVji27PqBngnvtws=;
+        s=korg; t=1644830914;
+        bh=r4loICwC/Ra3vZUKUUxcneuvZ23lklqWBJUiGClVREg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gyn1zm8fFw8lMX5yQG6thwUX1e9H24jyz+GNkttteyJm/2q1uY5ID2GBBqq7oTXJt
-         07NHw0QQxzsKvl5ikXcv89pcPh0+O1dFH1KZY3Dur/Gfh1YYyo7dWaHZlZoiYmKhIN
-         3NjqbcTHk3/bNXmVOU7aKpC74O9sih7wxme5yjdg=
+        b=KDj/knm8TDrAM2IOPoLHG3/8h5PpDhTl586Otb+TUvgn1IJb2S/gqxuqyBtmtSNuM
+         /bVQP3lstFm1HKTIJpzrKepbr8JkcFDCAlgdlyAm1aDJsTqiDjnfR8Hu7PUtC021YE
+         YG1TD43OyUtTOgRvKdnUhFwFP/cHzGU0VJkZj/OQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 032/116] PM: hibernate: Remove register_nosave_region_late()
+        Guillaume Bertholon <guillaume.bertholon@ens.fr>
+Subject: [PATCH 4.9 05/34] Input: i8042 - Fix misplaced backport of "add ASUS Zenbook Flip to noselftest list"
 Date:   Mon, 14 Feb 2022 10:25:31 +0100
-Message-Id: <20220214092459.800350010@linuxfoundation.org>
+Message-Id: <20220214092446.126910108@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
+References: <20220214092445.946718557@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,93 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+From: Guillaume Bertholon <guillaume.bertholon@ens.fr>
 
-[ Upstream commit 33569ef3c754a82010f266b7b938a66a3ccf90a4 ]
+The upstream commit b5d6e7ab7fe7 ("Input: i8042 - add ASUS Zenbook Flip to
+noselftest list") inserted a new entry in the `i8042_dmi_noselftest_table`
+table, further patched by commit daa58c8eec0a ("Input: i8042 - fix Pegatron
+C15B ID entry") to insert a missing separator.
 
-It is an unused wrapper forcing kmalloc allocation for registering
-nosave regions. Also, rename __register_nosave_region() to
-register_nosave_region() now that there is no need for disambiguation.
+However, their backported version in stable (commit e9e8b3769099
+("Input: i8042 - add ASUS Zenbook Flip to noselftest list") and
+commit c551d20d487a ("Input: i8042 - fix Pegatron C15B ID entry"))
+inserted this entry in `i8042_dmi_forcemux_table` instead.
 
-Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
-Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This patch moves the entry back into `i8042_dmi_noselftest_table`.
+
+Fixes: e9e8b3769099 ("Input: i8042 - add ASUS Zenbook Flip to noselftest list")
+Signed-off-by: Guillaume Bertholon <guillaume.bertholon@ens.fr>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/suspend.h | 11 +----------
- kernel/power/snapshot.c | 21 +++++++--------------
- 2 files changed, 8 insertions(+), 24 deletions(-)
+ drivers/input/serio/i8042-x86ia64io.h |   11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index 8af13ba60c7e4..c1310c571d805 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -430,15 +430,7 @@ struct platform_hibernation_ops {
- 
- #ifdef CONFIG_HIBERNATION
- /* kernel/power/snapshot.c */
--extern void __register_nosave_region(unsigned long b, unsigned long e, int km);
--static inline void __init register_nosave_region(unsigned long b, unsigned long e)
--{
--	__register_nosave_region(b, e, 0);
--}
--static inline void __init register_nosave_region_late(unsigned long b, unsigned long e)
--{
--	__register_nosave_region(b, e, 1);
--}
-+extern void register_nosave_region(unsigned long b, unsigned long e);
- extern int swsusp_page_is_forbidden(struct page *);
- extern void swsusp_set_page_free(struct page *);
- extern void swsusp_unset_page_free(struct page *);
-@@ -457,7 +449,6 @@ int pfn_is_nosave(unsigned long pfn);
- int hibernate_quiet_exec(int (*func)(void *data), void *data);
- #else /* CONFIG_HIBERNATION */
- static inline void register_nosave_region(unsigned long b, unsigned long e) {}
--static inline void register_nosave_region_late(unsigned long b, unsigned long e) {}
- static inline int swsusp_page_is_forbidden(struct page *p) { return 0; }
- static inline void swsusp_set_page_free(struct page *p) {}
- static inline void swsusp_unset_page_free(struct page *p) {}
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index 46b1804c1ddf7..1da013f50059a 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -944,8 +944,7 @@ static void memory_bm_recycle(struct memory_bitmap *bm)
-  * Register a range of page frames the contents of which should not be saved
-  * during hibernation (to be used in the early initialization code).
-  */
--void __init __register_nosave_region(unsigned long start_pfn,
--				     unsigned long end_pfn, int use_kmalloc)
-+void __init register_nosave_region(unsigned long start_pfn, unsigned long end_pfn)
- {
- 	struct nosave_region *region;
- 
-@@ -961,18 +960,12 @@ void __init __register_nosave_region(unsigned long start_pfn,
- 			goto Report;
- 		}
- 	}
--	if (use_kmalloc) {
--		/* During init, this shouldn't fail */
--		region = kmalloc(sizeof(struct nosave_region), GFP_KERNEL);
--		BUG_ON(!region);
--	} else {
--		/* This allocation cannot fail */
--		region = memblock_alloc(sizeof(struct nosave_region),
--					SMP_CACHE_BYTES);
--		if (!region)
--			panic("%s: Failed to allocate %zu bytes\n", __func__,
--			      sizeof(struct nosave_region));
--	}
-+	/* This allocation cannot fail */
-+	region = memblock_alloc(sizeof(struct nosave_region),
-+				SMP_CACHE_BYTES);
-+	if (!region)
-+		panic("%s: Failed to allocate %zu bytes\n", __func__,
-+		      sizeof(struct nosave_region));
- 	region->start_pfn = start_pfn;
- 	region->end_pfn = end_pfn;
- 	list_add_tail(&region->list, &nosave_regions);
--- 
-2.34.1
-
+--- a/drivers/input/serio/i8042-x86ia64io.h
++++ b/drivers/input/serio/i8042-x86ia64io.h
+@@ -586,11 +586,6 @@ static const struct dmi_system_id i8042_
+ 			DMI_MATCH(DMI_SYS_VENDOR, "Sony Corporation"),
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "VGN-CS"),
+ 		},
+-	}, {
+-		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
+-			DMI_MATCH(DMI_CHASSIS_TYPE, "31"), /* Convertible Notebook */
+-		},
+ 	},
+ 	{ }
+ };
+@@ -677,6 +672,12 @@ static const struct dmi_system_id i8042_
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "Z450LA"),
+ 		},
+ 	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
++			DMI_MATCH(DMI_CHASSIS_TYPE, "31"), /* Convertible Notebook */
++		},
++	},
+ 	{ }
+ };
+ static const struct dmi_system_id __initconst i8042_dmi_reset_table[] = {
 
 

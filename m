@@ -2,72 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D423D4B5B4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 21:52:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1B94B5B61
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 21:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiBNUvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 15:51:49 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46450 "EHLO
+        id S229916AbiBNUq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 15:46:28 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:39114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiBNUvq (ORCPT
+        with ESMTP id S229697AbiBNUp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 15:51:46 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C38DF4A0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:51:24 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id j2so50064360ybu.0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:51:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Fc6F8UmVPobantRNaLLTN28a7rasUnDLwQKG9SVLzq0=;
-        b=aH+paiSV3sgIYtrkaCwxKQbsjv6znZtteAiqoHHOb6AC3qgvXrFUWQj0XcZoTZMINW
-         XGUKwFueUMXH5XAOnIH7ou9f4U9hG/LV426XR5UXme06/t0rUorIkOZtPQyonJWN4BwT
-         5Ifzqabl/THZ4Om0V+h+tNsYSgSPCC7lN2+5I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Fc6F8UmVPobantRNaLLTN28a7rasUnDLwQKG9SVLzq0=;
-        b=DsGrK1guDqNdHGO7Ybfxg+PoaUC3foU1h1OFaEglR5+ynSSmtJ/hMgGgPvZ2WpuaAF
-         aBVEX59ScwTeNE35KOQUp7Txub7gQmEZaqBpZ5xsZbSy4t36bb2le1z81e6zk9O+Ydy7
-         LJp3X+6o1rL2qok5fY2fM3NR2GLGNo6SOdIsVFPR3b2t9e9u7T+HS5wtgQEPd/7GGJKC
-         WfmFsyCtWPxpWP8NQ+ZfrdjnACHTS+TozNpsjGoy4+5I7Nk7v7Y+2W7voGuQhZKhQYzD
-         2fw9BcW7LiO4RbWfjZMDqFP3Ty1tveRxQBTOCVJ3dMzAST37zqO9bDSWFiNJnmsONMNO
-         8OLg==
-X-Gm-Message-State: AOAM532dNjcNYWdN/XXEaKs0op1Vn2dFdWl4kVN6AvJtdfj7hoRR58x5
-        sqdzgTsVnhezS3DtKpg9VqTQm6UjkApcPVcf3Xki7x7RNg==
-X-Google-Smtp-Source: ABdhPJyfD2IesL3G/kU5m4HDGWuI/SKkArsW+wmg8ZWWtd9oGt7ZFjsXIxQ2DmTeIpsuWYk9K0Ng0fGqp9UWtHIi2NA=
-X-Received: by 2002:a25:73d5:: with SMTP id o204mr818084ybc.472.1644869729891;
- Mon, 14 Feb 2022 12:15:29 -0800 (PST)
-MIME-Version: 1.0
-References: <20220210214018.55739-1-atishp@rivosinc.com> <20220210214018.55739-6-atishp@rivosinc.com>
- <877da2xu32.fsf@igel.home> <CAMuHMdX4P82B96ZbANyF6cWo9CnrW9hg5up6pCb0PZ99=sPZ_A@mail.gmail.com>
-In-Reply-To: <CAMuHMdX4P82B96ZbANyF6cWo9CnrW9hg5up6pCb0PZ99=sPZ_A@mail.gmail.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Mon, 14 Feb 2022 12:15:19 -0800
-Message-ID: <CAOnJCUKvE7Q2C+DOLdeQH_Qh44aUvdMydW9DUTrFQRxYWHGYgA@mail.gmail.com>
-Subject: Re: [PATCH v2 5/6] RISC-V: Do no continue isa string parsing without
- correct XLEN
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Andreas Schwab <schwab@linux-m68k.org>,
-        Atish Patra <atishp@rivosinc.com>,
+        Mon, 14 Feb 2022 15:45:58 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076FE23A1BA;
+        Mon, 14 Feb 2022 12:44:00 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJhmV-001mcz-Ba; Mon, 14 Feb 2022 20:17:07 +0000
+Date:   Mon, 14 Feb 2022 20:17:07 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rich Felker <dalias@libc.org>, linux-ia64@vger.kernel.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Max Filippov <jcmvbkbc@gmail.com>, Guo Ren <guoren@kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
         linux-riscv <linux-riscv@lists.infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Helge Deller <deller@gmx.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        linux-csky@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Richard Weinberger <richard@nod.at>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        David Miller <davem@davemloft.net>
+Subject: Re: [PATCH 04/14] x86: use more conventional access_ok() definition
+Message-ID: <Ygq4wy9fikDYmuHU@zeniv-ca.linux.org.uk>
+References: <20220214163452.1568807-1-arnd@kernel.org>
+ <20220214163452.1568807-5-arnd@kernel.org>
+ <YgqLFYqIqkIsNC92@infradead.org>
+ <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
+ <CAHk-=whq6_Nh3cB3FieP481VcRyCu69X3=wO1yLHGmcZEj69SA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whq6_Nh3cB3FieP481VcRyCu69X3=wO1yLHGmcZEj69SA@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,50 +89,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 4:52 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Andreas,
->
-> On Thu, Feb 10, 2022 at 11:00 PM Andreas Schwab <schwab@linux-m68k.org> wrote:
-> > On Feb 10 2022, Atish Patra wrote:
-> > > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> > > index 469b9739faf7..cca579bae8a0 100644
-> > > --- a/arch/riscv/kernel/cpufeature.c
-> > > +++ b/arch/riscv/kernel/cpufeature.c
-> > > @@ -84,6 +84,7 @@ void __init riscv_fill_hwcap(void)
-> > >       for_each_of_cpu_node(node) {
-> > >               unsigned long this_hwcap = 0;
-> > >               uint64_t this_isa = 0;
-> > > +             char *temp;
-> > >
-> > >               if (riscv_of_processor_hartid(node) < 0)
-> > >                       continue;
-> > > @@ -93,6 +94,7 @@ void __init riscv_fill_hwcap(void)
-> > >                       continue;
-> > >               }
-> > >
-> > > +             temp = (char *)isa;
+On Mon, Feb 14, 2022 at 12:01:05PM -0800, Linus Torvalds wrote:
+> On Mon, Feb 14, 2022 at 11:46 AM Arnd Bergmann <arnd@kernel.org> wrote:
 > >
-> > There should be no need for this cast.
->
-> Indeed, but only if "temp" is changed to "const char *".
->
+> > As Al pointed out, they turned out to be necessary on sparc64, but the only
+> > definitions are on sparc64 and x86, so it's possible that they serve a similar
+> > purpose here, in which case changing the limit from TASK_SIZE to
+> > TASK_SIZE_MAX is probably wrong as well.
+> 
+> x86-64 has always(*) used TASK_SIZE_MAX for access_ok(), and the
+> get_user() assembler implementation does the same.
+> 
+> I think any __range_not_ok() users that use TASK_SIZE are entirely
+> historical, and should be just fixed.
 
-Yes. Fixed it in v3. Thanks.
-
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
-
-
-
--- 
-Regards,
-Atish
+IIRC, that was mostly userland stack trace collection in perf.
+I'll try to dig in archives and see what shows up - it's been
+a while ago...

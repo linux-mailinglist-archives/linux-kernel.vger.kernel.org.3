@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C294F4B472D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F26D4B4884
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245270AbiBNJpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:45:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33972 "EHLO
+        id S1343990AbiBNJz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:55:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244917AbiBNJnD (ORCPT
+        with ESMTP id S1344686AbiBNJvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:43:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD26D69CE4;
-        Mon, 14 Feb 2022 01:37:55 -0800 (PST)
+        Mon, 14 Feb 2022 04:51:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A57F6D381;
+        Mon, 14 Feb 2022 01:43:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59F28B80DA9;
-        Mon, 14 Feb 2022 09:37:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78D9BC340F0;
-        Mon, 14 Feb 2022 09:37:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D27BAB80D83;
+        Mon, 14 Feb 2022 09:43:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8CD6C36AE2;
+        Mon, 14 Feb 2022 09:43:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831473;
-        bh=+G1g/Z93f1zz309HBo79pRVjKS1a7Jevtkt1wE2TZEU=;
+        s=korg; t=1644831785;
+        bh=fEKu0wIsrTU9+RjmzFhznFG/l8LoKPcNOQsQGHl9h6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dx+AYcqhE0ARQ98vzqKeW8mrVrNhJbCCYfQ8eTxrbi9d86LCAwRP50B5hueRskdyV
-         hSoS5pj1Ybzk0wJzu+6ks6MzeRmDRPqAfXNJylC4om0L8JoeHB4RzXLrydwSoygGTC
-         VWhJ0eln0xR5OTY8Dh6/NJV4F/kSzixsm9BVSZTQ=
+        b=UF9sp0pZdx2rFPS4UcbAn7DIaXcXJl6LKI062+FcHuJYbuMuDpV+cEczCjN/XWXue
+         OrWl+JgScXTMMvZqOcHVWFixBwt6DyI6JgZV/n3KZQIR1gDfIMFIxBFyTKc2PaQ7AX
+         kdw/1JWvfNmP9FkCTGgUUupOhTwCQK/e9PYTFy8Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Scott Russell <Scott.Russell2@ncr.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.4 66/71] USB: serial: cp210x: add CPI Bulk Coin Recycler id
+        stable@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: [PATCH 5.10 095/116] usb: ulpi: Call of_node_put correctly
 Date:   Mon, 14 Feb 2022 10:26:34 +0100
-Message-Id: <20220214092454.258840056@linuxfoundation.org>
+Message-Id: <20220214092502.051973305@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Sean Anderson <sean.anderson@seco.com>
 
-commit 6ca0c6283340d819bf9c7d8e76be33c9fbd903ab upstream.
+commit 0a907ee9d95e3ac35eb023d71f29eae0aaa52d1b upstream.
 
-Add the device id for the Crane Payment Innovation / Money Controls Bulk
-Coin Recycler:
+of_node_put should always be called on device nodes gotten from
+of_get_*. Additionally, it should only be called after there are no
+remaining users. To address the first issue, call of_node_put if later
+steps in ulpi_register fail. To address the latter, call put_device if
+device_register fails, which will call ulpi_dev_release if necessary.
 
-	https://www.cranepi.com/en/system/files/Support/OM_BCR_EN_V1-04_0.pdf
-
-Reported-by: Scott Russell <Scott.Russell2@ncr.com>
-Cc: stable@vger.kernel.org
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
+Cc: stable <stable@vger.kernel.org>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+Link: https://lore.kernel.org/r/20220127190004.1446909-3-sean.anderson@seco.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/cp210x.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/common/ulpi.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -70,6 +70,7 @@ static const struct usb_device_id id_tab
- 	{ USB_DEVICE(0x0FCF, 0x1004) }, /* Dynastream ANT2USB */
- 	{ USB_DEVICE(0x0FCF, 0x1006) }, /* Dynastream ANT development board */
- 	{ USB_DEVICE(0x0FDE, 0xCA05) }, /* OWL Wireless Electricity Monitor CM-160 */
-+	{ USB_DEVICE(0x106F, 0x0003) },	/* CPI / Money Controls Bulk Coin Recycler */
- 	{ USB_DEVICE(0x10A6, 0xAA26) }, /* Knock-off DCU-11 cable */
- 	{ USB_DEVICE(0x10AB, 0x10C5) }, /* Siemens MC60 Cable */
- 	{ USB_DEVICE(0x10B5, 0xAC70) }, /* Nokia CA-42 USB */
+--- a/drivers/usb/common/ulpi.c
++++ b/drivers/usb/common/ulpi.c
+@@ -250,12 +250,16 @@ static int ulpi_register(struct device *
+ 		return ret;
+ 
+ 	ret = ulpi_read_id(ulpi);
+-	if (ret)
++	if (ret) {
++		of_node_put(ulpi->dev.of_node);
+ 		return ret;
++	}
+ 
+ 	ret = device_register(&ulpi->dev);
+-	if (ret)
++	if (ret) {
++		put_device(&ulpi->dev);
+ 		return ret;
++	}
+ 
+ 	dev_dbg(&ulpi->dev, "registered ULPI PHY: vendor %04x, product %04x\n",
+ 		ulpi->id.vendor, ulpi->id.product);
 
 

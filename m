@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80ED74B4862
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BDF4B46BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245396AbiBNJxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:53:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60950 "EHLO
+        id S245038AbiBNJpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:45:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237479AbiBNJua (ORCPT
+        with ESMTP id S244553AbiBNJl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:50:30 -0500
+        Mon, 14 Feb 2022 04:41:59 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E45652D3;
-        Mon, 14 Feb 2022 01:41:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C359466FB8;
+        Mon, 14 Feb 2022 01:37:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D43AB60FA2;
-        Mon, 14 Feb 2022 09:41:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A5FAC340E9;
-        Mon, 14 Feb 2022 09:41:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D21D60DFD;
+        Mon, 14 Feb 2022 09:37:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15F18C340E9;
+        Mon, 14 Feb 2022 09:37:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831685;
-        bh=z40kFjQaiXx7f71JHu8jlvlA7hqgKZhlPEtCv+lCots=;
+        s=korg; t=1644831463;
+        bh=BPMIo4tynHJXxOcnI45fP2l/HdokGMxypUolUYN5u8E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QoBmwg6JQoJkjvvttTvAC4fSLSoIR9HMefalI8P6iIikYM9t9AvhalpaNPq8mYSNF
-         6xhSSSaXQXgDOeAPQDCJ/zAy3hym8ohJ3E4x9wh0JgB8gl0IQqORZGvMyh02FHCZJF
-         zUG2VX0mLBvE4dPbB0OtO0kJ42GZSpF+2TG1O37o=
+        b=EHfQZ30RXc1MU2Y6xlJ7RLfYy1toTPHsgT6NFW/oG4Ri0LcZPSOR3CHgtwZ5gZsin
+         01XcWz5Ty9zjNk6hn0FIN++IFRiK1ZkFmBzSwerhT7kel2c3wjHf/DlrhgI5i5TGxS
+         se7s44bW8GACz8dUsbQoL/xHkU0/stkGbjIfy3Cs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pham Thanh Tuyen <phamtyn@gmail.com>,
-        Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 062/116] netfilter: ctnetlink: disable helper autoassign
+        stable@vger.kernel.org,
+        Nikolay Aleksandrov <nikolay@cumulusnetworks.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.4 33/71] net: bridge: fix stale eth hdr pointer in br_dev_xmit
 Date:   Mon, 14 Feb 2022 10:26:01 +0100
-Message-Id: <20220214092500.894610788@linuxfoundation.org>
+Message-Id: <20220214092453.134311359@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,72 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Nikolay Aleksandrov <nikolay@cumulusnetworks.com>
 
-[ Upstream commit d1ca60efc53d665cf89ed847a14a510a81770b81 ]
+commit 823d81b0fa2cd83a640734e74caee338b5d3c093 upstream.
 
-When userspace, e.g. conntrackd, inserts an entry with a specified helper,
-its possible that the helper is lost immediately after its added:
+In br_dev_xmit() we perform vlan filtering in br_allowed_ingress() but
+if the packet has the vlan header inside (e.g. bridge with disabled
+tx-vlan-offload) then the vlan filtering code will use skb_vlan_untag()
+to extract the vid before filtering which in turn calls pskb_may_pull()
+and we may end up with a stale eth pointer. Moreover the cached eth header
+pointer will generally be wrong after that operation. Remove the eth header
+caching and just use eth_hdr() directly, the compiler does the right thing
+and calculates it only once so we don't lose anything.
 
-ctnetlink_create_conntrack
-  -> nf_ct_helper_ext_add + assign helper
-    -> ctnetlink_setup_nat
-      -> ctnetlink_parse_nat_setup
-         -> parse_nat_setup -> nfnetlink_parse_nat_setup
-	                       -> nf_nat_setup_info
-                                 -> nf_conntrack_alter_reply
-                                   -> __nf_ct_try_assign_helper
-
-... and __nf_ct_try_assign_helper will zero the helper again.
-
-Set IPS_HELPER bit to bypass auto-assign logic, its unwanted, just like
-when helper is assigned via ruleset.
-
-Dropped old 'not strictly necessary' comment, it referred to use of
-rcu_assign_pointer() before it got replaced by RCU_INIT_POINTER().
-
-NB: Fixes tag intentionally incorrect, this extends the referenced commit,
-but this change won't build without IPS_HELPER introduced there.
-
-Fixes: 6714cf5465d280 ("netfilter: nf_conntrack: fix explicit helper attachment and NAT")
-Reported-by: Pham Thanh Tuyen <phamtyn@gmail.com>
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 057658cb33fb ("bridge: suppress arp pkts on BR_NEIGH_SUPPRESS ports")
+Signed-off-by: Nikolay Aleksandrov <nikolay@cumulusnetworks.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Cc: Eduardo Vela <Nava> <evn@google.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/uapi/linux/netfilter/nf_conntrack_common.h | 2 +-
- net/netfilter/nf_conntrack_netlink.c               | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ net/bridge/br_device.c |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/include/uapi/linux/netfilter/nf_conntrack_common.h b/include/uapi/linux/netfilter/nf_conntrack_common.h
-index 4b3395082d15c..26071021e986f 100644
---- a/include/uapi/linux/netfilter/nf_conntrack_common.h
-+++ b/include/uapi/linux/netfilter/nf_conntrack_common.h
-@@ -106,7 +106,7 @@ enum ip_conntrack_status {
- 	IPS_NAT_CLASH = IPS_UNTRACKED,
- #endif
+--- a/net/bridge/br_device.c
++++ b/net/bridge/br_device.c
+@@ -33,7 +33,6 @@ netdev_tx_t br_dev_xmit(struct sk_buff *
+ 	struct pcpu_sw_netstats *brstats = this_cpu_ptr(br->stats);
+ 	const struct nf_br_ops *nf_ops;
+ 	const unsigned char *dest;
+-	struct ethhdr *eth;
+ 	u16 vid = 0;
  
--	/* Conntrack got a helper explicitly attached via CT target. */
-+	/* Conntrack got a helper explicitly attached (ruleset, ctnetlink). */
- 	IPS_HELPER_BIT = 13,
- 	IPS_HELPER = (1 << IPS_HELPER_BIT),
+ 	rcu_read_lock();
+@@ -53,15 +52,14 @@ netdev_tx_t br_dev_xmit(struct sk_buff *
+ 	BR_INPUT_SKB_CB(skb)->frag_max_size = 0;
  
-diff --git a/net/netfilter/nf_conntrack_netlink.c b/net/netfilter/nf_conntrack_netlink.c
-index c6bcc28ae3387..eeeaa34b3e7b5 100644
---- a/net/netfilter/nf_conntrack_netlink.c
-+++ b/net/netfilter/nf_conntrack_netlink.c
-@@ -2283,7 +2283,8 @@ ctnetlink_create_conntrack(struct net *net,
- 			if (helper->from_nlattr)
- 				helper->from_nlattr(helpinfo, ct);
+ 	skb_reset_mac_header(skb);
+-	eth = eth_hdr(skb);
+ 	skb_pull(skb, ETH_HLEN);
  
--			/* not in hash table yet so not strictly necessary */
-+			/* disable helper auto-assignment for this entry */
-+			ct->status |= IPS_HELPER;
- 			RCU_INIT_POINTER(help->helper, helper);
- 		}
- 	} else {
--- 
-2.34.1
-
+ 	if (!br_allowed_ingress(br, br_vlan_group_rcu(br), skb, &vid))
+ 		goto out;
+ 
+ 	if (IS_ENABLED(CONFIG_INET) &&
+-	    (eth->h_proto == htons(ETH_P_ARP) ||
+-	     eth->h_proto == htons(ETH_P_RARP)) &&
++	    (eth_hdr(skb)->h_proto == htons(ETH_P_ARP) ||
++	     eth_hdr(skb)->h_proto == htons(ETH_P_RARP)) &&
+ 	    br_opt_get(br, BROPT_NEIGH_SUPPRESS_ENABLED)) {
+ 		br_do_proxy_suppress_arp(skb, br, vid, NULL);
+ 	} else if (IS_ENABLED(CONFIG_IPV6) &&
 
 

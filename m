@@ -2,137 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3B94B4AD7
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D5C4B4BE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:43:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346533AbiBNKTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:19:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44110 "EHLO
+        id S233666AbiBNKVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:21:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347634AbiBNKQk (ORCPT
+        with ESMTP id S1346250AbiBNKRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:16:40 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EBC8C7C8;
-        Mon, 14 Feb 2022 01:54:13 -0800 (PST)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21E803Wp016262;
-        Mon, 14 Feb 2022 09:53:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=DsNmjSHticmC1pAG1ErE4wFkPS88YyqO6VEKTMmKaQ0=;
- b=Uk65lxTnlWAxj3+A169KNOum6WcLbN7pI8oTmxisQHgzRUwSI4Fq7+WbsaYjLXEf+qx6
- 1cWJVvvr5EkAlH4LQDMjcGHPAhLr2Im0MeBpQHA4VnOtGwv+mpx6Lt1mLZ9qr/5IdMo5
- 6xNVeEE0VDNTowWNMTBKU90TmegLKGy9Di3eOg1q6xG1pnGepAY5/0anFR+xoWWjL2vv
- khVPzWphA/bJNrN0DPqhnE7dHzktwY/J4UlTCVPsrMn01PTmM5Bd/LlyQFM4aRJb7lBN
- GQRm7XFhG+HnxdekDmsHbGadUS4uYwE1ZDvsJ6TR7qqMggz3oLaceQVUDrm+gpx85cav ZA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e6thxf5vd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 09:53:22 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21E9p8fX007354;
-        Mon, 14 Feb 2022 09:53:21 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e6thxf5us-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 09:53:21 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21E9halr029231;
-        Mon, 14 Feb 2022 09:53:19 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 3e645jbnes-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 09:53:19 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21E9gvqf38994182
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Feb 2022 09:42:58 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2693D5204F;
-        Mon, 14 Feb 2022 09:53:16 +0000 (GMT)
-Received: from sig-9-145-84-135.uk.ibm.com (unknown [9.145.84.135])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 5EFB85206B;
-        Mon, 14 Feb 2022 09:53:14 +0000 (GMT)
-Message-ID: <6caad65b6229e8e01ce4e125a40f8c1ad2007d39.camel@linux.ibm.com>
-Subject: Re: [PATCH] parport_pc: Also enable driver for PCI systems
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 14 Feb 2022 10:53:13 +0100
-In-Reply-To: <alpine.DEB.2.21.2202140917540.34636@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2202122313460.34636@angie.orcam.me.uk>
-         <CAMuHMdW-utcFzCZTgqONjxs=U662nF0=aBQu7Zi7FBQouwiA3g@mail.gmail.com>
-         <e5ec2e3be2e70e690bd9112bd23297d05a2993e6.camel@linux.ibm.com>
-         <alpine.DEB.2.21.2202140917540.34636@angie.orcam.me.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Mon, 14 Feb 2022 05:17:55 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F16187C79A
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 01:54:50 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 52E131396;
+        Mon, 14 Feb 2022 01:54:05 -0800 (PST)
+Received: from [10.163.47.15] (unknown [10.163.47.15])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1074B3F718;
+        Mon, 14 Feb 2022 01:54:03 -0800 (PST)
+Subject: Re: [PATCH v6] mm: Uninline copy_overflow()
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <e1723b9cfa924bcefcd41f69d0025b38e4c9364e.1644819985.git.christophe.leroy@csgroup.eu>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <50eed483-9f0a-7aee-1bfd-e89106a80424@arm.com>
+Date:   Mon, 14 Feb 2022 15:24:03 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <e1723b9cfa924bcefcd41f69d0025b38e4c9364e.1644819985.git.christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: sa9z-6Pqwjl221V-INKoEOYV98uYRQhM
-X-Proofpoint-ORIG-GUID: YQquexsItY657nTmxfIzzQy8ETd2_kD7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-14_02,2022-02-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- lowpriorityscore=0 clxscore=1015 mlxlogscore=874 priorityscore=1501
- malwarescore=0 phishscore=0 suspectscore=0 spamscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202140058
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-02-14 at 09:21 +0000, Maciej W. Rozycki wrote:
-> On Mon, 14 Feb 2022, Niklas Schnelle wrote:
-> 
-> > > > --- linux-macro.orig/drivers/parport/Kconfig
-> > > > +++ linux-macro/drivers/parport/Kconfig
-> > > > @@ -42,7 +42,7 @@ if PARPORT
-> > > > 
-> > > >  config PARPORT_PC
-> > > >         tristate "PC-style hardware"
-> > > > -       depends on ARCH_MIGHT_HAVE_PC_PARPORT
-> > > > +       depends on ARCH_MIGHT_HAVE_PC_PARPORT || PCI
-> > 
-> > This would allow selecting PARPORT_PC on s390 e.g. for allyesconfig and
-> > randconfig and like POWER9 we definitely do not support I/O port
-> > access.
-> 
->  I guess we'll have to stop it with !S390 then short-term.  I don't think 
-> an issue with s390 should be blocking all the other platforms that can use 
-> these drivers just fine.  I'll post v2 with that installed if you agree.
-> 
->   Maciej
-
-Though a bit ugly that sounds fine by me. Thanks.
 
 
+On 2/14/22 11:56 AM, Christophe Leroy wrote:
+> While building a small config with CONFIG_CC_OPTIMISE_FOR_SIZE,
+> I ended up with more than 50 times the following function in vmlinux
+> because GCC doesn't honor the 'inline' keyword:
+> 
+> 	c00243bc <copy_overflow>:
+> 	c00243bc:	94 21 ff f0 	stwu    r1,-16(r1)
+> 	c00243c0:	7c 85 23 78 	mr      r5,r4
+> 	c00243c4:	7c 64 1b 78 	mr      r4,r3
+> 	c00243c8:	3c 60 c0 62 	lis     r3,-16286
+> 	c00243cc:	7c 08 02 a6 	mflr    r0
+> 	c00243d0:	38 63 5e e5 	addi    r3,r3,24293
+> 	c00243d4:	90 01 00 14 	stw     r0,20(r1)
+> 	c00243d8:	4b ff 82 45 	bl      c001c61c <__warn_printk>
+> 	c00243dc:	0f e0 00 00 	twui    r0,0
+> 	c00243e0:	80 01 00 14 	lwz     r0,20(r1)
+> 	c00243e4:	38 21 00 10 	addi    r1,r1,16
+> 	c00243e8:	7c 08 03 a6 	mtlr    r0
+> 	c00243ec:	4e 80 00 20 	blr
+> 
+> With -Winline, GCC tells:
+> 
+> 	/include/linux/thread_info.h:212:20: warning: inlining failed in call to 'copy_overflow': call is unlikely and code size would grow [-Winline]
+> 
+> copy_overflow() is a non conditional warning called by
+> check_copy_size() on an error path.
+> 
+> check_copy_size() have to remain inlined in order to benefit
+> from constant folding, but copy_overflow() is not worth inlining.
+> 
+> Uninline the warning when CONFIG_BUG is selected.
+> 
+> When CONFIG_BUG is not selected, WARN() does nothing so skip it.
+> 
+> This reduces the size of vmlinux by almost 4kbytes.
+
+Just wondering, is this the only such scenario which results in
+an avoidable bloated vmlinux image ?
+
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+> v6: I should have gone sleeping yesterday night instead of sending v5 out. Sorry for the noise. Fix EXPORT_SYMBOL()
+> 
+> v5: Change to EXPORT_SYMBOL() instead of EXPORT_SYMBOL_GPL()
+> 
+> v4: Make copy_overflow() a no-op when CONFIG_BUG is not selected
+> 
+> v3: Added missing ; after EXPORT_SYMBOL()
+> 
+> v2: Added missing EXPORT_SYMBOL() and enhanced commit message
+> ---
+>  include/linux/thread_info.h | 5 ++++-
+>  mm/maccess.c                | 6 ++++++
+>  2 files changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/thread_info.h b/include/linux/thread_info.h
+> index 73a6f34b3847..9f392ec76f2b 100644
+> --- a/include/linux/thread_info.h
+> +++ b/include/linux/thread_info.h
+> @@ -209,9 +209,12 @@ __bad_copy_from(void);
+>  extern void __compiletime_error("copy destination size is too small")
+>  __bad_copy_to(void);
+>  
+> +void __copy_overflow(int size, unsigned long count);
+> +
+>  static inline void copy_overflow(int size, unsigned long count)
+>  {
+> -	WARN(1, "Buffer overflow detected (%d < %lu)!\n", size, count);
+> +	if (IS_ENABLED(CONFIG_BUG))
+> +		__copy_overflow(size, count);
+>  }
+>  
+>  static __always_inline __must_check bool
+> diff --git a/mm/maccess.c b/mm/maccess.c
+> index d3f1a1f0b1c1..3fed2b876539 100644
+> --- a/mm/maccess.c
+> +++ b/mm/maccess.c
+> @@ -335,3 +335,9 @@ long strnlen_user_nofault(const void __user *unsafe_addr, long count)
+>  
+>  	return ret;
+>  }
+> +
+> +void __copy_overflow(int size, unsigned long count)
+> +{
+> +	WARN(1, "Buffer overflow detected (%d < %lu)!\n", size, count);
+> +}
+> +EXPORT_SYMBOL(__copy_overflow);
+> 

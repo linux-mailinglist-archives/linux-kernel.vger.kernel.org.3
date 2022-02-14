@@ -2,100 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722524B5850
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDEA4B585B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:20:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357032AbiBNRQU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 14 Feb 2022 12:16:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46994 "EHLO
+        id S1356991AbiBNRUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 12:20:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356970AbiBNRQS (ORCPT
+        with ESMTP id S240902AbiBNRUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 12:16:18 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EFB47652C3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:16:09 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-196-yVufUhzxMf6aRMAEmkShMQ-1; Mon, 14 Feb 2022 17:16:07 +0000
-X-MC-Unique: yVufUhzxMf6aRMAEmkShMQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Mon, 14 Feb 2022 17:16:06 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Mon, 14 Feb 2022 17:16:06 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Solar Designer' <solar@openwall.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Alexey Gladkov" <legion@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        Michal Koutn?? <mkoutny@suse.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH 5/8] ucounts: Handle wrapping in is_ucounts_overlimit
-Thread-Topic: [PATCH 5/8] ucounts: Handle wrapping in is_ucounts_overlimit
-Thread-Index: AQHYIGEwFCfhAMi5WkKLr8caSZ9ypKyTSxMw
-Date:   Mon, 14 Feb 2022 17:16:06 +0000
-Message-ID: <ff5abac97c7549d392674ce09cd970c5@AcuMS.aculab.com>
-References: <87o83e2mbu.fsf@email.froward.int.ebiederm.org>
- <20220211021324.4116773-5-ebiederm@xmission.com>
- <20220212223638.GB29214@openwall.com>
-In-Reply-To: <20220212223638.GB29214@openwall.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 14 Feb 2022 12:20:06 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D4D652D0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:19:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644859198; x=1676395198;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XSsL6qV2n9k64Apfa4F4nZ+5Kxc4c6SoDQeun4MQ2Fs=;
+  b=O5buJ6dhqQU24qDot3bOPXAvegv9a7OmxBBQisuQE/2lndSHsOp2MhS1
+   /+axhPftoiY7wWynvqqRBcVpGLfU9YjV/PrA4Rtd4DYD2rZhDlbytAqlJ
+   vqbzgaWhHuBNaArOPjFV4EY5u5X1zQPn44QIoNDyUYw7BrFur4QuydW4Q
+   /uVMMV/D10IAp+16FjxnFssRc1JXWSwMS7+zIF0weHxkOVwJD9+fcR10y
+   6CjlODrsc+WSR6klO/RfrVL412vfmnKDTArqUu3gBZ9YwMZl3BpEUGODW
+   TgnaoDIpjSJUBPkFrX4wWcJN3Zj9SSDcdHeauL7cU2eXChnW/x8V2Tw+P
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="247732698"
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="247732698"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 09:19:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="635315846"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 14 Feb 2022 09:19:14 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJf0L-0008mj-UF; Mon, 14 Feb 2022 17:19:13 +0000
+Date:   Tue, 15 Feb 2022 01:19:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>
+Subject: [intel-tdx:kvm-upstream-workaround 3/145]
+ arch/x86/include/asm/seam.h: asm/processor.h is included more than once.
+Message-ID: <202202142207.IfsH9Fn5-lkp@intel.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Solar Designer
-> Sent: 12 February 2022 22:37
-...
-> bool is_ucounts_overlimit(struct ucounts *ucounts, enum ucount_type type, unsigned long rlimit)
-> {
-> 	struct ucounts *iter;
-> 	long max = rlimit;
-> 	if (rlimit > LONG_MAX)
-> 		max = LONG_MAX;
-> 
-> The assignment on "long max = rlimit;" would have already been UB if
-> "rlimit > LONG_MAX", which is only checked afterwards.  I think the
-> above would be better written as:
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   f40698d38196025a38e79a2bdf22058de944b38a
+commit: 6b0213db6862a89cb6db2d20311af4b1e278dd73 [3/145] x86/cpu: Implement the SEAMCALL base function
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
 
-I'm pretty sure assignments and casts of negative values to unsigned
-types are actually well defined.
-Although the actual value may differ for ones-compliment and
-sign-overpunch systems.
-But I suspect Linux requires twos-compliment negative numbers.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-(In much the same way as it requires that NULL be the all zero
-bit pattern - although a load of annoying compiler warnings are only
-relevant if that isn't the case.)
 
-	David
+includecheck warnings: (new ones prefixed by >>)
+>> arch/x86/include/asm/seam.h: asm/processor.h is included more than once.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

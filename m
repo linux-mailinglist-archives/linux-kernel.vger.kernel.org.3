@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD5B4B41D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 07:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2212C4B41D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 07:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240698AbiBNGLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 01:11:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51032 "EHLO
+        id S240707AbiBNGMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 01:12:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240704AbiBNGL2 (ORCPT
+        with ESMTP id S240699AbiBNGLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 01:11:28 -0500
+        Mon, 14 Feb 2022 01:11:42 -0500
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A233522ED
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 22:11:21 -0800 (PST)
-X-UUID: 900f47d71e5d4a89952d8e9a3b3a24a6-20220214
-X-UUID: 900f47d71e5d4a89952d8e9a3b3a24a6-20220214
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B360575F4
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 22:11:31 -0800 (PST)
+X-UUID: 2a46d0b4bb524588a229cb1befa6a6a1-20220214
+X-UUID: 2a46d0b4bb524588a229cb1befa6a6a1-20220214
 Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
         (envelope-from <yong.wu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 589319721; Mon, 14 Feb 2022 14:11:18 +0800
+        with ESMTP id 729865382; Mon, 14 Feb 2022 14:11:27 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 14 Feb 2022 14:11:16 +0800
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 14 Feb 2022 14:11:25 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 14 Feb 2022 14:11:14 +0800
+ Transport; Mon, 14 Feb 2022 14:11:23 +0800
 From:   Yong Wu <yong.wu@mediatek.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Airlie <airlied@linux.ie>,
@@ -54,10 +54,11 @@ CC:     James Wang <james.qian.wang@arm.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Sebastian Reichel <sre@kernel.org>,
         Yong Wu <yong.wu@mediatek.com>,
-        "Linus Walleij" <linus.walleij@linaro.org>
-Subject: [PATCH 15/23] drm/mcde: Make use of the helper component_compare_dev
-Date:   Mon, 14 Feb 2022 14:08:11 +0800
-Message-ID: <20220214060819.7334-16-yong.wu@mediatek.com>
+        "Tomi Valkeinen" <tomba@kernel.org>,
+        Cai Huoqing <caihuoqing@baidu.com>
+Subject: [PATCH 16/23] drm/omap: dss: Make use of the helper component_compare_dev
+Date:   Mon, 14 Feb 2022 14:08:12 +0800
+Message-ID: <20220214060819.7334-17-yong.wu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220214060819.7334-1-yong.wu@mediatek.com>
 References: <20220214060819.7334-1-yong.wu@mediatek.com>
@@ -75,37 +76,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Use the common compare helper from component.
 
-Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Tomi Valkeinen <tomba@kernel.org>
+Cc: Cai Huoqing <caihuoqing@baidu.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 ---
- drivers/gpu/drm/mcde/mcde_drv.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/gpu/drm/omapdrm/dss/dss.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/drivers/gpu/drm/mcde/mcde_drv.c b/drivers/gpu/drm/mcde/mcde_drv.c
-index 5b5afc6aaf8e..a17bfbb152a2 100644
---- a/drivers/gpu/drm/mcde/mcde_drv.c
-+++ b/drivers/gpu/drm/mcde/mcde_drv.c
-@@ -265,11 +265,6 @@ static struct platform_driver *const mcde_component_drivers[] = {
- 	&mcde_dsi_driver,
+diff --git a/drivers/gpu/drm/omapdrm/dss/dss.c b/drivers/gpu/drm/omapdrm/dss/dss.c
+index 69b3e15b9356..0399f3390a0a 100644
+--- a/drivers/gpu/drm/omapdrm/dss/dss.c
++++ b/drivers/gpu/drm/omapdrm/dss/dss.c
+@@ -1344,12 +1344,6 @@ static const struct component_master_ops dss_component_ops = {
+ 	.unbind = dss_unbind,
  };
  
--static int mcde_compare_dev(struct device *dev, void *data)
+-static int dss_component_compare(struct device *dev, void *data)
 -{
--	return dev == data;
+-	struct device *child = data;
+-	return dev == child;
 -}
 -
- static int mcde_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -399,7 +394,7 @@ static int mcde_probe(struct platform_device *pdev)
+ struct dss_component_match_data {
+ 	struct device *dev;
+ 	struct component_match **match;
+@@ -1379,7 +1373,7 @@ static int dss_add_child_component(struct device *dev, void *data)
+ 		return device_for_each_child(dev, cmatch,
+ 					     dss_add_child_component);
  
- 		while ((d = platform_find_device_by_driver(p, drv))) {
- 			put_device(p);
--			component_match_add(dev, &match, mcde_compare_dev, d);
-+			component_match_add(dev, &match, component_compare_dev, d);
- 			p = d;
- 		}
- 		put_device(p);
+-	component_match_add(cmatch->dev, match, dss_component_compare, dev);
++	component_match_add(cmatch->dev, match, component_compare_dev, dev);
+ 
+ 	return 0;
+ }
 -- 
 2.18.0
 

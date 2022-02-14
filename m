@@ -2,98 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA9E4B5434
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 16:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5104B5438
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 16:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355621AbiBNPJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 10:09:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38918 "EHLO
+        id S1355631AbiBNPJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 10:09:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243886AbiBNPJ1 (ORCPT
+        with ESMTP id S243886AbiBNPJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 10:09:27 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACAC2B84F;
-        Mon, 14 Feb 2022 07:09:18 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id w6so2583763ljj.3;
-        Mon, 14 Feb 2022 07:09:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=OgvzWeL2gxETa8bIbp1BwS5Hh69YjWAn3iFy8+tRqGw=;
-        b=ak1nW1+BZAwK5RCQKmXlHfSW8FsrZ12pXLx6VLwCzJBSGaf/eYxYKTIozKy/iHq9Eb
-         gbhUrDLfhXd8mt4gE72NMH0Y0SUrbG8XX62VFN8dHZMJktdj/W9Jc/i3b3ljvRBc/KWS
-         IHa+v553SIYYrKwb0KeM17Xi25jAQ6eSQ35ZwWvJBO32mmBC95rXiTdBKt0mo/tBjKwV
-         dXk3Znze1VIp9N57+uSfoW1OFPcqVVO/3adZiBAIt/wRh8nfTQxMRxxLfGA+X1UjIBXh
-         chXl+gzl7OYVrJtXByRIMPaPWcfjqbKMdKngl3p8QE5n0rH+LyTO/UbHvJLVcwhotIjL
-         kRFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=OgvzWeL2gxETa8bIbp1BwS5Hh69YjWAn3iFy8+tRqGw=;
-        b=bIlESxHdvG1N/UaYKz+kqkU2m0+o1WEB47iRrUdIsc6Qmu53zYWQsDLug5GGvjdu0j
-         828UtS1zmZLeERudyaW/OJj6XsEBMD2IiVQwmug+JWrWEFp59fXgE83Efv8OWxF65zDZ
-         UPKHFTSmF0HL4Ktq1V3mfXaEiu4WQhyzI1AAJllHnw6hpk8A/iCMnCWxTiGubaOjFyRR
-         g6k/pdyNSw2jVfsGWJW1AL1HYa7Axvew1QS6BVweWbHDiEX4W3fYyZm0X4HvtRasB6Jr
-         LYvCQe9w7YzfRNXpz0zxMl1x6l79c0NfGXhu/Xqx/n1KCP3r38nRLm8wqXf2Ue1Jd8bK
-         HqMA==
-X-Gm-Message-State: AOAM531Jro/Nvx3X0U8jNivzBJFk0o2F7SW0P+0O821yVaMJQc1OeKMf
-        2miRVuQ3QDNzJrwHgO7fqfrzP3LdKhdDIm2xAAc=
-X-Google-Smtp-Source: ABdhPJzrVtGFstrzvnKZ4tnYHXap5XehMS2FWVkPXeBZVXB9SQTHOhHBolLaHw90l3iPGN3chwWx+A==
-X-Received: by 2002:a2e:a0cd:: with SMTP id f13mr134764ljm.116.1644851356663;
-        Mon, 14 Feb 2022 07:09:16 -0800 (PST)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id bp37sm3933236lfb.86.2022.02.14.07.09.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 07:09:16 -0800 (PST)
-Message-ID: <620a709c.1c69fb81.2fe5d.168b@mx.google.com>
-Date:   Mon, 14 Feb 2022 07:09:16 -0800 (PST)
-X-Google-Original-Date: Mon, 14 Feb 2022 15:09:11 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-Subject: RE: [PATCH 5.16 000/203] 5.16.10-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 14 Feb 2022 10:09:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D7249F9D;
+        Mon, 14 Feb 2022 07:09:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0402B810D5;
+        Mon, 14 Feb 2022 15:09:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E123C340EE;
+        Mon, 14 Feb 2022 15:09:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644851366;
+        bh=vWuN80VnIBztWgeDcbeMKNKCUZn+QCttNnaHfSaAfAU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tj18vLnywNyMG997rkbOL01uMlg5EitPEjGNsuHfyXI+RpsMB4hDPeyT9xBRq22ZD
+         Rcmj9as0roKC6x/0an4ackTFBVEBSvJwWC8lmLE5Oz1GX2XsjtJxh2vxUPjog3O4Bt
+         znq6Q/EFfrmCNVeDH5uiVp0Qvcp/O1nPhw5eqSe+1Ys6vnJMKx9DcWC+qGIvJN/0sy
+         O2v3en+YFl8hNyJDkBY44ponNICcWZneLoudOBrLyxeV/NNCqoZx1ezn7YrhCx7Gor
+         Qr+F2HTSEwALSm/Doyf6cvz0aDpg3+LyUi+hwpx7rYKtFMyzpQbia+v8/3CAplRrwl
+         hDnYmwGdSeuFg==
+Received: by pali.im (Postfix)
+        id A4EADCAA; Mon, 14 Feb 2022 16:09:23 +0100 (CET)
+Date:   Mon, 14 Feb 2022 16:09:23 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Gregory CLEMENT <gregory.clement@bootlin.com>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 11/11] ARM: dts: armada-385.dtsi: Add definitions for
+ PCIe legacy INTx interrupts
+Message-ID: <20220214150923.a5ttxoh426cfxn4v@pali>
+References: <20220105150239.9628-1-pali@kernel.org>
+ <20220112151814.24361-1-pali@kernel.org>
+ <20220112151814.24361-12-pali@kernel.org>
+ <87wnhxjxlq.fsf@BL-laptop>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87wnhxjxlq.fsf@BL-laptop>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Feb 2022 10:24:04 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.16.10 release.
-> There are 203 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Monday 14 February 2022 16:07:13 Gregory CLEMENT wrote:
+> Hello Pali,
 > 
-> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
-> Anything received after that time might be too late.
+> > With this change legacy INTA, INTB, INTC and INTD interrupts are reported
+> > separately and not mixed into one Linux virq source anymore.
+> >
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > ---
+> >  arch/arm/boot/dts/armada-385.dtsi | 52 ++++++++++++++++++++++++++-----
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.10-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> Is there any reason for not doing the same change in armada-380.dtsi ?
 
-5.16.10-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+I do not have A380 HW, so I did this change only for A385 which I have tested.
 
+> Grégory
+> 
+> >  1 file changed, 44 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/arch/arm/boot/dts/armada-385.dtsi b/arch/arm/boot/dts/armada-385.dtsi
+> > index f0022d10c715..83392b92dae2 100644
+> > --- a/arch/arm/boot/dts/armada-385.dtsi
+> > +++ b/arch/arm/boot/dts/armada-385.dtsi
+> > @@ -69,16 +69,25 @@
+> >  				reg = <0x0800 0 0 0 0>;
+> >  				#address-cells = <3>;
+> >  				#size-cells = <2>;
+> > +				interrupt-names = "intx";
+> > +				interrupts-extended = <&gic GIC_SPI 29 IRQ_TYPE_LEVEL_HIGH>;
+> >  				#interrupt-cells = <1>;
+> >  				ranges = <0x82000000 0 0 0x82000000 0x1 0 1 0
+> >  					  0x81000000 0 0 0x81000000 0x1 0 1 0>;
+> >  				bus-range = <0x00 0xff>;
+> > -				interrupt-map-mask = <0 0 0 0>;
+> > -				interrupt-map = <0 0 0 0 &gic GIC_SPI 29 IRQ_TYPE_LEVEL_HIGH>;
+> > +				interrupt-map-mask = <0 0 0 7>;
+> > +				interrupt-map = <0 0 0 1 &pcie1_intc 0>,
+> > +						<0 0 0 2 &pcie1_intc 1>,
+> > +						<0 0 0 3 &pcie1_intc 2>,
+> > +						<0 0 0 4 &pcie1_intc 3>;
+> >  				marvell,pcie-port = <0>;
+> >  				marvell,pcie-lane = <0>;
+> >  				clocks = <&gateclk 8>;
+> >  				status = "disabled";
+> > +				pcie1_intc: interrupt-controller {
+> > +					interrupt-controller;
+> > +					#interrupt-cells = <1>;
+> > +				};
+> >  			};
+> >  
+> >  			/* x1 port */
+> > @@ -88,16 +97,25 @@
+> >  				reg = <0x1000 0 0 0 0>;
+> >  				#address-cells = <3>;
+> >  				#size-cells = <2>;
+> > +				interrupt-names = "intx";
+> > +				interrupts-extended = <&gic GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
+> >  				#interrupt-cells = <1>;
+> >  				ranges = <0x82000000 0 0 0x82000000 0x2 0 1 0
+> >  					  0x81000000 0 0 0x81000000 0x2 0 1 0>;
+> >  				bus-range = <0x00 0xff>;
+> > -				interrupt-map-mask = <0 0 0 0>;
+> > -				interrupt-map = <0 0 0 0 &gic GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
+> > +				interrupt-map-mask = <0 0 0 7>;
+> > +				interrupt-map = <0 0 0 1 &pcie2_intc 0>,
+> > +						<0 0 0 2 &pcie2_intc 1>,
+> > +						<0 0 0 3 &pcie2_intc 2>,
+> > +						<0 0 0 4 &pcie2_intc 3>;
+> >  				marvell,pcie-port = <1>;
+> >  				marvell,pcie-lane = <0>;
+> >  				clocks = <&gateclk 5>;
+> >  				status = "disabled";
+> > +				pcie2_intc: interrupt-controller {
+> > +					interrupt-controller;
+> > +					#interrupt-cells = <1>;
+> > +				};
+> >  			};
+> >  
+> >  			/* x1 port */
+> > @@ -107,16 +125,25 @@
+> >  				reg = <0x1800 0 0 0 0>;
+> >  				#address-cells = <3>;
+> >  				#size-cells = <2>;
+> > +				interrupt-names = "intx";
+> > +				interrupts-extended = <&gic GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
+> >  				#interrupt-cells = <1>;
+> >  				ranges = <0x82000000 0 0 0x82000000 0x3 0 1 0
+> >  					  0x81000000 0 0 0x81000000 0x3 0 1 0>;
+> >  				bus-range = <0x00 0xff>;
+> > -				interrupt-map-mask = <0 0 0 0>;
+> > -				interrupt-map = <0 0 0 0 &gic GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
+> > +				interrupt-map-mask = <0 0 0 7>;
+> > +				interrupt-map = <0 0 0 1 &pcie3_intc 0>,
+> > +						<0 0 0 2 &pcie3_intc 1>,
+> > +						<0 0 0 3 &pcie3_intc 2>,
+> > +						<0 0 0 4 &pcie3_intc 3>;
+> >  				marvell,pcie-port = <2>;
+> >  				marvell,pcie-lane = <0>;
+> >  				clocks = <&gateclk 6>;
+> >  				status = "disabled";
+> > +				pcie3_intc: interrupt-controller {
+> > +					interrupt-controller;
+> > +					#interrupt-cells = <1>;
+> > +				};
+> >  			};
+> >  
+> >  			/*
+> > @@ -129,16 +156,25 @@
+> >  				reg = <0x2000 0 0 0 0>;
+> >  				#address-cells = <3>;
+> >  				#size-cells = <2>;
+> > +				interrupt-names = "intx";
+> > +				interrupts-extended = <&gic GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
+> >  				#interrupt-cells = <1>;
+> >  				ranges = <0x82000000 0 0 0x82000000 0x4 0 1 0
+> >  					  0x81000000 0 0 0x81000000 0x4 0 1 0>;
+> >  				bus-range = <0x00 0xff>;
+> > -				interrupt-map-mask = <0 0 0 0>;
+> > -				interrupt-map = <0 0 0 0 &gic GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
+> > +				interrupt-map-mask = <0 0 0 7>;
+> > +				interrupt-map = <0 0 0 1 &pcie4_intc 0>,
+> > +						<0 0 0 2 &pcie4_intc 1>,
+> > +						<0 0 0 3 &pcie4_intc 2>,
+> > +						<0 0 0 4 &pcie4_intc 3>;
+> >  				marvell,pcie-port = <3>;
+> >  				marvell,pcie-lane = <0>;
+> >  				clocks = <&gateclk 7>;
+> >  				status = "disabled";
+> > +				pcie4_intc: interrupt-controller {
+> > +					interrupt-controller;
+> > +					#interrupt-cells = <1>;
+> > +				};
+> >  			};
+> >  		};
+> >  	};
+> > -- 
+> > 2.20.1
+> >
+> 
+> -- 
+> Gregory Clement, Bootlin
+> Embedded Linux and Kernel engineering
+> http://bootlin.com

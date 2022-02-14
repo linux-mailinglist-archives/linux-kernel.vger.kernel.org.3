@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 800494B488E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB694B4ADB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344354AbiBNJ4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:56:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33188 "EHLO
+        id S1347963AbiBNKds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:33:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344257AbiBNJvh (ORCPT
+        with ESMTP id S1348968AbiBNKbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:51:37 -0500
+        Mon, 14 Feb 2022 05:31:13 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8F769484;
-        Mon, 14 Feb 2022 01:42:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB309DD75;
+        Mon, 14 Feb 2022 01:59:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85D3D61190;
-        Mon, 14 Feb 2022 09:42:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E952C340E9;
-        Mon, 14 Feb 2022 09:42:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C77960B31;
+        Mon, 14 Feb 2022 09:59:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24A1CC340E9;
+        Mon, 14 Feb 2022 09:59:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831761;
-        bh=7xkJakGSNhfRZ3mu004MFMQyYo6ZCPySJbHzwKQxZY0=;
+        s=korg; t=1644832788;
+        bh=+3V7kLPNkHtBcTLCEvk6zqPxgRYdatEipC65smgMYe0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BR/i0E0ghxETsAJ+BjEOmVUsodKbdqGjzul0WKUbsPM0cggjK4paGROG6FF/0g008
-         uE1JJvS0d9w7Tpev7RJSw5Whp4zqfdt++MRUpO0m+XDavJtlgoEDIBl8gc2gXnJ30Z
-         s8qZ4S6kNbQkXxLgtOhUTL+cWtacZZ89d2BkK4EE=
+        b=nOxpilClTw/DyWOTn4Tcyohvwy61m0+unemrcM3byACA2WNpANn0Ubul80HemS/De
+         QQHJJMANKsN1S9rWsZQ1XDvKzY9UG7ksy+WvnnNXqErJglNVYHAQj3ICFtH+DQcduy
+         Xn7Cbp3n2gCV+xJLx3vnw4ClGrbUdPRKjLaH7GiQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Marek Vasut <marex@denx.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 070/116] net: dsa: ar9331: register the mdiobus under devres
+Subject: [PATCH 5.16 125/203] drm/panel: simple: Assign data from panel_dpi_probe() correctly
 Date:   Mon, 14 Feb 2022 10:26:09 +0100
-Message-Id: <20220214092501.170736461@linuxfoundation.org>
+Message-Id: <20220214092514.490834060@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,67 +60,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 
-[ Upstream commit 50facd86e9fbc4b93fe02e5fe05776047f45dbfb ]
+[ Upstream commit 6df4432a5eca101b5fd80fbee41d309f3d67928d ]
 
-As explained in commits:
-74b6d7d13307 ("net: dsa: realtek: register the MDIO bus under devres")
-5135e96a3dd2 ("net: dsa: don't allocate the slave_mii_bus using devres")
+In the function panel_simple_probe() the pointer panel->desc is
+assigned to the passed pointer desc. If function panel_dpi_probe()
+is called panel->desc will be updated, but further on only desc
+will be evaluated. So update the desc pointer to be able to use
+the data from the function panel_dpi_probe().
 
-mdiobus_free() will panic when called from devm_mdiobus_free() <-
-devres_release_all() <- __device_release_driver(), and that mdiobus was
-not previously unregistered.
+Fixes: 4a1d0dbc8332 ("drm/panel: simple: add panel-dpi support")
 
-The ar9331 is an MDIO device, so the initial set of constraints that I
-thought would cause this (I2C or SPI buses which call ->remove on
-->shutdown) do not apply. But there is one more which applies here.
-
-If the DSA master itself is on a bus that calls ->remove from ->shutdown
-(like dpaa2-eth, which is on the fsl-mc bus), there is a device link
-between the switch and the DSA master, and device_links_unbind_consumers()
-will unbind the ar9331 switch driver on shutdown.
-
-So the same treatment must be applied to all DSA switch drivers, which
-is: either use devres for both the mdiobus allocation and registration,
-or don't use devres at all.
-
-The ar9331 driver doesn't have a complex code structure for mdiobus
-removal, so just replace of_mdiobus_register with the devres variant in
-order to be all-devres and ensure that we don't free a still-registered
-bus.
-
-Fixes: ac3a68d56651 ("net: phy: don't abuse devres in devm_mdiobus_register()")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Cc: Marek Vasut <marex@denx.de>
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: Sam Ravnborg <sam@ravnborg.org>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+To: dri-devel@lists.freedesktop.org
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+Signed-off-by: Marek Vasut <marex@denx.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220201110153.3479-1-cniedermaier@dh-electronics.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/qca/ar9331.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/gpu/drm/panel/panel-simple.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/dsa/qca/ar9331.c b/drivers/net/dsa/qca/ar9331.c
-index 661745932a539..c33bdcf7efc58 100644
---- a/drivers/net/dsa/qca/ar9331.c
-+++ b/drivers/net/dsa/qca/ar9331.c
-@@ -289,7 +289,7 @@ static int ar9331_sw_mbus_init(struct ar9331_sw_priv *priv)
- 	if (!mnp)
- 		return -ENODEV;
- 
--	ret = of_mdiobus_register(mbus, mnp);
-+	ret = devm_of_mdiobus_register(dev, mbus, mnp);
- 	of_node_put(mnp);
- 	if (ret)
- 		return ret;
-@@ -856,7 +856,6 @@ static void ar9331_sw_remove(struct mdio_device *mdiodev)
- 	struct ar9331_sw_priv *priv = dev_get_drvdata(&mdiodev->dev);
- 
- 	irq_domain_remove(priv->irqdomain);
--	mdiobus_unregister(priv->mbus);
- 	dsa_unregister_switch(&priv->ds);
- 
- 	reset_control_assert(priv->sw_reset);
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index eb475a3a774b7..87f30bced7b7e 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -588,6 +588,7 @@ static int panel_simple_probe(struct device *dev, const struct panel_desc *desc)
+ 		err = panel_dpi_probe(dev, panel);
+ 		if (err)
+ 			goto free_ddc;
++		desc = panel->desc;
+ 	} else {
+ 		if (!of_get_display_timing(dev->of_node, "panel-timing", &dt))
+ 			panel_simple_parse_panel_timing_node(dev, panel, &dt);
 -- 
 2.34.1
 

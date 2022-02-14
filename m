@@ -2,291 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D800C4B5B92
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 421EF4B5B41
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 21:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbiBNU4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 15:56:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41504 "EHLO
+        id S229536AbiBNUqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 15:46:54 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiBNU4N (ORCPT
+        with ESMTP id S229850AbiBNUqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 15:56:13 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1519DBD16
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:55:48 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id a42so8600292ljq.13
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:55:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0OkHBiaZEL4gbI88uAFjC4BevdegDkSw2mEVoE6XUQM=;
-        b=o/c8WGQ7vgEvxtzZSzEGkFFVcPUiHrl0G51Eg5NUiYHpcN3AIktYX1CzP78vLb2HCv
-         LyiqVlMYdkmHuBOpsyo/3V9Cj1FG5i2UtaP2pa4VVE7DPWVR0qrTIeuZJzSShHz31KtV
-         aG2q2Q+V1pIZOhlqrMm86Ieu10aJTAtNG3yAp85NUacZ5B9enUnoF98FgCEJuYwGuOR1
-         t/YcS4wqhUQgpObHz7ewBESmzKaLyvkXbT7E+XnLM/nDVEbqTumoE8kp9c32zg+fZ/Cm
-         kD09NV6hr9tEchdA4EsbPzDQ4YuOHJVTlkhoDxtAqfFcgQJzv29t30e/mp0RRlaVif14
-         p9DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0OkHBiaZEL4gbI88uAFjC4BevdegDkSw2mEVoE6XUQM=;
-        b=NCGG2unQE9gh/4QZ03pVLvg7V3vpmmuJcjwvV/Wx1KdmubQrg7PBaOPW4UvIGYtvhN
-         sCXjaixEsmm+CGTFgghQxs94w22/QxHDmSrae9oKJPFAojUsfLMXq2Dx9WJ1r7Q5PAR0
-         IwRdfQRCtI+sPKAjS7P97Uw455SAlRc2Z7GAgsKLZH21vo28vI6wB5IsjjJw1eSHMMrh
-         9a3PwUqmY35klsDh8uTWgRGVNAEDS3/IkLdELzC1P1c4vzU9EaoqJGKRClMhkR1/GNGH
-         Glllw/2LmFT9Ndj1cdKtYcnLp6ZvrKiGLp/MsXxTtFSsbd691URaOd6TZ8YTTWxSgKtX
-         WJ6A==
-X-Gm-Message-State: AOAM531gMRmvn6ey0yWhrNOjYyi+sdzPDzXUU+sEeIlmFBsFJgxbZ6tm
-        5CV/wRXQiH7U4SgFoH6Mu1fNMQH1KgHDbzFDdsUvZT4q/Ag=
-X-Google-Smtp-Source: ABdhPJx8lRnGEvo2BKjuadxx0kxXF47MC+omvIOvGqqY/xfT6A0YxtvN/5OElk6DOL9teF9tVH9vVeya6dhvDDCanxQ=
-X-Received: by 2002:a05:6512:139e:: with SMTP id p30mr572513lfa.502.1644869981206;
- Mon, 14 Feb 2022 12:19:41 -0800 (PST)
+        Mon, 14 Feb 2022 15:46:01 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B23816111C
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:44:23 -0800 (PST)
+Date:   Mon, 14 Feb 2022 21:19:52 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644869993;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=bXNE4LooGlzlo0G4AK11ajol/4hEQRx4f/cldILJwL0=;
+        b=v0KAacvU4tc7OHjoU8wjrxzXaARWq/HrUCuqwNsw7GVHTfzv230/bAPYfFzSx7BnRHBfVM
+        Lc96Wl7OltGuTYlJ5np1ledp09qOIG1FvLrlISnVkMxN/G7cgDFvllvMGcrCEzqNExTBJP
+        Vgj3pqn/Vf3g/CnNmiZ8fB5Ep2MrGnAzuO1fsYU4VVeQqZOOUi17x4UG5Bhv0RRqER9x9f
+        T5UmUmPxqseVxS6fbZMvHJZol8pMjwq8f6yUwhY3VKaUwJihHEAKi1Yvasij7OmC/Y7Rci
+        veub4I+LoHiMruMRlSJDn3l/urpyE5I+4VenMtPWZ6QlzjdnjkwsA6dKLIrlHA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644869993;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=bXNE4LooGlzlo0G4AK11ajol/4hEQRx4f/cldILJwL0=;
+        b=dTTsfpEIS3NpPxxk2QywVZnf+5RnfK+txM24xXJIJHKOXc1Z3xPtlb4CKN1f8varbd6CPX
+        aZBIPUai5RQi64AQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     x86@kernel.org, linux-kernel@vger.kernel.org
+Cc:     Oleg Nesterov <oleg@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH] signal/x86: Delay calling signals in atomic
+Message-ID: <Ygq5aBB/qMQw6aP5@linutronix.de>
 MIME-Version: 1.0
-References: <20220211161831.3493782-1-tjmercier@google.com>
- <20220211161831.3493782-7-tjmercier@google.com> <Ygdfe3XSvN8iFuUc@kroah.com>
- <CAHRSSEwoJ67Sr_=gtSaP91cbpjJjZdOo57cfAhv3r-ye0da7PA@mail.gmail.com> <CAJuCfpHf=Ewm0e9kguY3MEGVHU_cyviVXByi0oQtq7kTtOOD=A@mail.gmail.com>
-In-Reply-To: <CAJuCfpHf=Ewm0e9kguY3MEGVHU_cyviVXByi0oQtq7kTtOOD=A@mail.gmail.com>
-From:   Todd Kjos <tkjos@google.com>
-Date:   Mon, 14 Feb 2022 12:19:28 -0800
-Message-ID: <CAHRSSEzsn-EVKXTRfmpbPR9u0wNpdvdZoX64Tm_mB1DQMRSUPQ@mail.gmail.com>
-Subject: Re: [RFC v2 6/6] android: binder: Add a buffer flag to relinquish
- ownership of fds
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "T.J. Mercier" <tjmercier@google.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        DRI mailing list <dri-devel@lists.freedesktop.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        cgroups mailinglist <cgroups@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 11:29 AM Suren Baghdasaryan <surenb@google.com> wro=
-te:
->
-> On Mon, Feb 14, 2022 at 10:33 AM Todd Kjos <tkjos@google.com> wrote:
-> >
-> > On Fri, Feb 11, 2022 at 11:19 PM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Fri, Feb 11, 2022 at 04:18:29PM +0000, T.J. Mercier wrote:
-> >
-> > Title: "android: binder: Add a buffer flag to relinquish ownership of f=
-ds"
-> >
-> > Please drop the "android:" from the title.
-> >
-> > > > This patch introduces a buffer flag BINDER_BUFFER_FLAG_SENDER_NO_NE=
-ED
-> > > > that a process sending an fd array to another process over binder I=
-PC
-> > > > can set to relinquish ownership of the fds being sent for memory
-> > > > accounting purposes. If the flag is found to be set during the fd a=
-rray
-> > > > translation and the fd is for a DMA-BUF, the buffer is uncharged fr=
-om
-> > > > the sender's cgroup and charged to the receiving process's cgroup
-> > > > instead.
-> > > >
-> > > > It is up to the sending process to ensure that it closes the fds
-> > > > regardless of whether the transfer failed or succeeded.
-> > > >
-> > > > Most graphics shared memory allocations in Android are done by the
-> > > > graphics allocator HAL process. On requests from clients, the HAL p=
-rocess
-> > > > allocates memory and sends the fds to the clients over binder IPC.
-> > > > The graphics allocator HAL will not retain any references to the
-> > > > buffers. When the HAL sets the BINDER_BUFFER_FLAG_SENDER_NO_NEED fo=
-r fd
-> > > > arrays holding DMA-BUF fds, the gpu cgroup controller will be able =
-to
-> > > > correctly charge the buffers to the client processes instead of the
-> > > > graphics allocator HAL.
-> > > >
-> > > > From: Hridya Valsaraju <hridya@google.com>
-> > > > Signed-off-by: Hridya Valsaraju <hridya@google.com>
-> > > > Co-developed-by: T.J. Mercier <tjmercier@google.com>
-> > > > Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> > > > ---
-> > > > changes in v2
-> > > > - Move dma-buf cgroup charge transfer from a dma_buf_op defined by =
-every
-> > > > heap to a single dma-buf function for all heaps per Daniel Vetter a=
-nd
-> > > > Christian K=C3=B6nig.
-> > > >
-> > > >  drivers/android/binder.c            | 26 +++++++++++++++++++++++++=
+From: Oleg Nesterov <oleg@redhat.com>
+Date: Tue, 14 Jul 2015 14:26:34 +0200
+
+On x86_64 we must disable preemption before we enable interrupts
+for stack faults, int3 and debugging, because the current task is using
+a per CPU debug stack defined by the IST. If we schedule out, another task
+can come in and use the same stack and cause the stack to be corrupted
+and crash the kernel on return.
+
+When CONFIG_PREEMPT_RT is enabled, spinlock_t locks become sleeping, and
+one of these is the spin lock used in signal handling.
+
+Some of the debug code (int3) causes do_trap() to send a signal.
+This function calls a spinlock_t lock that has been converted to a
+sleeping lock. If this happens, the above issues with the corrupted
+stack is possible.
+
+Instead of calling the signal right away, for PREEMPT_RT and x86,
+the signal information is stored on the stacks task_struct and
+TIF_NOTIFY_RESUME is set. Then on exit of the trap, the signal resume
+code will send the signal when preemption is enabled.
+
+[ rostedt: Switched from #ifdef CONFIG_PREEMPT_RT to
+  ARCH_RT_DELAYS_SIGNAL_SEND and added comments to the code. ]
+[bigeasy: Add on 32bit as per Yang Shi, minor rewording. ]
+
+Signed-off-by: Oleg Nesterov <oleg@redhat.com>
+Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ arch/x86/include/asm/signal.h | 13 +++++++++++++
+ include/linux/sched.h         |  3 +++
+ kernel/entry/common.c         |  9 +++++++++
+ kernel/signal.c               | 28 ++++++++++++++++++++++++++++
+ 4 files changed, 53 insertions(+)
+
+diff --git a/arch/x86/include/asm/signal.h b/arch/x86/include/asm/signal.h
+index 2dfb5fea13aff..fc03f4f7ed84c 100644
+--- a/arch/x86/include/asm/signal.h
++++ b/arch/x86/include/asm/signal.h
+@@ -28,6 +28,19 @@ typedef struct {
+ #define SA_IA32_ABI	0x02000000u
+ #define SA_X32_ABI	0x01000000u
+ 
++/*
++ * Because some traps use the IST stack, we must keep preemption
++ * disabled while calling do_trap(), but do_trap() may call
++ * force_sig_info() which will grab the signal spin_locks for the
++ * task, which in PREEMPT_RT are mutexes.  By defining
++ * ARCH_RT_DELAYS_SIGNAL_SEND the force_sig_info() will set
++ * TIF_NOTIFY_RESUME and set up the signal to be sent on exit of the
++ * trap.
++ */
++#if defined(CONFIG_PREEMPT_RT)
++#define ARCH_RT_DELAYS_SIGNAL_SEND
++#endif
 +
-> > > >  include/uapi/linux/android/binder.h |  1 +
-> > > >  2 files changed, 27 insertions(+)
-> > > >
-> > > > diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-> > > > index 8351c5638880..f50d88ded188 100644
-> > > > --- a/drivers/android/binder.c
-> > > > +++ b/drivers/android/binder.c
-> > > > @@ -42,6 +42,7 @@
-> > > >
-> > > >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> > > >
-> > > > +#include <linux/dma-buf.h>
-> > > >  #include <linux/fdtable.h>
-> > > >  #include <linux/file.h>
-> > > >  #include <linux/freezer.h>
-> > > > @@ -2482,8 +2483,10 @@ static int binder_translate_fd_array(struct =
-list_head *pf_head,
-> > > >  {
-> > > >       binder_size_t fdi, fd_buf_size;
-> > > >       binder_size_t fda_offset;
-> > > > +     bool transfer_gpu_charge =3D false;
-> > > >       const void __user *sender_ufda_base;
-> > > >       struct binder_proc *proc =3D thread->proc;
-> > > > +     struct binder_proc *target_proc =3D t->to_proc;
-> > > >       int ret;
-> > > >
-> > > >       fd_buf_size =3D sizeof(u32) * fda->num_fds;
-> > > > @@ -2521,8 +2524,15 @@ static int binder_translate_fd_array(struct =
-list_head *pf_head,
-> > > >       if (ret)
-> > > >               return ret;
-> > > >
-> > > > +     if (IS_ENABLED(CONFIG_CGROUP_GPU) &&
-> > > > +             parent->flags & BINDER_BUFFER_FLAG_SENDER_NO_NEED)
-> > > > +             transfer_gpu_charge =3D true;
-> > > > +
-> > > >       for (fdi =3D 0; fdi < fda->num_fds; fdi++) {
-> > > >               u32 fd;
-> > > > +             struct dma_buf *dmabuf;
-> > > > +             struct gpucg *gpucg;
-> > > > +
-> > > >               binder_size_t offset =3D fda_offset + fdi * sizeof(fd=
-);
-> > > >               binder_size_t sender_uoffset =3D fdi * sizeof(fd);
-> > > >
-> > > > @@ -2532,6 +2542,22 @@ static int binder_translate_fd_array(struct =
-list_head *pf_head,
-> > > >                                                 in_reply_to);
-> > > >               if (ret)
-> > > >                       return ret > 0 ? -EINVAL : ret;
-> > > > +
-> > > > +             if (!transfer_gpu_charge)
-> > > > +                     continue;
-> > > > +
-> > > > +             dmabuf =3D dma_buf_get(fd);
-> > > > +             if (IS_ERR(dmabuf))
-> > > > +                     continue;
-> > > > +
-> > > > +             gpucg =3D gpucg_get(target_proc->tsk);
-> > > > +             ret =3D dma_buf_charge_transfer(dmabuf, gpucg);
-> > > > +             if (ret) {
-> > > > +                     pr_warn("%d:%d Unable to transfer DMA-BUF fd =
-charge to %d",
-> > > > +                             proc->pid, thread->pid, target_proc->=
-pid);
-> > > > +                     gpucg_put(gpucg);
-> > > > +             }
-> > > > +             dma_buf_put(dmabuf);
-> >
-> > Since we are creating a new gpu cgroup abstraction, couldn't this
-> > "transfer" be done in userspace by the target instead of in the kernel
-> > driver? Then this patch would reduce to just a flag on the buffer
-> > object.
->
-> Are you suggesting to have a userspace accessible cgroup interface for
-> transferring buffer charges and the target process to use that
-> interface for requesting the buffer to be charged to its cgroup?
-
-Well, I'm asking why we need to do these cgroup-ish actions in the
-kernel when it seems more natural to do it in userspace.
-
-> I'm worried about the case when the target process does not request
-> the transfer after receiving the buffer with this flag set. The charge
-> would stay with the wrong process and accounting will be invalid.
-
-I suspect this would be implemented in libbinder wherever the fd array
-object is handled, so it wouldn't require changes to every process.
-
->
-> Technically, since the proposed cgroup supports charge transfer from
-> the very beginning, the userspace can check if the cgroup is mounted
-> and if so then it knows this feature is supported.
-
-Has some userspace code for this been written? I'd like to be
-convinced that these changes need to be in the binder kernel driver
-instead of in userspace.
-
->
-> > This also solves the issue that Greg brought up about
-> > userspace needing to know whether the kernel implements this feature
-> > (older kernel running with newer userspace). I think we could just
-> > reserve some flags for userspace to use (and since those flags are
-> > "reserved" for older kernels, this would enable this feature even for
-> > old kernels)
-> >
-> > > >       }
-> > > >       return 0;
-> > > >  }
-> > > > diff --git a/include/uapi/linux/android/binder.h b/include/uapi/lin=
-ux/android/binder.h
-> > > > index 3246f2c74696..169fd5069a1a 100644
-> > > > --- a/include/uapi/linux/android/binder.h
-> > > > +++ b/include/uapi/linux/android/binder.h
-> > > > @@ -137,6 +137,7 @@ struct binder_buffer_object {
-> > > >
-> > > >  enum {
-> > > >       BINDER_BUFFER_FLAG_HAS_PARENT =3D 0x01,
-> > > > +     BINDER_BUFFER_FLAG_SENDER_NO_NEED =3D 0x02,
-> > > >  };
-> > > >
-> > > >  /* struct binder_fd_array_object - object describing an array of f=
-ds in a buffer
-> > > > --
-> > > > 2.35.1.265.g69c8d7142f-goog
-> > > >
-> > >
-> > > How does userspace know that binder supports this new flag?  And wher=
-e
-> > > is the userspace test for this new feature?  Isn't there a binder tes=
-t
-> > > framework somewhere?
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
+ #ifndef CONFIG_COMPAT
+ #define compat_sigset_t compat_sigset_t
+ typedef sigset_t compat_sigset_t;
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 75ba8aa60248b..0514237cee3fc 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1087,6 +1087,9 @@ struct task_struct {
+ 	/* Restored if set_restore_sigmask() was used: */
+ 	sigset_t			saved_sigmask;
+ 	struct sigpending		pending;
++#ifdef CONFIG_PREEMPT_RT
++	struct				kernel_siginfo forced_info;
++#endif
+ 	unsigned long			sas_ss_sp;
+ 	size_t				sas_ss_size;
+ 	unsigned int			sas_ss_flags;
+diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+index bad713684c2e3..216dbf46e05f5 100644
+--- a/kernel/entry/common.c
++++ b/kernel/entry/common.c
+@@ -162,6 +162,15 @@ static unsigned long exit_to_user_mode_loop(struct pt_regs *regs,
+ 		if (ti_work & _TIF_NEED_RESCHED)
+ 			schedule();
+ 
++#ifdef ARCH_RT_DELAYS_SIGNAL_SEND
++		if (unlikely(current->forced_info.si_signo)) {
++			struct task_struct *t = current;
++
++			force_sig_info(&t->forced_info);
++			t->forced_info.si_signo = 0;
++		}
++#endif
++
+ 		if (ti_work & _TIF_UPROBE)
+ 			uprobe_notify_resume(regs);
+ 
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 9b04631acde8f..cb2b28c17c0a5 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -1327,6 +1327,34 @@ force_sig_info_to_task(struct kernel_siginfo *info, struct task_struct *t,
+ 	struct k_sigaction *action;
+ 	int sig = info->si_signo;
+ 
++	/*
++	 * On some archs, PREEMPT_RT has to delay sending a signal from a trap
++	 * since it can not enable preemption, and the signal code's spin_locks
++	 * turn into mutexes. Instead, it must set TIF_NOTIFY_RESUME which will
++	 * send the signal on exit of the trap.
++	 */
++#ifdef ARCH_RT_DELAYS_SIGNAL_SEND
++	if (in_atomic()) {
++		struct task_struct *t = current;
++
++		if (WARN_ON_ONCE(t->forced_info.si_signo))
++			return 0;
++
++		if (is_si_special(info)) {
++			WARN_ON_ONCE(info != SEND_SIG_PRIV);
++			t->forced_info.si_signo = info->si_signo;
++			t->forced_info.si_errno = 0;
++			t->forced_info.si_code = SI_KERNEL;
++			t->forced_info.si_pid = 0;
++			t->forced_info.si_uid = 0;
++		} else {
++			t->forced_info = *info;
++		}
++
++		set_tsk_thread_flag(t, TIF_NOTIFY_RESUME);
++		return 0;
++	}
++#endif
+ 	spin_lock_irqsave(&t->sighand->siglock, flags);
+ 	action = &t->sighand->action[sig-1];
+ 	ignored = action->sa.sa_handler == SIG_IGN;
+-- 
+2.34.1

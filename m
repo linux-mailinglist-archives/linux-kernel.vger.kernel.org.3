@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C42DD4B4B2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 489484B4A26
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347246AbiBNK2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:28:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33926 "EHLO
+        id S1345680AbiBNKGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:06:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348389AbiBNK0z (ORCPT
+        with ESMTP id S1345741AbiBNKBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:26:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC6583022;
-        Mon, 14 Feb 2022 01:57:54 -0800 (PST)
+        Mon, 14 Feb 2022 05:01:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8824F2019D;
+        Mon, 14 Feb 2022 01:48:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FA4561491;
-        Mon, 14 Feb 2022 09:57:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA28C340E9;
-        Mon, 14 Feb 2022 09:57:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24CBA61296;
+        Mon, 14 Feb 2022 09:48:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ED9AC340E9;
+        Mon, 14 Feb 2022 09:48:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832673;
-        bh=MFrH3r1yKX+iFtfx80aWccnWMDRwj7DDM7f0gq4zrw8=;
+        s=korg; t=1644832088;
+        bh=oS2lkPCp3aLbjy4x18EkIQmiDK4N9sOMmcJlDMqhD+0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zb7v+7wb1NlRnRs+TTW2sCyQMom0PDPBksb5DlFvGl2DUtMGSdPyNfujcr99F4vww
-         wt+MaDLHIAcxQqb+e7+ZlXmf3hk/vkuqCogdpeBHQnC91z5+OafCZZ2Yc1Az2hGs8x
-         +S9qp4gKk3VS6cqbSDd0tFGay02BrCD74H0+NOrg=
+        b=hXwf9ty7D0l5Yh4l1w4m6h+1wTuZxwIBa/yFUyt3dqMCPdGh+nWKvPfpCULaG1Chh
+         Z5M9zk9VdpWSzA/YwgxkSuMsHUn/qTnNlBylc6Vh4sA2K8LbApW6+XKA5H4SfvFpgH
+         qaAHQC2IlH2WZ5GQg4SOJMXqOK5pyu3CsR+K+krk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: [PATCH 5.16 090/203] drm/i915: Allow !join_mbus cases for adlp+ dbuf configuration
+        stable@vger.kernel.org, Harry Wentland <harry.wentland@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.15 076/172] drm/amdgpu/display: change pipe policy for DCN 2.0
 Date:   Mon, 14 Feb 2022 10:25:34 +0100
-Message-Id: <20220214092513.321831043@linuxfoundation.org>
+Message-Id: <20220214092509.031262694@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,183 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ville Syrjälä <ville.syrjala@linux.intel.com>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-commit 8fd5a26e43859547790a7995494c952b708ab3b5 upstream.
+commit 6e7545ddb13416fd200e0b91c0acfd0404e2e27b upstream.
 
-Reintroduce the !join_mbus single pipe cases for adlp+.
+Fixes hangs on driver load with multiple displays on
+DCN 2.0 parts.
 
-Due to the mbus relative dbuf offsets in PLANE_BUF_CFG we
-need to know the actual slices used by the pipe when doing
-readout, even when mbus joining isn't enabled. Accurate
-readout will be needed to properly sanitize invalid BIOS
-dbuf configurations.
-
-This will also make it much easier to play around with the
-!join_mbus configs for testin/workaround purposes.
-
-Cc: <stable@vger.kernel.org> # v5.14+
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220204141818.1900-1-ville.syrjala@linux.intel.com
-Reviewed-by: Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>
-(cherry picked from commit eef173954432fe0612acb63421a95deb41155cdc)
-Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Bug: https://bugzilla.kernel.org/show_bug.cgi?id=215511
+Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1877
+Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1886
+Fixes: ee2698cf79cc ("drm/amd/display: Changed pipe split policy to allow for multi-display pipe split")
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/intel_pm.c |   66 +++++++++++++++++++++++++++-------------
- 1 file changed, 46 insertions(+), 20 deletions(-)
+ drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/i915/intel_pm.c
-+++ b/drivers/gpu/drm/i915/intel_pm.c
-@@ -4707,6 +4707,10 @@ static const struct dbuf_slice_conf_entr
- };
- 
- static const struct dbuf_slice_conf_entry adlp_allowed_dbufs[] = {
-+	/*
-+	 * Keep the join_mbus cases first so check_mbus_joined()
-+	 * will prefer them over the !join_mbus cases.
-+	 */
- 	{
- 		.active_pipes = BIT(PIPE_A),
- 		.dbuf_mask = {
-@@ -4722,6 +4726,20 @@ static const struct dbuf_slice_conf_entr
- 		.join_mbus = true,
- 	},
- 	{
-+		.active_pipes = BIT(PIPE_A),
-+		.dbuf_mask = {
-+			[PIPE_A] = BIT(DBUF_S1) | BIT(DBUF_S2),
-+		},
-+		.join_mbus = false,
-+	},
-+	{
-+		.active_pipes = BIT(PIPE_B),
-+		.dbuf_mask = {
-+			[PIPE_B] = BIT(DBUF_S3) | BIT(DBUF_S4),
-+		},
-+		.join_mbus = false,
-+	},
-+	{
- 		.active_pipes = BIT(PIPE_A) | BIT(PIPE_B),
- 		.dbuf_mask = {
- 			[PIPE_A] = BIT(DBUF_S1) | BIT(DBUF_S2),
-@@ -4837,13 +4855,14 @@ static bool adlp_check_mbus_joined(u8 ac
- 	return check_mbus_joined(active_pipes, adlp_allowed_dbufs);
- }
- 
--static u8 compute_dbuf_slices(enum pipe pipe, u8 active_pipes,
-+static u8 compute_dbuf_slices(enum pipe pipe, u8 active_pipes, bool join_mbus,
- 			      const struct dbuf_slice_conf_entry *dbuf_slices)
- {
- 	int i;
- 
- 	for (i = 0; i < dbuf_slices[i].active_pipes; i++) {
--		if (dbuf_slices[i].active_pipes == active_pipes)
-+		if (dbuf_slices[i].active_pipes == active_pipes &&
-+		    dbuf_slices[i].join_mbus == join_mbus)
- 			return dbuf_slices[i].dbuf_mask[pipe];
- 	}
- 	return 0;
-@@ -4854,7 +4873,7 @@ static u8 compute_dbuf_slices(enum pipe
-  * returns correspondent DBuf slice mask as stated in BSpec for particular
-  * platform.
-  */
--static u8 icl_compute_dbuf_slices(enum pipe pipe, u8 active_pipes)
-+static u8 icl_compute_dbuf_slices(enum pipe pipe, u8 active_pipes, bool join_mbus)
- {
- 	/*
- 	 * FIXME: For ICL this is still a bit unclear as prev BSpec revision
-@@ -4868,37 +4887,41 @@ static u8 icl_compute_dbuf_slices(enum p
- 	 * still here - we will need it once those additional constraints
- 	 * pop up.
- 	 */
--	return compute_dbuf_slices(pipe, active_pipes, icl_allowed_dbufs);
-+	return compute_dbuf_slices(pipe, active_pipes, join_mbus,
-+				   icl_allowed_dbufs);
- }
- 
--static u8 tgl_compute_dbuf_slices(enum pipe pipe, u8 active_pipes)
-+static u8 tgl_compute_dbuf_slices(enum pipe pipe, u8 active_pipes, bool join_mbus)
- {
--	return compute_dbuf_slices(pipe, active_pipes, tgl_allowed_dbufs);
-+	return compute_dbuf_slices(pipe, active_pipes, join_mbus,
-+				   tgl_allowed_dbufs);
- }
- 
--static u32 adlp_compute_dbuf_slices(enum pipe pipe, u32 active_pipes)
-+static u8 adlp_compute_dbuf_slices(enum pipe pipe, u8 active_pipes, bool join_mbus)
- {
--	return compute_dbuf_slices(pipe, active_pipes, adlp_allowed_dbufs);
-+	return compute_dbuf_slices(pipe, active_pipes, join_mbus,
-+				   adlp_allowed_dbufs);
- }
- 
--static u32 dg2_compute_dbuf_slices(enum pipe pipe, u32 active_pipes)
-+static u8 dg2_compute_dbuf_slices(enum pipe pipe, u8 active_pipes, bool join_mbus)
- {
--	return compute_dbuf_slices(pipe, active_pipes, dg2_allowed_dbufs);
-+	return compute_dbuf_slices(pipe, active_pipes, join_mbus,
-+				   dg2_allowed_dbufs);
- }
- 
--static u8 skl_compute_dbuf_slices(struct intel_crtc *crtc, u8 active_pipes)
-+static u8 skl_compute_dbuf_slices(struct intel_crtc *crtc, u8 active_pipes, bool join_mbus)
- {
- 	struct drm_i915_private *dev_priv = to_i915(crtc->base.dev);
- 	enum pipe pipe = crtc->pipe;
- 
- 	if (IS_DG2(dev_priv))
--		return dg2_compute_dbuf_slices(pipe, active_pipes);
-+		return dg2_compute_dbuf_slices(pipe, active_pipes, join_mbus);
- 	else if (IS_ALDERLAKE_P(dev_priv))
--		return adlp_compute_dbuf_slices(pipe, active_pipes);
-+		return adlp_compute_dbuf_slices(pipe, active_pipes, join_mbus);
- 	else if (DISPLAY_VER(dev_priv) == 12)
--		return tgl_compute_dbuf_slices(pipe, active_pipes);
-+		return tgl_compute_dbuf_slices(pipe, active_pipes, join_mbus);
- 	else if (DISPLAY_VER(dev_priv) == 11)
--		return icl_compute_dbuf_slices(pipe, active_pipes);
-+		return icl_compute_dbuf_slices(pipe, active_pipes, join_mbus);
- 	/*
- 	 * For anything else just return one slice yet.
- 	 * Should be extended for other platforms.
-@@ -6109,11 +6132,16 @@ skl_compute_ddb(struct intel_atomic_stat
- 			return ret;
- 	}
- 
-+	if (IS_ALDERLAKE_P(dev_priv))
-+		new_dbuf_state->joined_mbus =
-+			adlp_check_mbus_joined(new_dbuf_state->active_pipes);
-+
- 	for_each_intel_crtc(&dev_priv->drm, crtc) {
- 		enum pipe pipe = crtc->pipe;
- 
- 		new_dbuf_state->slices[pipe] =
--			skl_compute_dbuf_slices(crtc, new_dbuf_state->active_pipes);
-+			skl_compute_dbuf_slices(crtc, new_dbuf_state->active_pipes,
-+						new_dbuf_state->joined_mbus);
- 
- 		if (old_dbuf_state->slices[pipe] == new_dbuf_state->slices[pipe])
- 			continue;
-@@ -6125,9 +6153,6 @@ skl_compute_ddb(struct intel_atomic_stat
- 
- 	new_dbuf_state->enabled_slices = intel_dbuf_enabled_slices(new_dbuf_state);
- 
--	if (IS_ALDERLAKE_P(dev_priv))
--		new_dbuf_state->joined_mbus = adlp_check_mbus_joined(new_dbuf_state->active_pipes);
--
- 	if (old_dbuf_state->enabled_slices != new_dbuf_state->enabled_slices ||
- 	    old_dbuf_state->joined_mbus != new_dbuf_state->joined_mbus) {
- 		ret = intel_atomic_serialize_global_state(&new_dbuf_state->base);
-@@ -6628,7 +6653,8 @@ void skl_wm_get_hw_state(struct drm_i915
- 		}
- 
- 		dbuf_state->slices[pipe] =
--			skl_compute_dbuf_slices(crtc, dbuf_state->active_pipes);
-+			skl_compute_dbuf_slices(crtc, dbuf_state->active_pipes,
-+						dbuf_state->joined_mbus);
- 
- 		dbuf_state->weight[pipe] = intel_crtc_ddb_weight(crtc_state);
- 
+--- a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c
+@@ -1067,7 +1067,7 @@ static const struct dc_debug_options deb
+ 		.timing_trace = false,
+ 		.clock_trace = true,
+ 		.disable_pplib_clock_request = true,
+-		.pipe_split_policy = MPC_SPLIT_DYNAMIC,
++		.pipe_split_policy = MPC_SPLIT_AVOID_MULT_DISP,
+ 		.force_single_disp_pipe_split = false,
+ 		.disable_dcc = DCC_ENABLE,
+ 		.vsr_support = true,
 
 

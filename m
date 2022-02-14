@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2CA4B45AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 210A74B461D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242925AbiBNJ2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:28:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40836 "EHLO
+        id S243711AbiBNJct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:32:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232064AbiBNJ2G (ORCPT
+        with ESMTP id S243595AbiBNJcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:28:06 -0500
+        Mon, 14 Feb 2022 04:32:16 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148D760A8F;
-        Mon, 14 Feb 2022 01:27:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCB060AA5;
+        Mon, 14 Feb 2022 01:31:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4BD160DFD;
-        Mon, 14 Feb 2022 09:27:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 726D8C340EF;
-        Mon, 14 Feb 2022 09:27:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE94F60F83;
+        Mon, 14 Feb 2022 09:31:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95B93C340E9;
+        Mon, 14 Feb 2022 09:31:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644830878;
-        bh=0lxXy/jVMS9pYNsQkVICaXhZEM0lAPgI5MzlHy/N10E=;
+        s=korg; t=1644831067;
+        bh=RuHWb3w5sWFdomNRagX+hTJL7q/b3BKZNtbnuV1Auew=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w3Jc81cdiHJzM2eCqoR1ksaj/Kb0uP+DZ42hsT8ZO4eg2R3B3ysUEl0RvqW+6flqw
-         /D/np4M/18wJoBzGN6K1XWNMctRx6xbC9pSWpKY0myX+lUxnK5P7ighgSvS3qsKZAc
-         nCEWi7a6d+YfU2gUMii3KBdkC5Qb+9ZbHQXyWgHg=
+        b=Yb/8WwrENztGT1qCGnZ+foFPRevIWJm/U4dPgQwyEyV8HL/EeUmfXIN4YFYp8/dZh
+         vG7ZYYWlA3TXVfl9l4VFt2wqqezVZw9VUWmMX757ed0iUixaSbkIZcuN0boN8ZNfyi
+         aLZNrFYSCTDNgUQquc1Iq10jFfm9fgcQzRXL8TWQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaoke Wang <xkernel.wang@foxmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH 4.9 01/34] integrity: check the return value of audit_log_start()
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 4.14 04/44] mmc: sdhci-of-esdhc: Check for error num after setting mask
 Date:   Mon, 14 Feb 2022 10:25:27 +0100
-Message-Id: <20220214092445.995230860@linuxfoundation.org>
+Message-Id: <20220214092448.054893540@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
-References: <20220214092445.946718557@linuxfoundation.org>
+In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
+References: <20220214092447.897544753@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -57,33 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-commit 83230351c523b04ff8a029a4bdf97d881ecb96fc upstream.
+commit 40c67c291a93f8846c4a972c9ef1b7ba4544c8d0 upstream.
 
-audit_log_start() returns audit_buffer pointer on success or NULL on
-error, so it is better to check the return value of it.
+Because of the possible failure of the dma_supported(), the
+dma_set_mask_and_coherent() may return error num.
+Therefore, it should be better to check it and return the error if
+fails.
+And since the sdhci_setup_host() has already checked the return value of
+the enable_dma, we need not check it in sdhci_resume_host() again.
 
-Fixes: 3323eec921ef ("integrity: IMA as an integrity service provider")
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-Cc: <stable@vger.kernel.org>
-Reviewed-by: Paul Moore <paul@paul-moore.com>
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Fixes: 5552d7ad596c ("mmc: sdhci-of-esdhc: set proper dma mask for ls104x chips")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220112083156.1124782-1-jiasheng@iscas.ac.cn
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/integrity/integrity_audit.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/mmc/host/sdhci-of-esdhc.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
---- a/security/integrity/integrity_audit.c
-+++ b/security/integrity/integrity_audit.c
-@@ -39,6 +39,8 @@ void integrity_audit_msg(int audit_msgno
- 		return;
+--- a/drivers/mmc/host/sdhci-of-esdhc.c
++++ b/drivers/mmc/host/sdhci-of-esdhc.c
+@@ -427,12 +427,16 @@ static void esdhc_of_adma_workaround(str
  
- 	ab = audit_log_start(current->audit_context, GFP_KERNEL, audit_msgno);
-+	if (!ab)
-+		return;
- 	audit_log_format(ab, "pid=%d uid=%u auid=%u ses=%u",
- 			 task_pid_nr(current),
- 			 from_kuid(&init_user_ns, current_cred()->uid),
+ static int esdhc_of_enable_dma(struct sdhci_host *host)
+ {
++	int ret;
+ 	u32 value;
+ 	struct device *dev = mmc_dev(host->mmc);
+ 
+ 	if (of_device_is_compatible(dev->of_node, "fsl,ls1043a-esdhc") ||
+-	    of_device_is_compatible(dev->of_node, "fsl,ls1046a-esdhc"))
+-		dma_set_mask_and_coherent(dev, DMA_BIT_MASK(40));
++	    of_device_is_compatible(dev->of_node, "fsl,ls1046a-esdhc")) {
++		ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(40));
++		if (ret)
++			return ret;
++	}
+ 
+ 	value = sdhci_readl(host, ESDHC_DMA_SYSCTL);
+ 
 
 

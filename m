@@ -2,124 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81724B43DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 09:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12DD64B43E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 09:19:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237258AbiBNITH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 03:19:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47296 "EHLO
+        id S241894AbiBNIUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 03:20:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232671AbiBNITC (ORCPT
+        with ESMTP id S241710AbiBNIUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 03:19:02 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42EA25C40;
-        Mon, 14 Feb 2022 00:18:54 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id BBEB11F43333
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644826733;
-        bh=DGeNZvAkAxc84jyqOMSeG0plMeoRslPbkBa/UawJm90=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=LEJloTnuoTb17lj2/3q1rVL+T9coa2HajJg0FPD5cgCEypg5bBOQtpy1fGbB5q3lz
-         Kgnl3cw0Wpd9rALgRVsLCECWyAMs/4jda2QzUH2RcW/e5O2T1oM2fxlmxf4sIFbPLs
-         6NOgs6btI2asoBA4PQ4T4Av4GysrFK1VAXm5XmZfzXqgJdkTvEXkj7R42vi30sVNyt
-         wgouBW5vRkTgYurBvcuH2b8rkc4JfdEDQFBcUBzbo3sJKhUTB1ndxuABjxgV7seSXY
-         W0MQ6JQfgFi+JzckRLG694Hzvu1X54+3zblzEBguM0gmFphtL6T9j7S55fiHhJRSoR
-         pMiiUJ/ty/0iQ==
-Message-ID: <5af77f27-447c-794c-c96f-212dda3e4ab9@collabora.com>
-Date:   Mon, 14 Feb 2022 13:18:43 +0500
+        Mon, 14 Feb 2022 03:20:00 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8D925C46
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:19:53 -0800 (PST)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8AF07407DF
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:19:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644826792;
+        bh=twEcMK7D4MpQMmFx/xz45Xek8jdGQn3r+1Fp5P1lKZI=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=TeG/jb3lwXluq02uJzsB4g9rDDLf951RPp4W9Ai2gjjj95POLOsRyAPZ+bRtMR5Go
+         FPH7nI1mF1W3j1dggfdnAaIcr5Gzfld/EckrP+ClVCC8JQWKXNw9Fews2Dg7kTy+Eb
+         Pa5CnT0pezzQEb3JDGxRPIweXCP0k6XlCOcyyvg7KXxg4eC9o39uh93oXkyMJaa7mB
+         fhXZAgSoeIiLpDMKLlHHQ/7N9QcrG2PH6Zp97O17ajgw3+wIWrqQBp3lrfP0TBcxuQ
+         vOpmJs52ztMtpbqkbZbsTBkH6yrdVVbaIpRynKxitqS87VxAnN4+b3c/3mhipur7vy
+         mv6Rja+7WhByg==
+Received: by mail-ed1-f70.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso9766711edt.20
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:19:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=twEcMK7D4MpQMmFx/xz45Xek8jdGQn3r+1Fp5P1lKZI=;
+        b=DS8Q9ZMlo6J2lmQH5EQkwdJzEELB3kelYbQ+NyTpUrNizR4LnoGsb84MckCVanlDAY
+         ByvL3FHsnLa3LNbdwdYy0KFo0C8Cb6FBSoNKBsSd9w4pr8xc7/iuDYdyrkVOaEt+T9vY
+         u5U+gHx3Bw3XUq6L3TpCr9b3eCF+m5wL4fH363gBG2Y0rDU3cG2shcPZz2wZsygn1jfv
+         jJn8jhuc1Bi6Ae/+w5tNLUPle5qz1Gr2twcPg1bLcsJEqOnummTFK0hGYL7h6hZPdlrS
+         Ua7GLaOr7M3xAggIoAK+dcvux8OzpmR0idbyjlaiyTYJZUGF24UqOiVkyCBf4KoZNfbm
+         r2Ag==
+X-Gm-Message-State: AOAM531Urvyg/xKnrIoFk/k4erV5XbKLQW+pUcCWL8T6+t+7nVhBZ5LE
+        3/Jhp7k02Xrunw9tBbtr6Pf7BfFdt8Rsk2i9/k8DgbMhQaLA9UoYf4AnvY/xArnR70pCY3N9cM9
+        RY10vseYGFm8dsJlUUPZEh1AeosqYiqZLXU2YFzcFOg==
+X-Received: by 2002:a05:6402:490:: with SMTP id k16mr14100039edv.204.1644826791991;
+        Mon, 14 Feb 2022 00:19:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx2KcC8ZeDmmjUgfK6kq1aeD1UrtI7pu7omHRR58fZiRCylZRo2PHSaI/KjoBiBhqpeH5FfTA==
+X-Received: by 2002:a05:6402:490:: with SMTP id k16mr14100021edv.204.1644826791865;
+        Mon, 14 Feb 2022 00:19:51 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id b20sm2022941ede.23.2022.02.14.00.19.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 00:19:51 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Douglas Anderson <dianders@chromium.org>,
+        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Subject: [PATCH 0/4] mfd/pwm: dt-bindings: google,cros-ec: include generic pwm schema
+Date:   Mon, 14 Feb 2022 09:19:12 +0100
+Message-Id: <20220214081916.162014-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     usama.anjum@collabora.com,
-        "kernel@collabora.com" <kernel@collabora.com>,
-        "kernelci@groups.io" <kernelci@groups.io>,
-        "kernelci.org bot" <bot@kernelci.org>
-Subject: Re: [PATCH 1/2] selftests: x86: allow expansion of $(CC)
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "open list:INTEL SGX" <linux-sgx@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220210190642.1477814-1-usama.anjum@collabora.com>
- <20220210190642.1477814-2-usama.anjum@collabora.com>
- <a34f2fc8-f4aa-fef4-d1dd-f3fdb5114f72@linuxfoundation.org>
- <99625ceecead4e9eb73de2fc8acb2ae9@AcuMS.aculab.com>
- <7a501981-e4ce-fb08-7c1e-6aca26245cef@linuxfoundation.org>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <7a501981-e4ce-fb08-7c1e-6aca26245cef@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SCC_BODY_URI_ONLY,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/11/22 10:13 PM, Shuah Khan wrote:
-> On 2/11/22 9:47 AM, David Laight wrote:
->> From: Shuah Khan
->>> Sent: 10 February 2022 20:52
->>>
->>> On 2/10/22 12:06 PM, Muhammad Usama Anjum wrote:
->>>> CC can have multiple sub-strings like "ccache gcc". Erorr pops up if
->>>> it is treated as single string and double quote are used around it.
->>>> This can be fixed by removing the quotes and not treating CC a single
->>>> string.
->>>>
->>>> Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture
->>>> detection")
->>>> Reported-by: "kernelci.org bot" <bot@kernelci.org>
->>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->>>> ---
->>>>    tools/testing/selftests/x86/check_cc.sh | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/tools/testing/selftests/x86/check_cc.sh
->>>> b/tools/testing/selftests/x86/check_cc.sh
->>>> index 3e2089c8cf549..aff2c15018b53 100755
->>>> --- a/tools/testing/selftests/x86/check_cc.sh
->>>> +++ b/tools/testing/selftests/x86/check_cc.sh
->>>> @@ -7,7 +7,7 @@ CC="$1"
->>>>    TESTPROG="$2"
->>>>    shift 2
->>>>
->>>> -if "$CC" -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
->>>> +if $CC -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
->>>>        echo 1
->>>>    else
->>>>        echo 0
->>>>
->>>
->>> The intent is testing if $CC is set. Does this change work when
->>> $CC is not set?
->>
->> More by luck than judgement. Before and after.
->> If $CC might be empty you probably want:
->>
->> [ -n "$CC" ] && { echo 0; return; }
->>
->> The subject is also wrong. Should be "allow field splitting' of ${CC}.
->> (no brace or curly braces, not round ones.)
->>
-> 
-> Good points. It would be good enhancement to add the check - since the
-> current logic doesn't handle the null CC
-> 
-I'll send a V2.
-> thanks,
-> -- Shuah
+Hi,
+
+DTS patches are independent. Not tested, but I really hope no downstream kernel
+depends on pwm node naming... If it does, please change it to compatible. :)
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (4):
+  dt-bindings: pwm: google,cros-ec: include generic pwm schema
+  arm64: dts: mt8183: align Google CROS EC PWM node name with dtschema
+  arm64: dts: qcom: align Google CROS EC PWM node name with dtschema
+  arm64: dts: rk3399: align Google CROS EC PWM node name with dtschema
+
+ Documentation/devicetree/bindings/mfd/google,cros-ec.yaml    | 4 ++++
+ .../devicetree/bindings/pwm/google,cros-ec-pwm.yaml          | 5 ++++-
+ arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi       | 2 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi                 | 2 +-
+ arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r0.dts   | 2 +-
+ arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi               | 2 +-
+ arch/arm64/boot/dts/qcom/sc7280-idp-ec-h1.dtsi               | 2 +-
+ arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi                   | 2 +-
+ arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi      | 2 +-
+ 9 files changed, 15 insertions(+), 8 deletions(-)
+
+-- 
+2.32.0
+

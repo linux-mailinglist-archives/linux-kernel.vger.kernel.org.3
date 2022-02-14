@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E894B4B9C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9BA4B45C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:32:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345751AbiBNKGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:06:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54714 "EHLO
+        id S243432AbiBNJbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:31:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345794AbiBNKBz (ORCPT
+        with ESMTP id S243554AbiBNJa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:01:55 -0500
+        Mon, 14 Feb 2022 04:30:57 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C6CBC88;
-        Mon, 14 Feb 2022 01:48:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5A860D81;
+        Mon, 14 Feb 2022 01:30:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 252B961287;
-        Mon, 14 Feb 2022 09:48:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01291C340E9;
-        Mon, 14 Feb 2022 09:48:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6B8360F83;
+        Mon, 14 Feb 2022 09:29:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F2DC340E9;
+        Mon, 14 Feb 2022 09:29:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832091;
-        bh=UImdhe0lzIBcuJU5o3NtutfAaJZJjpWz8OLIQz63P+c=;
+        s=korg; t=1644830999;
+        bh=NpZm3yFy3Z1UNqbMTXkFjMGIfCtrlF8R0qEN3T7AHQA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ixYDFJJBqz2vMl0Uu+g8HWoLfBTvGwszGeuBIC9HDBv7mOV7M3AKPw3QcLHdG+kJT
-         0X3YWK2IfToRaNE6+wUB7+DWI215szig3CytCZz4tX80FibwxWQqmWiIcPKATEgbs2
-         Jmbj6nahhdQLpjn/G+EjHRmHSgQsrtKf8hzpVaJE=
+        b=wdikqBJvGedEyzsKmAsbfyqNMmKd9uUlTkA8J5wv61JiG77sGfI6KuxMTlUgtua6+
+         sj7HUMBcxgv+yLcjuV76OKYr5KqpJxVZonbNLmVCAL/AiQ3boowZ5Sqi+/UAr5r0pN
+         OTjM7CXY1bqPtND/lbLASmDovMB9FZlEWyqUf0kA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH 5.15 077/172] drm/rockchip: vop: Correct RK3399 VOP register fields
+        stable@vger.kernel.org, Olga Kornievskaia <kolga@netapp.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 12/44] NFSv4 expose nfs_parse_server_name function
 Date:   Mon, 14 Feb 2022 10:25:35 +0100
-Message-Id: <20220214092509.064956608@linuxfoundation.org>
+Message-Id: <20220214092448.308729383@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
+References: <20220214092447.897544753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,73 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Norris <briannorris@chromium.org>
+From: Olga Kornievskaia <kolga@netapp.com>
 
-commit 9da1e9ab82c92d0e89fe44cad2cd7c2d18d64070 upstream.
+[ Upstream commit f5b27cc6761e27ee6387a24df1a99ca77b360fea ]
 
-Commit 7707f7227f09 ("drm/rockchip: Add support for afbc") switched up
-the rk3399_vop_big[] register windows, but it did so incorrectly.
+Make nfs_parse_server_name available outside of nfs4namespace.c.
 
-The biggest problem is in rk3288_win23_data[] vs.
-rk3368_win23_data[] .format field:
-
-  RK3288's format: VOP_REG(RK3288_WIN2_CTRL0, 0x7, 1)
-  RK3368's format: VOP_REG(RK3368_WIN2_CTRL0, 0x3, 5)
-
-Bits 5:6 (i.e., shift 5, mask 0x3) are correct for RK3399, according to
-the TRM.
-
-There are a few other small differences between the 3288 and 3368
-definitions that were swapped in commit 7707f7227f09. I reviewed them to
-the best of my ability according to the RK3399 TRM and fixed them up.
-
-This fixes IOMMU issues (and display errors) when testing with BG24
-color formats.
-
-Fixes: 7707f7227f09 ("drm/rockchip: Add support for afbc")
-Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Tested-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220119161104.1.I1d01436bef35165a8cdfe9308789c0badb5ff46a@changeid
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/rockchip/rockchip_vop_reg.c |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ fs/nfs/nfs4_fs.h       | 3 ++-
+ fs/nfs/nfs4namespace.c | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
---- a/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
-@@ -902,6 +902,7 @@ static const struct vop_win_phy rk3399_w
- 	.enable = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 0),
- 	.format = VOP_REG(RK3288_WIN0_CTRL0, 0x7, 1),
- 	.rb_swap = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 12),
-+	.x_mir_en = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 21),
- 	.y_mir_en = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 22),
- 	.act_info = VOP_REG(RK3288_WIN0_ACT_INFO, 0x1fff1fff, 0),
- 	.dsp_info = VOP_REG(RK3288_WIN0_DSP_INFO, 0x0fff0fff, 0),
-@@ -912,6 +913,7 @@ static const struct vop_win_phy rk3399_w
- 	.uv_vir = VOP_REG(RK3288_WIN0_VIR, 0x3fff, 16),
- 	.src_alpha_ctl = VOP_REG(RK3288_WIN0_SRC_ALPHA_CTRL, 0xff, 0),
- 	.dst_alpha_ctl = VOP_REG(RK3288_WIN0_DST_ALPHA_CTRL, 0xff, 0),
-+	.channel = VOP_REG(RK3288_WIN0_CTRL2, 0xff, 0),
- };
+diff --git a/fs/nfs/nfs4_fs.h b/fs/nfs/nfs4_fs.h
+index 22cff39cca29a..c9ca2237c3fec 100644
+--- a/fs/nfs/nfs4_fs.h
++++ b/fs/nfs/nfs4_fs.h
+@@ -242,7 +242,8 @@ struct vfsmount *nfs4_submount(struct nfs_server *, struct dentry *,
+ 			       struct nfs_fh *, struct nfs_fattr *);
+ int nfs4_replace_transport(struct nfs_server *server,
+ 				const struct nfs4_fs_locations *locations);
+-
++size_t nfs_parse_server_name(char *string, size_t len, struct sockaddr *sa,
++			     size_t salen, struct net *net);
+ /* nfs4proc.c */
+ extern int nfs4_handle_exception(struct nfs_server *, int, struct nfs4_exception *);
+ extern int nfs4_call_sync(struct rpc_clnt *, struct nfs_server *,
+diff --git a/fs/nfs/nfs4namespace.c b/fs/nfs/nfs4namespace.c
+index 8c3f327d858d5..b36361ca0d36b 100644
+--- a/fs/nfs/nfs4namespace.c
++++ b/fs/nfs/nfs4namespace.c
+@@ -121,8 +121,8 @@ static int nfs4_validate_fspath(struct dentry *dentry,
+ 	return 0;
+ }
  
- /*
-@@ -922,11 +924,11 @@ static const struct vop_win_phy rk3399_w
- static const struct vop_win_data rk3399_vop_win_data[] = {
- 	{ .base = 0x00, .phy = &rk3399_win01_data,
- 	  .type = DRM_PLANE_TYPE_PRIMARY },
--	{ .base = 0x40, .phy = &rk3288_win01_data,
-+	{ .base = 0x40, .phy = &rk3368_win01_data,
- 	  .type = DRM_PLANE_TYPE_OVERLAY },
--	{ .base = 0x00, .phy = &rk3288_win23_data,
-+	{ .base = 0x00, .phy = &rk3368_win23_data,
- 	  .type = DRM_PLANE_TYPE_OVERLAY },
--	{ .base = 0x50, .phy = &rk3288_win23_data,
-+	{ .base = 0x50, .phy = &rk3368_win23_data,
- 	  .type = DRM_PLANE_TYPE_CURSOR },
- };
+-static size_t nfs_parse_server_name(char *string, size_t len,
+-		struct sockaddr *sa, size_t salen, struct net *net)
++size_t nfs_parse_server_name(char *string, size_t len, struct sockaddr *sa,
++			     size_t salen, struct net *net)
+ {
+ 	ssize_t ret;
  
+-- 
+2.34.1
+
 
 

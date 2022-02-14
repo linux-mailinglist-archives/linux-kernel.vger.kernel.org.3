@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9DBF4B4A9B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:39:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E76B4B45C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:32:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345110AbiBNKJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:09:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54814 "EHLO
+        id S243360AbiBNJan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:30:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344599AbiBNKEl (ORCPT
+        with ESMTP id S243341AbiBNJaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:04:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5469EBC8E;
-        Mon, 14 Feb 2022 01:49:08 -0800 (PST)
+        Mon, 14 Feb 2022 04:30:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C90AE5A;
+        Mon, 14 Feb 2022 01:29:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11075B80DC8;
-        Mon, 14 Feb 2022 09:49:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A057C340E9;
-        Mon, 14 Feb 2022 09:49:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CDDE160DFD;
+        Mon, 14 Feb 2022 09:29:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94F89C340E9;
+        Mon, 14 Feb 2022 09:29:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832145;
-        bh=tPEjF7F9Mz+qnlVTN+3+8I9Hs7K5Y+z4WT9v7HTWFkM=;
+        s=korg; t=1644830973;
+        bh=nhxowksZYKKrmbSdoJhQbTrb2+CQOovypkhNRJoHJw0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DHFZR25o7iP8fSZsr/3Cl81ZxLL87aF2K2wkqDaY6P53WkPcHstj82D/OcB/obAiT
-         Vr4YzVWjo7oVF78O07upudOhqarSEs3uMbNA68Ma/DCS9c8U6nD/gdYx87lTg8e/mj
-         qfL0khX2B5X5GorV4dZSP/2daNTosa5ItYbxwshc=
+        b=xsml7dWY3MVsVOb4je0ZFXNyyzKqYzg0cu5vUla2/j0zMNx2moZgA4l81N0K3Fw8E
+         Tunp+A6S+DV55VGsCypITb9tOtyW2Up0T7ZfMqsK7l6LsghmKLt5DeiuQa1MWFMsKo
+         a2K/z5/fzZJKXzrrfAn+tcqjJzwvMAnO3md0HH1Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrzej Hajda <andrzej.hajda@intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Liu Ying <victor.liu@nxp.com>, Vinod Koul <vkoul@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
-Subject: [PATCH 5.15 092/172] phy: dphy: Correct clk_pre parameter
+        stable@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Frank van der Linden <fllinden@amazon.com>
+Subject: [PATCH 4.9 24/34] bpf: Add kconfig knob for disabling unpriv bpf by default
 Date:   Mon, 14 Feb 2022 10:25:50 +0100
-Message-Id: <20220214092509.583577287@linuxfoundation.org>
+Message-Id: <20220214092446.726575082@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
+References: <20220214092445.946718557@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,156 +55,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liu Ying <victor.liu@nxp.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
 
-[ Upstream commit 9a8406ba1a9a2965c27e0db1d7753471d12ee9ff ]
+commit 08389d888287c3823f80b0216766b71e17f0aba5 upstream.
 
-The D-PHY specification (v1.2) explicitly mentions that the T-CLK-PRE
-parameter's unit is Unit Interval(UI) and the minimum value is 8.  Also,
-kernel doc of the 'clk_pre' member of struct phy_configure_opts_mipi_dphy
-mentions that it should be in UI.  However, the dphy core driver wrongly
-sets 'clk_pre' to 8000, which seems to hint that it's in picoseconds.
+Add a kconfig knob which allows for unprivileged bpf to be disabled by default.
+If set, the knob sets /proc/sys/kernel/unprivileged_bpf_disabled to value of 2.
 
-So, let's fix the dphy core driver to correctly reflect the T-CLK-PRE
-parameter's minimum value according to the D-PHY specification.
+This still allows a transition of 2 -> {0,1} through an admin. Similarly,
+this also still keeps 1 -> {1} behavior intact, so that once set to permanently
+disabled, it cannot be undone aside from a reboot.
 
-I'm assuming that all impacted custom drivers shall program values in
-TxByteClkHS cycles into hardware for the T-CLK-PRE parameter.  The D-PHY
-specification mentions that the frequency of TxByteClkHS is exactly 1/8
-the High-Speed(HS) bit rate(each HS bit consumes one UI).  So, relevant
-custom driver code is changed to program those values as
-DIV_ROUND_UP(cfg->clk_pre, BITS_PER_BYTE), then.
+We've also added extra2 with max of 2 for the procfs handler, so that an admin
+still has a chance to toggle between 0 <-> 2.
 
-Note that I've only tested the patch with RM67191 DSI panel on i.MX8mq EVK.
-Help is needed to test with other i.MX8mq, Meson and Rockchip platforms,
-as I don't have the hardwares.
+Either way, as an additional alternative, applications can make use of CAP_BPF
+that we added a while ago.
 
-Fixes: 2ed869990e14 ("phy: Add MIPI D-PHY configuration options")
-Tested-by: Liu Ying <victor.liu@nxp.com> # RM67191 DSI panel on i.MX8mq EVK
-Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com> # for phy-meson-axg-mipi-dphy.c
-Tested-by: Neil Armstrong <narmstrong@baylibre.com> # for phy-meson-axg-mipi-dphy.c
-Tested-by: Guido Günther <agx@sigxcpu.org> # Librem 5 (imx8mq) with it's rather picky panel
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Liu Ying <victor.liu@nxp.com>
-Link: https://lore.kernel.org/r/20220124024007.1465018-1-victor.liu@nxp.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/74ec548079189e4e4dffaeb42b8987bb3c852eee.1620765074.git.daniel@iogearbox.net
+[fllinden@amazon.com: backported to 4.9]
+Signed-off-by: Frank van der Linden <fllinden@amazon.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/bridge/nwl-dsi.c                 | 12 +++++-------
- drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c    |  3 ++-
- drivers/phy/phy-core-mipi-dphy.c                 |  4 ++--
- drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c |  3 ++-
- 4 files changed, 11 insertions(+), 11 deletions(-)
+ Documentation/sysctl/kernel.txt |   21 +++++++++++++++++++++
+ init/Kconfig                    |   10 ++++++++++
+ kernel/bpf/syscall.c            |    3 ++-
+ kernel/sysctl.c                 |   29 +++++++++++++++++++++++++----
+ 4 files changed, 58 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
-index a7389a0facfb4..af07eeb47ca02 100644
---- a/drivers/gpu/drm/bridge/nwl-dsi.c
-+++ b/drivers/gpu/drm/bridge/nwl-dsi.c
-@@ -7,6 +7,7 @@
-  */
+--- a/Documentation/sysctl/kernel.txt
++++ b/Documentation/sysctl/kernel.txt
+@@ -90,6 +90,7 @@ show up in /proc/sys/kernel:
+ - sysctl_writes_strict
+ - tainted
+ - threads-max
++- unprivileged_bpf_disabled
+ - unknown_nmi_panic
+ - watchdog
+ - watchdog_thresh
+@@ -995,6 +996,26 @@ available RAM pages threads-max is reduc
  
- #include <linux/bitfield.h>
-+#include <linux/bits.h>
- #include <linux/clk.h>
- #include <linux/irq.h>
- #include <linux/math64.h>
-@@ -196,12 +197,9 @@ static u32 ps2bc(struct nwl_dsi *dsi, unsigned long long ps)
- /*
-  * ui2bc - UI time periods to byte clock cycles
-  */
--static u32 ui2bc(struct nwl_dsi *dsi, unsigned long long ui)
-+static u32 ui2bc(unsigned int ui)
- {
--	u32 bpp = mipi_dsi_pixel_format_to_bpp(dsi->format);
--
--	return DIV64_U64_ROUND_UP(ui * dsi->lanes,
--				  dsi->mode.clock * 1000 * bpp);
-+	return DIV_ROUND_UP(ui, BITS_PER_BYTE);
- }
+ ==============================================================
  
- /*
-@@ -232,12 +230,12 @@ static int nwl_dsi_config_host(struct nwl_dsi *dsi)
- 	}
++unprivileged_bpf_disabled:
++
++Writing 1 to this entry will disable unprivileged calls to bpf();
++once disabled, calling bpf() without CAP_SYS_ADMIN will return
++-EPERM. Once set to 1, this can't be cleared from the running kernel
++anymore.
++
++Writing 2 to this entry will also disable unprivileged calls to bpf(),
++however, an admin can still change this setting later on, if needed, by
++writing 0 or 1 to this entry.
++
++If BPF_UNPRIV_DEFAULT_OFF is enabled in the kernel config, then this
++entry will default to 2 instead of 0.
++
++  0 - Unprivileged calls to bpf() are enabled
++  1 - Unprivileged calls to bpf() are disabled without recovery
++  2 - Unprivileged calls to bpf() are disabled
++
++==============================================================
++
+ unknown_nmi_panic:
  
- 	/* values in byte clock cycles */
--	cycles = ui2bc(dsi, cfg->clk_pre);
-+	cycles = ui2bc(cfg->clk_pre);
- 	DRM_DEV_DEBUG_DRIVER(dsi->dev, "cfg_t_pre: 0x%x\n", cycles);
- 	nwl_dsi_write(dsi, NWL_DSI_CFG_T_PRE, cycles);
- 	cycles = ps2bc(dsi, cfg->lpx + cfg->clk_prepare + cfg->clk_zero);
- 	DRM_DEV_DEBUG_DRIVER(dsi->dev, "cfg_tx_gap (pre): 0x%x\n", cycles);
--	cycles += ui2bc(dsi, cfg->clk_pre);
-+	cycles += ui2bc(cfg->clk_pre);
- 	DRM_DEV_DEBUG_DRIVER(dsi->dev, "cfg_t_post: 0x%x\n", cycles);
- 	nwl_dsi_write(dsi, NWL_DSI_CFG_T_POST, cycles);
- 	cycles = ps2bc(dsi, cfg->hs_exit);
-diff --git a/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c b/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
-index cd2332bf0e31a..fdbd64c03e12b 100644
---- a/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
-+++ b/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
-@@ -9,6 +9,7 @@
+ The value in this file affects behavior of handling NMI. When the
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1645,6 +1645,16 @@ config ADVISE_SYSCALLS
+ 	  applications use these syscalls, you can disable this option to save
+ 	  space.
  
- #include <linux/bitfield.h>
- #include <linux/bitops.h>
-+#include <linux/bits.h>
- #include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/io.h>
-@@ -250,7 +251,7 @@ static int phy_meson_axg_mipi_dphy_power_on(struct phy *phy)
- 		     (DIV_ROUND_UP(priv->config.clk_zero, temp) << 16) |
- 		     (DIV_ROUND_UP(priv->config.clk_prepare, temp) << 24));
- 	regmap_write(priv->regmap, MIPI_DSI_CLK_TIM1,
--		     DIV_ROUND_UP(priv->config.clk_pre, temp));
-+		     DIV_ROUND_UP(priv->config.clk_pre, BITS_PER_BYTE));
++config BPF_UNPRIV_DEFAULT_OFF
++	bool "Disable unprivileged BPF by default"
++	depends on BPF_SYSCALL
++	help
++	  Disables unprivileged BPF by default by setting the corresponding
++	  /proc/sys/kernel/unprivileged_bpf_disabled knob to 2. An admin can
++	  still reenable it by setting it to 0 later on, or permanently
++	  disable it by setting it to 1 (from which no other transition to
++	  0 is possible anymore).
++
+ config USERFAULTFD
+ 	bool "Enable userfaultfd() system call"
+ 	select ANON_INODES
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -22,7 +22,8 @@
  
- 	regmap_write(priv->regmap, MIPI_DSI_HS_TIM,
- 		     DIV_ROUND_UP(priv->config.hs_exit, temp) |
-diff --git a/drivers/phy/phy-core-mipi-dphy.c b/drivers/phy/phy-core-mipi-dphy.c
-index 288c9c67aa748..ccb4045685cdd 100644
---- a/drivers/phy/phy-core-mipi-dphy.c
-+++ b/drivers/phy/phy-core-mipi-dphy.c
-@@ -36,7 +36,7 @@ int phy_mipi_dphy_get_default_config(unsigned long pixel_clock,
+ DEFINE_PER_CPU(int, bpf_prog_active);
  
- 	cfg->clk_miss = 0;
- 	cfg->clk_post = 60000 + 52 * ui;
--	cfg->clk_pre = 8000;
-+	cfg->clk_pre = 8;
- 	cfg->clk_prepare = 38000;
- 	cfg->clk_settle = 95000;
- 	cfg->clk_term_en = 0;
-@@ -97,7 +97,7 @@ int phy_mipi_dphy_config_validate(struct phy_configure_opts_mipi_dphy *cfg)
- 	if (cfg->clk_post < (60000 + 52 * ui))
- 		return -EINVAL;
+-int sysctl_unprivileged_bpf_disabled __read_mostly;
++int sysctl_unprivileged_bpf_disabled __read_mostly =
++	IS_BUILTIN(CONFIG_BPF_UNPRIV_DEFAULT_OFF) ? 2 : 0;
  
--	if (cfg->clk_pre < 8000)
-+	if (cfg->clk_pre < 8)
- 		return -EINVAL;
+ static LIST_HEAD(bpf_map_types);
  
- 	if (cfg->clk_prepare < 38000 || cfg->clk_prepare > 95000)
-diff --git a/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c b/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
-index 347dc79a18c18..630e01b5c19b9 100644
---- a/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
-+++ b/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
-@@ -5,6 +5,7 @@
-  * Author: Wyon Bi <bivvy.bi@rock-chips.com>
-  */
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -221,6 +221,28 @@ static int sysrq_sysctl_handler(struct c
  
-+#include <linux/bits.h>
- #include <linux/kernel.h>
- #include <linux/clk.h>
- #include <linux/iopoll.h>
-@@ -364,7 +365,7 @@ static void inno_dsidphy_mipi_mode_enable(struct inno_dsidphy *inno)
- 	 * The value of counter for HS Tclk-pre
- 	 * Tclk-pre = Tpin_txbyteclkhs * value
- 	 */
--	clk_pre = DIV_ROUND_UP(cfg->clk_pre, t_txbyteclkhs);
-+	clk_pre = DIV_ROUND_UP(cfg->clk_pre, BITS_PER_BYTE);
+ #endif
  
- 	/*
- 	 * The value of counter for HS Tlpx Time
--- 
-2.34.1
-
++#ifdef CONFIG_BPF_SYSCALL
++static int bpf_unpriv_handler(struct ctl_table *table, int write,
++                             void *buffer, size_t *lenp, loff_t *ppos)
++{
++	int ret, unpriv_enable = *(int *)table->data;
++	bool locked_state = unpriv_enable == 1;
++	struct ctl_table tmp = *table;
++
++	if (write && !capable(CAP_SYS_ADMIN))
++		return -EPERM;
++
++	tmp.data = &unpriv_enable;
++	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
++	if (write && !ret) {
++		if (locked_state && unpriv_enable != 1)
++			return -EPERM;
++		*(int *)table->data = unpriv_enable;
++	}
++	return ret;
++}
++#endif
++
+ static struct ctl_table kern_table[];
+ static struct ctl_table vm_table[];
+ static struct ctl_table fs_table[];
+@@ -1202,10 +1224,9 @@ static struct ctl_table kern_table[] = {
+ 		.data		= &sysctl_unprivileged_bpf_disabled,
+ 		.maxlen		= sizeof(sysctl_unprivileged_bpf_disabled),
+ 		.mode		= 0644,
+-		/* only handle a transition from default "0" to "1" */
+-		.proc_handler	= proc_dointvec_minmax,
+-		.extra1		= &one,
+-		.extra2		= &one,
++		.proc_handler	= bpf_unpriv_handler,
++		.extra1		= &zero,
++		.extra2		= &two,
+ 	},
+ #endif
+ #if defined(CONFIG_TREE_RCU) || defined(CONFIG_PREEMPT_RCU)
 
 

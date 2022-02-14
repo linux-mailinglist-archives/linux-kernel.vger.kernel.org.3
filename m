@@ -2,103 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 509E14B5CCD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 320CE4B5CCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231271AbiBNV15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:27:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39536 "EHLO
+        id S231360AbiBNV3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:29:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbiBNV1z (ORCPT
+        with ESMTP id S231307AbiBNV3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:27:55 -0500
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A793D205CC;
-        Mon, 14 Feb 2022 13:27:43 -0800 (PST)
-Received: by mail-ua1-f52.google.com with SMTP id v5so8833640uam.3;
-        Mon, 14 Feb 2022 13:27:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kI/su3rLIeICfLlNKWmUFjgPBcsY2C15d0MI7GuavKc=;
-        b=wCG6p/+P3vdcrqHorWmabfT4JogzaP2GngcXL6Rxslb9pFcQ3qhxmXb4vIwbzI+D9x
-         QE6A6BnOGaCW2ByXnXT+9bo8CUpRDavYWaNQyU5w7fw1/aH7//yyy5tE6dTwFca6ildI
-         eWcA4h2F2Es8No5XO25NjGEod83i0wh050SkVgIX32EoyNqEJjnw4uaLAU1gVruG+AI0
-         HvUXLFPhcyClkkzAoKwE1ook66cfajOied7mYCEzClRYoYu3nufRvMYOkrN67iMlJRet
-         tGh6ojISA+4lTGp1SE9fygp5ToV03w8D89bQfP49oACIfF/HTsugq7I1u5H0VOSMFHbh
-         ldAA==
-X-Gm-Message-State: AOAM531I1BEuY5+JcROkHhgPhMkhwU/5T3l36VuBURdqL5vVUluJjbjp
-        vYof5q4Dr7+ruzp1aRcpuDinLJNBLq/rf03+U6DoPDcj
-X-Google-Smtp-Source: ABdhPJxGZGt2fPgzAqcgORvIh0/Y5CWB2tlTZbwqTAX/KQ7CW6L1r5+mAHGuDyElx2Pd5u2NGjMMyir7212xQ8cyY/A=
-X-Received: by 2002:a25:7e81:: with SMTP id z123mr550858ybc.466.1644866318513;
- Mon, 14 Feb 2022 11:18:38 -0800 (PST)
+        Mon, 14 Feb 2022 16:29:05 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F8B10E2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:28:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644874136; x=1676410136;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=vQTr1pJP/ZuLa7nTq51NMvNV6GS8nBWlHsGKMteM/68=;
+  b=Bq3lWyY2JoauNzTneViDvv2mByySxKFNSqKtrsPvtfJO56o3X3O0IeaS
+   d9dcQB/aa7NFC4mpUI5LZAQYFuiGRrqRVJG5VCaqZs/6NwSpEdiy/GXdw
+   fPrFpeCmqZeCoY0TK1I0vFWWiSm3b+lHgAsxcW+GR7Z8OEcrFmlw/jQ2S
+   wt4Y4MJhBsIYDSD58RFearsWQKwm3W+5E5hXgTCRz2Z/cp11d1USsBXIw
+   H4O103C5ODHV4BfY5oJG6dfPbTU3G16FSfxoBfMdq9ILaOfzmTxTZVGpm
+   2+mIGNqMf8oNwdn9Q96lp6kCS9DgRblqvsznFiY1p9UtHNAZU7iHkS1an
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="313440827"
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="313440827"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 11:20:24 -0800
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="543849190"
+Received: from racamill-t15-2.amr.corp.intel.com (HELO [10.251.23.156]) ([10.251.23.156])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 11:20:24 -0800
+Message-ID: <6b50671d-883f-561a-bf7d-5ae01c2cc312@intel.com>
+Date:   Mon, 14 Feb 2022 11:20:20 -0800
 MIME-Version: 1.0
-References: <20220210224933.379149-1-yury.norov@gmail.com> <20220210224933.379149-46-yury.norov@gmail.com>
-In-Reply-To: <20220210224933.379149-46-yury.norov@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 14 Feb 2022 20:18:27 +0100
-Message-ID: <CAJZ5v0hWse+A6ipWiAgfgzSQA52=e45WZgrRX9hUTsekkQjBig@mail.gmail.com>
-Subject: Re: [PATCH 45/49] ACPI: replace nodes__weight with nodes_weight_ge
- for numa
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Dan Williams <dan.j.williams@intel.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-kernel@vger.kernel.org
+References: <20220127175505.851391-1-ira.weiny@intel.com>
+ <20220127175505.851391-7-ira.weiny@intel.com>
+ <9c4a8275-236d-67b6-07f9-5e46f66396c0@intel.com>
+ <20220128231015.GK785175@iweiny-DESK2.sc.intel.com>
+ <f72b0e17-11bf-b12e-fe7a-d38b0833acdc@intel.com>
+ <20220204190851.GY785175@iweiny-DESK2.sc.intel.com>
+ <20220209053430.GL785175@iweiny-DESK2.sc.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH V8 06/44] mm/pkeys: Add Kconfig options for PKS
+In-Reply-To: <20220209053430.GL785175@iweiny-DESK2.sc.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 1:31 AM Yury Norov <yury.norov@gmail.com> wrote:
->
-> acpi_map_pxm_to_node() calls nodes_weight() to compare the weight
-> of nodemask with a given number. We can do it more efficiently with
-> nodes_weight_eq() because conditional nodes_weight may stop
-> traversing the nodemask earlier, as soon as condition is (or is not)
-> met.
->
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->  drivers/acpi/numa/srat.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/acpi/numa/srat.c b/drivers/acpi/numa/srat.c
-> index 3b818ab186be..fe7a7996f553 100644
-> --- a/drivers/acpi/numa/srat.c
-> +++ b/drivers/acpi/numa/srat.c
-> @@ -67,7 +67,7 @@ int acpi_map_pxm_to_node(int pxm)
->         node = pxm_to_node_map[pxm];
->
->         if (node == NUMA_NO_NODE) {
-> -               if (nodes_weight(nodes_found_map) >= MAX_NUMNODES)
-> +               if (nodes_weight_ge(nodes_found_map, MAX_NUMNODES))
->                         return NUMA_NO_NODE;
->                 node = first_unset_node(nodes_found_map);
->                 __acpi_map_pxm_to_node(pxm, node);
-> --
+On 2/8/22 21:34, Ira Weiny wrote:
+>>> In other words, there are two things that must happen before the code
+>>> gets compiled in:
+>>>
+>>> 1. Arch support
+>>> 2. One or more features to use the arch support
+>> Yes.  I really think we are both say the same thing with different words.
+> Is the following more clear?
+> 
+> <commit>
+> 
+> PKS is only useful to kernel consumers and is only available on some
+> architectures.  If no kernel consumers are configured or PKS support is
+> not available the PKS code can be eliminated from the compile.
+> 
+> Define a Kconfig structure which allows kernel consumers to detect
+> architecture support (ARCH_HAS_SUPERVISOR_PKEYS) and, if available,
+> indicate that PKS should be compiled in (ARCH_ENABLE_SUPERVISOR_PKEYS).
+> 
+> In this patch ARCH_ENABLE_SUPERVISOR_PKEYS remains off until the first
+> kernel consumer sets it.
 
-Applied as 5.18 material, thanks!
+It's a bit more clear.  I wish it was more clear about the problem.  I
+think it would be well-served to add some specifics and clarify the
+*problem*.  Maybe something like:
+
+== Problem ==
+
+PKS support is provided by core x86 architecture code.  Its consumers,
+however, may be far-flung device drivers like NVDIMM support.  The PKS
+core architecture code is dead weight without a consumer.
+
+--- maybe add one example ---
+
+== Solution ==
+
+Avoid even compiling in the core PKS code if there are no consumers.
+
+== Details ==

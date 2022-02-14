@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CA14B4BAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77EEF4B4773
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346901AbiBNKZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:25:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33266 "EHLO
+        id S1343736AbiBNJvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:51:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234368AbiBNKYS (ORCPT
+        with ESMTP id S1344243AbiBNJqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:24:18 -0500
+        Mon, 14 Feb 2022 04:46:46 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8806D182;
-        Mon, 14 Feb 2022 01:56:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D94A74842;
+        Mon, 14 Feb 2022 01:40:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AC40FB80DBE;
-        Mon, 14 Feb 2022 09:56:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADD1DC340E9;
-        Mon, 14 Feb 2022 09:56:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CECEBB80DCC;
+        Mon, 14 Feb 2022 09:40:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7032C340E9;
+        Mon, 14 Feb 2022 09:40:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832586;
-        bh=cJz+WCKCtmXCo1AQ+BSDjP3riPuNHgmDjCEGV5+z4VY=;
+        s=korg; t=1644831612;
+        bh=tBAxUNn4Q4FhGTcSQRgMTXs/kisbN/cZYWabXto48uc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y7epjIE6LzQxOtdJArTMotKv2/s8Onq1DHhgj8Wyq2OUptUr78kR9YmO0VwlzgRYJ
-         IQOP/WNLbBku56iRQ55XekF4wA7NWtTc1M1d0k5wxFr7b92ojX5x/j4TFEi+WN/lcw
-         OqFTmgNFQnmIvkmYYY+A3ehYxXNy5bDrP1tiJpQs=
+        b=CuM3juVUidzCb/PHr5/cgVDrkz2AJ/XZ+MWIODH4lGwQ7fVY2nl0mWumaXwAHRFVt
+         O41bhWhPsWCZh+RDWKZkRJ7cVRkvir6deg7253EBhylRxKHub680LUs6McWb4gdODD
+         8uQgkkORfi8tDmRMEUTOo5NCdd4SOQ9BnO36kvD0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jisheng Zhang <jszhang@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 061/203] net: stmmac: dwmac-sun8i: use return val of readl_poll_timeout()
-Date:   Mon, 14 Feb 2022 10:25:05 +0100
-Message-Id: <20220214092512.327799966@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 007/116] net: phy: marvell: Fix RGMII Tx/Rx delays setting in 88e1121-compatible PHYs
+Date:   Mon, 14 Feb 2022 10:25:06 +0100
+Message-Id: <20220214092458.927886784@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +57,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jisheng Zhang <jszhang@kernel.org>
+From: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
 
-[ Upstream commit 9e0db41e7a0b6f1271cbcfb16dbf5b8641b4e440 ]
+commit fe4f57bf7b585dca58f1496c4e2481ecbae18126 upstream.
 
-When readl_poll_timeout() timeout, we'd better directly use its return
-value.
+It is mandatory for a software to issue a reset upon modifying RGMII
+Receive Timing Control and RGMII Transmit Timing Control bit fields of MAC
+Specific Control register 2 (page 2, register 21) otherwise the changes
+won't be perceived by the PHY (the same is applicable for a lot of other
+registers). Not setting the RGMII delays on the platforms that imply it'
+being done on the PHY side will consequently cause the traffic loss. We
+discovered that the denoted soft-reset is missing in the
+m88e1121_config_aneg() method for the case if the RGMII delays are
+modified but the MDIx polarity isn't changed or the auto-negotiation is
+left enabled, thus causing the traffic loss on our platform with Marvell
+Alaska 88E1510 installed. Let's fix that by issuing the soft-reset if the
+delays have been actually set in the m88e1121_config_aneg_rgmii_delays()
+method.
 
-Before this patch:
-[    2.145528] dwmac-sun8i: probe of 4500000.ethernet failed with error -14
-
-After this patch:
-[    2.138520] dwmac-sun8i: probe of 4500000.ethernet failed with error -110
-
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: d6ab93364734 ("net: phy: marvell: Avoid unnecessary soft reset")
+Signed-off-by: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+Link: https://lore.kernel.org/r/20220205203932.26899-1-Pavel.Parkhomenko@baikalelectronics.ru
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/phy/marvell.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
-index 617d0e4c64958..09644ab0d87a7 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
-@@ -756,7 +756,7 @@ static int sun8i_dwmac_reset(struct stmmac_priv *priv)
+--- a/drivers/net/phy/marvell.c
++++ b/drivers/net/phy/marvell.c
+@@ -515,9 +515,9 @@ static int m88e1121_config_aneg_rgmii_de
+ 	else
+ 		mscr = 0;
  
- 	if (err) {
- 		dev_err(priv->device, "EMAC reset timeout\n");
--		return -EFAULT;
-+		return err;
- 	}
- 	return 0;
+-	return phy_modify_paged(phydev, MII_MARVELL_MSCR_PAGE,
+-				MII_88E1121_PHY_MSCR_REG,
+-				MII_88E1121_PHY_MSCR_DELAY_MASK, mscr);
++	return phy_modify_paged_changed(phydev, MII_MARVELL_MSCR_PAGE,
++					MII_88E1121_PHY_MSCR_REG,
++					MII_88E1121_PHY_MSCR_DELAY_MASK, mscr);
  }
--- 
-2.34.1
-
+ 
+ static int m88e1121_config_aneg(struct phy_device *phydev)
+@@ -531,11 +531,13 @@ static int m88e1121_config_aneg(struct p
+ 			return err;
+ 	}
+ 
++	changed = err;
++
+ 	err = marvell_set_polarity(phydev, phydev->mdix_ctrl);
+ 	if (err < 0)
+ 		return err;
+ 
+-	changed = err;
++	changed |= err;
+ 
+ 	err = genphy_config_aneg(phydev);
+ 	if (err < 0)
 
 

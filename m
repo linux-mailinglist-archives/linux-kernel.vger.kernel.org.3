@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 626AE4B4702
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0333F4B45EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343673AbiBNJvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:51:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42984 "EHLO
+        id S243085AbiBNJ2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:28:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343747AbiBNJq0 (ORCPT
+        with ESMTP id S242964AbiBNJ2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:46:26 -0500
+        Mon, 14 Feb 2022 04:28:38 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA816B0A0;
-        Mon, 14 Feb 2022 01:39:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9FC60AA7;
+        Mon, 14 Feb 2022 01:28:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4859DB80DC6;
-        Mon, 14 Feb 2022 09:39:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81185C340E9;
-        Mon, 14 Feb 2022 09:39:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BF9C5B80DCE;
+        Mon, 14 Feb 2022 09:28:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E91AFC340E9;
+        Mon, 14 Feb 2022 09:28:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831592;
-        bh=Oj7NXyw/WsaA4MVF4fR5lEQedQrm6KIDPdBManiDg4c=;
+        s=korg; t=1644830908;
+        bh=oY6W+400z0kgieG1TE5tUwoOogBmBQmqqk4deFmkKLo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TsAQwlaGbAP2n4NhOsv0uTcblJzM0uw4WCW5Z86i3gjTFozvFgl32AZbQHJGKZtcG
-         QUtNp990jTMwv6cTGsCy8UOnu7Mq/g6SWl4Qm7hnKP2dTiGhDExS3tQc9gt1UNjr0F
-         lesAy8DPPKc3+MXccWpX2qJvzbISSkw6ba1CDsf4=
+        b=Hfq9TrRJgrjyimP7kqUqMdpOWFtNGNRycxFPt8QrYsDbkmkxmbK+VFk7wuwS5ko6c
+         h24f1JJkCbu9hPbtsumxscO9Nos6udNZi4w9LUcpRv3lcwDfR0c+Jkqa/IAOqNouOQ
+         D1akjGUqeZz4ecmJraOuFvUTgefyCJfvOwDaEQRQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kiwoong Kim <kwmad.kim@samsung.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 030/116] scsi: ufs: Treat link loss as fatal error
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>
+Subject: [PATCH 4.9 03/34] NFS: Fix initialisation of nfs_client cl_flags field
 Date:   Mon, 14 Feb 2022 10:25:29 +0100
-Message-Id: <20220214092459.730608870@linuxfoundation.org>
+Message-Id: <20220214092446.057863341@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
+References: <20220214092445.946718557@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kiwoong Kim <kwmad.kim@samsung.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit c99b9b2301492b665b6e51ba6c06ec362eddcd10 ]
+commit 468d126dab45718feeb728319be20bd869a5eaa7 upstream.
 
-This event is raised when link is lost as specified in UFSHCI spec and that
-means communication is not possible. Thus initializing UFS interface needs
-to be done.
+For some long forgotten reason, the nfs_client cl_flags field is
+initialised in nfs_get_client() instead of being initialised at
+allocation time. This quirk was harmless until we moved the call to
+nfs_create_rpc_client().
 
-Make UFS driver considers Link Lost as fatal in the INT_FATAL_ERRORS
-mask. This will trigger a host reset whenever a link lost interrupt occurs.
-
-Link: https://lore.kernel.org/r/1642743475-54275-1-git-send-email-kwmad.kim@samsung.com
-Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: dd99e9f98fbf ("NFSv4: Initialise connection to the server in nfs4_alloc_client()")
+Cc: stable@vger.kernel.org # 4.8.x
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/ufs/ufshci.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/nfs/client.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/ufs/ufshci.h b/drivers/scsi/ufs/ufshci.h
-index 6795e1f0e8f8c..1d999228efc85 100644
---- a/drivers/scsi/ufs/ufshci.h
-+++ b/drivers/scsi/ufs/ufshci.h
-@@ -138,7 +138,8 @@ enum {
- #define INT_FATAL_ERRORS	(DEVICE_FATAL_ERROR |\
- 				CONTROLLER_FATAL_ERROR |\
- 				SYSTEM_BUS_FATAL_ERROR |\
--				CRYPTO_ENGINE_FATAL_ERROR)
-+				CRYPTO_ENGINE_FATAL_ERROR |\
-+				UIC_LINK_LOST)
+--- a/fs/nfs/client.c
++++ b/fs/nfs/client.c
+@@ -179,6 +179,7 @@ struct nfs_client *nfs_alloc_client(cons
+ 	INIT_LIST_HEAD(&clp->cl_superblocks);
+ 	clp->cl_rpcclient = ERR_PTR(-EINVAL);
  
- /* HCS - Host Controller Status 30h */
- #define DEVICE_PRESENT				0x1
--- 
-2.34.1
-
++	clp->cl_flags = cl_init->init_flags;
+ 	clp->cl_proto = cl_init->proto;
+ 	clp->cl_net = get_net(cl_init->net);
+ 
+@@ -400,7 +401,6 @@ nfs_get_client(const struct nfs_client_i
+ 			list_add_tail(&new->cl_share_link,
+ 					&nn->nfs_client_list);
+ 			spin_unlock(&nn->nfs_client_lock);
+-			new->cl_flags = cl_init->init_flags;
+ 			return rpc_ops->init_client(new, cl_init);
+ 		}
+ 
 
 

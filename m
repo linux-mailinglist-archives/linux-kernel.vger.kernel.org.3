@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0FA4B46E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA8A4B4B3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244782AbiBNJmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:42:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33930 "EHLO
+        id S1348231AbiBNKe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:34:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244971AbiBNJlC (ORCPT
+        with ESMTP id S1348221AbiBNKeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:41:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC5A65797;
-        Mon, 14 Feb 2022 01:36:29 -0800 (PST)
+        Mon, 14 Feb 2022 05:34:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2898C35;
+        Mon, 14 Feb 2022 02:00:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7C16B80DA9;
-        Mon, 14 Feb 2022 09:36:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 025F1C340E9;
-        Mon, 14 Feb 2022 09:36:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 526CE60B31;
+        Mon, 14 Feb 2022 10:00:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B9E4C340E9;
+        Mon, 14 Feb 2022 10:00:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831386;
-        bh=3QIS+JduvWa+345oQLZSG4xFS4uZ8ucq3Rru6CK+hIU=;
+        s=korg; t=1644832852;
+        bh=jfzU5AWgx9K/8cbFWPb2BdzFgFXH/WxAhtisdz6hsjk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Eh/jsido6PGfTh3c0XpeqwIEC+8V7qsi0pHtVVYOoH3Ixe798U3/pWVzcdAKKS0dM
-         D089fsSQo7IzlInSNd0SzDdzLar1+IVIGCxJ3/5oq3M7hnXwfw2FMi22xdDQ1nwttr
-         z7Fk+pOceF6PGOcICrdAZdU9Bt+j36ca9GMzwAx0=
+        b=qUob6VHXs1PgOwrDOG9sNh2Jr7Ad7gwpUgtOK2ftA9+cjVjfoAvRJ7QCp+YvyiFF7
+         OQL554AJ5JhXxa9dHlQDG0N43QFGyCbrUsxPK3RqQ5FYPwbVEWWnVb2vWdnNtlLAfj
+         9I6mvW12mq/07YcdybLUOmKhtz9eWrxHtq0NgW3E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>,
-        Hannes Reinecke <hare@suse.de>, Christoph Hellwig <hch@lst.de>
-Subject: [PATCH 5.4 30/71] nvme-tcp: fix bogus request completion when failing to send AER
+        stable@vger.kernel.org,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Mathias Krause <minipli@grsecurity.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 114/203] misc: fastrpc: avoid double fput() on failed usercopy
 Date:   Mon, 14 Feb 2022 10:25:58 +0100
-Message-Id: <20220214092453.029832946@linuxfoundation.org>
+Message-Id: <20220214092514.126632526@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,42 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sagi Grimberg <sagi@grimberg.me>
+From: Mathias Krause <minipli@grsecurity.net>
 
-commit 63573807b27e0faf8065a28b1bbe1cbfb23c0130 upstream.
+[ Upstream commit 46963e2e0629cb31c96b1d47ddd89dc3d8990b34 ]
 
-AER is not backed by a real request, hence we should not incorrectly
-assume that when failing to send a nvme command, it is a normal request
-but rather check if this is an aer and if so complete the aer (similar
-to the normal completion path).
+If the copy back to userland fails for the FASTRPC_IOCTL_ALLOC_DMA_BUFF
+ioctl(), we shouldn't assume that 'buf->dmabuf' is still valid. In fact,
+dma_buf_fd() called fd_install() before, i.e. "consumed" one reference,
+leaving us with none.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Sagi Grimberg <sagi@grimberg.me>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Calling dma_buf_put() will therefore put a reference we no longer own,
+leading to a valid file descritor table entry for an already released
+'file' object which is a straight use-after-free.
+
+Simply avoid calling dma_buf_put() and rely on the process exit code to
+do the necessary cleanup, if needed, i.e. if the file descriptor is
+still valid.
+
+Fixes: 6cffd79504ce ("misc: fastrpc: Add support for dmabuf exporter")
+Acked-by: Christian König <christian.koenig@amd.com>
+Signed-off-by: Mathias Krause <minipli@grsecurity.net>
+Link: https://lore.kernel.org/r/20220127130218.809261-1-minipli@grsecurity.net
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/host/tcp.c |   10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/misc/fastrpc.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
---- a/drivers/nvme/host/tcp.c
-+++ b/drivers/nvme/host/tcp.c
-@@ -840,7 +840,15 @@ static inline void nvme_tcp_done_send_re
+diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+index 4ccbf43e6bfa9..aa1682b94a23b 100644
+--- a/drivers/misc/fastrpc.c
++++ b/drivers/misc/fastrpc.c
+@@ -1288,7 +1288,14 @@ static int fastrpc_dmabuf_alloc(struct fastrpc_user *fl, char __user *argp)
+ 	}
  
- static void nvme_tcp_fail_request(struct nvme_tcp_request *req)
- {
--	nvme_tcp_end_request(blk_mq_rq_from_pdu(req), NVME_SC_HOST_PATH_ERROR);
-+	if (nvme_tcp_async_req(req)) {
-+		union nvme_result res = {};
-+
-+		nvme_complete_async_event(&req->queue->ctrl->ctrl,
-+				cpu_to_le16(NVME_SC_HOST_PATH_ERROR), &res);
-+	} else {
-+		nvme_tcp_end_request(blk_mq_rq_from_pdu(req),
-+				NVME_SC_HOST_PATH_ERROR);
-+	}
- }
+ 	if (copy_to_user(argp, &bp, sizeof(bp))) {
+-		dma_buf_put(buf->dmabuf);
++		/*
++		 * The usercopy failed, but we can't do much about it, as
++		 * dma_buf_fd() already called fd_install() and made the
++		 * file descriptor accessible for the current process. It
++		 * might already be closed and dmabuf no longer valid when
++		 * we reach this point. Therefore "leak" the fd and rely on
++		 * the process exit path to do any required cleanup.
++		 */
+ 		return -EFAULT;
+ 	}
  
- static int nvme_tcp_try_send_data(struct nvme_tcp_request *req)
+-- 
+2.34.1
+
 
 

@@ -2,102 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A504B4E94
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:34:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9414B4EA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351744AbiBNLcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:32:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57324 "EHLO
+        id S1347943AbiBNLdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:33:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352057AbiBNLbN (ORCPT
+        with ESMTP id S1352597AbiBNLbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:31:13 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A6BAE76
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 03:15:06 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id bx31so21769972ljb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 03:15:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kempniu.pl; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=/gvyvLv0L7lIbtDKzPDBQ3PnEIpy4XvEbEZzW6NXC+g=;
-        b=AZV1BkAsEdGRrs9twRIwoaLNpw3pBbcqFotnGiE8hRUgcJbPChrSAN0nKtNUEg4p6G
-         F9ac4XIr3moL5HhS1MHGpcDLz3pflsjdb/wxp+26J72Y/YYqjX1oGhT6Ixl7mftAQ+SE
-         LWQbc3TITf0zfw6SA64Qru8GAYieTOTg02PoI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=/gvyvLv0L7lIbtDKzPDBQ3PnEIpy4XvEbEZzW6NXC+g=;
-        b=yBNcvSrAeklEODkLmNEFKnHuGfaSaJ/j7mMNtLwS8h9lh//cjKvxq6KvaePMzHDYe9
-         36SQopafA2Xg8JJ9wwnyxYaJ2t6I3BU8mEfcagB1AMIs+WxqpqyN4nuGk9kbewyRSWze
-         L/dqg+enRxRgCGx4NP0nTUR6xVoz66DHeTmQCA/iVpUjD8dJchFc2uBKg1f2lqE0m1W7
-         qz3VRaEHGI5sMnJtGkthWswYnv4BKn6lVdeiVezbNZwhg5aVeT8axA1vCpUZ6vlOuQXw
-         AKe/3ceWrNZl3/jrkOaF02bvNe5tjbfU19c44zJPcfZ47HgBry3s8rPrnRdAPbJ4Fka+
-         A6qg==
-X-Gm-Message-State: AOAM531opeiHnk5Cp6zii7vh9hSG/mG27rbUygajjhLfr6vqdFVbbf8n
-        fjVkvU71zmka54HdzgtY8AughiDc3cJTMQ==
-X-Google-Smtp-Source: ABdhPJxRoBE3cIUrCU9X1zU2YRXoewWnjgMuJxW4V+IlP2JD8glHc5xw6ubK/RupzjCRv9d8nhumbQ==
-X-Received: by 2002:a2e:9619:: with SMTP id v25mr6303279ljh.92.1644837305128;
-        Mon, 14 Feb 2022 03:15:05 -0800 (PST)
-Received: from larwa.hq.kempniu.pl ([2001:470:64df:111::e02])
-        by smtp.gmail.com with ESMTPSA id o14sm517491lfr.176.2022.02.14.03.15.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 03:15:04 -0800 (PST)
-Date:   Mon, 14 Feb 2022 12:15:02 +0100
-From:   =?utf-8?B?TWljaGHFgiBLxJlwaWXFhA==?= <kernel@kempniu.pl>
-To:     Richard Weinberger <richard@nod.at>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 4/4] mtdchar: add MEMREAD ioctl
-Message-ID: <Ygo5tta48poc0IOB@larwa.hq.kempniu.pl>
-References: <20220125104822.8420-1-kernel@kempniu.pl>
- <20220125104822.8420-5-kernel@kempniu.pl>
- <1173246756.12597.1643879936765.JavaMail.zimbra@nod.at>
+        Mon, 14 Feb 2022 06:31:35 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D280C6516D;
+        Mon, 14 Feb 2022 03:16:35 -0800 (PST)
+Date:   Mon, 14 Feb 2022 12:16:33 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644837394;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mGouKSJGIoDr3ZG9aOBrrLpVT+0XirfwXSklJD4/Fu0=;
+        b=ucDpzAP8wWhsZkbVAW32g4NjJ3XxIrk28gOGl9Z92Qxd7xp+L2gJ/CGT0SoExSdsJa+i8V
+        38anv/Ip2e8CO0o9vH/fmTybr+07iTSo+lrQyCemMR1bgB3HAlIa2uujK8WeDHrBorr+RF
+        6QyhcqL4gHolpGrpcjbwxZhFAR9AiXh+z/61f8KWpewgKa/Nq8isFLuqesOK16xlZJOPui
+        SI+pP1i6Lm4br7IM5fB830EaAUW6Ps/F4STArrl4nZSOHGFuOHFVS0RsA/8kvcN91kwnj4
+        3pSMcpsUhJnKm8ryUjro8ESym4adLdBi7yVZWzPL7vhxEf7imLMvftBpPQUIXQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644837394;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mGouKSJGIoDr3ZG9aOBrrLpVT+0XirfwXSklJD4/Fu0=;
+        b=z3XXlTp0Uq1z/SpwR/LLay3zWfXJd04XJi9ufCRb/w5oh0KDNXSBejRwWGYP0DFk6gLQ59
+        Yq0KklMc55vcRMCQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: Re: [PATCH v6] random: defer fast pool mixing to worker
+Message-ID: <Ygo6EX1YVgTrtjVT@linutronix.de>
+References: <YgZ6IEbiDgz5X1ON@linutronix.de>
+ <20220211162515.554867-1-Jason@zx2c4.com>
+ <YgaSYlVEBOxfJbSD@linutronix.de>
+ <CAHmME9rC_q4LGq2JaAAeGbtRA2cibTe9bnvhMLng+QnzAy2DVg@mail.gmail.com>
+ <YgaV0UZO1KfmtLLh@linutronix.de>
+ <CAHmME9rsOWuprpYqo9G9eUboQwUxRgWqYRYgyHG7cNOG16c5EA@mail.gmail.com>
+ <YgoeBYJ5nwc8BTG3@linutronix.de>
+ <CAHmME9otmV1QCX29D_DXsHB-41puTKurWtyZ39huPZtD4mt5ng@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1173246756.12597.1643879936765.JavaMail.zimbra@nod.at>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHmME9otmV1QCX29D_DXsHB-41puTKurWtyZ39huPZtD4mt5ng@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Richard,
-
-Thank you for taking a look at this patch series.
-
-> > +	if (req.start + req.len > mtd->size) {
+On 2022-02-14 11:17:20 [+0100], Jason A. Donenfeld wrote:
+> On 2/14/22, Sebastian Andrzej Siewior <bigeasy@linutronix.de> wrote:
+> > to
+> > | - Does anything anywhere call get_random_xx() before the worker has a
+> > |   chance to run?
+> >
+> > Once you queue a work item I don't think that the scheduler needs to put
+> > it on the CPU right away. It may have already have other tasks waiting
+> > including some with a RT priority.
+> > Also, the lock is irqsave() so they can be users in an interrupt
+> > handler. I remember the original reason why I made it irqsave is because
+> > something did kmalloc() and SLUB somehow asked for random bits.
 > 
-> I think this can overflow since both req.start and req.len are u64.
-> So an evil-doer might bypass this check.
+> Right. So there are two sides of the questions: 1) how bad is this
+> actual race, and are there any drivers that do regularly get bit by
+> this? 2) There's a largeish window between workqueue_init_early()
+> setting up the system highprio workqueue, and workqueue_init()
+> enabling queued workers to actually run. Interrupts also get enabled
+> in the interim. Does anything get bit by that window?
 
-You are right, thanks.  I adopted this check from mtd_check_oob_ops()
-and your comment made me think that maybe the MEMREADOOB64/MEMWRITEOOB64
-ioctls are affected as well, but it looks like 'len' is a 32-bit integer
-in those other cases, so they look safe to me.
+This is only important during boot-up, right? Otherwise it just extracts
+entropy from the pool.
+I posted numbers earlier on where the work go scheduled and the three or
+four interrupts came in before the work-item was scheduled. I could send
+you the diff if you want to up it on some machines.
+ 
+> Jason
 
-However, the MEMWRITE ioctl does seem to be affected by the same issue
-since commit f6562bca84d22525f792305e3106571f8714d057 ("mtdchar: prevent
-unbounded allocation in MEMWRITE ioctl"), see mtdchar_write_ioctl().
-
-Changing the 'len' and 'ooblen' fields of struct mtd_{read,write}_req to
-u32 would break userspace, so that is not an option.  Would truncating
-req.len to 32 bits (req.len &= 0xffffffff) early in the two relevant
-functions be the way to go?  I guess such a change should be reflected
-in include/uapi/mtd/mtd-abi.h, too.
-
--- 
-Best regards,
-Michał Kępień
+Sebastian

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D380C4B55AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:12:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 294B74B55B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356175AbiBNQKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 11:10:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53634 "EHLO
+        id S1356195AbiBNQK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 11:10:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356150AbiBNQKT (ORCPT
+        with ESMTP id S1356159AbiBNQKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 11:10:19 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0364D27C
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:10:11 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id k1so27666139wrd.8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:10:11 -0800 (PST)
+        Mon, 14 Feb 2022 11:10:22 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DD560A9B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:10:12 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id o24so25023524wro.3
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:10:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=SEIW7YRrgEve1EnXf1IOLow6tqVRtOQkIRjRHaqNPcY=;
-        b=jgc5X1dKFdko4ZVk0ZRuMd+ChZLeODM3JVlLaCVZwY/IsXQCLT+7KPiIfdq8HOVrMf
-         MGBQZryx7CA6FZgswngZ6fGlcDUFZvj7dQBZc4XlZkSyyGRLJ960WwYcmZ/atfIV20h+
-         MBB2Mtdry1zRrnB80CMjAKLbZSrR3og9zWldJmc1ikyilR1yUKVMUvu0zHqHSEEaRyDC
-         fjdF58agxlSCeH/MQ9JTNhUKui7RANaib/oIDEMkIzT13Bnj2jvtVhCUcSoWT/DYgHIP
-         VxOCfe0QaKZQcWfNXecsUkbCdth2ZbMzQNH0rylRF+bCNPaQW8L0ajH4BVDEqRtU0w5F
-         c14g==
+        bh=x9uRKtqCvCxuePfYK0JAx8QeSBxwo9Y+7tq8m7yx3w0=;
+        b=WlvCopevW8b5o/72zfeOhvEXYQ8rB+v5AzHGOpdqFflewuoDHhb29my/5AhgSyQCqk
+         i5R3HjMlwDwhaYbR1USnLuYHZCtDQlv8Yq3T/MgoLSg81GOu33i/ALbHZkJkLnA3Od6h
+         XeRB6kUdTAhP/D4f1lYRrEwjV2NCgS/QuuLRr99dKP8qCxdaNI2S6IW2WB1BzC2HGP2B
+         aM+iPnRuHyJPW23QEd3/n7Zt1/ISKusWbvSnmjbn/v6Hkdb7fd43LjBHXiNTCyiej8TI
+         nhDlEeWfn8BifSRv5hpZPGCncCMvUEEnIJPWIV9AYken23zBh6wcn/4hXq81Y3B2bJGw
+         SxoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=SEIW7YRrgEve1EnXf1IOLow6tqVRtOQkIRjRHaqNPcY=;
-        b=IBJ/XfDVlpbxbaH12tQUc/RmbFAaN0UtdF0CBA5PhZEBHndBr8gbjL8//gj2zCPzoA
-         ZQvBo5vQY5KpqJkg1OUwuJEsryNme9suxCwF0ZdJmdhYXjCMfZfaAcZ8B6vAIHAxItTQ
-         Ssv/McI9dk08XPZQBxnRUlG2Lm9Q5eDZ5kHaK4CjQ4iBf+c0H9zOyvtCdCp/6TZjlcmy
-         0sl98Pp3UQqYwsVo+fU4JgSONLRWvgMiYxwFz1VAZdhfna1+t8st3H/JeCL4Q28LW/N9
-         jQbtvjYA9UcydU905mKGlq4/YGWZ7ix+Xsn22UVHagVwWAj1W4ayA1FuFBLC628B+5IR
-         Iohw==
-X-Gm-Message-State: AOAM533WYRHd6U7uLz06FF1p/6mk+l4yFbt/12xkdk4v1NqQ34+BroHd
-        1J/OqLl+NdTa53lohk5mNY6+zA==
-X-Google-Smtp-Source: ABdhPJxGFVc++ge9jYRM0IOsARHmNmfpAjBwRDg0lHq5RSa5Kwr9qpXa3HUJM8x2HSDkE1/lF0Yxow==
-X-Received: by 2002:adf:f2cb:: with SMTP id d11mr286204wrp.286.1644855009772;
-        Mon, 14 Feb 2022 08:10:09 -0800 (PST)
+        bh=x9uRKtqCvCxuePfYK0JAx8QeSBxwo9Y+7tq8m7yx3w0=;
+        b=RKbDbpx6q8VHsq4wstConW95D91DtvVEl8axz5ffXlI33JmA8JtED7e6rLLxGN+fpk
+         W4DTpZhGwCQoEYyLYI9a2BnWCVoMsJRR6Kab7mcKSRnheJvSEo2Q2yRQvDmE0q28e1ht
+         rzI/X98IRRPjJT9afrpVnlFcsCEP4H23sx9tPy7/1YNt+epHz/kThTY2/b0Pdp19TKUz
+         XUGGdND0SqpoDiI6wJM/E1ku3vtXdpBCirrRTlBBLXgmu8VNSaA2SWEQZcErIGA2eM9P
+         5ZKp+59PnwuBjoW0kJB4iRbHdpItPrdbzB+ESKPxopO/WdJLzJOn5n6484sVNyVF6kaH
+         T/ig==
+X-Gm-Message-State: AOAM532ztdCJehnUSSKhBAUOL44VpEMzY4LNDYRSgm7Bbalfphtq0fDC
+        sz34xKgrLio7xAxZT52pa3wnNg==
+X-Google-Smtp-Source: ABdhPJzV6UXmlK51RlmkwjmvZg1JdPBiVJub4IcAUfCRgceQL+C/VWFByLWMgo28GVrtc0aVjMvKkA==
+X-Received: by 2002:adf:ff82:: with SMTP id j2mr281369wrr.242.1644855010903;
+        Mon, 14 Feb 2022 08:10:10 -0800 (PST)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id k28sm13677022wms.23.2022.02.14.08.10.08
+        by smtp.gmail.com with ESMTPSA id k28sm13677022wms.23.2022.02.14.08.10.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 08:10:09 -0800 (PST)
+        Mon, 14 Feb 2022 08:10:10 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     robh+dt@kernel.org, gregkh@linuxfoundation.org
 Cc:     devicetree@vger.kernel.org, ekangupt@qti.qualcomm.com,
@@ -55,9 +55,9 @@ Cc:     devicetree@vger.kernel.org, ekangupt@qti.qualcomm.com,
         srini@kernel.org, bjorn.andersson@linaro.org,
         linux-arm-msm@vger.kernel.org, Jeya R <jeyr@codeaurora.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v4 02/12] misc: fastrpc: add support for FASTRPC_IOCTL_MEM_MAP/UNMAP
-Date:   Mon, 14 Feb 2022 16:09:52 +0000
-Message-Id: <20220214161002.6831-3-srinivas.kandagatla@linaro.org>
+Subject: [PATCH v4 03/12] misc: fastrpc: Add support to get DSP capabilities
+Date:   Mon, 14 Feb 2022 16:09:53 +0000
+Message-Id: <20220214161002.6831-4-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20220214161002.6831-1-srinivas.kandagatla@linaro.org>
 References: <20220214161002.6831-1-srinivas.kandagatla@linaro.org>
@@ -65,7 +65,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,284 +75,185 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jeya R <jeyr@codeaurora.org>
 
-Add support for IOCTL requests to map and unmap on DSP based on map
-flags.
+Add support to get DSP capabilities. The capability information is cached
+on driver.
 
 Signed-off-by: Jeya R <jeyr@codeaurora.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/misc/fastrpc.c      | 154 ++++++++++++++++++++++++++++++++++++
- include/uapi/misc/fastrpc.h |  51 ++++++++++++
- 2 files changed, 205 insertions(+)
+ drivers/misc/fastrpc.c      | 112 ++++++++++++++++++++++++++++++++++++
+ include/uapi/misc/fastrpc.h |   8 +++
+ 2 files changed, 120 insertions(+)
 
 diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-index 7e1c66591716..e3253daba0f9 100644
+index e3253daba0f9..528ae5777586 100644
 --- a/drivers/misc/fastrpc.c
 +++ b/drivers/misc/fastrpc.c
-@@ -72,6 +72,8 @@
- #define FASTRPC_RMID_INIT_CREATE	6
- #define FASTRPC_RMID_INIT_CREATE_ATTR	7
- #define FASTRPC_RMID_INIT_CREATE_STATIC	8
-+#define FASTRPC_RMID_INIT_MEM_MAP      10
-+#define FASTRPC_RMID_INIT_MEM_UNMAP    11
+@@ -31,10 +31,15 @@
+ #define FASTRPC_PHYS(p)	((p) & 0xffffffff)
+ #define FASTRPC_CTX_MAX (256)
+ #define FASTRPC_INIT_HANDLE	1
++#define FASTRPC_DSP_UTILITIES_HANDLE	2
+ #define FASTRPC_CTXID_MASK (0xFF0)
+ #define INIT_FILELEN_MAX (2 * 1024 * 1024)
+ #define FASTRPC_DEVICE_NAME	"fastrpc"
+ #define ADSP_MMAP_ADD_PAGES 0x1000
++#define DSP_UNSUPPORTED_API (0x80000414)
++/* MAX NUMBER of DSP ATTRIBUTES SUPPORTED */
++#define FASTRPC_MAX_DSP_ATTRIBUTES (256)
++#define FASTRPC_MAX_DSP_ATTRIBUTES_LEN (sizeof(u32) * FASTRPC_MAX_DSP_ATTRIBUTES)
  
- /* Protection Domain(PD) ids */
- #define AUDIO_PD	(0) /* also GUEST_OS PD? */
-@@ -108,12 +110,29 @@ struct fastrpc_mmap_req_msg {
- 	s32 num;
- };
- 
-+struct fastrpc_mem_map_req_msg {
-+	s32 pgid;
-+	s32 fd;
-+	s32 offset;
-+	u32 flags;
-+	u64 vaddrin;
-+	s32 num;
-+	s32 data_len;
-+};
-+
- struct fastrpc_munmap_req_msg {
- 	s32 pgid;
- 	u64 vaddr;
- 	u64 size;
- };
- 
-+struct fastrpc_mem_unmap_req_msg {
-+	s32 pgid;
-+	s32 fd;
-+	u64 vaddrin;
-+	u64 len;
-+};
-+
- struct fastrpc_msg {
- 	int pid;		/* process group id */
- 	int tid;		/* thread id */
-@@ -170,6 +189,7 @@ struct fastrpc_map {
- 	u64 size;
- 	void *va;
- 	u64 len;
-+	u64 raddr;
+ /* Retrives number of input buffers from the scalars parameter */
+ #define REMOTE_SCALARS_INBUFS(sc)	(((sc) >> 16) & 0x0ff)
+@@ -233,6 +238,9 @@ struct fastrpc_channel_ctx {
+ 	struct idr ctx_idr;
+ 	struct list_head users;
  	struct kref refcount;
++	/* Flag if dsp attributes are cached */
++	bool valid_attributes;
++	u32 dsp_attributes[FASTRPC_MAX_DSP_ATTRIBUTES];
+ 	struct fastrpc_device *fdevice;
  };
  
-@@ -1493,6 +1513,134 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl, char __user *argp)
+@@ -1371,6 +1379,107 @@ static int fastrpc_invoke(struct fastrpc_user *fl, char __user *argp)
  	return err;
  }
  
-+static int fastrpc_req_mem_unmap_impl(struct fastrpc_user *fl, struct fastrpc_mem_unmap *req)
++static int fastrpc_get_info_from_dsp(struct fastrpc_user *fl, uint32_t *dsp_attr_buf,
++				     uint32_t dsp_attr_buf_len)
 +{
-+	struct fastrpc_invoke_args args[1] = { [0] = { 0 } };
-+	struct fastrpc_map *map = NULL, *m;
-+	struct fastrpc_mem_unmap_req_msg req_msg = { 0 };
-+	int err = 0;
-+	u32 sc;
-+	struct device *dev = fl->sctx->dev;
++	struct fastrpc_invoke_args args[2] = { 0 };
 +
-+	spin_lock(&fl->lock);
-+	list_for_each_entry_safe(map, m, &fl->maps, node) {
-+		if ((req->fd < 0 || map->fd == req->fd) && (map->raddr == req->vaddr))
-+			break;
-+		map = NULL;
-+	}
++	/* Capability filled in userspace */
++	dsp_attr_buf[0] = 0;
 +
-+	spin_unlock(&fl->lock);
++	args[0].ptr = (u64)(uintptr_t)&dsp_attr_buf_len;
++	args[0].length = sizeof(dsp_attr_buf_len);
++	args[0].fd = -1;
++	args[1].ptr = (u64)(uintptr_t)&dsp_attr_buf[1];
++	args[1].length = dsp_attr_buf_len;
++	args[1].fd = -1;
++	fl->pd = 1;
 +
-+	if (!map) {
-+		dev_err(dev, "map not in list\n");
-+		return -EINVAL;
-+	}
-+
-+	req_msg.pgid = fl->tgid;
-+	req_msg.len = map->len;
-+	req_msg.vaddrin = map->raddr;
-+	req_msg.fd = map->fd;
-+
-+	args[0].ptr = (u64) (uintptr_t) &req_msg;
-+	args[0].length = sizeof(req_msg);
-+
-+	sc = FASTRPC_SCALARS(FASTRPC_RMID_INIT_MEM_UNMAP, 1, 0);
-+	err = fastrpc_internal_invoke(fl, true, FASTRPC_INIT_HANDLE, sc,
-+				      &args[0]);
-+	fastrpc_map_put(map);
-+	if (err)
-+		dev_err(dev, "unmmap\tpt fd = %d, 0x%09llx error\n",  map->fd, map->raddr);
-+
-+	return err;
++	return fastrpc_internal_invoke(fl, true, FASTRPC_DSP_UTILITIES_HANDLE,
++				       FASTRPC_SCALARS(0, 1, 1), args);
 +}
 +
-+static int fastrpc_req_mem_unmap(struct fastrpc_user *fl, char __user *argp)
++static int fastrpc_get_info_from_kernel(struct fastrpc_ioctl_capability *cap,
++					struct fastrpc_user *fl)
 +{
-+	struct fastrpc_mem_unmap req;
-+
-+	if (copy_from_user(&req, argp, sizeof(req)))
-+		return -EFAULT;
-+
-+	return fastrpc_req_mem_unmap_impl(fl, &req);
-+}
-+
-+static int fastrpc_req_mem_map(struct fastrpc_user *fl, char __user *argp)
-+{
-+	struct fastrpc_invoke_args args[4] = { [0 ... 3] = { 0 } };
-+	struct fastrpc_mem_map_req_msg req_msg = { 0 };
-+	struct fastrpc_mmap_rsp_msg rsp_msg = { 0 };
-+	struct fastrpc_mem_unmap req_unmap = { 0 };
-+	struct fastrpc_phy_page pages = { 0 };
-+	struct fastrpc_mem_map req;
-+	struct device *dev = fl->sctx->dev;
-+	struct fastrpc_map *map = NULL;
++	struct fastrpc_channel_ctx *cctx = fl->cctx;
++	uint32_t attribute_id = cap->attribute_id;
++	uint32_t *dsp_attributes;
++	unsigned long flags;
++	uint32_t domain = cap->domain;
 +	int err;
-+	u32 sc;
 +
-+	if (copy_from_user(&req, argp, sizeof(req)))
-+		return -EFAULT;
++	spin_lock_irqsave(&cctx->lock, flags);
++	/* check if we already have queried dsp for attributes */
++	if (cctx->valid_attributes) {
++		spin_unlock_irqrestore(&cctx->lock, flags);
++		goto done;
++	}
++	spin_unlock_irqrestore(&cctx->lock, flags);
 +
-+	/* create SMMU mapping */
-+	err = fastrpc_map_create(fl, req.fd, req.length, &map);
-+	if (err) {
-+		dev_err(dev, "failed to map buffer, fd = %d\n", req.fd);
++	dsp_attributes = kzalloc(FASTRPC_MAX_DSP_ATTRIBUTES_LEN, GFP_KERNEL);
++	if (!dsp_attributes)
++		return -ENOMEM;
++
++	err = fastrpc_get_info_from_dsp(fl, dsp_attributes, FASTRPC_MAX_DSP_ATTRIBUTES_LEN);
++	if (err == DSP_UNSUPPORTED_API) {
++		dev_info(&cctx->rpdev->dev,
++			 "Warning: DSP capabilities not supported on domain: %d\n", domain);
++		kfree(dsp_attributes);
++		return -EOPNOTSUPP;
++	} else if (err) {
++		dev_err(&cctx->rpdev->dev, "Error: dsp information is incorrect err: %d\n", err);
++		kfree(dsp_attributes);
 +		return err;
 +	}
 +
-+	req_msg.pgid = fl->tgid;
-+	req_msg.fd = req.fd;
-+	req_msg.offset = req.offset;
-+	req_msg.vaddrin = req.vaddrin;
-+	map->va = (void *) (uintptr_t) req.vaddrin;
-+	req_msg.flags = req.flags;
-+	req_msg.num = sizeof(pages);
-+	req_msg.data_len = 0;
-+
-+	args[0].ptr = (u64) (uintptr_t) &req_msg;
-+	args[0].length = sizeof(req_msg);
-+
-+	pages.addr = map->phys;
-+	pages.size = map->size;
-+
-+	args[1].ptr = (u64) (uintptr_t) &pages;
-+	args[1].length = sizeof(pages);
-+
-+	args[2].ptr = (u64) (uintptr_t) &pages;
-+	args[2].length = 0;
-+
-+	args[3].ptr = (u64) (uintptr_t) &rsp_msg;
-+	args[3].length = sizeof(rsp_msg);
-+
-+	sc = FASTRPC_SCALARS(FASTRPC_RMID_INIT_MEM_MAP, 3, 1);
-+	err = fastrpc_internal_invoke(fl, true, FASTRPC_INIT_HANDLE, sc, &args[0]);
-+	if (err) {
-+		dev_err(dev, "mem mmap error, fd %d, vaddr %llx, size %lld\n",
-+			req.fd, req.vaddrin, map->size);
-+		goto err_invoke;
-+	}
-+
-+	/* update the buffer to be able to deallocate the memory on the DSP */
-+	map->raddr = rsp_msg.vaddr;
-+
-+	/* let the client know the address to use */
-+	req.vaddrout = rsp_msg.vaddr;
-+
-+	if (copy_to_user((void __user *)argp, &req, sizeof(req))) {
-+		/* unmap the memory and release the buffer */
-+		req_unmap.vaddr = (uintptr_t) rsp_msg.vaddr;
-+		req_unmap.length = map->size;
-+		fastrpc_req_mem_unmap_impl(fl, &req_unmap);
-+		return -EFAULT;
-+	}
-+
++	spin_lock_irqsave(&cctx->lock, flags);
++	memcpy(cctx->dsp_attributes, dsp_attributes, FASTRPC_MAX_DSP_ATTRIBUTES_LEN);
++	cctx->valid_attributes = true;
++	spin_unlock_irqrestore(&cctx->lock, flags);
++	kfree(dsp_attributes);
++done:
++	cap->capability = cctx->dsp_attributes[attribute_id];
 +	return 0;
-+
-+err_invoke:
-+	fastrpc_map_put(map);
-+
-+	return err;
 +}
 +
- static long fastrpc_device_ioctl(struct file *file, unsigned int cmd,
- 				 unsigned long arg)
++static int fastrpc_get_dsp_info(struct fastrpc_user *fl, char __user *argp)
++{
++	struct fastrpc_ioctl_capability cap = {0};
++	int err = 0;
++
++	if (copy_from_user(&cap, argp, sizeof(cap)))
++		return  -EFAULT;
++
++	cap.capability = 0;
++	if (cap.domain >= FASTRPC_DEV_MAX) {
++		dev_err(&fl->cctx->rpdev->dev, "Error: Invalid domain id:%d, err:%d\n",
++			cap.domain, err);
++		return -ECHRNG;
++	}
++
++	/* Fastrpc Capablities does not support modem domain */
++	if (cap.domain == MDSP_DOMAIN_ID) {
++		dev_err(&fl->cctx->rpdev->dev, "Error: modem not supported %d\n", err);
++		return -ECHRNG;
++	}
++
++	if (cap.attribute_id >= FASTRPC_MAX_DSP_ATTRIBUTES) {
++		dev_err(&fl->cctx->rpdev->dev, "Error: invalid attribute: %d, err: %d\n",
++			cap.attribute_id, err);
++		return -EOVERFLOW;
++	}
++
++	err = fastrpc_get_info_from_kernel(&cap, fl);
++	if (err)
++		return err;
++
++	if (copy_to_user(argp, &cap.capability, sizeof(cap.capability)))
++		return -EFAULT;
++
++	return 0;
++}
++
+ static int fastrpc_req_munmap_impl(struct fastrpc_user *fl,
+ 				   struct fastrpc_req_munmap *req)
  {
-@@ -1522,6 +1670,12 @@ static long fastrpc_device_ioctl(struct file *file, unsigned int cmd,
- 	case FASTRPC_IOCTL_MUNMAP:
- 		err = fastrpc_req_munmap(fl, argp);
+@@ -1676,6 +1785,9 @@ static long fastrpc_device_ioctl(struct file *file, unsigned int cmd,
+ 	case FASTRPC_IOCTL_MEM_UNMAP:
+ 		err = fastrpc_req_mem_unmap(fl, argp);
  		break;
-+	case FASTRPC_IOCTL_MEM_MAP:
-+		err = fastrpc_req_mem_map(fl, argp);
-+		break;
-+	case FASTRPC_IOCTL_MEM_UNMAP:
-+		err = fastrpc_req_mem_unmap(fl, argp);
++	case FASTRPC_IOCTL_GET_DSP_INFO:
++		err = fastrpc_get_dsp_info(fl, argp);
 +		break;
  	default:
  		err = -ENOTTY;
  		break;
 diff --git a/include/uapi/misc/fastrpc.h b/include/uapi/misc/fastrpc.h
-index 0a89f95463f6..d248eeb20e67 100644
+index d248eeb20e67..7cc9d342078a 100644
 --- a/include/uapi/misc/fastrpc.h
 +++ b/include/uapi/misc/fastrpc.h
-@@ -13,6 +13,37 @@
- #define FASTRPC_IOCTL_MMAP		_IOWR('R', 6, struct fastrpc_req_mmap)
- #define FASTRPC_IOCTL_MUNMAP		_IOWR('R', 7, struct fastrpc_req_munmap)
+@@ -15,6 +15,7 @@
  #define FASTRPC_IOCTL_INIT_ATTACH_SNS	_IO('R', 8)
-+#define FASTRPC_IOCTL_MEM_MAP		_IOWR('R', 10, struct fastrpc_mem_map)
-+#define FASTRPC_IOCTL_MEM_UNMAP		_IOWR('R', 11, struct fastrpc_mem_unmap)
-+
-+/**
-+ * enum fastrpc_map_flags - control flags for mapping memory on DSP user process
-+ * @FASTRPC_MAP_STATIC: Map memory pages with RW- permission and CACHE WRITEBACK.
-+ * The driver is responsible for cache maintenance when passed
-+ * the buffer to FastRPC calls. Same virtual address will be
-+ * assigned for subsequent FastRPC calls.
-+ * @FASTRPC_MAP_RESERVED: Reserved
-+ * @FASTRPC_MAP_FD: Map memory pages with RW- permission and CACHE WRITEBACK.
-+ * Mapping tagged with a file descriptor. User is responsible for
-+ * CPU and DSP cache maintenance for the buffer. Get virtual address
-+ * of buffer on DSP using HAP_mmap_get() and HAP_mmap_put() APIs.
-+ * @FASTRPC_MAP_FD_DELAYED: Mapping delayed until user call HAP_mmap() and HAP_munmap()
-+ * functions on DSP. It is useful to map a buffer with cache modes
-+ * other than default modes. User is responsible for CPU and DSP
-+ * cache maintenance for the buffer.
-+ * @FASTRPC_MAP_FD_NOMAP: This flag is used to skip CPU mapping,
-+ * otherwise behaves similar to FASTRPC_MAP_FD_DELAYED flag.
-+ * @FASTRPC_MAP_MAX: max count for flags
-+ *
-+ */
-+enum fastrpc_map_flags {
-+	FASTRPC_MAP_STATIC = 0,
-+	FASTRPC_MAP_RESERVED,
-+	FASTRPC_MAP_FD = 2,
-+	FASTRPC_MAP_FD_DELAYED,
-+	FASTRPC_MAP_FD_NOMAP = 16,
-+	FASTRPC_MAP_MAX,
-+};
+ #define FASTRPC_IOCTL_MEM_MAP		_IOWR('R', 10, struct fastrpc_mem_map)
+ #define FASTRPC_IOCTL_MEM_UNMAP		_IOWR('R', 11, struct fastrpc_mem_unmap)
++#define FASTRPC_IOCTL_GET_DSP_INFO	_IOWR('R', 13, struct fastrpc_ioctl_capability)
  
- struct fastrpc_invoke_args {
- 	__u64 ptr;
-@@ -49,9 +80,29 @@ struct fastrpc_req_mmap {
- 	__u64 vaddrout;	/* dsp virtual address */
+ /**
+  * enum fastrpc_map_flags - control flags for mapping memory on DSP user process
+@@ -105,4 +106,11 @@ struct fastrpc_mem_unmap {
+ 	__s32 reserved[5];
  };
  
-+struct fastrpc_mem_map {
-+	__s32 version;
-+	__s32 fd;		/* fd */
-+	__s32 offset;		/* buffer offset */
-+	__u32 flags;		/* flags defined in enum fastrpc_map_flags */
-+	__u64 vaddrin;		/* buffer virtual address */
-+	__u64 length;		/* buffer length */
-+	__u64 vaddrout;		/* [out] remote virtual address */
-+	__s32 attrs;		/* buffer attributes used for SMMU mapping */
-+	__s32 reserved[4];
-+};
-+
- struct fastrpc_req_munmap {
- 	__u64 vaddrout;	/* address to unmap */
- 	__u64 size;	/* size */
- };
- 
-+struct fastrpc_mem_unmap {
-+	__s32 vesion;
-+	__s32 fd;		/* fd */
-+	__u64 vaddr;		/* remote process (dsp) virtual address */
-+	__u64 length;		/* buffer size */
-+	__s32 reserved[5];
++struct fastrpc_ioctl_capability {
++	__u32 domain;
++	__u32 attribute_id;
++	__u32 capability;   /* dsp capability */
++	__u32 reserved[4];
 +};
 +
  #endif /* __QCOM_FASTRPC_H__ */

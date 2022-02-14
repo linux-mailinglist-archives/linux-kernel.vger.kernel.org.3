@@ -2,98 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEF94B5514
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 16:45:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA234B551A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 16:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356004AbiBNPpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 10:45:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40432 "EHLO
+        id S1356012AbiBNPqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 10:46:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355974AbiBNPpm (ORCPT
+        with ESMTP id S238595AbiBNPqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 10:45:42 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43124925B;
-        Mon, 14 Feb 2022 07:45:34 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id be32so4360655ljb.7;
-        Mon, 14 Feb 2022 07:45:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=FztyKzv6dHpMb2LTGno+rYgClFz3GISrzuq2OrZ/IwY=;
-        b=EqAR2DrGCWZ91yI5D95Slj+Hv/MWRuc+Qs8FANyKXabFHwOqD7XFM6u6msaoxC1VBu
-         qfCmMQ7XGC7XPXzS89OEnNFv2MaJfVljKYFyWSyQ2zjzfj+bHHqbgd5WaacP6JkcpkdB
-         8ECH4uiE+NvFKqfbejg+dib3ux/04rLuDvb0le0DY+vyX++PMK7boD77Suuk8mXcLNOQ
-         fb4P8fN2ZDJbZbime1vfonsnKTs9RnQyCdJFxAHtsa1V3gtVF9/ImpIffz+LZhoolNRs
-         6q6zOuhfbgizawGuN2PbYRQHspZf/7ZTZiv2kfrWWGHNI7Mx5TwSnzxu0phi3I1nCKgj
-         PCTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=FztyKzv6dHpMb2LTGno+rYgClFz3GISrzuq2OrZ/IwY=;
-        b=FVaIImMZ1B6xubx8vySEAWXfhL/IblIgxS/eNFSpJV9idAswQVrQk7t7WI0WDm8r+D
-         Hxf2g0sQfSFxrGJVFLdMOvYYWd/JhoixQ/njFiLgvNBZcLtJyVVNiaCkM7tuoyAbzU9Z
-         gJOcRAmoVuhMpm0dkZZHme6uKl8qskVGTtycd44uia7NUHMlSVmG+gV/pJRywoTMAWtU
-         6ItPO15YEG7WZtrZFIHGHTTAFVyTPSLzCzFIK9JjB618L6wjaIU66053gx0LrGBwBCEn
-         wPH0nN2Oa83UE0HKQVP5GRPZGuATyejwDS2L9A08JxOsfKQQKYGuoFQLhTCG5AmTBNMe
-         L6RQ==
-X-Gm-Message-State: AOAM531BB0gCInR/N6JS0qK0rNPWW8UKmT/2/4oogIEfqiPdNCYxFXmS
-        YrwHZgqYywDZ8KInniuhQN0=
-X-Google-Smtp-Source: ABdhPJxpkWABFSdPJOyelxvjRIAFbTf6BXxGaSHaa1Yc0Ah+DCfx6cpknNQBu/fNNUq7b7IBE/G0cg==
-X-Received: by 2002:a05:651c:2051:: with SMTP id t17mr219765ljo.207.1644853533194;
-        Mon, 14 Feb 2022 07:45:33 -0800 (PST)
-Received: from [192.168.1.103] ([31.173.86.214])
-        by smtp.gmail.com with ESMTPSA id t15sm376002lfr.72.2022.02.14.07.45.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 07:45:32 -0800 (PST)
-Subject: Re: [PATCH] xhci: reduce xhci_handshake timeout in xhci_reset
-To:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Sarah Sharp <sarah.a.sharp@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_ugoswami@quicinc.com, Jung Daehwan <dh10.jung@samsung.com>
-References: <1644836663-29220-1-git-send-email-quic_pkondeti@quicinc.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <766b6370-979e-cd3c-cb64-44abce1977d7@gmail.com>
-Date:   Mon, 14 Feb 2022 18:45:30 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Mon, 14 Feb 2022 10:46:36 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3719626D
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 07:46:27 -0800 (PST)
+Received: (Authenticated sender: gregory.clement@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id F3629240006;
+        Mon, 14 Feb 2022 15:46:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1644853586;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6ywu1zL9TscboOTL+KoPo7dZ6f2fEaqerWdTVr9qxik=;
+        b=A4CnLIzQ5f3D5+0+ZyuCP8fGLUGNr3eCLcIRf21jidFewb//SlR/zb7Lyd0/MOE8NLVvVa
+        sTDqJpZchwZd8AC4M1eDjlR6E+X1I3Ie61VNE7VW9RZ5MlcWLIVVen8yJ0zQfddAxaWfLK
+        iuymkZZEOra8qtl/QUyEza2pc6mlD4S/GXvcQSDlyL2BrswAzLeo5z7S8Tblj26PDs7rkI
+        LWtXjgHLPPM10VL5MzpMBm3JZXErjsRlw5JylQQn3HMir4dQNXgjzXd1nd9pVP4W7jxeor
+        kw2AG71XY9qOvX9sMqZub7Vgo8zNVBxEz0yWWA/XseLaufRAmKk6r6fkOv/krA==
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>,
+        Pali =?utf-8?Q?Roh?= =?utf-8?Q?=C3=A1r?= <pali@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>
+Subject: Re: [PATCH v8 5/6] arm64: dts: marvell: armada-37xx: add device
+ node for UART clock and use it
+In-Reply-To: <20220211191238.2142-6-kabel@kernel.org>
+References: <20220211191238.2142-1-kabel@kernel.org>
+ <20220211191238.2142-6-kabel@kernel.org>
+Date:   Mon, 14 Feb 2022 16:46:25 +0100
+Message-ID: <87leydjvse.fsf@BL-laptop>
 MIME-Version: 1.0
-In-Reply-To: <1644836663-29220-1-git-send-email-quic_pkondeti@quicinc.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+Hello Marek and Pali,
 
-On 2/14/22 2:04 PM, Pavankumar Kondeti wrote:
+> From: Pali Roh=C3=A1r <pali@kernel.org>
+>
+> Define DT node for UART clock "marvell,armada-3700-uart-clock" and use
+> this UART clock as a base clock for all UART devices.
+>
+> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
+> Reviewed-by: Marek Beh=C3=BAn <kabel@kernel.org>
+> Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org>
 
-> From: Daehwan Jung <dh10.jung@samsung.com>
-> 
-> xhci_reset() is called with interrupts disabled. Waiting 10 seconds for
-> controller reset and controller ready operations can be fatal to the
-> system when controller is timed out. Reduce the timeout to 1 second
-> and print a error message when the time out happens.
+Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 
-   Waiting 1 second with IRQs diabled is also hardly acceptable. :-/
+However for keeping bisectability we have to ensure that this patch will
+be applied after the drivers changes.
 
-> 
-> Fixes: 22ceac191211 ("xhci: Increase reset timeout for Renesas 720201 host.")
-> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-[...]
+Thanks,
 
-MBR, Sergey
+Gregory
+
+
+> ---
+> Changes since v7:
+> - changed commit message ("This change defines" -> "Define")
+> - added Marek's Reviewed-by tag
+> ---
+>  arch/arm64/boot/dts/marvell/armada-37xx.dtsi | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi b/arch/arm64/bo=
+ot/dts/marvell/armada-37xx.dtsi
+> index 673f4906eef9..4cf6c8aa0ac2 100644
+> --- a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+> +++ b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+> @@ -132,10 +132,20 @@ avs: avs@11500 {
+>  				reg =3D <0x11500 0x40>;
+>  			};
+>=20=20
+> +			uartclk: clock-controller@12010 {
+> +				compatible =3D "marvell,armada-3700-uart-clock";
+> +				reg =3D <0x12010 0x4>, <0x12210 0x4>;
+> +				clocks =3D <&tbg 0>, <&tbg 1>, <&tbg 2>,
+> +					 <&tbg 3>, <&xtalclk>;
+> +				clock-names =3D "TBG-A-P", "TBG-B-P", "TBG-A-S",
+> +					      "TBG-B-S", "xtal";
+> +				#clock-cells =3D <1>;
+> +			};
+> +
+>  			uart0: serial@12000 {
+>  				compatible =3D "marvell,armada-3700-uart";
+>  				reg =3D <0x12000 0x18>;
+> -				clocks =3D <&xtalclk>;
+> +				clocks =3D <&uartclk 0>;
+>  				interrupts =3D
+>  				<GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
+>  				<GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
+> @@ -147,7 +157,7 @@ uart0: serial@12000 {
+>  			uart1: serial@12200 {
+>  				compatible =3D "marvell,armada-3700-uart-ext";
+>  				reg =3D <0x12200 0x30>;
+> -				clocks =3D <&xtalclk>;
+> +				clocks =3D <&uartclk 1>;
+>  				interrupts =3D
+>  				<GIC_SPI 30 IRQ_TYPE_EDGE_RISING>,
+>  				<GIC_SPI 31 IRQ_TYPE_EDGE_RISING>;
+> --=20
+> 2.34.1
+>
+
+--=20
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com

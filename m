@@ -2,208 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9954B5950
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 19:05:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2292C4B5964
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 19:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354630AbiBNSFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 13:05:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54548 "EHLO
+        id S1357342AbiBNSKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 13:10:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343834AbiBNSF2 (ORCPT
+        with ESMTP id S235368AbiBNSKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 13:05:28 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2081.outbound.protection.outlook.com [40.107.237.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11574DF73;
-        Mon, 14 Feb 2022 10:05:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CRjVLdQcb4bIvJoDONPtohzy/Lg8LS8oAuVpu/jJTAa5qUDO1dAKwcaz1jt6rbUiURz2kH77cugUTUW2NBnKKOoBtJWy2E3BgIOL3Em0kBHgY41exsUDWUgVmKd+1CUm/FwBCAVo6gRSW1v8KfXtCu9+81lT/v/W6QSnAZNP3lbMskCb7OuK3NHTV2Pq14koec/V6Adfl8mWaco8jxR6moZ2rXMzUEMQNJy2BgPb8uM4w2Lfybaxlyqs7PKjw7f9Rxos607ovGqApUILi7tmjks9hjRgk5MJsDL2blmQItq1M/lusKDigXH1vqYHtlKErjJIxhrepqC34caqCTr5uw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oDqRPe5JWIosiyBGJnr9jCAfa96tzCK2FopIl7wEoc4=;
- b=bEllzGDXw+65YATMgeBi1hatrybl+qHed5puLRleeGlsMglw2CYNReG1MSFA21WLkSLSAFMSrfoRBZUGYHVt6Og3HGUAyO2OgruhaBzDbi4Y1tD+vbacWkIaHwJEbU4E7qc44vBKjG0wqPWniLmiP1XupJ8rYqruOF3wHcn5oXpMHDtnXuQW69QmN/+iD9edce7jEPPEq/sqCQ+3L/EH8YOdV88P5mwpo0Q/6NpD5uAlZFA/WTjYRWSZh383hNVKRwGZYiJvohy19wRNvZqQYVacA7ynfeYmAm6NFS+KdfUHVE5IfTlpcMIN9wqXFI1BTFEqm9eUZ9Hr+QVvf18OXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oDqRPe5JWIosiyBGJnr9jCAfa96tzCK2FopIl7wEoc4=;
- b=saj6/OYr99s37MEk4dZw/ve8RRKB2WZxJ73vhvFK8giAH07YUBj2d42CvShnGN4/YicSrjs/e/hFaBTr/VWW+V2fA5/icrEw6DlvsPf/WzFyXjLii5eTHXHBzLqqPcFTH8HYp60E0Q9dNTZYayYUAy48WP+xCpj4/5HZOSnQAL6zPGQoNMNhFNbgGyVSr/2ow5RZ2lmCZRP/BOrvhfCaSGgZzBV3PGleygw7lpFQHnBta2sfEfW5SOEJjwlf85OIf/mHIUows85KR7OWWufhBxDvWw5DuPPQ8IjEZ6bXoGWTNlA14KqDMy3UdDSEPPhs1yDnEKs+RjIO2we4KrgsGg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
- by DM6PR12MB3803.namprd12.prod.outlook.com (2603:10b6:5:1ce::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Mon, 14 Feb
- 2022 18:05:18 +0000
-Received: from MN2PR12MB3823.namprd12.prod.outlook.com
- ([fe80::cb5:94df:b338:9b5e]) by MN2PR12MB3823.namprd12.prod.outlook.com
- ([fe80::cb5:94df:b338:9b5e%4]) with mapi id 15.20.4975.019; Mon, 14 Feb 2022
- 18:05:18 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
+        Mon, 14 Feb 2022 13:10:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B0BB652E2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:10:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644862209;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CGNOFCt1MU85Ts1xBeqV0FyWp/WQxMTDQKYlq49a4uc=;
+        b=QM6ImguIZ8zc4cCkdJFURHD34Ls3owlDOTdkpmfFPgjf55xKBNBA68rwYbbjrIYv/QDw+v
+        i6wOfxzcl2LAc+dz8o8yepmuHSQ3n0axurH5sFJdnctgJkXXp6Q4I2GmZaOOEUsy68xWzO
+        rnAC4vYaOXo+04ubSRO5X2yxRAoGoY8=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-148-megoJQvKP4Kxl0Xq1PoTrg-1; Mon, 14 Feb 2022 13:10:07 -0500
+X-MC-Unique: megoJQvKP4Kxl0Xq1PoTrg-1
+Received: by mail-qt1-f200.google.com with SMTP id x5-20020ac84d45000000b002cf826b1a18so13160511qtv.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:10:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CGNOFCt1MU85Ts1xBeqV0FyWp/WQxMTDQKYlq49a4uc=;
+        b=HFuFUO8lJFtk0ZJBmgjMCsT7eKvGqGPbMK8acVx+ol0s7qj0q2zjScYVrLfH+V/0jK
+         eGig+tZPyvkMCmNeii/4/sfIi3lKYq0DM+wB7rl4lwfoSrRYK40i36LxPDHEXE23zoCb
+         K84IwUXEFAfuzOYIImLSJ7DGA+hb+TAUtJPKmWBrBZSa7neffJTYmPaG3rQUQmztMPER
+         zhTN5+5l3yKMBcD5mJrxsP2O5vbKtDRiAtT/HgfXDN0uhHJS1jinybTSBZWClc60A9i2
+         pkOAhep3pbTNa5Q4NaT0BPz+FVf68AyBGEKuKd6AvI+MDbwt1AA2DSdwQj2ByQC9FyIf
+         R//w==
+X-Gm-Message-State: AOAM532qSuXqdpj7GbXsEn4XBbUOAZi5La0213eCbeiXoFHK+JbNGEgT
+        XiSRNmVdE5H2Wkf/P90aoV0Kz+uEHw048SGYCSG0qhCmYWycxjYcFbGXwGvFuNCXRggJSda7Ocd
+        PVTuggFUAP0t+DWP08/AX/RPd
+X-Received: by 2002:a05:6214:762:: with SMTP id f2mr693741qvz.24.1644862206859;
+        Mon, 14 Feb 2022 10:10:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx/vy40rnBwdMoVvt1Kva6lhknBX3yMZ/S5wMQcb4vy84dEW8nb/n8AHTcudHMUidnRHHxsJw==
+X-Received: by 2002:a05:6214:762:: with SMTP id f2mr693693qvz.24.1644862206520;
+        Mon, 14 Feb 2022 10:10:06 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::35])
+        by smtp.gmail.com with ESMTPSA id br30sm16056253qkb.67.2022.02.14.10.10.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 10:10:05 -0800 (PST)
+Date:   Mon, 14 Feb 2022 10:10:00 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
         Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        iommu@lists.linux-foundation.org, linux-mm@kvack.org
-Subject: Re: [PATCH v1 2/2] mm: enforce pageblock_order < MAX_ORDER
-Date:   Mon, 14 Feb 2022 13:05:16 -0500
-X-Mailer: MailMate (1.14r5869)
-Message-ID: <CBC1765F-6E95-45BB-8071-3574ED2E6EF4@nvidia.com>
-In-Reply-To: <20220214174132.219303-3-david@redhat.com>
-References: <20220214174132.219303-1-david@redhat.com>
- <20220214174132.219303-3-david@redhat.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_52C0766F-C3EF-48B0-B542-8703D600332F_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: MN2PR08CA0017.namprd08.prod.outlook.com
- (2603:10b6:208:239::22) To MN2PR12MB3823.namprd12.prod.outlook.com
- (2603:10b6:208:168::26)
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
+ unique-symbol` is available
+Message-ID: <20220214181000.xln2qgyzgswjxwcz@treble>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
+ <20220209185752.1226407-3-alexandr.lobakin@intel.com>
+ <20220211174130.xxgjoqr2vidotvyw@treble>
+ <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
+ <20220211183529.q7qi2qmlyuscxyto@treble>
+ <20220214122433.288910-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1bedac8c-7c7e-45d7-c932-08d9efe48f51
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3803:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB3803CD75B1B34562D75EFFB8C2339@DM6PR12MB3803.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sy1xdGBZQNi90JtNXQCBBrSz4Zp1xnaa5FNpv0/b0Wv+Oa5PyZ65kG8soDmzZToQ/0U503dvkZpYYGV60mZb1zaHgao+XNCa9V5KTG9VdHwI/3Hh/g5QIg0EEWw/ffcR38wtwjcgy2zq+riC6SGQkI5A5WGJPOF24ATDaeZMVl8pWTHZcSNesCZaNp5swdXc8WWSf7TsNn1SoK5vYz1O4qs4+8VLAw3HkiZJzDmx18iGSOKItl8ChCBejn7Rqm375yJ8aEFIu1tSJYYM0Qt2t+/tbVPUEZA4SSQRPEYUCOwXuPu2uz5y9A1BZ0ncu8R8tb0orTzcKxRmmuZQS95Ttjcw6d+CTW88UAtMJ79+BCSxfH65uW69hdVO521oHc+Yr2omZTad8fNhOX/Jyr3LLPqWRkAXbFKHMaRV4ZWqPsQor+866C9K+W5APLhCjP1ODt8NwXuqJXYGneWmD5DI0kh+lIzM//X3HImS4o5NfYrlElQIeakghn95GTmxPeFTgbAS399cgST59vzj5dhJu/PqjV05MAJqHNhugavN1o513BQC9ZJlqdjdmDFSVFjYFTS2byDWkgdPh85Dy8riTgC3o4eJCEVZsKJ8uaa+qFzoHf21FP0r/jas/l1UdQTFfoqyiWJ2LjlE8+CmfiOheN7V7OzG4w223lquV6nyfHj4UKQye7ffNH233pngY8ivmVOJGxjNrw0z80hfMtvG3oMHxGx5+NItQIvDz/bf4/b9O87tEm8wb+ESOnAac4k8HiloGkDBw10bft673fOzUFNaS5Srz+sdS/kUi0TW86pKFyF7n3TDQFEvrA3zPBgF
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(2906002)(7416002)(186003)(5660300002)(316002)(235185007)(86362001)(33656002)(966005)(6916009)(2616005)(83380400001)(4326008)(54906003)(6486002)(8676002)(8936002)(66476007)(66946007)(66556008)(508600001)(6506007)(38100700002)(6512007)(21480400003)(36756003)(53546011)(72826004)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?o6xLw9nbY2R8W8ftb+YVl56Agx3I8AH9vAs3SWqSE6+y4aMGWSAn5Enbm1EH?=
- =?us-ascii?Q?3OcASxnYYtpWTsaaN5FhSMkVDatuHKv6NPdFCthcY5bmQfsgnwHlO2T2NGYU?=
- =?us-ascii?Q?F7YPsfNyNqY0V/7IBQlyvNthl4N29SiM+uEEu+gp0wiJVRWbGq6JSZB7HIK2?=
- =?us-ascii?Q?pdEe9o18cdHulz5xTCs7VQppxDCsntoVkczMF5KbtwHzaryT1pVm4JV/kYMT?=
- =?us-ascii?Q?EQZ8CtNVbORPiCRTwV7Z5ZJfiha1iGsTNjkHhnb3ZPgH6WLjbzBtC9Ajcy6Z?=
- =?us-ascii?Q?wIJPKkbe9uqyEFhP05sRpocTgT+FYYeZYxuu8u3n4Kf2LqBnXwoBG320YpOS?=
- =?us-ascii?Q?luTStwvAHEpi1VNO2V/XYSRgDLdIcex5k2/jc38pca/W4EDJeMUZHCZelTJy?=
- =?us-ascii?Q?mx2gPqUhOV6G/gjfiGZRgOdc7aUrU2oIGTrPx4RqE3RCCp9JEpLikkqSQJ6o?=
- =?us-ascii?Q?5Dnxy6j0OUa5eBoc2eywin+4K8xmt1ygyynEjDGUi0byVYQjSTM7TdJYzJGV?=
- =?us-ascii?Q?K5EtrO9YQNlz2sVfLGAFdKYPy2EYmrrZ8BJogs/XrqQLq7iRfIFkYGAZvchg?=
- =?us-ascii?Q?C3PX+cjNTyEBF5HXvxNnAm424B6mPrl/aB4u8/k671MgsKpEdSdld5hBtf3C?=
- =?us-ascii?Q?oficyRRbV+8VTMRNx9zM+7hMTMgB8eAW3uBu9D2HBZYVmYEgDOW5nEf2jEHN?=
- =?us-ascii?Q?xohCuLIRSrK39MaX+FGoqJzYlfrBuF5F4jVs6YnZzLAQx/JRFXAmhUVNRlFt?=
- =?us-ascii?Q?z7UXe39I2Pya9ygNXj7fqYcS+jcjv8ug36Qgs9eu/iXJ+ViG2pYxWEQ/VdLW?=
- =?us-ascii?Q?xx57BUpLoMCpVoiEcvCxENSW2yuCaVXfVY6EojBGEa4AsKgLmJtUp2BeTPru?=
- =?us-ascii?Q?nzbcQdIZDNNhPTrmKw16F6hMITg5KVOlp3kyT/qyZTdinjc+xYQJAs9qWYNU?=
- =?us-ascii?Q?LP3Z5Btd0cLrH2Xzy0Bhg5xZFa08Zo0CQAyPOetsThU8opHoIxBlR4JGSdM0?=
- =?us-ascii?Q?2PoVpGJc9ECNTyyGKTAZ88hyLK7g1xw5lKgOizLKuqO9FNkI5IQrdj9zBc2o?=
- =?us-ascii?Q?lThMIgOZHBvXPfFW3T7dZHUYOQ/zMiCvUNXOQjRjzoFDWIV5Qd622rQ1FYKM?=
- =?us-ascii?Q?qPJ5/5iN/il5YZ9oNIrGaHU7C4Yrv4EyeoXX1pYFVFvi3N0oX774VS1Py0Xo?=
- =?us-ascii?Q?J9Oc1FJtR7bfEkoB1mG9Q9akV7Nq1gZOCMFfKmkB9yJDizPuHc9AjiKSJst8?=
- =?us-ascii?Q?M4S75f4Q7kLsIc/igYkcb5FhvHrT+vjw/bGvkn4A0KcU0t6f6WmdKB9kEtTi?=
- =?us-ascii?Q?/VYmwfMiJgEnGJsoHhd/D5JVssKquI/sj0zEzrcLUnzqcg95ntP0KZc1nLPy?=
- =?us-ascii?Q?IvkJsONA+oNNkKYhUal00JW6ZywgJhYtG1e5ygUfRNCQltCBwyVD4vAvPUku?=
- =?us-ascii?Q?XpllD4HYy3CNhD4hYcrifz9Zkry2679qcNEGi/BTCQ4Kil5J2szaI9Vv6X0j?=
- =?us-ascii?Q?bmUo3SYNCECNK4afOGFd/e+FHBVx7MqTO7YBCe2nuwa6uNAOd8s72aoFytz2?=
- =?us-ascii?Q?CYxz+JrAf6sASkCmyA8=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1bedac8c-7c7e-45d7-c932-08d9efe48f51
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2022 18:05:18.7125
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 37zSVIGHd3M6bTHy67CMXdOvsNscyJW2RyrfG6dpvKmq11mADqnYDTNIOdA4ycK7
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3803
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220214122433.288910-1-alexandr.lobakin@intel.com>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=_MailMate_52C0766F-C3EF-48B0-B542-8703D600332F_=
-Content-Type: text/plain
+On Mon, Feb 14, 2022 at 01:24:33PM +0100, Alexander Lobakin wrote:
+> > One idea I mentioned before, it may be worth exploring changing the "F"
+> > in FGKASLR to "File" instead of "Function".  In other words, only
+> > shuffle at an object-file granularity.  Then, even with duplicates, the
+> > <file+function> symbol pair doesn't change in the symbol table.  And as
+> > a bonus, it should help FGKASLR i-cache performance, significantly.
+> 
+> Yeah, I keep that in mind. However, this wouldn't solve the
+> duplicate static function names problem, right?
+> Let's say you have a static function f() in file1 and f() in file2,
+> then the layout each boot can be
+> 
+> .text.file1  or  .text.file2
+> f()              f()
+> .text.file2      .text.file1
+> f()              f()
+> 
+> and position-based search won't work anyway, right?
 
-On 14 Feb 2022, at 12:41, David Hildenbrand wrote:
+Right, so we'd have to abandon position-based search in favor of
+file+func based search.
 
-> Some places in the kernel don't really expect pageblock_order >=
-> MAX_ORDER, and it looks like this is only possible in corner cases:
->
-> 1) CONFIG_DEFERRED_STRUCT_PAGE_INIT we'll end up freeing pageblock_order
->    pages via __free_pages_core(), which cannot possibly work.
->
-> 2) find_zone_movable_pfns_for_nodes() will roundup the ZONE_MOVABLE
->    start PFN to MAX_ORDER_NR_PAGES. Consequently with a bigger
->    pageblock_order, we could have a single pageblock partially managed by
->    two zones.
->
-> 3) compaction code runs into __fragmentation_index() with order
->    >= MAX_ORDER, when checking WARN_ON_ONCE(order >= MAX_ORDER). [1]
->
-> 4) mm/page_reporting.c won't be reporting any pages with default
->    page_reporting_order == pageblock_order, as we'll be skipping the
->    reporting loop inside page_reporting_process_zone().
->
-> 5) __rmqueue_fallback() will never be able to steal with
->    ALLOC_NOFRAGMENT.
->
-> pageblock_order >= MAX_ORDER is weird either way: it's a pure
-> optimization for making alloc_contig_range(), as used for allcoation of
-> gigantic pages, a little more reliable to succeed. However, if there is
-> demand for somewhat reliable allocation of gigantic pages, affected setups
-> should be using CMA or boottime allocations instead.
->
-> So let's make sure that pageblock_order < MAX_ORDER and simplify.
->
-> [1] https://lkml.kernel.org/r/87r189a2ks.fsf@linux.ibm.com
->
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
->  drivers/virtio/virtio_mem.c     |  9 +++------
->  include/linux/cma.h             |  3 +--
->  include/linux/pageblock-flags.h |  7 +++++--
->  mm/Kconfig                      |  3 +++
->  mm/page_alloc.c                 | 32 ++++++++------------------------
->  5 files changed, 20 insertions(+), 34 deletions(-)
+It's not perfect because there are still a few file+func duplicates.
+But it might be good enough.  We would presumably just refuse to patch a
+duplicate.  Or we could remove them (and enforce their continued removal
+with tooling-based warnings).
 
-LGTM. Thanks. Reviewed-by: Zi Yan <ziy@nvidia.com>
+Another variant of this which I described here
 
---
-Best Regards,
-Yan, Zi
+  https://lore.kernel.org/all/20210125172124.awabevkpvq4poqxf@treble/
 
---=_MailMate_52C0766F-C3EF-48B0-B542-8703D600332F_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-Content-Type: application/pgp-signature; name="signature.asc"
+would be to keep it function-granular, but have kallsyms keep track of
+what file each func belongs to.  Then livepatch could still do the
+file+func based search.
 
------BEGIN PGP SIGNATURE-----
+-- 
+Josh
 
-iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAmIKmd0PHHppeUBudmlk
-aWEuY29tAAoJEJ2yUfNrYfqKTQsP/3r4RQN9p3Adw1F3G0GqaM6LEe8yaHYCK2oz
-FOut1UAs6kTQh71FZ2jwLKIDt8oc2XQF0+2YecquqI+x8l1oWrymuElKoAjO1Qiy
-/xIbLrmnV4GzVFrd802gbQpG/xiIp4GYZMXewwtuJtjyqmF2OL0xyObG61Lp6ZML
-u5WUJ7TzWTmwT0zNeGbkZ4Q1twhzE2kQWFRhEV/rwwFwi3Eua3FANtS+ADQXaCZ7
-kM57KetvtaWlt7TrHn6camKeC4EDrNVb9LKDj2chGvvfIxl6kMuxgWBKbFtQHF9z
-CwkaTZNuAAqWbrVe+6mgKtE+9mtNDpkptgp0zGCuoMnzEm77FiudQoms2gsYDZ9w
-KhT9Semmg7KuoIoxa0qWTc7GiB7/y4YIKOB0hPPQYnlpduau4KkysanRoQxsQ5mf
-oxCyvS4mu5quPzY0qsvVdMtE81K6tmpzDxYu27Qaj6sRnPy3ct/5b2gakoBoYOk5
-wHRXXe+0L0eFfg1C74KFTMJ4j7aWZzKK91CAxuVV9AoiNgu0qeaRebzbgxAPagos
-9dp1q/Wt3P/In2kdBK1yIT4TafT6qKLk+9MgpjKRyXYWKJO17x04YbnlGethojzF
-YrJR8b2ib9ZsuHye1KLoqKx0LFArqXNapwygekbcjN2wp/nyQuWbNGmzzmsLctrm
-H3AT2+DP
-=Pxl+
------END PGP SIGNATURE-----
-
---=_MailMate_52C0766F-C3EF-48B0-B542-8703D600332F_=--

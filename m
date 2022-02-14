@@ -2,58 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F974B44BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 09:46:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D50704B44BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 09:46:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242620AbiBNIq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 03:46:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46366 "EHLO
+        id S239883AbiBNIql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 03:46:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242587AbiBNIqG (ORCPT
+        with ESMTP id S242667AbiBNIq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 03:46:06 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927BD60A88
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:45:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8z7TIo9QpDnq9oRak8ydehEQVIwRZt56PmmHyDJv4Q0=; b=Etj5CWYvMeISloVay/qRvTBmiZ
-        eVdXR0WtDLU8avoWBHTMNsC2mdVq1yej3sdAa/M8i8MJi3XColtlTHXPXfrtIvjLQXPmLaWYchzlI
-        3Hvj0p9NUeeSt2EX28avq/Y1Rsmrso5Ph12xiLJOA/ncaAbY91+edBnfrUalGyfZJEJx3fg5p21v7
-        acgo57i8ovE4tCqvTHUL1DE6nF/A8NUflCcectBMtTYW9s582PGOUV2ho/SD8AW+BAuXIE4YnBdr5
-        qPrFbl+UYY3sriVGX0weMB3ufPW/h93jq0+FwoUJJAzDlt+Hlp/0wtfV3KLbAuzzPGbJNCmrfuaD3
-        qqrMMxbg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJWz7-009s0Y-Vd; Mon, 14 Feb 2022 08:45:26 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B0670300459;
-        Mon, 14 Feb 2022 09:45:22 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 63F292028FBEF; Mon, 14 Feb 2022 09:45:22 +0100 (CET)
-Date:   Mon, 14 Feb 2022 09:45:22 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Borislav Petkov <bp@suse.de>,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        zhangqiao22@huawei.com, tj@kernel.org, dietmar.eggemann@arm.com
-Subject: Re: [GIT PULL] sched/urgent for 5.17-rc4
-Message-ID: <YgoWoh6pIzlsQx6d@hirez.programming.kicks-ass.net>
-References: <Ygj7feK+vdtPw6zj@zn.tnic>
- <CAHk-=wiHUWHHcPLCvyXQKf2wbL3L1SOQSGVuCdf-py6QZGnuqQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiHUWHHcPLCvyXQKf2wbL3L1SOQSGVuCdf-py6QZGnuqQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Mon, 14 Feb 2022 03:46:29 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C3060D8B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:46:12 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 95F83210E0;
+        Mon, 14 Feb 2022 08:46:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644828371; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FgcyUlQOHZEmd4lpMBS5KJ2pIgVe7vbS5MjVf6/TUWQ=;
+        b=VnpFainkeDPnXiogMYL1YtNYfTV9Y1SvGpxMvG3LZnqy347J7B1tWk9vkRJebWg6Tnx4Jy
+        3CB3fhjxS482MkTiRVjvx/vmNxK0i0RQko/BdLUyChqDycFLKj1QBRiKoWfb4qE+wGWQ+/
+        Np9fzHE1dWo3VvBnxw8nBtB5bfpte+0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644828371;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FgcyUlQOHZEmd4lpMBS5KJ2pIgVe7vbS5MjVf6/TUWQ=;
+        b=3KQFiDxssJ95gtwu8kSWNyh6CVOB2Jeu7K/rXFk4DBhFDc8DxP4pf6ayL1vhyZcr58JaoL
+        VD0aPkJakqrNIHDA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 18E41A3B81;
+        Mon, 14 Feb 2022 08:46:11 +0000 (UTC)
+Date:   Mon, 14 Feb 2022 09:46:11 +0100
+Message-ID: <s5h5yphhm3w.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Yu Huang <diwang90@gmail.com>
+Cc:     perex@perex.cz, Takashi Iwai <tiwai@suse.com>,
+        Jeremy Szu <jeremy.szu@canonical.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Hui Wang <hui.wang@canonical.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        Kailang Yang <kailang@realtek.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Sami Loone <sami@loone.fi>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda/realtek: Add quirk for Legion Y9000X 2019
+In-Reply-To: <20220212160835.165065-1-diwang90@gmail.com>
+References: <20220212160835.165065-1-diwang90@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,19 +68,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 13, 2022 at 10:02:22AM -0800, Linus Torvalds wrote:
-> On Sun, Feb 13, 2022 at 4:37 AM Borislav Petkov <bp@suse.de> wrote:
-> >
-> > Tadeusz Struk (1):
-> >       sched/fair: Fix fault in reweight_entity
+On Sat, 12 Feb 2022 17:08:33 +0100,
+Yu Huang wrote:
 > 
-> I've pulled this, but this really smells bad to me.
+> Legion Y9000X 2019 has the same speaker with Y9000X 2020,
+> but with a different quirk address. Add one quirk entry
+> to make the speaker work on Y9000X 2019 too.
 > 
-> If set_load_weight() can see a process that hasn't even had the
-> runqueue pointer set yet, then what keeps *others* from the same
-> thing?
+> Signed-off-by: Yu Huang <diwang90@gmail.com>
 
-Urgh, I think you're right, the moment we enter the pidhash and become
-visible we should be complete. That means the previous commit
-(4ef0c5c6b5ba) is buggered... Let me try and make sense of all that
-cgroup stuff again :-(
+Thanks, applied.
+
+
+Takashi

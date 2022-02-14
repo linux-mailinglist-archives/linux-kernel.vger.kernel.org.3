@@ -2,70 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B215E4B5D70
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 23:12:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C542C4B5D79
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 23:13:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231730AbiBNWJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 17:09:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55142 "EHLO
+        id S231765AbiBNWNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 17:13:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231719AbiBNWJ0 (ORCPT
+        with ESMTP id S230197AbiBNWNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 17:09:26 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D2313C395
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 14:09:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644876557; x=1676412557;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MN0LuCClIf12LDl41vx5eilbtSgL9wlzY9x+3q5BCBs=;
-  b=EtAaLvNpPPRqKtCAEAHuxJgR9s1LR/QdJXfTdqDqJOVPVPSjL3RpDGgS
-   BLtECiS4Uo0ggLD13tQ3LPp1a5nCh4zYqs0d5tTQdkaruw9SP3TEB6REI
-   dLZlI6oqtEAtoR9cY2ZEzlyLmlZHNPjJhC8WdbCjOJI0kUtFGtzFA6dW4
-   dziEpPx1IR1SqRwpOuSNSEKe5Gdj97uJxV/g0QX+0ejzTWA5oRhG1FyDR
-   jDPHJrLXA1tgUSKX22716gsorAChqtpt4RMOARIlvUkvzevy219l+VAev
-   Z3zi/nTXRxnU5INxTmA2Dd+bcR8dc+XVN6Ox1vd/G7e7PLxG7NfFld3aM
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="237604182"
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="237604182"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 14:09:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="635461870"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 14 Feb 2022 14:09:11 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id EC53E107; Tue, 15 Feb 2022 00:09:26 +0200 (EET)
-Date:   Tue, 15 Feb 2022 01:09:26 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Dave Hansen <dave.hansen@intel.com>, tglx@linutronix.de,
-        mingo@redhat.com, luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 22/29] x86/tdx: Make pages shared in ioremap()
-Message-ID: <20220214220926.fjwlyieatwjhcpij@black.fi.intel.com>
-References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
- <20220124150215.36893-23-kirill.shutemov@linux.intel.com>
- <YgFIaJ8ijgQQ04Nv@zn.tnic>
- <1d77e91c-e151-7846-6cd4-6264236ca5ae@intel.com>
- <YgFWpGQfA84Y0mW/@zn.tnic>
+        Mon, 14 Feb 2022 17:13:48 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BDBE13DE23
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 14:13:39 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-3-0IuFZHXpM1-VcUsNfepTpQ-1; Mon, 14 Feb 2022 22:13:36 +0000
+X-MC-Unique: 0IuFZHXpM1-VcUsNfepTpQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Mon, 14 Feb 2022 22:13:34 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Mon, 14 Feb 2022 22:13:34 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@kernel.org>
+CC:     Mark Rutland <mark.rutland@arm.com>, Rich Felker <dalias@libc.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>, Guo Ren <guoren@kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        "Brian Cain" <bcain@codeaurora.org>,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        "Christoph Hellwig" <hch@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>, Arnd Bergmann <arnd@arndb.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        Stafford Horne <shorne@gmail.com>,
+        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        David Miller <davem@davemloft.net>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: RE: [PATCH 04/14] x86: use more conventional access_ok() definition
+Thread-Topic: [PATCH 04/14] x86: use more conventional access_ok() definition
+Thread-Index: AQHYIeHe9n+22PBgtUWxf89GrdwkK6yTmyQw
+Date:   Mon, 14 Feb 2022 22:13:34 +0000
+Message-ID: <2dda07f893cb4ef9b5ea2265adccb98f@AcuMS.aculab.com>
+References: <20220214163452.1568807-1-arnd@kernel.org>
+ <20220214163452.1568807-5-arnd@kernel.org> <YgqLFYqIqkIsNC92@infradead.org>
+ <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
+ <CAHk-=whq6_Nh3cB3FieP481VcRyCu69X3=wO1yLHGmcZEj69SA@mail.gmail.com>
+ <CAHk-=wgYu67OwP4LhcrPdDVxv2mOsx-Xsc2DKoVW6GZwKFtOYQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wgYu67OwP4LhcrPdDVxv2mOsx-Xsc2DKoVW6GZwKFtOYQ@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgFWpGQfA84Y0mW/@zn.tnic>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,49 +110,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 06:28:04PM +0100, Borislav Petkov wrote:
-> On Mon, Feb 07, 2022 at 08:57:39AM -0800, Dave Hansen wrote:
-> > We can surely *do* this with cc_something() helpers.  It's just not as
-> > easy as making cc_set/cc_clear().
-> 
-> Sure, that's easy: cc_pgprot_{enc,dec}() or so.
+RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMTQgRmVicnVhcnkgMjAyMiAyMDoyNA0KPiA+
+DQo+ID4geDg2LTY0IGhhcyBhbHdheXMoKikgdXNlZCBUQVNLX1NJWkVfTUFYIGZvciBhY2Nlc3Nf
+b2soKSwgYW5kIHRoZQ0KPiA+IGdldF91c2VyKCkgYXNzZW1ibGVyIGltcGxlbWVudGF0aW9uIGRv
+ZXMgdGhlIHNhbWUuDQo+IA0KPiBTaWRlIG5vdGU6IHdlIGNvdWxkIGp1c3QgY2hlY2sgdGhlIHNp
+Z24gYml0IGluc3RlYWQsIGFuZCBhdm9pZCBiaWcNCj4gY29uc3RhbnRzIHRoYXQgd2F5Lg0KDQpU
+aGUgY2hlYXAgdGVzdCBmb3IgbW9zdCA2NGJpdCBpcyAoYWRkciB8IHNpemUpID4+IDYyICE9IDAu
+DQoNCkkgZGlkIHNvbWUgdGVzdHMgbGFzdCB3ZWVrIGFuZCB0aGUgY29tcGlsZXJzIGNvcnJlY3Rs
+eSBvcHRpbWlzZQ0Kb3V0IGNvbnN0YW50IHNpemUuDQoNCkRvZXNuJ3Qgc3BhcmM2NCBzdGlsbCBu
+ZWVkIGEgd3JhcCB0ZXN0Pw0KT3IgaXMgdGhhdCBhc3N1bWVkIGJlY2F1c2UgdGhlcmUgaXMgYWx3
+YXlzIGFuIHVubWFwcGVkIHBhZ2UNCmFuZCB0cmFuc2ZlciBhcmUgJ2FkZXF1YXRlbHknIGRvbmUg
+b24gaW5jcmVhc2luZyBhZGRyZXNzZXM/DQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJl
+c3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsx
+IDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-So, I've ended up with this in <asm/pgtable.h>
-
-/*
- * Macros to add or remove encryption attribute
- */
-#ifdef CONFIG_ARCH_HAS_CC_PLATFORM
-pgprotval_t cc_enc(pgprotval_t protval);
-pgprotval_t cc_dec(pgprotval_t protval);
-#define pgprot_encrypted(prot)	__pgprot(cc_enc(pgprot_val(prot)))
-#define pgprot_decrypted(prot)	__pgprot(cc_dec(pgprot_val(prot)))
-#else
-#define pgprot_encrypted(prot) (prot)
-#define pgprot_decrypted(prot) (prot)
-#endif
-
-And cc_platform.c:
-
-pgprotval_t cc_enc(pgprotval_t protval)
-{
-	if (sme_me_mask)
-		return __sme_set(protval);
-	else if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
-		return protval & ~tdx_shared_mask();
-	else
-		return protval;
-}
-
-pgprotval_t cc_dec(pgprotval_t protval)
-{
-	if (sme_me_mask)
-		return __sme_clr(protval);
-	else if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
-		return protval | tdx_shared_mask();
-	else
-		return protval;
-}
-EXPORT_SYMBOL_GPL(cc_dec);
--- 
- Kirill A. Shutemov

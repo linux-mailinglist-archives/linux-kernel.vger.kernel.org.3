@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE374B480E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D03FD4B49D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:37:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244432AbiBNJjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:39:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51354 "EHLO
+        id S1345831AbiBNKLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:11:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244915AbiBNJgZ (ORCPT
+        with ESMTP id S1346141AbiBNKH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:36:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D3365797;
-        Mon, 14 Feb 2022 01:34:12 -0800 (PST)
+        Mon, 14 Feb 2022 05:07:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9ECF75C0D;
+        Mon, 14 Feb 2022 01:50:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 000A260FA2;
-        Mon, 14 Feb 2022 09:34:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7E97C340E9;
-        Mon, 14 Feb 2022 09:34:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86E8E612C3;
+        Mon, 14 Feb 2022 09:50:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D7F2C340E9;
+        Mon, 14 Feb 2022 09:50:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831251;
-        bh=isKue2QWQ1JKQpEPB6MDW/72jnmG+ZUtreUJnlTAIkQ=;
+        s=korg; t=1644832205;
+        bh=8NO9L2EdnhZsgystIDnpu8dqPHL8WI6Q4m/u9+1Qx8o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IhsQsZnygOMZDInKS6wO5sanpvGucNn9V5TN5ZODQp+H6eGdgbXDpzSVLYrXXyjdt
-         LozXG/3tujfMW1WCIviWcmO5QFLc2wFpwJ8N53Gf4IfQu+NzOlc3wcWicTJQfZ+Iea
-         leEvmgUhW4bBPMGwX1mr1DdNDVqMxMv8XBffCn4o=
+        b=B1uDRW3tOruAx5W6SChRfbN/a2Wx4jc81ftBIGyHOVIiFDlKWvTT7kgBfLrIr+s0B
+         zCs3BLHZnU0rOVjWMukZaTLxvtF3txqc6Rxq5p8NWk8k8O/v1u1nNkcdhI4ggkS9Yy
+         LAjaX6WXx+bntu3C43Gfu7JKKqdnK/rY5SwzRPGo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Scott Russell <Scott.Russell2@ncr.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 4.19 45/49] USB: serial: cp210x: add NCR Retail IO box id
+        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 113/172] net: dsa: bcm_sf2: dont use devres for mdiobus
 Date:   Mon, 14 Feb 2022 10:26:11 +0100
-Message-Id: <20220214092449.796430720@linuxfoundation.org>
+Message-Id: <20220214092510.336295985@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
-References: <20220214092448.285381753@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +56,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-commit b50f8f09c622297d3cf46e332e17ba8adedec9af upstream.
+[ Upstream commit 08f1a20822349004bb9cc1b153ecb516e9f2889d ]
 
-Add the device id for NCR's Retail IO box (CP2105) used in NCR FastLane
-SelfServ Checkout - R6C:
+As explained in commits:
+74b6d7d13307 ("net: dsa: realtek: register the MDIO bus under devres")
+5135e96a3dd2 ("net: dsa: don't allocate the slave_mii_bus using devres")
 
-	https://www.ncr.com/product-catalog/ncr-fastlane-selfserv-checkout-r6c
+mdiobus_free() will panic when called from devm_mdiobus_free() <-
+devres_release_all() <- __device_release_driver(), and that mdiobus was
+not previously unregistered.
 
-Reported-by: Scott Russell <Scott.Russell2@ncr.com>
-Cc: stable@vger.kernel.org
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The Starfighter 2 is a platform device, so the initial set of
+constraints that I thought would cause this (I2C or SPI buses which call
+->remove on ->shutdown) do not apply. But there is one more which
+applies here.
+
+If the DSA master itself is on a bus that calls ->remove from ->shutdown
+(like dpaa2-eth, which is on the fsl-mc bus), there is a device link
+between the switch and the DSA master, and device_links_unbind_consumers()
+will unbind the bcm_sf2 switch driver on shutdown.
+
+So the same treatment must be applied to all DSA switch drivers, which
+is: either use devres for both the mdiobus allocation and registration,
+or don't use devres at all.
+
+The bcm_sf2 driver has the code structure in place for orderly mdiobus
+removal, so just replace devm_mdiobus_alloc() with the non-devres
+variant, and add manual free where necessary, to ensure that we don't
+let devres free a still-registered bus.
+
+Fixes: ac3a68d56651 ("net: phy: don't abuse devres in devm_mdiobus_register()")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/serial/cp210x.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/dsa/bcm_sf2.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -52,6 +52,7 @@ static int cp210x_port_remove(struct usb
- static void cp210x_dtr_rts(struct usb_serial_port *p, int on);
+diff --git a/drivers/net/dsa/bcm_sf2.c b/drivers/net/dsa/bcm_sf2.c
+index 7578a5c38df59..2e314e3021d8b 100644
+--- a/drivers/net/dsa/bcm_sf2.c
++++ b/drivers/net/dsa/bcm_sf2.c
+@@ -584,7 +584,7 @@ static int bcm_sf2_mdio_register(struct dsa_switch *ds)
+ 	get_device(&priv->master_mii_bus->dev);
+ 	priv->master_mii_dn = dn;
  
- static const struct usb_device_id id_table[] = {
-+	{ USB_DEVICE(0x0404, 0x034C) },	/* NCR Retail IO Box */
- 	{ USB_DEVICE(0x045B, 0x0053) }, /* Renesas RX610 RX-Stick */
- 	{ USB_DEVICE(0x0471, 0x066A) }, /* AKTAKOM ACE-1001 cable */
- 	{ USB_DEVICE(0x0489, 0xE000) }, /* Pirelli Broadband S.p.A, DP-L10 SIP/GSM Mobile */
+-	priv->slave_mii_bus = devm_mdiobus_alloc(ds->dev);
++	priv->slave_mii_bus = mdiobus_alloc();
+ 	if (!priv->slave_mii_bus) {
+ 		of_node_put(dn);
+ 		return -ENOMEM;
+@@ -644,8 +644,10 @@ static int bcm_sf2_mdio_register(struct dsa_switch *ds)
+ 	}
+ 
+ 	err = mdiobus_register(priv->slave_mii_bus);
+-	if (err && dn)
++	if (err && dn) {
++		mdiobus_free(priv->slave_mii_bus);
+ 		of_node_put(dn);
++	}
+ 
+ 	return err;
+ }
+@@ -653,6 +655,7 @@ static int bcm_sf2_mdio_register(struct dsa_switch *ds)
+ static void bcm_sf2_mdio_unregister(struct bcm_sf2_priv *priv)
+ {
+ 	mdiobus_unregister(priv->slave_mii_bus);
++	mdiobus_free(priv->slave_mii_bus);
+ 	of_node_put(priv->master_mii_dn);
+ }
+ 
+-- 
+2.34.1
+
 
 

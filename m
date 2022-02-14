@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803254B4778
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 815694B4939
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242639AbiBNJpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:45:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33134 "EHLO
+        id S1345747AbiBNKKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:10:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244277AbiBNJln (ORCPT
+        with ESMTP id S1346069AbiBNKHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:41:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8593566FA2;
-        Mon, 14 Feb 2022 01:37:38 -0800 (PST)
+        Mon, 14 Feb 2022 05:07:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B2F6C1EF;
+        Mon, 14 Feb 2022 01:50:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2126460DFD;
-        Mon, 14 Feb 2022 09:37:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A33E9C340E9;
-        Mon, 14 Feb 2022 09:37:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B929DB80DC4;
+        Mon, 14 Feb 2022 09:50:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1852C340E9;
+        Mon, 14 Feb 2022 09:49:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831457;
-        bh=HV9VXFj+bj15/j3TivRxyX1vngnDbQtouSff1+V0MXM=;
+        s=korg; t=1644832199;
+        bh=ZdjzBLXDuAK7vtC6/8Lwynr/u2kPl+3Y+vzwytsbOvg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ivr4G7Dtyw/5vszpkpCZykD3YP5mj5tkKcjIgVw8txMg6sWdFZ0iTc79wCHhycoAY
-         P3J3SBgomOWNa6B9TdlwvOnEUnsrdl+yHK1ZY24LoscMkjNgQlF3ifi3wzQXmfrYgz
-         4XGLxFoFMLEkowRzmVIySu9xkudeq0lQHEb9Tx9k=
+        b=PevWyR7SDGhh7BZ/8JunoCIiaLMhLcxfIvPmrrwyltctR7Obfde+MG6N/RMl1303X
+         JmjkX9Xa45HVuqGIx8a4k/83peWjhbcJrRTmI15EvOC/bXQ9ZbM9jALk7m5mD2v32Z
+         qJ3cY8Wlu7Yoib1ZXyQ1PeiF0a2SrXrBbCb7Fjw8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mahesh Bandewar <maheshb@google.com>,
-        Jay Vosburgh <jay.vosburgh@canonical.com>,
+        stable@vger.kernel.org, Rafael Richter <Rafael.Richter@gin.de>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Daniel Klauer <daniel.klauer@gin.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 41/71] bonding: pair enable_port with slave_arr_updates
+Subject: [PATCH 5.15 111/172] net: dsa: mv88e6xxx: dont use devres for mdiobus
 Date:   Mon, 14 Feb 2022 10:26:09 +0100
-Message-Id: <20220214092453.423625474@linuxfoundation.org>
+Message-Id: <20220214092510.265292325@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,52 +59,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mahesh Bandewar <maheshb@google.com>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-[ Upstream commit 23de0d7b6f0e3f9a6283a882594c479949da1120 ]
+[ Upstream commit f53a2ce893b2c7884ef94471f170839170a4eba0 ]
 
-When 803.2ad mode enables a participating port, it should update
-the slave-array. I have observed that the member links are participating
-and are part of the active aggregator while the traffic is egressing via
-only one member link (in a case where two links are participating). Via
-kprobes I discovered that slave-arr has only one link added while
-the other participating link wasn't part of the slave-arr.
+As explained in commits:
+74b6d7d13307 ("net: dsa: realtek: register the MDIO bus under devres")
+5135e96a3dd2 ("net: dsa: don't allocate the slave_mii_bus using devres")
 
-I couldn't see what caused that situation but the simple code-walk
-through provided me hints that the enable_port wasn't always associated
-with the slave-array update.
+mdiobus_free() will panic when called from devm_mdiobus_free() <-
+devres_release_all() <- __device_release_driver(), and that mdiobus was
+not previously unregistered.
 
-Fixes: ee6377147409 ("bonding: Simplify the xmit function for modes that use xmit_hash")
-Signed-off-by: Mahesh Bandewar <maheshb@google.com>
-Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
-Link: https://lore.kernel.org/r/20220207222901.1795287-1-maheshb@google.com
+The mv88e6xxx is an MDIO device, so the initial set of constraints that
+I thought would cause this (I2C or SPI buses which call ->remove on
+->shutdown) do not apply. But there is one more which applies here.
+
+If the DSA master itself is on a bus that calls ->remove from ->shutdown
+(like dpaa2-eth, which is on the fsl-mc bus), there is a device link
+between the switch and the DSA master, and device_links_unbind_consumers()
+will unbind the Marvell switch driver on shutdown.
+
+systemd-shutdown[1]: Powering off.
+mv88e6085 0x0000000008b96000:00 sw_gl0: Link is Down
+fsl-mc dpbp.9: Removing from iommu group 7
+fsl-mc dpbp.8: Removing from iommu group 7
+------------[ cut here ]------------
+kernel BUG at drivers/net/phy/mdio_bus.c:677!
+Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 1 Comm: systemd-shutdow Not tainted 5.16.5-00040-gdc05f73788e5 #15
+pc : mdiobus_free+0x44/0x50
+lr : devm_mdiobus_free+0x10/0x20
+Call trace:
+ mdiobus_free+0x44/0x50
+ devm_mdiobus_free+0x10/0x20
+ devres_release_all+0xa0/0x100
+ __device_release_driver+0x190/0x220
+ device_release_driver_internal+0xac/0xb0
+ device_links_unbind_consumers+0xd4/0x100
+ __device_release_driver+0x4c/0x220
+ device_release_driver_internal+0xac/0xb0
+ device_links_unbind_consumers+0xd4/0x100
+ __device_release_driver+0x94/0x220
+ device_release_driver+0x28/0x40
+ bus_remove_device+0x118/0x124
+ device_del+0x174/0x420
+ fsl_mc_device_remove+0x24/0x40
+ __fsl_mc_device_remove+0xc/0x20
+ device_for_each_child+0x58/0xa0
+ dprc_remove+0x90/0xb0
+ fsl_mc_driver_remove+0x20/0x5c
+ __device_release_driver+0x21c/0x220
+ device_release_driver+0x28/0x40
+ bus_remove_device+0x118/0x124
+ device_del+0x174/0x420
+ fsl_mc_bus_remove+0x80/0x100
+ fsl_mc_bus_shutdown+0xc/0x1c
+ platform_shutdown+0x20/0x30
+ device_shutdown+0x154/0x330
+ kernel_power_off+0x34/0x6c
+ __do_sys_reboot+0x15c/0x250
+ __arm64_sys_reboot+0x20/0x30
+ invoke_syscall.constprop.0+0x4c/0xe0
+ do_el0_svc+0x4c/0x150
+ el0_svc+0x24/0xb0
+ el0t_64_sync_handler+0xa8/0xb0
+ el0t_64_sync+0x178/0x17c
+
+So the same treatment must be applied to all DSA switch drivers, which
+is: either use devres for both the mdiobus allocation and registration,
+or don't use devres at all.
+
+The Marvell driver already has a good structure for mdiobus removal, so
+just plug in mdiobus_free and get rid of devres.
+
+Fixes: ac3a68d56651 ("net: phy: don't abuse devres in devm_mdiobus_register()")
+Reported-by: Rafael Richter <Rafael.Richter@gin.de>
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Tested-by: Daniel Klauer <daniel.klauer@gin.de>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/bonding/bond_3ad.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/dsa/mv88e6xxx/chip.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
-index e3b25f3109367..ed170d803247a 100644
---- a/drivers/net/bonding/bond_3ad.c
-+++ b/drivers/net/bonding/bond_3ad.c
-@@ -1013,8 +1013,8 @@ static void ad_mux_machine(struct port *port, bool *update_slave_arr)
- 				if (port->aggregator &&
- 				    port->aggregator->is_active &&
- 				    !__port_is_enabled(port)) {
--
- 					__enable_port(port);
-+					*update_slave_arr = true;
- 				}
- 			}
- 			break;
-@@ -1770,6 +1770,7 @@ static void ad_agg_selection_logic(struct aggregator *agg,
- 			     port = port->next_port_in_aggregator) {
- 				__enable_port(port);
- 			}
-+			*update_slave_arr = true;
- 		}
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+index 43d126628610b..206b8a3001b95 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -3416,7 +3416,7 @@ static int mv88e6xxx_mdio_register(struct mv88e6xxx_chip *chip,
+ 			return err;
  	}
+ 
+-	bus = devm_mdiobus_alloc_size(chip->dev, sizeof(*mdio_bus));
++	bus = mdiobus_alloc_size(sizeof(*mdio_bus));
+ 	if (!bus)
+ 		return -ENOMEM;
+ 
+@@ -3441,14 +3441,14 @@ static int mv88e6xxx_mdio_register(struct mv88e6xxx_chip *chip,
+ 	if (!external) {
+ 		err = mv88e6xxx_g2_irq_mdio_setup(chip, bus);
+ 		if (err)
+-			return err;
++			goto out;
+ 	}
+ 
+ 	err = of_mdiobus_register(bus, np);
+ 	if (err) {
+ 		dev_err(chip->dev, "Cannot register MDIO bus (%d)\n", err);
+ 		mv88e6xxx_g2_irq_mdio_free(chip, bus);
+-		return err;
++		goto out;
+ 	}
+ 
+ 	if (external)
+@@ -3457,6 +3457,10 @@ static int mv88e6xxx_mdio_register(struct mv88e6xxx_chip *chip,
+ 		list_add(&mdio_bus->list, &chip->mdios);
+ 
+ 	return 0;
++
++out:
++	mdiobus_free(bus);
++	return err;
+ }
+ 
+ static void mv88e6xxx_mdios_unregister(struct mv88e6xxx_chip *chip)
+@@ -3472,6 +3476,7 @@ static void mv88e6xxx_mdios_unregister(struct mv88e6xxx_chip *chip)
+ 			mv88e6xxx_g2_irq_mdio_free(chip, bus);
+ 
+ 		mdiobus_unregister(bus);
++		mdiobus_free(bus);
+ 	}
+ }
  
 -- 
 2.34.1

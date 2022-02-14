@@ -2,135 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC2F4B58CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC71F4B58A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:36:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349366AbiBNRnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 12:43:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34300 "EHLO
+        id S1357157AbiBNRgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 12:36:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiBNRnp (ORCPT
+        with ESMTP id S232607AbiBNRgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 12:43:45 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F419652F2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:43:37 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id y17so26229682edd.10
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:43:37 -0800 (PST)
+        Mon, 14 Feb 2022 12:36:18 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAF76540B;
+        Mon, 14 Feb 2022 09:36:09 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id p3-20020a0568301d4300b005a7a702f921so12073378oth.9;
+        Mon, 14 Feb 2022 09:36:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hl2tx2/b0j1as4iPc8br7ak6VbssTN3Lkaa01qKImp4=;
-        b=B3+89vMVlD+t/jr4Ir3J5heCAGLy+8O/Bfqv5DSjHS7vGRacFAUCCs0TF2tOD5+IOJ
-         DARHbhMwmXg8IKTGNN5wyW1UIWJ3dy3zDkUXnMSy6euD4EH/SAawjrYbWaSs+0JtxWja
-         ZBOb3OkzZ9V/CSYGxjkJVHb89skxzNvZve0yg=
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=Z6QtGjyebNj17/54kv2z2LcBR1p+WI1Nf06btBSvcJg=;
+        b=ZjsyX6YZB7IMgIQGVoLo4Mv4EZ4hFB4/YqSFBKSerB/98+yLXqOyOHjdBo87zpo37Y
+         NWauQTxvhmEyAQAZdumzNhwl1TJ1TBCL/JFD84lP8AzCd4OqbJpM7KPjnd4Sl0gkqfvY
+         yUyr5YttWcZbK608BI/GbaAr0iYz0ibLHBNHG/xCkn2fRIipq9toP7Kp55sV+qM1bj0W
+         EL/32mZ7rXjKOhgVfLLcExNd8jPrc05PcXHtRQDvT9ngUJE8ap16LFhLIDDgMPRtXX5M
+         fIfpRZol+SsEJbbbejxNkFkg6cHMSWtyWRIXIqT3zX7LJubMmN4QZApuC2/he5v+Eogx
+         S4PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hl2tx2/b0j1as4iPc8br7ak6VbssTN3Lkaa01qKImp4=;
-        b=zpvY1hwkZTsI3kvRqsVb7j093XTNO0qs9VDJL7Ce/Kgf2aWE0M0O+OweL36PN0K721
-         G0HbV6OviQFhRolr6eYxYtzLNVGtKV71/p/etlxHCL40DfhfCUHw07WC89DBeXY2wxQx
-         jg8HHftMIlAhAqTlN+ctheVR2VtRrQ642rRdzP1NzSQ8VIvP5+a911dTONNYO2gQuepV
-         Y8CVW5IewFZOBmCKOUtwQt1H2vGh8XlQ1R0tyle3BwY05cedfKs/qzkZ8gJYFyMRvlVq
-         FFn1oc00ENlZf2mziN/VqJvNJi8pBa9xYTbg+0y+e77tyKtnL4kh85cwm+i3Uyma+9WG
-         2SxA==
-X-Gm-Message-State: AOAM533W8ySlptx75KbJg++F+jRl6XHi51zSteYPDUQ1PtEdAb9BaDIL
-        OnFSqHMrSJOBhEr7xfEOBTKpxJEB7nE07DmGCjo=
-X-Google-Smtp-Source: ABdhPJxljk/51G5lVHINNS09lkE9Vymateeo2UtJwxn76MXyqhuc7wX7CQmQyAub3+km3P91cikZxQ==
-X-Received: by 2002:a05:6402:518e:: with SMTP id q14mr744968edd.155.1644860615590;
-        Mon, 14 Feb 2022 09:43:35 -0800 (PST)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id ew6sm3264661ejc.217.2022.02.14.09.43.35
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=Z6QtGjyebNj17/54kv2z2LcBR1p+WI1Nf06btBSvcJg=;
+        b=djxWAg/rghjCMM+4tt7EPKbcSCfZ6++Izs5pjw9Ypu2HZngNvPXGWQ1Xv772M2spQD
+         r8Uim1YWxLz8F0O+8sF27Nk7RTZ8yYxmP/bl5IMxCQe+RfVFax4lm1mFgzHELpIUVFQs
+         ijqC5leQEBPDHjykgYv3jmSLfR8n1w32wJzekMLh7ffQi4M1KZl+4BKdcQN2aTC12iP4
+         mJmlWGjG6BNrK4V5gNyp/yexfXrY0eZ/BZ10BeSxJSIxjCv6JgPksG5c3Z/qLQUnO7+c
+         adDgLJRpRvoAVbug++vPT4mFVuMzH5oH02FaGeI0MZBZAKpfxBPotdyKO5JLVQRSKaAM
+         D7Sg==
+X-Gm-Message-State: AOAM531TJEOJ/BuC6hk0uf/xFe1f4h1OO1Y+FxPQT9b5RSOB44IVNSmI
+        +VG/t5ia3GBJ/tUaN3/DDNIZgEJUF8hcog==
+X-Google-Smtp-Source: ABdhPJyQnY4dv0gSMVPSjr1/xxp1pgwuACpUagJxoBFrukVip/LSPkih5ltEago2ndzy2/6Jm0a4sA==
+X-Received: by 2002:a9d:75c6:: with SMTP id c6mr1378otl.360.1644860168962;
+        Mon, 14 Feb 2022 09:36:08 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z17sm12493199otk.62.2022.02.14.09.36.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 09:43:35 -0800 (PST)
-Received: by mail-wr1-f50.google.com with SMTP id d27so28119630wrc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:43:35 -0800 (PST)
-X-Received: by 2002:a19:4302:: with SMTP id q2mr49672lfa.449.1644860131952;
- Mon, 14 Feb 2022 09:35:31 -0800 (PST)
+        Mon, 14 Feb 2022 09:36:08 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e718a9cf-8888-d24d-5d29-d883e8a0025f@roeck-us.net>
+Date:   Mon, 14 Feb 2022 09:36:06 -0800
 MIME-Version: 1.0
-References: <20220214163452.1568807-1-arnd@kernel.org>
-In-Reply-To: <20220214163452.1568807-1-arnd@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 14 Feb 2022 09:35:15 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whXYWoP6of7js=f4zov62on97mNFRSVRWhY75WoGM6CoQ@mail.gmail.com>
-Message-ID: <CAHk-=whXYWoP6of7js=f4zov62on97mNFRSVRWhY75WoGM6CoQ@mail.gmail.com>
-Subject: Re: [PATCH 00/14] clean up asm/uaccess.h, kill set_fs for good
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        David Miller <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-hexagon <linux-hexagon@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        openrisc@lists.librecores.org,
-        linux-parisc <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Marcello Sylvester Bauer <sylv@sylv.io>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-doc@vger.kernel.org
+References: <cover.1644834803.git.sylv@sylv.io>
+ <43ebb83e403c56e44709facf937b386282862092.1644834803.git.sylv@sylv.io>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 3/4] pmbus: Add support for pli1209bc
+In-Reply-To: <43ebb83e403c56e44709facf937b386282862092.1644834803.git.sylv@sylv.io>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 8:35 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> I did a patch for microblaze at some point, which turned out to be fairly
-> generic, and now ported it to most other architectures, using new generic
-> implementations of access_ok() and __{get,put}_kernel_nocheck().
+On 2/14/22 04:40, Marcello Sylvester Bauer wrote:
+> PLI1209BC is a Digital Supervisor from Vicor Corporation.
+> 
+> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> ---
+>   Documentation/hwmon/pli1209bc.rst |  73 +++++++++++++++++++
+>   drivers/hwmon/pmbus/Kconfig       |   9 +++
+>   drivers/hwmon/pmbus/Makefile      |   1 +
+>   drivers/hwmon/pmbus/pli1209bc.c   | 114 ++++++++++++++++++++++++++++++
+>   4 files changed, 197 insertions(+)
+>   create mode 100644 Documentation/hwmon/pli1209bc.rst
+>   create mode 100644 drivers/hwmon/pmbus/pli1209bc.c
+> 
+> diff --git a/Documentation/hwmon/pli1209bc.rst b/Documentation/hwmon/pli1209bc.rst
+> new file mode 100644
+> index 000000000000..a3f686d03cf2
+> --- /dev/null
+> +++ b/Documentation/hwmon/pli1209bc.rst
+> @@ -0,0 +1,73 @@
+> +Kernel driver pli1209bc
+> +=======================
+> +
+> +Supported chips:
+> +
+> +  * Digital Supervisor PLI1209BC
+> +
+> +    Prefix: 'pli1209bc'
+> +
+> +    Addresses scanned: 0x50 - 0x5F
+> +
+> +    Datasheet: https://www.vicorpower.com/documents/datasheets/ds-PLI1209BCxyzz-VICOR.pdf
+> +
+> +Authors:
+> +    - Marcello Sylvester Bauer <sylv@sylv.io>
+> +
+> +Description
+> +-----------
+> +
+> +The Vicor PLI1209BC is an isolated digital power system supervisor thatprovides
+> +a communication interface between a host processor and one Bus Converter Module
+> +(BCM). The PLI communicates with a system controller via a PMBus compatible
+> +interface over an isolated UART interface. Through the PLI, the host processor
+> +can configure, set protection limits, and monitor the BCM.
+> +
+> +Sysfs entries
+> +-------------
+> +
+> +======================= ========================================================
+> +in1_label		"vin2"
+> +in1_input		Input voltage.
+> +in1_rated_min		Minimum rated input voltage.
+> +in1_rated_max		Maximum rated input voltage.
+> +in1_max			Maximum input voltage.
+> +in1_max_alarm		Input voltage high alarm.
+> +in1_crit		Critical input voltage.
+> +in1_crit_alarm		Input voltage critical alarm.
+> +
+> +in2_label		"vout2"
+> +in2_input		Output voltage.
+> +in2_rated_min		Minimum rated output voltage.
+> +in2_rated_max		Maximum rated output voltage.
+> +in2_alarm		Output voltage alarm
+> +
+> +curr1_label		"iin2"
+> +curr1_input		Input current.
+> +curr1_max		Maximum input current.
+> +curr1_max_alarm		Maximum input current high alarm.
+> +curr1_crit		Critical input current.
+> +curr1_crit_alarm	Input current critical alarm.
+> +
+> +curr2_label		"iout2"
+> +curr2_input		Output current.
+> +curr2_crit		Critical output current.
+> +curr2_crit_alarm	Output current critical alarm.
+> +curr2_max		Maximum output current.
+> +curr2_max_alarm		Output current high alarm.
+> +
+> +power1_label		"pin2"
+> +power1_input		Input power.
+> +power1_alarm		Input power alarm.
+> +
+> +power2_label		"pout2"
+> +power2_input		Output power.
+> +power2_rated_max	Maximum rated output power.
+> +
+> +temp1_input		Die temperature.
+> +temp1_alarm		Die temperature alarm.
+> +temp1_max		Maximum die temperature.
+> +temp1_max_alarm		Die temperature high alarm.
+> +temp1_crit		Critical die temperature.
+> +temp1_crit_alarm	Die temperature critical alarm.
+> +======================= ========================================================
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index c96f7b7338bd..831db423bea0 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -310,6 +310,15 @@ config SENSORS_PIM4328
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called pim4328.
+>   
+> +config SENSORS_PLI1209BC
+> +	tristate "Vicor PLI1209BC"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for Vicor
+> +	  PLI1209BC Digital Supervisor.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called pli1209bc.
+> +
+>   config SENSORS_PM6764TR
+>   	tristate "ST PM6764TR"
+>   	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index e5935f70c9e0..7ce74e3b8552 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -34,6 +34,7 @@ obj-$(CONFIG_SENSORS_MP2888)	+= mp2888.o
+>   obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
+>   obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
+>   obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
+> +obj-$(CONFIG_SENSORS_PLI1209BC)	+= pli1209bc.o
+>   obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
+>   obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
+>   obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
+> diff --git a/drivers/hwmon/pmbus/pli1209bc.c b/drivers/hwmon/pmbus/pli1209bc.c
+> new file mode 100644
+> index 000000000000..8a9af2ccc46f
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/pli1209bc.c
+> @@ -0,0 +1,114 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Hardware monitoring driver for Vicor PLI1209BC Digital Supervisor
+> + *
+> + * Copyright (c) 2022 9elements GmbH
+> + */
+> +
+> +#include <linux/i2c.h>
+> +#include <linux/module.h>
+> +#include <linux/pmbus.h>
+> +#include "pmbus.h"
+> +
+> +/*
+> + * The capability command is only supported at page 0. Probing the device while
+> + * the page register is set to 1 will falsely enable PEC support. Disable
+> + * capability probing accordingly, since the PLI1209BC does not have any
+> + * additional capabilities.
+> + */
+> +static struct pmbus_platform_data pli1209bc_plat_data = {
+> +	.flags = PMBUS_NO_CAPABILITY,
+> +};
+> +
+> +static int pli1209bc_read_word_data(struct i2c_client *client, int page,
+> +				    int phase, int reg)
+> +{
+> +	int data;
+> +
+> +	switch (reg) {
+> +	/* PMBUS_READ_POUT uses a direct format with R=0 */
+> +	case PMBUS_READ_POUT:
+> +		data = pmbus_read_word_data(client, page, phase, reg);
+> +		if (data < 0)
+> +			return data;
+> +		return data * 10;
 
-Thanks for doing this.
+We have to be more careful here. While the datasheet doesn't explicitly
+say if the reported value is signed or not, the standard says that
+it is supposed to be signed, so let's assume that this is the case.
+That means that 'data' is really 16-bit signed value. We have to make
+sure that it doesn't over- or underflow when multiplying it,
+and that the sign is retained. Something like the following should do.
 
-Apart from the sparc64 issue with completely separate address spaces
-(so access_ok() should always return true like Al pointed out), this
-looks excellent to me.
+		data = sign_extend32(data, 15) * 10;
+		return clamp_val(data, -32768, 32767) & 0xffff;
 
-Somebody should check that there aren't other cases like sparc64, but
-let's merge this asap other than that.
+Otherwise the patch looks good.
 
-              Linus
+Thanks,
+Guenter
+
+> +	default:
+> +		return -ENODATA;
+> +	}
+> +}
+> +
+> +static struct pmbus_driver_info pli1209bc_info = {
+> +	.pages = 2,
+> +	.format[PSC_VOLTAGE_IN] = direct,
+> +	.format[PSC_VOLTAGE_OUT] = direct,
+> +	.format[PSC_CURRENT_IN] = direct,
+> +	.format[PSC_CURRENT_OUT] = direct,
+> +	.format[PSC_POWER] = direct,
+> +	.format[PSC_TEMPERATURE] = direct,
+> +	.m[PSC_VOLTAGE_IN] = 1,
+> +	.b[PSC_VOLTAGE_IN] = 0,
+> +	.R[PSC_VOLTAGE_IN] = 1,
+> +	.m[PSC_VOLTAGE_OUT] = 1,
+> +	.b[PSC_VOLTAGE_OUT] = 0,
+> +	.R[PSC_VOLTAGE_OUT] = 1,
+> +	.m[PSC_CURRENT_IN] = 1,
+> +	.b[PSC_CURRENT_IN] = 0,
+> +	.R[PSC_CURRENT_IN] = 3,
+> +	.m[PSC_CURRENT_OUT] = 1,
+> +	.b[PSC_CURRENT_OUT] = 0,
+> +	.R[PSC_CURRENT_OUT] = 2,
+> +	.m[PSC_POWER] = 1,
+> +	.b[PSC_POWER] = 0,
+> +	.R[PSC_POWER] = 1,
+> +	.m[PSC_TEMPERATURE] = 1,
+> +	.b[PSC_TEMPERATURE] = 0,
+> +	.R[PSC_TEMPERATURE] = 0,
+> +	/*
+> +	 * Page 0 sums up all attributes except voltage readings.
+> +	 * The pli1209 digital supervisor only contains a single BCM, making
+> +	 * page 0 redundant.
+> +	 */
+> +	.func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT
+> +	    | PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT
+> +	    | PMBUS_HAVE_PIN | PMBUS_HAVE_POUT
+> +	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
+> +	    | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_INPUT,
+> +	.read_word_data = pli1209bc_read_word_data,
+> +};
+> +
+> +static int pli1209bc_probe(struct i2c_client *client)
+> +{
+> +	client->dev.platform_data = &pli1209bc_plat_data;
+> +	return pmbus_do_probe(client, &pli1209bc_info);
+> +}
+> +
+> +static const struct i2c_device_id pli1209bc_id[] = {
+> +	{"pli1209bc", 0},
+> +	{}
+> +};
+> +
+> +MODULE_DEVICE_TABLE(i2c, pli1209bc_id);
+> +
+> +#ifdef CONFIG_OF
+> +static const struct of_device_id pli1209bc_of_match[] = {
+> +	{ .compatible = "vicor,pli1209bc" },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, pli1209bc_of_match);
+> +#endif
+> +
+> +static struct i2c_driver pli1209bc_driver = {
+> +	.driver = {
+> +		   .name = "pli1209bc",
+> +		   .of_match_table = of_match_ptr(pli1209bc_of_match),
+> +		   },
+> +	.probe_new = pli1209bc_probe,
+> +	.id_table = pli1209bc_id,
+> +};
+> +
+> +module_i2c_driver(pli1209bc_driver);
+> +
+> +MODULE_AUTHOR("Marcello Sylvester Bauer <sylv@sylv.io>");
+> +MODULE_DESCRIPTION("PMBus driver for Vicor PLI1209BC");
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS(PMBUS);
+

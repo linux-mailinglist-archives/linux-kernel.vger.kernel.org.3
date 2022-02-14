@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0284B464C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E674B4870
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243828AbiBNJdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:33:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41364 "EHLO
+        id S1343525AbiBNJyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:54:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243865AbiBNJdN (ORCPT
+        with ESMTP id S1343510AbiBNJur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:33:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742A260D90;
-        Mon, 14 Feb 2022 01:31:38 -0800 (PST)
+        Mon, 14 Feb 2022 04:50:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0208654BE;
+        Mon, 14 Feb 2022 01:41:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26D8FB80DCC;
-        Mon, 14 Feb 2022 09:31:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B360C340E9;
-        Mon, 14 Feb 2022 09:31:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BE3461190;
+        Mon, 14 Feb 2022 09:41:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CD5BC340E9;
+        Mon, 14 Feb 2022 09:41:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831096;
-        bh=uevaLRTtbu0gQTNmH5s19jDCZEKQ+0PLVKpDgPs9ZbU=;
+        s=korg; t=1644831699;
+        bh=tvJGlZcKHMJrtQcp+CZ4xSeF/sEJb4vveouu65YICaw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dBqfFpXMTV6Ae2mCOYkB2i7y1jV7VdyB6wPH/yeFSXLDlnOpqB63eMI55f2V3C+Hn
-         4ehUVxpHrrmhWoOl5ybaI59VCl9U6XI+sPOnEUnKUmh9auMBzyMUrUrGyRPulDdXTj
-         5w7gMaCvHPu9NiDJPNa2pW9+5P1zzwY49o3HJJoY=
+        b=yvD08sAeQ3rbnjEcNH0gFGCXkmieTb5O6S6703LJ2WMGY6JUV3R7snXFYHqPawQ+k
+         Qzy9I7Pro2WZ10DsONQE2eJy8bnkJaaBSW/60KR04Ew1Q+WyM54o6XCzvpHFz3ejXt
+         +ynAIJa8WZe4/zuj9l4Z3Yc70Sg2+hT0jbkExYMs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH 4.14 42/44] seccomp: Invalidate seccomp mode to catch death failures
+        stable@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 066/116] ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE
 Date:   Mon, 14 Feb 2022 10:26:05 +0100
-Message-Id: <20220214092449.263018817@linuxfoundation.org>
+Message-Id: <20220214092501.027060564@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
-References: <20220214092447.897544753@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,64 +55,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-commit 495ac3069a6235bfdf516812a2a9b256671bbdf9 upstream.
+[ Upstream commit dc0075ba7f387fe4c48a8c674b11ab6f374a6acc ]
 
-If seccomp tries to kill a process, it should never see that process
-again. To enforce this proactively, switch the mode to something
-impossible. If encountered: WARN, reject all syscalls, and attempt to
-kill the process again even harder.
+Commit 4a9af6cac050 ("ACPI: EC: Rework flushing of EC work while
+suspended to idle") made acpi_ec_dispatch_gpe() check
+pm_wakeup_pending(), but that is before canceling the SCI wakeup,
+so pm_wakeup_pending() is always true.  This causes the loop in
+acpi_ec_dispatch_gpe() to always terminate after one iteration which
+may not be correct.
 
-Cc: Andy Lutomirski <luto@amacapital.net>
-Cc: Will Drewry <wad@chromium.org>
-Fixes: 8112c4f140fa ("seccomp: remove 2-phase API")
-Cc: stable@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Address this issue by canceling the SCI wakeup earlier, from
+acpi_ec_dispatch_gpe() itself.
+
+Fixes: 4a9af6cac050 ("ACPI: EC: Rework flushing of EC work while suspended to idle")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/seccomp.c |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/acpi/ec.c    | 10 ++++++++++
+ drivers/acpi/sleep.c | 14 ++++----------
+ 2 files changed, 14 insertions(+), 10 deletions(-)
 
---- a/kernel/seccomp.c
-+++ b/kernel/seccomp.c
-@@ -28,6 +28,9 @@
- #include <linux/syscalls.h>
- #include <linux/sysctl.h>
+diff --git a/drivers/acpi/ec.c b/drivers/acpi/ec.c
+index 3f2e5ea9ab6b7..8347eaee679c8 100644
+--- a/drivers/acpi/ec.c
++++ b/drivers/acpi/ec.c
+@@ -2064,6 +2064,16 @@ bool acpi_ec_dispatch_gpe(void)
+ 	if (acpi_any_gpe_status_set(first_ec->gpe))
+ 		return true;
  
-+/* Not exposed in headers: strictly internal use only. */
-+#define SECCOMP_MODE_DEAD	(SECCOMP_MODE_FILTER + 1)
++	/*
++	 * Cancel the SCI wakeup and process all pending events in case there
++	 * are any wakeup ones in there.
++	 *
++	 * Note that if any non-EC GPEs are active at this point, the SCI will
++	 * retrigger after the rearming in acpi_s2idle_wake(), so no events
++	 * should be missed by canceling the wakeup here.
++	 */
++	pm_system_cancel_wakeup();
 +
- #ifdef CONFIG_HAVE_ARCH_SECCOMP_FILTER
- #include <asm/syscall.h>
- #endif
-@@ -632,6 +635,7 @@ static void __secure_computing_strict(in
- #ifdef SECCOMP_DEBUG
- 	dump_stack();
- #endif
-+	current->seccomp.mode = SECCOMP_MODE_DEAD;
- 	seccomp_log(this_syscall, SIGKILL, SECCOMP_RET_KILL_THREAD, true);
- 	do_exit(SIGKILL);
- }
-@@ -746,6 +750,7 @@ static int __seccomp_filter(int this_sys
- 	case SECCOMP_RET_KILL_THREAD:
- 	case SECCOMP_RET_KILL_PROCESS:
- 	default:
-+		current->seccomp.mode = SECCOMP_MODE_DEAD;
- 		seccomp_log(this_syscall, SIGSYS, action, true);
- 		/* Dump core only if this is the last remaining thread. */
- 		if (action == SECCOMP_RET_KILL_PROCESS ||
-@@ -798,6 +803,11 @@ int __secure_computing(const struct secc
- 		return 0;
- 	case SECCOMP_MODE_FILTER:
- 		return __seccomp_filter(this_syscall, sd, false);
-+	/* Surviving SECCOMP_RET_KILL_* must be proactively impossible. */
-+	case SECCOMP_MODE_DEAD:
-+		WARN_ON_ONCE(1);
-+		do_exit(SIGKILL);
-+		return -1;
- 	default:
- 		BUG();
- 	}
+ 	/*
+ 	 * Dispatch the EC GPE in-band, but do not report wakeup in any case
+ 	 * to allow the caller to process events properly after that.
+diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
+index 503935b1deeb1..e2614ea820bb8 100644
+--- a/drivers/acpi/sleep.c
++++ b/drivers/acpi/sleep.c
+@@ -1012,21 +1012,15 @@ static bool acpi_s2idle_wake(void)
+ 			return true;
+ 		}
+ 
+-		/* Check non-EC GPE wakeups and dispatch the EC GPE. */
++		/*
++		 * Check non-EC GPE wakeups and if there are none, cancel the
++		 * SCI-related wakeup and dispatch the EC GPE.
++		 */
+ 		if (acpi_ec_dispatch_gpe()) {
+ 			pm_pr_dbg("ACPI non-EC GPE wakeup\n");
+ 			return true;
+ 		}
+ 
+-		/*
+-		 * Cancel the SCI wakeup and process all pending events in case
+-		 * there are any wakeup ones in there.
+-		 *
+-		 * Note that if any non-EC GPEs are active at this point, the
+-		 * SCI will retrigger after the rearming below, so no events
+-		 * should be missed by canceling the wakeup here.
+-		 */
+-		pm_system_cancel_wakeup();
+ 		acpi_os_wait_events_complete();
+ 
+ 		/*
+-- 
+2.34.1
+
 
 

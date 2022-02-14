@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94724B4886
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1001D4B481F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiBNJz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:55:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33166 "EHLO
+        id S245142AbiBNJpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:45:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344722AbiBNJvz (ORCPT
+        with ESMTP id S243229AbiBNJnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:51:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF616D39A;
-        Mon, 14 Feb 2022 01:43:10 -0800 (PST)
+        Mon, 14 Feb 2022 04:43:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E696CA54;
+        Mon, 14 Feb 2022 01:38:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 969ABB80DC4;
-        Mon, 14 Feb 2022 09:43:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D028BC340F1;
-        Mon, 14 Feb 2022 09:43:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0638B80DA9;
+        Mon, 14 Feb 2022 09:38:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7872C340F0;
+        Mon, 14 Feb 2022 09:37:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831788;
-        bh=LzpzpbXuAXBVxXgaTfhdtBconWX5rylvXkzDq4epIPc=;
+        s=korg; t=1644831479;
+        bh=OS55XowkhI3CqDz/e8i9pKkA6nzSUACJ0ExuNWM5heM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vTuk6Zz+najX446C0/4xDFjveNSiHEjRdtJ6R4+DOJeMebb6SGKvXcmcw4jfjvpRu
-         NTaFYe94UvwRWhKhRsHxqn5Zoo0PrWqXxskTjVo15oZ16ZVO2wzHKt7e8dtf2vULfy
-         9CVQfdk+ljp3c/h66PMIs/X7SSL4aoMzu2oSyYpY=
+        b=Vd/a8uDBUOu/ARi8ptN1GAr0CfCtcUWD733umecV0RQTSekdlayfnQwa0CCLkttoV
+         bnz7Ozou9+23REwjDzHIFB29Bxc7PrmetYrusPFfRQ8KBYv14HLRK4oakgr8y34M0I
+         Hqb3U7DW+Te8ApA7vijzgm/s/LADO9bAOU3kGolg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>
-Subject: [PATCH 5.10 096/116] usb: dwc3: gadget: Prevent core from processing stale TRBs
-Date:   Mon, 14 Feb 2022 10:26:35 +0100
-Message-Id: <20220214092502.091779498@linuxfoundation.org>
+        stable@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 5.4 68/71] hwmon: (dell-smm) Speed up setting of fan speed
+Date:   Mon, 14 Feb 2022 10:26:36 +0100
+Message-Id: <20220214092454.325425404@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Udipto Goswami <quic_ugoswami@quicinc.com>
+From: Armin Wolf <W_Armin@gmx.de>
 
-commit 117b4e96c7f362eb6459543883fc07f77662472c upstream.
+commit c0d79987a0d82671bff374c07f2201f9bdf4aaa2 upstream.
 
-With CPU re-ordering on write instructions, there might
-be a chance that the HWO is set before the TRB is updated
-with the new mapped buffer address.
-And in the case where core is processing a list of TRBs
-it is possible that it fetched the TRBs when the HWO is set
-but before the buffer address is updated.
-Prevent this by adding a memory barrier before the HWO
-is updated to ensure that the core always process the
-updated TRBs.
+When setting the fan speed, i8k_set_fan() calls i8k_get_fan_status(),
+causing an unnecessary SMM call since from the two users of this
+function, only i8k_ioctl_unlocked() needs to know the new fan status
+while dell_smm_write() ignores the new fan status.
+Since SMM calls can be very slow while also making error reporting
+difficult for dell_smm_write(), remove the function call from
+i8k_set_fan() and call it separately in i8k_ioctl_unlocked().
 
-Fixes: f6bafc6a1c9d ("usb: dwc3: convert TRBs into bitshifts")
-Cc: stable <stable@vger.kernel.org>
-Reviewed-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
-Link: https://lore.kernel.org/r/1644207958-18287-1-git-send-email-quic_ugoswami@quicinc.com
+Tested on a Dell Inspiron 3505.
+
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+Reviewed-by: Pali Rohár <pali@kernel.org>
+Link: https://lore.kernel.org/r/20211021190531.17379-6-W_Armin@gmx.de
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc3/gadget.c |   13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/hwmon/dell-smm-hwmon.c |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1072,6 +1072,19 @@ static void __dwc3_prepare_one_trb(struc
- 	if (usb_endpoint_xfer_bulk(dep->endpoint.desc) && dep->stream_capable)
- 		trb->ctrl |= DWC3_TRB_CTRL_SID_SOFN(stream_id);
+--- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -301,7 +301,7 @@ static int i8k_get_fan_nominal_speed(int
+ }
  
-+	/*
-+	 * As per data book 4.2.3.2TRB Control Bit Rules section
-+	 *
-+	 * The controller autonomously checks the HWO field of a TRB to determine if the
-+	 * entire TRB is valid. Therefore, software must ensure that the rest of the TRB
-+	 * is valid before setting the HWO field to '1'. In most systems, this means that
-+	 * software must update the fourth DWORD of a TRB last.
-+	 *
-+	 * However there is a possibility of CPU re-ordering here which can cause
-+	 * controller to observe the HWO bit set prematurely.
-+	 * Add a write memory barrier to prevent CPU re-ordering.
-+	 */
-+	wmb();
- 	trb->ctrl |= DWC3_TRB_CTRL_HWO;
+ /*
+- * Set the fan speed (off, low, high). Returns the new fan status.
++ * Set the fan speed (off, low, high, ...).
+  */
+ static int i8k_set_fan(int fan, int speed)
+ {
+@@ -313,7 +313,7 @@ static int i8k_set_fan(int fan, int spee
+ 	speed = (speed < 0) ? 0 : ((speed > i8k_fan_max) ? i8k_fan_max : speed);
+ 	regs.ebx = (fan & 0xff) | (speed << 8);
  
- 	dwc3_ep_inc_enq(dep);
+-	return i8k_smm(&regs) ? : i8k_get_fan_status(fan);
++	return i8k_smm(&regs);
+ }
+ 
+ static int i8k_get_temp_type(int sensor)
+@@ -427,7 +427,7 @@ static int
+ i8k_ioctl_unlocked(struct file *fp, unsigned int cmd, unsigned long arg)
+ {
+ 	int val = 0;
+-	int speed;
++	int speed, err;
+ 	unsigned char buff[16];
+ 	int __user *argp = (int __user *)arg;
+ 
+@@ -488,7 +488,11 @@ i8k_ioctl_unlocked(struct file *fp, unsi
+ 		if (copy_from_user(&speed, argp + 1, sizeof(int)))
+ 			return -EFAULT;
+ 
+-		val = i8k_set_fan(val, speed);
++		err = i8k_set_fan(val, speed);
++		if (err < 0)
++			return err;
++
++		val = i8k_get_fan_status(val);
+ 		break;
+ 
+ 	default:
 
 

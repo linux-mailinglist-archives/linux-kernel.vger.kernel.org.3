@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4154B469F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C2F4B470B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244282AbiBNJjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:39:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52584 "EHLO
+        id S244610AbiBNJmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:42:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244945AbiBNJg0 (ORCPT
+        with ESMTP id S244720AbiBNJkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:36:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BFF6CA75;
-        Mon, 14 Feb 2022 01:34:15 -0800 (PST)
+        Mon, 14 Feb 2022 04:40:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8291AD97;
+        Mon, 14 Feb 2022 01:36:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7214E61149;
-        Mon, 14 Feb 2022 09:34:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34CCDC340E9;
-        Mon, 14 Feb 2022 09:34:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 406C4B80DCB;
+        Mon, 14 Feb 2022 09:35:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57E30C340EF;
+        Mon, 14 Feb 2022 09:35:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831254;
-        bh=oKFbjQIThrTEoXfJ2Rp9yWl1wVsyR7h+VVFaAA6N+oI=;
+        s=korg; t=1644831352;
+        bh=K/bO3DZjQwPyq1SoGO2MLeqecuuRLDydeAd+NpzgE+4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2ot7lxb281QDfQJy3AZRaIMJICz6Yvq/cQcIDyvU8GDAJb5iMZsm+zL1WsDEuXdFP
-         ccjO1/u0aloeIJ2GIFi1uSf8J2ZmLBVT+eDxN6ghktDaijYuzJIjau+FUI4hj/BJwK
-         ZTqHk+8FA8kKF+QXqBns7gNfp0t/ESUNCwizP9zI=
+        b=ORGpbHGzbInoC8ASSQ80NfJuzmIA/XEovrrPzqbbA3kVo1NNUAvA9KLWzCU1XGwqM
+         ukjqEVxSGYNbwSAiLu6omd2II1bmUH2EaIocuH5x90528Ws/IYWbb40o+T9PAh78Ep
+         8ptDdXzqxbfG/rHWXohwHFgbDOXRg15TqWFLRrw8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        syzbot <syzkaller@googlegroups.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 28/49] ipmr,ip6mr: acquire RTNL before calling ip[6]mr_free_table() on failure path
+        stable@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Frank van der Linden <fllinden@amazon.com>
+Subject: [PATCH 5.4 26/71] bpf: Add kconfig knob for disabling unpriv bpf by default
 Date:   Mon, 14 Feb 2022 10:25:54 +0100
-Message-Id: <20220214092449.219707158@linuxfoundation.org>
+Message-Id: <20220214092452.893556675@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
-References: <20220214092448.285381753@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,100 +55,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
 
-[ Upstream commit 5611a00697c8ecc5aad04392bea629e9d6a20463 ]
+commit 08389d888287c3823f80b0216766b71e17f0aba5 upstream.
 
-ip[6]mr_free_table() can only be called under RTNL lock.
+Add a kconfig knob which allows for unprivileged bpf to be disabled by default.
+If set, the knob sets /proc/sys/kernel/unprivileged_bpf_disabled to value of 2.
 
-RTNL: assertion failed at net/core/dev.c (10367)
-WARNING: CPU: 1 PID: 5890 at net/core/dev.c:10367 unregister_netdevice_many+0x1246/0x1850 net/core/dev.c:10367
-Modules linked in:
-CPU: 1 PID: 5890 Comm: syz-executor.2 Not tainted 5.16.0-syzkaller-11627-g422ee58dc0ef #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:unregister_netdevice_many+0x1246/0x1850 net/core/dev.c:10367
-Code: 0f 85 9b ee ff ff e8 69 07 4b fa ba 7f 28 00 00 48 c7 c6 00 90 ae 8a 48 c7 c7 40 90 ae 8a c6 05 6d b1 51 06 01 e8 8c 90 d8 01 <0f> 0b e9 70 ee ff ff e8 3e 07 4b fa 4c 89 e7 e8 86 2a 59 fa e9 ee
-RSP: 0018:ffffc900046ff6e0 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff888050f51d00 RSI: ffffffff815fa008 RDI: fffff520008dfece
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff815f3d6e R11: 0000000000000000 R12: 00000000fffffff4
-R13: dffffc0000000000 R14: ffffc900046ff750 R15: ffff88807b7dc000
-FS:  00007f4ab736e700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fee0b4f8990 CR3: 000000001e7d2000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- mroute_clean_tables+0x244/0xb40 net/ipv6/ip6mr.c:1509
- ip6mr_free_table net/ipv6/ip6mr.c:389 [inline]
- ip6mr_rules_init net/ipv6/ip6mr.c:246 [inline]
- ip6mr_net_init net/ipv6/ip6mr.c:1306 [inline]
- ip6mr_net_init+0x3f0/0x4e0 net/ipv6/ip6mr.c:1298
- ops_init+0xaf/0x470 net/core/net_namespace.c:140
- setup_net+0x54f/0xbb0 net/core/net_namespace.c:331
- copy_net_ns+0x318/0x760 net/core/net_namespace.c:475
- create_new_namespaces+0x3f6/0xb20 kernel/nsproxy.c:110
- copy_namespaces+0x391/0x450 kernel/nsproxy.c:178
- copy_process+0x2e0c/0x7300 kernel/fork.c:2167
- kernel_clone+0xe7/0xab0 kernel/fork.c:2555
- __do_sys_clone+0xc8/0x110 kernel/fork.c:2672
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f4ab89f9059
-Code: Unable to access opcode bytes at RIP 0x7f4ab89f902f.
-RSP: 002b:00007f4ab736e118 EFLAGS: 00000206 ORIG_RAX: 0000000000000038
-RAX: ffffffffffffffda RBX: 00007f4ab8b0bf60 RCX: 00007f4ab89f9059
-RDX: 0000000020000280 RSI: 0000000020000270 RDI: 0000000040200000
-RBP: 00007f4ab8a5308d R08: 0000000020000300 R09: 0000000020000300
-R10: 00000000200002c0 R11: 0000000000000206 R12: 0000000000000000
-R13: 00007ffc3977cc1f R14: 00007f4ab736e300 R15: 0000000000022000
- </TASK>
+This still allows a transition of 2 -> {0,1} through an admin. Similarly,
+this also still keeps 1 -> {1} behavior intact, so that once set to permanently
+disabled, it cannot be undone aside from a reboot.
 
-Fixes: f243e5a7859a ("ipmr,ip6mr: call ip6mr_free_table() on failure path")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Cong Wang <cong.wang@bytedance.com>
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Link: https://lore.kernel.org/r/20220208053451.2885398-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+We've also added extra2 with max of 2 for the procfs handler, so that an admin
+still has a chance to toggle between 0 <-> 2.
+
+Either way, as an additional alternative, applications can make use of CAP_BPF
+that we added a while ago.
+
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/74ec548079189e4e4dffaeb42b8987bb3c852eee.1620765074.git.daniel@iogearbox.net
+[fllinden@amazon.com: backported to 5.4]
+Signed-off-by: Frank van der Linden <fllinden@amazon.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/ipmr.c  | 2 ++
- net/ipv6/ip6mr.c | 2 ++
- 2 files changed, 4 insertions(+)
+ Documentation/admin-guide/sysctl/kernel.rst |   21 ++++++++++++++++++++
+ init/Kconfig                                |   10 +++++++++
+ kernel/bpf/syscall.c                        |    3 +-
+ kernel/sysctl.c                             |   29 ++++++++++++++++++++++++----
+ 4 files changed, 58 insertions(+), 5 deletions(-)
 
-diff --git a/net/ipv4/ipmr.c b/net/ipv4/ipmr.c
-index d235478d9ca3c..2085af224a416 100644
---- a/net/ipv4/ipmr.c
-+++ b/net/ipv4/ipmr.c
-@@ -265,7 +265,9 @@ static int __net_init ipmr_rules_init(struct net *net)
- 	return 0;
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@ -1125,6 +1125,27 @@ NMI switch that most IA32 servers have f
+ example.  If a system hangs up, try pressing the NMI switch.
  
- err2:
-+	rtnl_lock();
- 	ipmr_free_table(mrt);
-+	rtnl_unlock();
- err1:
- 	fib_rules_unregister(ops);
- 	return err;
-diff --git a/net/ipv6/ip6mr.c b/net/ipv6/ip6mr.c
-index 35e7092eceb37..e9eb917342b85 100644
---- a/net/ipv6/ip6mr.c
-+++ b/net/ipv6/ip6mr.c
-@@ -245,7 +245,9 @@ static int __net_init ip6mr_rules_init(struct net *net)
- 	return 0;
  
- err2:
-+	rtnl_lock();
- 	ip6mr_free_table(mrt);
-+	rtnl_unlock();
- err1:
- 	fib_rules_unregister(ops);
- 	return err;
--- 
-2.34.1
-
++unprivileged_bpf_disabled:
++==========================
++
++Writing 1 to this entry will disable unprivileged calls to ``bpf()``;
++once disabled, calling ``bpf()`` without ``CAP_SYS_ADMIN`` will return
++``-EPERM``. Once set to 1, this can't be cleared from the running kernel
++anymore.
++
++Writing 2 to this entry will also disable unprivileged calls to ``bpf()``,
++however, an admin can still change this setting later on, if needed, by
++writing 0 or 1 to this entry.
++
++If ``BPF_UNPRIV_DEFAULT_OFF`` is enabled in the kernel config, then this
++entry will default to 2 instead of 0.
++
++= =============================================================
++0 Unprivileged calls to ``bpf()`` are enabled
++1 Unprivileged calls to ``bpf()`` are disabled without recovery
++2 Unprivileged calls to ``bpf()`` are disabled
++= =============================================================
++
+ watchdog:
+ =========
+ 
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1609,6 +1609,16 @@ config BPF_JIT_ALWAYS_ON
+ 	  Enables BPF JIT and removes BPF interpreter to avoid
+ 	  speculative execution of BPF instructions by the interpreter
+ 
++config BPF_UNPRIV_DEFAULT_OFF
++	bool "Disable unprivileged BPF by default"
++	depends on BPF_SYSCALL
++	help
++	  Disables unprivileged BPF by default by setting the corresponding
++	  /proc/sys/kernel/unprivileged_bpf_disabled knob to 2. An admin can
++	  still reenable it by setting it to 0 later on, or permanently
++	  disable it by setting it to 1 (from which no other transition to
++	  0 is possible anymore).
++
+ config USERFAULTFD
+ 	bool "Enable userfaultfd() system call"
+ 	depends on MMU
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -39,7 +39,8 @@ static DEFINE_SPINLOCK(prog_idr_lock);
+ static DEFINE_IDR(map_idr);
+ static DEFINE_SPINLOCK(map_idr_lock);
+ 
+-int sysctl_unprivileged_bpf_disabled __read_mostly;
++int sysctl_unprivileged_bpf_disabled __read_mostly =
++	IS_BUILTIN(CONFIG_BPF_UNPRIV_DEFAULT_OFF) ? 2 : 0;
+ 
+ static const struct bpf_map_ops * const bpf_map_types[] = {
+ #define BPF_PROG_TYPE(_id, _ops)
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -250,6 +250,28 @@ static int sysrq_sysctl_handler(struct c
+ 
+ #endif
+ 
++#ifdef CONFIG_BPF_SYSCALL
++static int bpf_unpriv_handler(struct ctl_table *table, int write,
++                             void *buffer, size_t *lenp, loff_t *ppos)
++{
++	int ret, unpriv_enable = *(int *)table->data;
++	bool locked_state = unpriv_enable == 1;
++	struct ctl_table tmp = *table;
++
++	if (write && !capable(CAP_SYS_ADMIN))
++		return -EPERM;
++
++	tmp.data = &unpriv_enable;
++	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
++	if (write && !ret) {
++		if (locked_state && unpriv_enable != 1)
++			return -EPERM;
++		*(int *)table->data = unpriv_enable;
++	}
++	return ret;
++}
++#endif
++
+ static struct ctl_table kern_table[];
+ static struct ctl_table vm_table[];
+ static struct ctl_table fs_table[];
+@@ -1255,10 +1277,9 @@ static struct ctl_table kern_table[] = {
+ 		.data		= &sysctl_unprivileged_bpf_disabled,
+ 		.maxlen		= sizeof(sysctl_unprivileged_bpf_disabled),
+ 		.mode		= 0644,
+-		/* only handle a transition from default "0" to "1" */
+-		.proc_handler	= proc_dointvec_minmax,
+-		.extra1		= SYSCTL_ONE,
+-		.extra2		= SYSCTL_ONE,
++		.proc_handler	= bpf_unpriv_handler,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= &two,
+ 	},
+ 	{
+ 		.procname	= "bpf_stats_enabled",
 
 

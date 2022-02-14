@@ -2,75 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 374564B5BC4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 702864B5C1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiBNUwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 15:52:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51554 "EHLO
+        id S230316AbiBNVKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:10:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiBNUwl (ORCPT
+        with ESMTP id S230024AbiBNVKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 15:52:41 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC2A21818;
-        Mon, 14 Feb 2022 12:52:22 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id e17so11785218pfv.5;
-        Mon, 14 Feb 2022 12:52:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=OLEzoYCMLTbGDVeqbxK+5lFttyCAPo9oIDhB/QhDJGw=;
-        b=QXJQkK/mzVF+p35yGb5Rc6EArRncVS6UPVJ43adgUZqedywOqAnrO4S6GuocX12OA6
-         7YFYSOww3s7W6KLb8L+3R0VO1dXu3Sh2dfP/48P8qunaMnyE++UlU4HKjGxG6I4P6hh2
-         udpNZ4v7zu6zMPpttbGlQjWJFeQe3Ixcu6loRMEEDtWg9SzMBkgR5Fiz1xBV6G7Q4Gu9
-         tgsO7RW4gtFaMghM09q0Fw4CZJAq9iN88KAocwPW/+v2OQJQiRuZ4/v6rTke9phBfhxi
-         sKemXb+sPsf9dWsfLEMFuKn+xE+f3XgMulnZCxH1/+IWdoy2jN1JZrLsFIZEj8m6E50u
-         m4lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=OLEzoYCMLTbGDVeqbxK+5lFttyCAPo9oIDhB/QhDJGw=;
-        b=nJuwrUy4aoFdCQ1r+6KoIm/ARpYG4101OvoQndeAjpj70mmOPNx4liPhWD/mQYLTCz
-         yjUTVPiNS6Awl7UZEN0PLbSQHrlHG0spB+myAaY9qtiCfV90xtPsF3hqNf2ywuDsJx0U
-         XY8bXrwqAKbs9Kqhe17sq3AjDJ/+D7GrF743RSYCYcfFd8uD9lFusvdM+FITozCqgEBa
-         MlKe8sW4gOuI+zy/wg1dT4oQPGWQ1moeltFV3ls6v+BM/nBvpCvwK7zKUCTMGPnsbXf8
-         3neUlK89YqbHTGGz3V2cJX1Ad5Rfcic9crPA0lJJoHujfge6kM2qvbhSI/JO+Mv7eDPu
-         QDGw==
-X-Gm-Message-State: AOAM5301ORUGNBu+XGiw37nhAsr4ANQGAEzUrglZ3VXumGCQeUmgdmAv
-        fD/9c3VMoPzCRx7FSZ3sio66DBQgWGA=
-X-Google-Smtp-Source: ABdhPJz56ibNoIV+Cjq8u28ihnBkAsxJp4R4lDcSfLYtIfNvCH9HSd3otZBm399O4xXtxZUWzyx3pQ==
-X-Received: by 2002:a63:d2:: with SMTP id 201mr585252pga.51.1644869569345;
-        Mon, 14 Feb 2022 12:12:49 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id q2sm3435990pfu.160.2022.02.14.12.12.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 12:12:48 -0800 (PST)
-Subject: Re: [PATCH 5.4 00/71] 5.4.180-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220214092452.020713240@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <0bdf93e4-9fde-da49-d372-34b2fb687fa0@gmail.com>
-Date:   Mon, 14 Feb 2022 12:12:43 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 14 Feb 2022 16:10:14 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D40C2492;
+        Mon, 14 Feb 2022 13:10:05 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21EI9WKD008775;
+        Mon, 14 Feb 2022 20:13:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=N0QNkjW3qGQaVeorojZWrqSjCFf0AtLA6NMcO9ypCik=;
+ b=QtPNgtDvx2E/gY526BJifF3ty15H/Yo2Sl/iOcAuiyVpbf4hQrbed9/jIVlYdAHganmZ
+ Cq4kJScL7N4y8YSN9loMUD2Ah+UQOTFTAFqy4bQmURty3/SWtiSzsdNQsp/1jb7zwS8Y
+ Pwx8iQIRemIiPmraJ5lh0SHrvPqlviAPIlzJXgWJcEkIUWxaGBpX2dDgZRs76kIXEDPe
+ QIxAVCEi0pu07MHHIe2GWZPJzlqEbTqsrL+eTMVcYP7yB3FHrsN15gKVE2WQx8ZkBRA1
+ WTZFwn98qMvOjw4x/Hu7u0f/oDBg+yFj/EHW3aQEr+PabmftEHE9SvS/YgmdPQV920jy mQ== 
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e6ycr3fef-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 20:13:33 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21EK1xcr005846;
+        Mon, 14 Feb 2022 20:13:33 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma02wdc.us.ibm.com with ESMTP id 3e64ha7x5r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 20:13:33 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21EKDWHp33423846
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Feb 2022 20:13:32 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BF291AC065;
+        Mon, 14 Feb 2022 20:13:32 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8156EAC059;
+        Mon, 14 Feb 2022 20:13:32 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon, 14 Feb 2022 20:13:32 +0000 (GMT)
+Message-ID: <b0ba8db6-cf85-0ee3-af19-c8b1251d5b63@linux.ibm.com>
+Date:   Mon, 14 Feb 2022 15:13:32 -0500
 MIME-Version: 1.0
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 2/8] ima: define ima_max_digest_data struct without a
+ flexible array variable
 Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220211214310.119257-1-zohar@linux.ibm.com>
+ <20220211214310.119257-3-zohar@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220211214310.119257-3-zohar@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: DUZyhJckYq_l8o03iQFE7ETTRaar7VtR
+X-Proofpoint-GUID: DUZyhJckYq_l8o03iQFE7ETTRaar7VtR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-14_07,2022-02-14_03,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
+ adultscore=0 spamscore=0 priorityscore=1501 mlxscore=0 suspectscore=0
+ impostorscore=0 malwarescore=0 clxscore=1015 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202140116
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,27 +89,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/22 1:25 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.180 release.
-> There are 71 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.180-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+On 2/11/22 16:43, Mimi Zohar wrote:
+> To support larger hash digests in the 'iint' cache, instead of defining
+> the 'digest' field as the maximum digest size, the 'digest' field was
+> defined as a flexible array variable.  The "ima_digest_data" struct was
+> wrapped inside a local structure with the maximum digest size.  But
+> before adding the record to the iint cache, memory for the exact digest
+> size was dynamically allocated.
+>
+> The original reason for defining the 'digest' field as a flexible array
+> variable is still valid for the 'iint' cache use case.  Instead of
+> wrapping the 'ima_digest_data' struct in a local structure define
+> 'ima_max_digest_data' struct.
+>
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>   security/integrity/ima/ima_api.c          | 10 ++++------
+>   security/integrity/ima/ima_init.c         |  5 +----
+>   security/integrity/ima/ima_main.c         |  5 +----
+>   security/integrity/ima/ima_template_lib.c |  5 +----
+>   security/integrity/integrity.h            | 10 ++++++++++
+>   5 files changed, 17 insertions(+), 18 deletions(-)
+>
+> diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+> index 5b220a2fe573..c6805af46211 100644
+> --- a/security/integrity/ima/ima_api.c
+> +++ b/security/integrity/ima/ima_api.c
+> @@ -217,14 +217,11 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
+>   	const char *audit_cause = "failed";
+>   	struct inode *inode = file_inode(file);
+>   	const char *filename = file->f_path.dentry->d_name.name;
+> +	struct ima_max_digest_data hash;
+>   	int result = 0;
+>   	int length;
+>   	void *tmpbuf;
+>   	u64 i_version;
+> -	struct {
+> -		struct ima_digest_data hdr;
+> -		char digest[IMA_MAX_DIGEST_SIZE];
+> -	} hash;
+>   
+>   	/*
+>   	 * Always collect the modsig, because IMA might have already collected
+> @@ -239,8 +236,9 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
+>   
+>   	/*
+>   	 * Detecting file change is based on i_version. On filesystems
+> -	 * which do not support i_version, support is limited to an initial
+> -	 * measurement/appraisal/audit.
+> +	 * which do not support i_version, support was originally limited
+> +	 * to an initial measurement/appraisal/audit, but was modified to
+> +	 * assume the file changed.
+>   	 */
+>   	i_version = inode_query_iversion(inode);
+>   	hash.hdr.algo = algo;
+> diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
+> index b26fa67476b4..63979aefc95f 100644
+> --- a/security/integrity/ima/ima_init.c
+> +++ b/security/integrity/ima/ima_init.c
+> @@ -47,12 +47,9 @@ static int __init ima_add_boot_aggregate(void)
+>   	struct integrity_iint_cache tmp_iint, *iint = &tmp_iint;
+>   	struct ima_event_data event_data = { .iint = iint,
+>   					     .filename = boot_aggregate_name };
+> +	struct ima_max_digest_data hash;
+>   	int result = -ENOMEM;
+>   	int violation = 0;
+> -	struct {
+> -		struct ima_digest_data hdr;
+> -		char digest[TPM_MAX_DIGEST_SIZE];
+> -	} hash;
+>   
+>   	memset(iint, 0, sizeof(*iint));
+>   	memset(&hash, 0, sizeof(hash));
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> index 7c80dfe2c7a5..c6412dec3810 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -874,10 +874,7 @@ int process_buffer_measurement(struct user_namespace *mnt_userns,
+>   					    .buf = buf,
+>   					    .buf_len = size};
+>   	struct ima_template_desc *template;
+> -	struct {
+> -		struct ima_digest_data hdr;
+> -		char digest[IMA_MAX_DIGEST_SIZE];
+> -	} hash = {};
+> +	struct ima_max_digest_data hash;
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+
+It looks like the initialization wasn't necessary.
+
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+
+
+>   	char digest_hash[IMA_MAX_DIGEST_SIZE];
+>   	int digest_hash_len = hash_digest_size[ima_hash_algo];
+>   	int violation = 0;
+> diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
+> index 5a5d462ab36d..7155d17a3b75 100644
+> --- a/security/integrity/ima/ima_template_lib.c
+> +++ b/security/integrity/ima/ima_template_lib.c
+> @@ -307,10 +307,7 @@ static int ima_eventdigest_init_common(const u8 *digest, u32 digestsize,
+>   int ima_eventdigest_init(struct ima_event_data *event_data,
+>   			 struct ima_field_data *field_data)
+>   {
+> -	struct {
+> -		struct ima_digest_data hdr;
+> -		char digest[IMA_MAX_DIGEST_SIZE];
+> -	} hash;
+> +	struct ima_max_digest_data hash;
+>   	u8 *cur_digest = NULL;
+>   	u32 cur_digestsize = 0;
+>   	struct inode *inode;
+> diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+> index d045dccd415a..daf49894fd7d 100644
+> --- a/security/integrity/integrity.h
+> +++ b/security/integrity/integrity.h
+> @@ -15,6 +15,7 @@
+>   #include <linux/types.h>
+>   #include <linux/integrity.h>
+>   #include <crypto/sha1.h>
+> +#include <crypto/hash.h>
+>   #include <linux/key.h>
+>   #include <linux/audit.h>
+>   
+> @@ -110,6 +111,15 @@ struct ima_digest_data {
+>   	u8 digest[];
+>   } __packed;
+>   
+> +/*
+> + * Instead of wrapping the ima_digest_data struct inside a local structure
+> + * with the maximum hash size, define ima_max_digest_data struct.
+> + */
+> +struct ima_max_digest_data {
+> +	struct ima_digest_data hdr;
+> +	u8 digest[HASH_MAX_DIGESTSIZE];
+> +} __packed;
+> +
+>   /*
+>    * signature format v2 - for using with asymmetric keys
+>    */

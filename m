@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C1F4B47BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8CD4B49D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:37:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234661AbiBNJh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:37:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52644 "EHLO
+        id S1347916AbiBNKdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:33:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244813AbiBNJgM (ORCPT
+        with ESMTP id S1348959AbiBNKbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:36:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A832A6CA4A;
-        Mon, 14 Feb 2022 01:34:09 -0800 (PST)
+        Mon, 14 Feb 2022 05:31:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9819DD6D;
+        Mon, 14 Feb 2022 01:59:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D11AB80DA9;
-        Mon, 14 Feb 2022 09:34:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87195C340E9;
-        Mon, 14 Feb 2022 09:34:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D7D560C38;
+        Mon, 14 Feb 2022 09:59:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B5CCC340F0;
+        Mon, 14 Feb 2022 09:59:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831248;
-        bh=0KFL7EUzAu7Eb7oUe3MpZrguecfrpKt/qiwj88UrN+8=;
+        s=korg; t=1644832797;
+        bh=fgTxHlgAuSLN0JbaPkeomaLEwcnrryB9lPiCvLTAvSo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GbE8lKZsfPNe+ucadJEDuHNfn4GOHw8tT8QZVmlm/1M6t1qhvUqp3/fAu/t4OlW0E
-         b9auAYLVAsJLTh3ZV8FNJEKU9aE7aJ9pLwjjtuXqejkUQt6o1dRKzFHim/5de6Z9fs
-         EzmTl30wDwwFp5ApK8znHn9tjpflBeScLsk/NZtM=
+        b=y/TR2+VXMUgFS9mYyP34RC9ClyoCYqQSSap7gzDSyIsSmfFjjN8qxkXYybexhFlyS
+         2XTt0qdx+ywQoCU6zAAFtkNpOgX/uyGz9m4iv92viXKAWDhzNLPwXM3DFnxBWsUPLa
+         AqEx9z4XQFLi2N1N7iPokHhz6abeC0kTRJ9ViCpw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Stephan Brunner <s.brunner@stephan-brunner.net>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 4.19 44/49] USB: serial: ch341: add support for GW Instek USB2.0-Serial devices
-Date:   Mon, 14 Feb 2022 10:26:10 +0100
-Message-Id: <20220214092449.764605832@linuxfoundation.org>
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 127/203] ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE
+Date:   Mon, 14 Feb 2022 10:26:11 +0100
+Message-Id: <20220214092514.556008650@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
-References: <20220214092448.285381753@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +55,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephan Brunner <s.brunner@stephan-brunner.net>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-commit fa77ce201f7f2d823b07753575122d1ae5597fbe upstream.
+[ Upstream commit dc0075ba7f387fe4c48a8c674b11ab6f374a6acc ]
 
-Programmable lab power supplies made by GW Instek, such as the
-GPP-2323, have a USB port exposing a serial port to control the device.
+Commit 4a9af6cac050 ("ACPI: EC: Rework flushing of EC work while
+suspended to idle") made acpi_ec_dispatch_gpe() check
+pm_wakeup_pending(), but that is before canceling the SCI wakeup,
+so pm_wakeup_pending() is always true.  This causes the loop in
+acpi_ec_dispatch_gpe() to always terminate after one iteration which
+may not be correct.
 
-Stringing the supplied Windows driver, references to the ch341 chip are
-found. Binding the existing ch341 driver to the VID/PID of the GPP-2323
-("GW Instek USB2.0-Serial" as per the USB product name) works out of the
-box, communication and control is now possible.
+Address this issue by canceling the SCI wakeup earlier, from
+acpi_ec_dispatch_gpe() itself.
 
-This patch should work with any GPP series power supply due to
-similarities in the product line.
-
-Signed-off-by: Stephan Brunner <s.brunner@stephan-brunner.net>
-Link: https://lore.kernel.org/r/4a47b864-0816-6f6a-efee-aa20e74bcdc6@stephan-brunner.net
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 4a9af6cac050 ("ACPI: EC: Rework flushing of EC work while suspended to idle")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/serial/ch341.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/acpi/ec.c    | 10 ++++++++++
+ drivers/acpi/sleep.c | 14 ++++----------
+ 2 files changed, 14 insertions(+), 10 deletions(-)
 
---- a/drivers/usb/serial/ch341.c
-+++ b/drivers/usb/serial/ch341.c
-@@ -84,6 +84,7 @@ static const struct usb_device_id id_tab
- 	{ USB_DEVICE(0x1a86, 0x5523) },
- 	{ USB_DEVICE(0x1a86, 0x7522) },
- 	{ USB_DEVICE(0x1a86, 0x7523) },
-+	{ USB_DEVICE(0x2184, 0x0057) },
- 	{ USB_DEVICE(0x4348, 0x5523) },
- 	{ USB_DEVICE(0x9986, 0x7523) },
- 	{ },
+diff --git a/drivers/acpi/ec.c b/drivers/acpi/ec.c
+index b9c44e6c5e400..1712990bf2ad8 100644
+--- a/drivers/acpi/ec.c
++++ b/drivers/acpi/ec.c
+@@ -2051,6 +2051,16 @@ bool acpi_ec_dispatch_gpe(void)
+ 	if (acpi_any_gpe_status_set(first_ec->gpe))
+ 		return true;
+ 
++	/*
++	 * Cancel the SCI wakeup and process all pending events in case there
++	 * are any wakeup ones in there.
++	 *
++	 * Note that if any non-EC GPEs are active at this point, the SCI will
++	 * retrigger after the rearming in acpi_s2idle_wake(), so no events
++	 * should be missed by canceling the wakeup here.
++	 */
++	pm_system_cancel_wakeup();
++
+ 	/*
+ 	 * Dispatch the EC GPE in-band, but do not report wakeup in any case
+ 	 * to allow the caller to process events properly after that.
+diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
+index 9f237dc9d45fc..8513410ca2fc2 100644
+--- a/drivers/acpi/sleep.c
++++ b/drivers/acpi/sleep.c
+@@ -739,21 +739,15 @@ bool acpi_s2idle_wake(void)
+ 			return true;
+ 		}
+ 
+-		/* Check non-EC GPE wakeups and dispatch the EC GPE. */
++		/*
++		 * Check non-EC GPE wakeups and if there are none, cancel the
++		 * SCI-related wakeup and dispatch the EC GPE.
++		 */
+ 		if (acpi_ec_dispatch_gpe()) {
+ 			pm_pr_dbg("ACPI non-EC GPE wakeup\n");
+ 			return true;
+ 		}
+ 
+-		/*
+-		 * Cancel the SCI wakeup and process all pending events in case
+-		 * there are any wakeup ones in there.
+-		 *
+-		 * Note that if any non-EC GPEs are active at this point, the
+-		 * SCI will retrigger after the rearming below, so no events
+-		 * should be missed by canceling the wakeup here.
+-		 */
+-		pm_system_cancel_wakeup();
+ 		acpi_os_wait_events_complete();
+ 
+ 		/*
+-- 
+2.34.1
+
 
 

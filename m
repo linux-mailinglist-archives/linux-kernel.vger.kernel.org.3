@@ -2,460 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A2E4B4316
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF624B4315
 	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 08:47:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241472AbiBNHoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 02:44:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58972 "EHLO
+        id S241504AbiBNHo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 02:44:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235718AbiBNHo3 (ORCPT
+        with ESMTP id S241474AbiBNHow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 02:44:29 -0500
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 24C225AEE2;
-        Sun, 13 Feb 2022 23:44:17 -0800 (PST)
-Received: from jleng.ambarella.net (unknown [180.169.129.130])
-        by mail-app4 (Coremail) with SMTP id cS_KCgAHP5g6CApi2XkcCQ--.11874S2;
-        Mon, 14 Feb 2022 15:43:57 +0800 (CST)
-From:   3090101217@zju.edu.cn
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        ruslan.bilovol@gmail.com, pavel.hofman@ivitera.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jing Leng <jleng@ambarella.com>
-Subject: [PATCH] usb: gadget: f_uac1: add superspeed transfer support
-Date:   Mon, 14 Feb 2022 15:43:52 +0800
-Message-Id: <20220214074352.3447-1-3090101217@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cS_KCgAHP5g6CApi2XkcCQ--.11874S2
-X-Coremail-Antispam: 1UD129KBjvAXoWfGw1kZFWrJr4kWF1DCrW8Xrb_yoW8Xr4UWo
-        WDJFsYy34FqF18Xry8GF18WF18ZF1xCFsxXr1rJr9xZ3yI934Y9asrC3WDWa13JF1fC3WD
-        Wa4UWa1DZaykGr48n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-        AaLaJ3UjIYCTnIWjp_UUUYt7k0a2IF6w4xM7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0
-        x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj4
-        1l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0
-        I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4
-        vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWlnxkEFVCFx7IYxxCE
-        VcI25VAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-        xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lw4CEc2x0rVAKj4xxMxkIecxEwVAFwVW8CwCF04
-        k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
-        MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr4
-        1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1l
-        IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
-        A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jrxhdUUUUU=
-X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwQRBVNG3FHYyQAKsQ
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 14 Feb 2022 02:44:52 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E645A594;
+        Sun, 13 Feb 2022 23:44:40 -0800 (PST)
+X-UUID: 060ca1a90ef44e91b63732669f0fe9aa-20220214
+X-UUID: 060ca1a90ef44e91b63732669f0fe9aa-20220214
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1472425227; Mon, 14 Feb 2022 15:44:35 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 14 Feb 2022 15:44:34 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 14 Feb 2022 15:44:33 +0800
+Message-ID: <1e016441cdbae4fc6300dd6b70e9e29def81a960.camel@mediatek.com>
+Subject: Re: [PATCH] usb: host: xhci-mtk: Simplify supplies handling with
+ regulator_bulk
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+        <matthias.bgg@gmail.com>, <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Date:   Mon, 14 Feb 2022 15:44:30 +0800
+In-Reply-To: <02d0dba2-ffc8-1bf1-d8a7-f7fa19f2c7ed@collabora.com>
+References: <20220118133348.111860-1-angelogioacchino.delregno@collabora.com>
+         <91bb8078e2d0824c325eb3819e59cdcb65b68a4e.camel@mediatek.com>
+         <02d0dba2-ffc8-1bf1-d8a7-f7fa19f2c7ed@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jing Leng <jleng@ambarella.com>
+On Mon, 2022-02-07 at 11:00 +0100, AngeloGioacchino Del Regno wrote:
+> Il 20/01/22 07:50, Chunfeng Yun ha scritto:
+> > On Tue, 2022-01-18 at 14:33 +0100, AngeloGioacchino Del Regno
+> > wrote:
+> > > Remove the custom functions xhci_mtk_ldos_{enable,disable}() by
+> > > switching to using regulator_bulk to perform the very same thing,
+> > > as the regulators are always either both enabled or both
+> > > disabled.
+> > > 
+> > > Signed-off-by: AngeloGioacchino Del Regno <
+> > > angelogioacchino.delregno@collabora.com>
+> > > ---
+> > >   drivers/usb/host/xhci-mtk.c | 56 ++++++++++++----------------
+> > > -------
+> > > --
+> > >   drivers/usb/host/xhci-mtk.h |  4 +--
+> > >   2 files changed, 20 insertions(+), 40 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-
+> > > mtk.c
+> > > index 62c835d446be..3b81931e5b77 100644
+> > > --- a/drivers/usb/host/xhci-mtk.c
+> > > +++ b/drivers/usb/host/xhci-mtk.c
+> > > @@ -395,31 +395,6 @@ static int xhci_mtk_clks_get(struct
+> > > xhci_hcd_mtk
+> > > *mtk)
+> > >   	return devm_clk_bulk_get_optional(mtk->dev,
+> > > BULK_CLKS_NUM,
+> > > clks);
+> > >   }
+> > >   
+> > > -static int xhci_mtk_ldos_enable(struct xhci_hcd_mtk *mtk)
+> > > -{
+> > > -	int ret;
+> > > -
+> > > -	ret = regulator_enable(mtk->vbus);
+> > > -	if (ret) {
+> > > -		dev_err(mtk->dev, "failed to enable vbus\n");
+> > > -		return ret;
+> > > -	}
+> > > -
+> > > -	ret = regulator_enable(mtk->vusb33);
+> > > -	if (ret) {
+> > > -		dev_err(mtk->dev, "failed to enable vusb33\n");
+> > > -		regulator_disable(mtk->vbus);
+> > > -		return ret;
+> > > -	}
+> > > -	return 0;
+> > > -}
+> > > -
+> > > -static void xhci_mtk_ldos_disable(struct xhci_hcd_mtk *mtk)
+> > > -{
+> > > -	regulator_disable(mtk->vbus);
+> > > -	regulator_disable(mtk->vusb33);
+> > > -}
+> > > -
+> > >   static void xhci_mtk_quirks(struct device *dev, struct xhci_hcd
+> > > *xhci)
+> > >   {
+> > >   	struct usb_hcd *hcd = xhci_to_hcd(xhci);
+> > > @@ -475,6 +450,10 @@ static int xhci_mtk_setup(struct usb_hcd
+> > > *hcd)
+> > >   	return ret;
+> > >   }
+> > >   
+> > > +static const char * const xhci_mtk_supply_names[] = {
+> > > +	"vusb33", "vbus",
+> > > +};
+> > > +
+> > >   static const struct xhci_driver_overrides xhci_mtk_overrides
+> > > __initconst = {
+> > >   	.reset = xhci_mtk_setup,
+> > >   	.add_endpoint = xhci_mtk_add_ep,
+> > > @@ -507,17 +486,18 @@ static int xhci_mtk_probe(struct
+> > > platform_device *pdev)
+> > >   		return -ENOMEM;
+> > >   
+> > >   	mtk->dev = dev;
+> > > -	mtk->vbus = devm_regulator_get(dev, "vbus");
+> > > -	if (IS_ERR(mtk->vbus)) {
+> > > -		dev_err(dev, "fail to get vbus\n");
+> > > -		return PTR_ERR(mtk->vbus);
+> > > -	}
+> > > +	mtk->num_supplies = ARRAY_SIZE(xhci_mtk_supply_names);
+> > > +	mtk->supplies = devm_kcalloc(dev, mtk->num_supplies,
+> > > +				     sizeof(*mtk->supplies),
+> > > GFP_KERNEL);
+> > > +	if (!mtk->supplies)
+> > > +		return -ENOMEM;
+> > >   
+> > > -	mtk->vusb33 = devm_regulator_get(dev, "vusb33");
+> > > -	if (IS_ERR(mtk->vusb33)) {
+> > > -		dev_err(dev, "fail to get vusb33\n");
+> > > -		return PTR_ERR(mtk->vusb33);
+> > > -	}
+> > > +	regulator_bulk_set_supply_names(mtk->supplies,
+> > > xhci_mtk_supply_names,
+> > > +					mtk->num_supplies);
+> > > +
+> > > +	ret = devm_regulator_bulk_get(dev, mtk->num_supplies, mtk-
+> > > > supplies);
+> > > 
+> > > +	if (ret)
+> > > +		return dev_err_probe(dev, ret, "Failed to get
+> > > regulators\n");
+> > >   
+> > >   	ret = xhci_mtk_clks_get(mtk);
+> > >   	if (ret)
+> > > @@ -558,7 +538,7 @@ static int xhci_mtk_probe(struct
+> > > platform_device
+> > > *pdev)
+> > >   	pm_runtime_enable(dev);
+> > >   	pm_runtime_get_sync(dev);
+> > >   
+> > > -	ret = xhci_mtk_ldos_enable(mtk);
+> > > +	ret = regulator_bulk_enable(mtk->num_supplies, mtk->supplies);
+> > >   	if (ret)
+> > >   		goto disable_pm;
+> > >   
+> > > @@ -667,7 +647,7 @@ static int xhci_mtk_probe(struct
+> > > platform_device
+> > > *pdev)
+> > >   	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
+> > >   
+> > >   disable_ldos:
+> > > -	xhci_mtk_ldos_disable(mtk);
+> > > +	regulator_bulk_disable(mtk->num_supplies, mtk->supplies);
+> > >   
+> > >   disable_pm:
+> > >   	pm_runtime_put_noidle(dev);
+> > > @@ -695,7 +675,7 @@ static int xhci_mtk_remove(struct
+> > > platform_device
+> > > *pdev)
+> > >   	usb_put_hcd(hcd);
+> > >   	xhci_mtk_sch_exit(mtk);
+> > >   	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
+> > > -	xhci_mtk_ldos_disable(mtk);
+> > > +	regulator_bulk_disable(mtk->num_supplies, mtk->supplies);
+> > >   
+> > >   	pm_runtime_disable(dev);
+> > >   	pm_runtime_put_noidle(dev);
+> > > diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-
+> > > mtk.h
+> > > index 4b1ea89f959a..9b78cd2ba0ac 100644
+> > > --- a/drivers/usb/host/xhci-mtk.h
+> > > +++ b/drivers/usb/host/xhci-mtk.h
+> > > @@ -150,9 +150,9 @@ struct xhci_hcd_mtk {
+> > >   	int num_u3_ports;
+> > >   	int u2p_dis_msk;
+> > >   	int u3p_dis_msk;
+> > > -	struct regulator *vusb33;
+> > > -	struct regulator *vbus;
+> > >   	struct clk_bulk_data clks[BULK_CLKS_NUM];
+> > > +	struct regulator_bulk_data *supplies;
+> > > +	u8 num_supplies;
+> > 
+> > Could you please help to change it like as clock bulk?
+> > 
+> > 1. #define BULK_REGULATORS_NUM 2; then define @supplies array,
+> > 
+> >          struct regulator_bulk_data supplies[BULK_REGULATORS_NUM];
+> > 
+> > 2. also add a helper to get regulator bulk; e.g.
+> > 
+> > static int xhci_mtk_regulators_get(struct xhci_hcd_mtk *mtk)
+> > {
+> >      struct regulator_bulk_data *supplies = mtk->supplies;
+> > 
+> >      supplies[0].supply = "vusb33";
+> >      supplies[1].supply = "vbus";
+> > 
+> >      return devm_regulator_bulk_get(mtk->dev, BUL
+> > K_REGULATORS_NUM, supplies);
+> > }
+> 
+> Hello Chunfeng,
+> I chose to go for this way to enhance the implementation flexibility:
+> like that,
+> any future SoC that needs different regulators (more vregs, less,
+> different names)
+> will simply need a new array of vreg names, like:
+> 
+> static const char * const xhci_mtk_mtxxxx_supply_names[] = {
+> 	"vusb33", "vbus", "another-supply", "and-another-one",
+> };
+> 
+> Other than enhancing flexibility, this will also make sure that we
+> don't allocate
+> more regulator_bulk_data entries than needed, enhancing memory usage.
+> 
+> Your proposal, though, is valid if you are sure that future SoCs will
+> have only
+> and always these two power supplies and nothing else...
+As I know, vbus is usually always on (fixed regulator) and is used to
+provide 5v for the connected device, vusb33 is rarely used now (it's
+used to provide v3.3 for the controller). I think no need pay more
+attention to flexibility here.
 
-Currently uac1 only supports high speed.
+Thanks a lot
 
-Signed-off-by: Jing Leng <jleng@ambarella.com>
----
- drivers/usb/gadget/function/f_uac1.c | 276 ++++++++++++++++++++++-----
- 1 file changed, 225 insertions(+), 51 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
-index 03f50643fbba..16b21fa1e709 100644
---- a/drivers/usb/gadget/function/f_uac1.c
-+++ b/drivers/usb/gadget/function/f_uac1.c
-@@ -123,6 +123,15 @@ static struct uac_feature_unit_descriptor *in_feature_unit_desc;
- static struct uac_feature_unit_descriptor *out_feature_unit_desc;
- 
- /* AC IN Interrupt Endpoint */
-+static struct usb_endpoint_descriptor fs_int_ep_desc = {
-+	.bLength = USB_DT_ENDPOINT_SIZE,
-+	.bDescriptorType = USB_DT_ENDPOINT,
-+	.bEndpointAddress = USB_DIR_IN,
-+	.bmAttributes = USB_ENDPOINT_XFER_INT,
-+	.wMaxPacketSize = cpu_to_le16(2),
-+	.bInterval = 1,
-+};
-+
- static struct usb_endpoint_descriptor ac_int_ep_desc = {
- 	.bLength = USB_DT_ENDPOINT_SIZE,
- 	.bDescriptorType = USB_DT_ENDPOINT,
-@@ -132,6 +141,14 @@ static struct usb_endpoint_descriptor ac_int_ep_desc = {
- 	.bInterval = 4,
- };
- 
-+struct usb_ss_ep_comp_descriptor ac_int_ep_desc_comp = {
-+	.bLength = sizeof(ac_int_ep_desc_comp),
-+	.bDescriptorType = USB_DT_SS_ENDPOINT_COMP,
-+	.bMaxBurst = 0,
-+	.bmAttributes = 0,
-+	.wBytesPerInterval = cpu_to_le16(2),
-+};
-+
- /* B.4.1  Standard AS Interface Descriptor */
- static struct usb_interface_descriptor as_out_interface_alt_0_desc = {
- 	.bLength =		USB_DT_INTERFACE_SIZE,
-@@ -201,6 +218,16 @@ static struct uac_format_type_i_discrete_descriptor_1 as_out_type_i_desc = {
- };
- 
- /* Standard ISO OUT Endpoint Descriptor */
-+static struct usb_endpoint_descriptor fs_out_ep_desc  = {
-+	.bLength =		USB_DT_ENDPOINT_AUDIO_SIZE,
-+	.bDescriptorType =	USB_DT_ENDPOINT,
-+	.bEndpointAddress =	USB_DIR_OUT,
-+	.bmAttributes =		USB_ENDPOINT_SYNC_ADAPTIVE
-+				| USB_ENDPOINT_XFER_ISOC,
-+	.wMaxPacketSize	=	cpu_to_le16(UAC1_OUT_EP_MAX_PACKET_SIZE),
-+	.bInterval =		1,
-+};
-+
- static struct usb_endpoint_descriptor as_out_ep_desc  = {
- 	.bLength =		USB_DT_ENDPOINT_AUDIO_SIZE,
- 	.bDescriptorType =	USB_DT_ENDPOINT,
-@@ -211,6 +238,14 @@ static struct usb_endpoint_descriptor as_out_ep_desc  = {
- 	.bInterval =		4,
- };
- 
-+static struct usb_ss_ep_comp_descriptor as_out_ep_desc_comp = {
-+	.bLength		= sizeof(as_out_ep_desc_comp),
-+	.bDescriptorType	= USB_DT_SS_ENDPOINT_COMP,
-+	.bMaxBurst		= 0,
-+	.bmAttributes		= 0,
-+	.wBytesPerInterval	= cpu_to_le16(UAC1_OUT_EP_MAX_PACKET_SIZE),
-+};
-+
- /* Class-specific AS ISO OUT Endpoint Descriptor */
- static struct uac_iso_endpoint_descriptor as_iso_out_desc = {
- 	.bLength =		UAC_ISO_ENDPOINT_DESC_SIZE,
-@@ -231,7 +266,17 @@ static struct uac_format_type_i_discrete_descriptor_1 as_in_type_i_desc = {
- 	.bSamFreqType =		1,
- };
- 
--/* Standard ISO OUT Endpoint Descriptor */
-+/* Standard ISO IN Endpoint Descriptor */
-+static struct usb_endpoint_descriptor fs_in_ep_desc  = {
-+	.bLength =		USB_DT_ENDPOINT_AUDIO_SIZE,
-+	.bDescriptorType =	USB_DT_ENDPOINT,
-+	.bEndpointAddress =	USB_DIR_IN,
-+	.bmAttributes =		USB_ENDPOINT_SYNC_ASYNC
-+				| USB_ENDPOINT_XFER_ISOC,
-+	.wMaxPacketSize	=	cpu_to_le16(UAC1_OUT_EP_MAX_PACKET_SIZE),
-+	.bInterval =		1,
-+};
-+
- static struct usb_endpoint_descriptor as_in_ep_desc  = {
- 	.bLength =		USB_DT_ENDPOINT_AUDIO_SIZE,
- 	.bDescriptorType =	USB_DT_ENDPOINT,
-@@ -242,6 +287,14 @@ static struct usb_endpoint_descriptor as_in_ep_desc  = {
- 	.bInterval =		4,
- };
- 
-+static struct usb_ss_ep_comp_descriptor as_in_ep_desc_comp = {
-+	.bLength		= sizeof(as_in_ep_desc_comp),
-+	.bDescriptorType	= USB_DT_SS_ENDPOINT_COMP,
-+	.bMaxBurst		= 0,
-+	.bmAttributes		= 0,
-+	.wBytesPerInterval	= cpu_to_le16(UAC1_OUT_EP_MAX_PACKET_SIZE),
-+};
-+
- /* Class-specific AS ISO OUT Endpoint Descriptor */
- static struct uac_iso_endpoint_descriptor as_iso_in_desc = {
- 	.bLength =		UAC_ISO_ENDPOINT_DESC_SIZE,
-@@ -252,7 +305,41 @@ static struct uac_iso_endpoint_descriptor as_iso_in_desc = {
- 	.wLockDelay =		0,
- };
- 
--static struct usb_descriptor_header *f_audio_desc[] = {
-+static struct usb_descriptor_header *fs_audio_desc[] = {
-+	(struct usb_descriptor_header *)&ac_interface_desc,
-+	(struct usb_descriptor_header *)&ac_header_desc,
-+
-+	(struct usb_descriptor_header *)&usb_out_it_desc,
-+	(struct usb_descriptor_header *)&io_out_ot_desc,
-+	(struct usb_descriptor_header *)&out_feature_unit_desc,
-+
-+	(struct usb_descriptor_header *)&io_in_it_desc,
-+	(struct usb_descriptor_header *)&usb_in_ot_desc,
-+	(struct usb_descriptor_header *)&in_feature_unit_desc,
-+
-+	(struct usb_descriptor_header *)&fs_int_ep_desc,
-+
-+	(struct usb_descriptor_header *)&as_out_interface_alt_0_desc,
-+	(struct usb_descriptor_header *)&as_out_interface_alt_1_desc,
-+	(struct usb_descriptor_header *)&as_out_header_desc,
-+
-+	(struct usb_descriptor_header *)&as_out_type_i_desc,
-+
-+	(struct usb_descriptor_header *)&fs_out_ep_desc,
-+	(struct usb_descriptor_header *)&as_iso_out_desc,
-+
-+	(struct usb_descriptor_header *)&as_in_interface_alt_0_desc,
-+	(struct usb_descriptor_header *)&as_in_interface_alt_1_desc,
-+	(struct usb_descriptor_header *)&as_in_header_desc,
-+
-+	(struct usb_descriptor_header *)&as_in_type_i_desc,
-+
-+	(struct usb_descriptor_header *)&fs_in_ep_desc,
-+	(struct usb_descriptor_header *)&as_iso_in_desc,
-+	NULL,
-+};
-+
-+static struct usb_descriptor_header *hs_audio_desc[] = {
- 	(struct usb_descriptor_header *)&ac_interface_desc,
- 	(struct usb_descriptor_header *)&ac_header_desc,
- 
-@@ -286,6 +373,43 @@ static struct usb_descriptor_header *f_audio_desc[] = {
- 	NULL,
- };
- 
-+static struct usb_descriptor_header *ss_audio_desc[] = {
-+	(struct usb_descriptor_header *)&ac_interface_desc,
-+	(struct usb_descriptor_header *)&ac_header_desc,
-+
-+	(struct usb_descriptor_header *)&usb_out_it_desc,
-+	(struct usb_descriptor_header *)&io_out_ot_desc,
-+	(struct usb_descriptor_header *)&out_feature_unit_desc,
-+
-+	(struct usb_descriptor_header *)&io_in_it_desc,
-+	(struct usb_descriptor_header *)&usb_in_ot_desc,
-+	(struct usb_descriptor_header *)&in_feature_unit_desc,
-+
-+	(struct usb_descriptor_header *)&ac_int_ep_desc,
-+	(struct usb_descriptor_header *)&ac_int_ep_desc_comp,
-+
-+	(struct usb_descriptor_header *)&as_out_interface_alt_0_desc,
-+	(struct usb_descriptor_header *)&as_out_interface_alt_1_desc,
-+	(struct usb_descriptor_header *)&as_out_header_desc,
-+
-+	(struct usb_descriptor_header *)&as_out_type_i_desc,
-+
-+	(struct usb_descriptor_header *)&as_out_ep_desc,
-+	(struct usb_descriptor_header *)&as_out_ep_desc_comp,
-+	(struct usb_descriptor_header *)&as_iso_out_desc,
-+
-+	(struct usb_descriptor_header *)&as_in_interface_alt_0_desc,
-+	(struct usb_descriptor_header *)&as_in_interface_alt_1_desc,
-+	(struct usb_descriptor_header *)&as_in_header_desc,
-+
-+	(struct usb_descriptor_header *)&as_in_type_i_desc,
-+
-+	(struct usb_descriptor_header *)&as_in_ep_desc,
-+	(struct usb_descriptor_header *)&as_in_ep_desc_comp,
-+	(struct usb_descriptor_header *)&as_iso_in_desc,
-+	NULL,
-+};
-+
- enum {
- 	STR_AC_IF,
- 	STR_USB_OUT_IT,
-@@ -329,6 +453,89 @@ static struct usb_gadget_strings *uac1_strings[] = {
- 	NULL,
- };
- 
-+/* Use macro to overcome line length limitation */
-+#define USBDHDR(p) ((struct usb_descriptor_header *)(p))
-+
-+static void setup_headers(struct f_uac1_opts *opts,
-+			  struct usb_descriptor_header **headers,
-+			  enum usb_device_speed speed)
-+{
-+	struct usb_ss_ep_comp_descriptor *epout_desc_comp = NULL;
-+	struct usb_ss_ep_comp_descriptor *epin_desc_comp = NULL;
-+	struct usb_ss_ep_comp_descriptor *ep_int_desc_comp = NULL;
-+	struct usb_endpoint_descriptor *epout_desc;
-+	struct usb_endpoint_descriptor *epin_desc;
-+	struct usb_endpoint_descriptor *ep_int_desc;
-+	int i;
-+
-+	switch (speed) {
-+	case USB_SPEED_FULL:
-+		epout_desc = &fs_out_ep_desc;
-+		epin_desc = &fs_in_ep_desc;
-+		ep_int_desc = &fs_int_ep_desc;
-+		break;
-+	case USB_SPEED_HIGH:
-+		epout_desc = &as_out_ep_desc;
-+		epin_desc = &as_in_ep_desc;
-+		ep_int_desc = &ac_int_ep_desc;
-+		break;
-+	default:
-+		epout_desc = &as_out_ep_desc;
-+		epout_desc_comp = &as_out_ep_desc_comp;
-+		epin_desc = &as_in_ep_desc;
-+		epin_desc_comp = &as_in_ep_desc_comp;
-+		ep_int_desc = &ac_int_ep_desc;
-+		ep_int_desc_comp = &ac_int_ep_desc_comp;
-+		break;
-+	}
-+
-+	i = 0;
-+	headers[i++] = USBDHDR(&ac_interface_desc);
-+	headers[i++] = USBDHDR(ac_header_desc);
-+
-+	if (EPOUT_EN(opts)) {
-+		headers[i++] = USBDHDR(&usb_out_it_desc);
-+		headers[i++] = USBDHDR(&io_out_ot_desc);
-+		if (FUOUT_EN(opts))
-+			headers[i++] = USBDHDR(out_feature_unit_desc);
-+	}
-+
-+	if (EPIN_EN(opts)) {
-+		headers[i++] = USBDHDR(&io_in_it_desc);
-+		headers[i++] = USBDHDR(&usb_in_ot_desc);
-+		if (FUIN_EN(opts))
-+			headers[i++] = USBDHDR(in_feature_unit_desc);
-+	}
-+
-+	if (FUOUT_EN(opts) || FUIN_EN(opts)) {
-+		headers[i++] = USBDHDR(ep_int_desc);
-+		if (ep_int_desc_comp)
-+			headers[i++] = USBDHDR(ep_int_desc_comp);
-+	}
-+
-+	if (EPOUT_EN(opts)) {
-+		headers[i++] = USBDHDR(&as_out_interface_alt_0_desc);
-+		headers[i++] = USBDHDR(&as_out_interface_alt_1_desc);
-+		headers[i++] = USBDHDR(&as_out_header_desc);
-+		headers[i++] = USBDHDR(&as_out_type_i_desc);
-+		headers[i++] = USBDHDR(epout_desc);
-+		if (epout_desc_comp)
-+			headers[i++] = USBDHDR(epout_desc_comp);
-+		headers[i++] = USBDHDR(&as_iso_out_desc);
-+	}
-+	if (EPIN_EN(opts)) {
-+		headers[i++] = USBDHDR(&as_in_interface_alt_0_desc);
-+		headers[i++] = USBDHDR(&as_in_interface_alt_1_desc);
-+		headers[i++] = USBDHDR(&as_in_header_desc);
-+		headers[i++] = USBDHDR(&as_in_type_i_desc);
-+		headers[i++] = USBDHDR(epin_desc);
-+		if (epin_desc_comp)
-+			headers[i++] = USBDHDR(epin_desc_comp);
-+		headers[i++] = USBDHDR(&as_iso_in_desc);
-+	}
-+	headers[i] = NULL;
-+}
-+
- /*
-  * This function is an ALSA sound card following USB Audio Class Spec 1.0.
-  */
-@@ -891,7 +1098,6 @@ static int f_audio_get_alt(struct usb_function *f, unsigned intf)
- 	return -EINVAL;
- }
- 
--
- static void f_audio_disable(struct usb_function *f)
- {
- 	struct f_uac1 *uac1 = func_to_uac1(f);
-@@ -957,9 +1163,6 @@ uac1_ac_header_descriptor *build_ac_header_desc(struct f_uac1_opts *opts)
- 	return ac_desc;
- }
- 
--/* Use macro to overcome line length limitation */
--#define USBDHDR(p) (struct usb_descriptor_header *)(p)
--
- static void setup_descriptor(struct f_uac1_opts *opts)
- {
- 	/* patch descriptors */
-@@ -1015,44 +1218,9 @@ static void setup_descriptor(struct f_uac1_opts *opts)
- 		ac_header_desc->wTotalLength = cpu_to_le16(len);
- 	}
- 
--	i = 0;
--	f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
--	f_audio_desc[i++] = USBDHDR(ac_header_desc);
--
--	if (EPOUT_EN(opts)) {
--		f_audio_desc[i++] = USBDHDR(&usb_out_it_desc);
--		f_audio_desc[i++] = USBDHDR(&io_out_ot_desc);
--		if (FUOUT_EN(opts))
--			f_audio_desc[i++] = USBDHDR(out_feature_unit_desc);
--	}
--
--	if (EPIN_EN(opts)) {
--		f_audio_desc[i++] = USBDHDR(&io_in_it_desc);
--		f_audio_desc[i++] = USBDHDR(&usb_in_ot_desc);
--		if (FUIN_EN(opts))
--			f_audio_desc[i++] = USBDHDR(in_feature_unit_desc);
--	}
--
--	if (FUOUT_EN(opts) || FUIN_EN(opts))
--		f_audio_desc[i++] = USBDHDR(&ac_int_ep_desc);
--
--	if (EPOUT_EN(opts)) {
--		f_audio_desc[i++] = USBDHDR(&as_out_interface_alt_0_desc);
--		f_audio_desc[i++] = USBDHDR(&as_out_interface_alt_1_desc);
--		f_audio_desc[i++] = USBDHDR(&as_out_header_desc);
--		f_audio_desc[i++] = USBDHDR(&as_out_type_i_desc);
--		f_audio_desc[i++] = USBDHDR(&as_out_ep_desc);
--		f_audio_desc[i++] = USBDHDR(&as_iso_out_desc);
--	}
--	if (EPIN_EN(opts)) {
--		f_audio_desc[i++] = USBDHDR(&as_in_interface_alt_0_desc);
--		f_audio_desc[i++] = USBDHDR(&as_in_interface_alt_1_desc);
--		f_audio_desc[i++] = USBDHDR(&as_in_header_desc);
--		f_audio_desc[i++] = USBDHDR(&as_in_type_i_desc);
--		f_audio_desc[i++] = USBDHDR(&as_in_ep_desc);
--		f_audio_desc[i++] = USBDHDR(&as_iso_in_desc);
--	}
--	f_audio_desc[i] = NULL;
-+	setup_headers(opts, fs_audio_desc, USB_SPEED_FULL);
-+	setup_headers(opts, hs_audio_desc, USB_SPEED_HIGH);
-+	setup_headers(opts, ss_audio_desc, USB_SPEED_SUPER);
- }
- 
- static int f_audio_validate_opts(struct g_audio *audio, struct device *dev)
-@@ -1264,7 +1432,6 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
- 		if (!ep)
- 			goto err_free_fu;
- 		uac1->int_ep = ep;
--		uac1->int_ep->desc = &ac_int_ep_desc;
- 
- 		ac_interface_desc.bNumEndpoints = 1;
- 	}
-@@ -1275,7 +1442,6 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
- 		if (!ep)
- 			goto err_free_fu;
- 		audio->out_ep = ep;
--		audio->out_ep->desc = &as_out_ep_desc;
- 	}
- 
- 	if (EPIN_EN(audio_opts)) {
-@@ -1283,19 +1449,27 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
- 		if (!ep)
- 			goto err_free_fu;
- 		audio->in_ep = ep;
--		audio->in_ep->desc = &as_in_ep_desc;
- 	}
- 
-+	/* FS endpoint addresses are copied from autoconfigured HS descriptors */
-+	fs_int_ep_desc.bEndpointAddress = ac_int_ep_desc.bEndpointAddress;
-+	fs_out_ep_desc.bEndpointAddress = as_out_ep_desc.bEndpointAddress;
-+	fs_in_ep_desc.bEndpointAddress = as_in_ep_desc.bEndpointAddress;
-+
- 	setup_descriptor(audio_opts);
- 
- 	/* copy descriptors, and track endpoint copies */
--	status = usb_assign_descriptors(f, f_audio_desc, f_audio_desc, NULL,
--					NULL);
-+	status = usb_assign_descriptors(f, fs_audio_desc, hs_audio_desc,
-+					ss_audio_desc, ss_audio_desc);
- 	if (status)
- 		goto err_free_fu;
- 
--	audio->out_ep_maxpsize = le16_to_cpu(as_out_ep_desc.wMaxPacketSize);
--	audio->in_ep_maxpsize = le16_to_cpu(as_in_ep_desc.wMaxPacketSize);
-+	audio->out_ep_maxpsize = max_t(u16,
-+				le16_to_cpu(fs_out_ep_desc.wMaxPacketSize),
-+				le16_to_cpu(as_out_ep_desc.wMaxPacketSize));
-+	audio->in_ep_maxpsize = max_t(u16,
-+				le16_to_cpu(fs_in_ep_desc.wMaxPacketSize),
-+				le16_to_cpu(as_in_ep_desc.wMaxPacketSize));
- 	audio->params.c_chmask = audio_opts->c_chmask;
- 	audio->params.c_srate = audio_opts->c_srate;
- 	audio->params.c_ssize = audio_opts->c_ssize;
--- 
-2.17.1
+> 
+> Regards,
+> Angelo
+> 
+> > 
+> > Thanks a lot
+> > 
+> > 
+> > >   	unsigned int has_ippc:1;
+> > >   	unsigned int lpm_support:1;
+> > >   	unsigned int u2_lpm_disable:1;
 

@@ -2,153 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F4D4B5CF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45BBA4B5D14
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbiBNVhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:37:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50052 "EHLO
+        id S231401AbiBNVis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:38:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbiBNVhe (ORCPT
+        with ESMTP id S231458AbiBNVii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:37:34 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D970112D0B4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:37:25 -0800 (PST)
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A69553F1E8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 21:37:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644874644;
-        bh=kT/ZbStYKrIw4n+GRbiyCeyEm9jDf9nRetcAQkPpfiI=;
-        h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-         In-Reply-To:Content-Type;
-        b=aUTtIIzvYfj0v/80+GqkQ0QLTMiXM8o0ZmSbuRnOkQ0BmnHHv0bfig37ndQLNxJiB
-         mtgs+oGET55UI6eaqwijQZqEzvaZ2KVMDGeDxNUiuw6ShL6zw7utWpzI9T1PUYU2Dg
-         8suyKmx01OCZhtWEK7jYxP4MMdOVxXBL+b2QCwjG1FZjjab3ZnQ3dxj3uG0Y0NxDYU
-         vsV1RhCTFGNZKT7rRd/QsKNTCDi3QYJZJL+MKMw29a89twTMN1IMQvsx2AS48Krv9V
-         A+Y8mGstpM/5nI6B5Tkkdxl3P1LrZCXacfKLRwTFK9kdYmPa5prrR7DbIX5oAXLLHR
-         QaF6cRLfwHLuQ==
-Received: by mail-wr1-f69.google.com with SMTP id p9-20020adf9589000000b001e333885ac1so7391245wrp.10
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:37:24 -0800 (PST)
+        Mon, 14 Feb 2022 16:38:38 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1361016BF86
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:38:30 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id l125so17094647ybl.4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:38:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wCcd9F5bCRcs8XshngMDCvznDi+A9xGFahm7PcKzRHw=;
+        b=Q8tk/zjg2kqOdwrohQtL5HnJVRSrKfAgLL+jy3x6otXuFdoXukLtAuXrpILOoBc/pH
+         eYn8Y1slIrYHk8wE4T1MEJjUOXSbjtx1fiH5k9PGvLBVYZrenDTMFXKDV4T2hyL3atnb
+         lQnz/hhArXzUa2X8h/4u7szdBHYE0NUsiQn0JP/UqkahNcDaMHGNTjWfhRxwp54gzvaH
+         Xungy/wXWnrOlyjg4FCqYvSLJXeyyzMdomozlNAOTcbHujYtGNXsOWMQWyXAj3DwHWou
+         tJpdcDD4VDSx3eL+v2YFjObVBTco6OCIMrZO81yJFQvkgQ7T2LFueWoHnaNBa+emJFAe
+         1FLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kT/ZbStYKrIw4n+GRbiyCeyEm9jDf9nRetcAQkPpfiI=;
-        b=5+gHcTfp/yzP+lfZLoZvmU48VYlU5zaW3owKsJIoPEryFdHObmKP2KmJ9hc2VIrJrT
-         O5NJ4IkF9Zjr6WUKKpnIiCMYAecl3Ra4raDShOCZVlzl/cPfzJsWTqTHHH8Yo/hKklFT
-         bNFCuFkTy3caGdEBGYDEAhYfvxQ3o8tl1Vi9S4o3qK50JwbDYJat6HI8eueDDQyjXQ4O
-         6SYP8fWMxWPaSj1Q9N4FieB0oTaF0W60T/UWF0dHH1gCtb+otjtD6uLbKpfhjMVgYYdd
-         Y9LL6oe5/w4ohGpqPv/8Ax4RFkpDELZ57G9lIh9B34y7EINLOaLv1t5Jb0zjdPcKYvMT
-         J8Jw==
-X-Gm-Message-State: AOAM533+ZzSNlAWIQrkxxwC685DoRIbKzzkm9L9+HkFPHZjzgDTVxttF
-        9+Sl4e3odcY0GiYzHUCzA0HRWAESRTWbe/++Xo0GDwYpa+jt1r4CwhfTQT5/M/h4qG6trU9ZqjA
-        5cGkgeaVrBQPc35X0+8o25JJQFQqO/va19HSSmn25iQ==
-X-Received: by 2002:a5d:4745:: with SMTP id o5mr716526wrs.275.1644874643595;
-        Mon, 14 Feb 2022 13:37:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyy8FAd8AthJ50nYJRkJC2MLR9VdV0C5UiWk2N5lGhZra0fVO3q6DDUwAMpmDmMD2+Wryc6ZQ==
-X-Received: by 2002:a5d:4745:: with SMTP id o5mr716511wrs.275.1644874643350;
-        Mon, 14 Feb 2022 13:37:23 -0800 (PST)
-Received: from [192.168.0.106] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id b15sm26932080wri.96.2022.02.14.13.37.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 13:37:22 -0800 (PST)
-Message-ID: <a7ab4c1e-99d9-b78e-4c49-c565432f081d@canonical.com>
-Date:   Mon, 14 Feb 2022 22:37:22 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wCcd9F5bCRcs8XshngMDCvznDi+A9xGFahm7PcKzRHw=;
+        b=GIvmOjaSCZ5Uw6klq1AM2XALIlp1Bm/m/A4O5ykcYvvhLocNRkWQ8igc7UpsqiEcll
+         oCxp5CYiprxNK7uHianMTeT1msb+d7kLxCRvTsVLOgOW7wz4D4lfq9UQjVnkrsur/SrY
+         8CklWRiWgxU2+VUGTIRIc+1X1Bgc/2rQzAaYTttH0u9zNEjDr4mrii6kB/CtaBBmahup
+         p5FALgLx41SqyaGwiweL7o5bvP9YFJPEupq6Z27PocEAewFfX2YBF2MpMW5gvuY9RjaN
+         2oCim8YRVvFG/3KI+cuKAjIXyFNkacAZwEDxzptiC9ptCufxPtIiDtH8WbaYNNXiBf26
+         F+Jg==
+X-Gm-Message-State: AOAM5301ssKv2mKodP050yQueROLXItfJtJkMJX2RFPFFUXwmOPwSsdE
+        Ro1eh2SYkIdThdPrS6w+Can51vX1s/lnplpFutvNEw==
+X-Google-Smtp-Source: ABdhPJxUccxxoP4bZt6GjNhxpXP1XmlvCj2MmIFZET4f3oQ6jVVeZCKHTeW2u+S3hajLTFMEx9E97COi27QNEfTmUws=
+X-Received: by 2002:a0d:ec48:: with SMTP id r8mr816930ywn.298.1644874709055;
+ Mon, 14 Feb 2022 13:38:29 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v7 1/4] iio:frequency:admv1014: add support for ADMV1014
-Content-Language: en-US
-To:     Antoniu Miclaus <antoniu.miclaus@analog.com>, jic23@kernel.org,
-        robh+dt@kernel.org, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220214073418.4528-1-antoniu.miclaus@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220214073418.4528-1-antoniu.miclaus@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20211122170301.764232470@infradead.org> <20211122170805.338489412@infradead.org>
+ <6ebb0ab131c522f20c094294d49091fc@overdrivepizza.com> <202202081541.900F9E1B@keescook>
+ <ad6c2633f39e39583bc5c5eaf7ccbe52@overdrivepizza.com> <202202082003.FA77867@keescook>
+ <9ea50c51ee8db366430c9dc697a83923@overdrivepizza.com> <20220211133803.GV23216@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220211133803.GV23216@worktop.programming.kicks-ass.net>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Mon, 14 Feb 2022 13:38:18 -0800
+Message-ID: <CABCJKuciRBnz4JxBDJC=+kuJn4pU2uBkWPBov7-VL2o2j0F4SA@mail.gmail.com>
+Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Joao Moreira <joao@overdrivepizza.com>,
+        Kees Cook <keescook@chromium.org>, X86 ML <x86@kernel.org>,
+        hjl.tools@gmail.com, Josh Poimboeuf <jpoimboe@redhat.com>,
+        andrew.cooper3@citrix.com, LKML <linux-kernel@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2022 08:34, Antoniu Miclaus wrote:
-> The ADMV1014 is a silicon germanium (SiGe), wideband,
-> microwave downconverter optimized for point to point microwave
-> radio designs operating in the 24 GHz to 44 GHz frequency range.
-> 
-> Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ADMV1014.pdf
-> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
-> ---
-> no changes in v7.
->  drivers/iio/frequency/Kconfig    |  10 +
->  drivers/iio/frequency/Makefile   |   1 +
->  drivers/iio/frequency/admv1014.c | 824 +++++++++++++++++++++++++++++++
->  3 files changed, 835 insertions(+)
->  create mode 100644 drivers/iio/frequency/admv1014.c
-> 
-> diff --git a/drivers/iio/frequency/Kconfig b/drivers/iio/frequency/Kconfig
-> index 2c9e0559e8a4..493221f42077 100644
-> --- a/drivers/iio/frequency/Kconfig
-> +++ b/drivers/iio/frequency/Kconfig
-> @@ -50,6 +50,16 @@ config ADF4371
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called adf4371.
->  
-> +config ADMV1014
-> +	tristate "Analog Devices ADMV1014 Microwave Downconverter"
-> +	depends on SPI && COMMON_CLK && 64BIT
-> +	help
-> +	  Say yes here to build support for Analog Devices ADMV1014
-> +	  24 GHz to 44 GHz, Wideband, Microwave Downconverter.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called admv1014.
-> +
->  config ADRF6780
->          tristate "Analog Devices ADRF6780 Microwave Upconverter"
->          depends on SPI
-> diff --git a/drivers/iio/frequency/Makefile b/drivers/iio/frequency/Makefile
-> index ae3136c79202..5f0348e5eb53 100644
-> --- a/drivers/iio/frequency/Makefile
-> +++ b/drivers/iio/frequency/Makefile
-> @@ -7,4 +7,5 @@
->  obj-$(CONFIG_AD9523) += ad9523.o
->  obj-$(CONFIG_ADF4350) += adf4350.o
->  obj-$(CONFIG_ADF4371) += adf4371.o
-> +obj-$(CONFIG_ADMV1014) += admv1014.o
->  obj-$(CONFIG_ADRF6780) += adrf6780.o
-> diff --git a/drivers/iio/frequency/admv1014.c b/drivers/iio/frequency/admv1014.c
-> new file mode 100644
-> index 000000000000..59a6b1f3b7cb
-> --- /dev/null
-> +++ b/drivers/iio/frequency/admv1014.c
-> @@ -0,0 +1,824 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * ADMV1014 driver
-> + *
-> + * Copyright 2022 Analog Devices Inc.
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/bits.h>
-> +#include <linux/clk.h>
-> +#include <linux/clkdev.h>
-> +#include <linux/clk-provider.h>
+On Fri, Feb 11, 2022 at 5:38 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> I think we'll end up with something related to KCFI, but with distinct
+> differences:
+>
+>  - 32bit immediates for smaller code
 
-Where do you use/define clock provider?
+Sure, I don't see issues with that. Based on a quick test with
+defconfig, this reduces vmlinux size by 0.30%.
 
-Best regards,
-Krzysztof
+>  - __kcfi_check_fail() is out for smaller code
+
+I'm fine with adding a trap mode that's used by default, but having
+more helpful diagnostics when something fails is useful even in
+production systems in my experience. This change results in a vmlinux
+that's another 0.92% smaller.
+
+> Which then yields:
+>
+> caller:
+>         cmpl    $0xdeadbeef, -0x4(%rax)         # 7 bytes
+>         je      1f                              # 2 bytes
+>         ud2                                     # 2 bytes
+> 1:      call    __x86_indirect_thunk_rax        # 5 bytes
+
+Note that the compiler might not emit this *exact* sequence of
+instructions. For example, Clang generates this for events_sysfs_show
+with the modified KCFI patch:
+
+2274:       cmpl   $0x4d7bed9e,-0x4(%r11)
+227c:       jne    22c0 <events_sysfs_show+0x6c>
+227e:       call   2283 <events_sysfs_show+0x2f>
+                    227f: R_X86_64_PLT32    __x86_indirect_thunk_r11-0x4
+...
+22c0:       ud2
+
+In this case the function has two indirect calls and Clang seems to
+prefer to emit just one ud2.
+
+>         .align 16
+>         .byte 0xef, 0xbe, 0xad, 0xde            # 4 bytes
+> func:
+>         endbr                                   # 4 bytes
+
+Here func is no longer aligned to 16 bytes, in case that's important.
+
+> Further, Andrew put in the request for __attribute__((cfi_seed(blah)))
+> to allow distinguishing indirect functions with otherwise identical
+> signature; eg. cookie = hash32(blah##signature).
+
+Sounds reasonable.
+
+> Did I miss anything? Got anything wrong?
+
+How would you like to deal with the 4-byte hashes in objtool? We
+either need to annotate all function symbols in the kernel, or we need
+a way to distinguish the hashes from random instructions, so we can
+also have functions that don't have a type hash.
+
+Sami

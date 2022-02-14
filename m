@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0ED54B46CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F544B4B4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245288AbiBNJsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:48:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43350 "EHLO
+        id S241200AbiBNKbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:31:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245725AbiBNJqH (ORCPT
+        with ESMTP id S1348260AbiBNKau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:46:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD7769288;
-        Mon, 14 Feb 2022 01:39:33 -0800 (PST)
+        Mon, 14 Feb 2022 05:30:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265909BF7C;
+        Mon, 14 Feb 2022 01:59:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1609260FA2;
-        Mon, 14 Feb 2022 09:39:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA47FC340E9;
-        Mon, 14 Feb 2022 09:39:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14237B80DCF;
+        Mon, 14 Feb 2022 09:59:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BAE7C340F1;
+        Mon, 14 Feb 2022 09:59:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831572;
-        bh=/T57QsHEXzWRyz9ngAgfSuXzq9rnlQ9xNPWF7J/q3zk=;
+        s=korg; t=1644832747;
+        bh=yh+Oo2C0NdYplnno+CZkh/DZsN/Zg/W1MtgKkWir/Qw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UILrw1F8VVkjxQW7cV2r8tnyuSq/nP6D/APdV5B6vmGQjLl6VRmkqqM84dnzTlLgF
-         OEbSZY/w9sk5qXX/nCl4a3SHGgl5Uo772qdMRZ8qPnOBULQmaBO4KTfAi+/00uRM7K
-         gTjvfsyK9dS31SbCh5VesKuzfUBq02LHYfjD+cdI=
+        b=ndK5yA4MkOTdInS3Q49wpbr+lDOIN9ivUnbXzjx+vpvzwD+IrHvB0VMpFuTfhdUuy
+         EM5Y/48qENX6YUynIs5rK2eQLnzjVGj1/FtmRF+ww7aP6L2WLvSHS3Jx6cvWwLrIdk
+         qjJqjxOxWn0aoCX5lZSKZduqiSO7WsYozSu8j27g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, ZouMingzhe <mingzhe.zou@easystack.cn>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 025/116] scsi: target: iscsi: Make sure the np under each tpg is unique
+        stable@vger.kernel.org, Joey Corleone <joey.corleone@mail.ru>,
+        Sergiu Deitsch <sergiu.deitsch@gmail.com>,
+        David Spencer <dspencer577@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>
+Subject: [PATCH 5.16 080/203] Revert "PCI/portdrv: Do not setup up IRQs if there are no users"
 Date:   Mon, 14 Feb 2022 10:25:24 +0100
-Message-Id: <20220214092459.551003837@linuxfoundation.org>
+Message-Id: <20220214092512.997663857@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +57,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ZouMingzhe <mingzhe.zou@easystack.cn>
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-[ Upstream commit a861790afaa8b6369eee8a88c5d5d73f5799c0c6 ]
+commit 075b7d363c675ef7fa03918881caeca3458e2a96 upstream.
 
-iscsit_tpg_check_network_portal() has nested for_each loops and is supposed
-to return true when a match is found. However, the tpg loop will still
-continue after existing the tpg_np loop. If this tpg_np is not the last the
-match value will be changed.
+This reverts commit 0e8ae5a6ff5952253cd7cc0260df838ab4c21009.
 
-Break the outer loop after finding a match and make sure the np under each
-tpg is unique.
+0e8ae5a6ff59 ("PCI/portdrv: Do not setup up IRQs if there are no users")
+reduced usage of IRQs when we don't think we need them.  But Joey, Sergiu,
+and David reported choppy GUI rendering, systems that became unresponsive
+every few seconds, incorrect values reported by cpufreq, and high IRQ 16
+CPU usage.
 
-Link: https://lore.kernel.org/r/20220111054742.19582-1-mingzhe.zou@easystack.cn
-Signed-off-by: ZouMingzhe <mingzhe.zou@easystack.cn>
-Reviewed-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Joey bisected the issues to 0e8ae5a6ff59, so revert it until we figure out
+a better solution.
+
+Link: https://lore.kernel.org/r/20220210222717.GA658201@bhelgaas
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215533
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215546
+Reported-by: Joey Corleone <joey.corleone@mail.ru>
+Reported-by: Sergiu Deitsch <sergiu.deitsch@gmail.com>
+Reported-by: David Spencer <dspencer577@gmail.com>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Cc: stable@vger.kernel.org	# v5.16+
+Cc: Jan Kiszka <jan.kiszka@siemens.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/target/iscsi/iscsi_target_tpg.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/pci/pcie/portdrv_core.c |   47 ++++++++++++++--------------------------
+ 1 file changed, 17 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/target/iscsi/iscsi_target_tpg.c b/drivers/target/iscsi/iscsi_target_tpg.c
-index 8075f60fd02c3..2d5cf1714ae05 100644
---- a/drivers/target/iscsi/iscsi_target_tpg.c
-+++ b/drivers/target/iscsi/iscsi_target_tpg.c
-@@ -443,6 +443,9 @@ static bool iscsit_tpg_check_network_portal(
- 				break;
- 		}
- 		spin_unlock(&tpg->tpg_np_lock);
-+
-+		if (match)
-+			break;
- 	}
- 	spin_unlock(&tiqn->tiqn_tpg_lock);
+--- a/drivers/pci/pcie/portdrv_core.c
++++ b/drivers/pci/pcie/portdrv_core.c
+@@ -166,6 +166,9 @@ static int pcie_init_service_irqs(struct
+ {
+ 	int ret, i;
  
--- 
-2.34.1
-
++	for (i = 0; i < PCIE_PORT_DEVICE_MAXSERVICES; i++)
++		irqs[i] = -1;
++
+ 	/*
+ 	 * If we support PME but can't use MSI/MSI-X for it, we have to
+ 	 * fall back to INTx or other interrupts, e.g., a system shared
+@@ -314,10 +317,8 @@ static int pcie_device_init(struct pci_d
+  */
+ int pcie_port_device_register(struct pci_dev *dev)
+ {
+-	int status, capabilities, irq_services, i, nr_service;
+-	int irqs[PCIE_PORT_DEVICE_MAXSERVICES] = {
+-		[0 ... PCIE_PORT_DEVICE_MAXSERVICES-1] = -1
+-	};
++	int status, capabilities, i, nr_service;
++	int irqs[PCIE_PORT_DEVICE_MAXSERVICES];
+ 
+ 	/* Enable PCI Express port device */
+ 	status = pci_enable_device(dev);
+@@ -330,32 +331,18 @@ int pcie_port_device_register(struct pci
+ 		return 0;
+ 
+ 	pci_set_master(dev);
+-
+-	irq_services = 0;
+-	if (IS_ENABLED(CONFIG_PCIE_PME))
+-		irq_services |= PCIE_PORT_SERVICE_PME;
+-	if (IS_ENABLED(CONFIG_PCIEAER))
+-		irq_services |= PCIE_PORT_SERVICE_AER;
+-	if (IS_ENABLED(CONFIG_HOTPLUG_PCI_PCIE))
+-		irq_services |= PCIE_PORT_SERVICE_HP;
+-	if (IS_ENABLED(CONFIG_PCIE_DPC))
+-		irq_services |= PCIE_PORT_SERVICE_DPC;
+-	irq_services &= capabilities;
+-
+-	if (irq_services) {
+-		/*
+-		 * Initialize service IRQs. Don't use service devices that
+-		 * require interrupts if there is no way to generate them.
+-		 * However, some drivers may have a polling mode (e.g.
+-		 * pciehp_poll_mode) that can be used in the absence of IRQs.
+-		 * Allow them to determine if that is to be used.
+-		 */
+-		status = pcie_init_service_irqs(dev, irqs, irq_services);
+-		if (status) {
+-			irq_services &= PCIE_PORT_SERVICE_HP;
+-			if (!irq_services)
+-				goto error_disable;
+-		}
++	/*
++	 * Initialize service irqs. Don't use service devices that
++	 * require interrupts if there is no way to generate them.
++	 * However, some drivers may have a polling mode (e.g. pciehp_poll_mode)
++	 * that can be used in the absence of irqs.  Allow them to determine
++	 * if that is to be used.
++	 */
++	status = pcie_init_service_irqs(dev, irqs, capabilities);
++	if (status) {
++		capabilities &= PCIE_PORT_SERVICE_HP;
++		if (!capabilities)
++			goto error_disable;
+ 	}
+ 
+ 	/* Allocate child services if any */
 
 

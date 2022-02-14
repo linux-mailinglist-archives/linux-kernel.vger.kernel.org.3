@@ -2,115 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E3D4B5859
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:19:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0FD4B585E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:20:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356981AbiBNRTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 12:19:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48466 "EHLO
+        id S1356591AbiBNRUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 12:20:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244405AbiBNRTf (ORCPT
+        with ESMTP id S237047AbiBNRUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 12:19:35 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1D3652C0;
-        Mon, 14 Feb 2022 09:19:27 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id m22so11142968pfk.6;
-        Mon, 14 Feb 2022 09:19:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=UlEoY4gUMCf+dGZF5OFEMsNszRaKi2NA9sVTb7hg2Q0=;
-        b=Ae4U2rn/YgQgOSiyBw4kGAmri+C7D120xX2o4jTRqLmVZIwA9orrp82PFXVyOLe88t
-         5T5LS8Yywqq1yrpCVB7G4GG5FYZQUDJDm53OLiwGHyGy8+PzEh/ltOv9sdjQsLOQ37BW
-         K9jUAGGyAGbO8m/d9ADpTfTiEDDicGmysucCnySqoNkUDMyL2sf0KwApIjlpCOBKh7LG
-         PwLn7yzu096BJFsZbMkywa8qC5bLUChdLXtHANsVKuws7eixe2FC3CD/XVIIbRv0GFH4
-         8aL24++hGBw17OPlB9PFW8aJifALKZ5y0EbTPSEC7kOrBTt+Y+9DY5uTdqXJzHsuvFjt
-         Fi7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=UlEoY4gUMCf+dGZF5OFEMsNszRaKi2NA9sVTb7hg2Q0=;
-        b=ujxL7PDUeMS+CbmkzEbRrgiPOJHDngy+tn08wI7KiLUWNMYQrel1E4tam2WgnvaOV0
-         mOL9x7ofM576JGrsg3Cb1zqMJLD+TbcvgFZNA8eCgulH/6829BvzYG+2VsbyLD9aSz8S
-         cODmEEU2xbDJIyQYIkYIYiyNcsuhcjOYenOWIpVt/sTjRzYGR4y3RvWzQdJXtfXlmDld
-         Et/pAgT0hncGatSUQEGQUp0+p0Wo3rFZVSSxFU+mRgc6Zfo0G0raAFoipeEDIzr7No90
-         s0Np3fXvbEDXGgA/i6vrTOijYp0/2gHkEU1b/3xf7YOzt27+igpmv3wBFpShSaPwiIya
-         uLQw==
-X-Gm-Message-State: AOAM530c9f9JldGzpav6VBo7qaEQ+PKe+pLJTMpCKLoI5djAMZsoU7Ud
-        jcgxz+CsTX8xl78MajnPSL0=
-X-Google-Smtp-Source: ABdhPJzbAW43zE1Qfnv6bnjeH7rBFCX7yXcNUn2pVO8yLoL7oe86rRsSHL23eDM2HIDNmODSHPh2sQ==
-X-Received: by 2002:a63:2a51:: with SMTP id q78mr4148pgq.239.1644859166687;
-        Mon, 14 Feb 2022 09:19:26 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id bd34sm5276481pfb.73.2022.02.14.09.19.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 09:19:26 -0800 (PST)
-Subject: Re: [PATCH 10/15] dt-bindings: pwm: brcm,bcm7038: do not require
- pwm-cells
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Anson Huang <anson.huang@nxp.com>,
-        Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>,
-        Rahul Tanwar <rtanwar@maxlinear.com>,
-        Jeff LaBundy <jeff@labundy.com>,
-        Yash Shah <yash.shah@sifive.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Vignesh R <vigneshr@ti.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org
-References: <20220214081605.161394-1-krzysztof.kozlowski@canonical.com>
- <20220214081605.161394-10-krzysztof.kozlowski@canonical.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <a8d3ea6e-c9f8-e5e4-7cbd-71e0c814db0a@gmail.com>
-Date:   Mon, 14 Feb 2022 09:19:14 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 14 Feb 2022 12:20:40 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70774652D4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:20:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644859232; x=1676395232;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KbM5Fe5c3mdB4yDzDaP/4hUQUtRmyMGrS8a/5fb9PBo=;
+  b=AZB9ZbdKahUzLBONe+/TvmGldr1vIVgR2zxt9i3ZUFSG59bHirmaRLDe
+   BRzOpfwxb8ENz2Mb2dISV3VRnmshJj0Ufwxlyz1v5JslDnX19CW8jVUnG
+   GsbzGsWBopI2yMAo4aZf7NYi805puJ+MLhs8Vk80vwYR4YTgeCpM7VOrK
+   LFVLO9MghatymxKrx6iPGRM+8c1GLSxGonbEp8XMfkKpO5y/1Bk6D4w+f
+   y1gl2CLSP67n0NU7ShAezOKwm7HnOytuPS3oKuFuROiR+ZpPgWUb5+7Hp
+   P5XI2OWt8E+xLKHA8WDcSEk1G9+UXxsPrqqGqvpkGsA2kI0eg4UWqlmGN
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="249887908"
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="249887908"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 09:20:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="680606165"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Feb 2022 09:20:14 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJf1J-0008ms-WD; Mon, 14 Feb 2022 17:20:13 +0000
+Date:   Tue, 15 Feb 2022 01:19:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [willy-pagecache:for-next 58/85] mm/folio-compat.c:181:9: error:
+ implicit declaration of function 'folio_mlock'; did you mean 'folio_lock'?
+Message-ID: <202202142352.7A4VgqBz-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220214081605.161394-10-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/22 12:16 AM, Krzysztof Kozlowski wrote:
-> pwm-cells are already required by pwm.yaml schema.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+tree:   git://git.infradead.org/users/willy/pagecache for-next
+head:   c267b33d0001488f1d9dad12d6a87655e174d914
+commit: 2cefeaf011db4a95ecb515cc2ca61d091a792ac1 [58/85] mm/rmap: Turn page_mlock() into folio_mlock()
+config: h8300-alldefconfig (https://download.01.org/0day-ci/archive/20220214/202202142352.7A4VgqBz-lkp@intel.com/config)
+compiler: h8300-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add willy-pagecache git://git.infradead.org/users/willy/pagecache
+        git fetch --no-tags willy-pagecache for-next
+        git checkout 2cefeaf011db4a95ecb515cc2ca61d091a792ac1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=h8300 SHELL=/bin/bash
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   mm/folio-compat.c:169:6: warning: no previous prototype for 'clear_page_mlock' [-Wmissing-prototypes]
+     169 | void clear_page_mlock(struct page *page)
+         |      ^~~~~~~~~~~~~~~~
+   mm/folio-compat.c:174:6: error: redefinition of 'mlock_vma_page'
+     174 | void mlock_vma_page(struct page *page)
+         |      ^~~~~~~~~~~~~~
+   In file included from mm/folio-compat.c:11:
+   mm/internal.h:503:20: note: previous definition of 'mlock_vma_page' with type 'void(struct page *)'
+     503 | static inline void mlock_vma_page(struct page *page) { }
+         |                    ^~~~~~~~~~~~~~
+   mm/folio-compat.c: In function 'mlock_vma_page':
+   mm/folio-compat.c:176:9: error: implicit declaration of function 'mlock_vma_folio'; did you mean 'mlock_vma_page'? [-Werror=implicit-function-declaration]
+     176 |         mlock_vma_folio(page_folio(page));
+         |         ^~~~~~~~~~~~~~~
+         |         mlock_vma_page
+   mm/folio-compat.c: At top level:
+   mm/folio-compat.c:179:6: warning: no previous prototype for 'page_mlock' [-Wmissing-prototypes]
+     179 | void page_mlock(struct page *page)
+         |      ^~~~~~~~~~
+   mm/folio-compat.c: In function 'page_mlock':
+>> mm/folio-compat.c:181:9: error: implicit declaration of function 'folio_mlock'; did you mean 'folio_lock'? [-Werror=implicit-function-declaration]
+     181 |         folio_mlock(page_folio(page));
+         |         ^~~~~~~~~~~
+         |         folio_lock
+   cc1: some warnings being treated as errors
+
+
+vim +181 mm/folio-compat.c
+
+   178	
+   179	void page_mlock(struct page *page)
+   180	{
+ > 181		folio_mlock(page_folio(page));
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

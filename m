@@ -2,49 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8279D4B4D80
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:12:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC7F4B4D19
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349990AbiBNLCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:02:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36262 "EHLO
+        id S1349919AbiBNLCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:02:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349905AbiBNLCk (ORCPT
+        with ESMTP id S1349874AbiBNLCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Feb 2022 06:02:40 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5A16A397;
-        Mon, 14 Feb 2022 02:30:23 -0800 (PST)
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14306A393;
+        Mon, 14 Feb 2022 02:30:22 -0800 (PST)
 Date:   Mon, 14 Feb 2022 10:30:20 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644834622;
+        s=2020; t=1644834621;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=WcHz/38kpUTRfTb1MH9FbvylA0vbgrpBypC2JHmxk+4=;
-        b=bftFilmpNl6keLxM+weEEVyQvj3JD1venPWBn1XTHa8e5ol5kiOUx+yFkk/mfIpd4nCnjE
-        8hR+VbwMP6DLF+T5/s8V2f8+XSPXMJrFlPVvP7xDoHgAmRcKpPnxP8cle91qVpqYg4SkQy
-        hX7FDdSUT93LdIP/oHYzwjt4kbY26YkYJRdzHZXO2clV3HLpBticP7L3J+t2PiKyOPJBs9
-        1uRghgkcTqs1D4iqp8e500LxPoeJZqOWc2xuc4N75eg6sUt8CtlVP6vC0rdzPC3vc7VATi
-        jQ92VSMcCvQXDA1i4ToHtZchoQ5DtQCjINwaYBnTQ6pJM17goEm6FkvSdGZrgA==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BQZWcHVIUV3ERfcLHn+wIKBsjkEWR6/yq3ljYM6Ph3A=;
+        b=vROLgV4lGHMOen91K6jh2CCwL7tec0lgPiMMrG4kapvgrkcqSsxuxe7fHeB6ItRF8n5DJ+
+        hRpf5oSje1tzVvr3PnLCiKyIx1qTfyOZecbnbLEerFxzxfWXBN2kXFfrWohEJmpy+DVxkn
+        OIRNOQ1bgf9uftOIydqa38NA0nrVSplxl8bBeQdNUYlZA9NjyPbu1cxwZ6czWskF3SsDBS
+        RuawwoH55pt+5nm6uy+uzuWZ4YQQ+xA78a0XkMhUc7iJStwpnnwLAQy3SwVh1CouoA0hn0
+        vXcQasx0YtD7QZ2yAsD5oD/cUEsG3tKPtYWGsuSFOrhj2T1IPx4TlmjKBbuqGA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644834622;
+        s=2020e; t=1644834621;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=WcHz/38kpUTRfTb1MH9FbvylA0vbgrpBypC2JHmxk+4=;
-        b=YG71odPBwRLX3jIV8YDYUz306gqbiojJHSlj4PJcjAoMD13LAeuNTC3P5xBd7zwQI4M0WP
-        goI2HaSSZZECciDA==
-From:   "tip-bot2 for Mathieu Desnoyers" <tip-bot2@linutronix.de>
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BQZWcHVIUV3ERfcLHn+wIKBsjkEWR6/yq3ljYM6Ph3A=;
+        b=1M7gWZMkgQ1Ey3OTYSFsvhRdFvAlHROZ0JI7iJdi5Oyq6aVQPNOTcv5nIX9Mgt6aF9ks82
+        5vbsVebbCGkX/jAA==
+From:   "tip-bot2 for Mel Gorman" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] selftests/rseq: Change type of rseq_offset to ptrdiff_t
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: sched/core] sched/fair: Improve consistency of allowed NUMA
+ balance calculations
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Gautham R. Shenoy" <gautham.shenoy@amd.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
+In-Reply-To: <20220208094334.16379-2-mgorman@techsingularity.net>
+References: <20220208094334.16379-2-mgorman@techsingularity.net>
 MIME-Version: 1.0
-Message-ID: <164483462094.16921.3179511861185610192.tip-bot2@tip-bot2>
+Message-ID: <164483462018.16921.16665181001915806595.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -61,138 +69,80 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     889c5d60fbcf332c8b6ab7054d45f2768914a375
-Gitweb:        https://git.kernel.org/tip/889c5d60fbcf332c8b6ab7054d45f2768914a375
-Author:        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-AuthorDate:    Thu, 03 Feb 2022 10:05:32 -05:00
+Commit-ID:     2cfb7a1b031b0e816af7a6ee0c6ab83b0acdf05a
+Gitweb:        https://git.kernel.org/tip/2cfb7a1b031b0e816af7a6ee0c6ab83b0acdf05a
+Author:        Mel Gorman <mgorman@techsingularity.net>
+AuthorDate:    Tue, 08 Feb 2022 09:43:33 
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Fri, 11 Feb 2022 23:30:08 +01:00
 
-selftests/rseq: Change type of rseq_offset to ptrdiff_t
+sched/fair: Improve consistency of allowed NUMA balance calculations
 
-Just before the 2.35 release of glibc, the __rseq_offset userspace ABI
-was changed from int to ptrdiff_t.
+There are inconsistencies when determining if a NUMA imbalance is allowed
+that should be corrected.
 
-Adapt to this change in the kernel selftests.
+o allow_numa_imbalance changes types and is not always examining
+  the destination group so both the type should be corrected as
+  well as the naming.
+o find_idlest_group uses the sched_domain's weight instead of the
+  group weight which is different to find_busiest_group
+o find_busiest_group uses the source group instead of the destination
+  which is different to task_numa_find_cpu
+o Both find_idlest_group and find_busiest_group should account
+  for the number of running tasks if a move was allowed to be
+  consistent with task_numa_find_cpu
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Fixes: 7d2b5dd0bcc4 ("sched/numa: Allow a floating imbalance between NUMA nodes")
+Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://sourceware.org/pipermail/libc-alpha/2022-February/136024.html
+Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+Link: https://lore.kernel.org/r/20220208094334.16379-2-mgorman@techsingularity.net
 ---
- tools/testing/selftests/rseq/rseq-x86.h | 14 +++++++-------
- tools/testing/selftests/rseq/rseq.c     |  5 +++--
- tools/testing/selftests/rseq/rseq.h     |  3 ++-
- 3 files changed, 12 insertions(+), 10 deletions(-)
+ kernel/sched/fair.c | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/rseq/rseq-x86.h b/tools/testing/selftests/rseq/rseq-x86.h
-index f704d36..bd01dc4 100644
---- a/tools/testing/selftests/rseq/rseq-x86.h
-+++ b/tools/testing/selftests/rseq/rseq-x86.h
-@@ -143,7 +143,7 @@ int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [rseq_offset]		"r" ((long)rseq_offset),
-+		  [rseq_offset]		"r" (rseq_offset),
- 		  [v]			"m" (*v),
- 		  [expect]		"r" (expect),
- 		  [newv]		"r" (newv)
-@@ -214,7 +214,7 @@ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [rseq_offset]		"r" ((long)rseq_offset),
-+		  [rseq_offset]		"r" (rseq_offset),
- 		  /* final store input */
- 		  [v]			"m" (*v),
- 		  [expectnot]		"r" (expectnot),
-@@ -270,7 +270,7 @@ int rseq_addv(intptr_t *v, intptr_t count, int cpu)
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [rseq_offset]		"r" ((long)rseq_offset),
-+		  [rseq_offset]		"r" (rseq_offset),
- 		  /* final store input */
- 		  [v]			"m" (*v),
- 		  [count]		"er" (count)
-@@ -329,7 +329,7 @@ int rseq_offset_deref_addv(intptr_t *ptr, long off, intptr_t inc, int cpu)
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [rseq_offset]		"r" ((long)rseq_offset),
-+		  [rseq_offset]		"r" (rseq_offset),
- 		  /* final store input */
- 		  [ptr]			"m" (*ptr),
- 		  [off]			"er" (off),
-@@ -387,7 +387,7 @@ int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [rseq_offset]		"r" ((long)rseq_offset),
-+		  [rseq_offset]		"r" (rseq_offset),
- 		  /* try store input */
- 		  [v2]			"m" (*v2),
- 		  [newv2]		"r" (newv2),
-@@ -469,7 +469,7 @@ int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [rseq_offset]		"r" ((long)rseq_offset),
-+		  [rseq_offset]		"r" (rseq_offset),
- 		  /* cmp2 input */
- 		  [v2]			"m" (*v2),
- 		  [expect2]		"r" (expect2),
-@@ -581,7 +581,7 @@ int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 5dca13f..ea71016 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -9005,9 +9005,10 @@ static bool update_pick_idlest(struct sched_group *idlest,
+  * This is an approximation as the number of running tasks may not be
+  * related to the number of busy CPUs due to sched_setaffinity.
+  */
+-static inline bool allow_numa_imbalance(int dst_running, int dst_weight)
++static inline bool
++allow_numa_imbalance(unsigned int running, unsigned int weight)
+ {
+-	return (dst_running < (dst_weight >> 2));
++	return (running < (weight >> 2));
+ }
+ 
+ /*
+@@ -9141,12 +9142,13 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+ 				return idlest;
  #endif
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [rseq_offset]		"r" ((long)rseq_offset),
-+		  [rseq_offset]		"r" (rseq_offset),
- 		  /* final store input */
- 		  [v]			"m" (*v),
- 		  [expect]		"r" (expect),
-diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
-index 07ba0d4..986b945 100644
---- a/tools/testing/selftests/rseq/rseq.c
-+++ b/tools/testing/selftests/rseq/rseq.c
-@@ -27,16 +27,17 @@
- #include <signal.h>
- #include <limits.h>
- #include <dlfcn.h>
-+#include <stddef.h>
+ 			/*
+-			 * Otherwise, keep the task on this node to stay close
+-			 * its wakeup source and improve locality. If there is
+-			 * a real need of migration, periodic load balance will
+-			 * take care of it.
++			 * Otherwise, keep the task close to the wakeup source
++			 * and improve locality if the number of running tasks
++			 * would remain below threshold where an imbalance is
++			 * allowed. If there is a real need of migration,
++			 * periodic load balance will take care of it.
+ 			 */
+-			if (allow_numa_imbalance(local_sgs.sum_nr_running, sd->span_weight))
++			if (allow_numa_imbalance(local_sgs.sum_nr_running + 1, local_sgs.group_weight))
+ 				return NULL;
+ 		}
  
- #include "../kselftest.h"
- #include "rseq.h"
+@@ -9352,7 +9354,7 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+ 		/* Consider allowing a small imbalance between NUMA groups */
+ 		if (env->sd->flags & SD_NUMA) {
+ 			env->imbalance = adjust_numa_imbalance(env->imbalance,
+-				busiest->sum_nr_running, busiest->group_weight);
++				local->sum_nr_running + 1, local->group_weight);
+ 		}
  
--static const int *libc_rseq_offset_p;
-+static const ptrdiff_t *libc_rseq_offset_p;
- static const unsigned int *libc_rseq_size_p;
- static const unsigned int *libc_rseq_flags_p;
- 
- /* Offset from the thread pointer to the rseq area.  */
--int rseq_offset;
-+ptrdiff_t rseq_offset;
- 
- /* Size of the registered rseq area.  0 if the registration was
-    unsuccessful.  */
-diff --git a/tools/testing/selftests/rseq/rseq.h b/tools/testing/selftests/rseq/rseq.h
-index 6bd0ac4..9d850b2 100644
---- a/tools/testing/selftests/rseq/rseq.h
-+++ b/tools/testing/selftests/rseq/rseq.h
-@@ -16,6 +16,7 @@
- #include <errno.h>
- #include <stdio.h>
- #include <stdlib.h>
-+#include <stddef.h>
- #include "rseq-abi.h"
- #include "compiler.h"
- 
-@@ -47,7 +48,7 @@
- #include "rseq-thread-pointer.h"
- 
- /* Offset from the thread pointer to the rseq area.  */
--extern int rseq_offset;
-+extern ptrdiff_t rseq_offset;
- /* Size of the registered rseq area.  0 if the registration was
-    unsuccessful.  */
- extern unsigned int rseq_size;
+ 		return;

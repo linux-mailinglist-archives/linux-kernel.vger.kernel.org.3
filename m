@@ -2,115 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78D354B5E6F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 00:50:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B60C4B5E74
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 00:52:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232235AbiBNXus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 18:50:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37984 "EHLO
+        id S232244AbiBNXw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 18:52:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbiBNXur (ORCPT
+        with ESMTP id S229674AbiBNXw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 18:50:47 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AED14032;
-        Mon, 14 Feb 2022 15:50:38 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 03792210F5;
-        Mon, 14 Feb 2022 23:50:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644882637; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qvPKjOh/wsUJqEQu+1yAdeggiSSJIk+3zVWtr119qmc=;
-        b=MZKhM6baDXALJ8vMZRvkt0G/ule23iqk82N9aMTi4UY7j4EgQTr+czqmbaKwCj/YvSzYW9
-        0NqlSUIKeAr2COGHUE2sx6+4MXY77jrH3EEv6oyosIHgYgHgVi9YC+o+SDuxFyhb7RfRgU
-        AQb380eSlEsyi6eU+84RGkWhP1+S6h4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644882637;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qvPKjOh/wsUJqEQu+1yAdeggiSSJIk+3zVWtr119qmc=;
-        b=q4XCtTO4Ndidxg058D+Zx3F0YQcH4twF3P/3VBgXGRGXeQ0YS4wrPnsb+7tj85xUBjPJF5
-        d+qoI2Skz5LzVPCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DAD1213B59;
-        Mon, 14 Feb 2022 23:50:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 81zII8jqCmJ9MwAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 14 Feb 2022 23:50:32 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Mon, 14 Feb 2022 18:52:28 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA642182A;
+        Mon, 14 Feb 2022 15:52:19 -0800 (PST)
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nJl8h-000Agx-Ve; Tue, 15 Feb 2022 00:52:16 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nJl8h-0005fN-Ix; Tue, 15 Feb 2022 00:52:15 +0100
+Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Read in bpf_jit_free
+To:     syzbot <syzbot+2f649ec6d2eea1495a8f@syzkaller.appspotmail.com>,
+        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com,
+        kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
+References: <00000000000073b3e805d7fed17e@google.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <462fa505-25a8-fd3f-cc36-5860c6539664@iogearbox.net>
+Date:   Tue, 15 Feb 2022 00:52:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Geert Uytterhoeven" <geert@linux-m68k.org>
-Cc:     "Trond Myklebust" <trond.myklebust@hammerspace.com>,
-        "Anna Schumaker" <anna.schumaker@netapp.com>,
-        "Chuck Lever" <chuck.lever@oracle.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Mark Hemment" <markhemm@googlemail.com>,
-        "Christoph Hellwig" <hch@infradead.org>,
-        "David Howells" <dhowells@redhat.com>,
-        "open list:NFS, SUNRPC, AND..." <linux-nfs@vger.kernel.org>,
-        "Linux MM" <linux-mm@kvack.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 01/21] MM: create new mm/swap.h header file.
-In-reply-to: <CAMuHMdUtZyJE0-_B7YDexDpkOe_y5jQ7rWJKPyzJJczuSq7POg@mail.gmail.com>
-References: <164420889455.29374.17958998143835612560.stgit@noble.brown>,
- <164420916109.29374.8959231877111146366.stgit@noble.brown>,
- <CAMuHMdUtZyJE0-_B7YDexDpkOe_y5jQ7rWJKPyzJJczuSq7POg@mail.gmail.com>
-Date:   Tue, 15 Feb 2022 10:50:26 +1100
-Message-id: <164488262648.17471.2510331812560662090@noble.neil.brown.name>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <00000000000073b3e805d7fed17e@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26453/Mon Feb 14 10:29:35 2022)
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Feb 2022, Geert Uytterhoeven wrote:
-> Hi Neil,
-> 
-> On Wed, Feb 9, 2022 at 10:52 AM NeilBrown <neilb@suse.de> wrote:
-> > Many functions declared in include/linux/swap.h are only used within mm/
-> >
-> > Create a new "mm/swap.h" and move some of these declarations there.
-> > Remove the redundant 'extern' from the function declarations.
-> >
-> > Reviewed-by: Christoph Hellwig <hch@lst.de>
-> > Signed-off-by: NeilBrown <neilb@suse.de>
-> 
-> Thanks for your patch!
-> 
-> > --- /dev/null
-> > +++ b/mm/swap.h
-> > @@ -0,0 +1,129 @@
-> > +
-> 
-> scripts/checkpatch.pl:
-> WARNING: Missing or malformed SPDX-License-Identifier tag in line 1
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
+Song, ptal.
 
-Argg...  I think you pointed that out previously and I forgot to act on
-it.
-I've now copied the SPDX line from linux/swap.h, and also added that
-standard "#ifndef _MM_SWAP_H" etc protection.
+On 2/14/22 7:45 PM, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    e5313968c41b Merge branch 'Split bpf_sk_lookup remote_port..
+> git tree:       bpf-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=10baced8700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=c40b67275bfe2a58
+> dashboard link: https://syzkaller.appspot.com/bug?extid=2f649ec6d2eea1495a8f
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+2f649ec6d2eea1495a8f@syzkaller.appspotmail.com
+> 
+> ==================================================================
+> BUG: KASAN: vmalloc-out-of-bounds in bpf_jit_binary_pack_free kernel/bpf/core.c:1120 [inline]
+> BUG: KASAN: vmalloc-out-of-bounds in bpf_jit_free+0x2b5/0x2e0 kernel/bpf/core.c:1151
+> Read of size 4 at addr ffffffffa0001a80 by task kworker/0:18/13642
+> 
+> CPU: 0 PID: 13642 Comm: kworker/0:18 Not tainted 5.16.0-syzkaller-11655-ge5313968c41b #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Workqueue: events bpf_prog_free_deferred
+> Call Trace:
+>   <TASK>
+>   __dump_stack lib/dump_stack.c:88 [inline]
+>   dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>   print_address_description.constprop.0.cold+0xf/0x336 mm/kasan/report.c:255
+>   __kasan_report mm/kasan/report.c:442 [inline]
+>   kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+>   bpf_jit_binary_pack_free kernel/bpf/core.c:1120 [inline]
+>   bpf_jit_free+0x2b5/0x2e0 kernel/bpf/core.c:1151
+>   bpf_prog_free_deferred+0x5c1/0x790 kernel/bpf/core.c:2524
+>   process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
+>   worker_thread+0x657/0x1110 kernel/workqueue.c:2454
+>   kthread+0x2e9/0x3a0 kernel/kthread.c:377
+>   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+>   </TASK>
+> 
+> 
+> Memory state around the buggy address:
+>   ffffffffa0001980: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>   ffffffffa0001a00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>> ffffffffa0001a80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>                     ^
+>   ffffffffa0001b00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>   ffffffffa0001b80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+> ==================================================================
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> 
 
-Thanks,
-NeilBrown

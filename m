@@ -2,58 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111A64B47A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 586B54B45F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243877AbiBNJjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:39:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50010 "EHLO
+        id S236352AbiBNJcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:32:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244535AbiBNJgC (ORCPT
+        with ESMTP id S243592AbiBNJcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:36:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED30B1AD9D;
-        Mon, 14 Feb 2022 01:33:53 -0800 (PST)
+        Mon, 14 Feb 2022 04:32:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DB21AD89;
+        Mon, 14 Feb 2022 01:30:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3526F60FFC;
-        Mon, 14 Feb 2022 09:33:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A4F8C340E9;
-        Mon, 14 Feb 2022 09:33:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD1BEB80DC6;
+        Mon, 14 Feb 2022 09:30:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 058B7C340F0;
+        Mon, 14 Feb 2022 09:30:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831200;
-        bh=4RHKtD2d2DGhQCEoOtiljSMyW0D9xXcbs4ICzooPkGI=;
+        s=korg; t=1644831041;
+        bh=5c1KH+od5zW6GUt0v2I0263ztt7h/XKAC8j9FwaW+f4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yttdMwaH1radMk10/gB5i8OWi2f7WaPgwInAJOLNrW8simP+KZslbKy//kvENidFg
-         wtdgDAi/0HiXww1Pp4azFQr03HXbJY0T37LFBfl+f9/01fPBPU373iBenOj7KGrZg0
-         ZLCB1o13OlqWDZHRKGSuMMDYY7SVOABIWSKz1MpU=
+        b=GEmbcWneCzfPL6p39Y8K4LZTU3UGH4umQW1XsEMSokJaj+OEaRkXwolf9x22o4SJR
+         56NQ5qY50k/X4GlvuIX4pc8Iw2Vny6ycmiDHdViCweluVGGmV8um+JwpavsNRRlnxh
+         YOWyBE7dBcCP1UxwqaY2KzVoQBrsRCn9utJ7FtQA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zechuan Chen <chenzechuan1@huawei.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jianlin Lv <Jianlin.Lv@arm.com>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: [PATCH 4.19 21/49] perf probe: Fix ppc64 perf probe add events failed case
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 24/44] ipmr,ip6mr: acquire RTNL before calling ip[6]mr_free_table() on failure path
 Date:   Mon, 14 Feb 2022 10:25:47 +0100
-Message-Id: <20220214092448.997112587@linuxfoundation.org>
+Message-Id: <20220214092448.693863686@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
-References: <20220214092448.285381753@linuxfoundation.org>
+In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
+References: <20220214092447.897544753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -68,64 +57,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zechuan Chen <chenzechuan1@huawei.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit 4624f199327a704dd1069aca1c3cadb8f2a28c6f upstream.
+[ Upstream commit 5611a00697c8ecc5aad04392bea629e9d6a20463 ]
 
-Because of commit bf794bf52a80c627 ("powerpc/kprobes: Fix kallsyms
-lookup across powerpc ABIv1 and ABIv2"), in ppc64 ABIv1, our perf
-command eliminates the need to use the prefix "." at the symbol name.
+ip[6]mr_free_table() can only be called under RTNL lock.
 
-But when the command "perf probe -a schedule" is executed on ppc64
-ABIv1, it obtains two symbol address information through /proc/kallsyms,
-for example:
+RTNL: assertion failed at net/core/dev.c (10367)
+WARNING: CPU: 1 PID: 5890 at net/core/dev.c:10367 unregister_netdevice_many+0x1246/0x1850 net/core/dev.c:10367
+Modules linked in:
+CPU: 1 PID: 5890 Comm: syz-executor.2 Not tainted 5.16.0-syzkaller-11627-g422ee58dc0ef #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:unregister_netdevice_many+0x1246/0x1850 net/core/dev.c:10367
+Code: 0f 85 9b ee ff ff e8 69 07 4b fa ba 7f 28 00 00 48 c7 c6 00 90 ae 8a 48 c7 c7 40 90 ae 8a c6 05 6d b1 51 06 01 e8 8c 90 d8 01 <0f> 0b e9 70 ee ff ff e8 3e 07 4b fa 4c 89 e7 e8 86 2a 59 fa e9 ee
+RSP: 0018:ffffc900046ff6e0 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888050f51d00 RSI: ffffffff815fa008 RDI: fffff520008dfece
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff815f3d6e R11: 0000000000000000 R12: 00000000fffffff4
+R13: dffffc0000000000 R14: ffffc900046ff750 R15: ffff88807b7dc000
+FS:  00007f4ab736e700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fee0b4f8990 CR3: 000000001e7d2000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ mroute_clean_tables+0x244/0xb40 net/ipv6/ip6mr.c:1509
+ ip6mr_free_table net/ipv6/ip6mr.c:389 [inline]
+ ip6mr_rules_init net/ipv6/ip6mr.c:246 [inline]
+ ip6mr_net_init net/ipv6/ip6mr.c:1306 [inline]
+ ip6mr_net_init+0x3f0/0x4e0 net/ipv6/ip6mr.c:1298
+ ops_init+0xaf/0x470 net/core/net_namespace.c:140
+ setup_net+0x54f/0xbb0 net/core/net_namespace.c:331
+ copy_net_ns+0x318/0x760 net/core/net_namespace.c:475
+ create_new_namespaces+0x3f6/0xb20 kernel/nsproxy.c:110
+ copy_namespaces+0x391/0x450 kernel/nsproxy.c:178
+ copy_process+0x2e0c/0x7300 kernel/fork.c:2167
+ kernel_clone+0xe7/0xab0 kernel/fork.c:2555
+ __do_sys_clone+0xc8/0x110 kernel/fork.c:2672
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f4ab89f9059
+Code: Unable to access opcode bytes at RIP 0x7f4ab89f902f.
+RSP: 002b:00007f4ab736e118 EFLAGS: 00000206 ORIG_RAX: 0000000000000038
+RAX: ffffffffffffffda RBX: 00007f4ab8b0bf60 RCX: 00007f4ab89f9059
+RDX: 0000000020000280 RSI: 0000000020000270 RDI: 0000000040200000
+RBP: 00007f4ab8a5308d R08: 0000000020000300 R09: 0000000020000300
+R10: 00000000200002c0 R11: 0000000000000206 R12: 0000000000000000
+R13: 00007ffc3977cc1f R14: 00007f4ab736e300 R15: 0000000000022000
+ </TASK>
 
-  cat /proc/kallsyms | grep -w schedule
-  c000000000657020 T .schedule
-  c000000000d4fdb8 D schedule
-
-The symbol "D schedule" is not a function symbol, and perf will print:
-"p:probe/schedule _text+13958584"Failed to write event: Invalid argument
-
-Therefore, when searching symbols from map and adding probe point for
-them, a symbol type check is added. If the type of symbol is not a
-function, skip it.
-
-Fixes: bf794bf52a80c627 ("powerpc/kprobes: Fix kallsyms lookup across powerpc ABIv1 and ABIv2")
-Signed-off-by: Zechuan Chen <chenzechuan1@huawei.com>
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Jianlin Lv <Jianlin.Lv@arm.com>
-Cc: Jin Yao <yao.jin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
-Cc: Yang Jihong <yangjihong1@huawei.com>
-Link: https://lore.kernel.org/r/20211228111338.218602-1-chenzechuan1@huawei.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-[sudip: adjust context]
-Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: f243e5a7859a ("ipmr,ip6mr: call ip6mr_free_table() on failure path")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: Cong Wang <cong.wang@bytedance.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Link: https://lore.kernel.org/r/20220208053451.2885398-1-eric.dumazet@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/util/probe-event.c |    3 +++
- 1 file changed, 3 insertions(+)
+ net/ipv4/ipmr.c  | 2 ++
+ net/ipv6/ip6mr.c | 2 ++
+ 2 files changed, 4 insertions(+)
 
---- a/tools/perf/util/probe-event.c
-+++ b/tools/perf/util/probe-event.c
-@@ -2919,6 +2919,9 @@ static int find_probe_trace_events_from_
- 	for (j = 0; j < num_matched_functions; j++) {
- 		sym = syms[j];
+diff --git a/net/ipv4/ipmr.c b/net/ipv4/ipmr.c
+index ce3d5f734fdb1..0a68020d1de1b 100644
+--- a/net/ipv4/ipmr.c
++++ b/net/ipv4/ipmr.c
+@@ -248,7 +248,9 @@ static int __net_init ipmr_rules_init(struct net *net)
+ 	return 0;
  
-+		if (sym->type != STT_FUNC)
-+			continue;
-+
- 		tev = (*tevs) + ret;
- 		tp = &tev->point;
- 		if (ret == num_matched_functions) {
+ err2:
++	rtnl_lock();
+ 	ipmr_free_table(mrt);
++	rtnl_unlock();
+ err1:
+ 	fib_rules_unregister(ops);
+ 	return err;
+diff --git a/net/ipv6/ip6mr.c b/net/ipv6/ip6mr.c
+index 459f282d90e16..f8d60d511d3ed 100644
+--- a/net/ipv6/ip6mr.c
++++ b/net/ipv6/ip6mr.c
+@@ -252,7 +252,9 @@ static int __net_init ip6mr_rules_init(struct net *net)
+ 	return 0;
+ 
+ err2:
++	rtnl_lock();
+ 	ip6mr_free_table(mrt);
++	rtnl_unlock();
+ err1:
+ 	fib_rules_unregister(ops);
+ 	return err;
+-- 
+2.34.1
+
 
 

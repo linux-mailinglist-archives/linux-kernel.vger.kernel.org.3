@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8744B4C50
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 229174B4880
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348597AbiBNKjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:39:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48400 "EHLO
+        id S1343943AbiBNJzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:55:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349561AbiBNKgg (ORCPT
+        with ESMTP id S1344578AbiBNJvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:36:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7654A4190;
-        Mon, 14 Feb 2022 02:02:53 -0800 (PST)
+        Mon, 14 Feb 2022 04:51:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A8179850;
+        Mon, 14 Feb 2022 01:43:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5302160C71;
-        Mon, 14 Feb 2022 10:02:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21FC0C340E9;
-        Mon, 14 Feb 2022 10:02:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2B2EB80DCE;
+        Mon, 14 Feb 2022 09:43:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D63B7C340E9;
+        Mon, 14 Feb 2022 09:42:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832963;
-        bh=ba2athLM4NQjC44TtaESWWuhwR9s3OHzSaYXfdB2oBI=;
+        s=korg; t=1644831779;
+        bh=fv+WkH1spk8VErTFjZqgX1hkHlHoiWogpK/zEzaVGAA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tFy4df6FY4LrYjufTasTsFQMe6Xhm7+EGMdisairWElOCFQOlFc1tGRbBsFAyMvDR
-         5p/3byfO8PaBcGWMVaOpexKbWp88qLKi7hFaPNBChvpn+Hcry+P3tBUo6YCP6YTEZy
-         hKa2ylwcbLBbHQUkt0cYAJR+rlAPT1ijaoppA3ms=
+        b=OxZj5pUDs4NUgEAIBomLl9I6s7K8sbafCTye5fAKFBR4to6lzbYI6LkKTSRETyMDG
+         1laKswR/d6MohfLuNYXk/8HusknhXdRJ9Wg4shHJZB/5OVqRnAVrL5gWo1g36tmDy6
+         X8308ItoQrpdQLfDMmTxcRk8ZN4ZmRhiLoGJP5xs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Toshiaki Makita <makita.toshiaki@lab.ntt.co.jp>,
-        syzbot <syzkaller@googlegroups.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 148/203] veth: fix races around rq->rx_notify_masked
+        stable@vger.kernel.org, stable@kernel.org,
+        Jann Horn <jannh@google.com>
+Subject: [PATCH 5.10 093/116] net: usb: ax88179_178a: Fix out-of-bounds accesses in RX fixup
 Date:   Mon, 14 Feb 2022 10:26:32 +0100
-Message-Id: <20220214092515.268180563@linuxfoundation.org>
+Message-Id: <20220214092501.984699512@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,156 +54,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Jann Horn <jannh@google.com>
 
-[ Upstream commit 68468d8c4cd4222a4ca1f185ab5a1c14480d078c ]
+commit 57bc3d3ae8c14df3ceb4e17d26ddf9eeab304581 upstream.
 
-veth being NETIF_F_LLTX enabled, we need to be more careful
-whenever we read/write rq->rx_notify_masked.
+ax88179_rx_fixup() contains several out-of-bounds accesses that can be
+triggered by a malicious (or defective) USB device, in particular:
 
-BUG: KCSAN: data-race in veth_xmit / veth_xmit
+ - The metadata array (hdr_off..hdr_off+2*pkt_cnt) can be out of bounds,
+   causing OOB reads and (on big-endian systems) OOB endianness flips.
+ - A packet can overlap the metadata array, causing a later OOB
+   endianness flip to corrupt data used by a cloned SKB that has already
+   been handed off into the network stack.
+ - A packet SKB can be constructed whose tail is far beyond its end,
+   causing out-of-bounds heap data to be considered part of the SKB's
+   data.
 
-write to 0xffff888133d9a9f8 of 1 bytes by task 23552 on cpu 0:
- __veth_xdp_flush drivers/net/veth.c:269 [inline]
- veth_xmit+0x307/0x470 drivers/net/veth.c:350
- __netdev_start_xmit include/linux/netdevice.h:4683 [inline]
- netdev_start_xmit include/linux/netdevice.h:4697 [inline]
- xmit_one+0x105/0x2f0 net/core/dev.c:3473
- dev_hard_start_xmit net/core/dev.c:3489 [inline]
- __dev_queue_xmit+0x86d/0xf90 net/core/dev.c:4116
- dev_queue_xmit+0x13/0x20 net/core/dev.c:4149
- br_dev_queue_push_xmit+0x3ce/0x430 net/bridge/br_forward.c:53
- NF_HOOK include/linux/netfilter.h:307 [inline]
- br_forward_finish net/bridge/br_forward.c:66 [inline]
- NF_HOOK include/linux/netfilter.h:307 [inline]
- __br_forward+0x2e4/0x400 net/bridge/br_forward.c:115
- br_flood+0x521/0x5c0 net/bridge/br_forward.c:242
- br_dev_xmit+0x8b6/0x960
- __netdev_start_xmit include/linux/netdevice.h:4683 [inline]
- netdev_start_xmit include/linux/netdevice.h:4697 [inline]
- xmit_one+0x105/0x2f0 net/core/dev.c:3473
- dev_hard_start_xmit net/core/dev.c:3489 [inline]
- __dev_queue_xmit+0x86d/0xf90 net/core/dev.c:4116
- dev_queue_xmit+0x13/0x20 net/core/dev.c:4149
- neigh_hh_output include/net/neighbour.h:525 [inline]
- neigh_output include/net/neighbour.h:539 [inline]
- ip_finish_output2+0x6f8/0xb70 net/ipv4/ip_output.c:228
- ip_finish_output+0xfb/0x240 net/ipv4/ip_output.c:316
- NF_HOOK_COND include/linux/netfilter.h:296 [inline]
- ip_output+0xf3/0x1a0 net/ipv4/ip_output.c:430
- dst_output include/net/dst.h:451 [inline]
- ip_local_out net/ipv4/ip_output.c:126 [inline]
- ip_send_skb+0x6e/0xe0 net/ipv4/ip_output.c:1570
- udp_send_skb+0x641/0x880 net/ipv4/udp.c:967
- udp_sendmsg+0x12ea/0x14c0 net/ipv4/udp.c:1254
- inet_sendmsg+0x5f/0x80 net/ipv4/af_inet.c:819
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg net/socket.c:725 [inline]
- ____sys_sendmsg+0x39a/0x510 net/socket.c:2413
- ___sys_sendmsg net/socket.c:2467 [inline]
- __sys_sendmmsg+0x267/0x4c0 net/socket.c:2553
- __do_sys_sendmmsg net/socket.c:2582 [inline]
- __se_sys_sendmmsg net/socket.c:2579 [inline]
- __x64_sys_sendmmsg+0x53/0x60 net/socket.c:2579
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+I have tested that this can be used by a malicious USB device to send a
+bogus ICMPv6 Echo Request and receive an ICMPv6 Echo Reply in response
+that contains random kernel heap data.
+It's probably also possible to get OOB writes from this on a
+little-endian system somehow - maybe by triggering skb_cow() via IP
+options processing -, but I haven't tested that.
 
-read to 0xffff888133d9a9f8 of 1 bytes by task 23563 on cpu 1:
- __veth_xdp_flush drivers/net/veth.c:268 [inline]
- veth_xmit+0x2d6/0x470 drivers/net/veth.c:350
- __netdev_start_xmit include/linux/netdevice.h:4683 [inline]
- netdev_start_xmit include/linux/netdevice.h:4697 [inline]
- xmit_one+0x105/0x2f0 net/core/dev.c:3473
- dev_hard_start_xmit net/core/dev.c:3489 [inline]
- __dev_queue_xmit+0x86d/0xf90 net/core/dev.c:4116
- dev_queue_xmit+0x13/0x20 net/core/dev.c:4149
- br_dev_queue_push_xmit+0x3ce/0x430 net/bridge/br_forward.c:53
- NF_HOOK include/linux/netfilter.h:307 [inline]
- br_forward_finish net/bridge/br_forward.c:66 [inline]
- NF_HOOK include/linux/netfilter.h:307 [inline]
- __br_forward+0x2e4/0x400 net/bridge/br_forward.c:115
- br_flood+0x521/0x5c0 net/bridge/br_forward.c:242
- br_dev_xmit+0x8b6/0x960
- __netdev_start_xmit include/linux/netdevice.h:4683 [inline]
- netdev_start_xmit include/linux/netdevice.h:4697 [inline]
- xmit_one+0x105/0x2f0 net/core/dev.c:3473
- dev_hard_start_xmit net/core/dev.c:3489 [inline]
- __dev_queue_xmit+0x86d/0xf90 net/core/dev.c:4116
- dev_queue_xmit+0x13/0x20 net/core/dev.c:4149
- neigh_hh_output include/net/neighbour.h:525 [inline]
- neigh_output include/net/neighbour.h:539 [inline]
- ip_finish_output2+0x6f8/0xb70 net/ipv4/ip_output.c:228
- ip_finish_output+0xfb/0x240 net/ipv4/ip_output.c:316
- NF_HOOK_COND include/linux/netfilter.h:296 [inline]
- ip_output+0xf3/0x1a0 net/ipv4/ip_output.c:430
- dst_output include/net/dst.h:451 [inline]
- ip_local_out net/ipv4/ip_output.c:126 [inline]
- ip_send_skb+0x6e/0xe0 net/ipv4/ip_output.c:1570
- udp_send_skb+0x641/0x880 net/ipv4/udp.c:967
- udp_sendmsg+0x12ea/0x14c0 net/ipv4/udp.c:1254
- inet_sendmsg+0x5f/0x80 net/ipv4/af_inet.c:819
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg net/socket.c:725 [inline]
- ____sys_sendmsg+0x39a/0x510 net/socket.c:2413
- ___sys_sendmsg net/socket.c:2467 [inline]
- __sys_sendmmsg+0x267/0x4c0 net/socket.c:2553
- __do_sys_sendmmsg net/socket.c:2582 [inline]
- __se_sys_sendmmsg net/socket.c:2579 [inline]
- __x64_sys_sendmmsg+0x53/0x60 net/socket.c:2579
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-value changed: 0x00 -> 0x01
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 23563 Comm: syz-executor.5 Not tainted 5.17.0-rc2-syzkaller-00064-gc36c04c2e132 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-
-Fixes: 948d4f214fde ("veth: Add driver XDP")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Toshiaki Makita <makita.toshiaki@lab.ntt.co.jp>
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: e2ca90c276e1 ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
+Cc: stable@kernel.org
+Signed-off-by: Jann Horn <jannh@google.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/veth.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ drivers/net/usb/ax88179_178a.c |   68 +++++++++++++++++++++++------------------
+ 1 file changed, 39 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index ecbc09cbe2590..f478fe7e2b820 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -272,9 +272,10 @@ static void __veth_xdp_flush(struct veth_rq *rq)
- {
- 	/* Write ptr_ring before reading rx_notify_masked */
- 	smp_mb();
--	if (!rq->rx_notify_masked) {
--		rq->rx_notify_masked = true;
--		napi_schedule(&rq->xdp_napi);
-+	if (!READ_ONCE(rq->rx_notify_masked) &&
-+	    napi_schedule_prep(&rq->xdp_napi)) {
-+		WRITE_ONCE(rq->rx_notify_masked, true);
-+		__napi_schedule(&rq->xdp_napi);
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -1467,58 +1467,68 @@ static int ax88179_rx_fixup(struct usbne
+ 	u16 hdr_off;
+ 	u32 *pkt_hdr;
+ 
+-	/* This check is no longer done by usbnet */
+-	if (skb->len < dev->net->hard_header_len)
++	/* At the end of the SKB, there's a header telling us how many packets
++	 * are bundled into this buffer and where we can find an array of
++	 * per-packet metadata (which contains elements encoded into u16).
++	 */
++	if (skb->len < 4)
+ 		return 0;
+-
+ 	skb_trim(skb, skb->len - 4);
+ 	rx_hdr = get_unaligned_le32(skb_tail_pointer(skb));
+-
+ 	pkt_cnt = (u16)rx_hdr;
+ 	hdr_off = (u16)(rx_hdr >> 16);
++
++	if (pkt_cnt == 0)
++		return 0;
++
++	/* Make sure that the bounds of the metadata array are inside the SKB
++	 * (and in front of the counter at the end).
++	 */
++	if (pkt_cnt * 2 + hdr_off > skb->len)
++		return 0;
+ 	pkt_hdr = (u32 *)(skb->data + hdr_off);
+ 
+-	while (pkt_cnt--) {
++	/* Packets must not overlap the metadata array */
++	skb_trim(skb, hdr_off);
++
++	for (; ; pkt_cnt--, pkt_hdr++) {
+ 		u16 pkt_len;
+ 
+ 		le32_to_cpus(pkt_hdr);
+ 		pkt_len = (*pkt_hdr >> 16) & 0x1fff;
+ 
+-		/* Check CRC or runt packet */
+-		if ((*pkt_hdr & AX_RXHDR_CRC_ERR) ||
+-		    (*pkt_hdr & AX_RXHDR_DROP_ERR)) {
+-			skb_pull(skb, (pkt_len + 7) & 0xFFF8);
+-			pkt_hdr++;
+-			continue;
+-		}
+-
+-		if (pkt_cnt == 0) {
+-			skb->len = pkt_len;
+-			/* Skip IP alignment pseudo header */
+-			skb_pull(skb, 2);
+-			skb_set_tail_pointer(skb, skb->len);
+-			skb->truesize = pkt_len + sizeof(struct sk_buff);
+-			ax88179_rx_checksum(skb, pkt_hdr);
+-			return 1;
+-		}
++		if (pkt_len > skb->len)
++			return 0;
+ 
+-		ax_skb = skb_clone(skb, GFP_ATOMIC);
+-		if (ax_skb) {
++		/* Check CRC or runt packet */
++		if (((*pkt_hdr & (AX_RXHDR_CRC_ERR | AX_RXHDR_DROP_ERR)) == 0) &&
++		    pkt_len >= 2 + ETH_HLEN) {
++			bool last = (pkt_cnt == 0);
++
++			if (last) {
++				ax_skb = skb;
++			} else {
++				ax_skb = skb_clone(skb, GFP_ATOMIC);
++				if (!ax_skb)
++					return 0;
++			}
+ 			ax_skb->len = pkt_len;
+ 			/* Skip IP alignment pseudo header */
+ 			skb_pull(ax_skb, 2);
+ 			skb_set_tail_pointer(ax_skb, ax_skb->len);
+ 			ax_skb->truesize = pkt_len + sizeof(struct sk_buff);
+ 			ax88179_rx_checksum(ax_skb, pkt_hdr);
++
++			if (last)
++				return 1;
++
+ 			usbnet_skb_return(dev, ax_skb);
+-		} else {
+-			return 0;
+ 		}
+ 
+-		skb_pull(skb, (pkt_len + 7) & 0xFFF8);
+-		pkt_hdr++;
++		/* Trim this packet away from the SKB */
++		if (!skb_pull(skb, (pkt_len + 7) & 0xFFF8))
++			return 0;
  	}
+-	return 1;
  }
  
-@@ -919,8 +920,10 @@ static int veth_poll(struct napi_struct *napi, int budget)
- 		/* Write rx_notify_masked before reading ptr_ring */
- 		smp_store_mb(rq->rx_notify_masked, false);
- 		if (unlikely(!__ptr_ring_empty(&rq->xdp_ring))) {
--			rq->rx_notify_masked = true;
--			napi_schedule(&rq->xdp_napi);
-+			if (napi_schedule_prep(&rq->xdp_napi)) {
-+				WRITE_ONCE(rq->rx_notify_masked, true);
-+				__napi_schedule(&rq->xdp_napi);
-+			}
- 		}
- 	}
- 
--- 
-2.34.1
-
+ static struct sk_buff *
 
 

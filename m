@@ -2,67 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86CE94B54D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 16:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 047AC4B5504
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 16:40:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355883AbiBNPdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 10:33:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54542 "EHLO
+        id S1355938AbiBNPj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 10:39:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352973AbiBNPdN (ORCPT
+        with ESMTP id S1355908AbiBNPj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 10:33:13 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99BE47567;
-        Mon, 14 Feb 2022 07:33:02 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id u6so31381386lfc.3;
-        Mon, 14 Feb 2022 07:33:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=V+BZ9l4nxYyVbWiP19qpOCcVdcferaufovGSXxHYlGM=;
-        b=fMdJoRgwwpjfoOvUZWdzrXKf5lxk21do/fH8LT7Zkd2hgMr8pzwp6GP6P6RKv5E9Rv
-         OyVbOZl5n45vgkdiyVUKKjCv1+pik/MMCpG5Pic7UvibFUpldwMdZlUqAnG+S4FffeLa
-         7o+jpSbWcUZW/YhpmzlKM/VJ25OJHWsx1yq6/uVXx4COHLUXEDiQre0tAQimanWnl32N
-         bUX7GakS10z76tePFL5B+UaRlU0QapIXKJoFarJa8Dmsuh8An1GbMksrRDKl4lTWIiA0
-         0FJYZIl+vtOX5JIxbBJ9cOkZABLDV0r38wnb/mXDNNEm3s0p3emwYKVl0lXbcdbs9i/y
-         QcxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=V+BZ9l4nxYyVbWiP19qpOCcVdcferaufovGSXxHYlGM=;
-        b=SsroewCTNOm0kOlIsNAqMdUOuSVOP9nYF6jBCQ4RgLpMwi6hxhKD/y3Qub8ijanOb1
-         L5o2AyNXOa/GQO4j9006g4rFAIjn7s681DElKyNiIKS6uR+DlUX4NOFodiCwfGzsoCg6
-         G4qXncsIEV03TfC6utbBxVDTNF3yskgnyQ78+kOq8xjZ6bFps0X6wKpyQVvkGvBTpfjp
-         lz/IFgzhkiR6JGS0hM4kfihbC3yFEYQLmVkm7UClr+ZjZwnhDuDz5C1VOakAFfWPDhuE
-         GkR/kRsnBHwVW5n5X1MXZOj5k6Mb5n+jJTPtY2Bh/uQ2M0TLJnFpnicWrXWNn3Pz3Vdo
-         xRaw==
-X-Gm-Message-State: AOAM531iZtsUWp/e/GwfGN+j0OTP5yuLQRWnmVa4ntLzHDUibbyAPOeL
-        ZVnBb4AeqJGBVpYi5DzbHqxYwEzU56j1yw==
-X-Google-Smtp-Source: ABdhPJxQxoPfNXjl+WJ2hdTaOjuAOkK2pKeBqFw4r/OHj5wqqE3XWfTUozKbQV5BvC2MlwwiswWH/A==
-X-Received: by 2002:ac2:4c50:: with SMTP id o16mr162186lfk.114.1644852781002;
-        Mon, 14 Feb 2022 07:33:01 -0800 (PST)
-Received: from localhost ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id bp3sm4161693lfb.53.2022.02.14.07.32.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 07:33:00 -0800 (PST)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Jassi Brar <jassisinghbrar@gmail.com>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Pekka Pessi <ppessi@nvidia.com>, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mailbox: tegra-hsp: Flush whole channel
-Date:   Mon, 14 Feb 2022 16:32:56 +0100
-Message-Id: <20220214153256.162261-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 14 Feb 2022 10:39:56 -0500
+X-Greylist: delayed 304 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 07:39:48 PST
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FADD606DD
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 07:39:47 -0800 (PST)
+Received: from photo-meter.com ([62.157.68.154]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1Mz9EL-1oEbbc0w3n-00wHhj for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022
+ 16:34:43 +0100
+Received: from [192.168.100.109] (MICHA.fritz.box [192.168.100.109])
+        by photo-meter.com (Postfix) with ESMTP id 80A3B3B08B7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 16:32:43 +0100 (CET)
+Message-ID: <7da33ef9-67a4-343f-e97c-02d6bc40f2a9@photo-meter.com>
+Date:   Mon, 14 Feb 2022 16:34:42 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Reply-To: anochin@photo-meter.com
+Subject: Re: [PATCH 5.16 009/200] can: m_can: m_can_fifo_{read,write}: dont
+ read or write from/to FIFO if length is 0
+Content-Language: en-GB
+To:     linux-kernel@vger.kernel.org
+References: <20220131105233.561926043@linuxfoundation.org>
+ <20220131105233.868161646@linuxfoundation.org>
+From:   Michael Anochin <anochin@photo-meter.com>
+Organization: Czibula und Grundmann GmbH
+In-Reply-To: <20220131105233.868161646@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:VahmHILKvtLozMpmCn4/yqTtVWIofz43e8vvUF3FTcqbUJTtyCi
+ waqxShjNwhD3fyfPL0li5qyoodIemj+lFUuT4J0fzuZ8d98mizD66xfMGh2vphedLgd1YD/
+ Ic0rxMtvj+d5iII8i+H+trPMLPbzo7nAiu1TctH/JX1HWWMq4/0vkz9cvp2xk+LKL998gRP
+ 3HBri9e5iWt074hb2uEAg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ns1FS5/QL2E=:Vgfsgf4TxNL20J7JbIwsJs
+ gv6eJy04w8N09TN1wNBs6RWqh8Uvjepc6xtrrl47JeJbrZa/5vpcw9qBNkkVTM4QQvdEWkzIw
+ mtu3Gl5OrR4pB8gfPiiWuhKJrjgk3RO/aTejNgdQt1F5VReAyUVIu7lPwdzdORgbR/6ngo8Y7
+ YpAj8TqNvH5yJTjHmc9mf699/zxSO1wOxw2fAkDw4hWbVoPWe0HiA0/WOWZr2lVvlMrMwTuL6
+ caDmKsdWZfagRchD0Kwn2MzslwFcNYdeq3FAYJyDfsn0JGdvscOlW9Lqe2/aV871Y6V78wAed
+ TMlTU3m4dQLMtbfJ6fvgBrVBDVGK961spnHxY70It0wWJz/Q3qrgjHzHCmuc9Eayb8AkGDoGu
+ x0HCXFQzWxDa7kE/8ErIXysrRo/uWuN4KpiCp2NAkvChMnjNd+SJejzzfwdoElVGqYZibKfjA
+ yrfef3YIxDW4aHoVwKsSUlpkj/+1xgy0Fred5FZE9Aw8pH8JQUXgZ0FGkVRGOV9wo9OxQmOL4
+ ZWBNOA7I9GKtO1xcMzGqT6fsQF9H4VSboo2npNyVeauRSrZo2LbAUbFmZ6kOWMKbwFo2Onb51
+ j5tIWpLR5P9HjzObjeDkP6YU4ovKkWRpreSme8dND+8mdRLdp+17L9G1kSAN7P06h9cO+B81x
+ 5xb8Tl4hfjKi4Qlfd4FfyxwF0s4OgMQ/aBDNOIoeIkYkq1Wbs76frXkE0GNVsLMqjfdhU0r8b
+ W56xZYqv8xrAgQ8v
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,33 +65,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pekka Pessi <ppessi@nvidia.com>
 
-The txdone can re-fill the mailbox. Keep polling the mailbox during the
-flush until all the messages have been delivered.
+There is no -22 error message now. Tested with "cansend can0 123#"
 
-Signed-off-by: Pekka Pessi <ppessi@nvidia.com>
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- drivers/mailbox/tegra-hsp.c | 5 +++++
- 1 file changed, 5 insertions(+)
+But now it floods continuous from __skb_queue_add_sort:
 
-diff --git a/drivers/mailbox/tegra-hsp.c b/drivers/mailbox/tegra-hsp.c
-index acd0675da681..78f7265039c6 100644
---- a/drivers/mailbox/tegra-hsp.c
-+++ b/drivers/mailbox/tegra-hsp.c
-@@ -412,6 +412,11 @@ static int tegra_hsp_mailbox_flush(struct mbox_chan *chan,
- 		value = tegra_hsp_channel_readl(ch, HSP_SM_SHRD_MBOX);
- 		if ((value & HSP_SM_SHRD_MBOX_FULL) == 0) {
- 			mbox_chan_txdone(chan, 0);
-+
-+			/* Wait until channel is empty */
-+			if (chan->active_req != NULL)
-+				continue;
-+
- 			return 0;
- 		}
- 
--- 
-2.35.1
+[ xxx.xxx] tcan4x5x spi0.0 can0: __skb_queue_add_sort: pos=0x000000, 
+new=0x000000, diff= 0, queue_len=1
 
+Only modprobe -r tcan4x5x or reboot helps
+
+
+Hardware: RPI4 board with tcan4550 on spi0
+Kernel 5.17.0-rc3-v7l+
+from https://github.com/raspberrypi/linux/tree/rpi-5.17.y
+
+
+Am 31.01.2022 um 11:54 schrieb Greg Kroah-Hartman:
+> From: Marc Kleine-Budde <mkl@pengutronix.de>
+> 
+> commit db72589c49fd260bfc99c7160c079675bc7417af upstream.
+> 
+> In order to optimize FIFO access, especially on m_can cores attached
+> to slow busses like SPI, in patch
+> 
+> | e39381770ec9 ("can: m_can: Disable IRQs on FIFO bus errors")
+> 
+> bulk read/write support has been added to the m_can_fifo_{read,write}
+> functions.
+> 
+> That change leads to the tcan driver to call
+> regmap_bulk_{read,write}() with a length of 0 (for CAN frames with 0
+> data length). regmap treats this as an error:
+> 
+> | tcan4x5x spi1.0 tcan4x5x0: FIFO write returned -22
+> 
+> This patch fixes the problem by not calling the
+> cdev->ops->{read,write)_fifo() in case of a 0 length read/write.
+> 
+> Fixes: e39381770ec9 ("can: m_can: Disable IRQs on FIFO bus errors")
+> Link: https://lore.kernel.org/all/20220114155751.2651888-1-mkl@pengutronix.de
+> Cc: stable@vger.kernel.org
+> Cc: Matt Kline <matt@bitbashing.io>
+> Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>
+> Reported-by: Michael Anochin <anochin@photo-meter.com>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>   drivers/net/can/m_can/m_can.c |    6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> --- a/drivers/net/can/m_can/m_can.c
+> +++ b/drivers/net/can/m_can/m_can.c
+> @@ -336,6 +336,9 @@ m_can_fifo_read(struct m_can_classdev *c
+>   	u32 addr_offset = cdev->mcfg[MRAM_RXF0].off + fgi * RXF0_ELEMENT_SIZE +
+>   		offset;
+>   
+> +	if (val_count == 0)
+> +		return 0;
+> +
+>   	return cdev->ops->read_fifo(cdev, addr_offset, val, val_count);
+>   }
+>   
+> @@ -346,6 +349,9 @@ m_can_fifo_write(struct m_can_classdev *
+>   	u32 addr_offset = cdev->mcfg[MRAM_TXB].off + fpi * TXB_ELEMENT_SIZE +
+>   		offset;
+>   
+> +	if (val_count == 0)
+> +		return 0;
+> +
+>   	return cdev->ops->write_fifo(cdev, addr_offset, val, val_count);
+>   }
+>   
+> 

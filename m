@@ -2,99 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC634B51B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:37:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB46E4B51BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234250AbiBNNg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:36:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49916 "EHLO
+        id S234097AbiBNNhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:37:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232787AbiBNNg6 (ORCPT
+        with ESMTP id S239718AbiBNNhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:36:58 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6DB25E89
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:36:50 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id bg19-20020a05600c3c9300b0034565e837b6so5634436wmb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:36:50 -0800 (PST)
+        Mon, 14 Feb 2022 08:37:15 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD93949F92;
+        Mon, 14 Feb 2022 05:37:07 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id n5so12302982ilk.12;
+        Mon, 14 Feb 2022 05:37:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=lKeI0xAX+MJ5UPtqGLEtftF5bHWftWRiLnV6Tt/MzTM=;
-        b=seaFR5mE6UeUlDwgEVe5uNxczBGDBzhMm1NdnL6dXGgHSzthduClQ04Mq4lW6gVo+z
-         qvGcaodQubzN0Nlyb5q593nlEeB+brCWOzYsldS8ioZCOFosCxZgAvbUAAfhhazS2Jl0
-         7tKiib6z7m48RxTFoEVYCYObrJO893RJdN4jsNiHlt84S759gQObLhcC93/4H8qwX5K/
-         6zLMwwgM0LHxlL9MUxk79ZAmO00dgE4f6Iw2xhcJfDBr1nJk2X4W8X/NeVZ/U6yXUqiU
-         1/G7UlGHAt50dTLm78CxTYgwuNwU0acO4DV5L1HyVGllheCnbf/a8iAxLaY6+g9vXj9O
-         VF8Q==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0S222rJiXMXdLbL4sr8eXv1/RjuJqY7+BlIpDb0kXQU=;
+        b=Y1grS4VlTpVrHPRcg3ogv2eoxW96xGbuQ0rNH+3v401Jh/WkzItBEU6E8rfh+flaDN
+         5gAMiLYQUE0lQEqhJ9TeDJNcTKUlat+WvO0QuhzGZfLG0+4Y2EQTNNhisaoNrUeshGve
+         /x0TTqGyLkY5CsZNkDvwejmmP9NX3qgHvTxWYaVXI+KWRfPR2uhIN8/ZiiT83TcNtcmY
+         v1/u9il5hn12+4yKYW+rONaHHhdGAmZxWBuoa9rsm8oC1YU76D89FFKtZbIrCRowcCzo
+         XrYaqiY/pjg0nkJp2xIAvKQ2BmvohlmqPifRnaz/jTW79L592OvQvLTELRaIarOO9+gG
+         En4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=lKeI0xAX+MJ5UPtqGLEtftF5bHWftWRiLnV6Tt/MzTM=;
-        b=dHdCca+ZoM+3isnBEJz2HvgXfDzG/V1f5FOPJ7RO/iWYu6Xta/SyOU2nCvFiztDwm5
-         hpN6tHVO2EXPob13OVM72vBaQtjDxbeeM7N6SVG3Vy5p/16YRnFE0K4aJXqcj2OMCm9r
-         DkIR4f58Ub3XU7pdgb1yQfgSTagE/aAObWhZE6xnKLLHeAOdmlUrCygTmQfqqz7T68yw
-         nCgWfqE1vdvBXbor2s6c2f6l0po7TIypMSDjclTSzf49UWtxr9iRkcl03p1NMUFzGpsV
-         Q8sPjnksQ5pcUthVUf4yc3X+3d++B7XMDR5b+HN8Ox/4v4I1AKraOSiIHUQGlyCKgZwA
-         Ge7Q==
-X-Gm-Message-State: AOAM532DZYpdAn9vPvtY5EJ9elRdHqT2qnyCda7YDFpirgKw9s8zoP3/
-        zXGPvK/HCUjaYR5kvV+/MKgGeQ==
-X-Google-Smtp-Source: ABdhPJzPgfN6THQVQkirjhcrFcZYu8B9ytLmMvuFr7AtRhobgF+ZrZdh6SXK+ud2uXZgUQt/zNpRYw==
-X-Received: by 2002:a05:600c:1506:: with SMTP id b6mr11390115wmg.30.1644845808701;
-        Mon, 14 Feb 2022 05:36:48 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id z3sm14439479wmp.42.2022.02.14.05.36.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 05:36:48 -0800 (PST)
-Date:   Mon, 14 Feb 2022 13:36:46 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] mfd: exynos-lpass: Drop unneeded syscon.h include
-Message-ID: <Ygpa7kiDp9tHmKry@google.com>
-References: <20220202151310.285561-1-krzysztof.kozlowski@canonical.com>
- <20220202151310.285561-3-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0S222rJiXMXdLbL4sr8eXv1/RjuJqY7+BlIpDb0kXQU=;
+        b=cFXV5Ne9tBw2OwSQbyrV+OSQ7TOHvpNVBAhFPNNUIB4rnPx4Y5StodHuc3DRTDNDq2
+         EkbUl9CYfxXbsE1CVtppnfhyGiiPXvaZ6w4hCm2Psys0MqOMdHmwJjzG873LbjLrgNq5
+         m0gKoGNu3vKmEiNaZaBn9bkkywVx0fqZ1qdMM4tPe2IBse6fqjTmMGag3dcjiIJ9EnvB
+         2d6LZ2MndBVbfpayAXa/o38ZlAqH35AZAGWZPYIuKCfP1wBbUHSOHG0KWmdV+ADTV6GO
+         tWFcsz28z8WVsxBhx4gK7PBapMWhlmBFI9QQYEPQHjkEj6ozNWsR5y5bKQ5Znj4x3r14
+         M5gw==
+X-Gm-Message-State: AOAM530Rg/kk+RjUz2FdRKFDp47rlaK1UWsfzsXijHKelCVGE9J405tX
+        X0mkbJfsMH68QeS7Xt9+htDF+MemvOEYXpmrnG4=
+X-Google-Smtp-Source: ABdhPJz8VaSVI48p0HfaAeJH24iGo5ubZOtP91p5DCwKGTBFJ/2NlAkHOJ6pNrXG85vdJz0h3BZQUlq6UU5id2h2hfA=
+X-Received: by 2002:a05:6e02:1ba2:: with SMTP id n2mr8403067ili.5.1644845827109;
+ Mon, 14 Feb 2022 05:37:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220202151310.285561-3-krzysztof.kozlowski@canonical.com>
+References: <20220212130410.6901-1-ojeda@kernel.org> <20220212130410.6901-11-ojeda@kernel.org>
+ <YgnoJ97y3I2hE8UJ@google.com>
+In-Reply-To: <YgnoJ97y3I2hE8UJ@google.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 14 Feb 2022 14:36:56 +0100
+Message-ID: <CANiq72mUBox2cbkHGP9=s=MZhRydY9Z2-vq8OVXjp6xHHifwyQ@mail.gmail.com>
+Subject: Re: [PATCH v4 10/20] rust: add `kernel` crate
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Finn Behrens <me@kloenk.de>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sumera Priyadarsini <sylphrenadin@gmail.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Fox Chen <foxhlchen@gmail.com>,
+        Dan Robertson <daniel.robertson@starlab.io>,
+        Viktor Garske <viktor@v-gar.de>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        =?UTF-8?Q?L=C3=A9o_Lanteri_Thauvin?= <leseulartichaut@gmail.com>,
+        Niklas Mohrin <dev@niklasmohrin.de>,
+        Gioh Kim <gurugio@gmail.com>, Daniel Xu <dxu@dxuuu.xyz>,
+        Milan Landaverde <milan@mdaverde.com>,
+        Morgan Bartlett <mjmouse9999@gmail.com>,
+        Maciej Falkowski <m.falkowski@samsung.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 02 Feb 2022, Krzysztof Kozlowski wrote:
+Hi Sergey,
 
-> syscon regmap is not used since commit addebf1588ab ("mfd: exynos-lpass:
-> Remove pad retention control").
-> 
-> Fixes: addebf1588ab ("mfd: exynos-lpass: Remove pad retention control")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-> ---
->  drivers/mfd/exynos-lpass.c | 1 -
->  1 file changed, 1 deletion(-)
+On Mon, Feb 14, 2022 at 6:27 AM Sergey Senozhatsky
+<senozhatsky@chromium.org> wrote:
+>
+> Is this flexible enough? Why not let user pass bindings::GFP_* bitmask,
+> just like what the underlying kernel API does.
 
-Applied, thanks.
+For particular kernel abstractions, they may know what they need; but
+in general, yeah, we may need to allow for flexibility where needed
+(see the `TODO` comment in the quoted code).
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+For collections that need to allocate, it is an open question how Rust
+will handle it upstream, as there are several approaches (if you want
+to take a look, see the `allocator_api` feature and the working group
+at https://github.com/rust-lang/wg-allocators). But in order to be
+able to experiment and see what is best for the kernel, we have an
+in-tree fork of the `alloc` standard library crate (see
+`rust/alloc/README.md`).
+
+Cheers,
+Miguel

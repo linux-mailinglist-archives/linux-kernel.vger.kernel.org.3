@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D704B4B09
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:40:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5354B498D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236896AbiBNK2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:28:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36846 "EHLO
+        id S1345705AbiBNKGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:06:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348231AbiBNK0u (ORCPT
+        with ESMTP id S1345566AbiBNKBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:26:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72402811B0;
-        Mon, 14 Feb 2022 01:57:50 -0800 (PST)
+        Mon, 14 Feb 2022 05:01:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029591B785;
+        Mon, 14 Feb 2022 01:47:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58C2161236;
-        Mon, 14 Feb 2022 09:57:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31626C340E9;
-        Mon, 14 Feb 2022 09:57:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADD5DB80DBF;
+        Mon, 14 Feb 2022 09:47:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1418C340E9;
+        Mon, 14 Feb 2022 09:47:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832657;
-        bh=N3T3q2dVigTnrrBC916Z3kDWsICXJCmLkqSPQOiA/64=;
+        s=korg; t=1644832072;
+        bh=CLSw2UsO08t1ZFx/hYATDmoYgP4jThO6t+qj2UhqPtU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qavJnFN0vUF37mNaJubSXz1pOnweYl1y5ostZ8+EFgQ7AwLZ20s+gmwipqkMJi07c
-         AIdvvWNapxIVvMkdEhoxMjY/EOmXEmygXeyKob2m461YUkM4jkuHV0ZnkcbRm+Iyku
-         Gazt2CcYfpsOSJ5nIrM1JikAGeLYHb15lc73WVxc=
+        b=ftyu9UydqSzs58kIMqqvNloC2A9NcgNbXY8t5ieIt9ixbxosfFpHE4dBRS0PZl8CL
+         cnHiy0tWV5EuhzrGM2sfRHrylZVpVePE0Y9gHSl0YLeSZmCZqW9nWuRdx/AurnIqaV
+         0AwLx2B3SKNayxoX35uro5nZAlwbx9gbbPoTReN4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Petlan <mpetlan@redhat.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: [PATCH 5.16 085/203] ACPI/IORT: Check node revision for PMCG resources
+        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        Stefan Hansson <newbyte@disroot.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH 5.15 071/172] ARM: dts: Fix boot regression on Skomer
 Date:   Mon, 14 Feb 2022 10:25:29 +0100
-Message-Id: <20220214092513.159286943@linuxfoundation.org>
+Message-Id: <20220214092508.853467639@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,55 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robin Murphy <robin.murphy@arm.com>
+From: Linus Walleij <linus.walleij@linaro.org>
 
-commit da5fb9e1ad3fbf632dce735f1bdad257ca528499 upstream.
+commit d9058d6a0e92d8e4a00855f8fe204792f42794db upstream.
 
-The original version of the IORT PMCG definition had an oversight
-wherein there was no way to describe the second register page for an
-implementation using the recommended RELOC_CTRS feature. Although the
-spec was fixed, and the final patches merged to ACPICA and Linux written
-against the new version, it seems that some old firmware based on the
-original revision has survived and turned up in the wild.
+The signal routing on the Skomer board was incorrect making
+it impossible to mount root from the SD card. Fix this up.
 
-Add a check for the original PMCG definition, and avoid filling in the
-second memory resource with nonsense if so. Otherwise it is likely that
-something horrible will happen when the PMCG driver attempts to probe.
-
-Reported-by: Michael Petlan <mpetlan@redhat.com>
-Fixes: 24e516049360 ("ACPI/IORT: Add support for PMCG")
-Cc: <stable@vger.kernel.org> # 5.2.x
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Link: https://lore.kernel.org/r/75628ae41c257fb73588f7bf1c4459160e04be2b.1643916258.git.robin.murphy@arm.com
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Cc: stable@vger.kernel.org
+Cc: Stefan Hansson <newbyte@disroot.org>
+Link: https://lore.kernel.org/r/20220205235312.446730-1-linus.walleij@linaro.org'
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/acpi/arm64/iort.c |   14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/ste-ux500-samsung-skomer.dts |    4 ----
+ 1 file changed, 4 deletions(-)
 
---- a/drivers/acpi/arm64/iort.c
-+++ b/drivers/acpi/arm64/iort.c
-@@ -1361,9 +1361,17 @@ static void __init arm_smmu_v3_pmcg_init
- 	res[0].start = pmcg->page0_base_address;
- 	res[0].end = pmcg->page0_base_address + SZ_4K - 1;
- 	res[0].flags = IORESOURCE_MEM;
--	res[1].start = pmcg->page1_base_address;
--	res[1].end = pmcg->page1_base_address + SZ_4K - 1;
--	res[1].flags = IORESOURCE_MEM;
-+	/*
-+	 * The initial version in DEN0049C lacked a way to describe register
-+	 * page 1, which makes it broken for most PMCG implementations; in
-+	 * that case, just let the driver fail gracefully if it expects to
-+	 * find a second memory resource.
-+	 */
-+	if (node->revision > 0) {
-+		res[1].start = pmcg->page1_base_address;
-+		res[1].end = pmcg->page1_base_address + SZ_4K - 1;
-+		res[1].flags = IORESOURCE_MEM;
-+	}
- 
- 	if (pmcg->overflow_gsiv)
- 		acpi_iort_register_irq(pmcg->overflow_gsiv, "overflow",
+--- a/arch/arm/boot/dts/ste-ux500-samsung-skomer.dts
++++ b/arch/arm/boot/dts/ste-ux500-samsung-skomer.dts
+@@ -181,10 +181,6 @@
+ 			cap-sd-highspeed;
+ 			cap-mmc-highspeed;
+ 			/* All direction control is used */
+-			st,sig-dir-cmd;
+-			st,sig-dir-dat0;
+-			st,sig-dir-dat2;
+-			st,sig-dir-dat31;
+ 			st,sig-pin-fbclk;
+ 			full-pwr-cycle;
+ 			vmmc-supply = <&ab8500_ldo_aux3_reg>;
 
 

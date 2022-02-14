@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3CE4B488A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8444B47DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344094AbiBNJzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:55:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60946 "EHLO
+        id S244142AbiBNJkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:40:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343746AbiBNJvU (ORCPT
+        with ESMTP id S244116AbiBNJiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:51:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA3A66227;
-        Mon, 14 Feb 2022 01:42:02 -0800 (PST)
+        Mon, 14 Feb 2022 04:38:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733F069281;
+        Mon, 14 Feb 2022 01:35:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB80C611F3;
-        Mon, 14 Feb 2022 09:42:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6B46C340E9;
-        Mon, 14 Feb 2022 09:42:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2F2AB80DA9;
+        Mon, 14 Feb 2022 09:35:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C70B5C340F1;
+        Mon, 14 Feb 2022 09:35:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831721;
-        bh=hG9jkos58WAdkn3Ip/Te7FXuqEYEgOqyyoE7Oxk6cmw=;
+        s=korg; t=1644831314;
+        bh=Jb03Ld/1IlFjBDrxXqIoBlA0XES/Efs1bjalJ7s2rq0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d/Plt2lkpjfAaUB6+XgdUGIlGPEfV5ofrimDG50A6+I028x539eg1surTafMOvv/K
-         UcjRB8gOXi7z60XBgPbJDmIlLfUjPr0DaCvVYMll8kJNEcWYbyx67bUZ66LXt/xa2r
-         9duj57piaXnijKpFjYlEhb3cK9eq/qnd3yT8edM4=
+        b=FF/6CkT3W85qOU8lR3EmgKcp55shOs4nbEqR3Uey+afOIQanERlgzXnNHQe1XytLN
+         f6sx2pYfuZDcIJPEH6S+2GDW07x4lZT3vNZWmag8bEyHlNmWltZZHP/7gNz/qZMI8G
+         hH6lPpWt1Z337IHKguNY+uHjBffC9Wh96LvQshpA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: [PATCH 5.10 043/116] ARM: dts: imx23-evk: Remove MX23_PAD_SSP1_DETECT from hog group
-Date:   Mon, 14 Feb 2022 10:25:42 +0100
-Message-Id: <20220214092500.177939491@linuxfoundation.org>
+        stable@vger.kernel.org, Olga Kornievskaia <kolga@netapp.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 15/71] NFSv4 remove zero number of fs_locations entries error check
+Date:   Mon, 14 Feb 2022 10:25:43 +0100
+Message-Id: <20220214092452.536848104@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@gmail.com>
+From: Olga Kornievskaia <kolga@netapp.com>
 
-commit 42c9b28e6862d16db82a56f5667cf4d1f6658cf6 upstream.
+[ Upstream commit 90e12a3191040bd3854d3e236c35921e4e92a044 ]
 
-Currently, SD card fails to mount due to the following pinctrl error:
+Remove the check for the zero length fs_locations reply in the
+xdr decoding, and instead check for that in the migration code.
 
-[   11.170000] imx23-pinctrl 80018000.pinctrl: pin SSP1_DETECT already requested by 80018000.pinctrl; cannot claim for 80010000.spi
-[   11.180000] imx23-pinctrl 80018000.pinctrl: pin-65 (80010000.spi) status -22
-[   11.190000] imx23-pinctrl 80018000.pinctrl: could not request pin 65 (SSP1_DETECT) from group mmc0-pins-fixup.0  on device 80018000.pinctrl
-[   11.200000] mxs-mmc 80010000.spi: Error applying setting, reverse things back
-
-Fix it by removing the MX23_PAD_SSP1_DETECT pin from the hog group as it
-is already been used by the mmc0-pins-fixup pinctrl group.
-
-With this change the rootfs can be mounted and the imx23-evk board can
-boot successfully.
-
-Cc: <stable@vger.kernel.org>
-Fixes: bc3875f1a61e ("ARM: dts: mxs: modify mx23/mx28 dts files to use pinctrl headers")
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/imx23-evk.dts |    1 -
- 1 file changed, 1 deletion(-)
+ fs/nfs/nfs4state.c | 3 +++
+ fs/nfs/nfs4xdr.c   | 2 --
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
---- a/arch/arm/boot/dts/imx23-evk.dts
-+++ b/arch/arm/boot/dts/imx23-evk.dts
-@@ -79,7 +79,6 @@
- 						MX23_PAD_LCD_RESET__GPIO_1_18
- 						MX23_PAD_PWM3__GPIO_1_29
- 						MX23_PAD_PWM4__GPIO_1_30
--						MX23_PAD_SSP1_DETECT__SSP1_DETECT
- 					>;
- 					fsl,drive-strength = <MXS_DRIVE_4mA>;
- 					fsl,voltage = <MXS_VOLTAGE_HIGH>;
+diff --git a/fs/nfs/nfs4state.c b/fs/nfs/nfs4state.c
+index ea680f619438b..aa2caba38a014 100644
+--- a/fs/nfs/nfs4state.c
++++ b/fs/nfs/nfs4state.c
+@@ -2070,6 +2070,9 @@ static int nfs4_try_migration(struct nfs_server *server, const struct cred *cred
+ 	}
+ 
+ 	result = -NFS4ERR_NXIO;
++	if (!locations->nlocations)
++		goto out;
++
+ 	if (!(locations->fattr.valid & NFS_ATTR_FATTR_V4_LOCATIONS)) {
+ 		dprintk("<-- %s: No fs_locations data, migration skipped\n",
+ 			__func__);
+diff --git a/fs/nfs/nfs4xdr.c b/fs/nfs/nfs4xdr.c
+index 0fc08d22c9218..2b7741fe42ead 100644
+--- a/fs/nfs/nfs4xdr.c
++++ b/fs/nfs/nfs4xdr.c
+@@ -3683,8 +3683,6 @@ static int decode_attr_fs_locations(struct xdr_stream *xdr, uint32_t *bitmap, st
+ 	if (unlikely(!p))
+ 		goto out_eio;
+ 	n = be32_to_cpup(p);
+-	if (n <= 0)
+-		goto out_eio;
+ 	for (res->nlocations = 0; res->nlocations < n; res->nlocations++) {
+ 		u32 m;
+ 		struct nfs4_fs_location *loc;
+-- 
+2.34.1
+
 
 

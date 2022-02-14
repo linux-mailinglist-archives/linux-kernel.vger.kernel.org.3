@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D6074B3FF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C784B3FE7
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:01:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239721AbiBNC67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 21:58:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41368 "EHLO
+        id S239583AbiBNC7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 21:59:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239596AbiBNC65 (ORCPT
+        with ESMTP id S239725AbiBNC7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 21:58:57 -0500
+        Sun, 13 Feb 2022 21:59:03 -0500
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B7E50E0C
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 18:58:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD84950B17
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 18:58:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644807529; x=1676343529;
+  t=1644807532; x=1676343532;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=O9wbnZuHJK7j3rXRk0f0lAKkJ/IVVT5PxoMM23cEeS0=;
-  b=IuzFrkgFaOxfDke2ax4G7x4BtVxGWsD2aOAMvOSrVk5ONQ+1T7eVLSe5
-   U7NJIy+KoIhFLl69n4BUz8r5su9WJbWgvnCU4J3YthUxdS0jn5wDHsi3Y
-   ovc9EDQEvMnBMpZp/OYppRSriSTKScWNhHOmFMECBnhKWdzUIC8OQ6Kxe
-   UFaOtzrk9o5BWK0iYWKNjUjo8hAamPoaUcFS/v7LXmdSFB5K+b/mvNrhQ
-   x8VSbf1WHcA3PN6EODzx/VLfaaWPVwgtLOZY+hS1a76DcFfvNKAM1t6ua
-   yNF8jW850Ae1+JtiksLkRGip5En8RNRvhTMMxsGgddo8/J970I/fqmKLy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="313280421"
+  bh=VfnNiH0iyPcpYrZNt/OHwIGhAD5IQG518T5a6b0/BPU=;
+  b=E2+KSTbfs/+lFim55V7AgqbZjgGzROcoLVxxycGZY7eD0I7rd9qai8cE
+   NrXslQTgmV/cPaMrwS3VjIzJjvqEVXAV4+hIHVjT2aVIHcgv4z23wTMDJ
+   QsaH9POzMpc+B45NTDO1s3VLdjh8PbHi105e7gGsv+ZFYxln+9VZw3EIA
+   ilLTalEGtA5FdD+5Oujg5Lw6+k+imm3bLwBrcLiAbsywbEbYqI/Zubdki
+   RfcbMyiNYpHncRWgZZ52mX9463JZm3lQYnbg09slUTaN89wT1SokoGVrA
+   tzyW25VsV4CAFE4exPYQTMeyiJJZSAfpxMCUZi3iq8jSZ9tfjN4/rY3j8
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="313280425"
 X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="313280421"
+   d="scan'208";a="313280425"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 18:58:49 -0800
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 18:58:52 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="501514973"
+   d="scan'208";a="501514991"
 Received: from allen-box.sh.intel.com ([10.239.159.118])
-  by orsmga002.jf.intel.com with ESMTP; 13 Feb 2022 18:58:46 -0800
+  by orsmga002.jf.intel.com with ESMTP; 13 Feb 2022 18:58:49 -0800
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
         Ashok Raj <ashok.raj@intel.com>, Liu Yi L <yi.l.liu@intel.com>,
@@ -47,9 +47,9 @@ Cc:     Robin Murphy <robin.murphy@arm.com>,
         Christoph Hellwig <hch@lst.de>,
         iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
         Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v2 05/11] iommu/vt-d: Remove DEFER_DEVICE_DOMAIN_INFO
-Date:   Mon, 14 Feb 2022 10:56:58 +0800
-Message-Id: <20220214025704.3184654-6-baolu.lu@linux.intel.com>
+Subject: [PATCH v2 06/11] iommu/vt-d: Remove unnecessary includes
+Date:   Mon, 14 Feb 2022 10:56:59 +0800
+Message-Id: <20220214025704.3184654-7-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220214025704.3184654-1-baolu.lu@linux.intel.com>
 References: <20220214025704.3184654-1-baolu.lu@linux.intel.com>
@@ -65,469 +65,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allocate and set the per-device iommu private data during iommu device
-probe. This makes the per-device iommu private data always available
-during iommu_probe_device() and iommu_release_device(). With this changed,
-the dummy DEFER_DEVICE_DOMAIN_INFO pointer could be removed. The wrappers
-for getting the private data and domain are also cleaned.
+Remove unnecessary include files and sort the remaining alphabetically.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- include/linux/intel-iommu.h   |   2 -
- drivers/iommu/intel/debugfs.c |   3 +-
- drivers/iommu/intel/iommu.c   | 186 +++++++++++++---------------------
- drivers/iommu/intel/pasid.c   |  12 +--
- drivers/iommu/intel/svm.c     |   6 +-
- 5 files changed, 79 insertions(+), 130 deletions(-)
+ drivers/iommu/intel/iommu.c | 34 +++++++---------------------------
+ 1 file changed, 7 insertions(+), 27 deletions(-)
 
-diff --git a/include/linux/intel-iommu.h b/include/linux/intel-iommu.h
-index 8c7591b5f3e2..03f1134fc2fe 100644
---- a/include/linux/intel-iommu.h
-+++ b/include/linux/intel-iommu.h
-@@ -733,8 +733,6 @@ int for_each_device_domain(int (*fn)(struct device_domain_info *info,
- 				     void *data), void *data);
- void iommu_flush_write_buffer(struct intel_iommu *iommu);
- int intel_iommu_enable_pasid(struct intel_iommu *iommu, struct device *dev);
--struct dmar_domain *find_domain(struct device *dev);
--struct device_domain_info *get_domain_info(struct device *dev);
- struct intel_iommu *device_to_iommu(struct device *dev, u8 *bus, u8 *devfn);
- 
- #ifdef CONFIG_INTEL_IOMMU_SVM
-diff --git a/drivers/iommu/intel/debugfs.c b/drivers/iommu/intel/debugfs.c
-index db7a0ca73626..ed796eea4581 100644
---- a/drivers/iommu/intel/debugfs.c
-+++ b/drivers/iommu/intel/debugfs.c
-@@ -344,7 +344,8 @@ static void pgtable_walk_level(struct seq_file *m, struct dma_pte *pde,
- 
- static int show_device_domain_translation(struct device *dev, void *data)
- {
--	struct dmar_domain *domain = find_domain(dev);
-+	struct device_domain_info *info = dev_iommu_priv_get(dev);
-+	struct dmar_domain *domain = info->domain;
- 	struct seq_file *m = data;
- 	u64 path[6] = { 0 };
- 
 diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 51db26d8606c..d9965e72d9a8 100644
+index d9965e72d9a8..b6a6fea8525d 100644
 --- a/drivers/iommu/intel/iommu.c
 +++ b/drivers/iommu/intel/iommu.c
-@@ -342,21 +342,6 @@ static int iommu_skip_te_disable;
- int intel_iommu_gfx_mapped;
- EXPORT_SYMBOL_GPL(intel_iommu_gfx_mapped);
+@@ -13,38 +13,18 @@
+ #define pr_fmt(fmt)     "DMAR: " fmt
+ #define dev_fmt(fmt)    pr_fmt(fmt)
  
--#define DEFER_DEVICE_DOMAIN_INFO ((struct device_domain_info *)(-2))
--struct device_domain_info *get_domain_info(struct device *dev)
--{
--	struct device_domain_info *info;
--
--	if (!dev)
--		return NULL;
--
--	info = dev_iommu_priv_get(dev);
--	if (unlikely(info == DEFER_DEVICE_DOMAIN_INFO))
--		return NULL;
--
--	return info;
--}
--
- DEFINE_SPINLOCK(device_domain_lock);
- static LIST_HEAD(device_domain_list);
+-#include <linux/init.h>
+-#include <linux/bitmap.h>
+-#include <linux/debugfs.h>
+-#include <linux/export.h>
+-#include <linux/slab.h>
+-#include <linux/irq.h>
+-#include <linux/interrupt.h>
+-#include <linux/spinlock.h>
+-#include <linux/pci.h>
+-#include <linux/dmar.h>
+-#include <linux/dma-map-ops.h>
+-#include <linux/mempool.h>
+-#include <linux/memory.h>
+-#include <linux/cpu.h>
+-#include <linux/timer.h>
+-#include <linux/io.h>
+-#include <linux/iova.h>
+-#include <linux/iommu.h>
++#include <linux/crash_dump.h>
++#include <linux/dma-direct.h>
+ #include <linux/dma-iommu.h>
++#include <linux/dmi.h>
+ #include <linux/intel-iommu.h>
+ #include <linux/intel-svm.h>
++#include <linux/memory.h>
++#include <linux/pci.h>
++#include <linux/pci-ats.h>
++#include <linux/spinlock.h>
+ #include <linux/syscore_ops.h>
+ #include <linux/tboot.h>
+-#include <linux/dmi.h>
+-#include <linux/pci-ats.h>
+-#include <linux/memblock.h>
+-#include <linux/dma-direct.h>
+-#include <linux/crash_dump.h>
+-#include <linux/numa.h>
+-#include <asm/irq_remapping.h>
+-#include <asm/cacheflush.h>
+-#include <asm/iommu.h>
  
-@@ -741,11 +726,6 @@ struct context_entry *iommu_context_addr(struct intel_iommu *iommu, u8 bus,
- 	return &context[devfn];
- }
- 
--static bool attach_deferred(struct device *dev)
--{
--	return dev_iommu_priv_get(dev) == DEFER_DEVICE_DOMAIN_INFO;
--}
--
- /**
-  * is_downstream_to_pci_bridge - test if a device belongs to the PCI
-  *				 sub-hierarchy of a candidate PCI-PCI bridge
-@@ -2432,15 +2412,6 @@ static void domain_context_clear_one(struct device_domain_info *info, u8 bus, u8
- 	__iommu_flush_dev_iotlb(info, 0, MAX_AGAW_PFN_WIDTH);
- }
- 
--static inline void unlink_domain_info(struct device_domain_info *info)
--{
--	assert_spin_locked(&device_domain_lock);
--	list_del(&info->link);
--	list_del(&info->global);
--	if (info->dev)
--		dev_iommu_priv_set(info->dev, NULL);
--}
--
- static void domain_remove_dev_info(struct dmar_domain *domain)
- {
- 	struct device_domain_info *info, *tmp;
-@@ -2452,24 +2423,6 @@ static void domain_remove_dev_info(struct dmar_domain *domain)
- 	spin_unlock_irqrestore(&device_domain_lock, flags);
- }
- 
--struct dmar_domain *find_domain(struct device *dev)
--{
--	struct device_domain_info *info;
--
--	if (unlikely(!dev || !dev->iommu))
--		return NULL;
--
--	if (unlikely(attach_deferred(dev)))
--		return NULL;
--
--	/* No lock here, assumes no domain exit in normal case */
--	info = get_domain_info(dev);
--	if (likely(info))
--		return info->domain;
--
--	return NULL;
--}
--
- static inline struct device_domain_info *
- dmar_search_domain_by_dev_info(int segment, int bus, int devfn)
- {
-@@ -2530,66 +2483,20 @@ static struct dmar_domain *dmar_insert_one_dev_info(struct intel_iommu *iommu,
- 						    struct device *dev,
- 						    struct dmar_domain *domain)
- {
--	struct device_domain_info *info;
-+	struct device_domain_info *info = dev_iommu_priv_get(dev);
- 	unsigned long flags;
- 	int ret;
- 
--	info = kzalloc(sizeof(*info), GFP_KERNEL);
--	if (!info)
--		return NULL;
--
--	if (!dev_is_real_dma_subdevice(dev)) {
--		info->bus = bus;
--		info->devfn = devfn;
--		info->segment = iommu->segment;
--	} else {
--		struct pci_dev *pdev = to_pci_dev(dev);
--
--		info->bus = pdev->bus->number;
--		info->devfn = pdev->devfn;
--		info->segment = pci_domain_nr(pdev->bus);
--	}
--
--	info->dev = dev;
--	info->domain = domain;
--	info->iommu = iommu;
--
--	if (dev && dev_is_pci(dev)) {
--		struct pci_dev *pdev = to_pci_dev(info->dev);
--
--		if (ecap_dev_iotlb_support(iommu->ecap) &&
--		    pci_ats_supported(pdev) &&
--		    dmar_find_matched_atsr_unit(pdev))
--			info->ats_supported = 1;
--
--		if (sm_supported(iommu)) {
--			if (pasid_supported(iommu)) {
--				int features = pci_pasid_features(pdev);
--				if (features >= 0)
--					info->pasid_supported = features | 1;
--			}
--
--			if (info->ats_supported && ecap_prs(iommu->ecap) &&
--			    pci_pri_supported(pdev))
--				info->pri_supported = 1;
--		}
--	}
--
- 	spin_lock_irqsave(&device_domain_lock, flags);
-+	info->domain = domain;
- 	spin_lock(&iommu->lock);
- 	ret = domain_attach_iommu(domain, iommu);
- 	spin_unlock(&iommu->lock);
--
- 	if (ret) {
- 		spin_unlock_irqrestore(&device_domain_lock, flags);
--		kfree(info);
- 		return NULL;
- 	}
--
- 	list_add(&info->link, &domain->devices);
--	list_add(&info->global, &device_domain_list);
--	if (dev)
--		dev_iommu_priv_set(dev, info);
- 	spin_unlock_irqrestore(&device_domain_lock, flags);
- 
- 	/* PASID table is mandatory for a PCI device in scalable mode. */
-@@ -4336,13 +4243,11 @@ static void __dmar_remove_one_dev_info(struct device_domain_info *info)
- 		intel_pasid_free_table(info->dev);
- 	}
- 
--	unlink_domain_info(info);
-+	list_del(&info->link);
- 
- 	spin_lock_irqsave(&iommu->lock, flags);
- 	domain_detach_iommu(domain, iommu);
- 	spin_unlock_irqrestore(&iommu->lock, flags);
--
--	kfree(info);
- }
- 
- static void dmar_remove_one_dev_info(struct device *dev)
-@@ -4351,7 +4256,7 @@ static void dmar_remove_one_dev_info(struct device *dev)
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&device_domain_lock, flags);
--	info = get_domain_info(dev);
-+	info = dev_iommu_priv_get(dev);
- 	if (info)
- 		__dmar_remove_one_dev_info(info);
- 	spin_unlock_irqrestore(&device_domain_lock, flags);
-@@ -4475,10 +4380,9 @@ static int intel_iommu_attach_device(struct iommu_domain *domain,
- 
- 	/* normally dev is not mapped */
- 	if (unlikely(domain_context_mapped(dev))) {
--		struct dmar_domain *old_domain;
-+		struct device_domain_info *info = dev_iommu_priv_get(dev);
- 
--		old_domain = find_domain(dev);
--		if (old_domain)
-+		if (info->domain)
- 			dmar_remove_one_dev_info(dev);
- 	}
- 
-@@ -4642,28 +4546,73 @@ static bool intel_iommu_capable(enum iommu_cap cap)
- 
- static struct iommu_device *intel_iommu_probe_device(struct device *dev)
- {
-+	struct pci_dev *pdev = dev_is_pci(dev) ? to_pci_dev(dev) : NULL;
-+	struct device_domain_info *info;
- 	struct intel_iommu *iommu;
-+	unsigned long flags;
-+	u8 bus, devfn;
- 
--	iommu = device_to_iommu(dev, NULL, NULL);
-+	iommu = device_to_iommu(dev, &bus, &devfn);
- 	if (!iommu)
- 		return ERR_PTR(-ENODEV);
- 
--	if (translation_pre_enabled(iommu))
--		dev_iommu_priv_set(dev, DEFER_DEVICE_DOMAIN_INFO);
-+	info = kzalloc(sizeof(*info), GFP_KERNEL);
-+	if (!info)
-+		return ERR_PTR(-ENOMEM);
-+
-+	if (dev_is_real_dma_subdevice(dev)) {
-+		info->bus = pdev->bus->number;
-+		info->devfn = pdev->devfn;
-+		info->segment = pci_domain_nr(pdev->bus);
-+	} else {
-+		info->bus = bus;
-+		info->devfn = devfn;
-+		info->segment = iommu->segment;
-+	}
-+
-+	info->dev = dev;
-+	info->iommu = iommu;
-+	if (dev_is_pci(dev)) {
-+		if (ecap_dev_iotlb_support(iommu->ecap) &&
-+		    pci_ats_supported(pdev) &&
-+		    dmar_find_matched_atsr_unit(pdev))
-+			info->ats_supported = 1;
-+
-+		if (sm_supported(iommu)) {
-+			if (pasid_supported(iommu)) {
-+				int features = pci_pasid_features(pdev);
-+
-+				if (features >= 0)
-+					info->pasid_supported = features | 1;
-+			}
-+
-+			if (info->ats_supported && ecap_prs(iommu->ecap) &&
-+			    pci_pri_supported(pdev))
-+				info->pri_supported = 1;
-+		}
-+	}
-+
-+	spin_lock_irqsave(&device_domain_lock, flags);
-+	list_add(&info->global, &device_domain_list);
-+	dev_iommu_priv_set(dev, info);
-+	spin_unlock_irqrestore(&device_domain_lock, flags);
- 
- 	return &iommu->iommu;
- }
- 
- static void intel_iommu_release_device(struct device *dev)
- {
--	struct intel_iommu *iommu;
--
--	iommu = device_to_iommu(dev, NULL, NULL);
--	if (!iommu)
--		return;
-+	struct device_domain_info *info = dev_iommu_priv_get(dev);
-+	unsigned long flags;
- 
- 	dmar_remove_one_dev_info(dev);
- 
-+	spin_lock_irqsave(&device_domain_lock, flags);
-+	dev_iommu_priv_set(dev, NULL);
-+	list_del(&info->global);
-+	spin_unlock_irqrestore(&device_domain_lock, flags);
-+
-+	kfree(info);
- 	set_dma_ops(dev, NULL);
- }
- 
-@@ -4732,14 +4681,14 @@ static void intel_iommu_get_resv_regions(struct device *device,
- 
- int intel_iommu_enable_pasid(struct intel_iommu *iommu, struct device *dev)
- {
--	struct device_domain_info *info;
-+	struct device_domain_info *info = dev_iommu_priv_get(dev);
- 	struct context_entry *context;
- 	struct dmar_domain *domain;
- 	unsigned long flags;
- 	u64 ctx_lo;
- 	int ret;
- 
--	domain = find_domain(dev);
-+	domain = info->domain;
- 	if (!domain)
- 		return -EINVAL;
- 
-@@ -4747,8 +4696,7 @@ int intel_iommu_enable_pasid(struct intel_iommu *iommu, struct device *dev)
- 	spin_lock(&iommu->lock);
- 
- 	ret = -EINVAL;
--	info = get_domain_info(dev);
--	if (!info || !info->pasid_supported)
-+	if (!info->pasid_supported)
- 		goto out;
- 
- 	context = iommu_context_addr(iommu, info->bus, info->devfn, 0);
-@@ -4790,7 +4738,7 @@ static struct iommu_group *intel_iommu_device_group(struct device *dev)
- 
- static int intel_iommu_enable_sva(struct device *dev)
- {
--	struct device_domain_info *info = get_domain_info(dev);
-+	struct device_domain_info *info = dev_iommu_priv_get(dev);
- 	struct intel_iommu *iommu;
- 	int ret;
- 
-@@ -4819,7 +4767,7 @@ static int intel_iommu_enable_sva(struct device *dev)
- 
- static int intel_iommu_disable_sva(struct device *dev)
- {
--	struct device_domain_info *info = get_domain_info(dev);
-+	struct device_domain_info *info = dev_iommu_priv_get(dev);
- 	struct intel_iommu *iommu = info->iommu;
- 	int ret;
- 
-@@ -4832,7 +4780,7 @@ static int intel_iommu_disable_sva(struct device *dev)
- 
- static int intel_iommu_enable_iopf(struct device *dev)
- {
--	struct device_domain_info *info = get_domain_info(dev);
-+	struct device_domain_info *info = dev_iommu_priv_get(dev);
- 
- 	if (info && info->pri_supported)
- 		return 0;
-@@ -4872,7 +4820,9 @@ intel_iommu_dev_disable_feat(struct device *dev, enum iommu_dev_features feat)
- 
- static bool intel_iommu_is_attach_deferred(struct device *dev)
- {
--	return attach_deferred(dev);
-+	struct device_domain_info *info = dev_iommu_priv_get(dev);
-+
-+	return translation_pre_enabled(info->iommu) && !info->domain;
- }
- 
- /*
-diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
-index 10fb82ea467d..f8d215d85695 100644
---- a/drivers/iommu/intel/pasid.c
-+++ b/drivers/iommu/intel/pasid.c
-@@ -150,7 +150,7 @@ int intel_pasid_alloc_table(struct device *dev)
- 	int size;
- 
- 	might_sleep();
--	info = get_domain_info(dev);
-+	info = dev_iommu_priv_get(dev);
- 	if (WARN_ON(!info || !dev_is_pci(dev) || info->pasid_table))
- 		return -EINVAL;
- 
-@@ -197,7 +197,7 @@ void intel_pasid_free_table(struct device *dev)
- 	struct pasid_entry *table;
- 	int i, max_pde;
- 
--	info = get_domain_info(dev);
-+	info = dev_iommu_priv_get(dev);
- 	if (!info || !dev_is_pci(dev) || !info->pasid_table)
- 		return;
- 
-@@ -223,7 +223,7 @@ struct pasid_table *intel_pasid_get_table(struct device *dev)
- {
- 	struct device_domain_info *info;
- 
--	info = get_domain_info(dev);
-+	info = dev_iommu_priv_get(dev);
- 	if (!info)
- 		return NULL;
- 
-@@ -234,7 +234,7 @@ static int intel_pasid_get_dev_max_id(struct device *dev)
- {
- 	struct device_domain_info *info;
- 
--	info = get_domain_info(dev);
-+	info = dev_iommu_priv_get(dev);
- 	if (!info || !info->pasid_table)
- 		return 0;
- 
-@@ -254,7 +254,7 @@ static struct pasid_entry *intel_pasid_get_entry(struct device *dev, u32 pasid)
- 		return NULL;
- 
- 	dir = pasid_table->table;
--	info = get_domain_info(dev);
-+	info = dev_iommu_priv_get(dev);
- 	dir_index = pasid >> PASID_PDE_SHIFT;
- 	index = pasid & PASID_PTE_MASK;
- 
-@@ -487,7 +487,7 @@ devtlb_invalidation_with_pasid(struct intel_iommu *iommu,
- 	struct device_domain_info *info;
- 	u16 sid, qdep, pfsid;
- 
--	info = get_domain_info(dev);
-+	info = dev_iommu_priv_get(dev);
- 	if (!info || !info->ats_enabled)
- 		return;
- 
-diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
-index d04c83dd3a58..944e2408b6d2 100644
---- a/drivers/iommu/intel/svm.c
-+++ b/drivers/iommu/intel/svm.c
-@@ -200,7 +200,7 @@ static void __flush_svm_range_dev(struct intel_svm *svm,
- 				  unsigned long address,
- 				  unsigned long pages, int ih)
- {
--	struct device_domain_info *info = get_domain_info(sdev->dev);
-+	struct device_domain_info *info = dev_iommu_priv_get(sdev->dev);
- 
- 	if (WARN_ON(!pages))
- 		return;
-@@ -337,7 +337,7 @@ static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
- 					   struct mm_struct *mm,
- 					   unsigned int flags)
- {
--	struct device_domain_info *info = get_domain_info(dev);
-+	struct device_domain_info *info = dev_iommu_priv_get(dev);
- 	unsigned long iflags, sflags;
- 	struct intel_svm_dev *sdev;
- 	struct intel_svm *svm;
-@@ -545,7 +545,7 @@ static void intel_svm_drain_prq(struct device *dev, u32 pasid)
- 	u16 sid, did;
- 	int qdep;
- 
--	info = get_domain_info(dev);
-+	info = dev_iommu_priv_get(dev);
- 	if (WARN_ON(!info || !dev_is_pci(dev)))
- 		return;
- 
+ #include "../irq_remapping.h"
+ #include "../iommu-sva-lib.h"
 -- 
 2.25.1
 

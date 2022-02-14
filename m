@@ -2,97 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 600774B46F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3053F4B4712
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244224AbiBNJg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:36:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52462 "EHLO
+        id S240126AbiBNJmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:42:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244265AbiBNJft (ORCPT
+        with ESMTP id S244595AbiBNJkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:35:49 -0500
-X-Greylist: delayed 1234 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 01:33:27 PST
-Received: from mail-out.m-online.net (mail-out.m-online.net [IPv6:2001:a60:0:28:0:1:25:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A17654AD;
-        Mon, 14 Feb 2022 01:33:27 -0800 (PST)
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4JxzYC2nmmz1sb42;
-        Mon, 14 Feb 2022 10:33:19 +0100 (CET)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4JxzYC1Pw7z1qqkB;
-        Mon, 14 Feb 2022 10:33:19 +0100 (CET)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id 4A6rFkojWdYt; Mon, 14 Feb 2022 10:33:13 +0100 (CET)
-X-Auth-Info: 3pXtXEblWigUp5dC0ALx0wnK0waqMMj3wTwQrNh+E7nq00Dn+vM/9Ec1zbIoMOOV
-Received: from igel.home (ppp-46-244-178-131.dynamic.mnet-online.de [46.244.178.131])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Mon, 14 Feb 2022 10:33:13 +0100 (CET)
-Received: by igel.home (Postfix, from userid 1000)
-        id 07A512C39FF; Mon, 14 Feb 2022 10:33:13 +0100 (CET)
-From:   Andreas Schwab <schwab@linux-m68k.org>
-To:     Heinrich Schuchardt <xypron.glpk@gmx.de>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>, linux-efi@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>, stable@vger.kernel.org,
-        Sunil V L <sunilvl@ventanamicro.com>
-Subject: Re: [PATCH] riscv/efi_stub: Fix get_boot_hartid_from_fdt() return
- value
-References: <20220128045004.4843-1-sunilvl@ventanamicro.com>
-        <877d9xx14f.fsf@igel.home>
-        <9cd9f149-d2ea-eb55-b774-8d817b9b6cc9@gmx.de>
-X-Yow:  LOU GRANT froze my ASSETS!!
-Date:   Mon, 14 Feb 2022 10:33:12 +0100
-In-Reply-To: <9cd9f149-d2ea-eb55-b774-8d817b9b6cc9@gmx.de> (Heinrich
-        Schuchardt's message of "Mon, 14 Feb 2022 10:24:22 +0100")
-Message-ID: <87y22dvllz.fsf@igel.home>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.91 (gnu/linux)
+        Mon, 14 Feb 2022 04:40:47 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54A1B85D;
+        Mon, 14 Feb 2022 01:35:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/kVIgFJ8ubFPieTzVWtZtI9HqscvRt6tDLYaMfGuR94=; b=r8H/h8Igq0GzYQRu9lX+4vZpkz
+        PZT8xyiFTwmYfH8zubh1ywbnAQuGsxBwPjrNNrXA/o5U2JjK2PG0V0xRX/sJIDHEu54dC9/6UiQmL
+        F+Y3JW1EqyYpAxhmND0M+vmbJxIzO/juCEX+l1Qxgp3yY0pks+vRezLo8UnjVQpQDnV21BZMIq5eU
+        cLBiNTmqSIIC6wmCTCn7UcAw94DlAlbMufV+uEMoQM32jv5F+3qmu69tvjWwB6IZXb47Xsbg77XjX
+        QWG7HLXHrI/r9z3omtqEEq49GOXiD1gj/PIcUnY9oVdJvwe1GhbBV1iVjaieum7WgA5MFUOuUx9Vo
+        TDY7Hsgw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJXlV-00CkQY-Gv; Mon, 14 Feb 2022 09:35:25 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CF6CF300472;
+        Mon, 14 Feb 2022 10:35:22 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 94416203C074A; Mon, 14 Feb 2022 10:35:22 +0100 (CET)
+Date:   Mon, 14 Feb 2022 10:35:22 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jason Baron <jbaron@akamai.com>, rcu@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>, christophe.leroy@csgroup.eu
+Subject: Re: BUG: sleeping function called from invalid context at
+ include/linux/sched/mm.h:256
+Message-ID: <YgoiWlNZvTusk1B9@hirez.programming.kicks-ass.net>
+References: <244218af-df6a-236e-0a52-268247dd8271@molgen.mpg.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <244218af-df6a-236e-0a52-268247dd8271@molgen.mpg.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Feb 14 2022, Heinrich Schuchardt wrote:
+On Sun, Feb 13, 2022 at 12:05:50AM +0100, Paul Menzel wrote:
 
-> On 2/14/22 10:12, Andreas Schwab wrote:
->> On Jan 28 2022, Sunil V L wrote:
->>
->>> diff --git a/drivers/firmware/efi/libstub/riscv-stub.c b/drivers/firmware/efi/libstub/riscv-stub.c
->>> index 380e4e251399..9c460843442f 100644
->>> --- a/drivers/firmware/efi/libstub/riscv-stub.c
->>> +++ b/drivers/firmware/efi/libstub/riscv-stub.c
->>> @@ -25,7 +25,7 @@ typedef void __noreturn (*jump_kernel_func)(unsigned int, unsigned long);
->>>
->>>   static u32 hartid;
->>>
->>> -static u32 get_boot_hartid_from_fdt(void)
->>> +static int get_boot_hartid_from_fdt(void)
->>
->> I think the function should be renamed, now that it no longer returns
->> the hart ID, but initializes a static variable as a side effect.  Thus
->> it no longer "gets", but "sets".
->>
->
-> set_boot_hartid() implies that the caller can change the boot hart ID.
-> As this is not a case this name obviously would be a misnomer.
+> [    0.012154][    T1] BUG: sleeping function called from invalid context at
 
-Then I guess a different, more fitting name needs to be found.
+> [    0.022443][    T1] [c0000000084837d0] [c000000000961aac] > dump_stack_lvl+0xa0/0xec (unreliable)
+> [    0.023356][    T1] [c000000008483820] [c00000000019b314] > __might_resched+0x2f4/0x310
+> [    0.024174][    T1] [c0000000084838b0] [c0000000004c0c70] > kmem_cache_alloc+0x220/0x4b0
+> [    0.025000][    T1] [c000000008483920] [c000000000448af4] > __pud_alloc+0x74/0x1d0
+> [    0.025772][    T1] [c000000008483970] [c00000000008fe3c] > hash__map_kernel_page+0x2cc/0x390
+> [    0.026643][    T1] [c000000008483a20] [c0000000000a9944] > do_patch_instruction+0x134/0x4a0
 
--- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
+do_patch_instruction() rightfully disables IRQs, but then it goes and
+tries a memory alloc, which seems a bit daft.
+
+I'm thinking Christophe might know more... he's recently been poking at
+Power text poking..

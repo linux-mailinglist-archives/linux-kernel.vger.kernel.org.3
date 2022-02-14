@@ -2,175 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 174694B5CC3
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECCB4B5BF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:02:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbiBNV0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:26:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36616 "EHLO
+        id S230051AbiBNVBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:01:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231235AbiBNV0q (ORCPT
+        with ESMTP id S230064AbiBNVBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:26:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5763BB9D73;
-        Mon, 14 Feb 2022 13:26:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7EB9B81678;
-        Mon, 14 Feb 2022 19:48:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F834C340E9;
-        Mon, 14 Feb 2022 19:48:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644868118;
-        bh=6CPzKa/jy62UCHjGbLUgVBG8XhojQHJmyDzVBz+gPz8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R3kB8oqgBk6EVg5CIPE0hIH6DYKuQyhbj41LI2Zu1KV/lsB5zeVnY3wIAQ+SDoTwW
-         xpjIolDQcScuZ0DVqop4kK0Ntv+27D3129QOtCKxuBvI+BF4KO3bmOhocVf9KG+NWQ
-         G62Ri5tP+T0awA6b7PBpSvbg2nRMOvYaMl0qnHZRuLSYOyR172/owARg9IwMy+gEqM
-         kPrWx4eE8WBS8N6MWE17ENgnwYfpBmLBTSvnucgDiBlnYmORrczNRmTnyCWStEurCu
-         4Jkkua/Q4WNOOmIn6AU2zWYIhOAVlA4TkOmW6hS2s+baxbYHCaKnUgTCZi4CbhhEma
-         zpAvUMHD6Y5cQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id EE6F7400FE; Mon, 14 Feb 2022 16:48:35 -0300 (-03)
-Date:   Mon, 14 Feb 2022 16:48:35 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
-        Song Liu <song@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Hao Luo <haoluo@google.com>, eranian@google.com
-Subject: Re: [PATCH v3 06/22] perf test: Use pointer for maps
-Message-ID: <YgqyE+vYyOf1HaRj@kernel.org>
-References: <20220211103415.2737789-1-irogers@google.com>
- <20220211103415.2737789-7-irogers@google.com>
+        Mon, 14 Feb 2022 16:01:41 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 775148020D;
+        Mon, 14 Feb 2022 13:01:20 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id e17so11824355pfv.5;
+        Mon, 14 Feb 2022 13:01:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=xpGjdBuWBo0/fCuqaW8D1rC/RmyP4zpkCXt7KDYZNcI=;
+        b=S6T6B9c9HHpJeqSEGjxZrl5m6odevc5RDaveFKwfcS8QSNpDHuWH3tiQL81twy8PNp
+         Vzx8WcPNo3ASreDrKFpNjbcOsxoR6+wPusG+cPMiTVpwKXD1QNn68t405yIZeNn+uill
+         ynTOk5zTMFUp5mVXzrbfAJaf0dfKgvlJaweMQdPqYL5661VTOApUMYPP6sPrhjcddVfl
+         DBTHf74Y2caZoAZtQ0xzEtskz8b1Kuv8q8eaJzR4CQdRtfwyM/GUwQoW3K8CNDNyQQdO
+         rohBsXelKIDKuWTJdH1jqZDWjQZXEqk6wdfpgOsaCEdM/WJ8QCTkk8/kIYUh/KDUu3Mp
+         vHPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xpGjdBuWBo0/fCuqaW8D1rC/RmyP4zpkCXt7KDYZNcI=;
+        b=x6otNLslWrmCUCzrbNshl9LCdY4AUcRUNw3zKPLioEgEQt4vXmpZG10SQ7AxzheTRO
+         CbXSHTRW3fU8iSUZ9+j1rVjesORYP1QS9Ep5Rwfey7D5L9auFJ5aAU8xiOPgwyEbSgmP
+         L6xXGCxsO2QM3QV8yJ+v4216Xq7xK2LqK/ed1weeGnroontaZ1BxwgRhSk4Z8l9UUpPB
+         n1Y9v24tfzXj45yfrKgq+EvT3Q+H7VpkHuyGHZ1Iq0n3QK2tCOw3r8+6VLOpqThGkw30
+         Ldw6BY/9xbQtcbfoUlTeovLlJkD7M5d2P8Fpx1zgm3pKzII+bN97qkg4Q7zcA11wTPWi
+         N36A==
+X-Gm-Message-State: AOAM531mwKSg+CSyfbkuoN/Z+5t1e9gPeh1suLMuE/XyM9+3w2i4p+8F
+        CiiWZx/aSAsOZN0NFDX2LyDVQwvfQxQ=
+X-Google-Smtp-Source: ABdhPJxFknBPsF7sk0Olrl28gZDsrNjHc8MMToR9WCcpozGObjFSybxsKZoAFw5wYCShLb3cGEmc2A==
+X-Received: by 2002:a17:902:9895:: with SMTP id s21mr464803plp.53.1644868220878;
+        Mon, 14 Feb 2022 11:50:20 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id m13sm35090007pfh.197.2022.02.14.11.50.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 11:50:20 -0800 (PST)
+Subject: Re: [PATCH 4.9 00/34] 4.9.302-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220214092445.946718557@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <c58dc18f-aed2-1d60-406c-863da94d609a@gmail.com>
+Date:   Mon, 14 Feb 2022 11:50:14 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220211103415.2737789-7-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Feb 11, 2022 at 02:33:59AM -0800, Ian Rogers escreveu:
-> struct maps is reference counted, using a pointer is more idiomatic.
+On 2/14/22 1:25 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.302 release.
+> There are 34 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/tests/maps.c | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
+> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
+> Anything received after that time might be too late.
 > 
-> diff --git a/tools/perf/tests/maps.c b/tools/perf/tests/maps.c
-> index e308a3296cef..6f53f17f788e 100644
-> --- a/tools/perf/tests/maps.c
-> +++ b/tools/perf/tests/maps.c
-> @@ -35,7 +35,7 @@ static int check_maps(struct map_def *merged, unsigned int size, struct maps *ma
->  
->  static int test__maps__merge_in(struct test_suite *t __maybe_unused, int subtest __maybe_unused)
->  {
-> -	struct maps maps;
-> +	struct maps *maps;
->  	unsigned int i;
->  	struct map_def bpf_progs[] = {
->  		{ "bpf_prog_1", 200, 300 },
-> @@ -64,7 +64,7 @@ static int test__maps__merge_in(struct test_suite *t __maybe_unused, int subtest
->  	struct map *map_kcore1, *map_kcore2, *map_kcore3;
->  	int ret;
->  
-> -	maps__init(&maps, NULL);
-> +	maps = maps__new(NULL);
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.302-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Now that is dynamicly allocated we need to check for the constructor
-result, I'm fixing this up.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-- Arnaldo
-  
->  	for (i = 0; i < ARRAY_SIZE(bpf_progs); i++) {
->  		struct map *map;
-> @@ -74,7 +74,7 @@ static int test__maps__merge_in(struct test_suite *t __maybe_unused, int subtest
->  
->  		map->start = bpf_progs[i].start;
->  		map->end   = bpf_progs[i].end;
-> -		maps__insert(&maps, map);
-> +		maps__insert(maps, map);
->  		map__put(map);
->  	}
->  
-> @@ -99,25 +99,25 @@ static int test__maps__merge_in(struct test_suite *t __maybe_unused, int subtest
->  	map_kcore3->start = 880;
->  	map_kcore3->end   = 1100;
->  
-> -	ret = maps__merge_in(&maps, map_kcore1);
-> +	ret = maps__merge_in(maps, map_kcore1);
->  	TEST_ASSERT_VAL("failed to merge map", !ret);
->  
-> -	ret = check_maps(merged12, ARRAY_SIZE(merged12), &maps);
-> +	ret = check_maps(merged12, ARRAY_SIZE(merged12), maps);
->  	TEST_ASSERT_VAL("merge check failed", !ret);
->  
-> -	ret = maps__merge_in(&maps, map_kcore2);
-> +	ret = maps__merge_in(maps, map_kcore2);
->  	TEST_ASSERT_VAL("failed to merge map", !ret);
->  
-> -	ret = check_maps(merged12, ARRAY_SIZE(merged12), &maps);
-> +	ret = check_maps(merged12, ARRAY_SIZE(merged12), maps);
->  	TEST_ASSERT_VAL("merge check failed", !ret);
->  
-> -	ret = maps__merge_in(&maps, map_kcore3);
-> +	ret = maps__merge_in(maps, map_kcore3);
->  	TEST_ASSERT_VAL("failed to merge map", !ret);
->  
-> -	ret = check_maps(merged3, ARRAY_SIZE(merged3), &maps);
-> +	ret = check_maps(merged3, ARRAY_SIZE(merged3), maps);
->  	TEST_ASSERT_VAL("merge check failed", !ret);
->  
-> -	maps__exit(&maps);
-> +	maps__delete(maps);
->  	return TEST_OK;
->  }
->  
-> -- 
-> 2.35.1.265.g69c8d7142f-goog
-
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-
-- Arnaldo
+Florian

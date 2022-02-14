@@ -2,127 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A754B5886
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E304B5890
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357086AbiBNR2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 12:28:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54404 "EHLO
+        id S1357109AbiBNRfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 12:35:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231523AbiBNR2v (ORCPT
+        with ESMTP id S1357103AbiBNRfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 12:28:51 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2615CA1AC
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:28:43 -0800 (PST)
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id DF6B640333
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 17:28:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644859721;
-        bh=KsqdtAFgibXHueDPOB/KCI/9BNIh532HNP/vcYwtlGo=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=EaotnB1Q5yFIEvnLwgJI6YMC1Xh/XBf44S5x37IY1i39FrjwMI3ocKRYXgpsXzDPn
-         XQeG7yTkx9rNDjBpnMwvwIU6G2HrNi39XUycdjD/JSBFCTst5IPjeHY/Ry+gwBGBZc
-         RwWiQsNYFVkBrlQLXGclo5D5nCjOalXmlzU9Dfvxb2E/btBJHYZ04msn6Z4d5A9ODx
-         oR76eU683D4HmjxudjtgqoZASkGsNv6BVhtIEWEvANTBfHOSNERhHs6/xTY7v9wpdx
-         OxTVIkwxvEpikBroDqPUoIAUcU5uub6veWIqifw5oFFFt87bldKS+qOu0u7+ZZop2g
-         uvEPtRY0BayWQ==
-Received: by mail-wm1-f70.google.com with SMTP id 125-20020a1c0283000000b0037bf720e6a8so7412089wmc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:28:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KsqdtAFgibXHueDPOB/KCI/9BNIh532HNP/vcYwtlGo=;
-        b=wNCQokyZ2zgiDL9+tNXGjqw8Ul0rxrUbX0BdhoiEzvUI9G320yt+ndciBo6D60L2aW
-         y+hPQQOKbj2r5++eRcX/FhpVdVM0Gl+upNTtodSzBId1P0Gm+seAvwnMLjb1NgRTN7rh
-         gwBjn13sUM82ql+b1wD8Uymdd22Iz7BSwXZFVy2xNcTp8GahAMF+Q7d5B1UWN6jnJ+iY
-         qXpwnj5d+s33mGs7cAZh4VdeuTecWfx+MS/hSDFA/nRF3CNu6szAAt9189UxlA/1RmKs
-         VRAeAzrZz9VPDRrsKYJ549SUI/1YrGRfBs729WUHBsAcGa/cdgQvPK4dbf9Ltx6Fkiyx
-         L07A==
-X-Gm-Message-State: AOAM5335BxRmq0ypXhWOSAiP/6K4nNQkL48V3JPqDXmMz5zhyNtHULVq
-        El+pzjEEewtZr1akEZrtY14mAHOWsqIC/HxsIcHyApoD4q8pjQoWRWYzrlzKhCdozHw2GScIFpT
-        wYuAD+cS6GZLT7cb7mJdkiRV8Sjfe02+hMZQWjiJaXA==
-X-Received: by 2002:a05:6000:1888:: with SMTP id a8mr70866wri.258.1644859721542;
-        Mon, 14 Feb 2022 09:28:41 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw4VJ7GdAoNVKf4UbogMbxJVPbcvrv/rGMMFokvBRogG6Fr4FjAve/dO2zAbHh3hVqyQLkpPA==
-X-Received: by 2002:a05:6000:1888:: with SMTP id a8mr70852wri.258.1644859721314;
-        Mon, 14 Feb 2022 09:28:41 -0800 (PST)
-Received: from [192.168.0.106] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id p32sm12933096wms.1.2022.02.14.09.28.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 09:28:40 -0800 (PST)
-Message-ID: <8347bd3c-12d4-8479-153f-8a5beaec786c@canonical.com>
-Date:   Mon, 14 Feb 2022 18:28:39 +0100
+        Mon, 14 Feb 2022 12:35:00 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD84965414
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:34:50 -0800 (PST)
+Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JyBDN5xhcz6H6jL;
+        Tue, 15 Feb 2022 01:34:28 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Mon, 14 Feb 2022 18:34:47 +0100
+Received: from localhost.localdomain (10.69.192.58) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 14 Feb 2022 17:34:44 +0000
+From:   John Garry <john.garry@huawei.com>
+To:     <joro@8bytes.org>, <will@kernel.org>, <robin.murphy@arm.com>
+CC:     <mst@redhat.com>, <jasowang@redhat.com>,
+        <baolu.lu@linux.intel.com>, <iommu@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>, <hch@lst.de>,
+        <chenxiang66@hisilicon.com>, <linuxarm@huawei.com>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH v5 0/5] iommu: Allow IOVA rcache range be configured
+Date:   Tue, 15 Feb 2022 01:29:01 +0800
+Message-ID: <1644859746-20279-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 3/4] regulator: dt-bindings: maxim,max77693: convert to
- dtschema
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20220111175017.223966-1-krzysztof.kozlowski@canonical.com>
- <20220111175017.223966-4-krzysztof.kozlowski@canonical.com>
- <YgqGT999nsjUGp9Z@sirena.org.uk>
- <12c66ced-c4a4-3a4e-f84b-83edb9e3fc58@canonical.com>
- <YgqIiv8fZeqFFUHX@sirena.org.uk>
- <b0aaf1e6-c626-e68c-a0d2-4a7ff372b395@canonical.com>
- <YgqMZhNhMRgO0V8t@sirena.org.uk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <YgqMZhNhMRgO0V8t@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2022 18:07, Mark Brown wrote:
-> On Mon, Feb 14, 2022 at 06:01:17PM +0100, Krzysztof Kozlowski wrote:
-> 
->> You mantioned new features - this approach does not change that. If you
->> add new properties to common schema, you already alter bindings. Just
->> because we use common part, it does not change the fact that it is a
->> bindings change. Adding new features in common schema is the same
->> binding change as adding new feature in the specific binding, except
->> more work.
-> 
->> I guess you though that work in scaling, so yes, this scales worse. The
->> benefit is that this really restricts usage of regulator to what is
->> supported, so allows to detect wrongly configured DTS.
-> 
-> We should have a way of specifying generic properties that doesn't
-> require us to go through every single user of a binding and updating
-> them all, then auditing by hand any new users to make sure they didn't
-> forget one of the generic properties.  This is just error prone and
-> miserable, especially when most of the checking is done by hand rather
-> than automated.
+For streaming DMA mappings involving an IOMMU and whose IOVA len regularly
+exceeds the IOVA rcache upper limit (meaning that they are not cached),
+performance can be reduced. 
 
-I see. The hardware really does not support most of core regulator
-features, so if we switch to your proposal
-(unevaluatedProperties:false), the DTS could contain something which is
-good from the core regulator point of view, but does not fit at all this
-hardware.
+This may be much more pronounced from commit 4e89dce72521 ("iommu/iova:
+Retry from last rb tree node if iova search fails"), as discussed at [0].
 
-A disallow/deny-list could solve it... but it also does not scale.
+IOVAs which cannot be cached are highly involved in the IOVA ageing issue,
+as discussed at [1].
 
-Best regards,
-Krzysztof
+This series allows the IOVA rcache range be configured, so that we may
+cache all IOVAs per domain, thus improving performance.
+
+A new IOMMU group sysfs file is added - max_opt_dma_size - which is used
+indirectly to configure the IOVA rcache range:
+/sys/kernel/iommu_groups/X/max_opt_dma_size
+
+This file is updated same as how the IOMMU group default domain type is
+updated, i.e. must unbind the only device in the group first.
+
+The inspiration here comes from block layer request queue sysfs
+"optimal_io_size" file, in /sys/block/sdX/queue/optimal_io_size
+
+Some old figures* for storage scenario (when increasing IOVA rcache range
+to cover all DMA mapping sizes from the LLD):
+v5.13-rc1 baseline:			1200K IOPS
+With series:				1800K IOPS
+
+All above are for IOMMU strict mode. Non-strict mode gives ~1800K IOPS in
+all scenarios.
+
+Based on v5.17-rc4 + [2]
+* I lost my high data throughout test setup
+
+Differences to v4:
+https://lore.kernel.org/linux-iommu/1626259003-201303-1-git-send-email-john.garry@huawei.com/
+- Major rebase
+- Change the "Refactor iommu_group_store_type()" to not use a callback
+  and an op type enum instead
+  - I didn't pick up Will's Ack as it has changed so much
+- Use a domain feature flag to keep same default group type
+- Add wrapper for default IOVA rcache range
+- Combine last 2x patches
+
+[0] https://lore.kernel.org/linux-iommu/20210129092120.1482-1-thunder.leizhen@huawei.com/
+[1] https://lore.kernel.org/linux-iommu/1607538189-237944-1-git-send-email-john.garry@huawei.com/
+[2] https://lore.kernel.org/linux-iommu/20220203063345-mutt-send-email-mst@kernel.org/T/#m5b2b59576d35cad544314470f32e5f40ac5d1fe9
+
+John Garry (5):
+  iommu: Refactor iommu_group_store_type()
+  iova: Allow rcache range upper limit to be flexible
+  iommu: Allow iommu_change_dev_def_domain() realloc same default domain
+    type
+  iommu: Allow max opt DMA len be set for a group via sysfs
+  iova: Add iova_len argument to iova_domain_init_rcaches()
+
+ .../ABI/testing/sysfs-kernel-iommu_groups     |  16 ++
+ drivers/iommu/dma-iommu.c                     |  15 +-
+ drivers/iommu/iommu.c                         | 202 +++++++++++++-----
+ drivers/iommu/iova.c                          |  37 ++--
+ drivers/vdpa/vdpa_user/iova_domain.c          |   4 +-
+ include/linux/iommu.h                         |   7 +
+ include/linux/iova.h                          |   6 +-
+ 7 files changed, 212 insertions(+), 75 deletions(-)
+
+-- 
+2.26.2
+

@@ -2,111 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E45EC4B4169
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 06:38:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 478834B416A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 06:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240474AbiBNFf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 00:35:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36900 "EHLO
+        id S235619AbiBNFhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 00:37:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240468AbiBNFfw (ORCPT
+        with ESMTP id S231282AbiBNFhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 00:35:52 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF2D4EA03
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 21:35:45 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id c5-20020a17090a1d0500b001b904a7046dso16275652pjd.1
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 21:35:45 -0800 (PST)
+        Mon, 14 Feb 2022 00:37:32 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59844EA11
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 21:37:25 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id b187-20020a251bc4000000b0061e15c5024fso31638504ybb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 21:37:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=A5uw8NuusHMWu2H9EsRKlsl0yAY1+xIB1tX9+ZmKg0o=;
-        b=H4ZcRTgffCU+V4nQE4I4n7TVS0tSq/wk3kt++4+87wfzkfF1TvBLmBiyw6eWy8+XgX
-         g8tYW/w2e1v09MDmPRE9Mkoqs8OGkJVPkocnMh0CML90NrSBrMcKeuS4j3I4QbEt2JME
-         1maqVLAoFU0PtH61Sc3fFIFdpgbICz/OqEUf0=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=+1SwCE06M0PNqBLEJTg15X5eH7+oSoSSFiekI+9wl9s=;
+        b=VtTPVXxfex/1ySP2MQUCDrrLGS4bgo8o9gYa4yfPriMLozUesvzfOHPU9JNcSROXnZ
+         3PTCEKlwxO3xEnbzXHfcKoos8ott/okgb3eO4UDDb5Hgq0fnhYoRMEpSqFV4Pk277fJ2
+         +Nd5BHsBrYrOtYE1oe1F8NmnJOOYyYSzhBm7iowqdEfANVP0pk9K8G9JaIhlJe7ZekSu
+         9kpEwoQssXCR1UvrZQT5zNlJ5DF4OJ8uwRFWNzYIWYAWuZKd0QjWbKpL/zmBkd6fQkMq
+         a41bVuN0Wgd7EduqWuld4iSyG2TgCW8/AfcO5jxg3moU1H+YUcIzzZAWiUed0xbe9ykr
+         0LPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=A5uw8NuusHMWu2H9EsRKlsl0yAY1+xIB1tX9+ZmKg0o=;
-        b=Nt9SRFNQZ5J5RRfHlhCkQqPMl0A8vUVJ7xD0fb0B17+dIiB3Cos36En8JccO4sweHT
-         kn0Bv0GwH7soYah2IUZfHUtrgBI6iVhZh5p7go2jewLHyGvKG1izCt8X84F5jaCnuzu/
-         tj0YKFNLWSMZpR5TFOHrYAwzYk1CRzyQVQeUurgV68N0vdre+DC94ZIjzUpil8RXJem1
-         J/InKr/FZZoynKFOPt6OcGrcjOz+E8bIOWE3fMN1AL7aCZClbVfg885bv67z20Zq9GPo
-         TTLCcbbyR60QA8v9pwIo2WMykOmUDZmNgF+HXyqkM7eQMyTJUjPTVp6yV0c8ua0k1wtE
-         6LFw==
-X-Gm-Message-State: AOAM5319qRwCS/hfYL6QHs2+8jZ3rj/C1ExHAeepJI7gYaYedqNaCfyA
-        i9Xl/CtJITHaRqROUaRWhxhIug==
-X-Google-Smtp-Source: ABdhPJzL1kDqBiuPtpJEQddPujq+hwLdkk966Sc5BJyG+rxNIoO+0BiwpS0uaObb/NNhBolchSalPg==
-X-Received: by 2002:a17:90a:72c2:: with SMTP id l2mr12819195pjk.14.1644816945414;
-        Sun, 13 Feb 2022 21:35:45 -0800 (PST)
-Received: from google.com ([2401:fa00:8f:203:3a3d:6c6e:58a7:8903])
-        by smtp.gmail.com with ESMTPSA id hk3sm7442376pjb.12.2022.02.13.21.35.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Feb 2022 21:35:45 -0800 (PST)
-Date:   Mon, 14 Feb 2022 14:35:41 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: [PATCH v3] printk: use atomic updates for klogd work
-Message-ID: <YgnqLe9pWsbhV4kF@google.com>
-References: <20220203112915.1350753-1-john.ogness@linutronix.de>
- <YfzP50vDiJiaRVCr@google.com>
- <87bkzj3t77.fsf@jogness.linutronix.de>
- <YgUzm5POctivsjUg@alley>
- <87leyhd4wc.fsf@jogness.linutronix.de>
- <87iltld4ue.fsf@jogness.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87iltld4ue.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=+1SwCE06M0PNqBLEJTg15X5eH7+oSoSSFiekI+9wl9s=;
+        b=3y4fHYkpk5BTJSX8xqLB8/t5lyXPa6k83RrtWNmQbY9wj/d6zS/YiGM/Jp05B/lC+r
+         xNwTytQlo+KB/JbKe4P79/stfn3s/4AOT54ngSRy0BswXDyQldGGfWgderyl1Ca8Zan2
+         vHIuOQmaxvgsRxkWEbtx54jRDyc1E50TdmWQYywoaul9qM3X4zYIY2FkH8MCGS/n/MTZ
+         B6AlhyKU6y3kIvMmjJhWbI9+tE4H6RxO5+e2R7OsFm2//vzZq5lLDpzcMTR8J/UNMKdO
+         sTJT+dFDCcIoglipsoYdsXMRLiU4BzCIkv+3qV/FuumPdeh7Qz+xrD+NqEdBcJDAjrUV
+         TwYA==
+X-Gm-Message-State: AOAM531S+xC4woVO6BsOYckqxhPHNCwJckxb6aRFJBtWPSzK0Xi8snR4
+        6tVE8Eb0hDIBCmf5JBCCEdg0GBpEQCTw
+X-Google-Smtp-Source: ABdhPJzLlnCyP8MR7Ka8mTntsMrSfWdMHHSSskLUEwG3JprtOu25ulTVq/KOFZQzyJJoH9evqR6maA8J1aHF
+X-Received: from tzungbi-z840.tpe.corp.google.com ([2401:fa00:1:10:f315:f92d:e3d3:2539])
+ (user=tzungbi job=sendgmr) by 2002:a25:900e:: with SMTP id
+ s14mr10446908ybl.338.1644817044881; Sun, 13 Feb 2022 21:37:24 -0800 (PST)
+Date:   Mon, 14 Feb 2022 13:36:41 +0800
+Message-Id: <20220214053646.3088298-1-tzungbi@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+Subject: [PATCH 0/5] platform/chrome: cros_kbd_led_backlight: add EC PWM backend
+From:   Tzung-Bi Shih <tzungbi@google.com>
+To:     bleung@chromium.org, groeck@chromium.org, robh+dt@kernel.org
+Cc:     chrome-platform@lists.linux.dev, tzungbi@google.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/02/11 12:29), John Ogness wrote:
-> The per-cpu @printk_pending variable can be updated from
-> sleepable contexts, such as:
-> 
->   get_random_bytes()
->     warn_unseeded_randomness()
->       printk_deferred()
->         defer_console_output()
-> 
-> and can be updated from interrupt contexts, such as:
-> 
->   handle_irq_event_percpu()
->     __irq_wake_thread()
->       wake_up_process()
->         try_to_wake_up()
->           select_task_rq()
->             select_fallback_rq()
->               printk_deferred()
->                 defer_console_output()
-> 
-> and can be updated from NMI contexts, such as:
-> 
->   vprintk()
->     if (in_nmi()) defer_console_output()
-> 
-> Therefore the atomic variant of the updating functions must be used.
-> 
-> Replace __this_cpu_xchg() with this_cpu_xchg().
-> Replace __this_cpu_or() with this_cpu_or().
-> 
-> Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+The series adds EC PWM as an backend option for ChromeOS keyboard LED
+backlight.
 
-FWIW
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+The 1st patch reorder the headers alphabetically.
+
+The 2nd patch separates the ACPI backend as an independent option.
+
+The 3rd patch is the DT binding document for the proposed compatible string.
+
+The 4th patch supports OF match.
+
+The 5th patch adds EC PWM as another backend option.
+
+Tzung-Bi Shih (5):
+  platform/chrome: cros_kbd_led_backlight: sort headers alphabetically
+  platform/chrome: cros_kbd_led_backlight: separate ACPI backend
+  dt-bindings: add google,cros-kbd-led-backlight
+  platform/chrome: cros_kbd_led_backlight: support OF match
+  platform/chrome: cros_kbd_led_backlight: support EC PWM backend
+
+ .../chrome/google,cros-kbd-led-backlight.yaml |  35 +++
+ .../bindings/mfd/google,cros-ec.yaml          |   3 +
+ drivers/platform/chrome/Kconfig               |  14 +-
+ .../platform/chrome/cros_kbd_led_backlight.c  | 218 ++++++++++++++++--
+ 4 files changed, 247 insertions(+), 23 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/chrome/google,cros-kbd-led-backlight.yaml
+
+-- 
+2.35.1.265.g69c8d7142f-goog
+

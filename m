@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D234B4B63
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 141DF4B4814
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348019AbiBNKdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:33:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41536 "EHLO
+        id S244383AbiBNJo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:44:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348035AbiBNKbu (ORCPT
+        with ESMTP id S244986AbiBNJlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:31:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255FE2AD9;
-        Mon, 14 Feb 2022 02:00:14 -0800 (PST)
+        Mon, 14 Feb 2022 04:41:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26215A184;
+        Mon, 14 Feb 2022 01:36:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1395B80DCF;
-        Mon, 14 Feb 2022 10:00:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D71F4C340EF;
-        Mon, 14 Feb 2022 09:59:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C64F4B80DC4;
+        Mon, 14 Feb 2022 09:36:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D388BC340E9;
+        Mon, 14 Feb 2022 09:36:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832800;
-        bh=ConjnUoJ0g0xGyfJNWwrU/GygfPMqHV4ZaFCx5Ndfkk=;
+        s=korg; t=1644831405;
+        bh=h/90sFQJ4ADpeoVXdbJhADLAI2IKpcQnwVbtczvVWjg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=diankk27kKWxDRHQoAUdjLueM4xloH9aq13BiG9JLxP30et8iA8k+KqrJYqNEjMYr
-         I/uQ+Wow6depkctk34qJoPheW6WmZgNUCPO9sj5a6Zrad6Wu2YcItqMh+Jl+WVt12A
-         17SWOSmATS58ijW4Aj0sJzM18ElOgY4iFeSsnKew=
+        b=LVJeGEBmloFVjenri8+GQbqerYy2l6KI55vt5u9iidsJJn71sseGtW9HRAhZhP3Gx
+         4ax0PlVrc5x4VEGpBFTk//ylK+h0gY+bkjLFI8adP5btjVk2tBDI6rTtrbQVWSjBjg
+         28fNmsLBLIc/p6wR9tcQa0L68/gVVLHdqv2DtHjc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Suresh Balakrishnan <suresh.balakrishnan@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Vlad Buslov <vladbu@nvidia.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 128/203] gpiolib: Never return internal error codes to user space
+Subject: [PATCH 5.4 44/71] net: do not keep the dst cache when uncloning an skb dst and its metadata
 Date:   Mon, 14 Feb 2022 10:26:12 +0100
-Message-Id: <20220214092514.588804058@linuxfoundation.org>
+Message-Id: <20220214092453.530126018@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,102 +57,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Antoine Tenart <atenart@kernel.org>
 
-[ Upstream commit 95a4eed7dd5b7c1c3664a626174290686ddbee9f ]
+[ Upstream commit cfc56f85e72f5b9c5c5be26dc2b16518d36a7868 ]
 
-Currently it's possible that character device interface may return
-the error codes which are not supposed to be seen by user space.
-In this case it's EPROBE_DEFER.
+When uncloning an skb dst and its associated metadata a new dst+metadata
+is allocated and the tunnel information from the old metadata is copied
+over there.
 
-Wrap it to return -ENODEV instead as sysfs does.
+The issue is the tunnel metadata has references to cached dst, which are
+copied along the way. When a dst+metadata refcount drops to 0 the
+metadata is freed including the cached dst entries. As they are also
+referenced in the initial dst+metadata, this ends up in UaFs.
 
-Fixes: d7c51b47ac11 ("gpio: userspace ABI for reading/writing GPIO lines")
-Fixes: 61f922db7221 ("gpio: userspace ABI for reading GPIO line events")
-Fixes: 3c0d9c635ae2 ("gpiolib: cdev: support GPIO_V2_GET_LINE_IOCTL and GPIO_V2_LINE_GET_VALUES_IOCTL")
-Reported-by: Suresh Balakrishnan <suresh.balakrishnan@intel.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+In practice the above did not happen because of another issue, the
+dst+metadata was never freed because its refcount never dropped to 0
+(this will be fixed in a subsequent patch).
+
+Fix this by initializing the dst cache after copying the tunnel
+information from the old metadata to also unshare the dst cache.
+
+Fixes: d71785ffc7e7 ("net: add dst_cache to ovs vxlan lwtunnel")
+Cc: Paolo Abeni <pabeni@redhat.com>
+Reported-by: Vlad Buslov <vladbu@nvidia.com>
+Tested-by: Vlad Buslov <vladbu@nvidia.com>
+Signed-off-by: Antoine Tenart <atenart@kernel.org>
+Acked-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpio/gpiolib-cdev.c  |  6 +++---
- drivers/gpio/gpiolib-sysfs.c |  7 ++-----
- drivers/gpio/gpiolib.h       | 12 ++++++++++++
- 3 files changed, 17 insertions(+), 8 deletions(-)
+ include/net/dst_metadata.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-index c7b5446d01fd2..ffa0256cad5a0 100644
---- a/drivers/gpio/gpiolib-cdev.c
-+++ b/drivers/gpio/gpiolib-cdev.c
-@@ -330,7 +330,7 @@ static int linehandle_create(struct gpio_device *gdev, void __user *ip)
- 			goto out_free_lh;
- 		}
+diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
+index 14efa0ded75dd..b997e0c1e3627 100644
+--- a/include/net/dst_metadata.h
++++ b/include/net/dst_metadata.h
+@@ -123,6 +123,19 @@ static inline struct metadata_dst *tun_dst_unclone(struct sk_buff *skb)
  
--		ret = gpiod_request(desc, lh->label);
-+		ret = gpiod_request_user(desc, lh->label);
- 		if (ret)
- 			goto out_free_lh;
- 		lh->descs[i] = desc;
-@@ -1378,7 +1378,7 @@ static int linereq_create(struct gpio_device *gdev, void __user *ip)
- 			goto out_free_linereq;
- 		}
- 
--		ret = gpiod_request(desc, lr->label);
-+		ret = gpiod_request_user(desc, lr->label);
- 		if (ret)
- 			goto out_free_linereq;
- 
-@@ -1764,7 +1764,7 @@ static int lineevent_create(struct gpio_device *gdev, void __user *ip)
- 		}
- 	}
- 
--	ret = gpiod_request(desc, le->label);
-+	ret = gpiod_request_user(desc, le->label);
- 	if (ret)
- 		goto out_free_le;
- 	le->desc = desc;
-diff --git a/drivers/gpio/gpiolib-sysfs.c b/drivers/gpio/gpiolib-sysfs.c
-index 4098bc7f88b7e..44c1ad51b3fe9 100644
---- a/drivers/gpio/gpiolib-sysfs.c
-+++ b/drivers/gpio/gpiolib-sysfs.c
-@@ -475,12 +475,9 @@ static ssize_t export_store(struct class *class,
- 	 * they may be undone on its behalf too.
- 	 */
- 
--	status = gpiod_request(desc, "sysfs");
--	if (status) {
--		if (status == -EPROBE_DEFER)
--			status = -ENODEV;
-+	status = gpiod_request_user(desc, "sysfs");
-+	if (status)
- 		goto done;
--	}
- 
- 	status = gpiod_set_transitory(desc, false);
- 	if (!status) {
-diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
-index 30bc3f80f83e6..c31f4626915de 100644
---- a/drivers/gpio/gpiolib.h
-+++ b/drivers/gpio/gpiolib.h
-@@ -135,6 +135,18 @@ struct gpio_desc {
- 
- int gpiod_request(struct gpio_desc *desc, const char *label);
- void gpiod_free(struct gpio_desc *desc);
+ 	memcpy(&new_md->u.tun_info, &md_dst->u.tun_info,
+ 	       sizeof(struct ip_tunnel_info) + md_size);
++#ifdef CONFIG_DST_CACHE
++	/* Unclone the dst cache if there is one */
++	if (new_md->u.tun_info.dst_cache.cache) {
++		int ret;
 +
-+static inline int gpiod_request_user(struct gpio_desc *desc, const char *label)
-+{
-+	int ret;
++		ret = dst_cache_init(&new_md->u.tun_info.dst_cache, GFP_ATOMIC);
++		if (ret) {
++			metadata_dst_free(new_md);
++			return ERR_PTR(ret);
++		}
++	}
++#endif
 +
-+	ret = gpiod_request(desc, label);
-+	if (ret == -EPROBE_DEFER)
-+		ret = -ENODEV;
-+
-+	return ret;
-+}
-+
- int gpiod_configure_flags(struct gpio_desc *desc, const char *con_id,
- 		unsigned long lflags, enum gpiod_flags dflags);
- int gpio_set_debounce_timeout(struct gpio_desc *desc, unsigned int debounce);
+ 	skb_dst_drop(skb);
+ 	dst_hold(&new_md->dst);
+ 	skb_dst_set(skb, &new_md->dst);
 -- 
 2.34.1
 

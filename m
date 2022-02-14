@@ -2,134 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3766F4B5D39
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:49:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70AEA4B5D3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:49:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbiBNVte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:49:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51104 "EHLO
+        id S231546AbiBNVtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:49:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbiBNVtc (ORCPT
+        with ESMTP id S231511AbiBNVti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:49:32 -0500
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B9619414D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:49:23 -0800 (PST)
-Received: by mail-qk1-x732.google.com with SMTP id b35so15624429qkp.6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:49:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HduNWSXwHF2qMp2tKTU9szIHjs3c1KQrYw+jf8BZZPM=;
-        b=215dMlHoklWFE+75szJr/Y820Jgsu6uYnJPnIt2MoQCGOJqW3qsQAALF4vXlV9bVTf
-         oaY8xA66Iez3WRkyPgpYJ3sJx9jd6pDLsWo5K6Iofc1NmBq5OSY4k07jmhOfFpT9SM6p
-         /9JaJyDct5CGz4+UyIutmyUdQFUDTMH4jFG/WLfxmBUQRnsdSk8hw5YKSyeGHnHIkEUH
-         3Rzw8AHUCnbs7Wi+ORDMhd1492oL8mFwaYTPkjLGBF1qRd+vM4lIINt6AGmoCT8JQVxw
-         MR3RWrJXhYYwa/QgmZ2012SBgF6iPaTdSiOwNh5JC9a+J4bDdec2LxCpQ7Pitsj9HTYN
-         qvqQ==
+        Mon, 14 Feb 2022 16:49:38 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE521954E8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:49:30 -0800 (PST)
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3D4FC40336
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 21:49:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644875369;
+        bh=JIs1xiYNpUGWLEtymgYGm7pSCxeAjzoS3yDzGjJPXvE=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=qcfhIGPd6tSxaCbX5vQlCgrZirAgz3UI81E3r+pO/F+B1Y02TwOY8B+YY+1nIMkXV
+         f4KdgV1tQGPjc11LRspaej3Z7Ruqd2ht3k7ZqcN8kI82O9fRL9cW2VVmWk/F6ys8YZ
+         CJ9gwCPUmmL5iKPLANhXIBuwl1ZIzAxLhw5D4/qfYdEjHUVITEasTY5rjqPpUPl5/h
+         wsHJTx9Xq932yQ2GN8Q87ZNzhuAM55W/FLwiOKx38K9RpUnieYdhtgI9I3Selzhxsh
+         /kERbvX6p9m923C7Xg2XcRsI6J0ZVuUOb7fESdvQQDzUHcI1xUxie4LKdeQoy2PiRP
+         W8lO1chV4OeUw==
+Received: by mail-wm1-f69.google.com with SMTP id v185-20020a1cacc2000000b0034906580813so277771wme.1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:49:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=HduNWSXwHF2qMp2tKTU9szIHjs3c1KQrYw+jf8BZZPM=;
-        b=1q6aYdtOTeu+wOQkPjvLS2i+lt6YtNuOEAsnKX8YGFV2H7RYbb/uI5y2pHgzrwTgYe
-         n77Kdm4fqSWFJ+R+4RX+/WFrYRVoWSJAOnBFeNQjCN9kCKrL+TzYEEizY1qrr01fOS7O
-         yacQGo57ddi/Oaqop8RDBw8jdU1KeHGgMuZ9z6vrEUAHHUZ9Sx2CTEkoKJgDVIV+dbZN
-         3eD9XMnPhWwfRZbim19HxvBXLkBTbua4+V0kLdAGDaqja3X3/hm/IZ1ThcLBZxt3TM/e
-         priIyTsTJ1fcmbhxEIj998gktk+JtqyviFHKEjwdIIJIK9qJVEvF1LNnL+BEPQclmCOe
-         eLAA==
-X-Gm-Message-State: AOAM531NgeqD9yBYOY+lZw7u3fyvilBrbi1HbiBUp4PwoI1hjTkzp9Wu
-        YNUTNHsDFOCJTfkpl+J1r97urA==
-X-Google-Smtp-Source: ABdhPJyiRZjNZ7NyCD66Td1gEAAhNJr5fwSQTasB43SkAUHLAcSMqVyxeErZVQxtBTjDHLDXHSpppw==
-X-Received: by 2002:a05:620a:128c:: with SMTP id w12mr560649qki.464.1644875362346;
-        Mon, 14 Feb 2022 13:49:22 -0800 (PST)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id 5sm18474167qtp.81.2022.02.14.13.49.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 13:49:22 -0800 (PST)
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, CGEL <cgel.zte@gmail.com>,
-        Minchan Kim <minchan@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Yu Zhao <yuzhao@google.com>
-Subject: [PATCH] mm: page_io: fix psi memory pressure error on cold swapins
-Date:   Mon, 14 Feb 2022 16:49:21 -0500
-Message-Id: <20220214214921.419687-1-hannes@cmpxchg.org>
-X-Mailer: git-send-email 2.34.1
+        bh=JIs1xiYNpUGWLEtymgYGm7pSCxeAjzoS3yDzGjJPXvE=;
+        b=ysbb6nutBDRv3YsMc4qNi9632qK4RYmdAG7WTDKn9Coirx9jN+T9Zp/IR8osTGyHTf
+         j33o6fccXMHyup/Cw6rbj3/uTlqoZ0v/EkJztuuGIeBxEuihQCEgW61+kwGeP/Ih/9q/
+         o9pIT3QSprZ0QYXRZWVuv7q7Q54/3DT05X5CoNeRQuOfnZEk95e+6y5KfECTg45mnvmO
+         Rs4/7KZiUZ1izDsssZPU/bujgrHMvSRANCQQOOT/DclVFpTTpwuOsRsXXhICgP9INfAr
+         1GsDNkebJkf0Dl02HMMBYYYmUVxkFwtsj/EvkTSAr/Yl6UCvMvj925dp83bm/UueAHmL
+         Dzbg==
+X-Gm-Message-State: AOAM53129IExXOnuJKsE4VWxFBhAVBU+TyplWQ+aJe77joJAgfnb+n+F
+        044JWEQ+pWSpSb3769Jv+MogrtjlPcpmhgAJGmVCnql05SI7W8lWg2EDmuYthFdoTwxF6HsimAg
+        U0Zo9ZtCT+UxJc/wDdWC9GKJtnlkf4ccCoEJJkAtMuA==
+X-Received: by 2002:a05:600c:1c11:: with SMTP id j17mr606086wms.138.1644875368524;
+        Mon, 14 Feb 2022 13:49:28 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxKWcCqlvzOjQU6wfJEEKTCLPSGNxu0cNkLUzJsJZwJjpWyaSQuWK0i7UTurbPojjOb5bxVfA==
+X-Received: by 2002:a05:600c:1c11:: with SMTP id j17mr606079wms.138.1644875368292;
+        Mon, 14 Feb 2022 13:49:28 -0800 (PST)
+Received: from [192.168.0.106] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id n7sm12982487wmd.30.2022.02.14.13.49.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 13:49:27 -0800 (PST)
+Message-ID: <cf4e21e8-1ba8-a137-6063-00e1cee8e035@canonical.com>
+Date:   Mon, 14 Feb 2022 22:49:27 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] dt-bindings: ps2-gpio: convert binding to json-schema
+Content-Language: en-US
+To:     Danilo Krummrich <danilokrummrich@dk-develop.de>,
+        dmitry.torokhov@gmail.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linus.walleij@linaro.org
+References: <20220211233137.99624-1-danilokrummrich@dk-develop.de>
+ <20220211233137.99624-2-danilokrummrich@dk-develop.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220211233137.99624-2-danilokrummrich@dk-develop.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Once upon a time, all swapins counted toward memory pressure[1]. Then
-Joonsoo introduced workingset detection for anonymous pages and we
-gained the ability to distinguish hot from cold swapins[2][3]. But we
-failed to update swap_readpage() accordingly, and now we account
-partial memory pressure in the swapin path of cold memory.
+On 12/02/2022 00:31, Danilo Krummrich wrote:
+> Convert the ps2-gpio dt-binding documentation to DT schema format using
+> the json-schema.
+> 
+> Signed-off-by: Danilo Krummrich <danilokrummrich@dk-develop.de>
+> ---
+>  .../devicetree/bindings/serio/ps2-gpio.txt    | 23 --------
+>  .../devicetree/bindings/serio/ps2-gpio.yaml   | 52 +++++++++++++++++++
+>  2 files changed, 52 insertions(+), 23 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/serio/ps2-gpio.txt
+>  create mode 100644 Documentation/devicetree/bindings/serio/ps2-gpio.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/serio/ps2-gpio.txt b/Documentation/devicetree/bindings/serio/ps2-gpio.txt
+> deleted file mode 100644
+> index 7b7bc9cdf986..000000000000
+> --- a/Documentation/devicetree/bindings/serio/ps2-gpio.txt
+> +++ /dev/null
+> @@ -1,23 +0,0 @@
+> -Device-Tree binding for ps/2 gpio device
+> -
+> -Required properties:
+> -	- compatible = "ps2-gpio"
+> -	- data-gpios: the data pin
+> -	- clk-gpios: the clock pin
+> -	- interrupts: Should trigger on the falling edge of the clock line.
+> -
+> -Optional properties:
+> -	- write-enable: Indicates whether write function is provided
+> -	to serio device. Possibly providing the write fn will not work, because
+> -	of the tough timing requirements.
+> -
+> -Example nodes:
+> -
+> -ps2@0 {
+> -	compatible = "ps2-gpio";
+> -	interrupt-parent = <&gpio>;
+> -	interrupts = <23 IRQ_TYPE_EDGE_FALLING>;
+> -	data-gpios = <&gpio 24 GPIO_ACTIVE_HIGH>;
+> -	clk-gpios = <&gpio 23 GPIO_ACTIVE_HIGH>;
+> -	write-enable;
+> -};
+> diff --git a/Documentation/devicetree/bindings/serio/ps2-gpio.yaml b/Documentation/devicetree/bindings/serio/ps2-gpio.yaml
+> new file mode 100644
+> index 000000000000..ec6fa7b40851
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/serio/ps2-gpio.yaml
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/serio/ps2-gpio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Bindings for GPIO based PS/2
+> +
+> +maintainers:
+> +  - Danilo Krummrich <danilokrummrich@dk-develop.de>
+> +
+> +properties:
+> +  compatible:
+> +    items:
 
-Not for all situations - which adds more inconsistency: paths using
-the conventional submit_bio() and lock_page() route will not see much
-pressure - unless storage itself is heavily congested and the bio
-submissions stall. ZRAM and ZSWAP do most of the work directly from
-swap_readpage() and will see all swapins reflected as pressure.
+Hi,
 
-Restore consistency by making all swapin stall accounting conditional
-on the page actually being part of the workingset.
+I think you do not expect more compatibles, so skip "items".
 
-[1] commit 937790699be9 ("mm/page_io.c: annotate refault stalls from swap_readpage")
-[2] commit aae466b0052e ("mm/swap: implement workingset detection for anonymous LRU")
-[3] commit cad8320b4b39 ("mm/swap: don't SetPageWorkingset unconditionally during swapin")
+> +      - const: ps2-gpio
+> +
+> +  data-gpios:
+> +    description:
+> +      the gpio used for the data signal
+> +    maxItems: 1
+> +
+> +  clk-gpios:
+> +    description:
+> +      the gpio used for the clock signal
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    description:
+> +      The given interrupt should trigger on the falling edge of the clock line.
+> +    maxItems: 1
+> +
+> +  write-enable:
 
-Reported-by: CGEL <cgel.zte@gmail.com>
-Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Minchan Kim <minchan@google.com>
-Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Cc: Yu Zhao <yuzhao@google.com>
----
- mm/page_io.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+This does not look like a standard property. You need "type: boolean".
 
-diff --git a/mm/page_io.c b/mm/page_io.c
-index 61c792f916fa..f6296ee25014 100644
---- a/mm/page_io.c
-+++ b/mm/page_io.c
-@@ -359,6 +359,7 @@ int swap_readpage(struct page *page, bool synchronous)
- 	struct bio *bio;
- 	int ret = 0;
- 	struct swap_info_struct *sis = page_swap_info(page);
-+	bool workingset = PageWorkingset(page);
- 	unsigned long pflags;
- 
- 	VM_BUG_ON_PAGE(!PageSwapCache(page) && !synchronous, page);
-@@ -370,7 +371,8 @@ int swap_readpage(struct page *page, bool synchronous)
- 	 * or the submitting cgroup IO-throttled, submission can be a
- 	 * significant part of overall IO time.
- 	 */
--	psi_memstall_enter(&pflags);
-+	if (workingset)
-+		psi_memstall_enter(&pflags);
- 	delayacct_swapin_start();
- 
- 	if (frontswap_load(page) == 0) {
-@@ -431,7 +433,8 @@ int swap_readpage(struct page *page, bool synchronous)
- 	bio_put(bio);
- 
- out:
--	psi_memstall_leave(&pflags);
-+	if (workingset)
-+		psi_memstall_leave(&pflags);
- 	delayacct_swapin_end();
- 	return ret;
- }
--- 
-2.34.1
+> +    description:
+> +      Indicates whether write function is provided to serio device. Possibly
+> +      providing the write function will not work, because of the tough timing
+> +      requirements.
+> +
+> +required:
 
+Also: compatible
+
+> +  - data-gpios
+> +  - clk-gpios
+> +  - interrupts
+> +
+> +examples:
+> +  - |
+> +    ps2@0 {
+
+Does it compile cleanly? You used an unit-address but there is no reg.
+
+> +        compatible = "ps2-gpio";
+> +        interrupt-parent = <&gpio>;
+> +        interrupts = <23 IRQ_TYPE_EDGE_FALLING>;
+> +        data-gpios = <&gpio 24 GPIO_ACTIVE_HIGH>;
+> +        clk-gpios = <&gpio 23 GPIO_ACTIVE_HIGH>;
+> +        write-enable;
+> +    };
+
+
+Best regards,
+Krzysztof

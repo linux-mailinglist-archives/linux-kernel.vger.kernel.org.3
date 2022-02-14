@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60B5F4B4C3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62FDD4B499E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348733AbiBNKiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:38:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48006 "EHLO
+        id S235553AbiBNKCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:02:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242944AbiBNKet (ORCPT
+        with ESMTP id S1344351AbiBNJ4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:34:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A816B6463;
-        Mon, 14 Feb 2022 02:01:58 -0800 (PST)
+        Mon, 14 Feb 2022 04:56:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4417E6CA5D;
+        Mon, 14 Feb 2022 01:44:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 631E8B80E0D;
-        Mon, 14 Feb 2022 10:01:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF6A8C340EF;
-        Mon, 14 Feb 2022 10:01:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D24D160FA2;
+        Mon, 14 Feb 2022 09:44:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6DE9C340E9;
+        Mon, 14 Feb 2022 09:44:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832916;
-        bh=Gj3Z9M/ZYEBo4oID8ujH6W/lVH/mp2oAgAzRkJJzenA=;
+        s=korg; t=1644831869;
+        bh=3AAAJwkkpJAVdQ8g3D/3TqrN1ZQgpjd4xMjw1mc5W6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qvRHiilpnFwRC8LbEQiSTZBDZSLJg3a0HHWYXubVjQA8gkt0a5VlkKgZeGa1vAjZo
-         kDBDe4m1Xg4UK9FmZW9YVlEqZ0VmlxYPsnUmLvkLhSIRlw2vcHbIYV/zZ6ysNYiJ2M
-         Or9DqDgDcMBKxoEKvTIU0fiLrUMel6Q2/1xf7xiY=
+        b=kIq/D3nmJiL3D3oro4Ky8mmwm5GyMyctETowYF2FShUAFiraWaddRycI8o3HWL7Q6
+         2V6RyYC59kZQI9C2TMesL0+9pzdGhNBx9zzcp5tUBbcfBPVgaKkj0W2zk9J1LCC8Co
+         vVj1kLpr/R6xpNOp1eLaEvZXWYMOgnS4329YN7oM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
-        Jonas Malaco <jonas@protocubo.io>
-Subject: [PATCH 5.16 165/203] eeprom: ee1004: limit i2c reads to I2C_SMBUS_BLOCK_MAX
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH 5.10 110/116] Makefile.extrawarn: Move -Wunaligned-access to W=1
 Date:   Mon, 14 Feb 2022 10:26:49 +0100
-Message-Id: <20220214092515.850069036@linuxfoundation.org>
+Message-Id: <20220214092502.592945425@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonas Malaco <jonas@protocubo.io>
+From: Nathan Chancellor <nathan@kernel.org>
 
-commit c0689e46be23160d925dca95dfc411f1a0462708 upstream.
+commit 1cf5f151d25fcca94689efd91afa0253621fb33a upstream.
 
-Commit effa453168a7 ("i2c: i801: Don't silently correct invalid transfer
-size") revealed that ee1004_eeprom_read() did not properly limit how
-many bytes to read at once.
+-Wunaligned-access is a new warning in clang that is default enabled for
+arm and arm64 under certain circumstances within the clang frontend (see
+LLVM commit below). On v5.17-rc2, an ARCH=arm allmodconfig build shows
+1284 total/70 unique instances of this warning (most of the instances
+are in header files), which is quite noisy.
 
-In particular, i2c_smbus_read_i2c_block_data_or_emulated() takes the
-length to read as an u8.  If count == 256 after taking into account the
-offset and page boundary, the cast to u8 overflows.  And this is common
-when user space tries to read the entire EEPROM at once.
+To keep a normal build green through CONFIG_WERROR, only show this
+warning with W=1, which will allow automated build systems to catch new
+instances of the warning so that the total number can be driven down to
+zero eventually since catching unaligned accesses at compile time would
+be generally useful.
 
-To fix it, limit each read to I2C_SMBUS_BLOCK_MAX (32) bytes, already
-the maximum length i2c_smbus_read_i2c_block_data_or_emulated() allows.
-
-Fixes: effa453168a7 ("i2c: i801: Don't silently correct invalid transfer size")
 Cc: stable@vger.kernel.org
-Reviewed-by: Heiner Kallweit <hkallweit1@gmail.com>
-Signed-off-by: Jonas Malaco <jonas@protocubo.io>
-Link: https://lore.kernel.org/r/20220203165024.47767-1-jonas@protocubo.io
+Link: https://github.com/llvm/llvm-project/commit/35737df4dcd28534bd3090157c224c19b501278a
+Link: https://github.com/ClangBuiltLinux/linux/issues/1569
+Link: https://github.com/ClangBuiltLinux/linux/issues/1576
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/misc/eeprom/ee1004.c |    3 +++
- 1 file changed, 3 insertions(+)
+ scripts/Makefile.extrawarn |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/misc/eeprom/ee1004.c
-+++ b/drivers/misc/eeprom/ee1004.c
-@@ -114,6 +114,9 @@ static ssize_t ee1004_eeprom_read(struct
- 	if (offset + count > EE1004_PAGE_SIZE)
- 		count = EE1004_PAGE_SIZE - offset;
+--- a/scripts/Makefile.extrawarn
++++ b/scripts/Makefile.extrawarn
+@@ -51,6 +51,7 @@ KBUILD_CFLAGS += -Wno-sign-compare
+ KBUILD_CFLAGS += -Wno-format-zero-length
+ KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
+ KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
++KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
+ endif
  
-+	if (count > I2C_SMBUS_BLOCK_MAX)
-+		count = I2C_SMBUS_BLOCK_MAX;
-+
- 	return i2c_smbus_read_i2c_block_data_or_emulated(client, offset, count, buf);
- }
- 
+ endif
 
 

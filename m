@@ -2,43 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6140B4B5C0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:13:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7DB84B5BC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:01:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbiBNVGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:06:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55038 "EHLO
+        id S229971AbiBNVAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:00:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230462AbiBNVG2 (ORCPT
+        with ESMTP id S230024AbiBNVAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:06:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC15135486
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:06:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23CF26114D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 19:50:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA887C340E9;
-        Mon, 14 Feb 2022 19:50:48 +0000 (UTC)
-Date:   Mon, 14 Feb 2022 14:50:47 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] ftrace: Remove unused ftrace_startup_enable() stub
-Message-ID: <20220214145047.35b9df58@gandalf.local.home>
-In-Reply-To: <20220214192847.488166-1-nathan@kernel.org>
-References: <20220214192847.488166-1-nathan@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 14 Feb 2022 16:00:43 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A518713194B;
+        Mon, 14 Feb 2022 13:00:34 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id t4-20020a17090a510400b001b8c4a6cd5dso296884pjh.5;
+        Mon, 14 Feb 2022 13:00:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=nQ8TSkYAbvmp6Q3oaHRO6T3ykYVNUOGZKtBNrreWFLo=;
+        b=gjPryxoWPiwCiEaLQKO8x3yzqkQ+YJnYOcvgz2EmXtNKXXIuLVi2DVqX3Is2Dy9R4H
+         gw42n+xgEsswL+F+YL1ohciYqCVi/GM9S9MkGZ5EMkGtnTzo6D+gDrbCHrPMI889N8Yq
+         WukgFIXeRFzLQ/U8cAwb/gizAkWL3rfhwdPK0lO8nbndmcp7UMuca0EM2Ir55aGlYglK
+         t1IUBeRmjyxziKxJdXFLqHIbPfuRqKVgDRlBDvRNyoY2apSb8C+ITVTM/jt5xxCyKYZD
+         tFcm7SKK6aaVsPb58tw+w6tcQDKj2yzf0V7E5gFWoSHnARTYi/hCLPn1bTXs7M7v8BIs
+         2afQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=nQ8TSkYAbvmp6Q3oaHRO6T3ykYVNUOGZKtBNrreWFLo=;
+        b=CiAmdZ1+huo8KkVuTzzTKTzurPJ4hrQKIOO9UgURA6jWJFVdEQXDIUy51UH4+WUjPg
+         GRq+qkNQ+HWyjb10ds9Klu9ZIZ6jynN39Dws0phHpd9Zqp/OZg+5RHWD9jce9NNT7L9x
+         msGzHaNPuSRpNQTZ57S6qT0pVAKF60kZuxnj1R6OoW/38yzBlnUg2cluvhAjl2hlOeQT
+         A6GxCuRR5JdnvYYZUbKVA2aXqb8FvrB+4Pc8xVtm2h2I/nUEqMlLZGh6ZPeYya6HnQBj
+         xjlOTFzdVR5Qjs1ZDnh7bjJH8OaWQswBiscy+d0Ta4+Ka1OPB45y2jH3OH6pKL3JFQYf
+         JZnQ==
+X-Gm-Message-State: AOAM530sLnM8mNn14Cmyd6+7J5TBP4Y8SDBXSoet6fQXGnJWj68sbyvj
+        8V2qf39akc5H3y2tA9r8J+bZotQaf02Iug==
+X-Google-Smtp-Source: ABdhPJzs2dcp3QbYCWrCen4ErUKUVrFhyM9P4jNJSqL+XDqe+2UVjDQT6gadl/VQZUTaTUjglAr59Q==
+X-Received: by 2002:a05:6a00:15cd:: with SMTP id o13mr681299pfu.54.1644868379513;
+        Mon, 14 Feb 2022 11:52:59 -0800 (PST)
+Received: from jagath-PC ([27.4.59.114])
+        by smtp.gmail.com with ESMTPSA id e28sm359521pgm.23.2022.02.14.11.52.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 14 Feb 2022 11:52:59 -0800 (PST)
+Date:   Tue, 15 Feb 2022 01:22:54 +0530
+From:   Jagath Jog J <jagathjog1996@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>, jic23@kernel.org
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Slawomir Stepien <sst@poczta.fm>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/4] iio: potentiometer: Add support for Maxim DS3502
+Message-ID: <20220214195252.GA7374@jagath-PC>
+References: <20220214033620.4059-1-jagathjog1996@gmail.com>
+ <20220214033620.4059-4-jagathjog1996@gmail.com>
+ <CAHp75VcWym5vyDAVyTUCpj=Qkm28VUaqdqJ7VuFL_bsb0fmhaA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHp75VcWym5vyDAVyTUCpj=Qkm28VUaqdqJ7VuFL_bsb0fmhaA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,52 +77,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Feb 2022 12:28:47 -0700
-Nathan Chancellor <nathan@kernel.org> wrote:
+Hello Andy,
 
-> When building with clang + CONFIG_DYNAMIC_FTRACE=n + W=1, there is a
-> warning:
+On Mon, Feb 14, 2022 at 01:32:14PM +0200, Andy Shevchenko wrote:
+> On Mon, Feb 14, 2022 at 5:36 AM Jagath Jog J <jagathjog1996@gmail.com> wrote:
+> >
+> > The DS3502 is a 7-bit, nonvolatile digital potentiometer featuring
+> > an output voltage range of up to 15.5V.
+> > DS3502 support is implemented into existing ds1803 driver
 > 
->   kernel/trace/ftrace.c:7194:20: error: unused function 'ftrace_startup_enable' [-Werror,-Wunused-function]
->   static inline void ftrace_startup_enable(int command) { }
->                      ^
->   1 error generated.
+> Be consistent here and in other commit messages with how you refer to
+> the IC parts, i.e.
+> DS1803. Don't forget English grammar and punctuation, i.e. missed period above.
 > 
-> Clang warns on instances of static inline functions in .c files with W=1
-> after commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
-> inline functions for W=1 build").
-> 
-> The ftrace_startup_enable() stub has been unused since
-> commit e1effa0144a1 ("ftrace: Annotate the ops operation on update"),
-> where its use outside of the CONFIG_DYNAMIC_TRACE section was replaced
-> by ftrace_startup_all().  Remove it to resolve the warning.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Thanks,
+I will fix this in v3
 
-I'll queue this up for the next merge window. (After it passes all my
-testing of course).
-
--- Steve
-
-> ---
->  kernel/trace/ftrace.c | 1 -
->  1 file changed, 1 deletion(-)
+> > Datasheet: https://datasheets.maximintegrated.com/en/ds/DS3502.pdf
 > 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index f9feb197b2da..a4b462b6f944 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -7191,7 +7191,6 @@ static int __init ftrace_nodyn_init(void)
->  core_initcall(ftrace_nodyn_init);
->  
->  static inline int ftrace_init_dyn_tracefs(struct dentry *d_tracer) { return 0; }
-> -static inline void ftrace_startup_enable(int command) { }
->  static inline void ftrace_startup_all(int command) { }
->  
->  # define ftrace_startup_sysctl()	do { } while (0)
+> >
 > 
-> base-commit: 754e0b0e35608ed5206d6a67a791563c631cec07
+> A tag block may not have blank lines. Drop it.
+> 
+> > Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
+> 
+> ...
+> 
+> > -       tristate "Maxim Integrated DS1803 Digital Potentiometer driver"
+> > +       tristate "Maxim Integrated DS1803 and similar Digital Potentiometer driver"
+> 
+> Please, list them like other drivers do:
+> 
+>        tristate "Maxim Integrated DS1803/DS... Digital Potentiometer driver"
+> 
+> ...
+> 
+> > -         Say yes here to build support for the Maxim Integrated DS1803
+> > -         digital potentiometer chip.
+> > +         Say yes here to build support for the Maxim Integrated DS1803 and
+> > +         similar digital potentiometer chip.
+> 
+> Same here.
+> 
+> ...
+> 
+> > - * Maxim Integrated DS1803 digital potentiometer driver
+> > + * Maxim Integrated DS1803 and similar digital potentiometer driver
+> 
+> Same here.
 
+Based on Jonathan suggestion for the previous patch version I used 
+"and similar" wording here.
+
+> 
+> ...
+> 
+> > -#define DS1803_MAX_POS         255
+> > -#define DS1803_WRITE(chan)     (0xa8 | ((chan) + 1))
+> 
+> Not sure why these were removed (or moved?)
+
+Since max wiper position is present in avail array of ds1803_cfg structure
+and that is being used for read scale so DS1803_MAX_POS is removed.
+
+Since each wiper address of both parts is assigned to the address
+member of iio_chan_spec struct so DS1803_WRITE(chan) is removed.
+
+> 
+> ...
+> 
+> > +static const struct ds1803_cfg ds1803_cfg[] = {
+> > +       [DS1803_010] = { .wipers = 2, .avail = { 0, 1, 255 }, .kohms =  10,
+> > +                        .channels = ds1803_channels,
+> > +                        .num_channels = ARRAY_SIZE(ds1803_channels) },
+> > +       [DS1803_050] = { .wipers = 2, .avail = { 0, 1, 255 }, .kohms =  50,
+> > +                        .channels = ds1803_channels,
+> > +                        .num_channels = ARRAY_SIZE(ds1803_channels) },
+> > +       [DS1803_100] = { .wipers = 2, .avail = { 0, 1, 255 }, .kohms = 100,
+> > +                        .channels = ds1803_channels,
+> > +                        .num_channels = ARRAY_SIZE(ds1803_channels) },
+> > +       [DS3502] =     { .wipers = 1, .avail = { 0, 1, 127 }, .kohms =  10,
+> > +                        .channels = ds3502_channels,
+> > +                        .num_channels = ARRAY_SIZE(ds3502_channels) },
+> >  };
+> 
+> Split this on a per type basis. I believe it won't be too much work,
+> also, consider adding channels as a separate preparatory patch as you
+> did with avail.
+
+Based on Jonathan suggestion for the previous patch version to avoid
+having different chip type related structures so channels and num_channels
+are added into ds1803_cfg structure.
+
+Sure for channels I will split into separate patch for old part in v3.
+
+>
+> ...
+> 
+> > -       data->cfg = &ds1803_cfg[id->driver_data];
+> > +       data->chip_type = (uintptr_t)device_get_match_data(dev);
+> > +       if (data->chip_type < DS1803_010 || data->chip_type > DS3502)
+> > +               data->chip_type = id->driver_data;
+> 
+> Split it into a separate patch and use pointer validation instead:
+> 
+> data->cfg = ...
+> if (!data->cfg)
+>   data->cfg = ...id->driver_data;
+> 
+> ...
+> 
+> > -       { .compatible = "maxim,ds1803-010", .data = &ds1803_cfg[DS1803_010] },
+> > -       { .compatible = "maxim,ds1803-050", .data = &ds1803_cfg[DS1803_050] },
+> > -       { .compatible = "maxim,ds1803-100", .data = &ds1803_cfg[DS1803_100] },
+
+To get the chip specific structure I can use previous structure method for data
+and validation as you shown above.
+But it is necessary to get the chip_type also because of dependency in 
+ds1803_raw_read().
+
+To get the chip_type can I use 
+data->chip_type = id->driver_data
+
+> > +       { .compatible = "maxim,ds1803-010", .data = (void *)DS1803_010 },
+> > +       { .compatible = "maxim,ds1803-050", .data = (void *)DS1803_050 },
+> > +       { .compatible = "maxim,ds1803-100", .data = (void *)DS1803_100 },
+> 
+> This is not good, please use pointers as it was before.
+> 
+> > +       { .compatible = "maxim,ds3502",     .data = (void *)DS3502 },
+> 
+> Ditto. Create a new, separate structure for this type.
+> 
+> ...
+> 
+> >         { "ds1803-010", DS1803_010 },
+> >         { "ds1803-050", DS1803_050 },
+> >         { "ds1803-100", DS1803_100 },
+> > +       { "ds3502",     DS3502     },
+> 
+> Too many spaces.
+> Besides this, please create a new prerequisite patch to convert this
+> to use pointers as above.
+
+Sure I will split this patch in v3.
+Thanks for feedback.
+
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+
+Best Regards,
+Jagath

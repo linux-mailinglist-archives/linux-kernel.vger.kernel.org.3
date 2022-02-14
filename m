@@ -2,277 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 757364B4299
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 08:13:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D19EC4B4297
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 08:13:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241149AbiBNHKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 02:10:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32866 "EHLO
+        id S233544AbiBNHLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 02:11:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241145AbiBNHKX (ORCPT
+        with ESMTP id S241181AbiBNHLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 02:10:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 883A858E6C
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 23:10:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644822613;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y5iYrmeqFTWTMK2U/eGmx/ua6zxpJzL0laPaQH0XD4c=;
-        b=fYWJCicLOliVZOPOe7VPnmp1B7Ydl7Ra8Ar9CF3Qw7s0HvjWWbihswAZblH+qlhTbooZdb
-        WeEZ5Xdul9JYJlgn02LdEnmEiPpzzKnZhOd9glibC5VwphaK8x4JXmBhzMY/LBH4cDosA9
-        HXYDxmcPY2Oe+PNkgRf7ha7Aox6ittA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-352-U84TX2mcNDagSzVBXsNdkg-1; Mon, 14 Feb 2022 02:10:08 -0500
-X-MC-Unique: U84TX2mcNDagSzVBXsNdkg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7A253180833A;
-        Mon, 14 Feb 2022 07:10:05 +0000 (UTC)
-Received: from localhost (ovpn-13-68.pek2.redhat.com [10.72.13.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id AC4A2105C751;
-        Mon, 14 Feb 2022 07:10:01 +0000 (UTC)
-Date:   Mon, 14 Feb 2022 15:09:58 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: Re: [PATCH v20 3/5] arm64: kdump: reimplement crashkernel=X
-Message-ID: <YgoARncp0jCMTDEX@MiWiFi-R3L-srv>
-References: <20220124084708.683-1-thunder.leizhen@huawei.com>
- <20220124084708.683-4-thunder.leizhen@huawei.com>
- <YgY6yvX7PEeZpdTr@MiWiFi-R3L-srv>
- <6ac0c60c-78bc-9789-9f5c-659fb5fa3e9a@huawei.com>
- <YgY/qQUkBF0eZ9zc@MiWiFi-R3L-srv>
- <441c2917-bd86-da71-22d2-f526baf1457f@huawei.com>
+        Mon, 14 Feb 2022 02:11:49 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D035583BC
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 23:11:41 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id m18so323471ljp.1
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 23:11:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=g6DcfZ92QqbVDkAs+5onWxHYvjv4eWwkjyJIREZ2EHI=;
+        b=FuHHJ7d7pv5aBhqmGSDZ49xksdbfDW1/UWVdzf9yzdMEbAxQdda/x670Ojs+8e87vM
+         E5fimacLU+KLUtiJ2cK3H3h9q2Od2Wa3HStmrEe4GLWhoJMXtCuXFhb4dqCaGfaGoLfa
+         6AVvAon6gw93LvgE/YeBH7tl4vvAbD9rLhRg9ahUi2xDM8DdLqaQhOqJQSk3K11pmDc6
+         akX1kWkWmI4lNlIQ2Lsvh0WC+oHthoN4+WS1+MOBsIb8rqYJdkBO4YKpYfOrxvWUrXQv
+         aDjJUdJB3QU7x8T+dNg3bPDQFZCSpBPoh+uLjsq8dYnftpAmFy1MGpgcKgD2oMiqkKRR
+         VnEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g6DcfZ92QqbVDkAs+5onWxHYvjv4eWwkjyJIREZ2EHI=;
+        b=aUYgB5q2HjAo+/wu55h4G8mp36Euhti+HJ+szH+AnuvYbiDTtm3dG91ch4A7EcbShI
+         tQvGKZvJOT6TanRFRnIu7IitF/2fjyvKVwFChJj1yGrMF1Nv4dTKRl7IQfyGPx877x21
+         Xc40dt3FSF7qGCAOpG+8ahMrhCQYwvG0X/sLqmD7EUYIQvMMEYVqPVX8T+ma9fazcMan
+         akdwYtg2hvRzBCeBJ688oi2dZSugwGyHC5fj6svqOYhaDmrqanXwUGq5sZy/0sZYHi+a
+         11NxsX9JJlh/EMRwfwjCm0GW+ehniTFUDqz4j3A0tHWAnpcczE0KGaeUUNNFqZfo09k+
+         QyoQ==
+X-Gm-Message-State: AOAM530n1VIObc2fTHaYVKiFuy8fzo2SCIYeTQq0dULUso8l0JwMMLOd
+        vkO8sO6XCk+5KaqyxvbtClTEXStiFK0fNukeCejAQQ==
+X-Google-Smtp-Source: ABdhPJx7slpeRGSxnbPf6rrPFN41+RI0bP5E3hXma5RYfHdtnUcAjBwaynRftHeGXOGFN5zH+jAF0u9+ePiPHEGbbZI=
+X-Received: by 2002:a2e:a4ce:: with SMTP id p14mr1611442ljm.124.1644822699006;
+ Sun, 13 Feb 2022 23:11:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <441c2917-bd86-da71-22d2-f526baf1457f@huawei.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <4df50e95-6173-4ed1-9d08-3c1c4abab23f@gmail.com>
+ <CAHC9VhSjTqT-4TMxBnQOQHkj+djONihfeoPVyy1egrZY2t10XA@mail.gmail.com>
+ <c8a616e4-26a6-af51-212c-31dca0e265cd@gmail.com> <CAHC9VhQTZdeNOx3AXdoc9LXUzDk5n7wyGBX-tV-ZaovhPAdWwQ@mail.gmail.com>
+ <e85dd38b-ef7b-ed7e-882e-124cdf942c44@gmail.com> <CAHC9VhROuJtvNHuVaR6pEekNFacH3Tywx58_hn1f5Mwk+kjC8g@mail.gmail.com>
+ <b7e55304-d114-bcbe-08d2-b54828121a01@gmail.com> <CAHC9VhSdgD4Nfaxbnnn4r-OK8koSZ7+zQoPShDbGi9PvkJFpng@mail.gmail.com>
+ <478e1651-a383-05ff-d011-6dda771b8ce8@linux.microsoft.com>
+ <875ypt5zmz.fsf@defensec.nl> <CAFftDdo9JmbyPzPWRjOYgZBOS9b5d+OGKKf8egS8_ysbbWW87Q@mail.gmail.com>
+In-Reply-To: <CAFftDdo9JmbyPzPWRjOYgZBOS9b5d+OGKKf8egS8_ysbbWW87Q@mail.gmail.com>
+From:   Jeffrey Vander Stoep <jeffv@google.com>
+Date:   Mon, 14 Feb 2022 08:11:28 +0100
+Message-ID: <CABXk95Az0V0qWyB0Cp9D+MaCKNBfcdk4=bvXRdm5EXzHdjXJJg@mail.gmail.com>
+Subject: Re: [PATCH] SELinux: Always allow FIOCLEX and FIONCLEX
+To:     William Roberts <bill.c.roberts@gmail.com>
+Cc:     Dominick Grift <dominick.grift@defensec.nl>,
+        Chris PeBenito <chpebeni@linux.microsoft.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Demi Marie Obenour <demiobenour@gmail.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        SElinux list <selinux@vger.kernel.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        selinux-refpolicy@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/14/22 at 02:44pm, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2022/2/11 18:51, Baoquan He wrote:
-> > On 02/11/22 at 06:41pm, Leizhen (ThunderTown) wrote:
-> >>
-> >>
-> >> On 2022/2/11 18:30, Baoquan He wrote:
-> >>> On 01/24/22 at 04:47pm, Zhen Lei wrote:
-> >>>> From: Chen Zhou <chenzhou10@huawei.com>
-> >>> ......
-> >>>> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-> >>>> index 6c653a2c7cff052..a5d43feac0d7d96 100644
-> >>>> --- a/arch/arm64/mm/init.c
-> >>>> +++ b/arch/arm64/mm/init.c
-> >>>> @@ -71,6 +71,30 @@ phys_addr_t arm64_dma_phys_limit __ro_after_init;
-> >>>>  #define CRASH_ADDR_LOW_MAX	arm64_dma_phys_limit
-> >>>>  #define CRASH_ADDR_HIGH_MAX	MEMBLOCK_ALLOC_ACCESSIBLE
-> >>>>  
-> >>>> +static int __init reserve_crashkernel_low(unsigned long long low_size)
-> >>>> +{
-> >>>> +	unsigned long long low_base;
-> >>>> +
-> >>>> +	/* passed with crashkernel=0,low ? */
-> >>>> +	if (!low_size)
-> >>>> +		return 0;
-> >>>> +
-> >>>> +	low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, 0, CRASH_ADDR_LOW_MAX);
-> >>>> +	if (!low_base) {
-> >>>> +		pr_err("cannot allocate crashkernel low memory (size:0x%llx).\n", low_size);
-> >>>> +		return -ENOMEM;
-> >>>> +	}
-> >>>> +
-> >>>> +	pr_info("crashkernel low memory reserved: 0x%llx - 0x%llx (%lld MB)\n",
-> >>>> +		low_base, low_base + low_size, low_size >> 20);
-> >>>> +
-> >>>> +	crashk_low_res.start = low_base;
-> >>>> +	crashk_low_res.end   = low_base + low_size - 1;
-> >>>> +	insert_resource(&iomem_resource, &crashk_low_res);
-> >>>> +
-> >>>> +	return 0;
-> >>>> +}
-> >>>> +
-> >>>>  /*
-> >>>>   * reserve_crashkernel() - reserves memory for crash kernel
-> >>>>   *
-> >>>> @@ -81,29 +105,62 @@ phys_addr_t arm64_dma_phys_limit __ro_after_init;
-> >>>>  static void __init reserve_crashkernel(void)
-> >>>>  {
-> >>>>  	unsigned long long crash_base, crash_size;
-> >>>> +	unsigned long long crash_low_size = SZ_256M;
-> >>>>  	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
-> >>>>  	int ret;
-> >>>> +	bool fixed_base;
-> >>>> +	char *cmdline = boot_command_line;
-> >>>>  
-> >>>> -	ret = parse_crashkernel(boot_command_line, memblock_phys_mem_size(),
-> >>>> +	/* crashkernel=X[@offset] */
-> >>>> +	ret = parse_crashkernel(cmdline, memblock_phys_mem_size(),
-> >>>>  				&crash_size, &crash_base);
-> >>>> -	/* no crashkernel= or invalid value specified */
-> >>>> -	if (ret || !crash_size)
-> >>>> -		return;
-> >>>> +	if (ret || !crash_size) {
-> >>>> +		unsigned long long low_size;
-> >>>>  
-> >>>> +		/* crashkernel=X,high */
-> >>>> +		ret = parse_crashkernel_high(cmdline, 0, &crash_size, &crash_base);
-> >>>> +		if (ret || !crash_size)
-> >>>> +			return;
-> >>>> +
-> >>>> +		/* crashkernel=X,low */
-> >>>> +		ret = parse_crashkernel_low(cmdline, 0, &low_size, &crash_base);
-> >>>> +		if (!ret)
-> >>>> +			crash_low_size = low_size;
-> >>>
-> >>> Here, the error case is not checked and handled. But it still gets
-> >>> expeced result which is the default SZ_256M. Is this designed on
-> >>> purpose?
-> >>
-> >> Yes, we can specify only "crashkernel=X,high".
-> >>
-> >> This is mentioned in Documentation/admin-guide/kernel-parameters.txt
-> >>
-> >>         crashkernel=size[KMG],low
-> >>                         [KNL, X86-64] range under 4G. When crashkernel=X,high
-> >>                         is passed, kernel could allocate physical memory region
-> >>                         above 4G, that cause second kernel crash on system
-> >>                         that require some amount of low memory, e.g. swiotlb
-> >>                         requires at least 64M+32K low memory, also enough extra
-> >>                         low memory is needed to make sure DMA buffers for 32-bit
-> >>                         devices won't run out. Kernel would try to allocate at     <---------
-> >>                         least 256M below 4G automatically.                         <---------
-> > 
-> > Yeah, that is expected becasue no crahskernel=,low is a right usage. The
-> > 'ret' is 0 in the case. If I gave below string, it works too.
-> > "crashkernel=256M,high crashkernel=aaabbadfadfd,low"
-> 
-> Yes, so maybe we should change the error code in __parse_crashkernel()
-> from "-EINVAL" to "-ENOENT" when the specified option does not exist.
+On Tue, Feb 8, 2022 at 3:18 PM William Roberts <bill.c.roberts@gmail.com> wrote:
+>
+> <snip>
+>
+> This is getting too long for me.
+>
+> > >
+> > > I don't have a strong opinion either way.  If one were to allow this
+> > > using a policy rule, it would result in a major policy breakage.  The
+> > > rule would turn on extended perm checks across the entire system,
+> > > which the SELinux Reference Policy isn't written for.  I can't speak
+> > > to the Android policy, but I would imagine it would be the similar
+> > > problem there too.
+> >
+> > Excuse me if I am wrong but AFAIK adding a xperm rule does not turn on
+> > xperm checks across the entire system.
+>
+> It doesn't as you state below its target + class.
+>
+> >
+> > If i am not mistaken it will turn on xperm checks only for the
+> > operations that have the same source and target/target class.
+>
+> That's correct.
+>
+> >
+> > This is also why i don't (with the exception TIOSCTI for termdev
+> > chr_file) use xperms by default.
+> >
+> > 1. it is really easy to selectively filter ioctls by adding xperm rules
+> > for end users (and since ioctls are often device/driver specific they
+> > know best what is needed and what not)
+>
+> > >>> and FIONCLEX can be trivially bypassed unless fcntl(F_SETFD)
+> >
+> > 2. if you filter ioctls in upstream policy for example like i do with
+> > TIOSCTI using for example (allowx foo bar (ioctl chr_file (not
+> > (0xXXXX)))) then you cannot easily exclude additional ioctls later where source is
+> > foo and target/tclass is bar/chr_file because there is already a rule in
+> > place allowing the ioctl (and you cannot add rules)
+>
+> Currently, fcntl flag F_SETFD is never checked, it's silently allowed, but
+> the equivalent FIONCLEX and FIOCLEX are checked. So if you wrote policy
+> to block the FIO*CLEX flags, it would be bypassable through F_SETFD and
+> FD_CLOEXEC. So the patch proposed makes the FIO flags behave like
+> F_SETFD. Which means upstream policy users could drop this allow, which
+> could then remove the target/class rule and allow all icotls. Which is easy
+> to prevent and fix you could be a rule in to allowx 0 as documented in the
+> wiki: https://selinuxproject.org/page/XpermRules
+>
+> The questions I think we have here are:
+> 1. Do we agree that the behavior between SETFD and the FIO flags are equivalent?
+>   I think they are.
+> 2. Do we want the interfaces to behave the same?
+>   I think they should.
+> 3. Do upstream users of the policy construct care?
+>   The patch is backwards compat, but I don't want their to be cruft
+> floating around with extra allowxperm rules.
 
-Good point. I also thought of this, it could be next step clean up. X86
-code need this too. In crashkernel='messy code',high, it will fail to
-reserve. For consistency, we should fail crashkrenel='messy code',low
-too.
 
-> 
-> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-> index 256cf6db573cd09..395f4fac1773f28 100644
-> --- a/kernel/crash_core.c
-> +++ b/kernel/crash_core.c
-> @@ -243,9 +243,8 @@ static int __init __parse_crashkernel(char *cmdline,
->         *crash_base = 0;
-> 
->         ck_cmdline = get_last_crashkernel(cmdline, name, suffix);
-> -
->         if (!ck_cmdline)
-> -               return -EINVAL;
-> +               return -ENOENT;
-> 
->         ck_cmdline += strlen(name);
-> 
-> 
-> > 
-> >>
-> >>>
-> >>>> +
-> >>>> +		crash_max = CRASH_ADDR_HIGH_MAX;
-> >>>> +	}
-> >>>> +
-> >>>> +	fixed_base = !!crash_base;
-> >>>>  	crash_size = PAGE_ALIGN(crash_size);
-> >>>>  
-> >>>>  	/* User specifies base address explicitly. */
-> >>>>  	if (crash_base)
-> >>>>  		crash_max = crash_base + crash_size;
-> >>>>  
-> >>>> +retry:
-> >>>>  	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
-> >>>>  					       crash_base, crash_max);
-> >>>>  	if (!crash_base) {
-> >>>> +		/*
-> >>>> +		 * Attempt to fully allocate low memory failed, fall back
-> >>>> +		 * to high memory, the minimum required low memory will be
-> >>>> +		 * reserved later.
-> >>>> +		 */
-> >>>> +		if (!fixed_base && (crash_max == CRASH_ADDR_LOW_MAX)) {
-> >>>> +			crash_max = CRASH_ADDR_HIGH_MAX;
-> >>>> +			goto retry;
-> >>>> +		}
-> >>>> +
-> >>>>  		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
-> >>>>  			crash_size);
-> >>>>  		return;
-> >>>>  	}
-> >>>>  
-> >>>> +	if (crash_base >= SZ_4G && reserve_crashkernel_low(crash_low_size)) {
-> >>>> +		memblock_phys_free(crash_base, crash_size);
-> >>>> +		return;
-> >>>> +	}
-> >>>> +
-> >>>>  	pr_info("crashkernel reserved: 0x%016llx - 0x%016llx (%lld MB)\n",
-> >>>>  		crash_base, crash_base + crash_size, crash_size >> 20);
-> >>>>  
-> >>>> @@ -112,6 +169,9 @@ static void __init reserve_crashkernel(void)
-> >>>>  	 * map. Inform kmemleak so that it won't try to access it.
-> >>>>  	 */
-> >>>>  	kmemleak_ignore_phys(crash_base);
-> >>>> +	if (crashk_low_res.end)
-> >>>> +		kmemleak_ignore_phys(crashk_low_res.start);
-> >>>> +
-> >>>>  	crashk_res.start = crash_base;
-> >>>>  	crashk_res.end = crash_base + crash_size - 1;
-> >>>>  	insert_resource(&iomem_resource, &crashk_res);
-> >>>> -- 
-> >>>> 2.25.1
-> >>>>
-> >>>
-> >>> .
-> >>>
-> >>
-> >> -- 
-> >> Regards,
-> >>   Zhen Lei
-> >>
-> > 
-> > .
-> > 
-> 
-> -- 
-> Regards,
->   Zhen Lei
-> 
+I think this proposed change is fine from Android's perspective. It
+implements in the kernel what we've already already put in place in
+our policy - that all domains are allowed to use these IOCLTs.
+https://cs.android.com/android/platform/superproject/+/master:system/sepolicy/public/domain.te;l=312
 
+It'll be a few years before we can clean up our policy since we need
+to support older kernels, but that's fine.

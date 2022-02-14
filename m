@@ -2,358 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 783874B5E89
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 01:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C70B34B5E06
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 00:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232320AbiBOAAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 19:00:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40006 "EHLO
+        id S229568AbiBNXEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 18:04:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232317AbiBOAAf (ORCPT
+        with ESMTP id S229458AbiBNXD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 19:00:35 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743A641984;
-        Mon, 14 Feb 2022 16:00:26 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21EN10KB007645;
-        Tue, 15 Feb 2022 00:00:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=C9lgz9nUygy/WNSTFeeSPkV509FapWhd0eHU3azbyjQ=;
- b=V6jz00dlAfuHvlIEDEDdZ47RlqbFWWqYXihuemO13+2W7TEhkZ0I3+EeovzPhCwu9eog
- +pi3UdbixsAHlawfet+t6L/F0dz9xLWvm7qUGVVHb66YGaOSkavJbdAfIm9qYWVNuxmh
- H0frEzi1AjBYfLYqDl0zVpq9D7OWeuaLsr0/Qul8IOusWtlcMyxmPIYr/xYLnloLM3Jj
- 5fwFA7q9iGDmskbnaTyMX5CUFrIYlFRfLkk0tl5dLGkswaoxlmQQmu+hCzqosxwvbaPz
- YX6Nb1uUPtkbAAHct0ppFXk9l0PPM3s+k7mmLw6My0dey5I3TVyOY7t3FdKVkHX/AiYq bA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e7dej3p5d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Feb 2022 00:00:26 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21ENSUJm025655;
-        Tue, 15 Feb 2022 00:00:25 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e7dej3p4n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Feb 2022 00:00:25 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21ENwAlr005177;
-        Tue, 15 Feb 2022 00:00:23 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06ams.nl.ibm.com with ESMTP id 3e645jhxjc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Feb 2022 00:00:22 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21F00I5834537732
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Feb 2022 00:00:18 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 529DFA4059;
-        Tue, 15 Feb 2022 00:00:18 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A6342A404D;
-        Tue, 15 Feb 2022 00:00:17 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.145.2.54])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 15 Feb 2022 00:00:17 +0000 (GMT)
-Date:   Mon, 14 Feb 2022 18:58:49 +0100
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Subject: Re: [PATCH v4 06/10] KVM: s390: Add vm IOCTL for key checked guest
- absolute memory access
-Message-ID: <20220214185849.04331079@p-imbrenda>
-In-Reply-To: <20220211182215.2730017-7-scgl@linux.ibm.com>
-References: <20220211182215.2730017-1-scgl@linux.ibm.com>
-        <20220211182215.2730017-7-scgl@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        Mon, 14 Feb 2022 18:03:59 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36ADE19B40B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 15:03:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644879831; x=1676415831;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LQDocSg91l9vEMUZRg6EgiKUmYdHL9BdY4/boZi/R5Y=;
+  b=Ax5iKriuk8OwKR8ILD6lUwNpAJYL8miiC7rcmSQ2eJAsysiIi28bEzoE
+   hiCYEcKy0TE6ySFwjnZQLUwSBFbKjuakoLPQJtI2DdylmY7KOEYftRM3o
+   aDExkj+TMXHdAXK36xNnJRd20abfKt3ut7+ayLuu/QGSIi9TeHxh87jE+
+   0+3k4yiZ85SUInooh2M6aIvzSvpNkLWlO6U9B0sUqm+PU9ZvH802rQ6Zl
+   /WuSmc0M1pyMcc9Z8Wai2Ao0AFdAR0pFCC2BgUoHqV9C54QyIqeH6Zc3G
+   ISGulIA9ALop7VX5543Ya9REvBKWyCvtD+QaSG6hhyr3zLuRAuTDXT7OZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="250409578"
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="250409578"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 15:03:50 -0800
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="543974316"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 15:03:50 -0800
+Date:   Mon, 14 Feb 2022 15:03:50 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V8 06/44] mm/pkeys: Add Kconfig options for PKS
+Message-ID: <20220214230350.GW785175@iweiny-DESK2.sc.intel.com>
+References: <20220127175505.851391-1-ira.weiny@intel.com>
+ <20220127175505.851391-7-ira.weiny@intel.com>
+ <9c4a8275-236d-67b6-07f9-5e46f66396c0@intel.com>
+ <20220128231015.GK785175@iweiny-DESK2.sc.intel.com>
+ <f72b0e17-11bf-b12e-fe7a-d38b0833acdc@intel.com>
+ <20220204190851.GY785175@iweiny-DESK2.sc.intel.com>
+ <20220209053430.GL785175@iweiny-DESK2.sc.intel.com>
+ <6b50671d-883f-561a-bf7d-5ae01c2cc312@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: AJzA_gdQpFX90Dp5U0j_pYyepd_AzmFC
-X-Proofpoint-ORIG-GUID: toTycKR9roIP9nv0G3g-D8HnUz0prpH0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-14_07,2022-02-14_03,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- mlxscore=0 mlxlogscore=999 priorityscore=1501 adultscore=0 malwarescore=0
- spamscore=0 clxscore=1015 suspectscore=0 bulkscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202140134
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6b50671d-883f-561a-bf7d-5ae01c2cc312@intel.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Feb 2022 19:22:11 +0100
-Janis Schoetterl-Glausch <scgl@linux.ibm.com> wrote:
-
-> Channel I/O honors storage keys and is performed on absolute memory.
-> For I/O emulation user space therefore needs to be able to do key
-> checked accesses.
-> The vm IOCTL supports read/write accesses, as well as checking
-> if an access would succeed.
-> Unlike relying on KVM_S390_GET_SKEYS for key checking would,
-> the vm IOCTL performs the check in lockstep with the read or write,
-> by, ultimately, mapping the access to move instructions that
-> support key protection checking with a supplied key.
-> Fetch and storage protection override are not applicable to absolute
-> accesses and so are not applied as they are when using the vcpu memop.
+On Mon, Feb 14, 2022 at 11:20:20AM -0800, Dave Hansen wrote:
+> On 2/8/22 21:34, Ira Weiny wrote:
+> >>> In other words, there are two things that must happen before the code
+> >>> gets compiled in:
+> >>>
+> >>> 1. Arch support
+> >>> 2. One or more features to use the arch support
+> >> Yes.  I really think we are both say the same thing with different words.
+> > Is the following more clear?
+> > 
+> > <commit>
+> > 
+> > PKS is only useful to kernel consumers and is only available on some
+> > architectures.  If no kernel consumers are configured or PKS support is
+> > not available the PKS code can be eliminated from the compile.
+> > 
+> > Define a Kconfig structure which allows kernel consumers to detect
+> > architecture support (ARCH_HAS_SUPERVISOR_PKEYS) and, if available,
+> > indicate that PKS should be compiled in (ARCH_ENABLE_SUPERVISOR_PKEYS).
+> > 
+> > In this patch ARCH_ENABLE_SUPERVISOR_PKEYS remains off until the first
+> > kernel consumer sets it.
 > 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+> It's a bit more clear.  I wish it was more clear about the problem.  I
+> think it would be well-served to add some specifics and clarify the
+> *problem*.  Maybe something like:
 
-Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+;-(  Ok.
 
-> ---
->  arch/s390/kvm/gaccess.c  | 72 +++++++++++++++++++++++++++++++++++
->  arch/s390/kvm/gaccess.h  |  6 +++
->  arch/s390/kvm/kvm-s390.c | 81 ++++++++++++++++++++++++++++++++++++++++
->  include/uapi/linux/kvm.h |  2 +
->  4 files changed, 161 insertions(+)
 > 
-> diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
-> index 37838f637707..d53a183c2005 100644
-> --- a/arch/s390/kvm/gaccess.c
-> +++ b/arch/s390/kvm/gaccess.c
-> @@ -795,6 +795,35 @@ static int low_address_protection_enabled(struct kvm_vcpu *vcpu,
->  	return 1;
->  }
->  
-> +static int vm_check_access_key(struct kvm *kvm, u8 access_key,
-> +			       enum gacc_mode mode, gpa_t gpa)
-> +{
-> +	u8 storage_key, access_control;
-> +	bool fetch_protected;
-> +	unsigned long hva;
-> +	int r;
-> +
-> +	if (access_key == 0)
-> +		return 0;
-> +
-> +	hva = gfn_to_hva(kvm, gpa_to_gfn(gpa));
-> +	if (kvm_is_error_hva(hva))
-> +		return PGM_ADDRESSING;
-> +
-> +	mmap_read_lock(current->mm);
-> +	r = get_guest_storage_key(current->mm, hva, &storage_key);
-> +	mmap_read_unlock(current->mm);
-> +	if (r)
-> +		return r;
-> +	access_control = FIELD_GET(_PAGE_ACC_BITS, storage_key);
-> +	if (access_control == access_key)
-> +		return 0;
-> +	fetch_protected = storage_key & _PAGE_FP_BIT;
-> +	if ((mode == GACC_FETCH || mode == GACC_IFETCH) && !fetch_protected)
-> +		return 0;
-> +	return PGM_PROTECTION;
-> +}
-> +
->  static bool fetch_prot_override_applicable(struct kvm_vcpu *vcpu, enum gacc_mode mode,
->  					   union asce asce)
->  {
-> @@ -994,6 +1023,26 @@ access_guest_page_with_key(struct kvm *kvm, enum gacc_mode mode, gpa_t gpa,
->  	return 0;
->  }
->  
-> +int access_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, void *data,
-> +			      unsigned long len, enum gacc_mode mode, u8 access_key)
-> +{
-> +	int offset = offset_in_page(gpa);
-> +	int fragment_len;
-> +	int rc;
-> +
-> +	while (min(PAGE_SIZE - offset, len) > 0) {
-> +		fragment_len = min(PAGE_SIZE - offset, len);
-> +		rc = access_guest_page_with_key(kvm, mode, gpa, data, fragment_len, access_key);
-> +		if (rc)
-> +			return rc;
-> +		offset = 0;
-> +		len -= fragment_len;
-> +		data += fragment_len;
-> +		gpa += fragment_len;
-> +	}
-> +	return 0;
-> +}
-> +
->  int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
->  			  void *data, unsigned long len, enum gacc_mode mode,
->  			  u8 access_key)
-> @@ -1144,6 +1193,29 @@ int check_gva_range(struct kvm_vcpu *vcpu, unsigned long gva, u8 ar,
->  	return rc;
->  }
->  
-> +/**
-> + * check_gpa_range - test a range of guest physical addresses for accessibility
-> + * @kvm: virtual machine instance
-> + * @gpa: guest physical address
-> + * @length: length of test range
-> + * @mode: access mode to test, relevant for storage keys
-> + * @access_key: access key to mach the storage keys with
-> + */
-> +int check_gpa_range(struct kvm *kvm, unsigned long gpa, unsigned long length,
-> +		    enum gacc_mode mode, u8 access_key)
-> +{
-> +	unsigned int fragment_len;
-> +	int rc = 0;
-> +
-> +	while (length && !rc) {
-> +		fragment_len = min(PAGE_SIZE - offset_in_page(gpa), length);
-> +		rc = vm_check_access_key(kvm, access_key, mode, gpa);
-> +		length -= fragment_len;
-> +		gpa += fragment_len;
-> +	}
-> +	return rc;
-> +}
-> +
->  /**
->   * kvm_s390_check_low_addr_prot_real - check for low-address protection
->   * @vcpu: virtual cpu
-> diff --git a/arch/s390/kvm/gaccess.h b/arch/s390/kvm/gaccess.h
-> index c5f2e7311b17..1124ff282012 100644
-> --- a/arch/s390/kvm/gaccess.h
-> +++ b/arch/s390/kvm/gaccess.h
-> @@ -193,6 +193,12 @@ int guest_translate_address_with_key(struct kvm_vcpu *vcpu, unsigned long gva, u
->  int check_gva_range(struct kvm_vcpu *vcpu, unsigned long gva, u8 ar,
->  		    unsigned long length, enum gacc_mode mode, u8 access_key);
->  
-> +int check_gpa_range(struct kvm *kvm, unsigned long gpa, unsigned long length,
-> +		    enum gacc_mode mode, u8 access_key);
-> +
-> +int access_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, void *data,
-> +			      unsigned long len, enum gacc_mode mode, u8 access_key);
-> +
->  int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
->  			  void *data, unsigned long len, enum gacc_mode mode,
->  			  u8 access_key);
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index c31b40abfa23..36bc73b5f5de 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -2364,6 +2364,78 @@ static bool access_key_invalid(u8 access_key)
->  	return access_key > 0xf;
->  }
->  
-> +static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
-> +{
-> +	void __user *uaddr = (void __user *)mop->buf;
-> +	u64 supported_flags;
-> +	void *tmpbuf = NULL;
-> +	int r, srcu_idx;
-> +
-> +	supported_flags = KVM_S390_MEMOP_F_SKEY_PROTECTION
-> +			  | KVM_S390_MEMOP_F_CHECK_ONLY;
-> +	if (mop->flags & ~supported_flags)
-> +		return -EINVAL;
-> +	if (mop->size > MEM_OP_MAX_SIZE)
-> +		return -E2BIG;
-> +	if (kvm_s390_pv_is_protected(kvm))
-> +		return -EINVAL;
-> +	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
-> +		if (access_key_invalid(mop->key))
-> +			return -EINVAL;
-> +	} else {
-> +		mop->key = 0;
-> +	}
-> +	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
-> +		tmpbuf = vmalloc(mop->size);
-> +		if (!tmpbuf)
-> +			return -ENOMEM;
-> +	}
-> +
-> +	srcu_idx = srcu_read_lock(&kvm->srcu);
-> +
-> +	if (kvm_is_error_gpa(kvm, mop->gaddr)) {
-> +		r = PGM_ADDRESSING;
-> +		goto out_unlock;
-> +	}
-> +
-> +	switch (mop->op) {
-> +	case KVM_S390_MEMOP_ABSOLUTE_READ: {
-> +		if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
-> +			r = check_gpa_range(kvm, mop->gaddr, mop->size, GACC_FETCH, mop->key);
-> +		} else {
-> +			r = access_guest_abs_with_key(kvm, mop->gaddr, tmpbuf,
-> +						      mop->size, GACC_FETCH, mop->key);
-> +			if (r == 0) {
-> +				if (copy_to_user(uaddr, tmpbuf, mop->size))
-> +					r = -EFAULT;
-> +			}
-> +		}
-> +		break;
-> +	}
-> +	case KVM_S390_MEMOP_ABSOLUTE_WRITE: {
-> +		if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
-> +			r = check_gpa_range(kvm, mop->gaddr, mop->size, GACC_STORE, mop->key);
-> +		} else {
-> +			if (copy_from_user(tmpbuf, uaddr, mop->size)) {
-> +				r = -EFAULT;
-> +				break;
-> +			}
-> +			r = access_guest_abs_with_key(kvm, mop->gaddr, tmpbuf,
-> +						      mop->size, GACC_STORE, mop->key);
-> +		}
-> +		break;
-> +	}
-> +	default:
-> +		r = -EINVAL;
-> +	}
-> +
-> +out_unlock:
-> +	srcu_read_unlock(&kvm->srcu, srcu_idx);
-> +
-> +	vfree(tmpbuf);
-> +	return r;
-> +}
-> +
->  long kvm_arch_vm_ioctl(struct file *filp,
->  		       unsigned int ioctl, unsigned long arg)
->  {
-> @@ -2488,6 +2560,15 @@ long kvm_arch_vm_ioctl(struct file *filp,
->  		}
->  		break;
->  	}
-> +	case KVM_S390_MEM_OP: {
-> +		struct kvm_s390_mem_op mem_op;
-> +
-> +		if (copy_from_user(&mem_op, argp, sizeof(mem_op)) == 0)
-> +			r = kvm_s390_vm_mem_op(kvm, &mem_op);
-> +		else
-> +			r = -EFAULT;
-> +		break;
-> +	}
->  	default:
->  		r = -ENOTTY;
->  	}
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 4566f429db2c..4bc7623def87 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -575,6 +575,8 @@ struct kvm_s390_mem_op {
->  #define KVM_S390_MEMOP_LOGICAL_WRITE	1
->  #define KVM_S390_MEMOP_SIDA_READ	2
->  #define KVM_S390_MEMOP_SIDA_WRITE	3
-> +#define KVM_S390_MEMOP_ABSOLUTE_READ	4
-> +#define KVM_S390_MEMOP_ABSOLUTE_WRITE	5
->  /* flags for kvm_s390_mem_op->flags */
->  #define KVM_S390_MEMOP_F_CHECK_ONLY		(1ULL << 0)
->  #define KVM_S390_MEMOP_F_INJECT_EXCEPTION	(1ULL << 1)
+> == Problem ==
+> 
+> PKS support is provided by core x86 architecture code.  Its consumers,
+> however, may be far-flung device drivers like NVDIMM support.  The PKS
+> core architecture code is dead weight without a consumer.
 
+This is not the whole story though.  The far-flung device drivers don't need to
+compile their PKS code, or may not be able to support a feature, if
+ARCH_HAS_SUPERVISOR_PKEYS is not set.  Also, they may wish to chose a different
+implementation for the same functionality if available.  So
+ARCH_HAS_SUPERVISOR_PKEYS can affect more than just if PKS code is compiled.
+It could affect how drivers chose to implement some higher level feature.
+
+> 
+> --- maybe add one example ---
+> 
+> == Solution ==
+> 
+> Avoid even compiling in the core PKS code if there are no consumers.
+
+And allow users to avoid compiling PKS code on architectures which
+don't support PKS.  Or chose another implementation if possible.
+
+I'll try again.
+
+<msg>
+
+Consumers wishing to implement additional protections on memory pages may be
+able to use PKS.  However, PKS is only available on some architectures.
+
+In addition, PKS code, both in the core and in these consumers would be dead
+code without PKS being both available and used.  Therefore, if no kernel
+consumers are configured or PKS support is not available all the PKS code can
+be eliminated from the compile.
+
+Avoid using PKS if the architecture does not support it.  Furthermore,
+avoid compiling any PKS code if their are no consumers configured to use 
+it.
+
+Define ARCH_HAS_SUPERVISOR_PKEYS to detect architecture support and
+define ARCH_ENABLE_SUPERVISOR_PKEYS to indicate the core should compile
+in support.
+
+In this patch ARCH_ENABLE_SUPERVISOR_PKEYS remains off until the first
+kernel consumer sets it.
+
+</msg>
+
+
+Ira
+
+> 
+> == Details ==

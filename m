@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1FC4B49A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1314B4767
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347688AbiBNKbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:31:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38158 "EHLO
+        id S245424AbiBNJss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:48:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347476AbiBNKaI (ORCPT
+        with ESMTP id S245690AbiBNJqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:30:08 -0500
+        Mon, 14 Feb 2022 04:46:06 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681669969B;
-        Mon, 14 Feb 2022 01:58:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B396065834;
+        Mon, 14 Feb 2022 01:39:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5C10B80E02;
-        Mon, 14 Feb 2022 09:58:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A60DC340E9;
-        Mon, 14 Feb 2022 09:58:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C459B80DC4;
+        Mon, 14 Feb 2022 09:39:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84232C340E9;
+        Mon, 14 Feb 2022 09:39:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832734;
-        bh=PAJM3UNn5kgTW1Q50Bd3CjH0r2slOOk1wceAUWcc4+I=;
+        s=korg; t=1644831563;
+        bh=HIPORMFuV//Hr3CiBeB8KOpD7vvvwHqgFISVkSXSIQY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eAG5aNmB7Cy4shBmWvcwarKIqspJyeLMuXsf0Wh1UOQmvvFtsU3yPyK9lPDQwpPp4
-         uEiDkAuIKEOZ+N1Zn1cUL3Kvog8SZOIISN5+mBQMEj/8kT+pkBEY+fDcMxIMqS4N/A
-         fXGwFIu65Gdq4/XfM1JaZ42qMdR9VQJgTIQXfS+s=
+        b=gCIMEMeAAARUD5lHJMrfl5iRmK3elX+hiWu15FV0/obZn+Bp5cJF5yKBURqlcFG8J
+         iVw7kF+vghSXur9nBt1rjOfKauFObECmeZ2hrjrzBNdXl93Ts4XqKRdc97l3SYR9PK
+         nlaoEFTi8aMjYxpBVwsh2NIEKRntSdJ3ZA3HtNXk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Myrtle Shah <gatecat@ds0.me>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 5.16 076/203] riscv/mm: Add XIP_FIXUP for phys_ram_base
-Date:   Mon, 14 Feb 2022 10:25:20 +0100
-Message-Id: <20220214092512.862740072@linuxfoundation.org>
+        stable@vger.kernel.org, Raymond Jay Golo <rjgolo@gmail.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 022/116] drm: panel-orientation-quirks: Add quirk for the 1Netbook OneXPlayer
+Date:   Mon, 14 Feb 2022 10:25:21 +0100
+Message-Id: <20220214092459.446044719@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,31 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Palmer Dabbelt <palmer@rivosinc.com>
+From: Raymond Jay Golo <rjgolo@gmail.com>
 
-commit 4b1c70aa8ed8249608bb991380cb8ff423edf49e upstream.
+[ Upstream commit d3cbc6e323c9299d10c8d2e4127c77c7d05d07b1 ]
 
-This manifests as a crash early in boot on VexRiscv.
+The 1Netbook OneXPlayer uses a panel which has been mounted
+90 degrees rotated. Add a quirk for this.
 
-Signed-off-by: Myrtle Shah <gatecat@ds0.me>
-[Palmer: split commit]
-Fixes: 6d7f91d914bc ("riscv: Get rid of CONFIG_PHYS_RAM_BASE in kernel physical address conversion")
-Cc: stable@vger.kernel.org
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Raymond Jay Golo <rjgolo@gmail.com>
+Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220113000619.90988-1-rjgolo@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/riscv/mm/init.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/drm_panel_orientation_quirks.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -41,6 +41,7 @@ phys_addr_t phys_ram_base __ro_after_ini
- EXPORT_SYMBOL(phys_ram_base);
+diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+index 9d1bd8f491ad7..448c2f2d803a6 100644
+--- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
++++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+@@ -115,6 +115,12 @@ static const struct drm_dmi_panel_orientation_data lcd1280x1920_rightside_up = {
+ 	.orientation = DRM_MODE_PANEL_ORIENTATION_RIGHT_UP,
+ };
  
- #ifdef CONFIG_XIP_KERNEL
-+#define phys_ram_base  (*(phys_addr_t *)XIP_FIXUP(&phys_ram_base))
- extern char _xiprom[], _exiprom[], __data_loc;
- #endif
- 
++static const struct drm_dmi_panel_orientation_data lcd1600x2560_leftside_up = {
++	.width = 1600,
++	.height = 2560,
++	.orientation = DRM_MODE_PANEL_ORIENTATION_LEFT_UP,
++};
++
+ static const struct dmi_system_id orientation_data[] = {
+ 	{	/* Acer One 10 (S1003) */
+ 		.matches = {
+@@ -261,6 +267,12 @@ static const struct dmi_system_id orientation_data[] = {
+ 		  DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "Default string"),
+ 		},
+ 		.driver_data = (void *)&onegx1_pro,
++	}, {	/* OneXPlayer */
++		.matches = {
++		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "ONE-NETBOOK TECHNOLOGY CO., LTD."),
++		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "ONE XPLAYER"),
++		},
++		.driver_data = (void *)&lcd1600x2560_leftside_up,
+ 	}, {	/* Samsung GalaxyBook 10.6 */
+ 		.matches = {
+ 		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "SAMSUNG ELECTRONICS CO., LTD."),
+-- 
+2.34.1
+
 
 

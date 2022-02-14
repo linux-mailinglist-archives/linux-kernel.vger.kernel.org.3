@@ -2,90 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3109E4B5C8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A822B4B5C77
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbiBNVVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:21:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47000 "EHLO
+        id S230385AbiBNVSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:18:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbiBNVVq (ORCPT
+        with ESMTP id S230442AbiBNVS3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:21:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66421179BA;
-        Mon, 14 Feb 2022 13:21:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48FD8B8164B;
-        Mon, 14 Feb 2022 19:05:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D599C340E9;
-        Mon, 14 Feb 2022 19:05:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644865550;
-        bh=0qXjvfXrQAWSIg6NzaQiBgbrubEQO78+++XPIl1Kl8c=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=rZoYLgMoANJJQhw6AF430YieYpe50cyfmskQ8MsdJR2TZcu266KSWTuNs7Y2aYx1+
-         CHhdGj1EQKrOcSDoQWpOkCvYMZp7eX5l+P2kFOb4WqgNTAe2qyvKvYN+oJYUavpSoA
-         67WDlT3swFWpW9jcvLjwBdy9iRGWgWC/KpHRRidnIU57H+7a2Wcaq752/j/c3mPXyE
-         CResbLhsqjSIU3HRY6Qa3/4tRlp7x+43k9hls/xPM1p0NcwNSuWvBIi3es9uoVohyg
-         eZXKWqPy3LREqlQXWp55dVvInVSOnf+l1er9wnatIzNgYZ0LgzEvGA9DE+y5iTY8YI
-         9hgeJcTGnxV6Q==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 918F35C0388; Mon, 14 Feb 2022 11:05:49 -0800 (PST)
-Date:   Mon, 14 Feb 2022 11:05:49 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     clm@fb.com
-Cc:     riel@surriel.com, viro@zeniv.linux.org.uk,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        kernel-team@fb.com
-Subject: [PATCH RFC fs/namespace] Make kern_unmount() use
- synchronize_rcu_expedited()
-Message-ID: <20220214190549.GA2815154@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
+        Mon, 14 Feb 2022 16:18:29 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD53211628B;
+        Mon, 14 Feb 2022 13:18:19 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id p14so15806734ejf.11;
+        Mon, 14 Feb 2022 13:18:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=99BahZfDqfQoln2rf6Bj3xU3QXecprDtHuHMCBkgrcQ=;
+        b=qhf19N3SLoLekl8nSgEbpHiFYk6ResBtkXfsJl63wafe0VQ0y5uwdcbx4dh7Api/cr
+         pq4kpVN3rz8ufkFRa9PQhw12DgU06aBBMlGjIZ82TXZkn5kbidmhueb3xMvAz8cyvLFK
+         23OCsQ5snWWXIQrfygum5Ml7tz1ev7oa/U9muYVV8pA1ru4b2uJnVoNiHqJAUlw6HTVD
+         4YwuEf7WP8XA/Rm/UEIkIOK+MRnmJTKW4dRGuT49tZEp3Adgnjs0GNTOr22NQe/Yb5r4
+         ZRdbMxoYgxE3NBz9Kcl1JoZpZ2VWWqZLEqmaXpiuwLy5eS4Rlf+vH+mqr6eGRoqwxN34
+         hTIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=99BahZfDqfQoln2rf6Bj3xU3QXecprDtHuHMCBkgrcQ=;
+        b=8MvPCrp9Qh5VxH2eo86CV29dxKzn8thbL0ONZVBFka85iaKFnH1b0dMWsgzz8zE0mR
+         3k9A4OeUByrY9Y1Wni31rKSwFze+yTqTiR4Erd9Tms0t+aKDE527JJ5NfE4tCGKWZ8Le
+         AUeUxqyr1hntfjfkxJC3zkTqwgPhEmQfNOM8hvmK3cv7EmqASyRdo6uWc7GRvBM1jahg
+         UVDkpTtN0gnqR+GEpCP+cTpEW+akEFA8qb5QWdfqovmSubzEmknQqY1UPgCSX4DqE+QO
+         jENLitKRUII5Rimq2jZ7vgeHYHrSTWqDJyZDd+L7fGKl+J8SuFufKK6ns6B+MLaM3Ui3
+         P+GQ==
+X-Gm-Message-State: AOAM5322brr9yqyWrOx1rmIPNZS5W+a3qnOxarsVgsGYVHpXDNeAIBKw
+        +koQZSToxcZVQ2eHjHiKL3v5Q6LMfyjS/g==
+X-Google-Smtp-Source: ABdhPJwiFYCfncVtqTqjdVCBhQycol1aX209bItLXOycZar8UGc4dq3/BcvtHafFwyhS52svnZjIdA==
+X-Received: by 2002:a17:907:16aa:: with SMTP id hc42mr167762ejc.307.1644865723011;
+        Mon, 14 Feb 2022 11:08:43 -0800 (PST)
+Received: from kista.localdomain (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id m17sm2316338ejn.118.2022.02.14.11.08.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 11:08:42 -0800 (PST)
+From:   Jernej Skrabec <jernej.skrabec@gmail.com>
+To:     mripard@kernel.org, paul.kocialkowski@bootlin.com
+Cc:     mchehab@kernel.org, wens@csie.org, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: [PATCH] media: cedrus: h264: Fix neighbour info buffer size
+Date:   Mon, 14 Feb 2022 20:08:39 +0100
+Message-Id: <20220214190839.707889-1-jernej.skrabec@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Experimental.  Not for inclusion.  Yet, anyway.
+According to BSP library source, H264 neighbour info buffer size needs
+to be 32 kiB for H6. This is similar to H265 decoding, which also needs
+double buffer size in comparison to older Cedrus core generations.
 
-Freeing large numbers of namespaces in quick succession can result in
-a bottleneck on the synchronize_rcu() invoked from kern_unmount().
-This patch applies the synchronize_rcu_expedited() hammer to allow
-further testing and fault isolation.
+Increase buffer size to cover H6 needs. Since increase is not that big
+in absolute numbers, it doesn't make sense to complicate logic for older
+generations.
 
-Hey, at least there was no need to change the comment!  ;-)
+Issue was discovered using iommu and cross checked with BSP library
+source.
 
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: <linux-fsdevel@vger.kernel.org>
-Cc: <linux-kernel@vger.kernel.org>
-Not-yet-signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
+Fixes: 6eb9b758e307 ("media: cedrus: Add H264 decoding support")
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
-
- namespace.c |    2 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/namespace.c b/fs/namespace.c
-index 40b994a29e90d..79c50ad0ade5b 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -4389,7 +4389,7 @@ void kern_unmount(struct vfsmount *mnt)
- 	/* release long term mount so mount point can be released */
- 	if (!IS_ERR_OR_NULL(mnt)) {
- 		real_mount(mnt)->mnt_ns = NULL;
--		synchronize_rcu();	/* yecchhh... */
-+		synchronize_rcu_expedited();	/* yecchhh... */
- 		mntput(mnt);
- 	}
- }
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+index b4173a8926d6..d8fb93035470 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+@@ -38,7 +38,7 @@ struct cedrus_h264_sram_ref_pic {
+ 
+ #define CEDRUS_H264_FRAME_NUM		18
+ 
+-#define CEDRUS_NEIGHBOR_INFO_BUF_SIZE	(16 * SZ_1K)
++#define CEDRUS_NEIGHBOR_INFO_BUF_SIZE	(32 * SZ_1K)
+ #define CEDRUS_MIN_PIC_INFO_BUF_SIZE       (130 * SZ_1K)
+ 
+ static void cedrus_h264_write_sram(struct cedrus_dev *dev,
+-- 
+2.35.1
+

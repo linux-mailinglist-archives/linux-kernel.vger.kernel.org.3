@@ -2,132 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60BED4B4C38
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC364B4C4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348676AbiBNKiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:38:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41876 "EHLO
+        id S1347571AbiBNKjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:39:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348352AbiBNKes (ORCPT
+        with ESMTP id S1348856AbiBNKgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:34:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151B01164;
-        Mon, 14 Feb 2022 02:01:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 14 Feb 2022 05:36:01 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534C2205D4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:02:21 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 0D41E210F4;
+        Mon, 14 Feb 2022 10:02:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1644832940; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5mCqPoiiSFqVsEsSBkh61HkdEnJ7cMxylRwFu11LaQA=;
+        b=OzueHF+cFHoaypaGmaasoI+PnOp34/rRlN6Qiq2/lo8bgGwlYqrOAPjoIKt+rDBmOgDlty
+        Ek+RRwmKgEl56VXke2AvkLvUuwBZOWgglmy3NCIGpcAF5x1WraV2cQQobQTag2v15fjjEU
+        HJJOhafFQFWPy+ScYqd/Oe71/GxR3Z4=
+Received: from suse.cz (unknown [10.100.216.66])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AFF79B80DC8;
-        Mon, 14 Feb 2022 10:01:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CF7BC340E9;
-        Mon, 14 Feb 2022 10:01:38 +0000 (UTC)
-Message-ID: <713cee9b-c96c-119a-65be-3c289b361915@xs4all.nl>
-Date:   Mon, 14 Feb 2022 11:01:36 +0100
+        by relay2.suse.de (Postfix) with ESMTPS id 81597A3B8E;
+        Mon, 14 Feb 2022 10:02:19 +0000 (UTC)
+Date:   Mon, 14 Feb 2022 11:02:19 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Hillf Danton <hdanton@sina.com>, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH printk v1 10/13] printk: add kthread console printers
+Message-ID: <Ygooq5zdsQHJ5Eiy@alley>
+References: <20220207194323.273637-1-john.ogness@linutronix.de>
+ <20220208083620.2736-1-hdanton@sina.com>
+ <87v8xpmx9n.fsf@jogness.linutronix.de>
+ <YgKD6X9eiADTnvIi@alley>
+ <Ygny42nqV+3R5fp9@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [RFC] media: uapi: Move HEVC stateless controls out of staging
-Content-Language: en-US
-To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
-        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        jonas@kwiboo.se, nicolas@ndufresne.ca,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com, Alex Bee <knaerzche@gmail.com>,
-        jc@kynesim.co.uk
-References: <20220201123439.353854-1-benjamin.gaignard@collabora.com>
- <8038233.T7Z3S40VBb@kista>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <8038233.T7Z3S40VBb@kista>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ygny42nqV+3R5fp9@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Mon 2022-02-14 15:12:51, Sergey Senozhatsky wrote:
+> On (22/02/08 15:53), Petr Mladek wrote:
+> > My mine concern is that the kthread_worker API still uses an internal
+> > lock. And it is yet another layer that might be hard to debug when
+> > printk() does not work.
+> 
+> Isn't this also true for kthreads? Looks like we add "couple of spin_locks"
+> to the picture - rq, etc. - one way of the other.
 
-On 2/13/22 12:33, Jernej Škrabec wrote:
-> Hi Benjamin,
-> 
-> CC: Alex, John
-> 
-> Sorry for late response, but I've been very busy last week.
-> 
-> First of all, thank you for doing this! It's about time that HEVC moves 
-> forward.
-> 
-> Dne torek, 01. februar 2022 ob 13:34:39 CET je Benjamin Gaignard napisal(a):
->> The HEVC stateless 'uAPI' was staging and marked explicitly in the
->> V4L2 specification that it will change and is unstable.
->>
->> Note that these control IDs were never exported as a public API,
->> they were only defined in kernel-local headers (hevc-ctrls.h).
->>
->> While moving the controls out of staging they are renamed and
->> control IDs get new numbers.
->> Drivers (Hantro, Cedrus) and Documentation are updated accordaly.
-> 
-> accordaly -> accordingly
-> 
->>
->> Additional structures fields has been added for RKVDEC driver usage.
-> 
-> You should do separate patch for that, preceding this one. One patch should 
-> only do one thing.
-> 
-> I also suggest that you add additional patch for removing bit_size field in 
-> struct v4l2_ctrl_hevc_slice_params. Similar fields were already removed from 
-> MPEG2 and H264 structures. Bit size can be deduced from output buffer size and 
-> it doesn't hurt if bit size in Cedrus is set to bigger value than actual slice 
-> bit size.
-> 
->> Hantro dedicated control is moving to hantro-media.h
->> Since hevc-ctrls.h content has been dispatched in others file, remove it.
->>
->> fluster tests results on IMX8MQ is 77/147 for HEVC codec.
->>
->> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> 
-> Note that Cedrus still needs additional information in order to decode some 
-> HEVC videos. Missing info is num_entry_point_offsets and list of all 
-> entry_point_offset_minus1 (obviously, num_entry_point_offsets in size).
-> 
-> I suggest that this is represented in a new control, which would use dynamic 
-> array feature, written by Hans. While Cedrus supports max. 256 entries, it can 
-> be much bigger in theory, but in reality, it's much smaller (like 4-8 
-> entries).
+kthread_worker API is built on top of kthreads. It means one more
+lock, one more layer to deal with.
 
-I've rebased my dynarray tree, so it is up to date again:
+If anyone wants to propose workqueues or kthread_worker API, please,
+come up with a code and proof that it makes things easier.
 
-https://git.linuxtv.org/hverkuil/media_tree.git/log/?h=dynarray
+It is fine to mention this possibility. It is fine to consider it.
+It is fine to keep it in mind. But I do not want to spent too much
+time on theoretic discussions at the moment. We have a code now.
+John has spent non-trivial time on it. Let's concentrate
+on review.
 
-Regards,
-
-	Hans
-
-> 
-> Last but not least, data_bit_offset should be better defined. Currently it 
-> points right after last header bit, just like Cedrus needs it. However, there 
-> is padding after that, at least 1 bit and 8 bits at most, so slice data always 
-> starts from byte aligned address. It probably make sense to rework that field 
-> to be byte offset, not bit, just like in VA-API. Note that RPi HEVC driver also 
-> uses byte aligned address directly. Cedrus would need some kind of workaround 
-> and only one that works is this one:
-> https://github.com/bootlin/libva-v4l2-request/blob/master/src/h265.c#L191-L209
-> 
-> Best regards,
-> Jernej
-> 
-> 
+Best Regards,
+Petr

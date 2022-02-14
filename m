@@ -2,143 +2,344 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B044B5DFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 23:59:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9FC4B5E84
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 01:00:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232066AbiBNW7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 17:59:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60302 "EHLO
+        id S232304AbiBOAAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 19:00:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbiBNW7H (ORCPT
+        with ESMTP id S229636AbiBOAA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 17:59:07 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58ACE1901A6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 14:58:58 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id h18so7013629edb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 14:58:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=H4CDzrFaAIRXP+JfJQjZSpyvl+auCY5ZKASrSIHcfZ4=;
-        b=g1eWBAr03pbHIGky/Et9stEsa62hM8KOUIVkJ/UAyGbCj4E+TeHxDAH3ngnjFzbGfy
-         6KPQbUeolripHdS/5FHHM9Osf86vxMO7KIsfUjlLd1M3dNyM0u8fmJH+j+mm3iJ7z63G
-         JR5bLt0DPZE2syU6n0PxTOgFYdHlbSn8G6gXjktIi3ecNeuPuQWXqQTOZ6pD2qS1EnUj
-         5CI5MEwdruQArTTBNk5mEiO2WdgEek1emiOymwL1PvsONdPEK3OOEIaEqvwcIFHKrrFr
-         4JHZGQ3/Gfz/G39IRSC2r0IejJFYpkNCwItA4+7Y1kGBMvRC/fc9ZY7Fwo/zsr8YvW0o
-         1rqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H4CDzrFaAIRXP+JfJQjZSpyvl+auCY5ZKASrSIHcfZ4=;
-        b=GigqJoL78N/V6AlBDt+34VLICaPBiTBHEkEIbDJue2Xuiz5M7Vk2aB+kDLxpZTGutz
-         CTcWMuNlgV77Do8JrgJ9kqM/dRcYfeMK3riVOzYvUZsWEV3G4vFX78lWT+mI+VOAl7Ks
-         WHwwFOwo3u9fn+OvKnB9lik2pmhFf0ARdh6/FXT7X3bCoAqlj0OIuMMq20DHvaSOnWOR
-         /BqhW+Nhl0NvuKGho6HKwMLRmNMk6KQ9VsTrYUZDOI/qhj+q3qMWXQP/0HDIb6dZyxdh
-         nGxlKpz3d4JOsMUQ/nCixSCIw4wBnAO/cnPppaflg6qia2jgjBeEkpPuzevVlCfArCA6
-         40cQ==
-X-Gm-Message-State: AOAM531/hXgJv5FjtSp9bXtXpgvsbPO4+C8OeAYr6ZkWv2W3a2AmcCfi
-        +LCFBHF5p25uY7msxLAJ1tV/K0ijEqy6uwSLJMSuDQ==
-X-Google-Smtp-Source: ABdhPJwpXtBphXPJ50QihP13rNz4U0amvRgAmy4aDk1Wwxy0Bg+4yuTFVEPXPDcZi9Valn6eEkT1vrL25RQAh8jRaLY=
-X-Received: by 2002:a05:6402:50d4:: with SMTP id h20mr1175034edb.90.1644879536587;
- Mon, 14 Feb 2022 14:58:56 -0800 (PST)
+        Mon, 14 Feb 2022 19:00:29 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B9C403C6;
+        Mon, 14 Feb 2022 16:00:20 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21ENX1hJ019774;
+        Tue, 15 Feb 2022 00:00:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=J3faY/DanDPihzvBOoFhm5o0uGb8lNbKSjixyKz24a4=;
+ b=L7zjsXdU/behPiYfhjaJAek8StavL1GWqgnWXH0syp0IDMa9Y102WfcykzxTWW/zF/YH
+ C4vdUvAhAOZAy5MXbEJUwaETY7BiSuBp5DLCM3YIWrO7vEXHEQEm6DrorpORCutA+c0T
+ iPKWryhByoEqtVoeQd854InTcEdYYtw/8XGHXy97eEBJWpXazFjH1bxVqAwi47s1qudc
+ 7Kf9TlBdHw/l03N5nhfJ5C+NH9Mk7jN36E5dNpUfKQ/E0gNYWDj96XPHk5cG5B01Ec30
+ 0SIM7QxnI/qAaJdr9sJLNXOr/iypOB8IzOnbybUhnYhb/mjEgC35qerxUjk958kUFgrI BA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e785tg9x7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 00:00:19 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21F00JVI028653;
+        Tue, 15 Feb 2022 00:00:19 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e785tg9wc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 00:00:19 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21ENwH1c005203;
+        Tue, 15 Feb 2022 00:00:17 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3e645jhxhj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 00:00:16 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21F00D7i27132324
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Feb 2022 00:00:13 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 81E8AA405B;
+        Tue, 15 Feb 2022 00:00:13 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E561EA4059;
+        Tue, 15 Feb 2022 00:00:12 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.145.2.54])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 15 Feb 2022 00:00:12 +0000 (GMT)
+Date:   Mon, 14 Feb 2022 16:30:53 +0100
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Subject: Re: [PATCH v4 01/10] s390/uaccess: Add copy_from/to_user_key
+ functions
+Message-ID: <20220214163053.13e71683@p-imbrenda>
+In-Reply-To: <20220211182215.2730017-2-scgl@linux.ibm.com>
+References: <20220211182215.2730017-1-scgl@linux.ibm.com>
+        <20220211182215.2730017-2-scgl@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20220211023008.3197397-1-wonchung@google.com> <CAJZ5v0gD4zs3uBAYv6M4_1gNpkZ-g9XKOywJnf5007e6GwoGVA@mail.gmail.com>
- <CAOvb9yjpruiHxkZyZ8BOT0Hi_iV7xMOnBCr59BZX3eah_Zcy_w@mail.gmail.com>
-In-Reply-To: <CAOvb9yjpruiHxkZyZ8BOT0Hi_iV7xMOnBCr59BZX3eah_Zcy_w@mail.gmail.com>
-From:   Won Chung <wonchung@google.com>
-Date:   Mon, 14 Feb 2022 14:58:44 -0800
-Message-ID: <CAOvb9yh7jo27NH32tbAOtkJrnC9LwUFgFbHRbdbArwiU+YSmdw@mail.gmail.com>
-Subject: Re: [PATCH v6] ACPI: device_sysfs: Add sysfs support for _PLD
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Len Brown <lenb@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: BwgqTVATgoIpAz9oIa5f680-uma8_m3g
+X-Proofpoint-ORIG-GUID: B4tDmq-WKFrCwUYYxoj8b0-6O0b6sOi3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-14_07,2022-02-14_03,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ malwarescore=0 adultscore=0 lowpriorityscore=0 clxscore=1015
+ impostorscore=0 priorityscore=1501 bulkscore=0 suspectscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202140134
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 12:30 PM Won Chung <wonchung@google.com> wrote:
->
-> On Mon, Feb 14, 2022 at 11:12 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Fri, Feb 11, 2022 at 3:30 AM Won Chung <wonchung@google.com> wrote:
-> > >
-> > > When ACPI table includes _PLD fields for a device, create a new
-> > > directory (pld) in sysfs to share _PLD fields.
-> >
-> > This version of the patch loos better to me, but I'm not sure if it
-> > goes into the right direction overall.
-> >
-> > > Currently without PLD information, when there are multiple of same
-> > > devices, it is hard to distinguish which device corresponds to which
-> > > physical device in which location. For example, when there are two Type
-> > > C connectors, it is hard to find out which connector corresponds to the
-> > > Type C port on the left panel versus the Type C port on the right panel.
-> >
-> > So I think that this is your primary use case and I'm wondering if
-> > this is the best way to address it.
-> >
-> > Namely, by exposing _PLD information under the ACPI device object,
-> > you'll make user space wanting to use that information depend on this
-> > interface, but the problem is not ACPI-specific (inevitably, it will
-> > appear on systems using DT, sooner or later) and making the user space
-> > interface related to it depend on ACPI doesn't look like a perfect
-> > choice.
-> >
-> > IOW, why don't you create a proper ABI for this in the Type C
-> > subsystem and expose the information needed by user space in a generic
-> > way that can be based on the _PLD information on systems with ACPI?
->
-> Hi Rafael,
->
-> Thank you for the review.
->
-> I was thinking that _PLD info is specific to ACPI since it is part of
-> the ACPI table. Could you explain a little bit more on why you think
-> exposing _PLD fields is not an ACPI-specific problem?
+On Fri, 11 Feb 2022 19:22:06 +0100
+Janis Schoetterl-Glausch <scgl@linux.ibm.com> wrote:
 
-Hi Rafael again,
+> Add copy_from/to_user_key functions, which perform storage key checking.
+> These functions can be used by KVM for emulating instructions that need
+> to be key checked.
+> These functions differ from their non _key counterparts in
+> include/linux/uaccess.h only in the additional key argument and must be
+> kept in sync with those.
+> 
+> Since the existing uaccess implementation on s390 makes use of move
+> instructions that support having an additional access key supplied,
+> we can implement raw_copy_from/to_user_key by enhancing the
+> existing implementation.
+> 
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> Acked-by: Heiko Carstens <hca@linux.ibm.com>
+> Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+> Acked-by: Janosch Frank <frankja@linux.ibm.com>
 
-Sorry for the silly question here. I misunderstood your comment a bit,
-but I talked to Benson and Prashant for clarification. I understand
-now what you mean by it is not an ACPI-specific problem and exposing
-PLD would depend on ACPI.
+Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
 
->
-> I gave an example of how _PLD fields can be used for specifying Type C
-> connectors, but it is not Type C specific. For Chrome OS, we plan to
-> initially add PLD to not only Type C connectors but also USB port
-> devices (including Type C and Type A). Also, PLD can be used in the
-> future for describing other types of ports too like HDMI. (Benson and
-> Prashant, please correct or add if I am wrong or missing some
-> information) Maybe my commit message was not detailed enough..
->
-> I am also curious what Heikki thinks about this. Heikki, can you take
-> a look and share your thoughts?
+> ---
+>  arch/s390/include/asm/uaccess.h | 22 +++++++++
+>  arch/s390/lib/uaccess.c         | 81 +++++++++++++++++++++++++--------
+>  2 files changed, 85 insertions(+), 18 deletions(-)
+> 
+> diff --git a/arch/s390/include/asm/uaccess.h b/arch/s390/include/asm/uaccess.h
+> index d74e26b48604..ba1bcb91af95 100644
+> --- a/arch/s390/include/asm/uaccess.h
+> +++ b/arch/s390/include/asm/uaccess.h
+> @@ -44,6 +44,28 @@ raw_copy_to_user(void __user *to, const void *from, unsigned long n);
+>  #define INLINE_COPY_TO_USER
+>  #endif
+>  
+> +unsigned long __must_check
+> +_copy_from_user_key(void *to, const void __user *from, unsigned long n, unsigned long key);
+> +
+> +static __always_inline unsigned long __must_check
+> +copy_from_user_key(void *to, const void __user *from, unsigned long n, unsigned long key)
+> +{
+> +	if (likely(check_copy_size(to, n, false)))
+> +		n = _copy_from_user_key(to, from, n, key);
+> +	return n;
+> +}
+> +
+> +unsigned long __must_check
+> +_copy_to_user_key(void __user *to, const void *from, unsigned long n, unsigned long key);
+> +
+> +static __always_inline unsigned long __must_check
+> +copy_to_user_key(void __user *to, const void *from, unsigned long n, unsigned long key)
+> +{
+> +	if (likely(check_copy_size(from, n, true)))
+> +		n = _copy_to_user_key(to, from, n, key);
+> +	return n;
+> +}
+> +
+>  int __put_user_bad(void) __attribute__((noreturn));
+>  int __get_user_bad(void) __attribute__((noreturn));
+>  
+> diff --git a/arch/s390/lib/uaccess.c b/arch/s390/lib/uaccess.c
+> index 8a5d21461889..b709239feb5d 100644
+> --- a/arch/s390/lib/uaccess.c
+> +++ b/arch/s390/lib/uaccess.c
+> @@ -59,11 +59,13 @@ static inline int copy_with_mvcos(void)
+>  #endif
+>  
+>  static inline unsigned long copy_from_user_mvcos(void *x, const void __user *ptr,
+> -						 unsigned long size)
+> +						 unsigned long size, unsigned long key)
+>  {
+>  	unsigned long tmp1, tmp2;
+>  	union oac spec = {
+> +		.oac2.key = key,
+>  		.oac2.as = PSW_BITS_AS_SECONDARY,
+> +		.oac2.k = 1,
+>  		.oac2.a = 1,
+>  	};
+>  
+> @@ -94,19 +96,19 @@ static inline unsigned long copy_from_user_mvcos(void *x, const void __user *ptr
+>  }
+>  
+>  static inline unsigned long copy_from_user_mvcp(void *x, const void __user *ptr,
+> -						unsigned long size)
+> +						unsigned long size, unsigned long key)
+>  {
+>  	unsigned long tmp1, tmp2;
+>  
+>  	tmp1 = -256UL;
+>  	asm volatile(
+>  		"   sacf  0\n"
+> -		"0: mvcp  0(%0,%2),0(%1),%3\n"
+> +		"0: mvcp  0(%0,%2),0(%1),%[key]\n"
+>  		"7: jz    5f\n"
+>  		"1: algr  %0,%3\n"
+>  		"   la    %1,256(%1)\n"
+>  		"   la    %2,256(%2)\n"
+> -		"2: mvcp  0(%0,%2),0(%1),%3\n"
+> +		"2: mvcp  0(%0,%2),0(%1),%[key]\n"
+>  		"8: jnz   1b\n"
+>  		"   j     5f\n"
+>  		"3: la    %4,255(%1)\n"	/* %4 = ptr + 255 */
+> @@ -115,7 +117,7 @@ static inline unsigned long copy_from_user_mvcp(void *x, const void __user *ptr,
+>  		"   slgr  %4,%1\n"
+>  		"   clgr  %0,%4\n"	/* copy crosses next page boundary? */
+>  		"   jnh   6f\n"
+> -		"4: mvcp  0(%4,%2),0(%1),%3\n"
+> +		"4: mvcp  0(%4,%2),0(%1),%[key]\n"
+>  		"9: slgr  %0,%4\n"
+>  		"   j     6f\n"
+>  		"5: slgr  %0,%0\n"
+> @@ -123,24 +125,49 @@ static inline unsigned long copy_from_user_mvcp(void *x, const void __user *ptr,
+>  		EX_TABLE(0b,3b) EX_TABLE(2b,3b) EX_TABLE(4b,6b)
+>  		EX_TABLE(7b,3b) EX_TABLE(8b,3b) EX_TABLE(9b,6b)
+>  		: "+a" (size), "+a" (ptr), "+a" (x), "+a" (tmp1), "=a" (tmp2)
+> -		: : "cc", "memory");
+> +		: [key] "d" (key << 4)
+> +		: "cc", "memory");
+>  	return size;
+>  }
+>  
+> -unsigned long raw_copy_from_user(void *to, const void __user *from, unsigned long n)
+> +static unsigned long raw_copy_from_user_key(void *to, const void __user *from,
+> +					    unsigned long n, unsigned long key)
+>  {
+>  	if (copy_with_mvcos())
+> -		return copy_from_user_mvcos(to, from, n);
+> -	return copy_from_user_mvcp(to, from, n);
+> +		return copy_from_user_mvcos(to, from, n, key);
+> +	return copy_from_user_mvcp(to, from, n, key);
+> +}
+> +
+> +unsigned long raw_copy_from_user(void *to, const void __user *from, unsigned long n)
+> +{
+> +	return raw_copy_from_user_key(to, from, n, 0);
+>  }
+>  EXPORT_SYMBOL(raw_copy_from_user);
+>  
+> +unsigned long _copy_from_user_key(void *to, const void __user *from,
+> +				  unsigned long n, unsigned long key)
+> +{
+> +	unsigned long res = n;
+> +
+> +	might_fault();
+> +	if (!should_fail_usercopy()) {
+> +		instrument_copy_from_user(to, from, n);
+> +		res = raw_copy_from_user_key(to, from, n, key);
+> +	}
+> +	if (unlikely(res))
+> +		memset(to + (n - res), 0, res);
+> +	return res;
+> +}
+> +EXPORT_SYMBOL(_copy_from_user_key);
+> +
+>  static inline unsigned long copy_to_user_mvcos(void __user *ptr, const void *x,
+> -					       unsigned long size)
+> +					       unsigned long size, unsigned long key)
+>  {
+>  	unsigned long tmp1, tmp2;
+>  	union oac spec = {
+> +		.oac1.key = key,
+>  		.oac1.as = PSW_BITS_AS_SECONDARY,
+> +		.oac1.k = 1,
+>  		.oac1.a = 1,
+>  	};
+>  
+> @@ -171,19 +198,19 @@ static inline unsigned long copy_to_user_mvcos(void __user *ptr, const void *x,
+>  }
+>  
+>  static inline unsigned long copy_to_user_mvcs(void __user *ptr, const void *x,
+> -					      unsigned long size)
+> +					      unsigned long size, unsigned long key)
+>  {
+>  	unsigned long tmp1, tmp2;
+>  
+>  	tmp1 = -256UL;
+>  	asm volatile(
+>  		"   sacf  0\n"
+> -		"0: mvcs  0(%0,%1),0(%2),%3\n"
+> +		"0: mvcs  0(%0,%1),0(%2),%[key]\n"
+>  		"7: jz    5f\n"
+>  		"1: algr  %0,%3\n"
+>  		"   la    %1,256(%1)\n"
+>  		"   la    %2,256(%2)\n"
+> -		"2: mvcs  0(%0,%1),0(%2),%3\n"
+> +		"2: mvcs  0(%0,%1),0(%2),%[key]\n"
+>  		"8: jnz   1b\n"
+>  		"   j     5f\n"
+>  		"3: la    %4,255(%1)\n" /* %4 = ptr + 255 */
+> @@ -192,7 +219,7 @@ static inline unsigned long copy_to_user_mvcs(void __user *ptr, const void *x,
+>  		"   slgr  %4,%1\n"
+>  		"   clgr  %0,%4\n"	/* copy crosses next page boundary? */
+>  		"   jnh   6f\n"
+> -		"4: mvcs  0(%4,%1),0(%2),%3\n"
+> +		"4: mvcs  0(%4,%1),0(%2),%[key]\n"
+>  		"9: slgr  %0,%4\n"
+>  		"   j     6f\n"
+>  		"5: slgr  %0,%0\n"
+> @@ -200,18 +227,36 @@ static inline unsigned long copy_to_user_mvcs(void __user *ptr, const void *x,
+>  		EX_TABLE(0b,3b) EX_TABLE(2b,3b) EX_TABLE(4b,6b)
+>  		EX_TABLE(7b,3b) EX_TABLE(8b,3b) EX_TABLE(9b,6b)
+>  		: "+a" (size), "+a" (ptr), "+a" (x), "+a" (tmp1), "=a" (tmp2)
+> -		: : "cc", "memory");
+> +		: [key] "d" (key << 4)
+> +		: "cc", "memory");
+>  	return size;
+>  }
+>  
+> -unsigned long raw_copy_to_user(void __user *to, const void *from, unsigned long n)
+> +static unsigned long raw_copy_to_user_key(void __user *to, const void *from,
+> +					  unsigned long n, unsigned long key)
+>  {
+>  	if (copy_with_mvcos())
+> -		return copy_to_user_mvcos(to, from, n);
+> -	return copy_to_user_mvcs(to, from, n);
+> +		return copy_to_user_mvcos(to, from, n, key);
+> +	return copy_to_user_mvcs(to, from, n, key);
+> +}
+> +
+> +unsigned long raw_copy_to_user(void __user *to, const void *from, unsigned long n)
+> +{
+> +	return raw_copy_to_user_key(to, from, n, 0);
+>  }
+>  EXPORT_SYMBOL(raw_copy_to_user);
+>  
+> +unsigned long _copy_to_user_key(void __user *to, const void *from,
+> +				unsigned long n, unsigned long key)
+> +{
+> +	might_fault();
+> +	if (should_fail_usercopy())
+> +		return n;
+> +	instrument_copy_to_user(to, from, n);
+> +	return raw_copy_to_user_key(to, from, n, key);
+> +}
+> +EXPORT_SYMBOL(_copy_to_user_key);
+> +
+>  static inline unsigned long clear_user_mvcos(void __user *to, unsigned long size)
+>  {
+>  	unsigned long tmp1, tmp2;
 
-I am still curious what you and Heikki think about this since it may
-not be a Type C specific issue. We can start from adding generic
-location info to Type C subsystem first, as you suggested, then
-consider how to do the same for USB devices and Type A ports
-afterwards. I would appreciate sharing any thoughts or feedback. Thank
-you very much!
-
-Won
-
->
-> Thank you,
-> Won

@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6EA4B483C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:56:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B4A4B473E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245758AbiBNJwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:52:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44826 "EHLO
+        id S244041AbiBNJeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:34:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245490AbiBNJtz (ORCPT
+        with ESMTP id S233486AbiBNJdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:49:55 -0500
+        Mon, 14 Feb 2022 04:33:44 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2704A19E;
-        Mon, 14 Feb 2022 01:41:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D9B1ADA9;
+        Mon, 14 Feb 2022 01:32:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65C16B80DC7;
-        Mon, 14 Feb 2022 09:41:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7610FC340E9;
-        Mon, 14 Feb 2022 09:41:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D1B4B80DC1;
+        Mon, 14 Feb 2022 09:32:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 694E6C340E9;
+        Mon, 14 Feb 2022 09:32:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831664;
-        bh=/kvuUnbi5mWqDPHzY3HwB9slTUfUSoIsVvCWl1dVzJI=;
+        s=korg; t=1644831132;
+        bh=WVAeUqgrH/pNsmuq3GgGhWwHLzCf/geaD98MM19BHyA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0z0EcF0xHvpb6wflNKIb7pIyA9pasljNfaMi3kNQshUi4Bzdpgu4lzfQrJvIAO/3O
-         jOa7LjGMadOh6+vS9qvlPAQEpX++hRD/g8aKl0NAmlLdTZ6TtUFKgEEFrRpzHj0fld
-         ywk+KLFSkUA2p2DMj0AkAMR7SkFiP3UXGuISKL7E=
+        b=bJ7ntrP/sWcp8otYd0p3nIo+/nEaGQTFpLgGrd2aI/KFBbnEkGxYNCSVZIkyVf//r
+         r0v84rrb4XGCL4BN+cRmK6jZtfxNLudX2QCzLfQ13VqDMqmNXNXq1ViH5VReAQGtZ3
+         WKqTfmI8tlHjLs/3OOBUMpDhdWqk+YitElFmhRbY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 055/116] ARM: dts: imx6qdl-udoo: Properly describe the SD card detect
+        stable@vger.kernel.org, Kosuke Tatsukawa <tatsu-ab1@nec.com>
+Subject: [PATCH 4.14 31/44] n_tty: wake up poll(POLLRDNORM) on receiving data
 Date:   Mon, 14 Feb 2022 10:25:54 +0100
-Message-Id: <20220214092500.629084950@linuxfoundation.org>
+Message-Id: <20220214092448.919319254@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
+References: <20220214092447.897544753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +53,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@gmail.com>
+From: TATSUKAWA KOSUKE (立川 江介) <tatsu-ab1@nec.com>
 
-[ Upstream commit 993d66140f8d1c1853a3b58b77b43b681eb64dee ]
+commit c816b2e65b0e86b95011418cad334f0524fc33b8 upstream.
 
-GPIO7_IO00 is used as SD card detect.
+The poll man page says POLLRDNORM is equivalent to POLLIN when used as
+an event.
+$ man poll
+<snip>
+              POLLRDNORM
+                     Equivalent to POLLIN.
 
-Properly describe this in the devicetree.
+However, in n_tty driver, POLLRDNORM does not return until timeout even
+if there is terminal input, whereas POLLIN returns.
 
-Fixes: 40cdaa542cf0 ("ARM: dts: imx6q-udoo: Add initial board support")
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The following test program works until kernel-3.17, but the test stops
+in poll() after commit 57087d515441 ("tty: Fix spurious poll() wakeups").
+
+[Steps to run test program]
+  $ cc -o test-pollrdnorm test-pollrdnorm.c
+  $ ./test-pollrdnorm
+  foo          <-- Type in something from the terminal followed by [RET].
+                   The string should be echoed back.
+
+  ------------------------< test-pollrdnorm.c >------------------------
+  #include <stdio.h>
+  #include <errno.h>
+  #include <poll.h>
+  #include <unistd.h>
+
+  void main(void)
+  {
+	int		n;
+	unsigned char	buf[8];
+	struct pollfd	fds[1] = {{ 0, POLLRDNORM, 0 }};
+
+	n = poll(fds, 1, -1);
+	if (n < 0)
+		perror("poll");
+	n = read(0, buf, 8);
+	if (n < 0)
+		perror("read");
+	if (n > 0)
+		write(1, buf, n);
+  }
+  ------------------------------------------------------------------------
+
+The attached patch fixes this problem.  Many calls to
+wake_up_interruptible_poll() in the kernel source code already specify
+"POLLIN | POLLRDNORM".
+
+Fixes: 57087d515441 ("tty: Fix spurious poll() wakeups")
+Cc: stable@vger.kernel.org
+Signed-off-by: Kosuke Tatsukawa <tatsu-ab1@nec.com>
+Link: https://lore.kernel.org/r/TYCPR01MB81901C0F932203D30E452B3EA5209@TYCPR01MB8190.jpnprd01.prod.outlook.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/imx6qdl-udoo.dtsi | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/tty/n_tty.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/imx6qdl-udoo.dtsi b/arch/arm/boot/dts/imx6qdl-udoo.dtsi
-index d07d8f83456d2..ccfa8e320be62 100644
---- a/arch/arm/boot/dts/imx6qdl-udoo.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-udoo.dtsi
-@@ -5,6 +5,8 @@
-  * Author: Fabio Estevam <fabio.estevam@freescale.com>
-  */
+--- a/drivers/tty/n_tty.c
++++ b/drivers/tty/n_tty.c
+@@ -1377,7 +1377,7 @@ handle_newline:
+ 			put_tty_queue(c, ldata);
+ 			smp_store_release(&ldata->canon_head, ldata->read_head);
+ 			kill_fasync(&tty->fasync, SIGIO, POLL_IN);
+-			wake_up_interruptible_poll(&tty->read_wait, POLLIN);
++			wake_up_interruptible_poll(&tty->read_wait, POLLIN | POLLRDNORM);
+ 			return 0;
+ 		}
+ 	}
+@@ -1658,7 +1658,7 @@ static void __receive_buf(struct tty_str
  
-+#include <dt-bindings/gpio/gpio.h>
-+
- / {
- 	aliases {
- 		backlight = &backlight;
-@@ -226,6 +228,7 @@ MX6QDL_PAD_SD3_DAT0__SD3_DATA0		0x17059
- 				MX6QDL_PAD_SD3_DAT1__SD3_DATA1		0x17059
- 				MX6QDL_PAD_SD3_DAT2__SD3_DATA2		0x17059
- 				MX6QDL_PAD_SD3_DAT3__SD3_DATA3		0x17059
-+				MX6QDL_PAD_SD3_DAT5__GPIO7_IO00		0x1b0b0
- 			>;
- 		};
+ 	if (read_cnt(ldata)) {
+ 		kill_fasync(&tty->fasync, SIGIO, POLL_IN);
+-		wake_up_interruptible_poll(&tty->read_wait, POLLIN);
++		wake_up_interruptible_poll(&tty->read_wait, POLLIN | POLLRDNORM);
+ 	}
+ }
  
-@@ -304,7 +307,7 @@ &usbotg {
- &usdhc3 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_usdhc3>;
--	non-removable;
-+	cd-gpios = <&gpio7 0 GPIO_ACTIVE_LOW>;
- 	status = "okay";
- };
- 
--- 
-2.34.1
-
 
 

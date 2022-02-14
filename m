@@ -2,124 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E263A4B5E5C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 00:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 641F84B5E63
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 00:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232200AbiBNXlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 18:41:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56724 "EHLO
+        id S232207AbiBNXnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 18:43:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiBNXlc (ORCPT
+        with ESMTP id S231898AbiBNXnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 18:41:32 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E950114762
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 15:41:21 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id w1so11744849plb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 15:41:21 -0800 (PST)
+        Mon, 14 Feb 2022 18:43:33 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3F28D
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 15:43:25 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id s10so15780085wrb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 15:43:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=moNgRt/ZLEOBsvTByTxtoOs0vPE/zSrseOi9CrHk4fo=;
-        b=yoV/X27MeBo7oIZfSwmeTrP3dQ/+GNhABFP1Nj4ylCVxf+C2qf+1N2m4gY5+NP0SYS
-         MTK4VhrCChxql5dGYbg2D/eflP6WJWuMp2HL0yU5jMyfg1js+SOnqY4uf7Gk6Zwx1Dha
-         q4Lc2suIJTeaK30TCLCX+YU6f52bh1A2KKlRcqLvwx9shfV9qXx7trZePAdXWgFVf+Ox
-         0I7NDimuv+L78rDIfRcfFwGh8LpACXzlYn3M5dQl6uoQSjAyLPkT6f6GYvmvp8XpH8Mn
-         /hO7TOJBxKJlBjRLSz044qvnAiXd6Tf7e5mp5HyrSrhs83jUk6p7RGp15qN0Bso40VyC
-         Gq+A==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=J6UtsCOG/MOHUeoOG1yb2cxuVFsLjCztE8jNAjI7YmE=;
+        b=R9RitRklkNR91LTOMUmI6VdWT+ceCQ76Hbfh/914xLnzjqaCOAK5Mwd1gLlMA3UMyT
+         9UlCUUqJndIo/HBJujLAP8+b8Zkp2cNLQwAarfd558JsJjssTBYEMP6wSKmQP7Z5lvfd
+         PkZoy/A3E3HUY4bLNhPWGRsuwsFeVLTanRhZekWkReAb7hQS8J8I5lz3XEmVj6FVC5wh
+         XUFPx2xExCAcaReRbl/Lc6YETtJ3dtyLx59Hvj2RsdK0QGqcmFrH0PVVKdfU23XJcuw2
+         l7QJw0V3kLTtFh+6QF8so8yMB58v7zMp1df1qx8wkSHy4RRN3tcuUmYHGoRspXYvdgWS
+         aNDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=moNgRt/ZLEOBsvTByTxtoOs0vPE/zSrseOi9CrHk4fo=;
-        b=gtz18q6GET+mMS8Y2Pdg1Tubi7wTyNysl03cCfujf6A3zaYs7IgvUZu2HIwm+8OQCt
-         aAsDx/ZQNuBvblim7w1iuFDWotF1btJ88UaKUP3Rqx0pi2DnLBHHIwOlP0gV93xjvIzV
-         Alel3Ye7Y+1WgV8NXt5nTsKDVPa4eqo+V0kQu7FLt6AqTan+Dw8ecTHBrWGKJ/i4xeQK
-         GgwkZyXEeIRyV1XhgjCoJBq1qvmzYf7qAlUN/uKvosilPi+Kt7e36ZN1DapPb3BfVo/v
-         VQm1fUqpG9sBMdfyi/m58JLYKzbDtu1ZtgxrTNtzSgACMcB5s+ECLSjXtMdnb5cdDH18
-         A5sQ==
-X-Gm-Message-State: AOAM533++BSRjv3qUVjkJFdKevYg3A8tL+gIoiRHmdWmWdFOLlANd+8H
-        VtFUqK0r/ODJWg2zmg8kjiEyXA==
-X-Google-Smtp-Source: ABdhPJxrSAvPdqz8scLzAe/1uJoOiULuiRw2YIGciMi8EOsLxfF2zYjgEjkB/FnV4NMi5Ru8+XTGMA==
-X-Received: by 2002:a17:90b:2496:b0:1b9:a6dd:ae7 with SMTP id nt22-20020a17090b249600b001b9a6dd0ae7mr1233912pjb.35.1644882080753;
-        Mon, 14 Feb 2022 15:41:20 -0800 (PST)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id 13sm36798718pfm.161.2022.02.14.15.41.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 15:41:19 -0800 (PST)
-Date:   Mon, 14 Feb 2022 15:41:19 -0800 (PST)
-X-Google-Original-Date: Mon, 14 Feb 2022 15:40:54 PST (-0800)
-Subject:     Re: [PATCH] riscv: mm: remove the BUG_ON check of mapping the last 4K bytes of memory
-In-Reply-To: <36519886-cedc-a3e3-70d2-712f8a6d3a10@ghiti.fr>
-CC:     jszhang@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     alex@ghiti.fr
-Message-ID: <mhng-790fdd34-b20e-4c0a-b36d-eb91b16a3e44@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=J6UtsCOG/MOHUeoOG1yb2cxuVFsLjCztE8jNAjI7YmE=;
+        b=Uf8UpHEcIOEiGkDFpYTvNtZrtiSzPu1+3qzfwa+7nWmktR/oHqIly0E8p2ESmrGP0e
+         4ER6PTL8vGFbALlrZcWEdma4MtRF7KLx/fbv+LvpTv+DBUORj3HOPTA5hnjJZ7CwoyMX
+         Xg82mxS/+Pnp3oFCy5a/ffE5NDY/fhLy7B+zHD90oB4jrj8zb0VO0qoj2PfrORheUEV+
+         WtLYYxnC6zdsZiGjGV++ob5LZ8XZDQTicCcH0wih1egDQM1T0db4HOBRpbjCTHS0DL7y
+         Db0lYnl9JCcOpuv473brXk8lUB0CW2/T+CR5aj2qfdSR2MbDwPQqz5CmVkv7XfP9oufY
+         uatg==
+X-Gm-Message-State: AOAM532DcPqZtOmr4Hczr3cEURWVJWwWIgh2KpYQOx5uE/R2fOtQWzbQ
+        Z4Z8hGv79uBaEU0g/P2wSyS1VA==
+X-Google-Smtp-Source: ABdhPJwC0lcPFtT2usy6dc08+jDdHyf10KCX/MdPeMXIriK2I+D1B5tk/4NjH3eUFD7TilvAYK0Kug==
+X-Received: by 2002:adf:e5c4:: with SMTP id a4mr934723wrn.441.1644882203509;
+        Mon, 14 Feb 2022 15:43:23 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:758e:84ee:c9c7:9bfb? ([2a01:e34:ed2f:f020:758e:84ee:c9c7:9bfb])
+        by smtp.googlemail.com with ESMTPSA id y6sm5470608wrd.30.2022.02.14.15.43.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 15:43:22 -0800 (PST)
+Message-ID: <f249be05-74ef-6aeb-a561-462c3a76a194@linaro.org>
+Date:   Tue, 15 Feb 2022 00:43:21 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PATCH 4/4] tools/thermal: Add thermal daemon skeleton
+Content-Language: en-US
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>
+References: <20220214210446.255780-1-daniel.lezcano@linaro.org>
+ <20220214210446.255780-4-daniel.lezcano@linaro.org>
+ <50025eeb1826c929342e9f600b5c2d91eed6d2ed.camel@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <50025eeb1826c929342e9f600b5c2d91eed6d2ed.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 08:10:41 PST (-0800), alex@ghiti.fr wrote:
->
-> On 1/25/22 16:55, Jisheng Zhang wrote:
->> remove the BUG_ON check of mapping the last 4K bytes of the addressable
->> memory since "this is true for every kernel actually" as pointed out
->> by Alexandre.
->>
->> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
->> Reviewed-by: Alexandre Ghiti <alex@ghiti.fr>
->> ---
->>   arch/riscv/mm/init.c | 8 --------
->>   1 file changed, 8 deletions(-)
->>
->> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
->> index cf4d018b7d66..8347d0fda8cd 100644
->> --- a/arch/riscv/mm/init.c
->> +++ b/arch/riscv/mm/init.c
->> @@ -811,14 +811,6 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->>   	BUG_ON((PAGE_OFFSET % PGDIR_SIZE) != 0);
->>   	BUG_ON((kernel_map.phys_addr % PMD_SIZE) != 0);
->>
->> -#ifdef CONFIG_64BIT
->> -	/*
->> -	 * The last 4K bytes of the addressable memory can not be mapped because
->> -	 * of IS_ERR_VALUE macro.
->> -	 */
->> -	BUG_ON((kernel_map.virt_addr + kernel_map.size) > ADDRESS_SPACE_END - SZ_4K);
->> -#endif
->
->
-> This BUG_ON seems pretty legit to me: I re-read the exchanges we had,
-> and I see that I didn't notice that in your v2, you actually removed the
-> BUG_ON. So that's my bad, what I meant in the first place was that the
-> BUG_ON is true for 32-bit and 64-bit kernels actually.
 
-There's actually an ifndef 64BIT above that sort of handles this case 
-(though I didn't check to see if we're getting the limits correct, so it 
-may not work properly).  That's shrinking the memory, rather than just 
-firing a BUG, and it's not really any more code so we should go that way 
-for both.  I could see leaving a BUG in there, maybe just explicitly 
-using IS_ERR_VALUE as that's really what we're checking for (though if 
-that's not 4K a bunch of stuff will break, so maybe it just doesn't 
-matter).
+Hi Srinivas,
 
-> Sorry my RB was not right on this one :(
->
-> Alex
->
->
->> -
->>   	pt_ops_set_early();
+On 14/02/2022 23:34, srinivas pandruvada wrote:
+> On Mon, 2022-02-14 at 22:04 +0100, Daniel Lezcano wrote:
+>> This change provides a simple daemon skeleton. It provides an example
+>> of how to use the thermal library.
 >>
->>   	/* Setup early PGD for fixmap */
+>> The goal of this skeleton is to give a base brick for anyone
+>> interested in writing its own thermal engine.
+>>
+>> In the future, it will evolve with more features.
+>>
+>  From the code, doesn't seam to have a function to daemonize.
+
+Yes, it does, see below. If the stdout output is set, then it won't 
+daemonize.
+
+
+> So may be not call a daemon if that is true. mainloop() is just an
+> infinite loop polling netlink messages.
+> 
+> Also thermald will confuse with the standard thermald distributed with
+> every distro. May be thermal_control_sample as this a sample for future
+> development.
+
+Does thermal-engine fine ?
+
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+
+[ ... ]
+
+>>   tools/thermal/thermald/thermald.c | 275
+
+[ ... ]
+
+>> +       if (!(options.logopt & TO_STDOUT) && daemon(0, 0))
+>> +               return 1;
+
+[ ... ]
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D724B47D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B09694B4789
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244174AbiBNJi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:38:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51552 "EHLO
+        id S245032AbiBNJn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:43:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245238AbiBNJgf (ORCPT
+        with ESMTP id S244981AbiBNJlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:36:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F32425EB6;
-        Mon, 14 Feb 2022 01:34:32 -0800 (PST)
+        Mon, 14 Feb 2022 04:41:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F69725E95;
+        Mon, 14 Feb 2022 01:36:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BAE361120;
-        Mon, 14 Feb 2022 09:34:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26FE7C340EF;
-        Mon, 14 Feb 2022 09:34:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B89B0B80D83;
+        Mon, 14 Feb 2022 09:36:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02F16C340E9;
+        Mon, 14 Feb 2022 09:36:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831270;
-        bh=h/90sFQJ4ADpeoVXdbJhADLAI2IKpcQnwVbtczvVWjg=;
+        s=korg; t=1644831395;
+        bh=hG9jkos58WAdkn3Ip/Te7FXuqEYEgOqyyoE7Oxk6cmw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AGqi49kRYW9H2x0XuydoRzjh0aEklRJqU4I/mYAD0AsiF9WagUTmn/vmPfYLpb7jr
-         koJhRvJsINerHASahJpa6zH7fUToc82AjEZdXgK3PMP27egfcX889ZHmw6sH/e/oBr
-         t1Yu3mkLuWF9BfGVKNG48jd7GBkv2Uj+5w9oIILA=
+        b=tpckO9riehOi71KdxEo3+3dq6T1NG8R9/9QQb8h7Xl2LklBFzXGyY1uPMZry7xGLN
+         ZLw30qOTO9VWnwwN/9sRUAMJXdVIHbiElaYET/a+P1RR1DZkGMFSL70NccpS4jZ/5S
+         4BbQY0OLcN2xn4fj52QXWmeU76/Gc4VlmvmXJemo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Vlad Buslov <vladbu@nvidia.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 29/49] net: do not keep the dst cache when uncloning an skb dst and its metadata
-Date:   Mon, 14 Feb 2022 10:25:55 +0100
-Message-Id: <20220214092449.253165027@linuxfoundation.org>
+        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: [PATCH 5.4 28/71] ARM: dts: imx23-evk: Remove MX23_PAD_SSP1_DETECT from hog group
+Date:   Mon, 14 Feb 2022 10:25:56 +0100
+Message-Id: <20220214092452.963339698@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
-References: <20220214092448.285381753@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,64 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Antoine Tenart <atenart@kernel.org>
+From: Fabio Estevam <festevam@gmail.com>
 
-[ Upstream commit cfc56f85e72f5b9c5c5be26dc2b16518d36a7868 ]
+commit 42c9b28e6862d16db82a56f5667cf4d1f6658cf6 upstream.
 
-When uncloning an skb dst and its associated metadata a new dst+metadata
-is allocated and the tunnel information from the old metadata is copied
-over there.
+Currently, SD card fails to mount due to the following pinctrl error:
 
-The issue is the tunnel metadata has references to cached dst, which are
-copied along the way. When a dst+metadata refcount drops to 0 the
-metadata is freed including the cached dst entries. As they are also
-referenced in the initial dst+metadata, this ends up in UaFs.
+[   11.170000] imx23-pinctrl 80018000.pinctrl: pin SSP1_DETECT already requested by 80018000.pinctrl; cannot claim for 80010000.spi
+[   11.180000] imx23-pinctrl 80018000.pinctrl: pin-65 (80010000.spi) status -22
+[   11.190000] imx23-pinctrl 80018000.pinctrl: could not request pin 65 (SSP1_DETECT) from group mmc0-pins-fixup.0  on device 80018000.pinctrl
+[   11.200000] mxs-mmc 80010000.spi: Error applying setting, reverse things back
 
-In practice the above did not happen because of another issue, the
-dst+metadata was never freed because its refcount never dropped to 0
-(this will be fixed in a subsequent patch).
+Fix it by removing the MX23_PAD_SSP1_DETECT pin from the hog group as it
+is already been used by the mmc0-pins-fixup pinctrl group.
 
-Fix this by initializing the dst cache after copying the tunnel
-information from the old metadata to also unshare the dst cache.
+With this change the rootfs can be mounted and the imx23-evk board can
+boot successfully.
 
-Fixes: d71785ffc7e7 ("net: add dst_cache to ovs vxlan lwtunnel")
-Cc: Paolo Abeni <pabeni@redhat.com>
-Reported-by: Vlad Buslov <vladbu@nvidia.com>
-Tested-by: Vlad Buslov <vladbu@nvidia.com>
-Signed-off-by: Antoine Tenart <atenart@kernel.org>
-Acked-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: <stable@vger.kernel.org>
+Fixes: bc3875f1a61e ("ARM: dts: mxs: modify mx23/mx28 dts files to use pinctrl headers")
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/dst_metadata.h | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ arch/arm/boot/dts/imx23-evk.dts |    1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
-index 14efa0ded75dd..b997e0c1e3627 100644
---- a/include/net/dst_metadata.h
-+++ b/include/net/dst_metadata.h
-@@ -123,6 +123,19 @@ static inline struct metadata_dst *tun_dst_unclone(struct sk_buff *skb)
- 
- 	memcpy(&new_md->u.tun_info, &md_dst->u.tun_info,
- 	       sizeof(struct ip_tunnel_info) + md_size);
-+#ifdef CONFIG_DST_CACHE
-+	/* Unclone the dst cache if there is one */
-+	if (new_md->u.tun_info.dst_cache.cache) {
-+		int ret;
-+
-+		ret = dst_cache_init(&new_md->u.tun_info.dst_cache, GFP_ATOMIC);
-+		if (ret) {
-+			metadata_dst_free(new_md);
-+			return ERR_PTR(ret);
-+		}
-+	}
-+#endif
-+
- 	skb_dst_drop(skb);
- 	dst_hold(&new_md->dst);
- 	skb_dst_set(skb, &new_md->dst);
--- 
-2.34.1
-
+--- a/arch/arm/boot/dts/imx23-evk.dts
++++ b/arch/arm/boot/dts/imx23-evk.dts
+@@ -79,7 +79,6 @@
+ 						MX23_PAD_LCD_RESET__GPIO_1_18
+ 						MX23_PAD_PWM3__GPIO_1_29
+ 						MX23_PAD_PWM4__GPIO_1_30
+-						MX23_PAD_SSP1_DETECT__SSP1_DETECT
+ 					>;
+ 					fsl,drive-strength = <MXS_DRIVE_4mA>;
+ 					fsl,voltage = <MXS_VOLTAGE_HIGH>;
 
 

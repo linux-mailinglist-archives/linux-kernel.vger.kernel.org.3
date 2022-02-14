@@ -2,117 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB46E4B51BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:37:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A634B51BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:37:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234097AbiBNNhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:37:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50104 "EHLO
+        id S1345314AbiBNNhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:37:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239718AbiBNNhP (ORCPT
+        with ESMTP id S245347AbiBNNhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:37:15 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD93949F92;
-        Mon, 14 Feb 2022 05:37:07 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id n5so12302982ilk.12;
-        Mon, 14 Feb 2022 05:37:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0S222rJiXMXdLbL4sr8eXv1/RjuJqY7+BlIpDb0kXQU=;
-        b=Y1grS4VlTpVrHPRcg3ogv2eoxW96xGbuQ0rNH+3v401Jh/WkzItBEU6E8rfh+flaDN
-         5gAMiLYQUE0lQEqhJ9TeDJNcTKUlat+WvO0QuhzGZfLG0+4Y2EQTNNhisaoNrUeshGve
-         /x0TTqGyLkY5CsZNkDvwejmmP9NX3qgHvTxWYaVXI+KWRfPR2uhIN8/ZiiT83TcNtcmY
-         v1/u9il5hn12+4yKYW+rONaHHhdGAmZxWBuoa9rsm8oC1YU76D89FFKtZbIrCRowcCzo
-         XrYaqiY/pjg0nkJp2xIAvKQ2BmvohlmqPifRnaz/jTW79L592OvQvLTELRaIarOO9+gG
-         En4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0S222rJiXMXdLbL4sr8eXv1/RjuJqY7+BlIpDb0kXQU=;
-        b=cFXV5Ne9tBw2OwSQbyrV+OSQ7TOHvpNVBAhFPNNUIB4rnPx4Y5StodHuc3DRTDNDq2
-         EkbUl9CYfxXbsE1CVtppnfhyGiiPXvaZ6w4hCm2Psys0MqOMdHmwJjzG873LbjLrgNq5
-         m0gKoGNu3vKmEiNaZaBn9bkkywVx0fqZ1qdMM4tPe2IBse6fqjTmMGag3dcjiIJ9EnvB
-         2d6LZ2MndBVbfpayAXa/o38ZlAqH35AZAGWZPYIuKCfP1wBbUHSOHG0KWmdV+ADTV6GO
-         tWFcsz28z8WVsxBhx4gK7PBapMWhlmBFI9QQYEPQHjkEj6ozNWsR5y5bKQ5Znj4x3r14
-         M5gw==
-X-Gm-Message-State: AOAM530Rg/kk+RjUz2FdRKFDp47rlaK1UWsfzsXijHKelCVGE9J405tX
-        X0mkbJfsMH68QeS7Xt9+htDF+MemvOEYXpmrnG4=
-X-Google-Smtp-Source: ABdhPJz8VaSVI48p0HfaAeJH24iGo5ubZOtP91p5DCwKGTBFJ/2NlAkHOJ6pNrXG85vdJz0h3BZQUlq6UU5id2h2hfA=
-X-Received: by 2002:a05:6e02:1ba2:: with SMTP id n2mr8403067ili.5.1644845827109;
- Mon, 14 Feb 2022 05:37:07 -0800 (PST)
+        Mon, 14 Feb 2022 08:37:20 -0500
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156F825E89;
+        Mon, 14 Feb 2022 05:37:11 -0800 (PST)
+Received: from fsav116.sakura.ne.jp (fsav116.sakura.ne.jp [27.133.134.243])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 21EDax4h064843;
+        Mon, 14 Feb 2022 22:36:59 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav116.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav116.sakura.ne.jp);
+ Mon, 14 Feb 2022 22:36:59 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav116.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 21EDaxGx064835
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 14 Feb 2022 22:36:59 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <8ebd003c-f748-69b4-3a4f-fb80a3f39d36@I-love.SAKURA.ne.jp>
+Date:   Mon, 14 Feb 2022 22:36:57 +0900
 MIME-Version: 1.0
-References: <20220212130410.6901-1-ojeda@kernel.org> <20220212130410.6901-11-ojeda@kernel.org>
- <YgnoJ97y3I2hE8UJ@google.com>
-In-Reply-To: <YgnoJ97y3I2hE8UJ@google.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 14 Feb 2022 14:36:56 +0100
-Message-ID: <CANiq72mUBox2cbkHGP9=s=MZhRydY9Z2-vq8OVXjp6xHHifwyQ@mail.gmail.com>
-Subject: Re: [PATCH v4 10/20] rust: add `kernel` crate
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux <rust-for-linux@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Finn Behrens <me@kloenk.de>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sumera Priyadarsini <sylphrenadin@gmail.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Fox Chen <foxhlchen@gmail.com>,
-        Dan Robertson <daniel.robertson@starlab.io>,
-        Viktor Garske <viktor@v-gar.de>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        =?UTF-8?Q?L=C3=A9o_Lanteri_Thauvin?= <leseulartichaut@gmail.com>,
-        Niklas Mohrin <dev@niklasmohrin.de>,
-        Gioh Kim <gurugio@gmail.com>, Daniel Xu <dxu@dxuuu.xyz>,
-        Milan Landaverde <milan@mdaverde.com>,
-        Morgan Bartlett <mjmouse9999@gmail.com>,
-        Maciej Falkowski <m.falkowski@samsung.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [syzbot] possible deadlock in worker_thread
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        syzbot <syzbot+831661966588c802aae9@syzkaller.appspotmail.com>,
+        jgg@ziepe.ca, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+References: <0000000000005975a605d7aef05e@google.com>
+ <8ea57ddf-a09c-43f2-4285-4dfb908ad967@acm.org>
+ <ccd04d8a-154b-543e-e1c3-84bc655508d1@I-love.SAKURA.ne.jp>
+ <71d6f14e-46af-cc5a-bc70-af1cdc6de8d5@acm.org>
+ <309c86b7-2a4c-1332-585f-7bcd59cfd762@I-love.SAKURA.ne.jp>
+ <aa2bf24e-981a-a811-c5d8-a75f0b8f693a@acm.org>
+ <2959649d-cfbc-bdf2-02ac-053b8e7af030@I-love.SAKURA.ne.jp>
+ <YgnQGZWT/n3VAITX@slm.duckdns.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <YgnQGZWT/n3VAITX@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergey,
+On 2022/02/14 12:44, Tejun Heo wrote:
+> Hello,
+> 
+> On Mon, Feb 14, 2022 at 10:08:00AM +0900, Tetsuo Handa wrote:
+>> +	destroy_workqueue(srp_tl_err_wq);
+>>
+>> Then, we can call WARN_ON() if e.g. flush_workqueue() is called on system-wide workqueues.
+> 
+> Yeah, this is the right thing to do. It makes no sense at all to call
+> flush_workqueue() on the shared workqueues as the caller has no idea what
+> it's gonna end up waiting for. It was on my todo list a long while ago but
+> slipped through the crack. If anyone wanna take a stab at it (including
+> scrubbing the existing users, of course), please be my guest.
+> 
+> Thanks.
+> 
 
-On Mon, Feb 14, 2022 at 6:27 AM Sergey Senozhatsky
-<senozhatsky@chromium.org> wrote:
->
-> Is this flexible enough? Why not let user pass bindings::GFP_* bitmask,
-> just like what the underlying kernel API does.
+OK. Then, I propose below patch. If you are OK with this approach, I can
+keep this via my tree as a linux-next only experimental patch for one or
+two weeks, in order to see if someone complains.
 
-For particular kernel abstractions, they may know what they need; but
-in general, yeah, we may need to allow for flexibility where needed
-(see the `TODO` comment in the quoted code).
+From 95a3aa8d46c8479c95672305645247ba70312113 Mon Sep 17 00:00:00 2001
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Date: Mon, 14 Feb 2022 22:28:21 +0900
+Subject: [PATCH] workqueue: Warn on flushing system-wide workqueues
 
-For collections that need to allocate, it is an open question how Rust
-will handle it upstream, as there are several approaches (if you want
-to take a look, see the `allocator_api` feature and the working group
-at https://github.com/rust-lang/wg-allocators). But in order to be
-able to experiment and see what is best for the kernel, we have an
-in-tree fork of the `alloc` standard library crate (see
-`rust/alloc/README.md`).
+syzbot found a circular locking dependency which is caused by flushing
+system_long_wq WQ [1]. Tejun Heo commented that it makes no sense at all
+to call flush_workqueue() on the shared workqueues as the caller has no
+idea what it's gonna end up waiting for.
 
-Cheers,
-Miguel
+Although there is flush_scheduled_work() which flushes system_wq WQ with
+"Think twice before calling this function! It's very easy to get into
+trouble if you don't take great care." warning message, it will be too
+difficult to guarantee that all users safely flush system-wide WQs.
+
+Therefore, let's change the direction to that developers had better use
+their own WQs if flushing is inevitable. To give developers time to update
+their modules, for now just emit a warning message when flush_workqueue()
+is called on system-wide WQs. We will eventually convert this warning
+message into WARN_ON() and kill flush_scheduled_work().
+
+Link: https://syzkaller.appspot.com/bug?extid=831661966588c802aae9 [1]
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+---
+ kernel/workqueue.c | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 33f1106b4f99..5ef40b9a1842 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -2805,6 +2805,37 @@ static bool flush_workqueue_prep_pwqs(struct workqueue_struct *wq,
+ 	return wait;
+ }
+ 
++static void warn_if_flushing_global_workqueue(struct workqueue_struct *wq)
++{
++#ifdef CONFIG_PROVE_LOCKING
++	static DEFINE_RATELIMIT_STATE(flush_warn_rs, 600 * HZ, 1);
++	const char *name;
++
++	if (wq == system_wq)
++		name = "system_wq";
++	else if (wq == system_highpri_wq)
++		name = "system_highpri_wq";
++	else if (wq == system_long_wq)
++		name = "system_long_wq";
++	else if (wq == system_unbound_wq)
++		name = "system_unbound_wq";
++	else if (wq == system_freezable_wq)
++		name = "system_freezable_wq";
++	else if (wq == system_power_efficient_wq)
++		name = "system_power_efficient_wq";
++	else if (wq == system_freezable_power_efficient_wq)
++		name = "system_freezable_power_efficient_wq";
++	else
++		return;
++	ratelimit_set_flags(&flush_warn_rs, RATELIMIT_MSG_ON_RELEASE);
++	if (!__ratelimit(&flush_warn_rs))
++		return;
++	pr_warn("Since system-wide WQ is shared, flushing system-wide WQ can introduce unexpected locking dependency. Please replace %s usage in your code with your local WQ.\n",
++		name);
++	dump_stack();
++#endif
++}
++
+ /**
+  * flush_workqueue - ensure that any scheduled work has run to completion.
+  * @wq: workqueue to flush
+@@ -2824,6 +2855,8 @@ void flush_workqueue(struct workqueue_struct *wq)
+ 	if (WARN_ON(!wq_online))
+ 		return;
+ 
++	warn_if_flushing_global_workqueue(wq);
++
+ 	lock_map_acquire(&wq->lockdep_map);
+ 	lock_map_release(&wq->lockdep_map);
+ 
+-- 
+2.32.0
+

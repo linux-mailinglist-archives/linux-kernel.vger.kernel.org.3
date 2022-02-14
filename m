@@ -2,98 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0344B54BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 16:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3986C4B54BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 16:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346569AbiBNP0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 10:26:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51896 "EHLO
+        id S1355868AbiBNP0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 10:26:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240044AbiBNP0Y (ORCPT
+        with ESMTP id S1355816AbiBNP0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 10:26:24 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEC660A94;
-        Mon, 14 Feb 2022 07:26:16 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21EFOPpi012649;
-        Mon, 14 Feb 2022 15:25:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=CTbUY2hl0sfw79lUnt28hPNQO1kDDJya8WniS70Dynk=;
- b=N8x+p0bvLO1Zl7MdcxW+DIV9bJvL4pURIaEQcjS8moT9zhkS/KlJfnMg2c8aruvNVq4w
- oe5dXUkkJUFgQO48sf5u+Frm3BcpqiTIxVO4D6YbE3n8qPkunLYswv+mSscBQmqq7Spb
- cIqtdOVrhJIQ8XKuLCKk8DzFhZ0WBgGjrRDLZ8+sADMK2YJBEo0MglvbYyv0QrN1Don5
- 2nYC3c98cPszCYtfu71Rg/AESU4s6hxxAmAWrg9OQOUF2cG+MQ+jioJ7dcEPCA8qNgZq
- kfnzs5H6bFTS3yT24UhmUmz+q6kv0XGaV4+BjrVHqF6JUSTRr4SITmuLVmBgO1+S9DWM 9Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e7920vk9b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 15:25:42 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21EFOxa0014955;
-        Mon, 14 Feb 2022 15:25:41 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e7920vk8a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 15:25:41 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21EFBrql025996;
-        Mon, 14 Feb 2022 15:25:39 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma05fra.de.ibm.com with ESMTP id 3e64h9dvh1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 15:25:38 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21EFPaFr45744402
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Feb 2022 15:25:36 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6C3C14C046;
-        Mon, 14 Feb 2022 15:25:36 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C9A9F4C052;
-        Mon, 14 Feb 2022 15:25:35 +0000 (GMT)
-Received: from localhost (unknown [9.43.124.167])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Feb 2022 15:25:35 +0000 (GMT)
-Date:   Mon, 14 Feb 2022 20:55:33 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v2 09/13] powerpc/ftrace: Implement
- CONFIG_DYNAMIC_FTRACE_WITH_ARGS
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Jiri Kosina <jikos@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Ingo Molnar <mingo@redhat.com>, Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>
-References: <cover.1640017960.git.christophe.leroy@csgroup.eu>
-        <5831f711a778fcd6eb51eb5898f1faae4378b35b.1640017960.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <5831f711a778fcd6eb51eb5898f1faae4378b35b.1640017960.git.christophe.leroy@csgroup.eu>
+        Mon, 14 Feb 2022 10:26:37 -0500
+X-Greylist: delayed 1151 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 07:26:28 PST
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F2EC4D;
+        Mon, 14 Feb 2022 07:26:28 -0800 (PST)
+Received: (Authenticated sender: gregory.clement@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9AC19240014;
+        Mon, 14 Feb 2022 15:26:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1644852386;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=C+Q/XGnHf9irD5sCh0C/7PF0D//d8ipVJPI4owGtOS4=;
+        b=e4q1FrKfMdef6/DF9DT5NRlw6RWKgo4HAS3+DYgKOvaAp/2k9LttFnY3O476KP9nICbJsf
+        mcsRvNsGOc5G34qhOYGJHmkjNGw+8qeucXSGEX6kuQ/o1xmeXt5UsMOxzGuncO/rfcaNBW
+        WU3K6pwllDzR5au65vBHlaKP0yIibkgr3LU2R6StiaceLraEBJTBm8yyX1xhvtL4QAx9sI
+        /j6/70AgLg/j0DodVLyPK0PQUkv/qZALx2NLkZcyZVaQKMbun8CSyfHHnrO4GB5Uw4cDh1
+        2O8qLPYibp9cNZdfhdSuYsbT39yF+r8mmhZCQ+6uVc5D9ZQil8aJOVhQdP1rwA==
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 11/11] ARM: dts: armada-385.dtsi: Add definitions for
+ PCIe legacy INTx interrupts
+In-Reply-To: <20220214150923.a5ttxoh426cfxn4v@pali>
+References: <20220105150239.9628-1-pali@kernel.org>
+ <20220112151814.24361-1-pali@kernel.org>
+ <20220112151814.24361-12-pali@kernel.org> <87wnhxjxlq.fsf@BL-laptop>
+ <20220214150923.a5ttxoh426cfxn4v@pali>
+Date:   Mon, 14 Feb 2022 16:26:24 +0100
+Message-ID: <87tud1jwpr.fsf@BL-laptop>
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1644852011.qg7ud9elo2.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: U_R1WC4bISAb4FaYFWLfhme_IU7ZkUnM
-X-Proofpoint-ORIG-GUID: LZ_RkunqBHntcveHRdbfJBKGSEYZeo5L
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-14_06,2022-02-14_03,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=999 clxscore=1015 mlxscore=0 lowpriorityscore=0 spamscore=0
- priorityscore=1501 phishscore=0 adultscore=0 impostorscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202140093
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,71 +65,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy wrote:
-> Implement CONFIG_DYNAMIC_FTRACE_WITH_ARGS. It accelerates the call
-> of livepatching.
->=20
-> Also note that powerpc being the last one to convert to
-> CONFIG_DYNAMIC_FTRACE_WITH_ARGS, it will now be possible to remove
-> klp_arch_set_pc() on all architectures.
->=20
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  arch/powerpc/Kconfig                 |  1 +
->  arch/powerpc/include/asm/ftrace.h    | 17 +++++++++++++++++
->  arch/powerpc/include/asm/livepatch.h |  4 +---
->  3 files changed, 19 insertions(+), 3 deletions(-)
->=20
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index cdac2115eb00..e2b1792b2aae 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -210,6 +210,7 @@ config PPC
->  	select HAVE_DEBUG_KMEMLEAK
->  	select HAVE_DEBUG_STACKOVERFLOW
->  	select HAVE_DYNAMIC_FTRACE
-> +	select HAVE_DYNAMIC_FTRACE_WITH_ARGS	if MPROFILE_KERNEL || PPC32
->  	select HAVE_DYNAMIC_FTRACE_WITH_REGS	if MPROFILE_KERNEL || PPC32
->  	select HAVE_EBPF_JIT
->  	select HAVE_EFFICIENT_UNALIGNED_ACCESS	if !(CPU_LITTLE_ENDIAN && POWER7=
-_CPU)
-> diff --git a/arch/powerpc/include/asm/ftrace.h b/arch/powerpc/include/asm=
-/ftrace.h
-> index b3f6184f77ea..45c3d6f11daa 100644
-> --- a/arch/powerpc/include/asm/ftrace.h
-> +++ b/arch/powerpc/include/asm/ftrace.h
-> @@ -22,6 +22,23 @@ static inline unsigned long ftrace_call_adjust(unsigne=
-d long addr)
->  struct dyn_arch_ftrace {
->  	struct module *mod;
->  };
-> +
-> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_ARGS
-> +struct ftrace_regs {
-> +	struct pt_regs regs;
-> +};
-> +
-> +static __always_inline struct pt_regs *arch_ftrace_get_regs(struct ftrac=
-e_regs *fregs)
-> +{
-> +	return &fregs->regs;
-> +}
+Hello,
 
-I think this is wrong. We need to differentiate between ftrace_caller()=20
-and ftrace_regs_caller() here, and only return pt_regs if coming in=20
-through ftrace_regs_caller() (i.e., FL_SAVE_REGS is set).
+> On Monday 14 February 2022 16:07:13 Gregory CLEMENT wrote:
+>> Hello Pali,
+>>=20
+>> > With this change legacy INTA, INTB, INTC and INTD interrupts are repor=
+ted
+>> > separately and not mixed into one Linux virq source anymore.
+>> >
+>> > Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
+>> > ---
+>> >  arch/arm/boot/dts/armada-385.dtsi | 52 ++++++++++++++++++++++++++-----
+>>=20
+>> Is there any reason for not doing the same change in armada-380.dtsi ?
+>
+> I do not have A380 HW, so I did this change only for A385 which I have
+> tested.
 
-> +
-> +static __always_inline void ftrace_instruction_pointer_set(struct ftrace=
-_regs *fregs,
-> +							   unsigned long ip)
-> +{
-> +	regs_set_return_ip(&fregs->regs, ip);
+OK fair enough.
 
-Should we use that helper here? regs_set_return_ip() also updates some=20
-other state related to taking interrupts and I don't think it makes=20
-sense for use with ftrace.
+So you can add my
+Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+
+Moreover to keep biscetability  this patch should be merged after the
+support in the driver. So the easier is to let merge it through the PCI
+subsystem with the other patches from this series. I do not think there
+will be any other changes in this file so there won't be any merge
+conflicts.
+
+Thanks,
+
+Gr=C3=A9gory
 
 
-- Naveen
+>
+>> Gr=C3=A9gory
+>>=20
+>> >  1 file changed, 44 insertions(+), 8 deletions(-)
+>> >
+>> > diff --git a/arch/arm/boot/dts/armada-385.dtsi b/arch/arm/boot/dts/arm=
+ada-385.dtsi
+>> > index f0022d10c715..83392b92dae2 100644
+>> > --- a/arch/arm/boot/dts/armada-385.dtsi
+>> > +++ b/arch/arm/boot/dts/armada-385.dtsi
+>> > @@ -69,16 +69,25 @@
+>> >  				reg =3D <0x0800 0 0 0 0>;
+>> >  				#address-cells =3D <3>;
+>> >  				#size-cells =3D <2>;
+>> > +				interrupt-names =3D "intx";
+>> > +				interrupts-extended =3D <&gic GIC_SPI 29 IRQ_TYPE_LEVEL_HIGH>;
+>> >  				#interrupt-cells =3D <1>;
+>> >  				ranges =3D <0x82000000 0 0 0x82000000 0x1 0 1 0
+>> >  					  0x81000000 0 0 0x81000000 0x1 0 1 0>;
+>> >  				bus-range =3D <0x00 0xff>;
+>> > -				interrupt-map-mask =3D <0 0 0 0>;
+>> > -				interrupt-map =3D <0 0 0 0 &gic GIC_SPI 29 IRQ_TYPE_LEVEL_HIGH>;
+>> > +				interrupt-map-mask =3D <0 0 0 7>;
+>> > +				interrupt-map =3D <0 0 0 1 &pcie1_intc 0>,
+>> > +						<0 0 0 2 &pcie1_intc 1>,
+>> > +						<0 0 0 3 &pcie1_intc 2>,
+>> > +						<0 0 0 4 &pcie1_intc 3>;
+>> >  				marvell,pcie-port =3D <0>;
+>> >  				marvell,pcie-lane =3D <0>;
+>> >  				clocks =3D <&gateclk 8>;
+>> >  				status =3D "disabled";
+>> > +				pcie1_intc: interrupt-controller {
+>> > +					interrupt-controller;
+>> > +					#interrupt-cells =3D <1>;
+>> > +				};
+>> >  			};
+>> >=20=20
+>> >  			/* x1 port */
+>> > @@ -88,16 +97,25 @@
+>> >  				reg =3D <0x1000 0 0 0 0>;
+>> >  				#address-cells =3D <3>;
+>> >  				#size-cells =3D <2>;
+>> > +				interrupt-names =3D "intx";
+>> > +				interrupts-extended =3D <&gic GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
+>> >  				#interrupt-cells =3D <1>;
+>> >  				ranges =3D <0x82000000 0 0 0x82000000 0x2 0 1 0
+>> >  					  0x81000000 0 0 0x81000000 0x2 0 1 0>;
+>> >  				bus-range =3D <0x00 0xff>;
+>> > -				interrupt-map-mask =3D <0 0 0 0>;
+>> > -				interrupt-map =3D <0 0 0 0 &gic GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
+>> > +				interrupt-map-mask =3D <0 0 0 7>;
+>> > +				interrupt-map =3D <0 0 0 1 &pcie2_intc 0>,
+>> > +						<0 0 0 2 &pcie2_intc 1>,
+>> > +						<0 0 0 3 &pcie2_intc 2>,
+>> > +						<0 0 0 4 &pcie2_intc 3>;
+>> >  				marvell,pcie-port =3D <1>;
+>> >  				marvell,pcie-lane =3D <0>;
+>> >  				clocks =3D <&gateclk 5>;
+>> >  				status =3D "disabled";
+>> > +				pcie2_intc: interrupt-controller {
+>> > +					interrupt-controller;
+>> > +					#interrupt-cells =3D <1>;
+>> > +				};
+>> >  			};
+>> >=20=20
+>> >  			/* x1 port */
+>> > @@ -107,16 +125,25 @@
+>> >  				reg =3D <0x1800 0 0 0 0>;
+>> >  				#address-cells =3D <3>;
+>> >  				#size-cells =3D <2>;
+>> > +				interrupt-names =3D "intx";
+>> > +				interrupts-extended =3D <&gic GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
+>> >  				#interrupt-cells =3D <1>;
+>> >  				ranges =3D <0x82000000 0 0 0x82000000 0x3 0 1 0
+>> >  					  0x81000000 0 0 0x81000000 0x3 0 1 0>;
+>> >  				bus-range =3D <0x00 0xff>;
+>> > -				interrupt-map-mask =3D <0 0 0 0>;
+>> > -				interrupt-map =3D <0 0 0 0 &gic GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
+>> > +				interrupt-map-mask =3D <0 0 0 7>;
+>> > +				interrupt-map =3D <0 0 0 1 &pcie3_intc 0>,
+>> > +						<0 0 0 2 &pcie3_intc 1>,
+>> > +						<0 0 0 3 &pcie3_intc 2>,
+>> > +						<0 0 0 4 &pcie3_intc 3>;
+>> >  				marvell,pcie-port =3D <2>;
+>> >  				marvell,pcie-lane =3D <0>;
+>> >  				clocks =3D <&gateclk 6>;
+>> >  				status =3D "disabled";
+>> > +				pcie3_intc: interrupt-controller {
+>> > +					interrupt-controller;
+>> > +					#interrupt-cells =3D <1>;
+>> > +				};
+>> >  			};
+>> >=20=20
+>> >  			/*
+>> > @@ -129,16 +156,25 @@
+>> >  				reg =3D <0x2000 0 0 0 0>;
+>> >  				#address-cells =3D <3>;
+>> >  				#size-cells =3D <2>;
+>> > +				interrupt-names =3D "intx";
+>> > +				interrupts-extended =3D <&gic GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
+>> >  				#interrupt-cells =3D <1>;
+>> >  				ranges =3D <0x82000000 0 0 0x82000000 0x4 0 1 0
+>> >  					  0x81000000 0 0 0x81000000 0x4 0 1 0>;
+>> >  				bus-range =3D <0x00 0xff>;
+>> > -				interrupt-map-mask =3D <0 0 0 0>;
+>> > -				interrupt-map =3D <0 0 0 0 &gic GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
+>> > +				interrupt-map-mask =3D <0 0 0 7>;
+>> > +				interrupt-map =3D <0 0 0 1 &pcie4_intc 0>,
+>> > +						<0 0 0 2 &pcie4_intc 1>,
+>> > +						<0 0 0 3 &pcie4_intc 2>,
+>> > +						<0 0 0 4 &pcie4_intc 3>;
+>> >  				marvell,pcie-port =3D <3>;
+>> >  				marvell,pcie-lane =3D <0>;
+>> >  				clocks =3D <&gateclk 7>;
+>> >  				status =3D "disabled";
+>> > +				pcie4_intc: interrupt-controller {
+>> > +					interrupt-controller;
+>> > +					#interrupt-cells =3D <1>;
+>> > +				};
+>> >  			};
+>> >  		};
+>> >  	};
+>> > --=20
+>> > 2.20.1
+>> >
+>>=20
+>> --=20
+>> Gregory Clement, Bootlin
+>> Embedded Linux and Kernel engineering
+>> http://bootlin.com
 
+--=20
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com

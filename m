@@ -2,101 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B20064B54E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 16:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B14134B54E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 16:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355926AbiBNPfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 10:35:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55468 "EHLO
+        id S1355924AbiBNPf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 10:35:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355898AbiBNPfm (ORCPT
+        with ESMTP id S1355930AbiBNPfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 10:35:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8ECB4AE3C
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 07:35:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F0FD61328
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 15:35:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 223E5C340E9;
-        Mon, 14 Feb 2022 15:35:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644852933;
-        bh=GKW1O/9iEU6PCo4adC0DG5ixQw/23hNkDvK3MXbEU/A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ivNsmiPS4Tf+UY9vbDcZjF34lCS0o63Mbho96U/7CiTc5r6c69kGgDsPQZ0HxW5sU
-         peK/+DXnIKlPzS3kY76K+q4SLK3IjgRWmWpEBpOToELnM8+y628Nxgg3ikqgM7trRD
-         SudH1CrRFJX05een+/BoKb2kHwcZ6q+mGL6r7v7ZzLI5AW8ys/LpU1yQKVpN+eB2dA
-         Dvgm6/p7pZw2zUiASzvNiF8tXFr2dolpvzbQccoRGA9XQZF4ryN28Ds07K1QyaNtHk
-         RWQurZTHGXanZvVFav8d4rfPKjc7/EuP3oC/+iBVr7W1LD8SgRCoWQDrrclKiZPwDP
-         h/9ebHsGuy/hQ==
-Date:   Mon, 14 Feb 2022 08:35:29 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: arm64: clang-nightly: net/ipv4/tcp_input.c: clang: error: clang
- frontend command failed with exit code 139
-Message-ID: <Ygp2wVo8JfWh5iOk@dev-arch.archlinux-ax161>
-References: <CA+G9fYtR+E52X-ucmvXYG5-9v0q2UEXQsML=nkQRnSf7TwXYqw@mail.gmail.com>
+        Mon, 14 Feb 2022 10:35:54 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09B860A9B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 07:35:46 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id y6so47235871ybc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 07:35:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
+         :subject:cc;
+        bh=7MR/c1c0HoGO/HVVoYlYmh/1TEGUfmBelnD0hQ6ZZJc=;
+        b=CwaAbT0rIC31tG0LiFZnuea87dnkL2CLjz3iI+H+cYSZHGCArFO4llfu4I6wLvtb7t
+         H7nNtQunlXSR+yha8dv517uL9pl22qfKFYXYPyWsH1UOdk0vc1ml4E3hzLkQFG5/i8b+
+         xfZx+Vplmw+onTXuJDavtRegklzicgtLE6ILJbAyYPSiaKNHbkqEnLgSgcWCObgIzdu2
+         jForkb0ZBBZUyYWRMhoRM1QWuudhc1vmbnbkGbFNnisWSOfB8PeNIXTkpMGfHJBNxeH/
+         2XhilEDNYRcDNey/DcXzyx0n7iCFAf7MyJ+EBxqfYcxuEfAkhDcPI/2Tnp89h72e3c0i
+         fw7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
+         :from:date:message-id:subject:cc;
+        bh=7MR/c1c0HoGO/HVVoYlYmh/1TEGUfmBelnD0hQ6ZZJc=;
+        b=xMlO6w51hqRDVUlluyflAvWo/Ba7h/5mtneUpdfZOQQv5OcjXrKvnE1HJ26I45T6v6
+         /V3zfnwnRpsQHcUNWjKfMKG4GkhaqSRbLRvSmDd6Hp8bZ48uvOtk3egKIsp9M7Qu2Tle
+         UlOWMFI5xL+2T5SHJX9sJYyS5Le8kwFGrZwUCvcXi+olMhbVDTtN/bYnFYgiIqXVkyNt
+         h6jcdBOzz1XZLaPOPgEEPnpWZpadAxd0dF96inxUt6mX0iuJhnPUzrFv1BsjWWr9UVKb
+         P9BjipPWLbJgsFneKugCMpImiBbwqaZudPqzVTX3qQdHPTLGCAiCH19zNecS0nB5PogW
+         YA3w==
+X-Gm-Message-State: AOAM533ktlJaJqiKFBM4amudpAR3cKd4pSO/gv1v9V8h77gJaciniGbo
+        K6UttGiJipK7Qte71tUIP2SRtZDx2lItborkbw4=
+X-Received: by 2002:a25:8181:: with SMTP id p1mt178452ybk.755.1644852945941;
+ Mon, 14 Feb 2022 07:35:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYtR+E52X-ucmvXYG5-9v0q2UEXQsML=nkQRnSf7TwXYqw@mail.gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7011:309:b0:202:87aa:d2df with HTTP; Mon, 14 Feb 2022
+ 07:35:45 -0800 (PST)
+Reply-To: lisamuna2001@gmail.com
+In-Reply-To: <CAOpEvtjt9NW=M_YqecnpTr19fUZxzQv+Kpqd_MVWxDDKGsCLgA@mail.gmail.com>
+References: <CAOpEvtjt9NW=M_YqecnpTr19fUZxzQv+Kpqd_MVWxDDKGsCLgA@mail.gmail.com>
+From:   lisa muna <amedodziyaovi@gmail.com>
+Date:   Mon, 14 Feb 2022 16:35:45 +0100
+Message-ID: <CAOpEvth8YxNPY_rTByvp8S3cykK9Nf16W0y8J8i5jxPZkYwgcw@mail.gmail.com>
+Subject: Greetings
+Cc:     lisamuna2001@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,DEAR_FRIEND,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,
+        MISSING_HEADERS,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b36 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [lisamuna2001[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [amedodziyaovi[at]gmail.com]
+        *  1.0 MISSING_HEADERS Missing To: header
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  2.6 DEAR_FRIEND BODY: Dear Friend? That's not very dear!
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Naresh,
+Dear Friend,
 
-On Mon, Feb 14, 2022 at 12:27:17PM +0530, Naresh Kamboju wrote:
-> On Linux mainline master branch with arm64 clang-nightly build failed
-> due to following errors and warnings.
-> 
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/current LLVM=1 LLVM_IAS=1
-> ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
-> CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- HOSTCC=clang CC=clang
-> PLEASE submit a bug report to
-> https://github.com/llvm/llvm-project/issues/ and include the crash
-> backtrace, preprocessed source, and associated run script.
-> Stack dump:
+I'm happy to inform you that i finally succeeded in getting the funds
+transferred under the cooperation of a new partner from India,
+Presently I'm in India, for investment projects with my own share of
+the money and also on charity work to the less privileges and the
+orphanages. Meanwhile i didn't forget your past efforts to assist me.
 
-<snip>
+After your inability to cooperate I found a new partner who helped in
+getting those funds transferred for charity work , please use this
+share of the money for your self and also invest some on charity work
+in your country.
 
-> 1. <eof> parser at end of file
-> 2. Code generation
-> 3. Running pass 'Function Pass Manager' on module
-> '/builds/linux/net/ipv4/tcp_input.c'.
+So i left a Visa Card of $850,000.00 US Dollars for you as
+compensation for your past effort. Contact my office manager and give
+her your complete address so she can send you the Visa Card through
+Courier Delivery Logistics
 
-<snip>
+Her Name is Miss . Lisa Muna
 
-> I have reported this a new issues on github,
-> https://github.com/llvm/llvm-project/issues/53811
+Email: lisamuna2001@gmail.com
 
-Thank you for the report! I found this over the weekend myself and
-reverted the problematic commit in LLVM and I will make sure that if it
-lands again, it can build a kernel without any issues.
+NOTE; The Visa Card is an international Visa Card and you can cash it
+in any ATM machine in your Country.
 
-https://github.com/llvm/llvm-project/commit/22eb1dae3fb20ca8ada865de1d95baab0e08a060
-
-For the future, you may consider only sending reports of compiler
-crashes to Nick, myself, and llvm@lists.linux.dev; a compiler crash is
-pretty much never the fault of the source code so CC'ing Linux
-maintainers is just noise.
-
-Cheers,
-Nathan
+Regards
+lisa muna

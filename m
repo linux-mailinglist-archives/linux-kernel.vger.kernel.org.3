@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0AA04B51E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7464B51EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:40:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354455AbiBNNkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:40:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53146 "EHLO
+        id S1354492AbiBNNkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:40:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbiBNNkS (ORCPT
+        with ESMTP id S1354462AbiBNNkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:40:18 -0500
+        Mon, 14 Feb 2022 08:40:19 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58385621C;
-        Mon, 14 Feb 2022 05:40:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7D94A3CB;
+        Mon, 14 Feb 2022 05:40:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 719F9614FD;
-        Mon, 14 Feb 2022 13:40:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D58A7C36AE3;
-        Mon, 14 Feb 2022 13:40:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE5EC6150B;
+        Mon, 14 Feb 2022 13:40:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3F0D4C36AE2;
+        Mon, 14 Feb 2022 13:40:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644846009;
-        bh=t+3A7IemZeIy2izi4BzkNKp+rbO8ID2k2gzjcH33Apk=;
+        s=k20201202; t=1644846011;
+        bh=4T1Tqdk5SogHHJiSp6CWK0qg1zInEsqzVOwmJuDHDwU=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Si76sOSy0APJPpUgebjXIL54VMSVC2yfSVrlH/2Lmrthaa9OcMnhUpgDRKWFzjtEm
-         bZq1AuFActM4qVBkM7KVLtMs78Nwp1xyY4E+vkTAKuqAVetxGwrO9gCmKDXgHwiCJO
-         LZaZ7c1obNLc3E7vj++1Rl6ptjnsGYAY7aPvikZp3/lloHO9bXFd26s/QlwZUuQe12
-         QsRHQdW9VLuCRKbl6kIPBbriTHYiCrcXTgzeueTT6V8ZnTTXAwySfoDYFcxbxRUuaF
-         ee6Z1K51rP/OVdqOajqb4RUNIeuNHxRPRxhZUZc1xAAcYHca0KV32gAQ2G4ewuej9o
-         zKkkx0ihr4fjg==
+        b=TGbjXWKTwfJ3/W8m6tW+nqSevJjeyMBRPJALiLWEC7PLz4Ldmjq+71b+Y9s5TW5YI
+         bGKE+wIWPX9J+W/3ovdcGyXCL+q3Kpe+meiK2T7b1fPHUK3/ap13SEhfGnKkhjQIe7
+         Ly7G4LH7BAZaJuN8ijaU0iQ9RyjiVzNIJ8RIcCistMcDcc4uARjtPXlSvpzwJrX1Lj
+         jDpr+AgDBiuCzYnzkH1BEq4vWw09Nh0dIa1DW+0X6iX33C0o3gflWEXfGxMf1+wRcx
+         TpMJ9evr8+jFJCvOg4Bp5X3uLZiTNO5JGMvYJPTMeWZyWCONBOCoc0OWwt2fK/4brm
+         Pzv6/Q8luuOnA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C06A1E5D09D;
-        Mon, 14 Feb 2022 13:40:09 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2D3F4E6D458;
+        Mon, 14 Feb 2022 13:40:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ipv6: mcast: use rcu-safe version of ipv6_get_lladdr()
+Subject: Re: [PATCH v7 net-next 0/4] use bulk reads for ocelot statistics
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164484600978.23487.12151105643711844035.git-patchwork-notify@kernel.org>
-Date:   Mon, 14 Feb 2022 13:40:09 +0000
-References: <20220211173042.112852-1-ignat@cloudflare.com>
-In-Reply-To: <20220211173042.112852-1-ignat@cloudflare.com>
-To:     Ignat Korchagin <ignat@cloudflare.com>
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@cloudflare.com,
-        dpini@cloudflare.com
+Message-Id: <164484601117.23487.5745096307974974865.git-patchwork-notify@kernel.org>
+Date:   Mon, 14 Feb 2022 13:40:11 +0000
+References: <20220213191254.1480765-1-colin.foster@in-advantage.com>
+In-Reply-To: <20220213191254.1480765-1-colin.foster@in-advantage.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kuba@kernel.org, davem@davemloft.net, UNGLinuxDriver@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.manoil@nxp.com,
+        vladimir.oltean@nxp.com
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,22 +61,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net.git (master)
+This series was applied to netdev/net-next.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Fri, 11 Feb 2022 17:30:42 +0000 you wrote:
-> Some time ago 8965779d2c0e ("ipv6,mcast: always hold idev->lock before mca_lock")
-> switched ipv6_get_lladdr() to __ipv6_get_lladdr(), which is rcu-unsafe
-> version. That was OK, because idev->lock was held for these codepaths.
+On Sun, 13 Feb 2022 11:12:50 -0800 you wrote:
+> Ocelot loops over memory regions to gather stats on different ports.
+> These regions are mostly continuous, and are ordered. This patch set
+> uses that information to break the stats reads into regions that can get
+> read in bulk.
 > 
-> In 88e2ca308094 ("mld: convert ifmcaddr6 to RCU") these external locks were
-> removed, so we probably need to restore the original rcu-safe call.
+> The motiviation is for general cleanup, but also for SPI. Performing two
+> back-to-back reads on a SPI bus require toggling the CS line, holding,
+> re-toggling the CS line, sending 3 address bytes, sending N padding
+> bytes, then actually performing the read. Bulk reads could reduce almost
+> all of that overhead, but require that the reads are performed via
+> regmap_bulk_read.
 > 
 > [...]
 
 Here is the summary with links:
-  - ipv6: mcast: use rcu-safe version of ipv6_get_lladdr()
-    https://git.kernel.org/netdev/net/c/26394fc118d6
+  - [v7,net-next,1/4] net: mscc: ocelot: remove unnecessary stat reading from ethtool
+    https://git.kernel.org/netdev/net-next/c/e27d785e60b6
+  - [v7,net-next,2/4] net: ocelot: align macros for consistency
+    https://git.kernel.org/netdev/net-next/c/65c53595bc2a
+  - [v7,net-next,3/4] net: mscc: ocelot: add ability to perform bulk reads
+    https://git.kernel.org/netdev/net-next/c/40f3a5c81555
+  - [v7,net-next,4/4] net: mscc: ocelot: use bulk reads for stats
+    https://git.kernel.org/netdev/net-next/c/d87b1c08f38a
 
 You are awesome, thank you!
 -- 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB6F4B45D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:32:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 485624B4B75
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243347AbiBNJab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:30:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43072 "EHLO
+        id S1347732AbiBNKbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:31:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243344AbiBNJaQ (ORCPT
+        with ESMTP id S1347199AbiBNKaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:30:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86657AE45;
-        Mon, 14 Feb 2022 01:29:29 -0800 (PST)
+        Mon, 14 Feb 2022 05:30:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C78996B2;
+        Mon, 14 Feb 2022 01:59:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E34FB80DC7;
-        Mon, 14 Feb 2022 09:29:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36E86C340E9;
-        Mon, 14 Feb 2022 09:29:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6223360B33;
+        Mon, 14 Feb 2022 09:58:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D530C340E9;
+        Mon, 14 Feb 2022 09:58:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644830966;
-        bh=cUNXPxURKpD8NzufMujRgYG/2WfOROLJHJLMfse5iww=;
+        s=korg; t=1644832727;
+        bh=On09NtlxisAFDWKGqSyeGfJb1Y/OGiixVGVkNghruI0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U+41eWABF84TsEVNBKAWTk6tTOMCAGEmaM5iXWsUXyh4Xl9WYY2dkOccr9kH72WsY
-         j1TZ0AYcZEHNuYdIf5ZscFBVAepdHnorSgJi1tP8WmgvaBSWjhIhbgIlp3QFUVy9sg
-         fJ4oexulhr06wvZEhYkU8Cii5Xo/X0To2xKW1980=
+        b=JIcDj53V3AOpUzy9vwSDWs6dIXb0H8gD6Jx0OjJzMjBhrrFxBXXWARp/nl+zLBwnl
+         WbiFaySZ9FpvK4NCgtkma/6p70JsPiJjlnX2+RGQGg+hcoCPt++Qn3BZZGc7/Ue8GB
+         rz95v/+wcqfJrDRT1KsJ0j1eS2IT07ScAlOQsyzQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH 4.9 22/34] vt_ioctl: fix array_index_nospec in vt_setactivate
+        stable@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 104/203] ARM: dts: imx7ulp: Fix assigned-clocks-parents typo
 Date:   Mon, 14 Feb 2022 10:25:48 +0100
-Message-Id: <20220214092446.662947556@linuxfoundation.org>
+Message-Id: <20220214092513.781966778@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
-References: <20220214092445.946718557@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakob Koschel <jakobkoschel@gmail.com>
+From: Rob Herring <robh@kernel.org>
 
-commit 61cc70d9e8ef5b042d4ed87994d20100ec8896d9 upstream.
+[ Upstream commit 6d58c5e21a3fe355ce6d1808e96d02a610265218 ]
 
-array_index_nospec ensures that an out-of-bounds value is set to zero
-on the transient path. Decreasing the value by one afterwards causes
-a transient integer underflow. vsa.console should be decreased first
-and then sanitized with array_index_nospec.
+The correct property name is 'assigned-clock-parents', not
+'assigned-clocks-parents'. Though if the platform works with the typo, one
+has to wonder if the property is even needed.
 
-Kasper Acknowledgements: Jakob Koschel, Brian Johannesmeyer, Kaveh
-Razavi, Herbert Bos, Cristiano Giuffrida from the VUSec group at VU
-Amsterdam.
-
-Co-developed-by: Brian Johannesmeyer <bjohannesmeyer@gmail.com>
-Signed-off-by: Brian Johannesmeyer <bjohannesmeyer@gmail.com>
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-Link: https://lore.kernel.org/r/20220127144406.3589293-1-jakobkoschel@gmail.com
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Rob Herring <robh@kernel.org>
+Fixes: 8b8c7d97e2c7 ("ARM: dts: imx7ulp: Add wdog1 node")
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/vt/vt_ioctl.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/imx7ulp.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/tty/vt/vt_ioctl.c
-+++ b/drivers/tty/vt/vt_ioctl.c
-@@ -718,9 +718,9 @@ int vt_ioctl(struct tty_struct *tty,
- 		if (vsa.console == 0 || vsa.console > MAX_NR_CONSOLES)
- 			ret = -ENXIO;
- 		else {
--			vsa.console = array_index_nospec(vsa.console,
--							 MAX_NR_CONSOLES + 1);
- 			vsa.console--;
-+			vsa.console = array_index_nospec(vsa.console,
-+							 MAX_NR_CONSOLES);
- 			console_lock();
- 			ret = vc_allocate(vsa.console);
- 			if (ret == 0) {
+diff --git a/arch/arm/boot/dts/imx7ulp.dtsi b/arch/arm/boot/dts/imx7ulp.dtsi
+index b7ea37ad4e55c..bcec98b964114 100644
+--- a/arch/arm/boot/dts/imx7ulp.dtsi
++++ b/arch/arm/boot/dts/imx7ulp.dtsi
+@@ -259,7 +259,7 @@ wdog1: watchdog@403d0000 {
+ 			interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
+ 			assigned-clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
+-			assigned-clocks-parents = <&scg1 IMX7ULP_CLK_FIRC_BUS_CLK>;
++			assigned-clock-parents = <&scg1 IMX7ULP_CLK_FIRC_BUS_CLK>;
+ 			timeout-sec = <40>;
+ 		};
+ 
+-- 
+2.34.1
+
 
 

@@ -2,80 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3CB4B41F9
+	by mail.lfdr.de (Postfix) with ESMTP id 88F2D4B41FA
 	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 07:30:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240838AbiBNG21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 01:28:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40882 "EHLO
+        id S240852AbiBNG2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 01:28:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiBNG20 (ORCPT
+        with ESMTP id S240841AbiBNG2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 01:28:26 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D554C55499
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 22:28:18 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id u3so16324192oiv.12
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 22:28:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=DdJUI5FTpYGzpyS2d91zd0UtXmPra7JlEA7vdJLkTz8=;
-        b=Zwy3NLdy3OJuLKssvPEmtNN+TKK1BWI/R4Fd+WIZ/Rwu4v9y5kfejhJ2a+ckbtA2a5
-         aLSAS19N4u5nc1tBwV/oU1/lAE1TQh1MqvzhBMMy/gmRxNndufsnMcegq5MoBLIc8wz8
-         Vp/45FY1f5AHK+W2di1F6xrLhDm8eJqyhf2hurwe2FAeziKRimNdnYkYeUVHfO8nLNJi
-         9onpXsRNAj+JcrJ/8QnuGKHlmHQknGj8s7Ei6/bBf4UbWL7kgFqv2XhWkfGPDMICgXg0
-         grMC/FC9sLExmH3qhcL29u0GHFaLC81V+ToHGdhuWC8g8CznW9ljkN+tO8SlJaA9U5Ob
-         R2jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=DdJUI5FTpYGzpyS2d91zd0UtXmPra7JlEA7vdJLkTz8=;
-        b=1jwEu3lYc8xK7zrtS7zOhbSe32Lcp6onVFHaqJLVD/6roE6k5ii2tvHCoK8XAe5c0X
-         ECS9cM281M4OItdGmV8CjbSKDokBgh6lQ0Spc8lVAbMugVoNXv5C562S1mXni5D6gsR8
-         eQQH21T/DBQYxlKuRbDFKZQO3GamMao6T/B7nHfSA04TNfdLp/PJghpN0EkXWdOP8Q3v
-         6gjaTD1F+4sS5/hAJuOf5u76kMQ/o//ng3Ba97Jyq8GlT3l2pdElm8FWfwV/jvv6bOAv
-         ryPHSj183h20HlBvYyq+7OdCPWcV6Vywg65U2K/LM1eVb7DmWHnmnjsys9876lZeBtYb
-         C9PA==
-X-Gm-Message-State: AOAM532u/PRWFgDP5hK7h5jq3bNlAIfAw0e9M4Ncp2H1dDdTgxntB41t
-        hziDs3Hnu8CjmhngmCCLAqAtWA==
-X-Google-Smtp-Source: ABdhPJyZt0Xgmlu8ZlvkLQ3B0aktsKbWwbW9w83j+P1mpVhf2q+tWnCZI/6rqfNobw2s7ZdbZzwOJg==
-X-Received: by 2002:a05:6808:140c:: with SMTP id w12mr5103513oiv.265.1644820097343;
-        Sun, 13 Feb 2022 22:28:17 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id a128sm12219256oob.17.2022.02.13.22.28.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Feb 2022 22:28:16 -0800 (PST)
-Date:   Sun, 13 Feb 2022 22:28:14 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Vlastimil Babka <vbabka@suse.cz>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Rik van Riel <riel@surriel.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 06/13] mm/munlock: maintain page->mlock_count while
- unevictable
-In-Reply-To: <0e2dbdf3-f831-abbb-5ca8-02c8d1ab1a01@suse.cz>
-Message-ID: <db241e60-864e-b238-d83a-f822f87aa6df@google.com>
-References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com> <3d204af4-664f-e4b0-4781-16718a2efb9c@google.com> <0e2dbdf3-f831-abbb-5ca8-02c8d1ab1a01@suse.cz>
+        Mon, 14 Feb 2022 01:28:53 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6715622D
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 22:28:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644820126; x=1676356126;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=dtOzPCOkaDIchbROJI0d8OrNu+7J3y2/XmEqsTwbEbY=;
+  b=KIfIbujJJK+qxtQ9yD8o2oky1GeQArE6PyMQ2BzAALV4CKihpIheDCnx
+   ubuKauAFSsQfUQvsTzI4Kd76IXeD5eJXdhDLBTnVPluWN10vZri3cZNAL
+   6rUi0ScGNln28vBh1wHHez/WM+xIX0N3nnirbo5LWEORcwoE/+H1FUh17
+   boZwohzNl0GkxdLxBX6FiS01wizmqTr010I/E2kfLgh9KBeu9BsW0nUH7
+   EFLJzLhP8reJDkypAElYunFBJzF9q0223mDFSQQhwbeWVkV/jJBjp26Ka
+   0V558BYXFuzaztwgM9kz+aC8IrcnKqRyDL5ADj9+KLBgsTRbJy2wJDiP3
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="248857610"
+X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
+   d="scan'208";a="248857610"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 22:28:46 -0800
+X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
+   d="scan'208";a="527925225"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.30.201]) ([10.255.30.201])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 22:28:44 -0800
+Subject: Re: [kbuild-all] Re: include/linux/build_bug.h:78:41: error: static
+ assertion failed: "offsetof(struct page, compound_head) == offsetof(struct
+ folio, lru)"
+To:     Matthew Wilcox <willy@infradead.org>,
+        kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        William Kucharski <william.kucharski@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        David Howells <dhowells@redhat.com>
+References: <202202131828.VxAopBqR-lkp@intel.com>
+ <Ygj3Wop0i5Ld0gXu@casper.infradead.org>
+From:   "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <6f216c76-e86d-7962-5d40-0b9ce68096d5@intel.com>
+Date:   Mon, 14 Feb 2022 14:28:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <Ygj3Wop0i5Ld0gXu@casper.infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,98 +68,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Feb 2022, Vlastimil Babka wrote:
-> On 2/6/22 22:40, Hugh Dickins wrote:
-> > @@ -72,19 +91,40 @@ void mlock_page(struct page *page)
-> >   */
-> >  void munlock_page(struct page *page)
-> >  {
-> > +	struct lruvec *lruvec;
-> > +	int nr_pages = thp_nr_pages(page);
-> > +
-> >  	VM_BUG_ON_PAGE(PageTail(page), page);
-> >  
-> > +	lock_page_memcg(page);
+
+
+On 2/13/2022 8:19 PM, Matthew Wilcox wrote:
+> On Sun, Feb 13, 2022 at 07:00:16PM +0800, kernel test robot wrote:
+>> config: parisc-randconfig-r004-20220213 (https://download.01.org/0day-ci/archive/20220213/202202131828.VxAopBqR-lkp@intel.com/config)
+>> compiler: hppa64-linux-gcc (GCC) 11.2.0
+>> reproduce (this is a W=1 build):
+>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7b230db3b8d373219f88a3d25c8fbbf12cc7f233
+>>          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>          git fetch --no-tags linus master
+>>          git checkout 7b230db3b8d373219f88a3d25c8fbbf12cc7f233
+>>          # save the config file to linux build tree
+>>          mkdir build_dir
+>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc prepare
 > 
-> Hm this (and unlock_page_memcg() below) didn't catch my attention until I
-> see patch 10/13 removes it again. It also AFAICS wasn't present in the code
-> removed by patch 1. Am I missing something or it wasn't necessary to add it
-> in the first place?
+> There's something weird going on here.
 
-Something is needed to stabilize page->memcg, whoops I'm way out of date,
-folio->memcg_data, before trying to get the lock on the relevant lruvec.
+Hi Matthew,
 
-In commit_charge(), Johannes gives us a choice between four tools:
-	 * - the page lock
-	 * - LRU isolation
-	 * - lock_page_memcg()
-	 * - exclusive reference
+Sorry for the inconvenience, it's a false positive, the problem is
+ARCH=parisc was used to build the 64 bit kernel.
 
-The original code was using TestClearPageLRU inside isolate_lru_page()
-to do it (also happened to have the page lock, but one tool is enough).
+the actual command should be:
+COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross 
+O=build_dir ARCH=parisc64 prepare
 
-But I chose to use lock_page_memcg() at this stage, because we want to
-do the TestClearPageMlocked part of the business even when !PageLRU;
-and I don't entirely love the TestClearPageLRU method, since one will
-fail if two try it concurrently.
-
-Later, when doing the pagevec implementation, it seemed to become
-more natural to use the TestClearPageLRU method - because that's how
-pagevec_lru_move_fn() does it, or did I have a stronger reason for
-making a different choice at that stage?  Maybe: I might have been
-trying to keep the different functions as similar as possible.
-
-But really we have too many ways to do that same thing, and my
-choices may have been arbitrary, according to mood.  (When Alex Shi
-popularized the TestClearPageLRU method, I did devise a patch which
-used the lock_page_memcg() method throughout instead; but it was not
-obviously better, so I didn't waste anyone else's time with it.)
-
-I'm afraid that looking here again has led me to wonder whether
-__munlock_page() in the final (10/13 pagevec) implementaton is correct
-to be using __operations in its !isolated case.  But I'll have to come
-back and think about that another time, must push forward tonight.
-
-Hugh
+Best Regards,
+Rong Chen
 
 > 
-> > +	lruvec = folio_lruvec_lock_irq(page_folio(page));
-> > +	if (PageLRU(page) && PageUnevictable(page)) {
-> > +		/* Then mlock_count is maintained, but might undercount */
-> > +		if (page->mlock_count)
-> > +			page->mlock_count--;
-> > +		if (page->mlock_count)
-> > +			goto out;
-> > +	}
-> > +	/* else assume that was the last mlock: reclaim will fix it if not */
-> > +
-> >  	if (TestClearPageMlocked(page)) {
-> > -		int nr_pages = thp_nr_pages(page);
-> > -
-> > -		mod_zone_page_state(page_zone(page), NR_MLOCK, -nr_pages);
-> > -		if (!isolate_lru_page(page)) {
-> > -			putback_lru_page(page);
-> > -			count_vm_events(UNEVICTABLE_PGMUNLOCKED, nr_pages);
-> > -		} else if (PageUnevictable(page)) {
-> > -			count_vm_events(UNEVICTABLE_PGSTRANDED, nr_pages);
-> > -		}
-> > +		__mod_zone_page_state(page_zone(page), NR_MLOCK, -nr_pages);
-> > +		if (PageLRU(page) || !PageUnevictable(page))
-> > +			__count_vm_events(UNEVICTABLE_PGMUNLOCKED, nr_pages);
-> > +		else
-> > +			__count_vm_events(UNEVICTABLE_PGSTRANDED, nr_pages);
-> > +	}
-> > +
-> > +	/* page_evictable() has to be checked *after* clearing Mlocked */
-> > +	if (PageLRU(page) && PageUnevictable(page) && page_evictable(page)) {
-> > +		del_page_from_lru_list(page, lruvec);
-> > +		ClearPageUnevictable(page);
-> > +		add_page_to_lru_list(page, lruvec);
-> > +		__count_vm_events(UNEVICTABLE_PGRESCUED, nr_pages);
-> >  	}
-> > +out:
-> > +	unlock_page_lruvec_irq(lruvec);
-> > +	unlock_page_memcg(page);
-> >  }
-> >  
-> >  /*
+> If I just download & install gcc-11-hppa64-linux-gnu from Debian, this
+> config file builds just fine.
+> 
+> If I invoke make.cross as you have it here, I see the same error you
+> report.
+> 
+> Adding 'V=1' to this, shows:
+>    sh ../scripts/atomic/check-atomics.sh
+>    /home/willy/0day/gcc-9.3.0-nolibc/hppa-linux/bin/hppa-linux-gcc [...]
+> 
+> which is weird, right?  It's not hppa64, and it's not gcc-11.2.  So my
+> suspicion here is that there's some bug in your tooling which is reporting
+> a bogus error.  You're probably better situated to debug this further
+> than I am.
+> 
+> Oh, and I checked, in case the filename was confusing me:
+> $ /home/willy/0day/gcc-9.3.0-nolibc/hppa-linux/bin/hppa-linux-gcc -v
+> Using built-in specs.
+> COLLECT_GCC=/home/willy/0day/gcc-9.3.0-nolibc/hppa-linux/bin/hppa-linux-gcc
+> COLLECT_LTO_WRAPPER=/home/willy/0day/gcc-9.3.0-nolibc/hppa-linux/bin/../libexec/gcc/hppa-linux/9.3.0/lto-wrapper
+> Target: hppa-linux
+> Configured with: /tmp/build-crosstools-xh/gcc/gcc-9.3.0/configure --target=hppa-linux --enable-targets=all --prefix=/tmp/build-crosstools-xh/cross --enable-languages=c --without-headers --disable-bootstrap --disable-nls --disable-threads --disable-shared --disable-libmudflap --disable-libssp --disable-libgomp --disable-decimal-float --disable-libquadmath --disable-libatomic --disable-libcc1 --disable-libmpx --enable-checking=release
+> Thread model: single
+> gcc version 9.3.0 (GCC)
+> 
+> So it really is a 32-bit hppa build, and it really is gcc 9.3, not 11.2.
+> _______________________________________________
+> kbuild-all mailing list -- kbuild-all@lists.01.org
+> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+> 

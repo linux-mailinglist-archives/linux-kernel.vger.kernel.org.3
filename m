@@ -2,280 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E5D4B582D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9575A4B5817
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356922AbiBNRKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 12:10:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43988 "EHLO
+        id S1356914AbiBNRKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 12:10:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232397AbiBNRKo (ORCPT
+        with ESMTP id S239676AbiBNRKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 12:10:44 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A0E6517E;
-        Mon, 14 Feb 2022 09:10:36 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21EGuNxd012523;
-        Mon, 14 Feb 2022 17:09:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=l1qY/KEWmdOMqmt+7QpJnh4JMsoqsWK/gOpMsLH3vhU=;
- b=iOBmuVvF67xHukzHUkqyir7qEu/gzPLzycgcWIzc7esx1oZwqXQy2lYJocb/8IOyCzNJ
- JfmQDr2/AzpfN4sxXg8FoHY1ry1JGbDUMSTQv3uC+1yOt6/VHNKnGReTXRn1YeGynbm6
- YpeFn5+LCzDu0HeXDL+RrFWsmTk/3mH9r0Lgd7X7wROxKnRTXtTnkya3r5P+uDQG+lsn
- vkSHj+xkBczZq6SzMwqxlyUflVXyYuGm98NMk3ZNiDOxC8hs9uw3RZ15Mt+KHBYnp7R/
- keCirXfZuEcoG0F5/Nrh28QOFpukDJjzIKpmMxIl7F/ccChLhk6MkDzGkSdh4OXRGjnM iA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e7c4e4aus-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 17:09:56 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21EH8s3K012602;
-        Mon, 14 Feb 2022 17:09:56 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e7c4e4ate-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 17:09:56 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21EH3ptd006254;
-        Mon, 14 Feb 2022 17:09:53 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04ams.nl.ibm.com with ESMTP id 3e64h9qj1q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 17:09:53 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21EH9itQ48103784
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Feb 2022 17:09:44 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6B5DBA4059;
-        Mon, 14 Feb 2022 17:09:44 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9B65BA404D;
-        Mon, 14 Feb 2022 17:09:39 +0000 (GMT)
-Received: from sig-9-65-94-151.ibm.com (unknown [9.65.94.151])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Feb 2022 17:09:39 +0000 (GMT)
-Message-ID: <f324d8e04e4576d01325a4cfcad939abef29821b.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 2/6] powerpc/kexec_file: Add KEXEC_SIG support.
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Michal =?ISO-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-Cc:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
-        Philipp Rudo <prudo@redhat.com>,
-        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
-        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Frank van der Linden <fllinden@amazon.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Baoquan He <bhe@redhat.com>,
-        linux-security-module@vger.kernel.org
-Date:   Mon, 14 Feb 2022 12:09:39 -0500
-In-Reply-To: <20220214155524.GN3113@kunlun.suse.cz>
-References: <cover.1641900831.git.msuchanek@suse.de>
-         <d95f7c6865bcad5ee37dcbec240e79aa742f5e1d.1641900831.git.msuchanek@suse.de>
-         <cff97dbe262919ff709a5ad2c4af6a702cc72a95.camel@linux.ibm.com>
-         <a8d717a44e5e919676e9b1e197cac781db46da87.camel@linux.ibm.com>
-         <20220214155524.GN3113@kunlun.suse.cz>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: U1aZDtPbNOEZaiWcjzBgyJkPBcT_272k
-X-Proofpoint-ORIG-GUID: EsCqYyegF9IoZXPxKwIORY0TvjlMSVhJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-14_07,2022-02-14_03,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- adultscore=0 clxscore=1015 lowpriorityscore=0 impostorscore=0
- suspectscore=0 mlxlogscore=916 priorityscore=1501 mlxscore=0 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202140102
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 14 Feb 2022 12:10:06 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF2B65171;
+        Mon, 14 Feb 2022 09:09:57 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6E51647F;
+        Mon, 14 Feb 2022 18:09:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1644858595;
+        bh=/YNaz0DsrRJeG+wyZcvue35MIts+tATZZO5yOnTvmJY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OVPWru2lo/OxxUAbhYZ7ZzYSoNrelS85Ct9gfpER9HgH31TXus3Fzmf+xQSt5qK5R
+         NewjRiTNY2yFNUE7wzMFfp8UYOUVC4BDVu8DH+4mANw+gPv6Gpos3ms0zXx3i0g5R/
+         O67nQc/C419gxtXJDKShdgG4Fl1wNCzpmyr+GgSc=
+Date:   Mon, 14 Feb 2022 19:09:49 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 61/66] dt-bindings: media: Add Allwinner A31 ISP
+ bindings documentation
+Message-ID: <YgqM3ZdMfEz+ZKo/@pendragon.ideasonboard.com>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+ <20220205185429.2278860-62-paul.kocialkowski@bootlin.com>
+ <YgE/+UmP4nJVxtRT@pendragon.ideasonboard.com>
+ <YgqAv2vLimYgRwDS@aptenodytes>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YgqAv2vLimYgRwDS@aptenodytes>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-02-14 at 16:55 +0100, Michal Suchánek wrote:
-> Hello,
-> 
-> On Mon, Feb 14, 2022 at 10:14:16AM -0500, Mimi Zohar wrote:
-> > Hi Michal,
-> > 
-> > On Sun, 2022-02-13 at 21:59 -0500, Mimi Zohar wrote:
-> > 
+Hi Paul,
+
+On Mon, Feb 14, 2022 at 05:18:07PM +0100, Paul Kocialkowski wrote:
+> On Mon 07 Feb 22, 17:51, Laurent Pinchart wrote:
+> > On Sat, Feb 05, 2022 at 07:54:24PM +0100, Paul Kocialkowski wrote:
+> > > This introduces YAML bindings documentation for the Allwinner A31 Image
+> > > Signal Processor (ISP).
 > > > 
-> > > On Tue, 2022-01-11 at 12:37 +0100, Michal Suchanek wrote:
-> > > > diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> > > > index dea74d7717c0..1cde9b6c5987 100644
-> > > > --- a/arch/powerpc/Kconfig
-> > > > +++ b/arch/powerpc/Kconfig
-> > > > @@ -560,6 +560,22 @@ config KEXEC_FILE
-> > > >  config ARCH_HAS_KEXEC_PURGATORY
-> > > >         def_bool KEXEC_FILE
-> > > >  
-> > > > +config KEXEC_SIG
-> > > > +       bool "Verify kernel signature during kexec_file_load() syscall"
-> > > > +       depends on KEXEC_FILE && MODULE_SIG_FORMAT
-> > > > +       help
-> > > > +         This option makes kernel signature verification mandatory for
-> 
-> This is actually wrong. KEXEC_SIG makes it mandatory that any signature
-> that is appended is valid and made by a key that is part of the platform
-> keyiring (which is also wrong, built-in keys should be also accepted).
-> KEXEC_SIG_FORCE or an IMA policy makes it mandatory that the signature
-> is present.
-
-I'm aware of MODULE_SIG_FORCE, which isn't normally enabled by distros,
-but enabling MODULE_SIG allows MODULE_SIG_FORCE to be enabled on the
-boot command line.  In the IMA arch policies, if MODULE_SIG is enabled,
-it is then enforced, otherwise an IMA "appraise" policy rule is
-defined.  This rule would prevent the module_load syscall.
-
-I'm not aware of KEXEC_SIG_FORCE.  If there is such a Kconfig, then I
-assume it could work similarly.
-
-> 
-> > > > +         the kexec_file_load() syscall.
+> > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > ---
+> > >  .../media/allwinner,sun6i-a31-isp.yaml        | 117 ++++++++++++++++++
+> > >  1 file changed, 117 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
 > > > 
-> > > When KEXEC_SIG is enabled on other architectures, IMA does not define a
-> > > kexec 'appraise' policy rule.  Refer to the policy rules in
-> > > security/ima/ima_efi.c.  Similarly the kexec 'appraise' policy rule in
-> 
-> I suppose you mean security/integrity/ima/ima_efi.c
-
-Yes
-
-> 
-> I also think it's misguided because KEXEC_SIG in itself does not enforce
-> the signature. KEXEC_SIG_FORCE does.
-
-Right, which is why the IMA efi policy calls set_module_sig_enforced().
-
-> 
-> > > arch/powerpc/kernel/ima_policy.c should not be defined.
-> 
-> I suppose you mean arch/powerpc/kernel/ima_arch.c - see above.
-
-Sorry, yes.  
-
-> 
-> 
-> Thanks for taking the time to reseach and summarize the differences.
-> 
-> > The discussion shouldn't only be about IMA vs. KEXEC_SIG kernel image
-> > signature verification.  Let's try and reframe the problem a bit.
+> > > diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> > > new file mode 100644
+> > > index 000000000000..2d87022c43ce
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> > > @@ -0,0 +1,117 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-isp.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Allwinner A31 Image Signal Processor Driver (ISP) Device Tree Bindings
+> > > +
+> > > +maintainers:
+> > > +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - allwinner,sun6i-a31-isp
+> > > +      - allwinner,sun8i-v3s-isp
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  interrupts:
+> > > +    maxItems: 1
+> > > +
+> > > +  clocks:
+> > > +    items:
+> > > +      - description: Bus Clock
+> > > +      - description: Module Clock
+> > > +      - description: DRAM Clock
 > > 
-> > 1. Unify and simply the existing kexec signature verification so
-> > verifying the KEXEC kernel image signature works irrespective of
-> > signature type - PE, appended signature.
-> > 
-> > solution: enable KEXEC_SIG  (This patch set, with the above powerpc IMA
-> > policy changes.)
-> > 
-> > 2. Measure and include the kexec kernel image in a log for attestation,
-> > if desired.
-> > 
-> > solution: enable IMA_ARCH_POLICY 
-> > - Powerpc: requires trusted boot to be enabled.
-> > - EFI:   requires  secure boot to be enabled.  The IMA efi policy
-> > doesn't differentiate between secure and trusted boot.
-> > 
-> > 3. Carry the kexec kernel image measurement across kexec, if desired
-> > and supported on the architecture.
-> > 
-> > solution: enable IMA_KEXEC
-> > 
-> > Comparison: 
-> > - Are there any differences between IMA vs. KEXEC_SIG measuring the
-> > kexec kernel image?
-> > 
-> > One of the main differences is "what" is included in the measurement
-> > list differs.  In both cases, the 'd-ng' field of the IMA measurement
-> > list template (e.g. ima-ng, ima-sig, ima-modsig) is the full file hash
-> > including the appended signature.  With IMA and the 'ima-modsig'
-> > template, an additional hash without the appended signature is defined,
-> > as well as including the appended signature in the 'sig' field.
-> > 
-> > Including the file hash and appended signature in the measurement list
-> > allows an attestation server, for example, to verify the appended
-> > signature without having to know the file hash without the signature.
+> > That's interesting, does the ISP have a dedicated DRAM ?
 > 
-> I don't understand this part. Isn't the hash *with* signature always
-> included, and the distinguishing part about IMA is the hash *without*
-> signature which is the same irrespective of signature type (PE, appended
-> xattr) and irrespective of the keyt used for signoing?
-
-Roberto Sassu added support for IMA templates.  These are the
-definitions of 'ima-sig' and 'ima-modsig'.
-
-{.name = "ima-sig", .fmt = "d-ng|n-ng|sig"},
-{.name = "ima-modsig", .fmt = "d-ng|n-ng|sig|d-modsig|modsig"}
-
-d-ng: is the file hash.  With the proposed IMA support for fs-verity
-digests, the 'd-ng' field may also include the fsverity digest, based
-on policy.
-
-n-ng: is the file pathname.
-sig: is the file signature stored as a 'security.ima' xattr (may be
-NULL).
-d-modsig: is the file hash without the appended signature (may be
-NULL).
-
-FYI, changing from "module signature" to "appended signature", might
-impact the template field and name.  :)
-
-modsig: is the appended signature (May be NULL).
-
-I really haven't looked at PE signatures, so I can't comment on them.
-
+> It doesn't, it actually uses the main DRAM with the "mbus" interconnect.
+> The clock is probably for the DMA engine.
 > 
-> > Other differences are already included in the Kconfig KEXEC_SIG "Notes"
-> > section.
+> > > +
+> > > +  clock-names:
+> > > +    items:
+> > > +      - const: bus
+> > > +      - const: mod
+> > > +      - const: ram
+> > > +
+> > > +  resets:
+> > > +    maxItems: 1
+> > > +
+> > > +  ports:
+> > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > +
+> > > +    properties:
+> > > +      port@0:
+> > > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > > +        description: CSI0 input port
+> > > +
+> > > +        properties:
+> > > +          reg:
+> > > +            const: 0
+> > > +
+> > > +          endpoint:
+> > > +            $ref: video-interfaces.yaml#
+> > > +            unevaluatedProperties: false
+> > 
+> > If no other property than remote-endpoint are allowed, I'd write
+> > 
+> >           endpoint:
+> >             $ref: video-interfaces.yaml#
+> > 	    remote-endpoint: true
+> >             additionalProperties: false
+> > 
+> > Same below.
+> > 
+> > > +
+> > > +        additionalProperties: false
+> > > +
+> > > +      port@1:
+> > > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > > +        description: CSI1 input port
+> > > +
+> > > +        properties:
+> > > +          reg:
+> > > +            const: 0
+> > 
+> > This should be 1.
 > 
-> Which besides what is already described above would be blacklisting
-> specific binaries, which is much more effective if you have hashes of
-> binaries without signature.
+> Correct, thanks!
+> 
+> > > +
+> > > +          endpoint:
+> > > +            $ref: video-interfaces.yaml#
+> > > +            unevaluatedProperties: false
+> > > +
+> > > +        additionalProperties: false
+> > > +
+> > > +    anyOf:
+> > > +      - required:
+> > > +        - port@0
+> > > +      - required:
+> > > +        - port@1
+> > 
+> > As ports are an intrinsic property of the ISP, both should be required,
+> > but they don't have to be connected.
+> 
+> Well the ISP does have the ability to source from either CSI0 and CSI1
+> but I don't really get the point of declaring both ports when only one
+> of the two controllers is present.
 
-Thanks, Nayna will be happy to hear you approve.
+If it's within an SoC I don't mind too much. What I usually insist on is
+declaring all ports even when no external devices are connected on the
+board. It may however be easier to implement things on the driver side
+when all the ports are declared, even for internal devices. I won't
+insist either way here.
 
-FYI, IMA calculates the file hash once, which is then added to the IMA
-measurement list, extended into the TPM (when available), used to
-verify signatures, and included in the audit log.
+> > By the way, how do you select at runtime which CSI-2 RX the ISP gets its
+> > image stream from ? Is it configured through registers of the ISP ?
+> 
+> Actually what the ISP gets is fully dependent on what is received by the
+> CSI controller it is connected to (which can be the mipi csi-2 controller
+> or its direct parallel pins), so the configuration happens on the CSI side.
 
-With the KEXEC_SIG support, assuming the IMA arch policy is enabled,
-the file hash would be calculated twice - once for verifying the file
-signature and again for the measurement.
+OK, then how do you select at runtime which CSI the ISP gets its image
+stream from ? :-)
+
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +  - reg
+> > > +  - interrupts
+> > > +  - clocks
+> > > +  - clock-names
+> > > +  - resets
+> > > +
+> > > +additionalProperties: false
+> > > +
+> > > +examples:
+> > > +  - |
+> > > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > > +    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
+> > > +    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
+> > > +
+> > > +    isp: isp@1cb8000 {
+> > > +        compatible = "allwinner,sun8i-v3s-isp";
+> > > +        reg = <0x01cb8000 0x1000>;
+> > > +        interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
+> > > +        clocks = <&ccu CLK_BUS_CSI>,
+> > > +             <&ccu CLK_CSI1_SCLK>,
+> > > +             <&ccu CLK_DRAM_CSI>;
+> > > +        clock-names = "bus", "mod", "ram";
+> > > +        resets = <&ccu RST_BUS_CSI>;
+> > > +
+> > > +        ports {
+> > > +            #address-cells = <1>;
+> > > +            #size-cells = <0>;
+> > > +
+> > > +            port@0 {
+> > > +                reg = <0>;
+> > > +
+> > > +                isp_in_csi0: endpoint {
+> > > +                    remote-endpoint = <&csi0_out_isp>;
+> > > +                };
+> > > +            };
+> > > +        };
+> > > +    };
+> > > +
+> > > +...
 
 -- 
-thanks,
+Regards,
 
-Mimi
-
+Laurent Pinchart

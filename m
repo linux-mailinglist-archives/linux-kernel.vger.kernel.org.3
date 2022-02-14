@@ -2,110 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 953574B4A67
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:38:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A43434B4BBB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346073AbiBNKPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:15:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43938 "EHLO
+        id S1344426AbiBNJ7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:59:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345775AbiBNKNO (ORCPT
+        with ESMTP id S1344241AbiBNJ4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:13:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D678657A8;
-        Mon, 14 Feb 2022 01:52:00 -0800 (PST)
+        Mon, 14 Feb 2022 04:56:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CAF6E546;
+        Mon, 14 Feb 2022 01:44:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00997B80DBF;
-        Mon, 14 Feb 2022 09:51:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22A28C340E9;
-        Mon, 14 Feb 2022 09:51:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33DABB80DC7;
+        Mon, 14 Feb 2022 09:44:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F0BBC340E9;
+        Mon, 14 Feb 2022 09:44:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832317;
-        bh=6e54lmGimgKn631egJa57mEvUiKAcn1kkE1kiEEqHbE=;
+        s=korg; t=1644831861;
+        bh=aiC1CtD21EapGFLDtBLQ1aSbuuW6np9CQI5aEfTLGwc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QXjHaXev3mgh3gQXMVZmq9Wfg1ydNee8GVg3uih/33suCh+12Xyu8uKv2iE5NFnXO
-         7rI9X73z+EFO6V2ovYw9Fzs4DrBmZpoC5COKm3xhf8heffap2oSUNEQQdleVGStOn0
-         yIuyFUlrvNnLnHT1D5yP8P33Q/5wa1FTjzvzKDv4=
+        b=qnUGC8ISeM0MWatkW8HJCG1NEgDpnJxr0sU4lB0fD5wjMFLXSZoNXJC4TAhr8DNrE
+         jdUimp1MJSWpiXiZWf6ii5Jvt5IgbLPucfHXRvzlaJkt8MrsD6+oAqMt5VH1C/0Hu/
+         Ql1FsPaPR/A13OJzV6jwtth6Gl09AfRbIPe9vcVM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Cameron Williams <cang1@live.co.uk>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.15 149/172] USB: serial: ftdi_sio: add support for Brainboxes US-159/235/320
+        stable@vger.kernel.org, Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.10 108/116] phy: ti: Fix missing sentinel for clk_div_table
 Date:   Mon, 14 Feb 2022 10:26:47 +0100
-Message-Id: <20220214092511.539550070@linuxfoundation.org>
+Message-Id: <20220214092502.520012522@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cameron Williams <cang1@live.co.uk>
+From: Kishon Vijay Abraham I <kishon@ti.com>
 
-commit fbb9b194e15a63c56c5664e76ccd0e85c6100cea upstream.
+commit 6d1e6bcb31663ee83aaea1f171f3dbfe95dd4a69 upstream.
 
-This patch adds support for the Brainboxes US-159, US-235 and US-320
-USB-to-Serial devices.
+_get_table_maxdiv() tries to access "clk_div_table" array out of bound
+defined in phy-j721e-wiz.c. Add a sentinel entry to prevent
+the following global-out-of-bounds error reported by enabling KASAN.
 
-Signed-off-by: Cameron Williams <cang1@live.co.uk>
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
+[    9.552392] BUG: KASAN: global-out-of-bounds in _get_maxdiv+0xc0/0x148
+[    9.558948] Read of size 4 at addr ffff8000095b25a4 by task kworker/u4:1/38
+[    9.565926]
+[    9.567441] CPU: 1 PID: 38 Comm: kworker/u4:1 Not tainted 5.16.0-116492-gdaadb3bd0e8d-dirty #360
+[    9.576242] Hardware name: Texas Instruments J721e EVM (DT)
+[    9.581832] Workqueue: events_unbound deferred_probe_work_func
+[    9.587708] Call trace:
+[    9.590174]  dump_backtrace+0x20c/0x218
+[    9.594038]  show_stack+0x18/0x68
+[    9.597375]  dump_stack_lvl+0x9c/0xd8
+[    9.601062]  print_address_description.constprop.0+0x78/0x334
+[    9.606830]  kasan_report+0x1f0/0x260
+[    9.610517]  __asan_load4+0x9c/0xd8
+[    9.614030]  _get_maxdiv+0xc0/0x148
+[    9.617540]  divider_determine_rate+0x88/0x488
+[    9.622005]  divider_round_rate_parent+0xc8/0x124
+[    9.626729]  wiz_clk_div_round_rate+0x54/0x68
+[    9.631113]  clk_core_determine_round_nolock+0x124/0x158
+[    9.636448]  clk_core_round_rate_nolock+0x68/0x138
+[    9.641260]  clk_core_set_rate_nolock+0x268/0x3a8
+[    9.645987]  clk_set_rate+0x50/0xa8
+[    9.649499]  cdns_sierra_phy_init+0x88/0x248
+[    9.653794]  phy_init+0x98/0x108
+[    9.657046]  cdns_pcie_enable_phy+0xa0/0x170
+[    9.661340]  cdns_pcie_init_phy+0x250/0x2b0
+[    9.665546]  j721e_pcie_probe+0x4b8/0x798
+[    9.669579]  platform_probe+0x8c/0x108
+[    9.673350]  really_probe+0x114/0x630
+[    9.677037]  __driver_probe_device+0x18c/0x220
+[    9.681505]  driver_probe_device+0xac/0x150
+[    9.685712]  __device_attach_driver+0xec/0x170
+[    9.690178]  bus_for_each_drv+0xf0/0x158
+[    9.694124]  __device_attach+0x184/0x210
+[    9.698070]  device_initial_probe+0x14/0x20
+[    9.702277]  bus_probe_device+0xec/0x100
+[    9.706223]  deferred_probe_work_func+0x124/0x180
+[    9.710951]  process_one_work+0x4b0/0xbc0
+[    9.714983]  worker_thread+0x74/0x5d0
+[    9.718668]  kthread+0x214/0x230
+[    9.721919]  ret_from_fork+0x10/0x20
+[    9.725520]
+[    9.727032] The buggy address belongs to the variable:
+[    9.732183]  clk_div_table+0x24/0x440
+
+Fixes: 091876cc355d ("phy: ti: j721e-wiz: Add support for WIZ module present in TI J721E SoC")
+Cc: stable@vger.kernel.org # v5.10+
+Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
+Link: https://lore.kernel.org/r/20220117110108.4117-1-kishon@ti.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/ftdi_sio.c     |    3 +++
- drivers/usb/serial/ftdi_sio_ids.h |    3 +++
- 2 files changed, 6 insertions(+)
+ drivers/phy/ti/phy-j721e-wiz.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -969,6 +969,7 @@ static const struct usb_device_id id_tab
- 	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_VX_023_PID) },
- 	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_VX_034_PID) },
- 	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_101_PID) },
-+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_159_PID) },
- 	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_1_PID) },
- 	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_2_PID) },
- 	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_3_PID) },
-@@ -977,12 +978,14 @@ static const struct usb_device_id id_tab
- 	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_6_PID) },
- 	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_7_PID) },
- 	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_160_8_PID) },
-+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_235_PID) },
- 	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_257_PID) },
- 	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_279_1_PID) },
- 	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_279_2_PID) },
- 	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_279_3_PID) },
- 	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_279_4_PID) },
- 	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_313_PID) },
-+	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_320_PID) },
- 	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_324_PID) },
- 	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_346_1_PID) },
- 	{ USB_DEVICE(BRAINBOXES_VID, BRAINBOXES_US_346_2_PID) },
---- a/drivers/usb/serial/ftdi_sio_ids.h
-+++ b/drivers/usb/serial/ftdi_sio_ids.h
-@@ -1506,6 +1506,9 @@
- #define BRAINBOXES_VX_023_PID		0x1003 /* VX-023 ExpressCard 1 Port RS422/485 */
- #define BRAINBOXES_VX_034_PID		0x1004 /* VX-034 ExpressCard 2 Port RS422/485 */
- #define BRAINBOXES_US_101_PID		0x1011 /* US-101 1xRS232 */
-+#define BRAINBOXES_US_159_PID		0x1021 /* US-159 1xRS232 */
-+#define BRAINBOXES_US_235_PID		0x1017 /* US-235 1xRS232 */
-+#define BRAINBOXES_US_320_PID		0x1019 /* US-320 1xRS422/485 */
- #define BRAINBOXES_US_324_PID		0x1013 /* US-324 1xRS422/485 1Mbaud */
- #define BRAINBOXES_US_606_1_PID		0x2001 /* US-606 6 Port RS232 Serial Port 1 and 2 */
- #define BRAINBOXES_US_606_2_PID		0x2002 /* US-606 6 Port RS232 Serial Port 3 and 4 */
+--- a/drivers/phy/ti/phy-j721e-wiz.c
++++ b/drivers/phy/ti/phy-j721e-wiz.c
+@@ -177,6 +177,7 @@ static const struct clk_div_table clk_di
+ 	{ .val = 1, .div = 2, },
+ 	{ .val = 2, .div = 4, },
+ 	{ .val = 3, .div = 8, },
++	{ /* sentinel */ },
+ };
+ 
+ static struct wiz_clk_div_sel clk_div_sel[] = {
 
 

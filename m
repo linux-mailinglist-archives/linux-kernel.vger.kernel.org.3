@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FBE4B4A80
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:39:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7154B480A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:56:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346424AbiBNKYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:24:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57158 "EHLO
+        id S245755AbiBNJuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:50:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346959AbiBNKWw (ORCPT
+        with ESMTP id S245635AbiBNJqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:22:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839586CA52;
-        Mon, 14 Feb 2022 01:56:08 -0800 (PST)
+        Mon, 14 Feb 2022 04:46:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A548717B3;
+        Mon, 14 Feb 2022 01:39:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2150D61456;
-        Mon, 14 Feb 2022 09:56:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAD1EC340E9;
-        Mon, 14 Feb 2022 09:56:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C82236102D;
+        Mon, 14 Feb 2022 09:39:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BC86C340E9;
+        Mon, 14 Feb 2022 09:39:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832567;
-        bh=1A7IgsR91FTYPNF5tJ+NY0HRqWFFQHbPO3KHIvT7IJ0=;
+        s=korg; t=1644831554;
+        bh=4RIDEAq+c22nmmG4y8cxqHGvT85mUiWcK7yNYU3i7IM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IrzNkclxCdP0Tm/eSEVtwRs9J43b7Oe3kgk2QvocAZ04Nuwqnxx8LFxFacGc/CpiX
-         p2bBFJLWs6VG077I2TnuCJVQCP0eunFh26U8SEdATAU9moI1qhWvDqFo+wXe2XSA1T
-         DVNpd2L98YSLRIJAqMgbSS9bzrrDIrzy0xh8R53g=
+        b=aqJXK3/nkfETofJ1CeDtn3sUOWG+pdjyCrsnsoK9TWMgoufkPBpSHRI3W2krsc/Bl
+         g6Y5cQ0mW/5JR+Wind0zlxFToW0usSLBoH6RUNcryzVJIcRIPjN/4wcIz6iRpwg4FX
+         0GzyRFbAv6ni8945ZoiRYdpcYyTQ41aNJ9YQgt5g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Harry Wentland <harry.wentland@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 056/203] drm/amdgpu/display: use msleep rather than udelay for long delays
-Date:   Mon, 14 Feb 2022 10:25:00 +0100
-Message-Id: <20220214092512.153253157@linuxfoundation.org>
+        stable@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Subject: [PATCH 5.10 002/116] ima: Remove ima_policy file before directory
+Date:   Mon, 14 Feb 2022 10:25:01 +0100
+Message-Id: <20220214092458.753440143@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Deucher <alexander.deucher@amd.com>
+From: Stefan Berger <stefanb@linux.ibm.com>
 
-[ Upstream commit 98fdcacb45f7cd2092151d6af2e60152811eb79c ]
+commit f7333b9572d0559e00352a926c92f29f061b4569 upstream.
 
-Some architectures (e.g., ARM) throw an compilation error if the
-udelay is too long.  In general udelays of longer than 2000us are
-not recommended on any architecture.  Switch to msleep in these
-cases.
+The removal of ima_dir currently fails since ima_policy still exists, so
+remove the ima_policy file before removing the directory.
 
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 4af4662fa4a9 ("integrity: IMA policy")
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+Cc: <stable@vger.kernel.org>
+Acked-by: Christian Brauner <brauner@kernel.org>
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ security/integrity/ima/ima_fs.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-index b97be2e9088ce..94e75199d9428 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-@@ -6058,7 +6058,7 @@ bool dpcd_write_128b_132b_sst_payload_allocation_table(
- 			}
- 		}
- 		retries++;
--		udelay(5000);
-+		msleep(5);
- 	}
+--- a/security/integrity/ima/ima_fs.c
++++ b/security/integrity/ima/ima_fs.c
+@@ -496,12 +496,12 @@ int __init ima_fs_init(void)
  
- 	if (!result && retries == max_retries) {
-@@ -6110,7 +6110,7 @@ bool dpcd_poll_for_allocation_change_trigger(struct dc_link *link)
- 			break;
- 		}
- 
--		udelay(5000);
-+		msleep(5);
- 	}
- 
- 	if (result == ACT_FAILED) {
--- 
-2.34.1
-
+ 	return 0;
+ out:
++	securityfs_remove(ima_policy);
+ 	securityfs_remove(violations);
+ 	securityfs_remove(runtime_measurements_count);
+ 	securityfs_remove(ascii_runtime_measurements);
+ 	securityfs_remove(binary_runtime_measurements);
+ 	securityfs_remove(ima_symlink);
+ 	securityfs_remove(ima_dir);
+-	securityfs_remove(ima_policy);
+ 	return -1;
+ }
 
 

@@ -2,58 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B334B4699
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:52:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 671BF4B4696
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:52:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244862AbiBNJoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:44:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33982 "EHLO
+        id S243924AbiBNJeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:34:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244983AbiBNJlC (ORCPT
+        with ESMTP id S243768AbiBNJd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:41:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A891ADA7;
-        Mon, 14 Feb 2022 01:36:39 -0800 (PST)
+        Mon, 14 Feb 2022 04:33:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE87AE6D;
+        Mon, 14 Feb 2022 01:32:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F59C60F87;
-        Mon, 14 Feb 2022 09:36:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3ADFC340E9;
-        Mon, 14 Feb 2022 09:36:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B9D960F87;
+        Mon, 14 Feb 2022 09:32:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D17E0C340E9;
+        Mon, 14 Feb 2022 09:32:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831398;
-        bh=DqHdHTwGY9ECVd1fMS2r5aNiB2rMUb0e+u093JFxsMM=;
+        s=korg; t=1644831125;
+        bh=PlvEcycpV1nvF2g388FL0znRyecBtkKmN44AHTvezXU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AR28315Os6kCn+pJKlfrmCum4wEky9MEhmxP+RVZE7SA3eRJ2kMCOCaYolk898sNu
-         SSCLY283JOqJ75c+O1NnBcyLJNqmOZZ65pgFOtCgym/tzBUpvK9ROjtpFKWPoxE0pH
-         Kp0mURiBmETBKNiekjGDj/WqomIgKUXY4PGPcg/8=
+        b=VGrJ4R3k9T7ujOkZr1SAZ7FaOMyo5ejt733EBC3ouX1Y2pWsC6VKDShVUj3eDpPWw
+         cA17tqvDJpWGn2SIfLmQtvP6kGaYSV1a+SSQO94R7JtlhA2o2KFpUfJwxguSkJ28V9
+         ReOIdbxv6yLSKkJepljnQyjdMfkj+YKjAe7vTgBs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zechuan Chen <chenzechuan1@huawei.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jianlin Lv <Jianlin.Lv@arm.com>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: [PATCH 5.4 34/71] perf probe: Fix ppc64 perf probe add events failed case
+        stable@vger.kernel.org,
+        Stephan Brunner <s.brunner@stephan-brunner.net>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.14 39/44] USB: serial: ch341: add support for GW Instek USB2.0-Serial devices
 Date:   Mon, 14 Feb 2022 10:26:02 +0100
-Message-Id: <20220214092453.167162721@linuxfoundation.org>
+Message-Id: <20220214092449.168749199@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
+References: <20220214092447.897544753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -68,64 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zechuan Chen <chenzechuan1@huawei.com>
+From: Stephan Brunner <s.brunner@stephan-brunner.net>
 
-commit 4624f199327a704dd1069aca1c3cadb8f2a28c6f upstream.
+commit fa77ce201f7f2d823b07753575122d1ae5597fbe upstream.
 
-Because of commit bf794bf52a80c627 ("powerpc/kprobes: Fix kallsyms
-lookup across powerpc ABIv1 and ABIv2"), in ppc64 ABIv1, our perf
-command eliminates the need to use the prefix "." at the symbol name.
+Programmable lab power supplies made by GW Instek, such as the
+GPP-2323, have a USB port exposing a serial port to control the device.
 
-But when the command "perf probe -a schedule" is executed on ppc64
-ABIv1, it obtains two symbol address information through /proc/kallsyms,
-for example:
+Stringing the supplied Windows driver, references to the ch341 chip are
+found. Binding the existing ch341 driver to the VID/PID of the GPP-2323
+("GW Instek USB2.0-Serial" as per the USB product name) works out of the
+box, communication and control is now possible.
 
-  cat /proc/kallsyms | grep -w schedule
-  c000000000657020 T .schedule
-  c000000000d4fdb8 D schedule
+This patch should work with any GPP series power supply due to
+similarities in the product line.
 
-The symbol "D schedule" is not a function symbol, and perf will print:
-"p:probe/schedule _text+13958584"Failed to write event: Invalid argument
-
-Therefore, when searching symbols from map and adding probe point for
-them, a symbol type check is added. If the type of symbol is not a
-function, skip it.
-
-Fixes: bf794bf52a80c627 ("powerpc/kprobes: Fix kallsyms lookup across powerpc ABIv1 and ABIv2")
-Signed-off-by: Zechuan Chen <chenzechuan1@huawei.com>
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Jianlin Lv <Jianlin.Lv@arm.com>
-Cc: Jin Yao <yao.jin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
-Cc: Yang Jihong <yangjihong1@huawei.com>
-Link: https://lore.kernel.org/r/20211228111338.218602-1-chenzechuan1@huawei.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-[sudip: adjust context]
-Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Signed-off-by: Stephan Brunner <s.brunner@stephan-brunner.net>
+Link: https://lore.kernel.org/r/4a47b864-0816-6f6a-efee-aa20e74bcdc6@stephan-brunner.net
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/util/probe-event.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/serial/ch341.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/tools/perf/util/probe-event.c
-+++ b/tools/perf/util/probe-event.c
-@@ -2954,6 +2954,9 @@ static int find_probe_trace_events_from_
- 	for (j = 0; j < num_matched_functions; j++) {
- 		sym = syms[j];
- 
-+		if (sym->type != STT_FUNC)
-+			continue;
-+
- 		tev = (*tevs) + ret;
- 		tp = &tev->point;
- 		if (ret == num_matched_functions) {
+--- a/drivers/usb/serial/ch341.c
++++ b/drivers/usb/serial/ch341.c
+@@ -87,6 +87,7 @@ static const struct usb_device_id id_tab
+ 	{ USB_DEVICE(0x1a86, 0x5523) },
+ 	{ USB_DEVICE(0x1a86, 0x7522) },
+ 	{ USB_DEVICE(0x1a86, 0x7523) },
++	{ USB_DEVICE(0x2184, 0x0057) },
+ 	{ USB_DEVICE(0x4348, 0x5523) },
+ 	{ USB_DEVICE(0x9986, 0x7523) },
+ 	{ },
 
 

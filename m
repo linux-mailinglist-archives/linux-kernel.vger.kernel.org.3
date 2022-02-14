@@ -2,125 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7ECC4B5C11
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF8C4B5D71
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 23:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbiBNVHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:07:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57926 "EHLO
+        id S231735AbiBNWLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 17:11:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbiBNVHV (ORCPT
+        with ESMTP id S230197AbiBNWLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:07:21 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76499108578
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:07:12 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id d27so28870282wrc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:07:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=algolia.com; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=A/acD8nSSN2qwtutUsyLXhKazSyANNDkpT+zY2rd4hY=;
-        b=nVmTdnZw7YS+eOlZnhLC79w+4t4/B3iz1ng/yDksfg/oJnsdGedCB/leWt4F2kYknO
-         7dGtPvmWBIBnrYjN2tStnfnG1f/GyVOsAz1QTFx8GHzm9xeiF7LTqpi/f3lj7RSa4/zw
-         cacVk2TsFlUn65lyO5kHwFyc3nh3JDiFZc2kk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=A/acD8nSSN2qwtutUsyLXhKazSyANNDkpT+zY2rd4hY=;
-        b=ISJgk66ffOoQ/WHV0rA8YbbsUAYBzRkXpC7jcV0+ZZWxvT3L/Q84APO4bp1/kqAkjL
-         o5ru34C8J6EO4fxmlD1gtUk2gMFm/H2iV0hMgV10M4VNjr/d1SXvoYWjmpuwVGS2xWl6
-         +vEWRXSES0J7FYDkjpcWF5cPSkx+1oKnrmKPNJOyB59/aCV/84x6MfK3fWeq1O/UvZVo
-         nhjPJqCvvlJJvZO4Ok79zZPohAhZjrxGwPmKPnvqSfKWK574W6iIlZHDGNHR8BGckWg8
-         ApTm+G8csBHat60PQiI7+Nw8LFs8PRlVjQ8ZlY/Yr1Vp4CxsETnvMJYoD2I+n6PiGHAo
-         5cuw==
-X-Gm-Message-State: AOAM532uQKQe6X+G8WEB8pPtIeYOFoswTu8tLdi09oox7g8WqV2To8CO
-        y7SnM3NqXOSM4f+ltDdlNGxbLmxsskwXPNOV
-X-Google-Smtp-Source: ABdhPJzMTd/9kIRwNcQZCPYOLULANyq8hwJbViUkoG0vZJn1Ki2BLhMt59etGy6TljzXYaha+J9ynw==
-X-Received: by 2002:a5d:4910:: with SMTP id x16mr684033wrq.360.1644872830574;
-        Mon, 14 Feb 2022 13:07:10 -0800 (PST)
-Received: from xavier-xps ([2a01:e0a:830:d971:752e:e19b:a691:2171])
-        by smtp.gmail.com with ESMTPSA id p12sm13244032wmg.36.2022.02.14.13.07.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 13:07:10 -0800 (PST)
-Date:   Mon, 14 Feb 2022 22:07:08 +0100
-From:   Xavier Roche <xavier.roche@algolia.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org,
-        Xavier Roche <xavier.roche@algolia.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.vnet.ibm.com>
-Subject: fs: race between vfs_rename and do_linkat (mv and link)
-Message-ID: <20220214210708.GA2167841@xavier-xps>
+        Mon, 14 Feb 2022 17:11:51 -0500
+X-Greylist: delayed 3597 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 14:11:42 PST
+Received: from slate.cs.rochester.edu (slate.cs.rochester.edu [128.151.167.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1082EB820A;
+        Mon, 14 Feb 2022 14:11:41 -0800 (PST)
+Received: from node1x10a.cs.rochester.edu (node1x10a.cs.rochester.edu [192.5.53.74])
+        by slate.cs.rochester.edu (8.14.7/8.14.7) with ESMTP id 21ELAx5P010783
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 14 Feb 2022 16:10:59 -0500
+Received: from node1x10a.cs.rochester.edu (localhost [127.0.0.1])
+        by node1x10a.cs.rochester.edu (8.15.2/8.15.1) with ESMTP id 21ELAxL3031113;
+        Mon, 14 Feb 2022 16:10:59 -0500
+Received: (from szhai2@localhost)
+        by node1x10a.cs.rochester.edu (8.15.2/8.15.1/Submit) id 21ELAuk4031106;
+        Mon, 14 Feb 2022 16:10:56 -0500
+From:   Shuang Zhai <szhai2@cs.rochester.edu>
+To:     mgorman@techsingularity.net
+Cc:     akpm@linux-foundation.org, djwong@kernel.org, efault@gmx.de,
+        hakavlad@inbox.lv, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, mhocko@suse.com,
+        regressions@lists.linux.dev, riel@surriel.com, vbabka@suse.cz
+Subject: [PATCH v4 1/1] mm: vmscan: Reduce throttling due to a failure to make progress
+Date:   Mon, 14 Feb 2022 16:10:50 -0500
+Message-Id: <20220214211050.31049-1-szhai2@cs.rochester.edu>
+X-Mailer: git-send-email 2.21.3
+In-Reply-To: <20211202150614.22440-1-mgorman@techsingularity.net>
+References: <20211202150614.22440-1-mgorman@techsingularity.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There has been a longstanding race condition between vfs_rename and do_linkat,
-when those operations are done in parallel:
+Hi Mel,
 
-1. Moving a file to an existing target file (eg. mv file target)
-2. Creating a link from the target file  to a third file (eg. ln target link)
+Mel Gorman wrote:
+>
+> Mike Galbraith, Alexey Avramov and Darrick Wong all reported similar
+> problems due to reclaim throttling for excessive lengths of time.
+> In Alexey's case, a memory hog that should go OOM quickly stalls for
+> several minutes before stalling. In Mike and Darrick's cases, a small
+> memcg environment stalled excessively even though the system had enough
+> memory overall.
+>
 
-A typical example would be (1) a regular process putting a new version
-of a database in place and (2) a regular process backuping the live
-database by hardlinking it.
+I recently found a regression when I tested MGLRU with fio on Linux
+5.16-rc6 [1]. After this patch was applied, I re-ran the test with Linux
+5.16, but the regression has not been fixed yet. 
 
-My understanding is that as the target file is never erased on client
-side, but just replaced, the link should never fail.
+The workload is to let fio perform random access on files with buffered
+IO. The total file size is 2x the memory size. Files are stored on pmem.
+For each configuration, I ran fio 10 times and reported the average and
+the standard deviation.
 
-The issue seem to lie inside vfs_link (fs/namei.c):
-       inode_lock(inode);
-       /* Make sure we don't allow creating hardlink to an unlinked file */
-       if (inode->i_nlink == 0 && !(inode->i_state & I_LINKABLE))
-               error =  -ENOENT;
+Fio command
+===========
 
-The possible answer is that the inode refcount is zero because the
-file has just been replaced concurrently, old file being erased, and
-as such, the link operation is failing.
+$ numactl --cpubind=0 --membind=0 fio --name=randread \
+  --directory=/mnt/pmem/ --size={10G, 5G} --io_size=1000TB \
+  --time_based --numjobs={40, 80} --ioengine=io_uring \
+  --ramp_time=20m --runtime=10m --iodepth=128 \
+  --iodepth_batch_submit=32 --iodepth_batch_complete=32 \
+  --rw=randread --random_distribution=random \
+  --direct=0 --norandommap --group_reporting
 
-The race appears to have been introduced by aae8a97d3ec30, to fix
-_another_ race between unlink and link (but I'm not sure to understand
-what were the implications).
+Results in throughput (MB/s):
+=============================
 
-Reverting the inode->i_nlink == 0 section "fixes" the issue, but would
-probably reintroduce this another issue.
++------------+------+-------+------+-------+----------+-------+
+| Jobs / CPU | 5.15 | stdev | 5.16 | stdev | 5.17-rc3 | stdev |
++------------+------+-------+------+-------+----------+-------+
+| 1          | 8411 | 75    | 7459 | 38    | 7331     | 36    |
++------------+------+-------+------+-------+----------+-------+
+| 2          | 8417 | 54    | 7491 | 41    | 7383     | 15    |
++------------+------+-------+------+-------+----------+-------+
 
-At this point I don't know what would be the best way to fix this issue.
+[1] https://lore.kernel.org/linux-mm/20220105024423.26409-1-szhai2@cs.rochester.edu/
 
-Trivial case that will lead to ENOENT: (reproduced on 5.16.5)
-Note that the race _seems_ to last while some IO are pending (getting the
-race on tmpfs is typically much harder)
+Thanks!
 
-========== Cut here ==========
-#!/bin/bash
-#
-
-rm -f link file target
-touch target
-
-# Link target -> link in loop
-while ln target link && rm link; do :; done &
-
-# Overwrite file -> target in loop until we fail
-while touch file && mv file target; do :; done &
-
-wait
-========== Cut here ==========
-
-Kudos to Xavier Grand from Algolia for spotting the issue with a
-reproducible case.
-
-The issue was reported three years ago, but only on the fsdevel
-mailing-list, where it might have been overlooked.
-It was also reported at https://bugzilla.kernel.org/show_bug.cgi?id=204705
+Shuang

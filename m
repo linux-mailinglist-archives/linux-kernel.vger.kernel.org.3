@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5BD4B4BEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC8A4B47C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345376AbiBNKJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:09:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54558 "EHLO
+        id S244213AbiBNJij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:38:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344355AbiBNKEn (ORCPT
+        with ESMTP id S244610AbiBNJgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:04:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70564A3ED;
-        Mon, 14 Feb 2022 01:49:11 -0800 (PST)
+        Mon, 14 Feb 2022 04:36:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB1C66F8E;
+        Mon, 14 Feb 2022 01:33:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C848B80DC8;
-        Mon, 14 Feb 2022 09:49:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B81FC340E9;
-        Mon, 14 Feb 2022 09:49:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4103B80DC1;
+        Mon, 14 Feb 2022 09:33:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C6BDC340E9;
+        Mon, 14 Feb 2022 09:33:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832149;
-        bh=RGZA6G40eAW3uX2cR5Zais31mABtdKrTd4GgeiCbSUs=;
+        s=korg; t=1644831213;
+        bh=q+SyW+Db9SwZ6P7VPGG64vPhkk7vtP3jZwuRCE8SVao=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nA3V7YoNpFStkhoZKUIJjjbSImyeJmMGCePRFwxkLn5EUWZ+7Rd7lGeKu7C8Bns5A
-         KOSPGkh3LAwGZEG5HQWUHcOInReePdZJwGBEfU11yweab2lkhYJO43CK/4NPxhW88Q
-         3s5hjQXelUR/lHI8Vj9wpD+/85zuih3rizNvl6fc=
+        b=v48dBxBZJ4/g13AUX2XVhQg2BMAJRumrjJ3tvrSiEGc3ZwPsB1r48jDYXVaaeOCFE
+         WyVH+fC/P/I4J3RfHo2LuLPWOdakIQA0bTue3+IkWXH7EUmqkbno8tVT1uNAgepWNi
+         xym0H2LI8QI7J8M3bQ+uhJGJchZx5RRwp8GUFJIw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Mikko=20Salom=C3=A4ki?= <ms@datarespons.se>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+        stable@vger.kernel.org, John Keeping <john@metanate.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 093/172] gpio: aggregator: Fix calling into sleeping GPIO controllers
+Subject: [PATCH 4.19 25/49] usb: f_fs: Fix use-after-free for epfile
 Date:   Mon, 14 Feb 2022 10:25:51 +0100
-Message-Id: <20220214092509.617063943@linuxfoundation.org>
+Message-Id: <20220214092449.123615579@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
+References: <20220214092448.285381753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,79 +56,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Udipto Goswami <quic_ugoswami@quicinc.com>
 
-[ Upstream commit 2cba05451a6d0c703bb74f1a250691404f27c4f1 ]
+[ Upstream commit ebe2b1add1055b903e2acd86b290a85297edc0b3 ]
 
-If the parent GPIO controller is a sleeping controller (e.g. a GPIO
-controller connected to I2C), getting or setting a GPIO triggers a
-might_sleep() warning.  This happens because the GPIO Aggregator takes
-the can_sleep flag into account only for its internal locking, not for
-calling into the parent GPIO controller.
+Consider a case where ffs_func_eps_disable is called from
+ffs_func_disable as part of composition switch and at the
+same time ffs_epfile_release get called from userspace.
+ffs_epfile_release will free up the read buffer and call
+ffs_data_closed which in turn destroys ffs->epfiles and
+mark it as NULL. While this was happening the driver has
+already initialized the local epfile in ffs_func_eps_disable
+which is now freed and waiting to acquire the spinlock. Once
+spinlock is acquired the driver proceeds with the stale value
+of epfile and tries to free the already freed read buffer
+causing use-after-free.
 
-Fix this by using the gpiod_[gs]et*_cansleep() APIs when calling into a
-sleeping GPIO controller.
+Following is the illustration of the race:
 
-Reported-by: Mikko Salomäki <ms@datarespons.se>
-Fixes: 828546e24280f721 ("gpio: Add GPIO Aggregator")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+      CPU1                                  CPU2
+
+   ffs_func_eps_disable
+   epfiles (local copy)
+					ffs_epfile_release
+					ffs_data_closed
+					if (last file closed)
+					ffs_data_reset
+					ffs_data_clear
+					ffs_epfiles_destroy
+spin_lock
+dereference epfiles
+
+Fix this races by taking epfiles local copy & assigning it under
+spinlock and if epfiles(local) is null then update it in ffs->epfiles
+then finally destroy it.
+Extending the scope further from the race, protecting the ep related
+structures, and concurrent accesses.
+
+Fixes: a9e6f83c2df1 ("usb: gadget: f_fs: stop sleeping in ffs_func_eps_disable")
+Co-developed-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+Reviewed-by: John Keeping <john@metanate.com>
+Signed-off-by: Pratham Pratap <quic_ppratap@quicinc.com>
+Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+Link: https://lore.kernel.org/r/1643256595-10797-1-git-send-email-quic_ugoswami@quicinc.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpio/gpio-aggregator.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ drivers/usb/gadget/function/f_fs.c | 56 ++++++++++++++++++++++--------
+ 1 file changed, 42 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/gpio/gpio-aggregator.c b/drivers/gpio/gpio-aggregator.c
-index 34e35b64dcdc0..23047dc84ef1b 100644
---- a/drivers/gpio/gpio-aggregator.c
-+++ b/drivers/gpio/gpio-aggregator.c
-@@ -273,7 +273,8 @@ static int gpio_fwd_get(struct gpio_chip *chip, unsigned int offset)
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 9271a7009a00f..49eb4e3c760f4 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1636,16 +1636,24 @@ static void ffs_data_put(struct ffs_data *ffs)
+ 
+ static void ffs_data_closed(struct ffs_data *ffs)
  {
- 	struct gpiochip_fwd *fwd = gpiochip_get_data(chip);
++	struct ffs_epfile *epfiles;
++	unsigned long flags;
++
+ 	ENTER();
  
--	return gpiod_get_value(fwd->descs[offset]);
-+	return chip->can_sleep ? gpiod_get_value_cansleep(fwd->descs[offset])
-+			       : gpiod_get_value(fwd->descs[offset]);
- }
+ 	if (atomic_dec_and_test(&ffs->opened)) {
+ 		if (ffs->no_disconnect) {
+ 			ffs->state = FFS_DEACTIVATED;
+-			if (ffs->epfiles) {
+-				ffs_epfiles_destroy(ffs->epfiles,
+-						   ffs->eps_count);
+-				ffs->epfiles = NULL;
+-			}
++			spin_lock_irqsave(&ffs->eps_lock, flags);
++			epfiles = ffs->epfiles;
++			ffs->epfiles = NULL;
++			spin_unlock_irqrestore(&ffs->eps_lock,
++							flags);
++
++			if (epfiles)
++				ffs_epfiles_destroy(epfiles,
++						 ffs->eps_count);
++
+ 			if (ffs->setup_state == FFS_SETUP_PENDING)
+ 				__ffs_ep0_stall(ffs);
+ 		} else {
+@@ -1692,14 +1700,27 @@ static struct ffs_data *ffs_data_new(const char *dev_name)
  
- static int gpio_fwd_get_multiple(struct gpiochip_fwd *fwd, unsigned long *mask,
-@@ -292,7 +293,10 @@ static int gpio_fwd_get_multiple(struct gpiochip_fwd *fwd, unsigned long *mask,
- 	for_each_set_bit(i, mask, fwd->chip.ngpio)
- 		descs[j++] = fwd->descs[i];
- 
--	error = gpiod_get_array_value(j, descs, NULL, values);
-+	if (fwd->chip.can_sleep)
-+		error = gpiod_get_array_value_cansleep(j, descs, NULL, values);
-+	else
-+		error = gpiod_get_array_value(j, descs, NULL, values);
- 	if (error)
- 		return error;
- 
-@@ -327,7 +331,10 @@ static void gpio_fwd_set(struct gpio_chip *chip, unsigned int offset, int value)
+ static void ffs_data_clear(struct ffs_data *ffs)
  {
- 	struct gpiochip_fwd *fwd = gpiochip_get_data(chip);
++	struct ffs_epfile *epfiles;
++	unsigned long flags;
++
+ 	ENTER();
  
--	gpiod_set_value(fwd->descs[offset], value);
-+	if (chip->can_sleep)
-+		gpiod_set_value_cansleep(fwd->descs[offset], value);
-+	else
-+		gpiod_set_value(fwd->descs[offset], value);
- }
+ 	ffs_closed(ffs);
  
- static void gpio_fwd_set_multiple(struct gpiochip_fwd *fwd, unsigned long *mask,
-@@ -346,7 +353,10 @@ static void gpio_fwd_set_multiple(struct gpiochip_fwd *fwd, unsigned long *mask,
- 		descs[j++] = fwd->descs[i];
+ 	BUG_ON(ffs->gadget);
+ 
+-	if (ffs->epfiles) {
+-		ffs_epfiles_destroy(ffs->epfiles, ffs->eps_count);
++	spin_lock_irqsave(&ffs->eps_lock, flags);
++	epfiles = ffs->epfiles;
++	ffs->epfiles = NULL;
++	spin_unlock_irqrestore(&ffs->eps_lock, flags);
++
++	/*
++	 * potential race possible between ffs_func_eps_disable
++	 * & ffs_epfile_release therefore maintaining a local
++	 * copy of epfile will save us from use-after-free.
++	 */
++	if (epfiles) {
++		ffs_epfiles_destroy(epfiles, ffs->eps_count);
+ 		ffs->epfiles = NULL;
  	}
  
--	gpiod_set_array_value(j, descs, NULL, values);
-+	if (fwd->chip.can_sleep)
-+		gpiod_set_array_value_cansleep(j, descs, NULL, values);
-+	else
-+		gpiod_set_array_value(j, descs, NULL, values);
- }
+@@ -1847,12 +1868,15 @@ static void ffs_epfiles_destroy(struct ffs_epfile *epfiles, unsigned count)
  
- static void gpio_fwd_set_multiple_locked(struct gpio_chip *chip,
+ static void ffs_func_eps_disable(struct ffs_function *func)
+ {
+-	struct ffs_ep *ep         = func->eps;
+-	struct ffs_epfile *epfile = func->ffs->epfiles;
+-	unsigned count            = func->ffs->eps_count;
++	struct ffs_ep *ep;
++	struct ffs_epfile *epfile;
++	unsigned short count;
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&func->ffs->eps_lock, flags);
++	count = func->ffs->eps_count;
++	epfile = func->ffs->epfiles;
++	ep = func->eps;
+ 	while (count--) {
+ 		/* pending requests get nuked */
+ 		if (likely(ep->ep))
+@@ -1870,14 +1894,18 @@ static void ffs_func_eps_disable(struct ffs_function *func)
+ 
+ static int ffs_func_eps_enable(struct ffs_function *func)
+ {
+-	struct ffs_data *ffs      = func->ffs;
+-	struct ffs_ep *ep         = func->eps;
+-	struct ffs_epfile *epfile = ffs->epfiles;
+-	unsigned count            = ffs->eps_count;
++	struct ffs_data *ffs;
++	struct ffs_ep *ep;
++	struct ffs_epfile *epfile;
++	unsigned short count;
+ 	unsigned long flags;
+ 	int ret = 0;
+ 
+ 	spin_lock_irqsave(&func->ffs->eps_lock, flags);
++	ffs = func->ffs;
++	ep = func->eps;
++	epfile = ffs->epfiles;
++	count = ffs->eps_count;
+ 	while(count--) {
+ 		ep->ep->driver_data = ep;
+ 
 -- 
 2.34.1
 

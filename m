@@ -2,71 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F2A4B4DAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:20:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA954B4E6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:34:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237255AbiBNLPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:15:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45142 "EHLO
+        id S239692AbiBNL3D convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 14 Feb 2022 06:29:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350209AbiBNLPM (ORCPT
+        with ESMTP id S1351412AbiBNL2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:15:12 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77556673CF
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:44:44 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id e3so26173007wra.0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:44:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wEYNEIYPdcnYLYEy0iaUdFs9a34YcPpJNldEuNyBzNY=;
-        b=cJ0oJ3rKrxXIhRNwAfNrvQ1ql3yhxuZMVcNb7XaPbDJK11oq6dEPOmugLzFs0HLWp4
-         tAPoqRAYetyA7fb1X9auua3A/pQABKYbLKzK52UfyWlYzt1oYNZeV7Okyi7qICzfg4Qm
-         5suMSeSlRY1dUlEFtAvAclAABcKe1PxLzPlWTdNq/idr8hzriDBYfKnH8FFg6D5tglBS
-         kCIWOBmvpw0Na0Gu+o/5OgSMwfERrVeGBV7PzPa4tfo1moWdHR1Br6Lo9zLmwTwDZo2+
-         K1Die44/3JlbkEA9b0iwQsfpOMZiGQcpNIXP/1TAdTRoC0WYiNkFm2u+Apq3HmHq3JDh
-         n3Bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wEYNEIYPdcnYLYEy0iaUdFs9a34YcPpJNldEuNyBzNY=;
-        b=EY8LD5Uh3SFYAp/5wVoH8Au5c6v76uQbrJEW+hyKWLXthQ/YB28mfR5KxzUubOv5db
-         PpAjkFb+usSf8GHie3p5MFs4j8053QbEBV7QfARg4BNuQQpJFqtZVqxR5u5VsIV7i4FQ
-         yyWv2jhE/Poyeyh32rqUtI4EmJsk+6pjd/CmE8j9bdiQkumI6uSNpLT0KNjnXJXl0hKT
-         Bo1P4UzBQ92DOWJ8CzuEt8A8av7kxPGZXWbbvhv9XqQSjAAgnifzmTlGiQPQxWNawDAh
-         1oqagQ4kC5zR3P+oKD9MC5PnlThHPlg9C8ucnORkLiIwz6KsQZ9HCIU46NyiyD6aBfyY
-         STTQ==
-X-Gm-Message-State: AOAM533P+iy+1ebTP9Ud6ivqNFOsUlt9bO0InTrWaGdIC7hwcBF4IB81
-        GB/Td4ABh2c4Dd82eHQJXHcTjA==
-X-Google-Smtp-Source: ABdhPJx6Dji8PxUO8kXtpblQL8nxXOxK/bexvq1pUZNZ0MtxAeirvsDmvH1b8hpWNM/Vl6Lm+3eisA==
-X-Received: by 2002:adf:f3d1:: with SMTP id g17mr9553978wrp.518.1644835483008;
-        Mon, 14 Feb 2022 02:44:43 -0800 (PST)
-Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id z3sm13747208wmp.42.2022.02.14.02.44.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 02:44:42 -0800 (PST)
-Message-ID: <e1dd400d-0b8c-8bcd-d729-5f07976e468a@linaro.org>
-Date:   Mon, 14 Feb 2022 10:44:41 +0000
+        Mon, 14 Feb 2022 06:28:20 -0500
+Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA56C2DCA
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 03:06:02 -0800 (PST)
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-416-_7XVMO5INWiMjIMJzHYuqg-1; Mon, 14 Feb 2022 05:45:57 -0500
+X-MC-Unique: _7XVMO5INWiMjIMJzHYuqg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E2E7E1091DA1;
+        Mon, 14 Feb 2022 10:45:54 +0000 (UTC)
+Received: from x1.com (unknown [10.22.16.130])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5B42427BDF;
+        Mon, 14 Feb 2022 10:45:27 +0000 (UTC)
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org
+Subject: [RFC V2 00/21] The Runtime Verification (RV) interface
+Date:   Mon, 14 Feb 2022 11:44:51 +0100
+Message-Id: <cover.1644830251.git.bristot@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] doc: nvmem: Remove references to regmap
-Content-Language: en-US
-To:     Sean Anderson <sean.anderson@seco.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>
-References: <20220208162657.724119-1-sean.anderson@seco.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220208162657.724119-1-sean.anderson@seco.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=bristot@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,79 +66,192 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
-Thanks for the patch,
+Over the last years, I've been exploring the possibility of
+verifying the Linux kernel behavior using Runtime Verification.
 
-On 08/02/2022 16:26, Sean Anderson wrote:
-> Since commit 795ddd18d38f ("nvmem: core: remove regmap dependency"),
-> nvmem devices do not use the regmap API. Remove references to it from
-> the documentation. Additionally, update the example to reflect the new
-> API.  I have chosen the brcm-nvram driver since it seems to be simpler
-> than the qfprom driver.
-> 
+Runtime Verification (RV) is a lightweight (yet rigorous) method that
+complements classical exhaustive verification techniques (such as model
+checking and theorem proving) with a more practical approach for complex
+systems.
 
-Please split this into two patches.
+Instead of relying on a fine-grained model of a system (e.g., a
+re-implementation a instruction level), RV works by analyzing the trace of the
+system's actual execution, comparing it against a formal specification of
+the system behavior.
 
+The usage of deterministic automaton for RV is a well-established
+approach. In the specific case of the Linux kernel, you can check how
+to model complex behavior of the Linux kernel with this paper:
 
---srini
+  DE OLIVEIRA, Daniel Bristot; CUCINOTTA, Tommaso; DE OLIVEIRA, Romulo Silva.
+  *Efficient formal verification for the Linux kernel.* In: International
+  Conference on Software Engineering and Formal Methods. Springer, Cham, 2019.
+  p. 315-332.
 
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-> ---
-> 
-> Changes in v2:
-> - Replace spaces with tabs
-> 
->   Documentation/driver-api/nvmem.rst | 28 ++++++++++++----------------
->   1 file changed, 12 insertions(+), 16 deletions(-)
-> 
-> diff --git a/Documentation/driver-api/nvmem.rst b/Documentation/driver-api/nvmem.rst
-> index 287e86819640..a8a58b61709b 100644
-> --- a/Documentation/driver-api/nvmem.rst
-> +++ b/Documentation/driver-api/nvmem.rst
-> @@ -26,9 +26,7 @@ was a rather big abstraction leak.
->   
->   This framework aims at solve these problems. It also introduces DT
->   representation for consumer devices to go get the data they require (MAC
-> -Addresses, SoC/Revision ID, part numbers, and so on) from the NVMEMs. This
-> -framework is based on regmap, so that most of the abstraction available in
-> -regmap can be reused, across multiple types of buses.
-> +Addresses, SoC/Revision ID, part numbers, and so on) from the NVMEMs.
->   
->   NVMEM Providers
->   +++++++++++++++
-> @@ -45,24 +43,22 @@ nvmem_device pointer.
->   
->   nvmem_unregister(nvmem) is used to unregister a previously registered provider.
->   
-> -For example, a simple qfprom case::
-> +For example, a simple nvram case::
->   
-> -  static struct nvmem_config econfig = {
-> -	.name = "qfprom",
-> -	.owner = THIS_MODULE,
-> -  };
-> -
-> -  static int qfprom_probe(struct platform_device *pdev)
-> +  static int brcm_nvram_probe(struct platform_device *pdev)
->     {
-> +	struct nvmem_config config = {
-> +		.name = "brcm-nvram",
-> +		.reg_read = brcm_nvram_read,
-> +	};
->   	...
-> -	econfig.dev = &pdev->dev;
-> -	nvmem = nvmem_register(&econfig);
-> -	...
-> +	config.dev = &pdev->dev;
-> +	config.priv = priv;
-> +	config.size = resource_size(res);
-> +
-> +	devm_nvmem_register(&econfig);
->     }
->   
-> -It is mandatory that the NVMEM provider has a regmap associated with its
-> -struct device. Failure to do would return error code from nvmem_register().
-> -
->   Users of board files can define and register nvmem cells using the
->   nvmem_cell_table struct::
->   
+And how efficient is this approach here:
+
+  DE OLIVEIRA, Daniel B.; DE OLIVEIRA, Romulo S.; CUCINOTTA, Tommaso. *A thread
+  synchronization model for the PREEMPT_RT Linux kernel.* Journal of Systems
+  Architecture, 2020, 107: 101729.
+
+tlrd: it is possible to model complex behaviors in a modular way, with
+an acceptable overhead (even for production systems). See this
+presentation at 2019's ELCE: https://www.youtube.com/watch?v=BfTuEHafNgg
+
+Here I am proposing a more practical approach for the usage of deterministic
+automata for runtime verification, and it includes:
+
+	- An interface for controlling the verification;
+	- A tool and set of headers that enables the automatic code
+	  generation of the RV monitor (Monitor Synthesis);
+	- Sample monitors to evaluate the interface;
+	- A sample monitor developed in the context of the Elisa Project
+	  demonstrating how to use RV in the context of safety-critical
+	  systems.
+
+Given that RV is a tracing consumer, the code is being placed inside the
+tracing subsystem (Steven and I have been talking about it for a while).
+
+The changes since V1 includes:
+	- rebased to the latest kernel;
+	- code cleanup;
+	- the watchdog dev monitor;
+	- safety app;
+
+The TODO list still includes:
+	- Make per-task monitor use the task struct to store the
+	  per monitor state (Suggested by peterz)
+	- Add a reactor tha enables the visualization of the visited
+	  states via KCOV (Marco Elver & Dmitry Vyukov)
+	- Add a CRC method to check from user-space if the values
+	  exported by the monitor were not corrupted by any other
+	  kernel task (Gabriele Paoloni)
+
+I am sending the V2 with some TODOs because I need
+some feedback on the interface/files placement inside the kernel,
+so I can adjust all the patches accordingly. Also, to make it possible
+for people in the Elisa Project to evaluate the safety_app approach.
+
+Daniel Bristot de Oliveira (21):
+  rv: Add Runtime Verification (RV) interface
+  rv: Add runtime reactors interface
+  rv/include: Add helper functions for deterministic automata
+  rv/include: Add deterministic automata monitor definition via C macros
+  rv/include: Add tracing helper functions
+  tools/rv: Add dot2c
+  tools/rv: Add dot2k
+  rv/monitor: Add the wip monitor skeleton created by dot2k
+  rv/monitor: wip instrumentation and Makefile/Kconfig entries
+  rv/monitor: Add the wwnr monitor skeleton created by dot2k
+  rv/monitor: wwnr instrumentation and Makefile/Kconfig entries
+  rv/reactor: Add the printk reactor
+  rv/reactor: Add the panic reactor
+  Documentation/rv: Add a basic documentation
+  Documentation/rv: Add deterministic automata monitor synthesis
+    documentation
+  Documentation/rv: Add deterministic automata instrumentation
+    documentation
+  watchdog/dev: Add tracepoints
+  rv/monitor: Add safe watchdog monitor
+  rv/monitor: Add safe watchdog nowayout monitor
+  rv/safety_app: Add an safety_app sample
+  Documentation/rv: Add watchdog-monitor documentation
+
+ Documentation/trace/index.rst                 |   1 +
+ .../trace/rv/da_monitor_instrumentation.rst   | 230 ++++++
+ .../trace/rv/da_monitor_synthesis.rst         | 286 +++++++
+ Documentation/trace/rv/index.rst              |   9 +
+ .../trace/rv/runtime-verification.rst         | 233 ++++++
+ Documentation/trace/rv/watchdog-monitor.rst   | 307 ++++++++
+ drivers/watchdog/watchdog_dev.c               |  41 +-
+ include/linux/rv.h                            |  31 +
+ include/linux/watchdog.h                      |   7 +-
+ include/rv/automata.h                         |  52 ++
+ include/rv/da_monitor.h                       | 398 ++++++++++
+ include/rv/trace_helpers.h                    |  69 ++
+ include/trace/events/watchdog.h               | 103 +++
+ kernel/trace/Kconfig                          |   2 +
+ kernel/trace/Makefile                         |   2 +
+ kernel/trace/rv/Kconfig                       |  78 ++
+ kernel/trace/rv/Makefile                      |  10 +
+ kernel/trace/rv/monitor_safe_wtd/model.h      |  84 +++
+ kernel/trace/rv/monitor_safe_wtd/safe_wtd.c   | 322 ++++++++
+ kernel/trace/rv/monitor_safe_wtd/safe_wtd.h   |  64 ++
+ kernel/trace/rv/monitor_safe_wtd_nwo/model.h  |  61 ++
+ .../rv/monitor_safe_wtd_nwo/safe_wtd_nwo.c    | 309 ++++++++
+ .../rv/monitor_safe_wtd_nwo/safe_wtd_nwo.h    |  64 ++
+ kernel/trace/rv/monitor_wip/model.h           |  38 +
+ kernel/trace/rv/monitor_wip/wip.c             | 124 +++
+ kernel/trace/rv/monitor_wip/wip.h             |  64 ++
+ kernel/trace/rv/monitor_wwnr/model.h          |  38 +
+ kernel/trace/rv/monitor_wwnr/wwnr.c           | 122 +++
+ kernel/trace/rv/monitor_wwnr/wwnr.h           |  70 ++
+ kernel/trace/rv/reactor_panic.c               |  44 ++
+ kernel/trace/rv/reactor_printk.c              |  43 ++
+ kernel/trace/rv/rv.c                          | 700 +++++++++++++++++
+ kernel/trace/rv/rv.h                          |  50 ++
+ kernel/trace/rv/rv_reactors.c                 | 478 ++++++++++++
+ kernel/trace/trace.c                          |   4 +
+ kernel/trace/trace.h                          |   2 +
+ tools/tracing/rv/dot2/Makefile                |  26 +
+ tools/tracing/rv/dot2/automata.py             | 179 +++++
+ tools/tracing/rv/dot2/dot2c                   |  30 +
+ tools/tracing/rv/dot2/dot2c.py                | 240 ++++++
+ tools/tracing/rv/dot2/dot2k                   |  46 ++
+ tools/tracing/rv/dot2/dot2k.py                | 184 +++++
+ .../rv/dot2/dot2k_templates/main_global.c     |  96 +++
+ .../rv/dot2/dot2k_templates/main_global.h     |  64 ++
+ .../rv/dot2/dot2k_templates/main_per_cpu.c    |  96 +++
+ .../rv/dot2/dot2k_templates/main_per_cpu.h    |  64 ++
+ .../rv/dot2/dot2k_templates/main_per_task.c   |  96 +++
+ .../rv/dot2/dot2k_templates/main_per_task.h   |  70 ++
+ tools/tracing/rv/safety_app/Makefile          |  51 ++
+ tools/tracing/rv/safety_app/safety_app.c      | 713 ++++++++++++++++++
+ 50 files changed, 6486 insertions(+), 9 deletions(-)
+ create mode 100644 Documentation/trace/rv/da_monitor_instrumentation.rst
+ create mode 100644 Documentation/trace/rv/da_monitor_synthesis.rst
+ create mode 100644 Documentation/trace/rv/index.rst
+ create mode 100644 Documentation/trace/rv/runtime-verification.rst
+ create mode 100644 Documentation/trace/rv/watchdog-monitor.rst
+ create mode 100644 include/linux/rv.h
+ create mode 100644 include/rv/automata.h
+ create mode 100644 include/rv/da_monitor.h
+ create mode 100644 include/rv/trace_helpers.h
+ create mode 100644 include/trace/events/watchdog.h
+ create mode 100644 kernel/trace/rv/Kconfig
+ create mode 100644 kernel/trace/rv/Makefile
+ create mode 100644 kernel/trace/rv/monitor_safe_wtd/model.h
+ create mode 100644 kernel/trace/rv/monitor_safe_wtd/safe_wtd.c
+ create mode 100644 kernel/trace/rv/monitor_safe_wtd/safe_wtd.h
+ create mode 100644 kernel/trace/rv/monitor_safe_wtd_nwo/model.h
+ create mode 100644 kernel/trace/rv/monitor_safe_wtd_nwo/safe_wtd_nwo.c
+ create mode 100644 kernel/trace/rv/monitor_safe_wtd_nwo/safe_wtd_nwo.h
+ create mode 100644 kernel/trace/rv/monitor_wip/model.h
+ create mode 100644 kernel/trace/rv/monitor_wip/wip.c
+ create mode 100644 kernel/trace/rv/monitor_wip/wip.h
+ create mode 100644 kernel/trace/rv/monitor_wwnr/model.h
+ create mode 100644 kernel/trace/rv/monitor_wwnr/wwnr.c
+ create mode 100644 kernel/trace/rv/monitor_wwnr/wwnr.h
+ create mode 100644 kernel/trace/rv/reactor_panic.c
+ create mode 100644 kernel/trace/rv/reactor_printk.c
+ create mode 100644 kernel/trace/rv/rv.c
+ create mode 100644 kernel/trace/rv/rv.h
+ create mode 100644 kernel/trace/rv/rv_reactors.c
+ create mode 100644 tools/tracing/rv/dot2/Makefile
+ create mode 100644 tools/tracing/rv/dot2/automata.py
+ create mode 100644 tools/tracing/rv/dot2/dot2c
+ create mode 100644 tools/tracing/rv/dot2/dot2c.py
+ create mode 100644 tools/tracing/rv/dot2/dot2k
+ create mode 100644 tools/tracing/rv/dot2/dot2k.py
+ create mode 100644 tools/tracing/rv/dot2/dot2k_templates/main_global.c
+ create mode 100644 tools/tracing/rv/dot2/dot2k_templates/main_global.h
+ create mode 100644 tools/tracing/rv/dot2/dot2k_templates/main_per_cpu.c
+ create mode 100644 tools/tracing/rv/dot2/dot2k_templates/main_per_cpu.h
+ create mode 100644 tools/tracing/rv/dot2/dot2k_templates/main_per_task.c
+ create mode 100644 tools/tracing/rv/dot2/dot2k_templates/main_per_task.h
+ create mode 100644 tools/tracing/rv/safety_app/Makefile
+ create mode 100644 tools/tracing/rv/safety_app/safety_app.c
+
+-- 
+2.33.1
+

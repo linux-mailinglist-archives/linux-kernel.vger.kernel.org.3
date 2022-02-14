@@ -2,109 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B07254B5A70
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 20:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 191304B5A5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 20:05:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiBNTI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 14:08:26 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:44126 "EHLO
+        id S230168AbiBNTEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 14:04:40 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:51480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbiBNTIR (ORCPT
+        with ESMTP id S229812AbiBNTEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 14:08:17 -0500
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9439C1EC70
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 11:08:01 -0800 (PST)
-Received: by mail-pj1-f51.google.com with SMTP id n19-20020a17090ade9300b001b9892a7bf9so48708pjv.5
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 11:08:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rajagiritech-edu-in.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=l8oDDwvFNImY/VPR1iI+PTzO8EFCV3s3KPhPnO2c9qA=;
-        b=rI4JOyp6IV6w3InslglP235o0EtoDitOmNELyKh8B2Up0oGYgaVOWRXqwKiX9TLfAz
-         N/2ys8LUy0o18leOKmEw5jJ3DEvqQYHy3xxsiT2o5zWvHUved3MSXP9mu3GborQQtXay
-         ISMq80DJ8Ou2f8/XmrMyr+/+LX4XC7wfhRYHA3Ja3a05N56J8PQ19wNBPzb0VM4rb6hU
-         P7mxRkcgf0GCQZOnt3HteIoUDNo5wKZ1rbAxOf1AuI0pDIFeOk/FlgLUM9SCZoKhrujm
-         yQxkuwheZRelQtdwNZ4htfATDkm299zk1VFn16AKkKHIRFeaDzwwkeeAQ+HmljxteeM1
-         t4hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=l8oDDwvFNImY/VPR1iI+PTzO8EFCV3s3KPhPnO2c9qA=;
-        b=q7yczolk3C/TQei0o1QijetO8s7ft3GJoGv1M8+KpDZC8Px+nr0Qd/AFWGod6M69Uo
-         oaMCtvvyaWq+LDdSRqvht8DrNWptVLLdCxJdkrCaFd+kuf3x9Jiyze/6qMb4VI6rSYWu
-         nRez3xUbkApF7gKuUKlEG14uJKHC1G5P46R4NEp1hMOv0lG7d0K+ojpwsajAx7Vtxwzf
-         O1BDANelTR3bD59nhZAH7RmudRyP8E7Upwh4ua+QX1QakLRAcECNN++Idh9FtOvlhOD/
-         iz7PMIP4BDnKTVNGf+sPF4SGLTKGggnqiaQA8vdy8D5Xo9MAzz9WtfP27jRMo254EzWg
-         hVSw==
-X-Gm-Message-State: AOAM533+6kk1imQI0iPT2qV088lqJivnFsD/m4MX9SZ0//cd8/e2xtZV
-        MQcFvd3aDJqt8LMtTVmZouPP+g+9vyedJpRownRey7DHkrGV/rN6
-X-Google-Smtp-Source: ABdhPJwrV9PAaE833RQnSzliybCzTGC5tXIZJBODdZdXtN+MdiLtf7qksrvTJNixCwaxHomIyGnU/PinBMcVwG0/VPE=
-X-Received: by 2002:a67:7206:: with SMTP id n6mr51013vsc.21.1644864661852;
- Mon, 14 Feb 2022 10:51:01 -0800 (PST)
+        Mon, 14 Feb 2022 14:04:20 -0500
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387D18D6A8;
+        Mon, 14 Feb 2022 11:04:01 -0800 (PST)
+Received: from relay4-d.mail.gandi.net (unknown [217.70.183.196])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 812EACD6B9;
+        Mon, 14 Feb 2022 18:50:10 +0000 (UTC)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id BF614E0005;
+        Mon, 14 Feb 2022 18:49:26 +0000 (UTC)
+Date:   Mon, 14 Feb 2022 19:50:35 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/9] media: imx: Store the type of hardware
+ implementation
+Message-ID: <20220214185035.uomrdkzth7adkw5c@uno.localdomain>
+References: <20220211142752.779952-1-alexander.stein@ew.tq-group.com>
+ <20220211142752.779952-2-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
-References: <20220214092448.285381753@linuxfoundation.org>
-In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
-From:   Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
-Date:   Mon, 14 Feb 2022 13:50:25 -0500
-Message-ID: <CAG=yYwm=7zS0k9VY+Oie18LtmN1jemV0AP778+s4+wR5jC6N+g@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/49] 4.19.230-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
-        torvalds@linux-foundation.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220211142752.779952-2-alexander.stein@ew.tq-group.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 4:37 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.230 release.
-> There are 49 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.230-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
- hello,
+Hi Alexander, Dorota,
 
-Compiled and booted 4.19.230-rc1+  on  ...
-Processor Information
-    Socket Designation: FM2
-    Type: Central Processor
-    Family: A-Series
-    Manufacturer: AuthenticAMD
+On Fri, Feb 11, 2022 at 03:27:44PM +0100, Alexander Stein wrote:
+> From: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+>
+> The driver covers i.MX5/6, as well as i.MX7/8 hardware.
+> Those implementations differ, e.g. in the sizes of buffers they accept.
+>
+> Some functionality should be abstracted, and storing type achieves that.
+>
+> Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+> Changes in v2:
+> * Switch back to using enum
+>
+>  drivers/staging/media/imx/imx-ic-prpencvf.c   | 3 ++-
+>  drivers/staging/media/imx/imx-media-capture.c | 5 ++++-
+>  drivers/staging/media/imx/imx-media-csi.c     | 3 ++-
+>  drivers/staging/media/imx/imx-media.h         | 8 +++++++-
+>  drivers/staging/media/imx/imx7-media-csi.c    | 3 ++-
+>  5 files changed, 17 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/staging/media/imx/imx-ic-prpencvf.c b/drivers/staging/media/imx/imx-ic-prpencvf.c
+> index 9b81cfbcd777..671bb9a681aa 100644
+> --- a/drivers/staging/media/imx/imx-ic-prpencvf.c
+> +++ b/drivers/staging/media/imx/imx-ic-prpencvf.c
+> @@ -1266,7 +1266,8 @@ static int prp_registered(struct v4l2_subdev *sd)
+>
+>  	priv->vdev = imx_media_capture_device_init(ic_priv->ipu_dev,
+>  						   &ic_priv->sd,
+> -						   PRPENCVF_SRC_PAD, true);
+> +						   PRPENCVF_SRC_PAD, true,
+> +						   DEVICE_TYPE_IMX56);
+>  	if (IS_ERR(priv->vdev))
+>  		return PTR_ERR(priv->vdev);
+>
+> diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
+> index 93ba09236010..65dc95a48ecc 100644
+> --- a/drivers/staging/media/imx/imx-media-capture.c
+> +++ b/drivers/staging/media/imx/imx-media-capture.c
+> @@ -34,6 +34,7 @@ struct capture_priv {
+>
+>  	struct imx_media_video_dev vdev;	/* Video device */
+>  	struct media_pad vdev_pad;		/* Video device pad */
+> +	enum imx_media_device_type type;	/* Type of hardware implementation */
+>
+>  	struct v4l2_subdev *src_sd;		/* Source subdev */
+>  	int src_sd_pad;				/* Source subdev pad */
+> @@ -957,7 +958,8 @@ EXPORT_SYMBOL_GPL(imx_media_capture_device_unregister);
+>
+>  struct imx_media_video_dev *
+>  imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
+> -			      int pad, bool legacy_api)
+> +			      int pad, bool legacy_api,
+> +			      enum imx_media_device_type type)
+>  {
+>  	struct capture_priv *priv;
+>  	struct video_device *vfd;
+> @@ -972,6 +974,7 @@ imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
+>  	priv->src_sd_pad = pad;
+>  	priv->dev = dev;
+>  	priv->legacy_api = legacy_api;
+> +	priv->type = type;
+>
+>  	mutex_init(&priv->mutex);
+>  	INIT_LIST_HEAD(&priv->ready_q);
+> diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
+> index bd7f156f2d52..d5557bb4913d 100644
+> --- a/drivers/staging/media/imx/imx-media-csi.c
+> +++ b/drivers/staging/media/imx/imx-media-csi.c
+> @@ -1803,7 +1803,8 @@ static int csi_registered(struct v4l2_subdev *sd)
+>  	}
+>
+>  	priv->vdev = imx_media_capture_device_init(priv->sd.dev, &priv->sd,
+> -						   CSI_SRC_PAD_IDMAC, true);
+> +						   CSI_SRC_PAD_IDMAC, true,
+> +						   DEVICE_TYPE_IMX56);
+>  	if (IS_ERR(priv->vdev)) {
+>  		ret = PTR_ERR(priv->vdev);
+>  		goto free_fim;
+> diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
+> index f263fc3adbb9..e4c22b3ccd57 100644
+> --- a/drivers/staging/media/imx/imx-media.h
+> +++ b/drivers/staging/media/imx/imx-media.h
+> @@ -96,6 +96,11 @@ enum imx_pixfmt_sel {
+>  	PIXFMT_SEL_ANY = PIXFMT_SEL_YUV | PIXFMT_SEL_RGB | PIXFMT_SEL_BAYER,
+>  };
+>
+> +enum imx_media_device_type {
+> +	DEVICE_TYPE_IMX56,
+> +	DEVICE_TYPE_IMX78,
+> +};
+> +
 
-NO new regressions from dmesg.
+Isn't this too coarse as a distinction ?
 
-Tested-by: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+I tried adding per-soc identifiers here:
+https://lore.kernel.org/linux-media/20220214184318.409208-5-jacopo@jmondi.org/T/#u
 
--- 
-software engineer
-rajagiri school of engineering and technology  -  autonomous
+Maybe they can help ?
+
+>  struct imx_media_buffer {
+>  	struct vb2_v4l2_buffer vbuf; /* v4l buffer must be first */
+>  	struct list_head  list;
+> @@ -282,7 +287,8 @@ int imx_media_ic_unregister(struct v4l2_subdev *sd);
+>  /* imx-media-capture.c */
+>  struct imx_media_video_dev *
+>  imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
+> -			      int pad, bool legacy_api);
+> +			      int pad, bool legacy_api,
+> +			      enum imx_media_device_type type);
+>  void imx_media_capture_device_remove(struct imx_media_video_dev *vdev);
+>  int imx_media_capture_device_register(struct imx_media_video_dev *vdev,
+>  				      u32 link_flags);
+> diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+> index 32311fc0e2a4..173dd014c2d6 100644
+> --- a/drivers/staging/media/imx/imx7-media-csi.c
+> +++ b/drivers/staging/media/imx/imx7-media-csi.c
+> @@ -1039,7 +1039,8 @@ static int imx7_csi_registered(struct v4l2_subdev *sd)
+>  	}
+>
+>  	csi->vdev = imx_media_capture_device_init(csi->sd.dev, &csi->sd,
+> -						  IMX7_CSI_PAD_SRC, false);
+> +						  IMX7_CSI_PAD_SRC, false,
+> +						  DEVICE_TYPE_IMX78);
+>  	if (IS_ERR(csi->vdev))
+>  		return PTR_ERR(csi->vdev);
+>
+> --
+> 2.25.1
+>

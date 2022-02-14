@@ -2,106 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A01D4B4F98
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45BBC4B4F8A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351558AbiBNMEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 07:04:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33710 "EHLO
+        id S1352174AbiBNMDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 07:03:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352448AbiBNME3 (ORCPT
+        with ESMTP id S234179AbiBNMDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 07:04:29 -0500
-Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FF0B2BDE;
-        Mon, 14 Feb 2022 04:04:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=U+JDY
-        cv4Sgjbhmy74T8cF1JfikTdJpu6pHvaldP6AWY=; b=j+3OgVHiT/HQT4Ly8J28I
-        y8zfPY9WRl22n2RdMJ/oBNd80oywFYic3YwDSbL9Qab8Xb2n0i3iWneEniUf26LF
-        dFaAISezUDlG2tSyjIwixqXJkZXbPAwPSaglTGCRBRyKQjgTD6AEGhAzP52w2y/V
-        20+1ojt1gvf8Akb8HzUV0k=
-Received: from localhost.localdomain (unknown [49.76.218.253])
-        by smtp3 (Coremail) with SMTP id DcmowAAn1Pz3RApiYcDMAQ--.15568S2;
-        Mon, 14 Feb 2022 20:03:05 +0800 (CST)
-From:   wonder_rock@126.com
-To:     rdunlap@infradead.org
-Cc:     axboe@kernel.dk, guoren@kernel.org, linux-csky@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wonder_rock@126.com
-Subject: [PATCH 1/1] csky: Fix versioncheck warnings
-Date:   Mon, 14 Feb 2022 20:02:50 +0800
-Message-Id: <20220214120250.10256-1-wonder_rock@126.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <98208fa3-4b28-cdeb-7699-dbd9d66bfa60@infradead.org>
-References: <98208fa3-4b28-cdeb-7699-dbd9d66bfa60@infradead.org>
+        Mon, 14 Feb 2022 07:03:41 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6014D65;
+        Mon, 14 Feb 2022 04:03:33 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: adalessandro)
+        with ESMTPSA id E2B501F438D7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644840212;
+        bh=udMH2bb1ZVp+VDSfiDlModpHLLav3cr8I6TcP5b8eBM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OlU4OsTRNQ2WyqTcTvr0CXKeYf9reHgF0SovJRz2cOpsATdVDHU8Ga22SQ/DQAoKp
+         jteCmBKGVDQpNDaEkAF5TzwzLn19PY0MC41oTkh+eiAAxbiZclAt+trVfOsIZDpHD/
+         uEvQ+BZaJTPywUdjbY8Eib1aWUBIvpgFazvWXwh4t9NXU3JIo7RNHoxpoRh1DhKlIC
+         iMQIJBkSzt38Qiybz8SaozbMGa3MlFz+yMKHJqjYvnYNLRUsBGNm7vWGrdRHlxIv/5
+         wWiSR+K+SLd0bNl5Jm7BzgsQwFM2sKXY26tG5EL4O4PSuxLDirIomJb5pgSITyqZk3
+         +MQK6+irlQn0A==
+From:   Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+To:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+        linux-imx@nxp.com, linux-kernel@vger.kernel.org
+Cc:     ariel.dalessandro@collabora.com, broonie@kernel.org,
+        festevam@gmail.com, krzysztof.kozlowski@canonical.com,
+        lgirdwood@gmail.com, michael@amarulasolutions.com,
+        robh+dt@kernel.org, s.hauer@pengutronix.de, shawnguo@kernel.org
+Subject: [PATCH v3] arm64: dts: imx8mn-bsh-smm-s2pro: Add tlv320aic31xx audio card node
+Date:   Mon, 14 Feb 2022 09:03:07 -0300
+Message-Id: <20220214120307.15665-1-ariel.dalessandro@collabora.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DcmowAAn1Pz3RApiYcDMAQ--.15568S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Aw47Xr1rZF4Dur17Ar1kZrb_yoW8Ww15pF
-        1DZrZ5KrW5Cw18tr9rAr1qyas0q3WDGw1xX347KFWUZF47tFWqqrs5Crn0yr1DXFWv9w4r
-        WF43Gr45GrWDXaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UcSdkUUUUU=
-X-Originating-IP: [49.76.218.253]
-X-CM-SenderInfo: xzrqvv5ubu0ubn6rjloofrz/1tbiuRmngVpD7wfTewAAsf
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Deyan Wang <wonder_rock@126.com>
+BSH SystemMaster (SMM) S2 PRO board comes with an audio card based on
+tlv320aic31xx family codec.
 
-arch/csky/include/asm/io.h: 8 linux/version.h not needed.
-arch/csky/kernel/process.c: 5 linux/version.h not needed.
-arch/csky/mm/dma-mapping.c: 12 linux/version.h not needed.
+The audio card exposes two playback devices, one of them using the EASRC
+(Enhanced Asynchronous Sample Rate Converter) module. Note that this
+would require SDMA and EASRC firmware in order to work.
 
-Signed-off-by: Deyan Wang <wonder_rock@126.com>
+Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
 ---
- arch/csky/include/asm/io.h | 1 -
- arch/csky/kernel/process.c | 1 -
- arch/csky/mm/dma-mapping.c | 1 -
- 3 files changed, 3 deletions(-)
+ .../dts/freescale/imx8mn-bsh-smm-s2pro.dts    | 94 +++++++++++++++++++
+ 1 file changed, 94 insertions(+)
 
-diff --git a/arch/csky/include/asm/io.h b/arch/csky/include/asm/io.h
-index f82654053dc0..ed53f0b47388 100644
---- a/arch/csky/include/asm/io.h
-+++ b/arch/csky/include/asm/io.h
-@@ -5,7 +5,6 @@
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts
+index c6a8ed6745c1..44e2635d3096 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts
+@@ -7,6 +7,7 @@
+ /dts-v1/;
  
- #include <linux/pgtable.h>
- #include <linux/types.h>
--#include <linux/version.h>
+ #include "imx8mn-bsh-smm-s2-common.dtsi"
++#include <dt-bindings/sound/tlv320aic31xx.h>
  
- /*
-  * I/O memory access primitives. Reads are ordered relative to any
-diff --git a/arch/csky/kernel/process.c b/arch/csky/kernel/process.c
-index 3d0ca22cd0e2..5de04707aa07 100644
---- a/arch/csky/kernel/process.c
-+++ b/arch/csky/kernel/process.c
-@@ -2,7 +2,6 @@
- // Copyright (C) 2018 Hangzhou C-SKY Microsystems co.,ltd.
+ / {
+ 	model = "BSH SMM S2 PRO";
+@@ -16,6 +17,69 @@ memory@40000000 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x40000000 0x0 0x20000000>;
+ 	};
++
++	sound-tlv320aic31xx {
++		compatible = "fsl,imx-audio-tlv320aic31xx";
++		model = "tlv320aic31xx-hifi";
++		audio-cpu = <&sai3>;
++		audio-codec = <&codec>;
++		audio-asrc = <&easrc>;
++		audio-routing =
++			"Ext Spk", "SPL",
++			"Ext Spk", "SPR";
++		mclk-id = <PLL_CLKIN_BCLK>;
++	};
++
++	vdd_input: vdd_input {
++		compatible = "regulator-fixed";
++		regulator-name = "vdd_input";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++	};
++};
++
++&easrc {
++	fsl,asrc-rate = <48000>;
++	fsl,asrc-format = <10>;
++	status = "okay";
++};
++
++&i2c2 {
++	clock-frequency = <400000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c2>;
++	status = "okay";
++
++	tlv320dac3101: audio-codec@18 {
++		#sound-dai-cells = <0>;
++		compatible = "ti,tlv320dac3101";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_dac_rst>;
++		reg = <0x18>;
++
++		ai31xx-micbias-vg = <MICBIAS_AVDDV>;
++
++		HPVDD-supply = <&buck4_reg>;
++		SPRVDD-supply = <&vdd_input>;
++		SPLVDD-supply = <&vdd_input>;
++		AVDD-supply = <&buck4_reg>;
++		IOVDD-supply = <&buck4_reg>;
++		DVDD-supply = <&buck5_reg>;
++		reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
++
++		clocks = <&clk IMX8MN_CLK_SAI3_ROOT>;
++		clock-names = "mclk";
++	};
++};
++
++&sai3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_sai3>;
++	assigned-clocks = <&clk IMX8MN_CLK_SAI3>;
++	assigned-clock-parents = <&clk IMX8MN_AUDIO_PLL1_OUT>;
++	assigned-clock-rates = <24576000>;
++	fsl,sai-mclk-direction-output;
++	status = "okay";
+ };
  
- #include <linux/module.h>
--#include <linux/version.h>
- #include <linux/sched.h>
- #include <linux/sched/task_stack.h>
- #include <linux/sched/debug.h>
-diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
-index c3a775a7e8f9..82447029feb4 100644
---- a/arch/csky/mm/dma-mapping.c
-+++ b/arch/csky/mm/dma-mapping.c
-@@ -9,7 +9,6 @@
- #include <linux/mm.h>
- #include <linux/scatterlist.h>
- #include <linux/types.h>
--#include <linux/version.h>
- #include <asm/cache.h>
+ /* eMMC */
+@@ -30,6 +94,36 @@ &usdhc1 {
+ };
  
- static inline void cache_op(phys_addr_t paddr, size_t size,
+ &iomuxc {
++	pinctrl_dac_rst: dacrstgrp {
++		fsl,pins = <
++			MX8MN_IOMUXC_GPIO1_IO06_GPIO1_IO6		0x19 /* DAC_RST */
++		>;
++	};
++
++	pinctrl_espi2: espi2grp {
++		fsl,pins = <
++			MX8MN_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK		0x082
++			MX8MN_IOMUXC_ECSPI2_MOSI_ECSPI2_MOSI		0x082
++			MX8MN_IOMUXC_ECSPI2_MISO_ECSPI2_MISO		0x082
++			MX8MN_IOMUXC_ECSPI2_SS0_ECSPI2_SS0		0x040
++		>;
++	};
++
++	pinctrl_i2c2: i2c2grp {
++		fsl,pins = <
++			MX8MN_IOMUXC_I2C2_SCL_I2C2_SCL			0x400000c3
++			MX8MN_IOMUXC_I2C2_SDA_I2C2_SDA			0x400000c3
++		>;
++	};
++
++	pinctrl_sai3: sai3grp {
++		fsl,pins = <
++			MX8MN_IOMUXC_SAI3_TXFS_SAI3_TX_SYNC		0xd6
++			MX8MN_IOMUXC_SAI3_TXC_SAI3_TX_BCLK		0xd6
++			MX8MN_IOMUXC_SAI3_TXD_SAI3_TX_DATA0		0xd6
++		>;
++	};
++
+ 	pinctrl_usdhc1: usdhc1grp {
+ 		fsl,pins = <
+ 			MX8MN_IOMUXC_SD1_CLK_USDHC1_CLK			0x40000090
 -- 
-2.25.1
+2.34.1
 

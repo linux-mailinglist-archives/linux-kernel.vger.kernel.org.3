@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A5904B4883
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 153324B4755
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343735AbiBNJzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:55:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33310 "EHLO
+        id S245260AbiBNJpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:45:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344604AbiBNJvv (ORCPT
+        with ESMTP id S244835AbiBNJmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:51:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A807985E;
-        Mon, 14 Feb 2022 01:43:03 -0800 (PST)
+        Mon, 14 Feb 2022 04:42:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EB56736B;
+        Mon, 14 Feb 2022 01:37:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1412561172;
-        Mon, 14 Feb 2022 09:43:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB67FC340E9;
-        Mon, 14 Feb 2022 09:43:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CCB261163;
+        Mon, 14 Feb 2022 09:37:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F75FC340E9;
+        Mon, 14 Feb 2022 09:37:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831782;
-        bh=c4aitKK1Y1NNZzZfjqZWL2zAZsEEosoRaQN36dthyeA=;
+        s=korg; t=1644831469;
+        bh=isKue2QWQ1JKQpEPB6MDW/72jnmG+ZUtreUJnlTAIkQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KH95ua17WaXPbbX56J6yMOdC9Dwl9kCPGoXVels3ESepHsCt0q2cCdtC3Iz8Dh0ER
-         8Ha+MZn3DvemcHMXo0k6rcDlGfxFxKdxkTE7vpTcjgDUQwbUejznG0LeH7TlqNCAHw
-         cgF4Lbgm/8gcEif5UCh8U3RXTqz0UWzHOEjrAu3Y=
+        b=SLiyq1QWIgHuA57GDSvPRN5w4HBgp49YEdJJBjO9XxpOLF/nJHvss21nd12FsKM57
+         y8vHGM54dhPuTnPzABGBHA7yJWodRmhl0WraU5hwjUrc8CcEZU/cCqKE2b7K0ZPv9A
+         taG7kFzx4SkLx8o47AqQtTNwu+bCwqfwtvRXiFMQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sean Anderson <sean.anderson@seco.com>
-Subject: [PATCH 5.10 094/116] usb: ulpi: Move of_node_put to ulpi_dev_release
+        stable@vger.kernel.org, Scott Russell <Scott.Russell2@ncr.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.4 65/71] USB: serial: cp210x: add NCR Retail IO box id
 Date:   Mon, 14 Feb 2022 10:26:33 +0100
-Message-Id: <20220214092502.019577572@linuxfoundation.org>
+Message-Id: <20220214092454.216422725@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Anderson <sean.anderson@seco.com>
+From: Johan Hovold <johan@kernel.org>
 
-commit 092f45b13e51666fe8ecbf2d6cd247aa7e6c1f74 upstream.
+commit b50f8f09c622297d3cf46e332e17ba8adedec9af upstream.
 
-Drivers are not unbound from the device when ulpi_unregister_interface
-is called. Move of_node-freeing code to ulpi_dev_release which is called
-only after all users are gone.
+Add the device id for NCR's Retail IO box (CP2105) used in NCR FastLane
+SelfServ Checkout - R6C:
 
-Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
-Cc: stable <stable@vger.kernel.org>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-Link: https://lore.kernel.org/r/20220127190004.1446909-2-sean.anderson@seco.com
+	https://www.ncr.com/product-catalog/ncr-fastlane-selfserv-checkout-r6c
+
+Reported-by: Scott Russell <Scott.Russell2@ncr.com>
+Cc: stable@vger.kernel.org
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/common/ulpi.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/serial/cp210x.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/usb/common/ulpi.c
-+++ b/drivers/usb/common/ulpi.c
-@@ -132,6 +132,7 @@ static const struct attribute_group *ulp
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -52,6 +52,7 @@ static int cp210x_port_remove(struct usb
+ static void cp210x_dtr_rts(struct usb_serial_port *p, int on);
  
- static void ulpi_dev_release(struct device *dev)
- {
-+	of_node_put(dev->of_node);
- 	kfree(to_ulpi_dev(dev));
- }
- 
-@@ -301,7 +302,6 @@ EXPORT_SYMBOL_GPL(ulpi_register_interfac
-  */
- void ulpi_unregister_interface(struct ulpi *ulpi)
- {
--	of_node_put(ulpi->dev.of_node);
- 	device_unregister(&ulpi->dev);
- }
- EXPORT_SYMBOL_GPL(ulpi_unregister_interface);
+ static const struct usb_device_id id_table[] = {
++	{ USB_DEVICE(0x0404, 0x034C) },	/* NCR Retail IO Box */
+ 	{ USB_DEVICE(0x045B, 0x0053) }, /* Renesas RX610 RX-Stick */
+ 	{ USB_DEVICE(0x0471, 0x066A) }, /* AKTAKOM ACE-1001 cable */
+ 	{ USB_DEVICE(0x0489, 0xE000) }, /* Pirelli Broadband S.p.A, DP-L10 SIP/GSM Mobile */
 
 

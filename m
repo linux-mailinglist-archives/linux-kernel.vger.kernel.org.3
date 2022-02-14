@@ -2,148 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 651164B3FEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5A54B4028
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:15:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235669AbiBNDBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 22:01:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43712 "EHLO
+        id S239905AbiBNDPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 22:15:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiBNDBG (ORCPT
+        with ESMTP id S239895AbiBNDPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 22:01:06 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727AF50B17;
-        Sun, 13 Feb 2022 19:00:59 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21E0vod3020461;
-        Mon, 14 Feb 2022 03:00:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=r2BbXLjMEKqcO4K44sN1Gmq3mSVYuMaEX6htwmCbwKQ=;
- b=FzKxvrVo46Ic+1oTo5O0LSnJjNmNU0anGwK+OMeJ1iEzzkPFa+YW0QOE8SClW4lEUJSp
- POSCD6HCPICxpVYs1j5UZ4B3eGBoGzqilCIK2iOUze42ldsF1TR08AVWt9qCPj4eXO94
- FxoTEnZlI9/tcJDHIVawFxBXtm7wai8rsnl4uW8V3t4df3o2OMbr0gGsdRbLP1tmPbm0
- 9lbZ7xkx4ATcPsrdIdrZ7k4j77VcFHpQ7B0/alMJbSva87yapUruIQnGQlDBmYLA+9Rw
- 2zn78xgEg6InGWPeSSbBTqCLlLnZrPwai+kzoJizV6Dzn6Lw0/1x/TF/OHV2aqM+WtqJ kg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e7d0j9q6j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 03:00:12 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21E2wX4s031336;
-        Mon, 14 Feb 2022 03:00:11 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e7d0j9q5f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 03:00:11 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21E2vhO9001974;
-        Mon, 14 Feb 2022 03:00:09 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 3e645j8y3j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 03:00:09 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21E302P326870176
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Feb 2022 03:00:03 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D167AAE055;
-        Mon, 14 Feb 2022 03:00:02 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 598F6AE045;
-        Mon, 14 Feb 2022 02:59:58 +0000 (GMT)
-Received: from sig-9-65-82-84.ibm.com (unknown [9.65.82.84])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Feb 2022 02:59:58 +0000 (GMT)
-Message-ID: <cff97dbe262919ff709a5ad2c4af6a702cc72a95.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 2/6] powerpc/kexec_file: Add KEXEC_SIG support.
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Michal Suchanek <msuchanek@suse.de>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org
-Cc:     kexec@lists.infradead.org, Philipp Rudo <prudo@redhat.com>,
-        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
-        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Frank van der Linden <fllinden@amazon.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        Sun, 13 Feb 2022 22:15:52 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59EE517CF;
+        Sun, 13 Feb 2022 19:15:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644808545; x=1676344545;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GTRNegXQUauvtRLOj+BmtQhaOlzhjrUHWPmhf7At00Q=;
+  b=NmZyRaVo9zihP/Lu2Os895uuPagNSLpZmOaO8Ztj4EI3mzee1TGhL994
+   KH6W1EAhNAIV3DT/cleONv9f7v2tNvZYJjTP6UQn51VJHh34De+rQkgjI
+   QtkbnMUcP753zRciAtzSiUyd8UiI/+zNzsm2aa7ajcePeWYaKtNgPYXxs
+   qxOz7w/J8uSJzaoNxvNw2e134tZQ8j6jstlapYX3kXmG6/FHSqxXgum6Q
+   YgCHJuwmnwSkQ2ceO36FPZFeFkwxL72LlXCW8nMEJKct3dytyL6ZGEj5L
+   po5GvYGIdxaZAdnIrjNR/NM4kxwIyk+QgwRf2uoWUq9S1dGILGyFdugn0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="248833054"
+X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
+   d="scan'208";a="248833054"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 19:15:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
+   d="scan'208";a="543100685"
+Received: from npg-dpdk-haiyue-2.sh.intel.com ([10.67.118.240])
+  by orsmga008.jf.intel.com with ESMTP; 13 Feb 2022 19:15:41 -0800
+From:   Haiyue Wang <haiyue.wang@intel.com>
+To:     netdev@vger.kernel.org
+Cc:     Haiyue Wang <haiyue.wang@intel.com>,
+        Jeroen de Borst <jeroendb@google.com>,
+        Catherine Sullivan <csully@google.com>,
+        David Awogbemila <awogbemila@google.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Baoquan He <bhe@redhat.com>,
-        linux-security-module@vger.kernel.org
-Date:   Sun, 13 Feb 2022 21:59:57 -0500
-In-Reply-To: <d95f7c6865bcad5ee37dcbec240e79aa742f5e1d.1641900831.git.msuchanek@suse.de>
-References: <cover.1641900831.git.msuchanek@suse.de>
-         <d95f7c6865bcad5ee37dcbec240e79aa742f5e1d.1641900831.git.msuchanek@suse.de>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 4jFqhY0qCIvizxCmPiEO2fRRpmUYxZuY
-X-Proofpoint-GUID: dsEowZUA2zzhFinigDUJkPWd12uW6-s2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-14_01,2022-02-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 lowpriorityscore=0 phishscore=0 mlxlogscore=946
- adultscore=0 spamscore=0 clxscore=1015 bulkscore=0 priorityscore=1501
- mlxscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202140016
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Jakub Kicinski <kuba@kernel.org>,
+        Willem de Bruijn <willemb@google.com>,
+        Bailey Forrest <bcf@google.com>, Tao Liu <xliutaox@google.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        John Fraker <jfraker@google.com>,
+        Yangchun Fu <yangchun@google.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v1] gve: fix zero size queue page list allocation
+Date:   Mon, 14 Feb 2022 10:41:29 +0800
+Message-Id: <20220214024134.223939-1-haiyue.wang@intel.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal,
+According to the two functions 'gve_num_tx/rx_qpls', only the queue with
+GVE_GQI_QPL_FORMAT format has queue page list.
 
-On Tue, 2022-01-11 at 12:37 +0100, Michal Suchanek wrote:
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index dea74d7717c0..1cde9b6c5987 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -560,6 +560,22 @@ config KEXEC_FILE
->  config ARCH_HAS_KEXEC_PURGATORY
->         def_bool KEXEC_FILE
->  
-> +config KEXEC_SIG
-> +       bool "Verify kernel signature during kexec_file_load() syscall"
-> +       depends on KEXEC_FILE && MODULE_SIG_FORMAT
-> +       help
-> +         This option makes kernel signature verification mandatory for
-> +         the kexec_file_load() syscall.
+The 'queue_format == GVE_GQI_RDA_FORMAT' may lead to request zero sized
+memory allocation, like if the queue format is GVE_DQO_RDA_FORMAT.
 
-When KEXEC_SIG is enabled on other architectures, IMA does not define a
-kexec 'appraise' policy rule.  Refer to the policy rules in
-security/ima/ima_efi.c.  Similarly the kexec 'appraise' policy rule in
-arch/powerpc/kernel/ima_policy.c should not be defined.
+The kernel memory subsystem will return ZERO_SIZE_PTR, which is not NULL
+address, so the driver can run successfully. Also the code still checks
+the queue page list number firstly, then accesses the allocated memory,
+so zero number queue page list allocation will not lead to access fault.
 
+Use the queue page list number to detect no QPLs, it can avoid zero size
+queue page list memory allocation.
+
+Fixes: a5886ef4f4bf ("gve: Introduce per netdev `enum gve_queue_format`")
+Signed-off-by: Haiyue Wang <haiyue.wang@intel.com>
+---
+ drivers/net/ethernet/google/gve/gve_main.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
+index 54e51c8221b8..6cafee55efc3 100644
+--- a/drivers/net/ethernet/google/gve/gve_main.c
++++ b/drivers/net/ethernet/google/gve/gve_main.c
+@@ -857,8 +857,7 @@ static int gve_alloc_qpls(struct gve_priv *priv)
+ 	int i, j;
+ 	int err;
+ 
+-	/* Raw addressing means no QPLs */
+-	if (priv->queue_format == GVE_GQI_RDA_FORMAT)
++	if (num_qpls == 0)
+ 		return 0;
+ 
+ 	priv->qpls = kvcalloc(num_qpls, sizeof(*priv->qpls), GFP_KERNEL);
+@@ -901,8 +900,7 @@ static void gve_free_qpls(struct gve_priv *priv)
+ 	int num_qpls = gve_num_tx_qpls(priv) + gve_num_rx_qpls(priv);
+ 	int i;
+ 
+-	/* Raw addressing means no QPLs */
+-	if (priv->queue_format == GVE_GQI_RDA_FORMAT)
++	if (num_qpls == 0)
+ 		return;
+ 
+ 	kvfree(priv->qpl_cfg.qpl_id_map);
 -- 
-thanks,
-
-Mimi
+2.35.1
 

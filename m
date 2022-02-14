@@ -2,45 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25CF4B469A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:52:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9894B49EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243574AbiBNJhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:37:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51340 "EHLO
+        id S236036AbiBNKKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:10:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244728AbiBNJgK (ORCPT
+        with ESMTP id S1345851AbiBNKHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:36:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA3A25E90;
-        Mon, 14 Feb 2022 01:34:05 -0800 (PST)
+        Mon, 14 Feb 2022 05:07:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F6E74DE4;
+        Mon, 14 Feb 2022 01:49:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF38BB80DD4;
-        Mon, 14 Feb 2022 09:33:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0215BC340E9;
-        Mon, 14 Feb 2022 09:33:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E94161238;
+        Mon, 14 Feb 2022 09:49:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 649E0C340E9;
+        Mon, 14 Feb 2022 09:49:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831225;
-        bh=Vt6o6BUJUwenqkWrho+49oDACU5otjZPlwM4QWb24DM=;
+        s=korg; t=1644832181;
+        bh=5IU/2Rkm7fO5A9wkV5Una3P/EvDC8prg70sABLS3KJY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pln6plE1Z0+eZ/NczPXJz4k7a/pRebacrAbsK9Mu/FU+CJq6TvAQAtxtwb5dpcDaK
-         C1eMV2OV9C0npZoTb9LR2MtzPG6qrx5yerfznxM6YLTQd3plr8YSEZn5ZBI4aYTo6c
-         ghP25YrLcaY0kezU6nXZSjPXTMBRouZsqgtRJ3D0=
+        b=1gywfdbHB++L5WvpkFR1fkbBkma0rcQAm2/PVY7pikZoe8664rykNs1QV62bMWDnQ
+         6dKV7FlR3JGxF7oxjckE07alMiutglxrrEnZB+fJNQy/R3zs+Us2aFLO6oXF1ssmIg
+         uLNTUifMGHLcvbNTbIRZpVqPi9xvz0MGX2ZhglDA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sean Anderson <sean.anderson@seco.com>
-Subject: [PATCH 4.19 37/49] usb: ulpi: Move of_node_put to ulpi_dev_release
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Marek Vasut <marex@denx.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 105/172] drm/panel: simple: Assign data from panel_dpi_probe() correctly
 Date:   Mon, 14 Feb 2022 10:26:03 +0100
-Message-Id: <20220214092449.522306451@linuxfoundation.org>
+Message-Id: <20220214092510.026118532@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
-References: <20220214092448.285381753@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +60,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Anderson <sean.anderson@seco.com>
+From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 
-commit 092f45b13e51666fe8ecbf2d6cd247aa7e6c1f74 upstream.
+[ Upstream commit 6df4432a5eca101b5fd80fbee41d309f3d67928d ]
 
-Drivers are not unbound from the device when ulpi_unregister_interface
-is called. Move of_node-freeing code to ulpi_dev_release which is called
-only after all users are gone.
+In the function panel_simple_probe() the pointer panel->desc is
+assigned to the passed pointer desc. If function panel_dpi_probe()
+is called panel->desc will be updated, but further on only desc
+will be evaluated. So update the desc pointer to be able to use
+the data from the function panel_dpi_probe().
 
-Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
-Cc: stable <stable@vger.kernel.org>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-Link: https://lore.kernel.org/r/20220127190004.1446909-2-sean.anderson@seco.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 4a1d0dbc8332 ("drm/panel: simple: add panel-dpi support")
+
+Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Cc: Marek Vasut <marex@denx.de>
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: Sam Ravnborg <sam@ravnborg.org>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+To: dri-devel@lists.freedesktop.org
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+Signed-off-by: Marek Vasut <marex@denx.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220201110153.3479-1-cniedermaier@dh-electronics.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/common/ulpi.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/panel/panel-simple.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/usb/common/ulpi.c
-+++ b/drivers/usb/common/ulpi.c
-@@ -132,6 +132,7 @@ static const struct attribute_group *ulp
- 
- static void ulpi_dev_release(struct device *dev)
- {
-+	of_node_put(dev->of_node);
- 	kfree(to_ulpi_dev(dev));
- }
- 
-@@ -300,7 +301,6 @@ EXPORT_SYMBOL_GPL(ulpi_register_interfac
-  */
- void ulpi_unregister_interface(struct ulpi *ulpi)
- {
--	of_node_put(ulpi->dev.of_node);
- 	device_unregister(&ulpi->dev);
- }
- EXPORT_SYMBOL_GPL(ulpi_unregister_interface);
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index 9b6c4e6c38a1b..b7b654f2dfd90 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -721,6 +721,7 @@ static int panel_simple_probe(struct device *dev, const struct panel_desc *desc,
+ 		err = panel_dpi_probe(dev, panel);
+ 		if (err)
+ 			goto free_ddc;
++		desc = panel->desc;
+ 	} else {
+ 		if (!of_get_display_timing(dev->of_node, "panel-timing", &dt))
+ 			panel_simple_parse_panel_timing_node(dev, panel, &dt);
+-- 
+2.34.1
+
 
 

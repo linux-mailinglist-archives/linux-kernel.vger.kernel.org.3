@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C3A4B45E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 704754B461E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243243AbiBNJ3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:29:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41256 "EHLO
+        id S243242AbiBNJaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:30:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243079AbiBNJ3B (ORCPT
+        with ESMTP id S243158AbiBNJ3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:29:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E2D60AAF;
-        Mon, 14 Feb 2022 01:28:54 -0800 (PST)
+        Mon, 14 Feb 2022 04:29:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC12B60D92;
+        Mon, 14 Feb 2022 01:29:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E107160F87;
-        Mon, 14 Feb 2022 09:28:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4135C340E9;
-        Mon, 14 Feb 2022 09:28:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D8E6B80DC9;
+        Mon, 14 Feb 2022 09:29:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7235DC340E9;
+        Mon, 14 Feb 2022 09:29:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644830933;
-        bh=De5s6O1Q/mpgBB7MSS/zLALmsk1o5Msqf9qPTvT22tM=;
+        s=korg; t=1644830959;
+        bh=iAl+cwZj3wJT1MYhfX0W439uv0dF9qdN6Y9wFUrV0dg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KmlyN04+IyMnt/fLbuzBm8oQIxzWfjB6Oq/NErOrXQPTz/ZXYuvSNqarmULwjZs8l
-         cMMVIDW5tTtYEpLA3TUcSqeS2rGWaAYFeRonA9HzjIBlZiknnc3Ffz3hJS4pHgB5Zs
-         SFbXn5gS3YhYmSgfnZItQ7hhZ8u9aGivAMuHEVuk=
+        b=jG8+n1PF1vpHIFuNUMp1vk2hFl/VRgwD/dZCl48Q6fiixc10Raj2keJ0PYEbJS+sC
+         oNGwla83GnL/5Jg3JG4kTQzMI6NW2BiKRonMhqVBy8+4EtcBpzW6DTYcnQ+/xS0s78
+         h6HYVBFcJ12g/VhvBOaVPctKQsE3oE6tePA7QkKI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>,
         Vlad Buslov <vladbu@nvidia.com>,
         Antoine Tenart <atenart@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 19/34] net: do not keep the dst cache when uncloning an skb dst and its metadata
-Date:   Mon, 14 Feb 2022 10:25:45 +0100
-Message-Id: <20220214092446.567775131@linuxfoundation.org>
+Subject: [PATCH 4.9 20/34] net: fix a memleak when uncloning an skb dst and its metadata
+Date:   Mon, 14 Feb 2022 10:25:46 +0100
+Message-Id: <20220214092446.600609884@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
 References: <20220214092445.946718557@linuxfoundation.org>
@@ -59,60 +59,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Antoine Tenart <atenart@kernel.org>
 
-[ Upstream commit cfc56f85e72f5b9c5c5be26dc2b16518d36a7868 ]
+[ Upstream commit 9eeabdf17fa0ab75381045c867c370f4cc75a613 ]
 
-When uncloning an skb dst and its associated metadata a new dst+metadata
-is allocated and the tunnel information from the old metadata is copied
-over there.
+When uncloning an skb dst and its associated metadata, a new
+dst+metadata is allocated and later replaces the old one in the skb.
+This is helpful to have a non-shared dst+metadata attached to a specific
+skb.
 
-The issue is the tunnel metadata has references to cached dst, which are
-copied along the way. When a dst+metadata refcount drops to 0 the
-metadata is freed including the cached dst entries. As they are also
-referenced in the initial dst+metadata, this ends up in UaFs.
+The issue is the uncloned dst+metadata is initialized with a refcount of
+1, which is increased to 2 before attaching it to the skb. When
+tun_dst_unclone returns, the dst+metadata is only referenced from a
+single place (the skb) while its refcount is 2. Its refcount will never
+drop to 0 (when the skb is consumed), leading to a memory leak.
 
-In practice the above did not happen because of another issue, the
-dst+metadata was never freed because its refcount never dropped to 0
-(this will be fixed in a subsequent patch).
+Fix this by removing the call to dst_hold in tun_dst_unclone, as the
+dst+metadata refcount is already 1.
 
-Fix this by initializing the dst cache after copying the tunnel
-information from the old metadata to also unshare the dst cache.
-
-Fixes: d71785ffc7e7 ("net: add dst_cache to ovs vxlan lwtunnel")
-Cc: Paolo Abeni <pabeni@redhat.com>
+Fixes: fc4099f17240 ("openvswitch: Fix egress tunnel info.")
+Cc: Pravin B Shelar <pshelar@ovn.org>
 Reported-by: Vlad Buslov <vladbu@nvidia.com>
 Tested-by: Vlad Buslov <vladbu@nvidia.com>
 Signed-off-by: Antoine Tenart <atenart@kernel.org>
-Acked-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/dst_metadata.h | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ include/net/dst_metadata.h | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
-index 5a23535a5018d..33ca53057f318 100644
+index 33ca53057f318..6a6f1d3bf8538 100644
 --- a/include/net/dst_metadata.h
 +++ b/include/net/dst_metadata.h
-@@ -97,6 +97,19 @@ static inline struct metadata_dst *tun_dst_unclone(struct sk_buff *skb)
+@@ -111,7 +111,6 @@ static inline struct metadata_dst *tun_dst_unclone(struct sk_buff *skb)
+ #endif
  
- 	memcpy(&new_md->u.tun_info, &md_dst->u.tun_info,
- 	       sizeof(struct ip_tunnel_info) + md_size);
-+#ifdef CONFIG_DST_CACHE
-+	/* Unclone the dst cache if there is one */
-+	if (new_md->u.tun_info.dst_cache.cache) {
-+		int ret;
-+
-+		ret = dst_cache_init(&new_md->u.tun_info.dst_cache, GFP_ATOMIC);
-+		if (ret) {
-+			metadata_dst_free(new_md);
-+			return ERR_PTR(ret);
-+		}
-+	}
-+#endif
-+
  	skb_dst_drop(skb);
- 	dst_hold(&new_md->dst);
+-	dst_hold(&new_md->dst);
  	skb_dst_set(skb, &new_md->dst);
+ 	return new_md;
+ }
 -- 
 2.34.1
 

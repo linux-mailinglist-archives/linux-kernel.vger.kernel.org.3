@@ -2,111 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0BD4B4BBC
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7009A4B4962
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348092AbiBNKeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:34:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41876 "EHLO
+        id S1347931AbiBNKbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:31:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347799AbiBNKct (ORCPT
+        with ESMTP id S1348082AbiBNKaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:32:49 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540A42BCA
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 02:00:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644832827; x=1676368827;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xkE7ZB+HG58Bb8iZcYin4WAJ58blIEp7ZEadKNZd9f0=;
-  b=XI7vCoAwMIco7VhP3nsaqVnl93DK286cz01gMQmq7kVF0GT3xW2v0E/7
-   +KOccBdCG/I3tfN3aMbnIYQz4VlwOrqskGSpb1ufp+tQq+tNW32EV26Mf
-   mXWGNm3w9qCDAPA/rCCzfU0Rk+lP5lLVaQ5q2KAebYJWwGGIGLdfkqrxO
-   +5cwO6OG9xJjMQ4T+6dK5QaGWhiBV9Wnhs+BnX7FfoKWgt32SYa9rHkLe
-   KX58SeiK4Hyu867mFVDqZAwWsZdtNDqEd7PVx43u7vrdnWun/p9x6iymD
-   psh2QfB0gn73XEY+ux2Z9xQG2BBUjUrxSsYJdJ4Vd9bLNu3MJEGHkRQST
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="250263427"
-X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="250263427"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 01:59:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="501680245"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 14 Feb 2022 01:59:51 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nJY98-0008N3-PV; Mon, 14 Feb 2022 09:59:50 +0000
-Date:   Mon, 14 Feb 2022 17:58:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jonathan Bakker <xc-racer2@live.ca>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: sound/soc/samsung/aries_wm8994.c:525:34: warning: unused variable
- 'samsung_wm8994_of_match'
-Message-ID: <202202141756.kbtxAPyD-lkp@intel.com>
+        Mon, 14 Feb 2022 05:30:46 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 235309BF58;
+        Mon, 14 Feb 2022 01:59:20 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C50BB1396;
+        Mon, 14 Feb 2022 01:59:02 -0800 (PST)
+Received: from [10.163.47.15] (unknown [10.163.47.15])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 06C2E3F718;
+        Mon, 14 Feb 2022 01:59:00 -0800 (PST)
+Subject: Re: [PATCH 30/30] mm/mmap: Drop ARCH_HAS_VM_GET_PAGE_PROT
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-arch@vger.kernel.org
+References: <1644805853-21338-1-git-send-email-anshuman.khandual@arm.com>
+ <1644805853-21338-31-git-send-email-anshuman.khandual@arm.com>
+ <CAMuHMdVqeyFhzJHLvE+erA4dO+eqpqzx8hVUj9LDk0iPwR1ByQ@mail.gmail.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <b9308a0f-2877-8ef7-dcb8-301b91195d28@arm.com>
+Date:   Mon, 14 Feb 2022 15:29:01 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMuHMdVqeyFhzJHLvE+erA4dO+eqpqzx8hVUj9LDk0iPwR1ByQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   754e0b0e35608ed5206d6a67a791563c631cec07
-commit: 7a3a7671fa6c7e90aff5f4242add2a40587b85ef ASoC: samsung: Add driver for Aries boards
-date:   1 year, 8 months ago
-config: hexagon-randconfig-r035-20220213 (https://download.01.org/0day-ci/archive/20220214/202202141756.kbtxAPyD-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7a3a7671fa6c7e90aff5f4242add2a40587b85ef
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7a3a7671fa6c7e90aff5f4242add2a40587b85ef
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash sound/soc/samsung/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> sound/soc/samsung/aries_wm8994.c:525:34: warning: unused variable 'samsung_wm8994_of_match' [-Wunused-const-variable]
-   static const struct of_device_id samsung_wm8994_of_match[] = {
-                                    ^
-   1 warning generated.
 
 
-vim +/samsung_wm8994_of_match +525 sound/soc/samsung/aries_wm8994.c
+On 2/14/22 3:18 PM, Geert Uytterhoeven wrote:
+> Hi Anshuman,
+> 
+> On Mon, Feb 14, 2022 at 7:54 AM Anshuman Khandual
+> <anshuman.khandual@arm.com> wrote:
+>> All platforms now define their own vm_get_page_prot() and also there is no
+>> generic version left to fallback on. Hence drop ARCH_HAS_GET_PAGE_PROT.
+>>
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Cc: linux-mm@kvack.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> 
+> Thanks for your patch!
+> 
+>> -       select ARCH_HAS_VM_GET_PAGE_PROT
+> 
+> So before, all architectures selected ARCH_HAS_VM_GET_PAGE_PROT...
 
-   524	
- > 525	static const struct of_device_id samsung_wm8994_of_match[] = {
-   526		{
-   527			.compatible = "samsung,fascinate4g-wm8994",
-   528			.data = &fascinate4g_variant,
-   529		},
-   530		{
-   531			.compatible = "samsung,aries-wm8994",
-   532			.data = &aries_variant,
-   533		},
-   534		{ /* sentinel */ },
-   535	};
-   536	MODULE_DEVICE_TABLE(of, samsung_wm8994_of_match);
-   537	
+Right. ARCH_HAS_VM_GET_PAGE_PROT construct is required until all platforms
+define their own vm_get_page_prot(). But once defined, this can be dropped
+off, as a generic MM fallback is no longer available otherwise.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
+>> --- a/mm/mmap.c
+>> +++ b/mm/mmap.c
+>> @@ -81,7 +81,6 @@ static void unmap_region(struct mm_struct *mm,
+>>                 struct vm_area_struct *vma, struct vm_area_struct *prev,
+>>                 unsigned long start, unsigned long end);
+>>
+>> -#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
+> 
+> ... hence the block below was not included.
+> 
+>>  /* description of effects of mapping type and prot in current implementation.
+>>   * this is due to the limited x86 page protection hardware.  The expected
+>>   * behavior is in parens:
+>> @@ -102,8 +101,6 @@ static void unmap_region(struct mm_struct *mm,
+>>   *                                                             w: (no) no
+>>   *                                                             x: (yes) yes
+>>   */
+>> -#endif /* CONFIG_ARCH_HAS_VM_GET_PAGE_PROT */
+>> -
+> 
+> So shouldn't the whole block be removed instead?
+
+You are right, will remove the entire comment block here.
+
+> Do I need more coffee??
+> 
+>>  static pgprot_t vm_pgprot_modify(pgprot_t oldprot, unsigned long vm_flags)
+>>  {
+>>         return pgprot_modify(oldprot, vm_get_page_prot(vm_flags));
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+> 

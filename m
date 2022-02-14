@@ -2,92 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F88F4B589C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:35:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC2F4B58CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357162AbiBNRfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 12:35:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57534 "EHLO
+        id S1349366AbiBNRnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 12:43:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357134AbiBNRfR (ORCPT
+        with ESMTP id S229787AbiBNRnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 12:35:17 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948BC6540F;
-        Mon, 14 Feb 2022 09:35:09 -0800 (PST)
+        Mon, 14 Feb 2022 12:43:45 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F419652F2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:43:37 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id y17so26229682edd.10
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:43:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644860109; x=1676396109;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=5XlD8vp21eTKSkpNbt94DxzMkq8qEZEWW+TU+APGf4I=;
-  b=qyVG0PHTuWbB4FeptwwoG57i23sdo2wLxbD9+Tsl8fCkUYoQdM6DaqO1
-   qSGN9m9eQd7/adVm9MZZtfetF6zFKeet03fbDyy1nv4UAszvkd1dyVHus
-   gGwNjB7TS9egE4924hLZZFd7oTdt6IAGRdf/wJhZJ9Qk7YfK52vyeUdZG
-   o=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Feb 2022 09:35:09 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 09:35:08 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Mon, 14 Feb 2022 09:35:08 -0800
-Received: from [10.216.62.158] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 14 Feb
- 2022 09:35:02 -0800
-Subject: Re: [PATCH v13 07/10] ASoC: qcom: Add support for codec dma driver
-To:     Mark Brown <broonie@kernel.org>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <lgirdwood@gmail.com>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@codeaurora.org>,
-        <perex@perex.cz>, <tiwai@suse.com>,
-        <srinivas.kandagatla@linaro.org>, <rohitkr@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1644832778-16064-1-git-send-email-quic_srivasam@quicinc.com>
- <1644832778-16064-2-git-send-email-quic_srivasam@quicinc.com>
- <YgppMcVjs0KuE5y8@sirena.org.uk>
- <669f2d39-8c14-68b9-6d89-a26e0e2e8857@quicinc.com>
- <YgqBmvAQvh9WRMj+@sirena.org.uk>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-Message-ID: <3a13a99d-6b8b-bab5-3adc-fdd2565fc93a@quicinc.com>
-Date:   Mon, 14 Feb 2022 23:04:58 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hl2tx2/b0j1as4iPc8br7ak6VbssTN3Lkaa01qKImp4=;
+        b=B3+89vMVlD+t/jr4Ir3J5heCAGLy+8O/Bfqv5DSjHS7vGRacFAUCCs0TF2tOD5+IOJ
+         DARHbhMwmXg8IKTGNN5wyW1UIWJ3dy3zDkUXnMSy6euD4EH/SAawjrYbWaSs+0JtxWja
+         ZBOb3OkzZ9V/CSYGxjkJVHb89skxzNvZve0yg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hl2tx2/b0j1as4iPc8br7ak6VbssTN3Lkaa01qKImp4=;
+        b=zpvY1hwkZTsI3kvRqsVb7j093XTNO0qs9VDJL7Ce/Kgf2aWE0M0O+OweL36PN0K721
+         G0HbV6OviQFhRolr6eYxYtzLNVGtKV71/p/etlxHCL40DfhfCUHw07WC89DBeXY2wxQx
+         jg8HHftMIlAhAqTlN+ctheVR2VtRrQ642rRdzP1NzSQ8VIvP5+a911dTONNYO2gQuepV
+         Y8CVW5IewFZOBmCKOUtwQt1H2vGh8XlQ1R0tyle3BwY05cedfKs/qzkZ8gJYFyMRvlVq
+         FFn1oc00ENlZf2mziN/VqJvNJi8pBa9xYTbg+0y+e77tyKtnL4kh85cwm+i3Uyma+9WG
+         2SxA==
+X-Gm-Message-State: AOAM533W8ySlptx75KbJg++F+jRl6XHi51zSteYPDUQ1PtEdAb9BaDIL
+        OnFSqHMrSJOBhEr7xfEOBTKpxJEB7nE07DmGCjo=
+X-Google-Smtp-Source: ABdhPJxljk/51G5lVHINNS09lkE9Vymateeo2UtJwxn76MXyqhuc7wX7CQmQyAub3+km3P91cikZxQ==
+X-Received: by 2002:a05:6402:518e:: with SMTP id q14mr744968edd.155.1644860615590;
+        Mon, 14 Feb 2022 09:43:35 -0800 (PST)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
+        by smtp.gmail.com with ESMTPSA id ew6sm3264661ejc.217.2022.02.14.09.43.35
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 09:43:35 -0800 (PST)
+Received: by mail-wr1-f50.google.com with SMTP id d27so28119630wrc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:43:35 -0800 (PST)
+X-Received: by 2002:a19:4302:: with SMTP id q2mr49672lfa.449.1644860131952;
+ Mon, 14 Feb 2022 09:35:31 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YgqBmvAQvh9WRMj+@sirena.org.uk>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220214163452.1568807-1-arnd@kernel.org>
+In-Reply-To: <20220214163452.1568807-1-arnd@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 14 Feb 2022 09:35:15 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whXYWoP6of7js=f4zov62on97mNFRSVRWhY75WoGM6CoQ@mail.gmail.com>
+Message-ID: <CAHk-=whXYWoP6of7js=f4zov62on97mNFRSVRWhY75WoGM6CoQ@mail.gmail.com>
+Subject: Re: [PATCH 00/14] clean up asm/uaccess.h, kill set_fs for good
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Rich Felker <dalias@libc.org>,
+        David Miller <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-hexagon <linux-hexagon@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        openrisc@lists.librecores.org,
+        linux-parisc <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-sparc <sparclinux@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-xtensa@linux-xtensa.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 14, 2022 at 8:35 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> I did a patch for microblaze at some point, which turned out to be fairly
+> generic, and now ported it to most other architectures, using new generic
+> implementations of access_ok() and __{get,put}_kernel_nocheck().
 
-On 2/14/2022 9:51 PM, Mark Brown wrote:
-Thanks Brown for your time!!!
-> On Mon, Feb 14, 2022 at 08:10:20PM +0530, Srinivasa Rao Mandadapu wrote:
->> On 2/14/2022 8:07 PM, Mark Brown wrote:
->>> I only have this patch from both v12 and v13, which were sent very close
->>> together.  Please check what's going on here.
->> As only one patch has update, so sent only one patch. will do resend all
->> patches if needed.
-> You should always send all patches in a series, sending only some
-> patches at best makes it very difficult to follow what the current
-> version of the series is intended to look like.
-Okay. Sorry for inconvenience. Resent all patches again.
+Thanks for doing this.
+
+Apart from the sparc64 issue with completely separate address spaces
+(so access_ok() should always return true like Al pointed out), this
+looks excellent to me.
+
+Somebody should check that there aren't other cases like sparc64, but
+let's merge this asap other than that.
+
+              Linus

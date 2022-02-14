@@ -2,124 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087414B3E72
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 00:47:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7811B4B3E85
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 01:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238808AbiBMXq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 18:46:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57014 "EHLO
+        id S238823AbiBNAFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 19:05:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiBMXq5 (ORCPT
+        with ESMTP id S230195AbiBNAFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 18:46:57 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70049.outbound.protection.outlook.com [40.107.7.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C65517F9
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 15:46:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f0Byj9Es6n3B9MGcONGmg9CZVTZowQ04LEIIEifEjAQHWTeJRz9SGF5ne3cRExzMdoPtYjxIOOPZhHedse13+EzDT4z9/XAkYW28KXhbh+AmdSYoNnoIiwOPW+4t+k1PnyrsTSBbEBpBymWSlwaOPzdSnq9xI9JIKYAh/5tiZPMIqvvDe/eWdNMcbYQWYm+9IY964hjqgwAy0+lOmCdCQA6QDINNwvag8QCjC/WNq9br+ArKbh9xgstDruIA5pMNoMcrR4A0l0JlLggRJK1qWHCpn1zJxU6jpDcb3XCnFWYcEdZSv3Z3M++5ARH1qrAOEGL1fZe0yxwm4iIO4/DCWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dorCdrRNyC89n/vagkX21E0+L7RxHNS5NiUWe9Inyro=;
- b=LD66lrUgIbPJ/KVf6Lguyn7oClRBoSp+AHdSKzyNlpAhLzdWd94Fw9FZR3J46/Cg+SC0DCkBkl7ay6uGfK4IvP7P4D0dl6yOzHety59/OQ0fehkJDiIoDH+H36siXyg7sGgdtlOkVzB/dBdTGXvsDFZHYFa5FJE7tr/OqdtB1Njb6MMMhpqzN4JvFUZsbqdf7FjT+Y/Z8rOkWpXp50cjdeDib0lHXLee6ASaVMacc2PCYv3poo9q2I55ul4cmHHNxTJVWBBdJtH4evfGFE2Fsm3YrGsAJ20YW03gD8WToFavDhGHgO/WExtTdpwu09XTOmJV4GmSMSpF3nsBWg54kw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dorCdrRNyC89n/vagkX21E0+L7RxHNS5NiUWe9Inyro=;
- b=F1/b+WGXMbouLayIPTdGoFz6YdWwf/i3VtNNi4N/xP2U6Iz1V4bdFCh6BLtowqdD/2e6CkF1biB9uSIal2PCu1ahEQJYwUS8MAxaVFzlgrmaBqKRLYedo8NLxvfqzPgFoTUF+aPFFEZ4PATL25syDcV6O1TY3xcGfZ6lLRrtJbE=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by DU2PR04MB8501.eurprd04.prod.outlook.com (2603:10a6:10:2d0::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.18; Sun, 13 Feb
- 2022 23:46:46 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::448c:19d:ca9a:123e]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::448c:19d:ca9a:123e%7]) with mapi id 15.20.4975.018; Sun, 13 Feb 2022
- 23:46:46 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [PATCH 0/5] clocksource/drivers/imx: several updates
-Thread-Topic: [PATCH 0/5] clocksource/drivers/imx: several updates
-Thread-Index: AQHX8ONNsTFmjnGsD0WJi9r2hmyxN6xdV8+ggBfiokCAAAnSAIAdQaqQ
-Date:   Sun, 13 Feb 2022 23:46:46 +0000
-Message-ID: <DU0PR04MB9417CFE2BBFDB2FDC32CA8F088329@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20211214120737.1611955-1-peng.fan@oss.nxp.com>
- <DU0PR04MB94177F777E854B92C665303488519@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <DU0PR04MB9417BA24DB13CD6C98BE47CF88209@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <c7584787-838f-97b8-5e2a-c7f271d8a406@linaro.org>
-In-Reply-To: <c7584787-838f-97b8-5e2a-c7f271d8a406@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b7fa3250-b8de-48ba-2a96-08d9ef4b18ab
-x-ms-traffictypediagnostic: DU2PR04MB8501:EE_
-x-microsoft-antispam-prvs: <DU2PR04MB8501F1DA9FD1C717401B243688329@DU2PR04MB8501.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3383;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6fV9aAs1St3cUqlBJh/xBvhhYHAf5nlHvap/Gv3j6KNW6k1bfq8KWuCF2NNhqJmSgRiFLgkFBGwRWQUlMY8SBu7ZVkVdSoijm6TNS3fkO67C8d/AB4Uf4Q/dYCQzfFCIwwfZjMhne1OZCAOJx1QOhI1rm9lINe8fWlZgCW4IcZJGYpbpTzQJuqqCD/eSI/UDQGCRt1mwlC68+KEusJAlJBc15fDdyE+Js8j8MvuD47lBS/mOfdFDeATjVVZURpjVqwGyhReFV0oVN16Dhjp8BQ0eisNH9xUk0wKJOc+G6f6l9S+n4C8hVHHdz3OWNGGWNLL3Lkmzd94zH2LS20NM0g3ZoC53uRtjUxapMQpKkHB8d3+VxDluzjlKc1n3+gbG9ouv8UepL+vu2RKOvGVVktUZFjJ/jKE8Br+/zS+o4aO8A1qZa/9SOF4eaPB451LTdVw/xfY/0oF3gW7bThEeLlyOgFvI3wuxoPfqY9yBASFr68Fan4YOskr4g9zPyPa1r7RGD6BPNfR6dRP2qBpKDeHLVIi73UND1/DOmSsFEWOyKXH75031sRxUuvhKwQZHNccW3J432FSHyRNLkP2Ri8NzGdYrMFIqOM08Vk107WI6BGD9dIhsZk0XvBLpigWt4K9BBuhC6FW/xeHqNpFAvoSUwcGxZYPXxQKFgYumT/ctIB9oyPlp6Q8VC0Zq/GihdQUgs48dwRdCtI1jGsW6LFm0egmXoAL3KNXY9Qxnd4Ou/AdRDFrXGWmetRnNLsL6ms8JBoSrX69bvQblUTURKu9X3f2aWCEhpmHa0340gkQ=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(122000001)(33656002)(38100700002)(9686003)(2906002)(83380400001)(71200400001)(55016003)(186003)(26005)(508600001)(52536014)(15650500001)(38070700005)(8936002)(76116006)(4326008)(66556008)(64756008)(66446008)(66476007)(8676002)(66946007)(53546011)(44832011)(86362001)(110136005)(316002)(5660300002)(54906003)(6506007)(7696005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?koi8-r?Q?5VmWAYmsdYKyuPkEA/IWGVsnMmE2JDoHoCURP7mrRNJlV39zSN2DwJ+UTZftJr?=
- =?koi8-r?Q?BvCDAAhdFs3WjFjHyCINuthBh8zs1/o8zEdwkY5ydRGNeiEVcWdapbm1CI7Rv7?=
- =?koi8-r?Q?DmdotE6Y5KuucNO1R5elZ7EXrkOCUx+FMcTXJkjJG/s6qMUxj/OvFJBnVLFUQP?=
- =?koi8-r?Q?DAgK9SW5yD2J6/q/tq6fCW+nGEDHtIb3dzE2CFQ7DCE7F1bw30ROqjQP26wHBp?=
- =?koi8-r?Q?Lx4eotf0+tDvxU/wrHqt959uNl8Dt9szjUbErRS+DX6HHzuTUxnGG3egwwy8Kc?=
- =?koi8-r?Q?tJRZ6pxfJaz9Idx8oAsKK1jPTTk3uW+FVKqXaWmGr/q0q5OuaHe1an9PyrONRR?=
- =?koi8-r?Q?IYjus1LpksBBUtC1G7faYlOsYxa6CA3ES28NQzN+bPNt7CXrjWqj6VDo68np4y?=
- =?koi8-r?Q?lMoRAr+74U34uDc45euRJyOHpExXiuD/QVgkIXPP7yodsij0PjHy7+7+gh4tDR?=
- =?koi8-r?Q?QqTdW3PnE0tU3mI2EiiK286zw51yq0Ik7sFWjABBh+4uFQG7+FUBN7I2MrzvcZ?=
- =?koi8-r?Q?/Q+P/68okhhqWAamaV6oC4il461rptxRDm55dT6yJGPGKt35CWTRTyZpbIPbTt?=
- =?koi8-r?Q?rEqF/OyrXviBPQrSOoKWBnaGO+ax1ZycG99O1wPzD8zyOor+6WVPjW4bQ5rbcK?=
- =?koi8-r?Q?lJwQZfullsZCxePAAOSG6cNQavIAL03AEDqkfZ6DyYT10Hs0XcwOdI+yPpos6p?=
- =?koi8-r?Q?pEALGDed+bUIN9tt5+f8VmIQdohWz8B3ZWnhnxe2IuTv93f6+2z0X0SF6BAt3T?=
- =?koi8-r?Q?tOdF+J6Wz/NGM42rOjG0tAGFySJXQZ1eyfs1Q2m2RWN4oinkSLYzRIQ61cjHKF?=
- =?koi8-r?Q?YiXFhIDhgtkcFCzGbEAw0MBsXKuerfoppaarMpZUJz23CvuaylPHHpyXthOT6u?=
- =?koi8-r?Q?bVeitdeh7T6CTjaoRtJTsRIjDhDyBLVnVTT5uWz0VYIefyDyFQe2IXjgbLx2Ra?=
- =?koi8-r?Q?Ko1Nt/flMDavCgOPiKMwaM7//wni4AQ0rOqZftdkRQvMOHfvqzUQWbIqCfx96N?=
- =?koi8-r?Q?ttniUtDVgr6OWV2jWj0UFC+3yC8+aXSvHfJ+UZmJrdtK1EpS0U+jThy0HV00mP?=
- =?koi8-r?Q?oQsqTVIfpqhFRUKuhffHwkKAXpemXm9QxS1cdEDhCPRAQHWrCJXzx6rKz8Ao8b?=
- =?koi8-r?Q?bz5t4RwgRvFUQpwNa+S00UxDVxCs+DY2vpL4qZ7pzdzRJFFkUiIbBwWARJNrPT?=
- =?koi8-r?Q?lLbseAAAzE2yASpQI8P1iaZU9KxiCbMERcadR5fO/tyS+VrBMRZ9vOWRO6GLWP?=
- =?koi8-r?Q?kY7gbYQfZU6Gijv1HNCKfvGVB4UruGjf398h1y4XhlaL/CEM2PpoXX48rfGsco?=
- =?koi8-r?Q?3ncqGwr8iPP72LAJLWVDIRyGn0SPUVYnF11M5SZqG425LeV4BFscSI8XW1WS35?=
- =?koi8-r?Q?StCp1jNh93ThSEJi/58veUU+sVYFmMZlAHdit+7Tc+a7PX3RdsAVDUwCOFrHt+?=
- =?koi8-r?Q?MWtONqATEy+5EIi6H3w1H69riA13ucgj5Ue3z4j330FeG09kAVz9kv3f/4l1FM?=
- =?koi8-r?Q?N+ZWNHPEalIMyjiT+cGBiO7Jj00kWDyzJjDtozvSxqOtcbZzBkZw0q/KTn266m?=
- =?koi8-r?Q?585FdaSinw=3D=3D?=
-Content-Type: text/plain; charset="koi8-r"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 13 Feb 2022 19:05:10 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3638C51E5D
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 16:05:03 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id d10so34045399eje.10
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 16:05:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Q506mjUFQLa0QCAR/FySqXIPlqEu0ztpqvJS5nI+hGk=;
+        b=X7P19J5HBFK2SmheyA6Q1sZm+NEp0a9SLQi9jLpvdD3XpmR8S+ap9oRFwqaqvIMmzK
+         vRlzLqoKLLimR2mVVs3l1KJbQ+TYsZ+3Ivi5GIj54sm4U8RIGEkI12srqJfWCKkPCXPP
+         vCcyqEPcU2oSU/8vIEfqWs4CL82KfWVxkzOOqfwcg3WDgND32zntNkDEJvqT8CBICkVY
+         ImR92SsK7vL73mAZtkeOcMtlAHcVWMjZPQMqIjBygcfxtM9ebUnaswgGKbDrcVRGgIAG
+         pTqSuAqc4+IxiGN5yCLzLoVfDKWJmsutpbSff31EUN/A8oTCL2yoElZuX8+oL6vdoq4j
+         y4oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Q506mjUFQLa0QCAR/FySqXIPlqEu0ztpqvJS5nI+hGk=;
+        b=WbD4XabCdDN0hcwNEtg1Koh2xGQZq9IARvMh6VsYjX9IXjsWso6CyjI7+l9EJqqjBJ
+         Ifo2BkbutQTcFcpkhNkss1aDVi1LiUgZIagIv9Q0fgKPLSW+08JdKq578pMKru7npc+b
+         gPh1lqLv0DUl3pCte/BCmGDet9tM2DkL5NDMy7T+TjH1XEMcfpyFE7ELEvhV/kmuT3GV
+         nPgy0HWPXbHroRP0Dj86WpaSVP+Jgj3/1neUYpuLGWvIHWCIQcdDNf7KmeH9d9JEpYAU
+         PEW6dllDgz+GaCnIvzJ+5P7uAsAdyRTY85OLu2uRol/zPO9U0ZuNDP1hmxbi5PKdvEul
+         6Xww==
+X-Gm-Message-State: AOAM530wx5vsHrTobbn/xy07+Ah6C5Q7238+cV1FX3cAUzlxJpvAtLn3
+        GCyDsMq7ynga3h7ORi2MzJk=
+X-Google-Smtp-Source: ABdhPJxV1GWN5wCzBdVXLOEp5MDCv+JSAT7A6ufaM7t2X91/YLsbHO0PY7RHIEqm8c7xtH7T+5m7TA==
+X-Received: by 2002:a17:907:a409:: with SMTP id sg9mr9162530ejc.219.1644797101621;
+        Sun, 13 Feb 2022 16:05:01 -0800 (PST)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id 5sm1372646ejr.144.2022.02.13.16.05.00
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 13 Feb 2022 16:05:01 -0800 (PST)
+Date:   Mon, 14 Feb 2022 00:05:00 +0000
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Wei Yang <richard.weiyang@gmail.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: include/linux/build_bug.h:78:41: error: static assertion failed:
+ "offsetof(struct page, mapping) == offsetof(struct folio, mapping)"
+Message-ID: <20220214000500.4ao6vrh4l33donqz@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <202202131932.diaqTbxo-lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b7fa3250-b8de-48ba-2a96-08d9ef4b18ab
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Feb 2022 23:46:46.3985
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Yx7ZMb17YNcjHpVRIpFKHg1YSKBcARRYfD+EkSWYR5WFJYp/FRwnU9Om+kOTHm44wYfbp6eTvfOsAOR4Q90dwA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8501
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202202131932.diaqTbxo-lkp@intel.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -127,88 +76,270 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: Re: [PATCH 0/5] clocksource/drivers/imx: several updates
->=20
->=20
-> On 26/01/2022 09:24, Peng Fan wrote:
-> > Daniel,
-> >
-> >> Subject: RE: [PATCH 0/5] clocksource/drivers/imx: several updates
-> >
-> > Do you have time to give a look?
->=20
-> Yeah, sorry for the delay
->=20
-> They sounds good, I'll pick them up
+On Sun, Feb 13, 2022 at 07:51:34PM +0800, kernel test robot wrote:
+>tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>head:   b81b1829e7e39f6cebdf6e4d5484eacbceda8554
+>commit: 536f4217ced62b671bd759f6b549621a5654a70f mm: page->mapping folio->mapping should have the same offset
+>date:   2 weeks ago
+>config: parisc-randconfig-r004-20220213 (https://download.01.org/0day-ci/archive/20220213/202202131932.diaqTbxo-lkp@intel.com/config)
+>compiler: hppa64-linux-gcc (GCC) 11.2.0
+>reproduce (this is a W=1 build):
+>        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>        chmod +x ~/bin/make.cross
+>        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=536f4217ced62b671bd759f6b549621a5654a70f
+>        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>        git fetch --no-tags linus master
+>        git checkout 536f4217ced62b671bd759f6b549621a5654a70f
+>        # save the config file to linux build tree
+>        mkdir build_dir
+>        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc prepare
+>
+>If you fix the issue, kindly add following tag as appropriate
+>Reported-by: kernel test robot <lkp@intel.com>
+>
+>All errors (new ones prefixed by >>):
+>
+>      18 |         if (!(word & (~0ul << 32))) {
+>         |                            ^~
+>   include/asm-generic/bitops/__fls.h:20:22: warning: left shift count >= width of type [-Wshift-count-overflow]
+>      20 |                 word <<= 32;
+>         |                      ^~~
+>   include/asm-generic/bitops/__fls.h:23:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+>      23 |         if (!(word & (~0ul << (BITS_PER_LONG-16)))) {
+>         |                            ^~
+>   include/asm-generic/bitops/__fls.h:27:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+>      27 |         if (!(word & (~0ul << (BITS_PER_LONG-8)))) {
+>         |                            ^~
+>   include/asm-generic/bitops/__fls.h:31:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+>      31 |         if (!(word & (~0ul << (BITS_PER_LONG-4)))) {
+>         |                            ^~
+>   include/asm-generic/bitops/__fls.h:35:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+>      35 |         if (!(word & (~0ul << (BITS_PER_LONG-2)))) {
+>         |                            ^~
+>   include/asm-generic/bitops/__fls.h:39:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+>      39 |         if (!(word & (~0ul << (BITS_PER_LONG-1))))
+>         |                            ^~
+>   In file included from arch/parisc/include/asm/bitops.h:201,
+>                    from include/linux/bitops.h:33,
+>                    from include/linux/kernel.h:22,
+>                    from arch/parisc/include/asm/bug.h:5,
+>                    from include/linux/bug.h:5,
+>                    from include/linux/thread_info.h:13,
+>                    from include/asm-generic/preempt.h:5,
+>                    from ./arch/parisc/include/generated/asm/preempt.h:1,
+>                    from include/linux/preempt.h:78,
+>                    from include/linux/rcupdate.h:27,
+>                    from include/linux/rculist.h:11,
+>                    from include/linux/pid.h:5,
+>                    from include/linux/sched.h:14,
+>                    from arch/parisc/kernel/asm-offsets.c:18:
+>   include/asm-generic/bitops/__fls.h: In function '__fls':
+>   include/asm-generic/bitops/__fls.h:18:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+>      18 |         if (!(word & (~0ul << 32))) {
+>         |                            ^~
+>   include/asm-generic/bitops/__fls.h:20:22: warning: left shift count >= width of type [-Wshift-count-overflow]
+>      20 |                 word <<= 32;
+>         |                      ^~~
+>   include/asm-generic/bitops/__fls.h:23:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+>      23 |         if (!(word & (~0ul << (BITS_PER_LONG-16)))) {
+>         |                            ^~
+>   include/asm-generic/bitops/__fls.h:27:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+>      27 |         if (!(word & (~0ul << (BITS_PER_LONG-8)))) {
+>         |                            ^~
+>   include/asm-generic/bitops/__fls.h:31:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+>      31 |         if (!(word & (~0ul << (BITS_PER_LONG-4)))) {
+>         |                            ^~
+>   include/asm-generic/bitops/__fls.h:35:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+>      35 |         if (!(word & (~0ul << (BITS_PER_LONG-2)))) {
+>         |                            ^~
+>   include/asm-generic/bitops/__fls.h:39:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+>      39 |         if (!(word & (~0ul << (BITS_PER_LONG-1))))
+>         |                            ^~
+>   In file included from arch/parisc/include/asm/processor.h:18,
+>                    from arch/parisc/include/asm/thread_info.h:6,
+>                    from include/linux/thread_info.h:60,
+>                    from include/asm-generic/preempt.h:5,
+>                    from ./arch/parisc/include/generated/asm/preempt.h:1,
+>                    from include/linux/preempt.h:78,
+>                    from include/linux/rcupdate.h:27,
+>                    from include/linux/rculist.h:11,
+>                    from include/linux/pid.h:5,
+>                    from include/linux/sched.h:14,
+>                    from arch/parisc/kernel/asm-offsets.c:18:
+>   arch/parisc/include/asm/pdc.h: At top level:
+>   arch/parisc/include/asm/pdc.h:77:24: warning: 'struct pdc_memory_table' declared inside parameter list will not be visible outside of this definition or declaration
+>      77 |                 struct pdc_memory_table *tbl, unsigned long entries);
+>         |                        ^~~~~~~~~~~~~~~~
+>   arch/parisc/include/asm/pdc.h:76:30: warning: 'struct pdc_memory_table_raddr' declared inside parameter list will not be visible outside of this definition or declaration
+>      76 | int pdc_mem_mem_table(struct pdc_memory_table_raddr *r_addr,
+>         |                              ^~~~~~~~~~~~~~~~~~~~~~
+>   In file included from include/linux/compiler_types.h:65,
+>                    from <command-line>:
+>   include/linux/smp.h:34:33: error: requested alignment '20' is not a positive power of 2
+>      34 |         __aligned(sizeof(struct __call_single_data));
+>         |                                 ^~~~~~~~~~~~~~~~~~
+>   include/linux/compiler_attributes.h:33:68: note: in definition of macro '__aligned'
+>      33 | #define __aligned(x)                    __attribute__((__aligned__(x)))
+>         |                                                                    ^
+>   In file included from include/linux/container_of.h:5,
+>                    from include/linux/list.h:5,
+>                    from include/linux/rculist.h:10,
+>                    from include/linux/pid.h:5,
+>                    from include/linux/sched.h:14,
+>                    from arch/parisc/kernel/asm-offsets.c:18:
+>   include/linux/build_bug.h:78:41: error: static assertion failed: "offsetof(struct page, lru) == offsetof(struct folio, lru)"
+>      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+>         |                                         ^~~~~~~~~~~~~~
+>   include/linux/build_bug.h:77:34: note: in expansion of macro '__static_assert'
+>      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+>         |                                  ^~~~~~~~~~~~~~~
+>   include/linux/mm_types.h:261:9: note: in expansion of macro 'static_assert'
+>     261 |         static_assert(offsetof(struct page, pg) == offsetof(struct folio, fl))
+>         |         ^~~~~~~~~~~~~
+>   include/linux/mm_types.h:263:1: note: in expansion of macro 'FOLIO_MATCH'
+>     263 | FOLIO_MATCH(lru, lru);
 
-Still not in your tree? Or later?
+Sounds each FOLIO_MATCH() gets an compile error?
 
-Thanks,
-Peng.
+Compile on my machine looks good to me. How this happens?
 
->=20
-> Thanks
->=20
->   -- Daniel
->=20
->=20
-> >>> Subject: [PATCH 0/5] clocksource/drivers/imx: several updates
-> >>>
-> >>> From: Peng Fan <peng.fan@nxp.com>
-> >>>
-> >>> This patchset includes several update of i.MX sysctr and tpm driver.
-> >>
-> >> Ping..
-> >>
-> >> Thanks,
-> >> Peng.
-> >>
-> >>>
-> >>> Peng Fan (5):
-> >>>   clocksource/drivers/imx-sysctr: drop IRQF_IRQPOLL
-> >>>   clocksource/drivers/imx-tpm: drop IRQF_IRQPOLL
-> >>>   clocksource/drivers/imx-tpm: mark two variable with __ro_after_init
-> >>>   clocksource/drivers/imx-tpm: add CLOCK_EVT_FEAT_DYNIRQ
-> >>>   clocksource/drivers/imx-tpm: update name of clkevt
-> >>>
-> >>>  drivers/clocksource/timer-imx-sysctr.c |  2 +-
-> >>>  drivers/clocksource/timer-imx-tpm.c    | 10 +++++-----
-> >>>  2 files changed, 6 insertions(+), 6 deletions(-)
-> >>>
-> >>> --
-> >>> 2.25.1
-> >
->=20
->=20
-> --
-> <https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fwww.l
-> inaro.org%2F&amp;data=3D04%7C01%7Cpeng.fan%40nxp.com%7Ccb71984b85
-> 4c4bd16f2708d9e0aa295e%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%
-> 7C0%7C637787843705684549%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC
-> 4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&
-> amp;sdata=3Dop5BIq2UuUmYonbEV0U27tVbLPTfxnkASmS52eABSJ8%3D&amp;
-> reserved=3D0> Linaro.org =81 Open source software for ARM SoCs
->=20
-> Follow Linaro:
-> <https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fwww.f
-> acebook.com%2Fpages%2FLinaro&amp;data=3D04%7C01%7Cpeng.fan%40nxp.
-> com%7Ccb71984b854c4bd16f2708d9e0aa295e%7C686ea1d3bc2b4c6fa92cd
-> 99c5c301635%7C0%7C0%7C637787843705684549%7CUnknown%7CTWFpb
-> GZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI
-> 6Mn0%3D%7C3000&amp;sdata=3D7weozdfeg9ykj8wObv1d1G5UYCExNepqhFv
-> a%2BNwo9cE%3D&amp;reserved=3D0> Facebook |
-> <https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Ftwitt=
-er
-> .com%2F%23!%2Flinaroorg&amp;data=3D04%7C01%7Cpeng.fan%40nxp.com%
-> 7Ccb71984b854c4bd16f2708d9e0aa295e%7C686ea1d3bc2b4c6fa92cd99c5c
-> 301635%7C0%7C0%7C637787843705684549%7CUnknown%7CTWFpbGZsb3
-> d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0
-> %3D%7C3000&amp;sdata=3D8QScPZeVas%2Fpb%2F8YuUJMBjO83eeD%2BP9Sz
-> S3yfdKbid0%3D&amp;reserved=3D0> Twitter |
-> <https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fwww.l
-> inaro.org%2Flinaro-blog%2F&amp;data=3D04%7C01%7Cpeng.fan%40nxp.com%
-> 7Ccb71984b854c4bd16f2708d9e0aa295e%7C686ea1d3bc2b4c6fa92cd99c5c
-> 301635%7C0%7C0%7C637787843705684549%7CUnknown%7CTWFpbGZsb3
-> d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0
-> %3D%7C3000&amp;sdata=3DL90xtQflnMHRmrZVvmvXVfAY7npcLPM4%2FKITN
-> bxgY1c%3D&amp;reserved=3D0> Blog
+>         | ^~~~~~~~~~~
+>>> include/linux/build_bug.h:78:41: error: static assertion failed: "offsetof(struct page, mapping) == offsetof(struct folio, mapping)"
+>      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+>         |                                         ^~~~~~~~~~~~~~
+>   include/linux/build_bug.h:77:34: note: in expansion of macro '__static_assert'
+>      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+>         |                                  ^~~~~~~~~~~~~~~
+>   include/linux/mm_types.h:261:9: note: in expansion of macro 'static_assert'
+>     261 |         static_assert(offsetof(struct page, pg) == offsetof(struct folio, fl))
+>         |         ^~~~~~~~~~~~~
+>   include/linux/mm_types.h:264:1: note: in expansion of macro 'FOLIO_MATCH'
+>     264 | FOLIO_MATCH(mapping, mapping);
+>         | ^~~~~~~~~~~
+>   include/linux/build_bug.h:78:41: error: static assertion failed: "offsetof(struct page, compound_head) == offsetof(struct folio, lru)"
+>      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+>         |                                         ^~~~~~~~~~~~~~
+>   include/linux/build_bug.h:77:34: note: in expansion of macro '__static_assert'
+>      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+>         |                                  ^~~~~~~~~~~~~~~
+>   include/linux/mm_types.h:261:9: note: in expansion of macro 'static_assert'
+>     261 |         static_assert(offsetof(struct page, pg) == offsetof(struct folio, fl))
+>         |         ^~~~~~~~~~~~~
+>   include/linux/mm_types.h:265:1: note: in expansion of macro 'FOLIO_MATCH'
+>     265 | FOLIO_MATCH(compound_head, lru);
+>         | ^~~~~~~~~~~
+>   include/linux/build_bug.h:78:41: error: static assertion failed: "offsetof(struct page, index) == offsetof(struct folio, index)"
+>      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+>         |                                         ^~~~~~~~~~~~~~
+>   include/linux/build_bug.h:77:34: note: in expansion of macro '__static_assert'
+>      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+>         |                                  ^~~~~~~~~~~~~~~
+>   include/linux/mm_types.h:261:9: note: in expansion of macro 'static_assert'
+>     261 |         static_assert(offsetof(struct page, pg) == offsetof(struct folio, fl))
+>         |         ^~~~~~~~~~~~~
+>   include/linux/mm_types.h:266:1: note: in expansion of macro 'FOLIO_MATCH'
+>     266 | FOLIO_MATCH(index, index);
+>         | ^~~~~~~~~~~
+>   include/linux/build_bug.h:78:41: error: static assertion failed: "offsetof(struct page, private) == offsetof(struct folio, private)"
+>      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+>         |                                         ^~~~~~~~~~~~~~
+>   include/linux/build_bug.h:77:34: note: in expansion of macro '__static_assert'
+>      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+>         |                                  ^~~~~~~~~~~~~~~
+>   include/linux/mm_types.h:261:9: note: in expansion of macro 'static_assert'
+>     261 |         static_assert(offsetof(struct page, pg) == offsetof(struct folio, fl))
+>         |         ^~~~~~~~~~~~~
+>   include/linux/mm_types.h:267:1: note: in expansion of macro 'FOLIO_MATCH'
+>     267 | FOLIO_MATCH(private, private);
+>         | ^~~~~~~~~~~
+>   include/linux/build_bug.h:78:41: error: static assertion failed: "offsetof(struct page, _mapcount) == offsetof(struct folio, _mapcount)"
+>      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+>         |                                         ^~~~~~~~~~~~~~
+>   include/linux/build_bug.h:77:34: note: in expansion of macro '__static_assert'
+>      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+>         |                                  ^~~~~~~~~~~~~~~
+>   include/linux/mm_types.h:261:9: note: in expansion of macro 'static_assert'
+>     261 |         static_assert(offsetof(struct page, pg) == offsetof(struct folio, fl))
+>         |         ^~~~~~~~~~~~~
+>   include/linux/mm_types.h:268:1: note: in expansion of macro 'FOLIO_MATCH'
+>     268 | FOLIO_MATCH(_mapcount, _mapcount);
+>         | ^~~~~~~~~~~
+>   include/linux/build_bug.h:78:41: error: static assertion failed: "offsetof(struct page, _refcount) == offsetof(struct folio, _refcount)"
+>      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+>         |                                         ^~~~~~~~~~~~~~
+>   include/linux/build_bug.h:77:34: note: in expansion of macro '__static_assert'
+>      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+>         |                                  ^~~~~~~~~~~~~~~
+>   include/linux/mm_types.h:261:9: note: in expansion of macro 'static_assert'
+>     261 |         static_assert(offsetof(struct page, pg) == offsetof(struct folio, fl))
+>         |         ^~~~~~~~~~~~~
+>   include/linux/mm_types.h:269:1: note: in expansion of macro 'FOLIO_MATCH'
+>     269 | FOLIO_MATCH(_refcount, _refcount);
+>         | ^~~~~~~~~~~
+>   include/linux/build_bug.h:78:41: error: static assertion failed: "offsetof(struct page, memcg_data) == offsetof(struct folio, memcg_data)"
+>      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+>         |                                         ^~~~~~~~~~~~~~
+>   include/linux/build_bug.h:77:34: note: in expansion of macro '__static_assert'
+>      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+>         |                                  ^~~~~~~~~~~~~~~
+>   include/linux/mm_types.h:261:9: note: in expansion of macro 'static_assert'
+>     261 |         static_assert(offsetof(struct page, pg) == offsetof(struct folio, fl))
+>         |         ^~~~~~~~~~~~~
+>   include/linux/mm_types.h:271:1: note: in expansion of macro 'FOLIO_MATCH'
+>     271 | FOLIO_MATCH(memcg_data, memcg_data);
+>         | ^~~~~~~~~~~
+>   In file included from include/linux/mm.h:33,
+>                    from include/linux/pid_namespace.h:7,
+>                    from include/linux/ptrace.h:10,
+>                    from arch/parisc/kernel/asm-offsets.c:20:
+>   include/linux/pgtable.h: In function 'pud_index':
+>   include/linux/pgtable.h:77:25: warning: right shift count >= width of type [-Wshift-count-overflow]
+>      77 |         return (address >> PUD_SHIFT) & (PTRS_PER_PUD - 1);
+>         |                         ^~
+>   include/linux/pgtable.h: In function 'pgd_offset_pgd':
+>   include/linux/pgtable.h:84:29: warning: right shift count >= width of type [-Wshift-count-overflow]
+>      84 | #define pgd_index(a)  (((a) >> PGDIR_SHIFT) & (PTRS_PER_PGD - 1))
+>         |                             ^~
+>   include/linux/pgtable.h:124:23: note: in expansion of macro 'pgd_index'
+>     124 |         return (pgd + pgd_index(address));
+>         |                       ^~~~~~~~~
+>   In file included from include/linux/stringhash.h:7,
+>                    from include/linux/dcache.h:15,
+>
+>
+>vim +78 include/linux/build_bug.h
+>
+>bc6245e5efd70c Ian Abbott       2017-07-10  60  
+>6bab69c65013be Rasmus Villemoes 2019-03-07  61  /**
+>6bab69c65013be Rasmus Villemoes 2019-03-07  62   * static_assert - check integer constant expression at build time
+>6bab69c65013be Rasmus Villemoes 2019-03-07  63   *
+>6bab69c65013be Rasmus Villemoes 2019-03-07  64   * static_assert() is a wrapper for the C11 _Static_assert, with a
+>6bab69c65013be Rasmus Villemoes 2019-03-07  65   * little macro magic to make the message optional (defaulting to the
+>6bab69c65013be Rasmus Villemoes 2019-03-07  66   * stringification of the tested expression).
+>6bab69c65013be Rasmus Villemoes 2019-03-07  67   *
+>6bab69c65013be Rasmus Villemoes 2019-03-07  68   * Contrary to BUILD_BUG_ON(), static_assert() can be used at global
+>6bab69c65013be Rasmus Villemoes 2019-03-07  69   * scope, but requires the expression to be an integer constant
+>6bab69c65013be Rasmus Villemoes 2019-03-07  70   * expression (i.e., it is not enough that __builtin_constant_p() is
+>6bab69c65013be Rasmus Villemoes 2019-03-07  71   * true for expr).
+>6bab69c65013be Rasmus Villemoes 2019-03-07  72   *
+>6bab69c65013be Rasmus Villemoes 2019-03-07  73   * Also note that BUILD_BUG_ON() fails the build if the condition is
+>6bab69c65013be Rasmus Villemoes 2019-03-07  74   * true, while static_assert() fails the build if the expression is
+>6bab69c65013be Rasmus Villemoes 2019-03-07  75   * false.
+>6bab69c65013be Rasmus Villemoes 2019-03-07  76   */
+>6bab69c65013be Rasmus Villemoes 2019-03-07  77  #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+>6bab69c65013be Rasmus Villemoes 2019-03-07 @78  #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+>6bab69c65013be Rasmus Villemoes 2019-03-07  79  
+>
+>:::::: The code at line 78 was first introduced by commit
+>:::::: 6bab69c65013bed5fce9f101a64a84d0385b3946 build_bug.h: add wrapper for _Static_assert
+>
+>:::::: TO: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+>:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+>
+>---
+>0-DAY CI Kernel Test Service, Intel Corporation
+>https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+-- 
+Wei Yang
+Help you, Help me

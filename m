@@ -2,74 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 712A64B5E33
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 00:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9674B5E36
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 00:23:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232088AbiBNXWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 18:22:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47256 "EHLO
+        id S232105AbiBNXXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 18:23:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiBNXWl (ORCPT
+        with ESMTP id S229449AbiBNXXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 18:22:41 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511C813C3B2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 15:22:32 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id m17so4497198edc.13
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 15:22:32 -0800 (PST)
+        Mon, 14 Feb 2022 18:23:50 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2076.outbound.protection.outlook.com [40.107.220.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5DB13C3B7;
+        Mon, 14 Feb 2022 15:23:41 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VmhSK5EvdJvpupyUB3RGq6XYGHrVput4hHCJFgBatqMZ83FEfyq70ZGvT3n0mOTyYyRz8dwkQLfHYHOJ6/L564B50uVZOImj6qJysQJkC783lWU2GuBG4N6n4gwgYoYIljc/mfFRQA85nPIU7AN7w1/GHBa27HDbmHeoy8I2Vn+Jxj7VE0fqxpHiaoXAHmhna7eVrv5PFh1y0/cjdmxd5PUItMiKldEKlc5PEKK58tE5vncPfa6Ewdme+4B/s6xkzndFNG5ACdBg2MLmsoaZ/j7gQS7FCkPaSmJqEgtGuqOVB/+r0voFr6DjpoH5n0SgK/pTO+Mo/99+dh8t8frHyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sxdzs9bkvfMn7wY+xduUITSPic/i/42/o68/mWbVp2A=;
+ b=ZAu02pnE3Bg4+smakVACoCV5yZLm9GMTCoI/++noDwb9R2i5zzdYW63RESNV0EqLnXap9/7sZSE0cZ7yNZByg7iepG1/ZIzW/scLJI7SELoLroqGCxwA3yYW6PRtBS6MvolfDmRzJ8ODg09iRNagFJ5C3ktfQ6Erg+hAPz7DaNHLDPE5OrB4/y7jPfH2gZWkSfsnAu0HkJ9MCD/hfEFVFTNxeczzA1gRsgOIYlpNQWZbqSZkfpwQU0/rRnHiamin9uCXst3MXdXm+JDi3xWFU9cenGi9kuMto+Xg9JRe8FBYk3sl8jQiwxVqq/OqYnIBthwl999F28ERVYDhFX9sxQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=I6NFTkYI7ebjBhp1e1XZMTPr8QBe99RW2EaCjNoZteo=;
-        b=NsqBzOE4RRr7fD/64cRooOi87Ol/TjJl31w8h3szs+IwvPeHvpgbSjSeNPn2BQheGQ
-         qE6N266fHncxrlNu3FeyNWl/FGp9dQLZdEdcadh/QSc4vGDYtmsHASrCImwIzXXwAprQ
-         w2z1W7yOqnUL4k7ljixm+lXXrUoNHJI3Hios3zK60Fi1p55hsITpndmOu4oES3WHURed
-         ZIX2vFZQsSp48W9ubvOkOReK3UsZXnxYFlCCF3jR16ow/vVPVnRFTBS36UYk1xMtb5g/
-         Q8tEkKmz4jYjsjz3wFCgqQu6fXq+nx83qFRkrg9DNqn3YFgmCqz3iJBFZG84TJYJPEQB
-         BxLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=I6NFTkYI7ebjBhp1e1XZMTPr8QBe99RW2EaCjNoZteo=;
-        b=1a8ULhvvFfpNdHc+Y9mmbSA4D+LDis/h2s+GhDn/PgA/qnXLv58O+3sex/bB2KJcgn
-         UuqBu+HJYSaGm0+T4OrmLgioUlUSXTBdVluHX//je43mqyUkr5h9+AlGkp2ncdMuVQ1j
-         M7swy+ScYRei46I8aFsyInu9Bp8+HzPBzY1oPlCLijVzbPM/bL2Tp+sKaRE6FGuXxnMS
-         i1yJCvGKgPlg4AtYnKhs5BdZP2vbswy52LDn1Ez632hEfW/0whVErH9zTJ3/ycljTAfd
-         QlmtUnUtqGiykhQh8060NEqp4Y2dYjVBfP8YOm+ID4fdCWvoJAOz0Dukp7s7FfzH+7Aa
-         qFjA==
-X-Gm-Message-State: AOAM531S1SizoNoGeQ+sFje4Hl+FNuDZ2s/MrRU/Accp7MISaBfcAoMH
-        /yJPwxWV8OtdWKVkreMoc4jmlG9mYl0rTKkBDSwtsQ==
-X-Google-Smtp-Source: ABdhPJxiPduwDthMX8xudSwJU0Ax5iRYwMNewuwx3OI/tLotIvBhazm+qPahaXe+6y5c3gRNM+1oBpx4HW8Iacx6o3E=
-X-Received: by 2002:a05:6402:2050:: with SMTP id bc16mr1188306edb.431.1644880950812;
- Mon, 14 Feb 2022 15:22:30 -0800 (PST)
-MIME-Version: 1.0
-References: <20220210214018.55739-1-atishp@rivosinc.com> <3479483.A1skbJeUdD@diego>
- <CAOnJCU+cWBDrN-3Z37m8xA1GPrJY+JaOweYMiZBxJ-cT7ii_5Q@mail.gmail.com> <2413800.L4PxSk42VP@diego>
-In-Reply-To: <2413800.L4PxSk42VP@diego>
-From:   Atish Kumar Patra <atishp@rivosinc.com>
-Date:   Mon, 14 Feb 2022 15:22:19 -0800
-Message-ID: <CAHBxVyEETRsUu3mXqT2oD=fuxmNHxmvEd7z+ZhdXb60af2L=EQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] RISC-V: Implement multi-letter ISA extension
- probing framework
-To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+ d=NETORG5796793.onmicrosoft.com; s=selector1-NETORG5796793-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sxdzs9bkvfMn7wY+xduUITSPic/i/42/o68/mWbVp2A=;
+ b=H7qgWFHyz3C6zy5fVNBUbeXSQxrklAF29lEvgMAHpv56pmCVM8IRA/VX7xzn2CQFKY9I9Kqoe83nW2b36GUBoOxczkdwQAwOd9twPdSkXCOj/3oBPwCdJQByYvB/pGFlIazs/pWN+VfSyrYhFzhXQJfNkHIbA4fwrHsbVsdpvGU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=labundy.com;
+Received: from SJ0PR08MB6544.namprd08.prod.outlook.com (2603:10b6:a03:2d3::16)
+ by MW5PR08MB8190.namprd08.prod.outlook.com (2603:10b6:303:1ab::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.19; Mon, 14 Feb
+ 2022 23:23:37 +0000
+Received: from SJ0PR08MB6544.namprd08.prod.outlook.com
+ ([fe80::b48c:eec:fcaf:3379]) by SJ0PR08MB6544.namprd08.prod.outlook.com
+ ([fe80::b48c:eec:fcaf:3379%4]) with mapi id 15.20.4975.019; Mon, 14 Feb 2022
+ 23:23:36 +0000
+Date:   Mon, 14 Feb 2022 17:23:29 -0600
+From:   Jeff LaBundy <jeff@labundy.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Heiko Stuebner <heiko@sntech.de>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Anson Huang <anson.huang@nxp.com>,
+        Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>,
+        Rahul Tanwar <rtanwar@maxlinear.com>,
+        Yash Shah <yash.shah@sifive.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Vignesh R <vigneshr@ti.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 04/15] dt-bindings: pwm: iqs620a: Include generic pwm
+ schema
+Message-ID: <20220214232329.GA5918@nixie71>
+References: <20220214212154.8853-1-krzysztof.kozlowski@canonical.com>
+ <20220214212154.8853-5-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220214212154.8853-5-krzysztof.kozlowski@canonical.com>
+X-ClientProxiedBy: SN4PR0701CA0014.namprd07.prod.outlook.com
+ (2603:10b6:803:28::24) To SJ0PR08MB6544.namprd08.prod.outlook.com
+ (2603:10b6:a03:2d3::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f359ca54-2047-474e-1e0e-08d9f011065b
+X-MS-TrafficTypeDiagnostic: MW5PR08MB8190:EE_
+X-Microsoft-Antispam-PRVS: <MW5PR08MB81904D9246C9FD4EDEBC7911D3339@MW5PR08MB8190.namprd08.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2512;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: G0d6/SPUnspYrgZIa5JgTt97xuVgLGgrIo1lrdqE0Uk5fbyrgClDnpjSH7e2LRifLQeDIycK7gxkAyrPB5x3F01oP8UzDWOWTT7LsbgGUbwZwvPRTnf1jotEJDOBFmaMww9Ea8qXoF08pdNGoV28YlMfd3NJU1iNbFs/sbdxxofcUA3GPQ4QHKCGk6R82m5capLN3HGBkgt0z0FXtrWj7eNAkB7gjsKLFcL+pw/Uzw7smMaTN4t9Mwlnek1qCPZa0fGEX/MVnbfMyaO6bi7XekwREb4xGRpeeJFt2GsqXFH4OYqXj9Q+EjzYeD0bejXc1XNgpEP5KSDUtmuEuaZkFYOnNPAhzcwz21T4ps1vGq9WBPMfgwKdmihyrvpIWo0L04riIz4aVSnU//mCqlqU6ATGDSBxSfHIdTB5DdTDGUt6yNhmOVC5kvjhW9t5th+Cb4NQuI0S5q0ke0o0ftD/la9ICGmDkkgO4Ez97MNdo92HYK6Vr/L8cLNqih7DWxN+0+Zx+ZwXBTmxsANqGAqE2e0WOnqmnLHq2w3AbVsOYcdV21Z7DFnzHcJ3OAkxg45rVc8SlcfRc1k9fqofIUnW+3gnPT3KEBG36yq+o+aHjAkj9FqUyXVdYx2qJCFrXIZjJwGtga1r+Cvfv10TKPZhWOOTQSMo8bQeLAVcBH4+wTrtqAWs3xBQRC+KJSl/D7GzR0riKrf/o4B3C8avWLVW2MtFsJke4ezpl2JthIOOnd0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR08MB6544.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(376002)(396003)(136003)(39830400003)(346002)(5660300002)(9686003)(6916009)(83380400001)(33656002)(4326008)(66946007)(54906003)(66556008)(8936002)(33716001)(7406005)(66476007)(38100700002)(7416002)(2906002)(186003)(26005)(1076003)(316002)(38350700002)(6512007)(86362001)(508600001)(6486002)(8676002)(52116002)(6666004)(6506007)(41533002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ogY+BA6gi5y2wPOKb1wb9ztX+uCnX9UjZb5/0CCdxFnFb1fk6y8kowBLvt0f?=
+ =?us-ascii?Q?9HRobc90eDzaQ+r+PgG1scjigIkyFLSgfFxQwYm994LGgOvVzXwbcn8sNAAV?=
+ =?us-ascii?Q?kX5FGMr5VM4HWTL8O5bOogUxbh9CsWnjaxn+Ffc2J/4KacHecLYNZ6rUnYsc?=
+ =?us-ascii?Q?h8dr+rklYrg5q4J+O84m7/8tFj2+hjQBqfeQvCfhJ1co1CgezQlpgM8PQ1ol?=
+ =?us-ascii?Q?iDd/n0hyRSvUdRH9IqqPamGTnV5F0qA6pCIY76Y5ESzgkHEgJu87xRVZ/crH?=
+ =?us-ascii?Q?miaV/RZpN1sLMDICVhyCdKGqb/mDyb/pdWPbC9/bPGWPnAunRT2cK3e2W2/E?=
+ =?us-ascii?Q?iw67mOyP8mqPf0LWluzgfYWt95dzN28uE76BXA5RYuXhqrn1P9+jIuOFpbQQ?=
+ =?us-ascii?Q?EQNExZChChKt0jVmqlHLSshFPFvAn4djeP5ZeX3A7IDjGpUaWQg7hVKoGHiB?=
+ =?us-ascii?Q?skrQAToYO4FnzcSSdaurTtH+JS1RhkurMg9xOMdtbmZ5UmTejX/2OTiFXD6k?=
+ =?us-ascii?Q?Li70B/arQL5eX5UdnollGPNdmuTKN28kOUqU/HMwalsqG2fp3UN2xLEkhNbz?=
+ =?us-ascii?Q?+QTVjjstk6yV2nTyOeRYwAmRQnBVVGg5GWaWnwdxsVVg4ty9fA/qHSo9TAQZ?=
+ =?us-ascii?Q?brPJslKJacR/UTivIIZ6SS8clbo4sQcbk1L/vy09rHyWd2jz2IiBzG2tcQrr?=
+ =?us-ascii?Q?VIBeDXVfsjWEZFSIfrTJOMpgPN9Q+KZZsdzy3ToBz4UlGBoW6FUa89MLme0Q?=
+ =?us-ascii?Q?YsLzfaNeQXt5MhHwqLKZHRQjyqJoMQ2K494UnOhCfwuEfY67OkoF7EivcOOH?=
+ =?us-ascii?Q?zwgV9lDJ5T8DsFn5PmzrP/ohFSJLRlkftdIdFwB3QPYeaWZ7PRcnGV55p9/j?=
+ =?us-ascii?Q?vpT4/UI+xXPVcEhQ6D+/0FESLfGi3XPMW+XF5KMaWEewGNFLFrURHXDPfgFL?=
+ =?us-ascii?Q?tDyYlFtm+rrzZXG9TXXCQPHspgFhldTJ1m8685V5DcHLYvaUa/KYMsj69fg0?=
+ =?us-ascii?Q?VsD6HpXdAdJd6VN5sfp9yzHar6XtEFEyX4eCl3jcV3PtW+CseNvRNT4h2zd1?=
+ =?us-ascii?Q?OkwUGitOef9N3/2zcy4O5QITbFM+DdmNE8LJjtMfTAYhxZCZgX9Jp5idJrzN?=
+ =?us-ascii?Q?TN4aEsAXXPYjXlpbEPV3QE2aR4L7aTGNlRfKiPIn3e/cTVMlyT2iWEv8ZTdb?=
+ =?us-ascii?Q?puFXD06/sCQEYpaza8CWelB0s1dfRUS20vUQL+tS7FunedGHskbCBNlzS8xr?=
+ =?us-ascii?Q?I3hWSupUvBZaewcIt0MoYEV++URmTobmd5qd2H4fLzrGjn228zw15eKE5FZM?=
+ =?us-ascii?Q?+AquRLa7+25DmuOONR89E3tbzRlebb0AVFnSILEa0vY7ErGw7fTfWqMLIoGj?=
+ =?us-ascii?Q?QRgEgfEfx09v5zZvdlE9Qu7lO3Y/+xPE9KmO/V7pW1Qr7nTwaVu/WeUiy/2M?=
+ =?us-ascii?Q?VMPQaD/YUcst9Sl8aqKOU9+4/XGG+Vt3zOcYLr46q6vixQQ4Vti7SkHtnUUr?=
+ =?us-ascii?Q?LX43EVN3qqyO8MjdpqIDDhvh4Ujgdy/sfyEqiSLaH89qqSvlXZxQY2ChqCtL?=
+ =?us-ascii?Q?X0dVfk9kPoDwDuuNT4TPJ7JQ8SdLT2M7YJxtL/DS0FzMvjRCpD6+kDrkbkpH?=
+ =?us-ascii?Q?ldB3tW9nGoEAH8FLbfaD5yE=3D?=
+X-OriginatorOrg: labundy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f359ca54-2047-474e-1e0e-08d9f011065b
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR08MB6544.namprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2022 23:23:36.5926
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 00b69d09-acab-4585-aca7-8fb7c6323e6f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zgk9dNa/J2j9lbhaEm2FP3M3tZQPhi5hK7BuQvwmb6+prAjyF5Sg0/62iQNxSxaeptJhbW2rwDryM6XWkfDFKw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR08MB8190
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,246 +145,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 2:22 PM Heiko St=C3=BCbner <heiko@sntech.de> wrote:
->
-> Am Montag, 14. Februar 2022, 21:42:32 CET schrieb Atish Patra:
-> > On Mon, Feb 14, 2022 at 12:24 PM Heiko St=C3=BCbner <heiko@sntech.de> w=
-rote:
-> > >
-> > > Am Montag, 14. Februar 2022, 21:14:13 CET schrieb Atish Patra:
-> > > > On Mon, Feb 14, 2022 at 12:06 PM Heiko St=C3=BCbner <heiko@sntech.d=
-e> wrote:
-> > > > >
-> > > > > Am Donnerstag, 10. Februar 2022, 22:40:16 CET schrieb Atish Patra=
-:
-> > > > > > Multi-letter extensions can be probed using exising
-> > > > > > riscv_isa_extension_available API now. It doesn't support versi=
-oning
-> > > > > > right now as there is no use case for it.
-> > > > > > Individual extension specific implementation will be added duri=
-ng
-> > > > > > each extension support.
-> > > > > >
-> > > > > > Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> > > > >
-> > > > > Tested-by: Heiko Stuebner <heiko@sntech.de>
-> > > > >
-> > > > >
-> > > > > By the way, does a similar parsing exist for opensbi as well?
-> > > > > Things like svpbmt as well as zicbom have CSR bits controlling ho=
-w
-> > > > > these functions should behave (enabling them, etc), so I guess
-> > > > > opensbi also needs to parse the extensions from the ISA string?
-> > > > >
-> > > > >
-> > > >
-> > > > No. Currently, OpenSBI relies on the CSR read/write & trap method t=
-o
-> > > > identify the extensions [1].
-> > > >
-> > > > https://github.com/riscv-software-src/opensbi/blob/master/lib/sbi/s=
-bi_hart.c#L404
-> > >
-> > > I guess my question is more, who is supposed to set CBIE, CBCFE bits =
-in the
-> > > ENVCFG CSR. I.e. at it's default settings CMO instructions will cause
-> > > illegal instructions until the level above does allow them.
-> > >
-> > > When the kernel wants to call a cache-invalidate, from my reading men=
-vcfg
-> > > needs to be modified accordingly - which would fall in SBI's court?
-> > >
-> >
-> > I think so. I had the same question for the SSTC extension as well.
-> > This is what I currently do:
-> >
-> > 1. Detect menvcfg first, detect stimecmp
-> > 2. Enable SSTC feature only if both are available
-> > 3. Set the STCE bit in menvcfg if SSTC is available
-> >
-> > Here is the patch
-> > https://github.com/atishp04/opensbi/commit/e6b185821e8302bffdceb4633b41=
-3252e0de4889
->
-> Hmm, the CBO fields are defined as WARL (write any, read legal),
-> so I guess some sort of trap won't work here.
->
+Hi Krzysztof,
 
-Correct. Traps for extensions that introduce new CSRs.
-I was suggesting setting the corresponding bits in MENVCFG and reading
-it again to check if it sticks.
+On Mon, Feb 14, 2022 at 10:21:43PM +0100, Krzysztof Kozlowski wrote:
+> Include generic pwm.yaml schema, which enforces PWM node naming and
+> brings pwm-cells requirement.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  Documentation/devicetree/bindings/pwm/iqs620a-pwm.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pwm/iqs620a-pwm.yaml b/Documentation/devicetree/bindings/pwm/iqs620a-pwm.yaml
+> index 1d7c27be50da..0a46af240d83 100644
+> --- a/Documentation/devicetree/bindings/pwm/iqs620a-pwm.yaml
+> +++ b/Documentation/devicetree/bindings/pwm/iqs620a-pwm.yaml
+> @@ -15,6 +15,9 @@ description: |
+>    Documentation/devicetree/bindings/mfd/iqs62x.yaml for further details as
+>    well as an example.
+>  
+> +allOf:
+> +  - $ref: pwm.yaml#
+> +
+>  properties:
+>    compatible:
+>      enum:
+> @@ -25,7 +28,6 @@ properties:
+>  
+>  required:
+>    - compatible
+> -  - "#pwm-cells"
+>  
+>  additionalProperties: false
+>  
+> -- 
+> 2.32.0
+> 
 
-> The priv-spec only points to the cmo-spec for these bits and the cmo-spec
-> does not specifiy what the value should be when cmo is not present.
->
->
-> > > > In the future, zicbom can be detected in the same manner. However,
-> > > > svpbmt is a bit tricky as it doesn't
-> > > > define any new CSR. Do you think OpenSBI needs to detect svpbmt for=
- any reason ?
-> > >
-> > > There is the PBMTE bit in MENVCFG, which I found while looking throug=
-h the
-> > > zicbom-parts, which is supposed to "control wheter svpbmt is availabl=
-e for
-> > > use". So I guess the question is the same as above :-)
-> > >
-> >
-> > PBMTE bit in MENVCFG says if PBMTE bit is available or not. OpenSBI
-> > needs other way to
-> > detect if PBMTE is available.
-> >
-> > That's why, I think MENVCFG should be set correctly by the hardware
-> > upon reset. What do you think
-> > about that ? I couldn't find anything related to the reset state for me=
-nvcfg.
->
-> me neither. Both the priv-spec as well as the cmobase spec do not
-> specifiy any reset-values it seems.
->
-I have raised an issue in the ISA spec.
-https://github.com/riscv/riscv-isa-manual/issues/820
+Acked-by: Jeff LaBundy <jeff@labundy.com>
 
-> So I guess in the Qemu case, Qemu needs to set that bit when
-> its svpbmt extension is enabled?
->
-
-We can do that if the priv spec is modified to allow that.
-
->
-> Heiko
->
->
-> > > > > > ---
-> > > > > >  arch/riscv/include/asm/hwcap.h | 18 ++++++++++++++++++
-> > > > > >  arch/riscv/kernel/cpufeature.c | 27 ++++++++++++++++++++++++--=
--
-> > > > > >  2 files changed, 42 insertions(+), 3 deletions(-)
-> > > > > >
-> > > > > > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/includ=
-e/asm/hwcap.h
-> > > > > > index 5ce50468aff1..170bd80da520 100644
-> > > > > > --- a/arch/riscv/include/asm/hwcap.h
-> > > > > > +++ b/arch/riscv/include/asm/hwcap.h
-> > > > > > @@ -34,7 +34,25 @@ extern unsigned long elf_hwcap;
-> > > > > >  #define RISCV_ISA_EXT_s              ('s' - 'a')
-> > > > > >  #define RISCV_ISA_EXT_u              ('u' - 'a')
-> > > > > >
-> > > > > > +/*
-> > > > > > + * Increse this to higher value as kernel support more ISA ext=
-ensions.
-> > > > > > + */
-> > > > > >  #define RISCV_ISA_EXT_MAX    64
-> > > > > > +#define RISCV_ISA_EXT_NAME_LEN_MAX 32
-> > > > > > +
-> > > > > > +/* The base ID for multi-letter ISA extensions */
-> > > > > > +#define RISCV_ISA_EXT_BASE 26
-> > > > > > +
-> > > > > > +/*
-> > > > > > + * This enum represent the logical ID for each multi-letter RI=
-SC-V ISA extension.
-> > > > > > + * The logical ID should start from RISCV_ISA_EXT_BASE and mus=
-t not exceed
-> > > > > > + * RISCV_ISA_EXT_MAX. 0-25 range is reserved for single letter
-> > > > > > + * extensions while all the multi-letter extensions should def=
-ine the next
-> > > > > > + * available logical extension id.
-> > > > > > + */
-> > > > > > +enum riscv_isa_ext_id {
-> > > > > > +     RISCV_ISA_EXT_ID_MAX =3D RISCV_ISA_EXT_MAX,
-> > > > > > +};
-> > > > > >
-> > > > > >  unsigned long riscv_isa_extension_base(const unsigned long *is=
-a_bitmap);
-> > > > > >
-> > > > > > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel=
-/cpufeature.c
-> > > > > > index e9e3b0693d16..469b9739faf7 100644
-> > > > > > --- a/arch/riscv/kernel/cpufeature.c
-> > > > > > +++ b/arch/riscv/kernel/cpufeature.c
-> > > > > > @@ -83,7 +83,7 @@ void __init riscv_fill_hwcap(void)
-> > > > > >
-> > > > > >       for_each_of_cpu_node(node) {
-> > > > > >               unsigned long this_hwcap =3D 0;
-> > > > > > -             unsigned long this_isa =3D 0;
-> > > > > > +             uint64_t this_isa =3D 0;
-> > > > > >
-> > > > > >               if (riscv_of_processor_hartid(node) < 0)
-> > > > > >                       continue;
-> > > > > > @@ -169,12 +169,22 @@ void __init riscv_fill_hwcap(void)
-> > > > > >                       if (*isa !=3D '_')
-> > > > > >                               --isa;
-> > > > > >
-> > > > > > +#define SET_ISA_EXT_MAP(name, bit)                            =
-               \
-> > > > > > +                     do {                                     =
-               \
-> > > > > > +                             if ((ext_end - ext =3D=3D sizeof(=
-name) - 1) &&      \
-> > > > > > +                                  !memcmp(ext, name, sizeof(na=
-me) - 1)) {    \
-> > > > > > +                                     this_isa |=3D (1UL << bit=
-);               \
-> > > > > > +                                     pr_info("Found ISA extens=
-ion %s", name);\
-> > > > > > +                             }                                =
-               \
-> > > > > > +                     } while (false)                          =
-               \
-> > > > > > +
-> > > > > >                       if (unlikely(ext_err))
-> > > > > >                               continue;
-> > > > > >                       if (!ext_long) {
-> > > > > >                               this_hwcap |=3D isa2hwcap[(unsign=
-ed char)(*ext)];
-> > > > > >                               this_isa |=3D (1UL << (*ext - 'a'=
-));
-> > > > > >                       }
-> > > > > > +#undef SET_ISA_EXT_MAP
-> > > > > >               }
-> > > > > >
-> > > > > >               /*
-> > > > > > @@ -187,10 +197,21 @@ void __init riscv_fill_hwcap(void)
-> > > > > >               else
-> > > > > >                       elf_hwcap =3D this_hwcap;
-> > > > > >
-> > > > > > -             if (riscv_isa[0])
-> > > > > > +             if (riscv_isa[0]) {
-> > > > > > +#if IS_ENABLED(CONFIG_32BIT)
-> > > > > > +                     riscv_isa[0] &=3D this_isa & 0xFFFFFFFF;
-> > > > > > +                     riscv_isa[1] &=3D this_isa >> 32;
-> > > > > > +#else
-> > > > > >                       riscv_isa[0] &=3D this_isa;
-> > > > > > -             else
-> > > > > > +#endif
-> > > > > > +             } else {
-> > > > > > +#if IS_ENABLED(CONFIG_32BIT)
-> > > > > > +                     riscv_isa[0] =3D this_isa & 0xFFFFFFFF;
-> > > > > > +                     riscv_isa[1] =3D this_isa >> 32;
-> > > > > > +#else
-> > > > > >                       riscv_isa[0] =3D this_isa;
-> > > > > > +#endif
-> > > > > > +             }
-> > > > > >       }
-> > > > > >
-> > > > > >       /* We don't support systems with F but without D, so mask=
- those out
-> > > > > >
-> > > > >
-> > > > >
-> > > > >
-> > > > >
-> > > >
-> > > >
-> > > >
-> > >
-> > >
-> > >
-> > >
-> >
-> >
-> >
->
->
->
->
+Kind regards,
+Jeff LaBundy

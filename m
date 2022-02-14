@@ -2,137 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB6F4B4A92
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:39:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7A84B4598
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:25:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344641AbiBNKAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:00:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43526 "EHLO
+        id S242882AbiBNJZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:25:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345594AbiBNJ47 (ORCPT
+        with ESMTP id S235801AbiBNJZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:56:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985BE8302A;
-        Mon, 14 Feb 2022 01:45:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 440C1B80DC6;
-        Mon, 14 Feb 2022 09:45:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 731B8C340E9;
-        Mon, 14 Feb 2022 09:45:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831937;
-        bh=lyJPkVECiprsua+kfLo7vwcWYPr4vADc2/aJV5dQ37A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BOilgbm/TntvH3HQy2jcbm4vsEaUW+2e0TZhD7apBQjQhrfQg1yd8xOmZlzpA99/2
-         yHdUeoNnhoV+PgIGkVtQD1/a3OFtIHObMFVd/DCbe4X5RPGbs6FiGUOz+PRjNlgJdJ
-         804PcMORGmnA1n0p4fmn3ZsRAYDgO8lG9e9o9fBc=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guo Zihua <guozihua@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH 5.15 004/172] ima: Allow template selection with ima_template[_fmt]= after ima_hash=
+        Mon, 14 Feb 2022 04:25:05 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCAEE60A89;
+        Mon, 14 Feb 2022 01:24:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1644830679;
+        bh=bPwqzMydBgKUCCPAcnpWEevOwrjSEKacihSgwMc0jc4=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=iostq3mEM/MOJNzagGc2y1i3Y05rII7z/NhlaQiyUbyXunuVAbarmNO/rWdo9xJIG
+         Vdh5Ow8y1U5FZNOdkaBid272QPDu/tzE6mcnrrSE++hoHwixxHA08Uytf0DAqdq/np
+         WOpyi2gw7rg+RBCA7ZXGPairX8MzSBabv/qkfsF0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.123.55] ([88.152.144.107]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MIdif-1nY7vO2GKj-00Edn1; Mon, 14
+ Feb 2022 10:24:39 +0100
+Message-ID: <9cd9f149-d2ea-eb55-b774-8d817b9b6cc9@gmx.de>
 Date:   Mon, 14 Feb 2022 10:24:22 +0100
-Message-Id: <20220214092506.514075983@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] riscv/efi_stub: Fix get_boot_hartid_from_fdt() return
+ value
+Content-Language: en-US
+To:     Andreas Schwab <schwab@linux-m68k.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>, linux-efi@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Anup Patel <apatel@ventanamicro.com>, stable@vger.kernel.org,
+        Sunil V L <sunilvl@ventanamicro.com>
+References: <20220128045004.4843-1-sunilvl@ventanamicro.com>
+ <877d9xx14f.fsf@igel.home>
+From:   Heinrich Schuchardt <xypron.glpk@gmx.de>
+In-Reply-To: <877d9xx14f.fsf@igel.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Au/e3vMlDZkTXGdYorj9+mhhI0kX2Yew6mxWnv2QGwXtTeAfS/B
+ GC0CYZsekBZfnzXD4vQVL/bx8xJHpAaGKrFLun/Ih7miykJsovZHN4EABrb6DE/aB82u+CT
+ k5c1fbeV8pG17cyAa13L6Z8lVVvBfrq/uV8UwY2JaLXw2tPkV05PLZhFL6PL5/XCgt2mzv1
+ QptnAnKEGT+5Wc5+r0pyA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2xdUZkLP5D8=:FOcUVX4+xapxGqnhuR0t5M
+ 6FjdiVIZ4HOFCmWD7niXzb2QMPmbL5iWiX/XLvvHmuAKoQ21tsqVKJGLichsdaKOjHNjAkrTF
+ An37zog0g1a5ZsXqmQpszkOgIpbdUMjsB8RhA3H6PfjxjJqiCuSCHpRuEQHn2lRUZJzWk6qAI
+ iLZurQ/PEpqBL5lDwmr14XOmLjXK0xrMeu+Q1IVT8gABOdZNx9S8UT/soc7K3YquXvHbJNFjg
+ E8dNS24EEiPvPFGakMihSYE2V48uAKYYApxh+hqTze3kr/LY1nHHBeE4O1+dctXhF+eOp+/nn
+ Socw+JcuHf0c7mPCjtc/FKpekkTFRkbbo7L2CCl1UhBX03c4GkdDYmSuUY/f5pWZV4C2QJcQe
+ y18FpIOAgTdacaWI7tGuq37kffw8eqwFFSLjHrJOlhUb1Nmdku/DIkVnwmgwQB/x5Y5MEjAjR
+ wog4U8Ypt9h50VOKDJTa2tV1pGlqTHZoenPX5khDmG+XG8lb0H633AO9VZ5sUZnH4R9Xh0rS2
+ zVO71lzwAJ4WH3zVMN9ksZQzZh0JQkDsppnlPT3GjqQiJXclup+9FigJZatTWZVWKTZ1v1HN6
+ C6X355YcfqlYN4hx3qURb85suzcQtMNMOPrqGoZgml4d+PuWg4RpjTCRz5HoIfGXQjqrLC/uG
+ /U8OglNbddKjyBuQT4mgX4Gvuaie99pGrxBa68PSHmIMEoo6vfwCHv7Wq2MBflYGAYqF4X9c8
+ lgmgbaLfCcW+8hg0SufRgXgG+4N5vZMT2/smamEJRbdaW5qsrvXTaDyEbizDtj6tUiQecgGX6
+ WxeiesARhS9k8k0rPt//zIR/Ods6qL111AzecSoNzuu0JpMOy2cfsYinb/ElE0ehIDiV3Bq86
+ 0VlREP/0vmEG7FlVYi1/xTiD6qoGsRUY/8xP7GMPzocmQI9gyxiwz1dwqOyPMFZLOi8H14moq
+ YRsoYoRwlnvad55b5zoADbj694to8+24iVs/JWY7lommLPg6fogVgoGk7v3Fs631qyW9kboe0
+ 2UHKqP4mtqsKepGO/XjMBlOoKewGj+fYySTjde+bMKWZfGAuPIZ5ljSpiKmVCDfa20uokMbQQ
+ JNVEpb4tJlugaM=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On 2/14/22 10:12, Andreas Schwab wrote:
+> On Jan 28 2022, Sunil V L wrote:
+>
+>> diff --git a/drivers/firmware/efi/libstub/riscv-stub.c b/drivers/firmwa=
+re/efi/libstub/riscv-stub.c
+>> index 380e4e251399..9c460843442f 100644
+>> --- a/drivers/firmware/efi/libstub/riscv-stub.c
+>> +++ b/drivers/firmware/efi/libstub/riscv-stub.c
+>> @@ -25,7 +25,7 @@ typedef void __noreturn (*jump_kernel_func)(unsigned =
+int, unsigned long);
+>>
+>>   static u32 hartid;
+>>
+>> -static u32 get_boot_hartid_from_fdt(void)
+>> +static int get_boot_hartid_from_fdt(void)
+>
+> I think the function should be renamed, now that it no longer returns
+> the hart ID, but initializes a static variable as a side effect.  Thus
+> it no longer "gets", but "sets".
+>
 
-commit bb8e52e4906f148c2faf6656b5106cf7233e9301 upstream.
+set_boot_hartid() implies that the caller can change the boot hart ID.
+As this is not a case this name obviously would be a misnomer.
 
-Commit c2426d2ad5027 ("ima: added support for new kernel cmdline parameter
-ima_template_fmt") introduced an additional check on the ima_template
-variable to avoid multiple template selection.
+Best regards
 
-Unfortunately, ima_template could be also set by the setup function of the
-ima_hash= parameter, when it calls ima_template_desc_current(). This causes
-attempts to choose a new template with ima_template= or with
-ima_template_fmt=, after ima_hash=, to be ignored.
-
-Achieve the goal of the commit mentioned with the new static variable
-template_setup_done, so that template selection requests after ima_hash=
-are not ignored.
-
-Finally, call ima_init_template_list(), if not already done, to initialize
-the list of templates before lookup_template_desc() is called.
-
-Reported-by: Guo Zihua <guozihua@huawei.com>
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Cc: stable@vger.kernel.org
-Fixes: c2426d2ad5027 ("ima: added support for new kernel cmdline parameter ima_template_fmt")
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- security/integrity/ima/ima_template.c |   10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
---- a/security/integrity/ima/ima_template.c
-+++ b/security/integrity/ima/ima_template.c
-@@ -29,6 +29,7 @@ static struct ima_template_desc builtin_
- 
- static LIST_HEAD(defined_templates);
- static DEFINE_SPINLOCK(template_list);
-+static int template_setup_done;
- 
- static const struct ima_template_field supported_fields[] = {
- 	{.field_id = "d", .field_init = ima_eventdigest_init,
-@@ -101,10 +102,11 @@ static int __init ima_template_setup(cha
- 	struct ima_template_desc *template_desc;
- 	int template_len = strlen(str);
- 
--	if (ima_template)
-+	if (template_setup_done)
- 		return 1;
- 
--	ima_init_template_list();
-+	if (!ima_template)
-+		ima_init_template_list();
- 
- 	/*
- 	 * Verify that a template with the supplied name exists.
-@@ -128,6 +130,7 @@ static int __init ima_template_setup(cha
- 	}
- 
- 	ima_template = template_desc;
-+	template_setup_done = 1;
- 	return 1;
- }
- __setup("ima_template=", ima_template_setup);
-@@ -136,7 +139,7 @@ static int __init ima_template_fmt_setup
- {
- 	int num_templates = ARRAY_SIZE(builtin_templates);
- 
--	if (ima_template)
-+	if (template_setup_done)
- 		return 1;
- 
- 	if (template_desc_init_fields(str, NULL, NULL) < 0) {
-@@ -147,6 +150,7 @@ static int __init ima_template_fmt_setup
- 
- 	builtin_templates[num_templates - 1].fmt = str;
- 	ima_template = builtin_templates + num_templates - 1;
-+	template_setup_done = 1;
- 
- 	return 1;
- }
-
-
+Heinrich

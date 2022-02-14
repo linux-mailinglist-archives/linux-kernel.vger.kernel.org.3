@@ -2,126 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3555A4B5AD2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 21:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3D324B5B17
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 21:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiBNUFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 15:05:31 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:44830 "EHLO
+        id S229833AbiBNUR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 15:17:56 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:56444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiBNUF3 (ORCPT
+        with ESMTP id S229823AbiBNURx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 15:05:29 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DBE1A3768;
-        Mon, 14 Feb 2022 12:05:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644869110; x=1676405110;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GFe66AWLT+MQYAQ2dAVPVsypw1KVTvBSrIl/sWoPZfA=;
-  b=FyWJAbI+/JzzL7QCZC/oAPiCVqdFhDxMVbArs2ebLRfOLD5amJxN7E8I
-   co9/C9cCTdWj2JOZu7jaRObF+UT3rP+/iELXGdjV1qeMy2JB7WZvTVsGa
-   Rbz2YbVQDd356cyuxHIo/PxmGS/uLqqYLskBS7en0qwalS3D0K/K+JVBh
-   w=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 14 Feb 2022 12:00:14 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 12:00:14 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Mon, 14 Feb 2022 12:00:13 -0800
-Received: from [10.216.29.10] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 14 Feb
- 2022 12:00:09 -0800
-Message-ID: <c02d28ce-bef4-0b71-e90a-991ef4fae9d3@quicinc.com>
-Date:   Tue, 15 Feb 2022 01:30:04 +0530
+        Mon, 14 Feb 2022 15:17:53 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A4A192B2;
+        Mon, 14 Feb 2022 12:17:36 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 2A25C68AA6; Mon, 14 Feb 2022 21:00:11 +0100 (CET)
+Date:   Mon, 14 Feb 2022 21:00:11 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rich Felker <dalias@libc.org>, linux-ia64@vger.kernel.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Max Filippov <jcmvbkbc@gmail.com>, Guo Ren <guoren@kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Helge Deller <deller@gmx.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        linux-csky@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Richard Weinberger <richard@nod.at>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        David Miller <davem@davemloft.net>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH 04/14] x86: use more conventional access_ok() definition
+Message-ID: <20220214200011.GA3786@lst.de>
+References: <20220214163452.1568807-1-arnd@kernel.org> <20220214163452.1568807-5-arnd@kernel.org> <YgqLFYqIqkIsNC92@infradead.org> <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v5] drivers: thermal: clear all mitigation when thermal
- zone is disabled
-To:     Lukasz Luba <lukasz.luba@arm.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Amit Kucheria" <amitk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-References: <1643307093-22501-1-git-send-email-quic_manafm@quicinc.com>
- <4024218b-7938-e181-f456-bff4b3fb157a@arm.com>
-From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-In-Reply-To: <4024218b-7938-e181-f456-bff4b3fb157a@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 14, 2022 at 08:45:52PM +0100, Arnd Bergmann wrote:
+> As Al pointed out, they turned out to be necessary on sparc64, but the only
+> definitions are on sparc64 and x86, so it's possible that they serve a similar
+> purpose here, in which case changing the limit from TASK_SIZE to
+> TASK_SIZE_MAX is probably wrong as well.
+> 
+> So either I need to revert the original definition as I did on sparc64, or
+> they can be removed completely. Hopefully Al or the x86 maintainers
+> can clarify.
 
-On 1/31/2022 12:55 PM, Lukasz Luba wrote:
-> Hi Manaf,
->
-> On 1/27/22 6:11 PM, Manaf Meethalavalappu Pallikunhi wrote:
->> Whenever a thermal zone is in trip violated state, there is a chance
->> that the same thermal zone mode can be disabled either via
->> thermal core API or via thermal zone sysfs. Once it is disabled,
->> the framework bails out any re-evaluation of thermal zone. It leads
->> to a case where if it is already in mitigation state, it will stay
->> the same state forever.
->>
->> To avoid above mentioned issue, add support to bind/unbind
->> governor from thermal zone during thermal zone mode change request
->> and clear all existing throttling in governor unbind_from_tz()
->> callback.
->
-> I have one use case:
-> This would be a bit dangerous, e.g. to switch governors while there is a
-> high temperature. Although, sounds reasonable to left a 'default' state
-> for a next governor.
->
-I believe only way to change the governror via userspace at runtime.
+Looking at the x86 users I think:
 
-Just re-evaluate thermal zone  (thermal_zone_device_update) immediately  
-after
+ - valid_user_frame should go away and the caller should use get_user
+   instead of __get_user
+ - the one in copy_code can just go away, as there is another check
+   in copy_from_user_nmi
+ - copy_stack_frame should just use access_ok
+ - as does copy_from_user_nmi
 
-thermal_zone_device_set_policy()  in same policy_store() context, isn't 
-it good enough ?
-
-Not sure how a "default" state  can be reverted once governor change is 
-done.
-
-Re-evaluating thermal zone doesn't guarantee that it will recover previous
-
-set default state for all governors, right ?
-
->>
->> Suggested-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> Signed-off-by: Manaf Meethalavalappu Pallikunhi 
->> <quic_manafm@quicinc.com>
->> ---
->>   drivers/thermal/gov_power_allocator.c |  3 +++
->>   drivers/thermal/gov_step_wise.c       | 26 ++++++++++++++++++++++++++
->>   drivers/thermal/thermal_core.c        | 31 
->> +++++++++++++++++++++++++++----
->>   3 files changed, 56 insertions(+), 4 deletions(-)
->
-> Why only two governors need that change and not all?
-> Because they don't have 'bind/unbind' callbacks, then maybe we should
-> change that as well to make it consistent?
-I will update other governors as well in v6
->
-> Regards,
-> Lukasz
+but yes, having someone who actually knows this code look over it
+would be very helpful.

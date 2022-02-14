@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A99784B475B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B89A84B4969
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234955AbiBNJoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:44:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33992 "EHLO
+        id S1347724AbiBNKdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:33:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244989AbiBNJlC (ORCPT
+        with ESMTP id S1347648AbiBNKbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:41:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8197A186;
-        Mon, 14 Feb 2022 01:36:52 -0800 (PST)
+        Mon, 14 Feb 2022 05:31:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1592389;
+        Mon, 14 Feb 2022 02:00:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 57D0F6102D;
-        Mon, 14 Feb 2022 09:36:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17C85C340E9;
-        Mon, 14 Feb 2022 09:36:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A272F60921;
+        Mon, 14 Feb 2022 10:00:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06C70C340EF;
+        Mon, 14 Feb 2022 10:00:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831411;
-        bh=etoig3Pzjr9tZNEg1pKJtWlT1tk2W7RNrHuv6XbcSYw=;
+        s=korg; t=1644832807;
+        bh=TpPBO9LX7Ed0/HpASURHSpURkqAJAx0uV/TvLyhfA2g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pjn/7+91b2BmT8TlGxVFDfMFZYXZD+srQfAxzEz3iI80lURWkjzHYSDdnYKDSxJLr
-         ey1xzITJ15C0aPWsGFdeNV5zPFipcbGTA1TcujTw+j/eoafs+2wshSOQ0H37qMWu8r
-         0ysAE+Q6shAhAnk0teYzLsLI45Zjlw5Y/Knvprj0=
+        b=L8HZd6dBIu7+3PZzUmvKa/DHxp+7AmskcBJY3Rv1GVvFwLXdQCd17WFZZqPSFFssZ
+         sncjGmyXYcvny0TU+4WBC89NkQMgoS8DQWVB8RTBL5O385De/u2k3vIX49RYKO3428
+         ykbMevEiqFrQwkhBXrI9v1Ft5lVSC5ZYMOgbrXAE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Toshiaki Makita <makita.toshiaki@lab.ntt.co.jp>,
-        syzbot <syzkaller@googlegroups.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Helge Deller <deller@gmx.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 46/71] veth: fix races around rq->rx_notify_masked
+Subject: [PATCH 5.16 130/203] fbcon: Avoid cap set but not used warning
 Date:   Mon, 14 Feb 2022 10:26:14 +0100
-Message-Id: <20220214092453.603018204@linuxfoundation.org>
+Message-Id: <20220214092514.651071842@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,154 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Helge Deller <deller@gmx.de>
 
-[ Upstream commit 68468d8c4cd4222a4ca1f185ab5a1c14480d078c ]
+[ Upstream commit 50b10528aad568c95f772039d4b3093b4aea7439 ]
 
-veth being NETIF_F_LLTX enabled, we need to be more careful
-whenever we read/write rq->rx_notify_masked.
+Fix this kernel test robot warning:
 
-BUG: KCSAN: data-race in veth_xmit / veth_xmit
+  drivers/video/fbdev/core/fbcon.c: In function 'fbcon_init':
+  drivers/video/fbdev/core/fbcon.c:1028:6: warning: variable 'cap' set but not used [-Wunused-but-set-variable]
 
-write to 0xffff888133d9a9f8 of 1 bytes by task 23552 on cpu 0:
- __veth_xdp_flush drivers/net/veth.c:269 [inline]
- veth_xmit+0x307/0x470 drivers/net/veth.c:350
- __netdev_start_xmit include/linux/netdevice.h:4683 [inline]
- netdev_start_xmit include/linux/netdevice.h:4697 [inline]
- xmit_one+0x105/0x2f0 net/core/dev.c:3473
- dev_hard_start_xmit net/core/dev.c:3489 [inline]
- __dev_queue_xmit+0x86d/0xf90 net/core/dev.c:4116
- dev_queue_xmit+0x13/0x20 net/core/dev.c:4149
- br_dev_queue_push_xmit+0x3ce/0x430 net/bridge/br_forward.c:53
- NF_HOOK include/linux/netfilter.h:307 [inline]
- br_forward_finish net/bridge/br_forward.c:66 [inline]
- NF_HOOK include/linux/netfilter.h:307 [inline]
- __br_forward+0x2e4/0x400 net/bridge/br_forward.c:115
- br_flood+0x521/0x5c0 net/bridge/br_forward.c:242
- br_dev_xmit+0x8b6/0x960
- __netdev_start_xmit include/linux/netdevice.h:4683 [inline]
- netdev_start_xmit include/linux/netdevice.h:4697 [inline]
- xmit_one+0x105/0x2f0 net/core/dev.c:3473
- dev_hard_start_xmit net/core/dev.c:3489 [inline]
- __dev_queue_xmit+0x86d/0xf90 net/core/dev.c:4116
- dev_queue_xmit+0x13/0x20 net/core/dev.c:4149
- neigh_hh_output include/net/neighbour.h:525 [inline]
- neigh_output include/net/neighbour.h:539 [inline]
- ip_finish_output2+0x6f8/0xb70 net/ipv4/ip_output.c:228
- ip_finish_output+0xfb/0x240 net/ipv4/ip_output.c:316
- NF_HOOK_COND include/linux/netfilter.h:296 [inline]
- ip_output+0xf3/0x1a0 net/ipv4/ip_output.c:430
- dst_output include/net/dst.h:451 [inline]
- ip_local_out net/ipv4/ip_output.c:126 [inline]
- ip_send_skb+0x6e/0xe0 net/ipv4/ip_output.c:1570
- udp_send_skb+0x641/0x880 net/ipv4/udp.c:967
- udp_sendmsg+0x12ea/0x14c0 net/ipv4/udp.c:1254
- inet_sendmsg+0x5f/0x80 net/ipv4/af_inet.c:819
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg net/socket.c:725 [inline]
- ____sys_sendmsg+0x39a/0x510 net/socket.c:2413
- ___sys_sendmsg net/socket.c:2467 [inline]
- __sys_sendmmsg+0x267/0x4c0 net/socket.c:2553
- __do_sys_sendmmsg net/socket.c:2582 [inline]
- __se_sys_sendmmsg net/socket.c:2579 [inline]
- __x64_sys_sendmmsg+0x53/0x60 net/socket.c:2579
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+The cap variable is only used when CONFIG_FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION
+is enabled. Drop the temporary variable and use info->flags instead.
 
-read to 0xffff888133d9a9f8 of 1 bytes by task 23563 on cpu 1:
- __veth_xdp_flush drivers/net/veth.c:268 [inline]
- veth_xmit+0x2d6/0x470 drivers/net/veth.c:350
- __netdev_start_xmit include/linux/netdevice.h:4683 [inline]
- netdev_start_xmit include/linux/netdevice.h:4697 [inline]
- xmit_one+0x105/0x2f0 net/core/dev.c:3473
- dev_hard_start_xmit net/core/dev.c:3489 [inline]
- __dev_queue_xmit+0x86d/0xf90 net/core/dev.c:4116
- dev_queue_xmit+0x13/0x20 net/core/dev.c:4149
- br_dev_queue_push_xmit+0x3ce/0x430 net/bridge/br_forward.c:53
- NF_HOOK include/linux/netfilter.h:307 [inline]
- br_forward_finish net/bridge/br_forward.c:66 [inline]
- NF_HOOK include/linux/netfilter.h:307 [inline]
- __br_forward+0x2e4/0x400 net/bridge/br_forward.c:115
- br_flood+0x521/0x5c0 net/bridge/br_forward.c:242
- br_dev_xmit+0x8b6/0x960
- __netdev_start_xmit include/linux/netdevice.h:4683 [inline]
- netdev_start_xmit include/linux/netdevice.h:4697 [inline]
- xmit_one+0x105/0x2f0 net/core/dev.c:3473
- dev_hard_start_xmit net/core/dev.c:3489 [inline]
- __dev_queue_xmit+0x86d/0xf90 net/core/dev.c:4116
- dev_queue_xmit+0x13/0x20 net/core/dev.c:4149
- neigh_hh_output include/net/neighbour.h:525 [inline]
- neigh_output include/net/neighbour.h:539 [inline]
- ip_finish_output2+0x6f8/0xb70 net/ipv4/ip_output.c:228
- ip_finish_output+0xfb/0x240 net/ipv4/ip_output.c:316
- NF_HOOK_COND include/linux/netfilter.h:296 [inline]
- ip_output+0xf3/0x1a0 net/ipv4/ip_output.c:430
- dst_output include/net/dst.h:451 [inline]
- ip_local_out net/ipv4/ip_output.c:126 [inline]
- ip_send_skb+0x6e/0xe0 net/ipv4/ip_output.c:1570
- udp_send_skb+0x641/0x880 net/ipv4/udp.c:967
- udp_sendmsg+0x12ea/0x14c0 net/ipv4/udp.c:1254
- inet_sendmsg+0x5f/0x80 net/ipv4/af_inet.c:819
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg net/socket.c:725 [inline]
- ____sys_sendmsg+0x39a/0x510 net/socket.c:2413
- ___sys_sendmsg net/socket.c:2467 [inline]
- __sys_sendmmsg+0x267/0x4c0 net/socket.c:2553
- __do_sys_sendmmsg net/socket.c:2582 [inline]
- __se_sys_sendmmsg net/socket.c:2579 [inline]
- __x64_sys_sendmmsg+0x53/0x60 net/socket.c:2579
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-value changed: 0x00 -> 0x01
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 23563 Comm: syz-executor.5 Not tainted 5.17.0-rc2-syzkaller-00064-gc36c04c2e132 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-
-Fixes: 948d4f214fde ("veth: Add driver XDP")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Toshiaki Makita <makita.toshiaki@lab.ntt.co.jp>
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 87ab9f6b7417 ("Revert "fbcon: Disable accelerated scrolling")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Link: https://patchwork.freedesktop.org/patch/msgid/YgFB4xqI+As196FR@p100
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/veth.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ drivers/video/fbdev/core/fbcon.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 81a79e7132483..10a876f8831c7 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -209,9 +209,10 @@ static void __veth_xdp_flush(struct veth_rq *rq)
- {
- 	/* Write ptr_ring before reading rx_notify_masked */
- 	smp_mb();
--	if (!rq->rx_notify_masked) {
--		rq->rx_notify_masked = true;
--		napi_schedule(&rq->xdp_napi);
-+	if (!READ_ONCE(rq->rx_notify_masked) &&
-+	    napi_schedule_prep(&rq->xdp_napi)) {
-+		WRITE_ONCE(rq->rx_notify_masked, true);
-+		__napi_schedule(&rq->xdp_napi);
- 	}
- }
+diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
+index f36829eeb5a93..2fc1b80a26ad9 100644
+--- a/drivers/video/fbdev/core/fbcon.c
++++ b/drivers/video/fbdev/core/fbcon.c
+@@ -1025,7 +1025,7 @@ static void fbcon_init(struct vc_data *vc, int init)
+ 	struct vc_data *svc = *default_mode;
+ 	struct fbcon_display *t, *p = &fb_display[vc->vc_num];
+ 	int logo = 1, new_rows, new_cols, rows, cols;
+-	int cap, ret;
++	int ret;
  
-@@ -780,8 +781,10 @@ static int veth_poll(struct napi_struct *napi, int budget)
- 		/* Write rx_notify_masked before reading ptr_ring */
- 		smp_store_mb(rq->rx_notify_masked, false);
- 		if (unlikely(!__ptr_ring_empty(&rq->xdp_ring))) {
--			rq->rx_notify_masked = true;
--			napi_schedule(&rq->xdp_napi);
-+			if (napi_schedule_prep(&rq->xdp_napi)) {
-+				WRITE_ONCE(rq->rx_notify_masked, true);
-+				__napi_schedule(&rq->xdp_napi);
-+			}
- 		}
- 	}
+ 	if (WARN_ON(info_idx == -1))
+ 	    return;
+@@ -1034,7 +1034,6 @@ static void fbcon_init(struct vc_data *vc, int init)
+ 		con2fb_map[vc->vc_num] = info_idx;
  
+ 	info = registered_fb[con2fb_map[vc->vc_num]];
+-	cap = info->flags;
+ 
+ 	if (logo_shown < 0 && console_loglevel <= CONSOLE_LOGLEVEL_QUIET)
+ 		logo_shown = FBCON_LOGO_DONTSHOW;
+@@ -1137,8 +1136,8 @@ static void fbcon_init(struct vc_data *vc, int init)
+ 	ops->graphics = 0;
+ 
+ #ifdef CONFIG_FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION
+-	if ((cap & FBINFO_HWACCEL_COPYAREA) &&
+-	    !(cap & FBINFO_HWACCEL_DISABLED))
++	if ((info->flags & FBINFO_HWACCEL_COPYAREA) &&
++	    !(info->flags & FBINFO_HWACCEL_DISABLED))
+ 		p->scrollmode = SCROLL_MOVE;
+ 	else /* default to something safe */
+ 		p->scrollmode = SCROLL_REDRAW;
 -- 
 2.34.1
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6F54B4AFF
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:40:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 241AC4B477A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345444AbiBNKGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:06:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54752 "EHLO
+        id S244872AbiBNJnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:43:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345646AbiBNKBt (ORCPT
+        with ESMTP id S244799AbiBNJkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:01:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7021EAF9;
-        Mon, 14 Feb 2022 01:48:02 -0800 (PST)
+        Mon, 14 Feb 2022 04:40:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B80654B7;
+        Mon, 14 Feb 2022 01:36:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CA290B80DC7;
-        Mon, 14 Feb 2022 09:48:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B411CC340E9;
-        Mon, 14 Feb 2022 09:47:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0F440B80DCC;
+        Mon, 14 Feb 2022 09:36:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17A83C340EF;
+        Mon, 14 Feb 2022 09:36:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832079;
-        bh=0LiZp27Q0KIDsfgdO2XzxA5W7NEljmqZlrVlZTx/7xU=;
+        s=korg; t=1644831361;
+        bh=snN2LXEolAe1omZS7novdG4hFZ2Ief0Al+9cp4YeOlo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IBeLIGjBfEZfGAOGhY1vqX+gDE4VtSVm2rn2nle8J1jp8nyHJ4LEN0nmLv8qbKqU7
-         zDoaY17pSgGCaZOZuqeeOfOECw3z01OPi6NNEtyFcO0XjeAC+OIGNmTXfTcFv321JV
-         Qy+GjVQSpiFP3ZiccTOs7IlyzqT6dWDx+AT6Ygxk=
+        b=RQ5ujsbW5NRWHmX6jljqn52jfMn2Jnx3SiqDWPW2/hgFtpRpySQtd1Nrosb1k7PG+
+         GIpPKgNsqk8iJH0PT4xQvjMQ0rib/5TyIiFDhna4Y39qmqpaDfGS8al9Pji2Co1YqQ
+         7WP/s1m/dQwvjTtDXTaDeg4jn0/998GUfTrI+ujE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>,
-        Hannes Reinecke <hare@suse.de>, Christoph Hellwig <hch@lst.de>
-Subject: [PATCH 5.15 073/172] nvme-tcp: fix bogus request completion when failing to send AER
-Date:   Mon, 14 Feb 2022 10:25:31 +0100
-Message-Id: <20220214092508.929334944@linuxfoundation.org>
+        stable@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Subject: [PATCH 5.4 04/71] ima: Do not print policy rule with inactive LSM labels
+Date:   Mon, 14 Feb 2022 10:25:32 +0100
+Message-Id: <20220214092452.169784326@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,42 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sagi Grimberg <sagi@grimberg.me>
+From: Stefan Berger <stefanb@linux.ibm.com>
 
-commit 63573807b27e0faf8065a28b1bbe1cbfb23c0130 upstream.
+commit 89677197ae709eb1ab3646952c44f6a171c9e74c upstream.
 
-AER is not backed by a real request, hence we should not incorrectly
-assume that when failing to send a nvme command, it is a normal request
-but rather check if this is an aer and if so complete the aer (similar
-to the normal completion path).
+Before printing a policy rule scan for inactive LSM labels in the policy
+rule. Inactive LSM labels are identified by args_p != NULL and
+rule == NULL.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Sagi Grimberg <sagi@grimberg.me>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Fixes: 483ec26eed42 ("ima: ima/lsm policy rule loading logic bug fixes")
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+Cc: <stable@vger.kernel.org> # v5.6+
+Acked-by: Christian Brauner <brauner@kernel.org>
+[zohar@linux.ibm.com: Updated "Fixes" tag]
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/nvme/host/tcp.c |   10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ security/integrity/ima/ima_policy.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
---- a/drivers/nvme/host/tcp.c
-+++ b/drivers/nvme/host/tcp.c
-@@ -920,7 +920,15 @@ static inline void nvme_tcp_done_send_re
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -1382,6 +1382,14 @@ int ima_policy_show(struct seq_file *m,
  
- static void nvme_tcp_fail_request(struct nvme_tcp_request *req)
- {
--	nvme_tcp_end_request(blk_mq_rq_from_pdu(req), NVME_SC_HOST_PATH_ERROR);
-+	if (nvme_tcp_async_req(req)) {
-+		union nvme_result res = {};
-+
-+		nvme_complete_async_event(&req->queue->ctrl->ctrl,
-+				cpu_to_le16(NVME_SC_HOST_PATH_ERROR), &res);
-+	} else {
-+		nvme_tcp_end_request(blk_mq_rq_from_pdu(req),
-+				NVME_SC_HOST_PATH_ERROR);
+ 	rcu_read_lock();
+ 
++	/* Do not print rules with inactive LSM labels */
++	for (i = 0; i < MAX_LSM_RULES; i++) {
++		if (entry->lsm[i].args_p && !entry->lsm[i].rule) {
++			rcu_read_unlock();
++			return 0;
++		}
 +	}
- }
- 
- static int nvme_tcp_try_send_data(struct nvme_tcp_request *req)
++
+ 	if (entry->action & MEASURE)
+ 		seq_puts(m, pt(Opt_measure));
+ 	if (entry->action & DONT_MEASURE)
 
 

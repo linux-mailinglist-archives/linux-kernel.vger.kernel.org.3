@@ -2,165 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13784B5E5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 00:41:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E263A4B5E5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 00:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232184AbiBNXl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 18:41:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56450 "EHLO
+        id S232200AbiBNXlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 18:41:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiBNXl2 (ORCPT
+        with ESMTP id S229582AbiBNXlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 18:41:28 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27C16114762;
-        Mon, 14 Feb 2022 15:41:18 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E5C8C1063;
-        Mon, 14 Feb 2022 15:41:17 -0800 (PST)
-Received: from [192.168.122.164] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9FB523F70D;
-        Mon, 14 Feb 2022 15:41:17 -0800 (PST)
-Message-ID: <0384e0b3-0f3d-ea89-7385-48bed60ec1a0@arm.com>
-Date:   Mon, 14 Feb 2022 17:41:07 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [BUG/PATCH v2] net: mvpp2: always set port pcs ops
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     netdev@vger.kernel.org, mw@semihalf.com, davem@davemloft.net,
-        kuba@kernel.org, linux-kernel@vger.kernel.org
-References: <20220212003454.3214726-1-jeremy.linton@arm.com>
- <YgeFKsRjlxNiJbSa@shell.armlinux.org.uk>
-From:   Jeremy Linton <jeremy.linton@arm.com>
-In-Reply-To: <YgeFKsRjlxNiJbSa@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 14 Feb 2022 18:41:32 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E950114762
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 15:41:21 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id w1so11744849plb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 15:41:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=moNgRt/ZLEOBsvTByTxtoOs0vPE/zSrseOi9CrHk4fo=;
+        b=yoV/X27MeBo7oIZfSwmeTrP3dQ/+GNhABFP1Nj4ylCVxf+C2qf+1N2m4gY5+NP0SYS
+         MTK4VhrCChxql5dGYbg2D/eflP6WJWuMp2HL0yU5jMyfg1js+SOnqY4uf7Gk6Zwx1Dha
+         q4Lc2suIJTeaK30TCLCX+YU6f52bh1A2KKlRcqLvwx9shfV9qXx7trZePAdXWgFVf+Ox
+         0I7NDimuv+L78rDIfRcfFwGh8LpACXzlYn3M5dQl6uoQSjAyLPkT6f6GYvmvp8XpH8Mn
+         /hO7TOJBxKJlBjRLSz044qvnAiXd6Tf7e5mp5HyrSrhs83jUk6p7RGp15qN0Bso40VyC
+         Gq+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=moNgRt/ZLEOBsvTByTxtoOs0vPE/zSrseOi9CrHk4fo=;
+        b=gtz18q6GET+mMS8Y2Pdg1Tubi7wTyNysl03cCfujf6A3zaYs7IgvUZu2HIwm+8OQCt
+         aAsDx/ZQNuBvblim7w1iuFDWotF1btJ88UaKUP3Rqx0pi2DnLBHHIwOlP0gV93xjvIzV
+         Alel3Ye7Y+1WgV8NXt5nTsKDVPa4eqo+V0kQu7FLt6AqTan+Dw8ecTHBrWGKJ/i4xeQK
+         GgwkZyXEeIRyV1XhgjCoJBq1qvmzYf7qAlUN/uKvosilPi+Kt7e36ZN1DapPb3BfVo/v
+         VQm1fUqpG9sBMdfyi/m58JLYKzbDtu1ZtgxrTNtzSgACMcB5s+ECLSjXtMdnb5cdDH18
+         A5sQ==
+X-Gm-Message-State: AOAM533++BSRjv3qUVjkJFdKevYg3A8tL+gIoiRHmdWmWdFOLlANd+8H
+        VtFUqK0r/ODJWg2zmg8kjiEyXA==
+X-Google-Smtp-Source: ABdhPJxrSAvPdqz8scLzAe/1uJoOiULuiRw2YIGciMi8EOsLxfF2zYjgEjkB/FnV4NMi5Ru8+XTGMA==
+X-Received: by 2002:a17:90b:2496:b0:1b9:a6dd:ae7 with SMTP id nt22-20020a17090b249600b001b9a6dd0ae7mr1233912pjb.35.1644882080753;
+        Mon, 14 Feb 2022 15:41:20 -0800 (PST)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id 13sm36798718pfm.161.2022.02.14.15.41.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 15:41:19 -0800 (PST)
+Date:   Mon, 14 Feb 2022 15:41:19 -0800 (PST)
+X-Google-Original-Date: Mon, 14 Feb 2022 15:40:54 PST (-0800)
+Subject:     Re: [PATCH] riscv: mm: remove the BUG_ON check of mapping the last 4K bytes of memory
+In-Reply-To: <36519886-cedc-a3e3-70d2-712f8a6d3a10@ghiti.fr>
+CC:     jszhang@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     alex@ghiti.fr
+Message-ID: <mhng-790fdd34-b20e-4c0a-b36d-eb91b16a3e44@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 2/12/22 04:00, Russell King (Oracle) wrote:
-> On Fri, Feb 11, 2022 at 06:34:54PM -0600, Jeremy Linton wrote:
->> Booting a MACCHIATObin with 5.17, the system OOPs with
->> a null pointer deref when the network is started. This
->> is caused by the pcs->ops structure being null in
->> mcpp2_acpi_start() when it tries to call pcs_config().
+On Tue, 25 Jan 2022 08:10:41 PST (-0800), alex@ghiti.fr wrote:
+>
+> On 1/25/22 16:55, Jisheng Zhang wrote:
+>> remove the BUG_ON check of mapping the last 4K bytes of the addressable
+>> memory since "this is true for every kernel actually" as pointed out
+>> by Alexandre.
 >>
->> Hoisting the code which sets pcs_gmac.ops and pcs_xlg.ops,
->> assuring they are always set, fixes the problem.
->>
->> The OOPs looks like:
->> [   18.687760] Unable to handle kernel access to user memory outside uaccess routines at virtual address 0000000000000010
->> [   18.698561] Mem abort info:
->> [   18.698564]   ESR = 0x96000004
->> [   18.698567]   EC = 0x25: DABT (current EL), IL = 32 bits
->> [   18.709821]   SET = 0, FnV = 0
->> [   18.714292]   EA = 0, S1PTW = 0
->> [   18.718833]   FSC = 0x04: level 0 translation fault
->> [   18.725126] Data abort info:
->> [   18.729408]   ISV = 0, ISS = 0x00000004
->> [   18.734655]   CM = 0, WnR = 0
->> [   18.738933] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000111bbf000
->> [   18.745409] [0000000000000010] pgd=0000000000000000, p4d=0000000000000000
->> [   18.752235] Internal error: Oops: 96000004 [#1] SMP
->> [   18.757134] Modules linked in: rfkill ip_set nf_tables nfnetlink qrtr sunrpc vfat fat omap_rng fuse zram xfs crct10dif_ce mvpp2 ghash_ce sbsa_gwdt phylink xhci_plat_hcd ahci_plam
->> [   18.773481] CPU: 0 PID: 681 Comm: NetworkManager Not tainted 5.17.0-0.rc3.89.fc36.aarch64 #1
->> [   18.781954] Hardware name: Marvell                         Armada 7k/8k Family Board      /Armada 7k/8k Family Board      , BIOS EDK II Jun  4 2019
->> [   18.795222] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->> [   18.802213] pc : mvpp2_start_dev+0x2b0/0x300 [mvpp2]
->> [   18.807208] lr : mvpp2_start_dev+0x298/0x300 [mvpp2]
->> [   18.812197] sp : ffff80000b4732c0
->> [   18.815522] x29: ffff80000b4732c0 x28: 0000000000000000 x27: ffffccab38ae57f8
->> [   18.822689] x26: ffff6eeb03065a10 x25: ffff80000b473a30 x24: ffff80000b4735b8
->> [   18.829855] x23: 0000000000000000 x22: 00000000000001e0 x21: ffff6eeb07b6ab68
->> [   18.837021] x20: ffff6eeb07b6ab30 x19: ffff6eeb07b6a9c0 x18: 0000000000000014
->> [   18.844187] x17: 00000000f6232bfe x16: ffffccab899b1dc0 x15: 000000006a30f9fa
->> [   18.851353] x14: 000000003b77bd50 x13: 000006dc896f0e8e x12: 001bbbfccfd0d3a2
->> [   18.858519] x11: 0000000000001528 x10: 0000000000001548 x9 : ffffccab38ad0fb0
->> [   18.865685] x8 : ffff80000b473330 x7 : 0000000000000000 x6 : 0000000000000000
->> [   18.872851] x5 : 0000000000000000 x4 : 0000000000000000 x3 : ffff80000b4732f8
->> [   18.880017] x2 : 000000000000001a x1 : 0000000000000002 x0 : ffff6eeb07b6ab68
->> [   18.887183] Call trace:
->> [   18.889637]  mvpp2_start_dev+0x2b0/0x300 [mvpp2]
->> [   18.894279]  mvpp2_open+0x134/0x2b4 [mvpp2]
->> [   18.898483]  __dev_open+0x128/0x1e4
->> [   18.901988]  __dev_change_flags+0x17c/0x1d0
->> [   18.906187]  dev_change_flags+0x30/0x70
->> [   18.910038]  do_setlink+0x278/0xa7c
->> [   18.913540]  __rtnl_newlink+0x44c/0x7d0
->> [   18.917391]  rtnl_newlink+0x5c/0x8c
->> [   18.920892]  rtnetlink_rcv_msg+0x254/0x314
->> [   18.925006]  netlink_rcv_skb+0x48/0x10c
->> [   18.928858]  rtnetlink_rcv+0x24/0x30
->> [   18.932449]  netlink_unicast+0x290/0x2f4
->> [   18.936386]  netlink_sendmsg+0x1d0/0x41c
->> [   18.940323]  sock_sendmsg+0x60/0x70
->> [   18.943825]  ____sys_sendmsg+0x248/0x260
->> [   18.947762]  ___sys_sendmsg+0x74/0xa0
->> [   18.951438]  __sys_sendmsg+0x64/0xcc
->> [   18.955027]  __arm64_sys_sendmsg+0x30/0x40
->> [   18.959140]  invoke_syscall+0x50/0x120
->> [   18.962906]  el0_svc_common.constprop.0+0x4c/0xf4
->> [   18.967629]  do_el0_svc+0x30/0x9c
->> [   18.970958]  el0_svc+0x28/0xb0
->> [   18.974025]  el0t_64_sync_handler+0x10c/0x140
->> [   18.978400]  el0t_64_sync+0x1a4/0x1a8
->> [   18.982078] Code: 52800004 b9416262 aa1503e0 52800041 (f94008a5)
->> [   18.988196] ---[ end trace 0000000000000000 ]---
->>
->> Fixes: cff056322372 ("net: mvpp2: use .mac_select_pcs() interface")
->> Suggested-by: Russel King (Oracle) <rmk+kernel@armlinux.org.uk>
-> 
-> Please spell my name correctly, especially in attributations. I really
-> don't want this committed with this mistake.
-
-Sorry about that, no real excuse, I have posted a v3 with that corrected.
-
-Thanks again for you help.
-
-
-> 
->> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+>> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+>> Reviewed-by: Alexandre Ghiti <alex@ghiti.fr>
 >> ---
->>   drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>   arch/riscv/mm/init.c | 8 --------
+>>   1 file changed, 8 deletions(-)
 >>
->> diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
->> index 7cdbf8b8bbf6..1a835b48791b 100644
->> --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
->> +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
->> @@ -6870,6 +6870,9 @@ static int mvpp2_port_probe(struct platform_device *pdev,
->>   	dev->max_mtu = MVPP2_BM_JUMBO_PKT_SIZE;
->>   	dev->dev.of_node = port_node;
->>   
->> +	port->pcs_gmac.ops = &mvpp2_phylink_gmac_pcs_ops;
->> +	port->pcs_xlg.ops = &mvpp2_phylink_xlg_pcs_ops;
->> +
->>   	if (!mvpp2_use_acpi_compat_mode(port_fwnode)) {
->>   		port->phylink_config.dev = &dev->dev;
->>   		port->phylink_config.type = PHYLINK_NETDEV;
->> @@ -6940,9 +6943,6 @@ static int mvpp2_port_probe(struct platform_device *pdev,
->>   				  port->phylink_config.supported_interfaces);
->>   		}
->>   
->> -		port->pcs_gmac.ops = &mvpp2_phylink_gmac_pcs_ops;
->> -		port->pcs_xlg.ops = &mvpp2_phylink_xlg_pcs_ops;
->> -
->>   		phylink = phylink_create(&port->phylink_config, port_fwnode,
->>   					 phy_mode, &mvpp2_phylink_ops);
->>   		if (IS_ERR(phylink)) {
->> -- 
->> 2.34.1
+>> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+>> index cf4d018b7d66..8347d0fda8cd 100644
+>> --- a/arch/riscv/mm/init.c
+>> +++ b/arch/riscv/mm/init.c
+>> @@ -811,14 +811,6 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+>>   	BUG_ON((PAGE_OFFSET % PGDIR_SIZE) != 0);
+>>   	BUG_ON((kernel_map.phys_addr % PMD_SIZE) != 0);
 >>
->>
-> 
+>> -#ifdef CONFIG_64BIT
+>> -	/*
+>> -	 * The last 4K bytes of the addressable memory can not be mapped because
+>> -	 * of IS_ERR_VALUE macro.
+>> -	 */
+>> -	BUG_ON((kernel_map.virt_addr + kernel_map.size) > ADDRESS_SPACE_END - SZ_4K);
+>> -#endif
+>
+>
+> This BUG_ON seems pretty legit to me: I re-read the exchanges we had,
+> and I see that I didn't notice that in your v2, you actually removed the
+> BUG_ON. So that's my bad, what I meant in the first place was that the
+> BUG_ON is true for 32-bit and 64-bit kernels actually.
 
+There's actually an ifndef 64BIT above that sort of handles this case 
+(though I didn't check to see if we're getting the limits correct, so it 
+may not work properly).  That's shrinking the memory, rather than just 
+firing a BUG, and it's not really any more code so we should go that way 
+for both.  I could see leaving a BUG in there, maybe just explicitly 
+using IS_ERR_VALUE as that's really what we're checking for (though if 
+that's not 4K a bunch of stuff will break, so maybe it just doesn't 
+matter).
+
+> Sorry my RB was not right on this one :(
+>
+> Alex
+>
+>
+>> -
+>>   	pt_ops_set_early();
+>>
+>>   	/* Setup early PGD for fixmap */

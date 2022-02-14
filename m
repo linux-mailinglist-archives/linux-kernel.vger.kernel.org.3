@@ -2,306 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB50A4B50D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E36654B50E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353735AbiBNM5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 07:57:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48052 "EHLO
+        id S1353775AbiBNNCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:02:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236723AbiBNM5n (ORCPT
+        with ESMTP id S229631AbiBNNCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 07:57:43 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EDF94B873;
-        Mon, 14 Feb 2022 04:57:35 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21EBwJbv012473;
-        Mon, 14 Feb 2022 12:57:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=id2abh3WmQzXvMFNXByz0iFAdS1n1wujjaD/McLnorA=;
- b=Bl8JTG7aehpY1fmpY2NSpyDugy4MeJevlOUPVfz6cc6UQ/r7p5rFvmnB2GhPrPDZUZcm
- 0spZtl5N+FNBO5hKwV1m+zCNTU5j8i38ZJvFOq2FCeFb92lV4DjLliFiGuMopsbJT+/J
- tpElngGtExQUE4yPxVTVjFaU5QjQtAAWBydRpXzJAwcKOhq9/wF01qEGTL7aRLCj72Gy
- UTB+f76hblHedddp3kCL7ACtfshk2huv5hWBFaX6NCj9pkYXMDVhQSxgoaw59D0pDBF+
- aOwu6r6UjHCtDJnSt0td9BGSiNwyluyMB8LeKNae2AXpz2oqOsclZo5/EQTWCDud8L+y mQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e7c4dwpnw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 12:57:34 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21ECT2aO035399;
-        Mon, 14 Feb 2022 12:57:33 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e7c4dwpnb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 12:57:33 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21ECu737024641;
-        Mon, 14 Feb 2022 12:57:31 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3e64h9nd45-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 12:57:31 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21ECvQIB40567072
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Feb 2022 12:57:26 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E5BCAA4054;
-        Mon, 14 Feb 2022 12:57:25 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 07499A405C;
-        Mon, 14 Feb 2022 12:57:25 +0000 (GMT)
-Received: from [9.171.42.254] (unknown [9.171.42.254])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Feb 2022 12:57:24 +0000 (GMT)
-Message-ID: <7ecb4a93-5a41-a9e2-0a01-9eccabfa85ad@linux.ibm.com>
-Date:   Mon, 14 Feb 2022 13:59:37 +0100
+        Mon, 14 Feb 2022 08:02:38 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2077.outbound.protection.outlook.com [40.107.21.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3034C786;
+        Mon, 14 Feb 2022 05:02:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DsrMEns0qI03L+SFeaw3i9alCPvg68Z1HQyn4quxvO1KYUpjtTNG8RWEi2DA3OxYaD0K4QypX1GTofLGEwdkcgJHTFmhFLUAi1LfNSFvB77YwtqyPRUvBnsJDvEyy3vBlCeQtW0kf3tR8+LRUfc5r6niNEzGOHn7NmDHP1WzB4EQ0h4GJCcDhUeO6eFHuSHriQDyAhkD7R4rqWSKAML0U+KFXA6+mmXrPut13tIwAYim2sfnoSxW3kbFeH5tiafaXzksnRum+h4kfjSV/Gz6iWVaj6Swtjah83t9Cw1w80/lL5/VGkQslpehGEanU1NlGBt2qx9YWmMwHYFY8Uaxcw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IgLQy+96aY3YVLiqFi9xHtQznrpjeoK9EGkO7zmoKMU=;
+ b=Vy6qPLoxfQbVtT8NNgLF8FV0LiAsSHC2HQj9+62vBn5bJmt/2AFEKKrmdAuHyYsLn/FAwaH8WFQwxAeARxYejRbL90KMIR4Xbl6Fxdkc7vowVUNeMWytvyv9BGrZcbtbiSDWs1/1buJEolhOhIEjFAUlpFlkwqE8sGQKkSGicz7ISv5CN2XIjh5TTe2dK40dhOWKaBjC73KO5q9E/b0hcz06B9iLdAXB36HvCAxoeKJBeyguFIc4DCYR+Rf2uoJCEe6x3/hdnKfyOfr4mBhD4idRI0gP7+SQg4JiNx3SlzuFkEKUGeIEci6SmhlZzTN2akgWo0dpB4gpyBR+3+iReQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=KoCoConnector.onmicrosoft.com; s=selector2-KoCoConnector-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IgLQy+96aY3YVLiqFi9xHtQznrpjeoK9EGkO7zmoKMU=;
+ b=F0zi/PQl0D3/F5VBVmK7WbOHVUJc8MvXUyIu09cg5D8pvaAirSUJ/Su9TWwjQzPbv1yhe6fJQ8XgBgQs81hm6tQ6dlIqWsJoXLpkfLMqjkLLVgCbSjELNrZQMm/MXTApuuSgh6rH6G66p/U+mEMmo4Prm1A70Dmj/trmYz1QHtQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kococonnector.com;
+Received: from AM9PR09MB4884.eurprd09.prod.outlook.com (2603:10a6:20b:281::9)
+ by DBBPR09MB3173.eurprd09.prod.outlook.com (2603:10a6:10:df::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.18; Mon, 14 Feb
+ 2022 13:02:26 +0000
+Received: from AM9PR09MB4884.eurprd09.prod.outlook.com
+ ([fe80::3c7a:2af6:3623:4c3d]) by AM9PR09MB4884.eurprd09.prod.outlook.com
+ ([fe80::3c7a:2af6:3623:4c3d%7]) with mapi id 15.20.4975.019; Mon, 14 Feb 2022
+ 13:02:26 +0000
+Date:   Mon, 14 Feb 2022 14:02:16 +0100
+From:   Oliver Graute <oliver.graute@kococonnector.com>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH 4/6] Input: edt-ft5x06 - show model name by sysfs
+Message-ID: <20220214130216.GA13510@optiplex>
+References: <20220213171532.346270-1-dario.binacchi@amarulasolutions.com>
+ <20220213171532.346270-5-dario.binacchi@amarulasolutions.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220213171532.346270-5-dario.binacchi@amarulasolutions.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: AM3PR05CA0119.eurprd05.prod.outlook.com
+ (2603:10a6:207:2::21) To AM9PR09MB4884.eurprd09.prod.outlook.com
+ (2603:10a6:20b:281::9)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v3 17/30] KVM: s390: pci: enable host forwarding of
- Adapter Event Notifications
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220204211536.321475-1-mjrosato@linux.ibm.com>
- <20220204211536.321475-18-mjrosato@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <20220204211536.321475-18-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uB7gIWlhauDnt5kyHZjhgV0hYTjlvEx0
-X-Proofpoint-ORIG-GUID: Vj0sal7BBnc96eMnWyH2mY3fkc5Wd6qn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-14_05,2022-02-14_03,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- adultscore=0 clxscore=1015 lowpriorityscore=0 impostorscore=0
- suspectscore=0 mlxlogscore=999 priorityscore=1501 mlxscore=0 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202140076
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a93db5e0-3797-4c64-be08-08d9efba3fc3
+X-MS-TrafficTypeDiagnostic: DBBPR09MB3173:EE_
+X-Microsoft-Antispam-PRVS: <DBBPR09MB317322C559976E2FAB05D228EB339@DBBPR09MB3173.eurprd09.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:800;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZFu9JGR4DE4a4rDqOoyJYz33CtTTReeWSXwMXR1aVYUEj9yQA5Il5NR3uQ5oaMBYf+/ok8CL53VoUv2MW9d/JjVHZHwmhOYidldtJICChL6cWE8xAYaDnx95gIf9SonkfzEGWLeArF3z+dXiYm5WutEAArtCKfrYrQdCGb8K8UxJb5jT0LaBP3bVaISOb7wjESsaXLYzvivb4lTqa6LQ4Eaii3C+ZMnJCclyiHv1YPoYVo+qWmYJq6alMbohzygV5FfAw7Fo7REvYZUBM9z2d8xk18zLTXnFDiRY+7zxBI0zp1r+7SP8LUL4pjExGbM4Zxp0RDdX/LEfL9GJCmIPSuqVz8yKt3I/i7sEM1Vhh8wQTTcsR5W5pQlqgdAIrIRmcn4mwK2sWCexRbv6OP8SaGL6uu3TI2I7aUivvRPlonyHczem3lC2l2qjYdSpB2ih/mUooqtsWnTCmG5AdfKu7SA/1PvXVww/y+DDsm2ENh/49RKi6kzQk+a2WPFPMWkWGB+HVXTtvVfPifebOYuH1moldQ8XQU8j46/RjsqHf8XaWhyPhlXl6HVuCCy6SwfwVqD3tKAneWki7fOVGvs/RacEPSJEUkbH8HvC/s+8wfjvR49jgKH2yvDsZlUxrbn0A0/M42+CT3JYEXv4GHGM+7LuMfnUFVCAWz8twt9qNCBAGABK+0kRLolsWmDMY0S4CN2Hq+OB5HzplWUd0QKQ/w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR09MB4884.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(396003)(376002)(346002)(136003)(39830400003)(366004)(6506007)(5660300002)(52116002)(26005)(44832011)(38100700002)(38350700002)(186003)(6512007)(86362001)(4326008)(2906002)(8676002)(33716001)(8936002)(4744005)(9686003)(508600001)(316002)(66476007)(66946007)(66556008)(6666004)(6486002)(54906003)(1076003)(6916009)(33656002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JcvJUEBY2CltZ5PrSjh42AQC11XzC32wc1rLt46ls/VIAwbyJj1tptqEVcqC?=
+ =?us-ascii?Q?LdG+SMgrYSVRFwlUXZg2uhoFFN8/+RT/wTNs1QkfAWVDYSHZXzQOEzWWDqxr?=
+ =?us-ascii?Q?pCTltyCMo+hEFRspVa5clAvFpnfKmzcvecPSudFdv5O4Xx41TqbIcu1qTomw?=
+ =?us-ascii?Q?gDHtHOg57m0FovlVFAs7xvANkDqoXu3PcLx+PU4NJAV0d79ex9MIzAOUdnzO?=
+ =?us-ascii?Q?RdcA31OBI84ONzstlAVdyY+dSfTirRMRSl9zCwyeBY1RBKxCIexyyxA8EVM7?=
+ =?us-ascii?Q?KzBiJ/JbciCP1E1u8WrpGJWS9PWjwuFUuFIBEKHzk5lhgXBNVVVYG1Vu3X8R?=
+ =?us-ascii?Q?Wv1wFU5C4tLOe1Gf6LC33uwq5PV6PtyZnd0GBEDR6g3DZI3JvaZri6Y5vixc?=
+ =?us-ascii?Q?CTtqHyjAjOeFqmShwr/pjp+FDZR5hE7SjnwnS2QN9hq1YBhDYqmSNiAbXUGU?=
+ =?us-ascii?Q?iRN7Rf83R+hUk1AIG/2kcOOrEeaFClmiJJSF+v+QvYbm9FiKjh28c9SwsKhI?=
+ =?us-ascii?Q?2LJIsat8Rhq9S1GCrI2+4kFrJXtjE61CxJJsMLkSuRWurdb6TK4qZ2oiEVnK?=
+ =?us-ascii?Q?HjnpCTZhFeH6ajpG5l9MTJuK+sSJ9jZvK7owPRr4gvhzEQwFGTlHFcxzrZeM?=
+ =?us-ascii?Q?gafboRpD96Soze02RqqWqU6LvZN19v4aGIf+OtnPt972jAryX+pVdSU+kJ8f?=
+ =?us-ascii?Q?lOXsogV+d1SF2T7Z/oYuZpTwuU3glbM8ywA3eZvwZsD1mpW8C6Fzoi/wv/2x?=
+ =?us-ascii?Q?QYqyAkktZVfQAK+3FPFZwF8bhOHU3ps/p1jK+hIur88CzbmhAr4znGEf0wCi?=
+ =?us-ascii?Q?xblJrhSGUhkpWJz7oG099A7+skbN6M3840YpwUSfECQm4ov+4IL4rmx8F8G4?=
+ =?us-ascii?Q?Ed8e64wyOG0EWrdjDsdCDua30Hk93W86P7JYEZM5BMzCVoACjTCMT/lfr3KF?=
+ =?us-ascii?Q?IHlO4voK2wP8J8hMMMBX1CupxnpUIJEq2nF1wXT6bGAflysLMKDut2JqDnV7?=
+ =?us-ascii?Q?pCQB/ylguEA+cASxstQcivO8l95LHokRFRZ1POJdcn6oDkq+GEZfIHgXpDes?=
+ =?us-ascii?Q?xi5rIF44Oubw1ojTpYE6qV6u0XTEwKJ+IucnPQRxUomGrNq+EW3unk8t6ZfF?=
+ =?us-ascii?Q?osCl/UCnQxW1QMQ/8h+cE1ygWuMgq7OdWJ4Lc0gnlpGdzmbLLnmZ5omV/VuH?=
+ =?us-ascii?Q?DtfY8EzJZv4yjNmGxCDIImNofDQKTbpHptcsyn866qhTgc+RsrEUx+ZelbbB?=
+ =?us-ascii?Q?Zx3j68Q8bosFbVRuZFbb4t30wmsQGZmpvevoUXFGHp46vxaSpMBFt0SUEjEQ?=
+ =?us-ascii?Q?xqxIJYBmfNRaXb/cpf1zks1Mw7pg2SjvN4D6eoO704PxxzVq9eNwPkPpXZD2?=
+ =?us-ascii?Q?5mTB/aL68EAwF98PrIF9LwzavviF2r5X4YZUXDZSZ8E/Bj851b5B17dcRTK/?=
+ =?us-ascii?Q?g+T9Q9Z5Wpx3/2ZnpjQFsBNWLSTzCTUCISg1nBZHwqb7QlRJB21R8k104i7z?=
+ =?us-ascii?Q?A8psm+ikuXqoDHUw3IjZOP92ocuvGarycyOyN0xT5i5P31h6E7yKXfR1bI3+?=
+ =?us-ascii?Q?ds/EWu4BpVgunWEbs9ThvxQJeZOC1OxAE6l1hJBeCzNYQCJEX2oQSmqxlH5I?=
+ =?us-ascii?Q?rWcIetBfBzPA2G7IUEfms7I+dRz+bUS+DfPJtx0MArx+0FcY/V7u462Wh4lf?=
+ =?us-ascii?Q?6KIa1w=3D=3D?=
+X-OriginatorOrg: kococonnector.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a93db5e0-3797-4c64-be08-08d9efba3fc3
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR09MB4884.eurprd09.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2022 13:02:26.4415
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 59845429-0644-4099-bd7e-17fba65a2f2b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3zK1mSw63dwFZ5XH/mpaZkJZulAWNVSaHQmiNHTQc5guQSLmIiI+x0BtNP/lLX5GMJnV4KePnn1QDgVMNTAgm9wZD+wix5wBlRV+j81O6BI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR09MB3173
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/4/22 22:15, Matthew Rosato wrote:
-> In cases where interrupts are not forwarded to the guest via firmware,
-> KVM is responsible for ensuring delivery.  When an interrupt presents
-> with the forwarding bit, we must process the forwarding tables until
-> all interrupts are delivered.
+On 13/02/22, Dario Binacchi wrote:
+> The model name was printed only if debug mode was enabled. Now you can
+> always get it from sysfs.
 > 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> ---
->   arch/s390/include/asm/kvm_host.h |  1 +
->   arch/s390/include/asm/tpi.h      | 13 ++++++
->   arch/s390/kvm/interrupt.c        | 77 +++++++++++++++++++++++++++++++-
->   arch/s390/kvm/kvm-s390.c         |  3 +-
->   arch/s390/kvm/pci.h              | 10 +++++
->   5 files changed, 102 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
-> index a22c9266ea05..b468d3a2215e 100644
-> --- a/arch/s390/include/asm/kvm_host.h
-> +++ b/arch/s390/include/asm/kvm_host.h
-> @@ -757,6 +757,7 @@ struct kvm_vm_stat {
->   	u64 inject_pfault_done;
->   	u64 inject_service_signal;
->   	u64 inject_virtio;
-> +	u64 aen_forward;
->   };
->   
->   struct kvm_arch_memory_slot {
-> diff --git a/arch/s390/include/asm/tpi.h b/arch/s390/include/asm/tpi.h
-> index 1ac538b8cbf5..f76e5fdff23a 100644
-> --- a/arch/s390/include/asm/tpi.h
-> +++ b/arch/s390/include/asm/tpi.h
-> @@ -19,6 +19,19 @@ struct tpi_info {
->   	u32 :12;
->   } __packed __aligned(4);
->   
-> +/* I/O-Interruption Code as stored by TPI for an Adapter I/O */
-> +struct tpi_adapter_info {
-> +	u32 aism:8;
-> +	u32 :22;
-> +	u32 error:1;
-> +	u32 forward:1;
-> +	u32 reserved;
-> +	u32 adapter_IO:1;
-> +	u32 directed_irq:1;
-> +	u32 isc:3;
-> +	u32 :27;
-> +} __packed __aligned(4);
-> +
->   #endif /* __ASSEMBLY__ */
->   
->   #endif /* _ASM_S390_TPI_H */
-> diff --git a/arch/s390/kvm/interrupt.c b/arch/s390/kvm/interrupt.c
-> index 5e638f7c86f8..74a549d3d1e4 100644
-> --- a/arch/s390/kvm/interrupt.c
-> +++ b/arch/s390/kvm/interrupt.c
-> @@ -3271,11 +3271,86 @@ int kvm_s390_gisc_unregister(struct kvm *kvm, u32 gisc)
->   }
->   EXPORT_SYMBOL_GPL(kvm_s390_gisc_unregister);
->   
-> +static void aen_host_forward(unsigned long si)
-> +{
-> +	struct kvm_s390_gisa_interrupt *gi;
-> +	struct zpci_gaite *gaite;
-> +	struct kvm *kvm;
-> +
-> +	gaite = (struct zpci_gaite *)aift->gait +
-> +		(si * sizeof(struct zpci_gaite));
-> +	if (gaite->count == 0)
-> +		return;
-> +	if (gaite->aisb != 0)
-> +		set_bit_inv(gaite->aisbo, (unsigned long *)gaite->aisb);
-> +
-> +	kvm = kvm_s390_pci_si_to_kvm(aift, si);
-> +	if (kvm == 0)
-> +		return;
-> +	gi = &kvm->arch.gisa_int;
-> +
-> +	if (!(gi->origin->g1.simm & AIS_MODE_MASK(gaite->gisc)) ||
-> +	    !(gi->origin->g1.nimm & AIS_MODE_MASK(gaite->gisc))) {
-> +		gisa_set_ipm_gisc(gi->origin, gaite->gisc);
-> +		if (hrtimer_active(&gi->timer))
-> +			hrtimer_cancel(&gi->timer);
-> +		hrtimer_start(&gi->timer, 0, HRTIMER_MODE_REL);
-> +		kvm->stat.aen_forward++;
-> +	}
-> +}
-> +
-> +static void aen_process_gait(u8 isc)
-> +{
-> +	bool found = false, first = true;
-> +	union zpci_sic_iib iib = {{0}};
-> +	unsigned long si, flags;
-> +
-> +	spin_lock_irqsave(&aift->gait_lock, flags);
-> +
-> +	if (!aift->gait) {
-> +		spin_unlock_irqrestore(&aift->gait_lock, flags);
-> +		return;
-> +	}
-> +
-> +	for (si = 0;;) {
-> +		/* Scan adapter summary indicator bit vector */
-> +		si = airq_iv_scan(aift->sbv, si, airq_iv_end(aift->sbv));
-> +		if (si == -1UL) {
-> +			if (first || found) {
-> +				/* Reenable interrupts. */
-> +				if (zpci_set_irq_ctrl(SIC_IRQ_MODE_SINGLE, isc,
-> +						      &iib))
-> +					break;
+> Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-I thought we agreed that the test is not useful here.
-
-> +				first = found = false;
-> +			} else {
-> +				/* Interrupts on and all bits processed */
-> +				break;
-> +			}
-> +			found = false;
-> +			si = 0;
-
-and about a comment here.
-"rescan after re-enabling interrupts"
-would make things clear
-
-> +			continue;
-> +		}
-> +		found = true;
-> +		aen_host_forward(si);
-> +	}
-> +
-> +	spin_unlock_irqrestore(&aift->gait_lock, flags);
-> +}
-> +
->   static void gib_alert_irq_handler(struct airq_struct *airq,
->   				  struct tpi_info *tpi_info)
->   {
-> +	struct tpi_adapter_info *info = (struct tpi_adapter_info *)tpi_info;
-> +
->   	inc_irq_stat(IRQIO_GAL);
-> -	process_gib_alert_list();
-> +
-> +	if (IS_ENABLED(CONFIG_VFIO_PCI_ZDEV) &&
-> +	    (info->forward || info->error)) {
-> +		aen_process_gait(info->isc);
-> +		if (info->aism != 0)
-> +			process_gib_alert_list();
-> +	} else
-> +		process_gib_alert_list();
-
-Here we need braces.
-
->   }
->   
->   static struct airq_struct gib_alert_irq = {
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index dd4f4bfb326b..24837d6050dc 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -65,7 +65,8 @@ const struct _kvm_stats_desc kvm_vm_stats_desc[] = {
->   	STATS_DESC_COUNTER(VM, inject_float_mchk),
->   	STATS_DESC_COUNTER(VM, inject_pfault_done),
->   	STATS_DESC_COUNTER(VM, inject_service_signal),
-> -	STATS_DESC_COUNTER(VM, inject_virtio)
-> +	STATS_DESC_COUNTER(VM, inject_virtio),
-> +	STATS_DESC_COUNTER(VM, aen_forward)
->   };
->   
->   const struct kvm_stats_header kvm_vm_stats_header = {
-> diff --git a/arch/s390/kvm/pci.h b/arch/s390/kvm/pci.h
-> index 53e9968707c8..4d3db58beb74 100644
-> --- a/arch/s390/kvm/pci.h
-> +++ b/arch/s390/kvm/pci.h
-> @@ -12,6 +12,7 @@
->   
->   #include <linux/pci.h>
->   #include <linux/mutex.h>
-> +#include <linux/kvm_host.h>
->   #include <asm/airq.h>
->   #include <asm/kvm_pci.h>
->   
-> @@ -34,6 +35,15 @@ struct zpci_aift {
->   
->   extern struct zpci_aift *aift;
->   
-> +static inline struct kvm *kvm_s390_pci_si_to_kvm(struct zpci_aift *aift,
-> +						 unsigned long si)
-> +{
-> +	if (!IS_ENABLED(CONFIG_VFIO_PCI_ZDEV) || aift->kzdev == 0 ||
-> +	    aift->kzdev[si] == 0)
-> +		return 0;
-> +	return aift->kzdev[si]->kvm;
-> +};
-> +
->   int kvm_s390_pci_aen_init(u8 nisc);
->   void kvm_s390_pci_aen_exit(void);
->   
-> 
-
--- 
-Pierre Morel
-IBM Lab Boeblingen
+Acked-by: Oliver Graute <oliver.graute@kococonnector.com>

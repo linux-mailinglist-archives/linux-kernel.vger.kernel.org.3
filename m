@@ -2,111 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6854B5DEE
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 23:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D424B5DF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 23:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbiBNWxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 17:53:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34146 "EHLO
+        id S232021AbiBNWx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 17:53:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232000AbiBNWxQ (ORCPT
+        with ESMTP id S232000AbiBNWx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 17:53:16 -0500
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACCC171870;
-        Mon, 14 Feb 2022 14:53:07 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id AF0BF580632;
-        Mon, 14 Feb 2022 17:53:04 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 14 Feb 2022 17:53:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=e2LfV2BcYFTZ6ZIg8
-        FOTVm2MpIs9idDpZ8R+EsQHXrs=; b=SJdNeO/8jyTfLiWOckcAG2OHGKCIILKot
-        CoUd+ViU7KAYtLt39PVDcb/IGuv6zV7lLNGGyCe8EGuQ5DurWAtyc+59koNFynFb
-        Vax9tANM2zkhCcUoof6TNS/nhOKqyPS+Hw3tsgsfWgJvrvYRq/oTiaPhFIsCZ3gq
-        572A76x7uTT/SQOWr2a+qXWcnzfFPlN8I/AlTAP67o6ZCB+w+xPm/B5psHno61aJ
-        DCH/hrkY5RKmleyp5ih42WMsScPaotRe9Unr3WD7ZeSnt0m2dNzPfz999KUbozwI
-        V020ATKE/pSE4MZC8o1aHNCuKDsllmkkIJSgA7ad0fRyvnrt2DTiw==
-X-ME-Sender: <xms:T90KYtUsU1i8H8oKgKHJ6zYGcswaPP0J8WgFAclau0XetWuIQzG0mw>
-    <xme:T90KYtmQA6gxwJzCjpgsGZ91IZLbkRkK9l-KZyxb5ryxN91ZuejBSqStpdrtODbHF
-    GifMxA7HMTM-t1YzjE>
-X-ME-Received: <xmr:T90KYpb6E2tmhE99twMc1QbFpCxPqjw62-HdwNAwXMsB5Z1t4aNo3u9CZxAFYhuTPi2ZXSZxw3FS5jdDrwiRWsSOAlcaid0NeVA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjeefgddtfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvufgjkfhfgggtsehttdertddttddvnecuhfhrohhmpefhihhnnhcuvfhh
-    rghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrghtth
-    gvrhhnpeffudfhgeefvdeitedugfelueegheekkeefveffhfeiveetledvhfdtveffteeu
-    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehfth
-    hhrghinheslhhinhhugidqmheikehkrdhorhhg
-X-ME-Proxy: <xmx:T90KYgXiz-V4ond-i7eX1uAvA0i9WOmsdnB3aAw0H2uwKsVWoxeXRw>
-    <xmx:T90KYnl-c428-0I3-b8b87OVnAgj1cO8HsHp8BhvVhhh6vh8QeegDA>
-    <xmx:T90KYtcrQAQMyH87a2CMfgA9HSwqEFEk9lDpm9-zJ546bLNuMFdolw>
-    <xmx:UN0KYnHmkgdFIoGzRmz69Z6jzOvFrkcKI8C9eYQOxPNBA0jBhzy_3Q>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 14 Feb 2022 17:53:00 -0500 (EST)
-Date:   Tue, 15 Feb 2022 09:53:11 +1100 (AEDT)
-From:   Finn Thain <fthain@linux-m68k.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-cc:     Joshua Kinard <kumba@gentoo.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [PATCH RFC v0] random: block in /dev/urandom
-In-Reply-To: <CAHmME9ooEbgiv3DRk87ei+rUoVNMJthY7UuG_xCgm=kfMZAajw@mail.gmail.com>
-Message-ID: <b43cc58-5ace-11e1-1a11-6cca42f65e7@linux-m68k.org>
-References: <20220211210757.612595-1-Jason@zx2c4.com> <fcab986b-d0bd-c798-de17-266abcdc7da2@gentoo.org> <CAHmME9ooEbgiv3DRk87ei+rUoVNMJthY7UuG_xCgm=kfMZAajw@mail.gmail.com>
+        Mon, 14 Feb 2022 17:53:28 -0500
+Received: from hs01.dk-develop.de (hs01.dk-develop.de [IPv6:2a02:c207:3002:6234::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C1A1738DA;
+        Mon, 14 Feb 2022 14:53:18 -0800 (PST)
+Date:   Mon, 14 Feb 2022 23:53:15 +0100
+From:   Danilo Krummrich <danilokrummrich@dk-develop.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     dmitry.torokhov@gmail.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linus.walleij@linaro.org
+Subject: Re: [PATCH 1/2] dt-bindings: ps2-gpio: convert binding to json-schema
+Message-ID: <YgrdWymrC6fRgQZ/@pollux>
+References: <20220211233137.99624-1-danilokrummrich@dk-develop.de>
+ <20220211233137.99624-2-danilokrummrich@dk-develop.de>
+ <cf4e21e8-1ba8-a137-6063-00e1cee8e035@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cf4e21e8-1ba8-a137-6063-00e1cee8e035@canonical.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Feb 2022, Jason A. Donenfeld wrote:
-
+On Mon, Feb 14, 2022 at 10:49:27PM +0100, Krzysztof Kozlowski wrote:
+> On 12/02/2022 00:31, Danilo Krummrich wrote:
+> > Convert the ps2-gpio dt-binding documentation to DT schema format using
+> > the json-schema.
+> > 
+> > Signed-off-by: Danilo Krummrich <danilokrummrich@dk-develop.de>
+> > ---
+> >  .../devicetree/bindings/serio/ps2-gpio.txt    | 23 --------
+> >  .../devicetree/bindings/serio/ps2-gpio.yaml   | 52 +++++++++++++++++++
+> >  2 files changed, 52 insertions(+), 23 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/serio/ps2-gpio.txt
+> >  create mode 100644 Documentation/devicetree/bindings/serio/ps2-gpio.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/serio/ps2-gpio.txt b/Documentation/devicetree/bindings/serio/ps2-gpio.txt
+> > deleted file mode 100644
+> > index 7b7bc9cdf986..000000000000
+> > --- a/Documentation/devicetree/bindings/serio/ps2-gpio.txt
+> > +++ /dev/null
+> > @@ -1,23 +0,0 @@
+> > -Device-Tree binding for ps/2 gpio device
+> > -
+> > -Required properties:
+> > -	- compatible = "ps2-gpio"
+> > -	- data-gpios: the data pin
+> > -	- clk-gpios: the clock pin
+> > -	- interrupts: Should trigger on the falling edge of the clock line.
+> > -
+> > -Optional properties:
+> > -	- write-enable: Indicates whether write function is provided
+> > -	to serio device. Possibly providing the write fn will not work, because
+> > -	of the tough timing requirements.
+> > -
+> > -Example nodes:
+> > -
+> > -ps2@0 {
+> > -	compatible = "ps2-gpio";
+> > -	interrupt-parent = <&gpio>;
+> > -	interrupts = <23 IRQ_TYPE_EDGE_FALLING>;
+> > -	data-gpios = <&gpio 24 GPIO_ACTIVE_HIGH>;
+> > -	clk-gpios = <&gpio 23 GPIO_ACTIVE_HIGH>;
+> > -	write-enable;
+> > -};
+> > diff --git a/Documentation/devicetree/bindings/serio/ps2-gpio.yaml b/Documentation/devicetree/bindings/serio/ps2-gpio.yaml
+> > new file mode 100644
+> > index 000000000000..ec6fa7b40851
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/serio/ps2-gpio.yaml
+> > @@ -0,0 +1,52 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/serio/ps2-gpio.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Bindings for GPIO based PS/2
+> > +
+> > +maintainers:
+> > +  - Danilo Krummrich <danilokrummrich@dk-develop.de>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
 > 
-> So the only systems we're actually talking about without a good cycle 
-> counter are non-Amiga m68k? If so, that'd be a pretty terrific finding. 
-> It'd mean that this idea can move forward, and we only need to worry 
-> about some m68k museum pieces with misconfigured userspaces...
+> Hi,
 > 
+> I think you do not expect more compatibles, so skip "items".
+> 
+> > +      - const: ps2-gpio
+> > +
+> > +  data-gpios:
+> > +    description:
+> > +      the gpio used for the data signal
+> > +    maxItems: 1
+> > +
+> > +  clk-gpios:
+> > +    description:
+> > +      the gpio used for the clock signal
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    description:
+> > +      The given interrupt should trigger on the falling edge of the clock line.
+> > +    maxItems: 1
+> > +
+> > +  write-enable:
+> 
+> This does not look like a standard property. You need "type: boolean".
+> 
+> > +    description:
+> > +      Indicates whether write function is provided to serio device. Possibly
+> > +      providing the write function will not work, because of the tough timing
+> > +      requirements.
+> > +
+> > +required:
+> 
+> Also: compatible
+> 
+> > +  - data-gpios
+> > +  - clk-gpios
+> > +  - interrupts
+> > +
+> > +examples:
+> > +  - |
+> > +    ps2@0 {
+> 
+> Does it compile cleanly? You used an unit-address but there is no reg.
+Yes, it does. I will fix those up and send a v2.
+> 
+> > +        compatible = "ps2-gpio";
+> > +        interrupt-parent = <&gpio>;
+> > +        interrupts = <23 IRQ_TYPE_EDGE_FALLING>;
+> > +        data-gpios = <&gpio 24 GPIO_ACTIVE_HIGH>;
+> > +        clk-gpios = <&gpio 23 GPIO_ACTIVE_HIGH>;
+> > +        write-enable;
+> > +    };
+> 
+> 
+> Best regards,
+> Krzysztof
 
-A processor cycle counter is helpful when mounting a timing attack but my 
-museum pieces don't suffer from that problem.
-
-Also, they are and always were immune from spectre, meltdown etc.
-
-You misrepresent those secure hardware designs as being problematic, just 
-because of some bad advice on some random blogs about RNG API usage.
-
-Do you have a phone that no longer gets updates from its vendor? Have you 
-tried patching it?
-
-Your insecure museum pieces are the real problem, not my secure ones.
+- Danilo

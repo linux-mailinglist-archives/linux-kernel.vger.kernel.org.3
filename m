@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0EDF4B494C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7134B4BDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345762AbiBNKBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:01:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43510 "EHLO
+        id S1344261AbiBNJ67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:58:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344419AbiBNJ4L (ORCPT
+        with ESMTP id S1343693AbiBNJxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:56:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8CD6CA67;
-        Mon, 14 Feb 2022 01:44:34 -0800 (PST)
+        Mon, 14 Feb 2022 04:53:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3936D973;
+        Mon, 14 Feb 2022 01:43:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E867B80DBF;
-        Mon, 14 Feb 2022 09:44:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8920C340E9;
-        Mon, 14 Feb 2022 09:44:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF8FB61238;
+        Mon, 14 Feb 2022 09:43:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 597C5C340E9;
+        Mon, 14 Feb 2022 09:43:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831872;
-        bh=QsNESD3ovvJn16NRwkN3uzf4k3ZPt6v4eLTA/pYShbc=;
+        s=korg; t=1644831834;
+        bh=vr2L1ej+nJKwgQ0hPgDDDjwiXoPblqaNFaQQnQx4RNM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dqwRk5xa49rTjcJsJ2upCQBcWbUphUy2lQ1koNwZeF65zvcX833rh7ACHDYcVa4AB
-         2o00FbQ80+ADGPjTfQzb8cMmMYJvznnKESER4sfRuoI/fl1d1lJpFDCzFP7YLADcON
-         JTOJEJwTx/EKgT8eeXRKHeKtqxZqij+LTLD7ecd0=
+        b=R77IBMPIX3uYVE2u23FJ7GRgj5dYy8vZPZCBMOMKXvp/SG2q+PsGfxr97bojpCUbX
+         kUTx7InMmQxMr5I39gGj5foWIh+mx3vuBNi1LWSTug3jCytr3tXr7dK3rNQqbGREju
+         HbsoM1H7ZJQ0mCS+IXfqb4nILPXRWvZWW+yp1qxQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ziyang Xuan <william.xuanziyang@huawei.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.10 111/116] can: isotp: fix error path in isotp_sendmsg() to unlock wait queue
-Date:   Mon, 14 Feb 2022 10:26:50 +0100
-Message-Id: <20220214092502.627756264@linuxfoundation.org>
+        stable@vger.kernel.org, "Ewan D. Milne" <emilne@redhat.com>,
+        James Smart <jsmart2021@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.10 112/116] scsi: lpfc: Remove NVMe support if kernel has NVME_FC disabled
+Date:   Mon, 14 Feb 2022 10:26:51 +0100
+Message-Id: <20220214092502.661491240@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
 References: <20220214092458.668376521@linuxfoundation.org>
@@ -56,77 +55,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
+From: James Smart <jsmart2021@gmail.com>
 
-commit 8375dfac4f683e1b2c5956d919d36aeedad46699 upstream.
+commit c80b27cfd93ba9f5161383f798414609e84729f3 upstream.
 
-Commit 43a08c3bdac4 ("can: isotp: isotp_sendmsg(): fix TX buffer concurrent
-access in isotp_sendmsg()") introduced a new locking scheme that may render
-the userspace application in a locking state when an error is detected.
-This issue shows up under high load on simultaneously running isotp channels
-with identical configuration which is against the ISO specification and
-therefore breaks any reasonable PDU communication anyway.
+The driver is initiating NVMe PRLIs to determine device NVMe support.  This
+should not be occurring if CONFIG_NVME_FC support is disabled.
 
-Fixes: 43a08c3bdac4 ("can: isotp: isotp_sendmsg(): fix TX buffer concurrent access in isotp_sendmsg()")
-Link: https://lore.kernel.org/all/20220209073601.25728-1-socketcan@hartkopp.net
-Cc: stable@vger.kernel.org
-Cc: Ziyang Xuan <william.xuanziyang@huawei.com>
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Correct this by changing the default value for FC4 support. Currently it
+defaults to FCP and NVMe. With change, when NVME_FC support is not enabled
+in the kernel, the default value is just FCP.
+
+Link: https://lore.kernel.org/r/20220207180516.73052-1-jsmart2021@gmail.com
+Reviewed-by: Ewan D. Milne <emilne@redhat.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/can/isotp.c |   13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ drivers/scsi/lpfc/lpfc.h      |   13 ++++++++++---
+ drivers/scsi/lpfc/lpfc_attr.c |    4 ++--
+ 2 files changed, 12 insertions(+), 5 deletions(-)
 
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -885,24 +885,24 @@ static int isotp_sendmsg(struct socket *
+--- a/drivers/scsi/lpfc/lpfc.h
++++ b/drivers/scsi/lpfc/lpfc.h
+@@ -898,6 +898,16 @@ struct lpfc_hba {
+ 	uint32_t cfg_hostmem_hgp;
+ 	uint32_t cfg_log_verbose;
+ 	uint32_t cfg_enable_fc4_type;
++#define LPFC_ENABLE_FCP  1
++#define LPFC_ENABLE_NVME 2
++#define LPFC_ENABLE_BOTH 3
++#if (IS_ENABLED(CONFIG_NVME_FC))
++#define LPFC_MAX_ENBL_FC4_TYPE LPFC_ENABLE_BOTH
++#define LPFC_DEF_ENBL_FC4_TYPE LPFC_ENABLE_BOTH
++#else
++#define LPFC_MAX_ENBL_FC4_TYPE LPFC_ENABLE_FCP
++#define LPFC_DEF_ENBL_FC4_TYPE LPFC_ENABLE_FCP
++#endif
+ 	uint32_t cfg_aer_support;
+ 	uint32_t cfg_sriov_nr_virtfn;
+ 	uint32_t cfg_request_firmware_upgrade;
+@@ -918,9 +928,6 @@ struct lpfc_hba {
+ 	uint32_t cfg_ras_fwlog_func;
+ 	uint32_t cfg_enable_bbcr;	/* Enable BB Credit Recovery */
+ 	uint32_t cfg_enable_dpp;	/* Enable Direct Packet Push */
+-#define LPFC_ENABLE_FCP  1
+-#define LPFC_ENABLE_NVME 2
+-#define LPFC_ENABLE_BOTH 3
+ 	uint32_t cfg_enable_pbde;
+ 	struct nvmet_fc_target_port *targetport;
+ 	lpfc_vpd_t vpd;		/* vital product data */
+--- a/drivers/scsi/lpfc/lpfc_attr.c
++++ b/drivers/scsi/lpfc/lpfc_attr.c
+@@ -3797,8 +3797,8 @@ LPFC_ATTR_R(nvmet_mrq_post,
+  *                    3 - register both FCP and NVME
+  * Supported values are [1,3]. Default value is 3
+  */
+-LPFC_ATTR_R(enable_fc4_type, LPFC_ENABLE_BOTH,
+-	    LPFC_ENABLE_FCP, LPFC_ENABLE_BOTH,
++LPFC_ATTR_R(enable_fc4_type, LPFC_DEF_ENBL_FC4_TYPE,
++	    LPFC_ENABLE_FCP, LPFC_MAX_ENBL_FC4_TYPE,
+ 	    "Enable FC4 Protocol support - FCP / NVME");
  
- 	if (!size || size > MAX_MSG_LENGTH) {
- 		err = -EINVAL;
--		goto err_out;
-+		goto err_out_drop;
- 	}
- 
- 	err = memcpy_from_msg(so->tx.buf, msg, size);
- 	if (err < 0)
--		goto err_out;
-+		goto err_out_drop;
- 
- 	dev = dev_get_by_index(sock_net(sk), so->ifindex);
- 	if (!dev) {
- 		err = -ENXIO;
--		goto err_out;
-+		goto err_out_drop;
- 	}
- 
- 	skb = sock_alloc_send_skb(sk, so->ll.mtu + sizeof(struct can_skb_priv),
- 				  msg->msg_flags & MSG_DONTWAIT, &err);
- 	if (!skb) {
- 		dev_put(dev);
--		goto err_out;
-+		goto err_out_drop;
- 	}
- 
- 	can_skb_reserve(skb);
-@@ -967,7 +967,7 @@ static int isotp_sendmsg(struct socket *
- 	if (err) {
- 		pr_notice_once("can-isotp: %s: can_send_ret %d\n",
- 			       __func__, err);
--		goto err_out;
-+		goto err_out_drop;
- 	}
- 
- 	if (wait_tx_done) {
-@@ -980,6 +980,9 @@ static int isotp_sendmsg(struct socket *
- 
- 	return size;
- 
-+err_out_drop:
-+	/* drop this PDU and unlock a potential wait queue */
-+	old_state = ISOTP_IDLE;
- err_out:
- 	so->tx.state = old_state;
- 	if (so->tx.state == ISOTP_IDLE)
+ /*
 
 

@@ -2,48 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BFA54B46C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4810C4B45E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244469AbiBNJlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:41:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33136 "EHLO
+        id S243099AbiBNJaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:30:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244512AbiBNJke (ORCPT
+        with ESMTP id S243300AbiBNJaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:40:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B0AB84E;
-        Mon, 14 Feb 2022 01:35:57 -0800 (PST)
+        Mon, 14 Feb 2022 04:30:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4287AE77;
+        Mon, 14 Feb 2022 01:29:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4BC92B80DC4;
-        Mon, 14 Feb 2022 09:35:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 484DFC340E9;
-        Mon, 14 Feb 2022 09:35:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5063460C8A;
+        Mon, 14 Feb 2022 09:29:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1691FC340F2;
+        Mon, 14 Feb 2022 09:29:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831339;
-        bh=nBbcmC2clBtFUE4+r3jUl7e4KKEhA/7ys6t+U2NjNkU=;
+        s=korg; t=1644830976;
+        bh=WVAeUqgrH/pNsmuq3GgGhWwHLzCf/geaD98MM19BHyA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h3p/UZhwvllCpW6/vcsFWwHMWWutb0MIAyND+y8rMsYg77PI7y2uq22K8kcxEuWBR
-         Qb9hftZ+Ak/iXHrgW2fDce84P3AjDG1OpnliVRvT37eujxtqDmWdTckuUzOiaMQLLP
-         Z5Qr+ngF4DY2J7AY1SEuzll+F5dm59yxNOl782ag=
+        b=BNFNaqGiMBXRw32zAGBDaUMMYPfkYa1NTvcDqenI6KIURuq8rulRZ1woLylj9mi7P
+         s2l4RPHAvynNexihSfv42zmHUIAZbd1L2DnIsdpaqPwHBn1PMb6Lj85i5RCCWTpQrp
+         9LmUm7zTua1zEsPK9AyytrGzDnVhSqS85rz53kTc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 22/71] PM: hibernate: Remove register_nosave_region_late()
-Date:   Mon, 14 Feb 2022 10:25:50 +0100
-Message-Id: <20220214092452.761290303@linuxfoundation.org>
+        stable@vger.kernel.org, Kosuke Tatsukawa <tatsu-ab1@nec.com>
+Subject: [PATCH 4.9 25/34] n_tty: wake up poll(POLLRDNORM) on receiving data
+Date:   Mon, 14 Feb 2022 10:25:51 +0100
+Message-Id: <20220214092446.757731373@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
+References: <20220214092445.946718557@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,93 +53,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+From: TATSUKAWA KOSUKE (立川 江介) <tatsu-ab1@nec.com>
 
-[ Upstream commit 33569ef3c754a82010f266b7b938a66a3ccf90a4 ]
+commit c816b2e65b0e86b95011418cad334f0524fc33b8 upstream.
 
-It is an unused wrapper forcing kmalloc allocation for registering
-nosave regions. Also, rename __register_nosave_region() to
-register_nosave_region() now that there is no need for disambiguation.
+The poll man page says POLLRDNORM is equivalent to POLLIN when used as
+an event.
+$ man poll
+<snip>
+              POLLRDNORM
+                     Equivalent to POLLIN.
 
-Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
-Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+However, in n_tty driver, POLLRDNORM does not return until timeout even
+if there is terminal input, whereas POLLIN returns.
+
+The following test program works until kernel-3.17, but the test stops
+in poll() after commit 57087d515441 ("tty: Fix spurious poll() wakeups").
+
+[Steps to run test program]
+  $ cc -o test-pollrdnorm test-pollrdnorm.c
+  $ ./test-pollrdnorm
+  foo          <-- Type in something from the terminal followed by [RET].
+                   The string should be echoed back.
+
+  ------------------------< test-pollrdnorm.c >------------------------
+  #include <stdio.h>
+  #include <errno.h>
+  #include <poll.h>
+  #include <unistd.h>
+
+  void main(void)
+  {
+	int		n;
+	unsigned char	buf[8];
+	struct pollfd	fds[1] = {{ 0, POLLRDNORM, 0 }};
+
+	n = poll(fds, 1, -1);
+	if (n < 0)
+		perror("poll");
+	n = read(0, buf, 8);
+	if (n < 0)
+		perror("read");
+	if (n > 0)
+		write(1, buf, n);
+  }
+  ------------------------------------------------------------------------
+
+The attached patch fixes this problem.  Many calls to
+wake_up_interruptible_poll() in the kernel source code already specify
+"POLLIN | POLLRDNORM".
+
+Fixes: 57087d515441 ("tty: Fix spurious poll() wakeups")
+Cc: stable@vger.kernel.org
+Signed-off-by: Kosuke Tatsukawa <tatsu-ab1@nec.com>
+Link: https://lore.kernel.org/r/TYCPR01MB81901C0F932203D30E452B3EA5209@TYCPR01MB8190.jpnprd01.prod.outlook.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/suspend.h | 11 +----------
- kernel/power/snapshot.c | 21 +++++++--------------
- 2 files changed, 8 insertions(+), 24 deletions(-)
+ drivers/tty/n_tty.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index cd97d2c8840cc..44dd49cb2ea05 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -428,15 +428,7 @@ struct platform_hibernation_ops {
- 
- #ifdef CONFIG_HIBERNATION
- /* kernel/power/snapshot.c */
--extern void __register_nosave_region(unsigned long b, unsigned long e, int km);
--static inline void __init register_nosave_region(unsigned long b, unsigned long e)
--{
--	__register_nosave_region(b, e, 0);
--}
--static inline void __init register_nosave_region_late(unsigned long b, unsigned long e)
--{
--	__register_nosave_region(b, e, 1);
--}
-+extern void register_nosave_region(unsigned long b, unsigned long e);
- extern int swsusp_page_is_forbidden(struct page *);
- extern void swsusp_set_page_free(struct page *);
- extern void swsusp_unset_page_free(struct page *);
-@@ -453,7 +445,6 @@ extern struct pbe *restore_pblist;
- int pfn_is_nosave(unsigned long pfn);
- #else /* CONFIG_HIBERNATION */
- static inline void register_nosave_region(unsigned long b, unsigned long e) {}
--static inline void register_nosave_region_late(unsigned long b, unsigned long e) {}
- static inline int swsusp_page_is_forbidden(struct page *p) { return 0; }
- static inline void swsusp_set_page_free(struct page *p) {}
- static inline void swsusp_unset_page_free(struct page *p) {}
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index d65f2d5ab6942..46455aa7951ec 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -945,8 +945,7 @@ static void memory_bm_recycle(struct memory_bitmap *bm)
-  * Register a range of page frames the contents of which should not be saved
-  * during hibernation (to be used in the early initialization code).
-  */
--void __init __register_nosave_region(unsigned long start_pfn,
--				     unsigned long end_pfn, int use_kmalloc)
-+void __init register_nosave_region(unsigned long start_pfn, unsigned long end_pfn)
- {
- 	struct nosave_region *region;
- 
-@@ -962,18 +961,12 @@ void __init __register_nosave_region(unsigned long start_pfn,
- 			goto Report;
+--- a/drivers/tty/n_tty.c
++++ b/drivers/tty/n_tty.c
+@@ -1377,7 +1377,7 @@ handle_newline:
+ 			put_tty_queue(c, ldata);
+ 			smp_store_release(&ldata->canon_head, ldata->read_head);
+ 			kill_fasync(&tty->fasync, SIGIO, POLL_IN);
+-			wake_up_interruptible_poll(&tty->read_wait, POLLIN);
++			wake_up_interruptible_poll(&tty->read_wait, POLLIN | POLLRDNORM);
+ 			return 0;
  		}
  	}
--	if (use_kmalloc) {
--		/* During init, this shouldn't fail */
--		region = kmalloc(sizeof(struct nosave_region), GFP_KERNEL);
--		BUG_ON(!region);
--	} else {
--		/* This allocation cannot fail */
--		region = memblock_alloc(sizeof(struct nosave_region),
--					SMP_CACHE_BYTES);
--		if (!region)
--			panic("%s: Failed to allocate %zu bytes\n", __func__,
--			      sizeof(struct nosave_region));
--	}
-+	/* This allocation cannot fail */
-+	region = memblock_alloc(sizeof(struct nosave_region),
-+				SMP_CACHE_BYTES);
-+	if (!region)
-+		panic("%s: Failed to allocate %zu bytes\n", __func__,
-+		      sizeof(struct nosave_region));
- 	region->start_pfn = start_pfn;
- 	region->end_pfn = end_pfn;
- 	list_add_tail(&region->list, &nosave_regions);
--- 
-2.34.1
-
+@@ -1658,7 +1658,7 @@ static void __receive_buf(struct tty_str
+ 
+ 	if (read_cnt(ldata)) {
+ 		kill_fasync(&tty->fasync, SIGIO, POLL_IN);
+-		wake_up_interruptible_poll(&tty->read_wait, POLLIN);
++		wake_up_interruptible_poll(&tty->read_wait, POLLIN | POLLRDNORM);
+ 	}
+ }
+ 
 
 

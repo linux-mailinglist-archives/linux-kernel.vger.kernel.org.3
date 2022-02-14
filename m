@@ -2,52 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8A44B4E0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B22D4B4F43
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350705AbiBNLWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:22:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51454 "EHLO
+        id S1352421AbiBNLpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:45:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350665AbiBNLVp (ORCPT
+        with ESMTP id S1353084AbiBNLna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:21:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A174D13D60;
-        Mon, 14 Feb 2022 02:57:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BC8B60E84;
-        Mon, 14 Feb 2022 10:57:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E529C340E9;
-        Mon, 14 Feb 2022 10:57:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644836267;
-        bh=xH46V2BfUDEk4tfDK5AlSlTasUAt3mbtgoN2tyCrJuE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NY49rm1oYN8KMtEh7BNsW9o9HRKwbmuz+DUYhCUNjfjYjKlX/syU9fRRmA4f1+oig
-         ZNImXBF5GRqIZQghhPYmCucic71XuMLiJrP6RjqIb1+SzBwKeRThx8T95HhuJYwHKD
-         7/ZqrxEnVPV4dkAA2IUKdjh4GtpePda3FAgvhm9YF4CtGyLNt6v4vjtvZ6xGxjdXX/
-         +giS63sVuurdMRgDjEIkSdmHs3ZqzdaReEs1/ALdInTmhQsfy4DDSF1vanX7qymwCt
-         gMRwQtsGdHkCBUYZVnz1mrLc3A15gmCzXS5SHBPcpPSrNlKaSnPCpqF6t/IVEnjNbR
-         Gb3zGDlw6xb4Q==
-Date:   Mon, 14 Feb 2022 11:57:44 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Yu Liao <liaoyu15@huawei.com>
-Cc:     paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        liwei391@huawei.com, rcu@vger.kernel.org
-Subject: Re: Question about nohz and sysidle
-Message-ID: <20220214105744.GA663287@lothringen>
-References: <b881759b-d281-fdc3-71b7-4429d84cd734@huawei.com>
- <b6dc758b-492d-1000-24e5-643e38d3166e@huawei.com>
+        Mon, 14 Feb 2022 06:43:30 -0500
+X-Greylist: delayed 2169 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 03:35:27 PST
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFFB5F49;
+        Mon, 14 Feb 2022 03:35:27 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nJZ4E-00080o-TO; Mon, 14 Feb 2022 11:58:50 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Anson Huang <anson.huang@nxp.com>,
+        Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>,
+        Rahul Tanwar <rtanwar@maxlinear.com>,
+        Jeff LaBundy <jeff@labundy.com>,
+        Yash Shah <yash.shah@sifive.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Vignesh R <vigneshr@ti.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH 06/15] dt-bindings: pwm: rockchip: include generic pwm schema
+Date:   Mon, 14 Feb 2022 11:58:49 +0100
+Message-ID: <2270696.mDkAqzPR1c@diego>
+In-Reply-To: <20220214081605.161394-6-krzysztof.kozlowski@canonical.com>
+References: <20220214081605.161394-1-krzysztof.kozlowski@canonical.com> <20220214081605.161394-6-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b6dc758b-492d-1000-24e5-643e38d3166e@huawei.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,38 +72,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 05:40:55PM +0800, Yu Liao wrote:
-
-Hi Yu Liao,
-
+Am Montag, 14. Februar 2022, 09:15:56 CET schrieb Krzysztof Kozlowski:
+> Include generic pwm.yaml schema, which enforces PWM node naming and
+> brings pwm-cells requirement.
 > 
-> On 2022/2/14 16:28, Yu Liao wrote:
-> > Hi Frederic,
-> > 
-> > I'm working on an issue about nohz. When NO_HZ_FULL is enabled, CPU 0
-> > handles the timekeeping duty on behalf of all other CPUs, which means
-> > CPU 0 never stop tick even in sysidle state. This is a powersaving
-> > issue.
-> > 
-> > I found your patchset (nohz: Support sysidle) in the below link.
-> > https://lore.kernel.org/all/1406569056-30217-1-git-send-email-fweisbec@gmail.com/
-> > 
-> > But these patches haven't been merged into mainline yet and sysidle
-> > state detection has been removed by commit fe5ac724d81a (rcu: Remove
-> > nohz_full full-system-idle state machine) as well.
-> > 
-> > I tried your patches and it does work, why are we no longer working on
-> > stopping timekeeping duty when all full dynticks CPUs are idle?
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-Because it was not a priority at that time. There were so many things to handle
-first (and we are not even done yet) that we postponed that feature until
-someone ever comes up with powersaving issues on nohz_full. We were waiting for
-you :)
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 
-It's possible to unearth this. I think the first step will be to merge the
-RCU dynticks counters into context tracking, something that was on my queue
-anyway, and then revive this:
+> ---
+>  .../devicetree/bindings/pwm/pwm-rockchip.yaml | 74 ++++++++++---------
+>  1 file changed, 38 insertions(+), 36 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml b/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml
+> index 81a54a4e8e3e..a336ff9364a9 100644
+> --- a/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml
+> +++ b/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml
+> @@ -51,42 +51,44 @@ properties:
+>  required:
+>    - compatible
+>    - reg
+> -  - "#pwm-cells"
+> -
+> -if:
+> -  properties:
+> -    compatible:
+> -      contains:
+> -        enum:
+> -          - rockchip,rk3328-pwm
+> -          - rockchip,rv1108-pwm
+> -
+> -then:
+> -  properties:
+> -    clocks:
+> -      items:
+> -        - description: Used to derive the functional clock for the device.
+> -        - description: Used as the APB bus clock.
+> -
+> -    clock-names:
+> -      items:
+> -        - const: pwm
+> -        - const: pclk
+> -
+> -  required:
+> -    - clocks
+> -    - clock-names
+> -
+> -else:
+> -  properties:
+> -    clocks:
+> -      maxItems: 1
+> -      description:
+> -        Used both to derive the functional clock
+> -        for the device and as the bus clock.
+> -
+> -  required:
+> -    - clocks
+> +
+> +allOf:
+> +  - $ref: pwm.yaml#
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - rockchip,rk3328-pwm
+> +              - rockchip,rv1108-pwm
+> +
+> +    then:
+> +      properties:
+> +        clocks:
+> +          items:
+> +            - description: Used to derive the functional clock for the device.
+> +            - description: Used as the APB bus clock.
+> +
+> +        clock-names:
+> +          items:
+> +            - const: pwm
+> +            - const: pclk
+> +
+> +      required:
+> +        - clocks
+> +        - clock-names
+> +
+> +    else:
+> +      properties:
+> +        clocks:
+> +          maxItems: 1
+> +          description:
+> +            Used both to derive the functional clock
+> +            for the device and as the bus clock.
+> +
+> +      required:
+> +        - clocks
+>  
+>  additionalProperties: false
+>  
+> 
 
-	https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?h=sysidle.2017.05.11a&id=fe5ac724d81a3c7803e60c2232718f212f3f38d4
 
-Thanks.
+
+

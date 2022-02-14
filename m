@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A974B45F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3074B46A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243734AbiBNJca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:32:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41256 "EHLO
+        id S244157AbiBNJiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:38:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243293AbiBNJcB (ORCPT
+        with ESMTP id S244273AbiBNJft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:32:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05B81ADA5;
-        Mon, 14 Feb 2022 01:30:50 -0800 (PST)
+        Mon, 14 Feb 2022 04:35:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB6C65786;
+        Mon, 14 Feb 2022 01:33:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D22EB80DC4;
-        Mon, 14 Feb 2022 09:30:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7101FC340E9;
-        Mon, 14 Feb 2022 09:30:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C9ABB80DCB;
+        Mon, 14 Feb 2022 09:33:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 165BDC340E9;
+        Mon, 14 Feb 2022 09:33:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831048;
-        bh=qH5C2MIZZSUsnft6+Hfq14w5C40qpkh3d9Peu90YZeU=;
+        s=korg; t=1644831206;
+        bh=AQ1COmJn2gU97ypPJQ/vb3IDFfk2ENcFKsaIJ9vgvG8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0bYNEwJeOpbuGN1sY/NpDATz8+9TG/duQzlbv4AooQATajh4LzDsqTLLvnhwepMgW
-         tL0qBNIp6tphzu/+Z7DvQf8svo6Uk5bpu9BVNFPkQsXJ/6YkaOQzw5KojMsMqJcOxo
-         kPx36eOizWDdFv3QNsrPPjZGsO7nYzdSdAsNLgIs=
+        b=Do1+A/u9r684DO7cbmtsnah1PfQJg4Qgv8FZvkDncCh8bdC38rOIpxC9HclaGCb2K
+         7Phhqi+y3EvUMWHyy2YMCcR24hnD83kDsiTE0j9sMR4nqrntb400t7zF7ArBZ7+7o/
+         tXmBKuQgohGD5PA2ejizF5BTVqXrYkGEYNZZbmLI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>,
-        Vlad Buslov <vladbu@nvidia.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 26/44] net: fix a memleak when uncloning an skb dst and its metadata
+        stable@vger.kernel.org,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 23/49] staging: fbtft: Fix error path in fbtft_driver_module_init()
 Date:   Mon, 14 Feb 2022 10:25:49 +0100
-Message-Id: <20220214092448.756130347@linuxfoundation.org>
+Message-Id: <20220214092449.059940035@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
-References: <20220214092447.897544753@linuxfoundation.org>
+In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
+References: <20220214092448.285381753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,47 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Antoine Tenart <atenart@kernel.org>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-[ Upstream commit 9eeabdf17fa0ab75381045c867c370f4cc75a613 ]
+[ Upstream commit 426aca16e903b387a0b0001d62207a745c67cfd3 ]
 
-When uncloning an skb dst and its associated metadata, a new
-dst+metadata is allocated and later replaces the old one in the skb.
-This is helpful to have a non-shared dst+metadata attached to a specific
-skb.
+If registering the platform driver fails, the function must not return
+without undoing the spi driver registration first.
 
-The issue is the uncloned dst+metadata is initialized with a refcount of
-1, which is increased to 2 before attaching it to the skb. When
-tun_dst_unclone returns, the dst+metadata is only referenced from a
-single place (the skb) while its refcount is 2. Its refcount will never
-drop to 0 (when the skb is consumed), leading to a memory leak.
-
-Fix this by removing the call to dst_hold in tun_dst_unclone, as the
-dst+metadata refcount is already 1.
-
-Fixes: fc4099f17240 ("openvswitch: Fix egress tunnel info.")
-Cc: Pravin B Shelar <pshelar@ovn.org>
-Reported-by: Vlad Buslov <vladbu@nvidia.com>
-Tested-by: Vlad Buslov <vladbu@nvidia.com>
-Signed-off-by: Antoine Tenart <atenart@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: c296d5f9957c ("staging: fbtft: core support")
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Link: https://lore.kernel.org/r/20220118181338.207943-1-u.kleine-koenig@pengutronix.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/dst_metadata.h | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/staging/fbtft/fbtft.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
-index bf820c54e7ccd..177b1aabf95d1 100644
---- a/include/net/dst_metadata.h
-+++ b/include/net/dst_metadata.h
-@@ -135,7 +135,6 @@ static inline struct metadata_dst *tun_dst_unclone(struct sk_buff *skb)
- #endif
- 
- 	skb_dst_drop(skb);
--	dst_hold(&new_md->dst);
- 	skb_dst_set(skb, &new_md->dst);
- 	return new_md;
- }
+diff --git a/drivers/staging/fbtft/fbtft.h b/drivers/staging/fbtft/fbtft.h
+index 798a8fe98e957..247d0c23bb753 100644
+--- a/drivers/staging/fbtft/fbtft.h
++++ b/drivers/staging/fbtft/fbtft.h
+@@ -332,7 +332,10 @@ static int __init fbtft_driver_module_init(void)                           \
+ 	ret = spi_register_driver(&fbtft_driver_spi_driver);               \
+ 	if (ret < 0)                                                       \
+ 		return ret;                                                \
+-	return platform_driver_register(&fbtft_driver_platform_driver);    \
++	ret = platform_driver_register(&fbtft_driver_platform_driver);     \
++	if (ret < 0)                                                       \
++		spi_unregister_driver(&fbtft_driver_spi_driver);           \
++	return ret;                                                        \
+ }                                                                          \
+ 									   \
+ static void __exit fbtft_driver_module_exit(void)                          \
 -- 
 2.34.1
 

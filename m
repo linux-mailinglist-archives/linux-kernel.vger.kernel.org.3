@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA264B46C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E0B4B47E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244417AbiBNJkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:40:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51552 "EHLO
+        id S245369AbiBNJtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:49:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244217AbiBNJil (ORCPT
+        with ESMTP id S1344451AbiBNJrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:38:41 -0500
+        Mon, 14 Feb 2022 04:47:00 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4B869297;
-        Mon, 14 Feb 2022 01:35:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FB17486A;
+        Mon, 14 Feb 2022 01:40:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B5583B80DCD;
-        Mon, 14 Feb 2022 09:35:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAECEC340E9;
-        Mon, 14 Feb 2022 09:35:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F644B80DCE;
+        Mon, 14 Feb 2022 09:40:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D2FDC340E9;
+        Mon, 14 Feb 2022 09:40:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831317;
-        bh=tApmv9g/WQvtLQVhDANandRHY+qLCCsghdlgK1RbwaM=;
+        s=korg; t=1644831631;
+        bh=Erxzj6kcEZCNmyo/srhtw5hbaKN08mL/l5tMojFNSy4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T6sXI1akP+l4hDE4MparFg+bH/2yWr1mmDGdedq4efe7siKlBW9Z5vwt11ZUQXmvc
-         31WGcjyrUn4haz8CrmXm7qemZyo1nCCsKIPAeJg+PLiGXpCAX97K4UzTlZPrwfx5uC
-         0vlbg+6lxdyzTa3fRgaO+6Gu0nG+oAeQwHcV0IzA=
+        b=Vx2k/9ISHN3KXa76oOPe7uZYLtxKiOEHSo5RXhSAtZ4G2Ka4EtgY/ehyjnyL25UK6
+         h0vnRe2A+Aqj3+EhHRXiHJ2k4OElDGoiHUH0QCeS3HVIKmqq5mGCpxAHRpvWd2vzRE
+         xHLTjkjpb7E0ok1L+ZVqUGU6Edoae79cuuXSpUvA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Olga Kornievskaia <kolga@netapp.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 16/71] NFSv4 expose nfs_parse_server_name function
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Subject: [PATCH 5.10 045/116] ARM: socfpga: fix missing RESET_CONTROLLER
 Date:   Mon, 14 Feb 2022 10:25:44 +0100
-Message-Id: <20220214092452.567616266@linuxfoundation.org>
+Message-Id: <20220214092500.251879929@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Olga Kornievskaia <kolga@netapp.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-[ Upstream commit f5b27cc6761e27ee6387a24df1a99ca77b360fea ]
+commit 3037b174b1876aae6b2d1a27a878c681c78ccadc upstream.
 
-Make nfs_parse_server_name available outside of nfs4namespace.c.
+The SocFPGA machine since commit b3ca9888f35f ("reset: socfpga: add an
+early reset driver for SoCFPGA") uses reset controller, so it should
+select RESET_CONTROLLER explicitly.  Selecting ARCH_HAS_RESET_CONTROLLER
+is not enough because it affects only default choice still allowing a
+non-buildable configuration:
 
-Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+  /usr/bin/arm-linux-gnueabi-ld: arch/arm/mach-socfpga/socfpga.o: in function `socfpga_init_irq':
+  arch/arm/mach-socfpga/socfpga.c:56: undefined reference to `socfpga_reset_init'
+
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: <stable@vger.kernel.org>
+Fixes: b3ca9888f35f ("reset: socfpga: add an early reset driver for SoCFPGA")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/nfs4_fs.h       | 3 ++-
- fs/nfs/nfs4namespace.c | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ arch/arm/mach-socfpga/Kconfig |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/nfs/nfs4_fs.h b/fs/nfs/nfs4_fs.h
-index 5708b5a636f19..ebd77a301057e 100644
---- a/fs/nfs/nfs4_fs.h
-+++ b/fs/nfs/nfs4_fs.h
-@@ -279,7 +279,8 @@ struct vfsmount *nfs4_submount(struct nfs_server *, struct dentry *,
- 			       struct nfs_fh *, struct nfs_fattr *);
- int nfs4_replace_transport(struct nfs_server *server,
- 				const struct nfs4_fs_locations *locations);
--
-+size_t nfs_parse_server_name(char *string, size_t len, struct sockaddr *sa,
-+			     size_t salen, struct net *net);
- /* nfs4proc.c */
- extern int nfs4_handle_exception(struct nfs_server *, int, struct nfs4_exception *);
- extern int nfs4_async_handle_error(struct rpc_task *task,
-diff --git a/fs/nfs/nfs4namespace.c b/fs/nfs/nfs4namespace.c
-index 2e460c33ae487..768258848a684 100644
---- a/fs/nfs/nfs4namespace.c
-+++ b/fs/nfs/nfs4namespace.c
-@@ -121,8 +121,8 @@ static int nfs4_validate_fspath(struct dentry *dentry,
- 	return 0;
- }
+--- a/arch/arm/mach-socfpga/Kconfig
++++ b/arch/arm/mach-socfpga/Kconfig
+@@ -2,6 +2,7 @@
+ menuconfig ARCH_SOCFPGA
+ 	bool "Altera SOCFPGA family"
+ 	depends on ARCH_MULTI_V7
++	select ARCH_HAS_RESET_CONTROLLER
+ 	select ARCH_SUPPORTS_BIG_ENDIAN
+ 	select ARM_AMBA
+ 	select ARM_GIC
+@@ -18,6 +19,7 @@ menuconfig ARCH_SOCFPGA
+ 	select PL310_ERRATA_727915
+ 	select PL310_ERRATA_753970 if PL310
+ 	select PL310_ERRATA_769419
++	select RESET_CONTROLLER
  
--static size_t nfs_parse_server_name(char *string, size_t len,
--		struct sockaddr *sa, size_t salen, struct net *net)
-+size_t nfs_parse_server_name(char *string, size_t len, struct sockaddr *sa,
-+			     size_t salen, struct net *net)
- {
- 	ssize_t ret;
- 
--- 
-2.34.1
-
+ if ARCH_SOCFPGA
+ config SOCFPGA_SUSPEND
 
 

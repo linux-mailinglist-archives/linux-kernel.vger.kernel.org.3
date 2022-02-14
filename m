@@ -2,153 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A8334B5181
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18EA64B5183
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:19:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343995AbiBNNTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:19:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40166 "EHLO
+        id S1353976AbiBNNTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:19:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231583AbiBNNTF (ORCPT
+        with ESMTP id S1353800AbiBNNTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:19:05 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2085.outbound.protection.outlook.com [40.107.220.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EE03FDA7;
-        Mon, 14 Feb 2022 05:18:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WQW35npnfVAtOk1qoACyqv1/a9oey0w1+UvJscnMisQvGpvLKq9DwFIzggNu1TIaux9faC4LboIAoGGuT/IyaZFVnBxuDVtJzqI73n7TXC5DDbybNyFra4nU5qPC2SaFDtn0uUd3LdN9JRMl9eRzCxScgvx8owkMMWMxeJnDoogTnCU0hY8Da/gfeoNeEu4/++d+NhszuBG2yj8EZT7H7Aj+HxDXo/SbaTXpVtWA1Fgee8EOTFTRu0OM2u62t9TwqqMtsOx3JWzN6kurGlma6sbZuqfavcn4OmZdwzD4FsC0FJ9x9GV5mtsch0CATIynADFeLutI52r+vuPKM+tuBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TT5XBJ3cY/2m+zwOP+jTftkbAP+1h7MeEolixefMEOs=;
- b=l9qRjrlTLcjju2yuf1mIU5SUBRoqmHmNZIH4I1qkFyMmXSQyMvFMXdUeFqzHoz6MX8GspWf54HBiruOMmYdzMH9OcStfQqulLxmP0J1oPTvUyC2REQbNFBHHwp3D8TrvHeBhwGVYmwR0DLgxCyrLa9JEPHBh+7MsfQLRxrLo50xyKqWowcs5PJWIVsqdAX69cFK/dYI7Z1LS3FLvtVZ6drwvSa8eTNB6NtYyciu8JR0JiVenerkrsyOd5VF5Btup94kKgYQFaaHaP3hQk76cnefVqBCDiuC300Mk0Mxs3HVggI2+1iONCDpshsYVfew6RS+mkjrP/A9HSqVS6zV0wA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TT5XBJ3cY/2m+zwOP+jTftkbAP+1h7MeEolixefMEOs=;
- b=nXL5ELbpcQt2nkg1lb0YYpALKiO3Hxg4xPccWTsdrOjuD8qC+xlTcK0t0VGA82FSD1kPrcaoZ4zc7EdpqJyAXv/STAMIWM9rh0UDrcJG7aJAd/GDbjO8lxvr/cq2pUvWc7mOCSsZKKu5X+5nUiDpDK77m0Uy7KmI/k0mc2MRXIzumP1s8WiTKej/2HA/gYfBod0yuFpfmYThsPgjNg/D81oIYlsZEcxnK0zBREqWkq5PjNuYY1VR44yzQnOGCndcYf1WTq0NAEziaMzRuAJkFCUO+HPR+lUIxuaDFrDJ/koNgfciL82Tl4ZXD5BtswK9TIc4oe56F3NGb1g1/rEEPw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by BL1PR12MB5971.namprd12.prod.outlook.com (2603:10b6:208:39a::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Mon, 14 Feb
- 2022 13:18:54 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::e8f4:9793:da37:1bd3]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::e8f4:9793:da37:1bd3%4]) with mapi id 15.20.4975.019; Mon, 14 Feb 2022
- 13:18:54 +0000
-Date:   Mon, 14 Feb 2022 09:18:53 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
+        Mon, 14 Feb 2022 08:19:20 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4380C48388;
+        Mon, 14 Feb 2022 05:19:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644844752; x=1676380752;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3Diwd0EY/7PAtVxvigWXKiOU92Qi73gDqKE8+uKzDHY=;
+  b=c2r3cNMc3Ut9nxmqTXISqNZSBIFbK6QpbT0+px3nnrcbAOmo6D5d78ii
+   a8Hm6Q0tC9AEHis0b46/6EGuN4xIUk1U9lgXdibSRtsNI7RDt8yKBbfcl
+   BSA0fwiKth0f/FMPnw/fwKrwVqTuB3VCJpHS7V0xH1L7eZRLevQCoJRlw
+   s=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 14 Feb 2022 05:19:11 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 05:19:11 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 14 Feb 2022 05:19:10 -0800
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 14 Feb 2022 05:19:08 -0800
+Date:   Mon, 14 Feb 2022 18:49:04 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 04/14] driver core: platform: Add driver dma ownership
- management
-Message-ID: <20220214131853.GY4160@nvidia.com>
-References: <20220104015644.2294354-1-baolu.lu@linux.intel.com>
- <20220104015644.2294354-5-baolu.lu@linux.intel.com>
- <YgooFjSWLTSapuIs@kroah.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgooFjSWLTSapuIs@kroah.com>
-X-ClientProxiedBy: BL0PR01CA0015.prod.exchangelabs.com (2603:10b6:208:71::28)
- To MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+CC:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ugoswami@quicinc.com>, Jung Daehwan <dh10.jung@samsung.com>
+Subject: Re: [PATCH v2] xhci: reduce xhci_handshake timeout in xhci_reset
+Message-ID: <20220214131904.GB31021@hu-pkondeti-hyd.qualcomm.com>
+References: <1644836663-29220-1-git-send-email-quic_pkondeti@quicinc.com>
+ <1644841216-1468-1-git-send-email-quic_pkondeti@quicinc.com>
+ <YgpLGGYI0W9mL2gg@kroah.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8bcf9f7d-ce89-4617-8028-08d9efbc8cd6
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5971:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB5971F2951DC83F7EBDEE7521C2339@BL1PR12MB5971.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2512;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VkaAGP5r2WxgLNerXnT0GoAEiXJ56sVXSAXlVRSiPuQq6WVG+G0U4iTvS35nNJT1REa6JlPshlDfRi/XteU+nApt9FlqtvTnjuqV/o8WLcBVFLRQ0la1RXVaWNMAryL4dlTiMVaYFR9JlLtKiHbu/pu9JbW+V/IYBeiutPKIiI4z6+At5tgsR3cnDNR+JpgyA9f6tfnIhwIJE70lbAOuKhmMI7bQTng8Cq03X/sqCurh++IJ0NqNSWvQ3sFIR9hLTUMBW3Hy3Y0NWPfXUwIGoF+gblwvtnCRn+KK71JqD/tH4yX5sI+9nGDrQEtSTtk6SYOQBVrmFfBbOLkQjhS1cpsas34aoExOXMuj434nn6VYVkvW4xgEqFkR21bYJDXGwN2xRCD3SETdIXTvL1OgRY2o6+J/Ea+r1ILcgRgoQuFiKY5OFZ0ffzososayu0bHTvRKJX5+kxrj5ABjVJvcMAhEbdc1dFXlrzp1R0oOVd3FBRJbZaHVlWDkMzSbM6khkqAtOlV04w2xvPP8YiIRYSqEnc0v3JoeoKI1LiOs5jR/ZOIjDduAIz/3FWI5xrjYnjsg08p0TLn+F2BqmacmR5CPVwPDgwdOH1UM4/Ovw4EAew7uyEBf6kehMaCnyH6fBBRoz6nL2tUMYmohlA1VrA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2616005)(6506007)(86362001)(4326008)(4744005)(1076003)(186003)(8936002)(83380400001)(66946007)(6512007)(33656002)(66476007)(66556008)(8676002)(26005)(316002)(5660300002)(7416002)(508600001)(2906002)(38100700002)(36756003)(6916009)(54906003)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TIlzLL90VWCGCWBrCIB25krCuNL6TDSeVLaU6nr/bceMID8s3MbZRE9wPDAg?=
- =?us-ascii?Q?BV0tD1587dtwEZTGZB5XYuRMYtFAnQJAs/ZmQCcQXCPO0drptFjuxaMzw/lX?=
- =?us-ascii?Q?mcaYAd+pCR+lAPgWG3NHbH/IRsJY+GzpkpjZVZlvTkfNtR/nre0nmZA8f4jG?=
- =?us-ascii?Q?6iO17QSNY4GZ747KUAJ+Xah+z3Yvs2q4dYuRs8FluFbUXhATqUuUCgfoHISx?=
- =?us-ascii?Q?wRuUriWbQdLNLEYmKorvgYsdcBO7f0/nwUTddrUNJhMMIGV+Vm79kurMwXQg?=
- =?us-ascii?Q?tizC571KiEKwUo3ongY6Vtmnp/WtiWnXIzWhtGqhH2awxPlclwvoLhXRkoxR?=
- =?us-ascii?Q?8g0m3IdwexqPLoSIRd90YxzoJEY/ZUXUcfEhPaYloafAAuh2Xxpl/qPPbq66?=
- =?us-ascii?Q?iwC8Fut5iWUuZHHQzF6pGOB28ufA0cKWoBq9nWzPNt5ARnK/+ov1qNBGqFsY?=
- =?us-ascii?Q?PWV5gQNxSlJ5txpszajuKXdKO0doGpqecyRUE9OUcwLxn+QBLlSytqUr7ceK?=
- =?us-ascii?Q?AHUg6aE6l6l+t15fS0OMc6nCtrNVHFFb5SCubigmgb2rCg+c+OZewEH7pafD?=
- =?us-ascii?Q?ajRuGXixhQSXv+A0CyNcFXv7QZweF2X+Ln9OaaiHaebyN2gpzGW+xekt223R?=
- =?us-ascii?Q?xgNVp7D7NjqZ9Gn8lxPyKIJ+WqkUSViDwQ+eBiz4BWsb3wYAth6tNu6u4dBN?=
- =?us-ascii?Q?cL+HFjil4Y8WWZgvuYUyJDZ91epw/qz0Nrp2IOLw3/gAZHGgra34/fx/h48q?=
- =?us-ascii?Q?FA4bcRCs8tE9jbAqryIXtipoynBUAlzf2rv9mHt39mc2yocfCApXheob7FtL?=
- =?us-ascii?Q?COzcQtBcimPpCwAsiMX+AKgJWzVG2/eHbcIErXtocoGO+9I1RwkqPnHthFL4?=
- =?us-ascii?Q?0UWXMVykADQv1G/b5TjTlovv7pwsO6DsurFiPfUS8eVGZKyWrUpd6F10zGlB?=
- =?us-ascii?Q?TYDkeMwwZ9LDQIGHNuMbUnjitTJwJYDM9rpp67s8qS5ZzpzpCF5Qv7DxQnIK?=
- =?us-ascii?Q?RK1Akm+cPG4Ct8GuJYQbwxANJX/x6IkE+4OLDEes+KT0mf+HwZ/7eyjut/AB?=
- =?us-ascii?Q?3sczHBlJCigzHH71hOxRSpJplpLt56gBx6pI3/1OAorX2Hq05/FlKeoW369U?=
- =?us-ascii?Q?f1mS3C3gKvha6ZGcyR32r0DsmjBRT3mb3N9LRiYhAhhZhSVYTjz13qfftTl3?=
- =?us-ascii?Q?YDwuBVAIiSOzkiwqt38kd6kN1mHx+B3wYRwLPEpIKq8w22QuVqkewZ473CEf?=
- =?us-ascii?Q?SX+ijnyqNYc804HSsmJH4OhCiB9EZlwEYb9CeI0yVoRXlbEgKDfOc8jQGcCd?=
- =?us-ascii?Q?ET1OTk3JOlIQpliHwNMazgXfAchifOHrBaYdokqa8aNrovOl0Ofis/G9eN7G?=
- =?us-ascii?Q?pHdJjSbYXnKmAfLAI0yBudFj0tDE/DKlJPZl1A/c7yJpIs/8/D05YDxiPT5a?=
- =?us-ascii?Q?abAdc+3Bn0UAmvn4qoHNCJ6/3rNyUzM8TsYIhxEmGrj3NobbquMwxB0K9zx6?=
- =?us-ascii?Q?Iimv/nc4qkEdXksVHjLAZE7YbMndo07VAZIcmwjBHcpymexdaalbonRavdyi?=
- =?us-ascii?Q?Go/SMCskCS0bEV7WN+U=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8bcf9f7d-ce89-4617-8028-08d9efbc8cd6
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2022 13:18:54.7893
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DnyNu40OFe9kc3MP1VLuPK+17XF4FA29IsrTo5y7/RuQEgzm0fR/FTM4dfgdVSlY
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5971
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YgpLGGYI0W9mL2gg@kroah.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 10:59:50AM +0100, Greg Kroah-Hartman wrote:
-
-> > +	if (ret && !drv->no_kernel_api_dma)
-> > +		iommu_device_unuse_dma_api(dev);
+On Mon, Feb 14, 2022 at 01:29:12PM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Feb 14, 2022 at 05:50:16PM +0530, Pavankumar Kondeti wrote:
+> > From: Daehwan Jung <dh10.jung@samsung.com>
+> > 
+> > xhci_reset() is called with interrupts disabled. Waiting 10 seconds for
+> > controller reset and controller ready operations can be fatal to the
+> > system when controller is timed out. Reduce the timeout to 1 second
+> > and print a error message when the time out happens.
+> > 
+> > Fixes: 22ceac191211 ("xhci: Increase reset timeout for Renesas 720201 host.")
+> > Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> > Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+> > ---
+> > 
+> > v2:
+> > - Add error print statements in the code that change log refers to
+> > 
+> >  drivers/usb/host/xhci.c | 12 +++++++++---
+> >  1 file changed, 9 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > index dc357ca..bb9ea3f 100644
+> > --- a/drivers/usb/host/xhci.c
+> > +++ b/drivers/usb/host/xhci.c
+> > @@ -196,9 +196,11 @@ int xhci_reset(struct xhci_hcd *xhci)
+> >  		udelay(1000);
+> >  
+> >  	ret = xhci_handshake(&xhci->op_regs->command,
+> > -			CMD_RESET, 0, 10 * 1000 * 1000);
+> > -	if (ret)
+> > +			CMD_RESET, 0, 1 * 1000 * 1000);
+> > +	if (ret) {
+> > +		xhci_err(xhci, "Host controller reset timed out\n");
 > 
-> So you are now going to call this for every platform driver _unless_
-> they set this flag?
+> A timeout is not the only error that could have happened here.  So why
+> claim that all errors are timeout errors?
 
-Yes, it is necessary because VFIO supports platform devices as well
-and needs to ensure security. Conflicting kernel driver attachements
-must be blocked, just like for PCI.
+Thanks for pointing this out. xhci_handshake() can return an error code
+other than -ETIMEDOUT. ret == -ETIMEDOUT check needs to be added or
+just print the ret error in the print message.
+> 
+> How did you test this?
 
-Jason
+This is a hard to reproduce issue. So I have hacked the code to use 1 usec
+instead of 1 sec as timeout and see running into the timeout issue. I know
+this is not a perfect test. The test patch is included below.
+
+Thanks,
+Pavan
+
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index e95a5bc..6147544 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -37,6 +37,9 @@ static unsigned long long quirks;
+ module_param(quirks, ullong, S_IRUGO);
+ MODULE_PARM_DESC(quirks, "Bit flags for quirks to be enabled as default");
+ 
++static int reset_error;
++module_param(reset_error, int, S_IRUGO | S_IWUSR);
++
+ static bool td_on_ring(struct xhci_td *td, struct xhci_ring *ring)
+ {
+ 	struct xhci_segment *seg = ring->first_seg;
+@@ -195,8 +198,15 @@ int xhci_reset(struct xhci_hcd *xhci)
+ 	if (xhci->quirks & XHCI_INTEL_HOST)
+ 		udelay(1000);
+ 
+-	ret = xhci_handshake(&xhci->op_regs->command,
+-			CMD_RESET, 0, 1 * 1000 * 1000);
++	if (reset_error) {
++		xhci_err(xhci, "forcing timeout\n");
++		ret = xhci_handshake(&xhci->op_regs->command,
++				CMD_RESET, 0, 1); /* 1 usec */
++	} else {
++		ret = xhci_handshake(&xhci->op_regs->command,
++				CMD_RESET, 0, 1 * 1000 * 1000);
++	}
++
+ 	if (ret) {
+ 		xhci_err(xhci, "Host controller reset timed out\n");
+ 		return ret;

@@ -2,50 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254BA4B4FB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9574B4FC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 13:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352645AbiBNMK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 07:10:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45328 "EHLO
+        id S1352686AbiBNMLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 07:11:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243280AbiBNMK4 (ORCPT
+        with ESMTP id S241615AbiBNMLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 07:10:56 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215A9488A6;
-        Mon, 14 Feb 2022 04:10:49 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B72451EC04AD;
-        Mon, 14 Feb 2022 13:10:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1644840643;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=lIy/cfmHR9baTiV2EoLmKirTBMhO8ezxcxtXGNlkPeg=;
-        b=SOZfJwzqPJR3MeG1NT25sVU4SHJRSmIDtWmuB1tKe3tJIgJngma3cMssUUytwEYGCOifSB
-        0T2OFdMo4uhUK8/NLV3Q3ZCu+ilOfOllGZcg3aOt+spYo37vmnJUmvOe/9lycGjCJMVILq
-        euKqL0sCW1ZeBKs7fgbC1Ib+uvpy52g=
-Date:   Mon, 14 Feb 2022 13:10:49 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rric@kernel.org, Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH v4 10/24] EDAC/amd64: Define function to get Interleave
- Address Bit
-Message-ID: <YgpGyceWKsIVYuGv@zn.tnic>
-References: <20220127204115.384161-1-yazen.ghannam@amd.com>
- <20220127204115.384161-11-yazen.ghannam@amd.com>
+        Mon, 14 Feb 2022 07:11:50 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600B648E58;
+        Mon, 14 Feb 2022 04:11:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644840703; x=1676376703;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JKS4ZYVvHPWJrzHepeoCtuWYZKUX+bMl14hpmXPHIJw=;
+  b=T0SLUcL1Y4NwtiII5wL2o3zBiYywRCvNOHnc0tGKnQ6noaU9cSg3/ZvG
+   /E4wMrKX4sxtDNz6jOfR2KsEZ6oXhmJrklUKGcNUiKbuFuLFWlDON1pbv
+   OB5MZciRKtXRGYfs3TQOLGig/LHEQNK+++K6HzGls1xKQ8EUoynT7GU0A
+   NnJYz9u5hi98YGKVTgVkfeB9EdYRKDZ96+HNaEYfIWttOLbGdFHlralRW
+   HsjOGF/TQwmF8RIZtUyHKcqm8yYApVmT0W7JDFm/PkCAeBXCdfYBZb3X4
+   a8QOJAAkJBq9bZ19jeFdJVslFGx/ldFc5cV2AGE1nw/yzW65yayDIbE0A
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="237486582"
+X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
+   d="scan'208";a="237486582"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 04:11:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
+   d="scan'208";a="495513323"
+Received: from mylly.fi.intel.com (HELO [10.237.72.51]) ([10.237.72.51])
+  by orsmga006.jf.intel.com with ESMTP; 14 Feb 2022 04:11:39 -0800
+Message-ID: <b1c3a16a-2917-309a-5e5d-e4d9a4a62ebd@linux.intel.com>
+Date:   Mon, 14 Feb 2022 14:11:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220127204115.384161-11-yazen.ghannam@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.1
+Subject: Re: 5.17-rc regression: rmi4 clients cannot deal with asynchronous
+ suspend? (was: X1 Carbon touchpad not resumed)
+Content-Language: en-US
+To:     Hugh Dickins <hughd@google.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Rajat Jain <rajatja@google.com>, Wolfram Sang <wsa@kernel.org>,
+        Derek Basehore <dbasehore@chromium.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        "loic.poulain@linaro.org" <loic.poulain@linaro.org>,
+        Andrew Duggan <aduggan@synaptics.com>,
+        vincent.huang@tw.synaptics.com, cheiny@synaptics.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+References: <89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com>
+ <YgF/0QGFN4SppLKg@shikoro>
+ <CACK8Z6Etj-gq1VKpkUBstiXEETekPWG9p9gKBtuFaZF05pQEvQ@mail.gmail.com>
+ <CACK8Z6FUsceYgBoaAtN8o4m9HpZaBZMt0Nqtvw0a1Z3EuD_nWg@mail.gmail.com>
+ <YgHTYrODoo2ou49J@google.com>
+ <b76771e5-b8e-54c9-2474-d5a73d236cba@google.com>
+ <6f1103af-595c-ed0a-b946-97a9331ed148@linux.intel.com>
+ <Ygm+5rS7Cxeea5Dp@google.com>
+ <3741afae-305a-4ba-187d-eb52b039bc1a@google.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <3741afae-305a-4ba-187d-eb52b039bc1a@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,14 +82,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 08:41:01PM +0000, Yazen Ghannam wrote:
-> Move code to find the interleave address bit into a separate helper
-> function.
+On 2/14/22 09:36, Hugh Dickins wrote:
+> On Sun, 13 Feb 2022, Dmitry Torokhov wrote:
+>>
+>> Sorry for the delay, but I wonder if you could try the patch below and
+>> tell me if that also fixes the issue for you?
+> 
+> It fixes it for me, thanks Dmitry; with nothing unpleasant in dmesg.
+> 
+Also for me.
 
-Same question: what's the point of this change?
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>

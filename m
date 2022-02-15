@@ -2,249 +2,491 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301B74B7139
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:40:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2EE34B70B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237113AbiBOQB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:01:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57338 "EHLO
+        id S241330AbiBOQBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:01:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241192AbiBOQBn (ORCPT
+        with ESMTP id S241323AbiBOQB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:01:43 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68204D1097;
-        Tue, 15 Feb 2022 08:01:10 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21FEi1wA027349;
-        Tue, 15 Feb 2022 16:00:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- from : subject : to : cc : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=Kc3P29bjIZa5+NzVf50OuitZwWM3RLoIMiMfXhTYpww=;
- b=XUb8Rrcili4MVqmrYr1YLlsOKstW3jZPLAsll2Y/wILqX/hDb/2Y/4anca68b1DaXrXv
- /hFuxU4TEaydQMMhdkJwx2R8d/qKZO0VD+k35YsdUxOKv7sZ3NwtwkN72mKRb2uSpAV4
- XeevA9JAzYk1iK3eC09egvwPYXv4TpuxTsUR41s7VkR4VF5FyiY9va4Bx582PmLo4ALS
- zaaE9ZaCltg1dk6eKfYtmppTLUrYoXq5GAat/sXAEs5G+BzKVyIFzO1rHu2pB4pFt0Ox
- sVas4NzUqIQ8HDw/w26uFgmzHXPX2SGLWopWhfFtJk/A5QOPEwc0FPiGW6DEZSnHFKI5 oQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e820nj6ge-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Feb 2022 16:00:47 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21FFpKWF167500;
-        Tue, 15 Feb 2022 16:00:46 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2176.outbound.protection.outlook.com [104.47.55.176])
-        by userp3030.oracle.com with ESMTP id 3e620xatrp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Feb 2022 16:00:45 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OLVMhotk33dPVGvjouI6qduj/Fe7dGEwXWhVXTpKCVdjTh2yCo23sj34cK/wM8jX8q0lYk8FrBfCpiGnw7h/NhZeV1pvU513WN8wSRswKUBrPpozAOKljY5oTgCNdBdmY2Wknet6VOWSCKBNPk0z6dP4t6oNbWuIJ0hMz6wJRQf+z4sywv+OerBefPBxkguqwu00ocFSOmObwCSudQvrJsTWMGkExjvPSZxmnZVFihmqhWMcEnwmKwHTqVLdKH5ZStyqWH08bU0uc/btdPCrtIuVMv5PzFBsXl4yDfLD4/ltc9VZ4zH7TwfXlMeIgBHYBnbdg7dIfYfEgeTTJwrYPw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Kc3P29bjIZa5+NzVf50OuitZwWM3RLoIMiMfXhTYpww=;
- b=C7GZ81y2PpsEY0INormmX50lBwbIuKc0W0dLiW1WN0G0QvGQtBUwtQ69jpfBEoD3Qf6gixBof8n5EMwAvBlzV2/GxVWVVfIVqIr7dgs2Om2txq2dmOgsGC2n7TcbWSpmUfMkSnZoIAbVLJ02/F0JTChCtlrWOrLNsMPw9x75bYDtMfln6Z/d1Ch3NBgIQZEn28mb//23UjpRiL2n2WEzfhaMY7Rod3cbXzdGVYHVXv+2aD4O9c442BQkEcNwBL5l2YV8WnoAwI30UNHPHqwGd8QgbTIuW1bfE0vsQMnqXEwuHw96p5jM54mDSM2ir0JKlRyyTsXqrw6kMK+SXfTHqg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Kc3P29bjIZa5+NzVf50OuitZwWM3RLoIMiMfXhTYpww=;
- b=voPUdS1EC9e8qwwsCjc4F7sTslr+s2n6zOurUMWUt32AgEI4WpMRlyKPckrsxy3Pmm7kSjnA1IplxZbYfxkxW5I9yJXsQMjXB1dfA/li1emN4UF3VIrfqQsTskoul6svRvsLNglo+yc4UkVooXW7Hmj4z9m3JFRLbFZHog+qMcI=
-Received: from BLAPR10MB4835.namprd10.prod.outlook.com (2603:10b6:208:331::11)
- by BN8PR10MB3460.namprd10.prod.outlook.com (2603:10b6:408:b4::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.14; Tue, 15 Feb
- 2022 16:00:43 +0000
-Received: from BLAPR10MB4835.namprd10.prod.outlook.com
- ([fe80::750f:bf1d:1599:3406]) by BLAPR10MB4835.namprd10.prod.outlook.com
- ([fe80::750f:bf1d:1599:3406%4]) with mapi id 15.20.4995.015; Tue, 15 Feb 2022
- 16:00:43 +0000
-Message-ID: <6198d35c-f810-cab1-8b43-2f817de2c1ea@oracle.com>
-Date:   Tue, 15 Feb 2022 16:00:35 +0000
-From:   Joao Martins <joao.m.martins@oracle.com>
-Subject: Re: [RFC v2 0/4] vfio/hisilicon: add acc live migration driver
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        yuzenghui <yuzenghui@huawei.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>
-References: <20220202170329.GV1786498@nvidia.com>
- <c6c3007e-3a2e-a376-67a0-b28801bf93aa@oracle.com>
- <20220203151856.GD1786498@nvidia.com>
- <e67654ce-5646-8fe7-1230-00bd7ee66ff3@oracle.com>
- <20220204230750.GR1786498@nvidia.com>
- <0cd1d33a-39b1-9104-a4f8-ff2338699a41@oracle.com>
- <20220211174933.GQ4160@nvidia.com>
- <34ac016b-000f-d6d6-acf1-f39ca1ca9c54@oracle.com>
- <20220212000117.GS4160@nvidia.com>
- <8338fe24-04ab-130a-1324-ab8f8e14816d@oracle.com>
- <20220214140649.GC4160@nvidia.com>
-Content-Language: en-US
-In-Reply-To: <20220214140649.GC4160@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM3PR07CA0063.eurprd07.prod.outlook.com
- (2603:10a6:207:4::21) To BLAPR10MB4835.namprd10.prod.outlook.com
- (2603:10b6:208:331::11)
+        Tue, 15 Feb 2022 11:01:29 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3F7CC53F
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:00:57 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id AF4B8210F2;
+        Tue, 15 Feb 2022 16:00:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1644940856; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iQ7xvJZmH+PZ8vpmy+REEX8h833Un6VQf151PL8I2Wc=;
+        b=S06WJWY65cDbshAsrjwK4ogyrbWz9HV3vtcKPTlKNzlWyoLqCExbvlVDd0pLLEz42Z0VJg
+        7wZis7B0b9vzHSw/G5czIafl9q20evkz0ms804BYlQTCQxa81g0EZgfPaPE5vrUhoU0Zp2
+        T7syqazuL66CG+wL16cG9xrAMlQ7iAY=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id AE16EA3B85;
+        Tue, 15 Feb 2022 16:00:55 +0000 (UTC)
+Date:   Tue, 15 Feb 2022 17:00:52 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, ccross@google.com,
+        sumit.semwal@linaro.org, dave.hansen@intel.com,
+        keescook@chromium.org, willy@infradead.org,
+        kirill.shutemov@linux.intel.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, ebiederm@xmission.com, brauner@kernel.org,
+        legion@kernel.org, ran.xiaokai@zte.com.cn, sashal@kernel.org,
+        chris.hyser@oracle.com, dave@stgolabs.net, pcc@google.com,
+        caoxiaofeng@yulong.com, david@redhat.com, gorcunov@gmail.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com,
+        syzbot+aa7b3d4b35f9dc46a366@syzkaller.appspotmail.com
+Subject: Re: [PATCH v3 1/1] mm: fix use-after-free when anon vma name is used
+ after vma is freed
+Message-ID: <YgvONKdZ2T0PB2/0@dhcp22.suse.cz>
+References: <20220211013032.623763-1-surenb@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d0d92eb8-4951-4dec-fb20-08d9f09c5240
-X-MS-TrafficTypeDiagnostic: BN8PR10MB3460:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR10MB3460B0844DF3773D73CE9F5ABB349@BN8PR10MB3460.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5EfjL+DHQNrFLa1z2pkRWDdAaTiwC35nWkHulmb+hNcTByJCLmgk0m33n7hVeKZDWH31bcewc+wwFihPscqaDVSXDefoInFDQrUcDVAvW5Ihkcurr65sabciCNVM0tk2LOHZuiE8U5gW0AI14ocX/+mcOXSJvvaoptxF4zBj1TV5h6E1ff2oa8+4aO/KKFfn/ZA1mzz1ZgqS2NG+cP3UKO3vXEwVu7sXZxyMe6bvY14AtB+/nTJTfsqtuIVQsp3PK6HYv5qlmCK47Mi+nnn4j/NJ41T5Dj0ExGEYOHj/WYSRmsaxRTsx9MLl6xwCYgdaWzmI+H8h8VfRKs1VpoKuLXBerXkgJYq2z/F3qZqkiMQW37+dYKI0pUaR/1ShZR92eUS3IjIhpc7uUcOBEiWS64kHfWkC4M+Y6QrfQc6DnfEqXT+yfRR68fpMpVAHp5Met5dTxqVbxcfgi08njyaOgX7LJWB1toa/t8OIlIae9rEYCqDPyQpGhbkR9sTKrQ6vqoCgAbMQ0GefshC16p3xrFpaLZNiVB2lt/iU5CqnE97s7ofMcsvM6Mv++syBXEoG84+Kq+/QCwdV5Go0hOP+lJj/tG7S0kLGxo/R2wbR/Fd5ks9DYGYUbgFxUfU3JmBJSOLFVYkfaruOQtGhap7NqoG7nVz53OSYL6mSOUPstPAzr3jYvqP8uOXODANZuB8sX3h1d2lUmpBYPwKgZ12vAA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB4835.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2616005)(26005)(2906002)(6666004)(8936002)(6506007)(6512007)(186003)(66476007)(83380400001)(53546011)(7416002)(5660300002)(508600001)(66556008)(66946007)(6486002)(38100700002)(4326008)(8676002)(316002)(6916009)(86362001)(36756003)(54906003)(31696002)(31686004)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VWE5VXVnbWdIWjlpRVh3Y0JtUVlKeVpURDZkK2gxZ3FlcUYzZzhqbkRURWlu?=
- =?utf-8?B?WTVqaU5nYy9FNzAxUjVMYU5OeFBKOGNLMXEyM3VPa3lIaEYrUEhtVnErbVZl?=
- =?utf-8?B?a0JhQkMvUGt3d29yM1RGUEFEaGtLdzZxNlhHSlkwajYrWTdqdVBEa2o3ZGtG?=
- =?utf-8?B?VDQ2Wmc0ckR4TUVnK1NleENxUWR4V2d3bERNL1JNK1dsOWdMY2ZzVHJCNDlu?=
- =?utf-8?B?TUE3eDczekJvbnp6alpGNS9LMnBrcUFGcXAxSnNkeWVxUHZiZ1h0VXZ5QjdN?=
- =?utf-8?B?bTJkR0NTYWJsUE82bDIyNXR6eXZZM29CY3NVNzV1WWtMNjJ1Y2QxWWlRcFc3?=
- =?utf-8?B?UTcwRWlHNjF4b3ZzdEd5dXdqNDVXUUZndzlGcXBpNVpERTVpR2xuTkdha1dn?=
- =?utf-8?B?d2Uwbm55dC9NT1ZyN3krY3BqcHhlaFdDSThqRFdnMlhjalB2ZkgwTkpXZjRG?=
- =?utf-8?B?MmZQOVVRUkZyV1gxYUU3ZXl4ejBKd0V0aXJxeElDVjVGbjFzNzMrc05uMVJ2?=
- =?utf-8?B?ZVRqVHpQNEV3WWFydm9CL2Y4ZnZ4eUQ5ZlZXajRyWVM3RGwwcWNtMVpDdUFs?=
- =?utf-8?B?ZmUzWmNzRWc5K1lYdGVlek1YMDRLelhtU2JUMFVwT3c4b3hWL1BWOFJrb2Fs?=
- =?utf-8?B?aGQ3TGROd29pQmk4TFNzc2FtdWZPZzNZdTI0TVhKV1NGdVF6bnd3L3J1KzN5?=
- =?utf-8?B?dE1SZGZNU1ZibnQyaVk5bjFFTkJaclRlYmc2SmtsNm9VbnpjWXQwOTNFVnEz?=
- =?utf-8?B?cWJKVkd6Rk50RVAzU3pTc2laVFNhQ1BpdW5rL2t6YVphMFVhQ3N1UUZIZlJP?=
- =?utf-8?B?U2FjNEpISThBVVhoa2lubkFYTzNYL05QTG1UV0FyM3ZpSkdiR3hPZk1sS1BH?=
- =?utf-8?B?UnpSSnd0ck5jRHVOL3U2NTc4dTQ5YmQ5ZWhDa1MxdTAzUUIweElseEMvblZi?=
- =?utf-8?B?VlBZVThtcjZYNWRiZGl2bWxQdmZ6bzFwOHE1eHhsK0pDeWQ3ckIzaVo3eFJw?=
- =?utf-8?B?ZS8zTG5jSWR5VTZVLzBzM1czOHVvdFUrdkFyOGkxcExxem1BMXRBS3ZnNlBR?=
- =?utf-8?B?UXNQWHh5TFpUYms2WU9sbDBDM2lzOFIxSlpRby91UkJYMjBPYkVieHNpVURZ?=
- =?utf-8?B?ZlgxYWJuRy9ubk9iNzcvbStzY2JFdk5ZY2tJaTgvSjNEZXM3TE9RT1ZmeXNM?=
- =?utf-8?B?alBSM0pwTHJrTStSTUVTNEJya2tFOVlnOFdZa2gxd3Z6dkNSaU5GVFVCTE5B?=
- =?utf-8?B?SHZUNks3ellHb2duZHVMU1lKcHIvZXNid1Nrc1F2eDhVamRHbGtvZWRZT2pH?=
- =?utf-8?B?VTF5NWdUUDZ0SlFQL3BIY2J3VnhPSllMaWJCMkNXUkx2bWtCWU5seW5ybGw0?=
- =?utf-8?B?T09zTGpkdFdtQnhvMUpxa3RyZThib1RzNC9TQXkvOVdQdXVleFhYT21HK0p6?=
- =?utf-8?B?NEgvYWVGaGxMbVFDYkhxSHRxWTByU01lK0x5MFQzNS9hR1dlSUp5MVVLU2lS?=
- =?utf-8?B?MUg4TG0wWkgwTm1qcFVzaHYxaUFLZzRkWFdxMmhZZG9CR3dkVld4eWdVcXlB?=
- =?utf-8?B?ME9CeVhQTFF1bnRIS2EyMGk4SDNqSjJmSkJMMmRvckY3MEZFT2hzY0FLZmpM?=
- =?utf-8?B?ZHZha0NsT0o5WU9neDJDeTNNRHFmS2pWeW9uM0JDZ1NPeVB4WFR1K1Fpc2tp?=
- =?utf-8?B?U2ZzVkwwV1dMWDgxTHNlK1IrTlRzS05TT2pTaWp3dmZ1ZE83bHRyYlpaUDdK?=
- =?utf-8?B?Vk1FVk91RDFRemp4Y1J0MGwzdkFUY3liZ2g2R0syWDJnLzE1RGdWMFIrM2FO?=
- =?utf-8?B?SXptSitsdmhVU1Y0Sk9LOEc2anVGWXFWcUJtYUFvSjZyRmhVK1ZEeUxGQTJG?=
- =?utf-8?B?MGQxVTdFN201T0tFYndka1NKdkI5YWZrSHlSZmJlSk1FQkhONzZtOVdjdURj?=
- =?utf-8?B?d1BjdlVDZDRycnYxWGNLcDI5dTFwSHNVeUVRYXVocmE1RFlQK28zSGFZaDFW?=
- =?utf-8?B?aFVxeWFFV1pMQnBEYjRkeFo5dlQ2NzNpN0phcEtVbEdLRTJiNU4vYTNwMm1s?=
- =?utf-8?B?K3NFMDlaM0h2MEFBdUxCOVduTWFKNG45L3JWelhZdFhSem5iOVZlbzBvaS8y?=
- =?utf-8?B?T0F2TkJyN1MvV0h2VGs5dTVJYU0rU2FwTFl3ZStZblozVjdoYzE4dnVHRGdT?=
- =?utf-8?B?a1N0UE94SGlTT3BhYlhjdnAxa2ZVVjMxOEp4aGhaUUF2S1F5UXgvM0ZxQTda?=
- =?utf-8?B?WkVmWHBYRWtQRHBpQ1pLK2pRdnJRPT0=?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d0d92eb8-4951-4dec-fb20-08d9f09c5240
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB4835.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2022 16:00:43.7221
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UUXcP3wrclo4WEB+WK1PsWsDtYQNmmyMZ7o+M7XH2qmYKg2jK7fjZZsi7rfLptgxOVrj29HN2DKVJ5xH9Codkmj0GVLW29+jDCQPM64Ms4k=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB3460
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10258 signatures=673431
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- mlxlogscore=999 bulkscore=0 spamscore=0 adultscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202150093
-X-Proofpoint-ORIG-GUID: aVv7FXsiRttlgkiL8xa7WzX8348GKnI9
-X-Proofpoint-GUID: aVv7FXsiRttlgkiL8xa7WzX8348GKnI9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220211013032.623763-1-surenb@google.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/22 14:06, Jason Gunthorpe wrote:
-> On Mon, Feb 14, 2022 at 01:34:15PM +0000, Joao Martins wrote:
-> 
->> [*] apparently we need to write an invalid entry first, invalidate the {IO}TLB
->> and then write the new valid entry. Not sure I understood correctly that this
->> is the 'break-before-make' thingie.
-> 
-> Doesn't that explode if the invalid entry is DMA'd to?
-> 
-Yes, IIUC. Also, the manual has this note:
+On Thu 10-02-22 17:30:32, Suren Baghdasaryan wrote:
+[...]
+> +struct anon_vma_name *vma_anon_name_get(struct vm_area_struct *vma)
+> +{
+> +	if (!has_vma_anon_name(vma))
+> +		return NULL;
+> +
+> +	mmap_assert_locked(vma->vm_mm);
+> +
+> +	kref_get(&vma->anon_name->kref);
+> +	return vma->anon_name;
+> +}
+> +
+> +void vma_anon_name_put(struct anon_vma_name *anon_name)
+> +{
+> +	if (anon_name)
+> +		kref_put(&anon_name->kref, vma_anon_name_free);
+> +}
+> +
+>  void dup_vma_anon_name(struct vm_area_struct *orig_vma,
+>  		       struct vm_area_struct *new_vma)
+>  {
+> @@ -126,33 +146,34 @@ void free_vma_anon_name(struct vm_area_struct *vma)
+>  }
+>  
+>  /* mmap_lock should be write-locked */
+> -static int replace_vma_anon_name(struct vm_area_struct *vma, const char *name)
+> +static int replace_vma_anon_name(struct vm_area_struct *vma,
+> +				 struct anon_vma_name *anon_name)
+>  {
+> -	const char *anon_name;
+> +	const char *orig_name;
+>  
+> -	if (!name) {
+> +	if (!anon_name) {
+>  		free_vma_anon_name(vma);
+>  		return 0;
+>  	}
+>  
+> -	anon_name = vma_anon_name(vma);
+> -	if (anon_name) {
+> +	orig_name = vma_anon_name(vma);
+> +	if (orig_name) {
+>  		/* Same name, nothing to do here */
+> -		if (!strcmp(name, anon_name))
+> +		if (!strcmp(anon_name->name, orig_name))
+>  			return 0;
+>  
+>  		free_vma_anon_name(vma);
+>  	}
+> -	vma->anon_name = anon_vma_name_alloc(name);
+> -	if (!vma->anon_name)
+> -		return -ENOMEM;
+> +	kref_get(&anon_name->kref);
+> +	vma->anon_name = anon_name;
 
-"Note: For example, to split a block into constituent granules
-(or to merge a span of granules into an equivalent block), VMSA
-requires the region to be made invalid, a TLB invalidate
-performed, then to make the region take the new configuration.
+I really have to say that this is still confusing and potentially error
+prone. I haven't really dived deeply in the early break out from strcmp
+because I find your mixing strings and their referenced pointers rather
+confusing in principle. I still do not see why you are avoiding a
+relatively straighforward pattern. 
 
-Note: The requirement for a break-before-make sequence can cause
-problems for unrelated I/O streams that might use addresses
-overlapping a region of interest, because the I/O streams cannot
-always be conveniently stopped and might not tolerate translation
-faults. It is advantageous to perform live update of a block into
-smaller translations, or a set of translations into a larger block
-size."
+All you need is a shared pointer for your string and share
+it as much as possible, no? Sharing means that you elevate the reference
+counter whenever you assign to a vma and unshare when you are replacing
+the shared pointer by a different one or when vma is freed. In other
+words something like the following (pls note I have only compile tested
+it and it very likely needs tweaks here and there I just wanted to point
+the idea):
 
-Probably why the original SMMUv3.2 dirty track series requires FEAT_BBM
-as it had to do in-place atomic updates to split/collapse IO pgtables.
-Not enterily clear if HTTU Dirty access requires the same.
-
->>>> I wonder if we could start progressing the dirty tracking as a first initial series and
->>>> then have the split + collapse handling as a second part? That would be quite
->>>> nice to get me going! :D
->>>
->>> I think so, and I think we should. It is such a big problem space, it
->>> needs to get broken up.
->>
->> OK, cool! I'll stick with the same (slimmed down) IOMMU+VFIO interface as proposed in the
->> past except with the x86 support only[*]. And we poke holes there I guess.
->>
->> [*] I might include Intel too, albeit emulated only.
-> 
-> Like I said, I'd prefer we not build more on the VFIO type 1 code
-> until we have a conclusion for iommufd..
-> 
-
-I didn't quite understand what you mean by conclusion.
-
-If by conclusion you mean the whole thing to be merged, how can the work be
-broken up to pieces if we busy-waiting on the new subsystem? Or maybe you meant
-in terms of direction...
-
-I can build on top of iommufd -- Just trying to understand how this is
-going to work out.
-
-> While returning the dirty data looks straight forward, it is hard to
-> see an obvious path to enabling and controlling the system iommu the
-> way vfio is now.
-
-It seems strange to have a whole UAPI for userspace [*] meant to
-return dirty data to userspace, when dirty right now means the whole
-pinned page set and so copying the whole guest ... and the guest is
-running so we might be racing with the device changing guest pages with the
-VMM/CPU unaware of it. Even with no dwelling of IOMMU pagetables (i.e. split/collapse
-IO base pages) it would still help greatly the current status quo of copying
-the entire thing :(
-
-Hence my thinking was that the patches /if small/ would let us see how dirty
-tracking might work for iommu kAPI (and iommufd) too.
-
-Would it be better to do more iterative steps (when possible) as opposed to
-scratch and rebuild VFIO type1 IOMMU handling?
-
-	Joao
-
-[*] VFIO_IOMMU_DIRTY_PAGES{_FLAG_START,_FLAG_STOP,_FLAG_GET_BITMAP}
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 213cc569b192..689971696864 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2626,7 +2626,7 @@ static inline int vma_adjust(struct vm_area_struct *vma, unsigned long start,
+ extern struct vm_area_struct *vma_merge(struct mm_struct *,
+ 	struct vm_area_struct *prev, unsigned long addr, unsigned long end,
+ 	unsigned long vm_flags, struct anon_vma *, struct file *, pgoff_t,
+-	struct mempolicy *, struct vm_userfaultfd_ctx, const char *);
++	struct mempolicy *, struct vm_userfaultfd_ctx, struct anon_vma_name *);
+ extern struct anon_vma *find_mergeable_anon_vma(struct vm_area_struct *);
+ extern int __split_vma(struct mm_struct *, struct vm_area_struct *,
+ 	unsigned long addr, int new_below);
+@@ -3372,11 +3372,11 @@ static inline int seal_check_future_write(int seals, struct vm_area_struct *vma)
+ 
+ #ifdef CONFIG_ANON_VMA_NAME
+ int madvise_set_anon_name(struct mm_struct *mm, unsigned long start,
+-			  unsigned long len_in, const char *name);
++			  unsigned long len_in, struct anon_vma_name *name);
+ #else
+ static inline int
+ madvise_set_anon_name(struct mm_struct *mm, unsigned long start,
+-		      unsigned long len_in, const char *name) {
++		      unsigned long len_in, struct anon_vma_name *name) {
+ 	return 0;
+ }
+ #endif
+diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
+index b725839dfe71..cff619f762d0 100644
+--- a/include/linux/mm_inline.h
++++ b/include/linux/mm_inline.h
+@@ -145,45 +145,48 @@ static __always_inline void del_page_from_lru_list(struct page *page,
+  */
+ extern const char *vma_anon_name(struct vm_area_struct *vma);
+ 
+-/*
+- * mmap_lock should be read-locked for orig_vma->vm_mm.
+- * mmap_lock should be write-locked for new_vma->vm_mm or new_vma should be
+- * isolated.
+- */
+-extern void dup_vma_anon_name(struct vm_area_struct *orig_vma,
+-			      struct vm_area_struct *new_vma);
++static inline void anon_vma_name_get(struct anon_vma_name *name)
++{
++	if (!name)
++		return;
+ 
+-/*
+- * mmap_lock should be write-locked or vma should have been isolated under
+- * write-locked mmap_lock protection.
+- */
+-extern void free_vma_anon_name(struct vm_area_struct *vma);
++	kref_get(&name->kref);
++}
+ 
+-/* mmap_lock should be read-locked */
+-static inline bool is_same_vma_anon_name(struct vm_area_struct *vma,
+-					 const char *name)
++void vma_anon_name_free(struct kref *kref);
++static inline void anon_vma_name_put(struct anon_vma_name *name)
+ {
+-	const char *vma_name = vma_anon_name(vma);
++	if (!name)
++		return;
+ 
+-	/* either both NULL, or pointers to same string */
+-	if (vma_name == name)
++	kref_put(&name->kref, vma_anon_name_free);
++}
++
++static inline bool anon_vma_name_eq(struct anon_vma_name *name1, struct anon_vma_name *name2)
++{
++	if (name1 == name2)
+ 		return true;
+ 
+-	return name && vma_name && !strcmp(name, vma_name);
++	return name1 && name2 && !strcmp(name1->name, name2->name);
++}
++
++static inline void free_vma_anon_name(struct vm_area_struct *vma)
++{
++	anon_vma_name_put(vma->anon_name);
+ }
++
+ #else /* CONFIG_ANON_VMA_NAME */
+ static inline const char *vma_anon_name(struct vm_area_struct *vma)
+ {
+ 	return NULL;
+ }
+-static inline void dup_vma_anon_name(struct vm_area_struct *orig_vma,
+-			      struct vm_area_struct *new_vma) {}
+-static inline void free_vma_anon_name(struct vm_area_struct *vma) {}
+-static inline bool is_same_vma_anon_name(struct vm_area_struct *vma,
+-					 const char *name)
++static inline bool anon_vma_name_eq(struct anon_vma_name *name1, struct anon_vma_name *name2)
+ {
+ 	return true;
+ }
++static inline void free_vma_anon_name(struct vm_area_struct *vma)
++{
++}
+ #endif  /* CONFIG_ANON_VMA_NAME */
+ 
+ static inline void init_tlb_flush_pending(struct mm_struct *mm)
+diff --git a/kernel/sys.c b/kernel/sys.c
+index ecc4cf019242..662a0c8b4ceb 100644
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -2278,7 +2278,8 @@ static int prctl_set_vma(unsigned long opt, unsigned long addr,
+ {
+ 	struct mm_struct *mm = current->mm;
+ 	const char __user *uname;
+-	char *name, *pch;
++	char *uname, *pch;
++	struct anon_vma_name *vma_name = NULL;
+ 	int error;
+ 
+ 	switch (opt) {
+@@ -2296,15 +2297,17 @@ static int prctl_set_vma(unsigned long opt, unsigned long addr,
+ 					return -EINVAL;
+ 				}
+ 			}
+-		} else {
+-			/* Reset the name */
+-			name = NULL;
++
++			/* anon_vma has its own copy */
++			vma_name = anon_vma_name_alloc(name);
++			kfree(name);
++			if (!vma_name)
++				return PTR_ERR(vma_name);
+ 		}
+ 
+ 		mmap_write_lock(mm);
+-		error = madvise_set_anon_name(mm, addr, size, name);
++		error = madvise_set_anon_name(mm, addr, size, vma_name);
+ 		mmap_write_unlock(mm);
+-		kfree(name);
+ 		break;
+ 	default:
+ 		error = -EINVAL;
+diff --git a/mm/madvise.c b/mm/madvise.c
+index 5604064df464..f2f8065f67c1 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -65,7 +65,7 @@ static int madvise_need_mmap_write(int behavior)
+ }
+ 
+ #ifdef CONFIG_ANON_VMA_NAME
+-static struct anon_vma_name *anon_vma_name_alloc(const char *name)
++struct anon_vma_name *anon_vma_name_alloc(const char *name)
+ {
+ 	struct anon_vma_name *anon_name;
+ 	size_t count;
+@@ -81,7 +81,7 @@ static struct anon_vma_name *anon_vma_name_alloc(const char *name)
+ 	return anon_name;
+ }
+ 
+-static void vma_anon_name_free(struct kref *kref)
++void vma_anon_name_free(struct kref *kref)
+ {
+ 	struct anon_vma_name *anon_name =
+ 			container_of(kref, struct anon_vma_name, kref);
+@@ -103,54 +103,25 @@ const char *vma_anon_name(struct vm_area_struct *vma)
+ 	return vma->anon_name->name;
+ }
+ 
+-void dup_vma_anon_name(struct vm_area_struct *orig_vma,
+-		       struct vm_area_struct *new_vma)
+-{
+-	if (!has_vma_anon_name(orig_vma))
+-		return;
+-
+-	kref_get(&orig_vma->anon_name->kref);
+-	new_vma->anon_name = orig_vma->anon_name;
+-}
+-
+-void free_vma_anon_name(struct vm_area_struct *vma)
+-{
+-	struct anon_vma_name *anon_name;
+-
+-	if (!has_vma_anon_name(vma))
+-		return;
+-
+-	anon_name = vma->anon_name;
+-	vma->anon_name = NULL;
+-	kref_put(&anon_name->kref, vma_anon_name_free);
+-}
+-
+ /* mmap_lock should be write-locked */
+-static int replace_vma_anon_name(struct vm_area_struct *vma, const char *name)
++static int replace_vma_anon_name(struct vm_area_struct *vma, struct anon_vma_name *name)
+ {
+-	const char *anon_name;
+-
+ 	if (!name) {
+-		free_vma_anon_name(vma);
++		anon_vma_name_put(vma->anon_name);
++		vma->anon_name = NULL;
+ 		return 0;
+ 	}
+ 
+-	anon_name = vma_anon_name(vma);
+-	if (anon_name) {
+-		/* Same name, nothing to do here */
+-		if (!strcmp(name, anon_name))
+-			return 0;
+-
+-		free_vma_anon_name(vma);
+-	}
+-	vma->anon_name = anon_vma_name_alloc(name);
+-	if (!vma->anon_name)
+-		return -ENOMEM;
++	if (anon_vma_name_eq(vma->anon_name, name))
++		return 0;
+ 
++	anon_vma_name_put(vma->anon_name);
++	anon_vma_name_get(name);
++	vma->anon_name = name;
+ 	return 0;
+ }
+ #else /* CONFIG_ANON_VMA_NAME */
+-static int replace_vma_anon_name(struct vm_area_struct *vma, const char *name)
++static int replace_vma_anon_name(struct vm_area_struct *vma, struct anon_vma_name *name)
+ {
+ 	if (name)
+ 		return -EINVAL;
+@@ -165,13 +136,13 @@ static int replace_vma_anon_name(struct vm_area_struct *vma, const char *name)
+ static int madvise_update_vma(struct vm_area_struct *vma,
+ 			      struct vm_area_struct **prev, unsigned long start,
+ 			      unsigned long end, unsigned long new_flags,
+-			      const char *name)
++			      struct anon_vma_name *name)
+ {
+ 	struct mm_struct *mm = vma->vm_mm;
+ 	int error;
+ 	pgoff_t pgoff;
+ 
+-	if (new_flags == vma->vm_flags && is_same_vma_anon_name(vma, name)) {
++	if (new_flags == vma->vm_flags && anon_vma_name_eq(vma->anon_name, name)) {
+ 		*prev = vma;
+ 		return 0;
+ 	}
+@@ -1041,7 +1012,7 @@ static int madvise_vma_behavior(struct vm_area_struct *vma,
+ 	}
+ 
+ 	error = madvise_update_vma(vma, prev, start, end, new_flags,
+-				   vma_anon_name(vma));
++				   vma->anon_name);
+ 
+ out:
+ 	/*
+@@ -1234,7 +1205,7 @@ static int madvise_vma_anon_name(struct vm_area_struct *vma,
+ 		return -EBADF;
+ 
+ 	error = madvise_update_vma(vma, prev, start, end, vma->vm_flags,
+-				   (const char *)name);
++				   (struct anon_vma_name *)name);
+ 
+ 	/*
+ 	 * madvise() returns EAGAIN if kernel resources, such as
+@@ -1246,7 +1217,7 @@ static int madvise_vma_anon_name(struct vm_area_struct *vma,
+ }
+ 
+ int madvise_set_anon_name(struct mm_struct *mm, unsigned long start,
+-			  unsigned long len_in, const char *name)
++			  unsigned long len_in, struct anon_vma_name *name)
+ {
+ 	unsigned long end;
+ 	unsigned long len;
+diff --git a/mm/mlock.c b/mm/mlock.c
+index 8f584eddd305..e992755e8ffb 100644
+--- a/mm/mlock.c
++++ b/mm/mlock.c
+@@ -512,7 +512,7 @@ static int mlock_fixup(struct vm_area_struct *vma, struct vm_area_struct **prev,
+ 	pgoff = vma->vm_pgoff + ((start - vma->vm_start) >> PAGE_SHIFT);
+ 	*prev = vma_merge(mm, *prev, start, end, newflags, vma->anon_vma,
+ 			  vma->vm_file, pgoff, vma_policy(vma),
+-			  vma->vm_userfaultfd_ctx, vma_anon_name(vma));
++			  vma->vm_userfaultfd_ctx, vma->anon_name);
+ 	if (*prev) {
+ 		vma = *prev;
+ 		goto success;
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 1e8fdb0b51ed..c3b2e73d9c9a 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1031,7 +1031,7 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned long start,
+ static inline int is_mergeable_vma(struct vm_area_struct *vma,
+ 				struct file *file, unsigned long vm_flags,
+ 				struct vm_userfaultfd_ctx vm_userfaultfd_ctx,
+-				const char *anon_name)
++				struct anon_vma_name *anon_name)
+ {
+ 	/*
+ 	 * VM_SOFTDIRTY should not prevent from VMA merging, if we
+@@ -1049,7 +1049,7 @@ static inline int is_mergeable_vma(struct vm_area_struct *vma,
+ 		return 0;
+ 	if (!is_mergeable_vm_userfaultfd_ctx(vma, vm_userfaultfd_ctx))
+ 		return 0;
+-	if (!is_same_vma_anon_name(vma, anon_name))
++	if (!anon_vma_name_eq(vma->anon_name, anon_name))
+ 		return 0;
+ 	return 1;
+ }
+@@ -1084,7 +1084,7 @@ can_vma_merge_before(struct vm_area_struct *vma, unsigned long vm_flags,
+ 		     struct anon_vma *anon_vma, struct file *file,
+ 		     pgoff_t vm_pgoff,
+ 		     struct vm_userfaultfd_ctx vm_userfaultfd_ctx,
+-		     const char *anon_name)
++		     struct anon_vma_name *anon_name)
+ {
+ 	if (is_mergeable_vma(vma, file, vm_flags, vm_userfaultfd_ctx, anon_name) &&
+ 	    is_mergeable_anon_vma(anon_vma, vma->anon_vma, vma)) {
+@@ -1106,7 +1106,7 @@ can_vma_merge_after(struct vm_area_struct *vma, unsigned long vm_flags,
+ 		    struct anon_vma *anon_vma, struct file *file,
+ 		    pgoff_t vm_pgoff,
+ 		    struct vm_userfaultfd_ctx vm_userfaultfd_ctx,
+-		    const char *anon_name)
++		    struct anon_vma_name *anon_name)
+ {
+ 	if (is_mergeable_vma(vma, file, vm_flags, vm_userfaultfd_ctx, anon_name) &&
+ 	    is_mergeable_anon_vma(anon_vma, vma->anon_vma, vma)) {
+@@ -1167,7 +1167,7 @@ struct vm_area_struct *vma_merge(struct mm_struct *mm,
+ 			struct anon_vma *anon_vma, struct file *file,
+ 			pgoff_t pgoff, struct mempolicy *policy,
+ 			struct vm_userfaultfd_ctx vm_userfaultfd_ctx,
+-			const char *anon_name)
++			struct anon_vma_name *anon_name)
+ {
+ 	pgoff_t pglen = (end - addr) >> PAGE_SHIFT;
+ 	struct vm_area_struct *area, *next;
+@@ -3255,7 +3255,7 @@ struct vm_area_struct *copy_vma(struct vm_area_struct **vmap,
+ 		return NULL;	/* should never get here */
+ 	new_vma = vma_merge(mm, prev, addr, addr + len, vma->vm_flags,
+ 			    vma->anon_vma, vma->vm_file, pgoff, vma_policy(vma),
+-			    vma->vm_userfaultfd_ctx, vma_anon_name(vma));
++			    vma->vm_userfaultfd_ctx, vma->anon_name);
+ 	if (new_vma) {
+ 		/*
+ 		 * Source vma may have been merged into new_vma
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index 0138dfcdb1d8..dae529d24fa3 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -464,7 +464,7 @@ mprotect_fixup(struct vm_area_struct *vma, struct vm_area_struct **pprev,
+ 	pgoff = vma->vm_pgoff + ((start - vma->vm_start) >> PAGE_SHIFT);
+ 	*pprev = vma_merge(mm, *pprev, start, end, newflags,
+ 			   vma->anon_vma, vma->vm_file, pgoff, vma_policy(vma),
+-			   vma->vm_userfaultfd_ctx, vma_anon_name(vma));
++			   vma->vm_userfaultfd_ctx, vma->anon_name);
+ 	if (*pprev) {
+ 		vma = *pprev;
+ 		VM_WARN_ON((vma->vm_flags ^ newflags) & ~VM_SOFTDIRTY);
+-- 
+Michal Hocko
+SUSE Labs

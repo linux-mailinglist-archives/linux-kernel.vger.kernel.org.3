@@ -2,143 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6104B6A9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB32F4B6ABB
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237092AbiBOLYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 06:24:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42328 "EHLO
+        id S235895AbiBOLZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 06:25:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237056AbiBOLX6 (ORCPT
+        with ESMTP id S229597AbiBOLZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 06:23:58 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFDE10819F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 03:23:48 -0800 (PST)
+        Tue, 15 Feb 2022 06:25:17 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BB2108555
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 03:25:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644924228; x=1676460228;
+  t=1644924308; x=1676460308;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iZgAE0TK8uW8bFjvBAKwl1c+nKhdG4FK+XOowi1kxz4=;
-  b=lsZSugvzD9+TqMzN9u8++Azfxj2wM+ULD4M7t8GDvmzXTGL4ecySlO04
-   5p/dl5c8DvpvPkXYbDBOjeXNFe9qqGSS62k6/hrY2+lgll7H3EmXC4Ihn
-   5MYwNFiMUyXI7jjGgXXnd5rQhjEfkohMQU6OnXjuPwx4fLkIVYo/CL1Eq
-   ZsK1aHcqf80ciZk8zHlOZxAhQmmj0T4hRJCPsZ0rOCvap2IftgCp18acL
-   wSa5mX0NvD7jeH2sF69SWNjt+bkp+Dwhew/NssytKraGpCx38CWkcexTt
-   CliY6n6CQVhJtpjir0LW0ZKrx11AL2dbghc2liDOl5g7ZAoL303Etmztj
+  bh=Cqn2X0osSuXDH//2qQbOhV8xnDgXUM1QyR4CUXfzmQI=;
+  b=n0GpkmT7a3pxW6UslExddXGJzWZPDtisOPZGO9v0jOvlUObmYh67fRb2
+   3aIR8ho3IHIzdERRHGKTjUrM8zzK9NdtT/fEb8RIZq958lCRqg3wQ3SuK
+   2ydoOJH4/j9suo+WdcTViTz25FbabUaJWvIpVtOoHqS7NkeBytTxdXZmr
+   UGq+/kqkFyJaosffo0SwaAS4mStX7v+B5ouk7J5r1TsuDhAdbQ1Tuo05r
+   BjcdkwvSpSYSGjaGw+xg3bKAxFmTD1Im5Zg+ILDTasaXEzZWafhCSlWWZ
+   XiMbDDf/UhOCPaxE3KdXiMgg8G2oHwS6NdkFzRbIwiKpY2inT1y35nD93
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="311067941"
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="250072588"
 X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="311067941"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 03:23:48 -0800
+   d="scan'208";a="250072588"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 03:24:48 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="603763767"
+   d="scan'208";a="635815621"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 15 Feb 2022 03:23:46 -0800
+  by orsmga004.jf.intel.com with ESMTP; 15 Feb 2022 03:24:46 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nJvvu-0009av-1F; Tue, 15 Feb 2022 11:23:46 +0000
-Date:   Tue, 15 Feb 2022 19:23:39 +0800
+        id 1nJvws-0009bg-8p; Tue, 15 Feb 2022 11:24:46 +0000
+Date:   Tue, 15 Feb 2022 19:23:44 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [agd5f:drm-next 25/34]
- drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:991:3: error: implicit
- declaration of function 'DC_FP_START'
-Message-ID: <202202151850.04BAOxth-lkp@intel.com>
+To:     ckkim <changkon12@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Dongjin Kim <tobetter@gmail.com>
+Subject: [tobetter:odroid-5.17.y 9/41]
+ drivers/power/reset/odroid-reboot.c:63:6: warning: no previous prototype for
+ 'odroid_card_reset'
+Message-ID: <202202151819.zUcA2HQK-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
-head:   076172cdc7ab4983ed7596a53b95851849269e5a
-commit: af45a5fe4f0af159db23e8bf851115b61031c648 [25/34] drm/amd/display: Protect update_bw_bounding_box FPU code.
-config: riscv-randconfig-r033-20220214 (https://download.01.org/0day-ci/archive/20220215/202202151850.04BAOxth-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
+tree:   https://github.com/tobetter/linux odroid-5.17.y
+head:   992855288ffabfafb16c8ed7ce9a81fc64cfc89a
+commit: 5129b4258d6570b94abc714f4ac79508f8b7645b [9/41] ODROID-COMMON: power:reset: Add odroid support
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220215/202202151819.zUcA2HQK-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f drm-next
-        git checkout af45a5fe4f0af159db23e8bf851115b61031c648
+        # https://github.com/tobetter/linux/commit/5129b4258d6570b94abc714f4ac79508f8b7645b
+        git remote add tobetter https://github.com/tobetter/linux
+        git fetch --no-tags tobetter odroid-5.17.y
+        git checkout 5129b4258d6570b94abc714f4ac79508f8b7645b
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/power/reset/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:64:
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.h:30:
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dmub/dmub_srv.h:67:
-   drivers/gpu/drm/amd/amdgpu/../display/dmub/inc/dmub_cmd.h:2921:12: warning: variable 'temp' set but not used [-Wunused-but-set-variable]
-                   uint64_t temp;
-                            ^
->> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:991:3: error: implicit declaration of function 'DC_FP_START' [-Werror,-Wimplicit-function-declaration]
-                   DC_FP_START();
-                   ^
->> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:993:3: error: implicit declaration of function 'DC_FP_END' [-Werror,-Wimplicit-function-declaration]
-                   DC_FP_END();
-                   ^
-   1 warning and 2 errors generated.
+>> drivers/power/reset/odroid-reboot.c:63:6: warning: no previous prototype for 'odroid_card_reset' [-Wmissing-prototypes]
+      63 | void odroid_card_reset(void)
+         |      ^~~~~~~~~~~~~~~~~
+   drivers/power/reset/odroid-reboot.c: In function 'odroid_restart_probe':
+   drivers/power/reset/odroid-reboot.c:141:17: error: 'arm_pm_restart' undeclared (first use in this function); did you mean 'alarm_restart'?
+     141 |                 arm_pm_restart = do_odroid_restart;
+         |                 ^~~~~~~~~~~~~~
+         |                 alarm_restart
+   drivers/power/reset/odroid-reboot.c:141:17: note: each undeclared identifier is reported only once for each function it appears in
 
 
-vim +/DC_FP_START +991 drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c
+vim +/odroid_card_reset +63 drivers/power/reset/odroid-reboot.c
 
-   989	
-   990		if (dc->res_pool->funcs->update_bw_bounding_box) {
- > 991			DC_FP_START();
-   992			dc->res_pool->funcs->update_bw_bounding_box(dc, dc->clk_mgr->bw_params);
- > 993			DC_FP_END();
-   994		}
-   995	
-   996		/* Creation of current_state must occur after dc->dml
-   997		 * is initialized in dc_create_resource_pool because
-   998		 * on creation it copies the contents of dc->dml
-   999		 */
-  1000	
-  1001		dc->current_state = dc_create_state(dc);
-  1002	
-  1003		if (!dc->current_state) {
-  1004			dm_error("%s: failed to create validate ctx\n", __func__);
-  1005			goto fail;
-  1006		}
-  1007	
-  1008		if (!create_links(dc, init_params->num_virtual_links))
-  1009			goto fail;
-  1010	
-  1011		/* Create additional DIG link encoder objects if fewer than the platform
-  1012		 * supports were created during link construction.
-  1013		 */
-  1014		if (!create_link_encoders(dc))
-  1015			goto fail;
-  1016	
-  1017		dc_resource_state_construct(dc, dc->current_state);
-  1018	
-  1019		return true;
-  1020	
-  1021	fail:
-  1022		return false;
-  1023	}
-  1024	
+    62	
+  > 63	void odroid_card_reset(void)
+    64	{
+    65		int ret = 0;
+    66	
+    67		if ((sd_vqsw == 0) && (sd_vmmc == 0))
+    68			return;
+    69	
+    70		if (sd_vqen == 0) {
+    71			gpio_free(sd_vqsw);
+    72			gpio_free(sd_vmmc);
+    73			ret = gpio_request_one(sd_vqsw,
+    74					GPIOF_OUT_INIT_LOW, "REBOOT");
+    75			CHECK_RET(ret);
+    76			mdelay(10);
+    77			ret = gpio_direction_output(sd_vqsw, 1);
+    78			CHECK_RET(ret);
+    79			ret = gpio_request_one(sd_vmmc,
+    80					GPIOF_OUT_INIT_LOW, "REBOOT");
+    81			CHECK_RET(ret);
+    82			mdelay(10);
+    83			ret = gpio_direction_output(sd_vqsw, 0);
+    84			CHECK_RET(ret);
+    85			ret = gpio_direction_output(sd_vmmc, 1);
+    86			CHECK_RET(ret);
+    87			mdelay(5);
+    88			gpio_free(sd_vqsw);
+    89			gpio_free(sd_vmmc);
+    90		} else {
+    91			gpio_free(sd_vqsw);
+    92			gpio_free(sd_vqen);
+    93			gpio_free(sd_vmmc);
+    94	
+    95			ret = gpio_request_one(sd_vqsw,
+    96					GPIOF_OUT_INIT_LOW, "REBOOT");
+    97			CHECK_RET(ret);
+    98			ret = gpio_request_one(sd_vqen,
+    99					GPIOF_OUT_INIT_LOW, "REBOOT");
+   100			CHECK_RET(ret);
+   101			ret = gpio_request_one(sd_vmmc,
+   102					GPIOF_OUT_INIT_LOW, "REBOOT");
+   103			CHECK_RET(ret);
+   104			mdelay(100);
+   105			ret = gpio_direction_input(sd_vqen);
+   106			CHECK_RET(ret);
+   107			ret = gpio_direction_input(sd_vmmc);
+   108			CHECK_RET(ret);
+   109			ret = gpio_direction_input(sd_vqsw);
+   110			CHECK_RET(ret);
+   111			mdelay(5);
+   112			gpio_free(sd_vqen);
+   113			gpio_free(sd_vmmc);
+   114			gpio_free(sd_vqsw);
+   115		}
+   116	}
+   117	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

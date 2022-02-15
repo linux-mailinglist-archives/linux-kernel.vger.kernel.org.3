@@ -2,190 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1364B6EB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 15:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 663954B6EB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 15:18:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238577AbiBOOTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 09:19:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44562 "EHLO
+        id S238572AbiBOOSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 09:18:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbiBOOTG (ORCPT
+        with ESMTP id S235378AbiBOOSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 09:19:06 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9B6B16D3;
-        Tue, 15 Feb 2022 06:18:56 -0800 (PST)
+        Tue, 15 Feb 2022 09:18:35 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CC9B10A4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 06:18:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644934736; x=1676470736;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=orXD2LKbgOOvkF5cZIbblDrtOCqS+mecgx/2vVgqzeg=;
-  b=dQ221f7RBdHamEGjA4ZwlQzgVXMhh85r/wU7GIiJtSM59ZzbOnQijcf+
-   SkwLpwkI2XDPwf4wUZwLjkO1yYUJKarA9deXXUInvZ28dLRNrJUFv1RoL
-   omsYeVBdjJD2FKIA926ypYW2PfXulPWoSlLH515uWu4VzVXKT+dyLbwx0
-   ONHIJQPzbHu3WVLeG8R7tsiaqbQfVSS1TyQwuxHmP9hjrtNTHGBoxjNqW
-   NbTFd88KANa2siTC7B2A+Z/IUNC3KxqmsrHtRbsWwPIRTCOOImCSBaL+/
-   UkOhnlHhVcM4dEObQvZ2sqb9bpFj4Kf9hCmLUfFYSwqWUrFtnr6TrrdH0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="230987963"
+  t=1644934705; x=1676470705;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=2TDzB3yc1DJv1eV3LSYJMenEIhdyiLvMYtVL3TmCuCI=;
+  b=gWoChOgYNERfIGixpDU9gcB1BGiiIUW7Fqu6mJYqTcJw+DW75FDtbV/l
+   1ToK4u+ppccvR/kLuJu0pryvmuuSyjNRauopPI/3M+CTwNnQnV21MvmEu
+   zqZ7rwhDEvWwOaBr3qK1I0NDdhMwd/O0T2YVkUTMfTfQxGyCLALphhuqH
+   NneWGdW/OsTFpqZvdmy2ik68vYIyHpKjknoPwlEuh1YxCMRtkulCJ7Gln
+   2Mm7EIMADfDOpFuoLYPH/jmWHnf1t/VFr2+vuSU2cwdtd+zIXeBszlzuX
+   PE6R5d7l6uAihgU8ojI3x/UbmBlJmRQQ1A85R1DZSMlZ1tp8CElzfSc3R
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="249193231"
 X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="230987963"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 06:18:55 -0800
+   d="scan'208";a="249193231"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 06:18:16 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="486195062"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 15 Feb 2022 06:18:51 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nJyfL-0009k8-3w; Tue, 15 Feb 2022 14:18:51 +0000
-Date:   Tue, 15 Feb 2022 22:18:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Satya Priya <quic_c_skakit@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     kbuild-all@lists.01.org, Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Das Srinagesh <gurus@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        quic_collinsd@quicinc.com, quic_subbaram@quicinc.com,
-        quic_jprakash@quicinc.com, Satya Priya <quic_c_skakit@quicinc.com>
-Subject: Re: [PATCH V6 3/6] mfd: pm8008: Add mfd cell struct to register LDOs
-Message-ID: <202202152228.Mmfx9SWj-lkp@intel.com>
-References: <1644915231-7308-4-git-send-email-quic_c_skakit@quicinc.com>
+   d="scan'208";a="539329743"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
+  by fmsmga007.fm.intel.com with ESMTP; 15 Feb 2022 06:18:13 -0800
+Message-ID: <e31c10a2-0985-af6d-e4cd-0e7ad95fdb31@intel.com>
+Date:   Tue, 15 Feb 2022 16:18:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1644915231-7308-4-git-send-email-quic_c_skakit@quicinc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH V2 0/2] perf/x86/intel/pt: Add support for event tracing
+ and TNT disabling
+Content-Language: en-US
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        H Peter Anvin <hpa@zytor.com>
+References: <20220126104815.2807416-1-adrian.hunter@intel.com>
+ <dc5342b7-97d4-23c0-a093-1ba2dfec5ee7@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <dc5342b7-97d4-23c0-a093-1ba2dfec5ee7@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Satya,
+On 08/02/2022 08:28, Adrian Hunter wrote:
+> On 26/01/2022 12:48, Adrian Hunter wrote:
+>> Hi
+>>
+>> As of Intel SDM (https://www.intel.com/sdm) version 076, there are 2 new
+>> Intel PT features called Event Trace and TNT-Disable.
+>>
+>> Event Trace exposes details about asynchronous events such as interrupts
+>> and VM-Entry/Exit.
+>>
+>> TNT-Disable disables TNT packets to reduce the tracing overhead, but with
+>> the result that exact control flow information is lost.
+>>
+>> Tools patches are being sent in a separate patch set, but can be found
+>> here:
+>>
+>> 	https://github.com/ahunter6/linux/tree/event-trace
+>>
+>>
+>> Changes in V2:
+>>
+>> 	Add my SOB
+> 
+> Ping
 
-Thank you for the patch! Yet something to improve:
+Any comments on these patches?
 
-[auto build test ERROR on next-20220214]
-[also build test ERROR on v5.17-rc4]
-[cannot apply to robh/for-next broonie-regulator/for-next lee-mfd/for-mfd-next v5.17-rc4 v5.17-rc3 v5.17-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> 
+> 
+>>
+>>
+>> Alexander Shishkin (2):
+>>       perf/x86/intel/pt: Add a capability and config bit for event tracing
+>>       perf/x86/intel/pt: Add a capability and config bit for disabling TNTs
+>>
+>>  arch/x86/events/intel/pt.c       | 16 ++++++++++++++++
+>>  arch/x86/include/asm/intel_pt.h  |  2 ++
+>>  arch/x86/include/asm/msr-index.h |  2 ++
+>>  3 files changed, 20 insertions(+)
+>>
+>>
+>> Regards
+>> Adrian 
+>>
+> 
 
-url:    https://github.com/0day-ci/linux/commits/Satya-Priya/Add-Qualcomm-Technologies-Inc-PM8008-regulator-driver/20220215-165525
-base:    259cbfc98c55ba3b6ef6e61fb7cfc3751dfded1e
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220215/202202152228.Mmfx9SWj-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/12b686033a10eae2956b1c8436bfaa8c411baa92
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Satya-Priya/Add-Qualcomm-Technologies-Inc-PM8008-regulator-driver/20220215-165525
-        git checkout 12b686033a10eae2956b1c8436bfaa8c411baa92
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash drivers/mfd/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/mfd/qcom-pm8008.c:272:1: error: expected ',' or ';' before 'static'
-     272 | static struct i2c_driver pm8008_mfd_driver = {
-         | ^~~~~~
-   In file included from drivers/mfd/qcom-pm8008.c:7:
-   drivers/mfd/qcom-pm8008.c: In function 'pm8008_mfd_driver_init':
->> drivers/mfd/qcom-pm8008.c:279:19: error: 'pm8008_mfd_driver' undeclared (first use in this function); did you mean 'pm8008_mfd_driver_init'?
-     279 | module_i2c_driver(pm8008_mfd_driver);
-         |                   ^~~~~~~~~~~~~~~~~
-   include/linux/i2c.h:886:42: note: in definition of macro 'i2c_add_driver'
-     886 |         i2c_register_driver(THIS_MODULE, driver)
-         |                                          ^~~~~~
-   include/linux/i2c.h:954:9: note: in expansion of macro 'module_driver'
-     954 |         module_driver(__i2c_driver, i2c_add_driver, \
-         |         ^~~~~~~~~~~~~
-   drivers/mfd/qcom-pm8008.c:279:1: note: in expansion of macro 'module_i2c_driver'
-     279 | module_i2c_driver(pm8008_mfd_driver);
-         | ^~~~~~~~~~~~~~~~~
-   drivers/mfd/qcom-pm8008.c:279:19: note: each undeclared identifier is reported only once for each function it appears in
-     279 | module_i2c_driver(pm8008_mfd_driver);
-         |                   ^~~~~~~~~~~~~~~~~
-   include/linux/i2c.h:886:42: note: in definition of macro 'i2c_add_driver'
-     886 |         i2c_register_driver(THIS_MODULE, driver)
-         |                                          ^~~~~~
-   include/linux/i2c.h:954:9: note: in expansion of macro 'module_driver'
-     954 |         module_driver(__i2c_driver, i2c_add_driver, \
-         |         ^~~~~~~~~~~~~
-   drivers/mfd/qcom-pm8008.c:279:1: note: in expansion of macro 'module_i2c_driver'
-     279 | module_i2c_driver(pm8008_mfd_driver);
-         | ^~~~~~~~~~~~~~~~~
-   In file included from include/linux/device.h:32,
-                    from include/linux/acpi.h:15,
-                    from include/linux/i2c.h:13,
-                    from drivers/mfd/qcom-pm8008.c:7:
-   drivers/mfd/qcom-pm8008.c: In function 'pm8008_mfd_driver_exit':
-   drivers/mfd/qcom-pm8008.c:279:19: error: 'pm8008_mfd_driver' undeclared (first use in this function); did you mean 'pm8008_mfd_driver_exit'?
-     279 | module_i2c_driver(pm8008_mfd_driver);
-         |                   ^~~~~~~~~~~~~~~~~
-   include/linux/device/driver.h:267:24: note: in definition of macro 'module_driver'
-     267 |         __unregister(&(__driver) , ##__VA_ARGS__); \
-         |                        ^~~~~~~~
-   drivers/mfd/qcom-pm8008.c:279:1: note: in expansion of macro 'module_i2c_driver'
-     279 | module_i2c_driver(pm8008_mfd_driver);
-         | ^~~~~~~~~~~~~~~~~
-   drivers/mfd/qcom-pm8008.c: In function 'pm8008_mfd_driver_init':
-   include/linux/device/driver.h:263:1: error: control reaches end of non-void function [-Werror=return-type]
-     263 | } \
-         | ^
-   include/linux/i2c.h:954:9: note: in expansion of macro 'module_driver'
-     954 |         module_driver(__i2c_driver, i2c_add_driver, \
-         |         ^~~~~~~~~~~~~
-   drivers/mfd/qcom-pm8008.c:279:1: note: in expansion of macro 'module_i2c_driver'
-     279 | module_i2c_driver(pm8008_mfd_driver);
-         | ^~~~~~~~~~~~~~~~~
-   At top level:
-   drivers/mfd/qcom-pm8008.c:230:12: warning: 'pm8008_probe' defined but not used [-Wunused-function]
-     230 | static int pm8008_probe(struct i2c_client *client)
-         |            ^~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for SND_SOC_LPASS_RX_MACRO
-   Depends on SOUND && !UML && SND && SND_SOC && COMMON_CLK
-   Selected by
-   - SND_SOC_SC7280 && SOUND && !UML && SND && SND_SOC && SND_SOC_QCOM && (I2C && SOUNDWIRE || COMPILE_TEST
-   WARNING: unmet direct dependencies detected for SND_SOC_LPASS_TX_MACRO
-   Depends on SOUND && !UML && SND && SND_SOC && COMMON_CLK
-   Selected by
-   - SND_SOC_SC7280 && SOUND && !UML && SND && SND_SOC && SND_SOC_QCOM && (I2C && SOUNDWIRE || COMPILE_TEST
-
-
-vim +272 drivers/mfd/qcom-pm8008.c
-
-6b149f3310a466 Guru Das Srinagesh 2021-05-25  271  
-6b149f3310a466 Guru Das Srinagesh 2021-05-25 @272  static struct i2c_driver pm8008_mfd_driver = {
-6b149f3310a466 Guru Das Srinagesh 2021-05-25  273  	.driver = {
-6b149f3310a466 Guru Das Srinagesh 2021-05-25  274  		.name = "pm8008",
-6b149f3310a466 Guru Das Srinagesh 2021-05-25  275  		.of_match_table = pm8008_match,
-6b149f3310a466 Guru Das Srinagesh 2021-05-25  276  	},
-6b149f3310a466 Guru Das Srinagesh 2021-05-25  277  	.probe_new = pm8008_probe,
-6b149f3310a466 Guru Das Srinagesh 2021-05-25  278  };
-6b149f3310a466 Guru Das Srinagesh 2021-05-25 @279  module_i2c_driver(pm8008_mfd_driver);
-6b149f3310a466 Guru Das Srinagesh 2021-05-25  280  
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

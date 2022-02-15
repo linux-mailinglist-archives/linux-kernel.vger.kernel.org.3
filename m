@@ -2,143 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25ECC4B774A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB364B775B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241513AbiBOShP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 13:37:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60670 "EHLO
+        id S243118AbiBOSh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 13:37:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235305AbiBOShN (ORCPT
+        with ESMTP id S235305AbiBOShy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 13:37:13 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5105DFB6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:37:02 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21FIasTA043555;
-        Tue, 15 Feb 2022 12:36:54 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1644950214;
-        bh=ggLkBTTh/QZcYMoHa0drQ3r4e8GOr8CoOpONQ+shgLw=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=gZTGlcnLguKrMjtHXc/nY+/OsusMQMjZUxdmjtyXen9NU9HZFDF0y3E5Hi8dTpljE
-         EObwKtPmQZlVJro0BY1Wc3eE+/X/fFrdA+/13fy7NVQ8QKD4yRWF+VNk53dHNzycsa
-         8r9Kag1OZeljtXLM9wRgCKjn6164Z7L0mmIYvVyA=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21FIasXX095019
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 15 Feb 2022 12:36:54 -0600
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 15
- Feb 2022 12:36:54 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 15 Feb 2022 12:36:54 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21FIarsU026597;
-        Tue, 15 Feb 2022 12:36:54 -0600
-Date:   Wed, 16 Feb 2022 00:06:53 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     <Tudor.Ambarus@microchip.com>
-CC:     <michael@walle.cc>, <linux-mtd@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <miquel.raynal@bootlin.com>,
-        <richard@nod.at>, <vigneshr@ti.com>
-Subject: Re: [PATCH v1 03/14] mtd: spi-nor: allow a flash to define its own
- ready() function
-Message-ID: <20220215183653.6dt3hvvdajp2gld3@ti.com>
-References: <20220202145853.4187726-1-michael@walle.cc>
- <20220202145853.4187726-4-michael@walle.cc>
- <399c8ea5-e534-9da4-43c0-199e1b88bfae@microchip.com>
+        Tue, 15 Feb 2022 13:37:54 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A33414024
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:37:43 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 998CC1EC054C;
+        Tue, 15 Feb 2022 19:37:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1644950257;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=eiZd7abZTRheawir5Eg8sRvKVeTjedCspWOLi0oO0Q8=;
+        b=ZASfpJnOyyx9GrybIozgD8hHdpUS3Xz1NbNDelvsopu9Ax6a2AUExdHxr7JYDTqmIbOA+J
+        6jZnpRW0oj8IqXPoCk/6Oey3g0bgCGs+vkog26gKFyf5AB08LhLFlJwAkn3PXINPeSPbqz
+        EnjKIWbDpIice0X1kA9B+7kYIP8BQPE=
+Date:   Tue, 15 Feb 2022 19:37:38 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ross Philipson <ross.philipson@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        daniel.kiper@oracle.com, dpsmith@apertussolutions.com,
+        tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
+        luto@amacapital.net, kanth.ghatraju@oracle.com,
+        trenchboot-devel@googlegroups.com
+Subject: Re: [PATCH 1/2] x86/boot: Fix memremap of setup_indirect structures
+Message-ID: <Ygvy8j9E7WPo6dx0@zn.tnic>
+References: <1643303056-22272-1-git-send-email-ross.philipson@oracle.com>
+ <1643303056-22272-2-git-send-email-ross.philipson@oracle.com>
+ <YgabtFd4Nkpgi+oW@zn.tnic>
+ <2e584fc4-163a-0af4-abe0-9c14996918f2@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <399c8ea5-e534-9da4-43c0-199e1b88bfae@microchip.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <2e584fc4-163a-0af4-abe0-9c14996918f2@oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/22 03:05AM, Tudor.Ambarus@microchip.com wrote:
-> On 2/2/22 16:58, Michael Walle wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > Xilinx and Micron flashes have their own implementation of the
-> > spi_nor_ready() function. At the moment, the core will figure out
-> > which one to call according to some flags. Lay the foundation to
-> > make it possible that a flash can register its own ready()
-> > function.
-> > 
-> > Signed-off-by: Michael Walle <michael@walle.cc>
-> > ---
-> >  drivers/mtd/spi-nor/core.c | 4 ++++
-> >  drivers/mtd/spi-nor/core.h | 4 ++++
-> >  2 files changed, 8 insertions(+)
-> > 
-> > diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> > index c8cc906cf771..c181f2680df2 100644
-> > --- a/drivers/mtd/spi-nor/core.c
-> > +++ b/drivers/mtd/spi-nor/core.c
-> > @@ -794,6 +794,10 @@ static int spi_nor_ready(struct spi_nor *nor)
-> >  {
-> >         int sr, fsr;
-> > 
-> > +       /* flashes might override our standard routine */
+On Tue, Feb 15, 2022 at 06:34:43AM -0500, Ross Philipson wrote:
+> It can if you run out of slots in the fixed map.
+
+Right. Or if any of the checks in __early_ioremap() fail. But those
+would at least warn.
+
+> The only reason I did not check it for NULL was because it was not
+> checked elsewhere for NULL.
+
+Elsewhere in the tree or elsewhere in this file or in the setup_indirect
+adding code?
+
+> I guess there are two questions:
 > 
-> let's start comments with capital letter and put a dot at the end of
-> the sentence. s/our/the
+> 1. Should I also fix it elsewhere in the code I am touching?
 
-+1
+Yes pls.
 
-> 
-> Reviewed-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> 2. What should I do on an allocation failure? In a routine like this it
+> seems to be a critical early boot failure.
 
-With that fixed,
+How so?
 
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
+I'd expect in the case of e820__reserve_setup_data(), for example, to
+not call e820__range_update* and not have those indirect ranges present
+in the e820 map. What the user intended might not work but it'll at
+least boot instead of floating dead in the water.
 
-> > +       if (nor->params->ready)
-> > +               return nor->params->ready(nor);
-> > +
-> >         if (nor->flags & SNOR_F_READY_XSR_RDY)
-> >                 sr = spi_nor_xsr_ready(nor);
-> >         else
-> > diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-> > index 10f478547dc2..446218b0e017 100644
-> > --- a/drivers/mtd/spi-nor/core.h
-> > +++ b/drivers/mtd/spi-nor/core.h
-> > @@ -261,6 +261,9 @@ struct spi_nor_otp {
-> >   *                     SPI NOR flashes that have peculiarities to the SPI NOR
-> >   *                     standard e.g. different opcodes, specific address
-> >   *                     calculation, page size, etc.
-> > + * @ready:             (optional) flashes might use a different mechanism
-> > + *                     than reading the status register to indicate they
-> > + *                     are ready for a new command
-> >   * @locking_ops:       SPI NOR locking methods.
-> >   */
-> >  struct spi_nor_flash_parameter {
-> > @@ -282,6 +285,7 @@ struct spi_nor_flash_parameter {
-> >         int (*set_4byte_addr_mode)(struct spi_nor *nor, bool enable);
-> >         u32 (*convert_addr)(struct spi_nor *nor, u32 addr);
-> >         int (*setup)(struct spi_nor *nor, const struct spi_nor_hwcaps *hwcaps);
-> > +       int (*ready)(struct spi_nor *nor);
-> > 
-> >         const struct spi_nor_locking_ops *locking_ops;
-> >  };
-> > --
-> > 2.30.2
-> > 
-> 
+And similar approach in the other places you're touching.
+
+You could even issue a warning or so so that users at least know what's
+going on. I'd say...
+
+> I guess the original intention might have been to let it just blow up
+> since there is no recovery but that is just conjecture...
+
+The original intention?
+
+Thx.
 
 -- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

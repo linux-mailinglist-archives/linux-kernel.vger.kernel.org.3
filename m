@@ -2,97 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 214ED4B70A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:39:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ABF74B7377
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240429AbiBOPkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:40:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43702 "EHLO
+        id S240211AbiBOPbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:31:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240481AbiBOPj6 (ORCPT
+        with ESMTP id S240058AbiBOPa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:39:58 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9C5BF514;
-        Tue, 15 Feb 2022 07:33:19 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id b14so58257ede.9;
-        Tue, 15 Feb 2022 07:33:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZsGLRegII5LzYpB5pLn2eLB4RyUDQ3r2yhRyz4Zymro=;
-        b=jfNjEi8CbnksxEcuUDLclL+6IjLUbKE123nwv+rvok1mLpVJRp+r0E8Ej2fX+oxXzJ
-         yB6diuj6l+jftbmTJI3LMAqckJpGuNV3FYEU//5xKnrF7aGH+RCSYf6xm8J2rUM46da8
-         S1TYcD2dVyS6I1xuZthtUfuuUz74usvZo4Mlx90aHYEa0H2JWImI+lEpvFzDGiGjR/SD
-         c9AlqopcUGDQ/H+L2xY8+IpJJq8u7j2b7j7M27GfJ3RrXQm6AvgTVSOQSvdlaRkU3VLz
-         n6tY8IdGWw7jK62SI6SmJlzzFlil+bwvgHyvqF/7tRMEH9p3sX4F3yQ5mDrGJwxnMfwH
-         SATg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZsGLRegII5LzYpB5pLn2eLB4RyUDQ3r2yhRyz4Zymro=;
-        b=MVh3E/AuoJpSYgw/8NcvcutEOakpnjxEHyOxan+mDFsp27PzOKZGDtbWCIlfQQ+uhi
-         QQTLBdF8hvatxHdVdkJEBAZdPH3w4EH6yL0O5EGKZoHEp7FAkVJT6eyZyxcIBLUcECNC
-         YKmFquF+U6d/h8PUvcfo/wmdmuZ7BrMXTzm6juIyF4BKwvhGaqWNFnduiXD6fD0KtAXt
-         LOLXR5vqo5NL6hll03yp4+7otuP3dIPOEZO3gmWhYoFNZ2GD8SSEprVIkxzxDMFPIh4W
-         VfOyhyiNWZoMcQOXIpIW4LNmejmntPQpSuZzMK9z09DR+4+pzSCaGuNj0fcHkjxWDOOl
-         RqMA==
-X-Gm-Message-State: AOAM530jA++WYvi2GFSnatKNHps1zCW1OYjFIuerQsGYwZReLPBdEDy2
-        HMh/mMulVm06d6MC+QwNK5XTJH6PG5A9YL9Vq+lzvVVjTlo=
-X-Google-Smtp-Source: ABdhPJx0iQBEjNIc0Q8xmP1W7X7hBCZCJz9B4zqeyE+5FeHf3/ETNGTJUXd0iuv8b/zzGZWu/aRpf1HbvXA8SSNqgaQ=
-X-Received: by 2002:aa7:c395:: with SMTP id k21mr4518413edq.436.1644939196400;
- Tue, 15 Feb 2022 07:33:16 -0800 (PST)
+        Tue, 15 Feb 2022 10:30:26 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54F1C0849
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:28:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1644938934; x=1676474934;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CNkkyV8OXoISEdxMr9xw0emMq/NP2qfPJ4QtHLz9mWU=;
+  b=IxWYzCx6q1I45MBnQ0GnLdIJYc0coIsTUjbvI3VuxgqvFY0Qu293Sx5z
+   sY7fbiTzKvgCXl3q+yDl3xGtqoQjZAeJjea91Zu7ETSMkeEg5fpOpw9uF
+   RjCndCKep1WzX2yiRNYVt+Zgr7aZ65VxtvvugUuWkY2C133yVopfeLYhu
+   ttgxT9OS9UJRRaoz9JF7DK2IfJ2LeRPUWz8zFUZ/wDqkYfN16GC4YdQ29
+   V8kK4aoiMTB4vfzOYh3LrYvarZ7VZtmpNARVNgFXSoJpl12qXgpYaNksa
+   NWItk3vl6WIuvDelFLPqJ5Wpi+uu8qANStcyxnaa7fWST47m7HZYHQefF
+   w==;
+IronPort-SDR: nXKiRn6I5wtM0Aid4B0KMR91QqOHjFsXR5wHKJ0YW3JLBCKqHmGKgqH39/TbMShUQvwLnOTh2u
+ Ap5iXJe+XReFF5Od34mGEfcq4R5PEKu9MqnDBt3Z3M5vMT0scg5UYIQvOjwMWKKtRIF2TP8B8I
+ 6q6t7KOESiGqUzVba+6gjRtJ5e8iQO4vrNSNgQQ3qYdueaYaJyG8d2wSBo2urlLBq4uVb9Uahw
+ soC4HQgIz7dGmYsfwUQqbcxJpADJQLYLTtbcb9h23jyo5SmJ7g7N7EHBtMF4wiUPo3tQSBc8UL
+ LJBp5zvvz1X1f19aESq++xqS
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="146046829"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Feb 2022 08:28:53 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 15 Feb 2022 08:28:53 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Tue, 15 Feb 2022 08:28:48 -0700
+From:   <conor.dooley@microchip.com>
+To:     <aou@eecs.berkeley.edu>, <paul.walmsley@sifive.com>,
+        <palmer@dabbelt.com>, <arnd@arndb.de>, <olof@lixom.net>,
+        <linux-riscv@lists.infradead.org>
+CC:     <robh+dt@kernel.org>, <cyril.jean@microchip.com>,
+        <daire.mcnamara@microchip.com>, <lewis.hanly@microchip.com>,
+        <jassisinghbrar@gmail.com>, <j.neuschaefer@gmx.net>,
+        <sfr@canb.auug.org.au>, <damien.lemoal@wdc.com>,
+        <atishp@atishpatra.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <ludovic.desroches@microchip.com>,
+        <claudiu.beznea@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Conor Dooley" <conor.dooley@microchip.com>
+Subject: [PATCH v3 0/1] soc: add microchip polarfire soc system controller
+Date:   Tue, 15 Feb 2022 15:31:53 +0000
+Message-ID: <20220215153153.4136503-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220215042011.2266897-1-kai.heng.feng@canonical.com>
- <CAHp75VfBQPgrbuxazuoyDbFtGZR=rU5wqPhSXhkoiA_2HR1EHA@mail.gmail.com> <CAAd53p6tjWtKSqDDG_hjbFGKeR7-L3uYwgOTRNHfwAhmE8nV+g@mail.gmail.com>
-In-Reply-To: <CAAd53p6tjWtKSqDDG_hjbFGKeR7-L3uYwgOTRNHfwAhmE8nV+g@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 15 Feb 2022 17:31:48 +0200
-Message-ID: <CAHp75Vdsd1sfDfvc=mutGGR8d4G9Q2b1t_m+Z=cDVkLhmzPU3Q@mail.gmail.com>
-Subject: Re: [PATCH v3] iio: accel: adxl345: Add ACPI HID table
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 1:30 PM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
-> On Tue, Feb 15, 2022 at 4:28 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Tue, Feb 15, 2022 at 6:20 AM Kai-Heng Feng
-> > <kai.heng.feng@canonical.com> wrote:
+From: Conor Dooley <conor.dooley@microchip.com>
 
-...
+Since I submitted version 1 of this driver, I attempted to upstream
+bindings for devices dependant on the system controller [0]. In that
+process, Rob said that since they were devices with no resources,
+other than a reference to the system controller, the devices should
+not be in the device tree & instead they should be created by the
+system controller (which it now does).
 
-> > > +       { "ADS0345:00", ADXL345 },
-> >
-> > This is wrong. First of all, on the left side you put the device
-> > instance name (which must not be in the ID tables, since the device
-> > instance name is "ID + instance number"). Second, the motivation of
-> > this is not clear, if the device is enumerated by ACPI, why do you
-> > care about board code?
->
-> I was uncertain on this at first, but later I saw some drivers use
-> this form (*:00) too, so I just followed through.
+Since the sub devices using mpfs_sys_controller_get will now have the
+system controller as their parent, this function now just checks if the
+parent device is compatible. If the parent is compatible, the sub-
+device then attempts to register as a consumer of the system controller
 
-Those "drivers" are actually so called board files, i.o.w. hard coded
-pieces of what firmware(s) missed. That's why they are using device
-instance name(s) instead of the device IDs.
+@Arnd Hopefully this clears up the issues you had with reference
+counting & the lack of checks as to whether the device found by
+mpfs_sys_controller_get was in fact a system controller.
+
+Depends on [0] to change the compatible string in the dt-binding.
+Thanks,
+Conor.
+
+Changes since v2:
+- system controller is no longer an mfd, system controller now creates
+  sub devices for itself.
+- specify that a mpfs_mss_msg is used in mpfs_blocking_transaction
+  rather than using a void pointer.
+- as the subdevices are now all created by the system controller, the
+  get() function now checks that the requesting device's parent is
+  compatible.
+- mpfs_sys_controller_get now passes a pointer to the device that is
+  trying to register as a consumer rather than a device node.
+
+Changes since v1:
+- system controller is now an mfd
+- parentage is now used to get the device node on the system controller
+- mpfs_sys_controller_get() now updates the reference count
+- "polarfire-soc" in compat string changed to "mpfs"
+
+[0] https://lore.kernel.org/linux-riscv/20220214135840.168236-1-conor.dooley@microchip.com/
+
+Conor Dooley (1):
+  soc: add microchip polarfire soc system controller
+
+ drivers/soc/Kconfig                         |   1 +
+ drivers/soc/Makefile                        |   1 +
+ drivers/soc/microchip/Kconfig               |  10 +
+ drivers/soc/microchip/Makefile              |   1 +
+ drivers/soc/microchip/mpfs-sys-controller.c | 194 ++++++++++++++++++++
+ include/soc/microchip/mpfs.h                |   4 +-
+ 6 files changed, 209 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/soc/microchip/Kconfig
+ create mode 100644 drivers/soc/microchip/Makefile
+ create mode 100644 drivers/soc/microchip/mpfs-sys-controller.c
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.35.1
+

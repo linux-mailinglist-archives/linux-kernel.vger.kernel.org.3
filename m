@@ -2,104 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DAF4B7229
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E81814B7331
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:43:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240258AbiBOQOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:14:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53208 "EHLO
+        id S241397AbiBOQPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:15:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241381AbiBOQOB (ORCPT
+        with ESMTP id S239004AbiBOQPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:14:01 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D29E02D6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:13:51 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id b5so19013155qtq.11
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:13:50 -0800 (PST)
+        Tue, 15 Feb 2022 11:15:01 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BB7E02F5;
+        Tue, 15 Feb 2022 08:14:51 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id p9so12448704wra.12;
+        Tue, 15 Feb 2022 08:14:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ypn/aYhmXOciMlfqAueEjzIefCRey5nIsCwsmgIaFyY=;
-        b=M05Qq9KLA8RA/K4rgZh8Lyc5eMuEySX+Ry8WzMfSzm5+VZy2e572WzK5dx7cb9f/s2
-         GcX0Uukp2v8wej6E1jLCuPNVOXZpVrqdwy9JNOJjadsWI3IU/34PPNDVdnu80pyOhVcs
-         dKaSNObBW0j+55nBBPpEao2XIqvb7u12hlmcND1Mdk+YBSiZoLsDA4vicbMcAkyNumyk
-         DhYryeQROUrahMCawnYnQHjjaASneqPFZpBTRoC2bxoA1o0Gs5z4da/PCYTDjWa9Uq35
-         XJe9Zt+iNzaH0vssCa847XcKyINklOusgsgty68boxvD5NTnJXq3IMlbxcLbFtje+ogh
-         A5nQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=csNEKQKXZYs0Wbz+5J/UFBhsGdQCNtddqOoWSf3udBI=;
+        b=VZ17/1E4s5XtF6FccGvOhBXz1wTXHx2fZTDNfE3vILbAIRMnAarfPPoyoh5VzG/MxU
+         IOYglvaCFW7BRkmJWr69+DCG9MdH1KRXNo1hTok+9F+ndUZb+cw/EZAPB53lB0KOMMvd
+         678woltWRAJcJK/myzihqagX220S/me09FooDgOTYgWBL412by8XlDhmGECO+C5iG1vs
+         wW1AJjIlxzPUoasVOV2+kBrPCd9fKZj73eGBEEtaMi7DIxQ3wM0jlECoXSz2BbF9rHPv
+         2ghBOtqsH7YPkeezizuFl/p37DGK7yxUhvg6BKo879YvWuMO0t95XPe09u2cf24LAUdz
+         aNdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ypn/aYhmXOciMlfqAueEjzIefCRey5nIsCwsmgIaFyY=;
-        b=XUiG/ceUnn5oiLqPFNK5liFwCrEUFy8EVasjHSkk6OKP3mmv0cEvDuSH7X6qSCH1Ck
-         46WsQaQj3xGfPSxkroE7Ci/IkN1qTTq7BNDYBcGvXQX/Dq9heW8WQF+HcUuqAUv/I9Cy
-         re0YVezdmgFMdWhg5SER2HztlH//iS38pe6wEAxAF5GOy4tLkiQbAMi/X25rayF/qy+w
-         wMHewsWAp21TB0oEfxdELeZGEHSjz688u0U4N9ngjJhyNev5zodco/PgZbpmQrrcgF2x
-         KejimWAlP6/mxurt54Q9oj+wgxN10yzpPLXlOPWjLR8b0rEPuicyK4VbOhyrMirtpIik
-         Udyg==
-X-Gm-Message-State: AOAM533/05p/gUeeeCFdcwZLF8GGqVWCi9uon6c79ecmGtL3wXnHqEz6
-        Rsg/RWK7wgaA69sz7jsxt+1q+A==
-X-Google-Smtp-Source: ABdhPJzckpK/aLbVPcqxjj0MTWY9sCyxas2zreD1jK0ipt/37kTFObu882WaGo6NHke162vUMLOVbw==
-X-Received: by 2002:ac8:5d8a:: with SMTP id d10mr3252911qtx.279.1644941630211;
-        Tue, 15 Feb 2022 08:13:50 -0800 (PST)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id s9sm16641251qki.101.2022.02.15.08.13.49
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=csNEKQKXZYs0Wbz+5J/UFBhsGdQCNtddqOoWSf3udBI=;
+        b=HX5DA29/ReSkwRa4tzYVazuacSEGxTlJtKWCVcirYROcCFpbmcTYky1JyiLaIDQvAQ
+         je4wqS253C1mFPz+jEHdaoAd/tvAThHOgZl7R6MxPjLZ1Vm5P5Ho5w4PZgCacHjOH4Ef
+         Lyb8KoyPHpO5SMuAWMgcaJGn29sq/Xqvb3N/z/Ne0oqPaJ7rc2zWWHD/oIurmzdwauTS
+         inZh27yuMgrUym0JCT0RHdXtOUiMmH/kALORmrbWWHnyXvwegcGFQMizdG0/IjmLj/+F
+         BetkPAavcmrWqX14oTH24SRJMzWRlavXIgzUFG5058mwXT6SuuG8pgKjYB1LVbh/RjCf
+         ql8A==
+X-Gm-Message-State: AOAM532SQCuyWR2C4DNNKIHU9YNOJVqW0yk82/+vn9KETL/aMarg+slp
+        0hyoX5dvHR7EnSPpdmLUQxY=
+X-Google-Smtp-Source: ABdhPJzGh6/pqxlCvaSd1g20cak5NbmWfQheK5MBk8dXKrdh23qIZCAK5ZLWnt0SRgOimwDeSP3qfw==
+X-Received: by 2002:a05:6000:24a:: with SMTP id m10mr3859914wrz.367.1644941689955;
+        Tue, 15 Feb 2022 08:14:49 -0800 (PST)
+Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id l26sm14990465wmp.31.2022.02.15.08.14.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 08:13:49 -0800 (PST)
-Date:   Tue, 15 Feb 2022 11:13:48 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, CGEL <cgel.zte@gmail.com>,
-        Minchan Kim <minchan@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH] mm: page_io: fix psi memory pressure error on cold
- swapins
-Message-ID: <YgvRPJh44VkX1+JV@cmpxchg.org>
-References: <20220214214921.419687-1-hannes@cmpxchg.org>
- <20220214144805.fa389f495fdfb07b40526f70@linux-foundation.org>
+        Tue, 15 Feb 2022 08:14:49 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        hverkuil-cisco@xs4all.nl, jonas@kwiboo.se, nicolas@ndufresne.ca,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com, knaerzche@gmail.com, jc@kynesim.co.uk,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: Re: [RFC v2 0/8] Move HEVC stateless controls out of staging
+Date:   Tue, 15 Feb 2022 17:14:48 +0100
+Message-ID: <14572059.tv2OnDr8pf@kista>
+In-Reply-To: <20220215110103.241297-1-benjamin.gaignard@collabora.com>
+References: <20220215110103.241297-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220214144805.fa389f495fdfb07b40526f70@linux-foundation.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 02:48:05PM -0800, Andrew Morton wrote:
-> On Mon, 14 Feb 2022 16:49:21 -0500 Johannes Weiner <hannes@cmpxchg.org> wrote:
-> 
-> > Once upon a time, all swapins counted toward memory pressure[1]. Then
-> > Joonsoo introduced workingset detection for anonymous pages and we
-> > gained the ability to distinguish hot from cold swapins[2][3]. But we
-> > failed to update swap_readpage() accordingly, and now we account
-> > partial memory pressure in the swapin path of cold memory.
-> > 
-> > Not for all situations - which adds more inconsistency: paths using
-> > the conventional submit_bio() and lock_page() route will not see much
-> > pressure - unless storage itself is heavily congested and the bio
-> > submissions stall. ZRAM and ZSWAP do most of the work directly from
-> > swap_readpage() and will see all swapins reflected as pressure.
-> > 
-> > Restore consistency by making all swapin stall accounting conditional
-> > on the page actually being part of the workingset.
-> 
-> Does this have any known runtime effects?  If not, can we
-> hazard a guess?
+Hi Benjamin!
 
-hm, how about this paragrah between "not for all situations" and
-"restore consistency":
+Dne torek, 15. februar 2022 ob 12:00:55 CET je Benjamin Gaignard napisal(a):
+> This series aims to make HEVC uapi stable and usable for hardware
+> decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
+> and 2 out of the tree drivers (rkvdec and RPI).
+> 
+> The 3 first patches are from Hans to implement v4l2 dynamic control
+> feature which is need by patch 7 for 
+V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET
+> definition.
 
-IOW, a workload doing cold swapins could see little to no pressure
-reported with on-disk swap, but potentially high pressure with a zram
-or zswap backend. That confuses any psi-based health monitoring, load
-shedding, proactive reclaim, or userspace OOM killing schemes that
-might be in place for the workload.
+Great, I'll test this soon on Cedrus, but I can't promise it will be this 
+week.
+
+> 
+> Patch 4 move the existing uapi to stable, including definitions renaming 
+> and CID number change to fit with v4l2 naming.
+
+This should be last patch in series, otherwise you're changing stable uAPI, 
+even if only few commits later.
+
+Best regards,
+Jernej
+
+> 
+> Patches 5 and 7 add fields needed for rkvdec and RPI decoders.
+> 
+> Patches 6 is cleaning up the uapi of useless field.
+> Patches 8 change one field description and name to define offset by
+> bytes rather than by bits
+> 
+> Benjamin
+> 
+> Benjamin Gaignard (5):
+>   media: uapi: Move HEVC stateless controls out of staging
+>   media: uapi: Add fields needed for RKVDEC driver
+>   media: uapi: Remove bit_size field from v4l2_ctrl_hevc_slice_params
+>   media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET control
+>   media: uapi: Change data_bit_offset definition
+> 
+> Hans Verkuil (3):
+>   videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
+>   v4l2-ctrls: add support for dynamically allocated arrays.
+>   vivid: add dynamic array test control
+> 
+>  .../userspace-api/media/drivers/hantro.rst    |   5 -
+>  .../media/v4l/ext-ctrls-codec.rst             |  58 ++--
+>  .../media/v4l/vidioc-queryctrl.rst            |   8 +
+>  .../media/test-drivers/vivid/vivid-ctrls.c    |  15 ++
+>  drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 ++++++--
+>  drivers/media/v4l2-core/v4l2-ctrls-core.c     | 182 ++++++++++---
+>  drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  32 +--
+>  drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
+>  drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
+>  drivers/staging/media/hantro/hantro_drv.c     |  27 +-
+>  drivers/staging/media/hantro/hantro_hevc.c    |   8 +-
+>  drivers/staging/media/sunxi/cedrus/cedrus.c   |  24 +-
+>  .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
+>  .../staging/media/sunxi/cedrus/cedrus_h265.c  |  13 +-
+>  include/linux/hantro-media.h                  |  17 ++
+>  include/media/hevc-ctrls.h                    | 250 ------------------
+>  include/media/v4l2-ctrls.h                    |  48 +++-
+>  include/uapi/linux/v4l2-controls.h            | 224 ++++++++++++++++
+>  include/uapi/linux/videodev2.h                |   8 +
+>  19 files changed, 640 insertions(+), 408 deletions(-)
+>  create mode 100644 include/linux/hantro-media.h
+>  delete mode 100644 include/media/hevc-ctrls.h
+> 
+> -- 
+> 2.32.0
+> 
+> 
+> 
+
+

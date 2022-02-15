@@ -2,49 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584974B625A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 06:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A299E4B625B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 06:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232748AbiBOFSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 00:18:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49928 "EHLO
+        id S232870AbiBOFUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 00:20:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbiBOFSR (ORCPT
+        with ESMTP id S229693AbiBOFUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 00:18:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E30985A3;
-        Mon, 14 Feb 2022 21:18:07 -0800 (PST)
+        Tue, 15 Feb 2022 00:20:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D749DD57;
+        Mon, 14 Feb 2022 21:20:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 33F52B817B0;
-        Tue, 15 Feb 2022 05:18:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7D1CC340EC;
-        Tue, 15 Feb 2022 05:18:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8148961312;
+        Tue, 15 Feb 2022 05:20:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DB316C340F1;
+        Tue, 15 Feb 2022 05:20:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644902285;
-        bh=B0dV72SpkaC/hqg3i0PzRzrQESYJvg5LGjbZQ2GyHeI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DsNPRCay2L2EBDCGdxGRUbPZ8RNfMcxDib1LtwRy3xmJodn/cxNE8K7Fki3O0JeHs
-         y21gl3Lseg5Npewt/pgHL2qNGyuA4lIz2qAvsr6sQeniO+uhirk2+LSGRxFK1g2s6j
-         Hfmv4RDHMwlESivxfZlS9uuOc3C69LlDG1oiRzyGxeP/x2DMjg6MCXFePre2QmGpF6
-         Qp83riXkr9ZhqKwNMEV32wziklR9rqrrY0JFxiVapv0JHWo2YP0KGiO53CwZwU3xn8
-         shV9nVUEo23Q/a6lp+nN5gBFu3oWTX+KFHkLzt9YRewVYypDE1NbToSWf8dtv/tPL2
-         Yr9gl2awttn7A==
-Date:   Tue, 15 Feb 2022 10:48:00 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Sanjay R Mehta <sanju.mehta@amd.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, dmaengine@vger.kernel.org
-Subject: Re: [PATCH v2] dmaengine: ptdma: Fix the error handling path in
- pt_core_init()
-Message-ID: <Ygs3iKOUmCa+HtJp@matsya>
-References: <41a963a35173f89c874f5c44df5530dc09fea8da.1644044244.git.christophe.jaillet@wanadoo.fr>
+        s=k20201202; t=1644902409;
+        bh=4+pEcBL1Eid/mimbRZCtDHmyhM5IZrVdynLj15q1Zyo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=M6G6sbBhtE6O15nLGWFUDc7NfKZPnsAXtmIIsNNSefmgZQCNeXluBvoa2L53LVFon
+         7iolqLF6VR6Br7oR8y/ow0TpQa9nnny09BuS3lI1PiYz8eUaZPCJsCNcfO8jwuKGb9
+         0VpeIyNola0R3ysvbrMNAQvjt+nqu/P43NNFiMr3SIyHrx5THSXhGPOCwrbXMXxP5g
+         9difYs2XfreMmWAvqMfFF20u8K4mfgtEVRS+dyp09tZPX3llS44fFP0Qm60F3e16ZC
+         +PobzRG8g1PUKUVIS3uVbYfAQPtwAn1UwH65v1jtr4U7N4WRIr24WQyokXc861WanF
+         vJRjzNavBVZDw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BDB55E6D447;
+        Tue, 15 Feb 2022 05:20:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <41a963a35173f89c874f5c44df5530dc09fea8da.1644044244.git.christophe.jaillet@wanadoo.fr>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 net-next] net: dsa: mv88e6xxx: Fix validation of built-in
+ PHYs on 6095/6097
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164490240977.24821.13416312294211301534.git-patchwork-notify@kernel.org>
+Date:   Tue, 15 Feb 2022 05:20:09 +0000
+References: <20220213185154.3262207-1-tobias@waldekranz.com>
+In-Reply-To: <20220213185154.3262207-1-tobias@waldekranz.com>
+To:     Tobias Waldekranz <tobias@waldekranz.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        olteanv@gmail.com, linux@armlinux.org.uk, kabel@kernel.org,
+        rmk+kernel@armlinux.org.uk, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,15 +60,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05-02-22, 07:58, Christophe JAILLET wrote:
-> In order to free resources correctly in the error handling path of
-> pt_core_init(), 2 goto's have to be switched. Otherwise, some resources
-> will leak and we will try to release things that have not been allocated
-> yet.
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Sun, 13 Feb 2022 19:51:54 +0100 you wrote:
+> These chips have 8 built-in FE PHYs and 3 SERDES interfaces that can
+> run at 1G. With the blamed commit, the built-in PHYs could no longer
+> be connected to, using an MII PHY interface mode.
 > 
-> Also move a dev_err() to a place where it is more meaningful.
+> Create a separate .phylink_get_caps callback for these chips, which
+> takes the FE/GE split into consideration.
+> 
+> [...]
 
-Applied, thanks
+Here is the summary with links:
+  - [v2,net-next] net: dsa: mv88e6xxx: Fix validation of built-in PHYs on 6095/6097
+    https://git.kernel.org/netdev/net-next/c/d0b78ab1ca35
 
+You are awesome, thank you!
 -- 
-~Vinod
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

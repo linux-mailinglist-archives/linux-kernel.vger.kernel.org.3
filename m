@@ -2,66 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B4F4B60A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 03:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A564B60AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 03:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232351AbiBOCCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 21:02:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43504 "EHLO
+        id S233136AbiBOCC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 21:02:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233417AbiBOCBP (ORCPT
+        with ESMTP id S233423AbiBOCCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 21:01:15 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B18141E2B;
-        Mon, 14 Feb 2022 17:58:41 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id r144so22130896iod.9;
-        Mon, 14 Feb 2022 17:58:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MpC0HbFx2p3TGQJ1EFs6Qo70XuFPuwRTWe9faO3oyE8=;
-        b=k+g258VzTeS11yd/XrsPqAGybZ/1+tU3X4dCuKmZTwZAcpIkq1msesy42xuDExxsVM
-         3d+2p5jTm41zdPxFpVn/wp8E7cMVu+lRE9+AJjf9HuNZ9yEvX8BS1GJ++Dkem2A6mfca
-         OCbXW2GIbBcGI13j0dUAQGgYc8l77GhamnKu33hV6gGAseMu3zQwgEA1klPFBOAeAZ8b
-         qgQSKpDjTPBSAMnMg/tNcmeF6gt60Gc5EVGQ7JQKxG5LJLFffd0N8HsyXTGgCcFIqz9X
-         YSe0Q6YL6Cu2/Iby3vc0ouAQJKLJ8vSapM4VOdet0fChMyJ7caI5Y8kz9kDDzrK91p6Z
-         zJpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MpC0HbFx2p3TGQJ1EFs6Qo70XuFPuwRTWe9faO3oyE8=;
-        b=5HlGXGAGGGqPRFmtOarFywDjyXMV0uKlzgbm7mlQ9aR5iw8mfajTubloah766KhdVI
-         4U4pPnhDQkqB+BN0YFQlR4ZXIzgJjYQyaghIAyV+akKzZirO3z32WTOfvyVXTI+Sny1H
-         fbnexd3eHharaoeZr/f8EH/wqMEA4y+TQWBNJdOFIL8Jas9r0PGimaQAr5GUotUtds2K
-         /liGbnuUh53IfZ9oYeX82dRFknM7s+qndY5qBbs+PJprJUoTd64KO1qb0ujWVaLBEAAF
-         uejDkC/NPXLkvc3XUxaVrsIbxnSo63YZuZhGD8xKBMmnJxfHlzfhMPfxdaZXCsSVXzsR
-         3Mjg==
-X-Gm-Message-State: AOAM532pvCa/oWSVPsQnW7QhB1joxGHkHDR9qHuP+w33s5w/Yuvmtgjc
-        2tenytRVXTrTE1tWsGxfGDOphzNW9CVcJSdGZCMVKutr3ZxI6A==
-X-Google-Smtp-Source: ABdhPJxtWNyq+ixqkJFqqn5kgcn0Amxa9OlctSHR2PVokh2YURyq4KP5yPq5dlOf0BVCUzzI1PjB/LDn/YWQJDoKE74=
-X-Received: by 2002:a02:2b03:: with SMTP id h3mr1131758jaa.196.1644890321137;
- Mon, 14 Feb 2022 17:58:41 -0800 (PST)
+        Mon, 14 Feb 2022 21:02:43 -0500
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2104.outbound.protection.outlook.com [40.107.215.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11069898C6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 17:59:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bOEsEjMnZUdHIVJozAC9HEAL892/IpiZs78f5TEX/db3+4sFfvZVFd/Soddb9zaURSO4IvCp/fypiKVrWaK2wyshrNf+dBSLQbK+GqHYC3lhocj+EihstlMne7BBagjGXFFJSZYBdq45hP2NUfgN2+pMt38agVJW1N2rXTGZ0GY3hdyqNMdAj5IgJcVSr8eyPgv4YrtyVyBurWsn6m+5i7o70nUMNYuSkTUiyJW0lJto335bVC6paGijeIkskyAceLd7KiAvo3ff8AqOOPHT0+//Mp2NFzTw+dDeo4onHyfXe8nr5RyQgmWamuzhDv/HG3nRuTp2+bjTOEsA43e3RA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TEgS2l7JwvLEYxVw0xhJ0CQANs4fwijmiVoB0ViRTJI=;
+ b=g+vuSdnGqz1g2QGukRYlia5hP2fYu7GZ8Ok1OeJFGqlEumsFGDTUEdtoJyBxMC0QmCa3JkDV7LxxNSaUksLhl2ubaLJ1X5b/qe6k4f1tvPrg8TLvdhPWjJ0KdKDaiMtFvh4EHut5igPkt02u+UuPozSSrrVkCnbmX+VUcFP3vzFMVRwx44bl3eCRFc1OaFIMhscvmUb6GMfe8RUwaLbjSKXELFA9uw52wSwaqOrBzQbU7ZzzxsBnfLRmdapj013z0b5bXDxj2Rl5mvr8tfFguzjL2K3EDJpEbBI73/GyczW8hMAoEZWLrerTJHQOaXYSGXy9Td88an4AhKec7/ZTLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TEgS2l7JwvLEYxVw0xhJ0CQANs4fwijmiVoB0ViRTJI=;
+ b=PxOzwk0DixU0eXeynXLjhUuBUERUNqNnUBRi2xvq2TV2w5N84S6TmD4Gb/Fno5HTqLMO4Xn3Rk5uUZRsDw5gv8+vNOcdEJvcIHa4Y3ndpOEHRDFnwwAV8Pt1T4LQlx4/bYf/pgcxOt9xMIAfmMSjQe6xyjCl9yEeC+p1UHZBam8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
+ by SG2PR06MB5240.apcprd06.prod.outlook.com (2603:1096:4:1da::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.17; Tue, 15 Feb
+ 2022 01:59:40 +0000
+Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
+ ([fe80::80b4:e787:47a9:41bb]) by SL2PR06MB3082.apcprd06.prod.outlook.com
+ ([fe80::80b4:e787:47a9:41bb%4]) with mapi id 15.20.4975.019; Tue, 15 Feb 2022
+ 01:59:40 +0000
+From:   Qing Wang <wangqing@vivo.com>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     Wang Qing <wangqing@vivo.com>
+Subject: [PATCH] amdgpu: assign adev after null check
+Date:   Mon, 14 Feb 2022 17:59:21 -0800
+Message-Id: <1644890361-65071-1-git-send-email-wangqing@vivo.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-ClientProxiedBy: HK0PR01CA0056.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:a6::20) To SL2PR06MB3082.apcprd06.prod.outlook.com
+ (2603:1096:100:37::17)
 MIME-Version: 1.0
-References: <20220214092510.221474733@linuxfoundation.org>
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-From:   Zan Aziz <zanaziz313@gmail.com>
-Date:   Mon, 14 Feb 2022 18:58:30 -0700
-Message-ID: <CAFU3qoarsN9cnxhr26+aRsH7Ewu15gEVdLhRwiVTMmH=4Xgr3Q@mail.gmail.com>
-Subject: Re: [PATCH 5.16 000/203] 5.16.10-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 33efb96c-39b3-4e48-413e-08d9f026d3bf
+X-MS-TrafficTypeDiagnostic: SG2PR06MB5240:EE_
+X-Microsoft-Antispam-PRVS: <SG2PR06MB52403DEF16547A00435FE1B1BD349@SG2PR06MB5240.apcprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:415;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Mwyb7IC2tPOXkXuWftZFRcsm0PK5gygtlh4L7U0EyFQpUVUh/W/y9NSfWuztG05bwS6ervdC8yjsthHH/yGgZC11yXoV9V+TD6ot4hgUK9cpjYcIRACVQKClVnODsD0ai5F/Lmw6nDC0aYHXQR3HX3HfPz18S4rQRKByYSNkUlIPaA6Apz1tAbJKWJiXjKdbCAt92oTuS9XuF+vSIQ+45iDv4USH219+tDVoERR4TU8Ian6Fg9qT8ed/hzt1eAFdtSjh74hyIZrD+wVloHgqHInSrFbRjBbhzppPNyoFXOSRWG/V+YZ1dZKB949OYpJvSuRQGh02n26NSrp88819AR6+Wx+v0ekeexr712ZjJHz7kakamo+SOpT6uiyA+V39Z1WAB8JjG5YlEiJAwqkmsRjYc/Gw72MObjK61aosk78gpIY56CVfe/5o6t/fqL1Kh5eIAgViU5rls1iwWXiMu/KBpOcF36qLLENiwtQWuM9G9m8m5IdL30Bsyhjw1bw5VRb/NhlQSZszqpft17Pum8OfQda8dgU+61ebgBlmnjTLxcCiGNDK0Yg9y2nerM//GbdmwzYeh2qcHcCw57w266Oy0luUTVLYfzgNqYzkfOjSzfaTsJd2j+TFkOdJmgVlpLN78/+ZbpfuCw4ZNzvBqDCP6wwSh3pUTMP40BX8iYZ+2z4Qj8oP9ERvdDkntQVmFQMZWy/EW754aOaVMKP0TQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38350700002)(36756003)(66946007)(38100700002)(316002)(2616005)(6486002)(66476007)(4326008)(66556008)(107886003)(186003)(26005)(6666004)(8676002)(2906002)(6512007)(86362001)(110136005)(508600001)(5660300002)(8936002)(83380400001)(52116002)(6506007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fFHBWhIPFbckyobrPcevvMI15p8tuQKf++rjKnHfVcAZ13t6i1SGBykNL2I+?=
+ =?us-ascii?Q?gon4+9Gh8kV3j2A1FOPFxt/dhTZZDOS9DktamzpNCLEKAPRupoiWzHYdng0Y?=
+ =?us-ascii?Q?I03yDkGhqSaYom0aQgrQT3+biRrSDIlQ16+kv9fvNdNIvOkIlW8bQASyODwu?=
+ =?us-ascii?Q?AFLh4tlgm48yL0HcGHPR/X4WaeFb8hzTihgAio5ZgkWAWc7AdGFX2SAyTOzi?=
+ =?us-ascii?Q?n5Gh6Zm2jh+xcSlbCT5oeKGhepuQ7FwAiSDhFOXa8c/8uVi/SvcKs/mSZRHj?=
+ =?us-ascii?Q?JDAheEBl39JRkCaLh5BwrvdOBOVGfe25psaYdcfAYPTD589sKjGhtcjidMiP?=
+ =?us-ascii?Q?jMTEJXIDizRFGi00mwENTG518HPWX97yts9WujkO+ksNMpTnIjtp1ente9H/?=
+ =?us-ascii?Q?5rC4dqr6P2xms66t1fs5FSLPaskmNEql6xBN4iAB8vevj7DOYfCJfaN0N0a0?=
+ =?us-ascii?Q?NaiukAFbZgO+Tz4yEehQXHrpDvKDoxHx2kEJzVx92uICh3m+VJreYuu3ukHq?=
+ =?us-ascii?Q?qfUkgpSt/bk2fzii9Ig9ybaNE3hK1fkQvgRWtvrskurvNTSImfpYcC6Q20No?=
+ =?us-ascii?Q?gF8gzvsyeaGu95AEvdrmjQvgCaueBO9QGRTvYx8gRiMFbIldaumB66HAGXD0?=
+ =?us-ascii?Q?tGTqjXDlkFOhBXR0EijJf+KojBdK0jQ2qbA38lbYm9i015wOrBsz9hyUedqk?=
+ =?us-ascii?Q?kOGbHALgzWEgk/G+8xZozVoOPVj98lPMkIE5bUt5JFzuvQx1eheFfm/y2zXA?=
+ =?us-ascii?Q?TVBFWaABN3kGVQDdJ5zyuNFhP65Pl4yTGIaUZ0t1pUmNGOcNQgx7IQUUYS1M?=
+ =?us-ascii?Q?WyWLdHDVwoSAGn53BMQQmg6vU9Dbg8xOBu9vgXejLhgFV4OswbTLDrU60fC6?=
+ =?us-ascii?Q?1+YbY40m0Zmpcbs+CLBvaODf4HXawVgsRRILgUI1qkjg5nYCT1VZ+xtLkBwW?=
+ =?us-ascii?Q?o3iQObWbkGwM4PIb0sEx4M+BSTSn7ZCBRcQP7f2HNzbGoMkT9YQk+DcKFgJV?=
+ =?us-ascii?Q?BiseV10l6UsQS7EJC1I/vy4+0+AwCR84jpKzg3EzwDXhdkVddugCpiDRZFza?=
+ =?us-ascii?Q?HRrL3kL1p/rLMhu3X9nacxg4JFOqwqyZKJOD2B6ky0o5HR8eGAJndZojBirl?=
+ =?us-ascii?Q?vZ0ZJwBjiyB/i3dTpYggpDbdFqyb8t0LxDY0X/7niYnD9IFZbXAXGoLlvrDw?=
+ =?us-ascii?Q?fyXov5QI68KuAMprh5Udo1PKvKmb+vXuVUbEM7uS9Rn3rZuqjAhcxQY0OSDW?=
+ =?us-ascii?Q?7wVs+fh1dylkTUmuMcwTj8kXYoakV8/YYigippX3cJ/GXCApfKXnVy7UNhSA?=
+ =?us-ascii?Q?Yh5enOzknKq++UlWC/am+h/4xnuNQjxSZpUj0OE30zbWhQPJjKYfdwagljp4?=
+ =?us-ascii?Q?pflgQUpN4Xsj9zwQ9CGoBDgOivV11diD4orLtHOJnmS1q5FIftwYzF7PDx9B?=
+ =?us-ascii?Q?sBE8Dv0Ah7pM+wje9S4WSw6VWhla3ApOhBrylqAWqPUPv/3toEmkfa06n/w8?=
+ =?us-ascii?Q?xOPLkHLl9oQmr0j8Qb39iKyQifxWH+tJXwaXWYgXlqH72mPPAjjnboAPfZpz?=
+ =?us-ascii?Q?ezHk+b+9z1aaEUwmUHUSPIE0a+gM0FK24P0st8Eg0MJ/AYfDcFlEnH5dXtuR?=
+ =?us-ascii?Q?93NixRACXCWEGvBjhDG6JKI=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 33efb96c-39b3-4e48-413e-08d9f026d3bf
+X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2022 01:59:40.2992
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Hl9el+svImp7Ta6odRpLkKDhZK3HlnkVmjRvExjrO9dhQ7M1qe0LNxvfLW4jcuS/cfLlBRyeR0HjjpVJ54lsvQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB5240
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,48 +116,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 8:02 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.16.10 release.
-> There are 203 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.10-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+From: Wang Qing <wangqing@vivo.com>
 
-Hi Greg,
+adev should be assigned after a null check
 
-Compiled and booted on my test system Lenovo P50s: Intel Core i7
-No emergency and critical messages in the dmesg
+Signed-off-by: Wang Qing <wangqing@vivo.com>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-./perf bench sched all
-# Running sched/messaging benchmark...
-# 20 sender and receiver processes per group
-# 10 groups == 400 processes run
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c
+index 2c929fa..da114f7
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c
+@@ -259,12 +259,13 @@ static void amdgpu_ctx_fini_entity(struct amdgpu_ctx_entity *entity)
+ static int amdgpu_ctx_get_stable_pstate(struct amdgpu_ctx *ctx,
+ 					u32 *stable_pstate)
+ {
+-	struct amdgpu_device *adev = ctx->adev;
++	struct amdgpu_device *adev;
+ 	enum amd_dpm_forced_level current_level;
+ 
+ 	if (!ctx)
+ 		return -EINVAL;
+ 
++	adev = ctx->adev;
+ 	current_level = amdgpu_dpm_get_performance_level(adev);
+ 
+ 	switch (current_level) {
+@@ -290,13 +291,14 @@ static int amdgpu_ctx_get_stable_pstate(struct amdgpu_ctx *ctx,
+ static int amdgpu_ctx_set_stable_pstate(struct amdgpu_ctx *ctx,
+ 					u32 stable_pstate)
+ {
+-	struct amdgpu_device *adev = ctx->adev;
++	struct amdgpu_device *adev;
+ 	enum amd_dpm_forced_level level;
+ 	int r;
+ 
+ 	if (!ctx)
+ 		return -EINVAL;
+ 
++	adev = ctx->adev;
+ 	mutex_lock(&adev->pm.stable_pstate_ctx_lock);
+ 	if (adev->pm.stable_pstate_ctx && adev->pm.stable_pstate_ctx != ctx) {
+ 		r = -EBUSY;
+-- 
+2.7.4
 
-     Total time: 0.449 [sec]
-
-# Running sched/pipe benchmark...
-# Executed 1000000 pipe operations between two processes
-
-     Total time: 8.687 [sec]
-
-       8.687780 usecs/op
-         115104 ops/sec
-
-Tested-by: Zan Aziz <zanaziz313@gmail.com>
-
-Thanks
--Zan

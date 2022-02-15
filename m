@@ -2,90 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341894B7B49
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E8D4B7B53
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:46:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244835AbiBOXja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 18:39:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33850 "EHLO
+        id S244614AbiBOXqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 18:46:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbiBOXj2 (ORCPT
+        with ESMTP id S230361AbiBOXqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 18:39:28 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 837479A4FB
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:39:17 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A94E1396;
-        Tue, 15 Feb 2022 15:39:17 -0800 (PST)
-Received: from [10.163.46.213] (unknown [10.163.46.213])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A86FB3F66F;
-        Tue, 15 Feb 2022 15:39:15 -0800 (PST)
-Subject: Re: [PATCH V2] arm64/hugetlb: Define __hugetlb_valid_size()
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-kernel@vger.kernel.org
-References: <1644491770-16108-1-git-send-email-anshuman.khandual@arm.com>
- <20220215164851.GD8458@willie-the-truck>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <e60802f2-dfb4-3824-9b85-7770c8fede96@arm.com>
-Date:   Wed, 16 Feb 2022 05:09:12 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 15 Feb 2022 18:46:35 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9309E2C7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:46:24 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id o10so272670ilh.0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:46:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8D1y9JY/TcIg793QohbrVLgdALG9bj0J1UUN+R+ZXyQ=;
+        b=BOz+RWVBzt+//OXyKfTapB3uNHmGuMA1zjAC7Tb8wkL/9bCFb79wWGfCYyPhCB+ELd
+         fuPAa5qV5KQWaKfTKAQl0ZRqb9B2ai8PkbnB0pjiKf4HArUsyeEMZGcEHWbaTQrmMajN
+         VozDS2JfO/MkwzIZUMHByJIj65YP5IVXqNmMo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8D1y9JY/TcIg793QohbrVLgdALG9bj0J1UUN+R+ZXyQ=;
+        b=5TQZGujHgYFhhaM1Ho7cvJn1N2XPUDX4XrKNl1kv9OsK/PUbwTKpV3pqJ2qotRrwkq
+         aYizBD3y4ZYvSl0QBvKj4VBaWK/ntCpY87d89YlQDJ0oynuFMsZUJ1v63QqsLsN5twYC
+         7F72nT+EkLRBpFUOaSJu1vbdlUYlkPsiEPpUp0v0T7SoDuw3yl7fvsJp5NN/+TeOoKhK
+         sxX9tjuuM0/KayS2K/aeBpKCDAudfrJjrwQoCC3o9fGqkZwNb0mxNp9OqrGom5i3NbJ3
+         nr93BPpe0pFm5RBBgPHrUMiNALnzhr18QeJVwps56eZCRsHNDAohpi+lIop7xUv1NZtQ
+         NXaQ==
+X-Gm-Message-State: AOAM531jljAtfBP1Fl8NcfBF0/OcrDYHwGUHJqMi9o6oop8RycnzZqhc
+        DdPaZV4or1FKrcILLp6XaXodVZB9aCM+8Q==
+X-Google-Smtp-Source: ABdhPJwQxGlpouiw23jHPH4efZeIRg/I6suCeUi27E603LFILRD2xTPD8UpaGIn7nE7uVuAdXNh7ug==
+X-Received: by 2002:a92:dac7:0:b0:2bc:4110:94bd with SMTP id o7-20020a92dac7000000b002bc411094bdmr80463ilq.45.1644968783372;
+        Tue, 15 Feb 2022 15:46:23 -0800 (PST)
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com. [209.85.166.173])
+        by smtp.gmail.com with ESMTPSA id r13sm11463614ilb.35.2022.02.15.15.46.22
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 15:46:22 -0800 (PST)
+Received: by mail-il1-f173.google.com with SMTP id h11so225284ilq.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:46:22 -0800 (PST)
+X-Received: by 2002:a05:6e02:12ef:b0:2be:2c34:17b2 with SMTP id
+ l15-20020a056e0212ef00b002be2c3417b2mr108639iln.120.1644968782044; Tue, 15
+ Feb 2022 15:46:22 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220215164851.GD8458@willie-the-truck>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20211001144212.v2.1.I773a08785666ebb236917b0c8e6c05e3de471e75@changeid>
+ <CAD=FV=XU0bYVZk+-jPWZVoODW79QXOJ=NQy+RH=fYyX+LCZb2Q@mail.gmail.com> <CA+ASDXPXKVwcZGYoagJYPm4E7DzaJmEVEv2FANhLH-juJw+r+Q@mail.gmail.com>
+In-Reply-To: <CA+ASDXPXKVwcZGYoagJYPm4E7DzaJmEVEv2FANhLH-juJw+r+Q@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 15 Feb 2022 15:46:10 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=VYe1rLKANQ8eom7g8x1v6_s_OYnX819Ax4m7O3UwDHmg@mail.gmail.com>
+Message-ID: <CAD=FV=VYe1rLKANQ8eom7g8x1v6_s_OYnX819Ax4m7O3UwDHmg@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/bridge: analogix_dp: Grab runtime PM reference for DP-AUX
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Sean Paul <sean@poorly.run>, Jonas Karlman <jonas@kwiboo.se>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "# 4.0+" <stable@vger.kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
+
+On Tue, Feb 15, 2022 at 2:52 PM Brian Norris <briannorris@chromium.org> wrote:
+>
+> On Tue, Feb 15, 2022 at 1:31 PM Doug Anderson <dianders@chromium.org> wrote:
+> >
+> > Hi,
+>
+> Hi!
+>
+> > On Fri, Oct 1, 2021 at 2:50 PM Brian Norris <briannorris@chromium.org> wrote:
+> > >
+> > > If the display is not enable()d, then we aren't holding a runtime PM
+> > > reference here. Thus, it's easy to accidentally cause a hang, if user
+> > > space is poking around at /dev/drm_dp_aux0 at the "wrong" time.
+> > >
+> > > Let's get the panel and PM state right before trying to talk AUX.
+>
+> > > diff --git a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
+> > > index b7d2e4449cfa..6fc46ac93ef8 100644
+> > > --- a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
+> > > +++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
+> > > @@ -1632,8 +1632,27 @@ static ssize_t analogix_dpaux_transfer(struct drm_dp_aux *aux,
+> ...
+> > > +       pm_runtime_get_sync(dp->dev);
+> > > +       ret = analogix_dp_transfer(dp, msg);
+> > > +       pm_runtime_put(dp->dev);
+> >
+> > I've spent an unfortunate amount of time digging around the DP AUX bus
+> > recently, so I can at least say that I have some experience and some
+> > opinions here.
+>
+> Thanks! Experience is welcome, and opinions too sometimes ;)
+>
+> > IMO:
+> >
+> > 1. Don't power the panel on. If the panel isn't powered on then the DP
+> > AUX transfer will timeout. Tough nuggies. Think of yourself more like
+> > an i2c controller and of this as an i2c transfer implementation. The
+> > i2c controller isn't in charge of powering up the i2c devices on the
+> > bus. If userspace does an "i2c detect" on an i2c bus and some of the
+> > devices aren't powered then they won't be found. If you try to
+> > read/write from a powered off device that won't work either.
+>
+> I guess this, paired with the driver examples below (ti-sn65dsi86.c,
+> especially, which specifically throws errors if the panel isn't on),
+> makes some sense. It's approximately (but more verbosely) what Andrzej
+> was recommending too, I guess. It still makes me wonder what the point
+> of the /dev/drm_dp_aux<N> interface is though, because it seems like
+> you're pretty much destined to not have reliable operation through
+> that means.
+
+I can't say I have tons of history for those files. I seem to recall
+maybe someone using them to have userspace tweak the embedded
+backlight on some external DP connected panels? I think we also might
+use it in Chrome OS to update the firmware of panels (dunno if
+internal or external) in some cases too? I suspect that it works OK
+for certain situations but it's really not going to work in all
+cases...
 
 
-On 2/15/22 10:18 PM, Will Deacon wrote:
-> On Thu, Feb 10, 2022 at 04:46:10PM +0530, Anshuman Khandual wrote:
->> arch_hugetlb_valid_size() can be just factored out to create another helper
->> to be used in arch_hugetlb_migration_supported() as well. This just defines
->> __hugetlb_valid_size() for that purpose.
->>
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->> This applies on v5.17-rc3
->>
->> Changes in V2:
->>
->> - s/arm64_hugetlb_valid_size/__hugetlb_valid_size per Catalin
->> - Restored back warning in arch_hugetlb_migration_supported() per Catalin
->> - Updated the commit message subject line as required
->>
->> Changes in V1:
->>
->> https://lore.kernel.org/all/1644197468-26755-1-git-send-email-anshuman.khandual@arm.com/
->>
->>  arch/arm64/mm/hugetlbpage.c | 26 +++++++++++++-------------
->>  1 file changed, 13 insertions(+), 13 deletions(-)
->>
->> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
->> index ffb9c229610a..72ed07fe2c84 100644
->> --- a/arch/arm64/mm/hugetlbpage.c
->> +++ b/arch/arm64/mm/hugetlbpage.c
->> @@ -56,24 +56,19 @@ void __init arm64_hugetlb_cma_reserve(void)
->>  }
->>  #endif /* CONFIG_CMA */
->>  
->> +static bool __hugetlb_valid_size(unsigned long size);
-> 
-> Why not reorder the code to avoid this forward declaration?
+> Also note: I found that the AUX bus is really not working properly at
+> all (even with this patch) in some cases due to self-refresh. Not only
+> do we need the panel enabled, but we need to not be in self-refresh
+> mode. Self-refresh is not currently exposed to user space, so user
+> space has no way of knowing the panel is currently active, aside from
+> racily inducing artificial display activity.
 
-That will create more code churn, which I tried to avoid.
+I suppose this just further proves the point that this is really not a
+great interface to rely on. It's fine for debugging during hardware
+bringup and I guess in limited situations it might be OK, but it's
+really not something we want userspace tweaking with anyway, right? In
+general I expect it's up to the kernel to be controlling peripherals
+on the DP AUX bus. The kernel should have a backlight driver and
+should do the AUX transfers needed. Having userspace in there mucking
+with things is just a bad idea. I mean, userspace also doesn't know
+when a panel has been power cycled and potentially lost any changes
+that they might have written, right?
+
+I sorta suspect that most of the uses of these files are there because
+there wasn't a kernel driver and someone thought that doing it in
+userspace was the way to go?
+
+
+> But if we're OK with "just throw errors" or "just let stuff time out",
+> then I guess that's not a big deal. My purpose is to avoid hanging the
+> system, not to make /dev/drm_dp_aux<N> useful.
+>
+> > 2. In theory if the DP driver can read HPD (I haven't looked through
+> > the analogix code to see how it handles it) then you can fail an AUX
+> > transfer right away if HPD isn't asserted instead of timing out. If
+> > this is hard, it's probably fine to just time out though.
+>
+> This driver does handle HPD, but it also has overrides because
+> apparently it doesn't work on some systems. I might see if we can
+> leverage it, or I might just follow the bridge-enabled state (similar
+> to ti-sn65dsi86.c's 'comms_enabled').
+
+The "comms_enabled" is a bit ugly and is mostly there because we
+couldn't enable the bridge chip at the right time for some (probably
+unused) configuration, so I wouldn't necessarily say that it's the
+best model to follow. That being said, happy to review something if
+this model looks like the best way to go.
+
+
+> > 3. Do the "pm_runtime" calls, but enable "autosuspend" with something
+> > ~1 second autosuspend delay. When using the AUX bus to read an EDID
+> > the underlying code will call your function 16 times in quick
+> > succession. If you're powering up and down constantly that'll be a bit
+> > of a waste.
+>
+> Does this part really matter? For properly active cases, the bridge
+> remains enabled, and it holds a runtime PM reference. For "maybe
+> active" (your "tough nuggies" situation above), you're probably right
+> that it's inefficient, but does it matter, when it's going to be a
+> slow timed-out operation anyway? The AUX failure will be much slower
+> than the PM transition.
+>
+> I guess I can do this anyway, but frankly, I'll just be copy/pasting
+> stuff from other drivers, because the runtime PM documentation still
+> confuses me, and moreso once you involve autosuspend.
+
+For the ti-sn65dsi86 it could take a few ms to power it up and down
+each time and it seemed wasteful to do this over and over again.
+Agreed that pm_runtime can easily get confusing.
+
+-Doug

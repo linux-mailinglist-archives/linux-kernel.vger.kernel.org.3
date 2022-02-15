@@ -2,143 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77104B72A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE7A4B72B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241007AbiBOPvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:51:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50024 "EHLO
+        id S241339AbiBOQJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:09:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240999AbiBOPvA (ORCPT
+        with ESMTP id S238727AbiBOQJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:51:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E3155BC1D
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:50:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644940246;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dLICeKJBXSwpSnP3JhYsPftkHusO2mSaNRauGzzS1kQ=;
-        b=WyrXOidd6i59Ux4bmmVjQhC+7dbYzh9hH5dUBBgAset9mQMCru8uFG95xAPaoKY9eF0Tm0
-        /zU/9q/y7uXD5LZ5JyY9Y2EY0gSXDAN8FpX/pr7cG7EJV8852qEE/DCLMGmv4hU0vD8Kla
-        YnFqQnWhXhQFmpsgXtBJwKDqAIWzScs=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-541-NshtCdyQNHaEKWy-DfdAWA-1; Tue, 15 Feb 2022 10:50:44 -0500
-X-MC-Unique: NshtCdyQNHaEKWy-DfdAWA-1
-Received: by mail-oo1-f69.google.com with SMTP id t12-20020a4ab58c000000b002dcbee240efso12834917ooo.10
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:50:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=dLICeKJBXSwpSnP3JhYsPftkHusO2mSaNRauGzzS1kQ=;
-        b=7R+5yWeVpZRyvbL7JtmRu7bz0lRTw+TkpxQKfwRHclhOUBvjVk2nQQCEiCZ4SeVZzb
-         ATb8jr6+1q2L3fqOs93rWpb80JDUUET8OGgQOelCb45I3RhFwzZNS9cRkzssD58UqLjd
-         D1bl6DthG5Onk9tEXRbgefrDEEXplYaZ+OclqWMCt0x7uwqYK+c88FIlHkt5QKcjebtb
-         zCYF3StfuG99I3AEODEktalv8n/peoGutAS4wKlEiSI6+OuyaOOBZ+1dKjVfmo3AW/Zl
-         g+810Ri0I9F0tJmYQwspDDEuDDCnXOdH1eMsm8I6joHP20zP4Mm8KdQTKrISrsYDaGji
-         WnOA==
-X-Gm-Message-State: AOAM531baabRlOE69oaf/E9zz6OdPT3c+V/mzPiEW8d+Ki8TXtx5/vUp
-        XasaxIrQdvRaSe5zlJdbNf2t3Mz0GuJ3gxH2CI/IFdQOr8mSnLyC9Wcy0fhPPTfNO2KDI8Bl2gp
-        LNHLdIXaBX4m1wOjDPZw3rkzN
-X-Received: by 2002:a9d:a28:: with SMTP id 37mr1098484otg.225.1644940243977;
-        Tue, 15 Feb 2022 07:50:43 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzbDHT+/ZKmI2sFiyJuItMHm4fmoZcrlrJeWNTWAPast7TEOmnI7Tbs6g1lSY552mvQQLiGwA==
-X-Received: by 2002:a9d:a28:: with SMTP id 37mr1098472otg.225.1644940243774;
-        Tue, 15 Feb 2022 07:50:43 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id c14sm4375713ots.71.2022.02.15.07.50.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 07:50:42 -0800 (PST)
-Subject: Re: [PATCH v1 4/7] fpga: dfl: fix VF creation when ports have no
- local BAR space
-To:     Tianfei zhang <tianfei.zhang@intel.com>, hao.wu@intel.com,
-        mdf@kernel.org, yilun.xu@intel.com, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     corbet@lwn.net, Matthew Gerlach <matthew.gerlach@linux.intel.com>
-References: <20220214112619.219761-1-tianfei.zhang@intel.com>
- <20220214112619.219761-5-tianfei.zhang@intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <c527e9c7-4588-463b-8a6b-3db68d003d7a@redhat.com>
-Date:   Tue, 15 Feb 2022 07:50:40 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 15 Feb 2022 11:09:01 -0500
+X-Greylist: delayed 909 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 08:08:51 PST
+Received: from sender4-of-o51.zoho.com (sender4-of-o51.zoho.com [136.143.188.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D7A6C940
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:08:51 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1644940382; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=HXxz3GmPdHi9VJcULR+nRpA9zsW0rlX60sRmo8yOPf0h3QXRoVdNmSQqTJrAxriv+lFzmgr/eA8DOZRpDvCBQazkqXbUWl4fQBWXnf+P+rCpGP4q65P91EkgWpS8vP64nQ4LaKbfmnNC6qL40T403E/3D/Fyg2kpfNLQ5iW7NAU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1644940382; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=Q9rIJ8BwGgpzkzfuy7gF1S8dCxR9g5dAGFpAHarHfDU=; 
+        b=ee4ME+Qz5Pm78HW/5MLfo7HkApMsiQJnpOK4VJijt23BrczkJ2iLnKmwPoVVp8H2/kvLYv7zRJ/F4709/9IZCRj04Cstkp9aeYMVhatDD6ToQOP34xRxqqPGpSBY9c8HP9fPVGuvwbI4m4GcQ8zKesQpqIWWNWMxe3y6WPLSuCs=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=apertussolutions.com;
+        spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
+        dmarc=pass header.from=<dpsmith@apertussolutions.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1644940382;
+        s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
+        h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        bh=Q9rIJ8BwGgpzkzfuy7gF1S8dCxR9g5dAGFpAHarHfDU=;
+        b=hMiI53rETvA7McBVv/5+kyNFnRmFkD4k4nvg+oEHwMhlxhhG313puEjpfZSxuFzC
+        2AbXaQjR8tT1+3TLBEVXkgKb1/+trmA/Va7EA0AVmdKpCYcvTTfARfshzub967EiXf9
+        ty/aZPLMBmUau7nePCtU4nfZasbJXR3pwovm4x54=
+Received: from [10.10.1.138] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
+        with SMTPS id 1644940378250940.8412069904673; Tue, 15 Feb 2022 07:52:58 -0800 (PST)
+Message-ID: <d7b6434d-ceb5-fc87-4117-5b0341611535@apertussolutions.com>
+Date:   Tue, 15 Feb 2022 10:50:56 -0500
 MIME-Version: 1.0
-In-Reply-To: <20220214112619.219761-5-tianfei.zhang@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   "Daniel P. Smith" <dpsmith@apertussolutions.com>
+Subject: Re: [PATCH v4 00/14] x86: Trenchboot secure dynamic launch Linux
+ kernel support
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Ross Philipson <ross.philipson@oracle.com>,
+        trenchboot-devel@googlegroups.com, linux-kernel@vger.kernel.org,
+        x86@kernel.org, iommu@lists.linux-foundation.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        luto@amacapital.net, kanth.ghatraju@oracle.com
+References: <1630070917-9896-1-git-send-email-ross.philipson@oracle.com>
+ <CAHC9VhTJG24iG=U0geO-ZhC6OogxOu4icBrNY22+qRNpWd5PBQ@mail.gmail.com>
+ <456caf8c-b79a-e8b0-581f-3504240466ff@apertussolutions.com>
+ <CAHC9VhSZx7j2sEs1H3ON-eDoeWdtXPC7XNQcv5D1WbnP=4Lchg@mail.gmail.com>
+ <CAHC9VhThAbwuy+wXZfeMorc0QZ19FOfh0rk7uqaOj7uHvruM0Q@mail.gmail.com>
 Content-Language: en-US
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHC9VhThAbwuy+wXZfeMorc0QZ19FOfh0rk7uqaOj7uHvruM0Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Paul,
 
-On 2/14/22 3:26 AM, Tianfei zhang wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->
-> When a port is not connected to the same PCIe endpoint as
-> the FME, the port does not need to be released before being
-> virtualized.  Fix VF creation code to handle this new use
-Similar, how does this fit in with iofs, this looks like it would not be 
-valid for the existing cards
-> case.
->
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
-> ---
->   drivers/fpga/dfl.c | 11 +++++++++--
->   1 file changed, 9 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> index 26f8cf890700..cfc539a656f0 100644
-> --- a/drivers/fpga/dfl.c
-> +++ b/drivers/fpga/dfl.c
-> @@ -1705,15 +1705,22 @@ EXPORT_SYMBOL_GPL(dfl_fpga_cdev_config_ports_pf);
->   int dfl_fpga_cdev_config_ports_vf(struct dfl_fpga_cdev *cdev, int num_vfs)
->   {
->   	struct dfl_feature_platform_data *pdata;
-> -	int ret = 0;
-> +	int ret = 0, port_count = 0;
->   
->   	mutex_lock(&cdev->lock);
-> +
-> +	list_for_each_entry(pdata, &cdev->port_dev_list, node) {
-> +		if (pdata->dev)
+Apologies for missing your follow-up questions. Hopefully, the below
+answers will help.
 
-This looks wrong,
+On 1/21/22 16:39, Paul Moore wrote:
+> On Mon, Dec 6, 2021 at 3:56 PM Paul Moore <paul@paul-moore.com> wrote:
+>> On Thu, Dec 2, 2021 at 11:11 AM Daniel P. Smith
+>> <dpsmith@apertussolutions.com> wrote:
+>>> Hi Paul!
+>>
+>> /me waves
+>>
+>>> On 11/30/21 8:06 PM, Paul Moore wrote:
+>>>> On Fri, Aug 27, 2021 at 9:20 AM Ross Philipson
+>>>> <ross.philipson@oracle.com> wrote:
+>>>>>
+>>>>> The larger focus of the Trechboot project (https://github.com/TrenchBoot) is to
+>>>>> enhance the boot security and integrity in a unified manner. The first area of
+>>>>> focus has been on the Trusted Computing Group's Dynamic Launch for establishing
+>>>>> a hardware Root of Trust for Measurement, also know as DRTM (Dynamic Root of
+>>>>> Trust for Measurement).
+>>>>
+>>>> My apologies for such a late reply, but I'm just getting around to
+>>>> looking at this and I have a few questions on the basic design/flow
+>>>> (below) ...
+>>>
+>>> No worries, thank you so much for taking the time to review.
+>>>
+>>>>> The basic flow is:
+>>>>>
+>>>>>  - Entry from the dynamic launch jumps to the SL stub
+>>>>
+>>>> So I'm clear, at this point the combined stub+kernel+initramfs+cmdline
+>>>> image has already been loaded into memory and the SL stub is
+>>>> executing, yes?
+>>>
+>>> That is correct.
+>>>
+>>>> As TrenchBoot seems to be focused on boot measurement and not
+>>>> enforcing policy, I'm guessing this is considered out-of-scope (not to
+>>>> mention that the combined stub+kernel image makes this less
+>>>> interesting), but has any thought been given to leveraging the TXT
+>>>> launch control policy, or is it simply an empty run-everything policy?
+>>>
+>>> The TrenchBoot model is a bit different and takes a more flexible
+>>> approach to allow users to build tailored solutions. For instance Secure
+>>> Launch is able to be used in a configuration that is similar to tboot.
+>>> Consider the functions of tboot, it has a portion that is the
+>>> post-launch kernel that handles the handover from the ACM and a portion
+>>> that provides the Verified Launch policy engine, which is only capable
+>>> of enforcing policy on what is contained in the Multiboot chain. The
+>>> TrenchBoot approach is to introduce the Secure Launch capability into a
+>>> kernel, in this case Linux, to handle the handover from the ACM, and
+>>> then transition to a running user space that can contain a distribution
+>>> specific policy enforcement. As an example, the TrenchBoot project
+>>> contributed to the uroot project a Secure Launch policy engine which
+>>> enables the creation of an initramfs image which can then be embedded
+>>> into a minimal configuration Secure Launch Linux kernel ...
+>>
+>> Thank you for the answers, that was helpful.
+>>
+>> I think I initially misunderstood TrenchBoot, thinking that a Secure
+>> Launch'd kernel/userspace would be the "normal" OS that would
+>> transition to multi-user mode and be available for users and
+>> applications.  However, on reading your response it appears that the
+>> Secure Launch'd kernel/initramfs exists only to verify a secondary
+>> kernel/initramfs/userspace and then kexec() into that once verified.
 
-pdata->dev is dereferenced below, if there is a case were (!pdata->dev) 
-here there would be crash later.
+Yes it can be used in this manner but this is not the only way it was
+intended to be used. The goal is to enable an integrator, e.g, a distro,
+to incorporate Linux Secure Launch appropriately for their security
+needs, though ideally it would be preferred that a standardized approach
+is adopted by Linux init tooling to provide common experience across
+distros. Up until the introduction of Secure Launch, the only widely
+deployed model for DRTM has been to use tboot. Tboot is an MLE/DLME that
+functions as an exokernel and an intermediate loader for the Runtime
+OS/MLE. This motivated the first exemplar solution to be a Linux Secure
+Launch + uroot solution that would provide a similar intermediate loader
+experience, but with an expanded ability of the uroot to measure
+additional properties about a system. As a result a distro could use the
+exemplar to replace tboot, tboot VL policy tools, and VL policy file
+with a Secure Launch kernel, a u-root initrd (built-in or standalone),
+and a JSON policy file.
 
-> +			continue;
-> +		port_count++;
+By no means was Secure Launch meant to be limited to only being used as
+an intermediate loader for a Runtime OS. There is nothing that prohibits
+a Runtime Linux system to be directly started using Secure Launch.
+Though it should be noted that such a solution would need to be
+cognizant of the security gap across power-save modes, whereby the OS
+looses the positive control that it had over the system. It should also
+be mentioned that one of the motivations behind DRTM late-launch via
+kexec is to provide a path for dealing with this gap by enabling a
+late-launch to re-establish a known good state of the system. These all
+can be considered the advanced use cases for Secure Launch.
 
-how does this work when only some of the ports are handled in the new way ?
+>>> Finally if your schedule allows it and it is not too much to ask, it
+>>> would be greatly appreciated if some code review could be provided.
+>>> Otherwise thank you for taking the time that you have to review the
+>>> approach.
+>>
+>> I have to admit that I'm not sure I'm the most appropriate person to
+>> review all of the Intel TXT related assembly, but I could give it a
+>> shot as time allows.  I would think Intel would be willing to help out
+>> here if one were to ask nicely :)
+>>
+>> Beyond that, and with my new understanding of how TrenchBoot is
+>> supposed to work, I guess my only other concern is how one might
+>> verify the integrity of the Secure Launch environment on the local
+>> system during boot.  My apologies if I missed some details about that
+>> in your docs, responses, etc. but is this something that TrenchBoot is
+>> planning on addressing (or has already addressed)?
+> 
+> I wanted to follow-up on this thread just in case this last question
+> was lost ...
 
-Tom
+To continue from the answer above and lead into answering your question
+I would first point to a presentation I gave at LPC 2020, Advanced
+Applications of DRTM with TrenchBoot[1]. There I walked through how
+Secure Launch could be used for different early-launch and late-launch
+DRTM solutions. Under the late-launch solutions there is the "Secure
+Upgrade" solutions. What I laid out there is that DRTM could be used to
+launch an "Upgrade Environment" which could be locally or remotely
+verified and provide a known-good and clean environment to upgrade a
+system. What an implementation of that actually looks like can be seen
+in the presentation by Brain Payne and myself at FOSDEM 2021, Secure
+Upgrades with DRTM[2]. In this presentation the concept of a Management
+MLE is introduced to provide a secure means to upgrade the Runtime MLE
+along with its related policy and sealing measurements.
 
-> +	}
-> +
->   	/*
->   	 * can't turn multiple ports into 1 VF device, only 1 port for 1 VF
->   	 * device, so if released port number doesn't match VF device number,
->   	 * then reject the request with -EINVAL error code.
->   	 */
-> -	if (cdev->released_port_num != num_vfs) {
-> +	if (port_count && cdev->released_port_num != num_vfs) {
->   		ret = -EINVAL;
->   		goto done;
->   	}
+Now the above, like most local verification, relies on the unseal
+operation as the means of local attestation. Using unseal is strong but
+the reality is that remote attestation is stronger. The problem is that
+remote attestation is often built as an enterprise solutions requiring a
+central server/service under the control of an authority that decides
+what is good or bad. Often the average user either does not have access
+to such a service or does not desire to out-source control over their
+system. To address this I am collaborating with 3mdeb on their Fobnail
+product[3][4][5] to deliver an "attestation server in your pocket"
+capability that is accessible and usable by the average user.
 
+The answer so far is around solutions that were built from/around the
+TrenchBoot project but Linux Secure Launch does not require new, special
+user solutions. These solutions have been developed because DRTM enables
+them to exist, not that they are the only ways Linux Secure Launch can
+be utilized. For instance it is possible to setup a Clevis[6] based LUKS
+full disk encryption setup using clevis' TPM2 PIN, where the TPM2 PIN
+configuration uses the DRTM PCRs (17-22) as part of sealing PCRs for the
+encryption key.
+
+[1] https://lpc.events/event/7/contributions/739/
+[2] https://archive.fosdem.org/2021/schedule/event/firmware_suwd/
+[3] https://blog.3mdeb.com/2021/2021-10-28-fobnail-promotion/
+[4] https://blog.3mdeb.com/2021/2021-12-15-fobnail_2nd_phase/
+[5] https://fobnail.3mdeb.com/
+[6] https://github.com/latchset/clevis
+
+V/r,
+Daniel P. Smith

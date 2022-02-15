@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DFA4B5F99
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 01:54:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A46E4B5F9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 01:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232951AbiBOAxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 19:53:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48870 "EHLO
+        id S231444AbiBOAyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 19:54:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232132AbiBOAxQ (ORCPT
+        with ESMTP id S232897AbiBOAx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 19:53:16 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71E0B82DA;
-        Mon, 14 Feb 2022 16:52:44 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id z17so11830981plb.9;
-        Mon, 14 Feb 2022 16:52:44 -0800 (PST)
+        Mon, 14 Feb 2022 19:53:56 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBD8145AF8;
+        Mon, 14 Feb 2022 16:53:29 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id n19-20020a17090ade9300b001b9892a7bf9so974187pjv.5;
+        Mon, 14 Feb 2022 16:53:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=dv3kssat0G0+r/mn6cZ8o0DJdBpH+IYK8WlYpDl7VRk=;
-        b=SiiOQxbKe+V7ewVUSXRYdLtkyJFMtToCQ0GCZt4YMjE1T6aYhYrtpfQKxavLNorTDE
-         Y3/jPyC0k3UntNxxiyrIIMOvRe2MYad/kG6kRl4pr9IpKljm1P3Hg2rtKHSd2gDg9pCE
-         ublTc4KTbQc6RTf6KD2bh9xI6mJ1X6VbJgdUdjHNqzq9j3mY25Y3cCWMOjVbmKUcyIj4
-         47FKm+6D1xSvvztKjtPUhl7YO5BHtGLJuFUuY+npoWVIWnOH1F9Zuhg3q8aYKLn+QKke
-         wJTBq1Ebfmjxr8Mn3Y7QBG27CnVBTwiCQYlzMBGbqPl7/kLaUZmduGPIIwRZdhtRMg3j
-         0VPw==
+        bh=GniugwCBRot+g0mQTXvaIL/7nwoTX5TsSIiFOKffpis=;
+        b=aeWOm9QayhfBDEezRJj42f59gvzMGiJczqeKX3RBsDN77Qb8eeiXdrTqVJdCR8to3c
+         xFdjqNpsVsEZs+EXfgozb17spbUi4RQCyw3/LeT7NKZTg+RyZe5TO6FaTibiYvK5Ap/o
+         y/tPK6t6RxGCII9wAnYGhvzOc8gjEe2y2AqZ9QnKU/u4pmF1HX4JC1ySFvZwh8zIjhoc
+         x9sxPvNmYoY1SCQipP/V/d+UWhmj6EpAt7Os4rjHBJcqsftye3M9r5wng2boXRe/1LPn
+         G6bkRP+CZuTWrh47SeZdYv1OY4yAQJPCgst/YyJgCMwA9ipn0iyGvwU0BniyiOlGSfnc
+         GceA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=dv3kssat0G0+r/mn6cZ8o0DJdBpH+IYK8WlYpDl7VRk=;
-        b=bGOqIjP1gfvzmGflaIr5zOBxpdmxQokXuzf3bMWLKQMtyR3S/G46daO4gEmOPKVhEg
-         4sKaJD0pFsapcNRv2VTiI65qnjNbAMQBymVNJ0ls3P59pctdy4/kL7d9IBhoGuVgIxPn
-         Nm9qM7/eFtc5akgfgFoWJ44S8dxvpI0J7uIgl5JHor1owvufEgU7e8Fr8UQkwxnpgOf6
-         AY2na6L//DGGHmVZDMU70pccLPR6Y9NY38E8XK/SQgYg4RqbH+HhQV6Y4AXG6JlubL/I
-         1vtnOYI5vdJuxTg8ZWyMd+Exbk4LKlYCP7ltkG8X5iSjEwABwRJFSUkvqecuYqnOw5/l
-         J9CA==
-X-Gm-Message-State: AOAM532+UauM54jo0r646ICLum+cUIuotuBBDQIAsG7t2lsiiTpK4QcM
-        YqCxPoNSu17QP+rVOOQ6cnnc3orwDmY=
-X-Google-Smtp-Source: ABdhPJywNgst+GINAh2ryDsXhp3cqrx9PpdL4N7LTQmDZF2YSZEu16v/j4TLyB9n2OCN8nGWaHk/LQ==
-X-Received: by 2002:a17:90b:4ac4:b0:1ba:3b4:d3c with SMTP id mh4-20020a17090b4ac400b001ba03b40d3cmr1346349pjb.201.1644886363049;
-        Mon, 14 Feb 2022 16:52:43 -0800 (PST)
+        bh=GniugwCBRot+g0mQTXvaIL/7nwoTX5TsSIiFOKffpis=;
+        b=Y1DisF0a7fZOwdRIiDDd4qE0EDb8fX34dloKP66GyUe2Io0cS1KkjRlaPuJZeS6hu8
+         PDujBt0WXEV3Sg7dN+Oe8GQ+/yoE2PFBmtiB6/8X3eoOjtHLhhSylO51rkJY+T+AYJVa
+         r5A6VH5YWjcLY33Oexf1BzXwA9rC6pfDG9THia6sRanMorrTjxR/y0yMgDOJSxAzSwr3
+         sCqwP5tKF0zxzZTVJjPJmtwtUCQYqBLb8I696VIyagtcgIq9PsfEOP0SmvFe+6EuNLiR
+         yaRqZmKNo1Wo0Oygfp7Rv4ZUHWo4n25fg2xAn2SsHOB3HBhMYZSXSX96Q9s0wSrMvAQs
+         HwBA==
+X-Gm-Message-State: AOAM532MotMvAsGmaIsw3PKsVhZAuCHydQxFcxf74v8gn9csjkLrjIwa
+        X7OYqwHFs6LBRSvYXW/TnBM=
+X-Google-Smtp-Source: ABdhPJwf3PeI9WQkibFLQkgzCE5C/ipxp9YFytHwJ4Bs5P/fpD+4xQF/lVMKCXK7sHKKQEhWxyGXYQ==
+X-Received: by 2002:a17:902:f78c:: with SMTP id q12mr1513147pln.165.1644886408101;
+        Mon, 14 Feb 2022 16:53:28 -0800 (PST)
 Received: from localhost.localdomain (192.243.120.247.16clouds.com. [192.243.120.247])
-        by smtp.gmail.com with ESMTPSA id w198sm4014674pff.96.2022.02.14.16.52.39
+        by smtp.gmail.com with ESMTPSA id 16sm14935161pje.34.2022.02.14.16.53.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 16:52:42 -0800 (PST)
+        Mon, 14 Feb 2022 16:53:27 -0800 (PST)
 From:   davidcomponentone@gmail.com
-To:     toke@toke.dk
-Cc:     davidcomponentone@gmail.com, kvalo@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     t.schramm@manjaro.org
+Cc:     davidcomponentone@gmail.com, sre@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Yang Guang <yang.guang5@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] ath9k: use swap() to make code cleaner
-Date:   Tue, 15 Feb 2022 08:52:29 +0800
-Message-Id: <a2400dd73f6ea8672bb6e50124cc3041c0c43d6d.1644838854.git.yang.guang5@zte.com.cn>
+Subject: [PATCH] power: supply: cw2015: Fix application of sizeof to pointer
+Date:   Tue, 15 Feb 2022 08:53:11 +0800
+Message-Id: <a45647609e9d87e8fee643920b1479492956df2a.1644837424.git.yang.guang5@zte.com.cn>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -73,31 +72,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yang Guang <yang.guang5@zte.com.cn>
 
-Use the macro 'swap()' defined in 'include/linux/minmax.h' to avoid
-opencoding it.
+The coccinelle check report:
+./drivers/power/supply/cw2015_battery.c:692:12-18:
+ERROR: application of sizeof to pointer
+
+Using the real size to fix it.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
 Signed-off-by: David Yang <davidcomponentone@gmail.com>
 ---
- drivers/net/wireless/ath/ath9k/calib.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/power/supply/cw2015_battery.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/ath/ath9k/calib.c b/drivers/net/wireless/ath/ath9k/calib.c
-index 0422a33395b7..daf88330e13b 100644
---- a/drivers/net/wireless/ath/ath9k/calib.c
-+++ b/drivers/net/wireless/ath/ath9k/calib.c
-@@ -33,9 +33,7 @@ static int16_t ath9k_hw_get_nf_hist_mid(int16_t *nfCalBuffer)
- 	for (i = 0; i < ATH9K_NF_CAL_HIST_MAX - 1; i++) {
- 		for (j = 1; j < ATH9K_NF_CAL_HIST_MAX - i; j++) {
- 			if (sort[j] > sort[j - 1]) {
--				nfval = sort[j];
--				sort[j] = sort[j - 1];
--				sort[j - 1] = nfval;
-+				swap(sort[j], sort[j - 1]);
- 			}
- 		}
- 	}
+diff --git a/drivers/power/supply/cw2015_battery.c b/drivers/power/supply/cw2015_battery.c
+index 0c87ad0dbf71..db56db322b64 100644
+--- a/drivers/power/supply/cw2015_battery.c
++++ b/drivers/power/supply/cw2015_battery.c
+@@ -689,7 +689,7 @@ static int cw_bat_probe(struct i2c_client *client)
+ 	if (ret) {
+ 		/* Allocate an empty battery */
+ 		cw_bat->battery = devm_kzalloc(&client->dev,
+-					       sizeof(cw_bat->battery),
++					       sizeof(*(cw_bat->battery)),
+ 					       GFP_KERNEL);
+ 		if (!cw_bat->battery)
+ 			return -ENOMEM;
 -- 
 2.30.2
 

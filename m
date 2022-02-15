@@ -2,42 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7C04B6312
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 06:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0CF4B6257
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 06:17:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234214AbiBOFse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 00:48:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36764 "EHLO
+        id S231846AbiBOFR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 00:17:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232633AbiBOFsb (ORCPT
+        with ESMTP id S229586AbiBOFR5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 00:48:31 -0500
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DB92A71A;
-        Mon, 14 Feb 2022 21:48:21 -0800 (PST)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 815B61A185A;
-        Tue, 15 Feb 2022 06:48:20 +0100 (CET)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 49CF91A22DA;
-        Tue, 15 Feb 2022 06:48:20 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id CA843183AD07;
-        Tue, 15 Feb 2022 13:48:18 +0800 (+08)
-From:   Richard Zhu <hongxing.zhu@nxp.com>
-To:     l.stach@pengutronix.de, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, shawnguo@kernel.org
-Cc:     hongxing.zhu@nxp.com, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com
-Subject: [PATCH v3 2/2] PCI: imx6: Enable i.MX6QP PCIe power management support
-Date:   Tue, 15 Feb 2022 13:16:32 +0800
-Message-Id: <1644902192-12957-2-git-send-email-hongxing.zhu@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1644902192-12957-1-git-send-email-hongxing.zhu@nxp.com>
-References: <1644902192-12957-1-git-send-email-hongxing.zhu@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Tue, 15 Feb 2022 00:17:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CAB95491;
+        Mon, 14 Feb 2022 21:17:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E899B817B0;
+        Tue, 15 Feb 2022 05:17:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 798F4C340EC;
+        Tue, 15 Feb 2022 05:17:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644902265;
+        bh=llfRZiS0nJDKckZ14/zXDlzRmqfPP6XX4LcakrfbBOg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LMlOsBVEr6D0Df7KS6ZUmW+EzpCNdalIPA323SnSZ+MgqIVv5GuvF/i0lGwv42uYs
+         /QOZ5lLjelas5vVVWHoyA8x8xiJxHJTS6zq1h3xVWI0ngWO1jmFvlWDXayBlS7DjNF
+         cGjxXyNm1avavzhu3071BtIGRYywyVkReO9FwhY2cTNwmvi7XTmOqyse7pDq19Obnp
+         gFUZN2ShKEZEFJtgq3jTtHvZYTxIuo5v12I4YOYtrxFAJ4O+X9sAzwEi7Qe5cHW6R7
+         HVrwQy+gAI8PNnsUN5hhINNb2Mjr6gGHNPT6i99R4MZmRuaqkYlu91ustfER0jnrsk
+         qu0W+QONAUW8Q==
+Date:   Mon, 14 Feb 2022 21:17:43 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Yevhen Orlov <yevhen.orlov@plvision.eu>
+Cc:     netdev@vger.kernel.org,
+        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
+        Taras Chornyi <taras.chornyi@plvision.eu>,
+        Mickey Rachamim <mickeyr@marvell.com>,
+        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vadym Kochan <vadym.kochan@plvision.eu>,
+        Andrii Savka <andrii.savka@plvision.eu>,
+        Serhiy Boiko <serhiy.boiko@plvision.eu>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] net: marvell: prestera: Fix includes
+Message-ID: <20220214211743.6fbd3075@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220214011228.5625-1-yevhen.orlov@plvision.eu>
+References: <20220214011228.5625-1-yevhen.orlov@plvision.eu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,39 +63,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-i.MX6QP PCIe supports the reset logic, thus it can reset itself to the
-initialized state when exit from L2 or L3 states.
+On Mon, 14 Feb 2022 03:12:28 +0200 Yevhen Orlov wrote:
+> Include prestera.h in prestera_hw.h, because it may contain common
+> definitions.
 
-Enable the i.MX6QP PCIe suspend/resume operations support.
-
-Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
----
- drivers/pci/controller/dwc/pci-imx6.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-index 784801f2f9e6..62262483470a 100644
---- a/drivers/pci/controller/dwc/pci-imx6.c
-+++ b/drivers/pci/controller/dwc/pci-imx6.c
-@@ -995,6 +995,7 @@ static void imx6_pcie_pm_turnoff(struct imx6_pcie *imx6_pcie)
- 	/* Others poke directly at IOMUXC registers */
- 	switch (imx6_pcie->drvdata->variant) {
- 	case IMX6SX:
-+	case IMX6QP:
- 		regmap_update_bits(imx6_pcie->iomuxc_gpr, IOMUXC_GPR12,
- 				IMX6SX_GPR12_PCIE_PM_TURN_OFF,
- 				IMX6SX_GPR12_PCIE_PM_TURN_OFF);
-@@ -1307,7 +1308,8 @@ static const struct imx6_pcie_drvdata drvdata[] = {
- 	[IMX6QP] = {
- 		.variant = IMX6QP,
- 		.flags = IMX6_PCIE_FLAG_IMX6_PHY |
--			 IMX6_PCIE_FLAG_IMX6_SPEED_CHANGE,
-+			 IMX6_PCIE_FLAG_IMX6_SPEED_CHANGE |
-+			 IMX6_PCIE_FLAG_SUPPORTS_SUSPEND,
- 		.dbi_length = 0x200,
- 	},
- 	[IMX7D] = {
--- 
-2.25.1
-
+*May*? Is prestera_hw.h using definitions from prestera.h today?
+Dependencies between header files are best avoided completely.

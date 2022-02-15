@@ -2,93 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B28924B6425
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 08:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5DFC4B642C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 08:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233497AbiBOHSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 02:18:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57960 "EHLO
+        id S234772AbiBOHT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 02:19:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbiBOHSs (ORCPT
+        with ESMTP id S234532AbiBOHT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 02:18:48 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6A2CCC40;
-        Mon, 14 Feb 2022 23:18:39 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id f6so12435278pfj.11;
-        Mon, 14 Feb 2022 23:18:39 -0800 (PST)
+        Tue, 15 Feb 2022 02:19:56 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F7FEBDF9
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 23:19:47 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id 124so25205302ybn.11
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 23:19:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=SISmdrogFQ6Wpdq6L/IBt8vJfswq/0rWbf4LzZ48HYs=;
-        b=l4LG3XVOJMAoLEx2qWOJlsmfTxjgvWI3mcwTAl5BdAFyz0zDn8nSHxEK0vARgahUPh
-         ovVOlhmFtsMbajkVoQuLSGTf7ZqMXox8M/O+HvOX+Z0ijWSBzMCQBGivTtJRWO2HgyiK
-         1ByJPV3zdyCzp9vlIZN6RLwow8M4nbU91BXLeCuORpKtU+zKo8e/5n5cC0FODgG2fPMK
-         weDZ9utHmmdPlnu1uWJpwc6RPgImiAdX0RDzux+lZpQ91xMu6s4njWeE+yurSbRQ0ntL
-         FwGBDlEEo71rSTCWvkPXU6g0ddraFItHlCzUMxnkaLt5wWiIyx88Qsa4MfXBat7X6Cpl
-         VlwQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A6Vt6yUnPEpX+Sv2rGVstxQvcH1UBHN+lyF7dCbw5Wg=;
+        b=Nz1swxY2TPAOOH/d1/tUe5H0WXsil0iMonbnPxAEWPHYDqHdExDnTYI87V6DuusLdZ
+         alks65Ggqq1yRT/z2+zdbOhihQ6XHcD1ogET1iqj1sDd2buLYiVO/euXlajJ5iZEDOFC
+         g2F7g3fGTwHi4KACmtxBLr7rEtbS7teDNcyCU4I+YH+Yu56OyhFllkiZYFrE7EbwhOzi
+         crWCACfzkQ1HuJZ/Zf8iQ582qUh9/mcdfsP0PEAXdnARf13gFalHNAzTFOp50QjI54s3
+         zxlCQmi2c3kFY3oqRuexTDezSuj2yGpkhuu4s+uoXOtfwBbyNXCJU7K627hhwo6SEA+6
+         1Y1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SISmdrogFQ6Wpdq6L/IBt8vJfswq/0rWbf4LzZ48HYs=;
-        b=H60HClR1YgAmdrdLBb0GbcbTGVYXSsDvT5uk7d1cb4es+h1mQZ9Z1VBpl0gJJXr9i2
-         1OU6qV17VR7A0eu9qFM2ncNHkF5q3b1le4FMSTgkTJWdVr31mrd/t39Z6ALxe7TFJCA7
-         240BGSHzXjqc2lQsqzQUJOdbYZtuiTmd1lk1Eqp7/fGHbduSNUv0YpPE3CchL6Vq39u7
-         NQ9hzH6S1EJqItREdTsDFOVtZAsp5S1/nG5W8s46VLj/5K8r1F/0Kc2XQ2cNDlHaOKgW
-         H/laj/cGvckNMBdqOzKGszMSYVlVEtvacNr2vjMMZsKbE1SR2hokbG4kx/w2H60hipez
-         tMbQ==
-X-Gm-Message-State: AOAM530EwLyM+Py1wq5zVx0Q/EBOgikS2x07L47N9T96eveYkjilc91z
-        MwpYn7tI+Q+jhVVydgMQ4jE=
-X-Google-Smtp-Source: ABdhPJw3yruIS2d5BuDXJw18RRpWQ+JA0K/ybcY3VH6BYtmuOR5wYSHHVC2WKzGddwIF/+GYPO0YyQ==
-X-Received: by 2002:a62:bd0c:: with SMTP id a12mr3058724pff.26.1644909518866;
-        Mon, 14 Feb 2022 23:18:38 -0800 (PST)
-Received: from [192.168.43.80] (subs09a-223-255-225-76.three.co.id. [223.255.225.76])
-        by smtp.gmail.com with ESMTPSA id g126sm1558284pgc.31.2022.02.14.23.18.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 23:18:38 -0800 (PST)
-Message-ID: <d81b3498-f3c7-c31b-f53e-19e94f699374@gmail.com>
-Date:   Tue, 15 Feb 2022 14:18:32 +0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A6Vt6yUnPEpX+Sv2rGVstxQvcH1UBHN+lyF7dCbw5Wg=;
+        b=KGknxoDZKvovtEeZlR3Ipb3SMnMIrrqhi9SeciuwVro9OPoq3qliSDv/HoBTMCrgN3
+         1nHc3yo4277yGWB1sJ97gqWNkOBQApJ+ajA2TUIYpAaGHr/xIBizC1GKa4oC776TIKQa
+         uZ1vmN931i9paJtM5fXqXpcHBw1ueh+tn8bD9RGgqPmf8Jb9MMa88BiB9e33zeVg3+T/
+         DycMAIOTb5EIod7eNMxyxtZLu9AjoWU7QRyl+/smRCd4taHN71+D4Mo/l/8N2isHhgxo
+         mY8mtd3O+OMMsrNRtld7un5qTyamPSaIqXYItYpQV5Ysls0TgzfDoGuPj3P4EyNvSKW9
+         EoKg==
+X-Gm-Message-State: AOAM530rOc/xUq/Utgg3tI6MD/9fax5IlSSyCEaaw/GuAv4ExqTKYTZK
+        eiZfPPs2pXxagQYSPCQsy5CaKKvlxxkFnpZZY4d33g==
+X-Google-Smtp-Source: ABdhPJyo0FZoWsxXSo1Q1MhH67Kj+X4mUmgs7t1VhjD05V8j/coMY2GXPnHaTNpcj6+x4Rh5Mz9cODoyYdHVvQL4imk=
+X-Received: by 2002:a25:aac6:: with SMTP id t64mr2615071ybi.602.1644909586308;
+ Mon, 14 Feb 2022 23:19:46 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 5.15 000/172] 5.15.24-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220214092506.354292783@linuxfoundation.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220211161831.3493782-1-tjmercier@google.com>
+ <20220211161831.3493782-7-tjmercier@google.com> <Ygdfe3XSvN8iFuUc@kroah.com>
+ <CABdmKX1eKZZ9809uxnzT_Bm+mdNuK2AObLRxyBpdDF3yE76Hrg@mail.gmail.com> <YgtPzXUmSOVyplnm@kroah.com>
+In-Reply-To: <YgtPzXUmSOVyplnm@kroah.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 14 Feb 2022 23:19:35 -0800
+Message-ID: <CAJuCfpG0V2qZVVUPRmw3fZP-bQmp+w36nOUe9iHtgmuHb7PemQ@mail.gmail.com>
+Subject: Re: [RFC v2 6/6] android: binder: Add a buffer flag to relinquish
+ ownership of fds
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "T.J. Mercier" <tjmercier@google.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        DRI mailing list <dri-devel@lists.freedesktop.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/22 16.24, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.24 release.
-> There are 172 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
+On Mon, Feb 14, 2022 at 11:01 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Feb 14, 2022 at 02:25:47PM -0800, T.J. Mercier wrote:
+> > On Fri, Feb 11, 2022 at 11:19 PM Greg Kroah-Hartman
+> > > > --- a/include/uapi/linux/android/binder.h
+> > > > +++ b/include/uapi/linux/android/binder.h
+> > > > @@ -137,6 +137,7 @@ struct binder_buffer_object {
+> > > >
+> > > >  enum {
+> > > >       BINDER_BUFFER_FLAG_HAS_PARENT = 0x01,
+> > > > +     BINDER_BUFFER_FLAG_SENDER_NO_NEED = 0x02,
+> > > >  };
+> > > >
+> > > >  /* struct binder_fd_array_object - object describing an array of fds in a buffer
+> > > > --
+> > > > 2.35.1.265.g69c8d7142f-goog
+> > > >
+> > >
+> > > How does userspace know that binder supports this new flag?
+> >
+> > Sorry, I don't completely follow even after Todd's comment. Doesn't
+> > the presence of BINDER_BUFFER_FLAG_SENDER_NO_NEED in the header do
+> > this?
+>
+> There is no "header" when running a new kernel on an old userspace,
+> right?  How about the other way around, old kernel, new userspace?
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, clang 13.0.1)
-and powerpc (ps3_defconfig, gcc 11.2.0).
+1. new kernel + old userspace = kernel supports the feature but
+userspace does not use it. The old userspace won't even mount the new
+cgroup controller, accounting is not performed, charge is not
+transferred.
+2. old kernel + new userspace = the new cgroup controller is not
+supported by the kernel, accounting is not performed, charge is not
+transferred.
+3. old kernel + old userspace = same as #2
+4. new kernel + new userspace = cgroup is mounted, feature is
+supported and used.
+Does that work or do we need a separate indication of whether binder
+driver supports the charge transfer feature?
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
--- 
-An old man doll... just what I always wanted! - Clara
+>
+> > So wouldn't userspace need to be compiled against the wrong
+> > kernel headers for there to be a problem? In that case the allocation
+> > would still succeed, but there would be no charge transfer and
+> > unfortunately no error code.
+>
+> No error code is not good.  People upgrade their kernels all the time,
+> and do not do a "rebuild the world" when doing so.
+>
+> > > And where is the userspace test for this new feature?
+> >
+> > I tested this on a Pixel after modifying the gralloc implementation to
+> > mark allocated buffers as not used by the sender. This required
+> > setting the BINDER_BUFFER_FLAG_SENDER_NO_NEED in libhwbinder. That
+> > code can be found here:
+> > https://android-review.googlesource.com/c/platform/system/libhwbinder/+/1910752/1/Parcel.cpp
+> > https://android-review.googlesource.com/c/platform/system/libhidl/+/1910611/
+> >
+> > Then by inspecting gpu.memory.current files in sysfs I was able to see
+> > the memory attributed to processes other than the graphics allocator
+> > service. Before this change, several megabytes of memory were
+> > attributed to the graphics allocator service but those buffers are
+> > actually used by other processes like surfaceflinger, the camera, etc.
+> > After the change, the gpu.memory.current amount for the graphics
+> > allocator service was 0 and the charges showed up in the
+> > gpu.memory.current files for those other processes like this:
+> >
+> > PID: 764 Process Name: zygote64
+> > system 8192
+> > system-uncached 23191552
+> >
+> > PID: 529 Process Name: /system/bin/surfaceflinger
+> > system-uncached 109535232
+> > system 92196864
+> >
+> > PID: 530 Process Name:
+> > /vendor/bin/hw/android.hardware.graphics.allocator@4.0-service
+> > system-uncached 0
+> > system 0
+> > sensor_direct_heap 0
+> >
+> > PID: 806 Process Name:
+> > /apex/com.google.pixel.camera.hal/bin/hw/android.hardware.camera.provider@2.7-service-google
+> > system 1196032
+> >
+> > PID: 4608 Process Name: com.google.android.GoogleCamera
+> > system 2408448
+> > system-uncached 38887424
+> > sensor_direct_heap 0
+> >
+> > PID: 32102 Process Name: com.google.android.googlequicksearchbox:search
+> > system-uncached 91279360
+> > system 20480
+> >
+> > PID: 2758 Process Name: com.google.android.youtube
+> > system-uncached 1662976
+> > system 8192
+> >
+> > PID: 2517 Process Name: com.google.android.apps.nexuslauncher
+> > system-uncached 115662848
+> > system 122880
+> >
+> > PID: 2066 Process Name: com.android.systemui
+> > system 86016
+> > system-uncached 37957632
+> >
+> > >  Isn't there a binder test framework somewhere?
+> >
+> > Android has the Vendor Test Suite where automated tests could be added
+> > for this. Is that what you're thinking of?
+>
+> tools/testing/selftests/ is a good start.  VTS is the worst-case as no
+> one can really run that on their own, but it is better than nothing.
+> Having no test at all for this is not ok.
+>
+> thanks,
+>
+> greg k-h

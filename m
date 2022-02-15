@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CB04B7B63
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4082B4B7B67
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:51:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244874AbiBOXv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 18:51:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44626 "EHLO
+        id S244877AbiBOXwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 18:52:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233263AbiBOXv1 (ORCPT
+        with ESMTP id S244879AbiBOXv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 18:51:27 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68A9C4E25;
-        Tue, 15 Feb 2022 15:51:16 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id A5425385;
-        Tue, 15 Feb 2022 23:51:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A5425385
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1644969076; bh=ZwrJOQk8NdUvo/m4mnIZFlRPYRE2tqMlnMhJ4JIH8HI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=B3xDknRz4Yl8nmYPHskW/HxwaksROl2Hnay6VEtoHCtgAIbC1Wx1qz/xWQ3Xaock9
-         WVabbuSBZXcchmkML7uHnacKjjJiVHSdlYpreI3efs6JTLFr71lQDQUHSZI0KBfuxh
-         Ym/mjMioRZa7ZIVQ2rjnnIkK52dQ1smA8qUDb9WyR1e/bI2uCG+MCWZRus0RhtsQ/y
-         N1qOgmdl29iGNFpSq/HlRbP65BXNaEI63HA81aVGPBHjbrOmw1fdboswRUBDy/YWph
-         8EyDyASmDqAHjSpfkXW/bQEoDyc1p3Ap9N5drx5EK6zQqgrGu66kVvh4d3GPNee/Gz
-         DDR8WIXvU8XLg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Tomasz =?utf-8?B?V2FybmllxYLFgm8=?= <tomasz.warniello@gmail.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tomasz =?utf-8?B?V2FybmllxYLFgm8=?= <tomasz.warniello@gmail.com>
-Subject: Re: [RFC] scripts: kernel-doc: Major kernel-doc rework
-In-Reply-To: <20220205233945.7a4d22d8@fuji.fritz.box>
-References: <20220205233945.7a4d22d8@fuji.fritz.box>
-Date:   Tue, 15 Feb 2022 16:51:15 -0700
-Message-ID: <87v8xf664s.fsf@meer.lwn.net>
+        Tue, 15 Feb 2022 18:51:57 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0D614099
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:51:41 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id z17so616865plb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:51:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eOQl//KosZ4qvPRlYricOYzhur4w9CDxToybs/1HwUw=;
+        b=n0fGEseKpeTJVBRLcU6aOW671FkkrGG1F12nn1nnKRlJSzRZlYdwGVuHrmkdAKwDsH
+         2cgJ5x2nv5213DNiH3E5nWepZkSaeaQKiuoAqOILeyvtCV8UCAoqLCu7atcHC0pXWnJR
+         x2tovGc4IH5J1oixDaAKekf3001ZtzDQDBFHrtmqFm1lHS1VVhV9AE4yNHV++T1KOkrq
+         iIMPbPYw42SG+YdhpVwAMKgFAfvopVFbd2r/lUHxnzCyTokFTZHp7i43RcoioymXx936
+         ywuUZN1RyKYYOnf6usErLJkp+q/V3IzojWctav49gN1CbN8yk8vRuUOmjEtrZfhnAGYx
+         UYTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eOQl//KosZ4qvPRlYricOYzhur4w9CDxToybs/1HwUw=;
+        b=aF6QkSh60ASM0k1szv8RpfJlnkvA5yHsAK6wZS74ZbNkxvc1rOULeqHUBUGKzbAqwm
+         zR4GJVVJm7bzIH2NYBVxLm7AGfdkcRdR9V2/aYIkE1B7a4VMZtTPa/0HG6Pd+l3td8UA
+         tj/q0t+rFD16/ihBpsiIzeCe90H2uiw0fp6W7Y56g2LS3CkVM/RD99JyPvAFlJYuTHfm
+         atxnQAEbl/YzeMTOqUqPzTVJBygR3R8ZbzKz4oFwR6KzfJ/VG5M2cx7a7Z4BDLanaxWC
+         Dw+dE/kITfWR2+rPSBMA60+WxJkLNVK5yBz7uvseS2oqGRcVb3ZR+44yQx+qkbgD0chw
+         lBCg==
+X-Gm-Message-State: AOAM533+d0Ylf1Lqc8k0GY7rH369/8fJovG3Vuo8NLcVH3u3LRFt92kq
+        7Jz8xXGih+bFDR8niS/PoeTnKofws8g2K5empaydAQ==
+X-Google-Smtp-Source: ABdhPJzxjD3vKy3YyT+OCGwXU78ebjUah2EKpMfMibU0VWDXa+asOUJ5+9r/BPJajQyQWY0zQRe+xjGaYgcQFwMYr/U=
+X-Received: by 2002:a17:902:7296:b0:14b:4bc6:e81 with SMTP id
+ d22-20020a170902729600b0014b4bc60e81mr251082pll.132.1644969101356; Tue, 15
+ Feb 2022 15:51:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220127124058.1172422-1-ruansy.fnst@fujitsu.com>
+ <20220127124058.1172422-5-ruansy.fnst@fujitsu.com> <YfqBTDp0XEbExOyy@infradead.org>
+In-Reply-To: <YfqBTDp0XEbExOyy@infradead.org>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 15 Feb 2022 15:51:35 -0800
+Message-ID: <CAPcyv4jFMf_YSSgxoHJk=-0UMZeNO+PHP1sjkvXUmKfXvGaw1A@mail.gmail.com>
+Subject: Re: [PATCH v10 4/9] fsdax: fix function description
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>, david <david@fromorbit.com>,
+        Jane Chu <jane.chu@oracle.com>, Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tomasz Warnie=C5=82=C5=82o <tomasz.warniello@gmail.com> writes:
-
-> This is in fact a release notification of a major kernel-doc script
-> refurbishment I have done. My work has reached a stage, which can be
-> considered a world sync point and here we are.
+On Wed, Feb 2, 2022 at 5:04 AM Christoph Hellwig <hch@infradead.org> wrote:
 >
-> I'm not sending all the patches to the Linux mailing list, as I prefer
-> to check what you think before I emit about 500 emails.
->
-> I've parked the lot for you to inspect here:
-> https://salsa.debian.org/guest/kernel-doc
->
-> This also helps me report the bug fixes. See the issue tracker:
-> https://salsa.debian.org/guest/kernel-doc/-/issues
+> Dan, can you send this to Linus for 5.17 to get it out of the queue?
 
-So I have done you a disservice with this work; I've been distracted and
-it has languished.  I apologize.  It's at the top of the list and will
-be the next thing I put some serious attention to.
-
-Thanks,
-
-jon
+Sure.

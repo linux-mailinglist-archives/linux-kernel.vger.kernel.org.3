@@ -2,109 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 474454B69E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BA64B6A04
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236817AbiBOKzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 05:55:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47358 "EHLO
+        id S236774AbiBOK6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 05:58:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236753AbiBOKzZ (ORCPT
+        with ESMTP id S236813AbiBOK6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 05:55:25 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47115E1B4F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 02:55:07 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nJvTx-0001Ed-JO; Tue, 15 Feb 2022 11:54:53 +0100
-Received: from pengutronix.de (unknown [195.138.59.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0933833A8B;
-        Tue, 15 Feb 2022 10:54:51 +0000 (UTC)
-Date:   Tue, 15 Feb 2022 11:54:47 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Scott Branden <sbranden@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tony Lindgren <tony@atomide.com>, devicetree@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org, kernel@pengutronix.de,
-        linux-tegra@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 1/8] dt-bindings: net: add schema for ASIX USB
- Ethernet controllers
-Message-ID: <20220215105447.vimwbnyabyfxyl4v@pengutronix.de>
-References: <20220215100018.2306046-1-o.rempel@pengutronix.de>
- <20220215100018.2306046-2-o.rempel@pengutronix.de>
+        Tue, 15 Feb 2022 05:58:53 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440DCDB4B9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 02:58:33 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21F4STA4031155;
+        Tue, 15 Feb 2022 04:55:37 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=9pRI9DHKMGrjxTpdktKuGS8mctU4c81Pqefuj9Uotc8=;
+ b=Jp3pzaNepVGVVDVl+Igkfk8BlLbu+gQbUcdAqV4rmSlO7FBvUIArT6iofAI2ZVycyqDm
+ I6ENQqlHwdhB0+AThKzsyqp5J/gYbBKgmnPAyfnOo7MEiW2wnQw35uQsKxHJk89NTL9q
+ LYi+vBNq4bukYemDZJHLtHZjAkBHZ7Pgfinb3vAQ1TTqtH0nExM4b+2mlCRIl9ixx257
+ YNH7fsSe6yz0pgFUIjWZGiAG5YbtDiHwbiwihAYQna8wcXRqhjEw7YzfhQBsB6k0ux7M
+ hvXNPA0LNpqeacn+OSoXI7IefUr8DR1YjZlu737ncMPlvUBbvNPOUtF/RGiMZLER3fI0 uQ== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3e7kx7sbp9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 15 Feb 2022 04:55:36 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 15 Feb
+ 2022 10:55:35 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Tue, 15 Feb 2022 10:55:35 +0000
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 48B4811C7;
+        Tue, 15 Feb 2022 10:55:35 +0000 (UTC)
+Date:   Tue, 15 Feb 2022 10:55:35 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
+CC:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Shengjiu Wang <shengjiu.wang@freescale.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ASoC: codec: wm8960: complete discharge on BIAS
+ OFF->STANDBY
+Message-ID: <20220215105535.GE38351@ediswmail.ad.cirrus.com>
+References: <20220208121727.4461-1-viorel.suman@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ifqdzi4p4d6arjx2"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220215100018.2306046-2-o.rempel@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220208121727.4461-1-viorel.suman@oss.nxp.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: HvhLj2FcgwmuXl1hKIbOImqGwRK0Hy7H
+X-Proofpoint-GUID: HvhLj2FcgwmuXl1hKIbOImqGwRK0Hy7H
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 08, 2022 at 02:17:27PM +0200, Viorel Suman (OSS) wrote:
+> From: Viorel Suman <viorel.suman@nxp.com>
+> 
+> On BIAS STANDBY->OFF transition the current implementation sleeps
+> 600ms on suspend in order to discharge the chip. The suspend is
+> propagated from "snd_soc_suspend" call for all audio cards in a
+> serial fashion, thus in case of boards like i.MX8DXL EVK which has
+> 3 distinct WM8960 codecs the total cumulated sleep on suspend is 1.8
+> seconds.
+> 
+> On the other hand the BIAS OFF->STANDBY transition happens
+> asynchronously with regard to "snd_soc_resume" - the call is
+> propagated from "soc_resume_deferred" which is just scheduled
+> from "snd_soc_resume", each card having its own work scheduled to
+> execute "soc_resume_deferred" call.
+> 
+> The patch performs discharge completion on BIAS OFF->STANDBY transition
+> so that the cumulated effect on suspend described above is avoided
+> and discharge is completed in paralel in case of multiple WM8960
+> codecs on the board.
+> 
+> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
+> ---
 
---ifqdzi4p4d6arjx2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Apologies Mark not sure how I missed this one, a bit late now,
+but the change looks good to me.
 
-On 15.02.2022 11:00:11, Oleksij Rempel wrote:
-> Create schema for ASIX USB Ethernet controllers and import some of
-> currently supported USB IDs form drivers/net/usb/asix_devices.c
->=20
-> This devices are already used in some of DTs. So, this schema makes it of=
-ficial.
-These
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ifqdzi4p4d6arjx2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmILhnUACgkQrX5LkNig
-0127EAf8CJJABhnS+oUjbFpBGUxKQ7ySwvBPYhNMil097GqJDDjXWk8nLPgGs0PV
-kXT/pRPTBDeVWP9o48FVVyOLtWRgK/8mqia24ZAvb6MqXEUTVVOV5xQi7nQsChwp
-B6coQO7Py9d1yOw61MNEj/QR33O5qP3E4GqY4d0UE1p7DNVyeX9apoWDI5xRdZrL
-NV5wzDHIE45Cdgm0Gry8x9UVy8kMbPFV4wqiZo4OS9Ct7b+JkjM6dCFL3gvv7EuK
-kpaJSV2hefMCyrevDo4S6s0laNbec69cXTso9FXJVeWmZfz7L4xbiU3hRBXdyYNH
-kK3tvNuH8nP8Rw0vJyzQlK027HRKCw==
-=unWf
------END PGP SIGNATURE-----
-
---ifqdzi4p4d6arjx2--
+Thanks,
+Charles

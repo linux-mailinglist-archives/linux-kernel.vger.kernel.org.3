@@ -2,100 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E82034B6DC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:39:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C78D4B6DCA
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:41:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237959AbiBONkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 08:40:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35468 "EHLO
+        id S238384AbiBONlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 08:41:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232202AbiBONkE (ORCPT
+        with ESMTP id S232202AbiBONlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 08:40:04 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B18865179;
-        Tue, 15 Feb 2022 05:39:55 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E569C1480;
-        Tue, 15 Feb 2022 05:39:54 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.89.173])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 186353F718;
-        Tue, 15 Feb 2022 05:39:52 -0800 (PST)
-Date:   Tue, 15 Feb 2022 13:39:48 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     madvenka@linux.microsoft.com
-Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v13 06/11] arm64: Use stack_trace_consume_fn and rename
- args to unwind()
-Message-ID: <YgutJKqYe8ss8LLd@FVFF77S0Q05N>
-References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
- <20220117145608.6781-1-madvenka@linux.microsoft.com>
- <20220117145608.6781-7-madvenka@linux.microsoft.com>
+        Tue, 15 Feb 2022 08:41:07 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808C46E8F6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 05:40:57 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id z16so13040426pfh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 05:40:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EB2YtpGsw2UK9GF+IclDWBvYrktnmSxVfjyLOWm4RCc=;
+        b=it0+JgR3Tnw+GyF426mx276wP5fEzEVoclG67wjzctxG82ldZreRD6ZHTJSCnCd0tO
+         lHlMcY+hx9s6mDdH3NbsXaWbZ+s70Mov0/YuoFhitBlwDZQMwj/V4Zcfzarrii7ZcArN
+         UENLvrw2emllj2rPcJYrJw6f+xtBdRvw4wJWI3/WjptkCs0Qi342aPVhaLZGDgHHF4HL
+         vqq3edQviKaPo5QLjjN89ksikoNCvh43ocsWXQ3SFAwRA/wXseWIZuOE2Saa0j3bPwlg
+         0+q6/R5PmeoNilMQM2a4hp6qRy38cgVFhTTsgyy1nGVOVBCkWIkShE3XLuiB7ft4J0uB
+         glMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EB2YtpGsw2UK9GF+IclDWBvYrktnmSxVfjyLOWm4RCc=;
+        b=jWC3+8psonS+dTilUTx+7uvypsWz0yzgQYc2m2Bf3AZX7jc0Rq20P1b9Ig0nYR22vL
+         u7IvFl6Dh9JpLmh7Bg2U+JiPrcuMV6nuNjSvnpRIdQ2KErPp6w7pAXwlS95DedBNJR2J
+         Wr76EIlX+gP3Sy/gTmJlTcoVRRhUCyk43n9cafrikjBXMcxeX7kg4TKAibmC96VvSzys
+         CFjtCVISKcijhW4UA10VNRAyF39UUzA+HwW5F4lMArBbB03Qp0XQK8PU5tw7MKpRFm/c
+         ghO7Cp8wKOOQdpszLLLuKUOTj8Fdpgg7nzPtmOWpnPndJYmP9YMjrAy0fibnT0m8kglK
+         fLHw==
+X-Gm-Message-State: AOAM531h6LBlZgEqCyo5UHpRGWJ0/G49KLGUEZCR5RFa7KPkWpLxNvVb
+        wZfgpMhXHmjCEjYDwiuj+m4E5dGvjxSWLrED
+X-Google-Smtp-Source: ABdhPJwaJokt/EyUIDr4+WZi2lfdxC+jjQdisKRR2/ugx3If+XicBfuCADVDXTE92U6fTbSmXyIyMw==
+X-Received: by 2002:a63:5550:: with SMTP id f16mr3660189pgm.24.1644932456904;
+        Tue, 15 Feb 2022 05:40:56 -0800 (PST)
+Received: from localhost.localdomain ([139.177.225.249])
+        by smtp.gmail.com with ESMTPSA id z14sm36034055pfh.173.2022.02.15.05.40.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 05:40:56 -0800 (PST)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH] tools/vm/page_owner: filter out pid and timestamp
+Date:   Tue, 15 Feb 2022 21:40:45 +0800
+Message-Id: <20220215134045.12004-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220117145608.6781-7-madvenka@linux.microsoft.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 08:56:03AM -0600, madvenka@linux.microsoft.com wrote:
-> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-> 
-> Rename the arguments to unwind() for better consistency. Also, use the
-> typedef stack_trace_consume_fn for the consume_entry function as it is
-> already defined in linux/stacktrace.h.
->
-> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+Commit 9cc7e96aa846 ("mm/page_owner: record timestamp and pid") introduces
+timestamp and pid for page owner.  However, it is hard to aggregate the
+stack since those are specific (especially timestamp).  Filter out those
+information when aggregating.
 
-How about: 
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+---
+ tools/vm/page_owner_sort.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-| arm64: align with common stracktrace naming
-|
-| For historical reasons, the naming of parameters and their types in the arm64
-| stacktrace code differs from that used in generic code and other
-| architectures, even though the types are equivalent.
-|
-| For consistency and clarity, use the generic names.
+diff --git a/tools/vm/page_owner_sort.c b/tools/vm/page_owner_sort.c
+index 9ebb84a9c731..fc231749e0a9 100644
+--- a/tools/vm/page_owner_sort.c
++++ b/tools/vm/page_owner_sort.c
+@@ -45,6 +45,12 @@ int read_block(char *buf, int buf_size, FILE *fin)
+ 			return curr - buf;
+ 		if (!strncmp(curr, "PFN", 3))
+ 			continue;
++		if (!strncmp(curr, "Page allocated via order", 24)) {
++			char *end = strstr(curr, ", pid ");
++
++			if (end)
++				memcpy(end, "\n", 2);
++		}
+ 		curr += strlen(curr);
+ 	}
+ 
+-- 
+2.11.0
 
-Either way:
-
-Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-
-Mark.
-
-> ---
->  arch/arm64/kernel/stacktrace.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
-> index 1b32e55735aa..f772dac78b11 100644
-> --- a/arch/arm64/kernel/stacktrace.c
-> +++ b/arch/arm64/kernel/stacktrace.c
-> @@ -181,12 +181,12 @@ static int notrace unwind_next(struct unwind_state *state)
->  NOKPROBE_SYMBOL(unwind_next);
->  
->  static void notrace unwind(struct unwind_state *state,
-> -			   bool (*fn)(void *, unsigned long), void *data)
-> +			   stack_trace_consume_fn consume_entry, void *cookie)
->  {
->  	while (1) {
->  		int ret;
->  
-> -		if (!fn(data, state->pc))
-> +		if (!consume_entry(cookie, state->pc))
->  			break;
->  		ret = unwind_next(state);
->  		if (ret < 0)
-> -- 
-> 2.25.1
-> 

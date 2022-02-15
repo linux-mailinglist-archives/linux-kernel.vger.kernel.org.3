@@ -2,204 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF91C4B79DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 195054B7979
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244342AbiBOVPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 16:15:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45016 "EHLO
+        id S243361AbiBOVVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 16:21:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244336AbiBOVPI (ORCPT
+        with ESMTP id S233461AbiBOVVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 16:15:08 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D41C7EDA8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:14:57 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id lw4so16186709ejb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:14:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SOESlV2s6ZwCllfQeNa8evJBNbO1odv7aNzYs4NXHeE=;
-        b=Gj2Jg9IaholauJKgsi2qxw70XeHf2lRTlaQON8YobEMcYWbMg3wXnqfCORFUf1urpD
-         0vF+eiEdcqtpVPXKmjmC8LZqRwFnxOYz4dAaSB4wDjvt8F4YHbFcnfFTYFMV6v3AUuXX
-         8cDQmWDO8X1dmJfiyF+mZd2G7Djx+5HIPachZnLdjtB2W5skdyVU9uAH1UJIdUHF/+Ft
-         mrBbIZwSrpiV2W5mMEjt36UYXj/9kqdP3T0ni6kIWQ5AlQ6pbfQ3CrYpRMeOcM84h9t9
-         toAjzRB1+PVToxIzNics0/psPRNC32ZcnLTvOMwavxSTac6hKaj/jot/Z/XASlm+4ShV
-         ilKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SOESlV2s6ZwCllfQeNa8evJBNbO1odv7aNzYs4NXHeE=;
-        b=dTm6AhK10ycXawZIpehWBxcztmNtRzdr4RG86CvrPANkwwXlszaCh4vyK65SN7BtIa
-         cSPDV+C0FgE2eEXAndZz1/pSRhJ4OssPfUuLe2NahbLpK1+ateO5N9ni+NqB7hvA8ZB/
-         X/l5v+AWls8mIrcHCqvy4DeSDWSuQVp1+hnfOie94913aqrYqVESX5ahJ2nthHUDklkb
-         XR3AD9a1dDQvdfHfljEmYGkU9zz36GG/M4Y+oQrGNcXv98OBi8wKqDz7iqLGALdeuPXR
-         1zfZBj187BExFbBMDbxdq7GP0JOCiv3MmOSfE0iarUJSvwPGnBMM5TwbLlYM3C+TWKWY
-         8mhg==
-X-Gm-Message-State: AOAM531MFnV9Xqvds61jICwyMn1vkod0Ufo7L993DmbSfQLY6cHDZLxL
-        P8QqSoq7NeCLvrjLWoEGo9/IeJwOBTkl3czwlWUsVQ==
-X-Google-Smtp-Source: ABdhPJyoZAixW+aB10cycT90fPdgth70NFV7Bu4ziUqzGkm8HfDb8pzX1Wq3ZeRNIwKYpJ9uPhsTFsiL9qm/vERfNRE=
-X-Received: by 2002:a17:906:74d2:: with SMTP id z18mr833705ejl.618.1644959695408;
- Tue, 15 Feb 2022 13:14:55 -0800 (PST)
+        Tue, 15 Feb 2022 16:21:20 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE51BA753;
+        Tue, 15 Feb 2022 13:21:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644960070; x=1676496070;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D3mH1ZQYnUmDyHebTFiaM1aX+zULtvkheCq0LawoiFk=;
+  b=MOFWvdK+LAwtynpujM5pfTDLUDe+5zezk3M91/aVdxTOHfNUXWD7i0vg
+   5x9STv62ooHwC9WGsR9cubH8bMYt/0jHxk/NeNh4HUWiaRwQYEnHAUHUx
+   Xq3yBcHZKhbY4qNDKKbqOPiAKdZogISCY5jXufNSoaLSYXZwYpQKDQ4eO
+   eo5eZPSMrs2T2wFJM59ugt+RT3Fgv31HDmCj63pKbDLhBsbJgrumgfJTV
+   9EK/0/wOk3WCenSNxe67ubgQxj3defKVv7gk+0Dp74RmC9GKO2R5IFIXI
+   +cJPLOrX0rynOQ/xf9pVrC4lTMCBJV3NQ0xF7E2T96GXRS+HBaNJhimDG
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="249289916"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="249289916"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 13:21:10 -0800
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="625027203"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 13:21:05 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 723FA200F1;
+        Tue, 15 Feb 2022 23:21:03 +0200 (EET)
+Date:   Tue, 15 Feb 2022 23:21:03 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 37/66] media: sun6i-csi: Move power management to
+ runtime pm in capture
+Message-ID: <YgwZP4CS26FCOOqc@paasikivi.fi.intel.com>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+ <20220205185429.2278860-38-paul.kocialkowski@bootlin.com>
+ <YgqftcDgfrsZfTdF@paasikivi.fi.intel.com>
+ <Ygt4xh2Mq0qStyKs@aptenodytes>
+ <Ygt6vwydxg9/WuDH@pendragon.ideasonboard.com>
+ <Ygt+nZJrZMNXV4Cl@aptenodytes>
 MIME-Version: 1.0
-References: <20220215153644.3654582-1-bgeffon@google.com> <56fc0ced-d8d2-146f-6ca8-b95bd7e0b4f5@intel.com>
-In-Reply-To: <56fc0ced-d8d2-146f-6ca8-b95bd7e0b4f5@intel.com>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Tue, 15 Feb 2022 13:14:43 -0800
-Message-ID: <CABXOdTcU1eLLzjRdJiwfVpoJi8WqYXj5bTrJ_-tm4pgRZK0uYw@mail.gmail.com>
-Subject: Re: [PATCH] x86/fpu: Correct pkru/xstate inconsistency
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Brian Geffon <bgeffon@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Willis Kung <williskung@google.com>,
-        Borislav Petkov <bp@suse.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        "# v4 . 10+" <stable@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ygt+nZJrZMNXV4Cl@aptenodytes>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 9:13 AM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 2/15/22 07:36, Brian Geffon wrote:
-> > There are two issues with PKRU handling prior to 5.13.
->
-> Are you sure both of these issues were introduced by 0cecca9d03c?  I'm
-> surprised that the get_xsave_addr() issue is not older.
->
-> Should this be two patches?
->
-> > The first is that when eagerly switching PKRU we check that current
->
-> Don't forget to write in imperative mood.  No "we's", please.
->
-> https://www.kernel.org/doc/html/latest/process/maintainer-tip.html
->
-> This goes for changelogs and comments too.
->
-> > is not a kernel thread as kernel threads will never use PKRU. It's
-> > possible that this_cpu_read_stable() on current_task (ie.
-> > get_current()) is returning an old cached value. By forcing the read
-> > with this_cpu_read() the correct task is used. Without this it's
-> > possible when switching from a kernel thread to a userspace thread
-> > that we'll still observe the PF_KTHREAD flag and never restore the
-> > PKRU. And as a result this issue only occurs when switching from a
-> > kernel thread to a userspace thread, switching from a non kernel
-> > thread works perfectly fine because all we consider in that situation
-> > is the flags from some other non kernel task and the next fpu is
-> > passed in to switch_fpu_finish().
->
-> It makes *sense* that there would be a place in the context switch code
-> where 'current' is wonky, but I never realized this.  This seems really
-> fragile, but *also* trivially detectable.
->
-> Is the PKRU code really the only code to use 'current' in a buggy way
-> like this?
->
-> > The second issue is when using write_pkru() we only write to the
-> > xstate when the feature bit is set because get_xsave_addr() returns
-> > NULL when the feature bit is not set. This is problematic as the CPU
-> > is free to clear the feature bit when it observes the xstate in the
-> > init state, this behavior seems to be documented a few places throughout
-> > the kernel. If the bit was cleared then in write_pkru() we would happily
-> > write to PKRU without ever updating the xstate, and the FPU restore on
-> > return to userspace would load the old value agian.
->
->
->                                                 ^ again
->
-> It's probably worth noting that the AMD init tracker is a lot more
-> aggressive than Intel's.  On Intel, I think XRSTOR is the only way to
-> get back to the init state.  You're obviously hitting this on AMD.
->
+Hi Paul,
 
-Brian should correct me here, but I think we have seen this with one
-specific Intel CPU.
+On Tue, Feb 15, 2022 at 11:21:17AM +0100, Paul Kocialkowski wrote:
+> Hi Laurent,
+> 
+> On Tue 15 Feb 22, 12:04, Laurent Pinchart wrote:
+> > Hi Paul,
+> > 
+> > On Tue, Feb 15, 2022 at 10:56:22AM +0100, Paul Kocialkowski wrote:
+> > > On Mon 14 Feb 22, 20:30, Sakari Ailus wrote:
+> > > > On Sat, Feb 05, 2022 at 07:54:00PM +0100, Paul Kocialkowski wrote:
+> > > > > Let's just enable the module when we start using it (at stream on)
+> > > > > and benefit from runtime pm instead of enabling it at first open.
+> > > > > 
+> > > > > Also reorder the call to v4l2_pipeline_pm_get.
+> > > > > 
+> > > > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > > 
+> > > > Nice patch!
+> > > 
+> > > Thanks!
+> > > 
+> > > > Do you still need v4l2_pipeline_pm_put()? Removing it would be a separate
+> > > > patch of course.
+> > > 
+> > > My understanding is that this is still useful if there are drivers in the
+> > > pipeline that rely on s_power instead of rpm (a typical case could be an
+> > > old sensor driver). So that's why this is kept around, but all other components
+> > > of the pipeline (isp/csi/mipi csi-2) are using rpm now.
+> > 
+> > If that's not the case on your test platforms, I think it would be
+> > better to drop support for this old API, and convert drivers that still
+> > use .s_power() if someone needs to use one on an Allwinner platform.
+> 
+> I agree this is the path to follow but it feels like we're not quite there
+> yet and a bunch of driver were not converted at this point, including some
+> popular ones like ov5640, which I know for sure is used with Allwinner devices.
+> 
+> Honestly I'd be happy to get rid of these legacy functions as soon as the
+> transition is done, but doing it now would mean breaking a significant number
+> of use cases (which I'm trying to avoid here despite all the changes).
+> 
+> I definitely wouldn't be confident making that transition here and it
+> probably wouldn't be a good idea to make that a requirement to merge this
+> (already quite big) series.
+> 
+> What do you think?
 
-Brian, would it make sense to list the affected CPU model(s), or at
-least the ones where we have observed the problem ?
+Feel free to keep it if you prefer that.
 
-Thanks,
-Guenter
+All sensor drivers that implement s_power are old but there are quite a few
+of them. Converting them isn't trivial so best done by someone who has
+access to the hardware.
 
-> It's also *very* unlikely that PKRU gets back to a value of 0.  I think
-> we added a selftest for this case in later kernels.
->
-> That helps explain why this bug hung around for so long.
->
-> > diff --git a/arch/x86/include/asm/fpu/internal.h b/arch/x86/include/asm/fpu/internal.h
-> > index 03b3de491b5e..540bda5bdd28 100644
-> > --- a/arch/x86/include/asm/fpu/internal.h
-> > +++ b/arch/x86/include/asm/fpu/internal.h
-> > @@ -598,7 +598,7 @@ static inline void switch_fpu_finish(struct fpu *new_fpu)
-> >        * PKRU state is switched eagerly because it needs to be valid before we
-> >        * return to userland e.g. for a copy_to_user() operation.
-> >        */
-> > -     if (!(current->flags & PF_KTHREAD)) {
-> > +     if (!(this_cpu_read(current_task)->flags & PF_KTHREAD)) {
->
-> This really deserves a specific comment.
->
-> >               /*
-> >                * If the PKRU bit in xsave.header.xfeatures is not set,
-> >                * then the PKRU component was in init state, which means
-> > diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-> > index 9e71bf86d8d0..aa381b530de0 100644
-> > --- a/arch/x86/include/asm/pgtable.h
-> > +++ b/arch/x86/include/asm/pgtable.h
-> > @@ -140,16 +140,22 @@ static inline void write_pkru(u32 pkru)
-> >       if (!boot_cpu_has(X86_FEATURE_OSPKE))
-> >               return;
-> >
-> > -     pk = get_xsave_addr(&current->thread.fpu.state.xsave, XFEATURE_PKRU);
-> > -
-> >       /*
-> >        * The PKRU value in xstate needs to be in sync with the value that is
-> >        * written to the CPU. The FPU restore on return to userland would
-> >        * otherwise load the previous value again.
-> >        */
-> >       fpregs_lock();
-> > -     if (pk)
-> > -             pk->pkru = pkru;
-> > +     /*
-> > +      * The CPU is free to clear the feature bit when the xstate is in the
-> > +      * init state. For this reason, we need to make sure the feature bit is
-> > +      * reset when we're explicitly writing to pkru. If we did not then we
-> > +      * would write to pkru and it would not be saved on a context switch.
-> > +      */
-> > +     current->thread.fpu.state.xsave.header.xfeatures |= XFEATURE_MASK_PKRU;
->
-> I don't think we need to describe how the init optimization works again.
->  I'm also not sure it's worth mentioning context switches here.  It's a
-> wider problem than that.  Maybe:
->
->         /*
->          * All fpregs will be XRSTOR'd from this buffer before returning
->          * to userspace.  Ensure that XRSTOR does not init PKRU and that
->          * get_xsave_addr() will work.
->          */
->
-> > +     pk = get_xsave_addr(&current->thread.fpu.state.xsave, XFEATURE_PKRU);
-> > +     BUG_ON(!pk);
->
-> A BUG_ON() a line before a NULL pointer dereference doesn't tend to do
-> much good.
->
-> > +     pk->pkru = pkru;
-> >       __write_pkru(pkru);
-> >       fpregs_unlock();
-> >  }
->
+-- 
+Regards,
+
+Sakari Ailus

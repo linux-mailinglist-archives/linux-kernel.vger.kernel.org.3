@@ -2,79 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A6B4B77FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CADB94B78D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242698AbiBORml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 12:42:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58250 "EHLO
+        id S242705AbiBORm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 12:42:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242481AbiBORmj (ORCPT
+        with ESMTP id S242475AbiBORmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 12:42:39 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6878B6CB
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:42:29 -0800 (PST)
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E522F405EC
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:42:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644946947;
-        bh=SiDXwW19FJN8pW9aFNLOMTMKt2M32hD/m+v/+010wfI=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
-        b=aYs796KZF7Ua0SK9A8NX41zcogbAsg1G5VefBgGWu4c6D6/V1FkYxInjaDQBP4IhM
-         EoNtpyMsbrSncOTa4ElC6583iZvYDSZ43w9bM+7VuWrfIB6ZTIAzX5wBFONHum/aL1
-         kUKgnYy2m3eoIUfUdERdYLOcGzSB+PN4dobQJwuXrJLuXKITzTRTWxltqav0lHStnD
-         +seUe0gTvbJBFEKQaAj2g7+6V/zSoHN3wseIW0xpn4jsNvtB5zbbzF2iJ6+lab4Pcm
-         TEjErpghZpt8HWySOpkI2XP/cFWzb4hF7ccdjg4rXReX0h2ihYOGRFhYsh+lILrmw2
-         ++np5aBCpku6g==
-Received: by mail-ed1-f69.google.com with SMTP id bq19-20020a056402215300b0040f276105a4so278456edb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:42:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SiDXwW19FJN8pW9aFNLOMTMKt2M32hD/m+v/+010wfI=;
-        b=s13kCTRvob6rQCd3o1H2kzVRgAC9ryJdjW0dMgmPr5Fug57s3AIxfSM/+cAmopdoHy
-         bPc+s8KfqDfj2w1Lqct37dLlgK9q6U1P42Kmfy5wRE+/s/Mo22wlTE7MXeCKv2P27IzJ
-         gpuKOTFyqqjuvtyhvmsGgVaEDUvn+RRWKho7v+vE2LV0qMwybJQ9JpqD8xJxBfaO9c0z
-         84SBDX1a/mndwh0bKlSGQXOH3NODXDsiu4Mu/poV9C/vX/jzFnjuoIVJWzRJrtKd63vH
-         1oj7KJXUwXXm60tNcMhHcPK/6c/EU1IPVs9IwSItqSHN9ttPpSKgSIIPZzQ4JxOkGMkX
-         P28Q==
-X-Gm-Message-State: AOAM530M3KeZNqPKKhAyofvvzUgCFjPpW9cSg4cqjzVO4j4nSQU0xz2d
-        TcUQZd+Jp0PAZNq9jTMK75386CH6hELo/ab2hc37oGknsXBWi+oJGHuUfrEUrlcMG39UiBHyl7K
-        tUeCezvlg6M/kSvDUYf+kIHBnG13cPwhnQ6YSIbelLg==
-X-Received: by 2002:a17:906:9750:: with SMTP id o16mr153932ejy.766.1644946947398;
-        Tue, 15 Feb 2022 09:42:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzLI/tC+CkdcaVGl9luIU4vkop2V0YQT2cTA8hb6YgaHTY7Nk9gE95CNESjuz9heDNDC0+BVg==
-X-Received: by 2002:a17:906:9750:: with SMTP id o16mr153918ejy.766.1644946947238;
-        Tue, 15 Feb 2022 09:42:27 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id q8sm240797edd.10.2022.02.15.09.42.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 09:42:26 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Subject: [GIT PULL] pinctrl: samsung: pull for v5.18
-Date:   Tue, 15 Feb 2022 18:42:20 +0100
-Message-Id: <20220215174220.11054-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        Tue, 15 Feb 2022 12:42:54 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90AF8BE01;
+        Tue, 15 Feb 2022 09:42:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644946964; x=1676482964;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=I0P/s5Xzuf379+YxgczzGONTRmfLBBXVHSvWtOdV4pc=;
+  b=hRpdngq1nMlu4SZZ0ipVeZ5KPzhgK/9UZFz5JdXnNEOLo87O3zQQwujV
+   COWICBeQdLNpA5lx6XfSP7JEbv+Fie45luWGGsC7oLoWo6cXQfz7C9itI
+   24QMqu7uE/jvNcHCe8o/PalaZ/NL+vEFvPr3LtINVLM+ISYXlrl6vl0So
+   c=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 15 Feb 2022 09:42:43 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 09:42:43 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 15 Feb 2022 09:42:42 -0800
+Received: from [10.111.168.21] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 15 Feb
+ 2022 09:42:41 -0800
+Message-ID: <6a3ef247-b26b-d505-cd85-92fb277163dd@quicinc.com>
+Date:   Tue, 15 Feb 2022 09:42:38 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Add SC8180x to hw catalog
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20220215043353.1256754-1-bjorn.andersson@linaro.org>
+ <20220215043353.1256754-2-bjorn.andersson@linaro.org>
+ <be397e2e-05ab-5c18-8e2d-16c443f0a6d1@quicinc.com>
+ <Ygvisfhi0SY6XdAz@builder.lan>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <Ygvisfhi0SY6XdAz@builder.lan>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,75 +71,286 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
-
-Parts of this pull was shared with ARM SoC guys (tags/samsung-dt-pinctrl-5.18):
-https://lore.kernel.org/lkml/20220129115352.13274-1-krzysztof.kozlowski@canonical.com/
-
-This pull request is on top of it, in a fast-forward way, no rebases.
-
-You can pull this one alone, or tags/samsung-dt-pinctrl-5.18 +
-tags/samsung-pinctrl-5.18-2 together.
-
-Best regards,
-Krzysztof
 
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+On 2/15/2022 9:28 AM, Bjorn Andersson wrote:
+> On Tue 15 Feb 11:14 CST 2022, Abhinav Kumar wrote:
+> 
+>>
+>>
+>> On 2/14/2022 8:33 PM, Bjorn Andersson wrote:
+>>> From: Rob Clark <robdclark@chromium.org>
+>>>
+>>> Add SC8180x to the hardware catalog, for initial support for the
+>>> platform. Due to limitations in the DP driver only one of the four DP
+>>> interfaces is left enabled.
+>>>
+>>> The SC8180x platform supports the newly added DPU_INTF_WIDEBUS flag and
+>>> the Windows-on-Snapdragon bootloader leaves the widebus bit set, so this
+>>> is flagged appropriately to ensure widebus is disabled - for now.
+>>>
+>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+>>> [bjorn: Reworked intf and irq definitions]
+>>> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>>> ---
+>>>
+>>> Changes since v1:
+>>> - Dropped widebus flag
+>>>
+>>>    .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 129 ++++++++++++++++++
+>>>    .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |   1 +
+>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |   1 +
+>>>    drivers/gpu/drm/msm/msm_drv.c                 |   1 +
+>>>    4 files changed, 132 insertions(+)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>> index aa75991903a6..7ac0fe32df49 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>> @@ -90,6 +90,17 @@
+>>>    			 BIT(MDP_INTF3_INTR) | \
+>>>    			 BIT(MDP_INTF4_INTR))
+>>> +#define IRQ_SC8180X_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>>> +			  BIT(MDP_SSPP_TOP0_INTR2) | \
+>>> +			  BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>>> +			  BIT(MDP_INTF0_INTR) | \
+>>> +			  BIT(MDP_INTF1_INTR) | \
+>>> +			  BIT(MDP_INTF2_INTR) | \
+>>> +			  BIT(MDP_INTF3_INTR) | \
+>>> +			  BIT(MDP_INTF4_INTR) | \
+>>> +			  BIT(MDP_INTF5_INTR) | \
+>>> +			  BIT(MDP_AD4_0_INTR) | \
+>>> +			  BIT(MDP_AD4_1_INTR))
+>>>    #define DEFAULT_PIXEL_RAM_SIZE		(50 * 1024)
+>>>    #define DEFAULT_DPU_LINE_WIDTH		2048
+>>> @@ -225,6 +236,22 @@ static const struct dpu_caps sm8150_dpu_caps = {
+>>>    	.max_vdeci_exp = MAX_VERT_DECIMATION,
+>>>    };
+>>> +static const struct dpu_caps sc8180x_dpu_caps = {
+>>> +	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
+>>> +	.max_mixer_blendstages = 0xb,
+>>> +	.qseed_type = DPU_SSPP_SCALER_QSEED3,
+>>> +	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
+>>> +	.ubwc_version = DPU_HW_UBWC_VER_30,
+>>> +	.has_src_split = true,
+>>> +	.has_dim_layer = true,
+>>> +	.has_idle_pc = true,
+>>> +	.has_3d_merge = true,
+>>> +	.max_linewidth = 4096,
+>>> +	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
+>>> +	.max_hdeci_exp = MAX_HORZ_DECIMATION,
+>>> +	.max_vdeci_exp = MAX_VERT_DECIMATION,
+>>> +};
+>>> +
+>>>    static const struct dpu_caps sm8250_dpu_caps = {
+>>>    	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
+>>>    	.max_mixer_blendstages = 0xb,
+>>> @@ -293,6 +320,31 @@ static const struct dpu_mdp_cfg sc7180_mdp[] = {
+>>>    	},
+>>>    };
+>>> +static const struct dpu_mdp_cfg sc8180x_mdp[] = {
+>>> +	{
+>>> +	.name = "top_0", .id = MDP_TOP,
+>>> +	.base = 0x0, .len = 0x45C,
+>>> +	.features = 0,
+>>> +	.highest_bank_bit = 0x3,
+>>> +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = {
+>>> +			.reg_off = 0x2AC, .bit_off = 0},
+>>> +	.clk_ctrls[DPU_CLK_CTRL_VIG1] = {
+>>> +			.reg_off = 0x2B4, .bit_off = 0},
+>>> +	.clk_ctrls[DPU_CLK_CTRL_VIG2] = {
+>>> +			.reg_off = 0x2BC, .bit_off = 0},
+>>> +	.clk_ctrls[DPU_CLK_CTRL_VIG3] = {
+>>> +			.reg_off = 0x2C4, .bit_off = 0},
+>>> +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = {
+>>> +			.reg_off = 0x2AC, .bit_off = 8},
+>>> +	.clk_ctrls[DPU_CLK_CTRL_DMA1] = {
+>>> +			.reg_off = 0x2B4, .bit_off = 8},
+>>> +	.clk_ctrls[DPU_CLK_CTRL_CURSOR0] = {
+>>> +			.reg_off = 0x2BC, .bit_off = 8},
+>>> +	.clk_ctrls[DPU_CLK_CTRL_CURSOR1] = {
+>>> +			.reg_off = 0x2C4, .bit_off = 8},
+>>> +	},
+>>> +};
+>>> +
+>>>    static const struct dpu_mdp_cfg sm8250_mdp[] = {
+>>>    	{
+>>>    	.name = "top_0", .id = MDP_TOP,
+>>> @@ -861,6 +913,16 @@ static const struct dpu_intf_cfg sc7280_intf[] = {
+>>>    	INTF_BLK("intf_5", INTF_5, 0x39000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
+>>>    };
+>>> +static const struct dpu_intf_cfg sc8180x_intf[] = {
+>>> +	INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+>>> +	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+>>> +	INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
+>>> +	/* INTF_3 is for MST, wired to INTF_DP 0 and 1, use dummy index until this is supported */
+>>> +	INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_DP, 999, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
+>>> +	INTF_BLK("intf_4", INTF_4, 0x6C000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 20, 21),
+>>> +	INTF_BLK("intf_5", INTF_5, 0x6C800, INTF_DP, MSM_DP_CONTROLLER_2, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
+>>
+>> This is a continued discussion from
+>> https://patchwork.freedesktop.org/patch/474179/.
+>>
+>> Shouldnt INTF_5 be marked as INTF_eDP?
+>>
+> 
+> Might be, I didn't even know we had an INTF_EDP define...
+> 
+> Is there any reason to distinguish DP and EDP in the DPU?  I see sc7280
+> doesn't distinguish the DP and EDP interfaces.
+> 
+> Regards,
+> Bjorn
+> 
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+Like I have mentioned in the other patch, I think we have enough 
+confusion between eDP and DP with the common driver. Since DPU does have 
+separate interfaces I think we should fix that.
 
-are available in the Git repository at:
+Regarding sc7280 using INTF_DP, I synced up with Sankeerth. He referred 
+to your change 
+https://patchwork.freedesktop.org/patch/457776/?series=92992&rev=5 as it 
+was posted earlier and ended up using the same INTF_DP macro. So its 
+turning out to be a cyclical error.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/samsung.git tags/samsung-pinctrl-5.18-2
+I think we should fix both.
 
-for you to fetch changes up to 3652dc070bad335d6feb31402bb4ab1ad58d5cb6:
-
-  pinctrl: samsung: improve wake irq info on console (2022-02-01 09:13:30 +0100)
-
-----------------------------------------------------------------
-Samsung pinctrl drivers changes for v5.18
-
-1. Fix OF reference leak in pinctrl driver probe error path.
-2. Correct list of handlers for Exynos850 ALIVE and CMGP pin banks.
-3. Accept devicetrees with GPIO pin bank definitions named with a
-   "-gpio-bank" suffix.  This is necessary for later Samsung pinctrl
-   bindings dtschema.
-4. Convert Samsung pinctrl bindings to dtschema.
-5. Add support for Exynos850 and ExynosAutov9 wake-up interrupts.
-6. Add support for Tesla FSD SoC.
-
-----------------------------------------------------------------
-Alim Akhtar (2):
-      dt-bindings: pinctrl: samsung: Add compatible for Tesla FSD SoC
-      pinctrl: samsung: add FSD SoC specific data
-
-Krzysztof Kozlowski (5):
-      pinctrl: samsung: drop pin banks references on error paths
-      pinctrl: samsung: accept GPIO bank nodes with a suffix
-      dt-bindings: pinctrl: samsung: convert to dtschema
-      dt-bindings: pinctrl: samsung: describe Exynos850 and ExynosAutov9 wake-ups
-      pinctrl: samsung: add support for Exynos850 and ExynosAutov9 wake-ups
-
-Martin Jücker (1):
-      pinctrl: samsung: improve wake irq info on console
-
-Sam Protsenko (1):
-      pinctrl: samsung: Remove EINT handler for Exynos850 ALIVE and CMGP gpios
-
- .../pinctrl/samsung,pinctrl-gpio-bank.yaml         |  52 +++
- .../bindings/pinctrl/samsung,pinctrl-pins-cfg.yaml |  81 +++++
- .../pinctrl/samsung,pinctrl-wakeup-interrupt.yaml  | 106 ++++++
- .../bindings/pinctrl/samsung,pinctrl.yaml          | 393 +++++++++++++++++++++
- .../bindings/pinctrl/samsung-pinctrl.txt           | 383 --------------------
- MAINTAINERS                                        |   2 +-
- drivers/pinctrl/samsung/pinctrl-exynos-arm64.c     |  73 +++-
- drivers/pinctrl/samsung/pinctrl-exynos.c           |   7 +-
- drivers/pinctrl/samsung/pinctrl-samsung.c          |  89 ++++-
- drivers/pinctrl/samsung/pinctrl-samsung.h          |   1 +
- 10 files changed, 781 insertions(+), 406 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-gpio-bank.yaml
- create mode 100644 Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-pins-cfg.yaml
- create mode 100644 Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
- create mode 100644 Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/samsung-pinctrl.txt
+>>> +};
+>>> +
+>>>    /*************************************************************
+>>>     * VBIF sub blocks config
+>>>     *************************************************************/
+>>> @@ -931,6 +993,10 @@ static const struct dpu_qos_lut_entry sm8150_qos_linear[] = {
+>>>    	{.fl = 0, .lut = 0x0011222222223357 },
+>>>    };
+>>> +static const struct dpu_qos_lut_entry sc8180x_qos_linear[] = {
+>>> +	{.fl = 4, .lut = 0x0000000000000357 },
+>>> +};
+>>> +
+>>>    static const struct dpu_qos_lut_entry sdm845_qos_macrotile[] = {
+>>>    	{.fl = 10, .lut = 0x344556677},
+>>>    	{.fl = 11, .lut = 0x3344556677},
+>>> @@ -944,6 +1010,10 @@ static const struct dpu_qos_lut_entry sc7180_qos_macrotile[] = {
+>>>    	{.fl = 0, .lut = 0x0011223344556677},
+>>>    };
+>>> +static const struct dpu_qos_lut_entry sc8180x_qos_macrotile[] = {
+>>> +	{.fl = 10, .lut = 0x0000000344556677},
+>>> +};
+>>> +
+>>>    static const struct dpu_qos_lut_entry sdm845_qos_nrt[] = {
+>>>    	{.fl = 0, .lut = 0x0},
+>>>    };
+>>> @@ -1045,6 +1115,33 @@ static const struct dpu_perf_cfg sm8150_perf_data = {
+>>>    	.bw_inefficiency_factor = 120,
+>>>    };
+>>> +static const struct dpu_perf_cfg sc8180x_perf_data = {
+>>> +	.max_bw_low = 9600000,
+>>> +	.max_bw_high = 9600000,
+>>> +	.min_core_ib = 2400000,
+>>> +	.min_llcc_ib = 800000,
+>>> +	.min_dram_ib = 800000,
+>>> +	.danger_lut_tbl = {0xf, 0xffff, 0x0, 0x0},
+>>> +	.qos_lut_tbl = {
+>>> +		{.nentry = ARRAY_SIZE(sc8180x_qos_linear),
+>>> +		.entries = sc8180x_qos_linear
+>>> +		},
+>>> +		{.nentry = ARRAY_SIZE(sc8180x_qos_macrotile),
+>>> +		.entries = sc8180x_qos_macrotile
+>>> +		},
+>>> +		{.nentry = ARRAY_SIZE(sc7180_qos_nrt),
+>>> +		.entries = sc7180_qos_nrt
+>>> +		},
+>>> +		/* TODO: macrotile-qseed is different from macrotile */
+>>> +	},
+>>> +	.cdp_cfg = {
+>>> +		{.rd_enable = 1, .wr_enable = 1},
+>>> +		{.rd_enable = 1, .wr_enable = 0}
+>>> +	},
+>>> +	.clk_inefficiency_factor = 105,
+>>> +	.bw_inefficiency_factor = 120,
+>>> +};
+>>> +
+>>>    static const struct dpu_perf_cfg sm8250_perf_data = {
+>>>    	.max_bw_low = 13700000,
+>>>    	.max_bw_high = 16600000,
+>>> @@ -1199,6 +1296,37 @@ static void sm8150_cfg_init(struct dpu_mdss_cfg *dpu_cfg)
+>>>    	};
+>>>    }
+>>> +/*
+>>> + * sc8180x_cfg_init(): populate sc8180 dpu sub-blocks reg offsets
+>>> + * and instance counts.
+>>> + */
+>>> +static void sc8180x_cfg_init(struct dpu_mdss_cfg *dpu_cfg)
+>>> +{
+>>> +	*dpu_cfg = (struct dpu_mdss_cfg){
+>>> +		.caps = &sc8180x_dpu_caps,
+>>> +		.mdp_count = ARRAY_SIZE(sc8180x_mdp),
+>>> +		.mdp = sc8180x_mdp,
+>>> +		.ctl_count = ARRAY_SIZE(sm8150_ctl),
+>>> +		.ctl = sm8150_ctl,
+>>> +		.sspp_count = ARRAY_SIZE(sdm845_sspp),
+>>> +		.sspp = sdm845_sspp,
+>>> +		.mixer_count = ARRAY_SIZE(sm8150_lm),
+>>> +		.mixer = sm8150_lm,
+>>> +		.pingpong_count = ARRAY_SIZE(sm8150_pp),
+>>> +		.pingpong = sm8150_pp,
+>>> +		.merge_3d_count = ARRAY_SIZE(sm8150_merge_3d),
+>>> +		.merge_3d = sm8150_merge_3d,
+>>> +		.intf_count = ARRAY_SIZE(sc8180x_intf),
+>>> +		.intf = sc8180x_intf,
+>>> +		.vbif_count = ARRAY_SIZE(sdm845_vbif),
+>>> +		.vbif = sdm845_vbif,
+>>> +		.reg_dma_count = 1,
+>>> +		.dma_cfg = sm8150_regdma,
+>>> +		.perf = sc8180x_perf_data,
+>>> +		.mdss_irqs = IRQ_SC8180X_MASK,
+>>> +	};
+>>> +}
+>>> +
+>>>    /*
+>>>     * sm8250_cfg_init(): populate sm8250 dpu sub-blocks reg offsets
+>>>     * and instance counts.
+>>> @@ -1260,6 +1388,7 @@ static const struct dpu_mdss_hw_cfg_handler cfg_handler[] = {
+>>>    	{ .hw_rev = DPU_HW_VER_401, .cfg_init = sdm845_cfg_init},
+>>>    	{ .hw_rev = DPU_HW_VER_500, .cfg_init = sm8150_cfg_init},
+>>>    	{ .hw_rev = DPU_HW_VER_501, .cfg_init = sm8150_cfg_init},
+>>> +	{ .hw_rev = DPU_HW_VER_510, .cfg_init = sc8180x_cfg_init},
+>>>    	{ .hw_rev = DPU_HW_VER_600, .cfg_init = sm8250_cfg_init},
+>>>    	{ .hw_rev = DPU_HW_VER_620, .cfg_init = sc7180_cfg_init},
+>>>    	{ .hw_rev = DPU_HW_VER_720, .cfg_init = sc7280_cfg_init},
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>> index 31af04afda7d..9572d29ff2ff 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>> @@ -39,6 +39,7 @@
+>>>    #define DPU_HW_VER_410	DPU_HW_VER(4, 1, 0) /* sdm670 v1.0 */
+>>>    #define DPU_HW_VER_500	DPU_HW_VER(5, 0, 0) /* sm8150 v1.0 */
+>>>    #define DPU_HW_VER_501	DPU_HW_VER(5, 0, 1) /* sm8150 v2.0 */
+>>> +#define DPU_HW_VER_510	DPU_HW_VER(5, 1, 1) /* sc8180 */
+>>>    #define DPU_HW_VER_600	DPU_HW_VER(6, 0, 0) /* sm8250 */
+>>>    #define DPU_HW_VER_620	DPU_HW_VER(6, 2, 0) /* sc7180 v1.0 */
+>>>    #define DPU_HW_VER_720	DPU_HW_VER(7, 2, 0) /* sc7280 */
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> index 47fe11a84a77..cedc631f8498 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> @@ -1351,6 +1351,7 @@ const struct of_device_id dpu_dt_match[] = {
+>>>    	{ .compatible = "qcom,sdm845-dpu", },
+>>>    	{ .compatible = "qcom,sc7180-dpu", },
+>>>    	{ .compatible = "qcom,sc7280-dpu", },
+>>> +	{ .compatible = "qcom,sc8180x-dpu", },
+>>>    	{ .compatible = "qcom,sm8150-dpu", },
+>>>    	{ .compatible = "qcom,sm8250-dpu", },
+>>>    	{}
+>>> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+>>> index 555666e3f960..0f441d358b60 100644
+>>> --- a/drivers/gpu/drm/msm/msm_drv.c
+>>> +++ b/drivers/gpu/drm/msm/msm_drv.c
+>>> @@ -1438,6 +1438,7 @@ static const struct of_device_id dt_match[] = {
+>>>    	{ .compatible = "qcom,sdm845-mdss", .data = (void *)KMS_DPU },
+>>>    	{ .compatible = "qcom,sc7180-mdss", .data = (void *)KMS_DPU },
+>>>    	{ .compatible = "qcom,sc7280-mdss", .data = (void *)KMS_DPU },
+>>> +	{ .compatible = "qcom,sc8180x-mdss", .data = (void *)KMS_DPU },
+>>>    	{ .compatible = "qcom,sm8150-mdss", .data = (void *)KMS_DPU },
+>>>    	{ .compatible = "qcom,sm8250-mdss", .data = (void *)KMS_DPU },
+>>>    	{}

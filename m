@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F2E4B63C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7804B639B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:37:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234619AbiBOGvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 01:51:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60814 "EHLO
+        id S234522AbiBOGff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 01:35:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbiBOGvB (ORCPT
+        with ESMTP id S233731AbiBOGfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 01:51:01 -0500
-Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F3A13DD9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 22:50:50 -0800 (PST)
-X-QQ-mid: bizesmtp49t1644907828t7oku463
-Received: from localhost.localdomain (unknown [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 15 Feb 2022 14:50:20 +0800 (CST)
-X-QQ-SSF: 01400000002000B0E000B00A0000000
-X-QQ-FEAT: jfdGVjI73+QZRc8n97Vk+dmb1OAapcIclMz9KOpJT1KpOf9FJxT2g22wkHgLi
-        VG2PqvpMuMV0fymu2vwBb1of1qz1vCxcfNhlU9y5CMOJnVUrCon4mpd0C5C4jnwonGLlxea
-        j5XfkgoI+QR+qNf3VW21KHMUbdUh+6yEMygmiHYoazR8+i1LzTSKQ+uMPvHrk+dDgam6U8A
-        cXijWspGIGzY5/bAW7WiIpJvHJ/OzaH2BNXoaHqx+/7fscbgSaDiS7tyrDkxa32VCI4KgLt
-        1d6/V9YLAvqx24E/TkNF6WXcUCpUM5nWx1ZwO10OxZ1YqdEqDMqGzjxkJ57mFfqLkabjkkW
-        ZinJfeGo2/KYy6nWVwKJSAEwPhouVhOu92pjPgM
-X-QQ-GoodBg: 2
-From:   tangmeng <tangmeng@uniontech.com>
-To:     tglx@linutronix.de, mcgrof@kernel.org, keescook@chromium.org,
-        yzaikin@google.com, john.stultz@linaro.org, sboyd@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        tangmeng <tangmeng@uniontech.com>
-Subject: [PATCH v7] kernel/time: move timer sysctls to its own file
-Date:   Tue, 15 Feb 2022 14:50:19 +0800
-Message-Id: <20220215065019.7520-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Tue, 15 Feb 2022 01:35:34 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E16DB16C9;
+        Mon, 14 Feb 2022 22:35:23 -0800 (PST)
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JyWSN6srjz1FCsp;
+        Tue, 15 Feb 2022 14:31:00 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggpeml500020.china.huawei.com
+ (7.185.36.88) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 15 Feb
+ 2022 14:35:20 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <stable@vger.kernel.org>,
+        <oliver.sang@intel.com>, <beibei.si@intel.com>, <jannh@google.com>,
+        <mszeredi@redhat.com>, <torvalds@linux-foundation.org>,
+        <libaokun1@huawei.com>, <yukuai3@huawei.com>
+Subject: [PATCH 5.10] fget: clarify and improve __fget_files() implementation
+Date:   Tue, 15 Feb 2022 14:51:07 +0800
+Message-ID: <20220215065107.3045023-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign5
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500020.china.huawei.com (7.185.36.88)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,155 +48,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel/sysctl.c is a kitchen sink where everyone leaves their dirty
-dishes, this makes it very difficult to maintain.
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-To help with this maintenance let's start by moving sysctls to places
-where they actually belong.  The proc sysctl maintainers do not want to
-know what sysctl knobs you wish to add for your own piece of code, we
-just care about the core logic.
+commit e386dfc56f837da66d00a078e5314bc8382fab83 upstream.
 
-Now, all filesystem syctls now get reviewed by fs folks. This commit
-follows the commit of fs.
+Commit 054aa8d439b9 ("fget: check that the fd still exists after getting
+a ref to it") fixed a race with getting a reference to a file just as it
+was being closed.  It was a fairly minimal patch, and I didn't think
+re-checking the file pointer lookup would be a measurable overhead,
+since it was all right there and cached.
 
-So move the timer_migration sysctls to its own file.
+But I was wrong, as pointed out by the kernel test robot.
 
-Signed-off-by: tangmeng <tangmeng@uniontech.com>
+The 'poll2' case of the will-it-scale.per_thread_ops benchmark regressed
+quite noticeably.  Admittedly it seems to be a very artificial test:
+doing "poll()" system calls on regular files in a very tight loop in
+multiple threads.
+
+That means that basically all the time is spent just looking up file
+descriptors without ever doing anything useful with them (not that doing
+'poll()' on a regular file is useful to begin with).  And as a result it
+shows the extra "re-check fd" cost as a sore thumb.
+
+Happily, the regression is fixable by just writing the code to loook up
+the fd to be better and clearer.  There's still a cost to verify the
+file pointer, but now it's basically in the noise even for that
+benchmark that does nothing else - and the code is more understandable
+and has better comments too.
+
+[ Side note: this patch is also a classic case of one that looks very
+  messy with the default greedy Myers diff - it's much more legible with
+  either the patience of histogram diff algorithm ]
+
+Link: https://lore.kernel.org/lkml/20211210053743.GA36420@xsang-OptiPlex-9020/
+Link: https://lore.kernel.org/lkml/20211213083154.GA20853@linux.intel.com/
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Tested-by: Carel Si <beibei.si@intel.com>
+Cc: Jann Horn <jannh@google.com>
+Cc: Miklos Szeredi <mszeredi@redhat.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
 ---
- include/linux/timer.h |  8 -------
- kernel/sysctl.c       | 11 ---------
- kernel/time/timer.c   | 54 ++++++++++++++++++++++++++++++++-----------
- 3 files changed, 40 insertions(+), 33 deletions(-)
+ fs/file.c | 72 ++++++++++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 56 insertions(+), 16 deletions(-)
 
-diff --git a/include/linux/timer.h b/include/linux/timer.h
-index fda13c9d1256..648f00105f58 100644
---- a/include/linux/timer.h
-+++ b/include/linux/timer.h
-@@ -196,14 +196,6 @@ extern void init_timers(void);
- struct hrtimer;
- extern enum hrtimer_restart it_real_fn(struct hrtimer *);
- 
--#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
--struct ctl_table;
--
--extern unsigned int sysctl_timer_migration;
--int timer_migration_handler(struct ctl_table *table, int write,
--			    void *buffer, size_t *lenp, loff_t *ppos);
--#endif
--
- unsigned long __round_jiffies(unsigned long j, int cpu);
- unsigned long __round_jiffies_relative(unsigned long j, int cpu);
- unsigned long round_jiffies(unsigned long j);
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 083be6af29d7..740c34f20235 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -2656,17 +2656,6 @@ static struct ctl_table kern_table[] = {
- 		.extra1		= SYSCTL_ZERO,
- 		.extra2		= SYSCTL_ONE,
- 	},
--#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
--	{
--		.procname	= "timer_migration",
--		.data		= &sysctl_timer_migration,
--		.maxlen		= sizeof(unsigned int),
--		.mode		= 0644,
--		.proc_handler	= timer_migration_handler,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_ONE,
--	},
--#endif
- #ifdef CONFIG_BPF_SYSCALL
- 	{
- 		.procname	= "unprivileged_bpf_disabled",
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 85f1021ad459..c4f0045139cb 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -44,6 +44,9 @@
- #include <linux/slab.h>
- #include <linux/compat.h>
- #include <linux/random.h>
-+#ifdef CONFIG_SYSCTL
-+#include <linux/sysctl.h>
-+#endif
- 
- #include <linux/uaccess.h>
- #include <asm/unistd.h>
-@@ -223,7 +226,8 @@ static void timer_update_keys(struct work_struct *work);
- static DECLARE_WORK(timer_update_work, timer_update_keys);
- 
- #ifdef CONFIG_SMP
--unsigned int sysctl_timer_migration = 1;
-+struct ctl_table;
-+static unsigned int sysctl_timer_migration = 1;
- 
- DEFINE_STATIC_KEY_FALSE(timers_migration_enabled);
- 
-@@ -234,6 +238,41 @@ static void timers_update_migration(void)
- 	else
- 		static_branch_disable(&timers_migration_enabled);
- }
-+
-+#ifdef CONFIG_SYSCTL
-+static int timer_migration_handler(struct ctl_table *table, int write,
-+			    void *buffer, size_t *lenp, loff_t *ppos)
-+{
-+	int ret;
-+
-+	mutex_lock(&timer_keys_mutex);
-+	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
-+	if (!ret && write)
-+		timers_update_migration();
-+	mutex_unlock(&timer_keys_mutex);
-+	return ret;
-+}
-+
-+static struct ctl_table timer_sysctl[] = {
-+	{
-+		.procname       = "timer_migration",
-+		.data           = &sysctl_timer_migration,
-+		.maxlen         = sizeof(unsigned int),
-+		.mode           = 0644,
-+		.proc_handler   = timer_migration_handler,
-+		.extra1         = SYSCTL_ZERO,
-+		.extra2         = SYSCTL_ONE,
-+	},
-+	{}
-+};
-+
-+static int __init timer_sysctl_init(void)
-+{
-+	register_sysctl("kernel", timer_sysctl);
-+	return 0;
-+}
-+device_initcall(timer_sysctl_init);
-+#endif /* CONFIG_SYSCTL */
- #else
- static inline void timers_update_migration(void) { }
- #endif /* !CONFIG_SMP */
-@@ -251,19 +290,6 @@ void timers_update_nohz(void)
- 	schedule_work(&timer_update_work);
+diff --git a/fs/file.c b/fs/file.c
+index 9d02352fa18c..79a76d04c7c3 100644
+--- a/fs/file.c
++++ b/fs/file.c
+@@ -817,28 +817,68 @@ void do_close_on_exec(struct files_struct *files)
+ 	spin_unlock(&files->file_lock);
  }
  
--int timer_migration_handler(struct ctl_table *table, int write,
--			    void *buffer, size_t *lenp, loff_t *ppos)
--{
--	int ret;
--
--	mutex_lock(&timer_keys_mutex);
--	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
--	if (!ret && write)
--		timers_update_migration();
--	mutex_unlock(&timer_keys_mutex);
--	return ret;
--}
--
- static inline bool is_timers_nohz_active(void)
+-static struct file *__fget_files(struct files_struct *files, unsigned int fd,
+-				 fmode_t mask, unsigned int refs)
++static inline struct file *__fget_files_rcu(struct files_struct *files,
++	unsigned int fd, fmode_t mask, unsigned int refs)
  {
- 	return static_branch_unlikely(&timers_nohz_active);
+-	struct file *file;
++	for (;;) {
++		struct file *file;
++		struct fdtable *fdt = rcu_dereference_raw(files->fdt);
++		struct file __rcu **fdentry;
+ 
+-	rcu_read_lock();
+-loop:
+-	file = fcheck_files(files, fd);
+-	if (file) {
+-		/* File object ref couldn't be taken.
+-		 * dup2() atomicity guarantee is the reason
+-		 * we loop to catch the new file (or NULL pointer)
++		if (unlikely(fd >= fdt->max_fds))
++			return NULL;
++
++		fdentry = fdt->fd + array_index_nospec(fd, fdt->max_fds);
++		file = rcu_dereference_raw(*fdentry);
++		if (unlikely(!file))
++			return NULL;
++
++		if (unlikely(file->f_mode & mask))
++			return NULL;
++
++		/*
++		 * Ok, we have a file pointer. However, because we do
++		 * this all locklessly under RCU, we may be racing with
++		 * that file being closed.
++		 *
++		 * Such a race can take two forms:
++		 *
++		 *  (a) the file ref already went down to zero,
++		 *      and get_file_rcu_many() fails. Just try
++		 *      again:
+ 		 */
+-		if (file->f_mode & mask)
+-			file = NULL;
+-		else if (!get_file_rcu_many(file, refs))
+-			goto loop;
+-		else if (__fcheck_files(files, fd) != file) {
++		if (unlikely(!get_file_rcu_many(file, refs)))
++			continue;
++
++		/*
++		 *  (b) the file table entry has changed under us.
++		 *       Note that we don't need to re-check the 'fdt->fd'
++		 *       pointer having changed, because it always goes
++		 *       hand-in-hand with 'fdt'.
++		 *
++		 * If so, we need to put our refs and try again.
++		 */
++		if (unlikely(rcu_dereference_raw(files->fdt) != fdt) ||
++		    unlikely(rcu_dereference_raw(*fdentry) != file)) {
+ 			fput_many(file, refs);
+-			goto loop;
++			continue;
+ 		}
++
++		/*
++		 * Ok, we have a ref to the file, and checked that it
++		 * still exists.
++		 */
++		return file;
+ 	}
++}
++
++static struct file *__fget_files(struct files_struct *files, unsigned int fd,
++				 fmode_t mask, unsigned int refs)
++{
++	struct file *file;
++
++	rcu_read_lock();
++	file = __fget_files_rcu(files, fd, mask, refs);
+ 	rcu_read_unlock();
+ 
+ 	return file;
 -- 
-2.20.1
-
-
+2.31.1
 

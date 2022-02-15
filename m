@@ -2,138 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5AAB4B6C79
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:44:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8164B6C90
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238015AbiBOMoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 07:44:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56292 "EHLO
+        id S235910AbiBOMqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 07:46:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237936AbiBOMn3 (ORCPT
+        with ESMTP id S229665AbiBOMqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 07:43:29 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFA71111BC
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:42:40 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id u6so36618664lfc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:42:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bZ/hPvhB6l/GT98IyjxTlesdblulBOqx0t8aw3A0jHw=;
-        b=uJNVxw9rQQ9Ric3MtAGmVVmQ9e9tx8jQSgqxtiLH6Tj9yRS0M5phMpCdbQO2CuS6Lo
-         2HGd2G5RWhNEhynYJ75YmyD3ubNHBr+EmixSyhOVAAc1UFQlJYdRqEZ9tyVhySlGZVE7
-         dAd0xOczoO+SD/q/GWS5j625mh91rbBwm1JR6GZHaUA/Ox9usN2kusbueTAnKHUJ6kjf
-         fk7v8g69zom2gOxNIPReCCZP0/wysVgPU1aXmkvq6tMliKexaCj588lYYxM2fkBbdADt
-         T+UPbUVFQeVZzDNCmcWzvU9c5LGMxOlCAWo3RDuQeVVxuK30MNLWblvyBbxH/cfOpYTh
-         OVaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bZ/hPvhB6l/GT98IyjxTlesdblulBOqx0t8aw3A0jHw=;
-        b=RuB3OyvzHXxjFsIvrIz3yinlnUW8iyqCwwX3Epuj45LXQWmVhFB6QuyhyBZChhrujM
-         kzJGd5XDi+nPH583AqCf17Lw8TkA66rUw0plYzVCRdRc+ZnM94LSENd4QnK9OdtnPm5/
-         Xd+/wO5khD7WWd4jKL979b5CwjrPEEPL/+iyK2x9ylK/bMqDRv0OK4bfmjfXsfWY1gA2
-         KjqrLrKtSCKA1e7KeSZkyNtkDlnX2aWHYChklaowNhNw5hkoPT9Ybjl2zULqDgoMo4yi
-         0q+2UPCA1uGBMoVxsbWX5DzdZ8BDSfvn7MYe3M0QCNO2ry2bbEvuuHD6Uc7K82pbe6vT
-         2UBw==
-X-Gm-Message-State: AOAM531vodVPjjLBDO4N9osuHGVN794HbcJNUy7Puo5MNdLVdzswq6Gz
-        E3wcTwEDKdsHvqS8DFZUhjHfxw==
-X-Google-Smtp-Source: ABdhPJxentoESgiyNbBHAOr5c+HaAA+la7EJnNo75HfMC7ZWYPBFxfJ60zcCmBwrME44zYZL66IF7A==
-X-Received: by 2002:a19:6549:: with SMTP id c9mr3066138lfj.150.1644928958898;
-        Tue, 15 Feb 2022 04:42:38 -0800 (PST)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id bf10sm4394566ljb.130.2022.02.15.04.42.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 04:42:37 -0800 (PST)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 6DD81103F44; Tue, 15 Feb 2022 15:43:31 +0300 (+03)
-Date:   Tue, 15 Feb 2022 15:43:31 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v10 21/45] x86/mm: Add support to validate memory when
- changing C-bit
-Message-ID: <20220215124331.i4vgww733fv5owrx@box.shutemov.name>
-References: <20220209181039.1262882-1-brijesh.singh@amd.com>
- <20220209181039.1262882-22-brijesh.singh@amd.com>
- <YgZ427v95xcdOKSC@zn.tnic>
- <0242e383-5406-7504-ff3d-cf2e8dfaf8a3@amd.com>
- <Ygj2Wx6jtNEEmbh9@zn.tnic>
+        Tue, 15 Feb 2022 07:46:00 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0ED14098
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:45:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644929151; x=1676465151;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=k6V/EzoT1G6Iy6HpgWTP4Y7tnAk/b162v4eJl26GNMo=;
+  b=WZtv61wMgwPWpycw5rCEa8EPtc5ENbmD9w3l0KNVpy9Wqkp0k1ZUr381
+   RJCGoK3LDis3v20GaaMPWX14X7dEFGOkuRfbpKpOnXu9Z/8ciRfAZ25zB
+   Zq+R3fZPZDjGKo3iUTNl51zHJYYe3uTLBdyUcYQSKZE/HTyQh6Ud3J6Oh
+   Vsd54Cw2BaLt4HosUNHqW4tqBnF9d95js4djZXKo0T12MDziM/PNQiE8j
+   Q/AQ8RGsRGcj43e8mrVl/F1F1aBXSheq2jPSCpoAEw7i9EuaNCcWoFa8C
+   d/dnSjw21pNgug+zyiNCI8uc9zE9/tabuE5Zl4ytHIgpqZnG5hyjeGZ9A
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="247938875"
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="247938875"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 04:45:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="635856567"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 15 Feb 2022 04:45:48 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJxDI-0009ew-4i; Tue, 15 Feb 2022 12:45:48 +0000
+Date:   Tue, 15 Feb 2022 20:45:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Qinglin Pan <panqinglin2020@iscas.ac.cn>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [ammarfaizi2-block:palmer/linux/riscv-sv57 2/4]
+ arch/riscv/mm/init.c:782:83: warning: suggest braces around empty body in an
+ 'if' statement
+Message-ID: <202202152048.f2hoyu2a-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ygj2Wx6jtNEEmbh9@zn.tnic>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 13, 2022 at 01:15:23PM +0100, Borislav Petkov wrote:
-> On Fri, Feb 11, 2022 at 11:27:54AM -0600, Brijesh Singh wrote:
-> > > Simply have them always present. They will have !0 values on the
-> > > respective guest types and 0 otherwise. This should simplify a lot of
-> > > code and another unconditionally present u64 won't be the end of the
-> > > world.
-> > >
-> > > Any other aspect I'm missing?
-> > 
-> > I think that's mostly about it. IIUC, the recommendation is to define a
-> > new callback in x86_platform_op. The callback will be invoked
-> > unconditionally; The default implementation for this callback is NOP;
-> > The TDX and SEV will override with the platform specific implementation.
-> > I think we may able to handle everything in one callback hook but having
-> > pre and post will be a more desirable. Here is why I am thinking so:
-> > 
-> > * On SNP, the page must be invalidated before clearing the _PAGE_ENC
-> > from the page table attribute
-> > 
-> > * On SNP, the page must be validated after setting the _PAGE_ENC in the
-> > page table attribute.
-> 
-> Right, we could have a pre- and post- callback, if that would make
-> things simpler/clearer.
-> 
-> Also, in thinking further about the encryption mask, we could make it a
-> *single*, *global* variable called cc_mask which each guest type sets it
-> as it wants to.
+tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-sv57
+head:   8fbdccd2b17335e1881a23865e98c63fcc345938
+commit: 677b9eb8810edc6c616a699018a83e24ed0cccab [2/4] riscv: mm: Prepare pt_ops helper functions for sv57
+config: riscv-randconfig-r021-20220214 (https://download.01.org/0day-ci/archive/20220215/202202152048.f2hoyu2a-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/677b9eb8810edc6c616a699018a83e24ed0cccab
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-sv57
+        git checkout 677b9eb8810edc6c616a699018a83e24ed0cccab
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
 
-I don't think it works. TDX and SME/SEV has opposite polarity of the mask.
-SME/SEV has to clear the mask to share the page. TDX has to set it.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Making a single global mask only increases confusion.
+All warnings (new ones prefixed by >>):
 
--- 
- Kirill A. Shutemov
+   arch/riscv/mm/init.c: In function 'create_fdt_early_page_table':
+>> arch/riscv/mm/init.c:782:83: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
+     782 |                                    (uintptr_t)early_dtb_pud, P4D_SIZE, PAGE_TABLE);
+         |                                                                                   ^
+   arch/riscv/mm/init.c:786:83: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
+     786 |                                    (uintptr_t)early_dtb_pmd, PUD_SIZE, PAGE_TABLE);
+         |                                                                                   ^
+   arch/riscv/mm/init.c: At top level:
+   arch/riscv/mm/init.c:813:13: warning: no previous prototype for 'pt_ops_set_early' [-Wmissing-prototypes]
+     813 | void __init pt_ops_set_early(void)
+         |             ^~~~~~~~~~~~~~~~
+   arch/riscv/mm/init.c:835:13: warning: no previous prototype for 'pt_ops_set_fixmap' [-Wmissing-prototypes]
+     835 | void __init pt_ops_set_fixmap(void)
+         |             ^~~~~~~~~~~~~~~~~
+   arch/riscv/mm/init.c:853:13: warning: no previous prototype for 'pt_ops_set_late' [-Wmissing-prototypes]
+     853 | void __init pt_ops_set_late(void)
+         |             ^~~~~~~~~~~~~~~
+
+
+vim +/if +782 arch/riscv/mm/init.c
+
+   764	
+   765	/*
+   766	 * Setup a 4MB mapping that encompasses the device tree: for 64-bit kernel,
+   767	 * this means 2 PMD entries whereas for 32-bit kernel, this is only 1 PGDIR
+   768	 * entry.
+   769	 */
+   770	static void __init create_fdt_early_page_table(pgd_t *pgdir, uintptr_t dtb_pa)
+   771	{
+   772	#ifndef CONFIG_BUILTIN_DTB
+   773		uintptr_t pa = dtb_pa & ~(PMD_SIZE - 1);
+   774	
+   775		create_pgd_mapping(early_pg_dir, DTB_EARLY_BASE_VA,
+   776				   IS_ENABLED(CONFIG_64BIT) ? early_dtb_pgd_next : pa,
+   777				   PGDIR_SIZE,
+   778				   IS_ENABLED(CONFIG_64BIT) ? PAGE_TABLE : PAGE_KERNEL);
+   779	
+   780		if (pgtable_l5_enabled)
+   781			create_p4d_mapping(early_dtb_p4d, DTB_EARLY_BASE_VA,
+ > 782					   (uintptr_t)early_dtb_pud, P4D_SIZE, PAGE_TABLE);
+   783	
+   784		if (pgtable_l4_enabled)
+   785			create_pud_mapping(early_dtb_pud, DTB_EARLY_BASE_VA,
+   786					   (uintptr_t)early_dtb_pmd, PUD_SIZE, PAGE_TABLE);
+   787	
+   788		if (IS_ENABLED(CONFIG_64BIT)) {
+   789			create_pmd_mapping(early_dtb_pmd, DTB_EARLY_BASE_VA,
+   790					   pa, PMD_SIZE, PAGE_KERNEL);
+   791			create_pmd_mapping(early_dtb_pmd, DTB_EARLY_BASE_VA + PMD_SIZE,
+   792					   pa + PMD_SIZE, PMD_SIZE, PAGE_KERNEL);
+   793		}
+   794	
+   795		dtb_early_va = (void *)DTB_EARLY_BASE_VA + (dtb_pa & (PMD_SIZE - 1));
+   796	#else
+   797		/*
+   798		 * For 64-bit kernel, __va can't be used since it would return a linear
+   799		 * mapping address whereas dtb_early_va will be used before
+   800		 * setup_vm_final installs the linear mapping. For 32-bit kernel, as the
+   801		 * kernel is mapped in the linear mapping, that makes no difference.
+   802		 */
+   803		dtb_early_va = kernel_mapping_pa_to_va(XIP_FIXUP(dtb_pa));
+   804	#endif
+   805	
+   806		dtb_early_pa = dtb_pa;
+   807	}
+   808	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

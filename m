@@ -2,104 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD4E4B77C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 363DD4B7535
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242245AbiBOTm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 14:42:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49800 "EHLO
+        id S243525AbiBOTnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 14:43:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234521AbiBOTm1 (ORCPT
+        with ESMTP id S234521AbiBOTng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 14:42:27 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA20E1B7BA
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 11:42:16 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id u16so81398ljk.2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 11:42:16 -0800 (PST)
+        Tue, 15 Feb 2022 14:43:36 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F263F882
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 11:43:26 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id 124so31274636ybn.11
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 11:43:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=scBaLfaGLWYYxtrlYU1JbIy2UJbbECdZygDHVPbgRRk=;
-        b=lJP1yVdHufaCOzEkkjwdzlhxcctxP39rYiSDo8a2MXhB+GgPvhgLw6MCHYH5T5t/FQ
-         nSpEnu9AuwpaiPiMgurzncCC3pIY50Fi/JoIzF71JmdI/CidTfrdaU+afI49C2/z/4we
-         YnGAyB1qCVxghAFklVWc/ZYuUMF2Z3ATE/ENZqt1LKRrVZfmyMQuwGD2MSyFKI6Zo7gm
-         Tsk61FxSAYjYAkDX31UTXa4uG+wyyh5QqcCdsgVR3zst/tkoYtVgN+33IDZLfTwBYBFb
-         YHXOYNoumFJw50NPD1yysElaq4kVymT98hLvV4fLbfweVhc2S/NE2TER+lDvYSvPeqZo
-         mohA==
+        bh=fcf+8o+t6+WnOwFW3ZI0zrWbIEyxTwbnoswnCVbg8F8=;
+        b=QOKtYm93Mb7Nl3MP7JzAntRwnrHs7RWLTU/tCeRP+GM/Jn80ebbb/qwZx5QaX+mewI
+         WUUZuU6nr/9iu5TGPVJhCtVn0+ucVo4HNyV16DQluiaDXFfXynO0wi9IfmRHfy7AMV3Y
+         enPQ2mNYTsv5GfwrdbeHMtTUFex+HrNNLZn/CaLxvTvNAGfSnEUEJgzfZM3ql+B1fRKf
+         Uwxdzq5t7P7l8ohDBs6ISXllYWkYeAtu9rlf3JopT8ubliFCWgGa3QyOd8tlZIIshh/Y
+         beOdvGoM6IwF8SWPlasZQrI4HbcRDD404mYq2HSLETqVVrh8cL4W5EAGq8C3ZQiYQQS/
+         VPoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=scBaLfaGLWYYxtrlYU1JbIy2UJbbECdZygDHVPbgRRk=;
-        b=cMGTH1AYUKnkG2dgEG+PS4aaBK5D3jm+LHffzhvi9xmqbMbdpKWuGNzpmSTCC2Ijt+
-         vDQMp9hN6xbSInktDOjCGWMxODLAMbeMSODSdJgcFEXcm1YK91HX4I6XfqL0NYs5yBxM
-         yNTFlGGBkJDlQQs+anuIFW4ICVm+qgzBBd2biMeEgDlizPavvc7Lek/4YvnBKNEu51v2
-         mMyPHIIMjvY3AFzfJx4uqwdqbuCe2NyUbdKSV2YRh7p4dcCKpVVjiuULFTeNVXz0VwKs
-         NdIlLlW8V67DtkuE41ZMcpw1IIiFkrcWDavUvu+fUKj4ilTmHpqQF6wxkZlI5EqH93L3
-         oCew==
-X-Gm-Message-State: AOAM531NtU+1lO5RKqiOJ1ppH74WExXkvvvU2m0Ik93VSZMzmyZFjWkj
-        zIZfCF6nFcF8ZPJreXspIh2Fj+xd9raPwgm3+SO8QQ==
-X-Google-Smtp-Source: ABdhPJzfSSA3stmYRDtGVr8aeAPeZeLZIDE3WmXVsx/LCmKZBtGQxbOB8RdUyWAPezYun7pq/C1CNTW4pBuvRhLj2Hg=
-X-Received: by 2002:a05:651c:2121:: with SMTP id a33mr426220ljq.220.1644954134959;
- Tue, 15 Feb 2022 11:42:14 -0800 (PST)
+        bh=fcf+8o+t6+WnOwFW3ZI0zrWbIEyxTwbnoswnCVbg8F8=;
+        b=RGfXnX9vC6RiCK8tXsrhv9lTZoFsM23fWv9p3oCTXPyKpAjq+SlUHntKjxpMyTkVsZ
+         fJIBJP/ii9o/AaRWPKlPafXV1hQR0BC1eomPw1gHc8Bg6nrKI/0l9I4+P/2+LxDwFUKw
+         MTt5UsrU8mIz9KIh7uxMxuvaK55YpIphIL7Sfpog9/gkMOiYEX0ewBxvUWLRS7TM3QFW
+         fBFbqi8sGHTp9BaFqNBJ4gGtkdid0oUtZV4Ws0s1k2J9opurvG3KEqrTWq1J3zUkSvfx
+         AyMUiRPZZTPmS2SWv+mKA/uI1n0DNBLIVrfM78sibEgRSxJEHclC1BJoGDtDD0MjC3he
+         hn9A==
+X-Gm-Message-State: AOAM531AbMUTR2GEUc3WpDEN64MeGT9GPzekuo0YpbpGpGt3jSL/Zb0K
+        OCQMECaBLxhfYpm84q8xDVeT5g6qTodUXHNRWdtIfw==
+X-Google-Smtp-Source: ABdhPJw0Ygn9sW+6D5SxaOXJ0cWbKOO0bYs2UrcFSKQtZHUxCfSP7Ewfx33QU+tl0IwKHKZnRZl9PCxf9unHvYZcJTE=
+X-Received: by 2002:a25:7a47:: with SMTP id v68mr519462ybc.488.1644954205145;
+ Tue, 15 Feb 2022 11:43:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20220214175138.2902947-1-trix@redhat.com> <daabe69d3863caa62f7874a472edbf2bc892d99e.camel@codeconstruct.com.au>
- <6590666e-524d-51c3-0859-f8bf0c43c5ca@redhat.com>
-In-Reply-To: <6590666e-524d-51c3-0859-f8bf0c43c5ca@redhat.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 15 Feb 2022 11:42:03 -0800
-Message-ID: <CAKwvOd=ntKk7PwtYKWCV_44nf9ccCVDKiGJk_wB4yqfvPFDUbw@mail.gmail.com>
-Subject: Re: [PATCH] mctp: fix use after free
-To:     Tom Rix <trix@redhat.com>, Jeremy Kerr <jk@codeconstruct.com.au>
-Cc:     matt@codeconstruct.com.au, davem@davemloft.net, kuba@kernel.org,
-        nathan@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <00000000000072ef2c05d7f81950@google.com> <CAHbLzkpr=xHC7C2+wkOGUB24924T4L1Lx_v+m1Ke8Ku3ym7wYw@mail.gmail.com>
+ <Ygt5cAS78BFxVwkg@dhcp22.suse.cz> <CAJuCfpGf8HLh=tfrnK3VFd2QO9bgzuM9HyDY8PYYxJkbdbmYRA@mail.gmail.com>
+ <CAHbLzkpKGq8XaLx3G1=oJ-TsZiqC+A+CaVK5=Mjzo1Jo0qA3DQ@mail.gmail.com>
+ <CAJuCfpE833u+Z909yaLgGEJV7O10fVw-_eG1nH=w4b3+PbxrLg@mail.gmail.com> <YgwApdvLhxFU26j5@dhcp22.suse.cz>
+In-Reply-To: <YgwApdvLhxFU26j5@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 15 Feb 2022 11:43:14 -0800
+Message-ID: <CAJuCfpGixCqZDAqokxCrQ1YjMb+32Y77U5jHkULKM0htnR19MQ@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in __oom_reap_task_mm
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Yang Shi <shy828301@gmail.com>,
+        syzbot <syzbot+2ccf63a4bd07cf39cab0@syzkaller.appspotmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 6:16 PM Tom Rix <trix@redhat.com> wrote:
+On Tue, Feb 15, 2022 at 11:36 AM Michal Hocko <mhocko@suse.com> wrote:
 >
->
-> On 2/14/22 4:44 PM, Jeremy Kerr wrote:
-> > Hi Tom,
+> On Tue 15-02-22 10:10:53, Suren Baghdasaryan wrote:
+> > On Tue, Feb 15, 2022 at 9:53 AM Yang Shi <shy828301@gmail.com> wrote:
+> [...]
+> > > Isn't the below race possible?
+> > >
+> > >           CPU A                                     CPU B
+> > > exiting:
+> > >   mmap_write_lock
+> > >   remove_vma()
+> > >   mmap_write_unlock
+> > >                                                 process_mrelease:
+> > >                                                   mmap_read_lock
+> > >                                                   __oom_reap_task_mm
+> > >                                                   mmap_read_unlock
+> > >
 > >
-> > Also, can you share how you're doing the clang static analysis there?
-> > I'll get that included in my checks too.
+> > Sure, that sequence (would not call it a race) is possible but in this
+> > case __oom_reap_task_mm will find no vmas in the mm because exit_mmap
+> > freed and removed all of them.
 >
-> build clang, then use it
->
-> scan-build \
->      --use-cc=clang \
->      make CC=clang
+> I didn't really have chance to have a closer look but I do not see
+> exit_mmap doing mm->mmap = NULL so the pointer can be a freed vma unless
+> I am missing something. I thought we've had it in your patches? Has this
+> got lost somewhere in the process?
 
-I'm pretty sure we have a make target in Kbuild, too. It uses
-clang-tidy as the driver, as clang-tidy can do BOTH the static
-analyses AND clang-tidy checks.
+Doh! Yes, it looks like I completely missed the actual pointer. That
+must be it since I don't see any other possibility. Will post a patch
+shortly.
+Thanks!
 
-$ make LLVM=1 all clang-analyzer
-
->
-> There are a couple of configs that aren't happy with clang, these you
-> can sed away with
->
-> sed -e 's/CONFIG_FRAME_WARN=2048/CONFIG_FRAME_WARN=0/;
-> s/CONFIG_RETPOLINE=y/CONFIG_RETPOLINE=n/;
-> s/CONFIG_READABLE_ASM=y/CONFIG_READABLE_ASM=n/;
-> s/CONFIG_FORTIFY_SOURCE=y/CONFIG_FORTIFY_SOURCE=n/'
->
-> I am using clang 14
-
--- 
-Thanks,
-~Nick Desaulniers
+> --
+> Michal Hocko
+> SUSE Labs

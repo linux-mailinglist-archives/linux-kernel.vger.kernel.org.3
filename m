@@ -2,91 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 306844B761C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2AD4B7713
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243211AbiBOTPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 14:15:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38874 "EHLO
+        id S243470AbiBOTQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 14:16:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234514AbiBOTPL (ORCPT
+        with ESMTP id S234514AbiBOTQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 14:15:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FD5108189;
-        Tue, 15 Feb 2022 11:15:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB31361743;
-        Tue, 15 Feb 2022 19:15:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A36CBC340EB;
-        Tue, 15 Feb 2022 19:14:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644952499;
-        bh=AjJtRhsxaMSmw5bCKP9unHA02aPAd54DWxZLx21Wz6M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o/Oe5c/72fDzB3xtvF/HWUtrR4/Pl3HqbbE/VMGjrs07aQhZNPWjF2EkhDhCfzRtO
-         EHueLKYLA4M7CQLQKG0cOmXYT72Dscuo7STaTpYQpuL5kOb/JJxHjZlU76eXQfWFB+
-         LQl3V/C9dIX/Pi+erkqAyJVSZjYk/FrvbQZQnRyNNRmjHYkBu9pqHZUjeE0MWbCt8i
-         Koc01uXydjUxaYFXkGYxldhM212ffpI6zgD7wy/ogAkltZtpodQmM0zY4x9TKiH1rP
-         bntDyx4HJ+DhwmexzG/asgjqAEf51Izas/3RtVToyGQR5aJKgrqyV3N7niQE4Z35aB
-         JSgPRFsQiTlJQ==
-Date:   Tue, 15 Feb 2022 11:14:56 -0800
-From:   Keith Busch <kbusch@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Markus =?iso-8859-1?Q?Bl=F6chl?= <markus.bloechl@ipetronik.com>,
-        Jens Axboe <axboe@kernel.dk>, Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stefan Roese <sr@denx.de>
-Subject: Re: [RFC PATCH] nvme: prevent hang on surprise removal of NVMe disk
-Message-ID: <20220215191456.GB1934598@dhcp-10-100-145-180.wdc.com>
-References: <20220214095107.3t5en5a3tosaeoo6@ipetronik.com>
- <20220215152240.GB1663897@dhcp-10-100-145-180.wdc.com>
- <20220215184704.GB24543@lst.de>
+        Tue, 15 Feb 2022 14:16:22 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C19F108BD4;
+        Tue, 15 Feb 2022 11:16:12 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id A03A268AA6; Tue, 15 Feb 2022 20:16:08 +0100 (CET)
+Date:   Tue, 15 Feb 2022 20:16:08 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Christoph Hellwig <hch@lst.de>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        kernel test robot <lkp@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-sh@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sh: Convert nommu io{re,un}map() to static inline
+ functions
+Message-ID: <20220215191608.GA25076@lst.de>
+References: <4ed0a7a0d3fa912a5b44c451884818f2c138ef42.1644914600.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220215184704.GB24543@lst.de>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <4ed0a7a0d3fa912a5b44c451884818f2c138ef42.1644914600.git.geert+renesas@glider.be>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 07:47:04PM +0100, Christoph Hellwig wrote:
-> On Tue, Feb 15, 2022 at 07:22:40AM -0800, Keith Busch wrote:
-> > I can't actually tell if not checking the DYING flag check was
-> > intentional or not, since the comments in blk_queue_start_drain() say
-> > otherwise.
-> > 
-> > Christoph, do you know the intention here? Should __bio_queue_enter()
-> > check the queue DYING flag, or do you prefer drivers explicity set the
-> > disk state like this? It looks to me the queue flags should be checked
-> > since that's already tied to the freeze wait_queue_head_t.
+On Tue, Feb 15, 2022 at 09:51:05AM +0100, Geert Uytterhoeven wrote:
 > 
-> It was intentional but maybe not fully thought out.  Do you remember why
-> we're doing the manual setting of the dying flag instead of just calling
-> del_gendisk early on in nvme?  Because calling del_gendisk is supposed
-> to be all that a tree needs to do.
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Fixes: 13f1fc870dd74713 ("sh: move the ioremap implementation out of line")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-When the driver concludes new requests can't ever succeed, we had been
-setting the queue to DYING first so new requests can't enter, which can
-prevent forward progress.
+Looks good:
 
-AFAICT, just calling del_gendisk() is fine for a graceful removal. It
-calls fsync_bdev() to flush out pending writes before setting the disk
-state to "DEAD".
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 
-Setting the queue to dying first will "freeze" the queue, which is why
-fsync_bdev() is blocked. We were relying on the queue DYING flag to
-prevent that from blocking.
+> ---
+> This is actually the third time this change was made, as Christoph
+> converted iounmap() to a macro before in commit 98c90e5ea34e98bd ("sh:
+> remove __iounmap"), reverting commit 733f0025f0fb43e3 ("sh: prevent
+> warnings when using iounmap").
+> 
+> Probably sh-nommu should include <asm-generic/io.h>, but that would
+> require a lot more changes.
 
-Perhaps another way to do this might be to remove the queue DYING
-setting, and let the driver internally fail new requests instead? There
-may be some issues with doing it that way IIRC, but blk-mq is a bit
-evolved from where we started, so I'd need to test it out to confirm.
+I don't think it would be all that bad.  But between the breakage and
+the fact that sh is almost unmaintained let's get the quick fix in if
+we can..

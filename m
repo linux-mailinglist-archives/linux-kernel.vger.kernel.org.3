@@ -2,102 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13CAD4B7AC7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 23:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82EF34B7AD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 23:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244676AbiBOW4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 17:56:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33386 "EHLO
+        id S244717AbiBOW5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 17:57:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235253AbiBOW4i (ORCPT
+        with ESMTP id S244711AbiBOW5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 17:56:38 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80F866AC9;
-        Tue, 15 Feb 2022 14:56:26 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id l73so366828pge.11;
-        Tue, 15 Feb 2022 14:56:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=F1oWoUo/Pz47AF3QhLhNS8GxP6K0OhjZso/PODj3rEA=;
-        b=oA2SdCzBou6WlDc+wFi3Ojp9YyUq1aopMs9fn0pc//eCouP73Vuva76ZdR0AFPlv2L
-         7vim92sLGeXAHMe0t1eg5veqSVy278GeaYBQGTXFZE8VLuOoulJc0SJ+vG/mzpuzH/Pn
-         YJdufdaHzj+OWAlb7iybv0WTnf1YyEBW6oM2Rs0EKKC/kbp1C4sETQzEBEz3SN9jd4+7
-         azZPmhH1fnnerX7/x/om93bjgg/iC9Qal7SXEI6XZR+W8C+XfFNcK60Pso8g2HJEO3ew
-         H/f7omVdO8Prix3AA8s7m8egOfSb8Ui2qp4i9H2qdz0T9ZnPJQC78mqMYKPOVYV6rGMg
-         KRmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=F1oWoUo/Pz47AF3QhLhNS8GxP6K0OhjZso/PODj3rEA=;
-        b=jTrHX5CPG+r5bKv6gdaab6jfbk+JItmviGyeOF8XuFC/KqdrJQ0TP0V9sQofJ6/sas
-         +lGAFVzyaxMKsjw/lW6F0GO2f3M9wVkB/GcioDM9/ntDMXqR5R+mSLg87UV/QV/bizXy
-         mPQSs6iH1nz8jP/d/OZYZaDrAw/YJlYaltdCxhpP//Dl8hXBmYF8muMnKYwC2qsKVfPk
-         DatXjBCay89kwISalPu0kr5EuJC3dQfJY99R0rt9ND7MUeayHdIzwmJQ8c8Dur2VZbjo
-         2eafJhBXEoQ1MlSiESXvDt5A0LXmoStMWj8goO23NxqmSQW+M1WA7ZcVnfn8oMqxAhcM
-         oeRw==
-X-Gm-Message-State: AOAM532V5m7VEWfzSd2VSr4emiCWIKbqZedYGVvEwkVHrz0ycs01CAiL
-        +JSA1+2wgc5bovGt7G46Ijyq8qEaHUg=
-X-Google-Smtp-Source: ABdhPJztLBgYoi3wDhawZyaMDvrM19OyxAZJVIsFMod4/uaHZPhoo2S5cmKc9TqXBYa8gRCeXmtEsg==
-X-Received: by 2002:a65:52cc:: with SMTP id z12mr933070pgp.532.1644965786057;
-        Tue, 15 Feb 2022 14:56:26 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:4e4a:b0ff:e926:40e2])
-        by smtp.gmail.com with ESMTPSA id m25sm3697536pgv.4.2022.02.15.14.56.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 14:56:25 -0800 (PST)
-Date:   Tue, 15 Feb 2022 14:56:22 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Danilo Krummrich <danilokrummrich@dk-develop.de>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linus.walleij@linaro.org
-Subject: Re: ps2-gpio: use ktime for IRQ timekeeping
-Message-ID: <Ygwvls62iycw12z/@google.com>
-References: <20220215160208.34826-1-danilokrummrich@dk-develop.de>
+        Tue, 15 Feb 2022 17:57:19 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E130D4CBA
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 14:56:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=lxDxiH7YdaguzLVLUSqqsB5d4iEpIHEpukWCHc1REm0=; b=EelEfSfmJZSj7jPR8xdrytLvOv
+        vvUegttSQBNXTCISxTbXxPrmJ3ijUCphVHjWXzE5fzvUSjXjgspgCUuw/AooGJM3x20gIF2JvPJCV
+        Gr7jF/6+VPXHTn5p6oQYvOOdahT4NrKPvmxVpYH9NobncBN9rut7BziYG9r9sb8oOrGxy9XBaXXIw
+        lopSMV62eX5PhZgVOKfGsWjasY9ZBEuxFoA9uyQ5zoLd3Yw2uPBDcikP8sjKIweQuXrki7JmYHalt
+        vJCwUxPIlS2v6dDqrKb0d4JKpxhOoVKrCGPHuRudPQBuWKe6sTGs3YVuOVr8AS7BIFdxRsIWKQdW/
+        hq8pA/JQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nK6kL-00EEoo-QD; Tue, 15 Feb 2022 22:56:33 +0000
+Date:   Tue, 15 Feb 2022 22:56:33 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Rik van Riel <riel@surriel.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        SeongJae Park <sj@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 10/13] mm/munlock: mlock_page() munlock_page() batch
+ by pagevec
+Message-ID: <YgwvoaJj5BqpMOiR@casper.infradead.org>
+References: <55a49083-37f9-3766-1de9-9feea7428ac@google.com>
+ <1abb94ee-fe72-dba9-3eb0-d1e576d148e6@google.com>
+ <YgvXjwapRTOXQOuQ@casper.infradead.org>
+ <ef1e285c-187a-f682-a62b-c6a0f42b5cbf@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220215160208.34826-1-danilokrummrich@dk-develop.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ef1e285c-187a-f682-a62b-c6a0f42b5cbf@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 05:02:04PM +0100, Danilo Krummrich wrote:
-> Changes since v1
-> ================
->   - add patch to refactor struct ps2_gpio_data for clear separation between
->     RX and TX
->   - make all variables for IRQ timekeeping per-port and initialize them in
->     ps2_gpio_open()
+On Tue, Feb 15, 2022 at 01:02:30PM -0800, Hugh Dickins wrote:
+> On Tue, 15 Feb 2022, Matthew Wilcox wrote:
+> > > +#define mlock_new(page) ((struct page *)((unsigned long)page + NEW_PAGE))
+> > 
+> > I'm going to change this to:
+> > 
+> > static inline struct page *mlock_lru(struct page *page)
+> > {
+> > 	return (struct page *)((unsigned long)page + LRU_PAGE);
+> > }
+> > 
+> > (mutatis mutandi for mlock_new)
 > 
-> This patch series implements the usage of ktime for IRQ timekeeping to
-> overcome:
-> 
-> (1) The resolution limitations of jiffies.
-> (2) Potential spurious IRQs generated by gpio controllers.
-> 
-> Besides that, based on the newly implemented timekeeping, it fixes a wrongly
-> suspected extra clock cycle for TX transfers and a race condition when
-> starting an immediate TX transfer based on data received from an RX transfer.
-> 
-> Danilo Krummrich (4):
->       input: ps2-gpio: refactor struct ps2_gpio_data
->       input: ps2-gpio: use ktime for IRQ timekeeping
->       input: ps2-gpio: remove tx timeout from ps2_gpio_irq_tx()
->       input: ps2-gpio: don't send rx data before the stop bit
-> 
->  drivers/input/serio/ps2-gpio.c | 180 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++------------------------------------------
->  1 file changed, 116 insertions(+), 64 deletions(-)
+> Okay, thanks.  (You're not naming your folio "page" :-?)
 
-Applied the lot, thank you.
-
--- 
-Dmitry
+Worse, I tried passing it '&folio->page'.  That produced some ...
+interesting compiler error messages.

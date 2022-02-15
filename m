@@ -2,109 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F624B75C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9174B767F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241449AbiBOR0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 12:26:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35100 "EHLO
+        id S242495AbiBOR1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 12:27:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232081AbiBOR0x (ORCPT
+        with ESMTP id S232081AbiBOR1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 12:26:53 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCF9140FD
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:26:43 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id d187so35976755pfa.10
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:26:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LivC78KXDmCeBXJxJsH/goPuWXuSn9BnrpWMwbtednQ=;
-        b=ZZ1NeVjRHkne81llSgnehU+Oly7EGCd8n2UfEjNW4RbULk/bt5g8voHGiQed0jj+mn
-         hEl82AhzVEcnTv40D4gjTiSeymrkFFLQBtQoEjw1hXGkmpcWNnEZPxc2ui49Oxdqxpyz
-         WBtDY4J3UVxZzANq6JUMWW+9PlbmpsAXHIh+vYn6sP9jQAXkrxs8PuPpOZSECtx4GcuV
-         2sXUMosIEAY9Y1f9Myt6udtgtXaFjoK8bgo1UNXlrvQ3SrYLXK9gQwxiL7SadEvKow4r
-         AN73bMDKbGXkiH4HsMI7hch/9XYB1gzlcioZSX3OsDXafQWSFZ1efVlr5drlXajird4W
-         4pbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LivC78KXDmCeBXJxJsH/goPuWXuSn9BnrpWMwbtednQ=;
-        b=pZHUIHSkLDwipsko9U9SHSiPMMmnzOc//mYC7QYMHJLSVKK4U3hQeU1qqncZzHgMHg
-         DWLwwJhkmdzSNS3StkJieV/0iCwCzfAFVeeRTHlNEy92usZ6nWPJpbIdV5dy7D1VQl1H
-         dqDtdkY9becsjUmzOI7/O+fxyKUQtln5iz7mVCTBmyQf0sKZOpOenDOPb7wZ6+a7h64G
-         o7ok0KOoYBTgfw+h9OgWTIrGaVlNJN1Ld/Zy/bipdOQACnnG7RhOgJKJRz5Qca30a0Eu
-         KaIUWJrdxkTBksGSLJbnRYHgC4GPdSPf6gMy+HOCkWcXe/ThVFA1HK/KRWkmineen37z
-         JSsg==
-X-Gm-Message-State: AOAM5317dD0qfgQCk1ICKl4ylieVcTYVfJZdITPnzjXbGDOT9uYg6gU2
-        b6kRGsCMCZRY8nXpsdf87TyzACmL1aJVxm38Z6ShZw==
-X-Google-Smtp-Source: ABdhPJzf97Fv+GmhmthjM7cQZ+yiNvj/uOi69amBBwTr/Gv6s6j9trUhmKnj0GqfEgE0yQ0sylShhp6pIXxc6ja8LLg=
-X-Received: by 2002:a63:5b62:: with SMTP id l34mr4397652pgm.440.1644946003281;
- Tue, 15 Feb 2022 09:26:43 -0800 (PST)
+        Tue, 15 Feb 2022 12:27:12 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4855F140FD;
+        Tue, 15 Feb 2022 09:26:59 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 72EF81F382;
+        Tue, 15 Feb 2022 17:26:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1644946018; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yBgxgoZsveUgEspMXqC/qI2secN9IP8B/Gmo05h1B6E=;
+        b=T0nTYJZBFfHUHaGMRTG3JqNCq7Ua6FsneNb/P+cU9EM+aXvzn0ihPCxLgu2v1VHitdCPvI
+        B7Fyi2evWlQoZrZzY9fJJdrSodBDAxLakylLRcnuy2KD3961TFd/GC7LYniASf6cpcu8n8
+        Phe9NngBxI9NJJHPE1Uiz9f6Ern+hk4=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id EAA1BA3B81;
+        Tue, 15 Feb 2022 17:26:57 +0000 (UTC)
+Date:   Tue, 15 Feb 2022 18:26:57 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH] Docs: printk: add 'console=null|""' to
+ admin/kernel-parameters
+Message-ID: <YgviYXNc6zo2V+35@alley>
+References: <20220215005615.11244-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-References: <20220214213020.685-1-tharvey@gateworks.com> <9d5cff18-5493-f6dd-4bd6-9bafa2a503a7@camlingroup.com>
-In-Reply-To: <9d5cff18-5493-f6dd-4bd6-9bafa2a503a7@camlingroup.com>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Tue, 15 Feb 2022 09:26:32 -0800
-Message-ID: <CAJ+vNU0sWGsQa=YwLE9Ng34-DhJF=YR3oTV+q--KcgTMCjBa2w@mail.gmail.com>
-Subject: Re: [PATCH] serial: imx: leave IRTS disabled if using modem-control CTS
-To:     =?UTF-8?Q?Tomasz_Mo=C5=84?= <tomasz.mon@camlingroup.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-serial@vger.kernel.org,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Sergey Organov <sorganov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220215005615.11244-1-rdunlap@infradead.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 10:03 PM Tomasz Mo=C5=84 <tomasz.mon@camlingroup.co=
-m> wrote:
->
-> On 14.02.2022 22:30, Tim Harvey wrote:
-> > If using modem-control gpios for CTS we must leave IRTS disabled
-> > as otherwise the hardware will only transmit based on the internal RTS
-> > pin routed to it.
-> >
-> > This allows hardware flow control to be used with cts-gpios.
->
-> This hardware flow control sounds quite limited. Once CTS becomes
-> inactive, the transmitter will still output all characters from TxFIFO.
-> Transmitting whole TxFIFO already sounds quite bad, but that's the best
-> case scenario where gpio interrupt is handled right away without any
-> delay (so more than TxFIFO characters can actually be transmitted).
->
-> Does the internal RTS default to inactive when it's not pinmuxed to the
-> actual pin? If so, then controlling UCR2_IRTS based on CTS gpio could
-> halt the transmission when the TxFIFO is not empty.
->
+On Mon 2022-02-14 16:56:15, Randy Dunlap wrote:
+> Tell about 'console=null|""' and how to use it.
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Petr Mladek <pmladek@suse.com>
+> Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: John Ogness <john.ogness@linutronix.de>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt |    6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> --- linux-next-20220214.orig/Documentation/admin-guide/kernel-parameters.txt
+> +++ linux-next-20220214/Documentation/admin-guide/kernel-parameters.txt
+> @@ -724,6 +724,12 @@
+>  		hvc<n>	Use the hypervisor console device <n>. This is for
+>  			both Xen and PowerPC hypervisors.
+>  
+> +		{ null | "" }
+> +			Use to disable console output, i.e., to have kernel
+> +			console messages discarded.
+> +			This must be the first (or only) console= string
+> +			used on the kernel command line.
 
-Tomasz,
+It must be the only console= parameter on the command line. Otherwise,
+the other consoles get enabled as well.
 
-I agree that the increased latency makes using a GPIO for CTS
-(software controlled) not as good as one pinmuxed into the UART block
-directly (hardware controlled) but without this patch GPIO for CTS
-does not work at all because the internal RTS defaults to inactive
-when its not pinmuxed. For many applications the latency is not an
-issue.
+It might make sense to detect this situation and print a warning or
+so. Nobody has sent a patch for this so far.
+
+But there is even bigger problem. The default console is also used
+as stdin/stdout/stderr for the init process. It might fail when there
+is no console driver associated with it.
+
+The problem with stdin/stdout/stderr does not happen when
+CONFIG_NULL_TTY is enabled and ttynull driver is available.
+Unfortunately, it can't be enabled by default because it can
+be used by mistake, see the commit a91bd6223ecd46addc71e
+("Revert "init/console: Use ttynull as a fallback when there
+is no console").
+
+And there is still a mystery that has not been explained yet,
+see https://lore.kernel.org/r/a46e9a26-5b9f-f14c-26be-0b4d41fa7429@roeck-us.net
+
+On the positive note. console=null mostly works. All the problems are
+hard to reproduce.
+
+
+Now, what to do with this patch. I would suggest two changes:
+
+1. Replace "must be the first (or only)" with "must be the only"
+
+2. Mention that it is suggested to enable CONFIG_NULL_TTY that
+   will avoid problems with stdin/stdout/stderr of the init process.
+   But it might cause the ttynull might be used even when a real
+   console is configured. And that more details can be found
+   in the commit a91bd6223ecd46addc71e ("Revert "init/console:
+   Use ttynull as a fallback when there is no console").
+
+   It might be enough to mention this in the commit message.
 
 Best Regards,
+Petr
 
-Tim

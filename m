@@ -2,231 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C704B7392
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:44:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ABC24B7224
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239111AbiBOOsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 09:48:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53076 "EHLO
+        id S239317AbiBOOvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 09:51:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239425AbiBOOqI (ORCPT
+        with ESMTP id S239121AbiBOOuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 09:46:08 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA35106129
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 06:44:49 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id m14so16060520lfu.4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 06:44:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Jdq5INV1bbMgRIUNf5ebSD0wzAyaW4IvmLge7Lbz89Y=;
-        b=cv8g3z51OXlxfsG4dBvI+ALtL4z6gJJNdGMG36h7DVX21Q6Sec+oUN9/NuJF8+qo9a
-         Xf60I5nWD6CtLcfmMphbmVl7m5oJYW98xdjrjPaPjPs4rQBT3aUX/O3gz6XSBiYRJ85h
-         zgZMVcNXQDlW3ZTxMQ1c4zX7iaqW/GzLcjIwaGlF2ruiCvPReHRIdXaPxtH/hSPQ3Y/d
-         Z+6vSdPxuV5dXrKyrQ1m/F4pVmyjH5/1m88nKD8AgHVGMiD8uNmEGCkodcFky7akg0co
-         WFHqQfyqWtsVDFT34isKdlj6fpggRMvFOPtbY4kjwB3Caw5vKVAyUK4gvIVbFeWNg/a2
-         3UNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Jdq5INV1bbMgRIUNf5ebSD0wzAyaW4IvmLge7Lbz89Y=;
-        b=ywxz9VL8L9c+ETAB6NQgF334dWNbKMw9D+KqIcXBjrao+pqwT/qbTJEy+mS1E6M39I
-         SPrUC79qCmvRcMx7XYuwhG+72JEOTwCPS6jNf6Qd6IxOwzY7sRrt6qVf6naHmlNyFDzH
-         uTWup6tPmFqgxjzrO6GgdKeYoKWCpRyOYHpLgwNZkVuYmdfl6ZR/pZ8UPsdXlEeDznlB
-         T0sZ/fTms4lL/Gxed2eClf5EEgrKiyulY98YMkw7qIb8nZR66xK/UkYO3lFSDPhKItCH
-         TcaAR8p4MCnRkxcK4XwZmOuHlz+HEaKvjk5E/lmxQslJWm0Sa3za9GBWR2/W5fMQq/J4
-         mkaQ==
-X-Gm-Message-State: AOAM531EYpjU2bOcQnEpOy0c4uKx35z3WcRg6T4JVpX9Ry2diQj08kjo
-        vD9Sn9wrIoEwe+VVhk2PDgWhyQ==
-X-Google-Smtp-Source: ABdhPJyPstMwtYEwnlz/N2XWQ9dp7sLdzEVkWJuipil3ukOAddJ4id/9S+2ftJZlKM1513ZbvtOq/A==
-X-Received: by 2002:a05:6512:2351:: with SMTP id p17mr3415221lfu.431.1644936287407;
-        Tue, 15 Feb 2022 06:44:47 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id a9sm645840ljm.107.2022.02.15.06.44.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 06:44:46 -0800 (PST)
-Message-ID: <460e0036-74b5-bccd-c11c-2573290012ae@linaro.org>
-Date:   Tue, 15 Feb 2022 17:44:46 +0300
+        Tue, 15 Feb 2022 09:50:35 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5896129BBF;
+        Tue, 15 Feb 2022 06:48:37 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 9EF37210FA;
+        Tue, 15 Feb 2022 14:48:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1644936515; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+yhpPTea/DqMlskYIss7cvQ5ZGd0scwjXa1I33ua2hg=;
+        b=vCogXRX9gwyCVqmqrQoZpcqRCMT/RAnB+gHyB1EB8ZFVOUQfLs9dbBYVk75RE5Hos/Srbl
+        /xLJBKlF9ibMbjqlFeMUOvXbFcIH25cHEhjCgJYA1X3F0uQkvRj6PNu1VEm94lzv4Ys0Ep
+        K+q9HywEzRlYDjcCqPQ0i1CbVxOY7b0=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 97523A3B89;
+        Tue, 15 Feb 2022 14:48:35 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 96B8FDA818; Tue, 15 Feb 2022 15:44:51 +0100 (CET)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs fixes for 5.17-rc5
+Date:   Tue, 15 Feb 2022 15:44:49 +0100
+Message-Id: <cover.1644935941.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] drm/msm/dpu: Disable boot loader configured data paths
-Content-Language: en-GB
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220215043708.1256854-1-bjorn.andersson@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220215043708.1256854-1-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/02/2022 07:37, Bjorn Andersson wrote:
-> It's typical for the bootloader to configure CTL_0 for the boot splash
-> or EFIFB, but for non-DSI use cases the DPU driver tend to pick another
-> CTL and the system might end up with two configured data paths producing
-> data on the same INTF. In particular as the IOMMU configuration isn't
-> retained from the bootloader one of the data paths will push underflow
-> color, resulting in screen flickering.
-> 
-> Naturally the end goal would be to inherit the bootloader's
-> configuration and provide the user with a glitch-free handover from the
-> boot configuration to a running DPU.
-> 
-> But such effort will affect clocks, regulators, power-domains etc, and
-> will take time to implement. So in the meantime this patch simply
-> disables all the data paths, on platforms that has CTL_FETCH_ACTIVE, to
-> avoid the graphical artifacts.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 13 +++++++++++++
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h |  6 ++++++
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c    |  2 ++
->   drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c     | 17 +++++++++++++++++
->   drivers/gpu/drm/msm/disp/dpu1/dpu_rm.h     |  8 ++++++++
->   5 files changed, 46 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> index 02da9ecf71f1..69d4849484fa 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> @@ -357,6 +357,18 @@ static void dpu_hw_ctl_clear_all_blendstages(struct dpu_hw_ctl *ctx)
->   	DPU_REG_WRITE(c, CTL_FETCH_PIPE_ACTIVE, 0);
->   }
->   
-> +static void dpu_hw_ctl_disable_boot_config(struct dpu_hw_ctl *ctx)
-> +{
-> +	if (ctx->caps->features & BIT(DPU_CTL_FETCH_ACTIVE)) {
+Hi,
 
-I see that you are changing only CTL_FETCH_PIPE_ACTIVE. However it still 
-seems like a hack.
-What if instead we always disable boot config for all paths except CTL_0 
-(or CTL_0 and CTL_1)?
+a few more fixups. Please pull, thanks.
 
-> +		/*
-> +		 * Disable the pipe fetch and trigger a start, to disable the
-> +		 * data path
-> +		 */
-> +		DPU_REG_WRITE(&ctx->hw, CTL_FETCH_PIPE_ACTIVE, 0);
-> +		DPU_REG_WRITE(&ctx->hw, CTL_START, 0x1);
+* yield CPU more often when defragmenting a large file
 
-What about video vs cmd modes?
+* skip defragmenting extents already under writeback
 
-> +	}
-> +}
-> +
->   static void dpu_hw_ctl_setup_blendstage(struct dpu_hw_ctl *ctx,
->   	enum dpu_lm lm, struct dpu_hw_stage_cfg *stage_cfg)
->   {
-> @@ -590,6 +602,7 @@ static void _setup_ctl_ops(struct dpu_hw_ctl_ops *ops,
->   	ops->trigger_pending = dpu_hw_ctl_trigger_pending;
->   	ops->reset = dpu_hw_ctl_reset_control;
->   	ops->wait_reset_status = dpu_hw_ctl_wait_reset_status;
-> +	ops->disable_boot_config = dpu_hw_ctl_disable_boot_config;
->   	ops->clear_all_blendstages = dpu_hw_ctl_clear_all_blendstages;
->   	ops->setup_blendstage = dpu_hw_ctl_setup_blendstage;
->   	ops->get_bitmask_sspp = dpu_hw_ctl_get_bitmask_sspp;
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-> index 806c171e5df2..c2734f6ab760 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-> @@ -159,6 +159,12 @@ struct dpu_hw_ctl_ops {
->   	 */
->   	void (*clear_all_blendstages)(struct dpu_hw_ctl *ctx);
->   
-> +	/**
-> +	 * Disable the configuration setup by the bootloader
-> +	 * @ctx	      : ctl path ctx pointer
-> +	 */
-> +	void (*disable_boot_config)(struct dpu_hw_ctl *ctx);
-> +
->   	/**
->   	 * Configure layer mixer to pipe configuration
->   	 * @ctx       : ctl path ctx pointer
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> index cedc631f8498..eef2f017031a 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> @@ -1107,6 +1107,8 @@ static int dpu_kms_hw_init(struct msm_kms *kms)
->   
->   	dpu_kms->rm_init = true;
->   
-> +	dpu_rm_clear_boot_config(&dpu_kms->rm, dpu_kms->catalog);
-> +
->   	dpu_kms->hw_mdp = dpu_hw_mdptop_init(MDP_TOP, dpu_kms->mmio,
->   					     dpu_kms->catalog);
->   	if (IS_ERR(dpu_kms->hw_mdp)) {
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-> index f9c83d6e427a..3365c5e41e28 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-> @@ -4,6 +4,7 @@
->    */
->   
->   #define pr_fmt(fmt)	"[drm:%s] " fmt, __func__
-> +#include <linux/delay.h>
->   #include "dpu_kms.h"
->   #include "dpu_hw_lm.h"
->   #include "dpu_hw_ctl.h"
-> @@ -229,6 +230,22 @@ int dpu_rm_init(struct dpu_rm *rm,
->   	return rc ? rc : -EFAULT;
->   }
->   
-> +void dpu_rm_clear_boot_config(struct dpu_rm *rm, struct dpu_mdss_cfg *cat)
-> +{
-> +	struct dpu_hw_ctl *ctl;
-> +	int i;
-> +
-> +	for (i = CTL_0; i < CTL_MAX; i++) {
-> +		if (!rm->ctl_blks[i - CTL_0])
-> +			continue;
-> +
-> +		DPU_DEBUG("disabling ctl%d boot configuration\n", i - CTL_0);
-> +
-> +		ctl = to_dpu_hw_ctl(rm->ctl_blks[i - CTL_0]);
-> +		ctl->ops.disable_boot_config(ctl);
-> +	}
-> +}
-> +
->   static bool _dpu_rm_needs_split_display(const struct msm_display_topology *top)
->   {
->   	return top->num_intf > 1;
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.h
-> index 1f12c8d5b8aa..d3e084541e67 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.h
-> @@ -88,5 +88,13 @@ void dpu_rm_release(struct dpu_global_state *global_state,
->   int dpu_rm_get_assigned_resources(struct dpu_rm *rm,
->   	struct dpu_global_state *global_state, uint32_t enc_id,
->   	enum dpu_hw_blk_type type, struct dpu_hw_blk **blks, int blks_size);
-> +
-> +/**
-> + * dpu_rm_clear_boot_config() - Tear down any data paths configured by boot
-> + * @rm: DPU Resource Manager handle
-> + * @cat: Pointer to hardware catalog
-> + */
-> +void dpu_rm_clear_boot_config(struct dpu_rm *rm, struct dpu_mdss_cfg *cat);
-> +
->   #endif /* __DPU_RM_H__ */
->   
+* improve error message when send fails to write file data
 
+* get rid of warning when mounted with flushoncommit
 
--- 
-With best wishes
-Dmitry
+----------------------------------------------------------------
+The following changes since commit 40cdc509877bacb438213b83c7541c5e24a1d9ec:
+
+  btrfs: skip reserved bytes warning on unmount after log cleanup failure (2022-01-31 16:06:50 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-5.17-rc4-tag
+
+for you to fetch changes up to 2e7be9db125a0bf940c5d65eb5c40d8700f738b5:
+
+  btrfs: send: in case of IO error log it (2022-02-09 18:53:26 +0100)
+
+----------------------------------------------------------------
+Dāvis Mosāns (1):
+      btrfs: send: in case of IO error log it
+
+Filipe Manana (1):
+      btrfs: get rid of warning on transaction commit when using flushoncommit
+
+Qu Wenruo (2):
+      btrfs: don't hold CPU for too long when defragging a file
+      btrfs: defrag: don't try to defrag extents which are under writeback
+
+ fs/btrfs/ioctl.c       |  5 +++++
+ fs/btrfs/send.c        |  4 ++++
+ fs/btrfs/transaction.c | 12 ++++++++++--
+ 3 files changed, 19 insertions(+), 2 deletions(-)

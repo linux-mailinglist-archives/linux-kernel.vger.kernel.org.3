@@ -2,194 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5AFB4B7269
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1AE4B723E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239371AbiBOO6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 09:58:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45628 "EHLO
+        id S239372AbiBOO6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 09:58:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235008AbiBOO54 (ORCPT
+        with ESMTP id S235898AbiBOO6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 09:57:56 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C02636F;
-        Tue, 15 Feb 2022 06:57:45 -0800 (PST)
-Received: from [IPV6:2a01:e0a:120:3210:6d7b:ae43:289b:7e7c] (unknown [IPv6:2a01:e0a:120:3210:6d7b:ae43:289b:7e7c])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 737021F44B87;
-        Tue, 15 Feb 2022 14:57:43 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644937064;
-        bh=7KL/E1roB+Tsjv5A9j7TgPU3P6wRIqjJyd0pX11Row0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=W0nxo3O4UtsEQgAxjOIXGmT/eRA0jwW5mEMbT+VUmSvNj8xiq27pUa4KAFWyH7OPn
-         4Daj5t94TsJZbmYOS1TF4d7gzjtDT3bY5JxdaY6RK0d5XtIHQKrW5EWnfoZ9ereITe
-         Eh0w4js6g04jJdWKoCcIRw1zBBp4TRYL+izfixRDrTJeVI7mPw0tpW7imawps52ujF
-         qcoIBYHRAuNGXFP0GGmYAljY8qV9Sl99kAut50r/Gj5aUf9IwZLhymdhySZmwqTGBt
-         iajVR8j8kKb66KF449rW9ZjqjX82OhPJZJyTN8eMPU2vgW4xEwgyoJ3r4aK/YCwrXN
-         +1ZRQTPpgCQ3A==
-Message-ID: <b498904f-8c0e-65e4-b35c-d03792820891@collabora.com>
-Date:   Tue, 15 Feb 2022 15:57:41 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC v2 6/8] media: uapi: Remove bit_size field from
- v4l2_ctrl_hevc_slice_params
-Content-Language: en-US
-To:     John Cox <jc@kynesim.co.uk>
-Cc:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, hverkuil-cisco@xs4all.nl,
-        jonas@kwiboo.se, nicolas@ndufresne.ca, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com, knaerzche@gmail.com
-References: <20220215110103.241297-1-benjamin.gaignard@collabora.com>
- <20220215110103.241297-7-benjamin.gaignard@collabora.com>
- <t2dn0hddgq22nt6a7sr6kl44irm3c2lj1j@4ax.com>
- <99062279-a3c4-96f7-4c4b-f39e7f812e68@collabora.com>
- <mqen0ht146rbtukbd47tbtbiqvsmfta8oa@4ax.com>
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <mqen0ht146rbtukbd47tbtbiqvsmfta8oa@4ax.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 15 Feb 2022 09:58:16 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550496276;
+        Tue, 15 Feb 2022 06:58:05 -0800 (PST)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21FEm9uF022689;
+        Tue, 15 Feb 2022 14:58:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : content-type : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=DwMvSIbU3ZH+m1p41II1pEvA0O1v1hVXVvv5/UgubV0=;
+ b=fqVOGZIQJl+iCO8KKegHYEJkQyeN5jY8OOg9yKud0ISbhR0BogmAmwPhPkx73isPAK0F
+ TBgk7Jubj6PsABhibZqlVE46E2ajvXVRlsWaMPGF0+cw1YmmyIAfm5ZYi2/kOY+z/xAo
+ woNRpuC2i2mzVkq6UBreFISfQOL/gTaE2+A9hBXbG14zZtXMGbHSbiROTnvaCmkThhEv
+ xAvBsPAD1QgqSKJnaHpf3ctrId/DWNQp2TU8P6bTBjt3w/8+Bo3cG++AWVcwTNcJjA7Y
+ 77qozoC77Ae9vSm5RygkV/H//SmShOIgC0V0FkWp0aimBqKkdvhxedgslLyPWTYzZa/C UA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e8dxb8ugk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 14:58:04 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21FEmxv9025781;
+        Tue, 15 Feb 2022 14:58:04 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e8dxb8ufv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 14:58:04 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21FEkXUD021484;
+        Tue, 15 Feb 2022 14:58:02 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3e645jrg6p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 14:58:02 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21FEw0da22020476
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Feb 2022 14:58:00 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0EED2A4059;
+        Tue, 15 Feb 2022 14:58:00 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 553D9A404D;
+        Tue, 15 Feb 2022 14:57:59 +0000 (GMT)
+Received: from sig-9-65-71-246.ibm.com (unknown [9.65.71.246])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 15 Feb 2022 14:57:59 +0000 (GMT)
+Message-ID: <bd513c794ca096ff037c289e793e0ebaf5f0225f.camel@linux.ibm.com>
+Subject: kernel-parameter.txt question
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-doc <linux-doc@vger.kernel.org>
+Cc:     Yael Tzur <yaelt@google.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Tue, 15 Feb 2022 09:57:58 -0500
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: QZ31ezTWSLA1xslLJXrfV_3KBm0lOAUJ
+X-Proofpoint-GUID: B6zW6hsqKrNKbD1GNnXtvsXOcGyQcx4T
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-15_04,2022-02-14_04,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ spamscore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=794
+ clxscore=1015 phishscore=0 adultscore=0 suspectscore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202150084
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi -
 
-Le 15/02/2022 à 15:50, John Cox a écrit :
-> On Tue, 15 Feb 2022 15:35:12 +0100, you wrote:
->
->> Le 15/02/2022 à 15:17, John Cox a écrit :
->>> Hi
->>>
->>>> The bit size of the slice could be deduced from the buffer payload
->>>> so remove bit_size field to avoid duplicated the information.
->>> I think this is a bad idea. In the future we are (I hope) going to want
->>> to have an array (variable) of slice headers all referring to the same
->>> bit buffer.  When we do that we will need this field.
->> I wonder if that could be considering like another decode mode and so
->> use an other control ?
-> I, personally, would be in favour of making the slice header control a
-> variable array just as it is.  If userland can't cope with multiple
-> entries then just send them one at a time and the code looks exactly
-> like it does at the moment and if the driver can't then set max array
-> entries to 1.
->
-> Having implemented this in rpi port of ffmpeg and the RPi V4L2 driver I
-> can say with experience that the code and effort overhead is very low.
->
-> Either way having a multiple slice header control in the UAPI is
-> important for efficiency.
+When a new module parameter is defined, which will normally be
+specified on the boot command line, should it be included in
+Documentation/admin-guide/kernel-parameters.txt?
 
-Removing this field was one the Jernej's remarks.
-If he agree with you it won't be a big effort for me to remove this patch
-from v3.
+Example:  module_param(user_decrypted_data, bool, 0);
 
-Regards,
-Benjamin
+Message-Id: <20220215141953.1557009-1-yaelt@google.com>
 
->
-> Regards
->
-> John Cox
->
->>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->>>> ---
->>>> .../userspace-api/media/v4l/ext-ctrls-codec.rst       |  3 ---
->>>> drivers/staging/media/sunxi/cedrus/cedrus_h265.c      | 11 ++++-------
->>>> include/uapi/linux/v4l2-controls.h                    |  3 +--
->>>> 3 files changed, 5 insertions(+), 12 deletions(-)
->>>>
->>>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>> index 3296ac3b9fca..c3ae97657fa7 100644
->>>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>> @@ -2965,9 +2965,6 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->>>>       :stub-columns: 0
->>>>       :widths:       1 1 2
->>>>
->>>> -    * - __u32
->>>> -      - ``bit_size``
->>>> -      - Size (in bits) of the current slice data.
->>>>       * - __u32
->>>>         - ``data_bit_offset``
->>>>         - Offset (in bits) to the video data in the current slice data.
->>>> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
->>>> index 8ab2d9c6f048..db8c7475eeb8 100644
->>>> --- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
->>>> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
->>>> @@ -312,8 +312,8 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
->>>> 	const struct v4l2_hevc_pred_weight_table *pred_weight_table;
->>>> 	unsigned int width_in_ctb_luma, ctb_size_luma;
->>>> 	unsigned int log2_max_luma_coding_block_size;
->>>> +	size_t slice_bytes;
->>>> 	dma_addr_t src_buf_addr;
->>>> -	dma_addr_t src_buf_end_addr;
->>>> 	u32 chroma_log2_weight_denom;
->>>> 	u32 output_pic_list_index;
->>>> 	u32 pic_order_cnt[2];
->>>> @@ -370,8 +370,8 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
->>>>
->>>> 	cedrus_write(dev, VE_DEC_H265_BITS_OFFSET, 0);
->>>>
->>>> -	reg = slice_params->bit_size;
->>>> -	cedrus_write(dev, VE_DEC_H265_BITS_LEN, reg);
->>>> +	slice_bytes = vb2_get_plane_payload(&run->src->vb2_buf, 0);
->>>> +	cedrus_write(dev, VE_DEC_H265_BITS_LEN, slice_bytes);
->>> I think one of these must be wrong. bit_size is in bits,
->>> vb2_get_plane_payload is in bytes?
->> You are right it should be vb2_get_plane_payload() * 8 to get the size in bits.
->>
->> I will change that in v3.
->>
->>> Regards
->>>
->>> John Cox
->>>    
->>>> 	/* Source beginning and end addresses. */
->>>>
->>>> @@ -384,10 +384,7 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
->>>>
->>>> 	cedrus_write(dev, VE_DEC_H265_BITS_ADDR, reg);
->>>>
->>>> -	src_buf_end_addr = src_buf_addr +
->>>> -			   DIV_ROUND_UP(slice_params->bit_size, 8);
->>>> -
->>>> -	reg = VE_DEC_H265_BITS_END_ADDR_BASE(src_buf_end_addr);
->>>> +	reg = VE_DEC_H265_BITS_END_ADDR_BASE(src_buf_addr + slice_bytes);
->>>> 	cedrus_write(dev, VE_DEC_H265_BITS_END_ADDR, reg);
->>>>
->>>> 	/* Coding tree block address */
->>>> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
->>>> index b1a3dc05f02f..27f5d272dc43 100644
->>>> --- a/include/uapi/linux/v4l2-controls.h
->>>> +++ b/include/uapi/linux/v4l2-controls.h
->>>> @@ -2457,7 +2457,6 @@ struct v4l2_hevc_pred_weight_table {
->>>> #define V4L2_HEVC_SLICE_PARAMS_FLAG_DEPENDENT_SLICE_SEGMENT	(1ULL << 9)
->>>>
->>>> struct v4l2_ctrl_hevc_slice_params {
->>>> -	__u32	bit_size;
->>>> 	__u32	data_bit_offset;
->>>>
->>>> 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
->>>> @@ -2484,7 +2483,7 @@ struct v4l2_ctrl_hevc_slice_params {
->>>> 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture timing SEI message */
->>>> 	__u8	pic_struct;
->>>>
->>>> -	__u8	reserved;
->>>> +	__u8	reserved[5];
->>>>
->>>> 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: General slice segment header */
->>>> 	__u32	slice_segment_addr;
+-- 
+thanks,
+
+Mimi
+

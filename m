@@ -2,107 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A508A4B6351
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 553114B6354
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234336AbiBOGP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 01:15:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59798 "EHLO
+        id S234342AbiBOGUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 01:20:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232358AbiBOGP5 (ORCPT
+        with ESMTP id S229497AbiBOGUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 01:15:57 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A6DF7478
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 22:15:48 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C68231F38C;
-        Tue, 15 Feb 2022 06:15:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644905746; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=stFWmG4RHx6dwdwOXJa8oE098JQwQAuQshDHre0cRNc=;
-        b=geMBC9iAkPgkBwprFvlcXzXqOf+Icc2NyqYQrvyxtDHhsQHoSJniDV5oagjfEqDJvExOLI
-        Tx+y6csiVbbQmp5bVQmpAZoZYsTEZBQZ5HupWrx57fnS8ra57PDF0OfUNMDij8YYnsB5vD
-        4wpMxFm1ZPjg1LaWJ1QTcBo74kBeR3w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644905746;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=stFWmG4RHx6dwdwOXJa8oE098JQwQAuQshDHre0cRNc=;
-        b=b7g3DwVeNv0v/1M/Bb+kiBX1/nj/5ApQ5iRP/EYj0CdYYtIgRBQgyw7o+49q6tWbPXNNRU
-        p5qFztb91iL7U6Cg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 45B1013BD2;
-        Tue, 15 Feb 2022 06:15:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id wgA+DRJFC2J4KgAAMHmgww
-        (envelope-from <osalvador@suse.de>); Tue, 15 Feb 2022 06:15:46 +0000
-Date:   Tue, 15 Feb 2022 07:15:44 +0100
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Alistair Popple <apopple@nvidia.com>, akpm@linux-foundation.org,
-        jhubbard@nvidia.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ziy@nvidia.com, mgorman@suse.de
-Subject: Re: [PATCH] mm/pages_alloc.c: Don't create ZONE_MOVABLE beyond the
- end of a node
-Message-ID: <YgtFEOqgN7yXCGMC@localhost.localdomain>
-References: <20220215025831.2113067-1-apopple@nvidia.com>
- <7b752e06-f345-cbb2-d05c-57e5fc5d8e5a@arm.com>
+        Tue, 15 Feb 2022 01:20:19 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4382F11B32B;
+        Mon, 14 Feb 2022 22:20:06 -0800 (PST)
+X-UUID: 77a515df3bff4876be66cecc6c162a86-20220215
+X-UUID: 77a515df3bff4876be66cecc6c162a86-20220215
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <chun-jie.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1244512323; Tue, 15 Feb 2022 14:20:03 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 15 Feb 2022 14:20:01 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 15 Feb 2022 14:20:01 +0800
+Message-ID: <e4c71a67d682e4f8f6234651871afc5b36ebf1c6.camel@mediatek.com>
+Subject: Re: [PATCH v3 02/31] clk: mediatek: gate: Consolidate gate type clk
+ related code
+From:   Chun-Jie Chen <chun-jie.chen@mediatek.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Date:   Tue, 15 Feb 2022 14:20:01 +0800
+In-Reply-To: <20220208124034.414635-3-wenst@chromium.org>
+References: <20220208124034.414635-1-wenst@chromium.org>
+         <20220208124034.414635-3-wenst@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7b752e06-f345-cbb2-d05c-57e5fc5d8e5a@arm.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 10:17:09AM +0530, Anshuman Khandual wrote:
-> Hi Alistair,
+On Tue, 2022-02-08 at 20:40 +0800, Chen-Yu Tsai wrote:
+> Right now some bits of the gate type clk code are in clk-gate.[ch],
+> but
+> other bits are in clk-mtk.[ch]. This is different from the cpumux and
+> mux type clks, for which all of the code are found in the same files.
 > 
-> On 2/15/22 8:28 AM, Alistair Popple wrote:
-> > ZONE_MOVABLE uses the remaining memory in each node. It's starting pfn
-> > is also aligned to MAX_ORDER_NR_PAGES. It is possible for the remaining
-> > memory in a node to be less than MAX_ORDER_NR_PAGES, meaning there is
-> > not enough room for ZONE_MOVABLE on that node.
+> Move the functions that register multiple clks from a given list,
+> mtk_clk_register_gates_with_dev() and mtk_clk_register_gates(), to
+> clk-gate.[ch] to consolidate all the code for the gate type clks.
+> 
+> This commit only moves code with minor whitespace fixups to correct
+> the code style. Further improvements, such as internalizing various
+> functions and structures will be done in later commits.
+> 
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> 
 
-CC Mel as he wrote that back then.
+Reviewed-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
+> ---
+>  drivers/clk/mediatek/clk-gate.c | 53
+> ++++++++++++++++++++++++++++++++-
+>  drivers/clk/mediatek/clk-gate.h | 25 ++++++++++++++++
+>  drivers/clk/mediatek/clk-mtk.c  | 51 -------------------------------
+>  drivers/clk/mediatek/clk-mtk.h  | 25 ----------------
+>  4 files changed, 77 insertions(+), 77 deletions(-)
+> 
+> diff --git a/drivers/clk/mediatek/clk-gate.c
+> b/drivers/clk/mediatek/clk-gate.c
+> index 5d88b428565b..54921768bfba 100644
+> --- a/drivers/clk/mediatek/clk-gate.c
+> +++ b/drivers/clk/mediatek/clk-gate.c
+> @@ -11,9 +11,9 @@
+>  #include <linux/slab.h>
+>  #include <linux/delay.h>
+>  #include <linux/clkdev.h>
+> +#include <linux/mfd/syscon.h>
+>  #include <linux/module.h>
+>  
+> -#include "clk-mtk.h"
+>  #include "clk-gate.h"
+>  
+>  static u32 mtk_get_clockgating(struct clk_hw *hw)
+> @@ -182,4 +182,55 @@ struct clk *mtk_clk_register_gate(
+>  }
+>  EXPORT_SYMBOL_GPL(mtk_clk_register_gate);
+>  
+> +int mtk_clk_register_gates_with_dev(struct device_node *node,
+> +				    const struct mtk_gate *clks, int
+> num,
+> +				    struct clk_onecell_data *clk_data,
+> +				    struct device *dev)
+> +{
+> +	int i;
+> +	struct clk *clk;
+> +	struct regmap *regmap;
+> +
+> +	if (!clk_data)
+> +		return -ENOMEM;
+> +
+> +	regmap = device_node_to_regmap(node);
+> +	if (IS_ERR(regmap)) {
+> +		pr_err("Cannot find regmap for %pOF: %pe\n", node,
+> regmap);
+> +		return PTR_ERR(regmap);
+> +	}
+> +
+> +	for (i = 0; i < num; i++) {
+> +		const struct mtk_gate *gate = &clks[i];
+> +
+> +		if (!IS_ERR_OR_NULL(clk_data->clks[gate->id]))
+> +			continue;
+> +
+> +		clk = mtk_clk_register_gate(gate->name, gate-
+> >parent_name,
+> +					    regmap,
+> +					    gate->regs->set_ofs,
+> +					    gate->regs->clr_ofs,
+> +					    gate->regs->sta_ofs,
+> +					    gate->shift, gate->ops,
+> +					    gate->flags, dev);
+> +
+> +		if (IS_ERR(clk)) {
+> +			pr_err("Failed to register clk %s: %pe\n",
+> gate->name, clk);
+> +			continue;
+> +		}
+> +
+> +		clk_data->clks[gate->id] = clk;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +int mtk_clk_register_gates(struct device_node *node,
+> +			   const struct mtk_gate *clks, int num,
+> +			   struct clk_onecell_data *clk_data)
+> +{
+> +	return mtk_clk_register_gates_with_dev(node, clks, num,
+> clk_data, NULL);
+> +}
+> +EXPORT_SYMBOL_GPL(mtk_clk_register_gates);
+> +
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/clk/mediatek/clk-gate.h
+> b/drivers/clk/mediatek/clk-gate.h
+> index 3c3329ec54b7..432b571d23b3 100644
+> --- a/drivers/clk/mediatek/clk-gate.h
+> +++ b/drivers/clk/mediatek/clk-gate.h
+> @@ -43,6 +43,22 @@ struct clk *mtk_clk_register_gate(
+>  		unsigned long flags,
+>  		struct device *dev);
+>  
+> +struct mtk_gate_regs {
+> +	u32 sta_ofs;
+> +	u32 clr_ofs;
+> +	u32 set_ofs;
+> +};
+> +
+> +struct mtk_gate {
+> +	int id;
+> +	const char *name;
+> +	const char *parent_name;
+> +	const struct mtk_gate_regs *regs;
+> +	int shift;
+> +	const struct clk_ops *ops;
+> +	unsigned long flags;
+> +};
+> +
+>  #define GATE_MTK_FLAGS(_id, _name, _parent, _regs, _shift,	\
+>  			_ops, _flags) {				\
+>  		.id = _id,					\
+> @@ -57,4 +73,13 @@ struct clk *mtk_clk_register_gate(
+>  #define GATE_MTK(_id, _name, _parent, _regs, _shift, _ops)		
+> \
+>  	GATE_MTK_FLAGS(_id, _name, _parent, _regs, _shift, _ops, 0)
+>  
+> +int mtk_clk_register_gates(struct device_node *node,
+> +			   const struct mtk_gate *clks, int num,
+> +			   struct clk_onecell_data *clk_data);
+> +
+> +int mtk_clk_register_gates_with_dev(struct device_node *node,
+> +				    const struct mtk_gate *clks, int
+> num,
+> +				    struct clk_onecell_data *clk_data,
+> +				    struct device *dev);
+> +
+>  #endif /* __DRV_CLK_GATE_H */
+> diff --git a/drivers/clk/mediatek/clk-mtk.c
+> b/drivers/clk/mediatek/clk-mtk.c
+> index 519a461cbb6f..0c5db3c71fdd 100644
+> --- a/drivers/clk/mediatek/clk-mtk.c
+> +++ b/drivers/clk/mediatek/clk-mtk.c
+> @@ -106,57 +106,6 @@ void mtk_clk_register_factors(const struct
+> mtk_fixed_factor *clks,
+>  }
+>  EXPORT_SYMBOL_GPL(mtk_clk_register_factors);
+>  
+> -int mtk_clk_register_gates_with_dev(struct device_node *node,
+> -		const struct mtk_gate *clks,
+> -		int num, struct clk_onecell_data *clk_data,
+> -		struct device *dev)
+> -{
+> -	int i;
+> -	struct clk *clk;
+> -	struct regmap *regmap;
+> -
+> -	if (!clk_data)
+> -		return -ENOMEM;
+> -
+> -	regmap = device_node_to_regmap(node);
+> -	if (IS_ERR(regmap)) {
+> -		pr_err("Cannot find regmap for %pOF: %pe\n", node,
+> regmap);
+> -		return PTR_ERR(regmap);
+> -	}
+> -
+> -	for (i = 0; i < num; i++) {
+> -		const struct mtk_gate *gate = &clks[i];
+> -
+> -		if (!IS_ERR_OR_NULL(clk_data->clks[gate->id]))
+> -			continue;
+> -
+> -		clk = mtk_clk_register_gate(gate->name, gate-
+> >parent_name,
+> -				regmap,
+> -				gate->regs->set_ofs,
+> -				gate->regs->clr_ofs,
+> -				gate->regs->sta_ofs,
+> -				gate->shift, gate->ops, gate->flags,
+> dev);
+> -
+> -		if (IS_ERR(clk)) {
+> -			pr_err("Failed to register clk %s: %pe\n",
+> gate->name, clk);
+> -			continue;
+> -		}
+> -
+> -		clk_data->clks[gate->id] = clk;
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -int mtk_clk_register_gates(struct device_node *node,
+> -		const struct mtk_gate *clks,
+> -		int num, struct clk_onecell_data *clk_data)
+> -{
+> -	return mtk_clk_register_gates_with_dev(node,
+> -		clks, num, clk_data, NULL);
+> -}
+> -EXPORT_SYMBOL_GPL(mtk_clk_register_gates);
+> -
+>  struct clk *mtk_clk_register_composite(const struct mtk_composite
+> *mc,
+>  		void __iomem *base, spinlock_t *lock)
+>  {
+> diff --git a/drivers/clk/mediatek/clk-mtk.h
+> b/drivers/clk/mediatek/clk-mtk.h
+> index 0ff289d93452..bdec7dc5e07a 100644
+> --- a/drivers/clk/mediatek/clk-mtk.h
+> +++ b/drivers/clk/mediatek/clk-mtk.h
+> @@ -150,31 +150,6 @@ void mtk_clk_register_composites(const struct
+> mtk_composite *mcs,
+>  		int num, void __iomem *base, spinlock_t *lock,
+>  		struct clk_onecell_data *clk_data);
+>  
+> -struct mtk_gate_regs {
+> -	u32 sta_ofs;
+> -	u32 clr_ofs;
+> -	u32 set_ofs;
+> -};
+> -
+> -struct mtk_gate {
+> -	int id;
+> -	const char *name;
+> -	const char *parent_name;
+> -	const struct mtk_gate_regs *regs;
+> -	int shift;
+> -	const struct clk_ops *ops;
+> -	unsigned long flags;
+> -};
+> -
+> -int mtk_clk_register_gates(struct device_node *node,
+> -			const struct mtk_gate *clks, int num,
+> -			struct clk_onecell_data *clk_data);
+> -
+> -int mtk_clk_register_gates_with_dev(struct device_node *node,
+> -		const struct mtk_gate *clks,
+> -		int num, struct clk_onecell_data *clk_data,
+> -		struct device *dev);
+> -
+>  struct mtk_clk_divider {
+>  	int id;
+>  	const char *name;
 
-I was curious about the commit that introduced that, and I found
-[1] and [2].
-I guess [2] was eventually dismissed in favor of [1] as a whole, but in
-there the commit message said:
-
-"This patch rounds the start of ZONE_MOVABLE in each node to a
-MAX_ORDER_NR_PAGES boundary. If the rounding pushes the start of ZONE_MOVABLE
-above the end of the node then the zone will contain no memory and will not
-be used at runtime"
-
-I might be missing something, but it just rounds up the value, but does
-not check if it falls beyond node's boundaries.
-
-
-[1] commit 2a1e274acf0b1c192face19a4be7c12d4503eaaf "Create the
-ZONE_MOVABLE zone"
-[2] https://marc.info/?l=linux-mm&m=117743777129526&w=2
-
- 
-
--- 
-Oscar Salvador
-SUSE Labs

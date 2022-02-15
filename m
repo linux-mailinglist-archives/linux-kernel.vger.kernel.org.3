@@ -2,99 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6214B77A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:51:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4DF4B77F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:51:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243660AbiBOTZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 14:25:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58104 "EHLO
+        id S242186AbiBOTdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 14:33:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbiBOTY6 (ORCPT
+        with ESMTP id S233812AbiBOTdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 14:24:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79308566E;
-        Tue, 15 Feb 2022 11:24:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 513F3617CB;
-        Tue, 15 Feb 2022 19:24:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8127AC340EB;
-        Tue, 15 Feb 2022 19:24:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644953086;
-        bh=kUCZYr9eynBGfoyFNpGztKhdR0TjeWfPR20goAdEojo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pgheRwOAKjRlXMfJul10RwEjs5CBKHR/i0QEhyIM79774uc0ovg3u5myvyhB8s/qu
-         xkZdoun6Ve/NuXn1+qZDB9F/trYlid+yq9euKiwm3PP7bJ4zoGvDfPTjgfeWCzsH6f
-         Z5GtGABFqXnkSAxbAOokUuetZQuukvg8GogLN1PAUilOeXNWgORbaiYjI/aeCr++5W
-         YWvZj7f6KVH+xfahOEVmZaopl52rdr1jj6eaQg39ut/UgM8cVQWsEKIq8K1eRZzAAa
-         TaPAe7uN1AmbZCmz+9XMV8T/S9ihvGxGOcJfBqdWD8uwk44Sq4S7ITZBKug7wSeC6N
-         S7tHpNRHJfaSA==
-Date:   Tue, 15 Feb 2022 13:32:21 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linux-crypto@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, mpi3mr-linuxdrv.pdl@broadcom.com,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org, sparmaintainer@unisys.com,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-ext4@vger.kernel.org, linux-acpi@vger.kernel.org,
-        devel@acpica.org, linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        greybus-dev@lists.linaro.org, linux-i3c@lists.infradead.org,
-        linux-rdma@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] treewide: Replace zero-length arrays with
- flexible-array members
-Message-ID: <20220215193221.GA884407@embeddedor>
-References: <20220215174743.GA878920@embeddedor>
- <202202151016.C0471D6E@keescook>
- <20220215192110.GA883653@embeddedor>
- <Ygv8wY75hNqS7zO6@unreal>
+        Tue, 15 Feb 2022 14:33:22 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130DBB7C72;
+        Tue, 15 Feb 2022 11:33:11 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644953589;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6PgsBMBaD1VL/blQ9NGFYKVy9dzfRCvZ4SmB2o7/hv0=;
+        b=C3LVhzk8ug+ZT17S1HvaW+HMsdFerPa+zBeWUuRyzN32pFYEcihEuz8evEnCqtZravA1s7
+        MMNQT+e5oWjqZpC8QGpUKW0FYaNNbQMAnsCwNDpygvIX/CCEor4ZJ/Y0LYYWipNWTvbFi+
+        0E3pVP0SRbOqJGZEZvQ7nvUB1HjEPtxiYhKLXKRHSI4oKsX5LHYZMJE3BlTt6Sih1O6uMb
+        7WoU+QR8Ucwsa5b9oN73B9yyS0zJBNtTDN7YgTcyg2htWlacWz9ffG9ZsU875Xy1g/mAV7
+        GmNZC/BmfRZsTTS0GsItNoNbr0OZXEb/X/vVNq12daUUyzq8d6IfudbyoSti2A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644953589;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6PgsBMBaD1VL/blQ9NGFYKVy9dzfRCvZ4SmB2o7/hv0=;
+        b=r8YVCNMtnNMWlKQh6mpyzy8Lii7Hxnfat9/Yy8v7nrBFS8ZHA5jEZayKmaX1yiHQl0KEqQ
+        E9128Mys8LAY+JDw==
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org
+Subject: Re: [RFC V2 12/21] rv/reactor: Add the printk reactor
+In-Reply-To: <65172f14-bad6-37b1-d243-e91ca472d22e@kernel.org>
+References: <cover.1644830251.git.bristot@kernel.org>
+ <fad2d358d57dfffc084d482684ecc1d13b62b262.1644830251.git.bristot@kernel.org>
+ <10cf6003-6d2b-056b-11bb-3ae9c342a369@linuxfoundation.org>
+ <c1657d1c-0d2b-4aa3-c1ed-2ae6fdfcda86@kernel.org>
+ <87v8xg30qc.fsf@jogness.linutronix.de>
+ <45179cdb-2391-207a-2f7b-2dea828d1606@kernel.org>
+ <87r1842r1m.fsf@jogness.linutronix.de>
+ <65172f14-bad6-37b1-d243-e91ca472d22e@kernel.org>
+Date:   Tue, 15 Feb 2022 20:39:08 +0106
+Message-ID: <874k50hqmj.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ygv8wY75hNqS7zO6@unreal>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 09:19:29PM +0200, Leon Romanovsky wrote:
-> On Tue, Feb 15, 2022 at 01:21:10PM -0600, Gustavo A. R. Silva wrote:
-> > On Tue, Feb 15, 2022 at 10:17:40AM -0800, Kees Cook wrote:
-> > > On Tue, Feb 15, 2022 at 11:47:43AM -0600, Gustavo A. R. Silva wrote:
-> > > 
-> > > These all look trivially correct to me. Only two didn't have the end of
-> > > the struct visible in the patch, and checking those showed them to be
-> > > trailing members as well, so:
-> > > 
-> > > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > 
-> > I'll add this to my -next tree.
-> 
-> I would like to ask you to send mlx5 patch separately to netdev. We are working
-> to delete that file completely and prefer to avoid from unnecessary merge conflicts.
+On 2022-02-15, Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
+> I am aware of printk_deferred(), and every once and while I am Cc'ed
+> on patches suggesting changing printk() to printk_deferred(), but they
+> are not, let's say, welcome [1]... that is why I am not using it.
 
-Oh OK. Sure thing; I will do so.
+Yes. printk_deferred() is a workaround until we can get printk
+"PROVE_RAW_LOCK_NESTING clean". But currently there is real deadlock
+potential in the kernel with printk. For the most common cases, we use
+printk_deferred() to get around it. Once printk() is clean, we can
+replace all printk_deferred() call sites with printk().
 
-Thanks
---
-Gustavo
+I haven't looked into the details of your runtime verification method,
+but I assume it digs deep into some interfaces. In that case, the
+deadlock potential of printk may be relatively high. (And indeed, you
+have seen some.) IMHO, before warning users not to use this reactor if
+locks XYZ are taken, it would be better just to use printk_deferred()
+and it will always log without causing problems to the system you are
+trying to verify.
+
+> I saw deadlocks in the past, and while testing the WIP monitor some
+> time ago, it seems it depends on the console type. If such restriction
+> does not exist anymore, I can remove that comment, it would be even
+> better!
+
+If you say it depended on the console type, then it was probably the
+framebuffer console that was at fault. The fbcon is a landmine for
+deadlocks, which is why PREEMPT_RT avoids fbcon printing from
+non-preemptible context. For mainline, the series is currently in
+review.
+
+Perhaps avoiding fbcon would be good enough for you to avoid deadlocks
+with this reactor using printk().
+
+John
+
+> [1]  https://lore.kernel.org/lkml/e68888438cec9a1da53aaa1647720ade638d6ad4.1600705105.git.bristot@redhat.com/

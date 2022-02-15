@@ -2,110 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C15014B60B7
+	by mail.lfdr.de (Postfix) with ESMTP id 763784B60B6
 	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 03:03:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233364AbiBOCDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 21:03:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43736 "EHLO
+        id S233443AbiBOCD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 21:03:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233287AbiBOCDU (ORCPT
+        with ESMTP id S233545AbiBOCDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 21:03:20 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD92A108754
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 18:02:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644890567; x=1676426567;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PQx1bi+RZ7llbsZzitox0+KHCY/gJAuQuxLD+34SPaA=;
-  b=Ba+t9a4/llBJ743bF5dFLheLd7Cv7IfFQn14tpLY/7RAJyPDaEEdokIn
-   46B7DGf3zPf2zH0kHgRXkoses91VmoI6vW8RNXceBdbq0EeFATROXJue9
-   UTOIno2fihcQuPTdXB2LQkTfiSdfhLfTvxAIVnUWX3XSfEwdAlzSkRxf5
-   zlyflQFoNBtn8676++uNckpTWvflIxSQ2ZwZKkmcUItLdV5PCs5LoQ5Xh
-   fMfd7snq6q0aIfHVUfZi4Pu47khq1+7sctlRpXRt6SFa2CAuQ0a547Vcj
-   tQ2zcw6vgoE2wwRd5acNCBYw3Zi3uDtzuYVi5K0lX0ntGgL2SqBZulSBn
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="250435769"
-X-IronPort-AV: E=Sophos;i="5.88,369,1635231600"; 
-   d="scan'208";a="250435769"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 18:02:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,369,1635231600"; 
-   d="scan'208";a="680793619"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Feb 2022 18:02:43 -0800
-Message-ID: <0bf678af-1905-de87-322b-43703992030b@linux.intel.com>
-Date:   Tue, 15 Feb 2022 10:01:24 +0800
+        Mon, 14 Feb 2022 21:03:01 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2100.outbound.protection.outlook.com [40.107.255.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6860BC12C8;
+        Mon, 14 Feb 2022 18:02:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bISQYVO5IyIvi4NMf+tDyS+9MbNEjZvuhB0+8jh+BJZEMfUoC3Kti4CWCDG9S0dDrFb1EV3V+e3BZ1ZRdhYvJCiob5XvmS9sFCoqdgY/KL85QgmFiIczTstuLvDR+5Vd3DLtcBQ/ekYH8b/YurdcMlGLM1V8WxdxreCIgNM+pCmVXtow6y+mYmSSFLlqqZxUV2aSP4micVdeqWVwxGnC91ruExI9gtcW9YwVwFc8QHoOwtb3cIWjrahPWx+Nq7a39dIYGrjTi7ewWhs0pmyhmTufflfLQUa+6LqdO+jsGrXf0uvy4yIYRo32ZGWCYWDSJVlXbCeYkefa/m6r+q3S6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VbT87ECK3tkcuzgFCVCn/Ps3r1QcJVlwvcsyxI7ipvk=;
+ b=Q8KN8jHviDFwyezPGbE0+ISECGWmumYrWMBMAcCHBlSg0kjoLvl6xUI+U4VpSHqZCgV0rLhQgE97Xe8M5HcTGZk7R+g50H427L+BCfJLGFcv+TaYcMDoSdzwSFmElv4Pf8KMQB/wySVnVeyR2f6+xDhSxX9lN7md5HWpSE3wQOq42PTFYYETYq4rl8ObzrSKxgMysedQNXXUJsSz5Z8D/XGGoFavoCLlDcXNNtvXgJWagiMRI4N7Zql4cfsyiPsnjmcbn0e0cJFLjqdnPdtkLr8+lfqvp+TJyJxnmDZr8fk71nHnr/xAtpqpdUkPtoPuiH7oLSOWCYkgEzkf/a4TDw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VbT87ECK3tkcuzgFCVCn/Ps3r1QcJVlwvcsyxI7ipvk=;
+ b=iqLmRPGRT7QUFLFqzMiMy+kR6kQ61FFcrPhlU5O0fghN8JJtJ3fM561ZiysNdFu827EjTlKQhQpohJIc6O0q8Ftyo7i4Um1tKYVPPzRgXXZOIrDzL6elIEF7uJ68L1lRR4ACB1ZF7rpoywga+NANJK2JP2yb9INYiFPiTdxekv8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
+ by TYZPR06MB4510.apcprd06.prod.outlook.com (2603:1096:400:65::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.15; Tue, 15 Feb
+ 2022 02:02:25 +0000
+Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
+ ([fe80::80b4:e787:47a9:41bb]) by SL2PR06MB3082.apcprd06.prod.outlook.com
+ ([fe80::80b4:e787:47a9:41bb%4]) with mapi id 15.20.4975.019; Tue, 15 Feb 2022
+ 02:02:25 +0000
+From:   Qing Wang <wangqing@vivo.com>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Wang Qing <wangqing@vivo.com>
+Subject: [PATCH] net: bluetooth: assign len after null check
+Date:   Mon, 14 Feb 2022 18:01:56 -0800
+Message-Id: <1644890516-65362-1-git-send-email-wangqing@vivo.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-ClientProxiedBy: SG2P153CA0008.APCP153.PROD.OUTLOOK.COM (2603:1096::18) To
+ SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     baolu.lu@linux.intel.com, Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v3 07/10] iommu: Use right way to retrieve iommu_ops
-Content-Language: en-US
-To:     Joerg Roedel <joro@8bytes.org>
-References: <20220214015538.2828933-1-baolu.lu@linux.intel.com>
- <20220214015538.2828933-8-baolu.lu@linux.intel.com>
- <YgpP7AhY5hd/DX/C@8bytes.org>
- <0dd0f4c9-37a6-0418-3f19-22c40ccc8265@linux.intel.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <0dd0f4c9-37a6-0418-3f19-22c40ccc8265@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 098a09ac-385c-4f96-45bf-08d9f027364b
+X-MS-TrafficTypeDiagnostic: TYZPR06MB4510:EE_
+X-Microsoft-Antispam-PRVS: <TYZPR06MB4510472F108B8CF51C5FC753BD349@TYZPR06MB4510.apcprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:415;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3SyxE8fYne+TdCFSpmSwMsDS0GQoOTp5eXuGdXQJnR1yxPJYpZLl/LG2xEnwEm5Uo2Rux8SGz1+5qrcEouu6mbF1iEWaASf/Po1cFEeYM9SN5F5nXXu3Dtb6LKln0kF14Aqmtrtnezx0q7GV8mJPVcFZPblMd0uksBYf19e5xMrAVPInS5qPr2t8HI0sJjOQABQRrbw+nksGC9Xv7qbnSL/iZYOmkGWVtehy/sr/JWe9tAoVp4djUANoAVE0crmAdc5RNY9+j3Hp1YwipTMgdJeXvInrpJRUl92sFJEGw1aFU1XCqguVR8oXJ3iOV0PE4kfe5ULnRC4gqnLNGiKuMZeFjsShGL1ZwJNlyfT9a4RkA/5YpCzfLL3wXNy2Yw+L3BRaHqCnEIOQf+axE3u5gt5VBVKGCKK4HA8pVhsSwgIOnGvLk54cm8Haex50XM8x/txUz7HcEH8TPdL8XfgVY2hSJz9/cfdfnZ5PAlb1tdy/UBeUFqTgv/Te8XqmVVbfQz9Rw/S7VtRSS0uB6fUUnGwQ3Xvt8Y9xTAPU64rwuzJESCZ0juCAGKAtlH2vgL12grKfzqz59uO/zhLLcRma+8LBHBWYoPEo+GRLKDhXvH5XaJ0Hrg6Lt5irIVB0VO+vx2Jt7jxBjFXJdsGNtWTBBTEt5WhbT7QFYc5ffSwyTjc5fXJdQWzxNsB4HkpJkVvtMcZRl90tqlfIfwcmXfZCIQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(86362001)(83380400001)(107886003)(52116002)(186003)(26005)(6512007)(6486002)(2616005)(6666004)(110136005)(4744005)(508600001)(8936002)(66946007)(4326008)(66476007)(66556008)(5660300002)(2906002)(38100700002)(38350700002)(36756003)(316002)(8676002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ha1/DhTUa4FwpkkKylx23HckJJBNVNy6v8TDBf3y8zwdKFMFmkaMDmp84Gg7?=
+ =?us-ascii?Q?IDcSUdGg/zOTmce8elBlmbDNn7/9NymoxGzKcX9EDtBPxPtAT9vbZ5n6EVoj?=
+ =?us-ascii?Q?QtJVl+pkxsqfMF9cGkmenl4KvNaS1Zvc4gp9TBXYBh60lXaWZG0QZRMoiVRs?=
+ =?us-ascii?Q?18gcmQw1OKDLbjWJET4HDY1gWHIrV868H0xM6u7mW52NYcvYbmOopr/rHYAa?=
+ =?us-ascii?Q?LXy7TW15nZGh4PYSFJGbjTO4FZvn3cBKOPXdeRO0y9LOmcTYbJ7EnwvAF/JB?=
+ =?us-ascii?Q?YnUv3R/DE/Uk02j8OtDMjvh1bXShP+tWcbHRMuOj/RsO+MaK7Olwg8q8mEQ3?=
+ =?us-ascii?Q?N6PMCFKPDDoj3UFlbgnXZEki+T+OFSrQ3wo+0+qmXREdxyKkILRpUoxdCaGu?=
+ =?us-ascii?Q?3Snb6cOQFEROXCHP+3mStVgJdM1lazzRdRPElb+79Yotz/vAXc01o6xWeF2d?=
+ =?us-ascii?Q?Psx+L/NcLnCm8iKBmKXP0mBdQryBSzzYZu1WgyNFvI7u1GwBvVvHH3kc1hC+?=
+ =?us-ascii?Q?qEcH+ZYxNl05xo62cQf4BBCZKvBDqamd3/rxh+AprpZsu5w5PtJxvh3xMYii?=
+ =?us-ascii?Q?sc7rEajv4YjDrvb8w4reklQWoDspm978FugzMkYXc1Ok2YJXwhM5kC68r2+U?=
+ =?us-ascii?Q?wqC6Dv8PoaJWbhvvjIGvsJx02e+gL6/rZsJcyrkDmhXd3+mzUYx/eV09cDFQ?=
+ =?us-ascii?Q?0us+nt38Uv/DbbB4BEjRGAtr9xRULciTZO3pSzFZYZly8M91hRulfHwPTrbL?=
+ =?us-ascii?Q?O/04owGoKKuNEibPfcXEcUdE6thJ5J1SPilaZF8u+4Wl6p8eiCzIf5lI+iRp?=
+ =?us-ascii?Q?alFufgSu0Xe8LAQlp0umLh6KFBrgP6K+phJWfkgKZqOhRMib0iy1WTVh52dV?=
+ =?us-ascii?Q?wHBiwVRkDoTOQLKbFFt9CLm8KaVqw+EQDS4BYtajP9SC2i7UmhxjoI4KcuJY?=
+ =?us-ascii?Q?CGsAaIgzt0vRCay8wrOVkqK6skzIkQpNoxXMFBrtjYTsZnJXAGA1x+oOE2hK?=
+ =?us-ascii?Q?oDbKaXggVj87ylkjz1jkrMPS5A1TYoTV8Qbb/Mq1/kszlV/K4gycpmI4KSUl?=
+ =?us-ascii?Q?ShUJssbKvyl9uLDxdiAnFtkTqNbfKkR0/xrCXsxqHVrpBcuM1co8LXKajk0h?=
+ =?us-ascii?Q?sniIKOkWGkDG2ts5M3P7cG05VtY5UVLby+Z9Zf50Ao/1oFEEKA6n8LJuYuUM?=
+ =?us-ascii?Q?O435OI9rr3pB8whwBC1zKfSe8PtCYrNQ0wjO/GlJkPXdD5/LzCJeQncXUaTj?=
+ =?us-ascii?Q?pz0tMoe2teSVeoPach398nqRaMNis6TOAMCOu3E6eVMi7KEJBy+uFXQ8mxn3?=
+ =?us-ascii?Q?egL+47NLnDmTT/y+VBt66RMukE3b95k+xPDXeF3FKwEtY0R8m/wIVp995UM6?=
+ =?us-ascii?Q?7O8sGcPuJ4D+U6qfVa305e0CHlXZaVQUsxis5rqu/mhhhNJcNRfGmplkxRDC?=
+ =?us-ascii?Q?hqyHFRyhnKvdpeHLKAPyp6cDizOZy3nu7YdFHdZPcBhJ9hKsEFBcXHVobu47?=
+ =?us-ascii?Q?+QCIfVXDwMcQjz65qWY0mAw66rEUuFtZR0sm9yFVusHS8M4NqiR53AjPcMZX?=
+ =?us-ascii?Q?ZxtjpLrqhvUPqIp2dAQvLJXnHmaVXWoMpJThD4tMWDF6xuofInxWJ+/TucBQ?=
+ =?us-ascii?Q?us/7SRqzU6eWGkwpyVHQ4lk=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 098a09ac-385c-4f96-45bf-08d9f027364b
+X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2022 02:02:25.7116
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: u6u+yKqr/IsLbIvSMI3GupLVUFuyVlaq/LjtT6GJzsdajF7DqseAp78rXFgDdJr7DZYB53lnMhWBuzaNmj96vQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4510
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/22 9:46 AM, Lu Baolu wrote:
-> On 2/14/22 8:49 PM, Joerg Roedel wrote:
->> On Mon, Feb 14, 2022 at 09:55:35AM +0800, Lu Baolu wrote:
->>> +static inline const struct iommu_ops *dev_iommu_ops(struct device *dev)
->>> +{
->>> +    /*
->>> +     * Assume that valid ops must be installed if iommu_probe_device()
->>> +     * has succeeded. The device ops are essentially for internal use
->>> +     * within the IOMMU subsystem itself, so we should be able to trust
->>> +     * ourselves not to misuse the helper.
->>> +     */
->>> +    WARN_ON(!dev || !dev->iommu || !dev->iommu->iommu_dev ||
->>> +        !dev->iommu->iommu_dev->ops);
->>
->> There is no need for this WARN_ON, the code will oops anyway when one of
->> the pointers checked here is NULL.
->>
-> 
-> We really don't need to WARN_ON intermediate null pointers. But I would
-> argue that we could add a WARN() on null dev->iommu->iommu_dev->ops, so
-> that callers have no need to check the returned ops.
+From: Wang Qing <wangqing@vivo.com>
 
-Oh, sorry! We don't need to check null ops either. That will also result
-in a null pointer reference oops in the caller.
+len should be assigned after a null check
 
-So, yes. No need for this WARN_ON().
+Signed-off-by: Wang Qing <wangqing@vivo.com>
+---
+ net/bluetooth/mgmt_util.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Best regards,
-baolu
+diff --git a/net/bluetooth/mgmt_util.c b/net/bluetooth/mgmt_util.c
+index edee60b..37eef2c
+--- a/net/bluetooth/mgmt_util.c
++++ b/net/bluetooth/mgmt_util.c
+@@ -77,11 +77,12 @@ int mgmt_send_event_skb(unsigned short channel, struct sk_buff *skb, int flag,
+ {
+ 	struct hci_dev *hdev;
+ 	struct mgmt_hdr *hdr;
+-	int len = skb->len;
++	int len;
+ 
+ 	if (!skb)
+ 		return -EINVAL;
+ 
++	len = skb->len;
+ 	hdev = bt_cb(skb)->mgmt.hdev;
+ 
+ 	/* Time stamp */
+-- 
+2.7.4
+

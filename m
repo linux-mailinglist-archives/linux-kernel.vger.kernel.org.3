@@ -2,104 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10DD14B7628
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B2D4B779D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241959AbiBOQzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:55:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42786 "EHLO
+        id S242042AbiBOQz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:55:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233779AbiBOQzX (ORCPT
+        with ESMTP id S242028AbiBOQzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:55:23 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721BC117C80;
-        Tue, 15 Feb 2022 08:55:12 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EBADA1EC0535;
-        Tue, 15 Feb 2022 17:55:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1644944107;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=85FEUlBIu7c8gw8c7k99bQj9pHdSOqXZ6/sStTCcMr8=;
-        b=j47rsTlv5hjzO1Nkmit+xbe+OARRqvueOA4vw2ObjxKLl9G3hWsA/V75a64FJWY+h6HeQ0
-        tRJtp76UF+2FdvW1EZIGUOfhTiN2V/SqBrQH0IJ1+d9djKNnMvpwv2C7fuczr0+n5+p7H2
-        QGzBCxmUbzJfYm5std+ESynQIDydzFQ=
-Date:   Tue, 15 Feb 2022 17:55:04 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     mchehab@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ronenk@amazon.com, talel@amazon.com,
-        hhhawa@amazon.com, jonnyc@amazon.com, hanochu@amazon.com
-Subject: Re: [PATCH 3/4] EDAC: Refactor edac_align_ptr() to use
- u8/u16/u32/u64 data types
-Message-ID: <Ygva6E2Xrurr8hkE@zn.tnic>
-References: <20220113100622.12783-1-farbere@amazon.com>
- <20220113100622.12783-4-farbere@amazon.com>
+        Tue, 15 Feb 2022 11:55:45 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31CE117C80
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:55:35 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id c10so10248413pfv.8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:55:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1ncFR85fN36o35lsssnL+wzNGDTqWC9hiHD/c8p65I4=;
+        b=DJvP5WHoBzMbtMh4DC1UgHd3F3NZH6uAbOQ9+lOAr4dk9KlWWjyEJ0cK3iLWVrpM0o
+         ucvUE54tj/suLWJdMQbd8+xd2S2+VeF+vhqsincACgfT2Am8n7UelphSp6t0T9VRgzqP
+         xBi4FAynS/5RhUaTaFlKu/Aw465/Z3xT7IaOKTEWPXSfhV5kT3m+zyKEIK1xnMILuif8
+         6FaCqbGh9D7ZTnlBQieAPkpnQsNKvpAIwwd/iYU/Oc13hevOtlIqxwQEXog4WYIE/kA0
+         caiUZdM3bP5l7GD17XMi6GujWP/yoo/8goB350cMd+qww54Q/X4sH85sITFAYrQd2RiO
+         4tLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1ncFR85fN36o35lsssnL+wzNGDTqWC9hiHD/c8p65I4=;
+        b=i9t89cutAAjc6dj/gUSOhrpa9XYMtSziuW5EVKfBCVVx7BfoBNQ/a3ghujJXUlGYk6
+         V7hwt7I6VJIfRzIIno7KV6Qxsa3uxjdMpGwXoFXs/TwAHusseE1dvJ5j5emr31/6r1s3
+         GvEQBTz2rVm0ppR76XkvGXzrXFUXTPagI6E920RRqGd4otbEltBDWBlz0rTHTKhoScBb
+         C4Qd8lYeFEF+FYrO7oSB9Jwv4wQ/ihUUvm5Xqdr+1L4vLjn38yBrxZjfR/FpJ1n1Ucue
+         GEZCanDNjFVNJ32+dfMeOEcT/CRTvfs7c37MFlQIgb2SG+90cRfqfDMKxpAI8fZ5aEqn
+         xdjA==
+X-Gm-Message-State: AOAM5329ORt2DM8owxTjnzU/N2jYjBOL6J2aw+1KYN3Tyr97lZHdIpsL
+        X2zeyXu+0vyh6Hx9ykRZNgW0sQ==
+X-Google-Smtp-Source: ABdhPJxNkjayk772NXYsVPDj31XMmXZmRkbRaKzueCQf+WEYb+CAMQrXEiGlLUglpHR9JWyJf1TlxA==
+X-Received: by 2002:a05:6a00:2410:: with SMTP id z16mr657064pfh.66.1644944135147;
+        Tue, 15 Feb 2022 08:55:35 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id v187sm12187382pfv.101.2022.02.15.08.55.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 08:55:34 -0800 (PST)
+Date:   Tue, 15 Feb 2022 16:55:31 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] KVM: x86: use static_call_cond for optional
+ callbacks
+Message-ID: <YgvbAyD/4QEGQlpS@google.com>
+References: <20220214131614.3050333-1-pbonzini@redhat.com>
+ <20220214131614.3050333-2-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220113100622.12783-4-farbere@amazon.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220214131614.3050333-2-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 10:06:21AM +0000, Eliav Farber wrote:
-> Prefer well defined size variables, that are same in size across all
-> systems.
+On Mon, Feb 14, 2022, Paolo Bonzini wrote:
+> SVM implements neither update_emulated_instruction nor
+> set_apic_access_page_addr.  Remove an "if" by calling them
+> with static_call_cond().
 > 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
->  drivers/edac/edac_mc.c | 17 ++++++-----------
->  1 file changed, 6 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
-> index 8b9b86a7720a..3367bf997b73 100644
-> --- a/drivers/edac/edac_mc.c
-> +++ b/drivers/edac/edac_mc.c
-> @@ -250,18 +250,13 @@ void *edac_align_ptr(void **p, unsigned size, int n_elems)
->  	 * 'size'.  Adjust 'p' so that its alignment is at least as
->  	 * stringent as what the compiler would provide for X and return
->  	 * the aligned result.
-> -	 * Here we assume that the alignment of a "long long" is the most
-> -	 * stringent alignment that the compiler will ever provide by default.
-> -	 * As far as I know, this is a reasonable assumption.
->  	 */
-> -	if (size > sizeof(long))
-> -		align = sizeof(long long);
-> -	else if (size > sizeof(int))
-> -		align = sizeof(long);
-> -	else if (size > sizeof(short))
-> -		align = sizeof(int);
-> -	else if (size > sizeof(char))
-> -		align = sizeof(short);
-> +	if (size > sizeof(u32))
-> +		align = sizeof(u64);
-> +	else if (size > sizeof(u16))
-> +		align = sizeof(u32);
-> +	else if (size > sizeof(u8))
-> +		align = sizeof(u16);
->  	else
->  		return ptr;
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 
-This is just silly. I think you should simply align on 8 and kill all
-that bla.
-
-This whole pointer alignment, then picking out the actual pointers of
-the embedded struct members is just a bunch of unneeded complexity. I'd
-like to get rid of it completely one day...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Reviewed-by: Sean Christopherson <seanjc@google.com>

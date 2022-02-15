@@ -2,52 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8617E4B6CCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:55:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D68104B6CD6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238011AbiBOMzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 07:55:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37542 "EHLO
+        id S238020AbiBOM7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 07:59:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237992AbiBOMzT (ORCPT
+        with ESMTP id S235619AbiBOM7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 07:55:19 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612E0443E3;
-        Tue, 15 Feb 2022 04:55:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BC9ADCE1F1B;
-        Tue, 15 Feb 2022 12:55:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C49C0C340F2;
-        Tue, 15 Feb 2022 12:55:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644929705;
-        bh=p1tJVXNyyLVvsyyu/uQ3N9eU1Jya4h24+Tsf3iiMlAQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Ms8Zgq+/dXjmfQCkUbxTAtEKx/ileHFkTsIXxFSmde9KNDBXk/KBRJvtbG1TPgsuf
-         E1cUngzylxKYVMy+Toj/hUXgfQJh+eaeQsv0MBSZNXLanPHtIJLbO7WYkXw2sqcSCa
-         7OMJ1ua1dpnwoVbsFcwzFbIzrKC04EW8k2jerH6C9D7Aw7Hut1rDmonUhJESxRHb2f
-         8j79HT6Mr3hcEw3RYYyVPSj2oSjcyUU3qyz0mi+UihB4Fdx1zCY3Ov2xyo8C0C08A7
-         nXB2SSFOTjmKjspcSjEvLxsUyDp2q0bYiVaSy+hWgOSSUz5JZlQRugtIVKJAHVO9ei
-         IuTpq8k7TyDFw==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Li-hao Kuo <lhjeff911@gmail.com>
-Cc:     lh.kuo@sunplus.com, trix@redhat.com, nathan@kernel.org,
-        wells.lu@sunplus.com
-In-Reply-To: <7d91e6ce29f9a8df2c53a47b4b977664020e237a.1644805060.git.lhjeff911@gmail.com>
-References: <7d91e6ce29f9a8df2c53a47b4b977664020e237a.1644805060.git.lhjeff911@gmail.com>
-Subject: Re: [PATCH] spi: Fix warning for Clang build and simplify code
-Message-Id: <164492970350.14011.3679967978147631328.b4-ty@kernel.org>
-Date:   Tue, 15 Feb 2022 12:55:03 +0000
+        Tue, 15 Feb 2022 07:59:44 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59F07F6ED
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:59:34 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJxQA-0008UY-W5; Tue, 15 Feb 2022 13:59:07 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJxQ2-00Gku7-Gs; Tue, 15 Feb 2022 13:58:57 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJxQ1-003Kkc-4f; Tue, 15 Feb 2022 13:58:57 +0100
+Date:   Tue, 15 Feb 2022 13:58:56 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-riscv@lists.infradead.org, Vignesh R <vigneshr@ti.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-rockchip@lists.infradead.org,
+        Rahul Tanwar <rtanwar@maxlinear.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Jeff LaBundy <jeff@labundy.com>, linux-sunxi@lists.linux.dev,
+        linux-pwm@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [PATCH v2 00/15] pwm: dt-bindings: Include generic pwm schema
+Message-ID: <20220215125856.es2euyoqo6mp4y2t@pengutronix.de>
+References: <20220214212154.8853-1-krzysztof.kozlowski@canonical.com>
+ <20220215074030.3nugwproxjh3lwhl@pengutronix.de>
+ <CA+Eumj42Hojp1m4deuWnqMOaaNaupTSkzPaNbL_0eyBL-aDi_g@mail.gmail.com>
+ <7df71f8d-cdc3-4b2e-cf0a-7112eff28142@canonical.com>
+ <20220215094106.k35pmoxt2nk44dsj@pengutronix.de>
+ <20220215104952.3z7y2t5udwab64kh@pengutronix.de>
+ <d042abb2-e5df-42b9-824a-6fc3b9c6df6c@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="t6gdx5ppa5aoudwv"
+Content-Disposition: inline
+In-Reply-To: <d042abb2-e5df-42b9-824a-6fc3b9c6df6c@canonical.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,40 +84,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Feb 2022 10:20:11 +0800, Li-hao Kuo wrote:
-> Clang build fails with
-> spi-sunplus-sp7021.c:405:2: error: variable 'ret' is used
->   uninitialized whenever switch default is taken
->         default:
-> 
-> simplify code
-> 
-> [...]
 
-Applied to
+--t6gdx5ppa5aoudwv
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+On Tue, Feb 15, 2022 at 01:41:20PM +0100, Krzysztof Kozlowski wrote:
+> On 15/02/2022 11:49, Uwe Kleine-K=F6nig wrote:
+> > On Tue, Feb 15, 2022 at 10:41:06AM +0100, Uwe Kleine-K=F6nig wrote:
+> >> On Tue, Feb 15, 2022 at 09:02:25AM +0100, Krzysztof Kozlowski wrote:
+> >>> On 15/02/2022 08:59, Krzysztof Kozlowski wrote:
+> >>>> On Tue, 15 Feb 2022 at 08:40, Uwe Kleine-K=F6nig
+> >>>> <u.kleine-koenig@pengutronix.de> wrote:
+> >>>>>
+> >>>>> Hello,
+> >>>>>
+> >>>>> [dropped Anson Huang and Yash Shah from Cc: which were not reachabl=
+e for
+> >>>>> my last mail]
+> >>>>>
+> >>>>> On Mon, Feb 14, 2022 at 10:21:39PM +0100, Krzysztof Kozlowski wrote:
+> >>>>>> Hi,
+> >>>>>>
+> >>>>>> Changes since v1:
+> >>>>>> 1. Add tags.
+> >>>>>> 2. Adjust subject (Uwe).
+> >>>>>
+> >>>>> However you only took a part of my suggestion ...
+> >>>>>
+> >>>>>> Krzysztof Kozlowski (15):
+> >>>>>>   dt-bindings: pwm: allwinner,sun4i-a10: Include generic pwm schema
+> >>>>>>   dt-bindings: pwm: imx: Include generic pwm schema
+> >>>>>>   dt-bindings: pwm: intel,lgm: Include generic pwm schema
+> >>>>>>   dt-bindings: pwm: iqs620a: Include generic pwm schema
+> >>>>>>   dt-bindings: pwm: mxs: Include generic pwm schema
+> >>>>>>   dt-bindings: pwm: rockchip: Include generic pwm schema
+> >>>>>>   dt-bindings: pwm: sifive: Include generic pwm schema
+> >>>>>>   dt-bindings: pwm: renesas,pwm: Include generic pwm schema
+> >>>>>>   dt-bindings: pwm: toshiba,visconti: Include generic pwm schema
+> >>>>>>   dt-bindings: pwm: brcm,bcm7038: Do not require pwm-cells twice
+> >>>>>>   dt-bindings: pwm: intel,keembay: Do not require pwm-cells twice
+> >>>>>
+> >>>>> ... The actual patch has a space after the comma, I like this varia=
+nt
+> >>>>> without comma better as this is a compatible string.
+> >>>>
+> >>>> I am confused. My patch does not have comma after space. Your reply
+> >>>> had such in the subject, but not in the proposed new subject you wro=
+te
+> >>>> in msg, so I left it as is. Without comma. If you still see comma, it
+> >>>> is something with your mail client.
+> >>>>
+> >>>> See:
+> >>>> https://lore.kernel.org/linux-devicetree/20220214212154.8853-12-krzy=
+sztof.kozlowski@canonical.com/T/#u
+> >>>>
+> >>>> Also reply from Vijayakannan does not have comma:
+> >>>> https://lore.kernel.org/linux-devicetree/20220214081605.161394-11-kr=
+zysztof.kozlowski@canonical.com/T/#m80af695f2c751341bc971114aefa00ccc929a3ec
+> >>
+> >> Strange: I have this mail four times in my mailboxes (via
+> >> linux-arm-kernel, linux-pwm, kernel@pengutronix.de and directly). In t=
+he
+> >> two latter the Subject line is broken in two:
+> >=20
+> > I was wrong. The ones to kernel@pengutronix.de and the linux-arm-kernel
+> > one are the ones with the linebreak.
+> >=20
+> > Hmm,
+> >=20
+> > http://lists.infradead.org/pipermail/linux-arm-kernel/2022-February/717=
+310.html
+> > http://lists.infradead.org/pipermail/linux-arm-kernel/2022-February/717=
+304.html
+> >=20
+> > has the linebreaks, too. Still I wonder what is different between
+> > kernel@pengutronix.de and u.kleine-koenig@pengutronix.de.
+>=20
+> Other threads - not only mine - are also affected:
+> http://lists.infradead.org/pipermail/linux-arm-kernel/2022-February/71431=
+1.html
+> http://lists.infradead.org/pipermail/linux-arm-kernel/2022-February/71431=
+6.html
+> http://lists.infradead.org/pipermail/linux-arm-kernel/2022-February/71436=
+4.html
 
-Thanks!
+In the meantime I'm confident that mailman2 is the culprit.
 
-[1/1] spi: Fix warning for Clang build and simplify code
-      commit: 5790597d7113faabb1714d3d1efa268e36eb4811
+Best regards
+Uwe
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+--t6gdx5ppa5aoudwv
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+-----BEGIN PGP SIGNATURE-----
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmILo40ACgkQwfwUeK3K
+7AnvIwgAjV+YrVWzVl6/EalqkA0yXEPvLD0BIjc8GppPn0QIHRx5V3D1pFSohQMe
+5/B2Qed1xooVWuf0uGv8px49fkHuRjJmjJGyCqzzqljJK8kHyRtXs9J9+1SM5Grb
+KvVqy2mGU91WjUIFP1wUjOemZ5KQSdbXBRhPpT4rjoOia/t5VBxvosGde1oZnRWc
+lLE2zzwxRLz52uycLpDKCeLKvpohBy5rbd3R5lRvyCH25zIYRbnkGPRhE+Vpv2ec
+bU5gO5jQZss+5auIIrmYcpyjK2eS0nzYA6JW0jDLzC4+UB4RPAKPi2nEhD+LdD44
+d1DHbpi4cOq5fCyjQM93xFg5Xyz1sA==
+=+q5K
+-----END PGP SIGNATURE-----
 
-Thanks,
-Mark
+--t6gdx5ppa5aoudwv--

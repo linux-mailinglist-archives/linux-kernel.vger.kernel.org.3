@@ -2,103 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0144B75C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D88E4B76E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243191AbiBOSoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 13:44:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50574 "EHLO
+        id S243177AbiBOSoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 13:44:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241980AbiBOSoE (ORCPT
+        with ESMTP id S241980AbiBOSoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 13:44:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE3527FF6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:43:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29456616C7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:43:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C250FC340EC;
-        Tue, 15 Feb 2022 18:43:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644950633;
-        bh=jVE2UPwQbGumrX229wqA975K+AttmZ9p0pF/nvpok9Y=;
-        h=From:To:Cc:Subject:Date:From;
-        b=SRhqgjz47Z9NvbRe3aKfoY+SUjDETfnk4XZJxkkyoh9YYzrgdktOTgRbgfT75inLW
-         Pasx0y++4oWIo5MUdNNH+FbuGbMAFsdDLPHxo+sfO1H2RjX9LQKa4dRZusD6SRDEhq
-         I7xfG4nUoW/Lq2Ge5F08+EwLr6unbd6cFofQ+Lh2o7Aywm0a7JZEdgX84npyygGkTN
-         M3jTDum3/wUjb9BQIGg9EO4TD+io7PxDGaDAmFkTMdjngJjPslzVdfVebCjCD0ytyr
-         ljQ2Q9/cymblwFUceu7qvDG8YxyD2s4XnitPHG5M5d/+/ACa2Fa20hD1ylmRp7VLUf
-         y1LrBtwqrKcoQ==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>,
-        "kernelci.org bot" <bot@kernelci.org>
-Subject: [PATCH] mm/page_alloc: Mark pagesets as __maybe_unused
-Date:   Tue, 15 Feb 2022 11:43:22 -0700
-Message-Id: <20220215184322.440969-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Tue, 15 Feb 2022 13:44:00 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E176B27FF6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:43:49 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id h11so15523473ilq.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:43:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=A0+kP93DPXHvr6brEvM8VXEFzWB0S5lRFdtA9kDJkyE=;
+        b=VbnG0DTFoD5oInsLnSpyK8TY1b9yTtEV8jmDclcI0lVoHXaRfQ+1Kei06xf8rXYF7T
+         Wg/jkDG2mswlylVxkUyUwagh7VpOigDobBSIN+ruOXrKdEbqescCjLVZjKa5xcviv9J2
+         6BHdIVuOY/izVwkXKs6tMZ1SXb1wuGFnkP+R4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=A0+kP93DPXHvr6brEvM8VXEFzWB0S5lRFdtA9kDJkyE=;
+        b=QpE2M4zPcDWkK7tRYsMbd/I2REEkYC87riK+uxfAF66mWn4kDUQgaLN7Z1UvfVsQht
+         HjTzqpBxCTNlBjF9SpB6O11FH8ifGNpvL90nhLQYFV9BqeABD7tEvO1nNXpUme/wA7cn
+         +HX28iw/mXDxSo/5WmY/oIAiUopWCBhODa2b3tKhQC6h5opfs40Cdp4ED97Yipyq9E3n
+         OHDE3wHxP4Vt8zFD3vNLHfConQmHOjD67Vl+lhyeOjSLYAG7540VK8PgBCvKJC+Nufob
+         rZqnnjOsEcVX57ZEG71trMiQsBOOnJivqpMnNDVmKdNqYC5G5vyHLqpp958OQ2EMItrD
+         To+w==
+X-Gm-Message-State: AOAM530v66vDbVaHIsQVYASod3ucRqPQLPAuEjsXz4FzvlWctfLy6wXu
+        f65ovjcJslCoSQWOyP4c+2rmCQ==
+X-Google-Smtp-Source: ABdhPJy2vlGZWPGrF4v8TITllv20RRsSaBCpm9YRhgNODL/5uMIm2Jii7qjTHVGojYsoa6gztygi5g==
+X-Received: by 2002:a05:6e02:1bc1:: with SMTP id x1mr258711ilv.268.1644950629300;
+        Tue, 15 Feb 2022 10:43:49 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id s16sm12850411iow.10.2022.02.15.10.43.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 10:43:49 -0800 (PST)
+Subject: Re: [PATCH v2] selftests/seccomp: Fix seccomp failure by adding
+ missing headers
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Sherry Yang <sherry.yang@oracle.com>
+Cc:     "shuah@kernel.org" <shuah@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        "luto@amacapital.net" <luto@amacapital.net>,
+        "wad@chromium.org" <wad@chromium.org>,
+        "christian@brauner.io" <christian@brauner.io>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kafai@fb.com" <kafai@fb.com>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "yhs@fb.com" <yhs@fb.com>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220210203049.67249-1-sherry.yang@oracle.com>
+ <755ec9b2-8781-a75a-4fd0-39fb518fc484@collabora.com>
+ <85DF69B3-3932-4227-978C-C6DAC7CAE64D@oracle.com>
+ <66140ffb-306e-2956-2f6b-c017a38e18f8@collabora.com>
+ <4b739847-0622-c221-33b3-9fe428a52bc0@collabora.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <2f59f86c-dbd7-7dbf-021d-bc62ebbe2a43@linuxfoundation.org>
+Date:   Tue, 15 Feb 2022 11:43:48 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <4b739847-0622-c221-33b3-9fe428a52bc0@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 9983a9d577db ("locking/local_lock: Make the empty local_lock_*()
-function a macro.") in the -tip tree converted the local_lock_*()
-functions into macros, which causes a warning with clang with
-CONFIG_PREEMPT_RT=n + CONFIG_DEBUG_LOCK_ALLOC=n:
+On 2/15/22 11:17 AM, Muhammad Usama Anjum wrote:
+> 
+> On 2/14/22 9:12 PM, Muhammad Usama Anjum wrote:
+>>>> "../../../../usr/include/" directory doesn't have header files if
+>>>> different output directory is used for kselftests build like "make -C
+>>>> tools/tests/selftest O=build". Can you try adding recently added
+>>>> variable, KHDR_INCLUDES here which makes this kind of headers inclusion
+>>>> easy and correct for other build combinations as well?
+>>>>
+>>>>
+>>>
+>>> Hi Muhammad,
+>>>
+>>> I just pulled linux-next, and tried with KHDR_INCLUDES. It works. Very nice
+>>> work! I really appreciate you made headers inclusion compatible. However,
+>>> my case is a little more complicated. It will throw warnings with -I, using
+>>> -isystem can suppress these warnings, more details please refer to
+>>> https://lore.kernel.org/all/C340461A-6FD2-440A-8EFC-D7E85BF48DB5@oracle.com/
+>>>
+>>> According to this case, do you think will it be better to export header path
+>>> (KHDR_INCLUDES) without “-I”?
+>> Well said. I've thought about it and it seems like -isystem is better
+>> than -I. I've sent a patch:
+>> https://lore.kernel.org/linux-kselftest/20220214160756.3543590-1-usama.anjum@collabora.com/
+>> I'm looking forward to discussion on it.
+> The patch has been accepted. It should appear in linux-next soon. You
+> should be able to use KHDR_INCLUDES easily now.
+> 
 
-  mm/page_alloc.c:131:40: error: variable 'pagesets' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
-  static DEFINE_PER_CPU(struct pagesets, pagesets) = {
-                                         ^
-  1 error generated.
+Sherry,
 
-Prior to that change, clang was not able to tell that pagesets was
-unused in this configuration because it does not perform cross function
-analysis in the frontend. After that change, it sees that the macros
-just do a typecheck on the lock member of pagesets, which is evaluated
-at compile time (so the variable is technically "used"), meaning the
-variable is not needed in the final assembly, as the warning states.
+I pulled in your patch as a fix as is for 5.17-rc5.
 
-Mark the variable as __maybe_unused to make it clear to clang that this
-is expected in this configuration so there is no more warning.
+Using KHDR_INCLUDES can be separate patch for next release.
+This way the fix is going to be pulled for this release
+without dependencies on other patches.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1593
-Reported-by: "kernelci.org bot" <bot@kernelci.org>
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- mm/page_alloc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 7ff1efc84205..406f5d0c610f 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -128,7 +128,7 @@ static DEFINE_MUTEX(pcp_batch_high_lock);
- struct pagesets {
- 	local_lock_t lock;
- };
--static DEFINE_PER_CPU(struct pagesets, pagesets) = {
-+static DEFINE_PER_CPU(struct pagesets, pagesets) __maybe_unused = {
- 	.lock = INIT_LOCAL_LOCK(lock),
- };
- 
-
-base-commit: 10a64d66e319e6ea3a19f9d2e7c4f0dee90ce6e0
--- 
-2.35.1
-
+thanks,
+-- Shuah

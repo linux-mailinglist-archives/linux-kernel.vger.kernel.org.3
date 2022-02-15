@@ -2,131 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6306A4B730B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:43:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCDE4B706E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:39:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241212AbiBOQFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:05:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32960 "EHLO
+        id S241114AbiBOP5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:57:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238118AbiBOQFC (ORCPT
+        with ESMTP id S241063AbiBOP5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:05:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4A965BA;
-        Tue, 15 Feb 2022 08:04:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9B50B81AF1;
-        Tue, 15 Feb 2022 16:04:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8326EC340EB;
-        Tue, 15 Feb 2022 16:04:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644941089;
-        bh=4Fn2tQZHYMpisfGny9s7PMSOteToJFxy1fpDT9qsL/M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LyqJauKIRL7zzFOxSSzuV4sPvHKSMks6LI3MMs8fyKao/BGBPT0csBYTLJQeTW/JD
-         ps+YGpJ5YBqPHliptwQ/eEcJ275mryrK2t2bGi62nvnUp6UWafLdCEbzz079z6ucVd
-         Dgb69zOS6zpYfDdiUVv33JTYt0LEOCCjhyULPgUGwhI52lDB4T6ix82Fmjv230cqCd
-         XRqyoV+TClHwmZvAiic80eERxMH09CdM3xcQgxP3Pt0zBu8KeFI9q4ymsXYWSbj66/
-         OYnLtWQ34FueotGYUpxbz1zXQKuJ8XIOJXWE/ZBq/FrjFM2V65wBZJcXWSfDmzFkt1
-         DY7YI5Qr7mL9g==
-Date:   Tue, 15 Feb 2022 23:56:57 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-riscv@lists.infradead.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v3 0/6] Provide a fraemework for RISC-V ISA extensions
-Message-ID: <YgvNSeUekqEVS1yE@xhacker>
-References: <20220215090211.911366-1-atishp@rivosinc.com>
+        Tue, 15 Feb 2022 10:57:38 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C64BD2F9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:57:27 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id z22so233389edd.1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:57:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=r1yKOdG3+HcdEveOP9QqIBqiCAtk8UFmG7zm3SFzQ9M=;
+        b=mRnsdSWXqtWva+/wTXFIzYY2qPOA7NBqldJIzYYtUChPi7ncE9gdRSMXgP4AqO6oDC
+         j7URGXMyT6QWz8W6Hm3OvuLmmUlozcUwQTEjs3EgY/5j6OmlDjivAfEABC0TV5+MUn5X
+         w/npUZ+Q1vAikO9YA6K9Cv+qCz5YzIevMxyV0PMS+duM1HoRVQ78yn6V9Q+vnhanVEN/
+         3CFhBi9Oar4pg0UvsMjObSnHdUvvsak9y+KEngiJaeXNuJXXp5HV2mT59YA5a9fFZGWD
+         es4EmJMDYq2T/Y+ulDrDHEJhP2/ANpBMlM4hr/7d9r9h4u5TJzjAHIUXpAim/5ZcQFrL
+         vTAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r1yKOdG3+HcdEveOP9QqIBqiCAtk8UFmG7zm3SFzQ9M=;
+        b=ITDpPmMRvl4Z7oZSFFbga0SFHMOVx6vvzCs2/+uaTZ1Gxc7VEstYX3uG2y+igGmtV5
+         slHD1d3rDRK11hlqQWtuFS0R2HKl664W/c0pdVbR+oZpY6yCdIO2Dqpo73vRH6+yK3Mn
+         skh9q7yxF6zACOchZv+g1bACiqI4vJ06xiMDEV8Jngjxa0iQ4mzqZd8Sv+ItG97PUDEn
+         LAKnBO0D0Wrti3BezNd1VaJr4w+ieiWso9Vme5ur0VmNYqzAIjGX6PczFD0QS7MnWCKc
+         EvwyC+Q7gct1+0eio3M7xnDR5lnCL8xICYEdiD2YH8YHAj431N1/vCIHic+o6tOkuO3Q
+         3pHw==
+X-Gm-Message-State: AOAM532SJNspNPP5/tNednhXQ7mJsnKfyv7Uw5yNr6PETbt5AnOk6T5v
+        WNKSM2YMB6QUpXImeRyDlIozfSZdHbATKwEFD73rDRO/gMWZdA==
+X-Google-Smtp-Source: ABdhPJwUuOsxdKm3ToptWX43l41nQVNc/oh9PLwajjIsiUjBkT3KljbfFUCR4lSGc1SVbNrXgtqp1dZJ+gN7TbNYW6U=
+X-Received: by 2002:aa7:d40f:: with SMTP id z15mr4544792edq.357.1644940645587;
+ Tue, 15 Feb 2022 07:57:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220215090211.911366-1-atishp@rivosinc.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220215153644.3654582-1-bgeffon@google.com>
+In-Reply-To: <20220215153644.3654582-1-bgeffon@google.com>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Tue, 15 Feb 2022 07:57:13 -0800
+Message-ID: <CABXOdTe09SxzEpJE_BJO5=4NTjZt2a6zMviMzDH47X5MZao7WA@mail.gmail.com>
+Subject: Re: [PATCH] x86/fpu: Correct pkru/xstate inconsistency
+To:     Brian Geffon <bgeffon@google.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Willis Kung <williskung@google.com>,
+        Borislav Petkov <bp@suse.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        "# v4 . 10+" <stable@vger.kernel.org>, x86@kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 01:02:05AM -0800, Atish Patra wrote:
-> This series implements a generic framework to parse multi-letter ISA
-> extensions. This series is based on Tsukasa's v3 isa extension improvement
-> series[1]. I have fixed few bugs and improved comments from that series
-> (PATCH1-3). I have not used PATCH 4 from that series as we are not using
-> ISA extension versioning as of now. We can add that later if required.
-> 
-> PATCH 4 allows the probing of multi-letter extensions via a macro.
-> It continues to use the common isa extensions between all the harts.
-> Thus hetergenous hart systems will only see the common ISA extensions.
-> 
-> PATCH 6 improves the /proc/cpuinfo interface for the available ISA extensions
-> via /proc/cpuinfo.
-> 
-> Here is the example output of /proc/cpuinfo:
-> (with debug patches in Qemu and Linux kernel)
-> 
-> / # cat /proc/cpuinfo
-> processor	: 0
-> hart		: 0
-> isa		: rv64imafdcsu
-> isa-ext		: sstc,sscofpmf
-> mmu		: sv48
-> 
-> processor	: 1
-> hart		: 1
-> isa		: rv64imafdcsu
-> isa-ext		: sstc,sscofpmf
-> mmu		: sv48
-> 
-> processor	: 2
-> hart		: 2
-> isa		: rv64imafdcsu
-> isa-ext		: sstc,sscofpmf
-> mmu		: sv48
-> 
-> processor	: 3
-> hart		: 3
-> isa		: rv64imafdcsu
-> isa-ext		: sstc,sscofpmf
-> mmu		: sv48
-> 
-> Anybody adding support for any new multi-letter extensions should add an
-> entry to the riscv_isa_ext_id and the isa extension array. 
-> E.g. The patch[2] adds the support for various ISA extensions.
+Hi Brian,
 
-Hi Atish,
+On Tue, Feb 15, 2022 at 7:37 AM Brian Geffon <bgeffon@google.com> wrote:
+>
+> There are two issues with PKRU handling prior to 5.13. The first is that
 
-Thanks for this series. I'm thinking cpu features VS ISA extenstions.
-I'm converting the sv48 to static key:
-https://lore.kernel.org/linux-riscv/20220125165036.987-1-jszhang@kernel.org/
+Nice catch and work. One question, though: From the above, it seems
+like this patch only applies to kernels earlier than v5.13 or, more
+specifically, to v5.4.y and v5.10.y. Is this correct, or should it be
+applied to the upstream kernel and to all applicable stable releases ?
 
-Previously, I thought the SV48 as a cpu feature, and there will be
-more and more cpu features, so I implemented an unified static key
-mechanism for CPU features. But after reading this series, I think
-I may need to rebase(even reimplement) the above patch to your series.
-But I'm a bit confused by CPU features VS ISA extenstions now:
+Thanks,
+Guenter
 
-1. Is cpu feature  == ISA extension?
-
-2. Is SV48 considered as ISA extension?
-If yes, now SV48 or not is determined during runtime, but current ISA
-extensions seem parsed from DT. So how to support those ISA extensions
-which can be determined during runtime?
-
-Could you please share your thought?
-
-Thanks
+> when eagerly switching PKRU we check that current is not a kernel
+> thread as kernel threads will never use PKRU. It's possible that
+> this_cpu_read_stable() on current_task (ie. get_current()) is returning
+> an old cached value. By forcing the read with this_cpu_read() the
+> correct task is used. Without this it's possible when switching from
+> a kernel thread to a userspace thread that we'll still observe the
+> PF_KTHREAD flag and never restore the PKRU. And as a result this
+> issue only occurs when switching from a kernel thread to a userspace
+> thread, switching from a non kernel thread works perfectly fine because
+> all we consider in that situation is the flags from some other non
+> kernel task and the next fpu is passed in to switch_fpu_finish().
+>
+> Without reloading the value finish_fpu_load() after being inlined into
+> __switch_to() uses a stale value of current:
+>
+>   ba1:   8b 35 00 00 00 00       mov    0x0(%rip),%esi
+>   ba7:   f0 41 80 4d 01 40       lock orb $0x40,0x1(%r13)
+>   bad:   e9 00 00 00 00          jmp    bb2 <__switch_to+0x1eb>
+>   bb2:   41 f6 45 3e 20          testb  $0x20,0x3e(%r13)
+>   bb7:   75 1c                   jne    bd5 <__switch_to+0x20e>
+>
+> By using this_cpu_read() and avoiding the cached value the compiler does
+> insert an additional load instruction and observes the correct value now:
+>
+>   ba1:   8b 35 00 00 00 00       mov    0x0(%rip),%esi
+>   ba7:   f0 41 80 4d 01 40       lock orb $0x40,0x1(%r13)
+>   bad:   e9 00 00 00 00          jmp    bb2 <__switch_to+0x1eb>
+>   bb2:   65 48 8b 05 00 00 00    mov    %gs:0x0(%rip),%rax
+>   bb9:   00
+>   bba:   f6 40 3e 20             testb  $0x20,0x3e(%rax)
+>   bbe:   75 1c                   jne    bdc <__switch_to+0x215>
+>
+> The second issue is when using write_pkru() we only write to the
+> xstate when the feature bit is set because get_xsave_addr() returns
+> NULL when the feature bit is not set. This is problematic as the CPU
+> is free to clear the feature bit when it observes the xstate in the
+> init state, this behavior seems to be documented a few places throughout
+> the kernel. If the bit was cleared then in write_pkru() we would happily
+> write to PKRU without ever updating the xstate, and the FPU restore on
+> return to userspace would load the old value agian.
+>
+> Fixes: 0cecca9d03c9 ("x86/fpu: Eager switch PKRU state")
+> Signed-off-by: Brian Geffon <bgeffon@google.com>
+> Signed-off-by: Willis Kung <williskung@google.com>
+> Tested-by: Willis Kung <williskung@google.com>
+> ---
+>  arch/x86/include/asm/fpu/internal.h |  2 +-
+>  arch/x86/include/asm/pgtable.h      | 14 ++++++++++----
+>  2 files changed, 11 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/fpu/internal.h b/arch/x86/include/asm/fpu/internal.h
+> index 03b3de491b5e..540bda5bdd28 100644
+> --- a/arch/x86/include/asm/fpu/internal.h
+> +++ b/arch/x86/include/asm/fpu/internal.h
+> @@ -598,7 +598,7 @@ static inline void switch_fpu_finish(struct fpu *new_fpu)
+>          * PKRU state is switched eagerly because it needs to be valid before we
+>          * return to userland e.g. for a copy_to_user() operation.
+>          */
+> -       if (!(current->flags & PF_KTHREAD)) {
+> +       if (!(this_cpu_read(current_task)->flags & PF_KTHREAD)) {
+>                 /*
+>                  * If the PKRU bit in xsave.header.xfeatures is not set,
+>                  * then the PKRU component was in init state, which means
+> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+> index 9e71bf86d8d0..aa381b530de0 100644
+> --- a/arch/x86/include/asm/pgtable.h
+> +++ b/arch/x86/include/asm/pgtable.h
+> @@ -140,16 +140,22 @@ static inline void write_pkru(u32 pkru)
+>         if (!boot_cpu_has(X86_FEATURE_OSPKE))
+>                 return;
+>
+> -       pk = get_xsave_addr(&current->thread.fpu.state.xsave, XFEATURE_PKRU);
+> -
+>         /*
+>          * The PKRU value in xstate needs to be in sync with the value that is
+>          * written to the CPU. The FPU restore on return to userland would
+>          * otherwise load the previous value again.
+>          */
+>         fpregs_lock();
+> -       if (pk)
+> -               pk->pkru = pkru;
+> +       /*
+> +        * The CPU is free to clear the feature bit when the xstate is in the
+> +        * init state. For this reason, we need to make sure the feature bit is
+> +        * reset when we're explicitly writing to pkru. If we did not then we
+> +        * would write to pkru and it would not be saved on a context switch.
+> +        */
+> +       current->thread.fpu.state.xsave.header.xfeatures |= XFEATURE_MASK_PKRU;
+> +       pk = get_xsave_addr(&current->thread.fpu.state.xsave, XFEATURE_PKRU);
+> +       BUG_ON(!pk);
+> +       pk->pkru = pkru;
+>         __write_pkru(pkru);
+>         fpregs_unlock();
+>  }
+> --
+> 2.35.1.265.g69c8d7142f-goog
+>

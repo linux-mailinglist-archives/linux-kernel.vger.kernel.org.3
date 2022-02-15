@@ -2,63 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5684B789C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAED4B7573
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:47:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242677AbiBORh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 12:37:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42060 "EHLO
+        id S240004AbiBORkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 12:40:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238733AbiBORh6 (ORCPT
+        with ESMTP id S232294AbiBORkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 12:37:58 -0500
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5525A4EF52;
-        Tue, 15 Feb 2022 09:37:48 -0800 (PST)
-Received: by mail-pf1-f175.google.com with SMTP id i21so34581502pfd.13;
-        Tue, 15 Feb 2022 09:37:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oXWX0jaQNHFvwdQVtFP6krv3RJnur7U+S/3/43SPpDg=;
-        b=JMAFbJvvRk7zoL9ZZCkE1ZMLufEu7TGRMHlyn2TnW6Vj3ST1qstsemOFQ5Ad21BbG4
-         Z+8omORo/ergcZ2bDfRq4dy/50abIVMV9I1gEshmy19ce6ddeQbJFI+h3Mh9m/dzwgtV
-         WraXoUEIT3hwkQgxfDbmoIFsGOWQuUQ4gucuu29NDO8W3qzbJqrcZTU9fhB8iL0VPXkl
-         c3sKMLbfS/Y+qx6Ejvpn9WGv2AZcLK8du5Z8GjR7g59fzLL2323mmKEb4vDPGAjqw5Jf
-         aVGF66Gg8K53VgQCgCsO5oHaz3SE2rugz1lI7xHGazBuO3mye4LYLV8SgNiSQtpXguXN
-         DnRA==
-X-Gm-Message-State: AOAM530bqbjAO9CIU8twmD6oHkAU7o0EIQxFm1fEXNk7e7Vxzmdu3yDb
-        eB/zt4Y5dOn/NGZ8MDjYk/I=
-X-Google-Smtp-Source: ABdhPJxlCrWNZuGjUj8mtG+WZTgrCvZWeUA6qZVWeZbra0yvA2xyyvFTN6r8ezQWAhBHJO6h+4YM7Q==
-X-Received: by 2002:a05:6a00:1c6e:: with SMTP id s46mr5546027pfw.56.1644946667649;
-        Tue, 15 Feb 2022 09:37:47 -0800 (PST)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id d15sm41466850pfu.72.2022.02.15.09.37.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 09:37:47 -0800 (PST)
-Message-ID: <739e4ca0-ec2d-d39a-4c80-2b2e16435f49@acm.org>
-Date:   Tue, 15 Feb 2022 09:37:45 -0800
+        Tue, 15 Feb 2022 12:40:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFEC675E5E;
+        Tue, 15 Feb 2022 09:39:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75C0C615F4;
+        Tue, 15 Feb 2022 17:39:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7D5AC340EB;
+        Tue, 15 Feb 2022 17:39:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644946791;
+        bh=nUNc9NCmuYO7Z96Z2aJ5YseB2bw6sCO4T+CqaRXfLy4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ZHqzvRuWz09Sq3BLyc32W2AQzBDS73OTft6+Uift/wx0NxR5LdMjzdYMUVKx0sWne
+         XqUOfNdHVnP8aBq9L5xIEtYb76fq3/AF8sdOVJ/jJTVGQkL4tSAy+dseNUn8A5nGR1
+         PtxZtxOha7N2Pvdyayh7RAdOKnCNxpAS/60YkCx3FLfjuepKk+aSHaMpUwYearAbBh
+         IGnWxcPvMvWibambSQXXCFGND5ri42Q7j35Fu0gxuCXXw5hNdDyQ+LNf1eL3nti/3s
+         NKaFnR7vYFX5ry8jjp4eXuq4nemZ0yJ/YQYKtz846BjUlW0Xea4xOHAtGhE9CuPnLS
+         AfUZ7a2l6i4Yw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 9A0415C0641; Tue, 15 Feb 2022 09:39:51 -0800 (PST)
+Date:   Tue, 15 Feb 2022 09:39:51 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     kernel-team@fb.com, linux-kernel@vger.kernel.org,
+        rcu@vger.kernel.org, rostedt@goodmis.org, tj@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH rcu 3/3] rcu: Allow expedited RCU grace periods on
+ incoming CPUs
+Message-ID: <20220215173951.GH4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220209233811.GC557593@lothringen>
+ <20220214164435.GA2805255@paulmck-ThinkPad-P17-Gen-1>
+ <f8cff19c-5e8f-a7ed-c2ff-49a264b4e342@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2] [hpsa] Fix the wrong chars in comment section
-Content-Language: en-US
-To:     James Wang <jnwang@linux.alibaba.com>, don.brace@microsemi.com,
-        jejb@linux.vnet.ibm.com, martin.petersen@oracle.com,
-        esc.storagedev@microsemi.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <974edf4d-37fa-b25a-d0ac-33ac502381d8@acm.org>
- <1644889961-61470-1-git-send-email-jnwang@linux.alibaba.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1644889961-61470-1-git-send-email-jnwang@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f8cff19c-5e8f-a7ed-c2ff-49a264b4e342@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,32 +61,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/22 17:52, James Wang wrote:
-> These '+' should be redundant.
+On Tue, Feb 15, 2022 at 07:53:10PM +0530, Mukesh Ojha wrote:
 > 
-> Signed-off-by: James Wang <jnwang@linux.alibaba.com>
-> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+> On 2/14/2022 10:14 PM, Paul E. McKenney wrote:
+> > On Thu, Feb 10, 2022 at 12:38:11AM +0100, Frederic Weisbecker wrote:
+> > > On Fri, Feb 04, 2022 at 02:55:07PM -0800, Paul E. McKenney wrote:
+> > > > Although it is usually safe to invoke synchronize_rcu_expedited() from a
+> > > > preemption-enabled CPU-hotplug notifier, if it is invoked from a notifier
+> > > > between CPUHP_AP_RCUTREE_ONLINE and CPUHP_AP_ACTIVE, its attempts to
+> > > > invoke a workqueue handler will hang due to RCU waiting on a CPU that
+> > > > the scheduler is not paying attention to.  This commit therefore expands
+> > > > use of the existing workqueue-independent synchronize_rcu_expedited()
+> > > > from early boot to also include CPUs that are being hotplugged.
+> > > > 
+> > > > Link:https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/
+> > > > Reported-by: Mukesh Ojha<quic_mojha@quicinc.com>
+> > > > Cc: Tejun Heo<tj@kernel.org>
+> > > > Signed-off-by: Paul E. McKenney<paulmck@kernel.org>
+> > > I'm surprised by this scheduler behaviour.
+> > > 
+> > > Since sched_cpu_activate() hasn't been called yet,
+> > > rq->balance_callback = balance_push_callback. As a result, balance_push() should
+> > > be called at the end of schedule() when the workqueue is picked as the next task.
+> > > Then eventually the workqueue should be immediately preempted by the stop task to
+> > > be migrated elsewhere.
+> > > 
+> > > So I must be missing something. For the fun, I booted the following and it
+> > > didn't produce any issue:
+> > > 
+> > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > index 80faf2273ce9..b1e74a508881 100644
+> > > --- a/kernel/rcu/tree.c
+> > > +++ b/kernel/rcu/tree.c
+> > > @@ -4234,6 +4234,8 @@ int rcutree_online_cpu(unsigned int cpu)
+> > >   	// Stop-machine done, so allow nohz_full to disable tick.
+> > >   	tick_dep_clear(TICK_DEP_BIT_RCU);
+> > > +	if (cpu != 0)
+> > > +		synchronize_rcu_expedited();
+> > >   	return 0;
+> > >   }
+> > That does seem compelling.  And others have argued that the workqueue
+> > system's handling of offline CPUs should deal with this.
+> > 
+> > Mukesh, was this a theoretical bug, or did you actually make it happen?
+> > If you made it happen, as seems to have been the case given your original
+> > email [1], could you please post your reproducer?
+> 
+> No, it was not theoretical one. We saw this issue only once in our testing
+> and i don't think it is easy to reproduce otherwise
+> it would been fixed by now.
+> 
+> When one of thread calling synchronize_expedite_rcu with timer of 20s but it
+> did not get the exp funnel
+> lock for 20s and there we crash it with panic() on timeout.
+> 
+> The other thread cpuhp which was having the lock got stuck at the point
+> mentioned at the below link.
+> 
+> https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/
 
-Please do NOT add a Reviewed-by tag if a reviewer has not posted that 
-tag himself.
+OK.  Are you able to create an in-kernel reproducer, perhaps similar to
+Frederic's change above?
 
-I have the following additional comments on this patch:
-- I am not convinced that this patch is useful since it does not help
-   users of the hpsa driver.
-- The comment still does not conform to the Linux kernel coding style.
-   From coding-style.rst:
+I am worried that the patch that I am carrying might be fixing some
+other bug by accident...
 
-The preferred style for long (multi-line) comments is:
+							Thanx, Paul
 
-.. code-block:: c
-
-	/*
-	 * This is the preferred style for multi-line
-	 * comments in the Linux kernel source code.
-	 * Please use it consistently.
-	 *
-	 * Description:  A column of asterisks on the left side,
-	 * with beginning and ending almost-blank lines.
-	 */
-
-Bart.
+> e.g Below sample test in combination of many other test in parallel
+> 
+> :loop
+> 
+> adb shell "echo 0 > /sys/devices/system/cpu/cpu0/online"
+> 
+> adb shell "echo 1 > /sys/devices/system/cpu/cpu0/online"
+> 
+> adb shell "echo 0 > /sys/devices/system/cpu/cpu1/online"
+> 
+> adb shell "echo 1 > /sys/devices/system/cpu/cpu1/online"
+> 
+> adb shell "echo 0 > /sys/devices/system/cpu/cpu2/online"
+> 
+> adb shell "echo 1 > /sys/devices/system/cpu/cpu2/online"
+> 
+> adb shell "echo 0 > /sys/devices/system/cpu/cpu3/online"
+> 
+> adb shell "echo 1 > /sys/devices/system/cpu/cpu3/online"
+> 
+> adb shell "echo 0 > /sys/devices/system/cpu/cpu4/online"
+> 
+> adb shell "echo 1 > /sys/devices/system/cpu/cpu4/online"
+> 
+> adb shell "echo 0 > /sys/devices/system/cpu/cpu5/online"
+> 
+> adb shell "echo 1 > /sys/devices/system/cpu/cpu5/online"
+> 
+> adb shell "echo 0 > /sys/devices/system/cpu/cpu6/online"
+> 
+> adb shell "echo 1 > /sys/devices/system/cpu/cpu6/online"
+> 
+> adb shell "echo 0 > /sys/devices/system/cpu/cpu7/online"
+> 
+> adb shell "echo 1 > /sys/devices/system/cpu/cpu7/online"
+> 
+> goto loop
+> 
+> 
+> 
+> Thanks, Mukesh
+> 
+> > 
+> > 							Thanx, Paul
+> > 
+> > [1]https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/

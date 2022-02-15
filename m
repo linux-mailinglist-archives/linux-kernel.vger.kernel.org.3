@@ -2,102 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A46E4B5F9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 01:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B35D94B5F9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 01:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbiBOAyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 19:54:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49044 "EHLO
+        id S232835AbiBOAy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 19:54:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232897AbiBOAx4 (ORCPT
+        with ESMTP id S231485AbiBOAy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 19:53:56 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBD8145AF8;
-        Mon, 14 Feb 2022 16:53:29 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id n19-20020a17090ade9300b001b9892a7bf9so974187pjv.5;
-        Mon, 14 Feb 2022 16:53:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GniugwCBRot+g0mQTXvaIL/7nwoTX5TsSIiFOKffpis=;
-        b=aeWOm9QayhfBDEezRJj42f59gvzMGiJczqeKX3RBsDN77Qb8eeiXdrTqVJdCR8to3c
-         xFdjqNpsVsEZs+EXfgozb17spbUi4RQCyw3/LeT7NKZTg+RyZe5TO6FaTibiYvK5Ap/o
-         y/tPK6t6RxGCII9wAnYGhvzOc8gjEe2y2AqZ9QnKU/u4pmF1HX4JC1ySFvZwh8zIjhoc
-         x9sxPvNmYoY1SCQipP/V/d+UWhmj6EpAt7Os4rjHBJcqsftye3M9r5wng2boXRe/1LPn
-         G6bkRP+CZuTWrh47SeZdYv1OY4yAQJPCgst/YyJgCMwA9ipn0iyGvwU0BniyiOlGSfnc
-         GceA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GniugwCBRot+g0mQTXvaIL/7nwoTX5TsSIiFOKffpis=;
-        b=Y1DisF0a7fZOwdRIiDDd4qE0EDb8fX34dloKP66GyUe2Io0cS1KkjRlaPuJZeS6hu8
-         PDujBt0WXEV3Sg7dN+Oe8GQ+/yoE2PFBmtiB6/8X3eoOjtHLhhSylO51rkJY+T+AYJVa
-         r5A6VH5YWjcLY33Oexf1BzXwA9rC6pfDG9THia6sRanMorrTjxR/y0yMgDOJSxAzSwr3
-         sCqwP5tKF0zxzZTVJjPJmtwtUCQYqBLb8I696VIyagtcgIq9PsfEOP0SmvFe+6EuNLiR
-         yaRqZmKNo1Wo0Oygfp7Rv4ZUHWo4n25fg2xAn2SsHOB3HBhMYZSXSX96Q9s0wSrMvAQs
-         HwBA==
-X-Gm-Message-State: AOAM532MotMvAsGmaIsw3PKsVhZAuCHydQxFcxf74v8gn9csjkLrjIwa
-        X7OYqwHFs6LBRSvYXW/TnBM=
-X-Google-Smtp-Source: ABdhPJwf3PeI9WQkibFLQkgzCE5C/ipxp9YFytHwJ4Bs5P/fpD+4xQF/lVMKCXK7sHKKQEhWxyGXYQ==
-X-Received: by 2002:a17:902:f78c:: with SMTP id q12mr1513147pln.165.1644886408101;
-        Mon, 14 Feb 2022 16:53:28 -0800 (PST)
-Received: from localhost.localdomain (192.243.120.247.16clouds.com. [192.243.120.247])
-        by smtp.gmail.com with ESMTPSA id 16sm14935161pje.34.2022.02.14.16.53.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 16:53:27 -0800 (PST)
-From:   davidcomponentone@gmail.com
-To:     t.schramm@manjaro.org
-Cc:     davidcomponentone@gmail.com, sre@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Guang <yang.guang5@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] power: supply: cw2015: Fix application of sizeof to pointer
-Date:   Tue, 15 Feb 2022 08:53:11 +0800
-Message-Id: <a45647609e9d87e8fee643920b1479492956df2a.1644837424.git.yang.guang5@zte.com.cn>
-X-Mailer: git-send-email 2.30.2
+        Mon, 14 Feb 2022 19:54:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F14BC8F;
+        Mon, 14 Feb 2022 16:54:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AABB614F8;
+        Tue, 15 Feb 2022 00:54:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B0C0C340E9;
+        Tue, 15 Feb 2022 00:54:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644886478;
+        bh=HEiIZMjEKQ7AQOV3WTDf8XC3x+qJ7mJU59+gDlJbdVA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Y4EhxNa1TpAWFPO5vL1e9pgKFCFscD5yp+z9OG5Xv++M9n6iazAFJitTQhXdQOz3q
+         ZOnyKymr5UmO0G5drdewoxRmOmE04JTs8pz2nmoFpRTTRsYoiTc0McSqL6NASmzopw
+         TJT8I8HjfC/H3jJZF9jo8hwmVlJAa9ln6keCvOpTg7mgCRyBraOxY8P8QqM95SyftB
+         zsukqEJ5jKKLRp6eBu3RE0ZgxYTlcF7ESmVa3MExJvUcCujk46SR1qu8W3SGbuGykk
+         K2HK1UkOlM7lE7VRYPcDf/rTmZf2RpEEEoIMizqoa4BEPx6sPq4r8oNMjPv1I7Qi3p
+         tRcQ5vdwaYwyQ==
+Date:   Mon, 14 Feb 2022 16:54:36 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Ondrej Mosnacek <omosnace@redhat.com>, netdev@vger.kernel.org,
+        davem@davemloft.net, selinux@vger.kernel.org,
+        Xin Long <lucien.xin@gmail.com>,
+        Richard Haines <richard_c_haines@btinternet.com>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        linux-sctp@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prashanth Prahlad <pprahlad@redhat.com>
+Subject: Re: [PATCH net v3 2/2] security: implement sctp_assoc_established
+ hook in selinux
+Message-ID: <20220214165436.1f6a9987@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <CAHC9VhT90617FoqQJBCrDQ8gceVVA6a1h74h6T4ZOwNk6RVB3g@mail.gmail.com>
+References: <20220212175922.665442-1-omosnace@redhat.com>
+        <20220212175922.665442-3-omosnace@redhat.com>
+        <CAHC9VhT90617FoqQJBCrDQ8gceVVA6a1h74h6T4ZOwNk6RVB3g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Guang <yang.guang5@zte.com.cn>
+On Mon, 14 Feb 2022 17:14:04 -0500 Paul Moore wrote:
+> If I can get an ACK from one of the SCTP and/or netdev folks I'll
+> merge this into the selinux/next branch.
 
-The coccinelle check report:
-./drivers/power/supply/cw2015_battery.c:692:12-18:
-ERROR: application of sizeof to pointer
-
-Using the real size to fix it.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
-Signed-off-by: David Yang <davidcomponentone@gmail.com>
----
- drivers/power/supply/cw2015_battery.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/cw2015_battery.c b/drivers/power/supply/cw2015_battery.c
-index 0c87ad0dbf71..db56db322b64 100644
---- a/drivers/power/supply/cw2015_battery.c
-+++ b/drivers/power/supply/cw2015_battery.c
-@@ -689,7 +689,7 @@ static int cw_bat_probe(struct i2c_client *client)
- 	if (ret) {
- 		/* Allocate an empty battery */
- 		cw_bat->battery = devm_kzalloc(&client->dev,
--					       sizeof(cw_bat->battery),
-+					       sizeof(*(cw_bat->battery)),
- 					       GFP_KERNEL);
- 		if (!cw_bat->battery)
- 			return -ENOMEM;
--- 
-2.30.2
-
+No objections here FWIW, I'd defer the official acking to the SCTP
+maintainers.

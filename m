@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ABF74B7377
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 151874B71D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240211AbiBOPbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:31:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46370 "EHLO
+        id S234546AbiBOPcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:32:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240058AbiBOPa0 (ORCPT
+        with ESMTP id S240218AbiBOPao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:30:26 -0500
+        Tue, 15 Feb 2022 10:30:44 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54F1C0849
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:28:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765F5C117A
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:28:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1644938934; x=1676474934;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CNkkyV8OXoISEdxMr9xw0emMq/NP2qfPJ4QtHLz9mWU=;
-  b=IxWYzCx6q1I45MBnQ0GnLdIJYc0coIsTUjbvI3VuxgqvFY0Qu293Sx5z
-   sY7fbiTzKvgCXl3q+yDl3xGtqoQjZAeJjea91Zu7ETSMkeEg5fpOpw9uF
-   RjCndCKep1WzX2yiRNYVt+Zgr7aZ65VxtvvugUuWkY2C133yVopfeLYhu
-   ttgxT9OS9UJRRaoz9JF7DK2IfJ2LeRPUWz8zFUZ/wDqkYfN16GC4YdQ29
-   V8kK4aoiMTB4vfzOYh3LrYvarZ7VZtmpNARVNgFXSoJpl12qXgpYaNksa
-   NWItk3vl6WIuvDelFLPqJ5Wpi+uu8qANStcyxnaa7fWST47m7HZYHQefF
-   w==;
-IronPort-SDR: nXKiRn6I5wtM0Aid4B0KMR91QqOHjFsXR5wHKJ0YW3JLBCKqHmGKgqH39/TbMShUQvwLnOTh2u
- Ap5iXJe+XReFF5Od34mGEfcq4R5PEKu9MqnDBt3Z3M5vMT0scg5UYIQvOjwMWKKtRIF2TP8B8I
- 6q6t7KOESiGqUzVba+6gjRtJ5e8iQO4vrNSNgQQ3qYdueaYaJyG8d2wSBo2urlLBq4uVb9Uahw
- soC4HQgIz7dGmYsfwUQqbcxJpADJQLYLTtbcb9h23jyo5SmJ7g7N7EHBtMF4wiUPo3tQSBc8UL
- LJBp5zvvz1X1f19aESq++xqS
+  t=1644938939; x=1676474939;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Ygm33S+VlsQ8CzXQ3Jgs5FRrEN6SCNcQpq3VhY355xk=;
+  b=cMiBt8hgvglWjcfd1q0sTldgRugqYG4giVK0i+tEdZUojbfkMpdkocTn
+   DNYPOW0lHZiI63RPIzFfAZgqa+p2EfSvwIr04746ncOO63Y0O3HqVIpfy
+   WSOWu+axZV7dLbnCIyXC/mUuRfI0rwPrJAWmI4DY6JTNC80W2mbJPe3rl
+   Sv4DPn6BIOj6Lu4/4UX3W/aaGb86R50gBCmAkrHsISgKXFgEDrpNj5Kcc
+   YweKgFOZvgB13jlC16k7dYIj9vt2Do31bf845yfKKlmIRyBQycTFW/H2d
+   EK7oB45rqZjD7KKniM4W+dVOuZNNKgDc73cpySn1JACP0iXfDxNZqrgvb
+   A==;
+IronPort-SDR: B1RsNtqUlwJNhPbDeBFKVhgRDbJ5nRGwohofjKlIxn/slnpMMm8tnFeH8xAaQocoHGBbYL+YIf
+ bjfaLE4p3KunNnGoObfj5m9Hbq8HbwMOBNaQAuE+kKuMhp+ssKwe8dE1fAH9ssdOdaWSX2MNMV
+ +clfJjb3tYSXXNIJlIh5Pwz3Nn/018gKSa70St9yzY9QW0hLvGZIAdUG0lwt1bhAHM1C+u9OAJ
+ quh0D9+/U9qvOO7tiW7nby8DZ2QJjHIlwgUUnePckcTl5l2qdSD2TswqLhbpPdjz/domrUnmsn
+ sV5qa8CpC69JitOvNnDL87qb
 X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="146046829"
+   d="scan'208";a="146046840"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Feb 2022 08:28:53 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Feb 2022 08:28:58 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 15 Feb 2022 08:28:53 -0700
+ 15.1.2375.17; Tue, 15 Feb 2022 08:28:58 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
  (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Tue, 15 Feb 2022 08:28:48 -0700
+ Transport; Tue, 15 Feb 2022 08:28:53 -0700
 From:   <conor.dooley@microchip.com>
 To:     <aou@eecs.berkeley.edu>, <paul.walmsley@sifive.com>,
         <palmer@dabbelt.com>, <arnd@arndb.de>, <olof@lixom.net>,
@@ -58,10 +58,12 @@ CC:     <robh+dt@kernel.org>, <cyril.jean@microchip.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         "Conor Dooley" <conor.dooley@microchip.com>
-Subject: [PATCH v3 0/1] soc: add microchip polarfire soc system controller
-Date:   Tue, 15 Feb 2022 15:31:53 +0000
-Message-ID: <20220215153153.4136503-1-conor.dooley@microchip.com>
+Subject: [PATCH v3 1/1] soc: add microchip polarfire soc system controller
+Date:   Tue, 15 Feb 2022 15:31:54 +0000
+Message-ID: <20220215153153.4136503-2-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220215153153.4136503-1-conor.dooley@microchip.com>
+References: <20220215153153.4136503-1-conor.dooley@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -77,48 +79,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-Since I submitted version 1 of this driver, I attempted to upstream
-bindings for devices dependant on the system controller [0]. In that
-process, Rob said that since they were devices with no resources,
-other than a reference to the system controller, the devices should
-not be in the device tree & instead they should be created by the
-system controller (which it now does).
+This driver provides an interface for other drivers to access the
+functions of the system controller on the Microchip PolarFire SoC.
 
-Since the sub devices using mpfs_sys_controller_get will now have the
-system controller as their parent, this function now just checks if the
-parent device is compatible. If the parent is compatible, the sub-
-device then attempts to register as a consumer of the system controller
-
-@Arnd Hopefully this clears up the issues you had with reference
-counting & the lack of checks as to whether the device found by
-mpfs_sys_controller_get was in fact a system controller.
-
-Depends on [0] to change the compatible string in the dt-binding.
-Thanks,
-Conor.
-
-Changes since v2:
-- system controller is no longer an mfd, system controller now creates
-  sub devices for itself.
-- specify that a mpfs_mss_msg is used in mpfs_blocking_transaction
-  rather than using a void pointer.
-- as the subdevices are now all created by the system controller, the
-  get() function now checks that the requesting device's parent is
-  compatible.
-- mpfs_sys_controller_get now passes a pointer to the device that is
-  trying to register as a consumer rather than a device node.
-
-Changes since v1:
-- system controller is now an mfd
-- parentage is now used to get the device node on the system controller
-- mpfs_sys_controller_get() now updates the reference count
-- "polarfire-soc" in compat string changed to "mpfs"
-
-[0] https://lore.kernel.org/linux-riscv/20220214135840.168236-1-conor.dooley@microchip.com/
-
-Conor Dooley (1):
-  soc: add microchip polarfire soc system controller
-
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
  drivers/soc/Kconfig                         |   1 +
  drivers/soc/Makefile                        |   1 +
  drivers/soc/microchip/Kconfig               |  10 +
@@ -130,6 +95,269 @@ Conor Dooley (1):
  create mode 100644 drivers/soc/microchip/Makefile
  create mode 100644 drivers/soc/microchip/mpfs-sys-controller.c
 
+diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+index a8562678c437..c5aae42673d3 100644
+--- a/drivers/soc/Kconfig
++++ b/drivers/soc/Kconfig
+@@ -13,6 +13,7 @@ source "drivers/soc/imx/Kconfig"
+ source "drivers/soc/ixp4xx/Kconfig"
+ source "drivers/soc/litex/Kconfig"
+ source "drivers/soc/mediatek/Kconfig"
++source "drivers/soc/microchip/Kconfig"
+ source "drivers/soc/qcom/Kconfig"
+ source "drivers/soc/renesas/Kconfig"
+ source "drivers/soc/rockchip/Kconfig"
+diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+index adb30c2d4fea..904eec2a7871 100644
+--- a/drivers/soc/Makefile
++++ b/drivers/soc/Makefile
+@@ -18,6 +18,7 @@ obj-y				+= ixp4xx/
+ obj-$(CONFIG_SOC_XWAY)		+= lantiq/
+ obj-$(CONFIG_LITEX_SOC_CONTROLLER) += litex/
+ obj-y				+= mediatek/
++obj-y				+= microchip/
+ obj-y				+= amlogic/
+ obj-y				+= qcom/
+ obj-y				+= renesas/
+diff --git a/drivers/soc/microchip/Kconfig b/drivers/soc/microchip/Kconfig
+new file mode 100644
+index 000000000000..eb656b33156b
+--- /dev/null
++++ b/drivers/soc/microchip/Kconfig
+@@ -0,0 +1,10 @@
++config POLARFIRE_SOC_SYS_CTRL
++	tristate "POLARFIRE_SOC_SYS_CTRL"
++	depends on POLARFIRE_SOC_MAILBOX
++	help
++	  This driver adds support for the PolarFire SoC (MPFS) system controller.
++
++	  To compile this driver as a module, choose M here. the
++	  module will be called mpfs_system_controller.
++
++	  If unsure, say N.
+diff --git a/drivers/soc/microchip/Makefile b/drivers/soc/microchip/Makefile
+new file mode 100644
+index 000000000000..14489919fe4b
+--- /dev/null
++++ b/drivers/soc/microchip/Makefile
+@@ -0,0 +1 @@
++obj-$(CONFIG_POLARFIRE_SOC_SYS_CTRL)	+= mpfs-sys-controller.o
+diff --git a/drivers/soc/microchip/mpfs-sys-controller.c b/drivers/soc/microchip/mpfs-sys-controller.c
+new file mode 100644
+index 000000000000..c57be7b542db
+--- /dev/null
++++ b/drivers/soc/microchip/mpfs-sys-controller.c
+@@ -0,0 +1,194 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Microchip PolarFire SoC (MPFS) system controller driver
++ *
++ * Copyright (c) 2020-2021 Microchip Corporation. All rights reserved.
++ *
++ * Author: Conor Dooley <conor.dooley@microchip.com>
++ *
++ */
++
++#include <linux/slab.h>
++#include <linux/kref.h>
++#include <linux/module.h>
++#include <linux/interrupt.h>
++#include <linux/of_platform.h>
++#include <linux/mailbox_client.h>
++#include <linux/platform_device.h>
++#include <soc/microchip/mpfs.h>
++
++static DEFINE_MUTEX(transaction_lock);
++
++struct mpfs_sys_controller {
++	struct mbox_client client;
++	struct mbox_chan *chan;
++	struct completion c;
++	struct kref consumers;
++};
++
++int mpfs_blocking_transaction(struct mpfs_sys_controller *sys_controller, struct mpfs_mss_msg *msg)
++{
++	int ret, err;
++
++	err = mutex_lock_interruptible(&transaction_lock);
++	if (err)
++		return err;
++
++	reinit_completion(&sys_controller->c);
++
++	ret = mbox_send_message(sys_controller->chan, msg);
++	if (ret >= 0) {
++		if (wait_for_completion_timeout(&sys_controller->c, HZ)) {
++			ret = 0;
++		} else {
++			ret = -ETIMEDOUT;
++			dev_warn(sys_controller->client.dev,
++				 "MPFS sys controller transaction timeout\n");
++		}
++	} else {
++		dev_err(sys_controller->client.dev,
++			"mpfs sys controller transaction returned %d\n", ret);
++	}
++
++	mutex_unlock(&transaction_lock);
++
++	return ret;
++}
++EXPORT_SYMBOL(mpfs_blocking_transaction);
++
++static void rx_callback(struct mbox_client *client, void *msg)
++{
++	struct mpfs_sys_controller *sys_controller =
++		container_of(client, struct mpfs_sys_controller, client);
++
++	complete(&sys_controller->c);
++}
++
++static void mpfs_sys_controller_delete(struct kref *kref)
++{
++	struct mpfs_sys_controller *sys_controller = container_of(kref, struct mpfs_sys_controller,
++					       consumers);
++
++	mbox_free_channel(sys_controller->chan);
++	kfree(sys_controller);
++}
++
++void mpfs_sys_controller_put(void *data)
++{
++	struct mpfs_sys_controller *sys_controller = data;
++
++	kref_put(&sys_controller->consumers, mpfs_sys_controller_delete);
++}
++EXPORT_SYMBOL_GPL(mpfs_sys_controller_put);
++
++static struct platform_device subdevs[] = {
++	{
++		.name		= "mpfs-rng",
++		.id		= -1,
++	},
++	{
++		.name		= "mpfs-generic-service",
++		.id		= -1,
++	}
++};
++
++static int mpfs_sys_controller_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct mpfs_sys_controller *sys_controller;
++	int i;
++
++	sys_controller = kzalloc(sizeof(*sys_controller), GFP_KERNEL);
++	if (!sys_controller)
++		return -ENOMEM;
++
++	sys_controller->client.dev = dev;
++	sys_controller->client.rx_callback = rx_callback;
++	sys_controller->client.tx_block = 1U;
++
++	sys_controller->chan = mbox_request_channel(&sys_controller->client, 0);
++	if (IS_ERR(sys_controller->chan))
++		return dev_err_probe(dev, PTR_ERR(sys_controller->chan),
++				     "Failed to get mbox channel\n");
++
++	init_completion(&sys_controller->c);
++	kref_init(&sys_controller->consumers);
++
++	platform_set_drvdata(pdev, sys_controller);
++
++	dev_info(&pdev->dev, "Registered MPFS system controller\n");
++
++	for (i = 0; i < ARRAY_SIZE(subdevs); i++) {
++		subdevs[i].dev.parent = dev;
++		if (platform_device_register(&subdevs[i]))
++			dev_warn(dev, "Error registering sub device %s\n", subdevs[i].name);
++	}
++
++	return 0;
++}
++
++static int mpfs_sys_controller_remove(struct platform_device *pdev)
++{
++	struct mpfs_sys_controller *sys_controller = platform_get_drvdata(pdev);
++
++	mpfs_sys_controller_put(sys_controller);
++
++	return 0;
++}
++
++static const struct of_device_id mpfs_sys_controller_of_match[] = {
++	{.compatible = "microchip,mpfs-sys-controller", },
++	{},
++};
++MODULE_DEVICE_TABLE(of, mpfs_sys_controller_of_match);
++
++struct mpfs_sys_controller *mpfs_sys_controller_get(struct device *dev)
++{
++	const struct of_device_id *match;
++	struct mpfs_sys_controller *sys_controller;
++	int ret;
++
++	if (!dev->parent)
++		goto err_no_device;
++
++	match = of_match_node(mpfs_sys_controller_of_match,  dev->parent->of_node);
++	of_node_put(dev->parent->of_node);
++	if (!match)
++		goto err_no_device;
++
++	sys_controller = dev_get_drvdata(dev->parent);
++	if (!sys_controller)
++		goto err_bad_device;
++
++	if (!kref_get_unless_zero(&sys_controller->consumers))
++		goto err_bad_device;
++
++	ret = devm_add_action_or_reset(dev, mpfs_sys_controller_put, sys_controller);
++	if (ret)
++		return ERR_PTR(ret);
++
++	return sys_controller;
++
++err_no_device:
++	dev_dbg(dev, "Parent device was not an MPFS system controller\n");
++	return ERR_PTR(-ENODEV);
++
++err_bad_device:
++	dev_dbg(dev, "MPFS system controller found but could not register as a sub device\n");
++	return ERR_PTR(-EPROBE_DEFER);
++}
++EXPORT_SYMBOL_GPL(mpfs_sys_controller_get);
++
++static struct platform_driver mpfs_sys_controller_driver = {
++	.driver = {
++		.name = "mpfs-sys-controller",
++		.of_match_table = mpfs_sys_controller_of_match,
++	},
++	.probe = mpfs_sys_controller_probe,
++	.remove = mpfs_sys_controller_remove,
++};
++module_platform_driver(mpfs_sys_controller_driver);
++
++MODULE_LICENSE("GPL v2");
++MODULE_AUTHOR("Conor Dooley <conor.dooley@microchip.com>");
++MODULE_DESCRIPTION("MPFS system controller driver");
+diff --git a/include/soc/microchip/mpfs.h b/include/soc/microchip/mpfs.h
+index 2b64c95f3be5..6466515262bd 100644
+--- a/include/soc/microchip/mpfs.h
++++ b/include/soc/microchip/mpfs.h
+@@ -34,9 +34,9 @@ struct mpfs_mss_response {
+ 
+ #if IS_ENABLED(CONFIG_POLARFIRE_SOC_SYS_CTRL)
+ 
+-int mpfs_blocking_transaction(struct mpfs_sys_controller *mpfs_client, void *msg);
++int mpfs_blocking_transaction(struct mpfs_sys_controller *mpfs_client, struct mpfs_mss_msg *msg);
+ 
+-struct mpfs_sys_controller *mpfs_sys_controller_get(struct device_node *mailbox_node);
++struct mpfs_sys_controller *mpfs_sys_controller_get(struct device *dev);
+ 
+ #endif /* if IS_ENABLED(CONFIG_POLARFIRE_SOC_SYS_CTRL) */
+ 
 -- 
 2.35.1
 

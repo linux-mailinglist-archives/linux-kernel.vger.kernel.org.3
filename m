@@ -2,59 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 832BD4B5F04
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 01:26:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3AD24B5F09
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 01:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbiBOA0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 19:26:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56966 "EHLO
+        id S232509AbiBOA1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 19:27:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiBOA0h (ORCPT
+        with ESMTP id S231193AbiBOA1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 19:26:37 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99ECA24082
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 16:26:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644884787; x=1676420787;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=bGtCt4b5ncEXfeeJLjIcPS2iiyoPWaiuJ58UxYovSJI=;
-  b=m6/Xm7dUCoD7pIDUh6KZKLpjJ4aJYXEbf8LfSY0kf3Xb9tUySW7vsIt5
-   cwUidifWmd0LmrChvGNO9Md5It3hwQ2ZIiRawj7X15esK/urj9qOTVy37
-   05RGfXaXt3xp2cM/c6sNuhyaHiDNdxR3nRyMeZdlR+k9IcV/hcTmyeEcy
-   gf5mSmBQY7Q3ETIdtK1wZSGUvU5S776eAAmJYHRB6wLDPWPnZJ6ixNTis
-   9Jd/3xTdY9hhzC7/nZmxxPimIk+F2emnkFpbVnfyJD1LS2ll6d6xGLvHa
-   78KkPYdpRCvsh1KN2nhjPhOxLbbbX7S9dq7K48TJO08xSWpEDuJy+iKll
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="249047496"
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="249047496"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 16:26:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="775518473"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Feb 2022 16:26:26 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nJlfl-00095O-KH; Tue, 15 Feb 2022 00:26:25 +0000
-Date:   Tue, 15 Feb 2022 08:26:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 8a3d8d8a3c5544f07776f370b24ba57a097b6e1b
-Message-ID: <620af322.8BFyD+zLkRWY6vrA%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 14 Feb 2022 19:27:43 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A815117CBE
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 16:27:34 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id om7so16005987pjb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 16:27:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GYB1fI0D9nYciFwdD6JzesTCxp+5pmAN8brR7fAFLtk=;
+        b=NYZx6FyeL1UAVX/3ox6vx7GmLRlAzYVafPuQkb3hPQUX8qfjFlu7Uq3Ok7jVvkKjST
+         SLXaLFK+vJ6FmlcDLcnsd9tshLfQRMPcagZFda2MsTJr0GB4wLB06vkiBINn9neDwdy4
+         XbYDRiAaBTLemkLGH2E5mQp6WoiuEen53D8/+g8tBcCXsCaADdLfkebat+zaCNZfT/kF
+         j3zaFr06jgaod7L0TuFXLmQ/s7JWZ5195WaedVmVcE6Ym7+umEILwoyterY0hFNBzqL5
+         Yv7BLYnzAFXlQpn4qOBxWaFfKCdieh3n3C0F9KIBJgU2Jqmg+pBuELewq5NnOvUJC/u+
+         VyyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GYB1fI0D9nYciFwdD6JzesTCxp+5pmAN8brR7fAFLtk=;
+        b=FrLOpPasvKv9MI6jYbxBjBedlnh4t4qS1RzubqwIO8OF/SpOeJIcP3dJywV5gkYjOG
+         TJmvEKy/Wpvb+kXez5V1EKkXUY+p0GXKEB+uMKmckD5XoJMpu3QGYfdPCkUcXZxmhwkI
+         iPohvFI7xstnKHkW/JPIgDYIzATQQK5w4zf7c3ERzeOd4hZ1aIRowTFvOqnX9A4b3FFG
+         IO19r1RnOOj45jpplR/v4qFChK6vrMcyYwqyCVP/ku0PWpjpn5f5i4oNyksDlma0uANN
+         H/7fVUB6Q9aVTbqLXFjmFLr8ASeQJKEHnYNmVqLDtiPUPaiYOJZ+x3cJkUpQOMXBVyhB
+         xc5Q==
+X-Gm-Message-State: AOAM530aEN25TgNWVyBA/KaW0UlL5aLN7iL9JpN/+QC75rx8IkHjWlu8
+        9MKJ+0uXiw+SzOSoHjjAwFnqag==
+X-Google-Smtp-Source: ABdhPJwj0FJ3FoZR2POBi7bG76fKWAmmfSySxjxP0by9wYaGl3FyQMOX13/KDEhoL1DpjJMUTCunEw==
+X-Received: by 2002:a17:90b:1c01:: with SMTP id oc1mr1380135pjb.161.1644884853084;
+        Mon, 14 Feb 2022 16:27:33 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:f672:8368:e22c:5ae9])
+        by smtp.gmail.com with ESMTPSA id a9sm611010pgb.56.2022.02.14.16.27.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 16:27:31 -0800 (PST)
+Date:   Mon, 14 Feb 2022 16:27:25 -0800
+From:   Benson Leung <bleung@google.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "open list:CHROMEOS EC USB TYPE-C DRIVER" 
+        <chrome-platform@lists.linux.dev>
+Subject: Re: [PATCH v2 3/4] platform/chrome: cros_ec_typec: Configure muxes
+ at start of port update
+Message-ID: <YgrzbQViMLRTC4XB@google.com>
+References: <20220208184721.1697194-1-pmalani@chromium.org>
+ <20220208184721.1697194-4-pmalani@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mcHVd+HjoMipoP7y"
+Content-Disposition: inline
+In-Reply-To: <20220208184721.1697194-4-pmalani@chromium.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,215 +76,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 8a3d8d8a3c5544f07776f370b24ba57a097b6e1b  Merge locking/core into tip/master
 
-elapsed time: 731m
+--mcHVd+HjoMipoP7y
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-configs tested: 190
-configs skipped: 3
+Hi Prashant,
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+On Tue, Feb 08, 2022 at 06:47:22PM +0000, Prashant Malani wrote:
+> There are situations where the mux state reported by the Embedded
+> Controller (EC), might lag the partner "connected" state. So, the mux
+> state might still suggest that a partner is connected, while the PD
+> "connected" state, being in Try.SNK (for example) suggests that the
+> partner is disconnected.
+>=20
+> In such a scenario, we will end up sending a disconnect command to the
+> mux driver, followed by a connect command, since the mux is configured
+> later. Avoid this by configuring the mux before
+> registering/disconnecting a partner.
+>=20
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20220214
-mips                 randconfig-c004-20220214
-nios2                            alldefconfig
-sh                          r7780mp_defconfig
-sh                            titan_defconfig
-ia64                         bigsur_defconfig
-m68k                        mvme147_defconfig
-sh                            hp6xx_defconfig
-powerpc64                        alldefconfig
-sh                               alldefconfig
-arm                           tegra_defconfig
-powerpc                     stx_gp3_defconfig
-mips                        vocore2_defconfig
-xtensa                         virt_defconfig
-arc                     haps_hs_smp_defconfig
-xtensa                              defconfig
-arm                          lpd270_defconfig
-arm                        shmobile_defconfig
-m68k                         apollo_defconfig
-arc                 nsimosci_hs_smp_defconfig
-arm                         lubbock_defconfig
-parisc                           allyesconfig
-arm                      integrator_defconfig
-mips                          rb532_defconfig
-m68k                       m5475evb_defconfig
-mips                     loongson1b_defconfig
-sparc64                             defconfig
-sh                             shx3_defconfig
-powerpc                       maple_defconfig
-powerpc64                           defconfig
-arm                        mvebu_v7_defconfig
-x86_64                           alldefconfig
-ia64                            zx1_defconfig
-sparc                               defconfig
-arm64                            alldefconfig
-mips                         rt305x_defconfig
-mips                     decstation_defconfig
-powerpc                      cm5200_defconfig
-sparc64                          alldefconfig
-mips                            gpr_defconfig
-sh                           se7705_defconfig
-sh                           se7780_defconfig
-sh                         ap325rxa_defconfig
-arm                         at91_dt_defconfig
-arm                           u8500_defconfig
-mips                    maltaup_xpa_defconfig
-arm                          pxa3xx_defconfig
-ia64                          tiger_defconfig
-arc                           tb10x_defconfig
-sh                        sh7757lcr_defconfig
-m68k                          hp300_defconfig
-arm                     eseries_pxa_defconfig
-arm                            pleb_defconfig
-sh                           se7721_defconfig
-powerpc                 linkstation_defconfig
-sh                ecovec24-romimage_defconfig
-powerpc                       ppc64_defconfig
-m68k                        stmark2_defconfig
-sh                           se7722_defconfig
-mips                         db1xxx_defconfig
-powerpc                      ppc40x_defconfig
-h8300                               defconfig
-arm                         lpc18xx_defconfig
-powerpc                      bamboo_defconfig
-arc                        nsimosci_defconfig
-arm                  randconfig-c002-20220214
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc64                            defconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a013-20220214
-x86_64               randconfig-a014-20220214
-x86_64               randconfig-a012-20220214
-x86_64               randconfig-a015-20220214
-x86_64               randconfig-a011-20220214
-x86_64               randconfig-a016-20220214
-i386                 randconfig-a013-20220214
-i386                 randconfig-a016-20220214
-i386                 randconfig-a012-20220214
-i386                 randconfig-a015-20220214
-i386                 randconfig-a011-20220214
-i386                 randconfig-a014-20220214
-riscv                randconfig-r042-20220214
-arc                  randconfig-r043-20220214
-s390                 randconfig-r044-20220214
-x86_64                        randconfig-a006
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+Reviewed-by: Benson Leung <bleung@chromium.org>
 
-clang tested configs:
-riscv                randconfig-c006-20220214
-i386                 randconfig-c001-20220214
-x86_64               randconfig-c007-20220214
-powerpc              randconfig-c003-20220214
-arm                  randconfig-c002-20220214
-mips                 randconfig-c004-20220214
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220213
-i386                          randconfig-c001
-mips                 randconfig-c004-20220213
-arm                         lpc32xx_defconfig
-powerpc                 mpc8315_rdb_defconfig
-mips                        workpad_defconfig
-arm                         s3c2410_defconfig
-powerpc                     ppa8548_defconfig
-arm64                            allyesconfig
-arm                            dove_defconfig
-powerpc                     pseries_defconfig
-powerpc                      ppc64e_defconfig
-arm                        spear3xx_defconfig
-powerpc                     tqm8560_defconfig
-powerpc                     kmeter1_defconfig
-mips                          ath25_defconfig
-powerpc                     mpc5200_defconfig
-arm                  colibri_pxa300_defconfig
-arm                         bcm2835_defconfig
-mips                     cu1830-neo_defconfig
-arm                       spear13xx_defconfig
-mips                     loongson1c_defconfig
-arm                        magician_defconfig
-powerpc                     mpc512x_defconfig
-arm                          imote2_defconfig
-mips                         tb0287_defconfig
-arm                          moxart_defconfig
-powerpc                    gamecube_defconfig
-powerpc                 mpc832x_rdb_defconfig
-mips                           rs90_defconfig
-mips                          ath79_defconfig
-mips                         tb0219_defconfig
-mips                     cu1000-neo_defconfig
-mips                            e55_defconfig
-x86_64               randconfig-a002-20220214
-x86_64               randconfig-a006-20220214
-x86_64               randconfig-a005-20220214
-x86_64               randconfig-a004-20220214
-x86_64               randconfig-a003-20220214
-x86_64               randconfig-a001-20220214
-i386                 randconfig-a004-20220214
-i386                 randconfig-a005-20220214
-i386                 randconfig-a006-20220214
-i386                 randconfig-a002-20220214
-i386                 randconfig-a003-20220214
-i386                 randconfig-a001-20220214
-hexagon              randconfig-r045-20220214
-hexagon              randconfig-r041-20220214
-hexagon              randconfig-r045-20220213
-hexagon              randconfig-r041-20220213
-riscv                randconfig-r042-20220213
-s390                 randconfig-r044-20220213
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+>=20
+> Changes in v2:
+> - Change return at end of port_update() to just return 0.
+>=20
+>  drivers/platform/chrome/cros_ec_typec.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/c=
+hrome/cros_ec_typec.c
+> index 3d34ece7f790..3019e29f200d 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+> @@ -965,6 +965,11 @@ static int cros_typec_port_update(struct cros_typec_=
+data *typec, int port_num)
+>  	if (ret < 0)
+>  		return ret;
+> =20
+> +	/* Update the switches if they exist, according to requested state */
+> +	ret =3D cros_typec_configure_mux(typec, port_num, &resp);
+> +	if (ret)
+> +		dev_warn(typec->dev, "Configure muxes failed, err =3D %d\n", ret);
+> +
+>  	dev_dbg(typec->dev, "Enabled %d: 0x%hhx\n", port_num, resp.enabled);
+>  	dev_dbg(typec->dev, "Role %d: 0x%hhx\n", port_num, resp.role);
+>  	dev_dbg(typec->dev, "Polarity %d: 0x%hhx\n", port_num, resp.polarity);
+> @@ -980,12 +985,7 @@ static int cros_typec_port_update(struct cros_typec_=
+data *typec, int port_num)
+>  	if (typec->typec_cmd_supported)
+>  		cros_typec_handle_status(typec, port_num);
+> =20
+> -	/* Update the switches if they exist, according to requested state */
+> -	ret =3D cros_typec_configure_mux(typec, port_num, &resp);
+> -	if (ret)
+> -		dev_warn(typec->dev, "Configure muxes failed, err =3D %d\n", ret);
+> -
+> -	return ret;
+> +	return 0;
+>  }
+> =20
+>  static int cros_typec_get_cmd_version(struct cros_typec_data *typec)
+> --=20
+> 2.35.0.263.gb82422642f-goog
+>=20
+>=20
+
+--=20
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
+
+--mcHVd+HjoMipoP7y
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYgrzbQAKCRBzbaomhzOw
+wmsmAP4osevqyWmDrkfwKbxgKbYaAxsyYlmk2daeEsBiCz5oGQD/UjyH6XvZGqrE
+1g76TY7mzdZcD9yPVEjWDF8a4xK8lwk=
+=3lFf
+-----END PGP SIGNATURE-----
+
+--mcHVd+HjoMipoP7y--

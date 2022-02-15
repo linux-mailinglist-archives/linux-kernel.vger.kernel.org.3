@@ -2,51 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4554B67B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:36:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5724E4B67C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:38:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233888AbiBOJgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:36:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46056 "EHLO
+        id S235958AbiBOJiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:38:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231693AbiBOJgJ (ORCPT
+        with ESMTP id S235951AbiBOJiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:36:09 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9649CB8221
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:35:59 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JybWx0LNyz9sgP;
-        Tue, 15 Feb 2022 17:34:21 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+        Tue, 15 Feb 2022 04:38:13 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13D8C3C2C;
+        Tue, 15 Feb 2022 01:38:03 -0800 (PST)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JybW96B08z1FCh9;
+        Tue, 15 Feb 2022 17:33:41 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 15 Feb 2022 17:35:57 +0800
-Subject: Re: [PATCH 2/8] mm/memory-failure.c: avoid walking page table when
- vma_address() return -EFAULT
-To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-CC:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220210141733.1908-1-linmiaohe@huawei.com>
- <20220210141733.1908-3-linmiaohe@huawei.com> <20220214144826.GB2624914@u2004>
- <1c464c41-81f4-fff9-c4e0-45fd4d05e34b@huawei.com>
- <20220215083755.GA2001565@hori.linux.bs1.fc.nec.co.jp>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <335dffa8-fc2d-d3da-e64b-b6d608e3fba6@huawei.com>
-Date:   Tue, 15 Feb 2022 17:35:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+ 15.1.2308.21; Tue, 15 Feb 2022 17:38:02 +0800
+Received: from [10.174.179.5] (10.174.179.5) by dggpemm500002.china.huawei.com
+ (7.185.36.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 15 Feb
+ 2022 17:38:01 +0800
+Subject: Re: [RFC PATCH] blk-mq: avoid housekeeping CPUs scheduling a worker
+ on a non-housekeeping CPU
+To:     <axboe@kernel.dk>, <hch@lst.de>,
+        Frederic Weisbecker <frederic@kernel.org>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yuyufen@huawei.com>, <guohanjun@huawei.com>
+References: <20220210093532.182818-1-wangxiongfeng2@huawei.com>
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Message-ID: <68800eb8-af54-a836-eb1d-eecde951ede4@huawei.com>
+Date:   Tue, 15 Feb 2022 17:38:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20220215083755.GA2001565@hori.linux.bs1.fc.nec.co.jp>
+In-Reply-To: <20220210093532.182818-1-wangxiongfeng2@huawei.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.5]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -57,48 +55,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/2/15 16:37, HORIGUCHI NAOYA(堀口 直也) wrote:
-> On Tue, Feb 15, 2022 at 10:40:02AM +0800, Miaohe Lin wrote:
->> On 2022/2/14 22:48, Naoya Horiguchi wrote:
->>> On Thu, Feb 10, 2022 at 10:17:27PM +0800, Miaohe Lin wrote:
->>>> It's unnecessary to walk the page table when vma_address() return -EFAULT.
->>>> Return early if so to save some cpu cycles.
->>>>
->>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->>>
->>> Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
->>
->> Many thanks for your review and Acked-by tag!
-> 
-> You're welcome :)
-> 
->>
->>>
->>> Does this patch fix the real problem rather than just saving cpu cycles?
->>> Without this patch, "address == -EFAULT" seems to make pgd_offset() return
->>> invalid pointer and result in some serious result like general protection fault.
->>
->> I think you're right. We might dereference the invalid pointer in the following pagetable
->> walk and results in general protection fault.
->>
->>> If that's the case, this patch might be worth sending to stable.
->>
->> But I'am not sure vma_address will return -EFAULT for dax pages in the real workload?
->> If so, I will send a v2 with Fixes tag.
-> 
-> Hm, actually I'm not sure either.  But dev_pagemap_mapping_shift() is called only
-> when vma associated to the error page is found already in collect_procs_{file,anon},
-> so vma_address() should not return -EFAULT except with some bug.
-> So VM_BUG_ON() might be more suitable?
+Hi Frederic,
 
-Agree. anon_vma_interval_tree_foreach/vma_interval_tree_foreach in collect_procs_{file,anon} should
-have guaranteed the validity of the vma_address(). And rmap_walk_anon and rmap_walk_file do the
-VM_BUG_ON_VMA(address == -EFAULT, vma). So VM_BUG_ON() might be really more suitable. Will do this
-in v2.
+Sorry to disturb you. It's just that I think you may be interested in this
+patch. I notice you are reviewing some other CPU isolation patches. Appreciate
+it a lot if you can give it a look. Or just ignore it if you are not interested.
 
-Many thanks.
+Thanks,
+Xiongfeng
 
+On 2022/2/10 17:35, Xiongfeng Wang wrote:
+> When NOHZ_FULL is enabled, such as in HPC situation, CPUs are divided
+> into housekeeping CPUs and non-housekeeping CPUs. Non-housekeeping CPUs
+> are NOHZ_FULL CPUs and are often monopolized by the userspace process,
+> such HPC application process. Any sort of interruption is not expected.
 > 
-> Thanks,
-> Naoya Horiguchi
+> blk_mq_hctx_next_cpu() selects each cpu in 'hctx->cpumask' alternately
+> to schedule the work thread blk_mq_run_work_fn(). When 'hctx->cpumask'
+> contains housekeeping CPU and non-housekeeping CPU at the same time, a
+> housekeeping CPU, which want to request a IO, may schedule a worker on a
+> non-housekeeping CPU. This may affect the performance of the userspace
+> application running on non-housekeeping CPUs.
+> 
+> So let's just schedule the worker thread on the current CPU when the
+> current CPU is housekeeping CPU.
+> 
+> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+> ---
+>  block/blk-mq.c | 15 ++++++++++++++-
+>  1 file changed, 14 insertions(+), 1 deletion(-)
+> 
+> diff --git a/block/blk-mq.c b/block/blk-mq.c
+> index 1adfe4824ef5..ff9a4bf16858 100644
+> --- a/block/blk-mq.c
+> +++ b/block/blk-mq.c
+> @@ -24,6 +24,7 @@
+>  #include <linux/sched/sysctl.h>
+>  #include <linux/sched/topology.h>
+>  #include <linux/sched/signal.h>
+> +#include <linux/sched/isolation.h>
+>  #include <linux/delay.h>
+>  #include <linux/crash_dump.h>
+>  #include <linux/prefetch.h>
+> @@ -2036,6 +2037,8 @@ static int blk_mq_hctx_next_cpu(struct blk_mq_hw_ctx *hctx)
+>  static void __blk_mq_delay_run_hw_queue(struct blk_mq_hw_ctx *hctx, bool async,
+>  					unsigned long msecs)
+>  {
+> +	int work_cpu;
+> +
+>  	if (unlikely(blk_mq_hctx_stopped(hctx)))
+>  		return;
+>  
+> @@ -2050,7 +2053,17 @@ static void __blk_mq_delay_run_hw_queue(struct blk_mq_hw_ctx *hctx, bool async,
+>  		put_cpu();
+>  	}
+>  
+> -	kblockd_mod_delayed_work_on(blk_mq_hctx_next_cpu(hctx), &hctx->run_work,
+> +	/*
+> +	 * Avoid housekeeping CPUs scheduling a worker on a non-housekeeping
+> +	 * CPU
+> +	 */
+> +	if (tick_nohz_full_enabled() && housekeeping_cpu(smp_processor_id(),
+> +							 HK_FLAG_WQ))
+> +		work_cpu = smp_processor_id();
+> +	else
+> +		work_cpu = blk_mq_hctx_next_cpu(hctx);
+> +
+> +	kblockd_mod_delayed_work_on(work_cpu, &hctx->run_work,
+>  				    msecs_to_jiffies(msecs));
+>  }
+>  
 > 

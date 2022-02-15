@@ -2,126 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D80294B6F1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 15:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C8184B6F3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 15:46:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238720AbiBOOgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 09:36:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41398 "EHLO
+        id S238729AbiBOOhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 09:37:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238715AbiBOOgQ (ORCPT
+        with ESMTP id S238551AbiBOOhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 09:36:16 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CB610240C
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 06:36:05 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id j26so21627921wrb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 06:36:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=MUUf+pXkN05JwdwuQzd9Pvh+Bteaj3c62ygRM6bt9Qk=;
-        b=mudgwYtlwGFKHg2+iOKPcYtEENCpxIIfMw819BpddxPUCVCqMHj2+IeOBJM0X4iUpB
-         GxtARny1Df2jwq3YqCemRhpibF1+gTiMw17Vuz0eueDZwShUR7fDR/zggpssLn9xYNBq
-         qmwZJpwpMUokt7zNMHN46J+C38KBJPlHJMDFItwUmRn5U5LqxKHWe2Npafb0ihV4xtkj
-         L+3NqEKaGGzN7pgAtibj2nHTis9XKdKJf6zUacBd0Zu+nAIceQOhrYA9xH0g3wno+CJ9
-         iJvrc6sjhbNWiNFpFCIA2K3W2z8zBDgBSMIyKlwYzwwPQWg0KkqaO/xNG5dYbZsPVPPK
-         A1pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=MUUf+pXkN05JwdwuQzd9Pvh+Bteaj3c62ygRM6bt9Qk=;
-        b=cMbY1YP9YTmp9SKsHNgcHSULNP/35gtHu2mshONhLUg/bKgtsTVV/33atO8pK6GMmC
-         g0hkkrhWKtv8/Xvv/U3e5TiEpOmlQo0yUq4rq4XhEnOouNiWEn7mfR6xvfN3t1UaK8ZQ
-         bLwLj68tdxNKT8yr9vdYrRFMqpICi0aw7gZhmFEhXfUHZ03dkSyI978f2DV/gZ5P3b7g
-         FsNWyvbWHsY7nRfhsZ4xKDT71yme3Ec9JH7if3683tpDl1xEIGnK01L2jY3spqwXLQZ9
-         PL6Y0A3E2ug1RTDmxOLMda8QWAyKrUIP7vGiqSicTbPZCD7SHUj85r5bcuzwXSP9mTsd
-         xDbw==
-X-Gm-Message-State: AOAM531xwhTjdKmRX14M5oUYnsDL8WaGfbTkhyyCqE+c3cE9XDhAMrnj
-        GlX/VKhd7wMvcyfiV3Nzprkx5Q==
-X-Google-Smtp-Source: ABdhPJxdzZWSPAfu5kiJHsgXoaKlEMHyoO7bf7BXdQ3G1AR5Pr3gbsP/kmzkmb0nxmt6dWCFQ9iT3w==
-X-Received: by 2002:a5d:5381:: with SMTP id d1mr3487021wrv.559.1644935763754;
-        Tue, 15 Feb 2022 06:36:03 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id n7sm15182386wmd.30.2022.02.15.06.36.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 06:36:03 -0800 (PST)
-Date:   Tue, 15 Feb 2022 14:36:01 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>
-Subject: Re: [PATCH v4 0/7] Provide and use generic_handle_irq_safe() where
- appropriate.
-Message-ID: <Ygu6UewoPbYC9yPa@google.com>
-References: <20220211181500.1856198-1-bigeasy@linutronix.de>
+        Tue, 15 Feb 2022 09:37:14 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF5C810240F;
+        Tue, 15 Feb 2022 06:37:03 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A5E7F1396;
+        Tue, 15 Feb 2022 06:37:03 -0800 (PST)
+Received: from [192.168.122.164] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5ABD53F718;
+        Tue, 15 Feb 2022 06:37:03 -0800 (PST)
+Message-ID: <33a8e31c-c271-2e3a-36cf-caea5a7527dc@arm.com>
+Date:   Tue, 15 Feb 2022 08:36:54 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [BUG/PATCH v3] net: mvpp2: always set port pcs ops
+Content-Language: en-US
+To:     Marcin Wojtas <mw@semihalf.com>
+Cc:     netdev <netdev@vger.kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>
+References: <20220214231852.3331430-1-jeremy.linton@arm.com>
+ <CAPv3WKczaLS8zKwTyEXTCD=YEVF5KcDGTr0uqM-7=MKahMQJYA@mail.gmail.com>
+From:   Jeremy Linton <jeremy.linton@arm.com>
+In-Reply-To: <CAPv3WKczaLS8zKwTyEXTCD=YEVF5KcDGTr0uqM-7=MKahMQJYA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220211181500.1856198-1-bigeasy@linutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Feb 2022, Sebastian Andrzej Siewior wrote:
+Hi,
 
-> handler/ interrupt controller entry). It is low level code and the
-> function expects that interrupts are disabled at entry point.
+On 2/15/22 02:38, Marcin Wojtas wrote:
+> Hi Jeremy,
 > 
-> This isn't the case for invocations from tasklets, workqueues or the
-> primary interrupt handler on PREEMPT_RT. Once this gets noticed a
-> "local_irq_disable|safe()" is added. To avoid further confusion this
-> series adds generic_handle_irq_safe() which can be used from any context
-> and adds a few user.
 > 
-> v2…v4:
->   - Correct kernel doc for generic_handle_irq_safe() as per Wolfram Sang.
->   - Use "misc" instead of "mfd" for the hi6421-spmi-pmic driver.
+> wt., 15 lut 2022 o 00:18 Jeremy Linton <jeremy.linton@arm.com> napisał(a):
+>>
+>> Booting a MACCHIATObin with 5.17, the system OOPs with
+>> a null pointer deref when the network is started. This
+>> is caused by the pcs->ops structure being null in
+>> mcpp2_acpi_start() when it tries to call pcs_config().
+>>
+>> Hoisting the code which sets pcs_gmac.ops and pcs_xlg.ops,
+>> assuring they are always set, fixes the problem.
+>>
+>> The OOPs looks like:
+>> [   18.687760] Unable to handle kernel access to user memory outside uaccess routines at virtual address 0000000000000010
+>> [   18.698561] Mem abort info:
+>> [   18.698564]   ESR = 0x96000004
+>> [   18.698567]   EC = 0x25: DABT (current EL), IL = 32 bits
+>> [   18.709821]   SET = 0, FnV = 0
+>> [   18.714292]   EA = 0, S1PTW = 0
+>> [   18.718833]   FSC = 0x04: level 0 translation fault
+>> [   18.725126] Data abort info:
+>> [   18.729408]   ISV = 0, ISS = 0x00000004
+>> [   18.734655]   CM = 0, WnR = 0
+>> [   18.738933] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000111bbf000
+>> [   18.745409] [0000000000000010] pgd=0000000000000000, p4d=0000000000000000
+>> [   18.752235] Internal error: Oops: 96000004 [#1] SMP
+>> [   18.757134] Modules linked in: rfkill ip_set nf_tables nfnetlink qrtr sunrpc vfat fat omap_rng fuse zram xfs crct10dif_ce mvpp2 ghash_ce sbsa_gwdt phylink xhci_plat_hcd ahci_plam
+>> [   18.773481] CPU: 0 PID: 681 Comm: NetworkManager Not tainted 5.17.0-0.rc3.89.fc36.aarch64 #1
+>> [   18.781954] Hardware name: Marvell                         Armada 7k/8k Family Board      /Armada 7k/8k Family Board      , BIOS EDK II Jun  4 2019
+>> [   18.795222] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>> [   18.802213] pc : mvpp2_start_dev+0x2b0/0x300 [mvpp2]
+>> [   18.807208] lr : mvpp2_start_dev+0x298/0x300 [mvpp2]
+>> [   18.812197] sp : ffff80000b4732c0
+>> [   18.815522] x29: ffff80000b4732c0 x28: 0000000000000000 x27: ffffccab38ae57f8
+>> [   18.822689] x26: ffff6eeb03065a10 x25: ffff80000b473a30 x24: ffff80000b4735b8
+>> [   18.829855] x23: 0000000000000000 x22: 00000000000001e0 x21: ffff6eeb07b6ab68
+>> [   18.837021] x20: ffff6eeb07b6ab30 x19: ffff6eeb07b6a9c0 x18: 0000000000000014
+>> [   18.844187] x17: 00000000f6232bfe x16: ffffccab899b1dc0 x15: 000000006a30f9fa
+>> [   18.851353] x14: 000000003b77bd50 x13: 000006dc896f0e8e x12: 001bbbfccfd0d3a2
+>> [   18.858519] x11: 0000000000001528 x10: 0000000000001548 x9 : ffffccab38ad0fb0
+>> [   18.865685] x8 : ffff80000b473330 x7 : 0000000000000000 x6 : 0000000000000000
+>> [   18.872851] x5 : 0000000000000000 x4 : 0000000000000000 x3 : ffff80000b4732f8
+>> [   18.880017] x2 : 000000000000001a x1 : 0000000000000002 x0 : ffff6eeb07b6ab68
+>> [   18.887183] Call trace:
+>> [   18.889637]  mvpp2_start_dev+0x2b0/0x300 [mvpp2]
+>> [   18.894279]  mvpp2_open+0x134/0x2b4 [mvpp2]
+>> [   18.898483]  __dev_open+0x128/0x1e4
+>> [   18.901988]  __dev_change_flags+0x17c/0x1d0
+>> [   18.906187]  dev_change_flags+0x30/0x70
+>> [   18.910038]  do_setlink+0x278/0xa7c
+>> [   18.913540]  __rtnl_newlink+0x44c/0x7d0
+>> [   18.917391]  rtnl_newlink+0x5c/0x8c
+>> [   18.920892]  rtnetlink_rcv_msg+0x254/0x314
+>> [   18.925006]  netlink_rcv_skb+0x48/0x10c
+>> [   18.928858]  rtnetlink_rcv+0x24/0x30
+>> [   18.932449]  netlink_unicast+0x290/0x2f4
+>> [   18.936386]  netlink_sendmsg+0x1d0/0x41c
+>> [   18.940323]  sock_sendmsg+0x60/0x70
+>> [   18.943825]  ____sys_sendmsg+0x248/0x260
+>> [   18.947762]  ___sys_sendmsg+0x74/0xa0
+>> [   18.951438]  __sys_sendmsg+0x64/0xcc
+>> [   18.955027]  __arm64_sys_sendmsg+0x30/0x40
+>> [   18.959140]  invoke_syscall+0x50/0x120
+>> [   18.962906]  el0_svc_common.constprop.0+0x4c/0xf4
+>> [   18.967629]  do_el0_svc+0x30/0x9c
+>> [   18.970958]  el0_svc+0x28/0xb0
+>> [   18.974025]  el0t_64_sync_handler+0x10c/0x140
+>> [   18.978400]  el0t_64_sync+0x1a4/0x1a8
+>> [   18.982078] Code: 52800004 b9416262 aa1503e0 52800041 (f94008a5)
+>> [   18.988196] ---[ end trace 0000000000000000 ]---
+>>
+>> Fixes: cff056322372 ("net: mvpp2: use .mac_select_pcs() interface")
+>> Suggested-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+>> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+>> ---
+>> v1->v2: Apply Russell's fix
+>> v2->v3: Fix Russell's name
+>>
+>>   drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+>> index 7cdbf8b8bbf6..1a835b48791b 100644
+>> --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+>> +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+>> @@ -6870,6 +6870,9 @@ static int mvpp2_port_probe(struct platform_device *pdev,
+>>          dev->max_mtu = MVPP2_BM_JUMBO_PKT_SIZE;
+>>          dev->dev.of_node = port_node;
+>>
+>> +       port->pcs_gmac.ops = &mvpp2_phylink_gmac_pcs_ops;
+>> +       port->pcs_xlg.ops = &mvpp2_phylink_xlg_pcs_ops;
+>> +
+>>          if (!mvpp2_use_acpi_compat_mode(port_fwnode)) {
+>>                  port->phylink_config.dev = &dev->dev;
+>>                  port->phylink_config.type = PHYLINK_NETDEV;
+>> @@ -6940,9 +6943,6 @@ static int mvpp2_port_probe(struct platform_device *pdev,
+>>                                    port->phylink_config.supported_interfaces);
+>>                  }
+>>
+>> -               port->pcs_gmac.ops = &mvpp2_phylink_gmac_pcs_ops;
+>> -               port->pcs_xlg.ops = &mvpp2_phylink_xlg_pcs_ops;
+>> -
+>>                  phylink = phylink_create(&port->phylink_config, port_fwnode,
+>>                                           phy_mode, &mvpp2_phylink_ops);
+>>                  if (IS_ERR(phylink)) {
+>> --
+>> 2.34.1
+>>
 > 
-> v2…v1:
->  https://lore.kernel.org/all/20220131123404.175438-1-bigeasy@linutronix.de/
->  - Redo kernel-doc for generic_handle_irq_safe() in #1.
->  - Use generic_handle_irq_safe() instead of generic_handle_irq() in the
->    patch description where I accidently used the wrong one.
-> v1:
->  https://lore.kernel.org/all/20220127113303.3012207-1-bigeasy@linutronix.de/
+> I'd like to test the patch - what EDK2 version are you using?
 
-Please use the official cover-letter format (--cover-letter).
+I don't have access to the machine at the moment (maybe in a couple days 
+again) but it was running a build from late 2019 IIRC. So, definitely 
+not a bleeding edge version for sure.
 
-It would have been nice to at least find a diff stat here.
-
-...
-
-Do we really need to coordinate this series cross-subsystem?
-
-Can we first apply the API, then have each of the subsystems adapted
-separately?  Does the change-over all need to happen concurrently?
-
-If the latter is the case, is this set bisectable?
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog

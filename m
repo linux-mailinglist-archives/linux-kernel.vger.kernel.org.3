@@ -2,101 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FFD4B76C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C59A4B7629
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243715AbiBOTgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 14:36:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35766 "EHLO
+        id S243737AbiBOTgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 14:36:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243697AbiBOTgO (ORCPT
+        with ESMTP id S243725AbiBOTgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 14:36:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2833C24A2;
-        Tue, 15 Feb 2022 11:36:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 15 Feb 2022 14:36:23 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB766C24A2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 11:36:10 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 921C51F382;
+        Tue, 15 Feb 2022 19:36:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1644953769; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ii5TNPWsUIAw9A7FnVbIdGfffp+xa+Xc1AZj2a+jkto=;
+        b=ii/Z6CGN1NybTstlvc1PJeSPlw7jeLLEf4yJ0N3iydUQMZ4W73O1hjmYbZOJJ3kmcxketp
+        WxSLGwC0YW0ZrK1j/Bh/BmTt8TX9AyDJHjOWSvrUTqnvov20ZM+kUynCs0Vk+sHIPeS0eD
+        MHOIc0TRYJnf1ZAf3AYyfDnSTGsmQtU=
+Received: from suse.cz (unknown [10.100.201.86])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78E81B818F3;
-        Tue, 15 Feb 2022 19:36:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE494C340EB;
-        Tue, 15 Feb 2022 19:36:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644953761;
-        bh=mXUYdWjAyAGnzfunbLEvRbzhk1LQeTeub57on144Gog=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AQoUEG2PH9XDgvj9VgWfsiL+cXnmIUszgtgnX63DIOexHgyIxzm547vKPwBi55Rrg
-         PlTl+2N2Su3Hhflt3+9AF6yjE0fPI+yWtvhvMsuQxAQdq0VjXg7PF9IDrlTrGcj4fU
-         ss1Bl+2fP8Y0FobCLBxm7cUocwNLkc39f1vA8C9TmP1+LsMwU8aGEMg95cA2R4Rplc
-         SfFCbWyQK7eeSqhYbdqJGdqQ0qW2EbDgfB3/WGJiearA3RcOwaOLM44eHqM17duxDJ
-         PZ8MymJ/Y7F7EZmIZSt/ANDUP9lBpgIE3HPC/cQVNPgmAe3+wvA2u0U4i2Lm7sioQp
-         cc7rhegLmsd4A==
-Received: by pali.im (Postfix)
-        id D05BCF13; Tue, 15 Feb 2022 20:35:58 +0100 (CET)
-Date:   Tue, 15 Feb 2022 20:35:58 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/7] hwmon: (dell-smm) Reword and mark parameter "force"
- as unsafe
-Message-ID: <20220215193558.rorm3vrwyxa4gkj7@pali>
-References: <20220215191113.16640-1-W_Armin@gmx.de>
- <20220215191113.16640-8-W_Armin@gmx.de>
+        by relay2.suse.de (Postfix) with ESMTPS id 62467A3B83;
+        Tue, 15 Feb 2022 19:36:09 +0000 (UTC)
+Date:   Tue, 15 Feb 2022 20:36:05 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Yang Shi <shy828301@gmail.com>,
+        syzbot <syzbot+2ccf63a4bd07cf39cab0@syzkaller.appspotmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in __oom_reap_task_mm
+Message-ID: <YgwApdvLhxFU26j5@dhcp22.suse.cz>
+References: <00000000000072ef2c05d7f81950@google.com>
+ <CAHbLzkpr=xHC7C2+wkOGUB24924T4L1Lx_v+m1Ke8Ku3ym7wYw@mail.gmail.com>
+ <Ygt5cAS78BFxVwkg@dhcp22.suse.cz>
+ <CAJuCfpGf8HLh=tfrnK3VFd2QO9bgzuM9HyDY8PYYxJkbdbmYRA@mail.gmail.com>
+ <CAHbLzkpKGq8XaLx3G1=oJ-TsZiqC+A+CaVK5=Mjzo1Jo0qA3DQ@mail.gmail.com>
+ <CAJuCfpE833u+Z909yaLgGEJV7O10fVw-_eG1nH=w4b3+PbxrLg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220215191113.16640-8-W_Armin@gmx.de>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAJuCfpE833u+Z909yaLgGEJV7O10fVw-_eG1nH=w4b3+PbxrLg@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 15 February 2022 20:11:13 Armin Wolf wrote:
-> When enabling said module parameter, the driver ignores
-> all feature blacklists on relevant models, which has the
-> potential for strange side effects. Also there seems to
-> be a slight chance for unsupported devices to behave
-> badly when probed for features.
-> In such cases, the kernel should be tainted to inform
-> people that these issues might have been caused by
-> the dell_smm_hwmon driver with "force" enabled.
-> Also reword the parameter description to remind users
-> that enabling "force" also enables blacklisted features.
+On Tue 15-02-22 10:10:53, Suren Baghdasaryan wrote:
+> On Tue, Feb 15, 2022 at 9:53 AM Yang Shi <shy828301@gmail.com> wrote:
+[...]
+> > Isn't the below race possible?
+> >
+> >           CPU A                                     CPU B
+> > exiting:
+> >   mmap_write_lock
+> >   remove_vma()
+> >   mmap_write_unlock
+> >                                                 process_mrelease:
+> >                                                   mmap_read_lock
+> >                                                   __oom_reap_task_mm
+> >                                                   mmap_read_unlock
+> >
 > 
-> Tested on a Dell Inspiron 3505.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> Sure, that sequence (would not call it a race) is possible but in this
+> case __oom_reap_task_mm will find no vmas in the mm because exit_mmap
+> freed and removed all of them.
 
-Reviewed-by: Pali Rohár <pali@kernel.org>
-
-> ---
->  drivers/hwmon/dell-smm-hwmon.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 04a41d59da60..67d63932b48a 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -87,8 +87,8 @@ MODULE_LICENSE("GPL");
->  MODULE_ALIAS("i8k");
-> 
->  static bool force;
-> -module_param(force, bool, 0);
-> -MODULE_PARM_DESC(force, "Force loading without checking for supported models");
-> +module_param_unsafe(force, bool, 0);
-> +MODULE_PARM_DESC(force, "Force loading without checking for supported models and features");
-> 
->  static bool ignore_dmi;
->  module_param(ignore_dmi, bool, 0);
-> --
-> 2.30.2
-> 
+I didn't really have chance to have a closer look but I do not see
+exit_mmap doing mm->mmap = NULL so the pointer can be a freed vma unless
+I am missing something. I thought we've had it in your patches? Has this
+got lost somewhere in the process?
+-- 
+Michal Hocko
+SUSE Labs

@@ -2,38 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CAE34B6DBB
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E82034B6DC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:39:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238360AbiBONhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 08:37:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34362 "EHLO
+        id S237959AbiBONkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 08:40:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234825AbiBONhw (ORCPT
+        with ESMTP id S232202AbiBONkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 08:37:52 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFE06E8DE;
-        Tue, 15 Feb 2022 05:37:42 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJy1U-001zgX-Bx; Tue, 15 Feb 2022 13:37:40 +0000
-Date:   Tue, 15 Feb 2022 13:37:40 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Xavier Roche <xavier.roche@algolia.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.vnet.ibm.com>
-Subject: Re: race between vfs_rename and do_linkat (mv and link)
-Message-ID: <YguspMvu6M6NJ1hL@zeniv-ca.linux.org.uk>
-References: <20220214210708.GA2167841@xavier-xps>
- <CAJfpegvVKWHhhXwOi9jDUOJi2BnYSDxZQrp1_RRrpVjjZ3Rs2w@mail.gmail.com>
+        Tue, 15 Feb 2022 08:40:04 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B18865179;
+        Tue, 15 Feb 2022 05:39:55 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E569C1480;
+        Tue, 15 Feb 2022 05:39:54 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.89.173])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 186353F718;
+        Tue, 15 Feb 2022 05:39:52 -0800 (PST)
+Date:   Tue, 15 Feb 2022 13:39:48 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     madvenka@linux.microsoft.com
+Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v13 06/11] arm64: Use stack_trace_consume_fn and rename
+ args to unwind()
+Message-ID: <YgutJKqYe8ss8LLd@FVFF77S0Q05N>
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220117145608.6781-1-madvenka@linux.microsoft.com>
+ <20220117145608.6781-7-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJfpegvVKWHhhXwOi9jDUOJi2BnYSDxZQrp1_RRrpVjjZ3Rs2w@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220117145608.6781-7-madvenka@linux.microsoft.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,23 +48,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 10:56:29AM +0100, Miklos Szeredi wrote:
+On Mon, Jan 17, 2022 at 08:56:03AM -0600, madvenka@linux.microsoft.com wrote:
+> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+> 
+> Rename the arguments to unwind() for better consistency. Also, use the
+> typedef stack_trace_consume_fn for the consume_entry function as it is
+> already defined in linux/stacktrace.h.
+>
+> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
 
-> Doing "lock_rename() + lookup last components" would fix this race.
+How about: 
 
-No go - thanks to the possibility of AT_SYMLINK_FOLLOW there.
-Think of it - we'd need to
-	* lock parents (both at the same time)
-	* look up the last component of source
-	* if it turns a symlink - unlock parents and repeat the entire
-thing for its body, except when asked not to.
-	* when we are done with the source, look the last component of
-target up
+| arm64: align with common stracktrace naming
+|
+| For historical reasons, the naming of parameters and their types in the arm64
+| stacktrace code differs from that used in generic code and other
+| architectures, even though the types are equivalent.
+|
+| For consistency and clarity, use the generic names.
 
-... and then there is sodding -ESTALE handling, with all the elegance
-that brings in.
+Either way:
 
-> If this was only done on retry, then that would prevent possible
-> performance regressions, at the cost of extra complexity.
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
 
-Extra compared to the above, that is.  How delightful...
+Mark.
+
+> ---
+>  arch/arm64/kernel/stacktrace.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+> index 1b32e55735aa..f772dac78b11 100644
+> --- a/arch/arm64/kernel/stacktrace.c
+> +++ b/arch/arm64/kernel/stacktrace.c
+> @@ -181,12 +181,12 @@ static int notrace unwind_next(struct unwind_state *state)
+>  NOKPROBE_SYMBOL(unwind_next);
+>  
+>  static void notrace unwind(struct unwind_state *state,
+> -			   bool (*fn)(void *, unsigned long), void *data)
+> +			   stack_trace_consume_fn consume_entry, void *cookie)
+>  {
+>  	while (1) {
+>  		int ret;
+>  
+> -		if (!fn(data, state->pc))
+> +		if (!consume_entry(cookie, state->pc))
+>  			break;
+>  		ret = unwind_next(state);
+>  		if (ret < 0)
+> -- 
+> 2.25.1
+> 

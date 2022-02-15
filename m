@@ -2,140 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5674B7865
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB194B76A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242723AbiBORxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 12:53:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33968 "EHLO
+        id S242710AbiBORwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 12:52:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235112AbiBORxS (ORCPT
+        with ESMTP id S235112AbiBORwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 12:53:18 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFA3FDFBF;
-        Tue, 15 Feb 2022 09:53:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644947586; x=1676483586;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fjS+jLcimlpk3IgAjjxRkS7J2bLZR7vNKhdUAkDnH0s=;
-  b=edbVc8amMd0XPgXkRK8/61mMkGK9aavolWBCev63EO+m9Ds9sFFXv65o
-   oYF3FFHAn3t1StRdZ/jT258RCC64cFTJI4h83HkcWyQXWiB6r5tPapRB0
-   jT4Ojh4xBFHBL5mXxJsw6ZAibRDHB5mDtIx7ISpRCle1X064UguMWAsha
-   6q0fZ8tcWfl2PEWLFdOSm4Z5/hZMA/7Dufgz23b6QqrZ0Y3uhm0sgswUu
-   bejq82d/yDspDR53UDjbBzySNPrjaTRbxguXzJrDpZAYh54uwh5xe8pX9
-   9I4pOlrRJn95wsB8Fqlqj4rmu9E8O1q7inlQIxXDSmwMMxF4+nbPT5gz3
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="230374786"
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="230374786"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 09:53:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="502570210"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 15 Feb 2022 09:53:01 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nK20b-0009uF-90; Tue, 15 Feb 2022 17:53:01 +0000
-Date:   Wed, 16 Feb 2022 01:52:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Joseph Hwang <josephsih@chromium.org>,
-        linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
-        luiz.dentz@gmail.com, pali@kernel.org
-Cc:     kbuild-all@lists.01.org,
-        chromeos-bluetooth-upstreaming@chromium.org, josephsih@google.com,
-        Joseph Hwang <josephsih@chromium.org>,
-        Archie Pusaka <apusaka@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] Bluetooth: aosp: surface AOSP quality report
- through mgmt
-Message-ID: <202202160117.jjnGwidL-lkp@intel.com>
-References: <20220215213519.v4.1.I2015b42d2d0a502334c9c3a2983438b89716d4f0@changeid>
+        Tue, 15 Feb 2022 12:52:43 -0500
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1B5F11B7;
+        Tue, 15 Feb 2022 09:52:33 -0800 (PST)
+Received: by mail-pj1-f54.google.com with SMTP id y9so18020627pjf.1;
+        Tue, 15 Feb 2022 09:52:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EeWKQ0eSOfEOUNiOqe9rH7RJP4VfPyvNvd5R+f4N9f8=;
+        b=e/ZbU2zZBhhGYHW0wZt85Yw+ULHXEZCFDH6KF6ANlXiBMf7iXWK7Y/zfyl7+mx80Ii
+         i6n1IEwYkfY2JH41bBLkpU5HPHahFPSw9Hf5GXB007lMs+SfzI/QDvUrUvxgC31T14GL
+         32Gj6BYEU5Yau3HVHRXlTpCcCCMfTMSOIvIbMYG+XE/5M816GI/+yRLp3LuQkmnFbWFq
+         ySoEV/oQuJTN7QkXpNz8p7tUkeyDTKR19NZ8l6xnnbzDRaKo7V1w8SMh+sGZvGrnrukf
+         fbxfjzrIy77brOss/zrkJNkgMZdznf/TV7nHoxmmrUuwFJGiRGYhcb7Fn1qN/2W9oqNd
+         Kerw==
+X-Gm-Message-State: AOAM5337fCMWsNwx6XIOnZv/0k0R5RMBIieFZUDv7eZNNfVZxKImuvgS
+        Q5AV3S6ozZrGDAPT2e9gCtI=
+X-Google-Smtp-Source: ABdhPJxRHFGeXLqJk+vJ8VLtcFX9UvbUWSISEVKyixBZptY7v28xUppe6W7BEQeWSBccgHXJgDU07w==
+X-Received: by 2002:a17:903:228c:: with SMTP id b12mr162376plh.36.1644947552447;
+        Tue, 15 Feb 2022 09:52:32 -0800 (PST)
+Received: from localhost ([2601:647:5b00:ece0:aab:34ff:52ca:a7a5])
+        by smtp.gmail.com with ESMTPSA id kb12sm6870914pjb.20.2022.02.15.09.52.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 09:52:31 -0800 (PST)
+Date:   Tue, 15 Feb 2022 09:52:30 -0800
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>, mdf@kernel.org,
+        hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
+        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        system@metrotek.ru
+Subject: Re: [PATCH v2] fpga: microsemi-spi: add Microsemi FPGA manager
+Message-ID: <YgvoXgqM65M97qib@epycbox.lan>
+References: <20220214133835.25097-1-i.bornyakov@metrotek.ru>
+ <20220215115853.26491-1-i.bornyakov@metrotek.ru>
+ <d0890e09-5d4a-5cce-832d-26e64b74ac54@conchuod.ie>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220215213519.v4.1.I2015b42d2d0a502334c9c3a2983438b89716d4f0@changeid>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <d0890e09-5d4a-5cce-832d-26e64b74ac54@conchuod.ie>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joseph,
+Hi Conor, Ivan,
 
-Thank you for the patch! Perhaps something to improve:
+On Tue, Feb 15, 2022 at 05:37:04PM +0000, Conor Dooley wrote:
+> Hey Ivan,
+> Firstly thanks for the patch(es), stumbled across them today.
+> As you may know Microsemi has been acquired by Microchip, so
+> s/microsemi/microchip/ please. This would make the correct vendor
+> prefix for compatible strings "microchip". While you've said this is
+> for the PolarFire FPGA, there is prescendent for using "mpfs" for the
+> PolarFire SoC FPGA in the kernel - so if you could change the uses of
+> "polarfire" to "mpf" that'd be great.
 
-[auto build test WARNING on bluetooth-next/master]
-[also build test WARNING on net-next/master next-20220215]
-[cannot apply to net/master v5.17-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I personally don't have a strong opinion on hte microchip vs microsemi
+here. We have precedent with intel/altera.
 
-url:    https://github.com/0day-ci/linux/commits/Joseph-Hwang/Bluetooth-aosp-surface-AOSP-quality-report-through-mgmt/20220215-213800
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-config: h8300-randconfig-s032-20220214 (https://download.01.org/0day-ci/archive/20220216/202202160117.jjnGwidL-lkp@intel.com/config)
-compiler: h8300-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/8c2212761e41006d67f3fad819b5bde57bc17773
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Joseph-Hwang/Bluetooth-aosp-surface-AOSP-quality-report-through-mgmt/20220215-213800
-        git checkout 8c2212761e41006d67f3fad819b5bde57bc17773
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=h8300 SHELL=/bin/bash net/bluetooth/
+> 
+> The current item on my own todo list is the opposite side of this,
+> reprogramming the FPGA via the system controller acting as a SPI
+> master for PolarFire SoC.
+> I will get back to you when I have a better idea of what (if any) code
+> can be made generic between both modes. In the meantime, I will get
+> together a setup to test SPI slave reprogramming of the PolarFire (SoC)
+> 
+> Thanks,
+> Conor <conor.dooley@microchip.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for chiming in. Always nice to have vendors help out reviewing.
+> 
+> > Add support to the FPGA manager for programming Microsemi Polarfire
+> > FPGAs over slave SPI interface.
+> >
+> > Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> > ---
+> > Changelog:
+> >   v1 -> v2: fix printk formating
+> >
+> >  drivers/fpga/Kconfig         |   9 +
+> >  drivers/fpga/Makefile        |   1 +
+> >  drivers/fpga/microsemi-spi.c | 366 +++++++++++++++++++++++++++++++++++
+> >  3 files changed, 376 insertions(+)
+> >  create mode 100644 drivers/fpga/microsemi-spi.c
+> >
+> --<snip>--
 
+I'll take a closer look once the bot's complaints are addressed.
 
-sparse warnings: (new ones prefixed by >>)
-   net/bluetooth/hci_event.c:338:15: sparse: sparse: restricted __le16 degrades to integer
->> net/bluetooth/hci_event.c:4288:3: sparse: sparse: symbol 'evt_prefixes' was not declared. Should it be static?
-   net/bluetooth/hci_event.c: note: in included file (through include/net/bluetooth/hci_core.h):
-   include/net/bluetooth/hci.h:2473:47: sparse: sparse: array of flexible structures
-   include/net/bluetooth/hci.h:2559:43: sparse: sparse: array of flexible structures
-
-vim +/evt_prefixes +4288 net/bluetooth/hci_event.c
-
-  4275	
-  4276	/* Every distinct vendor specification must have a well-defined vendor
-  4277	 * event prefix to determine if a vendor event meets the specification.
-  4278	 * If an event prefix is fixed, it should be delcared with FIXED_EVT_PREFIX.
-  4279	 * Otherwise, DYNAMIC_EVT_PREFIX should be used for variable prefixes.
-  4280	 */
-  4281	struct vendor_event_prefix {
-  4282		__u8 *prefix;
-  4283		__u8 prefix_len;
-  4284		void (*vendor_func)(struct hci_dev *hdev, void *data,
-  4285				    struct sk_buff *skb);
-  4286		__u8 *(*get_prefix)(struct hci_dev *hdev);
-  4287		__u8 (*get_prefix_len)(struct hci_dev *hdev);
-> 4288	} evt_prefixes[] = {
-  4289		FIXED_EVT_PREFIX(AOSP_BQR_PREFIX, aosp_quality_report_evt),
-  4290		DYNAMIC_EVT_PREFIX(get_msft_evt_prefix, get_msft_evt_prefix_len,
-  4291				   msft_vendor_evt),
-  4292	
-  4293		/* end with a null entry */
-  4294		{},
-  4295	};
-  4296	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Moritz

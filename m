@@ -2,126 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0184B620A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 05:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCCD04B6211
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 05:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbiBOEYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 23:24:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47690 "EHLO
+        id S233155AbiBOE0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 23:26:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiBOEYl (ORCPT
+        with ESMTP id S229484AbiBOE0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 23:24:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D25A88B8;
-        Mon, 14 Feb 2022 20:24:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0CCD61227;
-        Tue, 15 Feb 2022 04:24:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F899C340EC;
-        Tue, 15 Feb 2022 04:24:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644899071;
-        bh=1GtgnRvuFA3j5DLrWfRmac2d+JF5/ykPvuln8f4qXg8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KH6NTdmd9+oocrKP6r/Hgc6lI+Cguq4EXWec7vhW4AZX83Xsl8en5bCImwLhf3uT9
-         FusC7nBEozxw9rT1ewN2v/saJ7bkfN0psUM9vRK/4bLRrbSFXO9PHX8DBoN6u0ieX4
-         RjC9EYpysJ97+l+t10EfLxiUbNMIEGLHfqQ248yqgk2P5pPKpk9UmgqMMWq0AEplw2
-         sEiVJ8nv2it4YnZhvc6+7ivTeG5z7wGCQstCILGCedP+jy3TXUsqq4fp4pLSmaK4hm
-         4ydWeT2YEJgSq0lKi+clJKctfrYTP2C4A56NF3JSY3C0tseGDI3VPwVLlYylHJE/1X
-         0nAmJqep/LheA==
-Received: by mail-vs1-f51.google.com with SMTP id g20so9090439vsb.9;
-        Mon, 14 Feb 2022 20:24:31 -0800 (PST)
-X-Gm-Message-State: AOAM5320D89GnvGiW1817TNEFhERndODFzr7G+Vce2z00KMZRxrMcUBp
-        Rkcdvwpmjq4KhpPcZ1ZASJBha5U4URaOXQ9fWcc=
-X-Google-Smtp-Source: ABdhPJzrYCExwBPj9lvIUEPXbkNhN3Rq3Cfgb2cKYfXljgYVrtwWmUdCX3U0U4NGGhf98fgtkqgw+fyHPL/IuQqtnrI=
-X-Received: by 2002:a67:c802:: with SMTP id u2mr806278vsk.59.1644899070100;
- Mon, 14 Feb 2022 20:24:30 -0800 (PST)
+        Mon, 14 Feb 2022 23:26:21 -0500
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1CAA8ED5;
+        Mon, 14 Feb 2022 20:26:12 -0800 (PST)
+Received: by mail-oo1-xc2a.google.com with SMTP id p190-20020a4a2fc7000000b0031820de484aso21804399oop.9;
+        Mon, 14 Feb 2022 20:26:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UTelz8ULof2gSjsBcmY6Zg1fgejCRlE5fSYm6lKKjy4=;
+        b=VDHh7z+IwcbBeMbqb/ts7h9CtBJtyvfF8FwWbf6emVp/mYymuVKbMMqRANFT8nLPpW
+         VCm425TEHngvz36JYjLZN+4o8vveeIyJZaKUMd7trP9ccSMivUMMNwjn4fxk0mnJi+1B
+         mDhTeO5C1X9Fmmc5uoX9AoY+zT2aFZjs5950zzjJiusCHSPv//q5Oh7wfs6GOiiqBQ8t
+         6PwX/37UFBXhs/cunn5Y/Sy6ojbvNmdK2A3/PXXJQ+1JR9V32r1bI4HnwmtdBv0YHi0l
+         t9V5MRgouIoHU2sxJrO6MdaJgO8dJYeD1LkGRzWS5Yb2gJppiVVTIzXgqI5YzgegKT5S
+         Onjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UTelz8ULof2gSjsBcmY6Zg1fgejCRlE5fSYm6lKKjy4=;
+        b=rn2/HaG3J/ZC0NA+c3YsGbmnttCQQp+fNskAMsJYhJCMGUTGi8jTzTrSHfsk4gw5rx
+         X7T0LvD0d5Bg7HNs6Km99YO87bcm2FV82uTom4hix89ucR3mVujhNG+Bg8fSb/x19xwq
+         5IEd4XQDoFInXo2NocMvmN1BH+EcVYnvSdlIV/MzGnQFDucLBsts0/QC6vIYmnCJreDA
+         mPj++dpWpph0MF9FCtADFfpJ/OCn10AlE0GWxWaS9yFO0a8aKC5OnGIx1P00/QBYyX2r
+         2MBU6agsBB49ogpCux/C50guulXDPsgFvOwZsOr0PBN5ZByStwm8Smo1UZhYfmKwhT3N
+         Z2cw==
+X-Gm-Message-State: AOAM53328K+i8f13wNf4+xu5ojgcVmjRbuzUU2lc1U+zsYZyJTbewDSZ
+        961cS9oKZ6GlUwS6jvMHnnyqQEdV1+gRyWhqR/Q=
+X-Google-Smtp-Source: ABdhPJyfCYYB1BeuPkdtK8hzETRmsfqVIwKFs5eK9bz8dTFd9F5vPFVAHjTsTuDovb1hAFiLRDHFqiYsSDF5dR5nZoY=
+X-Received: by 2002:a05:6870:d606:b0:ce:c0c9:657 with SMTP id
+ a6-20020a056870d60600b000cec0c90657mr791380oaq.169.1644899171351; Mon, 14 Feb
+ 2022 20:26:11 -0800 (PST)
 MIME-Version: 1.0
-References: <98208fa3-4b28-cdeb-7699-dbd9d66bfa60@infradead.org> <20220214120250.10256-1-wonder_rock@126.com>
-In-Reply-To: <20220214120250.10256-1-wonder_rock@126.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 15 Feb 2022 12:24:19 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTS8+8LME3oNgVyB4schf=Q8XictRXVCtpVTfoPL8D2NFA@mail.gmail.com>
-Message-ID: <CAJF2gTS8+8LME3oNgVyB4schf=Q8XictRXVCtpVTfoPL8D2NFA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] csky: Fix versioncheck warnings
-To:     wonder_rock@126.com
-Cc:     Randy Dunlap <rdunlap@infradead.org>, Jens Axboe <axboe@kernel.dk>,
-        linux-csky@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220212175922.665442-1-omosnace@redhat.com>
+In-Reply-To: <20220212175922.665442-1-omosnace@redhat.com>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Tue, 15 Feb 2022 12:26:00 +0800
+Message-ID: <CADvbK_dZc-ErLHVBgzqhaMQaYyzM8_R3cado3oSTj+JE9tCiHQ@mail.gmail.com>
+Subject: Re: [PATCH net v3 0/2] security: fixups for the security hooks in sctp
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+Cc:     network dev <netdev@vger.kernel.org>, davem <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        SElinux list <selinux@vger.kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Richard Haines <richard_c_haines@btinternet.com>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 8:35 PM <wonder_rock@126.com> wrote:
+On Sun, Feb 13, 2022 at 1:59 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
 >
-> From: Deyan Wang <wonder_rock@126.com>
+> This is a third round of patches to fix the SCTP-SELinux interaction
+> w.r.t. client-side peeloff. The patches are a modified version of Xin
+> Long's patches posted previously, of which only a part was merged (the
+> rest was merged for a while, but was later reverted):
+> https://lore.kernel.org/selinux/cover.1635854268.git.lucien.xin@gmail.com/T/
 >
-> arch/csky/include/asm/io.h: 8 linux/version.h not needed.
-> arch/csky/kernel/process.c: 5 linux/version.h not needed.
-> arch/csky/mm/dma-mapping.c: 12 linux/version.h not needed.
-Could you put the command in the comment log? thx
-
+> In gist, these patches replace the call to
+> security_inet_conn_established() in SCTP with a new hook
+> security_sctp_assoc_established() and implement the new hook in SELinux
+> so that the client-side association labels are set correctly (which
+> matters in case the association eventually gets peeled off into a
+> separate socket).
 >
-> Signed-off-by: Deyan Wang <wonder_rock@126.com>
-> ---
->  arch/csky/include/asm/io.h | 1 -
->  arch/csky/kernel/process.c | 1 -
->  arch/csky/mm/dma-mapping.c | 1 -
->  3 files changed, 3 deletions(-)
+> Note that other LSMs than SELinux don't implement the SCTP hooks nor
+> inet_conn_established, so they shouldn't be affected by any of these
+> changes.
 >
-> diff --git a/arch/csky/include/asm/io.h b/arch/csky/include/asm/io.h
-> index f82654053dc0..ed53f0b47388 100644
-> --- a/arch/csky/include/asm/io.h
-> +++ b/arch/csky/include/asm/io.h
-> @@ -5,7 +5,6 @@
+> These patches were tested by selinux-testsuite [1] with an additional
+> patch [2] and by lksctp-tools func_tests [3].
 >
->  #include <linux/pgtable.h>
->  #include <linux/types.h>
-> -#include <linux/version.h>
+> Changes since v2:
+> - patches 1 and 2 dropped as they are already in mainline (not reverted)
+> - in patch 3, the return value of security_sctp_assoc_established() is
+>   changed to int, the call is moved earlier in the function, and if the
+>   hook returns an error value, the packet will now be discarded,
+>   aborting the association
+> - patch 4 has been changed a lot - please see the patch description for
+>   details on how the hook is now implemented and why
 >
->  /*
->   * I/O memory access primitives. Reads are ordered relative to any
-> diff --git a/arch/csky/kernel/process.c b/arch/csky/kernel/process.c
-> index 3d0ca22cd0e2..5de04707aa07 100644
-> --- a/arch/csky/kernel/process.c
-> +++ b/arch/csky/kernel/process.c
-> @@ -2,7 +2,6 @@
->  // Copyright (C) 2018 Hangzhou C-SKY Microsystems co.,ltd.
+> [1] https://github.com/SELinuxProject/selinux-testsuite/
+> [2] https://patchwork.kernel.org/project/selinux/patch/20211021144543.740762-1-omosnace@redhat.com/
+> [3] https://github.com/sctp/lksctp-tools/tree/master/src/func_tests
 >
->  #include <linux/module.h>
-> -#include <linux/version.h>
->  #include <linux/sched.h>
->  #include <linux/sched/task_stack.h>
->  #include <linux/sched/debug.h>
-> diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
-> index c3a775a7e8f9..82447029feb4 100644
-> --- a/arch/csky/mm/dma-mapping.c
-> +++ b/arch/csky/mm/dma-mapping.c
-> @@ -9,7 +9,6 @@
->  #include <linux/mm.h>
->  #include <linux/scatterlist.h>
->  #include <linux/types.h>
-> -#include <linux/version.h>
->  #include <asm/cache.h>
+> Ondrej Mosnacek (2):
+>   security: add sctp_assoc_established hook
+>   security: implement sctp_assoc_established hook in selinux
 >
->  static inline void cache_op(phys_addr_t paddr, size_t size,
+>  Documentation/security/SCTP.rst | 22 ++++----
+>  include/linux/lsm_hook_defs.h   |  2 +
+>  include/linux/lsm_hooks.h       |  5 ++
+>  include/linux/security.h        |  8 +++
+>  net/sctp/sm_statefuns.c         |  8 +--
+>  security/security.c             |  7 +++
+>  security/selinux/hooks.c        | 90 ++++++++++++++++++++++++---------
+>  7 files changed, 103 insertions(+), 39 deletions(-)
+>
 > --
-> 2.25.1
+> 2.34.1
 >
-
-
---
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Reviewed-by: Xin Long <lucien.xin@gmail.com>

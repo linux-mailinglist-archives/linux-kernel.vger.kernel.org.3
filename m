@@ -2,72 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC6D4B60BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 03:06:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C16D4B60C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 03:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232573AbiBOCGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 21:06:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49480 "EHLO
+        id S233014AbiBOCHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 21:07:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbiBOCF7 (ORCPT
+        with ESMTP id S230498AbiBOCHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 21:05:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8652246
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 18:05:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644890748;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=rcVCDBo5DVaghZVQQl2zbGTyQ7E+laKLLxGgEjqHxnk=;
-        b=BsxIUDJ0NFwUiJ43PxEXU25y1vTuIzFDlJT36TVEeYsSeAjix370M3S14x+VeiVImZpYVh
-        ybAaCpPtG7IAqjI2MIlyPAfEqj5tohTeDvfW1P383T/n32JInI3MLvmIx6m44mo3fpgB5S
-        HGUF20Hn81Et1PA9gKO6PtJYyrlm8GU=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-20-FwxPgrQzM-2Owczkqe46SA-1; Mon, 14 Feb 2022 21:05:47 -0500
-X-MC-Unique: FwxPgrQzM-2Owczkqe46SA-1
-Received: by mail-oo1-f69.google.com with SMTP id v10-20020a4ade8a000000b003177422e81dso11707435oou.3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 18:05:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rcVCDBo5DVaghZVQQl2zbGTyQ7E+laKLLxGgEjqHxnk=;
-        b=ZUY+P9geHRG61LrfvO8WOHLoPuNyp+kUpqpF2GZSPpa8xnAdESLG5O3/JtK9lyMSgb
-         KwinOFes0+9vkrsOfJhsAA7ctQ4/IDbZyZbisd+3z4MhpiXknklcCKzF3rWK8FH4PMKt
-         8YadA477VZ7NXCVGq+3cQC3ktVuJlXMJ7D2el2ZVqOcQvXzQxt3IbuD/JfXp7bOaOKU/
-         CliW8HWgoBatVfp/lzmaps02UMYb9pXgBMqu5Ynb2/GL5Cv5j5NZ3qyF8Ku+NccTtgr2
-         EFtabWQZb62gePaKTEkxRjwVuzv7CnKqANZUUKsxyWvbvdNrjz1x9r4D1Q06SoWutb3Q
-         lBQQ==
-X-Gm-Message-State: AOAM533WWipJMStUKL3OUQ2WEUZ0G5pze7odcAdvdRDVw854vKc4nz3i
-        1a4j9o5tWV62CoIljJ76uunpo0NIB7l7UV67TzYbzUqKImXvNlRBhBNK5M4CjhM04cGWeinDrBv
-        rVpiDym963r56tMoaEvLZpmaX
-X-Received: by 2002:a05:6830:4113:: with SMTP id w19mr688306ott.120.1644890746728;
-        Mon, 14 Feb 2022 18:05:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzEs/cQG7EnoAYBz/PX072UhjyPsRpX8PJZ5Lr3Q9WSLBCh3TgTI0hgly/YAlr42AGrYmPADg==
-X-Received: by 2002:a05:6830:4113:: with SMTP id w19mr688302ott.120.1644890746552;
-        Mon, 14 Feb 2022 18:05:46 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id r41sm14527325oap.2.2022.02.14.18.05.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 18:05:46 -0800 (PST)
-From:   trix@redhat.com
-To:     jk@codeconstruct.com.au, matt@codeconstruct.com.au,
-        davem@davemloft.net, kuba@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH v2] mctp: fix use after free
-Date:   Mon, 14 Feb 2022 18:05:41 -0800
-Message-Id: <20220215020541.2944949-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Mon, 14 Feb 2022 21:07:14 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EB125DC
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 18:07:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644890825; x=1676426825;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dZS7EKMhjasWG4hFq6KS48/STYMyzi5srwau0lAF/g0=;
+  b=HDNlmR1+Z+oeBQ76oopdVSqwnosQYhHmbJDQOX70lNnzqc22sDjMlakI
+   F7iojjavi24KYCY13fFIHZew9xV7fYpLsdIwhwWp6BojC+ndGbIkMAHoG
+   1vKX3P6M0S676q41uErvbTJO2SyDgHVxCFeNU5BO5RlikgkNquAdfx7ag
+   coEYT44hgONuoDT14Iq4kvh6CW7Z3Bp4Czv82fSstPxje/kEa4t+L0NJi
+   AklPjzYnxyPcNcaT6IFQzCy7akuC/GVUxSl2F74QMO6qNriuwS9DkT1GH
+   kOAJlm11r1DpqsaMVH1AB9GZraCF48v0s91f5rZsKIY15I3l6EYksdtQK
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="250176826"
+X-IronPort-AV: E=Sophos;i="5.88,369,1635231600"; 
+   d="scan'208";a="250176826"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 18:07:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,369,1635231600"; 
+   d="scan'208";a="680795109"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Feb 2022 18:07:01 -0800
+Message-ID: <1d817995-f89b-a1de-6aff-9a2bfe91367f@linux.intel.com>
+Date:   Tue, 15 Feb 2022 10:05:42 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     baolu.lu@linux.intel.com, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 00/10] iommu cleanup and refactoring
+Content-Language: en-US
+To:     Joerg Roedel <joro@8bytes.org>
+References: <20220214015538.2828933-1-baolu.lu@linux.intel.com>
+ <YgpjzNtQlOdq+1AB@8bytes.org>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <YgpjzNtQlOdq+1AB@8bytes.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,48 +77,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+Hi Joerg,
 
-Clang static analysis reports this problem
-route.c:425:4: warning: Use of memory after it is freed
-  trace_mctp_key_acquire(key);
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-When mctp_key_add() fails, key is freed but then is later
-used in trace_mctp_key_acquire().  Add an else statement
-to use the key only when mctp_key_add() is successful.
+On 2/14/22 10:14 PM, Joerg Roedel wrote:
+> On Mon, Feb 14, 2022 at 09:55:28AM +0800, Lu Baolu wrote:
+>> v3:
+>>   - Remove ops check when dev_iommu_ops() is used.
+>>   - This version of series is available on github:
+>>     https://github.com/LuBaolu/intel-iommu/commits/iommu-domain-ops-v3
+>>
+>> Lu Baolu (10):
+>>    iommu/vt-d: Remove guest pasid related callbacks
+>>    iommu: Remove guest pasid related interfaces and definitions
+>>    iommu/vt-d: Remove aux-domain related callbacks
+>>    iommu: Remove aux-domain related interfaces and iommu_ops
+>>    iommu: Remove apply_resv_region
+>>    drm/nouveau/device: Get right pgsize_bitmap of iommu_domain
+>>    iommu: Use right way to retrieve iommu_ops
+>>    iommu: Remove unused argument in is_attach_deferred
+>>    iommu: Use dev_iommu_ops() helper
+>>    iommu: Split struct iommu_ops
+> 
+> Really cool, thanks for doing this, Baolu! I am currently running some
+> tests on this series to make sure there are no build breakages. And I
+> agree with Jason that:
+> 
+> 	iommu: Use right way to retrieve iommu_ops and
+> 	iommu: Use dev_iommu_ops() helper
+> 
+> can be combined into one patch. Splitting iommu_ops was something I have
+> been thinking about for some time, so thanks again for doing this.
 
-Fixes: 4f9e1ba6de45 ("mctp: Add tracepoints for tag/key handling")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
-v2: change the Fixes: line
+You are welcome!
 
- net/mctp/route.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+Do you want me to send a new version with below changes:
 
-diff --git a/net/mctp/route.c b/net/mctp/route.c
-index 17e3482aa770..0c4c56e1bd6e 100644
---- a/net/mctp/route.c
-+++ b/net/mctp/route.c
-@@ -419,13 +419,14 @@ static int mctp_route_input(struct mctp_route *route, struct sk_buff *skb)
- 			 * this function.
- 			 */
- 			rc = mctp_key_add(key, msk);
--			if (rc)
-+			if (rc) {
- 				kfree(key);
-+			} else {
-+				trace_mctp_key_acquire(key);
- 
--			trace_mctp_key_acquire(key);
--
--			/* we don't need to release key->lock on exit */
--			mctp_key_unref(key);
-+				/* we don't need to release key->lock on exit */
-+				mctp_key_unref(key);
-+			}
- 			key = NULL;
- 
- 		} else {
--- 
-2.26.3
+- Remove WARN_ON() in dev_iommu_ops();
+- Merge above two patches.
 
+Or, you can change above yourself?
+
+> 
+> Regards,
+> 
+> 	Joerg
+
+Best regards,
+baolu

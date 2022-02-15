@@ -2,89 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 046B64B5F12
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 01:31:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE8C4B5F1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 01:32:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232557AbiBOAb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 19:31:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34664 "EHLO
+        id S232585AbiBOAcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 19:32:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232355AbiBOAb2 (ORCPT
+        with ESMTP id S230245AbiBOAcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 19:31:28 -0500
-Received: from so254-9.mailgun.net (so254-9.mailgun.net [198.61.254.9])
-        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 1DE9C11943C
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 16:31:19 -0800 (PST)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1644885079; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: From: References: Cc: To: Subject: MIME-Version: Date:
- Message-ID: Sender; bh=Dg6NmRdYsXIymYqcfOP6WfnOJ5GwUIk9N0UWGtj/16Y=; b=Ndb+chaHlNePs7YvuIvW2YrsByUibARjGh4IO445qyO75UxduMCm6RZ+xqS9NS5PHqDAuypa
- F1loIkp5friaUrZqW4uFWqYLGgqM/DvOOuY2czTv8uRU/N/z588R+1zdS0wcmhzmIZJm6k8G
- mgwb80Bl+/9Vkuu0KlP1KrpSaWo=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 620af455110bf0c781596601 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 15 Feb 2022 00:31:17
- GMT
-Sender: hemantk=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B7528C43617; Tue, 15 Feb 2022 00:31:16 +0000 (UTC)
+        Mon, 14 Feb 2022 19:32:10 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCA1119F27;
+        Mon, 14 Feb 2022 16:32:01 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJll2-001pbW-H6; Tue, 15 Feb 2022 00:31:52 +0000
+Date:   Tue, 15 Feb 2022 00:31:52 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
+        will@kernel.org, guoren@kernel.org, bcain@codeaurora.org,
+        geert@linux-m68k.org, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        nickhu@andestech.com, green.hu@gmail.com, dinguyen@kernel.org,
+        shorne@gmail.com, deller@gmx.de, mpe@ellerman.id.au,
+        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        hca@linux.ibm.com, dalias@libc.org, davem@davemloft.net,
+        richard@nod.at, x86@kernel.org, jcmvbkbc@gmail.com,
+        ebiederm@xmission.com, akpm@linux-foundation.org, ardb@kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH 05/14] uaccess: add generic __{get,put}_kernel_nofault
+Message-ID: <Ygr0eAA+ZR1eX0wb@zeniv-ca.linux.org.uk>
+References: <20220214163452.1568807-1-arnd@kernel.org>
+ <20220214163452.1568807-6-arnd@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220214163452.1568807-6-arnd@kernel.org>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-Received: from [192.168.1.14] (cpe-76-176-73-171.san.res.rr.com [76.176.73.171])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: hemantk)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3A525C4338F;
-        Tue, 15 Feb 2022 00:31:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 3A525C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Message-ID: <7c11e976-b87a-5834-40a3-bca4ce499fa5@codeaurora.org>
-Date:   Mon, 14 Feb 2022 16:31:14 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v3 05/25] bus: mhi: Make mhi_state_str[] array static
- inline and move to common.h
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        mhi@lists.linux.dev
-Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
-        quic_jhugo@quicinc.com, vinod.koul@linaro.org,
-        bjorn.andersson@linaro.org, dmitry.baryshkov@linaro.org,
-        quic_vbadigan@quicinc.com, quic_cang@quicinc.com,
-        quic_skananth@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, elder@linaro.org
-References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
- <20220212182117.49438-6-manivannan.sadhasivam@linaro.org>
-From:   Hemant Kumar <hemantk@codeaurora.org>
-In-Reply-To: <20220212182117.49438-6-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/12/2022 10:20 AM, Manivannan Sadhasivam wrote:
-> mhi_state_str[] array could be used by MHI endpoint stack also. So let's
-> make the array as "static inline function" and move it inside the
-> "common.h" header so that the endpoint stack could also make use of it.
+On Mon, Feb 14, 2022 at 05:34:43PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> All architectures that don't provide __{get,put}_kernel_nofault() yet
+> can implement this on top of __{get,put}_user.
+> 
+> Add a generic version that lets everything use the normal
+> copy_{from,to}_kernel_nofault() code based on these, removing the last
+> use of get_fs()/set_fs() from architecture-independent code.
 
-Reviewed-by: Hemant Kumar <hemantk@codeaurora.org>
+I'd put the list of those architectures (AFAICS, that's alpha, ia64,
+microblaze, nds32, nios2, openrisc, sh, sparc32, xtensa) into commit
+message - it's not that hard to find out, but...
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
-Forum, a Linux Foundation Collaborative Project
+And AFAICS, you've missed nios2 - see
+#define __put_user(x, ptr) put_user(x, ptr)
+in there.  nds32 oddities are dealt with earlier in the series, this
+one is not...

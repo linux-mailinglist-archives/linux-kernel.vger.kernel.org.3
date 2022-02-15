@@ -2,166 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B6B4B6143
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 04:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 457444B6155
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 04:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232802AbiBODCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 22:02:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59094 "EHLO
+        id S233610AbiBODFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 22:05:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiBODCm (ORCPT
+        with ESMTP id S229734AbiBODFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 22:02:42 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371B5BB542
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 19:02:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644894153; x=1676430153;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AUs8ymZG9SQnxuySh1l8N3Qx5H6Xi58r4LlgvreFGgE=;
-  b=Bvu9SuULRQXTSkZZgHDPdRsRPcGBjO4uhFKm3qD97W08ARf1cftHd0vQ
-   KLGMsHBhB1SO5bcuKbEAoxK7AqU7BKw7Uyu+ugsBOBSNXAcZJnz9RjYun
-   ZQ0xLObSd8UGYEs18ZGELZ0itpN1JVC9o6OfMRDWR1Y0Kf+As7hKCZ3ln
-   91YlbWlKDOEx0cCLktUL1YlNdSYG/W5l/tXO9STXk6TGBuzrwW6lO8grm
-   u7LV0JhvD1JU7Loi6jxjBMXhkTbSKnienECgjc5FW22WL5tu6Cq+rwRgd
-   z6SoSAob5avexEYsd1ekBO0gFr6OC/XB7UIltoOtJBcKcKLnGNXTEvmDh
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="233783202"
-X-IronPort-AV: E=Sophos;i="5.88,369,1635231600"; 
-   d="scan'208";a="233783202"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 19:02:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,369,1635231600"; 
-   d="scan'208";a="632499861"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 14 Feb 2022 19:02:30 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nJo6n-0009DC-IR; Tue, 15 Feb 2022 03:02:29 +0000
-Date:   Tue, 15 Feb 2022 11:02:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 38/39]
- fs/netfs/crypto.c:76:10: warning: comparison of distinct pointer types
- ('typeof (len) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12) -
- offset) *' (aka 'unsigned long *'))
-Message-ID: <202202151033.vkfJ9MLG-lkp@intel.com>
+        Mon, 14 Feb 2022 22:05:38 -0500
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 19:05:27 PST
+Received: from qq.com (smtpbg409.qq.com [113.96.223.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B59BDE62;
+        Mon, 14 Feb 2022 19:05:27 -0800 (PST)
+X-QQ-mid: bizesmtp9t1644894208tiionbskv
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 15 Feb 2022 11:03:00 +0800 (CST)
+X-QQ-SSF: 0140000000000080F000B00A0000000
+X-QQ-FEAT: jaWQEnoziVEUFUcA33dfgmTiwLw8MbNPBILov2MQ4JKYsJ6wIWQzKRMbg8xV6
+        eJRtvw8z5vIpSwcFqa0JUw141zSmlzCFz5eX/Cxo6LP9/lCBhB0G1rOkYicOv2enldJj92W
+        f0Utccb31SsGTS5fhIkPPBT8u/6JHM/63xQURrKzdBe0HKd+s1Ohe5dezrJGyGjSIVQjxAb
+        w/IN7YF7mt3eLTa1WJSKxOOWHDl3ZpyHsHJECnvGMS9NFmVYlvuHx+s9hoNpvwXmaa2ppi5
+        I22i0C+VjPBxRTVP2Vn3SlBMfHpKZuO6wYzpaJ14mIrMXaW1YKn2bfy8qsWUTbflQtVZ68q
+        XbYqjZLRTO55uRCYwI=
+X-QQ-GoodBg: 2
+From:   sujiaxun <sujiaxun@uniontech.com>
+To:     mcgrof@kernel.org
+Cc:     keescook@chromium.org, yzaikin@google.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        sujiaxun <sujiaxun@uniontech.com>
+Subject: [PATCH] mm: move oom_kill sysctls to their own file
+Date:   Tue, 15 Feb 2022 11:02:57 +0800
+Message-Id: <20220215030257.11150-1-sujiaxun@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign1
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   b995bc7182f60aa2b4d8930a7446f10dfbcebcc2
-commit: 8573fb679d751564f10601acf56465d777132b03 [38/39] netfs: Perform content encryption
-config: i386-randconfig-a003-20220214 (https://download.01.org/0day-ci/archive/20220215/202202151033.vkfJ9MLG-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/8573fb679d751564f10601acf56465d777132b03
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout 8573fb679d751564f10601acf56465d777132b03
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
+kernel/sysctl.c is a kitchen sink where everyone leaves their dirty
+dishes, this makes it very difficult to maintain.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+To help with this maintenance let's start by moving sysctls to places
+where they actually belong.  The proc sysctl maintainers do not want to
+know what sysctl knobs you wish to add for your own piece of code, we just
+care about the core logic.
 
-All warnings (new ones prefixed by >>):
+So move the oom_kill sysctls to its own file.
 
->> fs/netfs/crypto.c:76:10: warning: comparison of distinct pointer types ('typeof (len) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12) - offset) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-                           seg = min(len, PAGE_SIZE - offset);
-                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +76 fs/netfs/crypto.c
-
-    45	
-    46	/*
-    47	 * Populate a scatterlist from folios in an xarray.
-    48	 */
-    49	static int netfs_xarray_to_sglist(struct xarray *xa, loff_t pos, size_t len,
-    50					  struct scatterlist *sg, unsigned int n_sg)
-    51	{
-    52		struct scatterlist *p = sg;
-    53		struct folio *folio = NULL;
-    54		size_t seg, offset, skip = 0;
-    55		loff_t start = pos;
-    56		pgoff_t index = start >> PAGE_SHIFT;
-    57		int j;
-    58	
-    59		XA_STATE(xas, xa, index);
-    60	
-    61		sg_init_table(sg, n_sg);
-    62	
-    63		rcu_read_lock();
-    64	
-    65		xas_for_each(&xas, folio, ULONG_MAX) {
-    66			if (xas_retry(&xas, folio))
-    67				continue;
-    68			if (WARN_ON(xa_is_value(folio)) || WARN_ON(folio_test_hugetlb(folio)))
-    69				break;
-    70			for (j = (folio_index(folio) < index) ? index - folio_index(folio) : 0;
-    71			     j < folio_nr_pages(folio); j++
-    72			     ) {
-    73				struct page *subpage = folio_file_page(folio, j);
-    74	
-    75				offset = (pos + skip) & ~PAGE_MASK;
-  > 76				seg = min(len, PAGE_SIZE - offset);
-    77	
-    78				sg_set_page(p++, subpage, seg, offset);
-    79	
-    80				len -= seg;
-    81				skip += seg;
-    82				if (len == 0)
-    83					break;
-    84			}
-    85			if (len == 0)
-    86				break;
-    87		}
-    88	
-    89		rcu_read_unlock();
-    90		if (len > 0) {
-    91			kdebug("*** Insufficient source (%zx)", len);
-    92			//WARN_ON(len > 0);
-    93			return -EIO;
-    94		}
-    95	
-    96		sg_mark_end(p - 1);
-    97		return p - sg;
-    98	}
-    99	
-
+Signed-off-by: sujiaxun <sujiaxun@uniontech.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ include/linux/oom.h |  4 ----
+ kernel/sysctl.c     | 23 -----------------------
+ mm/oom_kill.c       | 37 ++++++++++++++++++++++++++++++++++---
+ 3 files changed, 34 insertions(+), 30 deletions(-)
+
+diff --git a/include/linux/oom.h b/include/linux/oom.h
+index 2db9a1432511..02d1e7bbd8cd 100644
+--- a/include/linux/oom.h
++++ b/include/linux/oom.h
+@@ -123,8 +123,4 @@ extern void oom_killer_enable(void);
+
+ extern struct task_struct *find_lock_task_mm(struct task_struct *p);
+
+-/* sysctls */
+-extern int sysctl_oom_dump_tasks;
+-extern int sysctl_oom_kill_allocating_task;
+-extern int sysctl_panic_on_oom;
+ #endif /* _INCLUDE_LINUX_OOM_H */
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 788b9a34d5ab..40d822fbb6d5 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -2352,29 +2352,6 @@ static struct ctl_table vm_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_TWO,
+ 	},
+-	{
+-		.procname	= "panic_on_oom",
+-		.data		= &sysctl_panic_on_oom,
+-		.maxlen		= sizeof(sysctl_panic_on_oom),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec_minmax,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_TWO,
+-	},
+-	{
+-		.procname	= "oom_kill_allocating_task",
+-		.data		= &sysctl_oom_kill_allocating_task,
+-		.maxlen		= sizeof(sysctl_oom_kill_allocating_task),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec,
+-	},
+-	{
+-		.procname	= "oom_dump_tasks",
+-		.data		= &sysctl_oom_dump_tasks,
+-		.maxlen		= sizeof(sysctl_oom_dump_tasks),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec,
+-	},
+ 	{
+ 		.procname	= "overcommit_ratio",
+ 		.data		= &sysctl_overcommit_ratio,
+diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+index 6b875acabd1e..c720c0710911 100644
+--- a/mm/oom_kill.c
++++ b/mm/oom_kill.c
+@@ -52,9 +52,35 @@
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/oom.h>
+
+-int sysctl_panic_on_oom;
+-int sysctl_oom_kill_allocating_task;
+-int sysctl_oom_dump_tasks = 1;
++static int sysctl_panic_on_oom;
++static int sysctl_oom_kill_allocating_task;
++static int sysctl_oom_dump_tasks = 1;
++
++static struct ctl_table vm_oom_kill_table[] = {
++	{
++		.procname	= "panic_on_oom",
++		.data		= &sysctl_panic_on_oom,
++		.maxlen		= sizeof(sysctl_panic_on_oom),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_TWO,
++	},
++	{
++		.procname	= "oom_kill_allocating_task",
++		.data		= &sysctl_oom_kill_allocating_task,
++		.maxlen		= sizeof(sysctl_oom_kill_allocating_task),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec,
++	},
++	{
++		.procname	= "oom_dump_tasks",
++		.data		= &sysctl_oom_dump_tasks,
++		.maxlen		= sizeof(sysctl_oom_dump_tasks),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec,
++	}
++};
+
+ /*
+  * Serializes oom killer invocations (out_of_memory()) from all contexts to
+@@ -680,6 +706,11 @@ static void wake_oom_reaper(struct task_struct *tsk)
+ static int __init oom_init(void)
+ {
+ 	oom_reaper_th = kthread_run(oom_reaper, NULL, "oom_reaper");
++
++	#ifdef CONFIG_SYSCTL
++		register_sysctl_init("vm", vm_oom_kill_table);
++	#endif
++
+ 	return 0;
+ }
+ subsys_initcall(oom_init)
+--
+2.20.1
+
+
+

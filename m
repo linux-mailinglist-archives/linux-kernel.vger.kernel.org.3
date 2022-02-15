@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 069604B69D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF35A4B69CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236736AbiBOKyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 05:54:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46456 "EHLO
+        id S236721AbiBOKyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 05:54:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbiBOKyi (ORCPT
+        with ESMTP id S229510AbiBOKyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 05:54:38 -0500
+        Tue, 15 Feb 2022 05:54:37 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD42C6220;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE45D76D4;
         Tue, 15 Feb 2022 02:54:28 -0800 (PST)
-Date:   Tue, 15 Feb 2022 10:54:24 -0000
+Date:   Tue, 15 Feb 2022 10:54:25 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1644922466;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Gq8JkGp7txklDWvEWlo9O1PgemKRDCD3AFK4Be8fUDU=;
-        b=zEByKY6nS3XXm6LTHvcMVlReoFpuigW47wjkpjjMfvsvehIlDtNDd57S3TpByMkWX9282u
-        uPKku3w2HzVt0xgDWT0A4SE2eTQmxGDe8WL7dozlD7gr7qv6EjDzkBiqP1tOXQK+5TEPag
-        t56nlrbriXQmKgHsO6p8s+PzfaiExdqwVCzQwB5D0fDwIKiiSgGNFpkvuT2cAB4dGXpvm9
-        D+DoYmwjke/Avwan72NNiR8FvyAhTF2TV/MoXP+3Gln5w91fu3Yg8OrbGo/9Vt14Jcax0Z
-        AUDwl2L4+2o+D8AUByedtSPdSYZO0lDNp04aO6r42XpNQy1O4sKpE68S66n4zA==
+        bh=wZNOpiPv4xzRcQkAXWZySLm81tcK5Rpbr6Rh06TLHcg=;
+        b=zBLc/NV8bkKzAdlD0tg+PFxnAkIWEsX2zC9Wto2dvm8OkHGr3e7pcRTUzZMCwnkmwxc1BZ
+        +aehpu79kFHhfp5EPz9/j0nEdjMGOuC2XxCEz6xv6txUQbArygtb2Nc05gjAk5lESGRkGf
+        Uzi4UXS+OlSWTj3Vm8BkQX468knzuk1O3xCyNDZG08AkkML+2q8fPWOXP3lKKIA6H4M0p8
+        ohJ8WOHR11YCQyBYUHVlrcc4otvRh770Vv8eUHeXFr2K8+ald54/WT4xOpSYCLbkUPUpBd
+        Rl7IGm6JUj77cGFiYdYkv915Vi7QvoxhGKzCnTvgap8/3ZLj7fM5hUg2B2PCjw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1644922466;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,23 +36,23 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Gq8JkGp7txklDWvEWlo9O1PgemKRDCD3AFK4Be8fUDU=;
-        b=C4D+GLTgsQIqoy5nuB7I3KHx4MiI5Jlk1BUAes1XXd76zZXFU8l829xKs7t+BX1TFp5Odt
-        19WzDsuTcn0cQfBA==
+        bh=wZNOpiPv4xzRcQkAXWZySLm81tcK5Rpbr6Rh06TLHcg=;
+        b=H1jN74VOVd/ksA+v+BreiY3b0yd7WFuKE4YlTRY7FRIXOcrFWr6xJNRnugAQNArjYRRhE+
+        3DC+0NtP1out7WBQ==
 From:   "tip-bot2 for Fenghua Yu" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/pasid] Documentation/x86: Update documentation for SVA
- (Shared Virtual Addressing)
+Subject: [tip: x86/pasid] tools/objtool: Check for use of the ENQCMD
+ instruction in the kernel
 Cc:     Fenghua Yu <fenghua.yu@intel.com>, Borislav Petkov <bp@suse.de>,
         Tony Luck <tony.luck@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220207230254.3342514-12-fenghua.yu@intel.com>
-References: <20220207230254.3342514-12-fenghua.yu@intel.com>
+In-Reply-To: <20220207230254.3342514-11-fenghua.yu@intel.com>
+References: <20220207230254.3342514-11-fenghua.yu@intel.com>
 MIME-Version: 1.0
-Message-ID: <164492246461.16921.16965885697297666355.tip-bot2@tip-bot2>
+Message-ID: <164492246559.16921.6730975718917008633.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,92 +69,68 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/pasid branch of tip:
 
-Commit-ID:     83aa52ffed5d35a08e24452d0471e1684075cdf8
-Gitweb:        https://git.kernel.org/tip/83aa52ffed5d35a08e24452d0471e1684075cdf8
+Commit-ID:     6e3133d901e89a4ba83ce7ebd8c27bbeaa9ed1f2
+Gitweb:        https://git.kernel.org/tip/6e3133d901e89a4ba83ce7ebd8c27bbeaa9ed1f2
 Author:        Fenghua Yu <fenghua.yu@intel.com>
-AuthorDate:    Mon, 07 Feb 2022 15:02:54 -08:00
+AuthorDate:    Mon, 07 Feb 2022 15:02:53 -08:00
 Committer:     Borislav Petkov <bp@suse.de>
 CommitterDate: Tue, 15 Feb 2022 11:31:43 +01:00
 
-Documentation/x86: Update documentation for SVA (Shared Virtual Addressing)
+tools/objtool: Check for use of the ENQCMD instruction in the kernel
 
-Adjust the documentation to the new way how a PASID is being allocated,
-freed and fixed up.
+The ENQCMD instruction implicitly accesses the PASID_MSR to fill in the
+pasid field of the descriptor being submitted to an accelerator. But
+there is no precise (and stable across kernel changes) point at which
+the PASID_MSR is updated from the value for one task to the next.
 
-Based on a patch by Ashok Raj <ashok.raj@intel.com>
+Kernel code that uses accelerators must always use the ENQCMDS instruction
+which does not access the PASID_MSR.
 
-  [ bp: Massage commit message, fix htmldocs build warning ]
+Check for use of the ENQCMD instruction in the kernel and warn on its
+usage.
 
 Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Reviewed-by: Tony Luck <tony.luck@intel.com>
-Acked-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20220207230254.3342514-12-fenghua.yu@intel.com
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Link: https://lore.kernel.org/r/20220207230254.3342514-11-fenghua.yu@intel.com
 ---
- Documentation/x86/sva.rst | 53 +++++++++++++++++++++++++++++---------
- 1 file changed, 41 insertions(+), 12 deletions(-)
+ tools/objtool/arch/x86/decode.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/x86/sva.rst b/Documentation/x86/sva.rst
-index 076efd5..2e9b8b0 100644
---- a/Documentation/x86/sva.rst
-+++ b/Documentation/x86/sva.rst
-@@ -104,18 +104,47 @@ The MSR must be configured on each logical CPU before any application
- thread can interact with a device. Threads that belong to the same
- process share the same page tables, thus the same MSR value.
+diff --git a/tools/objtool/arch/x86/decode.c b/tools/objtool/arch/x86/decode.c
+index c10ef78..479e769 100644
+--- a/tools/objtool/arch/x86/decode.c
++++ b/tools/objtool/arch/x86/decode.c
+@@ -112,7 +112,7 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
+ 	const struct elf *elf = file->elf;
+ 	struct insn insn;
+ 	int x86_64, ret;
+-	unsigned char op1, op2,
++	unsigned char op1, op2, op3,
+ 		      rex = 0, rex_b = 0, rex_r = 0, rex_w = 0, rex_x = 0,
+ 		      modrm = 0, modrm_mod = 0, modrm_rm = 0, modrm_reg = 0,
+ 		      sib = 0, /* sib_scale = 0, */ sib_index = 0, sib_base = 0;
+@@ -139,6 +139,7 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
  
--PASID is cleared when a process is created. The PASID allocation and MSR
--programming may occur long after a process and its threads have been created.
--One thread must call iommu_sva_bind_device() to allocate the PASID for the
--process. If a thread uses ENQCMD without the MSR first being populated, a #GP
--will be raised. The kernel will update the PASID MSR with the PASID for all
--threads in the process. A single process PASID can be used simultaneously
--with multiple devices since they all share the same address space.
--
--One thread can call iommu_sva_unbind_device() to free the allocated PASID.
--The kernel will clear the PASID MSR for all threads belonging to the process.
--
--New threads inherit the MSR value from the parent.
-+PASID Life Cycle Management
-+===========================
-+
-+PASID is initialized as INVALID_IOASID (-1) when a process is created.
-+
-+Only processes that access SVA-capable devices need to have a PASID
-+allocated. This allocation happens when a process opens/binds an SVA-capable
-+device but finds no PASID for this process. Subsequent binds of the same, or
-+other devices will share the same PASID.
-+
-+Although the PASID is allocated to the process by opening a device,
-+it is not active in any of the threads of that process. It's loaded to the
-+IA32_PASID MSR lazily when a thread tries to submit a work descriptor
-+to a device using the ENQCMD.
-+
-+That first access will trigger a #GP fault because the IA32_PASID MSR
-+has not been initialized with the PASID value assigned to the process
-+when the device was opened. The Linux #GP handler notes that a PASID has
-+been allocated for the process, and so initializes the IA32_PASID MSR
-+and returns so that the ENQCMD instruction is re-executed.
-+
-+On fork(2) or exec(2) the PASID is removed from the process as it no
-+longer has the same address space that it had when the device was opened.
-+
-+On clone(2) the new task shares the same address space, so will be
-+able to use the PASID allocated to the process. The IA32_PASID is not
-+preemptively initialized as the PASID value might not be allocated yet or
-+the kernel does not know whether this thread is going to access the device
-+and the cleared IA32_PASID MSR reduces context switch overhead by xstate
-+init optimization. Since #GP faults have to be handled on any threads that
-+were created before the PASID was assigned to the mm of the process, newly
-+created threads might as well be treated in a consistent way.
-+
-+Due to complexity of freeing the PASID and clearing all IA32_PASID MSRs in
-+all threads in unbind, free the PASID lazily only on mm exit.
-+
-+If a process does a close(2) of the device file descriptor and munmap(2)
-+of the device MMIO portal, then the driver will unbind the device. The
-+PASID is still marked VALID in the PASID_MSR for any threads in the
-+process that accessed the device. But this is harmless as without the
-+MMIO portal they cannot submit new work to the device.
+ 	op1 = insn.opcode.bytes[0];
+ 	op2 = insn.opcode.bytes[1];
++	op3 = insn.opcode.bytes[2];
  
- Relationships
- =============
+ 	if (insn.rex_prefix.nbytes) {
+ 		rex = insn.rex_prefix.bytes[0];
+@@ -491,6 +492,14 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
+ 			/* nopl/nopw */
+ 			*type = INSN_NOP;
+ 
++		} else if (op2 == 0x38 && op3 == 0xf8) {
++			if (insn.prefixes.nbytes == 1 &&
++			    insn.prefixes.bytes[0] == 0xf2) {
++				/* ENQCMD cannot be used in the kernel. */
++				WARN("ENQCMD instruction at %s:%lx", sec->name,
++				     offset);
++			}
++
+ 		} else if (op2 == 0xa0 || op2 == 0xa8) {
+ 
+ 			/* push fs/gs */

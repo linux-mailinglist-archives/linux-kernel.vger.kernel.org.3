@@ -2,110 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 363DD4B7535
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB16A4B76C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243525AbiBOTnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 14:43:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54658 "EHLO
+        id S243777AbiBOTpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 14:45:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234521AbiBOTng (ORCPT
+        with ESMTP id S235781AbiBOTpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 14:43:36 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F263F882
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 11:43:26 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id 124so31274636ybn.11
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 11:43:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fcf+8o+t6+WnOwFW3ZI0zrWbIEyxTwbnoswnCVbg8F8=;
-        b=QOKtYm93Mb7Nl3MP7JzAntRwnrHs7RWLTU/tCeRP+GM/Jn80ebbb/qwZx5QaX+mewI
-         WUUZuU6nr/9iu5TGPVJhCtVn0+ucVo4HNyV16DQluiaDXFfXynO0wi9IfmRHfy7AMV3Y
-         enPQ2mNYTsv5GfwrdbeHMtTUFex+HrNNLZn/CaLxvTvNAGfSnEUEJgzfZM3ql+B1fRKf
-         Uwxdzq5t7P7l8ohDBs6ISXllYWkYeAtu9rlf3JopT8ubliFCWgGa3QyOd8tlZIIshh/Y
-         beOdvGoM6IwF8SWPlasZQrI4HbcRDD404mYq2HSLETqVVrh8cL4W5EAGq8C3ZQiYQQS/
-         VPoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fcf+8o+t6+WnOwFW3ZI0zrWbIEyxTwbnoswnCVbg8F8=;
-        b=RGfXnX9vC6RiCK8tXsrhv9lTZoFsM23fWv9p3oCTXPyKpAjq+SlUHntKjxpMyTkVsZ
-         fJIBJP/ii9o/AaRWPKlPafXV1hQR0BC1eomPw1gHc8Bg6nrKI/0l9I4+P/2+LxDwFUKw
-         MTt5UsrU8mIz9KIh7uxMxuvaK55YpIphIL7Sfpog9/gkMOiYEX0ewBxvUWLRS7TM3QFW
-         fBFbqi8sGHTp9BaFqNBJ4gGtkdid0oUtZV4Ws0s1k2J9opurvG3KEqrTWq1J3zUkSvfx
-         AyMUiRPZZTPmS2SWv+mKA/uI1n0DNBLIVrfM78sibEgRSxJEHclC1BJoGDtDD0MjC3he
-         hn9A==
-X-Gm-Message-State: AOAM531AbMUTR2GEUc3WpDEN64MeGT9GPzekuo0YpbpGpGt3jSL/Zb0K
-        OCQMECaBLxhfYpm84q8xDVeT5g6qTodUXHNRWdtIfw==
-X-Google-Smtp-Source: ABdhPJw0Ygn9sW+6D5SxaOXJ0cWbKOO0bYs2UrcFSKQtZHUxCfSP7Ewfx33QU+tl0IwKHKZnRZl9PCxf9unHvYZcJTE=
-X-Received: by 2002:a25:7a47:: with SMTP id v68mr519462ybc.488.1644954205145;
- Tue, 15 Feb 2022 11:43:25 -0800 (PST)
+        Tue, 15 Feb 2022 14:45:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1B046676;
+        Tue, 15 Feb 2022 11:45:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 273EE6176A;
+        Tue, 15 Feb 2022 19:45:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C77AAC340EC;
+        Tue, 15 Feb 2022 19:44:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644954299;
+        bh=IvBtOuBKJRkjWsCzqLuJQUQ4HwxeRxYRUYk6C1Y7qwE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2tSqBkeZO6Oqn3vmQ3iYbfTJmx4u9cWNnk+yYaA5DWhGET4q0+GZ1Tzr92x+A85l5
+         Nl5PU33/QkSFmyQnQddpQmcvi9xOZPc6WVAv6A7Ie643746w3H/PkY7TREobguku2Z
+         bc6N48d1+EFaPv3rpq53GPEG9+7MhPukta7VW/x4=
+Date:   Tue, 15 Feb 2022 20:44:56 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Brian Geffon <bgeffon@google.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Willis Kung <williskung@google.com>,
+        Guenter Roeck <groeck@google.com>,
+        Borislav Petkov <bp@suse.de>,
+        Andy Lutomirski <luto@kernel.org>, stable@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH stable 5.4,5.10] x86/fpu: Correct pkru/xstate
+ inconsistency
+Message-ID: <YgwCuGcg6adXAXIz@kroah.com>
+References: <543efc25-9b99-53cd-e305-d8b4d917b64b@intel.com>
+ <20220215192233.8717-1-bgeffon@google.com>
 MIME-Version: 1.0
-References: <00000000000072ef2c05d7f81950@google.com> <CAHbLzkpr=xHC7C2+wkOGUB24924T4L1Lx_v+m1Ke8Ku3ym7wYw@mail.gmail.com>
- <Ygt5cAS78BFxVwkg@dhcp22.suse.cz> <CAJuCfpGf8HLh=tfrnK3VFd2QO9bgzuM9HyDY8PYYxJkbdbmYRA@mail.gmail.com>
- <CAHbLzkpKGq8XaLx3G1=oJ-TsZiqC+A+CaVK5=Mjzo1Jo0qA3DQ@mail.gmail.com>
- <CAJuCfpE833u+Z909yaLgGEJV7O10fVw-_eG1nH=w4b3+PbxrLg@mail.gmail.com> <YgwApdvLhxFU26j5@dhcp22.suse.cz>
-In-Reply-To: <YgwApdvLhxFU26j5@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 15 Feb 2022 11:43:14 -0800
-Message-ID: <CAJuCfpGixCqZDAqokxCrQ1YjMb+32Y77U5jHkULKM0htnR19MQ@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in __oom_reap_task_mm
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Yang Shi <shy828301@gmail.com>,
-        syzbot <syzbot+2ccf63a4bd07cf39cab0@syzkaller.appspotmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220215192233.8717-1-bgeffon@google.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 11:36 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Tue 15-02-22 10:10:53, Suren Baghdasaryan wrote:
-> > On Tue, Feb 15, 2022 at 9:53 AM Yang Shi <shy828301@gmail.com> wrote:
-> [...]
-> > > Isn't the below race possible?
-> > >
-> > >           CPU A                                     CPU B
-> > > exiting:
-> > >   mmap_write_lock
-> > >   remove_vma()
-> > >   mmap_write_unlock
-> > >                                                 process_mrelease:
-> > >                                                   mmap_read_lock
-> > >                                                   __oom_reap_task_mm
-> > >                                                   mmap_read_unlock
-> > >
-> >
-> > Sure, that sequence (would not call it a race) is possible but in this
-> > case __oom_reap_task_mm will find no vmas in the mm because exit_mmap
-> > freed and removed all of them.
->
-> I didn't really have chance to have a closer look but I do not see
-> exit_mmap doing mm->mmap = NULL so the pointer can be a freed vma unless
-> I am missing something. I thought we've had it in your patches? Has this
-> got lost somewhere in the process?
+On Tue, Feb 15, 2022 at 11:22:33AM -0800, Brian Geffon wrote:
+> When eagerly switching PKRU in switch_fpu_finish() it checks that
+> current is not a kernel thread as kernel threads will never use PKRU.
+> It's possible that this_cpu_read_stable() on current_task
+> (ie. get_current()) is returning an old cached value. To resolve this
+> reference next_p directly rather than relying on current.
+> 
+> As written it's possible when switching from a kernel thread to a
+> userspace thread to observe a cached PF_KTHREAD flag and never restore
+> the PKRU. And as a result this issue only occurs when switching
+> from a kernel thread to a userspace thread, switching from a non kernel
+> thread works perfectly fine because all that is considered in that
+> situation are the flags from some other non kernel task and the next fpu
+> is passed in to switch_fpu_finish().
+> 
+> This behavior only exists between 5.2 and 5.13 when it was fixed by a
+> rewrite decoupling PKRU from xstate, in:
+>   commit 954436989cc5 ("x86/fpu: Remove PKRU handling from switch_fpu_finish()")
+> 
+> Unfortunately backporting the fix from 5.13 is probably not realistic as
+> it's part of a 60+ patch series which rewrites most of the PKRU handling.
+> 
+> Fixes: 0cecca9d03c9 ("x86/fpu: Eager switch PKRU state")
+> Signed-off-by: Brian Geffon <bgeffon@google.com>
+> Signed-off-by: Willis Kung <williskung@google.com>
+> Tested-by: Willis Kung <williskung@google.com>
+> Cc: <stable@vger.kernel.org> # v5.4.x
+> Cc: <stable@vger.kernel.org> # v5.10.x
+> ---
+>  arch/x86/include/asm/fpu/internal.h | 13 ++++++++-----
+>  arch/x86/kernel/process_32.c        |  6 ++----
+>  arch/x86/kernel/process_64.c        |  6 ++----
+>  3 files changed, 12 insertions(+), 13 deletions(-)
 
-Doh! Yes, it looks like I completely missed the actual pointer. That
-must be it since I don't see any other possibility. Will post a patch
-shortly.
-Thanks!
+So this is ONLY for 5.4.y and 5.10.y?  I'm really really loath to take
+non-upstream changes as 95% of the time (really) it goes wrong.
 
-> --
-> Michal Hocko
-> SUSE Labs
+How was this tested, and what do the maintainers of this subsystem
+think?  And will you be around to fix the bugs in this when they are
+found?
+
+And finally, what's wrong with 60+ patches to backport to fix a severe
+issue?  What's preventing that from happening?  Did you try it and see
+what exactly is involved?
+
+thanks,
+
+greg k-h

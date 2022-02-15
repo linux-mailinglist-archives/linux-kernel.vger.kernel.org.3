@@ -2,115 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8634B60A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 03:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B4F4B60A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 03:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231708AbiBOCBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 21:01:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42832 "EHLO
+        id S232351AbiBOCCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 21:02:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233330AbiBOB7N (ORCPT
+        with ESMTP id S233417AbiBOCBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 20:59:13 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD5B14563E;
-        Mon, 14 Feb 2022 17:57:42 -0800 (PST)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JyPJ10NCDz1FDD4;
-        Tue, 15 Feb 2022 09:53:21 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 15 Feb 2022 09:57:40 +0800
-Received: from [10.174.179.5] (10.174.179.5) by dggpemm500002.china.huawei.com
- (7.185.36.229) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 15 Feb
- 2022 09:57:40 +0800
-Subject: Re: Question about nohz and sysidle
-To:     <paulmck@kernel.org>, Frederic Weisbecker <frederic@kernel.org>
-CC:     Yu Liao <liaoyu15@huawei.com>, <linux-kernel@vger.kernel.org>,
-        <liwei391@huawei.com>, <rcu@vger.kernel.org>
-References: <b881759b-d281-fdc3-71b7-4429d84cd734@huawei.com>
- <b6dc758b-492d-1000-24e5-643e38d3166e@huawei.com>
- <20220214105744.GA663287@lothringen>
- <20220214144920.GW4285@paulmck-ThinkPad-P17-Gen-1>
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Message-ID: <88b4e601-fa52-c852-5ef5-c782ba13d3b0@huawei.com>
-Date:   Tue, 15 Feb 2022 09:57:39 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Mon, 14 Feb 2022 21:01:15 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B18141E2B;
+        Mon, 14 Feb 2022 17:58:41 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id r144so22130896iod.9;
+        Mon, 14 Feb 2022 17:58:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MpC0HbFx2p3TGQJ1EFs6Qo70XuFPuwRTWe9faO3oyE8=;
+        b=k+g258VzTeS11yd/XrsPqAGybZ/1+tU3X4dCuKmZTwZAcpIkq1msesy42xuDExxsVM
+         3d+2p5jTm41zdPxFpVn/wp8E7cMVu+lRE9+AJjf9HuNZ9yEvX8BS1GJ++Dkem2A6mfca
+         OCbXW2GIbBcGI13j0dUAQGgYc8l77GhamnKu33hV6gGAseMu3zQwgEA1klPFBOAeAZ8b
+         qgQSKpDjTPBSAMnMg/tNcmeF6gt60Gc5EVGQ7JQKxG5LJLFffd0N8HsyXTGgCcFIqz9X
+         YSe0Q6YL6Cu2/Iby3vc0ouAQJKLJ8vSapM4VOdet0fChMyJ7caI5Y8kz9kDDzrK91p6Z
+         zJpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MpC0HbFx2p3TGQJ1EFs6Qo70XuFPuwRTWe9faO3oyE8=;
+        b=5HlGXGAGGGqPRFmtOarFywDjyXMV0uKlzgbm7mlQ9aR5iw8mfajTubloah766KhdVI
+         4U4pPnhDQkqB+BN0YFQlR4ZXIzgJjYQyaghIAyV+akKzZirO3z32WTOfvyVXTI+Sny1H
+         fbnexd3eHharaoeZr/f8EH/wqMEA4y+TQWBNJdOFIL8Jas9r0PGimaQAr5GUotUtds2K
+         /liGbnuUh53IfZ9oYeX82dRFknM7s+qndY5qBbs+PJprJUoTd64KO1qb0ujWVaLBEAAF
+         uejDkC/NPXLkvc3XUxaVrsIbxnSo63YZuZhGD8xKBMmnJxfHlzfhMPfxdaZXCsSVXzsR
+         3Mjg==
+X-Gm-Message-State: AOAM532pvCa/oWSVPsQnW7QhB1joxGHkHDR9qHuP+w33s5w/Yuvmtgjc
+        2tenytRVXTrTE1tWsGxfGDOphzNW9CVcJSdGZCMVKutr3ZxI6A==
+X-Google-Smtp-Source: ABdhPJxtWNyq+ixqkJFqqn5kgcn0Amxa9OlctSHR2PVokh2YURyq4KP5yPq5dlOf0BVCUzzI1PjB/LDn/YWQJDoKE74=
+X-Received: by 2002:a02:2b03:: with SMTP id h3mr1131758jaa.196.1644890321137;
+ Mon, 14 Feb 2022 17:58:41 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220214144920.GW4285@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.5]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+From:   Zan Aziz <zanaziz313@gmail.com>
+Date:   Mon, 14 Feb 2022 18:58:30 -0700
+Message-ID: <CAFU3qoarsN9cnxhr26+aRsH7Ewu15gEVdLhRwiVTMmH=4Xgr3Q@mail.gmail.com>
+Subject: Re: [PATCH 5.16 000/203] 5.16.10-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Feb 14, 2022 at 8:02 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.16.10 release.
+> There are 203 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.10-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On 2022/2/14 22:49, Paul E. McKenney wrote:
-> On Mon, Feb 14, 2022 at 11:57:44AM +0100, Frederic Weisbecker wrote:
->> On Mon, Feb 14, 2022 at 05:40:55PM +0800, Yu Liao wrote:
->>
->> Hi Yu Liao,
->>
->>>
->>> On 2022/2/14 16:28, Yu Liao wrote:
->>>> Hi Frederic,
->>>>
->>>> I'm working on an issue about nohz. When NO_HZ_FULL is enabled, CPU 0
->>>> handles the timekeeping duty on behalf of all other CPUs, which means
->>>> CPU 0 never stop tick even in sysidle state. This is a powersaving
->>>> issue.
->>>>
->>>> I found your patchset (nohz: Support sysidle) in the below link.
->>>> https://lore.kernel.org/all/1406569056-30217-1-git-send-email-fweisbec@gmail.com/
->>>>
->>>> But these patches haven't been merged into mainline yet and sysidle
->>>> state detection has been removed by commit fe5ac724d81a (rcu: Remove
->>>> nohz_full full-system-idle state machine) as well.
->>>>
->>>> I tried your patches and it does work, why are we no longer working on
->>>> stopping timekeeping duty when all full dynticks CPUs are idle?
->>
->> Because it was not a priority at that time. There were so many things to handle
->> first (and we are not even done yet) that we postponed that feature until
->> someone ever comes up with powersaving issues on nohz_full. We were waiting for
->> you :)
->>
->> It's possible to unearth this. I think the first step will be to merge the
->> RCU dynticks counters into context tracking, something that was on my queue
->> anyway, and then revive this:
->>
->> 	https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?h=sysidle.2017.05.11a&id=fe5ac724d81a3c7803e60c2232718f212f3f38d4
-> 
-> Given a valid use case, getting that functionality back would be fine
-> by me.  But yes, properly merging RCU dynticks into context tracking
-> would reduce the resulting idle-entry/exit performance penalty, so it
-> would be good to do that first.
+Hi Greg,
 
-I have came across the same issue. The original email is as below.
- https://www.spinics.net/lists/kernel/msg4131382.html
-But unfortunately, I also sent to the old email address.
+Compiled and booted on my test system Lenovo P50s: Intel Core i7
+No emergency and critical messages in the dmesg
 
-In my situation, all the CPUs are in the same power domain. When nohz_full is
-enabled, if one of the CPUs keep receiving tick interrupts, all the CPUs can not
-be put into powerdown state, even though all other CPUs are idle.
+./perf bench sched all
+# Running sched/messaging benchmark...
+# 20 sender and receiver processes per group
+# 10 groups == 400 processes run
 
-Thanks,
-Xiongfeng
+     Total time: 0.449 [sec]
 
-> 
-> 							Thanx, Paul
-> .
-> 
+# Running sched/pipe benchmark...
+# Executed 1000000 pipe operations between two processes
+
+     Total time: 8.687 [sec]
+
+       8.687780 usecs/op
+         115104 ops/sec
+
+Tested-by: Zan Aziz <zanaziz313@gmail.com>
+
+Thanks
+-Zan

@@ -2,177 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 457444B6155
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 04:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73EF84B614F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 04:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233610AbiBODFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 22:05:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60286 "EHLO
+        id S233401AbiBODEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 22:04:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiBODFi (ORCPT
+        with ESMTP id S229734AbiBODD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 22:05:38 -0500
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 19:05:27 PST
-Received: from qq.com (smtpbg409.qq.com [113.96.223.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B59BDE62;
-        Mon, 14 Feb 2022 19:05:27 -0800 (PST)
-X-QQ-mid: bizesmtp9t1644894208tiionbskv
-Received: from localhost.localdomain (unknown [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 15 Feb 2022 11:03:00 +0800 (CST)
-X-QQ-SSF: 0140000000000080F000B00A0000000
-X-QQ-FEAT: jaWQEnoziVEUFUcA33dfgmTiwLw8MbNPBILov2MQ4JKYsJ6wIWQzKRMbg8xV6
-        eJRtvw8z5vIpSwcFqa0JUw141zSmlzCFz5eX/Cxo6LP9/lCBhB0G1rOkYicOv2enldJj92W
-        f0Utccb31SsGTS5fhIkPPBT8u/6JHM/63xQURrKzdBe0HKd+s1Ohe5dezrJGyGjSIVQjxAb
-        w/IN7YF7mt3eLTa1WJSKxOOWHDl3ZpyHsHJECnvGMS9NFmVYlvuHx+s9hoNpvwXmaa2ppi5
-        I22i0C+VjPBxRTVP2Vn3SlBMfHpKZuO6wYzpaJ14mIrMXaW1YKn2bfy8qsWUTbflQtVZ68q
-        XbYqjZLRTO55uRCYwI=
-X-QQ-GoodBg: 2
-From:   sujiaxun <sujiaxun@uniontech.com>
-To:     mcgrof@kernel.org
-Cc:     keescook@chromium.org, yzaikin@google.com,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        sujiaxun <sujiaxun@uniontech.com>
-Subject: [PATCH] mm: move oom_kill sysctls to their own file
-Date:   Tue, 15 Feb 2022 11:02:57 +0800
-Message-Id: <20220215030257.11150-1-sujiaxun@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Mon, 14 Feb 2022 22:03:57 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0512EBD88B;
+        Mon, 14 Feb 2022 19:03:49 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJo7z-001r4A-EX; Tue, 15 Feb 2022 03:03:43 +0000
+Date:   Tue, 15 Feb 2022 03:03:43 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
+        will@kernel.org, guoren@kernel.org, bcain@codeaurora.org,
+        geert@linux-m68k.org, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        nickhu@andestech.com, green.hu@gmail.com, dinguyen@kernel.org,
+        shorne@gmail.com, deller@gmx.de, mpe@ellerman.id.au,
+        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        hca@linux.ibm.com, dalias@libc.org, davem@davemloft.net,
+        richard@nod.at, x86@kernel.org, jcmvbkbc@gmail.com,
+        ebiederm@xmission.com, akpm@linux-foundation.org, ardb@kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH 14/14] uaccess: drop set_fs leftovers
+Message-ID: <YgsYD2nW9GjWJtn5@zeniv-ca.linux.org.uk>
+References: <20220214163452.1568807-1-arnd@kernel.org>
+ <20220214163452.1568807-15-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign1
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220214163452.1568807-15-arnd@kernel.org>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel/sysctl.c is a kitchen sink where everyone leaves their dirty
-dishes, this makes it very difficult to maintain.
+On Mon, Feb 14, 2022 at 05:34:52PM +0100, Arnd Bergmann wrote:
+> diff --git a/arch/parisc/include/asm/futex.h b/arch/parisc/include/asm/futex.h
+> index b5835325d44b..2f4a1b1ef387 100644
+> --- a/arch/parisc/include/asm/futex.h
+> +++ b/arch/parisc/include/asm/futex.h
+> @@ -99,7 +99,7 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
+>  	/* futex.c wants to do a cmpxchg_inatomic on kernel NULL, which is
+>  	 * our gateway page, and causes no end of trouble...
+>  	 */
+> -	if (uaccess_kernel() && !uaddr)
+> +	if (!uaddr)
+>  		return -EFAULT;
 
-To help with this maintenance let's start by moving sysctls to places
-where they actually belong.  The proc sysctl maintainers do not want to
-know what sysctl knobs you wish to add for your own piece of code, we just
-care about the core logic.
+	Huh?  uaccess_kernel() is removed since it becomes always false now,
+so this looks odd.
 
-So move the oom_kill sysctls to its own file.
-
-Signed-off-by: sujiaxun <sujiaxun@uniontech.com>
----
- include/linux/oom.h |  4 ----
- kernel/sysctl.c     | 23 -----------------------
- mm/oom_kill.c       | 37 ++++++++++++++++++++++++++++++++++---
- 3 files changed, 34 insertions(+), 30 deletions(-)
-
-diff --git a/include/linux/oom.h b/include/linux/oom.h
-index 2db9a1432511..02d1e7bbd8cd 100644
---- a/include/linux/oom.h
-+++ b/include/linux/oom.h
-@@ -123,8 +123,4 @@ extern void oom_killer_enable(void);
-
- extern struct task_struct *find_lock_task_mm(struct task_struct *p);
-
--/* sysctls */
--extern int sysctl_oom_dump_tasks;
--extern int sysctl_oom_kill_allocating_task;
--extern int sysctl_panic_on_oom;
- #endif /* _INCLUDE_LINUX_OOM_H */
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 788b9a34d5ab..40d822fbb6d5 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -2352,29 +2352,6 @@ static struct ctl_table vm_table[] = {
- 		.extra1		= SYSCTL_ZERO,
- 		.extra2		= SYSCTL_TWO,
- 	},
--	{
--		.procname	= "panic_on_oom",
--		.data		= &sysctl_panic_on_oom,
--		.maxlen		= sizeof(sysctl_panic_on_oom),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec_minmax,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_TWO,
--	},
--	{
--		.procname	= "oom_kill_allocating_task",
--		.data		= &sysctl_oom_kill_allocating_task,
--		.maxlen		= sizeof(sysctl_oom_kill_allocating_task),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec,
--	},
--	{
--		.procname	= "oom_dump_tasks",
--		.data		= &sysctl_oom_dump_tasks,
--		.maxlen		= sizeof(sysctl_oom_dump_tasks),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec,
--	},
- 	{
- 		.procname	= "overcommit_ratio",
- 		.data		= &sysctl_overcommit_ratio,
-diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index 6b875acabd1e..c720c0710911 100644
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -52,9 +52,35 @@
- #define CREATE_TRACE_POINTS
- #include <trace/events/oom.h>
-
--int sysctl_panic_on_oom;
--int sysctl_oom_kill_allocating_task;
--int sysctl_oom_dump_tasks = 1;
-+static int sysctl_panic_on_oom;
-+static int sysctl_oom_kill_allocating_task;
-+static int sysctl_oom_dump_tasks = 1;
-+
-+static struct ctl_table vm_oom_kill_table[] = {
-+	{
-+		.procname	= "panic_on_oom",
-+		.data		= &sysctl_panic_on_oom,
-+		.maxlen		= sizeof(sysctl_panic_on_oom),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_TWO,
-+	},
-+	{
-+		.procname	= "oom_kill_allocating_task",
-+		.data		= &sysctl_oom_kill_allocating_task,
-+		.maxlen		= sizeof(sysctl_oom_kill_allocating_task),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec,
-+	},
-+	{
-+		.procname	= "oom_dump_tasks",
-+		.data		= &sysctl_oom_dump_tasks,
-+		.maxlen		= sizeof(sysctl_oom_dump_tasks),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec,
-+	}
-+};
-
- /*
-  * Serializes oom killer invocations (out_of_memory()) from all contexts to
-@@ -680,6 +706,11 @@ static void wake_oom_reaper(struct task_struct *tsk)
- static int __init oom_init(void)
- {
- 	oom_reaper_th = kthread_run(oom_reaper, NULL, "oom_reaper");
-+
-+	#ifdef CONFIG_SYSCTL
-+		register_sysctl_init("vm", vm_oom_kill_table);
-+	#endif
-+
- 	return 0;
- }
- subsys_initcall(oom_init)
---
-2.20.1
-
-
-
+	AFAICS, the comment above that check refers to futex_detect_cmpxchg()
+-> cmpxchg_futex_value_locked() -> futex_atomic_cmpxchg_inatomic() call chain.
+Which had been gone since commit 3297481d688a (futex: Remove futex_cmpxchg
+detection).  The comment *and* the check should've been killed off back
+then.
+	Let's make sure to get both now...

@@ -2,69 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 398FD4B6DA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2AAB4B6DB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238348AbiBONgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 08:36:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60634 "EHLO
+        id S238337AbiBONhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 08:37:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234429AbiBONgC (ORCPT
+        with ESMTP id S234825AbiBONho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 08:36:02 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260451074C8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 05:35:50 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id d17so6788836pfl.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 05:35:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=i2L/2d/WummzhFYZmp1J8UiAMxM3AINvBVUjQlggREQ=;
-        b=kj8IUBBuHK/FjcZjTmdoH2RE+Bpk8jfs7BUNHvhM5Wc8eI/UqpyAQH1PGr2NXcmtLM
-         UVrM/XLB+mOD1+baEvaCQayzYlXwGvsWJfwGSpytQ8JghgZRG6Ngdvoi3AJGCe7QDX4y
-         2xyZOhowzR7AHS0Le8X5T3kClixmf6gVCk/mI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=i2L/2d/WummzhFYZmp1J8UiAMxM3AINvBVUjQlggREQ=;
-        b=ecoyviiUOLPUTpMr4y6/6qZH7jQYKk+uZ+a6EIeZja164RkkoyXDkvQoAfA9vOrYss
-         X1xV/FQ2roa1AOQ6QhbE2WSfjMJjtBDhWgYFy8LcarhC53v4YHk9Vxjhd9XyavHdLCfi
-         +iiC1n4t76G23L0fYPOG9Tzv5I/suaQav4aDlFrusSUiO3FVu2RSvrjlZr8gDEkOIEtF
-         zeXAA76q0XCZI6JQcD75dQ36zUWBJti3oLx2UeRNw8ldRLVnGkDYjd4ePJk1hhl5FSTR
-         OkSpHHb5+e2/BVtygf3PDQr81T9iKt4uzGff3RI866T9TB8rWlRzDbtur3tRLD977M6t
-         zrVQ==
-X-Gm-Message-State: AOAM530vNiSfgiQEnYQnP8Qzva/iKPpJfVxgXVMQm2sPRthMOtWRr3GQ
-        ToSMynMohrMqC8i2FHVJhC3e0A==
-X-Google-Smtp-Source: ABdhPJwEAb4o6qpPYrC7QhCmP4NQ0wbU1OWlS/M7Pmy/QuwmEMkjFtbzCUkKpXLwuQaimIojabiVnQ==
-X-Received: by 2002:a05:6a00:148b:: with SMTP id v11mr4172298pfu.82.1644932150369;
-        Tue, 15 Feb 2022 05:35:50 -0800 (PST)
-Received: from localhost (208.158.221.35.bc.googleusercontent.com. [35.221.158.208])
-        by smtp.gmail.com with UTF8SMTPSA id l2sm17178483pju.52.2022.02.15.05.35.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 05:35:49 -0800 (PST)
-From:   Joseph Hwang <josephsih@chromium.org>
-To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
-        luiz.dentz@gmail.com, pali@kernel.org
-Cc:     chromeos-bluetooth-upstreaming@chromium.org, josephsih@google.com,
-        Joseph Hwang <josephsih@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v4 3/3] Bluetooth: mgmt: add set_quality_report for MGMT_OP_SET_QUALITY_REPORT
-Date:   Tue, 15 Feb 2022 21:35:32 +0800
-Message-Id: <20220215133546.2826837-1-josephsih@chromium.org>
-X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-In-Reply-To: <20220215213519.v4.1.I2015b42d2d0a502334c9c3a2983438b89716d4f0@changeid>
-References: <20220215213519.v4.1.I2015b42d2d0a502334c9c3a2983438b89716d4f0@changeid>
+        Tue, 15 Feb 2022 08:37:44 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4991F65179;
+        Tue, 15 Feb 2022 05:37:33 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21FCBYSU010180;
+        Tue, 15 Feb 2022 13:36:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : message-id : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=CK5FtuC8RijTRY6mWusruZve7sKzMTJ4Wb1AQCLb+4M=;
+ b=gBqRWSYzIscQih3jCyUsxw/RAxD/ImWsy3NeoQ5mka7+s01pfaoo7TFYfiwptj8ee7hQ
+ I1TLNJPJVXjK3N/1tkBwaf3IQIXRXB/wuyjPr0Z2l4ccG3AVgEjzIfmylg+Azj1ESW3M
+ +VX6PiO6fpDCLRAxR3/4tfEpxcom3y/PuiS8TYNQppR2WigqwWJNyw3KU7fHs6ZeqAeP
+ mUGgzH4oBdO0VC0ER6geFFT2Ff66fo2JWHhd8cdOBHFUAEA8FxP7H7/S9ByDPjU7PoF7
+ cByoCJI6fDQjOn7Ei2s/dow8kL0jkHWmp3hsn83YZ/BZKKSOTEXQ4Jj/uZCCYG7F7y5x EA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8a71mfys-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 13:36:57 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21FDZpir025784;
+        Tue, 15 Feb 2022 13:36:57 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8a71mfyd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 13:36:57 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21FDWQai030911;
+        Tue, 15 Feb 2022 13:36:55 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3e64h9yh5k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 13:36:54 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21FDaqvq30998840
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Feb 2022 13:36:52 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6867452067;
+        Tue, 15 Feb 2022 13:36:52 +0000 (GMT)
+Received: from localhost (unknown [9.43.98.51])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id E36D55204E;
+        Tue, 15 Feb 2022 13:36:51 +0000 (GMT)
+Date:   Tue, 15 Feb 2022 19:06:48 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v2 09/13] powerpc/ftrace: Implement
+ CONFIG_DYNAMIC_FTRACE_WITH_ARGS
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Jiri Kosina <jikos@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Ingo Molnar <mingo@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>
+References: <cover.1640017960.git.christophe.leroy@csgroup.eu>
+        <5831f711a778fcd6eb51eb5898f1faae4378b35b.1640017960.git.christophe.leroy@csgroup.eu>
+        <1644852011.qg7ud9elo2.naveen@linux.ibm.com>
+        <1b28f52a-f8b7-6b5c-e726-feac4123517d@csgroup.eu>
+        <875ypgo0f3.fsf@mpe.ellerman.id.au>
+In-Reply-To: <875ypgo0f3.fsf@mpe.ellerman.id.au>
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1644930705.g64na2kgvd.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: D6NyYCfAf_PpNR8IgOprj2uFIQsnSWBc
+X-Proofpoint-ORIG-GUID: XfD_-Fp8wj-eqHfFNcokgkQw2teTdqBZ
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-15_04,2022-02-14_04,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ phishscore=0 bulkscore=0 mlxscore=0 priorityscore=1501 impostorscore=0
+ suspectscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1015
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202150078
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,285 +104,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds a new set_quality_report mgmt handler to set
-the quality report feature. The feature is removed from the
-experimental features at the same time.
+Michael Ellerman wrote:
+> Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+>> Le 14/02/2022 =C3=A0 16:25, Naveen N. Rao a =C3=A9crit=C2=A0:
+>>> Christophe Leroy wrote:
+>>>> Implement CONFIG_DYNAMIC_FTRACE_WITH_ARGS. It accelerates the call
+>>>> of livepatching.
+>>>>
+>>>> Also note that powerpc being the last one to convert to
+>>>> CONFIG_DYNAMIC_FTRACE_WITH_ARGS, it will now be possible to remove
+>>>> klp_arch_set_pc() on all architectures.
+>>>>
+>>>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>>>> ---
+>>>> =C2=A0arch/powerpc/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 1 +
+>>>> =C2=A0arch/powerpc/include/asm/ftrace.h=C2=A0=C2=A0=C2=A0 | 17 +++++++=
+++++++++++
+>>>> =C2=A0arch/powerpc/include/asm/livepatch.h |=C2=A0 4 +---
+>>>> =C2=A03 files changed, 19 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+>>>> index cdac2115eb00..e2b1792b2aae 100644
+>>>> --- a/arch/powerpc/Kconfig
+>>>> +++ b/arch/powerpc/Kconfig
+>>>> @@ -210,6 +210,7 @@ config PPC
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_DEBUG_KMEMLEAK
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_DEBUG_STACKOVERFLOW
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_DYNAMIC_FTRACE
+>>>> +=C2=A0=C2=A0=C2=A0 select HAVE_DYNAMIC_FTRACE_WITH_ARGS=C2=A0=C2=A0=
+=C2=A0 if MPROFILE_KERNEL || PPC32
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_DYNAMIC_FTRACE_WITH_REGS=C2=A0=C2=
+=A0=C2=A0 if MPROFILE_KERNEL || PPC32
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_EBPF_JIT
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_EFFICIENT_UNALIGNED_ACCESS=C2=A0=
+=C2=A0=C2=A0 if !(CPU_LITTLE_ENDIAN=20
+>>>> && POWER7_CPU)
+>>>> diff --git a/arch/powerpc/include/asm/ftrace.h=20
+>>>> b/arch/powerpc/include/asm/ftrace.h
+>>>> index b3f6184f77ea..45c3d6f11daa 100644
+>>>> --- a/arch/powerpc/include/asm/ftrace.h
+>>>> +++ b/arch/powerpc/include/asm/ftrace.h
+>>>> @@ -22,6 +22,23 @@ static inline unsigned long=20
+>>>> ftrace_call_adjust(unsigned long addr)
+>>>> =C2=A0struct dyn_arch_ftrace {
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 struct module *mod;
+>>>> =C2=A0};
+>>>> +
+>>>> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_ARGS
+>>>> +struct ftrace_regs {
+>>>> +=C2=A0=C2=A0=C2=A0 struct pt_regs regs;
+>>>> +};
+>>>> +
+>>>> +static __always_inline struct pt_regs *arch_ftrace_get_regs(struct=20
+>>>> ftrace_regs *fregs)
+>>>> +{
+>>>> +=C2=A0=C2=A0=C2=A0 return &fregs->regs;
+>>>> +}
+>>>=20
+>>> I think this is wrong. We need to differentiate between ftrace_caller()=
+=20
+>>> and ftrace_regs_caller() here, and only return pt_regs if coming in=20
+>>> through ftrace_regs_caller() (i.e., FL_SAVE_REGS is set).
+>>
+>> Not sure I follow you.
+>>
+>> This is based on 5740a7c71ab6 ("s390/ftrace: add=20
+>> HAVE_DYNAMIC_FTRACE_WITH_ARGS support")
+>>
+>> It's all the point of HAVE_DYNAMIC_FTRACE_WITH_ARGS, have the regs also=
+=20
+>> with ftrace_caller().
+>>
+>> Sure you only have the params, but that's the same on s390, so what did=
+=20
+>> I miss ?
 
-Signed-off-by: Joseph Hwang <josephsih@chromium.org>
----
+It looks like s390 is special since it apparently saves all registers=20
+even for ftrace_caller:=20
+https://lore.kernel.org/all/YbipdU5X4HNDWIni@osiris/
 
-Changes in v4:
-- return current settings for set_quality_report.
+As I understand it, the reason ftrace_get_regs() was introduced was to=20
+be able to only return the pt_regs, if _all_ registers were saved into=20
+it, which we don't do when coming in through ftrace_caller(). See the=20
+x86 implementation (commit 02a474ca266a47 ("ftrace/x86: Allow for=20
+arguments to be passed in to ftrace_regs by default"), which returns=20
+pt_regs conditionally.
 
-Changes in v3:
-- This is a new patch to enable the quality report feature.
-  The reading and setting of the quality report feature are
-  removed from the experimental features.
+>=20
+> I already have this series in next, I can pull it out, but I'd rather
+> not.
 
- include/net/bluetooth/mgmt.h |   7 ++
- net/bluetooth/mgmt.c         | 168 +++++++++++++++--------------------
- 2 files changed, 81 insertions(+), 94 deletions(-)
+Yeah, I'm sorry about the late review on this one.
 
-diff --git a/include/net/bluetooth/mgmt.h b/include/net/bluetooth/mgmt.h
-index 83b602636262..74d253ff617a 100644
---- a/include/net/bluetooth/mgmt.h
-+++ b/include/net/bluetooth/mgmt.h
-@@ -109,6 +109,7 @@ struct mgmt_rp_read_index_list {
- #define MGMT_SETTING_STATIC_ADDRESS	0x00008000
- #define MGMT_SETTING_PHY_CONFIGURATION	0x00010000
- #define MGMT_SETTING_WIDEBAND_SPEECH	0x00020000
-+#define MGMT_SETTING_QUALITY_REPORT	0x00040000
- 
- #define MGMT_OP_READ_INFO		0x0004
- #define MGMT_READ_INFO_SIZE		0
-@@ -838,6 +839,12 @@ struct mgmt_cp_add_adv_patterns_monitor_rssi {
- } __packed;
- #define MGMT_ADD_ADV_PATTERNS_MONITOR_RSSI_SIZE	8
- 
-+#define MGMT_OP_SET_QUALITY_REPORT		0x0057
-+struct mgmt_cp_set_quality_report {
-+	__u8	action;
-+} __packed;
-+#define MGMT_SET_QUALITY_REPORT_SIZE		1
-+
- #define MGMT_EV_CMD_COMPLETE		0x0001
- struct mgmt_ev_cmd_complete {
- 	__le16	opcode;
-diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
-index 5e48576041fb..ccd77b94905b 100644
---- a/net/bluetooth/mgmt.c
-+++ b/net/bluetooth/mgmt.c
-@@ -857,6 +857,10 @@ static u32 get_supported_settings(struct hci_dev *hdev)
- 
- 	settings |= MGMT_SETTING_PHY_CONFIGURATION;
- 
-+	if (hdev && (aosp_has_quality_report(hdev) ||
-+		     hdev->set_quality_report))
-+		settings |= MGMT_SETTING_QUALITY_REPORT;
-+
- 	return settings;
- }
- 
-@@ -928,6 +932,9 @@ static u32 get_current_settings(struct hci_dev *hdev)
- 	if (hci_dev_test_flag(hdev, HCI_WIDEBAND_SPEECH_ENABLED))
- 		settings |= MGMT_SETTING_WIDEBAND_SPEECH;
- 
-+	if (hci_dev_test_flag(hdev, HCI_QUALITY_REPORT))
-+		settings |= MGMT_SETTING_QUALITY_REPORT;
-+
- 	return settings;
- }
- 
-@@ -3871,12 +3878,6 @@ static const u8 debug_uuid[16] = {
- };
- #endif
- 
--/* 330859bc-7506-492d-9370-9a6f0614037f */
--static const u8 quality_report_uuid[16] = {
--	0x7f, 0x03, 0x14, 0x06, 0x6f, 0x9a, 0x70, 0x93,
--	0x2d, 0x49, 0x06, 0x75, 0xbc, 0x59, 0x08, 0x33,
--};
--
- /* a6695ace-ee7f-4fb9-881a-5fac66c629af */
- static const u8 offload_codecs_uuid[16] = {
- 	0xaf, 0x29, 0xc6, 0x66, 0xac, 0x5f, 0x1a, 0x88,
-@@ -3898,7 +3899,7 @@ static const u8 rpa_resolution_uuid[16] = {
- static int read_exp_features_info(struct sock *sk, struct hci_dev *hdev,
- 				  void *data, u16 data_len)
- {
--	char buf[102];   /* Enough space for 5 features: 2 + 20 * 5 */
-+	char buf[82];   /* Enough space for 4 features: 2 + 20 * 4 */
- 	struct mgmt_rp_read_exp_features_info *rp = (void *)buf;
- 	u16 idx = 0;
- 	u32 flags;
-@@ -3939,18 +3940,6 @@ static int read_exp_features_info(struct sock *sk, struct hci_dev *hdev,
- 		idx++;
- 	}
- 
--	if (hdev && (aosp_has_quality_report(hdev) ||
--		     hdev->set_quality_report)) {
--		if (hci_dev_test_flag(hdev, HCI_QUALITY_REPORT))
--			flags = BIT(0);
--		else
--			flags = 0;
--
--		memcpy(rp->features[idx].uuid, quality_report_uuid, 16);
--		rp->features[idx].flags = cpu_to_le32(flags);
--		idx++;
--	}
--
- 	if (hdev && hdev->get_data_path_id) {
- 		if (hci_dev_test_flag(hdev, HCI_OFFLOAD_CODECS_ENABLED))
- 			flags = BIT(0);
-@@ -4163,80 +4152,6 @@ static int set_rpa_resolution_func(struct sock *sk, struct hci_dev *hdev,
- 	return err;
- }
- 
--static int set_quality_report_func(struct sock *sk, struct hci_dev *hdev,
--				   struct mgmt_cp_set_exp_feature *cp,
--				   u16 data_len)
--{
--	struct mgmt_rp_set_exp_feature rp;
--	bool val, changed;
--	int err;
--
--	/* Command requires to use a valid controller index */
--	if (!hdev)
--		return mgmt_cmd_status(sk, MGMT_INDEX_NONE,
--				       MGMT_OP_SET_EXP_FEATURE,
--				       MGMT_STATUS_INVALID_INDEX);
--
--	/* Parameters are limited to a single octet */
--	if (data_len != MGMT_SET_EXP_FEATURE_SIZE + 1)
--		return mgmt_cmd_status(sk, hdev->id,
--				       MGMT_OP_SET_EXP_FEATURE,
--				       MGMT_STATUS_INVALID_PARAMS);
--
--	/* Only boolean on/off is supported */
--	if (cp->param[0] != 0x00 && cp->param[0] != 0x01)
--		return mgmt_cmd_status(sk, hdev->id,
--				       MGMT_OP_SET_EXP_FEATURE,
--				       MGMT_STATUS_INVALID_PARAMS);
--
--	hci_req_sync_lock(hdev);
--
--	val = !!cp->param[0];
--	changed = (val != hci_dev_test_flag(hdev, HCI_QUALITY_REPORT));
--
--	if (!aosp_has_quality_report(hdev) && !hdev->set_quality_report) {
--		err = mgmt_cmd_status(sk, hdev->id,
--				      MGMT_OP_SET_EXP_FEATURE,
--				      MGMT_STATUS_NOT_SUPPORTED);
--		goto unlock_quality_report;
--	}
--
--	if (changed) {
--		if (hdev->set_quality_report)
--			err = hdev->set_quality_report(hdev, val);
--		else
--			err = aosp_set_quality_report(hdev, val);
--
--		if (err) {
--			err = mgmt_cmd_status(sk, hdev->id,
--					      MGMT_OP_SET_EXP_FEATURE,
--					      MGMT_STATUS_FAILED);
--			goto unlock_quality_report;
--		}
--
--		if (val)
--			hci_dev_set_flag(hdev, HCI_QUALITY_REPORT);
--		else
--			hci_dev_clear_flag(hdev, HCI_QUALITY_REPORT);
--	}
--
--	bt_dev_dbg(hdev, "quality report enable %d changed %d", val, changed);
--
--	memcpy(rp.uuid, quality_report_uuid, 16);
--	rp.flags = cpu_to_le32(val ? BIT(0) : 0);
--	hci_sock_set_flag(sk, HCI_MGMT_EXP_FEATURE_EVENTS);
--
--	err = mgmt_cmd_complete(sk, hdev->id, MGMT_OP_SET_EXP_FEATURE, 0,
--				&rp, sizeof(rp));
--
--	if (changed)
--		exp_feature_changed(hdev, quality_report_uuid, val, sk);
--
--unlock_quality_report:
--	hci_req_sync_unlock(hdev);
--	return err;
--}
--
- static int set_offload_codec_func(struct sock *sk, struct hci_dev *hdev,
- 				  struct mgmt_cp_set_exp_feature *cp,
- 				  u16 data_len)
-@@ -4363,7 +4278,6 @@ static const struct mgmt_exp_feature {
- 	EXP_FEAT(debug_uuid, set_debug_func),
- #endif
- 	EXP_FEAT(rpa_resolution_uuid, set_rpa_resolution_func),
--	EXP_FEAT(quality_report_uuid, set_quality_report_func),
- 	EXP_FEAT(offload_codecs_uuid, set_offload_codec_func),
- 	EXP_FEAT(le_simultaneous_roles_uuid, set_le_simultaneous_roles_func),
- 
-@@ -8653,6 +8567,71 @@ static int get_adv_size_info(struct sock *sk, struct hci_dev *hdev,
- 				 MGMT_STATUS_SUCCESS, &rp, sizeof(rp));
- }
- 
-+static int set_quality_report(struct sock *sk, struct hci_dev *hdev,
-+			      void *data, u16 data_len)
-+{
-+	struct mgmt_cp_set_quality_report *cp = data;
-+	bool enable, changed;
-+	int err;
-+
-+	/* Command requires to use a valid controller index */
-+	if (!hdev)
-+		return mgmt_cmd_status(sk, MGMT_INDEX_NONE,
-+				       MGMT_OP_SET_QUALITY_REPORT,
-+				       MGMT_STATUS_INVALID_INDEX);
-+
-+	/* Only 0 (off) and 1 (on) is supported */
-+	if (cp->action != 0x00 && cp->action != 0x01)
-+		return mgmt_cmd_status(sk, hdev->id,
-+				       MGMT_OP_SET_QUALITY_REPORT,
-+				       MGMT_STATUS_INVALID_PARAMS);
-+
-+	hci_req_sync_lock(hdev);
-+
-+	enable = !!cp->action;
-+	changed = (enable != hci_dev_test_flag(hdev, HCI_QUALITY_REPORT));
-+
-+	if (!aosp_has_quality_report(hdev) && !hdev->set_quality_report) {
-+		err = mgmt_cmd_status(sk, hdev->id,
-+				      MGMT_OP_SET_QUALITY_REPORT,
-+				      MGMT_STATUS_NOT_SUPPORTED);
-+		goto unlock_quality_report;
-+	}
-+
-+	if (changed) {
-+		if (hdev->set_quality_report)
-+			err = hdev->set_quality_report(hdev, enable);
-+		else
-+			err = aosp_set_quality_report(hdev, enable);
-+
-+		if (err) {
-+			err = mgmt_cmd_status(sk, hdev->id,
-+					      MGMT_OP_SET_QUALITY_REPORT,
-+					      MGMT_STATUS_FAILED);
-+			goto unlock_quality_report;
-+		}
-+
-+		if (enable)
-+			hci_dev_set_flag(hdev, HCI_QUALITY_REPORT);
-+		else
-+			hci_dev_clear_flag(hdev, HCI_QUALITY_REPORT);
-+	}
-+
-+	bt_dev_dbg(hdev, "quality report enable %d changed %d",
-+		   enable, changed);
-+
-+	err = send_settings_rsp(sk, MGMT_OP_SET_QUALITY_REPORT, hdev);
-+	if (err < 0)
-+		goto unlock_quality_report;
-+
-+	if (changed)
-+		err = new_settings(hdev, sk);
-+
-+unlock_quality_report:
-+	hci_req_sync_unlock(hdev);
-+	return err;
-+}
-+
- static const struct hci_mgmt_handler mgmt_handlers[] = {
- 	{ NULL }, /* 0x0000 (no command) */
- 	{ read_version,            MGMT_READ_VERSION_SIZE,
-@@ -8779,6 +8758,7 @@ static const struct hci_mgmt_handler mgmt_handlers[] = {
- 	{ add_adv_patterns_monitor_rssi,
- 				   MGMT_ADD_ADV_PATTERNS_MONITOR_RSSI_SIZE,
- 						HCI_MGMT_VAR_LEN },
-+	{ set_quality_report,      MGMT_SET_QUALITY_REPORT_SIZE },
- };
- 
- void mgmt_index_added(struct hci_dev *hdev)
--- 
-2.35.1.265.g69c8d7142f-goog
+>=20
+> I'll leave it in for now, hopefully you two can agree overnight my time
+> whether this is a big problem or something we can fix with a fixup
+> patch.
 
+I think changes to this particular patch can be added as an incremental=20
+patch. If anything, pt_regs won't have all valid registers, but no one=20
+should depend on it without also setting FL_SAVE_REGS anyway.
+
+I was concerned about patch 8 though, where we are missing saving r1=20
+into pt_regs. That gets used in patch 11, and will be used during=20
+unwinding when the function_graph tracer is active. But, this should=20
+still just result in us being unable to unwind the stack, so I think=20
+that can also be an incremental patch.
+
+
+Thanks,
+Naveen

@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 031C14B7AA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 23:41:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BE74B7A9F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 23:41:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243973AbiBOWlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 17:41:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59304 "EHLO
+        id S244654AbiBOWlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 17:41:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244640AbiBOWko (ORCPT
+        with ESMTP id S244695AbiBOWkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 17:40:44 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48122C249B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 14:40:31 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id x13so241537iop.4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 14:40:31 -0800 (PST)
+        Tue, 15 Feb 2022 17:40:52 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A908C1C8E
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 14:40:38 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id e8so112361ilm.13
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 14:40:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Gn3EIklOnIG2tkcpFpUKroOkFa8PWu0ikEpLWQKkSxA=;
-        b=MS8D4rvahPgLiydnJDPOq0ZvTiIFx587xA0Y5Cs6xoBVrb1JcEtTJu3L1MZ2uirVnv
-         7gqbYQA4jQ0+96ZkeiQHVcd/s9nL5UoXilCyi9sGytY97J60DwH55NjZEV64DO653Jn4
-         0qkWhQKWsC4ux3PUj5SK8nE+3xOzkgmSsC8DyGlw1/a3my3DHz3b4WfcjTIQpLcFHDx+
-         +zub+L35PMLwfzdVZD5lEU8kh5oD2khSCjqDdHkKRGrPQigUTf4Z5DzYjsEJKjjrqEeQ
-         1WX2nmFZ262ZCopwtHr0PBl+zTolIGxJO7GpXMD/2zvqLAAAq9VLFKvovK3hv+dDxCRx
-         X41A==
+        bh=s3S+ZBHc3O8N3HfRVKVNePzpEy5amtqjf7RHMF5rRnE=;
+        b=iwIWNIIlDgQIxBgeolVH9CWJ43u83733cf1DLYW08OnChtIbN3f0gfofr270sPTfSe
+         FRHma1EMI1KLwZuhdi5guZeCYqb+bJ8YN89vyzY0JR01E0DT5rbPxAJUmW6QEmtqIG/0
+         2hxiX7+QkPYH87BQ8nHE2Rssg9zyqGjX5lbk2Mq41o6xd/874piXZS7Mj2vdESa7cree
+         8oiUr66YygsyQuECK7eoZLq+kEtchua/H8FOIivdANXvZhlePQ51o8xPykPtI6lWVFYe
+         LSUXhyvTfgKbgc11bpqi/ImKrXaYX26l/TiKy9j7p1a65jSQRiD50V/6ChtB6ZywQ/x/
+         vHpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Gn3EIklOnIG2tkcpFpUKroOkFa8PWu0ikEpLWQKkSxA=;
-        b=ZJAksgFEopylTxY6Q9ZwUJ5jxSwwGcDlmy1rnx+4v9idxPBbpNHH5NIqQi9qyqDdKb
-         3abqkZEaVMXnTat2zREqs6SXlMZ480ohDV+N/2Nc8aJIHqeCuJ7XXZOiXE040+C0jGLw
-         ycZvSCRBgGKWQzLHcYkYJG+rWxCdr1ihuVJufUYvMo9wnAGIFQw+FxCPhZX8JelLgVE1
-         NpgZcENRhoUBL61OMb5W818xh+mLyzVO8bRUt86rL70ogaB5n5qAhQQKSj1Z54MUWYOH
-         EM9plv7KvYLXE3QK7zJIsTw3af6DMe3p19BBLPEx3X4kt1oh3y+nS7Mo2VdUyBr3a9hK
-         /2QA==
-X-Gm-Message-State: AOAM533qEqIT9E7UuRMECBca0Ax8Sra0SQ68EVtxTfxf+kvcbZWZb/Ca
-        cB7Qbux8i6qt7fm4bKO0wVWPSw==
-X-Google-Smtp-Source: ABdhPJzexSR3WzZVJEbJjdXcTfGZuHlWw9A8dLI6/quoJY6Fja96InlxvKwSBegbn7O3t7L44uRSLQ==
-X-Received: by 2002:a02:954f:: with SMTP id y73mr694414jah.252.1644964830569;
-        Tue, 15 Feb 2022 14:40:30 -0800 (PST)
+        bh=s3S+ZBHc3O8N3HfRVKVNePzpEy5amtqjf7RHMF5rRnE=;
+        b=NfOSty2W3y4tcL0H1WAm8XjxkjXOZug6xIgyZt33wCa7wGi2vjfKIq69H51j4VHGzg
+         7e4V3U6eYYqrZdJerJIaX1clF0U07xQVqAIwlu4m4gd0PzDRoYImUMZC09QZ3cS78hfn
+         fFpHQ8nNnOXle4batwyKA23VmJz7S4LQX9vrXKBtKv7Ao3pkie4ZsftBml/fT6PscbHx
+         w00jXm5ShtHQNFELMPYGrKH0zxyN27RQ/csd74o4FfTn3OiPMkA+5qIODc8moS1Z1FBg
+         yhwveFVrEZFwhIQV21BVPgIsOGYmlgb/N84iOHWzS5aFO1WqXE04v5F9ot+sc3777Xas
+         jKgg==
+X-Gm-Message-State: AOAM531FNEY2V6IkZnJcxjVZHRS7dESKqzCAyZkkJyAn3PIugJhww/Lj
+        Fcx4Hi/hovFWn9ivRllyV/Kn/sbiR94MBfJ7
+X-Google-Smtp-Source: ABdhPJwcvqCC2LXb/bb/4iUcEbXnAop+6ntKZrqA3SaLV0AgGTPLP7OdP7l34HU35Zx159jCPIcAfw==
+X-Received: by 2002:a05:6e02:1bc1:: with SMTP id x1mr766657ilv.268.1644964837781;
+        Tue, 15 Feb 2022 14:40:37 -0800 (PST)
 Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id l2sm5996859ilv.66.2022.02.15.14.40.29
+        by smtp.googlemail.com with ESMTPSA id r7sm16538062ilm.14.2022.02.15.14.40.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 14:40:30 -0800 (PST)
-Message-ID: <766e6568-0b80-c745-dd8f-7f401fb0422d@linaro.org>
-Date:   Tue, 15 Feb 2022 16:40:29 -0600
+        Tue, 15 Feb 2022 14:40:37 -0800 (PST)
+Message-ID: <05575816-878c-852a-5aa0-5854d1b49394@linaro.org>
+Date:   Tue, 15 Feb 2022 16:40:35 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v3 23/25] bus: mhi: ep: Add support for queueing SKBs to
- the host
+Subject: Re: [PATCH v3 24/25] bus: mhi: ep: Add support for suspending and
+ resuming channels
 Content-Language: en-US
 To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         mhi@lists.linux.dev
@@ -66,9 +66,9 @@ Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
         quic_skananth@quicinc.com, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
- <20220212182117.49438-24-manivannan.sadhasivam@linaro.org>
+ <20220212182117.49438-25-manivannan.sadhasivam@linaro.org>
 From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <20220212182117.49438-24-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20220212182117.49438-25-manivannan.sadhasivam@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,190 +82,130 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 2/12/22 12:21 PM, Manivannan Sadhasivam wrote:
-> Add support for queueing SKBs to the host over the transfer ring of the
-> relevant channel. The mhi_ep_queue_skb() API will be used by the client
-> networking drivers to queue the SKBs to the host over MHI bus.
-> 
-> The host will add ring elements to the transfer ring periodically for
-> the device and the device will write SKBs to the ring elements. If a
-> single SKB doesn't fit in a ring element (TRE), it will be placed in
-> multiple ring elements and the overflow event will be sent for all ring
-> elements except the last one. For the last ring element, the EOT event
-> will be sent indicating the packet boundary.
+> Add support for suspending and resuming the channels in MHI endpoint stack.
+> The channels will be moved to the suspended state during M3 state
+> transition and will be resumed during M0 transition.
 > 
 > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-I'm a little confused by this, so maybe you can provide
-a better explanation somehow.
+Looks good.
 
-					-Alex
+Reviewed-by: Alex Elder <elder@linaro.org>
 
 > ---
->   drivers/bus/mhi/ep/main.c | 102 ++++++++++++++++++++++++++++++++++++++
->   include/linux/mhi_ep.h    |  13 +++++
->   2 files changed, 115 insertions(+)
+>   drivers/bus/mhi/ep/internal.h |  2 ++
+>   drivers/bus/mhi/ep/main.c     | 58 +++++++++++++++++++++++++++++++++++
+>   drivers/bus/mhi/ep/sm.c       |  4 +++
+>   3 files changed, 64 insertions(+)
 > 
+> diff --git a/drivers/bus/mhi/ep/internal.h b/drivers/bus/mhi/ep/internal.h
+> index 8654af7caf40..e23d2fd04282 100644
+> --- a/drivers/bus/mhi/ep/internal.h
+> +++ b/drivers/bus/mhi/ep/internal.h
+> @@ -242,6 +242,8 @@ int mhi_ep_set_m0_state(struct mhi_ep_cntrl *mhi_cntrl);
+>   int mhi_ep_set_m3_state(struct mhi_ep_cntrl *mhi_cntrl);
+>   int mhi_ep_set_ready_state(struct mhi_ep_cntrl *mhi_cntrl);
+>   void mhi_ep_handle_syserr(struct mhi_ep_cntrl *mhi_cntrl);
+> +void mhi_ep_resume_channels(struct mhi_ep_cntrl *mhi_cntrl);
+> +void mhi_ep_suspend_channels(struct mhi_ep_cntrl *mhi_cntrl);
+>   
+>   /* MHI EP memory management functions */
+>   int mhi_ep_alloc_map(struct mhi_ep_cntrl *mhi_cntrl, u64 pci_addr, size_t size,
 > diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
-> index baf383a4857b..e4186b012257 100644
+> index e4186b012257..315409705b91 100644
 > --- a/drivers/bus/mhi/ep/main.c
 > +++ b/drivers/bus/mhi/ep/main.c
-> @@ -488,6 +488,108 @@ int mhi_ep_process_tre_ring(struct mhi_ep_ring *ring, struct mhi_ep_ring_element
->   	return 0;
+> @@ -1106,6 +1106,64 @@ void mhi_ep_power_down(struct mhi_ep_cntrl *mhi_cntrl)
 >   }
+>   EXPORT_SYMBOL_GPL(mhi_ep_power_down);
 >   
-> +int mhi_ep_queue_skb(struct mhi_ep_device *mhi_dev, enum dma_data_direction dir,
-> +		     struct sk_buff *skb, size_t len, enum mhi_flags mflags)
-
-Why are both skb and len supplied?  Will an skb be supplied
-without wanting to send all of it?  Must len be less than
-skb->len?  I'm a little confused about the interface.
-
-Also, the data direction is *out*, right?  You'll never
-be queueing a "receive" SKB?
-
+> +void mhi_ep_suspend_channels(struct mhi_ep_cntrl *mhi_cntrl)
 > +{
-> +	struct mhi_ep_chan *mhi_chan = (dir == DMA_FROM_DEVICE) ? mhi_dev->dl_chan :
-> +								mhi_dev->ul_chan;
-> +	struct mhi_ep_cntrl *mhi_cntrl = mhi_dev->mhi_cntrl;
-> +	struct device *dev = &mhi_chan->mhi_dev->dev;
-> +	struct mhi_ep_ring_element *el;
-> +	struct mhi_ep_ring *ring;
-> +	size_t bytes_to_write;
-> +	enum mhi_ev_ccs code;
-> +	void *read_from_loc;
-> +	u32 buf_remaining;
-> +	u64 write_to_loc;
-> +	u32 tre_len;
-> +	int ret = 0;
+> +	struct mhi_ep_chan *mhi_chan;
+> +	u32 tmp;
+> +	int i;
 > +
-> +	if (dir == DMA_TO_DEVICE)
-> +		return -EINVAL;
-
-Can't you just preclude this from happening, or
-know it won't happen by inspection?
-
+> +	for (i = 0; i < mhi_cntrl->max_chan; i++) {
+> +		mhi_chan = &mhi_cntrl->mhi_chan[i];
 > +
-> +	buf_remaining = len;
-> +	ring = &mhi_cntrl->mhi_chan[mhi_chan->chan].ring;
+> +		if (!mhi_chan->mhi_dev)
+> +			continue;
 > +
-> +	mutex_lock(&mhi_chan->lock);
-> +
-> +	do {
-> +		/* Don't process the transfer ring if the channel is not in RUNNING state */
-> +		if (mhi_chan->state != MHI_CH_STATE_RUNNING) {
-> +			dev_err(dev, "Channel not available\n");
-> +			ret = -ENODEV;
-> +			goto err_exit;
+> +		mutex_lock(&mhi_chan->lock);
+> +		/* Skip if the channel is not currently running */
+> +		tmp = le32_to_cpu(mhi_cntrl->ch_ctx_cache[i].chcfg);
+> +		if (FIELD_GET(CHAN_CTX_CHSTATE_MASK, tmp) != MHI_CH_STATE_RUNNING) {
+> +			mutex_unlock(&mhi_chan->lock);
+> +			continue;
 > +		}
 > +
+> +		dev_dbg(&mhi_chan->mhi_dev->dev, "Suspending channel\n");
+> +		/* Set channel state to SUSPENDED */
+> +		tmp &= ~CHAN_CTX_CHSTATE_MASK;
+> +		tmp |= FIELD_PREP(CHAN_CTX_CHSTATE_MASK, MHI_CH_STATE_SUSPENDED);
 
-It would be nice if the caller could know whether there
-was enough room *before* you start transferring things.
-It's probably a lot of work to get to that point though.
+Somebody really needs to write a FIELD_UPDATE() macro to
+do this read/modify/write pattern.
 
-> +		if (mhi_ep_queue_is_empty(mhi_dev, dir)) {
-> +			dev_err(dev, "TRE not available!\n");
-> +			ret = -EINVAL;
-> +			goto err_exit;
-> +		}
-> +
-> +		el = &ring->ring_cache[ring->rd_offset];
-> +		tre_len = MHI_EP_TRE_GET_LEN(el);
-> +		if (skb->len > tre_len) {
-> +			dev_err(dev, "Buffer size (%d) is too large for TRE (%d)!\n",
-> +				skb->len, tre_len);
-
-This means the receive buffer must be big enough to hold
-any incoming SKB.  This is *without* checking for the
-CHAIN flag in the TRE, so what you describe in the
-patch description seems not to be true.  I.e., multiple
-TREs in a TRD will *not* be consumed if the SKB data
-requires more than what's left in the current TRE.
-
-But you have some other code below, so it's likely I'm
-just misunderstanding this.
-
-> +			ret = -ENOMEM;
-> +			goto err_exit;
-> +		}
-> +
-> +		bytes_to_write = min(buf_remaining, tre_len);
-> +		read_from_loc = skb->data;
-> +		write_to_loc = MHI_EP_TRE_GET_PTR(el);
-> +
-> +		ret = mhi_cntrl->write_to_host(mhi_cntrl, read_from_loc, write_to_loc,
-> +					       bytes_to_write);
-> +		if (ret < 0)
-> +			goto err_exit;
-> +
-> +		buf_remaining -= bytes_to_write;
-> +		/*
-> +		 * For all TREs queued by the host for DL channel, only the EOT flag will be set.
-> +		 * If the packet doesn't fit into a single TRE, send the OVERFLOW event to
-> +		 * the host so that the host can adjust the packet boundary to next TREs. Else send
-> +		 * the EOT event to the host indicating the packet boundary.
-> +		 */
-> +		if (buf_remaining)
-> +			code = MHI_EV_CC_OVERFLOW;
-> +		else
-> +			code = MHI_EV_CC_EOT;
-> +
-> +		ret = mhi_ep_send_completion_event(mhi_cntrl, ring, bytes_to_write, code);
-> +		if (ret) {
-> +			dev_err(dev, "Error sending completion event\n");
-> +			goto err_exit;
-> +		}
-> +
-> +		mhi_ep_ring_inc_index(ring);
-> +	} while (buf_remaining);
-> +
-> +	/*
-> +	 * During high network traffic, sometimes the DL doorbell interrupt from the host is missed
-> +	 * by the endpoint. So manually check for the write pointer update here so that we don't run
-> +	 * out of buffer due to missing interrupts.
-> +	 */
-> +	if (ring->rd_offset + 1 == ring->wr_offset) {
-> +		ret = mhi_ep_update_wr_offset(ring);
-> +		if (ret) {
-> +			dev_err(dev, "Error updating write pointer\n");
-> +			goto err_exit;
-> +		}
+> +		mhi_cntrl->ch_ctx_cache[i].chcfg = cpu_to_le32(tmp);
+> +		mutex_unlock(&mhi_chan->lock);
 > +	}
-> +
-> +	mutex_unlock(&mhi_chan->lock);
-> +
-> +	return 0;
-> +
-> +err_exit:
-> +	mutex_unlock(&mhi_chan->lock);
-> +
-> +	return ret;
 > +}
-> +EXPORT_SYMBOL_GPL(mhi_ep_queue_skb);
 > +
->   static int mhi_ep_cache_host_cfg(struct mhi_ep_cntrl *mhi_cntrl)
+> +void mhi_ep_resume_channels(struct mhi_ep_cntrl *mhi_cntrl)
+> +{
+> +	struct mhi_ep_chan *mhi_chan;
+> +	u32 tmp;
+> +	int i;
+> +
+> +	for (i = 0; i < mhi_cntrl->max_chan; i++) {
+> +		mhi_chan = &mhi_cntrl->mhi_chan[i];
+> +
+> +		if (!mhi_chan->mhi_dev)
+> +			continue;
+> +
+> +		mutex_lock(&mhi_chan->lock);
+> +		/* Skip if the channel is not currently suspended */
+> +		tmp = le32_to_cpu(mhi_cntrl->ch_ctx_cache[i].chcfg);
+> +		if (FIELD_GET(CHAN_CTX_CHSTATE_MASK, tmp) != MHI_CH_STATE_SUSPENDED) {
+> +			mutex_unlock(&mhi_chan->lock);
+> +			continue;
+> +		}
+> +
+> +		dev_dbg(&mhi_chan->mhi_dev->dev, "Resuming channel\n");
+> +		/* Set channel state to RUNNING */
+> +		tmp &= ~CHAN_CTX_CHSTATE_MASK;
+> +		tmp |= FIELD_PREP(CHAN_CTX_CHSTATE_MASK, MHI_CH_STATE_RUNNING);
+> +		mhi_cntrl->ch_ctx_cache[i].chcfg = cpu_to_le32(tmp);
+> +		mutex_unlock(&mhi_chan->lock);
+> +	}
+> +}
+> +
+>   static void mhi_ep_release_device(struct device *dev)
 >   {
->   	struct device *dev = &mhi_cntrl->mhi_dev->dev;
-> diff --git a/include/linux/mhi_ep.h b/include/linux/mhi_ep.h
-> index aaf4b6942037..75cfbf0c6fb0 100644
-> --- a/include/linux/mhi_ep.h
-> +++ b/include/linux/mhi_ep.h
-> @@ -277,4 +277,17 @@ void mhi_ep_power_down(struct mhi_ep_cntrl *mhi_cntrl);
->    */
->   bool mhi_ep_queue_is_empty(struct mhi_ep_device *mhi_dev, enum dma_data_direction dir);
+>   	struct mhi_ep_device *mhi_dev = to_mhi_ep_device(dev);
+> diff --git a/drivers/bus/mhi/ep/sm.c b/drivers/bus/mhi/ep/sm.c
+> index 9a75ecfe1adf..e24ba2d85e13 100644
+> --- a/drivers/bus/mhi/ep/sm.c
+> +++ b/drivers/bus/mhi/ep/sm.c
+> @@ -88,8 +88,11 @@ int mhi_ep_set_m0_state(struct mhi_ep_cntrl *mhi_cntrl)
+>   	enum mhi_state old_state;
+>   	int ret;
 >   
-> +/**
-> + * mhi_ep_queue_skb - Send SKBs to host over MHI Endpoint
-> + * @mhi_dev: Device associated with the channels
-> + * @dir: DMA direction for the channel
-> + * @skb: Buffer for holding SKBs
-> + * @len: Buffer length
-> + * @mflags: MHI Endpoint transfer flags used for the transfer
-> + *
-> + * Return: 0 if the SKBs has been sent successfully, a negative error code otherwise.
-> + */
-> +int mhi_ep_queue_skb(struct mhi_ep_device *mhi_dev, enum dma_data_direction dir,
-> +		     struct sk_buff *skb, size_t len, enum mhi_flags mflags);
-> +
->   #endif
+> +	/* If MHI is in M3, resume suspended channels */
+>   	spin_lock_bh(&mhi_cntrl->state_lock);
+>   	old_state = mhi_cntrl->mhi_state;
+> +	if (old_state == MHI_STATE_M3)
+> +		mhi_ep_resume_channels(mhi_cntrl);
+>   
+>   	ret = mhi_ep_set_mhi_state(mhi_cntrl, MHI_STATE_M0);
+>   	if (ret) {
+> @@ -135,6 +138,7 @@ int mhi_ep_set_m3_state(struct mhi_ep_cntrl *mhi_cntrl)
+>   	}
+>   
+>   	spin_unlock_bh(&mhi_cntrl->state_lock);
+> +	mhi_ep_suspend_channels(mhi_cntrl);
+>   
+>   	/* Signal host that the device moved to M3 */
+>   	ret = mhi_ep_send_state_change_event(mhi_cntrl, MHI_STATE_M3);
 

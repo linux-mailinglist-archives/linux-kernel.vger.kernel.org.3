@@ -2,133 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE9E4B70F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:39:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 506664B724B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241555AbiBOQ1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:27:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33402 "EHLO
+        id S241560AbiBOQ1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:27:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241546AbiBOQ1F (ORCPT
+        with ESMTP id S241558AbiBOQ1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:27:05 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEA766F95
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:26:53 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id h14-20020a17090a130e00b001b88991a305so3440687pja.3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:26:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4AlrkeeOh0/Ufcc3UhsLjdJdRVpoM+riWwT9RuQlIRU=;
-        b=d0pWAwFclxXSjZn3YA4K8V/CwPcWGI1yTN7bKBa+B683NUF8r5WKYsm+VGWk7Vqaez
-         eTDpe4b4sWabolPl84kzQWLnIryk75cvpwhx2vHaq12wHPi7IgJ+ljgw5QChAU6b5KGs
-         MUQQtkJ/4tjH/8foiyaxX4P+jQnNGaAQ0nH+3PY2H8gezxYZRMALMexDENJVdWb+uMVo
-         c4aV+Hs0FpOVSU4MRhW+Rmo3C9OAtWlmSmAe/5zkGSHJNUI7lEIjhFjcy2ltYGPlx4Rz
-         2UFm0jzGVjjjUg9G6lONM41KO33LGQH0Mh/CJNrLs7WjgctuadQu5dImAX0RerSwTTAY
-         C2/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4AlrkeeOh0/Ufcc3UhsLjdJdRVpoM+riWwT9RuQlIRU=;
-        b=35v20skVu49urNWGENljn/vbO8Qitd3GPqnTnc5hmRToydasNO1B53Lr4a7W/bAXe/
-         jLymc3L5FTpMLEB9YWoa8nHtl9TOIfa0JNZqGgpos8aYvujR/QVRClX2cSW9HqH07+Z/
-         GQkIKZK9EQCkILwPoksNqYLTjKuxnRd5343JOr21+uRIi2Dsk7ZP4OhSUQQNMb8m0uju
-         GNMaTeXerfFmLaEr1UZXeVtapT5+E+pp9sUGiIgmBwulSF5VFyAgRvZjkr5hJJMaAiFl
-         AiBWHS+tPtQmroujpGVHz64rMkVapbNEhbNccQQsotZJxdc9BDjK176sXZRUxiYvtUvc
-         XTYw==
-X-Gm-Message-State: AOAM531S5kqNt1aDwK8awGTEL9KkHLgH1oVS6RdDMmM+2rcEObJsN0iH
-        7xA+pvSgPQIvVQ3h4vEH7WkwpcqarmSz3g==
-X-Google-Smtp-Source: ABdhPJzwgO018qz0B77mszx1CmVsyurVkt4dBBqXVTV6Jfw1+PjyE7MG5D5NZVyMRs+57WNG/ZcL2w==
-X-Received: by 2002:a17:902:ed89:: with SMTP id e9mr5235867plj.88.1644942412865;
-        Tue, 15 Feb 2022 08:26:52 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id g6sm20404223pfv.158.2022.02.15.08.26.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 08:26:52 -0800 (PST)
-Date:   Tue, 15 Feb 2022 16:26:48 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Wanpeng Li <kernellwp@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-Subject: Re: [PATCH] KVM: Fix lockdep false negative during host resume
-Message-ID: <YgvUSCjukIxvpDlf@google.com>
-References: <1644920142-81249-1-git-send-email-wanpengli@tencent.com>
+        Tue, 15 Feb 2022 11:27:43 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE1A6C920;
+        Tue, 15 Feb 2022 08:27:30 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21FGDE1F001119;
+        Tue, 15 Feb 2022 16:27:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=yuJ33/IS3C8JmgqYKYRI7WGKiRlXun9JPd2/bJ+93WA=;
+ b=sOclZRJgd7NDzOsSb2uU840Kwry0jw4kCuTeWrNB5Rja9fkxfT64FGzeYCwe0RhJ5AKS
+ ySmme8nLWrCxoVaavRnmZAvyrkH8BIIZ6QPr1vpF2KN3t2zKCJSCI0Gv5pJI5AqlzSvK
+ boUuO9Ep8Od6htYVlFtEPAyi8Na79tE1k3svbEFDZHhtDlp+u11ovagr5coTOOOlnZkf
+ HUDthA4wkeZ81x3TRFhzVEs4yjLhgJF0QgDkkfD8e4z7cDUYVNenb4dEidard4jMOURK
+ hBEEmRQqhJ70xhwsRbPSQ/f5cbVAL1H+0Ji493n4Rk2io31tvRP3NnOjyGJB2LhFMOGf xw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8d9fvjff-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 16:27:07 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21FGDTLm009902;
+        Tue, 15 Feb 2022 16:27:06 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8d9fvje5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 16:27:06 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21FGC1EO007679;
+        Tue, 15 Feb 2022 16:27:03 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma05fra.de.ibm.com with ESMTP id 3e64h9qrkj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 16:27:03 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21FGR1Tv24510740
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Feb 2022 16:27:01 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 61D3EAE045;
+        Tue, 15 Feb 2022 16:27:01 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EB164AE053;
+        Tue, 15 Feb 2022 16:27:00 +0000 (GMT)
+Received: from localhost (unknown [9.43.98.51])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 15 Feb 2022 16:27:00 +0000 (GMT)
+Date:   Tue, 15 Feb 2022 21:56:59 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v2 09/13] powerpc/ftrace: Implement
+ CONFIG_DYNAMIC_FTRACE_WITH_ARGS
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Jiri Kosina <jikos@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Petr Mladek <pmladek@suse.com>
+References: <cover.1640017960.git.christophe.leroy@csgroup.eu>
+        <5831f711a778fcd6eb51eb5898f1faae4378b35b.1640017960.git.christophe.leroy@csgroup.eu>
+        <1644852011.qg7ud9elo2.naveen@linux.ibm.com>
+        <1b28f52a-f8b7-6b5c-e726-feac4123517d@csgroup.eu>
+        <875ypgo0f3.fsf@mpe.ellerman.id.au>
+        <1644930705.g64na2kgvd.naveen@linux.ibm.com>
+        <20220215093849.556d5444@gandalf.local.home>
+In-Reply-To: <20220215093849.556d5444@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1644920142-81249-1-git-send-email-wanpengli@tencent.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1644942378.byz0qymic3.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: jrSZjNs8gbiYltKWnkGMOceFtwUtrkOd
+X-Proofpoint-GUID: BBeV6KJeqsMu-XQ3oul3qIPY_5o_K6oZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-15_04,2022-02-14_04,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ phishscore=0 bulkscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 adultscore=0 impostorscore=0 clxscore=1011 mlxlogscore=782
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202150095
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022, Wanpeng Li wrote:
-> From: Wanpeng Li <wanpengli@tencent.com>
-> 
-> I saw the below splatting after the host suspended and resumed.
-> 
->    WARNING: CPU: 0 PID: 2943 at kvm/arch/x86/kvm/../../../virt/kvm/kvm_main.c:5531 kvm_resume+0x2c/0x30 [kvm]
->    CPU: 0 PID: 2943 Comm: step_after_susp Tainted: G        W IOE     5.17.0-rc3+ #4
->    RIP: 0010:kvm_resume+0x2c/0x30 [kvm]
->    Call Trace:
->     <TASK>
->     syscore_resume+0x90/0x340
->     suspend_devices_and_enter+0xaee/0xe90
->     pm_suspend.cold+0x36b/0x3c2
->     state_store+0x82/0xf0
->     kernfs_fop_write_iter+0x1b6/0x260
->     new_sync_write+0x258/0x370
->     vfs_write+0x33f/0x510
->     ksys_write+0xc9/0x160
->     do_syscall_64+0x3b/0xc0
->     entry_SYSCALL_64_after_hwframe+0x44/0xae
-> 
-> lockdep_is_held() can return -1 when lockdep is disabled which triggers
-> this warning. Let's use lockdep_assert_not_held() which can detect 
-> incorrect calls while holding a lock and it also avoids false negatives
-> when lockdep is disabled.
-> 
+Steven Rostedt wrote:
+> On Tue, 15 Feb 2022 19:06:48 +0530
+> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+>=20
+>> As I understand it, the reason ftrace_get_regs() was introduced was to=20
+>> be able to only return the pt_regs, if _all_ registers were saved into=20
+>> it, which we don't do when coming in through ftrace_caller(). See the=20
+>> x86 implementation (commit 02a474ca266a47 ("ftrace/x86: Allow for=20
+>> arguments to be passed in to ftrace_regs by default"), which returns=20
+>> pt_regs conditionally.
+>=20
+> I can give you the history of ftrace_caller and ftrace_regs_caller.
+>=20
+> ftrace_caller saved just enough as was denoted for gcc mcount trampolines=
+.
+> The new fentry which happens at the start of the function, whereas mcount
+> happens after the stack frame is set up, may change the rules on some
+> architectures.
+>=20
+> As for ftrace_regs_caller, that was created for kprobes. As the majority =
+of
+> kprobes were added at the start of the function, it made sense to hook in=
+to
+> ftrace as the ftrace trampoline call is much faster than taking a
+> breakpoint interrupt. But to keep compatibility with breakpoint
+> interrupts, we needed to fill in all the registers, and make it act just
+> like a breakpoint interrupt.
+>=20
+> I've been wanting to record function parameters, and because the ftrace
+> trampoline must at a minimum save the function parameters before calling
+> the ftrace callbacks, all the information for those parameters were being
+> saved but were never exposed to the ftrace callbacks. I created the the
+> DYNAMIC_FTRACE_WITH_ARGS to expose them. I first just used pt_regs with
+> just the parameters filled in, but that was criticized as it could be
+> confusing where the non filled in pt_regs might be used and thinking they
+> are legitimate. So I created ftrace_regs that would give you just the
+> function arguments (if DYNAMIC_FTRACE_WITH_ARGS is defined), or it will
+> give you a full pt_regs, if the caller came from the ftrace_regs_caller. =
+If
+> not, it will give you a NULL pointer.
+>=20
+> The first user to use the args was live kernel patching, as they only nee=
+d
+> that and the return pointer.
 
-Fixes: 2eb06c306a57 ("KVM: Fix spinlock taken warning during host resume")
+Thanks, that helps.
 
-> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
-> ---
->  virt/kvm/kvm_main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 83c57bcc6eb6..3f861f33bfe0 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -5528,7 +5528,7 @@ static void kvm_resume(void)
->  {
->  	if (kvm_usage_count) {
->  #ifdef CONFIG_LOCKDEP
+- Naveen
 
-The #ifdef can be dropped, it was added only to omit the WARN_ON.
-
-With that,
-
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-
-> -		WARN_ON(lockdep_is_held(&kvm_count_lock));
-> +		lockdep_assert_not_held(&kvm_count_lock);
->  #endif
->  		hardware_enable_nolock(NULL);
->  	}
-> -- 
-> 2.25.1
-> 

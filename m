@@ -2,164 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4334B7090
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:39:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA134B73C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:44:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241595AbiBOQhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:37:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40154 "EHLO
+        id S241697AbiBOQjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:39:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233621AbiBOQhe (ORCPT
+        with ESMTP id S233621AbiBOQjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:37:34 -0500
-X-Greylist: delayed 9703 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 08:37:23 PST
-Received: from mail-4018.proton.ch (mail-4018.proton.ch [185.70.40.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137D2A4184;
-        Tue, 15 Feb 2022 08:37:23 -0800 (PST)
-Date:   Tue, 15 Feb 2022 16:37:19 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
-        s=protonmail2; t=1644943039;
-        bh=f1kG4y1Pad9UaeKLlKedqj/sm+OCsoIlrgJXYL6aSeI=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=E9V91jN86xK6pzcMltPM69/bOQFFQNJV14lQwmcL2FYT3foga5gLBN44BK4oxAPri
-         Vd8zuw1PuCIPGRg2//vtiVX9F2F6j/JTJL3odWwNmjV4QndYJ/cNzlL994kRk5oss4
-         t+oB5svlaOh0xBX9GF7yyVj1AjeFwDYEvnfX4LlK0wXUUANzluIiX7MMssmf+EtKXg
-         j3TEQWNZHHEFFnC96soVMV8mnPbtAkLt2VhY0qKE/ctXlMHsckdPLAA5vi0D16WsVW
-         ELSgf6c8NzeavnNPc22BI1Gvf+qHdGR5FmKWYe1aX8Wak2lhTUG3wpbv4id1Yx/OtQ
-         5XOlTjjx0fyLA==
-To:     Emil Velikov <emil.l.velikov@gmail.com>
-From:   Simon Ser <contact@emersion.fr>
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        LAKML <linux-arm-kernel@lists.infradead.org>
-Reply-To: Simon Ser <contact@emersion.fr>
-Subject: Re: [Intel-gfx] [PATCH v8 1/3] gpu: drm: separate panel orientation property creating and value setting
-Message-ID: <GYG6EVT1MqtmfKiPpMhDG9mpuATnmwVDq2PuE_dpDat5oQW_t1tUfm39lSWHj32D5r7mrog27sL4dkgdMYQ5BN830TfVOrgQ4Ts8LcO8Hcs=@emersion.fr>
-In-Reply-To: <CACvgo532-pC+7DLFCo=DWTX-OnJEJvSoTmQnt3_qLhiT4cqEMg@mail.gmail.com>
-References: <20220208084234.1684930-1-hsinyi@chromium.org> <CACvgo53u01BK_D0ZssV+gCepjxSz23Nr5Dy1qXeaAoJuu6VCFQ@mail.gmail.com> <KW6DNh6IRRgVJx9DfOFBnEqc4a0x-AnDXEbMxwpfEbk8dOn_KGVzAfo-slJWq-4nWW728Uc-OVpFh2w4fDE4-bxfkDuz1hFILRVvbcuXqaw=@emersion.fr> <CACvgo532-pC+7DLFCo=DWTX-OnJEJvSoTmQnt3_qLhiT4cqEMg@mail.gmail.com>
+        Tue, 15 Feb 2022 11:39:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB6DC336D;
+        Tue, 15 Feb 2022 08:39:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0555F60ACF;
+        Tue, 15 Feb 2022 16:39:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45011C340EB;
+        Tue, 15 Feb 2022 16:39:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644943145;
+        bh=V9kovIYtQQZPjm+yjWJXoF36Q5nY9s/7izEgPXb6ED0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H20AF5GpAoL0xHR3aw5y9HrMfQPcCLnqPRpm5ZgsnuWQnHD0/e/3t4HykhgISSXdI
+         XBPmf4Kc6YbG2y45fo6XP/43XSOAo2IaNBPCr+PDW3QFrk3UCQGPzKW4r1u8xtm6gm
+         pJmNxc28w0Ulw3yjO0GpfQweuD5Gj/tlk8QGMj0CpMAPB0gbmSds3rdU7M/3Ceh27W
+         qVDXyt7GQPbqpcS09WIiNAtZ3CcfV9jz3WijMroOKdl4Z0HA0j0kqX5o5p7IB03HoY
+         fm/q3Pzzit71kyrQgKTJXnWGQMyFB31qpgDJnJUNSEMYgBKqdxrzLy/bl+zBJt46xx
+         BZwAqoN836hLQ==
+Date:   Tue, 15 Feb 2022 16:38:59 +0000
+From:   Will Deacon <will@kernel.org>
+To:     "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
+Cc:     Darren Hart <darren@os.amperecomputing.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Arm <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        "D . Scott Phillips" <scott@os.amperecomputing.com>,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] arm64: smp: Skip MC domain for SoCs without shared cache
+Message-ID: <20220215163858.GA8458@willie-the-truck>
+References: <8c4a69eca4d0591f30c112df59c5098c24923bd3.1644543449.git.darren@os.amperecomputing.com>
+ <ec9be4eb7a0548178191edd51ddd309f@hisilicon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ec9be4eb7a0548178191edd51ddd309f@hisilicon.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday, February 15th, 2022 at 15:38, Emil Velikov <emil.l.velikov@gmai=
-l.com> wrote:
+On Fri, Feb 11, 2022 at 03:20:51AM +0000, Song Bao Hua (Barry Song) wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Darren Hart [mailto:darren@os.amperecomputing.com]
+> > Sent: Friday, February 11, 2022 2:43 PM
+> > To: LKML <linux-kernel@vger.kernel.org>; Linux Arm
+> > <linux-arm-kernel@lists.infradead.org>
+> > Cc: Catalin Marinas <catalin.marinas@arm.com>; Will Deacon <will@kernel.org>;
+> > Peter Zijlstra <peterz@infradead.org>; Vincent Guittot
+> > <vincent.guittot@linaro.org>; Song Bao Hua (Barry Song)
+> > <song.bao.hua@hisilicon.com>; Valentin Schneider
+> > <valentin.schneider@arm.com>; D . Scott Phillips
+> > <scott@os.amperecomputing.com>; Ilkka Koskinen
+> > <ilkka@os.amperecomputing.com>; stable@vger.kernel.org
+> > Subject: [PATCH] arm64: smp: Skip MC domain for SoCs without shared cache
+> > 
+> > SoCs such as the Ampere Altra define clusters but have no shared
+> > processor-side cache. As of v5.16 with CONFIG_SCHED_CLUSTER and
+> > CONFIG_SCHED_MC, build_sched_domain() will BUG() with:
+> > 
+> > BUG: arch topology borken
+> >      the CLS domain not a subset of the MC domain
+> > 
+> > for each CPU (160 times for a 2 socket 80 core Altra system). The MC
+> > level cpu mask is then extended to that of the CLS child, and is later
+> > removed entirely as redundant.
+> > 
+> > This change detects when all cpu_coregroup_mask weights=1 and uses an
+> > alternative sched_domain_topology equivalent to the default if
+> > CONFIG_SCHED_MC were disabled.
+> > 
+> > The final resulting sched domain topology is unchanged with or without
+> > CONFIG_SCHED_CLUSTER, and the BUG is avoided:
+> > 
+> > For CPU0:
+> > 
+> > With CLS:
+> > CLS  [0-1]
+> > DIE  [0-79]
+> > NUMA [0-159]
+> > 
+> > Without CLS:
+> > DIE  [0-79]
+> > NUMA [0-159]
+> > 
+> > Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > Cc: Will Deacon <will@kernel.org>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> > Cc: Barry Song <song.bao.hua@hisilicon.com>
+> > Cc: Valentin Schneider <valentin.schneider@arm.com>
+> > Cc: D. Scott Phillips <scott@os.amperecomputing.com>
+> > Cc: Ilkka Koskinen <ilkka@os.amperecomputing.com>
+> > Cc: <stable@vger.kernel.org> # 5.16.x
+> > Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
+> 
+> Hi Darrent,
+> What kind of resources are clusters sharing on Ampere Altra?
+> So on Altra, cpus are not sharing LLC? Each LLC is separate
+> for each cpu?
+> 
+> > ---
+> >  arch/arm64/kernel/smp.c | 32 ++++++++++++++++++++++++++++++++
+> >  1 file changed, 32 insertions(+)
+> > 
+> > diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+> > index 27df5c1e6baa..0a78ac5c8830 100644
+> > --- a/arch/arm64/kernel/smp.c
+> > +++ b/arch/arm64/kernel/smp.c
+> > @@ -715,9 +715,22 @@ void __init smp_init_cpus(void)
+> >  	}
+> >  }
+> > 
+> > +static struct sched_domain_topology_level arm64_no_mc_topology[] = {
+> > +#ifdef CONFIG_SCHED_SMT
+> > +	{ cpu_smt_mask, cpu_smt_flags, SD_INIT_NAME(SMT) },
+> > +#endif
+> > +
+> > +#ifdef CONFIG_SCHED_CLUSTER
+> > +	{ cpu_clustergroup_mask, cpu_cluster_flags, SD_INIT_NAME(CLS) },
+> > +#endif
+> > +	{ cpu_cpu_mask, SD_INIT_NAME(DIE) },
+> > +	{ NULL, },
+> > +};
+> > +
+> >  void __init smp_prepare_cpus(unsigned int max_cpus)
+> >  {
+> >  	const struct cpu_operations *ops;
+> > +	bool use_no_mc_topology = true;
+> >  	int err;
+> >  	unsigned int cpu;
+> >  	unsigned int this_cpu;
+> > @@ -758,6 +771,25 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
+> > 
+> >  		set_cpu_present(cpu, true);
+> >  		numa_store_cpu_info(cpu);
+> > +
+> > +		/*
+> > +		 * Only use no_mc topology if all cpu_coregroup_mask weights=1
+> > +		 */
+> > +		if (cpumask_weight(cpu_coregroup_mask(cpu)) > 1)
+> > +			use_no_mc_topology = false;
+> 
+> This seems to be wrong? If you have 5 cpus,
+> Cpu0 has cpu_coregroup_mask(cpu)== 1, cpu1-4
+> has cpu_coregroup_mask(cpu)== 4, for cpu0, you still
+> need to remove MC, but for cpu1-4, you will need
+> CLS and MC both?
 
-> On Tue, 15 Feb 2022 at 13:55, Simon Ser <contact@emersion.fr> wrote:
-> >
-> > On Tuesday, February 15th, 2022 at 13:04, Emil Velikov <emil.l.velikov@=
-gmail.com> wrote:
-> >
-> > > Greetings everyone,
-> > >
-> > > Padron for joining in so late o/
-> > >
-> > > On Tue, 8 Feb 2022 at 08:42, Hsin-Yi Wang <hsinyi@chromium.org> wrote=
-:
-> > > >
-> > > > drm_dev_register() sets connector->registration_state to
-> > > > DRM_CONNECTOR_REGISTERED and dev->registered to true. If
-> > > > drm_connector_set_panel_orientation() is first called after
-> > > > drm_dev_register(), it will fail several checks and results in foll=
-owing
-> > > > warning.
-> > > >
-> > > > Add a function to create panel orientation property and set default=
- value
-> > > > to UNKNOWN, so drivers can call this function to init the property =
-earlier
-> > > > , and let the panel set the real value later.
-> > > >
-> > >
-> > > The warning illustrates a genuine race condition, where userspace wil=
-l
-> > > read the old/invalid property value/state. So this patch masks away
-> > > the WARNING without addressing the actual issue.
-> > > Instead can we fix the respective drivers, so that no properties are
-> > > created after drm_dev_register()?
-> > >
-> > > Longer version:
-> > > As we look into drm_dev_register() it's in charge of creating the
-> > > dev/sysfs nodes (et al). Note that connectors cannot disappear at
-> > > runtime.
-> > > For panel orientation, we are creating an immutable connector
-> > > properly, meaning that as soon as drm_dev_register() is called we mus=
-t
-> > > ensure that the property is available (if applicable) and set to the
-> > > correct value.
-> >
-> > Unfortunately we can't quite do this. To apply the panel orientation qu=
-irks we
-> > need to grab the EDID of the eDP connector, and this happened too late =
-in my
-> > testing.
-> >
-> > What we can do is create the prop early during module load, and update =
-it when
-> > we read the EDID (at the place where we create it right now). User-spac=
-e will
-> > receive a hotplug event after the EDID is read, so will be able to pick=
- up the
-> > new value if any.
->
-> Didn't quite get that, are you saying that a GETPROPERTY for the EDID,
-> the ioctl blocks or that we get an empty EDID?
+What is the *current* behaviour on such a system?
 
-I'm not referring to GETPROPERTY, I'm referring to the driver getting the E=
-DID
-from the sink (here, the eDP panel). In my experimentations with amdgpu I
-noticed that the driver module load finished before the EDID was available =
-to
-the driver. Maybe other drivers behave differently and probe connectors whe=
-n
-loaded, not sure.
-
-> The EDID hotplug even thing is neat - sounds like it also signals on
-> panel orientation, correct?
-> On such an event, which properties userspace should be re-fetching -
-> everything or guess randomly?
->
-> Looking through the documentation, I cannot see a clear answer :-\
-
-User-space should re-fetch *all* properties. In practice some user-space ma=
-y
-only be fetching some properties, but that should get fixed in user-space.
-
-Also the kernel can indicate that only a single connector changed via the
-"CONNECTOR" uevent prop, or even a single connector property via "PROPERTY"=
-.
-See [1] for a user-space implementation. But all of this is purely an optio=
-nal
-optimization. Re-fetching all properties is a bit slower (especially if som=
-e
-drmModeGetConnector calls force-probe connectors) but works perfectly fine.
-
-It would be nice to document, if you have the time feel free to send a patc=
-h
-and CC danvet, pq and me.
-
-[1]: https://gitlab.freedesktop.org/wlroots/wlroots/-/blob/252b2348bd62170d=
-97c4e81fb2050f757b56d67e/backend/session/session.c#L144
+Will

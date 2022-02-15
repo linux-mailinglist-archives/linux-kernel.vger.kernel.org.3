@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD394B6885
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:01:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B69504B6878
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:00:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236291AbiBOKBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 05:01:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35900 "EHLO
+        id S236281AbiBOKBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 05:01:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236244AbiBOKAx (ORCPT
+        with ESMTP id S236191AbiBOKAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 05:00:53 -0500
+        Tue, 15 Feb 2022 05:00:44 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FBB10E07B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 02:00:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4627F10E541
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 02:00:35 -0800 (PST)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1nJudB-0001tE-P5; Tue, 15 Feb 2022 11:00:21 +0100
+        id 1nJudB-0001tF-OW; Tue, 15 Feb 2022 11:00:21 +0100
 Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1nJud9-009fw4-CS; Tue, 15 Feb 2022 11:00:19 +0100
+        id 1nJud9-009fwD-Dg; Tue, 15 Feb 2022 11:00:19 +0100
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
         "David S. Miller" <davem@davemloft.net>,
@@ -42,9 +42,9 @@ Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
         linux-tegra@vger.kernel.org
-Subject: [PATCH v4 2/8] dt-bindings: net: add schema for Microchip/SMSC LAN95xx USB Ethernet controllers
-Date:   Tue, 15 Feb 2022 11:00:12 +0100
-Message-Id: <20220215100018.2306046-3-o.rempel@pengutronix.de>
+Subject: [PATCH v4 3/8] dt-bindings: usb: ci-hdrc-usb2: fix node node for ethernet controller
+Date:   Tue, 15 Feb 2022 11:00:13 +0100
+Message-Id: <20220215100018.2306046-4-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220215100018.2306046-1-o.rempel@pengutronix.de>
 References: <20220215100018.2306046-1-o.rempel@pengutronix.de>
@@ -63,105 +63,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create initial schema for Microchip/SMSC LAN95xx USB Ethernet controllers and
-import some of currently supported USB IDs form drivers/net/usb/smsc95xx.c
-
-This devices are already used in some of DTs. So, this schema makes it official.
-NOTE: there was no previously documented txt based DT binding for this
-controllers.
+This documentation provides wrong node name for the Ethernet controller.
+It should be "ethernet" instead of "smsc" as required by Ethernet
+controller devicetree schema:
+ Documentation/devicetree/bindings/net/ethernet-controller.yaml
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- .../bindings/net/microchip,lan95xx.yaml       | 80 +++++++++++++++++++
- 1 file changed, 80 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
+ Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml b/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
-new file mode 100644
-index 000000000000..8521c65366b4
---- /dev/null
-+++ b/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
-@@ -0,0 +1,80 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/net/microchip,lan95xx.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: The device tree bindings for the USB Ethernet controllers
-+
-+maintainers:
-+  - Oleksij Rempel <o.rempel@pengutronix.de>
-+
-+description: |
-+  Device tree properties for hard wired SMSC95xx compatible USB Ethernet
-+  controller.
-+
-+allOf:
-+  - $ref: ethernet-controller.yaml#
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - usb424,9500   # SMSC9500 USB Ethernet Device
-+          - usb424,9505   # SMSC9505 USB Ethernet Device
-+          - usb424,9530   # SMSC LAN9530 USB Ethernet Device
-+          - usb424,9730   # SMSC LAN9730 USB Ethernet Device
-+          - usb424,9900   # SMSC9500 USB Ethernet Device (SAL10)
-+          - usb424,9901   # SMSC9505 USB Ethernet Device (SAL10)
-+          - usb424,9902   # SMSC9500A USB Ethernet Device (SAL10)
-+          - usb424,9903   # SMSC9505A USB Ethernet Device (SAL10)
-+          - usb424,9904   # SMSC9512/9514 USB Hub & Ethernet Device (SAL10)
-+          - usb424,9905   # SMSC9500A USB Ethernet Device (HAL)
-+          - usb424,9906   # SMSC9505A USB Ethernet Device (HAL)
-+          - usb424,9907   # SMSC9500 USB Ethernet Device (Alternate ID)
-+          - usb424,9908   # SMSC9500A USB Ethernet Device (Alternate ID)
-+          - usb424,9909   # SMSC9512/9514 USB Hub & Ethernet Devic.  ID)
-+          - usb424,9e00   # SMSC9500A USB Ethernet Device
-+          - usb424,9e01   # SMSC9505A USB Ethernet Device
-+          - usb424,9e08   # SMSC LAN89530 USB Ethernet Device
-+          - usb424,ec00   # SMSC9512/9514 USB Hub & Ethernet Device
-+
-+  reg: true
-+  local-mac-address: true
-+  mac-address: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    usb {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        ethernet@1 {
-+            compatible = "usb424,ec00";
-+            reg = <1>;
-+            local-mac-address = [00 00 00 00 00 00];
-+        };
-+    };
-+  - |
-+    usb {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        usb1@1 {
-+            compatible = "usb424,9514";
-+            reg = <1>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            ethernet@1 {
-+               compatible = "usb424,ec00";
-+               reg = <1>;
-+            };
-+        };
-+    };
+diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
+index a5c5db6a0b2d..ba51fb1252b9 100644
+--- a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
++++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
+@@ -151,7 +151,7 @@ Example for HSIC:
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+ 
+-		usbnet: smsc@1 {
++		usbnet: ethernet@1 {
+ 			compatible = "usb424,9730";
+ 			reg = <1>;
+ 		};
 -- 
 2.30.2
 

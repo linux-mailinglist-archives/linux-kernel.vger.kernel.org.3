@@ -2,63 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 103974B78A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99AE54B7868
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242318AbiBORNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 12:13:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39016 "EHLO
+        id S240485AbiBORIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 12:08:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235970AbiBORNH (ORCPT
+        with ESMTP id S236369AbiBORIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 12:13:07 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52DE7119F7A;
-        Tue, 15 Feb 2022 09:12:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644945177; x=1676481177;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=NgaNvbLh/5PNCAekVCyte5+CqdZYMQ6Cb7Fvz6rUpBA=;
-  b=hGxfzI+qH+2nBbvtKpBoIipw7EvobynCdMjJu4lBuCpQVAHQsNr6G/qw
-   xVh4Hk592PGTai6CrUxcQMwhm139jnHDza+Kf6PDVDaRjJQIhh2O+EChh
-   0j3Lo0aEc3sQJskZnNF2h9X91kXDDrS6S/LnguIc0KwuNlcI9LABJAYMc
-   dfJlEGd5MR/3DbX/8mSukJ5vo5bh4NfnxcNlAns3TUOcej2EWeaCesEzt
-   TWt/TBQVSOxl6UrFF0QcGlfpQ7dzZur/lLzv4dDkbej97siycToV3bwVZ
-   NGYKebIyouQNWYB4W5Sqy98MHn3hEH2UzrF9D1PI0DdNyk5l22Rk8INVU
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="336830818"
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="336830818"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 09:07:53 -0800
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="775934195"
-Received: from tngodup-mobl.amr.corp.intel.com (HELO [10.209.32.98]) ([10.209.32.98])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 09:07:50 -0800
-Message-ID: <56fc0ced-d8d2-146f-6ca8-b95bd7e0b4f5@intel.com>
-Date:   Tue, 15 Feb 2022 09:07:45 -0800
+        Tue, 15 Feb 2022 12:08:20 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAC811AA1B
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:08:10 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id d187so35886384pfa.10
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:08:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TRcNDUgXoT6OZOBt2+++3rmCdi8tsP1V+jytusJgHpc=;
+        b=dItuKln7xrgOVHkAQ9pjdGpQViJKChs+LxfNttrgJ0Cr7S2Qmt+lYAW8GRGaPy6/P5
+         IB0o7rRimgAtQJ6piWnoiTIvPalw2BpyCcW4W4CHZKSU9VoeDbDYXDTLRcCa2JcAasY/
+         aEl6Yy9zYJ0dG3Ub4G1lWT8iM9S4xff0T/QO191ZffmbQYPR3EP6JZ3AaPApvNfEZpBo
+         1C8yihxT0e3xX8KRlOrF1it+DQYR+sJRhK+66IVvI0x6LWcTruuNFupZFEVihwMjSJc0
+         VEfKrnSvv0CRb/xNO5g+DggdjuzTvbptWmYTWyET8Os5PSKVmt0mjeSHlx6q0qgYb1ON
+         ptMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TRcNDUgXoT6OZOBt2+++3rmCdi8tsP1V+jytusJgHpc=;
+        b=vuJQFX1yuVjqFDMPXrzH5gWimvpjZbIr13YIgPgNNyzOZdz+47PU1SYF3+OMf0i0Fd
+         zzQNQnNR2J6srjxTt3dECjlWxZTFvMp3bv2I4NujC3vYmty2dwSg4WpazjMoTV1yz2GP
+         8ucFrXNVYtFOp+Q+cxCwVI6t2SfqW3YlRKkfxhUE7ND+M6zmzR5tBjeQFQ1TsCRisDPf
+         b16koum4+sH9XCtfzCVrdnIjm1b3BEadkM09sU4/Ya94juMbVZAoCucQRKSN7wValnYZ
+         PFXtE+k71EsPCpPOkMrCEsKStaXHP1u76l64Jo2dagxnUn17ttSxnJqzs0fhFVKrUUw2
+         MOig==
+X-Gm-Message-State: AOAM530OWOha25W0lIhaiOMrCIKUn2VrbzyeUKlsU3dJnTfhyQHGM6gA
+        L8zLl/VWOPgrj6CwjhvHzVKokA==
+X-Google-Smtp-Source: ABdhPJzrsZn3NwtaFf5BiKmBjOYmsYtgU/fWcbt/Anm0hsxLEPBoVreh5F9X5rtngmqMyMdHCgZsJQ==
+X-Received: by 2002:a05:6a00:16d3:: with SMTP id l19mr5227528pfc.7.1644944889854;
+        Tue, 15 Feb 2022 09:08:09 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k26sm3050425pgl.46.2022.02.15.09.08.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 09:08:09 -0800 (PST)
+Date:   Tue, 15 Feb 2022 17:08:05 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] KVM: x86: remove KVM_X86_OP_NULL and mark
+ optional kvm_x86_ops
+Message-ID: <Ygvd9Q+R+tt6WfC2@google.com>
+References: <20220214131614.3050333-1-pbonzini@redhat.com>
+ <20220214131614.3050333-3-pbonzini@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Brian Geffon <bgeffon@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Willis Kung <williskung@google.com>,
-        Guenter Roeck <groeck@google.com>,
-        Borislav Petkov <bp@suse.de>,
-        Andy Lutomirski <luto@kernel.org>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <20220215153644.3654582-1-bgeffon@google.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH] x86/fpu: Correct pkru/xstate inconsistency
-In-Reply-To: <20220215153644.3654582-1-bgeffon@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220214131614.3050333-3-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,122 +72,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/22 07:36, Brian Geffon wrote:
-> There are two issues with PKRU handling prior to 5.13. 
-
-Are you sure both of these issues were introduced by 0cecca9d03c?  I'm
-surprised that the get_xsave_addr() issue is not older.
-
-Should this be two patches?
-
-> The first is that when eagerly switching PKRU we check that current
-
-Don't forget to write in imperative mood.  No "we's", please.
-
-https://www.kernel.org/doc/html/latest/process/maintainer-tip.html
-
-This goes for changelogs and comments too.
-
-> is not a kernel thread as kernel threads will never use PKRU. It's
-> possible that this_cpu_read_stable() on current_task (ie.
-> get_current()) is returning an old cached value. By forcing the read
-> with this_cpu_read() the correct task is used. Without this it's
-> possible when switching from a kernel thread to a userspace thread
-> that we'll still observe the PF_KTHREAD flag and never restore the
-> PKRU. And as a result this issue only occurs when switching from a
-> kernel thread to a userspace thread, switching from a non kernel
-> thread works perfectly fine because all we consider in that situation
-> is the flags from some other non kernel task and the next fpu is
-> passed in to switch_fpu_finish().
-
-It makes *sense* that there would be a place in the context switch code
-where 'current' is wonky, but I never realized this.  This seems really
-fragile, but *also* trivially detectable.
-
-Is the PKRU code really the only code to use 'current' in a buggy way
-like this?
-
-> The second issue is when using write_pkru() we only write to the
-> xstate when the feature bit is set because get_xsave_addr() returns
-> NULL when the feature bit is not set. This is problematic as the CPU
-> is free to clear the feature bit when it observes the xstate in the
-> init state, this behavior seems to be documented a few places throughout
-> the kernel. If the bit was cleared then in write_pkru() we would happily
-> write to PKRU without ever updating the xstate, and the FPU restore on
-> return to userspace would load the old value agian.
-
-
-						^ again
-
-It's probably worth noting that the AMD init tracker is a lot more
-aggressive than Intel's.  On Intel, I think XRSTOR is the only way to
-get back to the init state.  You're obviously hitting this on AMD.
-
-It's also *very* unlikely that PKRU gets back to a value of 0.  I think
-we added a selftest for this case in later kernels.
-
-That helps explain why this bug hung around for so long.
-
-> diff --git a/arch/x86/include/asm/fpu/internal.h b/arch/x86/include/asm/fpu/internal.h
-> index 03b3de491b5e..540bda5bdd28 100644
-> --- a/arch/x86/include/asm/fpu/internal.h
-> +++ b/arch/x86/include/asm/fpu/internal.h
-> @@ -598,7 +598,7 @@ static inline void switch_fpu_finish(struct fpu *new_fpu)
->  	 * PKRU state is switched eagerly because it needs to be valid before we
->  	 * return to userland e.g. for a copy_to_user() operation.
->  	 */
-> -	if (!(current->flags & PF_KTHREAD)) {
-> +	if (!(this_cpu_read(current_task)->flags & PF_KTHREAD)) {
-
-This really deserves a specific comment.
-
->  		/*
->  		 * If the PKRU bit in xsave.header.xfeatures is not set,
->  		 * then the PKRU component was in init state, which means
-> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-> index 9e71bf86d8d0..aa381b530de0 100644
-> --- a/arch/x86/include/asm/pgtable.h
-> +++ b/arch/x86/include/asm/pgtable.h
-> @@ -140,16 +140,22 @@ static inline void write_pkru(u32 pkru)
->  	if (!boot_cpu_has(X86_FEATURE_OSPKE))
->  		return;
+On Mon, Feb 14, 2022, Paolo Bonzini wrote:
+> The original use of KVM_X86_OP_NULL, which was to mark calls
+> that do not follow a specific naming convention, is not in use
+> anymore.  Instead, let's mark calls that are optional because
+> they are always invoked within conditionals or with static_call_cond.
+> Those that are _not_, i.e. those that are defined with KVM_X86_OP,
+> must be defined by both vendor modules or some kind of NULL pointer
+> dereference is bound to happen at runtime.
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/include/asm/kvm-x86-ops.h | 84 +++++++++++++++---------------
+>  arch/x86/include/asm/kvm_host.h    |  4 +-
+>  arch/x86/kvm/x86.c                 |  2 +-
+>  3 files changed, 44 insertions(+), 46 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index 9e37dc3d8863..9415d9af204c 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -1,25 +1,23 @@
+>  /* SPDX-License-Identifier: GPL-2.0 */
+> -#if !defined(KVM_X86_OP) || !defined(KVM_X86_OP_NULL)
+> +#if !defined(KVM_X86_OP) || !defined(KVM_X86_OP_OPTIONAL)
+>  BUILD_BUG_ON(1)
+>  #endif
 >  
-> -	pk = get_xsave_addr(&current->thread.fpu.state.xsave, XFEATURE_PKRU);
-> -
->  	/*
->  	 * The PKRU value in xstate needs to be in sync with the value that is
->  	 * written to the CPU. The FPU restore on return to userland would
->  	 * otherwise load the previous value again.
->  	 */
->  	fpregs_lock();
-> -	if (pk)
-> -		pk->pkru = pkru;
-> +	/*
-> +	 * The CPU is free to clear the feature bit when the xstate is in the
-> +	 * init state. For this reason, we need to make sure the feature bit is
-> +	 * reset when we're explicitly writing to pkru. If we did not then we
-> +	 * would write to pkru and it would not be saved on a context switch.
-> +	 */
-> +	current->thread.fpu.state.xsave.header.xfeatures |= XFEATURE_MASK_PKRU;
+>  /*
+> - * KVM_X86_OP() and KVM_X86_OP_NULL() are used to help generate
+> + * KVM_X86_OP() and KVM_X86_OP_OPTIONAL() are used to help generate
+>   * "static_call()"s. They are also intended for use when defining
+> - * the vmx/svm kvm_x86_ops. KVM_X86_OP() can be used for those
+> - * functions that follow the [svm|vmx]_func_name convention.
+> - * KVM_X86_OP_NULL() can leave a NULL definition for the
+> - * case where there is no definition or a function name that
+> - * doesn't match the typical naming convention is supplied.
+> + * the vmx/svm kvm_x86_ops.
 
-I don't think we need to describe how the init optimization works again.
- I'm also not sure it's worth mentioning context switches here.  It's a
-wider problem than that.  Maybe:
+But assuming your veto of actually using kvm-x86-ops to fill vendor ops isn't
+overriden, they're _not_ "intended for use when defining the vmx/svm kvm_x86_ops."
 
-	/*
-	 * All fpregs will be XRSTOR'd from this buffer before returning
-	 * to userspace.  Ensure that XRSTOR does not init PKRU and that
-	 * get_xsave_addr() will work.
-	 */
-
-> +	pk = get_xsave_addr(&current->thread.fpu.state.xsave, XFEATURE_PKRU);
-> +	BUG_ON(!pk);
-
-A BUG_ON() a line before a NULL pointer dereference doesn't tend to do
-much good.
-
-> +	pk->pkru = pkru;
->  	__write_pkru(pkru);
->  	fpregs_unlock();
->  }
-
+> KVM_X86_OP_OPTIONAL() can be used for those
+> + * functions that can have a NULL definition, for example if
+> + * "static_call_cond()" will be used at the call sites.
+>   */

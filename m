@@ -2,82 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6FF4B777A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D89A64B7775
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241854AbiBOSJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 13:09:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57656 "EHLO
+        id S242894AbiBOSJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 13:09:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234881AbiBOSJg (ORCPT
+        with ESMTP id S234881AbiBOSJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 13:09:36 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F5F11942F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:09:25 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nK2Fy-0001wD-JJ; Tue, 15 Feb 2022 19:08:54 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nK2Fq-00GnTY-RA; Tue, 15 Feb 2022 19:08:46 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nK2Fp-003OCR-H8; Tue, 15 Feb 2022 19:08:45 +0100
-Date:   Tue, 15 Feb 2022 19:08:45 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, linux-pwm@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-riscv@lists.infradead.org, Vignesh R <vigneshr@ti.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-rockchip@lists.infradead.org,
-        Rahul Tanwar <rtanwar@maxlinear.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Jeff LaBundy <jeff@labundy.com>, linux-sunxi@lists.linux.dev,
-        devicetree@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH v2 00/15] pwm: dt-bindings: Include generic pwm schema
-Message-ID: <20220215180845.vzzqwdaiaj7aqxry@pengutronix.de>
-References: <20220214212154.8853-1-krzysztof.kozlowski@canonical.com>
- <20220215074030.3nugwproxjh3lwhl@pengutronix.de>
- <CA+Eumj42Hojp1m4deuWnqMOaaNaupTSkzPaNbL_0eyBL-aDi_g@mail.gmail.com>
- <7df71f8d-cdc3-4b2e-cf0a-7112eff28142@canonical.com>
- <20220215094106.k35pmoxt2nk44dsj@pengutronix.de>
- <20220215104952.3z7y2t5udwab64kh@pengutronix.de>
- <d042abb2-e5df-42b9-824a-6fc3b9c6df6c@canonical.com>
- <20220215125856.es2euyoqo6mp4y2t@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lgr56zm67yyqodt4"
-Content-Disposition: inline
-In-Reply-To: <20220215125856.es2euyoqo6mp4y2t@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Tue, 15 Feb 2022 13:09:58 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C88119431;
+        Tue, 15 Feb 2022 10:09:47 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21FHB2pG016332;
+        Tue, 15 Feb 2022 18:09:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=9kxFY6QSfERb8ypvZ0/M23Sv+S4WIy8ZmOdiGOw/q4I=;
+ b=X4yaxXOc2a/6q/fjuObGtyNqKwxDYUzXn/K9HnUzHUz62EIENYgCz55If95TQfjnod70
+ LW8CSsvQcTKSolAKi7RlJPfj/y7H29w/Ot5JX7y9LtScIacl8aouZ5zg01dWXEG8G6tE
+ tN3j1hkvQubd9O0+zLnlPSI2C42V6OBvRK2kkjQb4LomKYRZXvl0eu5SEWFKYgC+6mmQ
+ bLpi809lXPQ/jhHSDkyr9TbQku9jTfjVx8qsCshOHNcOSRjX8NNJ8avVfxo3LUJiZQ27
+ Mv6LFhy7f4+kYFmr4/G95Qtt8PjqT9biwwwaih96KwgUZtETBY34XmVCulwgiiPWoToT Pw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8fe3tmfk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 18:09:12 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21FHDv5W026458;
+        Tue, 15 Feb 2022 18:09:12 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8fe3tmer-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 18:09:12 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21FI8UFm001039;
+        Tue, 15 Feb 2022 18:09:10 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 3e64ha1vkg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 18:09:10 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21FI95ce42205450
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Feb 2022 18:09:05 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 576C611C06C;
+        Tue, 15 Feb 2022 18:09:05 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 34D4711C054;
+        Tue, 15 Feb 2022 18:09:03 +0000 (GMT)
+Received: from sig-9-65-88-149.ibm.com (unknown [9.65.88.149])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 15 Feb 2022 18:09:03 +0000 (GMT)
+Message-ID: <8d72ee39ac5d98e0d293d46c8f73188281f270b7.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 03/27] ima: Return error code obtained from
+ securityfs functions
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Date:   Tue, 15 Feb 2022 13:09:02 -0500
+In-Reply-To: <1a4bc3cf915057bc5c5957c42c164bc2491a9da7.camel@linux.ibm.com>
+References: <20220201203735.164593-1-stefanb@linux.ibm.com>
+         <20220201203735.164593-4-stefanb@linux.ibm.com>
+         <1a4bc3cf915057bc5c5957c42c164bc2491a9da7.camel@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 2vQN03Yr0BkbDFMnNTjyktEts2coJDFe
+X-Proofpoint-ORIG-GUID: CIupRnnEGM9sDcVqfp0CKLZMLJCOh7PS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-15_05,2022-02-14_04,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ adultscore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=953
+ impostorscore=0 suspectscore=0 bulkscore=0 mlxscore=0 malwarescore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202150105
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,69 +102,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2022-02-10 at 07:02 -0500, Mimi Zohar wrote:
+> On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
+> > If an error occurs when creating a securityfs file, return the exact
+> > error code to the caller.
+> > 
+> > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> 
+> Thanks, Stefan.  Nice cleanup.
 
---lgr56zm67yyqodt4
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is now queued in next-integrity.
 
-Hello,
+-- 
+Thanks,
 
-On Tue, Feb 15, 2022 at 01:58:56PM +0100, Uwe Kleine-K=F6nig wrote:
-> On Tue, Feb 15, 2022 at 01:41:20PM +0100, Krzysztof Kozlowski wrote:
-> > On 15/02/2022 11:49, Uwe Kleine-K=F6nig wrote:
-> > > [... Something inserted a space in Subject lines ...]
-> >=20
-> > Other threads - not only mine - are also affected:
-> > http://lists.infradead.org/pipermail/linux-arm-kernel/2022-February/714=
-311.html
-> > http://lists.infradead.org/pipermail/linux-arm-kernel/2022-February/714=
-316.html
-> > http://lists.infradead.org/pipermail/linux-arm-kernel/2022-February/714=
-364.html
->=20
-> In the meantime I'm confident that mailman2 is the culprit.
+Mimi
 
-For the record: Using python2 (which is what mailman2 uses):
-
->>> from email.header import Header
->>> h =3D Header('[PATCH v2 08/15] dt-bindings: pwm: renesas,pwm: Include g=
-eneric pwm schema', maxlinelen=3D76, header_name=3D'Subject')
->>> h.encode()
-'[PATCH v2 08/15] dt-bindings: pwm: renesas,\n pwm: Include generic pwm sch=
-ema'
-
-This is the inner source of the problem, mailman just does something
-like:
-
->>> import email
->>> a =3D email.message_from_file(open('message'))
->>> open('message-mangled', 'w').write(a.as_string())
-
-So we just have to wait until all mailserver admins migrate away from
-mailman2. I bet this will happen no later than when Python2 will become
-EOL. :-\
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---lgr56zm67yyqodt4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIL7CkACgkQwfwUeK3K
-7Am22wf/QGAYOVL7Or/wGAw+w38cz+S2A17cswpSeUgQ9tVBFPsz54e2W/VEZWVo
-dXdS7jXz+yJ994+aOj0azyG0HVLpSFWm4w6bMQwUF/mKMDTBmEQblGYTgRA+ZKog
-LS2KEE3tSItn2cgXgzDvsS3jj6ONyOGipMEfFU3o/3Wy9FnTrX/bAy6kxDIDwTVH
-KfTm1YMQFP77eyXEueSNZl9ALHubGZqGXwNJ0Fy+IBE/OydoX2AC3oNzslvrPrMw
-7dy18agIIqzJ0as+OMD8kpIzxLfU/r4jcqmfSWHF7WNYfE5kfL8A7i+c/JiWtJaO
-y4RH/KCKM0Jmb58rB6611pS1iRadyA==
-=AUvf
------END PGP SIGNATURE-----
-
---lgr56zm67yyqodt4--

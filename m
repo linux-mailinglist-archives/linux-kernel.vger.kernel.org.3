@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0ED94B759F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B10FC4B779F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243145AbiBOSmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 13:42:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44186 "EHLO
+        id S243153AbiBOSmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 13:42:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232323AbiBOSmm (ORCPT
+        with ESMTP id S241557AbiBOSmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 13:42:42 -0500
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1705127FE7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:42:31 -0800 (PST)
-Received: by mail-qk1-x732.google.com with SMTP id o10so18193633qkg.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:42:31 -0800 (PST)
+        Tue, 15 Feb 2022 13:42:43 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B72B27FE5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:42:32 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id u1so19899565wrg.11
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:42:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=N8Mzo9kwQJbBUuobpZNkluKeTNp6O+4lLW+jyI06oSo=;
-        b=hTEg+HbHcQZriHxnBXteXcl1poQJoQHNozcsa9SZqVNd8prBRHZFjGUxTy7SCMCcOB
-         eznXsbj2rZCoyXyQ2MF9tQXo890PqpAlHv0eGpQA11NLwEhc7aKo8mQ4ee9I9q0npkiH
-         5UUzW81KMr+ECp2U624rcpzN5WjTqnivnR9PgojwhDTdTAbJ7Fx+N8DqdEop0HANEY5n
-         jUvJnYvfBzV2l1n8qjL/Kl6N6mSMZJrTXMsJRNkhBNXunSVrdCTBybzcxGqrvE0A/jKu
-         7jXebjRdMeFbOvPdYssrCRkaBhoAxnknePb8hK/yiHqUh7hL8Ux1qrsmr9/klVDtgd95
-         E96g==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=17RfdOkFpQ0vqX6j3AbugB+kAjRG2bVcKwe0qdXZHnE=;
+        b=R0NFIY6PLX5Bq2GY7wQqcv1fzjR+HqhwNljCYJLfBmHLsZkNkH5UgW4x9kBi5gvXUt
+         Ss54ZIWiLGHlt9/QOiMPO7CGbXpioYIHjH9eSBDHqfbQhlFrWYzcqlbalgvqRQtDEPen
+         UqB+yc+2Kr94kHm3BsC8qfB8cjPpwgXUmshMQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N8Mzo9kwQJbBUuobpZNkluKeTNp6O+4lLW+jyI06oSo=;
-        b=jY373YwEEMwCtWNWlzluo9JnVOPTCxp+2uvV7VuAS9bqsE/li91iMNvu8uEhDDdV1w
-         zqni4EjZbgx2L6d85wb/Ttsc/au82V9IkJYs6HMsWvE69lPelJPfm81VQSLF+SlR1sCj
-         j/3kr9cjwTF8h/mT2X3XBJnL9B5tJE4Xl0877nAP1j9CPTyBsN67YCsWOTixMGM2Mk9x
-         Ocx6zmnwh5nRTPhoT1e77u8uefk/NElFdKr0+JLw3qCw0hGiwtsHYlTPAr0qdc8z6KfZ
-         iY7X7TkQZqQovDflovOvelD+t5FWGOzoeykzfQtbvTMJAw4Q3027VP6dM0RoYbsNKrqc
-         /7ew==
-X-Gm-Message-State: AOAM533fiYUU5nVlMmCOdIOFEdlIMHQMngxu63VFzin1JS9py/fszITl
-        /cOGBb2lONqJfK+4ifM4oqg/66uAk7GOoECGtUew74veu6vlNQ==
-X-Google-Smtp-Source: ABdhPJzdKtk7sQP1DR1LID2+t1xyUg4t0iv8cYuGyPUvvU6bCfyJ5TXw0vfpWzSmL11GzbSz3QPHcHJlea+H+Wazvf4=
-X-Received: by 2002:a05:620a:1664:: with SMTP id d4mr190632qko.363.1644950549740;
- Tue, 15 Feb 2022 10:42:29 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=17RfdOkFpQ0vqX6j3AbugB+kAjRG2bVcKwe0qdXZHnE=;
+        b=CIeOKTVvit/nMjmOwZpvQ45mfFZCea3m8Ff0RVhTVlV9C6uZANBC2HqJxVqpyIKdGh
+         w3NCkO+o2B69R5XFtlPBlX+fSZie/oUdETAaWUGoyGXEaoNYoZAduFwTG2wq4lWnI2Kt
+         IYwLlPDaj74ClThJ83xQR4Gflvy/uQldncXu4xf6Ns0G8/iKAdQ0wpXuzNS6SHKiHBs8
+         9+gVSUzs74wlDPi7Mtg1BRYqZby2ZQlHdfP3VIS7Fp+aH1sZ4meIGkHBDilRJamrzOTr
+         jlAxacyJGZrl6BtSra7Bxz3y6l79iLStZU8Avks8UycLLMs+hSvjXKKwe6JtXpEkXApx
+         Wm0g==
+X-Gm-Message-State: AOAM532cZznRqwCJFV7nPVgpFJFocgMfCiC3GRwsY8wwknwNUXLLZSLF
+        4pPHMjVDDOir6cQy5jnNZCwQxA==
+X-Google-Smtp-Source: ABdhPJz54Ip87v52N6pTMY2GW3cc/euNgtBXo+zsV39RnEX7mH5FCghKMZBrBwTlkUeE9KcoPJKx/A==
+X-Received: by 2002:adf:ffce:: with SMTP id x14mr253920wrs.552.1644950551214;
+        Tue, 15 Feb 2022 10:42:31 -0800 (PST)
+Received: from beni.c.googlers.com.com (216.131.76.34.bc.googleusercontent.com. [34.76.131.216])
+        by smtp.gmail.com with ESMTPSA id a1sm14094017wri.36.2022.02.15.10.42.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 10:42:30 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH v2] media: uvcvideo: Fix handling on Bitmask controls
+Date:   Tue, 15 Feb 2022 18:42:28 +0000
+Message-Id: <20220215184228.2531386-1-ribalda@chromium.org>
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
 MIME-Version: 1.0
-References: <20220215043353.1256754-1-bjorn.andersson@linaro.org>
- <20220215043353.1256754-2-bjorn.andersson@linaro.org> <be397e2e-05ab-5c18-8e2d-16c443f0a6d1@quicinc.com>
- <Ygvisfhi0SY6XdAz@builder.lan> <6a3ef247-b26b-d505-cd85-92fb277163dd@quicinc.com>
-In-Reply-To: <6a3ef247-b26b-d505-cd85-92fb277163dd@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 15 Feb 2022 21:42:18 +0300
-Message-ID: <CAA8EJprCaiPW=Kk0B69RNNwAk0xcqaxQA031sfR0ky+BfzcWKQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Add SC8180x to hw catalog
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Clark <robdclark@gmail.com>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,308 +67,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022 at 20:42, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
-> On 2/15/2022 9:28 AM, Bjorn Andersson wrote:
-> > On Tue 15 Feb 11:14 CST 2022, Abhinav Kumar wrote:
-> >
-> >>
-> >>
-> >> On 2/14/2022 8:33 PM, Bjorn Andersson wrote:
-> >>> From: Rob Clark <robdclark@chromium.org>
-> >>>
-> >>> Add SC8180x to the hardware catalog, for initial support for the
-> >>> platform. Due to limitations in the DP driver only one of the four DP
-> >>> interfaces is left enabled.
-> >>>
-> >>> The SC8180x platform supports the newly added DPU_INTF_WIDEBUS flag and
-> >>> the Windows-on-Snapdragon bootloader leaves the widebus bit set, so this
-> >>> is flagged appropriately to ensure widebus is disabled - for now.
-> >>>
-> >>> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> >>> [bjorn: Reworked intf and irq definitions]
-> >>> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> >>> ---
-> >>>
-> >>> Changes since v1:
-> >>> - Dropped widebus flag
-> >>>
-> >>>    .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 129 ++++++++++++++++++
-> >>>    .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |   1 +
-> >>>    drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |   1 +
-> >>>    drivers/gpu/drm/msm/msm_drv.c                 |   1 +
-> >>>    4 files changed, 132 insertions(+)
-> >>>
-> >>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> >>> index aa75991903a6..7ac0fe32df49 100644
-> >>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> >>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> >>> @@ -90,6 +90,17 @@
-> >>>                      BIT(MDP_INTF3_INTR) | \
-> >>>                      BIT(MDP_INTF4_INTR))
-> >>> +#define IRQ_SC8180X_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
-> >>> +                     BIT(MDP_SSPP_TOP0_INTR2) | \
-> >>> +                     BIT(MDP_SSPP_TOP0_HIST_INTR) | \
-> >>> +                     BIT(MDP_INTF0_INTR) | \
-> >>> +                     BIT(MDP_INTF1_INTR) | \
-> >>> +                     BIT(MDP_INTF2_INTR) | \
-> >>> +                     BIT(MDP_INTF3_INTR) | \
-> >>> +                     BIT(MDP_INTF4_INTR) | \
-> >>> +                     BIT(MDP_INTF5_INTR) | \
-> >>> +                     BIT(MDP_AD4_0_INTR) | \
-> >>> +                     BIT(MDP_AD4_1_INTR))
-> >>>    #define DEFAULT_PIXEL_RAM_SIZE           (50 * 1024)
-> >>>    #define DEFAULT_DPU_LINE_WIDTH           2048
-> >>> @@ -225,6 +236,22 @@ static const struct dpu_caps sm8150_dpu_caps = {
-> >>>     .max_vdeci_exp = MAX_VERT_DECIMATION,
-> >>>    };
-> >>> +static const struct dpu_caps sc8180x_dpu_caps = {
-> >>> +   .max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
-> >>> +   .max_mixer_blendstages = 0xb,
-> >>> +   .qseed_type = DPU_SSPP_SCALER_QSEED3,
-> >>> +   .smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
-> >>> +   .ubwc_version = DPU_HW_UBWC_VER_30,
-> >>> +   .has_src_split = true,
-> >>> +   .has_dim_layer = true,
-> >>> +   .has_idle_pc = true,
-> >>> +   .has_3d_merge = true,
-> >>> +   .max_linewidth = 4096,
-> >>> +   .pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
-> >>> +   .max_hdeci_exp = MAX_HORZ_DECIMATION,
-> >>> +   .max_vdeci_exp = MAX_VERT_DECIMATION,
-> >>> +};
-> >>> +
-> >>>    static const struct dpu_caps sm8250_dpu_caps = {
-> >>>     .max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
-> >>>     .max_mixer_blendstages = 0xb,
-> >>> @@ -293,6 +320,31 @@ static const struct dpu_mdp_cfg sc7180_mdp[] = {
-> >>>     },
-> >>>    };
-> >>> +static const struct dpu_mdp_cfg sc8180x_mdp[] = {
-> >>> +   {
-> >>> +   .name = "top_0", .id = MDP_TOP,
-> >>> +   .base = 0x0, .len = 0x45C,
-> >>> +   .features = 0,
-> >>> +   .highest_bank_bit = 0x3,
-> >>> +   .clk_ctrls[DPU_CLK_CTRL_VIG0] = {
-> >>> +                   .reg_off = 0x2AC, .bit_off = 0},
-> >>> +   .clk_ctrls[DPU_CLK_CTRL_VIG1] = {
-> >>> +                   .reg_off = 0x2B4, .bit_off = 0},
-> >>> +   .clk_ctrls[DPU_CLK_CTRL_VIG2] = {
-> >>> +                   .reg_off = 0x2BC, .bit_off = 0},
-> >>> +   .clk_ctrls[DPU_CLK_CTRL_VIG3] = {
-> >>> +                   .reg_off = 0x2C4, .bit_off = 0},
-> >>> +   .clk_ctrls[DPU_CLK_CTRL_DMA0] = {
-> >>> +                   .reg_off = 0x2AC, .bit_off = 8},
-> >>> +   .clk_ctrls[DPU_CLK_CTRL_DMA1] = {
-> >>> +                   .reg_off = 0x2B4, .bit_off = 8},
-> >>> +   .clk_ctrls[DPU_CLK_CTRL_CURSOR0] = {
-> >>> +                   .reg_off = 0x2BC, .bit_off = 8},
-> >>> +   .clk_ctrls[DPU_CLK_CTRL_CURSOR1] = {
-> >>> +                   .reg_off = 0x2C4, .bit_off = 8},
-> >>> +   },
-> >>> +};
-> >>> +
-> >>>    static const struct dpu_mdp_cfg sm8250_mdp[] = {
-> >>>     {
-> >>>     .name = "top_0", .id = MDP_TOP,
-> >>> @@ -861,6 +913,16 @@ static const struct dpu_intf_cfg sc7280_intf[] = {
-> >>>     INTF_BLK("intf_5", INTF_5, 0x39000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
-> >>>    };
-> >>> +static const struct dpu_intf_cfg sc8180x_intf[] = {
-> >>> +   INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
-> >>> +   INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
-> >>> +   INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
-> >>> +   /* INTF_3 is for MST, wired to INTF_DP 0 and 1, use dummy index until this is supported */
-> >>> +   INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_DP, 999, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
-> >>> +   INTF_BLK("intf_4", INTF_4, 0x6C000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 20, 21),
-> >>> +   INTF_BLK("intf_5", INTF_5, 0x6C800, INTF_DP, MSM_DP_CONTROLLER_2, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
-> >>
-> >> This is a continued discussion from
-> >> https://patchwork.freedesktop.org/patch/474179/.
-> >>
-> >> Shouldnt INTF_5 be marked as INTF_eDP?
-> >>
-> >
-> > Might be, I didn't even know we had an INTF_EDP define...
-> >
-> > Is there any reason to distinguish DP and EDP in the DPU?  I see sc7280
-> > doesn't distinguish the DP and EDP interfaces.
-> >
-> > Regards,
-> > Bjorn
-> >
->
-> Like I have mentioned in the other patch, I think we have enough
-> confusion between eDP and DP with the common driver. Since DPU does have
-> separate interfaces I think we should fix that.
->
-> Regarding sc7280 using INTF_DP, I synced up with Sankeerth. He referred
-> to your change
-> https://patchwork.freedesktop.org/patch/457776/?series=92992&rev=5 as it
-> was posted earlier and ended up using the same INTF_DP macro. So its
-> turning out to be a cyclical error.
->
-> I think we should fix both.
+Minimum and step values for V4L2_CTRL_TYPE_BITMASK controls should be 0.
+There is no need to query the camera firmware about this and maybe get
+invalid results.
 
-So, what is the value for DPU to distinguish between eDP and DP interfaces?
-Would we get anything except the (intf_type == INTF_EDP || intf_type
-== INTF_DP) instead of (intf_type == INTF_DP) in all the cases where
-the type is checked?
-(thus leading us to cases when someone would forget to add INTF_EDP
-next to INTF_DP)
+Also value should be clamped to the min/max value advertised by the
+hardware.
 
-Also, if we are switching from INTF_DP to INTF_EDP, should we stop
-using end-to-end numbering (like MSM_DP_CONTROLLER_2 for INTF_5) and
-add a separate numbering scheme for INTF_EDP?
+Fixes v4l2-compliane:
+Control ioctls (Input 0):
+                fail: v4l2-test-controls.cpp(97): minimum must be 0 for a bitmask control
+	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: FAIL
 
-With all that in mind I'd suggest to:
-- use INTF_DP for both DP and new eDP interfaces
-- remove INTF_EDP usage from the dpu1 driver
-- add a note that INTF_EDP corresponds to older eDP blocks (found on 8x74/8x84)
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+ drivers/media/usb/uvc/uvc_ctrl.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
->
-> >>> +};
-> >>> +
-> >>>    /*************************************************************
-> >>>     * VBIF sub blocks config
-> >>>     *************************************************************/
-> >>> @@ -931,6 +993,10 @@ static const struct dpu_qos_lut_entry sm8150_qos_linear[] = {
-> >>>     {.fl = 0, .lut = 0x0011222222223357 },
-> >>>    };
-> >>> +static const struct dpu_qos_lut_entry sc8180x_qos_linear[] = {
-> >>> +   {.fl = 4, .lut = 0x0000000000000357 },
-> >>> +};
-> >>> +
-> >>>    static const struct dpu_qos_lut_entry sdm845_qos_macrotile[] = {
-> >>>     {.fl = 10, .lut = 0x344556677},
-> >>>     {.fl = 11, .lut = 0x3344556677},
-> >>> @@ -944,6 +1010,10 @@ static const struct dpu_qos_lut_entry sc7180_qos_macrotile[] = {
-> >>>     {.fl = 0, .lut = 0x0011223344556677},
-> >>>    };
-> >>> +static const struct dpu_qos_lut_entry sc8180x_qos_macrotile[] = {
-> >>> +   {.fl = 10, .lut = 0x0000000344556677},
-> >>> +};
-> >>> +
-> >>>    static const struct dpu_qos_lut_entry sdm845_qos_nrt[] = {
-> >>>     {.fl = 0, .lut = 0x0},
-> >>>    };
-> >>> @@ -1045,6 +1115,33 @@ static const struct dpu_perf_cfg sm8150_perf_data = {
-> >>>     .bw_inefficiency_factor = 120,
-> >>>    };
-> >>> +static const struct dpu_perf_cfg sc8180x_perf_data = {
-> >>> +   .max_bw_low = 9600000,
-> >>> +   .max_bw_high = 9600000,
-> >>> +   .min_core_ib = 2400000,
-> >>> +   .min_llcc_ib = 800000,
-> >>> +   .min_dram_ib = 800000,
-> >>> +   .danger_lut_tbl = {0xf, 0xffff, 0x0, 0x0},
-> >>> +   .qos_lut_tbl = {
-> >>> +           {.nentry = ARRAY_SIZE(sc8180x_qos_linear),
-> >>> +           .entries = sc8180x_qos_linear
-> >>> +           },
-> >>> +           {.nentry = ARRAY_SIZE(sc8180x_qos_macrotile),
-> >>> +           .entries = sc8180x_qos_macrotile
-> >>> +           },
-> >>> +           {.nentry = ARRAY_SIZE(sc7180_qos_nrt),
-> >>> +           .entries = sc7180_qos_nrt
-> >>> +           },
-> >>> +           /* TODO: macrotile-qseed is different from macrotile */
-> >>> +   },
-> >>> +   .cdp_cfg = {
-> >>> +           {.rd_enable = 1, .wr_enable = 1},
-> >>> +           {.rd_enable = 1, .wr_enable = 0}
-> >>> +   },
-> >>> +   .clk_inefficiency_factor = 105,
-> >>> +   .bw_inefficiency_factor = 120,
-> >>> +};
-> >>> +
-> >>>    static const struct dpu_perf_cfg sm8250_perf_data = {
-> >>>     .max_bw_low = 13700000,
-> >>>     .max_bw_high = 16600000,
-> >>> @@ -1199,6 +1296,37 @@ static void sm8150_cfg_init(struct dpu_mdss_cfg *dpu_cfg)
-> >>>     };
-> >>>    }
-> >>> +/*
-> >>> + * sc8180x_cfg_init(): populate sc8180 dpu sub-blocks reg offsets
-> >>> + * and instance counts.
-> >>> + */
-> >>> +static void sc8180x_cfg_init(struct dpu_mdss_cfg *dpu_cfg)
-> >>> +{
-> >>> +   *dpu_cfg = (struct dpu_mdss_cfg){
-> >>> +           .caps = &sc8180x_dpu_caps,
-> >>> +           .mdp_count = ARRAY_SIZE(sc8180x_mdp),
-> >>> +           .mdp = sc8180x_mdp,
-> >>> +           .ctl_count = ARRAY_SIZE(sm8150_ctl),
-> >>> +           .ctl = sm8150_ctl,
-> >>> +           .sspp_count = ARRAY_SIZE(sdm845_sspp),
-> >>> +           .sspp = sdm845_sspp,
-> >>> +           .mixer_count = ARRAY_SIZE(sm8150_lm),
-> >>> +           .mixer = sm8150_lm,
-> >>> +           .pingpong_count = ARRAY_SIZE(sm8150_pp),
-> >>> +           .pingpong = sm8150_pp,
-> >>> +           .merge_3d_count = ARRAY_SIZE(sm8150_merge_3d),
-> >>> +           .merge_3d = sm8150_merge_3d,
-> >>> +           .intf_count = ARRAY_SIZE(sc8180x_intf),
-> >>> +           .intf = sc8180x_intf,
-> >>> +           .vbif_count = ARRAY_SIZE(sdm845_vbif),
-> >>> +           .vbif = sdm845_vbif,
-> >>> +           .reg_dma_count = 1,
-> >>> +           .dma_cfg = sm8150_regdma,
-> >>> +           .perf = sc8180x_perf_data,
-> >>> +           .mdss_irqs = IRQ_SC8180X_MASK,
-> >>> +   };
-> >>> +}
-> >>> +
-> >>>    /*
-> >>>     * sm8250_cfg_init(): populate sm8250 dpu sub-blocks reg offsets
-> >>>     * and instance counts.
-> >>> @@ -1260,6 +1388,7 @@ static const struct dpu_mdss_hw_cfg_handler cfg_handler[] = {
-> >>>     { .hw_rev = DPU_HW_VER_401, .cfg_init = sdm845_cfg_init},
-> >>>     { .hw_rev = DPU_HW_VER_500, .cfg_init = sm8150_cfg_init},
-> >>>     { .hw_rev = DPU_HW_VER_501, .cfg_init = sm8150_cfg_init},
-> >>> +   { .hw_rev = DPU_HW_VER_510, .cfg_init = sc8180x_cfg_init},
-> >>>     { .hw_rev = DPU_HW_VER_600, .cfg_init = sm8250_cfg_init},
-> >>>     { .hw_rev = DPU_HW_VER_620, .cfg_init = sc7180_cfg_init},
-> >>>     { .hw_rev = DPU_HW_VER_720, .cfg_init = sc7280_cfg_init},
-> >>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> >>> index 31af04afda7d..9572d29ff2ff 100644
-> >>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> >>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> >>> @@ -39,6 +39,7 @@
-> >>>    #define DPU_HW_VER_410   DPU_HW_VER(4, 1, 0) /* sdm670 v1.0 */
-> >>>    #define DPU_HW_VER_500   DPU_HW_VER(5, 0, 0) /* sm8150 v1.0 */
-> >>>    #define DPU_HW_VER_501   DPU_HW_VER(5, 0, 1) /* sm8150 v2.0 */
-> >>> +#define DPU_HW_VER_510     DPU_HW_VER(5, 1, 1) /* sc8180 */
-> >>>    #define DPU_HW_VER_600   DPU_HW_VER(6, 0, 0) /* sm8250 */
-> >>>    #define DPU_HW_VER_620   DPU_HW_VER(6, 2, 0) /* sc7180 v1.0 */
-> >>>    #define DPU_HW_VER_720   DPU_HW_VER(7, 2, 0) /* sc7280 */
-> >>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> >>> index 47fe11a84a77..cedc631f8498 100644
-> >>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> >>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> >>> @@ -1351,6 +1351,7 @@ const struct of_device_id dpu_dt_match[] = {
-> >>>     { .compatible = "qcom,sdm845-dpu", },
-> >>>     { .compatible = "qcom,sc7180-dpu", },
-> >>>     { .compatible = "qcom,sc7280-dpu", },
-> >>> +   { .compatible = "qcom,sc8180x-dpu", },
-> >>>     { .compatible = "qcom,sm8150-dpu", },
-> >>>     { .compatible = "qcom,sm8250-dpu", },
-> >>>     {}
-> >>> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-> >>> index 555666e3f960..0f441d358b60 100644
-> >>> --- a/drivers/gpu/drm/msm/msm_drv.c
-> >>> +++ b/drivers/gpu/drm/msm/msm_drv.c
-> >>> @@ -1438,6 +1438,7 @@ static const struct of_device_id dt_match[] = {
-> >>>     { .compatible = "qcom,sdm845-mdss", .data = (void *)KMS_DPU },
-> >>>     { .compatible = "qcom,sc7180-mdss", .data = (void *)KMS_DPU },
-> >>>     { .compatible = "qcom,sc7280-mdss", .data = (void *)KMS_DPU },
-> >>> +   { .compatible = "qcom,sc8180x-mdss", .data = (void *)KMS_DPU },
-> >>>     { .compatible = "qcom,sm8150-mdss", .data = (void *)KMS_DPU },
-> >>>     { .compatible = "qcom,sm8250-mdss", .data = (void *)KMS_DPU },
-> >>>     {}
-
-
-
+diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+index b4f6edf968bc0..d8b9ab5b7fb85 100644
+--- a/drivers/media/usb/uvc/uvc_ctrl.c
++++ b/drivers/media/usb/uvc/uvc_ctrl.c
+@@ -1156,7 +1156,8 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
+ 		break;
+ 	}
+ 
+-	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_MIN)
++	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_MIN &&
++	    mapping->v4l2_type != V4L2_CTRL_TYPE_BITMASK)
+ 		v4l2_ctrl->minimum = mapping->get(mapping, UVC_GET_MIN,
+ 				     uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MIN));
+ 
+@@ -1164,7 +1165,8 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
+ 		v4l2_ctrl->maximum = mapping->get(mapping, UVC_GET_MAX,
+ 				     uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MAX));
+ 
+-	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_RES)
++	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_RES &&
++	    mapping->v4l2_type != V4L2_CTRL_TYPE_BITMASK)
+ 		v4l2_ctrl->step = mapping->get(mapping, UVC_GET_RES,
+ 				  uvc_ctrl_data(ctrl, UVC_CTRL_DATA_RES));
+ 
+@@ -1721,6 +1723,7 @@ int uvc_ctrl_set(struct uvc_fh *handle,
+ 	/* Clamp out of range values. */
+ 	switch (mapping->v4l2_type) {
+ 	case V4L2_CTRL_TYPE_INTEGER:
++	case V4L2_CTRL_TYPE_BITMASK:
+ 		if (!ctrl->cached) {
+ 			ret = uvc_ctrl_populate_cache(chain, ctrl);
+ 			if (ret < 0)
 -- 
-With best wishes
-Dmitry
+2.35.1.265.g69c8d7142f-goog
+

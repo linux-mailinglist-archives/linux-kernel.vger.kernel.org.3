@@ -2,223 +2,490 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612564B6157
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 04:07:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAD94B6161
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 04:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233739AbiBODHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 22:07:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33120 "EHLO
+        id S233757AbiBODJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 22:09:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiBODHY (ORCPT
+        with ESMTP id S229545AbiBODJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 22:07:24 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2046.outbound.protection.outlook.com [40.107.223.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A3BD557C
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 19:07:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P+es9lVP9vXZiAh0Jn5onaWEHf5JJT3lrowL+JMUc/LbHZx8whzXxbArdjgl3dwbxKGRnwFSBXyp6YQVq6yWOI8Yh1KUko/zRNM2/OQu06iA9B/++Q6w24OCaWNEzkPEMYs3Qz4Zt+jpTlPXDQq1+RKH4W5fUuNrxB+OOBNwbx627VeaRB0+rHu9I8Z7PKXovHvANiRZTw1hizzJFP+ixGtMsJSnjPYcqSv3v/O2VRnyTJgSD1Yrcs+Lcjhf4pFWQImMPpMxJjF6XSm483/lzjcZWJL5OV0XzPDO76+XGgFrAd6Rsjk8krqP69N96IYw4jdBBnsbqLzcJQL+HQWYlw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JO+plKKAuvINA+HexV1aYvTEEVDGHY7mItD1qD66crs=;
- b=Z7+R7JDdx8AwIUNM1LqsjUxgOBeQRp5RQRtpzaqb3HFYAGrTAHhn8ZVlywvfkPXWhQ4uZTOaeLuqO3xu13fCMzRIC1O1XvIaDocnXLiGL57oNe6UGZIQHLZd7po3xJUjg0B98GfmdE8Md8qX7u36EyOxrprk6uvBwXgERNe1YPJWaGQ/i8LDmLjVBZWBeMpAjSbWXmqoIfRnpX1G/WGKtTrJExQRksW0O69+O0tzeP+beqbr7T2XQ7E4x68QmFxNtl5v7UucScxsvDKXTqiOVG6C29isZRxAi1mKIwFOVsgmjM1A91UI/yarN1P7NPgMftR6HMucP4PbLl9vxoNtXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JO+plKKAuvINA+HexV1aYvTEEVDGHY7mItD1qD66crs=;
- b=kWTxMzQ8XuLIiynmz/8ksyzDvf6dfPzjTNBtp90w0c8XXQThAJ3brwvUbQlQdoOTTQ1YAK/77Woz3ee/yVr4wOhE2YH154LEKoJaW1xPcTJTXDH2dlnyGwo8F18INuxqqoVm3ZHcJtinDq7K1nle7sITQh02kZczAlKM01i7O/s=
-Received: from DM6PR12MB2619.namprd12.prod.outlook.com (2603:10b6:5:45::18) by
- CY4PR12MB1669.namprd12.prod.outlook.com (2603:10b6:910:3::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4975.15; Tue, 15 Feb 2022 03:07:12 +0000
-Received: from DM6PR12MB2619.namprd12.prod.outlook.com
- ([fe80::7d61:f517:f3f8:9ea]) by DM6PR12MB2619.namprd12.prod.outlook.com
- ([fe80::7d61:f517:f3f8:9ea%5]) with mapi id 15.20.4975.019; Tue, 15 Feb 2022
- 03:07:12 +0000
-From:   "Quan, Evan" <Evan.Quan@amd.com>
-To:     Salvatore Bonaccorso <carnil@debian.org>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>
-CC:     Dominique Dumont <dod@debian.org>,
-        "1005005@bugs.debian.org" <1005005@bugs.debian.org>,
-        "Tuikov, Luben" <Luben.Tuikov@amd.com>,
-        Sasha Levin <sashal@kernel.org>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: Regression from 3c196f056666 ("drm/amdgpu: always reset the asic
- in suspend (v2)") on suspend?
-Thread-Topic: Regression from 3c196f056666 ("drm/amdgpu: always reset the asic
- in suspend (v2)") on suspend?
-Thread-Index: AQHYID3PyV9OUcvk5kC3ntmnBjx1BayT7zAQ
-Date:   Tue, 15 Feb 2022 03:07:12 +0000
-Message-ID: <DM6PR12MB261963959BB02323CF27C0ACE4349@DM6PR12MB2619.namprd12.prod.outlook.com>
-References: <Ygf7KuWyc0d4HIFu@eldamar.lan>
-In-Reply-To: <Ygf7KuWyc0d4HIFu@eldamar.lan>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Enabled=true;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_SetDate=2022-02-15T03:07:09Z;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Method=Standard;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Name=AMD Official Use
- Only-AIP 2.0;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_ActionId=1e9a53ad-e0d2-42e8-8ac2-bf0e9748fb06;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_ContentBits=1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: dcba85ed-5053-4a7f-6b6b-08d9f030434f
-x-ms-traffictypediagnostic: CY4PR12MB1669:EE_
-x-microsoft-antispam-prvs: <CY4PR12MB16696BF52699C6D8092AA9F8E4349@CY4PR12MB1669.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1060;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5SH6Y6HsiPla9RD22DuppDU8zKAV+taJLH/j8KkkCnfhbyXU68S0b189evAyvU4Ksq/mtW/4MIy56lXEuH6jZ2sLtKhOnhfUNeeHwXU8D2efYxp0qDpRAj1LIg9V4g3iqpQvipriZAe1guYm6WmF6R8r9mTtV/bBkLLwnyxlFI0YkzSXs+8n4xZqowSPHyOwmsEpJ40yKJbkuVwC51DM2qYEDbkN0K+ot3kjLVRDw5zUHAXxhsvJsL3TdDzZuZQ67P/RWER6m1HLFTUl6TxyN8ddeGfI6Yd57t0fu3Xk+cZjK/mLca51qYLEfUrYsjuYZcPcOr/oz6bsJuswjn8ocrLnn3sBEtxaOID8iGaF1g/Y0UgcQ0Rp5yUFdKBCp413jTx+FArUJJKiaqoW45QpKw/s2XVFeUxNUwLPJiK7OVfHDCRukOLt9ochpm1yYtWJ4HSx9nS+p3pAGM5VSUmzikhozRAkRPDO1Rr9ZJePvSKOzfPcTrMc5nEPdIVAt5aUqO1Tm14TjLgjhesuJL04hUsfGGS2kIMyYhRKr8MYECOoMJTEPglVjAj3YqysEb9kIfdPACkD5Jm3xLTs/7aC/l49TYXSlXn8KL+PcLtyIX57G9VCumf4CJG5d/ostV+iJjCaDQNkYymuaNI4uj1fbmPOuWr40L56JHumv1LPHJL8+PKBXAm6vADsIj/hdeBNejxFqS7MCXH2TmID6p3ebOyFVxynut98hVPRV5hOOKT3GzE27bHgYGfjEm3XLl9BSTbzzFEhI6EUIJvuOdy1pZfJDofHY5qPzODFdbhu34w=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2619.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(122000001)(55016003)(38100700002)(71200400001)(38070700005)(52536014)(45080400002)(8936002)(7696005)(15650500001)(53546011)(110136005)(83380400001)(316002)(66946007)(6636002)(76116006)(66556008)(33656002)(66476007)(64756008)(8676002)(66446008)(508600001)(4326008)(186003)(6506007)(966005)(26005)(86362001)(2906002)(54906003)(5660300002)(9686003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?JELQCaX+lYULU/XL3LYlnza+eOrll/wcAy3Lk/A3g9lOWujcEv46x3ydbyU0?=
- =?us-ascii?Q?ltqbPO+eZ3y8R1ZSxsCGscWI+QAmSKICHPmCO6TAwnlIUbEPzj3LPdGWctIM?=
- =?us-ascii?Q?4VFAqGJSI+2PkNu97zKrrYbTZzwRGfetZziLUoSc8j+5P4a5tXfRXZveps0p?=
- =?us-ascii?Q?Ba+jXPWMIkWvUyUTcj4SALAdtOI0oV5GFNnprypIdc8b0/7lT4PW9xuZErNx?=
- =?us-ascii?Q?rmT/SveBP+7wPhDH3ADk5gc0ihWYe6VGdz6cJ7LANMHDSiWxirCLuFwJ9Dmo?=
- =?us-ascii?Q?LG736erT7ffLsAMm8wq3OFx8z+9RnreeWoP++oT9x5NRLcpOZ3x4Ig2SaDi2?=
- =?us-ascii?Q?4GCfsCq7N88725fKXV3ir40kqFUUmrklScb0iE4NPUt7qOWM83L23fhK2N42?=
- =?us-ascii?Q?VOdpOvk50zthsT+2RkI6bUrbKJE9j2BlxPjB04PsTBv7NyyLNjG1fmRxYBVD?=
- =?us-ascii?Q?i0qjOgeXoKrvsxDveSDbLpxrcWk74SVqcB3y36VFuXSwbHT0bG5PYZqGZF/Q?=
- =?us-ascii?Q?0g+Rq5GmDvxlA+8sNcVvncHxkvDULD/i9LPelJ/IIiBbL6xSQTiMJotIsIXD?=
- =?us-ascii?Q?XxnBfgCxLaGaxqts35ZawAEbsIIv81czzcK6J71sd7u80K0s4u6Zf4cy8cnG?=
- =?us-ascii?Q?zYTNIvGjB6vsY7WBXbG30zpJ5pn1UL83oKcMFQfR/1GhY8uNZOMaDv4mfdiw?=
- =?us-ascii?Q?BuJvwLn2xj0hNyLM9rRz6wgo0DR/B+FpkPkvi0XnXVsiH2FcDgZbDXFpVin3?=
- =?us-ascii?Q?S4Bm2bfi1KSWCHdbplrbvehy0jg5WEwDgcK6UY8rPlBLKJmpFsh8eOlPlhL5?=
- =?us-ascii?Q?7V4Z8k3rAGDroX0VTJ8c+tKzk5WlX0S9i64rinSUF1RN+9veeb2dzILD+EOl?=
- =?us-ascii?Q?rP7gE8nW52s7s8D8saxpmss1Q3GEkS9GmVr4MXnn51g+qlO8v4xfjJ/2mT47?=
- =?us-ascii?Q?Hjf7YBkCg5uOx4TMy6JI03H18f94sh6zEhb0A0B/GFoQnZ2McO7qVr4w+ylq?=
- =?us-ascii?Q?O98ez1fCktAbjzUQLuz1xGDn1yOzZR0jWl9y8BDhQ75e4id7nHbhFOv/SKSG?=
- =?us-ascii?Q?j/kmICwqqaon5gn1xtG9ycF+LVUzcyF93rNXTH84ca79nBkqE5FOTo1e8rx1?=
- =?us-ascii?Q?blWbxdT1ut5ikCtVVQhHdtx8CNz86nJCwzv4Kis9xT0Kc7elmOU4g807SF78?=
- =?us-ascii?Q?xmbU0RyTVFjD7Ub8PnpToXKQbZxXEWEGdmiaq6cMn/JnGnEXQ+/J8/dodd7X?=
- =?us-ascii?Q?22xAVkRHkVH+QHN5uex7UX0VfRQD4disucK3AxUux/glwHYDqzquE+yS07n/?=
- =?us-ascii?Q?MHsjszxhuFbaegNb6O4QI1i94xGHzcIwZy/Nxduq5CfPmmKQK/yRfLPJGNyK?=
- =?us-ascii?Q?XtvD2qBfyULjyaGkjMhfDkE6p6n/o+UbA2qg59u3sf9Vs5nIbVragDuKaXhD?=
- =?us-ascii?Q?lgcuS3JZg+7LmHI8dT1+Cjmy2ZmL1fEASLyfdQIvqO1OihNkaYh/qM3N40w8?=
- =?us-ascii?Q?w9FBv/knWNldmozE1yEb9N4ntM8IPopoXi2VhAGn66Qd8dpV7VuyhMRe3BQm?=
- =?us-ascii?Q?+coWj6VG0ID5B0G/QdE=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 14 Feb 2022 22:09:35 -0500
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id A2931D95C7;
+        Mon, 14 Feb 2022 19:09:23 -0800 (PST)
+Received: from jleng.ambarella.net (unknown [180.169.129.130])
+        by mail-app2 (Coremail) with SMTP id by_KCgCnrYVCGQtiw5nmAQ--.31476S2;
+        Tue, 15 Feb 2022 11:09:01 +0800 (CST)
+From:   3090101217@zju.edu.cn
+To:     gregkh@linuxfoundation.org
+Cc:     balbi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, pavel.hofman@ivitera.com,
+        ruslan.bilovol@gmail.com, Jing Leng <jleng@ambarella.com>
+Subject: [PATCH v3] usb: gadget: f_uac1: add different speed transfers support
+Date:   Tue, 15 Feb 2022 11:08:48 +0800
+Message-Id: <20220215030848.5709-1-3090101217@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <YgprpGbtBpojsCmQ@kroah.com>
+References: <YgprpGbtBpojsCmQ@kroah.com>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2619.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dcba85ed-5053-4a7f-6b6b-08d9f030434f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2022 03:07:12.7541
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rsMjT+NKVafF6wj0eSmSkxP2qns9FjNxDlk7+jd3zB2NtdGpPjkFSJ78g+L0IZAv
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1669
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: by_KCgCnrYVCGQtiw5nmAQ--.31476S2
+X-Coremail-Antispam: 1UD129KBjvAXoW3CrW7JF4fCryfAr1rAF1xuFg_yoW8Wr4kAo
+        WDXFsYy34FqF18Xry8GF18WF18ZF1xCFnxXry5Jr98Z3yI934Y93srC3WDWa13JF1fC3WD
+        Wa4UWa1DZaykGr4xn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUUYQ7k0a2IF6w4kM7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0
+        x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj4
+        1l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0
+        I7IYx2IY6xkF7I0E14v26F4UJVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAac4AC62xK8xCEY4vEwIxC4wAac4AC6xC2jxv24VCS
+        YI8q64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
+        WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
+        bVWUJVW8JwACjcxG0xvY0x0EwIxGrwAKzVCY07xG64k0F24l42xK82IYc2Ij64vIr41l4I
+        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
+        xVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
+        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8I
+        cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r
+        4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUgqg4DUUUU
+X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwQRBVNG3FHYyQAVsP
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only]
+From: Jing Leng <jleng@ambarella.com>
 
+On page 61 of the UAC1 specification (
+https://www.usb.org/sites/default/files/audio10.pdf),
+bInterval is interval for polling endpoint for data transfers
+expressed in milliseconds, must be set to 1.
 
+On page 47 of the USB2.0 specification (
+https://www.usb.org/sites/default/files/usb_20_20211008.zip),
+An isochronous endpoint must specify its required bus access period.
+Full-/high-speed endpoints must specify a desired period as
+(2^(bInterval-1)) x F, where bInterval is in the range one to
+(and including) 16 and F is 125 μs for high-speed and 1ms for full-speed.
 
-> -----Original Message-----
-> From: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com> On Behalf
-> Of Salvatore Bonaccorso
-> Sent: Sunday, February 13, 2022 2:24 AM
-> To: Deucher, Alexander <Alexander.Deucher@amd.com>
-> Cc: Dominique Dumont <dod@debian.org>; 1005005@bugs.debian.org;
-> Tuikov, Luben <Luben.Tuikov@amd.com>; Quan, Evan
-> <Evan.Quan@amd.com>; Sasha Levin <sashal@kernel.org>; Koenig, Christian
-> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; David
-> Airlie <airlied@linux.ie>; Daniel Vetter <daniel@ffwll.ch>; amd-
-> gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-
-> kernel@vger.kernel.org
-> Subject: Regression from 3c196f056666 ("drm/amdgpu: always reset the asic
-> in suspend (v2)") on suspend?
->=20
-> Hi Alex, hi all
->=20
-> In Debian we got a regression report from Dominique Dumont, CC'ed in
-> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fbugs
-> .debian.org%2F1005005&amp;data=3D04%7C01%7Cevan.quan%40amd.com%7
-> C735917b6e3f44fc8fda808d9ee54cbc0%7C3dd8961fe4884e608e11a82d994e1
-> 83d%7C0%7C0%7C637802870862664095%7CUnknown%7CTWFpbGZsb3d8eyJ
-> WIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%
-> 7C3000&amp;sdata=3D6xECB3MmvNYuOn41ZOEDPyWUjklY%2Bfxumz7lf8fijwA
-> %3D&amp;reserved=3D0 that afer an update to 5.15.15 based kernel, his
-> machine noe longer suspends correctly, after screen going black as usual =
-it
-> comes back. The Debian bug above contians a trace.
->=20
-> Dominique confirmed that this issue persisted after updating to 5.16.7
-> furthermore he bisected the issue and found
->=20
-> 	3c196f05666610912645c7c5d9107706003f67c3 is the first bad commit
-> 	commit 3c196f05666610912645c7c5d9107706003f67c3
-> 	Author: Alex Deucher <alexander.deucher@amd.com>
-> 	Date:   Fri Nov 12 11:25:30 2021 -0500
->=20
-> 	    drm/amdgpu: always reset the asic in suspend (v2)
->=20
-> 	    [ Upstream commit daf8de0874ab5b74b38a38726fdd3d07ef98a7ee ]
->=20
-> 	    If the platform suspend happens to fail and the power rail
-> 	    is not turned off, the GPU will be in an unknown state on
-> 	    resume, so reset the asic so that it will be in a known
-> 	    good state on resume even if the platform suspend failed.
->=20
-> 	    v2: handle s0ix
->=20
-> 	    Acked-by: Luben Tuikov <luben.tuikov@amd.com>
-> 	    Acked-by: Evan Quan <evan.quan@amd.com>
-> 	    Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-> 	    Signed-off-by: Sasha Levin <sashal@kernel.org>
->=20
-> 	 drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 5 ++++-
-> 	 1 file changed, 4 insertions(+), 1 deletion(-)
->=20
-> to be the first bad commit, see
-> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fbugs
-> .debian.org%2F1005005%2334&amp;data=3D04%7C01%7Cevan.quan%40amd.c
-> om%7C735917b6e3f44fc8fda808d9ee54cbc0%7C3dd8961fe4884e608e11a82d
-> 994e183d%7C0%7C0%7C637802870862664095%7CUnknown%7CTWFpbGZsb3
-> d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0
-> %3D%7C3000&amp;sdata=3DCV%2FKmpYT8WOVJnrTiU91godaFDJMpjih%2FAV
-> NAcw5qaI%3D&amp;reserved=3D0 .
-I checked the back trace posted there(below). It seems the error occurred d=
-uring amdgpu_device_suspend().=20
-That means Alex's patch should not be related(as it affected only those log=
-ic after amdgpu_device_suspend()).=20
-So we might got a wrong regression point here.
-[  257.842851]  ? vi_common_set_clockgating_state+0x229/0x2f0 [amdgpu]
-[  257.843356]  amdgpu_device_ip_suspend_phase1+0x5e/0xc0 [amdgpu]
-[  257.843771]  amdgpu_device_suspend+0x62/0xc0 [amdgpu]
-[  257.844184]  amdgpu_pmops_suspend+0x36/0x70 [amdgpu]
-[  257.844631]  pci_pm_suspend+0x71/0x160
-[  257.844643]  ? pci_pm_freeze+0xb0/0xb0
+On page 362 of the USB3.2 specification (
+https://usb.org/sites/default/files/usb_32_20210125.zip),
+The 'SuperSpeed Endpoint Companion Descriptor' shall only be
+returned by Enhanced SuperSpeed devices that are operating at Gen X speed.
+Each endpoint described in an interface is followed by a 'SuperSpeed
+Endpoint Companion Descriptor'.
 
-BR
-Evan
->=20
-> Does this ring any bell? Any idea on the problem?
->=20
-> Regards,
-> Salvatore
+Currently uac1 driver doesn't set bInterval to 1 in full speed transfer
+and doesn't have a 'SuperSpeed Endpoint Companion Descriptor' behind
+'Standard Endpoint Descriptor'.
+
+So we should set bInterval to 1 in full speed transfer and set it to 4
+in other speed transfers, and we should add 'SuperSpeed Endpoint Companion
+Descriptor' behind 'Standard Endpoint Descriptor' for superspeed transfer.
+
+Signed-off-by: Jing Leng <jleng@ambarella.com>
+---
+ drivers/usb/gadget/function/f_uac1.c | 276 ++++++++++++++++++++++-----
+ 1 file changed, 225 insertions(+), 51 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
+index 03f50643fbba..67b3e7170ec6 100644
+--- a/drivers/usb/gadget/function/f_uac1.c
++++ b/drivers/usb/gadget/function/f_uac1.c
+@@ -123,6 +123,15 @@ static struct uac_feature_unit_descriptor *in_feature_unit_desc;
+ static struct uac_feature_unit_descriptor *out_feature_unit_desc;
+ 
+ /* AC IN Interrupt Endpoint */
++static struct usb_endpoint_descriptor fs_int_ep_desc = {
++	.bLength = USB_DT_ENDPOINT_SIZE,
++	.bDescriptorType = USB_DT_ENDPOINT,
++	.bEndpointAddress = USB_DIR_IN,
++	.bmAttributes = USB_ENDPOINT_XFER_INT,
++	.wMaxPacketSize = cpu_to_le16(2),
++	.bInterval = 1,
++};
++
+ static struct usb_endpoint_descriptor ac_int_ep_desc = {
+ 	.bLength = USB_DT_ENDPOINT_SIZE,
+ 	.bDescriptorType = USB_DT_ENDPOINT,
+@@ -132,6 +141,14 @@ static struct usb_endpoint_descriptor ac_int_ep_desc = {
+ 	.bInterval = 4,
+ };
+ 
++static struct usb_ss_ep_comp_descriptor ac_int_ep_desc_comp = {
++	.bLength = sizeof(ac_int_ep_desc_comp),
++	.bDescriptorType = USB_DT_SS_ENDPOINT_COMP,
++	.bMaxBurst = 0,
++	.bmAttributes = 0,
++	.wBytesPerInterval = cpu_to_le16(2),
++};
++
+ /* B.4.1  Standard AS Interface Descriptor */
+ static struct usb_interface_descriptor as_out_interface_alt_0_desc = {
+ 	.bLength =		USB_DT_INTERFACE_SIZE,
+@@ -201,6 +218,16 @@ static struct uac_format_type_i_discrete_descriptor_1 as_out_type_i_desc = {
+ };
+ 
+ /* Standard ISO OUT Endpoint Descriptor */
++static struct usb_endpoint_descriptor fs_out_ep_desc  = {
++	.bLength =		USB_DT_ENDPOINT_AUDIO_SIZE,
++	.bDescriptorType =	USB_DT_ENDPOINT,
++	.bEndpointAddress =	USB_DIR_OUT,
++	.bmAttributes =		USB_ENDPOINT_SYNC_ADAPTIVE
++				| USB_ENDPOINT_XFER_ISOC,
++	.wMaxPacketSize	=	cpu_to_le16(UAC1_OUT_EP_MAX_PACKET_SIZE),
++	.bInterval =		1,
++};
++
+ static struct usb_endpoint_descriptor as_out_ep_desc  = {
+ 	.bLength =		USB_DT_ENDPOINT_AUDIO_SIZE,
+ 	.bDescriptorType =	USB_DT_ENDPOINT,
+@@ -211,6 +238,14 @@ static struct usb_endpoint_descriptor as_out_ep_desc  = {
+ 	.bInterval =		4,
+ };
+ 
++static struct usb_ss_ep_comp_descriptor as_out_ep_desc_comp = {
++	.bLength		= sizeof(as_out_ep_desc_comp),
++	.bDescriptorType	= USB_DT_SS_ENDPOINT_COMP,
++	.bMaxBurst		= 0,
++	.bmAttributes		= 0,
++	.wBytesPerInterval	= cpu_to_le16(UAC1_OUT_EP_MAX_PACKET_SIZE),
++};
++
+ /* Class-specific AS ISO OUT Endpoint Descriptor */
+ static struct uac_iso_endpoint_descriptor as_iso_out_desc = {
+ 	.bLength =		UAC_ISO_ENDPOINT_DESC_SIZE,
+@@ -231,7 +266,17 @@ static struct uac_format_type_i_discrete_descriptor_1 as_in_type_i_desc = {
+ 	.bSamFreqType =		1,
+ };
+ 
+-/* Standard ISO OUT Endpoint Descriptor */
++/* Standard ISO IN Endpoint Descriptor */
++static struct usb_endpoint_descriptor fs_in_ep_desc  = {
++	.bLength =		USB_DT_ENDPOINT_AUDIO_SIZE,
++	.bDescriptorType =	USB_DT_ENDPOINT,
++	.bEndpointAddress =	USB_DIR_IN,
++	.bmAttributes =		USB_ENDPOINT_SYNC_ASYNC
++				| USB_ENDPOINT_XFER_ISOC,
++	.wMaxPacketSize	=	cpu_to_le16(UAC1_OUT_EP_MAX_PACKET_SIZE),
++	.bInterval =		1,
++};
++
+ static struct usb_endpoint_descriptor as_in_ep_desc  = {
+ 	.bLength =		USB_DT_ENDPOINT_AUDIO_SIZE,
+ 	.bDescriptorType =	USB_DT_ENDPOINT,
+@@ -242,6 +287,14 @@ static struct usb_endpoint_descriptor as_in_ep_desc  = {
+ 	.bInterval =		4,
+ };
+ 
++static struct usb_ss_ep_comp_descriptor as_in_ep_desc_comp = {
++	.bLength		= sizeof(as_in_ep_desc_comp),
++	.bDescriptorType	= USB_DT_SS_ENDPOINT_COMP,
++	.bMaxBurst		= 0,
++	.bmAttributes		= 0,
++	.wBytesPerInterval	= cpu_to_le16(UAC1_OUT_EP_MAX_PACKET_SIZE),
++};
++
+ /* Class-specific AS ISO OUT Endpoint Descriptor */
+ static struct uac_iso_endpoint_descriptor as_iso_in_desc = {
+ 	.bLength =		UAC_ISO_ENDPOINT_DESC_SIZE,
+@@ -252,7 +305,41 @@ static struct uac_iso_endpoint_descriptor as_iso_in_desc = {
+ 	.wLockDelay =		0,
+ };
+ 
+-static struct usb_descriptor_header *f_audio_desc[] = {
++static struct usb_descriptor_header *fs_audio_desc[] = {
++	(struct usb_descriptor_header *)&ac_interface_desc,
++	(struct usb_descriptor_header *)&ac_header_desc,
++
++	(struct usb_descriptor_header *)&usb_out_it_desc,
++	(struct usb_descriptor_header *)&io_out_ot_desc,
++	(struct usb_descriptor_header *)&out_feature_unit_desc,
++
++	(struct usb_descriptor_header *)&io_in_it_desc,
++	(struct usb_descriptor_header *)&usb_in_ot_desc,
++	(struct usb_descriptor_header *)&in_feature_unit_desc,
++
++	(struct usb_descriptor_header *)&fs_int_ep_desc,
++
++	(struct usb_descriptor_header *)&as_out_interface_alt_0_desc,
++	(struct usb_descriptor_header *)&as_out_interface_alt_1_desc,
++	(struct usb_descriptor_header *)&as_out_header_desc,
++
++	(struct usb_descriptor_header *)&as_out_type_i_desc,
++
++	(struct usb_descriptor_header *)&fs_out_ep_desc,
++	(struct usb_descriptor_header *)&as_iso_out_desc,
++
++	(struct usb_descriptor_header *)&as_in_interface_alt_0_desc,
++	(struct usb_descriptor_header *)&as_in_interface_alt_1_desc,
++	(struct usb_descriptor_header *)&as_in_header_desc,
++
++	(struct usb_descriptor_header *)&as_in_type_i_desc,
++
++	(struct usb_descriptor_header *)&fs_in_ep_desc,
++	(struct usb_descriptor_header *)&as_iso_in_desc,
++	NULL,
++};
++
++static struct usb_descriptor_header *hs_audio_desc[] = {
+ 	(struct usb_descriptor_header *)&ac_interface_desc,
+ 	(struct usb_descriptor_header *)&ac_header_desc,
+ 
+@@ -286,6 +373,43 @@ static struct usb_descriptor_header *f_audio_desc[] = {
+ 	NULL,
+ };
+ 
++static struct usb_descriptor_header *ss_audio_desc[] = {
++	(struct usb_descriptor_header *)&ac_interface_desc,
++	(struct usb_descriptor_header *)&ac_header_desc,
++
++	(struct usb_descriptor_header *)&usb_out_it_desc,
++	(struct usb_descriptor_header *)&io_out_ot_desc,
++	(struct usb_descriptor_header *)&out_feature_unit_desc,
++
++	(struct usb_descriptor_header *)&io_in_it_desc,
++	(struct usb_descriptor_header *)&usb_in_ot_desc,
++	(struct usb_descriptor_header *)&in_feature_unit_desc,
++
++	(struct usb_descriptor_header *)&ac_int_ep_desc,
++	(struct usb_descriptor_header *)&ac_int_ep_desc_comp,
++
++	(struct usb_descriptor_header *)&as_out_interface_alt_0_desc,
++	(struct usb_descriptor_header *)&as_out_interface_alt_1_desc,
++	(struct usb_descriptor_header *)&as_out_header_desc,
++
++	(struct usb_descriptor_header *)&as_out_type_i_desc,
++
++	(struct usb_descriptor_header *)&as_out_ep_desc,
++	(struct usb_descriptor_header *)&as_out_ep_desc_comp,
++	(struct usb_descriptor_header *)&as_iso_out_desc,
++
++	(struct usb_descriptor_header *)&as_in_interface_alt_0_desc,
++	(struct usb_descriptor_header *)&as_in_interface_alt_1_desc,
++	(struct usb_descriptor_header *)&as_in_header_desc,
++
++	(struct usb_descriptor_header *)&as_in_type_i_desc,
++
++	(struct usb_descriptor_header *)&as_in_ep_desc,
++	(struct usb_descriptor_header *)&as_in_ep_desc_comp,
++	(struct usb_descriptor_header *)&as_iso_in_desc,
++	NULL,
++};
++
+ enum {
+ 	STR_AC_IF,
+ 	STR_USB_OUT_IT,
+@@ -329,6 +453,89 @@ static struct usb_gadget_strings *uac1_strings[] = {
+ 	NULL,
+ };
+ 
++/* Use macro to overcome line length limitation */
++#define USBDHDR(p) ((struct usb_descriptor_header *)(p))
++
++static void setup_headers(struct f_uac1_opts *opts,
++			  struct usb_descriptor_header **headers,
++			  enum usb_device_speed speed)
++{
++	struct usb_ss_ep_comp_descriptor *epout_desc_comp = NULL;
++	struct usb_ss_ep_comp_descriptor *epin_desc_comp = NULL;
++	struct usb_ss_ep_comp_descriptor *ep_int_desc_comp = NULL;
++	struct usb_endpoint_descriptor *epout_desc;
++	struct usb_endpoint_descriptor *epin_desc;
++	struct usb_endpoint_descriptor *ep_int_desc;
++	int i;
++
++	switch (speed) {
++	case USB_SPEED_FULL:
++		epout_desc = &fs_out_ep_desc;
++		epin_desc = &fs_in_ep_desc;
++		ep_int_desc = &fs_int_ep_desc;
++		break;
++	case USB_SPEED_HIGH:
++		epout_desc = &as_out_ep_desc;
++		epin_desc = &as_in_ep_desc;
++		ep_int_desc = &ac_int_ep_desc;
++		break;
++	default:
++		epout_desc = &as_out_ep_desc;
++		epout_desc_comp = &as_out_ep_desc_comp;
++		epin_desc = &as_in_ep_desc;
++		epin_desc_comp = &as_in_ep_desc_comp;
++		ep_int_desc = &ac_int_ep_desc;
++		ep_int_desc_comp = &ac_int_ep_desc_comp;
++		break;
++	}
++
++	i = 0;
++	headers[i++] = USBDHDR(&ac_interface_desc);
++	headers[i++] = USBDHDR(ac_header_desc);
++
++	if (EPOUT_EN(opts)) {
++		headers[i++] = USBDHDR(&usb_out_it_desc);
++		headers[i++] = USBDHDR(&io_out_ot_desc);
++		if (FUOUT_EN(opts))
++			headers[i++] = USBDHDR(out_feature_unit_desc);
++	}
++
++	if (EPIN_EN(opts)) {
++		headers[i++] = USBDHDR(&io_in_it_desc);
++		headers[i++] = USBDHDR(&usb_in_ot_desc);
++		if (FUIN_EN(opts))
++			headers[i++] = USBDHDR(in_feature_unit_desc);
++	}
++
++	if (FUOUT_EN(opts) || FUIN_EN(opts)) {
++		headers[i++] = USBDHDR(ep_int_desc);
++		if (ep_int_desc_comp)
++			headers[i++] = USBDHDR(ep_int_desc_comp);
++	}
++
++	if (EPOUT_EN(opts)) {
++		headers[i++] = USBDHDR(&as_out_interface_alt_0_desc);
++		headers[i++] = USBDHDR(&as_out_interface_alt_1_desc);
++		headers[i++] = USBDHDR(&as_out_header_desc);
++		headers[i++] = USBDHDR(&as_out_type_i_desc);
++		headers[i++] = USBDHDR(epout_desc);
++		if (epout_desc_comp)
++			headers[i++] = USBDHDR(epout_desc_comp);
++		headers[i++] = USBDHDR(&as_iso_out_desc);
++	}
++	if (EPIN_EN(opts)) {
++		headers[i++] = USBDHDR(&as_in_interface_alt_0_desc);
++		headers[i++] = USBDHDR(&as_in_interface_alt_1_desc);
++		headers[i++] = USBDHDR(&as_in_header_desc);
++		headers[i++] = USBDHDR(&as_in_type_i_desc);
++		headers[i++] = USBDHDR(epin_desc);
++		if (epin_desc_comp)
++			headers[i++] = USBDHDR(epin_desc_comp);
++		headers[i++] = USBDHDR(&as_iso_in_desc);
++	}
++	headers[i] = NULL;
++}
++
+ /*
+  * This function is an ALSA sound card following USB Audio Class Spec 1.0.
+  */
+@@ -891,7 +1098,6 @@ static int f_audio_get_alt(struct usb_function *f, unsigned intf)
+ 	return -EINVAL;
+ }
+ 
+-
+ static void f_audio_disable(struct usb_function *f)
+ {
+ 	struct f_uac1 *uac1 = func_to_uac1(f);
+@@ -957,9 +1163,6 @@ uac1_ac_header_descriptor *build_ac_header_desc(struct f_uac1_opts *opts)
+ 	return ac_desc;
+ }
+ 
+-/* Use macro to overcome line length limitation */
+-#define USBDHDR(p) (struct usb_descriptor_header *)(p)
+-
+ static void setup_descriptor(struct f_uac1_opts *opts)
+ {
+ 	/* patch descriptors */
+@@ -1015,44 +1218,9 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+ 		ac_header_desc->wTotalLength = cpu_to_le16(len);
+ 	}
+ 
+-	i = 0;
+-	f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
+-	f_audio_desc[i++] = USBDHDR(ac_header_desc);
+-
+-	if (EPOUT_EN(opts)) {
+-		f_audio_desc[i++] = USBDHDR(&usb_out_it_desc);
+-		f_audio_desc[i++] = USBDHDR(&io_out_ot_desc);
+-		if (FUOUT_EN(opts))
+-			f_audio_desc[i++] = USBDHDR(out_feature_unit_desc);
+-	}
+-
+-	if (EPIN_EN(opts)) {
+-		f_audio_desc[i++] = USBDHDR(&io_in_it_desc);
+-		f_audio_desc[i++] = USBDHDR(&usb_in_ot_desc);
+-		if (FUIN_EN(opts))
+-			f_audio_desc[i++] = USBDHDR(in_feature_unit_desc);
+-	}
+-
+-	if (FUOUT_EN(opts) || FUIN_EN(opts))
+-		f_audio_desc[i++] = USBDHDR(&ac_int_ep_desc);
+-
+-	if (EPOUT_EN(opts)) {
+-		f_audio_desc[i++] = USBDHDR(&as_out_interface_alt_0_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_out_interface_alt_1_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_out_header_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_out_type_i_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_out_ep_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_iso_out_desc);
+-	}
+-	if (EPIN_EN(opts)) {
+-		f_audio_desc[i++] = USBDHDR(&as_in_interface_alt_0_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_in_interface_alt_1_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_in_header_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_in_type_i_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_in_ep_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_iso_in_desc);
+-	}
+-	f_audio_desc[i] = NULL;
++	setup_headers(opts, fs_audio_desc, USB_SPEED_FULL);
++	setup_headers(opts, hs_audio_desc, USB_SPEED_HIGH);
++	setup_headers(opts, ss_audio_desc, USB_SPEED_SUPER);
+ }
+ 
+ static int f_audio_validate_opts(struct g_audio *audio, struct device *dev)
+@@ -1264,7 +1432,6 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 		if (!ep)
+ 			goto err_free_fu;
+ 		uac1->int_ep = ep;
+-		uac1->int_ep->desc = &ac_int_ep_desc;
+ 
+ 		ac_interface_desc.bNumEndpoints = 1;
+ 	}
+@@ -1275,7 +1442,6 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 		if (!ep)
+ 			goto err_free_fu;
+ 		audio->out_ep = ep;
+-		audio->out_ep->desc = &as_out_ep_desc;
+ 	}
+ 
+ 	if (EPIN_EN(audio_opts)) {
+@@ -1283,19 +1449,27 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 		if (!ep)
+ 			goto err_free_fu;
+ 		audio->in_ep = ep;
+-		audio->in_ep->desc = &as_in_ep_desc;
+ 	}
+ 
++	/* FS endpoint addresses are copied from autoconfigured HS descriptors */
++	fs_int_ep_desc.bEndpointAddress = ac_int_ep_desc.bEndpointAddress;
++	fs_out_ep_desc.bEndpointAddress = as_out_ep_desc.bEndpointAddress;
++	fs_in_ep_desc.bEndpointAddress = as_in_ep_desc.bEndpointAddress;
++
+ 	setup_descriptor(audio_opts);
+ 
+ 	/* copy descriptors, and track endpoint copies */
+-	status = usb_assign_descriptors(f, f_audio_desc, f_audio_desc, NULL,
+-					NULL);
++	status = usb_assign_descriptors(f, fs_audio_desc, hs_audio_desc,
++					ss_audio_desc, ss_audio_desc);
+ 	if (status)
+ 		goto err_free_fu;
+ 
+-	audio->out_ep_maxpsize = le16_to_cpu(as_out_ep_desc.wMaxPacketSize);
+-	audio->in_ep_maxpsize = le16_to_cpu(as_in_ep_desc.wMaxPacketSize);
++	audio->out_ep_maxpsize = max_t(u16,
++				le16_to_cpu(fs_out_ep_desc.wMaxPacketSize),
++				le16_to_cpu(as_out_ep_desc.wMaxPacketSize));
++	audio->in_ep_maxpsize = max_t(u16,
++				le16_to_cpu(fs_in_ep_desc.wMaxPacketSize),
++				le16_to_cpu(as_in_ep_desc.wMaxPacketSize));
+ 	audio->params.c_chmask = audio_opts->c_chmask;
+ 	audio->params.c_srate = audio_opts->c_srate;
+ 	audio->params.c_ssize = audio_opts->c_ssize;
+-- 
+2.17.1
+

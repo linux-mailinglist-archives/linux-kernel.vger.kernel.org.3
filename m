@@ -2,217 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C0104B77D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A650D4B757A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:47:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241902AbiBOTXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 14:23:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57188 "EHLO
+        id S243556AbiBOTYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 14:24:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234184AbiBOTXI (ORCPT
+        with ESMTP id S230290AbiBOTYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 14:23:08 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAB58301A
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 11:22:58 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id s133-20020a252c8b000000b0062112290d0bso27867847ybs.23
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 11:22:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=+Qagel9nxFYYnNu2HO8CI3hbxGS3rPswiuqZekiakKs=;
-        b=li8UV/c9WCi6LXoDFvpYmTXYrRW7F85lEGiJd8p70kxSkOWAWsw/rBrAAy6p0krLV8
-         AheJXPAHJ4LQu1QXcJ062+EJcq3X1rx1XujfG9+LxPpF1E36wcG9csbxb8xHgQCizzDc
-         2Y/vkr4iJebx9bSFG6bdSg3Wg9aE8iY3nWgHNIY6a2mIgL9YtgMDY5h2NUGiC1ba3OGx
-         HDs7l7+gpVLbVImM2iDn+TnStY79NQ2OF+cOJA5ItPQbG3WkFyv8EEJ2u3KXiGCU4jn6
-         6f2nTGnhJjil6JPxiVTWl7XYCQ6OarH/2zom4PJA0tf8NdDV6x5DWtU/HH8/QdQPMR4X
-         v9wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=+Qagel9nxFYYnNu2HO8CI3hbxGS3rPswiuqZekiakKs=;
-        b=iXH94ZFNz1yIitCAmyT1Rdg2G1HqRPmwDzDaQaRTssKynGQZN8F/EB8OuowWzD0OLC
-         x9BgQjbQF7L4I9PBRKfy3dp4QxDGALtuK2wD9Vat2B9bDi9oZ3awdTxlzhLLc9rIlIz+
-         bKoeFB+UGWTscH+ftPBWjLGACe3v1ZvQm1LkS0WKDN7Em03vYRpxFXmiHt/SRaxjXqY7
-         XhDzBMKRPlHnNaDE6v+WEQEUhwD8ViKsum12qQA7U/4v/wNjXNZjo/frPDLOPlDF7RKI
-         2Fdgm5a0QnMqAxFfYteLOUW/1kjemHZ4aN5DCZrRbvEDSTfGltrcZ5zcw3dYc5i731Yd
-         i57w==
-X-Gm-Message-State: AOAM533J3dSYB5AAL1/qyNWmSyFzZjUX9dqWwk6icxgUNXGK0CZbk7oF
-        7S/bGHNSLsQfXvtyi0DkDGes0cl3VnQH
-X-Google-Smtp-Source: ABdhPJxAUxFFPS+GiBvMggHlTCE+Y2IVZgCgbqT1fUdihi1KYP3j9OJC2WvQbznhoZPN5QXJ9cWVtVmbBlPH
-X-Received: from bg.sfo.corp.google.com ([2620:15c:11a:202:c66c:3ade:392d:9c60])
- (user=bgeffon job=sendgmr) by 2002:a81:1f89:: with SMTP id
- f131mr357116ywf.261.1644952977298; Tue, 15 Feb 2022 11:22:57 -0800 (PST)
-Date:   Tue, 15 Feb 2022 11:22:33 -0800
-In-Reply-To: <543efc25-9b99-53cd-e305-d8b4d917b64b@intel.com>
-Message-Id: <20220215192233.8717-1-bgeffon@google.com>
-Mime-Version: 1.0
-References: <543efc25-9b99-53cd-e305-d8b4d917b64b@intel.com>
-X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH stable 5.4,5.10] x86/fpu: Correct pkru/xstate inconsistency
-From:   Brian Geffon <bgeffon@google.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Willis Kung <williskung@google.com>,
-        Guenter Roeck <groeck@google.com>,
-        Borislav Petkov <bp@suse.de>,
-        Andy Lutomirski <luto@kernel.org>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Brian Geffon <bgeffon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 15 Feb 2022 14:24:05 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACAB85656
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 11:23:55 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21FJNlHZ059882;
+        Tue, 15 Feb 2022 13:23:47 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1644953027;
+        bh=rr1Zodq/FlvEdUsZUpJ8FeMZ8Ymp8twhy6LQt3KrRRQ=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=C2fE0fAyYyiJk4eDrOpc0WrARKLjIQqNIxzhAugHyKQPQ8MedUYNYQlTRQ8bMxdH4
+         tHyFJfX7WkR333grEmFdNUkvRDS1chycw3Xi/Yhr7T57cexcmjP6bNZ1zVRdQ4JpH3
+         rU2S0/TcY/40v+QdaWajZOxo1BMCreUc1HH/nUeg=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21FJNlLJ008985
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 15 Feb 2022 13:23:47 -0600
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 15
+ Feb 2022 13:23:47 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 15 Feb 2022 13:23:47 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21FJNkoD109511;
+        Tue, 15 Feb 2022 13:23:46 -0600
+Date:   Wed, 16 Feb 2022 00:53:45 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     <Tudor.Ambarus@microchip.com>
+CC:     <michael@walle.cc>, <linux-mtd@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <miquel.raynal@bootlin.com>,
+        <richard@nod.at>, <vigneshr@ti.com>
+Subject: Re: [PATCH v1 12/14] mtd: spi-nor: move all spansion specifics into
+ spansion.c
+Message-ID: <20220215192345.3pv4soo3grjsr7op@ti.com>
+References: <20220202145853.4187726-1-michael@walle.cc>
+ <20220202145853.4187726-13-michael@walle.cc>
+ <ceef013d-a337-0059-6207-b30d2274d5cb@microchip.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ceef013d-a337-0059-6207-b30d2274d5cb@microchip.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When eagerly switching PKRU in switch_fpu_finish() it checks that
-current is not a kernel thread as kernel threads will never use PKRU.
-It's possible that this_cpu_read_stable() on current_task
-(ie. get_current()) is returning an old cached value. To resolve this
-reference next_p directly rather than relying on current.
+On 10/02/22 03:32AM, Tudor.Ambarus@microchip.com wrote:
+> On 2/2/22 16:58, Michael Walle wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > The clear status register flags is only available on spansion flashes.
+> > Move all the functions around that into the spanion module.
+> > 
+> > Signed-off-by: Michael Walle <michael@walle.cc>
+> > ---
+> >  drivers/mtd/spi-nor/core.c     | 52 +------------------------
+> >  drivers/mtd/spi-nor/spansion.c | 70 ++++++++++++++++++++++++++++++++++
+> >  include/linux/mtd/spi-nor.h    |  1 -
+> >  3 files changed, 72 insertions(+), 51 deletions(-)
+> > 
+> > diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> > index be65aaa954ca..5b00dfab77a6 100644
+> > --- a/drivers/mtd/spi-nor/core.c
+> > +++ b/drivers/mtd/spi-nor/core.c
+> > @@ -554,33 +554,6 @@ int spi_nor_write_ear(struct spi_nor *nor, u8 ear)
+> >         return ret;
+> >  }
+> > 
+> > -/**
+> > - * spi_nor_clear_sr() - Clear the Status Register.
+> > - * @nor:       pointer to 'struct spi_nor'.
+> > - */
+> > -static void spi_nor_clear_sr(struct spi_nor *nor)
+> > -{
+> > -       int ret;
+> > -
+> > -       if (nor->spimem) {
+> > -               struct spi_mem_op op =
+> > -                       SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_CLSR, 0),
+> > -                                  SPI_MEM_OP_NO_ADDR,
+> > -                                  SPI_MEM_OP_NO_DUMMY,
+> > -                                  SPI_MEM_OP_NO_DATA);
+> > -
+> > -               spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
+> > -
+> > -               ret = spi_mem_exec_op(nor->spimem, &op);
+> > -       } else {
+> > -               ret = spi_nor_controller_ops_write_reg(nor, SPINOR_OP_CLSR,
+> > -                                                      NULL, 0);
+> > -       }
+> > -
+> > -       if (ret)
+> > -               dev_dbg(nor->dev, "error %d clearing SR\n", ret);
+> > -}
+> > -
+> >  /**
+> >   * spi_nor_sr_ready() - Query the Status Register to see if the flash is ready
+> >   * for new commands.
+> > @@ -590,33 +563,12 @@ static void spi_nor_clear_sr(struct spi_nor *nor)
+> >   */
+> >  int spi_nor_sr_ready(struct spi_nor *nor)
+> >  {
+> > -       int ret = spi_nor_read_sr(nor, nor->bouncebuf);
+> > +       int ret;
+> > 
+> > +       ret = spi_nor_read_sr(nor, nor->bouncebuf);
+> >         if (ret)
+> >                 return ret;
+> 
+> :) don't change style for no reason. What's wrong with the previous version?
 
-As written it's possible when switching from a kernel thread to a
-userspace thread to observe a cached PF_KTHREAD flag and never restore
-the PKRU. And as a result this issue only occurs when switching
-from a kernel thread to a userspace thread, switching from a non kernel
-thread works perfectly fine because all that is considered in that
-situation are the flags from some other non kernel task and the next fpu
-is passed in to switch_fpu_finish().
+FWIW, I like the newer style better. But that should come in a separate 
+patch in either case.
 
-This behavior only exists between 5.2 and 5.13 when it was fixed by a
-rewrite decoupling PKRU from xstate, in:
-  commit 954436989cc5 ("x86/fpu: Remove PKRU handling from switch_fpu_finish()")
+> 
+> Anyway, with the reports fixed and no hidden style changes, it looks good to me.
+> 
+> > 
+> > -       if (nor->flags & SNOR_F_USE_CLSR &&
+> > -           nor->bouncebuf[0] & (SR_E_ERR | SR_P_ERR)) {
+> > -               if (nor->bouncebuf[0] & SR_E_ERR)
+> > -                       dev_err(nor->dev, "Erase Error occurred\n");
+> > -               else
+> > -                       dev_err(nor->dev, "Programming Error occurred\n");
+> > -
+> > -               spi_nor_clear_sr(nor);
+> > -
+> > -               /*
+> > -                * WEL bit remains set to one when an erase or page program
+> > -                * error occurs. Issue a Write Disable command to protect
+> > -                * against inadvertent writes that can possibly corrupt the
+> > -                * contents of the memory.
+> > -                */
+> > -               ret = spi_nor_write_disable(nor);
+> > -               if (ret)
+> > -                       return ret;
+> > -
+> > -               return -EIO;
+> > -       }
+> > -
+> >         return !(nor->bouncebuf[0] & SR_WIP);
+> >  }
+> > 
+> > diff --git a/drivers/mtd/spi-nor/spansion.c b/drivers/mtd/spi-nor/spansion.c
+> > index dedc2de90cb8..4756fb88eab2 100644
+> > --- a/drivers/mtd/spi-nor/spansion.c
+> > +++ b/drivers/mtd/spi-nor/spansion.c
+> > @@ -8,6 +8,7 @@
+> > 
+> >  #include "core.h"
+> > 
+> > +#define SPINOR_OP_CLSR         0x30    /* Clear status register 1 */
+> >  #define SPINOR_OP_RD_ANY_REG                   0x65    /* Read any register */
+> >  #define SPINOR_OP_WR_ANY_REG                   0x71    /* Write any register */
+> >  #define SPINOR_REG_CYPRESS_CFR2V               0x00800003
+> > @@ -294,6 +295,72 @@ static const struct flash_info spansion_parts[] = {
+> >         },
+> >  };
+> > 
+> > +/**
+> > + * spi_nor_clear_sr() - Clear the Status Register.
+> > + * @nor:       pointer to 'struct spi_nor'.
+> > + */
+> > +static void spi_nor_clear_sr(struct spi_nor *nor)
+> > +{
+> > +       int ret;
+> > +
+> > +       if (nor->spimem) {
+> > +               struct spi_mem_op op =
+> > +                       SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_CLSR, 0),
+> > +                                  SPI_MEM_OP_NO_ADDR,
+> > +                                  SPI_MEM_OP_NO_DUMMY,
+> > +                                  SPI_MEM_OP_NO_DATA);
+> > +
+> > +               spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
+> > +
+> > +               ret = spi_mem_exec_op(nor->spimem, &op);
+> > +       } else {
+> > +               ret = spi_nor_controller_ops_write_reg(nor, SPINOR_OP_CLSR,
+> > +                                                      NULL, 0);
+> > +       }
+> > +
+> > +       if (ret)
+> > +               dev_dbg(nor->dev, "error %d clearing SR\n", ret);
+> > +}
+> > +
+> > +/**
+> > + * spi_nor_sr_ready_and_clear() - Query the Status Register to see if the flash
+> > + * is ready for new commands and clear it.
+> > + * @nor:       pointer to 'struct spi_nor'.
+> > + *
+> > + * Return: 1 if ready, 0 if not ready, -errno on errors.
+> > + */
+> > +int spi_nor_sr_ready_and_clear(struct spi_nor *nor)
 
-Unfortunately backporting the fix from 5.13 is probably not realistic as
-it's part of a 60+ patch series which rewrites most of the PKRU handling.
+Make it static.
 
-Fixes: 0cecca9d03c9 ("x86/fpu: Eager switch PKRU state")
-Signed-off-by: Brian Geffon <bgeffon@google.com>
-Signed-off-by: Willis Kung <williskung@google.com>
-Tested-by: Willis Kung <williskung@google.com>
-Cc: <stable@vger.kernel.org> # v5.4.x
-Cc: <stable@vger.kernel.org> # v5.10.x
----
- arch/x86/include/asm/fpu/internal.h | 13 ++++++++-----
- arch/x86/kernel/process_32.c        |  6 ++----
- arch/x86/kernel/process_64.c        |  6 ++----
- 3 files changed, 12 insertions(+), 13 deletions(-)
+[...]
 
-diff --git a/arch/x86/include/asm/fpu/internal.h b/arch/x86/include/asm/fpu/internal.h
-index 03b3de491b5e..5ed702e2c55f 100644
---- a/arch/x86/include/asm/fpu/internal.h
-+++ b/arch/x86/include/asm/fpu/internal.h
-@@ -560,9 +560,11 @@ static inline void __fpregs_load_activate(void)
-  * The FPU context is only stored/restored for a user task and
-  * PF_KTHREAD is used to distinguish between kernel and user threads.
-  */
--static inline void switch_fpu_prepare(struct fpu *old_fpu, int cpu)
-+static inline void switch_fpu_prepare(struct task_struct *prev, int cpu)
- {
--	if (static_cpu_has(X86_FEATURE_FPU) && !(current->flags & PF_KTHREAD)) {
-+	struct fpu *old_fpu = &prev->thread.fpu;
-+
-+	if (static_cpu_has(X86_FEATURE_FPU) && !(prev->flags & PF_KTHREAD)) {
- 		if (!copy_fpregs_to_fpstate(old_fpu))
- 			old_fpu->last_cpu = -1;
- 		else
-@@ -581,10 +583,11 @@ static inline void switch_fpu_prepare(struct fpu *old_fpu, int cpu)
-  * Load PKRU from the FPU context if available. Delay loading of the
-  * complete FPU state until the return to userland.
-  */
--static inline void switch_fpu_finish(struct fpu *new_fpu)
-+static inline void switch_fpu_finish(struct task_struct *next)
- {
- 	u32 pkru_val = init_pkru_value;
- 	struct pkru_state *pk;
-+	struct fpu *next_fpu = &next->thread.fpu;
- 
- 	if (!static_cpu_has(X86_FEATURE_FPU))
- 		return;
-@@ -598,7 +601,7 @@ static inline void switch_fpu_finish(struct fpu *new_fpu)
- 	 * PKRU state is switched eagerly because it needs to be valid before we
- 	 * return to userland e.g. for a copy_to_user() operation.
- 	 */
--	if (!(current->flags & PF_KTHREAD)) {
-+	if (!(next->flags & PF_KTHREAD)) {
- 		/*
- 		 * If the PKRU bit in xsave.header.xfeatures is not set,
- 		 * then the PKRU component was in init state, which means
-@@ -607,7 +610,7 @@ static inline void switch_fpu_finish(struct fpu *new_fpu)
- 		 * in memory is not valid. This means pkru_val has to be
- 		 * set to 0 and not to init_pkru_value.
- 		 */
--		pk = get_xsave_addr(&new_fpu->state.xsave, XFEATURE_PKRU);
-+		pk = get_xsave_addr(&next_fpu->state.xsave, XFEATURE_PKRU);
- 		pkru_val = pk ? pk->pkru : 0;
- 	}
- 	__write_pkru(pkru_val);
-diff --git a/arch/x86/kernel/process_32.c b/arch/x86/kernel/process_32.c
-index b8ceec4974fe..352f876950ab 100644
---- a/arch/x86/kernel/process_32.c
-+++ b/arch/x86/kernel/process_32.c
-@@ -229,14 +229,12 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
- {
- 	struct thread_struct *prev = &prev_p->thread,
- 			     *next = &next_p->thread;
--	struct fpu *prev_fpu = &prev->fpu;
--	struct fpu *next_fpu = &next->fpu;
- 	int cpu = smp_processor_id();
- 
- 	/* never put a printk in __switch_to... printk() calls wake_up*() indirectly */
- 
- 	if (!test_thread_flag(TIF_NEED_FPU_LOAD))
--		switch_fpu_prepare(prev_fpu, cpu);
-+		switch_fpu_prepare(prev_p, cpu);
- 
- 	/*
- 	 * Save away %gs. No need to save %fs, as it was saved on the
-@@ -292,7 +290,7 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
- 
- 	this_cpu_write(current_task, next_p);
- 
--	switch_fpu_finish(next_fpu);
-+	switch_fpu_finish(next_p);
- 
- 	/* Load the Intel cache allocation PQR MSR. */
- 	resctrl_sched_in();
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index da3cc3a10d63..633788362906 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -505,15 +505,13 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
- {
- 	struct thread_struct *prev = &prev_p->thread;
- 	struct thread_struct *next = &next_p->thread;
--	struct fpu *prev_fpu = &prev->fpu;
--	struct fpu *next_fpu = &next->fpu;
- 	int cpu = smp_processor_id();
- 
- 	WARN_ON_ONCE(IS_ENABLED(CONFIG_DEBUG_ENTRY) &&
- 		     this_cpu_read(irq_count) != -1);
- 
- 	if (!test_thread_flag(TIF_NEED_FPU_LOAD))
--		switch_fpu_prepare(prev_fpu, cpu);
-+		switch_fpu_prepare(prev_p, cpu);
- 
- 	/* We must save %fs and %gs before load_TLS() because
- 	 * %fs and %gs may be cleared by load_TLS().
-@@ -565,7 +563,7 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
- 	this_cpu_write(current_task, next_p);
- 	this_cpu_write(cpu_current_top_of_stack, task_top_of_stack(next_p));
- 
--	switch_fpu_finish(next_fpu);
-+	switch_fpu_finish(next_p);
- 
- 	/* Reload sp0. */
- 	update_task_stack(next_p);
 -- 
-2.35.1.265.g69c8d7142f-goog
-
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

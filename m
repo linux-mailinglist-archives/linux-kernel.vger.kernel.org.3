@@ -2,106 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5B74B7537
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D70064B754B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:47:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242841AbiBOR4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 12:56:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42278 "EHLO
+        id S236997AbiBOR62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 12:58:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242815AbiBOR4K (ORCPT
+        with ESMTP id S231445AbiBOR61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 12:56:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7068B1019CD;
-        Tue, 15 Feb 2022 09:55:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 15 Feb 2022 12:58:27 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC51CB90F
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:58:16 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 1F0061F37B;
+        Tue, 15 Feb 2022 17:58:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1644947895; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PWnIgritZWDbPqJt4NsgSR71vtgK2UWzhthhnP5o4N8=;
+        b=ANXyuW7pa1fRxyk4Wi82kyjZCJBuqKX1zYvsPJuG/UniPdAKijCFcYg1yLlU+7XXtpIhMv
+        0CfdkivBt3YJc2YGKg4twu+MOatTDOXUrcl3jlvvw25cHxsarePAEQsuZz0UOWD5x7EPgY
+        rGuJDycszjodPi/gitL3YyXISA8J4vU=
+Received: from suse.cz (unknown [10.100.216.66])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30A95B81BD8;
-        Tue, 15 Feb 2022 17:55:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14539C340EB;
-        Tue, 15 Feb 2022 17:55:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644947756;
-        bh=DpghstMLiYzSupNnVlCnqIFT1M0QQYu4EYFnyOaiqFw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mSPGUQN2CJZfhuRDjs4goK1NyxaFWDdEV/KiPLcQ0EoUToT7fgJ3ObqnbSFubXVv7
-         rY9XdlUgvy6h3F8BdW2L9IH4eC6nxdEXEIvxztbANm8JQ5vQZyZMhKlSdltMNfRiPR
-         s7DjbgqWmo0nGynny0oevRwJ4fwQiqRe3MxZiRXrn5RU5sV+GKLqoxXo2B89Wu/JGE
-         9KDd4sHF2niS9z6ocJCZbdl2uvk/qV7nvALpYjGLI6RYV87AByqq4P2OToPfJOd6nV
-         XXVbfb7z8HIIMU9XaS/G8SK/Fs5QbckN5UXRGxzWFwsK+IEGFtBzQN6MwxziWvrANn
-         sYqzMn5ThjfLA==
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Aharon Landau <aharonl@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Subject: [PATCH rdma-next v2 5/5] RDMA/mlx5: Reorder calls to pcie_relaxed_ordering_enabled()
-Date:   Tue, 15 Feb 2022 19:55:33 +0200
-Message-Id: <684be1366cb1d4f05aa3e78986205e4bc410443a.1644947594.git.leonro@nvidia.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1644947594.git.leonro@nvidia.com>
-References: <cover.1644947594.git.leonro@nvidia.com>
+        by relay2.suse.de (Postfix) with ESMTPS id CC322A3B89;
+        Tue, 15 Feb 2022 17:58:14 +0000 (UTC)
+Date:   Tue, 15 Feb 2022 18:58:14 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Andre Kalb <andre.kalb@sma.de>, john.ogness@linutronix.de,
+        linux-kernel@vger.kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v2] printk: Set console_set_on_cmdline=1 when
+ __add_preferred_console() is called with user_specified == true
+Message-ID: <YgvptpD/g4hj0bsp@alley>
+References: <YgKSbe9d3haHKMid@alley>
+ <YgpXWQqjfJBISG1v@pc6682>
+ <Ygsa7gfqlhZVWdDb@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ygsa7gfqlhZVWdDb@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aharon Landau <aharonl@nvidia.com>
+On Tue 2022-02-15 12:15:58, Sergey Senozhatsky wrote:
+> On (22/02/14 14:21), Andre Kalb wrote:
+> > +static void set_user_specified(struct console_cmdline *c, bool user_specified)
+> > +{
+> > +	if (!user_specified)
+> > +		return;
+> > +
+> > +	c->user_specified = true;
+> > +	console_set_on_cmdline = 1;
+> > +}
+> 
+> In original code we always set c->user_specified. Is it guaranteed that
+> ->user_specified is properly initialized to 0? Maybe can do something like:
 
-The mkc is the key for the mkey cache, hence, created in each attempt to
-get a cache mkey, while pcie_relaxed_ordering_enabled() is called during
-the setting of the mkc, but used only for cases where
-IB_ACCESS_RELAXED_ORDERING is set.
+It is guaranteed. console_cmdline is a static array initialized with
+zeroes. The 2nd set_user_specified() call is done for a not-yet-used
+slot in the array, so it must be zero.
 
-pcie_relaxed_ordering_enabled() is an expensive call (26 us). Reorder the
-code so the driver will call it only when it is needed.
 
-Signed-off-by: Aharon Landau <aharonl@nvidia.com>
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
----
- drivers/infiniband/hw/mlx5/mr.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+> static void set_user_specified(struct console_cmdline *c, bool user_specified)
+> {
+> 	c->user_specified = user_specified;
 
-diff --git a/drivers/infiniband/hw/mlx5/mr.c b/drivers/infiniband/hw/mlx5/mr.c
-index eb14ea4bcbba..eab7921eb91f 100644
---- a/drivers/infiniband/hw/mlx5/mr.c
-+++ b/drivers/infiniband/hw/mlx5/mr.c
-@@ -68,7 +68,6 @@ static void set_mkc_access_pd_addr_fields(void *mkc, int acc, u64 start_addr,
- 					  struct ib_pd *pd)
- {
- 	struct mlx5_ib_dev *dev = to_mdev(pd->device);
--	bool ro_pci_enabled = pcie_relaxed_ordering_enabled(dev->mdev->pdev);
- 
- 	MLX5_SET(mkc, mkc, a, !!(acc & IB_ACCESS_REMOTE_ATOMIC));
- 	MLX5_SET(mkc, mkc, rw, !!(acc & IB_ACCESS_REMOTE_WRITE));
-@@ -76,12 +75,13 @@ static void set_mkc_access_pd_addr_fields(void *mkc, int acc, u64 start_addr,
- 	MLX5_SET(mkc, mkc, lw, !!(acc & IB_ACCESS_LOCAL_WRITE));
- 	MLX5_SET(mkc, mkc, lr, 1);
- 
--	if (MLX5_CAP_GEN(dev->mdev, relaxed_ordering_write))
--		MLX5_SET(mkc, mkc, relaxed_ordering_write,
--			 (acc & IB_ACCESS_RELAXED_ORDERING) && ro_pci_enabled);
--	if (MLX5_CAP_GEN(dev->mdev, relaxed_ordering_read))
--		MLX5_SET(mkc, mkc, relaxed_ordering_read,
--			 (acc & IB_ACCESS_RELAXED_ORDERING) && ro_pci_enabled);
-+	if ((acc & IB_ACCESS_RELAXED_ORDERING) &&
-+	    pcie_relaxed_ordering_enabled(dev->mdev->pdev)) {
-+		if (MLX5_CAP_GEN(dev->mdev, relaxed_ordering_write))
-+			MLX5_SET(mkc, mkc, relaxed_ordering_write, 1);
-+		if (MLX5_CAP_GEN(dev->mdev, relaxed_ordering_read))
-+			MLX5_SET(mkc, mkc, relaxed_ordering_read, 1);
-+	}
- 
- 	MLX5_SET(mkc, mkc, pd, to_mpd(pd)->pdn);
- 	MLX5_SET(mkc, mkc, qpn, 0xffffff);
--- 
-2.35.1
+This will change the behavior for the 1st set_user_specified() call.
+It happens when the same console is added more times by device tree,
+SPCR, and/or command line. c->user_specified must stay "true" when
+at least one __add_preferred_console() call added it from the command line.
 
+> 	if (!user_specified)
+> 		return;
+> 
+> 	console_set_on_cmdline = 1;
+> }
+
+I agree that it is not obvious. It would make sense to add a comment
+into the code. I am going to propose something in a reply to the
+original post.
+
+Best Regards,
+Petr

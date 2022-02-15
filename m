@@ -2,146 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 494064B79D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:50:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 976F44B79D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244456AbiBOViY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 16:38:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36770 "EHLO
+        id S234203AbiBOVij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 16:38:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234203AbiBOViV (ORCPT
+        with ESMTP id S244467AbiBOVih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 16:38:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70886B93B2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:38:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644961089;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=lw6VFDNDin3+pbk+tx5AobUrmHH/xqmLZ9mW+ngKQHA=;
-        b=b8jTXvwtJ5+Ua986iowvGdhZcXDa2QIsPJhkWmYNm3waE1tHdVtuuqFEi2uKpbxZ1kf28z
-        YplXuX/b6YemvF9aVDbSv9Dwn1Clay3ERqXJ+fkXedNS8iILG4ZhTE86n1NEt8M8I1H5QG
-        F8mGmHqfiwZMf9BgqyPVy7hPZlY0wB8=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-150-LEVnjWfPML6oJJkjhWTWAQ-1; Tue, 15 Feb 2022 16:38:08 -0500
-X-MC-Unique: LEVnjWfPML6oJJkjhWTWAQ-1
-Received: by mail-oo1-f69.google.com with SMTP id b10-20020a4a340a000000b0031937d5a5efso90576ooa.15
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:38:08 -0800 (PST)
+        Tue, 15 Feb 2022 16:38:37 -0500
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72106F747E
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:38:24 -0800 (PST)
+Received: by mail-qk1-x735.google.com with SMTP id m25so9374qka.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:38:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=J1afD2UuA2twxlw8ZzYufWhFKO6wr/3kutM+ZjyetLk=;
+        b=Wcl7oY9fxL+v3oPFd1xJprCDBFPC/SUL0s385FIv9KvKn7xQn+INxXiqJqW1x8EuFK
+         7F3FLwEtLULlwb0dFj1iPOckU4U+s4WbW5s2R5XHL24xywKiiuJ50feMlNcrr3xKzU80
+         4ckWEYm2nGOh3ZFkrH/7ajWwCHGBfW6v4bdyJLj/PLx6TMItmI6xrQ64wW6XEWUtLkV+
+         xoValrFu7CWuxwnvIC3AGYTuWz9HTpBrk2HvxgS/7CEbc67DYyznj9+agowFE6ShYp9R
+         yURG3NrplLpz7e9vOZ90uF6zp9+zUhUeGBb81PjGwmUk4HJKYJ3zsddSR9OVYYC1Awu3
+         P5wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lw6VFDNDin3+pbk+tx5AobUrmHH/xqmLZ9mW+ngKQHA=;
-        b=Hj8pc28e4MIh9a+8MjN9aEXEYlY1L5Rcc4F57iDU7INlz+QvET8BP76O2ABzKrhLdd
-         vULLvDRG4P8ZALa5R2T+MaVoHbbBpqnB96M6XpelUkbsWumuprYbuEcIV6ne6rfpa3W+
-         /9r3XyevTdx+5uYspmp3ZzhqwHCDdQDfHD21HCWhBe5klZuLb5k6Bqhpd+kwFuLOKHSu
-         UoYxQG7AdDr0XpytBFy8oY+0GBqWPPlpTtl6zcBuOOlfK+FA/l6SQEvN+fVTZI9mwrFq
-         ++aioXxF0zP4GYEjdwN/ZaHojjXjgUx94gg4L+9cPA6QIvt2lnEV8F6dhOCrZU7857dW
-         5kgQ==
-X-Gm-Message-State: AOAM533VIYRD9xNz7GJjMC0L00q+uVNlOWKMiUJKd48qP6wNeO2sDM5p
-        TuwP9jABsACImlXgP3xs3CPpnLgnrDdkjhlpB6fnDueAeRMGvczJAJXPoUq2te51KNzBhBt1Z6z
-        JNOxrsQcGpTh7e2938I/Vq48u
-X-Received: by 2002:a05:6830:1493:: with SMTP id s19mr397256otq.85.1644961087405;
-        Tue, 15 Feb 2022 13:38:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxHMQprTXozHvAqtiU55fjLcSJcPyW6e11I36Ur5jnj6V1ImozP4x5z3TQW31gX7xF9l32RWg==
-X-Received: by 2002:a05:6830:1493:: with SMTP id s19mr397250otq.85.1644961087159;
-        Tue, 15 Feb 2022 13:38:07 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id u32sm10936990oiw.28.2022.02.15.13.38.06
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=J1afD2UuA2twxlw8ZzYufWhFKO6wr/3kutM+ZjyetLk=;
+        b=HoEkwA5/nkR1RM3B/gpvGjAQ87Qsm6lCVlukqYC2Ht200pjrpxl3ZDZHTzZuoiJZrJ
+         VbBc+MbNAe1CDjkFJ88D23xVNdoLPsD3PrkTGhbD+2QZnnAZvoG+1g/LMsxr+qkOGm8B
+         k0QmzNwK8OwW0FWrFyfSQBWdy1mGdn45JXD+6jn0WVgbALFzS3YHETsCP5yp4BeRFGhB
+         h+XOOEDF04LL00IcdjbN7dKWlhzYG58TG9pyVuyyTzBQaRusWo4SBMJHQGXBj7GJEeQq
+         RFkpkmPYprJ7NK7X88EzA0pXzAA9LfKjBd4sDBXXsQ/4jCS8Gr262/ca6HzmOhGTLS9C
+         JuIw==
+X-Gm-Message-State: AOAM532PAHc8tK3oF385NmdFMTvd/wMBjN10ASRT66y5Gb5lzTw0ympz
+        W0PD2kJ4t8XhQ+v4MONyZi3tKg==
+X-Google-Smtp-Source: ABdhPJwSnmcbyCFnLifXS/yn/JrFTpEWFiC13xTSxk+iFYmllr+zSaMVP3leFQFjySBg2IBVEq4+gA==
+X-Received: by 2002:ae9:ddc1:: with SMTP id r184mr607603qkf.549.1644961103396;
+        Tue, 15 Feb 2022 13:38:23 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id o81sm427231qke.134.2022.02.15.13.38.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 13:38:06 -0800 (PST)
-From:   trix@redhat.com
-To:     joyce.ooi@intel.com, davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] net: ethernet: altera: cleanup comments
-Date:   Tue, 15 Feb 2022 13:38:02 -0800
-Message-Id: <20220215213802.3043178-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Tue, 15 Feb 2022 13:38:22 -0800 (PST)
+Date:   Tue, 15 Feb 2022 13:38:20 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Matthew Wilcox <willy@infradead.org>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Rik van Riel <riel@surriel.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 04/13] mm/munlock: rmap call mlock_vma_page()
+ munlock_vma_page()
+In-Reply-To: <YgvFMjWPITbD1o64@casper.infradead.org>
+Message-ID: <3c6097a7-df8c-f39c-36e8-8b5410e76c8a@google.com>
+References: <55a49083-37f9-3766-1de9-9feea7428ac@google.com> <501673c-a5a-6c5f-ab65-38545dfb723d@google.com> <YgvFMjWPITbD1o64@casper.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+On Tue, 15 Feb 2022, Matthew Wilcox wrote:
+> On Mon, Feb 14, 2022 at 06:26:39PM -0800, Hugh Dickins wrote:
+> > Add vma argument to mlock_vma_page() and munlock_vma_page(), make them
+> > inline functions which check (vma->vm_flags & VM_LOCKED) before calling
+> > mlock_page() and munlock_page() in mm/mlock.c.
+> > 
+> > Add bool compound to mlock_vma_page() and munlock_vma_page(): this is
+> > because we have understandable difficulty in accounting pte maps of THPs,
+> > and if passed a PageHead page, mlock_page() and munlock_page() cannot
+> > tell whether it's a pmd map to be counted or a pte map to be ignored.
+> > 
+> [...]
+> > 
+> > Mlock accounting on THPs has been hard to define, differed between anon
+> > and file, involved PageDoubleMap in some places and not others, required
+> > clear_page_mlock() at some points.  Keep it simple now: just count the
+> > pmds and ignore the ptes, there is no reason for ptes to undo pmd mlocks.
+> 
+> How would you suggest we handle the accounting for folios which are
+> intermediate in size between PMDs and PTEs?  eg, an order-4 page?
+> Would it make sense to increment mlock_count by HUGE_PMD_NR for
+> each PMD mapping and by 1 for each PTE mapping?
 
-Replacements:
-queueing to queuing
-trasfer to transfer
-aditional to additional
-adaptor to adapter
-transactino to transaction
+I think you're asking the wrong question here, but perhaps you've
+already decided there's only one satisfactory answer to the right question.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/net/ethernet/altera/altera_sgdma.c    | 2 +-
- drivers/net/ethernet/altera/altera_tse_main.c | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+To answer what you've asked: it doesn't matter at all how you count them
+in mlock_count, just so long as they are counted up and down consistently.
+Since it's simplest just to count 1 in mlock_count for each pmd or pte,
+I prefer that (as I did with THPs); but if you prefer to count pmds up
+and down by HUGE_PMD_NR, that works too.
 
-diff --git a/drivers/net/ethernet/altera/altera_sgdma.c b/drivers/net/ethernet/altera/altera_sgdma.c
-index db97170da8c7..7f247ccbe6ba 100644
---- a/drivers/net/ethernet/altera/altera_sgdma.c
-+++ b/drivers/net/ethernet/altera/altera_sgdma.c
-@@ -513,7 +513,7 @@ static int sgdma_txbusy(struct altera_tse_private *priv)
- {
- 	int delay = 0;
- 
--	/* if DMA is busy, wait for current transactino to finish */
-+	/* if DMA is busy, wait for current transaction to finish */
- 	while ((csrrd32(priv->tx_dma_csr, sgdma_csroffs(status))
- 		& SGDMA_STSREG_BUSY) && (delay++ < 100))
- 		udelay(1);
-diff --git a/drivers/net/ethernet/altera/altera_tse_main.c b/drivers/net/ethernet/altera/altera_tse_main.c
-index 993b2fb42961..a3816264c35c 100644
---- a/drivers/net/ethernet/altera/altera_tse_main.c
-+++ b/drivers/net/ethernet/altera/altera_tse_main.c
-@@ -72,7 +72,7 @@ MODULE_PARM_DESC(dma_tx_num, "Number of descriptors in the TX list");
-  */
- #define ALTERA_RXDMABUFFER_SIZE	2048
- 
--/* Allow network stack to resume queueing packets after we've
-+/* Allow network stack to resume queuing packets after we've
-  * finished transmitting at least 1/4 of the packets in the queue.
-  */
- #define TSE_TX_THRESH(x)	(x->tx_ring_size / 4)
-@@ -390,7 +390,7 @@ static int tse_rx(struct altera_tse_private *priv, int limit)
- 				   "RCV pktstatus %08X pktlength %08X\n",
- 				   pktstatus, pktlength);
- 
--		/* DMA trasfer from TSE starts with 2 aditional bytes for
-+		/* DMA transfer from TSE starts with 2 additional bytes for
- 		 * IP payload alignment. Status returned by get_rx_status()
- 		 * contains DMA transfer length. Packet is 2 bytes shorter.
- 		 */
-@@ -1044,7 +1044,7 @@ static void altera_tse_set_mcfilterall(struct net_device *dev)
- 		csrwr32(1, priv->mac_dev, tse_csroffs(hash_table) + i * 4);
- }
- 
--/* Set or clear the multicast filter for this adaptor
-+/* Set or clear the multicast filter for this adapter
-  */
- static void tse_set_rx_mode_hashfilter(struct net_device *dev)
- {
-@@ -1064,7 +1064,7 @@ static void tse_set_rx_mode_hashfilter(struct net_device *dev)
- 	spin_unlock(&priv->mac_cfg_lock);
- }
- 
--/* Set or clear the multicast filter for this adaptor
-+/* Set or clear the multicast filter for this adapter
-  */
- static void tse_set_rx_mode(struct net_device *dev)
- {
--- 
-2.26.3
+Though, reading again, you're asking about a PMD mapping of an order-4
+page?  I don't understand how that could be allowed (except on some
+non-x86 architecture where the page table fits only 16 pages).
 
+The question I thought you should be asking is about how to count them
+in Mlocked.  That's tough; but I take it for granted that you would not
+want per-subpage flags and counts involved (or not unless forced to do
+so by some regression that turns out to matter).  And I think the only
+satisfactory answer is to count the whole compound_nr() as Mlocked
+when any part of it (a single pte, a series of ptes, a pmd) is mlocked;
+and (try to) move folio to Unevictable whenever any part of it is mlocked.
+
+That differs from what Kirill decided for THPs (which I cannot
+confidently describe, but something like count pmd as Mlocked, don't count
+ptes as Mlocked, but uncount pmd if any ptes), and what I simplified it to
+in the mm/munlock series (count pmd as Mlocked, ignore ptes), and will
+tend to show larger numbers for Mlocked than before; but alternatives
+seem unworkable to me.
+
+Hugh

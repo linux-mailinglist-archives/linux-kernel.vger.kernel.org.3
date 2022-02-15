@@ -2,196 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7562A4B6AA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:23:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9334B6AB6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:24:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237101AbiBOLYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 06:24:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42340 "EHLO
+        id S237116AbiBOLZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 06:25:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237077AbiBOLX7 (ORCPT
+        with ESMTP id S237085AbiBOLY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 06:23:59 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2082.outbound.protection.outlook.com [40.107.94.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B0A1081B2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 03:23:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d17eRlcrURyPtVPdj6CSYTVX98h1hA+wjkmAfbXpE1DpfPV0vV7u3b9fpds5aMkpZAF32BLJRMSx+5ejNrvsZFG+ZQCvKlBj4U/rPrCnLNM8D6CGP5TUn46jXAYYk7458SDR24p4EUwlQAhs6jVA5/6b01+GG7qDPD2ZFX9wSD54ReEG/9U028doJNgC0Y07CTfoLgBWeZixR69oBzyoj8hIi66IKMtyayeLI0SRmNpA8WR2SuRo9FSq9eNPoTFr7X9/agsP3rEuFH8SSug9QWQ8bL6/nc7bun97i0maI59or9spuWZLebwpR3yqfqXD9w2IeRZX3PwLZtTA45FfTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/D65h5012vVD65R8WlCs2I/MeRRgkXWF3EbBonUsbIg=;
- b=N2UcVexboIHXVkN8za73da1iAimYclvqnvUJOsFzdiEAGPLyct0K4TXWavsB23oCqd0KlJ3bWp7TRdLYzTuR56cKDOvePO81FQsbHm9U2o0LxVCqewvdfOyUETfMUjk8kearzFAkXqqvSDM6EpiiRCk/nmz1v1ikcgIz8kMa3r4cuYBWvhR4LT05EqS0VBOLDWqaL2vRbptDsgrJDa4rNr0Ha7tb/M63kQDZoz29M9LeDlaiyznrn9Sj1oCP5oZjtUKaB4kQYy8U8ZjBrhhRLEyoFKcLNEf0uiyz6gvi6sPqlzHNsCNz6UTLBcQ5o/NdZPmtx0sibO/v12hmeL8Sng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/D65h5012vVD65R8WlCs2I/MeRRgkXWF3EbBonUsbIg=;
- b=fna+EMa2vg5b8MUVf2iTZ1KKWrN0QAHbAHEEAHNdVC6E3accU9Us8nmC/hGzlGUikXuTr4FIUFcTxEyMa6/nLt4zsUQJwO98KzncGFCn+pbHY90QkjfCkhpZJ6b0waGJw1VTsV6LP7FdvTnZp+qn5/emYSL1gApaCkCotH9vXWY=
-Received: from SJ0PR12MB5504.namprd12.prod.outlook.com (2603:10b6:a03:3ad::24)
- by BY5PR12MB3890.namprd12.prod.outlook.com (2603:10b6:a03:1a7::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.18; Tue, 15 Feb
- 2022 11:23:47 +0000
-Received: from SJ0PR12MB5504.namprd12.prod.outlook.com
- ([fe80::9cc:9f51:a623:30c6]) by SJ0PR12MB5504.namprd12.prod.outlook.com
- ([fe80::9cc:9f51:a623:30c6%5]) with mapi id 15.20.4975.018; Tue, 15 Feb 2022
- 11:23:47 +0000
-From:   "Lin, Wayne" <Wayne.Lin@amd.com>
-To:     "iam@lach.pw" <iam@lach.pw>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
-CC:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>
-Subject: RE: [2/2] drm/amd: use fixed dsc bits-per-pixel from edid
-Thread-Topic: [2/2] drm/amd: use fixed dsc bits-per-pixel from edid
-Thread-Index: AdgiXnlzLjvwyhTiSnGb7Uj4pLwEjQ==
-Date:   Tue, 15 Feb 2022 11:23:47 +0000
-Message-ID: <SJ0PR12MB55040F0F0ECF27FB1E13889EFC349@SJ0PR12MB5504.namprd12.prod.outlook.com>
-References: <20220213133128.5833-2-iam@lach.pw>
-In-Reply-To: <20220213133128.5833-2-iam@lach.pw>
-Accept-Language: en-US, zh-TW
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=eb6fb98c-bfda-42c4-94e4-53441be044b3;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=0;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP
- 2.0;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-02-15T11:15:44Z;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ced2675d-5469-46d8-1f68-08d9f075a23d
-x-ms-traffictypediagnostic: BY5PR12MB3890:EE_
-x-microsoft-antispam-prvs: <BY5PR12MB38907BE33E02574D3847AE2DFC349@BY5PR12MB3890.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4941;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: rv3jIx7w1RxckHBHA8XZPyoEOtDOEy+Cb9ltLYc6hG4ZinVjIEp6TLq9LM4lV+k9O9eUWI/fSvmTxP572GvtvEIOK5giDTJT7hfbMKA3DpTUxWnsobU/8KkFbmlsusW0mKNsYD95ARkpVxsM6owku7znSaatvUhN7NtAbffGaM1XiTgp/vHK7oSyxmIKWKwlgj962L8A+3e63LdynT6RyFrUUeSSqBungIrdg0z3oZWCqxGOoZMeQ32Qkr1jVHWe8sFTzaIB3xyEv95vZPO+vt9MTyrbVybCAteCOFtTHv6eWVEQco5oKNgSvsj7Vtdddwvexid3Gfx+i+hQpbbEAJrtIFDqZYjNS23erinuXJUcZ0TC1sQ9GiePYVwO7hPbKN9xAI9FMGsnbGvI4rXQA+1O9MYz9gljjlmJdZF/Jw0/CzMsdMzpGSV/kMdsdkRLVi59Qa0kfVfHbibb+yPSdK4kSPlNxr+DotTWt+5meCEoxtF8wYXYtdtFv658M8N/BbFo85CowxGMoaGMsOZstMh9sUz8wou96lzVSUMWJSy3WHwiHGhwIfIWq4qcJDPfsqzXFddxrfQcWger+eTmHmknzbx/dBx/1Hmw080ZqKRVRAme5/etou1YWDv2lBlch4itLcYQPW0bZcusaCuNS+XYyRdfxXzZEigv3JGuIOSZoaGwkwpVYNUl2pZtvQgPcJKt++abGSC4xPpeEwsATg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR12MB5504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(110136005)(54906003)(86362001)(122000001)(55016003)(38070700005)(53546011)(26005)(316002)(76116006)(66476007)(7696005)(9686003)(6506007)(8936002)(5660300002)(8676002)(2906002)(66946007)(52536014)(4326008)(66556008)(71200400001)(64756008)(508600001)(33656002)(66446008)(83380400001)(186003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?S3l5ZkJSZnM3QW9NUjczUnBCVTVlVGl6bHozWkliZ29RNm5OTTdocTBQb2RZ?=
- =?utf-8?B?bHVtbHV5TU9kWk5SN1hFTzdXSmg2Q2N6RExmcnI2STkxV3grV1NZOVdtOXgy?=
- =?utf-8?B?alVsQk5DWGs3dFBwVGpwdlZmcHNOOUV4b1F2V2dVYTZiWk0wbW5sOG1iTVk2?=
- =?utf-8?B?VHlTZ1I2UmFHcThXcWt5dGlvWkMxQ2szb0s5Rkc1bVpMQ1ByTUxzdGtZZjJ0?=
- =?utf-8?B?eDJVQSsyWEhBMG5URy9CdkFGdlFmTTRhTEkvaHk1TThXcmJaSXdNYzQ2UWNq?=
- =?utf-8?B?aWNVVUx3VytNVVRWNFpWcmsvczNKQzc5OUpXdE1SOFJ4VHBkSGI0UVowY3RX?=
- =?utf-8?B?MjZqa0tMcFc4TTQ3ZHJYdXpEcHZqeERDK1lXM2gyU2JaSDBBc0FPcnJRRGlz?=
- =?utf-8?B?Z2w1OE8vZnc2d2Q1RzBTV1lNSXR2VmsvOEh1R01NR05PVlZyMHJKOWNlVHI0?=
- =?utf-8?B?Yk1MYUZaVWpMbW1LTHg4SUpMdXAzanI3WFJiS3phTUxqU1FlbGJ2MU1sSk9M?=
- =?utf-8?B?TTY4dXVPMG04dmFGUlJRdXRxd1ViUEtBVzNwWlVxSHFRUlluak1UUno0NHVO?=
- =?utf-8?B?ZitreE1LVi9hNk9qbmo2Uk9uV3hIWVJMd1RpNGJIRHJua3BjNXZCMHQwenpv?=
- =?utf-8?B?OHZiR1RkVDEvU21UVHk5bWtTalZqY3lCY3ROSFhrMWlEaUwyNC9Zdzc5Q3U0?=
- =?utf-8?B?SGZMOGZaYUJJT01KMUtkQmlKZVFwdlI1Vjl6c2FWZHVGYlRKUVFoRlVWbGdI?=
- =?utf-8?B?UUdCeWlUY1lySEg4ckErQ285WkVidWNKVG9vRFlONFUyalZGdUtVUXJWTDZJ?=
- =?utf-8?B?enNrSm5rQmh1VGlpcHgwMFhUdzdRODZXSklMbUxpM3VaTTYwbDNBWHhuUXM1?=
- =?utf-8?B?clZLNTdZV2hFWVJvR01KWW44ajRjY3pwZkFBN3VpalpjS2ZoWm9XNjA5VjBX?=
- =?utf-8?B?UTBXQjJFaWlIZXRMRnl0a0xCQTF6MGViTFJ3Vzd0WFNyaHJ1MStCSWdXcXF3?=
- =?utf-8?B?Z284ZlBvaVNSM2RaOWFOUHZRUHlVcEs5L1F3QUM4MExneS9hcE05OUpWejRF?=
- =?utf-8?B?aFlkUkFXVlQvRlJJcHd5TlM4WDVpVnArWjVRcjc4ZFkzRUp2OTZQd04raUVC?=
- =?utf-8?B?ZURpMS9nam0yS3FjNjlQWEhvdDliOE5pWS9VZUloeDdibXBwVnRlNGhtTEoy?=
- =?utf-8?B?S2RabUlsMEdnUUZtZUViYWliY3NJclVMYzl5aVlteUlBa0ZNNi82RmZ3Y1Bv?=
- =?utf-8?B?cG5oVk9iV0M2Uk9oMkRxcm9CN1JUU2U2TWxyZHc0b29Bc0lPR2FaYytCaGpq?=
- =?utf-8?B?VTc2SkpMaTdVWjBhUXl5M3ROdTB2N0FDQVdVR3VneWJZNytKRENpeU5UWXJN?=
- =?utf-8?B?dGtqVXBFdzU4OW9xd1Rab2hNeDExV1Yyem1maVJtTnhMUFAxbHZVRDd6Z2xD?=
- =?utf-8?B?aXZiVlhZc0JRVTFvdFErbnBmdWVoUWwxd01EU2VUcXBLMldEYzA4bVBwcmdY?=
- =?utf-8?B?ckVIc2s3ME01TC9oVEdxdE1DZmdRMzkxdm5LS0hlbi9LczljOHg2NHhzQ1ls?=
- =?utf-8?B?UVBOL2UyOWE5UW9oTFFKL1hJbXBrdUVYSjFIRWpJTVJQVDAvNHBYaEV6NDhv?=
- =?utf-8?B?c3RpT1BQejE5WW8raHVQTmtySDNkT1NrMUtyWWVvcjEwbjVLaGpoOEI3clk2?=
- =?utf-8?B?V3RzMHUvaGZ2Nm95RHZHWXNZQkh5TTlMMnJvdHluTXpPQUN2QTVWSlBJYWoy?=
- =?utf-8?B?aUxJejI1YkF4V3pEeVR0NXFQSHlpdm9WTUp5N1BNT3pSY1RNOEwzeG5zc0xU?=
- =?utf-8?B?MHJ2YldBRFJ2Y2tDRFlYWnBtekdJdEFUalc5cDUwcTFaV3Jxalc0QUVVRUxk?=
- =?utf-8?B?M1ZrbGgzSThNa2J0TExudTExbU9OR2pvcHFCb3dYbllwWDRZQWJUSFlURUJT?=
- =?utf-8?B?UjVPRjdyM0t0ZlRGN3psbkxSenZ1cFduVmNpVktMYWxGaWtYNms0dHpRcDNQ?=
- =?utf-8?B?MHhibE1sK3drN1BiQms0S053U2kzQVVvMkZ0RXc1NlB0VlM1Tm0xbFgxemlo?=
- =?utf-8?B?djk2SHBaMjBhZWV1RUQ2Qml5NXlxYk9xT1ZNamRzdEJOZUUyMzY5OFFyTS9o?=
- =?utf-8?B?cGpTZVpwWS9HMDVIRGpaUy8vcllnejNUQjgwWGtVZXJVREZjTWh3YTNIWEFl?=
- =?utf-8?B?cEE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 15 Feb 2022 06:24:59 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6765110855C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 03:24:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644924289; x=1676460289;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dGvHOm3GzQ/RImX1rvRjCrdnjiyvMfLPKbT8wZlS/6U=;
+  b=Kv9lUBnzLQUrmbRdhycfAJrFP2Jfuzuz9gS6UCUktzn0FyaZCSJX9FTD
+   VrTCh3mJP0DVpHt9UvYGXNaf21AW/WuVypIeHDny2lVMocvpxGHYvr7QU
+   Jj9M9rxI+F6vvGfuCMxD8rEMXeoSSol2SxintQ2nEUO7PlZXkpKHhqlvQ
+   QQz4LBfXNfMAGbQvQWf93dBBnzKKkLtP2cvgXDT2c89LPzhimJSiy/Jok
+   /Pz3N/YvJWmCgWWD7340ZEArDe7Flr2zXm9sRuduDm/D/3cLSKDhRTewt
+   ZRnwvCw9tpGVg4ZQa4NeqzqqXeBXxHoLkhdkDueYNMIxDDaQMjifvKZ2d
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="250275049"
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="250275049"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 03:24:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="502380139"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 15 Feb 2022 03:24:46 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJvws-0009be-84; Tue, 15 Feb 2022 11:24:46 +0000
+Date:   Tue, 15 Feb 2022 19:23:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chuck Lever <chuck.lever@oracle.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [cel:nfsd-courteous-server 32/34] fs/nfsd/nfs4state.c:5893:9: error:
+ implicit declaration of function 'nfsd4_get_client_reaplist'; did you mean
+ 'nfs4_get_client_reaplist'?
+Message-ID: <202202151804.8Tf5mieQ-lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR12MB5504.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ced2675d-5469-46d8-1f68-08d9f075a23d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2022 11:23:47.1516
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jyItejZyZsfP7V25GuJJEsBVpuAjWEQx0ViInvgtEd/M5tD8bUD0jA4k0F2ExuT7E41BJUyxpTEX8UD/bp/1nA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3890
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W1B1YmxpY10NCg0KSGksDQoNClRoYW5rcyBmb3IgdGhlIHBhdGNoIGFuZCBpdCBMR1RNLg0KRmVl
-bCBmcmVlIHRvIGFkZA0KUmV2aWV3ZWQtYnk6IFdheW5lIExpbiA8V2F5bmUuTGluQGFtZC5jb20+
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogWWFyb3NsYXYgQm9seXVr
-aW4gPGlhbUBsYWNoLnB3Pg0KPiBTZW50OiBTdW5kYXksIEZlYnJ1YXJ5IDEzLCAyMDIyIDk6MzEg
-UE0NCj4gVG86IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IGRyaS1kZXZlbEBsaXN0cy5m
-cmVlZGVza3RvcC5vcmc7IGFtZC1nZnhAbGlzdHMuZnJlZWRlc2t0b3Aub3JnDQo+IENjOiBUaG9t
-YXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT47IERhdmlkIEFpcmxpZSA8YWlybGll
-ZEBsaW51eC5pZT47IFJvZHJpZ28gU2lxdWVpcmEgPFJvZHJpZ28uU2lxdWVpcmFAYW1kLmNvbT47
-IFBhbiwNCj4gWGluaHVpIDxYaW5odWkuUGFuQGFtZC5jb20+OyBMZW8gTGkgPHN1bnBlbmcubGlA
-YW1kLmNvbT47IEFsZXggRGV1Y2hlciA8YWxleGFuZGVyLmRldWNoZXJAYW1kLmNvbT47IENocmlz
-dGlhbiBLP25pZw0KPiA8Y2hyaXN0aWFuLmtvZW5pZ0BhbWQuY29tPjsgWWFyb3NsYXYgQm9seXVr
-aW4gPGlhbUBsYWNoLnB3Pg0KPiBTdWJqZWN0OiBbMi8yXSBkcm0vYW1kOiB1c2UgZml4ZWQgZHNj
-IGJpdHMtcGVyLXBpeGVsIGZyb20gZWRpZA0KPg0KPiBWRVNBIHZlbmRvciBoZWFkZXIgZnJvbSBE
-aXNwbGF5SUQgc3BlYyBtYXkgY29udGFpbiBmaXhlZCBiaXQgcGVyIHBpeGVsIHJhdGUsIGl0IHNo
-b3VsZCBiZSByZXNwZWN0ZWQgYnkgZHJtIGRyaXZlcg0KPg0KPiBTaWduZWQtb2ZmLWJ5OiBZYXJv
-c2xhdiBCb2x5dWtpbiA8aWFtQGxhY2gucHc+DQo+IC0tLQ0KPiAgZHJpdmVycy9ncHUvZHJtL2Ft
-ZC9kaXNwbGF5L2FtZGdwdV9kbS9hbWRncHVfZG1faGVscGVycy5jIHwgMiArKw0KPiAgZHJpdmVy
-cy9ncHUvZHJtL2FtZC9kaXNwbGF5L2RjL2NvcmUvZGNfc3RyZWFtLmMgICAgICAgICAgIHwgMyAr
-Ky0NCj4gIGRyaXZlcnMvZ3B1L2RybS9hbWQvZGlzcGxheS9kYy9kY190eXBlcy5oICAgICAgICAg
-ICAgICAgICB8IDMgKysrDQo+ICAzIGZpbGVzIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgMSBk
-ZWxldGlvbigtKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2FtZC9kaXNwbGF5
-L2FtZGdwdV9kbS9hbWRncHVfZG1faGVscGVycy5jDQo+IGIvZHJpdmVycy9ncHUvZHJtL2FtZC9k
-aXNwbGF5L2FtZGdwdV9kbS9hbWRncHVfZG1faGVscGVycy5jDQo+IGluZGV4IDI5ZjA3YzI2ZC4u
-YjM0ZGQ4OWFlIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vYW1kL2Rpc3BsYXkvYW1k
-Z3B1X2RtL2FtZGdwdV9kbV9oZWxwZXJzLmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2FtZC9k
-aXNwbGF5L2FtZGdwdV9kbS9hbWRncHVfZG1faGVscGVycy5jDQo+IEBAIC0xMTgsNiArMTE4LDgg
-QEAgZW51bSBkY19lZGlkX3N0YXR1cyBkbV9oZWxwZXJzX3BhcnNlX2VkaWRfY2FwcygNCj4NCj4g
-ICAgICAgZWRpZF9jYXBzLT5lZGlkX2hkbWkgPSBjb25uZWN0b3ItPmRpc3BsYXlfaW5mby5pc19o
-ZG1pOw0KPg0KPiArICAgICBlZGlkX2NhcHMtPmRzY19maXhlZF9iaXRzX3Blcl9waXhlbF94MTYg
-PQ0KPiArY29ubmVjdG9yLT5kaXNwbGF5X2luZm8uZHBfZHNjX2JwcDsNCj4gKw0KPiAgICAgICBz
-YWRfY291bnQgPSBkcm1fZWRpZF90b19zYWQoKHN0cnVjdCBlZGlkICopIGVkaWQtPnJhd19lZGlk
-LCAmc2Fkcyk7DQo+ICAgICAgIGlmIChzYWRfY291bnQgPD0gMCkNCj4gICAgICAgICAgICAgICBy
-ZXR1cm4gcmVzdWx0Ow0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2FtZC9kaXNwbGF5
-L2RjL2NvcmUvZGNfc3RyZWFtLmMgYi9kcml2ZXJzL2dwdS9kcm0vYW1kL2Rpc3BsYXkvZGMvY29y
-ZS9kY19zdHJlYW0uYw0KPiBpbmRleCA1N2NmNGNiODIuLmY4NTE2ZWM3MCAxMDA2NDQNCj4gLS0t
-IGEvZHJpdmVycy9ncHUvZHJtL2FtZC9kaXNwbGF5L2RjL2NvcmUvZGNfc3RyZWFtLmMNCj4gKysr
-IGIvZHJpdmVycy9ncHUvZHJtL2FtZC9kaXNwbGF5L2RjL2NvcmUvZGNfc3RyZWFtLmMNCj4gQEAg
-LTEwNSw2ICsxMDUsOCBAQCBzdGF0aWMgYm9vbCBkY19zdHJlYW1fY29uc3RydWN0KHN0cnVjdCBk
-Y19zdHJlYW1fc3RhdGUgKnN0cmVhbSwNCj4NCj4gICAgICAgLyogRURJRCBDQVAgdHJhbnNsYXRp
-b24gZm9yIEhETUkgMi4wICovDQo+ICAgICAgIHN0cmVhbS0+dGltaW5nLmZsYWdzLkxURV8zNDBN
-Q1NDX1NDUkFNQkxFID0gZGNfc2lua19kYXRhLT5lZGlkX2NhcHMubHRlXzM0MG1jc2Nfc2NyYW1i
-bGU7DQo+ICsgICAgIHN0cmVhbS0+dGltaW5nLmRzY19maXhlZF9iaXRzX3Blcl9waXhlbF94MTYg
-PQ0KPiArICAgICAgICAgICAgIGRjX3NpbmtfZGF0YS0+ZWRpZF9jYXBzLmRzY19maXhlZF9iaXRz
-X3Blcl9waXhlbF94MTY7DQo+DQo+ICAgICAgIG1lbXNldCgmc3RyZWFtLT50aW1pbmcuZHNjX2Nm
-ZywgMCwgc2l6ZW9mKHN0cmVhbS0+dGltaW5nLmRzY19jZmcpKTsNCj4gICAgICAgc3RyZWFtLT50
-aW1pbmcuZHNjX2NmZy5udW1fc2xpY2VzX2ggPSAwOyBAQCAtNzM4LDQgKzc0MCwzIEBAIHZvaWQg
-ZGNfc3RyZWFtX2xvZyhjb25zdCBzdHJ1Y3QgZGMgKmRjLCBjb25zdCBzdHJ1Y3QNCj4gZGNfc3Ry
-ZWFtX3N0YXRlICpzdHJlYW0pDQo+ICAgICAgICAgICAgICAgICAgICAgICAiXHRsaW5rOiAlZFxu
-IiwNCj4gICAgICAgICAgICAgICAgICAgICAgIHN0cmVhbS0+bGluay0+bGlua19pbmRleCk7DQo+
-ICB9DQo+IC0NCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9hbWQvZGlzcGxheS9kYy9k
-Y190eXBlcy5oIGIvZHJpdmVycy9ncHUvZHJtL2FtZC9kaXNwbGF5L2RjL2RjX3R5cGVzLmgNCj4g
-aW5kZXggMDI4NWE0YjM4Li5jZTJlMTFkNzAgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2Ry
-bS9hbWQvZGlzcGxheS9kYy9kY190eXBlcy5oDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9hbWQv
-ZGlzcGxheS9kYy9kY190eXBlcy5oDQo+IEBAIC0yMjcsNiArMjI3LDkgQEAgc3RydWN0IGRjX2Vk
-aWRfY2FwcyB7DQo+ICAgICAgIGJvb2wgZWRpZF9oZG1pOw0KPiAgICAgICBib29sIGhkcl9zdXBw
-b3J0ZWQ7DQo+DQo+ICsgICAgIC8qIERpc3BsYXlQb3J0IGNhcHMgKi8NCj4gKyAgICAgdWludDMy
-X3QgZHNjX2ZpeGVkX2JpdHNfcGVyX3BpeGVsX3gxNjsNCj4gKw0KPiAgICAgICBzdHJ1Y3QgZGNf
-cGFuZWxfcGF0Y2ggcGFuZWxfcGF0Y2g7DQo+ICB9Ow0KPg0KLS0NClJlZ2FyZHMsDQpXYXluZSBM
-aW4NCg==
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux nfsd-courteous-server
+head:   4b14f83e0bc79cb49f28fdc63a370c19637e2bfc
+commit: 2fb4c8cd9a292bbee4428e9c6d33be28ca5775c6 [32/34] NFSD: Refactor nfsd4_laundromat()
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220215/202202151804.8Tf5mieQ-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=2fb4c8cd9a292bbee4428e9c6d33be28ca5775c6
+        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
+        git fetch --no-tags cel nfsd-courteous-server
+        git checkout 2fb4c8cd9a292bbee4428e9c6d33be28ca5775c6
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   fs/nfsd/nfs4state.c: In function 'nfs4_laundromat':
+>> fs/nfsd/nfs4state.c:5893:9: error: implicit declaration of function 'nfsd4_get_client_reaplist'; did you mean 'nfs4_get_client_reaplist'? [-Werror=implicit-function-declaration]
+    5893 |         nfsd4_get_client_reaplist(nn, &reaplist, &lt);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+         |         nfs4_get_client_reaplist
+   At top level:
+   fs/nfsd/nfs4state.c:5841:1: warning: 'nfs4_get_client_reaplist' defined but not used [-Wunused-function]
+    5841 | nfs4_get_client_reaplist(struct nfsd_net *nn, struct list_head *reaplist,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +5893 fs/nfsd/nfs4state.c
+
+  5860	
+  5861	static time64_t
+  5862	nfs4_laundromat(struct nfsd_net *nn)
+  5863	{
+  5864		struct nfs4_client *clp;
+  5865		struct nfs4_openowner *oo;
+  5866		struct nfs4_delegation *dp;
+  5867		struct nfs4_ol_stateid *stp;
+  5868		struct nfsd4_blocked_lock *nbl;
+  5869		struct list_head *pos, *next, reaplist;
+  5870		struct laundry_time lt = {
+  5871			.cutoff = ktime_get_boottime_seconds() - nn->nfsd4_lease,
+  5872			.new_timeo = nn->nfsd4_lease
+  5873		};
+  5874		struct nfs4_cpntf_state *cps;
+  5875		copy_stateid_t *cps_t;
+  5876		int i;
+  5877	
+  5878		if (clients_still_reclaiming(nn)) {
+  5879			lt.new_timeo = 0;
+  5880			goto out;
+  5881		}
+  5882		nfsd4_end_grace(nn);
+  5883	
+  5884		spin_lock(&nn->s2s_cp_lock);
+  5885		idr_for_each_entry(&nn->s2s_cp_stateids, cps_t, i) {
+  5886			cps = container_of(cps_t, struct nfs4_cpntf_state, cp_stateid);
+  5887			if (cps->cp_stateid.sc_type == NFS4_COPYNOTIFY_STID &&
+  5888					state_expired(&lt, cps->cpntf_time))
+  5889				_free_cpntf_state_locked(nn, cps);
+  5890		}
+  5891		spin_unlock(&nn->s2s_cp_lock);
+  5892	
+> 5893		nfsd4_get_client_reaplist(nn, &reaplist, &lt);
+  5894		list_for_each_safe(pos, next, &reaplist) {
+  5895			clp = list_entry(pos, struct nfs4_client, cl_lru);
+  5896			trace_nfsd_clid_purged(&clp->cl_clientid);
+  5897			list_del_init(&clp->cl_lru);
+  5898			expire_client(clp);
+  5899		}
+  5900		spin_lock(&state_lock);
+  5901		list_for_each_safe(pos, next, &nn->del_recall_lru) {
+  5902			dp = list_entry (pos, struct nfs4_delegation, dl_recall_lru);
+  5903			if (!state_expired(&lt, dp->dl_time))
+  5904				break;
+  5905			WARN_ON(!unhash_delegation_locked(dp));
+  5906			list_add(&dp->dl_recall_lru, &reaplist);
+  5907		}
+  5908		spin_unlock(&state_lock);
+  5909		while (!list_empty(&reaplist)) {
+  5910			dp = list_first_entry(&reaplist, struct nfs4_delegation,
+  5911						dl_recall_lru);
+  5912			list_del_init(&dp->dl_recall_lru);
+  5913			revoke_delegation(dp);
+  5914		}
+  5915	
+  5916		spin_lock(&nn->client_lock);
+  5917		while (!list_empty(&nn->close_lru)) {
+  5918			oo = list_first_entry(&nn->close_lru, struct nfs4_openowner,
+  5919						oo_close_lru);
+  5920			if (!state_expired(&lt, oo->oo_time))
+  5921				break;
+  5922			list_del_init(&oo->oo_close_lru);
+  5923			stp = oo->oo_last_closed_stid;
+  5924			oo->oo_last_closed_stid = NULL;
+  5925			spin_unlock(&nn->client_lock);
+  5926			nfs4_put_stid(&stp->st_stid);
+  5927			spin_lock(&nn->client_lock);
+  5928		}
+  5929		spin_unlock(&nn->client_lock);
+  5930	
+  5931		/*
+  5932		 * It's possible for a client to try and acquire an already held lock
+  5933		 * that is being held for a long time, and then lose interest in it.
+  5934		 * So, we clean out any un-revisited request after a lease period
+  5935		 * under the assumption that the client is no longer interested.
+  5936		 *
+  5937		 * RFC5661, sec. 9.6 states that the client must not rely on getting
+  5938		 * notifications and must continue to poll for locks, even when the
+  5939		 * server supports them. Thus this shouldn't lead to clients blocking
+  5940		 * indefinitely once the lock does become free.
+  5941		 */
+  5942		BUG_ON(!list_empty(&reaplist));
+  5943		spin_lock(&nn->blocked_locks_lock);
+  5944		while (!list_empty(&nn->blocked_locks_lru)) {
+  5945			nbl = list_first_entry(&nn->blocked_locks_lru,
+  5946						struct nfsd4_blocked_lock, nbl_lru);
+  5947			if (!state_expired(&lt, nbl->nbl_time))
+  5948				break;
+  5949			list_move(&nbl->nbl_lru, &reaplist);
+  5950			list_del_init(&nbl->nbl_list);
+  5951		}
+  5952		spin_unlock(&nn->blocked_locks_lock);
+  5953	
+  5954		while (!list_empty(&reaplist)) {
+  5955			nbl = list_first_entry(&reaplist,
+  5956						struct nfsd4_blocked_lock, nbl_lru);
+  5957			list_del_init(&nbl->nbl_lru);
+  5958			free_blocked_lock(nbl);
+  5959		}
+  5960	#ifdef CONFIG_NFSD_V4_2_INTER_SSC
+  5961		/* service the server-to-server copy delayed unmount list */
+  5962		nfsd4_ssc_expire_umount(nn);
+  5963	#endif
+  5964	out:
+  5965		return max_t(time64_t, lt.new_timeo, NFSD_LAUNDROMAT_MINTIMEOUT);
+  5966	}
+  5967	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

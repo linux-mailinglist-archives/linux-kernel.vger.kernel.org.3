@@ -2,250 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F124B7369
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 336FD4B739A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239648AbiBOPQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:16:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38316 "EHLO
+        id S238861AbiBOPRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:17:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239630AbiBOPQL (ORCPT
+        with ESMTP id S238151AbiBOPQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:16:11 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64763F30F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:16:00 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id o23so1597169oie.10
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:16:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=I0VnhROKkBi4dtf21+79RpDBG1aGmguFKe9ZiPB4Eq0=;
-        b=xVCfK1LN+I6iwSWNtKEeju0I09FcEDFWuzizRZT8uxxPb/TlJ5xOwMjvlUhU7yfOya
-         relwyrZ9dnGa423jgX7TI0D3JuE9erfwh23lFw+mgFOirYHzuwVFJe5ORNXsk9+5Lvdv
-         MbF3qtbk9WLXmuDvQzcx/q1eL9NmZdOm/WwTL+qNGWSqM7Kc+2Tk5yp6MZwrsSPL4r3o
-         /Z4CJ4RZ5O7IgivR7Se4HyIYSFe47ozt5gXRrhUDNp+8q49yvJfLBFndGmFm/7m7QLCF
-         o4Fs3EFfsUuxX+RA6XyajhWc3TdpIjR8CluO59F6uCLMX/FS6xTpxqPtsMY2QDYHeaPh
-         D5Bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=I0VnhROKkBi4dtf21+79RpDBG1aGmguFKe9ZiPB4Eq0=;
-        b=ffppCt9wZKaQKfPTo4Z1lrt6CGy1+pOet/RN0L/DQbK+K0O+cwWt5UZ7bwzOJP1u0I
-         XZtG5UZXYZoOdkX4wMGZLcA31hP7LccLorKo/YHCbu0QU0g6LKBkFmcy1QlVVjVU3i4v
-         TzA0mOtj9btJNWCo0+5ZHMqI4souCqPCLLG6PFFT5CnXQAJsYE/U/AZaef/vgGUsp11K
-         v/GHnNQZG2Ut55CZRBsYo9TFCxJzwNvWY7+nhecWyhCTrkgDFz3G9p8YO6StNwtRQ41R
-         i3zaA890fh/tk46eq46OELLdNog4gXxZu6jv+1vjm2m0owJWpt6uZEiYKQ/2MtuBFU72
-         JiMg==
-X-Gm-Message-State: AOAM531NonNNGlOLgix+NhQu7Nr4EoHG/Q31sRwIg7kePlgBDrLe40tQ
-        MuUtSovgFVOyV1irRyFWFMFDBw==
-X-Google-Smtp-Source: ABdhPJwYo5wNw2IV5T32mI1cM3Pqz048fDRVUkw6/B15L3hD9mmisGBAWzLrF9B6LM4vtFUbMlV4Lg==
-X-Received: by 2002:aca:6286:0:b0:2d3:d3f1:5b0f with SMTP id w128-20020aca6286000000b002d3d3f15b0fmr1848246oib.290.1644938159976;
-        Tue, 15 Feb 2022 07:15:59 -0800 (PST)
-Received: from yoga ([2600:1700:a0:3dc8:5c39:baff:fe03:898d])
-        by smtp.gmail.com with ESMTPSA id o14sm4782888oaq.37.2022.02.15.07.15.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 07:15:59 -0800 (PST)
-Date:   Tue, 15 Feb 2022 09:15:57 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/msm/dpu: Disable boot loader configured data paths
-Message-ID: <YgvDrXoK4a0+HLpz@yoga>
-References: <20220215043708.1256854-1-bjorn.andersson@linaro.org>
- <460e0036-74b5-bccd-c11c-2573290012ae@linaro.org>
+        Tue, 15 Feb 2022 10:16:57 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D914504C;
+        Tue, 15 Feb 2022 07:16:42 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21FF3pVP032162;
+        Tue, 15 Feb 2022 15:16:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=t4M7B7VeO6a4O1E5UtKtnGc7qN/+vPjVyq8HLLpmb/4=;
+ b=rp7NxDWdWXOHuJKGwL4w2nAkCIhRNunonis7e6u3zhGu8mqEDLkCesIaz21QKfJhQ+MO
+ zb5RmwN2Ak+pUvw4uYXS4YzKtRvKYyT/CvHBQEhe9Z0upYx9XQ1CNZlLiNxl2j0M4fhq
+ R/0ztItNQEi95OT6R2pRvIDu9jKJhpKlZJ+OQZuobAXfv+R+0kFjNEWwe02glxNzWGy2
+ 3shy9C0VQFeLr+NzI3KagfDV2gFOg2wsqExlMPP4tyCX7Tg/E8w2U41rPKhRISY4HsQ5
+ SZbqSGJ/4FwvNOxb8fD9vtdOC3WPBEMQFJO/ACy/u3T5qqLzF8wiT+GWNaLtlWZhMGQX OA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8d9ftr05-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 15:16:41 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21FFCB1m018446;
+        Tue, 15 Feb 2022 15:16:41 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8d9ftqxu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 15:16:41 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21FF8XRq027250;
+        Tue, 15 Feb 2022 15:16:38 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3e645jrnsr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 15:16:38 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21FFGZfI46072194
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Feb 2022 15:16:35 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0E7BF11C04C;
+        Tue, 15 Feb 2022 15:16:35 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8FEBF11C04A;
+        Tue, 15 Feb 2022 15:16:34 +0000 (GMT)
+Received: from [9.171.51.217] (unknown [9.171.51.217])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 15 Feb 2022 15:16:34 +0000 (GMT)
+Message-ID: <f4d8bbdf-eed9-727c-9566-d7de47e4ef3f@de.ibm.com>
+Date:   Tue, 15 Feb 2022 16:16:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <460e0036-74b5-bccd-c11c-2573290012ae@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 1/1] KVM: s390: pv: make use of ultravisor AIV support
+Content-Language: en-US
+To:     Michael Mueller <mimu@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     cohuck@redhat.com, frankja@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220209152217.1793281-1-mimu@linux.ibm.com>
+ <20220209152217.1793281-2-mimu@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+In-Reply-To: <20220209152217.1793281-2-mimu@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: nvyd8PEQtE-vlAPL_EBQwmFKZUWp0CMi
+X-Proofpoint-GUID: Ouq-ikPOKzARXK9349zznohUQwzROuEJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-15_04,2022-02-14_04,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ phishscore=0 bulkscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 adultscore=0 impostorscore=0 clxscore=1011 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202150088
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 15 Feb 08:44 CST 2022, Dmitry Baryshkov wrote:
 
-> On 15/02/2022 07:37, Bjorn Andersson wrote:
-> > It's typical for the bootloader to configure CTL_0 for the boot splash
-> > or EFIFB, but for non-DSI use cases the DPU driver tend to pick another
-> > CTL and the system might end up with two configured data paths producing
-> > data on the same INTF. In particular as the IOMMU configuration isn't
-> > retained from the bootloader one of the data paths will push underflow
-> > color, resulting in screen flickering.
-> > 
-> > Naturally the end goal would be to inherit the bootloader's
-> > configuration and provide the user with a glitch-free handover from the
-> > boot configuration to a running DPU.
-> > 
-> > But such effort will affect clocks, regulators, power-domains etc, and
-> > will take time to implement. So in the meantime this patch simply
-> > disables all the data paths, on platforms that has CTL_FETCH_ACTIVE, to
-> > avoid the graphical artifacts.
-> > 
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > ---
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 13 +++++++++++++
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h |  6 ++++++
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c    |  2 ++
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c     | 17 +++++++++++++++++
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_rm.h     |  8 ++++++++
-> >   5 files changed, 46 insertions(+)
-> > 
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> > index 02da9ecf71f1..69d4849484fa 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> > @@ -357,6 +357,18 @@ static void dpu_hw_ctl_clear_all_blendstages(struct dpu_hw_ctl *ctx)
-> >   	DPU_REG_WRITE(c, CTL_FETCH_PIPE_ACTIVE, 0);
-> >   }
-> > +static void dpu_hw_ctl_disable_boot_config(struct dpu_hw_ctl *ctx)
-> > +{
-> > +	if (ctx->caps->features & BIT(DPU_CTL_FETCH_ACTIVE)) {
+
+Am 09.02.22 um 16:22 schrieb Michael Mueller:
+> This patch enables the ultravisor adapter interruption vitualization
+> support indicated by UV feature BIT_UV_FEAT_AIV. This allows ISC
+> interruption injection directly into the GISA IPM for PV kvm guests.
 > 
-> I see that you are changing only CTL_FETCH_PIPE_ACTIVE. However it still
-> seems like a hack.
-
-You're not wrong, it certainly seems a little bit hacky.
-
-I think that it would be more appropriate to try to inherit the
-bootloader configuration. So the proposal here is, in my view, a
-stop-gap until we start to look at "continuous splash".
-
-> What if instead we always disable boot config for all paths except CTL_0 (or
-> CTL_0 and CTL_1)?
+> Hardware that does not support this feature will continue to use the
+> UV interruption interception method to deliver ISC interruptions to
+> PV kvm guests. For this purpose, the ECA_AIV bit for all guest cpus
+> will be cleared and the GISA will be disabled during PV CPU setup.
 > 
-
-On my laptop the bootloader sets up efifb using CTL_0. When Linux brings
-up the eDP interface it seems to skip DPU_CTL_SPLIT_DISPLAY ctls and
-picks CTL_2.
-
-As mentioned in the message, I now have both CTL_0 and CTL_2 pushing
-data to the one interface; resulting in flickering.
-
-> > +		/*
-> > +		 * Disable the pipe fetch and trigger a start, to disable the
-> > +		 * data path
-> > +		 */
-> > +		DPU_REG_WRITE(&ctx->hw, CTL_FETCH_PIPE_ACTIVE, 0);
-> > +		DPU_REG_WRITE(&ctx->hw, CTL_START, 0x1);
+> In addition a check in __inject_io() has been removed. That reduces the
+> required instructions for interruption handling for PV and traditional
+> kvm guests.
 > 
-> What about video vs cmd modes?
+> Signed-off-by: Michael Mueller <mimu@linux.ibm.com>
+
+We have to be careful that our turn off/turn on does not break anything, but
+this will make the hot path __inject_io cheaper so it is probably a good thing.
+I will apply/queue this so that we get some CI coverage. Patch looks good to
+me.
+
+Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+> ---
+>   arch/s390/include/asm/uv.h |  1 +
+>   arch/s390/kvm/interrupt.c  | 54 +++++++++++++++++++++++++++++++++-----
+>   arch/s390/kvm/kvm-s390.c   | 11 +++++---
+>   arch/s390/kvm/kvm-s390.h   | 11 ++++++++
+>   4 files changed, 68 insertions(+), 9 deletions(-)
 > 
-
-Initially I was resetting a whole bunch of properties in the CTL, but
-all I want to do is stop the data flow. It's my expectation that the
-steps to follow will reset the interfaces and configure the actual data
-paths anew.
-
-Perhaps I'm missing some steps here, the documentation is not clear and
-this has the expected visual outcome...
-
-Regards,
-Bjorn
-
-> > +	}
-> > +}
-> > +
-> >   static void dpu_hw_ctl_setup_blendstage(struct dpu_hw_ctl *ctx,
-> >   	enum dpu_lm lm, struct dpu_hw_stage_cfg *stage_cfg)
-> >   {
-> > @@ -590,6 +602,7 @@ static void _setup_ctl_ops(struct dpu_hw_ctl_ops *ops,
-> >   	ops->trigger_pending = dpu_hw_ctl_trigger_pending;
-> >   	ops->reset = dpu_hw_ctl_reset_control;
-> >   	ops->wait_reset_status = dpu_hw_ctl_wait_reset_status;
-> > +	ops->disable_boot_config = dpu_hw_ctl_disable_boot_config;
-> >   	ops->clear_all_blendstages = dpu_hw_ctl_clear_all_blendstages;
-> >   	ops->setup_blendstage = dpu_hw_ctl_setup_blendstage;
-> >   	ops->get_bitmask_sspp = dpu_hw_ctl_get_bitmask_sspp;
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-> > index 806c171e5df2..c2734f6ab760 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-> > @@ -159,6 +159,12 @@ struct dpu_hw_ctl_ops {
-> >   	 */
-> >   	void (*clear_all_blendstages)(struct dpu_hw_ctl *ctx);
-> > +	/**
-> > +	 * Disable the configuration setup by the bootloader
-> > +	 * @ctx	      : ctl path ctx pointer
-> > +	 */
-> > +	void (*disable_boot_config)(struct dpu_hw_ctl *ctx);
-> > +
-> >   	/**
-> >   	 * Configure layer mixer to pipe configuration
-> >   	 * @ctx       : ctl path ctx pointer
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> > index cedc631f8498..eef2f017031a 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> > @@ -1107,6 +1107,8 @@ static int dpu_kms_hw_init(struct msm_kms *kms)
-> >   	dpu_kms->rm_init = true;
-> > +	dpu_rm_clear_boot_config(&dpu_kms->rm, dpu_kms->catalog);
-> > +
-> >   	dpu_kms->hw_mdp = dpu_hw_mdptop_init(MDP_TOP, dpu_kms->mmio,
-> >   					     dpu_kms->catalog);
-> >   	if (IS_ERR(dpu_kms->hw_mdp)) {
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-> > index f9c83d6e427a..3365c5e41e28 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-> > @@ -4,6 +4,7 @@
-> >    */
-> >   #define pr_fmt(fmt)	"[drm:%s] " fmt, __func__
-> > +#include <linux/delay.h>
-> >   #include "dpu_kms.h"
-> >   #include "dpu_hw_lm.h"
-> >   #include "dpu_hw_ctl.h"
-> > @@ -229,6 +230,22 @@ int dpu_rm_init(struct dpu_rm *rm,
-> >   	return rc ? rc : -EFAULT;
-> >   }
-> > +void dpu_rm_clear_boot_config(struct dpu_rm *rm, struct dpu_mdss_cfg *cat)
-> > +{
-> > +	struct dpu_hw_ctl *ctl;
-> > +	int i;
-> > +
-> > +	for (i = CTL_0; i < CTL_MAX; i++) {
-> > +		if (!rm->ctl_blks[i - CTL_0])
-> > +			continue;
-> > +
-> > +		DPU_DEBUG("disabling ctl%d boot configuration\n", i - CTL_0);
-> > +
-> > +		ctl = to_dpu_hw_ctl(rm->ctl_blks[i - CTL_0]);
-> > +		ctl->ops.disable_boot_config(ctl);
-> > +	}
-> > +}
-> > +
-> >   static bool _dpu_rm_needs_split_display(const struct msm_display_topology *top)
-> >   {
-> >   	return top->num_intf > 1;
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.h
-> > index 1f12c8d5b8aa..d3e084541e67 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.h
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.h
-> > @@ -88,5 +88,13 @@ void dpu_rm_release(struct dpu_global_state *global_state,
-> >   int dpu_rm_get_assigned_resources(struct dpu_rm *rm,
-> >   	struct dpu_global_state *global_state, uint32_t enc_id,
-> >   	enum dpu_hw_blk_type type, struct dpu_hw_blk **blks, int blks_size);
-> > +
-> > +/**
-> > + * dpu_rm_clear_boot_config() - Tear down any data paths configured by boot
-> > + * @rm: DPU Resource Manager handle
-> > + * @cat: Pointer to hardware catalog
-> > + */
-> > +void dpu_rm_clear_boot_config(struct dpu_rm *rm, struct dpu_mdss_cfg *cat);
-> > +
-> >   #endif /* __DPU_RM_H__ */
-> 
-> 
-> -- 
-> With best wishes
-> Dmitry
+> diff --git a/arch/s390/include/asm/uv.h b/arch/s390/include/asm/uv.h
+> index 86218382d29c..a2d376b8bce3 100644
+> --- a/arch/s390/include/asm/uv.h
+> +++ b/arch/s390/include/asm/uv.h
+> @@ -80,6 +80,7 @@ enum uv_cmds_inst {
+>   
+>   enum uv_feat_ind {
+>   	BIT_UV_FEAT_MISC = 0,
+> +	BIT_UV_FEAT_AIV = 1,
+>   };
+>   
+>   struct uv_cb_header {
+> diff --git a/arch/s390/kvm/interrupt.c b/arch/s390/kvm/interrupt.c
+> index db933c252dbc..9b30beac904d 100644
+> --- a/arch/s390/kvm/interrupt.c
+> +++ b/arch/s390/kvm/interrupt.c
+> @@ -1901,13 +1901,12 @@ static int __inject_io(struct kvm *kvm, struct kvm_s390_interrupt_info *inti)
+>   	isc = int_word_to_isc(inti->io.io_int_word);
+>   
+>   	/*
+> -	 * Do not make use of gisa in protected mode. We do not use the lock
+> -	 * checking variant as this is just a performance optimization and we
+> -	 * do not hold the lock here. This is ok as the code will pick
+> -	 * interrupts from both "lists" for delivery.
+> +	 * We do not use the lock checking variant as this is just a
+> +	 * performance optimization and we do not hold the lock here.
+> +	 * This is ok as the code will pick interrupts from both "lists"
+> +	 * for delivery.
+>   	 */
+> -	if (!kvm_s390_pv_get_handle(kvm) &&
+> -	    gi->origin && inti->type & KVM_S390_INT_IO_AI_MASK) {
+> +	if (gi->origin && inti->type & KVM_S390_INT_IO_AI_MASK) {
+>   		VM_EVENT(kvm, 4, "%s isc %1u", "inject: I/O (AI/gisa)", isc);
+>   		gisa_set_ipm_gisc(gi->origin, isc);
+>   		kfree(inti);
+> @@ -3171,9 +3170,33 @@ void kvm_s390_gisa_init(struct kvm *kvm)
+>   	VM_EVENT(kvm, 3, "gisa 0x%pK initialized", gi->origin);
+>   }
+>   
+> +void kvm_s390_gisa_enable(struct kvm *kvm)
+> +{
+> +	struct kvm_s390_gisa_interrupt *gi = &kvm->arch.gisa_int;
+> +	struct kvm_vcpu *vcpu;
+> +	unsigned long i;
+> +	u32 gisa_desc;
+> +
+> +	if (gi->origin)
+> +		return;
+> +	kvm_s390_gisa_init(kvm);
+> +	gisa_desc = kvm_s390_get_gisa_desc(kvm);
+> +	if (!gisa_desc)
+> +		return;
+> +	kvm_for_each_vcpu(i, vcpu, kvm) {
+> +		mutex_lock(&vcpu->mutex);
+> +		vcpu->arch.sie_block->gd = gisa_desc;
+> +		vcpu->arch.sie_block->eca |= ECA_AIV;
+> +		VCPU_EVENT(vcpu, 3, "AIV gisa format-%u enabled for cpu %03u",
+> +			   vcpu->arch.sie_block->gd & 0x3, vcpu->vcpu_id);
+> +		mutex_unlock(&vcpu->mutex);
+> +	}
+> +}
+> +
+>   void kvm_s390_gisa_destroy(struct kvm *kvm)
+>   {
+>   	struct kvm_s390_gisa_interrupt *gi = &kvm->arch.gisa_int;
+> +	struct kvm_s390_gisa *gisa = gi->origin;
+>   
+>   	if (!gi->origin)
+>   		return;
+> @@ -3184,6 +3207,25 @@ void kvm_s390_gisa_destroy(struct kvm *kvm)
+>   		cpu_relax();
+>   	hrtimer_cancel(&gi->timer);
+>   	gi->origin = NULL;
+> +	VM_EVENT(kvm, 3, "gisa 0x%pK destroyed", gisa);
+> +}
+> +
+> +void kvm_s390_gisa_disable(struct kvm *kvm)
+> +{
+> +	struct kvm_s390_gisa_interrupt *gi = &kvm->arch.gisa_int;
+> +	struct kvm_vcpu *vcpu;
+> +	unsigned long i;
+> +
+> +	if (!gi->origin)
+> +		return;
+> +	kvm_for_each_vcpu(i, vcpu, kvm) {
+> +		mutex_lock(&vcpu->mutex);
+> +		vcpu->arch.sie_block->eca &= ~ECA_AIV;
+> +		vcpu->arch.sie_block->gd = 0U;
+> +		mutex_unlock(&vcpu->mutex);
+> +		VCPU_EVENT(vcpu, 3, "AIV disabled for cpu %03u", vcpu->vcpu_id);
+> +	}
+> +	kvm_s390_gisa_destroy(kvm);
+>   }
+>   
+>   /**
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 577f1ead6a51..c83330f98ff0 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -2194,6 +2194,9 @@ static int kvm_s390_cpus_from_pv(struct kvm *kvm, u16 *rcp, u16 *rrcp)
+>   		}
+>   		mutex_unlock(&vcpu->mutex);
+>   	}
+> +	/* Ensure that we re-enable gisa if the non-PV guest used it but the PV guest did not. */
+> +	if (use_gisa)
+> +		kvm_s390_gisa_enable(kvm);
+>   	return ret;
+>   }
+>   
+> @@ -2205,6 +2208,10 @@ static int kvm_s390_cpus_to_pv(struct kvm *kvm, u16 *rc, u16 *rrc)
+>   
+>   	struct kvm_vcpu *vcpu;
+>   
+> +	/* Disable the GISA if the ultravisor does not support AIV. */
+> +	if (!test_bit_inv(BIT_UV_FEAT_AIV, &uv_info.uv_feature_indications))
+> +		kvm_s390_gisa_disable(kvm);
+> +
+>   	kvm_for_each_vcpu(i, vcpu, kvm) {
+>   		mutex_lock(&vcpu->mutex);
+>   		r = kvm_s390_pv_create_cpu(vcpu, rc, rrc);
+> @@ -3263,9 +3270,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+>   
+>   	vcpu->arch.sie_block->icpua = vcpu->vcpu_id;
+>   	spin_lock_init(&vcpu->arch.local_int.lock);
+> -	vcpu->arch.sie_block->gd = (u32)(u64)vcpu->kvm->arch.gisa_int.origin;
+> -	if (vcpu->arch.sie_block->gd && sclp.has_gisaf)
+> -		vcpu->arch.sie_block->gd |= GISA_FORMAT1;
+> +	vcpu->arch.sie_block->gd = kvm_s390_get_gisa_desc(vcpu->kvm);
+>   	seqcount_init(&vcpu->arch.cputm_seqcount);
+>   
+>   	vcpu->arch.pfault_token = KVM_S390_PFAULT_TOKEN_INVALID;
+> diff --git a/arch/s390/kvm/kvm-s390.h b/arch/s390/kvm/kvm-s390.h
+> index 098831e815e6..4ba8fc30d87a 100644
+> --- a/arch/s390/kvm/kvm-s390.h
+> +++ b/arch/s390/kvm/kvm-s390.h
+> @@ -231,6 +231,15 @@ static inline unsigned long kvm_s390_get_gfn_end(struct kvm_memslots *slots)
+>   	return ms->base_gfn + ms->npages;
+>   }
+>   
+> +static inline u32 kvm_s390_get_gisa_desc(struct kvm *kvm)
+> +{
+> +	u32 gd = (u32)(u64)kvm->arch.gisa_int.origin;
+> +
+> +	if (gd && sclp.has_gisaf)
+> +		gd |= GISA_FORMAT1;
+> +	return gd;
+> +}
+> +
+>   /* implemented in pv.c */
+>   int kvm_s390_pv_destroy_cpu(struct kvm_vcpu *vcpu, u16 *rc, u16 *rrc);
+>   int kvm_s390_pv_create_cpu(struct kvm_vcpu *vcpu, u16 *rc, u16 *rrc);
+> @@ -450,6 +459,8 @@ int kvm_s390_get_irq_state(struct kvm_vcpu *vcpu,
+>   void kvm_s390_gisa_init(struct kvm *kvm);
+>   void kvm_s390_gisa_clear(struct kvm *kvm);
+>   void kvm_s390_gisa_destroy(struct kvm *kvm);
+> +void kvm_s390_gisa_disable(struct kvm *kvm);
+> +void kvm_s390_gisa_enable(struct kvm *kvm);
+>   int kvm_s390_gib_init(u8 nisc);
+>   void kvm_s390_gib_destroy(void);
+>   

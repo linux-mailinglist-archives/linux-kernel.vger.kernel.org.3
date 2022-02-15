@@ -2,92 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD4824B7249
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2651D4B731F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241531AbiBOQXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:23:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51738 "EHLO
+        id S241540AbiBOQ0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:26:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235027AbiBOQXk (ORCPT
+        with ESMTP id S235027AbiBOQ0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:23:40 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DF127170
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:23:29 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644942208;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VGa3oCsCDm0R2QE32ynzHVQmQs9uQ3ubWMnYmBZfUtU=;
-        b=b5AuXe/aARjeX5fjNLRuvi7BCXK1xKsBXXx8pqm9uDCmW1oSq4NPu2Ntr+cMDzooZojhRA
-        Mo/BtgXQpJVQ4xvkZOhZXSZ4kA+0a/2BpGls+2efBUpHnpXJ//b4L16TynasJXnsckeJFy
-        1Z/E7bVtGhTPRXYSY6TSOURJCrkCr64AE2r3nAbJ8e7/7xD91Kh7eLv8L4PD26V93M3IEL
-        xRg4jafV0o8Jm+ZsJ73v37eC+81tcmET2Yo6NbJ642yyTY6W4m639aCIt4S3Sw5G3yk1zT
-        J9auPgiRZwm4BbnAHxy926Ez1CsiEqwODQyEc5C/x5LbiecOT61lXAo/9tWdrg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644942208;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VGa3oCsCDm0R2QE32ynzHVQmQs9uQ3ubWMnYmBZfUtU=;
-        b=oDGLoR+EdHIqdeEfijeVg9bXDhKnweL8w/ARhGpB5nK6PhRveeKOU0KcdBtcxtWm4hbg4r
-        nrsqpYR5X0nQP3AQ==
-To:     Sebastian Siewior <bigeasy@linutronix.de>,
-        Jiri Kosina <jikos@kernel.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm: fb-helper: Avoid nesting spinlock_t into
- raw_spinlock_t
-In-Reply-To: <YgvLdvPihuQ9KZ6/@linutronix.de>
-References: <nycvar.YFH.7.76.2202151640200.11721@cbobk.fhfr.pm>
- <YgvLdvPihuQ9KZ6/@linutronix.de>
-Date:   Tue, 15 Feb 2022 17:29:27 +0106
-Message-ID: <87o8382j5s.fsf@jogness.linutronix.de>
+        Tue, 15 Feb 2022 11:26:51 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB3C48E7A;
+        Tue, 15 Feb 2022 08:26:41 -0800 (PST)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21FGEGUC012232;
+        Tue, 15 Feb 2022 16:26:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : message-id : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=iP7A9xbr7WCdikDbTTC4JtVmLGumU2W/N4lvCKlQWyA=;
+ b=rXBdw3B0xh+d0sP0mpClQhyNrR4q1YsGA5OIvMn5miEQUSqPGgtbujy61nKyOALQ1pbE
+ s4bb8JC1dTHuLDm+bKnqH6iHDN51DdWiaWVI2XF5earoUhPPo6H6Jn5LmqlOpdoSKR7G
+ DW1yWljJDb0+e2EwJecYCAMfm6F7e+bu1y+pvUQZE9yeTnVqOVdXyeymdWyPV12yU9Ty
+ Eg3nLSMurCs7gYJigL0nS4CgchBN//v2tUwFDGEiGJyCFPcDA4VcxDbtrfb6uGgeECiy
+ q7y4oKFh5pYrL8vvrzE3PmTvnx9YrGT0mm87TleglDNkvQgNNWbFA/k/HnA6RugbXqHV Ng== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8e5katqp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 16:26:01 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21FGERFh013678;
+        Tue, 15 Feb 2022 16:26:01 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8e5katpn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 16:26:00 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21FGCAAa000869;
+        Tue, 15 Feb 2022 16:25:58 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3e64h9qr7n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 16:25:58 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21FGPsKa46137752
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Feb 2022 16:25:54 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7D72D4C046;
+        Tue, 15 Feb 2022 16:25:54 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 100F74C058;
+        Tue, 15 Feb 2022 16:25:54 +0000 (GMT)
+Received: from localhost (unknown [9.43.98.51])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 15 Feb 2022 16:25:54 +0000 (GMT)
+Date:   Tue, 15 Feb 2022 21:55:52 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v2 09/13] powerpc/ftrace: Implement
+ CONFIG_DYNAMIC_FTRACE_WITH_ARGS
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Ingo Molnar <mingo@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>
+References: <cover.1640017960.git.christophe.leroy@csgroup.eu>
+        <5831f711a778fcd6eb51eb5898f1faae4378b35b.1640017960.git.christophe.leroy@csgroup.eu>
+        <1644852011.qg7ud9elo2.naveen@linux.ibm.com>
+        <1b28f52a-f8b7-6b5c-e726-feac4123517d@csgroup.eu>
+        <875ypgo0f3.fsf@mpe.ellerman.id.au>
+        <1644930705.g64na2kgvd.naveen@linux.ibm.com>
+        <6dc50f09-4d14-afa2-d2a1-34b72b880edf@csgroup.eu>
+        <5c7b5334-6071-f131-a509-9a49ca3d628c@csgroup.eu>
+In-Reply-To: <5c7b5334-6071-f131-a509-9a49ca3d628c@csgroup.eu>
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1644941712.lqdstzo09z.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: QDZP46n6BggCxyXNreLRduagvaFZpVgp
+X-Proofpoint-GUID: YTMmRxt70LkYsWEOYMOjmpqtACe0q3Uu
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-15_04,2022-02-14_04,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 impostorscore=0 mlxscore=0 bulkscore=0
+ adultscore=0 clxscore=1011 priorityscore=1501 suspectscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202150095
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-15, Sebastian Siewior <bigeasy@linutronix.de> wrote:
->> From: Jiri Kosina <jkosina@suse.cz>
->> 
->> drm_fb_helper_damage() is acquiring spinlock_t (helper->damage_lock), 
->> while it can be called from contexts where raw_spinlock_t is held (e.g. 
->> console_owner lock obtained on vprintk_emit() codepath).
->> 
->> As the critical sections protected by damage_lock are super-tiny, let's 
->> fix this by converting it to raw_spinlock_t in order not to violate 
->> PREEMPT_RT-imposed lock nesting rules.
->> 
->> This fixes the splat below.
->> 
->>  =============================
->>  [ BUG: Invalid wait context ]
->>  5.17.0-rc4-00002-gd567f5db412e #1 Not tainted
->
-> rc4. Is this also the case in the RT tree which includes John's printk
-> changes?
+Christophe Leroy wrote:
+> + S390 people
+>=20
+> Le 15/02/2022 =C3=A0 15:28, Christophe Leroy a =C3=A9crit=C2=A0:
+>>=20
+>>=20
+>> Le 15/02/2022 =C3=A0 14:36, Naveen N. Rao a =C3=A9crit=C2=A0:
+>>> Michael Ellerman wrote:
+>>>> Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+>>>>> Le 14/02/2022 =C3=A0 16:25, Naveen N. Rao a =C3=A9crit=C2=A0:
+>>>>>> Christophe Leroy wrote:
+>>>>>>> Implement CONFIG_DYNAMIC_FTRACE_WITH_ARGS. It accelerates the call
+>>>>>>> of livepatching.
+>>>>>>>
+>>>>>>> Also note that powerpc being the last one to convert to
+>>>>>>> CONFIG_DYNAMIC_FTRACE_WITH_ARGS, it will now be possible to remove
+>>>>>>> klp_arch_set_pc() on all architectures.
+>>>>>>>
+>>>>>>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>>>>>>> ---
+>>>>>>> =C2=A0arch/powerpc/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 1 +
+>>>>>>> =C2=A0arch/powerpc/include/asm/ftrace.h=C2=A0=C2=A0=C2=A0 | 17 ++++=
++++++++++++++
+>>>>>>> =C2=A0arch/powerpc/include/asm/livepatch.h |=C2=A0 4 +---
+>>>>>>> =C2=A03 files changed, 19 insertions(+), 3 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+>>>>>>> index cdac2115eb00..e2b1792b2aae 100644
+>>>>>>> --- a/arch/powerpc/Kconfig
+>>>>>>> +++ b/arch/powerpc/Kconfig
+>>>>>>> @@ -210,6 +210,7 @@ config PPC
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_DEBUG_KMEMLEAK
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_DEBUG_STACKOVERFLOW
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_DYNAMIC_FTRACE
+>>>>>>> +=C2=A0=C2=A0=C2=A0 select HAVE_DYNAMIC_FTRACE_WITH_ARGS=C2=A0=C2=
+=A0=C2=A0 if MPROFILE_KERNEL ||=20
+>>>>>>> PPC32
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_DYNAMIC_FTRACE_WITH_REGS=C2=A0=
+=C2=A0=C2=A0 if MPROFILE_KERNEL ||=20
+>>>>>>> PPC32
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_EBPF_JIT
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_EFFICIENT_UNALIGNED_ACCESS=C2=
+=A0=C2=A0=C2=A0 if=20
+>>>>>>> !(CPU_LITTLE_ENDIAN && POWER7_CPU)
+>>>>>>> diff --git a/arch/powerpc/include/asm/ftrace.h=20
+>>>>>>> b/arch/powerpc/include/asm/ftrace.h
+>>>>>>> index b3f6184f77ea..45c3d6f11daa 100644
+>>>>>>> --- a/arch/powerpc/include/asm/ftrace.h
+>>>>>>> +++ b/arch/powerpc/include/asm/ftrace.h
+>>>>>>> @@ -22,6 +22,23 @@ static inline unsigned long=20
+>>>>>>> ftrace_call_adjust(unsigned long addr)
+>>>>>>> =C2=A0struct dyn_arch_ftrace {
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 struct module *mod;
+>>>>>>> =C2=A0};
+>>>>>>> +
+>>>>>>> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_ARGS
+>>>>>>> +struct ftrace_regs {
+>>>>>>> +=C2=A0=C2=A0=C2=A0 struct pt_regs regs;
+>>>>>>> +};
+>>>>>>> +
+>>>>>>> +static __always_inline struct pt_regs=20
+>>>>>>> *arch_ftrace_get_regs(struct ftrace_regs *fregs)
+>>>>>>> +{
+>>>>>>> +=C2=A0=C2=A0=C2=A0 return &fregs->regs;
+>>>>>>> +}
+>>>>>>
+>>>>>> I think this is wrong. We need to differentiate between=20
+>>>>>> ftrace_caller() and ftrace_regs_caller() here, and only return=20
+>>>>>> pt_regs if coming in through ftrace_regs_caller() (i.e.,=20
+>>>>>> FL_SAVE_REGS is set).
+>>>>>
+>>>>> Not sure I follow you.
+>>>>>
+>>>>> This is based on 5740a7c71ab6 ("s390/ftrace: add=20
+>>>>> HAVE_DYNAMIC_FTRACE_WITH_ARGS support")
+>>>>>
+>>>>> It's all the point of HAVE_DYNAMIC_FTRACE_WITH_ARGS, have the regs=20
+>>>>> also with ftrace_caller().
+>>>>>
+>>>>> Sure you only have the params, but that's the same on s390, so what=20
+>>>>> did I miss ?
 
-In the RT tree, the fbcon's write() callback is only called in
-preemptible() contexts. So this is only a mainline issue.
+Steven has explained the rationale for this in his other response:
+https://lore.kernel.org/all/20220215093849.556d5444@gandalf.local.home/
 
-The series I recently posted to LKML [0] should also address this issue
-(if/when it gets accepted).
+>>>
+>>> It looks like s390 is special since it apparently saves all registers=20
+>>> even for ftrace_caller:=20
+>>> https://lore.kernel.org/all/YbipdU5X4HNDWIni@osiris/
+>>=20
+>> It is not what I understand from their code, see=20
+>> https://elixir.bootlin.com/linux/v5.17-rc3/source/arch/s390/kernel/mcoun=
+t.S#L37=20
+>>=20
+>>=20
+>> They have a common macro called with argument 'allregs' which is set to=
+=20
+>> 0 for ftrace_caller() and 1 for ftrace_regs_caller().
+>> When allregs =3D=3D 1, the macro seems to save more.
+>>=20
+>> But ok, I can do like x86, but I need a trick to know whether=20
+>> FL_SAVE_REGS is set or not, like they do with fregs->regs.cs
+>> Any idea what the condition can be for powerpc ?
 
-John
+We'll need to explicitly zero-out something in pt_regs in=20
+ftrace_caller(). We can probably use regs->msr since we don't expect it=20
+to be zero when saved from ftrace_regs_caller().
 
-[0] https://lore.kernel.org/lkml/20220207194323.273637-1-john.ogness@linutronix.de
+>>=20
+>=20
+> Finally, it looks like this change is done  via commit 894979689d3a=20
+> ("s390/ftrace: provide separate ftrace_caller/ftrace_regs_caller=20
+> implementations") four hours the same day after the implementation of=20
+> arch_ftrace_get_regs()
+>=20
+> They may have forgotten to change arch_ftrace_get_regs() which was added=
+=20
+> in commit 5740a7c71ab6 ("s390/ftrace: add HAVE_DYNAMIC_FTRACE_WITH_ARGS=20
+> support") with the assumption that ftrace_caller and ftrace_regs_caller=20
+> where identical.
+
+Indeed, good find!
+
+
+Thanks,
+Naveen
+

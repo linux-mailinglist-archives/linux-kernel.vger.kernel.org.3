@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD1C4B66DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1DA4B66D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:03:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235139AbiBOJCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:02:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41470 "EHLO
+        id S235555AbiBOJCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:02:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235529AbiBOJCo (ORCPT
+        with ESMTP id S235537AbiBOJCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:02:44 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF66115952
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:02:33 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id e16so17958655qtq.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:02:33 -0800 (PST)
+        Tue, 15 Feb 2022 04:02:46 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6554110610A
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:02:35 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id e16so17958716qtq.6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:02:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6U4rijSjm5U8GLHq/t1MdTXdgQmgucjQmV8Ymo3NwgE=;
-        b=d6AqXpyQAUkwb7NXhHhPGHpTrpz3kInmKc5l+9JKzydHa1Yjbsy2BRjVcrrntoh+uV
-         YSQEMzX9r2CZNmJmFCHPm+X5kRBzgTrZM02dq9yoSvrYlt7uRDIMi7wlJLYJE7nizXzu
-         aYhyLgumMIBE/xOUIwG9y/Z4cXW7mmh0UdF/CzdS7XB+Ck7zFP01JNJ19/P1gKt7YD3D
-         7hyGx4x7oSLcY1P5xdXeceqdoBd7KXOMfRoYuKL1/FOYYXCS14RqfWH01+GK6FFBzypt
-         8KllIXTC2VopZSJX1gQ/d3NwidFhmksqid4R56q62/Y6aJliP/uD5fXLPByPaBNiDRGF
-         +DyA==
+        bh=jKIMNTCTSaMpDoiqtlH3Q9QXsNmu9SOq71EHGRiXKQg=;
+        b=IKo/im9vNvmw3DDbv7pl3Jy9rQHe0pf4uWP6c70xfG0w+L4au40G42ELqNNlEIA5t5
+         lotcK9NYVkKEcMFnpug+isg/KHOOChYTsJtA16RR+TbVa03ziUCKC/Fo5mw1PqrqzhtA
+         Blvot4EgBJLkRgNAM+hVnd9AC/c8iSPBO6+Wy5D7qQm5/01SKrw/DRSMKXYJu1vS78tD
+         dbUlx/AVYIoYfRA+tjbRv2MapUG0BRXUVnK9MmPN46SmiBQg14AHV6WYM5FNl4gbaw/D
+         NAdbSrlv+ILXXpa7B/0Fm8qCNJBeWr0VxgnfpvbXtOuvdc2gbPza0pR0RnP4ttCQXTrd
+         K76A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6U4rijSjm5U8GLHq/t1MdTXdgQmgucjQmV8Ymo3NwgE=;
-        b=U/r/d4MJBWN47qwlvmZBUEt/ZwWreU0lijDF64YiBIN6mOgUSoKNcBWEB5p25mI+f6
-         fu76vcwsL97nf6LtXQYPCI1LLJDNI/cc7Y05S5Kkhtr4k3yuReR6Ix3tY4HtO72eUBKZ
-         vTQcYpqlQSx849qbzohV3wc6jPkcZkrO/JsdPc0c+GpUkcJy8E/ZuTsoyzoShtXKHR2t
-         M1atqX6ymxVDsyVPn5vhM+OePXUMDfaApQRQ4+GMM5rdWszQjFSgCBKL6bO5RE5oNQJ2
-         X3GMUNuF5Url9JlSLdJgVoNvwRW47UIwz9On2/n0Ka55SqcsV/gt4EwsjOaJkL5vaO8T
-         l0uQ==
-X-Gm-Message-State: AOAM532PDZVnLeZBeMXJYnPCCQk59PxnX3O5N60dGfWGAA2Ccq1v54eA
-        Q7bUTG8tt+hbIAyc4BWlMxlfDmasCMNpMkEP
-X-Google-Smtp-Source: ABdhPJx4/yvXhJ/ovAf24/YgwDAEuc6OS7o3jsbBhcLP6CiFPWkQQ7xGpHWTW3PyyVI01ETcK1YUEw==
-X-Received: by 2002:a05:622a:1350:: with SMTP id w16mr1988487qtk.320.1644915752185;
-        Tue, 15 Feb 2022 01:02:32 -0800 (PST)
+        bh=jKIMNTCTSaMpDoiqtlH3Q9QXsNmu9SOq71EHGRiXKQg=;
+        b=4wlA0h70FO8/eTsYY+cxZxsz2133MVbwBLchwDOETDDik82l95HahDuW82b5Pv5BxY
+         Nqob9byf2nprOsKAlq/QOAe2Sev80n3lVy19cQDi31Sw6YFHZTRVpYAbk9Cgm96+6570
+         PpQfqHn+oH+NvbHcN5bjFP/k02yA8NVd4HNzQG/cuaYuv1laxx3I1Ln+JqUAWCawSUE3
+         B+5tFq+VlWXvQOBIOcqFUchebBFK4F+097EscHHY/5JwKbB2FzmJLWGkEFdLcy+Sl1AR
+         ra2OKGtHzG9bub1+/Q8U93Fs64ol3PreY5DwZeE1JYHh0aSUQ/slip8ezM6tu1xKZ9yF
+         BGYQ==
+X-Gm-Message-State: AOAM533jW1RtLqzAW8FBQSX6qffK7P7kciZ15VRQQMFQWdFBWwEYP6hw
+        RFFV/yMVesT6k49R1T8VlQo0HROF6xz7ihQP
+X-Google-Smtp-Source: ABdhPJzx9QXJ2FNduXLIO3eucXJXSddratxrtG+GboFKt493dIEOaNkDPKFaL7o5yk74IsytWpegew==
+X-Received: by 2002:a05:622a:1351:: with SMTP id w17mr1961454qtk.447.1644915754311;
+        Tue, 15 Feb 2022 01:02:34 -0800 (PST)
 Received: from rivos-atish.. (adsl-70-228-75-190.dsl.akrnoh.ameritech.net. [70.228.75.190])
-        by smtp.gmail.com with ESMTPSA id w4sm17711158qko.123.2022.02.15.01.02.30
+        by smtp.gmail.com with ESMTPSA id w4sm17711158qko.123.2022.02.15.01.02.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 01:02:31 -0800 (PST)
+        Tue, 15 Feb 2022 01:02:33 -0800 (PST)
 From:   Atish Patra <atishp@rivosinc.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Tsukasa OI <research_trasio@irq.a4lg.com>,
@@ -63,9 +63,9 @@ Cc:     Tsukasa OI <research_trasio@irq.a4lg.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH v3 1/6] RISC-V: Correctly print supported extensions
-Date:   Tue, 15 Feb 2022 01:02:06 -0800
-Message-Id: <20220215090211.911366-2-atishp@rivosinc.com>
+Subject: [PATCH v3 2/6] RISC-V: Minimal parser for "riscv, isa" strings
+Date:   Tue, 15 Feb 2022 01:02:07 -0800
+Message-Id: <20220215090211.911366-3-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220215090211.911366-1-atishp@rivosinc.com>
 References: <20220215090211.911366-1-atishp@rivosinc.com>
@@ -83,60 +83,129 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Tsukasa OI <research_trasio@irq.a4lg.com>
 
-This commit replaces BITS_PER_LONG with number of alphabet letters.
+Current hart ISA ("riscv,isa") parser don't correctly parse:
 
-Current ISA pretty-printing code expects extension 'a' (bit 0) through
-'z' (bit 25).  Although bit 26 and higher is not currently used (thus never
-cause an issue in practice), it will be an annoying problem if we start to
-use those in the future.
+1. Multi-letter extensions
+2. Version numbers
 
-This commit disables printing high bits for now.
+All ISA extensions ratified recently has multi-letter extensions
+(except 'H'). The current "riscv,isa" parser that is easily confused
+by multi-letter extensions and "p" in version numbers can be a huge
+problem for adding new extensions through the device tree.
 
-Signed-off-by: Tsukasa OI <research_trasio@irq.a4lg.com>
+Leaving it would create incompatible hacks and would make "riscv,isa"
+value unreliable.
+
+This commit implements minimal parser for "riscv,isa" strings.  With this,
+we can safely ignore multi-letter extensions and version numbers.
+
+[Improved commit text and fixed a bug around 's' in base extension]
 Signed-off-by: Atish Patra <atishp@rivosinc.com>
+[Fixed workaround for QEMU]
+Signed-off-by: Tsukasa OI <research_trasio@irq.a4lg.com>
 Tested-by: Heiko Stuebner <heiko@sntech.de>
 ---
- arch/riscv/kernel/cpufeature.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ arch/riscv/kernel/cpufeature.c | 66 ++++++++++++++++++++++++++++------
+ 1 file changed, 55 insertions(+), 11 deletions(-)
 
 diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-index d959d207a40d..dd3d57eb4eea 100644
+index dd3d57eb4eea..9d5448542226 100644
 --- a/arch/riscv/kernel/cpufeature.c
 +++ b/arch/riscv/kernel/cpufeature.c
-@@ -13,6 +13,8 @@
- #include <asm/smp.h>
- #include <asm/switch_to.h>
+@@ -7,6 +7,7 @@
+  */
  
-+#define NUM_ALPHA_EXTS ('z' - 'a' + 1)
-+
- unsigned long elf_hwcap __read_mostly;
- 
- /* Host ISA bitmap */
-@@ -63,7 +65,7 @@ void __init riscv_fill_hwcap(void)
- {
+ #include <linux/bitmap.h>
++#include <linux/ctype.h>
+ #include <linux/of.h>
+ #include <asm/processor.h>
+ #include <asm/hwcap.h>
+@@ -66,7 +67,7 @@ void __init riscv_fill_hwcap(void)
  	struct device_node *node;
  	const char *isa;
--	char print_str[BITS_PER_LONG + 1];
-+	char print_str[NUM_ALPHA_EXTS + 1];
- 	size_t i, j, isa_len;
+ 	char print_str[NUM_ALPHA_EXTS + 1];
+-	size_t i, j, isa_len;
++	int i, j;
  	static unsigned long isa2hwcap[256] = {0};
  
-@@ -133,13 +135,13 @@ void __init riscv_fill_hwcap(void)
- 	}
+ 	isa2hwcap['i'] = isa2hwcap['I'] = COMPAT_HWCAP_ISA_I;
+@@ -92,23 +93,66 @@ void __init riscv_fill_hwcap(void)
+ 			continue;
+ 		}
  
- 	memset(print_str, 0, sizeof(print_str));
--	for (i = 0, j = 0; i < BITS_PER_LONG; i++)
-+	for (i = 0, j = 0; i < NUM_ALPHA_EXTS; i++)
- 		if (riscv_isa[0] & BIT_MASK(i))
- 			print_str[j++] = (char)('a' + i);
- 	pr_info("riscv: ISA extensions %s\n", print_str);
+-		i = 0;
+-		isa_len = strlen(isa);
+ #if IS_ENABLED(CONFIG_32BIT)
+ 		if (!strncmp(isa, "rv32", 4))
+-			i += 4;
++			isa += 4;
+ #elif IS_ENABLED(CONFIG_64BIT)
+ 		if (!strncmp(isa, "rv64", 4))
+-			i += 4;
++			isa += 4;
+ #endif
+-		for (; i < isa_len; ++i) {
+-			this_hwcap |= isa2hwcap[(unsigned char)(isa[i])];
++		for (; *isa; ++isa) {
++			const char *ext = isa++;
++			const char *ext_end = isa;
++			bool ext_long = false, ext_err = false;
++
++			switch (*ext) {
++			case 's':
++			case 'x':
++			case 'z':
++				/**
++				 * Workaround for invalid single-letter 's' (QEMU).
++				 * It works until multi-letter extension starting
++				 * with "Su" appears.
++				 */
++				if (*ext == 's' && ext[-1] != '_' && ext[1] == 'u')
++					break;
++				ext_long = true;
++				/* Multi-letter extension must be delimited */
++				for (; *isa && *isa != '_'; ++isa)
++					if (!islower(*isa) && !isdigit(*isa))
++						ext_err = true;
++				/* ... but must be ignored. */
++				break;
++			default:
++				if (unlikely(!islower(*ext))) {
++					ext_err = true;
++					break;
++				}
++				/* Find next extension */
++				if (!isdigit(*isa))
++					break;
++				while (isdigit(*++isa))
++					;
++				if (*isa != 'p')
++					break;
++				if (!isdigit(*++isa)) {
++					--isa;
++					break;
++				}
++				while (isdigit(*++isa))
++					;
++				break;
++			}
++			if (*isa != '_')
++				--isa;
+ 			/*
+-			 * TODO: X, Y and Z extension parsing for Host ISA
+-			 * bitmap will be added in-future.
++			 * TODO: Full version-aware handling including
++			 * multi-letter extensions will be added in-future.
+ 			 */
+-			if ('a' <= isa[i] && isa[i] < 'x')
+-				this_isa |= (1UL << (isa[i] - 'a'));
++			if (ext_err || ext_long)
++				continue;
++			this_hwcap |= isa2hwcap[(unsigned char)(*ext)];
++			this_isa |= (1UL << (*ext - 'a'));
+ 		}
  
- 	memset(print_str, 0, sizeof(print_str));
--	for (i = 0, j = 0; i < BITS_PER_LONG; i++)
-+	for (i = 0, j = 0; i < NUM_ALPHA_EXTS; i++)
- 		if (elf_hwcap & BIT_MASK(i))
- 			print_str[j++] = (char)('a' + i);
- 	pr_info("riscv: ELF capabilities %s\n", print_str);
+ 		/*
 -- 
 2.30.2
 

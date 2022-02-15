@@ -2,49 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1496A4B787E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 742D24B76E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243247AbiBOSrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 13:47:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56268 "EHLO
+        id S243268AbiBOSrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 13:47:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243203AbiBOSqy (ORCPT
+        with ESMTP id S243240AbiBOSrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 13:46:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017182B275
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:46:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 940B0616C7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:46:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F39A6C340F0;
-        Tue, 15 Feb 2022 18:46:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644950803;
-        bh=ZZVHYN24fbtWtWWxo9X93JAX+d6Sbd/BNMAjo9TCEWg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NP7XJ7FkCwxUTWQFFr763Xtt20093Awuy17twpkb6nJw41/4NqPIacyVL3hmU9ByF
-         HLplaSE6hcS3hvIeCzj8RXP1ZZzMAH0w6RBU1YjjVYtrlA/tQvIXXC2OYEgsqrUYBD
-         luJAySzM/57YBSdNpiJxftfZK+sHD1iojcD+aLviUHRiqEtiw4sFUj9AlWw4/rnjTM
-         bL0jMZBAX/6fa48/U9i50bIRB/FHXStFnWvsyWomDlByrr/7LbyLV/iyWPMftAJM7w
-         4FhnO1a6V5DrOKWxdqVFsGDy2sfU40wMTnn5EBkS36vsjFFfzIhPOYQ+MzBUok5IjX
-         mXRhL+P7mArqA==
-From:   SeongJae Park <sj@kernel.org>
-To:     akpm@linux-foundation.org
-Cc:     xhao@linux.alibaba.com, rientjes@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH 8/8] mm/damon/paddr,vaddr: Remove damon_{p,v}a_{target_valid,set_operations}()
-Date:   Tue, 15 Feb 2022 18:46:03 +0000
-Message-Id: <20220215184603.1479-9-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220215184603.1479-1-sj@kernel.org>
-References: <20220215184603.1479-1-sj@kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 15 Feb 2022 13:47:13 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48023136A
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:47:01 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: alyssa)
+        with ESMTPSA id C83521F44C43
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644950820;
+        bh=Jo+q2iQ2HhAa53Jyc9hotJ72iRGY8gVAx2ZkJDQVWGs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=O/3tC6A7Y2k4vIRMj3hfKSEHSGeZoMgX6+aVJ82NXCd+tB2+It8IgQtZJQcAjUvZp
+         tMZ5HVFsejX4SMoMyUII0+qa0pUH1S+U7I6dfqFR+uCSJ7Mfei4JZx8Lp5dnb7N1l2
+         c0FFJRW8s2M/9iAq+GjOAestYeZxGr4egQePe3M4kM3fYkWCMsBlSZuUX1cJqo0EZw
+         ynWyFjvHnj4jMbrHz1o/8bp2BFeZtETATMa/S+lzMe+zm4iHdfDryquVxjCD3SClkS
+         Q4+VV86gXKLI5Q7rz4fuBF6T/0OAw3yEwnrFebY186J7HSHvq/MYh2dmFC26KLAaJt
+         LzjHw7cZuHrsg==
+From:   Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Nick Fan <Nick.Fan@mediatek.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2] soc: mediatek: mtk-infracfg: Disable ACP on MT8192
+Date:   Tue, 15 Feb 2022 13:46:51 -0500
+Message-Id: <20220215184651.12168-1-alyssa.rosenzweig@collabora.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,115 +57,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because DAMON debugfs interface and DAMON-based proactive reclaim are
-now using monitoring operations via registration mechanism,
-damon_{p,v}a_{target_valid,set_operations}() functions have no user.
-This commit clean them up.
+MT8192 contains an experimental Accelerator Coherency Port
+implementation, which does not work correctly but was unintentionally
+enabled by default. For correct operation of the GPU, we must set a
+chicken bit disabling ACP on MT8192.
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
+Adapted from the following downstream change to the out-of-tree, legacy
+Mali GPU driver:
+
+https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/2781271/5
+
+Note this change is required for both Panfrost and the legacy kernel
+driver.
+
+v2: Move the change from clk-mt8192.c to mtk-infracfg.c (Robin).
+Although it does not make sense to add this platform-specific hack to
+the GPU driver, it has nothing to do with clocks. We already have
+mtk-infracfg.c to manage other infracfg bits; the ACP disable should
+live there too.
+
+Co-developed-by: Robin Murphy <robin.murphy@arm.com>
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+Signed-off-by: Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
+Cc: Nick Fan <Nick.Fan@mediatek.com>
+Cc: Nicolas Boichat <drinkcat@chromium.org>
+Cc: Chen-Yu Tsai <wenst@chromium.org>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- include/linux/damon.h | 10 ----------
- mm/damon/paddr.c      | 20 +-------------------
- mm/damon/vaddr.c      | 15 +--------------
- 3 files changed, 2 insertions(+), 43 deletions(-)
+ drivers/soc/mediatek/mtk-infracfg.c   | 19 +++++++++++++++++++
+ include/linux/soc/mediatek/infracfg.h |  3 +++
+ 2 files changed, 22 insertions(+)
 
-diff --git a/include/linux/damon.h b/include/linux/damon.h
-index 076da277b249..49c4a11ecf20 100644
---- a/include/linux/damon.h
-+++ b/include/linux/damon.h
-@@ -513,14 +513,4 @@ int damon_stop(struct damon_ctx **ctxs, int nr_ctxs);
+diff --git a/drivers/soc/mediatek/mtk-infracfg.c b/drivers/soc/mediatek/mtk-infracfg.c
+index 0590b68e0d78..2acf19676af2 100644
+--- a/drivers/soc/mediatek/mtk-infracfg.c
++++ b/drivers/soc/mediatek/mtk-infracfg.c
+@@ -6,6 +6,7 @@
+ #include <linux/export.h>
+ #include <linux/jiffies.h>
+ #include <linux/regmap.h>
++#include <linux/mfd/syscon.h>
+ #include <linux/soc/mediatek/infracfg.h>
+ #include <asm/processor.h>
  
- #endif	/* CONFIG_DAMON */
+@@ -72,3 +73,21 @@ int mtk_infracfg_clear_bus_protection(struct regmap *infracfg, u32 mask,
  
--#ifdef CONFIG_DAMON_VADDR
--bool damon_va_target_valid(void *t);
--void damon_va_set_operations(struct damon_ctx *ctx);
--#endif	/* CONFIG_DAMON_VADDR */
--
--#ifdef CONFIG_DAMON_PADDR
--bool damon_pa_target_valid(void *t);
--void damon_pa_set_operations(struct damon_ctx *ctx);
--#endif	/* CONFIG_DAMON_PADDR */
--
- #endif	/* _DAMON_H */
-diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
-index d968bb38bd5d..7c263797a9a9 100644
---- a/mm/damon/paddr.c
-+++ b/mm/damon/paddr.c
-@@ -208,11 +208,6 @@ static unsigned int damon_pa_check_accesses(struct damon_ctx *ctx)
- 	return max_nr_accesses;
+ 	return ret;
  }
++
++static int __init mtk_infracfg_init(void)
++{
++	struct regmap *infracfg;
++
++	/*
++	 * MT8192 has an experimental path to route GPU traffic to the DSU's
++	 * Accelerator Coherency Port, which is inadvertently enabled by
++	 * default. It turns out not to work, so disable it to prevent spurious
++	 * GPU faults.
++	 */
++	infracfg = syscon_regmap_lookup_by_compatible("mediatek,mt8192-infracfg");
++	if (!IS_ERR(infracfg))
++		regmap_set_bits(infracfg, MT8192_INFRA_CTRL,
++				MT8192_INFRA_CTRL_DISABLE_MFG2ACP);
++	return 0;
++}
++postcore_initcall(mtk_infracfg_init);
+diff --git a/include/linux/soc/mediatek/infracfg.h b/include/linux/soc/mediatek/infracfg.h
+index d858e0bab7a2..fcbbd0dd5e55 100644
+--- a/include/linux/soc/mediatek/infracfg.h
++++ b/include/linux/soc/mediatek/infracfg.h
+@@ -229,6 +229,9 @@
+ #define INFRA_TOPAXI_PROTECTEN_SET		0x0260
+ #define INFRA_TOPAXI_PROTECTEN_CLR		0x0264
  
--bool damon_pa_target_valid(void *t)
--{
--	return true;
--}
--
- static unsigned long damon_pa_apply_scheme(struct damon_ctx *ctx,
- 		struct damon_target *t, struct damon_region *r,
- 		struct damos *scheme)
-@@ -261,19 +256,6 @@ static int damon_pa_scheme_score(struct damon_ctx *context,
- 	return DAMOS_MAX_SCORE;
- }
++#define MT8192_INFRA_CTRL			0x290
++#define MT8192_INFRA_CTRL_DISABLE_MFG2ACP	BIT(9)
++
+ #define REG_INFRA_MISC				0xf00
+ #define F_DDR_4GB_SUPPORT_EN			BIT(13)
  
--void damon_pa_set_operations(struct damon_ctx *ctx)
--{
--	ctx->ops.init = NULL;
--	ctx->ops.update = NULL;
--	ctx->ops.prepare_access_checks = damon_pa_prepare_access_checks;
--	ctx->ops.check_accesses = damon_pa_check_accesses;
--	ctx->ops.reset_aggregated = NULL;
--	ctx->ops.target_valid = damon_pa_target_valid;
--	ctx->ops.cleanup = NULL;
--	ctx->ops.apply_scheme = damon_pa_apply_scheme;
--	ctx->ops.get_scheme_score = damon_pa_scheme_score;
--}
--
- static int __init damon_pa_initcall(void)
- {
- 	struct damon_operations ops = {
-@@ -283,7 +265,7 @@ static int __init damon_pa_initcall(void)
- 		.prepare_access_checks = damon_pa_prepare_access_checks,
- 		.check_accesses = damon_pa_check_accesses,
- 		.reset_aggregated = NULL,
--		.target_valid = damon_pa_target_valid,
-+		.target_valid = NULL,
- 		.cleanup = NULL,
- 		.apply_scheme = damon_pa_apply_scheme,
- 		.get_scheme_score = damon_pa_scheme_score,
-diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
-index 87475ba37bec..b2ec0aa1ff45 100644
---- a/mm/damon/vaddr.c
-+++ b/mm/damon/vaddr.c
-@@ -653,7 +653,7 @@ static unsigned int damon_va_check_accesses(struct damon_ctx *ctx)
-  * Functions for the target validity check and cleanup
-  */
- 
--bool damon_va_target_valid(void *target)
-+static bool damon_va_target_valid(void *target)
- {
- 	struct damon_target *t = target;
- 	struct task_struct *task;
-@@ -739,19 +739,6 @@ static int damon_va_scheme_score(struct damon_ctx *context,
- 	return DAMOS_MAX_SCORE;
- }
- 
--void damon_va_set_operations(struct damon_ctx *ctx)
--{
--	ctx->ops.init = damon_va_init;
--	ctx->ops.update = damon_va_update;
--	ctx->ops.prepare_access_checks = damon_va_prepare_access_checks;
--	ctx->ops.check_accesses = damon_va_check_accesses;
--	ctx->ops.reset_aggregated = NULL;
--	ctx->ops.target_valid = damon_va_target_valid;
--	ctx->ops.cleanup = NULL;
--	ctx->ops.apply_scheme = damon_va_apply_scheme;
--	ctx->ops.get_scheme_score = damon_va_scheme_score;
--}
--
- static int __init damon_va_initcall(void)
- {
- 	struct damon_operations ops = {
 -- 
-2.17.1
+2.34.1
 

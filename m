@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C244B7741
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7234B755B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:47:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243301AbiBOSzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 13:55:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34872 "EHLO
+        id S243307AbiBOS5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 13:57:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237168AbiBOSze (ORCPT
+        with ESMTP id S235072AbiBOS5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 13:55:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07D7DF4B2;
-        Tue, 15 Feb 2022 10:55:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C865B81C38;
-        Tue, 15 Feb 2022 18:55:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47D2BC340EB;
-        Tue, 15 Feb 2022 18:55:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644951321;
-        bh=gfU6juJAppsF7FTy6N8V5lW5Ezbm9GSdyT28JV/ZGvw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=w755QU6OcIzIK8XG76gj1td78Gi9gbqLkL+9HHdYMQh57QegPGogLInVFP5jGJWEX
-         fxFkxlIZAmPql2ebDtEMXaXhCIK5GN4skyJjivbcdA5sn2sO40/m/j2pp4Pp9mFSpk
-         jiK4bpO+IDqNt4nOMg6mDIfHkdfc4SD6fUNCcvkk=
-Date:   Tue, 15 Feb 2022 19:55:17 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH v20 5/5] arm64: dts: qcom: sc7180-trogdor: Add nodes for
- onboard USB hub
-Message-ID: <Ygv3FSDS/fq1oePy@kroah.com>
-References: <20220119204345.3769662-1-mka@chromium.org>
- <20220119124327.v20.5.Ie0d2c1214b767bb5551dd4cad38398bd40e4466f@changeid>
- <YgJMkFAxjazkUDZd@kroah.com>
- <YgLCswtX/0THkzXT@google.com>
- <CAD=FV=WMP8M5HTRNv9_scvrytbpE0iBdUack=XaHoypGNLJeVA@mail.gmail.com>
+        Tue, 15 Feb 2022 13:57:49 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D723AA2F2D
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:57:38 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21FIvMbR052255;
+        Tue, 15 Feb 2022 12:57:22 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1644951442;
+        bh=5U/fmKhkScupajpvEnznWL+J0dy7eQ02Tzjl/NPjDpA=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=LMKQcf8cdOPVCrlWvE15B0ft3gjNkw/AEcLF2QHobhUIB/YBHBa0MahF4NUduuF/3
+         XPTYZU7xkAQ24LJChF+ORz8lc3mm5T8u9CKbSc/C53Uxtud3AERlEtcx58uK7LaQFK
+         7Uq0xZeIprwxuDDcbVGTQJiv5PlmS2IG4m9BZAW4=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21FIvMkH020922
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 15 Feb 2022 12:57:22 -0600
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 15
+ Feb 2022 12:57:17 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 15 Feb 2022 12:57:17 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21FIvHG9002914;
+        Tue, 15 Feb 2022 12:57:17 -0600
+Date:   Wed, 16 Feb 2022 00:27:16 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Subject: Re: [PATCH v1 04/14] mtd: spi-nor: move all xilinx specifics into
+ xilinx.c
+Message-ID: <20220215185716.ccjthc4a4merlmxw@ti.com>
+References: <20220202145853.4187726-1-michael@walle.cc>
+ <20220202145853.4187726-5-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <CAD=FV=WMP8M5HTRNv9_scvrytbpE0iBdUack=XaHoypGNLJeVA@mail.gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220202145853.4187726-5-michael@walle.cc>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,40 +68,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 09:54:54AM -0800, Doug Anderson wrote:
-> Hi,
+On 02/02/22 03:58PM, Michael Walle wrote:
+> Mechanically move all the xilinx functions to its own module.
+
+If you do some code changes mechanically you should also paste the 
+semantic patch for future reference.
+
 > 
-> On Tue, Feb 8, 2022 at 11:21 AM Matthias Kaehlcke <mka@chromium.org> wrote:
-> >
-> > On Tue, Feb 08, 2022 at 11:57:20AM +0100, Greg Kroah-Hartman wrote:
-> > > On Wed, Jan 19, 2022 at 12:43:45PM -0800, Matthias Kaehlcke wrote:
-> > > > Add nodes for the onboard USB hub on trogdor devices. Remove the
-> > > > 'always-on' property from the hub regulator, since the regulator
-> > > > is now managed by the onboard_usb_hub driver.
-> > > >
-> > > > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> > > > Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-> > > > Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> > > > ---
-> > >
-> > > No DT maintainer approval yet?  :(
-> >
-> > Bjorn usually just picks DT changes into the QCOM tree when they are
-> > ready, so I wouldn't interpret anything into the lack of an explicit
-> > Ack.
+> Then register the new flash specific ready() function.
 > 
-> Right, so the expectation is that this patch wouldn't land through the
-> USB tree but would instead land through the Qualcomm tree, probably a
-> revision after the code lands in the USB tree to avoid dependency
-> problems.
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  drivers/mtd/spi-nor/core.c   | 64 +------------------------------
+>  drivers/mtd/spi-nor/core.h   | 18 ---------
+>  drivers/mtd/spi-nor/xilinx.c | 73 ++++++++++++++++++++++++++++++++++++
+>  include/linux/mtd/spi-nor.h  |  9 -----
+>  4 files changed, 74 insertions(+), 90 deletions(-)
+> 
+[...]
+>  
+> +/**
+> + * spi_nor_xread_sr() - Read the Status Register on S3AN flashes.
+> + * @nor:	pointer to 'struct spi_nor'.
+> + * @sr:		pointer to a DMA-able buffer where the value of the
+> + *              Status Register will be written.
+> + *
+> + * Return: 0 on success, -errno otherwise.
+> + */
+> +static int spi_nor_xread_sr(struct spi_nor *nor, u8 *sr)
 
-But our tools pick up the whole series.  I can't just do "i will pick
-patches 1-4 only" easily, and neither can any other maintainer.
+Nitpick: rename to xilinx_read_sr()?
 
-Why not just get their ack so that I know it can come through the USB
-tree?  That's what normally happens for other changes like this where a
-driver change is required first.
+> +{
+> +	int ret;
+> +
+> +	if (nor->spimem) {
+> +		struct spi_mem_op op =
+> +			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_XRDSR, 0),
+> +				   SPI_MEM_OP_NO_ADDR,
+> +				   SPI_MEM_OP_NO_DUMMY,
+> +				   SPI_MEM_OP_DATA_IN(1, sr, 0));
+> +
+> +		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
+> +
+> +		ret = spi_mem_exec_op(nor->spimem, &op);
+> +	} else {
+> +		ret = spi_nor_controller_ops_read_reg(nor, SPINOR_OP_XRDSR, sr,
+> +						      1);
+> +	}
+> +
+> +	if (ret)
+> +		dev_dbg(nor->dev, "error %d reading XRDSR\n", ret);
+> +
+> +	return ret;
+> +}
+> +
+> +/**
+> + * spi_nor_xsr_ready() - Query the Status Register of the S3AN flash to see if
+> + * the flash is ready for new commands.
+> + * @nor:	pointer to 'struct spi_nor'.
+> + *
+> + * Return: 1 if ready, 0 if not ready, -errno on errors.
+> + */
+> +static int spi_nor_xsr_ready(struct spi_nor *nor)
 
-thanks,
+Nitpick: rename to xilinx_sr_ready()?
 
-greg k-h
+Either way,
+
+Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
+
+
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

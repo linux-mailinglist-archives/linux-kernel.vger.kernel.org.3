@@ -2,72 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35D94B5F9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 01:55:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B7D4B5FA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 01:55:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232835AbiBOAy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 19:54:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54742 "EHLO
+        id S232853AbiBOAzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 19:55:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231485AbiBOAy4 (ORCPT
+        with ESMTP id S231485AbiBOAzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 19:54:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F14BC8F;
-        Mon, 14 Feb 2022 16:54:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AABB614F8;
-        Tue, 15 Feb 2022 00:54:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B0C0C340E9;
-        Tue, 15 Feb 2022 00:54:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644886478;
-        bh=HEiIZMjEKQ7AQOV3WTDf8XC3x+qJ7mJU59+gDlJbdVA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Y4EhxNa1TpAWFPO5vL1e9pgKFCFscD5yp+z9OG5Xv++M9n6iazAFJitTQhXdQOz3q
-         ZOnyKymr5UmO0G5drdewoxRmOmE04JTs8pz2nmoFpRTTRsYoiTc0McSqL6NASmzopw
-         TJT8I8HjfC/H3jJZF9jo8hwmVlJAa9ln6keCvOpTg7mgCRyBraOxY8P8QqM95SyftB
-         zsukqEJ5jKKLRp6eBu3RE0ZgxYTlcF7ESmVa3MExJvUcCujk46SR1qu8W3SGbuGykk
-         K2HK1UkOlM7lE7VRYPcDf/rTmZf2RpEEEoIMizqoa4BEPx6sPq4r8oNMjPv1I7Qi3p
-         tRcQ5vdwaYwyQ==
-Date:   Mon, 14 Feb 2022 16:54:36 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Ondrej Mosnacek <omosnace@redhat.com>, netdev@vger.kernel.org,
-        davem@davemloft.net, selinux@vger.kernel.org,
-        Xin Long <lucien.xin@gmail.com>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        linux-sctp@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prashanth Prahlad <pprahlad@redhat.com>
-Subject: Re: [PATCH net v3 2/2] security: implement sctp_assoc_established
- hook in selinux
-Message-ID: <20220214165436.1f6a9987@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <CAHC9VhT90617FoqQJBCrDQ8gceVVA6a1h74h6T4ZOwNk6RVB3g@mail.gmail.com>
-References: <20220212175922.665442-1-omosnace@redhat.com>
-        <20220212175922.665442-3-omosnace@redhat.com>
-        <CAHC9VhT90617FoqQJBCrDQ8gceVVA6a1h74h6T4ZOwNk6RVB3g@mail.gmail.com>
+        Mon, 14 Feb 2022 19:55:19 -0500
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5525BB40;
+        Mon, 14 Feb 2022 16:55:10 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V4VOuCZ_1644886507;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V4VOuCZ_1644886507)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 15 Feb 2022 08:55:07 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     mpm@selenic.com
+Cc:     herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] hwrng: core: Remove duplicated include in core.c
+Date:   Tue, 15 Feb 2022 08:55:05 +0800
+Message-Id: <20220215005505.80430-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Feb 2022 17:14:04 -0500 Paul Moore wrote:
-> If I can get an ACK from one of the SCTP and/or netdev folks I'll
-> merge this into the selinux/next branch.
+Fix following includecheck warning:
+./drivers/char/hw_random/core.c: linux/random.h is included more than
+once.
 
-No objections here FWIW, I'd defer the official acking to the SCTP
-maintainers.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/char/hw_random/core.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/char/hw_random/core.c b/drivers/char/hw_random/core.c
+index be2953aa5145..94626f533361 100644
+--- a/drivers/char/hw_random/core.c
++++ b/drivers/char/hw_random/core.c
+@@ -21,7 +21,6 @@
+ #include <linux/sched/signal.h>
+ #include <linux/miscdevice.h>
+ #include <linux/module.h>
+-#include <linux/random.h>
+ #include <linux/sched.h>
+ #include <linux/slab.h>
+ #include <linux/uaccess.h>
+-- 
+2.20.1.7.g153144c
+

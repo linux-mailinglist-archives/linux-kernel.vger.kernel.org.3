@@ -2,143 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F644B6BE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 443124B6BE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237583AbiBOMTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 07:19:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57720 "EHLO
+        id S237611AbiBOMUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 07:20:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbiBOMTs (ORCPT
+        with ESMTP id S236232AbiBOMUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 07:19:48 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE8C1074E6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:19:39 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id f6so13583481pfj.11
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:19:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=t4VIfPOAozNC70kbDOl2dbBGsgdLxKSP4QJrhlwbu5k=;
-        b=yyPjnmR65ZCx8CliAl5MrjTv9+HVfnSjBHgKjhUGGWHpNtMQ3MrbqjhZKmbJ4Ko+bx
-         LumaWc5vrjhUHkrk/GCHfhEIlw9m+hQrIdOHvCwdRhQ1vbLqCIPgfRipClamscTA3LDw
-         SwC3RN+HIeuaP2HLdtnAivns5km7Haf5yjKAJo2tIX7G6Fh+5ia+S7KGem6DBgSpCOTR
-         Sn84/Y8jlIekJSXbhd8KTg4O1LOakBoFxYDA8U1ADohldqKVPkYVOFRPUt7MaCC+TSib
-         TFrGXB+d33NMx/ESGHZHd6JMgsDxUI6Yyjf9WypdjvJDM1ml6XV/fgLioq40ccaxEFy1
-         R/Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=t4VIfPOAozNC70kbDOl2dbBGsgdLxKSP4QJrhlwbu5k=;
-        b=On4sAnvfbYhmzb1qjMhqi7YBpuBEWYlnR19C7rbfr1rj2TEupfFXsvZwDB0xWYSpCF
-         IXZtmEu7l5VK9moRfYcd5brzA403SjTu/KtIAZT5X9i/r+bFLi2KtRAdz5BpJ4VCPX43
-         zR59sCR4W5VYBkumTWKa/wN/D1/QiJ9ziAsIvqmhnestb6G9pHgTBXAntwhNBMBD6+H1
-         tYPe+PYNl2JuYMHUonrtEa/jWo709y7Uzk6bgkRJAB2tFqa256hCiyRNAAvCHlT/0FfJ
-         2yR4sidyGn1CCgk8gxBqvYNGB/skSX5yac8/ARRzzsAq74vMw+D87IofurO9et7XEC8h
-         ik4Q==
-X-Gm-Message-State: AOAM532BAF+NuWSLrCeFmPeZwaxWVJ14Ww5iPJCnZ/X2q7cMX6j5BfgB
-        BW5C9My6QpCScuUqbLcAjNS6nUIpK9J7Jg==
-X-Google-Smtp-Source: ABdhPJyyX/bNQ6faE4RjKlHG3VF68qqDZQ25cF/jMO0cIIJIK7Zt3bWZ6ezKMnlD1KgSLiGYM7nuuw==
-X-Received: by 2002:a05:6a00:2444:: with SMTP id d4mr4123710pfj.46.1644927578757;
-        Tue, 15 Feb 2022 04:19:38 -0800 (PST)
-Received: from [10.255.13.118] ([139.177.225.246])
-        by smtp.gmail.com with ESMTPSA id s9sm5706044pjk.1.2022.02.15.04.19.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 04:19:38 -0800 (PST)
-Message-ID: <b3f9e3c5-679d-1a15-f797-5e211d543a68@bytedance.com>
-Date:   Tue, 15 Feb 2022 20:19:33 +0800
+        Tue, 15 Feb 2022 07:20:10 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38861074EE
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:19:59 -0800 (PST)
+Date:   Tue, 15 Feb 2022 12:19:55 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644927596;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dyM4Y7J7b4bK7UFlD0E5yLbZ9YLPHgg1Z8dWcUV0Tss=;
+        b=PSpzCnhFoxJ0L8RLJY4OR3wUUi6VY9GBo80I0ZfTTLH/TVfx9RhKVzjZngKS9JHRBWfrEI
+        HKcUNIUZGrdAFZDKXsnsz2oXIWPZF3/TXK4aKFaKmBV8UOblo/Z54MlbiEv7J7gaeMxYXw
+        lT2qFoVpRUKAo9HPyWJLvyNBOU/jt4XaVDaOUrcENFjKbZahbMDK9Q1mfV5n0T1ji+DsCi
+        K+u1+lWM/LuRkVePaBk+xc1aV1Z/iLSnfCzbLa7kOSlNNfFIUGrW+/hJoU+phtbsiOWVYF
+        xNHwYU2Fw2Lmu0EzEYsd0Ry0ZkGRgmRjJn9Q9IztTpRTHEyMGDLvSAxIGzA1Gg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644927596;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dyM4Y7J7b4bK7UFlD0E5yLbZ9YLPHgg1Z8dWcUV0Tss=;
+        b=db+N8ZwMgCTW6gsY//3Wtz8kPIYBOJgopH+kQYPjwoZeiLmua2nT5RqYeSwpy6JP2hb0w+
+        y9ADv8I4FVbcQHAQ==
+From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] irqchip/versatile-fpga: Switch to dynamic
+ chip name output
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>, tglx@linutronix.de
+In-Reply-To: <20220209162607.1118325-8-maz@kernel.org>
+References: <20220209162607.1118325-8-maz@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [External] Re: [PATCH] sched/cpuacct: fix charge percpu cpuusage
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     tj@kernel.org, arbn@yandex-team.com, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, Minye Zhu <zhuminye@bytedance.com>
-References: <20220213120118.93471-1-zhouchengming@bytedance.com>
- <YgoqPT67g2NcV/eH@hirez.programming.kicks-ass.net>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <YgoqPT67g2NcV/eH@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <164492759537.16921.11531674759646795086.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/2/14 6:09 下午, Peter Zijlstra wrote:
-> On Sun, Feb 13, 2022 at 08:01:18PM +0800, Chengming Zhou wrote:
->> The cpuacct_account_field() is always called by the current task
->> itself, so it's ok to use __this_cpu_add() to charge the tick time.
->>
->> But cpuacct_charge() maybe called by update_curr() in load_balance()
->> on a random CPU, different from the CPU on which the task is running.
->> So __this_cpu_add() will charge that cputime to a random incorrect CPU.
->>
->> Reported-by: Minye Zhu <zhuminye@bytedance.com>
->> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> 
-> Can I get a Fixes: tag for this?
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Yes, Fixes: 73e6aafd9ea8 ("sched/cpuacct: Simplify the cpuacct code")
-I will send a patch v2 to add it.
+Commit-ID:     3fb212a042fbd8eccbb2af1852e03ed7757b9600
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/3fb212a042fbd8eccbb2af1852e03ed7757b9600
+Author:        Marc Zyngier <maz@kernel.org>
+AuthorDate:    Wed, 09 Feb 2022 16:26:04 
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Tue, 15 Feb 2022 11:25:46 
 
-> 
->> ---
->>  kernel/sched/cpuacct.c | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/kernel/sched/cpuacct.c b/kernel/sched/cpuacct.c
->> index 3d06c5e4220d..75fbc212cb71 100644
->> --- a/kernel/sched/cpuacct.c
->> +++ b/kernel/sched/cpuacct.c
->> @@ -335,11 +335,12 @@ static struct cftype files[] = {
->>  void cpuacct_charge(struct task_struct *tsk, u64 cputime)
->>  {
->>  	struct cpuacct *ca;
->> +	unsigned int cpu = task_cpu(tsk);
->>  
->>  	rcu_read_lock();
->>  
->>  	for (ca = task_ca(tsk); ca; ca = parent_ca(ca))
->> -		__this_cpu_add(*ca->cpuusage, cputime);
->> +		*per_cpu_ptr(ca->cpuusage, cpu) += cputime;
->>  
->>  	rcu_read_unlock();
->>  }
-> 
-> Also, while we there, what about this as an additional patch?
-> 
-> --- a/kernel/sched/cpuacct.c
-> +++ b/kernel/sched/cpuacct.c
-> @@ -334,15 +334,13 @@ static struct cftype files[] = {
->   */
->  void cpuacct_charge(struct task_struct *tsk, u64 cputime)
->  {
-> -	struct cpuacct *ca;
->  	unsigned int cpu = task_cpu(tsk);
-> +	struct cpuacct *ca;
->  
-> -	rcu_read_lock();
-> +	lockdep_assert_rq_held(cpu_rq(cpu));
->  
->  	for (ca = task_ca(tsk); ca; ca = parent_ca(ca))
->  		*per_cpu_ptr(ca->cpuusage, cpu) += cputime;
-> -
-> -	rcu_read_unlock();
->  }
->  
->  /*
+irqchip/versatile-fpga: Switch to dynamic chip name output
 
-This is much better, I will send an additional patch to include this.
+Move the name output to the relevant callback, which allows us
+some nice cleanups (mostly owing to the fact that the driver is
+now DT only.
 
-Thanks.
+We also drop a random include directive from the ftintc010 driver.
 
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20220209162607.1118325-8-maz@kernel.org
+---
+ drivers/irqchip/irq-ftintc010.c        |  1 +-
+ drivers/irqchip/irq-versatile-fpga.c   | 46 ++++++++++++++-----------
+ include/linux/irqchip/versatile-fpga.h | 14 +--------
+ 3 files changed, 26 insertions(+), 35 deletions(-)
+ delete mode 100644 include/linux/irqchip/versatile-fpga.h
+
+diff --git a/drivers/irqchip/irq-ftintc010.c b/drivers/irqchip/irq-ftintc010.c
+index 5cc2688..46a3aa6 100644
+--- a/drivers/irqchip/irq-ftintc010.c
++++ b/drivers/irqchip/irq-ftintc010.c
+@@ -11,7 +11,6 @@
+ #include <linux/irq.h>
+ #include <linux/io.h>
+ #include <linux/irqchip.h>
+-#include <linux/irqchip/versatile-fpga.h>
+ #include <linux/irqdomain.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+diff --git a/drivers/irqchip/irq-versatile-fpga.c b/drivers/irqchip/irq-versatile-fpga.c
+index f2757b6..ba543ed 100644
+--- a/drivers/irqchip/irq-versatile-fpga.c
++++ b/drivers/irqchip/irq-versatile-fpga.c
+@@ -7,12 +7,12 @@
+ #include <linux/io.h>
+ #include <linux/irqchip.h>
+ #include <linux/irqchip/chained_irq.h>
+-#include <linux/irqchip/versatile-fpga.h>
+ #include <linux/irqdomain.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
++#include <linux/seq_file.h>
+ 
+ #include <asm/exception.h>
+ #include <asm/mach/irq.h>
+@@ -34,14 +34,12 @@
+ /**
+  * struct fpga_irq_data - irq data container for the FPGA IRQ controller
+  * @base: memory offset in virtual memory
+- * @chip: chip container for this instance
+  * @domain: IRQ domain for this instance
+  * @valid: mask for valid IRQs on this controller
+  * @used_irqs: number of active IRQs on this controller
+  */
+ struct fpga_irq_data {
+ 	void __iomem *base;
+-	struct irq_chip chip;
+ 	u32 valid;
+ 	struct irq_domain *domain;
+ 	u8 used_irqs;
+@@ -67,6 +65,20 @@ static void fpga_irq_unmask(struct irq_data *d)
+ 	writel(mask, f->base + IRQ_ENABLE_SET);
+ }
+ 
++static void fpga_irq_print_chip(struct irq_data *d, struct seq_file *p)
++{
++	struct fpga_irq_data *f = irq_data_get_irq_chip_data(d);
++
++	seq_printf(p, irq_domain_get_of_node(f->domain)->name);
++}
++
++static const struct irq_chip fpga_chip = {
++	.irq_ack	= fpga_irq_mask,
++	.irq_mask	= fpga_irq_mask,
++	.irq_unmask	= fpga_irq_unmask,
++	.irq_print_chip	= fpga_irq_print_chip,
++};
++
+ static void fpga_irq_handle(struct irq_desc *desc)
+ {
+ 	struct irq_chip *chip = irq_desc_get_chip(desc);
+@@ -116,7 +128,7 @@ static int handle_one_fpga(struct fpga_irq_data *f, struct pt_regs *regs)
+  * Keep iterating over all registered FPGA IRQ controllers until there are
+  * no pending interrupts.
+  */
+-asmlinkage void __exception_irq_entry fpga_handle_irq(struct pt_regs *regs)
++static asmlinkage void __exception_irq_entry fpga_handle_irq(struct pt_regs *regs)
+ {
+ 	int i, handled;
+ 
+@@ -135,8 +147,7 @@ static int fpga_irqdomain_map(struct irq_domain *d, unsigned int irq,
+ 	if (!(f->valid & BIT(hwirq)))
+ 		return -EPERM;
+ 	irq_set_chip_data(irq, f);
+-	irq_set_chip_and_handler(irq, &f->chip,
+-				handle_level_irq);
++	irq_set_chip_and_handler(irq, &fpga_chip, handle_level_irq);
+ 	irq_set_probe(irq);
+ 	return 0;
+ }
+@@ -146,8 +157,8 @@ static const struct irq_domain_ops fpga_irqdomain_ops = {
+ 	.xlate = irq_domain_xlate_onetwocell,
+ };
+ 
+-void __init fpga_irq_init(void __iomem *base, const char *name, int irq_start,
+-			  int parent_irq, u32 valid, struct device_node *node)
++static void __init fpga_irq_init(void __iomem *base, int parent_irq,
++				 u32 valid, struct device_node *node)
+ {
+ 	struct fpga_irq_data *f;
+ 	int i;
+@@ -158,10 +169,6 @@ void __init fpga_irq_init(void __iomem *base, const char *name, int irq_start,
+ 	}
+ 	f = &fpga_irq_devices[fpga_irq_id];
+ 	f->base = base;
+-	f->chip.name = name;
+-	f->chip.irq_ack = fpga_irq_mask;
+-	f->chip.irq_mask = fpga_irq_mask;
+-	f->chip.irq_unmask = fpga_irq_unmask;
+ 	f->valid = valid;
+ 
+ 	if (parent_irq != -1) {
+@@ -169,20 +176,19 @@ void __init fpga_irq_init(void __iomem *base, const char *name, int irq_start,
+ 						 f);
+ 	}
+ 
+-	/* This will also allocate irq descriptors */
+-	f->domain = irq_domain_add_simple(node, fls(valid), irq_start,
++	f->domain = irq_domain_add_linear(node, fls(valid),
+ 					  &fpga_irqdomain_ops, f);
+ 
+ 	/* This will allocate all valid descriptors in the linear case */
+ 	for (i = 0; i < fls(valid); i++)
+ 		if (valid & BIT(i)) {
+-			if (!irq_start)
+-				irq_create_mapping(f->domain, i);
++			/* Is this still required? */
++			irq_create_mapping(f->domain, i);
+ 			f->used_irqs++;
+ 		}
+ 
+ 	pr_info("FPGA IRQ chip %d \"%s\" @ %p, %u irqs",
+-		fpga_irq_id, name, base, f->used_irqs);
++		fpga_irq_id, node->name, base, f->used_irqs);
+ 	if (parent_irq != -1)
+ 		pr_cont(", parent IRQ: %d\n", parent_irq);
+ 	else
+@@ -192,8 +198,8 @@ void __init fpga_irq_init(void __iomem *base, const char *name, int irq_start,
+ }
+ 
+ #ifdef CONFIG_OF
+-int __init fpga_irq_of_init(struct device_node *node,
+-			    struct device_node *parent)
++static int __init fpga_irq_of_init(struct device_node *node,
++				   struct device_node *parent)
+ {
+ 	void __iomem *base;
+ 	u32 clear_mask;
+@@ -222,7 +228,7 @@ int __init fpga_irq_of_init(struct device_node *node,
+ 		parent_irq = -1;
+ 	}
+ 
+-	fpga_irq_init(base, node->name, 0, parent_irq, valid_mask, node);
++	fpga_irq_init(base, parent_irq, valid_mask, node);
+ 
+ 	/*
+ 	 * On Versatile AB/PB, some secondary interrupts have a direct
+diff --git a/include/linux/irqchip/versatile-fpga.h b/include/linux/irqchip/versatile-fpga.h
+deleted file mode 100644
+index a978fc8..0000000
+--- a/include/linux/irqchip/versatile-fpga.h
++++ /dev/null
+@@ -1,14 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef PLAT_FPGA_IRQ_H
+-#define PLAT_FPGA_IRQ_H
+-
+-struct device_node;
+-struct pt_regs;
+-
+-void fpga_handle_irq(struct pt_regs *regs);
+-void fpga_irq_init(void __iomem *, const char *, int, int, u32,
+-		struct device_node *node);
+-int fpga_irq_of_init(struct device_node *node,
+-		     struct device_node *parent);
+-
+-#endif

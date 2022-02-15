@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D2824B6307
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 06:45:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBAC4B630D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 06:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234168AbiBOFpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 00:45:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55464 "EHLO
+        id S234185AbiBOFru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 00:47:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232208AbiBOFp3 (ORCPT
+        with ESMTP id S229741AbiBOFrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 00:45:29 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CF770F5A;
-        Mon, 14 Feb 2022 21:45:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644903920; x=1676439920;
-  h=message-id:date:mime-version:subject:to:cc:references:
+        Tue, 15 Feb 2022 00:47:49 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E680665D6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 21:47:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644904059; x=1676440059;
+  h=message-id:date:mime-version:cc:subject:to:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=Ombo381yTECr2++CC6IrhFb5/8w8RFX970kix5v4qaQ=;
-  b=Jy7QQJRdQlc6mJ+M0+R9pbVfj9ONMWOQGC/c9bQWPBCVKM7R1qd8ANuc
-   HZCyXn6Oy99GsXHRT/rWXCbP/S2+TcCJEvUHPxeL++kx6O3xckuzdfR7y
-   UpPe4QwLGeJ1dh1gkSX8Dqu/QeC50oifzIo2D8cCPbe4kLteEZN+yh0ax
-   k=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 14 Feb 2022 21:45:20 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 21:45:19 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Mon, 14 Feb 2022 21:45:19 -0800
-Received: from [10.216.16.231] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 14 Feb
- 2022 21:45:16 -0800
-Message-ID: <151d2942-7b47-8d5c-8caa-3b88895b2abf@quicinc.com>
-Date:   Tue, 15 Feb 2022 11:15:13 +0530
+  bh=FB4ZrG+H6kHcJlMBI4utm8Pv+AllaomNjuD3vYEkBkw=;
+  b=nRC0zS16r33xIh/169umun5mIqiiN9N/M/cVFn2XYgON4cTXmrIc4OxU
+   qN6mSI0i4JyaBeaZYRQetxJpQ1Kq7MXAXSdVN01DvpfaGT06d6ROiIeRG
+   jf+FDPRp9dRcUnETECT/iVZsWCZ7iqt1R264PGSWeAljdGcWv1XUyQBr9
+   5ykGyqrrqbUmDaDvAhhwhtP8Mb8lpgWwcmBXE4uCF0mGWhsuSDcp/o2PA
+   VbzqXgRCklI3lNFeXTeBaP0OOZm8L3YvwsD42UdovUg8O768hzXqcsSrj
+   s+UAOnLbA/6lT9CvlvT1qmmhuWopEksDdX3mnzAFlVcyy1uHIp97D+R8Q
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="313529375"
+X-IronPort-AV: E=Sophos;i="5.88,369,1635231600"; 
+   d="scan'208";a="313529375"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 21:47:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,369,1635231600"; 
+   d="scan'208";a="680850350"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Feb 2022 21:47:36 -0800
+Message-ID: <b8420944-03ec-e426-e1fa-789b17604686@linux.intel.com>
+Date:   Tue, 15 Feb 2022 13:46:18 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 4/8] clk: qcom: Add A7 PLL support for SDX65
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Liu Yi L <yi.l.liu@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 10/11] iommu/vt-d: Use xarray for global
+ device_domain_info
 Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1644821987-27343-1-git-send-email-quic_rohiagar@quicinc.com>
- <20220214084214.GD3494@thinkpad>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <20220214084214.GD3494@thinkpad>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <20220214025704.3184654-1-baolu.lu@linux.intel.com>
+ <20220214025704.3184654-11-baolu.lu@linux.intel.com>
+ <20220214140038.GB4160@nvidia.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <20220214140038.GB4160@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,64 +71,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jason,
 
-On 2/14/2022 2:12 PM, Manivannan Sadhasivam wrote:
-> On Mon, Feb 14, 2022 at 12:29:47PM +0530, Rohit Agarwal wrote:
->> Add support for PLL found in Qualcomm SDX65 platforms which is used to
->> provide clock to the Cortex A7 CPU via a mux. This PLL can provide high
->> frequency clock to the CPU above 1GHz as compared to the other sources
->> like GPLL0.
->>
->> In this driver, the power domain is attached to the cpudev. This is
->> required for CPUFreq functionality and there seems to be no better place
->> to do other than this driver (no dedicated CPUFreq driver).
->>
->> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->> ---
->>   drivers/clk/qcom/Kconfig  | 6 +++---
->>   drivers/clk/qcom/a7-pll.c | 1 +
->>   2 files changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
->> index 6cd0634..1904ba1 100644
->> --- a/drivers/clk/qcom/Kconfig
->> +++ b/drivers/clk/qcom/Kconfig
->> @@ -29,11 +29,11 @@ config QCOM_A53PLL
->>   	  devices.
+On 2/14/22 10:00 PM, Jason Gunthorpe wrote:
+>> +
+>> +/* Convert device source ID into the index of device_domain_array. */
+>> +static inline unsigned long devi_idx(unsigned long seg, u8 bus, u8 devfn)
+>> +{
+>> +	return (seg << 16) | PCI_DEVID(bus, devfn);
+>> +}
 >>   
->>   config QCOM_A7PLL
->> -	tristate "SDX55 A7 PLL"
->> +	tristate "SDX55 like A7 PLL"
-> A7 PLL driver for SDX55 and SDX65
-Will do.
->
->>   	help
->> -	  Support for the A7 PLL on SDX55 devices. It provides the CPU with
->> +	  Support for the A7 PLL on SDX55 like devices. It provides the CPU with
->>   	  frequencies above 1GHz.
->> -	  Say Y if you want to support higher CPU frequencies on SDX55
->> +	  Say Y if you want to support higher CPU frequencies on SDX55 like
-> Say Y if you want to support higher CPU frequencies on devices such as SDX55 and
-> SDX65.
-Will do.
-> Thanks,
-> Mani
->
->>   	  devices.
+>>   /*
+>> - * Iterate over elements in device_domain_list and call the specified
+>> + * Iterate over elements in device_domain_array and call the specified
+>>    * callback @fn against each element.
+>>    */
+>>   int for_each_device_domain(int (*fn)(struct device_domain_info *info,
+>>   				     void *data), void *data)
+>>   {
+>> -	int ret = 0;
+>> -	unsigned long flags;
+>>   	struct device_domain_info *info;
+>> +	unsigned long index;
+>> +	int ret = 0;
 >>   
->>   config QCOM_CLK_APCS_MSM8916
->> diff --git a/drivers/clk/qcom/a7-pll.c b/drivers/clk/qcom/a7-pll.c
->> index c4a53e5..adb2121 100644
->> --- a/drivers/clk/qcom/a7-pll.c
->> +++ b/drivers/clk/qcom/a7-pll.c
->> @@ -84,6 +84,7 @@ static int qcom_a7pll_probe(struct platform_device *pdev)
->>   
->>   static const struct of_device_id qcom_a7pll_match_table[] = {
->>   	{ .compatible = "qcom,sdx55-a7pll" },
->> +	{ .compatible = "qcom,sdx65-a7pll" },
->>   	{ }
->>   };
->>   MODULE_DEVICE_TABLE(of, qcom_a7pll_match_table);
->> -- 
->> 2.7.4
->>
+>> -	spin_lock_irqsave(&device_domain_lock, flags);
+>> -	list_for_each_entry(info, &device_domain_list, global) {
+>> +	rcu_read_lock();
+>> +	xa_for_each(&device_domain_array, index, info) {
+>>   		ret = fn(info, data);
+>> -		if (ret) {
+>> -			spin_unlock_irqrestore(&device_domain_lock, flags);
+>> -			return ret;
+>> -		}
+>> +		if (ret)
+>> +			break;
+> And you probably shouldn't try to use RCU. It is really unclear how
+> this function can be useful while racing against
+> intel_iommu_release_device(), eg today the only user of this function
+> does:
+> 
+> static int search_pasid_table(struct device_domain_info *info, void *opaque)
+> {
+> 	struct pasid_table_opaque *data = opaque;
+> 
+> 	if (info->iommu->segment == data->segment &&
+> 	    info->bus == data->bus &&
+> 	    info->devfn == data->devfn &&
+> 
+> And even if you kfree_rcu(info) then 'info->iommu->' is still racy
+> unlocked.
+> 
+> RCU is complicated to use, it is not just a drop in replacement for a
+> spinlock.
+
+Thanks for your comments. I am going to stop this patch (and the next
+11/11) and spend more time figuring them out.
+
+Best regards,
+baolu

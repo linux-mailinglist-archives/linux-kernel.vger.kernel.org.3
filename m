@@ -2,96 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49DAA4B67A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8C64B67A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:33:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235899AbiBOJcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:32:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34020 "EHLO
+        id S235933AbiBOJdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:33:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235916AbiBOJcc (ORCPT
+        with ESMTP id S232294AbiBOJdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:32:32 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F236AA007
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:32:22 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 2CE86210DC;
-        Tue, 15 Feb 2022 09:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1644917541; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KYdGeFsANOtOABOCKg2n5btFGKH4PKRKWZczmP67Y4c=;
-        b=Fre+2KMos1Xt+rzKEa0yiIruHha9K585218YxzHlAprj3wPnd0UmAjNDO0DHnOvj8I85EA
-        8qWBQ1+65aI05croPjluXpbDyoll3bC7Hs4+mQpwSmwWUif6BvnvediTZJTFwLVB7+EflY
-        v+3muQf3MguEBQ5s+V4KTIjsqnksXqU=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 148E0A3B85;
-        Tue, 15 Feb 2022 09:32:21 +0000 (UTC)
-Date:   Tue, 15 Feb 2022 10:32:20 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marco Elver <elver@google.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Alexander Potapenko <glider@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH printk v1 01/13] printk: rename cpulock functions
-Message-ID: <YgtzJPa7XJ5Ozdhf@alley>
-References: <20220207194323.273637-1-john.ogness@linutronix.de>
- <20220207194323.273637-2-john.ogness@linutronix.de>
- <YgZaMkUU5Ve2GV9D@alley>
- <87fsopcvnj.fsf@jogness.linutronix.de>
- <20220211155727.49ab86f5@gandalf.local.home>
- <YgbPcAHgC1FLRXdR@hirez.programming.kicks-ass.net>
+        Tue, 15 Feb 2022 04:33:08 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA39AD11E;
+        Tue, 15 Feb 2022 01:32:58 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JybPH4r5zzZfQ2;
+        Tue, 15 Feb 2022 17:28:35 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 15 Feb 2022 17:32:56 +0800
+Received: from [10.174.179.5] (10.174.179.5) by dggpemm500002.china.huawei.com
+ (7.185.36.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 15 Feb
+ 2022 17:32:55 +0800
+Subject: Re: [RFC PATCH] blk-mq: avoid housekeeping CPUs scheduling a worker
+ on a non-housekeeping CPU
+To:     Ming Lei <ming.lei@redhat.com>
+CC:     <axboe@kernel.dk>, <hch@lst.de>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yuyufen@huawei.com>,
+        <guohanjun@huawei.com>
+References: <20220210093532.182818-1-wangxiongfeng2@huawei.com>
+ <881ae7a8-5dff-ff50-9bc2-a983b6a53c30@huawei.com> <Ygst7R+X7u2OBgUW@T590>
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Message-ID: <ccaf5c9b-bede-a3d9-fbc2-b26ab1c94143@huawei.com>
+Date:   Tue, 15 Feb 2022 17:32:54 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgbPcAHgC1FLRXdR@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Ygst7R+X7u2OBgUW@T590>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.5]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2022-02-11 22:04:48, Peter Zijlstra wrote:
-> On Fri, Feb 11, 2022 at 03:57:27PM -0500, Steven Rostedt wrote:
-> > On Fri, 11 Feb 2022 15:48:08 +0106
-> > John Ogness <john.ogness@linutronix.de> wrote:
-> > 
-> > > It is because (as in the example above), taking this "lock" does not
-> > > provide synchronization to data. It is only synchronizing between
-> > > CPUs. It was Steven's suggestion to call the thing a cpu_sync object and
-> > > nobody in the RT Track seemed to disagree.
-> > 
-> > I love causing trouble ;-)
-> > 
-> > Actually, it wasn't just my suggestion. IIRC, I believe Peter Zijlstra was
-> > against calling it a lock (Peter, you can use lore to see the context here).
+Hi Ming,
+
+Thanks for your reply !
+
+On 2022/2/15 12:37, Ming Lei wrote:
+> Hello Xiongfeng,
 > 
-> All I remember is that it was in a room and I was late, I can't even
-> remember what City we were all in at the time. Was this Lisbon?
+> On Tue, Feb 15, 2022 at 10:29:51AM +0800, Xiongfeng Wang wrote:
+>> Hi Ming,
+>>
+>> Sorry to disturb you. It's just that I think you may be interested at this
+>> patch. I found the following commit written by you.
+>>   commit 11ea68f553e244851d15793a7fa33a97c46d8271
+>>   genirq, sched/isolation: Isolate from handling managed interrupts
+>> It removed the managed_irq interruption from non-housekeeping CPUs as long as
+>> the non-housekeeping CPUs do not request IO. But the the work thread
+>> blk_mq_run_work_fn() may still run on the non-housekeeping CPUs.
+>> Appreciate it a lot if you can give it a look.
 > 
-> Anyway, as Steve said, it isn't really a strict exclusion thing, it only
-> avoids the most egregious inter-cpu interleaving. I'm down with
-> goldi-locks, something has to have that name :-)
+> Yeah, commit 11ea68f553e24 touches irq subsystem to try not assign
+> isolated cpus for managed irq's effective affinity.
+> 
+> Here blk-mq just selects one cpu and calls mod_delayed_work_on()
+> to execute the run queue handler on specified cpu. There are lots of
+> such bound wq usage in tree, so I guess it might belong to one wq or
+> scheduler generic problem instead of blk-mq specific issue. Not sure
+> if it is good to address it in block layer.
 
-You troublemakers :-)
+Yes, I also find some other worker thread running on the non-housekeeping CPUs.
+Some of them need to read the per-cpu data, such as drain_local_pages_wq(). But
+workqueue subsystem doesn't know if the work threads read any per-cpu data and
+can be migrated to another CPU.
 
-OK, I know, I am the troublemaker here.
+For the workqueue marked as WQ_UNBOUND, the following commit can move the worker
+threads to the housekeeping CPUs.
+    commit 1bda3f8087fce9063da0b8aef87f17a3fe541aca
+    sched/isolation: Isolate workqueues when "nohz_full=" is set
+But for the workqueue without flag WQ_UNBOUND, workqueue subsystem doesn't know
+if the worker threads can be migrated to another CPU.
 
-Best Regards,
-Petr
+So I think maybe the subsystem who create the workqueue can decide whether the
+worker threads can be migrated.
+
+Thanks,
+Xiongfeng
+
+> 
+> thanks,
+> Ming
+> 
+>>
+>> Thanks,
+>> Xiongfeng
+>>
+>> On 2022/2/10 17:35, Xiongfeng Wang wrote:
+>>> When NOHZ_FULL is enabled, such as in HPC situation, CPUs are divided
+>>> into housekeeping CPUs and non-housekeeping CPUs. Non-housekeeping CPUs
+>>> are NOHZ_FULL CPUs and are often monopolized by the userspace process,
+>>> such HPC application process. Any sort of interruption is not expected.
+>>>
+>>> blk_mq_hctx_next_cpu() selects each cpu in 'hctx->cpumask' alternately
+>>> to schedule the work thread blk_mq_run_work_fn(). When 'hctx->cpumask'
+>>> contains housekeeping CPU and non-housekeeping CPU at the same time, a
+>>> housekeeping CPU, which want to request a IO, may schedule a worker on a
+>>> non-housekeeping CPU. This may affect the performance of the userspace
+>>> application running on non-housekeeping CPUs.
+>>>
+>>> So let's just schedule the worker thread on the current CPU when the
+>>> current CPU is housekeeping CPU.
+>>>
+>>> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+>>> ---
+>>>  block/blk-mq.c | 15 ++++++++++++++-
+>>>  1 file changed, 14 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/block/blk-mq.c b/block/blk-mq.c
+>>> index 1adfe4824ef5..ff9a4bf16858 100644
+>>> --- a/block/blk-mq.c
+>>> +++ b/block/blk-mq.c
+>>> @@ -24,6 +24,7 @@
+>>>  #include <linux/sched/sysctl.h>
+>>>  #include <linux/sched/topology.h>
+>>>  #include <linux/sched/signal.h>
+>>> +#include <linux/sched/isolation.h>
+>>>  #include <linux/delay.h>
+>>>  #include <linux/crash_dump.h>
+>>>  #include <linux/prefetch.h>
+>>> @@ -2036,6 +2037,8 @@ static int blk_mq_hctx_next_cpu(struct blk_mq_hw_ctx *hctx)
+>>>  static void __blk_mq_delay_run_hw_queue(struct blk_mq_hw_ctx *hctx, bool async,
+>>>  					unsigned long msecs)
+>>>  {
+>>> +	int work_cpu;
+>>> +
+>>>  	if (unlikely(blk_mq_hctx_stopped(hctx)))
+>>>  		return;
+>>>  
+>>> @@ -2050,7 +2053,17 @@ static void __blk_mq_delay_run_hw_queue(struct blk_mq_hw_ctx *hctx, bool async,
+>>>  		put_cpu();
+>>>  	}
+>>>  
+>>> -	kblockd_mod_delayed_work_on(blk_mq_hctx_next_cpu(hctx), &hctx->run_work,
+>>> +	/*
+>>> +	 * Avoid housekeeping CPUs scheduling a worker on a non-housekeeping
+>>> +	 * CPU
+>>> +	 */
+>>> +	if (tick_nohz_full_enabled() && housekeeping_cpu(smp_processor_id(),
+>>> +							 HK_FLAG_WQ))
+>>> +		work_cpu = smp_processor_id();
+>>> +	else
+>>> +		work_cpu = blk_mq_hctx_next_cpu(hctx);
+>>> +
+>>> +	kblockd_mod_delayed_work_on(work_cpu, &hctx->run_work,
+>>>  				    msecs_to_jiffies(msecs));
+>>>  }
+>>>  
+>>>
+>>
+> 

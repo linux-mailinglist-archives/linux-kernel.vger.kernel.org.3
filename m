@@ -2,98 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373C74B79A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A36C4B79DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243389AbiBOVXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 16:23:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45758 "EHLO
+        id S244347AbiBOVYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 16:24:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239244AbiBOVXV (ORCPT
+        with ESMTP id S238383AbiBOVYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 16:23:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7ECDB84D
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:23:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93E9B61917
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 21:23:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D1CEC340EB;
-        Tue, 15 Feb 2022 21:23:09 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="m8HIgyBa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644960188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BBa9wueJoGb7LxuMzbvrV62ilts8LkBCNQfxIqDAz2s=;
-        b=m8HIgyBalfmKrwyVHWHZVY/qWQW9jNtjaj4jJY43LvVEakS6gV2vbr84BHwcM70hQQMTpp
-        DJvLkiU5z8veBKfa1a8kkLSxoEtGtjMLHZY2BtYaN+AYjbhEFj82BRTRYfujrfWZ/I1IE/
-        M96uJ7Kbn27f+I1+4tikCSKPXwAMifg=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c92f5e54 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 15 Feb 2022 21:23:08 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, bigeasy@linutronix.de,
-        linux@dominikbrodowski.net, sultan@kerneltoast.com
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: [PATCH v4 2/2] random: invalidate crngs and batches in cpuhp prepare
-Date:   Tue, 15 Feb 2022 22:22:55 +0100
-Message-Id: <20220215212255.273253-3-Jason@zx2c4.com>
-In-Reply-To: <20220215212255.273253-1-Jason@zx2c4.com>
-References: <20220215212255.273253-1-Jason@zx2c4.com>
+        Tue, 15 Feb 2022 16:24:00 -0500
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64779E61D6;
+        Tue, 15 Feb 2022 13:23:49 -0800 (PST)
+Received: by mail-pj1-f50.google.com with SMTP id a11-20020a17090a740b00b001b8b506c42fso4396934pjg.0;
+        Tue, 15 Feb 2022 13:23:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qLbBvFVC577ibqj3b5u8NA+u/tqGnpQje7r8Bqpw0jQ=;
+        b=RP7AYWH+B6sgAmrvH3TeuIJipTlj3rfZnKvgzYEinJ92wPCxGcJHTo+XFWartszUP+
+         a1DB3Kfqsjp5Ve7OCw1tWDb7k8YBDiQqk5Bj0buZD5p8SjRiIk/xyWLUrBBj0a8QgfDU
+         5H7rP9LTBKtQ5zdQfZccdJYbsFutvJEhYXEyfWqxQ9ti5k8W8SLHInr6mXhipmLPDN+V
+         vEZEq1xxcAy7b/Xi8YFtWU/R5NnFsCwGYFDp2ga56n4kxBPy2CpBKUb2H6Bimy/UjUol
+         bR8poaW/1HtA4TKwHVHErgbnObKsJrsZn6qywH7VBLw13DdJG9kK8NZop1GuaW6wwDG2
+         9HOg==
+X-Gm-Message-State: AOAM530YO46fuFJbLr7Gx++uzaYzoAG20VR0faC6JvcjJGX3UOd3JsmA
+        QDG2Q1R8zxNmgV8JD/m3hy0=
+X-Google-Smtp-Source: ABdhPJyXyPE8wHBIybkMAui490IDkz5GW+uKQmy+kw6bryVQjCpYwAkIB+67yW7npKmMzZJbTESv7w==
+X-Received: by 2002:a17:902:e74b:: with SMTP id p11mr642867plf.115.1644960228705;
+        Tue, 15 Feb 2022 13:23:48 -0800 (PST)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id pc18sm7701980pjb.9.2022.02.15.13.23.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 13:23:47 -0800 (PST)
+Message-ID: <517dddb8-efd6-6b1a-fa1b-eba6f2c93119@acm.org>
+Date:   Tue, 15 Feb 2022 13:23:46 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [RFC V2 1/6] blk: make blk-rq-qos support pluggable and modular
+ policy
+Content-Language: en-US
+To:     "Wang Jianchao (Kuaishou)" <jianchao.wan9@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     hch@infradead.org, Josef Bacik <jbacik@fb.com>,
+        Tejun Heo <tj@kernel.org>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220215123705.58968-1-jianchao.wan9@gmail.com>
+ <20220215123705.58968-2-jianchao.wan9@gmail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220215123705.58968-2-jianchao.wan9@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that we have a cpuhp prepare notifier, we can invalidate the keys
-used by the per-cpu crngs and the batches used by per-cpu batched
-entropy, so that if the cpus come back online, and the generation
-counter happens to have cycled all the way around to where it was
-before, it doesn't mistakenly use the old data. The chances of this
-happening are exceedingly rare, but since we now have the notifier
-setup, doing this is basically free.
+On 2/15/22 04:37, Wang Jianchao (Kuaishou) wrote:
+> @@ -337,6 +338,7 @@ void blk_cleanup_queue(struct request_queue *q)
+>   	 * it is safe to free requests now.
+>   	 */
+>   	mutex_lock(&q->sysfs_lock);
+> +	rq_qos_exit(q);
+>   	if (q->elevator)
+>   		blk_mq_sched_free_rqs(q);
+>   	mutex_unlock(&q->sysfs_lock);
 
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Sultan Alsawaf <sultan@kerneltoast.com>
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+I think this change should be a separate patch with tag "Fixes: 
+8e141f9eb803 ("block: drain file system I/O on del_gendisk")". See also 
+https://lore.kernel.org/linux-block/b64942a1-0f7e-9e9c-0fd4-c35647035eaf@acm.org/
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index a3cc147406b0..41188a49d43e 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1233,6 +1233,14 @@ int random_prepare_cpu(unsigned int cpu)
- 	 * since the MIX_INFLIGHT flag will be cleared.
- 	 */
- 	per_cpu_ptr(&irq_randomness, cpu)->count = 0;
-+
-+	/*
-+	 * We also want to invalidate per-cpu crngs and batches, so
-+	 * that we always use fresh entropy.
-+	 */
-+	per_cpu_ptr(&crngs, cpu)->generation = ULONG_MAX;
-+	per_cpu_ptr(&batched_entropy_u32, cpu)->position = UINT_MAX;
-+	per_cpu_ptr(&batched_entropy_u64, cpu)->position = UINT_MAX;
- 	return 0;
- }
- #endif
--- 
-2.35.0
+Thanks,
 
+Bart.

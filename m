@@ -2,160 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC29D4B6646
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B744B664B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234305AbiBOIiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 03:38:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55922 "EHLO
+        id S234372AbiBOIjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 03:39:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231600AbiBOIiI (ORCPT
+        with ESMTP id S233297AbiBOIjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 03:38:08 -0500
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2055.outbound.protection.outlook.com [40.107.113.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50036EA343
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 00:37:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RhoXP5PDT8d/Po1gI7lQ3MfcFgFbfHM0toqnvLCiHfNHThZ41f+J1W604VJwt55qOkHpI0g2fJ9NxyMY39iaPhaZ0b6bMLcLacClus1gTy4LvNK9aizuFuGzSvtlgGg3UrxP27uwRuDdvsmbITGyAr6Ql9b2001zWTAq/QQUvLoc9A0sVllIt5aDeu6huyCyW7H4E2cPqRiTr57cD70ehOh3RZbQwTurAXLVpXPR4IPQC6DxTo+p9m6NyjrSIaG6bdodjSZg9VjLKJqEnx/kMOf24yD4YAN/9loJKYq6X2SrJjlXZ8oko4VSJ/oL6BVoWfBGGFvhp7aF3xeDKIwWqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3age2PU8/OW6Unf3IlGtHMnMS+PPg5JW2BmgE+McwC8=;
- b=UClgZtt8K7hd7PhLpoRGoWLfBPw8qOM+ZsqwMiMO3U++DQmvEIUh1A5qu+kr4YFhatOArhUE33HrEKeX1nAvmA6bVxZPAEok1J2tgC9Idz7fJaxQYhMTmSK6sLqM5qR8vTKyDKOSU+DBjZSSGQcLJJOj7kILStd0reMDQIVEYoJ91fHoauAl0E5sOT9J+VhzJeImhdW33EGf9W/UUkZzMz0RaNhfq/lDv7Safvr3NGQtbJD1cVTUPcwqyFjWoB4IPt0uWkMq4xYF0uZHkBju0NCc8yu3m4Q1a8c4qQkrj5bxwFgYnbXye4TKLz3fsc/LT7NKwMoL971QKMVvJC/EXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3age2PU8/OW6Unf3IlGtHMnMS+PPg5JW2BmgE+McwC8=;
- b=Ch/OMKLW/d/ONaNr7pmbLSkIbpKxsHAU2ON5EjrbRUPw+0hdQmJdJ8KqCh7t7Y5AhDrpD/R+/GmVeKdUNQzBUSL4xxMgWSl2MrAA5H/b72/j4BeMFAw0QOsYCGLwklqbmFeL3LSIuTRIqOZTKty3ZTdhLrVP5f44J3wkL4aRaCk=
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
- by TYCPR01MB8251.jpnprd01.prod.outlook.com (2603:1096:400:104::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.15; Tue, 15 Feb
- 2022 08:37:56 +0000
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::7c3a:9153:8e79:6a9b]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::7c3a:9153:8e79:6a9b%4]) with mapi id 15.20.4975.019; Tue, 15 Feb 2022
- 08:37:56 +0000
-From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
-        <naoya.horiguchi@nec.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-CC:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/8] mm/memory-failure.c: avoid walking page table when
- vma_address() return -EFAULT
-Thread-Topic: [PATCH 2/8] mm/memory-failure.c: avoid walking page table when
- vma_address() return -EFAULT
-Thread-Index: AQHYIhVedAER3YKqlUy29jDjivEPIqyUSnyA
-Date:   Tue, 15 Feb 2022 08:37:56 +0000
-Message-ID: <20220215083755.GA2001565@hori.linux.bs1.fc.nec.co.jp>
-References: <20220210141733.1908-1-linmiaohe@huawei.com>
- <20220210141733.1908-3-linmiaohe@huawei.com> <20220214144826.GB2624914@u2004>
- <1c464c41-81f4-fff9-c4e0-45fd4d05e34b@huawei.com>
-In-Reply-To: <1c464c41-81f4-fff9-c4e0-45fd4d05e34b@huawei.com>
-Accept-Language: ja-JP, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nec.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 69f9e92c-53e0-44f0-c02a-08d9f05e7716
-x-ms-traffictypediagnostic: TYCPR01MB8251:EE_
-x-microsoft-antispam-prvs: <TYCPR01MB82517FACD0A951C25A3B1494E7349@TYCPR01MB8251.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2449;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: qxJ+NifqF+7+ihkxbtxFpqse7YSufKOBrRnmj9le4qspCrwI6HMOlyqSrXBE9NoHm0t6YL9jQDUUAXnz8C14rsRqCj8kdma5CFhud9q4qOHnU8BLwBB42gzaSwEcVUETPkqS9fzHTFsTXUtE6MOQpDZvo+4RFJfr7lEabvMzISeWfpfk3M6wC+n/wCjJVXUS/sIpQ5axoKk8RkYEgcayB6eZq87S5hZoOI88FK5Dy4jVVuw145mMPX2HFlBYZ3m/P+RgcH96P6fRTvht71303AFt83sP883mCZW5scRh7e+9AoWOd2txbJhVDGpEIBoLVW3wPJzlV3j0UYpv4l2lv1C6WXiSxy8tiGYKLd/0FnSTC6Xd7KfMS2nvIVUeRhisYt+kb9W5TRQE+BgFyLxN1gFK6tcHHvP9C3EgzYvK/eteuVVhZx1lYUvW/rz0WQoyDRzZcX7Pxi13FmRI3yDd0w0ZiN3YjaTG1CvVfB0cvnF71ObHVNKnc8Auk+HGy1hqOq13WvFatTwS82e0HenwpBp+TTuxFefmjh0TJNMw0vKtKjxzfoK5M1ueKOsHx9KaLVUWByswvqBNaauT26MqoevAFE8AqyXi0d7XfYFWBbUA9lbCvvle5pcYlGRuxxuIbsxoD2Wwrl3PHc+ALJXOFqQR2TeCohl7BDPNpx+f8gqL6ttqEoZZ74WDE5b2rdUZoYd1m9T1BumomUBP7eqOrA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8676002)(66946007)(66446008)(186003)(66476007)(66556008)(64756008)(38070700005)(76116006)(4326008)(53546011)(86362001)(71200400001)(55236004)(6506007)(6486002)(508600001)(6512007)(26005)(1076003)(54906003)(6916009)(9686003)(316002)(82960400001)(2906002)(122000001)(85182001)(5660300002)(8936002)(33656002)(38100700002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bHNGUHJQSnpyT0xQejMwdGhDWnFTOFBONDIzcFhsQmMyNndBMGlWVnl6UFJQ?=
- =?utf-8?B?bEdWUE95dGVja2oxVDMwTlNZT3lKNXlQdldWNmZ5T2NWazRvNkRYVEgwc2F4?=
- =?utf-8?B?QzJjS0daZ3VNQ2xGazAyN2tRZzhERTQxaXFxQW1zZXp1clM5NmIxbzJWbTBi?=
- =?utf-8?B?aHNEdjB4YTQrYTVtUFI2Ujh6eWk1bEZPRis1dXova0NFeHNjc3diUTRHNEhK?=
- =?utf-8?B?d0U0d1hLZjBDT0QzVmNjZFFLNjl2S0JVV1VIa1Z6UWx2cVFicURlZ294TWRC?=
- =?utf-8?B?SGhMcnZMS0c1ZWFRVGJUTXpPQ2xuT1VQMEdwd0ZQanBnWi9leEZBZVJuR3hV?=
- =?utf-8?B?UFhoUHdiRlRPNjAyN0YwdzdQTW9vN3FuOHRuVnlVaHgrZENHUGNpZ3Q1Wngr?=
- =?utf-8?B?NHBab0Z0YjIwYm43bEo1ekUrbFRHeXVSM2M1b2pPVC80VWRhWXVqWkJLYnJ6?=
- =?utf-8?B?RFhlYnpWbGZGTU9LckVsRXpFWUg1bkhnY0huQjcyeGlseWIrMUlKQzdIWkN5?=
- =?utf-8?B?K1IwM01QTTlpV1l0Y1pxbFJUY3NJeWpCaUs0VmFiK1hrRUtvSHp6SCtnbE5D?=
- =?utf-8?B?QUwyWW1ZaWd1eitWMFBvaXlhUlkzcnhDWTM0RUp5MjVlUWRTVnZKZTliQ1J4?=
- =?utf-8?B?NGpTUHJGSXM0UzdWYzVsSFNhSzY4aWtvajNMSkQ5TWkvZnpiUmZ5MXY4WGNt?=
- =?utf-8?B?OU9TWkpyVHhIelpWNlI4dkZ3YlYxcWI2eW5xamJxUDJtOEZUK3pJVDhldXNQ?=
- =?utf-8?B?V0VoQVhtL2tqYWVjVEE0QWRaUTRabDl1M2thUEFiamJTTHU5Wmt0STVoUnZ2?=
- =?utf-8?B?bHdzcUpWNlVKWmpkUkFDRkNlbkl6ZXN5Mk1sMEp6TUpqVWgwT3NvNTBrQmda?=
- =?utf-8?B?YkNkQWRGY1JNbGtSZFprSTJaTWVsYVJBZk1QL0RVMDZ4SW5HN0paMS9mRGk2?=
- =?utf-8?B?Qm45M09XekZlU0RwWjRHb2U1alY0WXdkRnh0ZHRKS05id1ZDODZGazVBK2Iy?=
- =?utf-8?B?clBzaiszTWptaWdHMjBMT2hWaEhnTW9OU2dhUjArWlJCYnowTHpLK3EwN0RR?=
- =?utf-8?B?a3kwOHRKYTUzcjlZWllRd3hSWVppQ0ljRFU4WUhEWDV0TkJLeThrdy9OejdH?=
- =?utf-8?B?TUhhVnBlcyt2bU8xUDhlbkhWWC9Zb1BlcUJ0YXBRUnF1UWE3dUtXUWFZcnM0?=
- =?utf-8?B?UXNuRUdFWUlXY252S2RGR3FUUzN1VFNUTFFKWjlLN3llRGJONWw4VzZuOW5R?=
- =?utf-8?B?alFoZEpueGhGUFA1OWJDQ2dlM241THFHN055UWxCV2tqMkR5MVFMeUJJbm51?=
- =?utf-8?B?azRmQ3MxRlBiOFlIeVBVdW5uaU9xZWUrdndWOHBIQnBGb2xaRUVYQWtpQ2Ny?=
- =?utf-8?B?SHJ3THdoZDlkdWE2SHFTdS9NS1Q4Q1ZSUUpSMXVwU0Q2cStNY3k4U3ZiNzE0?=
- =?utf-8?B?ZUNkd2I4Njcvbko5Q0d2eHFNeVlieFhia2JFU0wwZFpXelRrYnJ1NnZURm0x?=
- =?utf-8?B?M2V0YmUxc0lUblVMejNzMUExMlZBcitnNHpZTEhTSmp5eDg4SUtYUFlSRXRG?=
- =?utf-8?B?SE1NODc0RG9MazFkVk1SSXZYc0xrMUlmaURKd2Qxc1I3SFp2alZPOVZPd2E0?=
- =?utf-8?B?RTlpbHZFVUZJVUZYd051c1FFRkdYMTJBcVVBOVVsekttdDQyQUtxS01ZY21x?=
- =?utf-8?B?MkQ0ZGpudTJGejFuaWcvQlRyUE9FL2t4c1ZMbzVzcGw4MXZ5L1MvZFNTNFVh?=
- =?utf-8?B?THpFbjFhK2FlcEFKaVo1TzJ1SDZwNEROQkoxc2pSZkFIU3doZk1oUnF5amw4?=
- =?utf-8?B?NkRjbkdSOXI1NW1OMXRwL1ZnbTZmZVhoejdIRGNmbTcxanVnVURJWnJoWDkx?=
- =?utf-8?B?ZmZBYVVHa3N6UTNkUlNXMGJwb3RQeHllSHg2WTI3eGRWbU85YmY4SHlKejh2?=
- =?utf-8?B?WGYrS1dwRHhXZGhzREpkZHJzYVNRdVJiWi85UXdVcjJ0K1o3NGo4NjZnaG1O?=
- =?utf-8?B?QlgvdTc0QWVPWnNkUzk3UTRld3pvR2hXVlFuMzVVVGJndjlKRnI0czFTQnBC?=
- =?utf-8?B?MmtkNmtwVGFMTlMrSGI3YjdaL3M3dUFxT0V6YjdUWHZ2Zm5Md0pXSmdoSkI0?=
- =?utf-8?B?MEJ2RUF4ZmphQ1A1MzB3eDZuNG9LUUVldXg1a0dkdm4vVjNhVkNNc2MycW5O?=
- =?utf-8?Q?w0fUofuojnTVpKrtIZAZ5KTymUFXZzcq0FGvTDcGY3qa?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DAE601C01053F8458C2DE1E64A5E44B3@jpnprd01.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 15 Feb 2022 03:39:07 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C27EF0BB
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 00:38:57 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id j15so12528300lfe.11
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 00:38:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=b9cKiex4dTYU+JK1gPd+hEZp9w4hTub6Pglrmgq8pNY=;
+        b=kYLtXwSgyJP34xR4VQeX416IBeflukjyoe7UdPG6hcby5u46ATRiMMkKcQuEaqKVna
+         7Zg2FpdZtvJ1t5kPxRuSh7Dpw50yU9n0ALqix3gE3cYT5f2MdUDNyHXILKkyWVdwmg24
+         WDUhkt3l+7qgz3v2XcvrgVkLXIDsMfS/ufWbE+LBTAwSwxHD5rpJjo2xJ7O5kZZ2RQMa
+         DjOYorX20pyY25HKbfmH5uGtMni89p9JZBad8eFX6DCXdNrMKWq372pdyAeceth07tIP
+         3ZyCqVhqy4uxhIPjOw34MsPHm/BD/g5DKBhYnfdIbnVJebqz+cUZOLr0F3vmuQZI8mNP
+         77ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=b9cKiex4dTYU+JK1gPd+hEZp9w4hTub6Pglrmgq8pNY=;
+        b=4mn666VLfGBrBgNmfwp+PAwgLv+hjPwfmGX+K3c+bmISk5CNO+WOTHbJhkR0CHG9F5
+         LujJhGABDZCE5cN4/is0q9FZXbjzuENAO5pqFl+DHCXIlOIh0PI7MOfLhPtEMeFKbLkU
+         xaenHWpKipyNmIht7RC1oII55H12nqrEw2DQf69QfCFd7FTxJSJ8CfcngqqSwaVuwWoK
+         bP2vXdYR5bpVf0BfZyOefWvr0PhuGIwc4TaPFf8FLagEtJHrddt4qjzYX9Gvjk9uvHTf
+         PO3Rk0KlKG3Dc4cdm09Rr76MxsR9asiLH3/EGg/2pTr9XZS+Kw20CFxaRHR+Kv/l/CBJ
+         pUWg==
+X-Gm-Message-State: AOAM5302RRU2EMfHbq/rcrpB9nHZGOA8ZHVqqeiDD4cYXbsRzbtGnk40
+        SH/dfW6zUc0ou7KBrICVqp6Ylkc71CNejZz0o+xJpQ==
+X-Google-Smtp-Source: ABdhPJwBUL0XNat1oOmTd/6uilyeaVO/lmgZx+65oNEr07oHiH/ufFj8PYa8oqIbKHlG5Hh4LT5FykceRacCBATmln0=
+X-Received: by 2002:a19:6e0b:: with SMTP id j11mr2325842lfc.514.1644914336029;
+ Tue, 15 Feb 2022 00:38:56 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: nec.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69f9e92c-53e0-44f0-c02a-08d9f05e7716
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2022 08:37:56.4738
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5U5uznmCRk62SrpbiFcnA90H8NOiXkI6ZQqwfQFotnOvEvE59HNJjTD66YjlS6oicARdVz3ZHjlNnxaI87duqg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB8251
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220214231852.3331430-1-jeremy.linton@arm.com>
+In-Reply-To: <20220214231852.3331430-1-jeremy.linton@arm.com>
+From:   Marcin Wojtas <mw@semihalf.com>
+Date:   Tue, 15 Feb 2022 09:38:44 +0100
+Message-ID: <CAPv3WKczaLS8zKwTyEXTCD=YEVF5KcDGTr0uqM-7=MKahMQJYA@mail.gmail.com>
+Subject: Re: [BUG/PATCH v3] net: mvpp2: always set port pcs ops
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     netdev <netdev@vger.kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCBGZWIgMTUsIDIwMjIgYXQgMTA6NDA6MDJBTSArMDgwMCwgTWlhb2hlIExpbiB3cm90
-ZToNCj4gT24gMjAyMi8yLzE0IDIyOjQ4LCBOYW95YSBIb3JpZ3VjaGkgd3JvdGU6DQo+ID4gT24g
-VGh1LCBGZWIgMTAsIDIwMjIgYXQgMTA6MTc6MjdQTSArMDgwMCwgTWlhb2hlIExpbiB3cm90ZToN
-Cj4gPj4gSXQncyB1bm5lY2Vzc2FyeSB0byB3YWxrIHRoZSBwYWdlIHRhYmxlIHdoZW4gdm1hX2Fk
-ZHJlc3MoKSByZXR1cm4gLUVGQVVMVC4NCj4gPj4gUmV0dXJuIGVhcmx5IGlmIHNvIHRvIHNhdmUg
-c29tZSBjcHUgY3ljbGVzLg0KPiA+Pg0KPiA+PiBTaWduZWQtb2ZmLWJ5OiBNaWFvaGUgTGluIDxs
-aW5taWFvaGVAaHVhd2VpLmNvbT4NCj4gPiANCj4gPiBBY2tlZC1ieTogTmFveWEgSG9yaWd1Y2hp
-IDxuYW95YS5ob3JpZ3VjaGlAbmVjLmNvbT4NCj4gDQo+IE1hbnkgdGhhbmtzIGZvciB5b3VyIHJl
-dmlldyBhbmQgQWNrZWQtYnkgdGFnIQ0KDQpZb3UncmUgd2VsY29tZSA6KQ0KDQo+IA0KPiA+IA0K
-PiA+IERvZXMgdGhpcyBwYXRjaCBmaXggdGhlIHJlYWwgcHJvYmxlbSByYXRoZXIgdGhhbiBqdXN0
-IHNhdmluZyBjcHUgY3ljbGVzPw0KPiA+IFdpdGhvdXQgdGhpcyBwYXRjaCwgImFkZHJlc3MgPT0g
-LUVGQVVMVCIgc2VlbXMgdG8gbWFrZSBwZ2Rfb2Zmc2V0KCkgcmV0dXJuDQo+ID4gaW52YWxpZCBw
-b2ludGVyIGFuZCByZXN1bHQgaW4gc29tZSBzZXJpb3VzIHJlc3VsdCBsaWtlIGdlbmVyYWwgcHJv
-dGVjdGlvbiBmYXVsdC4NCj4gDQo+IEkgdGhpbmsgeW91J3JlIHJpZ2h0LiBXZSBtaWdodCBkZXJl
-ZmVyZW5jZSB0aGUgaW52YWxpZCBwb2ludGVyIGluIHRoZSBmb2xsb3dpbmcgcGFnZXRhYmxlDQo+
-IHdhbGsgYW5kIHJlc3VsdHMgaW4gZ2VuZXJhbCBwcm90ZWN0aW9uIGZhdWx0Lg0KPiANCj4gPiBJ
-ZiB0aGF0J3MgdGhlIGNhc2UsIHRoaXMgcGF0Y2ggbWlnaHQgYmUgd29ydGggc2VuZGluZyB0byBz
-dGFibGUuDQo+IA0KPiBCdXQgSSdhbSBub3Qgc3VyZSB2bWFfYWRkcmVzcyB3aWxsIHJldHVybiAt
-RUZBVUxUIGZvciBkYXggcGFnZXMgaW4gdGhlIHJlYWwgd29ya2xvYWQ/DQo+IElmIHNvLCBJIHdp
-bGwgc2VuZCBhIHYyIHdpdGggRml4ZXMgdGFnLg0KDQpIbSwgYWN0dWFsbHkgSSdtIG5vdCBzdXJl
-IGVpdGhlci4gIEJ1dCBkZXZfcGFnZW1hcF9tYXBwaW5nX3NoaWZ0KCkgaXMgY2FsbGVkIG9ubHkN
-CndoZW4gdm1hIGFzc29jaWF0ZWQgdG8gdGhlIGVycm9yIHBhZ2UgaXMgZm91bmQgYWxyZWFkeSBp
-biBjb2xsZWN0X3Byb2NzX3tmaWxlLGFub259LA0Kc28gdm1hX2FkZHJlc3MoKSBzaG91bGQgbm90
-IHJldHVybiAtRUZBVUxUIGV4Y2VwdCB3aXRoIHNvbWUgYnVnLg0KU28gVk1fQlVHX09OKCkgbWln
-aHQgYmUgbW9yZSBzdWl0YWJsZT8NCg0KVGhhbmtzLA0KTmFveWEgSG9yaWd1Y2hp
+Hi Jeremy,
+
+
+wt., 15 lut 2022 o 00:18 Jeremy Linton <jeremy.linton@arm.com> napisa=C5=82=
+(a):
+>
+> Booting a MACCHIATObin with 5.17, the system OOPs with
+> a null pointer deref when the network is started. This
+> is caused by the pcs->ops structure being null in
+> mcpp2_acpi_start() when it tries to call pcs_config().
+>
+> Hoisting the code which sets pcs_gmac.ops and pcs_xlg.ops,
+> assuring they are always set, fixes the problem.
+>
+> The OOPs looks like:
+> [   18.687760] Unable to handle kernel access to user memory outside uacc=
+ess routines at virtual address 0000000000000010
+> [   18.698561] Mem abort info:
+> [   18.698564]   ESR =3D 0x96000004
+> [   18.698567]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
+> [   18.709821]   SET =3D 0, FnV =3D 0
+> [   18.714292]   EA =3D 0, S1PTW =3D 0
+> [   18.718833]   FSC =3D 0x04: level 0 translation fault
+> [   18.725126] Data abort info:
+> [   18.729408]   ISV =3D 0, ISS =3D 0x00000004
+> [   18.734655]   CM =3D 0, WnR =3D 0
+> [   18.738933] user pgtable: 4k pages, 48-bit VAs, pgdp=3D0000000111bbf00=
+0
+> [   18.745409] [0000000000000010] pgd=3D0000000000000000, p4d=3D000000000=
+0000000
+> [   18.752235] Internal error: Oops: 96000004 [#1] SMP
+> [   18.757134] Modules linked in: rfkill ip_set nf_tables nfnetlink qrtr =
+sunrpc vfat fat omap_rng fuse zram xfs crct10dif_ce mvpp2 ghash_ce sbsa_gwd=
+t phylink xhci_plat_hcd ahci_plam
+> [   18.773481] CPU: 0 PID: 681 Comm: NetworkManager Not tainted 5.17.0-0.=
+rc3.89.fc36.aarch64 #1
+> [   18.781954] Hardware name: Marvell                         Armada 7k/8=
+k Family Board      /Armada 7k/8k Family Board      , BIOS EDK II Jun  4 20=
+19
+> [   18.795222] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYP=
+E=3D--)
+> [   18.802213] pc : mvpp2_start_dev+0x2b0/0x300 [mvpp2]
+> [   18.807208] lr : mvpp2_start_dev+0x298/0x300 [mvpp2]
+> [   18.812197] sp : ffff80000b4732c0
+> [   18.815522] x29: ffff80000b4732c0 x28: 0000000000000000 x27: ffffccab3=
+8ae57f8
+> [   18.822689] x26: ffff6eeb03065a10 x25: ffff80000b473a30 x24: ffff80000=
+b4735b8
+> [   18.829855] x23: 0000000000000000 x22: 00000000000001e0 x21: ffff6eeb0=
+7b6ab68
+> [   18.837021] x20: ffff6eeb07b6ab30 x19: ffff6eeb07b6a9c0 x18: 000000000=
+0000014
+> [   18.844187] x17: 00000000f6232bfe x16: ffffccab899b1dc0 x15: 000000006=
+a30f9fa
+> [   18.851353] x14: 000000003b77bd50 x13: 000006dc896f0e8e x12: 001bbbfcc=
+fd0d3a2
+> [   18.858519] x11: 0000000000001528 x10: 0000000000001548 x9 : ffffccab3=
+8ad0fb0
+> [   18.865685] x8 : ffff80000b473330 x7 : 0000000000000000 x6 : 000000000=
+0000000
+> [   18.872851] x5 : 0000000000000000 x4 : 0000000000000000 x3 : ffff80000=
+b4732f8
+> [   18.880017] x2 : 000000000000001a x1 : 0000000000000002 x0 : ffff6eeb0=
+7b6ab68
+> [   18.887183] Call trace:
+> [   18.889637]  mvpp2_start_dev+0x2b0/0x300 [mvpp2]
+> [   18.894279]  mvpp2_open+0x134/0x2b4 [mvpp2]
+> [   18.898483]  __dev_open+0x128/0x1e4
+> [   18.901988]  __dev_change_flags+0x17c/0x1d0
+> [   18.906187]  dev_change_flags+0x30/0x70
+> [   18.910038]  do_setlink+0x278/0xa7c
+> [   18.913540]  __rtnl_newlink+0x44c/0x7d0
+> [   18.917391]  rtnl_newlink+0x5c/0x8c
+> [   18.920892]  rtnetlink_rcv_msg+0x254/0x314
+> [   18.925006]  netlink_rcv_skb+0x48/0x10c
+> [   18.928858]  rtnetlink_rcv+0x24/0x30
+> [   18.932449]  netlink_unicast+0x290/0x2f4
+> [   18.936386]  netlink_sendmsg+0x1d0/0x41c
+> [   18.940323]  sock_sendmsg+0x60/0x70
+> [   18.943825]  ____sys_sendmsg+0x248/0x260
+> [   18.947762]  ___sys_sendmsg+0x74/0xa0
+> [   18.951438]  __sys_sendmsg+0x64/0xcc
+> [   18.955027]  __arm64_sys_sendmsg+0x30/0x40
+> [   18.959140]  invoke_syscall+0x50/0x120
+> [   18.962906]  el0_svc_common.constprop.0+0x4c/0xf4
+> [   18.967629]  do_el0_svc+0x30/0x9c
+> [   18.970958]  el0_svc+0x28/0xb0
+> [   18.974025]  el0t_64_sync_handler+0x10c/0x140
+> [   18.978400]  el0t_64_sync+0x1a4/0x1a8
+> [   18.982078] Code: 52800004 b9416262 aa1503e0 52800041 (f94008a5)
+> [   18.988196] ---[ end trace 0000000000000000 ]---
+>
+> Fixes: cff056322372 ("net: mvpp2: use .mac_select_pcs() interface")
+> Suggested-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+> ---
+> v1->v2: Apply Russell's fix
+> v2->v3: Fix Russell's name
+>
+>  drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/ne=
+t/ethernet/marvell/mvpp2/mvpp2_main.c
+> index 7cdbf8b8bbf6..1a835b48791b 100644
+> --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> @@ -6870,6 +6870,9 @@ static int mvpp2_port_probe(struct platform_device =
+*pdev,
+>         dev->max_mtu =3D MVPP2_BM_JUMBO_PKT_SIZE;
+>         dev->dev.of_node =3D port_node;
+>
+> +       port->pcs_gmac.ops =3D &mvpp2_phylink_gmac_pcs_ops;
+> +       port->pcs_xlg.ops =3D &mvpp2_phylink_xlg_pcs_ops;
+> +
+>         if (!mvpp2_use_acpi_compat_mode(port_fwnode)) {
+>                 port->phylink_config.dev =3D &dev->dev;
+>                 port->phylink_config.type =3D PHYLINK_NETDEV;
+> @@ -6940,9 +6943,6 @@ static int mvpp2_port_probe(struct platform_device =
+*pdev,
+>                                   port->phylink_config.supported_interfac=
+es);
+>                 }
+>
+> -               port->pcs_gmac.ops =3D &mvpp2_phylink_gmac_pcs_ops;
+> -               port->pcs_xlg.ops =3D &mvpp2_phylink_xlg_pcs_ops;
+> -
+>                 phylink =3D phylink_create(&port->phylink_config, port_fw=
+node,
+>                                          phy_mode, &mvpp2_phylink_ops);
+>                 if (IS_ERR(phylink)) {
+> --
+> 2.34.1
+>
+
+I'd like to test the patch - what EDK2 version are you using?
+
+Best regards,
+Marcin

@@ -2,204 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE5B4B6ECC
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 15:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A58E24B6EDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 15:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238589AbiBOO2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 09:28:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42444 "EHLO
+        id S238606AbiBOO3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 09:29:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbiBOO2S (ORCPT
+        with ESMTP id S232774AbiBOO3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 09:28:18 -0500
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120048.outbound.protection.outlook.com [40.107.12.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4086CD5C5;
-        Tue, 15 Feb 2022 06:28:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mLMpQwWaQK1c/XCoVLJgAMsLbl4PgXLoNteyUw10ae1W2TJ3oRfogOiSLKT/TeDHdTKw+MRuqP1p/u9Mp72rCg390u8X7EBh/SUDIxuQLcwRXOs0FyvLknCc/Q96GFhB5UttmJemD2m+OR/XnB2Zl3RV/BI3E85r7CDMX3daXOOT7f37zWJz9qk1VX4ePhC8IjnQPuQtlcYTf88pmfEnJd5yyywLGK6T4I/see8GbcQDeYYeNprdOqrjEQha+Adssr5FqqYPMzG4ipffYZfo1PoXwYQBA6TG0lKGLSaX+lwaT5rm1loBTJB68EEEL7a3Qo74mdCC2BOTLhUGpdbw0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VIfRJTuZHZBBEvzj5vkflQC6xgjqpADsDB4AEJ1ID5M=;
- b=m6+JzFcg+UuVrtChfcVi/q6yDFjS5NUK+4a3RVBZ2ORbn6GeMY7foign6Qf/oZKcMj97vz/fkbaMxlBP7yjKWevTTBhGjDXRCgNO1Hlsc15HVWdxsXiy7pK5E0YOJAhhIDD81o6S0HaaJuotNr0Rp3r+kd4TfIz+kefUHq7gZVU17seOfUt5cB5uUNmG7K4ab2I6yfwxGkatMRcvdtciumjOKe+LYoP8u77PDyEgmrsGZfHtGt3FAILeh+RfZ4nzbE3Lbl37895VZR24+WCjfADvtrsVjAu9FZ+0HhI5Nc4gW5/txkMDxpZtmULmNaIL6pj1lvx9TehAoGJ8hcDa2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRZP264MB2778.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:1f::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.12; Tue, 15 Feb
- 2022 14:28:05 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c9a2:1db0:5469:54e1]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c9a2:1db0:5469:54e1%9]) with mapi id 15.20.4975.019; Tue, 15 Feb 2022
- 14:28:05 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Ingo Molnar <mingo@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>
-Subject: Re: [PATCH v2 09/13] powerpc/ftrace: Implement
- CONFIG_DYNAMIC_FTRACE_WITH_ARGS
-Thread-Topic: [PATCH v2 09/13] powerpc/ftrace: Implement
- CONFIG_DYNAMIC_FTRACE_WITH_ARGS
-Thread-Index: AQHX9cAEWTCD8cHnLE+YV5TEx6NNVqyTgraAgAEV/wCAADOPAIAAKmUAgAAOUwA=
-Date:   Tue, 15 Feb 2022 14:28:04 +0000
-Message-ID: <6dc50f09-4d14-afa2-d2a1-34b72b880edf@csgroup.eu>
-References: <cover.1640017960.git.christophe.leroy@csgroup.eu>
- <5831f711a778fcd6eb51eb5898f1faae4378b35b.1640017960.git.christophe.leroy@csgroup.eu>
- <1644852011.qg7ud9elo2.naveen@linux.ibm.com>
- <1b28f52a-f8b7-6b5c-e726-feac4123517d@csgroup.eu>
- <875ypgo0f3.fsf@mpe.ellerman.id.au>
- <1644930705.g64na2kgvd.naveen@linux.ibm.com>
-In-Reply-To: <1644930705.g64na2kgvd.naveen@linux.ibm.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 75ffa270-3123-4ec0-991c-08d9f08f6123
-x-ms-traffictypediagnostic: MRZP264MB2778:EE_
-x-microsoft-antispam-prvs: <MRZP264MB277830093DC7EA0D8F229FFEED349@MRZP264MB2778.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yjp8oHnVGQoenNh2dcbbM+Cp92aHp0BOCpj04/LxPy1ygnxAVCA//OCv59Ui3VeOO+emhB+nuR51yvcheFc5GSnIks3hTTyr6maOZSJ7RtpKQDXWSHnviGHHpmbKkI4DB79ridz7XipOj8x+4I6SvR+jwv7ZuMqdz/aIOOKxJpwDSeXIoHtS6Ye1yViCrTrKGAvuJ+GG+ssl7Ega3SCPP8tL9ZwVEUKmkRgPhf216AJW1PPNFalT8atVqAT5oe0g2W78eHAfmK4S1NLNFQuNTs/tpJaK/7vaArB0A1YKlXomm6obgdS3YhtpoEwCPLCwjG9fvOfaNb/hlrw2x2ByuQ+A6xIb36AZfUXtl34LT+3ZzqJ8QHlp53/r7zj6lk45xPW+qrfPG42TPSbqi2gBcPjn6WL9S+EaKBixsbH4ju4XFwAJs+GxPQPjoUVyYbcJDuPaVCeNo/0x7WHNFpCEpKLdEtJ22Cl8BXKIsbKnlWaledLbbCPbMS6vUSqsyr3Dy6w1P37AcCbEA0IgvUBuEXAAXJzDY9uM3fmP7zcrVe8SjUKisAxGc74PJqSwPWX2W4+XZ+tHu6RpsOChe4Yb2eqi4GVPC8vRwhuKOE0TfnxcaJpvj/ygSo9tTqDlJP1VHvNI3v5XCkw3l1GbMsa8X6mB1G8cefZuWP4cS7gHkEsRxFnLjOc/1s3qAG1VNyJRbjMDBPgBL2MlnmoBmoVZWOBwUkWnDP2cxj1+rhInQkgMgsb3nGx9rp9ERUEqbWsG+Ezmb5wUwPqx806Cv+tPAYDGZBlsU0KlV3qolr8BJoeNYY5wREjM2zle20m27j2hJe9nTB1AT5WIU0mL7KhVfzh1kgD0iIUKSSuV+ETQlR4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(122000001)(5660300002)(316002)(66574015)(83380400001)(7416002)(8936002)(38070700005)(2906002)(66946007)(8676002)(76116006)(64756008)(91956017)(66476007)(66556008)(4326008)(66446008)(31696002)(110136005)(86362001)(44832011)(36756003)(6506007)(508600001)(2616005)(31686004)(186003)(26005)(6486002)(71200400001)(54906003)(966005)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QXJobE5vMnVKYXY0TXZTVlhBQjN2cXBwbmFmTzFwdGV1NXVRdVFwd2pRd0V1?=
- =?utf-8?B?NXUrVTBLdUlYQit6d0ZZbEEzV3M5NHVOcmlTaDlOWXJoc2xJbVNHc2RobUVh?=
- =?utf-8?B?RUhOWjhOcnFhYjZPM3ZDU3dSYVhjWnBBL2xlVE1yeEsvaVdQL1FBN0xHZUtm?=
- =?utf-8?B?TjFyLzhxM1pab2tCUDMvUTZVQUZkek8vRHVYaitETjJCdHIrTzlhUFNSanVK?=
- =?utf-8?B?WWF6MytsMTJmWlJXODJHaURZczU3SjZ3bTJoMHpQeDZ4UThqS0pIZUViR0tr?=
- =?utf-8?B?YmlPTExWU2h0NWNPU0Q3amxJUlNsckdzU1VJWTRmUXIvV2JSRUxRbjgyNTE5?=
- =?utf-8?B?dllXNDBwOGRaaVhNUzF2dW15VUY0MlJvcExpTU9ySzZRZEQ5WmdWc2d1QTc1?=
- =?utf-8?B?WDAzeGlyN08xWml1blQzcFFYT3BMM25CQ3dyYkJhaGtFem9UYXFzSFBINElR?=
- =?utf-8?B?YWV0c0xqQTRPTkRPd3ZxakpjRnNxZCtYczNCb3k3ODFab0VndzgyUm5TQTND?=
- =?utf-8?B?cFZlVEVuY2F6cnpaTnlZMStwekd1VGhRVTFNd1N4c0JGMkNvNUNxUEZRNUd1?=
- =?utf-8?B?SFpuYld6cnRJQ09COGw0aThGOUFEaHV1SG8rWVk5RndXOXlNcGJiMzBGZy9V?=
- =?utf-8?B?ckt1MS83R2VaSFAyVy9FbGNQZWY0bld1NkNuUWZhQVAzank0QlN6Y09WcExu?=
- =?utf-8?B?VlYxejcxN2poREtWV1JzRCs2d3dHeEZCOGhHS2Q4bFRnUUpLSVptNkJHWlZV?=
- =?utf-8?B?QW1oU0JIaFlmMnQ0akhHakh3S2JIT3kxUDNua0V5b29TS3RaODZ3WGtrZjZ3?=
- =?utf-8?B?aTJ1MGx5c3NMOXhBdllvWGJYRllKcjhtSmJ2Tk1qeFh4RGt6WGQ3RGIyOWlI?=
- =?utf-8?B?aDBYSVduZk1iZlMxMlU3MFA1blVxTWhsS3VzU3VwK1ptanI3aU9WVFJOV1Ny?=
- =?utf-8?B?dGxXSVJsNGl4Ym5SQ2daWGl2UUNpRW02cWMyZUNsRTBqNWNxeXpGcGlhdURh?=
- =?utf-8?B?ZUZxTHpaZjM2YitiL3RGQzFTQ3BUYlIwbXREd0lWRHdET0pTdjF2SDUrQWM3?=
- =?utf-8?B?NlVodGtVZXdyY00yNGFLb3BhNllNVGwvSDJzK0pDZTUyR1FkU1FQSkllVVdG?=
- =?utf-8?B?TkUxZXNHYm1rb3JyaUFEY3BnQmU5TmVXSGJER2VrQzhPaXZqTVFkTmFYK0hk?=
- =?utf-8?B?RlFqNGdvQXFUczU0OGRiL0ZVMzRQcC9GQ2l5Q2luVTUzT1FqMUJ6Y0djUGFv?=
- =?utf-8?B?UC9uc3FybkY4Uncway9IbkdEU1NKTjZ4YzRmSVo1bEV6a2JBNUlmS0EzK3pE?=
- =?utf-8?B?Q2Q0NXBGRW1DSS9kR0tHcVk4R0oybzFXT3lsU0tZRzV5VXF6UnRhcEFDUlBC?=
- =?utf-8?B?L0RXR1Q4b051c2plQWw5SjZoeGppOU8rTlFZd3NGbTlRLzRrRmNWb2lZMVZ5?=
- =?utf-8?B?SW9PNWo0aUFjSTBSOHNHWGRCZ2pWc0hHUUhVTkQvaUJhaDRJWlJSZHNsT0Zp?=
- =?utf-8?B?Y2JFaGw2UWtlYzNJNzljNTV0cngwRElPaTA2QmxkVW9rRHlteTRFYnlxNFlD?=
- =?utf-8?B?NnFRL25VMFIrUU4wZVdRcU5uU2VpckJ1a2pwcWlRbmV6eVhuaTVJY28yWUE5?=
- =?utf-8?B?MXZsYjNUVUE0Y3BxVU1RQ0tka1dmVUc3dEhLaE9pVWlHakYwTU1XU0diazhK?=
- =?utf-8?B?bjVvdjBmaHJrWkFFRnJ3bExrdm5ZQmhOTEdkTVhEZmVDa1lGU2RvWmJ2MldK?=
- =?utf-8?B?NFJnb3FuVktOK2hEMHY4V01XdWFSVWZSVFlramtycityS2w5aDFrSzMzNHl5?=
- =?utf-8?B?YUhuMW1nWEFITFRKMEIzSjFoVHVkcTFEcHZKczkweUpndkVjcE5jejFPMHg3?=
- =?utf-8?B?ZCt2RFZPb3BiQU1VMTZjZzVzSENQMmczWVNrNzJqdGJXeVZlNURlQXdwV25u?=
- =?utf-8?B?WDZmK3p6OVlIVFMrMElFY3h1bXQyTEJoc3FCaFIzSldHa2k2VXFKTk56UXZV?=
- =?utf-8?B?Q0lFL0JtRHRLVzl0eC96dUpUTVBPYUZsY2I1VFpjT3ZqT1Y2VnRtVXJXR3lh?=
- =?utf-8?B?eGE1YVNua3NHWllFMnRKU0hPM0hjdGhBVEVYMHUzZ0NTZTFINUIvSU82WFNQ?=
- =?utf-8?B?S2hPM2dQU2lqcFZJaksrUlAyeGFIRWRHbmN5MENHV1FMN3pSbWdKSnFDdXY2?=
- =?utf-8?B?TDlCYTBUZnMyd29TWStuNExWM255aFR5WUVBaWhGMjFUdGU0dkkyS0JhWjgw?=
- =?utf-8?Q?bjVd/RVVIHz+tXjALdYvQWHyn+1UoppCBf1mNZmaFE=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1BE11D263D0B984DB4FBB3FB72820D6B@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Tue, 15 Feb 2022 09:29:47 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36EC9E1B4D;
+        Tue, 15 Feb 2022 06:29:36 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 78DC11396;
+        Tue, 15 Feb 2022 06:29:36 -0800 (PST)
+Received: from [10.57.70.89] (unknown [10.57.70.89])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 327793F718;
+        Tue, 15 Feb 2022 06:29:32 -0800 (PST)
+Message-ID: <161e5005-ea12-fde4-0e31-ec871d2fe591@arm.com>
+Date:   Tue, 15 Feb 2022 14:29:27 +0000
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 75ffa270-3123-4ec0-991c-08d9f08f6123
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2022 14:28:04.9722
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: l2aZQra9m7SnPdNC/ukyDYchxwT/jt/awvNI0q1pR5ZPpd7fR2P8bts9BbplIjwPtdfQBV2IRoqEAyPoDp03khxaNE2XhDDpnUR3CJYCWl8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB2778
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v3 8/8] iommu/arm-smmu-v3: Make default domain type of
+ HiSilicon PTT device to identity
+Content-Language: en-GB
+To:     Will Deacon <will@kernel.org>
+Cc:     Yicong Yang <yangyicong@huawei.com>, mark.rutland@arm.com,
+        prime.zeng@huawei.com, alexander.shishkin@linux.intel.com,
+        linux-pci@vger.kernel.org, linuxarm@huawei.com,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        daniel.thompson@linaro.org, peterz@infradead.org, mingo@redhat.com,
+        helgaas@kernel.org, liuqi115@huawei.com, mike.leach@linaro.org,
+        suzuki.poulose@arm.com, coresight@lists.linaro.org,
+        acme@kernel.org, zhangshaokun@hisilicon.com,
+        linux-arm-kernel@lists.infradead.org, mathieu.poirier@linaro.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, iommu@lists.linux-foundation.org,
+        leo.yan@linaro.org
+References: <20220124131118.17887-1-yangyicong@hisilicon.com>
+ <20220124131118.17887-9-yangyicong@hisilicon.com>
+ <e58888c1-5448-77c7-7f6c-f5db999a888f@huawei.com>
+ <20220215130044.GA7154@willie-the-truck>
+ <9018a1d9-4d42-3a99-dbc6-c55139abcb1e@arm.com>
+ <20220215134232.GA7592@willie-the-truck>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220215134232.GA7592@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDE1LzAyLzIwMjIgw6AgMTQ6MzYsIE5hdmVlbiBOLiBSYW8gYSDDqWNyaXTCoDoNCj4g
-TWljaGFlbCBFbGxlcm1hbiB3cm90ZToNCj4+IENocmlzdG9waGUgTGVyb3kgPGNocmlzdG9waGUu
-bGVyb3lAY3Nncm91cC5ldT4gd3JpdGVzOg0KPj4+IExlIDE0LzAyLzIwMjIgw6AgMTY6MjUsIE5h
-dmVlbiBOLiBSYW8gYSDDqWNyaXTCoDoNCj4+Pj4gQ2hyaXN0b3BoZSBMZXJveSB3cm90ZToNCj4+
-Pj4+IEltcGxlbWVudCBDT05GSUdfRFlOQU1JQ19GVFJBQ0VfV0lUSF9BUkdTLiBJdCBhY2NlbGVy
-YXRlcyB0aGUgY2FsbA0KPj4+Pj4gb2YgbGl2ZXBhdGNoaW5nLg0KPj4+Pj4NCj4+Pj4+IEFsc28g
-bm90ZSB0aGF0IHBvd2VycGMgYmVpbmcgdGhlIGxhc3Qgb25lIHRvIGNvbnZlcnQgdG8NCj4+Pj4+
-IENPTkZJR19EWU5BTUlDX0ZUUkFDRV9XSVRIX0FSR1MsIGl0IHdpbGwgbm93IGJlIHBvc3NpYmxl
-IHRvIHJlbW92ZQ0KPj4+Pj4ga2xwX2FyY2hfc2V0X3BjKCkgb24gYWxsIGFyY2hpdGVjdHVyZXMu
-DQo+Pj4+Pg0KPj4+Pj4gU2lnbmVkLW9mZi1ieTogQ2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3Bo
-ZS5sZXJveUBjc2dyb3VwLmV1Pg0KPj4+Pj4gLS0tDQo+Pj4+PiDCoGFyY2gvcG93ZXJwYy9LY29u
-ZmlnwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgIDEgKw0KPj4+Pj4gwqBhcmNo
-L3Bvd2VycGMvaW5jbHVkZS9hc20vZnRyYWNlLmjCoMKgwqAgfCAxNyArKysrKysrKysrKysrKysr
-Kw0KPj4+Pj4gwqBhcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20vbGl2ZXBhdGNoLmggfMKgIDQgKy0t
-LQ0KPj4+Pj4gwqAzIGZpbGVzIGNoYW5nZWQsIDE5IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25z
-KC0pDQo+Pj4+Pg0KPj4+Pj4gZGlmZiAtLWdpdCBhL2FyY2gvcG93ZXJwYy9LY29uZmlnIGIvYXJj
-aC9wb3dlcnBjL0tjb25maWcNCj4+Pj4+IGluZGV4IGNkYWMyMTE1ZWIwMC4uZTJiMTc5MmIyYWFl
-IDEwMDY0NA0KPj4+Pj4gLS0tIGEvYXJjaC9wb3dlcnBjL0tjb25maWcNCj4+Pj4+ICsrKyBiL2Fy
-Y2gvcG93ZXJwYy9LY29uZmlnDQo+Pj4+PiBAQCAtMjEwLDYgKzIxMCw3IEBAIGNvbmZpZyBQUEMN
-Cj4+Pj4+IMKgwqDCoMKgIHNlbGVjdCBIQVZFX0RFQlVHX0tNRU1MRUFLDQo+Pj4+PiDCoMKgwqDC
-oCBzZWxlY3QgSEFWRV9ERUJVR19TVEFDS09WRVJGTE9XDQo+Pj4+PiDCoMKgwqDCoCBzZWxlY3Qg
-SEFWRV9EWU5BTUlDX0ZUUkFDRQ0KPj4+Pj4gK8KgwqDCoCBzZWxlY3QgSEFWRV9EWU5BTUlDX0ZU
-UkFDRV9XSVRIX0FSR1PCoMKgwqAgaWYgTVBST0ZJTEVfS0VSTkVMIHx8IA0KPj4+Pj4gUFBDMzIN
-Cj4+Pj4+IMKgwqDCoMKgIHNlbGVjdCBIQVZFX0RZTkFNSUNfRlRSQUNFX1dJVEhfUkVHU8KgwqDC
-oCBpZiBNUFJPRklMRV9LRVJORUwgfHwgDQo+Pj4+PiBQUEMzMg0KPj4+Pj4gwqDCoMKgwqAgc2Vs
-ZWN0IEhBVkVfRUJQRl9KSVQNCj4+Pj4+IMKgwqDCoMKgIHNlbGVjdCBIQVZFX0VGRklDSUVOVF9V
-TkFMSUdORURfQUNDRVNTwqDCoMKgIGlmIA0KPj4+Pj4gIShDUFVfTElUVExFX0VORElBTiAmJiBQ
-T1dFUjdfQ1BVKQ0KPj4+Pj4gZGlmZiAtLWdpdCBhL2FyY2gvcG93ZXJwYy9pbmNsdWRlL2FzbS9m
-dHJhY2UuaCANCj4+Pj4+IGIvYXJjaC9wb3dlcnBjL2luY2x1ZGUvYXNtL2Z0cmFjZS5oDQo+Pj4+
-PiBpbmRleCBiM2Y2MTg0Zjc3ZWEuLjQ1YzNkNmYxMWRhYSAxMDA2NDQNCj4+Pj4+IC0tLSBhL2Fy
-Y2gvcG93ZXJwYy9pbmNsdWRlL2FzbS9mdHJhY2UuaA0KPj4+Pj4gKysrIGIvYXJjaC9wb3dlcnBj
-L2luY2x1ZGUvYXNtL2Z0cmFjZS5oDQo+Pj4+PiBAQCAtMjIsNiArMjIsMjMgQEAgc3RhdGljIGlu
-bGluZSB1bnNpZ25lZCBsb25nIA0KPj4+Pj4gZnRyYWNlX2NhbGxfYWRqdXN0KHVuc2lnbmVkIGxv
-bmcgYWRkcikNCj4+Pj4+IMKgc3RydWN0IGR5bl9hcmNoX2Z0cmFjZSB7DQo+Pj4+PiDCoMKgwqDC
-oCBzdHJ1Y3QgbW9kdWxlICptb2Q7DQo+Pj4+PiDCoH07DQo+Pj4+PiArDQo+Pj4+PiArI2lmZGVm
-IENPTkZJR19EWU5BTUlDX0ZUUkFDRV9XSVRIX0FSR1MNCj4+Pj4+ICtzdHJ1Y3QgZnRyYWNlX3Jl
-Z3Mgew0KPj4+Pj4gK8KgwqDCoCBzdHJ1Y3QgcHRfcmVncyByZWdzOw0KPj4+Pj4gK307DQo+Pj4+
-PiArDQo+Pj4+PiArc3RhdGljIF9fYWx3YXlzX2lubGluZSBzdHJ1Y3QgcHRfcmVncyAqYXJjaF9m
-dHJhY2VfZ2V0X3JlZ3Moc3RydWN0IA0KPj4+Pj4gZnRyYWNlX3JlZ3MgKmZyZWdzKQ0KPj4+Pj4g
-K3sNCj4+Pj4+ICvCoMKgwqAgcmV0dXJuICZmcmVncy0+cmVnczsNCj4+Pj4+ICt9DQo+Pj4+DQo+
-Pj4+IEkgdGhpbmsgdGhpcyBpcyB3cm9uZy4gV2UgbmVlZCB0byBkaWZmZXJlbnRpYXRlIGJldHdl
-ZW4gDQo+Pj4+IGZ0cmFjZV9jYWxsZXIoKSBhbmQgZnRyYWNlX3JlZ3NfY2FsbGVyKCkgaGVyZSwg
-YW5kIG9ubHkgcmV0dXJuIA0KPj4+PiBwdF9yZWdzIGlmIGNvbWluZyBpbiB0aHJvdWdoIGZ0cmFj
-ZV9yZWdzX2NhbGxlcigpIChpLmUuLCANCj4+Pj4gRkxfU0FWRV9SRUdTIGlzIHNldCkuDQo+Pj4N
-Cj4+PiBOb3Qgc3VyZSBJIGZvbGxvdyB5b3UuDQo+Pj4NCj4+PiBUaGlzIGlzIGJhc2VkIG9uIDU3
-NDBhN2M3MWFiNiAoInMzOTAvZnRyYWNlOiBhZGQgDQo+Pj4gSEFWRV9EWU5BTUlDX0ZUUkFDRV9X
-SVRIX0FSR1Mgc3VwcG9ydCIpDQo+Pj4NCj4+PiBJdCdzIGFsbCB0aGUgcG9pbnQgb2YgSEFWRV9E
-WU5BTUlDX0ZUUkFDRV9XSVRIX0FSR1MsIGhhdmUgdGhlIHJlZ3MgDQo+Pj4gYWxzbyB3aXRoIGZ0
-cmFjZV9jYWxsZXIoKS4NCj4+Pg0KPj4+IFN1cmUgeW91IG9ubHkgaGF2ZSB0aGUgcGFyYW1zLCBi
-dXQgdGhhdCdzIHRoZSBzYW1lIG9uIHMzOTAsIHNvIHdoYXQgDQo+Pj4gZGlkIEkgbWlzcyA/DQo+
-IA0KPiBJdCBsb29rcyBsaWtlIHMzOTAgaXMgc3BlY2lhbCBzaW5jZSBpdCBhcHBhcmVudGx5IHNh
-dmVzIGFsbCByZWdpc3RlcnMgDQo+IGV2ZW4gZm9yIGZ0cmFjZV9jYWxsZXI6IA0KPiBodHRwczov
-L2xvcmUua2VybmVsLm9yZy9hbGwvWWJpcGRVNVg0SE5EV0luaUBvc2lyaXMvDQoNCkl0IGlzIG5v
-dCB3aGF0IEkgdW5kZXJzdGFuZCBmcm9tIHRoZWlyIGNvZGUsIHNlZSANCmh0dHBzOi8vZWxpeGly
-LmJvb3RsaW4uY29tL2xpbnV4L3Y1LjE3LXJjMy9zb3VyY2UvYXJjaC9zMzkwL2tlcm5lbC9tY291
-bnQuUyNMMzcNCg0KVGhleSBoYXZlIGEgY29tbW9uIG1hY3JvIGNhbGxlZCB3aXRoIGFyZ3VtZW50
-ICdhbGxyZWdzJyB3aGljaCBpcyBzZXQgdG8gDQowIGZvciBmdHJhY2VfY2FsbGVyKCkgYW5kIDEg
-Zm9yIGZ0cmFjZV9yZWdzX2NhbGxlcigpLg0KV2hlbiBhbGxyZWdzID09IDEsIHRoZSBtYWNybyBz
-ZWVtcyB0byBzYXZlIG1vcmUuDQoNCkJ1dCBvaywgSSBjYW4gZG8gbGlrZSB4ODYsIGJ1dCBJIG5l
-ZWQgYSB0cmljayB0byBrbm93IHdoZXRoZXIgDQpGTF9TQVZFX1JFR1MgaXMgc2V0IG9yIG5vdCwg
-bGlrZSB0aGV5IGRvIHdpdGggZnJlZ3MtPnJlZ3MuY3MNCkFueSBpZGVhIHdoYXQgdGhlIGNvbmRp
-dGlvbiBjYW4gYmUgZm9yIHBvd2VycGMgPw0KDQpUaGFua3MNCkNocmlzdG9waGU=
+On 2022-02-15 13:42, Will Deacon wrote:
+> On Tue, Feb 15, 2022 at 01:30:26PM +0000, Robin Murphy wrote:
+>> On 2022-02-15 13:00, Will Deacon wrote:
+>>> On Mon, Feb 14, 2022 at 08:55:20PM +0800, Yicong Yang wrote:
+>>>> On 2022/1/24 21:11, Yicong Yang wrote:
+>>>>> The DMA of HiSilicon PTT device can only work with identical
+>>>>> mapping. So add a quirk for the device to force the domain
+>>>>> passthrough.
+>>>>>
+>>>>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+>>>>> ---
+>>>>>    drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 16 ++++++++++++++++
+>>>>>    1 file changed, 16 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>>>>> index 6dc6d8b6b368..6f67a2b1dd27 100644
+>>>>> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>>>>> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>>>>> @@ -2838,6 +2838,21 @@ static int arm_smmu_dev_disable_feature(struct device *dev,
+>>>>>    	}
+>>>>>    }
+>>>>> +#define IS_HISI_PTT_DEVICE(pdev)	((pdev)->vendor == PCI_VENDOR_ID_HUAWEI && \
+>>>>> +					 (pdev)->device == 0xa12e)
+>>>>> +
+>>>>> +static int arm_smmu_def_domain_type(struct device *dev)
+>>>>> +{
+>>>>> +	if (dev_is_pci(dev)) {
+>>>>> +		struct pci_dev *pdev = to_pci_dev(dev);
+>>>>> +
+>>>>> +		if (IS_HISI_PTT_DEVICE(pdev))
+>>>>> +			return IOMMU_DOMAIN_IDENTITY;
+>>>>> +	}
+>>>>> +
+>>>>> +	return 0;
+>>>>> +}
+>>>>> +
+>>>>>    static struct iommu_ops arm_smmu_ops = {
+>>>>>    	.capable		= arm_smmu_capable,
+>>>>>    	.domain_alloc		= arm_smmu_domain_alloc,
+>>>>> @@ -2863,6 +2878,7 @@ static struct iommu_ops arm_smmu_ops = {
+>>>>>    	.sva_unbind		= arm_smmu_sva_unbind,
+>>>>>    	.sva_get_pasid		= arm_smmu_sva_get_pasid,
+>>>>>    	.page_response		= arm_smmu_page_response,
+>>>>> +	.def_domain_type	= arm_smmu_def_domain_type,
+>>>>>    	.pgsize_bitmap		= -1UL, /* Restricted during device attach */
+>>>>>    	.owner			= THIS_MODULE,
+>>>>>    };
+>>>>>
+>>>>
+>>>> Is this quirk ok with the SMMU v3 driver? Just want to confirm that I'm on the
+>>>> right way to dealing with the issue of our device.
+>>>
+>>> I don't think the quirk should be in the SMMUv3 driver. Assumedly, you would
+>>> have the exact same problem if you stuck the PTT device behind a different
+>>> type of IOMMU, and so the quirk should be handled by a higher level of the
+>>> stack.
+>>
+>> Conceptually, yes, but I'm inclined to be pragmatic here. Default domain
+>> quirks could only move out as far as the other end of the call from
+>> iommu_get_def_domain_type() - it's not like we could rely on some flag in a
+>> driver which may not even be loaded yet, let alone matched to the device.
+>> And even then there's an equal and opposite argument for why the core code
+>> should have to maintain a list of platform-specific quirks rather than code
+>> specific to the relevant platforms. The fact is that a HiSilicon RCiEP is
+>> not going to end up behind anything other than a HiSilicon IOMMU, and if
+>> those ever stop being SMMUv3 *and* such a quirk still exists we can worry
+>> about it then.
+> 
+> Perhaps, but you know that by adding this hook it's only a matter of time
+> before we get random compatible string matches in there, so I'd rather keep
+> the flood gates closed as long as we can.
+> 
+> Given that this is a PCI device, why can't we have a PCI quirk for devices
+> which require an identity mapping and then handle that in the IOMMU core?
+
+Oh, don't think I *like* having quirks in the driver, it just seems like 
+the least-worst choice from a bad bunch. All of the default domain 
+quirks so far (including this one) exist for integrated devices and/or 
+dodgy firmware setups such that they are platform-specific, so there is 
+no technical reason for trying to split *some* of them off into a 
+generic mechanism when the driver-based platform-specific mechanism 
+still needs to exist anyway (some of them do depend on driver state as 
+well).
+
+Feel free to test the waters with a patch punting 
+qcom_smmu_def_domain_type() to core code, but I think you'll struggle to 
+find a reason to give in the commit message other than "I don't like it".
+
+>> Ugly as it is, this is the status quo. I don't recall anyone ever arguing
+>> that the equivalent quirks for Intel integrated graphics should be made
+>> generic ;)
+> 
+> I don't know anything about Intel integrated graphics. Have they solved this
+> problem in a better way, or could they equally make use of a generic quirk?
+
+See intel-iommu's device_def_domain_type() implementation. The shape of 
+it may seem quite familiar...
+
+Robin.

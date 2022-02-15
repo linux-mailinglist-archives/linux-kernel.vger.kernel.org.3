@@ -2,137 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52FB4B72FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E77724B7290
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241103AbiBOPqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:46:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59958 "EHLO
+        id S241011AbiBOPqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:46:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240315AbiBOPpd (ORCPT
+        with ESMTP id S240903AbiBOPpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:45:33 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE3946650
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:42:17 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id d14-20020a05600c34ce00b0037bf4d14dc7so1669337wmq.3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:42:17 -0800 (PST)
+        Tue, 15 Feb 2022 10:45:40 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C47B250C;
+        Tue, 15 Feb 2022 07:42:37 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id v129so11578870wme.2;
+        Tue, 15 Feb 2022 07:42:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Gtjf9sYNQ8tWBLlDu3878tO9bOueSPSIdgfErkYWlBY=;
-        b=DfOm8aL3XIsw72i/aZu6TaMC/vPWGMQcXFr7OkI4Sf4eJrfk085WYNEhE+YixC1q9B
-         URdh8F77SUPEgJZQr5QXaHqX6CdKz9yrjFxWzIH9q9JALAqMZjdtzp+dEb7tENQ3uRxk
-         b5kqYhOXOH+exRGXHZDAmKVw7O4YZFqXS1BLFZJYFX2I522dxdj6NmQEpOt4DD5vOHbV
-         s9hW+Om+CoGgk8pR5NXkxcrG1j9UEir00MQhC9r1fQsVR1EBoJcI4eirTOn19do2+TIf
-         Lx2dj12+PPeEMK9mjKSkkEACHehbDAl6CMbg0vXb+oLop+OXpJ9jkc7JqBtqUT33J+wP
-         zpRw==
+         :content-disposition:in-reply-to;
+        bh=Y+bDBcR0c7hXTx1K3Rg+9ZhzPuyWp38ngyyjtP3qjek=;
+        b=gxbu+Cbr/yPt9Wjr3BEE1hIdQA9g/qHkFZNkOR+9Sh63WS+YisL/YE98ncV5IgXR8b
+         /GwFcW+uoi88TzXeU3fjg4I+HCECR5hbsaknN2/hriRa3YvYa+c6tgbw4FZnbjhONUZx
+         JQrVsvbCpAWNUJxZvIoIr7wB+BDmOu8F+Sx3BMQA7ruAhVu2Olkmqk684Xh/WkidLTeh
+         w7jAjz8UqaWIZZqHgnIiR2Mn/0+wna1K5cf03gj+yQ5KzkqvhHpsqjeDrqj/WMPIog4l
+         Sp4zUsTNs7iiynwce3UiEbCxkqhSDdWS3385J7KwmA3vBMr5wNltao6YGsVZgy5PdZbM
+         iyXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Gtjf9sYNQ8tWBLlDu3878tO9bOueSPSIdgfErkYWlBY=;
-        b=cf4sKW1me5eJ7j7CpsNEh76/CX8WB5RpihDyQrkPYy4EKyLIIIbUblSVF6ogcD3vm2
-         ffiAXdXQe9WMk0tZkwhteVUwK2ESkfUcbr+AmLpjWX8UtM21HqvgSwSBU/Y5fvPgApme
-         iNOxkjhHPU23g4HEQHdGRcGzSzC7DlzunKeoafjVnRWQkMe5pVkRnDTKrn0jzQGaoU09
-         4VwYoJ/fpzcD/SC3Ye+Erz8WPdXAhMO3dhWZ8ty11gq1GxWWjLYuJ4itcKWW1DafsVhq
-         FVQHuNSKpXYZ+6W4FZrO7JGQIH+5/DXI2vkoo1dJDst0uHcYL41DTF0/V0lvCPIbIoZ4
-         egmg==
-X-Gm-Message-State: AOAM530OXEsxAjcb6tRN3NpfEqe5pmWCydigJ45eZMxXAvGUWKNP2wiP
-        vB53z3YpAHboPfF5G9BQyMCbAA==
-X-Google-Smtp-Source: ABdhPJwnCjLd1r+f0841f6Uaydm3Kuy4F+zJ0sUGx8wUMnwu4nP1nVBSXBIog2dMKdF/OUO+qbc42A==
-X-Received: by 2002:a05:600c:2301:b0:37b:de9e:226d with SMTP id 1-20020a05600c230100b0037bde9e226dmr3567367wmo.78.1644939736406;
-        Tue, 15 Feb 2022 07:42:16 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id g8sm19421269wrd.9.2022.02.15.07.42.15
+         :mime-version:content-disposition:in-reply-to;
+        bh=Y+bDBcR0c7hXTx1K3Rg+9ZhzPuyWp38ngyyjtP3qjek=;
+        b=3gThKW/iNqX+n/4K96sWNteM+ZrrR/HKybl7f/LwBdC5YH6QJHmqnV6jE59txe8BDk
+         tcRBNR3phcN6TSo0fMesz5y1Wu7zJFVpdRN3mOpx/BsbyvG648Rcn2AkgtXagLKuVESf
+         ql1arz+IKlrlq0NjVA8x0ql/VEUoDdgZiwdo4HgTTSblLeyb+Vl7QZgEo66V/jHsa7CA
+         3u1Q2IrnPG+nop/Hd4fntQDzygruyZf90b3M8iOSujSnDgBM3dkgqHjGGaDaTDLCToza
+         MzIqlHqGkKbqq/DNp+uE4W1IFFkEuvpMN8XG7+xGuafg+EjiftGurnq9z0i3JcJ9s76H
+         Hhdw==
+X-Gm-Message-State: AOAM530o4Yg3DZrqFDGl9OlW9gKATkVO0tuUVFuIWlyNnOmaN8rdOYBA
+        +uJd1zbg27QTQM/A9Oq3rhc=
+X-Google-Smtp-Source: ABdhPJyhEWW2p5tjCHxFPrbLpNe6DQ1lIp8aOpR92m4Pd0ZBfU8WztlyZTGyoLsHkYCuCRzTR4z7ww==
+X-Received: by 2002:a05:600c:2e53:: with SMTP id q19mr3485312wmf.189.1644939755764;
+        Tue, 15 Feb 2022 07:42:35 -0800 (PST)
+Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
+        by smtp.gmail.com with ESMTPSA id z10sm15167469wmi.31.2022.02.15.07.42.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 07:42:16 -0800 (PST)
-Date:   Tue, 15 Feb 2022 15:42:13 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>
-Subject: Re: [PATCH v4 0/7] Provide and use generic_handle_irq_safe() where
- appropriate.
-Message-ID: <YgvJ1fCUYmaV0Mbx@google.com>
-References: <20220211181500.1856198-1-bigeasy@linutronix.de>
- <Ygu6UewoPbYC9yPa@google.com>
- <Ygu9xtrMxxq36FRH@linutronix.de>
- <YgvD1HpN2oyalDmj@google.com>
- <YgvH4ROUQVgusBdA@linutronix.de>
+        Tue, 15 Feb 2022 07:42:35 -0800 (PST)
+Date:   Tue, 15 Feb 2022 15:42:33 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 4.19 00/49] 4.19.230-rc1 review
+Message-ID: <YgvJ6YMPja1dQbmx@debian>
+References: <20220214092448.285381753@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YgvH4ROUQVgusBdA@linutronix.de>
+In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022, Sebastian Andrzej Siewior wrote:
+Hi Greg,
 
-> On 2022-02-15 15:16:36 [+0000], Lee Jones wrote:
-> > On Tue, 15 Feb 2022, Sebastian Andrzej Siewior wrote:
-> > 
-> > > On 2022-02-15 14:36:01 [+0000], Lee Jones wrote:
-> > > > Do we really need to coordinate this series cross-subsystem?
-> > > 
-> > > I would suggest to merge it via irq subsystem but I leave the logistics
-> > > to tglx.
-> > 
-> > Could you answer by other questions too please?
+On Mon, Feb 14, 2022 at 10:25:26AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.230 release.
+> There are 49 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> I don't think that I can answer them. I said I leave the logistics to
-> tglx.
-> 
-> This can go via one merge via irq. This can also go differently i.e.
-> feature branch on top of 5.17-rc1 (with 1/7) which is merge into each
-> subsystem and then the "feature" on top.
+> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
+> Anything received after that time might be too late.
 
-Apologies for the confusion.
+Build test:
+mips (gcc version 11.2.1 20220213): 63 configs -> no failure
+arm (gcc version 11.2.1 20220213): 116 configs -> no new failure
+arm64 (gcc version 11.2.1 20220213): 2 configs -> no failure
+x86_64 (gcc version 11.2.1 20220213): 4 configs -> no failure
 
-I'm not asking you about merge strategies.
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
 
-We can handle that without issue.
+[1]. https://openqa.qa.codethink.co.uk/tests/759
 
-> Either way it remains bisect-able since each driver is changed
-> individually. There is no need to merge them in one go but since it is
-> that small it probably makes sense. But I don't do the logistics here.
 
-Okay, this is what I was asking.
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
-So there aren't any hard dependencies between the driver changes?
+--
+Regards
+Sudip
 
-Only the drivers are dependent on the API.
-
-So, if we choose to do so, we can merge the API and then subsequently
-add the users one by one into their respective subsystem, in any
-order.  This would save on creating an immutable topic branch which we
-all pull from.
-
-What is your preference Thomas?
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog

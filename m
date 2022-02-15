@@ -2,355 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CADB94B78D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50DD34B778F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242705AbiBORm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 12:42:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59196 "EHLO
+        id S242651AbiBORoA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 15 Feb 2022 12:44:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242475AbiBORmy (ORCPT
+        with ESMTP id S229508AbiBORn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 12:42:54 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90AF8BE01;
-        Tue, 15 Feb 2022 09:42:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644946964; x=1676482964;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=I0P/s5Xzuf379+YxgczzGONTRmfLBBXVHSvWtOdV4pc=;
-  b=hRpdngq1nMlu4SZZ0ipVeZ5KPzhgK/9UZFz5JdXnNEOLo87O3zQQwujV
-   COWICBeQdLNpA5lx6XfSP7JEbv+Fie45luWGGsC7oLoWo6cXQfz7C9itI
-   24QMqu7uE/jvNcHCe8o/PalaZ/NL+vEFvPr3LtINVLM+ISYXlrl6vl0So
-   c=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 15 Feb 2022 09:42:43 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 09:42:43 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 15 Feb 2022 09:42:42 -0800
-Received: from [10.111.168.21] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 15 Feb
- 2022 09:42:41 -0800
-Message-ID: <6a3ef247-b26b-d505-cd85-92fb277163dd@quicinc.com>
-Date:   Tue, 15 Feb 2022 09:42:38 -0800
+        Tue, 15 Feb 2022 12:43:59 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF77E5406;
+        Tue, 15 Feb 2022 09:43:48 -0800 (PST)
+Date:   Tue, 15 Feb 2022 17:43:35 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 00/12] iio: buffer-dma: write() and new DMABUF based
+ API
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Christian =?iso-8859-1?b?S/ZuaWc=?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org
+Message-Id: <N8XC7R.5FP2M8552CGT3@crapouillou.net>
+In-Reply-To: <20220213184616.669b490b@jic23-huawei>
+References: <20220207125933.81634-1-paul@crapouillou.net>
+        <20220213184616.669b490b@jic23-huawei>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Add SC8180x to hw catalog
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20220215043353.1256754-1-bjorn.andersson@linaro.org>
- <20220215043353.1256754-2-bjorn.andersson@linaro.org>
- <be397e2e-05ab-5c18-8e2d-16c443f0a6d1@quicinc.com>
- <Ygvisfhi0SY6XdAz@builder.lan>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <Ygvisfhi0SY6XdAz@builder.lan>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-13; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jonathan,
+
+Le dim., févr. 13 2022 at 18:46:16 +0000, Jonathan Cameron 
+<jic23@kernel.org> a écrit :
+> On Mon,  7 Feb 2022 12:59:21 +0000
+> Paul Cercueil <paul@crapouillou.net> wrote:
+> 
+>>  Hi Jonathan,
+>> 
+>>  This is the V2 of my patchset that introduces a new userspace 
+>> interface
+>>  based on DMABUF objects to complement the fileio API, and adds 
+>> write()
+>>  support to the existing fileio API.
+> 
+> Hi Paul,
+> 
+> It's been a little while. Perhaps you could summarize the various view
+> points around the appropriateness of using DMABUF for this?
+> I appreciate it is a tricky topic to distil into a brief summary but
+> I know I would find it useful even if no one else does!
+
+So we want to have a high-speed interface where buffers of samples are 
+passed around between IIO devices and other devices (e.g. USB or 
+network), or made available to userspace without copying the data.
+
+DMABUF is, at least in theory, exactly what we need. Quoting the 
+documentation 
+(https://www.kernel.org/doc/html/v5.15/driver-api/dma-buf.html):
+"The dma-buf subsystem provides the framework for sharing buffers for 
+hardware (DMA) access across multiple device drivers and subsystems, 
+and for synchronizing asynchronous hardware access. This is used, for 
+example, by drm ´prime¡ multi-GPU support, but is of course not 
+limited to GPU use cases."
+
+The problem is that right now DMABUF is only really used by DRM, and to 
+quote Daniel, "dma-buf looks like something super generic and useful, 
+until you realize that there's a metric ton of gpu/accelerator bagage 
+piled in".
+
+Still, it seems to be the only viable option. We could add a custom 
+buffer-passing interface, but that would mean implementing the same 
+buffer-passing interface on the network and USB stacks, and before we 
+know it we re-invented DMABUFs.
+
+Cheers,
+-Paul
 
 
-On 2/15/2022 9:28 AM, Bjorn Andersson wrote:
-> On Tue 15 Feb 11:14 CST 2022, Abhinav Kumar wrote:
-> 
->>
->>
->> On 2/14/2022 8:33 PM, Bjorn Andersson wrote:
->>> From: Rob Clark <robdclark@chromium.org>
->>>
->>> Add SC8180x to the hardware catalog, for initial support for the
->>> platform. Due to limitations in the DP driver only one of the four DP
->>> interfaces is left enabled.
->>>
->>> The SC8180x platform supports the newly added DPU_INTF_WIDEBUS flag and
->>> the Windows-on-Snapdragon bootloader leaves the widebus bit set, so this
->>> is flagged appropriately to ensure widebus is disabled - for now.
->>>
->>> Signed-off-by: Rob Clark <robdclark@chromium.org>
->>> [bjorn: Reworked intf and irq definitions]
->>> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->>> ---
->>>
->>> Changes since v1:
->>> - Dropped widebus flag
->>>
->>>    .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 129 ++++++++++++++++++
->>>    .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |   1 +
->>>    drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |   1 +
->>>    drivers/gpu/drm/msm/msm_drv.c                 |   1 +
->>>    4 files changed, 132 insertions(+)
->>>
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>> index aa75991903a6..7ac0fe32df49 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>> @@ -90,6 +90,17 @@
->>>    			 BIT(MDP_INTF3_INTR) | \
->>>    			 BIT(MDP_INTF4_INTR))
->>> +#define IRQ_SC8180X_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
->>> +			  BIT(MDP_SSPP_TOP0_INTR2) | \
->>> +			  BIT(MDP_SSPP_TOP0_HIST_INTR) | \
->>> +			  BIT(MDP_INTF0_INTR) | \
->>> +			  BIT(MDP_INTF1_INTR) | \
->>> +			  BIT(MDP_INTF2_INTR) | \
->>> +			  BIT(MDP_INTF3_INTR) | \
->>> +			  BIT(MDP_INTF4_INTR) | \
->>> +			  BIT(MDP_INTF5_INTR) | \
->>> +			  BIT(MDP_AD4_0_INTR) | \
->>> +			  BIT(MDP_AD4_1_INTR))
->>>    #define DEFAULT_PIXEL_RAM_SIZE		(50 * 1024)
->>>    #define DEFAULT_DPU_LINE_WIDTH		2048
->>> @@ -225,6 +236,22 @@ static const struct dpu_caps sm8150_dpu_caps = {
->>>    	.max_vdeci_exp = MAX_VERT_DECIMATION,
->>>    };
->>> +static const struct dpu_caps sc8180x_dpu_caps = {
->>> +	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
->>> +	.max_mixer_blendstages = 0xb,
->>> +	.qseed_type = DPU_SSPP_SCALER_QSEED3,
->>> +	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
->>> +	.ubwc_version = DPU_HW_UBWC_VER_30,
->>> +	.has_src_split = true,
->>> +	.has_dim_layer = true,
->>> +	.has_idle_pc = true,
->>> +	.has_3d_merge = true,
->>> +	.max_linewidth = 4096,
->>> +	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
->>> +	.max_hdeci_exp = MAX_HORZ_DECIMATION,
->>> +	.max_vdeci_exp = MAX_VERT_DECIMATION,
->>> +};
->>> +
->>>    static const struct dpu_caps sm8250_dpu_caps = {
->>>    	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
->>>    	.max_mixer_blendstages = 0xb,
->>> @@ -293,6 +320,31 @@ static const struct dpu_mdp_cfg sc7180_mdp[] = {
->>>    	},
->>>    };
->>> +static const struct dpu_mdp_cfg sc8180x_mdp[] = {
->>> +	{
->>> +	.name = "top_0", .id = MDP_TOP,
->>> +	.base = 0x0, .len = 0x45C,
->>> +	.features = 0,
->>> +	.highest_bank_bit = 0x3,
->>> +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = {
->>> +			.reg_off = 0x2AC, .bit_off = 0},
->>> +	.clk_ctrls[DPU_CLK_CTRL_VIG1] = {
->>> +			.reg_off = 0x2B4, .bit_off = 0},
->>> +	.clk_ctrls[DPU_CLK_CTRL_VIG2] = {
->>> +			.reg_off = 0x2BC, .bit_off = 0},
->>> +	.clk_ctrls[DPU_CLK_CTRL_VIG3] = {
->>> +			.reg_off = 0x2C4, .bit_off = 0},
->>> +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = {
->>> +			.reg_off = 0x2AC, .bit_off = 8},
->>> +	.clk_ctrls[DPU_CLK_CTRL_DMA1] = {
->>> +			.reg_off = 0x2B4, .bit_off = 8},
->>> +	.clk_ctrls[DPU_CLK_CTRL_CURSOR0] = {
->>> +			.reg_off = 0x2BC, .bit_off = 8},
->>> +	.clk_ctrls[DPU_CLK_CTRL_CURSOR1] = {
->>> +			.reg_off = 0x2C4, .bit_off = 8},
->>> +	},
->>> +};
->>> +
->>>    static const struct dpu_mdp_cfg sm8250_mdp[] = {
->>>    	{
->>>    	.name = "top_0", .id = MDP_TOP,
->>> @@ -861,6 +913,16 @@ static const struct dpu_intf_cfg sc7280_intf[] = {
->>>    	INTF_BLK("intf_5", INTF_5, 0x39000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
->>>    };
->>> +static const struct dpu_intf_cfg sc8180x_intf[] = {
->>> +	INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
->>> +	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
->>> +	INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
->>> +	/* INTF_3 is for MST, wired to INTF_DP 0 and 1, use dummy index until this is supported */
->>> +	INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_DP, 999, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
->>> +	INTF_BLK("intf_4", INTF_4, 0x6C000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 20, 21),
->>> +	INTF_BLK("intf_5", INTF_5, 0x6C800, INTF_DP, MSM_DP_CONTROLLER_2, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
->>
->> This is a continued discussion from
->> https://patchwork.freedesktop.org/patch/474179/.
->>
->> Shouldnt INTF_5 be marked as INTF_eDP?
->>
-> 
-> Might be, I didn't even know we had an INTF_EDP define...
-> 
-> Is there any reason to distinguish DP and EDP in the DPU?  I see sc7280
-> doesn't distinguish the DP and EDP interfaces.
-> 
-> Regards,
-> Bjorn
+>> 
+>>  Changes since v1:
+>> 
+>>  - the patches that were merged in v1 have been (obviously) dropped 
+>> from
+>>    this patchset;
+>>  - the patch that was setting the write-combine cache setting has 
+>> been
+>>    dropped as well, as it was simply not useful.
+>>  - [01/12]:
+>>      * Only remove the outgoing queue, and keep the incoming queue, 
+>> as we
+>>        want the buffer to start streaming data as soon as it is 
+>> enabled.
+>>      * Remove IIO_BLOCK_STATE_DEQUEUED, since it is now functionally 
+>> the
+>>        same as IIO_BLOCK_STATE_DONE.
+>>  - [02/12]:
+>>      * Fix block->state not being reset in
+>>        iio_dma_buffer_request_update() for output buffers.
+>>      * Only update block->bytes_used once and add a comment about 
+>> why we
+>>        update it.
+>>      * Add a comment about why we're setting a different state for 
+>> output
+>>        buffers in iio_dma_buffer_request_update()
+>>      * Remove useless cast to bool (!!) in iio_dma_buffer_io()
+>>  - [05/12]:
+>>      Only allow the new IOCTLs on the buffer FD created with
+>>      IIO_BUFFER_GET_FD_IOCTL().
+>>  - [12/12]:
+>>      * Explicitly state that the new interface is optional and is
+>>        not implemented by all drivers.
+>>      * The IOCTLs can now only be called on the buffer FD returned by
+>>        IIO_BUFFER_GET_FD_IOCTL.
+>>      * Move the page up a bit in the index since it is core stuff 
+>> and not
+>>        driver-specific.
+>> 
+>>  The patches not listed here have not been modified since v1.
+>> 
+>>  Cheers,
+>>  -Paul
+>> 
+>>  Alexandru Ardelean (1):
+>>    iio: buffer-dma: split iio_dma_buffer_fileio_free() function
+>> 
+>>  Paul Cercueil (11):
+>>    iio: buffer-dma: Get rid of outgoing queue
+>>    iio: buffer-dma: Enable buffer write support
+>>    iio: buffer-dmaengine: Support specifying buffer direction
+>>    iio: buffer-dmaengine: Enable write support
+>>    iio: core: Add new DMABUF interface infrastructure
+>>    iio: buffer-dma: Use DMABUFs instead of custom solution
+>>    iio: buffer-dma: Implement new DMABUF based userspace API
+>>    iio: buffer-dmaengine: Support new DMABUF based userspace API
+>>    iio: core: Add support for cyclic buffers
+>>    iio: buffer-dmaengine: Add support for cyclic buffers
+>>    Documentation: iio: Document high-speed DMABUF based API
+>> 
+>>   Documentation/driver-api/dma-buf.rst          |   2 +
+>>   Documentation/iio/dmabuf_api.rst              |  94 +++
+>>   Documentation/iio/index.rst                   |   2 +
+>>   drivers/iio/adc/adi-axi-adc.c                 |   3 +-
+>>   drivers/iio/buffer/industrialio-buffer-dma.c  | 610 
+>> ++++++++++++++----
+>>   .../buffer/industrialio-buffer-dmaengine.c    |  42 +-
+>>   drivers/iio/industrialio-buffer.c             |  60 ++
+>>   include/linux/iio/buffer-dma.h                |  38 +-
+>>   include/linux/iio/buffer-dmaengine.h          |   5 +-
+>>   include/linux/iio/buffer_impl.h               |   8 +
+>>   include/uapi/linux/iio/buffer.h               |  30 +
+>>   11 files changed, 749 insertions(+), 145 deletions(-)
+>>   create mode 100644 Documentation/iio/dmabuf_api.rst
+>> 
 > 
 
-Like I have mentioned in the other patch, I think we have enough 
-confusion between eDP and DP with the common driver. Since DPU does have 
-separate interfaces I think we should fix that.
 
-Regarding sc7280 using INTF_DP, I synced up with Sankeerth. He referred 
-to your change 
-https://patchwork.freedesktop.org/patch/457776/?series=92992&rev=5 as it 
-was posted earlier and ended up using the same INTF_DP macro. So its 
-turning out to be a cyclical error.
-
-I think we should fix both.
-
->>> +};
->>> +
->>>    /*************************************************************
->>>     * VBIF sub blocks config
->>>     *************************************************************/
->>> @@ -931,6 +993,10 @@ static const struct dpu_qos_lut_entry sm8150_qos_linear[] = {
->>>    	{.fl = 0, .lut = 0x0011222222223357 },
->>>    };
->>> +static const struct dpu_qos_lut_entry sc8180x_qos_linear[] = {
->>> +	{.fl = 4, .lut = 0x0000000000000357 },
->>> +};
->>> +
->>>    static const struct dpu_qos_lut_entry sdm845_qos_macrotile[] = {
->>>    	{.fl = 10, .lut = 0x344556677},
->>>    	{.fl = 11, .lut = 0x3344556677},
->>> @@ -944,6 +1010,10 @@ static const struct dpu_qos_lut_entry sc7180_qos_macrotile[] = {
->>>    	{.fl = 0, .lut = 0x0011223344556677},
->>>    };
->>> +static const struct dpu_qos_lut_entry sc8180x_qos_macrotile[] = {
->>> +	{.fl = 10, .lut = 0x0000000344556677},
->>> +};
->>> +
->>>    static const struct dpu_qos_lut_entry sdm845_qos_nrt[] = {
->>>    	{.fl = 0, .lut = 0x0},
->>>    };
->>> @@ -1045,6 +1115,33 @@ static const struct dpu_perf_cfg sm8150_perf_data = {
->>>    	.bw_inefficiency_factor = 120,
->>>    };
->>> +static const struct dpu_perf_cfg sc8180x_perf_data = {
->>> +	.max_bw_low = 9600000,
->>> +	.max_bw_high = 9600000,
->>> +	.min_core_ib = 2400000,
->>> +	.min_llcc_ib = 800000,
->>> +	.min_dram_ib = 800000,
->>> +	.danger_lut_tbl = {0xf, 0xffff, 0x0, 0x0},
->>> +	.qos_lut_tbl = {
->>> +		{.nentry = ARRAY_SIZE(sc8180x_qos_linear),
->>> +		.entries = sc8180x_qos_linear
->>> +		},
->>> +		{.nentry = ARRAY_SIZE(sc8180x_qos_macrotile),
->>> +		.entries = sc8180x_qos_macrotile
->>> +		},
->>> +		{.nentry = ARRAY_SIZE(sc7180_qos_nrt),
->>> +		.entries = sc7180_qos_nrt
->>> +		},
->>> +		/* TODO: macrotile-qseed is different from macrotile */
->>> +	},
->>> +	.cdp_cfg = {
->>> +		{.rd_enable = 1, .wr_enable = 1},
->>> +		{.rd_enable = 1, .wr_enable = 0}
->>> +	},
->>> +	.clk_inefficiency_factor = 105,
->>> +	.bw_inefficiency_factor = 120,
->>> +};
->>> +
->>>    static const struct dpu_perf_cfg sm8250_perf_data = {
->>>    	.max_bw_low = 13700000,
->>>    	.max_bw_high = 16600000,
->>> @@ -1199,6 +1296,37 @@ static void sm8150_cfg_init(struct dpu_mdss_cfg *dpu_cfg)
->>>    	};
->>>    }
->>> +/*
->>> + * sc8180x_cfg_init(): populate sc8180 dpu sub-blocks reg offsets
->>> + * and instance counts.
->>> + */
->>> +static void sc8180x_cfg_init(struct dpu_mdss_cfg *dpu_cfg)
->>> +{
->>> +	*dpu_cfg = (struct dpu_mdss_cfg){
->>> +		.caps = &sc8180x_dpu_caps,
->>> +		.mdp_count = ARRAY_SIZE(sc8180x_mdp),
->>> +		.mdp = sc8180x_mdp,
->>> +		.ctl_count = ARRAY_SIZE(sm8150_ctl),
->>> +		.ctl = sm8150_ctl,
->>> +		.sspp_count = ARRAY_SIZE(sdm845_sspp),
->>> +		.sspp = sdm845_sspp,
->>> +		.mixer_count = ARRAY_SIZE(sm8150_lm),
->>> +		.mixer = sm8150_lm,
->>> +		.pingpong_count = ARRAY_SIZE(sm8150_pp),
->>> +		.pingpong = sm8150_pp,
->>> +		.merge_3d_count = ARRAY_SIZE(sm8150_merge_3d),
->>> +		.merge_3d = sm8150_merge_3d,
->>> +		.intf_count = ARRAY_SIZE(sc8180x_intf),
->>> +		.intf = sc8180x_intf,
->>> +		.vbif_count = ARRAY_SIZE(sdm845_vbif),
->>> +		.vbif = sdm845_vbif,
->>> +		.reg_dma_count = 1,
->>> +		.dma_cfg = sm8150_regdma,
->>> +		.perf = sc8180x_perf_data,
->>> +		.mdss_irqs = IRQ_SC8180X_MASK,
->>> +	};
->>> +}
->>> +
->>>    /*
->>>     * sm8250_cfg_init(): populate sm8250 dpu sub-blocks reg offsets
->>>     * and instance counts.
->>> @@ -1260,6 +1388,7 @@ static const struct dpu_mdss_hw_cfg_handler cfg_handler[] = {
->>>    	{ .hw_rev = DPU_HW_VER_401, .cfg_init = sdm845_cfg_init},
->>>    	{ .hw_rev = DPU_HW_VER_500, .cfg_init = sm8150_cfg_init},
->>>    	{ .hw_rev = DPU_HW_VER_501, .cfg_init = sm8150_cfg_init},
->>> +	{ .hw_rev = DPU_HW_VER_510, .cfg_init = sc8180x_cfg_init},
->>>    	{ .hw_rev = DPU_HW_VER_600, .cfg_init = sm8250_cfg_init},
->>>    	{ .hw_rev = DPU_HW_VER_620, .cfg_init = sc7180_cfg_init},
->>>    	{ .hw_rev = DPU_HW_VER_720, .cfg_init = sc7280_cfg_init},
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>> index 31af04afda7d..9572d29ff2ff 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>> @@ -39,6 +39,7 @@
->>>    #define DPU_HW_VER_410	DPU_HW_VER(4, 1, 0) /* sdm670 v1.0 */
->>>    #define DPU_HW_VER_500	DPU_HW_VER(5, 0, 0) /* sm8150 v1.0 */
->>>    #define DPU_HW_VER_501	DPU_HW_VER(5, 0, 1) /* sm8150 v2.0 */
->>> +#define DPU_HW_VER_510	DPU_HW_VER(5, 1, 1) /* sc8180 */
->>>    #define DPU_HW_VER_600	DPU_HW_VER(6, 0, 0) /* sm8250 */
->>>    #define DPU_HW_VER_620	DPU_HW_VER(6, 2, 0) /* sc7180 v1.0 */
->>>    #define DPU_HW_VER_720	DPU_HW_VER(7, 2, 0) /* sc7280 */
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>> index 47fe11a84a77..cedc631f8498 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>> @@ -1351,6 +1351,7 @@ const struct of_device_id dpu_dt_match[] = {
->>>    	{ .compatible = "qcom,sdm845-dpu", },
->>>    	{ .compatible = "qcom,sc7180-dpu", },
->>>    	{ .compatible = "qcom,sc7280-dpu", },
->>> +	{ .compatible = "qcom,sc8180x-dpu", },
->>>    	{ .compatible = "qcom,sm8150-dpu", },
->>>    	{ .compatible = "qcom,sm8250-dpu", },
->>>    	{}
->>> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
->>> index 555666e3f960..0f441d358b60 100644
->>> --- a/drivers/gpu/drm/msm/msm_drv.c
->>> +++ b/drivers/gpu/drm/msm/msm_drv.c
->>> @@ -1438,6 +1438,7 @@ static const struct of_device_id dt_match[] = {
->>>    	{ .compatible = "qcom,sdm845-mdss", .data = (void *)KMS_DPU },
->>>    	{ .compatible = "qcom,sc7180-mdss", .data = (void *)KMS_DPU },
->>>    	{ .compatible = "qcom,sc7280-mdss", .data = (void *)KMS_DPU },
->>> +	{ .compatible = "qcom,sc8180x-mdss", .data = (void *)KMS_DPU },
->>>    	{ .compatible = "qcom,sm8150-mdss", .data = (void *)KMS_DPU },
->>>    	{ .compatible = "qcom,sm8250-mdss", .data = (void *)KMS_DPU },
->>>    	{}

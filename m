@@ -2,100 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6364B63DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 08:00:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A77574B63C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234660AbiBOHA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 02:00:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60090 "EHLO
+        id S233165AbiBOGzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 01:55:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234656AbiBOHAz (ORCPT
+        with ESMTP id S229575AbiBOGy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 02:00:55 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC1E3E5CF;
-        Mon, 14 Feb 2022 23:00:45 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JyX6h3K1Tz4y3h;
-        Tue, 15 Feb 2022 18:00:44 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644908444;
-        bh=AKJ/dR8BPfe6zq3W9O6Z+o/jn7dK96AB9mxFSSRU4HA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=SWjxyyTK4+kYBlGJPNC2zWDZPNBUjbwPwFPPXknAGl+YjFmgJwhSgZf1iu0iaaUkl
-         6OTVoNe2l4rU7mg08xG1xxKoJe/xRA0QUCGJMv/DZzDhZiQ7Ww+R9Pg3unv6JE7yKm
-         tPv/TPYBROC+uc05zQwCCyCeOuTalyuu7vJm6tZFItavb9baN6c9WVO7ZnSMkX6T4h
-         SabAW3PzIe+RFwQDrVLiU/Mmk2lTFn1YMS7z8TzNqTiALDEELrRowV7IHFWNwzd4CD
-         bBmkWm1t9BaiU7+8AvuL6+zrJGqoDM+Lt/kUlA5dtIH/x3pi0q7vRhsubbRyRpPNw6
-         732jAC/7wYpXA==
-Date:   Tue, 15 Feb 2022 18:00:43 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the akpm-current tree with the folio
- tree
-Message-ID: <20220215180043.23879691@canb.auug.org.au>
+        Tue, 15 Feb 2022 01:54:58 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C980727B2E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 22:54:45 -0800 (PST)
+Received: from kwepemi500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JyWyV2QFZzbkSj;
+        Tue, 15 Feb 2022 14:53:38 +0800 (CST)
+Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
+ kwepemi500020.china.huawei.com (7.221.188.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 15 Feb 2022 14:54:43 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600015.china.huawei.com
+ (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 15 Feb
+ 2022 14:54:43 +0800
+From:   ChenXiaoSong <chenxiaosong2@huawei.com>
+To:     <jlbec@evilplan.org>, <hch@lst.de>
+CC:     <linux-kernel@vger.kernel.org>, <chenxiaosong2@huawei.com>,
+        <yukuai3@huawei.com>, <yi.zhang@huawei.com>, <qiulaibin@huawei.com>
+Subject: [PATCH -next] configfs: fix a race in configfs_{,un}register_subsystem()
+Date:   Tue, 15 Feb 2022 15:10:30 +0800
+Message-ID: <20220215071030.3067982-1-chenxiaosong2@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BI=LnLnJ8yUvPft7vj4C.Ge";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600015.china.huawei.com (7.193.23.52)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/BI=LnLnJ8yUvPft7vj4C.Ge
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+When configfs_register_subsystem() or configfs_unregister_subsystem()
+is executing link_group() or unlink_group(),
+it is possible that two processes add or delete list concurrently.
+Some unfortunate interleavings of them can cause kernel panic.
 
-Hi all,
+One of cases is:
+A --> B --> C --> D
+A <-- B <-- C <-- D
 
-Today's linux-next merge of the block tree got conflicts in:
+     delete list_head *B        |      delete list_head *C
+--------------------------------|-----------------------------------
+configfs_unregister_subsystem   |   configfs_unregister_subsystem
+  unlink_group                  |     unlink_group
+    unlink_obj                  |       unlink_obj
+      list_del_init             |         list_del_init
+        __list_del_entry        |           __list_del_entry
+          __list_del            |             __list_del
+            // next == C        |
+            next->prev = prev   |
+                                |               next->prev = prev
+            prev->next = next   |
+                                |                 // prev == B
+                                |                 prev->next = next
 
-  include/linux/mm.h
-  include/linux/rmap.h
-  mm/gup.c
-  mm/huge_memory.c
-  mm/internal.h
-  mm/memory-failure.c
-  mm/migrate.c
-  mm/mlock.c
-  mm/rmap.c
-  mm/vmscan.c
+Fix this by adding mutex when calling link_group() or unlink_group(),
+but parent configfs_subsystem is NULL when config_item is root.
+So I create a mutex configfs_subsystem_mutex.
 
-There is no way I can figure out in a reasonable time (or at all
-probably) the resolution needed here.  You guys need to get together
-and figure out how the folio tree changes are going to progress to
-Linus' tree.
+Fixes: 7063fbf22611 ("[PATCH] configfs: User-driven configuration filesystem")
+Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+Signed-off-by: Laibin Qiu <qiulaibin@huawei.com>
+---
+ fs/configfs/dir.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-I have gone back and used the folio tree from next-20220204 again for
-today.
---=20
-Cheers,
-Stephen Rothwell
+diff --git a/fs/configfs/dir.c b/fs/configfs/dir.c
+index 688f28b0c4f8..170538639533 100644
+--- a/fs/configfs/dir.c
++++ b/fs/configfs/dir.c
+@@ -35,6 +35,14 @@
+  */
+ DEFINE_SPINLOCK(configfs_dirent_lock);
+ 
++/*
++ * All of link_obj/unlink_obj/link_group/unlink_group require that
++ * subsys->su_mutex is held.
++ * But parent configfs_subsystem is NULL when config_item is root.
++ * Use this mutex when config_item is root.
++ */
++static DEFINE_MUTEX(configfs_subsystem_mutex);
++
+ static void configfs_d_iput(struct dentry * dentry,
+ 			    struct inode * inode)
+ {
+@@ -1927,7 +1935,9 @@ int configfs_register_subsystem(struct configfs_subsystem *subsys)
+ 		group->cg_item.ci_name = group->cg_item.ci_namebuf;
+ 
+ 	sd = root->d_fsdata;
++	mutex_lock(&configfs_subsystem_mutex);
+ 	link_group(to_config_group(sd->s_element), group);
++	mutex_unlock(&configfs_subsystem_mutex);
+ 
+ 	inode_lock_nested(d_inode(root), I_MUTEX_PARENT);
+ 
+@@ -1952,7 +1962,9 @@ int configfs_register_subsystem(struct configfs_subsystem *subsys)
+ 	inode_unlock(d_inode(root));
+ 
+ 	if (err) {
++		mutex_lock(&configfs_subsystem_mutex);
+ 		unlink_group(group);
++		mutex_unlock(&configfs_subsystem_mutex);
+ 		configfs_release_fs();
+ 	}
+ 	put_fragment(frag);
+@@ -1999,7 +2011,9 @@ void configfs_unregister_subsystem(struct configfs_subsystem *subsys)
+ 
+ 	dput(dentry);
+ 
++	mutex_lock(&configfs_subsystem_mutex);
+ 	unlink_group(group);
++	mutex_unlock(&configfs_subsystem_mutex);
+ 	configfs_release_fs();
+ }
+ 
+-- 
+2.31.1
 
---Sig_/BI=LnLnJ8yUvPft7vj4C.Ge
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmILT5sACgkQAVBC80lX
-0Gyp5wf/fMeORNi36rHxWmLeunsKRuit6JyGjHNRjAIofAG0Zvob7Cc0/8OgO9QK
-qg3Z4oRm+Lsg0qQSje53QMrQN6BnDePfYsmYKhMx36NlCsaWaehCZ/iE/chMv6sW
-z1Yhj46hWR6N1mu2ISoil7GJmfGaRevxeIRy0wXBWt7kWC0/LAacax5HHDAQbbvV
-guPZA7jPzNzXRwptsVSkLBJBxFdeaaQL7DRpF7z+udoEKrglql932lOV9nuvk6fv
-5e7HOFGsq5mXYAosPT8sgIjAibOYzpVnGIqlHTzf2VYRmJamTTpNwdtaVB0+IbmQ
-P2Dux7b224zIzyXNz2npWnhkLRqVGA==
-=0iaa
------END PGP SIGNATURE-----
-
---Sig_/BI=LnLnJ8yUvPft7vj4C.Ge--

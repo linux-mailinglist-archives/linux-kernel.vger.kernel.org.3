@@ -2,120 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C781A4B63B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A0C54B63B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234603AbiBOGmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 01:42:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52076 "EHLO
+        id S234570AbiBOGlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 01:41:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234597AbiBOGl7 (ORCPT
+        with ESMTP id S229517AbiBOGlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 01:41:59 -0500
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66268C1172
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 22:41:50 -0800 (PST)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220215064147epoutp031fb19538c68513839883927a2ac4bdf0~T4nsiV2ta2458624586epoutp03L
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 06:41:47 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220215064147epoutp031fb19538c68513839883927a2ac4bdf0~T4nsiV2ta2458624586epoutp03L
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1644907307;
-        bh=uYuVoc8TLG5pnyaXF/S+/Ss83yCwqhKJwuUxsFkXcD4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OZOGjYPbRrM1u60ro5V+x1GJI2VYxsqRqqk667N16j9+bLu1bLE39wuNW7kX2+4TM
-         5w+46K9FrCP4IjF5dU9LubU6A6nuNASsSKEKUlkdRyejXaoFj3/c6CSSC+twaSAZQX
-         w+so1Q/0jbwhUuytDQijuqPFg5SZlAi+7/FA2di4=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20220215064147epcas2p2ad99f62b76f65789911defc7de98304a~T4nsKogGf2025620256epcas2p2Y;
-        Tue, 15 Feb 2022 06:41:47 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.69]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4JyWhm1XXqz4x9Q3; Tue, 15 Feb
-        2022 06:41:44 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1A.52.35137.16A4B026; Tue, 15 Feb 2022 15:38:25 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220215064139epcas2p4669383cd1a2937ce5884335856be457d~T4nlaJU6z2843428434epcas2p4N;
-        Tue, 15 Feb 2022 06:41:39 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220215064139epsmtrp20c7fd16c90eb1427795db762e37dc096~T4nlYtDWi1742317423epsmtrp2D;
-        Tue, 15 Feb 2022 06:41:39 +0000 (GMT)
-X-AuditID: b6c32a46-da1ff70000018941-18-620b4a612069
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        80.53.08738.32B4B026; Tue, 15 Feb 2022 15:41:39 +0900 (KST)
-Received: from ubuntu (unknown [12.36.155.120]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220215064139epsmtip14d824f0e0cbc8c6cd20bd524ae674f66~T4nlPr6Di1847318473epsmtip1k;
-        Tue, 15 Feb 2022 06:41:39 +0000 (GMT)
-Date:   Tue, 15 Feb 2022 15:39:25 +0900
-From:   Jung Daehwan <dh10.jung@samsung.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-Subject: Re: [PATCH v2 1/2] usb: dwc3: Not set DWC3_EP_END_TRANSFER_PENDING
- in ep cmd fails
-Message-ID: <20220215063925.GC144890@ubuntu>
-MIME-Version: 1.0
-In-Reply-To: <ff604504-00df-0c1b-673e-892e42737f7a@synopsys.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOJsWRmVeSWpSXmKPExsWy7bCmmW6iF3eSwcE1JhbH2p6wWzQvXs9m
-        cXnXHDaLRctamS12/VvEZLFpdx+rxaoFB9gd2D02repk89g/dw27x8Q9dR5b9n9m9Pi8SS6A
-        NSrbJiM1MSW1SCE1Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwfoCiWF
-        ssScUqBQQGJxsZK+nU1RfmlJqkJGfnGJrVJqQUpOgXmBXnFibnFpXrpeXmqJlaGBgZEpUGFC
-        dsadCZ+YCuZJVPTsvsDWwHhTuIuRk0NCwETi3/mnTF2MXBxCAjsYJW7f3MEI4XxilPi/4xAb
-        SJWQwGdGiWsXA2A6eqZfhCraxSjxfksjK4TzhFGi4fBOsA4WAVWJN1c/MYLYbAJaEvd+nGAG
-        sUUEdCQOnDgPto9ZYDmTRMf5k2AJYYFYiQvb2sCaeYGKJrVMYIawBSVOznzCAmJzCjhITOh9
-        ARTn4BAVUJF4dbAeZI6EwF92iTOHDzNDnOcisffmKlYIW1ji1fEt7BC2lMTnd3vZIOxiiV2f
-        WpkgmhsYJRofnIBqNpaY9awd7GpmgQyJvoZpLCDLJASUJY7cYoEI80l0HP7LDhHmlehoE4Lo
-        VJaYfnkC1FpJiYOvz0FN9JD43bsIGr69TBIrrvYyT2CUn4XktVlItkHYOhILdn9imwW0gllA
-        WmL5Pw4IU1Ni/S79BYysqxjFUguKc9NTi40KjOCxnZyfu4kRnEK13HYwTnn7Qe8QIxMH4yFG
-        CQ5mJRHeuLOcSUK8KYmVValF+fFFpTmpxYcYTYERNZFZSjQ5H5jE80riDU0sDUzMzAzNjUwN
-        zJXEeb1SNiQKCaQnlqRmp6YWpBbB9DFxcEo1MO22a/eaFWxumpoUcWmBsoP7dVNehS8L5opo
-        XZh6t8fqhIl94oSbE670Ch7+tUrjB+fEsz4LXD3LOj8oLxTV5X2ttGtHaJOqgPlEnn0dL223
-        8/XFb77j/jvog8rJ1abd7zco//vOv9rS/FHZ5xVPJJqXX9uzjDXhzzxlpfqoNbc2/Stwc5Ey
-        W7U7YFX0FMuiqJmcX3wiAgQm9JYf/nOyI97XRXLJO5XAzbZRdhqXerwfbgmcZinKsZir5dL+
-        yV1FaUq1J9tYNCX2/lKWeRFiEh3w7Y75N+dNUnvZlsZuVGu6Iq+W9uU+pwNfg/1MBvOPz1LC
-        X26YkLI79O2yuSlxBR1eMXfCf8vfl5GsvqfwUImlOCPRUIu5qDgRAMUnHnMqBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrLLMWRmVeSWpSXmKPExsWy7bCSnK6yN3eSwZ8jGhbH2p6wWzQvXs9m
-        cXnXHDaLRctamS12/VvEZLFpdx+rxaoFB9gd2D02repk89g/dw27x8Q9dR5b9n9m9Pi8SS6A
-        NYrLJiU1J7MstUjfLoErY/LKS4wF90QrVvz/xNTAuEmwi5GTQ0LARKJn+kXGLkYuDiGBHYwS
-        Hx+9Y4RISEosnXuDHcIWlrjfcoQVougRo8SxfavAEiwCqhJvrn4Ca2AT0JK49+MEM4gtIqAj
-        ceDEeSaQBmaBlUwSU7vmsoIkhAViJS5sa2MDsXmBiia1TGCGmNrLJLH+1ERWiISgxMmZT1hA
-        bGagqTf+vQSaxAFkS0ss/8cBEuYUcJCY0PuCGSQsKqAi8epg/QRGwVlImmchaZ6F0LyAkXkV
-        o2RqQXFuem6xYYFRXmq5XnFibnFpXrpecn7uJkZwDGhp7WDcs+qD3iFGJg7GQ4wSHMxKIrxx
-        ZzmThHhTEiurUovy44tKc1KLDzFKc7AoifNe6DoZLySQnliSmp2aWpBaBJNl4uCUamDKYLP9
-        Oql3YtYdKdOEW73hXAfVd8lNemW5vdBnJ4PJpzdN5f29Yq0r+z8qduzk1VZgtPoUuM5Lep78
-        Fkdjb9FrqtbNmxTmf91dUj7ft4iRcVYyixrr+pnPJGOlBP5+4Tqo5nXQWnST1TTXe0L/62Zf
-        jNtneH3bruD1XE4/Ol6wab+sYeX1LDytbHCvW2bXujt7SqPD1wl3d6/L9DCJmPzV4uapQ9VL
-        n+efWh4TPnft440dzzwZzLae1tdStd6yfc3DkxOX5S2SYrTQe8Qhyvn4XtLE49f5HBbsSLGr
-        2Ko77+JRC8PfTY5rn59MzvT4KLq5KKloZUxnd+fEwv6f3h23Fj79lKHx+/x6pVyxFR+VWIoz
-        Eg21mIuKEwFJTdE08AIAAA==
-X-CMS-MailID: 20220215064139epcas2p4669383cd1a2937ce5884335856be457d
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----.rW42XXn7_Ji6OxwuAF4RAMbP.qed.OeqKlvEhSLhB3noATS=_e8880_"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220214111149epcas2p1a1faeda037991885fd6f2f026fa44ec5
-References: <1644836933-141376-1-git-send-email-dh10.jung@samsung.com>
-        <CGME20220214111149epcas2p1a1faeda037991885fd6f2f026fa44ec5@epcas2p1.samsung.com>
-        <1644836933-141376-2-git-send-email-dh10.jung@samsung.com>
-        <ff604504-00df-0c1b-673e-892e42737f7a@synopsys.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        Tue, 15 Feb 2022 01:41:15 -0500
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.220])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47175B0A6A
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 22:41:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1644907231;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=7tMUX+eorF53dL/JJztQLtiGnrjb4Zp6TdJ3ouaG3aI=;
+    b=DjfGZ9vliUN7C75cTBbJOVNpaiYzALKjVykuyKak9iuuQJo//LB4aNhNO8adRP5i3f
+    6UhikW1rtLH3CcYBVxblMnmmzJjNstNbHeRRXo2KgImKxkNJCbdvfX3WlXdi+f9ahWQW
+    OdzNX61kPcHO8CFZnpDAk+swaM7eRaTocv0QGdeJ73eGmQ+NjqSnDVaXQsh02zVPItGr
+    8RcIReCs+7vHVYn6cp/jctCRMKpPzSyyTxcZbCBU3j52aIF9b6qAMIYExBXDayfhaC3H
+    EWMAQq17PTFwYzGH7xMtj7Gu1quztramVNNfQmLsqFfEr7ApBWF+NjHA8BSEkm10PYGC
+    Ljjg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3jMB+"
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.39.0 DYNA|AUTH)
+    with ESMTPSA id L29417y1F6eV20z
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Tue, 15 Feb 2022 07:40:31 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [BUG]: musb broken since v5.17-rc1 on gta04 (omap3 / dm3730) -
+ cf081d009c44 ("usb: musb: Set the DT node on the child device")
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <F24D461D-8103-456E-AD28-1AA9D5C2AA3D@goldelico.com>
+Date:   Tue, 15 Feb 2022 07:40:29 +0100
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <D26EF7C8-5264-456F-88FC-1B55AB83AAED@goldelico.com>
+References: <F24D461D-8103-456E-AD28-1AA9D5C2AA3D@goldelico.com>
+To:     Rob Herring <robh+dt@kernel.org>, Tony Lindgren <tony@atomide.com>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -123,94 +65,196 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------.rW42XXn7_Ji6OxwuAF4RAMbP.qed.OeqKlvEhSLhB3noATS=_e8880_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
+Hi Rob or Tony,
+any insights or fixes?
 
-Hi Thinh,
+At the moment we have simply reverted cf081d009c44 in the Letux distro =
+kernels.
 
-On Mon, Feb 14, 2022 at 06:44:33PM +0000, Thinh Nguyen wrote:
+BR and thanks,
+Nikolaus Schaller
+
+> Am 03.02.2022 um 11:16 schrieb H. Nikolaus Schaller =
+<hns@goldelico.com>:
+>=20
 > Hi,
-> 
-> Daehwan Jung wrote:
-> > It always sets DWC3_EP_END_TRANSFER_PENDING in dwc3_stop_active_transfer
-> > even if dwc3_send_gadget_ep_cmd fails. It can cause some problems like
-> 
-> How does it fail? Timed out?
+> since v5.17-rc1 musb is broken on the gta04 device.
+>=20
+> Symptoms of this bug are
+>=20
+> a) main symptom
+>=20
+> [   21.336517] using random host ethernet address
+> [   21.341430] using host ethernet address: 32:70:05:18:ff:78
+> [   21.341461] using self ethernet address: 46:10:3a:b3:af:d9
+> [   21.358184] usb0: HOST MAC 32:70:05:18:ff:78
+> [   21.376678] usb0: MAC 46:10:3a:b3:af:d9
+> [   21.388305] using random self ethernet address
+> [   21.393371] using random host ethernet address
+> [   21.398162] g_ether gadget: Ethernet Gadget, version: Memorial Day =
+2008
+> [   21.421081] g_ether gadget: g_ether ready
+> [   21.492156] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+> [   21.691345] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+> [   21.803192] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+> [   21.819427] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+> [   22.124450] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+> [   22.168518] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+> [   22.179382] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+> [   23.213592] musb-hdrc musb-hdrc.1.auto: pm runtime get failed in =
+musb_gadget_queue
+> [   23.221832] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+> [   23.227905] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+> [   23.239440] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+> [   23.401000] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+> [   23.407073] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+> [   23.426361] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+> [   23.734466] musb-hdrc musb-hdrc.1.auto: pm runtime get failed in =
+musb_gadget_queue
+> [   23.742462] musb-hdrc musb-hdrc.1.auto: pm runtime get failed in =
+musb_gadget_queue
+> [   23.750396] musb-hdrc musb-hdrc.1.auto: pm runtime get failed in =
+musb_gadget_queue
+> ... (repeats with high frequency)
+>=20
+> This stops if the USB cable is unplugged and restarts if it is plugged =
+in again.
+>=20
+> b) also found in the log
+>=20
+> [    6.498107] ------------[ cut here ]------------
+> [    6.502960] WARNING: CPU: 0 PID: 868 at =
+arch/arm/mach-omap2/omap_hwmod.c:1885 _enable+0x50/0x234
+> [    6.512207] omap_hwmod: usb_otg_hs: enabled state can only be =
+entered from initialized, idle, or disabled state
+> [    6.522766] Modules linked in: omap2430(+) bmp280_i2c bmp280 =
+itg3200 at24 tsc2007 leds_tca6507 bma180 hmc5843_i2c hmc5843_core =
+industrialio_triggered_buffer lis3lv02d_i2c kfifo_buf lis3lv02d =
+phy_twl4030_usb snd_soc_omap_mcbsp snd_soc_ti_sdma musb_hdrc =
+snd_soc_twl4030 gnss_sirf twl4030_vibra twl4030_madc twl4030_charger =
+twl4030_pwrbutton gnss industrialio ehci_omap omapdrm drm_kms_helper =
+syscopyarea sysfillrect sysimgblt fb_sys_fops drm =
+drm_panel_orientation_quirks cec
+> [    6.566436] CPU: 0 PID: 868 Comm: udevd Not tainted =
+5.16.0-rc5-letux+ #8251
+> [    6.573730] Hardware name: Generic OMAP36xx (Flattened Device Tree)
+> [    6.580322] [<c010ed30>] (unwind_backtrace) from [<c010a1d0>] =
+(show_stack+0x10/0x14)
+> [    6.588470] [<c010a1d0>] (show_stack) from [<c0897c14>] =
+(dump_stack_lvl+0x40/0x4c)
+> [    6.596405] [<c0897c14>] (dump_stack_lvl) from [<c0130cc4>] =
+(__warn+0xb4/0xdc)
+> [    6.604003] [<c0130cc4>] (__warn) from [<c0130d5c>] =
+(warn_slowpath_fmt+0x70/0x9c)
+> [    6.611846] [<c0130d5c>] (warn_slowpath_fmt) from [<c011f4d4>] =
+(_enable+0x50/0x234)
+> [    6.619903] [<c011f4d4>] (_enable) from [<c012081c>] =
+(omap_hwmod_enable+0x28/0x40)
+> [    6.627838] [<c012081c>] (omap_hwmod_enable) from [<c0120ff4>] =
+(omap_device_enable+0x4c/0x78)
+> [    6.636779] [<c0120ff4>] (omap_device_enable) from [<c0121030>] =
+(_od_runtime_resume+0x10/0x3c)
+> [    6.645812] [<c0121030>] (_od_runtime_resume) from [<c05c688c>] =
+(__rpm_callback+0x3c/0xf4)
+> [    6.654510] [<c05c688c>] (__rpm_callback) from [<c05c6994>] =
+(rpm_callback+0x50/0x54)
+> [    6.662628] [<c05c6994>] (rpm_callback) from [<c05c66b0>] =
+(rpm_resume+0x448/0x4e4)
+> [    6.670593] [<c05c66b0>] (rpm_resume) from [<c05c6784>] =
+(__pm_runtime_resume+0x38/0x50)
+> [    6.678985] [<c05c6784>] (__pm_runtime_resume) from [<bf14ab20>] =
+(musb_init_controller+0x350/0xa5c [musb_hdrc])
+> [    6.689727] [<bf14ab20>] (musb_init_controller [musb_hdrc]) from =
+[<c05bccb8>] (platform_probe+0x58/0xa8)
+> [    6.699737] [<c05bccb8>] (platform_probe) from [<c05badf0>] =
+(really_probe+0x170/0x2fc)
+> [    6.708068] [<c05badf0>] (really_probe) from [<c05bb040>] =
+(__driver_probe_device+0xc4/0xd8)
+> [    6.716827] [<c05bb040>] (__driver_probe_device) from [<c05bb084>] =
+(driver_probe_device+0x30/0xac)
+> [    6.726226] [<c05bb084>] (driver_probe_device) from [<c05bb3d0>] =
+(__device_attach_driver+0x94/0xb4)
+> [    6.735717] [<c05bb3d0>] (__device_attach_driver) from [<c05b93f8>] =
+(bus_for_each_drv+0xa0/0xb4)
+> [    6.744934] [<c05b93f8>] (bus_for_each_drv) from [<c05bb248>] =
+(__device_attach+0xc0/0x134)
+> [    6.753631] [<c05bb248>] (__device_attach) from [<c05b9fcc>] =
+(bus_probe_device+0x28/0x80)
+> [    6.762207] [<c05b9fcc>] (bus_probe_device) from [<c05b7e40>] =
+(device_add+0x5fc/0x788)
+> [    6.770507] [<c05b7e40>] (device_add) from [<c05bd240>] =
+(platform_device_add+0x70/0x1bc)
+> [    6.779022] [<c05bd240>] (platform_device_add) from [<bf177830>] =
+(omap2430_probe+0x260/0x2d4 [omap2430])
+> [    6.789001] [<bf177830>] (omap2430_probe [omap2430]) from =
+[<c05bccb8>] (platform_probe+0x58/0xa8)
+> [    6.798309] [<c05bccb8>] (platform_probe) from [<c05badf0>] =
+(really_probe+0x170/0x2fc)
+> [    6.806610] [<c05badf0>] (really_probe) from [<c05bb040>] =
+(__driver_probe_device+0xc4/0xd8)
+> [    6.815399] [<c05bb040>] (__driver_probe_device) from [<c05bb084>] =
+(driver_probe_device+0x30/0xac)
+> [    6.824798] [<c05bb084>] (driver_probe_device) from [<c05bb4b4>] =
+(__driver_attach+0xc4/0xd8)
+> [    6.833648] [<c05bb4b4>] (__driver_attach) from [<c05b9308>] =
+(bus_for_each_dev+0x64/0xa0)
+> [    6.842224] [<c05b9308>] (bus_for_each_dev) from [<c05ba248>] =
+(bus_add_driver+0x148/0x1a4)
+> [    6.850891] [<c05ba248>] (bus_add_driver) from [<c05bbd1c>] =
+(driver_register+0xb4/0xf8)
+> [    6.859313] [<c05bbd1c>] (driver_register) from [<c0101f54>] =
+(do_one_initcall+0x90/0x1c8)
+> [    6.867889] [<c0101f54>] (do_one_initcall) from [<c0893968>] =
+(do_init_module+0x4c/0x204)
+> [    6.876373] [<c0893968>] (do_init_module) from [<c01b4c30>] =
+(load_module+0x13f0/0x1928)
+> [    6.884796] [<c01b4c30>] (load_module) from [<c01b53a0>] =
+(sys_finit_module+0xa0/0xc0)
+> [    6.893005] [<c01b53a0>] (sys_finit_module) from [<c0100080>] =
+(ret_fast_syscall+0x0/0x54)
+> [    6.901580] Exception stack(0xc2807fa8 to 0xc2807ff0)
+> [    6.906890] 7fa0:                   b6e517d4 00052068 00000006 =
+b6e509f8 00000000 b6e5131c
+> [    6.915466] 7fc0: b6e517d4 00052068 cd718000 0000017b 00020000 =
+00037f78 00050048 00063368
+> [    6.924011] 7fe0: bed8fef0 bed8fee0 b6e4ac4b b6f55a42
+> [    6.929321] ---[ end trace d715ff121b58763c ]---
+>=20
+> c) git bisect result on testing for "musb-hdrc" in the console log:
+>=20
+> cf081d009c447647c6b36aced535ca427dbebe72 is the first bad commit
+> commit cf081d009c447647c6b36aced535ca427dbebe72
+> Author: Rob Herring <robh@kernel.org>
+> Date:   Wed Dec 15 17:07:57 2021 -0600
+>=20
+>    usb: musb: Set the DT node on the child device
+>=20
+>    The musb glue drivers just copy the glue resources to the musb =
+child device.
+>    Instead, set the musb child device's DT node pointer to the parent =
+device's
+>    node so that platform_get_irq_byname() can find the resources in =
+the DT.
+>    This removes the need for statically populating the IRQ resources =
+from the
+>    DT which has been deprecated for some time.
+>=20
+>    Signed-off-by: Rob Herring <robh@kernel.org>
+>    Link: =
+https://lore.kernel.org/r/20211215230756.2009115-3-robh@kernel.org
+>    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>=20
+> drivers/usb/musb/am35x.c    | 2 ++
+> drivers/usb/musb/da8xx.c    | 2 ++
+> drivers/usb/musb/jz4740.c   | 1 +
+> drivers/usb/musb/mediatek.c | 2 ++
+> drivers/usb/musb/omap2430.c | 1 +
+> drivers/usb/musb/ux500.c    | 1 +
+> 6 files changed, 9 insertions(+)
+>=20
+> Please advise a fix.
+>=20
+> BR and thanks,
+> Nikolaus Schaller
+>=20
 
-Yes, timed out.
-> 
-> > skipping clear stall commmand or giveback from dequeue. We fix to set it
-> > only when ep cmd success. Additionally, We clear DWC3_EP_TRANSFER_STARTED
-> > for next trb to start transfer not update transfer.
-> 
-> We shouldn't do this. Things will be out of sync. It may work for 1
-> scenario, but it won't work for others.
-> 
-> Please help me understand a few things:
-> 
-> 1) What is the scenario that triggers this? Is it random?
-> 
-ep cmd timeout occurs on dequeue request from user side. End Transfer command
-would be sent in dwc3_stop_active transfer.
-
-> 2) Are there other traffics pending while issuing the End Transfer
-> command? If so, what transfer type(s)?
-> 
-I haven't checked it yet. 
-
-> 3) Have you tried increasing the timeout?
-> 
-No, I haven't.
-> BR,
-> Thinh
-> 
-
-This issue occurs very rarely on customer. I only have restricted
-information. That's why I've been trying to reproduce it.
-
-Wesley may have run into same issue and you can see this issue in detail.
-https://protect2.fireeye.com/v1/url?k=9d423b69-fc3fd32e-9d43b026-74fe485fff30-77a099b52659410d&q=1&e=20b4d9f5-2599-4f57-8b6a-7c4ec167d228&u=https%3A%2F%2Flore.kernel.org%2Flinux-usb%2F20220203080017.27339-1-quic_wcheng%40quicinc.com%2F
-
-Best Regards,
-Jung Daehwan
-> 
-> > 
-> > Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> > ---
-> >  drivers/usb/dwc3/gadget.c | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > index 183b90923f51..3ad3bc5813ca 100644
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@ -2044,6 +2044,12 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
-> >  				dwc3_gadget_move_cancelled_request(r,
-> >  						DWC3_REQUEST_STATUS_DEQUEUED);
-> >  
-> > +			/* If ep cmd fails, then force to giveback cancelled requests here */
-> > +			if (!(dep->flags & DWC3_EP_END_TRANSFER_PENDING)) {
-> > +				dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
-> > +				dwc3_gadget_ep_cleanup_cancelled_requests(dep);
-> > +			}
-> > +
-> >  			dep->flags &= ~DWC3_EP_WAIT_TRANSFER_COMPLETE;
-> >  
-> >  			goto out;
-> > @@ -3645,7 +3651,7 @@ static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
-> >  
-> >  	if (!interrupt)
-> >  		dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
-> > -	else
-> > +	else if (!ret)
-> >  		dep->flags |= DWC3_EP_END_TRANSFER_PENDING;
-> >  }
-> >  
-> 
-
-------.rW42XXn7_Ji6OxwuAF4RAMbP.qed.OeqKlvEhSLhB3noATS=_e8880_
-Content-Type: text/plain; charset="utf-8"
-
-
-------.rW42XXn7_Ji6OxwuAF4RAMbP.qed.OeqKlvEhSLhB3noATS=_e8880_--

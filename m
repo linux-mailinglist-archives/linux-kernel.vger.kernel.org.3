@@ -2,144 +2,951 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F28764B6599
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:13:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFAF04B65AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233268AbiBOINN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 03:13:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34484 "EHLO
+        id S235272AbiBOIOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 03:14:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231987AbiBOINK (ORCPT
+        with ESMTP id S232421AbiBOIOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 03:13:10 -0500
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00050.outbound.protection.outlook.com [40.107.0.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729C5E09F;
-        Tue, 15 Feb 2022 00:12:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KRd3bnvhyDL6rxwpEOW4gy68PDjV2WX0SuV1RvKkXhpr1Pg8jpc7hQf+D4+snczEp5ojWq0bSUUU1kQ65PJEOFKVvBqZVCumuRPo9GvmeShQbe5sE9C0Y0irluwkgFypDwjGCsYv0c07FzuyfTXz9fedFUumsalyd/Fk9U2DEVVKoNVuFCal3ROeXQn2sk1HXmrqNtVXoqWGVEA5/McmW9z602KWFVE1MaOp9UuP4CNBd5PpcHsG3NDd/gDONPBVNaPv7O33YbY9Rrx8A7yLKUQ4BQ1MrXb2VQaqCrcbguRiPlrHQzcWN3KJWtQCkE9YJLNduCjCZTXGeJhq0fuDdw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XOwm9m3URtZP+AU0KsxKEfx+E6fM3XXxeCHiVCOoH3I=;
- b=nNRsiyRKUqVEAUxvoWUiJaOmYgoSRkVxaSKu5Z+Z37ayseJLZbPbQpsx+MCCr+kl0243VbXQ9C20DBO3X+bTU3LUcvx39gh9ZO5KQs7XbuTJLSsMrtefOaFg2N0hqi7+BF8babMkuBt2UMf64i4gkdVdg27K7dvofH4HP3FMx2x7MYtVSKhoCdz2Oe2ofRgVUeGD84jmZulluEPs5v0W7qudDjTdj0pM+VLLb6JpSuSecyguzSwVOo8V09WsGD02LlU99L+Kba2sfuRzhvuCMNuGTMuCqkZLFdOMSRCeSLWsmaPYvVWdUkB0zn6dGcG1osZUajz0vxj5nrhyricJHA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XOwm9m3URtZP+AU0KsxKEfx+E6fM3XXxeCHiVCOoH3I=;
- b=Sspb/pV4qXe3GXoS6r3zwnUwp2W0zKwIxtS/d8x24DPxF6/ewDYJ1ClzGE2me1VyGdN/xcCHCOMGft8xfavbfFN21KkajxxXTFokHHT/W/ue5BnXpkI0MyPu5X5G3YWNZv6er1DcO+fiRadLa11NeLhjHDC3C8qN7igm7GYRdP8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AM0PR04MB6740.eurprd04.prod.outlook.com (2603:10a6:208:16b::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.19; Tue, 15 Feb
- 2022 08:12:53 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::448c:19d:ca9a:123e]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::448c:19d:ca9a:123e%7]) with mapi id 15.20.4975.018; Tue, 15 Feb 2022
- 08:12:52 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        shawnguo@kernel.org
-Cc:     kernel@pengutronix.de, festevam@gmail.com,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH] dt-bindings: watchdog: imx7ulp-wdt: Add imx93 compatible string
-Date:   Tue, 15 Feb 2022 16:12:02 +0800
-Message-Id: <20220215081202.787853-1-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR06CA0218.apcprd06.prod.outlook.com
- (2603:1096:4:68::26) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        Tue, 15 Feb 2022 03:14:32 -0500
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5566D844;
+        Tue, 15 Feb 2022 00:14:21 -0800 (PST)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21F2uQXP023551;
+        Tue, 15 Feb 2022 03:14:13 -0500
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3e7kt2mqma-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 03:14:13 -0500
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 21F8EC0O024147
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 15 Feb 2022 03:14:12 -0500
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Tue, 15 Feb 2022 03:14:11 -0500
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Tue, 15 Feb 2022 03:14:10 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Tue, 15 Feb 2022 03:14:10 -0500
+Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.131])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 21F8Dwtg002120;
+        Tue, 15 Feb 2022 03:14:01 -0500
+From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
+To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
+        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Antoniu Miclaus <antoniu.miclaus@analog.com>
+Subject: [PATCH v8 1/4] iio:frequency:admv1014: add support for ADMV1014
+Date:   Tue, 15 Feb 2022 10:12:13 +0200
+Message-ID: <20220215081216.67706-1-antoniu.miclaus@analog.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2ba63c83-433f-48b7-36d4-08d9f05af682
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6740:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <AM0PR04MB6740186F1A48EE037C1303B4C9349@AM0PR04MB6740.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:576;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zf77OVN3g3oVqXz/GxZjflSmPiEd/PD9W1eBN+SE7z2goaCBvM6b/tF/QJCumBHJq06mjuE267UOyOoE3bbjRae3KccGFTPToglTzGnYZpvtbu4Ty8aIJ0ZTed6AfF2IUFdAD3RxEuCW/FXAC1bg8bmymRIBG+wqO5A8r4kEm5Idfdn1ZmUvyx4MHaKk5CL6vwMd9d7F5RcfFYuBJOKfHNTVeUU9vc5/NpGHApFAimn98WvCugqQmotsmYjHx2ZLSUYJMrOc2EShEJ0CCK7Fuc8cKwKS2FSVBXHRB629C+nOeJ7LMULnA7WsA+y+IglITyqZ5CdAENFIaO0aybAav3QPE3PPro+PgioIWL+CdlpSN5KmJKK2bEyKuzsLrznE9fcyUrGeqzhxMomJkgJfiwuv2Sa2c5GQlKCjPPJfuCuGjqjoYB7QWi3mX46EuNx/8sxgOD45y8K+ZmAmcpZV76iRM7NSRcZKICNT4OYuLno+mc2bu83DJ/7fPM/FEX8aJUYoCKa4VJ+koMv3lh1ERTepE7KYsI9f/FCGH+kPpxeWBKmmV5PJ01FWdB+d40uzI6rTxKVACM1v+PWoDyxl7SRBsQp67UUCH8XdngFE4ID+p2su6rILfVq/yMsID7XS1+iLPFxgu7YADfHkBRiDGyKix5H4M8hrZ0EHmRbGb7qDXlzVDXoYYGBvq64vOUHcuKRj02nu6GR3MbUG8gS16g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(66476007)(66556008)(86362001)(1076003)(66946007)(4326008)(8676002)(8936002)(2616005)(5660300002)(52116002)(7416002)(6506007)(6512007)(6666004)(4744005)(186003)(508600001)(316002)(38350700002)(38100700002)(26005)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d9uh9OHQ7UXgsKKgBofrRf3R+iWbLEPdtvDYQc7BW62uAD3E96chsMS44WM2?=
- =?us-ascii?Q?YlQVfapzV71A8MJEq1FC6Mzh575SazmRohEjRJb/gan0gNhlwFXnjURJouYw?=
- =?us-ascii?Q?tCMEY08tDyXFqzSTEaGj0X2zedITQUHeSPkkOzwcqMZEPMPCp9qkMZZ3NAxC?=
- =?us-ascii?Q?VECYPazHIGS2SJHUPS4O0lQlWFKSz/0zvmO4b2buhJRNbcd56sIv5f8FkN6N?=
- =?us-ascii?Q?1h4R4+4LsBxkaSEzyJgNKWwZugQdcTbxSg1li3/P0h+w5zNNIwSCwEc9L79O?=
- =?us-ascii?Q?DRt9Wygkyo1I7PBMIpxD0xKNkPI11vIp0sn9UwtCywjc4NB+cvKq0Y195CVm?=
- =?us-ascii?Q?HhQQ03cljxkc5rK0tHbGUNjvJlSv9taakAwSY1HTgsZeZ1LexgwpF3oJ1F7L?=
- =?us-ascii?Q?0PUNRKcpwiFoU+3tHc4XuL1JWUEmneHm7lTUTPbPPKd5UbiXID0PTOXen3z0?=
- =?us-ascii?Q?Jy5OIL/GoJoqxqPAYqh6VQexRNDO1PYbFtJwwBqCpK9TFuyPYWNfPy1aGoFl?=
- =?us-ascii?Q?9nxSRBeiE9VsodvlDpT7j8TpOkHr+hvpsmiX2bWOP0gTrlUXEkSYg+mKmdNE?=
- =?us-ascii?Q?5VLjmTuK7T+XKu8u5C9cJpCe7tbebC39nGvNOETnlrIXlHQaldo0yfn4wpVg?=
- =?us-ascii?Q?LyaO3PJd0CGuHygA9yl9mfqy1/VqZULCF2DpBUy21IDDTFQ+LqSg/6nYYUKW?=
- =?us-ascii?Q?u1fM685qLAU3V/2S8vJB1XZy6fBOKUuGusykkzuAgl1H7pWSUepEAAf/MwfM?=
- =?us-ascii?Q?y55MjdoXX6vsUNhrMBipOufkzYAniqPZGYC/NEpUqiQ83mvbsEwhW1sl6L0v?=
- =?us-ascii?Q?6AUnS7AvS/Mrn/IEqBv/xCYgXK+DSMMsACFdHdjMU1yMNOs7pi2DcJvOZMHf?=
- =?us-ascii?Q?h+n0bzxl2O9DMmpRqFNzlcYNrHYVQqoQooK2k/VTfRD3B29p0g7O4ku3bATe?=
- =?us-ascii?Q?H14nFHhL3tVInY8UWYqE5LI8sDq48XS1+ReR3NFkVzCzg+6xJkErCAL7yUMk?=
- =?us-ascii?Q?fIIfoFWkPUd1zHAIsklEDMge/gJUE05kYkte/wQMADskVewBzxNBvF+ugHfL?=
- =?us-ascii?Q?XsOXd1iyLvG2U9DaKQp+985pQRpyAfgb7h/djxH/Mj9rBMgGlRUc0aTnBDC+?=
- =?us-ascii?Q?kEPYBs8RvoKb9EmEfMifPIE1fj7DoNhDCCATl0g0Chv8d4YVk+bt76u1oaCD?=
- =?us-ascii?Q?O2/0Yma8v09KjweOGBXtod0foPF5ZyhnDOb0Yw0cVD3MHeP7IwW9e8miZ1wt?=
- =?us-ascii?Q?I6oJ91NsncWJnWG9amhme3vmHPCF+hIrdsMCUFr6DL/FOj4iWbPdxC5sIgh4?=
- =?us-ascii?Q?KW6w8K4fzwIq59cwoftjuDqzf6yx2rb1TBB7FLBm0JN9kEcMZ/S4f6YhTo0d?=
- =?us-ascii?Q?01hz00p51VJTENWYgqHk6MNlY5EKZevkPrlfydVRvaVL3bG4HRnCtbCW005c?=
- =?us-ascii?Q?n84YXnBrFiQdfJAN1DUlOPqSch2T7Lv8rmRNcgTr9v+dh5zOAgGCSh227CZh?=
- =?us-ascii?Q?R0DTT0sf4rpjwZDOIvyb9FNPiPt/jNlhhR0gD0cH8lTaZCbLpsNVJVA9jWJp?=
- =?us-ascii?Q?FaHOcOodk+2Z7jHxYl3jxj56WKKJXkn+1TJOSMXX6LVDEz/JlJIgZKtX6GjO?=
- =?us-ascii?Q?T0doV6NBUwOx3UpVA2Z/k6c=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ba63c83-433f-48b7-36d4-08d9f05af682
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2022 08:12:52.8399
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZkGintu3WaG/O0nCneV/hiLOCJq2LkbS2KH0uRb8d5L+d6p6JOfVkdByuPefflhKh7xmFOAJbQuW6aNjaNuLDQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6740
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: NoizVAptUI9jso02Jb4yogJb_7isQSoa
+X-Proofpoint-ORIG-GUID: NoizVAptUI9jso02Jb4yogJb_7isQSoa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-15_03,2022-02-14_04,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ adultscore=0 clxscore=1015 lowpriorityscore=0 mlxlogscore=999 phishscore=0
+ spamscore=0 priorityscore=1501 impostorscore=0 suspectscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202150047
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+The ADMV1014 is a silicon germanium (SiGe), wideband,
+microwave downconverter optimized for point to point microwave
+radio designs operating in the 24 GHz to 44 GHz frequency range.
 
-The wdog on i.MX93 is modified from i.MX8ULP with some changes,
-it uses one compatible string, so add i.MX93 support.
-
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ADMV1014.pdf
+Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
 ---
- Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml | 1 +
- 1 file changed, 1 insertion(+)
+changes in v8:
+ - remove clk-provider header
+ drivers/iio/frequency/Kconfig    |  10 +
+ drivers/iio/frequency/Makefile   |   1 +
+ drivers/iio/frequency/admv1014.c | 823 +++++++++++++++++++++++++++++++
+ 3 files changed, 834 insertions(+)
+ create mode 100644 drivers/iio/frequency/admv1014.c
 
-diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
-index fb603a20e396..12da179ed6c0 100644
---- a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
-@@ -19,6 +19,7 @@ properties:
-       - items:
-           - const: fsl,imx8ulp-wdt
-           - const: fsl,imx7ulp-wdt
-+      - const: fsl,imx93-wdt
+diff --git a/drivers/iio/frequency/Kconfig b/drivers/iio/frequency/Kconfig
+index 2c9e0559e8a4..493221f42077 100644
+--- a/drivers/iio/frequency/Kconfig
++++ b/drivers/iio/frequency/Kconfig
+@@ -50,6 +50,16 @@ config ADF4371
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called adf4371.
  
-   reg:
-     maxItems: 1
++config ADMV1014
++	tristate "Analog Devices ADMV1014 Microwave Downconverter"
++	depends on SPI && COMMON_CLK && 64BIT
++	help
++	  Say yes here to build support for Analog Devices ADMV1014
++	  24 GHz to 44 GHz, Wideband, Microwave Downconverter.
++
++	  To compile this driver as a module, choose M here: the
++	  module will be called admv1014.
++
+ config ADRF6780
+         tristate "Analog Devices ADRF6780 Microwave Upconverter"
+         depends on SPI
+diff --git a/drivers/iio/frequency/Makefile b/drivers/iio/frequency/Makefile
+index ae3136c79202..5f0348e5eb53 100644
+--- a/drivers/iio/frequency/Makefile
++++ b/drivers/iio/frequency/Makefile
+@@ -7,4 +7,5 @@
+ obj-$(CONFIG_AD9523) += ad9523.o
+ obj-$(CONFIG_ADF4350) += adf4350.o
+ obj-$(CONFIG_ADF4371) += adf4371.o
++obj-$(CONFIG_ADMV1014) += admv1014.o
+ obj-$(CONFIG_ADRF6780) += adrf6780.o
+diff --git a/drivers/iio/frequency/admv1014.c b/drivers/iio/frequency/admv1014.c
+new file mode 100644
+index 000000000000..06a60c246161
+--- /dev/null
++++ b/drivers/iio/frequency/admv1014.c
+@@ -0,0 +1,823 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * ADMV1014 driver
++ *
++ * Copyright 2022 Analog Devices Inc.
++ */
++
++#include <linux/bitfield.h>
++#include <linux/bits.h>
++#include <linux/clk.h>
++#include <linux/clkdev.h>
++#include <linux/device.h>
++#include <linux/iio/iio.h>
++#include <linux/module.h>
++#include <linux/mod_devicetable.h>
++#include <linux/notifier.h>
++#include <linux/property.h>
++#include <linux/regulator/consumer.h>
++#include <linux/spi/spi.h>
++#include <linux/units.h>
++
++#include <asm/unaligned.h>
++
++/* ADMV1014 Register Map */
++#define ADMV1014_REG_SPI_CONTROL		0x00
++#define ADMV1014_REG_ALARM			0x01
++#define ADMV1014_REG_ALARM_MASKS		0x02
++#define ADMV1014_REG_ENABLE			0x03
++#define ADMV1014_REG_QUAD			0x04
++#define ADMV1014_REG_LO_AMP_PHASE_ADJUST1	0x05
++#define ADMV1014_REG_MIXER			0x07
++#define ADMV1014_REG_IF_AMP			0x08
++#define ADMV1014_REG_IF_AMP_BB_AMP		0x09
++#define ADMV1014_REG_BB_AMP_AGC			0x0A
++#define ADMV1014_REG_VVA_TEMP_COMP		0x0B
++
++/* ADMV1014_REG_SPI_CONTROL Map */
++#define ADMV1014_PARITY_EN_MSK			BIT(15)
++#define ADMV1014_SPI_SOFT_RESET_MSK		BIT(14)
++#define ADMV1014_CHIP_ID_MSK			GENMASK(11, 4)
++#define ADMV1014_CHIP_ID			0x9
++#define ADMV1014_REVISION_ID_MSK		GENMASK(3, 0)
++
++/* ADMV1014_REG_ALARM Map */
++#define ADMV1014_PARITY_ERROR_MSK		BIT(15)
++#define ADMV1014_TOO_FEW_ERRORS_MSK		BIT(14)
++#define ADMV1014_TOO_MANY_ERRORS_MSK		BIT(13)
++#define ADMV1014_ADDRESS_RANGE_ERROR_MSK	BIT(12)
++
++/* ADMV1014_REG_ENABLE Map */
++#define ADMV1014_IBIAS_PD_MSK			BIT(14)
++#define ADMV1014_P1DB_COMPENSATION_MSK		GENMASK(13, 12)
++#define ADMV1014_IF_AMP_PD_MSK			BIT(11)
++#define ADMV1014_QUAD_BG_PD_MSK			BIT(9)
++#define ADMV1014_BB_AMP_PD_MSK			BIT(8)
++#define ADMV1014_QUAD_IBIAS_PD_MSK		BIT(7)
++#define ADMV1014_DET_EN_MSK			BIT(6)
++#define ADMV1014_BG_PD_MSK			BIT(5)
++
++/* ADMV1014_REG_QUAD Map */
++#define ADMV1014_QUAD_SE_MODE_MSK		GENMASK(9, 6)
++#define ADMV1014_QUAD_FILTERS_MSK		GENMASK(3, 0)
++
++/* ADMV1014_REG_LO_AMP_PHASE_ADJUST1 Map */
++#define ADMV1014_LOAMP_PH_ADJ_I_FINE_MSK	GENMASK(15, 9)
++#define ADMV1014_LOAMP_PH_ADJ_Q_FINE_MSK	GENMASK(8, 2)
++
++/* ADMV1014_REG_MIXER Map */
++#define ADMV1014_MIXER_VGATE_MSK		GENMASK(15, 9)
++#define ADMV1014_DET_PROG_MSK			GENMASK(6, 0)
++
++/* ADMV1014_REG_IF_AMP Map */
++#define ADMV1014_IF_AMP_COARSE_GAIN_I_MSK	GENMASK(11, 8)
++#define ADMV1014_IF_AMP_FINE_GAIN_Q_MSK		GENMASK(7, 4)
++#define ADMV1014_IF_AMP_FINE_GAIN_I_MSK		GENMASK(3, 0)
++
++/* ADMV1014_REG_IF_AMP_BB_AMP Map */
++#define ADMV1014_IF_AMP_COARSE_GAIN_Q_MSK	GENMASK(15, 12)
++#define ADMV1014_BB_AMP_OFFSET_Q_MSK		GENMASK(9, 5)
++#define ADMV1014_BB_AMP_OFFSET_I_MSK		GENMASK(4, 0)
++
++/* ADMV1014_REG_BB_AMP_AGC Map */
++#define ADMV1014_BB_AMP_REF_GEN_MSK		GENMASK(6, 3)
++#define ADMV1014_BB_AMP_GAIN_CTRL_MSK		GENMASK(2, 1)
++#define ADMV1014_BB_SWITCH_HIGH_LOW_CM_MSK	BIT(0)
++
++/* ADMV1014_REG_VVA_TEMP_COMP Map */
++#define ADMV1014_VVA_TEMP_COMP_MSK		GENMASK(15, 0)
++
++/* ADMV1014 Miscellaneous Defines */
++#define ADMV1014_READ				BIT(7)
++#define ADMV1014_REG_ADDR_READ_MSK		GENMASK(6, 1)
++#define ADMV1014_REG_ADDR_WRITE_MSK		GENMASK(22, 17)
++#define ADMV1014_REG_DATA_MSK			GENMASK(16, 1)
++#define ADMV1014_NUM_REGULATORS			9
++
++enum {
++	ADMV1014_IQ_MODE,
++	ADMV1014_IF_MODE,
++};
++
++enum {
++	ADMV1014_SE_MODE_POS = 6,
++	ADMV1014_SE_MODE_NEG = 9,
++	ADMV1014_SE_MODE_DIFF = 12,
++};
++
++enum {
++	ADMV1014_CALIBSCALE_COARSE,
++	ADMV1014_CALIBSCALE_FINE,
++};
++
++static const int detector_table[] = {0, 1, 2, 4, 8, 16, 32, 64};
++
++static const char * const input_mode_names[] = { "iq", "if" };
++
++static const char * const quad_se_mode_names[] = { "se-pos", "se-neg", "diff" };
++
++struct admv1014_state {
++	struct spi_device		*spi;
++	struct clk			*clkin;
++	struct notifier_block		nb;
++	/* Protect against concurrent accesses to the device and to data*/
++	struct mutex			lock;
++	struct regulator_bulk_data	regulators[ADMV1014_NUM_REGULATORS];
++	unsigned int			input_mode;
++	unsigned int			quad_se_mode;
++	unsigned int			p1db_comp;
++	bool				det_en;
++	u8				data[3] ____cacheline_aligned;
++};
++
++static const int mixer_vgate_table[] = {106, 107, 108, 110, 111, 112, 113, 114,
++					117, 118, 119, 120, 122, 123, 44, 45};
++
++static int __admv1014_spi_read(struct admv1014_state *st, unsigned int reg,
++			       unsigned int *val)
++{
++	struct spi_transfer t = {};
++	int ret;
++
++	st->data[0] = ADMV1014_READ | FIELD_PREP(ADMV1014_REG_ADDR_READ_MSK, reg);
++	st->data[1] = 0;
++	st->data[2] = 0;
++
++	t.rx_buf = &st->data[0];
++	t.tx_buf = &st->data[0];
++	t.len = sizeof(st->data);
++
++	ret = spi_sync_transfer(st->spi, &t, 1);
++	if (ret)
++		return ret;
++
++	*val = FIELD_GET(ADMV1014_REG_DATA_MSK, get_unaligned_be24(&st->data[0]));
++
++	return ret;
++}
++
++static int admv1014_spi_read(struct admv1014_state *st, unsigned int reg,
++			     unsigned int *val)
++{
++	int ret;
++
++	mutex_lock(&st->lock);
++	ret = __admv1014_spi_read(st, reg, val);
++	mutex_unlock(&st->lock);
++
++	return ret;
++}
++
++static int __admv1014_spi_write(struct admv1014_state *st,
++				unsigned int reg,
++				unsigned int val)
++{
++	put_unaligned_be24(FIELD_PREP(ADMV1014_REG_DATA_MSK, val) |
++			   FIELD_PREP(ADMV1014_REG_ADDR_WRITE_MSK, reg), &st->data[0]);
++
++	return spi_write(st->spi, &st->data[0], 3);
++}
++
++static int admv1014_spi_write(struct admv1014_state *st, unsigned int reg,
++			      unsigned int val)
++{
++	int ret;
++
++	mutex_lock(&st->lock);
++	ret = __admv1014_spi_write(st, reg, val);
++	mutex_unlock(&st->lock);
++
++	return ret;
++}
++
++static int __admv1014_spi_update_bits(struct admv1014_state *st, unsigned int reg,
++				      unsigned int mask, unsigned int val)
++{
++	unsigned int data, temp;
++	int ret;
++
++	ret = __admv1014_spi_read(st, reg, &data);
++	if (ret)
++		return ret;
++
++	temp = (data & ~mask) | (val & mask);
++
++	return __admv1014_spi_write(st, reg, temp);
++}
++
++static int admv1014_spi_update_bits(struct admv1014_state *st, unsigned int reg,
++				    unsigned int mask, unsigned int val)
++{
++	int ret;
++
++	mutex_lock(&st->lock);
++	ret = __admv1014_spi_update_bits(st, reg, mask, val);
++	mutex_unlock(&st->lock);
++
++	return ret;
++}
++
++static int admv1014_update_quad_filters(struct admv1014_state *st)
++{
++	unsigned int filt_raw;
++	u64 rate = clk_get_rate(st->clkin);
++
++	if (rate >= (5400 * HZ_PER_MHZ) && rate <= (7000 * HZ_PER_MHZ))
++		filt_raw = 15;
++	else if (rate > (7000 * HZ_PER_MHZ) && rate <= (8000 * HZ_PER_MHZ))
++		filt_raw = 10;
++	else if (rate > (8000 * HZ_PER_MHZ) && rate <= (9200 * HZ_PER_MHZ))
++		filt_raw = 5;
++	else
++		filt_raw = 0;
++
++	return __admv1014_spi_update_bits(st, ADMV1014_REG_QUAD,
++					ADMV1014_QUAD_FILTERS_MSK,
++					FIELD_PREP(ADMV1014_QUAD_FILTERS_MSK, filt_raw));
++}
++
++static int admv1014_update_vcm_settings(struct admv1014_state *st)
++{
++	unsigned int i, vcm_mv, vcm_comp, bb_sw_hl_cm;
++	int ret;
++
++	vcm_mv = regulator_get_voltage(st->regulators[0].consumer) / 1000;
++	for (i = 0; i < ARRAY_SIZE(mixer_vgate_table); i++) {
++		vcm_comp = 1050 + mult_frac(i, 450, 8);
++		if (vcm_mv != vcm_comp)
++			continue;
++
++		ret = __admv1014_spi_update_bits(st, ADMV1014_REG_MIXER,
++						 ADMV1014_MIXER_VGATE_MSK,
++						 FIELD_PREP(ADMV1014_MIXER_VGATE_MSK,
++							    mixer_vgate_table[i]));
++		if (ret)
++			return ret;
++
++		bb_sw_hl_cm = ~(i / 8);
++		bb_sw_hl_cm = FIELD_PREP(ADMV1014_BB_SWITCH_HIGH_LOW_CM_MSK, bb_sw_hl_cm);
++
++		return __admv1014_spi_update_bits(st, ADMV1014_REG_BB_AMP_AGC,
++						  ADMV1014_BB_AMP_REF_GEN_MSK |
++						  ADMV1014_BB_SWITCH_HIGH_LOW_CM_MSK,
++						  FIELD_PREP(ADMV1014_BB_AMP_REF_GEN_MSK, i) |
++						  bb_sw_hl_cm);
++	}
++
++	return -EINVAL;
++}
++
++static int admv1014_read_raw(struct iio_dev *indio_dev,
++			     struct iio_chan_spec const *chan,
++			     int *val, int *val2, long info)
++{
++	struct admv1014_state *st = iio_priv(indio_dev);
++	unsigned int data;
++	int ret;
++
++	switch (info) {
++	case IIO_CHAN_INFO_OFFSET:
++		ret = admv1014_spi_read(st, ADMV1014_REG_IF_AMP_BB_AMP, &data);
++		if (ret)
++			return ret;
++
++		if (chan->channel2 == IIO_MOD_I)
++			*val = FIELD_GET(ADMV1014_BB_AMP_OFFSET_I_MSK, data);
++		else
++			*val = FIELD_GET(ADMV1014_BB_AMP_OFFSET_Q_MSK, data);
++
++		return IIO_VAL_INT;
++	case IIO_CHAN_INFO_PHASE:
++		ret = admv1014_spi_read(st, ADMV1014_REG_LO_AMP_PHASE_ADJUST1, &data);
++		if (ret)
++			return ret;
++
++		if (chan->channel2 == IIO_MOD_I)
++			*val = FIELD_GET(ADMV1014_LOAMP_PH_ADJ_I_FINE_MSK, data);
++		else
++			*val = FIELD_GET(ADMV1014_LOAMP_PH_ADJ_Q_FINE_MSK, data);
++
++		return IIO_VAL_INT;
++	case IIO_CHAN_INFO_SCALE:
++		ret = admv1014_spi_read(st, ADMV1014_REG_MIXER, &data);
++		if (ret)
++			return ret;
++
++		*val = FIELD_GET(ADMV1014_DET_PROG_MSK, data);
++		return IIO_VAL_INT;
++	case IIO_CHAN_INFO_CALIBSCALE:
++		ret = admv1014_spi_read(st, ADMV1014_REG_BB_AMP_AGC, &data);
++		if (ret)
++			return ret;
++
++		*val = FIELD_GET(ADMV1014_BB_AMP_GAIN_CTRL_MSK, data);
++		return IIO_VAL_INT;
++	default:
++		return -EINVAL;
++	}
++}
++
++static int admv1014_write_raw(struct iio_dev *indio_dev,
++			      struct iio_chan_spec const *chan,
++			      int val, int val2, long info)
++{
++	int data;
++	unsigned int msk;
++	struct admv1014_state *st = iio_priv(indio_dev);
++
++	switch (info) {
++	case IIO_CHAN_INFO_OFFSET:
++		if (chan->channel2 == IIO_MOD_I) {
++			msk = ADMV1014_BB_AMP_OFFSET_I_MSK;
++			data = FIELD_PREP(ADMV1014_BB_AMP_OFFSET_I_MSK, val);
++		} else {
++			msk = ADMV1014_BB_AMP_OFFSET_Q_MSK;
++			data = FIELD_PREP(ADMV1014_BB_AMP_OFFSET_Q_MSK, val);
++		}
++
++		return admv1014_spi_update_bits(st, ADMV1014_REG_IF_AMP_BB_AMP, msk, data);
++	case IIO_CHAN_INFO_PHASE:
++		if (chan->channel2 == IIO_MOD_I) {
++			msk = ADMV1014_LOAMP_PH_ADJ_I_FINE_MSK;
++			data = FIELD_PREP(ADMV1014_LOAMP_PH_ADJ_I_FINE_MSK, val);
++		} else {
++			msk = ADMV1014_LOAMP_PH_ADJ_Q_FINE_MSK;
++			data = FIELD_PREP(ADMV1014_LOAMP_PH_ADJ_Q_FINE_MSK, val);
++		}
++
++		return admv1014_spi_update_bits(st, ADMV1014_REG_LO_AMP_PHASE_ADJUST1, msk, data);
++	case IIO_CHAN_INFO_SCALE:
++		return admv1014_spi_update_bits(st, ADMV1014_REG_MIXER,
++						ADMV1014_DET_PROG_MSK,
++						FIELD_PREP(ADMV1014_DET_PROG_MSK, val));
++	case IIO_CHAN_INFO_CALIBSCALE:
++		return admv1014_spi_update_bits(st, ADMV1014_REG_BB_AMP_AGC,
++						ADMV1014_BB_AMP_GAIN_CTRL_MSK,
++						FIELD_PREP(ADMV1014_BB_AMP_GAIN_CTRL_MSK, val));
++	default:
++		return -EINVAL;
++	}
++}
++
++static ssize_t admv1014_read(struct iio_dev *indio_dev,
++			     uintptr_t private,
++			     const struct iio_chan_spec *chan,
++			     char *buf)
++{
++	struct admv1014_state *st = iio_priv(indio_dev);
++	unsigned int data;
++	int ret;
++
++	switch (private) {
++	case ADMV1014_CALIBSCALE_COARSE:
++		if (chan->channel2 == IIO_MOD_I) {
++			ret = admv1014_spi_read(st, ADMV1014_REG_IF_AMP, &data);
++			if (ret)
++				return ret;
++
++			data = FIELD_GET(ADMV1014_IF_AMP_COARSE_GAIN_I_MSK, data);
++		} else {
++			ret = admv1014_spi_read(st, ADMV1014_REG_IF_AMP_BB_AMP, &data);
++			if (ret)
++				return ret;
++
++			data = FIELD_GET(ADMV1014_IF_AMP_COARSE_GAIN_Q_MSK, data);
++		}
++		break;
++	case ADMV1014_CALIBSCALE_FINE:
++		ret = admv1014_spi_read(st, ADMV1014_REG_IF_AMP, &data);
++		if (ret)
++			return ret;
++
++		if (chan->channel2 == IIO_MOD_I)
++			data = FIELD_GET(ADMV1014_IF_AMP_FINE_GAIN_I_MSK, data);
++		else
++			data = FIELD_GET(ADMV1014_IF_AMP_FINE_GAIN_Q_MSK, data);
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return sysfs_emit(buf, "%u\n", data);
++}
++
++static ssize_t admv1014_write(struct iio_dev *indio_dev,
++			      uintptr_t private,
++			      const struct iio_chan_spec *chan,
++			      const char *buf, size_t len)
++{
++	struct admv1014_state *st = iio_priv(indio_dev);
++	unsigned int data, addr, msk;
++	int ret;
++
++	ret = kstrtouint(buf, 10, &data);
++	if (ret)
++		return ret;
++
++	switch (private) {
++	case ADMV1014_CALIBSCALE_COARSE:
++		if (chan->channel2 == IIO_MOD_I) {
++			addr = ADMV1014_REG_IF_AMP;
++			msk = ADMV1014_IF_AMP_COARSE_GAIN_I_MSK;
++			data = FIELD_PREP(ADMV1014_IF_AMP_COARSE_GAIN_I_MSK, data);
++		} else {
++			addr = ADMV1014_REG_IF_AMP_BB_AMP;
++			msk = ADMV1014_IF_AMP_COARSE_GAIN_Q_MSK;
++			data = FIELD_PREP(ADMV1014_IF_AMP_COARSE_GAIN_Q_MSK, data);
++		}
++		break;
++	case ADMV1014_CALIBSCALE_FINE:
++		addr = ADMV1014_REG_IF_AMP;
++
++		if (chan->channel2 == IIO_MOD_I) {
++			msk = ADMV1014_IF_AMP_FINE_GAIN_I_MSK;
++			data = FIELD_PREP(ADMV1014_IF_AMP_FINE_GAIN_I_MSK, data);
++		} else {
++			msk = ADMV1014_IF_AMP_FINE_GAIN_Q_MSK;
++			data = FIELD_PREP(ADMV1014_IF_AMP_FINE_GAIN_Q_MSK, data);
++		}
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	ret = admv1014_spi_update_bits(st, addr, msk, data);
++
++	return ret ? ret : len;
++}
++
++static int admv1014_read_avail(struct iio_dev *indio_dev,
++			       struct iio_chan_spec const *chan,
++			       const int **vals, int *type, int *length,
++			       long info)
++{
++	switch (info) {
++	case IIO_CHAN_INFO_SCALE:
++		*vals = detector_table;
++		*type = IIO_VAL_INT;
++		*length = ARRAY_SIZE(detector_table);
++
++		return IIO_AVAIL_LIST;
++	default:
++		return -EINVAL;
++	}
++}
++
++static int admv1014_reg_access(struct iio_dev *indio_dev,
++			       unsigned int reg,
++			       unsigned int write_val,
++			       unsigned int *read_val)
++{
++	struct admv1014_state *st = iio_priv(indio_dev);
++
++	if (read_val)
++		return admv1014_spi_read(st, reg, read_val);
++	else
++		return admv1014_spi_write(st, reg, write_val);
++}
++
++static const struct iio_info admv1014_info = {
++	.read_raw = admv1014_read_raw,
++	.write_raw = admv1014_write_raw,
++	.read_avail = &admv1014_read_avail,
++	.debugfs_reg_access = &admv1014_reg_access,
++};
++
++static const char * const admv1014_reg_name[] = {
++	 "vcm", "vcc-if-bb", "vcc-vga", "vcc-vva", "vcc-lna-3p3",
++	 "vcc-lna-1p5", "vcc-bg", "vcc-quad", "vcc-mixer"
++};
++
++static int admv1014_freq_change(struct notifier_block *nb, unsigned long action, void *data)
++{
++	struct admv1014_state *st = container_of(nb, struct admv1014_state, nb);
++	int ret;
++
++	if (action == POST_RATE_CHANGE) {
++		mutex_lock(&st->lock);
++		ret = notifier_from_errno(admv1014_update_quad_filters(st));
++		mutex_unlock(&st->lock);
++		return ret;
++	}
++
++	return NOTIFY_OK;
++}
++
++#define _ADMV1014_EXT_INFO(_name, _shared, _ident) { \
++		.name = _name, \
++		.read = admv1014_read, \
++		.write = admv1014_write, \
++		.private = _ident, \
++		.shared = _shared, \
++}
++
++static const struct iio_chan_spec_ext_info admv1014_ext_info[] = {
++	_ADMV1014_EXT_INFO("calibscale_coarse", IIO_SEPARATE, ADMV1014_CALIBSCALE_COARSE),
++	_ADMV1014_EXT_INFO("calibscale_fine", IIO_SEPARATE, ADMV1014_CALIBSCALE_FINE),
++	{ }
++};
++
++#define ADMV1014_CHAN_IQ(_channel, rf_comp) {				\
++	.type = IIO_ALTVOLTAGE,						\
++	.modified = 1,							\
++	.output = 0,							\
++	.indexed = 1,							\
++	.channel2 = IIO_MOD_##rf_comp,					\
++	.channel = _channel,						\
++	.info_mask_separate = BIT(IIO_CHAN_INFO_PHASE) |		\
++		BIT(IIO_CHAN_INFO_OFFSET),				\
++	.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_CALIBSCALE),	\
++	}
++
++#define ADMV1014_CHAN_IF(_channel, rf_comp) {				\
++	.type = IIO_ALTVOLTAGE,						\
++	.modified = 1,							\
++	.output = 0,							\
++	.indexed = 1,							\
++	.channel2 = IIO_MOD_##rf_comp,					\
++	.channel = _channel,						\
++	.info_mask_separate = BIT(IIO_CHAN_INFO_PHASE) |		\
++		BIT(IIO_CHAN_INFO_OFFSET),				\
++	}
++
++#define ADMV1014_CHAN_POWER(_channel) {					\
++	.type = IIO_POWER,						\
++	.output = 0,							\
++	.indexed = 1,							\
++	.channel = _channel,						\
++	.info_mask_separate = BIT(IIO_CHAN_INFO_SCALE),			\
++	.info_mask_shared_by_type_available = BIT(IIO_CHAN_INFO_SCALE),	\
++	}
++
++#define ADMV1014_CHAN_CALIBSCALE(_channel, rf_comp, _admv1014_ext_info) {	\
++	.type = IIO_ALTVOLTAGE,							\
++	.modified = 1,								\
++	.output = 0,								\
++	.indexed = 1,								\
++	.channel2 = IIO_MOD_##rf_comp,						\
++	.channel = _channel,							\
++	.ext_info = _admv1014_ext_info,						\
++	}
++
++static const struct iio_chan_spec admv1014_channels_iq[] = {
++	ADMV1014_CHAN_IQ(0, I),
++	ADMV1014_CHAN_IQ(0, Q),
++	ADMV1014_CHAN_POWER(0),
++};
++
++static const struct iio_chan_spec admv1014_channels_if[] = {
++	ADMV1014_CHAN_IF(0, I),
++	ADMV1014_CHAN_IF(0, Q),
++	ADMV1014_CHAN_CALIBSCALE(0, I, admv1014_ext_info),
++	ADMV1014_CHAN_CALIBSCALE(0, Q, admv1014_ext_info),
++	ADMV1014_CHAN_POWER(0),
++};
++
++static void admv1014_clk_disable(void *data)
++{
++	clk_disable_unprepare(data);
++}
++
++static void admv1014_reg_disable(void *data)
++{
++	regulator_bulk_disable(ADMV1014_NUM_REGULATORS, data);
++}
++
++static void admv1014_powerdown(void *data)
++{
++	unsigned int enable_reg, enable_reg_msk;
++
++	/* Disable all components in the Enable Register */
++	enable_reg_msk = ADMV1014_IBIAS_PD_MSK |
++			ADMV1014_IF_AMP_PD_MSK |
++			ADMV1014_QUAD_BG_PD_MSK |
++			ADMV1014_BB_AMP_PD_MSK |
++			ADMV1014_QUAD_IBIAS_PD_MSK |
++			ADMV1014_BG_PD_MSK;
++
++	enable_reg = FIELD_PREP(ADMV1014_IBIAS_PD_MSK, 1) |
++			FIELD_PREP(ADMV1014_IF_AMP_PD_MSK, 1) |
++			FIELD_PREP(ADMV1014_QUAD_BG_PD_MSK, 1) |
++			FIELD_PREP(ADMV1014_BB_AMP_PD_MSK, 1) |
++			FIELD_PREP(ADMV1014_QUAD_IBIAS_PD_MSK, 1) |
++			FIELD_PREP(ADMV1014_BG_PD_MSK, 1);
++
++	admv1014_spi_update_bits(data, ADMV1014_REG_ENABLE,
++				 enable_reg_msk, enable_reg);
++}
++
++static int admv1014_init(struct admv1014_state *st)
++{
++	unsigned int chip_id, enable_reg, enable_reg_msk;
++	struct spi_device *spi = st->spi;
++	int ret;
++
++	ret = regulator_bulk_enable(ADMV1014_NUM_REGULATORS, st->regulators);
++	if (ret) {
++		dev_err(&spi->dev, "Failed to enable regulators");
++		return ret;
++	}
++
++	ret = devm_add_action_or_reset(&spi->dev, admv1014_reg_disable, st->regulators);
++	if (ret)
++		return ret;
++
++	ret = clk_prepare_enable(st->clkin);
++	if (ret)
++		return ret;
++
++	ret = devm_add_action_or_reset(&spi->dev, admv1014_clk_disable, st->clkin);
++	if (ret)
++		return ret;
++
++	st->nb.notifier_call = admv1014_freq_change;
++	ret = devm_clk_notifier_register(&spi->dev, st->clkin, &st->nb);
++	if (ret)
++		return ret;
++
++	ret = devm_add_action_or_reset(&spi->dev, admv1014_powerdown, st);
++	if (ret)
++		return ret;
++
++	/* Perform a software reset */
++	ret = __admv1014_spi_update_bits(st, ADMV1014_REG_SPI_CONTROL,
++					 ADMV1014_SPI_SOFT_RESET_MSK,
++					 FIELD_PREP(ADMV1014_SPI_SOFT_RESET_MSK, 1));
++	if (ret) {
++		dev_err(&spi->dev, "ADMV1014 SPI software reset failed.\n");
++		return ret;
++	}
++
++	ret = __admv1014_spi_update_bits(st, ADMV1014_REG_SPI_CONTROL,
++					 ADMV1014_SPI_SOFT_RESET_MSK,
++					 FIELD_PREP(ADMV1014_SPI_SOFT_RESET_MSK, 0));
++	if (ret) {
++		dev_err(&spi->dev, "ADMV1014 SPI software reset disable failed.\n");
++		return ret;
++	}
++
++	ret = __admv1014_spi_write(st, ADMV1014_REG_VVA_TEMP_COMP, 0x727C);
++	if (ret) {
++		dev_err(&spi->dev, "Writing default Temperature Compensation value failed.\n");
++		return ret;
++	}
++
++	ret = __admv1014_spi_read(st, ADMV1014_REG_SPI_CONTROL, &chip_id);
++	if (ret)
++		return ret;
++
++	chip_id = (chip_id & ADMV1014_CHIP_ID_MSK) >> 4;
++	if (chip_id != ADMV1014_CHIP_ID) {
++		dev_err(&spi->dev, "Invalid Chip ID.\n");
++		ret = -EINVAL;
++		return ret;
++	}
++
++	ret = __admv1014_spi_update_bits(st, ADMV1014_REG_QUAD,
++					 ADMV1014_QUAD_SE_MODE_MSK,
++					 FIELD_PREP(ADMV1014_QUAD_SE_MODE_MSK,
++						    st->quad_se_mode));
++	if (ret) {
++		dev_err(&spi->dev, "Writing Quad SE Mode failed.\n");
++		return ret;
++	}
++
++	ret = admv1014_update_quad_filters(st);
++	if (ret) {
++		dev_err(&spi->dev, "Update Quad Filters failed.\n");
++		return ret;
++	}
++
++	ret = admv1014_update_vcm_settings(st);
++	if (ret) {
++		dev_err(&spi->dev, "Update VCM Settings failed.\n");
++		return ret;
++	}
++
++	enable_reg_msk = ADMV1014_P1DB_COMPENSATION_MSK |
++			 ADMV1014_IF_AMP_PD_MSK |
++			 ADMV1014_BB_AMP_PD_MSK |
++			 ADMV1014_DET_EN_MSK;
++
++	enable_reg = FIELD_PREP(ADMV1014_P1DB_COMPENSATION_MSK, st->p1db_comp ? 3 : 0) |
++		     FIELD_PREP(ADMV1014_IF_AMP_PD_MSK, !(st->input_mode)) |
++		     FIELD_PREP(ADMV1014_BB_AMP_PD_MSK, st->input_mode) |
++		     FIELD_PREP(ADMV1014_DET_EN_MSK, st->det_en);
++
++	return __admv1014_spi_update_bits(st, ADMV1014_REG_ENABLE, enable_reg_msk, enable_reg);
++}
++
++static int admv1014_properties_parse(struct admv1014_state *st)
++{
++	const char *str;
++	unsigned int i;
++	struct spi_device *spi = st->spi;
++	int ret;
++
++	st->det_en = device_property_read_bool(&spi->dev, "adi,detector-enable");
++
++	st->p1db_comp = device_property_read_bool(&spi->dev, "adi,p1db-compensation-enable");
++
++	ret = device_property_read_string(&spi->dev, "adi,input-mode", &str);
++	if (ret) {
++		st->input_mode = ADMV1014_IQ_MODE;
++	} else {
++		ret = match_string(input_mode_names, ARRAY_SIZE(input_mode_names), str);
++		if (ret < 0)
++			return ret;
++
++		st->input_mode = ret;
++	}
++
++	ret = device_property_read_string(&spi->dev, "adi,quad-se-mode", &str);
++	if (ret) {
++		st->quad_se_mode = ADMV1014_SE_MODE_POS;
++	} else {
++		ret = match_string(quad_se_mode_names, ARRAY_SIZE(quad_se_mode_names), str);
++		if (ret < 0)
++			return ret;
++
++		st->quad_se_mode = ADMV1014_SE_MODE_POS + (ret * 3);
++	}
++
++	for (i = 0; i < ADMV1014_NUM_REGULATORS; ++i)
++		st->regulators[i].supply = admv1014_reg_name[i];
++
++	ret = devm_regulator_bulk_get(&st->spi->dev, ADMV1014_NUM_REGULATORS,
++				      st->regulators);
++	if (ret) {
++		dev_err(&spi->dev, "Failed to request regulators");
++		return ret;
++	}
++
++	st->clkin = devm_clk_get(&spi->dev, "lo_in");
++	if (IS_ERR(st->clkin))
++		return dev_err_probe(&spi->dev, PTR_ERR(st->clkin),
++				     "failed to get the LO input clock\n");
++
++	return 0;
++}
++
++static int admv1014_probe(struct spi_device *spi)
++{
++	struct iio_dev *indio_dev;
++	struct admv1014_state *st;
++	int ret;
++
++	indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*st));
++	if (!indio_dev)
++		return -ENOMEM;
++
++	st = iio_priv(indio_dev);
++
++	ret = admv1014_properties_parse(st);
++	if (ret)
++		return ret;
++
++	indio_dev->info = &admv1014_info;
++	indio_dev->name = "admv1014";
++
++	if (st->input_mode == ADMV1014_IQ_MODE) {
++		indio_dev->channels = admv1014_channels_iq;
++		indio_dev->num_channels = ARRAY_SIZE(admv1014_channels_iq);
++	} else {
++		indio_dev->channels = admv1014_channels_if;
++		indio_dev->num_channels = ARRAY_SIZE(admv1014_channels_if);
++	}
++
++	st->spi = spi;
++
++	mutex_init(&st->lock);
++
++	ret = admv1014_init(st);
++	if (ret)
++		return ret;
++
++	return devm_iio_device_register(&spi->dev, indio_dev);
++}
++
++static const struct spi_device_id admv1014_id[] = {
++	{ "admv1014", 0 },
++	{}
++};
++MODULE_DEVICE_TABLE(spi, admv1014_id);
++
++static const struct of_device_id admv1014_of_match[] = {
++	{ .compatible = "adi,admv1014" },
++	{}
++};
++MODULE_DEVICE_TABLE(of, admv1014_of_match);
++
++static struct spi_driver admv1014_driver = {
++	.driver = {
++		.name = "admv1014",
++		.of_match_table = admv1014_of_match,
++	},
++	.probe = admv1014_probe,
++	.id_table = admv1014_id,
++};
++module_spi_driver(admv1014_driver);
++
++MODULE_AUTHOR("Antoniu Miclaus <antoniu.miclaus@analog.com");
++MODULE_DESCRIPTION("Analog Devices ADMV1014");
++MODULE_LICENSE("GPL v2");
 -- 
-2.25.1
+2.35.1
 

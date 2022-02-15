@@ -2,210 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E8D4B7B53
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:46:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E29D4B7B55
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:46:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244614AbiBOXqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 18:46:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50952 "EHLO
+        id S244843AbiBOXqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 18:46:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbiBOXqf (ORCPT
+        with ESMTP id S244622AbiBOXqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 18:46:35 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9309E2C7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:46:24 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id o10so272670ilh.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:46:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8D1y9JY/TcIg793QohbrVLgdALG9bj0J1UUN+R+ZXyQ=;
-        b=BOz+RWVBzt+//OXyKfTapB3uNHmGuMA1zjAC7Tb8wkL/9bCFb79wWGfCYyPhCB+ELd
-         fuPAa5qV5KQWaKfTKAQl0ZRqb9B2ai8PkbnB0pjiKf4HArUsyeEMZGcEHWbaTQrmMajN
-         VozDS2JfO/MkwzIZUMHByJIj65YP5IVXqNmMo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8D1y9JY/TcIg793QohbrVLgdALG9bj0J1UUN+R+ZXyQ=;
-        b=5TQZGujHgYFhhaM1Ho7cvJn1N2XPUDX4XrKNl1kv9OsK/PUbwTKpV3pqJ2qotRrwkq
-         aYizBD3y4ZYvSl0QBvKj4VBaWK/ntCpY87d89YlQDJ0oynuFMsZUJ1v63QqsLsN5twYC
-         7F72nT+EkLRBpFUOaSJu1vbdlUYlkPsiEPpUp0v0T7SoDuw3yl7fvsJp5NN/+TeOoKhK
-         sxX9tjuuM0/KayS2K/aeBpKCDAudfrJjrwQoCC3o9fGqkZwNb0mxNp9OqrGom5i3NbJ3
-         nr93BPpe0pFm5RBBgPHrUMiNALnzhr18QeJVwps56eZCRsHNDAohpi+lIop7xUv1NZtQ
-         NXaQ==
-X-Gm-Message-State: AOAM531jljAtfBP1Fl8NcfBF0/OcrDYHwGUHJqMi9o6oop8RycnzZqhc
-        DdPaZV4or1FKrcILLp6XaXodVZB9aCM+8Q==
-X-Google-Smtp-Source: ABdhPJwQxGlpouiw23jHPH4efZeIRg/I6suCeUi27E603LFILRD2xTPD8UpaGIn7nE7uVuAdXNh7ug==
-X-Received: by 2002:a92:dac7:0:b0:2bc:4110:94bd with SMTP id o7-20020a92dac7000000b002bc411094bdmr80463ilq.45.1644968783372;
-        Tue, 15 Feb 2022 15:46:23 -0800 (PST)
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com. [209.85.166.173])
-        by smtp.gmail.com with ESMTPSA id r13sm11463614ilb.35.2022.02.15.15.46.22
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 15:46:22 -0800 (PST)
-Received: by mail-il1-f173.google.com with SMTP id h11so225284ilq.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:46:22 -0800 (PST)
-X-Received: by 2002:a05:6e02:12ef:b0:2be:2c34:17b2 with SMTP id
- l15-20020a056e0212ef00b002be2c3417b2mr108639iln.120.1644968782044; Tue, 15
- Feb 2022 15:46:22 -0800 (PST)
+        Tue, 15 Feb 2022 18:46:45 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C80B7D1;
+        Tue, 15 Feb 2022 15:46:33 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 5046A35F;
+        Tue, 15 Feb 2022 23:46:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 5046A35F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1644968793; bh=MNWowirlgRREMQi3jxNT3zqanigNKlLDCr1BaueZGO4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=ppRtWmuIWeldUwDZIVU+63mrxI045OAz7yBYj9O8sgifrarXkU53/7rh2yjyzhTB/
+         ikP1XObawNHu7WaSo5LAm+d5i1H544sHvmvt/M3hsV+6p0Na9V3dDpH/uv/5XZZv0m
+         FhydAKI9wLe7jIuV4JCT7ezl9eHeXyUOLwio7up6o3F8elApVlPDwcjHpZudax8lkz
+         CJaYLHeby4yJH1KiG0k02OBABaKy+Un/d6DqZSRVeMnaSwvMFqzpPG7higdba/9D3F
+         5Px8oZgIDC+apd1BWu5qCpgbnXDX69SxTo7w7newlgpTkDH2v1LgI/5Hl3Gw1AQLB9
+         D8L54k0UXIv4g==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Akira Yokosawa <akiyks@gmail.com>
+Subject: Re: [PATCH 0/5] docs: pdfdocs: Improve LaTeX preamble (TOC, CJK fonts)
+In-Reply-To: <b5b948b7-8e41-3bd6-1a52-44785c89c965@gmail.com>
+References: <b5b948b7-8e41-3bd6-1a52-44785c89c965@gmail.com>
+Date:   Tue, 15 Feb 2022 16:46:32 -0700
+Message-ID: <87zgmr66cn.fsf@meer.lwn.net>
 MIME-Version: 1.0
-References: <20211001144212.v2.1.I773a08785666ebb236917b0c8e6c05e3de471e75@changeid>
- <CAD=FV=XU0bYVZk+-jPWZVoODW79QXOJ=NQy+RH=fYyX+LCZb2Q@mail.gmail.com> <CA+ASDXPXKVwcZGYoagJYPm4E7DzaJmEVEv2FANhLH-juJw+r+Q@mail.gmail.com>
-In-Reply-To: <CA+ASDXPXKVwcZGYoagJYPm4E7DzaJmEVEv2FANhLH-juJw+r+Q@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 15 Feb 2022 15:46:10 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=VYe1rLKANQ8eom7g8x1v6_s_OYnX819Ax4m7O3UwDHmg@mail.gmail.com>
-Message-ID: <CAD=FV=VYe1rLKANQ8eom7g8x1v6_s_OYnX819Ax4m7O3UwDHmg@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/bridge: analogix_dp: Grab runtime PM reference for DP-AUX
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Sean Paul <sean@poorly.run>, Jonas Karlman <jonas@kwiboo.se>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        "# 4.0+" <stable@vger.kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Akira Yokosawa <akiyks@gmail.com> writes:
 
-On Tue, Feb 15, 2022 at 2:52 PM Brian Norris <briannorris@chromium.org> wrote:
+> Hi,
 >
-> On Tue, Feb 15, 2022 at 1:31 PM Doug Anderson <dianders@chromium.org> wrote:
-> >
-> > Hi,
+> This is a follow-up series to the CJK font setting patch series [1]
+> upstreamed in v5.15.
 >
-> Hi!
+> [1]: https://lore.kernel.org/r/39d0fb0f-b248-bca4-2dac-df69e8d697b1@gmail.com
 >
-> > On Fri, Oct 1, 2021 at 2:50 PM Brian Norris <briannorris@chromium.org> wrote:
-> > >
-> > > If the display is not enable()d, then we aren't holding a runtime PM
-> > > reference here. Thus, it's easy to accidentally cause a hang, if user
-> > > space is poking around at /dev/drm_dp_aux0 at the "wrong" time.
-> > >
-> > > Let's get the panel and PM state right before trying to talk AUX.
+> There is still a lot of room for improvement in the layout of PDF docs.
 >
-> > > diff --git a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-> > > index b7d2e4449cfa..6fc46ac93ef8 100644
-> > > --- a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-> > > +++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-> > > @@ -1632,8 +1632,27 @@ static ssize_t analogix_dpaux_transfer(struct drm_dp_aux *aux,
-> ...
-> > > +       pm_runtime_get_sync(dp->dev);
-> > > +       ret = analogix_dp_transfer(dp, msg);
-> > > +       pm_runtime_put(dp->dev);
-> >
-> > I've spent an unfortunate amount of time digging around the DP AUX bus
-> > recently, so I can at least say that I have some experience and some
-> > opinions here.
+> This series resolves issues listed below:
 >
-> Thanks! Experience is welcome, and opinions too sometimes ;)
->
-> > IMO:
-> >
-> > 1. Don't power the panel on. If the panel isn't powered on then the DP
-> > AUX transfer will timeout. Tough nuggies. Think of yourself more like
-> > an i2c controller and of this as an i2c transfer implementation. The
-> > i2c controller isn't in charge of powering up the i2c devices on the
-> > bus. If userspace does an "i2c detect" on an i2c bus and some of the
-> > devices aren't powered then they won't be found. If you try to
-> > read/write from a powered off device that won't work either.
->
-> I guess this, paired with the driver examples below (ti-sn65dsi86.c,
-> especially, which specifically throws errors if the panel isn't on),
-> makes some sense. It's approximately (but more verbosely) what Andrzej
-> was recommending too, I guess. It still makes me wonder what the point
-> of the /dev/drm_dp_aux<N> interface is though, because it seems like
-> you're pretty much destined to not have reliable operation through
-> that means.
+>  1. Some of chapter and section counts in Table of Contents (TOC) in
+>     large PDF docs collide with chapter/section titles, e.g., Chapters 10,
+>     11, 12, and 13 and Section 10.10 in userspace-api.pdf.
+>  2. In docs of more than 99 pages, page counts in TOC are not aligned
+>     properly when maxdepth >= 2 is specified in toctree, e.g., Chapters 10,
+>     12, and 13 in userspace-api.pdf
+>  3. In TOC of Latin-script docs, quotation and apostrophe symbols look too
+>     wide, e.g., Section 2.2 in userspace-api.pdf.
+>  4. In TOC of translations, Korean chapter titles lose inter-phrase spaces.
+>  5. On systems without "Noto Sans CJK" fonts, CJK chapters in translations
+>     results in full of "TOFU" boxes, with a long build time and a large
+>     log file containing lots of missing-font warnings.
+>  6. In translations.pdf built by "make pdfdocs", ascii-art diagrams in CJK
+>     are not aligned properly.
 
-I can't say I have tons of history for those files. I seem to recall
-maybe someone using them to have userspace tweak the embedded
-backlight on some external DP connected panels? I think we also might
-use it in Chrome OS to update the firmware of panels (dunno if
-internal or external) in some cases too? I suspect that it works OK
-for certain situations but it's really not going to work in all
-cases...
+I've applied the set, thanks.
 
+I do notice that Documentation/conf.py is getting large and
+unapproachable.  At some future point, it might be nice to pull all of
+the latex stuff out into a separate file where it won't scare people who
+stumble into it by accident.
 
-> Also note: I found that the AUX bus is really not working properly at
-> all (even with this patch) in some cases due to self-refresh. Not only
-> do we need the panel enabled, but we need to not be in self-refresh
-> mode. Self-refresh is not currently exposed to user space, so user
-> space has no way of knowing the panel is currently active, aside from
-> racily inducing artificial display activity.
+Thanks,
 
-I suppose this just further proves the point that this is really not a
-great interface to rely on. It's fine for debugging during hardware
-bringup and I guess in limited situations it might be OK, but it's
-really not something we want userspace tweaking with anyway, right? In
-general I expect it's up to the kernel to be controlling peripherals
-on the DP AUX bus. The kernel should have a backlight driver and
-should do the AUX transfers needed. Having userspace in there mucking
-with things is just a bad idea. I mean, userspace also doesn't know
-when a panel has been power cycled and potentially lost any changes
-that they might have written, right?
-
-I sorta suspect that most of the uses of these files are there because
-there wasn't a kernel driver and someone thought that doing it in
-userspace was the way to go?
-
-
-> But if we're OK with "just throw errors" or "just let stuff time out",
-> then I guess that's not a big deal. My purpose is to avoid hanging the
-> system, not to make /dev/drm_dp_aux<N> useful.
->
-> > 2. In theory if the DP driver can read HPD (I haven't looked through
-> > the analogix code to see how it handles it) then you can fail an AUX
-> > transfer right away if HPD isn't asserted instead of timing out. If
-> > this is hard, it's probably fine to just time out though.
->
-> This driver does handle HPD, but it also has overrides because
-> apparently it doesn't work on some systems. I might see if we can
-> leverage it, or I might just follow the bridge-enabled state (similar
-> to ti-sn65dsi86.c's 'comms_enabled').
-
-The "comms_enabled" is a bit ugly and is mostly there because we
-couldn't enable the bridge chip at the right time for some (probably
-unused) configuration, so I wouldn't necessarily say that it's the
-best model to follow. That being said, happy to review something if
-this model looks like the best way to go.
-
-
-> > 3. Do the "pm_runtime" calls, but enable "autosuspend" with something
-> > ~1 second autosuspend delay. When using the AUX bus to read an EDID
-> > the underlying code will call your function 16 times in quick
-> > succession. If you're powering up and down constantly that'll be a bit
-> > of a waste.
->
-> Does this part really matter? For properly active cases, the bridge
-> remains enabled, and it holds a runtime PM reference. For "maybe
-> active" (your "tough nuggies" situation above), you're probably right
-> that it's inefficient, but does it matter, when it's going to be a
-> slow timed-out operation anyway? The AUX failure will be much slower
-> than the PM transition.
->
-> I guess I can do this anyway, but frankly, I'll just be copy/pasting
-> stuff from other drivers, because the runtime PM documentation still
-> confuses me, and moreso once you involve autosuspend.
-
-For the ti-sn65dsi86 it could take a few ms to power it up and down
-each time and it seemed wasteful to do this over and over again.
-Agreed that pm_runtime can easily get confusing.
-
--Doug
+jon

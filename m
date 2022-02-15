@@ -2,95 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B422D4B6844
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 833D94B683C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:55:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236163AbiBOJ4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:56:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57686 "EHLO
+        id S235673AbiBOJzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:55:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236128AbiBOJz4 (ORCPT
+        with ESMTP id S229445AbiBOJzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:55:56 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82ED10DA46;
-        Tue, 15 Feb 2022 01:55:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644918946; x=1676454946;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LBjk0RGRItnnfUS2rGh0O1oLABxwlG/YheagFyaRlhk=;
-  b=VD6QoH7/mtUFCYbEcayDLNLHSEK/YekLWGzfvhTI4sAOl+ZOi4j9GX7T
-   3xytuR3KGXfYYPumIP/XwuP0jxxZ8EhG6mcLyKgyfkogH/Oxg2iRzYWPj
-   U0PBqoxKAtw8w4EF8U9W0lzjRxRpx1qYzC/Sr14yEb8UWamLgyI8KRJsd
-   QQ8mbkiSfTzTradBZi8CUg4BTJQEFNQWpHiIH+H+KCmQg4SLRZTle8n6C
-   4UUwDQP9zMg1J+2ZIuINEAuvAY7kmEtL3K03BtOrevv3FO3xGVTewGo1C
-   HDRen+nPmdxjSlQWhEwPbuEqtHjeQrNMKiwgVkBeDxAPA08rwq4TrHOxM
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="249147387"
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="249147387"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 01:55:46 -0800
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="544222329"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 01:55:44 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nJuXp-004s9E-Rz;
-        Tue, 15 Feb 2022 11:54:49 +0200
-Date:   Tue, 15 Feb 2022 11:54:49 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Qing Wang <wangqing@vivo.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tty: serial: 8250: add missing pci_dev_put() before
- return
-Message-ID: <Ygt4aUMVKM8ZcW/5@smile.fi.intel.com>
-References: <1644890454-65258-1-git-send-email-wangqing@vivo.com>
- <67ace5d3-02b3-034d-969f-9a05bbdd8e30@kernel.org>
- <621e2079-567c-6954-9744-c51748dd48dd@kernel.org>
+        Tue, 15 Feb 2022 04:55:12 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4555A10A7FB;
+        Tue, 15 Feb 2022 01:55:03 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21F7p9DB012049;
+        Tue, 15 Feb 2022 09:55:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=yLXpyIZemp4HaBhnwsA2gdOt8XJPHK0CTjP4FZW3qys=;
+ b=K6UUEPadL9L6PQMBpihilw1A1+O+79lawRDAArPtjjHI2kp4QtkvEtWRnbse4EsIXI8L
+ wjs1HYloPPEnjAu0iag/YXc3s22v7l7x3GOt1zOUs1jj+O6Ip9Ll+MgA4ozy/z6bNiM0
+ qU3A2QOZ7n+YMv7ditpbtePMjvWIQnjrdFgXyO/8aHHt2PEzBoazJI260Y6LLjCsBEBE
+ wlIlE5Z0Udl4ldKTdDtatTSvGVGDRXKro3P9MXmQc0jtFfHvqVk0bx+Tf09oW+COENbg
+ u0VeI5an3xSkYDu0bBEYaBw34IYUgfSTvFXEsuZffbIooq6c9RvE9QCQPQ5lQNhPR0zb Hg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8850jh1m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 09:55:02 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21F9nRcC028637;
+        Tue, 15 Feb 2022 09:55:01 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8850jh11-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 09:55:01 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21F9cMDH031585;
+        Tue, 15 Feb 2022 09:55:00 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3e645jn9wq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 09:55:00 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21F9stfw41091396
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Feb 2022 09:54:56 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C9E544C044;
+        Tue, 15 Feb 2022 09:54:55 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5A59C4C040;
+        Tue, 15 Feb 2022 09:54:55 +0000 (GMT)
+Received: from [9.171.66.227] (unknown [9.171.66.227])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 15 Feb 2022 09:54:55 +0000 (GMT)
+Message-ID: <801aa4ea-ca26-7561-95f3-162b0f680929@linux.ibm.com>
+Date:   Tue, 15 Feb 2022 10:54:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <621e2079-567c-6954-9744-c51748dd48dd@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] selftests: kvm: Check whether SIDA memop fails for normal
+ guests
+Content-Language: en-US
+To:     Thomas Huth <thuth@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220215074824.188440-1-thuth@redhat.com>
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+In-Reply-To: <20220215074824.188440-1-thuth@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: viCYogg6dhuGJ0Dow6CRyD5yxFP8TSm2
+X-Proofpoint-ORIG-GUID: 6_EK_d2sRUK_MRmYvKJrBKiS4EtxccOA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-15_03,2022-02-14_04,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ bulkscore=0 impostorscore=0 priorityscore=1501 suspectscore=0
+ lowpriorityscore=0 phishscore=0 mlxscore=0 clxscore=1011 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202150055
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 07:02:57AM +0100, Jiri Slaby wrote:
-> On 15. 02. 22, 6:55, Jiri Slaby wrote:
-> > On 15. 02. 22, 3:00, Qing Wang wrote:
-> > > From: Wang Qing <wangqing@vivo.com>
-> > > 
-> > > pci_get_slot() increases its reference count, the caller must
-> > > decrement the reference count by calling pci_dev_put()
-
-Wang, thank you for the report!
-
-...
-
-> > What about the "return -ENODEV" few lines above?
+On 2/15/22 08:48, Thomas Huth wrote:
+> Commit 2c212e1baedc ("KVM: s390: Return error on SIDA memop on normal
+> guest") fixed the behavior of the SIDA memops for normal guests. It
+> would be nice to have a way to test whether the current kernel has
+> the fix applied or not. Thus add a check to the KVM selftests for
+> these two memops.
 > 
-> On the top of that, the code stores the pointer to the dev:
-> param->dma_dev = &dma_dev->dev;
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> ---
+>  tools/testing/selftests/kvm/s390x/memop.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 > 
-> So we should likely put the device in ->exit(), not ->setup().
+> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+> index 9f49ead380ab..d19c3ffdea3f 100644
+> --- a/tools/testing/selftests/kvm/s390x/memop.c
+> +++ b/tools/testing/selftests/kvm/s390x/memop.c
+> @@ -160,6 +160,21 @@ int main(int argc, char *argv[])
+>  	run->psw_mask &= ~(3UL << (63 - 17));   /* Disable AR mode */
+>  	vcpu_run(vm, VCPU_ID);                  /* Run to sync new state */
+> 
+> +	/* Check that the SIDA calls are rejected for non-protected guests */
+> +	ksmo.gaddr = 0;
+> +	ksmo.flags = 0;
+> +	ksmo.size = 8;
+> +	ksmo.op = KVM_S390_MEMOP_SIDA_READ;
+> +	ksmo.buf = (uintptr_t)mem1;
+> +	ksmo.sida_offset = 0x1c0;
 
-I think I may fix all these and send a new version.
+What is the rational for that constant?
+Any would do, as long as size + offset < PAGE_SIZE, correct?
 
--- 
-With Best Regards,
-Andy Shevchenko
-
+> +	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+> +	TEST_ASSERT(rv == -1 && errno == EINVAL,
+> +		    "ioctl does not reject SIDA_READ in non-protected mode");
+> +	ksmo.op = KVM_S390_MEMOP_SIDA_WRITE;
+> +	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+> +	TEST_ASSERT(rv == -1 && errno == EINVAL,
+> +		    "ioctl does not reject SIDA_WRITE in non-protected mode");
+> +
+>  	kvm_vm_free(vm);
+> 
+>  	return 0;
 

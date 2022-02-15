@@ -2,164 +2,468 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCBD44B771D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0664B7755
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242470AbiBORl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 12:41:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53360 "EHLO
+        id S242693AbiBORld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 12:41:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242704AbiBORlX (ORCPT
+        with ESMTP id S242618AbiBORl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 12:41:23 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2047.outbound.protection.outlook.com [40.107.237.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A498111AA1C;
-        Tue, 15 Feb 2022 09:41:03 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UAuWU4DoXx46xq33urUvrsfENEaeGluu42NvS7oF3+7h67V2NO4dNqlB/cYJkP5COSwlYeBQ4Izn/asyKfxPui8weoC5x/fZILfsYcB4I34k4GqMCYlM+LwtZs8baZuE0lNAak1dqoHPO0pdbhz/0Tbt2UEJWOm7FINx+H9ODMT42J0yT4DfNrobmZ36vLVvtJGFwteY81wG2J8QBcgqI0vsyacZcbRxZfv2Q0CtGn9lH74MJ2bjvi87hW3YN/N8cTH2SX1NeI+bIOZep7vCEffM7ZQ9jWRUcnWSatdfLhLKqGUsgTkYEwwuPO0hUrjrB/yLG08CMxU32hEcimNOXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/Nwe/MFR3ag+T8mThFgJ0ME7n7k3EsKwyapXdAqy6rg=;
- b=YEpqsYZwSEIfq6RVdSBlpOjDXmk4NmYFdHBYUkbfGxVZRLuvZx2BuLOusWBnjBH4tXGvjpgkM37v3rcOAnIylkc96yEUhmRdqYyw8jxUKTbwdU1AFi5uY6X+H70p08eObZk8Fwu85SNwUusS2NlQVv4GrloZySMMPCLyjdO7YyY6S9sA34V2TxSWoME1seJV8ejh0OMcREApcfDpoWE9lIPI+qsqpb18mM75Bh4KhHO55T5AXV+yzwREBDVC03VaszflmNXnBfhtNjGeT4mB15BudFaMg0aJ83ZuyiR8hZlRo5RXfNGXgDqugofdwcN+fEc8YuYotNziNz4ewaODQA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/Nwe/MFR3ag+T8mThFgJ0ME7n7k3EsKwyapXdAqy6rg=;
- b=mggHfN75TfPPtDqT8B4H/OKy0nB8P6xY1DElxUW0wNRfIbnZbKU4Uk3bYH8OHdrrI+SupSDnAkhCSiqxbVr9DAyagazgSD5e2DQTDzBlU/QIX5VEQAyTYR6Jv9pU70pGaJ1OPMHjartS+Hy1APwVJ+vGjimdQT9RVWzj3iMx3AHkMtA52tMn4MmTIasUtp1EEj5tCRXFq9vtO9qufNl42Wd1+RV9qqQ6Ht/MAqndUbOsxAoq4Uzq4aFdrY8htlyA1G04DHw+fphMGMdwUM0oUVdq61RgniR/d6Sh9I7gceAmzOofPJ+9+OwrOQ3K00DqY30NPmOLiAIhTivijsSH0Q==
-Received: from MWHPR12MB1390.namprd12.prod.outlook.com (2603:10b6:300:12::13)
- by CY4PR12MB1207.namprd12.prod.outlook.com (2603:10b6:903:39::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.15; Tue, 15 Feb
- 2022 17:41:01 +0000
-Received: from MWHPR12MB1390.namprd12.prod.outlook.com
- ([fe80::7161:aac8:35b6:1447]) by MWHPR12MB1390.namprd12.prod.outlook.com
- ([fe80::7161:aac8:35b6:1447%9]) with mapi id 15.20.4995.015; Tue, 15 Feb 2022
- 17:41:01 +0000
-From:   Ajay Gupta <ajayg@nvidia.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Thierry Reding <treding@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>,
-        Amit Cohen <amcohen@nvidia.com>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
-        Sameer Pujar <spujar@nvidia.com>
-Subject: RE: [PATCH v3 1/5] i2c: Introduce common module to instantiate CCGx
- UCSI
-Thread-Topic: [PATCH v3 1/5] i2c: Introduce common module to instantiate CCGx
- UCSI
-Thread-Index: AQHYETQrH65y7Kmubk+ARHDJuviNGqyIJpuAgAARJgCAAAbJgIAMNraAgAAJ04CAADKPAIAAUlkg
-Date:   Tue, 15 Feb 2022 17:41:01 +0000
-Message-ID: <MWHPR12MB139064CD774561207321D309DC349@MWHPR12MB1390.namprd12.prod.outlook.com>
-References: <20220105141935.24109-1-andriy.shevchenko@linux.intel.com>
- <Ye7AhqMsOkfvHOAg@smile.fi.intel.com> <YgEa/blO2UMzztCq@smile.fi.intel.com>
- <YgEpYE2VNc05XhpG@shikoro> <YgEvEQ7BRc4KhOcF@smile.fi.intel.com>
- <Ygtt8c+s7LiAuI6C@kunai> <Ygt2L/WkJ9rCe3XF@smile.fi.intel.com>
- <YgugmDb7h1mhEqm0@shikoro>
-In-Reply-To: <YgugmDb7h1mhEqm0@shikoro>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d8604e5d-39a1-4f8c-bf17-08d9f0aa555a
-x-ms-traffictypediagnostic: CY4PR12MB1207:EE_
-x-microsoft-antispam-prvs: <CY4PR12MB12076E6B4C9C0A7810BCCF25DC349@CY4PR12MB1207.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6970BPCLXX7vmxZADgkqAiIsSbjoPFc8cgqxWRLKuqU5XXjkWo51iH7SvOaU0YRkqjvgk5MXGuN2SkZxJwLqNizkdGKK1nq/Gulsn1JDSnZMlN5EdQz7uUfx1wwasrxWgYvdlJtkS1fhwUvzBAiDO/E8nFMcKZ8rixXDXTPU7n818PZH8wpoeWc8WdoihAwUkLbCgj1LKS3KpyHnPzlD+BwPZMYJIW6i7IaXw7K9Dpr56u32DbaSgw4KgWA5AxnnnuENdkDWl0VuZaANdazSCdb1lQs+fEPtuIOvXby4KvayHV25bNGSfyVLxzJYJImY9a7hDkP3WhZB9up1YQh8AT25A+SRWrOtPIlVOkeDZxI6LbZP8T2GOraHdc1Y1P1htc5FcrkntFCjhBV40SxfDglWg9k9e/2V+f7YYLYMc4sWqqkLDihFiQQs0c91LAHoGyAv/E722BZA8ZuhJ6SdoMUDu0Jt5Xi4/9Pms+HF8BvVqbgdMhtMJBRwBjusB9T0D+B7XB3wVaLsD4dPflqcztaGtFbN4Q9rXs9meOtonqyGY8mrB6eQkylOv+UsWtdmTlqmxSijkCLiutCefO4kbsjkMTHcDSMnPqGvLghId0AQ7xF+q69YLup9khdRcnSM2aG0ru5iAv1Yf9sDNjtgUM+mvjVI9sKAp9Uk8yeA1wWbSp1UaaK7+TnIccbeGWbPNIkikspfno1H+DHbJloabA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR12MB1390.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(122000001)(2906002)(38100700002)(52536014)(33656002)(8936002)(5660300002)(4744005)(508600001)(186003)(53546011)(6506007)(86362001)(71200400001)(66476007)(7696005)(4326008)(66946007)(64756008)(55016003)(8676002)(66556008)(38070700005)(66446008)(26005)(110136005)(54906003)(316002)(83380400001)(9686003)(76116006)(107886003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?55i59aaxZplfuI3y5DLx1XNkij0X88yBC73EtiLZ3Hm8nwIQSjoH68dpVyXP?=
- =?us-ascii?Q?O7CMkoWiHDOgCQqcoW5qYQiTXhg0C7D95EwqatPTMECkzYqkNHfsMAuFvS2O?=
- =?us-ascii?Q?aGqWcAn9+yMhPHyLhTiDfJFjY/32MgfjRJlTgr/8q7A1iPf29QJd94lu2XvD?=
- =?us-ascii?Q?OOm4CKDP3kPnAgH7k/s5vO/mlGUByFjgDUB8hD+EnLyuxC+NVd2fngC7tJeX?=
- =?us-ascii?Q?UqV3/Tc/3V1z6IThc//hEyVOe5m+THOzTgPFoTvLUpV+06h6+bqCy0yq1RnV?=
- =?us-ascii?Q?x0GP6Z7lgKke74/gMlgKR+wmy41WOyIDfoIz7iY2OeftL3WsNKnLaeqUo0Po?=
- =?us-ascii?Q?ZkNfyz6kLmQ5kfbXxxQbHLHEybwYzpOue5GCP+3na+5jXbVkFlfRFxJ33nSS?=
- =?us-ascii?Q?T9FMJjfXSSbEGpX4S/31LYfytqO51qsyTVPXbRFo3arDz+TYu7OOpWVMjEFx?=
- =?us-ascii?Q?HRMJcb5AbXOkV2nJBV/l9ikoiwO9CdkFSrgvhpiEEFI0JJ8utH4zQImNoqcc?=
- =?us-ascii?Q?ZN9eqcziMWobb2Vi20wJj0s21O5ihYLCjHW8xdsYMSfZG5G49gflrcm0lJSh?=
- =?us-ascii?Q?KTYExWrdEX8AV98PGZJPZfljWGF0FUzJRLL9FnreRo3o2aCl/Vae34ma9blL?=
- =?us-ascii?Q?oQL3icI/umnrw7TYAv0wFNzRtUpYTHqCJiY9T7ryEHUhpm7rmaYuHEIFf1U5?=
- =?us-ascii?Q?OYogv1qRmHJpFlcSuBvjF1ScdP7FEFQ6gmepAeebTDU+nHAQ1VlD9OCYYs5G?=
- =?us-ascii?Q?B2RESXxx8eiXC5cYMm95Ju6ye4Yxx9M3uXxYaN65/gh2FU4MgDCLKIPvNaPw?=
- =?us-ascii?Q?Hb1NdCjJNO5drIX2ysVY/gmwu7ZLNbd9G2fQgouvP+6+HTXiq0tUkSQsmNig?=
- =?us-ascii?Q?hLIkDQ+ro213YPx+vCAkm4simJs2Vv4vx9D2jinH5muNm5QaNboYlu2+dx1O?=
- =?us-ascii?Q?6pP5EoWIdvo4mc0GMlPU6H8G1EyU08T1zX5HhIktdzj97nJs4hr+ZEQjKZdb?=
- =?us-ascii?Q?UR/beyNyFlGj4cHtWU87fNwKp+ah0Ma3TCuMTFxffrJRgevHO0gPNuAARCNi?=
- =?us-ascii?Q?J8IUnpWxNEJrQbHTDTeYwwwCAWljpH40yO1Y15pv7s0mMlRqJ7GMOxeGbrB8?=
- =?us-ascii?Q?lZSm4ijs1+A87HwqYoQEXuA1Fp22QkPyHI2I0VdWrqSBhBAXTJzwfOZ7Ljrn?=
- =?us-ascii?Q?IiJlqXUCATjKLVoai9CKRGIE15zvV+QjRbbqxRIXvjMN7+dx20ql7KIJajKJ?=
- =?us-ascii?Q?J83a8qwjxuEzSX4W1AsaoNqGERqd5bKzWsgkK5cWTf9NChHoV4fdWrq1pf0l?=
- =?us-ascii?Q?KZxZp9pcMK72mazNas0Lj+6IXta1IIRj483ngR/KyKVv/5rEYupbldnN+UqW?=
- =?us-ascii?Q?YGpR3M65W8ffoX+Ib7pfGgtYtpLPHSrOUWGsD8s/u2wZSZsDE4EVvqWSSFxz?=
- =?us-ascii?Q?R9YREOkKidmyABmtEOmH0rMty4Ynmxsbk+bY4/KbGuPAcVbWwGxY99FaUUJQ?=
- =?us-ascii?Q?46y8gLdL0Jc3x+OQ33iLngr0R0y59a2W3Z5naCY07509pyXs9MSO1bWal2uv?=
- =?us-ascii?Q?PYFlF0qACJTD/HfB8pTiVkTYvlry9NJay4pKItzrOigjH7Uwn+CervAQl4Pg?=
- =?us-ascii?Q?4erEnLmsUgfsefgeqFe8gWg=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 15 Feb 2022 12:41:29 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64DE4A3C4;
+        Tue, 15 Feb 2022 09:41:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644946878; x=1676482878;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4yiWFkfWSslO+frra9N96ukQwZe8gg2MbNGsiRbMA0o=;
+  b=afehDQpGwkM4VgnRdYaQZXmtVsJovnwPRvY+Dx7Am+OXR0GPGrqywZFE
+   xo5wLAUCTI0WR7g7DO+hkN8PBFIZUBH/ty7YjQgDHMs6DVfG/pB6N7GJK
+   wYYbDBKWFxmP+ssP+Yqnl4siuNAB9+jx8ocmjVvbpNeYfZzwm1ggzQc/C
+   8=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 15 Feb 2022 09:41:18 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 09:41:17 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 15 Feb 2022 09:41:17 -0800
+Received: from [10.110.63.253] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 15 Feb
+ 2022 09:41:16 -0800
+Message-ID: <04237d77-bd5e-c0d9-5154-e6118a3af53d@quicinc.com>
+Date:   Tue, 15 Feb 2022 09:41:15 -0800
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR12MB1390.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d8604e5d-39a1-4f8c-bf17-08d9f0aa555a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2022 17:41:01.4409
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WbkXEWgpEgcaUnKHEhHiGwUoUihJGi5c/T5qmIVq1WcSJ7U401ihG/tqv/tWucai1mv1NKUae/9b4bdLpG1d0w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1207
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 2/2] drm/msm/dp: enable widebus feature for display
+ port
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <vkoul@kernel.org>,
+        <daniel@ffwll.ch>, <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <quic_abhinavk@quicinc.com>,
+        <quic_aravindh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1644878346-28511-1-git-send-email-quic_khsieh@quicinc.com>
+ <1644878346-28511-3-git-send-email-quic_khsieh@quicinc.com>
+ <YgsqcTruwrvaGBxw@yoga>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <YgsqcTruwrvaGBxw@yoga>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram and Andy,
 
-> -----Original Message-----
-> From: Wolfram Sang <wsa@kernel.org>
-> Sent: Tuesday, February 15, 2022 4:46 AM
-> To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Thierry Reding <treding@nvidia.com>; linux-kernel@vger.kernel.org;
-> linux-i2c@vger.kernel.org; Jarkko Nikula <jarkko.nikula@linux.intel.com>;
-> Mika Westerberg <mika.westerberg@linux.intel.com>; Ajay Gupta
-> <ajayg@nvidia.com>; Shah, Nehal-bakulchandra <nehal-
-> bakulchandra.shah@amd.com>; Amit Cohen <amcohen@nvidia.com>;
-> Nikolay Aleksandrov <nikolay@nvidia.com>; Sameer Pujar
-> <spujar@nvidia.com>
-> Subject: Re: [PATCH v3 1/5] i2c: Introduce common module to instantiate
-> CCGx UCSI
->=20
->=20
-> > Maybe we should orphan the driver if no-one response in meaningful
-> > time (let's say till the next merge window)?
-Sorry for the late response. The series looks good to me. I don't have setu=
-p ready
-to test the changes but will be able to test next week and let you know if =
-there is
-any issues.
+On 2/14/2022 8:22 PM, Bjorn Andersson wrote:
+> On Mon 14 Feb 16:39 CST 2022, Kuogee Hsieh wrote:
+>
+>> Widebus feature will transmit two pixel data per pixel clock to interface.
+>> This feature now is required to be enabled to easy migrant to higher
+>> resolution applications in future. However since some legacy chipsets
+>> does not support this feature, this feature is enabled base on chip's
+>> hardware revision.
+>>
+>> changes in v2:
+>> -- remove compression related code from timing
+>> -- remove op_info from  struct msm_drm_private
+>> -- remove unnecessary wide_bus_en variables
+>> -- pass wide_bus_en into timing configuration by struct msm_dp
+>>
+>> Changes in v3:
+>> -- split patch into 3 patches
+>> -- enable widebus feature base on chip hardware revision
+>>
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>
+>> ---
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c |  4 +++-
+>>   drivers/gpu/drm/msm/dp/dp_catalog.c         | 36 +++++++++++++++++++++++++++--
+>>   drivers/gpu/drm/msm/dp/dp_catalog.h         |  3 ++-
+>>   drivers/gpu/drm/msm/dp/dp_ctrl.c            | 13 +++++++----
+>>   drivers/gpu/drm/msm/dp/dp_ctrl.h            |  1 +
+>>   drivers/gpu/drm/msm/dp/dp_display.c         | 30 ++++++++++++++++++++++++
+>>   drivers/gpu/drm/msm/dp/dp_display.h         |  2 ++
+>>   drivers/gpu/drm/msm/dp/dp_panel.c           |  4 ++--
+>>   drivers/gpu/drm/msm/dp/dp_panel.h           |  2 +-
+>>   drivers/gpu/drm/msm/msm_drv.h               |  6 +++++
+>>   10 files changed, 90 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>> index 0c22839..b2d23c2 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>> @@ -2167,8 +2167,10 @@ int dpu_encoder_setup(struct drm_device *dev, struct drm_encoder *enc,
+>>   		timer_setup(&dpu_enc->vsync_event_timer,
+>>   				dpu_encoder_vsync_event_handler,
+>>   				0);
+>> -	else if (disp_info->intf_type == DRM_MODE_ENCODER_TMDS)
+>> +	else if (disp_info->intf_type == DRM_MODE_ENCODER_TMDS) {
+>>   		dpu_enc->dp = priv->dp[disp_info->h_tile_instance[0]];
+>> +		dpu_enc->wide_bus_en = msm_dp_wide_bus_enable(dpu_enc->dp);
+>> +	}
+>>   
+>>   	INIT_DELAYED_WORK(&dpu_enc->delayed_off_work,
+>>   			dpu_encoder_off_work);
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
+>> index 64f0b26..99d087e 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_catalog.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
+>> @@ -483,6 +483,27 @@ int dp_catalog_ctrl_set_pattern_state_bit(struct dp_catalog *dp_catalog,
+>>   }
+>>   
+>>   /**
+>> + * dp_catalog_hw_revision() - retrieve DP hw revision
+>> + *
+>> + * @dp_catalog: DP catalog structure
+>> + *
+>> + * return: u32
+> Q: What's 2+2?
+> A: Integer
+>
+> This should say:
+>
+> Return: the controller hardware revision
+>
+>> + *
+>> + * This function return the DP controller hw revision
+> That's what "Return:" in the kernel-doc is supposed to clarify...
+>
+> https://docs.kernel.org/doc-guide/kernel-doc.html is good to read.
+>
+>> + *
+>> + */
+>> +u32 dp_catalog_hw_revision(struct dp_catalog *dp_catalog)
+>> +{
+>> +	u32 revision;
+>> +	struct dp_catalog_private *catalog = container_of(dp_catalog,
+>> +				struct dp_catalog_private, dp_catalog);
+>> +
+>> +	revision = dp_read_ahb(catalog, REG_DP_HW_VERSION);
+> There's no need for a local variable here, just:
+>
+> 	return dp_read_ahb();
+>
+>> +
+>> +	return revision;
+>> +}
+>> +
+>> +/**
+>>    * dp_catalog_ctrl_reset() - reset DP controller
+>>    *
+>>    * @dp_catalog: DP catalog structure
+>> @@ -739,10 +760,11 @@ u32 dp_catalog_ctrl_read_phy_pattern(struct dp_catalog *dp_catalog)
+>>   }
+>>   
+>>   /* panel related catalog functions */
+>> -int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog)
+>> +int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog, bool wide_bus_en)
+>>   {
+>>   	struct dp_catalog_private *catalog = container_of(dp_catalog,
+>>   				struct dp_catalog_private, dp_catalog);
+>> +	u32 reg;
+>>   
+>>   	dp_write_link(catalog, REG_DP_TOTAL_HOR_VER,
+>>   				dp_catalog->total);
+>> @@ -751,7 +773,17 @@ int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog)
+>>   	dp_write_link(catalog, REG_DP_HSYNC_VSYNC_WIDTH_POLARITY,
+>>   				dp_catalog->width_blanking);
+>>   	dp_write_link(catalog, REG_DP_ACTIVE_HOR_VER, dp_catalog->dp_active);
+>> -	dp_write_p0(catalog, MMSS_DP_INTF_CONFIG, 0);
+>> +
+>> +	reg = dp_read_p0(catalog, MMSS_DP_INTF_CONFIG);
+>> +
+>> +	if (wide_bus_en)
+>> +		reg |= BIT(4);	/* DATABUS_WIDEN */
+> #define DATABUS_WIDEN BIT(4)
+>
+> Would save you the need for writing that comment.
+>
+>> +	else
+>> +		reg &= ~BIT(4);
+>> +
+>> +	DRM_DEBUG_DP("wide_bus_en=%d reg=%x\n", wide_bus_en, reg);
+>> +
+>> +	dp_write_p0(catalog, MMSS_DP_INTF_CONFIG, reg);
+>>   	return 0;
+>>   }
+>>   
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.h b/drivers/gpu/drm/msm/dp/dp_catalog.h
+>> index 7dea101..a3a0129 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_catalog.h
+>> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.h
+>> @@ -95,6 +95,7 @@ void dp_catalog_ctrl_config_misc(struct dp_catalog *dp_catalog, u32 cc, u32 tb);
+>>   void dp_catalog_ctrl_config_msa(struct dp_catalog *dp_catalog, u32 rate,
+>>   				u32 stream_rate_khz, bool fixed_nvid);
+>>   int dp_catalog_ctrl_set_pattern_state_bit(struct dp_catalog *dp_catalog, u32 pattern);
+>> +u32 dp_catalog_hw_revision(struct dp_catalog *dp_catalog);
+>>   void dp_catalog_ctrl_reset(struct dp_catalog *dp_catalog);
+>>   bool dp_catalog_ctrl_mainlink_ready(struct dp_catalog *dp_catalog);
+>>   void dp_catalog_ctrl_enable_irq(struct dp_catalog *dp_catalog, bool enable);
+>> @@ -115,7 +116,7 @@ void dp_catalog_ctrl_send_phy_pattern(struct dp_catalog *dp_catalog,
+>>   u32 dp_catalog_ctrl_read_phy_pattern(struct dp_catalog *dp_catalog);
+>>   
+>>   /* DP Panel APIs */
+>> -int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog);
+>> +int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog, bool wide_bus_en);
+>>   void dp_catalog_dump_regs(struct dp_catalog *dp_catalog);
+>>   void dp_catalog_panel_tpg_enable(struct dp_catalog *dp_catalog,
+>>   				struct drm_display_mode *drm_mode);
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>> index 245e1b9..1c4cf9d 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>> @@ -154,7 +154,7 @@ static void dp_ctrl_config_ctrl(struct dp_ctrl_private *ctrl)
+>>   	dp_catalog_ctrl_config_ctrl(ctrl->catalog, config);
+>>   }
+>>   
+>> -static void dp_ctrl_configure_source_params(struct dp_ctrl_private *ctrl)
+>> +static void dp_ctrl_configure_source_params(struct dp_ctrl_private *ctrl, bool wide_bus_en)
+>>   {
+>>   	u32 cc, tb;
+>>   
+>> @@ -167,7 +167,7 @@ static void dp_ctrl_configure_source_params(struct dp_ctrl_private *ctrl)
+>>   		ctrl->panel->dp_mode.bpp);
+>>   	cc = dp_link_get_colorimetry_config(ctrl->link);
+>>   	dp_catalog_ctrl_config_misc(ctrl->catalog, cc, tb);
+>> -	dp_panel_timing_cfg(ctrl->panel);
+>> +	dp_panel_timing_cfg(ctrl->panel, wide_bus_en);
+>>   }
+>>   
+>>   /*
+>> @@ -1796,6 +1796,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+>>   	int ret = 0;
+>>   	bool mainlink_ready = false;
+>>   	struct dp_ctrl_private *ctrl;
+>> +	u32 pixel_rate_orig;
+>>   
+>>   	if (!dp_ctrl)
+>>   		return -EINVAL;
+>> @@ -1804,6 +1805,10 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+>>   
+>>   	ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
+>>   
+>> +	pixel_rate_orig = ctrl->dp_ctrl.pixel_rate;
+>> +	if (dp_ctrl->wide_bus_en)
+>> +		ctrl->dp_ctrl.pixel_rate >>= 1;
+>> +
+>>   	DRM_DEBUG_DP("rate=%d, num_lanes=%d, pixel_rate=%d\n",
+>>   		ctrl->link->link_params.rate,
+>>   		ctrl->link->link_params.num_lanes, ctrl->dp_ctrl.pixel_rate);
+>> @@ -1839,11 +1844,11 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+>>   	 */
+>>   	reinit_completion(&ctrl->video_comp);
+>>   
+>> -	dp_ctrl_configure_source_params(ctrl);
+>> +	dp_ctrl_configure_source_params(ctrl, dp_ctrl->wide_bus_en);
+>>   
+>>   	dp_catalog_ctrl_config_msa(ctrl->catalog,
+>>   		ctrl->link->link_params.rate,
+>> -		ctrl->dp_ctrl.pixel_rate, dp_ctrl_use_fixed_nvid(ctrl));
+>> +		pixel_rate_orig, dp_ctrl_use_fixed_nvid(ctrl));
+>>   
+>>   	dp_ctrl_setup_tr_unit(ctrl);
+>>   
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+>> index 2433edb..4dff44d 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
+>> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+>> @@ -17,6 +17,7 @@ struct dp_ctrl {
+>>   	bool orientation;
+>>   	atomic_t aborted;
+>>   	u32 pixel_rate;
+>> +	bool wide_bus_en;
+>>   };
+>>   
+>>   int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl);
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+>> index e89556ad..d45a3aa 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>> @@ -117,6 +117,8 @@ struct dp_display_private {
+>>   	struct dp_event event_list[DP_EVENT_Q_MAX];
+>>   	spinlock_t event_lock;
+>>   
+>> +	bool wide_bus_en;
+>> +
+>>   	struct dp_audio *audio;
+>>   };
+>>   
+>> @@ -845,6 +847,8 @@ static int dp_display_enable(struct dp_display_private *dp, u32 data)
+>>   		return 0;
+>>   	}
+>>   
+>> +	dp->ctrl->wide_bus_en = dp->wide_bus_en;
+>> +
+>>   	rc = dp_ctrl_on_stream(dp->ctrl);
+>>   	if (!rc)
+>>   		dp_display->power_on = true;
+>> @@ -979,6 +983,7 @@ int dp_display_get_modes(struct msm_dp *dp,
+>>   		dp->connector, dp_mode);
+>>   	if (dp_mode->drm_mode.clock)
+>>   		dp->max_pclk_khz = dp_mode->drm_mode.clock;
+>> +
+>>   	return ret;
+>>   }
+>>   
+>> @@ -1451,6 +1456,28 @@ void msm_dp_irq_postinstall(struct msm_dp *dp_display)
+>>   	}
+>>   }
+>>   
+>> +bool msm_dp_wide_bus_enable(struct msm_dp *dp_display)
+>> +{
+>> +	struct dp_display_private *dp;
+>> +	u32 revision, major, minor;
+>> +
+>> +	dp = container_of(dp_display, struct dp_display_private, dp_display);
+>> +
+>> +	/* for the time being widebus only support on DP */
+>> +	if (dp_display->connector_type  == DRM_MODE_CONNECTOR_DisplayPort) {
+> Is there a reason for not enabling widebus for eDP? (I'm perfectly fine
+> with doing us doing that separately at a later point, but I'm curious)
 
-Thanks
-Ajay
-> nvpublic
->=20
-> Yes, I had a similar idea.
+yes, widebus can be enabled for eDP too.
 
+Just ask hardware engineer thsi question, they said widebus is 
+recommended to be enabled at both eDP and DP.
+
+I will enable it later.
+
+
+>
+>> +		revision = dp_catalog_hw_revision(dp->catalog);
+>> +		major = ((revision >> 28) & 0x0ff);
+>> +		minor = ((revision >> 16) & 0x0fff);
+>> +
+>> +	DRM_DEBUG_DP("id=%d major=%d minor=%d\n", dp->id, major, minor);
+> The indentation of this line is wrong.
+>
+>> +
+>> +		if (major >= 1 && minor >= 2)
+>> +			return true;
+>> +	}
+>> +
+>> +	return false;
+>> +}
+>> +
+>>   void msm_dp_debugfs_init(struct msm_dp *dp_display, struct drm_minor *minor)
+>>   {
+>>   	struct dp_display_private *dp;
+>> @@ -1505,6 +1532,9 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+>>   	dp_priv->panel->connector = dp_display->connector;
+>>   
+>>   	priv->connectors[priv->num_connectors++] = dp_display->connector;
+>> +
+>> +	dp_priv->wide_bus_en = msm_dp_wide_bus_enable(dp_display);
+> Not sure if I'm missing some patches, but my branch branch doesn't have
+> a dp_priv in this function.
+
+My fault, I uploaded patches for review at my working directory instead 
+of msm-next branch.
+
+
+>
+> Regards,
+> Bjorn
+>
+>> +
+>>   	return 0;
+>>   }
+>>   
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.h b/drivers/gpu/drm/msm/dp/dp_display.h
+>> index 8e80e3b..d9cb9ee 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_display.h
+>> +++ b/drivers/gpu/drm/msm/dp/dp_display.h
+>> @@ -23,6 +23,8 @@ struct msm_dp {
+>>   
+>>   	hdmi_codec_plugged_cb plugged_cb;
+>>   
+>> +	bool wide_bus_en;
+>> +
+>>   	u32 max_pclk_khz;
+>>   
+>>   	u32 max_dp_lanes;
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
+>> index 71db10c..71deb1e 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_panel.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_panel.c
+>> @@ -353,7 +353,7 @@ void dp_panel_dump_regs(struct dp_panel *dp_panel)
+>>   	dp_catalog_dump_regs(catalog);
+>>   }
+>>   
+>> -int dp_panel_timing_cfg(struct dp_panel *dp_panel)
+>> +int dp_panel_timing_cfg(struct dp_panel *dp_panel, bool wide_bus_en)
+>>   {
+>>   	u32 data, total_ver, total_hor;
+>>   	struct dp_catalog *catalog;
+>> @@ -404,7 +404,7 @@ int dp_panel_timing_cfg(struct dp_panel *dp_panel)
+>>   
+>>   	catalog->dp_active = data;
+>>   
+>> -	dp_catalog_panel_timing_cfg(catalog);
+>> +	dp_catalog_panel_timing_cfg(catalog, wide_bus_en);
+>>   	panel->panel_on = true;
+>>   
+>>   	return 0;
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.h b/drivers/gpu/drm/msm/dp/dp_panel.h
+>> index 9023e5b..5ec341a 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_panel.h
+>> +++ b/drivers/gpu/drm/msm/dp/dp_panel.h
+>> @@ -57,7 +57,7 @@ struct dp_panel {
+>>   
+>>   int dp_panel_init_panel_info(struct dp_panel *dp_panel);
+>>   int dp_panel_deinit(struct dp_panel *dp_panel);
+>> -int dp_panel_timing_cfg(struct dp_panel *dp_panel);
+>> +int dp_panel_timing_cfg(struct dp_panel *dp_panel, bool wide_bus_en);
+>>   void dp_panel_dump_regs(struct dp_panel *dp_panel);
+>>   int dp_panel_read_sink_caps(struct dp_panel *dp_panel,
+>>   		struct drm_connector *connector);
+>> diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
+>> index 07f6c41..667f3a8 100644
+>> --- a/drivers/gpu/drm/msm/msm_drv.h
+>> +++ b/drivers/gpu/drm/msm/msm_drv.h
+>> @@ -398,6 +398,7 @@ void msm_dp_irq_postinstall(struct msm_dp *dp_display);
+>>   void msm_dp_snapshot(struct msm_disp_state *disp_state, struct msm_dp *dp_display);
+>>   
+>>   void msm_dp_debugfs_init(struct msm_dp *dp_display, struct drm_minor *minor);
+>> +bool msm_dp_wide_bus_enable(struct msm_dp *dp_display);
+>>   
+>>   #else
+>>   static inline int __init msm_dp_register(void)
+>> @@ -448,6 +449,11 @@ static inline void msm_dp_debugfs_init(struct msm_dp *dp_display,
+>>   {
+>>   }
+>>   
+>> +bool msm_dp_wide_bus_enable(struct msm_dp *dp_display)
+>> +{
+>> +	return false;
+>> +}
+>> +
+>>   #endif
+>>   
+>>   void __init msm_mdp_register(void);
+>> -- 
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
+>>

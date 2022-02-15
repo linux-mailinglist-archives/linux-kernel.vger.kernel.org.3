@@ -2,140 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DB44B6631
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:33:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C104B662F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235464AbiBOIdj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 15 Feb 2022 03:33:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41616 "EHLO
+        id S235474AbiBOIdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 03:33:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234086AbiBOId3 (ORCPT
+        with ESMTP id S234351AbiBOIdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 03:33:29 -0500
-Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29A3C621A;
-        Tue, 15 Feb 2022 00:33:19 -0800 (PST)
-Received: by mail-vk1-f180.google.com with SMTP id j9so2266619vkj.1;
-        Tue, 15 Feb 2022 00:33:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=oR61WoE2PUcAYaftqeV9KOA2/duj5FvLte7fWGKCtuM=;
-        b=JbZUl8BSz2gsWG7vZO2wQBaLDJUsVK4njR3CDP5+pzrfj8NiXKvZzfIm0Y35QFnXj4
-         EVQ4lsNoqbq93MbLDu+8yBc1w3a22ExU191yaXUUohnOoJWC+AHxSvyg4TQOou9P3hwC
-         kINtdFWwCNy+JyyojNJwglxwTKD7OHEAoIIkW6dSOF8uLaTFYMT5nk1fEOVvqSRKSn9T
-         2krY9q36yZnC2vED2SlxzVbJDVF7+ffyq61Wes3vTyKQ54JyOQRAMFmkCZMkestp1vom
-         eH+TN5po8u6bXVPPgl1Yebeal1gmRQJcE+KWwCej+yewpwCOJKnCT5U37OD4SoOmk7j2
-         U0Wg==
-X-Gm-Message-State: AOAM5330eOUl9nfYNiJZMsh6fqouRB5cnhEjltZFqjpUXltmxayH15LD
-        jZmRbAdE9vqCKtYL4+/4An0wO3gTk7sOMIC5
-X-Google-Smtp-Source: ABdhPJy5AeTXv0S+6g0lz0alWqsSYyhe0HwSq+tOfy1jNb82cqVbdPSssVuleAXsLwySy9maOe+/tQ==
-X-Received: by 2002:a05:6122:d0b:: with SMTP id az11mr907935vkb.11.1644913998923;
-        Tue, 15 Feb 2022 00:33:18 -0800 (PST)
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com. [209.85.217.42])
-        by smtp.gmail.com with ESMTPSA id t3sm430827vkl.53.2022.02.15.00.33.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 00:33:18 -0800 (PST)
-Received: by mail-vs1-f42.google.com with SMTP id j20so7898598vsg.5;
-        Tue, 15 Feb 2022 00:33:18 -0800 (PST)
-X-Received: by 2002:a05:6102:440d:: with SMTP id df13mr953197vsb.5.1644913998142;
- Tue, 15 Feb 2022 00:33:18 -0800 (PST)
+        Tue, 15 Feb 2022 03:33:20 -0500
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90078.outbound.protection.outlook.com [40.107.9.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B50E687A;
+        Tue, 15 Feb 2022 00:33:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fsPGvz75HXbgU+UKgSbnQE+19g6aVwMaqQ+RzBNAEGff62gs6PdA8cY2US3cBeFvvOkryXpTTnKyB218X1DDjD9aaLxbjDmdqnfHswbUPCdpV8pxsLThHWmZjohbGATzyBrRit/4zCKT/UUHsSrUKrF9qKconk0iSDOgSjKWlyIWqWSaHyyPiYvlo6vHHYh8X+qQZiJCUPwq0DYaWGe8cfvq3SI7CAG+9P5k7vpguC5y/zi0DiBNgzJXPTUD9ECj5JtGemNb2Y0imNU20eoBqRjdih0nTCAuscsDHZK5EAOj1Npeqc7DHvabnlQFxHBODJDSzBLCWDUyqUdg5ZSJzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XrckqNSeE29e3Yq5+/cQhv4/KsZXD0Xc31e3XFfHpl8=;
+ b=foOVuG3ElOvz6DNsgZg/zfW0HBFj9FFveJ/UJQbRfZb/ZR5zP1zZSrceZWT+p+TiRrv3nmPTkkkOrYJ5HJ2iC3b/zxf44pMWisC9KX4v7AgiwrIgY3rXQECHKIdtWkwFfvaGNGHc1lwnUSpaDYs1N7+1oqHL0Gebp/9yZa/cONfGFon9KFZ6OoDiDFHhdDAIOriF1MS1iqF795+ONuiX3raA6/OT0suUIsxtnoXPfDwWYH4s+R9D8NCV031e1qkhTsTGQOPdAuaa2ssgvt/ZfqjtNFNrt42dNdcr7q8ftjEjS4TKUdDTwKNlCedFQRRH0MJo9HmnPH0xhcOolS7uXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR1P264MB2192.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:193::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Tue, 15 Feb
+ 2022 08:33:07 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::c9a2:1db0:5469:54e1]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::c9a2:1db0:5469:54e1%9]) with mapi id 15.20.4975.019; Tue, 15 Feb 2022
+ 08:33:07 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Ingo Molnar <mingo@redhat.com>, Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>
+Subject: Re: [PATCH v2 12/13] powerpc/ftrace: Prepare ftrace_64_mprofile.S for
+ reuse by PPC32
+Thread-Topic: [PATCH v2 12/13] powerpc/ftrace: Prepare ftrace_64_mprofile.S
+ for reuse by PPC32
+Thread-Index: AQHX9cAL+q8e/kpRIUG40cd4NXnolKyTq5wAgAD2MgA=
+Date:   Tue, 15 Feb 2022 08:33:07 +0000
+Message-ID: <758cd183-b2cf-3cab-7fcb-6fa485997209@csgroup.eu>
+References: <cover.1640017960.git.christophe.leroy@csgroup.eu>
+ <82a732915dc71ee766e31809350939331944006d.1640017960.git.christophe.leroy@csgroup.eu>
+ <1644860537.hyunv1mld0.naveen@linux.ibm.com>
+In-Reply-To: <1644860537.hyunv1mld0.naveen@linux.ibm.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d1736773-1f3f-4b62-539e-08d9f05dcabe
+x-ms-traffictypediagnostic: PR1P264MB2192:EE_
+x-microsoft-antispam-prvs: <PR1P264MB2192F4751E037AA53AD89954ED349@PR1P264MB2192.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:4941;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3UYZ9kBI+iFvVSAH+o3qdOzss7ySCwSGPMPsM2sasuYvLmAsrADGzesJMG4uGVRq4TY4lqUnFuCpmSMD4GXTBx/86f3FKTHcsSzC3LpQzXYdN+5JIRbgRgDHG/jmYQykNj6Cl26mDzZ4N6fdXYgA+UIveUfW0QYjrXtjMyyM7XDR9i0aJWK7XI0n63a5QoHsd8CW+izXQYq7QMbuh8tbRa8TPMd/i7TxWzumYMTBQzY+TXwk9BoEoT381aMgPb14NTEHNmFtQqaXwaWd03T9abGoNZWT30sGKHghjGaw+5MybkXNMwm6ngNQlP4hVVbkEvjmmZIHHgiawa/cRmSa6IsyLgFOkzzyOe89FFrXS/xYPoDhESSsGQ0XGrvYzP2ooT6wawhUmG+Aut130OjclA/tg/SBFrQxQdQQfJhpZVrEEiCf1+wKoWJzrg3jZl2k/FZA3pJAaek7SfP4LEGFmjjtgfw7wwIwYHqc7ttwgsfrHvTDr9FGEakwc4gMsNGecDj4eo9ZKNOSbw/0lvwBwU5MPPH66TaY6MatFq1d1KTtdteZudqkcHeZSXebZNmMptvU6BPe+44vFd6wWfoUGvYpDO6PVtjz1TromWn6mW3WgjuWZHMqL6fyZu2JVtzWZkYBF+KvYJJsp2Ng//Wbm4bB/NTRTNVm2QPzoAcHxewwSEZ7Sizo7M9fS5SdRw44nLOmtQiBMDiWdB8avi82JzY/mZ7ya0b13qTGSkCYn3DPkhNQNWGYvG4vdwnCeu7TzaTIDfjvIiSedkCkwGWQUQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(44832011)(4744005)(7416002)(6512007)(2616005)(31686004)(5660300002)(36756003)(186003)(26005)(8936002)(38100700002)(71200400001)(2906002)(83380400001)(6506007)(38070700005)(66556008)(76116006)(8676002)(91956017)(4326008)(66476007)(66946007)(6486002)(66446008)(508600001)(64756008)(86362001)(122000001)(31696002)(110136005)(54906003)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?c0JURERmVUcra3RFVHlXajZHbXlHK0t1MXFzT1JVOXpiVHpjdnkvU3ZEbVRU?=
+ =?utf-8?B?MS9rQ1hXejdWaEhWdTAvYmJtcm1YbHZVbFlXWk5NQ2FtK2J1cWNsc29FZ3Nk?=
+ =?utf-8?B?Ni9KR3NNdGNxaWhXNTdHaTYyL0x4RTFmYUVpUDdjQjREVVNiTll6Mk1sd0Vk?=
+ =?utf-8?B?SGdrZUVBbVRIUjFLc1FBakpzY1IyZWZ4NkJtRkhWa1hFdEJ3QlBnTXBGaldP?=
+ =?utf-8?B?cDV0dFJEeGdyWmlIMmpLK0FKcTA4bk1vNFk1Y0FCU3Z0b1VBaHFYNGk4UXZG?=
+ =?utf-8?B?OVBLUDZ5ZFNEMElycjlLcDBYVzFYZ0ZWT2NiYTZSWU9EMVVIS1o5Umg1bFJn?=
+ =?utf-8?B?dHk2TTNpSnU0ZXdaaUV4ZHZ6SlFUWVdpSmlwZzBJWk5wODdDeUpPZForQ1Ni?=
+ =?utf-8?B?aEgrcVlOaDVBdGVDcWRJTnZaQVkzUnRuN0ZVWEtyY25tU1E3eUN1Mlc1eGdK?=
+ =?utf-8?B?OExlZ1ZSL1hvQk1qejF6eW42Y29id0w4YUlqc1lqN1RhamQvcXdwenRhSmlL?=
+ =?utf-8?B?WnFaV1I2SUlwZ1hiZ21WaFBsWE1JbTk3bEtWay83M1RjVDFHdTVabWR1d3Fy?=
+ =?utf-8?B?UFZJdXdZejJMQjVPTlA3emdRY2wzdFJ5MENhZm1kSVVBYlhkODU5OTdlbHNR?=
+ =?utf-8?B?UmdmckljZGUwTG5Oc2xTSkVLbXVYYTgvcTRpV1F5NWcrL2NMZUhIaEhPSjk2?=
+ =?utf-8?B?VE12MVJzdEhUWVlwRlVJM0toVmx6Z1BEa1dNdFp2YVpwYzlDSEZPNysrd2V5?=
+ =?utf-8?B?bU5EYXdaeEZZbFJGMmJqU3RHN0JZdU04VFpnYXl5WGxKZjVXb0hFcHFDczVP?=
+ =?utf-8?B?dUpxSFNoMkRRS2tiNmR3UnpQN0FwWUpwUmRLNFBMSVAyMWI4cVpDcW9YcVhm?=
+ =?utf-8?B?anFZL3htYTFtVjc1MTgzdlFzeVQvYkl5SnFURDExUVpJU01DUmJrTHIwenB3?=
+ =?utf-8?B?REtwRTJnS21MVlltVzc1RS8vS2ErUWxhMTJvTVk5UTE1WXp0Rm9rVnZjblpW?=
+ =?utf-8?B?YTVCOG9NalM0SFdiSThLdlNtOG1hY0MzU0ZqbVFCRS9ZdW14dVF4TDZiV0Y5?=
+ =?utf-8?B?K3k1VjZTbmhOR1ZWV3RpVUl2YUgrZmZhYzVPQ294b3NJb3lGSXU0TEZtVVNR?=
+ =?utf-8?B?VlVKek9ORUVEQnpBWEhzUlZTa2t5MTZOdis4dllMcFZYNW5oZC9tSHMwcFdI?=
+ =?utf-8?B?a0JWeVFUMGorajdTWC94L1dXaTdhb3JzUWliVTVkSnBjQlZURkZLYkE4RXFJ?=
+ =?utf-8?B?Sk4vWmx1RExmbHo0bDBnSS85QTdWUXBNelgwSTY1ZXFjWER3VncxVzA1YXFC?=
+ =?utf-8?B?REhpelN6UUUweVUxYkpGYWxLSjhOcGQwQnRaamVqQXNNNzdVK3czbEErVitG?=
+ =?utf-8?B?MEwzN3ZsejlGcWNzcWI0c214OWM1Qk5iUC9najFWMlNEL3lMSXpwck9jaEJ5?=
+ =?utf-8?B?UVc4YTRuM1YrZEE1UU9nckRhWmJ5S2JQd3dTdk9weTZzcXpoTzlNYjRSR3JE?=
+ =?utf-8?B?NUlZS2RPcDVTbWVMdjZTdkE1Vktabkt3cHFnYVptY1Zaa1VNeGFKbVYvTHFT?=
+ =?utf-8?B?SmV1SjlUQ0VDejRqZ3FFOU12UDRFVmJqemJlZ2l6TndtQnZsbWJiL0RXN1hU?=
+ =?utf-8?B?MHdZMkxvL2VGV2JlNFJzei9vOFM5VnJ1VXJrczhieUxhZHUrN2ZhZzgyVjZ4?=
+ =?utf-8?B?bUE1Y2xvQW5SZmV3VGpYS0lVMmhMWkNlRHp6Tzlud2xtM3p1cng0NDl4bE1y?=
+ =?utf-8?B?RjBJTm9PVVdVYlFsOER1SWxiU3Q3cmU3cTg5UGFWb3gzNTY0blFxYUNMalJk?=
+ =?utf-8?B?eHhlMVZmM1NlODc0VHRUZGdOQ3Nyenk3U28rR29zbXJyZHhNNUlkaVN5cGJ5?=
+ =?utf-8?B?b1ZMdGhzNFdyTjlCS3BXZmhXZCszQzJNYktiZllML1BIM0MzY1A1Smx0UjZn?=
+ =?utf-8?B?dXR2VHlHdjYvTGY2Tkd0RERQRHBMRG5US0cwd0VXNXN3SnVKc3BGU2JLWWl5?=
+ =?utf-8?B?eGZndk01TGxuVWZJK1dsZGhkOVhQVGdGb1h4WFd3MzE5cm1rWVg3QzkvMXhw?=
+ =?utf-8?B?a0FMOVVPbHlRQXFibXlWNGxRRUdmcUpkbkJSV3VxcGpEK3dIeTJUMmNSbW5L?=
+ =?utf-8?B?bzFkZnh2ckZRTXc3V2Z4b0pQLzZEVTN3MWRMM0FONlFHVXJaOEJOUkJQa2VN?=
+ =?utf-8?B?c3lHZ3dEcHpxK1J2UWxaVUdySlRpRTRzU1lFcUhLSzVZUWUzWmVmdFJ6MkZO?=
+ =?utf-8?Q?41qNj7Tu2DQTIKO3mcyxqWa+OZLIRG7kVm3wSMu4AY=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <49EF578B8568E54EBB291F6C9A3D27D4@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <202202142203.4ofqbic9-lkp@intel.com> <20220214151905.00005a27@Huawei.com>
-In-Reply-To: <20220214151905.00005a27@Huawei.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 15 Feb 2022 09:33:07 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWYHWVroOdqP6+tx_zj+63OG77EcizdnpGsmfto=6SeDw@mail.gmail.com>
-Message-ID: <CAMuHMdWYHWVroOdqP6+tx_zj+63OG77EcizdnpGsmfto=6SeDw@mail.gmail.com>
-Subject: Re: drivers/iio/adc/xilinx-ams.c:1195:21: error: unused variable 'ams'
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Manish Narani <manish.narani@xilinx.com>,
-        linux-sh@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1736773-1f3f-4b62-539e-08d9f05dcabe
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2022 08:33:07.2937
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: shIF8ffVMXuY/9vEyevd3CkNJsyqxcBOrLOw+g5t2XryCaqL1gZovO+6FaYrpe2vjXl6bmXox0qWkNAdAsvX9f370oyGeHuiT+UC9SFuTBA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB2192
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan.
-
-On Mon, Feb 14, 2022 at 8:17 PM Jonathan Cameron
-<Jonathan.Cameron@huawei.com> wrote:
-> On Mon, 14 Feb 2022 22:47:14 +0800
-> kernel test robot <lkp@intel.com> wrote:
->
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   754e0b0e35608ed5206d6a67a791563c631cec07
-> > commit: d5c70627a79455154f5f636096abe6fe57510605 iio: adc: Add Xilinx AMS driver
-> > date:   8 weeks ago
-> > config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220214/202202142203.4ofqbic9-lkp@intel.com/config)
-> > compiler: sh4-linux-gcc (GCC) 11.2.0
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d5c70627a79455154f5f636096abe6fe57510605
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout d5c70627a79455154f5f636096abe6fe57510605
-> >         # save the config file to linux build tree
-> >         mkdir build_dir
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash drivers/iio/adc/ drivers/net/ethernet/freescale/
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
->
-> I'm very tempted to say won't fix on this at least not in the IIO code.
->
-> The issue I think is the stub for iounmap on sh with no MMU not using the argument because it's
-
-Indeed.
-
-> defined as a while loop rather than as an empty static inline function which is what we'd
-> get it it wasn't defined at all (AFAICT).
-
-We would get that only if <asm-generic/io.h> would be included...
-
-> If anyone wants to take this on, my guess is drop
-> https://elixir.bootlin.com/linux/latest/source/arch/sh/include/asm/io.h#L274
-> and see if everything still works and the warning goes away.
-
-Nope:
-
-    error: implicit declaration of function ‘iounmap’
-
-> +CC linux-sh for inputs.
-
-Thanks, I'll post a fix.
-
-> > All errors (new ones prefixed by >>):
-> >
-> >    drivers/iio/adc/xilinx-ams.c: In function 'ams_iounmap_ps':
-> > >> drivers/iio/adc/xilinx-ams.c:1195:21: error: unused variable 'ams' [-Werror=unused-variable]
-> >     1195 |         struct ams *ams = data;
-> >          |                     ^~~
-> >    drivers/iio/adc/xilinx-ams.c: In function 'ams_iounmap_pl':
-> >    drivers/iio/adc/xilinx-ams.c:1202:21: error: unused variable 'ams' [-Werror=unused-variable]
-> >     1202 |         struct ams *ams = data;
-> >          |                     ^~~
-> >    cc1: all warnings being treated as errors
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+DQoNCkxlIDE0LzAyLzIwMjIgw6AgMTg6NTEsIE5hdmVlbiBOLiBSYW8gYSDDqWNyaXTCoDoNCj4g
+Q2hyaXN0b3BoZSBMZXJveSB3cm90ZToNCj4+IFBQQzY0IG1wcm9maWxlIHZlcnNpb25zIGFuZCBQ
+UEMzMiBhcmUgdmVyeSBzaW1pbGFyLg0KPj4NCj4+IE1vZGlmeSBQUEM2NCB2ZXJzaW9uIHNvIHRo
+YXQgaWYgY2FuIGJlIHJldXNlZCBmb3IgUFBDMzIuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogQ2hy
+aXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Pg0KPj4gLS0tDQo+PiDC
+oC4uLi9wb3dlcnBjL2tlcm5lbC90cmFjZS9mdHJhY2VfNjRfbXByb2ZpbGUuUyB8IDczICsrKysr
+KysrKysrKystLS0tLS0NCj4+IMKgMSBmaWxlIGNoYW5nZWQsIDUxIGluc2VydGlvbnMoKyksIDIy
+IGRlbGV0aW9ucygtKQ0KPiANCj4gV2hpbGUgSSBhZ3JlZSB0aGF0IHBwYzMyIGFuZCAtbXByb2Zp
+bGUta2VybmVsIGZ0cmFjZSBjb2RlIGFyZSB2ZXJ5IA0KPiBzaW1pbGFyLCBJIHRoaW5rIHRoaXMg
+cGF0Y2ggYWRkcyB3YXkgdG9vIG1hbnkgI2lmZGVmcy4gSU1ITywgdGhpcw0KPiBtYWtlcyB0aGUg
+cmVzdWx0YW50IGNvZGUgcXVpdGUgZGlmZmljdWx0IHRvIGZvbGxvdy4NCg0KT2ssIEkgY2FuIGlu
+dHJvZHVjZSBzb21lIEdBUyBtYWNyb3MgZm9yIGEgZmV3IG9mIHRoZW0gaW4gYSBmb2xsb3d1cCBw
+YXRjaC4NCg0KQ2hyaXN0b3BoZQ==

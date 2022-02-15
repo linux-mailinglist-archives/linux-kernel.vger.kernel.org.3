@@ -2,117 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 206BD4B77AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D074B779C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243193AbiBOSp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 13:45:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54604 "EHLO
+        id S243225AbiBOSrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 13:47:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237418AbiBOSpy (ORCPT
+        with ESMTP id S240201AbiBOSqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 13:45:54 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EB3DB493
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:45:44 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id d3so15539420ilr.10
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:45:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=n3AOo60tfBaJy0Iklwh+IzdN0WzcJlMEZNrEs/WOwvw=;
-        b=LrwQguX72d7dQoMRVwv17UfZHO/gfxy7H+qTm1mQL7cG385yS/SywqjBNPcGMad0Au
-         ex+cSrtSKEzSpSHI/BABqhNvi2VO/qwGn6c+BOo4r1Ixiv2iLXEgQrB0Dwh0LW4Cdhz1
-         JjYJXGtTXuY0TMIUrdSNceDkXBYN8LyO6KYaY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=n3AOo60tfBaJy0Iklwh+IzdN0WzcJlMEZNrEs/WOwvw=;
-        b=TnD2piVhsolxX8NSSIlFDbBuZdwiOQcgdPIL0Gk7rt8Kvw5cd0zJlnlLtuIEAs/xgs
-         B8Hney7jIoMv4Da5xIB7I24r2vyp5FYf3PmvSVu35/MvbfPhWyJ3iSK/2hKjCJFHG/4D
-         lHE3yKSVAztLoWkshc4Qg9OpdrhVQIo5CSAzmQmR5urJsqIJai5MZoQLajaYrqhxkRdy
-         ki+rMGTb+9To2CXHoIKyg9obOroBpY/0OKVg6tNuCGxN5v7vH71L/3y1fhr5Tp7BCHMX
-         x+IgHfaGzZE7KAvu6Y+OXCQ88IU85+EOTIpiyu3O3J66zXQ+x5XI3GAG94J+L6i59ary
-         b9Xg==
-X-Gm-Message-State: AOAM532EMIyA7iyrMUP35dBYTmhIL6+n/VzndGHJKSNtsyn/TGLjW6d6
-        8DNxSKnUIGigSGHk1Zz4lpbU0g==
-X-Google-Smtp-Source: ABdhPJzy8r32H631rMEUqmMguE25zJsdVa5JigyKXSP1Nt1BwBWWh7OYkf9i+9yWOzq7PhycuDOl1Q==
-X-Received: by 2002:a05:6e02:1a21:: with SMTP id g1mr280061ile.154.1644950743677;
-        Tue, 15 Feb 2022 10:45:43 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id n12sm22596509ili.69.2022.02.15.10.45.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 10:45:43 -0800 (PST)
-Subject: Re: [PATCH v3] selftests/seccomp: Fix seccomp failure by adding
- missing headers
-To:     Sherry Yang <sherry.yang@oracle.com>, shuah@kernel.org,
-        keescook@chromium.org, luto@amacapital.net, wad@chromium.org,
-        christian@brauner.io, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        usama.anjum@collabora.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20220215184215.40093-1-sherry.yang@oracle.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <022c8d4f-25aa-76e4-3e7c-eae1d1431a01@linuxfoundation.org>
-Date:   Tue, 15 Feb 2022 11:45:42 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20220215184215.40093-1-sherry.yang@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 15 Feb 2022 13:46:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9EC2B1B7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:46:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5367BB8124E
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:46:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CDABC340EB;
+        Tue, 15 Feb 2022 18:46:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644950798;
+        bh=IZEEeaeimH1toBqTQkv4T6a9UDa2v1gE60oPYpQOfCo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QyuLo9dERdzYrBbj+GyH7OMzdQBtKYObQWFuu0yIGrTVQZGnvojlchU9PfjTFZqIm
+         6QLHzq5icSdtNI8B1b4TvZlacfVHHrtLKP8rdp9MUvl9HaiWkLumqooz5VDw3voK02
+         uw4xWkFGTq48MM0mX7VnIFI1iqGugV2iH6fsAARlisVyeVC0YlwjhKwjXXCs/VHXKU
+         aucFEQ6ImQKcCJtZlTOc+WO9vcT0uIfjdDOnSG3cgxxMYtUYia9d06HbBpCuCjFAcC
+         MXHYTf5cub6ud2/xshfOIUugeAv1kLa0YW4+OmBd0WnL9eIuPEeLTIxaiQ4Xac5vTM
+         4pr4H/G/hCwrQ==
+From:   SeongJae Park <sj@kernel.org>
+To:     akpm@linux-foundation.org
+Cc:     xhao@linux.alibaba.com, rientjes@google.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
+Subject: [PATCH 0/8] Allow DAMON user code independent of monitoring primitives
+Date:   Tue, 15 Feb 2022 18:45:55 +0000
+Message-Id: <20220215184603.1479-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/22 11:42 AM, Sherry Yang wrote:
-> seccomp_bpf failed on tests 47 global.user_notification_filter_empty
-> and 48 global.user_notification_filter_empty_threaded when it's
-> tested on updated kernel but with old kernel headers. Because old
-> kernel headers don't have definition of macro __NR_clone3 which is
-> required for these two tests. Use KHDR_INCLUDES to correctly reach
-> the installed headers.
-> 
-> Signed-off-by: Sherry Yang <sherry.yang@oracle.com>
-> Tested-by: Sherry Yang <sherry.yang@oracle.com>
-> ---
->   tools/testing/selftests/seccomp/Makefile | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/seccomp/Makefile b/tools/testing/selftests/seccomp/Makefile
-> index 0ebfe8b0e147..7eaed95ba4b3 100644
-> --- a/tools/testing/selftests/seccomp/Makefile
-> +++ b/tools/testing/selftests/seccomp/Makefile
-> @@ -1,5 +1,5 @@
->   # SPDX-License-Identifier: GPL-2.0
-> -CFLAGS += -Wl,-no-as-needed -Wall
-> +CFLAGS += -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
->   LDFLAGS += -lpthread
->   
->   TEST_GEN_PROGS := seccomp_bpf seccomp_benchmark
-> 
+In-kernel DAMON user code is required to configure the monitoring
+context (struct damon_ctx) with proper monitoring primitives (struct
+damon_primitive).  This makes the user code dependent to all supporting
+monitoring primitives.  For example, DAMON debugfs interface depends on
+both DAMON_VADDR and DAMON_PADDR, though some users have interest in
+only one use case.  As more monitoring primitives are introduced, the
+problem will be bigger.
 
-Sherry,
+To minimize such unnecessary dependency, this patchset makes monitoring
+primitives can be registered by the implemnting code and later
+dynamically searched and selected by the user code.
 
-Please see comments on v2. Your v2 is in next for rc5.
+In addition to that, this patchset renames monitoring primitives to
+monitoring operations, which is more easy to intuitively understand what
+it means and how it would be structed.
 
-I pulled in your patch as a fix as is for 5.17-rc5.
+SeongJae Park (8):
+  mm/damon: Rename damon_primitives to damon_operations
+  mm/damon: Let monitoring operations can be registered and selected
+  mm/damon/paddr,vaddr: Register themselves to DAMON in subsys_initcall
+  mm/damon/reclaim: Use damon_select_ops() instead of
+    damon_{v,p}a_set_operations()
+  mm/damon/dbgfs: Use damon_select_ops() instead of
+    damon_{v,p}a_set_operations()
+  mm/damon/dbgfs: Use operations id for knowing if the target has pid
+  mm/damon/dbgfs-test: Fix is_target_id() change
+  mm/damon/paddr,vaddr: Remove
+    damon_{p,v}a_{target_valid,set_operations}()
 
-Using KHDR_INCLUDES can be separate patch for next release.
-This way the fix is going to be pulled for this release
-without dependencies on other patches.
+ include/linux/damon.h                     |  72 ++++++------
+ mm/damon/Kconfig                          |  12 +-
+ mm/damon/Makefile                         |   4 +-
+ mm/damon/core.c                           | 131 ++++++++++++++++------
+ mm/damon/dbgfs-test.h                     |   4 +-
+ mm/damon/dbgfs.c                          |  20 +++-
+ mm/damon/{prmtv-common.c => ops-common.c} |   2 +-
+ mm/damon/{prmtv-common.h => ops-common.h} |   0
+ mm/damon/paddr.c                          |  36 +++---
+ mm/damon/reclaim.c                        |   4 +-
+ mm/damon/vaddr-test.h                     |   2 +-
+ mm/damon/vaddr.c                          |  33 +++---
+ 12 files changed, 209 insertions(+), 111 deletions(-)
+ rename mm/damon/{prmtv-common.c => ops-common.c} (99%)
+ rename mm/damon/{prmtv-common.h => ops-common.h} (100%)
 
-thanks,
--- Shuah
+-- 
+2.17.1
+

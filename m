@@ -2,51 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F634B7302
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 678584B7326
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241335AbiBOQHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:07:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36064 "EHLO
+        id S241316AbiBOQHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:07:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241306AbiBOQHN (ORCPT
+        with ESMTP id S241306AbiBOQHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:07:13 -0500
-Received: from box.fidei.email (box.fidei.email [IPv6:2605:2700:0:2:a800:ff:feba:dc44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A53615A;
-        Tue, 15 Feb 2022 08:07:02 -0800 (PST)
-Received: from authenticated-user (box.fidei.email [71.19.144.250])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.fidei.email (Postfix) with ESMTPSA id 4AAA3805DE;
-        Tue, 15 Feb 2022 11:07:01 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dorminy.me; s=mail;
-        t=1644941221; bh=ITdx6H4Vxkkt1psYEw6EmitYVmfA1N7Bq0NJMjPXVbQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=c4HMPAjbq9F1JsH/sS6OZSMR8Aa5gwb/rUTmkRyeIsGxcXdJgSAlYxBnavMzRk3Kt
-         WjVSt7IRFjSy2cnIL8Nyv510FnAa6Ws3exMJrLfZM3ZUb1IfhPbzDIv5jqK+D9Mpo+
-         3QrUwvr2Rcg5Lodgu6+qInG29z3ZqqrgsmhAGs9A1VZUI90zgEaWNU4lnCKydFjc+d
-         84pORfyZQIZryZyICyw1TvYoLMuq1HAtha5NPyoP4/L9jB4MiGr4td16ewp87WNhsX
-         kDq1c/WUHdMQUHH4BqvaFoaad6zp3CP50o1ahjr+zmpqBosi8cc+REXZa1858iEJBu
-         xZJEE3HqcQckQ==
+        Tue, 15 Feb 2022 11:07:45 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481F4DE92
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:07:35 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id om7so17741056pjb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:07:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9F1cZHityGGoWBhfQ6coBOoN6sLDbcrG5DsSqFvaDqU=;
+        b=QerMelEYY6ZDyyl1cI/YVp6a+3AiRTY9PXCnsmnFgeUeqOfD0RdHc1oShO5TFk3a1e
+         reRp5IdzoSDGiTUW0TUs9obthAaR6Fd7ALoGIVLN+mzEsNiFaBatztWhabOU5Mdkco4q
+         B/zJoBvoW6A94AVKVgT4SIX+4LVEqROqThJII=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9F1cZHityGGoWBhfQ6coBOoN6sLDbcrG5DsSqFvaDqU=;
+        b=UuHo4huDG/g+8KnzR0JQ20OKXaQtQb9eub3jhPm/cee0IPqdhaj5LRGLpy5AjO6Fi8
+         pqdrhoxX2j4EbC6YwFYTC7+Kgt5fR57P3Al2oqrpGXBnndEkURJFacS647wAOi8zVpvH
+         +EYMPj9LDwdfTU6KrxUyzMbaHvfsbIdKxKGDULsyyW0G669bpxdOSKck7FRp5UMlovUH
+         YnD5UJXz784kDUKpEhjeTQnxzPuujkV+i4+Lv2VgYDS+er25VABnlrcRfytjmRL+Cop/
+         1ldBcJDDbGZrLDhpmLYzyiuVWQnUpXYCc0jvtdHZXUzHNyqCZiHsH0BUtmrJ3uLvv3VW
+         Twqw==
+X-Gm-Message-State: AOAM531oEDbvTQt60A/SsHJ9SxfOCZKUt2bdLbRqjt3hlwOPoUu9sR3m
+        sxCqKxznku/6JwSKw3hNWiJZaw==
+X-Google-Smtp-Source: ABdhPJy9XUFQBS9qoJ92jrgPj0aOGN3xbqhE/n4oek8xKKJdVkIpgUPawPDOLHN99L+h2PeDtK1eNw==
+X-Received: by 2002:a17:902:b413:: with SMTP id x19mr5046708plr.103.1644941254817;
+        Tue, 15 Feb 2022 08:07:34 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n29sm2964422pgc.10.2022.02.15.08.07.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 08:07:34 -0800 (PST)
+Date:   Tue, 15 Feb 2022 08:07:33 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v4 00/13] Fix LKDTM for PPC64/IA64/PARISC v4
+Message-ID: <202202150807.D584917D34@keescook>
+References: <cover.1644928018.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Date:   Tue, 15 Feb 2022 11:07:01 -0500
-From:   Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-To:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] btrfs: add fs state details to error messages.
-In-Reply-To: <20220215150438.GN12643@twin.jikos.cz>
-References: <20220212191042.94954-1-sweettea-kernel@dorminy.me>
- <20220215150438.GN12643@twin.jikos.cz>
-Message-ID: <dc7bfe199bf22e67061a358e8e1f32b2@dorminy.me>
-X-Sender: sweettea-kernel@dorminy.me
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1644928018.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,107 +75,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 15, 2022 at 01:40:55PM +0100, Christophe Leroy wrote:
+> PPC64/IA64/PARISC have function descriptors. LKDTM doesn't work
+> on those three architectures because LKDTM messes up function
+> descriptors with functions.
+> 
+> This series does some cleanup in the three architectures and
+> refactors function descriptors so that it can then easily use it
+> in a generic way in LKDTM.
 
->> +static void btrfs_state_to_string(const struct btrfs_fs_info *info, 
->> char *buf)
->> +{
->> +	unsigned long state = info->fs_state;
->> +	char *curr = buf;
->> +
->> +	memcpy(curr, STATE_STRING_PREFACE, sizeof(STATE_STRING_PREFACE));
->> +	curr += sizeof(STATE_STRING_PREFACE) - 1;
->> +
->> +	/* If more states are reported, update MAX_STATE_CHARS also */
->> +	if (test_and_clear_bit(BTRFS_FS_STATE_ERROR, &state))
-> 
-> The state is supposed to be sticky, so can't be cleared. Also as I read
-> the suggested change, the "state: " should be visible for all messages
-> that are printed after the filesystem state changes.
+Thanks for doing this! It looks good to me. :)
 
-'state' is a local copy of info->fs_state, so clearing bits on the local 
-copy should be okay, and the "state: " will be present for everything 
-after the fs state changes. Could instead use test_bit(&info->fs_state) 
-and keep a count of how many states were printed (to know if we need to 
-reset the buffer) if that is clearer.
-> 
->> +		*curr++ = 'E';
->> +
->> +	if (test_and_clear_bit(BTRFS_FS_STATE_TRANS_ABORTED, &state))
->> +		*curr++ = 'X';
->> +
->> +	/* If no states were printed, reset the buffer */
->> +	if (state == info->fs_state)
->> +		curr = buf;
->> +
->> +	*curr++ = '\0';
->> +}
->> +
->>  /*
->>   * Generally the error codes correspond to their respective errors, 
->> but there
->>   * are a few special cases.
->> @@ -128,6 +153,7 @@ void __btrfs_handle_fs_error(struct btrfs_fs_info 
->> *fs_info, const char *function
->>  {
->>  	struct super_block *sb = fs_info->sb;
->>  #ifdef CONFIG_PRINTK
->> +	char statestr[sizeof(STATE_STRING_PREFACE) + MAX_STATE_CHARS];
->>  	const char *errstr;
->>  #endif
->> 
->> @@ -136,10 +162,11 @@ void __btrfs_handle_fs_error(struct 
->> btrfs_fs_info *fs_info, const char *function
->>  	 * under SB_RDONLY, then it is safe here.
->>  	 */
->>  	if (errno == -EROFS && sb_rdonly(sb))
->> -  		return;
->> +		return;
-> 
-> Unnecessary change.
-Yeah, there's a stray space at the start of that line, but I can take 
-out fixing it.
-> 
->> 
->>  #ifdef CONFIG_PRINTK
->>  	errstr = btrfs_decode_error(errno);
->> +	btrfs_state_to_string(fs_info, statestr);
->>  	if (fmt) {
->>  		struct va_format vaf;
->>  		va_list args;
->> @@ -148,12 +175,12 @@ void __btrfs_handle_fs_error(struct 
->> btrfs_fs_info *fs_info, const char *function
->>  		vaf.fmt = fmt;
->>  		vaf.va = &args;
->> 
->> -		pr_crit("BTRFS: error (device %s) in %s:%d: errno=%d %s (%pV)\n",
->> -			sb->s_id, function, line, errno, errstr, &vaf);
->> +		pr_crit("BTRFS: error (device %s%s) in %s:%d: errno=%d %s (%pV)\n",
->> +			sb->s_id, statestr, function, line, errno, errstr, &vaf);
-> 
-> Alternatively the state message can be built into the message itself so
-> it does not require the extra array.
-> 
-> 
-> 		pr_crit("btrfs: error(device %s%s%s%s) ...",
-> 			sb->s_id,
-> 			statebits ? ", state" : "",
-> 			test_bit(FS_ERRROR) ? "E" : "",
-> 			test_bit(TRANS_ABORT) ? "T" : "", ...);
-> 
-> This is the idea, final code can use some wrappers around the bit
-> constatnts.
-> 
-> 
->>  		va_end(args);
->>  	} else {
->> -		pr_crit("BTRFS: error (device %s) in %s:%d: errno=%d %s\n",
->> -			sb->s_id, function, line, errno, errstr);
->> +		pr_crit("BTRFS: error (device %s%s) in %s:%d: errno=%d %s\n",
->> +			sb->s_id, statestr, function, line, errno, errstr);
-> 
-> Filling the temporary array makes sense as it's used twice, however I'm
-> not sure if the 'else' branch is ever executed.
-There are a bunch of calls with NULL format -> else branch, 
-unfortunately.
+-Kees
 
-Thanks!
+> 
+> Changes in v4:
+> - Added patch 1 which Fixes 'sparse' for powerpc64le after wrong report on previous series, refer https://github.com/ruscur/linux-ci/actions/runs/1351427671
+> - Exported dereference_function_descriptor() to modules
+> - Addressed other received comments
+> - Rebased on latest powerpc/next (5a72345e6a78120368fcc841b570331b6c5a50da)
+> 
+> Changes in v3:
+> - Addressed received comments
+> - Swapped some of the powerpc patches to keep func_descr_t renamed as struct func_desc and remove 'struct ppc64_opd_entry'
+> - Changed HAVE_FUNCTION_DESCRIPTORS macro to a config item CONFIG_HAVE_FUNCTION_DESCRIPTORS
+> - Dropped patch 11 ("Fix lkdtm_EXEC_RODATA()")
+> 
+> Changes in v2:
+> - Addressed received comments
+> - Moved dereference_[kernel]_function_descriptor() out of line
+> - Added patches to remove func_descr_t and func_desc_t in powerpc
+> - Using func_desc_t instead of funct_descr_t
+> - Renamed HAVE_DEREFERENCE_FUNCTION_DESCRIPTOR to HAVE_FUNCTION_DESCRIPTORS
+> - Added a new lkdtm test to check protection of function descriptors
+> 
+> Christophe Leroy (13):
+>   powerpc: Fix 'sparse' checking on PPC64le
+>   powerpc: Move and rename func_descr_t
+>   powerpc: Use 'struct func_desc' instead of 'struct ppc64_opd_entry'
+>   powerpc: Remove 'struct ppc64_opd_entry'
+>   powerpc: Prepare func_desc_t for refactorisation
+>   ia64: Rename 'ip' to 'addr' in 'struct fdesc'
+>   asm-generic: Define CONFIG_HAVE_FUNCTION_DESCRIPTORS
+>   asm-generic: Define 'func_desc_t' to commonly describe function
+>     descriptors
+>   asm-generic: Refactor dereference_[kernel]_function_descriptor()
+>   lkdtm: Force do_nothing() out of line
+>   lkdtm: Really write into kernel text in WRITE_KERN
+>   lkdtm: Fix execute_[user]_location()
+>   lkdtm: Add a test for function descriptors protection
+> 
+>  arch/Kconfig                             |  3 +
+>  arch/ia64/Kconfig                        |  1 +
+>  arch/ia64/include/asm/elf.h              |  2 +-
+>  arch/ia64/include/asm/sections.h         | 24 +-------
+>  arch/ia64/kernel/module.c                |  6 +-
+>  arch/parisc/Kconfig                      |  1 +
+>  arch/parisc/include/asm/sections.h       | 16 ++----
+>  arch/parisc/kernel/process.c             | 21 -------
+>  arch/powerpc/Kconfig                     |  1 +
+>  arch/powerpc/Makefile                    |  2 +-
+>  arch/powerpc/include/asm/code-patching.h |  2 +-
+>  arch/powerpc/include/asm/elf.h           |  6 ++
+>  arch/powerpc/include/asm/sections.h      | 29 ++--------
+>  arch/powerpc/include/asm/types.h         |  6 --
+>  arch/powerpc/include/uapi/asm/elf.h      |  8 ---
+>  arch/powerpc/kernel/module_64.c          | 42 ++++++--------
+>  arch/powerpc/kernel/ptrace/ptrace.c      |  6 ++
+>  arch/powerpc/kernel/signal_64.c          |  8 +--
+>  drivers/misc/lkdtm/core.c                |  1 +
+>  drivers/misc/lkdtm/lkdtm.h               |  1 +
+>  drivers/misc/lkdtm/perms.c               | 71 +++++++++++++++++++-----
+>  include/asm-generic/sections.h           | 15 ++++-
+>  include/linux/kallsyms.h                 |  2 +-
+>  kernel/extable.c                         | 24 +++++++-
+>  tools/testing/selftests/lkdtm/tests.txt  |  1 +
+>  25 files changed, 155 insertions(+), 144 deletions(-)
+> 
+> -- 
+> 2.34.1
+> 
+
+-- 
+Kees Cook

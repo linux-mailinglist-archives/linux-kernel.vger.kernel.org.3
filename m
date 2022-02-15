@@ -2,180 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AC24B6253
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 06:15:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDB84B6308
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 06:46:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbiBOFPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 00:15:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47746 "EHLO
+        id S234173AbiBOFqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 00:46:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiBOFP3 (ORCPT
+        with ESMTP id S229844AbiBOFqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 00:15:29 -0500
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2068.outbound.protection.outlook.com [40.107.113.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA021D04B2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 21:15:19 -0800 (PST)
+        Tue, 15 Feb 2022 00:46:17 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2052.outbound.protection.outlook.com [40.107.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631D077A8E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 21:46:04 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YL4uEzElsu2+kdAZGNy3/s3Zohvg24IzjROBlMNhVFT+o5lpKqlcYiaM2QoqRHROB85g/CHcqttGqNib/LlR06VTkfO5hiJ+V6oGI3QI9V4rU4HUY+ePlF+7apwZTEIamTB8UN4piLBfZfD7toksPKbbLkVoSlgp+c+PyB6SLqZqbKWxhf2cK9QVLIUN1LsBMFUOwpYoWfe2zUBrbfFVS3nBX3FGVB3bs4EH1BmUbkoNgMzrznTd1AyIZAaIX5uPbwNyrjH6ZjeXeG35y/gQNiJASin/C4+gs4rJ7WJ9AkDPfT3eBNOazUg0s01AqieLQgXjWP4VbNnP8hcKsPgvCw==
+ b=jJ5FFr7UcxBAs2OQF9uHcomIN5xReB5Wh9HdacjIfxcSSAWF+RjAvoOBvXePGc7RTgPXcldKPU34VsjGQDSXEHbef7cg9+idAM6JaPxFR/Bhf4WR1/8Ib+OAzNWr2BCT1MAFJt/sIYuX9gyY7JcCuYHJP2yQ+6R5F1hIujcV4kFec28l+orVbOTGzX/EbEP3XJcn2wq9WIw8Q0MuoyW0F9VOzl/471FnDTx6IIHCePt1e8SV3KPbJDSykRP3BR5+WdXstnAtqQiGFSCHJA/2b9Jn331/y8Pr8NFb40rMqFai4/vv/ULUJsiI94emMtL//i3HDwKLA7xkzhM68rwdHg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0844HE2Mvd/t1MRGYidCWvJDxCegfbl1UVg+rE2Bufc=;
- b=e0lwzQGakN5iRlXM8YJaeYYSJO5B/uuiyORsM3dplaGyU5VEwLfg2W232j97McCq/Lu8eNe5F75cHkaicJSBFW2SEwlL+7IN+HfCB0kArUmSxea438I+9KuOjZcZtxby/HRmb7uE8Oinmz1FmlJnZ0HEUNNoVqSL2yvLEZGi/tUDpuSkIRkCDkFnIHQlkSwBHp80CwWDxmcofaRbB3yMR7LwKOcmOoF4410pv3+P1qltX6QIA/8JLJKcDOox640RGiJoq3Y4Ymn6bmN8XidU7oudZxd+k5nsTFbKCILBmotPTH1xbsJnjRDJcPPINXT+/J/7yyQuxBgL8hMRwwtA0g==
+ bh=QXEV1RHpfVoM4n+frBsDN+FosRYf1a9MWcZY+1U4rh0=;
+ b=oC7X7EOk436nvHJX4e6OecV6Vd50hp1HjkBZi3+7FxwtGrwpH53she9Pc+axY7tGGH8Eo/I/ufS/bUyBfYtEADjUddCU72DDWUo4WXKHDXu6ZY3BjNZcds03K1LOBeZldqsAPyKOt6ohQZ+bXFhLzHOspSVZwTkT/m5CzbuwA5iAG3PZHkUxq8+/z8axb2dVNZz7jNsXN8pGvU57xspQm5GX66b56sdburCGwVsWfTFVABrstaWUDbDX3bpOerIO5+1Uwjfnk25Fd9BxRhJIweonuTEHgU3MYdz1ruGKJ6STwSE5Hmnsc23hCJjpV576vrwQQIkpfcEtPkML099XGQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0844HE2Mvd/t1MRGYidCWvJDxCegfbl1UVg+rE2Bufc=;
- b=htYRd/IgYi3yQrZsofAoNbYmZAjLPVOdPNPM0luqy4qIK32sm62gguTtYwIH4BjXkA56t1rW4Z1vmhaKt6ICVbspednONcsq2fx1IUHJ/dMOS14EF22vplV0SUG3XsQcEYoZP5pn7DflQkr0YV2d64XMZl3YeitatY+SxORslDk=
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
- by TYCPR01MB5727.jpnprd01.prod.outlook.com (2603:1096:400:47::14) with
+ bh=QXEV1RHpfVoM4n+frBsDN+FosRYf1a9MWcZY+1U4rh0=;
+ b=p1ZcrmWApQVcgMY0kpYONLTkgYg65YIAwxImkfYY8zvWSScsLlyZSwdQMhg6T6+Yc7cLlAYhlLDN34Wo+0znJeKBjayHxEoGduj9Zg/z9D3pMI5mxN+FNUCnH1SaUU3SniLQ0BTLEpk1eIhGSrGoS6QVJL9+TDVK3Rf0GTpVM/va/u8sAvB4aV8ArzAq6Bka3/EcDmrXPoDqpGRKmU9GLSUHoH51P5ivnfXEOkDkpkHNAcF4yBr07rl4y+c8gAfhGwbv1yWAqDVychrDHRec+0H34U7duxtIdT9wSD1a3Kaxzgwd/s+2cUgmeVumjxyqpdQ5JqK/7o7PZq8B7LS3xw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by SA0PR12MB4461.namprd12.prod.outlook.com (2603:10b6:806:9c::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.15; Tue, 15 Feb
- 2022 05:15:17 +0000
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::7c3a:9153:8e79:6a9b]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::7c3a:9153:8e79:6a9b%4]) with mapi id 15.20.4975.019; Tue, 15 Feb 2022
- 05:15:17 +0000
-From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
-        <naoya.horiguchi@nec.com>
-To:     Rik van Riel <riel@surriel.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel-team@fb.com" <kernel-team@fb.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
-Subject: Re: [PATCH v2] mm: clean up hwpoison page cache page in fault path
-Thread-Topic: [PATCH v2] mm: clean up hwpoison page cache page in fault path
-Thread-Index: AQHYIfn/AL9DAriJu0uasOu12MLroayT1TgAgAA824A=
-Date:   Tue, 15 Feb 2022 05:15:17 +0000
-Message-ID: <20220215051515.GA1918865@hori.linux.bs1.fc.nec.co.jp>
-References: <20220212213740.423efcea@imladris.surriel.com>
- <20220214152407.67e0d7dd1a532252c9dd203e@linux-foundation.org>
- <6f70cc26ccc92d099f1080e4c57ab44709bafd68.camel@surriel.com>
-In-Reply-To: <6f70cc26ccc92d099f1080e4c57ab44709bafd68.camel@surriel.com>
-Accept-Language: ja-JP, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nec.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0fdb9c8f-c6c2-4687-0ad9-08d9f04227ec
-x-ms-traffictypediagnostic: TYCPR01MB5727:EE_
-x-microsoft-antispam-prvs: <TYCPR01MB5727508B3D5F1878E835943DE7349@TYCPR01MB5727.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3kCbtE85OzYIJSNDis1BsdzCux9A2son6UH9wwV7qVI2ZnamTFdCxo7ebjqfZgv63uezPX8pnvQaCAEUjspX3823KAqLSLGXe50hIGTSRPC3O8YcncaZ4SaCcMbIPN8wqPHv7SqMHJvndQI0K+Wg18s8df1vpVMFS/eeYSSnsfH9NNx/zohMX+2kr8h6NT8HwOFpsjyTV1gQtM5T7Y1UXeZ0nvlm/SR6366b+n9JH7/DoV1sJj3GVsI/LXwlYuOPqjPcJBzDqUmA8uoGb0f5d2fnHW6aYZHcQpRLTvYyTKUyoDsfYxNed6LEWBBdk994ISn+B5R8lUgfnUOh8fpvwJH+Dp9HVuaxZdaJkfYV51FG2PfKOhK9UzQjMJSwhcYlRAxe0atfTE4WqK48Y4slR+h0Ok0dgg7yFsI11UeozqbifdVFwEzzhjL87A6RL9dE9ZWlqILmvq1LpV9eRgJlpWonD+DqD5LdoPW/6dARBJrTbwUVd9ioNBpuUBxrKCbtR53uqAvHNv8aSl7KS2OzKpk2+pW4JKjZZb/3QMefp+EjUL/8c8mnNzeALBdcgvDvqxRJV424e8gQtYYRrbuzJxV4fUzyM7DJhTvkyTbQyrVIzvOx9u8KgCsL0cWgJa84jUcQoGlCLvfe5pjv0WBoPBsvsuQM6lr3Za9ODc545tDqCr8CkJwVH/jiiy+gHG58w5JjZsEomgFov4RFgr+bKA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(82960400001)(122000001)(38100700002)(38070700005)(71200400001)(55236004)(8936002)(66446008)(66556008)(66946007)(26005)(76116006)(6486002)(33656002)(8676002)(508600001)(4326008)(66476007)(6506007)(186003)(64756008)(83380400001)(1076003)(85182001)(54906003)(5660300002)(2906002)(6916009)(7416002)(6512007)(9686003)(86362001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TlRFZnJmYWZnenZ3M3RoWnUxYXdkV1hqaVh3Si9LZ2s2M3BHdmdXR3R2bmpx?=
- =?utf-8?B?cW1wOGlremt3d3ZOZGJoNmZJQmhLMWdtSzQzSzZWSXRjVUVKVEtJSUdQOXBG?=
- =?utf-8?B?UmhQWWhjby94MGd3WFVHYUNzWStsMjlpTWdPalFRaFpjQ2dsVSsvY2VyZm82?=
- =?utf-8?B?bXBTN0JKbEZDcUhkUjlydU41UmFTS1gyTmF4WmkzaktqRGFuYTFrVGd4cURt?=
- =?utf-8?B?cTR1a2RMZkJDeEszc2kvTGxZTlovdkRPRDExRHdoN2RlMXFKY0xCZExTQk1D?=
- =?utf-8?B?ekt0L2oyNXZqZHlUNUpTTG9EdktUZnEyTU80blYrMmt3azZ4LzJUN0txQ3Zn?=
- =?utf-8?B?aUQ3ekhJUExrRWFkMnJRWlRBcm52RkZDYThGcHR3SmJFc1poU3plcCtKSWRZ?=
- =?utf-8?B?VUZlVkZpNTVYaXUwREx2ampWNVBJcnAxM0lSREJVVFJzME9rTE9UcGoyT0Qw?=
- =?utf-8?B?Tjdjdk9BWWp4YVdGa0lFNm41c1ZQSnpUdnd5R0ZPcWhGZnhSbzRCR082RS82?=
- =?utf-8?B?Q3FWZ1c5aGIxY1U2cDN0M3B1UFJBZUMwOHl4Rm52OEU4LzJFWWt6RW92UVRE?=
- =?utf-8?B?RHV2b2I3VUc4Z3M0UDRSYVNpTmVGa0pqMmhTUWVOTVNCdGVjNDVmMmNZVktU?=
- =?utf-8?B?OVRKR1VOSjBJbll2T2FZbHJIQWVlYlozN01VUTUzNGVOZ0ovNmJCaVVjOHNU?=
- =?utf-8?B?QjNmdlpKakQ0KzFDMFB4eVZkZndHWWk2OCtpWXlQeENDcEwrTEo1aHE5OWJQ?=
- =?utf-8?B?bWJHRWNzUHlyVWJTU0dnNUh0VHd3c09NVWNTeEtPdVlhMjBYOC95TU4vZC84?=
- =?utf-8?B?dEhyV00ydUxmK3U2ME1PR0h3M3JuUTMrTE1zakp5ekVBQ3JKYkVsSE1IQ04w?=
- =?utf-8?B?Rk83WUNPU01YQm1PZmsyU1ptV2NIdkdIU0h1bS9DMnJ3cExNUTJlZDc3elA3?=
- =?utf-8?B?eElscThyWkpva1NvaEZQcVMwdyt6TVFwMFBDNUhYeXp0SHNXU09uNU0zZEpm?=
- =?utf-8?B?R29FejB4QWc5ZTBNMUN3RHk3QlJpa0tKSVRKK0hTN1Y1V3JXR0h3SjF1T0Zs?=
- =?utf-8?B?MzhSb2E1NWg0bi9xRjlYcmJhOGVpQld3QklJRlZwYWhRUjcvV2xIZUZNR28r?=
- =?utf-8?B?eXptUTNYaVpyMUdIR3U3am9uWDhyc040c0NwUjhod21lYm9IOS9tS3RDdEJ1?=
- =?utf-8?B?Qlh4M0tWejJqOHZodlBDdk5lUjNjNXRPTHVXcDFvdi9rdDhtZUtXcEw1ZVkx?=
- =?utf-8?B?djJOVnJrUWM2NEtvQjRwcFI0UGVqVG9uNStkSURsSzlKdHdWNFFxb0xPY3Nq?=
- =?utf-8?B?UnY2LzhHZlduMWtaWE1mQXFNRXVlanFQMTZkSzFic0R2eWFJR1ZyTUJ1WkVI?=
- =?utf-8?B?cHpJSGhoZlBjQzdaT0R0b0dFcXBoZHpHUGdWOFUxQjZwOTltbmVYTVFLY3k0?=
- =?utf-8?B?VnNSUERkcDE5KzlBcWZtOGlrUFI1cm9nUUJyaTlGQnRIQWJGcmRiMDBlQ0xT?=
- =?utf-8?B?M2orTndtaFY1am0rV3dkbm1HRXM1WmN2a3JOZHo5cWJESWJua3JteXZsUjlz?=
- =?utf-8?B?dCtFU2prUDFpcFB1a1NoQjBHRlRuSkRoNWhEZHFUZ3BjNHVrVG5KQitLdGt0?=
- =?utf-8?B?MkdhSG9QdlhRZjFuK0hESDFIengvQkdSa004VnZRM0tpSDJHM01kcHROUjNp?=
- =?utf-8?B?Vm0vOFZJWEZEVVYyMW1heFViWVllS29sbE1FQzBwK2RXMXFNN25QVEdHUnRO?=
- =?utf-8?B?TjEvT0FqVnJCWVZvcnRZUFZvUE55SmJ1MWlWYnA4QXBGbnVOcXVVZ0NjRktE?=
- =?utf-8?B?QXJGQ1I0T202UnFwT2ludlhia0MxVG91SkFzdW1iNDg1QVZYSU8zZnhCa29x?=
- =?utf-8?B?RU1PZmZ4QW1KMmgzV0pEd3NGeCtKTlBSSGxxZ1h1UnpyVUVKWG82ZkgwbE12?=
- =?utf-8?B?MFIyTTNXbFRNQWtwWllWUHBwTTNwdzhYUjBEUTQ0ZW0rek1laGdIUkx4OE0y?=
- =?utf-8?B?cXp5VTJUbFN0OGFSSUF3UElaaUhGT2FScHpXeE9aMDhveE9USWhxT3ZNeXpp?=
- =?utf-8?B?WU9tTnh2S1Zjd2Z0TmJwdFhaWjJmTXg4c1hjaFRsRlk5dWtaYlRQcWZjUG5W?=
- =?utf-8?B?SDVxeFhJem9zWC93YW9tQzU4eE5URjBjdlh0Q3RocTB6SkVQVzRCSk0ydzhj?=
- =?utf-8?Q?0mYKpRewBirEMfmTVw7ip6eubmoTPHavAqCUmpB55D51?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <036279BFA9731A41B0736017BD6B557C@jpnprd01.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Tue, 15 Feb
+ 2022 05:46:02 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::1528:82a2:aa0:7aa6]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::1528:82a2:aa0:7aa6%6]) with mapi id 15.20.4975.019; Tue, 15 Feb 2022
+ 05:46:02 +0000
+From:   Alistair Popple <apopple@nvidia.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     akpm@linux-foundation.org, jhubbard@nvidia.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ziy@nvidia.com
+Subject: Re: [PATCH] mm/pages_alloc.c: Don't create ZONE_MOVABLE beyond the
+ end of a node
+Date:   Tue, 15 Feb 2022 16:16:28 +1100
+References: <20220215025831.2113067-1-apopple@nvidia.com>
+ <7b752e06-f345-cbb2-d05c-57e5fc5d8e5a@arm.com>
+User-agent: mu4e 1.6.9; emacs 27.1
+In-reply-to: <7b752e06-f345-cbb2-d05c-57e5fc5d8e5a@arm.com>
+Message-ID: <87bkz8d6nc.fsf@nvdebian.thelocal>
+Content-Type: multipart/mixed; boundary="=-=-="
+X-ClientProxiedBy: BY3PR10CA0024.namprd10.prod.outlook.com
+ (2603:10b6:a03:255::29) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
-X-OriginatorOrg: nec.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 504d9b14-48c5-46dc-b962-08d9f046734c
+X-MS-TrafficTypeDiagnostic: SA0PR12MB4461:EE_
+X-Microsoft-Antispam-PRVS: <SA0PR12MB4461AD342355CE5ECD317F24DF349@SA0PR12MB4461.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: m+WNKRICcDRPeXXmj3NFrRSfq9N1ME9H7sKUbvTobA7Lv758wMLwI6N0ic+JOO66RwauAddLDdzo2uXburJm6gm0kzaVaUdW55dTzWNJ+xSdwnur6NBkaBEpgOdXZY5okcRyap+Wjs5EV1uXY+TMiSHVhEVO4yJLR2WKZoG4fXP6/YwTVertGVVHOPK3UG5EBC0Z0dIlaAcE8fY/ePAey6nia0ureu4l2fDOLIIQKMq5cRx4yV1yuFGOtX07LR1Y7HeMMQJrGjnpgfBX6sTq9EZi9OsOomlstbs9Q/nxU/drTyPZb4AEYLQ0jYEUY/wdCxP6KfJG40Kul3ATtQhjPd+L1rH3X0Mfxuv3ttBUqFSvxXoLj2wlsXtLN5g3z+bmILlFNpK0TbCH4i5TKy879Q88Wz8y7hAgnwVtt/EGiXc3Y2mebXzZvO4Qpauc5fHW2qCMoOdAPEexF5mq6LrAeATPTirm5yuWtXUY5pRoi3mO98DgYTMPUI5ZZTIGtNXXu3Sw31nWm1WF00kje4YhuKfKPGIRH4NX4dv9Kz5hhJuUdfq8M71nQhTbpY95FEOaEgso7JaSyLPJuIIXleTS0dglKGLKlL6vZ8ZogCmPEIGevl624psubcgEMK3RSg5YYMtM1+F/ZZMGdqPqly+azw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(38100700002)(83380400001)(2906002)(186003)(8936002)(5660300002)(6486002)(44144004)(6506007)(66946007)(107886003)(66476007)(26005)(9686003)(6512007)(66556008)(8676002)(53546011)(508600001)(316002)(86362001)(6916009)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?T7LwP2zCznkjM9YMEc1au/TMO7sZjl9oa1VQpb6S4ZS9ASVspkJhnYKBY3P/?=
+ =?us-ascii?Q?CRO+glZ3sLdY4coP2r7LoL9v72c3wN0l6suPwaWdRipJKBIkH+GnA0Y1DjZL?=
+ =?us-ascii?Q?aIKjaWJFKd/F9eMBPohb+TD0vGcuck0Pj3hHMUV4Q3xWzVqKiQ8xYEvM+54g?=
+ =?us-ascii?Q?Yuie6FhULNohSSQGYpSbuo4kPjEfrEi9mtY9axtT7qtdsNBuPD35sfbKXCKZ?=
+ =?us-ascii?Q?OwY1/jjV5OLpEA0Zrj/B0F/UIgCjUkxQCTYOQ7uY2ChhXReEis76Fyh/jTxJ?=
+ =?us-ascii?Q?pY7Lov2/TN63ibuxmDUdwTef6A0kR72W3yJkDtVHTJYyNdL4zogKnClgdPlN?=
+ =?us-ascii?Q?/QDE6RsNbszfLkVzJVBQiizhFoV2SnfGesYeFb+WjFWcoQGab5vu8SEB3mRV?=
+ =?us-ascii?Q?65RpZhEWDUAffZAiErvFtLFfBkHLxK2dGoluc23D+UmjeCeV8ReIW+WqFyeo?=
+ =?us-ascii?Q?YGhfMhyr5NQdhhfjmjPMeK+ets81GNQUiUAF2lxNoW839wKykRZKXRPCZZdG?=
+ =?us-ascii?Q?JFkskcN7GH5QSa1bHLlExw/83JS/SDzmKcjqBTT9FyeY6zyYElHm542pKqF2?=
+ =?us-ascii?Q?8rfdhtxuRzKWZILdMB8LTyltU6bUc3HupAZbO6788fKQsfnRWmcbziWjnoC/?=
+ =?us-ascii?Q?HQJ5iC8NpJZp6a6VcUIkvnkz1Es1AWLIA+I57V1/IJgPR0oEA7R1TfPnaXGD?=
+ =?us-ascii?Q?QO7hF+SMOw0Z5KuErIFprqLyjYND15aeHK0yFrn0BvAjv+Y7w5aXB30Mv9Xn?=
+ =?us-ascii?Q?/D/0c6UecXnVqPknU2JhUZ+nm83vXplarUpiZyTsZqGHT3GPhoMHs6y655Ap?=
+ =?us-ascii?Q?NY9+TWglYBhoQivNT1JuW0N89C5gRHDhSYnYfvRo8nrgTpCkE7vSP+5uFef1?=
+ =?us-ascii?Q?aH40lk7V5dRkhGwL+n+uw0XtmvXiokIG7qZG+YV2DEG6TyktRHX4mwRU9MVI?=
+ =?us-ascii?Q?LntTIMhq6JkCPH8daWmn83mQbZ845iaHQKR2UdwbYyfe7dlN/c5H1VHZu8Z9?=
+ =?us-ascii?Q?9lWV5Z8LWkyxj+njRleHSEKPZizJAc2gEEJzKr0ocgOt3nN7wMNehuxEvYzs?=
+ =?us-ascii?Q?3+MLyJMupuRWKH9PyfZQi/bc/AvJUN1PdXBLTarvBj5fRX0mGe2G8qiYn5Dx?=
+ =?us-ascii?Q?2P3VqIlPh7hr2W8yYP8LywJhbfYN17NtzSCBTDKxB6cJm6hq22jDBS1nGBRl?=
+ =?us-ascii?Q?0hLC7DYNFF3JKl8Dfnsl8oDJfOTCnXVECZKvvZcwtbj4FkZHZhhiVzT1Sq2x?=
+ =?us-ascii?Q?/ZsV6lCHxWkyYPj8bzTu+7++xklAHTM8QDxHE+kOGlcBb/8i5md2w2uCalgk?=
+ =?us-ascii?Q?XvfRc4EXuY5/WFyI5f0GHee0txTqy6gR8FHH+QgmuWJi6bODIfCs6WNBxk6G?=
+ =?us-ascii?Q?u0LzB88gZYi6mc9Yzwq2VuG4qwLVW6tW5o5SbL1lF4rlvAdiVmnIdUjG0oCK?=
+ =?us-ascii?Q?WFHCaQMluWnztCqB+ImWaF95IekHQyew33oW6bwRJQtNhuDZ1LgnKyF3zf3B?=
+ =?us-ascii?Q?FBMY2wGqQWFk2TRqOLO48Knw0nBeskoFZytXX0WZIZcmR8tBfDI4wVWepmbR?=
+ =?us-ascii?Q?1icOJ/muzH3mf5RfvC23ysxKsXOhcpSMZESMJ8t9X0wdbSHQ5G8fgkYKvUUY?=
+ =?us-ascii?Q?yGT7mSAKM5lrwq6fUoCJ9oM=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 504d9b14-48c5-46dc-b962-08d9f046734c
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0fdb9c8f-c6c2-4687-0ad9-08d9f04227ec
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2022 05:15:17.6986
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2022 05:46:02.5233
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Lzt0H41C91eEyO/arqid7M/BhjXOoWt664vXAY2vyhPjSxlM5ICS8Dimzh6AxT38w4Z858cieDD6K8iG3+B0gg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB5727
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +QxQ97kQCan1dxGJeIWBbabaX/aqRQgacQbIKzULfP4HzzMn2TSpRfykIZ7OGBsJwxgQGKGFEBT4+M/rQPi/2g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4461
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCBGZWIgMTQsIDIwMjIgYXQgMDg6Mzc6MjZQTSAtMDUwMCwgUmlrIHZhbiBSaWVsIHdy
-b3RlOg0KPiBPbiBNb24sIDIwMjItMDItMTQgYXQgMTU6MjQgLTA4MDAsIEFuZHJldyBNb3J0b24g
-d3JvdGU6DQo+ID4gDQo+ID4gPiBTdWJqZWN0OiBbUEFUQ0ggdjJdIG1tOiBjbGVhbiB1cCBod3Bv
-aXNvbiBwYWdlIGNhY2hlIHBhZ2UgaW4gZmF1bHQNCj4gPiA+IHBhdGgNCj4gPiANCj4gPiBBdCBm
-aXJzdCBzY2FuIEkgdGhvdWdodCB0aGlzIHdhcyBhIGNvZGUgY2xlYW51cC4NCj4gPiANCj4gPiBJ
-IHRoaW5rIEknbGwgZG8gcy9jbGVhbiB1cC9pbnZhbGlkYXRlLy4NCj4gPiANCj4gT0ssIHRoYXQg
-c291bmRzIGdvb2QuDQo+IA0KPiA+IE9uIFNhdCwgMTIgRmViIDIwMjIgMjE6Mzc6NDAgLTA1MDAg
-UmlrIHZhbiBSaWVsIDxyaWVsQHN1cnJpZWwuY29tPg0KPiA+IHdyb3RlOg0KPiA+IA0KPiA+ID4g
-U29tZXRpbWVzIHRoZSBwYWdlIG9mZmxpbmluZyBjb2RlIGNhbiBsZWF2ZSBiZWhpbmQgYSBod3Bv
-aXNvbmVkDQo+ID4gPiBjbGVhbg0KPiA+ID4gcGFnZSBjYWNoZSBwYWdlLg0KPiA+IA0KPiA+IElz
-IHRoaXMgY29ycmVjdCBiZWhhdmlvdXI/DQo+IA0KPiBJdCBpcyBub3QgZGVzaXJhYmxlLCBhbmQg
-dGhlIHNvZnQgcGFnZSBvZmZsaW5pbmcgY29kZQ0KPiB0cmllcyB0byBpbnZhbGlkYXRlIHRoZSBw
-YWdlLCBidXQgSSBkb24ndCB0aGluayBvdmVyaGF1bGluZw0KPiB0aGUgd2F5IHdlIGxvY2sgYW5k
-IHJlZmNvdW50IHBhZ2UgY2FjaGUgcGFnZXMganVzdCB0byBtYWtlDQo+IG9mZmxpbmluZyB0aGVt
-IG1vcmUgcmVsaWFibGUgd291bGQgYmUgd29ydGh3aGlsZSwgd2hlbiB3ZQ0KPiBhbHJlYWR5IGhh
-dmUgYSBicmFuY2ggaW4gdGhlIHBhZ2UgZmF1bHQgaGFuZGxlciB0byBkZWFsIHdpdGgNCj4gdGhl
-c2UgcGFnZXMsIGFueXdheS4NCg0KSSBkb24ndCBoYXZlIGFueSBpZGVhIGFib3V0IGhvdyB0aGlz
-IGtpbmQgb2YgcGFnZSBpcyBsZWZ0IG9uIHBhZ2UNCmNhY2hlIGFmdGVyIHBhZ2Ugb2ZmbGluaW5n
-LiAgQnV0IEkgYWdyZWUgd2l0aCB0aGUgc3VnZ2VzdGVkIGNoYW5nZS4NCg0KPiANCj4gPiA+IFRo
-aXMgY2FuIGxlYWQgdG8gcHJvZ3JhbXMgYmVpbmcga2lsbGVkIG92ZXIgYW5kIG92ZXINCj4gPiA+
-IGFuZCBvdmVyIGFnYWluIGFzIHRoZXkgZmF1bHQgaW4gdGhlIGh3cG9pc29uZWQgcGFnZSwgZ2V0
-IGtpbGxlZCwNCj4gPiA+IGFuZA0KPiA+ID4gdGhlbiBnZXQgcmUtc3Bhd25lZCBieSB3aGF0ZXZl
-ciB3YW50ZWQgdG8gcnVuIHRoZW0uDQo+ID4gPiANCj4gPiA+IFRoaXMgaXMgcGFydGljdWxhcmx5
-IGVtYmFycmFzc2luZyB3aGVuIHRoZSBwYWdlIHdhcyBvZmZsaW5lZCBkdWUgdG8NCj4gPiA+IGhh
-dmluZyB0b28gbWFueSBjb3JyZWN0ZWQgbWVtb3J5IGVycm9ycy4gTm93IHdlIGFyZSBraWxsaW5n
-IHRhc2tzDQo+ID4gPiBkdWUgdG8gdGhlbSB0cnlpbmcgdG8gYWNjZXNzIG1lbW9yeSB0aGF0IHBy
-b2JhYmx5IGlzbid0IGV2ZW4NCj4gPiA+IGNvcnJ1cHRlZC4NCj4gPiA+IA0KPiA+ID4gVGhpcyBw
-cm9ibGVtIGNhbiBiZSBhdm9pZGVkIGJ5IGludmFsaWRhdGluZyB0aGUgcGFnZSBmcm9tIHRoZSBw
-YWdlDQo+ID4gPiBmYXVsdCBoYW5kbGVyLCB3aGljaCBhbHJlYWR5IGhhcyBhIGJyYW5jaCBmb3Ig
-ZGVhbGluZyB3aXRoIHRoZXNlDQo+ID4gPiBraW5kcyBvZiBwYWdlcy4gV2l0aCB0aGlzIHBhdGNo
-IHdlIHNpbXBseSBwcmV0ZW5kIHRoZSBwYWdlIGZhdWx0DQo+ID4gPiB3YXMgc3VjY2Vzc2Z1bCBp
-ZiB0aGUgcGFnZSB3YXMgaW52YWxpZGF0ZWQsIHJldHVybiB0byB1c2Vyc3BhY2UsDQo+ID4gPiBp
-bmN1ciBhbm90aGVyIHBhZ2UgZmF1bHQsIHJlYWQgaW4gdGhlIGZpbGUgZnJvbSBkaXNrICh0byBh
-IG5ldw0KPiA+ID4gbWVtb3J5IHBhZ2UpLCBhbmQgdGhlbiBldmVyeXRoaW5nIHdvcmtzIGFnYWlu
-Lg0KPiA+IA0KPiA+IElzIHRoaXMgd29ydGggYSBjYzpzdGFibGU/DQo+IA0KPiBNYXliZS4gSSBk
-b24ndCBrbm93IGhvdyBmYXIgYmFjayB0aGlzIGlzc3VlIGdvZXMuLi4NCg0KVGhpcyBpc3N1ZSBz
-aG91bGQgYmUgb3J0aG9nb25hbCB3aXRoIHJlY2VudCBjaGFuZ2VzIG9uIGh3cG9pc29uLCBhbmQN
-CnRoZSBiYXNlIGNvZGUgdGFyZ2V0dGVkIGJ5IHRoaXMgcGF0Y2ggaXMgdW5jaGFuZ2VkIHNpbmNl
-IDIwMTYgKDQuMTAtcmMxKSwNCnNvIHRoaXMgcGF0Y2ggaXMgc2ltcGx5IGFwcGxpY2FibGUgdG8g
-bW9zdCBvZiB0aGUgbWFpbnRhaW5lZCBzdGFibGUgdHJlZXMNCihtYXliZSBleGNlcHQgNC45Lnop
-Lg0KDQpBY2tlZC1ieTogTmFveWEgSG9yaWd1Y2hpIDxuYW95YS5ob3JpZ3VjaGlAbmVjLmNvbT4N
-Cg0KVGhhbmtzLA0KTmFveWEgSG9yaWd1Y2hp
+--=-=-=
+Content-Type: text/plain
+Content-Disposition: inline
+
+Anshuman Khandual <anshuman.khandual@arm.com> writes:
+
+> Hi Alistair,
+>
+> On 2/15/22 8:28 AM, Alistair Popple wrote:
+>> ZONE_MOVABLE uses the remaining memory in each node. It's starting pfn
+>> is also aligned to MAX_ORDER_NR_PAGES. It is possible for the remaining
+>> memory in a node to be less than MAX_ORDER_NR_PAGES, meaning there is
+>> not enough room for ZONE_MOVABLE on that node.
+>
+> How plausible is this scenario on normal systems ?
+
+Probably not very. I happened to run into this on my development/test x86 VM
+which has 8GB and was booted with `numa=fake=4 kernelcore=60%` but in theory I
+guess any system that has a node with less than MAX_ORDER_NR_PAGES left over for
+ZONE_MOVABLE may be susceptible.
+
+This was the RAM map:
+
+[    0.000000] BIOS-provided physical RAM map:
+[    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
+[    0.000000] BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000000f0000-0x00000000000fffff] reserved
+[    0.000000] BIOS-e820: [mem 0x0000000000100000-0x000000007ffddfff] usable
+[    0.000000] BIOS-e820: [mem 0x000000007ffde000-0x000000007fffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000b0000000-0x00000000bfffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000fed1c000-0x00000000fed1ffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000feffc000-0x00000000feffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000fffc0000-0x00000000ffffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x0000000100000000-0x000000027fffffff] usable
+
+[...]
+
+[    0.065897] Early memory node ranges
+[    0.065898]   node   0: [mem 0x0000000000001000-0x000000000009efff]
+[    0.065900]   node   0: [mem 0x0000000000100000-0x000000007ffddfff]
+[    0.065902]   node   1: [mem 0x0000000100000000-0x000000017fffffff]
+[    0.065904]   node   2: [mem 0x0000000180000000-0x00000001ffffffff]
+[    0.065906]   node   3: [mem 0x0000000200000000-0x000000027fffffff]
+
+Note the reserved range from 0x000000007ffde000 to 0x000000007fffffff resulting
+in node-0 ending at 0x000000007ffddfff.
+
+> Should not the node always contain MAX_ORDER_NR_PAGES aligned pages ? Also all
+> zones which get created from that node should also be MAX_ORDER_NR_PAGES
+> aligned ?
+
+I'm not sure why that would be case given page size and MAX_ORDER_NR_PAGES can
+be set via a kernel configuration parameter. Obviously it wasn't the case here
+or this situation would not arise. That said I don't know this code well, and
+this was where I decided to stop shaving this yak so it's possible there is an
+even deeper underlying issue.
+
+Either way I don't *think* the fix should introduce any problems as it shouldn't
+do anything unless you were going to hit this issue anyway (which took sometime
+to track down as the cause wasn't obvious).
+
+> I am just curious how a node could end up being like this.
+
+- Anshuman
+
+--=-=-=--

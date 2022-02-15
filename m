@@ -2,154 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6301B4B6770
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 143B64B6773
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:22:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235815AbiBOJVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:21:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57734 "EHLO
+        id S235820AbiBOJWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:22:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231371AbiBOJVn (ORCPT
+        with ESMTP id S233932AbiBOJWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:21:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A231F13DFB;
-        Tue, 15 Feb 2022 01:21:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56034B81809;
-        Tue, 15 Feb 2022 09:21:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14939C340F1;
-        Tue, 15 Feb 2022 09:21:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644916891;
-        bh=RZSvrBa9M+3bZFIsmIZDqZd7d5VDsf+KxZINLGmOa8g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RAHiiSoOT+qkGjStonZhYrYy/J3OZkS+nBm5D1plR6odf8spdLFI55sA0GVSG+gX1
-         FmPcCDRzKeNuLVHvCjfGJTHBTxbwgzR030DFU2LsjuGz8pZEhKbeR/hgIeCQIxEcqx
-         HIj4CCTOLKxrGhK2W31aOh+D7o/B8cTcO951Ev77NRvhE6lAtkLsACcoUhM/z6tTLu
-         qhTXBSD0ylFj48SjE2u2QLeEZrRNw+HEiuL8QU8JNZPpShvXVrQypqOZsWhDE9yRc2
-         D5rdiVAwgITkzu5kXiFsxejSLdB78l1bk+Ac3J6FFkDPU8n6d+5fZ9lqTH30MQ3R7+
-         eJDiITKNJvo0Q==
-Received: by mail-wr1-f53.google.com with SMTP id u1so17209940wrg.11;
-        Tue, 15 Feb 2022 01:21:30 -0800 (PST)
-X-Gm-Message-State: AOAM533FzJSsT8a7w1ImWBVvt3HK9GnWvbMGEtf/XTO1+QttXjfyOpGP
-        fFIXt+xpSAJIbkE0u6f2d3wLzhIDWQZ2eryvBuk=
-X-Google-Smtp-Source: ABdhPJxTZ3T3Abm/GIU6+FEpYkuoBAl5nS/ZOniPodztANRfoa0z/A0V8x7uBN46c9isaaDTdlBbvvwdEiVYUyGe5DM=
-X-Received: by 2002:adf:da4c:: with SMTP id r12mr2454185wrl.550.1644916889390;
- Tue, 15 Feb 2022 01:21:29 -0800 (PST)
+        Tue, 15 Feb 2022 04:22:14 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2077.outbound.protection.outlook.com [40.107.94.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DBA13F36
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:22:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OH+zojnui0ZOoJwnDX4JqE1Q5SWPwXmPJFhxxVVIVui/ZL033+O21CSwSqCPWdZDaEjjcuLLoafHw9eAd6qTh3SmAq9h5GWuT14VgC78gE2+ZeUETLMrcoc774A8l8bOw5D4KLI6vJGr92BLOaFlvhnkK0ajVB+0vciPbI88uU+gV9oTFPX76HFuRiVomR/94aQKzfsUiGToQmgjLXSAYFJaAHazcWRefKAFbVf0m5SrApDgNSOmgeeAFfjGK/85F2uMubCCvseJHmoCwRKfOmMYWwe7EC9RqM+tz5KkEZ6U90hQ5t7FsOaO5yiW8q50eMJEhdQxJxq/670yZ2QTTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=n91EHGu7logRHc/EPPDK5nUgQyFIL9y74UDoMal00XU=;
+ b=ewwStsFr2Hc7iskxjkFpAp/qOEr8RUr/34gAKIfHjkcyv25jfEH9P106RHhNUpiS5au8SYNf4UFZyoEJUlIxSD2ct+e+bboLPLNranx5qsYQoWh6sWmI+RPEeZhkhH5ILJveu9nLo4GpAcLak2BLjm3l8CY4LjWCqUvVzXFDjVhg49c7HCPJMSpAlrFNkQH3TxvOSEowTo7IBndvg+wpdS5mOekeH7xsJucRJBDOIj3W0kV7ErygkGCwOAEPZi3QcMaowHkpKRwYogsWJvPt3Td5VtwelkQEFA4smgCeCBdz1yMoKZUnOD5KXJGxQ3EdPrsUIUbE8hO9Vj83UgQH5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=n91EHGu7logRHc/EPPDK5nUgQyFIL9y74UDoMal00XU=;
+ b=ryHXgIHv3OuS3N1Xl3izQ+nLkmj771Y8qt/nMQHeocKip/2Ul1AaQWvfKoe7AyeXw9hVY/HAMKFywAmC1h4aod/o+AyjIo4mh36pwObIH0yy/FWa8GNyL2jb441EqG52DcHjR69Fyt1C7xSNI5M0cVEULJZdcags+82HY5fy6yI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by BYAPR12MB3559.namprd12.prod.outlook.com (2603:10b6:a03:d9::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.18; Tue, 15 Feb
+ 2022 09:22:01 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::d861:5699:8188:7bd3]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::d861:5699:8188:7bd3%3]) with mapi id 15.20.4975.019; Tue, 15 Feb 2022
+ 09:22:01 +0000
+Message-ID: <d4087e25-5cd0-71fe-f9b7-a7dc03b813cf@amd.com>
+Date:   Tue, 15 Feb 2022 10:21:53 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] drm/amdkfd: Replace zero-length array with flexible-array
+ member
+Content-Language: en-US
+To:     cgel.zte@gmail.com, Felix.Kuehling@amd.com
+Cc:     alexander.deucher@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220215091142.1775600-1-deng.changcheng@zte.com.cn>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220215091142.1775600-1-deng.changcheng@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM6P191CA0092.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:209:8a::33) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-References: <20220214163452.1568807-1-arnd@kernel.org> <20220214163452.1568807-9-arnd@kernel.org>
- <CAMj1kXHixUFjV=4m3tzfGz7AiRWc-VczymbKuZq7dyZZNuLKxQ@mail.gmail.com> <CAK8P3a2VfvDkueaJNTA9SiB+PFsi_Q17AX+aL46ueooW2ahmQw@mail.gmail.com>
-In-Reply-To: <CAK8P3a2VfvDkueaJNTA9SiB+PFsi_Q17AX+aL46ueooW2ahmQw@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 15 Feb 2022 10:21:16 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGkG0KMD2rnKAJc3V7X9LP1grbcHTNYMnj_q4GiYfG2pQ@mail.gmail.com>
-Message-ID: <CAMj1kXGkG0KMD2rnKAJc3V7X9LP1grbcHTNYMnj_q4GiYfG2pQ@mail.gmail.com>
-Subject: Re: [PATCH 08/14] arm64: simplify access_ok()
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>, X86 ML <x86@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:S390" <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: dac79886-2221-4d77-cbc8-08d9f0649f0b
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3559:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB35596738B6FAB6C4BEB2611983349@BYAPR12MB3559.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: R+Yu/eqsrheZGxcIuIluDAQrq2W4bID6Qa7/56EWsO5x+4zPSSyp5afhJ4p1fTglu5sIw486DPbWarSDHT+wm76lsmqAr6SJQomTEUY9MEm7l6XkhKLtT8Th6zAqeEadunOJfWQZkaqFpZOHPRgX0+Zve53CC2aNX00i89zGJyNcS+FAONr5OSDd0EAlYVSEJozz1x87Fa+egxBGmnSapYjLbtvo7FVaat9oi/G/iLjbCW4ysUFcszxpDpyGoAUv6C4UQuqSMrLkM+uMreilvV7UyaShCdhfAxMGB9A4dk2lYEyFSSD/E9WJFsw08RdHgmaty8U/PTJSa+jH/eMVYPCSl3+TswD1p/XAY1PNtlDTD6fNFy6eZLFu7enhk20urESPaYsr5tGkkcObVcTfBlCVlT+y3aRaBO8xwHzyqWuN4APY69nbyO/moU+5gWXIbKcEOBUAYq+Tehxq2RWVtYChe9+BvRiR7yJmlR5gt/N8q+rMEvpHSFYWJ2zul8oQv9gtX1MorGdJ3spsyjBzzjtHFIuNxq6hur+jMOc67TL1OJsKKbR6+jmPjpZ/dnU7A0qF7VV1nBqKgy6VbGwS5X05vdOhdAdE8rAGMnNMIwUjexIaO5ZZLReddYWXubtkQkbXi4I7Vydyq4HhQry7AQefyRdvkQ7n3cavg0ZT5ca4rvYRc48Am8GlnRHN/XON/955w0Ser+m0tVv2fXKGEYVskI8yaZDJTAO27REpo+Xdmyp7enzcvggwnpG9P7/hUJqZi5y2JulPmHbMLbPlLb5wZ+GP+fZ4f2Dht4xEa0/ByoU/LYyvWzfe+Y9YTFDoclcKr4tIrDRU64CS0g/iFg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6512007)(6506007)(54906003)(66946007)(31686004)(8936002)(6636002)(83380400001)(4326008)(66476007)(5660300002)(66556008)(31696002)(316002)(6666004)(8676002)(966005)(2906002)(36756003)(2616005)(186003)(38100700002)(508600001)(6486002)(66574015)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d0VhM1FVc3dLU1NrSnlUMkVMdm5leGJGb3RJcXpUWGJWakJZeDE4TlpYcTlR?=
+ =?utf-8?B?ME5PZzEzakN5VFZkb0hBUmRTbEl5eFZRb1c3UHF5VnFYWWkyK0NXcWtqbnNa?=
+ =?utf-8?B?MHJMb2xFSG5YUzBuU2V1UUcvN0ZVdndVNmU1WTdnc1FMTWVWNXB2c3YxTWNS?=
+ =?utf-8?B?dEd0YXRsMnZpb2tOTUdodlNxK3c1N1Y4UWVaVzlmNDVCSVZJcTQvV0h5elBV?=
+ =?utf-8?B?MkJ6bnhPUzNiQnNJT3ZrSDY5ajRBRThEVkJidlVXSnREQUthOUxwWkZpbG9P?=
+ =?utf-8?B?eUlJMW9aaW4yRUpYd05oeWhrMEFRcFJHSndaaWxPeDZHZDhpVWt0SE1jcG10?=
+ =?utf-8?B?RUhOYmNhVExPeVprMSs4eHZRTXJmbHhNZ0ZKeGZOdEsxMDVobEdWeUc3aU53?=
+ =?utf-8?B?cXJtM2lENE5MNjJuOHlqUTJpcm9mSGZ1YldTOHhSYjhSQXdWVWFkMVdBa2Ju?=
+ =?utf-8?B?UVFyQTc4UmJpcnlwYXdCNkg5cDY4L3Y0azZnNUNSMWFPRDMzclVtdm55Uzg1?=
+ =?utf-8?B?bGFsRFhJcy9rV0lUQldqbTFIc3ZBdVkxSDFWdDhQbzNtZ3NJQndIN0FHRlNx?=
+ =?utf-8?B?T0pDa2lRbGxDQWhuNkZVakNtMkp6L21SdS9TRGtLOWlFV3FPNTlDa0R3N3ZH?=
+ =?utf-8?B?ZDgzTE1mSWdxbmtYaEo2UC9rL2JBMUN2YUl4SUM5NnI4aTg3cE5DL1poSU9r?=
+ =?utf-8?B?Ym5EMlVmR3RoQWE5TFdkdXg1Z2o4eEU5dk5VaDMycVgyaC9qYzJrdGhqVDhw?=
+ =?utf-8?B?UzJjYXF6RW82N2VGclVCZVBnUXRBaUxNMVljZlV6V0thbEZ6b1V2K3k1YTVP?=
+ =?utf-8?B?SUU1WlVHRzlmRWlneXFWL0dHNFRpRDU0VXVZRnJiSEdydm96cHRDUUNmNnFF?=
+ =?utf-8?B?RWltdW5mWmtyUkkvYi92QlNDMFQ0NU1IY2p5ZEFoRjdCV2tGUFlpSW5ZbGpW?=
+ =?utf-8?B?Mkw1eGVMSFE2NkkzS1FvbGZYUGxWMklBeVc2eGdoeEs0d05BUFN4WGJ5R0kz?=
+ =?utf-8?B?QTdiaW8wM0wrNkkwdzdaQ2FBYk44dVUzekxMTmNtWlpieVZRSGp4UFdqeUht?=
+ =?utf-8?B?bkJ5VDA0NDQ1VGozRkhyb1dRdWIxb3IzdDZTbHlHRnNmQ2VKdWo3ZjJhRDVl?=
+ =?utf-8?B?S0pkbk83MStrbncvWEJzbDd5WGE1dDU1MXFHa05YK1g1akplWGMxTnFHNTFR?=
+ =?utf-8?B?eENpUWZ2MU1NQXhjRGFXeGNYRGxpd2NObjFoblpLQmRqaWozSko1dEJObmZP?=
+ =?utf-8?B?OXNlTm0rWWMzVmRZTTBTR0VIWGZjLy9naHUvY0RHTDZ0cDM3RlNDUkUwUDBM?=
+ =?utf-8?B?VjdqeWp2UW9wVmNwWEE4RmkwMjVyZjcyVXFoSzRNVUplNzNwK1NLV3hpZjV5?=
+ =?utf-8?B?REp5RkJ0VXNFSmlMV3J1UUJBYjRrQVhOM2RNalM5NlZhM0ZIVG5QR0I1TVFX?=
+ =?utf-8?B?cHh1aWZDVk9Tb1BlK2RaMS8rTTZveWNQL3A3ZlJhSVAvU2FQSlJ4bERNdmhK?=
+ =?utf-8?B?b1Z1MVFUT1pjaUYxMGhSL085d1dXdmJUUWQ4NG5TU2RGUWhKYkpQOEJXNTdo?=
+ =?utf-8?B?dExDZHo4OUJDcnpVSHg5MHR4NlBETTBFMHJ3SFBoZkEvWXVYaHUzZGt4NTJk?=
+ =?utf-8?B?NXRoRkJma3F1WmhIamZWMTlveGpwVUg5SXZQOHF1eXBIYmtzVFFWWjBWU1Fj?=
+ =?utf-8?B?cjZJSjlFa0lidDFTMmxBYVJIeVhYbzhWMlRzUTBGdXZuM1NHNUVvSSt6cSt4?=
+ =?utf-8?B?aTZsZ1F6N1FjOC9aTkV5eHdKUFlEcDFJdTJ3a2RFQUF6N3FjNjYrQ1JYaWVY?=
+ =?utf-8?B?QURIcmdKaVA1MjFhZEJBMWwvN0pTUTcvU25FMHFEY0JoUTZCR1I2ZEJReW9i?=
+ =?utf-8?B?enhnV3o1WE1jZGttdlhmczBjRUNEZWdLREZCQnpXMW85Y3RpN0lBS1BOMUIy?=
+ =?utf-8?B?eVovTlE1ZTVSY1YwcXlyeFg4VWFOcFppK2lUQmlRZ0N1S3B2WU9GZUxDYmFn?=
+ =?utf-8?B?Qkt5SEVrZnRFYXd6TVhXemdxWWNIbVY3TXFQajFPUlNoRHBOSnFkWjJ5Umlt?=
+ =?utf-8?B?OVVlRjY1andlcjE1dHZ4N1BJelJ0S3ZvY2tkMXhIWG1DMGlNU3FISjQzWFNJ?=
+ =?utf-8?B?Q29BaXlhUGlMTDRWZVJxWVk1L25zbGtuMlRSNU15WDJTekxTRnlyaXJ1alln?=
+ =?utf-8?Q?ooHIv7ZO/g6wQ0RvUm/SvJg=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dac79886-2221-4d77-cbc8-08d9f0649f0b
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2022 09:22:00.7569
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Q0Mkc2uvo4n/+EMxOEjtJGx2jLDzyJqOKJyYLqtzX00+TkeMGuBowBM20SwaKqL4
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3559
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022 at 10:13, Arnd Bergmann <arnd@kernel.org> wrote:
->
-> On Tue, Feb 15, 2022 at 9:17 AM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > On Mon, 14 Feb 2022 at 17:37, Arnd Bergmann <arnd@kernel.org> wrote:
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > >
-> >
-> > With set_fs() out of the picture, wouldn't it be sufficient to check
-> > that bit #55 is clear? (the bit that selects between TTBR0 and TTBR1)
-> > That would also remove the need to strip the tag from the address.
-> >
-> > Something like
-> >
-> >     asm goto("tbnz  %0, #55, %2     \n"
-> >              "tbnz  %1, #55, %2     \n"
-> >              :: "r"(addr), "r"(addr + size - 1) :: notok);
-> >     return 1;
-> > notok:
-> >     return 0;
-> >
-> > with an additional sanity check on the size which the compiler could
-> > eliminate for compile-time constant values.
->
-> That should work, but I don't see it as a clear enough advantage to
-> have a custom implementation. For the constant-size case, it probably
-> isn't better than a compiler-scheduled comparison against a
-> constant limit, but it does hurt maintainability when the next person
-> wants to change the behavior of access_ok() globally.
->
 
-arm64 also has this leading up to the range check, and I think we'd no
-longer need it:
 
-    if (IS_ENABLED(CONFIG_ARM64_TAGGED_ADDR_ABI) &&
-        (current->flags & PF_KTHREAD || test_thread_flag(TIF_TAGGED_ADDR)))
-            addr = untagged_addr(addr);
-
-> If we want to get into micro-optimizing uaccess, I think a better target
-> would be a CONFIG_CC_HAS_ASM_GOTO_OUTPUT version
-> of __get_user()/__put_user as we have on x86 and powerpc.
+Am 15.02.22 um 10:11 schrieb cgel.zte@gmail.com:
+> From: Changcheng Deng <deng.changcheng@zte.com.cn>
 >
->          Arnd
+> There is a regular need in the kernel to provide a way to declare having
+> a dynamically sized set of trailing elements in a structure. Kernel code
+> should always use "flexible array members" for these cases. The older
+> style of one-element or zero-length arrays should no longer be used.
+> Reference:
+> https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+
+I think you should harden the wording here into "must" no longer be used.
+
+We had so many problems with that and certain gcc versions that we 
+should have this automatically checked somehow.
+
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+
+Acked-by: Christian König <christian.koenig@amd.com>
+
+> ---
+>   drivers/gpu/drm/amd/amdkfd/kfd_priv.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_priv.h b/drivers/gpu/drm/amd/amdkfd/kfd_priv.h
+> index e54a52785690..7d39191d13f6 100644
+> --- a/drivers/gpu/drm/amd/amdkfd/kfd_priv.h
+> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_priv.h
+> @@ -1084,7 +1084,7 @@ struct kfd_criu_svm_range_priv_data {
+>   	uint64_t start_addr;
+>   	uint64_t size;
+>   	/* Variable length array of attributes */
+> -	struct kfd_ioctl_svm_attribute attrs[0];
+> +	struct kfd_ioctl_svm_attribute attrs[];
+>   };
+>   
+>   struct kfd_criu_queue_priv_data {
+

@@ -2,43 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DAC84B6D4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:22:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0504B6D4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:23:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238222AbiBONXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 08:23:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41400 "EHLO
+        id S238232AbiBONXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 08:23:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238192AbiBONW6 (ORCPT
+        with ESMTP id S238192AbiBONXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 08:22:58 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0443106626;
+        Tue, 15 Feb 2022 08:23:00 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0F3106628
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 05:22:50 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id v12so32144235wrv.2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 05:22:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=OhoR4XATjA7zKN/RXHZHTsGzRsSVf9+O2oXzvEdltm4=;
+        b=b37OwHeSwfGsU9K1T22xDFIAhKSKSenRPOPbaBz5dZ/gVxQWzkw8Y3f1IAXCFdvB5m
+         +rSWAbEkBChDH+rt2BOUIkYYjYF1LSICd9lKhJIBHYcdADSvzXh1Gtm+OqkvSP1NqtEC
+         G2mE+1Epjaafm5Q66Hno5vMzoyv3AhZXIFAoMK3NVIV+pK5/ssYk2jOK7jIou3xRnGdd
+         kpGaGU3vcaN+DqVvayYZvOe6PnvMl98owWy9NR0ZvCmpYpJWiq0wys4JDCviEwdDf5Rj
+         24EK3QIdRsEIulb0NtGI8z6Buh2SHfkNgIrxKGAISAyEDWGTW05NanSb53nDjsTn42Gi
+         MiKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=OhoR4XATjA7zKN/RXHZHTsGzRsSVf9+O2oXzvEdltm4=;
+        b=e8fAGBv+s54mUvEhGai7s9Nmtft4+2U7a4iDkL6tG1ta3HzIHAI8FguGTxzbz9H60S
+         HqRGEUaIfu0o3ddW6wckvvFDbsDl/7R2TabIk0E2V97WRr5PJ9NeDXuXhcHN3nJF68z+
+         V6ZyzHs0ZkVNFgK+u6pkRUTj1o4gdzcGtAfR6Pns+i8MYTUf2WqSHXqtc2gVloMvM/lS
+         Bo7IYWBxvebzxZaQF64qoDffOUUb2YEeThtbmLc5xfueTcW4tQlgf4CfYDneCR11SpJc
+         Vr0DOYVUR8m2q/JoOT3QEddrGo8ixt8axLvF4xT9gwz3jMi72toJIal95xzPSt5N1pdf
+         VFLg==
+X-Gm-Message-State: AOAM533/fMWIvFX9T14gco1ul9bMiKJPa4SNdJudEibwqqMm46YlSuS/
+        FbVAU4tVnbGcIbwZ6RO00wcOzLbVXcSTwQ==
+X-Google-Smtp-Source: ABdhPJwcKJSqTBvxL+OpSByXJmDucyG0ZiWYSfuT5Cbu9ZCkArRBYTg7i2nkZMigKRRU51tW62ISkg==
+X-Received: by 2002:a5d:484e:: with SMTP id n14mr3147271wrs.574.1644931369364;
+        Tue, 15 Feb 2022 05:22:49 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id m31sm16135529wms.34.2022.02.15.05.22.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 15 Feb 2022 05:22:48 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 688541480;
-        Tue, 15 Feb 2022 05:22:48 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.89.173])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8A9D33F718;
-        Tue, 15 Feb 2022 05:22:46 -0800 (PST)
-Date:   Tue, 15 Feb 2022 13:22:42 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     madvenka@linux.microsoft.com
-Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v13 05/11] arm64: Copy the task argument to unwind_state
-Message-ID: <YgupIuJgL7nreT+1@FVFF77S0Q05N>
-References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
- <20220117145608.6781-1-madvenka@linux.microsoft.com>
- <20220117145608.6781-6-madvenka@linux.microsoft.com>
+Date:   Tue, 15 Feb 2022 13:22:46 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 9/9] mfd: sta2x11: use GFP_KERNEL
+Message-ID: <YgupJrUGnOh1vxr5@google.com>
+References: <20220210204223.104181-1-Julia.Lawall@inria.fr>
+ <20220210204223.104181-10-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220117145608.6781-6-madvenka@linux.microsoft.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220210204223.104181-10-Julia.Lawall@inria.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,161 +72,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 08:56:02AM -0600, madvenka@linux.microsoft.com wrote:
-> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+On Thu, 10 Feb 2022, Julia Lawall wrote:
+
+> Pci_driver probe functions aren't called with locks held and
+> thus don't need GFP_ATOMIC. Use GFP_KERNEL instead.
 > 
-> Copy the task argument passed to arch_stack_walk() to unwind_state so that
-> it can be passed to unwind functions via unwind_state rather than as a
-> separate argument. The task is a fundamental part of the unwind state.
+> Problem found with Coccinelle.
 > 
-> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+> 
 > ---
->  arch/arm64/include/asm/stacktrace.h |  3 +++
->  arch/arm64/kernel/stacktrace.c      | 29 ++++++++++++++++-------------
->  2 files changed, 19 insertions(+), 13 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/stacktrace.h b/arch/arm64/include/asm/stacktrace.h
-> index 41ec360515f6..af423f5d7ad8 100644
-> --- a/arch/arm64/include/asm/stacktrace.h
-> +++ b/arch/arm64/include/asm/stacktrace.h
-> @@ -51,6 +51,8 @@ struct stack_info {
->   * @kr_cur:      When KRETPROBES is selected, holds the kretprobe instance
->   *               associated with the most recently encountered replacement lr
->   *               value.
-> + *
-> + * @task:        Pointer to the task structure.
+>  drivers/mfd/sta2x11-mfd.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Can we please say:
+Applied, thanks.
 
-	@task:	The task being unwound.
-
->   */
->  struct unwind_state {
->  	unsigned long fp;
-> @@ -61,6 +63,7 @@ struct unwind_state {
->  #ifdef CONFIG_KRETPROBES
->  	struct llist_node *kr_cur;
->  #endif
-> +	struct task_struct *task;
->  };
->  
->  extern void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk,
-> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
-> index b2b568e5deba..1b32e55735aa 100644
-> --- a/arch/arm64/kernel/stacktrace.c
-> +++ b/arch/arm64/kernel/stacktrace.c
-> @@ -33,8 +33,10 @@
->   */
->  
->  
-> -static void unwind_init_common(struct unwind_state *state)
-> +static void unwind_init_common(struct unwind_state *state,
-> +			       struct task_struct *task)
->  {
-> +	state->task = task;
->  #ifdef CONFIG_KRETPROBES
->  	state->kr_cur = NULL;
->  #endif
-> @@ -57,9 +59,10 @@ static void unwind_init_common(struct unwind_state *state)
->   * TODO: document requirements here.
->   */
->  static inline void unwind_init_from_regs(struct unwind_state *state,
-> +					 struct task_struct *task,
-
-Please drop the `task` parameter here ...
-
->  					 struct pt_regs *regs)
->  {
-> -	unwind_init_common(state);
-> +	unwind_init_common(state, task);
-
-... and make this:
-
-	unwind_init_common(state, current);
-
-... since that way it's *impossible* to have ismatched parameters, which is one
-of the reasons for having separate functions in the first place.
-
->  	state->fp = regs->regs[29];
->  	state->pc = regs->pc;
-> @@ -71,9 +74,10 @@ static inline void unwind_init_from_regs(struct unwind_state *state,
->   * Note: this is always inlined, and we expect our caller to be a noinline
->   * function, such that this starts from our caller's caller.
->   */
-> -static __always_inline void unwind_init_from_current(struct unwind_state *state)
-> +static __always_inline void unwind_init_from_current(struct unwind_state *state,
-> +						     struct task_struct *task)
->  {
-> -	unwind_init_common(state);
-> +	unwind_init_common(state, task);
-
-Same comments as for unwind_init_from_regs(): please drop the `task` parameter
-and hard-code `current` in the call to unwind_init_common().
-
->  	state->fp = (unsigned long)__builtin_frame_address(1);
->  	state->pc = (unsigned long)__builtin_return_address(0);
-> @@ -87,7 +91,7 @@ static __always_inline void unwind_init_from_current(struct unwind_state *state)
->  static inline void unwind_init_from_task(struct unwind_state *state,
->  					 struct task_struct *task)
->  {
-> -	unwind_init_common(state);
-> +	unwind_init_common(state, task);
->  
->  	state->fp = thread_saved_fp(task);
->  	state->pc = thread_saved_pc(task);
-> @@ -100,11 +104,11 @@ static inline void unwind_init_from_task(struct unwind_state *state,
->   * records (e.g. a cycle), determined based on the location and fp value of A
->   * and the location (but not the fp value) of B.
->   */
-> -static int notrace unwind_next(struct task_struct *tsk,
-> -			       struct unwind_state *state)
-> +static int notrace unwind_next(struct unwind_state *state)
->  {
->  	unsigned long fp = state->fp;
->  	struct stack_info info;
-> +	struct task_struct *tsk = state->task;
->  
->  	/* Final frame; nothing to unwind */
->  	if (fp == (unsigned long)task_pt_regs(tsk)->stackframe)
-> @@ -176,8 +180,7 @@ static int notrace unwind_next(struct task_struct *tsk,
->  }
->  NOKPROBE_SYMBOL(unwind_next);
->  
-> -static void notrace unwind(struct task_struct *tsk,
-> -			   struct unwind_state *state,
-> +static void notrace unwind(struct unwind_state *state,
->  			   bool (*fn)(void *, unsigned long), void *data)
->  {
->  	while (1) {
-> @@ -185,7 +188,7 @@ static void notrace unwind(struct task_struct *tsk,
->  
->  		if (!fn(data, state->pc))
->  			break;
-> -		ret = unwind_next(tsk, state);
-> +		ret = unwind_next(state);
->  		if (ret < 0)
->  			break;
->  	}
-> @@ -232,11 +235,11 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
->  	struct unwind_state state;
->  
->  	if (regs)
-> -		unwind_init_from_regs(&state, regs);
-> +		unwind_init_from_regs(&state, task, regs);
->  	else if (task == current)
-> -		unwind_init_from_current(&state);
-> +		unwind_init_from_current(&state, task);
->  	else
->  		unwind_init_from_task(&state, task);
-
-As above we shouldn't need these two changes.
-
-For the regs case we might want to sanity-check that task == current.
-
-> -	unwind(task, &state, consume_entry, cookie);
-> +	unwind(&state, consume_entry, cookie);
-
-Otherwise, this looks good to me.
-
-Thanks,
-Mark.
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

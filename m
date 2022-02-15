@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C17714B7648
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 581454B7800
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:51:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242295AbiBORn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 12:43:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33318 "EHLO
+        id S242647AbiBORnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 12:43:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242475AbiBORnY (ORCPT
+        with ESMTP id S242709AbiBORnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 12:43:24 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0202997BA0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:43:13 -0800 (PST)
+        Tue, 15 Feb 2022 12:43:14 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D518A8A302
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:43:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644946993; x=1676482993;
+  t=1644946983; x=1676482983;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oj8OOXX1ckMDtALqPdHVZbRyMA1rseOv4Z7KiHNiDvY=;
-  b=EAU10a564pJkbX5e/PiSj6SbGRy/+Vu5Rx3Rw02nVSKMeTBu+nIY3gW8
-   caxhQ+AKZ3gubnjaxl9PPQGwoGvCOXbXXoQ3NEZnxk7f3BITZglvj1/zj
-   tNVd80Jxro6ObUuYO1hg1b0iPwx4yMokjxRCmFjtfWhcnWglPUJkdjtnK
-   EBlrW57mNDklg89V609aIzYCP6EQoIwrVwPLZJHND3GlWlW79VU1cQI7i
-   Kv4EGtvshaunRcZYRksj2qBbwaMnRC6j1qjP151AHDHw51uVeKVVZn0dj
-   VuJA3dvtC9iw+WPoSryP0W26aeXmNp40b2D/5VMm47hpyY4EdiSRewQiD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="231039124"
+  bh=8XtzYT/B74VNG4mzbC7Cmln/RJIa3ubEIcc5/b84Trw=;
+  b=f53Ek8MuVWl2h2eDJcq/FmMi4d1BCrcTMjeQ8LL5gm/xXgTQQ4JNLzHr
+   yOWNynxA+7jnDBJYr/waI+CkSdgDW/nh8LVIG+VE7eE42WyN8ULmCWy3c
+   iM7JkOQhJ9ypAeKDLOznA4dg9M3U1pRYegeQoRWjhvheaRw6MpM5sOHDp
+   BrolhUGivZDBl20waj6ebXqUEID6ClruxfYuXKCUh5Z6c6Go+Y3+nmCZY
+   5T+B4N4gXdLw8YLpzh5KGwHemP8spobUhXzeAdobbeihlTZQVzRbw/hvF
+   jz/UK+jjesFTxcgZQYzwoc0bs8WR0e5+Jqe7Wo4IzaBvyRIWmNEAlbxVN
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="311150747"
 X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="231039124"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 09:43:04 -0800
+   d="scan'208";a="311150747"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 09:43:03 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="636028684"
+   d="scan'208";a="486276323"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 15 Feb 2022 09:43:01 -0800
+  by orsmga003.jf.intel.com with ESMTP; 15 Feb 2022 09:43:01 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nK1qv-0009td-1e; Tue, 15 Feb 2022 17:43:01 +0000
-Date:   Wed, 16 Feb 2022 01:42:05 +0800
+        id 1nK1qv-0009tf-2T; Tue, 15 Feb 2022 17:43:01 +0000
+Date:   Wed, 16 Feb 2022 01:42:09 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Kevin Kim <ckkim@hardkernel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Dongjin Kim <tobetter@gmail.com>,
-        Olliver Schinagl <oliver@schinagl.nl>
-Subject: [tobetter:odroid-5.17.y 7/41] drivers/pwm/pwm-gpio.c:60:22: warning:
- no previous prototype for function 'gpio_pwm_timer'
-Message-ID: <202202160144.hjSHJs2v-lkp@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Nicolin Chen <nicolinc@nvidia.com>
+Subject: [luxis1999-iommufd:iommufd-v5.17-rc4 28/56]
+ drivers/iommu/iommufd/selftest.c:183:25: error: initialization of 'struct
+ iommu_group * (*)(struct device *)' from incompatible pointer type
+ 'phys_addr_t (*)(struct iommu_domain *, dma_addr_t)' {aka 'unsigned int
+ (*)(struct iommu_domain *, unsigned int)'}
+Message-ID: <202202160138.nI8GEZY7-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -63,66 +66,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/tobetter/linux odroid-5.17.y
-head:   992855288ffabfafb16c8ed7ce9a81fc64cfc89a
-commit: 380f2027a31094e1f64a78ce0e424f02dea66bc7 [7/41] ODROID-COMMON: pwm: gpio: Add a generic gpio based PWM driver
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220216/202202160144.hjSHJs2v-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
+tree:   https://github.com/luxis1999/iommufd iommufd-v5.17-rc4
+head:   94542ac92f6f23784d73c13b39dc95cc4012181c
+commit: 047031aaa50c5daed9c24fa0701f7016d4ff6934 [28/56] iommufd: Add a selftest
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220216/202202160138.nI8GEZY7-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/tobetter/linux/commit/380f2027a31094e1f64a78ce0e424f02dea66bc7
-        git remote add tobetter https://github.com/tobetter/linux
-        git fetch --no-tags tobetter odroid-5.17.y
-        git checkout 380f2027a31094e1f64a78ce0e424f02dea66bc7
+        # https://github.com/luxis1999/iommufd/commit/047031aaa50c5daed9c24fa0701f7016d4ff6934
+        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
+        git fetch --no-tags luxis1999-iommufd iommufd-v5.17-rc4
+        git checkout 047031aaa50c5daed9c24fa0701f7016d4ff6934
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/pwm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/pwm/pwm-gpio.c:60:22: warning: no previous prototype for function 'gpio_pwm_timer' [-Wmissing-prototypes]
-   enum hrtimer_restart gpio_pwm_timer(struct hrtimer *timer)
-                        ^
-   drivers/pwm/pwm-gpio.c:60:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   enum hrtimer_restart gpio_pwm_timer(struct hrtimer *timer)
-   ^
-   static 
-   1 warning generated.
+   drivers/iommu/iommufd/selftest.c: In function 'mock_domain_alloc':
+   drivers/iommu/iommufd/selftest.c:69:26: error: assignment to 'const struct iommu_domain_ops *' from incompatible pointer type 'const struct iommu_ops *' [-Werror=incompatible-pointer-types]
+      69 |         mock->domain.ops = &domain_mock_ops;
+         |                          ^
+   drivers/iommu/iommufd/selftest.c: At top level:
+   drivers/iommu/iommufd/selftest.c:180:10: error: 'const struct iommu_ops' has no member named 'domain_free'
+     180 |         .domain_free = mock_domain_free,
+         |          ^~~~~~~~~~~
+   drivers/iommu/iommufd/selftest.c:180:24: error: initialization of 'struct iommu_device * (*)(struct device *)' from incompatible pointer type 'void (*)(struct iommu_domain *)' [-Werror=incompatible-pointer-types]
+     180 |         .domain_free = mock_domain_free,
+         |                        ^~~~~~~~~~~~~~~~
+   drivers/iommu/iommufd/selftest.c:180:24: note: (near initialization for 'domain_mock_ops.probe_device')
+   drivers/iommu/iommufd/selftest.c:181:10: error: 'const struct iommu_ops' has no member named 'map_pages'
+     181 |         .map_pages = mock_domain_map_pages,
+         |          ^~~~~~~~~
+   drivers/iommu/iommufd/selftest.c:181:22: error: initialization of 'void (*)(struct device *)' from incompatible pointer type 'int (*)(struct iommu_domain *, long unsigned int,  phys_addr_t,  size_t,  size_t,  int,  gfp_t,  size_t *)' {aka 'int (*)(struct iommu_domain *, long unsigned int,  unsigned int,  unsigned int,  unsigned int,  int,  unsigned int,  unsigned int *)'} [-Werror=incompatible-pointer-types]
+     181 |         .map_pages = mock_domain_map_pages,
+         |                      ^~~~~~~~~~~~~~~~~~~~~
+   drivers/iommu/iommufd/selftest.c:181:22: note: (near initialization for 'domain_mock_ops.release_device')
+   drivers/iommu/iommufd/selftest.c:182:10: error: 'const struct iommu_ops' has no member named 'unmap_pages'
+     182 |         .unmap_pages = mock_domain_unmap_pages,
+         |          ^~~~~~~~~~~
+   drivers/iommu/iommufd/selftest.c:182:24: error: initialization of 'void (*)(struct device *)' from incompatible pointer type 'size_t (*)(struct iommu_domain *, long unsigned int,  size_t,  size_t,  struct iommu_iotlb_gather *)' {aka 'unsigned int (*)(struct iommu_domain *, long unsigned int,  unsigned int,  unsigned int,  struct iommu_iotlb_gather *)'} [-Werror=incompatible-pointer-types]
+     182 |         .unmap_pages = mock_domain_unmap_pages,
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iommu/iommufd/selftest.c:182:24: note: (near initialization for 'domain_mock_ops.probe_finalize')
+   drivers/iommu/iommufd/selftest.c:183:10: error: 'const struct iommu_ops' has no member named 'iova_to_phys'
+     183 |         .iova_to_phys = mock_domain_iova_to_phys,
+         |          ^~~~~~~~~~~~
+>> drivers/iommu/iommufd/selftest.c:183:25: error: initialization of 'struct iommu_group * (*)(struct device *)' from incompatible pointer type 'phys_addr_t (*)(struct iommu_domain *, dma_addr_t)' {aka 'unsigned int (*)(struct iommu_domain *, unsigned int)'} [-Werror=incompatible-pointer-types]
+     183 |         .iova_to_phys = mock_domain_iova_to_phys,
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iommu/iommufd/selftest.c:183:25: note: (near initialization for 'domain_mock_ops.device_group')
+   drivers/iommu/iommufd/selftest.c: In function 'get_md_pagetable':
+   drivers/iommu/iommufd/selftest.c:198:31: warning: comparison of distinct pointer types lacks a cast
+     198 |         if (hwpt->domain->ops != &domain_mock_ops) {
+         |                               ^~
+   cc1: some warnings being treated as errors
 
 
-vim +/gpio_pwm_timer +60 drivers/pwm/pwm-gpio.c
+vim +183 drivers/iommu/iommufd/selftest.c
 
-    59	
-  > 60	enum hrtimer_restart gpio_pwm_timer(struct hrtimer *timer)
-    61	{
-    62		struct gpio_pwm_data *gpio_data = container_of(timer,
-    63							      struct gpio_pwm_data,
-    64							      timer);
-    65		if (!gpio_data->run) {
-    66			gpio_pwm_off(gpio_data);
-    67			gpio_data->pin_on = false;
-    68			return HRTIMER_NORESTART;
-    69		}
-    70	
-    71		if (!gpio_data->pin_on) {
-    72			hrtimer_forward_now(&gpio_data->timer,
-    73					    ns_to_ktime(gpio_data->on_time));
-    74			gpio_pwm_on(gpio_data);
-    75			gpio_data->pin_on = true;
-    76		} else {
-    77			hrtimer_forward_now(&gpio_data->timer,
-    78					    ns_to_ktime(gpio_data->off_time));
-    79			gpio_pwm_off(gpio_data);
-    80			gpio_data->pin_on = false;
-    81		}
-    82	
-    83		return HRTIMER_RESTART;
-    84	}
-    85	
+   176	
+   177	static const struct iommu_ops domain_mock_ops = {
+   178		.pgsize_bitmap = MOCK_IO_PAGE_SIZE,
+   179		.domain_alloc = mock_domain_alloc,
+   180		.domain_free = mock_domain_free,
+   181		.map_pages = mock_domain_map_pages,
+   182		.unmap_pages = mock_domain_unmap_pages,
+ > 183		.iova_to_phys = mock_domain_iova_to_phys,
+   184	};
+   185	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

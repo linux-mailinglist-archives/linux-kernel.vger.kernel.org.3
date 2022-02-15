@@ -2,277 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840584B719B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:40:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 301B74B7139
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241372AbiBOQB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:01:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56726 "EHLO
+        id S237113AbiBOQB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:01:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241320AbiBOQA4 (ORCPT
+        with ESMTP id S241192AbiBOQBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:00:56 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A6ECFB80
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:00:35 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id s10so19375975wrb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:00:35 -0800 (PST)
+        Tue, 15 Feb 2022 11:01:43 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68204D1097;
+        Tue, 15 Feb 2022 08:01:10 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21FEi1wA027349;
+        Tue, 15 Feb 2022 16:00:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ from : subject : to : cc : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=Kc3P29bjIZa5+NzVf50OuitZwWM3RLoIMiMfXhTYpww=;
+ b=XUb8Rrcili4MVqmrYr1YLlsOKstW3jZPLAsll2Y/wILqX/hDb/2Y/4anca68b1DaXrXv
+ /hFuxU4TEaydQMMhdkJwx2R8d/qKZO0VD+k35YsdUxOKv7sZ3NwtwkN72mKRb2uSpAV4
+ XeevA9JAzYk1iK3eC09egvwPYXv4TpuxTsUR41s7VkR4VF5FyiY9va4Bx582PmLo4ALS
+ zaaE9ZaCltg1dk6eKfYtmppTLUrYoXq5GAat/sXAEs5G+BzKVyIFzO1rHu2pB4pFt0Ox
+ sVas4NzUqIQ8HDw/w26uFgmzHXPX2SGLWopWhfFtJk/A5QOPEwc0FPiGW6DEZSnHFKI5 oQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3e820nj6ge-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Feb 2022 16:00:47 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21FFpKWF167500;
+        Tue, 15 Feb 2022 16:00:46 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2176.outbound.protection.outlook.com [104.47.55.176])
+        by userp3030.oracle.com with ESMTP id 3e620xatrp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Feb 2022 16:00:45 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OLVMhotk33dPVGvjouI6qduj/Fe7dGEwXWhVXTpKCVdjTh2yCo23sj34cK/wM8jX8q0lYk8FrBfCpiGnw7h/NhZeV1pvU513WN8wSRswKUBrPpozAOKljY5oTgCNdBdmY2Wknet6VOWSCKBNPk0z6dP4t6oNbWuIJ0hMz6wJRQf+z4sywv+OerBefPBxkguqwu00ocFSOmObwCSudQvrJsTWMGkExjvPSZxmnZVFihmqhWMcEnwmKwHTqVLdKH5ZStyqWH08bU0uc/btdPCrtIuVMv5PzFBsXl4yDfLD4/ltc9VZ4zH7TwfXlMeIgBHYBnbdg7dIfYfEgeTTJwrYPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Kc3P29bjIZa5+NzVf50OuitZwWM3RLoIMiMfXhTYpww=;
+ b=C7GZ81y2PpsEY0INormmX50lBwbIuKc0W0dLiW1WN0G0QvGQtBUwtQ69jpfBEoD3Qf6gixBof8n5EMwAvBlzV2/GxVWVVfIVqIr7dgs2Om2txq2dmOgsGC2n7TcbWSpmUfMkSnZoIAbVLJ02/F0JTChCtlrWOrLNsMPw9x75bYDtMfln6Z/d1Ch3NBgIQZEn28mb//23UjpRiL2n2WEzfhaMY7Rod3cbXzdGVYHVXv+2aD4O9c442BQkEcNwBL5l2YV8WnoAwI30UNHPHqwGd8QgbTIuW1bfE0vsQMnqXEwuHw96p5jM54mDSM2ir0JKlRyyTsXqrw6kMK+SXfTHqg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kynesim-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:references:in-reply-to
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=ev89lW43hp3qbktlsuNQsUosdM2OcOnj9zBVHNAOnL8=;
-        b=MzhjypX5VGUPPfW7ufDzJ8pOoKfavQjYoYSJYclgytqFqBZXKAxG/msV+MgbB55DP5
-         jYgdlvnq14freS8c1DXIVKTwo4g3MgEAMfJamOTRNvFOfeNTbM+HFp7pbT6Rg3MkaSsv
-         2W1i9eXP/Pqq5DdvtAIxaKRpeDKINU1a6ydfjrucTHbKhKNZs6Z3UBJs12sy8snQSROw
-         n+f2mC8o9/2bgRRyaVwia0sH4QP7EjM0R91QflOf1mCsWwroGs8zNw1amBlMvOIItEgh
-         q0070k1DGHqGBfi59rC1aLgL30M3xE7jnZLs+N+jscdMKK/83d5YG6WsZQxb0IH/70Wr
-         my3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:references
-         :in-reply-to:user-agent:mime-version:content-transfer-encoding;
-        bh=ev89lW43hp3qbktlsuNQsUosdM2OcOnj9zBVHNAOnL8=;
-        b=Pdtds2wWIsXBO5amFfSOFU40/Q/Cq5LwDD0b14WSxQGIP7tZ8Ud3dMQseG23aZ953m
-         vfUeTMSGe/BHwry3d1zmL06hU0bbLW/gCrHpzLJ8vSe0jBi5mS157yWtClSMAMwoVBNJ
-         O8CEkL3e8/ZmFmDy4K6pbEvtwcyCZQZXPtyeku0CFEnlsqHEO+4+jVuSja859CuGM4wR
-         top++7M5kUdVqvTuigeFhg84+AYY94cdbbpPAEGhdYCHvnIBPZNpZNlHT5O/sfql0jfV
-         OVqa5J6pD18qt4QV8YCmuWI2qVubZoMr4TKEb0Fa2xIxgy2xQPjGbulT66LTsIxsq/KL
-         Jn1A==
-X-Gm-Message-State: AOAM531DwxsBINV/ALIEwpzi56BXzPHjD/WIFeVxzpxRbZ31qZNGIBr9
-        dI5SQk9pUeJGAj3bvl8pC2EswQ==
-X-Google-Smtp-Source: ABdhPJyG0esH7uOaAhVJZcD69tfS19xit7vvGYjc7dcKtgtWanE0SsRjK2d4ZYNkwauxdqt+v2WpYw==
-X-Received: by 2002:a5d:6488:: with SMTP id o8mr3708827wri.24.1644940834309;
-        Tue, 15 Feb 2022 08:00:34 -0800 (PST)
-Received: from CTHALPA.outer.uphall.net (cpc1-cmbg20-2-0-cust759.5-4.cable.virginm.net. [86.21.218.248])
-        by smtp.gmail.com with ESMTPSA id l9sm15483830wrt.29.2022.02.15.08.00.33
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Tue, 15 Feb 2022 08:00:33 -0800 (PST)
-From:   John Cox <jc@kynesim.co.uk>
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, hverkuil-cisco@xs4all.nl,
-        jonas@kwiboo.se, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com, knaerzche@gmail.com
-Subject: Re: [RFC v2 6/8] media: uapi: Remove bit_size field from v4l2_ctrl_hevc_slice_params
-Date:   Tue, 15 Feb 2022 16:00:33 +0000
-Message-ID: <48in0h5qq4ea87gcnmtkpsfqdk1r4tipid@4ax.com>
-References: <20220215110103.241297-1-benjamin.gaignard@collabora.com> <20220215110103.241297-7-benjamin.gaignard@collabora.com> <t2dn0hddgq22nt6a7sr6kl44irm3c2lj1j@4ax.com> <99062279-a3c4-96f7-4c4b-f39e7f812e68@collabora.com> <mqen0ht146rbtukbd47tbtbiqvsmfta8oa@4ax.com> <9a78eb88f8690d43d34d8140420dae3f5f043637.camel@ndufresne.ca>
-In-Reply-To: <9a78eb88f8690d43d34d8140420dae3f5f043637.camel@ndufresne.ca>
-User-Agent: ForteAgent/8.00.32.1272
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Kc3P29bjIZa5+NzVf50OuitZwWM3RLoIMiMfXhTYpww=;
+ b=voPUdS1EC9e8qwwsCjc4F7sTslr+s2n6zOurUMWUt32AgEI4WpMRlyKPckrsxy3Pmm7kSjnA1IplxZbYfxkxW5I9yJXsQMjXB1dfA/li1emN4UF3VIrfqQsTskoul6svRvsLNglo+yc4UkVooXW7Hmj4z9m3JFRLbFZHog+qMcI=
+Received: from BLAPR10MB4835.namprd10.prod.outlook.com (2603:10b6:208:331::11)
+ by BN8PR10MB3460.namprd10.prod.outlook.com (2603:10b6:408:b4::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.14; Tue, 15 Feb
+ 2022 16:00:43 +0000
+Received: from BLAPR10MB4835.namprd10.prod.outlook.com
+ ([fe80::750f:bf1d:1599:3406]) by BLAPR10MB4835.namprd10.prod.outlook.com
+ ([fe80::750f:bf1d:1599:3406%4]) with mapi id 15.20.4995.015; Tue, 15 Feb 2022
+ 16:00:43 +0000
+Message-ID: <6198d35c-f810-cab1-8b43-2f817de2c1ea@oracle.com>
+Date:   Tue, 15 Feb 2022 16:00:35 +0000
+From:   Joao Martins <joao.m.martins@oracle.com>
+Subject: Re: [RFC v2 0/4] vfio/hisilicon: add acc live migration driver
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        liulongfang <liulongfang@huawei.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        yuzenghui <yuzenghui@huawei.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        "Wangzhou (B)" <wangzhou1@hisilicon.com>
+References: <20220202170329.GV1786498@nvidia.com>
+ <c6c3007e-3a2e-a376-67a0-b28801bf93aa@oracle.com>
+ <20220203151856.GD1786498@nvidia.com>
+ <e67654ce-5646-8fe7-1230-00bd7ee66ff3@oracle.com>
+ <20220204230750.GR1786498@nvidia.com>
+ <0cd1d33a-39b1-9104-a4f8-ff2338699a41@oracle.com>
+ <20220211174933.GQ4160@nvidia.com>
+ <34ac016b-000f-d6d6-acf1-f39ca1ca9c54@oracle.com>
+ <20220212000117.GS4160@nvidia.com>
+ <8338fe24-04ab-130a-1324-ab8f8e14816d@oracle.com>
+ <20220214140649.GC4160@nvidia.com>
+Content-Language: en-US
+In-Reply-To: <20220214140649.GC4160@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM3PR07CA0063.eurprd07.prod.outlook.com
+ (2603:10a6:207:4::21) To BLAPR10MB4835.namprd10.prod.outlook.com
+ (2603:10b6:208:331::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d0d92eb8-4951-4dec-fb20-08d9f09c5240
+X-MS-TrafficTypeDiagnostic: BN8PR10MB3460:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR10MB3460B0844DF3773D73CE9F5ABB349@BN8PR10MB3460.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5EfjL+DHQNrFLa1z2pkRWDdAaTiwC35nWkHulmb+hNcTByJCLmgk0m33n7hVeKZDWH31bcewc+wwFihPscqaDVSXDefoInFDQrUcDVAvW5Ihkcurr65sabciCNVM0tk2LOHZuiE8U5gW0AI14ocX/+mcOXSJvvaoptxF4zBj1TV5h6E1ff2oa8+4aO/KKFfn/ZA1mzz1ZgqS2NG+cP3UKO3vXEwVu7sXZxyMe6bvY14AtB+/nTJTfsqtuIVQsp3PK6HYv5qlmCK47Mi+nnn4j/NJ41T5Dj0ExGEYOHj/WYSRmsaxRTsx9MLl6xwCYgdaWzmI+H8h8VfRKs1VpoKuLXBerXkgJYq2z/F3qZqkiMQW37+dYKI0pUaR/1ShZR92eUS3IjIhpc7uUcOBEiWS64kHfWkC4M+Y6QrfQc6DnfEqXT+yfRR68fpMpVAHp5Met5dTxqVbxcfgi08njyaOgX7LJWB1toa/t8OIlIae9rEYCqDPyQpGhbkR9sTKrQ6vqoCgAbMQ0GefshC16p3xrFpaLZNiVB2lt/iU5CqnE97s7ofMcsvM6Mv++syBXEoG84+Kq+/QCwdV5Go0hOP+lJj/tG7S0kLGxo/R2wbR/Fd5ks9DYGYUbgFxUfU3JmBJSOLFVYkfaruOQtGhap7NqoG7nVz53OSYL6mSOUPstPAzr3jYvqP8uOXODANZuB8sX3h1d2lUmpBYPwKgZ12vAA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB4835.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2616005)(26005)(2906002)(6666004)(8936002)(6506007)(6512007)(186003)(66476007)(83380400001)(53546011)(7416002)(5660300002)(508600001)(66556008)(66946007)(6486002)(38100700002)(4326008)(8676002)(316002)(6916009)(86362001)(36756003)(54906003)(31696002)(31686004)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VWE5VXVnbWdIWjlpRVh3Y0JtUVlKeVpURDZkK2gxZ3FlcUYzZzhqbkRURWlu?=
+ =?utf-8?B?WTVqaU5nYy9FNzAxUjVMYU5OeFBKOGNLMXEyM3VPa3lIaEYrUEhtVnErbVZl?=
+ =?utf-8?B?a0JhQkMvUGt3d29yM1RGUEFEaGtLdzZxNlhHSlkwajYrWTdqdVBEa2o3ZGtG?=
+ =?utf-8?B?VDQ2Wmc0ckR4TUVnK1NleENxUWR4V2d3bERNL1JNK1dsOWdMY2ZzVHJCNDlu?=
+ =?utf-8?B?TUE3eDczekJvbnp6alpGNS9LMnBrcUFGcXAxSnNkeWVxUHZiZ1h0VXZ5QjdN?=
+ =?utf-8?B?bTJkR0NTYWJsUE82bDIyNXR6eXZZM29CY3NVNzV1WWtMNjJ1Y2QxWWlRcFc3?=
+ =?utf-8?B?UTcwRWlHNjF4b3ZzdEd5dXdqNDVXUUZndzlGcXBpNVpERTVpR2xuTkdha1dn?=
+ =?utf-8?B?d2Uwbm55dC9NT1ZyN3krY3BqcHhlaFdDSThqRFdnMlhjalB2ZkgwTkpXZjRG?=
+ =?utf-8?B?MmZQOVVRUkZyV1gxYUU3ZXl4ejBKd0V0aXJxeElDVjVGbjFzNzMrc05uMVJ2?=
+ =?utf-8?B?ZVRqVHpQNEV3WWFydm9CL2Y4ZnZ4eUQ5ZlZXajRyWVM3RGwwcWNtMVpDdUFs?=
+ =?utf-8?B?ZmUzWmNzRWc5K1lYdGVlek1YMDRLelhtU2JUMFVwT3c4b3hWL1BWOFJrb2Fs?=
+ =?utf-8?B?aGQ3TGROd29pQmk4TFNzc2FtdWZPZzNZdTI0TVhKV1NGdVF6bnd3L3J1KzN5?=
+ =?utf-8?B?dE1SZGZNU1ZibnQyaVk5bjFFTkJaclRlYmc2SmtsNm9VbnpjWXQwOTNFVnEz?=
+ =?utf-8?B?cWJKVkd6Rk50RVAzU3pTc2laVFNhQ1BpdW5rL2t6YVphMFVhQ3N1UUZIZlJP?=
+ =?utf-8?B?U2FjNEpISThBVVhoa2lubkFYTzNYL05QTG1UV0FyM3ZpSkdiR3hPZk1sS1BH?=
+ =?utf-8?B?UnpSSnd0ck5jRHVOL3U2NTc4dTQ5YmQ5ZWhDa1MxdTAzUUIweElseEMvblZi?=
+ =?utf-8?B?VlBZVThtcjZYNWRiZGl2bWxQdmZ6bzFwOHE1eHhsK0pDeWQ3ckIzaVo3eFJw?=
+ =?utf-8?B?ZS8zTG5jSWR5VTZVLzBzM1czOHVvdFUrdkFyOGkxcExxem1BMXRBS3ZnNlBR?=
+ =?utf-8?B?UXNQWHh5TFpUYms2WU9sbDBDM2lzOFIxSlpRby91UkJYMjBPYkVieHNpVURZ?=
+ =?utf-8?B?ZlgxYWJuRy9ubk9iNzcvbStzY2JFdk5ZY2tJaTgvSjNEZXM3TE9RT1ZmeXNM?=
+ =?utf-8?B?alBSM0pwTHJrTStSTUVTNEJya2tFOVlnOFdZa2gxd3Z6dkNSaU5GVFVCTE5B?=
+ =?utf-8?B?SHZUNks3ellHb2duZHVMU1lKcHIvZXNid1Nrc1F2eDhVamRHbGtvZWRZT2pH?=
+ =?utf-8?B?VTF5NWdUUDZ0SlFQL3BIY2J3VnhPSllMaWJCMkNXUkx2bWtCWU5seW5ybGw0?=
+ =?utf-8?B?T09zTGpkdFdtQnhvMUpxa3RyZThib1RzNC9TQXkvOVdQdXVleFhYT21HK0p6?=
+ =?utf-8?B?NEgvYWVGaGxMbVFDYkhxSHRxWTByU01lK0x5MFQzNS9hR1dlSUp5MVVLU2lS?=
+ =?utf-8?B?MUg4TG0wWkgwTm1qcFVzaHYxaUFLZzRkWFdxMmhZZG9CR3dkVld4eWdVcXlB?=
+ =?utf-8?B?ME9CeVhQTFF1bnRIS2EyMGk4SDNqSjJmSkJMMmRvckY3MEZFT2hzY0FLZmpM?=
+ =?utf-8?B?ZHZha0NsT0o5WU9neDJDeTNNRHFmS2pWeW9uM0JDZ1NPeVB4WFR1K1Fpc2tp?=
+ =?utf-8?B?U2ZzVkwwV1dMWDgxTHNlK1IrTlRzS05TT2pTaWp3dmZ1ZE83bHRyYlpaUDdK?=
+ =?utf-8?B?Vk1FVk91RDFRemp4Y1J0MGwzdkFUY3liZ2g2R0syWDJnLzE1RGdWMFIrM2FO?=
+ =?utf-8?B?SXptSitsdmhVU1Y0Sk9LOEc2anVGWXFWcUJtYUFvSjZyRmhVK1ZEeUxGQTJG?=
+ =?utf-8?B?MGQxVTdFN201T0tFYndka1NKdkI5YWZrSHlSZmJlSk1FQkhONzZtOVdjdURj?=
+ =?utf-8?B?d1BjdlVDZDRycnYxWGNLcDI5dTFwSHNVeUVRYXVocmE1RFlQK28zSGFZaDFW?=
+ =?utf-8?B?aFVxeWFFV1pMQnBEYjRkeFo5dlQ2NzNpN0phcEtVbEdLRTJiNU4vYTNwMm1s?=
+ =?utf-8?B?K3NFMDlaM0h2MEFBdUxCOVduTWFKNG45L3JWelhZdFhSem5iOVZlbzBvaS8y?=
+ =?utf-8?B?T0F2TkJyN1MvV0h2VGs5dTVJYU0rU2FwTFl3ZStZblozVjdoYzE4dnVHRGdT?=
+ =?utf-8?B?a1N0UE94SGlTT3BhYlhjdnAxa2ZVVjMxOEp4aGhaUUF2S1F5UXgvM0ZxQTda?=
+ =?utf-8?B?WkVmWHBYRWtQRHBpQ1pLK2pRdnJRPT0=?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d0d92eb8-4951-4dec-fb20-08d9f09c5240
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB4835.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2022 16:00:43.7221
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UUXcP3wrclo4WEB+WK1PsWsDtYQNmmyMZ7o+M7XH2qmYKg2jK7fjZZsi7rfLptgxOVrj29HN2DKVJ5xH9Codkmj0GVLW29+jDCQPM64Ms4k=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB3460
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10258 signatures=673431
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ mlxlogscore=999 bulkscore=0 spamscore=0 adultscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202150093
+X-Proofpoint-ORIG-GUID: aVv7FXsiRttlgkiL8xa7WzX8348GKnI9
+X-Proofpoint-GUID: aVv7FXsiRttlgkiL8xa7WzX8348GKnI9
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022 10:28:55 -0500, you wrote:
+On 2/14/22 14:06, Jason Gunthorpe wrote:
+> On Mon, Feb 14, 2022 at 01:34:15PM +0000, Joao Martins wrote:
+> 
+>> [*] apparently we need to write an invalid entry first, invalidate the {IO}TLB
+>> and then write the new valid entry. Not sure I understood correctly that this
+>> is the 'break-before-make' thingie.
+> 
+> Doesn't that explode if the invalid entry is DMA'd to?
+> 
+Yes, IIUC. Also, the manual has this note:
 
->Le mardi 15 f=C3=A9vrier 2022 =C3=A0 14:50 +0000, John Cox a =
-=C3=A9crit=C2=A0:
->> On Tue, 15 Feb 2022 15:35:12 +0100, you wrote:
->>=20
->> >=20
->> > Le 15/02/2022 =C3=A0 15:17, John Cox a =C3=A9crit=C2=A0:
->> > > Hi
->> > >=20
->> > > > The bit size of the slice could be deduced from the buffer =
-payload
->> > > > so remove bit_size field to avoid duplicated the information.
->> > > I think this is a bad idea. In the future we are (I hope) going to=
- want
->> > > to have an array (variable) of slice headers all referring to the =
-same
->> > > bit buffer.  When we do that we will need this field.
->> >=20
->> > I wonder if that could be considering like another decode mode and =
-so
->> > use an other control ?
->>=20
->> I, personally, would be in favour of making the slice header control a
->> variable array just as it is.  If userland can't cope with multiple
->> entries then just send them one at a time and the code looks exactly
->> like it does at the moment and if the driver can't then set max array
->> entries to 1.
->>=20
->> Having implemented this in rpi port of ffmpeg and the RPi V4L2 driver =
-I
->> can say with experience that the code and effort overhead is very low.
->>=20
->> Either way having a multiple slice header control in the UAPI is
->> important for efficiency.
->
->Just to clarify the idea, we would have a single slice controls, always =
-dynamic:
->
->1. For sliced based decoder
->
->The dynamic array slice control is implemented by the driver and its =
-size must
->be 1.
+"Note: For example, to split a block into constituent granules
+(or to merge a span of granules into an equivalent block), VMSA
+requires the region to be made invalid, a TLB invalidate
+performed, then to make the region take the new configuration.
 
-Yes
+Note: The requirement for a break-before-make sequence can cause
+problems for unrelated I/O streams that might use addresses
+overlapping a region of interest, because the I/O streams cannot
+always be conveniently stopped and might not tolerate translation
+faults. It is advantageous to perform live update of a block into
+smaller translations, or a set of translations into a larger block
+size."
 
->2. For frame based decoder that don't care for slices
->
->The dynamic array slice controls is not implement. Userland detects that=
- at
->runtime, similar to the VP9 compressed headers.
+Probably why the original SMMUv3.2 dirty track series requires FEAT_BBM
+as it had to do in-place atomic updates to split/collapse IO pgtables.
+Not enterily clear if HTTU Dirty access requires the same.
 
-If the driver parses all the slice header then that seems plausible
+>>>> I wonder if we could start progressing the dirty tracking as a first initial series and
+>>>> then have the split + collapse handling as a second part? That would be quite
+>>>> nice to get me going! :D
+>>>
+>>> I think so, and I think we should. It is such a big problem space, it
+>>> needs to get broken up.
+>>
+>> OK, cool! I'll stick with the same (slimmed down) IOMMU+VFIO interface as proposed in the
+>> past except with the x86 support only[*]. And we poke holes there I guess.
+>>
+>> [*] I might include Intel too, albeit emulated only.
+> 
+> Like I said, I'd prefer we not build more on the VFIO type 1 code
+> until we have a conclusion for iommufd..
+> 
 
->3. For frame based decoders that needs slices (or driver that supports =
-offset
->and can gain performance with such mode)
->
->The dynamic array slice controls is implemented, and should contain all =
-the
->slices found in the OUTPUT buffer.
->
->So the reason for this bit_size (not sure why its bits though, perhaps =
-someone
->can educate me ?)
+I didn't quite understand what you mean by conclusion.
 
-RPi doesn't need bits and would be happy with bytes however
-slice_segment data isn't byte aligned at the end so its possible that
-there might be decoders out there that want an accurate length for that.
+If by conclusion you mean the whole thing to be merged, how can the work be
+broken up to pieces if we busy-waiting on the new subsystem? Or maybe you meant
+in terms of direction...
 
-> Would be to let the driver offset inside the the single
->OUTPUT/bitstream buffer in case this is not automatically found by the =
-driver
->(or that no start-code is needed). Is that last bit correct ? If so, =
-should we
->change it to an offset rather then a size ? Shall we allow using =
-offesets inside
->larger buffer (e.g. to avoid some memory copies) for the Sliced Base =
-cases ?
+I can build on top of iommufd -- Just trying to understand how this is
+going to work out.
 
-I use (in the current structure) data_bit_offset to find the start of
-each slice's slice_segment_data within the OUTPUT buffer and bit_size to
-find the end.  RPi doesn't / can't parse the slice_header and so wants
-all of that.  Decoders that do parse the header might plausably want
-header offsets too and it would facilitate zero copy of the bit buffer.
+> While returning the dirty data looks straight forward, it is hard to
+> see an obvious path to enabling and controlling the system iommu the
+> way vfio is now.
 
-=20
->> Regards
->>=20
->> John Cox
->>=20
->> > > > Signed-off-by: Benjamin Gaignard =
-<benjamin.gaignard@collabora.com>
->> > > > ---
->> > > > .../userspace-api/media/v4l/ext-ctrls-codec.rst       |  3 ---
->> > > > drivers/staging/media/sunxi/cedrus/cedrus_h265.c      | 11 =
-++++-------
->> > > > include/uapi/linux/v4l2-controls.h                    |  3 +--
->> > > > 3 files changed, 5 insertions(+), 12 deletions(-)
->> > > >=20
->> > > > diff --git =
-a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst =
-b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->> > > > index 3296ac3b9fca..c3ae97657fa7 100644
->> > > > --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->> > > > +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->> > > > @@ -2965,9 +2965,6 @@ enum =
-v4l2_mpeg_video_hevc_size_of_length_field -
->> > > >      :stub-columns: 0
->> > > >      :widths:       1 1 2
->> > > >=20
->> > > > -    * - __u32
->> > > > -      - ``bit_size``
->> > > > -      - Size (in bits) of the current slice data.
->> > > >      * - __u32
->> > > >        - ``data_bit_offset``
->> > > >        - Offset (in bits) to the video data in the current slice=
- data.
->> > > > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c =
-b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
->> > > > index 8ab2d9c6f048..db8c7475eeb8 100644
->> > > > --- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
->> > > > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
->> > > > @@ -312,8 +312,8 @@ static void cedrus_h265_setup(struct =
-cedrus_ctx *ctx,
->> > > > 	const struct v4l2_hevc_pred_weight_table *pred_weight_table;
->> > > > 	unsigned int width_in_ctb_luma, ctb_size_luma;
->> > > > 	unsigned int log2_max_luma_coding_block_size;
->> > > > +	size_t slice_bytes;
->> > > > 	dma_addr_t src_buf_addr;
->> > > > -	dma_addr_t src_buf_end_addr;
->> > > > 	u32 chroma_log2_weight_denom;
->> > > > 	u32 output_pic_list_index;
->> > > > 	u32 pic_order_cnt[2];
->> > > > @@ -370,8 +370,8 @@ static void cedrus_h265_setup(struct =
-cedrus_ctx *ctx,
->> > > >=20
->> > > > 	cedrus_write(dev, VE_DEC_H265_BITS_OFFSET, 0);
->> > > >=20
->> > > > -	reg =3D slice_params->bit_size;
->> > > > -	cedrus_write(dev, VE_DEC_H265_BITS_LEN, reg);
->> > > > +	slice_bytes =3D vb2_get_plane_payload(&run->src->vb2_buf, 0);
->> > > > +	cedrus_write(dev, VE_DEC_H265_BITS_LEN, slice_bytes);
->> > > I think one of these must be wrong. bit_size is in bits,
->> > > vb2_get_plane_payload is in bytes?
->> >=20
->> > You are right it should be vb2_get_plane_payload() * 8 to get the =
-size in bits.
->> >=20
->> > I will change that in v3.
->> >=20
->> > >=20
->> > > Regards
->> > >=20
->> > > John Cox
->> > >  =20
->> > > > 	/* Source beginning and end addresses. */
->> > > >=20
->> > > > @@ -384,10 +384,7 @@ static void cedrus_h265_setup(struct =
-cedrus_ctx *ctx,
->> > > >=20
->> > > > 	cedrus_write(dev, VE_DEC_H265_BITS_ADDR, reg);
->> > > >=20
->> > > > -	src_buf_end_addr =3D src_buf_addr +
->> > > > -			   DIV_ROUND_UP(slice_params->bit_size, 8);
->> > > > -
->> > > > -	reg =3D VE_DEC_H265_BITS_END_ADDR_BASE(src_buf_end_addr);
->> > > > +	reg =3D VE_DEC_H265_BITS_END_ADDR_BASE(src_buf_addr + =
-slice_bytes);
->> > > > 	cedrus_write(dev, VE_DEC_H265_BITS_END_ADDR, reg);
->> > > >=20
->> > > > 	/* Coding tree block address */
->> > > > diff --git a/include/uapi/linux/v4l2-controls.h =
-b/include/uapi/linux/v4l2-controls.h
->> > > > index b1a3dc05f02f..27f5d272dc43 100644
->> > > > --- a/include/uapi/linux/v4l2-controls.h
->> > > > +++ b/include/uapi/linux/v4l2-controls.h
->> > > > @@ -2457,7 +2457,6 @@ struct v4l2_hevc_pred_weight_table {
->> > > > #define V4L2_HEVC_SLICE_PARAMS_FLAG_DEPENDENT_SLICE_SEGMENT	=
-(1ULL << 9)
->> > > >=20
->> > > > struct v4l2_ctrl_hevc_slice_params {
->> > > > -	__u32	bit_size;
->> > > > 	__u32	data_bit_offset;
->> > > >=20
->> > > > 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
->> > > > @@ -2484,7 +2483,7 @@ struct v4l2_ctrl_hevc_slice_params {
->> > > > 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture timing SEI =
-message */
->> > > > 	__u8	pic_struct;
->> > > >=20
->> > > > -	__u8	reserved;
->> > > > +	__u8	reserved[5];
->> > > >=20
->> > > > 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: General slice segment =
-header */
->> > > > 	__u32	slice_segment_addr;
+It seems strange to have a whole UAPI for userspace [*] meant to
+return dirty data to userspace, when dirty right now means the whole
+pinned page set and so copying the whole guest ... and the guest is
+running so we might be racing with the device changing guest pages with the
+VMM/CPU unaware of it. Even with no dwelling of IOMMU pagetables (i.e. split/collapse
+IO base pages) it would still help greatly the current status quo of copying
+the entire thing :(
+
+Hence my thinking was that the patches /if small/ would let us see how dirty
+tracking might work for iommu kAPI (and iommufd) too.
+
+Would it be better to do more iterative steps (when possible) as opposed to
+scratch and rebuild VFIO type1 IOMMU handling?
+
+	Joao
+
+[*] VFIO_IOMMU_DIRTY_PAGES{_FLAG_START,_FLAG_STOP,_FLAG_GET_BITMAP}

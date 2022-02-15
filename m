@@ -2,161 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FFE4B6129
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 03:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 873C64B6135
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 03:47:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233722AbiBOCmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 21:42:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49248 "EHLO
+        id S233738AbiBOCr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 21:47:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233669AbiBOCms (ORCPT
+        with ESMTP id S229734AbiBOCrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 21:42:48 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6373D11D7AC
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 18:42:38 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id e16so17319029qtq.6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 18:42:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=giPReZ8UhbPqkZLEqkAOxK4yInsc7PbE1m6SE66Te4Q=;
-        b=btIELsE6p+AIrHoSPLSohcTUVe+luSKo9dd0AyNSjs7Ju9Xa9XzP3dnes8rgd8EOwp
-         mm6tUMUxoPRUi6IiZyTjfcVWS1/wWYrOEJiRagFc0uLo1MraDS+RlIc43lg6+LoXvVZX
-         4p4LFiGoHfzMTc4q3TgVGzbSDb8K9+QqdoZIbP9HQ7U5RXMwijNjwTcSe2Qw+GF3LUz0
-         12psOMKrAo6jkpCt9p5nygK7/F9KKWOZimQoPlXIUCJjJUgT9SQpsXHB7j7TGRXaW/W9
-         S9f+IR9MLXYuRPp/+mThEHeH2tlKRWEPKnc7IPr8zPOSY/a6A0U5WhX69BF+/lTw9vkR
-         DTpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=giPReZ8UhbPqkZLEqkAOxK4yInsc7PbE1m6SE66Te4Q=;
-        b=HbR6nUTwTG3BTA/agdhSoiZSnPzPlxcqxvNsTnDRofyYfNB5/9BL2sgJ2MAUXYsRn0
-         TZ/k9DGkR6HRM9lmd8pOmzEvzPifpRaSByaEhi1VbRe8a4BkQdQQ7J/D6g7z1rh4yStM
-         zNYlF+7S+2HmUy12ZydNCQSzm/JtW1iV50amR8K1wtvF9dVbbDPVpVdA5ZzVLqm4wvqN
-         y2BUXDkPmmldGM7f6XbeqqrGa+h80aNtUn8suZ63kt0aMjcVB5iOc4pg47XQ0C+SODJR
-         bRQgeFm7yKsknzI5CM+gmdAC0l8WcVZenXa7xdCgzCKqOJS7p30D+cLpqYQUxHarPaM0
-         MZjg==
-X-Gm-Message-State: AOAM530MT+tGpr0o6HAI7tj0e66+asf31aGLwn9QQ6BRhHEFysB9eyZp
-        at2IZPOebFyzBQbOIoTR/TDbYg==
-X-Google-Smtp-Source: ABdhPJznFEk0d/fI+EPrzI5m8zqaIJocidCZFSgE1ynr0TcpDqCkqNNw84SymhENnH3FgBo3d8wQAw==
-X-Received: by 2002:ac8:4e87:: with SMTP id 7mr1362080qtp.9.1644892956787;
-        Mon, 14 Feb 2022 18:42:36 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id c20sm19161403qtb.58.2022.02.14.18.42.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 18:42:36 -0800 (PST)
-Date:   Mon, 14 Feb 2022 18:42:33 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Michal Hocko <mhocko@suse.com>, Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Rik van Riel <riel@surriel.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 13/13] mm/thp: shrink_page_list() avoid splitting VM_LOCKED
- THP
-In-Reply-To: <55a49083-37f9-3766-1de9-9feea7428ac@google.com>
-Message-ID: <531d13ee-bc7d-329a-9748-5e272f699d78@google.com>
-References: <55a49083-37f9-3766-1de9-9feea7428ac@google.com>
+        Mon, 14 Feb 2022 21:47:24 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501913F89F;
+        Mon, 14 Feb 2022 18:47:15 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJnrt-001qwH-NG; Tue, 15 Feb 2022 02:47:05 +0000
+Date:   Tue, 15 Feb 2022 02:47:05 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rich Felker <dalias@libc.org>, linux-ia64@vger.kernel.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Max Filippov <jcmvbkbc@gmail.com>, Guo Ren <guoren@kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Helge Deller <deller@gmx.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        linux-csky@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Richard Weinberger <richard@nod.at>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        David Miller <davem@davemloft.net>
+Subject: Re: [PATCH 04/14] x86: use more conventional access_ok() definition
+Message-ID: <YgsUKcXGR7r4nINj@zeniv-ca.linux.org.uk>
+References: <20220214163452.1568807-1-arnd@kernel.org>
+ <20220214163452.1568807-5-arnd@kernel.org>
+ <YgqLFYqIqkIsNC92@infradead.org>
+ <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
+ <CAHk-=whq6_Nh3cB3FieP481VcRyCu69X3=wO1yLHGmcZEj69SA@mail.gmail.com>
+ <Ygq4wy9fikDYmuHU@zeniv-ca.linux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ygq4wy9fikDYmuHU@zeniv-ca.linux.org.uk>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-4.8 commit 7751b2da6be0 ("vmscan: split file huge pages before paging
-them out") inserted a split_huge_page_to_list() into shrink_page_list()
-without considering the mlock case: no problem if the page has already
-been marked as Mlocked (the !page_evictable check much higher up will
-have skipped all this), but it has always been the case that races or
-omissions in setting Mlocked can rely on page reclaim to detect this
-and correct it before actually reclaiming - and that remains so, but
-what a shame if a hugepage is needlessly split before discovering it.
+On Mon, Feb 14, 2022 at 08:17:07PM +0000, Al Viro wrote:
+> On Mon, Feb 14, 2022 at 12:01:05PM -0800, Linus Torvalds wrote:
+> > On Mon, Feb 14, 2022 at 11:46 AM Arnd Bergmann <arnd@kernel.org> wrote:
+> > >
+> > > As Al pointed out, they turned out to be necessary on sparc64, but the only
+> > > definitions are on sparc64 and x86, so it's possible that they serve a similar
+> > > purpose here, in which case changing the limit from TASK_SIZE to
+> > > TASK_SIZE_MAX is probably wrong as well.
+> > 
+> > x86-64 has always(*) used TASK_SIZE_MAX for access_ok(), and the
+> > get_user() assembler implementation does the same.
+> > 
+> > I think any __range_not_ok() users that use TASK_SIZE are entirely
+> > historical, and should be just fixed.
+> 
+> IIRC, that was mostly userland stack trace collection in perf.
+> I'll try to dig in archives and see what shows up - it's been
+> a while ago...
 
-It is surprising that page_check_references() returns PAGEREF_RECLAIM
-when VM_LOCKED, but there was a good reason for that: try_to_unmap_one()
-is where the condition is detected and corrected; and until now it could
-not be done in page_referenced_one(), because that does not always have
-the page locked.  Now that mlock's requirement for page lock has gone,
-copy try_to_unmap_one()'s mlock restoration into page_referenced_one(),
-and let page_check_references() return PAGEREF_ACTIVATE in this case.
+After some digging:
 
-But page_referenced_one() may find a pte mapping one part of a hugepage:
-what hold should a pte mapped in a VM_LOCKED area exert over the entire
-huge page?  That's debatable.  The approach taken here is to treat that
-pte mapping in page_referenced_one() as if not VM_LOCKED, and if no
-VM_LOCKED pmd mapping is found later in the walk, and lack of reference
-permits, then PAGEREF_RECLAIM take it to attempted splitting as before.
+	access_ok() needs only to make sure that MMU won't go anywhere near
+the kernel page tables; address limit for 32bit threads is none of its
+concern, so TASK_SIZE_MAX is right for it.
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
-v2: same as v1.
+	valid_user_frame() in arch/x86/events/core.c: used while walking
+the userland call chain.  The reason it's not access_ok() is only that
+perf_callchain_user() might've been called from interrupt that came while
+we'd been under KERNEL_DS.
+	That had been back in 2015 and it had been obsoleted since 2017, commit
+88b0193d9418 (perf/callchain: Force USER_DS when invoking perf_callchain_user()).
+We had been guaranteed USER_DS ever since.
+	IOW, it could've reverted to use of access_ok() at any point after that.
+TASK_SIZE vs TASK_SIZE_MAX is pretty much an accident there - might've been
+TASK_SIZE_MAX from the very beginning.
 
- mm/rmap.c   | 7 +++++--
- mm/vmscan.c | 6 +++---
- 2 files changed, 8 insertions(+), 5 deletions(-)
+	copy_stack_frame() in arch/x86/kernel/stacktrace.c: similar story,
+except the commit that made sure callers will have USER_DS - cac9b9a4b083
+(stacktrace: Force USER_DS for stack_trace_save_user()) in this case.
+Also could've been using access_ok() just fine.  Amusingly, access_ok()
+used to be there, until it had been replaced with explicit check on
+Jul 22 2019 - 4 days after that had been made useless by fix in the caller...
 
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 714bfdc72c7b..c7921c102bc0 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -812,7 +812,10 @@ static bool page_referenced_one(struct page *page, struct vm_area_struct *vma,
- 	while (page_vma_mapped_walk(&pvmw)) {
- 		address = pvmw.address;
- 
--		if (vma->vm_flags & VM_LOCKED) {
-+		if ((vma->vm_flags & VM_LOCKED) &&
-+		    (!PageTransCompound(page) || !pvmw.pte)) {
-+			/* Restore the mlock which got missed */
-+			mlock_vma_page(page, vma, !pvmw.pte);
- 			page_vma_mapped_walk_done(&pvmw);
- 			pra->vm_flags |= VM_LOCKED;
- 			return false; /* To break the loop */
-@@ -851,7 +854,7 @@ static bool page_referenced_one(struct page *page, struct vm_area_struct *vma,
- 
- 	if (referenced) {
- 		pra->referenced++;
--		pra->vm_flags |= vma->vm_flags;
-+		pra->vm_flags |= vma->vm_flags & ~VM_LOCKED;
- 	}
- 
- 	if (!pra->mapcount)
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 090bfb605ecf..a160efba3c73 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -1386,11 +1386,11 @@ static enum page_references page_check_references(struct page *page,
- 	referenced_page = TestClearPageReferenced(page);
- 
- 	/*
--	 * Mlock lost the isolation race with us.  Let try_to_unmap()
--	 * move the page to the unevictable list.
-+	 * The supposedly reclaimable page was found to be in a VM_LOCKED vma.
-+	 * Let the page, now marked Mlocked, be moved to the unevictable list.
- 	 */
- 	if (vm_flags & VM_LOCKED)
--		return PAGEREF_RECLAIM;
-+		return PAGEREF_ACTIVATE;
- 
- 	if (referenced_ptes) {
- 		/*
--- 
-2.34.1
+	copy_from_user_nmi().  That one is a bit more interesting.
+We have a call chain from perf_output_sample_ustack() (covered by
+force_uaccess_begin() these days, not that it mattered for x86 now),
+there's something odd in dumpstack.c:copy_code() (with explicit check
+for TASK_SIZE_MAX in the caller) and there's a couple of callers in
+Intel PMU code.
+	AFAICS, there's no reason whatsoever to use TASK_SIZE
+in that one - the point is to prevent copyin from the kernel
+memory, and in that respect TASK_SIZE_MAX isn't any worse.
+The check in copy_code() probably should go.
 
+	So all of those guys should be simply switched to access_ok().
+Might be worth making that a preliminary patch - it's independent
+from everything else and there's no point folding it into any of the
+patches in the series.

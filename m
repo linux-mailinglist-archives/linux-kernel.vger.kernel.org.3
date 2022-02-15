@@ -2,247 +2,547 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE784B699E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AFF4B69AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:48:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236653AbiBOKoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 05:44:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42734 "EHLO
+        id S236664AbiBOKsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 05:48:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235867AbiBOKoT (ORCPT
+        with ESMTP id S232378AbiBOKsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 05:44:19 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0F4AFF4D;
-        Tue, 15 Feb 2022 02:44:08 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21FAH3bG007111;
-        Tue, 15 Feb 2022 10:43:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=PRM6ke0AHYsA4qouRLqtnyM2ujzwAswISfsCV+aqtjg=;
- b=L3CPp1v08GUmNUu3+5FTpbRuXAJt7H7bJY2BHATJENaBSj5uWr/tZTT4JGKrHBWlkgKY
- K55MLGNb4XIgFx3TKUXh7N+cYdpg9N2z0NIswMW2AFJCCB/1tCx2ENRn3qcFVnWzlPeC
- Y1EGFjRxtQl84f45iqKJwlcUBdj4KLxrspOI1xIx6U4X41yGYQ7DEJAobnl9cLUoVtIn
- 97Akx33Ls4SyhiqGqkvgMKz+/fa5SHDDYA4+ly+1sio7Yb52VX7tn0Hk3z0pevppMLun
- c/6pChBOOtcu9mEF6xohhaVyewZPvDlBexZNRtHa8ni3x5U6s9qak/fmjP1LWumrGjPi zA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e884r8hqr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Feb 2022 10:43:51 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21FAeTWG050657;
-        Tue, 15 Feb 2022 10:43:50 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2100.outbound.protection.outlook.com [104.47.58.100])
-        by aserp3030.oracle.com with ESMTP id 3e62xechyd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Feb 2022 10:43:50 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aFukAj/p6t0Er8X7KFKpJyWjQvIu1Umwu9whsTNF6B7R1hjgArdD1MHtWsTvmTquXGINqM5k/iiPnD6s1hCl64t6EdmCAOg4z8mThqC+c8ObgT7osbUsDbf0QaGlZHc0Qh64kg5WOqmrOnXYKeIq+6GjA4NtWJBDpk65u5kYo8k6nIW0YsJAyfyx939UDpok9FlLIaUPM+yzE+TOEQMipYybEH6muWd6/dcgexEUDZnGG1MTTf2SJAEdiX38yjsvzbJGE2SHD38O+kRCFl8t0xFh4gL/WXQee1BDbPmbJaD8IYuJR4FU6prV51+sYJ5wsEIZ/WCwZXYpodFuTKgNCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PRM6ke0AHYsA4qouRLqtnyM2ujzwAswISfsCV+aqtjg=;
- b=EAkRPN3EKoeJwBVkZjymQWVuRAHjJwEK2taqaZ+P7KZiktzMoSRp/I6DLDehSbQCMs2jWq7pDhk4lv0JUEapTY2vaERAcpIwGpAhxP++nP46Ut+u7Gy50spcOXpPcmPsrbPdKYnPZY4q8gqWBC3AemUkHEFlDUWPhkK6d62kjxqH07kRSSCNtcOcE3bX0Q2th3y2/QJ+qbPAThV/f8+IfuOD0a80C9WlYrnHqEFintYWTERmwUy5WOxe24s80Db3fnh7w2lo1rQZ1tA3UGNdQp1clDUG5f5D/FGuPYiXTNhRtDOD7W9O8BwCoKP90KeMWw1m9A9QzxOzpvCVdW2Uiw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PRM6ke0AHYsA4qouRLqtnyM2ujzwAswISfsCV+aqtjg=;
- b=ZnDdxoeqk8RETebT6lyTIa1sL3PMc7mReB/WVYq06cvhodyhYVjRkeEwYdCaV7aTY+ul9G9q2jvxn/oVy+2TNlJLtp3GtTgmpOrykZSfJNTHbTde0NvL+SA4QRk6rBow3118zxJCMhb70YlUQCWqcmTVw3FR+VR6mku7oJCUahE=
-Received: from SJ0PR10MB5600.namprd10.prod.outlook.com (2603:10b6:a03:3dc::12)
- by DS7PR10MB4912.namprd10.prod.outlook.com (2603:10b6:5:3a1::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.15; Tue, 15 Feb
- 2022 10:43:48 +0000
-Received: from SJ0PR10MB5600.namprd10.prod.outlook.com
- ([fe80::5b6:33a0:d015:36a5]) by SJ0PR10MB5600.namprd10.prod.outlook.com
- ([fe80::5b6:33a0:d015:36a5%3]) with mapi id 15.20.4951.019; Tue, 15 Feb 2022
- 10:43:48 +0000
-From:   Haakon Bugge <haakon.bugge@oracle.com>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-CC:     Tejun Heo <tj@kernel.org>, Bart Van Assche <bvanassche@acm.org>,
-        syzbot <syzbot+831661966588c802aae9@syzkaller.appspotmail.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        LKML <linux-kernel@vger.kernel.org>,
-        OFED mailing list <linux-rdma@vger.kernel.org>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [syzbot] possible deadlock in worker_thread
-Thread-Topic: [syzbot] possible deadlock in worker_thread
-Thread-Index: AQHYHrRGZ1eWC5CyIUqr8tRZWA61Q6yOtbMAgACwk4CAALoWgIAACiCAgAH00YCAACHoAIAAK7SAgACljYCAAEJtAIABGqQAgAAE4QA=
-Date:   Tue, 15 Feb 2022 10:43:47 +0000
-Message-ID: <76616D2F-14F2-4D83-9DB4-576FB2ACB72C@oracle.com>
-References: <0000000000005975a605d7aef05e@google.com>
- <8ea57ddf-a09c-43f2-4285-4dfb908ad967@acm.org>
- <ccd04d8a-154b-543e-e1c3-84bc655508d1@I-love.SAKURA.ne.jp>
- <71d6f14e-46af-cc5a-bc70-af1cdc6de8d5@acm.org>
- <309c86b7-2a4c-1332-585f-7bcd59cfd762@I-love.SAKURA.ne.jp>
- <aa2bf24e-981a-a811-c5d8-a75f0b8f693a@acm.org>
- <2959649d-cfbc-bdf2-02ac-053b8e7af030@I-love.SAKURA.ne.jp>
- <YgnQGZWT/n3VAITX@slm.duckdns.org>
- <8ebd003c-f748-69b4-3a4f-fb80a3f39d36@I-love.SAKURA.ne.jp>
- <YgqSsuSN5C7StvKx@slm.duckdns.org>
- <a07e464c-69c6-6165-e88c-5a2eded79138@I-love.SAKURA.ne.jp>
-In-Reply-To: <a07e464c-69c6-6165-e88c-5a2eded79138@I-love.SAKURA.ne.jp>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3693.40.0.1.81)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4f3446ef-4b93-4217-24d1-08d9f0700c23
-x-ms-traffictypediagnostic: DS7PR10MB4912:EE_
-x-microsoft-antispam-prvs: <DS7PR10MB4912EA3FE67785B539401235FD349@DS7PR10MB4912.namprd10.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1728;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /u/Cbroj4mcKcCwoani801dhswmjz365DTaNn15bYVLQBprS+ev/O3sFGEOkhZMWdcIkaLWpAJF9yoEwnS0tSHbzngmd2e3oZT8EtPefxivinjVX/AJA8qHmqH4kCwamssoDJlhhApEzhBCkCahSKEvKUaP/Cdt/FMZv/HH1LaZx5V8A4l1c8+t2VUU1kRkxb1ZJtyB7GQzt72L0QRgfXEwB2axCAJTiHdg6is94RFPpsm5qEUUibEAsP7Jh0xHEIVkQHXo75+T23AapJoQ+nTnna2CENvxfhnR9L4/odbHYd2rytN2PBBViIf8XJ9tcOZhOT7ZbszMvh1AwB2IC5i9H+nYlaClGRQ9CFQWSOAsQPB+IhY1FrAJz/wpw7SLqioDTxTmoiElpOUm3gNxQVB7JprIzVSqvZQpetGyBdOfZDFMNWohFGfOSxYIavR0d3z9PNYT+mpFrBx67HyX41NDJB98AemNzhzFezh46xw5DO+Xw9Q9xDd2MWPDmQADf1CipaTaYxc8G3IZiPSRtGLqV9cXnmHuTm1vzwY16CJmS1oCi790bHO6exU3SPyGliuOsEq/GeZK7cDVprykJpxxkCog0eZwjAVuMmpU95mHFZMAM0eGw76c0WVzYegD4/gGm29iXU9+70Z5ULQ871R2Lf4YlHyXH5xNt/Tfiwbce0zl4Qxl4HUyMfWp9Y4coGUgzKsvEtduhygfT0A95FZrCEquOGelYplHtlyLQ6aEyB2bsjosthwNt7SqlSbP9
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB5600.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2616005)(186003)(83380400001)(6512007)(66574015)(26005)(8936002)(5660300002)(44832011)(2906002)(36756003)(6506007)(33656002)(508600001)(53546011)(71200400001)(6486002)(38070700005)(91956017)(4326008)(8676002)(66476007)(66946007)(76116006)(64756008)(86362001)(66446008)(316002)(66556008)(38100700002)(54906003)(6916009)(122000001)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RWZNNVB2YktkT0diaGcwbkhSWUpnUnNSTjc0MFZEM1ZyejlpNDlkVTJKdm85?=
- =?utf-8?B?MnNkZ0FFVEVGeE9UU01LVncrbDdybkY5SWU3clZnZHJHVDk3V1hGeW1ydnEz?=
- =?utf-8?B?Q1phVGV2T2luT1VudTNQWE9PZ2Y1NEI2V2Z2SWdHRGNSRkV0UnFrZjlCTFNv?=
- =?utf-8?B?dWJ4UHBZbi95b3REektERzFRTm02cUZSQmFIQ0QrdTU3Zmw2RkF2N25RZkYy?=
- =?utf-8?B?UUxlcURUak0wdDRFYXFhMWNpU25RckM1VkRFZitadUt0T0NRcHhFM0ExSnFJ?=
- =?utf-8?B?WG44QnN5WXNBbkkraGNvNGRVempyeU1RZXVBc1lYdFkyaG1zNXhvMWZPcnVk?=
- =?utf-8?B?Z05VdHFNNG5oNVRNdHlOOG5TUXJkOVhJYndqY0E2TXMweEx5ZDB6S2JFYzhl?=
- =?utf-8?B?QlE5eDVMR3pwNDV5aHFSMlBnY2ZwR21icEdFV2J3aTU5VlozcVlwcEtxdWYy?=
- =?utf-8?B?QldMRDlKRzltMW5pY1R0eWIrMzVhVnRIYldOZ0E0dFMxWGxZNGxSR08vZjhp?=
- =?utf-8?B?dyt4djQyekVBemRoVFZvQWQrV1ZtbXQra0NhR2p0KytMVzZUbmg0a1ExUkho?=
- =?utf-8?B?cFhFRzVBbWZxQjBVSDZZWmtQNTZMU2RTdENLWFhxTWJmeHMxTXlDYjBaR3Jq?=
- =?utf-8?B?QjZ5RURMYzZmWjBYQ3FzNlpwRUxjcjJsdXQyZy9iRlpwNnBJVEZITm9hekFB?=
- =?utf-8?B?bTVLUTlsbVl4NHdnRzdOMHJYYXZFYThyNmZOYzU5d3JaR1RVR0pRUzUwdnBz?=
- =?utf-8?B?YjY0UmF5d2EwcC9zeUY4ZlRnbnk2WXBUTStUaFV0U1hUUGY1emdvVzNVMjRE?=
- =?utf-8?B?TjJSbHlrMjJwSHQveVVXOFEwMEl2VzFWbTJPT3l6RWpKUVBpdVRHOEpDaytI?=
- =?utf-8?B?TXpXWXBVUk5lUko1bHlFMzlKdy9UYXBUUDdGU2lOR3pnSTcwSTl3enh3Tm1p?=
- =?utf-8?B?VXhYS0d3MXRCMGgyUHNRaFRCVDBZZ0VqbHNJSzlMTWNkYW9IQW0vbTNVSWFU?=
- =?utf-8?B?YTE0Z3o5MTVWVlBiQXd3QWZYMlZHd0tvTnV0ZlY0RFpKTmJvVW8rTCtXREd4?=
- =?utf-8?B?SXFOdWpZanp6OWphQmlIblI5VWF1Wm9jM3JOUjQ2ZzVqL2d3b1Y0ZXlSR1h6?=
- =?utf-8?B?OHVXbnFJdUZ2T3VOQUs1aEt2OTl3TjZZZEwxY29mNlR5Rm9kMVpKM1JsM3F6?=
- =?utf-8?B?U3pRSVpzNWcyaXZqd0lET3BzSHJYTzFLZWEwRUJ5MExlYit3Z0xxdyszc0VN?=
- =?utf-8?B?Z3k2UXRDTDVLUjdkNjNBOTZtN3B5TXhXQmNWdkVUcmpHNVZ6cGJnNGgyQ2hN?=
- =?utf-8?B?NisxeTR6ZytwN1IzZGF1b3ZlaXRKcy8xTXFsWTdtZGg0S2QwVVo2OXJvRzlX?=
- =?utf-8?B?TnJJcWlYN3dHZEtvQ3ZPM3lHbklRNWM3KzlCdGdDZm5sbURsZVRPeE8wZWc4?=
- =?utf-8?B?T3JZSGNlcTdpQk9wa21ZRVR4Q2lFakllamZKSStJMWNJb0grMlkvN2pqREl3?=
- =?utf-8?B?b09FNHF5SVNGQzh4YUNBSmVTSW9hSmZoNmpCTi9zZGxQOEIvL3ZXWkFlSE1h?=
- =?utf-8?B?TVhsZ2d2L1Ayd3U2T2EvOHVHVHdHQmpUMEN4dlc1SkZCQnJZWm1uSit3TlhU?=
- =?utf-8?B?blBBc0RKQnhDS01lM1hZMXVhV2hBdFN5N3Z6Vnc0QmhlN2hRNDJGZC9sNlNl?=
- =?utf-8?B?K0RFWXJvVy9sL2xSMEhiZW9qWDNyZ3p3V2NKMFdiMmhyS2pqcWVFUW9XVXZM?=
- =?utf-8?B?Sno5bE1PeDkyMUh3bnZjRFphU3NEU2s2TjEyWnJVTXhaeXhWL3hmalpPS2NL?=
- =?utf-8?B?OTIvRVUxYi9CaTRvcGlKL0NwUW9qTGhHcWdwanVObmVFeGo1L3FVbHJqL3kz?=
- =?utf-8?B?REFIS3lPL3FqS2lxZ3FOOW1CQ0FEWDlLYkpiT2NwakZ5NVJNdmJJVytTVTk1?=
- =?utf-8?B?T3NaZCtzMnhGUDVSUVBEWmRia0RYZlFBYmpFN1hYUU1ORFJIMUh2a2gveEZL?=
- =?utf-8?B?RmgxTzNveDA0ck1SVEg5YjBVTXJRZk1FTFVFYVBUeDhyOVdtMU1DZmtyZ2J4?=
- =?utf-8?B?WE5PbzBpWFk5VHFrdW92TWJ0S2pQVWJJaUd0cXdHZmIzeDVtcldGVS9rZmtX?=
- =?utf-8?B?M0lhc2Z3RFhTMjFMVEdNOGtpRXdES01xZnBPMDlWWlgzcEtsUlU1S1VOTEZG?=
- =?utf-8?Q?e4Y2CuSLGMklCqoSZXUPbMg=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <44C5391E197D63458F136928CC513717@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 15 Feb 2022 05:48:11 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0671BB569
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 02:47:59 -0800 (PST)
+Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jyd7s0xkbz67Lqc;
+        Tue, 15 Feb 2022 18:47:05 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 15 Feb 2022 11:47:56 +0100
+Received: from [10.47.81.62] (10.47.81.62) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.21; Tue, 15 Feb
+ 2022 10:47:55 +0000
+Message-ID: <6c7c9366-91e1-3b8e-8249-dec7973f3f98@huawei.com>
+Date:   Tue, 15 Feb 2022 10:47:57 +0000
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB5600.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4f3446ef-4b93-4217-24d1-08d9f0700c23
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2022 10:43:47.9019
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rlQ0s7maCPkWZRMQW220WJFS+OQlmImQ2rrPOoRxPTLz7VOVtiL4eruVX7ktDo1e9EkO4qoAqXf9domu2V7oSg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB4912
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10258 signatures=673431
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0 bulkscore=0
- malwarescore=0 adultscore=0 spamscore=0 mlxlogscore=999 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202150060
-X-Proofpoint-GUID: 6fkF56LDkj83P6bS8Aidper423GZfi6k
-X-Proofpoint-ORIG-GUID: 6fkF56LDkj83P6bS8Aidper423GZfi6k
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 1/2] drivers/perf: hisi: Add Support for CPA PMU
+To:     Qi Liu <liuqi115@huawei.com>, "will@kernel.org" <will@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>,
+        Zhangshaokun <zhangshaokun@hisilicon.com>
+References: <20220214114228.40859-1-liuqi115@huawei.com>
+ <20220214114228.40859-2-liuqi115@huawei.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220214114228.40859-2-liuqi115@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.81.62]
+X-ClientProxiedBy: lhreml703-chm.china.huawei.com (10.201.108.52) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gT24gMTUgRmViIDIwMjIsIGF0IDExOjI2LCBUZXRzdW8gSGFuZGEgPHBlbmd1aW4ta2Vy
-bmVsQGktbG92ZS5zYWt1cmEubmUuanA+IHdyb3RlOg0KPiANCj4gT24gMjAyMi8wMi8xNSAyOjM0
-LCBUZWp1biBIZW8gd3JvdGU6DQo+PiANCj4+IEluc3RlYWQgb2YgZG9pbmcgdGhlIGFib3ZlLCBw
-bGVhc2UgYWRkIGEgd3EgZmxhZyB0byBtYXJrIHN5c3RlbSB3cXMgYW5kDQo+PiB0cmlnZ2VyIHRo
-ZSB3YXJuaW5nIHRoYXQgd2F5IGFuZCBJJ2QgbGVhdmUgaXQgcmVnYXJkbGVzcyBvZiBQUk9WRV9M
-T0NLSU5HLg0KPj4gDQo+IA0KPiBEbyB5b3UgbWVhbiBzb21ldGhpbmcgbGlrZSBiZWxvdz8NCj4g
-SSB0aGluayB0aGUgYWJvdmUgaXMgZWFzaWVyIHRvIHVuZGVyc3RhbmQgKGZvciBkZXZlbG9wZXJz
-KSBiZWNhdXNlDQo+IA0KPiAgVGhlIGFib3ZlIHByaW50cyB2YXJpYWJsZSdzIG5hbWUgKG9uZSBv
-ZiAnc3lzdGVtX3dxJywgJ3N5c3RlbV9oaWdocHJpX3dxJywNCj4gICdzeXN0ZW1fbG9uZ193cScs
-ICdzeXN0ZW1fdW5ib3VuZF93cScsICdzeXN0ZW1fZnJlZXphYmxlX3dxJywgJ3N5c3RlbV9wb3dl
-cl9lZmZpY2llbnRfd3EnDQo+ICBvciAnc3lzdGVtX2ZyZWV6YWJsZV9wb3dlcl9lZmZpY2llbnRf
-d3EnKSB3aXRoIGJhY2t0cmFjZSAod2hpY2ggd2lsbCBiZSB0cmFuc2xhdGVkIGludG8NCj4gIGZp
-bGVuYW1lOmxpbmUgZm9ybWF0KSB3aGlsZSB0aGUgYmVsb3cgcHJpbnRzIHF1ZXVlJ3MgbmFtZSAo
-b25lIG9mICdldmVudHMnLCAnZXZlbnRzX2hpZ2hwcmknLA0KPiAgJ2V2ZW50c19sb25nJywgJ2V2
-ZW50c191bmJvdW5kJywgJ2V2ZW50c19mcmVlemFibGUnLCAnZXZlbnRzX3Bvd2VyX2VmZmljaWVu
-dCcgb3INCj4gICdldmVudHNfZnJlZXphYmxlX3Bvd2VyX2VmZmljaWVudCcpLiBJZiBDT05GSUdf
-S0FMTFNZTVNfQUxMPXksIHdlIGNhbiBwcmludA0KPiAgdmFyaWFibGUncyBuYW1lIHVzaW5nICIl
-cHMiLCBidXQgQ09ORklHX0tBTExTWU1TX0FMTCBpcyBub3QgYWx3YXlzIGVuYWJsZWQuDQo+IA0K
-PiAgVGhlIGZsYWcgbXVzdCBub3QgYmUgdXNlZCBieSB1c2VyLWRlZmluZWQgV1FzLCBmb3IgZGVz
-dHJveV93b3JrcXVldWUoKSBpbnZvbHZlcw0KPiAgZmx1c2hfd29ya3F1ZXVlKCkuIElmIHRoaXMg
-ZmxhZyBpcyBieSBlcnJvciB1c2VkIG9uIHVzZXItZGVmaW5lZCBXUXMsIHBvaW50bGVzcw0KPiAg
-d2FybmluZyB3aWxsIGJlIHByaW50ZWQuIEkgZGlkbid0IHBhc3MgdGhpcyBmbGFnIHdoZW4gY3Jl
-YXRpbmcgc3lzdGVtLXdpZGUgV1FzDQo+ICBiZWNhdXNlIHNvbWUgZGV2ZWxvcGVyIG1pZ2h0IGNv
-cHkmcGFzdGUgdGhlDQo+ICAgIHN5c3RlbV93cSA9IGFsbG9jX3dvcmtxdWV1ZSgiZXZlbnRzIiwg
-MCwgMCk7DQo+ICBsaW5lcyB3aGVuIGNvbnZlcnRpbmcuDQo+IA0KPiAtLS0NCj4gaW5jbHVkZS9s
-aW51eC93b3JrcXVldWUuaCB8ICAxICsNCj4ga2VybmVsL3dvcmtxdWV1ZS5jICAgICAgICB8IDI0
-ICsrKysrKysrKysrKysrKysrKysrKysrKw0KPiAyIGZpbGVzIGNoYW5nZWQsIDI1IGluc2VydGlv
-bnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3dvcmtxdWV1ZS5oIGIvaW5j
-bHVkZS9saW51eC93b3JrcXVldWUuaA0KPiBpbmRleCA3ZmVlOWI2Y2ZlZGUuLjllMzNkY2Q0MTdk
-MyAxMDA2NDQNCj4gLS0tIGEvaW5jbHVkZS9saW51eC93b3JrcXVldWUuaA0KPiArKysgYi9pbmNs
-dWRlL2xpbnV4L3dvcmtxdWV1ZS5oDQo+IEBAIC0zMzksNiArMzM5LDcgQEAgZW51bSB7DQo+IAlf
-X1dRX09SREVSRUQJCT0gMSA8PCAxNywgLyogaW50ZXJuYWw6IHdvcmtxdWV1ZSBpcyBvcmRlcmVk
-ICovDQo+IAlfX1dRX0xFR0FDWQkJPSAxIDw8IDE4LCAvKiBpbnRlcm5hbDogY3JlYXRlKl93b3Jr
-cXVldWUoKSAqLw0KPiAJX19XUV9PUkRFUkVEX0VYUExJQ0lUCT0gMSA8PCAxOSwgLyogaW50ZXJu
-YWw6IGFsbG9jX29yZGVyZWRfd29ya3F1ZXVlKCkgKi8NCj4gKwlfX1dRX1NZU1RFTV9XSURFICAg
-ICAgICA9IDEgPDwgMjAsIC8qIGludGVyYmFsOiBkb24ndCBmbHVzaCB0aGlzIHdvcmtxdWV1ZSAq
-Lw0KDQpzL2ludGVyYmFsL2ludGVybmFsLw0KDQo+IA0KPiAJV1FfTUFYX0FDVElWRQkJPSA1MTIs
-CSAgLyogSSBsaWtlIDUxMiwgYmV0dGVyIGlkZWFzPyAqLw0KPiAJV1FfTUFYX1VOQk9VTkRfUEVS
-X0NQVQk9IDQsCSAgLyogNCAqICNjcHVzIGZvciB1bmJvdW5kIHdxICovDQo+IGRpZmYgLS1naXQg
-YS9rZXJuZWwvd29ya3F1ZXVlLmMgYi9rZXJuZWwvd29ya3F1ZXVlLmMNCj4gaW5kZXggMzNmMTEw
-NmI0Zjk5Li5kYmI5YzZiYjU0YTcgMTAwNjQ0DQo+IC0tLSBhL2tlcm5lbC93b3JrcXVldWUuYw0K
-PiArKysgYi9rZXJuZWwvd29ya3F1ZXVlLmMNCj4gQEAgLTI4MDUsNiArMjgwNSwyMSBAQCBzdGF0
-aWMgYm9vbCBmbHVzaF93b3JrcXVldWVfcHJlcF9wd3FzKHN0cnVjdCB3b3JrcXVldWVfc3RydWN0
-ICp3cSwNCj4gCXJldHVybiB3YWl0Ow0KPiB9DQo+IA0KPiArc3RhdGljIHZvaWQgd2Fybl9pZl9m
-bHVzaGluZ19nbG9iYWxfd29ya3F1ZXVlKHN0cnVjdCB3b3JrcXVldWVfc3RydWN0ICp3cSkNCj4g
-K3sNCj4gKwlzdGF0aWMgREVGSU5FX1JBVEVMSU1JVF9TVEFURShmbHVzaF93YXJuX3JzLCA2MDAg
-KiBIWiwgMSk7DQo+ICsNCj4gKwlpZiAobGlrZWx5KCEod3EtPmZsYWdzICYgX19XUV9TWVNURU1f
-V0lERSkpKQ0KPiArCQlyZXR1cm47DQo+ICsNCj4gKwlyYXRlbGltaXRfc2V0X2ZsYWdzKCZmbHVz
-aF93YXJuX3JzLCBSQVRFTElNSVRfTVNHX09OX1JFTEVBU0UpOw0KPiArCWlmICghX19yYXRlbGlt
-aXQoJmZsdXNoX3dhcm5fcnMpKQ0KPiArCQlyZXR1cm47DQo+ICsJcHJfd2FybigiU2luY2Ugc3lz
-dGVtLXdpZGUgV1EgaXMgc2hhcmVkLCBmbHVzaGluZyBzeXN0ZW0td2lkZSBXUSBjYW4gaW50cm9k
-dWNlIHVuZXhwZWN0ZWQgbG9ja2luZyBkZXBlbmRlbmN5LiBQbGVhc2UgcmVwbGFjZSAlcyB1c2Fn
-ZSBpbiB5b3VyIGNvZGUgd2l0aCB5b3VyIGxvY2FsIFdRLlxuIiwNCj4gKwkJd3EtPm5hbWUpOw0K
-PiArCWR1bXBfc3RhY2soKTsNCj4gK30NCj4gKw0KPiAvKioNCj4gICogZmx1c2hfd29ya3F1ZXVl
-IC0gZW5zdXJlIHRoYXQgYW55IHNjaGVkdWxlZCB3b3JrIGhhcyBydW4gdG8gY29tcGxldGlvbi4N
-Cj4gICogQHdxOiB3b3JrcXVldWUgdG8gZmx1c2gNCj4gQEAgLTI4MjQsNiArMjgzOSw4IEBAIHZv
-aWQgZmx1c2hfd29ya3F1ZXVlKHN0cnVjdCB3b3JrcXVldWVfc3RydWN0ICp3cSkNCj4gCWlmIChX
-QVJOX09OKCF3cV9vbmxpbmUpKQ0KPiAJCXJldHVybjsNCj4gDQo+ICsJd2Fybl9pZl9mbHVzaGlu
-Z19nbG9iYWxfd29ya3F1ZXVlKHdxKTsNCj4gKw0KPiAJbG9ja19tYXBfYWNxdWlyZSgmd3EtPmxv
-Y2tkZXBfbWFwKTsNCj4gCWxvY2tfbWFwX3JlbGVhc2UoJndxLT5sb2NrZGVwX21hcCk7DQo+IA0K
-PiBAQCAtNjA3MCw2ICs2MDg3LDEzIEBAIHZvaWQgX19pbml0IHdvcmtxdWV1ZV9pbml0X2Vhcmx5
-KHZvaWQpDQo+IAkgICAgICAgIXN5c3RlbV91bmJvdW5kX3dxIHx8ICFzeXN0ZW1fZnJlZXphYmxl
-X3dxIHx8DQo+IAkgICAgICAgIXN5c3RlbV9wb3dlcl9lZmZpY2llbnRfd3EgfHwNCj4gCSAgICAg
-ICAhc3lzdGVtX2ZyZWV6YWJsZV9wb3dlcl9lZmZpY2llbnRfd3EpOw0KPiArCXN5c3RlbV93cS0+
-ZmxhZ3MgfD0gX19XUV9TWVNURU1fV0lERTsNCj4gKwlzeXN0ZW1faGlnaHByaV93cS0+ZmxhZ3Mg
-fD0gX19XUV9TWVNURU1fV0lERTsNCj4gKwlzeXN0ZW1fbG9uZ193cS0+ZmxhZ3MgfD0gX19XUV9T
-WVNURU1fV0lERTsNCj4gKwlzeXN0ZW1fdW5ib3VuZF93cS0+ZmxhZ3MgfD0gX19XUV9TWVNURU1f
-V0lERTsNCj4gKwlzeXN0ZW1fZnJlZXphYmxlX3dxLT5mbGFncyB8PSBfX1dRX1NZU1RFTV9XSURF
-Ow0KPiArCXN5c3RlbV9wb3dlcl9lZmZpY2llbnRfd3EtPmZsYWdzIHw9IF9fV1FfU1lTVEVNX1dJ
-REU7DQo+ICsJc3lzdGVtX2ZyZWV6YWJsZV9wb3dlcl9lZmZpY2llbnRfd3EtPmZsYWdzIHw9IF9f
-V1FfU1lTVEVNX1dJREU7DQoNCkJldHRlciB0byBPUiB0aGlzIGluLCBpbiB0aGUgYWxsb2Nfd29y
-a3F1ZXVlKCkgY2FsbD8gUGVyY2VpdmUgdGhlIG5vdGlvbiBvZiBhbiBvcGFxdWUgb2JqZWN0Pw0K
-DQoNClRoeHMsIEjDpWtvbg0KDQo+IH0NCj4gDQo+IC8qKg0KPiAtLSANCj4gMi4zMi4wDQo+IA0K
-PiANCg0K
+On 14/02/2022 11:42, Qi Liu wrote:
+> On HiSilicon Hip09 platform, there is a CPA(Coherency Protocol Agent) on
+> each SICL (Super I/O Cluster) which implements packet format translation,
+> route parsing and traffic statistic.
+> 
+> CPA PMU has separate PMU registers which the driver can program freely and
+> interrupt is supported to handle counter overflow. Let's support its driver
+> under the framework of HiSilicon uncore PMU driver.
+> 
+
+Any documentation required?
+
+> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+> ---
+>   drivers/perf/hisilicon/Makefile              |   2 +-
+>   drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c | 403 +++++++++++++++++++
+>   include/linux/cpuhotplug.h                   |   1 +
+>   3 files changed, 405 insertions(+), 1 deletion(-)
+>   create mode 100644 drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
+> 
+> diff --git a/drivers/perf/hisilicon/Makefile b/drivers/perf/hisilicon/Makefile
+> index 506ed39e3266..6be83517acaa 100644
+> --- a/drivers/perf/hisilicon/Makefile
+> +++ b/drivers/perf/hisilicon/Makefile
+> @@ -1,6 +1,6 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+>   obj-$(CONFIG_HISI_PMU) += hisi_uncore_pmu.o hisi_uncore_l3c_pmu.o \
+>   			  hisi_uncore_hha_pmu.o hisi_uncore_ddrc_pmu.o hisi_uncore_sllc_pmu.o \
+> -			  hisi_uncore_pa_pmu.o
+> +			  hisi_uncore_pa_pmu.o hisi_uncore_cpa_pmu.o
+>   
+>   obj-$(CONFIG_HISI_PCIE_PMU) += hisi_pcie_pmu.o
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c b/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
+> new file mode 100644
+> index 000000000000..a28796e93ae1
+> --- /dev/null
+> +++ b/drivers/perf/hisilicon/hisi_uncore_cpa_pmu.c
+> @@ -0,0 +1,403 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * HiSilicon SoC CPA(Coherency Protocol Agent) uncore Hardware event counters support
+> + *
+> + * Copyright (C) 2022 HiSilicon Limited
+> + * Author: Qi Liu <liuqi115@huawei.com>
+> + *
+> + * This code is based on the uncore PMUs like arm-cci and arm-ccn.
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/bug.h>
+> +#include <linux/cpuhotplug.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/list.h>
+> +#include <linux/smp.h>
+> +
+> +#include "hisi_uncore_pmu.h"
+> +
+> +/* CPA register definition */
+> +#define CPA_PERF_CTRL		0x1C00
+> +#define CPA_EVENT_CTRL		0x1C04
+> +#define CPA_INT_MASK		0x1C70
+> +#define CPA_INT_STATUS		0x1C78
+> +#define CPA_INT_CLEAR		0x1C7C
+> +#define CPA_EVENT_TYPE0		0x1C80
+> +#define CPA_VERSION		0x1CF0
+> +#define CPA_CNT0_LOWER		0x1D00
+> +#define CPA_CFG_REG		0x0534
+
+nit: some people prefer lower case for hex numbers, but not a big deal.
+
+> +
+> +/* CPA operation command */
+> +#define CPA_PERF_CTRL_EN	BIT_ULL(0)
+> +#define CPA_EVTYPE_MASK		0xFFUL
+> +#define CPA_PM_CTRL		BIT_ULL(9)
+> +
+> +#define CPA_COUNTER_BITS	64
+> +#define CPA_NR_EVENTS		0xFF
+> +#define CPA_REG_OFFSET		0x8
+> +
+> +static u32 hisi_cpa_pmu_get_counter_offset(int idx)
+> +{
+> +	return (CPA_CNT0_LOWER + idx * CPA_REG_OFFSET);
+> +}
+> +
+> +static u64 hisi_cpa_pmu_read_counter(struct hisi_pmu *cpa_pmu,
+> +				     struct hw_perf_event *hwc)
+> +{
+> +	return readq(cpa_pmu->base + hisi_cpa_pmu_get_counter_offset(hwc->idx));
+> +}
+> +
+> +static void hisi_cpa_pmu_write_counter(struct hisi_pmu *cpa_pmu,
+> +				       struct hw_perf_event *hwc, u64 val)
+> +{
+> +	writeq(val, cpa_pmu->base + hisi_cpa_pmu_get_counter_offset(hwc->idx));
+> +}
+> +
+> +static void hisi_cpa_pmu_write_evtype(struct hisi_pmu *cpa_pmu, int idx, u32 type)
+> +{
+> +	u32 reg, reg_idx, shift, val;
+> +
+> +	/*
+> +	 * Select the appropriate event select register(CPA_EVENT_TYPE0/1).
+> +	 * There are 2 event select registers for the 8 hardware counters.
+> +	 * Event code is 8-bits and for the former 4 hardware counters,
+> +	 * CPA_EVENT_TYPE0 is chosen. For the latter 4 hardware counters,
+> +	 * CPA_EVENT_TYPE1 is chosen.
+> +	 */
+> +	reg = CPA_EVENT_TYPE0 + (idx / 4) * 4;
+
+rounddown(,4) could be used, I think. Or something like it.
+
+> +	reg_idx = idx % 4;
+> +	shift = CPA_REG_OFFSET * reg_idx;
+> +
+> +	/* Write event code to CPA_EVENT_TYPEx Register */
+> +	val = readl(cpa_pmu->base + reg);
+> +	val &= ~(CPA_EVTYPE_MASK << shift);
+> +	val |= (type << shift);
+
+no need for ()
+
+> +	writel(val, cpa_pmu->base + reg);
+> +}
+> +
+> +static void hisi_cpa_pmu_start_counters(struct hisi_pmu *cpa_pmu)
+> +{
+> +	u32 val;
+> +
+> +	val = readl(cpa_pmu->base + CPA_PERF_CTRL);
+> +	val |= CPA_PERF_CTRL_EN;
+> +	writel(val, cpa_pmu->base + CPA_PERF_CTRL);
+> +}
+> +
+> +static void hisi_cpa_pmu_stop_counters(struct hisi_pmu *cpa_pmu)
+> +{
+> +	u32 val;
+> +
+> +	val = readl(cpa_pmu->base + CPA_PERF_CTRL);
+> +	val &= ~(CPA_PERF_CTRL_EN);
+> +	writel(val, cpa_pmu->base + CPA_PERF_CTRL);
+> +}
+> +
+> +static void hisi_cpa_pmu_disable_pm(struct hisi_pmu *cpa_pmu)
+> +{
+> +	u32 val;
+> +
+> +	val = readl(cpa_pmu->base + CPA_CFG_REG);
+> +	val |= CPA_PM_CTRL;
+> +	writel(val, cpa_pmu->base + CPA_CFG_REG);
+> +}
+> +
+> +static void hisi_cpa_pmu_enable_pm(struct hisi_pmu *cpa_pmu)
+> +{
+> +	u32 val;
+> +
+> +	val = readl(cpa_pmu->base + CPA_CFG_REG);
+> +	val &= ~CPA_PM_CTRL;
+> +	writel(val, cpa_pmu->base + CPA_CFG_REG);
+> +}
+> +
+> +static void hisi_cpa_pmu_enable_counter(struct hisi_pmu *cpa_pmu, struct hw_perf_event *hwc)
+> +{
+> +	u32 val;
+> +
+> +	/* Enable counter index in CPA_EVENT_CTRL register */
+> +	val = readl(cpa_pmu->base + CPA_EVENT_CTRL);
+> +	val |= 1 << hwc->idx;
+> +	writel(val, cpa_pmu->base + CPA_EVENT_CTRL);
+> +
+> +	/* Power management should be disabled before counting. */
+> +	hisi_cpa_pmu_disable_pm(cpa_pmu);
+> +}
+> +
+> +static void hisi_cpa_pmu_disable_counter(struct hisi_pmu *cpa_pmu, struct hw_perf_event *hwc)
+> +{
+> +	u32 val;
+> +
+> +	hisi_cpa_pmu_enable_pm(cpa_pmu);
+> +
+> +	/* Clear counter index in CPA_EVENT_CTRL register */
+> +	val = readl(cpa_pmu->base + CPA_EVENT_CTRL);
+> +	val &= ~(1UL << hwc->idx);
+> +	writel(val, cpa_pmu->base + CPA_EVENT_CTRL);
+> +}
+> +
+> +static void hisi_cpa_pmu_enable_counter_int(struct hisi_pmu *cpa_pmu, struct hw_perf_event *hwc)
+> +{
+> +	u32 val;
+> +
+> +	/* Write 0 to enable interrupt */
+> +	val = readl(cpa_pmu->base + CPA_INT_MASK);
+> +	val &= ~(1UL << hwc->idx);
+> +	writel(val, cpa_pmu->base + CPA_INT_MASK);
+> +}
+> +
+> +static void hisi_cpa_pmu_disable_counter_int(struct hisi_pmu *cpa_pmu, struct hw_perf_event *hwc)
+> +{
+> +	u32 val;
+> +
+> +	/* Write 1 to mask interrupt */
+> +	val = readl(cpa_pmu->base + CPA_INT_MASK);
+> +	val |= 1 << hwc->idx;
+> +	writel(val, cpa_pmu->base + CPA_INT_MASK);
+> +}
+> +
+> +static u32 hisi_cpa_pmu_get_int_status(struct hisi_pmu *cpa_pmu)
+> +{
+> +	return readl(cpa_pmu->base + CPA_INT_STATUS);
+> +}
+> +
+> +static void hisi_cpa_pmu_clear_int_status(struct hisi_pmu *cpa_pmu, int idx)
+> +{
+> +	writel(1 << idx, cpa_pmu->base + CPA_INT_CLEAR);
+> +}
+> +
+> +static const struct acpi_device_id hisi_cpa_pmu_acpi_match[] = {
+> +	{ "HISI0281", },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(acpi, hisi_cpa_pmu_acpi_match);
+> +
+> +static int hisi_cpa_pmu_init_data(struct platform_device *pdev,
+> +				  struct hisi_pmu *cpa_pmu)
+> +{
+> +	if (device_property_read_u32(&pdev->dev, "hisilicon,scl-id",
+> +				     &cpa_pmu->sccl_id)) {
+> +		dev_err(&pdev->dev, "Can not read cpa_pmu sccl-id\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	cpa_pmu->ccl_id = -1;
+> +
+> +	if (device_property_read_u32(&pdev->dev, "hisilicon,idx-id",
+> +				     &cpa_pmu->index_id)) {
+> +		dev_err(&pdev->dev, "Cannot read idx-id\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	cpa_pmu->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(cpa_pmu->base)) {
+> +		dev_err(&pdev->dev, "ioremap failed for cpa_pmu resource\n");
+
+I think that devm_platform_ioremap_resource() gives error messages already
+
+> +		return PTR_ERR(cpa_pmu->base);
+> +	}
+> +
+> +	cpa_pmu->identifier = readl(cpa_pmu->base + CPA_VERSION);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct attribute *hisi_cpa_pmu_format_attr[] = {
+> +	HISI_PMU_FORMAT_ATTR(event, "config:0-15"),
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group hisi_cpa_pmu_format_group = {
+> +	.name = "format",
+> +	.attrs = hisi_cpa_pmu_format_attr,
+> +};
+> +
+> +static struct attribute *hisi_cpa_pmu_events_attr[] = {
+> +	HISI_PMU_EVENT_ATTR(cpa_cycles,		0x00),
+> +	HISI_PMU_EVENT_ATTR(p1_wr_dat,		0x61),
+> +	HISI_PMU_EVENT_ATTR(p1_rd_dat,		0x62),
+> +	HISI_PMU_EVENT_ATTR(p0_wr_dat,		0xE1),
+> +	HISI_PMU_EVENT_ATTR(p0_rd_dat,		0xE2),
+
+would it be better to prefix them all with cpa_? That might be 
+future-proofing any event alias clashes with other PMU types
+
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group hisi_cpa_pmu_events_group = {
+> +	.name = "events",
+> +	.attrs = hisi_cpa_pmu_events_attr,
+> +};
+> +
+> +static DEVICE_ATTR(cpumask, 0444, hisi_cpumask_sysfs_show, NULL);
+> +
+> +static struct attribute *hisi_cpa_pmu_cpumask_attrs[] = {
+> +	&dev_attr_cpumask.attr,
+> +	NULL,
+> +};
+> +
+> +static const struct attribute_group hisi_cpa_pmu_cpumask_attr_group = {
+> +	.attrs = hisi_cpa_pmu_cpumask_attrs,
+> +};
+> +
+> +static struct device_attribute hisi_cpa_pmu_identifier_attr =
+> +	__ATTR(identifier, 0444, hisi_uncore_pmu_identifier_attr_show, NULL);
+> +
+> +static struct attribute *hisi_cpa_pmu_identifier_attrs[] = {
+> +	&hisi_cpa_pmu_identifier_attr.attr,
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group hisi_cpa_pmu_identifier_group = {
+> +	.attrs = hisi_cpa_pmu_identifier_attrs,
+> +};
+> +
+> +static const struct attribute_group *hisi_cpa_pmu_attr_groups[] = {
+> +	&hisi_cpa_pmu_format_group,
+> +	&hisi_cpa_pmu_events_group,
+> +	&hisi_cpa_pmu_cpumask_attr_group,
+> +	&hisi_cpa_pmu_identifier_group,
+> +	NULL,
+
+nit: no need to ',' on sentinel
+
+> +};
+> +
+> +static const struct hisi_uncore_ops hisi_uncore_cpa_pmu_ops = {
+> +	.write_evtype           = hisi_cpa_pmu_write_evtype,
+> +	.get_event_idx		= hisi_uncore_pmu_get_event_idx,
+> +	.start_counters		= hisi_cpa_pmu_start_counters,
+> +	.stop_counters		= hisi_cpa_pmu_stop_counters,
+> +	.enable_counter		= hisi_cpa_pmu_enable_counter,
+> +	.disable_counter	= hisi_cpa_pmu_disable_counter,
+> +	.enable_counter_int	= hisi_cpa_pmu_enable_counter_int,
+> +	.disable_counter_int	= hisi_cpa_pmu_disable_counter_int,
+> +	.write_counter		= hisi_cpa_pmu_write_counter,
+> +	.read_counter		= hisi_cpa_pmu_read_counter,
+> +	.get_int_status		= hisi_cpa_pmu_get_int_status,
+> +	.clear_int_status	= hisi_cpa_pmu_clear_int_status,
+> +};
+> +
+> +static int hisi_cpa_pmu_dev_probe(struct platform_device *pdev,
+> +				  struct hisi_pmu *cpa_pmu)
+> +{
+> +	int ret;
+> +
+> +	ret = hisi_cpa_pmu_init_data(pdev, cpa_pmu);
+
+nit: I don't see the need for this separate function. One issue is that 
+we need to study the code there to see if we're missing some tidy-up if 
+the hisi_uncore_pmu_init_irq call fails, below.
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = hisi_uncore_pmu_init_irq(cpa_pmu, pdev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	cpa_pmu->counter_bits = CPA_COUNTER_BITS;
+> +	cpa_pmu->check_event = CPA_NR_EVENTS;
+> +	cpa_pmu->pmu_events.attr_groups = hisi_cpa_pmu_attr_groups;
+> +	cpa_pmu->ops = &hisi_uncore_cpa_pmu_ops;
+> +	cpa_pmu->num_counters = CPA_NR_COUNTERS;
+> +	cpa_pmu->dev = &pdev->dev;
+> +	cpa_pmu->on_cpu = -1;
+> +
+> +	return 0;
+> +}
+> +
+> +static int hisi_cpa_pmu_probe(struct platform_device *pdev)
+> +{
+> +	struct hisi_pmu *cpa_pmu;
+> +	char *name;
+> +	int ret;
+> +
+> +	cpa_pmu = devm_kzalloc(&pdev->dev, sizeof(*cpa_pmu), GFP_KERNEL);
+> +	if (!cpa_pmu)
+> +		return -ENOMEM;
+> +
+> +	platform_set_drvdata(pdev, cpa_pmu);
+
+nit: normally we do this at the end, right?
+
+> +
+> +	ret = hisi_cpa_pmu_dev_probe(pdev, cpa_pmu);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = cpuhp_state_add_instance(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
+> +				       &cpa_pmu->node);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Error %d registering hotplug\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sicl%d_cpa%u", cpa_pmu->sccl_id - 1,
+
+why subtract 1? Looks dangerous if sccl_id == 0
+
+> +			      cpa_pmu->index_id);
+> +
+> +	cpa_pmu->pmu = (struct pmu) {
+> +		.name		= name,
+> +		.module		= THIS_MODULE,
+> +		.task_ctx_nr	= perf_invalid_context,
+> +		.event_init	= hisi_uncore_pmu_event_init,
+> +		.pmu_enable	= hisi_uncore_pmu_enable,
+> +		.pmu_disable	= hisi_uncore_pmu_disable,
+> +		.add		= hisi_uncore_pmu_add,
+> +		.del		= hisi_uncore_pmu_del,
+> +		.start		= hisi_uncore_pmu_start,
+> +		.stop		= hisi_uncore_pmu_stop,
+> +		.read		= hisi_uncore_pmu_read,
+> +		.attr_groups	= cpa_pmu->pmu_events.attr_groups,
+> +		.capabilities	= PERF_PMU_CAP_NO_EXCLUDE,
+> +	};
+> +
+> +	ret = perf_pmu_register(&cpa_pmu->pmu, name, -1);
+> +	if (ret) {
+> +		dev_err(cpa_pmu->dev, "CPA PMU register failed\n");
+> +		cpuhp_state_remove_instance_nocalls(
+> +			CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE, &cpa_pmu->node);
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int hisi_cpa_pmu_remove(struct platform_device *pdev)
+> +{
+> +	struct hisi_pmu *cpa_pmu = platform_get_drvdata(pdev);
+> +
+> +	perf_pmu_unregister(&cpa_pmu->pmu);
+> +	cpuhp_state_remove_instance_nocalls(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
+> +					    &cpa_pmu->node);
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver hisi_cpa_pmu_driver = {
+> +	.driver = {
+> +		.name = "hisi_cpa_pmu",
+> +		.acpi_match_table = ACPI_PTR(hisi_cpa_pmu_acpi_match),
+> +		.suppress_bind_attrs = true,
+> +	},
+> +	.probe = hisi_cpa_pmu_probe,
+> +	.remove = hisi_cpa_pmu_remove,
+> +};
+> +
+> +static int __init hisi_cpa_pmu_module_init(void)
+> +{
+> +	int ret;
+> +
+> +	ret = cpuhp_setup_state_multi(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
+> +				      "AP_PERF_ARM_HISI_CPA_ONLINE",
+> +				      hisi_uncore_pmu_online_cpu,
+> +				      hisi_uncore_pmu_offline_cpu);
+> +	if (ret) {
+> +		pr_err("CPA PMU: setup hotplug: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = platform_driver_register(&hisi_cpa_pmu_driver);
+> +	if (ret)
+> +		cpuhp_remove_multi_state(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE);
+
+I am not being totally serious, but this pattern of registering a CPU 
+hotplug handler and then a driver is so common that we could nearly add 
+a wrapper for it.
+
+> +
+> +	return ret;
+> +}
+> +module_init(hisi_cpa_pmu_module_init);
+> +
+> +static void __exit hisi_cpa_pmu_module_exit(void)
+> +{
+> +	platform_driver_unregister(&hisi_cpa_pmu_driver);
+> +	cpuhp_remove_multi_state(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE);
+> +}
+> +module_exit(hisi_cpa_pmu_module_exit);
+> +
+> +MODULE_DESCRIPTION("HiSilicon SoC CPA uncore PMU driver");
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_AUTHOR("Qi Liu <liuqi115@huawei.com>");
+> diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+> index 411a428ace4d..d55063719904 100644
+> --- a/include/linux/cpuhotplug.h
+> +++ b/include/linux/cpuhotplug.h
+> @@ -220,6 +220,7 @@ enum cpuhp_state {
+>   	CPUHP_AP_PERF_S390_SF_ONLINE,
+>   	CPUHP_AP_PERF_ARM_CCI_ONLINE,
+>   	CPUHP_AP_PERF_ARM_CCN_ONLINE,
+> +	CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
+>   	CPUHP_AP_PERF_ARM_HISI_DDRC_ONLINE,
+>   	CPUHP_AP_PERF_ARM_HISI_HHA_ONLINE,
+>   	CPUHP_AP_PERF_ARM_HISI_L3_ONLINE,
+

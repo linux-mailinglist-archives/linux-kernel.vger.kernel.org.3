@@ -2,160 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 751294B64DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 08:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 042D54B6508
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:03:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234954AbiBOH6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 02:58:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48722 "EHLO
+        id S231439AbiBOICX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 03:02:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiBOH6U (ORCPT
+        with ESMTP id S235055AbiBOICJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 02:58:20 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE50913D30;
-        Mon, 14 Feb 2022 23:58:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644911890; x=1676447890;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=J2aPIxHkPt7CQ39Q+4Y+kmdrTWxBvdaiEZS2aBpap2A=;
-  b=e/vuIb1tdkKMEOdMSdPUsncrGuY3pungxMsNc/ECSoZcHrWZGefPvfe6
-   Zs96DpE68GYg90P/S1b3DzW4uyBlTyDxkUNRMrAjOU95SDYaHLYcPOfF/
-   Pst57rCEjB9CGF42f7dazjLmjTq1g72XnEe2QxjnOAaDjGJQdRvJdwOKU
-   EONX/ZwvwjPsbno9UhgYYeo7RYb6ctXzoVdT53f6mXCi78XpHdSQO1D0Z
-   ffnqWS1ldEd6BLt46YoDLe+1ZR/XqfttijaR8JIohSZRlAjPE4pS2nKOJ
-   mX30hQFq3nSZe3iZw5t+HVdnKG+IhQKkXV60Y8VzwVnywjqf/wd6VHKHe
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="233820899"
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="233820899"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 23:58:10 -0800
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="496867207"
-Received: from twinkler-lnx.jer.intel.com ([10.12.91.43])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 23:58:08 -0800
-From:   Tomas Winkler <tomas.winkler@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Tomas Winkler <tomas.winkler@intel.com>
-Subject: [char-misc 1/4] mei: me: disable driver on the ign firmware
-Date:   Tue, 15 Feb 2022 09:57:45 +0200
-Message-Id: <20220215075748.264195-1-tomas.winkler@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 15 Feb 2022 03:02:09 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A611FA44;
+        Tue, 15 Feb 2022 00:02:00 -0800 (PST)
+X-UUID: b0463c27e77e42469f67d14d3b21efd3-20220215
+X-UUID: b0463c27e77e42469f67d14d3b21efd3-20220215
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 620332594; Tue, 15 Feb 2022 16:01:53 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 15 Feb 2022 16:01:51 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 15 Feb 2022 16:01:51 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <chunkuang.hu@kernel.org>, <matthias.bgg@gmail.com>,
+        <robh+dt@kernel.org>
+CC:     <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <jassisinghbrar@gmail.com>, <fparent@baylibre.com>,
+        <yongqiang.niu@mediatek.com>, <hsinyi@chromium.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [v2,1/6] dt-bindings: arm: mediatek: mmsys: add support for MT8186
+Date:   Tue, 15 Feb 2022 15:59:48 +0800
+Message-ID: <20220215075953.3310-2-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220215075953.3310-1-rex-bc.chen@mediatek.com>
+References: <20220215075953.3310-1-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Usyskin <alexander.usyskin@intel.com>
+Add "mediatek,mt8186-mmsys" to binding document.
 
-Add a quirk to disable MEI interface on Intel PCH Ignition (IGN)
-as the IGN firmware doesn't support the protocol.
-
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
-Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 ---
- drivers/misc/mei/hw-me-regs.h |  1 +
- drivers/misc/mei/hw-me.c      | 23 ++++++++++++-----------
- 2 files changed, 13 insertions(+), 11 deletions(-)
+ .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml         | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/misc/mei/hw-me-regs.h b/drivers/misc/mei/hw-me-regs.h
-index 67bb6a25fd0a..888c27bc3f1a 100644
---- a/drivers/misc/mei/hw-me-regs.h
-+++ b/drivers/misc/mei/hw-me-regs.h
-@@ -120,6 +120,7 @@
- #define PCI_CFG_HFS_2         0x48
- #define PCI_CFG_HFS_3         0x60
- #  define PCI_CFG_HFS_3_FW_SKU_MSK   0x00000070
-+#  define PCI_CFG_HFS_3_FW_SKU_IGN   0x00000000
- #  define PCI_CFG_HFS_3_FW_SKU_SPS   0x00000060
- #define PCI_CFG_HFS_4         0x64
- #define PCI_CFG_HFS_5         0x68
-diff --git a/drivers/misc/mei/hw-me.c b/drivers/misc/mei/hw-me.c
-index d3a6c0728645..fbc4c9581864 100644
---- a/drivers/misc/mei/hw-me.c
-+++ b/drivers/misc/mei/hw-me.c
-@@ -1405,16 +1405,16 @@ static bool mei_me_fw_type_sps_4(const struct pci_dev *pdev)
- 	.quirk_probe = mei_me_fw_type_sps_4
- 
- /**
-- * mei_me_fw_type_sps() - check for sps sku
-+ * mei_me_fw_type_sps_ign() - check for sps or ign sku
-  *
-- * Read ME FW Status register to check for SPS Firmware.
-- * The SPS FW is only signaled in pci function 0
-+ * Read ME FW Status register to check for SPS or IGN Firmware.
-+ * The SPS/IGN FW is only signaled in pci function 0
-  *
-  * @pdev: pci device
-  *
-- * Return: true in case of SPS firmware
-+ * Return: true in case of SPS/IGN firmware
-  */
--static bool mei_me_fw_type_sps(const struct pci_dev *pdev)
-+static bool mei_me_fw_type_sps_ign(const struct pci_dev *pdev)
- {
- 	u32 reg;
- 	u32 fw_type;
-@@ -1427,14 +1427,15 @@ static bool mei_me_fw_type_sps(const struct pci_dev *pdev)
- 
- 	dev_dbg(&pdev->dev, "fw type is %d\n", fw_type);
- 
--	return fw_type == PCI_CFG_HFS_3_FW_SKU_SPS;
-+	return fw_type == PCI_CFG_HFS_3_FW_SKU_IGN ||
-+	       fw_type == PCI_CFG_HFS_3_FW_SKU_SPS;
- }
- 
- #define MEI_CFG_KIND_ITOUCH                     \
- 	.kind = "itouch"
- 
--#define MEI_CFG_FW_SPS                          \
--	.quirk_probe = mei_me_fw_type_sps
-+#define MEI_CFG_FW_SPS_IGN                      \
-+	.quirk_probe = mei_me_fw_type_sps_ign
- 
- #define MEI_CFG_FW_VER_SUPP                     \
- 	.fw_ver_supported = 1
-@@ -1535,7 +1536,7 @@ static const struct mei_cfg mei_me_pch12_sps_cfg = {
- 	MEI_CFG_PCH8_HFS,
- 	MEI_CFG_FW_VER_SUPP,
- 	MEI_CFG_DMA_128,
--	MEI_CFG_FW_SPS,
-+	MEI_CFG_FW_SPS_IGN,
- };
- 
- /* Cannon Lake itouch with quirk for SPS 5.0 and newer Firmware exclusion
-@@ -1545,7 +1546,7 @@ static const struct mei_cfg mei_me_pch12_itouch_sps_cfg = {
- 	MEI_CFG_KIND_ITOUCH,
- 	MEI_CFG_PCH8_HFS,
- 	MEI_CFG_FW_VER_SUPP,
--	MEI_CFG_FW_SPS,
-+	MEI_CFG_FW_SPS_IGN,
- };
- 
- /* Tiger Lake and newer devices */
-@@ -1562,7 +1563,7 @@ static const struct mei_cfg mei_me_pch15_sps_cfg = {
- 	MEI_CFG_FW_VER_SUPP,
- 	MEI_CFG_DMA_128,
- 	MEI_CFG_TRC,
--	MEI_CFG_FW_SPS,
-+	MEI_CFG_FW_SPS_IGN,
- };
- 
- /*
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+index 763c62323a74..b31d90dc9eb4 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+@@ -29,6 +29,7 @@ properties:
+               - mediatek,mt8167-mmsys
+               - mediatek,mt8173-mmsys
+               - mediatek,mt8183-mmsys
++              - mediatek,mt8186-mmsys
+               - mediatek,mt8192-mmsys
+               - mediatek,mt8365-mmsys
+           - const: syscon
 -- 
-2.34.1
+2.18.0
 

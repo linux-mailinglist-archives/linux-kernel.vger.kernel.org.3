@@ -2,191 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A22F54B727A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 138474B719A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:40:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239774AbiBOPZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:25:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42092 "EHLO
+        id S239732AbiBOP1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:27:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236753AbiBOPZy (ORCPT
+        with ESMTP id S239141AbiBOP1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:25:54 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E57B8E19B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:25:44 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id 124so28961401ybn.11
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:25:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=857+qV47ddm8WE8KTWXLHPQ7djLUydmVO+RXbwgQrfk=;
-        b=D/mNPmTVJktt/9sUx/SBEKcVTfsa+TjCn2lpj52UUTHad0PYCP5Y5GRCI5TsYp/Qb4
-         +3GRI9/4MzexhaYzhS1sAqdgGVT0f+0MRLF/NNyIfoc/F4Gny6uGGwGZX5yY/oC69zyU
-         q7sKT2+fhC81GUp9Tt55QBzS+BOkBsnQqsHYKpOfiPoQZ+Obe1Xgjr8O8vtBz+eAaMa4
-         y3o7yKo5gCKZxcglyuEHZlXGeK4UGpDYUtiyhWlGWOVamG4O4oaeCRkDm2Zcpr2kGGK7
-         l1pP12h2lndBiXfbkyBb2/wULR3aPBHDIuFoWjZGf3a7HZM2PbN3evJ5bxgQTp+mMTYf
-         QD7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=857+qV47ddm8WE8KTWXLHPQ7djLUydmVO+RXbwgQrfk=;
-        b=AG21oKsVkntItY9jFs3+cTVw8cgvf4pMzI48jMG6venYrj7S6f4ACu/YK+3g967KDY
-         9ai/obyhOCWM5ZU1uXmnnHS6M4vPg5Q9Z/ZydENZzeADx6KJwnf4XZ/Mbju/GX82u2L4
-         COCwdpyEOQUfjG0QoJACUcmVQs7rXte2MxvUvo5WLOCQLMMrlYYSBMrQw4DS3fM0TU1E
-         qtMRdjmULC9Yzc1UOm9F5vP0lIgJq93fLmuCaqSR1THqZV3nh5j6HU9AzhUN0zx9Boce
-         xdsQ+CSYXVw+R3JHdl8mHhwWyse37KDfwD+laQkaG7sEF3uYHkhAOZi49uowLh8zZMSV
-         6Qsw==
-X-Gm-Message-State: AOAM5313hEGlOPmlovnj4i6pzKRMocf9C9Shm4ojiPsUpVia3w2PL5Uc
-        5qR7dbYNrcH7mPn82Rx3+vwB03W5McxZIs9glCI2hQ==
-X-Google-Smtp-Source: ABdhPJxk7mrbL3RMym2ruQfovDQ1leVFG4JQH55yguTM8qjJSu1NPA/AjTgXDZUUTMFqhfKeqlX581mdgioFNv/nHJw=
-X-Received: by 2002:a81:ff05:: with SMTP id k5mr4176036ywn.474.1644938742804;
- Tue, 15 Feb 2022 07:25:42 -0800 (PST)
+        Tue, 15 Feb 2022 10:27:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075A09EBAF;
+        Tue, 15 Feb 2022 07:27:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97808615CE;
+        Tue, 15 Feb 2022 15:27:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2769C340EB;
+        Tue, 15 Feb 2022 15:26:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644938821;
+        bh=KRBk8usKmGeZ1GUK1kBqF1ohJl+84gnwg7OyWcxSc50=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jxQWhYtZGugFvBqt4KDyTlqf+ukRYJwSHrz+LGmlruBdfKdKXdtam6VfXrr5+Bb4K
+         w02ZXVEkr+cdqjwTyIzpyCU7mv93AG4WlUAy2Xlv9N5i/QjrMXX9t42Lk2EktdEVJf
+         eWKznf3Bhx+c/qkP2c9yxVVDdHB3N5U2gU16voQ9xIOA0+RBO643xfhOXfcsPe6oCN
+         FIkQC+nl5mmUhBTDvNXE7pIt+Wgpo566dRlnvO9YAojvk4ZD2VcPxYL2qvIOFbL6hl
+         YnWO0rxxH08pZnH18Kwgto7uxNaoNNGTe8Eu5JPPQedHg8+07zuTfoJy1kLNdiPtBy
+         BR/UxLJipkU+g==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Wan Jiabing <wanjiabing@vivo.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Sasha Levin <sashal@kernel.org>, bcousson@baylibre.com,
+        paul@pwsan.com, linux@armlinux.org.uk, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.16 01/34] ARM: OMAP2+: hwmod: Add of_node_put() before break
+Date:   Tue, 15 Feb 2022 10:26:24 -0500
+Message-Id: <20220215152657.580200-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220215103639.11739-1-kerneljasonxing@gmail.com>
-In-Reply-To: <20220215103639.11739-1-kerneljasonxing@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 15 Feb 2022 07:25:31 -0800
-Message-ID: <CANn89iL8vOUOH9bZaiA-cKcms+PotuKCxv7LpVx3RF0dDDSnmg@mail.gmail.com>
-Subject: Re: [PATCH] net: do not set SOCK_RCVBUF_LOCK if sk_rcvbuf isn't reduced
-To:     Jason Xing <kerneljasonxing@gmail.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Wei Wang <weiwan@google.com>,
-        Alexander Aring <aahringo@redhat.com>,
-        Yangbo Lu <yangbo.lu@nxp.com>, Florian Westphal <fw@strlen.de>,
-        Tonghao Zhang <xiangxia.m.yue@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Jason Xing <xingwanli@kuaishou.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 2:37 AM <kerneljasonxing@gmail.com> wrote:
->
-> From: Jason Xing <xingwanli@kuaishou.com>
->
-> Normally, user doesn't care the logic behind the kernel if they're
-> trying to set receive buffer via setsockopt. However, if the new value
-> of the receive buffer is not smaller than the initial value which is
-> sysctl_tcp_rmem[1] implemented in tcp_rcv_space_adjust(), the server's
-> wscale will shrink and then lead to the bad bandwidth. I think it is
-> not appropriate.
+From: Wan Jiabing <wanjiabing@vivo.com>
 
-Then do not use SO_RCVBUF ?
+[ Upstream commit 80c469a0a03763f814715f3d12b6f3964c7423e8 ]
 
-It is working as intended really.
+Fix following coccicheck warning:
+./arch/arm/mach-omap2/omap_hwmod.c:753:1-23: WARNING: Function
+for_each_matching_node should have of_node_put() before break
 
->
-> Here are some numbers:
-> $ sysctl -a | grep rmem
-> net.core.rmem_default = 212992
-> net.core.rmem_max = 40880000
-> net.ipv4.tcp_rmem = 4096        425984  40880000
->
-> Case 1
-> on the server side
->     # iperf -s -p 5201
-> on the client side
->     # iperf -c [client ip] -p 5201
-> It turns out that the bandwidth is 9.34 Gbits/sec while the wscale of
-> server side is 10. It's good.
->
-> Case 2
-> on the server side
->     #iperf -s -p 5201 -w 425984
-> on the client side
->     # iperf -c [client ip] -p 5201
-> It turns out that the bandwidth is reduced to 2.73 Gbits/sec while the
-> wcale is 2, even though the receive buffer is not changed at all at the
-> very beginning.
+Early exits from for_each_matching_node should decrement the
+node reference counter.
 
-Great, you discovered auto tuning is working as intended.
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/arm/mach-omap2/omap_hwmod.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
->
-> Therefore, I added one condition where only user is trying to set a
-> smaller rx buffer. After this patch is applied, the bandwidth of case 2
-> is recovered to 9.34 Gbits/sec.
->
-> Fixes: e88c64f0a425 ("tcp: allow effective reduction of TCP's rcv-buffer via setsockopt")
+diff --git a/arch/arm/mach-omap2/omap_hwmod.c b/arch/arm/mach-omap2/omap_hwmod.c
+index ccb0e3732c0dc..31d1a21f60416 100644
+--- a/arch/arm/mach-omap2/omap_hwmod.c
++++ b/arch/arm/mach-omap2/omap_hwmod.c
+@@ -752,8 +752,10 @@ static int __init _init_clkctrl_providers(void)
+ 
+ 	for_each_matching_node(np, ti_clkctrl_match_table) {
+ 		ret = _setup_clkctrl_provider(np);
+-		if (ret)
++		if (ret) {
++			of_node_put(np);
+ 			break;
++		}
+ 	}
+ 
+ 	return ret;
+-- 
+2.34.1
 
-This commit has nothing to do with your patch or feature.
-
-> Signed-off-by: Jason Xing <xingwanli@kuaishou.com>
-> ---
->  net/core/filter.c | 7 ++++---
->  net/core/sock.c   | 8 +++++---
->  2 files changed, 9 insertions(+), 6 deletions(-)
->
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 4603b7c..99f5d9c 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -4795,9 +4795,10 @@ static int _bpf_setsockopt(struct sock *sk, int level, int optname,
->                 case SO_RCVBUF:
->                         val = min_t(u32, val, sysctl_rmem_max);
->                         val = min_t(int, val, INT_MAX / 2);
-> -                       sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
-> -                       WRITE_ONCE(sk->sk_rcvbuf,
-> -                                  max_t(int, val * 2, SOCK_MIN_RCVBUF));
-> +                       val = max_t(int, val * 2, SOCK_MIN_RCVBUF);
-> +                       if (val < sock_net(sk)->ipv4.sysctl_tcp_rmem[1])
-> +                               sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
-> +                       WRITE_ONCE(sk->sk_rcvbuf, val);
->                         break;
->                 case SO_SNDBUF:
->                         val = min_t(u32, val, sysctl_wmem_max);
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index 4ff806d..e5e9cb0 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-> @@ -923,8 +923,6 @@ static void __sock_set_rcvbuf(struct sock *sk, int val)
->          * as a negative value.
->          */
->         val = min_t(int, val, INT_MAX / 2);
-> -       sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
-> -
->         /* We double it on the way in to account for "struct sk_buff" etc.
->          * overhead.   Applications assume that the SO_RCVBUF setting they make
->          * will allow that much actual data to be received on that socket.
-> @@ -935,7 +933,11 @@ static void __sock_set_rcvbuf(struct sock *sk, int val)
->          * And after considering the possible alternatives, returning the value
->          * we actually used in getsockopt is the most desirable behavior.
->          */
-> -       WRITE_ONCE(sk->sk_rcvbuf, max_t(int, val * 2, SOCK_MIN_RCVBUF));
-> +       val = max_t(int, val * 2, SOCK_MIN_RCVBUF);
-> +       if (val < sock_net(sk)->ipv4.sysctl_tcp_rmem[1])
-> +               sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
-> +
-> +       WRITE_ONCE(sk->sk_rcvbuf, val);
->  }
->
->  void sock_set_rcvbuf(struct sock *sk, int val)
-
-You are breaking applications that want to set sk->sk_rcvbuf  to a fixed value,
-to control memory usage on millions of active sockets in a host.
-
-I think that you want new functionality, with new SO_ socket options,
-targeting net-next tree (No spurious FIxes: tag)
-
-For instance letting an application set  or unset  SOCK_RCVBUF_LOCK
-would be more useful, and would not break applications.

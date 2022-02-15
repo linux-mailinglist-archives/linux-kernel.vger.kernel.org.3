@@ -2,64 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948474B6C7F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5AAB4B6C79
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237981AbiBOMoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 07:44:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56370 "EHLO
+        id S238015AbiBOMoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 07:44:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237944AbiBOMoA (ORCPT
+        with ESMTP id S237936AbiBOMn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 07:44:00 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADC7193E8;
-        Tue, 15 Feb 2022 04:43:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644929005; x=1676465005;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yvmj8JjhwTJn4uYxWDD3+eNoUbMnV/p5cwCro3/3IKs=;
-  b=QZcMMbLaaQOIVl++D8aCBNz3vrmhuX1a/UypNp5yXlxu4p2z50IA1rBA
-   zmYtolLP8L88TdtmwoC90Zsqo9m5BDhmdYuKytwj1HarSxLJcXjCfjMVc
-   IUc40H4vnMODEzmZqLeYSjoHwKXnXQw4QlgR7SCs6ev+IFL7YpxGWuk7T
-   tfBsVhqLaFWDdORTmLhFRMs+4ova+GYln0JVeX+y/M+DO8j9tPYEy5TOa
-   +I4FRT1fkVvSfz22+VSP5AvlvqqqJx0CgLWkyONGjeVK9+6cBcX0qm7JY
-   lyKH+HyEdGAICIoo0OqcOmoq4k1i+enNYPr3AvGRILANhMBgUHGTq1s8W
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="230306049"
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="230306049"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 04:43:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="681015719"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 15 Feb 2022 04:43:18 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 15 Feb 2022 14:43:17 +0200
-Date:   Tue, 15 Feb 2022 14:43:17 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Xin Ji <xji@analogixsemi.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        bliang@analogixsemi.com, qwen@analogixsemi.com,
-        jli@analogixsemi.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] usb: typec: anx7411: Add Analogix PD ANX7411
- support
-Message-ID: <Yguf5bwRkqolW0+/@kuha.fi.intel.com>
-References: <20220208091621.3680427-1-xji@analogixsemi.com>
- <20220208091621.3680427-2-xji@analogixsemi.com>
- <YgPCLopskwyQ6F4K@kuha.fi.intel.com>
- <20220215054300.GA3752727@anxtwsw-Precision-3640-Tower>
+        Tue, 15 Feb 2022 07:43:29 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFA71111BC
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:42:40 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id u6so36618664lfc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:42:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bZ/hPvhB6l/GT98IyjxTlesdblulBOqx0t8aw3A0jHw=;
+        b=uJNVxw9rQQ9Ric3MtAGmVVmQ9e9tx8jQSgqxtiLH6Tj9yRS0M5phMpCdbQO2CuS6Lo
+         2HGd2G5RWhNEhynYJ75YmyD3ubNHBr+EmixSyhOVAAc1UFQlJYdRqEZ9tyVhySlGZVE7
+         dAd0xOczoO+SD/q/GWS5j625mh91rbBwm1JR6GZHaUA/Ox9usN2kusbueTAnKHUJ6kjf
+         fk7v8g69zom2gOxNIPReCCZP0/wysVgPU1aXmkvq6tMliKexaCj588lYYxM2fkBbdADt
+         T+UPbUVFQeVZzDNCmcWzvU9c5LGMxOlCAWo3RDuQeVVxuK30MNLWblvyBbxH/cfOpYTh
+         OVaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bZ/hPvhB6l/GT98IyjxTlesdblulBOqx0t8aw3A0jHw=;
+        b=RuB3OyvzHXxjFsIvrIz3yinlnUW8iyqCwwX3Epuj45LXQWmVhFB6QuyhyBZChhrujM
+         kzJGd5XDi+nPH583AqCf17Lw8TkA66rUw0plYzVCRdRc+ZnM94LSENd4QnK9OdtnPm5/
+         Xd+/wO5khD7WWd4jKL979b5CwjrPEEPL/+iyK2x9ylK/bMqDRv0OK4bfmjfXsfWY1gA2
+         KjqrLrKtSCKA1e7KeSZkyNtkDlnX2aWHYChklaowNhNw5hkoPT9Ybjl2zULqDgoMo4yi
+         0q+2UPCA1uGBMoVxsbWX5DzdZ8BDSfvn7MYe3M0QCNO2ry2bbEvuuHD6Uc7K82pbe6vT
+         2UBw==
+X-Gm-Message-State: AOAM531vodVPjjLBDO4N9osuHGVN794HbcJNUy7Puo5MNdLVdzswq6Gz
+        E3wcTwEDKdsHvqS8DFZUhjHfxw==
+X-Google-Smtp-Source: ABdhPJxentoESgiyNbBHAOr5c+HaAA+la7EJnNo75HfMC7ZWYPBFxfJ60zcCmBwrME44zYZL66IF7A==
+X-Received: by 2002:a19:6549:: with SMTP id c9mr3066138lfj.150.1644928958898;
+        Tue, 15 Feb 2022 04:42:38 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id bf10sm4394566ljb.130.2022.02.15.04.42.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 04:42:37 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 6DD81103F44; Tue, 15 Feb 2022 15:43:31 +0300 (+03)
+Date:   Tue, 15 Feb 2022 15:43:31 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v10 21/45] x86/mm: Add support to validate memory when
+ changing C-bit
+Message-ID: <20220215124331.i4vgww733fv5owrx@box.shutemov.name>
+References: <20220209181039.1262882-1-brijesh.singh@amd.com>
+ <20220209181039.1262882-22-brijesh.singh@amd.com>
+ <YgZ427v95xcdOKSC@zn.tnic>
+ <0242e383-5406-7504-ff3d-cf2e8dfaf8a3@amd.com>
+ <Ygj2Wx6jtNEEmbh9@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220215054300.GA3752727@anxtwsw-Precision-3640-Tower>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <Ygj2Wx6jtNEEmbh9@zn.tnic>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,27 +101,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 01:43:00PM +0800, Xin Ji wrote:
-> On Wed, Feb 09, 2022 at 03:31:26PM +0200, Heikki Krogerus wrote:
-> > On Tue, Feb 08, 2022 at 05:16:21PM +0800, Xin Ji wrote:
-> > > Add driver for analogix ANX7411 USB Type-C DRP port controller.
+On Sun, Feb 13, 2022 at 01:15:23PM +0100, Borislav Petkov wrote:
+> On Fri, Feb 11, 2022 at 11:27:54AM -0600, Brijesh Singh wrote:
+> > > Simply have them always present. They will have !0 values on the
+> > > respective guest types and 0 otherwise. This should simplify a lot of
+> > > code and another unconditionally present u64 won't be the end of the
+> > > world.
+> > >
+> > > Any other aspect I'm missing?
 > > 
-> > We already have the driver drivers/usb/typec/tcpm/tcpci.c for port
-> > controllers.
+> > I think that's mostly about it. IIUC, the recommendation is to define a
+> > new callback in x86_platform_op. The callback will be invoked
+> > unconditionally; The default implementation for this callback is NOP;
+> > The TDX and SEV will override with the platform specific implementation.
+> > I think we may able to handle everything in one callback hook but having
+> > pre and post will be a more desirable. Here is why I am thinking so:
 > > 
-> > If you need a glue layer - if there is something specific that you
-> > need to do with ANX7411 that is not completely TCPC compliant - use
-> > drivers/usb/typec/tcpm/tcpci_*.c as examples.
-> Hi heikki, ANX7411 PD controller has 2 applications, the one has embeded
-> internal firmware, the other is not have. The currently upstream patch
-> is for the first way, driver mustn't use TCPCI framework(embeded firmware
-> will control all the TCPCI register). The second way(erased internaly
-> firmware) can work under TCPCI framework.
+> > * On SNP, the page must be invalidated before clearing the _PAGE_ENC
+> > from the page table attribute
+> > 
+> > * On SNP, the page must be validated after setting the _PAGE_ENC in the
+> > page table attribute.
+> 
+> Right, we could have a pre- and post- callback, if that would make
+> things simpler/clearer.
+> 
+> Also, in thinking further about the encryption mask, we could make it a
+> *single*, *global* variable called cc_mask which each guest type sets it
+> as it wants to.
 
-Ah, so it has a microcontroller. Fair enough. I'll take another
-look at your patch.
+I don't think it works. TDX and SME/SEV has opposite polarity of the mask.
+SME/SEV has to clear the mask to share the page. TDX has to set it.
 
-thanks,
+Making a single global mask only increases confusion.
 
 -- 
-heikki
+ Kirill A. Shutemov

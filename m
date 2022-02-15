@@ -2,66 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A034B6BF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE1C4B6BF1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:23:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232999AbiBOMWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 07:22:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60866 "EHLO
+        id S235329AbiBOMX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 07:23:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbiBOMW1 (ORCPT
+        with ESMTP id S229997AbiBOMX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 07:22:27 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3D8652D8;
-        Tue, 15 Feb 2022 04:22:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644927738; x=1676463738;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9Z5qiYvDYgVNlV1KxkkI+JpsTNmfMXnWh+xwt4Boy3U=;
-  b=K18fhYO+cO1+R1f4gdB/AxhnKjtkK43b06/+vItf5eOs7JpPkTXVcJ2e
-   iHM1kJFYe+/quot+2cHbQ+ww463J0TnEMipp7YOM5Nz6nsHJIZ+s81AXJ
-   HHLRg/v8RS/CMlteHDZ8pNaGUc8g2nIuni9NpXuc1tcEY31AMISFlg/cP
-   vFklBoGU6+B4tjJEuNMgs+PsFuoZpi9LE5fr5wIgWePozIE1Ew/rhYv0H
-   3dGqsaGvHbmAbdijmnC568gjGQqrcaQAR6Auvi7L5SV4izrEkDKw9mm9L
-   vJRTMoAreyMML98quevfyB1Q8DVngqidABpRzZXlRUf4xHTwz3/dJR5cM
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="250081081"
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="250081081"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 04:22:17 -0800
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="544277902"
-Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.249.196]) ([10.99.249.196])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 04:22:14 -0800
-Message-ID: <f6e5f716-f191-c126-cc81-cf872ad4e750@linux.intel.com>
-Date:   Tue, 15 Feb 2022 13:22:12 +0100
+        Tue, 15 Feb 2022 07:23:28 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757C965797
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:23:18 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id c4so13264984pfl.7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:23:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/vGpsroO/5ynMmmPCxpzvU3BbrtrxMXLbcoJ2oxfZUw=;
+        b=jvDpzCyNE1qA7kCpxOuQgmJ8nXakFWB+xDTaQ5qLriuUqdBIt2FlHGSYZGPR+09kpj
+         CbRwtmlK7/zrJgiQsBe9kGTUHBptLDFkmLdU87MSmoguriPt9Q4MkUwTuHJhI8LhrRdY
+         h1uqPe0AogX7f5/xorm+U+/y1rjHpmDW0RZf3h8oYTmZO4MILPdMZ1ofvZXg4QqNYMLx
+         m75GlFiQK6SeoHcvbxIniXlZ5VWGvFcy7VGvyIRXkm5le/JLwY2TvImsLGFfIKex6E5j
+         9TsSnkN7sMT9wqIkNi/0OIpkA04yOXhbfrHw88YnwXKnFfUG7gPcW13Jli1orQvey3BL
+         kL3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/vGpsroO/5ynMmmPCxpzvU3BbrtrxMXLbcoJ2oxfZUw=;
+        b=wtsPshysvQ79iWC8/nsDyetzVzmaayEqd2QWWQ9ol9S6fNEyCxXFgNeC1c3vM4kfQR
+         Ya8zi4ANEwcIygTqd5bxT01K23m/6c2MgWuz97VVxnZIX3qZPvzFQ+mGDSI74znI2/Yg
+         B7aCM7eMKGFK82zEPnVq+i6R/A5WNvxJBJTU+1CO7T03gu8XdAGufxbn/b6syeDDG7bt
+         ieSecS9adY+NufBRhW36AwAIUzxH4I4yBqOprH/qBTMQQ5rkNaVD9fAU8HRg+kFarcn0
+         1/XQu5S7Jwhm04WnCUZL1rIUX0pKqyn7HihBqZK99+KC/JlQGFHTM74c49V162UWM+RM
+         hgKQ==
+X-Gm-Message-State: AOAM530ROa1H7tH/IEHWtQ8VyEbJTqPmynUWYdAC/m9kKJ+IX2xSlXqF
+        eH7OYEhH9B1L2nryAvvBCzJQng==
+X-Google-Smtp-Source: ABdhPJzzNNNv3vukYQ33azaYf4qWPQyjIeFOE7w8XiLVxQT74HFsjInNJoyr/SE9wfwwtLgyDzl/lg==
+X-Received: by 2002:a63:87c3:: with SMTP id i186mr3310832pge.545.1644927797995;
+        Tue, 15 Feb 2022 04:23:17 -0800 (PST)
+Received: from [10.255.13.118] ([139.177.225.246])
+        by smtp.gmail.com with ESMTPSA id c3sm9459607pfd.129.2022.02.15.04.23.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 04:23:17 -0800 (PST)
+Message-ID: <86bbb33e-1e9b-70f9-237c-d0c02537380c@bytedance.com>
+Date:   Tue, 15 Feb 2022 20:23:13 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] x86: Preserve ACPI memory area during hibernation
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [Phishing Risk] [External] Re: [PATCH] sched/cpuacct: fix charge
+ percpu cpuusage
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20220121103938.2602637-1-amadeuszx.slawinski@linux.intel.com>
- <59ef4cd5-5703-2356-c893-9858985f91e0@intel.com>
-From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <59ef4cd5-5703-2356-c893-9858985f91e0@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Tejun Heo <tj@kernel.org>, Peter Zijlstra <peterz@infradead.org>
+Cc:     arbn@yandex-team.com, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, Minye Zhu <zhuminye@bytedance.com>
+References: <20220213120118.93471-1-zhouchengming@bytedance.com>
+ <YgoqPT67g2NcV/eH@hirez.programming.kicks-ass.net>
+ <YgqmE9Id35av9NZk@slm.duckdns.org>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <YgqmE9Id35av9NZk@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,57 +76,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/2022 8:34 PM, Rafael J. Wysocki wrote:
-> On 1/21/2022 11:39 AM, Amadeusz Sławiński wrote:
->> When overriding NHLT ACPI-table tests show that on some platforms
->> there is problem that NHLT contains garbage after hibernation/resume
->> cycle.
->>
->> Problem stems from the fact that ACPI override performs early memory
->> allocation using memblock_phys_alloc_range() in
->> memblock_phys_alloc_range(). This memory block is later being marked as
->> ACPI memory block in arch_reserve_mem_area(). Later when memory areas
->> are considered for hibernation it is being marked as nosave in
->> e820__register_nosave_regions().
->>
->> Fix this by skipping ACPI memory area altogether when considering areas
->> to mark as nosave.
+On 2022/2/15 2:57 上午, Tejun Heo wrote:
+> On Mon, Feb 14, 2022 at 11:09:01AM +0100, Peter Zijlstra wrote:
+>> --- a/kernel/sched/cpuacct.c
+>> +++ b/kernel/sched/cpuacct.c
+>> @@ -334,15 +334,13 @@ static struct cftype files[] = {
+>>   */
+>>  void cpuacct_charge(struct task_struct *tsk, u64 cputime)
+>>  {
+>> -	struct cpuacct *ca;
+>>  	unsigned int cpu = task_cpu(tsk);
+>> +	struct cpuacct *ca;
+>>  
+>> -	rcu_read_lock();
+>> +	lockdep_assert_rq_held(cpu_rq(cpu));
+>>  
+>>  	for (ca = task_ca(tsk); ca; ca = parent_ca(ca))
+>>  		*per_cpu_ptr(ca->cpuusage, cpu) += cputime;
+>> -
+>> -	rcu_read_unlock();
 > 
-> This patch looks correct to me and I'm going to apply it as 5.18 
-> material unless there are any objections or concerns (in which case 
-> please let me know).
+> And probably expand the same to cgroup_account_cputime[_field]() too.
 > 
+> Thanks.
 > 
 
-Well, what do you know? I've checked with validation team to make sure 
-that it works as expected and while it causes no problem on almost all 
-platforms and fixes problem with NHLT ACPI-table override, there is this 
-one platform where it causes oops on hibernation which of course is gone 
-after reverting the patch.
+Good suggestion, will do.
 
-  ? set_direct_map_default_noflush+0x130/0x130
-  ? memory_bm_test_bit+0x29/0x60
-  saveable_page+0xce/0xf2
-  count_data_pages+0x50/0x76
-  hibernate_preallocate_memory+0x9c/0x377
-  ? __mutex_lock_slowpath+0x20/0x20
-  hibernation_snapshot+0x1cf/0x610
-  snapshot_ioctl+0x3d2/0x690
-  ? snapshot_release+0xd0/0xd0
-  ? new_sync_write+0x36b/0x390
-  __x64_sys_ioctl+0x6dc/0xe20
-  ? vfs_fileattr_set+0x520/0x520
-  ? _raw_read_unlock+0x2a/0x50
-  ? __kasan_check_read+0x11/0x20
-  ? vfs_write+0x131/0x3d0
-  ? ksys_write+0x13b/0x170
-  ? debug_smp_processor_id+0x17/0x20
-  ? fpregs_assert_state_consistent+0x5f/0x70
-  ? exit_to_user_mode_prepare+0x3e/0x170
-  do_syscall_64+0x43/0x90
-  entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Above trace points at functions using pfn, so I suspect there may be 
-need for some additional checks, but I will need to investigate.
-I guess you can skip this patch for now, until I figure what exactly is 
-going on.
+Thanks.

@@ -2,94 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51904B7B24
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 939C04B7B25
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244802AbiBOXTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 18:19:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36148 "EHLO
+        id S241539AbiBOXVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 18:21:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244794AbiBOXTT (ORCPT
+        with ESMTP id S229526AbiBOXVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 18:19:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F40FC1C9E
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:19:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BBDFF6157E
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:19:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 089C3C340F3;
-        Tue, 15 Feb 2022 23:19:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644967148;
-        bh=J5G/TINlmHc23UCskGemF0ZvApVh+Wj1ZO+IX7y1D3M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uGrdR1E/KH+AeDsVyrFHW8Lf66dTFhArd0d35Ld3UN3ACRj3SlNDq2OKDfjocxvKG
-         5sep/hL+eJr5/xwLyUYV71xQpXCAURWd4gtYKcjo75S0J6Kuz05rvfcb6r5MVtjDai
-         ejk49b09sIg+W7qRjl67rMDSm5EoZUJoTWVMkKTIKnjlu467rBYg8d64s2KHOyi7c5
-         OaK0TWhkveLDH3OIBs4sdXDgOQBXQLJAoUc3lC64r30xfDwsu7jFgTYzuBhvmuBIAP
-         MfcEeJ2NPJrxAqcKSyAETtK3EXCblaTs2sVUKHigRcfrgGOrnxBv6xvO4MuD3sytFQ
-         SKTeNGvTixWYw==
-From:   Will Deacon <will@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Laight <David.Laight@aculab.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Dennis Zhou <dennis@kernel.org>, Joe Perches <joe@perches.com>,
-        linux-kernel@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v4 00/49] bitmap: optimize bitmap_weight() usage
-Date:   Tue, 15 Feb 2022 23:18:33 +0000
-Message-Id: <164493593823.3069697.15308947342224952378.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220210224933.379149-1-yury.norov@gmail.com>
-References: <20220210224933.379149-1-yury.norov@gmail.com>
+        Tue, 15 Feb 2022 18:21:31 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC15EF94D4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:21:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zctHsFYI39kKpZ65pfZtOmz6zeTwXvzzS07zdKOR0As=; b=XRl94yyNGudaG33KxxsztMkolj
+        KUoRGCrUdxQi9s/OmlDMn77OJz7JmGQIGinlkXhDHnUD6UKq7Rk0K5skenCKjwCsMav7Fgn5rhk8N
+        2OhjaQMZlSs0HWJPKLJum0MyuveiRSFzOF4UXGW/+3z5eXSC9tWB2atNS8jehM0avk3WWv9IZ/WRd
+        q4S7IsIZK4wk/8mS0gPEtN0n+dbxHfjwFGka+ylGVxTtNP34c7Rl6Kh3IQgu+0NABC+sdGbrC/+JW
+        xT3EK69m8tSaTBAh0x/MkLmj0sGVjROHclQ0STdUNXp+/z3bEDowXnkXntdbQNsNxbkPvcoYnhVzN
+        GAjPQ9uA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nK78A-00EFfc-G7; Tue, 15 Feb 2022 23:21:10 +0000
+Date:   Tue, 15 Feb 2022 23:21:10 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Rik van Riel <riel@surriel.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 04/13] mm/munlock: rmap call mlock_vma_page()
+ munlock_vma_page()
+Message-ID: <Ygw1Zn+WUuY5WkZy@casper.infradead.org>
+References: <55a49083-37f9-3766-1de9-9feea7428ac@google.com>
+ <501673c-a5a-6c5f-ab65-38545dfb723d@google.com>
+ <YgvFMjWPITbD1o64@casper.infradead.org>
+ <3c6097a7-df8c-f39c-36e8-8b5410e76c8a@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3c6097a7-df8c-f39c-36e8-8b5410e76c8a@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Feb 2022 14:48:44 -0800, Yury Norov wrote:
-> In many cases people use bitmap_weight()-based functions to compare
-> the result against a number of expression:
+On Tue, Feb 15, 2022 at 01:38:20PM -0800, Hugh Dickins wrote:
+> On Tue, 15 Feb 2022, Matthew Wilcox wrote:
+> > On Mon, Feb 14, 2022 at 06:26:39PM -0800, Hugh Dickins wrote:
+> > > Add vma argument to mlock_vma_page() and munlock_vma_page(), make them
+> > > inline functions which check (vma->vm_flags & VM_LOCKED) before calling
+> > > mlock_page() and munlock_page() in mm/mlock.c.
+> > > 
+> > > Add bool compound to mlock_vma_page() and munlock_vma_page(): this is
+> > > because we have understandable difficulty in accounting pte maps of THPs,
+> > > and if passed a PageHead page, mlock_page() and munlock_page() cannot
+> > > tell whether it's a pmd map to be counted or a pte map to be ignored.
+> > > 
+> > [...]
+> > > 
+> > > Mlock accounting on THPs has been hard to define, differed between anon
+> > > and file, involved PageDoubleMap in some places and not others, required
+> > > clear_page_mlock() at some points.  Keep it simple now: just count the
+> > > pmds and ignore the ptes, there is no reason for ptes to undo pmd mlocks.
+> > 
+> > How would you suggest we handle the accounting for folios which are
+> > intermediate in size between PMDs and PTEs?  eg, an order-4 page?
+> > Would it make sense to increment mlock_count by HUGE_PMD_NR for
+> > each PMD mapping and by 1 for each PTE mapping?
 > 
->         if (cpumask_weight(mask) > 1)
->                 do_something();
-> 
-> This may take considerable amount of time on many-cpus machines because
-> cpumask_weight() will traverse every word of underlying cpumask
-> unconditionally.
-> 
-> [...]
+> I think you're asking the wrong question here, but perhaps you've
+> already decided there's only one satisfactory answer to the right question.
 
-Applied to will (for-next/perf), thanks!
+Or I've gravely misunderstood the situation.  Or explained my concern
+badly.  The possibilities are endless!
 
-[12/49] perf: replace bitmap_weight with bitmap_empty where appropriate
-        https://git.kernel.org/will/c/95ed57c73bbc
+My concern is that a filesystem may create an order-4 folio, an
+application mmaps the folio and then calls mlock() (either over a portion
+or the entirety of the folio).  As far as I can tell, we then do not
+move the folio onto the unevictable list because it is of order >0 and
+is only mapped by PTEs.  This presumably then has performance problems
+(or we wouldn't need to have an unevictable list in the first place).
 
-Cheers,
--- 
-Will
+> The question I thought you should be asking is about how to count them
+> in Mlocked.  That's tough; but I take it for granted that you would not
+> want per-subpage flags and counts involved (or not unless forced to do
+> so by some regression that turns out to matter).  And I think the only
+> satisfactory answer is to count the whole compound_nr() as Mlocked
+> when any part of it (a single pte, a series of ptes, a pmd) is mlocked;
+> and (try to) move folio to Unevictable whenever any part of it is mlocked.
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
+I think that makes sense.  As with so many other things, we choose to
+manage memory in >PAGE_SIZE chunks.  If you mlock() a part of a folio,
+we lock the whole folio in memory, and it all counts as being locked.

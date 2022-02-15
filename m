@@ -2,242 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2651D4B731F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE9E4B70F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:39:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241540AbiBOQ0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:26:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60738 "EHLO
+        id S241555AbiBOQ1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:27:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235027AbiBOQ0v (ORCPT
+        with ESMTP id S241546AbiBOQ1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:26:51 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB3C48E7A;
-        Tue, 15 Feb 2022 08:26:41 -0800 (PST)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21FGEGUC012232;
-        Tue, 15 Feb 2022 16:26:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=iP7A9xbr7WCdikDbTTC4JtVmLGumU2W/N4lvCKlQWyA=;
- b=rXBdw3B0xh+d0sP0mpClQhyNrR4q1YsGA5OIvMn5miEQUSqPGgtbujy61nKyOALQ1pbE
- s4bb8JC1dTHuLDm+bKnqH6iHDN51DdWiaWVI2XF5earoUhPPo6H6Jn5LmqlOpdoSKR7G
- DW1yWljJDb0+e2EwJecYCAMfm6F7e+bu1y+pvUQZE9yeTnVqOVdXyeymdWyPV12yU9Ty
- Eg3nLSMurCs7gYJigL0nS4CgchBN//v2tUwFDGEiGJyCFPcDA4VcxDbtrfb6uGgeECiy
- q7y4oKFh5pYrL8vvrzE3PmTvnx9YrGT0mm87TleglDNkvQgNNWbFA/k/HnA6RugbXqHV Ng== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8e5katqp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Feb 2022 16:26:01 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21FGERFh013678;
-        Tue, 15 Feb 2022 16:26:01 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8e5katpn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Feb 2022 16:26:00 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21FGCAAa000869;
-        Tue, 15 Feb 2022 16:25:58 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3e64h9qr7n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Feb 2022 16:25:58 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21FGPsKa46137752
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Feb 2022 16:25:54 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D72D4C046;
-        Tue, 15 Feb 2022 16:25:54 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 100F74C058;
-        Tue, 15 Feb 2022 16:25:54 +0000 (GMT)
-Received: from localhost (unknown [9.43.98.51])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 15 Feb 2022 16:25:54 +0000 (GMT)
-Date:   Tue, 15 Feb 2022 21:55:52 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v2 09/13] powerpc/ftrace: Implement
- CONFIG_DYNAMIC_FTRACE_WITH_ARGS
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Ingo Molnar <mingo@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>
-References: <cover.1640017960.git.christophe.leroy@csgroup.eu>
-        <5831f711a778fcd6eb51eb5898f1faae4378b35b.1640017960.git.christophe.leroy@csgroup.eu>
-        <1644852011.qg7ud9elo2.naveen@linux.ibm.com>
-        <1b28f52a-f8b7-6b5c-e726-feac4123517d@csgroup.eu>
-        <875ypgo0f3.fsf@mpe.ellerman.id.au>
-        <1644930705.g64na2kgvd.naveen@linux.ibm.com>
-        <6dc50f09-4d14-afa2-d2a1-34b72b880edf@csgroup.eu>
-        <5c7b5334-6071-f131-a509-9a49ca3d628c@csgroup.eu>
-In-Reply-To: <5c7b5334-6071-f131-a509-9a49ca3d628c@csgroup.eu>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1644941712.lqdstzo09z.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: QDZP46n6BggCxyXNreLRduagvaFZpVgp
-X-Proofpoint-GUID: YTMmRxt70LkYsWEOYMOjmpqtACe0q3Uu
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 15 Feb 2022 11:27:05 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEA766F95
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:26:53 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id h14-20020a17090a130e00b001b88991a305so3440687pja.3
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:26:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4AlrkeeOh0/Ufcc3UhsLjdJdRVpoM+riWwT9RuQlIRU=;
+        b=d0pWAwFclxXSjZn3YA4K8V/CwPcWGI1yTN7bKBa+B683NUF8r5WKYsm+VGWk7Vqaez
+         eTDpe4b4sWabolPl84kzQWLnIryk75cvpwhx2vHaq12wHPi7IgJ+ljgw5QChAU6b5KGs
+         MUQQtkJ/4tjH/8foiyaxX4P+jQnNGaAQ0nH+3PY2H8gezxYZRMALMexDENJVdWb+uMVo
+         c4aV+Hs0FpOVSU4MRhW+Rmo3C9OAtWlmSmAe/5zkGSHJNUI7lEIjhFjcy2ltYGPlx4Rz
+         2UFm0jzGVjjjUg9G6lONM41KO33LGQH0Mh/CJNrLs7WjgctuadQu5dImAX0RerSwTTAY
+         C2/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4AlrkeeOh0/Ufcc3UhsLjdJdRVpoM+riWwT9RuQlIRU=;
+        b=35v20skVu49urNWGENljn/vbO8Qitd3GPqnTnc5hmRToydasNO1B53Lr4a7W/bAXe/
+         jLymc3L5FTpMLEB9YWoa8nHtl9TOIfa0JNZqGgpos8aYvujR/QVRClX2cSW9HqH07+Z/
+         GQkIKZK9EQCkILwPoksNqYLTjKuxnRd5343JOr21+uRIi2Dsk7ZP4OhSUQQNMb8m0uju
+         GNMaTeXerfFmLaEr1UZXeVtapT5+E+pp9sUGiIgmBwulSF5VFyAgRvZjkr5hJJMaAiFl
+         AiBWHS+tPtQmroujpGVHz64rMkVapbNEhbNccQQsotZJxdc9BDjK176sXZRUxiYvtUvc
+         XTYw==
+X-Gm-Message-State: AOAM531S5kqNt1aDwK8awGTEL9KkHLgH1oVS6RdDMmM+2rcEObJsN0iH
+        7xA+pvSgPQIvVQ3h4vEH7WkwpcqarmSz3g==
+X-Google-Smtp-Source: ABdhPJzwgO018qz0B77mszx1CmVsyurVkt4dBBqXVTV6Jfw1+PjyE7MG5D5NZVyMRs+57WNG/ZcL2w==
+X-Received: by 2002:a17:902:ed89:: with SMTP id e9mr5235867plj.88.1644942412865;
+        Tue, 15 Feb 2022 08:26:52 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id g6sm20404223pfv.158.2022.02.15.08.26.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 08:26:52 -0800 (PST)
+Date:   Tue, 15 Feb 2022 16:26:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Wanpeng Li <kernellwp@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: Re: [PATCH] KVM: Fix lockdep false negative during host resume
+Message-ID: <YgvUSCjukIxvpDlf@google.com>
+References: <1644920142-81249-1-git-send-email-wanpengli@tencent.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-15_04,2022-02-14_04,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 phishscore=0 impostorscore=0 mlxscore=0 bulkscore=0
- adultscore=0 clxscore=1011 priorityscore=1501 suspectscore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202150095
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1644920142-81249-1-git-send-email-wanpengli@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy wrote:
-> + S390 people
->=20
-> Le 15/02/2022 =C3=A0 15:28, Christophe Leroy a =C3=A9crit=C2=A0:
->>=20
->>=20
->> Le 15/02/2022 =C3=A0 14:36, Naveen N. Rao a =C3=A9crit=C2=A0:
->>> Michael Ellerman wrote:
->>>> Christophe Leroy <christophe.leroy@csgroup.eu> writes:
->>>>> Le 14/02/2022 =C3=A0 16:25, Naveen N. Rao a =C3=A9crit=C2=A0:
->>>>>> Christophe Leroy wrote:
->>>>>>> Implement CONFIG_DYNAMIC_FTRACE_WITH_ARGS. It accelerates the call
->>>>>>> of livepatching.
->>>>>>>
->>>>>>> Also note that powerpc being the last one to convert to
->>>>>>> CONFIG_DYNAMIC_FTRACE_WITH_ARGS, it will now be possible to remove
->>>>>>> klp_arch_set_pc() on all architectures.
->>>>>>>
->>>>>>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
->>>>>>> ---
->>>>>>> =C2=A0arch/powerpc/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 1 +
->>>>>>> =C2=A0arch/powerpc/include/asm/ftrace.h=C2=A0=C2=A0=C2=A0 | 17 ++++=
-+++++++++++++
->>>>>>> =C2=A0arch/powerpc/include/asm/livepatch.h |=C2=A0 4 +---
->>>>>>> =C2=A03 files changed, 19 insertions(+), 3 deletions(-)
->>>>>>>
->>>>>>> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
->>>>>>> index cdac2115eb00..e2b1792b2aae 100644
->>>>>>> --- a/arch/powerpc/Kconfig
->>>>>>> +++ b/arch/powerpc/Kconfig
->>>>>>> @@ -210,6 +210,7 @@ config PPC
->>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_DEBUG_KMEMLEAK
->>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_DEBUG_STACKOVERFLOW
->>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_DYNAMIC_FTRACE
->>>>>>> +=C2=A0=C2=A0=C2=A0 select HAVE_DYNAMIC_FTRACE_WITH_ARGS=C2=A0=C2=
-=A0=C2=A0 if MPROFILE_KERNEL ||=20
->>>>>>> PPC32
->>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_DYNAMIC_FTRACE_WITH_REGS=C2=A0=
-=C2=A0=C2=A0 if MPROFILE_KERNEL ||=20
->>>>>>> PPC32
->>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_EBPF_JIT
->>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_EFFICIENT_UNALIGNED_ACCESS=C2=
-=A0=C2=A0=C2=A0 if=20
->>>>>>> !(CPU_LITTLE_ENDIAN && POWER7_CPU)
->>>>>>> diff --git a/arch/powerpc/include/asm/ftrace.h=20
->>>>>>> b/arch/powerpc/include/asm/ftrace.h
->>>>>>> index b3f6184f77ea..45c3d6f11daa 100644
->>>>>>> --- a/arch/powerpc/include/asm/ftrace.h
->>>>>>> +++ b/arch/powerpc/include/asm/ftrace.h
->>>>>>> @@ -22,6 +22,23 @@ static inline unsigned long=20
->>>>>>> ftrace_call_adjust(unsigned long addr)
->>>>>>> =C2=A0struct dyn_arch_ftrace {
->>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0 struct module *mod;
->>>>>>> =C2=A0};
->>>>>>> +
->>>>>>> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_ARGS
->>>>>>> +struct ftrace_regs {
->>>>>>> +=C2=A0=C2=A0=C2=A0 struct pt_regs regs;
->>>>>>> +};
->>>>>>> +
->>>>>>> +static __always_inline struct pt_regs=20
->>>>>>> *arch_ftrace_get_regs(struct ftrace_regs *fregs)
->>>>>>> +{
->>>>>>> +=C2=A0=C2=A0=C2=A0 return &fregs->regs;
->>>>>>> +}
->>>>>>
->>>>>> I think this is wrong. We need to differentiate between=20
->>>>>> ftrace_caller() and ftrace_regs_caller() here, and only return=20
->>>>>> pt_regs if coming in through ftrace_regs_caller() (i.e.,=20
->>>>>> FL_SAVE_REGS is set).
->>>>>
->>>>> Not sure I follow you.
->>>>>
->>>>> This is based on 5740a7c71ab6 ("s390/ftrace: add=20
->>>>> HAVE_DYNAMIC_FTRACE_WITH_ARGS support")
->>>>>
->>>>> It's all the point of HAVE_DYNAMIC_FTRACE_WITH_ARGS, have the regs=20
->>>>> also with ftrace_caller().
->>>>>
->>>>> Sure you only have the params, but that's the same on s390, so what=20
->>>>> did I miss ?
+On Tue, Feb 15, 2022, Wanpeng Li wrote:
+> From: Wanpeng Li <wanpengli@tencent.com>
+> 
+> I saw the below splatting after the host suspended and resumed.
+> 
+>    WARNING: CPU: 0 PID: 2943 at kvm/arch/x86/kvm/../../../virt/kvm/kvm_main.c:5531 kvm_resume+0x2c/0x30 [kvm]
+>    CPU: 0 PID: 2943 Comm: step_after_susp Tainted: G        W IOE     5.17.0-rc3+ #4
+>    RIP: 0010:kvm_resume+0x2c/0x30 [kvm]
+>    Call Trace:
+>     <TASK>
+>     syscore_resume+0x90/0x340
+>     suspend_devices_and_enter+0xaee/0xe90
+>     pm_suspend.cold+0x36b/0x3c2
+>     state_store+0x82/0xf0
+>     kernfs_fop_write_iter+0x1b6/0x260
+>     new_sync_write+0x258/0x370
+>     vfs_write+0x33f/0x510
+>     ksys_write+0xc9/0x160
+>     do_syscall_64+0x3b/0xc0
+>     entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> lockdep_is_held() can return -1 when lockdep is disabled which triggers
+> this warning. Let's use lockdep_assert_not_held() which can detect 
+> incorrect calls while holding a lock and it also avoids false negatives
+> when lockdep is disabled.
+> 
 
-Steven has explained the rationale for this in his other response:
-https://lore.kernel.org/all/20220215093849.556d5444@gandalf.local.home/
+Fixes: 2eb06c306a57 ("KVM: Fix spinlock taken warning during host resume")
 
->>>
->>> It looks like s390 is special since it apparently saves all registers=20
->>> even for ftrace_caller:=20
->>> https://lore.kernel.org/all/YbipdU5X4HNDWIni@osiris/
->>=20
->> It is not what I understand from their code, see=20
->> https://elixir.bootlin.com/linux/v5.17-rc3/source/arch/s390/kernel/mcoun=
-t.S#L37=20
->>=20
->>=20
->> They have a common macro called with argument 'allregs' which is set to=
-=20
->> 0 for ftrace_caller() and 1 for ftrace_regs_caller().
->> When allregs =3D=3D 1, the macro seems to save more.
->>=20
->> But ok, I can do like x86, but I need a trick to know whether=20
->> FL_SAVE_REGS is set or not, like they do with fregs->regs.cs
->> Any idea what the condition can be for powerpc ?
+> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+> ---
+>  virt/kvm/kvm_main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 83c57bcc6eb6..3f861f33bfe0 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -5528,7 +5528,7 @@ static void kvm_resume(void)
+>  {
+>  	if (kvm_usage_count) {
+>  #ifdef CONFIG_LOCKDEP
 
-We'll need to explicitly zero-out something in pt_regs in=20
-ftrace_caller(). We can probably use regs->msr since we don't expect it=20
-to be zero when saved from ftrace_regs_caller().
+The #ifdef can be dropped, it was added only to omit the WARN_ON.
 
->>=20
->=20
-> Finally, it looks like this change is done  via commit 894979689d3a=20
-> ("s390/ftrace: provide separate ftrace_caller/ftrace_regs_caller=20
-> implementations") four hours the same day after the implementation of=20
-> arch_ftrace_get_regs()
->=20
-> They may have forgotten to change arch_ftrace_get_regs() which was added=
-=20
-> in commit 5740a7c71ab6 ("s390/ftrace: add HAVE_DYNAMIC_FTRACE_WITH_ARGS=20
-> support") with the assumption that ftrace_caller and ftrace_regs_caller=20
-> where identical.
+With that,
 
-Indeed, good find!
+Reviewed-by: Sean Christopherson <seanjc@google.com>
 
-
-Thanks,
-Naveen
-
+> -		WARN_ON(lockdep_is_held(&kvm_count_lock));
+> +		lockdep_assert_not_held(&kvm_count_lock);
+>  #endif
+>  		hardware_enable_nolock(NULL);
+>  	}
+> -- 
+> 2.25.1
+> 

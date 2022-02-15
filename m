@@ -2,116 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC404B6350
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:15:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A508A4B6351
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234321AbiBOGPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 01:15:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59280 "EHLO
+        id S234336AbiBOGP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 01:15:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232361AbiBOGO7 (ORCPT
+        with ESMTP id S232358AbiBOGP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 01:14:59 -0500
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9B5F745F;
-        Mon, 14 Feb 2022 22:14:49 -0800 (PST)
-Received: by mail-ej1-f45.google.com with SMTP id lw4so11181779ejb.12;
-        Mon, 14 Feb 2022 22:14:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dmLGmi/jb0sxVvWxeOL0tvmCWKAWUGwcOpsWGkrfDD4=;
-        b=vEYcqR/WbLyVaIaxBOQMCwJ3B/shJjEoQoYJyInVyJJt8qOI0WVISK8BEOhgIc+I08
-         0pQCDSMrWOVPmgRG0nZlIQAdfUui+4ph1pw5jsCoD1DFQKurQ7oZCHsotMxQxwRMfkN8
-         CAJENVPcJHfbB7RnUOnfJfcnXZXduQ8fpYyKGBj/rFzQWicjnEuyNSQ8hVL01x5n7S4b
-         +6n7wDV22TelZm4caycnmmLQqB7DOJKwqGUaEf4quJweJwVl6Zu4lWRe3V7aTln2q/JY
-         SSQy/hgUJtDE0B5nc1nh1TjXhtrkuH101ym/GMBNo4r3WFHLauJxccORy8+DZRRtX8BZ
-         Zjxw==
-X-Gm-Message-State: AOAM530pEFamNSuh8yXNgc6xPttAhZWG2KqF62brmkZcHz+VHJ6yQpkT
-        XzTyKOBu7RR4VTRgqWArJOs=
-X-Google-Smtp-Source: ABdhPJyKYhLgz9cMjm/zKM9LTSN6EcKQmbtwOxntWyQ0i0XlaEcmgIzQMi1BNZ0JQ1KQPqkEhAq6GQ==
-X-Received: by 2002:a17:907:6d94:: with SMTP id sb20mr1739357ejc.375.1644905688362;
-        Mon, 14 Feb 2022 22:14:48 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id h6sm6727577edb.5.2022.02.14.22.14.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 22:14:47 -0800 (PST)
-Message-ID: <a9b2899a-bbd4-ec15-6fcc-b7765455ea13@kernel.org>
-Date:   Tue, 15 Feb 2022 07:14:46 +0100
+        Tue, 15 Feb 2022 01:15:57 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A6DF7478
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 22:15:48 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C68231F38C;
+        Tue, 15 Feb 2022 06:15:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644905746; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=stFWmG4RHx6dwdwOXJa8oE098JQwQAuQshDHre0cRNc=;
+        b=geMBC9iAkPgkBwprFvlcXzXqOf+Icc2NyqYQrvyxtDHhsQHoSJniDV5oagjfEqDJvExOLI
+        Tx+y6csiVbbQmp5bVQmpAZoZYsTEZBQZ5HupWrx57fnS8ra57PDF0OfUNMDij8YYnsB5vD
+        4wpMxFm1ZPjg1LaWJ1QTcBo74kBeR3w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644905746;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=stFWmG4RHx6dwdwOXJa8oE098JQwQAuQshDHre0cRNc=;
+        b=b7g3DwVeNv0v/1M/Bb+kiBX1/nj/5ApQ5iRP/EYj0CdYYtIgRBQgyw7o+49q6tWbPXNNRU
+        p5qFztb91iL7U6Cg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 45B1013BD2;
+        Tue, 15 Feb 2022 06:15:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id wgA+DRJFC2J4KgAAMHmgww
+        (envelope-from <osalvador@suse.de>); Tue, 15 Feb 2022 06:15:46 +0000
+Date:   Tue, 15 Feb 2022 07:15:44 +0100
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Alistair Popple <apopple@nvidia.com>, akpm@linux-foundation.org,
+        jhubbard@nvidia.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ziy@nvidia.com, mgorman@suse.de
+Subject: Re: [PATCH] mm/pages_alloc.c: Don't create ZONE_MOVABLE beyond the
+ end of a node
+Message-ID: <YgtFEOqgN7yXCGMC@localhost.localdomain>
+References: <20220215025831.2113067-1-apopple@nvidia.com>
+ <7b752e06-f345-cbb2-d05c-57e5fc5d8e5a@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] tty: serial: add missing pci_dev_put() before return
-Content-Language: en-US
-To:     Qing Wang <wangqing@vivo.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1644890472-65306-1-git-send-email-wangqing@vivo.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <1644890472-65306-1-git-send-email-wangqing@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7b752e06-f345-cbb2-d05c-57e5fc5d8e5a@arm.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15. 02. 22, 3:01, Qing Wang wrote:
-> From: Wang Qing <wangqing@vivo.com>
+On Tue, Feb 15, 2022 at 10:17:09AM +0530, Anshuman Khandual wrote:
+> Hi Alistair,
 > 
-> pci_get_slot() increases its reference count, the caller must
-> decrement the reference count by calling pci_dev_put()
-> 
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
-> ---
->   drivers/tty/serial/pch_uart.c | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/pch_uart.c b/drivers/tty/serial/pch_uart.c
-> index f0351e6..da5a276
-> --- a/drivers/tty/serial/pch_uart.c
-> +++ b/drivers/tty/serial/pch_uart.c
-> @@ -723,7 +723,7 @@ static void pch_request_dma(struct uart_port *port)
->   	if (!chan) {
->   		dev_err(priv->port.dev, "%s:dma_request_channel FAILS(Tx)\n",
->   			__func__);
-> -		return;
-> +		goto out;
->   	}
->   	priv->chan_tx = chan;
->   
-> @@ -739,13 +739,16 @@ static void pch_request_dma(struct uart_port *port)
->   			__func__);
->   		dma_release_channel(priv->chan_tx);
->   		priv->chan_tx = NULL;
-> -		return;
-> +		goto out;
->   	}
->   
->   	/* Get Consistent memory for DMA */
->   	priv->rx_buf_virt = dma_alloc_coherent(port->dev, port->fifosize,
->   				    &priv->rx_buf_dma, GFP_KERNEL);
->   	priv->chan_rx = chan;
-> +
-> +out:
-> +	pci_dev_put(dma_dev);
+> On 2/15/22 8:28 AM, Alistair Popple wrote:
+> > ZONE_MOVABLE uses the remaining memory in each node. It's starting pfn
+> > is also aligned to MAX_ORDER_NR_PAGES. It is possible for the remaining
+> > memory in a node to be less than MAX_ORDER_NR_PAGES, meaning there is
+> > not enough room for ZONE_MOVABLE on that node.
 
-Again, dma_dev is stored to an internal structure and shouldn't be freed 
-now.
+CC Mel as he wrote that back then.
 
->   }
->   
->   static void pch_dma_rx_complete(void *arg)
+I was curious about the commit that introduced that, and I found
+[1] and [2].
+I guess [2] was eventually dismissed in favor of [1] as a whole, but in
+there the commit message said:
 
+"This patch rounds the start of ZONE_MOVABLE in each node to a
+MAX_ORDER_NR_PAGES boundary. If the rounding pushes the start of ZONE_MOVABLE
+above the end of the node then the zone will contain no memory and will not
+be used at runtime"
+
+I might be missing something, but it just rounds up the value, but does
+not check if it falls beyond node's boundaries.
+
+
+[1] commit 2a1e274acf0b1c192face19a4be7c12d4503eaaf "Create the
+ZONE_MOVABLE zone"
+[2] https://marc.info/?l=linux-mm&m=117743777129526&w=2
+
+ 
 
 -- 
-js
-suse labs
+Oscar Salvador
+SUSE Labs

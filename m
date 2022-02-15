@@ -2,99 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1664B7701
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7CFD4B76D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242745AbiBORza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 12:55:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41514 "EHLO
+        id S242767AbiBORzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 12:55:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233741AbiBORz3 (ORCPT
+        with ESMTP id S242755AbiBORzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 12:55:29 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D5BFEB34;
-        Tue, 15 Feb 2022 09:55:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644947719; x=1676483719;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=WrTqW/MTMMAtSIFLsehmFFuDfgHFboDGMW3aqd59c2k=;
-  b=M+yG+oMi9auL/Ns4gmTwrINxF0zRyZaqQ5QIWIBjfLpzWttCKoDfKh2L
-   dnBB+jkfyWFPoAxLpsMNN6AvKDm89TKMFOuAEmUYXl+UtQyOrTAwF51BY
-   V/ZE5A7aomIveycfC9oQuTVPlIMYr7x6LI7MMWBGRjdhsOAV5CdnIAJUI
-   RnHV+VpGweTday9/dv/dP1xvPmyYoA5hcjr/9OnPpYJzXzNqw2ggLahJ8
-   sQVYdnVW+LK9Vvs3E//n1xozX7F6N10E9bGJXN2djT2CaskNyNd0JqED3
-   ud7qyxWng/eKL2NDW7/4szNI8yvTrx+g7fkLQzlSQakmiySPmgliYmL8F
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="274989548"
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="274989548"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 09:55:16 -0800
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="528990176"
-Received: from tngodup-mobl.amr.corp.intel.com (HELO [10.209.32.98]) ([10.209.32.98])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 09:55:13 -0800
-Message-ID: <543efc25-9b99-53cd-e305-d8b4d917b64b@intel.com>
-Date:   Tue, 15 Feb 2022 09:55:09 -0800
+        Tue, 15 Feb 2022 12:55:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5C1FEB34;
+        Tue, 15 Feb 2022 09:55:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54090615F4;
+        Tue, 15 Feb 2022 17:55:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD1C9C340F0;
+        Tue, 15 Feb 2022 17:55:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644947739;
+        bh=8jqw1SbbN1bCwucftaezbFXbmtXyg3plJCA6mm8sWpc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Iog7V3Q55nsodj1YR+x5JFrg788GrUsIcXWdbldqIw/AojuJqivYIow/B6n4Tv5lQ
+         c/oOp+MoXqQ/FIacA8H1eO+8EUZgH6cF1hesqpc7RcE8MhdX4wNDYj2ZKWySIwf8wi
+         6LTGhs4ci0KIYsYIvU4vE8Sd029Y/e0PEN2KOmp0KSnN76M2NfmPj+WRwWC1x7X+rn
+         2F2jlGw/61v4J1hM7TxT6Ch3KvGvfkJMzEo2KvO/BA3CTi87fmWrSOUDJFZokaRNR5
+         CZTyF3sOSOHx0bSJIRG4Yk6nxyESzZnjmuN/xrooPZXbyIxBabWSBQ1O9HdQCfgGQd
+         0kxoXVLrpQDUg==
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Leon Romanovsky <leonro@nvidia.com>,
+        Aharon Landau <aharonl@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org
+Subject: [PATCH rdma-next v2 0/5] MR cache enhancements
+Date:   Tue, 15 Feb 2022 19:55:28 +0200
+Message-Id: <cover.1644947594.git.leonro@nvidia.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Brian Geffon <bgeffon@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Willis Kung <williskung@google.com>,
-        Guenter Roeck <groeck@google.com>,
-        Borislav Petkov <bp@suse.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        "# v4 . 10+" <stable@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220215153644.3654582-1-bgeffon@google.com>
- <56fc0ced-d8d2-146f-6ca8-b95bd7e0b4f5@intel.com>
- <CADyq12x2sd4hrfX9XeG7pCbJx8ZHGb9FZo=9G1BavkrAUX7r-g@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH] x86/fpu: Correct pkru/xstate inconsistency
-In-Reply-To: <CADyq12x2sd4hrfX9XeG7pCbJx8ZHGb9FZo=9G1BavkrAUX7r-g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/22 09:50, Brian Geffon wrote:
->>> is not a kernel thread as kernel threads will never use PKRU. It's
->>> possible that this_cpu_read_stable() on current_task (ie.
->>> get_current()) is returning an old cached value. By forcing the read
->>> with this_cpu_read() the correct task is used. Without this it's
->>> possible when switching from a kernel thread to a userspace thread
->>> that we'll still observe the PF_KTHREAD flag and never restore the
->>> PKRU. And as a result this issue only occurs when switching from a
->>> kernel thread to a userspace thread, switching from a non kernel
->>> thread works perfectly fine because all we consider in that situation
->>> is the flags from some other non kernel task and the next fpu is
->>> passed in to switch_fpu_finish().
->>
->> It makes *sense* that there would be a place in the context switch code
->> where 'current' is wonky, but I never realized this.  This seems really
->> fragile, but *also* trivially detectable.
->>
->> Is the PKRU code really the only code to use 'current' in a buggy way
->> like this?
-> 
-> Yes, because the remaining code in __switch_to() references the next
-> task as next_p rather than current. Technically, it might be more
-> correct to pass next_p to switch_fpu_finish(), what do you think? This
-> may make sense since we're also passing the next fpu anyway.
+From: Leon Romanovsky <leonro@nvidia.com>
 
-Yeah, passing next_p instead of next_fpu makes a lot of sense to me.
+Changelog:
+v2:
+ * Susbset of previously sent patches
+v1: https://lore.kernel.org/all/cover.1640862842.git.leonro@nvidia.com
+ * Based on DM revert https://lore.kernel.org/all/20211222101312.1358616-1-maorg@nvidia.com
+v0: https://lore.kernel.org/all/cover.1638781506.git.leonro@nvidia.com
+
+---------------------------------------------------------
+Hi,
+
+This series from Aharon cleans a little bit MR logic.
+
+Thanks
+
+Aharon Landau (5):
+  RDMA/mlx5: Remove redundant work in struct mlx5_cache_ent
+  RDMA/mlx5: Fix the flow of a miss in the allocation of a cache ODP MR
+  RDMA/mlx5: Merge similar flows of allocating MR from the cache
+  RDMA/mlx5: Store ndescs instead of the translation table size
+  RDMA/mlx5: Reorder calls to pcie_relaxed_ordering_enabled()
+
+ drivers/infiniband/hw/mlx5/mlx5_ib.h |   6 +-
+ drivers/infiniband/hw/mlx5/mr.c      | 104 ++++++++++-----------------
+ drivers/infiniband/hw/mlx5/odp.c     |  19 ++---
+ 3 files changed, 52 insertions(+), 77 deletions(-)
+
+-- 
+2.35.1
 

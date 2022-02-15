@@ -2,175 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8C64B67A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:33:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D02854B67AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235933AbiBOJdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:33:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37046 "EHLO
+        id S235932AbiBOJeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:34:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232294AbiBOJdI (ORCPT
+        with ESMTP id S235024AbiBOJeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:33:08 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA39AD11E;
-        Tue, 15 Feb 2022 01:32:58 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JybPH4r5zzZfQ2;
-        Tue, 15 Feb 2022 17:28:35 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 15 Feb 2022 17:32:56 +0800
-Received: from [10.174.179.5] (10.174.179.5) by dggpemm500002.china.huawei.com
- (7.185.36.229) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 15 Feb
- 2022 17:32:55 +0800
-Subject: Re: [RFC PATCH] blk-mq: avoid housekeeping CPUs scheduling a worker
- on a non-housekeeping CPU
-To:     Ming Lei <ming.lei@redhat.com>
-CC:     <axboe@kernel.dk>, <hch@lst.de>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yuyufen@huawei.com>,
-        <guohanjun@huawei.com>
-References: <20220210093532.182818-1-wangxiongfeng2@huawei.com>
- <881ae7a8-5dff-ff50-9bc2-a983b6a53c30@huawei.com> <Ygst7R+X7u2OBgUW@T590>
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Message-ID: <ccaf5c9b-bede-a3d9-fbc2-b26ab1c94143@huawei.com>
-Date:   Tue, 15 Feb 2022 17:32:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Tue, 15 Feb 2022 04:34:23 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651CDB6D04
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:34:13 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id l125so21050725ybl.4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:34:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=RF7hs9hKJBm03X0ReYCknuAjGAC1I8IaxNBksYlqjvA=;
+        b=NafvuE5wb9VO0YfpQJAmhcj57AnK3lScTcTv4Oeprb434fMH4a+nvDJzniZ5pDcliR
+         L4ZNClSGUsldD6jiiklGZkZN6XqrDu6hQf8Xx0pxhJx+s02mwRYJlXWL4mvuC+FqkTKt
+         VOa4FNfBdhTe+Yx31ukfQRWwkUSGvKz/c3vpMTDhTqDVaQCS6IrqiZct19uMXlx+cVxw
+         cZSnmXDYVKFgZlEbgW2Wzn0KbHFZIyCGXh2zLJfPLUILzCxlp3nHK8IgZ46/03kbVzfG
+         R0gcUiwl9wcd364tJ8jI8eZaXW+KQ5dVQWrc7VqO9nXiTensDESLWCXnS/CPD9v5sQy6
+         2N/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RF7hs9hKJBm03X0ReYCknuAjGAC1I8IaxNBksYlqjvA=;
+        b=cwrriXiO6ELxgx/4o/J13YmNLNBRgHG9zg9USELIjjgpc2E0S7W1MnSFYGCZH1XnD5
+         BTcaiFxzubkqiGkU3UtIwBQ7uSGikjmpJ8ZtzEC2wX15cFQ0e6UaWzIzKR+lAf6pbA8q
+         rz2vY1gVS74YDogMpnzto0sVPDyDbvYbF7kWeeiL6omM4f5F8c7EhriUrpmoh/25kGVM
+         ucqt/1cQsyqjTUtqHBsjqSpLtBOpitO3HHBNGNigsFHsOD+1Rd9GOKDf6voorAmC1cZm
+         FgBoVGwyMY8lN7OxaUAF8JipNu+JuTCC+XpwuXcSNrD9AXber4nnFVjnDojpfOSLaI9c
+         3Yeg==
+X-Gm-Message-State: AOAM530519pz8f2GAw3TQlZ6xZOgLyAkjq96vUvu9fCp0Vo3GuSrRv8/
+        +QCqOjYcfBLchXefdwHp06bIoi1yH3eonlxxtVNeiQ==
+X-Google-Smtp-Source: ABdhPJw0Dm9KzEA7SDMhUASVBNE5a/v+TkV/1mqXS7Zy45mFbuJ5tdQ+sDY4kRooxpmZSCJoYVituF+QbBKH5VkVdbs=
+X-Received: by 2002:a25:bc81:: with SMTP id e1mr2909570ybk.553.1644917652436;
+ Tue, 15 Feb 2022 01:34:12 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <Ygst7R+X7u2OBgUW@T590>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.5]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220214092447.897544753@linuxfoundation.org>
+In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 15 Feb 2022 15:04:01 +0530
+Message-ID: <CA+G9fYvMfijwfy+zUT9ekj0xeSzb7b=GyZH8-gz-MonNdftkgg@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/44] 4.14.267-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ming,
-
-Thanks for your reply !
-
-On 2022/2/15 12:37, Ming Lei wrote:
-> Hello Xiongfeng,
-> 
-> On Tue, Feb 15, 2022 at 10:29:51AM +0800, Xiongfeng Wang wrote:
->> Hi Ming,
->>
->> Sorry to disturb you. It's just that I think you may be interested at this
->> patch. I found the following commit written by you.
->>   commit 11ea68f553e244851d15793a7fa33a97c46d8271
->>   genirq, sched/isolation: Isolate from handling managed interrupts
->> It removed the managed_irq interruption from non-housekeeping CPUs as long as
->> the non-housekeeping CPUs do not request IO. But the the work thread
->> blk_mq_run_work_fn() may still run on the non-housekeeping CPUs.
->> Appreciate it a lot if you can give it a look.
-> 
-> Yeah, commit 11ea68f553e24 touches irq subsystem to try not assign
-> isolated cpus for managed irq's effective affinity.
-> 
-> Here blk-mq just selects one cpu and calls mod_delayed_work_on()
-> to execute the run queue handler on specified cpu. There are lots of
-> such bound wq usage in tree, so I guess it might belong to one wq or
-> scheduler generic problem instead of blk-mq specific issue. Not sure
-> if it is good to address it in block layer.
-
-Yes, I also find some other worker thread running on the non-housekeeping CPUs.
-Some of them need to read the per-cpu data, such as drain_local_pages_wq(). But
-workqueue subsystem doesn't know if the work threads read any per-cpu data and
-can be migrated to another CPU.
-
-For the workqueue marked as WQ_UNBOUND, the following commit can move the worker
-threads to the housekeeping CPUs.
-    commit 1bda3f8087fce9063da0b8aef87f17a3fe541aca
-    sched/isolation: Isolate workqueues when "nohz_full=" is set
-But for the workqueue without flag WQ_UNBOUND, workqueue subsystem doesn't know
-if the worker threads can be migrated to another CPU.
-
-So I think maybe the subsystem who create the workqueue can decide whether the
-worker threads can be migrated.
-
-Thanks,
-Xiongfeng
-
-> 
+On Mon, 14 Feb 2022 at 15:01, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.267 release.
+> There are 44 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.14.267-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
 > thanks,
-> Ming
-> 
->>
->> Thanks,
->> Xiongfeng
->>
->> On 2022/2/10 17:35, Xiongfeng Wang wrote:
->>> When NOHZ_FULL is enabled, such as in HPC situation, CPUs are divided
->>> into housekeeping CPUs and non-housekeeping CPUs. Non-housekeeping CPUs
->>> are NOHZ_FULL CPUs and are often monopolized by the userspace process,
->>> such HPC application process. Any sort of interruption is not expected.
->>>
->>> blk_mq_hctx_next_cpu() selects each cpu in 'hctx->cpumask' alternately
->>> to schedule the work thread blk_mq_run_work_fn(). When 'hctx->cpumask'
->>> contains housekeeping CPU and non-housekeeping CPU at the same time, a
->>> housekeeping CPU, which want to request a IO, may schedule a worker on a
->>> non-housekeeping CPU. This may affect the performance of the userspace
->>> application running on non-housekeeping CPUs.
->>>
->>> So let's just schedule the worker thread on the current CPU when the
->>> current CPU is housekeeping CPU.
->>>
->>> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
->>> ---
->>>  block/blk-mq.c | 15 ++++++++++++++-
->>>  1 file changed, 14 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/block/blk-mq.c b/block/blk-mq.c
->>> index 1adfe4824ef5..ff9a4bf16858 100644
->>> --- a/block/blk-mq.c
->>> +++ b/block/blk-mq.c
->>> @@ -24,6 +24,7 @@
->>>  #include <linux/sched/sysctl.h>
->>>  #include <linux/sched/topology.h>
->>>  #include <linux/sched/signal.h>
->>> +#include <linux/sched/isolation.h>
->>>  #include <linux/delay.h>
->>>  #include <linux/crash_dump.h>
->>>  #include <linux/prefetch.h>
->>> @@ -2036,6 +2037,8 @@ static int blk_mq_hctx_next_cpu(struct blk_mq_hw_ctx *hctx)
->>>  static void __blk_mq_delay_run_hw_queue(struct blk_mq_hw_ctx *hctx, bool async,
->>>  					unsigned long msecs)
->>>  {
->>> +	int work_cpu;
->>> +
->>>  	if (unlikely(blk_mq_hctx_stopped(hctx)))
->>>  		return;
->>>  
->>> @@ -2050,7 +2053,17 @@ static void __blk_mq_delay_run_hw_queue(struct blk_mq_hw_ctx *hctx, bool async,
->>>  		put_cpu();
->>>  	}
->>>  
->>> -	kblockd_mod_delayed_work_on(blk_mq_hctx_next_cpu(hctx), &hctx->run_work,
->>> +	/*
->>> +	 * Avoid housekeeping CPUs scheduling a worker on a non-housekeeping
->>> +	 * CPU
->>> +	 */
->>> +	if (tick_nohz_full_enabled() && housekeeping_cpu(smp_processor_id(),
->>> +							 HK_FLAG_WQ))
->>> +		work_cpu = smp_processor_id();
->>> +	else
->>> +		work_cpu = blk_mq_hctx_next_cpu(hctx);
->>> +
->>> +	kblockd_mod_delayed_work_on(work_cpu, &hctx->run_work,
->>>  				    msecs_to_jiffies(msecs));
->>>  }
->>>  
->>>
->>
-> 
+>
+> greg k-h
+
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 4.14.267-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-4.14.y
+* git commit: ce409501ca5fc4f5e9e69e85655f25f01fe1ae3f
+* git describe: v4.14.266-45-gce409501ca5f
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.266-45-gce409501ca5f
+
+## Test Regressions (compared to v4.14.266-45-gf7ca1925a437)
+No test regressions found.
+
+## Metric Regressions (compared to v4.14.266-45-gf7ca1925a437)
+No metric regressions found.
+
+## Test Fixes (compared to v4.14.266-45-gf7ca1925a437)
+No test fixes found.
+
+## Metric Fixes (compared to v4.14.266-45-gf7ca1925a437)
+No metric fixes found.
+
+## Test result summary
+total: 64375, pass: 53031, fail: 449, skip: 9624, xfail: 1271
+
+## Build Summary
+* arm: 250 total, 242 passed, 8 failed
+* arm64: 32 total, 32 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* powerpc: 52 total, 0 passed, 52 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 31 total, 31 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

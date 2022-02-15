@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87EA54B66CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8CE54B66CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:01:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235516AbiBOJBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:01:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40098 "EHLO
+        id S235495AbiBOJBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:01:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235500AbiBOJBU (ORCPT
+        with ESMTP id S235364AbiBOJBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:01:20 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C401115952
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:01:10 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id b13so31072778edn.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:01:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=logitech.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=WkhcIWEydrLEu21tGc6bt7TQzVHVN+a5GFEqw2Tp8tE=;
-        b=MB06c3iFDV9lwfCDZwEc/OQfwkp5xkFU7/Qlyhdci7nmAsNpWPS+3ZqormO0XrFImA
-         yQZy+KF/XIExfT3y6wkBusm7M583EpVm6QSZqQNcorGyjYf3v6LrVlGzkGI8lL7i8Xw2
-         skDsBaSt1oZ8aZ3X36F9am5wGhWPBge5+kQfANPUJWKhLbcqXKGsSFDHjdrEuaoZN40E
-         YnogateGCCnwa0FeUak+m0wQqYylHXGD1v0TQYw+eKobNUMjH6l2uB6HqDBxJfCRtglp
-         JGV0YwpdNTOOKuscBT9bULpjM8n711FW52O2UMf4Igzs7MQyK05IKqb5NDdufS+fUF3P
-         tkaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=WkhcIWEydrLEu21tGc6bt7TQzVHVN+a5GFEqw2Tp8tE=;
-        b=NQvUzw7NT54jk9LFiU2bq3zbc4jWSDGMsRrUO9l9zgyFVcH7rWZiaBWs9I+PNkmnUd
-         zy7lNY49HgQYwVckjLU/DQF5c9U2cHvh7cZ/7lLMLXRdofxolziVHmmsxv9UwM1fIoXq
-         aWaXEXFxLmSd2S8ihQGhdSvySLVlEFAZoujKMi9EFciP/1O56GKPbBxr1ZiEgUrLZmoJ
-         Ni9GMr09I41bTp83JDMp74pr6yhr5gWNftycwcIIu8CL3lrOgP0gsL1YmFZaoU6anlvS
-         +RG+YytSMC1OPRUwz5pfW27xzr9zOg65vWpPxAsuJR6Y6gsbPulUTIskR8+0nWmZEC4Q
-         SMrQ==
-X-Gm-Message-State: AOAM530gLH3PSSpEdmSWBw6eL/YJ5Yvy7BnF/G5tTbuKcfOKx9D/y4T7
-        WNVO5v9bt8+NpoI06c6K710XbkbTjwa8Tvwu4g4cSw==
-X-Google-Smtp-Source: ABdhPJwrQw+liqRG/xSGcZ6rv5VuTsffc2RhKNj8UlJLneL8SgpdFmHWnL0Oh0crjcT21on0bpaWjqXxdVukdtHIV8Y=
-X-Received: by 2002:a05:6402:51d2:: with SMTP id r18mr2891798edd.88.1644915669053;
- Tue, 15 Feb 2022 01:01:09 -0800 (PST)
+        Tue, 15 Feb 2022 04:01:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E07F114FD3;
+        Tue, 15 Feb 2022 01:01:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45A4A616A4;
+        Tue, 15 Feb 2022 09:01:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E16C340EC;
+        Tue, 15 Feb 2022 09:00:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644915660;
+        bh=Fv0I/uevMVqVdK/YAsuOKAZFXwj51x+bB14+7XtibRQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u/mX8M0XqH3ZKtNGF+4zBIDaIv+IW/W9stVW3A7eG7vDdNjbXGFjDhvXw1x6s0DSg
+         Cl1o7O8ny+2C0VeJumxwXiKjPu7t+BErcxKjeF8HgUoHVe5SmLhElqI3bBQIaPrzvO
+         XkXN72+fXu/atrhwWE3w1cytEAWA3DvXEhvimB3di/P6r0uqmXlXUx0ULx02deK+hM
+         H6PRVU2HndYB31gJ6ckntDGPVWgh1bu8HegUB8x7WDfOLcWSfy4H0iPpjzWr87flFc
+         LigYdC/K4jXpRv8hY9UzR0gtM/F+OXH95AaC7/CLoc8Z1O5okP7A+YY3k3kGQlPL4F
+         L+Qt/pcLoIlbQ==
+Date:   Tue, 15 Feb 2022 10:00:52 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Terry Bowman <terry.bowman@amd.com>, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org, linux-i2c@vger.kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+Subject: Re: [PATCH v5 3/9] i2c: piix4: Move port I/O region request/release
+ code into functions
+Message-ID: <YgtrxLc79ipRJT55@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Terry Bowman <terry.bowman@amd.com>, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org, linux-i2c@vger.kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+References: <20220209172717.178813-1-terry.bowman@amd.com>
+ <20220209172717.178813-4-terry.bowman@amd.com>
+ <20220211105322.180ad89d@endymion.delvare>
+ <YgZ12hCMUlqtLKD3@kunai>
+ <20220215093742.3f3894c5@endymion.delvare>
 MIME-Version: 1.0
-References: <20220126144400.130797-1-lzampier@redhat.com> <CAO-hwJ+KyV+Ks38DDF8EuT9kEc9jd9SvNn=nGyTwjkD3GOQ+RA@mail.gmail.com>
- <15ef80cc2ecdcc993043aa0c1d5ea88f41f9b67b.camel@riseup.net>
-In-Reply-To: <15ef80cc2ecdcc993043aa0c1d5ea88f41f9b67b.camel@riseup.net>
-From:   Nestor Lopez Casado <nlopezcasad@logitech.com>
-Date:   Tue, 15 Feb 2022 10:00:42 +0100
-Message-ID: <CAE7qMro-ies_7DXhvqWE=aNhGcZKTFGxj9xmU38w12jHTOWbmA@mail.gmail.com>
-Subject: Re: [PATCH] HID: logitech-dj: add new lightspeed receiver id
-To:     =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Lucas Zampieri <lzampier@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="HaDtY9g02sHaKJ/N"
+Content-Disposition: inline
+In-Reply-To: <20220215093742.3f3894c5@endymion.delvare>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,48 +74,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 3:55 PM Filipe La=C3=ADns <lains@riseup.net> wrote:
->
-> On Wed, 2022-01-26 at 15:47 +0100, Benjamin Tissoires wrote:
-> > On Wed, Jan 26, 2022 at 3:44 PM Lucas Zampieri <lzampier@redhat.com> wr=
-ote:
-> > >
-> > > As of logitech lightspeed receiver fw version 04.02.B0009,
-> > > HIDPP_PARAM_DEVICE_INFO is being reported as 0x11.
-> > >
-> > > With patch "HID: logitech-dj: add support for the new lightspeed rece=
-iver
-> > > iteration", the mouse starts to error out with:
-> > >   logitech-djreceiver: unusable device of type UNKNOWN (0x011) connec=
-ted on
-> > >   slot 1
-> > > and becomes unusable.
-> > >
-> > > This has been noticed on a Logitech G Pro X Superlight fw MPM 25.01.B=
-0018.
-> >
-> > The patch looks good to me.
-> >
-> > Reviewed-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> >
-> > Ideally, Nestor, can you confirm this is expected and that we won't
-> > have any bad surprises there?
-Yes, I confirm this matches our specifications, this is an iteration
-of Lightspeed 1.2
-No objections on my side.
 
-> >
-> > I think we probably want this to be Cc-ed to stable once it gets
-> > merged (we can add the tag as we merge it).
-> >
-> > Cheers,
-> > Benjamin
->
-> This is likely a different connection type, so it should probably get its=
- own
-> case statement, but let's let Nestor confirm :)
->
-> Cheers,
-> Filipe La=C3=ADns
-best,
--nestor
+--HaDtY9g02sHaKJ/N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+
+> Maybe you build-tested the series as a whole but not individual
+> patches? The series did build fine, as the missing curly brace was
+> added back in a later patch.
+
+It wasn't that, but another gory detail. Updating my build tests is in
+the works. But thanks for the help!
+
+
+--HaDtY9g02sHaKJ/N
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmILa8AACgkQFA3kzBSg
+Kbav0w/8CUhOO800F5iCxEQXQhrZieAMSCN57JwhmmoKvm+mtWL3URToO7OA3Aq9
+K/NSm7bxUUr60UGNOF2sZvHwGy3ZY7h1L1x0YFr9khxSgGupk/B4JBSm3SGecdhe
+RbbwatPphTzgRcRTynvMBgqTbTa/XWpUH3BXgY5HwLLBKuuJaMzXQ9aBL3SjqY/R
+k8sV0VtnB/cD1HeC/YlJsoU3V7tCu/LKKD2+e9QFQnhDJvEmedE7jnBo3gUM7J/x
+CwQ+MOXxGfFBn3f34MT8DEsLBnpop8OMlNFSoGGPgwhbwAbEcCeLhEX7pxCb5sO0
+Kt99hymeiVLSrGLEnH3qOnnMIyc96PhrhhhGa4hojZfH3wqTyw7YqKs4OHTA8AKo
+gOTf4IL8eOMkvSeA7AW7IvHvw/fyGMRlEHerj/v8/vQJuXgiUto14MT55OYEhX4S
+NjNw6VwLXS5KjXKy3rjp8Uvq6WXm0FvWBJnvUtU+HQJ6IaAlSPc/JIjt9EuBZAU0
+seIzC8g1Cfgq8qJmy5Uh5JnTqvx3OJDg+xpir26Ej1NxY8Ioc5Zg3w7QISi9vwLm
+Rx/tk9rLa0lp4Y0jnPkU0kOqnJPjEc50jYgYZFDDInnqAmnh1QvRK9naLrQE+OKx
+OPGZn0vlnc7QrdUhv2M+4B1DTgL40cQe0D5ef4BRsDcwDl/5Dk4=
+=b8+x
+-----END PGP SIGNATURE-----
+
+--HaDtY9g02sHaKJ/N--

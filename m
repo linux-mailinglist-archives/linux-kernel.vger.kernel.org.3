@@ -2,88 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD734B79B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:49:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8424B79C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244322AbiBOVO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 16:14:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44282 "EHLO
+        id S244327AbiBOVOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 16:14:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236566AbiBOVO2 (ORCPT
+        with ESMTP id S233326AbiBOVOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 16:14:28 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99487E09E
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:14:17 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id r8so3174458ioc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:14:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=XXedcp2yhbUzo3O92znwEibtv2eEO56xS91b3yWI2ys=;
-        b=0ZBGtyXpprvtwB02Ug9plwdlXTZcNgMbVrrfq+GoCMWZsFy4kMhFPR7Ik6GYKsdWWm
-         8apaMiJqABQECCkZYmE9EiOcpwvPr/is8h0+UHwGOiQP+w2GavCXrykeRgJ3xVqO+tha
-         /A+W/eXYZmW49+PRRnIzK0IUMHotFOGZHJv1EOQT749nDlTZyVsROay0wxzG5KdxVcni
-         lCifbH5uZtwvXmI9r1oCfmotaVmTwcLQniKLwKT2Lz11TZ/G9p4iUjmeAewQJoAwU7b4
-         wz60283Of2U+JnK2Hh6lvdOPr36mjlvJe6PwKH3+NbchhhoCL3VoaCJBt3PA7t/EjDlB
-         bYoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=XXedcp2yhbUzo3O92znwEibtv2eEO56xS91b3yWI2ys=;
-        b=Ve/h1Md+5XhBUFZu6T2HHoTHHcUXc/mZHPsdKzYZxbKiJZ3kS2VPA3wMbApQSwygqH
-         4H5nbTAayObungRfTU4ka67oH5NfXlnf/KUBNyaL+g/p8X2a0bPtZWZhnXH3Q9AA3/Yf
-         KkBTs97FLs0Cjp0C5wJKFkHmW32Knkk5Uh7wKiCRl3FDlICxRbUUEDADi3y/GPzMprVS
-         P7qPL5MtfE0zQMROPzjLZzOVjAT4JrHxYOVOeS+DAXKpCQf8zT5UIFP4dXTvj5KljUTp
-         5x8Gw+Kzs66xtu/w4RCtNvwiMGLKJznsLOUm6dBcrHYpsIfOkADNwsP5JYrstpRWYrbe
-         eatQ==
-X-Gm-Message-State: AOAM530FxD5X/ZoEMAendq0f+xaCudCiLRUxbHNUpOSfWcG4j+fQpuoP
-        QrKLZoOyz6ameYv6PRNEcjmv5Q==
-X-Google-Smtp-Source: ABdhPJzoYPw1Q4I4tDZdScQxnpjehFexgVWCQnCHRKpXjX7xIIZqHvMbhqxNZ4eJvcYXakCkhL59uA==
-X-Received: by 2002:a05:6602:168c:: with SMTP id s12mr486266iow.100.1644959657041;
-        Tue, 15 Feb 2022 13:14:17 -0800 (PST)
-Received: from m1.localdomain ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id b6sm23928798ioz.43.2022.02.15.13.14.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 13:14:16 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     tj@kernel.org, Chengming Zhou <zhouchengming@bytedance.com>,
-        boris@bur.io
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220213085902.88884-1-zhouchengming@bytedance.com>
-References: <20220213085902.88884-1-zhouchengming@bytedance.com>
-Subject: Re: [PATCH] blk-cgroup: set blkg iostat after percpu stat aggregation
-Message-Id: <164495965641.2684.16928611518978800084.b4-ty@kernel.dk>
-Date:   Tue, 15 Feb 2022 14:14:16 -0700
+        Tue, 15 Feb 2022 16:14:52 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946ED7EB09;
+        Tue, 15 Feb 2022 13:14:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Ewfe4TG75hNdQYiqI5YcRGb9gBCJCzU8HIieAhtXL9Q=; b=rUAnTaT6QlkDIZSbdWSdyVfoP0
+        /IhvV+6wHA7VESbxmaQ0RieXS20ndEBV8tIvsXyH/k5IlVK9Mx8b9B6gxBFLWyXPtF/wQc/tMi1/F
+        59BFtiff3amxKR2ZXyQGcWyREYWaMSuavp6yZ7tYIVti1E6erzFBouUTvaoCpEfwCHZ8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nK59U-0067eJ-EW; Tue, 15 Feb 2022 22:14:24 +0100
+Date:   Tue, 15 Feb 2022 22:14:24 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     =?utf-8?B?UGF3ZcWC?= Dembicki <paweldembicki@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Hao Fang <fanghao11@huawei.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 2/2] ARM: dts: kirkwood: Add Ctera C-200 V1 board
+Message-ID: <YgwXsIRR/B9UmBOD@lunn.ch>
+References: <20220215163926.894-1-paweldembicki@gmail.com>
+ <Ygvv/CWUYumhKoCh@lunn.ch>
+ <CAJN1Kkz3_z8M1j_mtOJzriUWj1m6iAEdZSZFg-zB2Gw2BYY4wA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJN1Kkz3_z8M1j_mtOJzriUWj1m6iAEdZSZFg-zB2Gw2BYY4wA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 13 Feb 2022 16:59:02 +0800, Chengming Zhou wrote:
-> Don't need to do blkg_iostat_set for top blkg iostat on each CPU,
-> so move it after percpu stat aggregation.
+> > Thanks for adding a comment. So you need something like a PWM driving
+> > it? Have you tried playing with drivers/input/misc/pwm-beeper.c ?
 > 
+> It use a PWM device. Driver gpio-pwm isn't accepted in mainline so far.
 > 
+> > Some of the mvebu family have a simple PWM functionality as part of
+> > the GPIO controller. I don't remember if kirkwood has this.
+> 
+> Kirkwood have very simple blink mode only: GPIO pin make visible blinks.
 
-Applied, thanks!
+[Goes and looks at the datasheet]
 
-[1/1] blk-cgroup: set blkg iostat after percpu stat aggregation
-      commit: f122d103b564e5fb7c82de902c6f8f6cbdf50ec9
+Yes, Kirkwood has fixed rate blinking. It is the later generation of
+devices which have true PWM capabilities.
 
-Best regards,
--- 
-Jens Axboe
-
-
+	Andrew

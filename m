@@ -2,58 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6BB4B7B5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:48:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D2B4B7B5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:49:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244847AbiBOXsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 18:48:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58138 "EHLO
+        id S244863AbiBOXtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 18:49:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237166AbiBOXsX (ORCPT
+        with ESMTP id S243433AbiBOXt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 18:48:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A865BBF505;
-        Tue, 15 Feb 2022 15:48:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4852BB81D4B;
-        Tue, 15 Feb 2022 23:48:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA4EC340EB;
-        Tue, 15 Feb 2022 23:48:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644968889;
-        bh=ntRkLDJdszNp74lJFVe+EQz4Z27rNENIOTdR2SU+7VU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f/SX0Swt8Tie4u76t8Z0xXSmx1fzLK7JoCvPUyRiuVFh1LSRgFO0q2dOOzLt7Bn0s
-         0gVJLDZOjGnBBGMrmEqMfJ67WnbtmRdW7/yOgxSUaZQ7tvZVwNHk3jO3h19zkQFSuf
-         58mfZNMbB8hEGDeSuGMKB7umTk1la9ufDJEJxrtZT9j56kec1tSDrgSdZdaNciWRx6
-         aH0zR+swH7M+ZZBCGydDFoeqpYmxZ4qVrccNGJD8u4q5wfbea+sth8aVqhGYds2FH2
-         U06eeZ3pRAswO8RIn4RwagyApfOUBrGioY1Uar/kY9QJiAHnX/OQjvxIl1tUKfN4am
-         u3Tn7iHF3oYiw==
-Date:   Tue, 15 Feb 2022 16:48:03 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Yujie Liu <yujie.liu@intel.com>,
-        Philip Li <philip.li@intel.com>, julie.du@intel.com,
-        Michal Marek <michal.lkml@markovi.net>, llvm@lists.linux.dev,
-        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Documentation/llvm: refresh docs for LLVM=1
-Message-ID: <Ygw7s5XRokaPP1J5@dev-arch.archlinux-ax161>
-References: <20220215204947.1719516-1-ndesaulniers@google.com>
+        Tue, 15 Feb 2022 18:49:28 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A5DDAAFE
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:49:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644968957; x=1676504957;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hO6d4nhTJaxkqNk/wzEFqZo0tgEE/3SKs2w+Zizo43g=;
+  b=XEUuA6EwtGZ4djt0xLTy3KAQCg8VGBO3cmphTINMQgFVitFErAmq6jQZ
+   r0crDEKjNBj1r0wvxLhiy2mTawF8vTy7Y9/6CvXQd0a5GR9JPhonbbrta
+   0/aUuGj6fV3GB80bKywLL5mE7+axGlYSl9cz0y3AnfMl/xO6BgxzKjAmT
+   mAe2oY5JoPSyDyI1iF1vjMIhT4zNaaSgMtYSLVO/Fs5Uu4LXdm/yeM4Wj
+   loCYTanJDeCGs5vX6vQrRx3iKQDXFmItCNiYlon493S1w5Ag5FpNS4FiJ
+   1yxWCroZHoV8dLPSc4UzDk4Xl8en/OsPzI0wtxwliRkV+fDdTLNAaXA7n
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="311225338"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="311225338"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 15:49:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="486481735"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 15 Feb 2022 15:49:15 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nK7ZK-000A9j-RV; Tue, 15 Feb 2022 23:49:14 +0000
+Date:   Wed, 16 Feb 2022 07:48:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Luben Tuikov <luben.tuikov@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [agd5f:drm-next 2/34]
+ drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:664:35: warning: format '%ld'
+ expects argument of type 'long int', but argument 4 has type 'size_t' {aka
+ 'unsigned int'}
+Message-ID: <202202160733.1Egjqp9Y-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220215204947.1719516-1-ndesaulniers@google.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,221 +64,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 12:49:47PM -0800, Nick Desaulniers wrote:
-> Refresh the docs for 2022:
-> * add link to Chimera Linux.
-> * add Quick Start section pointing out that LLVM=1 is the simple
->   recommended method.
-> * Re-order the sections on Clang and Cross Compiling to come after the
->   section on LLVM utilities. I think the documentation flows better this
->   way.
-> * Add note about LLVM=1 to Omitting CROSS_COMPILE section.
-> * Change note in Supported Architectures from discussing CC=clang vs.
->   LLVM=1 to discussion LLVM=1 vs. LLVM_IAS=0.
-> * Update make command column of support architecture table; we now
->   support LLVM=1 everywhere; just some more work to get ARCH=s390
->   assembling with clang.
-> * Word wrap a few columns over 80 lines.
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
+head:   076172cdc7ab4983ed7596a53b95851849269e5a
+commit: a6c40b178092f41b9d6cc8615697c14b1e5a1c3a [2/34] drm/amdgpu: Show IP discovery in sysfs
+config: arm-randconfig-r005-20220214 (https://download.01.org/0day-ci/archive/20220216/202202160733.1Egjqp9Y-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f drm-next
+        git checkout a6c40b178092f41b9d6cc8615697c14b1e5a1c3a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
 
-This patch is doing a lot, it might make sense to split it up. Reviewing
-documentation changes is not the easiest as it is.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Comments inline, thanks for the patch!
+All warnings (new ones prefixed by >>):
 
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
->  Documentation/kbuild/llvm.rst | 82 +++++++++++++++++++++--------------
->  1 file changed, 50 insertions(+), 32 deletions(-)
-> 
-> diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
-> index d32616891dcf..7f52cde70bc7 100644
-> --- a/Documentation/kbuild/llvm.rst
-> +++ b/Documentation/kbuild/llvm.rst
-> @@ -15,36 +15,27 @@ such as GCC and binutils. Ongoing work has allowed for `Clang
->  <https://clang.llvm.org/>`_ and `LLVM <https://llvm.org/>`_ utilities to be
->  used as viable substitutes. Distributions such as `Android
->  <https://www.android.com/>`_, `ChromeOS
-> -<https://www.chromium.org/chromium-os>`_, and `OpenMandriva
-> -<https://www.openmandriva.org/>`_ use Clang built kernels.  `LLVM is a
-> +<https://www.chromium.org/chromium-os>`_, `OpenMandriva
-> +<https://www.openmandriva.org/>`_, and `Chimera Linux
-> +<https://chimera-linux.org/>`_ use Clang built kernels.  `LLVM is a
->  collection of toolchain components implemented in terms of C++ objects
->  <https://www.aosabook.org/en/llvm.html>`_. Clang is a front-end to LLVM that
->  supports C and the GNU C extensions required by the kernel, and is pronounced
->  "klang," not "see-lang."
->  
-> -Clang
-> ------
-> +Quick Start
-> +-----------
-> +::
->  
-> -The compiler used can be swapped out via ``CC=`` command line argument to ``make``.
-> -``CC=`` should be set when selecting a config and during a build. ::
-> +	make LLVM=1
->  
-> -	make CC=clang defconfig
-> +for native builds or
->  
-> -	make CC=clang
-> +or ::
->  
-> -Cross Compiling
-> ----------------
-> +	ARCH=arm64 make LLVM=1
+   In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_ring.h:29,
+                    from drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.h:26,
+                    from drivers/gpu/drm/amd/amdgpu/amdgpu.h:43,
+                    from drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:26:
+   drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c: In function 'amdgpu_discovery_sysfs_ips':
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:664:35: warning: format '%ld' expects argument of type 'long int', but argument 4 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+     664 |                         DRM_DEBUG("match:%d @ ip_offset:%ld", ii, ip_offset);
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~      ~~~~~~~~~
+         |                                                                   |
+         |                                                                   size_t {aka unsigned int}
+   include/drm/drm_print.h:526:32: note: in definition of macro 'DRM_DEBUG'
+     526 |         __drm_dbg(DRM_UT_CORE, fmt, ##__VA_ARGS__)
+         |                                ^~~
+   drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:664:59: note: format string is defined here
+     664 |                         DRM_DEBUG("match:%d @ ip_offset:%ld", ii, ip_offset);
+         |                                                         ~~^
+         |                                                           |
+         |                                                           long int
+         |                                                         %d
 
-make ARCH=arm64 LLVM=1
 
-is used throughout the rest of the document and I think it is more
-consistent to keep all the variables on the right side of make.
+vim +664 drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
 
-Compare:
+   639	
+   640	static int amdgpu_discovery_sysfs_ips(struct amdgpu_device *adev,
+   641					      struct ip_die_entry *ip_die_entry,
+   642					      const size_t _ip_offset, const int num_ips)
+   643	{
+   644		int ii, jj, kk, res;
+   645	
+   646		DRM_DEBUG("num_ips:%d", num_ips);
+   647	
+   648		/* Find all IPs of a given HW ID, and add their instance to
+   649		 * #die/#hw_id/#instance/<attributes>
+   650		 */
+   651		for (ii = 0; ii < HW_ID_MAX; ii++) {
+   652			struct ip_hw_id *ip_hw_id = NULL;
+   653			size_t ip_offset = _ip_offset;
+   654	
+   655			for (jj = 0; jj < num_ips; jj++) {
+   656				struct ip *ip;
+   657				struct ip_hw_instance *ip_hw_instance;
+   658	
+   659				ip = (struct ip *)(adev->mman.discovery_bin + ip_offset);
+   660				if (amdgpu_discovery_validate_ip(ip) ||
+   661				    le16_to_cpu(ip->hw_id) != ii)
+   662					goto next_ip;
+   663	
+ > 664				DRM_DEBUG("match:%d @ ip_offset:%ld", ii, ip_offset);
+   665	
+   666				/* We have a hw_id match; register the hw
+   667				 * block if not yet registered.
+   668				 */
+   669				if (!ip_hw_id) {
+   670					ip_hw_id = kzalloc(sizeof(*ip_hw_id), GFP_KERNEL);
+   671					if (!ip_hw_id)
+   672						return -ENOMEM;
+   673					ip_hw_id->hw_id = ii;
+   674	
+   675					kobject_set_name(&ip_hw_id->hw_id_kset.kobj, "%d", ii);
+   676					ip_hw_id->hw_id_kset.kobj.kset = &ip_die_entry->ip_kset;
+   677					ip_hw_id->hw_id_kset.kobj.ktype = &ip_hw_id_ktype;
+   678					res = kset_register(&ip_hw_id->hw_id_kset);
+   679					if (res) {
+   680						DRM_ERROR("Couldn't register ip_hw_id kset");
+   681						kfree(ip_hw_id);
+   682						return res;
+   683					}
+   684					if (hw_id_names[ii]) {
+   685						res = sysfs_create_link(&ip_die_entry->ip_kset.kobj,
+   686									&ip_hw_id->hw_id_kset.kobj,
+   687									hw_id_names[ii]);
+   688						if (res) {
+   689							DRM_ERROR("Couldn't create IP link %s in IP Die:%s\n",
+   690								  hw_id_names[ii],
+   691								  kobject_name(&ip_die_entry->ip_kset.kobj));
+   692						}
+   693					}
+   694				}
+   695	
+   696				/* Now register its instance.
+   697				 */
+   698				ip_hw_instance = kzalloc(struct_size(ip_hw_instance,
+   699								     base_addr,
+   700								     ip->num_base_address),
+   701							 GFP_KERNEL);
+   702				if (!ip_hw_instance) {
+   703					DRM_ERROR("no memory for ip_hw_instance");
+   704					return -ENOMEM;
+   705				}
+   706				ip_hw_instance->hw_id = le16_to_cpu(ip->hw_id); /* == ii */
+   707				ip_hw_instance->num_instance = ip->number_instance;
+   708				ip_hw_instance->major = ip->major;
+   709				ip_hw_instance->minor = ip->minor;
+   710				ip_hw_instance->revision = ip->revision;
+   711				ip_hw_instance->num_base_addresses = ip->num_base_address;
+   712	
+   713				for (kk = 0; kk < ip_hw_instance->num_base_addresses; kk++)
+   714					ip_hw_instance->base_addr[kk] = ip->base_address[kk];
+   715	
+   716				kobject_init(&ip_hw_instance->kobj, &ip_hw_instance_ktype);
+   717				ip_hw_instance->kobj.kset = &ip_hw_id->hw_id_kset;
+   718				res = kobject_add(&ip_hw_instance->kobj, NULL,
+   719						  "%d", ip_hw_instance->num_instance);
+   720	next_ip:
+   721				ip_offset += sizeof(*ip) + 4 * (ip->num_base_address - 1);
+   722			}
+   723		}
+   724	
+   725		return 0;
+   726	}
+   727	
 
-$ rg "make .*=" Documentation
-
-vs.
-
-$ rg "=.* make" Documentation
-
->  
-> -A single Clang compiler binary will typically contain all supported backends,
-> -which can help simplify cross compiling. ::
-> -
-> -	make ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu-
-> -
-> -``CROSS_COMPILE`` is not used to prefix the Clang compiler binary, instead
-> -``CROSS_COMPILE`` is used to set a command line flag: ``--target=<triple>``. For
-> -example: ::
-> -
-> -	clang --target=aarch64-linux-gnu foo.c
-> +for cross compiling.
->  
->  LLVM Utilities
->  --------------
-> @@ -63,6 +54,32 @@ They can be enabled individually. The full list of the parameters: ::
->  The integrated assembler is enabled by default. You can pass ``LLVM_IAS=0`` to
->  disable it.
->  
-> +Clang
-> +-----
-> +
-> +The compiler used can be swapped out via ``CC=`` command line argument to
-
-... via the ``CC=``... ?
-
-> +``make``.  ``CC=`` should be set when selecting a config and during a build.
-
-I think
-
-``CC=`` should be set when generating a config and building a kernel.
-
-might read a little bit better?
-
-> +``CC=clang`` is implied by ``LLVM=1``, but if it's desired to simply use clang
-> +as the compiler for the target, then ``CC=`` is a quick substitute. ::
-> +
-> +	make CC=clang defconfig
-> +
-> +	make CC=clang
-> +
-> +Cross Compiling
-> +---------------
-> +
-> +A single Clang compiler binary will typically contain all supported backends,
-> +which can help simplify cross compiling. ::
-> +
-> +	make ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu-
-> +
-> +``CROSS_COMPILE`` is not used to prefix the Clang compiler binary, instead
-> +``CROSS_COMPILE`` is used to set a command line flag: ``--target=<triple>``.
-> +For example: ::
-> +
-> +	clang --target=aarch64-linux-gnu foo.c
-> +
->  Omitting CROSS_COMPILE
->  ----------------------
->  
-> @@ -71,7 +88,8 @@ As explained above, ``CROSS_COMPILE`` is used to set ``--target=<triple>``.
->  If ``CROSS_COMPILE`` is not specified, the ``--target=<triple>`` is inferred
->  from ``ARCH``.
->  
-> -That means if you use only LLVM tools, ``CROSS_COMPILE`` becomes unnecessary.
-> +That means if you use only LLVM tools via ``LLVM=1``, ``CROSS_COMPILE`` becomes
-> +unnecessary.
->  
->  For example, to cross-compile the arm64 kernel::
->  
-> @@ -88,13 +106,13 @@ Supported Architectures
->  LLVM does not target all of the architectures that Linux supports and
->  just because a target is supported in LLVM does not mean that the kernel
->  will build or work without any issues. Below is a general summary of
-> -architectures that currently work with ``CC=clang`` or ``LLVM=1``. Level
-> -of support corresponds to "S" values in the MAINTAINERS files. If an
-> -architecture is not present, it either means that LLVM does not target
-> -it or there are known issues. Using the latest stable version of LLVM or
-> -even the development tree will generally yield the best results.
-> -An architecture's ``defconfig`` is generally expected to work well,
-> -certain configurations may have problems that have not been uncovered
-> +architectures that currently work with ``LLVM=1`` but may need the integrated
-> +assembler disabled via ``LLVM_IAS=0``. Level of support corresponds to "S"
-> +values in the MAINTAINERS files. If an architecture is not present, it either
-> +means that LLVM does not target it or there are known issues. Using the latest
-> +stable version of LLVM or even the development tree will generally yield the
-> +best results.  An architecture's ``defconfig`` is generally expected to work
-> +well, certain configurations may have problems that have not been uncovered
->  yet. Bug reports are always welcome at the issue tracker below!
->  
->  .. list-table::
-> @@ -112,16 +130,16 @@ yet. Bug reports are always welcome at the issue tracker below!
->       - ``LLVM=1``
->     * - mips
->       - Maintained
-> -     - ``CC=clang``
-> +     - ``LLVM=1``
->     * - powerpc
->       - Maintained
-> -     - ``CC=clang``
-> +     - ``LLVM=1``
-
-Are we ready for this yet?
-
-https://github.com/ClangBuiltLinux/linux/issues?q=is%3Aopen+is%3Aissue+label%3A%22%5BARCH%5D+powerpc%22+label%3A%22%5BTOOL%5D+integrated-as%22
-
-I think we could potentially say LLVM=1 LLVM_IAS=0 but pseries_defconfig
-does not build with ld.lld:
-
-https://github.com/ClangBuiltLinux/linux/issues/602
-
-Maybe it is worth breaking up powerpc into powerpc32, powerpc64, and
-powerpc64le?
-
->     * - riscv
->       - Maintained
-> -     - ``CC=clang``
-> +     - ``LLVM=1``
->     * - s390
->       - Maintained
-> -     - ``CC=clang``
-> +     - ``LLVM=1 LLVM_IAS=0``
-
-I don't think s390 is ready for this claim. ld.lld and llvm-objcopy do
-not support s390, which are both used in a defconfig build, as far as I
-am aware.
-
-https://github.com/ClangBuiltLinux/linux/issues/1524
-https://github.com/ClangBuiltLinux/linux/issues/1530
-
->     * - x86
->       - Supported
->       - ``LLVM=1``
-> 
-> base-commit: c5d9ae265b105d9a67575fb67bd4650a6fc08e25
-> -- 
-> 2.35.1.265.g69c8d7142f-goog
-> 
-
-The rest of the changes look good to me.
-
-Cheers,
-Nathan
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

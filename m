@@ -2,93 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A71934B6D3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A04084B6D3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:18:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238202AbiBONSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 08:18:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55776 "EHLO
+        id S238213AbiBONSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 08:18:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232192AbiBONSp (ORCPT
+        with ESMTP id S232192AbiBONSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 08:18:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A71D10A0;
-        Tue, 15 Feb 2022 05:18:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 88C24B819C2;
-        Tue, 15 Feb 2022 13:18:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3062CC340ED;
-        Tue, 15 Feb 2022 13:18:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644931113;
-        bh=6sDK0ccoSzhYNr2YTp0NKTVctS799bzZHwni9VvC+GI=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=CeIMzQji6pQPppttKX9ZxoE2OPFrWW9a+9Fu8Coii2iyM02IjSEw+UxvuZ4ouWUt2
-         SsJlW8lFWyj2o7mR+xGUnSVGvyeEBjQrMauJS5pY3nxkqFk2U3tuabW1GPt7HKCbMd
-         zGUKpP2Uylv5OPTAqCGLkBNVgv920ngnO8CGHQN21B0nqMuamtknG5ra4t/pUjek98
-         mwTHb66jaPsTTV1QREPLPJqoB4zVqOQERavSVroCXrbWqNARdgA7gmyMi/6u3OgrlL
-         Gxut4aQT4COPorjx2VNFAEL2BAmeh8MIXHLzaxyftpXG7E2FrWkjzwBdMGAMECbUut
-         9OBjgEoT7yzqA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>, Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, alsa-devel@alsa-project.org,
-        linux-tegra@vger.kernel.org,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220214213223.65780-1-colin.i.king@gmail.com>
-References: <20220214213223.65780-1-colin.i.king@gmail.com>
-Subject: Re: [PATCH] ASoC: tegra20: spdif: make const array rates static
-Message-Id: <164493111091.974741.18170472602420654568.b4-ty@kernel.org>
-Date:   Tue, 15 Feb 2022 13:18:30 +0000
+        Tue, 15 Feb 2022 08:18:52 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1778D10A8;
+        Tue, 15 Feb 2022 05:18:42 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21FD1o3U021874;
+        Tue, 15 Feb 2022 13:18:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Y/mj7jLB8eOdqAaE1qPvldlmkX/RYMfvzjuJ1uwyWlA=;
+ b=fUCfl6DDGzHLFp490ckK+1ANlaagkuWe7+aGK+QOow9kY6oK1OJjdG3gTnkesJFWtgn2
+ jJjkXRKlSK8AKLXqIOJnjIv9YCgKIYWf2eA7BdvZ7APjr1AwdtdTDk8ieEM2X3aE/6G7
+ evwzTUMyzzj7XTpUCx1o0WLW/7skS3SFRQhbKikNLitxS8hoVtfakAWDP9LzE1FR3PDP
+ 2+UW5PalvdXN1nQM7fQJTqHiddtM3SHsh5rXurLlPeDkmwgtL0XSN9aBtGBZ1Q2nf9LG
+ DaGtKoAoplkc4gEX7heQGjdzdxzMXWGXC2gb33ek0CBLV4BZgygXNV3OWaf2cBbqIhNr tw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e86tfrxhu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 13:18:41 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21FCOQkI018121;
+        Tue, 15 Feb 2022 13:18:41 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e86tfrxha-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 13:18:41 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21FDI0lK000350;
+        Tue, 15 Feb 2022 13:18:39 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03fra.de.ibm.com with ESMTP id 3e64h9x4cr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 13:18:39 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21FDIYZN48562448
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Feb 2022 13:18:34 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5118DA405B;
+        Tue, 15 Feb 2022 13:18:34 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BAE76A4054;
+        Tue, 15 Feb 2022 13:18:33 +0000 (GMT)
+Received: from [9.145.49.62] (unknown [9.145.49.62])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 15 Feb 2022 13:18:33 +0000 (GMT)
+Message-ID: <d6e0af70-9ac3-bdd6-3517-cbf21cf86e2c@linux.ibm.com>
+Date:   Tue, 15 Feb 2022 14:18:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 1/1] KVM: s390: pv: make use of ultravisor AIV support
+Content-Language: en-US
+To:     Michael Mueller <mimu@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     cohuck@redhat.com, borntraeger@de.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220209152217.1793281-1-mimu@linux.ibm.com>
+ <20220209152217.1793281-2-mimu@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20220209152217.1793281-2-mimu@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: l6OVTrbGSjY6SJpltKWa9KY--7DMSqgt
+X-Proofpoint-ORIG-GUID: U7SnPpatJSD4iU8hl3f34cRnry11IQEo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-15_04,2022-02-14_04,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ priorityscore=1501 mlxscore=0 adultscore=0 phishscore=0 lowpriorityscore=0
+ impostorscore=0 suspectscore=0 mlxlogscore=999 clxscore=1015 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202150075
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Feb 2022 21:32:23 +0000, Colin Ian King wrote:
-> Don't populate the read-only const array rates on the stack but
-> instead it static. Also makes the object code a little smaller.
+On 2/9/22 16:22, Michael Mueller wrote:
+> This patch enables the ultravisor adapter interruption vitualization
+> support indicated by UV feature BIT_UV_FEAT_AIV. This allows ISC
+> interruption injection directly into the GISA IPM for PV kvm guests.
 > 
+> Hardware that does not support this feature will continue to use the
+> UV interruption interception method to deliver ISC interruptions to
+> PV kvm guests. For this purpose, the ECA_AIV bit for all guest cpus
+> will be cleared and the GISA will be disabled during PV CPU setup.
 > 
+> In addition a check in __inject_io() has been removed. That reduces the
+> required instructions for interruption handling for PV and traditional
+> kvm guests.
+> 
+> Signed-off-by: Michael Mueller <mimu@linux.ibm.com>
 
-Applied to
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> ---
+>   arch/s390/include/asm/uv.h |  1 +
+>   arch/s390/kvm/interrupt.c  | 54 +++++++++++++++++++++++++++++++++-----
+>   arch/s390/kvm/kvm-s390.c   | 11 +++++---
+>   arch/s390/kvm/kvm-s390.h   | 11 ++++++++
+>   4 files changed, 68 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/s390/include/asm/uv.h b/arch/s390/include/asm/uv.h
+> index 86218382d29c..a2d376b8bce3 100644
+> --- a/arch/s390/include/asm/uv.h
+> +++ b/arch/s390/include/asm/uv.h
+> @@ -80,6 +80,7 @@ enum uv_cmds_inst {
+>   
+>   enum uv_feat_ind {
+>   	BIT_UV_FEAT_MISC = 0,
+> +	BIT_UV_FEAT_AIV = 1,
+>   };
+>   
+>   struct uv_cb_header {
+> diff --git a/arch/s390/kvm/interrupt.c b/arch/s390/kvm/interrupt.c
+> index db933c252dbc..9b30beac904d 100644
+> --- a/arch/s390/kvm/interrupt.c
+> +++ b/arch/s390/kvm/interrupt.c
+> @@ -1901,13 +1901,12 @@ static int __inject_io(struct kvm *kvm, struct kvm_s390_interrupt_info *inti)
+>   	isc = int_word_to_isc(inti->io.io_int_word);
+>   
+>   	/*
+> -	 * Do not make use of gisa in protected mode. We do not use the lock
+> -	 * checking variant as this is just a performance optimization and we
+> -	 * do not hold the lock here. This is ok as the code will pick
+> -	 * interrupts from both "lists" for delivery.
+> +	 * We do not use the lock checking variant as this is just a
+> +	 * performance optimization and we do not hold the lock here.
+> +	 * This is ok as the code will pick interrupts from both "lists"
+> +	 * for delivery.
+>   	 */
+> -	if (!kvm_s390_pv_get_handle(kvm) &&
+> -	    gi->origin && inti->type & KVM_S390_INT_IO_AI_MASK) {
+> +	if (gi->origin && inti->type & KVM_S390_INT_IO_AI_MASK) {
+>   		VM_EVENT(kvm, 4, "%s isc %1u", "inject: I/O (AI/gisa)", isc);
+>   		gisa_set_ipm_gisc(gi->origin, isc);
+>   		kfree(inti);
+> @@ -3171,9 +3170,33 @@ void kvm_s390_gisa_init(struct kvm *kvm)
+>   	VM_EVENT(kvm, 3, "gisa 0x%pK initialized", gi->origin);
+>   }
+>   
+> +void kvm_s390_gisa_enable(struct kvm *kvm)
+> +{
+> +	struct kvm_s390_gisa_interrupt *gi = &kvm->arch.gisa_int;
+> +	struct kvm_vcpu *vcpu;
+> +	unsigned long i;
+> +	u32 gisa_desc;
+> +
+> +	if (gi->origin)
+> +		return;
+> +	kvm_s390_gisa_init(kvm);
+> +	gisa_desc = kvm_s390_get_gisa_desc(kvm);
+> +	if (!gisa_desc)
+> +		return;
+> +	kvm_for_each_vcpu(i, vcpu, kvm) {
+> +		mutex_lock(&vcpu->mutex);
+> +		vcpu->arch.sie_block->gd = gisa_desc;
+> +		vcpu->arch.sie_block->eca |= ECA_AIV;
+> +		VCPU_EVENT(vcpu, 3, "AIV gisa format-%u enabled for cpu %03u",
+> +			   vcpu->arch.sie_block->gd & 0x3, vcpu->vcpu_id);
+> +		mutex_unlock(&vcpu->mutex);
+> +	}
+> +}
+> +
+>   void kvm_s390_gisa_destroy(struct kvm *kvm)
+>   {
+>   	struct kvm_s390_gisa_interrupt *gi = &kvm->arch.gisa_int;
+> +	struct kvm_s390_gisa *gisa = gi->origin;
+>   
+>   	if (!gi->origin)
+>   		return;
+> @@ -3184,6 +3207,25 @@ void kvm_s390_gisa_destroy(struct kvm *kvm)
+>   		cpu_relax();
+>   	hrtimer_cancel(&gi->timer);
+>   	gi->origin = NULL;
+> +	VM_EVENT(kvm, 3, "gisa 0x%pK destroyed", gisa);
+> +}
+> +
+> +void kvm_s390_gisa_disable(struct kvm *kvm)
+> +{
+> +	struct kvm_s390_gisa_interrupt *gi = &kvm->arch.gisa_int;
+> +	struct kvm_vcpu *vcpu;
+> +	unsigned long i;
+> +
+> +	if (!gi->origin)
+> +		return;
+> +	kvm_for_each_vcpu(i, vcpu, kvm) {
+> +		mutex_lock(&vcpu->mutex);
+> +		vcpu->arch.sie_block->eca &= ~ECA_AIV;
+> +		vcpu->arch.sie_block->gd = 0U;
+> +		mutex_unlock(&vcpu->mutex);
+> +		VCPU_EVENT(vcpu, 3, "AIV disabled for cpu %03u", vcpu->vcpu_id);
+> +	}
+> +	kvm_s390_gisa_destroy(kvm);
+>   }
+>   
+>   /**
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 577f1ead6a51..c83330f98ff0 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -2194,6 +2194,9 @@ static int kvm_s390_cpus_from_pv(struct kvm *kvm, u16 *rcp, u16 *rrcp)
+>   		}
+>   		mutex_unlock(&vcpu->mutex);
+>   	}
+> +	/* Ensure that we re-enable gisa if the non-PV guest used it but the PV guest did not. */
+> +	if (use_gisa)
+> +		kvm_s390_gisa_enable(kvm);
+>   	return ret;
+>   }
+>   
+> @@ -2205,6 +2208,10 @@ static int kvm_s390_cpus_to_pv(struct kvm *kvm, u16 *rc, u16 *rrc)
+>   
+>   	struct kvm_vcpu *vcpu;
+>   
+> +	/* Disable the GISA if the ultravisor does not support AIV. */
+> +	if (!test_bit_inv(BIT_UV_FEAT_AIV, &uv_info.uv_feature_indications))
+> +		kvm_s390_gisa_disable(kvm);
+> +
+>   	kvm_for_each_vcpu(i, vcpu, kvm) {
+>   		mutex_lock(&vcpu->mutex);
+>   		r = kvm_s390_pv_create_cpu(vcpu, rc, rrc);
+> @@ -3263,9 +3270,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+>   
+>   	vcpu->arch.sie_block->icpua = vcpu->vcpu_id;
+>   	spin_lock_init(&vcpu->arch.local_int.lock);
+> -	vcpu->arch.sie_block->gd = (u32)(u64)vcpu->kvm->arch.gisa_int.origin;
+> -	if (vcpu->arch.sie_block->gd && sclp.has_gisaf)
+> -		vcpu->arch.sie_block->gd |= GISA_FORMAT1;
+> +	vcpu->arch.sie_block->gd = kvm_s390_get_gisa_desc(vcpu->kvm);
+>   	seqcount_init(&vcpu->arch.cputm_seqcount);
+>   
+>   	vcpu->arch.pfault_token = KVM_S390_PFAULT_TOKEN_INVALID;
+> diff --git a/arch/s390/kvm/kvm-s390.h b/arch/s390/kvm/kvm-s390.h
+> index 098831e815e6..4ba8fc30d87a 100644
+> --- a/arch/s390/kvm/kvm-s390.h
+> +++ b/arch/s390/kvm/kvm-s390.h
+> @@ -231,6 +231,15 @@ static inline unsigned long kvm_s390_get_gfn_end(struct kvm_memslots *slots)
+>   	return ms->base_gfn + ms->npages;
+>   }
+>   
+> +static inline u32 kvm_s390_get_gisa_desc(struct kvm *kvm)
+> +{
+> +	u32 gd = (u32)(u64)kvm->arch.gisa_int.origin;
+> +
+> +	if (gd && sclp.has_gisaf)
+> +		gd |= GISA_FORMAT1;
+> +	return gd;
+> +}
+> +
+>   /* implemented in pv.c */
+>   int kvm_s390_pv_destroy_cpu(struct kvm_vcpu *vcpu, u16 *rc, u16 *rrc);
+>   int kvm_s390_pv_create_cpu(struct kvm_vcpu *vcpu, u16 *rc, u16 *rrc);
+> @@ -450,6 +459,8 @@ int kvm_s390_get_irq_state(struct kvm_vcpu *vcpu,
+>   void kvm_s390_gisa_init(struct kvm *kvm);
+>   void kvm_s390_gisa_clear(struct kvm *kvm);
+>   void kvm_s390_gisa_destroy(struct kvm *kvm);
+> +void kvm_s390_gisa_disable(struct kvm *kvm);
+> +void kvm_s390_gisa_enable(struct kvm *kvm);
+>   int kvm_s390_gib_init(u8 nisc);
+>   void kvm_s390_gib_destroy(void);
+>   
 
-Thanks!
-
-[1/1] ASoC: tegra20: spdif: make const array rates static
-      commit: 83a1bed1f49869ea0fc7de321d5dcc598d0dfb15
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

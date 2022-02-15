@@ -2,692 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9DFE4B6C0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DACB44B6C15
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237682AbiBOMab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 07:30:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37684 "EHLO
+        id S237560AbiBOMdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 07:33:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236596AbiBOMaa (ORCPT
+        with ESMTP id S230356AbiBOMdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 07:30:30 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488AB107D18
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:30:20 -0800 (PST)
+        Tue, 15 Feb 2022 07:33:53 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD54107D33;
+        Tue, 15 Feb 2022 04:33:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644928220; x=1676464220;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bIFqNKHI6bOI6lXyvBll9J8BMAqcZiVtExxmAz4Vm7g=;
-  b=mzhFwzCPqAPt5097qRGyo1elwRMZwDtO+f6699GLuDxtWLDM6yN8usOo
-   /kCXcHhU87cyr+DqtiRigZQGDBsXaG2TJbt74HVyMt3yyu6st+D5w6ipD
-   2ZGy2PaXZo5Az9N9+fIjfgPILsol6aE0XuB+g0KOxTybyAtpuf/zbvWD4
-   CPmZ5CAohT5JpbL1n4yhLQ9ZpCkyw8FSDgVjG81G8K2qEMeHpu315mc5c
-   C0PLIux/qUamECh9u052J+xCCC79OXtRJB/BUpYxVrep/f3QyzQVZS7Mv
-   B4xaiI28y4zXC2zd7L3jN3XRhR3h4DsG1zrE3Cx+47WssAAkitqTKzhlS
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="247936243"
+  t=1644928423; x=1676464423;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZSSPPDPlAtANWJt0ibRhhqUVLHllcN8SoStBieGVQlU=;
+  b=mSwDnZlVobLxFpeLIB2eJsb48ylqyxdWYaZGgxTnbKhVPRwSx94Y6dvO
+   pJKe77l8d1fJEe59+1FC/9luBsijsknsjCuXhFGaQbS9b1jO6SEb0N3o9
+   3KErLm1J1LG8IC1LOMNGFcK/415/HQEcko9qqrx9jjC/vB6ArzENgoKGD
+   eW5IABNZ6ghIIzthp7AE+64xjWIuvkVLTNw78jCgFuHTNdzFSlhdBF1ph
+   zqENE1eVDhys4akdwH47OEhaZSP0aD1yzIsGMu8g19ve9sC86/fFF/LGj
+   /ZMpdQfUyxXnuEkW2aOrgabTUObd01tO4oLX/Lov5MCk/Lm6tOw52lGqZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="230969321"
 X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="247936243"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 04:30:17 -0800
+   d="scan'208";a="230969321"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 04:33:43 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="624766664"
-Received: from jkoratik-mobl2.amr.corp.intel.com (HELO [10.212.80.80]) ([10.212.80.80])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 04:30:14 -0800
-Message-ID: <f88b7780-cf4f-d2f5-f2ba-cd3d7bf2a0d4@linux.intel.com>
-Date:   Tue, 15 Feb 2022 12:30:12 +0000
+   d="scan'208";a="681013040"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 15 Feb 2022 04:33:39 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 15 Feb 2022 14:33:38 +0200
+Date:   Tue, 15 Feb 2022 14:33:38 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Jack Pham <quic_jackp@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Jameson Thies <jthies@google.com>,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 3/3] usb: typec: ucsi: Register USB Power Delivery
+ Capabilities
+Message-ID: <YgudomUruecCdS4M@kuha.fi.intel.com>
+References: <20220203144657.16527-1-heikki.krogerus@linux.intel.com>
+ <20220203144657.16527-4-heikki.krogerus@linux.intel.com>
+ <20220210075611.GC13801@jackp-linux.qualcomm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [Intel-gfx] [PATCH v7 1/5] drm/i915/gsc: add gsc as a mei
- auxiliary device
-Content-Language: en-US
-To:     Alexander Usyskin <alexander.usyskin@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        intel-gfx@lists.freedesktop.org
-References: <20220213103215.2440248-1-alexander.usyskin@intel.com>
- <20220213103215.2440248-2-alexander.usyskin@intel.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <20220213103215.2440248-2-alexander.usyskin@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210075611.GC13801@jackp-linux.qualcomm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 13/02/2022 10:32, Alexander Usyskin wrote:
-> From: Tomas Winkler <tomas.winkler@intel.com>
+On Wed, Feb 09, 2022 at 11:56:11PM -0800, Jack Pham wrote:
+> Hi Heikki,
 > 
-> GSC is a graphics system controller, it provides
-> a chassis controller for graphics discrete cards.
+> On Thu, Feb 03, 2022 at 05:46:57PM +0300, Heikki Krogerus wrote:
+> > UCSI allows the USB PD capabilities to be read with the
+> > GET_PDO command. This will register those capabilities, and
+> > that way make them visible to the user space.
+> > 
+> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > ---
+> >  drivers/usb/typec/ucsi/ucsi.c | 128 +++++++++++++++++++++++++++++++---
+> >  drivers/usb/typec/ucsi/ucsi.h |   8 +++
+> >  2 files changed, 125 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> > index f0c2fa19f3e0f..5149001093c7f 100644
+> > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > @@ -568,8 +568,8 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
+> >  	}
+> >  }
+> >  
+> > -static int ucsi_get_pdos(struct ucsi_connector *con, int is_partner,
+> > -			 u32 *pdos, int offset, int num_pdos)
+> > +static int ucsi_read_pdos(struct ucsi_connector *con, enum typec_role role, int is_partner,
+> > +			  u32 *pdos, int offset, int num_pdos)
+> >  {
+> >  	struct ucsi *ucsi = con->ucsi;
+> >  	u64 command;
+> > @@ -579,7 +579,7 @@ static int ucsi_get_pdos(struct ucsi_connector *con, int is_partner,
+> >  	command |= UCSI_GET_PDOS_PARTNER_PDO(is_partner);
+> >  	command |= UCSI_GET_PDOS_PDO_OFFSET(offset);
+> >  	command |= UCSI_GET_PDOS_NUM_PDOS(num_pdos - 1);
+> > -	command |= UCSI_GET_PDOS_SRC_PDOS;
+> > +	command |= is_source(role) ? UCSI_GET_PDOS_SRC_PDOS : 0;
+> >  	ret = ucsi_send_command(ucsi, command, pdos + offset,
+> >  				num_pdos * sizeof(u32));
+> >  	if (ret < 0 && ret != -ETIMEDOUT)
+> > @@ -590,26 +590,39 @@ static int ucsi_get_pdos(struct ucsi_connector *con, int is_partner,
+> >  	return ret;
+> >  }
+> >  
+> > -static int ucsi_get_src_pdos(struct ucsi_connector *con)
+> > +static int ucsi_get_pdos(struct ucsi_connector *con, enum typec_role role,
+> > +			 int is_partner, u32 *pdos)
+> >  {
+> > +	u8 num_pdos;
+> >  	int ret;
+> >  
+> >  	/* UCSI max payload means only getting at most 4 PDOs at a time */
+> > -	ret = ucsi_get_pdos(con, 1, con->src_pdos, 0, UCSI_MAX_PDOS);
+> > +	ret = ucsi_read_pdos(con, role, is_partner, pdos, 0, UCSI_MAX_PDOS);
+> >  	if (ret < 0)
+> >  		return ret;
+> >  
+> > -	con->num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
+> > -	if (con->num_pdos < UCSI_MAX_PDOS)
+> > -		return 0;
+> > +	num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
+> > +	if (num_pdos < UCSI_MAX_PDOS)
+> > +		return num_pdos;
+> >  
+> >  	/* get the remaining PDOs, if any */
+> > -	ret = ucsi_get_pdos(con, 1, con->src_pdos, UCSI_MAX_PDOS,
+> > -			    PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
+> > +	ret = ucsi_read_pdos(con, role, is_partner, pdos, UCSI_MAX_PDOS,
+> > +			     PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	return ret / sizeof(u32) + num_pdos;
+> > +}
+> > +
+> > +static int ucsi_get_src_pdos(struct ucsi_connector *con)
+> > +{
+> > +	int ret;
+> > +
+> > +	ret = ucsi_get_pdos(con, TYPEC_SOURCE, 1, con->src_pdos);
 > 
-> There are two MEI interfaces in GSC: HECI1 and HECI2.
+> This issues the GET_PDOS command to PPM to get the source PDOs of the
+> partner...
 > 
-> Both interfaces are on the BAR0 at offsets 0x00258000 and 0x00259000.
-> GSC is a GT Engine (class 4: instance 6). HECI1 interrupt is signaled
-> via bit 15 and HECI2 via bit 14 in the interrupt register.
+> >  	if (ret < 0)
+> >  		return ret;
+> >  
+> > -	con->num_pdos += ret / sizeof(u32);
+> > +	con->num_pdos += ret;
+> >  
+> >  	ucsi_port_psy_changed(con);
+> >  
+> > @@ -638,6 +651,60 @@ static int ucsi_check_altmodes(struct ucsi_connector *con)
+> >  	return ret;
+> >  }
+> >  
+> > +static int ucsi_register_partner_pdos(struct ucsi_connector *con)
+> > +{
+> > +	struct pd_desc desc = { con->ucsi->cap.pd_version };
+> > +	struct pd_capabilities *cap;
+> > +	struct pd_caps_desc caps;
+> > +	int ret;
+> > +
+> > +	con->partner_pd = typec_partner_register_pd(con->partner, &desc);
+> > +	if (IS_ERR(con->partner_pd))
+> > +		return PTR_ERR(con->partner_pd);
+> > +
+> > +	ret = ucsi_get_pdos(con, TYPEC_SOURCE, 1, caps.pdo);
 > 
-> This patch exports GSC as auxiliary device for mei driver to bind to
-> for HECI2 interface.
+> ... and also here.
 > 
-> CC: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
-> Signed-off-by: Vitaly Lubart <vitaly.lubart@intel.com>
-> Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
-> ---
-> V4: add header to the MAINTAINERS file
->      drop empty line
-> V5: rebase
-> V6: rebase, drop redundant assignments
-> V7: add Greg KH Reviewed-by
-> ---
->   MAINTAINERS                              |   1 +
->   drivers/gpu/drm/i915/Kconfig             |   1 +
->   drivers/gpu/drm/i915/Makefile            |   3 +
->   drivers/gpu/drm/i915/gt/intel_gsc.c      | 196 +++++++++++++++++++++++
->   drivers/gpu/drm/i915/gt/intel_gsc.h      |  37 +++++
->   drivers/gpu/drm/i915/gt/intel_gt.c       |   3 +
->   drivers/gpu/drm/i915/gt/intel_gt.h       |   5 +
->   drivers/gpu/drm/i915/gt/intel_gt_irq.c   |  13 ++
->   drivers/gpu/drm/i915/gt/intel_gt_regs.h  |   1 +
->   drivers/gpu/drm/i915/gt/intel_gt_types.h |   2 +
->   drivers/gpu/drm/i915/i915_drv.h          |   8 +
->   drivers/gpu/drm/i915/i915_pci.c          |   3 +-
->   drivers/gpu/drm/i915/i915_reg.h          |   2 +
->   drivers/gpu/drm/i915/intel_device_info.h |   2 +
->   include/linux/mei_aux.h                  |  19 +++
->   15 files changed, 295 insertions(+), 1 deletion(-)
->   create mode 100644 drivers/gpu/drm/i915/gt/intel_gsc.c
->   create mode 100644 drivers/gpu/drm/i915/gt/intel_gsc.h
->   create mode 100644 include/linux/mei_aux.h
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	if (ret < PDO_MAX_OBJECTS)
+> > +		caps.pdo[ret] = 0;
+> > +	caps.role = TYPEC_SOURCE;
+> > +
+> > +	cap = pd_register_capabilities(con->partner_pd, &caps);
+> > +	if (IS_ERR(cap))
+> > +		return PTR_ERR(cap);
+> > +
+> > +	ret = typec_partner_set_pd_capabilities(con->partner, cap);
+> > +	if (ret) {
+> > +		pd_unregister_capabilities(cap);
+> > +		return ret;
+> > +	}
+> > +
+> > +	con->partner_source_caps = cap;
+> > +
+> > +	ret = ucsi_get_pdos(con, TYPEC_SINK, 1, caps.pdo);
+> > +	if (ret <= 0)
+> > +		return ret;
+> > +
+> > +	if (ret < PDO_MAX_OBJECTS)
+> > +		caps.pdo[ret] = 0;
+> > +	caps.role = TYPEC_SINK;
+> > +
+> > +	cap = pd_register_capabilities(con->partner_pd, &caps);
+> > +	if (IS_ERR(cap))
+> > +		return PTR_ERR(cap);
+> > +
+> > +	ret = typec_partner_set_pd_capabilities(con->partner, cap);
+> > +	if (ret) {
+> > +		pd_unregister_capabilities(cap);
+> > +		return ret;
+> > +	}
+> > +
+> > +	con->partner_sink_caps = cap;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static void ucsi_pwr_opmode_change(struct ucsi_connector *con)
+> >  {
+> >  	switch (UCSI_CONSTAT_PWR_OPMODE(con->status.flags)) {
+> > @@ -646,6 +713,7 @@ static void ucsi_pwr_opmode_change(struct ucsi_connector *con)
+> >  		typec_set_pwr_opmode(con->port, TYPEC_PWR_MODE_PD);
+> >  		ucsi_partner_task(con, ucsi_get_src_pdos, 30, 0);
+> >  		ucsi_partner_task(con, ucsi_check_altmodes, 30, 0);
+> > +		ucsi_partner_task(con, ucsi_register_partner_pdos, 1, HZ);
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a0c2ae3d71d8..c92d34f8522a 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -9797,6 +9797,7 @@ S:	Supported
->   F:	Documentation/driver-api/mei/*
->   F:	drivers/misc/mei/
->   F:	drivers/watchdog/mei_wdt.c
-> +F:	include/linux/mei_aux.h
->   F:	include/linux/mei_cl_bus.h
->   F:	include/uapi/linux/mei.h
->   F:	samples/mei/*
-> diff --git a/drivers/gpu/drm/i915/Kconfig b/drivers/gpu/drm/i915/Kconfig
-> index 2ac220bfd0ed..3b0508e7a805 100644
-> --- a/drivers/gpu/drm/i915/Kconfig
-> +++ b/drivers/gpu/drm/i915/Kconfig
-> @@ -29,6 +29,7 @@ config DRM_I915
->   	select VMAP_PFN
->   	select DRM_TTM
->   	select DRM_BUDDY
-> +	select AUXILIARY_BUS
->   	help
->   	  Choose this option if you have a system that has "Intel Graphics
->   	  Media Accelerator" or "HD Graphics" integrated graphics,
-> diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
-> index 226dbef5f64a..e40ba71b3cdd 100644
-> --- a/drivers/gpu/drm/i915/Makefile
-> +++ b/drivers/gpu/drm/i915/Makefile
-> @@ -195,6 +195,9 @@ i915-y += gt/uc/intel_uc.o \
->   	  gt/uc/intel_huc_debugfs.o \
->   	  gt/uc/intel_huc_fw.o
->   
-> +# graphics system controller (GSC) support
-> +i915-y += gt/intel_gsc.o
-> +
->   # modesetting core code
->   i915-y += \
->   	display/hsw_ips.o \
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.c b/drivers/gpu/drm/i915/gt/intel_gsc.c
-> new file mode 100644
-> index 000000000000..d07f182f64e4
-> --- /dev/null
-> +++ b/drivers/gpu/drm/i915/gt/intel_gsc.c
-> @@ -0,0 +1,196 @@
-> +// SPDX-License-Identifier: MIT
-> +/*
-> + * Copyright(c) 2019-2022, Intel Corporation. All rights reserved.
-> + */
-> +
-> +#include <linux/irq.h>
-> +#include <linux/mei_aux.h>
-> +#include "i915_reg.h"
-> +#include "i915_drv.h"
-> +#include "gt/intel_gt.h"
-> +#include "intel_gsc.h"
-> +
-> +#define GSC_BAR_LENGTH  0x00000FFC
-> +
-> +static void gsc_irq_mask(struct irq_data *d)
-> +{
-> +	/* generic irq handling */
-> +}
-> +
-> +static void gsc_irq_unmask(struct irq_data *d)
-> +{
-> +	/* generic irq handling */
-> +} > +
-> +static struct irq_chip gsc_irq_chip = {
-> +	.name = "gsc_irq_chip",
-> +	.irq_mask = gsc_irq_mask,
-> +	.irq_unmask = gsc_irq_unmask,
-> +};
-> +
-> +static int gsc_irq_init(struct drm_i915_private *dev_priv, int irq)
+> And, both ucsi_get_src_pdos() and ucsi_register_partner_pdos() are
+> scheduled to run here...
+> 
+> >  		break;
+> >  	case UCSI_CONSTAT_PWR_OPMODE_TYPEC1_5:
+> >  		con->rdo = 0;
+> > @@ -704,6 +772,17 @@ static void ucsi_unregister_partner(struct ucsi_connector *con)
+> >  	if (!con->partner)
+> >  		return;
+> >  
+> > +	typec_partner_unset_pd_capabilities(con->partner, TYPEC_SINK);
+> > +	pd_unregister_capabilities(con->partner_sink_caps);
+> > +	con->partner_sink_caps = NULL;
+> > +
+> > +	typec_partner_unset_pd_capabilities(con->partner, TYPEC_SOURCE);
+> > +	pd_unregister_capabilities(con->partner_source_caps);
+> > +	con->partner_source_caps = NULL;
+> > +
+> > +	typec_partner_unregister_pd(con->partner);
+> > +	con->partner_pd = NULL;
+> > +
+> >  	ucsi_unregister_altmodes(con, UCSI_RECIPIENT_SOP);
+> >  	typec_unregister_partner(con->partner);
+> >  	con->partner = NULL;
+> > @@ -1037,6 +1116,8 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+> >  	u64 command;
+> >  	char *name;
+> >  	int ret;
+> > +	struct pd_desc desc = { ucsi->cap.pd_version };
+> > +	struct pd_caps_desc caps;
+> >  
+> >  	name = kasprintf(GFP_KERNEL, "%s-con%d", dev_name(ucsi->dev), con->num);
+> >  	if (!name)
+> > @@ -1103,6 +1184,24 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+> >  		goto out;
+> >  	}
+> >  
+> > +	con->pd = typec_port_register_pd(con->port, &desc);
+> > +
+> > +	ret = ucsi_get_pdos(con, TYPEC_SOURCE, 0, caps.pdo);
+> > +	if (ret > 0) {
+> > +		caps.pdo[ret] = 0;
+> > +		caps.role = TYPEC_SOURCE;
+> > +		con->source_caps = pd_register_capabilities(con->pd, &caps);
+> > +		typec_port_set_pd_capabilities(con->port, con->source_caps);
+> > +	}
+> > +
+> > +	ret = ucsi_get_pdos(con, TYPEC_SINK, 0, caps.pdo);
+> > +	if (ret > 0) {
+> > +		caps.pdo[ret] = 0;
+> > +		caps.role = TYPEC_SINK;
+> > +		con->sink_caps = pd_register_capabilities(con->pd, &caps);
+> > +		typec_port_set_pd_capabilities(con->port, con->sink_caps);
+> > +	}
+> > +
+> >  	/* Alternate modes */
+> >  	ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_CON);
+> >  	if (ret) {
+> > @@ -1169,6 +1268,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+> >  	    UCSI_CONSTAT_PWR_OPMODE_PD) {
+> >  		ucsi_get_src_pdos(con);
+> >  		ucsi_check_altmodes(con);
+> > +		ucsi_register_partner_pdos(con);
+> 
+> ... as well as here.
+> 
+> So wouldn't this result in the PPM issuing the same PD Get_Source_Cap
+> message twice to the port partner (in either case of initial port
+> registration or op mode change)?  Could we just consolidate them to just
+> issue GET_PDOS only once and take care of populating the partner's
+> Source Caps for both the pd_capabilties as well as power_supply purposes
+> from a single helper?
 
-I am not insisting but we tend to use i915 for the variable name instead 
-of dev_priv since some time back.
+Yes. I tried create as little impact on existing code with this as
+possible, so I just duplicated that part, but I probable should not
+have done that.
 
-> +{
-> +	irq_set_chip_and_handler_name(irq, &gsc_irq_chip,
-> +				      handle_simple_irq, "gsc_irq_handler");
-> +
-> +	return irq_set_chip_data(irq, dev_priv);
+> Another aside, thinking back to a previous patch [1] I had proposed a
+> few months ago, another question I had is whether it is proper to even
+> issue a Get_Source_Cap message to sink-only devices, as we did encounter
+> certain DisplayPort adapters that don't like when that happens.
+> Wondering if it could be possible to limit calling the GET_PDOS command
+> unless we know the partner is capable of operating in that particular
+> power role.  e.g. don't call get_src_pdos() if partner is sink-only.
+> Or is this the kind of thing that the PPM is supposed to be able to
+> figure out and allow OPM to naively issue the command regardless, and
+> just get an error/empty return?
 
-I am not familiar with this interrupt scheme - does dev_priv get used at 
-all by handle_simple_irq, or anyone, after being set here?
+Well, in many cases we simply can not rely on the PPM, but I think we
+should be able rely on it with the role.
 
-> +}
-> +
-> +struct intel_gsc_def {
-> +	const char *name;
-> +	const unsigned long bar;
+What you are proposing probable would make sense. Do you want to work
+on those improvements? I don't have to modify this driver now with
+this series. I also can first register the sysfs attributes from
+tcpm.c.
 
-Unusual, why const out of curiosity? And is it "bar" or "base" would be 
-more accurate?
+thanks,
 
-> +	size_t bar_size;
-> +};
-> +
-> +/* gscfi (graphics system controller firmware interface) resources */
-> +static const struct intel_gsc_def intel_gsc_def_dg1[] = {
-> +	{
-> +	},
-
-Maybe put a comment in this empty element like "/* HECI1 not yet 
-implemented. */"?
-
-> +	{
-> +		.name = "mei-gscfi",
-> +		.bar = GSC_DG1_HECI2_BASE,
-> +		.bar_size = GSC_BAR_LENGTH,
-> +	}
-> +};
-> +
-> +static void intel_gsc_release_dev(struct device *dev)
-> +{
-> +	struct auxiliary_device *aux_dev = to_auxiliary_dev(dev);
-> +	struct mei_aux_device *adev = auxiliary_dev_to_mei_aux_dev(aux_dev);
-> +
-> +	kfree(adev);
-> +}
-> +
-> +static void intel_gsc_destroy_one(struct intel_gsc_intf *intf)
-> +{
-> +	if (intf->adev) {
-> +		auxiliary_device_delete(&intf->adev->aux_dev);
-> +		auxiliary_device_uninit(&intf->adev->aux_dev);
-> +		intf->adev = NULL;
-> +	}
-> +	if (intf->irq >= 0)
-> +		irq_free_desc(intf->irq);
-> +	intf->irq = -1;
-> +}
-> +
-> +static void intel_gsc_init_one(struct drm_i915_private *dev_priv,
-> +			       struct intel_gsc_intf *intf,
-> +			       unsigned int intf_id)
-
-Could pass in intel_gsc instead of dev_priv to better match with 
-intel_gsc prefix, but no big deal.
-
-> +{
-> +	struct pci_dev *pdev = to_pci_dev(dev_priv->drm.dev);
-> +	struct mei_aux_device *adev;
-> +	struct auxiliary_device *aux_dev;
-> +	const struct intel_gsc_def *def;
-> +	int ret;
-> +
-> +	intf->irq = -1;
-> +	intf->id = intf_id;
-> +
-> +	if (intf_id == 0 && !HAS_HECI_PXP(dev_priv))
-> +		return;
-
-Isn't inf_id == 0 always a bug with this patch, regardless of 
-HAS_HECI_PXP, since the support is incomplete in this patch? If so I'd 
-be more comfortable with a plain drm_WARN_ON_ONCE(intf_id == 0).
-
-> +
-> +	def = &intel_gsc_def_dg1[intf_id];
-> +
-> +	dev_dbg(&pdev->dev, "init gsc one with id %d\n", intf_id);
-
-Meh, too much looks like a during development aid.
-
-> +	intf->irq = irq_alloc_desc(0);
-> +	if (intf->irq < 0) {
-> +		dev_err(&pdev->dev, "gsc irq error %d\n", intf->irq);
-> +		return;
-> +	}
-> +
-> +	ret = gsc_irq_init(dev_priv, intf->irq);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev, "gsc irq init failed %d\n", ret);
-> +		goto fail;
-> +	}
-> +
-> +	adev = kzalloc(sizeof(*adev), GFP_KERNEL);
-> +	if (!adev)
-> +		goto fail;
-> +
-> +	adev->irq = intf->irq;
-> +	adev->bar.parent = &pdev->resource[0];
-> +	adev->bar.start = def->bar + pdev->resource[0].start;
-> +	adev->bar.end = adev->bar.start + def->bar_size - 1;
-> +	adev->bar.flags = IORESOURCE_MEM;
-> +	adev->bar.desc = IORES_DESC_NONE;
-> +
-> +	aux_dev = &adev->aux_dev;
-> +	aux_dev->name = def->name;
-> +	aux_dev->id = (pci_domain_nr(pdev->bus) << 16) |
-> +		      PCI_DEVID(pdev->bus->number, pdev->devfn);
-> +	aux_dev->dev.parent = &pdev->dev;
-> +	aux_dev->dev.release = intel_gsc_release_dev;
-> +
-> +	ret = auxiliary_device_init(aux_dev);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev, "gsc aux init failed %d\n", ret);
-> +		kfree(adev);
-> +		goto fail;
-> +	}
-> +
-> +	ret = auxiliary_device_add(aux_dev);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev, "gsc aux add failed %d\n", ret);
-> +		/* adev will be freed with the put_device() and .release sequence */
-
-For things which fail but do not prevent driver loading and operating 
-otherwise correctly I'd suggest drm_warn throughout but maybe it is just me.
-
-> +		auxiliary_device_uninit(aux_dev);
-> +		goto fail;
-> +	}
-> +	intf->adev = adev;
-> +
-> +	dev_dbg(&pdev->dev, "gsc init one done\n");
-> +	return;
-> +fail:
-> +	intel_gsc_destroy_one(intf);
-
-Error handling is a bit meh but looks correct. Like you could avoid 
-separate free's on the error paths by doing onion unwind, or even full 
-onion unwind instead of conditional teardown in intel_gsc_destroy_one. 
-Not asking for it, just commenting.
-
-> +}
-> +
-> +static void intel_gsc_irq_handler(struct intel_gt *gt, unsigned int intf_id)
-> +{
-> +	int ret;
-> +
-> +	if (intf_id >= INTEL_GSC_NUM_INTERFACES)
-> +		return;
-
-Is this worthy of a WARN_ON or drm_warn? (ratelimited I suppose) Because 
-it would be either bad hardware or a bad driver error to see the 
-interrupt with wrong interface, no?
-
-> +
-> +	if (!HAS_HECI_GSC(gt->i915))
-> +		return;
-
-Likewise?
-
-> +
-> +	if (gt->gsc.intf[intf_id].irq <= 0) {
-> +		DRM_ERROR_RATELIMITED("error handling GSC irq: irq not set");
-
-Like this, but use logging functions which say which device please.
-
-> +		return;
-> +	}
-> +
-> +	ret = generic_handle_irq(gt->gsc.intf[intf_id].irq);
-> +	if (ret)
-> +		DRM_ERROR_RATELIMITED("error handling GSC irq: %d\n", ret);
-> +}
-> +
-> +void gsc_irq_handler(struct intel_gt *gt, u32 iir)
-> +{
-> +	if (iir & GSC_IRQ_INTF(0))
-> +		intel_gsc_irq_handler(gt, 0);
-> +	if (iir & GSC_IRQ_INTF(1))
-> +		intel_gsc_irq_handler(gt, 1);
-> +}
-> +
-> +void intel_gsc_init(struct intel_gsc *gsc, struct drm_i915_private *dev_priv)
-
-Here you don't need to pass in dev_priv since you can get it with 
-container_of and gt->i915 but up to you, no big deal.
-
-> +{
-> +	unsigned int i;
-> +
-> +	if (!HAS_HECI_GSC(dev_priv))
-> +		return;
-> +
-> +	for (i = 0; i < INTEL_GSC_NUM_INTERFACES; i++)
-> +		intel_gsc_init_one(dev_priv, &gsc->intf[i], i);
-> +}
-> +
-> +void intel_gsc_fini(struct intel_gsc *gsc)
-> +{
-> +	struct intel_gt *gt = gsc_to_gt(gsc);
-> +	unsigned int i;
-> +
-> +	if (!HAS_HECI_GSC(gt->i915))
-> +		return;
-> +
-> +	for (i = 0; i < INTEL_GSC_NUM_INTERFACES; i++)
-> +		intel_gsc_destroy_one(&gsc->intf[i]);
-> +}
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.h b/drivers/gpu/drm/i915/gt/intel_gsc.h
-> new file mode 100644
-> index 000000000000..67cb2a75f839
-> --- /dev/null
-> +++ b/drivers/gpu/drm/i915/gt/intel_gsc.h
-> @@ -0,0 +1,37 @@
-> +/* SPDX-License-Identifier: MIT */
-> +/*
-> + * Copyright(c) 2019-2022, Intel Corporation. All rights reserved.
-> + */
-> +#ifndef __INTEL_GSC_DEV_H__
-> +#define __INTEL_GSC_DEV_H__
-> +
-> +#include <linux/types.h>
-> +
-> +struct drm_i915_private;
-> +struct intel_gt;
-> +struct mei_aux_device;
-> +
-> +#define INTEL_GSC_NUM_INTERFACES 2
-> +/*
-> + * The HECI1 bit corresponds to bit15 and HECI2 to bit14.
-> + * The reason for this is to allow growth for more interfaces in the future.
-> + */
-> +#define GSC_IRQ_INTF(_x)  BIT(15 - (_x))
-> +
-> +/**
-> + * struct intel_gsc - graphics security controller
-> + * @intf : gsc interface
-> + */
-> +struct intel_gsc {
-> +	struct intel_gsc_intf {
-> +		struct mei_aux_device *adev;
-> +		int irq;
-> +		unsigned int id;
-> +	} intf[INTEL_GSC_NUM_INTERFACES];
-> +};
-> +
-> +void intel_gsc_init(struct intel_gsc *gsc, struct drm_i915_private *dev_priv);
-> +void intel_gsc_fini(struct intel_gsc *gsc);
-> +void gsc_irq_handler(struct intel_gt *gt, u32 iir);
-
-Why not have consistent prefix on all exported functions?
-
-> +
-> +#endif /* __INTEL_GSC_DEV_H__ */
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
-> index e8403fa53909..18961d154956 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gt.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_gt.c
-> @@ -446,6 +446,8 @@ void intel_gt_chipset_flush(struct intel_gt *gt)
->   
->   void intel_gt_driver_register(struct intel_gt *gt)
->   {
-> +	intel_gsc_init(&gt->gsc, gt->i915);
-> +
->   	intel_rps_driver_register(&gt->rps);
->   
->   	intel_gt_debugfs_register(gt);
-> @@ -766,6 +768,7 @@ void intel_gt_driver_unregister(struct intel_gt *gt)
->   	intel_wakeref_t wakeref;
->   
->   	intel_rps_driver_unregister(&gt->rps);
-> +	intel_gsc_fini(&gt->gsc);
->   
->   	intel_pxp_fini(&gt->pxp);
->   
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gt.h b/drivers/gpu/drm/i915/gt/intel_gt.h
-> index 2dad46c3eff2..6ba817c02baa 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gt.h
-> +++ b/drivers/gpu/drm/i915/gt/intel_gt.h
-> @@ -34,6 +34,11 @@ static inline struct intel_gt *huc_to_gt(struct intel_huc *huc)
->   	return container_of(huc, struct intel_gt, uc.huc);
->   }
->   
-> +static inline struct intel_gt *gsc_to_gt(struct intel_gsc *gsc)
-> +{
-> +	return container_of(gsc, struct intel_gt, gsc);
-> +}
-> +
->   void intel_gt_init_early(struct intel_gt *gt, struct drm_i915_private *i915);
->   void __intel_gt_init_early(struct intel_gt *gt, struct drm_i915_private *i915);
->   int intel_gt_assign_ggtt(struct intel_gt *gt);
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gt_irq.c b/drivers/gpu/drm/i915/gt/intel_gt_irq.c
-> index 983264e10e0a..d36f919bbdf5 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gt_irq.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_gt_irq.c
-> @@ -68,6 +68,9 @@ gen11_other_irq_handler(struct intel_gt *gt, const u8 instance,
->   	if (instance == OTHER_KCR_INSTANCE)
->   		return intel_pxp_irq_handler(&gt->pxp, iir);
->   
-> +	if (instance == OTHER_GSC_INSTANCE)
-> +		return gsc_irq_handler(gt, iir);
-> +
->   	WARN_ONCE(1, "unhandled other interrupt instance=0x%x, iir=0x%x\n",
->   		  instance, iir);
-
-Digression - it would be nice to be able to report unhandled iir bits 
-here but all handlers return void so refactoring would be needed.
-
->   }
-> @@ -182,6 +185,8 @@ void gen11_gt_irq_reset(struct intel_gt *gt)
->   	/* Disable RCS, BCS, VCS and VECS class engines. */
->   	intel_uncore_write(uncore, GEN11_RENDER_COPY_INTR_ENABLE, 0);
->   	intel_uncore_write(uncore, GEN11_VCS_VECS_INTR_ENABLE,	  0);
-> +	if (HAS_HECI_GSC(gt->i915))
-> +		intel_uncore_write(uncore, GEN11_GUNIT_CSME_INTR_ENABLE, 0);
->   
->   	/* Restore masks irqs on RCS, BCS, VCS and VECS engines. */
->   	intel_uncore_write(uncore, GEN11_RCS0_RSVD_INTR_MASK,	~0);
-> @@ -195,6 +200,8 @@ void gen11_gt_irq_reset(struct intel_gt *gt)
->   	intel_uncore_write(uncore, GEN11_VECS0_VECS1_INTR_MASK,	~0);
->   	if (HAS_ENGINE(gt, VECS2) || HAS_ENGINE(gt, VECS3))
->   		intel_uncore_write(uncore, GEN12_VECS2_VECS3_INTR_MASK, ~0);
-> +	if (HAS_HECI_GSC(gt->i915))
-> +		intel_uncore_write(uncore, GEN11_GUNIT_CSME_INTR_MASK, ~0);
->   
->   	intel_uncore_write(uncore, GEN11_GPM_WGBOXPERF_INTR_ENABLE, 0);
->   	intel_uncore_write(uncore, GEN11_GPM_WGBOXPERF_INTR_MASK,  ~0);
-> @@ -209,6 +216,7 @@ void gen11_gt_irq_postinstall(struct intel_gt *gt)
->   {
->   	struct intel_uncore *uncore = gt->uncore;
->   	u32 irqs = GT_RENDER_USER_INTERRUPT;
-> +	const u32 gsc_mask = GSC_IRQ_INTF(0) | GSC_IRQ_INTF(1);
-
-Why enable the one which is not supported by the patch? No harm doing it?
-
->   	u32 dmask;
->   	u32 smask;
->   
-> @@ -225,6 +233,9 @@ void gen11_gt_irq_postinstall(struct intel_gt *gt)
->   	/* Enable RCS, BCS, VCS and VECS class interrupts. */
->   	intel_uncore_write(uncore, GEN11_RENDER_COPY_INTR_ENABLE, dmask);
->   	intel_uncore_write(uncore, GEN11_VCS_VECS_INTR_ENABLE, dmask);
-> +	if (HAS_HECI_GSC(gt->i915))
-> +		intel_uncore_write(uncore, GEN11_GUNIT_CSME_INTR_ENABLE,
-> +				   gsc_mask);
->   
->   	/* Unmask irqs on RCS, BCS, VCS and VECS engines. */
->   	intel_uncore_write(uncore, GEN11_RCS0_RSVD_INTR_MASK, ~smask);
-> @@ -238,6 +249,8 @@ void gen11_gt_irq_postinstall(struct intel_gt *gt)
->   	intel_uncore_write(uncore, GEN11_VECS0_VECS1_INTR_MASK, ~dmask);
->   	if (HAS_ENGINE(gt, VECS2) || HAS_ENGINE(gt, VECS3))
->   		intel_uncore_write(uncore, GEN12_VECS2_VECS3_INTR_MASK, ~dmask);
-> +	if (HAS_HECI_GSC(gt->i915))
-> +		intel_uncore_write(uncore, GEN11_GUNIT_CSME_INTR_MASK, 0);
->   	/*
->   	 * RPS interrupts will get enabled/disabled on demand when RPS itself
->   	 * is enabled/disabled.
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gt_regs.h b/drivers/gpu/drm/i915/gt/intel_gt_regs.h
-> index a6f0220c2e9f..427f91900afc 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gt_regs.h
-> +++ b/drivers/gpu/drm/i915/gt/intel_gt_regs.h
-> @@ -944,6 +944,7 @@ enum {
->   #define OTHER_GUC_INSTANCE	0
->   #define OTHER_GTPM_INSTANCE	1
->   #define OTHER_KCR_INSTANCE	4
-> +#define OTHER_GSC_INSTANCE	6
->   
->   #define GEN11_INTR_IDENTITY_REG(x)	_MMIO(0x190060 + ((x) * 4))
->   
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gt_types.h b/drivers/gpu/drm/i915/gt/intel_gt_types.h
-> index f20687796490..5556d55f76ea 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gt_types.h
-> +++ b/drivers/gpu/drm/i915/gt/intel_gt_types.h
-> @@ -16,6 +16,7 @@
->   #include <linux/workqueue.h>
->   
->   #include "uc/intel_uc.h"
-> +#include "intel_gsc.h"
->   
->   #include "i915_vma.h"
->   #include "intel_engine_types.h"
-> @@ -72,6 +73,7 @@ struct intel_gt {
->   	struct i915_ggtt *ggtt;
->   
->   	struct intel_uc uc;
-> +	struct intel_gsc gsc;
->   
->   	struct mutex tlb_invalidate_lock;
->   
-> diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
-> index 4f057a45654a..b41871abe776 100644
-> --- a/drivers/gpu/drm/i915/i915_drv.h
-> +++ b/drivers/gpu/drm/i915/i915_drv.h
-> @@ -1444,6 +1444,14 @@ IS_SUBPLATFORM(const struct drm_i915_private *i915,
->   
->   #define HAS_DMC(dev_priv)	(INTEL_INFO(dev_priv)->display.has_dmc)
->   
-> +#define HAS_HECI_PXP(dev_priv) \
-> +	(INTEL_INFO(dev_priv)->has_heci_pxp)
-> +
-> +#define HAS_HECI_GSCFI(dev_priv) \
-> +	(INTEL_INFO(dev_priv)->has_heci_gscfi)
-> +
-> +#define HAS_HECI_GSC(dev_priv) (HAS_HECI_PXP(dev_priv) || HAS_HECI_GSCFI(dev_priv))
-> +
->   #define HAS_MSO(i915)		(DISPLAY_VER(i915) >= 12)
->   
->   #define HAS_RUNTIME_PM(dev_priv) (INTEL_INFO(dev_priv)->has_runtime_pm)
-> diff --git a/drivers/gpu/drm/i915/i915_pci.c b/drivers/gpu/drm/i915/i915_pci.c
-> index 467252f885c2..8f608b03d30b 100644
-> --- a/drivers/gpu/drm/i915/i915_pci.c
-> +++ b/drivers/gpu/drm/i915/i915_pci.c
-> @@ -900,7 +900,8 @@ static const struct intel_device_info rkl_info = {
->   	.has_llc = 0, \
->   	.has_pxp = 0, \
->   	.has_snoop = 1, \
-> -	.is_dgfx = 1
-> +	.is_dgfx = 1, \
-> +	.has_heci_gscfi = 1
->   
->   static const struct intel_device_info dg1_info = {
->   	GEN12_FEATURES,
-> diff --git a/drivers/gpu/drm/i915/i915_reg.h b/drivers/gpu/drm/i915/i915_reg.h
-> index ca6adfc234c0..e74934255198 100644
-> --- a/drivers/gpu/drm/i915/i915_reg.h
-> +++ b/drivers/gpu/drm/i915/i915_reg.h
-> @@ -974,6 +974,8 @@
->   #define GEN11_VEBOX2_RING_BASE		0x1d8000
->   #define XEHP_VEBOX3_RING_BASE		0x1e8000
->   #define XEHP_VEBOX4_RING_BASE		0x1f8000
-> +#define GSC_DG1_HECI1_BASE	0x00258000
-> +#define GSC_DG1_HECI2_BASE	0x00259000
->   #define BLT_RING_BASE		0x22000
->   
->   
-> diff --git a/drivers/gpu/drm/i915/intel_device_info.h b/drivers/gpu/drm/i915/intel_device_info.h
-> index 27dcfe6f2429..fa75f464cb01 100644
-> --- a/drivers/gpu/drm/i915/intel_device_info.h
-> +++ b/drivers/gpu/drm/i915/intel_device_info.h
-> @@ -135,6 +135,8 @@ enum intel_ppgtt_type {
->   	func(has_reset_engine); \
->   	func(has_global_mocs); \
->   	func(has_gt_uc); \
-> +	func(has_heci_pxp); \
-
-Presumably this will be used soon? (And the variety of HAS_ macros.)
-
-> +	func(has_heci_gscfi); \
->   	func(has_guc_deprivilege); \
->   	func(has_l3_dpf); \
->   	func(has_llc); \
-> diff --git a/include/linux/mei_aux.h b/include/linux/mei_aux.h
-> new file mode 100644
-> index 000000000000..587f25128848
-> --- /dev/null
-> +++ b/include/linux/mei_aux.h
-> @@ -0,0 +1,19 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (c) 2022, Intel Corporation. All rights reserved.
-> + */
-> +#ifndef _LINUX_MEI_AUX_H
-> +#define _LINUX_MEI_AUX_H
-> +
-> +#include <linux/auxiliary_bus.h>
-> +
-> +struct mei_aux_device {
-> +	struct auxiliary_device aux_dev;
-> +	int irq;
-> +	struct resource bar;
-> +};
-> +
-> +#define auxiliary_dev_to_mei_aux_dev(auxiliary_dev) \
-> +	container_of(auxiliary_dev, struct mei_aux_device, aux_dev)
-> +
-> +#endif /* _LINUX_MEI_AUX_H */
-
-In summary I think prefix on the exported function and 
-drm_err_ratelimited were the only comments which need action. The rest 
-were either questions of suggestions on how to polish it a bit more so 
-it aligns better with established i915 patterns.
-
-Regards,
-
-Tvrtko
-
+-- 
+heikki

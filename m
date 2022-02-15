@@ -2,253 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC764B7058
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E86E4B7299
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240294AbiBOPmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:42:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43492 "EHLO
+        id S239414AbiBOPmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:42:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241533AbiBOPlb (ORCPT
+        with ESMTP id S241642AbiBOPlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:41:31 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B015DC1146
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:35:23 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id v186so57267857ybg.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:35:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=O4eypergZV3m6Zzdl4fNq7xKdAiZHF46BD1z85Nc8jg=;
-        b=QXVXjkwWhHxjoLXOmL4F9kN9NOD62pL1mWBMaTYzAESbupVXKNh5VqF9KgeTTv80NX
-         8qM68EjdMMonVbDhSSRJ/xxdMD/ZnUyHwl/MAXaBsdLu5vBPwCP3zq2uW6MXcDeKBWMg
-         LYAVlC8HVQcez0QQi1WnMtf35FtsRNXzyzL1S2Ty5WGzqw7aPbVl9hB3LSoWvi0p+LPb
-         m3hfDp+37V/UnGccbWP2lFtEQk3mAItXOd8GiHBVZWv2LGwEa8oyhACoUx/U+U1wpY8Q
-         s6evXE37CnbGzrC3sZPINlGMGyVjjpql9t1fBcWMI8aqIguTkyXmX3UXiePkMlSN6qMm
-         6k1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=O4eypergZV3m6Zzdl4fNq7xKdAiZHF46BD1z85Nc8jg=;
-        b=sBkN4KjfLSRppCISU2TUO0zD/44gTTkA7n3ys7Eu18E6CDX2IjWGHVIRVq0Co3dbrY
-         K5R7ErsdP/sXT6pQqiKdyI1O0h+JZlFy6uWiegyYy3bvBsuhXpi0+3F94yU3DqRVch7k
-         XdKOdDRG4Oig9gKx3frG0DOQNWTI4NRmK3Fl69+Tq68hvWI4BGvLrmKW9qeipv3nG9FO
-         yRuZ3gdm6n8nR40AMI/efURr/k3iwxJZqZdGKX6MwPWdxF8ZEutaOA13vHhqIRIdcNSC
-         MHzGhIX5JUaGJuz1xE9alpF2p1j3CCyMNTQgVY2BqDvf2o0A7bZO0LvhKaR1cQDobGbA
-         XZXw==
-X-Gm-Message-State: AOAM530Tp9YXaTpXH1cW5mimwx1lNZNAdeQumDQbtmGJNITfdcWunaS/
-        0IZEaH1EGS6kCDQUhZo8r1gRvU3TAzjznbnk3S438Q==
-X-Google-Smtp-Source: ABdhPJxRvA4gT9FlG4INWIsLr7W6swMmTrbJAhDieVE8mfjvg+BfEtJeIG89DlINozKWNR5djGyY1BHeaHKW0G90v/A=
-X-Received: by 2002:a25:8885:: with SMTP id d5mr4091214ybl.383.1644939322315;
- Tue, 15 Feb 2022 07:35:22 -0800 (PST)
+        Tue, 15 Feb 2022 10:41:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1719DB65
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:35:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5C89616A0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:35:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15830C340EB;
+        Tue, 15 Feb 2022 15:35:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644939347;
+        bh=WwwCEUptRQNEOeF0BNXF+xx9Qur6a0L+BPYNrj74ML4=;
+        h=Date:From:To:cc:Subject:From;
+        b=rOHu2/LhaO7fHu2VHeol8vWk8YYZ/0UpeMD4agxzaaHjJMnVrB6/21mitW1d9AWpg
+         ulWJBMza1COGX55mrxvXuMIvL1woTzZEj//naGbzGleCXVzH6p1c9T6r0kcfmRUw8P
+         IhJRzp9YwOJwbKScFiRj2oZZCVTuy1XBotPGFzlv7fxNhuUynAET0EKWvdnWaJ1hT+
+         SZUBPS0cNGhnMxu4lOeL42qgXR2OHfOXdt+qN8X1OHQ6zlXeIPe0wqaVwZFCVZ3eqk
+         b65pDxQbtIjJG/L0kUQbv0Gu56Dhy1FFD/Uvg4g+rEZrPeOKIJTVAzw3v1nydFTbJ9
+         34OXMKqqW4sKA==
+Date:   Tue, 15 Feb 2022 16:35:43 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+cc:     linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [GIT PULL] HID fixes
+Message-ID: <nycvar.YFH.7.76.2202151633100.11721@cbobk.fhfr.pm>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-References: <20220213150234.31602-1-thomas.liu@ucloud.cn> <CA+FuTSdODATw3hSAMv9aZUmJNM8ZE-YP58pr17bO9rGJUgfegw@mail.gmail.com>
- <CFD9B65A-6762-4D9B-ADEB-B4C0B1902E02@ucloud.cn> <CA+FuTSfQOUEyEDnOU8VVZ=STw_ii-hTwyg-cvpcViPkVK4pLUA@mail.gmail.com>
- <42554FCB-9180-4B32-B5CF-6D3236237D99@ucloud.cn> <CAF=yD-+1RSj_o8n5LDOLVyn_dvVQvmDQo5pacSoDFPOR3M2g5g@mail.gmail.com>
-In-Reply-To: <CAF=yD-+1RSj_o8n5LDOLVyn_dvVQvmDQo5pacSoDFPOR3M2g5g@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 15 Feb 2022 07:35:10 -0800
-Message-ID: <CANn89i+T=Ny7pfUomSsa1ub77u8LfYtRZPzmp_0-=oWKt0abLg@mail.gmail.com>
-Subject: Re: [PATCH] gso: do not skip outer ip header in case of ipip and net_failover
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     Tao Liu <thomas.liu@ucloud.cn>, David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Samudrala, Sridhar" <sridhar.samudrala@intel.com>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 7:01 AM Willem de Bruijn
-<willemdebruijn.kernel@gmail.com> wrote:
->
-> On Mon, Feb 14, 2022 at 8:38 PM Tao Liu <thomas.liu@ucloud.cn> wrote:
-> >
-> > Sorry to resend it.
-> >
-> > 2022=E5=B9=B42=E6=9C=8814=E6=97=A5 12:27=EF=BC=8CWillem de Bruijn <will=
-emdebruijn.kernel@gmail.com> =E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > On Sun, Feb 13, 2022 at 11:03 PM Tao Liu <thomas.liu@ucloud.cn> wrote:
-> >
-> >
-> > Sorry for bothering, just repost it.
-> >
-> > 2022=E5=B9=B42=E6=9C=8814=E6=97=A5 09:28=EF=BC=8CWillem de Bruijn <will=
-emdebruijn.kernel@gmail.com> =E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > On Sun, Feb 13, 2022 at 10:10 AM Tao Liu <thomas.liu@ucloud.cn> wrote:
-> >
-> >
-> > We encouter a tcp drop issue in our cloud environment. Packet GROed in =
-host
-> > forwards to a VM virtio_net nic with net_failover enabled. VM acts as a
-> > IPVS LB with ipip encapsulation. The full path like:
-> > host gro -> vm virtio_net rx -> net_failover rx -> ipvs fullnat
-> > -> ipip encap -> net_failover tx -> virtio_net tx
-> >
-> > When net_failover transmits a ipip pkt (gso_type =3D 0x0103), there is =
-no gso
-> > performed because it supports TSO and GSO_IPXIP4. But network_header ha=
-s
-> > been pointing to inner ip header.
-> >
-> >
-> > If the packet is configured correctly, and net_failover advertises
-> > that it can handle TSO packets with IPIP encap, then still virtio_net
-> > should not advertise it and software GSO be applied on its
-> > dev_queue_xmit call.
-> >
-> > This is assuming that the packet not only has SKB_GSO_IPXIP4 correctly
-> > set, but also tunneling fields like skb->encapsulated and
-> > skb_inner_network_header.
-> >
-> > Thanks very much for your comment!
-> >
-> > Yes, the packet is correct. Another thing i have not pointed directly i=
-s
-> > that the pkt has SKB_GSO_DODGY. net_failover do not advertises GSO_ROBU=
-ST
-> > but virtio_net do.
-> >
-> >
-> > If net_failover does not advertise NETIF_F_GSO_ROBUST, then
-> > tcp_gso_segment will pass a packet with SKB_GSO_DODGY to the
-> > software gso stack, not taking the branch
-> >
-> >        if (skb_gso_ok(skb, features | NETIF_F_GSO_ROBUST)) {
-> >
-> > As i tested, packet with SKB_GSO_DODGY hits this branch. packet's gso_t=
-ype=3D0x0103, which
-> > means SKB_GSO_TCPV4, SKB_GSO_DODGY and SKB_GSO_IPXIP4. net_failover mat=
-ches
-> > the condition.
-> >
-> > Consequently, tcp_gso_segment returns NULL, there is no software gso di=
-d here. And
-> > network_header points to inner iph.
-> >
-> > Software gso is did by virtio_net which not advertises NETIF_F_GSO_IPXI=
-P4. It skips the outer
-> > iph, and keeps it unchanged.
-> >
-> > ---
-> > net/ipv4/af_inet.c | 10 +++++++++-
-> > 1 file changed, 9 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-> > index 9c465ba..f8b3f8a 100644
-> > --- a/net/ipv4/af_inet.c
-> > +++ b/net/ipv4/af_inet.c
-> > @@ -1425,10 +1425,18 @@ struct sk_buff *inet_gso_segment(struct sk_buff=
- *skb,
-> > static struct sk_buff *ipip_gso_segment(struct sk_buff *skb,
-> >                                       netdev_features_t features)
-> > {
-> > +       struct sk_buff *segs;
-> > +       int nhoff;
-> > +
-> >       if (!(skb_shinfo(skb)->gso_type & SKB_GSO_IPXIP4))
-> >               return ERR_PTR(-EINVAL);
-> >
-> > -       return inet_gso_segment(skb, features);
-> > +       nhoff =3D skb_network_header(skb) - skb_mac_header(skb);
-> > +       segs =3D inet_gso_segment(skb, features);
-> > +       if (!segs)
-> > +               skb->network_header =3D skb_mac_header(skb) + nhoff - s=
-kb->head;
-> > +
-> > +       return segs;
-> > }
-> >
-> >
-> > If this would be needed for IPIP, then the same would be needed for SIT=
-, etc.
-> >
-> > Is the skb_network_header
-> >
-> > 1. correctly pointing to the outer header of the TSO packet before the
-> > call to inet_gso_segment
-> > 2. incorrectly pointing to the inner header of the (still) TSO packet
-> > after the call to inet_gso_segment
-> >
-> > inet_gso_segment already does the same operation: save nhoff, pull
-> > network header, call callbacks.gso_segment (which can be
-> > ipip_gso_segment->inet_gso_segment), then place the network header
-> > back at nhoff.
-> >
-> > values print in skb_mac_gso_segment() before callbacks.gso_segment:
-> > ipip:               vlan_depth=3D0 mac_len=3D0 skb->network_header=3D20=
-6
-> > net_failover:  vlan_depth=3D14 mac_len=3D14 skb->network_header=3D186
-> > virtio_net:      vlan_depth=3D34 mac_len=3D34 skb->network_header=3D206
-> >
-> > agree to add sit/ip4ip6/ip6ip6, and patch can be simplified as:
-> >
-> >
-> > If IPIP GSO was so broken, I think we would have found it long before.
-> >
-> > As said, inet_gso_segment should already do the right thing for ipip:
-> > it will be called twice.
-> >
-> >
-> > SKB_GSO_DODGY flag and net_failover conduct this issue. local traffic j=
-ust works fine.
->
-> Got it. That is an uncommon combination. SKB_GSO_DODGY is set from
-> external virtio_net, which does not support tunnels. But a path with
-> an added tunnel might cause this combination.
->
-> And inet_gso_segment resets the network header, both times, before
-> calling callbacks.gso_segment()
->
->         skb_reset_network_header(skb);
->         nhoff =3D skb_network_header(skb) - skb_mac_header(skb);
->
->         [...]
->
->         if (likely(ops && ops->callbacks.gso_segment))
->                 segs =3D ops->callbacks.gso_segment(skb, features);
->
-> And resets that after for each skb in segs.
->
->         skb =3D segs;
->         do {
->                 [...]
->                 skb->network_header =3D (u8 *)iph - skb->head;
->
-> But does not do this if segs =3D=3D NULL.
->
-> The packet has to be restored before it is passed to the device. I
-> think we have to handle this case correctly in inet_gso_segment,
-> instead of patching it up in all the various tunnel devices.
->
-> The same holds for ipv6_gso_segment.
+Linus,
 
-Back in the days, GRO was modified so that we passed a context (nhoff)
-in called functions,
-instead of changing skb offsets. The concept of outer/inner header
-only works with 1 encap.
+please pull from
 
-Perhaps it is time to do the same in GSO, to allow arbitrary levels of
-encapsulation.
-Then we no longer mess with these limited
-'network_header/inner_network_header' fields
-in the skb.
+  git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-linus
 
-Stuffing state in the skb has been a mistake I think.
+to receive HID subsystem fixes.
+
+=====
+- memory leak fix for hid-elo driver (Dongliang Mu)
+- fix for hangs on newer AMD platforms with amd_sfh-driven hardware 
+  (Basavaraj Natikar )
+- locking fix in i2c-hid (Daniel Thompson)
+- a few device-ID specific quirks
+=====
+
+Thanks.
+
+----------------------------------------------------------------
+Alex Henrie (1):
+      HID: apple: Set the tilde quirk flag on the Wellspring 5 and later
+
+Basavaraj Natikar (7):
+      HID: amd_sfh: Increase sensor command timeout
+      HID: amd_sfh: Add illuminance mask to limit ALS max value
+      HID: amd_sfh: Handle amd_sfh work buffer in PM ops
+      HID: amd_sfh: Correct the structure field name
+      HID: amd_sfh: Disable the interrupt for all command
+      HID: amd_sfh: Add functionality to clear interrupts
+      HID: amd_sfh: Add interrupt handler to process interrupts
+
+Daniel Thompson (1):
+      HID: i2c-hid: goodix: Fix a lockdep splat
+
+Dongliang Mu (1):
+      HID: elo: fix memory leak in elo_probe
+
+Sergio Costas (1):
+      HID:Add support for UGTABLET WP5540
+
+ drivers/hid/amd-sfh-hid/amd_sfh_pcie.c             | 76 +++++++++++++++++++++-
+ drivers/hid/amd-sfh-hid/amd_sfh_pcie.h             |  4 +-
+ .../amd-sfh-hid/hid_descriptor/amd_sfh_hid_desc.c  |  4 +-
+ drivers/hid/hid-apple.c                            | 16 ++---
+ drivers/hid/hid-elo.c                              |  1 +
+ drivers/hid/hid-ids.h                              |  1 +
+ drivers/hid/hid-quirks.c                           |  1 +
+ drivers/hid/i2c-hid/i2c-hid-of-goodix.c            | 28 ++++----
+ 8 files changed, 102 insertions(+), 29 deletions(-)
+
+-- 
+Jiri Kosina
+SUSE Labs
+

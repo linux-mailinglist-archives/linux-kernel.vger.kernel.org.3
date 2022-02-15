@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB16A4B76C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3526D4B75B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243777AbiBOTpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 14:45:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55724 "EHLO
+        id S243850AbiBOTp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 14:45:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235781AbiBOTpK (ORCPT
+        with ESMTP id S243845AbiBOTp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 14:45:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1B046676;
-        Tue, 15 Feb 2022 11:45:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 273EE6176A;
-        Tue, 15 Feb 2022 19:45:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C77AAC340EC;
-        Tue, 15 Feb 2022 19:44:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644954299;
-        bh=IvBtOuBKJRkjWsCzqLuJQUQ4HwxeRxYRUYk6C1Y7qwE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2tSqBkeZO6Oqn3vmQ3iYbfTJmx4u9cWNnk+yYaA5DWhGET4q0+GZ1Tzr92x+A85l5
-         Nl5PU33/QkSFmyQnQddpQmcvi9xOZPc6WVAv6A7Ie643746w3H/PkY7TREobguku2Z
-         bc6N48d1+EFaPv3rpq53GPEG9+7MhPukta7VW/x4=
-Date:   Tue, 15 Feb 2022 20:44:56 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Brian Geffon <bgeffon@google.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Willis Kung <williskung@google.com>,
-        Guenter Roeck <groeck@google.com>,
-        Borislav Petkov <bp@suse.de>,
-        Andy Lutomirski <luto@kernel.org>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH stable 5.4,5.10] x86/fpu: Correct pkru/xstate
- inconsistency
-Message-ID: <YgwCuGcg6adXAXIz@kroah.com>
-References: <543efc25-9b99-53cd-e305-d8b4d917b64b@intel.com>
- <20220215192233.8717-1-bgeffon@google.com>
+        Tue, 15 Feb 2022 14:45:57 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35D9748891;
+        Tue, 15 Feb 2022 11:45:47 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9D2251480;
+        Tue, 15 Feb 2022 11:45:46 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.89.173])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B178B3F70D;
+        Tue, 15 Feb 2022 11:45:41 -0800 (PST)
+Date:   Tue, 15 Feb 2022 19:45:21 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 2/2] perf: Expand perf_branch_entry.type
+Message-ID: <YgwC0S846lBUBf51@FVFF77S0Q05N>
+References: <1643348653-24367-1-git-send-email-anshuman.khandual@arm.com>
+ <1643348653-24367-3-git-send-email-anshuman.khandual@arm.com>
+ <Yfpxv9+TP9rP72wL@FVFF77S0Q05N>
+ <6168f881-92a4-54f8-929a-c2f40a36c112@arm.com>
+ <Yf1N/EWjlQ/bEA0D@FVFF77S0Q05N>
+ <Ygv4cmO/zb3qO48q@robh.at.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220215192233.8717-1-bgeffon@google.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <Ygv4cmO/zb3qO48q@robh.at.kernel.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,51 +55,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 11:22:33AM -0800, Brian Geffon wrote:
-> When eagerly switching PKRU in switch_fpu_finish() it checks that
-> current is not a kernel thread as kernel threads will never use PKRU.
-> It's possible that this_cpu_read_stable() on current_task
-> (ie. get_current()) is returning an old cached value. To resolve this
-> reference next_p directly rather than relying on current.
+On Tue, Feb 15, 2022 at 01:01:06PM -0600, Rob Herring wrote:
+> On Fri, Feb 04, 2022 at 04:02:04PM +0000, Mark Rutland wrote:
+> > On Fri, Feb 04, 2022 at 10:25:24AM +0530, Anshuman Khandual wrote:
+> > > On 2/2/22 5:27 PM, Mark Rutland wrote:
+> > > > On Fri, Jan 28, 2022 at 11:14:13AM +0530, Anshuman Khandual wrote:
+> > > >> @@ -1370,8 +1376,8 @@ struct perf_branch_entry {
+> > > >>  		in_tx:1,    /* in transaction */
+> > > >>  		abort:1,    /* transaction abort */
+> > > >>  		cycles:16,  /* cycle count to last branch */
+> > > >> -		type:4,     /* branch type */
+> > > >> -		reserved:40;
+> > > >> +		type:6,     /* branch type */
+> > > > 
+> > > > As above, is this a safe-change ABI-wise?
+> > > 
+> > > If the bit fields here cannot be expanded without breaking ABI, then
+> > > there is a fundamental problem. Only remaining option will be to add
+> > > new fields (with new width value) which could accommodate these new
+> > > required branch types.
+> > 
+> > Unfortunately, I think expanding this does break ABI, and is a fundamental
+> > problem, as:
+> > 
+> > (a) Any new values in the expanded field will be truncated when read by old
+> >     userspace, and so those may be mis-reported. Maybe we're not too worried
+> >     about this case.
 > 
-> As written it's possible when switching from a kernel thread to a
-> userspace thread to observe a cached PF_KTHREAD flag and never restore
-> the PKRU. And as a result this issue only occurs when switching
-> from a kernel thread to a userspace thread, switching from a non kernel
-> thread works perfectly fine because all that is considered in that
-> situation are the flags from some other non kernel task and the next fpu
-> is passed in to switch_fpu_finish().
+> 'type' or specfically branch stack is not currently supported on arm64. 
+> Do we expect an old userspace which this didn't work on to start working 
+> with a new kernel?
+
+I agree for arm64 specifically this probably doesn't matter; I just wanted to
+have a clear explanation of why this *could* be a problem, since this could
+affect other architectures.
+
+> Given at least some of the new types are arch specific, perhaps 
+> the existing type field should get a new 'PERF_BR_ARCH_SPECIFIC' or 
+> 'PERF_BR_EXTENDED' value (or use PERF_BR_UNKNOWN?) which means read a 
+> new 'arch_type' field.
+
+Yup; something of that shape sounds good to me -- that was roughly what I had
+suggested elsewhere.
+
+> Another option is maybe some of these additional types just shouldn't be 
+> exposed to userspace? For example, are branches to FIQ useful or leaking 
+> any info about secure world? Debug mode branches also seem minimally 
+> useful to me (though I'm no expert in how this is used).
+
+I agree; this wasn't clear to me, and regardless I think many of the types
+added in the prior patch should not be generic since they're very specific to
+the Arm architecture.
+
+> > (b) Depending on how the field is placed, existing values might get stored
+> >     differently. This could break any mismatched combination of
+> >     {old,new}-kernel and {old,new}-userspace.
+> > 
+> >     In practice, I think this means that this is broken for BE, and happens to
+> >     work for LE, but I don't know how bitfields are defined for each
+> >     architecture, so there could be other brokenness.
+> > 
+> > Consider the test case below:
 > 
-> This behavior only exists between 5.2 and 5.13 when it was fixed by a
-> rewrite decoupling PKRU from xstate, in:
->   commit 954436989cc5 ("x86/fpu: Remove PKRU handling from switch_fpu_finish()")
+> [...]
 > 
-> Unfortunately backporting the fix from 5.13 is probably not realistic as
-> it's part of a 60+ patch series which rewrites most of the PKRU handling.
+> > ... where the low bits of the field have moved, and so this is broken even for
+> > existing values!
 > 
-> Fixes: 0cecca9d03c9 ("x86/fpu: Eager switch PKRU state")
-> Signed-off-by: Brian Geffon <bgeffon@google.com>
-> Signed-off-by: Willis Kung <williskung@google.com>
-> Tested-by: Willis Kung <williskung@google.com>
-> Cc: <stable@vger.kernel.org> # v5.4.x
-> Cc: <stable@vger.kernel.org> # v5.10.x
-> ---
->  arch/x86/include/asm/fpu/internal.h | 13 ++++++++-----
->  arch/x86/kernel/process_32.c        |  6 ++----
->  arch/x86/kernel/process_64.c        |  6 ++----
->  3 files changed, 12 insertions(+), 13 deletions(-)
+> So that is a separate issue to be fixed and not directly related to the 
+> size of 'type'. 
 
-So this is ONLY for 5.4.y and 5.10.y?  I'm really really loath to take
-non-upstream changes as 95% of the time (really) it goes wrong.
+I agree if you moved the entire field that's broken everywhere, but in this
+case it *is* directly related to the size changing. In my example the meaning
+of specific bits changed *because* the size of the field changed and in BE that
+meant the low bits of the field moved, even though the field started at the
+same position.
 
-How was this tested, and what do the maintainers of this subsystem
-think?  And will you be around to fix the bugs in this when they are
-found?
+> Looks like it needs similar '#if 
+> defined(__LITTLE_ENDIAN_BITFIELD)' treatment as some of the other struct 
+> bitfields. Though somehow BE PPC hasn't had issues?
 
-And finally, what's wrong with 60+ patches to backport to fix a severe
-issue?  What's preventing that from happening?  Did you try it and see
-what exactly is involved?
+IIRC there were recent problems in this area, and I think historically we've
+broken ABI and people only noticed much later.
 
-thanks,
-
-greg k-h
+Thanks,
+Mark.

@@ -2,156 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5DA14B7B29
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C422B4B7B31
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243838AbiBOXZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 18:25:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49882 "EHLO
+        id S244809AbiBOX2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 18:28:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231760AbiBOXZc (ORCPT
+        with ESMTP id S244406AbiBOX2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 18:25:32 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A532A9E9DF
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:25:20 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21FMYjJH008692;
-        Tue, 15 Feb 2022 23:24:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=cRi/8hSjhtri/YziIk/amVafGNBU7VdEkUnOoZ+3lTM=;
- b=jkUjLzCjdgAuhar62wl+9L8VUggwEqfNgmg+uL77Hq7cXijbPcraZffzBOSfc+HHBUZ2
- nsP+4FdeiW8WjNQNutRQbnmpemA0PYzZOtEDTJ9PPPvK5ncjktwJE6OEshiNzuP+6VlY
- W2MOybY6n8QNDgdmVI8sFA+2+QtWLmgNQoxt+CFcFwNGtRCHbC8eX1yg7txTeIjpE8Na
- KBZZ5+krwpl0SEIphpJ0SgSHHjfJ43vQ3g8LYtcqeJYFqrViyQP5HLX1gkAiv8FH/qUN
- fPE1Jjo6S0U9W4URp3b3dwhyrPPNHW/Xzp3FMCqhwuOftV3cHfui0fk/oGb7Qg+7TSgA pA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e8n3dr2f2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Feb 2022 23:24:57 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21FNLhOa114457;
-        Tue, 15 Feb 2022 23:24:56 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2173.outbound.protection.outlook.com [104.47.57.173])
-        by aserp3030.oracle.com with ESMTP id 3e8ns882na-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Feb 2022 23:24:56 +0000
+        Tue, 15 Feb 2022 18:28:05 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DBF2B27B;
+        Tue, 15 Feb 2022 15:27:55 -0800 (PST)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21FMa5Z7000917;
+        Tue, 15 Feb 2022 15:27:40 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=9YjoEPMJYd+J9jPuyADgLhWKC5Rsz82AyQjg0ogfSgw=;
+ b=cv6r/R26IwDLGpQQDvmB8iZxRTpDEbeQrW4co9PGz77pUCg8W6ERW+mrpNKDlLP6IERJ
+ cs5Yn51ECW9Euwm7ATOq+mptungI0hKzw46TnMX1LKULWO7B6OeKurOBmrzJ90YtJj3q
+ J+2S/ZtQvt7hrxYs3rwphmX/R/TOHizRprA= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3e8n44ra4c-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 15 Feb 2022 15:27:40 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.228) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 15 Feb 2022 15:27:37 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KhR0YututcA70OOZ0x+NRuRmwCecW1hjoYdOAvS1RmnYjaB+FmtCNNHw/ij1uxRcQMmNGN+pu6rWhL+uSpP7zf+jEUIUXtVXQr+MHH5OHY7FBT/FP24MLVGuc8pfxz+d5XKSPaQi/xpcbMkDZlzyXpi12vzV4E90yf76BRQ/TECW9ytiloOJMHf7jSfvH8rnJl/Maub15aqD/htsuc7peZhC19s9em4WXUzmuGxixr4Lia5EQQxO+qsHu/yFN/nDylvRD/o0PVp2rotXP7PzV4tY4fjM+zzH3lImz2KsHpNLcSxRnfBRX0k6vkPdEgc9y5UOImUadc6ksv9PheeMOw==
+ b=iZWtJCh87IUXqbsC8Wj7tq2lvNSHNbCtGvAB9hNDb4f5AOCa2JSu7SMgb8gKQ1IIoBgyCrTetfVLP3ljJceJDkdnEp8IElMz7JuJv8EvUiHW40MhpYL1gf7PnLgIRNQPRUDiVJ4kJykehD86jLzH8bGQ8AJ9N7Jrk4FD35Q5tDy1HIaHoELH5Ter4e5fEWa9/KdelIME65o+hrTrsfW2Ezuj8UjJakJB9MBRq71pI/cdEyY8Cw+at8x0Tvvj5qlP+KCLfgmboqM6MamyCFCQ3tyInW/OkXSXCUj5+YUHNJNFIbT8UUtGx6c9Blv3F3DxOVxrRui92Fm4QA/6lB4dNQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cRi/8hSjhtri/YziIk/amVafGNBU7VdEkUnOoZ+3lTM=;
- b=Y2Nit+TQMaNvFuODQ1iEJtERwc0W9mRq2wl0G3zJDp/AnXIIi5U/15sM33kpyuPVRuDdrwM2OVFZ/Eo2sw4+8fsx2jtjUpo6AUjRumqJ2kH8gnY9h9CbNW9Jl0WodYeQuTih1ucxFpVsow6CFnOfOBKENfK6JO25jZqLEujqqkRGbknJInjp1Gp+c0DMBkgsHs9W4CsZBVFKe3keSgY5BpXJ6CNUELrrw473UJMBtr0WmmgxT5B10EwsdSIwyeB5/T/GslCzAHqBg8B3fa2z1KMYyZzlvbst9GIsUcfiCjpjYCu+OHqM65f79IUaSC04Mtp50z9bfi7Nvg1FAt0q5w==
+ bh=9YjoEPMJYd+J9jPuyADgLhWKC5Rsz82AyQjg0ogfSgw=;
+ b=WND+8IXXkhNHN/E/+ctNQE/3fKoVLZiT1XUv7ynsidDYeO+f9U8niohCbpfh6suhHS5RiOgyUOMfXOesM4kntD0/SyIdeMOiRjIazMQZfG1I/ORSGesQB+NkzQz9S60wjbJN6DGp/3mzJIQG1bYA6D8s7/8hOjCexj4446rE9H7/Ls9MzccVt+nFGVFYGF54nN/DKgjwtU37KAOU1JxHihWvg8KXVQ/eO93Mxu2nW9yh0GElbNHP4DvK0ykHfkhsCUD1p4YLLA6W7VTg+2IfJfavsgKx7S41JfI07atoDeBE/5UiRJgGuZA9URwjVIKasIRdMGEeyw77P9lBeoqcCA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cRi/8hSjhtri/YziIk/amVafGNBU7VdEkUnOoZ+3lTM=;
- b=vOc+h973RMA1P5uUVZkBgITSthuOC2ZjRRLzFNcBssb191IYYZKY069VcUd3llSolhHCHuyXClwjzaxCAiCdqH4fpkyg63ZqPJy+EYpW6UYPMjKMM0P8OdZnn4I/5i4MD1EF8Yt9M5aBpYt7VJ+u7924DFybsVr0s8p/k9d1qdM=
-Received: from CH2PR10MB4166.namprd10.prod.outlook.com (2603:10b6:610:78::20)
- by SJ0PR10MB5801.namprd10.prod.outlook.com (2603:10b6:a03:423::5) with
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com (2603:10b6:a03:96::24)
+ by PH0PR15MB5006.namprd15.prod.outlook.com (2603:10b6:510:cd::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.14; Tue, 15 Feb
- 2022 23:24:54 +0000
-Received: from CH2PR10MB4166.namprd10.prod.outlook.com
- ([fe80::a1f3:1518:4e2e:b69b]) by CH2PR10MB4166.namprd10.prod.outlook.com
- ([fe80::a1f3:1518:4e2e:b69b%5]) with mapi id 15.20.4975.019; Tue, 15 Feb 2022
- 23:24:54 +0000
-Message-ID: <3ad45074-72c6-8844-ba00-caa95e11ea7c@oracle.com>
-Date:   Tue, 15 Feb 2022 15:24:50 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 0/4] printk: reduce deadlocks during panic
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>
-References: <20220202171821.179394-1-stephen.s.brennan@oracle.com>
- <YgTZPQEay6T/nhu6@alley> <8f08bb64-ee8a-9555-f4a1-6d55d3c77531@oracle.com>
- <YgpfAsC1EZSbpDOv@alley>
-From:   Stephen Brennan <stephen.s.brennan@oracle.com>
-In-Reply-To: <YgpfAsC1EZSbpDOv@alley>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN4PR0201CA0027.namprd02.prod.outlook.com
- (2603:10b6:803:2e::13) To CH2PR10MB4166.namprd10.prod.outlook.com
- (2603:10b6:610:78::20)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.17; Tue, 15 Feb
+ 2022 23:27:36 +0000
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::8038:a2f9:13d7:704c]) by BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::8038:a2f9:13d7:704c%5]) with mapi id 15.20.4995.014; Tue, 15 Feb 2022
+ 23:27:36 +0000
+Date:   Tue, 15 Feb 2022 15:27:32 -0800
+From:   Roman Gushchin <guro@fb.com>
+To:     Shakeel Butt <shakeelb@google.com>
+CC:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Chris Down <chris@chrisdown.name>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <cgroups@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/4] memcg: synchronously enforce memory.high for
+ large overcharges
+Message-ID: <Ygw25FypLsN9ZQaZ@carbon.dhcp.thefacebook.com>
+References: <20220211064917.2028469-1-shakeelb@google.com>
+ <20220211064917.2028469-5-shakeelb@google.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220211064917.2028469-5-shakeelb@google.com>
+X-ClientProxiedBy: MW4PR03CA0345.namprd03.prod.outlook.com
+ (2603:10b6:303:dc::20) To BYAPR15MB4136.namprd15.prod.outlook.com
+ (2603:10b6:a03:96::24)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ddaa81e3-deee-4c8c-c34e-08d9f0da5f1f
-X-MS-TrafficTypeDiagnostic: SJ0PR10MB5801:EE_
-X-Microsoft-Antispam-PRVS: <SJ0PR10MB58011C0F8ED47FFCEC0CA15FDB349@SJ0PR10MB5801.namprd10.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: f07bad0d-2827-44b2-668e-08d9f0dabfa2
+X-MS-TrafficTypeDiagnostic: PH0PR15MB5006:EE_
+X-Microsoft-Antispam-PRVS: <PH0PR15MB500659F698C8C64E7E4B3783BE349@PH0PR15MB5006.namprd15.prod.outlook.com>
+X-FB-Source: Internal
 X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cU3nO1qQkXxdKQ99rC/N8ZkkWdrqn8Y8QcfSDFYxTTUC1r0II2GlduhS+s4y7FupwuZcEupJ/0kUH+JlKE854OeR2+aFt/omFuxd2/JOSLJq6unud/4mxvkxH5BHoXhduMzMzjKfrTTnehuzYcL4FEYOWVYiJhvuXWJGmVBNhAEllwK5qXcFKLLhDAOH71I0fnQ78JrNzg0ZSbONrjwO/5nhfzglFC8LUJ7HnxRUZsGfuVrq+EVkEdfFt5xwV1+JiDW8FHFCviifYGyt7D9bJO5LhlkFc8a70ZBEfwMdiAWlisz1VXnDQejMOLKBXpgouleibDe+7Ho+JYTg9xvy2WHGlJLgCTFY/0rHs5t8wOJKtHToGqHjxQmGVJ6C+2fnX8bBSMlLlyDL8RRO8eStehwiizQYlKNaTbQRi6KLnLHkIcsEqmoBYYfTE1ScgXAycST/JC1aJ2ZOpax0MHtr8OszNHrE6IA+vAq79QgToAb3pdnKesPwVly2+wKIBJ108XR5q264YPPSC0rJfC9ryYBLu6Fe3SFiLuSYctFZEQUaoIP1tN7+Bou3S003I2HvNjoviYQgJVvSFfrWZiimfj0eBM2JnzURBDqav9Qes5FGYtmHnDsFGV7+k1/Ki+whBnaUz0PKQ/GDtTkvCZZvCi0oJfO0GUddq4gn/3qPnzOcs0YAw/eTX6DW6vhRr26tIqDsy1Q6tv77dBHg9nwUWXAUfExmWJF74fAHL+ure+dPlXNXenbHYY5mmNdyCZHVivv0Tm4Me+uUJvnD/5riIptiYe+1nJcseLGhvEsF8/VQsSOa4eF/rKIf7Z98bf9e
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4166.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(53546011)(316002)(86362001)(6512007)(66476007)(83380400001)(8676002)(8936002)(66946007)(26005)(54906003)(66556008)(2616005)(38100700002)(31696002)(186003)(4326008)(6916009)(2906002)(5660300002)(31686004)(966005)(36756003)(6486002)(6666004)(6506007)(508600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 8VkxLF98X8uqGhxZasQd48QS42QBMyk9wZY9bR/qwlcPvLfco1JUM4qGPww61wGl0/rpHmucpGOxyILBqyFuRVUCh7k1Zy7AYkelMDEzKa1Vp9IbrYYD1CPSPXoMdmbfX9rg1TSS8crMaFgXComyu6AxAr2ZHkaJ5POl3QT2T2OYj0nc0shphlN74+4bMy3RUxaaDHsonkYF2T22WOpoougGlggYdgdRRRNoZzCeTl3ARBJMxI5xO40hdJopmkR/DhAZwxDH1invoY4IHpm470UMeCnRjw3E8RBKEJ2R7jhc3PxZUiaMVnBvMgTAsLCziBoZRMqS6jhKSdoJtKIhP5kWGnX7gt7YF/XnE9grFNnGzAJD72nsfcXSev7kXlMsn7H+p31IpFpYDBUIrKN+e1ANSOr89bR6fY5gzB+oH5iNzhcpE/8ZDnaTqQ9u9mlW1XV+AJ8Z1Dnzh1MNXjyouEQ77UjpxS5Uhikfz+qUI6FDD5mUJZsXYch7cDXu7IY4Ybdk4ZZuoICJbHBIm01Xnx7AGjahP1zQDqbYyZY13N+gYvok+H1PCrQSxtV9gYOdKC6pNsnRVN35sB3zhtnu20CFMp7fso4B4K+j2KoIf0wXF+fjFIF6odtR7LHxrtjM9nzie0u9HOPQbdoBEHutag==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4136.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66476007)(6512007)(186003)(52116002)(66556008)(316002)(86362001)(8676002)(4326008)(8936002)(66946007)(6506007)(54906003)(6916009)(6666004)(83380400001)(9686003)(6486002)(38100700002)(508600001)(5660300002)(2906002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QS9IeHlnR0ZHMmlXdGhaSmorbFlLcGRUMmlnZVlpR3BXeXFWSzJyYzlBTWQr?=
- =?utf-8?B?RnpjeEpqSVhLbDRnNVVaRjBCTFFUVk5GWWhIdkpHSWFOV1dBeDNNNjBZbUxl?=
- =?utf-8?B?RUJnSGRGb2k3M1RxWmloaS9WRlB4M1pKTm1la0h3MVlEa2RMUWZUcFRrSWJi?=
- =?utf-8?B?TEZvN0RUcXlqUmtRUDZ0ZmJTNmMwQXVpNURFbHF2OS95WDUrWDNEbnlPWDhQ?=
- =?utf-8?B?UGZtNzNkcjZDMVEwdkQweW1nOEV1aGNSOUJrQ2NjREYyTFRvS3pXVE9YRlI5?=
- =?utf-8?B?amlWZEtFWE00bWtvcEU1UlVVMkhsaVNnTzd2TElRZjNFY1JKVG9LUVpCU3Nw?=
- =?utf-8?B?MVBGTWRXNmFJdDliV21pVTZ4VGt4enFFV2FOMjE0UzFyZU8xL1Z2Yi90S21K?=
- =?utf-8?B?aDNtV0FMaEpycjQ3SVhFSGt2T2pzb2sxWkU5TFZIUUVMZGJsN1oxSC93M2dE?=
- =?utf-8?B?bzZyR1lDZjRTRmFMRGxybWliclJmQURocWlNWG1CYTFSVXhXTGxhd1l5eDR5?=
- =?utf-8?B?eFI1dFowL1oxazhwMmNUdzBSMUlDUS9RaWU4ZFU2WlpEVmFocG5EUGptdDk4?=
- =?utf-8?B?R0wyT0k0WTh5Tm9ObzVjaFU5ZlFsODI1bmZJNktqQjgxSk9EbXE3cUQ3NDVm?=
- =?utf-8?B?MTlNenFhUmduNWNnaHFFRXFpUEU3UldFckdsT3BZV2hxMUlmbmxKZ1h0VnN4?=
- =?utf-8?B?VUhpT1R3MzJ6QlA5UlhjZU1zbkNyTWplTVB2OUY5SFB3SWpVUlFkdnlCYmhv?=
- =?utf-8?B?YXF6TGNKMmNRZU1sMXYzTStPQ3FTZmpFZGptWTE3MGxqaENscGN4YW5VNGwr?=
- =?utf-8?B?dkhjcWN5elJnQTJqOXN4d0dlSko0c1c1eHZLeDFWT3M5VmExMDgwWlYrUm5X?=
- =?utf-8?B?NUdEcUVSZVJxM0FBTTV5aTEzN2dQei9vTXo4akFRQzErZy96Ynl6R0FpVHlE?=
- =?utf-8?B?dTNwaFdRVXRXWDZ4QlBXNWFyTnBMYWhzTzlFOUdHSXMwakZMczVpKzY4R0dP?=
- =?utf-8?B?cXhnTDBYOUFtUHEvdG44SWxRN0NVMEVFeHFzZU9JMjE3R0N1VktnS29Oa2Yw?=
- =?utf-8?B?MmtlNktIOFJZNUJIQS9ESWtXNnhXek5DbHVCUk5Jako0dTJuaENNYmNSdjF3?=
- =?utf-8?B?bzZ1Ryt1SDNQY3BDSW9rRUxIc3FtOW5TRSt1UFluYUYrdGY2eEtIcHowT0pC?=
- =?utf-8?B?Mnd3MDNYRlgrRzhNUnRoTmw3SG16R2U5MUlUblFIUkxUSEExbDBuZWN4bjE4?=
- =?utf-8?B?cWU0Z010RHhNQWx2YXkvM0RKL3R0bUdySnEya051Q0xMRU9TWk1GVXNEelli?=
- =?utf-8?B?Z0JJaXAyUnh2SWs0MnZuNWFaUlNFUEE0TDFsZjZzc0pPdnNPd2kwMFVmRndz?=
- =?utf-8?B?RVAyaU95dUEybnN0K3l5NndycEhhMG0xUFB4cVJ5bjIrL1JzUlZTYlJIWnpi?=
- =?utf-8?B?OGkwaldpVlE4WWFDZ0t4UzNnRDRkQ1ZSMUhwdzNabXdNNkJxZlpzbzNHWHZa?=
- =?utf-8?B?QWpjeUNYSnBoQ2dVSW4vV3BrRHFtYWx6QnhwQ2JORW9mRWxBL3NDUlpYY2V4?=
- =?utf-8?B?RXJXdTRtak5hVDNlS0ovUWF5a0RQVTFLQ3pBMk80bzNQM1JYaTlvNGZ3eUZF?=
- =?utf-8?B?anNGNzZBL1Y2MlhCQlUvblFNMmNEYUs1VTlFME40Ni83djVvWi96dG15aFN4?=
- =?utf-8?B?bFRaWVZndXBQM1A2TE9na3VPMm1QQndtSXRHTGV1NmRUSDhmVlJQdEt0Zm5q?=
- =?utf-8?B?Y1ltUkhnYXA2RDF2ZXJjYy9HNnpnK2VYbHJCUkdSbmFrYmZPQzMzRzduSnE5?=
- =?utf-8?B?NTFKeW9hMWJnRUhycG9RVm9wbHg5a0o1ZjhscFZJbFp0M2dUeTFRc2JMRTFv?=
- =?utf-8?B?YlhWRm9NQ3NoU255aFpGNWkwckFMai8rV2FSUHhPekJiSjVoUk5iZkZ4eFgy?=
- =?utf-8?B?WCs1SVdZSk1mVzZ3eDBLcWwrSEJwK2pXMFRkRzlsNjRqbkdja1dyUEV2Zi9H?=
- =?utf-8?B?K2ZxRmJUeGsvK1QyOXFqLy9MVW0rM0ZQSGRGRkxXV0txc2t2cjYyc0FaK1I4?=
- =?utf-8?B?ZEFHZW9IalA0R1NmOWwvT2w5ZlZ5WUw0YzBpN2h2Z3JOd3RWMklnVEk3SVRV?=
- =?utf-8?B?clRlbkVVVmp5dGJmZzNmeWEzT0c5dHhlR1phSHExaHR6OVNzKzNuNkkxY3hj?=
- =?utf-8?B?RkQ1ajRjQ3J2QThRTlA2N0lpdzkxeU9vSGtCMVhjVVdqcVVseFdlNFcrOFV3?=
- =?utf-8?B?RjZtYWNaMUZGd29iM1dSYU0zTTR3PT0=?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ddaa81e3-deee-4c8c-c34e-08d9f0da5f1f
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4166.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ec9reGwEdspMnFnlW9sN9LahgOGqq8xhq29+pLnObXfj1t9+0u6S3ZwH+pgB?=
+ =?us-ascii?Q?7eul984KulWrUm/GgiIn6P250SYiFBFQRy/+O1KozeFHIV7z9c8ynVJT13y7?=
+ =?us-ascii?Q?CQ+PuUqp4f4bdso3w0qpVef562S7KXNHXvvaUsXQMH9QOIOjsAzhPUqGYBqW?=
+ =?us-ascii?Q?hMD63YeDCEZthRJ22wVGc83UDHgEeQVzGQuDDhcMtMeG6YNM5+iV51Km0LOe?=
+ =?us-ascii?Q?PKrpYxtrvkavzoYbT2ByO+bMw3rMrPLJ/prYXjVII727sEEQq5lkGe/v/QEg?=
+ =?us-ascii?Q?vJu4N0971noOWcoTJkn9m1pm78wEaUGvzLsNdHqdY0dGqLSYAdUcOfSxSwux?=
+ =?us-ascii?Q?O7ScgdCrL8NLLCF/VdEuvxKvUVzgHbawUj2zTHtyEwUo2aJcdIY4BSpj/zrY?=
+ =?us-ascii?Q?Pwz+8LVkHESqZIwNhgJdE8ERLegdggMAydznhn7Pd9qfbcNmsHNC3Ib8tZfb?=
+ =?us-ascii?Q?CmTkolVLp55gu1QHHQp3k70b8PkgrjprsGwfbDsDtHJxa3UbhHqMFfWIDYct?=
+ =?us-ascii?Q?/+mL5rHrbzv86kTtkXZBNMgxHFs4NO0PNDl5IqrtTpiMwS79SUYSY6hrzxKT?=
+ =?us-ascii?Q?P+n+yCis7GA0+6uEfeDnPdL+DyND8lFTM7LZcIYhdjX+jq5oMPuRfyIpx15j?=
+ =?us-ascii?Q?fXrnyY5un3Urtsu47Tvr2cq0eeIsC84OsGuZjHEQAGi9xRQaJCWrVB0MbN68?=
+ =?us-ascii?Q?FUgHLa2E98HdNhVyfSL4kaPpYA0QYhZDno1fqUhwrFZfginbl8vzVEZhgk6m?=
+ =?us-ascii?Q?mnaLP5eASR8h1qHN56pmeH4c+OkEhYWD6wSqGW4qauam/5zbTlnRvu+yrQue?=
+ =?us-ascii?Q?PO3vTylDrHyW/yL8gu+x1D5N4JWeaOXLl+NWg06TK+l+8OBQZ+mEU8svI8xN?=
+ =?us-ascii?Q?wGcTQvba31I8j6316RkVdjx0mc2exd//ciklUpchoXRl6QOiF+OILZyEOkYJ?=
+ =?us-ascii?Q?tC/T5V25V1DL6tZPd23KWmDrYuRCwhw+2uuuGe1o+WHWRR8e2atwjyuHjp+t?=
+ =?us-ascii?Q?avmQTmFXO3nOtUYGEHaeOyINsBor6zRmXuId9PmKC2wke3aICul/iVxKEShB?=
+ =?us-ascii?Q?M88LAZqpFL/aPStHvDaOuieCOk9JuAr0573a5hx2b3yfjiOYEUsTaIn1TM47?=
+ =?us-ascii?Q?JFUHzSB7M2MdWehj/liyD76Q/LWZjXnA33uJZ5oyOonQdQq6xQF+79mGBQSj?=
+ =?us-ascii?Q?/DBRr0JUill7dI6pbtn/65ucF/67kHja5SUc+3GgN6NXjF+iugwOa9lM5kfD?=
+ =?us-ascii?Q?v3Gu+JOCh4D8NJViPsc+VKfQI6dRD+QQUHrz9T8JYqIsrzGug8kxylW6DKE9?=
+ =?us-ascii?Q?GElweqdFI7jiCbMCjNNJjHSfR0ftPs1zpzndTL8zCaNupHtB1oMHi/w7amwa?=
+ =?us-ascii?Q?aLMTmifGgday29iTDYCUkexcztZDVooZwZcc/90TU4n1K80/SeTYZxrpBXVR?=
+ =?us-ascii?Q?ccVemRQnpqJNlNQ8WSelvjxk7eKIcpNdOviojQvd7VpeF6hFiQB07PfHv4sn?=
+ =?us-ascii?Q?CdpNZMJtpmkaF+PjFqKD0lPSi2vHox0tsGdApbdjthVga5DVHZibA76gckdE?=
+ =?us-ascii?Q?Ze9A5lZTSHEg4s++LdZu9GT+z83+rzu1y/hKscH4?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: f07bad0d-2827-44b2-668e-08d9f0dabfa2
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4136.namprd15.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2022 23:24:54.1445
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2022 23:27:36.5294
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LDOdAH9cbaUhS5SS7l0XQ5CVfVg4DPU5PaPp5Jrqe27FpPJ5uwJnnxuv/7HyxXTV+eaHYCdDpxxr6Ooy/qBs8tFsa4wQnq1NAh5547Cryhc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB5801
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10259 signatures=675924
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 phishscore=0
- adultscore=0 mlxlogscore=999 bulkscore=0 mlxscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202150134
-X-Proofpoint-ORIG-GUID: n2hp-vnP7O0hT7r0jevQW5a19N3HebIr
-X-Proofpoint-GUID: n2hp-vnP7O0hT7r0jevQW5a19N3HebIr
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6cw2VgEVw/i33HWc/FQ8/0dsSpnJjAgsUMMcYiOAE7o+m1wS6vgR52VaUiZ9mmX1
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR15MB5006
+X-OriginatorOrg: fb.com
+X-Proofpoint-GUID: X-44isA-YBAyKgBzVnMuC0thiY_3NmLQ
+X-Proofpoint-ORIG-GUID: X-44isA-YBAyKgBzVnMuC0thiY_3NmLQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-15_07,2022-02-14_04,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 lowpriorityscore=0
+ spamscore=0 malwarescore=0 bulkscore=0 mlxscore=0 suspectscore=0
+ adultscore=0 mlxlogscore=682 impostorscore=0 priorityscore=1501
+ clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202150134
+X-FB-Internal: deliver
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -159,147 +142,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/22 05:54, Petr Mladek wrote:
-> On Thu 2022-02-10 12:06:44, Stephen Brennan wrote:
->> On 2/10/22 01:22, Petr Mladek wrote:
->>> On Wed 2022-02-02 09:18:17, Stephen Brennan wrote:
->>>> When a caller writes heavily to the kernel log (e.g. writing to
->>>> /dev/kmsg in a loop) while another panics, there's currently a high
->>>> likelihood of a deadlock (see patch 2 for the full description of this
->>>> deadlock).
->>>>
->>>> The principle fix is to disable the optimistic spin once panic_cpu is
->>>> set, so the panic CPU doesn't spin waiting for a halted CPU to hand over
->>>> the console_sem.
->>>>
->>>> However, this exposed us to a livelock situation, where the panic CPU
->>>> holds the console_sem, and another CPU could fill up the log buffer
->>>> faster than the consoles could drain it, preventing the panic from
->>>> progressing and halting the other CPUs. To avoid this, patch 3 adds a
->>>> mechanism to suppress printk (from non-panic-CPU) during panic, if we
->>>> reach a threshold of dropped messages.
->>>>
->>>> A major goal with all of these patches is to try to decrease the
->>>> likelihood that another CPU is holding the console_sem when we halt it
->>>> in panic(). This reduces the odds of needing to break locks and
->>>> potentially encountering further deadlocks with the console drivers.
->>>>
->>>> To test, I use the following script, kmsg_panic.sh:
->>>>
->>>>       #!/bin/bash
->>>>       date
->>>>       # 991 chars (based on log buffer size):
->>>>       chars="$(printf 'a%.0s' {1..991})"
->>>>       while :; do
->>>>           echo $chars > /dev/kmsg
->>>>       done &
->>>>       echo c > /proc/sysrq-trigger &
->>>>       date
->>>>       exit
->>>>
->>>> I defined a hang as any time the system did not reboot to a login prompt
->>>> on the serial console within 60 seconds. Here are the statistics on
->>>> hangs using this script, before and after the patch.
->>>>
->>>> before:  776 hangs / 1484 trials - 52.3%
->>>> after :    0 hangs /  15k trials -  0.0%
->>>>
->>>> Stephen Brennan (4):
->>>>     printk: Add panic_in_progress helper
->>>>     printk: disable optimistic spin during panic
->>>>     printk: Avoid livelock with heavy printk during panic
->>>>     printk: Drop console_sem during panic
->>>>
->>>>    kernel/printk/printk.c | 55 +++++++++++++++++++++++++++++++++++++++++-
->>>>    1 file changed, 54 insertions(+), 1 deletion(-)
->>>
->>> For the entire patchset:
->>>
->>> Reviewed-by: Petr Mladek <pmladek@suse.com>
->>>
->>> It looks ready for linux-next from my POV. I am going to push it early
->>> next week unless anyone complains in the meantime.
+On Thu, Feb 10, 2022 at 10:49:17PM -0800, Shakeel Butt wrote:
+> The high limit is used to throttle the workload without invoking the
+> oom-killer. Recently we tried to use the high limit to right size our
+> internal workloads. More specifically dynamically adjusting the limits
+> of the workload without letting the workload get oom-killed. However due
+> to the limitation of the implementation of high limit enforcement, we
+> observed the mechanism fails for some real workloads.
 > 
-> The patchset is committed in printk/linux.git, branch for-5.18-panic-deadlocks.
-
-Thank you!
-
+> The high limit is enforced on return-to-userspace i.e. the kernel let
+> the usage goes over the limit and when the execution returns to
+> userspace, the high reclaim is triggered and the process can get
+> throttled as well. However this mechanism fails for workloads which do
+> large allocations in a single kernel entry e.g. applications that
+> mlock() a large chunk of memory in a single syscall. Such applications
+> bypass the high limit and can trigger the oom-killer.
 > 
->> Thank you Petr! It occurs to me that some of this could be stable-worthy,
->> depending on your feelings on it. Patches 1-3 resolve real bugs on customer
->> systems, and they'd apply back a decent way. 1-2 apply all the way back to
->> 4.14, and 3 would apply with some minor changes. I suppose the question is
->> whether they are simple enough. Patch 4 is useful but I don't have a real
->> reproducer for a bug it fixes, so I wouldn't say it's stable worthy.
+> To make high limit enforcement more robust, this patch makes the limit
+> enforcement synchronous only if the accumulated overcharge becomes
+> larger than MEMCG_CHARGE_BATCH. So, most of the allocations would still
+> be throttled on the return-to-userspace path but only the extreme
+> allocations which accumulates large amount of overcharge without
+> returning to the userspace will be throttled synchronously. The value
+> MEMCG_CHARGE_BATCH is a bit arbitrary but most of other places in the
+> memcg codebase uses this constant therefore for now uses the same one.
 > 
-> Good question. If you saw these deadlocks on customer systems in
-> the real life then it might be worth it.
-> 
-> I newer saw them. But they hard to debug and report. Also they are
-> visible only when CPUs are stopped by NMI. And the default
-> smp_send_stop() tries to stop CPUs using normal IRQ first.
+> Signed-off-by: Shakeel Butt <shakeelb@google.com>
+> ---
+> Changes since v1:
+> - Based on Roman's comment simply the sync enforcement and only target
+>   the extreme cases.
 
-Some of our default configurations like to ship with 
-crash_kexec_post_notifiers=1, so I see the aggressive 
-crash_smp_send_stop() code path a lot internally.
+Reviewed-by: Roman Gushchin <guro@fb.com>
 
-And interestingly, Hyper-V enables crash_kexec_post_notifiers in certain 
-cases, without so much as a peep in the kernel log, even if kdump is not 
-enabled... So folks running on Azure or otherwise running Hyper-V guests 
-would be exposed to this. I actually just saw some patches related to 
-this which you reviewed, so I guess you're aware of that :)
+This version indeed looks more safe to me.
 
-https://lore.kernel.org/lkml/YgDZX4PYwhrA1+Ct@MiWiFi-R3L-srv/
-
-As somebody who mainly browses subsystem-focused mailing lists I didn't 
-see this at all, as these printk/panic related patches only seem to go 
-to LKML. I guess I need to check out the new lore+lei system so I can 
-keep track of relevant work.
-
-> 
-> Anyway, the patches 1,2,4 are pretty straightforward and should be
-> safe. Feel free to send them to stable.
-
-Very reasonable. The customer systems experiencing the issue would be 
-resolved by patches 1-2 alone. I did not have a customer experiencing 
-any sort of livelock (and it would be a pretty ridiculous situation, 
-most printk dies down quickly). I see the value of patch 4 for 
-architectures without these NMI so I can send it too.
-
-> 
-> 3rd patch is a heuristic. It tries to prevent livelock and the cost
-> is a possible loss of information. I am not 100% sure that it will
-> do the right thing in all situations. I would wait one or two release
-> cycles before we backport it to older stable releases.
-
-Fair enough!
-
-> 
->> Of course we have the logbuf_lock in 5.10 and previous, and if a CPU is
->> halted holding that lock, then printk hangs even before the optimistic
->> spinning. I have patches which reinitialize those locks after the CPUs are
->> halted if necessary. I think they are reasonable for stable - printk is
->> guaranteed to hang without doing this, so in the worst case you trade a hang
->> during a panic, with some other sort of printk log buffer bug during a
->> panic. But in the common case, you eliminate the hang. I can send that patch
->> to linux-stable as well.
-> 
-> The main problem is that the locks can be safely re-initialized only
-> when the other CPUs were stopped using NMI. Otherwise, there is
-> a risk of double unlock. Such a patch would need to be arch-dependent.
-
-That's a very good point, thank you for mentioning it.
-
-> 
-> Also stable people do not like much solutions that were not used
-> in the mainline. So, it might be a waste of time.
-
-True. I may try my hand at it simply because I would much rather see 
-work be done for all via -stable rather than in vendor-specific trees.
-
-Thanks,
-Stephen
-
-> 
-> Best Regards,
-> Petr
+Thanks!

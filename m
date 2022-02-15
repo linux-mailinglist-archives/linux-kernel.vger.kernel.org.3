@@ -2,107 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B2A4B77B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:51:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6654B7616
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243330AbiBOS7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 13:59:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49492 "EHLO
+        id S243340AbiBOTBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 14:01:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235944AbiBOS7l (ORCPT
+        with ESMTP id S231887AbiBOTBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 13:59:41 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674DCEB33E
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:59:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644951571; x=1676487571;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=whwP9Db5MNSBKpAGicysWN+UADdsEBzGUgWDC7WFI5w=;
-  b=ibYfSP6BU852w/cFUfsBn/ugJp2Y3gA2qvc1Z20Zi5JUexhdy3sUFwX4
-   GTK8/Dqtq0tEfA0YuVFrSnz4XPq8YpXLp7V0+vn2atA9xjjrXrZUKaMAX
-   3RsfmNmH8TsLxJGw4D8yF1h0dNaoeYJNNx7kOwUh9kWEOnEiqNN9ZggGq
-   MGnGa16Pg9kSXNDApljTIrWndAIwRm76lW6KdG6GfUcV4Lk9oLYTTGIfH
-   X52tZfE3t8SqO2pcYpYNyKugWm21TZrUE9IUAzevvTN6X86bCm+CQuGxW
-   1147xC9wVyaNCAry3W5abVKS07+1K/ECA0dWzZ1Q3Bk9ELcJsBwBPv+Pa
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="230392431"
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="230392431"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 10:59:31 -0800
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="636072634"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 10:59:27 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nK320-0051ub-M8;
-        Tue, 15 Feb 2022 20:58:32 +0200
-Date:   Tue, 15 Feb 2022 20:58:32 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v1 1/1] drm/i915/selftests: Replace too verbose for-loop
- with simpler while
-Message-ID: <Ygv32CptVknidyP3@smile.fi.intel.com>
-References: <20220215163213.54917-1-andriy.shevchenko@linux.intel.com>
- <87o83859x2.fsf@intel.com>
+        Tue, 15 Feb 2022 14:01:20 -0500
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E53EBBB9;
+        Tue, 15 Feb 2022 11:01:10 -0800 (PST)
+Received: by mail-il1-f174.google.com with SMTP id o10so15611883ilh.0;
+        Tue, 15 Feb 2022 11:01:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UBBmp4DgxbJ3nAuN//yjsP9FmwDmp49m+83tg2kI50Y=;
+        b=6KSrOYonYhJ96jW2hVv9ABGA6wGvjVAGSBDIWIkDZfVJeFFLNYTWrC+UKCD0awloRm
+         awRfE98zhFXgc1eY4XQpHrve1mkprkNcMZkbzpqnKjqlIfy6iR8sDj+nyDMefQXUyTcW
+         e/CxiaVzfI+wd6qgYLHqzVzvZhFXjby3+5kkLOrV2/KPZKtbiqLBCAnnaDpTEi6sPu7P
+         Ubr9frcZ7aaTPde3eoLV8qhtz+62gU01WcME2slB9ytmF/xClKBDmntdpO6VfIUymkBV
+         wFNH4UfUpqcpbUsqy3ZC4SG2BLpsAgT3oklL/arWGjdIVCxcNkAoIt/g4vqqH96cU7fp
+         tXsw==
+X-Gm-Message-State: AOAM533TF06t0Ob0aiGfgkHM4vJvPetYhvencW3rUU644hwHWRIy01+0
+        tP9DyUvNEDbHvuCMOQjqRA==
+X-Google-Smtp-Source: ABdhPJzr1JvD7wkz7BTuJejx6Q5hZPGEsJZTOE5TvygVd8PbAcJonZNUWrC4RHzDEmQr1FWxeEBVHA==
+X-Received: by 2002:a05:6e02:1687:: with SMTP id f7mr281589ila.143.1644951668921;
+        Tue, 15 Feb 2022 11:01:08 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id q18sm18818854ils.78.2022.02.15.11.01.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 11:01:08 -0800 (PST)
+Received: (nullmailer pid 3747771 invoked by uid 1000);
+        Tue, 15 Feb 2022 19:01:06 -0000
+Date:   Tue, 15 Feb 2022 13:01:06 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 2/2] perf: Expand perf_branch_entry.type
+Message-ID: <Ygv4cmO/zb3qO48q@robh.at.kernel.org>
+References: <1643348653-24367-1-git-send-email-anshuman.khandual@arm.com>
+ <1643348653-24367-3-git-send-email-anshuman.khandual@arm.com>
+ <Yfpxv9+TP9rP72wL@FVFF77S0Q05N>
+ <6168f881-92a4-54f8-929a-c2f40a36c112@arm.com>
+ <Yf1N/EWjlQ/bEA0D@FVFF77S0Q05N>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87o83859x2.fsf@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yf1N/EWjlQ/bEA0D@FVFF77S0Q05N>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 07:14:49PM +0200, Jani Nikula wrote:
-> On Tue, 15 Feb 2022, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > It's hard to parse for-loop which has some magic calculations inside.
-> > Much cleaner to use while-loop directly.
+On Fri, Feb 04, 2022 at 04:02:04PM +0000, Mark Rutland wrote:
+> On Fri, Feb 04, 2022 at 10:25:24AM +0530, Anshuman Khandual wrote:
+> > On 2/2/22 5:27 PM, Mark Rutland wrote:
+> > > On Fri, Jan 28, 2022 at 11:14:13AM +0530, Anshuman Khandual wrote:
+> > >> @@ -1370,8 +1376,8 @@ struct perf_branch_entry {
+> > >>  		in_tx:1,    /* in transaction */
+> > >>  		abort:1,    /* transaction abort */
+> > >>  		cycles:16,  /* cycle count to last branch */
+> > >> -		type:4,     /* branch type */
+> > >> -		reserved:40;
+> > >> +		type:6,     /* branch type */
+> > > 
+> > > As above, is this a safe-change ABI-wise?
+> > 
+> > If the bit fields here cannot be expanded without breaking ABI, then
+> > there is a fundamental problem. Only remaining option will be to add
+> > new fields (with new width value) which could accommodate these new
+> > required branch types.
 > 
-> I assume you're trying to prove a point following our recent
-> for-vs-while loop discussion. I really can't think of any other reason
-> you'd end up looking at this file or this loop.
+> Unfortunately, I think expanding this does break ABI, and is a fundamental
+> problem, as:
 > 
-> With the change, the loop indeed becomes simpler, but it also runs one
-> iteration further than the original. Whoops.
+> (a) Any new values in the expanded field will be truncated when read by old
+>     userspace, and so those may be mis-reported. Maybe we're not too worried
+>     about this case.
 
-Yeah, sorry for that, the initial condition should be d = depth - 1,
-of course.
+'type' or specfically branch stack is not currently supported on arm64. 
+Do we expect an old userspace which this didn't work on to start working 
+with a new kernel?
 
-> It's a selftest. The loop's been there for five years. What are we
-> trying to achieve here? So we disagree on loops, fine. Perhaps this is
-> not the best use of either of our time? Please just let the for loops in
-> i915 be.
+Given at least some of the new types are arch specific, perhaps 
+the existing type field should get a new 'PERF_BR_ARCH_SPECIFIC' or 
+'PERF_BR_EXTENDED' value (or use PERF_BR_UNKNOWN?) which means read a 
+new 'arch_type' field.
 
-Yes, I'm pretty much was sure that no-one will go and apply this anyway
-(so I haven't paid too much attention), but to prove my point in the
-certain discussion.
-
-And yes, the point is for the new code, I'm not going to change existing
-suboptimal and too hard to read for-loops, it will consume my time later
-when I will try to understand the code.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Another option is maybe some of these additional types just shouldn't be 
+exposed to userspace? For example, are branches to FIQ useful or leaking 
+any info about secure world? Debug mode branches also seem minimally 
+useful to me (though I'm no expert in how this is used).
 
 
+> (b) Depending on how the field is placed, existing values might get stored
+>     differently. This could break any mismatched combination of
+>     {old,new}-kernel and {old,new}-userspace.
+> 
+>     In practice, I think this means that this is broken for BE, and happens to
+>     work for LE, but I don't know how bitfields are defined for each
+>     architecture, so there could be other brokenness.
+> 
+> Consider the test case below:
+
+[...]
+
+> ... where the low bits of the field have moved, and so this is broken even for
+> existing values!
+
+So that is a separate issue to be fixed and not directly related to the 
+size of 'type'. Looks like it needs similar '#if 
+defined(__LITTLE_ENDIAN_BITFIELD)' treatment as some of the other struct 
+bitfields. Though somehow BE PPC hasn't had issues?
+
+Rob

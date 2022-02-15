@@ -2,83 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FCF74B73C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D50794B7310
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238511AbiBOPQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:16:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40390 "EHLO
+        id S239049AbiBOPUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:20:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237184AbiBOPQ5 (ORCPT
+        with ESMTP id S238746AbiBOPUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:16:57 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34DF4424AE
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:16:40 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id az26-20020a05600c601a00b0037c078db59cso1612312wmb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:16:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=OIi6IjZGN1DjvNwgjy01isoyMANw0CM1niHXU8IMICs=;
-        b=SwWi/sh1OtgWFbxIeTi0CIX0bG3M0dr9rvOt1C9uOIHUkmS0Tx4+euvoSu9m50hSWJ
-         xzJRS0q680RYaFiTT8KsEaBI7acIfk5E6A4ednBp5mQfNhvQJOmszhd7rD8/3trkWXNe
-         9hjrejLm09BjRagMsfLY7r+glUeY41hoMwa1Cr4EbMASffn+fHThPTP+nDpMs4z3h4zK
-         ptWu/8xyrCdg8Sgd+v56xpvdYwhuIlHOynmCTtLZg6PnEzeA8T8q0j8IwCJPT+vIOj8d
-         GceX8yjXjDmQDBXmFWZwcmyD627TV90z7DByb5HC6DvCTNIq1AX+dUhcdDt2HBYQBNTv
-         APfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=OIi6IjZGN1DjvNwgjy01isoyMANw0CM1niHXU8IMICs=;
-        b=Piq8BUjCmG6M7qi0xgVTXptYfvuoz8DRrFJoEwPxJ35cRYsf9Emzo6g0G/onm6+QBX
-         WiwsQK1Nw2oZTKSXT+tl6vife0Y2KkgRU+HLag2IMtPCQqFC6ImYQ9A5ynuD3gwjIJId
-         GZ/d4Piiu1JwKpRbsgRft2CTFicJ4ZzX8bPmRa9CmfEkts3bIk2n191F/hG/Ebf4EZB7
-         rbP2cJbAL1tqwjsu2QL4c1GFMxd1wUt8Qbog6d3QPcvhGjN13DGGjN87KmcXMI0E2gti
-         CqubsciXSHsV0zp5/BRUIlIawd7RBF7MFy1tpwzr9kKlfJJS9tCkbj3Mep2D5ReNP514
-         WZfg==
-X-Gm-Message-State: AOAM532S7b2EDkMChbUF5IpBPCygFmocZQ0/Qwu4tcujr66JbgpDP+rK
-        7ov2KCkmJoR9tM0VHw8y66lnow==
-X-Google-Smtp-Source: ABdhPJwDYJo+GBmI826bxOJy/7iZxdyYz/3wkWRnnUCR4EQcUm4sQdJCcAWmk18wlmflepH7A2mBug==
-X-Received: by 2002:a05:600c:1d92:: with SMTP id p18mr3510400wms.93.1644938198724;
-        Tue, 15 Feb 2022 07:16:38 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id f25sm15472676wml.16.2022.02.15.07.16.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 07:16:38 -0800 (PST)
-Date:   Tue, 15 Feb 2022 15:16:36 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>
-Subject: Re: [PATCH v4 0/7] Provide and use generic_handle_irq_safe() where
- appropriate.
-Message-ID: <YgvD1HpN2oyalDmj@google.com>
-References: <20220211181500.1856198-1-bigeasy@linutronix.de>
- <Ygu6UewoPbYC9yPa@google.com>
- <Ygu9xtrMxxq36FRH@linutronix.de>
+        Tue, 15 Feb 2022 10:20:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF3A108BDC;
+        Tue, 15 Feb 2022 07:20:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 633D3B81AE2;
+        Tue, 15 Feb 2022 15:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B299DC340ED;
+        Tue, 15 Feb 2022 15:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644938417;
+        bh=cvvJ7Y1uOZsTSQ2EgEC3IyWSOPxIRWdyF+l3TLo73fA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=BXhMIXjvG0BZrIJ4AGpwnd1+8ps21YN90C6Bx7kEUxLMo/3m80ucK5R2bJrFaSirP
+         hI8uY5ws0E9o9oeS7ygCnZn6rdX20Z7ZkmnXG3d4Itv8GmCZs5x4WR3o9ZsiOD/0xK
+         pjCS+7Sc/J+zkjtJHi1ejsXElZXX22ywEpgJgjn/E/G7RBWtv5lenBDo0E9BqIJC1b
+         FoMjo02LYKKLmVYTRBDWVWEaSFKMJbpkAxHboipvvicoSmN7zmAnV/ynYX13emGxEm
+         PaWa7Ira/bSgUfxTAwWlSxlmJ7QjNPXpVyokVltb4aiYv544BfK1XAdNmBeVpa6Doj
+         1g0Yi++3vwe1g==
+Date:   Tue, 15 Feb 2022 09:20:14 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Ben Dooks <ben.dooks@codethink.co.uk>
+Cc:     linux-kernel@vger.kernel.org, bhelgaas@google.comv,
+        linux-pci@vger.kernel.org, paul.walmsley@sifive.com,
+        greentime.hu@sifive.com, david.abdurachmanov@gmail.com,
+        Rob Herring <robh@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: Re: [PATCH 1/2] PCI: fu740: fix finding GPIOs
+Message-ID: <20220215152014.GA108566@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ygu9xtrMxxq36FRH@linutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <bfb2b7f9-d2dc-590c-6cec-5923efa9ac80@codethink.co.uk>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,18 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022, Sebastian Andrzej Siewior wrote:
-
-> On 2022-02-15 14:36:01 [+0000], Lee Jones wrote:
-> > Do we really need to coordinate this series cross-subsystem?
+On Tue, Feb 15, 2022 at 11:21:03AM +0000, Ben Dooks wrote:
+> On 14/02/2022 16:05, Bjorn Helgaas wrote:
+> > [+cc Rob for possible DT/kernel match issue,
+> > Lorenzo (native host bridge driver maintainer)]
+> > 
+> > s/fix finding/Fix finding/ (in subject)
+> > Or even better, say something specific about the DT properties in
+> > question, e.g., look for "reset" instead of "reset-gpios".
+> > 
+> > On Mon, Feb 14, 2022 at 08:21:43AM +0000, Ben Dooks wrote:
+> > > The calls to devm_gpiod_get_optional() have the -gpios at the end of
+> > > the name. This means the pcie driver is not finding the necessary
+> > > reset or power GPOOs to allow the PCIe devices on the SiFive Unmatched
+> > > boards.
+> > 
+> > "to allow the PCIe devices ...?"  Something is missing from this
+> > sentence.  "To allow the devices <to do what>"?  Or maybe the driver
+> > needs these GPIOs to power up the PCIe devices?
+> > 
+> > I guess the implication is that the code looks for "reset-gpios" and
+> > "pwren-gpios", but the DT contains "reset" and "pwren"?
+> > 
+> > But both Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
+> > and arch/riscv/boot/dts/sifive/fu740-c000.dtsi actually do contain
+> > "reset-gpios" and "pwren-gpios".
 > 
-> I would suggest to merge it via irq subsystem but I leave the logistics
-> to tglx.
+> Yes, the issue is the gpio core code adds either "-gpio" or "-gpios"
+> itself, thus the find code does not need this. The error messages and
+> DT are correct. I'll reword the initial paragraph to note that which
+> should also deal with the other comments:
+> 
+> The calls to devm_gpiod_get_optional() have the -gpios at the end of
+> the name but the GPIO core code is already adding the suffix during
+> the lookup. This means the PCIe driver is not finding the necessary
+> reset or power lines to allow initialisation of the PCIe.
 
-Could you answer by other questions too please?
+Ah, that makes things make a LOT more sense!  Please add something
+about "the '-gpios' suffix" for non-experts like me who don't know the
+inner workings of the GPIO core.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+The GPIO core seems slightly too helpful here -- we have to know about
+that detail to write error messages that make sense.
+
+> > If we *do* want to change the code, please change the error messages
+> > to match.
+> 
+> See above, it is just devm_gpiod_get_optional() parameters at fault.
+> 
+> > > This has not been a noted bug as the PCIe probe from u-boot has been
+> > > required to get the PCIe working due to other issues with the system
+> > > setup. It could have been broken since the driver inclusion, and not
+> > > been noticed as it is not necessary for the driver to funciton.
+> > 
+> > Please add a line about what the connection between U-Boot and this
+> > issue is, e.g., maybe U-Boot powers up the devices, so we wouldn't
+> > notice the kernel's inability to do so?
+> 
+> Does a reword to the following make better sense:
+> 
+> This bug has not been noticed as if U-Boot has setup the GPIO lines
+> for the hardware when it does the PCIe initialisation (either by
+> booting from PCIe or user command to access PCIe) then the PCIe
+> will work in Linux. The U-Boot as supplied by SiFive does not by
+> default initialise any PCIe component.
+
+Sounds good, thanks.
+
+Bjorn

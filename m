@@ -2,223 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563364B7242
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF984B72A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237507AbiBOPtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:49:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49010 "EHLO
+        id S239554AbiBOPtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:49:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiBOPtX (ORCPT
+        with ESMTP id S229616AbiBOPtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:49:23 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22B4241
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:49:12 -0800 (PST)
-Date:   Tue, 15 Feb 2022 16:49:10 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644940151;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CTD2emJVAMyrhz49dgY9PFY8c6oHOUAD1tBKxJ4b55g=;
-        b=YLkB0R0INUJzd1184OAw5Yr3P464LTg+UcqO0k7NQ+gAHuXv+LcgRnqZVIoXArB+2DFkQY
-        zPFvJLH/2X0UNMUAHUtqyawtmrp7E2rvuA9M9Z5CerUGhBQE+kxw8WKoLN8o+pWHxv+7p3
-        hQGUi1fhAQcT+4GrdLva/N3J7DJK3ECKYeHApH2WyX4Nz7p82feTNTLvn6ulFRZslAoYM2
-        +uSlpTrt9/9nnHQ1PWJ70RHsuccfu9M6Ap+E6CVpLgvwvcxzdplj8Scrn1ce0cRQsez4OH
-        w6bTOZBXtTvnNea6IdpoKBdOhcean+L7T0nIUHPEYNSJVi/1EaSCnJTdyomW5A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644940151;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CTD2emJVAMyrhz49dgY9PFY8c6oHOUAD1tBKxJ4b55g=;
-        b=W/3qaydenUTXwhOMjL6vw8V4MVyll5xn08I1Mmy67+J0t+ST+neehI11KtQ4VWCSTWnaly
-        eH1CxO8iBBXRuxCQ==
-From:   Sebastian Siewior <bigeasy@linutronix.de>
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        John Ogness <john.ogness@linutronix.de>
-Subject: Re: [PATCH] drm: fb-helper: Avoid nesting spinlock_t into
- raw_spinlock_t
-Message-ID: <YgvLdvPihuQ9KZ6/@linutronix.de>
-References: <nycvar.YFH.7.76.2202151640200.11721@cbobk.fhfr.pm>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Tue, 15 Feb 2022 10:49:40 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2049.outbound.protection.outlook.com [40.107.223.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D12241;
+        Tue, 15 Feb 2022 07:49:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fxf1u9F9gxhJUDvztdzcu0x+ge5iVmuy0+rrRvnQEbgs5b/+3Xqv16vrJxJXUv/JNsNiALD7enUvXw+oQvkb3ytlOpm1ximxZdZ0VQJInrUfjF43IDw0vt24wZiuI9AWHvRO49wwMbO8XgMR09P3NC3nuHQlvUFa/eQj1E4MKPPIqg6z6bkgctlRcohEYtzt/sPTCnU0IAg73F/7t7WVdAepXm0nIae8TCN4FKDYFqcekqZb3FgJwQL5OqWGYfyXrVdnfnFNO6pb7lOpv07ZajfQCD/95elMh/fg8AAakxl6U/2PGCr2Q8JwRf2m2t+axFZPSwsX0/nNZZ6e/eWVxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i/1Du4EXs63ZVDpdgQz9GicNWagI5Ks2qlFUbRZ2dyc=;
+ b=VGQBuzJHsloKVyUsq7xfOcsTOxfYHXcmvyWKm2uyvmaM3uUMACcfStjOTkz8NS/i2AyLTplmJF5VhrDRKt/JsJGm348KT1G9kyIElSBIjtTP9C+vj53rUur34Y6sgj0AiEaf2rZ1OwcGSNnpjbwyXmRBf0CMw95RfvDQRpc2nSVx9IPGmRzTkfZLy2Oo1v1MytDCvUVarPBmK3VEcWZCywwBeVGxRSvQQ7sfkKjBfOl6r3e4Z3zl6oFSFF1eiraXASS9SyZmF2Fq9dnM6RAjfHftiSiK7eJPSWL3cvXQSZV9vJtI1NbyJtomgrMdNyCRixYbH1mZGxcN+NKlJxlnDQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i/1Du4EXs63ZVDpdgQz9GicNWagI5Ks2qlFUbRZ2dyc=;
+ b=qb3127cDkTJHnIMAG/enPoa7VIw73UacjGvTQvTvxgO/WIUdBxgdreeHl+jGgoXVx6ft1xA//oXzXKzbIux/7UlX9NGsbeabt4o3+YBzMPK1wQtsc7LGj2nZBaHSgEBC6HDjRsdIhdsW3S34wNKd+wQllkD5oXpGIh0WkYgsJ4Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
+ by DM4PR12MB5151.namprd12.prod.outlook.com (2603:10b6:5:392::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Tue, 15 Feb
+ 2022 15:49:28 +0000
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::f93a:9f04:fbd5:dc5a]) by BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::f93a:9f04:fbd5:dc5a%6]) with mapi id 15.20.4975.019; Tue, 15 Feb 2022
+ 15:49:28 +0000
+Date:   Tue, 15 Feb 2022 15:49:25 +0000
+From:   Yazen Ghannam <yazen.ghannam@amd.com>
+To:     Naveen Krishna Chatradhi <nchatrad@amd.com>
+Cc:     linux-edac@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, bp@alien8.de, mingo@redhat.com,
+        mchehab@kernel.org, Muralidhara M K <muralimk@amd.com>
+Subject: Re: [PATCH v7 05/12] EDAC/amd64: Define dynamic family ops routines
+Message-ID: <YgvLhXVOX+upsE3a@yaz-ubuntu>
+References: <20220203174942.31630-1-nchatrad@amd.com>
+ <20220203174942.31630-6-nchatrad@amd.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <nycvar.YFH.7.76.2202151640200.11721@cbobk.fhfr.pm>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220203174942.31630-6-nchatrad@amd.com>
+X-ClientProxiedBy: BL0PR0102CA0049.prod.exchangelabs.com
+ (2603:10b6:208:25::26) To BN8PR12MB3108.namprd12.prod.outlook.com
+ (2603:10b6:408:40::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 01689294-5d72-4a28-a8cd-08d9f09abfc6
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5151:EE_
+X-Microsoft-Antispam-PRVS: <DM4PR12MB5151F21574F0D171E6B3E165F8349@DM4PR12MB5151.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4303;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5D4IlpCm8OD57r16mMZNbGEI9N8bQPcJ4DKFO3Fk6J5/53kG9huncx1XSLRfxwlDzieLgfnXH5n5Qtkf/C3GLmSflIw4aTBTeap3YTzRcDbwdSJdSwYW7H/NjIQdIs0NaD+HSowY3lLKW3OJ0eod4OO9uiWeepNq0FhfZ8NVBesMs50onaxJQ/WOTL1d3m1aSvT2qhE3+q9FAy97QFdwb53JhCqO0QchHPdrlrTS2OpYg8e7xitEG8H3wQXoHwlj0tX5dV2s74BaQFNRMj2+d7AG7W/xT+pMP21ZMMexsBqA9Kkmu216Af0H6+tSSGt1q7hab7PLBkrvdisIr4Jq7hrkJtydnGyKF0BQY8+3ouGtz7h2KYM9Yd2D7f+1mjaKch1vR+N30ZOzJ+kyaUlZOVgEJMtnwvGDbxgMRwLbDtmmKOtEVjQf9ouj7G/beryit5wcpol59oP9Z0RNKGsy8ylQFKOJZHnskuODQVkZcMNBYUr0GnmOYVT2hz8jjEGQ9ZDcaVOLvBsv2pZfz9iwhb/Usx/d98zH2BGvmaIeUu3DIzNjM4cL6BLTePUgeCDWbwsJkftt8U62PEpmJWU3iSB0yP1d3khD71E1dW76pSApZmpoXpyqtMjtUKiAJvW8B3AYcidtmuTPVufu6zSPBHejmZ9gkqqV+SAeOTuB68eb1ToSCDDq2lvZypYuFPNDYQVmkSzHZvz5WFr1c+uprw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(4326008)(8676002)(26005)(86362001)(66946007)(66476007)(66556008)(8936002)(186003)(6862004)(316002)(5660300002)(44832011)(6666004)(6636002)(2906002)(38100700002)(33716001)(6486002)(83380400001)(9686003)(6512007)(6506007)(508600001)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?M5Eaea+/WNYZX5jYBzLlBSmDTJHwrKL/EaPT+sq4WZ7SyZGkP3rju/+pKjLb?=
+ =?us-ascii?Q?lLMrYvAN/EdaXHPu/jF3pKUzFc53ndu/oRkLC6EdrchrxQ+K9sVQrUBs7c5u?=
+ =?us-ascii?Q?iEJEeWfs84i6mf+e+XwNYf52tpf31DV57anYvs5zuxjTmkM+YwaQfaw3huPT?=
+ =?us-ascii?Q?Zs3Ws00ARUCtjVHKZk++FrNCXy8ovAmokyd0M3Bkun6BcWs/yGXsfp6DGdnE?=
+ =?us-ascii?Q?/LNy9YTQpqPrSLIGLkw6dxsAomJOdYGpZZjgAx71Ja+DV03M0GBUPs6WNTT+?=
+ =?us-ascii?Q?G7xYjwaOf7F1mVXx3/Jh24+9jdllbXH9Csswl3F9L8YkdBO0j4tT4BHVhri6?=
+ =?us-ascii?Q?HqHudMg6aWnGCqMgWXgclWbCh17gSzgI3v6FS+qKW1vX30ebpDmFa5T7nDH3?=
+ =?us-ascii?Q?5rfIX83jl2UHOmjk3zRbYib8qkzq0gzUQQVnl0FdZYfx1FpPH8c3lcIkgYBC?=
+ =?us-ascii?Q?/cY/GcX8RUfrAURA9AKAXsDjckD26zoXQ+biS4lFIaUnvisx4DPRMlUAZpgB?=
+ =?us-ascii?Q?fflM37hgyCcErAIJVRCi4EdaEKCTW/5stQR/+KuOpk4apnz3ikpBZwhdXR0h?=
+ =?us-ascii?Q?rX6C1F3JriStzFjWIISWvQ/sL+hJoFT7saSW75K8yqFs+7emZxbBVhVxysEW?=
+ =?us-ascii?Q?eseQc+ng+/WCVxSLepMdGnJl7d6AwTGq4b6BJiOk6utDXeXqxfTw1g4CXnkq?=
+ =?us-ascii?Q?pdEtexbmwgcNXsFDIzDHs/8zQ36TFowqr92mns+kgiaJpS5fJD9NPknbjzmh?=
+ =?us-ascii?Q?fKIPEuSAhGN/dbn4X7xTJXKpHOoZP5vCRyuswzT0+jxGRtCqKN6NOdMo/1E0?=
+ =?us-ascii?Q?lddsX494YZjKfqm89LgKiuX1ZWyZ8YDzukYk6g7d8tqp0a7//BAgrmvTmBqj?=
+ =?us-ascii?Q?P5CxRuw13bn7C9JtE12tJIF4Dc0tCUntmhjfY1CYhfToUssXksAP1Z6JNcP6?=
+ =?us-ascii?Q?bQpLzhnwrDrDGt3FLvOl4yg+BhPOe7xYKAURtlU9FEj+kQJEvRQwulJ62KEI?=
+ =?us-ascii?Q?zQR48v/NZ0tROOhjRmGlZV7GHv7HUIgByszR+oEKFNDVMS4o2zCCavXtZhbQ?=
+ =?us-ascii?Q?NsR1Tz0A8WUZtCEam9OTZrMaXxsJqcKvKFCa/jsfINLMqRpRkvnsjltYAEVM?=
+ =?us-ascii?Q?ZvSnwAxb4C3pjqhkrg0gocTm4zZyyEB/YU68uRlClMo8Y6Bggkpa5oD2bynO?=
+ =?us-ascii?Q?hdaQ4OENDpvzsKYi48MDErzEdlmrr8BGJ/RywWxljV7c3BU5BbRdWZBTfhbq?=
+ =?us-ascii?Q?HLFDwxgcr7eDg5Y31kgqe1plDO7Q8IxNg0DvVwy9Q8VbHGNDD+SZ9hZyiotV?=
+ =?us-ascii?Q?2KzJsv9F7H13/LylXxk3esHKj8TK9h8VKGGY92Xeh1a9RHyhojxeErPT5Ztq?=
+ =?us-ascii?Q?MSspPWTNhR8MjzM5L8AtvszEjN4s9rBuSjJvQQ+7uKn1zBcZoj5Dkq7cqmSy?=
+ =?us-ascii?Q?lurzGHyhyzA9oo89q0hRdUoeuKzpLMTY04Cx+K8LErAInHMSETqTiTkPOAVL?=
+ =?us-ascii?Q?/t3nTHK2pNXoisYnkhfyAy+lS+pm5C+ctxLEu8fwOoY1mQMjqFalA+YBN6i7?=
+ =?us-ascii?Q?XhWw9xX5jy/yfOtpM0k/SHPuH90aUM9WV5jOnMp4bq5s7So6KAJJP+GZ3PPA?=
+ =?us-ascii?Q?rDsTEIBHylz2KrydvLno6oc=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01689294-5d72-4a28-a8cd-08d9f09abfc6
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2022 15:49:28.3826
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ba4DYBLLOIoB4Is73he7gDb1oLTJ67ObiMjmwvqx3F12BfblME2dmUkhOMvXYb1Y0z+Yi3rRJikSe872m5bMBw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5151
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-15 16:43:08 [+0100], Jiri Kosina wrote:
-> From: Jiri Kosina <jkosina@suse.cz>
+On Thu, Feb 03, 2022 at 11:49:35AM -0600, Naveen Krishna Chatradhi wrote:
+> From: Muralidhara M K <muralimk@amd.com>
 > 
-> drm_fb_helper_damage() is acquiring spinlock_t (helper->damage_lock), 
-> while it can be called from contexts where raw_spinlock_t is held (e.g. 
-> console_owner lock obtained on vprintk_emit() codepath).
-> 
-> As the critical sections protected by damage_lock are super-tiny, let's 
-> fix this by converting it to raw_spinlock_t in order not to violate 
-> PREEMPT_RT-imposed lock nesting rules.
-> 
-> This fixes the splat below.
-> 
->  =============================
->  [ BUG: Invalid wait context ]
->  5.17.0-rc4-00002-gd567f5db412e #1 Not tainted
+> Extending family-specific assignments dynamic.
 
-rc4. Is this also the case in the RT tree which includes John's printk
-changes?
+The commit message doesn't clearly describe what the patch is about.
 
->  -----------------------------
->  swapper/0/0 is trying to lock:
->  ffff8c5687cc4158 (&helper->damage_lock){....}-{3:3}, at: drm_fb_helper_damage.isra.22+0x4a/0xf0
->  other info that might help us debug this:
->  context-{2:2}
->  3 locks held by swapper/0/0:
->   #0: ffffffffad776520 (console_lock){+.+.}-{0:0}, at: vprintk_emit+0xb8/0x2a0
->   #1: ffffffffad696120 (console_owner){-...}-{0:0}, at: console_unlock+0x17f/0x550
->   #2: ffffffffad926a58 (printing_lock){....}-{3:3}, at: vt_console_print+0x7d/0x3e0
->  stack backtrace:
->  CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc4-00002-gd567f5db412e #1 bed1d5e19e0e7e8c9d97fd8afa1322f7f47a4f38
->  Hardware name: LENOVO 20UJS2B905/20UJS2B905, BIOS R1CET63W(1.32 ) 04/09/2021
->  Call Trace:
->   <IRQ>
->   dump_stack_lvl+0x58/0x71
->   __lock_acquire+0x165b/0x1780
->   ? secondary_startup_64_no_verify+0xd5/0xdb
->   lock_acquire+0x278/0x300
->   ? drm_fb_helper_damage.isra.22+0x4a/0xf0
->   ? save_trace+0x3e/0x340
->   ? __bfs+0x10f/0x240
->   _raw_spin_lock_irqsave+0x48/0x60
->   ? drm_fb_helper_damage.isra.22+0x4a/0xf0
->   drm_fb_helper_damage.isra.22+0x4a/0xf0
->   soft_cursor+0x194/0x240
->   bit_cursor+0x386/0x630
->   ? get_color+0x29/0x120
->   ? bit_putcs+0x4b0/0x4b0
->   ? console_unlock+0x17f/0x550
->   hide_cursor+0x2f/0x90
->   vt_console_print+0x3c5/0x3e0
->   ? console_unlock+0x17f/0x550
->   console_unlock+0x515/0x550
->   vprintk_emit+0x1c8/0x2a0
->   _printk+0x52/0x6e
->   ? sched_clock_tick+0x3d/0x60
->   collect_cpu_info_amd+0x93/0xd0
->   collect_cpu_info_local+0x23/0x30
->   flush_smp_call_function_queue+0x137/0x220
->   __sysvec_call_function_single+0x43/0x1c0
->   sysvec_call_function_single+0x43/0x80
->   </IRQ>
->   <TASK>
->   asm_sysvec_call_function_single+0x12/0x20
->  RIP: 0010:cpuidle_enter_state+0x111/0x4b0
->  Code: 7c ff 45 84 ff 74 17 9c 58 0f 1f 44 00 00 f6 c4 02 0f 85 71 03 00 00 31 ff e8 bb 21 86 ff e8 76 2f 8e ff fb 66 0f 1f 44 00 00 <45> 85 f6 0f 88 12 01 00 00 49 63 d6 4c 2b 24 24 48 8d 04 52 48 8d
->  RSP: 0018:ffffffffad603e48 EFLAGS: 00000206
->  RAX: 00000000000127c3 RBX: 0000000000000003 RCX: 0000000000000000
->  RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffffffac32617a
->  RBP: ffff8c5687ba4400 R08: 0000000000000001 R09: 0000000000000001
->  R10: ffffffffad603e10 R11: 0000000000000000 R12: 00000000685eb4a0
->  R13: ffffffffad918f80 R14: 0000000000000003 R15: 0000000000000000
->   ? cpuidle_enter_state+0x10a/0x4b0
->   ? cpuidle_enter_state+0x10a/0x4b0
->   cpuidle_enter+0x29/0x40
->   do_idle+0x24d/0x2c0
->   cpu_startup_entry+0x19/0x20
->   start_kernel+0x9c2/0x9e9
->   secondary_startup_64_no_verify+0xd5/0xdb
->   </TASK>
+> This would simplify adding support for future platforms.
 > 
-> Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+> Signed-off-by: Muralidhara M K <muralimk@amd.com>
+> Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
 > ---
->  drivers/gpu/drm/drm_fb_helper.c | 14 +++++++-------
->  include/drm/drm_fb_helper.h     |  2 +-
->  2 files changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
-> index ed43b987d306..7c4ab6e6f865 100644
-> --- a/drivers/gpu/drm/drm_fb_helper.c
-> +++ b/drivers/gpu/drm/drm_fb_helper.c
-> @@ -436,11 +436,11 @@ static void drm_fb_helper_damage_work(struct work_struct *work)
->  	unsigned long flags;
->  	int ret;
->  
-> -	spin_lock_irqsave(&helper->damage_lock, flags);
-> +	raw_spin_lock_irqsave(&helper->damage_lock, flags);
->  	clip_copy = *clip;
->  	clip->x1 = clip->y1 = ~0;
->  	clip->x2 = clip->y2 = 0;
-> -	spin_unlock_irqrestore(&helper->damage_lock, flags);
-> +	raw_spin_unlock_irqrestore(&helper->damage_lock, flags);
->  
->  	/* Call damage handlers only if necessary */
->  	if (!(clip_copy.x1 < clip_copy.x2 && clip_copy.y1 < clip_copy.y2))
-> @@ -465,12 +465,12 @@ static void drm_fb_helper_damage_work(struct work_struct *work)
->  	 * Restore damage clip rectangle on errors. The next run
->  	 * of the damage worker will perform the update.
->  	 */
-> -	spin_lock_irqsave(&helper->damage_lock, flags);
-> +	raw_spin_lock_irqsave(&helper->damage_lock, flags);
->  	clip->x1 = min_t(u32, clip->x1, clip_copy.x1);
->  	clip->y1 = min_t(u32, clip->y1, clip_copy.y1);
->  	clip->x2 = max_t(u32, clip->x2, clip_copy.x2);
->  	clip->y2 = max_t(u32, clip->y2, clip_copy.y2);
-> -	spin_unlock_irqrestore(&helper->damage_lock, flags);
-> +	raw_spin_unlock_irqrestore(&helper->damage_lock, flags);
->  }
->  
->  /**
-> @@ -486,7 +486,7 @@ void drm_fb_helper_prepare(struct drm_device *dev, struct drm_fb_helper *helper,
->  			   const struct drm_fb_helper_funcs *funcs)
->  {
->  	INIT_LIST_HEAD(&helper->kernel_fb_list);
-> -	spin_lock_init(&helper->damage_lock);
-> +	raw_spin_lock_init(&helper->damage_lock);
->  	INIT_WORK(&helper->resume_work, drm_fb_helper_resume_worker);
->  	INIT_WORK(&helper->damage_work, drm_fb_helper_damage_work);
->  	helper->damage_clip.x1 = helper->damage_clip.y1 = ~0;
-> @@ -670,12 +670,12 @@ static void drm_fb_helper_damage(struct fb_info *info, u32 x, u32 y,
->  	if (!drm_fbdev_use_shadow_fb(helper))
->  		return;
->  
-> -	spin_lock_irqsave(&helper->damage_lock, flags);
-> +	raw_spin_lock_irqsave(&helper->damage_lock, flags);
->  	clip->x1 = min_t(u32, clip->x1, x);
->  	clip->y1 = min_t(u32, clip->y1, y);
->  	clip->x2 = max_t(u32, clip->x2, x + width);
->  	clip->y2 = max_t(u32, clip->y2, y + height);
-> -	spin_unlock_irqrestore(&helper->damage_lock, flags);
-> +	raw_spin_unlock_irqrestore(&helper->damage_lock, flags);
->  
->  	schedule_work(&helper->damage_work);
->  }
-> diff --git a/include/drm/drm_fb_helper.h b/include/drm/drm_fb_helper.h
-> index 3af4624368d8..91178958896e 100644
-> --- a/include/drm/drm_fb_helper.h
-> +++ b/include/drm/drm_fb_helper.h
-> @@ -131,7 +131,7 @@ struct drm_fb_helper {
->  	struct fb_info *fbdev;
->  	u32 pseudo_palette[17];
->  	struct drm_clip_rect damage_clip;
-> -	spinlock_t damage_lock;
-> +	raw_spinlock_t damage_lock;
->  	struct work_struct damage_work;
->  	struct work_struct resume_work;
->  
-> 
 
-Sebastian
+...
+
+> --- a/drivers/edac/amd64_edac.h
+> +++ b/drivers/edac/amd64_edac.h
+> @@ -481,6 +481,19 @@ struct low_ops {
+>  				     struct err_info *err);
+>  	int  (*dbam_to_cs)(struct amd64_pvt *pvt, u8 dct,
+>  			   unsigned int cs_mode, int cs_mask_nr);
+> +	void (*prep_chip_selects)(struct amd64_pvt *pvt);
+> +	void (*determine_memory_type)(struct amd64_pvt *pvt);
+> +	void (*determine_ecc_sym_sz)(struct amd64_pvt *pvt);
+> +	bool (*ecc_enabled)(struct amd64_pvt *pvt);
+> +	void (*determine_edac_ctl_cap)(struct mem_ctl_info *mci, struct amd64_pvt *pvt);
+> +	unsigned long (*determine_edac_cap)(struct amd64_pvt *pvt);
+> +	int  (*get_cs_mode)(int dimm, u8 ctrl, struct amd64_pvt *pvt);
+> +	void (*get_base_mask)(struct amd64_pvt *pvt);
+> +	void (*dump_misc_regs)(struct amd64_pvt *pvt);
+> +	void (*get_mc_regs)(struct amd64_pvt *pvt);
+> +	void (*setup_mci_misc_attrs)(struct mem_ctl_info *mci);
+> +	int  (*populate_csrows)(struct mem_ctl_info *mci);
+> +	void (*get_umc_err_info)(struct mce *m, struct err_info *err);
+>  };
+
+I think there should be a patch for breaking out each of these functions.
+
+Thanks,
+Yazen

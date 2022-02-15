@@ -2,147 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0CD4B6B23
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:33:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 823974B6AD8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237333AbiBOLdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 06:33:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54766 "EHLO
+        id S237143AbiBOLal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 06:30:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237384AbiBOLdX (ORCPT
+        with ESMTP id S237139AbiBOLae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 06:33:23 -0500
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FD913EA5;
-        Tue, 15 Feb 2022 03:32:55 -0800 (PST)
-Received: by mail-pl1-x641.google.com with SMTP id c3so12877117pls.5;
-        Tue, 15 Feb 2022 03:32:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=uvNG3b2ZVAODPVHZbR7OYDshW9r7jcq3KS61WPMxW90=;
-        b=T2fE7+oGkLWvKCMISDbt4bvOr7QIHlkrZlnQet4SeOSLZPVjKT3pWkYg3UDXs1SPRg
-         YBE2wQq4UchSyDXvJgvOnHflX78v6Df2RIBEmfMQl/SODnKmxT1RsFcaWtIyDMHXJl/T
-         VBoYbiekjo6P37OZ9EpcbW2FSIcPd+CFbXw4wXE8ZywQqPcqVX6kcCVmOFaAsbpyhUpX
-         aXnFFKwRumazi6MgnxI+uVHj4JeOjhOTqcBN5yd1J6trqxfJQm30wfRGEvD47gD7WB8R
-         +UXS8UAKw9SxMkktLVN+rNVSFsgMWTohWIh3lay0JL3VITklQIMH8Kq63XDAdAk3QzeO
-         1TdQ==
+        Tue, 15 Feb 2022 06:30:34 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD14710855E
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 03:30:24 -0800 (PST)
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com [209.85.161.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2020940333
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 11:30:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644924623;
+        bh=TQsWKxzWtW4CbZduV18nJ8RuXExNAqdKgvnVntrHDhc=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=Ih4nybmos/dYj9ptGC8iIbrR2f0liEqTSJ7K5toAJyiI0DQbr488UQsDEHvUkOBVL
+         Rel72W18wTWMaSFvUjpo+7TlK9i01THlKC/6k/DSkZvHICnVQRQ2xU2R+0HJrl4he1
+         YHT4anh7KNyaz10OJKGaYVmYQUgDDUdyZKduLJf2Sx3QZScuF7A0Mo+VOvnyrSHFNH
+         JiI+AimC3ocKRBnlzJ7TW+tz6pmJx5nN2ITd8FWoq48/Uwwq/9wavUQ9Kp+93d/dmS
+         c5Fb7s8L/CbmzaajY7ADu/ULYKHT8Lpch8yJUYnrWsz689GU06n2OLnMgy64Bx0g+g
+         SWO/AQdN/CHNA==
+Received: by mail-oo1-f72.google.com with SMTP id u13-20020a4ab5cd000000b002e021ad5bbcso12390976ooo.17
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 03:30:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=uvNG3b2ZVAODPVHZbR7OYDshW9r7jcq3KS61WPMxW90=;
-        b=HtY8QPP6c8fUzScDxfb0bUO5pJH40mgmPkbJNyOoIvYrLz485V7yW7xh9wq4CEwgyo
-         fXv+sD1qO88yrJbkDURHuUp72Ycz0O9VbC3Fz2auQ1gu2Kzp9d0vfEsryz375HdCaXaB
-         b2PTe3QbMnUnoIlrKbBcgKOE7ljKZM5h7sEDjEXgr5sagzlWyAazvqBRbZlFXCgAzoVX
-         lFDZo8NnG9Ne7gbgxgixuyA/40urlgpkqBB8NToCFEl5ZqH+P869NYC+RwUexjUpzF8i
-         8mKi5nKdnAP5hh4hfFjr9wN7kCJShdAXtg1nXFPNLwDkUAZEp6mRsKRgWwuUYczC1zYK
-         NqQQ==
-X-Gm-Message-State: AOAM531OV2+eSExSInNNEpF2O+rk7dbEuzTTajKaJZ9CtJil3V9Iz1wI
-        NCnDxrbIlap8vk3xvzNu5rc=
-X-Google-Smtp-Source: ABdhPJw2H1l6j9qqcE3Sp6JhI0pOdJnG6iQ17yFicjP59I0hrTkpTTpS6iQab8ePR5xq32PTvq0Duw==
-X-Received: by 2002:a17:902:8d96:: with SMTP id v22mr3646721plo.77.1644924775195;
-        Tue, 15 Feb 2022 03:32:55 -0800 (PST)
-Received: from localhost.localdomain ([203.205.141.113])
-        by smtp.gmail.com with ESMTPSA id s11sm44515513pfu.58.2022.02.15.03.32.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 03:32:54 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     dsahern@kernel.org, kuba@kernel.org
-Cc:     edumazet@google.com, davem@davemloft.net, rostedt@goodmis.org,
-        mingo@redhat.com, yoshfuji@linux-ipv6.org, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        imagedong@tencent.com, talalahmad@google.com,
-        keescook@chromium.org, ilias.apalodimas@linaro.org, alobakin@pm.me,
-        memxor@gmail.com, atenart@kernel.org, bigeasy@linutronix.de,
-        pabeni@redhat.com, linyunsheng@huawei.com, arnd@arndb.de,
-        yajun.deng@linux.dev, roopa@nvidia.com, willemb@google.com,
-        vvs@virtuozzo.com, cong.wang@bytedance.com,
-        luiz.von.dentz@intel.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, flyingpeng@tencent.com
-Subject: [PATCH net-next 19/19] net: dev: use kfree_skb_reason() for __netif_receive_skb_core()
-Date:   Tue, 15 Feb 2022 19:28:12 +0800
-Message-Id: <20220215112812.2093852-20-imagedong@tencent.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220215112812.2093852-1-imagedong@tencent.com>
-References: <20220215112812.2093852-1-imagedong@tencent.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TQsWKxzWtW4CbZduV18nJ8RuXExNAqdKgvnVntrHDhc=;
+        b=yGOjyi9AHseaIh2e/peFvy7VS1lLS6HbkuytRpYV0NQ4ALHWK0M3CvA6or8F8HRCW+
+         jWIJVJLn6sRFhoB94PNoaVbu4oAwky9rb3qzbDmdZ/79dgnxFzVZKthpYYJlqb/ukReh
+         1gpLVQ2tKUMDPKxcCzkfSGuN2mklJL+dqPsX/70sTObrtq2DTYh5tjmISlANNaTgRNtt
+         OZ+xFNl19PB57HHoEm7gUwrI7t1Y4fWHd8QjKSmRXHOh0UoZQEnJIKlEovcVOZqWmgtL
+         ngXFjKatJydoKzPjovN9tngxRaN9+HyKvX/OZ0exkepYRIxoVSyVATgwnPgL3xx+VgIC
+         GG8A==
+X-Gm-Message-State: AOAM5331Tpc753r2mMrndm1cQJMFZatxLsWffbHD6ja8pG+6xGEbhAcB
+        2u8FYNkPtEDt+wXDy9AZpl4w7FhwY9GhDNzflvdvP1xJWtLKfSc0yacCLrI2XRwU3/MhCQWsczc
+        c9vJEiAyrvoJ9kc8J7xej/O8/hghQE9K8WHFGi0YeiGlM8erL2pNEwWmd3g==
+X-Received: by 2002:a05:6870:1019:b0:ce:c0c9:631 with SMTP id 25-20020a056870101900b000cec0c90631mr1163423oai.131.1644924621950;
+        Tue, 15 Feb 2022 03:30:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxSDV3cX4UNce8B0x7g5PwElp6clHoeO17u/5Wi9aFeC595MGFUPB0PzJhz/IbYfeFikE2Tp9YmYSfowWCVBTw=
+X-Received: by 2002:a05:6870:1019:b0:ce:c0c9:631 with SMTP id
+ 25-20020a056870101900b000cec0c90631mr1163415oai.131.1644924621695; Tue, 15
+ Feb 2022 03:30:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220215042011.2266897-1-kai.heng.feng@canonical.com> <CAHp75VfBQPgrbuxazuoyDbFtGZR=rU5wqPhSXhkoiA_2HR1EHA@mail.gmail.com>
+In-Reply-To: <CAHp75VfBQPgrbuxazuoyDbFtGZR=rU5wqPhSXhkoiA_2HR1EHA@mail.gmail.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Tue, 15 Feb 2022 19:30:10 +0800
+Message-ID: <CAAd53p6tjWtKSqDDG_hjbFGKeR7-L3uYwgOTRNHfwAhmE8nV+g@mail.gmail.com>
+Subject: Re: [PATCH v3] iio: accel: adxl345: Add ACPI HID table
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+On Tue, Feb 15, 2022 at 4:28 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Tue, Feb 15, 2022 at 6:20 AM Kai-Heng Feng
+> <kai.heng.feng@canonical.com> wrote:
+> >
+> > x86 boards may use ACPI HID "ADS0345" for adxl345 device.
+> >
+> > Analog replied:
+> > "ADS034X is not a valid PNP ID. ADS0345 would be.
+> > I'm not aware that this ID is already taken.
+> > Feel free to submit a mainline Linux input mailing list patch."
+> >
+> > So add an ACPI match table for that accordingly.
+>
+> Thank you for the update, my comments below.
+>
+> ...
+>
+> > @@ -41,6 +41,7 @@ static int adxl345_i2c_probe(struct i2c_client *client,
+> >  static const struct i2c_device_id adxl345_i2c_id[] = {
+> >         { "adxl345", ADXL345 },
+> >         { "adxl375", ADXL375 },
+>
+> > +       { "ADS0345:00", ADXL345 },
+> >         { }
+> >  };
+> >
+>
+> This is wrong. First of all, on the left side you put the device
+> instance name (which must not be in the ID tables, since the device
+> instance name is "ID + instance number"). Second, the motivation of
+> this is not clear, if the device is enumerated by ACPI, why do you
+> care about board code?
 
-Add reason for skb drops to __netif_receive_skb_core() when packet_type
-not found to handle the skb. For this purpose, the drop reason
-SKB_DROP_REASON_PTYPE_ABSENT is introduced. Take ether packets for
-example, this case mainly happens when L3 protocol is not supported.
+I was uncertain on this at first, but later I saw some drivers use
+this form (*:00) too, so I just followed through.
 
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
- include/linux/skbuff.h     | 5 +++++
- include/trace/events/skb.h | 1 +
- net/core/dev.c             | 8 +++++---
- 3 files changed, 11 insertions(+), 3 deletions(-)
+The intention is to accommodate adxl345_i2c_probe() without any modification.
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index e36e27943104..b467a5adfeaf 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -415,6 +415,11 @@ enum skb_drop_reason {
- 					 * failed (maybe an eBPF program
- 					 * is tricking?)
- 					 */
-+	SKB_DROP_REASON_PTYPE_ABSENT,	/* no packet_type found to handle
-+					 * the skb. For an etner packet,
-+					 * this means that L3 protocol is
-+					 * not supported
-+					 */
- 	SKB_DROP_REASON_MAX,
- };
- 
-diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
-index 96a550570dfe..f649c0a18d29 100644
---- a/include/trace/events/skb.h
-+++ b/include/trace/events/skb.h
-@@ -48,6 +48,7 @@
- 	EM(SKB_DROP_REASON_CPU_BACKLOG, CPU_BACKLOG)		\
- 	EM(SKB_DROP_REASON_XDP, XDP)				\
- 	EM(SKB_DROP_REASON_QDISC_INGRESS, QDISC_INGRESS)	\
-+	EM(SKB_DROP_REASON_PTYPE_ABSENT, PTYPE_ABSENT)		\
- 	EMe(SKB_DROP_REASON_MAX, MAX)
- 
- #undef EM
-diff --git a/net/core/dev.c b/net/core/dev.c
-index c67e3491c004..90488d05f83b 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -5323,11 +5323,13 @@ static int __netif_receive_skb_core(struct sk_buff **pskb, bool pfmemalloc,
- 		*ppt_prev = pt_prev;
- 	} else {
- drop:
--		if (!deliver_exact)
-+		if (!deliver_exact) {
- 			atomic_long_inc(&skb->dev->rx_dropped);
--		else
-+			kfree_skb_reason(skb, SKB_DROP_REASON_PTYPE_ABSENT);
-+		} else {
- 			atomic_long_inc(&skb->dev->rx_nohandler);
--		kfree_skb(skb);
-+			kfree_skb(skb);
-+		}
- 		/* Jamal, now you will not able to escape explaining
- 		 * me how you were going to use this. :-)
- 		 */
--- 
-2.34.1
 
+>
+> Just don't add anything to this table.
+
+Got it.
+
+>
+> The rest is good, but consider doing the same for _spi part of the driver.
+
+OK, will do.
+
+Kai-Heng
+
+>
+> --
+> With Best Regards,
+> Andy Shevchenko

@@ -2,88 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BC64B6470
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 08:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D4914B6472
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 08:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234854AbiBOHgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 02:36:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58572 "EHLO
+        id S234861AbiBOHh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 02:37:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiBOHgb (ORCPT
+        with ESMTP id S231211AbiBOHh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 02:36:31 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38CD9F68
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 23:36:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=XuivQHXzqmT3xw61eBb+t7LNnzD2mGSvYyypQI3V5GI=; b=iaDEe79+/Uc/gess0wmJTlIL8U
-        5DFDxn475BXEw/HDVuz3/0Y9SlI4HNyyg6AwtlTUyLfQjnh0bSxHMiQrIQMY9OmdWDRtKqsn+iaea
-        pQDV/5wZC22JMbQRJEgtSmIRcYMZQN53zqfKiQoVXnAVfHA9AC5/tXmDjheIV/TPldoFSSFJIwUkx
-        iaXtPMTL+1nI+FCpV2sQu9/Kq0GQfajluvgiFIzZmT/l88cFvgYAMODIL5zhv8ztUXpokP7YLXD+H
-        iI4Akk72TV+8kRHRyW0UmLHPStZMjWwbEtn+ytHrkaK1O0oNRkVvQI8/qUYnLqyrNiG0A4uB6RO2J
-        ybA/xRZA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJsNo-001H5m-C5; Tue, 15 Feb 2022 07:36:20 +0000
-Date:   Mon, 14 Feb 2022 23:36:20 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: kernel/module_decompress.c:264:36: error: 'module_kset'
- undeclared; did you mean 'module_use'?
-Message-ID: <YgtX9OFbeNZdCZTp@bombadil.infradead.org>
-References: <202202140027.K0xZn3T2-lkp@intel.com>
- <b45a15ec-549d-25ba-f818-ed503ba991de@infradead.org>
- <YgnEsbnHXiuanfY/@google.com>
+        Tue, 15 Feb 2022 02:37:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501E7657A1;
+        Mon, 14 Feb 2022 23:37:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ECF55B817DF;
+        Tue, 15 Feb 2022 07:37:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29254C340EC;
+        Tue, 15 Feb 2022 07:37:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644910634;
+        bh=MS4a2sCHLZDfgiTN71t3s65oVZd6bxNMNM0atcJwRWY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pS+1F9Sj4fbMu0Y2QNh0UNCUsswFlNNCkvOQCsYb86ZoSrdbKstuOh/vHEnPYQ6N5
+         KuBooyEaeTAaFvi/dqpcY6FEHzIRR0/K3BYlCekjIP398Q3y9OIiQ9ngiiWLFGF1ku
+         HNB67wXhckx/Ila2/JHhITi6G7iQ7nRk+FkdPtg8=
+Date:   Tue, 15 Feb 2022 08:37:11 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jung Daehwan <dh10.jung@samsung.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        Thinh.Nguyen@synopsys.com
+Subject: Re: [PATCH v2 1/2] usb: dwc3: Not set DWC3_EP_END_TRANSFER_PENDING
+ in ep cmd fails
+Message-ID: <YgtYJ544YsvKTaxS@kroah.com>
+References: <1644836933-141376-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20220214111149epcas2p1a1faeda037991885fd6f2f026fa44ec5@epcas2p1.samsung.com>
+ <1644836933-141376-2-git-send-email-dh10.jung@samsung.com>
+ <Ygo9LZg8lxitTE8J@kroah.com>
+ <20220215065826.GD144890@ubuntu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YgnEsbnHXiuanfY/@google.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220215065826.GD144890@ubuntu>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 13, 2022 at 06:55:45PM -0800, Dmitry Torokhov wrote:
-> On Sun, Feb 13, 2022 at 04:34:49PM -0800, Randy Dunlap wrote:
+On Tue, Feb 15, 2022 at 03:58:26PM +0900, Jung Daehwan wrote:
+> On Mon, Feb 14, 2022 at 12:29:49PM +0100, Greg Kroah-Hartman wrote:
+> > On Mon, Feb 14, 2022 at 08:08:52PM +0900, Daehwan Jung wrote:
+> > > It always sets DWC3_EP_END_TRANSFER_PENDING in dwc3_stop_active_transfer
+> > > even if dwc3_send_gadget_ep_cmd fails. It can cause some problems like
+> > > skipping clear stall commmand or giveback from dequeue. We fix to set it
+> > > only when ep cmd success. Additionally, We clear DWC3_EP_TRANSFER_STARTED
+> > > for next trb to start transfer not update transfer.
 > > 
+> > So is this two different changes?
 > > 
-> > On 2/13/22 08:57, kernel test robot wrote:
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > > head:   b81b1829e7e39f6cebdf6e4d5484eacbceda8554
-> > > commit: b1ae6dc41eaaa98bb75671e0f3665bfda248c3e7 module: add in-kernel support for decompressing
-> > > date:   5 weeks ago
-> > > config: sparc-randconfig-r005-20220213 (https://download.01.org/0day-ci/archive/20220214/202202140027.K0xZn3T2-lkp@intel.com/config)
-> > > compiler: sparc-linux-gcc (GCC) 11.2.0
-> > > reproduce (this is a W=1 build):
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b1ae6dc41eaaa98bb75671e0f3665bfda248c3e7
-> > >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> > >         git fetch --no-tags linus master
-> > >         git checkout b1ae6dc41eaaa98bb75671e0f3665bfda248c3e7
-> > >         # save the config file to linux build tree
-> > >         mkdir build_dir
-> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc SHELL=/bin/bash
+> > > 
+> > > Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
 > > 
-> > FTR/FYI:
-> > # CONFIG_SYSFS is not set
+> > What commit id does this fix?
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> > 
 > 
-> Ugh, why is this even a thing?
+> Hi greg,
+> 
+> Below is commit id to fix.
+> 
+> commit c58d8bfc77a2c7f6ff6339b58c9fca7ae6f57e70
+> Author: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> Date:   Wed Dec 18 18:14:44 2019 -0800
 
-If the kconfig supports it we need to support it. If you think
-we need to remove the option to be built-in we can take that
-up separately. In the meantime it would be wonderful if you
-can address this issue for Linus' tree.
+<snip>
 
-  Luis
+Then please properly put that as a "Fixes:" tag in the signed-off-by
+area when you resubmit this.
+
+thanks,
+
+greg k-h

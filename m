@@ -2,169 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3AD24B5F09
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 01:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B6384B5F0A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 01:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232509AbiBOA1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 19:27:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32896 "EHLO
+        id S232535AbiBOA1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 19:27:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbiBOA1n (ORCPT
+        with ESMTP id S231678AbiBOA1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Feb 2022 19:27:43 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A815117CBE
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 16:27:34 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id om7so16005987pjb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 16:27:34 -0800 (PST)
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F129118601;
+        Mon, 14 Feb 2022 16:27:34 -0800 (PST)
+Received: by mail-oo1-xc33.google.com with SMTP id v17-20020a4ac911000000b002eac41bb3f4so21252122ooq.10;
+        Mon, 14 Feb 2022 16:27:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=GYB1fI0D9nYciFwdD6JzesTCxp+5pmAN8brR7fAFLtk=;
-        b=NYZx6FyeL1UAVX/3ox6vx7GmLRlAzYVafPuQkb3hPQUX8qfjFlu7Uq3Ok7jVvkKjST
-         SLXaLFK+vJ6FmlcDLcnsd9tshLfQRMPcagZFda2MsTJr0GB4wLB06vkiBINn9neDwdy4
-         XbYDRiAaBTLemkLGH2E5mQp6WoiuEen53D8/+g8tBcCXsCaADdLfkebat+zaCNZfT/kF
-         j3zaFr06jgaod7L0TuFXLmQ/s7JWZ5195WaedVmVcE6Ym7+umEILwoyterY0hFNBzqL5
-         Yv7BLYnzAFXlQpn4qOBxWaFfKCdieh3n3C0F9KIBJgU2Jqmg+pBuELewq5NnOvUJC/u+
-         VyyQ==
+        bh=b5B+yrC0gIEdCLEK+c+3rXYNtE3GXLDu5+sXZ077SsU=;
+        b=HkPyP2vLgaaQ9ig0Gr3XYjQoPl0M9HmZ3YpMS1h9M2XaOz1p2O75yyoH6vCLZAjhC9
+         cNZCI2i+0NIdwQz/457Q9E0gujpBn7mjnK6Oty9pVWNhHHR3HZDWRVWk7kTgCTAjDwVQ
+         UamSeJWPfcOZisdiNlu1Yk8y/S2hYYFJhyeoKGspUfmocH6NQEq9t4Ws9qI9WIB9pe6P
+         RBWWV97fb5/XVyVMmZ/l+EKJwJMRXmOyTtHmrtuTdzDw2L33C0iP8DI4QbOhThawdXkK
+         /QZ0FYur/W/uIPIMoBW6HHRth9o/twEZS2lILXgA0ndbMuVgdwBqRVJLh0fVBlIBngC+
+         63LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GYB1fI0D9nYciFwdD6JzesTCxp+5pmAN8brR7fAFLtk=;
-        b=FrLOpPasvKv9MI6jYbxBjBedlnh4t4qS1RzubqwIO8OF/SpOeJIcP3dJywV5gkYjOG
-         TJmvEKy/Wpvb+kXez5V1EKkXUY+p0GXKEB+uMKmckD5XoJMpu3QGYfdPCkUcXZxmhwkI
-         iPohvFI7xstnKHkW/JPIgDYIzATQQK5w4zf7c3ERzeOd4hZ1aIRowTFvOqnX9A4b3FFG
-         IO19r1RnOOj45jpplR/v4qFChK6vrMcyYwqyCVP/ku0PWpjpn5f5i4oNyksDlma0uANN
-         H/7fVUB6Q9aVTbqLXFjmFLr8ASeQJKEHnYNmVqLDtiPUPaiYOJZ+x3cJkUpQOMXBVyhB
-         xc5Q==
-X-Gm-Message-State: AOAM530aEN25TgNWVyBA/KaW0UlL5aLN7iL9JpN/+QC75rx8IkHjWlu8
-        9MKJ+0uXiw+SzOSoHjjAwFnqag==
-X-Google-Smtp-Source: ABdhPJwj0FJ3FoZR2POBi7bG76fKWAmmfSySxjxP0by9wYaGl3FyQMOX13/KDEhoL1DpjJMUTCunEw==
-X-Received: by 2002:a17:90b:1c01:: with SMTP id oc1mr1380135pjb.161.1644884853084;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=b5B+yrC0gIEdCLEK+c+3rXYNtE3GXLDu5+sXZ077SsU=;
+        b=a/5Os+d3dBb1uyz8ZH7VlOxujJvqHFzBYl+SBZ6pqygG+PrEHGWeOTsm3iEWwMvKa7
+         e6JQ+pA4wNfXnW6/jzCExmg6Wjg7KnqpzgKLkOUjRqxdiYja+sYTXo4fjCpUR6fObc8s
+         ciya+FqZxIObnl395bq60AMyiQDrNMRuArthqVhvxMSC5TIASr8T/1vip+ot4zY9pySA
+         jSdaDg5nPz/7jgTgh2zdKDKUt9kvl0HnA//D7kzLJhT0d0qz3WCEUW5AsOvEzI3/MT3c
+         FZKj7EOwEMtkipbj6lZgTmjGyDU+CLXfbk9E2p2PXo6/cJOy4dXyEHim5P65r5yuNdJz
+         bL2A==
+X-Gm-Message-State: AOAM5338dy/YYNzaEJj5HeP/h88549Cp4LfWiTFzVmePhX5rITXflND3
+        7lmxpV5T4LzW14bYzQjkj6w=
+X-Google-Smtp-Source: ABdhPJxEOf2WfIGCmAK2dc8BpfpvK0oIOCqxeRVtuIwP2iaCBUYc+bsRfQGdFLT8N+IwavzqziRUvQ==
+X-Received: by 2002:a05:6870:4:: with SMTP id a4mr511568oaa.228.1644884853871;
         Mon, 14 Feb 2022 16:27:33 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:f672:8368:e22c:5ae9])
-        by smtp.gmail.com with ESMTPSA id a9sm611010pgb.56.2022.02.14.16.27.31
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p5sm13161323oou.39.2022.02.14.16.27.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 16:27:31 -0800 (PST)
-Date:   Mon, 14 Feb 2022 16:27:25 -0800
-From:   Benson Leung <bleung@google.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "open list:CHROMEOS EC USB TYPE-C DRIVER" 
-        <chrome-platform@lists.linux.dev>
-Subject: Re: [PATCH v2 3/4] platform/chrome: cros_ec_typec: Configure muxes
- at start of port update
-Message-ID: <YgrzbQViMLRTC4XB@google.com>
-References: <20220208184721.1697194-1-pmalani@chromium.org>
- <20220208184721.1697194-4-pmalani@chromium.org>
+        Mon, 14 Feb 2022 16:27:33 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 14 Feb 2022 16:27:32 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     mripard@kernel.org, wens@csie.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Klein <michael@fossekall.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: Re: [PATCH v2] ARM: dts: sun8i: Adjust power key nodes
+Message-ID: <20220215002732.GA3215504@roeck-us.net>
+References: <20211129165510.370717-1-jernej.skrabec@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mcHVd+HjoMipoP7y"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220208184721.1697194-4-pmalani@chromium.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20211129165510.370717-1-jernej.skrabec@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---mcHVd+HjoMipoP7y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, Nov 29, 2021 at 05:55:10PM +0100, Jernej Skrabec wrote:
+> Several H3 and one H2+ board have power key nodes, which are slightly
+> off. Some are missing wakeup-source property and some have BTN_0 code
+> assigned instead of KEY_POWER.
+> 
+> Adjust them, so they can function as intended by designer.
+> 
+> Co-developed-by: Michael Klein <michael@fossekall.de>
+> Signed-off-by: Michael Klein <michael@fossekall.de>
+> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Hi Prashant,
+This patch results in the following traceback when rebooting an
+orangepi-pc qemu emulation.
 
-On Tue, Feb 08, 2022 at 06:47:22PM +0000, Prashant Malani wrote:
-> There are situations where the mux state reported by the Embedded
-> Controller (EC), might lag the partner "connected" state. So, the mux
-> state might still suggest that a partner is connected, while the PD
-> "connected" state, being in Try.SNK (for example) suggests that the
-> partner is disconnected.
->=20
-> In such a scenario, we will end up sending a disconnect command to the
-> mux driver, followed by a connect command, since the mux is configured
-> later. Avoid this by configuring the mux before
-> registering/disconnecting a partner.
->=20
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+[   30.899594]
+[   30.899685] ============================================
+[   30.899757] WARNING: possible recursive locking detected
+[   30.899938] 5.17.0-rc3-00394-gc849047c2473 #1 Not tainted
+[   30.900055] --------------------------------------------
+[   30.900124] init/307 is trying to acquire lock:
+[   30.900246] c2dfe27c (&irq_desc_lock_class){-.-.}-{2:2}, at: __irq_get_desc_lock+0x58/0xa0
+[   30.900900]
+[   30.900900] but task is already holding lock:
+[   30.900974] c3c0ac7c (&irq_desc_lock_class){-.-.}-{2:2}, at: __irq_get_desc_lock+0x58/0xa0
+[   30.901101]
+[   30.901101] other info that might help us debug this:
+[   30.901188]  Possible unsafe locking scenario:
+[   30.901188]
+[   30.901262]        CPU0
+[   30.901301]        ----
+[   30.901339]   lock(&irq_desc_lock_class);
+[   30.901411]   lock(&irq_desc_lock_class);
+[   30.901480]
+[   30.901480]  *** DEADLOCK ***
+[   30.901480]
+[   30.901554]  May be due to missing lock nesting notation
+[   30.901554]
+[   30.901657] 4 locks held by init/307:
+[   30.901724]  #0: c1f29f18 (system_transition_mutex){+.+.}-{3:3}, at: __do_sys_reboot+0x90/0x23c
+[   30.901889]  #1: c20f7760 (&dev->mutex){....}-{3:3}, at: device_shutdown+0xf4/0x224
+[   30.902016]  #2: c2e804d8 (&dev->mutex){....}-{3:3}, at: device_shutdown+0x104/0x224
+[   30.902138]  #3: c3c0ac7c (&irq_desc_lock_class){-.-.}-{2:2}, at: __irq_get_desc_lock+0x58/0xa0
+[   30.902281]
+[   30.902281] stack backtrace:
+[   30.902462] CPU: 0 PID: 307 Comm: init Not tainted 5.17.0-rc3-00394-gc849047c2473 #1
+[   30.902572] Hardware name: Allwinner sun8i Family
+[   30.902781]  unwind_backtrace from show_stack+0x10/0x14
+[   30.902895]  show_stack from dump_stack_lvl+0x68/0x90
+[   30.902970]  dump_stack_lvl from __lock_acquire+0x1680/0x31a0
+[   30.903047]  __lock_acquire from lock_acquire+0x148/0x3dc
+[   30.903118]  lock_acquire from _raw_spin_lock_irqsave+0x50/0x6c
+[   30.903197]  _raw_spin_lock_irqsave from __irq_get_desc_lock+0x58/0xa0
+[   30.903282]  __irq_get_desc_lock from irq_set_irq_wake+0x2c/0x19c
+[   30.903366]  irq_set_irq_wake from irq_set_irq_wake+0x13c/0x19c
+[   30.903442]  irq_set_irq_wake from gpio_keys_suspend+0x80/0x1a4
+[   30.903523]  gpio_keys_suspend from gpio_keys_shutdown+0x10/0x2c
+[   30.903603]  gpio_keys_shutdown from device_shutdown+0x180/0x224
+[   30.903685]  device_shutdown from __do_sys_reboot+0x134/0x23c
+[   30.903764]  __do_sys_reboot from ret_fast_syscall+0x0/0x1c
+[   30.903894] Exception stack(0xc584ffa8 to 0xc584fff0)
+[   30.904013] ffa0:                   01234567 000c623f fee1dead 28121969 01234567 00000000
+[   30.904117] ffc0: 01234567 000c623f 00000001 00000058 000d85c0 00000000 00000000 00000000
+[   30.904213] ffe0: 000d8298 be84ddf4 000918bc b6eb0edc
+[   30.905189] reboot: Restarting system
 
-Reviewed-by: Benson Leung <bleung@chromium.org>
+The warning is no longer seen after reverting this patch.
 
+The problem exists but is not seen in v5.17-rc4 because a bug in commit
+8df89a7cbc63 ("pinctrl-sunxi: don't call pinctrl_gpio_direction()")
+hides it. That problem is fixed with commit 3c5412cdec9f ("pinctrl-sunxi:
+sunxi_pinctrl_gpio_direction_in/output: use correct offset") in linux-next,
+and the traceback is seen there.
 
-> ---
->=20
-> Changes in v2:
-> - Change return at end of port_update() to just return 0.
->=20
->  drivers/platform/chrome/cros_ec_typec.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/c=
-hrome/cros_ec_typec.c
-> index 3d34ece7f790..3019e29f200d 100644
-> --- a/drivers/platform/chrome/cros_ec_typec.c
-> +++ b/drivers/platform/chrome/cros_ec_typec.c
-> @@ -965,6 +965,11 @@ static int cros_typec_port_update(struct cros_typec_=
-data *typec, int port_num)
->  	if (ret < 0)
->  		return ret;
-> =20
-> +	/* Update the switches if they exist, according to requested state */
-> +	ret =3D cros_typec_configure_mux(typec, port_num, &resp);
-> +	if (ret)
-> +		dev_warn(typec->dev, "Configure muxes failed, err =3D %d\n", ret);
-> +
->  	dev_dbg(typec->dev, "Enabled %d: 0x%hhx\n", port_num, resp.enabled);
->  	dev_dbg(typec->dev, "Role %d: 0x%hhx\n", port_num, resp.role);
->  	dev_dbg(typec->dev, "Polarity %d: 0x%hhx\n", port_num, resp.polarity);
-> @@ -980,12 +985,7 @@ static int cros_typec_port_update(struct cros_typec_=
-data *typec, int port_num)
->  	if (typec->typec_cmd_supported)
->  		cros_typec_handle_status(typec, port_num);
-> =20
-> -	/* Update the switches if they exist, according to requested state */
-> -	ret =3D cros_typec_configure_mux(typec, port_num, &resp);
-> -	if (ret)
-> -		dev_warn(typec->dev, "Configure muxes failed, err =3D %d\n", ret);
-> -
-> -	return ret;
-> +	return 0;
->  }
-> =20
->  static int cros_typec_get_cmd_version(struct cros_typec_data *typec)
-> --=20
-> 2.35.0.263.gb82422642f-goog
->=20
->=20
-
---=20
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
-
---mcHVd+HjoMipoP7y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYgrzbQAKCRBzbaomhzOw
-wmsmAP4osevqyWmDrkfwKbxgKbYaAxsyYlmk2daeEsBiCz5oGQD/UjyH6XvZGqrE
-1g76TY7mzdZcD9yPVEjWDF8a4xK8lwk=
-=3lFf
------END PGP SIGNATURE-----
-
---mcHVd+HjoMipoP7y--
+Guenter

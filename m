@@ -2,116 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9824B6908
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A504B68F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:15:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236417AbiBOKQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 05:16:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48502 "EHLO
+        id S236403AbiBOKPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 05:15:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234049AbiBOKQo (ORCPT
+        with ESMTP id S236387AbiBOKPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 05:16:44 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A61F27;
-        Tue, 15 Feb 2022 02:16:34 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id x11so1128214pll.10;
-        Tue, 15 Feb 2022 02:16:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=q3kUX6Dxx4EW1Q5ZjF1J+bSGyjInRYAGr/XgVtEwU/Y=;
-        b=nPxTeFWWAv6mE/U4pkG4JwVAvqL0RRxxC40zcSM1FXMQvl8Rd4YmBff77YkqcJ++Uv
-         x/qBLXXvsyhWtJYHp2m7R4tR2dheXwRNYXchhMSu9uUyoD9oXDWLOR6auGughQAxNDhT
-         bKYqfj/mIEmYG3VyZQTaZN0b+6o/PIUdIFUCIK0xJ/7DnLxA5FvISyfvDNqU8P1gM9Co
-         ox4Dflr9IDvhmKcFeuMPA8PQg8BOLpls2pFzxJpxoSN285yXNJxNJPg7B7psUkPSHNK9
-         EY21opk6aBnTEO482iaVMAVdXRXOLEK8INAZZSCrYrpRWm3U7hJ8xhJSXDCwm5pnnpby
-         cgdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=q3kUX6Dxx4EW1Q5ZjF1J+bSGyjInRYAGr/XgVtEwU/Y=;
-        b=4lX6SMjMCnPuPsryeX0LOl4s0go+vN9eKT0gzYLdxSY6CyRLIibC3zAjoNbVXz6ima
-         1vkgOzsB72sUhzvPrO+Q1RNiR/I2vXCxeXaC/Sd2xI0A7Ji+vC6XJgekQ4uh91DtkVIB
-         nYFUo7rYcCBl3dNKVz8FLVuxmr5wJGs8CbF4/Ntnp+YRCloT1ZZ88tSVaeXUWTFfa5Fo
-         66/TJOjPFEmbiYrj99ByVhz+JAQDcg5F8wTgQeVZqICJ+gAKrtX+MGG8c41lMq/lEIvm
-         sPTvD/KnFT5Z29kgaUMI06rUXys1yop7Z19PNMSEzbkImq5uZMC3cfmHrdqlypr5eV8Y
-         a9yw==
-X-Gm-Message-State: AOAM533vKzJOiDJUMKI4JeYL7l0MWzddNS8Op+uv9LvzGcJUIX/9wWin
-        eIfqwSdeRKzPy7i7RRiVMh+jGqGDZkM=
-X-Google-Smtp-Source: ABdhPJzXLDtNDf6vXkKZ56LqEbeTEAdpk8VCEhQoieBRwJ8b41W4LvBIvkDnb1/Bl+VdPfI/6yB+2w==
-X-Received: by 2002:a17:902:e889:: with SMTP id w9mr3350383plg.95.1644920193562;
-        Tue, 15 Feb 2022 02:16:33 -0800 (PST)
-Received: from localhost.localdomain ([203.205.141.114])
-        by smtp.googlemail.com with ESMTPSA id gk15sm17798302pjb.3.2022.02.15.02.16.31
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 15 Feb 2022 02:16:33 -0800 (PST)
-From:   Wanpeng Li <kernellwp@gmail.com>
-X-Google-Original-From: Wanpeng Li <wanpengli@tencent.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-Subject: [PATCH] KVM: Fix lockdep false negative during host resume
-Date:   Tue, 15 Feb 2022 02:15:42 -0800
-Message-Id: <1644920142-81249-1-git-send-email-wanpengli@tencent.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 15 Feb 2022 05:15:13 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA52B10E078;
+        Tue, 15 Feb 2022 02:15:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644920103; x=1676456103;
+  h=to:cc:references:from:subject:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=P3O9RVEmyjwfNMnRlSoLb01VrE7EGKUuzO6cSHuVtJE=;
+  b=M/50bWFkG5CwAEPbzEquDRTp8izqMmSZ5BiGaBVTJ7ptYTb5XEXRJGdG
+   3PbtMbSlZelO8X+GIj5BrI//Pgz35hLhTiTC8S54FV5VavmBvhZLI9VO5
+   70Z/eX3oDu9cm5x8gtfyCN6YC6Y5Uog31qqjb3jNE6YrQpAOqv0Mh+zPC
+   wHsDiCLexdTD/BLFeKtxXTm9Vy3uqwXSGeW+v9Gk+oxtplAF9Jy6MAxft
+   GemhWKZafCosLS7T0YK/cjAdqtqsfyOh/HbAzQC1YOhztyhtpoy65jwxu
+   1Pw2ZOl6Fqpy0sLMz6WGW84LdbmE0vPAYo+kz2YMR8dSTJvPo3gI6xWGD
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="237723232"
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="237723232"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 02:14:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="570751654"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga001.jf.intel.com with ESMTP; 15 Feb 2022 02:14:35 -0800
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_ugoswami@quicinc.com, Jung Daehwan <dh10.jung@samsung.com>
+References: <1644836663-29220-1-git-send-email-quic_pkondeti@quicinc.com>
+ <1644841216-1468-1-git-send-email-quic_pkondeti@quicinc.com>
+ <d82746d2-4096-1477-42dd-fd393e0ff827@linux.intel.com>
+ <20220214135310.GC31021@hu-pkondeti-hyd.qualcomm.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v2] xhci: reduce xhci_handshake timeout in xhci_reset
+Message-ID: <1b9e7641-2ae9-0f81-2ad9-18340d5e148f@linux.intel.com>
+Date:   Tue, 15 Feb 2022 12:16:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20220214135310.GC31021@hu-pkondeti-hyd.qualcomm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wanpeng Li <wanpengli@tencent.com>
+On 14.2.2022 15.53, Pavan Kondeti wrote:
+> Hi Mathias,
+> 
+> On Mon, Feb 14, 2022 at 02:51:54PM +0200, Mathias Nyman wrote:
+>> On 14.2.2022 14.20, Pavankumar Kondeti wrote:
+>>> From: Daehwan Jung <dh10.jung@samsung.com>
+>>>
+>>> xhci_reset() is called with interrupts disabled. Waiting 10 seconds for
+>>> controller reset and controller ready operations can be fatal to the
+>>> system when controller is timed out. Reduce the timeout to 1 second
+>>> and print a error message when the time out happens.
+>>>
+>>> Fixes: 22ceac191211 ("xhci: Increase reset timeout for Renesas 720201 host.")
+>>
+>>
+>> The commit 22ceac191211 ("xhci: Increase reset timeout for Renesas 720201 host.")
+>> intentionally increased the timeout to 10 seconds as that host might take 9
+>> seconds to complete reset. This was done almost 10 years ago so I don't know
+>> if it really is an issue anymore.
+>>
+>> Anyways, your patch might break Renesas 72021 instead of fixing it.
+> 
+> Unfortunately, yes :-( . We have this reduced timeout patch in our previous
+> commercialized products so thought this would be a good time to fix this
+> once for all. Since this patch has been 10 years long, not sure if any other
+> controllers also need 10 sec timeout. It would probably better
+> 
+>>
+>> I agree that busylooping up to 10 seconds with interrupts disabled doesn't make sense.
+>>
+>> Lets see if there is another solution for your case.
+>>
+>> - Does a "guard interval" after writing the reset help?
+>>   For example Intel xHCI needs 1ms before touching xHC after writing the reset bit
+> 
+> I will ask this question to our hardware team. Setting that one quirk from
+> DWC3 host might require other changes like this [1].
+>>
+>> - Is it the CNR bit or the RESET bit that fails? could be just stuck CNR bit? 
+> 
+> The RESET bit never gets cleared from USBCMD register.
+> 
+>>  
+>> - we only disable local interrupts when xhci_reset() is called from xhci_stop(),
+>>   and sometimes from xhci_shutdown() and xhci_resume() if some conditions are met.
+>>   Have you identified which one is the problematic case?
+> 
+> The crash reports I have seen are pointing to
+> 
+> usb_remove_hcd()->xhci_stop()->xhci_reset()
 
-I saw the below splatting after the host suspended and resumed.
+Ok, so xhci_stop() and xhci_shutdown() both may call xhci_reset() with interrupts
+disabled and spinlock held. In both these cases we're not that interested in the
+outcome of xhci_reset().
 
-   WARNING: CPU: 0 PID: 2943 at kvm/arch/x86/kvm/../../../virt/kvm/kvm_main.c:5531 kvm_resume+0x2c/0x30 [kvm]
-   CPU: 0 PID: 2943 Comm: step_after_susp Tainted: G        W IOE     5.17.0-rc3+ #4
-   RIP: 0010:kvm_resume+0x2c/0x30 [kvm]
-   Call Trace:
-    <TASK>
-    syscore_resume+0x90/0x340
-    suspend_devices_and_enter+0xaee/0xe90
-    pm_suspend.cold+0x36b/0x3c2
-    state_store+0x82/0xf0
-    kernfs_fop_write_iter+0x1b6/0x260
-    new_sync_write+0x258/0x370
-    vfs_write+0x33f/0x510
-    ksys_write+0xc9/0x160
-    do_syscall_64+0x3b/0xc0
-    entry_SYSCALL_64_after_hwframe+0x44/0xae
+But during probe we call xhci_reset() with interrupts enabled without spinlock,
+and here we really care about it succeeding.
+I'm also guessing reset could take a longer time during probe due to possible recent
+BIOS handover, or firmware loading etc.
 
-lockdep_is_held() can return -1 when lockdep is disabled which triggers
-this warning. Let's use lockdep_assert_not_held() which can detect 
-incorrect calls while holding a lock and it also avoids false negatives
-when lockdep is disabled.
+So how about passing a timeout value to xhci_reset()?
+Give it 10 seconds during probe, and 250ms in the other cases.
 
-Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
----
- virt/kvm/kvm_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Then dig into the reason why xhci_stop(), xhci_resume() and xhci_shutdown() call
+xhci_reset() witch spin_lock_irq() held.
 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 83c57bcc6eb6..3f861f33bfe0 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -5528,7 +5528,7 @@ static void kvm_resume(void)
- {
- 	if (kvm_usage_count) {
- #ifdef CONFIG_LOCKDEP
--		WARN_ON(lockdep_is_held(&kvm_count_lock));
-+		lockdep_assert_not_held(&kvm_count_lock);
- #endif
- 		hardware_enable_nolock(NULL);
- 	}
--- 
-2.25.1
-
+-Mathias

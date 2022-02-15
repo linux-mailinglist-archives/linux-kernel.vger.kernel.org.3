@@ -2,102 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737374B7859
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E88A4B7887
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237764AbiBOTU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 14:20:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53940 "EHLO
+        id S243527AbiBOTTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 14:19:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233127AbiBOTUf (ORCPT
+        with ESMTP id S243524AbiBOTTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 14:20:35 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C10811629F;
-        Tue, 15 Feb 2022 11:19:57 -0800 (PST)
+        Tue, 15 Feb 2022 14:19:32 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BD710CF0C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 11:19:21 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id p22so5268282lfu.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 11:19:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644952797; x=1676488797;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=XeefgcZDdJ2Av5SJ7ak6HNuzzyBwctIrJ52GfpLMZV0=;
-  b=jSTAsHhtnNtD2G9WE/4V0V65i7INdF8sgGzG2zvePhYtQnvDooR2SMAJ
-   R7FkXTqOiksM03XTst98yOmthW5q64FEZuUPH4DzJZLKtlqkFnPrsd0DF
-   Jdm1oOBmMKkg7uLDUI45TdBY4BzO8x+rdD3WyJqIvWr001xikGO47HIWh
-   s=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 15 Feb 2022 11:19:57 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 11:19:56 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 15 Feb 2022 11:19:56 -0800
-Received: from c-sanm-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 15 Feb 2022 11:19:50 -0800
-From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        "Stephen Boyd" <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>
-CC:     <evicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: [PATCH 3/3] arm64: dts: qcom: sc7280: Update SNPS Phy params for SC7280 IDP device
-Date:   Wed, 16 Feb 2022 00:49:15 +0530
-Message-ID: <1644952755-15527-4-git-send-email-quic_c_sanm@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1644952755-15527-1-git-send-email-quic_c_sanm@quicinc.com>
-References: <1644952755-15527-1-git-send-email-quic_c_sanm@quicinc.com>
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=rmAUdf26epsUhnZgVgaT/vfT/sOzQvVHgvDDTsajqPc=;
+        b=LzChSGwlWiyeBElwd1gZsSPpenXQZzTrdlGvC7n8jlU4ooFZPHWMbW3iJ3PoIdFtfH
+         3IKWBH/9XvnEGt5eBN5+IRYBE/KfA0HD5opmdcp+nxkxmUWEr8niPbFihhi5/wVdpP+m
+         Os1aNEs0uyo/plpdIyc4f1UCQTE7yQlKlW20R3+8PFhd7BW2fUV7y3dWUaPUpaaA5bxh
+         2ERVVfFMEqfqDBlTC6Z7/IFlRJ0xRjufnGsfFy6o3Da+0qUTQY+cTmk+qo8Pma6QrDsv
+         aMC2FpRO2SjwIA1TvjpW7iSkZAbzWz/+UxANWzS6tbKp54Jo3Ko6i2weZPyUHI7pduyV
+         bI7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=rmAUdf26epsUhnZgVgaT/vfT/sOzQvVHgvDDTsajqPc=;
+        b=Z6ZptjR4U3Wf5S/G/oKTZRKEQyo1XeeK8lpxfkt3mFAkyDZ6QLM022CXVnA3G663gh
+         zHWUSn2qiB25eIOcBFxqc63rWoktXRqSwh9s7pX7UnZFEFAzCLoILfXpCukdURTggM+N
+         IIrPFby5u2pbzgDofV1PUW5lCn9WwYenw9/H6yjubhWW+femwZYoEfwJ5eeT4tHokOjV
+         I4esYI965ipHLzbNFjZgUuH/9IWXo6GFi7LUYFxF5Zoc//zU6DGvbwsqSDFVgc1MFynJ
+         VuKz58Y4qAgi7iVmQUwn/c2/7nbf+XlplNo9WpGNECsYpPgVFZWxyU03idJDsLPe9GYE
+         31SQ==
+X-Gm-Message-State: AOAM531PTUeJ/u3NO/kMPPimQNo1zJwaWFoFCI75XVN3CLpBfAp55EIo
+        g2hPcT06f3byjU2XhpC3gYAkGXHCsLh5Gl5XZts=
+X-Google-Smtp-Source: ABdhPJw6ey/cAYXCtsk6XJM8bxRhDwLiluuC8YCldEzucJ/f3QUHWKQdTd8q3Sx4laHkZjbW2prXlcqkSVqtWBsMXfM=
+X-Received: by 2002:a05:6512:3fa5:: with SMTP id x37mr438427lfa.78.1644952760106;
+ Tue, 15 Feb 2022 11:19:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Received: by 2002:a2e:a4b3:0:0:0:0:0 with HTTP; Tue, 15 Feb 2022 11:19:19
+ -0800 (PST)
+Reply-To: westerunionbankoffce@gmail.com
+From:   "westerunionbankoffce@gmail.com" <jpaulesq753@gmail.com>
+Date:   Tue, 15 Feb 2022 19:19:19 +0000
+Message-ID: <CADMzAGybZ7K6thOgMy__tTUKghTJtBLttz2wTLcA0vRg6puWvw@mail.gmail.com>
+Subject: Hello
+To:     westerunionbankoffce@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
+        NAME_EMAIL_DIFF,PDS_TO_EQ_FROM_NAME,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Overriding the SNPS Phy tuning parameters for SC7280 IDP device.
+--=20
+ Irod=C3=A1nk el=C3=A9rhet=C5=91s=C3=A9ge: 2554 Road Of Kpalime Face Pharma=
+cy Bet, Lome, Gulf.
 
-Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+Ez a WU bank igazgat=C3=B3ja =C3=A9rtes=C3=ADti =C3=96nt arr=C3=B3l, hogy a=
+ Nemzetk=C3=B6zi
+Valutaalap (IMF) 850 000,00 USD k=C3=A1rt=C3=A9r=C3=ADt=C3=A9st fizet =C3=
+=96nnek, mert
+megtal=C3=A1lta az =C3=96n e-mail c=C3=ADm=C3=A9t a csal=C3=A1s =C3=A1ldoza=
+tainak list=C3=A1j=C3=A1n. Hajland=C3=B3
+vagy venni ezt az alapot vagy sem?
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-index ecbf2b8..88ca9d5 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-@@ -317,6 +317,10 @@
- 	vdda-pll-supply = <&vreg_l10c_0p8>;
- 	vdda33-supply = <&vreg_l2b_3p0>;
- 	vdda18-supply = <&vreg_l1c_1p8>;
-+	qcom,override_x0 = <0xe6>;
-+	qcom,override_x1 = <0x8b>;
-+	qcom,override_x2 = <0x16>;
-+	qcom,override_x3 = <0x03>;
- };
- 
- &usb_1_qmpphy {
--- 
-2.7.4
+V=C3=A1rjuk s=C3=BCrg=C5=91s h=C3=ADr=C3=A9t.
 
+Tisztelettel
+  Tony Albert
+  BANKIGAZGAT=C3=93
+  Whatsappal, +22892905783

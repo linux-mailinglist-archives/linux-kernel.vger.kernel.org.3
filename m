@@ -2,100 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9917D4B6B46
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:37:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A20D4B6B47
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236605AbiBOLh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 06:37:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48508 "EHLO
+        id S234402AbiBOLiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 06:38:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiBOLhy (ORCPT
+        with ESMTP id S236631AbiBOLiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 06:37:54 -0500
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF903BF54;
-        Tue, 15 Feb 2022 03:37:41 -0800 (PST)
-Received: by mail-wm1-f43.google.com with SMTP id j9-20020a05600c190900b0037bff8a24ebso1239615wmq.4;
-        Tue, 15 Feb 2022 03:37:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=nzGDqbhu0Wl/32WelYjIbt2kiyQEkr31ABCIpew9vYE=;
-        b=vys3Np6vQPwLZkndQK0ulubZQrQD2aXyUKJ6SpojqQ1/YOjK2yVgWFAXHCNb0TdlZl
-         E/FkKETw/dy4HgDdLHzY19K9hMm3WUpfjcUR4UEiTTO9ms9/yL/cqTl/6ZwYbMUZgeC9
-         eyVudCWTLWL1Mux304SjSnCsk91Ar+A4Wq2gEYS+IMlIO5nHJCAvtmWPd+PZkUm3x4w5
-         AQ+fcMxvJJNPpNYZWFTWM8gldBHnIa/KbBMYFiLek+E0UKs2TcadZAnZuG3+M8Yg/X9C
-         lnE14znhcQWcXNEafzYk6fJKrgZh2cfdiKkjPhCucsta+quLmZwdBRa4AOM/Ny+GccOQ
-         tP3w==
-X-Gm-Message-State: AOAM531DWSf+yLobDOeQ58/ap5SQ1+ZngMOADXRGC9DHv1kutcTxdXT5
-        jDzCijuG59SBkUnR2ARJ2ng=
-X-Google-Smtp-Source: ABdhPJysij4hHMdNvbblAfSvxt10FmWza9mHTmGndJe6es2yf5HqOb4Xb1wMYY3xF3XJJwvk6YPU0g==
-X-Received: by 2002:a05:600c:1e88:: with SMTP id be8mr2743037wmb.125.1644925060305;
-        Tue, 15 Feb 2022 03:37:40 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id i3sm34392404wrq.72.2022.02.15.03.37.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 03:37:39 -0800 (PST)
-Date:   Tue, 15 Feb 2022 11:37:38 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Wei Liu <wei.liu@kernel.org>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
-        sthemmin@microsoft.com, Michael Kelley <mikelley@microsoft.com>
-Subject: [GIT PULL] Hyper-V fixes for 5.17-rc5
-Message-ID: <20220215113738.mewd4wwbw6defcuj@liuwe-devbox-debian-v2>
+        Tue, 15 Feb 2022 06:38:00 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19B314027
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 03:37:50 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 84FC3210F9;
+        Tue, 15 Feb 2022 11:37:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1644925069; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pw068fBCazlz3BwNkc7tJOJSYYz5n2wbrWj8hk+Qk0c=;
+        b=FIzh/mtXss78WLaVXZ0p+HyizHWcg1OAgoO6jXye2Vs5V8A097HKb1BZctnDXeX7Nf4yCM
+        /XwyoX/oLX6WDJsx7IB94As3hox/18NtQN2YE+uFhopBjerQCinyBRmkjVBeQ6imjJmwwa
+        VKEqNYnrhUm7zQabflbD5olbqc6kMqE=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5F57313C40;
+        Tue, 15 Feb 2022 11:37:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id UgY1Fo2QC2KnQwAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 15 Feb 2022 11:37:49 +0000
+Date:   Tue, 15 Feb 2022 12:37:48 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org, Alexey Gladkov <legion@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Solar Designer <solar@openwall.com>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        Linux Containers <containers@lists.linux-foundation.org>
+Subject: Re: [PATCH 0/8] ucounts: RLIMIT_NPROC fixes
+Message-ID: <20220215113748.GI21589@blackbody.suse.cz>
+References: <20220207121800.5079-1-mkoutny@suse.com>
+ <87o83e2mbu.fsf@email.froward.int.ebiederm.org>
+ <f0d686aa-3fad-afac-d377-f5d63111704a@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <f0d686aa-3fad-afac-d377-f5d63111704a@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, Feb 11, 2022 at 11:22:13AM -0700, Shuah Khan <skhan@linuxfoundation.org> wrote:
+> Do we need updates to selftests - Michal's patch series included changes to
+> selftests/exec
 
-The following changes since commit 9ff5549b1d1d3c3a9d71220d44bd246586160f1d:
+In my understanding the original rlimits-per-userns.c covers an invalid
+use case -- clone(0);setuid();unshare(CLONE_NEWUSER) -- where the
+created user_ns is owned by unprivileged user and the global
+RLIMIT_NPROC cannot be breached.
 
-  video: hyperv_fb: Fix validation of screen resolution (2022-01-24 14:01:12 +0000)
+My patched variant retains this use-case (should fail) and adds
+clone(CLONE_NEWUSER);setuid() [1] variant which should be the valid
+use-case for per-user per-user-ns RLIMIT_NPROC.
 
-are available in the Git repository at:
+Michal
 
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-fixes-signed-20220215
+[1] In this situation theoretically equivalent to clone(0);unshare(CLONE_NEWUSER);setuid().
 
-for you to fetch changes up to ffc58bc4af9365d4eea72526bb3cf6a83615c673:
-
-  Drivers: hv: utils: Make use of the helper macro LIST_HEAD() (2022-02-09 14:33:21 +0000)
-
-----------------------------------------------------------------
-hyperv-fixes for 5.17-rc5
-  - Rework use of DMA_BIT_MASK in vmbus to work around a clang bug
-    (Michael Kelley)
-  - Fix NUMA topology (Long Li)
-  - Fix a memory leak in vmbus (Miaoqian Lin)
-  - One minor clean-up patch (Cai Huoqing)
-----------------------------------------------------------------
-Cai Huoqing (1):
-      Drivers: hv: utils: Make use of the helper macro LIST_HEAD()
-
-Long Li (1):
-      PCI: hv: Fix NUMA node assignment when kernel boots with custom NUMA topology
-
-Miaoqian Lin (1):
-      Drivers: hv: vmbus: Fix memory leak in vmbus_add_channel_kobj
-
-Michael Kelley (1):
-      Drivers: hv: vmbus: Rework use of DMA_BIT_MASK(64)
-
- drivers/hv/hv_utils_transport.c     |  2 +-
- drivers/hv/vmbus_drv.c              |  9 ++++++---
- drivers/pci/controller/pci-hyperv.c | 13 +++++++++++--
- include/linux/hyperv.h              |  1 +
- 4 files changed, 19 insertions(+), 6 deletions(-)

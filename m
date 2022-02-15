@@ -2,104 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A04964B684C
+	by mail.lfdr.de (Postfix) with ESMTP id 029FD4B684A
 	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:57:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236149AbiBOJ4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:56:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59290 "EHLO
+        id S236134AbiBOJ5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:57:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236130AbiBOJ4u (ORCPT
+        with ESMTP id S229631AbiBOJ5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:56:50 -0500
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C7010CF34
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:56:40 -0800 (PST)
-Received: by mail-vs1-xe29.google.com with SMTP id g20so9795776vsb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:56:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RV9b+cKLMc+taV0E0thVfuoXTKPyMNBl8U5rNvre5qw=;
-        b=RH0RXuwhdhEgwG6CEP1Pt9fHVQy4soD2TJ+IpVuxgtAqBQw3Sebbzc7/1oJkQ8wCJ8
-         3o0wZ6HXpUJYbiJpByjTCyCSHtHEAKsGscPkvPh5WhXqrQcSOJ/mXsEuPM2zYZs3hK6Q
-         UmdL603FjaB8BVRAaZS/S2ZVaIjXev4IZlUkc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RV9b+cKLMc+taV0E0thVfuoXTKPyMNBl8U5rNvre5qw=;
-        b=S6DnRovzA4jCJQ94GmB9v4QTrKp17IH34y+Qw5w0dqSgK60ZifEiYx1iCEZqEFJ45w
-         J+n/a10bb06tKHWyS2yfI3MvB2o0mi+VEaQBhlIBVltADRFZAjFhkGrFcva3iJMjX0KW
-         ii3A+jjK/FSrbMgyhOCcvAKqsAtRl/ubKT1UjwFi9yxz/wVgiiF6IyAUsXPW0zTZsz0/
-         WPqlyEVSbknkOi3h7So3BDYxOSC1vliN56hcGxvDRLVDZkWfr0GTI0XNGCB7qk+ZlXTj
-         pLbm/dzJeF7aGvFoFIxpEpO611Rs8pg+bYBG2qikJzEAbMEBBm2p89B+p/bpPtO4DyNM
-         SV2g==
-X-Gm-Message-State: AOAM5300m1VV0iuYrfLyfYydiUa9QF5cPoMO8crrx2BvJufl9C+rFa8N
-        r98PKxHKhLvN1SLg4fJZvav2IvIPCY4pTsJHyaUj/EsP5pY=
-X-Google-Smtp-Source: ABdhPJyHRK9A/0HBH5/KKjNI20lBkuXxfgBQxJo3eep6C4GYCrDFTcZMWCjl6PPIFOVyed25ViaCgIWoVevZ8BxfBnE=
-X-Received: by 2002:a05:6102:558b:: with SMTP id dc11mr65470vsb.87.1644919000014;
- Tue, 15 Feb 2022 01:56:40 -0800 (PST)
+        Tue, 15 Feb 2022 04:57:31 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3783810DA57;
+        Tue, 15 Feb 2022 01:57:22 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 04D111063;
+        Tue, 15 Feb 2022 01:57:22 -0800 (PST)
+Received: from [10.57.13.122] (unknown [10.57.13.122])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CFB6F3F66F;
+        Tue, 15 Feb 2022 01:57:20 -0800 (PST)
+Subject: Re: [PATCH v5] drivers: thermal: clear all mitigation when thermal
+ zone is disabled
+To:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+References: <1643307093-22501-1-git-send-email-quic_manafm@quicinc.com>
+ <4024218b-7938-e181-f456-bff4b3fb157a@arm.com>
+ <c02d28ce-bef4-0b71-e90a-991ef4fae9d3@quicinc.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <f936ee68-3e2c-273c-38fe-9b37277f54ba@arm.com>
+Date:   Tue, 15 Feb 2022 09:57:19 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220214210708.GA2167841@xavier-xps>
-In-Reply-To: <20220214210708.GA2167841@xavier-xps>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Tue, 15 Feb 2022 10:56:29 +0100
-Message-ID: <CAJfpegvVKWHhhXwOi9jDUOJi2BnYSDxZQrp1_RRrpVjjZ3Rs2w@mail.gmail.com>
-Subject: Re: race between vfs_rename and do_linkat (mv and link)
-To:     Xavier Roche <xavier.roche@algolia.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.vnet.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <c02d28ce-bef4-0b71-e90a-991ef4fae9d3@quicinc.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Feb 2022 at 22:07, Xavier Roche <xavier.roche@algolia.com> wrote:
->
-> There has been a longstanding race condition between vfs_rename and do_linkat,
-> when those operations are done in parallel:
->
-> 1. Moving a file to an existing target file (eg. mv file target)
-> 2. Creating a link from the target file  to a third file (eg. ln target link)
->
-> A typical example would be (1) a regular process putting a new version
-> of a database in place and (2) a regular process backuping the live
-> database by hardlinking it.
->
-> My understanding is that as the target file is never erased on client
-> side, but just replaced, the link should never fail.
->
-> The issue seem to lie inside vfs_link (fs/namei.c):
->        inode_lock(inode);
->        /* Make sure we don't allow creating hardlink to an unlinked file */
->        if (inode->i_nlink == 0 && !(inode->i_state & I_LINKABLE))
->                error =  -ENOENT;
->
-> The possible answer is that the inode refcount is zero because the
-> file has just been replaced concurrently, old file being erased, and
-> as such, the link operation is failing.
->
-> The race appears to have been introduced by aae8a97d3ec30, to fix
-> _another_ race between unlink and link (but I'm not sure to understand
-> what were the implications).
->
-> Reverting the inode->i_nlink == 0 section "fixes" the issue, but would
-> probably reintroduce this another issue.
->
-> At this point I don't know what would be the best way to fix this issue.
 
-Doing "lock_rename() + lookup last components" would fix this race.
-If this was only done on retry, then that would prevent possible
-performance regressions, at the cost of extra complexity.
 
-Thanks,
-Miklos
+On 2/14/22 8:00 PM, Manaf Meethalavalappu Pallikunhi wrote:
+> 
+> On 1/31/2022 12:55 PM, Lukasz Luba wrote:
+>> Hi Manaf,
+>>
+>> On 1/27/22 6:11 PM, Manaf Meethalavalappu Pallikunhi wrote:
+>>> Whenever a thermal zone is in trip violated state, there is a chance
+>>> that the same thermal zone mode can be disabled either via
+>>> thermal core API or via thermal zone sysfs. Once it is disabled,
+>>> the framework bails out any re-evaluation of thermal zone. It leads
+>>> to a case where if it is already in mitigation state, it will stay
+>>> the same state forever.
+>>>
+>>> To avoid above mentioned issue, add support to bind/unbind
+>>> governor from thermal zone during thermal zone mode change request
+>>> and clear all existing throttling in governor unbind_from_tz()
+>>> callback.
+>>
+>> I have one use case:
+>> This would be a bit dangerous, e.g. to switch governors while there is a
+>> high temperature. Although, sounds reasonable to left a 'default' state
+>> for a next governor.
+>>
+> I believe only way to change the governror via userspace at runtime.
+> 
+> Just re-evaluate thermal zone  (thermal_zone_device_update) immediately 
+> after
+> 
+> thermal_zone_device_set_policy()  in same policy_store() context, isn't 
+> it good enough ?
+
+It depends. The code would switch the governors very fast, in the
+meantime notifying about possible full speed of CPU (cooling state = 0).
+If the task scheduler goes via schedutil (cpufreq governor) at that
+moment and decides to set this max frequency, it will be set.
+This is situation with your patch, since you added in IPA unbind
+'allow_maximum_power()'.
+Then the new governor is bind, evaluates the max cooling state, the
+notification about reduced max freq is sent to schedutil (a workqueue
+will call .sugov_limits() callback) and lower freq would be set.
+
+Now there are things which are not greatly covered by these 4
+involved sub-systems (thermal fwk, schedutil, scheduler, HW).
+It takes time. It also depends when the actual HW freq is possible to be
+set. It might take a few milli-seconds or even a dozes of milli-seconds
+(depends on HW).
+
+Without your change, we avoid such situation while switching the
+thermal governors.
+
+For your requirement, which is 'mode' enable/disable it OK to
+un-throttle.
+
+It's probably something to Rafael and Daniel to judge if we want to
+pay that cost and introduce this racy time slot.
+
+Maybe there is a way to implement your needed feature differently.
+Unfortunately, I'm super busy with other stuff this month so I cannot
+spent much time investigating this.
+
+
+> 
+> Not sure how a "default" state  can be reverted once governor change is 
+> done.
+> 
+> Re-evaluating thermal zone doesn't guarantee that it will recover previous
+> 
+> set default state for all governors, right ?
+> 
+>>>
+>>> Suggested-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>> Signed-off-by: Manaf Meethalavalappu Pallikunhi 
+>>> <quic_manafm@quicinc.com>
+>>> ---
+>>>   drivers/thermal/gov_power_allocator.c |  3 +++
+>>>   drivers/thermal/gov_step_wise.c       | 26 ++++++++++++++++++++++++++
+>>>   drivers/thermal/thermal_core.c        | 31 
+>>> +++++++++++++++++++++++++++----
+>>>   3 files changed, 56 insertions(+), 4 deletions(-)
+>>
+>> Why only two governors need that change and not all?
+>> Because they don't have 'bind/unbind' callbacks, then maybe we should
+>> change that as well to make it consistent?
+> I will update other governors as well in v6
+
+Sounds reasonable based on your code (you've added the unbind_from_tz()
+callback to step_wise, but not for others).
+

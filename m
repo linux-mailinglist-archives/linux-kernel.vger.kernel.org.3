@@ -2,64 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10FC4B779F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 698C34B76A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243153AbiBOSmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 13:42:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44264 "EHLO
+        id S243170AbiBOSnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 13:43:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241557AbiBOSmn (ORCPT
+        with ESMTP id S243171AbiBOSm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 13:42:43 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B72B27FE5
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:42:32 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id u1so19899565wrg.11
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:42:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=17RfdOkFpQ0vqX6j3AbugB+kAjRG2bVcKwe0qdXZHnE=;
-        b=R0NFIY6PLX5Bq2GY7wQqcv1fzjR+HqhwNljCYJLfBmHLsZkNkH5UgW4x9kBi5gvXUt
-         Ss54ZIWiLGHlt9/QOiMPO7CGbXpioYIHjH9eSBDHqfbQhlFrWYzcqlbalgvqRQtDEPen
-         UqB+yc+2Kr94kHm3BsC8qfB8cjPpwgXUmshMQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=17RfdOkFpQ0vqX6j3AbugB+kAjRG2bVcKwe0qdXZHnE=;
-        b=CIeOKTVvit/nMjmOwZpvQ45mfFZCea3m8Ff0RVhTVlV9C6uZANBC2HqJxVqpyIKdGh
-         w3NCkO+o2B69R5XFtlPBlX+fSZie/oUdETAaWUGoyGXEaoNYoZAduFwTG2wq4lWnI2Kt
-         IYwLlPDaj74ClThJ83xQR4Gflvy/uQldncXu4xf6Ns0G8/iKAdQ0wpXuzNS6SHKiHBs8
-         9+gVSUzs74wlDPi7Mtg1BRYqZby2ZQlHdfP3VIS7Fp+aH1sZ4meIGkHBDilRJamrzOTr
-         jlAxacyJGZrl6BtSra7Bxz3y6l79iLStZU8Avks8UycLLMs+hSvjXKKwe6JtXpEkXApx
-         Wm0g==
-X-Gm-Message-State: AOAM532cZznRqwCJFV7nPVgpFJFocgMfCiC3GRwsY8wwknwNUXLLZSLF
-        4pPHMjVDDOir6cQy5jnNZCwQxA==
-X-Google-Smtp-Source: ABdhPJz54Ip87v52N6pTMY2GW3cc/euNgtBXo+zsV39RnEX7mH5FCghKMZBrBwTlkUeE9KcoPJKx/A==
-X-Received: by 2002:adf:ffce:: with SMTP id x14mr253920wrs.552.1644950551214;
-        Tue, 15 Feb 2022 10:42:31 -0800 (PST)
-Received: from beni.c.googlers.com.com (216.131.76.34.bc.googleusercontent.com. [34.76.131.216])
-        by smtp.gmail.com with ESMTPSA id a1sm14094017wri.36.2022.02.15.10.42.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 10:42:30 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v2] media: uvcvideo: Fix handling on Bitmask controls
-Date:   Tue, 15 Feb 2022 18:42:28 +0000
-Message-Id: <20220215184228.2531386-1-ribalda@chromium.org>
-X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+        Tue, 15 Feb 2022 13:42:59 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DB927FEA
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:42:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644950566; x=1676486566;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Uq3mK2F4oBeJy49d6SR0mO9NdzovVt3JSrPgHEwNGYw=;
+  b=W5YTAaFfp7s1FpSHaJ9WNGYT3P2ugleLxF6xKi8I8zrdGd5Vj8hX7AOe
+   QxerCg3RQ3Vm37LVgzaFJBmG19y7NGIkqbZkPuemIep89kORBbrnHTTr3
+   8CougRYcS/lBM38SHVjwBzYrZ+A1+KSIw6qPaKTGtohR3UFgwFW1TrXWw
+   NT+atc1II32rMbbFet12Hq21a0o484tWISodtRPkYZYfVRrRpwdZZz2DL
+   wfAzkfk9tJxVfMIcmWtFzU0ZXZwQk/2A6dg91WQQOciZIXRZJ0MDbGe18
+   yOWXbed1HRZuRc3dF7VKzn4hnR9cPSkNylRa+72Fc+Kn+oLEARqOj+6y7
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="311167725"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="311167725"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 10:42:43 -0800
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="624957742"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.60])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 10:42:43 -0800
+Date:   Tue, 15 Feb 2022 10:42:42 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Jue Wang <juew@google.com>
+Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH] x86/mce: Add workaround for SKX/CLX/CPX spurious machine
+ checks
+Message-ID: <Ygv0IncyBA3pXR7Q@agluck-desk3.sc.intel.com>
+References: <CAPcxDJ7nriZEJHF6dMPR7tQ+dGuueyRjw1NC+4CbjxiAT_S+ZA@mail.gmail.com>
+ <20220208150945.266978-1-juew@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220208150945.266978-1-juew@google.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,55 +61,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Minimum and step values for V4L2_CTRL_TYPE_BITMASK controls should be 0.
-There is no need to query the camera firmware about this and maybe get
-invalid results.
+On Tue, Feb 08, 2022 at 07:09:45AM -0800, Jue Wang wrote:
+> +static bool quirk_skylake_repmov(void)
+> +{
+> +	u64 mcgstatus = mce_rdmsrl(MSR_IA32_MCG_STATUS);
+> +	u64 misc_enable = __rdmsr(MSR_IA32_MISC_ENABLE);
+> +
+> +	if ((mcgstatus & MCG_STATUS_LMCES) &&
+> +	    unlikely(misc_enable & MSR_IA32_MISC_ENABLE_FAST_STRING)) {
+> +		u64 mc1_status = mce_rdmsrl(MSR_IA32_MCx_STATUS(1));
+> +
 
-Also value should be clamped to the min/max value advertised by the
-hardware.
+Needs a comment that this big blob of logic is checking for a software
+recoverable data fetch error.
 
-Fixes v4l2-compliane:
-Control ioctls (Input 0):
-                fail: v4l2-test-controls.cpp(97): minimum must be 0 for a bitmask control
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: FAIL
+> +		if ((mc1_status &
+> +		     (MCI_STATUS_VAL|MCI_STATUS_OVER|MCI_STATUS_UC|MCI_STATUS_EN|
+> +		      MCI_STATUS_ADDRV|MCI_STATUS_MISCV|MCI_STATUS_PCC|
+> +		      MCI_STATUS_AR|MCI_STATUS_S)) ==
+> +		    (MCI_STATUS_VAL|MCI_STATUS_UC|MCI_STATUS_EN|MCI_STATUS_ADDRV|
+> +		     MCI_STATUS_MISCV|MCI_STATUS_AR|MCI_STATUS_S)) {
+> +			msr_clear_bit(MSR_IA32_MISC_ENABLE,
+> +				      MSR_IA32_MISC_ENABLE_FAST_STRING_BIT);
+> +			mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
+> +			mce_wrmsrl(MSR_IA32_MCx_STATUS(1), 0);
+> +			pr_err_once("Errata detected, disable fast string copy instructions.\n");
+> +			return true;
+> +		}
+> +	}
+> +	return false;
+> +}
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- drivers/media/usb/uvc/uvc_ctrl.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Otherwise:
 
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index b4f6edf968bc0..d8b9ab5b7fb85 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -1156,7 +1156,8 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
- 		break;
- 	}
- 
--	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_MIN)
-+	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_MIN &&
-+	    mapping->v4l2_type != V4L2_CTRL_TYPE_BITMASK)
- 		v4l2_ctrl->minimum = mapping->get(mapping, UVC_GET_MIN,
- 				     uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MIN));
- 
-@@ -1164,7 +1165,8 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
- 		v4l2_ctrl->maximum = mapping->get(mapping, UVC_GET_MAX,
- 				     uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MAX));
- 
--	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_RES)
-+	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_RES &&
-+	    mapping->v4l2_type != V4L2_CTRL_TYPE_BITMASK)
- 		v4l2_ctrl->step = mapping->get(mapping, UVC_GET_RES,
- 				  uvc_ctrl_data(ctrl, UVC_CTRL_DATA_RES));
- 
-@@ -1721,6 +1723,7 @@ int uvc_ctrl_set(struct uvc_fh *handle,
- 	/* Clamp out of range values. */
- 	switch (mapping->v4l2_type) {
- 	case V4L2_CTRL_TYPE_INTEGER:
-+	case V4L2_CTRL_TYPE_BITMASK:
- 		if (!ctrl->cached) {
- 			ret = uvc_ctrl_populate_cache(chain, ctrl);
- 			if (ret < 0)
--- 
-2.35.1.265.g69c8d7142f-goog
+Reviewed-by: Tony Luck <tony.luck@intel.com>
 
+-Tony

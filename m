@@ -2,65 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A56894B63C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F2E4B63C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234615AbiBOGuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 01:50:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60332 "EHLO
+        id S234619AbiBOGvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 01:51:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231484AbiBOGuB (ORCPT
+        with ESMTP id S229938AbiBOGvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 01:50:01 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC3C13DD7
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 22:49:52 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id l19so27518614pfu.2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 22:49:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xxNE0TFx978UWTdZuF/X+Zjl/Zu9B/EL8TKg3OsvIYY=;
-        b=TwRuwjv5NQx8hyoVuJc3q1UScxc4G6geUNNju6BBx3rxlr507gzM3/q+3cJRq7JbJL
-         rQBa6ZMNFUY8R7ThS0GDaHZLiKeE3VSgPJqaRafTxyZF/RO5UsHOyPBZpfq9fyWkrN1X
-         TQLns8TdWSW2uSYd5VdU8i+qeitKzOPpW4/AHK5wSG1zkHTuK+MaEFvV89tIE45FHH/I
-         XNlNoDy2raD6uycXHzuYtzbAnAbiDV/kzVCyGijRuA8c8YATKYrLr9fPpjGkIp1Pf71K
-         XNRqZxKfp/ges7iowGzN6LieEiYIUjEn/VhGBFPp/+vzqQ7DRPA4RYtB7mxTDBZLgIp0
-         V7mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xxNE0TFx978UWTdZuF/X+Zjl/Zu9B/EL8TKg3OsvIYY=;
-        b=7c/zk/yyPwkp1pw/6yQQ7N0QDJq5u1a2CsqM9LvWq0cAnl1+v/4gwuj6lxxC8BsMWS
-         icxg2gggW6UOXrqctfyyjuU095xg5/R5G2MWL8ZrAXIMJXD5fvDmk7V34VjwGU8ExVcZ
-         SmlOPJ3l5b9yA361snV1GE0bfTT/FOnJxnK+GHnjwHQgwilQtzduE58q7Nhps1p3921G
-         Uwtu8VIfmvZZBhOkpj3E/nIWCBGabvqADb0LKtDnMq+AepU1B8V9/q6USIio2FRBeBF1
-         wj/hhgRnMs3pFMB8KjwLEQm5HliomcqR7WlozclANWzwEcaMhUy+GRWYQQlOFKsrEaf3
-         MLFA==
-X-Gm-Message-State: AOAM531562NY5kcELynfnmGtrWxsvSEp40k0QoP0mLTOTZL9wJ0sZGC+
-        CErT8XqcnJk0t+JP9wh5uaQRtEyPqzK36kQ58O5q5g==
-X-Google-Smtp-Source: ABdhPJx/ODP9Hm8TkDdnwXGyaE1kHCna584PGsxkj7xtAGMlrAdDlFdQAiedlezUQ3iZ/KnsenM/Pe3ZX6p/HyXTAVU=
-X-Received: by 2002:a63:1518:: with SMTP id v24mr359768pgl.568.1644907792253;
- Mon, 14 Feb 2022 22:49:52 -0800 (PST)
+        Tue, 15 Feb 2022 01:51:01 -0500
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F3A13DD9
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 22:50:50 -0800 (PST)
+X-QQ-mid: bizesmtp49t1644907828t7oku463
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 15 Feb 2022 14:50:20 +0800 (CST)
+X-QQ-SSF: 01400000002000B0E000B00A0000000
+X-QQ-FEAT: jfdGVjI73+QZRc8n97Vk+dmb1OAapcIclMz9KOpJT1KpOf9FJxT2g22wkHgLi
+        VG2PqvpMuMV0fymu2vwBb1of1qz1vCxcfNhlU9y5CMOJnVUrCon4mpd0C5C4jnwonGLlxea
+        j5XfkgoI+QR+qNf3VW21KHMUbdUh+6yEMygmiHYoazR8+i1LzTSKQ+uMPvHrk+dDgam6U8A
+        cXijWspGIGzY5/bAW7WiIpJvHJ/OzaH2BNXoaHqx+/7fscbgSaDiS7tyrDkxa32VCI4KgLt
+        1d6/V9YLAvqx24E/TkNF6WXcUCpUM5nWx1ZwO10OxZ1YqdEqDMqGzjxkJ57mFfqLkabjkkW
+        ZinJfeGo2/KYy6nWVwKJSAEwPhouVhOu92pjPgM
+X-QQ-GoodBg: 2
+From:   tangmeng <tangmeng@uniontech.com>
+To:     tglx@linutronix.de, mcgrof@kernel.org, keescook@chromium.org,
+        yzaikin@google.com, john.stultz@linaro.org, sboyd@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        tangmeng <tangmeng@uniontech.com>
+Subject: [PATCH v7] kernel/time: move timer sysctls to its own file
+Date:   Tue, 15 Feb 2022 14:50:19 +0800
+Message-Id: <20220215065019.7520-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220209032745.38570-1-cai.huoqing@linux.dev> <302e8426-5a22-23dd-2b3b-7eb6d0ee2e8d@amd.com>
-In-Reply-To: <302e8426-5a22-23dd-2b3b-7eb6d0ee2e8d@amd.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Tue, 15 Feb 2022 07:49:41 +0100
-Message-ID: <CAHUa44G0UY9a7v6KTCx4LdChDZyS1Y0zCmKEXzyddsshFLgv8g@mail.gmail.com>
-Subject: Re: [PATCH] tee: amdtee: Make use of the helper macro LIST_HEAD()
-To:     Rijo Thomas <Rijo-john.Thomas@amd.com>
-Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign5
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,42 +50,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 8:16 AM Rijo Thomas <Rijo-john.Thomas@amd.com> wrote:
->
->
->
-> On 2/9/2022 8:57 AM, Cai Huoqing wrote:
-> > Replace "struct list_head head = LIST_HEAD_INIT(head)" with
-> > "LIST_HEAD(head)" to simplify the code.
-> >
-> > Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
-> > ---
-> >  drivers/tee/amdtee/call.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/tee/amdtee/call.c b/drivers/tee/amdtee/call.c
-> > index 07f36ac834c8..cec6e70f0ac9 100644
-> > --- a/drivers/tee/amdtee/call.c
-> > +++ b/drivers/tee/amdtee/call.c
-> > @@ -122,7 +122,7 @@ static int amd_params_to_tee_params(struct tee_param *tee, u32 count,
-> >  }
-> >
-> >  static DEFINE_MUTEX(ta_refcount_mutex);
-> > -static struct list_head ta_list = LIST_HEAD_INIT(ta_list);
-> > +static LIST_HEAD(ta_list);
-> >
->
-> Reviewed-by: Rijo Thomas <Rijo-john.Thomas@amd.com>
+kernel/sysctl.c is a kitchen sink where everyone leaves their dirty
+dishes, this makes it very difficult to maintain.
 
-I'm picking up this.
+To help with this maintenance let's start by moving sysctls to places
+where they actually belong.  The proc sysctl maintainers do not want to
+know what sysctl knobs you wish to add for your own piece of code, we
+just care about the core logic.
 
-Thanks,
-Jens
+Now, all filesystem syctls now get reviewed by fs folks. This commit
+follows the commit of fs.
 
->
-> Thanks,
-> Rijo
->
-> >  static u32 get_ta_refcount(u32 ta_handle)
-> >  {
-> >
+So move the timer_migration sysctls to its own file.
+
+Signed-off-by: tangmeng <tangmeng@uniontech.com>
+---
+ include/linux/timer.h |  8 -------
+ kernel/sysctl.c       | 11 ---------
+ kernel/time/timer.c   | 54 ++++++++++++++++++++++++++++++++-----------
+ 3 files changed, 40 insertions(+), 33 deletions(-)
+
+diff --git a/include/linux/timer.h b/include/linux/timer.h
+index fda13c9d1256..648f00105f58 100644
+--- a/include/linux/timer.h
++++ b/include/linux/timer.h
+@@ -196,14 +196,6 @@ extern void init_timers(void);
+ struct hrtimer;
+ extern enum hrtimer_restart it_real_fn(struct hrtimer *);
+ 
+-#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
+-struct ctl_table;
+-
+-extern unsigned int sysctl_timer_migration;
+-int timer_migration_handler(struct ctl_table *table, int write,
+-			    void *buffer, size_t *lenp, loff_t *ppos);
+-#endif
+-
+ unsigned long __round_jiffies(unsigned long j, int cpu);
+ unsigned long __round_jiffies_relative(unsigned long j, int cpu);
+ unsigned long round_jiffies(unsigned long j);
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 083be6af29d7..740c34f20235 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -2656,17 +2656,6 @@ static struct ctl_table kern_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_ONE,
+ 	},
+-#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
+-	{
+-		.procname	= "timer_migration",
+-		.data		= &sysctl_timer_migration,
+-		.maxlen		= sizeof(unsigned int),
+-		.mode		= 0644,
+-		.proc_handler	= timer_migration_handler,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE,
+-	},
+-#endif
+ #ifdef CONFIG_BPF_SYSCALL
+ 	{
+ 		.procname	= "unprivileged_bpf_disabled",
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index 85f1021ad459..c4f0045139cb 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -44,6 +44,9 @@
+ #include <linux/slab.h>
+ #include <linux/compat.h>
+ #include <linux/random.h>
++#ifdef CONFIG_SYSCTL
++#include <linux/sysctl.h>
++#endif
+ 
+ #include <linux/uaccess.h>
+ #include <asm/unistd.h>
+@@ -223,7 +226,8 @@ static void timer_update_keys(struct work_struct *work);
+ static DECLARE_WORK(timer_update_work, timer_update_keys);
+ 
+ #ifdef CONFIG_SMP
+-unsigned int sysctl_timer_migration = 1;
++struct ctl_table;
++static unsigned int sysctl_timer_migration = 1;
+ 
+ DEFINE_STATIC_KEY_FALSE(timers_migration_enabled);
+ 
+@@ -234,6 +238,41 @@ static void timers_update_migration(void)
+ 	else
+ 		static_branch_disable(&timers_migration_enabled);
+ }
++
++#ifdef CONFIG_SYSCTL
++static int timer_migration_handler(struct ctl_table *table, int write,
++			    void *buffer, size_t *lenp, loff_t *ppos)
++{
++	int ret;
++
++	mutex_lock(&timer_keys_mutex);
++	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
++	if (!ret && write)
++		timers_update_migration();
++	mutex_unlock(&timer_keys_mutex);
++	return ret;
++}
++
++static struct ctl_table timer_sysctl[] = {
++	{
++		.procname       = "timer_migration",
++		.data           = &sysctl_timer_migration,
++		.maxlen         = sizeof(unsigned int),
++		.mode           = 0644,
++		.proc_handler   = timer_migration_handler,
++		.extra1         = SYSCTL_ZERO,
++		.extra2         = SYSCTL_ONE,
++	},
++	{}
++};
++
++static int __init timer_sysctl_init(void)
++{
++	register_sysctl("kernel", timer_sysctl);
++	return 0;
++}
++device_initcall(timer_sysctl_init);
++#endif /* CONFIG_SYSCTL */
+ #else
+ static inline void timers_update_migration(void) { }
+ #endif /* !CONFIG_SMP */
+@@ -251,19 +290,6 @@ void timers_update_nohz(void)
+ 	schedule_work(&timer_update_work);
+ }
+ 
+-int timer_migration_handler(struct ctl_table *table, int write,
+-			    void *buffer, size_t *lenp, loff_t *ppos)
+-{
+-	int ret;
+-
+-	mutex_lock(&timer_keys_mutex);
+-	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+-	if (!ret && write)
+-		timers_update_migration();
+-	mutex_unlock(&timer_keys_mutex);
+-	return ret;
+-}
+-
+ static inline bool is_timers_nohz_active(void)
+ {
+ 	return static_branch_unlikely(&timers_nohz_active);
+-- 
+2.20.1
+
+
+

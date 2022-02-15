@@ -2,118 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDAE4B6BA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:03:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5165F4B6BA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237449AbiBOMDj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 15 Feb 2022 07:03:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40294 "EHLO
+        id S237458AbiBOMFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 07:05:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237403AbiBOMDg (ORCPT
+        with ESMTP id S234984AbiBOMFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 07:03:36 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A1ED0B5B;
-        Tue, 15 Feb 2022 04:03:24 -0800 (PST)
-Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jyfpt0tBJz67xgN;
-        Tue, 15 Feb 2022 20:02:30 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 15 Feb 2022 13:03:21 +0100
-Received: from localhost (10.202.226.41) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.21; Tue, 15 Feb
- 2022 12:03:21 +0000
-Date:   Tue, 15 Feb 2022 12:03:19 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-CC:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Christoph Hellwig <hch@lst.de>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        kernel test robot <lkp@intel.com>,
-        "Arnd Bergmann" <arnd@arndb.de>, <linux-sh@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] sh: Convert nommu io{re,un}map() to static inline
- functions
-Message-ID: <20220215120319.00004feb@Huawei.com>
-In-Reply-To: <4ed0a7a0d3fa912a5b44c451884818f2c138ef42.1644914600.git.geert+renesas@glider.be>
-References: <4ed0a7a0d3fa912a5b44c451884818f2c138ef42.1644914600.git.geert+renesas@glider.be>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Tue, 15 Feb 2022 07:05:02 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DB4D1091;
+        Tue, 15 Feb 2022 04:04:51 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id j24so17026076qkk.10;
+        Tue, 15 Feb 2022 04:04:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qbnM1QziU/XSffVJX+bwaVuJwYnLnX8GCs9DF4EaXsk=;
+        b=GBMqnSHarXC8GjklagRkyGCCCF9Vo/+51OFuwdd5ApKg9dkW3pSkUxe1+Er9Afky6v
+         Mh2HJsmInn/Y/1pqwHTcBVDt66gJ/n6NdvbagUwpaPDxAvKcWYOAGF9eJPUNFVcrRXtq
+         xCSE7P90lHDA1hG1rhBhFZGiFUdEZBw1BFNdSm6I9ARqcXxZutmsu9NurMbQf2X083rl
+         9+kUZoxTiRxt6xCjAn7+Jb0RJO2hrZ27eujcuFSoIqQOhf4xU+BWknVKr1J/HQwRZh/a
+         e5YQ7kDjPYvpT1sVr1H0+hd9UeSzNdxElh2nZKmTnlIU4cYZGHUOmV3CekLD9/CDG7mk
+         a3Ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qbnM1QziU/XSffVJX+bwaVuJwYnLnX8GCs9DF4EaXsk=;
+        b=b21z7h9BEbm9q2xigGDvHgcbgBH0XEbiV+WqYxPNpQoMMqFid6WxNiq2CuDvxp6xEn
+         kJrbvuqWZBwjxX4lVjwrQ0f4FzJ7WIrKNITlyYBhOdOpMxaPPdZyNJnA+jpyn5GITZdp
+         ow5MUmiCgvqssvXIUWg7YL5XMYXGZm7z1NQ+MT5LrNvSQDY7Z+tT+R6hN0SuuigKXGzA
+         mTHPDmvdal1CqQbFKBvxnOxXcxxd/EjLTM1EmO3kYN8rRMcrHw4nTTVOETh3v0F/SZcm
+         DQDojmGqO5C4unxeERGcrb91yUAZDMVuccoUo4krsM6If8RiFi/nRV60L3FjRogB+lPD
+         PRTQ==
+X-Gm-Message-State: AOAM531zWVdUrBALKCayUy0EaGfXK0EO0hxOS4/+SsVHZG6bcdq4WB7G
+        gPtQjt/A/SXU0WwIe1eocNJMqKrxrOD7rDNyTNE=
+X-Google-Smtp-Source: ABdhPJxFzThI9yJ6WQ5YwMfuHeghHCKy7MGmGIpj5Bk2cqTfQYGSL/bhIOpU56LzBlNjDXYJ7jFaFlTkyTg9FfzELMc=
+X-Received: by 2002:a05:620a:4048:: with SMTP id i8mr1689174qko.482.1644926690999;
+ Tue, 15 Feb 2022 04:04:50 -0800 (PST)
 MIME-Version: 1.0
+References: <20220208084234.1684930-1-hsinyi@chromium.org>
+In-Reply-To: <20220208084234.1684930-1-hsinyi@chromium.org>
+From:   Emil Velikov <emil.l.velikov@gmail.com>
+Date:   Tue, 15 Feb 2022 12:04:39 +0000
+Message-ID: <CACvgo53u01BK_D0ZssV+gCepjxSz23Nr5Dy1qXeaAoJuu6VCFQ@mail.gmail.com>
+Subject: Re: [Intel-gfx] [PATCH v8 1/3] gpu: drm: separate panel orientation
+ property creating and value setting
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     ML dri-devel <dri-devel@lists.freedesktop.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Simon Ser <contact@emersion.fr>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        LAKML <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.202.226.41]
-X-ClientProxiedBy: lhreml701-chm.china.huawei.com (10.201.108.50) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022 09:51:05 +0100
-Geert Uytterhoeven <geert+renesas@glider.be> wrote:
+Greetings everyone,
 
-> Recently, nommu iounmap() was converted from a static inline function to
-> a macro again, basically reverting commit 4580ba4ad2e6b8dd ("sh: Convert
-> iounmap() macros to inline functions").  With -Werror, this leads to
-> build failures like:
-> 
->     drivers/iio/adc/xilinx-ams.c: In function ‘ams_iounmap_ps’:
->     drivers/iio/adc/xilinx-ams.c:1195:14: error: unused variable ‘ams’ [-Werror=unused-variable]
->      1195 |  struct ams *ams = data;
-> 	  |              ^~~
-> 
-> Fix this by replacing the macros for ioremap() and iounmap() by static
-> inline functions, based on <asm-generic/io.h>.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Fixes: 13f1fc870dd74713 ("sh: move the ioremap implementation out of line")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Padron for joining in so late o/
 
-Looks good.
+On Tue, 8 Feb 2022 at 08:42, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+>
+> drm_dev_register() sets connector->registration_state to
+> DRM_CONNECTOR_REGISTERED and dev->registered to true. If
+> drm_connector_set_panel_orientation() is first called after
+> drm_dev_register(), it will fail several checks and results in following
+> warning.
+>
+> Add a function to create panel orientation property and set default value
+> to UNKNOWN, so drivers can call this function to init the property earlier
+> , and let the panel set the real value later.
+>
 
-Thanks for the quick response.
+The warning illustrates a genuine race condition, where userspace will
+read the old/invalid property value/state. So this patch masks away
+the WARNING without addressing the actual issue.
+Instead can we fix the respective drivers, so that no properties are
+created after drm_dev_register()?
 
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Longer version:
+As we look into drm_dev_register() it's in charge of creating the
+dev/sysfs nodes (et al). Note that connectors cannot disappear at
+runtime.
+For panel orientation, we are creating an immutable connector
+properly, meaning that as soon as drm_dev_register() is called we must
+ensure that the property is available (if applicable) and set to the
+correct value.
 
-> ---
-> This is actually the third time this change was made, as Christoph
-> converted iounmap() to a macro before in commit 98c90e5ea34e98bd ("sh:
-> remove __iounmap"), reverting commit 733f0025f0fb43e3 ("sh: prevent
-> warnings when using iounmap").
-> 
-> Probably sh-nommu should include <asm-generic/io.h>, but that would
-> require a lot more changes.
-> ---
->  arch/sh/include/asm/io.h | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/sh/include/asm/io.h b/arch/sh/include/asm/io.h
-> index cf9a3ec32406f856..fba90e670ed41d48 100644
-> --- a/arch/sh/include/asm/io.h
-> +++ b/arch/sh/include/asm/io.h
-> @@ -271,8 +271,12 @@ static inline void __iomem *ioremap_prot(phys_addr_t offset, unsigned long size,
->  #endif /* CONFIG_HAVE_IOREMAP_PROT */
->  
->  #else /* CONFIG_MMU */
-> -#define iounmap(addr)		do { } while (0)
-> -#define ioremap(offset, size)	((void __iomem *)(unsigned long)(offset))
-> +static inline void __iomem *ioremap(phys_addr_t offset, size_t size)
-> +{
-> +	return (void __iomem *)(unsigned long)offset;
-> +}
-> +
-> +static inline void iounmap(volatile void __iomem *addr) { }
->  #endif /* CONFIG_MMU */
->  
->  #define ioremap_uc	ioremap
+For illustration, consider the following scenario:
+ - DRM modules are loaded late - are not built-in and not part of
+initrd (or there's no initrd)
+ - kernel boots
+ - plymouth/similar user-space component kicks in before the
+driver/module is loaded
+ - module gets loaded, drm_dev_register() kicks in populating /dev/dri/card0
+ - plymouth opens the dev node and reads DRM_MODE_PANEL_ORIENTATION_UNKNOWN
+ - module updates the orientation property
 
+Thanks
+Emil

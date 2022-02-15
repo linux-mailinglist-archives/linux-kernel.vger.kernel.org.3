@@ -2,86 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598E44B7A2C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 23:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B344B7A2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 23:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243782AbiBOWFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 17:05:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38998 "EHLO
+        id S243725AbiBOWFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 17:05:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235480AbiBOWFq (ORCPT
+        with ESMTP id S235480AbiBOWFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 17:05:46 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34BD1EEE4;
-        Tue, 15 Feb 2022 14:05:35 -0800 (PST)
-Received: from fsav114.sakura.ne.jp (fsav114.sakura.ne.jp [27.133.134.241])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 21FM58u9053588;
-        Wed, 16 Feb 2022 07:05:08 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav114.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav114.sakura.ne.jp);
- Wed, 16 Feb 2022 07:05:08 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav114.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 21FM58hL053577
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 16 Feb 2022 07:05:08 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <06b2f59c-3c96-9443-7a23-f1c957a41d9b@I-love.SAKURA.ne.jp>
-Date:   Wed, 16 Feb 2022 07:05:05 +0900
+        Tue, 15 Feb 2022 17:05:32 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B156A1EEC0;
+        Tue, 15 Feb 2022 14:05:21 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id r76so210090pgr.10;
+        Tue, 15 Feb 2022 14:05:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dDDOlmNFqQPUtIJmBHCY2QIaiUjiyb0ZsTU/D8n9slY=;
+        b=QgZm8HhxITQBrEAP5EACOx4w9cYA2N4hu6QUDNkbuZo9+lcrR6l/odPwCEmGQfaewk
+         vSqGM2hc3aTL0eYiYv9R3qDKAufy1qJ1Xuy5A6gs6HyhWfqxcYAPJR9+qunREaFBQzJV
+         DUC/UkAqhfhF+HHi4E0Asx4OjVhgm2LRtPBrkWMvQpKecjZQB5yFEOuEY/w1toEone79
+         bHKIfyI4PCf1m9WeTNweKwiD6pm3pPmYz+JKRtKk432Fxo1Mp1p7M72ZyvKeA0kaFAvA
+         HkgEzGFT7Mb+MAulIRyEBwDxyGO9vRm605HdXR9qvfuLPZkzQEf8H9kLvVJZGaiVzbPI
+         MYSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dDDOlmNFqQPUtIJmBHCY2QIaiUjiyb0ZsTU/D8n9slY=;
+        b=yfpxdKiSdJFLnY/Dh85R3yj/1uO2LWTgzwhFE4RT4sDU4HkJ4Ru+IAkGGZUStr4wLl
+         wQ3J3aEIeDgJCie5xjVusSlRIMrL1eYEuCdYG0HR45k/Ck0VmyBXHJCc1w29lWmREOWc
+         D+pnDwQ62cK4l9tnG1Lp3yJ53iQvWbpcxhrnGXSZJFYQ47ZTLodlbrOufn3kUA5zTCNd
+         NZraxjFIvRo2NNN7KH2ZRxv/MOX8tdyrqREvyONTlz9vh3wtRc2tAWjF9yrUImmlxjYs
+         nh5d0wwhD973ouy2ny5k9hQbqVFpJ7aiqz9wb4KfznVcEpIXotoxb+YB54SJJIEF98GJ
+         bWng==
+X-Gm-Message-State: AOAM5334/zmUifjKtDgLTEQC+mA+0EhTo1rlAmnC720Av8W3XQsmvbSU
+        vOsPp/XqC/f75WC/WNy4A7Q=
+X-Google-Smtp-Source: ABdhPJwB0RRWOvxCp5oHvgXK7rKlYnzKA4PrLyq5QSqNxsoeCrskDVoa+6PGjvACOoGKvY0wUsiNGA==
+X-Received: by 2002:a63:6cc1:: with SMTP id h184mr814216pgc.276.1644962721196;
+        Tue, 15 Feb 2022 14:05:21 -0800 (PST)
+Received: from jeffreyji1.c.googlers.com.com (180.145.227.35.bc.googleusercontent.com. [35.227.145.180])
+        by smtp.gmail.com with ESMTPSA id om2sm3630952pjb.39.2022.02.15.14.05.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 14:05:20 -0800 (PST)
+From:   Jeffrey Ji <jeffreyjilinux@gmail.com>
+X-Google-Original-From: Jeffrey Ji <jeffreyji@google.com>
+To:     Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>
+Cc:     Brian Vazquez <brianvv@google.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Mahesh Bandewar <maheshb@google.com>,
+        jeffreyji <jeffreyji@google.com>
+Subject: [PATCH v1 net-next] teaming: deliver link-local packets with the link they arrive on
+Date:   Tue, 15 Feb 2022 22:05:17 +0000
+Message-Id: <20220215220517.2498751-1-jeffreyji@google.com>
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [syzbot] possible deadlock in worker_thread
-Content-Language: en-US
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Haakon Bugge <haakon.bugge@oracle.com>
-Cc:     Tejun Heo <tj@kernel.org>,
-        syzbot <syzbot+831661966588c802aae9@syzkaller.appspotmail.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        LKML <linux-kernel@vger.kernel.org>,
-        OFED mailing list <linux-rdma@vger.kernel.org>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-References: <0000000000005975a605d7aef05e@google.com>
- <8ea57ddf-a09c-43f2-4285-4dfb908ad967@acm.org>
- <ccd04d8a-154b-543e-e1c3-84bc655508d1@I-love.SAKURA.ne.jp>
- <71d6f14e-46af-cc5a-bc70-af1cdc6de8d5@acm.org>
- <309c86b7-2a4c-1332-585f-7bcd59cfd762@I-love.SAKURA.ne.jp>
- <aa2bf24e-981a-a811-c5d8-a75f0b8f693a@acm.org>
- <2959649d-cfbc-bdf2-02ac-053b8e7af030@I-love.SAKURA.ne.jp>
- <YgnQGZWT/n3VAITX@slm.duckdns.org>
- <8ebd003c-f748-69b4-3a4f-fb80a3f39d36@I-love.SAKURA.ne.jp>
- <YgqSsuSN5C7StvKx@slm.duckdns.org>
- <a07e464c-69c6-6165-e88c-5a2eded79138@I-love.SAKURA.ne.jp>
- <76616D2F-14F2-4D83-9DB4-576FB2ACB72C@oracle.com>
- <fb854eea-a7e7-b526-a989-95784c1c593c@I-love.SAKURA.ne.jp>
- <1b70929f-1f73-c549-64c1-94cea2c1a36c@acm.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <1b70929f-1f73-c549-64c1-94cea2c1a36c@acm.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_SBL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/02/16 2:05, Bart Van Assche wrote:
-> On 2/15/22 04:48, Tetsuo Handa wrote:
->> I do not want to do like
->>
->> -    system_wq = alloc_workqueue("events", 0, 0);
->> +    system_wq = alloc_workqueue("events", __WQ_SYSTEM_WIDE, 0);
->>
->> because the intent of this change is to ask developers to create their own WQs.
-> 
-> I want more developers to use the system-wide workqueues since that reduces memory usage. That matters for embedded devices running Linux.
+From: jeffreyji <jeffreyji@google.com>
 
-Reserving a kernel thread for WQ_MEM_RECLAIM WQ might consume some memory,
-but I don't think that creating a !WQ_MEM_RECLAIM WQ consumes much memory.
+skb is ignored if team port is disabled. We want the skb to be delivered
+if it's an LLDP packet.
+
+Issue is already fixed for bonding in commit
+b89f04c61efe3b7756434d693b9203cc0cce002e
+
+Signed-off-by: jeffreyji <jeffreyji@google.com>
+---
+ drivers/net/team/team.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/net/team/team.c b/drivers/net/team/team.c
+index 8b2adc56b92a..24d66dfbb2e1 100644
+--- a/drivers/net/team/team.c
++++ b/drivers/net/team/team.c
+@@ -734,6 +734,12 @@ static rx_handler_result_t team_handle_frame(struct sk_buff **pskb)
+ 	port = team_port_get_rcu(skb->dev);
+ 	team = port->team;
+ 	if (!team_port_enabled(port)) {
++		if (is_link_local_ether_addr(eth_hdr(skb)->h_dest))
++			/*
++			 * link-local packets are mostly useful when stack
++			 * receives them with the link they arrive on.
++			 */
++			return RX_HANDLER_PASS;
+ 		/* allow exact match delivery for disabled ports */
+ 		res = RX_HANDLER_EXACT;
+ 	} else {
+-- 
+2.35.1.265.g69c8d7142f-goog
+

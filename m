@@ -2,269 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E424A4B757E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2374B7590
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241942AbiBOQy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:54:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37766 "EHLO
+        id S241937AbiBOQyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:54:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241933AbiBOQyP (ORCPT
+        with ESMTP id S233779AbiBOQyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:54:15 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BCC1162AE
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:54:04 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id az26-20020a05600c601a00b0037c078db59cso1808231wmb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:54:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=6dxUHfHd2thSyna+SP246lbFbUtj41Yjp+oFZyo2GbY=;
-        b=DCat5VP9YVrqN0n/0UgbjvOxszAmCAanPIP4ymZHjEC3Wd41GjjR1nrq1O+FrhOxy7
-         5MDQFMLJkVXiOsm8DeO85Hp4YFWeuEXdmvTkHvQ5onCspvycAdD3fP7dpBWoDNsQyRQp
-         veeJuqjHZXT0dAzG4sZGe4NC/IqSx/spfjcf+pNZmsV8Qs6kbiRCLE8BDRv5Q+q38qUk
-         ghhDR2hw8cfQxUGXUcD3pZ3Tzwe+4nJGBf+7Ynq6lK9rofaHsmXzRil+bhcbgZdJcPT8
-         W2u24tBzncuNzK1rZTCgJI+5DhG6jgB2c362c5jxtPHKDZKcBnkv9X1pdtBYpcGK/0+C
-         4q1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=6dxUHfHd2thSyna+SP246lbFbUtj41Yjp+oFZyo2GbY=;
-        b=x/6WoqULKNeBdDUh43TRBkuv9Yu91kLGEu54RKTRVauroUEeSQr6TvCoeDO8Xob2iv
-         an6aFVi9ZwHX1b0SczL8WOt9pdIKVPiEFiYN3F/ClruTpjHSWE/Mauvnf9mlBIiKLJHy
-         VLmLrH8CeK5anRr5aUOUPYpV3aFMpLAHoj1vGj2GA8YegvN7Ui+i0B4BVhxG1adraA9L
-         JnYrvN1flhWDuypvDEWPCPAVsOssuGNVaPUK0U/Lzza0pvx4FZEHD9pxkmI3HqKrZBdg
-         1QCenWQZKynXxfcAu3YHhV98kxGkRTxgUgy5rURt+IO1fTHsUmOqW6vMSkGI6vKHpgHI
-         dFMQ==
-X-Gm-Message-State: AOAM530bwjMCroHLMb509uiH55OFvNAPsSCTQrCPpQSHecHqVk2nGiMS
-        UpuhnHTPhiUmZ12H3nyKxOL6Eg==
-X-Google-Smtp-Source: ABdhPJwuKI+bNPJZZ1qflmVanE4vrI3VVZi31qJXYrb9UatcTi6G2+Lh1Fm0dLKpD/YcVimukmd//A==
-X-Received: by 2002:a1c:2645:: with SMTP id m66mr3917370wmm.39.1644944043162;
-        Tue, 15 Feb 2022 08:54:03 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id 7sm15721841wrb.43.2022.02.15.08.54.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 08:54:02 -0800 (PST)
-Date:   Tue, 15 Feb 2022 16:54:00 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        Henning Schild <henning.schild@siemens.com>
-Subject: Re: [PATCH v4 5/8] mfd: lpc_ich: Add support for pinctrl in non-ACPI
- system
-Message-ID: <YgvaqBB8fNVWp1lN@google.com>
-References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
- <20220131151346.45792-6-andriy.shevchenko@linux.intel.com>
+        Tue, 15 Feb 2022 11:54:43 -0500
+Received: from hs01.dk-develop.de (hs01.dk-develop.de [173.249.23.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B4B117C93;
+        Tue, 15 Feb 2022 08:54:32 -0800 (PST)
+From:   Danilo Krummrich <danilokrummrich@dk-develop.de>
+To:     dmitry.torokhov@gmail.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linus.walleij@linaro.org,
+        Danilo Krummrich <danilokrummrich@dk-develop.de>
+Subject: [PATCH] input: ps2-gpio: enforce GPIOs flag open drain
+Date:   Tue, 15 Feb 2022 17:54:29 +0100
+Message-Id: <20220215165429.53764-1-danilokrummrich@dk-develop.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220131151346.45792-6-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Jan 2022, Andy Shevchenko wrote:
+The PS/2 bus defines the data and clock line be open drain, therefore
+for both enforce the particular GPIO flags in the driver.
 
-> From: Tan Jui Nee <jui.nee.tan@intel.com>
-> 
-> Add support for non-ACPI systems, such as system that uses
-> Advanced Boot Loader (ABL) whereby a platform device has to be created
-> in order to bind with pin control and GPIO.
-> 
-> At the moment, Intel Apollo Lake In-Vehicle Infotainment (IVI) system
-> requires a driver to hide and unhide P2SB to lookup P2SB BAR and pass
-> the PCI BAR address to GPIO.
-> 
-> Signed-off-by: Tan Jui Nee <jui.nee.tan@intel.com>
-> Co-developed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Acked-by: Hans de Goede <hdegoede@redhat.com>
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
->  drivers/mfd/lpc_ich.c | 101 +++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 100 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mfd/lpc_ich.c b/drivers/mfd/lpc_ich.c
-> index 95dca5434917..e1bca5325ce7 100644
-> --- a/drivers/mfd/lpc_ich.c
-> +++ b/drivers/mfd/lpc_ich.c
-> @@ -8,7 +8,8 @@
->   *  Configuration Registers.
->   *
->   *  This driver is derived from lpc_sch.
-> -
-> + *
-> + *  Copyright (c) 2017, 2021-2022 Intel Corporation
->   *  Copyright (c) 2011 Extreme Engineering Solution, Inc.
->   *  Author: Aaron Sierra <asierra@xes-inc.com>
->   *
-> @@ -42,6 +43,7 @@
->  #include <linux/errno.h>
->  #include <linux/acpi.h>
->  #include <linux/pci.h>
-> +#include <linux/pinctrl/pinctrl.h>
->  #include <linux/mfd/core.h>
->  #include <linux/mfd/lpc_ich.h>
->  #include <linux/platform_data/itco_wdt.h>
-> @@ -140,6 +142,70 @@ static struct mfd_cell lpc_ich_gpio_cell = {
->  	.ignore_resource_conflicts = true,
->  };
->  
-> +#define APL_GPIO_NORTH		0
-> +#define APL_GPIO_NORTHWEST	1
-> +#define APL_GPIO_WEST		2
-> +#define APL_GPIO_SOUTHWEST	3
-> +#define APL_GPIO_NR_DEVICES	4
-> +
-> +/* Offset data for Apollo Lake GPIO controllers */
-> +#define APL_GPIO_NORTH_OFFSET		0xc50000
-> +#define APL_GPIO_NORTHWEST_OFFSET	0xc40000
-> +#define APL_GPIO_WEST_OFFSET		0xc70000
-> +#define APL_GPIO_SOUTHWEST_OFFSET	0xc00000
-> +
-> +#define APL_GPIO_IRQ			14
-> +
-> +static struct resource apl_gpio_resources[APL_GPIO_NR_DEVICES][2] = {
-> +	[APL_GPIO_NORTH] = {
-> +		DEFINE_RES_MEM(APL_GPIO_NORTH_OFFSET, 0x1000),
+Without enforcing to flag at least the clock gpio as open drain we run
+into the following warning:
 
-Are these 0x1000's being over-written in lpc_ich_init_pinctrl()?
+WARNING: CPU: 1 PID: 40 at drivers/gpio/gpiolib.c:3175 gpiochip_enable_irq+0x54/0x90
 
-If so, why pre-initialise?
+gpiochip_enable_irq() warns on a GPIO being configured as output while
+serving as IRQ source without being flagged as open drain.
 
-> +		DEFINE_RES_IRQ(APL_GPIO_IRQ),
-> +	},
-> +	[APL_GPIO_NORTHWEST] = {
-> +		DEFINE_RES_MEM(APL_GPIO_NORTHWEST_OFFSET, 0x1000),
-> +		DEFINE_RES_IRQ(APL_GPIO_IRQ),
-> +	},
-> +	[APL_GPIO_WEST] = {
-> +		DEFINE_RES_MEM(APL_GPIO_WEST_OFFSET, 0x1000),
-> +		DEFINE_RES_IRQ(APL_GPIO_IRQ),
-> +	},
-> +	[APL_GPIO_SOUTHWEST] = {
-> +		DEFINE_RES_MEM(APL_GPIO_SOUTHWEST_OFFSET, 0x1000),
-> +		DEFINE_RES_IRQ(APL_GPIO_IRQ),
-> +	},
-> +};
-> +
-> +/* The order must be in sync with apl_pinctrl_soc_data */
+Signed-off-by: Danilo Krummrich <danilokrummrich@dk-develop.de>
+---
+ drivers/input/serio/ps2-gpio.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-Why does the order matter if you've pre-enumerated them all?
-
-> +static const struct mfd_cell apl_gpio_devices[APL_GPIO_NR_DEVICES] = {
-> +	[APL_GPIO_NORTH] = {
-> +		.name = "apollolake-pinctrl",
-> +		.id = APL_GPIO_NORTH,
-> +		.num_resources = ARRAY_SIZE(apl_gpio_resources[APL_GPIO_NORTH]),
-> +		.resources = apl_gpio_resources[APL_GPIO_NORTH],
-> +		.ignore_resource_conflicts = true,
-> +	},
-> +	[APL_GPIO_NORTHWEST] = {
-> +		.name = "apollolake-pinctrl",
-> +		.id = APL_GPIO_NORTHWEST,
-> +		.num_resources = ARRAY_SIZE(apl_gpio_resources[APL_GPIO_NORTHWEST]),
-> +		.resources = apl_gpio_resources[APL_GPIO_NORTHWEST],
-> +		.ignore_resource_conflicts = true,
-> +	},
-> +	[APL_GPIO_WEST] = {
-> +		.name = "apollolake-pinctrl",
-> +		.id = APL_GPIO_WEST,
-> +		.num_resources = ARRAY_SIZE(apl_gpio_resources[APL_GPIO_WEST]),
-> +		.resources = apl_gpio_resources[APL_GPIO_WEST],
-> +		.ignore_resource_conflicts = true,
-> +	},
-> +	[APL_GPIO_SOUTHWEST] = {
-> +		.name = "apollolake-pinctrl",
-> +		.id = APL_GPIO_SOUTHWEST,
-> +		.num_resources = ARRAY_SIZE(apl_gpio_resources[APL_GPIO_SOUTHWEST]),
-> +		.resources = apl_gpio_resources[APL_GPIO_SOUTHWEST],
-> +		.ignore_resource_conflicts = true,
-> +	},
-> +};
->  
->  static struct mfd_cell lpc_ich_spi_cell = {
->  	.name = "intel-spi",
-> @@ -1083,6 +1149,33 @@ static int lpc_ich_init_wdt(struct pci_dev *dev)
->  	return ret;
->  }
->  
-> +static int lpc_ich_init_pinctrl(struct pci_dev *dev)
-> +{
-> +	struct resource base;
-> +	unsigned int i;
-> +	int ret;
-> +
-> +	/* Check, if GPIO has been exported as an ACPI device */
-> +	if (acpi_dev_present("INT3452", NULL, -1))
-> +		return -EEXIST;
-> +
-> +	ret = p2sb_bar(dev->bus, 0, &base);
-> +	if (ret)
-> +		return ret;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(apl_gpio_devices); i++) {
-> +		struct resource *mem = &apl_gpio_resources[i][0];
-> +
-> +		/* Fill MEM resource */
-> +		mem->start += base.start;
-> +		mem->end += base.start;
-> +		mem->flags = base.flags;
-> +	}
-> +
-> +	return mfd_add_devices(&dev->dev, 0, apl_gpio_devices,
-> +			       ARRAY_SIZE(apl_gpio_devices), NULL, 0, NULL);
-> +}
-> +
->  static void lpc_ich_test_spi_write(struct pci_dev *dev, unsigned int devfn,
->  				   struct intel_spi_boardinfo *info)
->  {
-> @@ -1199,6 +1292,12 @@ static int lpc_ich_probe(struct pci_dev *dev,
->  			cell_added = true;
->  	}
->  
-> +	if (priv->chipset == LPC_APL) {
-> +		ret = lpc_ich_init_pinctrl(dev);
-> +		if (!ret)
-> +			cell_added = true;
-> +	}
-> +
->  	if (lpc_chipset_info[priv->chipset].spi_type) {
->  		ret = lpc_ich_init_spi(dev);
->  		if (!ret)
-
+diff --git a/drivers/input/serio/ps2-gpio.c b/drivers/input/serio/ps2-gpio.c
+index 8970b49ea09a..f562f396ba05 100644
+--- a/drivers/input/serio/ps2-gpio.c
++++ b/drivers/input/serio/ps2-gpio.c
+@@ -322,14 +322,19 @@ static irqreturn_t ps2_gpio_irq(int irq, void *dev_id)
+ static int ps2_gpio_get_props(struct device *dev,
+ 				 struct ps2_gpio_data *drvdata)
+ {
+-	drvdata->gpio_data = devm_gpiod_get(dev, "data", GPIOD_IN);
++	enum gpiod_flags gflags;
++
++	/* Enforce open drain, since this is required by the PS/2 bus. */
++	gflags = GPIOD_IN | GPIOD_FLAGS_BIT_OPEN_DRAIN;
++
++	drvdata->gpio_data = devm_gpiod_get(dev, "data", gflags);
+ 	if (IS_ERR(drvdata->gpio_data)) {
+ 		dev_err(dev, "failed to request data gpio: %ld",
+ 			PTR_ERR(drvdata->gpio_data));
+ 		return PTR_ERR(drvdata->gpio_data);
+ 	}
+ 
+-	drvdata->gpio_clk = devm_gpiod_get(dev, "clk", GPIOD_IN);
++	drvdata->gpio_clk = devm_gpiod_get(dev, "clk", gflags);
+ 	if (IS_ERR(drvdata->gpio_clk)) {
+ 		dev_err(dev, "failed to request clock gpio: %ld",
+ 			PTR_ERR(drvdata->gpio_clk));
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.35.1
+

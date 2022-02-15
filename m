@@ -2,139 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0F24B79FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:51:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 919544B79FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:53:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243610AbiBOVvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 16:51:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47882 "EHLO
+        id S239800AbiBOVxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 16:53:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240925AbiBOVv3 (ORCPT
+        with ESMTP id S234702AbiBOVxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 16:51:29 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4044BE370B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:51:18 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id v13-20020a17090ac90d00b001b87bc106bdso4424441pjt.4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:51:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=UF22wzNFpm2IeXFXPkRt/7QTNpA2ZS3NNacg1G/BHTA=;
-        b=aLkLiUl2q3+S6eeMXpypsrxoD5fjO9umu93awZL2f4DtK7iBq9t1st5HRP4P9rgAKQ
-         vbbbxGJdWSs0YTXYqaQOXspsbJuV/Ut61sGZKXIhgZ+Ao1l2oLI2a3lopePAqvNg0AM/
-         kDMZ1kpGbiLtcFI4B2ZqtAbaAHRBWRiCwoQbOyqM63uY3euR9sdAmumj5oYMSCVi95Ns
-         1sW4wxDTlXLSh9B6p0n0D3UkJbjeDvFRKeSYt2Q+/kQzExnf7VeE2lpE7rMUEQZ5fScV
-         u6euyIJCEvIB0kJrnAAehROqriwI5p8Dq4L2NbjbKWOUOEKsNVQpkAWi+LR6NKEvikDK
-         GEWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=UF22wzNFpm2IeXFXPkRt/7QTNpA2ZS3NNacg1G/BHTA=;
-        b=2tTe9xQfJd48MwdsR2nEdyxCzyG1/Nynx+r8XpRGEpD/6YslvUFSY6uf27PqktGeW2
-         Y7nuO5JoN1wfyxYhB2ew/BhCFCUNYXUDmrqVazSsVgMuLjKBmIVdCYcaYZiCsmAvcaxi
-         tekq680SrUXXDO/wwRi2zLMpFDuTQjjflcyQZ+HsV60M2fHoelAUAVi87SiNs3ehHXvl
-         FUmsP7qmBWfI5pDO61Gyh8JL+ARiIxwDEmAzN1fCB6jXWazSr1wWymsGuWkM2ZF6+L1R
-         Xcb9WQa8oXwjXOzVqHogVBeh/x4Q3ZUQu++zonbtM+9FPudVYOxQXbZmaNGJ/HatFxWE
-         mQKw==
-X-Gm-Message-State: AOAM533dRyZURi1W6cZVZovU9J2JuNpdvxyFeBtJUjj+SzVtYvVsd3hM
-        Rp3G5qQQGR2ECar1f7QV96AdBK97F+5C4Hajh1D9rw==
-X-Google-Smtp-Source: ABdhPJwiWSTwvDiLHvEHx5jVlkEcfKkWS636fiMP5bezJwAkxTbJWDUQr5zyAmugPr7yn16pxbnRwJ5XVgTvcXGjjUQ=
-X-Received: by 2002:a17:902:b20a:: with SMTP id t10mr753705plr.132.1644961876547;
- Tue, 15 Feb 2022 13:51:16 -0800 (PST)
+        Tue, 15 Feb 2022 16:53:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1268BB5601
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:53:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98057B81D0C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 21:53:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 498DCC340EC
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 21:53:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644962001;
+        bh=Vfxjv7E56iaOFRTCObvj3BvVuslFzvG2n3OckI8Aumw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ud/+h1cDLctFXinnhjFDRa48kZs/Sv+52aBGhae3CUMR1ixHIyIH5oYqHkxx9XxE9
+         7YOMVJHo9ApG1yi86kyolWpX24iIZ5CKk0M7Efr0GaH2lRN09W8+tfOSi9CEEwaBgW
+         F287c+HHEKXmgQjnXSbK8ljE5Zvb3vUO/A99T7aq1++sTdgtjqLlhHGYN0LX/iaxtL
+         fAoLjjkmkJZnfigW7zjsYIrhhhP5rsqvqIX8tovq1acLLuab8QzCMidGE9xcUXIbHx
+         aZ0wI+UffNxCzoesfDAlvnEwWezGtdxHOBYF4USCONazR2UrovVz7o9/+kA45D0g3u
+         UV1O4Cw/kMenA==
+Received: by mail-ed1-f52.google.com with SMTP id u18so555927edt.6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:53:21 -0800 (PST)
+X-Gm-Message-State: AOAM533mqAveGr/9IV1J1YllxhS3cBejHXkCT2UXVcibBysz1ewZOrri
+        aWS2R07I5uwLuBhcu7uGqlGbHuwZVJclwcO4Pg==
+X-Google-Smtp-Source: ABdhPJwYZKHAsuuqxukUb3ew/CZgg5aKKKTyuRP2EBIW3EIb7cJwFue/JUV1JPmJrNN+olDMIRRtpNXvf0a48ySSLUo=
+X-Received: by 2002:a50:e68d:: with SMTP id z13mr993946edm.307.1644961999559;
+ Tue, 15 Feb 2022 13:53:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20220105181230.GC398655@magnolia> <CAPcyv4iTaneUgdBPnqcvLr4Y_nAxQp31ZdUNkSRPsQ=9CpMWHg@mail.gmail.com>
- <20220105185626.GE398655@magnolia> <CAPcyv4h3M9f1-C5e9kHTfPaRYR_zN4gzQWgR+ZyhNmG_SL-u+A@mail.gmail.com>
- <20220105224727.GG398655@magnolia> <CAPcyv4iZ88FPeZC1rt_bNdWHDZ5oh7ua31NuET2-oZ1UcMrH2Q@mail.gmail.com>
- <20220105235407.GN656707@magnolia> <CAPcyv4gUmpDnGkhd+WdhcJVMP07u+CT8NXRjzcOTp5KF-5Yo5g@mail.gmail.com>
- <YekhXENAEYJJNy7e@infradead.org> <76f5ed28-2df9-890e-0674-3ef2f18e2c2f@fujitsu.com>
- <20220121022200.GG13563@magnolia>
-In-Reply-To: <20220121022200.GG13563@magnolia>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Tue, 15 Feb 2022 13:51:10 -0800
-Message-ID: <CAPcyv4gXp66bc6dkN+F8pUdxwCj=wmkOebjmPdALyKKZSOczoQ@mail.gmail.com>
-Subject: Re: [PATCH v9 02/10] dax: Introduce holder for dax_device
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        david <david@fromorbit.com>, Jane Chu <jane.chu@oracle.com>
+References: <20220214203132.4722-1-alyssa.rosenzweig@collabora.com>
+In-Reply-To: <20220214203132.4722-1-alyssa.rosenzweig@collabora.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 15 Feb 2022 15:53:07 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKdb0_N252hR=iv3Lpi6T9+iCRBwzBQhS7UQGFNhM5k=A@mail.gmail.com>
+Message-ID: <CAL_JsqKdb0_N252hR=iv3Lpi6T9+iCRBwzBQhS7UQGFNhM5k=A@mail.gmail.com>
+Subject: Re: [PATCH] drm/panfrost: Dynamically allocate pm_domains
+To:     Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Steven Price <steven.price@arm.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 6:22 PM Darrick J. Wong <djwong@kernel.org> wrote:
+On Mon, Feb 14, 2022 at 2:31 PM Alyssa Rosenzweig
+<alyssa.rosenzweig@collabora.com> wrote:
 >
-> On Fri, Jan 21, 2022 at 09:26:52AM +0800, Shiyang Ruan wrote:
-> >
-> >
-> > =E5=9C=A8 2022/1/20 16:46, Christoph Hellwig =E5=86=99=E9=81=93:
-> > > On Wed, Jan 05, 2022 at 04:12:04PM -0800, Dan Williams wrote:
-> > > > We ended up with explicit callbacks after hch balked at a notifier
-> > > > call-chain, but I think we're back to that now. The partition mista=
-ke
-> > > > might be unfixable, but at least bdev_dax_pgoff() is dead. Notifier
-> > > > call chains have their own locking so, Ruan, this still does not ne=
-ed
-> > > > to touch dax_read_lock().
-> > >
-> > > I think we have a few options here:
-> > >
-> > >   (1) don't allow error notifications on partitions.  And error retur=
-n from
-> > >       the holder registration with proper error handling in the file
-> > >       system would give us that
+> MT8192 requires 5 power domains. Rather than bump MAX_PM_DOMAINS and
+> waste memory on every supported Panfrost chip, instead dynamically
+> allocate pm_domain_devs and pm_domain_links. This adds some flexibility;
+> it seems inevitable a new MediaTek device will require more than 5
+> domains.
 >
-> Hm, so that means XFS can only support dax+pmem when there aren't
-> partitions in use?  Ew.
->
-> > >   (2) extent the holder mechanism to cover a rangeo
->
-> I don't think I was around for the part where "hch balked at a notifier
-> call chain" -- what were the objections there, specifically?  I would
-> hope that pmem problems would be infrequent enough that the locking
-> contention (or rcu expiration) wouldn't be an issue...?
->
-> > >   (3) bite the bullet and create a new stacked dax_device for each
-> > >       partition
-> > >
-> > > I think (1) is the best option for now.  If people really do need
-> > > partitions we'll have to go for (3)
-> >
-> > Yes, I agree.  I'm doing it the first way right now.
-> >
-> > I think that since we can use namespace to divide a big NVDIMM into mul=
-tiple
-> > pmems, partition on a pmem seems not so meaningful.
->
-> I'll try to find out what will happen if pmem suddenly stops supporting
-> partitions...
+> On non-MediaTek devices, this saves a small amount of memory.
 
-Finally catching up with this thread...
+How much? You measured it?
 
-Given that XFS already has the policy of disabling DAX rather than
-failing the mount in some cases, I think it is workable for XFS to
-fail a DAX mount if reflink is enabled on a partition. This should not
-regress anyone's current setup since the FS will not even mount with
-dax+reflink today. As to the specific concern about registering
-failure handlers for other purposes I expect that can be done by
-registering failure notification handlers on block devices, not dax
-devices.
+It's not that simple. kmalloc has finite allocation sizes (see
+/proc/slabinfo). So unless panfrost_device shrinks or grows to the
+next smaller or larger size, the memory used doesn't change. And each
+devm_kmalloc adds its own overhead as well.
 
-So it's not that pmem will suddenly stop supporting partitions, dax
-will simply never gain support for reflink in the presence of
-partitions.
+I'd do the oneliner changing it to 5 and be done with it. That being
+said, we have plenty of examples of doing this both ways, so whatever
+makes people happy.
+
+Rob

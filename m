@@ -2,115 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B60B4B79DE
+	by mail.lfdr.de (Postfix) with ESMTP id A92334B79E0
 	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:50:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244258AbiBOVC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 16:02:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36088 "EHLO
+        id S244266AbiBOVEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 16:04:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235440AbiBOVCy (ORCPT
+        with ESMTP id S233714AbiBOVEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 16:02:54 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4D827FF2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:02:44 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id z15so49279qtx.13
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:02:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=RojO1s2ebF9xxfjFY1vNZc8Wc0/GmbtOgVpxelDT3Es=;
-        b=AOrHTegYpuTN0vWbGZ1zxEfaoRq+Xa3pSQhdj+hxe4QWQwOovJklU1Mac1cCs3LQ0E
-         fAwrLmAeXlKCWaMrZgtHQJhel53qFAYRkdna73DjH1w4LAVndwouTOG4MbFFYCCL9Y2f
-         Ju+QjlMsHFz2W6zLiwmavEQqvXNNqMUi9K0GHLEGKnHCWKfa5bY0F9HnbJOJuMe8wyQ6
-         vbU5PaZEeQFFD1ftF2g6k0wg0girLYJ395HGrjmUTR1Oj/eMSEYxsPlRnzDqZj6k80qO
-         hoIoLJdKaSmNMp9Xdlr/aDqr53+r4k95Msf1pTf6zDgDZqsJ2koKU2Ds3jSPjxk4BjZN
-         n1Uw==
+        Tue, 15 Feb 2022 16:04:05 -0500
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630CC27FFA;
+        Tue, 15 Feb 2022 13:03:55 -0800 (PST)
+Received: by mail-io1-f50.google.com with SMTP id c188so25504404iof.6;
+        Tue, 15 Feb 2022 13:03:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=RojO1s2ebF9xxfjFY1vNZc8Wc0/GmbtOgVpxelDT3Es=;
-        b=Dg95RxDAOSguUcfUEdNWIl++LeeqILDFlYnu6Ko6QhPcfQUsL39g9/L8ANXH3TMflr
-         o4aJtMWL0mg/A8m+WsxykJJ3Uy87GQjC4fy5a3SDW2njU/ENA4yFXPyALbn7QCrz0ybZ
-         BQoZNivBTZvUgSu4LBMiGC18F395+tu3jr4Yp9YsHcsOkJJ3KmdItiUtf14ILOv9dduu
-         uzIMQrqwmZe128uoQay6U6qtUfgQYoR9djCJdudE7fLu1luhYhEgTNkooWgbdo2kzfBh
-         o/0ILvKNi5DmvPXIMiVpFgR+t1akksuY45ru5HNYRt8l+YhhS+5hCwq9kzzDNq7MUIkR
-         CwYQ==
-X-Gm-Message-State: AOAM533cwLv0Bl6GxcfbyIdQ21apj0knpzFtOoPJq+iGM3U5MxvIqT0Y
-        MQ74X73z6v9uK/I+clLFY3o95Q==
-X-Google-Smtp-Source: ABdhPJyYLAdLBtClvESalRU/1PMX028+T47koEhg36b0JuJd2M9G5i3e6iZxz5oKrtS2SdUrsWnRug==
-X-Received: by 2002:ac8:5bc8:: with SMTP id b8mr643716qtb.428.1644958963064;
-        Tue, 15 Feb 2022 13:02:43 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id p15sm20735921qtk.56.2022.02.15.13.02.40
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ABrhc5X4t6fuOcuDaQZbLnAECbyh/WwN9lD2vRsVEaI=;
+        b=CHBkZSUd6mNPaMK3KyF1uxQYGNvfWEtHttSW695EkBLjLL2fU69zWxc+BK5yuINq0S
+         39KSgfoJ2jnAq9WQSF+2OaYie1wc7S/f/ftRatgvWKXq62y5FrUv4cupb6QUPwLyw8Ax
+         U+ydQ5z2fuuXZdForHT1L3tnq8dEkw+1m693GuLZXDP6PvyOlEf7G153Hq4iE3z987Hs
+         JYlj5e7gR9Nztn6nEp3+MyHjs6dQMOrSpEfoZe3qaVngrY8o/fI/3diEANKyj92a9XkD
+         uyeabJ8eo9UTqOdXyW2a6VfQZVlcAER4GHXbl6y/hB5OM+HtoxGeMIe4R9F4Avlr6ply
+         CFvw==
+X-Gm-Message-State: AOAM532cC98+7Hc5GYvr7N/mN8THqiWU6LbbBXkfbi9vTO49KovP/SYi
+        SvMn3NVdh0ZAHxs+flSV/w==
+X-Google-Smtp-Source: ABdhPJz1L9wTn9oP95nr4RBAQPtGhnz/mtfBdBHouAwIXfSY6CGaW/doAWSL2qS52le6wpjOs557VQ==
+X-Received: by 2002:a05:6638:2584:: with SMTP id s4mr449890jat.289.1644959034612;
+        Tue, 15 Feb 2022 13:03:54 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id d3sm13122624ilg.23.2022.02.15.13.03.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 13:02:42 -0800 (PST)
-Date:   Tue, 15 Feb 2022 13:02:30 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Matthew Wilcox <willy@infradead.org>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        David Hildenbrand <david@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Rik van Riel <riel@surriel.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        SeongJae Park <sj@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 10/13] mm/munlock: mlock_page() munlock_page() batch
- by pagevec
-In-Reply-To: <YgvXjwapRTOXQOuQ@casper.infradead.org>
-Message-ID: <ef1e285c-187a-f682-a62b-c6a0f42b5cbf@google.com>
-References: <55a49083-37f9-3766-1de9-9feea7428ac@google.com> <1abb94ee-fe72-dba9-3eb0-d1e576d148e6@google.com> <YgvXjwapRTOXQOuQ@casper.infradead.org>
+        Tue, 15 Feb 2022 13:03:53 -0800 (PST)
+Received: (nullmailer pid 3917584 invoked by uid 1000);
+        Tue, 15 Feb 2022 21:03:52 -0000
+Date:   Tue, 15 Feb 2022 15:03:52 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        souvik.chakravarty@arm.com, peter.hilber@opensynergy.com,
+        igor.skalkin@opensynergy.com, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 4/8] dt-bindings: firmware: arm,scmi: Add
+ atomic-threshold-us optional property
+Message-ID: <YgwVOMyjHrToGUR4@robh.at.kernel.org>
+References: <20220213195832.27932-1-cristian.marussi@arm.com>
+ <20220213195832.27932-5-cristian.marussi@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220213195832.27932-5-cristian.marussi@arm.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022, Matthew Wilcox wrote:
-> On Mon, Feb 14, 2022 at 06:37:29PM -0800, Hugh Dickins wrote:
-> > +/*
-> > + * Flags held in the low bits of a struct page pointer on the mlock_pvec.
-> > + */
-> > +#define LRU_PAGE 0x1
-> > +#define NEW_PAGE 0x2
-> > +#define mlock_lru(page) ((struct page *)((unsigned long)page + LRU_PAGE))
-> > +#define mlock_new(page) ((struct page *)((unsigned long)page + NEW_PAGE))
+On Sun, Feb 13, 2022 at 07:58:28PM +0000, Cristian Marussi wrote:
+> SCMI protocols in the platform can optionally signal to the OSPM agent
+> the expected execution latency for a specific resource/operation pair.
 > 
-> You've tripped over one of the weirdnesses in the C preprocessor here.
-> If the variable passed is not _named_ page, it gets cast to a pointer
-> to a struct of the same name as the variable.  There's no way to tell
-> cpp that that 'page' after 'struct' is literal and not to be replaced
-> by the 'page' argument.
+> Introduce an SCMI system wide optional property to describe a global time
+> threshold which can be configured on a per-platform base to determine the
+> opportunity, or not, for an SCMI command advertised to have a higher
+> latency than the threshold, to be considered for atomic operations:
+> high-latency SCMI synchronous commands should be preferably issued in the
+> usual non-atomic mode.
 > 
-> I'm going to change this to:
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> ---
+> v3 --> v4
+> - renamed property to atomic-threshold-us
+> v1 --> v2
+> - rephrased the property description
+> ---
+>  .../devicetree/bindings/firmware/arm,scmi.yaml        | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 > 
-> static inline struct page *mlock_lru(struct page *page)
-> {
-> 	return (struct page *)((unsigned long)page + LRU_PAGE);
-> }
-> 
-> (mutatis mutandi for mlock_new)
+> diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> index eae15df36eef..3ffa669b91af 100644
+> --- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> +++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> @@ -81,6 +81,15 @@ properties:
+>    '#size-cells':
+>      const: 0
+>  
+> +  atomic-threshold-us:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      An optional time value, expressed in microseconds, representing, on this
+> +      platform, the threshold above which any SCMI command, advertised to have
+> +      an higher-than-threshold execution latency, should not be considered for
+> +      atomic mode of operation, even if requested.
 
-Okay, thanks.  (You're not naming your folio "page" :-?)
+> +      If left unconfigured defaults to zero.
 
-Hugh
+This can be expressed as 'default: 0'.
+
+> +
+>    arm,smc-id:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      description:
+> @@ -264,6 +273,8 @@ examples:
+>              #address-cells = <1>;
+>              #size-cells = <0>;
+>  
+> +            atomic_threshold = <10000>;
+> +
+>              scmi_devpd: protocol@11 {
+>                  reg = <0x11>;
+>                  #power-domain-cells = <1>;
+> -- 
+> 2.17.1
+> 
+> 

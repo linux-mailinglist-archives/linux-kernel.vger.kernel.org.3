@@ -2,74 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E06364B6776
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 007504B6779
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235827AbiBOJXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:23:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36058 "EHLO
+        id S235838AbiBOJXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:23:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233932AbiBOJXE (ORCPT
+        with ESMTP id S233932AbiBOJXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:23:04 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA2413F39
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:22:53 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id m126-20020a1ca384000000b0037bb8e379feso995134wme.5
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:22:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=MGallghbqZYnV5XKa1+ZW10tPrTrZGW9EkboS7fw5MQ=;
-        b=wVvz2W3ESnbTzOVGKu+YOG9h+YDJ+KwFyhJTmJJzyRY5M+7hZeO8mDzNq02IwUr/w/
-         DQ9Ebxsy4tukzG+Cv6VjxPGiR+YHA6KhNobCh/HL8IqlVnIy+cRSv/SolinaKdGTiEH7
-         El8dS3NWdA5UVReFFH5aG1HRZ0CSbs9d1xECsLMcNdFIs5Mub3MSiNm/3F3Np9aWpXuS
-         u766soTHmG4JViYSnWGynU7neqFnv7ynOCe6FTvE2+YeZOmgw+t5HeBA0zCPuLc3Po6l
-         WWU1j+6BMCRYVmqMsTBzAvFQujRevjh5OkxuFxTUE9YGTKPpT+0/im0ba/1mUUF0UcjD
-         BKhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=MGallghbqZYnV5XKa1+ZW10tPrTrZGW9EkboS7fw5MQ=;
-        b=NOzWvT96wwZfL/VHqshDWtwID0RlNR6+pABgr9mVwMMDbBIGiBUMc+U291KouIE7Qb
-         LarhebQKQ2iL+1nylVxD21jneQoPBif5oStlSv8iLh8op+8kh+jM0/8/VZGpCT/UmBI6
-         qAafufiCMWEfwML0X3f9jOvY/A40BvBvmxpRUcX0JQTu+QGxiLw6YWjjL9IMTyY0p1Yp
-         i0Y5Y+1JW8JbHieOwQb1d5fl5i4Mc+p10gxlEiXQuwbX5vt5pu7p8D8GZT2HtkD1H1ov
-         bLhgnli1B1XweFCmdE5TGJOnBISHDleh8eOcmD3BpjOfNt5TSk9zntQlimNi0U/6uHBH
-         dOFg==
-X-Gm-Message-State: AOAM530g1G/TSZia5ZjKc0e0EIIqcD0UE+bOwpJV2aoyV1d0VaxAlOAa
-        rzzFD9gNXSOR8/GA2OXiH7+R1u3fUADneA==
-X-Google-Smtp-Source: ABdhPJzELvsNi/azn1IFMoIkFlgJQS6KAnNJYi5Q+IUJAj5r3qfJnM0VYiWzldu9oTmC+b3qdCyTGg==
-X-Received: by 2002:a05:600c:1e8e:b0:37b:b9ab:e35d with SMTP id be14-20020a05600c1e8e00b0037bb9abe35dmr2228754wmb.109.1644916972521;
-        Tue, 15 Feb 2022 01:22:52 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id f14sm13569965wmq.3.2022.02.15.01.22.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 01:22:51 -0800 (PST)
-Date:   Tue, 15 Feb 2022 09:22:50 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Michael Walle <michael@walle.cc>, SoC Team <soc@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Olof Johansson <olof@lixom.net>
-Subject: Re: [PATCH] MAINTAINERS: add myself as a maintainer for the sl28cpld
-Message-ID: <Ygtw6hJFfDC6fd07@google.com>
-References: <20220207184652.1218447-1-michael@walle.cc>
- <YgpkCyoSMg5RYfkO@google.com>
- <YgpkQMbhWAJG6oCh@google.com>
- <CAK8P3a0UWO=h6K4NpzCVC2vbOvThJH28GM5ddm9U1crr1Su7vQ@mail.gmail.com>
- <YgqE/OvNDco5wEY3@google.com>
- <CAK8P3a1aqcsD-fGBgAmsi0qf9Td_y3Ry+o32Z1fU8H3qmEn0GA@mail.gmail.com>
+        Tue, 15 Feb 2022 04:23:31 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90AC3DA69;
+        Tue, 15 Feb 2022 01:23:21 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21F8BD2T020405;
+        Tue, 15 Feb 2022 09:23:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=v61IXX80zQXs7K1gQg/jhLYIWkOL7EzOxuh7BknpY7Y=;
+ b=YH6k4xpAB3LMka1wTzvRNSLSxcYqYj5qTfPb1Pv8J64XfK13t09/n1H/36HHEyM2tj8a
+ l5Kb7m9gb3M7AAEt+vXAjyAZBLPHqvTNGwU/nz1mlKuihSEWhZZACfHeowG+KE6bqrOl
+ zzC8SgSgpChPnH3zu84VHZGEt8gl9TEsAMoGu7nZQbDAa58ERDp+elg8k/RbdxhnHj+j
+ 3MzHNy0tWx5QJjmiMKlysZ6E2DnWx6eQJPTWBRHAiZAoPxp/j4n9AtAuezkrD4EIDBqn
+ CIKLDPFxmy5M0twrKB4Nbm3MGM6dnV5Vuzmo4ninDbu6pOQ1Z/1Mlg9hzDQ7jlCdbbPf CQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e85tew2tk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 09:23:21 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21F8vnHI027976;
+        Tue, 15 Feb 2022 09:23:21 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e85tew2sy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 09:23:20 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21F9MJMP014903;
+        Tue, 15 Feb 2022 09:23:18 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 3e64h9vvru-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 09:23:18 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21F9NFP148169380
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Feb 2022 09:23:15 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 17188A405F;
+        Tue, 15 Feb 2022 09:23:15 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9B1BDA4060;
+        Tue, 15 Feb 2022 09:23:14 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.145.2.54])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 15 Feb 2022 09:23:14 +0000 (GMT)
+Date:   Tue, 15 Feb 2022 10:23:12 +0100
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Thomas Huth <thuth@redhat.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: kvm: Check whether SIDA memop fails for
+ normal guests
+Message-ID: <20220215102312.330e8220@p-imbrenda>
+In-Reply-To: <20220215074824.188440-1-thuth@redhat.com>
+References: <20220215074824.188440-1-thuth@redhat.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK8P3a1aqcsD-fGBgAmsi0qf9Td_y3Ry+o32Z1fU8H3qmEn0GA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Y0PgVOt7ge_HS87ivnQe0eDdrDGmI1vI
+X-Proofpoint-ORIG-GUID: d5EjyeNEubM4HY1w4HRueE3z17T4SNH7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-15_03,2022-02-14_04,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ adultscore=0 malwarescore=0 suspectscore=0 impostorscore=0 mlxscore=0
+ priorityscore=1501 clxscore=1011 mlxlogscore=999 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202150052
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,34 +97,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Feb 2022, Arnd Bergmann wrote:
+On Tue, 15 Feb 2022 08:48:24 +0100
+Thomas Huth <thuth@redhat.com> wrote:
 
-> On Mon, Feb 14, 2022 at 5:36 PM Lee Jones <lee.jones@linaro.org> wrote:
-> > On Mon, 14 Feb 2022, Arnd Bergmann wrote:
-> > > On Mon, Feb 14, 2022 at 3:16 PM Lee Jones <lee.jones@linaro.org> wrote:
-> > > >
-> > > > Hold on, you're not going to get many Acks if you don't send it to the
-> > > > other subsystem maintainers. :)
-> > >
-> > > I've already applied this one through the soc tree.
-> >
-> > You did?  I missed the acceptance email.
+> Commit 2c212e1baedc ("KVM: s390: Return error on SIDA memop on normal
+> guest") fixed the behavior of the SIDA memops for normal guests. It
+> would be nice to have a way to test whether the current kernel has
+> the fix applied or not. Thus add a check to the KVM selftests for
+> these two memops.
 > 
-> I see now that the automated mails only get sent the submitter and
-> the list that is owned by patchwork. I completely missed how this
-> was sent to multiple maintainers and just grabbed it from patchwork
-> along with some other maintainer changes I picked up.
-> 
-> > It would have been nice to give the other maintainers a chance to look
-> > at it first, but I guess it's not a big deal in the great scheme.
-> 
-> Right, I need to find a better process to look at the actual emails
-> when going through patchwork. Sorry about that.
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
 
-No problem at all.  Thank you for the explanation.
+looks rather straightforward
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+
+> ---
+>  tools/testing/selftests/kvm/s390x/memop.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+> index 9f49ead380ab..d19c3ffdea3f 100644
+> --- a/tools/testing/selftests/kvm/s390x/memop.c
+> +++ b/tools/testing/selftests/kvm/s390x/memop.c
+> @@ -160,6 +160,21 @@ int main(int argc, char *argv[])
+>  	run->psw_mask &= ~(3UL << (63 - 17));   /* Disable AR mode */
+>  	vcpu_run(vm, VCPU_ID);                  /* Run to sync new state */
+>  
+> +	/* Check that the SIDA calls are rejected for non-protected guests */
+> +	ksmo.gaddr = 0;
+> +	ksmo.flags = 0;
+> +	ksmo.size = 8;
+> +	ksmo.op = KVM_S390_MEMOP_SIDA_READ;
+> +	ksmo.buf = (uintptr_t)mem1;
+> +	ksmo.sida_offset = 0x1c0;
+> +	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+> +	TEST_ASSERT(rv == -1 && errno == EINVAL,
+> +		    "ioctl does not reject SIDA_READ in non-protected mode");
+> +	ksmo.op = KVM_S390_MEMOP_SIDA_WRITE;
+> +	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+> +	TEST_ASSERT(rv == -1 && errno == EINVAL,
+> +		    "ioctl does not reject SIDA_WRITE in non-protected mode");
+> +
+>  	kvm_vm_free(vm);
+>  
+>  	return 0;
+

@@ -2,128 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCCD04B6211
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 05:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E71134B6221
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 05:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233155AbiBOE0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 23:26:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48298 "EHLO
+        id S231314AbiBOEeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 23:34:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiBOE0V (ORCPT
+        with ESMTP id S229852AbiBOEep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 23:26:21 -0500
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1CAA8ED5;
-        Mon, 14 Feb 2022 20:26:12 -0800 (PST)
-Received: by mail-oo1-xc2a.google.com with SMTP id p190-20020a4a2fc7000000b0031820de484aso21804399oop.9;
-        Mon, 14 Feb 2022 20:26:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UTelz8ULof2gSjsBcmY6Zg1fgejCRlE5fSYm6lKKjy4=;
-        b=VDHh7z+IwcbBeMbqb/ts7h9CtBJtyvfF8FwWbf6emVp/mYymuVKbMMqRANFT8nLPpW
-         VCm425TEHngvz36JYjLZN+4o8vveeIyJZaKUMd7trP9ccSMivUMMNwjn4fxk0mnJi+1B
-         mDhTeO5C1X9Fmmc5uoX9AoY+zT2aFZjs5950zzjJiusCHSPv//q5Oh7wfs6GOiiqBQ8t
-         6PwX/37UFBXhs/cunn5Y/Sy6ojbvNmdK2A3/PXXJQ+1JR9V32r1bI4HnwmtdBv0YHi0l
-         t9V5MRgouIoHU2sxJrO6MdaJgO8dJYeD1LkGRzWS5Yb2gJppiVVTIzXgqI5YzgegKT5S
-         Onjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UTelz8ULof2gSjsBcmY6Zg1fgejCRlE5fSYm6lKKjy4=;
-        b=rn2/HaG3J/ZC0NA+c3YsGbmnttCQQp+fNskAMsJYhJCMGUTGi8jTzTrSHfsk4gw5rx
-         X7T0LvD0d5Bg7HNs6Km99YO87bcm2FV82uTom4hix89ucR3mVujhNG+Bg8fSb/x19xwq
-         5IEd4XQDoFInXo2NocMvmN1BH+EcVYnvSdlIV/MzGnQFDucLBsts0/QC6vIYmnCJreDA
-         mPj++dpWpph0MF9FCtADFfpJ/OCn10AlE0GWxWaS9yFO0a8aKC5OnGIx1P00/QBYyX2r
-         2MBU6agsBB49ogpCux/C50guulXDPsgFvOwZsOr0PBN5ZByStwm8Smo1UZhYfmKwhT3N
-         Z2cw==
-X-Gm-Message-State: AOAM53328K+i8f13wNf4+xu5ojgcVmjRbuzUU2lc1U+zsYZyJTbewDSZ
-        961cS9oKZ6GlUwS6jvMHnnyqQEdV1+gRyWhqR/Q=
-X-Google-Smtp-Source: ABdhPJyfCYYB1BeuPkdtK8hzETRmsfqVIwKFs5eK9bz8dTFd9F5vPFVAHjTsTuDovb1hAFiLRDHFqiYsSDF5dR5nZoY=
-X-Received: by 2002:a05:6870:d606:b0:ce:c0c9:657 with SMTP id
- a6-20020a056870d60600b000cec0c90657mr791380oaq.169.1644899171351; Mon, 14 Feb
- 2022 20:26:11 -0800 (PST)
+        Mon, 14 Feb 2022 23:34:45 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3658AA9A63
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 20:34:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644899675; x=1676435675;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sQoCwA26t7bohLjBxsistapM0bOlvqxoeLeHcbXfGVU=;
+  b=j7t7DWgBzpSMFvCWV2UcCE74tLSL3aL6Jngj8y11tkksUbBr5cWFzfaz
+   Ax0uWf2/97Ze51Xhkec4uXO8wdMowc3y7zrL+6GOgqaHgUUEswJHU0Lrp
+   pLLZaf9kIwgEpF2FiNAQnM2nm8GeNVr/wJTvqtp6neAs1E3h0DndJaynl
+   s3iP4RillAsG69Le9eZ3BJT9lxhkoIXXLsSyaIM8jzJvSVbx/vYZFywzb
+   0s/HNDFB6bzSAKOiYyclzUWGCdAgjrRmpB6Z4HWORs079tzu4iflbRnBu
+   LPWXVHV8XBrEzOUfvlJ1jL+H/4FH5yKw8n4OlbfJV8I5E5POcoNv/Oq58
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="250194201"
+X-IronPort-AV: E=Sophos;i="5.88,369,1635231600"; 
+   d="scan'208";a="250194201"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 20:34:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,369,1635231600"; 
+   d="scan'208";a="485951089"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 14 Feb 2022 20:34:33 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJpXs-0009Gr-IU; Tue, 15 Feb 2022 04:34:32 +0000
+Date:   Tue, 15 Feb 2022 12:33:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jlayton:ceph-sparse-read 13/13] net/ceph/messenger_v2.c:3642:56:
+ warning: variable 'recved' is uninitialized when used here
+Message-ID: <202202151220.h4Fu215q-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220212175922.665442-1-omosnace@redhat.com>
-In-Reply-To: <20220212175922.665442-1-omosnace@redhat.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Tue, 15 Feb 2022 12:26:00 +0800
-Message-ID: <CADvbK_dZc-ErLHVBgzqhaMQaYyzM8_R3cado3oSTj+JE9tCiHQ@mail.gmail.com>
-Subject: Re: [PATCH net v3 0/2] security: fixups for the security hooks in sctp
-To:     Ondrej Mosnacek <omosnace@redhat.com>
-Cc:     network dev <netdev@vger.kernel.org>, davem <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        SElinux list <selinux@vger.kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 13, 2022 at 1:59 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
->
-> This is a third round of patches to fix the SCTP-SELinux interaction
-> w.r.t. client-side peeloff. The patches are a modified version of Xin
-> Long's patches posted previously, of which only a part was merged (the
-> rest was merged for a while, but was later reverted):
-> https://lore.kernel.org/selinux/cover.1635854268.git.lucien.xin@gmail.com/T/
->
-> In gist, these patches replace the call to
-> security_inet_conn_established() in SCTP with a new hook
-> security_sctp_assoc_established() and implement the new hook in SELinux
-> so that the client-side association labels are set correctly (which
-> matters in case the association eventually gets peeled off into a
-> separate socket).
->
-> Note that other LSMs than SELinux don't implement the SCTP hooks nor
-> inet_conn_established, so they shouldn't be affected by any of these
-> changes.
->
-> These patches were tested by selinux-testsuite [1] with an additional
-> patch [2] and by lksctp-tools func_tests [3].
->
-> Changes since v2:
-> - patches 1 and 2 dropped as they are already in mainline (not reverted)
-> - in patch 3, the return value of security_sctp_assoc_established() is
->   changed to int, the call is moved earlier in the function, and if the
->   hook returns an error value, the packet will now be discarded,
->   aborting the association
-> - patch 4 has been changed a lot - please see the patch description for
->   details on how the hook is now implemented and why
->
-> [1] https://github.com/SELinuxProject/selinux-testsuite/
-> [2] https://patchwork.kernel.org/project/selinux/patch/20211021144543.740762-1-omosnace@redhat.com/
-> [3] https://github.com/sctp/lksctp-tools/tree/master/src/func_tests
->
-> Ondrej Mosnacek (2):
->   security: add sctp_assoc_established hook
->   security: implement sctp_assoc_established hook in selinux
->
->  Documentation/security/SCTP.rst | 22 ++++----
->  include/linux/lsm_hook_defs.h   |  2 +
->  include/linux/lsm_hooks.h       |  5 ++
->  include/linux/security.h        |  8 +++
->  net/sctp/sm_statefuns.c         |  8 +--
->  security/security.c             |  7 +++
->  security/selinux/hooks.c        | 90 ++++++++++++++++++++++++---------
->  7 files changed, 103 insertions(+), 39 deletions(-)
->
-> --
-> 2.34.1
->
-Reviewed-by: Xin Long <lucien.xin@gmail.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git ceph-sparse-read
+head:   c0521644c264a8578ab61182209f303610af16e7
+commit: c0521644c264a8578ab61182209f303610af16e7 [13/13] libceph: add revoke support for sparse data
+config: i386-randconfig-a003-20220214 (https://download.01.org/0day-ci/archive/20220215/202202151220.h4Fu215q-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=c0521644c264a8578ab61182209f303610af16e7
+        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
+        git fetch --no-tags jlayton ceph-sparse-read
+        git checkout c0521644c264a8578ab61182209f303610af16e7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/ceph/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> net/ceph/messenger_v2.c:3642:56: warning: variable 'recved' is uninitialized when used here [-Wuninitialized]
+           dout("%s con %p recved %d resid %d\n", __func__, con, recved, resid);
+                                                                 ^~~~~~
+   include/linux/ceph/ceph_debug.h:35:45: note: expanded from macro 'dout'
+   # define dout(fmt, ...) pr_debug(" " fmt, ##__VA_ARGS__)
+                                               ^~~~~~~~~~~
+   include/linux/printk.h:570:26: note: expanded from macro 'pr_debug'
+           dynamic_pr_debug(fmt, ##__VA_ARGS__)
+                                   ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:163:22: note: expanded from macro 'dynamic_pr_debug'
+                              pr_fmt(fmt), ##__VA_ARGS__)
+                                             ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+   net/ceph/messenger_v2.c:3635:12: note: initialize the variable 'recved' to silence this warning
+           int recved, resid;  /* current piece of data */
+                     ^
+                      = 0
+   1 warning generated.
+
+
+vim +/recved +3642 net/ceph/messenger_v2.c
+
+  3632	
+  3633	static void revoke_at_prepare_sparse_data(struct ceph_connection *con)
+  3634	{
+  3635		int recved, resid;  /* current piece of data */
+  3636		int remaining;
+  3637	
+  3638		WARN_ON(con_secure(con));
+  3639		WARN_ON(!data_len(con->in_msg));
+  3640		WARN_ON(!iov_iter_is_bvec(&con->v2.in_iter));
+  3641		resid = iov_iter_count(&con->v2.in_iter);
+> 3642		dout("%s con %p recved %d resid %d\n", __func__, con, recved, resid);
+  3643	
+  3644		remaining = CEPH_EPILOGUE_PLAIN_LEN + con->v2.data_len_remain;
+  3645		con->v2.in_iter.count -= resid;
+  3646		set_in_skip(con, resid + remaining);
+  3647		con->v2.in_state = IN_S_FINISH_SKIP;
+  3648	}
+  3649	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

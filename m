@@ -2,155 +2,387 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF734B61F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 05:10:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 337AF4B61F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 05:12:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbiBOEKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 23:10:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41754 "EHLO
+        id S231873AbiBOEMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 23:12:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiBOEKR (ORCPT
+        with ESMTP id S229592AbiBOEMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 23:10:17 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B5FAFF59;
-        Mon, 14 Feb 2022 20:10:08 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id l19so26956211pfu.2;
-        Mon, 14 Feb 2022 20:10:08 -0800 (PST)
+        Mon, 14 Feb 2022 23:12:53 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B79B5616
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 20:12:44 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id b17-20020a9d4791000000b005a17fc2dfc1so13037436otf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 20:12:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sH4/2oJtfi5laET5tEMr+Y3iQdUpMaIDyoN80AX7CZk=;
-        b=TFB9JYwYT2dieEmGZmjGby6qN+n15NKEVhbbshPnmGbfZM5sMIGksQiob4rIqkMXAE
-         1iXaDhLW9Wp7Np+0a6OLl5f4+qly1AO+QCk5YulLk9bvoKG/7GsgG3redqZX/h/RopHQ
-         paopzfRbA74736juS6cvZhCxmrtnZ5jzuupmRIpyClljBpph+xqWclLfuHrQ5/Efqgr/
-         ZM6XmM8qcBSHiJbO2aKU0mYvzrq/vTWdyls/MayWpK/KPaEoPbsmrPeTsWJST/OzIkK5
-         NRpOilJd1ExVzxOtDipjk2uKuxopa/aySiPiYbgm/EGFhF4TuRIwPfX+XTWRk1GisvCM
-         an2w==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QHBlAe1imB9wB10ptbc1elqgvyeO+rwXBHar9R5XADk=;
+        b=EonIx2iIoiubRkWH7QB1h3f8w8B4hkUF2P+mFr3NycUcTHfTF6QIILMgWOP7QugdbS
+         StwdAChLQhnLdS+XyOhFJhfeYgacHmkqdaADo2AGMUfQyQImtpQdiAhrP9cyGUPsCk3r
+         c0ClTYHlIewOoHg5WzKFY8K3qV/TSN7EOjR4jWePl0G+ydZLInzV+vw3YhxnziyCnCwS
+         +WDq3Rp84SP6k9AOYciXSahesmnqehou65MIXhLCbh5wOQY0yxO+jStBheom1pFCy6WV
+         S2hMNEo530EDTs28n5F4sGzA/T6nOjInxyGMETnQbGn7YlkX1hBeDWRO4j5r84gLosTK
+         9lYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sH4/2oJtfi5laET5tEMr+Y3iQdUpMaIDyoN80AX7CZk=;
-        b=ft0QTSBn6MVz3BFm2kAS5Qw7O10PYfz9pZXEEcodv8K4qZWHTuYEppZfaCEHVs0gmw
-         5ji71J6G57cNEV4eIVEJbc/ClX5E5PH3MKx1ZQzyWlVFaxF4FsMr3vqJros4VaUUSumd
-         vXkHsA8Wpp9mhcuXZbWHDQSt5bAwrIQXNBJuFzNowS8kk3V2sT+LDT/OvPjCSimA4+ok
-         CCB02GuIWhz6r4Ujee34sB8PIRmX6cb214EwSzObqazoDYD+Oid+e5vVMvPShTtY36us
-         MjtSd7FTo/3hlvnudWDECLKn2Eb+xMfSCyNH5HcOWINd1fT0vIEBX2Cl+N3y9qVb5q0h
-         j5Hw==
-X-Gm-Message-State: AOAM533QIvtvCxjYg/bl76s8jhUV97N9Dzls6/kA4sTNtO7oEShSCepp
-        KiooI+UMl4/7+ODAJ3uye6ukuf3Y36M=
-X-Google-Smtp-Source: ABdhPJzBnrC5+k4E1LSF4Y/ZMXxUsvgq54z6F3pzi8xaU875WJtw9MKOdzTK1Ka9HrtVqhCxKHQjEg==
-X-Received: by 2002:aa7:88d1:: with SMTP id k17mr2053151pff.38.1644898207434;
-        Mon, 14 Feb 2022 20:10:07 -0800 (PST)
-Received: from edumazet1.svl.corp.google.com ([2620:15c:2c4:201:ff52:228f:b44e:a40b])
-        by smtp.gmail.com with ESMTPSA id bm3sm871353pgb.88.2022.02.14.20.10.06
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QHBlAe1imB9wB10ptbc1elqgvyeO+rwXBHar9R5XADk=;
+        b=kphLcVIsg2jHyh/6C44KAyS3XZrrPrBLl5C795abiehVgFLJPFEzLYK54yZ7unj3ty
+         qwrwEpTG13g8Y7SibjsqY9+CRi0DPM1KEBseCj0pPQlaIzmhpIHuBCM4Gdn0SFYAnNEI
+         p+hDIBDcDl2IEf5kWXLhJIvNOiEt/Qn84292rNHfPTEZaREaiHvyo9gJxvA9IBGwLhIL
+         Rr+1Wrw26nh47WkE7K4+/DIbLOmBylZMpwL6GlPPhxJF6P5FGaqSR2TjjrtN5IQhpga3
+         yMOfiQxMwbZswztDiRUBbS0fafgZOOJPSJxaw6k9hOA6IqGA8G5HAe6lCZoRO86r2LSI
+         alNg==
+X-Gm-Message-State: AOAM53327A1uYvUOpiheu4rZnGCRQoUXCJ73c7kBv9QYV8gL9Y8JdMBo
+        5c5u97AeFbyxOwms2aFBdZLGOQ==
+X-Google-Smtp-Source: ABdhPJzlNzV/ez8v3xTrbWZkPBvX158/9VDJYu18ragNQGlZ9CrYxrAF3y/k/r1DMPzf9GD6FAqwMQ==
+X-Received: by 2002:a05:6830:2aa1:: with SMTP id s33mr746579otu.117.1644898363519;
+        Mon, 14 Feb 2022 20:12:43 -0800 (PST)
+Received: from yoga ([2600:1700:a0:3dc8:5c39:baff:fe03:898d])
+        by smtp.gmail.com with ESMTPSA id ek4sm15333559oab.23.2022.02.14.20.12.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 20:10:06 -0800 (PST)
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring <io-uring@vger.kernel.org>,
-        syzbot <syzkaller@googlegroups.com>
-Subject: [PATCH] io_uring: add a schedule point in io_add_buffers()
-Date:   Mon, 14 Feb 2022 20:10:03 -0800
-Message-Id: <20220215041003.2394784-1-eric.dumazet@gmail.com>
-X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+        Mon, 14 Feb 2022 20:12:42 -0800 (PST)
+Date:   Mon, 14 Feb 2022 22:12:40 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, vkoul@kernel.org,
+        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
+        dmitry.baryshkov@linaro.org, quic_abhinavk@quicinc.com,
+        quic_aravindh@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] drm/msm/dp:  revise timing engine programming to
+ support widebus feature
+Message-ID: <YgsoOP3DegHz9zA8@yoga>
+References: <1644878346-28511-1-git-send-email-quic_khsieh@quicinc.com>
+ <1644878346-28511-2-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1644878346-28511-2-git-send-email-quic_khsieh@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+On Mon 14 Feb 16:39 CST 2022, Kuogee Hsieh wrote:
 
-Looping ~65535 times doing kmalloc() calls can trigger soft lockups,
-especially with DEBUG features (like KASAN).
+> Widebus feature will transmit two pixel data per pixel clock to interface.
+> Timing engine provides driving force for this purpose. This patch base
+> on HPG (Hardware Programming Guide) to revise timing engine register
+> setting to accommodate both widebus and non widebus application. Also
+> horizontal width parameters need to be reduced by half since two pixel
+> data are clocked out per pixel clock when widebus feature enabled.
+> 
+> Widebus can be enabled individually at DP. However at DSI, widebus have
+> to be enabled along with DSC enabled to achieve pixel clock rate be
+> scaled down with same ratio as compression ratio when 10 bits per source
+> component. Therefore this patch have both widebus and compression covered
+> together so tat less efforts will be required when DSC enabled later.
+> 
+> Changes in v2:
+> -- remove compression related code from timing
+> -- remove op_info from  struct msm_drm_private
+> -- remove unnecessary wide_bus_en variables
+> -- pass wide_bus_en into timing configuration by struct msm_dp
+> 
+> Changes in v3:
+> -- split patch into 3 patches
+> 
+> Changes in v4:
+> -- rework timing engine to not interfere with dsi/hdmi
+> -- cover both widebus and compression
+> 
 
-[  253.536212] watchdog: BUG: soft lockup - CPU#64 stuck for 26s! [b219417889:12575]
-[  253.544433] Modules linked in: vfat fat i2c_mux_pca954x i2c_mux spidev cdc_acm xhci_pci xhci_hcd sha3_generic gq(O)
-[  253.544451] CPU: 64 PID: 12575 Comm: b219417889 Tainted: G S         O      5.17.0-smp-DEV #801
-[  253.544457] RIP: 0010:kernel_text_address (./include/asm-generic/sections.h:192 ./include/linux/kallsyms.h:29 kernel/extable.c:67 kernel/extable.c:98)
-[  253.544464] Code: 0f 93 c0 48 c7 c1 e0 63 d7 a4 48 39 cb 0f 92 c1 20 c1 0f b6 c1 5b 5d c3 90 0f 1f 44 00 00 55 48 89 e5 41 57 41 56 53 48 89 fb <48> c7 c0 00 00 80 a0 41 be 01 00 00 00 48 39 c7 72 0c 48 c7 c0 40
-[  253.544468] RSP: 0018:ffff8882d8baf4c0 EFLAGS: 00000246
-[  253.544471] RAX: 1ffff1105b175e00 RBX: ffffffffa13ef09a RCX: 00000000a13ef001
-[  253.544474] RDX: ffffffffa13ef09a RSI: ffff8882d8baf558 RDI: ffffffffa13ef09a
-[  253.544476] RBP: ffff8882d8baf4d8 R08: ffff8882d8baf5e0 R09: 0000000000000004
-[  253.544479] R10: ffff8882d8baf5e8 R11: ffffffffa0d59a50 R12: ffff8882eab20380
-[  253.544481] R13: ffffffffa0d59a50 R14: dffffc0000000000 R15: 1ffff1105b175eb0
-[  253.544483] FS:  00000000016d3380(0000) GS:ffff88af48c00000(0000) knlGS:0000000000000000
-[  253.544486] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  253.544488] CR2: 00000000004af0f0 CR3: 00000002eabfa004 CR4: 00000000003706e0
-[  253.544491] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[  253.544492] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[  253.544494] Call Trace:
-[  253.544496]  <TASK>
-[  253.544498] ? io_queue_sqe (fs/io_uring.c:7143)
-[  253.544505] __kernel_text_address (kernel/extable.c:78)
-[  253.544508] unwind_get_return_address (arch/x86/kernel/unwind_frame.c:19)
-[  253.544514] arch_stack_walk (arch/x86/kernel/stacktrace.c:27)
-[  253.544517] ? io_queue_sqe (fs/io_uring.c:7143)
-[  253.544521] stack_trace_save (kernel/stacktrace.c:123)
-[  253.544527] ____kasan_kmalloc (mm/kasan/common.c:39 mm/kasan/common.c:45 mm/kasan/common.c:436 mm/kasan/common.c:515)
-[  253.544531] ? ____kasan_kmalloc (mm/kasan/common.c:39 mm/kasan/common.c:45 mm/kasan/common.c:436 mm/kasan/common.c:515)
-[  253.544533] ? __kasan_kmalloc (mm/kasan/common.c:524)
-[  253.544535] ? kmem_cache_alloc_trace (./include/linux/kasan.h:270 mm/slab.c:3567)
-[  253.544541] ? io_issue_sqe (fs/io_uring.c:4556 fs/io_uring.c:4589 fs/io_uring.c:6828)
-[  253.544544] ? __io_queue_sqe (fs/io_uring.c:?)
-[  253.544551] __kasan_kmalloc (mm/kasan/common.c:524)
-[  253.544553] kmem_cache_alloc_trace (./include/linux/kasan.h:270 mm/slab.c:3567)
-[  253.544556] ? io_issue_sqe (fs/io_uring.c:4556 fs/io_uring.c:4589 fs/io_uring.c:6828)
-[  253.544560] io_issue_sqe (fs/io_uring.c:4556 fs/io_uring.c:4589 fs/io_uring.c:6828)
-[  253.544564] ? __kasan_slab_alloc (mm/kasan/common.c:45 mm/kasan/common.c:436 mm/kasan/common.c:469)
-[  253.544567] ? __kasan_slab_alloc (mm/kasan/common.c:39 mm/kasan/common.c:45 mm/kasan/common.c:436 mm/kasan/common.c:469)
-[  253.544569] ? kmem_cache_alloc_bulk (mm/slab.h:732 mm/slab.c:3546)
-[  253.544573] ? __io_alloc_req_refill (fs/io_uring.c:2078)
-[  253.544578] ? io_submit_sqes (fs/io_uring.c:7441)
-[  253.544581] ? __se_sys_io_uring_enter (fs/io_uring.c:10154 fs/io_uring.c:10096)
-[  253.544584] ? __x64_sys_io_uring_enter (fs/io_uring.c:10096)
-[  253.544587] ? do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
-[  253.544590] ? entry_SYSCALL_64_after_hwframe (??:?)
-[  253.544596] __io_queue_sqe (fs/io_uring.c:?)
-[  253.544600] io_queue_sqe (fs/io_uring.c:7143)
-[  253.544603] io_submit_sqe (fs/io_uring.c:?)
-[  253.544608] io_submit_sqes (fs/io_uring.c:?)
-[  253.544612] __se_sys_io_uring_enter (fs/io_uring.c:10154 fs/io_uring.c:10096)
-[  253.544616] __x64_sys_io_uring_enter (fs/io_uring.c:10096)
-[  253.544619] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
-[  253.544623] entry_SYSCALL_64_after_hwframe (??:?)
+Even though the change relates to DP, I think it would be appropriate to
+change the $subject prefix to "drm/msm/dpu".
 
-Fixes: ddf0322db79c ("io_uring: add IORING_OP_PROVIDE_BUFFERS")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: Pavel Begunkov <asml.silence@gmail.com>
-Cc: io-uring <io-uring@vger.kernel.org>
-Reported-by: syzbot <syzkaller@googlegroups.com>
----
- fs/io_uring.c | 1 +
- 1 file changed, 1 insertion(+)
+When booting sc8180x the bootloader leaves widebus enabled in the eDP
+controller, and the two patches takes care of this problem for me. I
+also checked the DP still works.
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 77b9c7e4793bf3332a0229ed74603d195b761756..b928928617a475af71fe2d42c63bc32099b42ada 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -4567,6 +4567,7 @@ static int io_add_buffers(struct io_provide_buf *pbuf, struct io_buffer **head)
- 		} else {
- 			list_add_tail(&buf->list, &(*head)->list);
- 		}
-+		cond_resched();
- 	}
- 
- 	return i ? i : -ENOMEM;
--- 
-2.35.1.265.g69c8d7142f-goog
+Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
+Thanks,
+Bjorn
+
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        | 10 +++
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h        |  2 +
+>  .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   | 14 +++
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        | 99 ++++++++++++++++++----
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h        |  6 ++
+>  5 files changed, 115 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index 0d315b4..0c22839 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -208,6 +208,8 @@ struct dpu_encoder_virt {
+>  
+>  	u32 idle_timeout;
+>  
+> +	bool wide_bus_en;
+> +
+>  	struct msm_dp *dp;
+>  };
+>  
+> @@ -217,6 +219,14 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
+>  	15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
+>  };
+>  
+> +
+> +bool dpu_encoder_is_widebus_enabled(struct drm_encoder *drm_enc)
+> +{
+> +	struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
+> +
+> +	return dpu_enc->wide_bus_en;
+> +}
+> +
+>  static void _dpu_encoder_setup_dither(struct dpu_hw_pingpong *hw_pp, unsigned bpc)
+>  {
+>  	struct dpu_hw_dither_cfg dither_cfg = { 0 };
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> index 99a5d73..893d74d 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> @@ -168,4 +168,6 @@ int dpu_encoder_get_linecount(struct drm_encoder *drm_enc);
+>   */
+>  int dpu_encoder_get_frame_count(struct drm_encoder *drm_enc);
+>  
+> +bool dpu_encoder_is_widebus_enabled(struct drm_encoder *drm_enc);
+> +
+>  #endif /* __DPU_ENCODER_H__ */
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+> index 185379b..2af2bb7 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+> @@ -110,6 +110,20 @@ static void drm_mode_to_intf_timing_params(
+>  		timing->v_back_porch += timing->v_front_porch;
+>  		timing->v_front_porch = 0;
+>  	}
+> +
+> +	timing->wide_bus_en = dpu_encoder_is_widebus_enabled(phys_enc->parent);
+> +
+> +	/*
+> +	 * for DP, divide the horizonal parameters by 2 when
+> +	 * widebus is enabled
+> +	 */
+> +	if (phys_enc->hw_intf->cap->type == INTF_DP && timing->wide_bus_en) {
+> +		timing->width = timing->width >> 1;
+> +		timing->xres = timing->xres >> 1;
+> +		timing->h_back_porch = timing->h_back_porch >> 1;
+> +		timing->h_front_porch = timing->h_front_porch >> 1;
+> +		timing->hsync_pulse_width = timing->hsync_pulse_width >> 1;
+> +	}
+>  }
+>  
+>  static u32 get_horizontal_total(const struct intf_timing_params *timing)
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+> index 116e2b5..3b9273e 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+> @@ -33,6 +33,7 @@
+>  #define INTF_TP_COLOR1                  0x05C
+>  #define INTF_CONFIG2                    0x060
+>  #define INTF_DISPLAY_DATA_HCTL          0x064
+> +#define INTF_ACTIVE_DATA_HCTL           0x068
+>  #define INTF_FRAME_LINE_COUNT_EN        0x0A8
+>  #define INTF_FRAME_COUNT                0x0AC
+>  #define   INTF_LINE_COUNT               0x0B0
+> @@ -60,6 +61,14 @@
+>  
+>  #define   INTF_MUX                      0x25C
+>  
+> +#define BIT_INTF_CFG_ACTIVE_H_EN	BIT(29)
+> +#define BIT_INTF_CFG_ACTIVE_V_EN	BIT(30)
+> +
+> +#define BIT_INTF_CFG2_DATABUS_WIDEN	BIT(0)
+> +#define BIT_INTF_CFG2_DATA_HCTL_EN	BIT(4)
+> +#define BIT_INTF_CFG2_DCE_DATA_COMPRESS	BIT(12)
+> +
+> +
+>  static const struct dpu_intf_cfg *_intf_offset(enum dpu_intf intf,
+>  		const struct dpu_mdss_cfg *m,
+>  		void __iomem *addr,
+> @@ -90,15 +99,23 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+>  	u32 hsync_period, vsync_period;
+>  	u32 display_v_start, display_v_end;
+>  	u32 hsync_start_x, hsync_end_x;
+> +	u32 hsync_data_start_x, hsync_data_end_x;
+>  	u32 active_h_start, active_h_end;
+>  	u32 active_v_start, active_v_end;
+>  	u32 active_hctl, display_hctl, hsync_ctl;
+>  	u32 polarity_ctl, den_polarity, hsync_polarity, vsync_polarity;
+>  	u32 panel_format;
+> -	u32 intf_cfg, intf_cfg2 = 0, display_data_hctl = 0;
+> +	u32 intf_cfg, intf_cfg2 = 0;
+> +	u32 display_data_hctl = 0, active_data_hctl = 0;
+> +	u32 data_width;
+> +	bool dp_intf = false;
+>  
+>  	/* read interface_cfg */
+>  	intf_cfg = DPU_REG_READ(c, INTF_CONFIG);
+> +
+> +	if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP)
+> +		dp_intf = true;
+> +
+>  	hsync_period = p->hsync_pulse_width + p->h_back_porch + p->width +
+>  	p->h_front_porch;
+>  	vsync_period = p->vsync_pulse_width + p->v_back_porch + p->height +
+> @@ -112,7 +129,10 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+>  	hsync_start_x = p->h_back_porch + p->hsync_pulse_width;
+>  	hsync_end_x = hsync_period - p->h_front_porch - 1;
+>  
+> -	if (p->width != p->xres) {
+> +	hsync_ctl = (hsync_period << 16) | p->hsync_pulse_width;
+> +	display_hctl = (hsync_end_x << 16) | hsync_start_x;
+> +
+> +	if (p->width != p->xres) { /* border fill added */
+>  		active_h_start = hsync_start_x;
+>  		active_h_end = active_h_start + p->xres - 1;
+>  	} else {
+> @@ -130,27 +150,78 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+>  
+>  	if (active_h_end) {
+>  		active_hctl = (active_h_end << 16) | active_h_start;
+> -		intf_cfg |= BIT(29);	/* ACTIVE_H_ENABLE */
+> +		intf_cfg |= BIT_INTF_CFG_ACTIVE_H_EN;
+>  	} else {
+>  		active_hctl = 0;
+>  	}
+>  
+>  	if (active_v_end)
+> -		intf_cfg |= BIT(30); /* ACTIVE_V_ENABLE */
+> +		intf_cfg |= BIT_INTF_CFG_ACTIVE_V_EN;
+>  
+> -	hsync_ctl = (hsync_period << 16) | p->hsync_pulse_width;
+> -	display_hctl = (hsync_end_x << 16) | hsync_start_x;
+> +	/*
+> +	 * DATA_HCTL_EN controls data timing which can be different from
+> +	 * video timing. It is recommended to enable it for all cases, except
+> +	 * if compression is enabled in 1 pixel per clock mode
+> +	 */
+> +	if (!p->compression_en || p->wide_bus_en)
+> +		intf_cfg2 |= BIT_INTF_CFG2_DATA_HCTL_EN;
+> +
+> +	if (p->wide_bus_en)
+> +		intf_cfg2 |=  BIT_INTF_CFG2_DATABUS_WIDEN;
+> +
+> +	/*
+> +	 * If widebus is disabled:
+> +	 * For uncompressed stream, the data is valid for the entire active
+> +	 * window period.
+> +	 * For compressed stream, data is valid for a shorter time period
+> +	 * inside the active window depending on the compression ratio.
+> +	 *
+> +	 * If widebus is enabled:
+> +	 * For uncompressed stream, data is valid for only half the active
+> +	 * window, since the data rate is doubled in this mode.
+> +	 * p->width holds the adjusted width for DP but unadjusted width for DSI
+> +	 * For compressed stream, data validity window needs to be adjusted for
+> +	 * compression ratio and then further halved.
+> +	 */
+> +	data_width = p->width;
+> +
+> +	if (p->compression_en) {
+> +		data_width = DIV_ROUND_UP(p->dce_bytes_per_line, 3);
+> +
+> +		if (p->wide_bus_en)
+> +			data_width >>= 1;
+> +	} else if (!dp_intf && p->wide_bus_en) {
+> +		data_width = p->width >> 1;
+> +	}
+> +
+> +	hsync_data_start_x = hsync_start_x;
+> +	hsync_data_end_x =  hsync_start_x + data_width - 1;
+> +
+> +	display_data_hctl = (hsync_data_end_x << 16) | hsync_data_start_x;
+> +
+> +	if (dp_intf) {
+> +		/* DP timing adjustment */
+> +		display_v_start += p->hsync_pulse_width + p->h_back_porch;
+> +		display_v_end   -= p->h_front_porch;
+>  
+> -	if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP) {
+>  		active_h_start = hsync_start_x;
+>  		active_h_end = active_h_start + p->xres - 1;
+>  		active_v_start = display_v_start;
+>  		active_v_end = active_v_start + (p->yres * hsync_period) - 1;
+>  
+> -		display_v_start += p->hsync_pulse_width + p->h_back_porch;
+> -
+>  		active_hctl = (active_h_end << 16) | active_h_start;
+>  		display_hctl = active_hctl;
+> +
+> +		intf_cfg |= BIT_INTF_CFG_ACTIVE_H_EN;
+> +		intf_cfg |= BIT_INTF_CFG_ACTIVE_V_EN;
+> +
+> +		if (p->compression_en) {
+> +			active_data_hctl = (hsync_start_x +
+> +					p->extra_dto_cycles) << 16;
+> +			active_data_hctl += hsync_start_x;
+> +
+> +			display_data_hctl = active_data_hctl;
+> +		}
+>  	}
+>  
+>  	den_polarity = 0;
+> @@ -180,13 +251,6 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+>  				(COLOR_8BIT << 4) |
+>  				(0x21 << 8));
+>  
+> -	if (ctx->cap->features & BIT(DPU_DATA_HCTL_EN)) {
+> -		intf_cfg2 |= BIT(4);
+> -		display_data_hctl = display_hctl;
+> -		DPU_REG_WRITE(c, INTF_CONFIG2, intf_cfg2);
+> -		DPU_REG_WRITE(c, INTF_DISPLAY_DATA_HCTL, display_data_hctl);
+> -	}
+> -
+>  	DPU_REG_WRITE(c, INTF_HSYNC_CTL, hsync_ctl);
+>  	DPU_REG_WRITE(c, INTF_VSYNC_PERIOD_F0, vsync_period * hsync_period);
+>  	DPU_REG_WRITE(c, INTF_VSYNC_PULSE_WIDTH_F0,
+> @@ -204,6 +268,9 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+>  	DPU_REG_WRITE(c, INTF_FRAME_LINE_COUNT_EN, 0x3);
+>  	DPU_REG_WRITE(c, INTF_CONFIG, intf_cfg);
+>  	DPU_REG_WRITE(c, INTF_PANEL_FORMAT, panel_format);
+> +	DPU_REG_WRITE(c, INTF_CONFIG2, intf_cfg2);
+> +	DPU_REG_WRITE(c, INTF_DISPLAY_DATA_HCTL, display_data_hctl);
+> +	DPU_REG_WRITE(c, INTF_ACTIVE_DATA_HCTL, active_data_hctl);
+>  }
+>  
+>  static void dpu_hw_intf_enable_timing_engine(
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+> index 3568be8..299c9c1 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+> @@ -30,6 +30,12 @@ struct intf_timing_params {
+>  	u32 border_clr;
+>  	u32 underflow_clr;
+>  	u32 hsync_skew;
+> +
+> +	bool wide_bus_en;
+> +	bool compression_en;
+> +	u32 extra_dto_cycles;   /* for DP only */
+> +	bool dsc_4hs_merge;     /* DSC 4HS merge */
+> +	u32 dce_bytes_per_line;
+>  };
+>  
+>  struct intf_prog_fetch {
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 

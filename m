@@ -2,55 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C36104B6B7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:48:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D7E4B6B86
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236849AbiBOLse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 06:48:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52122 "EHLO
+        id S237338AbiBOLvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 06:51:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbiBOLsc (ORCPT
+        with ESMTP id S229707AbiBOLvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 06:48:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D777710F9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 03:48:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE8AB6157B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 11:48:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF59FC340EB;
-        Tue, 15 Feb 2022 11:48:21 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="G4jSwocK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644925700;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XQTMRXJB9KfjEetgEwOx1Rgeuw93qd9A1BZQuEZHg9I=;
-        b=G4jSwocKDUp8ByfkQXrCIZoXLqH+z0LVz9kkt63NuBcTLOHtvnexiXjKg31WUaNHMgcDwy
-        r69p99id2DBagDkxjEbWa4yltyDwJT7ZoC3oZjID+jJG8F+hfVIJ6QnzBroMdEYPjOQ197
-        XLWBxJhF8PYzAvAIdEANDdzhOWpnrPk=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bb65e87b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 15 Feb 2022 11:48:20 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: [PATCH v3] random: deobfuscate irq u32/u64 contributions
-Date:   Tue, 15 Feb 2022 12:48:12 +0100
-Message-Id: <20220215114812.96750-1-Jason@zx2c4.com>
-In-Reply-To: <YgX6r9hsRIbv06hq@owl.dominikbrodowski.net>
-References: <YgX6r9hsRIbv06hq@owl.dominikbrodowski.net>
+        Tue, 15 Feb 2022 06:51:31 -0500
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80053.outbound.protection.outlook.com [40.107.8.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD4789307;
+        Tue, 15 Feb 2022 03:51:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LkS537Bwaex2wQb1to21PnEt1xVVYyQZ4mTeXZj5d5GfwCFm+0zzyQw6wKzCyqSOhnM0d+qSxBMdyVh4r0D9DazwuvxXnzi6o3v6xQTjX9U23MSWRa1kbAMuKLGmCr4i6bWYvDEABNXUBB5rtRHTObx7wpHgW8naq4R/dRLF7/w8297R71L6p36Aar9Wt1j8BOz/2hLUL5glp/YLjewbfoHv7n+NU+AlH+Q+4s6onQtTBnjBTslsO33w6dFtVACiblhbpbDle4aFuvTurSEScBmzH5UV+UJgx0/6rO+CDij1rDoC7Nldtev+coU0lE5S3u/wu1CJQLfsOAy42ahWjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9BOOJgIZOLBd+ek16E1YPVTpg1WVe2HP+ySsoJBlSVk=;
+ b=fZ+JaHxSJ0pvYKqWWTfvOgCfpgpnGGC+E1ZEzHM9pTnPxYuwi5gY4o7RS9l1Ys9131cVn9eS9ZRuk0QJaj1CtrC5c/zxNV9JP4bg5MXsrRSxddjlRo8tILbXeTYNKL2w6wx4P3EPWzaA37P9x034iHoea67iCmRK/7vJX5sxYjKWo8kKh5K0JKy4Gma9Ir+oqWR4oWoUHJP2cbRAVnAZuk86QTcQhVV5kSCPh0yICErlZ2eXNX/ormu6bFnchP72HdZrxHFCiatlKKSNUXWUgbrMj4vqp8HYJdq1xhSkckwve0w20Cm/4raUftcjz+Vxgo1oaUbkIwnPaa4vZS0Rmg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9BOOJgIZOLBd+ek16E1YPVTpg1WVe2HP+ySsoJBlSVk=;
+ b=qRMR79lpCNsXAlydC0e0mLUWxs+PcegrYCT3EirML+WI2ixlRWEcQZyntk0fkdvOn8SKhnaaSrRiUc7co7EXWkSwaGA3LDRRp1GmCxnCkmJ7z+A6VQBzAeODYLRB+UQdyzTUCoXmUxYfs33PMccdYjIDu4B+Y97IEWwD1v/e5JI=
+Received: from AM9PR04MB8555.eurprd04.prod.outlook.com (2603:10a6:20b:436::16)
+ by AM5PR0402MB2705.eurprd04.prod.outlook.com (2603:10a6:203:96::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.19; Tue, 15 Feb
+ 2022 11:51:18 +0000
+Received: from AM9PR04MB8555.eurprd04.prod.outlook.com
+ ([fe80::5df9:5bf0:7ac1:a793]) by AM9PR04MB8555.eurprd04.prod.outlook.com
+ ([fe80::5df9:5bf0:7ac1:a793%8]) with mapi id 15.20.4995.014; Tue, 15 Feb 2022
+ 11:51:18 +0000
+From:   Ioana Ciornei <ioana.ciornei@nxp.com>
+To:     "trix@redhat.com" <trix@redhat.com>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [PATCH] dpaa2-switch: fix default return of
+ dpaa2_switch_flower_parse_mirror_key
+Thread-Topic: [PATCH] dpaa2-switch: fix default return of
+ dpaa2_switch_flower_parse_mirror_key
+Thread-Index: AQHYIblgcwa2mr3+1UqnRzNxN8McnayUgTuA
+Date:   Tue, 15 Feb 2022 11:51:18 +0000
+Message-ID: <20220215115117.zz56xxvymbntumvi@skbuf>
+References: <20220214154139.2891275-1-trix@redhat.com>
+In-Reply-To: <20220214154139.2891275-1-trix@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 41573e99-fb4c-4fa6-a623-08d9f0797a9b
+x-ms-traffictypediagnostic: AM5PR0402MB2705:EE_
+x-microsoft-antispam-prvs: <AM5PR0402MB2705738706EEBD046515AF74E0349@AM5PR0402MB2705.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:260;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: OVbUqGgZVCRL8cz3qTI9pv/EypJ+VK5l+N3F9igduz/g/ZlFIiYzU1pwCKm6f+4FFs7++xobsSruaD9AvRrO7h6xBWNFTPHhwxdemJpZsglAot34s9DmvlAceFasNM+SDG6oE3gw+bAE/TSuvvrwnoRukqTdIQbOqDgj66RSsy9JQCw7MCmlIQpIX3Xqx09h6GLpv+3YxY0YeqYr+q5adG7FaKfiV4yvDHrULWDre9wICQCP2RLSevk1uqkcv7cER8h4lQiDw4DZv6YluMsp9mhELZyV8r1vyPoszaT1nN/+S71VHwwiEvhQKowdW4BiEqu+TdP07uWqrqUAoXwyn1jdSRQj3Ly3N0DqiCEJTigM7g2mXU2eeYbHzJSkgiJBFaJhhrGDbEV2StHg+PEGJNNyfWXjU6eBERU2u4u4gcn2mH8o+vCC/X1euXM1NKdXs/fERzaCSSAgvjI3QfEUQt6TGXrYP6DsMDDa2emWmfMuzlo/lHVxQUPL8plnZDfmmiJ05jjHFQEBpATepgts+5tHlWulhuAN2AJ59b5gyn54+gVPRqBOi5op21Bpmadb8QL5NkB/bWHwvduv8QbrHLDpu59uNNyX9+8hT4vmHjy0Z0PernSGwfU70bkNqHvWpsd/0OYpU5Ua7xDtIR2tRCp/2IoYsxsnrzr5EVocJFej+7V4E+AjkGa8Da4cNkyN2AtG7iF+HFe3hBXdvGFAOA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8555.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(76116006)(91956017)(38100700002)(122000001)(8676002)(6486002)(8936002)(5660300002)(44832011)(83380400001)(66556008)(4326008)(86362001)(66946007)(508600001)(316002)(71200400001)(38070700005)(33716001)(26005)(6512007)(9686003)(186003)(64756008)(6506007)(1076003)(2906002)(54906003)(4744005)(6916009)(66446008)(66476007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?K5BgCHSqii7a34O2ZePzS08Sr/dMHtbSzwB7GANFMCcAG3MNnslXHTSd9lqo?=
+ =?us-ascii?Q?MNBDx/XBD24l3/1szYOarLwc5Tk14lluj1Yms6CAiFKY+1mVUi30CyFYSfTf?=
+ =?us-ascii?Q?kEb2iL/zVA8isqK1iJPhXMjXVY8jOA7HDdb1sfJPKsOdSa89YW3uKCcZFNA0?=
+ =?us-ascii?Q?JFfIbyuNrKCK0VeC1slQs5c8Db/o5NVYB4XTpBCowmjtrwFdX1mC4OkTR3Bh?=
+ =?us-ascii?Q?hwL29EqcNh6QSig5TGSBoKEnYJqgExmydY9da7aT593Ce2g0FxkpkQYs0eMk?=
+ =?us-ascii?Q?HQLO+Fli1q77d1azK0ZnTv+mDVpLpuQoN5YBp777yUh2ROOp8Pk3hb8xtX/O?=
+ =?us-ascii?Q?ThLPeuzX0pns8K90IC/q4TsTmWPyFBEu/V+OERIznnAoNQiwdKX+8suZIcrc?=
+ =?us-ascii?Q?IODvcj7IPsubBdLbOoN/0IyzQ9DfdmwLkm7L4pfKac9N92b3yDSeZgefuzMF?=
+ =?us-ascii?Q?T7VRPBLiYqVZPeKhnmdzp7OOpEX07NtTVz/3EK5jnwopPXf/2JXVfG2/g07t?=
+ =?us-ascii?Q?4eoRbT/tzs8IP+TY8CT/kOUzk1nWWGZWQvEn6A9ELH6gDzxHB3d2/68Mdp7Y?=
+ =?us-ascii?Q?TWj8WLkUBYsG/QNsXtmi3lbcIot7ccQFTQrWJOxWI1jivNtF5DdaKR1vRsan?=
+ =?us-ascii?Q?SzPuztx/L11VBxfkzTW2wx0KJqveDxndZWGeSAdgJNF/Ge4GT9LjCV26Jy8h?=
+ =?us-ascii?Q?hYY2jRp5bRM7eNB/LgD1QLVbI8rLbCnWByJ6yk5ti0rWlw62tIILpcDeA+DE?=
+ =?us-ascii?Q?uwUCrWNnVBihzTqdzx/T6oxTLjFJ5lFx/M0+AcAunb3K5wknNPK6K8TCepll?=
+ =?us-ascii?Q?DU8uoUxPcJVYpZGx13unt6zOngL+yfR2+NNK0YEeSxHMCt+v8f8MuWjMuu7F?=
+ =?us-ascii?Q?YH01p4UzNFdXY/kYPRcbL2K5m7tnEJThQU6x9mQGwTFuWdbIJOTJzA52Xz9T?=
+ =?us-ascii?Q?+n8lFfLD8rDfOP7Y8yTVMp8uRumJdsk3aBuKazrMqiQUHxd8FZYLbb6lP9Ub?=
+ =?us-ascii?Q?vfmQoXgvpB72fp8xRUm83UDMO5aICo4+42n3BkRmMsJE/onO2uHyVYsbnorZ?=
+ =?us-ascii?Q?3kh2Zh77lrZvQ18/g4CIcew9ANn8tSO/lVGhjXQH1MZmsZDu99hlNgUA66tL?=
+ =?us-ascii?Q?nk+ZWgozUbNrQdz7Pr4HT50uqykgNTrP6L3C85yEj6bwTl304MGr8AcGHCER?=
+ =?us-ascii?Q?Li2eX/QntnilOHP2ZFHNwlopBhEz4PTMRAaBB70l5Gy42paLZ3/z+4LNwrsB?=
+ =?us-ascii?Q?BNOWEsGoXdqRYRne36YhYvOOFuUoLagCF8kHJSSlQk13xZDhA7P47/2vk/mj?=
+ =?us-ascii?Q?nafl9vSFVKd+qGKIvrnvmqusGxHnAw2jhQSPfJc4pRandOcnjHDL6Ww2HBdE?=
+ =?us-ascii?Q?xISi0cgq3dB3njTqhFdYIabRuYT7vXZAZxjrKa6sngUzMAqx/ZP57IYHUH5e?=
+ =?us-ascii?Q?UtlXI5R72Iso1fgAEcwkoPxAWTDuD81HhTsuoJ14NCyAHtWWLm9HnPLHFLXQ?=
+ =?us-ascii?Q?1oNXlDwUe3xpSCgr4U/JVAfh5e7QpqCIoU/YioUuTuH2JOExaCcEmO48oLtD?=
+ =?us-ascii?Q?gKzAyncKyTSoJpDixjLqgML4hhTfVgcK2NT0Tx0RjDooir1MEKTLrx8KfIzJ?=
+ =?us-ascii?Q?l+FLbRu+HE7KcvPEeo0yZ0w=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <89082DB9BEA00E499CFD3141C238E8F3@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8555.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41573e99-fb4c-4fa6-a623-08d9f0797a9b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2022 11:51:18.7428
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XrulDJF++XEXZtUHGe8rkRjjI20hkfViyS37bsOYwIo126aXjOE2G6ZOsGWAdW/2MRSHTLFfs1fyPbxtLOI8FA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0402MB2705
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,126 +125,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the irq handler, we fill out 16 bytes differently on 32-bit and
-64-bit platforms, and for 32-bit vs 64-bit cycle counters, which doesn't
-always correspond with the bitness of the platform. Whether or not you
-like this strangeness, it is a matter of fact.  But it might not be a
-fact you well realized until now, because the code that loaded the irq
-info into 4 32-bit words was quite confusing.  Instead, this commit
-makes everything explicit by having separate (compile-time) branches for
-32-bit and 64-bit types.
+On Mon, Feb 14, 2022 at 07:41:39AM -0800, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+>=20
+> Clang static analysis reports this representative problem
+> dpaa2-switch-flower.c:616:24: warning: The right operand of '=3D=3D'
+>   is a garbage value
+>   tmp->cfg.vlan_id =3D=3D vlan) {
+>                    ^  ~~~~
+> vlan is set in dpaa2_switch_flower_parse_mirror_key(). However
+> this function can return success without setting vlan.  So
+> change the default return to -EOPNOTSUPP.
+>=20
+> Fixes: 0f3faece5808 ("dpaa2-switch: add VLAN based mirroring")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-Changes v2->v3:
-- cycles_t is sometimes an `unsigned long long`, even on 32-bit x86, so
-  separate that contribution from the other one.
-- rebased on the latest.
 
- drivers/char/random.c | 49 ++++++++++++++++++++++++-------------------
- 1 file changed, 28 insertions(+), 21 deletions(-)
+Reviewed-by: Ioana Ciornei <ioana.ciornei@nxp.com>
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 9714d9f05a84..6a2c7db94417 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -283,7 +283,10 @@ static void mix_pool_bytes(const void *in, size_t nbytes)
- }
- 
- struct fast_pool {
--	u32 pool[4];
-+	union {
-+		u32 pool32[4];
-+		u64 pool64[2];
-+	};
- 	unsigned long last;
- 	u16 reg_idx;
- 	u8 count;
-@@ -294,10 +297,10 @@ struct fast_pool {
-  * collector.  It's hardcoded for an 128 bit pool and assumes that any
-  * locks that might be needed are taken by the caller.
-  */
--static void fast_mix(struct fast_pool *f)
-+static void fast_mix(u32 pool[4])
- {
--	u32 a = f->pool[0],	b = f->pool[1];
--	u32 c = f->pool[2],	d = f->pool[3];
-+	u32 a = pool[0],	b = pool[1];
-+	u32 c = pool[2],	d = pool[3];
- 
- 	a += b;			c += d;
- 	b = rol32(b, 6);	d = rol32(d, 27);
-@@ -315,9 +318,8 @@ static void fast_mix(struct fast_pool *f)
- 	b = rol32(b, 16);	d = rol32(d, 14);
- 	d ^= a;			b ^= c;
- 
--	f->pool[0] = a;  f->pool[1] = b;
--	f->pool[2] = c;  f->pool[3] = d;
--	f->count++;
-+	pool[0] = a;  pool[1] = b;
-+	pool[2] = c;  pool[3] = d;
- }
- 
- static void process_random_ready_list(void)
-@@ -778,29 +780,34 @@ void add_interrupt_randomness(int irq)
- 	struct pt_regs *regs = get_irq_regs();
- 	unsigned long now = jiffies;
- 	cycles_t cycles = random_get_entropy();
--	u32 c_high, j_high;
--	u64 ip;
- 
- 	if (cycles == 0)
- 		cycles = get_reg(fast_pool, regs);
--	c_high = (sizeof(cycles) > 4) ? cycles >> 32 : 0;
--	j_high = (sizeof(now) > 4) ? now >> 32 : 0;
--	fast_pool->pool[0] ^= cycles ^ j_high ^ irq;
--	fast_pool->pool[1] ^= now ^ c_high;
--	ip = regs ? instruction_pointer(regs) : _RET_IP_;
--	fast_pool->pool[2] ^= ip;
--	fast_pool->pool[3] ^=
--		(sizeof(ip) > 4) ? ip >> 32 : get_reg(fast_pool, regs);
- 
--	fast_mix(fast_pool);
-+	if (sizeof(cycles) == 8)
-+		fast_pool->pool64[0] ^= cycles ^ rol64(now, 32) ^ irq;
-+	else {
-+		fast_pool->pool32[0] ^= cycles ^ irq;
-+		fast_pool->pool32[1] ^= now;
-+	}
-+
-+	if (sizeof(unsigned long) == 8)
-+		fast_pool->pool64[1] ^= regs ? instruction_pointer(regs) : _RET_IP_;
-+	else {
-+		fast_pool->pool32[2] ^= regs ? instruction_pointer(regs) : _RET_IP_;
-+		fast_pool->pool32[3] ^= get_reg(fast_pool, regs);
-+	}
-+
-+	fast_mix(fast_pool->pool32);
-+	++fast_pool->count;
- 
- 	if (unlikely(crng_init == 0)) {
- 		if (fast_pool->count >= 64 &&
--		    crng_fast_load(fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
-+		    crng_fast_load(fast_pool->pool32, sizeof(fast_pool->pool32)) > 0) {
- 			fast_pool->count = 0;
- 			fast_pool->last = now;
- 			if (spin_trylock(&input_pool.lock)) {
--				_mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
-+				_mix_pool_bytes(&fast_pool->pool32, sizeof(fast_pool->pool32));
- 				spin_unlock(&input_pool.lock);
- 			}
- 		}
-@@ -814,7 +821,7 @@ void add_interrupt_randomness(int irq)
- 		return;
- 
- 	fast_pool->last = now;
--	_mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
-+	_mix_pool_bytes(&fast_pool->pool32, sizeof(fast_pool->pool32));
- 	spin_unlock(&input_pool.lock);
- 
- 	fast_pool->count = 0;
--- 
-2.35.0
-
+Thanks!

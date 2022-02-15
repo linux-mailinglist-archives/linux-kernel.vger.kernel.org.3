@@ -2,137 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D6654B7616
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B654F4B7621
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243340AbiBOTBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 14:01:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50864 "EHLO
+        id S243358AbiBOTEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 14:04:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231887AbiBOTBU (ORCPT
+        with ESMTP id S243348AbiBOTEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 14:01:20 -0500
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E53EBBB9;
-        Tue, 15 Feb 2022 11:01:10 -0800 (PST)
-Received: by mail-il1-f174.google.com with SMTP id o10so15611883ilh.0;
-        Tue, 15 Feb 2022 11:01:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UBBmp4DgxbJ3nAuN//yjsP9FmwDmp49m+83tg2kI50Y=;
-        b=6KSrOYonYhJ96jW2hVv9ABGA6wGvjVAGSBDIWIkDZfVJeFFLNYTWrC+UKCD0awloRm
-         awRfE98zhFXgc1eY4XQpHrve1mkprkNcMZkbzpqnKjqlIfy6iR8sDj+nyDMefQXUyTcW
-         e/CxiaVzfI+wd6qgYLHqzVzvZhFXjby3+5kkLOrV2/KPZKtbiqLBCAnnaDpTEi6sPu7P
-         Ubr9frcZ7aaTPde3eoLV8qhtz+62gU01WcME2slB9ytmF/xClKBDmntdpO6VfIUymkBV
-         wFNH4UfUpqcpbUsqy3ZC4SG2BLpsAgT3oklL/arWGjdIVCxcNkAoIt/g4vqqH96cU7fp
-         tXsw==
-X-Gm-Message-State: AOAM533TF06t0Ob0aiGfgkHM4vJvPetYhvencW3rUU644hwHWRIy01+0
-        tP9DyUvNEDbHvuCMOQjqRA==
-X-Google-Smtp-Source: ABdhPJzr1JvD7wkz7BTuJejx6Q5hZPGEsJZTOE5TvygVd8PbAcJonZNUWrC4RHzDEmQr1FWxeEBVHA==
-X-Received: by 2002:a05:6e02:1687:: with SMTP id f7mr281589ila.143.1644951668921;
-        Tue, 15 Feb 2022 11:01:08 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id q18sm18818854ils.78.2022.02.15.11.01.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 11:01:08 -0800 (PST)
-Received: (nullmailer pid 3747771 invoked by uid 1000);
-        Tue, 15 Feb 2022 19:01:06 -0000
-Date:   Tue, 15 Feb 2022 13:01:06 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH 2/2] perf: Expand perf_branch_entry.type
-Message-ID: <Ygv4cmO/zb3qO48q@robh.at.kernel.org>
-References: <1643348653-24367-1-git-send-email-anshuman.khandual@arm.com>
- <1643348653-24367-3-git-send-email-anshuman.khandual@arm.com>
- <Yfpxv9+TP9rP72wL@FVFF77S0Q05N>
- <6168f881-92a4-54f8-929a-c2f40a36c112@arm.com>
- <Yf1N/EWjlQ/bEA0D@FVFF77S0Q05N>
+        Tue, 15 Feb 2022 14:04:21 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD034F9541;
+        Tue, 15 Feb 2022 11:04:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644951850; x=1676487850;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OY5rlKrPl7iXMWmlVQVIRd4Ut3dm2c9g9Y247Vf0NLE=;
+  b=mbdBiv2fguhDFcdzPUSaiodaaHimArqz8k9ixMGfhPX9dT8hiNSK9A35
+   +D8SW8JTkQ3BCs8KCrxbY7zv4QU2Dr+pVST/v+VH5Kih8AsG8pkYFmTmX
+   09HuXPHkk+SopwueXtvIEKS7OvrVuS0173Ut0MPkKchIn35ari4iFcLoE
+   EUkZiZRh/U9qx8YzKvG9jUOJgnKXulYK6AMo5ZNsvB+eulvipqEpyQBrL
+   N3Ei+C5goajidTGNdVUT2gwapSShOk4qEHTfotu1os7bpGVFsbaxOjmrH
+   G/JE4UnKpTH4nduMeb6ZEQCVYpAaMployKG1VKtFWn1ZMExFttJNHNkz5
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="233974166"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="233974166"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 11:04:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="497393288"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 15 Feb 2022 11:04:08 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nK37K-0009ww-M0; Tue, 15 Feb 2022 19:04:02 +0000
+Date:   Wed, 16 Feb 2022 03:03:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Herbert Xu <herbert@gondor.apana.org.au>
+Subject: Re: [PATCH v1 1/1] crypto: cavium/nitrox - don't cast parameter in
+ bit operations
+Message-ID: <202202160202.jG0FQRzi-lkp@intel.com>
+References: <20220215160641.51683-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yf1N/EWjlQ/bEA0D@FVFF77S0Q05N>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220215160641.51683-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 04:02:04PM +0000, Mark Rutland wrote:
-> On Fri, Feb 04, 2022 at 10:25:24AM +0530, Anshuman Khandual wrote:
-> > On 2/2/22 5:27 PM, Mark Rutland wrote:
-> > > On Fri, Jan 28, 2022 at 11:14:13AM +0530, Anshuman Khandual wrote:
-> > >> @@ -1370,8 +1376,8 @@ struct perf_branch_entry {
-> > >>  		in_tx:1,    /* in transaction */
-> > >>  		abort:1,    /* transaction abort */
-> > >>  		cycles:16,  /* cycle count to last branch */
-> > >> -		type:4,     /* branch type */
-> > >> -		reserved:40;
-> > >> +		type:6,     /* branch type */
-> > > 
-> > > As above, is this a safe-change ABI-wise?
-> > 
-> > If the bit fields here cannot be expanded without breaking ABI, then
-> > there is a fundamental problem. Only remaining option will be to add
-> > new fields (with new width value) which could accommodate these new
-> > required branch types.
-> 
-> Unfortunately, I think expanding this does break ABI, and is a fundamental
-> problem, as:
-> 
-> (a) Any new values in the expanded field will be truncated when read by old
->     userspace, and so those may be mis-reported. Maybe we're not too worried
->     about this case.
+Hi Andy,
 
-'type' or specfically branch stack is not currently supported on arm64. 
-Do we expect an old userspace which this didn't work on to start working 
-with a new kernel?
+I love your patch! Perhaps something to improve:
 
-Given at least some of the new types are arch specific, perhaps 
-the existing type field should get a new 'PERF_BR_ARCH_SPECIFIC' or 
-'PERF_BR_EXTENDED' value (or use PERF_BR_UNKNOWN?) which means read a 
-new 'arch_type' field.
+[auto build test WARNING on herbert-cryptodev-2.6/master]
+[also build test WARNING on herbert-crypto-2.6/master linux/master linus/master v5.17-rc4 next-20220215]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Another option is maybe some of these additional types just shouldn't be 
-exposed to userspace? For example, are branches to FIQ useful or leaking 
-any info about secure world? Debug mode branches also seem minimally 
-useful to me (though I'm no expert in how this is used).
+url:    https://github.com/0day-ci/linux/commits/Andy-Shevchenko/crypto-cavium-nitrox-don-t-cast-parameter-in-bit-operations/20220216-000941
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220216/202202160202.jG0FQRzi-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/51e27f6f33d377023ec5e097d18acb18f992f551
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/crypto-cavium-nitrox-don-t-cast-parameter-in-bit-operations/20220216-000941
+        git checkout 51e27f6f33d377023ec5e097d18acb18f992f551
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/crypto/cavium/nitrox/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/crypto/cavium/nitrox/nitrox_mbx.c: In function 'nitrox_pf2vf_mbox_handler':
+   drivers/crypto/cavium/nitrox/nitrox_mbx.c:126:9: error: implicit declaration of function 'DEFINE_BITMAP'; did you mean 'DEFINE_IDA'? [-Werror=implicit-function-declaration]
+     126 |         DEFINE_BITMAP(csr, 64);
+         |         ^~~~~~~~~~~~~
+         |         DEFINE_IDA
+   drivers/crypto/cavium/nitrox/nitrox_mbx.c:126:23: error: 'csr' undeclared (first use in this function)
+     126 |         DEFINE_BITMAP(csr, 64);
+         |                       ^~~
+   drivers/crypto/cavium/nitrox/nitrox_mbx.c:126:23: note: each undeclared identifier is reported only once for each function it appears in
+>> drivers/crypto/cavium/nitrox/nitrox_mbx.c:127:9: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
+     127 |         u64 value, reg_addr;
+         |         ^~~
+   cc1: some warnings being treated as errors
 
 
-> (b) Depending on how the field is placed, existing values might get stored
->     differently. This could break any mismatched combination of
->     {old,new}-kernel and {old,new}-userspace.
-> 
->     In practice, I think this means that this is broken for BE, and happens to
->     work for LE, but I don't know how bitfields are defined for each
->     architecture, so there could be other brokenness.
-> 
-> Consider the test case below:
+vim +127 drivers/crypto/cavium/nitrox/nitrox_mbx.c
 
-[...]
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  121  
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  122  void nitrox_pf2vf_mbox_handler(struct nitrox_device *ndev)
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  123  {
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  124  	struct nitrox_vfdev *vfdev;
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  125  	struct pf2vf_work *pfwork;
+51e27f6f33d377 Andy Shevchenko   2022-02-15  126  	DEFINE_BITMAP(csr, 64);
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04 @127  	u64 value, reg_addr;
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  128  	u32 i;
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  129  	int vfno;
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  130  
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  131  	/* loop for VF(0..63) */
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  132  	reg_addr = NPS_PKT_MBOX_INT_LO;
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  133  	value = nitrox_read_csr(ndev, reg_addr);
+51e27f6f33d377 Andy Shevchenko   2022-02-15  134  	bitmap_from_u64(csr, value);
+51e27f6f33d377 Andy Shevchenko   2022-02-15  135  	for_each_set_bit(i, csr, BITS_PER_TYPE(csr)) {
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  136  		/* get the vfno from ring */
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  137  		vfno = RING_TO_VFNO(i, ndev->iov.max_vf_queues);
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  138  		vfdev = ndev->iov.vfdev + vfno;
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  139  		vfdev->ring = i;
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  140  		/* fill the vf mailbox data */
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  141  		vfdev->msg.value = pf2vf_read_mbox(ndev, vfdev->ring);
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  142  		pfwork = kzalloc(sizeof(*pfwork), GFP_ATOMIC);
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  143  		if (!pfwork)
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  144  			continue;
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  145  
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  146  		pfwork->vfdev = vfdev;
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  147  		pfwork->ndev = ndev;
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  148  		INIT_WORK(&pfwork->pf2vf_resp, pf2vf_resp_handler);
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  149  		queue_work(ndev->iov.pf2vf_wq, &pfwork->pf2vf_resp);
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  150  		/* clear the corresponding vf bit */
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  151  		nitrox_write_csr(ndev, reg_addr, BIT_ULL(i));
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  152  	}
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  153  
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  154  	/* loop for VF(64..127) */
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  155  	reg_addr = NPS_PKT_MBOX_INT_HI;
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  156  	value = nitrox_read_csr(ndev, reg_addr);
+51e27f6f33d377 Andy Shevchenko   2022-02-15  157  	bitmap_from_u64(csr, value);
+51e27f6f33d377 Andy Shevchenko   2022-02-15  158  	for_each_set_bit(i, csr, BITS_PER_TYPE(csr)) {
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  159  		/* get the vfno from ring */
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  160  		vfno = RING_TO_VFNO(i + 64, ndev->iov.max_vf_queues);
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  161  		vfdev = ndev->iov.vfdev + vfno;
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  162  		vfdev->ring = (i + 64);
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  163  		/* fill the vf mailbox data */
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  164  		vfdev->msg.value = pf2vf_read_mbox(ndev, vfdev->ring);
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  165  
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  166  		pfwork = kzalloc(sizeof(*pfwork), GFP_ATOMIC);
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  167  		if (!pfwork)
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  168  			continue;
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  169  
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  170  		pfwork->vfdev = vfdev;
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  171  		pfwork->ndev = ndev;
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  172  		INIT_WORK(&pfwork->pf2vf_resp, pf2vf_resp_handler);
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  173  		queue_work(ndev->iov.pf2vf_wq, &pfwork->pf2vf_resp);
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  174  		/* clear the corresponding vf bit */
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  175  		nitrox_write_csr(ndev, reg_addr, BIT_ULL(i));
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  176  	}
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  177  }
+cf718eaa8f9b2c Srikanth, Jampala 2018-12-04  178  
 
-> ... where the low bits of the field have moved, and so this is broken even for
-> existing values!
-
-So that is a separate issue to be fixed and not directly related to the 
-size of 'type'. Looks like it needs similar '#if 
-defined(__LITTLE_ENDIAN_BITFIELD)' treatment as some of the other struct 
-bitfields. Though somehow BE PPC hasn't had issues?
-
-Rob
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,160 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7F04B7A85
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 23:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0EA64B7A88
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 23:39:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbiBOWib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 17:38:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50212 "EHLO
+        id S233391AbiBOWjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 17:39:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiBOWi3 (ORCPT
+        with ESMTP id S229481AbiBOWjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 17:38:29 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42299BF50E
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 14:38:18 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id z4so303859pgh.12
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 14:38:18 -0800 (PST)
+        Tue, 15 Feb 2022 17:39:08 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA81BBF51A;
+        Tue, 15 Feb 2022 14:38:57 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id p23so346272pgj.2;
+        Tue, 15 Feb 2022 14:38:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=83N6jbrz7Nk3njK8ABDKRljMA2AS3yoeVqMaJxkbwE4=;
-        b=NZcAstJ9fEDIrozklG+RC9EQnCGd5vnNAmljBzFj7Frwp93akfK3W5JC/0w/lZ18dD
-         MYqN+YgMBuM/nKcjfD2aeojlmtsQHT2+Be4zWWUs2s6SZLdqRp6AVGU1oryJJeClc7Kt
-         XtHnfx8AOWkte0H2aoUZtq0u17D5yDLE3VhNbvYCHpY7QmFnYpsfRHTkw9EV1u+7l2yC
-         JmubuJ1AB28ViO/8hEO0kHPsixIW9HU4iwOXN+/f6B4W4+9OHIHZcRTrv/eeN/Z6zSwS
-         WAIwsOTjCBT/cguKvVlDE+i1V2yXum0gE9hA8+qaxza2iGH1wIlB8bXWrlVlVNHdSIRX
-         k7Tw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Pmu0kzHupXHbf/q4IYLdojHnEWj4eQimF9pY5ure/SY=;
+        b=bea8ynOaRdl22JCKg/Weqxl0uPFQW3daaV6s6gDRLIQLJED36t1TwLjhWoVaRY33J3
+         L9hNX4ZEm49bOnnXdK7kXCWvsLGONYf2NPIa51ME08YuvgI3PeVCBzkztTXVQX05m2CM
+         M3locmPP9P1W7zG5Tr8gCfotbnYk328B/tYrRBtq+jWc31fzTyMnuHL26x/ATcWua/kr
+         OWmo9amaLfKuO7ZgZi3UotWcbErNSXURm3wZc08Am3G4g3z+EFLJuvj4H/kN1RWVHcu/
+         mIUk9VQLddjyC8Vs2pi5uMVWEPhWvDx/ILnp8UG9Mldkl6yPd5vNuAAUA6gpZnnlyj2r
+         3BEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=83N6jbrz7Nk3njK8ABDKRljMA2AS3yoeVqMaJxkbwE4=;
-        b=146j4Zbrl7e8qasv6eaXMf4XbmbLwKUyKoB5W7V/IdH9vdhkJEDV+1NgkMn3JwOnzf
-         teAgxbJImXIMOKMtHgxtt+EgIq2Nje+yvs3IX4wMSKUh+rVuCHwGruuFKxyr4HEA15U6
-         nEtbriDmXwys7iQ9k70sxe0QELE9cXD1MMTCNJCUZNj5G6h7GLa/3hiddsuKtKunXUiq
-         FHIVNdAS/YD0+wq8UnfeFv3iEb08jWlkfnT/yH143lyiugVy0NG6Rdq8nE0Q1YPUISeW
-         gEGf45XwgCDdMDbVyjxQuksnAGLwcwKsd6nMr7Uiu4/cbRLF9PoVnZU0K2miQBZzd6EG
-         uSAw==
-X-Gm-Message-State: AOAM531CrSGWjAu6gIinGPFgre4WRF70zbCQV+F6jEw2feJ+mlWag/ca
-        FCDWwyBefcnOYAOPGf9+ZYqmIahWtB7ysNBq7h/Oj/8kK6E=
-X-Google-Smtp-Source: ABdhPJwyiOHriZYIH+JGn4mCV9FeAMpy8ae1cYWDts5xxcI1rDCUtkY8xoI1fwtyNIRCDQmS/O9n6n/LNqhqdjINLRE=
-X-Received: by 2002:a05:6a00:8ca:b0:4e0:2ed3:5630 with SMTP id
- s10-20020a056a0008ca00b004e02ed35630mr30392pfu.3.1644964697734; Tue, 15 Feb
- 2022 14:38:17 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Pmu0kzHupXHbf/q4IYLdojHnEWj4eQimF9pY5ure/SY=;
+        b=ZxGasYmLXGv8407cEt67e+CU+/8raHy51XPc+zIWpMA1rnIzBJm+slDiAV19bCsYvs
+         +N2bdvL/yFLb6PrCIXDHm3/uI/sBHdxv4sv9hILFVFVpOjDowl8Ow53AFb8JzHd7iEXq
+         B9aJd+mNd5qxPZ8wmaJdizo3wvvD4zgF0cd2XlqRosNeu23IZcMWxkal8WXn7T8JfcXA
+         EE8HP1RlFPmxF7tSa3X5pj7rC+RFzmmnKZRGTQgGbQZ+NJkzA+KOSfO6bkz7/lz5yuS/
+         Bw7SVmh/MGptKyS1Gkp5jFTx5x8421Jli5VOjbhROaw/pPaG6zhZz/kxkiwI8vHEDm6+
+         e7Rw==
+X-Gm-Message-State: AOAM532r3AdIuz0TsQddNiiPuhqNEyxyDq5U+KBdi1NilhemkUsHp9PN
+        +B266GpWrWhMkFFf92wG5jY=
+X-Google-Smtp-Source: ABdhPJznZ0IpeTM+ttjQzn3ISkxHiNPMnva2B6w0fM+Q+N+4m9T5KceFcQ/+nz160UQLBeVgBNajlg==
+X-Received: by 2002:a05:6a00:190e:: with SMTP id y14mr888751pfi.52.1644964737244;
+        Tue, 15 Feb 2022 14:38:57 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:4e4a:b0ff:e926:40e2])
+        by smtp.gmail.com with ESMTPSA id c14sm39445059pfm.169.2022.02.15.14.38.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 14:38:56 -0800 (PST)
+Date:   Tue, 15 Feb 2022 14:38:54 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Danilo Krummrich <danilokrummrich@dk-develop.de>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linus.walleij@linaro.org
+Subject: Re: [PATCH 1/4] input: ps2-gpio: refactor struct ps2_gpio_data
+Message-ID: <YgwrfhIp44GMF/OV@google.com>
+References: <20220215160208.34826-1-danilokrummrich@dk-develop.de>
+ <20220215160208.34826-2-danilokrummrich@dk-develop.de>
+ <YgwhJkRGdduf5oYc@google.com>
+ <Ygwn1ZhLGuWctfkP@pollux>
 MIME-Version: 1.0
-References: <20220127124058.1172422-1-ruansy.fnst@fujitsu.com> <20220127124058.1172422-4-ruansy.fnst@fujitsu.com>
-In-Reply-To: <20220127124058.1172422-4-ruansy.fnst@fujitsu.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Tue, 15 Feb 2022 14:38:11 -0800
-Message-ID: <CAPcyv4i0FSjfd1vYFBj6DMq4dG36JPzvuUFw3yjJweNqsHNNPw@mail.gmail.com>
-Subject: Re: [PATCH v10 3/9] pagemap,pmem: Introduce ->memory_failure()
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>, david <david@fromorbit.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jane Chu <jane.chu@oracle.com>, Christoph Hellwig <hch@lst.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ygwn1ZhLGuWctfkP@pollux>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 4:41 AM Shiyang Ruan <ruansy.fnst@fujitsu.com> wrote:
->
-> When memory-failure occurs, we call this function which is implemented
-> by each kind of devices.  For the fsdax case, pmem device driver
-> implements it.  Pmem device driver will find out the filesystem in which
-> the corrupted page located in.
->
-> With dax_holder notify support, we are able to notify the memory failure
-> from pmem driver to upper layers.  If there is something not support in
-> the notify routine, memory_failure will fall back to the generic hanlder.
->
-> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> ---
->  drivers/nvdimm/pmem.c    | 16 ++++++++++++++++
->  include/linux/memremap.h | 12 ++++++++++++
->  mm/memory-failure.c      | 14 ++++++++++++++
->  3 files changed, 42 insertions(+)
->
-> diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-> index 58d95242a836..0a6e8698d086 100644
-> --- a/drivers/nvdimm/pmem.c
-> +++ b/drivers/nvdimm/pmem.c
-> @@ -366,6 +366,20 @@ static void pmem_release_disk(void *__pmem)
->         blk_cleanup_disk(pmem->disk);
->  }
->
-> +static int pmem_pagemap_memory_failure(struct dev_pagemap *pgmap,
-> +               unsigned long pfn, u64 len, int mf_flags)
-> +{
-> +       struct pmem_device *pmem =
-> +                       container_of(pgmap, struct pmem_device, pgmap);
-> +       u64 offset = PFN_PHYS(pfn) - pmem->phys_addr - pmem->data_offset;
-> +
-> +       return dax_holder_notify_failure(pmem->dax_dev, offset, len, mf_flags);
-> +}
-> +
-> +static const struct dev_pagemap_ops fsdax_pagemap_ops = {
-> +       .memory_failure         = pmem_pagemap_memory_failure,
-> +};
-> +
->  static int pmem_attach_disk(struct device *dev,
->                 struct nd_namespace_common *ndns)
->  {
-> @@ -427,6 +441,7 @@ static int pmem_attach_disk(struct device *dev,
->         pmem->pfn_flags = PFN_DEV;
->         if (is_nd_pfn(dev)) {
->                 pmem->pgmap.type = MEMORY_DEVICE_FS_DAX;
-> +               pmem->pgmap.ops = &fsdax_pagemap_ops;
->                 addr = devm_memremap_pages(dev, &pmem->pgmap);
->                 pfn_sb = nd_pfn->pfn_sb;
->                 pmem->data_offset = le64_to_cpu(pfn_sb->dataoff);
-> @@ -440,6 +455,7 @@ static int pmem_attach_disk(struct device *dev,
->                 pmem->pgmap.range.end = res->end;
->                 pmem->pgmap.nr_range = 1;
->                 pmem->pgmap.type = MEMORY_DEVICE_FS_DAX;
-> +               pmem->pgmap.ops = &fsdax_pagemap_ops;
->                 addr = devm_memremap_pages(dev, &pmem->pgmap);
->                 pmem->pfn_flags |= PFN_MAP;
->                 bb_range = pmem->pgmap.range;
-> diff --git a/include/linux/memremap.h b/include/linux/memremap.h
-> index 1fafcc38acba..f739318b496f 100644
-> --- a/include/linux/memremap.h
-> +++ b/include/linux/memremap.h
-> @@ -77,6 +77,18 @@ struct dev_pagemap_ops {
->          * the page back to a CPU accessible page.
->          */
->         vm_fault_t (*migrate_to_ram)(struct vm_fault *vmf);
-> +
-> +       /*
-> +        * Handle the memory failure happens on a range of pfns.  Notify the
-> +        * processes who are using these pfns, and try to recover the data on
-> +        * them if necessary.  The mf_flags is finally passed to the recover
-> +        * function through the whole notify routine.
-> +        *
-> +        * When this is not implemented, or it returns -EOPNOTSUPP, the caller
-> +        * will fall back to a common handler called mf_generic_kill_procs().
-> +        */
-> +       int (*memory_failure)(struct dev_pagemap *pgmap, unsigned long pfn,
-> +                             u64 len, int mf_flags);
+On Tue, Feb 15, 2022 at 11:23:17PM +0100, Danilo Krummrich wrote:
+> Hi Dmitry,
+> 
+> On Tue, Feb 15, 2022 at 01:54:46PM -0800, Dmitry Torokhov wrote:
+> > Hi Danilo,
+> > 
+> > On Tue, Feb 15, 2022 at 05:02:05PM +0100, Danilo Krummrich wrote:
+> > 
+> > > +static inline struct ps2_gpio_data *
+> > > +to_ps2_gpio_data(struct delayed_work *dwork)
+> > > +{
+> > > +	struct ps2_gpio_data_tx *txd = container_of(dwork,
+> > > +						    struct ps2_gpio_data_tx,
+> > > +						    work);
+> > > +
+> > > +	return container_of(txd, struct ps2_gpio_data, tx);
+> > > +}
+> > > +
+> > >  static void ps2_gpio_tx_work_fn(struct work_struct *work)
+> > >  {
+> > >  	struct delayed_work *dwork = to_delayed_work(work);
+> > > -	struct ps2_gpio_data *drvdata = container_of(dwork,
+> > > -						    struct ps2_gpio_data,
+> > > -						    tx_work);
+> > 
+> > This can simply be written as:
+> > 
+> > 	struct ps2_gpio_data *drvdata = container_of(dwork,
+> > 						     struct ps2_gpio_data,
+> > 						     tx.work);
+> > 
+> > No need to resubmit unless you disagree - I can change it on my side.
+> Thanks, please do so.
+> 
+> The tx and rx members of struct ps2_gpio_data can then be anonymous structs.
+> Do you mind changing that too? Or should I resubmit?
 
-I think it is odd to have the start address be in terms of pfns and
-the length by in terms of bytes. I would either change @len to
-@nr_pages, or change @pfn to @phys and make it a phys_addr_t.
+I will.
 
-Otherwise you can add,
+Thanks.
 
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+-- 
+Dmitry

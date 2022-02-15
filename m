@@ -2,45 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7804B639B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 694E84B63CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234522AbiBOGff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 01:35:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46994 "EHLO
+        id S234631AbiBOG5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 01:57:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233731AbiBOGfe (ORCPT
+        with ESMTP id S229575AbiBOG5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 01:35:34 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E16DB16C9;
-        Mon, 14 Feb 2022 22:35:23 -0800 (PST)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JyWSN6srjz1FCsp;
-        Tue, 15 Feb 2022 14:31:00 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500020.china.huawei.com
- (7.185.36.88) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 15 Feb
- 2022 14:35:20 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <stable@vger.kernel.org>,
-        <oliver.sang@intel.com>, <beibei.si@intel.com>, <jannh@google.com>,
-        <mszeredi@redhat.com>, <torvalds@linux-foundation.org>,
-        <libaokun1@huawei.com>, <yukuai3@huawei.com>
-Subject: [PATCH 5.10] fget: clarify and improve __fget_files() implementation
-Date:   Tue, 15 Feb 2022 14:51:07 +0800
-Message-ID: <20220215065107.3045023-1-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 15 Feb 2022 01:57:22 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221B8656A;
+        Mon, 14 Feb 2022 22:57:12 -0800 (PST)
+X-UUID: 9544f8c0507647d390792cfc0b099226-20220215
+X-UUID: 9544f8c0507647d390792cfc0b099226-20220215
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <chun-jie.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 926062451; Tue, 15 Feb 2022 14:57:09 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 15 Feb 2022 14:57:08 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 15 Feb 2022 14:57:08 +0800
+Message-ID: <73a6bfd04fb8e81e25e15ba686ba72a36d3899d2.camel@mediatek.com>
+Subject: Re: [PATCH v3 20/31] clk: mediatek: mtk: Clean up included headers
+From:   Chun-Jie Chen <chun-jie.chen@mediatek.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Date:   Tue, 15 Feb 2022 14:57:08 +0800
+In-Reply-To: <20220208124034.414635-21-wenst@chromium.org>
+References: <20220208124034.414635-1-wenst@chromium.org>
+         <20220208124034.414635-21-wenst@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500020.china.huawei.com (7.185.36.88)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,139 +59,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+On Tue, 2022-02-08 at 20:40 +0800, Chen-Yu Tsai wrote:
+> Some included headers aren't actually used anywhere, while other
+> headers
+> with the declaration of functions and structures aren't directly
+> included.
+> 
+> Get rid of the unused ones, and add the ones that should be included
+> directly.
+> 
+> On the header side, replace headers that are included purely for data
+> structure definitions with forward declarations. This decreases the
+> amount of preprocessing and compilation effort required for each
+> inclusion.
+> 
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
 
-commit e386dfc56f837da66d00a078e5314bc8382fab83 upstream.
-
-Commit 054aa8d439b9 ("fget: check that the fd still exists after getting
-a ref to it") fixed a race with getting a reference to a file just as it
-was being closed.  It was a fairly minimal patch, and I didn't think
-re-checking the file pointer lookup would be a measurable overhead,
-since it was all right there and cached.
-
-But I was wrong, as pointed out by the kernel test robot.
-
-The 'poll2' case of the will-it-scale.per_thread_ops benchmark regressed
-quite noticeably.  Admittedly it seems to be a very artificial test:
-doing "poll()" system calls on regular files in a very tight loop in
-multiple threads.
-
-That means that basically all the time is spent just looking up file
-descriptors without ever doing anything useful with them (not that doing
-'poll()' on a regular file is useful to begin with).  And as a result it
-shows the extra "re-check fd" cost as a sore thumb.
-
-Happily, the regression is fixable by just writing the code to loook up
-the fd to be better and clearer.  There's still a cost to verify the
-file pointer, but now it's basically in the noise even for that
-benchmark that does nothing else - and the code is more understandable
-and has better comments too.
-
-[ Side note: this patch is also a classic case of one that looks very
-  messy with the default greedy Myers diff - it's much more legible with
-  either the patience of histogram diff algorithm ]
-
-Link: https://lore.kernel.org/lkml/20211210053743.GA36420@xsang-OptiPlex-9020/
-Link: https://lore.kernel.org/lkml/20211213083154.GA20853@linux.intel.com/
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Tested-by: Carel Si <beibei.si@intel.com>
-Cc: Jann Horn <jannh@google.com>
-Cc: Miklos Szeredi <mszeredi@redhat.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
----
- fs/file.c | 72 ++++++++++++++++++++++++++++++++++++++++++-------------
- 1 file changed, 56 insertions(+), 16 deletions(-)
-
-diff --git a/fs/file.c b/fs/file.c
-index 9d02352fa18c..79a76d04c7c3 100644
---- a/fs/file.c
-+++ b/fs/file.c
-@@ -817,28 +817,68 @@ void do_close_on_exec(struct files_struct *files)
- 	spin_unlock(&files->file_lock);
- }
- 
--static struct file *__fget_files(struct files_struct *files, unsigned int fd,
--				 fmode_t mask, unsigned int refs)
-+static inline struct file *__fget_files_rcu(struct files_struct *files,
-+	unsigned int fd, fmode_t mask, unsigned int refs)
- {
--	struct file *file;
-+	for (;;) {
-+		struct file *file;
-+		struct fdtable *fdt = rcu_dereference_raw(files->fdt);
-+		struct file __rcu **fdentry;
- 
--	rcu_read_lock();
--loop:
--	file = fcheck_files(files, fd);
--	if (file) {
--		/* File object ref couldn't be taken.
--		 * dup2() atomicity guarantee is the reason
--		 * we loop to catch the new file (or NULL pointer)
-+		if (unlikely(fd >= fdt->max_fds))
-+			return NULL;
-+
-+		fdentry = fdt->fd + array_index_nospec(fd, fdt->max_fds);
-+		file = rcu_dereference_raw(*fdentry);
-+		if (unlikely(!file))
-+			return NULL;
-+
-+		if (unlikely(file->f_mode & mask))
-+			return NULL;
-+
-+		/*
-+		 * Ok, we have a file pointer. However, because we do
-+		 * this all locklessly under RCU, we may be racing with
-+		 * that file being closed.
-+		 *
-+		 * Such a race can take two forms:
-+		 *
-+		 *  (a) the file ref already went down to zero,
-+		 *      and get_file_rcu_many() fails. Just try
-+		 *      again:
- 		 */
--		if (file->f_mode & mask)
--			file = NULL;
--		else if (!get_file_rcu_many(file, refs))
--			goto loop;
--		else if (__fcheck_files(files, fd) != file) {
-+		if (unlikely(!get_file_rcu_many(file, refs)))
-+			continue;
-+
-+		/*
-+		 *  (b) the file table entry has changed under us.
-+		 *       Note that we don't need to re-check the 'fdt->fd'
-+		 *       pointer having changed, because it always goes
-+		 *       hand-in-hand with 'fdt'.
-+		 *
-+		 * If so, we need to put our refs and try again.
-+		 */
-+		if (unlikely(rcu_dereference_raw(files->fdt) != fdt) ||
-+		    unlikely(rcu_dereference_raw(*fdentry) != file)) {
- 			fput_many(file, refs);
--			goto loop;
-+			continue;
- 		}
-+
-+		/*
-+		 * Ok, we have a ref to the file, and checked that it
-+		 * still exists.
-+		 */
-+		return file;
- 	}
-+}
-+
-+static struct file *__fget_files(struct files_struct *files, unsigned int fd,
-+				 fmode_t mask, unsigned int refs)
-+{
-+	struct file *file;
-+
-+	rcu_read_lock();
-+	file = __fget_files_rcu(files, fd, mask, refs);
- 	rcu_read_unlock();
- 
- 	return file;
--- 
-2.31.1
+Reviewed-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
+> ---
+>  drivers/clk/mediatek/clk-mtk.c | 13 ++++++-------
+>  drivers/clk/mediatek/clk-mtk.h | 12 ++++++------
+>  2 files changed, 12 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/clk/mediatek/clk-mtk.c
+> b/drivers/clk/mediatek/clk-mtk.c
+> index f108786caeda..5618c84e4e08 100644
+> --- a/drivers/clk/mediatek/clk-mtk.c
+> +++ b/drivers/clk/mediatek/clk-mtk.c
+> @@ -4,17 +4,16 @@
+>   * Author: James Liao <jamesjj.liao@mediatek.com>
+>   */
+>  
+> -#include <linux/of.h>
+> -#include <linux/of_address.h>
+> +#include <linux/bitops.h>
+> +#include <linux/clk-provider.h>
+>  #include <linux/err.h>
+>  #include <linux/io.h>
+> -#include <linux/slab.h>
+> -#include <linux/delay.h>
+> -#include <linux/clkdev.h>
+> -#include <linux/module.h>
+>  #include <linux/mfd/syscon.h>
+> -#include <linux/device.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+>  #include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+>  
+>  #include "clk-mtk.h"
+>  #include "clk-gate.h"
+> diff --git a/drivers/clk/mediatek/clk-mtk.h
+> b/drivers/clk/mediatek/clk-mtk.h
+> index 4fa658f5d934..7f902581a115 100644
+> --- a/drivers/clk/mediatek/clk-mtk.h
+> +++ b/drivers/clk/mediatek/clk-mtk.h
+> @@ -7,19 +7,19 @@
+>  #ifndef __DRV_CLK_MTK_H
+>  #define __DRV_CLK_MTK_H
+>  
+> -#include <linux/regmap.h>
+> -#include <linux/bitops.h>
+>  #include <linux/clk-provider.h>
+> -#include <linux/platform_device.h>
+> -
+> -struct clk;
+> -struct clk_onecell_data;
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/types.h>
+>  
+>  #define MAX_MUX_GATE_BIT	31
+>  #define INVALID_MUX_GATE_BIT	(MAX_MUX_GATE_BIT + 1)
+>  
+>  #define MHZ (1000 * 1000)
+>  
+> +struct platform_device;
+> +
+>  struct mtk_fixed_clk {
+>  	int id;
+>  	const char *name;
 

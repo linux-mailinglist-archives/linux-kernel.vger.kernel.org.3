@@ -2,347 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9652C4B64D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 08:53:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 992994B64D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 08:54:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234988AbiBOHyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 02:54:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40998 "EHLO
+        id S234996AbiBOHyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 02:54:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233992AbiBOHyA (ORCPT
+        with ESMTP id S234952AbiBOHyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 02:54:00 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D50BECE0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 23:53:50 -0800 (PST)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CEFDA3F1AE
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:53:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644911629;
-        bh=xUfWt8K8DvSQWW/wfcPCCEqq3LOVzecUY4ADYtMZEAc=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=ReDKpD+zEghSSx8pSArkUYeXOD6IlP9Gp7qNaA0ELZOdmlJvIIjMVA+Cn2Vz00WRe
-         oJyPO3ILkugW1nLCqGh0AmL0Qghz8ScqLsp2zkQej7N4fT/AcWtnBHJfGIGuqDmjSe
-         8PzsxzubIAs3tw/SnO8fjoQ2fHi+k2sPH3uY7kZYX5J93+uzVE6w1JXDdKg56rBKlg
-         2R8DduyW/5lns53FtYZb70B0X/h5oM6BV7/2FuQe/Vu/EntSxV4EBWFKW4s4YHFxFS
-         frdUKKWW6pbodmfouMaGxPk9wrU7ANlxOrP1PQxgand3ElQ37TiOEoju31Hqi6m23R
-         Y0I8d4wCH/tBA==
-Received: by mail-ed1-f70.google.com with SMTP id f6-20020a0564021e8600b0040f662b99ffso11854786edf.7
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 23:53:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xUfWt8K8DvSQWW/wfcPCCEqq3LOVzecUY4ADYtMZEAc=;
-        b=VgU9TfgZ9TAymHtQaGRmOBFaG6Evc/AYp9dmB1vIhzHuJecQmlJdsKBr89pZ1dKBvi
-         OXYlx8svUgcs7kOkJpp77M1c0WN4+R1b7QZTk3Syb8nOKfDvQvU4lki6n42/f9gzASbH
-         PyfoNfEp2STZP8sa47/SldxumzxiG2tJF8Wq5ha/qtJEOu4EfNw5tLUbk222mbPMzqVc
-         kc3MHq7owwZnwrOwYO4i+MOYJSomTWtwKP0q20diMiTCbZJOiUBGVh+Mn9OBKuprWnWJ
-         6XC4RE7OfLCf07/JMTLqieYZlNZc03GxGJb4zNSFtGHT3LHX6U62tRfr4PElSHflIgM6
-         Ywrg==
-X-Gm-Message-State: AOAM530DV8wIteeCMcKj6keyEW2FjHfuizx0Lja+1mkdnA3muZNeSBLP
-        vlhoL+A2va0e6ldzqdLySZ6hVLmzj5DpKkJUr9FOqdGl0FQbKhb5pCPfjSZZ2bLhXCgRjWwLiQq
-        z46/tm3uQHHiuBa8tVC191JqCpY1mz8v7Iw+i6I9cIg==
-X-Received: by 2002:a05:6402:3714:: with SMTP id ek20mr2734796edb.16.1644911629488;
-        Mon, 14 Feb 2022 23:53:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwR3nY9STBQzAXgAUZp2+1sMAngvEQku3bu9/ybgTQiSsnBxeBbITouVqbWOxN8q0+4VYJJRA==
-X-Received: by 2002:a05:6402:3714:: with SMTP id ek20mr2734779edb.16.1644911629314;
-        Mon, 14 Feb 2022 23:53:49 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id h11sm4663713edb.68.2022.02.14.23.53.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 23:53:48 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Subject: [PATCH v3 2/2] dt-bindings: mfd: maxim,max77802: convert to dtschema
-Date:   Tue, 15 Feb 2022 08:53:44 +0100
-Message-Id: <20220215075344.31421-3-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220215075344.31421-1-krzysztof.kozlowski@canonical.com>
-References: <20220215075344.31421-1-krzysztof.kozlowski@canonical.com>
+        Tue, 15 Feb 2022 02:54:08 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCEDBF94F;
+        Mon, 14 Feb 2022 23:53:54 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F311B315;
+        Tue, 15 Feb 2022 08:53:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1644911633;
+        bh=7ATJ6C51d10GiKyu3AsQFR7KYr0FiUdZtqe/hL2xLBo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Fe8h4Ix/bI8W5/Z518PktjodKQWprEafFzmdjQO64loctLTShcE01zvI215HqabWs
+         iV/Ad8chC5Luez5pEDoo+gK1SHRvYQb/+R44+lZqWTBsCkhdrdeitZTpb7Y2eq8rED
+         TcViXBDl93VZjB3FTpYO3ae20e16kWkKlI/OqVSI=
+Date:   Tue, 15 Feb 2022 09:53:46 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/9] media: imx: Store the type of hardware
+ implementation
+Message-ID: <YgtcCn3XVAaSv0+c@pendragon.ideasonboard.com>
+References: <20220211142752.779952-1-alexander.stein@ew.tq-group.com>
+ <20220211142752.779952-2-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220211142752.779952-2-alexander.stein@ew.tq-group.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the MFD part of Maxim MAX77802 PMIC to DT schema format.  The
-example DTS was copied from existing DTS (exynos5800-peach-pi.dts), so
-keep the license as GPL-2.0-only.
+Hi Alexander and Dorota,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
----
- .../devicetree/bindings/mfd/max77802.txt      |  25 ---
- .../bindings/mfd/maxim,max77802.yaml          | 194 ++++++++++++++++++
- MAINTAINERS                                   |   2 +-
- 3 files changed, 195 insertions(+), 26 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/mfd/max77802.txt
- create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77802.yaml
+Thank you for the patch.
 
-diff --git a/Documentation/devicetree/bindings/mfd/max77802.txt b/Documentation/devicetree/bindings/mfd/max77802.txt
-deleted file mode 100644
-index 09decac20d91..000000000000
---- a/Documentation/devicetree/bindings/mfd/max77802.txt
-+++ /dev/null
-@@ -1,25 +0,0 @@
--Maxim MAX77802 multi-function device
--
--The Maxim MAX77802 is a Power Management IC (PMIC) that contains 10 high
--efficiency Buck regulators, 32 Low-DropOut (LDO) regulators used to power
--up application processors and peripherals, a 2-channel 32kHz clock outputs,
--a Real-Time-Clock (RTC) and a I2C interface to program the individual
--regulators, clocks outputs and the RTC.
--
--Bindings for the built-in 32k clock generator block and
--regulators are defined in ../clk/maxim,max77802.txt and
--../regulator/max77802.txt respectively.
--
--Required properties:
--- compatible		: Must be "maxim,max77802"
--- reg			: Specifies the I2C slave address of PMIC block.
--- interrupts		: I2C device IRQ line connected to the main SoC.
--
--Example:
--
--	max77802: pmic@9 {
--		compatible = "maxim,max77802";
--		interrupt-parent = <&intc>;
--		interrupts = <26 IRQ_TYPE_NONE>;
--		reg = <0x09>;
--	};
-diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77802.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77802.yaml
-new file mode 100644
-index 000000000000..baa1346ac5d5
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/maxim,max77802.yaml
-@@ -0,0 +1,194 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/maxim,max77802.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Maxim MAX77802 Power Management IC
-+
-+maintainers:
-+  - Javier Martinez Canillas <javier@dowhile0.org>
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+
-+description: |
-+  This is a part of device tree bindings for Maxim MAX77802 Power Management
-+  Integrated Circuit (PMIC).
-+
-+  The Maxim MAX77802 is a Power Management IC which includes voltage and
-+  current regulators (10 high efficiency Buck regulators and 32 Low-DropOut
-+  (LDO)), RTC and clock outputs.
-+
-+  The MAX77802 provides two 32.768khz clock outputs that can be controlled
-+  (gated/ungated) over I2C.  The clock IDs are defined as preprocessor macros
-+  in dt-bindings/clock/maxim,max77802.h.
-+
-+properties:
-+  compatible:
-+    const: maxim,max77802
-+
-+  '#clock-cells':
-+    const: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+  regulators:
-+    $ref: /schemas/regulator/maxim,max77802.yaml
-+    description:
-+      List of child nodes that specify the regulators.
-+
-+  inb1-supply:
-+    description: Power supply for buck1
-+  inb2-supply:
-+    description: Power supply for buck2
-+  inb3-supply:
-+    description: Power supply for buck3
-+  inb4-supply:
-+    description: Power supply for buck4
-+  inb5-supply:
-+    description: Power supply for buck5
-+  inb6-supply:
-+    description: Power supply for buck6
-+  inb7-supply:
-+    description: Power supply for buck7
-+  inb8-supply:
-+    description: Power supply for buck8
-+  inb9-supply:
-+    description: Power supply for buck9
-+  inb10-supply:
-+    description: Power supply for buck10
-+
-+  inl1-supply:
-+    description: Power supply for LDO8, LDO15
-+  inl2-supply:
-+    description: Power supply for LDO17, LDO27, LDO30, LDO35
-+  inl3-supply:
-+    description: Power supply for LDO3, LDO5, LDO7, LDO7
-+  inl4-supply:
-+    description: Power supply for LDO10, LDO11, LDO13, LDO14
-+  inl5-supply:
-+    description: Power supply for LDO9, LDO19
-+  inl6-supply:
-+    description: Power supply for LDO4, LDO21, LDO24, LDO33
-+  inl7-supply:
-+    description: Power supply for LDO18, LDO20, LDO28, LDO29
-+  inl9-supply:
-+    description: Power supply for LDO12, LDO23, LDO25, LDO26, LDO32, LDO34
-+  inl10-supply:
-+    description: Power supply for LDO1, LDO2
-+
-+  wakeup-source: true
-+
-+required:
-+  - compatible
-+  - '#clock-cells'
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/regulator/maxim,max77802.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        pmic@9 {
-+            compatible = "maxim,max77802";
-+            interrupt-parent = <&gpx3>;
-+            interrupts = <1 IRQ_TYPE_NONE>;
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&max77802_irq>, <&pmic_selb>,
-+                        <&pmic_dvs_1>, <&pmic_dvs_2>, <&pmic_dvs_3>;
-+            wakeup-source;
-+            reg = <0x9>;
-+            #clock-cells = <1>;
-+
-+            inb1-supply = <&tps65090_dcdc2>;
-+            inb2-supply = <&tps65090_dcdc1>;
-+            inb3-supply = <&tps65090_dcdc2>;
-+            inb4-supply = <&tps65090_dcdc2>;
-+            inb5-supply = <&tps65090_dcdc1>;
-+            inb6-supply = <&tps65090_dcdc2>;
-+            inb7-supply = <&tps65090_dcdc1>;
-+            inb8-supply = <&tps65090_dcdc1>;
-+            inb9-supply = <&tps65090_dcdc1>;
-+            inb10-supply = <&tps65090_dcdc1>;
-+
-+            inl1-supply = <&buck5_reg>;
-+            inl2-supply = <&buck7_reg>;
-+            inl3-supply = <&buck9_reg>;
-+            inl4-supply = <&buck9_reg>;
-+            inl5-supply = <&buck9_reg>;
-+            inl6-supply = <&tps65090_dcdc2>;
-+            inl7-supply = <&buck9_reg>;
-+            inl9-supply = <&tps65090_dcdc2>;
-+            inl10-supply = <&buck7_reg>;
-+
-+            regulators {
-+                BUCK1 {
-+                    regulator-name = "vdd_mif";
-+                    regulator-min-microvolt = <800000>;
-+                    regulator-max-microvolt = <1300000>;
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-ramp-delay = <12500>;
-+                    regulator-state-mem {
-+                        regulator-off-in-suspend;
-+                    };
-+                };
-+
-+                BUCK2 {
-+                    regulator-name = "vdd_arm";
-+                    regulator-min-microvolt = <800000>;
-+                    regulator-max-microvolt = <1500000>;
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-ramp-delay = <12500>;
-+                    regulator-coupled-with = <&buck3_reg>;
-+                    regulator-coupled-max-spread = <300000>;
-+                    regulator-state-mem {
-+                        regulator-off-in-suspend;
-+                    };
-+                };
-+
-+                // ...
-+
-+                BUCK10 {
-+                    regulator-name = "vdd_1v8";
-+                    regulator-min-microvolt = <1800000>;
-+                    regulator-max-microvolt = <1800000>;
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                    };
-+                };
-+
-+                LDO1 {
-+                    regulator-name = "vdd_1v0";
-+                    regulator-min-microvolt = <1000000>;
-+                    regulator-max-microvolt = <1000000>;
-+                    regulator-always-on;
-+                    regulator-initial-mode = <MAX77802_OPMODE_NORMAL>;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-mode = <MAX77802_OPMODE_LP>;
-+                    };
-+                };
-+
-+                // ...
-+
-+                LDO35 {
-+                    regulator-name = "ldo_35";
-+                    regulator-min-microvolt = <1200000>;
-+                    regulator-max-microvolt = <1200000>;
-+                };
-+            };
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ad66530bcbe2..6783a9dc85a5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11825,7 +11825,7 @@ MAXIM MAX77802 PMIC REGULATOR DEVICE DRIVER
- M:	Javier Martinez Canillas <javier@dowhile0.org>
- L:	linux-kernel@vger.kernel.org
- S:	Supported
--F:	Documentation/devicetree/bindings/*/*max77802.txt
-+F:	Documentation/devicetree/bindings/*/*max77802.yaml
- F:	drivers/regulator/max77802-regulator.c
- F:	include/dt-bindings/*/*max77802.h
- 
+On Fri, Feb 11, 2022 at 03:27:44PM +0100, Alexander Stein wrote:
+> From: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+> 
+> The driver covers i.MX5/6, as well as i.MX7/8 hardware.
+> Those implementations differ, e.g. in the sizes of buffers they accept.
+> 
+> Some functionality should be abstracted, and storing type achieves that.
+
+As much as I'd love it one of you would pick
+https://gitlab.com/ideasonboard/nxp/linux/-/tree/pinchartl/csi-bridge/destage
+and bring it to completion, I won't ask for yak shaving.
+
+Could you however mention in the commit message that this is a temporary
+solution ? Maybe as follows:
+
+This is a temporary solution until the imx7-media-csi driver gets
+decoupled from the helpers shared with the i.MX6 implementation, and
+should be reverted once this happens.
+
+With that,
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+> Changes in v2:
+> * Switch back to using enum
+> 
+>  drivers/staging/media/imx/imx-ic-prpencvf.c   | 3 ++-
+>  drivers/staging/media/imx/imx-media-capture.c | 5 ++++-
+>  drivers/staging/media/imx/imx-media-csi.c     | 3 ++-
+>  drivers/staging/media/imx/imx-media.h         | 8 +++++++-
+>  drivers/staging/media/imx/imx7-media-csi.c    | 3 ++-
+>  5 files changed, 17 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/staging/media/imx/imx-ic-prpencvf.c b/drivers/staging/media/imx/imx-ic-prpencvf.c
+> index 9b81cfbcd777..671bb9a681aa 100644
+> --- a/drivers/staging/media/imx/imx-ic-prpencvf.c
+> +++ b/drivers/staging/media/imx/imx-ic-prpencvf.c
+> @@ -1266,7 +1266,8 @@ static int prp_registered(struct v4l2_subdev *sd)
+>  
+>  	priv->vdev = imx_media_capture_device_init(ic_priv->ipu_dev,
+>  						   &ic_priv->sd,
+> -						   PRPENCVF_SRC_PAD, true);
+> +						   PRPENCVF_SRC_PAD, true,
+> +						   DEVICE_TYPE_IMX56);
+>  	if (IS_ERR(priv->vdev))
+>  		return PTR_ERR(priv->vdev);
+>  
+> diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
+> index 93ba09236010..65dc95a48ecc 100644
+> --- a/drivers/staging/media/imx/imx-media-capture.c
+> +++ b/drivers/staging/media/imx/imx-media-capture.c
+> @@ -34,6 +34,7 @@ struct capture_priv {
+>  
+>  	struct imx_media_video_dev vdev;	/* Video device */
+>  	struct media_pad vdev_pad;		/* Video device pad */
+> +	enum imx_media_device_type type;	/* Type of hardware implementation */
+>  
+>  	struct v4l2_subdev *src_sd;		/* Source subdev */
+>  	int src_sd_pad;				/* Source subdev pad */
+> @@ -957,7 +958,8 @@ EXPORT_SYMBOL_GPL(imx_media_capture_device_unregister);
+>  
+>  struct imx_media_video_dev *
+>  imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
+> -			      int pad, bool legacy_api)
+> +			      int pad, bool legacy_api,
+> +			      enum imx_media_device_type type)
+>  {
+>  	struct capture_priv *priv;
+>  	struct video_device *vfd;
+> @@ -972,6 +974,7 @@ imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
+>  	priv->src_sd_pad = pad;
+>  	priv->dev = dev;
+>  	priv->legacy_api = legacy_api;
+> +	priv->type = type;
+>  
+>  	mutex_init(&priv->mutex);
+>  	INIT_LIST_HEAD(&priv->ready_q);
+> diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
+> index bd7f156f2d52..d5557bb4913d 100644
+> --- a/drivers/staging/media/imx/imx-media-csi.c
+> +++ b/drivers/staging/media/imx/imx-media-csi.c
+> @@ -1803,7 +1803,8 @@ static int csi_registered(struct v4l2_subdev *sd)
+>  	}
+>  
+>  	priv->vdev = imx_media_capture_device_init(priv->sd.dev, &priv->sd,
+> -						   CSI_SRC_PAD_IDMAC, true);
+> +						   CSI_SRC_PAD_IDMAC, true,
+> +						   DEVICE_TYPE_IMX56);
+>  	if (IS_ERR(priv->vdev)) {
+>  		ret = PTR_ERR(priv->vdev);
+>  		goto free_fim;
+> diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
+> index f263fc3adbb9..e4c22b3ccd57 100644
+> --- a/drivers/staging/media/imx/imx-media.h
+> +++ b/drivers/staging/media/imx/imx-media.h
+> @@ -96,6 +96,11 @@ enum imx_pixfmt_sel {
+>  	PIXFMT_SEL_ANY = PIXFMT_SEL_YUV | PIXFMT_SEL_RGB | PIXFMT_SEL_BAYER,
+>  };
+>  
+> +enum imx_media_device_type {
+> +	DEVICE_TYPE_IMX56,
+> +	DEVICE_TYPE_IMX78,
+> +};
+> +
+>  struct imx_media_buffer {
+>  	struct vb2_v4l2_buffer vbuf; /* v4l buffer must be first */
+>  	struct list_head  list;
+> @@ -282,7 +287,8 @@ int imx_media_ic_unregister(struct v4l2_subdev *sd);
+>  /* imx-media-capture.c */
+>  struct imx_media_video_dev *
+>  imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
+> -			      int pad, bool legacy_api);
+> +			      int pad, bool legacy_api,
+> +			      enum imx_media_device_type type);
+>  void imx_media_capture_device_remove(struct imx_media_video_dev *vdev);
+>  int imx_media_capture_device_register(struct imx_media_video_dev *vdev,
+>  				      u32 link_flags);
+> diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+> index 32311fc0e2a4..173dd014c2d6 100644
+> --- a/drivers/staging/media/imx/imx7-media-csi.c
+> +++ b/drivers/staging/media/imx/imx7-media-csi.c
+> @@ -1039,7 +1039,8 @@ static int imx7_csi_registered(struct v4l2_subdev *sd)
+>  	}
+>  
+>  	csi->vdev = imx_media_capture_device_init(csi->sd.dev, &csi->sd,
+> -						  IMX7_CSI_PAD_SRC, false);
+> +						  IMX7_CSI_PAD_SRC, false,
+> +						  DEVICE_TYPE_IMX78);
+>  	if (IS_ERR(csi->vdev))
+>  		return PTR_ERR(csi->vdev);
+>  
+
 -- 
-2.32.0
+Regards,
 
+Laurent Pinchart

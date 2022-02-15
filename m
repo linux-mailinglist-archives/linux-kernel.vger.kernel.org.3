@@ -2,151 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F364B60DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 03:16:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9A14B60E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 03:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233483AbiBOCRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 21:17:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45042 "EHLO
+        id S233501AbiBOCRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 21:17:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233253AbiBOCQ7 (ORCPT
+        with ESMTP id S233502AbiBOCRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 21:16:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F49265DA
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 18:16:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644891409;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OES9eo0if6aMt90j7pDi9qQJl5u1pvSze5SYytpvGsE=;
-        b=RjmdJg0WqS5v5ARJjcj1g/JXd/p+bT+Bj8tQ7G6wZT08KDkCef7o1vSbkutdN7Yiu0imDq
-        lsUuK4YOxIFjjB6Ggg6DQmRCdHn6CFxUHl1Y0a8qW7KDODmGwuCt0FL+k5ZmyjMkeGRM7q
-        DMZ0yw4he8d73Pm2/p5fmF2TAyQHB8o=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-82-61ZIDJzCOpiCVQ8duuLApQ-1; Mon, 14 Feb 2022 21:16:48 -0500
-X-MC-Unique: 61ZIDJzCOpiCVQ8duuLApQ-1
-Received: by mail-ot1-f69.google.com with SMTP id q8-20020a056830232800b005ab75f5e906so11402231otg.18
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 18:16:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=OES9eo0if6aMt90j7pDi9qQJl5u1pvSze5SYytpvGsE=;
-        b=TH5InU4BC13NX/+lWWzdisrcTbEsAzk7qj4qq4WB5bqd6P46mjURYR8FXzw9jkyHg+
-         18VcIv8QAoRo6EArKYtX7KrzE2A8JYEKLIa4YCHSr1YBbADAb7roS0gjMrUGjZwy+FOk
-         mYKJLfTdC4xOdSjdZo/Bb+aujZlKiov9g0ixec69EPH1Ye6Y3gnAt0zW4bsrjkfNtpn7
-         0CdTyIvjhPJzfYzIx4ds46+NYlagIc5pRWXUSpMt0xGJ6JcblZ2tO0ZNCSzlRfLFINL4
-         wO/7U6HJknVwNpRx3CV9SGfLzqMYrGPOCbz4SwRni5CGua/d3b5OH/wbs+MDV/Xx2Oaj
-         iuxw==
-X-Gm-Message-State: AOAM53348AOJ7PyinOFfCOCT491JoFhsWtR2GttUQsw43sQHCEesi2+i
-        VgVZSTaPyR5Ooo5uB56hvzWCeQgb+UpZlp7rY0peHdB6McpUNbFeB/7d8u/so5IvITYJmL665iz
-        ToADQn8qWTaLJeS5MaPxDHORi
-X-Received: by 2002:a9d:2006:: with SMTP id n6mr624192ota.280.1644891407274;
-        Mon, 14 Feb 2022 18:16:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxNReslkyHcan04SVrO66oIRVvUmrz6T/DGJgUso3HMcO0lO54yqkB9k5GXi2Cs08NXfNdIqw==
-X-Received: by 2002:a9d:2006:: with SMTP id n6mr624189ota.280.1644891407067;
-        Mon, 14 Feb 2022 18:16:47 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id q4sm13092321otk.39.2022.02.14.18.16.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 18:16:46 -0800 (PST)
-Subject: Re: [PATCH] mctp: fix use after free
-To:     Jeremy Kerr <jk@codeconstruct.com.au>, matt@codeconstruct.com.au,
-        davem@davemloft.net, kuba@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <20220214175138.2902947-1-trix@redhat.com>
- <daabe69d3863caa62f7874a472edbf2bc892d99e.camel@codeconstruct.com.au>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <6590666e-524d-51c3-0859-f8bf0c43c5ca@redhat.com>
-Date:   Mon, 14 Feb 2022 18:16:44 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <daabe69d3863caa62f7874a472edbf2bc892d99e.camel@codeconstruct.com.au>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 14 Feb 2022 21:17:41 -0500
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7B2B564F0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 18:17:31 -0800 (PST)
+Received: from jleng.ambarella.net (unknown [116.246.37.178])
+        by mail-app3 (Coremail) with SMTP id cC_KCgCXD1MWDQti9F1EDQ--.983S2;
+        Tue, 15 Feb 2022 10:17:01 +0800 (CST)
+From:   3090101217@zju.edu.cn
+To:     gregkh@linuxfoundation.org
+Cc:     balbi@kernel.org, jleng@ambarella.com,
+        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v2] usb: gadget: f_uvc: fix superspeedplus transfer
+Date:   Tue, 15 Feb 2022 10:16:47 +0800
+Message-Id: <20220215021647.4316-1-3090101217@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <Ygow+EB1P84VflBb@kroah.com>
+References: <Ygow+EB1P84VflBb@kroah.com>
+X-CM-TRANSID: cC_KCgCXD1MWDQti9F1EDQ--.983S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFykGFyfZF1xJr4xWr48WFg_yoW5AFyDpa
+        15A3WrAr45JFs5Xw48Aan5ury3Xa1fZa1DKrZ2q345ur43t3s5Ar90yryFg347XF45Zr48
+        CFsrJw4Skw1jkr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9vb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2vYz4IE4I80cI0F6IAv
+        xc0EwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ew
+        Av7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY
+        6r1j6r4UM4x0Y48IcxkI7VAKI48JM4kE6xkIj40Ew7xC0wCF04k20xvY0x0EwIxGrwCFx2
+        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+        6r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IY
+        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr
+        0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8GsjUUUUUU==
+X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwQRBVNG3FHYyQAUsO
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Jing Leng <jleng@ambarella.com>
 
-On 2/14/22 4:44 PM, Jeremy Kerr wrote:
-> Hi Tom,
->
->> Clang static analysis reports this problem
->> route.c:425:4: warning: Use of memory after it is freed
->>    trace_mctp_key_acquire(key);
->>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->> When mctp_key_add() fails, key is freed but then is later
->> used in trace_mctp_key_acquire().  Add an else statement
->> to use the key only when mctp_key_add() is successful.
-> Looks good to me, thanks for the fix.
->
-> However, the Fixes tag will need an update; at the point of
-> 4a992bbd3650 ("mctp: Implement message fragmentation"), there was no
-> use of 'key' after the kfree() there.
->
-> Instead, this is the hunk that introduced the trace event:
->
->    @@ -365,12 +368,16 @@
->                            if (rc)
->                                    kfree(key);
->     
->    +                       trace_mctp_key_acquire(key);
->    +
->                            /* we don't need to release key->lock on exit */
->                            key = NULL;
->   
-> - which is from 4f9e1ba6de45. The unref() comes in later, but the
-> initial uaf is caused by this change.
->
-> So, I'd suggest this instead:
->
-> Fixes: 4f9e1ba6de45 ("mctp: Add tracepoints for tag/key handling")
-ok - see v2
->
-> (this just means we need the fix for 5.16+, rather than 5.15+).
->
-> Also, can you share how you're doing the clang static analysis there?
-> I'll get that included in my checks too.
+UVC driver doesn't set ssp_descriptors in struct usb_function,
+If UVC uses superspeedplus UDC (e.g. cdnsp), when
+config_ep_by_speed_and_alt is called, the g->speed is
+USB_SPEED_SUPER_PLUS, and f->ssp_descriptors is NULL,
+So kernel will access NULL pointer of speed_desc.
 
-build clang, then use it
+Call trace:
+ config_ep_by_speed_and_alt+0x3c/0x2a0 [libcomposite]
+ uvc_function_set_alt+0xd4/0x2e8 [usb_f_uvc]
+ set_config.constprop.0+0x154/0x3a0 [libcomposite]
+ composite_setup+0x314/0xb44 [libcomposite]
+ configfs_composite_setup+0x84/0xb0 [libcomposite]
+ cdnsp_ep0_std_request+0x25c/0x470 [cdns3]
+ cdnsp_setup_analyze+0x94/0x25c [cdns3]
+ cdnsp_handle_event+0xe8/0x23c [cdns3]
+ cdnsp_thread_irq_handler+0x58/0xe8 [cdns3]
+ irq_thread_fn+0x2c/0xa0
+ irq_thread+0x164/0x280
+ kthread+0x128/0x134
+ ret_from_fork+0x10/0x40
 
-scan-build \
-     --use-cc=clang \
-     make CC=clang
+Signed-off-by: Jing Leng <jleng@ambarella.com>
+---
+ drivers/usb/gadget/function/f_uvc.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-There are a couple of configs that aren't happy with clang, these you 
-can sed away with
-
-sed -e 's/CONFIG_FRAME_WARN=2048/CONFIG_FRAME_WARN=0/; 
-s/CONFIG_RETPOLINE=y/CONFIG_RETPOLINE=n/; 
-s/CONFIG_READABLE_ASM=y/CONFIG_READABLE_ASM=n/; 
-s/CONFIG_FORTIFY_SOURCE=y/CONFIG_FORTIFY_SOURCE=n/'
-
-I am using clang 14
-
-Tom
-
->
-> Cheers,
->
->
-> Jeremy
->
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 71bb5e477dba..8fc9b035481e 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -478,6 +478,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
+ 	void *mem;
+ 
+ 	switch (speed) {
++	case USB_SPEED_SUPER_PLUS:
+ 	case USB_SPEED_SUPER:
+ 		uvc_control_desc = uvc->desc.ss_control;
+ 		uvc_streaming_cls = uvc->desc.ss_streaming;
+@@ -521,7 +522,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
+ 	      + uvc_control_ep.bLength + uvc_control_cs_ep.bLength
+ 	      + uvc_streaming_intf_alt0.bLength;
+ 
+-	if (speed == USB_SPEED_SUPER) {
++	if (speed == USB_SPEED_SUPER || speed == USB_SPEED_SUPER_PLUS) {
+ 		bytes += uvc_ss_control_comp.bLength;
+ 		n_desc = 6;
+ 	} else {
+@@ -565,7 +566,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
+ 	uvc_control_header->baInterfaceNr[0] = uvc->streaming_intf;
+ 
+ 	UVC_COPY_DESCRIPTOR(mem, dst, &uvc_control_ep);
+-	if (speed == USB_SPEED_SUPER)
++	if (speed == USB_SPEED_SUPER || speed == USB_SPEED_SUPER_PLUS)
+ 		UVC_COPY_DESCRIPTOR(mem, dst, &uvc_ss_control_comp);
+ 
+ 	UVC_COPY_DESCRIPTOR(mem, dst, &uvc_control_cs_ep);
+@@ -727,6 +728,15 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
+ 		}
+ 	}
+ 
++	if (gadget_is_superspeed_plus(c->cdev->gadget)) {
++		f->ssp_descriptors = uvc_copy_descriptors(uvc, USB_SPEED_SUPER_PLUS);
++		if (IS_ERR(f->ssp_descriptors)) {
++			ret = PTR_ERR(f->ssp_descriptors);
++			f->ssp_descriptors = NULL;
++			goto error;
++		}
++	}
++
+ 	/* Preallocate control endpoint request. */
+ 	uvc->control_req = usb_ep_alloc_request(cdev->gadget->ep0, GFP_KERNEL);
+ 	uvc->control_buf = kmalloc(UVC_MAX_REQUEST_SIZE, GFP_KERNEL);
+-- 
+2.17.1
 

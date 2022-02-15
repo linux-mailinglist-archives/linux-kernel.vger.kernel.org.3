@@ -2,142 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 029FD4B684A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA654B6850
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236134AbiBOJ5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:57:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33844 "EHLO
+        id S236154AbiBOJ6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:58:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiBOJ5b (ORCPT
+        with ESMTP id S229631AbiBOJ6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:57:31 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3783810DA57;
-        Tue, 15 Feb 2022 01:57:22 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 04D111063;
-        Tue, 15 Feb 2022 01:57:22 -0800 (PST)
-Received: from [10.57.13.122] (unknown [10.57.13.122])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CFB6F3F66F;
-        Tue, 15 Feb 2022 01:57:20 -0800 (PST)
-Subject: Re: [PATCH v5] drivers: thermal: clear all mitigation when thermal
- zone is disabled
-To:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-References: <1643307093-22501-1-git-send-email-quic_manafm@quicinc.com>
- <4024218b-7938-e181-f456-bff4b3fb157a@arm.com>
- <c02d28ce-bef4-0b71-e90a-991ef4fae9d3@quicinc.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <f936ee68-3e2c-273c-38fe-9b37277f54ba@arm.com>
-Date:   Tue, 15 Feb 2022 09:57:19 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 15 Feb 2022 04:58:47 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A0710DA58
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:58:37 -0800 (PST)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 9B6EE2223A;
+        Tue, 15 Feb 2022 10:58:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1644919115;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TYhcTk1FGajj2Roa6thArdlpXuwJlYKd+o+75K745gU=;
+        b=r7lzzpMzVvbuEs0XGxUVX0Dt4ltPEvygeevfRZyvBcNniB62pFbBVXoF87WGZiKMUhiH2H
+        b2CGJnWw/ZisGAFfWxau8tabBgCf7YgAbg1cE/aQMiHEd3Au+UkRWk4XB7rXWIW3x8G8X4
+        iw4+j7H1RzhWy/xRfif7CG1xe1UJ4iI=
 MIME-Version: 1.0
-In-Reply-To: <c02d28ce-bef4-0b71-e90a-991ef4fae9d3@quicinc.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 15 Feb 2022 10:58:35 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Tudor.Ambarus@microchip.com
+Cc:     miquel.raynal@bootlin.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, p.yadav@ti.com, richard@nod.at,
+        vigneshr@ti.com
+Subject: Re: [PATCH v1 05/14] mtd: spi-nor: xilinx: rename vendor specific
+ functions and defines
+In-Reply-To: <7d8b7581-4610-6c04-9033-dac9ba27038b@microchip.com>
+References: <20220202145853.4187726-1-michael@walle.cc>
+ <20220202145853.4187726-6-michael@walle.cc>
+ <68aa414b-7a9d-1330-531c-37b2db2ab09d@microchip.com>
+ <73d3d8ed2cb4ca1b06902b767fe529c3@walle.cc>
+ <d76f21dd-4038-57de-f2f6-6afa947b62cb@microchip.com>
+ <c3a58de8ee39dd473483dfd0ed8a0058@walle.cc>
+ <7d8b7581-4610-6c04-9033-dac9ba27038b@microchip.com>
+User-Agent: Roundcube Webmail/1.4.12
+Message-ID: <3d5bb9c9480092c64c5574b6551e64f1@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/14/22 8:00 PM, Manaf Meethalavalappu Pallikunhi wrote:
+Am 2022-02-15 09:52, schrieb Tudor.Ambarus@microchip.com:
+> Miquel in To:
 > 
-> On 1/31/2022 12:55 PM, Lukasz Luba wrote:
->> Hi Manaf,
->>
->> On 1/27/22 6:11 PM, Manaf Meethalavalappu Pallikunhi wrote:
->>> Whenever a thermal zone is in trip violated state, there is a chance
->>> that the same thermal zone mode can be disabled either via
->>> thermal core API or via thermal zone sysfs. Once it is disabled,
->>> the framework bails out any re-evaluation of thermal zone. It leads
->>> to a case where if it is already in mitigation state, it will stay
->>> the same state forever.
->>>
->>> To avoid above mentioned issue, add support to bind/unbind
->>> governor from thermal zone during thermal zone mode change request
->>> and clear all existing throttling in governor unbind_from_tz()
->>> callback.
->>
->> I have one use case:
->> This would be a bit dangerous, e.g. to switch governors while there is a
->> high temperature. Although, sounds reasonable to left a 'default' state
->> for a next governor.
->>
-> I believe only way to change the governror via userspace at runtime.
+> On 2/15/22 10:25, Michael Walle wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
+>> the content is safe
+>> 
+>> Am 2022-02-10 09:06, schrieb Tudor.Ambarus@microchip.com:
+>>> On 2/10/22 10:04, Michael Walle wrote:
+>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you 
+>>>> know
+>>>> the content is safe
+>>>> 
+>>>> Am 2022-02-10 04:08, schrieb Tudor.Ambarus@microchip.com:
+>>>>> On 2/2/22 16:58, Michael Walle wrote:
+>>>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you
+>>>>>> know
+>>>>>> the content is safe
+>>>>>> 
+>>>>>> Drop the generic spi_nor prefix for all the xilinx functions.
+>>>>> 
+>>>>> mm, no, I would keep the spi_nor prefix because xilinx_sr_ready is
+>>>>> too
+>>>>> generic and can conflict with methods from other subsystems.
+>>>> 
+>>>> But all the other functions in this file start with xilinx_ ;)
+>>>> 
+>>>> I don't have a strong opinion here, other than it shouldn't
+>>>> be called spi_nor_read_blaba() because that looks like a
+>>>> standard spi nor function belonging in core.c
+>>>> 
+>>> 
+>>> then let's prepend all with spi_nor_xilinx_*()?
+>> 
+>> I'm still not sure what to do here. Have a look at all the other
+>> vendor modules in spi-nor. they are all prefixed with the vendor
+>> name? E.g. there is a sst_write() which is far more likely to
+>> cause a conflict. So should we rename all these functions? Or
+>> do we just take our chance that it might have a conflict in
+>> the future (with an easy fix to rename the function then). TBH
+>> I doubt there will be a global symbol "xilinx_read_sr()".
 > 
-> Just re-evaluate thermal zone  (thermal_zone_device_update) immediately 
-> after
+> I doubt it will not be a conflict.
 > 
-> thermal_zone_device_set_policy()  in same policy_store() context, isn't 
-> it good enough ?
-
-It depends. The code would switch the governors very fast, in the
-meantime notifying about possible full speed of CPU (cooling state = 0).
-If the task scheduler goes via schedutil (cpufreq governor) at that
-moment and decides to set this max frequency, it will be set.
-This is situation with your patch, since you added in IPA unbind
-'allow_maximum_power()'.
-Then the new governor is bind, evaluates the max cooling state, the
-notification about reduced max freq is sent to schedutil (a workqueue
-will call .sugov_limits() callback) and lower freq would be set.
-
-Now there are things which are not greatly covered by these 4
-involved sub-systems (thermal fwk, schedutil, scheduler, HW).
-It takes time. It also depends when the actual HW freq is possible to be
-set. It might take a few milli-seconds or even a dozes of milli-seconds
-(depends on HW).
-
-Without your change, we avoid such situation while switching the
-thermal governors.
-
-For your requirement, which is 'mode' enable/disable it OK to
-un-throttle.
-
-It's probably something to Rafael and Daniel to judge if we want to
-pay that cost and introduce this racy time slot.
-
-Maybe there is a way to implement your needed feature differently.
-Unfortunately, I'm super busy with other stuff this month so I cannot
-spent much time investigating this.
-
-
+>> 
+>> But I care for consistency, so having some named xilinx_, sst_,
+>> st_micron_ and some spi_nor_read_xsr sounds and looks awful.
 > 
-> Not sure how a "default" state  can be reverted once governor change is 
-> done.
-> 
-> Re-evaluating thermal zone doesn't guarantee that it will recover previous
-> 
-> set default state for all governors, right ?
-> 
->>>
->>> Suggested-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->>> Signed-off-by: Manaf Meethalavalappu Pallikunhi 
->>> <quic_manafm@quicinc.com>
->>> ---
->>>   drivers/thermal/gov_power_allocator.c |  3 +++
->>>   drivers/thermal/gov_step_wise.c       | 26 ++++++++++++++++++++++++++
->>>   drivers/thermal/thermal_core.c        | 31 
->>> +++++++++++++++++++++++++++----
->>>   3 files changed, 56 insertions(+), 4 deletions(-)
->>
->> Why only two governors need that change and not all?
->> Because they don't have 'bind/unbind' callbacks, then maybe we should
->> change that as well to make it consistent?
-> I will update other governors as well in v6
+> yes, I agree. Take a look on what's happening in NAND. They prepend
+> the name with vendor_nand_*(). Or in SPI NAND they use flash family
+> names which should be unique. So how about aligning with NAND and
+> use vendor_nor_*()?
 
-Sounds reasonable based on your code (you've added the unbind_from_tz()
-callback to step_wise, but not for others).
+Sounds good. Regarding the flash family.. take a look at Winbond W25M
+which can either be NAND or NOR depending on the size ;)
 
+But the main question was rather whether we rename all the function
+names at once or bit by bit. To proceed here with this series, I'd
+use the vendor_nor_ prefix for the moved functions (but still keep
+the micron_st_ st_micron_ rename patch).
+
+-michael

@@ -2,106 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BA64B6A04
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F22F84B69F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236774AbiBOK6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 05:58:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60508 "EHLO
+        id S232106AbiBOK5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 05:57:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236813AbiBOK6x (ORCPT
+        with ESMTP id S230245AbiBOK4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 05:58:53 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440DCDB4B9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 02:58:33 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21F4STA4031155;
-        Tue, 15 Feb 2022 04:55:37 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=9pRI9DHKMGrjxTpdktKuGS8mctU4c81Pqefuj9Uotc8=;
- b=Jp3pzaNepVGVVDVl+Igkfk8BlLbu+gQbUcdAqV4rmSlO7FBvUIArT6iofAI2ZVycyqDm
- I6ENQqlHwdhB0+AThKzsyqp5J/gYbBKgmnPAyfnOo7MEiW2wnQw35uQsKxHJk89NTL9q
- LYi+vBNq4bukYemDZJHLtHZjAkBHZ7Pgfinb3vAQ1TTqtH0nExM4b+2mlCRIl9ixx257
- YNH7fsSe6yz0pgFUIjWZGiAG5YbtDiHwbiwihAYQna8wcXRqhjEw7YzfhQBsB6k0ux7M
- hvXNPA0LNpqeacn+OSoXI7IefUr8DR1YjZlu737ncMPlvUBbvNPOUtF/RGiMZLER3fI0 uQ== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3e7kx7sbp9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 15 Feb 2022 04:55:36 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 15 Feb
- 2022 10:55:35 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Tue, 15 Feb 2022 10:55:35 +0000
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 48B4811C7;
-        Tue, 15 Feb 2022 10:55:35 +0000 (UTC)
-Date:   Tue, 15 Feb 2022 10:55:35 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
-CC:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Shengjiu Wang <shengjiu.wang@freescale.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ASoC: codec: wm8960: complete discharge on BIAS
- OFF->STANDBY
-Message-ID: <20220215105535.GE38351@ediswmail.ad.cirrus.com>
-References: <20220208121727.4461-1-viorel.suman@oss.nxp.com>
+        Tue, 15 Feb 2022 05:56:55 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A399BAD4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 02:56:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644922605; x=1676458605;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ra6yOTkBvyh+xKAMCzdkWhY3ihCynSiAAonYVl3d67I=;
+  b=FuFO5od07QxPiSFCEQB9JSgbYuiXenlHYjJUMaSybVH6BH2O4RO4MezY
+   EVxMfJl+LOBbJp2ZXwYJUymgWqCLmagAuqkpbun/acolEUEA1msKHK9QH
+   mJIn0grQ8KukQqyJoUOChtqUzS1FUVZipY7zOBCEtq0p0KCShz8uJtrBZ
+   j3dP2bfA3Lokm+Ocr2XiFTziNSn1kaQWo3bldUdQ0V2S6Mk4yMbegow8t
+   Rt/dZsU3VReVEmekusYvn8WoNwoh7UvUynmbmt6cqXspx46L+9cJH4y3P
+   9qeXBZbKIlckFbTHLTf0W4Tq2R3fS9QIKeJfXcu47zmKhTAHcgtDwb94e
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="250270686"
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="250270686"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 02:56:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="775777086"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 15 Feb 2022 02:56:44 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJvVj-0009Z8-FF; Tue, 15 Feb 2022 10:56:43 +0000
+Date:   Tue, 15 Feb 2022 18:56:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:for-next/kspp-sat-helpers] BUILD SUCCESS
+ eb29c492def3b40a93258ecafce3582f9c048e82
+Message-ID: <620b86d8.S5JL+a8lFlA3X+mk%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220208121727.4461-1-viorel.suman@oss.nxp.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-ORIG-GUID: HvhLj2FcgwmuXl1hKIbOImqGwRK0Hy7H
-X-Proofpoint-GUID: HvhLj2FcgwmuXl1hKIbOImqGwRK0Hy7H
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 02:17:27PM +0200, Viorel Suman (OSS) wrote:
-> From: Viorel Suman <viorel.suman@nxp.com>
-> 
-> On BIAS STANDBY->OFF transition the current implementation sleeps
-> 600ms on suspend in order to discharge the chip. The suspend is
-> propagated from "snd_soc_suspend" call for all audio cards in a
-> serial fashion, thus in case of boards like i.MX8DXL EVK which has
-> 3 distinct WM8960 codecs the total cumulated sleep on suspend is 1.8
-> seconds.
-> 
-> On the other hand the BIAS OFF->STANDBY transition happens
-> asynchronously with regard to "snd_soc_resume" - the call is
-> propagated from "soc_resume_deferred" which is just scheduled
-> from "snd_soc_resume", each card having its own work scheduled to
-> execute "soc_resume_deferred" call.
-> 
-> The patch performs discharge completion on BIAS OFF->STANDBY transition
-> so that the cumulated effect on suspend described above is avoided
-> and discharge is completed in paralel in case of multiple WM8960
-> codecs on the board.
-> 
-> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
-> ---
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git for-next/kspp-sat-helpers
+branch HEAD: eb29c492def3b40a93258ecafce3582f9c048e82  tpm: xen-tpmfront: Use struct_size() helper
 
-Apologies Mark not sure how I missed this one, a bit late now,
-but the change looks good to me.
+elapsed time: 732m
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+configs tested: 129
+configs skipped: 3
 
-Thanks,
-Charles
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20220214
+mips                 randconfig-c004-20220214
+nios2                            alldefconfig
+sh                          r7780mp_defconfig
+sh                            titan_defconfig
+ia64                         bigsur_defconfig
+xtensa                         virt_defconfig
+arc                     haps_hs_smp_defconfig
+xtensa                              defconfig
+arm                          lpd270_defconfig
+arm                        oxnas_v6_defconfig
+sh                     magicpanelr2_defconfig
+parisc                              defconfig
+mips                          rb532_defconfig
+powerpc                       maple_defconfig
+powerpc64                           defconfig
+arm                        mvebu_v7_defconfig
+parisc                           alldefconfig
+microblaze                          defconfig
+sparc                               defconfig
+arm64                            alldefconfig
+m68k                          hp300_defconfig
+arm                     eseries_pxa_defconfig
+arm                            pleb_defconfig
+sh                           se7721_defconfig
+powerpc                           allnoconfig
+arm                         lpc18xx_defconfig
+powerpc                      bamboo_defconfig
+arc                        nsimosci_defconfig
+arm                  randconfig-c002-20220214
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+x86_64               randconfig-a013-20220214
+x86_64               randconfig-a014-20220214
+x86_64               randconfig-a012-20220214
+x86_64               randconfig-a015-20220214
+x86_64               randconfig-a011-20220214
+x86_64               randconfig-a016-20220214
+i386                 randconfig-a013-20220214
+i386                 randconfig-a016-20220214
+i386                 randconfig-a012-20220214
+i386                 randconfig-a015-20220214
+i386                 randconfig-a011-20220214
+i386                 randconfig-a014-20220214
+riscv                randconfig-r042-20220214
+arc                  randconfig-r043-20220214
+s390                 randconfig-r044-20220214
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+riscv                randconfig-c006-20220214
+i386                 randconfig-c001-20220214
+x86_64               randconfig-c007-20220214
+powerpc              randconfig-c003-20220214
+arm                  randconfig-c002-20220214
+mips                 randconfig-c004-20220214
+arm                         lpc32xx_defconfig
+powerpc                 mpc8315_rdb_defconfig
+mips                        workpad_defconfig
+arm                         s3c2410_defconfig
+powerpc                     ppa8548_defconfig
+mips                          ath25_defconfig
+mips                     cu1830-neo_defconfig
+arm                       spear13xx_defconfig
+mips                         tb0287_defconfig
+arm                          moxart_defconfig
+powerpc                    gamecube_defconfig
+mips                     loongson2k_defconfig
+arm                       netwinder_defconfig
+arm                       versatile_defconfig
+powerpc                      ppc44x_defconfig
+x86_64               randconfig-a002-20220214
+x86_64               randconfig-a006-20220214
+x86_64               randconfig-a005-20220214
+x86_64               randconfig-a004-20220214
+x86_64               randconfig-a003-20220214
+x86_64               randconfig-a001-20220214
+i386                 randconfig-a004-20220214
+i386                 randconfig-a005-20220214
+i386                 randconfig-a006-20220214
+i386                 randconfig-a002-20220214
+i386                 randconfig-a003-20220214
+i386                 randconfig-a001-20220214
+hexagon              randconfig-r045-20220214
+hexagon              randconfig-r041-20220214
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

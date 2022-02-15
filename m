@@ -2,88 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A20D4B6B47
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7854B6BF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234402AbiBOLiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 06:38:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49054 "EHLO
+        id S236767AbiBOMZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 07:25:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236631AbiBOLiA (ORCPT
+        with ESMTP id S232191AbiBOMZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 06:38:00 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19B314027
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 03:37:50 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 84FC3210F9;
-        Tue, 15 Feb 2022 11:37:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1644925069; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pw068fBCazlz3BwNkc7tJOJSYYz5n2wbrWj8hk+Qk0c=;
-        b=FIzh/mtXss78WLaVXZ0p+HyizHWcg1OAgoO6jXye2Vs5V8A097HKb1BZctnDXeX7Nf4yCM
-        /XwyoX/oLX6WDJsx7IB94As3hox/18NtQN2YE+uFhopBjerQCinyBRmkjVBeQ6imjJmwwa
-        VKEqNYnrhUm7zQabflbD5olbqc6kMqE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5F57313C40;
-        Tue, 15 Feb 2022 11:37:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id UgY1Fo2QC2KnQwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 15 Feb 2022 11:37:49 +0000
-Date:   Tue, 15 Feb 2022 12:37:48 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, Alexey Gladkov <legion@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Solar Designer <solar@openwall.com>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        Linux Containers <containers@lists.linux-foundation.org>
-Subject: Re: [PATCH 0/8] ucounts: RLIMIT_NPROC fixes
-Message-ID: <20220215113748.GI21589@blackbody.suse.cz>
-References: <20220207121800.5079-1-mkoutny@suse.com>
- <87o83e2mbu.fsf@email.froward.int.ebiederm.org>
- <f0d686aa-3fad-afac-d377-f5d63111704a@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f0d686aa-3fad-afac-d377-f5d63111704a@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 15 Feb 2022 07:25:36 -0500
+X-Greylist: delayed 437 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 04:25:25 PST
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98489107AA9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:25:25 -0800 (PST)
+Received: from epcas3p2.samsung.com (unknown [182.195.41.20])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220215121802epoutp0224e8823b84944bcaceac18e348d4ebcc~T9NR5_Vfw1394113941epoutp02R
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:18:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220215121802epoutp0224e8823b84944bcaceac18e348d4ebcc~T9NR5_Vfw1394113941epoutp02R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1644927482;
+        bh=gFH/O+Wwc4cOaRG+Ce3cxW3yMZxYDCdcbdpfz+GoqEI=;
+        h=Subject:Reply-To:From:To:Date:References:From;
+        b=jXCJwOE5sTQnteFunbis4gvquuLY4r+Fc++uZfECXWhSZHbCjnx8iKJaya1fe8GQC
+         WHqo4O6+qGPL7R8IjRF8aarMdqH5xsKCAjMxctUdpR5s9Mg6BYICwUTccQCglkCUey
+         wRoqw01oQUGub6pazRizoou1csXo6U4rEnpMovUM=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas3p2.samsung.com (KnoxPortal) with ESMTP id
+        20220215121801epcas3p2104ee63750619de84afdcdec064da235~T9NRYlWeI1114711147epcas3p2X;
+        Tue, 15 Feb 2022 12:18:01 +0000 (GMT)
+Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp1.localdomain
+        (Postfix) with ESMTP id 4Jyg8n5CJLz4x9Pp; Tue, 15 Feb 2022 12:18:01 +0000
+        (GMT)
+Mime-Version: 1.0
+Subject: [PATCH] scsi: ufs: Remove wlun_dev_to_hba()
+Reply-To: keosung.park@samsung.com
+Sender: Keoseong Park <keosung.park@samsung.com>
+From:   Keoseong Park <keosung.park@samsung.com>
+To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <1891546521.01644927481711.JavaMail.epsvc@epcpadp4>
+Date:   Tue, 15 Feb 2022 20:40:02 +0900
+X-CMS-MailID: 20220215114002epcms2p1eb4e53507c96e0f24770af16aedcf5c6
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20220215114002epcms2p1eb4e53507c96e0f24770af16aedcf5c6
+References: <CGME20220215114002epcms2p1eb4e53507c96e0f24770af16aedcf5c6@epcms2p1>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 11:22:13AM -0700, Shuah Khan <skhan@linuxfoundation.org> wrote:
-> Do we need updates to selftests - Michal's patch series included changes to
-> selftests/exec
+Commit edc0596cc04b ("scsi: ufs: core: Stop clearing UNIT ATTENTIONS")
+removed all callers of wlun_dev_to_hba(). Hence also remove the macro itself.
 
-In my understanding the original rlimits-per-userns.c covers an invalid
-use case -- clone(0);setuid();unshare(CLONE_NEWUSER) -- where the
-created user_ns is owned by unprivileged user and the global
-RLIMIT_NPROC cannot be breached.
+Signed-off-by: Keoseong Park <keosung.park@samsung.com>
+---
+ drivers/scsi/ufs/ufshcd.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-My patched variant retains this use-case (should fail) and adds
-clone(CLONE_NEWUSER);setuid() [1] variant which should be the valid
-use-case for per-user per-user-ns RLIMIT_NPROC.
-
-Michal
-
-[1] In this situation theoretically equivalent to clone(0);unshare(CLONE_NEWUSER);setuid().
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 41d85b69fa50..1243d73d669b 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -83,8 +83,6 @@
+ /* Polling time to wait for fDeviceInit */
+ #define FDEVICEINIT_COMPL_TIMEOUT 1500 /* millisecs */
+ 
+-#define wlun_dev_to_hba(dv) shost_priv(to_scsi_device(dv)->host)
+-
+ #define ufshcd_toggle_vreg(_dev, _vreg, _on)				\
+ 	({                                                              \
+ 		int _ret;                                               \
+-- 
+2.17.1
 

@@ -2,116 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598B74B6711
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:11:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA3C4B670F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:11:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235670AbiBOJLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:11:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52586 "EHLO
+        id S235678AbiBOJLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:11:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiBOJLO (ORCPT
+        with ESMTP id S235674AbiBOJL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:11:14 -0500
-Received: from theia.8bytes.org (8bytes.org [81.169.241.247])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0645913DD4;
-        Tue, 15 Feb 2022 01:11:04 -0800 (PST)
-Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id CA08436D; Tue, 15 Feb 2022 10:11:02 +0100 (CET)
-Date:   Tue, 15 Feb 2022 10:11:01 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Will Deacon <will@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 5/8] iommu/amd: Use iommu_attach/detach_device()
-Message-ID: <YgtuJQhY8SNlv9/6@8bytes.org>
-References: <20220106022053.2406748-1-baolu.lu@linux.intel.com>
- <20220106022053.2406748-6-baolu.lu@linux.intel.com>
- <20220106143345.GC2328285@nvidia.com>
- <Ygo8iek2CwtPp2hj@8bytes.org>
- <20220214131544.GX4160@nvidia.com>
- <Ygpb6CxmTdUHiN50@8bytes.org>
- <20220214140236.GC929467@nvidia.com>
- <YgplyyjofwlM+1tc@8bytes.org>
- <20220214150059.GE4160@nvidia.com>
+        Tue, 15 Feb 2022 04:11:29 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2531313DDF;
+        Tue, 15 Feb 2022 01:11:19 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id e17so14325424pfv.5;
+        Tue, 15 Feb 2022 01:11:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=CENX30cS1AwqRdGdR2LGQaXDhJCf//o48FSLd1tc1dM=;
+        b=EXpVWUDmG/suSPOYNy4mBNNV+Gq7GkpSFYiuNKXihpliObBZlZeaj+oh24WJxQz8F5
+         tp095SeKWhqL8MegSIxzs2lmJW56ohOJuRdLlXZZH7kFB7ih2L3685C580np9GeealHA
+         sV1ev7aZ8mOJTZe9nmcpiPbaZOj9bCafUvpwImMAKkjJNVWgcGxJIO74ziKY8n8AWUaq
+         GkaCpOkdUSzE9yP4YpxOucpy9dL7qSs+S0XVUjoE0pVMs53JEVEjJcF40qyI3zVedz6l
+         Ps37MnFNGXuZQuIj7LfLLEIgDaJogZdojdasL0l1xONhSyCc21ErThIkivZrTGn+3etv
+         4c5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=CENX30cS1AwqRdGdR2LGQaXDhJCf//o48FSLd1tc1dM=;
+        b=bBYnVlna7yAdx2i7JZOhl4wIfzl2CBzHjA/Qvzti3N6z5XpfaIWn0YfduBewCiKuDA
+         u4Lh2qS3qJoWu835ld3Ac7zLXU+t+P7SWQ+gLIfzn3q6DSnhPIBcbkyqjf4vawjThoeZ
+         TW8d5kH5TSfZ1Yyll/biFNwbxoaIJKYh/MabZLDQJAVShFXt3RjP0KUNVdXI+wFkz07Z
+         ztNxfj+2Hwzp22FtzA83Ykw8GqXw8DOAGQOAlPoCFJ9KiQYJL3ZGjx2UA/PmDMQE3vAs
+         dC/08jYMIBkoRPHPnJhcdSAzNdXTMwPfZXmpUo3X9K20HjAw1xHQFZucqr9evbQTbkvd
+         IY0g==
+X-Gm-Message-State: AOAM5330XELfHBQ/BZCn1xQP5SwibIX1pbD845YPO7gR8tR2z832Ckyh
+        nCYctVh89rLEboToBPnDHXw=
+X-Google-Smtp-Source: ABdhPJxgbzmTCJqIiTWlG5h2H7sIuaDs6lIwJVhjipJPrxaUDEMZTFJppnHGmXxUScH8x6CrkI+Mrg==
+X-Received: by 2002:a63:8549:: with SMTP id u70mr2785919pgd.266.1644916278530;
+        Tue, 15 Feb 2022 01:11:18 -0800 (PST)
+Received: from [192.168.43.80] (subs28-116-206-12-52.three.co.id. [116.206.12.52])
+        by smtp.gmail.com with ESMTPSA id j2sm39099118pfc.209.2022.02.15.01.11.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 01:11:18 -0800 (PST)
+Message-ID: <d82db5a9-ec38-28cd-831f-cb8755fb5a77@gmail.com>
+Date:   Tue, 15 Feb 2022 16:11:13 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220214150059.GE4160@nvidia.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH 5.16 000/203] 5.16.10-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220214092510.221474733@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 11:00:59AM -0400, Jason Gunthorpe wrote:
-> On Mon, Feb 14, 2022 at 03:23:07PM +0100, Joerg Roedel wrote:
+On 14/02/22 16.24, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.10 release.
+> There are 203 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> > Device drivers calling into iommu_attach_device() is seldom a good
-> > idea.  In this case the sound device has some generic hardware
-> > interface so that an existing sound driver can be re-used. Making this
-> > driver call iommu-specific functions for some devices is something hard
-> > to justify.
-> 
-> Er, so this is transparent to the generic sound device? I guess
-> something fixed up the dma_api on that device to keep working?
 
-Right, this is completly transparent to the sound device. The IOMMU code
-will not set dma_ops on the device because it uses a direct mapping and
-so the standard implementation will be used.
+Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0)
+and powerpc (ps3_defconfig, gcc 11.2.0).
 
-> But, then, the requirement is that nobody is using the dma API when we
-> make this change?
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-That is the tricky part. DMA-API keeps working after the change is made,
-because the new domain is also direct mapped. The new domain just has
-the ability to assign host page-tables to device PASIDs, so that DMA
-requests with a PASID TLP will be remapped.
-
-It was actually a requirement for this code that when it jumps in, the
-DMA-API mappings stay live. And the reason a direct mapping is used at
-all is that the page-table walker of the IOMMU is a two-dimensional
-walker, which will treat the addresses found in the host page-tables as
-IO-virtual an translates them through the underlying page-table. So to
-use host-pagetables the underlying mapping must be direct mapped.
-
-
-> I don't think it matters how big/small the group is, only that when we
-> change the domain we know everything flowing through the domain is
-> still happy.
-
-Yes, that matters. The group size matters too for DMA-API performance.
-If two devices compete for the same lock in the allocator and/or the
-same cached magazines, things will slow down. That only matters for
-high-throughput devices, but still...
-
-Regards,
-
-	Joerg
-
+-- 
+An old man doll... just what I always wanted! - Clara

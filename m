@@ -2,98 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14AAE4B60ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 03:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8017A4B60D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 03:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233550AbiBOCWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 21:22:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34700 "EHLO
+        id S233464AbiBOCLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 21:11:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbiBOCWd (ORCPT
+        with ESMTP id S232846AbiBOCLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 21:22:33 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111AC6324;
-        Mon, 14 Feb 2022 18:22:24 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id o2so34193156lfd.1;
-        Mon, 14 Feb 2022 18:22:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=P/tvBzh5yTdGWjYe/a4NiHPV5u6LYQEeMADqm7POP+A=;
-        b=GNbEl+j+OyeSr4lg4pcZ2QBdhvcJf11Y2vSXjOzCWQ4dy8Fq/6KnDrfnGfNWOPnND9
-         7X9Q+qyVGmlC8oaJXu6OTA5jX/4EGtEJSmltOzv0ed772IHODNDJhwCwQjay8u6UuuTk
-         48qVfVkDNSthvcWtHy+axf1lpg5Y1f7WBtecVUAlRNuZAmPEnatJ0AxmXHe60sARqYpV
-         w9OILWkw/1dnKFTlGQa3U+LcWRlyoqjSfRHd3IEr9y2w2NZ76fupzra6beJn4j/DJWmR
-         v1wUtzeWaFUnJKAI7qAJlS8a0JH/8dxLkLZiVrEgg9ej8C16tmIhJItNy3mBUwEd+OR4
-         VOhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=P/tvBzh5yTdGWjYe/a4NiHPV5u6LYQEeMADqm7POP+A=;
-        b=vJ00Jk1rfhfSDSa/ut1olnxjes71ND5dKxX2GvrhUnooNSymSxcquzzdmAHcCjd792
-         sjI1K9S1OKhqDQjDOPwRl1RyKbH4529mQYs1dpHV/Cl308N9v96r67IGDlkm4lJs2Prc
-         6YroHGp69YFshTMHhFxEAbweyVXTn8/uexbGHSz4M5PehuO0usGThlv0gsBn6b4LWOfU
-         hF2otiPo0GUDXcnR00nBOkpck/t4uQOkWny6cqht5Sq1PfRgR2fFNhJ+y8qStHpO4y+6
-         G9ifwHk3yio7hrgytGqYRShlAK8wq4GpuzaZRFtNneCg6W3/z4lViO9LnFZEIe7j7x2j
-         mtng==
-X-Gm-Message-State: AOAM530BzQ3H/kDUmnGnUeD2wZtlGj3qrfimwryZfk8MULcxEmqo/uh5
-        0kXpuxx60oahUKCKdTb1M2stmSnGk0JP8wuYEZRJHQ==
-X-Google-Smtp-Source: ABdhPJzfUtt+wefzMntdmoZ4JJ9s6pAwxvOVMbM7sTtjvILR+Zn6ZEVa12hOaRqyLz461kg5oAM8MA==
-X-Received: by 2002:a05:6512:3619:: with SMTP id f25mr1427675lfs.245.1644891741973;
-        Mon, 14 Feb 2022 18:22:21 -0800 (PST)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id d5sm1046952lfs.307.2022.02.14.18.22.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 18:22:21 -0800 (PST)
-Message-ID: <620b0e5d.1c69fb81.cf937.4f88@mx.google.com>
-Date:   Mon, 14 Feb 2022 18:22:21 -0800 (PST)
-X-Google-Original-Date: Tue, 15 Feb 2022 02:22:17 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-Subject: RE: [PATCH 5.10 000/116] 5.10.101-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 14 Feb 2022 21:11:40 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B0D19C3A;
+        Mon, 14 Feb 2022 18:11:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644891091; x=1676427091;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+HeZRAeKFxW/cwuCZBqN2uQwwndDLWRt5wIFdHPT7oM=;
+  b=AuaIm1/q2OT+wy9PW+hgjnMIe7bEwjz7GYjQ21mcIsPrGAkCK5iylBVS
+   KpsmX9MNuK/ZWgogrIn+VAWfGzQOo0p1uR6dAyJpNKRLAAomLtVB9xQ6L
+   7nOgKIE4oTNy6Zv//HGT19Mm0ItMxUaMqwyNaJFzCIMqlYQybNdLEFAs6
+   epNKKhaE3ToKkSi65rh7XDtRDpICr9dbxyrHwph3AWKhgTTltN731u2ns
+   uWRB1jx3TWhLPoanDEaHwTv58xLc1FRdS0mk62y2z2nR161wyxI72nazz
+   Dym4s/EJztdhyOJDsaslFZYuclyFJXvRX+3j6dEqFwmcCeWa0fgoLtPSP
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="230867125"
+X-IronPort-AV: E=Sophos;i="5.88,369,1635231600"; 
+   d="scan'208";a="230867125"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 18:11:31 -0800
+X-IronPort-AV: E=Sophos;i="5.88,369,1635231600"; 
+   d="scan'208";a="703381197"
+Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.105])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 18:11:27 -0800
+Date:   Tue, 15 Feb 2022 10:22:23 +0800
+From:   Chao Gao <chao.gao@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zeng Guang <guang.zeng@intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Subject: Re: [PATCH 02/11] KVM: VMX: Handle APIC-write offset wrangling in
+ VMX code
+Message-ID: <20220215022221.GA28478@gao-cwp>
+References: <20220204214205.3306634-1-seanjc@google.com>
+ <20220204214205.3306634-3-seanjc@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204214205.3306634-3-seanjc@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Feb 2022 10:24:59 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.10.101 release.
-> There are 116 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+>--- a/arch/x86/kvm/vmx/vmx.c
+>+++ b/arch/x86/kvm/vmx/vmx.c
+>@@ -5302,9 +5302,16 @@ static int handle_apic_eoi_induced(struct kvm_vcpu *vcpu)
+> static int handle_apic_write(struct kvm_vcpu *vcpu)
+> {
+> 	unsigned long exit_qualification = vmx_get_exit_qual(vcpu);
+>-	u32 offset = exit_qualification & 0xfff;
 > 
-> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.101-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+>-	/* APIC-write VM exit is trap-like and thus no need to adjust IP */
+>+	/*
+>+	 * APIC-write VM-Exit is trap-like, KVM doesn't need to advance RIP and
+>+	 * hardware has done any necessary aliasing, offset adjustments, etc...
+>+	 * for the access.  I.e. the correct value has already been  written to
+>+	 * the vAPIC page for the correct 16-byte chunk.  KVM needs only to
+>+	 * retrieve the register value and emulate the access.
+>+	 */
+>+	u32 offset = exit_qualification & 0xff0;
 
-5.10.101-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+Can we take this opportunity to remove offset/exit_qualification?
+They are used just once.
 
+>+
+> 	kvm_apic_write_nodecode(vcpu, offset);
+> 	return 1;
+> }
+>-- 
+>2.35.0.263.gb82422642f-goog
+>

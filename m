@@ -2,86 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2BD34B7A39
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 23:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB55D4B7A3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 23:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244468AbiBOWJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 17:09:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48592 "EHLO
+        id S244483AbiBOWKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 17:10:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244464AbiBOWJc (ORCPT
+        with ESMTP id S243913AbiBOWK1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 17:09:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F6B1237FB
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 14:09:21 -0800 (PST)
+        Tue, 15 Feb 2022 17:10:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 765AB23BC4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 14:10:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644962960;
+        s=mimecast20190719; t=1644963016;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0m+BA83aWoEiePUXOk5oy6jWnLXLhh5UqcrUWxGGpW4=;
-        b=jENBNfCIQ1FSM98WTUyLWoBmGQU3/HYry6uS+BG7EBi3sk5xHe2bOKjmxQZOC+7KeOX+u5
-        zhMO4oc1TKJ0Hx9lmDn8R8r46VSaws9Pkugbj4a/dol7IeN4DQmA4Of1TOiowHOB+vg2kP
-        oCREGgbsYA2oJDh4BqjrSCeU1Xhi+j4=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=/lpQF/1aozwPXUYPuIRUCyzJVUaZkY7i5LfgQfbgp/4=;
+        b=Xw8m5WqnW3PFmVF1QbQu/dqc29BqE40TEK64PM6f/Hk7af1IhOc+vAp/4XykZ0nDuohgm7
+        V8fNDuKc8AR0JSSAsIzowwDDM/p1tepFmWjkJZ+4ez+UFll8Xleefn1HpKyC1/yPzhY39O
+        MAy7wuCvz3eftGnkw61/exVJjBfLhpM=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-12-gLjchDf4PAuYm1HEOm2tgw-1; Tue, 15 Feb 2022 17:09:19 -0500
-X-MC-Unique: gLjchDf4PAuYm1HEOm2tgw-1
-Received: by mail-wr1-f70.google.com with SMTP id s22-20020adf9796000000b001e7e75ab581so74640wrb.23
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 14:09:19 -0800 (PST)
+ us-mta-359-n9e2M8DvPcSeJgUY3_0kRg-1; Tue, 15 Feb 2022 17:10:15 -0500
+X-MC-Unique: n9e2M8DvPcSeJgUY3_0kRg-1
+Received: by mail-wr1-f72.google.com with SMTP id s5-20020adfbc05000000b001e7af4f2231so109757wrg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 14:10:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=0m+BA83aWoEiePUXOk5oy6jWnLXLhh5UqcrUWxGGpW4=;
-        b=flZkhpTDJZXNElPyb4KEMuQ4e9wTpFimGnBQfK8TrRW2RA/GL9UVgqTeLpBxx4VOoj
-         aRB9Og4aztrAsY3pJU5YVa+jxGjKJEPijb55w/kvMUmZB7+Q4YSHv/4YUw3GJeCh0xKV
-         TpLjlnyUCIhDgw2cztyRI1otYLMe/dh7G67HRRtsLZBktoTctJzor4aV2xF0rwmZeIfy
-         fJ5apLro/pCZY+um/ul9/b3sTXmRJWJMFcY7YtuDDNY8+SHDBwQ22KPBdvLQO7XkyLs3
-         fxtcpRJwt+tyzY1t2vTwVdKTYW5bYv8SkDFTgyyp8trA925VsmJ6rO3jrXPhW98zKOaO
-         Ch1w==
-X-Gm-Message-State: AOAM533OKAkFwsDwOUcMBo+Vg1yz4u1tlzZk54iI5QATuELk2gLg+Nt8
-        gTxlaIViKptg7KwmvooYF+4xQ6LlTY1IDlXlJ8wR9XQtu1QERl7zyrvD8kU8flmfIdtWU3ECXGW
-        sszluGbx6Yfx7uGFDqjXf6AqI
-X-Received: by 2002:adf:dd8b:: with SMTP id x11mr733218wrl.599.1644962958198;
-        Tue, 15 Feb 2022 14:09:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwHw/TEWtChpHD1Jcb3s2gMkTePeuSIRDClJ/u2UyeoC9fnBijBMv1BfwrUjbbeQYYDAmbhAg==
-X-Received: by 2002:adf:dd8b:: with SMTP id x11mr733204wrl.599.1644962957952;
-        Tue, 15 Feb 2022 14:09:17 -0800 (PST)
+        bh=/lpQF/1aozwPXUYPuIRUCyzJVUaZkY7i5LfgQfbgp/4=;
+        b=cfAL4b7uQYgkd15aQkkSYu7CfJuox2StM6mShd7t7aW4VW94ziL2JWg6wTaO8da3fC
+         CeXE8GofoIcAexnDR4ip/4QVBdf7aK2JF7xuZqPfWKEUaZcdumsqpZUgxSYwjp8xsqFy
+         SWDG/dwLiJpy2Dl6K+Ea53+1wqB+0UEyH51TZ6RC3wQR7VePvHIfNYXITAXp9ZarpMSU
+         8RLaEq/LQ6iguuf6L4UCZZZwBl9F08kPFXaZM6fIGGozPrFeNSjWQozC3MOzkSfIXfff
+         uuEfFhCThdp0jgnEyTbHCHRX2wV+9e6H0HLVyYX0lcCmYqh8NJIZsjx8SKJT0XiWOf4E
+         cm8A==
+X-Gm-Message-State: AOAM533mKU+EUJ3T8umXay9hULt0+PiHB2l97WGwUV7TC3oIQhBMaC+S
+        0AC6x8u6JATow9homOZukLOUGvaJJp2zCAtqOqyB3/4A3upGWaqFH3UYo2nBGunZlJf3dEuIhl8
+        +NbrhK9Q/mF1Yq1CwDgvcUQcV
+X-Received: by 2002:a7b:ce84:0:b0:37c:52fe:a3ff with SMTP id q4-20020a7bce84000000b0037c52fea3ffmr2504362wmj.48.1644963014379;
+        Tue, 15 Feb 2022 14:10:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz5t5oT/WGZxlEhtAFFuNjdgRZmbAJp74nksVLboadzTM50qN6VJ2Ad4Sqri3UYJkxSujekWQ==
+X-Received: by 2002:a7b:ce84:0:b0:37c:52fe:a3ff with SMTP id q4-20020a7bce84000000b0037c52fea3ffmr2504351wmj.48.1644963014221;
+        Tue, 15 Feb 2022 14:10:14 -0800 (PST)
 Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id y4sm12016236wrd.54.2022.02.15.14.09.16
+        by smtp.gmail.com with ESMTPSA id 12sm8773502wry.111.2022.02.15.14.10.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 14:09:17 -0800 (PST)
-Message-ID: <5d60473d-be8f-e2dc-2ce9-bc0b9056e4b4@redhat.com>
-Date:   Tue, 15 Feb 2022 23:09:16 +0100
+        Tue, 15 Feb 2022 14:10:13 -0800 (PST)
+Message-ID: <d875e70c-e9a9-9e4d-7041-f8ff6ee48f4f@redhat.com>
+Date:   Tue, 15 Feb 2022 23:10:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/3] drm: Plumb debugfs_init through to panels
+Subject: Re: [PATCH v2 3/3] drm/panel-edp: Allow querying the detected panel
+ via debugfs
 Content-Language: en-US
 To:     Douglas Anderson <dianders@chromium.org>,
         dri-devel@lists.freedesktop.org
 Cc:     Daniel Vetter <daniel@ffwll.ch>, robert.foss@linaro.org,
         lschyi@chromium.org, Sam Ravnborg <sam@ravnborg.org>,
-        jjsu@chromium.org, Andrzej Hajda <andrzej.hajda@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
+        jjsu@chromium.org, David Airlie <airlied@linux.ie>,
         Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
         linux-kernel@vger.kernel.org
 References: <20220205001342.3155839-1-dianders@chromium.org>
- <20220204161245.v2.2.Ib0bd5346135cbb0b63006b69b61d4c8af6484740@changeid>
+ <20220204161245.v2.3.I209d72bcc571e1d7d6b793db71bf15c9c0fc9292@changeid>
 From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220204161245.v2.2.Ib0bd5346135cbb0b63006b69b61d4c8af6484740@changeid>
+In-Reply-To: <20220204161245.v2.3.I209d72bcc571e1d7d6b793db71bf15c9c0fc9292@changeid>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -94,41 +87,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Doug,
-
 On 2/5/22 01:13, Douglas Anderson wrote:
-
-[snip]
-
-> +static void panel_bridge_debugfs_init(struct drm_bridge *bridge,
-> +				      struct dentry *root)
-> +{
-> +	struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
-> +	struct drm_panel *panel = panel_bridge->panel;
-> +
-> +	root = debugfs_create_dir("panel", root);
-
-This could return a ERR_PTR(-errno) if the function doesn't succeed.
-
-I noticed that most kernel code doesn't check the return value though...
-
-> +	if (panel->funcs->debugfs_init)
-
-Probably if (!(IS_ERR(root) && panel->funcs->debugfs_init) ?
-
-> +		panel->funcs->debugfs_init(panel, root);
-> +}
-
-[snip]
-
-> @@ -436,6 +436,9 @@ void drm_debugfs_connector_add(struct drm_connector *connector)
->  	/* vrr range */
->  	debugfs_create_file("vrr_range", S_IRUGO, root, connector,
->  			    &vrr_range_fops);
-
-Same here, wonder if the return value should be checked.
-
-I leave it to you to decide, but regardless of that the patch looks good to me.
+> Recently we added generic "edp-panel"s probed by EDID. To support
+> panels in this way we look at the panel ID in the EDID and look up the
+> panel in a table that has power sequence timings. If we find a panel
+> that's not in the table we will still attempt to use it but we'll use
+> conservative timings. While it's likely that these conservative
+> timings will work for most nearly all panels, the performance of
+> turning the panel off and on suffers.
+> 
+> We'd like to be able to reliably detect the case that we're using the
+> hardcoded timings without relying on parsing dmesg. This allows us to
+> implement tests that ensure that no devices get shipped that are
+> relying on the conservative timings.
+> 
+> Let's add a new debugfs entry to panel devices. It will have one of:
+> * UNKNOWN - We tried to detect a panel but it wasn't in our table.
+> * HARDCODED - We're not using generic "edp-panel" probed by EDID.
+> * A panel name - This is the name of the panel from our table.
+> 
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
 
 Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 

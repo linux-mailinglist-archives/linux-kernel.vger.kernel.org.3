@@ -2,180 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65574B75E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BE04B785B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241087AbiBOSDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 13:03:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36918 "EHLO
+        id S242780AbiBOSDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 13:03:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240552AbiBOSDC (ORCPT
+        with ESMTP id S241542AbiBOSDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 13:03:02 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA529CEA2B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:02:49 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id d3so15441213ilr.10
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:02:49 -0800 (PST)
+        Tue, 15 Feb 2022 13:03:24 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1213A107DA0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:03:14 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id b13so873023edn.0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:03:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=vHlV/LtgGXNiZ7zK5zIyGJOfGAkSpkjLSX123D9TpgA=;
-        b=lZlLqVCF5x50Bw2WI0EmXhOEjbmCR23f3VzzrlMJALYbhC7MgI5zF3t2kRSeFNXgm/
-         rDDMLTaPP0dhqmJLiYSNIqgNUUb+sVxvFZnMVM65kctrFrm+2wfIdNizm8DuNZ7Ndxu9
-         +T0TtFxp1mv9GBEgCqd/+joe9Uwyn5DSCKRbM=
+        bh=BJ0o1LbbbPkL3ONTf+eFHsJYmd8V+bgTcEocoTANRFw=;
+        b=sW/IrqynFA4NS3qFxuwjep2QjFIVuJ33y6ChTHuc6kVIXABimZ4MoSThEc+lCmAYkF
+         QdBLi392Bjy1xxJne1bvdyh8kk9bvXNN5TA2zQkMu+HmuX6ov2GmhuZFc9cWapiJT90B
+         OrGl5Nn8/Vi4i4T0fhwr9Lj0ubO1UeSL1sq78Q7k+i5GsyeAO0XqClla1z/wu7nGi65O
+         KRlcYKptA68Jn2UTBDy52hewCJiWdvQo8DtOcj0s7RJ5yi09JHD5BUhWHzLdmz5PWAdp
+         XDJPuuvcRinWOM7vqOFBGflJQ+TBI3cu38sdgeh/my2E4byQuZc6c9pSipkYqKu7oXFH
+         hvWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vHlV/LtgGXNiZ7zK5zIyGJOfGAkSpkjLSX123D9TpgA=;
-        b=P5h+h71ZM//9jTQeQos8O718+8CiLG+Mibq4U3oIJI9LQjne7BIYxLv0b9CE5wIXd1
-         QKYGx4eNNGWGwHIpB3RbaZkaeD+dgAoBQ8neerNcC0lIBe7xdTF/vFKtJVfWU91xVAmb
-         slrFon/EX2F2YT0UTBKbkc9xTK7EXOv2pIpKWUJmcCXs1lyMp03FywkrZdXNxyo4/+O7
-         F0OV4Nk+GTPEAxAN/QFC5K78q84jn4ZVN1CFvonLPTLCO3caQVDJPLDgEdJ2mscsELsD
-         QJyhvUizY+ZDOji6p6wixFFqLHwVQIFuF2+6kO/ZMyjONh4cIxo68B80dcvUN8X9Cuv/
-         MnSg==
-X-Gm-Message-State: AOAM532VALmHdhG6NBwoDyoAc6fRWSD514BNtPcx3R6zxnTxg52aBJaC
-        5eenUkp5+ecrN2UeJBzg2KOv6EvIT8RhbA==
-X-Google-Smtp-Source: ABdhPJw0PQMD+Dxcrm82KOyT/bHH+lUnbJpC8VXaLLIRZu5KL7AULyTQZErqjnAA4d3dE/c8ktUdWg==
-X-Received: by 2002:a05:6e02:180f:: with SMTP id a15mr185970ilv.8.1644948169400;
-        Tue, 15 Feb 2022 10:02:49 -0800 (PST)
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com. [209.85.166.46])
-        by smtp.gmail.com with ESMTPSA id k10sm11346763ilo.8.2022.02.15.10.02.49
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 10:02:49 -0800 (PST)
-Received: by mail-io1-f46.google.com with SMTP id r8so2513530ioc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:02:49 -0800 (PST)
-X-Received: by 2002:a05:6638:4810:: with SMTP id cp16mr51427jab.207.1644948168679;
- Tue, 15 Feb 2022 10:02:48 -0800 (PST)
+        bh=BJ0o1LbbbPkL3ONTf+eFHsJYmd8V+bgTcEocoTANRFw=;
+        b=l6qdJE4IQcky97sU7W98FAaolbmzhs0Xvs+Y9GMYu6GUvv9tHJ7Hrn0ED5mU/FwjuB
+         V5If2fkG4im6umlMcOU4UMFWSMee6E++bTHP1eoqjJY+Bbhbe7sHp5IFtXecTCP5BXM2
+         8JCFZov+f1vimo07EALnBRH5dSQ7f3ZVjkdmHZzu0/MW2iBozAFWvQq5JAkr8P3bVMwR
+         pdgm+uJaAqmI0kypaAGi1mDce9rvWY25+ClCV29ufYnUDypTWt6tAySQnT/kW7VgZ1Er
+         psrlXxYzD0CWoNR7LqGWn9LSAY5Xz6dgxxPLsaHs6rLDdj5ZiNzlAFRPX5eUP3HbBNhQ
+         EFiA==
+X-Gm-Message-State: AOAM533ZMaalqKhOXBHUSyTOObC2Pihcsp0MItCDh1LwJqI5cL5QS7J0
+        bWdIQIVN5ffmWxqjfGfPUFlwPrhFlxxGHQoTmBhTloNrSSM=
+X-Google-Smtp-Source: ABdhPJzrv1k7qz2tLrhupOb2QFbnLukBkVNPs6DNVFLv+e/UrsDCFpiMzzQDBNpQf+dfSAlyaAAfxGsGDq9kgl1HFgo=
+X-Received: by 2002:a05:6402:22cf:: with SMTP id dm15mr83839edb.327.1644948192404;
+ Tue, 15 Feb 2022 10:03:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20220119204345.3769662-1-mka@chromium.org> <20220119124327.v20.3.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
- <YgJMX0QK9Koyu/uv@kroah.com> <YgLB0/aJJvGm3oYR@google.com>
-In-Reply-To: <YgLB0/aJJvGm3oYR@google.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 15 Feb 2022 10:02:36 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=VJmb_P9Rnn0ooNAkf3ese-BEWZr8z-Vc0RMdF=gHmNvw@mail.gmail.com>
-Message-ID: <CAD=FV=VJmb_P9Rnn0ooNAkf3ese-BEWZr8z-Vc0RMdF=gHmNvw@mail.gmail.com>
-Subject: Re: [PATCH v20 3/5] usb: misc: Add onboard_usb_hub driver
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>
+References: <20220214184104.1710107-1-dlatypov@google.com> <CAGS_qxomM_mGzvFokZH5dnf7L3kCitB3dWD8JH56fPcDSb6PeA@mail.gmail.com>
+ <YgtLFwORwGggQ7M2@lahna>
+In-Reply-To: <YgtLFwORwGggQ7M2@lahna>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 15 Feb 2022 10:03:01 -0800
+Message-ID: <CAGS_qxrHUaCWNZ_sbTkhZvM9=BMN-ZH1LpMXCzxz=FbEeSx+Pg@mail.gmail.com>
+Subject: Re: [PATCH] thunderbolt: test: get running under UML, add kunitconfig
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, Feb 8, 2022 at 11:17 AM Matthias Kaehlcke <mka@chromium.org> wrote:
-> > > +/*
-> > > + * Returns the onboard_hub platform device that is associated with the USB
-> > > + * device passed as parameter.
-> > > + */
-> > > +static struct onboard_hub *_find_onboard_hub(struct device *dev)
-> > > +{
-> > > +   struct platform_device *pdev;
-> > > +   struct device_node *np;
-> > > +   struct onboard_hub *hub;
-> > > +
-> > > +   pdev = of_find_device_by_node(dev->of_node);
-> > > +   if (!pdev) {
-> > > +           np = of_parse_phandle(dev->of_node, "companion-hub", 0);
-> > > +           if (!np) {
-> > > +                   dev_err(dev, "failed to find device node for companion hub\n");
-> > > +                   return ERR_PTR(-EINVAL);
-> > > +           }
-> > > +
-> > > +           pdev = of_find_device_by_node(np);
-> > > +           of_node_put(np);
-> > > +
-> > > +           if (!pdev || !device_is_bound(&pdev->dev)) {
+On Mon, Feb 14, 2022 at 10:41 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> Hi Daniel,
+>
+> On Mon, Feb 14, 2022 at 06:39:25PM -0800, Daniel Latypov wrote:
+> > On Mon, Feb 14, 2022 at 10:41 AM Daniel Latypov <dlatypov@google.com> wrote:
+> > >
+> > > These tests didn't work under the normal `kunit.py run` command since
+> > > they require CONFIG_PCI=y, which could not be set on ARCH=um.
+> > >
+> > > Commit 68f5d3f3b654 ("um: add PCI over virtio emulation driver") lets us
+> > > do so. To make it so people don't have to figure out how to do so, we
+> > > add a drivers/thunderbolt/.kunitconfig.
+> > >
+> > > Can now run these tests using
+> > > $ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/thunderbolt
+> > >
+> > > Potentially controversial bits:
+> > > 1. this .kunitconfig is UML-specific, can't do this for example
+> > > $ ./tools/testing/kunit/kunit.py run --arch=x86_64 --kunitconfig=drivers/thunderbolt
+> > > 2. this removes the manual call to __kunit_test_suites_init(), which
+> > >    allowed us to control exactly when the tests got run.
 > >
-> > I don't understand why you need to call device_is_bound() here.  What
-> > are you wanting to find here?
->
-> Whether the platform driver actually probed.
->
-> > You found the hub device associated to this usb device, based on the
-> > of_find_device_by_node() call, so why check it again?  What could have
-> > happened that this isn't the correct device?
->
-> It is the correct platform device, however it might not have finished
-> probing (this function is called from the USB driver). It's an unlikely
-> case, but it might happen, especially if the bootloader left the hub
-> regulator enabled (otherwise it would only be enabled by the platform
-> driver).
->
-> If device_is_bound() is a no-go (as it seems) the function could check
-> the drvdata instead.
-
-So IMO the answer here is to send a v21:
-
-1. Switch to use drvdata just to you can avoid the controversial
-device_is_bound() export.
-
-2. Add a comment here explaining _why_ you are checking the drvdata
-and return -EPROBE_DEFER. In general if it's confusing to someone
-during a code review it will be confusing to someone later and so
-deserves a comment. Something along the lines of: "Just to be
-paranoid, we check that the drvdata is set which indicates that the
-platform driver has finished probing. This handles the case where
-(conceivably) we could be running at the exact same time as the
-platform driver's probe. If we detect the race we request probe
-deferral and we'll come back and try again."
-
-
-> > > +   err = onboard_hub_add_usbdev(hub, udev);
-> > > +   if (err)
-> > > +           return err;
-> > > +
-> > > +   err = sysfs_create_link(&udev->dev.kobj, &hub->dev->kobj, "onboard_hub_dev");
+> > kernel-test-robot points out something I had forgotten.
+> > Doing this prevents us from being able to build this test as a module.
 > >
-> > What is this link for?  Messing with sysfs links is a pain and drivers
-> > really shouldn't be doing them if at all possible.
->
-> Alan asked me to add them. It's not strictly needed. I'm fine with removing
-> them as long as there is no strong opposition to that :)
-
-I don't personally care either way. I'd say remove them and they can
-be added back later?
-
-
-> > > +   if (err)
-> > > +           dev_warn(&udev->dev, "failed to create symlink to platform device '%s'): %d\n",
-> > > +                    dev_name(hub->dev), err);
-> > > +
-> > > +   return 0;
+> > kunit_test_suites() defines an init_module() which conflicts with the
+> > existing ones.
 > >
-> > So you ignore the error?  That's fine, just odd.
+> > There's some relevant discussion about reworking how kunit modules
+> > work here, https://lore.kernel.org/linux-kselftest/e5fa413ed59083ca63f3479d507b972380da0dcf.camel@codeconstruct.com.au/
+> >
+> > So I think we have two options for this patch:
+> > a) proceed, but disable building the test as a module for now (tristate => bool)
+> > b) wait on this patch until kunit module support is refactored
+> >
+> > Basically the question is: does this slightly easier way of running
+> > the test seem worth losing the ability to test as a module in the
+> > short-term?
 >
-> Yes, the links aren't critical for the functioning of the driver.
+> I would like to keep the module option available.
+>
+> For me, I can just continue running this under QEMU for now so let's
+> wait until the reworking has been done. Thanks for looking into this,
+> though! :)
 
-If you keep the links in, this is another good place for a comment,
-even something as simple as what you just said above about the links
-not being critical for the driver to function.
+Sounds good.
+We can treat this patch as just an example of what people can manually
+do if they want to run tests under UML.
 
--Doug
+And I'll also look to this when I inevitably forget how to enable
+CONFIG_PCI=y on UML again.
+
+Thanks!
+Daniel

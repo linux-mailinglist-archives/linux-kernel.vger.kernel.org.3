@@ -2,146 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF084B67DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B424B67E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235985AbiBOJld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:41:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32992 "EHLO
+        id S235999AbiBOJmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:42:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235983AbiBOJlb (ORCPT
+        with ESMTP id S236012AbiBOJmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:41:31 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCB0E4D07
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:41:20 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id p9so10520333wra.12
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:41:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=t1wflCr1vStMilehgvIe0w5v3TJPtXNP/omwaXqFnbs=;
-        b=X2ztBi1BvP5dZxfZSWhpEp86yS7NH+aFVQUGt8uylxVUHrTPgLxljm/I823I20QDAC
-         myDO9b6pKdhXfxOflamUH9a0V56xRHIzRt+zobHm2aSQI9lX2AtyVbvDJ4b/hbAVMJwj
-         O9vb1GNkZY2UcPTCqfIbCX+8y2sqNQNjI5x14V4+FrxOupZqMwREoOU7tUaRNhVammTS
-         15HBCcV5/vHuri9+ncnfWaytYpmQXGl85VY7/QOaHfZV4ygqrf/US1M/Trp4pBEdNttY
-         GmI4NuNrS9A1UQGLBpSYyXFp+7ZES8mph1JTwI5jnuKmU+GSd5GjMsnzQcXxqbHmEldG
-         KnAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=t1wflCr1vStMilehgvIe0w5v3TJPtXNP/omwaXqFnbs=;
-        b=wyD84+PsfYNWD0W/tR42mRoHQZSL7LljoTMx6ynZHqCeX6SEEAJQTpaCH0n0M2VvEl
-         SOMGB0mU7rjvIDVezYzQrnXj5ZTYCj2O0TYG5a5PX2OgKSzr/FZyDosYJePigWKBuj7W
-         fJGrLtcJ3YALYCGZI4hvKHQ3jiRbRoYDf6Dfl5A2y40m4XHHluJuyP81uVLmPCfh5gsH
-         ViOnWTDjM8sObQB12eV2g0DsFHAoCjZSdSHV+fNAIBddviIt8MxWxKq1Lkxmf4zOeujo
-         2n7ixxNBcktEAIMhIoKnifpgRO6WqFFffuHn3XURc72YMyzFF/EUg6jq2LjRbC/VBhGf
-         UG5g==
-X-Gm-Message-State: AOAM531F7EpZDc7BAUqxbx46TpdWPtH3mHMAnarqCYXGm3DrCGEdo3IO
-        KIOL0NRecM6ACiKBxqkVWCE3m9sUd4c+9wccl+g/vQ==
-X-Google-Smtp-Source: ABdhPJycaBm0tTnyxaAYB2jLzb26nfkOtUFXqf8v+zAItEOizp7OLUjLiobN4Bd6P0OekZnQ3wsTWbSu3Eh+8hJtkd0=
-X-Received: by 2002:a5d:4209:: with SMTP id n9mr2515369wrq.86.1644918078895;
- Tue, 15 Feb 2022 01:41:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20220215090211.911366-1-atishp@rivosinc.com> <20220215090211.911366-2-atishp@rivosinc.com>
-In-Reply-To: <20220215090211.911366-2-atishp@rivosinc.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Tue, 15 Feb 2022 15:11:06 +0530
-Message-ID: <CAAhSdy0+K+ADhO0oSoW7QUF582UvbaUbNPyAcBs5RMhUsm91Rw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/6] RISC-V: Correctly print supported extensions
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Tsukasa OI <research_trasio@irq.a4lg.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        DTML <devicetree@vger.kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
+        Tue, 15 Feb 2022 04:42:04 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795C263BE
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:41:45 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJuKh-0007uR-49; Tue, 15 Feb 2022 10:41:15 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJuKa-00Gixt-Lc; Tue, 15 Feb 2022 10:41:07 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJuKZ-003J7g-4B; Tue, 15 Feb 2022 10:41:07 +0100
+Date:   Tue, 15 Feb 2022 10:41:06 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-riscv@lists.infradead.org, Vignesh R <vigneshr@ti.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-rockchip@lists.infradead.org,
+        Rahul Tanwar <rtanwar@maxlinear.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Jeff LaBundy <jeff@labundy.com>, linux-sunxi@lists.linux.dev,
+        linux-pwm@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [PATCH v2 00/15] pwm: dt-bindings: Include generic pwm schema
+Message-ID: <20220215094106.k35pmoxt2nk44dsj@pengutronix.de>
+References: <20220214212154.8853-1-krzysztof.kozlowski@canonical.com>
+ <20220215074030.3nugwproxjh3lwhl@pengutronix.de>
+ <CA+Eumj42Hojp1m4deuWnqMOaaNaupTSkzPaNbL_0eyBL-aDi_g@mail.gmail.com>
+ <7df71f8d-cdc3-4b2e-cf0a-7112eff28142@canonical.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oa7qtfm672zzictn"
+Content-Disposition: inline
+In-Reply-To: <7df71f8d-cdc3-4b2e-cf0a-7112eff28142@canonical.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 2:32 PM Atish Patra <atishp@rivosinc.com> wrote:
->
-> From: Tsukasa OI <research_trasio@irq.a4lg.com>
->
-> This commit replaces BITS_PER_LONG with number of alphabet letters.
->
-> Current ISA pretty-printing code expects extension 'a' (bit 0) through
-> 'z' (bit 25).  Although bit 26 and higher is not currently used (thus never
-> cause an issue in practice), it will be an annoying problem if we start to
-> use those in the future.
->
-> This commit disables printing high bits for now.
->
-> Signed-off-by: Tsukasa OI <research_trasio@irq.a4lg.com>
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> Tested-by: Heiko Stuebner <heiko@sntech.de>
 
-Looks good to me.
+--oa7qtfm672zzictn
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+On Tue, Feb 15, 2022 at 09:02:25AM +0100, Krzysztof Kozlowski wrote:
+> On 15/02/2022 08:59, Krzysztof Kozlowski wrote:
+> > On Tue, 15 Feb 2022 at 08:40, Uwe Kleine-K=F6nig
+> > <u.kleine-koenig@pengutronix.de> wrote:
+> >>
+> >> Hello,
+> >>
+> >> [dropped Anson Huang and Yash Shah from Cc: which were not reachable f=
+or
+> >> my last mail]
+> >>
+> >> On Mon, Feb 14, 2022 at 10:21:39PM +0100, Krzysztof Kozlowski wrote:
+> >>> Hi,
+> >>>
+> >>> Changes since v1:
+> >>> 1. Add tags.
+> >>> 2. Adjust subject (Uwe).
+> >>
+> >> However you only took a part of my suggestion ...
+> >>
+> >>> Krzysztof Kozlowski (15):
+> >>>   dt-bindings: pwm: allwinner,sun4i-a10: Include generic pwm schema
+> >>>   dt-bindings: pwm: imx: Include generic pwm schema
+> >>>   dt-bindings: pwm: intel,lgm: Include generic pwm schema
+> >>>   dt-bindings: pwm: iqs620a: Include generic pwm schema
+> >>>   dt-bindings: pwm: mxs: Include generic pwm schema
+> >>>   dt-bindings: pwm: rockchip: Include generic pwm schema
+> >>>   dt-bindings: pwm: sifive: Include generic pwm schema
+> >>>   dt-bindings: pwm: renesas,pwm: Include generic pwm schema
+> >>>   dt-bindings: pwm: toshiba,visconti: Include generic pwm schema
+> >>>   dt-bindings: pwm: brcm,bcm7038: Do not require pwm-cells twice
+> >>>   dt-bindings: pwm: intel,keembay: Do not require pwm-cells twice
+> >>
+> >> ... The actual patch has a space after the comma, I like this variant
+> >> without comma better as this is a compatible string.
+> >=20
+> > I am confused. My patch does not have comma after space. Your reply
+> > had such in the subject, but not in the proposed new subject you wrote
+> > in msg, so I left it as is. Without comma. If you still see comma, it
+> > is something with your mail client.
+> >=20
+> > See:
+> > https://lore.kernel.org/linux-devicetree/20220214212154.8853-12-krzyszt=
+of.kozlowski@canonical.com/T/#u
+> >=20
+> > Also reply from Vijayakannan does not have comma:
+> > https://lore.kernel.org/linux-devicetree/20220214081605.161394-11-krzys=
+ztof.kozlowski@canonical.com/T/#m80af695f2c751341bc971114aefa00ccc929a3ec
 
-Regards,
-Anup
+Strange: I have this mail four times in my mailboxes (via
+linux-arm-kernel, linux-pwm, kernel@pengutronix.de and directly). In the
+two latter the Subject line is broken in two:
 
-> ---
->  arch/riscv/kernel/cpufeature.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index d959d207a40d..dd3d57eb4eea 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -13,6 +13,8 @@
->  #include <asm/smp.h>
->  #include <asm/switch_to.h>
->
-> +#define NUM_ALPHA_EXTS ('z' - 'a' + 1)
-> +
->  unsigned long elf_hwcap __read_mostly;
->
->  /* Host ISA bitmap */
-> @@ -63,7 +65,7 @@ void __init riscv_fill_hwcap(void)
->  {
->         struct device_node *node;
->         const char *isa;
-> -       char print_str[BITS_PER_LONG + 1];
-> +       char print_str[NUM_ALPHA_EXTS + 1];
->         size_t i, j, isa_len;
->         static unsigned long isa2hwcap[256] = {0};
->
-> @@ -133,13 +135,13 @@ void __init riscv_fill_hwcap(void)
->         }
->
->         memset(print_str, 0, sizeof(print_str));
-> -       for (i = 0, j = 0; i < BITS_PER_LONG; i++)
-> +       for (i = 0, j = 0; i < NUM_ALPHA_EXTS; i++)
->                 if (riscv_isa[0] & BIT_MASK(i))
->                         print_str[j++] = (char)('a' + i);
->         pr_info("riscv: ISA extensions %s\n", print_str);
->
->         memset(print_str, 0, sizeof(print_str));
-> -       for (i = 0, j = 0; i < BITS_PER_LONG; i++)
-> +       for (i = 0, j = 0; i < NUM_ALPHA_EXTS; i++)
->                 if (elf_hwcap & BIT_MASK(i))
->                         print_str[j++] = (char)('a' + i);
->         pr_info("riscv: ELF capabilities %s\n", print_str);
-> --
-> 2.30.2
->
+	Subject: [PATCH v2 08/15] dt-bindings: pwm: renesas,
+	 pwm: Include generic pwm schema
+
+So this is indeed a problem near my side.
+
+> Just one more clarification - you proposed also to remove "pwm:"
+> middle-prefix. Shall I remove it from every patch and use instead full
+> file name?
+
+I did that to save some vertical space in the Subject line. I don't feel
+strong here.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--oa7qtfm672zzictn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmILdS8ACgkQwfwUeK3K
+7Algegf/dBLzT9R46q44cuy81Jhbw+cPq5TJjsxMzatiOW6z9KMgzITY+3sdf4tR
+wPwWoOZRYJOlQVK2OsQIBh+fF6w6J2rW+ij4RW9FGM6nBkAE4mp4Ac4xqhCovwl6
+e6hv7eF8br7+c4hXNxTa43gX7KS5JorkySK+4v0qE+iNDy0+vD81laV3sILWFaPm
+e9PWjHuuKzHsWK2iVcoQlLCmbhFHcgBwSarOx8ytG9525zLDq0RwZG8mws1Udn18
+SILWaO0/zphzHlX0Fl3VbShlGLhZBHLHI0HdwAjSg8iyj4GhjTUZSxnwXKZw0G/k
+fa+SMHLCyStkxfK/oN1jkKah5Fl4TQ==
+=9Zp/
+-----END PGP SIGNATURE-----
+
+--oa7qtfm672zzictn--

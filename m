@@ -2,96 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D482A4B79F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:50:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D0F24B79FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:51:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241898AbiBOVuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 16:50:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47184 "EHLO
+        id S243610AbiBOVvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 16:51:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235764AbiBOVuD (ORCPT
+        with ESMTP id S240925AbiBOVv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 16:50:03 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122ECD5DEE;
-        Tue, 15 Feb 2022 13:49:53 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id p22so178498lfu.5;
-        Tue, 15 Feb 2022 13:49:52 -0800 (PST)
+        Tue, 15 Feb 2022 16:51:29 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4044BE370B
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:51:18 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id v13-20020a17090ac90d00b001b87bc106bdso4424441pjt.4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:51:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nVOc+WtGt9M92xR6YqeYiWL9ZGefjURnpi4PPff1eNE=;
-        b=nIVz5kH3Ir2dOdYoW1eJf+OcDxjmaZlWEwoFVBedQngH9lCh96VtuYWLw9x0Vkjlwn
-         m/ZtTS6eNS+F/1LUHpvR+r5T/FvtKaifaFq2v+d1xXP16+KwfroIvfSDeBKA6FaAVxA+
-         johnyiXHxbbgIphI+QAHesBLja3CdtWHI7YIRwvQnhLvgJgskQtN9nFjlObZb2uAVg+Z
-         AT5HrSPYiJ8oJgxs01e2CBCtEeBLyVsl+QlEmaGT0YHa8SIQtYKI0OnCx8V4jfyYqCnr
-         r9bKXZG7m66iqpdGAVIUOsnKXPT+ycD/EkW/EsCv7cJ2mk2CHKHGA0Df7QQVk2kn5xps
-         UtPg==
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=UF22wzNFpm2IeXFXPkRt/7QTNpA2ZS3NNacg1G/BHTA=;
+        b=aLkLiUl2q3+S6eeMXpypsrxoD5fjO9umu93awZL2f4DtK7iBq9t1st5HRP4P9rgAKQ
+         vbbbxGJdWSs0YTXYqaQOXspsbJuV/Ut61sGZKXIhgZ+Ao1l2oLI2a3lopePAqvNg0AM/
+         kDMZ1kpGbiLtcFI4B2ZqtAbaAHRBWRiCwoQbOyqM63uY3euR9sdAmumj5oYMSCVi95Ns
+         1sW4wxDTlXLSh9B6p0n0D3UkJbjeDvFRKeSYt2Q+/kQzExnf7VeE2lpE7rMUEQZ5fScV
+         u6euyIJCEvIB0kJrnAAehROqriwI5p8Dq4L2NbjbKWOUOEKsNVQpkAWi+LR6NKEvikDK
+         GEWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nVOc+WtGt9M92xR6YqeYiWL9ZGefjURnpi4PPff1eNE=;
-        b=OnJVaKG3fdF4/Wz0AYtVUwyZzxjL3C8qj52v5JdTyuYVqgOLWwMmV5PUV8sHwZ3BF7
-         quBp5Gly4x7SkCF+kY5RQ34AyF8rz8gfocn2cAo0JERvxtnGC4/BZzDZdasM4rwhNBVs
-         5UNJkZ8FeavsQUBIFY+Xu5miASlvEXi1aLM2hVuwuclr+Nu9aPPlzKbqEtyvi0yI0MmS
-         qUhEdpAJhzn3f+E6/uOVXl5NNQT81tOnmstXjl8rVp/Qp2T2/cCFBPCNhUYwAGj7xl+T
-         pSzBjKPWEdQFOvsUMoVqQJZPSQ9lZvEbbp+IBDufC8aj4qHKJyTwpUjq6LZWgiNkysNN
-         tHDw==
-X-Gm-Message-State: AOAM530TUzgdxhUG5x34bedQUNYZ4z/G62OqZigDxTmpHUcB85Iau7w6
-        pYPjKVaP7FKcMb05wOxlZ4Y=
-X-Google-Smtp-Source: ABdhPJxAVLf4fs8AL+OfizHakAeVAC1vYUuYg498WhaVN9bvHWSKOyDreVBXJhKizCLoIctLHX4JEw==
-X-Received: by 2002:a05:6512:4d1:: with SMTP id w17mr796008lfq.391.1644961791454;
-        Tue, 15 Feb 2022 13:49:51 -0800 (PST)
-Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
-        by smtp.googlemail.com with ESMTPSA id t12sm4574312ljj.118.2022.02.15.13.49.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 13:49:51 -0800 (PST)
-Message-ID: <dd7d0ebd-7bd8-9f2e-e212-5b597ec729d5@gmail.com>
-Date:   Wed, 16 Feb 2022 00:49:50 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=UF22wzNFpm2IeXFXPkRt/7QTNpA2ZS3NNacg1G/BHTA=;
+        b=2tTe9xQfJd48MwdsR2nEdyxCzyG1/Nynx+r8XpRGEpD/6YslvUFSY6uf27PqktGeW2
+         Y7nuO5JoN1wfyxYhB2ew/BhCFCUNYXUDmrqVazSsVgMuLjKBmIVdCYcaYZiCsmAvcaxi
+         tekq680SrUXXDO/wwRi2zLMpFDuTQjjflcyQZ+HsV60M2fHoelAUAVi87SiNs3ehHXvl
+         FUmsP7qmBWfI5pDO61Gyh8JL+ARiIxwDEmAzN1fCB6jXWazSr1wWymsGuWkM2ZF6+L1R
+         Xcb9WQa8oXwjXOzVqHogVBeh/x4Q3ZUQu++zonbtM+9FPudVYOxQXbZmaNGJ/HatFxWE
+         mQKw==
+X-Gm-Message-State: AOAM533dRyZURi1W6cZVZovU9J2JuNpdvxyFeBtJUjj+SzVtYvVsd3hM
+        Rp3G5qQQGR2ECar1f7QV96AdBK97F+5C4Hajh1D9rw==
+X-Google-Smtp-Source: ABdhPJwiWSTwvDiLHvEHx5jVlkEcfKkWS636fiMP5bezJwAkxTbJWDUQr5zyAmugPr7yn16pxbnRwJ5XVgTvcXGjjUQ=
+X-Received: by 2002:a17:902:b20a:: with SMTP id t10mr753705plr.132.1644961876547;
+ Tue, 15 Feb 2022 13:51:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] PM: domains: Prevent power off for parent unless child
- is in deepest state
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        linux-kernel@vger.kernel.org
-References: <20220204101657.233723-1-ulf.hansson@linaro.org>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20220204101657.233723-1-ulf.hansson@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220105181230.GC398655@magnolia> <CAPcyv4iTaneUgdBPnqcvLr4Y_nAxQp31ZdUNkSRPsQ=9CpMWHg@mail.gmail.com>
+ <20220105185626.GE398655@magnolia> <CAPcyv4h3M9f1-C5e9kHTfPaRYR_zN4gzQWgR+ZyhNmG_SL-u+A@mail.gmail.com>
+ <20220105224727.GG398655@magnolia> <CAPcyv4iZ88FPeZC1rt_bNdWHDZ5oh7ua31NuET2-oZ1UcMrH2Q@mail.gmail.com>
+ <20220105235407.GN656707@magnolia> <CAPcyv4gUmpDnGkhd+WdhcJVMP07u+CT8NXRjzcOTp5KF-5Yo5g@mail.gmail.com>
+ <YekhXENAEYJJNy7e@infradead.org> <76f5ed28-2df9-890e-0674-3ef2f18e2c2f@fujitsu.com>
+ <20220121022200.GG13563@magnolia>
+In-Reply-To: <20220121022200.GG13563@magnolia>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 15 Feb 2022 13:51:10 -0800
+Message-ID: <CAPcyv4gXp66bc6dkN+F8pUdxwCj=wmkOebjmPdALyKKZSOczoQ@mail.gmail.com>
+Subject: Re: [PATCH v9 02/10] dax: Introduce holder for dax_device
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        david <david@fromorbit.com>, Jane Chu <jane.chu@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-04.02.2022 13:16, Ulf Hansson пишет:
-> A PM domain managed by genpd may support multiple idlestates. During
-> genpd_power_off() a genpd governor may be asked to select one of the
-> idlestates based upon the dev PM QoS constraints, for example.
-> 
-> However, there is a problem with the behaviour around this in genpd. More
-> precisely, a parent-domain is allowed to be powered off, no matter of what
-> idlestate that has been selected for the child-domain.
-> 
-> So far, we have not received any reports about errors from the current
-> behaviour. However, there is an STMicro platform that is being worked on,
-> which can't cope with this.
+On Thu, Jan 20, 2022 at 6:22 PM Darrick J. Wong <djwong@kernel.org> wrote:
+>
+> On Fri, Jan 21, 2022 at 09:26:52AM +0800, Shiyang Ruan wrote:
+> >
+> >
+> > =E5=9C=A8 2022/1/20 16:46, Christoph Hellwig =E5=86=99=E9=81=93:
+> > > On Wed, Jan 05, 2022 at 04:12:04PM -0800, Dan Williams wrote:
+> > > > We ended up with explicit callbacks after hch balked at a notifier
+> > > > call-chain, but I think we're back to that now. The partition mista=
+ke
+> > > > might be unfixable, but at least bdev_dax_pgoff() is dead. Notifier
+> > > > call chains have their own locking so, Ruan, this still does not ne=
+ed
+> > > > to touch dax_read_lock().
+> > >
+> > > I think we have a few options here:
+> > >
+> > >   (1) don't allow error notifications on partitions.  And error retur=
+n from
+> > >       the holder registration with proper error handling in the file
+> > >       system would give us that
+>
+> Hm, so that means XFS can only support dax+pmem when there aren't
+> partitions in use?  Ew.
+>
+> > >   (2) extent the holder mechanism to cover a rangeo
+>
+> I don't think I was around for the part where "hch balked at a notifier
+> call chain" -- what were the objections there, specifically?  I would
+> hope that pmem problems would be infrequent enough that the locking
+> contention (or rcu expiration) wouldn't be an issue...?
+>
+> > >   (3) bite the bullet and create a new stacked dax_device for each
+> > >       partition
+> > >
+> > > I think (1) is the best option for now.  If people really do need
+> > > partitions we'll have to go for (3)
+> >
+> > Yes, I agree.  I'm doing it the first way right now.
+> >
+> > I think that since we can use namespace to divide a big NVDIMM into mul=
+tiple
+> > pmems, partition on a pmem seems not so meaningful.
+>
+> I'll try to find out what will happen if pmem suddenly stops supporting
+> partitions...
 
-Could you please provide some technical info about why STMicro platform
-can't cope with that?
+Finally catching up with this thread...
+
+Given that XFS already has the policy of disabling DAX rather than
+failing the mount in some cases, I think it is workable for XFS to
+fail a DAX mount if reflink is enabled on a partition. This should not
+regress anyone's current setup since the FS will not even mount with
+dax+reflink today. As to the specific concern about registering
+failure handlers for other purposes I expect that can be done by
+registering failure notification handlers on block devices, not dax
+devices.
+
+So it's not that pmem will suddenly stop supporting partitions, dax
+will simply never gain support for reflink in the presence of
+partitions.

@@ -2,87 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D874B79D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B60B4B79DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:50:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244256AbiBOVB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 16:01:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59980 "EHLO
+        id S244258AbiBOVC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 16:02:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235440AbiBOVBY (ORCPT
+        with ESMTP id S235440AbiBOVCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 16:01:24 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFC927FE3;
-        Tue, 15 Feb 2022 13:01:14 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id c4so282622pfl.7;
-        Tue, 15 Feb 2022 13:01:14 -0800 (PST)
+        Tue, 15 Feb 2022 16:02:54 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4D827FF2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:02:44 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id z15so49279qtx.13
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:02:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=wTa2P1MgBvk9m62qPWIOit490TSiIyPTgJSzWGel9bY=;
-        b=Rs1oCdwMxQfYIGJWKXdRuZnB1Ma80VhEoTYeNZtsDwRds0jVEX5HUNouyWNpmnPRKb
-         HrTm06k3tzmIkSplIDIRp684mUUaOheiW/2QtnudPz20P9C8zBxZYOByhkQ4IovjwnNm
-         gHmN6sHkkNbAviSAEYQRkXI65xNnpBRvYb9v2CvjUk5LzL6CqNDk13QeIt9g9sdrQMO/
-         B/bhfV5Cd2A4UTggseJf4bvZj70EpYruSXaUY9s1t+/VjpfyHxIpuR9qWDQvNJXHl2NT
-         wKbWwhiOGuuRMHGLMGPAETmWCZpAijdKjM52I71SuZ9GXDQYgLSEykguUq2mYOQQClOn
-         tfng==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=RojO1s2ebF9xxfjFY1vNZc8Wc0/GmbtOgVpxelDT3Es=;
+        b=AOrHTegYpuTN0vWbGZ1zxEfaoRq+Xa3pSQhdj+hxe4QWQwOovJklU1Mac1cCs3LQ0E
+         fAwrLmAeXlKCWaMrZgtHQJhel53qFAYRkdna73DjH1w4LAVndwouTOG4MbFFYCCL9Y2f
+         Ju+QjlMsHFz2W6zLiwmavEQqvXNNqMUi9K0GHLEGKnHCWKfa5bY0F9HnbJOJuMe8wyQ6
+         vbU5PaZEeQFFD1ftF2g6k0wg0girLYJ395HGrjmUTR1Oj/eMSEYxsPlRnzDqZj6k80qO
+         hoIoLJdKaSmNMp9Xdlr/aDqr53+r4k95Msf1pTf6zDgDZqsJ2koKU2Ds3jSPjxk4BjZN
+         n1Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=wTa2P1MgBvk9m62qPWIOit490TSiIyPTgJSzWGel9bY=;
-        b=gttvPXs0JJzkW2KEzGutEgF+BslUPfMQ794H4Q+zItntEQ5UYM3uEyryDtJWItXLWz
-         U4tJrhiosY66N2NN8RNT3xcPWbTpIkB++gwCMXQqs2kkIJ1bYWAqA2qksmN3SFu/FevE
-         8DJH5RB8BsIq50M5KdTyOcdOsXflEKn/8rUbUrrlR3O3zs7+9KUzj2IHMG5lpZ460epa
-         avIBEm4XepWqL5eOLuIIJpr0eobfq5OgdfkA2cNf+1ORZolTkduW9keJGDFAo+AgSQNi
-         L84RlZHie2adCSQx1u8D/lQUws9IFMCtDU23+jsSOkYpXniGustZzDMMfkpUnG9Nm2oP
-         ucYA==
-X-Gm-Message-State: AOAM5327KHvc+TjiEVXGHNTbezky5tkculQHv+y9MLAhHBpxq6YPwTok
-        3g6z4Ia3BIInsauGWQ3x7ynOX1SRwYQ=
-X-Google-Smtp-Source: ABdhPJxyQSAmCDE8WPMyCfUAI8JQM4Z7dyqZXvdtO7dYQTgEBuIQYkUh24QMtAyo8fvuDu2mO6aCAw==
-X-Received: by 2002:a63:234d:: with SMTP id u13mr628141pgm.128.1644958873451;
-        Tue, 15 Feb 2022 13:01:13 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id w12sm3306242pgl.64.2022.02.15.13.01.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 13:01:12 -0800 (PST)
-Subject: Re: [PATCH v3 4/8] ARM: dts: bcm283x: fix ethernet node name
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Scott Branden <sbranden@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tony Lindgren <tony@atomide.com>
-Cc:     kernel@pengutronix.de, bcm-kernel-feedback-list@broadcom.com,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <20220215080937.2263111-1-o.rempel@pengutronix.de>
- <20220215080937.2263111-4-o.rempel@pengutronix.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <f5ea3375-0306-e37f-5847-e1472164d7b7@gmail.com>
-Date:   Tue, 15 Feb 2022 13:01:06 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=RojO1s2ebF9xxfjFY1vNZc8Wc0/GmbtOgVpxelDT3Es=;
+        b=Dg95RxDAOSguUcfUEdNWIl++LeeqILDFlYnu6Ko6QhPcfQUsL39g9/L8ANXH3TMflr
+         o4aJtMWL0mg/A8m+WsxykJJ3Uy87GQjC4fy5a3SDW2njU/ENA4yFXPyALbn7QCrz0ybZ
+         BQoZNivBTZvUgSu4LBMiGC18F395+tu3jr4Yp9YsHcsOkJJ3KmdItiUtf14ILOv9dduu
+         uzIMQrqwmZe128uoQay6U6qtUfgQYoR9djCJdudE7fLu1luhYhEgTNkooWgbdo2kzfBh
+         o/0ILvKNi5DmvPXIMiVpFgR+t1akksuY45ru5HNYRt8l+YhhS+5hCwq9kzzDNq7MUIkR
+         CwYQ==
+X-Gm-Message-State: AOAM533cwLv0Bl6GxcfbyIdQ21apj0knpzFtOoPJq+iGM3U5MxvIqT0Y
+        MQ74X73z6v9uK/I+clLFY3o95Q==
+X-Google-Smtp-Source: ABdhPJyYLAdLBtClvESalRU/1PMX028+T47koEhg36b0JuJd2M9G5i3e6iZxz5oKrtS2SdUrsWnRug==
+X-Received: by 2002:ac8:5bc8:: with SMTP id b8mr643716qtb.428.1644958963064;
+        Tue, 15 Feb 2022 13:02:43 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id p15sm20735921qtk.56.2022.02.15.13.02.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 13:02:42 -0800 (PST)
+Date:   Tue, 15 Feb 2022 13:02:30 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Matthew Wilcox <willy@infradead.org>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Rik van Riel <riel@surriel.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        SeongJae Park <sj@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 10/13] mm/munlock: mlock_page() munlock_page() batch
+ by pagevec
+In-Reply-To: <YgvXjwapRTOXQOuQ@casper.infradead.org>
+Message-ID: <ef1e285c-187a-f682-a62b-c6a0f42b5cbf@google.com>
+References: <55a49083-37f9-3766-1de9-9feea7428ac@google.com> <1abb94ee-fe72-dba9-3eb0-d1e576d148e6@google.com> <YgvXjwapRTOXQOuQ@casper.infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <20220215080937.2263111-4-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,37 +86,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/22 12:09 AM, Oleksij Rempel wrote:
-> It should be "ethernet@x" instead of "usbether@x"
+On Tue, 15 Feb 2022, Matthew Wilcox wrote:
+> On Mon, Feb 14, 2022 at 06:37:29PM -0800, Hugh Dickins wrote:
+> > +/*
+> > + * Flags held in the low bits of a struct page pointer on the mlock_pvec.
+> > + */
+> > +#define LRU_PAGE 0x1
+> > +#define NEW_PAGE 0x2
+> > +#define mlock_lru(page) ((struct page *)((unsigned long)page + LRU_PAGE))
+> > +#define mlock_new(page) ((struct page *)((unsigned long)page + NEW_PAGE))
 > 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> You've tripped over one of the weirdnesses in the C preprocessor here.
+> If the variable passed is not _named_ page, it gets cast to a pointer
+> to a struct of the same name as the variable.  There's no way to tell
+> cpp that that 'page' after 'struct' is literal and not to be replaced
+> by the 'page' argument.
+> 
+> I'm going to change this to:
+> 
+> static inline struct page *mlock_lru(struct page *page)
+> {
+> 	return (struct page *)((unsigned long)page + LRU_PAGE);
+> }
+> 
+> (mutatis mutandi for mlock_new)
 
-This looks like, a quick grep on the u-boot source code seems to suggest
-that only one file is assuming that 'usbether@1' is to be used as a node
-name and the error message does not even match the code it is patching:
+Okay, thanks.  (You're not naming your folio "page" :-?)
 
-board/liebherr/xea/xea.c:
-  #ifdef CONFIG_OF_BOARD_SETUP
-  static int fdt_fixup_l2switch(void *blob)
-  {
-          u8 ethaddr[6];
-          int ret;
-
-          if (eth_env_get_enetaddr("ethaddr", ethaddr)) {
-                  ret = fdt_find_and_setprop(blob,
-
-"/ahb@80080000/switch@800f0000",
-                                             "local-mac-address",
-ethaddr, 6, 1);
-                  if (ret < 0)
-                          printf("%s: can't find usbether@1 node: %d\n",
-                                 __func__, ret);
-          }
-
-          return 0;
-  }
-
-I will wait for the other maintainers on the other patches to provide
-some feedback, but if all is well, will apply this one soon.
--- 
-Florian
+Hugh

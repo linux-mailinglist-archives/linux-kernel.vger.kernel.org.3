@@ -2,211 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F284B7096
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8765E4B71ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239412AbiBOO7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 09:59:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48344 "EHLO
+        id S236722AbiBOOwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 09:52:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbiBOO7t (ORCPT
+        with ESMTP id S239315AbiBOOvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 09:59:49 -0500
-X-Greylist: delayed 474 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 06:59:38 PST
-Received: from outbound-smtp36.blacknight.com (outbound-smtp36.blacknight.com [46.22.139.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D701DEB7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 06:59:38 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
-        by outbound-smtp36.blacknight.com (Postfix) with ESMTPS id 89F101A8D
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 14:52:13 +0000 (GMT)
-Received: (qmail 16638 invoked from network); 15 Feb 2022 14:52:13 -0000
-Received: from unknown (HELO stampy.112glenside.lan) (mgorman@techsingularity.net@[84.203.17.223])
-  by 81.17.254.9 with ESMTPA; 15 Feb 2022 14:52:13 -0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Aaron Lu <aaron.lu@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Mel Gorman <mgorman@techsingularity.net>
-Subject: [PATCH 5/5] mm/page_alloc: Limit number of high-order pages on PCP during bulk free
-Date:   Tue, 15 Feb 2022 14:51:11 +0000
-Message-Id: <20220215145111.27082-6-mgorman@techsingularity.net>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220215145111.27082-1-mgorman@techsingularity.net>
-References: <20220215145111.27082-1-mgorman@techsingularity.net>
+        Tue, 15 Feb 2022 09:51:53 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA7329C90;
+        Tue, 15 Feb 2022 06:51:18 -0800 (PST)
+Received: from [IPV6:2a01:e0a:120:3210:6d7b:ae43:289b:7e7c] (unknown [IPv6:2a01:e0a:120:3210:6d7b:ae43:289b:7e7c])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 26B781F44B73;
+        Tue, 15 Feb 2022 14:51:16 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644936676;
+        bh=BISiIxMthx3a38D0w6FQTgr0oYS0glTcHHhtZRUHEmI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=khtOgfbefSkpsF1Gw7AuGbcob/Pkcy7PJ6TJiFl8GjmzYMAO1otg6g9IdhIGlMPu9
+         eesGO0llgkt7jVmbJtZa8/L7mykCviiOhoVavnSJivkqYMiHRGkbYMANjqvnFEDYvB
+         X6px2CaO8tZ1YUwapVheciUKWAr5a66Oskry5j23gO/lFoqNo1zIVrtMXFg8Pxf1gn
+         pHiFmZn4y1c6aduURue+oWWndNQCOZ/b4RgLMPqIprsnX7o39gPLJngdctX3PsKBbf
+         LeYz8C7jx7hFLQrvRZdMU/Psr8a7VA6eYdFS9fzqb7HiKShp3PV6HWjygrePKdxb3c
+         6aOcvuLs7wg/A==
+Message-ID: <fe5017b0-6ea3-6b30-e04f-fad3aa769906@collabora.com>
+Date:   Tue, 15 Feb 2022 15:51:13 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC] media: uapi: Move HEVC stateless controls out of staging
+Content-Language: en-US
+To:     John Cox <jc@kynesim.co.uk>,
+        =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>
+Cc:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        hverkuil-cisco@xs4all.nl, jonas@kwiboo.se, nicolas@ndufresne.ca,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com, Alex Bee <knaerzche@gmail.com>
+References: <20220201123439.353854-1-benjamin.gaignard@collabora.com>
+ <8038233.T7Z3S40VBb@kista>
+ <903ca214-9576-33aa-8412-7c71c9d8ac09@collabora.com>
+ <2302767.NG923GbCHz@kista> <andn0h1pjhbkuaejphce535gm6u8ptae8v@4ax.com>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <andn0h1pjhbkuaejphce535gm6u8ptae8v@4ax.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a PCP is mostly used for frees then high-order pages can exist on PCP
-lists for some time. This is problematic when the allocation pattern is all
-allocations from one CPU and all frees from another resulting in colder
-pages being used. When bulk freeing pages, limit the number of high-order
-pages that are stored on the PCP lists.
 
-Netperf running on localhost exhibits this pattern and while it does
-not matter for some machines, it does matter for others with smaller
-caches where cache misses cause problems due to reduced page reuse.
-Pages freed directly to the buddy list may be reused quickly while still
-cache hot where as storing on the PCP lists may be cold by the time
-free_pcppages_bulk() is called.
+Le 15/02/2022 à 15:37, John Cox a écrit :
+> On Mon, 14 Feb 2022 20:26:34 +0100, you wrote:
+>
+>> Dne ponedeljek, 14. februar 2022 ob 18:25:01 CET je Benjamin Gaignard
+>> napisal(a):
+>>> Le 13/02/2022 à 12:33, Jernej Škrabec a écrit :
+>>>> Hi Benjamin,
+>>>>
+>>>> CC: Alex, John
+>>>>
+>>>> Sorry for late response, but I've been very busy last week.
+>>>>
+>>>> First of all, thank you for doing this! It's about time that HEVC moves
+>>>> forward.
+>>>>
+>>>> Dne torek, 01. februar 2022 ob 13:34:39 CET je Benjamin Gaignard
+>> napisal(a):
+>>>>> The HEVC stateless 'uAPI' was staging and marked explicitly in the
+>>>>> V4L2 specification that it will change and is unstable.
+>>>>>
+>>>>> Note that these control IDs were never exported as a public API,
+>>>>> they were only defined in kernel-local headers (hevc-ctrls.h).
+>>>>>
+>>>>> While moving the controls out of staging they are renamed and
+>>>>> control IDs get new numbers.
+>>>>> Drivers (Hantro, Cedrus) and Documentation are updated accordaly.
+>>>> accordaly -> accordingly
+>>>>
+>>>>> Additional structures fields has been added for RKVDEC driver usage.
+>>>> You should do separate patch for that, preceding this one. One patch
+>> should
+>>>> only do one thing.
+>>> I will do that in v2
+>>>
+>>>> I also suggest that you add additional patch for removing bit_size field in
+>>>> struct v4l2_ctrl_hevc_slice_params. Similar fields were already removed
+>> from
+>>>> MPEG2 and H264 structures. Bit size can be deduced from output buffer size
+>> and
+>>>> it doesn't hurt if bit size in Cedrus is set to bigger value than actual
+>> slice
+>>>> bit size.
+>>> ok
+>>>
+>>>>> Hantro dedicated control is moving to hantro-media.h
+>>>>> Since hevc-ctrls.h content has been dispatched in others file, remove it.
+>>>>>
+>>>>> fluster tests results on IMX8MQ is 77/147 for HEVC codec.
+>>>>>
+>>>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>>>> Note that Cedrus still needs additional information in order to decode
+>> some
+>>>> HEVC videos. Missing info is num_entry_point_offsets and list of all
+>>>> entry_point_offset_minus1 (obviously, num_entry_point_offsets in size).
+>>>>
+>>>> I suggest that this is represented in a new control, which would use
+>> dynamic
+>>>> array feature, written by Hans. While Cedrus supports max. 256 entries, it
+>> can
+>>>> be much bigger in theory, but in reality, it's much smaller (like 4-8
+>>>> entries).
+>>> I haven't seen yet any user for these fields but I will create a new control
+>> like
+>>> #define V4L2_CID_STATELESS_HEVC_ENTRY_POINT	(V4L2_CID_CODEC_STATELESS_BASE +
+>> 407)
+>>> struct v4l2_ctrl_hevc_entry_point_offset {
+>>> 	__u32	entry_point_offset_minus1;
+>>> };
+> Can we tell if this control is needed from userland? There's no great
+> point in filling it in if the driver isn't going to use it.
+>
+>> Yeah, Cedrus is currently the only mainline driver that needs that in order to
+>> fully work. I think John used num_entry_point_offsets in his (out of tree) RPi
+>> HEVC decoding driver too.
+> num_entry_points is a useful field  (in the slice header preferably) for
+> the RPi hardware as whilst it doesn't need to know the offsets it does
+> need to construct a table with one entry per offset (for cabac state
+> purposes) so it needs to know how many there are. It is possible to
+> infer the number from the slice_segment address in the next slice header
+> but that involves keeping around more state from one request to the
+> next.
 
-Using perf kmem:mm_page_alloc, the 5 most used page frames were
+In v2 I have remove the structure and only keep a dynamic v4l2 control (an array
+of integer). Control num_elems could be used as num_entry_points field.
+Userland can test if the driver implement the control to decide to fill or not.
+It is already the case in GStreamer for Hantro dedicate control.
 
-5.17-rc3
-  13041 pfn=0x111a30
-  13081 pfn=0x5814d0
-  13097 pfn=0x108258
-  13121 pfn=0x689598
-  13128 pfn=0x5814d8
+>
+>> Wouldn't be easier to just use u32 directly? This is just array of numbers, so
+>> nothing else will be added in that struct...
+>>
+>> Anyway, once you add this, I'll quickly update driver to take advantage of it.
+>>
+>>> and add it in the documentation:
+>>> ``V4L2_CID_STATELESS_HEVC_ENTRY_POINT (struct)``
+>>>       Specifies the i-th entry point offset in bytes and is represented by
+>>>       offset_len_minus1 plus 1 bits.
+>>>       This control is a dynamically sized array. The number of entry point
+>>>       offsets is reported by the ``elems`` field.
+>>>       This bitstream parameter is defined according to :ref:`hevc`.
+>>>       They are described in section 7.4.7.1 "General slice segment header
+>>>       semantics" of the specification.
+>>>
+>>>> Last but not least, data_bit_offset should be better defined. Currently it
+>>>> points right after last header bit, just like Cedrus needs it. However,
+>> there
+>>>> is padding after that, at least 1 bit and 8 bits at most, so slice data
+>> always
+>>>> starts from byte aligned address. It probably make sense to rework that
+>> field
+>>>> to be byte offset, not bit, just like in VA-API. Note that RPi HEVC driver
+>> also
+>>>> uses byte aligned address directly. Cedrus would need some kind of
+>> workaround
+>>>> and only one that works is this one:
+>>>> https://github.com/bootlin/libva-v4l2-request/blob/master/src/h265.c#L191-L209
+>>> If Cedrus driver is happy with this definition I will keep it like that.
+>>> When providing offset in bit is more accurate and any driver can align the
+>> value
+>>> if needed, the reverse (byte -> bit) isn't possible.
+>> If I'm not mistaken, HEVC standard actually requires that slice data starts at
+>> byte aligned address, so nothing would be lost for correctness of uAPI.
+>>
+>> I already had this discussion with John and IIRC conclusion was to have byte
+>> aligned value here. John, can you please confirm if my interpretation is
+>> correct?
+> Yes slice_segment_data only occurs afer slice_segment_header (7.3.6.1)
+> and that ends with byte_alignment().
 
-5.17-revert-highpcp
- 192009 pfn=0x54c140
- 195426 pfn=0x1081d0
- 200908 pfn=0x61c808
- 243515 pfn=0xa9dc20
- 402523 pfn=0x222bb8
+I have done a patch for that change in v2.
 
-5.17-full-series
- 142693 pfn=0x346208
- 162227 pfn=0x13bf08
- 166413 pfn=0x2711e0
- 166950 pfn=0x2702f8
+Regards,
 
-The spread is wider as there is still time before pages freed to one
-PCP get released with a tradeoff between fast reuse and reduced zone
-lock acquisition.
+Benjamin
 
-From the machine used to gather the traces, the headline performance
-was equivalent.
-
-netperf-tcp
-                            5.17.0-rc3             5.17.0-rc3             5.17.0-rc3
-                               vanilla  mm-reverthighpcp-v1r1  mm-highpcplimit-v1r12
-Hmean     64         839.93 (   0.00%)      840.77 (   0.10%)      835.34 *  -0.55%*
-Hmean     128       1614.22 (   0.00%)     1622.07 *   0.49%*     1604.18 *  -0.62%*
-Hmean     256       2952.00 (   0.00%)     2953.19 (   0.04%)     2959.46 (   0.25%)
-Hmean     1024     10291.67 (   0.00%)    10239.17 (  -0.51%)    10287.05 (  -0.04%)
-Hmean     2048     17335.08 (   0.00%)    17399.97 (   0.37%)    17125.73 *  -1.21%*
-Hmean     3312     22628.15 (   0.00%)    22471.97 (  -0.69%)    22414.24 *  -0.95%*
-Hmean     4096     25009.50 (   0.00%)    24752.83 *  -1.03%*    24620.03 *  -1.56%*
-Hmean     8192     32745.01 (   0.00%)    31682.63 *  -3.24%*    32475.31 (  -0.82%)
-Hmean     16384    39759.59 (   0.00%)    36805.78 *  -7.43%*    39291.42 (  -1.18%)
-
-From a 1-socket skylake machine with a small CPU cache that suffers
-more if cache misses are too high
-
-netperf-tcp
-                            5.17.0-rc3             5.17.0-rc3             5.17.0-rc3
-                               vanilla    mm-reverthighpcp-v1     mm-highpcplimit-v1
-Min       64         935.38 (   0.00%)      939.40 (   0.43%)      940.11 (   0.51%)
-Min       128       1831.69 (   0.00%)     1856.15 (   1.34%)     1849.30 (   0.96%)
-Min       256       3560.61 (   0.00%)     3659.25 (   2.77%)     3654.12 (   2.63%)
-Min       1024     13165.24 (   0.00%)    13444.74 (   2.12%)    13281.71 (   0.88%)
-Min       2048     22706.44 (   0.00%)    23219.67 (   2.26%)    23027.31 (   1.41%)
-Min       3312     30960.26 (   0.00%)    31985.01 (   3.31%)    31484.40 (   1.69%)
-Min       4096     35149.03 (   0.00%)    35997.44 (   2.41%)    35891.92 (   2.11%)
-Min       8192     48064.73 (   0.00%)    49574.05 (   3.14%)    48928.89 (   1.80%)
-Min       16384    58017.25 (   0.00%)    60352.93 (   4.03%)    60691.14 (   4.61%)
-Hmean     64         938.95 (   0.00%)      941.50 *   0.27%*      940.47 (   0.16%)
-Hmean     128       1843.10 (   0.00%)     1857.58 *   0.79%*     1855.83 *   0.69%*
-Hmean     256       3573.07 (   0.00%)     3667.45 *   2.64%*     3662.08 *   2.49%*
-Hmean     1024     13206.52 (   0.00%)    13487.80 *   2.13%*    13351.11 *   1.09%*
-Hmean     2048     22870.23 (   0.00%)    23337.96 *   2.05%*    23149.68 *   1.22%*
-Hmean     3312     31001.99 (   0.00%)    32206.50 *   3.89%*    31849.40 *   2.73%*
-Hmean     4096     35364.59 (   0.00%)    36490.96 *   3.19%*    36112.91 *   2.12%*
-Hmean     8192     48497.71 (   0.00%)    49954.05 *   3.00%*    49384.50 *   1.83%*
-Hmean     16384    58410.86 (   0.00%)    60839.80 *   4.16%*    61362.12 *   5.05%*
-
-Note that this was a machine that did not benefit from caching high-order
-pages and performance is almost restored with the series applied. It's not
-fully restored as cache misses are still higher. This is a trade-off
-between optimising for a workload that does all allocs on one CPU and frees
-on another or more general workloads that need high-order pages for SLUB
-and benefit from avoiding zone->lock for every SLUB refill/drain.
-
-Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
----
- mm/page_alloc.c | 26 +++++++++++++++++++++-----
- 1 file changed, 21 insertions(+), 5 deletions(-)
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 6881175b27df..cfb3cbad152c 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -3314,10 +3314,15 @@ static bool free_unref_page_prepare(struct page *page, unsigned long pfn,
- 	return true;
- }
- 
--static int nr_pcp_free(struct per_cpu_pages *pcp, int high, int batch)
-+static int nr_pcp_free(struct per_cpu_pages *pcp, int high, int batch,
-+		       bool free_high)
- {
- 	int min_nr_free, max_nr_free;
- 
-+	/* Free everything if batch freeing high-order pages. */
-+	if (unlikely(free_high))
-+		return pcp->count;
-+
- 	/* Check for PCP disabled or boot pageset */
- 	if (unlikely(high < batch))
- 		return 1;
-@@ -3338,11 +3343,12 @@ static int nr_pcp_free(struct per_cpu_pages *pcp, int high, int batch)
- 	return batch;
- }
- 
--static int nr_pcp_high(struct per_cpu_pages *pcp, struct zone *zone)
-+static int nr_pcp_high(struct per_cpu_pages *pcp, struct zone *zone,
-+		       bool free_high)
- {
- 	int high = READ_ONCE(pcp->high);
- 
--	if (unlikely(!high))
-+	if (unlikely(!high || free_high))
- 		return 0;
- 
- 	if (!test_bit(ZONE_RECLAIM_ACTIVE, &zone->flags))
-@@ -3362,17 +3368,27 @@ static void free_unref_page_commit(struct page *page, unsigned long pfn,
- 	struct per_cpu_pages *pcp;
- 	int high;
- 	int pindex;
-+	bool free_high;
- 
- 	__count_vm_event(PGFREE);
- 	pcp = this_cpu_ptr(zone->per_cpu_pageset);
- 	pindex = order_to_pindex(migratetype, order);
- 	list_add(&page->lru, &pcp->lists[pindex]);
- 	pcp->count += 1 << order;
--	high = nr_pcp_high(pcp, zone);
-+
-+	/*
-+	 * As high-order pages other than THP's stored on PCP can contribute
-+	 * to fragmentation, limit the number stored when PCP is heavily
-+	 * freeing without allocation. The remainder after bulk freeing
-+	 * stops will be drained from vmstat refresh context.
-+	 */
-+	free_high = (pcp->free_factor && order && order <= PAGE_ALLOC_COSTLY_ORDER);
-+
-+	high = nr_pcp_high(pcp, zone, free_high);
- 	if (pcp->count >= high) {
- 		int batch = READ_ONCE(pcp->batch);
- 
--		free_pcppages_bulk(zone, nr_pcp_free(pcp, high, batch), pcp, pindex);
-+		free_pcppages_bulk(zone, nr_pcp_free(pcp, high, batch, free_high), pcp, pindex);
- 	}
- }
- 
--- 
-2.31.1
-
+>
+> Regards
+>
+> John Cox
+>
+>> Best regards,
+>> Jernej
+>>
+>>> Regards,
+>>> Benjamin
+>>>
+>>>> Best regards,
+>>>> Jernej
+>>>>
+>>>>

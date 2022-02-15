@@ -2,72 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033994B7881
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0774B75B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241743AbiBOQoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:44:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36028 "EHLO
+        id S241804AbiBOQrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:47:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240022AbiBOQok (ORCPT
+        with ESMTP id S235228AbiBOQrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:44:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7461019EA;
-        Tue, 15 Feb 2022 08:44:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38A2C60B41;
-        Tue, 15 Feb 2022 16:44:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D94BC340EB;
-        Tue, 15 Feb 2022 16:44:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644943469;
-        bh=j5oH26Cfn5lFpZrtBYRNUgpR23mKOYs0t///TQ3gtos=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Dx/CDIATn6FoaibbMlYUYCWbYDywCRM1QA5iEN8V6FpJFF0KxX5UKPOXxjeOHv6eV
-         JVKlhPrpk/0rnKmre4wP2Y+vlG7otqegLoprosnrs7qD+eTfULRCr64DRdBNoXC1pU
-         DRUEBNK1Yie6VavxZYnGQtnA8HTdwLZUavmpjwRe8Z+vNjY66MJnBM9CJ++I4aQQoG
-         gpDtbpz/vQ1oQjFW6lPKbJzqGCGxM3imwyOJ9pzdVdIIgqtPN5OiS9UXogazAF2kOL
-         kMJ9tONegyRUiZj29VqIWskzzBFCJfTMkIe16DoeZuWCgG7DF9wv5kokaUA8bFS8h+
-         WwHuaXcwC5NMg==
-Date:   Tue, 15 Feb 2022 16:44:23 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Huang Shijie <shijie@os.amperecomputing.com>
-Cc:     catalin.marinas@arm.com, bhe@redhat.com, vgoyal@redhat.com,
-        dyoung@redhat.com, corbet@lwn.net, kexec@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, zwang@amperecomputing.com,
-        patches@amperecomputing.com, darren@os.amperecomputing.com
-Subject: Re: [PATCH] arm64: crash_core: Export MODULES, VMALLOC, and VMEMMAP
- ranges
-Message-ID: <20220215164423.GB8458@willie-the-truck>
-References: <20220209092642.9181-1-shijie@os.amperecomputing.com>
+        Tue, 15 Feb 2022 11:47:05 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EAEBDE71;
+        Tue, 15 Feb 2022 08:46:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644943615; x=1676479615;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U9cLS970bwlyW17ctpm79Dm5QjC8dMWPZatYaS+V9SM=;
+  b=LT67/gCzFP+d0j5GALSpoymfzjiLht6Do3kAmv6iK1L3XpRWn2mZ3Q1t
+   blBYkOwjzMiS/SQB1nHj9U/sHEyIfRVN5esL0Mz53H43tHJk3IK24audp
+   inxCwbD4wkr9R1llQDN9e4IE+E/1JEEqKTanFbBabTdySGAkxnS5theMf
+   XJIHM0ssiv7MwHguImTQTkIY5Ejf5uNRPtAe8P9CzpyjCjf3LWeYyH7S3
+   pFap486XI+/82+S36y4riGDUokkXubB1R8EdduJ7kXHI3HinL+KiLcCAv
+   3iqgS8rWBKbU3hZhJB48tnxb+kVP8v+VrnUd35JMYPR0pmm6keRrEoOfH
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="250133755"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="250133755"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 08:46:54 -0800
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="570911110"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 08:46:52 -0800
+Received: by lahna (sSMTP sendmail emulation); Tue, 15 Feb 2022 18:44:40 +0200
+Date:   Tue, 15 Feb 2022 18:44:40 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v1 1/4] pinctrl: tigerlake: Revert "Add Alder Lake-M ACPI
+ ID"
+Message-ID: <YgvYeJSvwaCXzISF@lahna>
+References: <20220215152800.21104-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220209092642.9181-1-shijie@os.amperecomputing.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220215152800.21104-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 09:26:42AM +0000, Huang Shijie wrote:
-> The following interrelated ranges are needed by the kdump crash tool:
-> 	MODULES_VADDR ~ MODULES_END,
-> 	VMALLOC_START ~ VMALLOC_END,
-> 	VMEMMAP_START ~ VMEMMAP_END
+On Tue, Feb 15, 2022 at 05:27:57PM +0200, Andy Shevchenko wrote:
+> It appears that last minute change moved ACPI ID of Alder Lake-M
+> to the INTC1055, which is already in the driver.
 > 
-> Since these values change from time to time, it is preferable to export
-> them via vmcoreinfo than to change the crash's code frequently.
+> This ID on the other hand will be used elsewhere.
+> 
+> This reverts commit 258435a1c8187f559549e515d2f77fa0b57bcd27.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Please can you explain _why_ they are needed?
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Will
+Please mark this for stable too as discussed.

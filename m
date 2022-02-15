@@ -2,128 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 505234B63BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E5D94B63BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:45:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233737AbiBOGob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 01:44:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53564 "EHLO
+        id S234608AbiBOGp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 01:45:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiBOGo3 (ORCPT
+        with ESMTP id S229556AbiBOGpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 01:44:29 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC027C24A3;
-        Mon, 14 Feb 2022 22:44:19 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JyWlg0BXtz4xcY;
-        Tue, 15 Feb 2022 17:44:14 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644907455;
-        bh=Me7gKSD/eykmW/PwyxtAO5OSQgVRSm8H5mAjaHBSKYY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=lZpY04WCqpDSXnaqdlm8JOEYwNY7DzdhvRAvBJdqlBIgYD4SwmVir80xi/t/ZehMQ
-         kkzuRRkQPcnJ6IiiRdKcxVUR9YSuk9jdBr95OvVgMajFSj/PivpZ+jThjc+HI8E75b
-         GuP6nWdxEQLB1M6fiuMaTQ8UGvJXXEu8IpcHiVDProjL6u53KLcPRGycD4weLo36/W
-         aULgfChR6doY9OzXdW9UOX1I/nqUEsgvWCUGxp9mXGcAL1rU5R4zrnUJSrmnPRfv8N
-         et7O/oLJRFbBBClPhmfnWvnZIbRpw7JafgjierNPoR0zpugGnNTpLr1Xi7oYU3rqp/
-         rnFrcDydaiV8w==
-Date:   Tue, 15 Feb 2022 17:44:11 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the folio tree
-Message-ID: <20220215174411.49e1d3ba@canb.auug.org.au>
+        Tue, 15 Feb 2022 01:45:55 -0500
+X-Greylist: delayed 1574 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 22:45:45 PST
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB0DC2E7F
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 22:45:45 -0800 (PST)
+X-QQ-mid: bizesmtp44t1644907530twnjvw9f
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 15 Feb 2022 14:45:24 +0800 (CST)
+X-QQ-SSF: 01400000002000B0E000B00A0000000
+X-QQ-FEAT: SAUrQiVpIXGIL5g7/NqIvJwpdoFW7wYZScAUFA/QFcoU1fbTkyDLEpCNrmc1X
+        oO3SrOYY48t7wRrlQzy/yoTv43z3vqOujfSfspKvJMPCSGPfevYoFhjOal9meYjt/3n0KJJ
+        QkPakhaFrzFpwtZcVe5Z6YaeV+yeDleye6dmMFOWyWAhbhkkiM1hrAtXUsjleNkGiqUNr6K
+        VV2vw9Nr69o/6Wldox/s+9nuXbjMYXPKEK72v+cxKGGtesXh6rJtksh7boX7BehAiE6VxTI
+        /hXI33OLbx84faXI3yCrLaWf78JEiezzOHZZROYlxkZKBPi7KzxM79DyGqIlqDBJmQgscUt
+        9Cqxk8cSakiNaw9wJudMm2hYXgQApd+woQaUfoM
+X-QQ-GoodBg: 2
+From:   tangmeng <tangmeng@uniontech.com>
+To:     tglx@linutronix.de, mcgrof@kernel.org, keescook@chromium.org,
+        yzaikin@google.com, john.stultz@linaro.org, sboyd@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        tangmeng <tangmeng@uniontech.com>
+Subject: [PATCH v6] kernel/time: move timer sysctls to its own file
+Date:   Tue, 15 Feb 2022 14:45:22 +0800
+Message-Id: <20220215064522.5905-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//UaxFjjj36yAv0OYS9D1ELy";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign2
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_//UaxFjjj36yAv0OYS9D1ELy
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+kernel/sysctl.c is a kitchen sink where everyone leaves their dirty
+dishes, this makes it very difficult to maintain.
 
-Hi all,
+To help with this maintenance let's start by moving sysctls to places
+where they actually belong.  The proc sysctl maintainers do not want to
+know what sysctl knobs you wish to add for your own piece of code, we
+just care about the core logic.
 
-After merging the folio tree, today's linux-next build (sparc defconfig)
-failed like this:
+So move the timer_migration sysctls to its own file.
 
-mm/page_vma_mapped.c: In function 'page_vma_mapped_walk':
-mm/page_vma_mapped.c:219:48: error: implicit declaration of function 'pmd_p=
-fn'; did you mean 'pmd_off'? [-Werror=3Dimplicit-function-declaration]
-  219 |                                 if (!check_pmd(pmd_pfn(pmde), pvmw))
-      |                                                ^~~~~~~
-      |                                                pmd_off
-
-
-Caused by commit
-
-  b1dede582893 ("mm: Convert page_vma_mapped_walk to work on PFNs")
-
-I applied the following hack just to make it build:
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 15 Feb 2022 17:15:48 +1100
-Subject: [PATCH] fix up for "mm: Convert page_vma_mapped_walk to work on PF=
-Ns"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: tangmeng <tangmeng@uniontech.com>
 ---
- arch/sparc/include/asm/pgtable_32.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+ include/linux/timer.h |  8 -------
+ kernel/sysctl.c       | 11 ---------
+ kernel/time/timer.c   | 54 ++++++++++++++++++++++++++++++++-----------
+ 3 files changed, 40 insertions(+), 33 deletions(-)
 
-diff --git a/arch/sparc/include/asm/pgtable_32.h b/arch/sparc/include/asm/p=
-gtable_32.h
-index ffccfe3b22ed..30d55a37515d 100644
---- a/arch/sparc/include/asm/pgtable_32.h
-+++ b/arch/sparc/include/asm/pgtable_32.h
-@@ -424,6 +424,13 @@ static inline int io_remap_pfn_range(struct vm_area_st=
-ruct *vma,
- 	__changed;							  \
- })
-=20
-+static inline unsigned long pmd_pfn(pmd_t pmd)
-+{
-+	pte_t pte =3D __pte(pmd_val(pmd));
+diff --git a/include/linux/timer.h b/include/linux/timer.h
+index fda13c9d1256..648f00105f58 100644
+--- a/include/linux/timer.h
++++ b/include/linux/timer.h
+@@ -196,14 +196,6 @@ extern void init_timers(void);
+ struct hrtimer;
+ extern enum hrtimer_restart it_real_fn(struct hrtimer *);
+ 
+-#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
+-struct ctl_table;
+-
+-extern unsigned int sysctl_timer_migration;
+-int timer_migration_handler(struct ctl_table *table, int write,
+-			    void *buffer, size_t *lenp, loff_t *ppos);
+-#endif
+-
+ unsigned long __round_jiffies(unsigned long j, int cpu);
+ unsigned long __round_jiffies_relative(unsigned long j, int cpu);
+ unsigned long round_jiffies(unsigned long j);
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 083be6af29d7..740c34f20235 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -2656,17 +2656,6 @@ static struct ctl_table kern_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_ONE,
+ 	},
+-#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
+-	{
+-		.procname	= "timer_migration",
+-		.data		= &sysctl_timer_migration,
+-		.maxlen		= sizeof(unsigned int),
+-		.mode		= 0644,
+-		.proc_handler	= timer_migration_handler,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE,
+-	},
+-#endif
+ #ifdef CONFIG_BPF_SYSCALL
+ 	{
+ 		.procname	= "unprivileged_bpf_disabled",
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index 85f1021ad459..c4f0045139cb 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -44,6 +44,9 @@
+ #include <linux/slab.h>
+ #include <linux/compat.h>
+ #include <linux/random.h>
++#ifdef CONFIG_SYSCTL
++#include <linux/sysctl.h>
++#endif
+ 
+ #include <linux/uaccess.h>
+ #include <asm/unistd.h>
+@@ -223,7 +226,8 @@ static void timer_update_keys(struct work_struct *work);
+ static DECLARE_WORK(timer_update_work, timer_update_keys);
+ 
+ #ifdef CONFIG_SMP
+-unsigned int sysctl_timer_migration = 1;
++struct ctl_table;
++static unsigned int sysctl_timer_migration = 1;
+ 
+ DEFINE_STATIC_KEY_FALSE(timers_migration_enabled);
+ 
+@@ -234,6 +238,41 @@ static void timers_update_migration(void)
+ 	else
+ 		static_branch_disable(&timers_migration_enabled);
+ }
 +
-+	return pte_pfn(pte);
++#ifdef CONFIG_SYSCTL
++static int timer_migration_handler(struct ctl_table *table, int write,
++			    void *buffer, size_t *lenp, loff_t *ppos)
++{
++	int ret;
++
++	mutex_lock(&timer_keys_mutex);
++	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
++	if (!ret && write)
++		timers_update_migration();
++	mutex_unlock(&timer_keys_mutex);
++	return ret;
 +}
 +
- #endif /* !(__ASSEMBLY__) */
-=20
- #define VMALLOC_START           _AC(0xfe600000,UL)
---=20
-2.34.1
++static struct ctl_table timer_sysctl[] = {
++	{
++		.procname       = "timer_migration",
++		.data           = &sysctl_timer_migration,
++		.maxlen         = sizeof(unsigned int),
++		.mode           = 0644,
++		.proc_handler   = timer_migration_handler,
++		.extra1         = SYSCTL_ZERO,
++		.extra2         = SYSCTL_ONE,
++	},
++	{}
++};
++
++static int __init timer_sysctl_init(void)
++{
++	register_sysctl("kernel", timer_sysctl);
++	return 0;
++}
++device_initcall(timer_sysctl_init);
++#endif /* CONFIG_SYSCTL */
+ #else
+ static inline void timers_update_migration(void) { }
+ #endif /* !CONFIG_SMP */
+@@ -251,19 +290,6 @@ void timers_update_nohz(void)
+ 	schedule_work(&timer_update_work);
+ }
+ 
+-int timer_migration_handler(struct ctl_table *table, int write,
+-			    void *buffer, size_t *lenp, loff_t *ppos)
+-{
+-	int ret;
+-
+-	mutex_lock(&timer_keys_mutex);
+-	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+-	if (!ret && write)
+-		timers_update_migration();
+-	mutex_unlock(&timer_keys_mutex);
+-	return ret;
+-}
+-
+ static inline bool is_timers_nohz_active(void)
+ {
+ 	return static_branch_unlikely(&timers_nohz_active);
+-- 
+2.20.1
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_//UaxFjjj36yAv0OYS9D1ELy
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmILS7sACgkQAVBC80lX
-0Gw7kQf+IGSmrnK0XCUqcNQZ7RMYTMRCGyc4OTiXc8fsyYOjBsCKQjNbJzqawYgE
-UBuDmrmdnTBKgukq3AoF0xWYumO3TTB98RZ/Mt3MpOmW8brdGFhXxDQfSeEnys1/
-NZ/wrVug2f7mTCkuof5VMnRk0Gz987h0PeJMgWSssJrV6II1wSAt3uUrjRkd7aL+
-DWc+xVsl2oq8pgdy/M7vmlm47G5opAhqNoDC6CYZrC3v3f9NYbJiSplBExnlpEs+
-ugvuQPonxZhY0Jwk6ODQev4N9maueuHFHJ08QEJ03cO7CzcDHRKwyRR00PuAFT1v
-JbLtcqqx3psaFbn4owuKvqEyMM4TzA==
-=sy8j
------END PGP SIGNATURE-----
-
---Sig_//UaxFjjj36yAv0OYS9D1ELy--

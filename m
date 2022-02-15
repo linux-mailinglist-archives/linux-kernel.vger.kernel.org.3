@@ -2,144 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8127C4B6BA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:05:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 450194B6BAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:06:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237476AbiBOMFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 07:05:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45226 "EHLO
+        id S237487AbiBOMGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 07:06:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237472AbiBOMFs (ORCPT
+        with ESMTP id S237465AbiBOMGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 07:05:48 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97A7D207A
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:05:37 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id m22so15302285pfk.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:05:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AvoSKo98ulJsw2WNwaVfLj/l/nh9gyg8Vgm73/f2Cg0=;
-        b=QwMS041zrimjNV74ySW6/aEYe7UiHK52oC4sA7e5yXzaKYm47mFk2ThPjn6rsCa5/w
-         pcneguNLnPKLl9Iyy/7mdNG/s4XJo0gQztdp2w28VT+XlklF8pIsuBYhZKpTa0uKmT6T
-         gq+8A5YvlPgSEe63jC9r1+xxeJCPeN4K7sE7HT32ZRwlRJExpCIAm8LV7oWMrI3XaqEq
-         nM0x3OQkPX10IbiuBEpekHpxVnB/ZDsFgzxqLPREk6w23Lz8p+sUtSc9u4Ob+mC9fv7+
-         uUBTpM3pQq40xLUrqweNbRpYzAos9jzswxhQTGnygnPUd8R/8fO+YZ/YKL8519MYCIvD
-         DAEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AvoSKo98ulJsw2WNwaVfLj/l/nh9gyg8Vgm73/f2Cg0=;
-        b=Q4AtuSj7Hu4SNoBeYBv1qyO97iFcRPN44zTyvMUMtE9AVQGQ2hKHIXzRQf8BkzTpbG
-         Eji6QL1P7F27x/TEk6Max3Rq4RVKsye/ydfCAtZzaxB2xQ2uWxI7Rmwy9rw38QHT+Em7
-         L1yv7jlg2sOURzLVtjX6dy1m3N5fv876jxq5rzvjgmlUksigGRUlnJW3jzyISmK5DZv/
-         Ug/qXW4Ctn0388rfhkUBxM2ULgPjAiIUWN2udTJ4mKEWntt4LDJonLMuWTvFc4y+ODRj
-         tkKOSewV6SuijTn+ZP3JTmN0aN4wUBS86jdCowdm0Yl72G1Y0NS4Kd7S/Ohi1MhxaGIk
-         aORQ==
-X-Gm-Message-State: AOAM530c2pbyEDGEX6RvmSu06m+WVB7yCaTKDbaKgwr0WFmanGxJYGg3
-        XajqYLiFrUnu9kjcb3HZyShgd5VAJwd8g1xp3/plOw==
-X-Google-Smtp-Source: ABdhPJxFNaJhw9q+C7NaqGxKKGzPpa5mjZ240L5mkJh17FY5uNOfGjZF8e1QzCfRoulUqZIZL5kKn04LRXKUReNzq6s=
-X-Received: by 2002:a05:6a00:b83:: with SMTP id g3mr4064233pfj.58.1644926737009;
- Tue, 15 Feb 2022 04:05:37 -0800 (PST)
+        Tue, 15 Feb 2022 07:06:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E624BFD8;
+        Tue, 15 Feb 2022 04:06:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26B1CB81865;
+        Tue, 15 Feb 2022 12:06:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1AB2C340ED;
+        Tue, 15 Feb 2022 12:06:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644926788;
+        bh=Sv9IrvT5EE6VlBqnofRFBXi83PWWmXl7XCHCvVMjTJ0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TC0Q5IOz+/cfPgB6GZyxOj2vONGKWZOSW/Ih1uRBCYZR1Qmj609401JmPDeVKJZJ3
+         tUJ68Ul/5/LUNCQjg/FHvkmz1iyzTxYBvADGDT8JnTPNvxkhMnzDuLyBQngMdIKq8q
+         mDkmuHzn7rbo+0J65Jg4/Dxx6b9jos6tA481AdD3ayv2ZtrFvoNVg5yIBBpj2tyTux
+         NcTv+R2NBbZ+ZFzKMLd5xkWgPYDzi0dLU03inPV00eC7jyO+G1xVofCFGfU8gVF/dD
+         aYUugWTkbiPCi06+F1joVdES+3TFhBaR264LZSVO9guNuti4oNhuKlTrIO7kllJIK8
+         nArzNJO2zQbEg==
+Date:   Tue, 15 Feb 2022 17:36:24 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Zong Li <zong.li@sifive.com>
+Cc:     robh+dt@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
+        conor.dooley@microchip.com, geert@linux-m68k.org,
+        bin.meng@windriver.com, green.wan@sifive.com,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v5 3/3] dmaengine: sf-pdma: Get number of channel by
+ device tree
+Message-ID: <YguXQJp/b/8SzjGX@matsya>
+References: <cover.1644215230.git.zong.li@sifive.com>
+ <df6c8d1c701b33fa735dd072de3cb585dc60f2c9.1644215230.git.zong.li@sifive.com>
 MIME-Version: 1.0
-References: <20220129093036.488231-1-pumahsu@google.com> <413ce7e5-1c35-c3d0-a89e-a3c7f03b4db7@linux.intel.com>
- <CAGCq0La83AKrdk4w2b6wJLZVB0oKB7_AH3iqc4R0K1vDnqrX9A@mail.gmail.com> <86bd1bef-2f07-8dee-a125-be208903204e@linux.intel.com>
-In-Reply-To: <86bd1bef-2f07-8dee-a125-be208903204e@linux.intel.com>
-From:   Puma Hsu <pumahsu@google.com>
-Date:   Tue, 15 Feb 2022 20:05:00 +0800
-Message-ID: <CAGCq0LZfYbqyFO8C5zct4cuUVEvs8CMN3g6MYO14_cLGdm-ATQ@mail.gmail.com>
-Subject: Re: [PATCH v6] xhci: re-initialize the HC during resume if HCE was set
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     mathias.nyman@intel.com, Greg KH <gregkh@linuxfoundation.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Albert Wang <albertccwang@google.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <df6c8d1c701b33fa735dd072de3cb585dc60f2c9.1644215230.git.zong.li@sifive.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 7:08 PM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
->
-> On 8.2.2022 9.11, Puma Hsu wrote:
-> > On Thu, Feb 3, 2022 at 3:11 AM Mathias Nyman
-> > <mathias.nyman@linux.intel.com> wrote:
-> >>
-> >> On 29.1.2022 11.30, Puma Hsu wrote:
-> >>> When HCE(Host Controller Error) is set, it means an internal
-> >>> error condition has been detected. Software needs to re-initialize
-> >>> the HC, so add this check in xhci resume.
-> >>>
-> >>> Cc: stable@vger.kernel.org
-> >>> Signed-off-by: Puma Hsu <pumahsu@google.com>
-> >>> ---
-> >>> v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
-> >>> v3: Add stable@vger.kernel.org for stable release.
-> >>> v4: Refine the commit message.
-> >>> v5: Add a debug log. Follow Mathias Nyman <mathias.nyman@linux.intel.com>'s comment.
-> >>> v6: Fix the missing declaration for str.
-> >>>
-> >>>  drivers/usb/host/xhci.c | 7 +++++--
-> >>>  1 file changed, 5 insertions(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> >>> index dc357cabb265..6f1198068004 100644
-> >>> --- a/drivers/usb/host/xhci.c
-> >>> +++ b/drivers/usb/host/xhci.c
-> >>> @@ -1091,6 +1091,7 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
-> >>>       int                     retval = 0;
-> >>>       bool                    comp_timer_running = false;
-> >>>       bool                    pending_portevent = false;
-> >>> +     char                    str[XHCI_MSG_MAX];
-> >>>
-> >>>       if (!hcd->state)
-> >>>               return 0;
-> >>> @@ -1146,8 +1147,10 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
-> >>>               temp = readl(&xhci->op_regs->status);
-> >>>       }
-> >>>
-> >>> -     /* If restore operation fails, re-initialize the HC during resume */
-> >>> -     if ((temp & STS_SRE) || hibernated) {
-> >>> +     /* If restore operation fails or HC error is detected, re-initialize the HC during resume */
-> >>> +     if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
-> >>> +             xhci_warn(xhci, "re-initialize HC during resume, USBSTS:%s\n",
-> >>> +                       xhci_decode_usbsts(str, temp));
-> >>>
-> >>>               if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
-> >>>                               !(xhci_all_ports_seen_u0(xhci))) {
-> >>>
-> >>
-> >> Ended up modifying this patch a bit more than I first intended,
-> >> - don't print warning in hibernation case, only error.
-> >> - maybe using a lot of stack for a debug string isn't really needed.
-> >> - make sure we read the usbsts register before checking for the HCE bit.
-> >>
-> >> Does the below work for you? If yes, and you agree I'll apply it instead
-> >
-> > Hi Mathias,
-> > Yes, your patch works for me, thanks!
-> > Will you submit a new patch? or should I update to a new version?
-> > Thanks.
->
-> I'll submit it
+On 07-02-22, 14:30, Zong Li wrote:
+> It currently assumes that there are always four channels, it would
+> cause the error if there is actually less than four channels. Change
+> that by getting number of channel from device tree.
+> 
+> For backwards-compatibility, it uses the default value (i.e. 4) when
+> there is no 'dma-channels' information in dts.
+> 
+> Signed-off-by: Zong Li <zong.li@sifive.com>
+> ---
+>  drivers/dma/sf-pdma/sf-pdma.c | 21 ++++++++++++++-------
+>  drivers/dma/sf-pdma/sf-pdma.h |  8 ++------
+>  2 files changed, 16 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/dma/sf-pdma/sf-pdma.c b/drivers/dma/sf-pdma/sf-pdma.c
+> index f12606aeff87..2ae10b61dfa1 100644
+> --- a/drivers/dma/sf-pdma/sf-pdma.c
+> +++ b/drivers/dma/sf-pdma/sf-pdma.c
+> @@ -482,9 +482,7 @@ static void sf_pdma_setup_chans(struct sf_pdma *pdma)
+>  static int sf_pdma_probe(struct platform_device *pdev)
+>  {
+>  	struct sf_pdma *pdma;
+> -	struct sf_pdma_chan *chan;
+>  	struct resource *res;
+> -	int len, chans;
+>  	int ret;
+>  	const enum dma_slave_buswidth widths =
+>  		DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
+> @@ -492,13 +490,21 @@ static int sf_pdma_probe(struct platform_device *pdev)
+>  		DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
+>  		DMA_SLAVE_BUSWIDTH_64_BYTES;
+>  
+> -	chans = PDMA_NR_CH;
+> -	len = sizeof(*pdma) + sizeof(*chan) * chans;
+> -	pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
+> +	pdma = devm_kzalloc(&pdev->dev, sizeof(*pdma), GFP_KERNEL);
+>  	if (!pdma)
+>  		return -ENOMEM;
+>  
+> -	pdma->n_chans = chans;
+> +	ret = of_property_read_u32(pdev->dev.of_node, "dma-channels",
+> +				   &pdma->n_chans);
+> +	if (ret) {
+> +		dev_notice(&pdev->dev, "set number of channels to default value: 4\n");
 
-Hi Mathias,
-Could I know when you will submit the new patch?
-We will sync the patch to our project.
-Thank you for your effort!
+This is useful for only debug i think, so dev_dbg perhaps
 
->
-> Thanks
-> -Mathias
+> +		pdma->n_chans = PDMA_MAX_NR_CH;
+> +	}
+> +
+> +	if (pdma->n_chans > PDMA_MAX_NR_CH) {
+> +		dev_err(&pdev->dev, "the number of channels exceeds the maximum\n");
+> +		return -EINVAL;
+> +	}
+>  
+>  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>  	pdma->membase = devm_ioremap_resource(&pdev->dev, res);
+> @@ -556,7 +562,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
+>  	struct sf_pdma_chan *ch;
+>  	int i;
+>  
+> -	for (i = 0; i < PDMA_NR_CH; i++) {
+> +	for (i = 0; i < pdma->n_chans; i++) {
+>  		ch = &pdma->chans[i];
+>  
+>  		devm_free_irq(&pdev->dev, ch->txirq, ch);
+> @@ -574,6 +580,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
+>  
+>  static const struct of_device_id sf_pdma_dt_ids[] = {
+>  	{ .compatible = "sifive,fu540-c000-pdma" },
+> +	{ .compatible = "sifive,pdma0" },
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(of, sf_pdma_dt_ids);
+> diff --git a/drivers/dma/sf-pdma/sf-pdma.h b/drivers/dma/sf-pdma/sf-pdma.h
+> index 0c20167b097d..8127d792f639 100644
+> --- a/drivers/dma/sf-pdma/sf-pdma.h
+> +++ b/drivers/dma/sf-pdma/sf-pdma.h
+> @@ -22,11 +22,7 @@
+>  #include "../dmaengine.h"
+>  #include "../virt-dma.h"
+>  
+> -#define PDMA_NR_CH					4
+> -
+> -#if (PDMA_NR_CH != 4)
+> -#error "Please define PDMA_NR_CH to 4"
+> -#endif
+> +#define PDMA_MAX_NR_CH					4
+>  
+>  #define PDMA_BASE_ADDR					0x3000000
+>  #define PDMA_CHAN_OFFSET				0x1000
+> @@ -118,7 +114,7 @@ struct sf_pdma {
+>  	void __iomem            *membase;
+>  	void __iomem            *mappedbase;
+>  	u32			n_chans;
+> -	struct sf_pdma_chan	chans[PDMA_NR_CH];
+> +	struct sf_pdma_chan	chans[PDMA_MAX_NR_CH];
+
+why waste memory allocating max, we know number of channels in probe,
+why not allocate runtime?
+
+-- 
+~Vinod

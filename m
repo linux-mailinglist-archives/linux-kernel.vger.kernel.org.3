@@ -2,68 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2714B70CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:39:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D324B706C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239529AbiBOPCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:02:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54208 "EHLO
+        id S239538AbiBOPC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:02:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235665AbiBOPCu (ORCPT
+        with ESMTP id S235665AbiBOPC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:02:50 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175351EAEA;
-        Tue, 15 Feb 2022 07:02:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1644937342;
-        bh=wa0JzlxCJP6FT5B/WCabwme/3GDUXb4BZx1q77XkiJo=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=SiTvSscv6dsdawlwf4tFoOkjjTPVTbRjj0QB6vLWukFyKr5wWNtUY6annljpvpmFP
-         CVm9ZKEXV6b1+qsH5fPHBiE8Azi1Lg5J4gFa5b3FbXSbkcMEpXS4cYMmy82VGvlBW5
-         4cS28SVa36iP5bQ/+AsU+Vg3emvXJKr+YmRvyvsc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ls3530 ([92.116.185.100]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MfYLa-1nvH661irQ-00g0c6; Tue, 15
- Feb 2022 16:02:22 +0100
-Date:   Tue, 15 Feb 2022 16:02:13 +0100
-From:   Helge Deller <deller@gmx.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        John David Anglin <dave.anglin@bell.net>,
-        Sven Schnelle <svens@stackframe.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [GIT PULL] parisc architecture fixes for v5.17-rc5
-Message-ID: <YgvAdaab22aRk18r@ls3530>
+        Tue, 15 Feb 2022 10:02:57 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2068.outbound.protection.outlook.com [40.107.92.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840FD1EAEA;
+        Tue, 15 Feb 2022 07:02:45 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YUDUCni3l2B4YLrkUIR5xXWkpqAezZH54Oe43KGtIdYQ/BRiQYrOUulF4bdxuW/BEWxJTJdMFWdBjK41354GbZqOagecSnM74hDzUupXQxAGzBo0qppcpPfmGTqBGgVFTq5zFbmaRzlINFRN4r9whIIxmcnIl4bZTwywwQgjuvb7p/W0qTUycARCBV5QqZL0NxFReVWcAfX4Wiqhs2pHrkfVk1jiPmu3KCSTr7aObYSoOj9efLS9gvdwN/m1VQRcfxsO4AP9f18M7G4iMOzvBl41zIt3kfYOQY3pRX94kNvpe+7FiYYzjIwWYyhTXh7iMg4w+yXdaB0Z99lFWxypSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pN9zH5NUB/Yga89NpvXWBEy+j3NC5YB17lnIQ3kWWew=;
+ b=fjnFGpg6iLcATF84imYWqJ3M6PlUvHi+A4q+xuAFkNrqI0i2iz8I5VgO/pyycmlehkv1fGCdb2GvGLTk6vttLS1NALeFQLU3wzBtlUbv72XeMW9ThK5KDRQqaYbswCNnBdg4dwBUrj/Lo14qToy5CxSkMMl+3KS6GTeqt0ORgJbsmJS5Ki6v0U1ANsQ9o9/aoiIIHUFz7zV8AhVBF3+WcczEvT2igQV3/BnhYNpCnGNygugdbKqjqJCatGvZA6rHoddWYHZ2+/FYVPiMP22GzvgDUKe/aMrlXrhT+fzLaDaE0qzbqXhegAoAT/PWmC4lHmOZ/wojTxnINJNqcGtSgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=gmail.com smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pN9zH5NUB/Yga89NpvXWBEy+j3NC5YB17lnIQ3kWWew=;
+ b=ffFwxWL2f31xe5fWsM42ShM5skxnNWH/6bvwbApctKe5vsw9pGOZuJVa+5MpXjegcsmPbpByWGNqytSCjlBByLj6bhy60ir94SFnj3IdH/8Q4jnTKABAYOPHNml6XYQ97V97kWNmQ4rlFrWdjonfbjV16FK0Nn4KkY1xn8TDjc0=
+Received: from DM5PR12CA0008.namprd12.prod.outlook.com (2603:10b6:4:1::18) by
+ MW4PR02MB7348.namprd02.prod.outlook.com (2603:10b6:303:76::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4995.14; Tue, 15 Feb 2022 15:02:42 +0000
+Received: from DM3NAM02FT016.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:4:1:cafe::9f) by DM5PR12CA0008.outlook.office365.com
+ (2603:10b6:4:1::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.15 via Frontend
+ Transport; Tue, 15 Feb 2022 15:02:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT016.mail.protection.outlook.com (10.13.4.77) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4975.11 via Frontend Transport; Tue, 15 Feb 2022 15:02:42 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 15 Feb 2022 07:02:38 -0800
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 15 Feb 2022 07:02:38 -0800
+Envelope-to: seanga2@gmail.com,
+ zajec5@gmail.com,
+ robh+dt@kernel.org,
+ trini@konsulko.com,
+ sjg@chromium.org,
+ srinivas.kandagatla@linaro.org,
+ krzysztof.kozlowski@canonical.com,
+ ricardo@foundries.io,
+ jorge@foundries.io,
+ devicetree@vger.kernel.org,
+ u-boot@lists.denx.de,
+ linux-kernel@vger.kernel.org,
+ rafal@milecki.pl
+Received: from [10.254.241.49] (port=43520)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1nJzLi-000EaI-BX; Tue, 15 Feb 2022 07:02:38 -0800
+Message-ID: <2def78a6-afbf-7534-358c-9515abf1b68e@xilinx.com>
+Date:   Tue, 15 Feb 2022 16:02:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Provags-ID: V03:K1:DthRBr0+MoN09uePx4rSBjbxJokAu2S8IlkuYcCYYFARHNUAbKy
- wp4L2PL+wr4lhHp0w+0xRq0hPodpMEbUhnP+PbWh5Fqij6V0jZeN4anS8PCeNENbjJjhc68
- DVfIg5YGY7gnSkG7biN7cVBVztGn9yLLljLvqzHnnaKs9VB/irbMZGP6fFl4tUGX/gJFNFC
- 01QWimEyQXjDskCDNGaXw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:27VC9SX74C4=:6H6fUQrVJQp9H0Y1RavvB0
- VdWbD6a5+2pigzcLDa6kyTAG5IxFeZhdU9QOWeWUNmgbPyid8iSkfEm7R5D8woc+S3qZyxDVz
- sHAA/sManypw+g2BnWeqvrXfB2Dpiy73YGcwc5o6/7akFHQTXm/L05JexqCRE4ZhdhMfXtBak
- XJ6FMLknTbQrtNBiUu36Mpn29NeqLdYy5ydzsPeoj0AJx8xlib9RtaORuZQvcpX1qJix7Szqd
- 4N3lm1HqE/V9+JKAd6Lo1k9P1CxYV8CYVaU2F6wOun0JwESdYyOM3bJvhptPmo1aCOvA5Fgc3
- ARhA4aZQKlBWZiu+f/uhk8PKVnTfud5Muz/uG8uuYy75YQn+sZS9QLVI3sBFcFxcxcwGFuyZU
- 4Q3998pphriykn/XT2PRuBbA5danZuU2ArYOHWHYx3hs3JSRWmchlHgOpYtm6wMeC4EHwLWZl
- x5x8ZhgynQdrTvQUV+U+KB63sabRRlY0GHVbvsfgGkq6J70Y93siQf6l+SHE7W/ulI0VN6ePu
- ZkvyYT6MRcN0djJ3HiDGc4m202PdZ7QUD/RrIFJu7JC0z/ikksngDcaitmoIxm10Kb+/EmUxi
- uo6rUXHMYnNKhFwBnK6fLPiBQrdjRoHsi2uSuCQ0OuFbnXrSmM7Igkh4POElY27FyEJeANKcI
- DFC0IjycWOdy7LwnZD2DGIZiUq1xWV4XY8taXlyPGK4aJSTyrr95u2KYKNaGwoaiZEV2h2AI6
- J4+18lNu9YMGIcqw1t7dMzBMBIKKGewEKG3yPbBF/IS0kQU6hV8XNYF85tbRZic/qbWOTkaVU
- HeY/Lkw9z/x4vIee+AIwP/5LBZDo01zIv1EFWlWDKcJTLYdZAUFvDkyq4fp+jVGrz9csv4GSv
- zbPi9QEnMd5+iaecB0pA/3gzMVFbDBjj/lXevld9q40o3JMWk6Iz2JAFVWsnznpp4i3uy/nFp
- lUSs0O+v/iCN0Rp664cpcFVR3+2rkOxCMxVXzwi5+WCdTuzkhewzlpV8Z+LAhLg2uk22ornB3
- BqdpsOrl82tpfgmpA97347FbGM76eqq6ww+GXIjD4/OgPUhELytIa+8w4musSH8KLMbhaDMXp
- nwmviLutDGsvxI=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] dt-bindings: nvmem: add U-Boot environment variables
+ binding
+Content-Language: en-US
+To:     Sean Anderson <seanga2@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tom Rini <trini@konsulko.com>, Simon Glass <sjg@chromium.org>
+CC:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Ricardo Salveti <ricardo@foundries.io>,
+        Jorge Ramirez-Ortiz <jorge@foundries.io>,
+        <devicetree@vger.kernel.org>, <u-boot@lists.denx.de>,
+        <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20220215134925.32691-1-zajec5@gmail.com>
+ <193f9354-5e1d-def8-c8ab-fbe88d8d9b8f@xilinx.com>
+ <6679b98e-f5f0-8608-a36c-c0c41fb5ea6f@gmail.com>
+From:   Michal Simek <michal.simek@xilinx.com>
+In-Reply-To: <6679b98e-f5f0-8608-a36c-c0c41fb5ea6f@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f06017ce-1f0c-4917-4c70-08d9f094372f
+X-MS-TrafficTypeDiagnostic: MW4PR02MB7348:EE_
+X-Microsoft-Antispam-PRVS: <MW4PR02MB73482FEB1C333B8C5FC9850FC6349@MW4PR02MB7348.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eiX35Fch8hae46E6SfWpNHtKvDlU7Ekl2qEVC4NYpPXgF5scdytAk0X4CTct2UkERq4sV2hV+xBCagyeetWSTynec8eCUFV7ByycIAXth5Fa3riCltfD/uBY3xdMIe1zj9LTgBgcz+9Lppl1HIl0nmS7CiIbSOPsKZjcdQZuIeDsLnENaJE43oFmfI6IASQscUHIuJnsPnPk+IQXynch5JcVK0HbqJMzR9KBvJ73Lx2ZZ2Ctpdt9QHIb6aVocVwz/aec2pBozeiaDdsRGswc48hCG5MoOTWKuqsj3uoIH15fjEMGNWdceexjGi2KutF37nmHlIzWJ2y1U33xHW2apelJquewWE8v9Ci+iLtxAmnTo8jIjeC7finSbhq2Y6dayIi9BvaUQyVAEZeK3vEy2AZy0l3o1FR8Kecqn/m4NHJB6Su+3WSwXakw5XWnuFosYohrFcAM8MqukmnwKGtCXdgVALttsSe19SWzyBjotHUPcRlZp6wnqDtoA2s+H+QbafjJbKbghskc7BANoBf6ikjj896CuxRTFcbYzwCRRBX7mgn3NvJeZ4G5wNNCEeKRolZvePdh4tQ7xi5bfDywo6H4kCHlSq+kqTwzsX7WVQwIs5xrabkbBMbvFVpPM1oKVoCrRaivKi4IVdJdbpoDOCSi6/XNW4S9/sKfD+gLCiFaQqmAvzknL2JPYMYUYuh/thmaYW0gTSKgVOIzij/b7FMIjP3GPV7LtQ6is4jOjLdIjXIZmbXEx1I1LDMK24qKiz0JW1xeS5yTHm5GIGiig5q0jHJ2F91YlkEIVMooyAm/QSdEKDz7U9RTFB8ZbwLkqVqZgrh1QSzwuvYSrSJUVDw/k2ezvyaQBQYvCWTS6e4=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(9786002)(31696002)(66574015)(8936002)(47076005)(36860700001)(31686004)(5660300002)(7416002)(336012)(83380400001)(426003)(53546011)(40460700003)(6666004)(36756003)(2906002)(508600001)(186003)(110136005)(44832011)(54906003)(70586007)(316002)(2616005)(8676002)(4326008)(966005)(82310400004)(356005)(70206006)(7636003)(26005)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2022 15:02:42.0371
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f06017ce-1f0c-4917-4c70-08d9f094372f
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT016.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR02MB7348
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,53 +133,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
-are available in the Git repository at:
+On 2/15/22 15:57, Sean Anderson wrote:
+> On 2/15/22 9:02 AM, Michal Simek wrote:
+>>
+>>
+>> On 2/15/22 14:49, Rafał Miłecki wrote:
+>>> From: Rafał Miłecki <rafal@milecki.pl>
+>>>
+>>> U-Boot uses environment variables for storing device setup data on
+>>> flash. That data usually needs to be accessed by a bootloader, kernel
+>>> and often user-space.
+>>>
+>>> This binding allows describing environment data location and its format
+>>> clearly. In some/many cases it should be cleaner than hardcoding &
+>>> duplicating that info in multiple places. Bootloader & kernel can share
+>>> DTS and user-space can try reading it too or just have correct data
+>>> exposed by a kernel.
+>>>
+>>> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+>>> ---
+>>>   .../devicetree/bindings/nvmem/u-boot,env.yaml | 58 +++++++++++++++++++
+>>>   MAINTAINERS                                   |  5 ++
+>>>   2 files changed, 63 insertions(+)
+>>>   create mode 100644 Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml 
+>>> b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
+>>> new file mode 100644
+>>> index 000000000000..a2b3a9b88eb8
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
+>>> @@ -0,0 +1,58 @@
+>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/nvmem/u-boot,env.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: U-Boot environment variables
+>>> +
+>>> +description: |
+>>> +  U-Boot uses environment variables to store device parameters and
+>>> +  configuration. They may be used for booting process, setup or keeping end 
+>>> user
+>>> +  info.
+>>> +
+>>> +  Data is stored on flash in a U-Boot specific format (header and NUL separated
+>>> +  key-value pairs).
+>>> +
+>>> +  This binding allows specifying data location and used format.
+>>> +
+>>> +maintainers:
+>>> +  - Rafał Miłecki <rafal@milecki.pl>
+>>> +
+>>> +allOf:
+>>> +  - $ref: nvmem.yaml#
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    oneOf:
+>>> +      - description: A standalone env data block
+>>> +        const: u-boot,env
+>>> +      - description: Two redundant blocks with active one flagged
+>>> +        const: u-boot,env-redundant-bool
+>>> +      - description: Two redundant blocks with active having higher counter
+>>> +        const: u-boot,env-redundant-count
+>>
+>> I am not convinced that this is the best way how to do it. Because in u-boot 
+>> implementation you would have to enable MTD partitions to get there.
+>> And the whole parsing will take a lot of time.
+>>
+>> I think the way how I think this can be handled is.
+>>
+>> # I don't think that discussion with Simon was finished.
+>> But for example (chosen or firmware node)
+>> chosen {
+>>      u-boot {
+>>          u-boot,env = <&qspi &part0>;
+>>          u-boot,env-redundant = <&qspi &part1>;
+>>          #or
+>>          u-boot,env = <&qspi 0 40000>;
+>>          u-boot,env-redundant = <&qspi 40000 40000>;
+> 
+> What about when the environment is on top of UBI?
 
-  http://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git tags/for-5.17/parisc-3
+I expect we should list all possible combinations and cover them here.
 
-for you to fetch changes up to 6e8793674bb0d1135ca0e5c9f7e16fecbf815926:
+> 
+>>          #or
+>>          u-boot,env = <&mmc 0 0 10000>; #device/start/size - raw mode
+>>          u-boot,env = <&mmc 0 1>; # device/partition - as file to FS
+> 
+> For emmc at least you will need another cell for the hardware partition.
+> And of course, you can name the environment file whatever you want, so
+> that needs to be recorded as well.
+> 
+> IMO to do this properly you'd need to have a property corresponding to
+> each of the major configs in the env menu.
 
-  serial: parisc: GSC: fix build when IOSAPIC is not set (2022-02-14 19:34:42 +0100)
+Agree 100%. I just wanted to share how I think this should be done.
+At the end we should be able to describe any combination in generic way.
 
-----------------------------------------------------------------
-parisc architecture fixes for kernel v5.17-rc5
+Thanks,
+Michal
 
-- Fix miscompilations when function calls are made from inside a
-  put_user() call
-- Drop __init from map_pages() declaration to avoid random boot crashes
-- Added #error messages if a 64-bit compiler was used to build a 32-bit
-  kernel (and vice versa)
-- Fix out-of-bound data TLB miss faults in sba_iommu and ccio-dma
-  drivers
-- Add ioread64_lo_hi() and iowrite64_lo_hi() functions to avoid kernel
-  test robot errors
-- Fix link failure when 8250_gsc driver is built without CONFIG_IOSAPIC
-
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      parisc: Add ioread64_lo_hi() and iowrite64_lo_hi()
-
-Helge Deller (2):
-      parisc: Show error if wrong 32/64-bit compiler is being used
-      parisc: Fix some apparent put_user() failures
-
-John David Anglin (3):
-      parisc: Drop __init from map_pages declaration
-      parisc: Fix data TLB miss in sba_unmap_sg
-      parisc: Fix sglist access in ccio-dma.c
-
-Randy Dunlap (1):
-      serial: parisc: GSC: fix build when IOSAPIC is not set
-
- arch/parisc/include/asm/bitops.h   |  8 ++++++++
- arch/parisc/include/asm/uaccess.h  | 29 +++++++++++++++--------------
- arch/parisc/lib/iomap.c            | 18 ++++++++++++++++++
- arch/parisc/mm/init.c              |  9 ++++-----
- drivers/parisc/ccio-dma.c          |  3 ++-
- drivers/parisc/sba_iommu.c         |  3 ++-
- drivers/tty/serial/8250/8250_gsc.c |  2 +-
- 7 files changed, 50 insertions(+), 22 deletions(-)

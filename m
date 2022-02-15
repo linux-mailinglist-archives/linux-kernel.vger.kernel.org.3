@@ -2,99 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B70DD4B73CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1E54B73CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:44:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241701AbiBOQkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:40:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49668 "EHLO
+        id S241718AbiBOQkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:40:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239370AbiBOQkR (ORCPT
+        with ESMTP id S241721AbiBOQke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:40:17 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BABEFF91
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:40:07 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id v4so17857771pjh.2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:40:07 -0800 (PST)
+        Tue, 15 Feb 2022 11:40:34 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B8AF212D
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:40:24 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id m10so21360526oie.2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:40:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=GjzGhBOh8jK25Hj15polj7Q2qGK/jzjkg+lJ5DCE9Bs=;
-        b=mDwJxlM9ua3Q2EgY+L5cfx6nvP4xPP+V5PVHN/8DFq6tukufpnQnRJFRhRH+X1Kg2g
-         7yYY6qmmd/2hMLGnJj75Yoww4EO20Uj5zU/pEhf5S8Bdr74ZZGkiRWnOlSGGQldMtnC2
-         v/cbHY8fGp1O7j7LN65MwzB40H7TV+ABMpVILP6pEhtkKCVIt0JQviHRDltnyeifZxLw
-         BEPuP5UFkVICiZKm/uv/71YmeDwxxKLbVFfNzkNgSe3ro8V+eHbWWL7dQvXY4KoB9wrc
-         hAiv0sAKz3QnPf/sZ0ZfmS1SMjQU4Gg/cIE+ByBPlcNvCO1sY7N1GxjQn2HRwjghj0Oh
-         HPAA==
+        bh=I1kj9pE4xw6JAJzinakuQqOKg6JJ0KzkGT4gYU3pHWA=;
+        b=UCeI7kpxKycxeDv1CKWVXZiSqQZl7pCD/Zi0Nn3FNq3/b6tW5KckWNvCu73yVCLynj
+         tCJq1ODydHRD39fH5qHnxqOJqJLVz3jkbcavRpeXAJnRcNuHIOo+HTRZHB0Mc4d3Bi3p
+         Od1LuZhoT50Uce+glyEI0gfVmvUrW/OVI2bql8B1YEiCpeiZvZWdeRjn5da4UlWV79pH
+         CRT5vtEZAD9Sx8lZHCTtt85jWIigmAFLchrwoWa1JwKM3vC/n55xqG6/8vrLMauyGD6f
+         wvs17n2TNHLYXbPIdfFxRxabOftLSvL7hWs9hIQS7BzWVIKRCFImVfyqpNH2RFUZf2I5
+         MXww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=GjzGhBOh8jK25Hj15polj7Q2qGK/jzjkg+lJ5DCE9Bs=;
-        b=XauxfMAUDOkvjJGVre0ILWvEcPsXDIZqEFVlR20jvbv1FsgR8iQ4oh1eVwrCArVjc+
-         66gykahdNqGA6OyQ5nIwwk6kBaAMZy4P1e2KdCT1s39VJ8Xe5pWBsHS/X1vgZodwha1Z
-         awbYyeegNwXSTsBSGVWH4+a/7lgSB0PJmLh+g7/0MzRHFCZygenREhLe7GS51gL0F7S3
-         IBFv2mbvUq48+y+2d4GCCgwX5cKUb39cV4NTo4MOHUn8glNCOl5s5PZF8rRma8DMyV+G
-         GSfOZSdq8Mi6Q9s2l2LZ5X6+ts7Om6Fpxs9KcyyAAjg6PhifXj0G45OSN6jLiODhNXQs
-         pyVQ==
-X-Gm-Message-State: AOAM530ldvV+83KGrtEi9lEHLZA02GxRggeEqc/cbpuMthaqG/YCXaPx
-        Ue7CxjCAG/mvNQmXJx6aDPirBSrQt2rJ5w==
-X-Google-Smtp-Source: ABdhPJzp3QQbBsaFv+7+b6FImzl1ZX+uzkVQdvAA7LZJnDAJM8bbYxLOXQYZ8csVnKZYU87zVSDD6g==
-X-Received: by 2002:a17:90b:4f42:b0:1b9:5a43:2278 with SMTP id pj2-20020a17090b4f4200b001b95a432278mr5313268pjb.158.1644943207065;
-        Tue, 15 Feb 2022 08:40:07 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id oj10sm18803477pjb.7.2022.02.15.08.40.06
+        bh=I1kj9pE4xw6JAJzinakuQqOKg6JJ0KzkGT4gYU3pHWA=;
+        b=6FY7pPf2PTV+sudXlf2N1tory5XMLu+WtnjFBFPfvUdYVtqFgl1jGkMGSflkDxM+u9
+         pGh/imEZfau5NFm9GT8x16CuoWtvTQCouKzzLHB39HRrDE53ecuNbw6Lx4/iw+1e1drv
+         4bmMO+o9mKFHpyhEyJXi/6S8fQrc+r08vvsO7yKuxXHL7SkVLDseJXKZjvbzCox10t8O
+         JOd2ZCxArhydOAeDMtsl6f6qa+gaP4crGWwqfFQazpLHSQYV0GlXwG8Xpgkypv9KMAro
+         x7LxcNxlIykhdVn5y+G1KjKNPrDsyb7JKOqYT56u34AH6lvwAIlxn30gHwH5F4mH6zxK
+         D6tQ==
+X-Gm-Message-State: AOAM533herqk0YddC6tdJQdvOe2Lu+jHbm+972aRCvvjy0vGLh/B/z3/
+        cc34wHq2UJJbjlToMlnPkckfig==
+X-Google-Smtp-Source: ABdhPJwywAFvvPp04iK1gyctbPPD1igrq3/W2+Vd3W1gPOO1Z7BW13OeaSkecxF5Lrcky9rnyejdRw==
+X-Received: by 2002:aca:3886:0:b0:2cf:6189:ee47 with SMTP id f128-20020aca3886000000b002cf6189ee47mr1954823oia.58.1644943223401;
+        Tue, 15 Feb 2022 08:40:23 -0800 (PST)
+Received: from yoga ([2600:1700:a0:3dc8:5c39:baff:fe03:898d])
+        by smtp.gmail.com with ESMTPSA id x3sm1703671oiv.29.2022.02.15.08.40.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 08:40:06 -0800 (PST)
-Date:   Tue, 15 Feb 2022 16:40:03 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zeng Guang <guang.zeng@intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: Re: [PATCH 09/11] KVM: x86: Treat x2APIC's ICR as a 64-bit register,
- not two 32-bit regs
-Message-ID: <YgvXY98ah4uIECee@google.com>
-References: <20220204214205.3306634-1-seanjc@google.com>
- <20220204214205.3306634-10-seanjc@google.com>
- <20220215032712.GB28478@gao-cwp>
+        Tue, 15 Feb 2022 08:40:22 -0800 (PST)
+Date:   Tue, 15 Feb 2022 10:40:20 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/15] arm64: dts: qcom: Add MSM8953 device tree
+Message-ID: <YgvXdFZfWEzHF2Oy@yoga>
+References: <20220112194118.178026-1-luca@z3ntu.xyz>
+ <20220112194118.178026-11-luca@z3ntu.xyz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220215032712.GB28478@gao-cwp>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220112194118.178026-11-luca@z3ntu.xyz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022, Chao Gao wrote:
-> > 	case APIC_SELF_IPI:
-> >-		if (apic_x2apic_mode(apic)) {
-> >-			kvm_lapic_reg_write(apic, APIC_ICR,
-> >-					    APIC_DEST_SELF | (val & APIC_VECTOR_MASK));
-> >-		} else
-> >+		if (apic_x2apic_mode(apic))
-> >+			kvm_x2apic_icr_write(apic, APIC_DEST_SELF | (val & APIC_VECTOR_MASK));
-> >+		else
-> 
-> The original code looks incorrect. Emulating writes to SELF_IPI by writes to
-> ICR has an unwanted side-effect: the value of ICR in vAPIC page gets changed.
-> 
-> It is better to use kvm_apic_send_ipi() directly.
+On Wed 12 Jan 13:40 CST 2022, Luca Weiss wrote:
 
-Agreed, the SDM lists SELF_IPI as write-only, with no associated MMIO offset, so
-it should have no visible side effect in the vAPIC.  I'll add a patch to fix this.
+> From: Vladimir Lypak <vladimir.lypak@gmail.com>
+> 
+> Add a base DT for MSM8953 SoC.
+> 
+> Co-developed-by: Luca Weiss <luca@z3ntu.xyz>
+> Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+>  arch/arm64/boot/dts/qcom/msm8953.dtsi | 1337 +++++++++++++++++++++++++
+>  1 file changed, 1337 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8953.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi b/arch/arm64/boot/dts/qcom/msm8953.dtsi
+> new file mode 100644
+> index 000000000000..59918b527750
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
+> @@ -0,0 +1,1337 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +/* Copyright (c) 2022, The Linux Foundation. All rights reserved. */
+> +
+> +#include <dt-bindings/clock/qcom,gcc-msm8953.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/power/qcom-rpmpd.h>
+> +#include <dt-bindings/thermal/thermal.h>
+> +
+> +/ {
+> +	interrupt-parent = <&intc>;
+> +
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
 
-Thanks!
+Why do you have address/size-cells of 2, and then limit them to 1 in
+/soc?
+
+> +
+> +	aliases {
+> +		i2c1 = &i2c_1;
+> +		i2c2 = &i2c_2;
+> +		i2c3 = &i2c_3;
+> +		i2c4 = &i2c_4;
+> +		i2c5 = &i2c_5;
+> +		i2c6 = &i2c_6;
+> +		i2c7 = &i2c_7;
+> +		i2c8 = &i2c_8;
+
+It was expressed a while back that you should specify alias only for the
+things that you have enabled in your .dts.
+
+> +	};
+[..]
+> +		tcsr_mutex: hwlock@1905000 {
+> +			compatible = "qcom,tcsr-mutex";
+> +			reg = <0x1905000 0x20000>;
+> +			#hwlock-cells = <1>;
+> +		};
+> +
+> +		tcsr: syscon@1937000 {
+> +			compatible = "qcom,tcsr-msm8953", "syscon";
+> +			reg = <0x1937000 0x30000>;
+> +		};
+> +
+> +		tcsr_phy_clk_scheme_sel: syscon@193f044 {
+
+I don't fancy exposing a single word from the middle of &tcsr using a
+syscon. The tcsr node should express the TCSR region and if we need to
+reference bits of information within that we should do that in some
+structured way.
+
+Wouldn't nvmem be a good candidate for this?
+
+> +			compatible = "syscon";
+> +			reg = <0x193f044 0x4>;
+> +		};
+> +
+
+Regards,
+Bjorn

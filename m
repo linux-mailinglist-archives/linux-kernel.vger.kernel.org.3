@@ -2,81 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBEB94B7B0F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:12:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2628E4B7B11
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:12:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244395AbiBOXMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 18:12:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47458 "EHLO
+        id S244721AbiBOXMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 18:12:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238786AbiBOXMI (ORCPT
+        with ESMTP id S244412AbiBOXMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 18:12:08 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D95F13F53
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:11:56 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id h11so176088ilq.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:11:56 -0800 (PST)
+        Tue, 15 Feb 2022 18:12:14 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B4B13F74
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:12:03 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id c6so774001ybk.3
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:12:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=atishpatra.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=RS9LJJqmWh2HshOHeCWOhECU3+chlrbjdRDe3zN6X9M=;
-        b=H3bimkVRJOknA0aIROgu2Emj9m+d2cHFSVAZdO3VDMB9C2wmDyi0GpYAphtkdW5T9l
-         t2vyE2yOlh0+55slm821IvlxRGaKvbnhxFvzX4eRbrxX7KE9aJqBlZqzyLfQbcaGAcB5
-         i8Toqhd012JS44MZovroT1JLm5LHghliYvR6E=
+        bh=loAfDoGLfr/iqSIkMgZ8bYEjmt72BeZCLhtdpL5OIaQ=;
+        b=gNwn4w1BBG0QO8d7il/hS7XnsvBv8CEpuRu43msQBQZCnhs9Fnj5h72+hczDMizL64
+         9MeW8FDditxJs7M787wypzS7HhaJKVRx4aLxywV+pZoSHdANKzvX0JPQx2u6to6zWfDy
+         ZXcynRo469aF4QZX+xgx+6suPf+EIZz6Cfvl8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=RS9LJJqmWh2HshOHeCWOhECU3+chlrbjdRDe3zN6X9M=;
-        b=us80kALiUh37C15lmoylpnaKCjpQEcTsUV89ZpraxuS4ubqeDUgiyeLP10bvKHIsWd
-         O0oRss3a7HVkA9qJ2uwS1IkjGuNEHt0RjxwYnND2aFKFQ4s5U8OFHNeYvTzda74iuUGX
-         5VWrlSHWjG7O7tIMRY4V91rBpO6K4hhw/2bWQ5Bdk+pcDPWEF9VLZVm5Kvlexq5JJTxM
-         mnFLH7Vjc1yaw1CY9JXI/sJc9l8WalydhffXQ+NcU3DFqbKCq/b2k1tq1G+pqOaHbCH8
-         0L+UUVXbJcAVKG3MsEFO/CCrOqJWDliQBWbDGfO8gzPJnpzV9sydCl7cTwywOoj/MP4Y
-         ZFpg==
-X-Gm-Message-State: AOAM5334iAFu6rm1GGsS6nRS00Zu8NnyNEVTBBMSwa50ARm2KEaXVNi8
-        L2G5SYrRuJXTBEstJYRqu9nX351GgixWlQ==
-X-Google-Smtp-Source: ABdhPJxLVaIpJLGSQ6C1m3N2IqJn3iGoUKr++u44ETurWC2ZkyNHQztQZ5xc0MIIGTwUdr3sbzAe0A==
-X-Received: by 2002:a05:6e02:1788:b0:2be:ffc9:8bb2 with SMTP id y8-20020a056e02178800b002beffc98bb2mr22130ilu.294.1644966715424;
-        Tue, 15 Feb 2022 15:11:55 -0800 (PST)
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com. [209.85.166.177])
-        by smtp.gmail.com with ESMTPSA id x1sm22589255ilc.34.2022.02.15.15.11.53
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 15:11:53 -0800 (PST)
-Received: by mail-il1-f177.google.com with SMTP id d7so177703ilf.8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:11:53 -0800 (PST)
-X-Received: by 2002:a05:6e02:12ef:b0:2be:2c34:17b2 with SMTP id
- l15-20020a056e0212ef00b002be2c3417b2mr39472iln.120.1644966712975; Tue, 15 Feb
- 2022 15:11:52 -0800 (PST)
+        bh=loAfDoGLfr/iqSIkMgZ8bYEjmt72BeZCLhtdpL5OIaQ=;
+        b=uWB6E3V/iwYNdUoCxwtNa/NsvRnR7iSXUE3naD/7DnNfpSRr3QU5/6PurfVqw4fDcK
+         lA+9PKaiEsTL/rVxV1Diu+ywuTFUg/uHBIoDr0GInpsAZ/aSU8bD1PJXGCdKdHgv8adO
+         R0JnSlyVi2UrmVlQigKrs3CDRLrbsTBHiDHJi1C9C4EYiWgt6q46+jhd2EWoaipAm68X
+         uEHLMgsJ4eC3fhwJt+/kdAzC7d6GSxbhAP6rbqBmf6P7BJfYJ1aCwnvk7l0+gJF3/Q4s
+         XJzY/He/abpfhFiaGScBwT38s238Ce3xJ+ZUgur0EVuFM3ulcy6xCjSO57oRmv7ksdgl
+         ox8g==
+X-Gm-Message-State: AOAM5317Y+2xbciVUHynSIuEkIwpPVhZWmAyEKtIcd6HQSEm0UvcMdkS
+        uP7q9Hn+cuSpvI0s3I78u9QJgy6t5K51lp0hR/8n
+X-Google-Smtp-Source: ABdhPJyU6ADhFsSkKFw6pjjAvZ21yhhrWabJjiIocdygUARwxsgbNK6NODHq3oiHUoD9dlFnAQQTVwPWoB0Pj4jiqlw=
+X-Received: by 2002:a25:c794:: with SMTP id w142mr1196085ybe.632.1644966722684;
+ Tue, 15 Feb 2022 15:12:02 -0800 (PST)
 MIME-Version: 1.0
-References: <20220205001342.3155839-1-dianders@chromium.org>
- <20220204161245.v2.2.Ib0bd5346135cbb0b63006b69b61d4c8af6484740@changeid>
- <5d60473d-be8f-e2dc-2ce9-bc0b9056e4b4@redhat.com> <e6670fd7-1f75-56f7-b668-20db9902cac6@intel.com>
-In-Reply-To: <e6670fd7-1f75-56f7-b668-20db9902cac6@intel.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 15 Feb 2022 15:11:41 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=Ut3N9syXbN7i939mNsx3h7-u9cU9j6=XFkz9vrh0Vseg@mail.gmail.com>
-Message-ID: <CAD=FV=Ut3N9syXbN7i939mNsx3h7-u9cU9j6=XFkz9vrh0Vseg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] drm: Plumb debugfs_init through to panels
-To:     Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>, jjsu@chromium.org,
-        lschyi@chromium.org, Sam Ravnborg <sam@ravnborg.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+References: <20220215090211.911366-1-atishp@rivosinc.com> <20220215090211.911366-5-atishp@rivosinc.com>
+ <CAAhSdy29nzXFesfeMjY_FkTmTZ4yrHjGxTweBCVn-wFFHnMV=A@mail.gmail.com>
+In-Reply-To: <CAAhSdy29nzXFesfeMjY_FkTmTZ4yrHjGxTweBCVn-wFFHnMV=A@mail.gmail.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Tue, 15 Feb 2022 15:11:51 -0800
+Message-ID: <CAOnJCUJR1V2xBxr61xYH6PAYEooqGuMtuyvA-wWXFVAwYsG3Gw@mail.gmail.com>
+Subject: Re: [PATCH v3 4/6] RISC-V: Implement multi-letter ISA extension
+ probing framework
+To:     Anup Patel <anup@brainfault.org>
+Cc:     Atish Patra <atishp@rivosinc.com>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,77 +73,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, Feb 15, 2022 at 2:20 PM Andrzej Hajda <andrzej.hajda@intel.com> wrote:
+On Tue, Feb 15, 2022 at 2:24 AM Anup Patel <anup@brainfault.org> wrote:
 >
-> On 15.02.2022 23:09, Javier Martinez Canillas wrote:
-> > Hello Doug,
+> On Tue, Feb 15, 2022 at 2:32 PM Atish Patra <atishp@rivosinc.com> wrote:
 > >
-> > On 2/5/22 01:13, Douglas Anderson wrote:
+> > Multi-letter extensions can be probed using exising
+> > riscv_isa_extension_available API now. It doesn't support versioning
+> > right now as there is no use case for it.
+> > Individual extension specific implementation will be added during
+> > each extension support.
 > >
-> > [snip]
+> > Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> > ---
+> >  arch/riscv/include/asm/hwcap.h | 18 ++++++++++++++++++
+> >  arch/riscv/kernel/cpufeature.c | 27 ++++++++++++++++++++++++---
+> >  2 files changed, 42 insertions(+), 3 deletions(-)
 > >
-> >> +static void panel_bridge_debugfs_init(struct drm_bridge *bridge,
-> >> +                                  struct dentry *root)
-> >> +{
-> >> +    struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
-> >> +    struct drm_panel *panel = panel_bridge->panel;
-> >> +
-> >> +    root = debugfs_create_dir("panel", root);
-> > This could return a ERR_PTR(-errno) if the function doesn't succeed.
+> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> > index 5ce50468aff1..170bd80da520 100644
+> > --- a/arch/riscv/include/asm/hwcap.h
+> > +++ b/arch/riscv/include/asm/hwcap.h
+> > @@ -34,7 +34,25 @@ extern unsigned long elf_hwcap;
+> >  #define RISCV_ISA_EXT_s                ('s' - 'a')
+> >  #define RISCV_ISA_EXT_u                ('u' - 'a')
 > >
-> > I noticed that most kernel code doesn't check the return value though...
+> > +/*
+> > + * Increse this to higher value as kernel support more ISA extensions.
+> > + */
+> >  #define RISCV_ISA_EXT_MAX      64
+> > +#define RISCV_ISA_EXT_NAME_LEN_MAX 32
+> > +
+> > +/* The base ID for multi-letter ISA extensions */
+> > +#define RISCV_ISA_EXT_BASE 26
+> > +
+> > +/*
+> > + * This enum represent the logical ID for each multi-letter RISC-V ISA extension.
+> > + * The logical ID should start from RISCV_ISA_EXT_BASE and must not exceed
+> > + * RISCV_ISA_EXT_MAX. 0-25 range is reserved for single letter
+> > + * extensions while all the multi-letter extensions should define the next
+> > + * available logical extension id.
+> > + */
+> > +enum riscv_isa_ext_id {
+> > +       RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
+> > +};
 > >
-> >> +    if (panel->funcs->debugfs_init)
-> > Probably if (!(IS_ERR(root) && panel->funcs->debugfs_init) ?
+> >  unsigned long riscv_isa_extension_base(const unsigned long *isa_bitmap);
 > >
-> >> +            panel->funcs->debugfs_init(panel, root);
-> >> +}
-> > [snip]
+> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> > index cd9eb34f8d11..af9a57ad3d4e 100644
+> > --- a/arch/riscv/kernel/cpufeature.c
+> > +++ b/arch/riscv/kernel/cpufeature.c
+> > @@ -83,7 +83,7 @@ void __init riscv_fill_hwcap(void)
 > >
-> >> @@ -436,6 +436,9 @@ void drm_debugfs_connector_add(struct drm_connector *connector)
-> >>      /* vrr range */
-> >>      debugfs_create_file("vrr_range", S_IRUGO, root, connector,
-> >>                          &vrr_range_fops);
-> > Same here, wonder if the return value should be checked.
+> >         for_each_of_cpu_node(node) {
+> >                 unsigned long this_hwcap = 0;
+> > -               unsigned long this_isa = 0;
+> > +               uint64_t this_isa = 0;
+>
+> Why not use a bitmap here ?
+>
 
-My plan (confirmed with Javier over IRC) is to land my patches and we
-can address as needed with follow-up patches.
+Yeah. That will simplify things for both RV32 & RV64. Thanks.
 
-I actually wrote said follow-up patches and they were ready to go, but
-when I was trying to come up with the right "Fixes" tag I found commit
-b792e64021ec ("drm: no need to check return value of debugfs_create
-functions"). So what's being requested is nearly the opposite of what
-Greg did there.
+> >
+> >                 if (riscv_of_processor_hartid(node) < 0)
+> >                         continue;
+> > @@ -167,12 +167,22 @@ void __init riscv_fill_hwcap(void)
+> >                         if (*isa != '_')
+> >                                 --isa;
+> >
+> > +#define SET_ISA_EXT_MAP(name, bit)                                             \
+>
+> Where is this macro used ?
 
-I thought about perhaps only checking for directories but even that
-type of check was removed by Greg's patch. Further checking shows that
-start_creating() actually has:
+It will be used in the future where individual extension support will use it.
+Here is an example from my debug patch
 
-if (IS_ERR(parent))
-  return parent;
+https://github.com/atishp04/linux/commit/e9e240c9a854dceb434ceb53bdbe82a657bee5f2
 
-...so I guess that explains why it's fine to skip the check even for parents?
+>
+> > +                       do {                                                    \
+> > +                               if ((ext_end - ext == sizeof(name) - 1) &&      \
+> > +                                    !memcmp(ext, name, sizeof(name) - 1)) {    \
+> > +                                       this_isa |= (1UL << bit);               \
+>
+> You can use set_bit() here when using bitmap.
+>
+> > +                                       pr_info("Found ISA extension %s", name);\
+> > +                               }                                               \
+> > +                       } while (false)                                         \
+> > +
+> >                         if (unlikely(ext_err))
+> >                                 continue;
+> >                         if (!ext_long) {
+> >                                 this_hwcap |= isa2hwcap[(unsigned char)(*ext)];
+> >                                 this_isa |= (1UL << (*ext - 'a'));
+> >                         }
+> > +#undef SET_ISA_EXT_MAP
+> >                 }
+> >
+> >                 /*
+> > @@ -185,10 +195,21 @@ void __init riscv_fill_hwcap(void)
+> >                 else
+> >                         elf_hwcap = this_hwcap;
+> >
+> > -               if (riscv_isa[0])
+> > +               if (riscv_isa[0]) {
+>
+> You can use bitmap_weight() here
+>
+> > +#if IS_ENABLED(CONFIG_32BIT)
+> > +                       riscv_isa[0] &= this_isa & 0xFFFFFFFF;
+> > +                       riscv_isa[1] &= this_isa >> 32;
+> > +#else
+> >                         riscv_isa[0] &= this_isa;
+> > -               else
+> > +#endif
+> > +               } else {
+> > +#if IS_ENABLED(CONFIG_32BIT)
+> > +                       riscv_isa[0] = this_isa & 0xFFFFFFFF;
+> > +                       riscv_isa[1] = this_isa >> 32;
+> > +#else
+> >                         riscv_isa[0] = this_isa;
+> > +#endif
+> > +               }
+> >         }
+> >
+> >         /* We don't support systems with F but without D, so mask those out
+> > --
+> > 2.30.2
+> >
+>
+> Regards,
+> Anup
 
-Sure enough I confirmed that if I pass `ERR_PTR(-EINVAL)` as the root
-for `panel->funcs->debugfs_init()` that nothing bad seems to happen...
 
 
-> I've seen sometimes that file/dir was already created with the same
-> name, reporting error in such case will be helpful.
-
-It sure looks like start_creating() already handles that type of
-reporting... Sure enough, I tried to create the "force" file twice,
-adding no error checking myself, and I see:
-
-debugfs: File 'force' in directory 'eDP-1' already present!
-debugfs: File 'force' in directory 'DP-1' already present!
-
-
-So tl;dr is that I'm going to land the patches and now am _not_
-planning on doing followup patches. However, if I'm confused about any
-of the above then please let me know and I'll dig more / can send
-follow-up patches.
-
--Doug
+-- 
+Regards,
+Atish

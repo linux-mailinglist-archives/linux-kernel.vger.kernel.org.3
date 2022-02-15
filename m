@@ -2,87 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E88A4B7887
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CACAA4B7734
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243527AbiBOTTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 14:19:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53422 "EHLO
+        id S243637AbiBOTUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 14:20:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243524AbiBOTTc (ORCPT
+        with ESMTP id S243580AbiBOTTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 14:19:32 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BD710CF0C
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 11:19:21 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id p22so5268282lfu.5
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 11:19:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=rmAUdf26epsUhnZgVgaT/vfT/sOzQvVHgvDDTsajqPc=;
-        b=LzChSGwlWiyeBElwd1gZsSPpenXQZzTrdlGvC7n8jlU4ooFZPHWMbW3iJ3PoIdFtfH
-         3IKWBH/9XvnEGt5eBN5+IRYBE/KfA0HD5opmdcp+nxkxmUWEr8niPbFihhi5/wVdpP+m
-         Os1aNEs0uyo/plpdIyc4f1UCQTE7yQlKlW20R3+8PFhd7BW2fUV7y3dWUaPUpaaA5bxh
-         2ERVVfFMEqfqDBlTC6Z7/IFlRJ0xRjufnGsfFy6o3Da+0qUTQY+cTmk+qo8Pma6QrDsv
-         aMC2FpRO2SjwIA1TvjpW7iSkZAbzWz/+UxANWzS6tbKp54Jo3Ko6i2weZPyUHI7pduyV
-         bI7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=rmAUdf26epsUhnZgVgaT/vfT/sOzQvVHgvDDTsajqPc=;
-        b=Z6ZptjR4U3Wf5S/G/oKTZRKEQyo1XeeK8lpxfkt3mFAkyDZ6QLM022CXVnA3G663gh
-         zHWUSn2qiB25eIOcBFxqc63rWoktXRqSwh9s7pX7UnZFEFAzCLoILfXpCukdURTggM+N
-         IIrPFby5u2pbzgDofV1PUW5lCn9WwYenw9/H6yjubhWW+femwZYoEfwJ5eeT4tHokOjV
-         I4esYI965ipHLzbNFjZgUuH/9IWXo6GFi7LUYFxF5Zoc//zU6DGvbwsqSDFVgc1MFynJ
-         VuKz58Y4qAgi7iVmQUwn/c2/7nbf+XlplNo9WpGNECsYpPgVFZWxyU03idJDsLPe9GYE
-         31SQ==
-X-Gm-Message-State: AOAM531PTUeJ/u3NO/kMPPimQNo1zJwaWFoFCI75XVN3CLpBfAp55EIo
-        g2hPcT06f3byjU2XhpC3gYAkGXHCsLh5Gl5XZts=
-X-Google-Smtp-Source: ABdhPJw6ey/cAYXCtsk6XJM8bxRhDwLiluuC8YCldEzucJ/f3QUHWKQdTd8q3Sx4laHkZjbW2prXlcqkSVqtWBsMXfM=
-X-Received: by 2002:a05:6512:3fa5:: with SMTP id x37mr438427lfa.78.1644952760106;
- Tue, 15 Feb 2022 11:19:20 -0800 (PST)
+        Tue, 15 Feb 2022 14:19:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA2F10DA4E;
+        Tue, 15 Feb 2022 11:19:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C0F461773;
+        Tue, 15 Feb 2022 19:19:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E76B9C340EB;
+        Tue, 15 Feb 2022 19:19:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644952780;
+        bh=RxAYLCqbUWlxjV9GFahzPwnkRBYKU9aVJMxo+INb+K8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oa82FKq0/HZo1Hieccox0xhuEOltsBpyNCb/oKWHfz9JimsfI5qrPFHosVG+Hw9KD
+         FqjMZvJ5BquXlsEM1IUTOugfyhHJjbL+NoooCvHgJp/wzFU4N6mJ3/+qfEy0h1bhbj
+         fv9Bo5w4LHHM1g+pM9OlS1+FV6MX0/N+Aa88X5OzELy65s1Xs5Q/258d9WBNoUp0fb
+         HMGG+vm/A6PvbbvtXJ00MB45hauRqyRZCekvmCmXYRktZmaEtd9qOIjTryp50cyo1/
+         0DT+ajNam/uql+1lfstz9xW/6FSdwogqLIyHb8bwuPl3b0gveaOfCnpwJkPBK0mL1q
+         tCTR2Et3rHU/g==
+Date:   Tue, 15 Feb 2022 21:19:29 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linux-crypto@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, mpi3mr-linuxdrv.pdl@broadcom.com,
+        linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org, sparmaintainer@unisys.com,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-ext4@vger.kernel.org, linux-acpi@vger.kernel.org,
+        devel@acpica.org, linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        greybus-dev@lists.linaro.org, linux-i3c@lists.infradead.org,
+        linux-rdma@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] treewide: Replace zero-length arrays with
+ flexible-array members
+Message-ID: <Ygv8wY75hNqS7zO6@unreal>
+References: <20220215174743.GA878920@embeddedor>
+ <202202151016.C0471D6E@keescook>
+ <20220215192110.GA883653@embeddedor>
 MIME-Version: 1.0
-Received: by 2002:a2e:a4b3:0:0:0:0:0 with HTTP; Tue, 15 Feb 2022 11:19:19
- -0800 (PST)
-Reply-To: westerunionbankoffce@gmail.com
-From:   "westerunionbankoffce@gmail.com" <jpaulesq753@gmail.com>
-Date:   Tue, 15 Feb 2022 19:19:19 +0000
-Message-ID: <CADMzAGybZ7K6thOgMy__tTUKghTJtBLttz2wTLcA0vRg6puWvw@mail.gmail.com>
-Subject: Hello
-To:     westerunionbankoffce@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
-        NAME_EMAIL_DIFF,PDS_TO_EQ_FROM_NAME,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220215192110.GA883653@embeddedor>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
- Irod=C3=A1nk el=C3=A9rhet=C5=91s=C3=A9ge: 2554 Road Of Kpalime Face Pharma=
-cy Bet, Lome, Gulf.
+On Tue, Feb 15, 2022 at 01:21:10PM -0600, Gustavo A. R. Silva wrote:
+> On Tue, Feb 15, 2022 at 10:17:40AM -0800, Kees Cook wrote:
+> > On Tue, Feb 15, 2022 at 11:47:43AM -0600, Gustavo A. R. Silva wrote:
+> > > There is a regular need in the kernel to provide a way to declare
+> > > having a dynamically sized set of trailing elements in a structure.
+> > > Kernel code should always use “flexible array members”[1] for these
+> > > cases. The older style of one-element or zero-length arrays should
+> > > no longer be used[2].
+> > > 
+> > > This code was transformed with the help of Coccinelle:
+> > > (next-20220214$ spatch --jobs $(getconf _NPROCESSORS_ONLN) --sp-file script.cocci --include-headers --dir . > output.patch)
+> > > 
+> > > @@
+> > > identifier S, member, array;
+> > > type T1, T2;
+> > > @@
+> > > 
+> > > struct S {
+> > >   ...
+> > >   T1 member;
+> > >   T2 array[
+> > > - 0
+> > >   ];
+> > > };
+> > 
+> > These all look trivially correct to me. Only two didn't have the end of
+> > the struct visible in the patch, and checking those showed them to be
+> > trailing members as well, so:
+> > 
+> > Reviewed-by: Kees Cook <keescook@chromium.org>
+> 
+> I'll add this to my -next tree.
 
-Ez a WU bank igazgat=C3=B3ja =C3=A9rtes=C3=ADti =C3=96nt arr=C3=B3l, hogy a=
- Nemzetk=C3=B6zi
-Valutaalap (IMF) 850 000,00 USD k=C3=A1rt=C3=A9r=C3=ADt=C3=A9st fizet =C3=
-=96nnek, mert
-megtal=C3=A1lta az =C3=96n e-mail c=C3=ADm=C3=A9t a csal=C3=A1s =C3=A1ldoza=
-tainak list=C3=A1j=C3=A1n. Hajland=C3=B3
-vagy venni ezt az alapot vagy sem?
+I would like to ask you to send mlx5 patch separately to netdev. We are working
+to delete that file completely and prefer to avoid from unnecessary merge conflicts.
 
-V=C3=A1rjuk s=C3=BCrg=C5=91s h=C3=ADr=C3=A9t.
+Thanks
 
-Tisztelettel
-  Tony Albert
-  BANKIGAZGAT=C3=93
-  Whatsappal, +22892905783
+> 
+> Thanks!
+> --
+> Gustavo

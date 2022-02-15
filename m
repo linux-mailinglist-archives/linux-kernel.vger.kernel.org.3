@@ -2,113 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 010F44B7A12
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D184B7A20
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 23:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237122AbiBOV5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 16:57:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53182 "EHLO
+        id S232373AbiBOWBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 17:01:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234664AbiBOV5W (ORCPT
+        with ESMTP id S243036AbiBOWAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 16:57:22 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EB8FCA
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:57:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644962232; x=1676498232;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=m6XSI0G98RPdQqcOvLzHw4i5erJFqqKLtNysZ8EGoWc=;
-  b=XQ7meixloG3rOG95L78NTeSgUfrd7G/GpogCc1SPnb0oWTAEMLKX6RFj
-   au9BikTHDI5I6ElIXlFZFUdANk3WnF5PazBEUn6l8kB26ylRdQPY2Nk5e
-   F+l5gcy0+vVSlb544Mkw5yJlFxA5teIKZEWre9vZSgyDijdvDuviLkQxq
-   Bo0Gu7S2L6EXBsu7/HD9mt1zYbku/YSPxbpo7gwOaDOutFVRveGFVq33J
-   J/fb9TL20T5Gbyev7gYzIZB2g4MUEqhBUUOxcBFdvwTIAA1O6MR+PLQEB
-   12mzVkBvwTdSpWD+Nm5xIO7nB7fq/jk66BOEQtrZ2bf79C4OYoayfQ1oq
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="230426533"
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="230426533"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 13:57:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="497587232"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 15 Feb 2022 13:57:08 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nK5oq-000A4q-6W; Tue, 15 Feb 2022 21:57:08 +0000
-Date:   Wed, 16 Feb 2022 05:56:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 9/43]
- fs/9p/vfs_inode.c:258:7: error: no member named 'wsize' in 'struct
- netfs_i_context'
-Message-ID: <202202160504.GlQpVHFc-lkp@intel.com>
+        Tue, 15 Feb 2022 17:00:48 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9207679;
+        Tue, 15 Feb 2022 14:00:37 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id d23so156794lfv.13;
+        Tue, 15 Feb 2022 14:00:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:cc:references:to:in-reply-to:content-transfer-encoding;
+        bh=DVulEGE2JpmKCAwv+Z9nIfk2u5ZwvRtSEnvF0++tohE=;
+        b=eAbTUd8SWrkduWMDvYSL9PCIMvTyx1/PDNq+g34U5a6HTO/JfyDazuc/276Sm7ld7f
+         RQAUjz9KnJpaex/eozKDcsnVqqRwA5Fj5CSlNJHiQfzBkJVLCc7y3vw02lxihPY3TExU
+         lYcUYoYFkQWAG/XD2qnNsvTl5P4zqH6pcaasqRB1LojAt2IN4Q9BVX82FHrNStE8wYB4
+         mmhCvKeDI7YjVSy4dXfgCBsx8WWHAoaLNoouUIXdBuim6buHAqSq3/5veKqw8hxrEwEf
+         aYlaoKh86/GFDdT8ghhsvoX3tr735feUL8boUX68tZ9vbfpFMdKPrE/wFw8zC0NNEmPZ
+         ssKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:cc:references:to:in-reply-to
+         :content-transfer-encoding;
+        bh=DVulEGE2JpmKCAwv+Z9nIfk2u5ZwvRtSEnvF0++tohE=;
+        b=wTomICDpoIwEpCbz/72bMDFaEmVWU7jQc/NuRAsg5bofzOt+vrWhjPQ2iKSRqFWatq
+         2nn/6InANIri5CuyLP57qbEDM9mNc+5oZNOvgWA5aUbfkk3r9wDjbUSkFFER2DeqtH/a
+         bADUAVck22cpEUHFrfulL2xsLu64LIqrFQ+00XUn0A7FBhLtpL22/xqTllsHNe4eEPm7
+         g1Fru5sO0wB860IhOJJiDRGaDBtpzxBNQqYE73Et7s+bciz4Ih7cIC4g6X8+IJ3dqZ+K
+         17whSiQLXyb07yrqfCubnrkgnA7Ks4PppPUCaKBYPiXtyTFtzwoLKHoc68JFMAcjRFuF
+         yOWA==
+X-Gm-Message-State: AOAM531oZB9VDs53ngcnjqCct//CiNbyr8ZzJgloNmrvVFVlHGjuR1ts
+        zMznJoIsXh+/1v7IepFIBTg=
+X-Google-Smtp-Source: ABdhPJyJtWqeT1e2wzvijosINOm/qc6wwzWUL/FDa9uqhHR32CJOoO1KF1UaVLhHtHEQQhQBEaQuLQ==
+X-Received: by 2002:a05:6512:96d:: with SMTP id v13mr790998lft.343.1644962435902;
+        Tue, 15 Feb 2022 14:00:35 -0800 (PST)
+Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
+        by smtp.googlemail.com with ESMTPSA id k3sm66075lfo.10.2022.02.15.14.00.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 14:00:35 -0800 (PST)
+Message-ID: <635e8121-fca4-580c-6af5-d9317a2eee1b@gmail.com>
+Date:   Wed, 16 Feb 2022 01:00:33 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v6 00/21] Introduce power-off+restart call chain API
+Content-Language: en-US
+From:   Dmitry Osipenko <digetx@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
+        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+References: <20220130233718.21544-1-digetx@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+In-Reply-To: <20220130233718.21544-1-digetx@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   d40df0841e9f8de3713a19dd3f0ba283c860cb93
-commit: 90870fcbed9794a03bee7aba8195e8c43e46e1dd [9/43] netfs: Add a netfs inode context
-config: hexagon-randconfig-r034-20220214 (https://download.01.org/0day-ci/archive/20220216/202202160504.GlQpVHFc-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/90870fcbed9794a03bee7aba8195e8c43e46e1dd
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout 90870fcbed9794a03bee7aba8195e8c43e46e1dd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/9p/
+31.01.2022 02:36, Dmitry Osipenko пишет:
+> Problem
+> -------
+> 
+> SoC devices require power-off call chaining functionality from kernel.
+> We have a widely used restart chaining provided by restart notifier API,
+> but nothing for power-off.
+> 
+> Solution
+> --------
+> 
+> Introduce new API that provides both restart and power-off call chains.
+> 
+> Why combine restart with power-off? Because drivers often do both.
+> More practical to have API that provides both under the same roof.
+> 
+> The new API is designed with simplicity and extensibility in mind.
+> It's built upon the existing restart and reboot APIs. The simplicity
+> is in new helper functions that are convenient for drivers. The
+> extensibility is in the design that doesn't hardcode callback
+> arguments, making easy to add new parameters and remove old.
+> 
+> This is a third attempt to introduce the new API. First was made by
+> Guenter Roeck back in 2014, second was made by Thierry Reding in 2017.
+> In fact the work didn't stop and recently arm_pm_restart() was removed
+> from v5.14 kernel, which was a part of preparatory work started by
+> Guenter Roeck. I took into account experience and ideas from the
+> previous attempts, extended and polished them.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-Note: the ammarfaizi2-block/dhowells/linux-fs/netfs-maple HEAD d40df0841e9f8de3713a19dd3f0ba283c860cb93 builds fine.
-      It only hurts bisectability.
+Rafael and all, do you see anything critical that needs to be improved
+in this v6?
 
-All errors (new ones prefixed by >>):
-
->> fs/9p/vfs_inode.c:258:7: error: no member named 'wsize' in 'struct netfs_i_context'
-           ctx->wsize = 1024 * 1024;
-           ~~~  ^
-   1 error generated.
-
-
-vim +258 fs/9p/vfs_inode.c
-
-   249	
-   250	/*
-   251	 * Set parameters for the netfs library
-   252	 */
-   253	static void v9fs_set_netfs_context(struct inode *inode)
-   254	{
-   255		struct netfs_i_context *ctx = netfs_i_context(inode);
-   256	
-   257		netfs_i_context_init(inode, &v9fs_req_ops);
- > 258		ctx->wsize = 1024 * 1024;
-   259	}
-   260	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Will be great if you could take this patchset via the power tree if it
+looks okay, or give an ack.

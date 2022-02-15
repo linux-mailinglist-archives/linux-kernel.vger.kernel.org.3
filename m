@@ -2,109 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE0B4B67D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 856134B67DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:41:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235973AbiBOJkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:40:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60484 "EHLO
+        id S235979AbiBOJlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:41:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234609AbiBOJkR (ORCPT
+        with ESMTP id S233978AbiBOJlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:40:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CECE3881;
-        Tue, 15 Feb 2022 01:40:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D11C2B8185C;
-        Tue, 15 Feb 2022 09:40:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D751C340F9;
-        Tue, 15 Feb 2022 09:40:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644918004;
-        bh=hv8AUuEMkapI1zY2x6Wj+fHd7ew8TaKYgsOBPTPrxmw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Qgz5FlPpKWsWGCSKlOreQeA49RzB47Yb61DpdQGkSqCvpQXhd/1xrVzA6HxgVkOAv
-         HM/bWEouCkOrFRfLVSWs2TAF8Lvnm82Q7ljXZwaQBoSUgr63Phu8Xh5sdVnTyJI/ON
-         lHIubRtLqY287IV/RrnG/iEcxILMQsa62F1uuyYy08GpnMfCYeG+01yyQZZn7UnJv7
-         021LqbfWi1zld4k8/8Wmx6fnGfR5no+iR4l8Y+N7e700ePaO67g4IaN0y0Orgs7STR
-         gYOAdpNAvnxBHFJPJ1WrXSLgaxHaPAb+pRZVWsShzWY/LNUX3cgIy9+U52JoF4j03G
-         HEN4j4yjmnzVQ==
-Received: by mail-wm1-f49.google.com with SMTP id j9-20020a05600c190900b0037bff8a24ebso1024782wmq.4;
-        Tue, 15 Feb 2022 01:40:04 -0800 (PST)
-X-Gm-Message-State: AOAM531J5BbA2tq+ZrO2lMXu1GyShx/RoveGKKoSQ3d4y/40vJp0pF5k
-        5RSVmhlT3A9RLcg1FrOEAGhO7GBLSr55OHQcjeQ=
-X-Google-Smtp-Source: ABdhPJxpFSyo2tIfVZXx6xnWqAN7kXzL0SfiKGeaqLH7fIF3GRmujo8Iug1QC1Z1ypgNgRnGoRSGx0exr14yXtWS6QY=
-X-Received: by 2002:a05:600c:1d27:b0:37c:74bb:2b4d with SMTP id
- l39-20020a05600c1d2700b0037c74bb2b4dmr2314325wms.82.1644918002508; Tue, 15
- Feb 2022 01:40:02 -0800 (PST)
+        Tue, 15 Feb 2022 04:41:18 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACA4E373D;
+        Tue, 15 Feb 2022 01:41:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644918069; x=1676454069;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7jFBmRsokxLTHy5wctRuheDhtuL9EHujzt5OiFap7wI=;
+  b=AoBbRyQHq/hanCOHcD7oX/W0hHSoGVtrkJDhZhk5ARbG4buV0jzFK7t5
+   6YFEKIOy6/JmDwMsKfBkqfpSTJdC+5rLDK+W4HmQ6LV5lHm0SzPiJzHLe
+   eDubsxmahsA9IbLcIGIa9lDPdsY5MTYIqSX1ZzLal6X3CvuFKjP3aDPrD
+   c=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 15 Feb 2022 01:41:08 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 01:41:08 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 15 Feb 2022 01:41:07 -0800
+Received: from [10.216.25.137] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 15 Feb
+ 2022 01:41:02 -0800
+Message-ID: <0e006cc0-2760-195a-35b9-0a2f6e8452c5@quicinc.com>
+Date:   Tue, 15 Feb 2022 15:10:58 +0530
 MIME-Version: 1.0
-References: <20220214163452.1568807-1-arnd@kernel.org> <20220214163452.1568807-9-arnd@kernel.org>
- <CAMj1kXHixUFjV=4m3tzfGz7AiRWc-VczymbKuZq7dyZZNuLKxQ@mail.gmail.com>
- <CAK8P3a2VfvDkueaJNTA9SiB+PFsi_Q17AX+aL46ueooW2ahmQw@mail.gmail.com> <CAMj1kXGkG0KMD2rnKAJc3V7X9LP1grbcHTNYMnj_q4GiYfG2pQ@mail.gmail.com>
-In-Reply-To: <CAMj1kXGkG0KMD2rnKAJc3V7X9LP1grbcHTNYMnj_q4GiYfG2pQ@mail.gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 15 Feb 2022 10:39:46 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0NTqK_m7q909d8FN6is8k4_u3zeckC9XOrjEi7kqSvmg@mail.gmail.com>
-Message-ID: <CAK8P3a0NTqK_m7q909d8FN6is8k4_u3zeckC9XOrjEi7kqSvmg@mail.gmail.com>
-Subject: Re: [PATCH 08/14] arm64: simplify access_ok()
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>, X86 ML <x86@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:S390" <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v10 6/6] usb: dwc3: qcom: Enable the interrupts during
+ probe
+Content-Language: en-US
+To:     Steev Klimaszewski <steev@kali.org>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>
+References: <1642398248-21753-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1642398248-21753-7-git-send-email-quic_c_sanm@quicinc.com>
+ <93b68251-7e7e-ac92-fb47-346c410744b2@kali.org>
+ <20220118095255.GB11385@hu-pkondeti-hyd.qualcomm.com>
+ <78c90e46-666b-bc9b-235d-ae4c69e19929@quicinc.com>
+ <601cdc74-392f-dd4f-7ea0-8e65c6b6d7e2@quicinc.com>
+ <52b37547-3e78-b18c-307d-7eedf5baab0d@kali.org>
+From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+In-Reply-To: <52b37547-3e78-b18c-307d-7eedf5baab0d@kali.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -113,23 +80,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 10:21 AM Ard Biesheuvel <ardb@kernel.org> wrote:
-> On Tue, 15 Feb 2022 at 10:13, Arnd Bergmann <arnd@kernel.org> wrote:
+Hi Steev,
+
+On 1/28/2022 2:06 PM, Steev Klimaszewski wrote:
+> Hi Sandeep,
 >
-> arm64 also has this leading up to the range check, and I think we'd no
-> longer need it:
+> On 1/25/22 3:17 AM, Sandeep Maheswaram wrote:
+>> Hi Steev,
+>>
+>>> I didn't face any such issue with devices connected.
+>>>
+>>> I think this is because I used IRQ_TYPE_EDGE_BOTH in device tree and 
+>>> Steev has IRQ_TYPE_LEVEL_HIGH in his device tree.
+>>>
+>>> When i changed to IRQ_TYPE_LEVEL_HIGH I also observed a storm of 
+>>> interrupts in my device though it booted .
+>>>
+>>> Regards
+>>>
+>>> Sandeep
+>>>
+>> Can you try with IRQ_TYPE_EDGE_BOTH in your device tree and see if 
+>> you are getting the issue.
+>>
+>> Regards
+>>
+>> Sandeep
+>>
+> I just tested here, changing both of the IRQ_TYPE_LEVEL_HIGH in the 
+> yoga's dts to EDGE_BOTH and I still do not get a booting system.
 >
->     if (IS_ENABLED(CONFIG_ARM64_TAGGED_ADDR_ABI) &&
->         (current->flags & PF_KTHREAD || test_thread_flag(TIF_TAGGED_ADDR)))
->             addr = untagged_addr(addr);
+> -- Steev
+>
+Please let us know what devices are connected to your setup and share 
+the device tree file you are using.
 
-I suspect the expensive part here is checking the two flags, as untagged_addr()
-seems to always just add a sbfx instruction. Would this work?
+Please share the failure logs also,
 
-#ifdef CONFIG_ARM64_TAGGED_ADDR_ABI
-#define access_ok(ptr, size) __access_ok(untagged_addr(ptr), (size))
-#else // the else path is the default, this can be left out.
-#define access_ok(ptr, size) __access_ok((ptr), (size))
-#endif
+Regards
 
-       Arnd
+Sandeep
+

@@ -2,199 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2BC4B7B6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 128AA4B7B71
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244892AbiBOXwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 18:52:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49780 "EHLO
+        id S244704AbiBOXzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 18:55:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237886AbiBOXwg (ORCPT
+        with ESMTP id S237886AbiBOXzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 18:52:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C777B887BA;
-        Tue, 15 Feb 2022 15:52:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75BABB81D4F;
-        Tue, 15 Feb 2022 23:52:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1541C340F0;
-        Tue, 15 Feb 2022 23:52:22 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="BRfZKOGi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644969138;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GMm9EAolxAtPMXh1X1nKAXKitpaKoxPDLSCUjxHh4ks=;
-        b=BRfZKOGi1a2g1iAFygTGRfQSBpQItd4ogiJv2CsIHInjzDvjY1hkTOyr/rknIKu4ucizQV
-        Rc5KH/CEOeLhOCtpcaLxU2rEicJ7G1oUN2sd48JJ2Ywiq6y0ZdHF+13zTe8/j5Qv8OJQx5
-        2p58pO4Ue2jxJS9jzl86tivW5ZcDubQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 2a124aa7 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 15 Feb 2022 23:52:18 +0000 (UTC)
-Received: by mail-yb1-f180.google.com with SMTP id l125so987501ybl.4;
-        Tue, 15 Feb 2022 15:52:16 -0800 (PST)
-X-Gm-Message-State: AOAM532tWilof7TOfYIKyW6mggPsSqlsZAakWIkMPtT4Hw4KLXAOlghH
-        1pJjYmW7z8zWCUq5+x0/vDVsZ0LjqHlOKl3a6eE=
-X-Google-Smtp-Source: ABdhPJyZNoC98Q81CRhjYyC9iywczoAHqV6JDC3RmYMvG7wWiGpeJ+1knd618Ptg+zK7xD23lTHpW08gYGl69nXWKQw=
-X-Received: by 2002:a81:7d04:0:b0:2d0:d0e2:126f with SMTP id
- y4-20020a817d04000000b002d0d0e2126fmr126329ywc.485.1644969136220; Tue, 15 Feb
- 2022 15:52:16 -0800 (PST)
+        Tue, 15 Feb 2022 18:55:01 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343A9F65FD
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:54:51 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id j4so628277plj.8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:54:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+nTGNa9s6u2rYcAhXWuxtwf4TTMMDST6LAdmBGRAZ9k=;
+        b=gs536kU/AcOsO1s8ccJDa8Cl0nWLPsH7Kt25IJC2NXtxM4/uhdTZ7KeEnxZrtKMymL
+         zH6keBd92K6elTWTQEjtZE6PdxQPQR8vAQAFW5ySaqRI73Yt09rfKaekwn1ZO5fl4OEO
+         HBm2IfP4hQJkgGJLfWLHZdJG788fplKYLh48k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+nTGNa9s6u2rYcAhXWuxtwf4TTMMDST6LAdmBGRAZ9k=;
+        b=lNsWR5dHDAxAPA+Erajnaaxxgf4sPhP/eOK+71/bGcz45b7OGu3mwHCcG/bRAm1J4X
+         o0Gel1Lk0/tPHLm4A5rwjxo7mZyMoR2VmBLCx8TkPTSruSBWHavRjhzndIkofCZ/9ZKg
+         i+Vsx28Xd7x1SwBS9NTbog3pR/sO6NvdgclyyKxTBqQhQVKEssRRo1PC6H+pVnsVzO7K
+         33BEW5dj22tkk6Kqc+i1QUiUQwOW7yJMpzTqg4vQ065ySndG6aLewoM3T9tU1VJfEQO0
+         xlN6GM44zHTbPC9DTSXhaCAFZz6f0qg3fpJZ3D4L+Z6cw9IAZqAv0IM85zzTwjz7fO6b
+         EfRw==
+X-Gm-Message-State: AOAM532xru6/+g+XyuJu/nCQM9rK1xA/uIc/puS8k7iKTIjOQ4HUV+of
+        SyuACbk1MI5eN7j38ibDjBBbSA==
+X-Google-Smtp-Source: ABdhPJyfgHzglRsCZcuCTEveJ50IZg7QeQSve0L8/LjgLavRV70CR8Eoi0SvPPKabLI0pw/ZoVXdZQ==
+X-Received: by 2002:a17:90b:4c8e:b0:1b9:f99f:1218 with SMTP id my14-20020a17090b4c8e00b001b9f99f1218mr7174869pjb.75.1644969290754;
+        Tue, 15 Feb 2022 15:54:50 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:97ca:4b5:7d22:b276])
+        by smtp.gmail.com with UTF8SMTPSA id k5sm10176304pfu.180.2022.02.15.15.54.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 15:54:50 -0800 (PST)
+From:   Brian Norris <briannorris@chromium.org>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>, Sean Paul <sean@poorly.run>,
+        linux-kernel@vger.kernel.org, Sean Paul <seanpaul@chromium.org>,
+        Brian Norris <briannorris@chromium.org>
+Subject: [PATCH 0/2] drm/bridge: analogix_dp: Self-refresh state machine fixes
+Date:   Tue, 15 Feb 2022 15:54:18 -0800
+Message-Id: <20220215235420.1284208-1-briannorris@chromium.org>
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
 MIME-Version: 1.0
-Received: by 2002:a05:7110:88a:b0:15e:9450:8ed4 with HTTP; Tue, 15 Feb 2022
- 15:52:15 -0800 (PST)
-In-Reply-To: <87o8374sx3.fsf@toke.dk>
-References: <CAHmME9r4+ENUhZ6u26rAbq0iCWoKqTPYA7=_LWbGG98KvaCE6g@mail.gmail.com>
- <20220215162812.195716-1-Jason@zx2c4.com> <87o8374sx3.fsf@toke.dk>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 16 Feb 2022 00:52:15 +0100
-X-Gmail-Original-Message-ID: <CAHmME9pZaYW-p=zU4v96TjeSijm-g03cNpvUJcNvhOqh5v+Lwg@mail.gmail.com>
-Message-ID: <CAHmME9pZaYW-p=zU4v96TjeSijm-g03cNpvUJcNvhOqh5v+Lwg@mail.gmail.com>
-Subject: Re: [PATCH] ath9k: use hw_random API instead of directly dumping into random.c
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>
-Cc:     miaoqing@codeaurora.org, rsalvaterra@gmail.com,
-        Jason Cooper <jason@lakedaemon.net>,
-        "Sepehrdad, Pouyan" <pouyans@qti.qualcomm.com>,
-        ath9k-devel <ath9k-devel@qca.qualcomm.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/16/22, Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk> wrote:
-> "Jason A. Donenfeld" <Jason@zx2c4.com> writes:
->
->> Hardware random number generators are supposed to use the hw_random
->> framework. This commit turns ath9k's kthread-based design into a proper
->> hw_random driver.
->>
->> This compiles, but I have no hardware or other ability to determine
->> whether it works. I'll leave further development up to the ath9k
->> and hw_random maintainers.
->>
->> Cc: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->> Cc: Kalle Valo <kvalo@kernel.org>
->> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
->> Cc: Herbert Xu <herbert@gondor.apana.org.au>
->> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
->> ---
->>  drivers/net/wireless/ath/ath9k/ath9k.h |  2 +-
->>  drivers/net/wireless/ath/ath9k/rng.c   | 62 +++++++++-----------------
->>  2 files changed, 23 insertions(+), 41 deletions(-)
->>
->> diff --git a/drivers/net/wireless/ath/ath9k/ath9k.h
->> b/drivers/net/wireless/ath/ath9k/ath9k.h
->> index ef6f5ea06c1f..142f472903dc 100644
->> --- a/drivers/net/wireless/ath/ath9k/ath9k.h
->> +++ b/drivers/net/wireless/ath/ath9k/ath9k.h
->> @@ -1072,7 +1072,7 @@ struct ath_softc {
->>
->>  #ifdef CONFIG_ATH9K_HWRNG
->>  	u32 rng_last;
->> -	struct task_struct *rng_task;
->> +	struct hwrng rng_ops;
->>  #endif
->>  };
->>
->> diff --git a/drivers/net/wireless/ath/ath9k/rng.c
->> b/drivers/net/wireless/ath/ath9k/rng.c
->> index aae2bd3cac69..369b222908ba 100644
->> --- a/drivers/net/wireless/ath/ath9k/rng.c
->> +++ b/drivers/net/wireless/ath/ath9k/rng.c
->> @@ -22,9 +22,6 @@
->>  #include "hw.h"
->>  #include "ar9003_phy.h"
->>
->> -#define ATH9K_RNG_BUF_SIZE	320
->> -#define ATH9K_RNG_ENTROPY(x)	(((x) * 8 * 10) >> 5) /* quality: 10/32 */
->
-> So this comment says "quality: 10/32" but below you're setting "quality"
-> as 320. No idea what the units are supposed to be, but is this right?
+Hi,
 
-I think the unit is supposed to be how many entropic bits there are
-out of 1024 bits? These types of estimates are always BS, so keeping
-it on the lower end as before seemed right. Herbert can jump in here
-if he has a better idea; that's his jig.
+I've been investigating several eDP issues on a Rockchip RK3399 system
+and have two proposed bugfixes. RK3399 has two CRTCs, either of which
+can be used for eDP output. For both fixes, we have bugs due to the
+relationship between the generalized "self refresh helpers" and the
+analogix-dp bridge driver which controls much of the PSR mechanics.
+These bugs are most visible when switching between CRTCs.
 
->
->>  static DECLARE_WAIT_QUEUE_HEAD(rng_queue);
->>
->>  static int ath9k_rng_data_read(struct ath_softc *sc, u32 *buf, u32
->> buf_size)
->
-> This function takes buf as a *u32, and interprets buf_size as a number
-> of u32s...
+I'm not a DRM expert, but I've been poking at a lot of Rockchip display
+drivers recently. I'd love some skeptical eyes, so feel free to ask
+questions if I haven't explained issues well, or the proposals look
+fishy.
 
-Oh my... Nice catch. I'll send a v2 shortly. I wonder how this managed
-to work for Rui.
+Regards,
+Brian
 
->
->> @@ -72,61 +69,46 @@ static u32 ath9k_rng_delay_get(u32 fail_stats)
->>  	return delay;
->>  }
->>
->> -static int ath9k_rng_kthread(void *data)
->> +static int ath9k_rng_read(struct hwrng *rng, void *buf, size_t max, boo=
-l
->> wait)
->>  {
->> +	struct ath_softc *sc =3D container_of(rng, struct ath_softc, rng_ops);
->>  	int bytes_read;
->> -	struct ath_softc *sc =3D data;
->> -	u32 *rng_buf;
->> -	u32 delay, fail_stats =3D 0;
->> -
->> -	rng_buf =3D kmalloc_array(ATH9K_RNG_BUF_SIZE, sizeof(u32), GFP_KERNEL)=
-;
->> -	if (!rng_buf)
->> -		goto out;
->> -
->> -	while (!kthread_should_stop()) {
->> -		bytes_read =3D ath9k_rng_data_read(sc, rng_buf,
->> -						 ATH9K_RNG_BUF_SIZE);
->> -		if (unlikely(!bytes_read)) {
->> -			delay =3D ath9k_rng_delay_get(++fail_stats);
->> -			wait_event_interruptible_timeout(rng_queue,
->> -							 kthread_should_stop(),
->> -							 msecs_to_jiffies(delay));
->> -			continue;
->> -		}
->> -
->> -		fail_stats =3D 0;
->> -
->> -		/* sleep until entropy bits under write_wakeup_threshold */
->> -		add_hwgenerator_randomness((void *)rng_buf, bytes_read,
->> -					   ATH9K_RNG_ENTROPY(bytes_read));
->> -	}
->> +	u32 fail_stats =3D 0;
->>
->> -	kfree(rng_buf);
->> -out:
->> -	sc->rng_task =3D NULL;
->> +retry:
->> +	bytes_read =3D ath9k_rng_data_read(sc, buf, max);
->
-> ... but AFAICT here you're calling it with a buffer size from hw_random
-> that's in bytes?
 
-V2 on its way. Rui - you may need to re-test...
+Brian Norris (2):
+  drm/bridge: analogix_dp: Support PSR-exit to disable transition
+  drm/atomic: Force bridge self-refresh-exit on CRTC switch
 
-Jason
+ .../drm/bridge/analogix/analogix_dp_core.c    | 42 +++++++++++++++++--
+ drivers/gpu/drm/drm_atomic_helper.c           | 16 +++++--
+ 2 files changed, 51 insertions(+), 7 deletions(-)
+
+-- 
+2.35.1.265.g69c8d7142f-goog
+

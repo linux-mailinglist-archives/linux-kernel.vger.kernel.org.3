@@ -2,236 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6991A4B7795
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 009B54B78CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241589AbiBOUcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 15:32:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51924 "EHLO
+        id S242292AbiBOUev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 15:34:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239817AbiBOUcJ (ORCPT
+        with ESMTP id S232236AbiBOUeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 15:32:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB03589CD4;
-        Tue, 15 Feb 2022 12:31:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6BF44B811D7;
-        Tue, 15 Feb 2022 20:31:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B91ECC340EB;
-        Tue, 15 Feb 2022 20:31:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644957115;
-        bh=th4FwXBLYgPciHT5Bd8dAS4HNndNOjW6B9M9XxSvfK4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ui5B1AvERC/ANv2h2O7v8d+QOmkQDvj3V00slQuYm0j4XW1+VNLU/rw+W/FguVhYv
-         G62yeCyeWQUfKYBjQVhM0ENTXwV3PwMN5psJrMBNldFpZErXA2JZgNUvbAmmALzarS
-         P1z6a121BFIAfEecgCxAK3Y3jWfz/Opyn6GF/r8sdRbmDPzcwy0Qawg2DfPsjwiePm
-         JTnoPVlJMOGN95IOn47oS7K0MViu8rf0KpNCrP5UJNPHnlR78RD5Dw9RMmZYul3qfS
-         bWXJ4jl9jiP2ZBaubSLFjuLw0i6Prkrll5gVNnP7qfaEUvaGRLFkExunQZnalaZ7za
-         yd1zpKuI4gC0g==
-Received: by pali.im (Postfix)
-        id E3917F13; Tue, 15 Feb 2022 21:31:51 +0100 (CET)
-Date:   Tue, 15 Feb 2022 21:31:51 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] hwmon: (dell-smm) Allow for specifying fan control
- method as module parameter
-Message-ID: <20220215203151.kajdh6uezx5mzyal@pali>
-References: <20220215191113.16640-1-W_Armin@gmx.de>
- <20220215191113.16640-2-W_Armin@gmx.de>
- <20220215191941.azk5gpcn42ahcnna@pali>
- <a450a2b6-92d3-d2cd-db63-b578480ff385@gmx.de>
- <20220215194909.py62gbsfwe2qxq2i@pali>
- <6c9a1f7a-004e-1991-abef-181cc117907e@gmx.de>
+        Tue, 15 Feb 2022 15:34:50 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488E089CD4;
+        Tue, 15 Feb 2022 12:34:39 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id p9so13544321wra.12;
+        Tue, 15 Feb 2022 12:34:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=KRSkNhIEhZMEMhWXs5iKQNZLmkUM8XOFNeLt27M+yH0=;
+        b=hmXooVo0/3oV8QfjJUBlso0REBtT/7qZxc4FtjAmra0e1picrf+m3AyZe/9+8D/Qys
+         dAKgFh2OJUrLVKJkf6aJmpRcU7Qan23dlXdC0svDE/UgTCkjX2BuMtea43ycfowTGPAy
+         UI++sJoOrZY7O3tZRi5Sd98UNVeeD3+7UCSQRtdd8UB27UASvbssCSCmBM7W9NCdoRSy
+         EwGs+mFo+Q+4AYFJcptcxtmga80wOuzuZaV1sd5mPdtoreJ+MuJe34KIj6aYUmlcWdX7
+         ZPeKhgH4e1WwI7lmO1AO+RdrMWmX7QTBeP2Eg6Q5AY0fo0HHAZP//R0Ljxtl8OJ3GqRG
+         eDWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=KRSkNhIEhZMEMhWXs5iKQNZLmkUM8XOFNeLt27M+yH0=;
+        b=7zFebYcJOgR4rGL+B2CSGMfVKSvjbuv8zyEciQtu2lPjPKaO2aCY5PjE7IYtcCGhYq
+         Hie7d+k3Nac9Kr+NSO5yxHH9A92g+p3hqekqWP1zQh9F6NUhr612BSuMKZWpdo0ZUQZ/
+         mpB/XA78P1EDOKBPk/SFZEUwSkSo5Jd+CE5OOEfZhcFthFqZRZx8t/MF0BKMaY1r979S
+         6plZoCQTdr5womrOceHoTX7l9Hn/YNKBAj2BHgoSNomoSz7hRsT+14SoPi6YsAHvQIO7
+         4yJD8K+vTq7sj2XpBMgDI9BmBAFJc9Fya7S4x7yPKnbUApI/OeJ5pkPE9B/E/8TD7yqP
+         a6EA==
+X-Gm-Message-State: AOAM531gqW+JPGAfpU2tBgfAgHeS062mAuPlwrx613y8JiUO0A5tiNpj
+        BMMSXmpeIQm2iKeroVd0pTE=
+X-Google-Smtp-Source: ABdhPJx7LPF22AwP5kqzNKnc1tpYmsQB+V9uLmcnJHL/G901Xck085/9xsudMsuFVZQmfQc0vJM0Ug==
+X-Received: by 2002:adf:f191:: with SMTP id h17mr568730wro.188.1644957277766;
+        Tue, 15 Feb 2022 12:34:37 -0800 (PST)
+Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id r14sm6034914wrz.84.2022.02.15.12.34.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 12:34:37 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     mripard@kernel.org, wens@csie.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Klein <michael@fossekall.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: Re: Re: [PATCH v2] ARM: dts: sun8i: Adjust power key nodes
+Date:   Tue, 15 Feb 2022 21:34:36 +0100
+Message-ID: <4714494.31r3eYUQgx@kista>
+In-Reply-To: <20220215002732.GA3215504@roeck-us.net>
+References: <20211129165510.370717-1-jernej.skrabec@gmail.com> <20220215002732.GA3215504@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6c9a1f7a-004e-1991-abef-181cc117907e@gmx.de>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 15 February 2022 21:19:17 Armin Wolf wrote:
-> Am 15.02.22 um 20:49 schrieb Pali Rohár:
-> > On Tuesday 15 February 2022 20:44:20 Armin Wolf wrote:
-> > > Am 15.02.22 um 20:19 schrieb Pali Rohár:
-> > > > On Tuesday 15 February 2022 20:11:07 Armin Wolf wrote:
-> > > > > Right now, the only way to test if setting manual/auto fan control works
-> > > > > is to edit and recompile the module, which may be too cumbersome for
-> > > > > the average user.
-> > > > There is also another way suitable for testing purposes which do not
-> > > > requires any kernel patch. Call iopl(3) syscall which changes I/O
-> > > > privilege level to 3 and which allows to poke I/O registers.
-> > > > 
-> > > This is not possible under kernel lockdown/Secure Boot.
-> > Under Secure Boot it should be still possible.
+Hi!
+
+Dne torek, 15. februar 2022 ob 01:27:32 CET je Guenter Roeck napisal(a):
+> Hi,
 > 
-> Afaik, access to iopl() and ioperm() is blocked in this mode too.
-> This for example causes dell-bios-fan-control to fail when
-> the machine is booted in Secure Boot mode.
-
-Well, then it is the cost of the usage of Secure Boot. If you need
-additional functionality then disable it.
-
-> > With kernel lockdown, no kernel testing/debugging at HW level is
-> > acceptable due to security reasons, as it is against what kernel
-> > lockdown should achieve.
+> On Mon, Nov 29, 2021 at 05:55:10PM +0100, Jernej Skrabec wrote:
+> > Several H3 and one H2+ board have power key nodes, which are slightly
+> > off. Some are missing wakeup-source property and some have BTN_0 code
+> > assigned instead of KEY_POWER.
 > > 
-> That is the reason i limited the number of selectable code pairs to
-> two which are known to work on a wide range of machines.
-> So users are unable to specify SMM commands, which are controlled by
-> the driver. If this still is to much, then we may drop this patch.
-
-This kernel driver dell-smm-hwmon should use same security model as
-other parts in kernel. So if kernel disallow user to specify custom
-parameters for io ports (those which are not provided by platform data)
-then it should be disabled also in this driver.
-
-It is really _bad_ practice to trying invent a security hole to the
-existing security model.
-
-> > > > > Allow for specifying the desired fan mode control method when loading
-> > > > > the module, but taint the kernel if so since there is the possibility
-> > > > > for strange side effects on non-whitelisted models.
-> > > > > Also update docs and kernel-parameters.txt accordingly.
-> > > > > 
-> > > > > Tested on a Dell Inspiron 3505.
-> > > > > 
-> > > > > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> > > > > ---
-> > > > >    .../admin-guide/kernel-parameters.txt         |  3 +++
-> > > > >    Documentation/hwmon/dell-smm-hwmon.rst        | 21 ++++++++++------
-> > > > >    drivers/hwmon/dell-smm-hwmon.c                | 25 +++++++++++++------
-> > > > >    3 files changed, 35 insertions(+), 14 deletions(-)
-> > > > > 
-> > > > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > > > > index d68053db21cc..4f1b6c2b7ed1 100644
-> > > > > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > > > > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > > > > @@ -968,6 +968,9 @@
-> > > > >    	dell_smm_hwmon.fan_max=
-> > > > >    			[HW] Maximum configurable fan speed.
-> > > > > 
-> > > > > +	dell_smm_hwmon.fan_mode_method=
-> > > > > +			[HW] Method to use for changing fan mode.
-> > > > > +
-> > > > >    	dfltcc=		[HW,S390]
-> > > > >    			Format: { on | off | def_only | inf_only | always }
-> > > > >    			on:       s390 zlib hardware support for compression on
-> > > > > diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/dell-smm-hwmon.rst
-> > > > > index beec88491171..564d99cda869 100644
-> > > > > --- a/Documentation/hwmon/dell-smm-hwmon.rst
-> > > > > +++ b/Documentation/hwmon/dell-smm-hwmon.rst
-> > > > > @@ -67,13 +67,16 @@ for your hardware. It is possible that codes that work for other
-> > > > >    laptops actually work for yours as well, or that you have to discover
-> > > > >    new codes.
-> > > > > 
-> > > > > -Check the list ``i8k_whitelist_fan_control`` in file
-> > > > > -``drivers/hwmon/dell-smm-hwmon.c`` in the kernel tree: as a first
-> > > > > -attempt you can try to add your machine and use an already-known code
-> > > > > -pair. If, after recompiling the kernel, you see that ``pwm1_enable``
-> > > > > -is present and works (i.e., you can manually control the fan speed),
-> > > > > -then please submit your finding as a kernel patch, so that other users
-> > > > > -can benefit from it. Please see
-> > > > > +As a first step, you can load the module with the module parameter
-> > > > > +``fan_mode_method`` set to 1 to test if your hardware works with
-> > > > > +an already know method for disabling automatic BIOS fan control.
-> > > > > +If ``pwm1_enable`` is now present and works (i.e., you can
-> > > > > +manually control the fan speed), then please submit your finding
-> > > > > +as a kernel patch, so that other users can benefit from it.
-> > > > > +Just add your model to the list ``i8k_whitelist_fan_control`` in
-> > > > > +file ``drivers/hwmon/dell-smm-hwmon.c`` in the kernel tree and use
-> > > > > +the already known code pair.
-> > > > > +Please read
-> > > > >    :ref:`Documentation/process/submitting-patches.rst <submittingpatches>`
-> > > > >    for information on submitting patches.
-> > > > > 
-> > > > > @@ -120,6 +123,10 @@ Module parameters
-> > > > >                       Maximum configurable fan speed. (default:
-> > > > >                       autodetect)
-> > > > > 
-> > > > > +* fan_mode_method:uint
-> > > > > +                   Method to use for changing fan mode (default:
-> > > > > +                   from whitelist)
-> > > > > +
-> > > > >    Legacy ``/proc`` interface
-> > > > >    --------------------------
-> > > > > 
-> > > > > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> > > > > index 9949eeb79378..1c4cc516c8b2 100644
-> > > > > --- a/drivers/hwmon/dell-smm-hwmon.c
-> > > > > +++ b/drivers/hwmon/dell-smm-hwmon.c
-> > > > > @@ -111,6 +111,10 @@ static uint fan_max;
-> > > > >    module_param(fan_max, uint, 0);
-> > > > >    MODULE_PARM_DESC(fan_max, "Maximum configurable fan speed (default: autodetect)");
-> > > > > 
-> > > > > +static uint fan_mode_method;
-> > > > > +module_param_unsafe(fan_mode_method, uint, 0);
-> > > > > +MODULE_PARM_DESC(fan_mode_method, "Method to use for changing fan mode (default: from whitelist)");
-> > > > No, please really do not introduce another kernel parameter for this
-> > > > driver. There are already many and we do not need to extend this list.
+> > Adjust them, so they can function as intended by designer.
+> > 
+> > Co-developed-by: Michael Klein <michael@fossekall.de>
+> > Signed-off-by: Michael Klein <michael@fossekall.de>
+> > Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 > 
-> Since there are two code pairs, i could not reuse the force param for that.
-> Since the newly added pair is unused, should i remove it and reuse the
-> force param?
+> This patch results in the following traceback when rebooting an
+> orangepi-pc qemu emulation.
+> 
+> [   30.899594]
+> [   30.899685] ============================================
+> [   30.899757] WARNING: possible recursive locking detected
+> [   30.899938] 5.17.0-rc3-00394-gc849047c2473 #1 Not tainted
+> [   30.900055] --------------------------------------------
+> [   30.900124] init/307 is trying to acquire lock:
+> [   30.900246] c2dfe27c (&irq_desc_lock_class){-.-.}-{2:2}, at: 
+__irq_get_desc_lock+0x58/0xa0
+> [   30.900900]
+> [   30.900900] but task is already holding lock:
+> [   30.900974] c3c0ac7c (&irq_desc_lock_class){-.-.}-{2:2}, at: 
+__irq_get_desc_lock+0x58/0xa0
+> [   30.901101]
+> [   30.901101] other info that might help us debug this:
+> [   30.901188]  Possible unsafe locking scenario:
+> [   30.901188]
+> [   30.901262]        CPU0
+> [   30.901301]        ----
+> [   30.901339]   lock(&irq_desc_lock_class);
+> [   30.901411]   lock(&irq_desc_lock_class);
+> [   30.901480]
+> [   30.901480]  *** DEADLOCK ***
+> [   30.901480]
+> [   30.901554]  May be due to missing lock nesting notation
+> [   30.901554]
+> [   30.901657] 4 locks held by init/307:
+> [   30.901724]  #0: c1f29f18 (system_transition_mutex){+.+.}-{3:3}, at: 
+__do_sys_reboot+0x90/0x23c
+> [   30.901889]  #1: c20f7760 (&dev->mutex){....}-{3:3}, at: 
+device_shutdown+0xf4/0x224
+> [   30.902016]  #2: c2e804d8 (&dev->mutex){....}-{3:3}, at: 
+device_shutdown+0x104/0x224
+> [   30.902138]  #3: c3c0ac7c (&irq_desc_lock_class){-.-.}-{2:2}, at: 
+__irq_get_desc_lock+0x58/0xa0
+> [   30.902281]
+> [   30.902281] stack backtrace:
+> [   30.902462] CPU: 0 PID: 307 Comm: init Not tainted 5.17.0-rc3-00394-
+gc849047c2473 #1
+> [   30.902572] Hardware name: Allwinner sun8i Family
+> [   30.902781]  unwind_backtrace from show_stack+0x10/0x14
+> [   30.902895]  show_stack from dump_stack_lvl+0x68/0x90
+> [   30.902970]  dump_stack_lvl from __lock_acquire+0x1680/0x31a0
+> [   30.903047]  __lock_acquire from lock_acquire+0x148/0x3dc
+> [   30.903118]  lock_acquire from _raw_spin_lock_irqsave+0x50/0x6c
+> [   30.903197]  _raw_spin_lock_irqsave from __irq_get_desc_lock+0x58/0xa0
+> [   30.903282]  __irq_get_desc_lock from irq_set_irq_wake+0x2c/0x19c
+> [   30.903366]  irq_set_irq_wake from irq_set_irq_wake+0x13c/0x19c
+> [   30.903442]  irq_set_irq_wake from gpio_keys_suspend+0x80/0x1a4
+> [   30.903523]  gpio_keys_suspend from gpio_keys_shutdown+0x10/0x2c
+> [   30.903603]  gpio_keys_shutdown from device_shutdown+0x180/0x224
+> [   30.903685]  device_shutdown from __do_sys_reboot+0x134/0x23c
+> [   30.903764]  __do_sys_reboot from ret_fast_syscall+0x0/0x1c
+> [   30.903894] Exception stack(0xc584ffa8 to 0xc584fff0)
+> [   30.904013] ffa0:                   01234567 000c623f fee1dead 28121969 
+01234567 00000000
+> [   30.904117] ffc0: 01234567 000c623f 00000001 00000058 000d85c0 00000000 
+00000000 00000000
+> [   30.904213] ffe0: 000d8298 be84ddf4 000918bc b6eb0edc
+> [   30.905189] reboot: Restarting system
+> 
+> The warning is no longer seen after reverting this patch.
+> 
+> The problem exists but is not seen in v5.17-rc4 because a bug in commit
+> 8df89a7cbc63 ("pinctrl-sunxi: don't call pinctrl_gpio_direction()")
+> hides it. That problem is fixed with commit 3c5412cdec9f ("pinctrl-sunxi:
+> sunxi_pinctrl_gpio_direction_in/output: use correct offset") in linux-next,
+> and the traceback is seen there.
 
-For such things like this there is debugfs, if you really need to
-specify / provide custom values.
+Hm... These DT changes were tested with many users on older kernels for some 
+time now and new properties conform to bindings. Should we revert pinctrl 
+changes?
 
-> > > > > +
-> > > > >    struct smm_regs {
-> > > > >    	unsigned int eax;
-> > > > >    	unsigned int ebx;
-> > > > > @@ -677,7 +681,7 @@ static umode_t dell_smm_is_visible(const void *drvdata, enum hwmon_sensor_types
-> > > > > 
-> > > > >    			break;
-> > > > >    		case hwmon_pwm_enable:
-> > > > > -			if (data->auto_fan)
-> > > > > +			if (data->auto_fan && data->manual_fan)
-> > > > >    				/*
-> > > > >    				 * There is no command for retrieve the current status
-> > > > >    				 * from BIOS, and userspace/firmware itself can change
-> > > > > @@ -1282,14 +1286,21 @@ static int __init dell_smm_probe(struct platform_device *pdev)
-> > > > >    	data->i8k_fan_max = fan_max ? : I8K_FAN_HIGH;	/* Must not be 0 */
-> > > > >    	data->i8k_pwm_mult = DIV_ROUND_UP(255, data->i8k_fan_max);
-> > > > > 
-> > > > > -	fan_control = dmi_first_match(i8k_whitelist_fan_control);
-> > > > > -	if (fan_control && fan_control->driver_data) {
-> > > > > -		const struct i8k_fan_control_data *control = fan_control->driver_data;
-> > > > > +	/* value specified via module param overrides whitelist */
-> > > > > +	if (fan_mode_method > 0 && fan_mode_method <= ARRAY_SIZE(i8k_fan_control_data)) {
-> > > > > +		data->manual_fan = i8k_fan_control_data[fan_mode_method - 1].manual_fan;
-> > > > > +		data->auto_fan = i8k_fan_control_data[fan_mode_method - 1].auto_fan;
-> > > > > +	} else {
-> > > > > +		fan_control = dmi_first_match(i8k_whitelist_fan_control);
-> > > > > +		if (fan_control && fan_control->driver_data) {
-> > > > > +			const struct i8k_fan_control_data *control = fan_control->driver_data;
-> > > > > 
-> > > > > -		data->manual_fan = control->manual_fan;
-> > > > > -		data->auto_fan = control->auto_fan;
-> > > > > -		dev_info(&pdev->dev, "enabling support for setting automatic/manual fan control\n");
-> > > > > +			data->manual_fan = control->manual_fan;
-> > > > > +			data->auto_fan = control->auto_fan;
-> > > > > +		}
-> > > > >    	}
-> > > > > +	if (data->manual_fan && data->auto_fan)
-> > > > > +		dev_info(&pdev->dev, "enabling support for setting automatic/manual fan control\n");
-> > > > > 
-> > > > >    	if (!fan_mult) {
-> > > > >    		/*
-> > > > > --
-> > > > > 2.30.2
-> > > > > 
+Best regards,
+Jernej
+
+
+

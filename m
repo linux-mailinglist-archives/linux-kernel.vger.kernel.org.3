@@ -2,108 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094C04B7845
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F3C4B777E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243416AbiBOTMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 14:12:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53822 "EHLO
+        id S243425AbiBOTMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 14:12:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243398AbiBOTL5 (ORCPT
+        with ESMTP id S243402AbiBOTMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 14:11:57 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77254657B7;
-        Tue, 15 Feb 2022 11:11:47 -0800 (PST)
+        Tue, 15 Feb 2022 14:12:00 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726AB7A9AD;
+        Tue, 15 Feb 2022 11:11:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1644952289;
-        bh=SxVO8kVjsQIgzNAhMuQrTyZ/nhGltRDfeyl32VMM+ys=;
+        s=badeba3b8450; t=1644952290;
+        bh=piF//2eS4Ky3pAJp+1bPy+qGO6OmU+pXfnFC9nwV+0w=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=XoJLEzbUAF0JQ0YeIcPYMUiopaRbrvPRYHJKrTvkgLoHbSNezoI5dhP1S+r1Qf07A
-         tFwxsrcY1d6Rc5sFpDnRJUb+Obvqxkkbu4PuIFybhVpneFXoahp3EwrjUP4FKT4P2z
-         wFGdL4qMGfdOOJK1aWzywUI7/NIdrmGPiBKQt9yg=
+        b=IP8roPnJPfL5+Bg2kmmogQT6GRIAypuF2Qxja2WPE38sGinjxzUzaU7/ATnQsPiTz
+         QwlVGxTUQ18BqDfzjmLeJ4SRZuNPiYS0Kf0TTkq8/WWrghqJ0XZYF+E6bOUfVO8vCt
+         Yv+LqDfqUmanZYfEgf2zqsKur036YISVJKwVvmo4=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
  (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MowGa-1o4bOR0HlO-00qUcS; Tue, 15 Feb 2022 20:11:29 +0100
+ 1MrhQ6-1o7MXu0e8a-00nkXG; Tue, 15 Feb 2022 20:11:30 +0100
 From:   Armin Wolf <W_Armin@gmx.de>
 To:     pali@kernel.org
 Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 4/7] hwmon: (dell-smm) Improve temperature sensors detection
-Date:   Tue, 15 Feb 2022 20:11:10 +0100
-Message-Id: <20220215191113.16640-5-W_Armin@gmx.de>
+Subject: [PATCH 5/7] hwmon: (dell-smm) Improve assembly code
+Date:   Tue, 15 Feb 2022 20:11:11 +0100
+Message-Id: <20220215191113.16640-6-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220215191113.16640-1-W_Armin@gmx.de>
 References: <20220215191113.16640-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:jnoIJaV3BwZeEXCRHEY0Vv+6tBpjG7Kw+ZxDd1+5f9mfGaY/KVt
- BY1ekcT/jpYqnddZrXw1SasIt5w/ceBanLqocKRLl9VUbPEIwScpnoXJxWYnEU9/qpaYO+5
- WSMutac4ciXooQMH0hc5Qg5wfsdheTWBgoGB6XYI/8LEZnFNG4FRkAvgo6L0ZpzC+f8Rc4n
- sOUsumkU+4d/1cPUIP/eA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:taQVSqRsvBU=:naGTMuA3uzqaFLbAoWj5UZ
- MPjEWMfBIt9ZtLfnMlQKhimUE8bjQ9rx2vo7q7taWK/vTy/AwEGb/2B5f1ZVFSYWH9Tyd4VTI
- P8ECuI5Jll2LTgrDZk/Vfnm/tcE13urv0L54l0XfpaJBKazPay16f3zg8f2sfrHM1GPkQB3oy
- K7kIalbimCverIOd0mPi7YgemCzIiCb0ABtUDhHM2F+cleRO9HRjqct1PR4XOJkElAMIC1Mrg
- S6eNPyoD0fJP6S+nwI+3b74LElpWY/TQzJI1gj4mbYb+qruy6VVt3/t3yWBELb0zCOuoYBpkJ
- evU402fqgaRYQrAvYDdPBNFZAvTOrudCcSfZfXWzPTgPx9diLES/aDMv/qYf8mSsEv15HFbsM
- mv2pQFqiz6Zz0+NytRpVkDc6+Lxd1U0U0NfcnhCGtm4HiguElhqoQzUJzHLuMZEEM0ODob18z
- CNROzD/nyt9Kv2qPQ9iWzbW20fqBCCf9fT4Lv1cojakOy05KdPc6FbITEMHP6LGCuV0jC+PJz
- BNnhSjuNoxmdlzrlOcbdXb2PWe4zQoq13nk8r7Up70hImo4IKoL4cE8j5YIHAyfB1U+nE5QA+
- 58iSBfNX7tm0TI8GcTmP4pFnuhe8WTbZz392yy5dp2CxvHP0QG+4XZCbHuqSsQI5bdbm8ahx+
- t8jQSdYwSgOn/nnEHXAz8LAMP+7Jb8CqgCPZget+q3tZtX5ppZtk4VPi3NmT/PQqLPqBmBBmg
- 5ZYYO6vMNRskEk9GGuFvQVv+Z9waHGnlPrAyF7O6Vs2EyDZ+4zifIMCF6cEzZPsm/EThjFhtu
- fkWV5GHsYjbrae13RGDKl/k+dsI0FPZFW85bZF23qAnMkWQ4fiJzGaZhChMRModtNJcITmUpT
- UUdK4uijaldfeBzJsAfqC3vi3iZmskm+4Foy+QnuhKhDxByTSTjvLPbjmapmqlJW9neLbmkUq
- iY+HO8BF/wVQNz8DTxUrDLLGxlsJyDP3tMSFNKEv75OfbjyxKrozx9as1Sy/FV6zbEvWMgT4s
- 7tFGh/eA54F8kOqvuj76JClMWgvhnT5HUE93ga4W4jOs56hne9igIEvbtmHY27DwZldPf+G81
- IMch1fXbqnwx4c=
+X-Provags-ID: V03:K1:TPkHDCY2XjIMWm7XLGt0M2XcEpZdlfGfNupt6prvJ0b3/F7j8Ku
+ /ZstF8pTeB+xIp9bwmvuXXUXFHEJkKu4cWpY0Gz/bg5MC86eDp2CCUeRK2yUyqTnJm/Aqzu
+ ZGkfqnjpR3T+c5wJkQTK9z5jbTDhefl8ZXQ2cqiyegax6ayTxjExnTW2ucvqlz9MjGqxd9N
+ 2DeLBZY8QwcJeHEhtfQCA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:LyH3HjHAY2k=:LFypqImYl+lS8Zu1DCUzc6
+ w1f8vECAfAG+wAONXZZ+1lqNS4897wWN+zwT+5yIb1wD/AcsbEG9+5gMcHqqY6g9/8fup3KSg
+ iA0tXrsX3ulbPOper8gWpSEguPKwnWBel1O2l3UEmVIoT70ASJDMCLfWXVTM0TNaqASOBetPd
+ 9M2HoPGgxB1hTAuBoAnJnCDCtBhQLSORzPe278etp2fzU2p0gt8ZeWqntkn0TVL86l6gz6wtf
+ O+OITwvrv7EKbF3tSynz3rvkS0AraOPuc2syu9uQi+dzNRSP9P/V373s/myMjV+QDSxbWtaX1
+ 0SQ4AtJIHGq9032LXhPcXELvRuxpL7+piLnDQ7tkzFtJMU0HOIVHGktAFCxy9cvs/LWo3kq1O
+ tqWWPdGkzljV5Br0ppjBh6tFWOG8vbMiu+F7wYZXns64icg4Qtz9e7b9QIJ3a4yFsdSXISmB1
+ dahr9qOABEDEfUcfAvTnx+DfPEKJw5SDSJXBYEw8RoOcEUI1GtVaS3jy3cFienbAM4Flq/0CN
+ LzC2iqYNf+YvDy53Mm/uPFKdf01w6Y4/Mk4BTT3lnMUW9Qb7IkIvN9kHLM0fm4+EYaW5mFuHU
+ jNf7KvA2nSXm6Bd9PAINDih9zz5+5gTNFmOgJ0kAzXCSu+zFytdOgBCtNU9+mIfzxt3/C+oTD
+ L/SWQh4jjpq8+RsYbCMkU+4WOEhR8jPdCg4poIi0J60awtXYujSrf33nUq10Jd7K8GNejp7JC
+ w0Atz16tE0HEga7DoJhycA3GTr6iABIQoNH1yIT1RTCI/cihmhDI/dPRSmtEviyEhCblDQyG7
+ hYmQdHEZ2p6x3aqlz09yAM9Oxs9fUvaEi+Y3qtCC6NngUPSBXFSnm5bJSz8f4A8/us4l533Vi
+ cyxoJv0cqLPMXgxYq4Ex5UYQx9EAYYHVxBBIYGldd2F81yOc0593RJ19/8ABDXlecy4m11J1o
+ PDlGhzamTGhkQ5mZE+/q850nncGYv+34JKHeYVyjGKUsL6vhe7Ab6bLr5cbxLiwt+0tatYOQm
+ 3k7tU8SMp5slNJxqyvrByWvpG3JHqwuF6lUN6sU5yn4vjmz4qVq978kO3/P2i2JAFn9s4SVkP
+ J484sr4P11Muls=
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On the Dell Inspiron 3505, three temperature sensors are
-available through the SMM interface. However since they
-do not have an associated type, they are not detected.
-Probe for those sensors in case no type was detected.
-_i8k_get_temp() is used instead of i8k_get_temp()
-since it is sometimes faster and the result is
-easier to check (no -ENODATA) since we do not
-care about the actual temp value.
+The new assembly code works on both 32bit and 64bit cpus
+and allows for more compiler optimisations by not
+requiring smm_regs to be packed. Also since the
+SMM handler seems to modify the carry flag, the new
+code informs the compiler that the flags register
+needs to be saved/restored.
 
-Tested on a Dell Inspiron 3505.
+Tested with 32 bit and 64 bit kernels on a Dell Inspiron 3505.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- drivers/hwmon/dell-smm-hwmon.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/hwmon/dell-smm-hwmon.c | 71 ++++++++--------------------------
+ 1 file changed, 17 insertions(+), 54 deletions(-)
 
 diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
 .c
-index a102034a1d38..b7016971bb2e 100644
+index b7016971bb2e..04a41d59da60 100644
 =2D-- a/drivers/hwmon/dell-smm-hwmon.c
 +++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -655,6 +655,11 @@ static umode_t dell_smm_is_visible(const void *drvdat=
-a, enum hwmon_sensor_types
- 	case hwmon_temp:
- 		switch (attr) {
- 		case hwmon_temp_input:
-+			/* _i8k_get_temp() is fine since we do not care about the actual value=
- */
-+			if (data->temp_type[channel] >=3D 0 || _i8k_get_temp(channel) >=3D 0)
-+				return 0444;
+@@ -123,7 +123,7 @@ struct smm_regs {
+ 	unsigned int edx;
+ 	unsigned int esi;
+ 	unsigned int edi;
+-} __packed;
++};
+
+ static const char * const temp_labels[] =3D {
+ 	"CPU",
+@@ -175,59 +175,22 @@ static int i8k_smm_func(void *par)
+ 	if (smp_processor_id() !=3D 0)
+ 		return -EBUSY;
+
+-#if defined(CONFIG_X86_64)
+-	asm volatile("pushq %%rax\n\t"
+-		"movl 0(%%rax),%%edx\n\t"
+-		"pushq %%rdx\n\t"
+-		"movl 4(%%rax),%%ebx\n\t"
+-		"movl 8(%%rax),%%ecx\n\t"
+-		"movl 12(%%rax),%%edx\n\t"
+-		"movl 16(%%rax),%%esi\n\t"
+-		"movl 20(%%rax),%%edi\n\t"
+-		"popq %%rax\n\t"
+-		"out %%al,$0xb2\n\t"
+-		"out %%al,$0x84\n\t"
+-		"xchgq %%rax,(%%rsp)\n\t"
+-		"movl %%ebx,4(%%rax)\n\t"
+-		"movl %%ecx,8(%%rax)\n\t"
+-		"movl %%edx,12(%%rax)\n\t"
+-		"movl %%esi,16(%%rax)\n\t"
+-		"movl %%edi,20(%%rax)\n\t"
+-		"popq %%rdx\n\t"
+-		"movl %%edx,0(%%rax)\n\t"
+-		"pushfq\n\t"
+-		"popq %%rax\n\t"
+-		"andl $1,%%eax\n"
+-		: "=3Da"(rc)
+-		:    "a"(regs)
+-		:    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
+-#else
+-	asm volatile("pushl %%eax\n\t"
+-	    "movl 0(%%eax),%%edx\n\t"
+-	    "push %%edx\n\t"
+-	    "movl 4(%%eax),%%ebx\n\t"
+-	    "movl 8(%%eax),%%ecx\n\t"
+-	    "movl 12(%%eax),%%edx\n\t"
+-	    "movl 16(%%eax),%%esi\n\t"
+-	    "movl 20(%%eax),%%edi\n\t"
+-	    "popl %%eax\n\t"
+-	    "out %%al,$0xb2\n\t"
+-	    "out %%al,$0x84\n\t"
+-	    "xchgl %%eax,(%%esp)\n\t"
+-	    "movl %%ebx,4(%%eax)\n\t"
+-	    "movl %%ecx,8(%%eax)\n\t"
+-	    "movl %%edx,12(%%eax)\n\t"
+-	    "movl %%esi,16(%%eax)\n\t"
+-	    "movl %%edi,20(%%eax)\n\t"
+-	    "popl %%edx\n\t"
+-	    "movl %%edx,0(%%eax)\n\t"
+-	    "lahf\n\t"
+-	    "shrl $8,%%eax\n\t"
+-	    "andl $1,%%eax\n"
+-	    : "=3Da"(rc)
+-	    :    "a"(regs)
+-	    :    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
+-#endif
++	asm volatile("out %%al,$0xb2\n\t"
++		     "out %%al,$0x84\n"
++		     : "=3Da" (regs->eax),
++		       "=3Db" (regs->ebx),
++		       "=3Dc" (regs->ecx),
++		       "=3Dd" (regs->edx),
++		       "=3DS" (regs->esi),
++		       "=3DD" (regs->edi),
++		       CC_OUT(c) (rc)
++		     : "a" (regs->eax),
++		       "b" (regs->ebx),
++		       "c" (regs->ecx),
++		       "d" (regs->edx),
++		       "S" (regs->esi),
++		       "D" (regs->edi));
 +
-+			break;
- 		case hwmon_temp_label:
- 			if (data->temp_type[channel] >=3D 0)
- 				return 0444;
+ 	if (rc !=3D 0 || (regs->eax & 0xffff) =3D=3D 0xffff || regs->eax =3D=3D =
+eax)
+ 		rc =3D -EINVAL;
+
 =2D-
 2.30.2
 

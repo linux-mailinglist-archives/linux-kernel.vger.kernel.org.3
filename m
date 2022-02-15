@@ -2,69 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 914494B64B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 08:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A6A4B64BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 08:50:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234932AbiBOHsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 02:48:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37000 "EHLO
+        id S234998AbiBOHs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 02:48:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233788AbiBOHsa (ORCPT
+        with ESMTP id S234752AbiBOHsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 02:48:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8205E90FD6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 23:48:20 -0800 (PST)
+        Tue, 15 Feb 2022 02:48:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9B1797BBA
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 23:48:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644911299;
+        s=mimecast20190719; t=1644911314;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=S8TBMpDANby8RmP/LFmogH2MgUB/cxamBFb1C+IRX38=;
-        b=ECuQ6+fOI9cxDx2lbpHPd7IssXXnXTleML4APLvpxkd1NPE2a7g80F7XxuLreRP8/e1Ms1
-        i+bIWWd8HExn8woJfVtsKhECpnjD5p4+NDgl70tTMnr2PsOSeUgwPom9a8ULQuLbggmfjf
-        Uojw6to24vt1wpGHwWV6vbC0YxQxhHI=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7mqaQERLi8FqjBn6o0qRtuyA3NkSe11glfd42h6C9JY=;
+        b=iES7z4jHtzyTCXbD/ps9hm/k5DIxNKN9J367svLJWVBDD14Dx28xP+yaIRaE5rLzeeXK0J
+        Pzpi5FPMuayaUSSO+MQn7S2FMtYCbO0s/cxRvN+EUn1/fSGXGA5sHKQ1GIdd+NsbcOSEoR
+        ZWCCfyxlror/a9hFAxcslkwaLllIWaE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-358-sn8W8v1RPb--Q_myZm7b5w-1; Tue, 15 Feb 2022 02:48:17 -0500
-X-MC-Unique: sn8W8v1RPb--Q_myZm7b5w-1
-Received: by mail-lf1-f70.google.com with SMTP id z24-20020a056512371800b0043ea4caa07cso5948162lfr.17
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 23:48:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S8TBMpDANby8RmP/LFmogH2MgUB/cxamBFb1C+IRX38=;
-        b=Ns3lQDwOO5E+UzOaNhIPZSscLT6OUnIN1E0Ct6csy8NgWLnvmq47ldUXmjFzfL4uOK
-         tT63chxyK5XQx9n+lZz3BYyDk1Ezp56fEZiQoyZAjD5p++LDNUm6VJz2naEI0U4kn5RQ
-         Q+tNg3fyX+OXFH7MjCRAirUlUsKa7cOgEqdYtFamF0O5tpFcK8w02oqGs1EmaQExVOdS
-         hEZioQB6yMfCURFmKP1t/S9J4q4Jn3Gi9RleR9RPirZZ4xZC4zkPSRjzF5GrzXj9G9h6
-         9dxUmfj/ZQmWQXO9JAELQSbYS9j9VZFSZav0xazYDBqVX8WubtPr3GYx2r2OfjxFD/AQ
-         SUsA==
-X-Gm-Message-State: AOAM530JOuvQpHo7PCMqUjyHhMKaCD1dUo7+qM5V5G3G048o9WYVAB9i
-        Nm93QMnMyHwORANmKJ2D1sMzKVcK9h+a9jwqTGjahrjujv61VZPINMSkAcFf7wbEpGDHROueL6S
-        6D1ZxNHn3vrtpPc9ycRQK3dbsvXCg+m/w2zrw1Y9u
-X-Received: by 2002:ac2:4437:: with SMTP id w23mr2253846lfl.481.1644911296355;
-        Mon, 14 Feb 2022 23:48:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzrPGSBjibGvDtlM9Z1Jt9MP9dvUIJlBBoHq0xmqexyKC5if7aafgy71D/1u2QPpo0U8LGebpqeueCGo0+ygO8=
-X-Received: by 2002:ac2:4437:: with SMTP id w23mr2253833lfl.481.1644911296148;
- Mon, 14 Feb 2022 23:48:16 -0800 (PST)
+ us-mta-403-6Q_O5W5LNZK5CC9nkERWug-1; Tue, 15 Feb 2022 02:48:32 -0500
+X-MC-Unique: 6Q_O5W5LNZK5CC9nkERWug-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 72A0A2F26;
+        Tue, 15 Feb 2022 07:48:31 +0000 (UTC)
+Received: from thuth.com (dhcp-192-183.str.redhat.com [10.33.192.183])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A10F362D7B;
+        Tue, 15 Feb 2022 07:48:26 +0000 (UTC)
+From:   Thomas Huth <thuth@redhat.com>
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: kvm: Check whether SIDA memop fails for normal guests
+Date:   Tue, 15 Feb 2022 08:48:24 +0100
+Message-Id: <20220215074824.188440-1-thuth@redhat.com>
 MIME-Version: 1.0
-References: <20220215053430.24650-1-gdawar@xilinx.com>
-In-Reply-To: <20220215053430.24650-1-gdawar@xilinx.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 15 Feb 2022 15:48:04 +0800
-Message-ID: <CACGkMEs7UEFM=ospckg0-LMw92wj74D_NLPsZy6oSY=dio9V-w@mail.gmail.com>
-Subject: Re: [PATCH] Add definition of VIRTIO_F_IN_ORDER feature bit
-To:     Gautam Dawar <gautam.dawar@xilinx.com>
-Cc:     Martin Petrus Hubertus Habets <martinh@xilinx.com>,
-        Harpreet Singh Anand <hanand@xilinx.com>, pabloc@xilinx.com,
-        Gautam Dawar <gdawar@xilinx.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -75,39 +60,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 1:34 PM Gautam Dawar <gautam.dawar@xilinx.com> wrote:
->
-> This patch adds the definition of VIRTIO_F_IN_ORDER feature bit
-> in the relevant header file to make it available in QEMU's
-> linux standard header file virtio_config.h, which is updated using
-> scripts/update-linux-headers.sh
->
-> Signed-off-by: Gautam Dawar <gdawar@xilinx.com>
+Commit 2c212e1baedc ("KVM: s390: Return error on SIDA memop on normal
+guest") fixed the behavior of the SIDA memops for normal guests. It
+would be nice to have a way to test whether the current kernel has
+the fix applied or not. Thus add a check to the KVM selftests for
+these two memops.
 
-Acked-by: Jason Wang <jasowang@redhat.com>
+Signed-off-by: Thomas Huth <thuth@redhat.com>
+---
+ tools/testing/selftests/kvm/s390x/memop.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-> ---
->  include/uapi/linux/virtio_config.h | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/include/uapi/linux/virtio_config.h b/include/uapi/linux/virtio_config.h
-> index b5eda06f0d57..f0fb0ae021c0 100644
-> --- a/include/uapi/linux/virtio_config.h
-> +++ b/include/uapi/linux/virtio_config.h
-> @@ -82,6 +82,12 @@
->  /* This feature indicates support for the packed virtqueue layout. */
->  #define VIRTIO_F_RING_PACKED           34
->
-> +/*
-> + * Inorder feature indicates that all buffers are used by the device
-> + * in the same order in which they have been made available.
-> + */
-> +#define VIRTIO_F_IN_ORDER              35
-> +
->  /*
->   * This feature indicates that memory accesses by the driver and the
->   * device are ordered in a way described by the platform.
-> --
-> 2.30.1
->
+diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+index 9f49ead380ab..d19c3ffdea3f 100644
+--- a/tools/testing/selftests/kvm/s390x/memop.c
++++ b/tools/testing/selftests/kvm/s390x/memop.c
+@@ -160,6 +160,21 @@ int main(int argc, char *argv[])
+ 	run->psw_mask &= ~(3UL << (63 - 17));   /* Disable AR mode */
+ 	vcpu_run(vm, VCPU_ID);                  /* Run to sync new state */
+ 
++	/* Check that the SIDA calls are rejected for non-protected guests */
++	ksmo.gaddr = 0;
++	ksmo.flags = 0;
++	ksmo.size = 8;
++	ksmo.op = KVM_S390_MEMOP_SIDA_READ;
++	ksmo.buf = (uintptr_t)mem1;
++	ksmo.sida_offset = 0x1c0;
++	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
++	TEST_ASSERT(rv == -1 && errno == EINVAL,
++		    "ioctl does not reject SIDA_READ in non-protected mode");
++	ksmo.op = KVM_S390_MEMOP_SIDA_WRITE;
++	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
++	TEST_ASSERT(rv == -1 && errno == EINVAL,
++		    "ioctl does not reject SIDA_WRITE in non-protected mode");
++
+ 	kvm_vm_free(vm);
+ 
+ 	return 0;
+-- 
+2.27.0
 

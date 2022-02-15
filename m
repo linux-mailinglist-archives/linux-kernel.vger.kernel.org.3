@@ -2,152 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B752D4B633E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:03:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A08584B633F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234298AbiBOGDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 01:03:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52116 "EHLO
+        id S233526AbiBOGFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 01:05:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiBOGDp (ORCPT
+        with ESMTP id S229773AbiBOGFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 01:03:45 -0500
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2D2C4B65
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 22:03:34 -0800 (PST)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220215060329epoutp03603be276507613556a8232215e26441c~T4GP-CvjY1807218072epoutp03h
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 06:03:29 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220215060329epoutp03603be276507613556a8232215e26441c~T4GP-CvjY1807218072epoutp03h
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1644905009;
-        bh=l/tuDcqbcvlzpI0UVW5GWhgjOGzEwtl1XwGEDLmHnl4=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=cWjLF6nfGaLWtXoYF+ZA0OVtilw+wporERqGTCJ3k0YiRk40KN9H8XwLMumedKRM7
-         loDnF3TKIYa8W4WeOldYcdswX7gYy6eKmXFl+W4Nzlft64/Fa/+odjBBR99+l37nLY
-         C250CPE412yacEItt7b4FdZYA4d8PPXTSKupp0u0=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20220215060327epcas2p4b0e57a32b82ce55ccefaede5742ce536~T4GOmAWo50347103471epcas2p48;
-        Tue, 15 Feb 2022 06:03:27 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.101]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4JyVrZ1Q2Gz4x9Q7; Tue, 15 Feb
-        2022 06:03:26 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2B.39.35137.C614B026; Tue, 15 Feb 2022 15:00:12 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220215060325epcas2p4238dd2ab583ad0bbc301baa8ce68df9a~T4GMuFO6A0182101821epcas2p4O;
-        Tue, 15 Feb 2022 06:03:25 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220215060325epsmtrp28a684999c0fc9f387facc6b2d6fd133d~T4GMs6xQr2769127691epsmtrp2C;
-        Tue, 15 Feb 2022 06:03:25 +0000 (GMT)
-X-AuditID: b6c32a46-da1ff70000018941-1e-620b416c35fb
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        32.AE.08738.D224B026; Tue, 15 Feb 2022 15:03:25 +0900 (KST)
-Received: from KORCO011456 (unknown [10.229.18.123]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220215060325epsmtip2ff17a5a5abc6360a754b12b54a32f3a1~T4GMdLYEc0332903329epsmtip2g;
-        Tue, 15 Feb 2022 06:03:25 +0000 (GMT)
-From:   "Kiwoong Kim" <kwmad.kim@samsung.com>
-To:     "'Bart Van Assche'" <bvanassche@acm.org>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <beanhuo@micron.com>, <cang@codeaurora.org>,
-        <adrian.hunter@intel.com>, <sc.suh@samsung.com>,
-        <hy50.seo@samsung.com>, <sh425.lee@samsung.com>,
-        <bhoon95.kim@samsung.com>, <vkumar.1997@samsung.com>
-In-Reply-To: <62a5170b-48c0-a372-5392-08f5112d7a06@acm.org>
-Subject: RE: [PATCH v1] scsi: ufs: remove clk_scaling_lock when clkscaling
- isn't supported.
-Date:   Tue, 15 Feb 2022 15:03:25 +0900
-Message-ID: <007e01d82231$be8be250$3ba3a6f0$@samsung.com>
+        Tue, 15 Feb 2022 01:05:48 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F37C4B65
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 22:05:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644905139; x=1676441139;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9T1Zhf11T2THdcQwM7OSO3iT2Z5DgFxy8/YrIQD9NXo=;
+  b=WaKmqozGyUvm8nvU8tUej+LN9pq1W3Z4VtOFLwXW0Hrumi30jdss/VOt
+   B2vh2I6QRtUR47xV5OMwvNiyGT728sGzdMunuEoRV1BvTDtZ6RY49x5qK
+   N36RPQK6LLsXl89Z/ENpAV1YpgKh1XL0d+PQ4rE2QmdeRiHsiMNF9yrbm
+   VZP7+BSguWHphcQvFWSdCU3aKq2Kkku/kWYf0uZ/4OaUYUO0iBQ+l8tul
+   lA1Txghh1FXpjp3Kb5RakDK0yWeVgyKebW98dWvE/XS1HmleQcJGgEI6X
+   mtFSZMVb4fmCSU34eoXKGrE3vfaHCmn9vXVEs8EIYysgSdS2HOZGil2U/
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="230893924"
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="230893924"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 22:05:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="703453297"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 14 Feb 2022 22:05:36 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJqy0-0009K4-9B; Tue, 15 Feb 2022 06:05:36 +0000
+Date:   Tue, 15 Feb 2022 14:05:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Manisha Chinthapally <manisha.chinthapally@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mchinth:sep_socwatch_linux_5_16 1/1]
+ drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse: sparse: incorrect
+ type in initializer (incompatible argument 2 (different address spaces))
+Message-ID: <202202151426.RB8miR3A-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: ko
-Thread-Index: AQI4IgZMS69T+T+3eQm0GbWo6Fi0ygFitYZoAW3RkECrvZmasA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrEJsWRmVeSWpSXmKPExsWy7bCmmW6OI3eSwZ1tVhYnn6xhs3gwbxub
-        xcufV9ksDj7sZLH4uvQZq8W0Dz+ZLT6tX8ZqsXrxAxaLRTe2MVlc3jWHzaL7+g42i+XH/zFZ
-        dN29wWix9N9bFos79z+yOPB7XL7i7XG5r5fJY/Gel0weExYdYPT4vr6DzePj01ssHn1bVjF6
-        fN4k59F+oJspgDMq2yYjNTEltUghNS85PyUzL91WyTs43jne1MzAUNfQ0sJcSSEvMTfVVsnF
-        J0DXLTMH6AMlhbLEnFKgUEBicbGSvp1NUX5pSapCRn5xia1SakFKToF5gV5xYm5xaV66Xl5q
-        iZWhgYGRKVBhQnbG7Hl9zAVT2SpW/jvD1MD4naWLkZNDQsBE4t2xFcxdjFwcQgI7GCUmXlwA
-        5XxilFi95BY7hPOZUeLso6vsMC3zTj9jgUjsYpRYtWEXG4TzklFixq6dbCBVbALaEtMe7mYF
-        SYgIzGeW+HJ+EStIglPAWuLa36WMILawQKzEje3XwRpYBFQlXmw7BLaCV8BSYvvZDYwQtqDE
-        yZlPwK5lBhq6bOFrZogzFCR+Pl3GChEXkZjd2QYWFxFwkvj57gATyGIJgTscEqc6n7BBNLhI
-        PJ3TywRhC0u8Or4F6h8pic/v9gLVcADZxRKb9slD9DYwSiz5tBkaTMYSs561M4LUMAtoSqzf
-        pQ9Rrixx5BbUaXwSHYf/skOEeSU62oQgGpUlfk2azAhhS0rMvHkHqsRDonNR1gRGxVlIfpyF
-        5MdZSP6ahbB2ASPLKkax1ILi3PTUYqMCI3hkJ+fnbmIEJ24ttx2MU95+0DvEyMTBeIhRgoNZ
-        SYQ37ixnkhBvSmJlVWpRfnxRaU5q8SFGU2CoT2SWEk3OB+aOvJJ4QxNLAxMzM0NzI1MDcyVx
-        Xq+UDYlCAumJJanZqakFqUUwfUwcnFINTDx9NU4ptbmv+iYKRNsbXCrU9ud69eZNt4xEV0qg
-        xJuWbwmfrnbUH5ijnrs89mNT/Z02Hef931q4JXM/zrKP/P+jRfBdq8CKVLWFzJ/dNsYmrpuq
-        ValyP+a53f2TjaGnYt/9VZ62d5/Cjdu60mtnH2FxOru2aMIvGdkvJxdJCshHJXb6HfiwWYNf
-        +OtPhnmMz64b2z+ob02btyib5Uv4x5XPPL8uDZefO+dLdXNclfAxdY7U/ZOKYk706HjxOmgv
-        s4v8tT9DTuWl6utvNx/IG7zlTPTsqdWKb4xj911/kPXHf077V67/SpkDPj762zDH+Pbt4DVW
-        OtwnN6obiK91lNzzjvP5PRONzOriiFPLlViKMxINtZiLihMBerR7tGUEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCIsWRmVeSWpSXmKPExsWy7bCSvK6uE3eSwddLYhYnn6xhs3gwbxub
-        xcufV9ksDj7sZLH4uvQZq8W0Dz+ZLT6tX8ZqsXrxAxaLRTe2MVlc3jWHzaL7+g42i+XH/zFZ
-        dN29wWix9N9bFos79z+yOPB7XL7i7XG5r5fJY/Gel0weExYdYPT4vr6DzePj01ssHn1bVjF6
-        fN4k59F+oJspgDOKyyYlNSezLLVI3y6BK+PeprssBdPZKvZMmcncwPiVpYuRk0NCwERi3uln
-        QDYXh5DADkaJ3o4r7BAJSYkTO58zQtjCEvdbjrBCFD1nlNh58wUrSIJNQFti2sPdYAkRgY3M
-        EmvbHjBCVB1jlGjcs4oNpIpTwFri2t+lYKOEBaIltk/4yQRiswioSrzYdghsHa+ApcT2sxsY
-        IWxBiZMzn4Ddxwy0ofdhKyOMvWzha2aIkxQkfj5dxgoRF5GY3dkGFhcRcJL4+e4A0wRGoVlI
-        Rs1CMmoWklGzkLQvYGRZxSiZWlCcm55bbFhglJdarlecmFtcmpeul5yfu4kRHLFaWjsY96z6
-        oHeIkYmD8RCjBAezkghv3FnOJCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJpCeWpGan
-        phakFsFkmTg4pRqYZAoFq3bL+UWfitjbOkd/5tFE3o0ca9xi43W7VBorAy6+Ni17c3bftJuV
-        EZOXiume1GWZFFye93JTUcuzxLKathOXYnfJiaxJesE1e/OF1NOLBELfNU/6mzu5JcX36Kw5
-        F3Kkr2cvLHLqM1hre/jQpbAI67tvha4rLF2/iq/n1f8X2Yl2TPWe2rMurHu8n4tvrchr3TMG
-        1aXKS1dpTX88kfXvQ/vYOk0mt+0+arXeLxv3HHnRfyvY7uvft1tE7ZdXC7wWWq5/wti5SNSn
-        Q7S8flP0ph+vfklbOZ4I+fkhNvHJOX2RZeaxHyu3P63mTl34W+ZbTkGC1JeHPAsyJ35104z8
-        +Xbfk4mPklquC7w9qcRSnJFoqMVcVJwIAG+uwddHAwAA
-X-CMS-MailID: 20220215060325epcas2p4238dd2ab583ad0bbc301baa8ce68df9a
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220205074128epcas2p40901c37a7328e825d8697f8d3269edba
-References: <CGME20220205074128epcas2p40901c37a7328e825d8697f8d3269edba@epcas2p4.samsung.com>
-        <1644046760-83345-1-git-send-email-kwmad.kim@samsung.com>
-        <62a5170b-48c0-a372-5392-08f5112d7a06@acm.org>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > -	down_read(&hba->clk_scaling_lock);
-> > +	if (ufshcd_is_clkscaling_supported(hba))
-> > +		down_read(&hba->clk_scaling_lock);
-> >
-> >   	lrbp =3D &hba->lrb=5Btag=5D;
-> >   	WARN_ON(lrbp->cmd);
->=20
-> I don't like this patch at all. This patch makes testing the UFS driver
-> more complicated without having any clear benefit. Additionally, adding
-> if-statements in front of locking makes static source code analysis harde=
-r
-> and is an anti-pattern. Please don't do this.
->=20
-> Bart.=20
+tree:   https://github.com/mchinth/linux sep_socwatch_linux_5_16
+head:   4cbfca15a262729ae8557758b49226fe4769f582
+commit: 4cbfca15a262729ae8557758b49226fe4769f582 [1/1] Platform/x86 Updated SEP/SOCPERF drivers to latest version
+config: i386-randconfig-s002-20220214 (https://download.01.org/0day-ci/archive/20220215/202202151426.RB8miR3A-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/mchinth/linux/commit/4cbfca15a262729ae8557758b49226fe4769f582
+        git remote add mchinth https://github.com/mchinth/linux
+        git fetch --no-tags mchinth sep_socwatch_linux_5_16
+        git checkout 4cbfca15a262729ae8557758b49226fe4769f582
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/x86/socperf/
 
-The benefit that I think is not blocking dev cmd during submitting a scsi c=
-md.
-Rather, I don't understand why this lock is required if a SoC doesn't suppo=
-rt clk scaling.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The period of ringing doorbells has been already protected by spin lock.
 
-Thanks.
-Kiwoong Kim
+sparse warnings: (new ones prefixed by >>)
+   drivers/platform/x86/socperf/socperfdrv.c:208:13: sparse: sparse: function 'SOCPERF_Read_Data3' with external linkage has definition
+   drivers/platform/x86/socperf/socperfdrv.c:1175:13: sparse: sparse: function 'lwpmudrv_Stop_Mem' with external linkage has definition
+   drivers/platform/x86/socperf/socperfdrv.c:1392:22: sparse: sparse: function 'socperf_Service_IOCTL' with external linkage has definition
+   drivers/platform/x86/socperf/socperfdrv.c:1516:13: sparse: sparse: function 'socperf_Device_Control' with external linkage has definition
+   drivers/platform/x86/socperf/socperfdrv.c:1602:12: sparse: sparse: function 'SOCPERF_Abnormal_Terminate' with external linkage has definition
+   drivers/platform/x86/socperf/socperfdrv.c:104:22: sparse: sparse: symbol 'socperf_drv_version' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:105:5: sparse: sparse: symbol 'read_unc_ctr_info' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:106:10: sparse: sparse: symbol 'dispatch_uncore' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:108:14: sparse: sparse: symbol 'socperf_global_ec' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:109:14: sparse: sparse: symbol 'socperf_abnormal_terminate' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:110:11: sparse: sparse: symbol 'socperf_control' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:114:8: sparse: sparse: symbol 'socperf_pcb_size' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __user *ptr @@     got unsigned int [usertype] * @@
+   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     expected void const volatile [noderef] __user *ptr
+   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     got unsigned int [usertype] *
+   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __user *__ptr_pu @@     got unsigned int [usertype] * @@
+   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     expected void [noderef] __user *__ptr_pu
+   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     got unsigned int [usertype] *
+   drivers/platform/x86/socperf/socperfdrv.c:328:37: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got void *[usertype] buf_drv_to_usr @@
+   drivers/platform/x86/socperf/socperfdrv.c:328:37: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:328:37: sparse:     got void *[usertype] buf_drv_to_usr
+   drivers/platform/x86/socperf/socperfdrv.c:407:62: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got void *[usertype] buf_drv_to_usr @@
+   drivers/platform/x86/socperf/socperfdrv.c:407:62: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:407:62: sparse:     got void *[usertype] buf_drv_to_usr
+   drivers/platform/x86/socperf/socperfdrv.c:559:63: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
+   drivers/platform/x86/socperf/socperfdrv.c:559:63: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:559:63: sparse:     got char *[usertype] buf_usr_to_drv
+   drivers/platform/x86/socperf/socperfdrv.c:641:39: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
+   drivers/platform/x86/socperf/socperfdrv.c:641:39: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:641:39: sparse:     got char *[usertype] buf_usr_to_drv
+   drivers/platform/x86/socperf/socperfdrv.c:742:64: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
+   drivers/platform/x86/socperf/socperfdrv.c:742:64: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:742:64: sparse:     got char *[usertype] buf_usr_to_drv
+   drivers/platform/x86/socperf/socperfdrv.c:1043:43: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got unsigned int [usertype] * @@
+   drivers/platform/x86/socperf/socperfdrv.c:1043:43: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:1043:43: sparse:     got unsigned int [usertype] *
+   drivers/platform/x86/socperf/socperfdrv.c:1066:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
+   drivers/platform/x86/socperf/socperfdrv.c:1066:29: sparse:     expected void [noderef] __user *to
+   drivers/platform/x86/socperf/socperfdrv.c:1066:29: sparse:     got char *[usertype] buf_drv_to_usr
+   drivers/platform/x86/socperf/socperfdrv.c:1089:28: sparse: sparse: Using plain integer as NULL pointer
+   drivers/platform/x86/socperf/socperfdrv.c:1100:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
+   drivers/platform/x86/socperf/socperfdrv.c:1100:29: sparse:     expected void [noderef] __user *to
+   drivers/platform/x86/socperf/socperfdrv.c:1100:29: sparse:     got char *[usertype] buf_drv_to_usr
+   drivers/platform/x86/socperf/socperfdrv.c:1135:45: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got unsigned long long [usertype] * @@
+   drivers/platform/x86/socperf/socperfdrv.c:1135:45: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:1135:45: sparse:     got unsigned long long [usertype] *
+   drivers/platform/x86/socperf/socperfdrv.c:1154:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
+   drivers/platform/x86/socperf/socperfdrv.c:1154:29: sparse:     expected void [noderef] __user *to
+   drivers/platform/x86/socperf/socperfdrv.c:1154:29: sparse:     got char *[usertype] buf_drv_to_usr
+   drivers/platform/x86/socperf/socperfdrv.c:1175:13: sparse: sparse: symbol 'lwpmudrv_Stop_Mem' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:1286:54: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
+   drivers/platform/x86/socperf/socperfdrv.c:1286:54: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:1286:54: sparse:     got char *[usertype] buf_usr_to_drv
+   drivers/platform/x86/socperf/socperfdrv.c:1310:30: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
+   drivers/platform/x86/socperf/socperfdrv.c:1310:30: sparse:     expected void [noderef] __user *to
+   drivers/platform/x86/socperf/socperfdrv.c:1310:30: sparse:     got char *[usertype] buf_drv_to_usr
+   drivers/platform/x86/socperf/socperfdrv.c:1348:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *buf @@
+   drivers/platform/x86/socperf/socperfdrv.c:1348:26: sparse:     expected void [noderef] __user *to
+   drivers/platform/x86/socperf/socperfdrv.c:1348:26: sparse:     got char *buf
+   drivers/platform/x86/socperf/socperfdrv.c:1368:76: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char const * @@
+   drivers/platform/x86/socperf/socperfdrv.c:1368:76: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:1368:76: sparse:     got char const *
+   drivers/platform/x86/socperf/socperfdrv.c:1392:22: sparse: sparse: symbol 'socperf_Service_IOCTL' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:1537:55: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got struct IOCTL_ARGS_NODE_S [usertype] *[usertype] @@
+   drivers/platform/x86/socperf/socperfdrv.c:1537:55: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:1537:55: sparse:     got struct IOCTL_ARGS_NODE_S [usertype] *[usertype]
+   drivers/platform/x86/socperf/socperfdrv.c:1516:13: sparse: sparse: symbol 'socperf_Device_Control' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:1602:12: sparse: sparse: symbol 'SOCPERF_Abnormal_Terminate' was not declared. Should it be static?
+>> drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse: sparse: incorrect type in initializer (incompatible argument 2 (different address spaces)) @@     expected int ( *read )( ... ) @@     got int ( * )( ... ) @@
+   drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse:     expected int ( *read )( ... )
+   drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse:     got int ( * )( ... )
+>> drivers/platform/x86/socperf/socperfdrv.c:1638:18: sparse: sparse: incorrect type in initializer (incompatible argument 2 (different address spaces)) @@     expected int ( *write )( ... ) @@     got int ( * )( ... ) @@
+   drivers/platform/x86/socperf/socperfdrv.c:1638:18: sparse:     expected int ( *write )( ... )
+   drivers/platform/x86/socperf/socperfdrv.c:1638:18: sparse:     got int ( * )( ... )
 
+vim +1637 drivers/platform/x86/socperf/socperfdrv.c
+
+f57492d07625dd Manisha Chinthapally 2019-05-01  1619  
+f57492d07625dd Manisha Chinthapally 2019-05-01  1620  /*****************************************************************************************
+f57492d07625dd Manisha Chinthapally 2019-05-01  1621   *
+f57492d07625dd Manisha Chinthapally 2019-05-01  1622   *   Driver Entry / Exit functions that will be called on when the driver is loaded and
+f57492d07625dd Manisha Chinthapally 2019-05-01  1623   *   unloaded
+f57492d07625dd Manisha Chinthapally 2019-05-01  1624   *
+f57492d07625dd Manisha Chinthapally 2019-05-01  1625   ****************************************************************************************/
+f57492d07625dd Manisha Chinthapally 2019-05-01  1626  
+f57492d07625dd Manisha Chinthapally 2019-05-01  1627  /*
+f57492d07625dd Manisha Chinthapally 2019-05-01  1628   * Structure that declares the usual file access functions
+f57492d07625dd Manisha Chinthapally 2019-05-01  1629   * First one is for lwpmu_c, the control functions
+f57492d07625dd Manisha Chinthapally 2019-05-01  1630   */
+f57492d07625dd Manisha Chinthapally 2019-05-01  1631  static struct file_operations socperf_Fops = {
+f57492d07625dd Manisha Chinthapally 2019-05-01  1632  	.owner = THIS_MODULE,
+f57492d07625dd Manisha Chinthapally 2019-05-01  1633  	IOCTL_OP = socperf_Device_Control,
+f57492d07625dd Manisha Chinthapally 2019-05-01  1634  #if defined(CONFIG_COMPAT) && defined(DRV_EM64T)
+f57492d07625dd Manisha Chinthapally 2019-05-01  1635  	.compat_ioctl = socperf_Device_Control_Compat,
+f57492d07625dd Manisha Chinthapally 2019-05-01  1636  #endif
+f57492d07625dd Manisha Chinthapally 2019-05-01 @1637  	.read = socperf_Read,
+f57492d07625dd Manisha Chinthapally 2019-05-01 @1638  	.write = socperf_Write,
+f57492d07625dd Manisha Chinthapally 2019-05-01  1639  	.open = socperf_Open,
+f57492d07625dd Manisha Chinthapally 2019-05-01  1640  	.release = NULL,
+f57492d07625dd Manisha Chinthapally 2019-05-01  1641  	.llseek = NULL,
+f57492d07625dd Manisha Chinthapally 2019-05-01  1642  };
+f57492d07625dd Manisha Chinthapally 2019-05-01  1643  
+
+:::::: The code at line 1637 was first introduced by commit
+:::::: f57492d07625dddac7920eccdb5be08c55ee16fa platform/x86: SOCPERF3 support for sep & socwatch
+
+:::::: TO: Manisha Chinthapally <manisha.chinthapally@intel.com>
+:::::: CC: Faycal Benmlih <faycal.benmlih@intel.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

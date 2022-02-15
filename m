@@ -2,170 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 009B54B78CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 215314B7900
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242292AbiBOUev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 15:34:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52874 "EHLO
+        id S242891AbiBOUfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 15:35:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232236AbiBOUeu (ORCPT
+        with ESMTP id S236290AbiBOUfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 15:34:50 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488E089CD4;
-        Tue, 15 Feb 2022 12:34:39 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id p9so13544321wra.12;
-        Tue, 15 Feb 2022 12:34:39 -0800 (PST)
+        Tue, 15 Feb 2022 15:35:23 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5812D76E7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:35:11 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id hw13so18218117ejc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:35:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KRSkNhIEhZMEMhWXs5iKQNZLmkUM8XOFNeLt27M+yH0=;
-        b=hmXooVo0/3oV8QfjJUBlso0REBtT/7qZxc4FtjAmra0e1picrf+m3AyZe/9+8D/Qys
-         dAKgFh2OJUrLVKJkf6aJmpRcU7Qan23dlXdC0svDE/UgTCkjX2BuMtea43ycfowTGPAy
-         UI++sJoOrZY7O3tZRi5Sd98UNVeeD3+7UCSQRtdd8UB27UASvbssCSCmBM7W9NCdoRSy
-         EwGs+mFo+Q+4AYFJcptcxtmga80wOuzuZaV1sd5mPdtoreJ+MuJe34KIj6aYUmlcWdX7
-         ZPeKhgH4e1WwI7lmO1AO+RdrMWmX7QTBeP2Eg6Q5AY0fo0HHAZP//R0Ljxtl8OJ3GqRG
-         eDWQ==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KePYcCl5a38qqRp4PlWIKJyXKZKQzDwLkIxZJtpH86s=;
+        b=TjWFfUMH/5M/aImVMoFiuz3ZvcaO/cos6XwrUYBV1zduc1Cwj9ORKwQ8gBkKx1kv3q
+         eqGaj9THZ4cCjfkgLJtX/iS/XdLY692b93Q4qZeaOqZDVcwHHSAtC6bGaW6OWSSj1skk
+         0IDe8gV5sQi9hGV2dHz5XcfdV1Xfyr1cAOQFYo9fQa+Y0wFqsRLyszyKN+cz3ojjZrrz
+         asjUssQFpyaC4Qoa14E4HyJ8NfDCAakA8qWRb88gGAyWPOQKvSYxxlUEHSL+5N2t95uk
+         CbVZuTzLB1QkD96EV8OUK10iHv+G/yqcjcMFlurbnNA5VLP0sguuydd1TH17mhKQzPZ9
+         rVxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KRSkNhIEhZMEMhWXs5iKQNZLmkUM8XOFNeLt27M+yH0=;
-        b=7zFebYcJOgR4rGL+B2CSGMfVKSvjbuv8zyEciQtu2lPjPKaO2aCY5PjE7IYtcCGhYq
-         Hie7d+k3Nac9Kr+NSO5yxHH9A92g+p3hqekqWP1zQh9F6NUhr612BSuMKZWpdo0ZUQZ/
-         mpB/XA78P1EDOKBPk/SFZEUwSkSo5Jd+CE5OOEfZhcFthFqZRZx8t/MF0BKMaY1r979S
-         6plZoCQTdr5womrOceHoTX7l9Hn/YNKBAj2BHgoSNomoSz7hRsT+14SoPi6YsAHvQIO7
-         4yJD8K+vTq7sj2XpBMgDI9BmBAFJc9Fya7S4x7yPKnbUApI/OeJ5pkPE9B/E/8TD7yqP
-         a6EA==
-X-Gm-Message-State: AOAM531gqW+JPGAfpU2tBgfAgHeS062mAuPlwrx613y8JiUO0A5tiNpj
-        BMMSXmpeIQm2iKeroVd0pTE=
-X-Google-Smtp-Source: ABdhPJx7LPF22AwP5kqzNKnc1tpYmsQB+V9uLmcnJHL/G901Xck085/9xsudMsuFVZQmfQc0vJM0Ug==
-X-Received: by 2002:adf:f191:: with SMTP id h17mr568730wro.188.1644957277766;
-        Tue, 15 Feb 2022 12:34:37 -0800 (PST)
-Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id r14sm6034914wrz.84.2022.02.15.12.34.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 12:34:37 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     mripard@kernel.org, wens@csie.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Klein <michael@fossekall.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: Re: Re: [PATCH v2] ARM: dts: sun8i: Adjust power key nodes
-Date:   Tue, 15 Feb 2022 21:34:36 +0100
-Message-ID: <4714494.31r3eYUQgx@kista>
-In-Reply-To: <20220215002732.GA3215504@roeck-us.net>
-References: <20211129165510.370717-1-jernej.skrabec@gmail.com> <20220215002732.GA3215504@roeck-us.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KePYcCl5a38qqRp4PlWIKJyXKZKQzDwLkIxZJtpH86s=;
+        b=ymvFeOWYU1gdE7oRYVXaf+NgZ1G8QWgn5vCO0mTlI/ChK8yzisrXOUA4MPOtjObZBC
+         xkb+PIZqVnyXvJ06a3H12s1N0sNkaeQzFwjh2kHR5GEd2a7irQqKorydsgNtEaRhXaZp
+         XQTZQB72LaRq/ANu3UugF/Hp3+OdkTLDiqzHegBvsLyyltW78pgsBL8Pvdh/skR+AtU6
+         3t4SWkTIWbj7LaC1XLxLWDOfsaLTbHRby0sqAmfFg9k8exsSy2VkNiC4mijy2lVVCvyD
+         B3uLCWyXr8LiuuNVo9aejcpHdXz8cUtxf32GIw+B+V2KImxqrvtOXkWn6es/y8jyg0nG
+         339Q==
+X-Gm-Message-State: AOAM533i65nfUz8mVz0/tHSHqFgphiCPYv8o3+MXs4lXhp7GIyHGFUuM
+        9nKGfYKKG/JOF3nZwcF1xAvxb713c8qf6u9pDwT2
+X-Google-Smtp-Source: ABdhPJz1Tc45Xo6bFBvHTWEiDBZPvg/YToRg+d0x7DzZCYRR99sT5jdGxyicDniFd93V3RRkBGBRUsY70DgMCnKJwt0=
+X-Received: by 2002:a17:907:7409:: with SMTP id gj9mr713011ejc.112.1644957309973;
+ Tue, 15 Feb 2022 12:35:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <4df50e95-6173-4ed1-9d08-3c1c4abab23f@gmail.com>
+ <CAHC9VhSjTqT-4TMxBnQOQHkj+djONihfeoPVyy1egrZY2t10XA@mail.gmail.com>
+ <c8a616e4-26a6-af51-212c-31dca0e265cd@gmail.com> <CAHC9VhQTZdeNOx3AXdoc9LXUzDk5n7wyGBX-tV-ZaovhPAdWwQ@mail.gmail.com>
+ <e85dd38b-ef7b-ed7e-882e-124cdf942c44@gmail.com> <CAHC9VhROuJtvNHuVaR6pEekNFacH3Tywx58_hn1f5Mwk+kjC8g@mail.gmail.com>
+ <b7e55304-d114-bcbe-08d2-b54828121a01@gmail.com> <CAHC9VhSdgD4Nfaxbnnn4r-OK8koSZ7+zQoPShDbGi9PvkJFpng@mail.gmail.com>
+ <478e1651-a383-05ff-d011-6dda771b8ce8@linux.microsoft.com>
+ <875ypt5zmz.fsf@defensec.nl> <CAFftDdo9JmbyPzPWRjOYgZBOS9b5d+OGKKf8egS8_ysbbWW87Q@mail.gmail.com>
+ <CABXk95Az0V0qWyB0Cp9D+MaCKNBfcdk4=bvXRdm5EXzHdjXJJg@mail.gmail.com>
+In-Reply-To: <CABXk95Az0V0qWyB0Cp9D+MaCKNBfcdk4=bvXRdm5EXzHdjXJJg@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 15 Feb 2022 15:34:59 -0500
+Message-ID: <CAHC9VhQKuQuR1pJfa0h2Y5dCjmrpiYaGpymwxxE1sa6jR3h-bA@mail.gmail.com>
+Subject: Re: [PATCH] SELinux: Always allow FIOCLEX and FIONCLEX
+To:     Demi Marie Obenour <demiobenour@gmail.com>
+Cc:     William Roberts <bill.c.roberts@gmail.com>,
+        Dominick Grift <dominick.grift@defensec.nl>,
+        Chris PeBenito <chpebeni@linux.microsoft.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        SElinux list <selinux@vger.kernel.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        selinux-refpolicy@vger.kernel.org,
+        Jeffrey Vander Stoep <jeffv@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+On Mon, Feb 14, 2022 at 2:11 AM Jeffrey Vander Stoep <jeffv@google.com> wrote:
+> On Tue, Feb 8, 2022 at 3:18 PM William Roberts <bill.c.roberts@gmail.com> wrote:
+> >
+> > <snip>
+> >
+> > This is getting too long for me.
+> >
+> > > >
+> > > > I don't have a strong opinion either way.  If one were to allow this
+> > > > using a policy rule, it would result in a major policy breakage.  The
+> > > > rule would turn on extended perm checks across the entire system,
+> > > > which the SELinux Reference Policy isn't written for.  I can't speak
+> > > > to the Android policy, but I would imagine it would be the similar
+> > > > problem there too.
+> > >
+> > > Excuse me if I am wrong but AFAIK adding a xperm rule does not turn on
+> > > xperm checks across the entire system.
+> >
+> > It doesn't as you state below its target + class.
+> >
+> > >
+> > > If i am not mistaken it will turn on xperm checks only for the
+> > > operations that have the same source and target/target class.
+> >
+> > That's correct.
+> >
+> > >
+> > > This is also why i don't (with the exception TIOSCTI for termdev
+> > > chr_file) use xperms by default.
+> > >
+> > > 1. it is really easy to selectively filter ioctls by adding xperm rules
+> > > for end users (and since ioctls are often device/driver specific they
+> > > know best what is needed and what not)
+> >
+> > > >>> and FIONCLEX can be trivially bypassed unless fcntl(F_SETFD)
+> > >
+> > > 2. if you filter ioctls in upstream policy for example like i do with
+> > > TIOSCTI using for example (allowx foo bar (ioctl chr_file (not
+> > > (0xXXXX)))) then you cannot easily exclude additional ioctls later where source is
+> > > foo and target/tclass is bar/chr_file because there is already a rule in
+> > > place allowing the ioctl (and you cannot add rules)
+> >
+> > Currently, fcntl flag F_SETFD is never checked, it's silently allowed, but
+> > the equivalent FIONCLEX and FIOCLEX are checked. So if you wrote policy
+> > to block the FIO*CLEX flags, it would be bypassable through F_SETFD and
+> > FD_CLOEXEC. So the patch proposed makes the FIO flags behave like
+> > F_SETFD. Which means upstream policy users could drop this allow, which
+> > could then remove the target/class rule and allow all icotls. Which is easy
+> > to prevent and fix you could be a rule in to allowx 0 as documented in the
+> > wiki: https://selinuxproject.org/page/XpermRules
+> >
+> > The questions I think we have here are:
+> > 1. Do we agree that the behavior between SETFD and the FIO flags are equivalent?
+> >   I think they are.
+> > 2. Do we want the interfaces to behave the same?
+> >   I think they should.
+> > 3. Do upstream users of the policy construct care?
+> >   The patch is backwards compat, but I don't want their to be cruft
+> > floating around with extra allowxperm rules.
+>
+> I think this proposed change is fine from Android's perspective. It
+> implements in the kernel what we've already already put in place in
+> our policy - that all domains are allowed to use these IOCLTs.
+> https://cs.android.com/android/platform/superproject/+/master:system/sepolicy/public/domain.te;l=312
+>
+> It'll be a few years before we can clean up our policy since we need
+> to support older kernels, but that's fine.
 
-Dne torek, 15. februar 2022 ob 01:27:32 CET je Guenter Roeck napisal(a):
-> Hi,
-> 
-> On Mon, Nov 29, 2021 at 05:55:10PM +0100, Jernej Skrabec wrote:
-> > Several H3 and one H2+ board have power key nodes, which are slightly
-> > off. Some are missing wakeup-source property and some have BTN_0 code
-> > assigned instead of KEY_POWER.
-> > 
-> > Adjust them, so they can function as intended by designer.
-> > 
-> > Co-developed-by: Michael Klein <michael@fossekall.de>
-> > Signed-off-by: Michael Klein <michael@fossekall.de>
-> > Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> 
-> This patch results in the following traceback when rebooting an
-> orangepi-pc qemu emulation.
-> 
-> [   30.899594]
-> [   30.899685] ============================================
-> [   30.899757] WARNING: possible recursive locking detected
-> [   30.899938] 5.17.0-rc3-00394-gc849047c2473 #1 Not tainted
-> [   30.900055] --------------------------------------------
-> [   30.900124] init/307 is trying to acquire lock:
-> [   30.900246] c2dfe27c (&irq_desc_lock_class){-.-.}-{2:2}, at: 
-__irq_get_desc_lock+0x58/0xa0
-> [   30.900900]
-> [   30.900900] but task is already holding lock:
-> [   30.900974] c3c0ac7c (&irq_desc_lock_class){-.-.}-{2:2}, at: 
-__irq_get_desc_lock+0x58/0xa0
-> [   30.901101]
-> [   30.901101] other info that might help us debug this:
-> [   30.901188]  Possible unsafe locking scenario:
-> [   30.901188]
-> [   30.901262]        CPU0
-> [   30.901301]        ----
-> [   30.901339]   lock(&irq_desc_lock_class);
-> [   30.901411]   lock(&irq_desc_lock_class);
-> [   30.901480]
-> [   30.901480]  *** DEADLOCK ***
-> [   30.901480]
-> [   30.901554]  May be due to missing lock nesting notation
-> [   30.901554]
-> [   30.901657] 4 locks held by init/307:
-> [   30.901724]  #0: c1f29f18 (system_transition_mutex){+.+.}-{3:3}, at: 
-__do_sys_reboot+0x90/0x23c
-> [   30.901889]  #1: c20f7760 (&dev->mutex){....}-{3:3}, at: 
-device_shutdown+0xf4/0x224
-> [   30.902016]  #2: c2e804d8 (&dev->mutex){....}-{3:3}, at: 
-device_shutdown+0x104/0x224
-> [   30.902138]  #3: c3c0ac7c (&irq_desc_lock_class){-.-.}-{2:2}, at: 
-__irq_get_desc_lock+0x58/0xa0
-> [   30.902281]
-> [   30.902281] stack backtrace:
-> [   30.902462] CPU: 0 PID: 307 Comm: init Not tainted 5.17.0-rc3-00394-
-gc849047c2473 #1
-> [   30.902572] Hardware name: Allwinner sun8i Family
-> [   30.902781]  unwind_backtrace from show_stack+0x10/0x14
-> [   30.902895]  show_stack from dump_stack_lvl+0x68/0x90
-> [   30.902970]  dump_stack_lvl from __lock_acquire+0x1680/0x31a0
-> [   30.903047]  __lock_acquire from lock_acquire+0x148/0x3dc
-> [   30.903118]  lock_acquire from _raw_spin_lock_irqsave+0x50/0x6c
-> [   30.903197]  _raw_spin_lock_irqsave from __irq_get_desc_lock+0x58/0xa0
-> [   30.903282]  __irq_get_desc_lock from irq_set_irq_wake+0x2c/0x19c
-> [   30.903366]  irq_set_irq_wake from irq_set_irq_wake+0x13c/0x19c
-> [   30.903442]  irq_set_irq_wake from gpio_keys_suspend+0x80/0x1a4
-> [   30.903523]  gpio_keys_suspend from gpio_keys_shutdown+0x10/0x2c
-> [   30.903603]  gpio_keys_shutdown from device_shutdown+0x180/0x224
-> [   30.903685]  device_shutdown from __do_sys_reboot+0x134/0x23c
-> [   30.903764]  __do_sys_reboot from ret_fast_syscall+0x0/0x1c
-> [   30.903894] Exception stack(0xc584ffa8 to 0xc584fff0)
-> [   30.904013] ffa0:                   01234567 000c623f fee1dead 28121969 
-01234567 00000000
-> [   30.904117] ffc0: 01234567 000c623f 00000001 00000058 000d85c0 00000000 
-00000000 00000000
-> [   30.904213] ffe0: 000d8298 be84ddf4 000918bc b6eb0edc
-> [   30.905189] reboot: Restarting system
-> 
-> The warning is no longer seen after reverting this patch.
-> 
-> The problem exists but is not seen in v5.17-rc4 because a bug in commit
-> 8df89a7cbc63 ("pinctrl-sunxi: don't call pinctrl_gpio_direction()")
-> hides it. That problem is fixed with commit 3c5412cdec9f ("pinctrl-sunxi:
-> sunxi_pinctrl_gpio_direction_in/output: use correct offset") in linux-next,
-> and the traceback is seen there.
+Thanks for the discussion everyone, it sounds like everybody is okay
+with the change - that's good.  However, as I said earlier in this
+thread I think we need to put this behind a policy capability, how
+does POLICYDB_CAPABILITY_IOCTL_CLOEXEC/"ioctl_skip_cloexec" sound to
+everyone?
 
-Hm... These DT changes were tested with many users on older kernels for some 
-time now and new properties conform to bindings. Should we revert pinctrl 
-changes?
+Demi, are you able to respin this patch with policy capability changes?
 
-Best regards,
-Jernej
-
-
-
+-- 
+paul-moore.com

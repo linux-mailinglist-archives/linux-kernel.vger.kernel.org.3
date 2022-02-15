@@ -2,141 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 742D24B76E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 240304B758B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243268AbiBOSrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 13:47:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57664 "EHLO
+        id S243233AbiBOSr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 13:47:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243240AbiBOSrN (ORCPT
+        with ESMTP id S243253AbiBOSrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 13:47:13 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48023136A
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:47:01 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: alyssa)
-        with ESMTPSA id C83521F44C43
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644950820;
-        bh=Jo+q2iQ2HhAa53Jyc9hotJ72iRGY8gVAx2ZkJDQVWGs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=O/3tC6A7Y2k4vIRMj3hfKSEHSGeZoMgX6+aVJ82NXCd+tB2+It8IgQtZJQcAjUvZp
-         tMZ5HVFsejX4SMoMyUII0+qa0pUH1S+U7I6dfqFR+uCSJ7Mfei4JZx8Lp5dnb7N1l2
-         c0FFJRW8s2M/9iAq+GjOAestYeZxGr4egQePe3M4kM3fYkWCMsBlSZuUX1cJqo0EZw
-         ynWyFjvHnj4jMbrHz1o/8bp2BFeZtETATMa/S+lzMe+zm4iHdfDryquVxjCD3SClkS
-         Q4+VV86gXKLI5Q7rz4fuBF6T/0OAw3yEwnrFebY186J7HSHvq/MYh2dmFC26KLAaJt
-         LzjHw7cZuHrsg==
-From:   Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
-To:     linux-mediatek@lists.infradead.org
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Nick Fan <Nick.Fan@mediatek.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2] soc: mediatek: mtk-infracfg: Disable ACP on MT8192
-Date:   Tue, 15 Feb 2022 13:46:51 -0500
-Message-Id: <20220215184651.12168-1-alyssa.rosenzweig@collabora.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 15 Feb 2022 13:47:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA813206E;
+        Tue, 15 Feb 2022 10:47:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AC3661719;
+        Tue, 15 Feb 2022 18:47:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42CEFC340EB;
+        Tue, 15 Feb 2022 18:47:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644950823;
+        bh=kscKovcHd2nlQ0B0p+OkiWybB5K6IGKqiw3FP0tR73g=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bZgNh/7E+ij5VtobYi835qErjEZ5CZIIWSw+rLFCeGkBtalOcAGX3VuMfBGh8/Fpy
+         Z+dPTdLQBOPRwhcKCCoYqjGG4zZEfkTzL47ixHBYj58eQou4DtJd0qCkgcBMWiRQmO
+         s+t2Ogh4W/J8YGy7rgYOQgsqh8sLFq8UdZnshCvOhSzx0REVacxP+FYkTS/yr/KPlK
+         oEABv+tD5xRtI86zL5WT8vKBHvIBOLUwYwDnq2jSXpqq+j1BM1uJanDvjnklImh6fZ
+         zVg/gv30VM+NEH20toivT9Prlwo1a0HCEqtAXKCn5bEQsCbHbymf+9UkumvlQci/dB
+         lhfydPN0JyW0A==
+Message-ID: <f626571a-30de-5549-a73e-aaef874d3c36@kernel.org>
+Date:   Tue, 15 Feb 2022 11:47:01 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [PATCH net-next 01/19] net: tcp: introduce tcp_drop_reason()
+Content-Language: en-US
+To:     Eric Dumazet <edumazet@google.com>,
+        Menglong Dong <menglong8.dong@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Talal Ahmad <talalahmad@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        flyingpeng@tencent.com
+References: <20220215112812.2093852-1-imagedong@tencent.com>
+ <20220215112812.2093852-2-imagedong@tencent.com>
+ <CANn89iLWOBy=X1CpY+gvukhQ-bb7hDWd5y+m46K7o5XR0Pbt_A@mail.gmail.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <CANn89iLWOBy=X1CpY+gvukhQ-bb7hDWd5y+m46K7o5XR0Pbt_A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MT8192 contains an experimental Accelerator Coherency Port
-implementation, which does not work correctly but was unintentionally
-enabled by default. For correct operation of the GPU, we must set a
-chicken bit disabling ACP on MT8192.
+On 2/15/22 10:34 AM, Eric Dumazet wrote:
+>> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+>> index af94a6d22a9d..e3811afd1756 100644
+>> --- a/net/ipv4/tcp_input.c
+>> +++ b/net/ipv4/tcp_input.c
+>> @@ -4684,10 +4684,19 @@ static bool tcp_ooo_try_coalesce(struct sock *sk,
+>>         return res;
+>>  }
+>>
+>> -static void tcp_drop(struct sock *sk, struct sk_buff *skb)
+>> +static void tcp_drop_reason(struct sock *sk, struct sk_buff *skb,
+>> +                           enum skb_drop_reason reason)
+>>  {
+>>         sk_drops_add(sk, skb);
+>> -       __kfree_skb(skb);
+>> +       /* why __kfree_skb() used here before, other than kfree_skb()?
+>> +        * confusing......
+> 
+> Do not add comments like that if you do not know the difference...
+> 
+> __kfree_skb() is used by TCP stack because it owns skb in receive
+> queues, and avoids touching skb->users
+> because it must be one already.
 
-Adapted from the following downstream change to the out-of-tree, legacy
-Mali GPU driver:
-
-https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/2781271/5
-
-Note this change is required for both Panfrost and the legacy kernel
-driver.
-
-v2: Move the change from clk-mt8192.c to mtk-infracfg.c (Robin).
-Although it does not make sense to add this platform-specific hack to
-the GPU driver, it has nothing to do with clocks. We already have
-mtk-infracfg.c to manage other infracfg bits; the ACP disable should
-live there too.
-
-Co-developed-by: Robin Murphy <robin.murphy@arm.com>
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-Signed-off-by: Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
-Cc: Nick Fan <Nick.Fan@mediatek.com>
-Cc: Nicolas Boichat <drinkcat@chromium.org>
-Cc: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/soc/mediatek/mtk-infracfg.c   | 19 +++++++++++++++++++
- include/linux/soc/mediatek/infracfg.h |  3 +++
- 2 files changed, 22 insertions(+)
-
-diff --git a/drivers/soc/mediatek/mtk-infracfg.c b/drivers/soc/mediatek/mtk-infracfg.c
-index 0590b68e0d78..2acf19676af2 100644
---- a/drivers/soc/mediatek/mtk-infracfg.c
-+++ b/drivers/soc/mediatek/mtk-infracfg.c
-@@ -6,6 +6,7 @@
- #include <linux/export.h>
- #include <linux/jiffies.h>
- #include <linux/regmap.h>
-+#include <linux/mfd/syscon.h>
- #include <linux/soc/mediatek/infracfg.h>
- #include <asm/processor.h>
- 
-@@ -72,3 +73,21 @@ int mtk_infracfg_clear_bus_protection(struct regmap *infracfg, u32 mask,
- 
- 	return ret;
- }
-+
-+static int __init mtk_infracfg_init(void)
-+{
-+	struct regmap *infracfg;
-+
-+	/*
-+	 * MT8192 has an experimental path to route GPU traffic to the DSU's
-+	 * Accelerator Coherency Port, which is inadvertently enabled by
-+	 * default. It turns out not to work, so disable it to prevent spurious
-+	 * GPU faults.
-+	 */
-+	infracfg = syscon_regmap_lookup_by_compatible("mediatek,mt8192-infracfg");
-+	if (!IS_ERR(infracfg))
-+		regmap_set_bits(infracfg, MT8192_INFRA_CTRL,
-+				MT8192_INFRA_CTRL_DISABLE_MFG2ACP);
-+	return 0;
-+}
-+postcore_initcall(mtk_infracfg_init);
-diff --git a/include/linux/soc/mediatek/infracfg.h b/include/linux/soc/mediatek/infracfg.h
-index d858e0bab7a2..fcbbd0dd5e55 100644
---- a/include/linux/soc/mediatek/infracfg.h
-+++ b/include/linux/soc/mediatek/infracfg.h
-@@ -229,6 +229,9 @@
- #define INFRA_TOPAXI_PROTECTEN_SET		0x0260
- #define INFRA_TOPAXI_PROTECTEN_CLR		0x0264
- 
-+#define MT8192_INFRA_CTRL			0x290
-+#define MT8192_INFRA_CTRL_DISABLE_MFG2ACP	BIT(9)
-+
- #define REG_INFRA_MISC				0xf00
- #define F_DDR_4GB_SUPPORT_EN			BIT(13)
- 
--- 
-2.34.1
-
+and it bypasses kfree_skb tracepoint which seems by design.

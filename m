@@ -2,68 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB26E4B78B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E0D4B76E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242555AbiBOR3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 12:29:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43328 "EHLO
+        id S242565AbiBORaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 12:30:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242540AbiBOR30 (ORCPT
+        with ESMTP id S242540AbiBORaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 12:29:26 -0500
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A4FDB840
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:29:16 -0800 (PST)
-Received: by mail-oo1-xc36.google.com with SMTP id c7-20020a4ad207000000b002e7ab4185d2so24028553oos.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:29:16 -0800 (PST)
+        Tue, 15 Feb 2022 12:30:06 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36712DB853
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:29:55 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id v12so33386911wrv.2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:29:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=njbqDSApNZJxgs8QUG+GJc2lRg8kr9qwNOtBMNrAGzk=;
-        b=Hg3yzSGM6InbUrgXSxmZSoAqb6uDGrwrZKujnThQlviuJauC0iCJUExwou4yPKJifZ
-         obaXgpqa/bOGF9trvOyYCD7dtImTql1VR6ZIOA+/hMzf4kq/egRB6LiVPtv8lXKIgkZE
-         iFHUkTRTxq7zD3FxS55Cbd+wzzjO64T2oyNXY=
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ICO1ml37Huyez+etV+dT6D2+k0fK+dVgQX5aKLEtpWE=;
+        b=im6LJNHwlFAY9cu/QQdYtskumJ2IlnWWzqdt5Z9BVaTZVNb6jEK7vusRjOzoETzlLy
+         D8CRih2welvIHDPxp+CBf1zRAWFB46gczAOOyzgQoBImzsy1sUBHpK17HTxUymgTgY+4
+         k3OV3VwgNG34VgF+pPMAWCJ+0t3V1u9KfifiwaoSxom9ARUIvx/a2Mq54gahxgbpXCkM
+         xHHr1UsBoR0xMqLrL39HDlu+dvBcZQuK+Q0jSfIhSP2cacCDhNapx7cvb+CrUi3VYD7F
+         5w1bEqTDFVkfjQnDy6CGZEuG8TFGtZSsdrSsfrYE/OPXw2taYRSitUXrncwpTOU/rkyj
+         yUHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=njbqDSApNZJxgs8QUG+GJc2lRg8kr9qwNOtBMNrAGzk=;
-        b=FuwqGnTqKu8kHg7aNN1yTjE3HdtBiK82ta2Ff7IHLFu223mAw0cqjAFVrzXkjPL4at
-         Uzv8jfiFxYdVVnORHHHdK2GrV71UuRWxdT5ece9OVbvVmGkPJRxOsgYT9DtEbw1bKnDV
-         5/pzkX5DEKa5nNBaeW93v2XQ5FFWlip8lmcEJu9/8rZbCRRvGrIBwN/6fFyBojczc59q
-         Z/TkokMbsBAGVOHOFcIt2fm2JwWyycblgC5MDTDVAnPff+Uon7QC3y5q1+N8DZekq6tw
-         FcoSdEHt9ALa1SkvCDrXcLZn36toa2TvBLhH/o8takamgVRsrxaEha0VDIOA9I5TIrfw
-         IpkA==
-X-Gm-Message-State: AOAM530Wh3U4Fc5EIgsu78ACUM9j8JH2hA1vZ7Hn4tsQ/AOpnxJ4p5xX
-        RCFHrrXjHDnvBGA1OdZ26EmoyA==
-X-Google-Smtp-Source: ABdhPJxLqmCfbePiA5dJpCUgGhVla5Ir+4EqFudR5QZ5U0xtkChH47WQL72pJkS5oVWw5+oCNIb4Xw==
-X-Received: by 2002:a05:6870:10d8:b0:d0:eaa:951a with SMTP id 24-20020a05687010d800b000d00eaa951amr1779644oar.296.1644946155821;
-        Tue, 15 Feb 2022 09:29:15 -0800 (PST)
-Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
-        by smtp.gmail.com with ESMTPSA id s6sm16348289oap.32.2022.02.15.09.29.14
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ICO1ml37Huyez+etV+dT6D2+k0fK+dVgQX5aKLEtpWE=;
+        b=occL3oQ8Vv2osyaSBaLycSz/8IyIkuEAoCDuxsp49/QAG/JeVsQxF3OLoC1OaMYTRZ
+         jZm7CXcrfvXrVEr1f8PFD6YlZVtnjOaH30NIYaXrTxQ3H5fBIlAP6diL1lF5Y4RE1r8D
+         KjkNM1k4QUBA77tcXu2q907lc0JydI0uGBd4XzSv9l+Kscx9y4uMIcfsGnlKKsXBNPsB
+         tTwrnW7KhCpaayQ9tqu/CCVtvh2bbBX/hZRg3wRz7pmnt8MAf8Dm7vgcDyuBOHMGI9kM
+         L9GehOl5MS8itMgr/M9/SALZZFzGGBw8jWGXViQ/TbZkGVREqnM/gQle1WAzAiUilRb7
+         2/vA==
+X-Gm-Message-State: AOAM530M3fgvpqCNIUX6m09o+soNLLxwBCV+KwFtDcUm8bVmtrLtXJLm
+        /NxQE2YQpXJYrsFESmeStAtrag==
+X-Google-Smtp-Source: ABdhPJwOSH7G6HmOK9tUgixHAXjPC1RBzQXDR1s7T2yUWuUsnh1GJ/d+msUEl3DzoTdLHmv2ZT68gw==
+X-Received: by 2002:adf:e5cb:: with SMTP id a11mr17283wrn.255.1644946193787;
+        Tue, 15 Feb 2022 09:29:53 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id f8sm13204075wmq.19.2022.02.15.09.29.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 09:29:15 -0800 (PST)
-Date:   Tue, 15 Feb 2022 11:29:13 -0600
-From:   Justin Forbes <jmforbes@linuxtx.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.16 000/203] 5.16.10-rc1 review
-Message-ID: <Ygvi6YWU8QxV1ToD@fedora64.linuxtx.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+        Tue, 15 Feb 2022 09:29:53 -0800 (PST)
+Date:   Tue, 15 Feb 2022 17:29:51 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: Re: [PATCH v4 5/8] mfd: lpc_ich: Add support for pinctrl in non-ACPI
+ system
+Message-ID: <YgvjDy1R06IC8FE5@google.com>
+References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+ <20220131151346.45792-6-andriy.shevchenko@linux.intel.com>
+ <YgvaqBB8fNVWp1lN@google.com>
+ <YgveyspHVXCp2ul+@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YgveyspHVXCp2ul+@smile.fi.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,27 +95,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 10:24:04AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.10 release.
-> There are 203 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.10-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Tue, 15 Feb 2022, Andy Shevchenko wrote:
 
-Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+> On Tue, Feb 15, 2022 at 04:54:00PM +0000, Lee Jones wrote:
+> > On Mon, 31 Jan 2022, Andy Shevchenko wrote:
+> 
+> Thank you for the review, my answers below.
+> 
+> ...
+> 
+> > > +static struct resource apl_gpio_resources[APL_GPIO_NR_DEVICES][2] = {
+> > > +	[APL_GPIO_NORTH] = {
+> > > +		DEFINE_RES_MEM(APL_GPIO_NORTH_OFFSET, 0x1000),
+> > 
+> > Are these 0x1000's being over-written in lpc_ich_init_pinctrl()?
+> > 
+> > If so, why pre-initialise?
+> 
+> You mean to pre-initialize the offsets, but leave the length to be added
+> in the function? It can be done, but it feels inconsistent, since we would
+> have offsets and lengths in different places for the same thingy. That said,
+> I prefer current way for the sake of consistency.
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+Don't you over-write this entry entirely?
 
+  for (i = 0; i < ARRAY_SIZE(apl_gpio_devices); i++) {
+        struct resource *mem = &apl_gpio_resources[i][0];
+
+        /* Fill MEM resource */
+        mem->start += base.start;
+        mem->end += base.start;
+        mem->flags = base.flags;
+  }
+
+Oh wait, you're just adding the base value to the offsets.
+
+In which case that comment is also confusing!
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

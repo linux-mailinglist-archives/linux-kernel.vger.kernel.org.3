@@ -2,144 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5C34B72CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E58D34B706D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239241AbiBOOuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 09:50:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34058 "EHLO
+        id S238708AbiBOO4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 09:56:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239245AbiBOOtz (ORCPT
+        with ESMTP id S231856AbiBOO40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 09:49:55 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53452120E81
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 06:47:25 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id i6so33336071pfc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 06:47:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=emeH7mCGapfwR7x4iOpmF9tKGBCFcUttvDyikdsQAJc=;
-        b=cqVTvmIJzPmriwJyUF21v+XFr2iyEE6WvjfBvXmXcobqorKqs56hBOPkORZz/zg9J1
-         rzrwxcjOcpRVXzZSqpUpmmlI2BQ/nVV+fgdbIOYWBlpRZjPaGYnM9z2COeGNMEhK3DMd
-         47KBTlLw6OkPbVv6SBNsf0SI+cDEf07+Rj5diLPoCsI6mHxQxzSYv/2t1WSrjGXszIoH
-         /yrdqKMDrRB4pnWW4979IstWWMNkPDkQFF/6N6+qMhfZTu+F6fSVIwj06zxgSVzCwtW0
-         m20npBq/X4u+fwE0lAnyICllXdtAXl93YggL/M23yZgGv0qYtMTweCs9DvhypZZ7SrNX
-         fzgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=emeH7mCGapfwR7x4iOpmF9tKGBCFcUttvDyikdsQAJc=;
-        b=PBsEBlurkpjYc5AX4UwPetYhJtIQ//pQeAbQM0sgfd5jRfYKP0sZx12J3LDWt2eKwe
-         xEuteGlqaEfk1CljHY3ITCpm2eKWjtSLrz9NUbPDCm3NPrZj2MXGUogCNkZgFWEBAecX
-         dD0Kxpk63Ck5FT0pwn7oMWiq1iFt4NYnj3vg2iFeQkq0/H1vNDYD+60T5QQiB7K6evgu
-         CPykz9ENl2WJsFDWToeOVjKsD5GQpGKqnxMhB5rC6tiiQ7XtNgTRYy+dda4oiYeNAepD
-         VIs5XTu0z100AaEk3W8N6NpU1JpBeHm52zIZz4ThajOSgaZZctUxs7uP063tl3ZjE8vL
-         NdWg==
-X-Gm-Message-State: AOAM531+5bPlsdjJR96gTd1gENrJ8MXOYcs6Vn7mft6sHLrJMYvJ0QIZ
-        Tcy+XdbUUz3BWeVHEWrX+M64/g==
-X-Google-Smtp-Source: ABdhPJy9gtbW7lahIXCZesWLTIrk1BnyzaoT7BWcJwYBHfqKytr5jVZ7VLv2EJ3CW3QmJH3XabexlA==
-X-Received: by 2002:a63:4c41:: with SMTP id m1mr3810469pgl.52.1644936444650;
-        Tue, 15 Feb 2022 06:47:24 -0800 (PST)
-Received: from [192.168.1.116] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id z11sm17408284pjq.53.2022.02.15.06.47.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 06:47:23 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Eric Dumazet <eric.dumazet@gmail.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        syzbot <syzkaller@googlegroups.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring <io-uring@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>
-In-Reply-To: <20220215041003.2394784-1-eric.dumazet@gmail.com>
-References: <20220215041003.2394784-1-eric.dumazet@gmail.com>
-Subject: Re: [PATCH] io_uring: add a schedule point in io_add_buffers()
-Message-Id: <164493644178.127292.6802735611215849677.b4-ty@kernel.dk>
-Date:   Tue, 15 Feb 2022 07:47:21 -0700
+        Tue, 15 Feb 2022 09:56:26 -0500
+X-Greylist: delayed 378 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 06:56:16 PST
+Received: from mail-4327.protonmail.ch (mail-4327.protonmail.ch [185.70.43.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760339FE5;
+        Tue, 15 Feb 2022 06:56:16 -0800 (PST)
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        by mail-4321.protonmail.ch (Postfix) with ESMTPS id 4JykWy17Jvz4x6KM;
+        Tue, 15 Feb 2022 14:49:50 +0000 (UTC)
+Authentication-Results: mail-4321.protonmail.ch;
+        dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="BDvn1o1Z"
+Date:   Tue, 15 Feb 2022 14:49:00 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+        s=protonmail2; t=1644936545;
+        bh=BNi3yC/9jw1c/szfUfUGT5h9vUtlRUvDAK4sFcLdjmk=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID;
+        b=BDvn1o1ZnCovptmLn11diWMUEAWct4RD312L8UhYymcv2YyALQ0+t4WLvihd2EiZC
+         tPc5WJekOp7nZTc3KwH24zmXXoHCubCivqzXXamMSRzo5TgUJkbYT+22j7Nu8u82Ai
+         Z99eglNVPxJLUMXHt20FU09SULmsFJkzUZZNMJXnqxMqGItr5a+HEju7xrB+xwjtHH
+         /ABhwuILabSjR0rBdRp/niEjUx8Ghyfouiy//TJCKQO2uoNzNSLWxqUpxdmehiglJ+
+         ASV2R5Klz+28noHpnpCsQBmCuQic75pIp8Y+1uWN5ADRY5i92MirLhvMCNoKobJ86+
+         f0ojLOvQR2VYg==
+To:     =?utf-8?Q?Philippe_Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: Re: [PATCH mips-fixes] MIPS: smp: fill in sibling and core maps earlier
+Message-ID: <5324be35-5c49-31c1-3f9a-267a5dae8c84@amsat.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Feb 2022 20:10:03 -0800, Eric Dumazet wrote:
-> From: Eric Dumazet <edumazet@google.com>
-> 
-> Looping ~65535 times doing kmalloc() calls can trigger soft lockups,
-> especially with DEBUG features (like KASAN).
-> 
-> [  253.536212] watchdog: BUG: soft lockup - CPU#64 stuck for 26s! [b219417889:12575]
-> [  253.544433] Modules linked in: vfat fat i2c_mux_pca954x i2c_mux spidev cdc_acm xhci_pci xhci_hcd sha3_generic gq(O)
-> [  253.544451] CPU: 64 PID: 12575 Comm: b219417889 Tainted: G S         O      5.17.0-smp-DEV #801
-> [  253.544457] RIP: 0010:kernel_text_address (./include/asm-generic/sections.h:192 ./include/linux/kallsyms.h:29 kernel/extable.c:67 kernel/extable.c:98)
-> [  253.544464] Code: 0f 93 c0 48 c7 c1 e0 63 d7 a4 48 39 cb 0f 92 c1 20 c1 0f b6 c1 5b 5d c3 90 0f 1f 44 00 00 55 48 89 e5 41 57 41 56 53 48 89 fb <48> c7 c0 00 00 80 a0 41 be 01 00 00 00 48 39 c7 72 0c 48 c7 c0 40
-> [  253.544468] RSP: 0018:ffff8882d8baf4c0 EFLAGS: 00000246
-> [  253.544471] RAX: 1ffff1105b175e00 RBX: ffffffffa13ef09a RCX: 00000000a13ef001
-> [  253.544474] RDX: ffffffffa13ef09a RSI: ffff8882d8baf558 RDI: ffffffffa13ef09a
-> [  253.544476] RBP: ffff8882d8baf4d8 R08: ffff8882d8baf5e0 R09: 0000000000000004
-> [  253.544479] R10: ffff8882d8baf5e8 R11: ffffffffa0d59a50 R12: ffff8882eab20380
-> [  253.544481] R13: ffffffffa0d59a50 R14: dffffc0000000000 R15: 1ffff1105b175eb0
-> [  253.544483] FS:  00000000016d3380(0000) GS:ffff88af48c00000(0000) knlGS:0000000000000000
-> [  253.544486] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  253.544488] CR2: 00000000004af0f0 CR3: 00000002eabfa004 CR4: 00000000003706e0
-> [  253.544491] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [  253.544492] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [  253.544494] Call Trace:
-> [  253.544496]  <TASK>
-> [  253.544498] ? io_queue_sqe (fs/io_uring.c:7143)
-> [  253.544505] __kernel_text_address (kernel/extable.c:78)
-> [  253.544508] unwind_get_return_address (arch/x86/kernel/unwind_frame.c:19)
-> [  253.544514] arch_stack_walk (arch/x86/kernel/stacktrace.c:27)
-> [  253.544517] ? io_queue_sqe (fs/io_uring.c:7143)
-> [  253.544521] stack_trace_save (kernel/stacktrace.c:123)
-> [  253.544527] ____kasan_kmalloc (mm/kasan/common.c:39 mm/kasan/common.c:45 mm/kasan/common.c:436 mm/kasan/common.c:515)
-> [  253.544531] ? ____kasan_kmalloc (mm/kasan/common.c:39 mm/kasan/common.c:45 mm/kasan/common.c:436 mm/kasan/common.c:515)
-> [  253.544533] ? __kasan_kmalloc (mm/kasan/common.c:524)
-> [  253.544535] ? kmem_cache_alloc_trace (./include/linux/kasan.h:270 mm/slab.c:3567)
-> [  253.544541] ? io_issue_sqe (fs/io_uring.c:4556 fs/io_uring.c:4589 fs/io_uring.c:6828)
-> [  253.544544] ? __io_queue_sqe (fs/io_uring.c:?)
-> [  253.544551] __kasan_kmalloc (mm/kasan/common.c:524)
-> [  253.544553] kmem_cache_alloc_trace (./include/linux/kasan.h:270 mm/slab.c:3567)
-> [  253.544556] ? io_issue_sqe (fs/io_uring.c:4556 fs/io_uring.c:4589 fs/io_uring.c:6828)
-> [  253.544560] io_issue_sqe (fs/io_uring.c:4556 fs/io_uring.c:4589 fs/io_uring.c:6828)
-> [  253.544564] ? __kasan_slab_alloc (mm/kasan/common.c:45 mm/kasan/common.c:436 mm/kasan/common.c:469)
-> [  253.544567] ? __kasan_slab_alloc (mm/kasan/common.c:39 mm/kasan/common.c:45 mm/kasan/common.c:436 mm/kasan/common.c:469)
-> [  253.544569] ? kmem_cache_alloc_bulk (mm/slab.h:732 mm/slab.c:3546)
-> [  253.544573] ? __io_alloc_req_refill (fs/io_uring.c:2078)
-> [  253.544578] ? io_submit_sqes (fs/io_uring.c:7441)
-> [  253.544581] ? __se_sys_io_uring_enter (fs/io_uring.c:10154 fs/io_uring.c:10096)
-> [  253.544584] ? __x64_sys_io_uring_enter (fs/io_uring.c:10096)
-> [  253.544587] ? do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
-> [  253.544590] ? entry_SYSCALL_64_after_hwframe (??:?)
-> [  253.544596] __io_queue_sqe (fs/io_uring.c:?)
-> [  253.544600] io_queue_sqe (fs/io_uring.c:7143)
-> [  253.544603] io_submit_sqe (fs/io_uring.c:?)
-> [  253.544608] io_submit_sqes (fs/io_uring.c:?)
-> [  253.544612] __se_sys_io_uring_enter (fs/io_uring.c:10154 fs/io_uring.c:10096)
-> [  253.544616] __x64_sys_io_uring_enter (fs/io_uring.c:10096)
-> [  253.544619] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
-> [  253.544623] entry_SYSCALL_64_after_hwframe (??:?)
-> 
-> [...]
+From: Philippe Mathieu-Daud=C3=A9 <f4bug@amsat.org>
+Date: Mon, 14 Feb 2022 20:00:12 +0100
 
-Applied, thanks!
+> On 12/2/22 23:21, Alexander Lobakin wrote:
+> > After enabling CONFIG_SCHED_CORE (landed during 5.14 cycle),
+> > 2-core 2-thread-per-core interAptiv (CPS-driven) started emitting
+> > the following:
+> >
 
-[1/1] io_uring: add a schedule point in io_add_buffers()
-      commit: f240762f88b4b1b58561939ffd44837759756477
+--- 8< ---
 
-Best regards,
--- 
-Jens Axboe
+> >
+> > [    0.048433] CPU: 1, smt_mask: 0-1
+> >
+> > [0] https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/comm=
+it/?id=3D76ce7cfe35ef
+>
+> Isn't it worth Cc'ing stable@vger.kernel.org here?
 
+Probably. It doesn't have any Fixes tag (this is a fix, but the bug
+is caused not by a particular commit, rather by a combination of
+changes and code flows from the past), but it still can be
+backported, right.
+
+Thomas, should I queue a v2 with this tag added?
+
+Cc: stable@vger.kernel.org # 5.14+
+
+Or it can be picked up automatically?
+
+>
+> > Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+> > ---
+> >   arch/mips/kernel/smp.c | 6 +++---
+> >   1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <f4bug@amsat.org>
+
+Thanks!
+
+Al
 

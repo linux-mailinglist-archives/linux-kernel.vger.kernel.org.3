@@ -2,80 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F00A4B6A5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EFEF4B6A16
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236952AbiBOLKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 06:10:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34262 "EHLO
+        id S236852AbiBOLB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 06:01:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236940AbiBOLK2 (ORCPT
+        with ESMTP id S236830AbiBOLBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 06:10:28 -0500
-X-Greylist: delayed 962 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 03:10:15 PST
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F6E107ABF;
-        Tue, 15 Feb 2022 03:10:15 -0800 (PST)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21F6vGcF025181;
-        Tue, 15 Feb 2022 04:54:07 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=PODMain02222019;
- bh=ZA1HdUqFb+HwEJ8FdZvVs2kz00f9tkNcxNpgQ96eXPE=;
- b=lGmOC8ZryEdtSW6TmatZkTJzoP+AWgpXfYNMPHZYDqOELAAOkswAJd3800duR5wd/1XY
- UazWcy3Mmlb0gUCWnOWeAtX8/huO7lrMjN45NONAb0JjHc1qDpfnLhOfkk/BfqxUCsQR
- iw1qk3Ql8x3Hf3/W7vB37+ttGka3X/UpEeDoIexx8JYFA5O+Zs2lHRSmW3n7gXjq3it3
- zJhqNHuhve05z6g7odf7uTFvLL/OFsj7ua5agi0lU6K/+3AXEF8ou6yVtxh3GFVTZkFz
- VYivd+vtinxoLtGWxQWra2ShNXIyshcV/Fkly0ZOAiB6JaoNWHV6ZkrW/8oEfPlabOx3 gA== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3e7qq197c4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 15 Feb 2022 04:54:07 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 15 Feb
- 2022 10:54:05 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Tue, 15 Feb 2022 10:54:05 +0000
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 060682A9;
-        Tue, 15 Feb 2022 10:54:05 +0000 (UTC)
-Date:   Tue, 15 Feb 2022 10:54:05 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Prasad Kumpatla <quic_pkumpatl@quicinc.com>
-CC:     Mark Brown <broonie@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH v2] regmap-irq: Use regmap_irq_update_bits instead of
- regmap_write
-Message-ID: <20220215105405.GD38351@ediswmail.ad.cirrus.com>
-References: <20220119142953.1804-1-quic_pkumpatl@quicinc.com>
- <CGME20220208122955eucas1p2d4e32f51224242e9ebd0bce58b9c04ca@eucas1p2.samsung.com>
- <39f1b598-58ca-1e3d-3065-8dd692ee7c9f@samsung.com>
- <20220208133957.GC112838@ediswmail.ad.cirrus.com>
- <20220208135036.GD112838@ediswmail.ad.cirrus.com>
- <YgJ2hG2vwUclA/zF@sirena.org.uk>
- <20220208143316.GE112838@ediswmail.ad.cirrus.com>
- <YgKBEIapL8MAQAoI@sirena.org.uk>
- <22d9bf04-e069-c6a3-4d59-974a9402b0f7@quicinc.com>
+        Tue, 15 Feb 2022 06:01:25 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82654F956C;
+        Tue, 15 Feb 2022 03:01:15 -0800 (PST)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:6d7b:ae43:289b:7e7c])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id D2AEA1F444D0;
+        Tue, 15 Feb 2022 11:01:12 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644922873;
+        bh=j2A4NMSFKaArnsLVO73dDEOpv7p5lUGniQuI/KRT0iU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=MIWd6bRq5QrtPVR9A0Zxw1KYRLSgRl9262dVOZdU3VNsOOY+nq4dMzxoeT2Sw7d4d
+         Kn/WKgMc9OL4o3RmJTqNlXqn2TufiLROIKh9xkkjNq2oqu5RJBCOoZAesMUG0G7EXM
+         8NuyZFj19Z+Qb9LNWEH37LE2w9/aBk/WKDtVOmD4Dde0SOhGfi//nyQLMEUP4yuGt/
+         mW34vWyP7aO8ZhttR1YNZvpbTqtkXABw769Izo2PYeobAi+Pmd8SWXsKDgDu6bveTu
+         JARwO8EFy4F1Ipwz9SksZtq8FjcKtP6dQvMnU8+OJTo5JfKIk8q0WL57dsjrcNmt6w
+         No4D6omyiHWIQ==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, hverkuil-cisco@xs4all.nl,
+        jonas@kwiboo.se, nicolas@ndufresne.ca
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com, knaerzche@gmail.com, jc@kynesim.co.uk
+Subject: [RFC v2 1/8] videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
+Date:   Tue, 15 Feb 2022 12:00:56 +0100
+Message-Id: <20220215110103.241297-2-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220215110103.241297-1-benjamin.gaignard@collabora.com>
+References: <20220215110103.241297-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <22d9bf04-e069-c6a3-4d59-974a9402b0f7@quicinc.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-ORIG-GUID: O5SJEsYmLvIZhquG6L90YoFUWeq5Uh9q
-X-Proofpoint-GUID: O5SJEsYmLvIZhquG6L90YoFUWeq5Uh9q
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,72 +58,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 03:06:24PM +0530, Prasad Kumpatla wrote:
-> On 2/8/2022 8:11 PM, Mark Brown wrote:
-> >On Tue, Feb 08, 2022 at 02:33:16PM +0000, Charles Keepax wrote:
-> >>On Tue, Feb 08, 2022 at 01:56:20PM +0000, Mark Brown wrote:
-> ISR = Interrupt status register
-> ICR = Interrupt clear register
-> 
-> When the Invert_ack is
->  *
->    *FALSE*: For ICR,writing 1 will clear , writing 0 has no effect.
->  *
->    *TRUE* : For ICR, writing 0 will clear , writing 1 has no effect
-> and clear_ack
-> 
->  *
->    *TRUE* :  Some hardware doesn’t support auto clear for ICR,  Need
->    explicitly clear the ICR
->  *
->    *FALSE *:  No need to clear ICR, as HW will reset.
-> 
-> Consider the following scenario,  where Invert_ack is false and
-> clear_ack is true.
-> 
-> Say Default ISR=0x00 & ICR=0x00 and ISR is triggered with 2
-> interrupts making ISR = 0x11.
-> 
-> *Step1:* Say ISR is set 0x11 (store status_buff = ISR). ISR needs to
-> be cleared with the help of ICR once the Interrupt is processed.
-> 
-> *Step 2:* Write ICR = 0x11 (status_buff), this will clear the ISR to 0x00.
-> 
-> *Step 3:* Issue - In the existing code, ICR is written with ICR =
-> ~(status_buff) i.e ICR = 0xEE à This will block all the interrupts
-> from raising except for interrupts 0 and 4.
-> 
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-Ok yes I the issue here now. I hadn't quite realised there was
-hardware where you actually had to manually clear the ACK bits.
+Add a new flag that indicates that this control is a dynamically sized
+array. Also document this flag.
 
-> Code snippet for step 3
-> *if*(chip->clear_ack) {
-> *if*(chip->ack_invert && !ret)
-> ret = regmap_write(map, reg,
-> data->status_buf[i]);
-> *else**if*(!ret)
-> ret = regmap_write(map, reg,
-> ~data->status_buf[i]);
-> 
-> Solution: Since ICR does not clear automatically, writing 0x00 into
-> ICR explicitly will clear the ICR (ICR = 0x00) allowing all the
-> interrupts to raise.
-> 
-> So I’m thinking to implement as below.
-> if (chip->clear_ack) {
-> if (chip->ack_invert && !ret)
-> - ret = regmap_write(map, reg,
-> - data->status_buf[i]);
-> + ret = regmap_write(map, reg, 0xff);
-> else if (!ret)
-> - ret = regmap_write(map, reg,
-> - ~data->status_buf[i]);
-> + ret = regmap_write(map, reg, 0x00);
-> }
+Currently dynamically sized arrays are limited to one dimensional arrays,
+but that might change in the future if there is a need for it.
 
-I think this looks much safer, the values you are writing should
-have no effect, other than clearing the ACKs you just set.
+The initial use-case of dynamic arrays are stateless codecs. A frame
+can be divided in many slices, so you want to provide an array containing
+slice information for each slice. Typically the number of slices is small,
+but the standard allow for hundreds or thousands of slices. Dynamic arrays
+are a good solution since sizing the array for the worst case would waste
+substantial amounts of memory.
 
-Thanks,
-Charles
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ .../userspace-api/media/v4l/vidioc-queryctrl.rst          | 8 ++++++++
+ include/uapi/linux/videodev2.h                            | 1 +
+ 2 files changed, 9 insertions(+)
+
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
+index 88f630252d98..a20dfa2a933b 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
+@@ -625,6 +625,14 @@ See also the examples in :ref:`control`.
+ 	``V4L2_CTRL_FLAG_GRABBED`` flag when buffers are allocated or
+ 	streaming is in progress since most drivers do not support changing
+ 	the format in that case.
++    * - ``V4L2_CTRL_FLAG_DYNAMIC_ARRAY``
++      - 0x0800
++      - This control is a dynamically sized 1-dimensional array. It
++        behaves the same as a regular array, except that the number
++	of elements as reported by the ``elems`` field is between 1 and
++	``dims[0]``. So setting the control with a differently sized
++	array will change the ``elems`` field when the control is
++	queried afterwards.
+ 
+ Return Value
+ ============
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index df8b9c486ba1..e27c8eae78c9 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -1884,6 +1884,7 @@ struct v4l2_querymenu {
+ #define V4L2_CTRL_FLAG_HAS_PAYLOAD	0x0100
+ #define V4L2_CTRL_FLAG_EXECUTE_ON_WRITE	0x0200
+ #define V4L2_CTRL_FLAG_MODIFY_LAYOUT	0x0400
++#define V4L2_CTRL_FLAG_DYNAMIC_ARRAY	0x0800
+ 
+ /*  Query flags, to be ORed with the control ID */
+ #define V4L2_CTRL_FLAG_NEXT_CTRL	0x80000000
+-- 
+2.32.0
+

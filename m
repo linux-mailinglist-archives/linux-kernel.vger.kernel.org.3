@@ -2,105 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A274B6B5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:45:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 004914B6B62
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:46:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237315AbiBOLpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 06:45:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40352 "EHLO
+        id S237343AbiBOLqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 06:46:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237225AbiBOLpB (ORCPT
+        with ESMTP id S233700AbiBOLqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 06:45:01 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE3260048;
-        Tue, 15 Feb 2022 03:44:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644925491; x=1676461491;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qyAIjd2VQY1Poo9qKr5NLtKFqp4MeB5xc4hdxEJNHXM=;
-  b=RgXabcJaXfLwZBjEnPvAozvIGHVdVWA7zLnnjyQWihqGy7vAkfIkMHGl
-   K8tEziMEztppRyEnF/d+LLB0OyGEysDST32dI3kiYTmBXEYGQN/nztIcv
-   Oq61l+zdFnhMZjvu1K8kolh6BOLYxky7fuc2AjbrbS07aYPdrf5GUYhfb
-   vQL2zIEQOZzPlDeXpzI/MH/E8VDX+btShjLOLgNRsf6jQm5RyiL0R3iMA
-   VH9AwIhGnhtZyJ409O1YM6EuCcvNhMBJrego9mRPONDUddaT4rNiJB/Gz
-   NgPdKpPwe1zfHMSZI21lp0w/DfEP5Kz66YSfDwzpp5kMCWEl4bE358TV/
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="233876092"
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="233876092"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 03:44:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="502391557"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 15 Feb 2022 03:44:47 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nJwGE-0009cR-T6; Tue, 15 Feb 2022 11:44:46 +0000
-Date:   Tue, 15 Feb 2022 19:44:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, sboyd@kernel.org,
-        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        abel.vesa@nxp.com
-Cc:     kbuild-all@lists.01.org, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 3/4] clk: imx: support fracn gppll
-Message-ID: <202202151921.cC2AD29z-lkp@intel.com>
-References: <20220215081835.790311-4-peng.fan@oss.nxp.com>
+        Tue, 15 Feb 2022 06:46:39 -0500
+Received: from smtpbg156.qq.com (smtpbg156.qq.com [15.184.82.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3EBD77
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 03:46:23 -0800 (PST)
+X-QQ-mid: bizesmtp42t1644925577t9a74mhx
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 15 Feb 2022 19:46:12 +0800 (CST)
+X-QQ-SSF: 0140000000200030C000B00A0000000
+X-QQ-FEAT: iCx1gO6ZefsCbpjuwgyXD4WWWpXLXLVWfSt2QNnpeapYPSsU2j8ffQLtlCHs2
+        1u0PvUVuzHac6r17+T8qcLy6ept5P7fFKhnYaJcjNIf/RkA0NKJ6eFOmQVkw2rE0BTqB6Ij
+        LzTfxdbEZhauLqK8rr9Nv9V674cxlaa2OVIElHEMNDKWLgy7R/5JZLrCTSmDszDylMMFPoy
+        +fKKztpZ7y1EztvRlPYHAXONaVMbnMsKDrc/qZ0xL1ier9ezwqAlx4zTQ3n8KZpQR4H+CVB
+        NQmzS64apdCcXlw0LoGQlEyfIaJzd2R3dhHv7mMQD/8pI3Ae7BSLjx7avbWafWfh5bqM0Af
+        894lxKZGfna9Qw2uuSEFwYwneQjpBHZisflpa0I
+X-QQ-GoodBg: 2
+From:   Zhen Ni <nizhen@uniontech.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, mcgrof@kernel.org,
+        keescook@chromium.org
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Zhen Ni <nizhen@uniontech.com>
+Subject: [PATCH v3 0/8] sched: Move a series of sysctls starting with sys/kernel/sched_*
+Date:   Tue, 15 Feb 2022 19:45:56 +0800
+Message-Id: <20220215114604.25772-1-nizhen@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220215081835.790311-4-peng.fan@oss.nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign6
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Peng,
+move a series of sysctls starting with sys/kernel/sched_* and use the
+new register_sysctl_init() to register the sysctl interface.
 
-Thank you for the patch! Yet something to improve:
+Zhen Ni (8):
+  sched: Move child_runs_first sysctls to fair.c
+  sched: Move schedstats sysctls to core.c
+  sched: Move rt_period/runtime sysctls to rt.c
+  sched: Move deadline_period sysctls to deadline.c
+  sched: Move rr_timeslice sysctls to rt.c
+  sched: Move uclamp_util sysctls to core.c
+  sched: Move cfs_bandwidth_slice sysctls to fair.c
+  sched: Move energy_aware sysctls to topology.c
 
-[auto build test ERROR on shawnguo/for-next]
-[also build test ERROR on robh/for-next clk/clk-next v5.17-rc4 next-20220214]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+ include/linux/sched/sysctl.h | 41 ---------------
+ kernel/rcu/rcu.h             |  2 +
+ kernel/sched/core.c          | 69 ++++++++++++++++++-------
+ kernel/sched/deadline.c      | 42 +++++++++++++---
+ kernel/sched/fair.c          | 32 +++++++++++-
+ kernel/sched/rt.c            | 56 +++++++++++++++++++--
+ kernel/sched/sched.h         |  7 +++
+ kernel/sched/topology.c      | 25 +++++++++-
+ kernel/sysctl.c              | 97 ------------------------------------
+ 9 files changed, 201 insertions(+), 170 deletions(-)
 
-url:    https://github.com/0day-ci/linux/commits/Peng-Fan-OSS/imx-add-i-MX93-clk-bindings-and-driver/20220215-162047
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
-config: riscv-randconfig-r022-20220214 (https://download.01.org/0day-ci/archive/20220215/202202151921.cC2AD29z-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/37b42f1a06ef92797e800461d1f46e849fa63c91
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Peng-Fan-OSS/imx-add-i-MX93-clk-bindings-and-driver/20220215-162047
-        git checkout 37b42f1a06ef92797e800461d1f46e849fa63c91
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
+-- 
+2.20.1
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
 
-   riscv32-linux-ld: drivers/clk/imx/clk-fracn-gppll.o: in function `.L39':
->> clk-fracn-gppll.c:(.text+0x2b4): undefined reference to `__udivdi3'
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

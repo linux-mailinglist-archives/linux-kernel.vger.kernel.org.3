@@ -2,128 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC874B6BB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:09:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BA34B6BB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237504AbiBOMJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 07:09:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60734 "EHLO
+        id S237495AbiBOMJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 07:09:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237486AbiBOMJd (ORCPT
+        with ESMTP id S237465AbiBOMJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 07:09:33 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60D6EEF0B0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:09:22 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D0A9B1480;
-        Tue, 15 Feb 2022 04:09:21 -0800 (PST)
-Received: from [10.57.70.89] (unknown [10.57.70.89])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AFF733F718;
-        Tue, 15 Feb 2022 04:09:20 -0800 (PST)
-Message-ID: <f408da05-a825-c392-6484-3a665cc0dbd6@arm.com>
-Date:   Tue, 15 Feb 2022 12:09:16 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] drm/panfrost: Dynamically allocate pm_domains
-Content-Language: en-GB
-To:     Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        dri-devel@lists.freedesktop.org
-Cc:     Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        Steven Price <steven.price@arm.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-References: <20220214203132.4722-1-alyssa.rosenzweig@collabora.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220214203132.4722-1-alyssa.rosenzweig@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 15 Feb 2022 07:09:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ABF1EF7AB;
+        Tue, 15 Feb 2022 04:09:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA8B4B817B9;
+        Tue, 15 Feb 2022 12:09:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 660FEC340EB;
+        Tue, 15 Feb 2022 12:09:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644926960;
+        bh=Ftj69RG3gmLoAWhVy5oxY9cQIuIItMQXxWGvo4VYRwY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=URnL3MBbK940bv95M5l+cUkuNwiIaEtbjmNO0xLsFMa6aFUPMptzT/WupeZ/fm/FX
+         1IL6NuPMN0bnKDV7WnMdxceoolfMV8NmA8eaF6zAtXrmaFEDte5mxLDb2hI07tCG/C
+         H7ozX6A79BHaavhmEVyckzlLczIC2rWLhMfdqynkWCNyLx89V9jzgnYOJDhX8fmbzJ
+         QbN5gIk+E8EniS/MSksbwGceADlpSpZHxM+3kDULkWFF8kQWZv2gCBEGRTwUkF9G6t
+         9EWXrKS2LDsGTeY3qjxaOClt5PSsQ1Zeyn/EuQWtv4aqkr328BOU69urbzN+yj6QdJ
+         zSReuJ86//sgw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nJwdy-0082gW-FU; Tue, 15 Feb 2022 12:09:18 +0000
+Date:   Tue, 15 Feb 2022 12:09:18 +0000
+Message-ID: <87czjo49ht.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Bert Vermeulen <bert@biot.com>,
+        John Crispin <john@phrozen.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 0/4] Per-parent domains for realtek-rtl IRQ driver
+In-Reply-To: <cover.1644864700.git.sander@svanheule.net>
+References: <cover.1644864700.git.sander@svanheule.net>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sander@svanheule.net, robh+dt@kernel.org, devicetree@vger.kernel.org, tglx@linutronix.de, mail@birger-koblitz.de, bert@biot.com, john@phrozen.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-14 20:31, Alyssa Rosenzweig wrote:
-> MT8192 requires 5 power domains. Rather than bump MAX_PM_DOMAINS and
-> waste memory on every supported Panfrost chip, instead dynamically
-> allocate pm_domain_devs and pm_domain_links. This adds some flexibility;
-> it seems inevitable a new MediaTek device will require more than 5
-> domains.
+On Mon, 14 Feb 2022 18:56:57 +0000,
+Sander Vanheule <sander@svanheule.net> wrote:
 > 
-> On non-MediaTek devices, this saves a small amount of memory.
+> The original implementation for this interrupt controller/router used
+> an interrupt-map parser to determine which parent interrupts were
+> present. However, this controller is not transparent, so a list of
+> parent interrupts seems more appropriate, while also getting rid of the
+> assumed routing to parent interrupts.
 > 
-> Suggested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Signed-off-by: Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
-> ---
->   drivers/gpu/drm/panfrost/panfrost_device.c | 14 ++++++++++----
->   drivers/gpu/drm/panfrost/panfrost_device.h |  5 ++---
->   2 files changed, 12 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_device.c b/drivers/gpu/drm/panfrost/panfrost_device.c
-> index ee612303f076..661cdec320af 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_device.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_device.c
-> @@ -127,7 +127,10 @@ static void panfrost_pm_domain_fini(struct panfrost_device *pfdev)
->   {
->   	int i;
->   
-> -	for (i = 0; i < ARRAY_SIZE(pfdev->pm_domain_devs); i++) {
-> +	if (!pfdev->pm_domain_devs || !pfdev->pm_domain_links)
-> +		return;
-> +
-> +	for (i = 0; i < pfdev->comp->num_pm_domains; i++) {
->   		if (!pfdev->pm_domain_devs[i])
->   			break;
->   
-> @@ -161,9 +164,12 @@ static int panfrost_pm_domain_init(struct panfrost_device *pfdev)
->   		return -EINVAL;
->   	}
->   
-> -	if (WARN(num_domains > ARRAY_SIZE(pfdev->pm_domain_devs),
-> -			"Too many supplies in compatible structure.\n"))
-> -		return -EINVAL;
-> +	pfdev->pm_domain_devs = devm_kcalloc(pfdev->dev, num_domains,
-> +					     sizeof(*pfdev->pm_domain_devs),
-> +					     GFP_KERNEL);
-> +	pfdev->pm_domain_links = devm_kcalloc(pfdev->dev, num_domains,
-> +					      sizeof(*pfdev->pm_domain_links),
-> +					      GFP_KERNEL);
+> Additionally, N real cascaded interrupts are implemented, instead of
+> handling all input interrupts with one cascaded interrupt. Otherwise it
+> is possible that the priority of the parent interrupts is not respected.
 
-Since we're not really doing any detailed management of our device 
-links, could we get away with using AUTOREMOVE_CONSUMER instead of 
-STATELESS to avoid having to explicitly keep track of them ourselves?
+My original question[1] still stands. An old kernel breaks with a new
+DT. I am not convinced that this is an acceptable outcome.
 
-Robin.
+	M.
 
->   
->   	for (i = 0; i < num_domains; i++) {
->   		pfdev->pm_domain_devs[i] =
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_device.h b/drivers/gpu/drm/panfrost/panfrost_device.h
-> index 8b25278f34c8..98e3039696f9 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_device.h
-> +++ b/drivers/gpu/drm/panfrost/panfrost_device.h
-> @@ -22,7 +22,6 @@ struct panfrost_job;
->   struct panfrost_perfcnt;
->   
->   #define NUM_JOB_SLOTS 3
-> -#define MAX_PM_DOMAINS 3
->   
->   struct panfrost_features {
->   	u16 id;
-> @@ -87,8 +86,8 @@ struct panfrost_device {
->   	struct regulator_bulk_data *regulators;
->   	struct reset_control *rstc;
->   	/* pm_domains for devices with more than one. */
-> -	struct device *pm_domain_devs[MAX_PM_DOMAINS];
-> -	struct device_link *pm_domain_links[MAX_PM_DOMAINS];
-> +	struct device **pm_domain_devs;
-> +	struct device_link **pm_domain_links;
->   	bool coherent;
->   
->   	struct panfrost_features features;
+[1] https://lore.kernel.org/all/874k585efy.wl-maz@kernel.org
+
+-- 
+Without deviation from the norm, progress is not possible.

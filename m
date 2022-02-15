@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9CD4B6569
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F614B657D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:11:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234894AbiBOIK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 03:10:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52516 "EHLO
+        id S235198AbiBOIKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 03:10:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235140AbiBOIKO (ORCPT
+        with ESMTP id S235132AbiBOIKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 03:10:14 -0500
+        Tue, 15 Feb 2022 03:10:11 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF38C2DAAC
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 00:10:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1D02DAA4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 00:10:02 -0800 (PST)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1nJsu4-0002EK-5F; Tue, 15 Feb 2022 09:09:40 +0100
+        id 1nJsu4-0002EL-57; Tue, 15 Feb 2022 09:09:40 +0100
 Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1nJsu2-009Ule-B4; Tue, 15 Feb 2022 09:09:38 +0100
+        id 1nJsu2-009Uln-CF; Tue, 15 Feb 2022 09:09:38 +0100
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
         "David S. Miller" <davem@davemloft.net>,
@@ -42,9 +42,9 @@ Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
         linux-tegra@vger.kernel.org
-Subject: [PATCH v3 7/8] ARM: dts: tegra20/30: fix ethernet node name for different tegra boards
-Date:   Tue, 15 Feb 2022 09:09:36 +0100
-Message-Id: <20220215080937.2263111-7-o.rempel@pengutronix.de>
+Subject: [PATCH v3 8/8] arm64: dts: imx8mm-kontron: fix ethernet node name
+Date:   Tue, 15 Feb 2022 09:09:37 +0100
+Message-Id: <20220215080937.2263111-8-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220215080937.2263111-1-o.rempel@pengutronix.de>
 References: <20220215080937.2263111-1-o.rempel@pengutronix.de>
@@ -64,54 +64,26 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 The node name of Ethernet controller should be "ethernet" instead of
-"asix" or "smsc"
+"usbether"
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- arch/arm/boot/dts/tegra20-colibri.dtsi | 2 +-
- arch/arm/boot/dts/tegra30-colibri.dtsi | 2 +-
- arch/arm/boot/dts/tegra30-ouya.dts     | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/tegra20-colibri.dtsi b/arch/arm/boot/dts/tegra20-colibri.dtsi
-index 1eefb9ee4ac8..8ebd8afc857d 100644
---- a/arch/arm/boot/dts/tegra20-colibri.dtsi
-+++ b/arch/arm/boot/dts/tegra20-colibri.dtsi
-@@ -691,7 +691,7 @@ usb@c5004000 {
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts b/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
+index d40caf14ac4a..23be1ec538ba 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
+@@ -182,7 +182,7 @@ usb1@1 {
  		#address-cells = <1>;
  		#size-cells = <0>;
  
--		asix@1 {
-+		ethernet@1 {
- 			compatible = "usbb95,772b";
+-		usbnet: usbether@1 {
++		usbnet: ethernet@1 {
+ 			compatible = "usb424,ec00";
  			reg = <1>;
- 			local-mac-address = [00 00 00 00 00 00];
-diff --git a/arch/arm/boot/dts/tegra30-colibri.dtsi b/arch/arm/boot/dts/tegra30-colibri.dtsi
-index be691a1c33a1..22231d450b1b 100644
---- a/arch/arm/boot/dts/tegra30-colibri.dtsi
-+++ b/arch/arm/boot/dts/tegra30-colibri.dtsi
-@@ -960,7 +960,7 @@ usb@7d004000 {
- 		#address-cells = <1>;
- 		#size-cells = <0>;
- 
--		asix@1 {
-+		ethernet@1 {
- 			compatible = "usbb95,772b";
- 			reg = <1>;
- 			local-mac-address = [00 00 00 00 00 00];
-diff --git a/arch/arm/boot/dts/tegra30-ouya.dts b/arch/arm/boot/dts/tegra30-ouya.dts
-index a5cfbab5f565..e58dda4f9d2c 100644
---- a/arch/arm/boot/dts/tegra30-ouya.dts
-+++ b/arch/arm/boot/dts/tegra30-ouya.dts
-@@ -4553,7 +4553,7 @@ usb@7d004000 {
- 		#address-cells = <1>;
- 		#size-cells = <0>;
- 
--		smsc@2 { /* SMSC 10/100T Ethernet Controller */
-+		ethernet@2 { /* SMSC 10/100T Ethernet Controller */
- 			compatible = "usb424,9e00";
- 			reg = <2>;
- 			local-mac-address = [00 11 22 33 44 55];
+ 			local-mac-address = [ 00 00 00 00 00 00 ];
 -- 
 2.30.2
 

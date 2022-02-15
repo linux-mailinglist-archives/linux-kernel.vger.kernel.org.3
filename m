@@ -2,113 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417454B797C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCF64B7985
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:49:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243103AbiBOUyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 15:54:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49030 "EHLO
+        id S244225AbiBOUyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 15:54:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235916AbiBOUyW (ORCPT
+        with ESMTP id S243103AbiBOUyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 15:54:22 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0972F27159
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:54:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=STnj2ybwZv05qCjMTqaXWuXN0Sm5uRuBvdpB6J67Jg0=; b=o++5p4UyKYULUAc9XC40okIKxv
-        p9pPp+HvcJo46VATvElhowtSi+6FB7H2feZPLxDPHk1AkWihA23qMIj4IsNq9zaUTEt8913L+IM4l
-        nFS/JGmwP1+I/zScTHdItmu7EIiDyHDpqRr6bai9qTIniHz5b5AwLu0ksN/owOGXTe0RmDtnyT0M2
-        Yz8euY75y/El0mSE0isb+8qiguE50bRr92wSRlFUqUhkagz9flQTo2aqXRZL2ewrEVZDtu5W8PtkN
-        Js0Lx/dWZE7xNmwOzqAv9YOGDgjwsF3VvSnuH5L4Lc9ZHw7M404pCUPyJrlpMbDOcwqRkCZ9F/ee0
-        seBCiFgA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nK4pb-00ABAC-Jx; Tue, 15 Feb 2022 20:53:52 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EC34B987956; Tue, 15 Feb 2022 21:53:49 +0100 (CET)
-Date:   Tue, 15 Feb 2022 21:53:49 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Joao Moreira <joao@overdrivepizza.com>,
-        Kees Cook <keescook@chromium.org>, X86 ML <x86@kernel.org>,
-        hjl.tools@gmail.com, Josh Poimboeuf <jpoimboe@redhat.com>,
-        andrew.cooper3@citrix.com, LKML <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev
-Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
-Message-ID: <20220215205349.GC23216@worktop.programming.kicks-ass.net>
-References: <20211122170805.338489412@infradead.org>
- <6ebb0ab131c522f20c094294d49091fc@overdrivepizza.com>
- <202202081541.900F9E1B@keescook>
- <ad6c2633f39e39583bc5c5eaf7ccbe52@overdrivepizza.com>
- <202202082003.FA77867@keescook>
- <9ea50c51ee8db366430c9dc697a83923@overdrivepizza.com>
- <20220211133803.GV23216@worktop.programming.kicks-ass.net>
- <CABCJKuciRBnz4JxBDJC=+kuJn4pU2uBkWPBov7-VL2o2j0F4SA@mail.gmail.com>
- <20220214222550.GB23216@worktop.programming.kicks-ass.net>
- <CABCJKuf-wouSCh4u43GPQHPPgG=mqOGboSoHPQRfmgQSBkFrMg@mail.gmail.com>
+        Tue, 15 Feb 2022 15:54:04 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DBE27165;
+        Tue, 15 Feb 2022 12:53:53 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nK4pa-0007bZ-UA; Tue, 15 Feb 2022 21:53:50 +0100
+Message-ID: <2adc3231-2f5c-78c0-7a68-e5a8a1363b55@leemhuis.info>
+Date:   Tue, 15 Feb 2022 21:53:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABCJKuf-wouSCh4u43GPQHPPgG=mqOGboSoHPQRfmgQSBkFrMg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] Input: psmouse - set up dependency between PS/2 and SMBus
+ companions
+Content-Language: en-BZ
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rajat Jain <rajatja@google.com>, Wolfram Sang <wsa@kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org
+References: <YgwQN8ynO88CPMju@google.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <YgwQN8ynO88CPMju@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1644958433;d8100e34;
+X-HE-SMSGID: 1nK4pa-0007bZ-UA
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 08:56:03AM -0800, Sami Tolvanen wrote:
-> On Mon, Feb 14, 2022 at 2:25 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > On Mon, Feb 14, 2022 at 01:38:18PM -0800, Sami Tolvanen wrote:
-> > > I'm fine with adding a trap mode that's used by default, but having
-> > > more helpful diagnostics when something fails is useful even in
-> > > production systems in my experience. This change results in a vmlinux
-> > > that's another 0.92% smaller.
-> >
-> > You can easily have the exception generate a nice warning, you can even
-> > have it continue. You really don't need a call for that.
+
+
+On 15.02.22 21:42, Dmitry Torokhov wrote:
+> When we switch from emulated PS/2 to native (RMI4 or Elan) protocols, we
+> create SMBus companion devices that are attached to I2C/SMBus controllers.
+> However, when suspending and resuming, we also need to make sure that we
+> take into account the PS/2 device they are associated with, so that PS/2
+> device is suspended after the companion and resumed before it, otherwise
+> companions will not work properly. Before I2C devices were marked for
+> asynchronous suspend/resume, this ordering happened naturally, but now we
+> need to enforce it by establishing device links, with PS/2 devices being
+> suppliers and SMBus companions being consumers.
 > 
-> Sure, but wouldn't that require us to generate something like
-> __bug_table, so we know where the CFI specific traps are?
+> Fixes: 172d931910e1 ("i2c: enable async suspend/resume on i2c client devices")
+> Reported-and-tested-by: Hugh Dickins <hughd@google.com>
+> Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-Yes, but since you're going to emit a retpoline, and objtool already
-generates a list of retpoline sites, we can abuse that. If the
-instruction after the trap is a retpoline site, we a CFI fail.
+If you respin or commit this patch, could you please add the link to the
+report, as explained in 'Documentation/process/submitting-patches.rst'
+and 'Documentation/process/5.Posting.rst':
 
-> > > In this case the function has two indirect calls and Clang seems to
-> > > prefer to emit just one ud2.
-> >
-> > That will not allow you to recover from the exception. UD2 is not an
-> > unconditional fail. It should have an out-going edge in this case too.
-> 
-> Yes, CFI failures are not recoverable in that code. In fact, LLVM
-> assumes that the llvm.trap intrinsic (i.e. ud2) never returns, but I
-> suppose we could just use an int3 instead. I assume that's sufficient
-> to stop speculation?
+Link:
+https://lore.kernel.org/r/89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com
 
-It is. int3 is also smaller by one byte, but the exception is already
-fairly complicated, but I can see if we can make it work.
+This would be helpful for me, as this is a regression tracked by
+regzbot, my Linux kernel regression tracking bot, which then is able to
+assign threads like this with the regression report and mark the
+regression as resolved once the fix lands in the appropriate tree. tia!
 
-> > Also, you really should add a CS prefix to the retpoline thunk call if
-> > you insist on using r11 (or any of the higher regs).
-> 
-> I actually didn't touch the retpoline thunk call, that's exactly the
-> code Clang normally generates.
+Ciao, Thorsten
 
-Yeah, and it needs help, also see:
-
-  https://lore.kernel.org/lkml/20211119165630.276205624@infradead.org/
-
-Specifically, clang needs to:
-
- - CS prefix stuff the retpoline thunk call/jmp;
- - stop doing conditional indirect tail-calls.
+#regzbot ^backmonitor:
+https://lore.kernel.org/r/89456fcd-a113-4c82-4b10-a9bcaefac68f@google.com
 

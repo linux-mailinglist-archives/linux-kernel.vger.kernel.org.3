@@ -2,96 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E984B79D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9881F4B79D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244300AbiBOVMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 16:12:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35266 "EHLO
+        id S244302AbiBOVOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 16:14:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240904AbiBOVMd (ORCPT
+        with ESMTP id S240516AbiBOVOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 16:12:33 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C4E6A06B;
-        Tue, 15 Feb 2022 13:12:21 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21FLCCb5101189;
-        Tue, 15 Feb 2022 15:12:12 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1644959532;
-        bh=QHA9FiW6sTQUWRL+Cb034HLnTWq6uprmaJl1T0uNhqY=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=UFarTeK/bPvMdyiMUyA1ScG9YFTwhV8kioXvbduuBK1On+rNWWxXOSmR00Lg6/tZV
-         kAaXLKqUGShKac4/Rz/wxQ+epmmWIaNqCN18750mGU+lEuGPGdCBw86X/aEITICN6w
-         TxGFpyhDC8vrGbeQ02hyhqob8cBrjfqWkjxgSXF8=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21FLCCFm001929
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 15 Feb 2022 15:12:12 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 15
- Feb 2022 15:12:12 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 15 Feb 2022 15:12:12 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21FLCClW017811;
-        Tue, 15 Feb 2022 15:12:12 -0600
-Date:   Tue, 15 Feb 2022 15:12:12 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Marc Zyngier <maz@kernel.org>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/5] arm64: dts: ti: Introduce base support for AM62x SoC
-Message-ID: <20220215211212.iqamp5dea6qrtus5@magma>
-References: <20220208131827.1430086-1-vigneshr@ti.com>
- <20220208131827.1430086-5-vigneshr@ti.com>
- <bc6cb6e1adcf6860a595b71246778733@kernel.org>
- <20220210193459.nl6baranvmqs46bi@coastal>
- <87bkzdljt1.wl-maz@kernel.org>
- <20220211235513.cplmvgfuwe3dhzbs@nearby>
- <87k0e0tirw.wl-maz@kernel.org>
+        Tue, 15 Feb 2022 16:14:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C306371C97;
+        Tue, 15 Feb 2022 13:13:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FEC8618FA;
+        Tue, 15 Feb 2022 21:13:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E1EC340EB;
+        Tue, 15 Feb 2022 21:13:49 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="IgL/2/E1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644959627;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kp7eWj533NNXB9m2ob0Q6FbMxEEdkB1SZsAocpyT3WI=;
+        b=IgL/2/E1e1E7zCYvhET5dX678TGPh3WQ9Dx3D2r2DuwZb/dXyQfElTGoySAuZbdUNtyQi9
+        bmDP8eQZVd38ZBtYLXDl6Z6QU56IDPwKCtEKUnRiVNeiDrsqXpP21hwil5o8HswG7jWDHc
+        ml+m0C7a8CwyxK/wT/cqDQaDnY9zGyU=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6df90ad4 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 15 Feb 2022 21:13:47 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>
+Subject: [PATCH v3] random: absorb fast pool into input pool after fast load
+Date:   Tue, 15 Feb 2022 22:13:33 +0100
+Message-Id: <20220215211333.244383-1-Jason@zx2c4.com>
+In-Reply-To: <CAHmME9qMRO0YFwQRUZfuUjTy2=C0QYkNLZSK5YgVD0xpcP2qbQ@mail.gmail.com>
+References: <CAHmME9qMRO0YFwQRUZfuUjTy2=C0QYkNLZSK5YgVD0xpcP2qbQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <87k0e0tirw.wl-maz@kernel.org>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11:40-20220212, Marc Zyngier wrote:
-[...]
+During crng_init == 0, we never credit entropy in add_interrupt_
+randomness(), but instead dump it directly into the primary_crng. That's
+fine, except for the fact that we then wind up throwing away that
+entropy later when we switch to extracting from the input pool and
+overwriting the primary_crng key. The two other early init sites --
+add_hwgenerator_randomness()'s use crng_fast_load() and add_device_
+randomness()'s use of crng_slow_load() -- always additionally give their
+inputs to the input pool. But not add_interrupt_randomness().
 
-> I expect the SRE settings to control all of this, most of which are
-> under NS control. You could easily check this by advertising the 3
-> missing regions in DT, booting an upstream kernel with KVM and boot a
-> GICv2 guest. KVM will also warn if the DT regions are advertised but
-> the HW doesn't actually support the MMIO accesses. Feel free to ping
-> me offline if you need the runs for this,
+This commit fixes that shortcoming by calling mix_pool_bytes() after
+crng_fast_load() in add_interrupt_randomness(). That's partially
+verboten on PREEMPT_RT, where it implies taking spinlock_t from an IRQ
+handler. But this also only happens during early boot and then never
+again after that. Plus it's a trylock so it has the same considerations
+as calling crng_fast_load(), which we're already using.
 
+Cc: Theodore Ts'o <tytso@mit.edu>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Suggested-by: Eric Biggers <ebiggers@google.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+v3 uses a trylock instead of a spinlock, just like all the other locks
+taken in hard irq. (Incidentally, we're now talking about moving this
+into the deferred stage, so that at can be a spinlock, but at least with
+what we have here, this really must be a trylock.)
 
-Thanks for the offline guidance and clarification. fixup patches for
-existing K3 devices posted in [1].
+ drivers/char/random.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-[1] https://lore.kernel.org/all/20220215201008.15235-1-nm@ti.com/
-
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index d31b0b3afe2e..f3179c67010b 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -850,6 +850,10 @@ void add_interrupt_randomness(int irq)
+ 		    crng_fast_load((u8 *)fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
+ 			fast_pool->count = 0;
+ 			fast_pool->last = now;
++			if (spin_trylock(&input_pool.lock)) {
++				_mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
++				spin_unlock(&input_pool.lock);
++			}
+ 		}
+ 		return;
+ 	}
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+2.35.0
+

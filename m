@@ -2,255 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9D44B66D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:02:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7565D4B66D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:03:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235524AbiBOJCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:02:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41090 "EHLO
+        id S235532AbiBOJCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:02:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbiBOJCI (ORCPT
+        with ESMTP id S235139AbiBOJCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:02:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4091B54C8;
-        Tue, 15 Feb 2022 01:01:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A065B80764;
-        Tue, 15 Feb 2022 09:01:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5C4EC340EC;
-        Tue, 15 Feb 2022 09:01:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644915715;
-        bh=7EejRv6u9amFqRYVYWyOD9s0dLtId/TOvvFuq30/PYk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e4evkuJgCoF1G+Drlcz97TmsU/QuwhqKfyQrVlMFhl3+IzhR0vfhGRPu4dVsLLiSb
-         T7qgkYHFR3chK9Us2GBsqc3g8r2VutrU4BJJi9p6Eu4swXNkAgsLt1cBpOJF/lZdrx
-         P9UTZGizLEp9lJ/+zKq8nYbPFsCeoqgeboWEPG7dM+JoWUpM7OobVjHG7hrHcToQRc
-         1JK4iK4e939Fa31R3Rzwg/vH0iEVPSzFQto64WR1IQ9w2Hyg5jsKxZeL6lJDkrifNB
-         tdobEUht/pZGRNy142a3sRymPUgYpCmThE8a69ZhsxTMJ+sFPpquPHnfKCvIMGOy61
-         Vqi8Zh9bLcMig==
-Date:   Tue, 15 Feb 2022 10:01:51 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Robert =?utf-8?B?xZp3acSZY2tp?= <robert@swiecki.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Jann Horn <jannh@google.com>, Will Drewry <wad@chromium.org>,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [RFC] Get siginfo from unreaped task
-Message-ID: <20220215090151.zpatnzpvqnaeekrq@wittgenstein>
-References: <CAP145phC6S6Zda-ZWLH1s4ZfDPh79rtf_7vzs-yvt1vykUCP4A@mail.gmail.com>
- <CF5167CE-FA1C-4CEC-9EA8-5EE8041FE7C4@amacapital.net>
- <20220213085212.cwzuqlrabpgbnbac@wittgenstein>
- <202202141152.6296CD7F@keescook>
+        Tue, 15 Feb 2022 04:02:42 -0500
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50150114FDF
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:02:31 -0800 (PST)
+Received: by mail-qv1-xf2a.google.com with SMTP id x3so11353905qvd.8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:02:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=94zuPq2u7S7IuvdQC3T3gt4sxQz8uNo1pA51T1QzfOM=;
+        b=oXqITTtyvfd9bHj1UUEuwmPenKxCQ5523q9nzwEO8w5VJCBGzM9ghj2KUA5i0TjLFx
+         Ys12W+pBymEITarI/Mt2wWZlxCb9r+0ZbJvahV7goHiEwztoJzjZz9HkbhU2/y1ZxjWm
+         Gkdakdeo+UKhfCbL99UQyRy8XK6Llrpv53n8cHI/rydrfz8IUoLPxwbcIYaU0abEiWxF
+         hmub8pVPRIS05ocu3J/0jpsILbBMGht6GEGMypdtGG13zkdEl41Ec1rqHilNUq8bkYo5
+         fx24g/02Shkj9e9P0tG8RgjqGp1EX1yEi815/fkcBpz3DlTF3/k+KqTilxk7w7qm4KRH
+         Rg9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=94zuPq2u7S7IuvdQC3T3gt4sxQz8uNo1pA51T1QzfOM=;
+        b=AZribKxmmfcuWvpl9Gm09EqXk6kYFa+jnUQLYwFVV65W8lSWj+bDAufBXeOvqpXT3u
+         BUDhl0uKfWbw59ELgUQ1mKesKJTQWdAWIoIcSG5/N1BWT5pZgg0/NRnwusacag5NGRh0
+         DuSBBF8HvQOEYI1fBOh/I6f4zxn6pjKHmlR3LDI98Is9vETPH1WSLJk/oXkZOjrQo438
+         zcPj9bT9ezpn4klhP0YB/8m8rrpJE4afQpj2dQ0+dKL2oGQJcWThD2jkot6mOoYWYhtN
+         qpsE4I6W71NmiQTHYwTbmTnc979SEMyWVRm2AIZEMTmlw8stXYscR3zTVP9KXYrK7+Bb
+         mnMA==
+X-Gm-Message-State: AOAM531LEkzQ537gCQsoyUldumGX+HUL0dCMe4d4ePIHeDNMl7utr9PN
+        Y1dnYZDLWoUNmSSKstSTu3SCvFBQ8xnpHp5+
+X-Google-Smtp-Source: ABdhPJwdwNZpshpGezRK0j6kwzSGlQR6i2H2/tl7sT0mgs1i5UvXYIdnGb/gj8f0ZjhiTY3Ommk/rA==
+X-Received: by 2002:a05:6214:21a5:: with SMTP id t5mr1975944qvc.51.1644915750023;
+        Tue, 15 Feb 2022 01:02:30 -0800 (PST)
+Received: from rivos-atish.. (adsl-70-228-75-190.dsl.akrnoh.ameritech.net. [70.228.75.190])
+        by smtp.gmail.com with ESMTPSA id w4sm17711158qko.123.2022.02.15.01.02.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 01:02:29 -0800 (PST)
+From:   Atish Patra <atishp@rivosinc.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Atish Patra <atishp@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        devicetree@vger.kernel.org, Jisheng Zhang <jszhang@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-riscv@lists.infradead.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH v3 0/6] Provide a fraemework for RISC-V ISA extensions 
+Date:   Tue, 15 Feb 2022 01:02:05 -0800
+Message-Id: <20220215090211.911366-1-atishp@rivosinc.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <202202141152.6296CD7F@keescook>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 12:07:25PM -0800, Kees Cook wrote:
-> On Sun, Feb 13, 2022 at 09:52:12AM +0100, Christian Brauner wrote:
-> > On Sat, Feb 12, 2022 at 06:32:08PM -0800, Andy Lutomirski wrote:
-> > > 
-> > > > On Feb 12, 2022, at 3:24 AM, Robert Święcki <robert@swiecki.net> wrote:
-> > > > 
-> > > > ﻿sob., 12 lut 2022 o 05:28 Kees Cook <keescook@chromium.org> napisał(a):
-> > > >> 
-> > > >> Make siginfo available through PTRACE_GETSIGINFO after process death,
-> > > >> without needing to have already used PTRACE_ATTACH. Uses 48 more bytes
-> > > >> in task_struct, though I bet there might be somewhere else we could
-> > > >> stash a copy of it?
-> > > > 
-> > > > An alternative way of accessing this info could be abusing the
-> > > > waitid() interface, with some additional, custom to Linux, flag
-> > > > 
-> > > > waitid(P_ALL, 0, &si, __WCHILDSIGINFO);
-> > > > 
-> > > > which would change what is put into si.
-> > > > 
-> > > > But maybe ptrace() is better, because it's mostly incompatible with
-> > > > other OSes anyway on the behavior/flag level, while waitd() seems to
-> > > > be POSIX/BSD standard, even if Linux specifies some additional flags.
-> > > > 
-> > > > 
-> > > 
-> > > I had a kind of opposite thought, which is that it would be very nice
-> > > to be able to get all the waitid() data without reaping a process or
-> > > even necessarily being its parent.  Maybe these can be combined?  A
-> > > new waitid() option like you’re suggesting could add siginfo (and
-> > > might need permissions).  And we could have a different waitid() flag
-> > > that says “maybe not my child, don’t reap” (and also needs
-> > > permissions).
-> > > 
-> > > Although the “don’t reap” thing is fundamentally racy. What a sane
-> > > process manager actually wants is an interface to read all this info
-> > > from a pidfd, which means it all needs to get stuck in struct pid. And
-> > 
-> > /me briefly pops out from vacation
-> > 
-> > Agreed and not just siginfo I would expect(?). We already came to that
-> > conclusion when we first introduced them.
-> > 
-> > > task_struct needs a completion or wait queue so you can actually wait
-> > > for a pidfd to exit (unless someone already did this — I had patches a
-> > > while back).  And this would be awesome.
-> > 
-> > Currently, you can wait for a pidfd to exit via polling and you can use
-> > a pidfd to pass it to waitid(P_PIDFD, pidfd, ...).
-> > 
-> > /me pops back into vacation
-> 
-> Right, so waitid already has all the infrastructure for this, so I think
-> adding it there makes a lot of sense. Here's what I've got:
-> 
-> 
-> 
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index f5b2be39a78c..e40789e801ef 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -1178,6 +1178,7 @@ struct task_struct {
->  #endif
->  	/* Ptrace state: */
->  	unsigned long			ptrace_message;
-> +	kernel_siginfo_t		death_siginfo;
->  	kernel_siginfo_t		*last_siginfo;
->  
->  	struct task_io_accounting	ioac;
-> diff --git a/kernel/signal.c b/kernel/signal.c
-> index 9b04631acde8..41f6ba6b7aa7 100644
-> --- a/kernel/signal.c
-> +++ b/kernel/signal.c
-> @@ -2825,6 +2825,10 @@ bool get_signal(struct ksignal *ksig)
->  		}
->  
->  	fatal:
-> +		/* Allow siginfo to be queried until reaped. */
-> +		copy_siginfo(&current->death_siginfo, &ksig->info);
-> +		current->last_siginfo = &current->death_siginfo;
-> +
->  		spin_unlock_irq(&sighand->siglock);
->  		if (unlikely(cgroup_task_frozen(current)))
->  			cgroup_leave_frozen(true);
-> diff --git a/include/uapi/linux/wait.h b/include/uapi/linux/wait.h
-> index 85b809fc9f11..7258cd4510ba 100644
-> --- a/include/uapi/linux/wait.h
-> +++ b/include/uapi/linux/wait.h
-> @@ -9,6 +9,7 @@
->  #define WCONTINUED	0x00000008
->  #define WNOWAIT		0x01000000	/* Don't reap, just poll status.  */
->  
-> +#define __WCHILDSIGINFO	0x10000000	/* Report child's siginfo. */
->  #define __WNOTHREAD	0x20000000	/* Don't wait on children of other threads in this group */
->  #define __WALL		0x40000000	/* Wait on all children, regardless of type */
->  #define __WCLONE	0x80000000	/* Wait only on non-SIGCHLD children */
-> diff --git a/kernel/exit.c b/kernel/exit.c
-> index d54efddd378b..70ecb996cecd 100644
-> --- a/kernel/exit.c
-> +++ b/kernel/exit.c
-> @@ -953,6 +953,7 @@ struct waitid_info {
->  	uid_t uid;
->  	int status;
->  	int cause;
-> +	kernel_siginfo_t siginfo;
->  };
->  
->  struct wait_opts {
-> @@ -964,7 +965,7 @@ struct wait_opts {
->  	int			wo_stat;
->  	struct rusage		*wo_rusage;
->  
-> -	wait_queue_entry_t		child_wait;
-> +	wait_queue_entry_t	child_wait;
->  	int			notask_error;
->  };
->  
-> @@ -1012,11 +1013,16 @@ static int wait_task_zombie(struct wait_opts *wo, struct task_struct *p)
->  	int state, status;
->  	pid_t pid = task_pid_vnr(p);
->  	uid_t uid = from_kuid_munged(current_user_ns(), task_uid(p));
-> -	struct waitid_info *infop;
-> +	struct waitid_info *infop = wo->wo_info;
->  
->  	if (!likely(wo->wo_flags & WEXITED))
->  		return 0;
->  
-> +	/* Before WNOWAIT so a copy can be extracted without reaping. */
-> +	if (unlikely(wo->wo_flags & __WCHILDSIGINFO)) {
-> +		if (infop && p->last_siginfo)
-> +			copy_siginfo(&infop->siginfo, p->last_siginfo);
-> +	}
->  	if (unlikely(wo->wo_flags & WNOWAIT)) {
->  		status = (p->signal->flags & SIGNAL_GROUP_EXIT)
->  			? p->signal->group_exit_code : p->exit_code;
-> @@ -1121,7 +1127,6 @@ static int wait_task_zombie(struct wait_opts *wo, struct task_struct *p)
->  		release_task(p);
->  
->  out_info:
-> -	infop = wo->wo_info;
->  	if (infop) {
->  		if ((status & 0x7f) == 0) {
->  			infop->cause = CLD_EXITED;
-> @@ -1564,7 +1569,7 @@ static long kernel_waitid(int which, pid_t upid, struct waitid_info *infop,
->  	unsigned int f_flags = 0;
->  
->  	if (options & ~(WNOHANG|WNOWAIT|WEXITED|WSTOPPED|WCONTINUED|
-> -			__WNOTHREAD|__WCLONE|__WALL))
-> +			__WNOTHREAD|__WCLONE|__WALL|__WCHILDSIGINFO))
->  		return -EINVAL;
->  	if (!(options & (WEXITED|WSTOPPED|WCONTINUED)))
->  		return -EINVAL;
-> @@ -1638,6 +1645,10 @@ SYSCALL_DEFINE5(waitid, int, which, pid_t, upid, struct siginfo __user *,
->  	if (!infop)
->  		return err;
->  
-> +	/* __WCHILDSIGINFO */
-> +	if (info->siginfo.signo)
-> +		return copy_siginfo_to_user(infop, &info->siginfo);
-> +
->  	if (!user_write_access_begin(infop, sizeof(*infop)))
->  		return -EFAULT;
->  
-> @@ -1781,6 +1792,12 @@ COMPAT_SYSCALL_DEFINE5(waitid,
->  	if (!infop)
->  		return err;
->  
-> +	/* __WCHILDSIGINFO */
-> +	if (info->siginfo.signo)
-> +		return copy_siginfo_to_user32(
-> +				(struct compat_siginfo __user *)infop,
-> +				&info->siginfo);
-> +
->  	if (!user_write_access_begin(infop, sizeof(*infop)))
->  		return -EFAULT;
->  
-> 
-> 
-> One usability question I have is:
-> 
-> - if the process just exited normally, should it return an empty
->   siginfo, or should it ignore __WCHILDSIGINFO? (I have it ignoring it
->   above.)
+This series implements a generic framework to parse multi-letter ISA
+extensions. This series is based on Tsukasa's v3 isa extension improvement
+series[1]. I have fixed few bugs and improved comments from that series
+(PATCH1-3). I have not used PATCH 4 from that series as we are not using
+ISA extension versioning as of now. We can add that later if required.
 
-I would model this after the regular waitid() call which seems to always
-fill in that info? But note that afaict, there is a potential behavioral
-difference between getting the siginfo from a no-reaped task and a
-reaped task now. copy_siginfo_to_user*() simply copies all of siginfo
-to the user and clears additional fields. In contrast, regular waitid()
-only fills in specific fields and leaves additional fields as they were
-before. It might not matter in practice but if you're doing this then
-this behavior should be documented on the manpage.
+PATCH 4 allows the probing of multi-letter extensions via a macro.
+It continues to use the common isa extensions between all the harts.
+Thus hetergenous hart systems will only see the common ISA extensions.
+
+PATCH 6 improves the /proc/cpuinfo interface for the available ISA extensions
+via /proc/cpuinfo.
+
+Here is the example output of /proc/cpuinfo:
+(with debug patches in Qemu and Linux kernel)
+
+/ # cat /proc/cpuinfo
+processor	: 0
+hart		: 0
+isa		: rv64imafdcsu
+isa-ext		: sstc,sscofpmf
+mmu		: sv48
+
+processor	: 1
+hart		: 1
+isa		: rv64imafdcsu
+isa-ext		: sstc,sscofpmf
+mmu		: sv48
+
+processor	: 2
+hart		: 2
+isa		: rv64imafdcsu
+isa-ext		: sstc,sscofpmf
+mmu		: sv48
+
+processor	: 3
+hart		: 3
+isa		: rv64imafdcsu
+isa-ext		: sstc,sscofpmf
+mmu		: sv48
+
+Anybody adding support for any new multi-letter extensions should add an
+entry to the riscv_isa_ext_id and the isa extension array. 
+E.g. The patch[2] adds the support for various ISA extensions.
+
+[1] https://lore.kernel.org/all/0f568515-a05e-8204-aae3-035975af3ee8@irq.a4lg.com/T/
+[2] https://github.com/atishp04/linux/commit/dc6f9200033bb5a72d8fd1a179bb272c6ade17e6 
+
+
+Changes from v2->v3:
+1. Updated comments to mark clearly a fix required for Qemu only.
+2. Fixed a bug where the 1st multi-letter extension can be present without _
+3. Added Tested by tags. 
+
+Changes from v1->v2:
+1. Instead of adding a separate DT property use the riscv,isa property.
+2. Based on Tsukasa's v3 isa extension improvement series.
+
+Atish Patra (3):
+RISC-V: Implement multi-letter ISA extension probing framework
+RISC-V: Do no continue isa string parsing without correct XLEN
+RISC-V: Improve /proc/cpuinfo output for ISA extensions
+
+Tsukasa OI (3):
+RISC-V: Correctly print supported extensions
+RISC-V: Minimal parser for "riscv, isa" strings
+RISC-V: Extract multi-letter extension names from "riscv, isa"
+
+arch/riscv/include/asm/hwcap.h |  25 +++++++
+arch/riscv/kernel/cpu.c        |  44 ++++++++++-
+arch/riscv/kernel/cpufeature.c | 130 ++++++++++++++++++++++++++++-----
+3 files changed, 178 insertions(+), 21 deletions(-)
+
+--
+2.30.2
+

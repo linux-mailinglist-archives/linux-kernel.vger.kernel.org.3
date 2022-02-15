@@ -2,159 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506664B724B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C16A4B71E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241560AbiBOQ1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:27:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35876 "EHLO
+        id S241577AbiBOQ1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:27:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241558AbiBOQ1n (ORCPT
+        with ESMTP id S241558AbiBOQ1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:27:43 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE1A6C920;
-        Tue, 15 Feb 2022 08:27:30 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21FGDE1F001119;
-        Tue, 15 Feb 2022 16:27:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=yuJ33/IS3C8JmgqYKYRI7WGKiRlXun9JPd2/bJ+93WA=;
- b=sOclZRJgd7NDzOsSb2uU840Kwry0jw4kCuTeWrNB5Rja9fkxfT64FGzeYCwe0RhJ5AKS
- ySmme8nLWrCxoVaavRnmZAvyrkH8BIIZ6QPr1vpF2KN3t2zKCJSCI0Gv5pJI5AqlzSvK
- boUuO9Ep8Od6htYVlFtEPAyi8Na79tE1k3svbEFDZHhtDlp+u11ovagr5coTOOOlnZkf
- HUDthA4wkeZ81x3TRFhzVEs4yjLhgJF0QgDkkfD8e4z7cDUYVNenb4dEidard4jMOURK
- hBEEmRQqhJ70xhwsRbPSQ/f5cbVAL1H+0Ji493n4Rk2io31tvRP3NnOjyGJB2LhFMOGf xw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8d9fvjff-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Feb 2022 16:27:07 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21FGDTLm009902;
-        Tue, 15 Feb 2022 16:27:06 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8d9fvje5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Feb 2022 16:27:06 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21FGC1EO007679;
-        Tue, 15 Feb 2022 16:27:03 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma05fra.de.ibm.com with ESMTP id 3e64h9qrkj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Feb 2022 16:27:03 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21FGR1Tv24510740
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Feb 2022 16:27:01 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 61D3EAE045;
-        Tue, 15 Feb 2022 16:27:01 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EB164AE053;
-        Tue, 15 Feb 2022 16:27:00 +0000 (GMT)
-Received: from localhost (unknown [9.43.98.51])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 15 Feb 2022 16:27:00 +0000 (GMT)
-Date:   Tue, 15 Feb 2022 21:56:59 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v2 09/13] powerpc/ftrace: Implement
- CONFIG_DYNAMIC_FTRACE_WITH_ARGS
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Jiri Kosina <jikos@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>
-References: <cover.1640017960.git.christophe.leroy@csgroup.eu>
-        <5831f711a778fcd6eb51eb5898f1faae4378b35b.1640017960.git.christophe.leroy@csgroup.eu>
-        <1644852011.qg7ud9elo2.naveen@linux.ibm.com>
-        <1b28f52a-f8b7-6b5c-e726-feac4123517d@csgroup.eu>
-        <875ypgo0f3.fsf@mpe.ellerman.id.au>
-        <1644930705.g64na2kgvd.naveen@linux.ibm.com>
-        <20220215093849.556d5444@gandalf.local.home>
-In-Reply-To: <20220215093849.556d5444@gandalf.local.home>
+        Tue, 15 Feb 2022 11:27:25 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE716BDDB
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:27:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644942433; x=1676478433;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FhUgSu8QDriqHaKgF3RSsaX1eOMu6Th4q4D3Ki12HOQ=;
+  b=IL6/NkCWfuMMlWKFaDwipGZ7FZU6IJE4Rggi3SAymxwhvXou9JiTShK2
+   QzjSvTtGxUOquKXtFCjJPGIEF8xVbkpRKPqH/LCR+RLByQbDUNdFucLeP
+   cbFVuQvmKHGKbs+Z4hYbWYqLRLFiZSqGs6S0Q0aFVdDuGmgmn4/2ezyOe
+   3E6pAzuAHYneXAKU2cVZArd3o9NFkXzmXKTUsshYjFYwnXkvUZdxSdn9K
+   ra04DyydTVphQBV9QqcsCWjnJVRDboml99qg4xoigCrAwsU0hjf3AKCJO
+   xcU6Y+2G0ifOoEImj4WaNHje8lADoR5M8cFxNDxcL31hCEVeFRuleHAb1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="250128868"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="250128868"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 08:27:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="502523569"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 15 Feb 2022 08:27:07 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id A3748107; Tue, 15 Feb 2022 18:27:22 +0200 (EET)
+Date:   Tue, 15 Feb 2022 19:27:22 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>, tglx@linutronix.de,
+        mingo@redhat.com, luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 22/29] x86/tdx: Make pages shared in ioremap()
+Message-ID: <20220215162722.cvzik5r57spr2krz@black.fi.intel.com>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-23-kirill.shutemov@linux.intel.com>
+ <YgFIaJ8ijgQQ04Nv@zn.tnic>
+ <1d77e91c-e151-7846-6cd4-6264236ca5ae@intel.com>
+ <YgFWpGQfA84Y0mW/@zn.tnic>
+ <20220214220926.fjwlyieatwjhcpij@black.fi.intel.com>
+ <f1dfc268-7b2f-9980-27ce-0b5bb1aea962@amd.com>
+ <20220215154118.ldpvvk5seljntl44@black.fi.intel.com>
+ <dd21e54a-a431-4d6f-47b7-ab1a3e8e0cc8@amd.com>
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1644942378.byz0qymic3.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: jrSZjNs8gbiYltKWnkGMOceFtwUtrkOd
-X-Proofpoint-GUID: BBeV6KJeqsMu-XQ3oul3qIPY_5o_K6oZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-15_04,2022-02-14_04,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- phishscore=0 bulkscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
- suspectscore=0 adultscore=0 impostorscore=0 clxscore=1011 mlxlogscore=782
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202150095
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dd21e54a-a431-4d6f-47b7-ab1a3e8e0cc8@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Steven Rostedt wrote:
-> On Tue, 15 Feb 2022 19:06:48 +0530
-> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
->=20
->> As I understand it, the reason ftrace_get_regs() was introduced was to=20
->> be able to only return the pt_regs, if _all_ registers were saved into=20
->> it, which we don't do when coming in through ftrace_caller(). See the=20
->> x86 implementation (commit 02a474ca266a47 ("ftrace/x86: Allow for=20
->> arguments to be passed in to ftrace_regs by default"), which returns=20
->> pt_regs conditionally.
->=20
-> I can give you the history of ftrace_caller and ftrace_regs_caller.
->=20
-> ftrace_caller saved just enough as was denoted for gcc mcount trampolines=
-.
-> The new fentry which happens at the start of the function, whereas mcount
-> happens after the stack frame is set up, may change the rules on some
-> architectures.
->=20
-> As for ftrace_regs_caller, that was created for kprobes. As the majority =
-of
-> kprobes were added at the start of the function, it made sense to hook in=
-to
-> ftrace as the ftrace trampoline call is much faster than taking a
-> breakpoint interrupt. But to keep compatibility with breakpoint
-> interrupts, we needed to fill in all the registers, and make it act just
-> like a breakpoint interrupt.
->=20
-> I've been wanting to record function parameters, and because the ftrace
-> trampoline must at a minimum save the function parameters before calling
-> the ftrace callbacks, all the information for those parameters were being
-> saved but were never exposed to the ftrace callbacks. I created the the
-> DYNAMIC_FTRACE_WITH_ARGS to expose them. I first just used pt_regs with
-> just the parameters filled in, but that was criticized as it could be
-> confusing where the non filled in pt_regs might be used and thinking they
-> are legitimate. So I created ftrace_regs that would give you just the
-> function arguments (if DYNAMIC_FTRACE_WITH_ARGS is defined), or it will
-> give you a full pt_regs, if the caller came from the ftrace_regs_caller. =
-If
-> not, it will give you a NULL pointer.
->=20
-> The first user to use the args was live kernel patching, as they only nee=
-d
-> that and the return pointer.
+On Tue, Feb 15, 2022 at 09:55:16AM -0600, Tom Lendacky wrote:
+> On 2/15/22 09:41, Kirill A. Shutemov wrote:
+> > On Tue, Feb 15, 2022 at 08:49:34AM -0600, Tom Lendacky wrote:
+> > > On 2/14/22 16:09, Kirill A. Shutemov wrote:
+> > > > On Mon, Feb 07, 2022 at 06:28:04PM +0100, Borislav Petkov wrote:
+> > > > > On Mon, Feb 07, 2022 at 08:57:39AM -0800, Dave Hansen wrote:
+> > > > > > We can surely *do* this with cc_something() helpers.  It's just not as
+> > > > > > easy as making cc_set/cc_clear().
+> > > > > 
+> > > > > Sure, that's easy: cc_pgprot_{enc,dec}() or so.
+> > > > 
+> > > > So, I've ended up with this in <asm/pgtable.h>
+> > > > 
+> > > > /*
+> > > >    * Macros to add or remove encryption attribute
+> > > >    */
+> > > > #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
+> > > > pgprotval_t cc_enc(pgprotval_t protval);
+> > > > pgprotval_t cc_dec(pgprotval_t protval);
+> > > > #define pgprot_encrypted(prot)	__pgprot(cc_enc(pgprot_val(prot)))
+> > > > #define pgprot_decrypted(prot)	__pgprot(cc_dec(pgprot_val(prot)))
+> > > > #else
+> > > > #define pgprot_encrypted(prot) (prot)
+> > > > #define pgprot_decrypted(prot) (prot)
+> > > > #endif
+> > > 
+> > > A couple of things. I think cc_pgprot_enc() and cc_pgprot_dec() would be
+> > > more descriptive/better names to use here.
+> > > 
+> > > Also, can they be defined in include/linux/cc_platform.h (with two versions
+> > > based on CONFIG_ARCH_HAS_CC_PLATFORM) and have that included here? Or is
+> > > there some header file include issues when trying to include it? That would
+> > > clean this block up into just two lines.
+> > 
+> > Well, pgprotval_t is x86-specific. It cannot be used in generic headers.
+> 
+> Ah, right.
+> 
+> > We can use u64 here instead. It is wider than pgprotval_t on 2-level
+> > paging x86, but should work.
+> 
+> Hmm..., yeah. Maybe unsigned long? CONFIG_ARCH_HAS_CC_PLATFORM is X86_64
+> only, so 2-level paging wouldn't be applicable when an unsigned long is
+> 64-bits?
 
-Thanks, that helps.
+Hm. So for !CONFIG_ARCH_HAS_CC_PLATFORM it has to be define, if we would
+try static inline dummy instead it will break x86 PAE as upper bit get
+trancated when passed via helper.
 
-- Naveen
+I donno.
 
+> I'll let the maintainers weigh in on that.
+> 
+> > 
+> > But with u64 as type, I'm not sure 'pgprot' in the name is jutified.
+> 
+> Maybe cc_mask_{enc,dec}()? It just sounds like cc_{enc,dec}() is actually
+> performing encryption or decryption and can be confusing.
+
+cc_{enc,dec}_mask() sounds better to me.
+
+-- 
+ Kirill A. Shutemov

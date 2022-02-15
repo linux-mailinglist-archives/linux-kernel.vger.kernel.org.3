@@ -2,225 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A184B6516
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:03:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F06634B6528
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235104AbiBOIEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 03:04:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36150 "EHLO
+        id S235113AbiBOIFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 03:05:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235103AbiBOIEB (ORCPT
+        with ESMTP id S230126AbiBOIE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 03:04:01 -0500
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151F727160;
-        Tue, 15 Feb 2022 00:03:42 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=kanie@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V4XPkO4_1644912216;
-Received: from localhost(mailfrom:kanie@linux.alibaba.com fp:SMTPD_---0V4XPkO4_1644912216)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 15 Feb 2022 16:03:40 +0800
-From:   Guixin Liu <kanie@linux.alibaba.com>
-To:     bostroesser@gmail.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xiaoguang.wang@linux.alibaba.com,
-        xlpang@linux.alibaba.com
-Subject: [PATCH V3] scsi: target: tcmu: Make cmd_ring_size changeable via configfs.
-Date:   Tue, 15 Feb 2022 16:03:36 +0800
-Message-Id: <1644912216-97633-1-git-send-email-kanie@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 15 Feb 2022 03:04:59 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A6F2654E;
+        Tue, 15 Feb 2022 00:04:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644912290; x=1676448290;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=J2aPIxHkPt7CQ39Q+4Y+kmdrTWxBvdaiEZS2aBpap2A=;
+  b=nErw1dThFvhTUPgA2Nn9QfTr2ruhnTJIAG23xWrNi5eGwn4pXLyVQvC5
+   IcYozrCQwyd9xFTnJoXbOsqiRzeGnXuql0Wr/kxnp/isihS1q5quztDTh
+   DT/C7C59WxOV9uWN329A6wvCyPI3l2msH+KM9rcGnuQVGd5pgnqxfD12f
+   Y05Pgf2hyL/jpxtod9j7mG0CQQos+NPi4pvUC/16ZfPtYT4LFoA8invqG
+   Wan+bj1UF+h4ZdbLEoHHi5Nhcy4Ppv5QdhV9K6PTg5Q/eKpdpDLOEfRLx
+   gMg+a+lKf/JfW0/OHy5LsIeUGiZ3AcA33zG1sRaZ0FQiONoAPI35jZnTj
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="336703227"
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="336703227"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 00:04:49 -0800
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="703498873"
+Received: from twinkler-lnx.jer.intel.com ([10.12.91.43])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 00:04:47 -0800
+From:   Tomas Winkler <tomas.winkler@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alexander Usyskin <alexander.usyskin@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Tomas Winkler <tomas.winkler@intel.com>
+Subject: [char-misc 1/4] mei: me: disable driver on the ign firmware
+Date:   Tue, 15 Feb 2022 10:04:35 +0200
+Message-Id: <20220215080438.264876-1-tomas.winkler@intel.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make cmd_ring_size changeable similar to the way it is done for
-max_data_area_mb, the reason is that our tcmu client will create
-thousands of tcmu instances, and this will consume lots of mem with
-default 8Mb cmd ring size for every backstore.
+From: Alexander Usyskin <alexander.usyskin@intel.com>
 
-One can change the value by typing:
-    echo "cmd_ring_size_mb=N" > control
-The "N" is a integer between 1 to 8, if set 1, the cmd ring can hold
-about 6k cmds(tcmu_cmd_entry about 176 byte) at least.
+Add a quirk to disable MEI interface on Intel PCH Ignition (IGN)
+as the IGN firmware doesn't support the protocol.
 
-The value is printed when doing:
-    cat info
-In addition, a new readonly attribute 'cmd_ring_size_mb' returns the
-value in read.
-
-Reviewed-by: Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
+Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
 ---
- drivers/target/target_core_user.c | 71 ++++++++++++++++++++++++++++++++++-----
- 1 file changed, 62 insertions(+), 9 deletions(-)
+ drivers/misc/mei/hw-me-regs.h |  1 +
+ drivers/misc/mei/hw-me.c      | 23 ++++++++++++-----------
+ 2 files changed, 13 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
-index 7b2a89a..0a546db 100644
---- a/drivers/target/target_core_user.c
-+++ b/drivers/target/target_core_user.c
-@@ -61,10 +61,10 @@
- #define TCMU_TIME_OUT (30 * MSEC_PER_SEC)
+diff --git a/drivers/misc/mei/hw-me-regs.h b/drivers/misc/mei/hw-me-regs.h
+index 67bb6a25fd0a..888c27bc3f1a 100644
+--- a/drivers/misc/mei/hw-me-regs.h
++++ b/drivers/misc/mei/hw-me-regs.h
+@@ -120,6 +120,7 @@
+ #define PCI_CFG_HFS_2         0x48
+ #define PCI_CFG_HFS_3         0x60
+ #  define PCI_CFG_HFS_3_FW_SKU_MSK   0x00000070
++#  define PCI_CFG_HFS_3_FW_SKU_IGN   0x00000000
+ #  define PCI_CFG_HFS_3_FW_SKU_SPS   0x00000060
+ #define PCI_CFG_HFS_4         0x64
+ #define PCI_CFG_HFS_5         0x68
+diff --git a/drivers/misc/mei/hw-me.c b/drivers/misc/mei/hw-me.c
+index d3a6c0728645..fbc4c9581864 100644
+--- a/drivers/misc/mei/hw-me.c
++++ b/drivers/misc/mei/hw-me.c
+@@ -1405,16 +1405,16 @@ static bool mei_me_fw_type_sps_4(const struct pci_dev *pdev)
+ 	.quirk_probe = mei_me_fw_type_sps_4
  
- /* For mailbox plus cmd ring, the size is fixed 8MB */
--#define MB_CMDR_SIZE (8 * 1024 * 1024)
-+#define MB_CMDR_SIZE_DEF (8 * 1024 * 1024)
- /* Offset of cmd ring is size of mailbox */
- #define CMDR_OFF sizeof(struct tcmu_mailbox)
--#define CMDR_SIZE (MB_CMDR_SIZE - CMDR_OFF)
-+#define CMDR_SIZE_DEF (MB_CMDR_SIZE_DEF - CMDR_OFF)
+ /**
+- * mei_me_fw_type_sps() - check for sps sku
++ * mei_me_fw_type_sps_ign() - check for sps or ign sku
+  *
+- * Read ME FW Status register to check for SPS Firmware.
+- * The SPS FW is only signaled in pci function 0
++ * Read ME FW Status register to check for SPS or IGN Firmware.
++ * The SPS/IGN FW is only signaled in pci function 0
+  *
+  * @pdev: pci device
+  *
+- * Return: true in case of SPS firmware
++ * Return: true in case of SPS/IGN firmware
+  */
+-static bool mei_me_fw_type_sps(const struct pci_dev *pdev)
++static bool mei_me_fw_type_sps_ign(const struct pci_dev *pdev)
+ {
+ 	u32 reg;
+ 	u32 fw_type;
+@@ -1427,14 +1427,15 @@ static bool mei_me_fw_type_sps(const struct pci_dev *pdev)
+ 
+ 	dev_dbg(&pdev->dev, "fw type is %d\n", fw_type);
+ 
+-	return fw_type == PCI_CFG_HFS_3_FW_SKU_SPS;
++	return fw_type == PCI_CFG_HFS_3_FW_SKU_IGN ||
++	       fw_type == PCI_CFG_HFS_3_FW_SKU_SPS;
+ }
+ 
+ #define MEI_CFG_KIND_ITOUCH                     \
+ 	.kind = "itouch"
+ 
+-#define MEI_CFG_FW_SPS                          \
+-	.quirk_probe = mei_me_fw_type_sps
++#define MEI_CFG_FW_SPS_IGN                      \
++	.quirk_probe = mei_me_fw_type_sps_ign
+ 
+ #define MEI_CFG_FW_VER_SUPP                     \
+ 	.fw_ver_supported = 1
+@@ -1535,7 +1536,7 @@ static const struct mei_cfg mei_me_pch12_sps_cfg = {
+ 	MEI_CFG_PCH8_HFS,
+ 	MEI_CFG_FW_VER_SUPP,
+ 	MEI_CFG_DMA_128,
+-	MEI_CFG_FW_SPS,
++	MEI_CFG_FW_SPS_IGN,
+ };
+ 
+ /* Cannon Lake itouch with quirk for SPS 5.0 and newer Firmware exclusion
+@@ -1545,7 +1546,7 @@ static const struct mei_cfg mei_me_pch12_itouch_sps_cfg = {
+ 	MEI_CFG_KIND_ITOUCH,
+ 	MEI_CFG_PCH8_HFS,
+ 	MEI_CFG_FW_VER_SUPP,
+-	MEI_CFG_FW_SPS,
++	MEI_CFG_FW_SPS_IGN,
+ };
+ 
+ /* Tiger Lake and newer devices */
+@@ -1562,7 +1563,7 @@ static const struct mei_cfg mei_me_pch15_sps_cfg = {
+ 	MEI_CFG_FW_VER_SUPP,
+ 	MEI_CFG_DMA_128,
+ 	MEI_CFG_TRC,
+-	MEI_CFG_FW_SPS,
++	MEI_CFG_FW_SPS_IGN,
+ };
  
  /*
-  * For data area, the default block size is PAGE_SIZE and
-@@ -1617,6 +1617,7 @@ static struct se_device *tcmu_alloc_device(struct se_hba *hba, const char *name)
- 
- 	udev->data_pages_per_blk = DATA_PAGES_PER_BLK_DEF;
- 	udev->max_blocks = DATA_AREA_PAGES_DEF / udev->data_pages_per_blk;
-+	udev->cmdr_size = CMDR_SIZE_DEF;
- 	udev->data_area_mb = TCMU_PAGES_TO_MBS(DATA_AREA_PAGES_DEF);
- 
- 	mutex_init(&udev->cmdr_lock);
-@@ -2189,7 +2190,7 @@ static int tcmu_configure_device(struct se_device *dev)
- 		goto err_bitmap_alloc;
- 	}
- 
--	mb = vzalloc(MB_CMDR_SIZE);
-+	mb = vzalloc(udev->cmdr_size + CMDR_OFF);
- 	if (!mb) {
- 		ret = -ENOMEM;
- 		goto err_vzalloc;
-@@ -2198,10 +2199,9 @@ static int tcmu_configure_device(struct se_device *dev)
- 	/* mailbox fits in first part of CMDR space */
- 	udev->mb_addr = mb;
- 	udev->cmdr = (void *)mb + CMDR_OFF;
--	udev->cmdr_size = CMDR_SIZE;
--	udev->data_off = MB_CMDR_SIZE;
-+	udev->data_off = udev->cmdr_size + CMDR_OFF;
- 	data_size = TCMU_MBS_TO_PAGES(udev->data_area_mb) << PAGE_SHIFT;
--	udev->mmap_pages = (data_size + MB_CMDR_SIZE) >> PAGE_SHIFT;
-+	udev->mmap_pages = (data_size + udev->cmdr_size + CMDR_OFF) >> PAGE_SHIFT;
- 	udev->data_blk_size = udev->data_pages_per_blk * PAGE_SIZE;
- 	udev->dbi_thresh = 0; /* Default in Idle state */
- 
-@@ -2221,7 +2221,7 @@ static int tcmu_configure_device(struct se_device *dev)
- 
- 	info->mem[0].name = "tcm-user command & data buffer";
- 	info->mem[0].addr = (phys_addr_t)(uintptr_t)udev->mb_addr;
--	info->mem[0].size = data_size + MB_CMDR_SIZE;
-+	info->mem[0].size = data_size + udev->cmdr_size + CMDR_OFF;
- 	info->mem[0].memtype = UIO_MEM_NONE;
- 
- 	info->irqcontrol = tcmu_irqcontrol;
-@@ -2401,7 +2401,7 @@ static void tcmu_reset_ring(struct tcmu_dev *udev, u8 err_level)
- enum {
- 	Opt_dev_config, Opt_dev_size, Opt_hw_block_size, Opt_hw_max_sectors,
- 	Opt_nl_reply_supported, Opt_max_data_area_mb, Opt_data_pages_per_blk,
--	Opt_err,
-+	Opt_cmd_ring_size_mb, Opt_err,
- };
- 
- static match_table_t tokens = {
-@@ -2412,6 +2412,7 @@ enum {
- 	{Opt_nl_reply_supported, "nl_reply_supported=%d"},
- 	{Opt_max_data_area_mb, "max_data_area_mb=%d"},
- 	{Opt_data_pages_per_blk, "data_pages_per_blk=%d"},
-+	{Opt_cmd_ring_size_mb, "cmd_ring_size_mb=%d"},
- 	{Opt_err, NULL}
- };
- 
-@@ -2509,6 +2510,41 @@ static int tcmu_set_data_pages_per_blk(struct tcmu_dev *udev, substring_t *arg)
- 	return ret;
- }
- 
-+static int tcmu_set_cmd_ring_size(struct tcmu_dev *udev, substring_t *arg)
-+{
-+	int val, ret;
-+
-+	ret = match_int(arg, &val);
-+	if (ret < 0) {
-+		pr_err("match_int() failed for cmd_ring_size_mb=. Error %d.\n",
-+		       ret);
-+		return ret;
-+	}
-+
-+	if (val <= 0) {
-+		pr_err("Invalid cmd_ring_size_mb %d.\n", val);
-+		return -EINVAL;
-+	}
-+
-+	mutex_lock(&udev->cmdr_lock);
-+	if (udev->data_bitmap) {
-+		pr_err("Cannot set cmd_ring_size_mb after it has been enabled.\n");
-+		ret = -EINVAL;
-+		goto unlock;
-+	}
-+
-+	udev->cmdr_size = (val << 20) - CMDR_OFF;
-+	if (val > (MB_CMDR_SIZE_DEF >> 20)) {
-+		pr_err("%d is too large. Adjusting cmd_ring_size_mb to global limit of %u\n",
-+		       val, (MB_CMDR_SIZE_DEF >> 20));
-+		udev->cmdr_size = CMDR_SIZE_DEF;
-+	}
-+
-+unlock:
-+	mutex_unlock(&udev->cmdr_lock);
-+	return ret;
-+}
-+
- static ssize_t tcmu_set_configfs_dev_params(struct se_device *dev,
- 		const char *page, ssize_t count)
- {
-@@ -2563,6 +2599,9 @@ static ssize_t tcmu_set_configfs_dev_params(struct se_device *dev,
- 		case Opt_data_pages_per_blk:
- 			ret = tcmu_set_data_pages_per_blk(udev, &args[0]);
- 			break;
-+		case Opt_cmd_ring_size_mb:
-+			ret = tcmu_set_cmd_ring_size(udev, &args[0]);
-+			break;
- 		default:
- 			break;
- 		}
-@@ -2584,7 +2623,9 @@ static ssize_t tcmu_show_configfs_dev_params(struct se_device *dev, char *b)
- 		     udev->dev_config[0] ? udev->dev_config : "NULL");
- 	bl += sprintf(b + bl, "Size: %llu ", udev->dev_size);
- 	bl += sprintf(b + bl, "MaxDataAreaMB: %u ", udev->data_area_mb);
--	bl += sprintf(b + bl, "DataPagesPerBlk: %u\n", udev->data_pages_per_blk);
-+	bl += sprintf(b + bl, "DataPagesPerBlk: %u", udev->data_pages_per_blk);
-+	bl += sprintf(b + bl, "CmdRingSizeMB: %u\n",
-+		      (udev->cmdr_size + CMDR_OFF) >> 20);
- 
- 	return bl;
- }
-@@ -2693,6 +2734,17 @@ static ssize_t tcmu_data_pages_per_blk_show(struct config_item *item,
- }
- CONFIGFS_ATTR_RO(tcmu_, data_pages_per_blk);
- 
-+static ssize_t tcmu_cmd_ring_size_mb_show(struct config_item *item, char *page)
-+{
-+	struct se_dev_attrib *da = container_of(to_config_group(item),
-+						struct se_dev_attrib, da_group);
-+	struct tcmu_dev *udev = TCMU_DEV(da->da_dev);
-+
-+	return snprintf(page, PAGE_SIZE, "%u\n",
-+			(udev->cmdr_size + CMDR_OFF) >> 20);
-+}
-+CONFIGFS_ATTR_RO(tcmu_, cmd_ring_size_mb);
-+
- static ssize_t tcmu_dev_config_show(struct config_item *item, char *page)
- {
- 	struct se_dev_attrib *da = container_of(to_config_group(item),
-@@ -3064,6 +3116,7 @@ static ssize_t tcmu_free_kept_buf_store(struct config_item *item, const char *pa
- 	&tcmu_attr_qfull_time_out,
- 	&tcmu_attr_max_data_area_mb,
- 	&tcmu_attr_data_pages_per_blk,
-+	&tcmu_attr_cmd_ring_size_mb,
- 	&tcmu_attr_dev_config,
- 	&tcmu_attr_dev_size,
- 	&tcmu_attr_emulate_write_cache,
 -- 
-1.8.3.1
+2.34.1
 

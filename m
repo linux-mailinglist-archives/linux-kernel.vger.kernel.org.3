@@ -2,103 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 561A74B6993
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:41:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C09914B699A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236623AbiBOKlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 05:41:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56786 "EHLO
+        id S236637AbiBOKmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 05:42:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbiBOKlf (ORCPT
+        with ESMTP id S236629AbiBOKm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 05:41:35 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830A6F01;
-        Tue, 15 Feb 2022 02:41:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644921684; x=1676457684;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=bUFqVIa927kOx97MLVPfcfP+TipMCW3yTUUD0NGSecA=;
-  b=j0JT2hU+uhgTIxY+pT+TUp95mr0rXmLHOwvvYrHDXfve/fE68EyIpkDf
-   lXvTT5yv0nYP5iYzYVnXjYSPRgyRQ8doYZCU1tS1oh64fKJ5K9rvPf36V
-   4+2RmKr0bS8tLkkDNkJxfLKVQWhPXeXXK3gFQbrNqN4PE6Xc/TE93CEbJ
-   e17MqOy7iGqjBmLo++61SiVSl8M85XUthXSTSfq+0k2TfzaEVSm2aB+3J
-   3kxzn85+8LKb+rf9AEKJSa9qIt7E22HV8l4/eAZEqlQ7Nz9NQKtrOJO06
-   7R2UrqJSIrZjX6RFz6/HvmP7hTxZZ5Y3tx84b2YV3VbxQsT5GAiTx09nL
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="250268251"
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="250268251"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 02:41:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="502361940"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 15 Feb 2022 02:41:12 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id D577F15B; Tue, 15 Feb 2022 12:41:27 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: [PATCH v1 1/1] serial: 8250_mid: Get rid of custom MID_DEVICE() macro
-Date:   Tue, 15 Feb 2022 12:41:26 +0200
-Message-Id: <20220215104126.7220-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 15 Feb 2022 05:42:27 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1400C9A9BA
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 02:42:18 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id e30-20020a6b691e000000b0063d81bdc76fso297464ioc.14
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 02:42:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=LZjOty7zFJyOrMcr4TxzREc+2c2KYd3S0p/Wv9X7MIc=;
+        b=RKLvAVXXkJu8BZils2ZlwOpiTH/tlNs4Jq7UsKgyWyg0+O7RrM3sRXDtYYSqUdpnFe
+         9qsQD4YAvtoKyd9MHyyRFXjsYAvJ7/CWSxUfPuB1i8fa4ULalUKNmAjKa064Fv7hE3Tn
+         h7+kcAOsdlvs14/xCAFZHmTXXhbQhR3RaIBRy3HwlmmufyCDxgD6bRfhlYnGeT4dprjf
+         +rHxLVkBnf1ZK+aXHzcTPaVB0osDjbnp/cRjytXMcMJQAfV/KCbX4R48o22LF7p7PgeB
+         4qEHdlgb7dL4+UjOSZTRR7RiaHkcaKot8kgRO3lBzbgnpSK65pH+Wx+W6u7ZeTUBZiDu
+         uaOw==
+X-Gm-Message-State: AOAM533aOEW+5+05hF+U4bxoAbsS0X39y6rAaPR6PrPLELLM40BGetUt
+        yTn1PuBErMBcT6jxHlh1/Cgwaf6oyv0figUyFXKuFup8tOo9
+X-Google-Smtp-Source: ABdhPJw14P7CBwpVD017iscgSxpeYEOKiTbswdQ+qjsuc8jOMmAEFFiwc4iS66FSjVgskWlH1gc92AYMS8GmDsc0kxpdzyp7wtFh
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6e02:1a0a:: with SMTP id s10mr2075014ild.297.1644921737274;
+ Tue, 15 Feb 2022 02:42:17 -0800 (PST)
+Date:   Tue, 15 Feb 2022 02:42:17 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d56a0305d80c2f2b@google.com>
+Subject: [syzbot] KMSAN: uninit-value in ax88179_led_setting
+From:   syzbot <syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com>
+To:     arnd@arndb.de, davem@davemloft.net, glider@google.com,
+        jgg@ziepe.ca, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        phil@philpotter.co.uk, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since PCI core provides a generic PCI_DEVICE_DATA() macro,
-replace MID_DEVICE() with former one.
+Hello,
 
-No functional change intended.
+syzbot found the following issue on:
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+HEAD commit:    85cfd6e539bd kmsan: core: delete kmsan_gup_pgd_range()
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=12d6c53c700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b9807dd5b044fd7a
+dashboard link: https://syzkaller.appspot.com/bug?extid=d3dbdf31fbe9d8f5f311
+compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com
+
+ax88179_178a 2-1:0.35 (unnamed net_device) (uninitialized): Failed to read reg index 0x0001: -71
+ax88179_178a 2-1:0.35 (unnamed net_device) (uninitialized): Failed to read reg index 0x0002: -71
+=====================================================
+BUG: KMSAN: uninit-value in ax88179_check_eeprom drivers/net/usb/ax88179_178a.c:1074 [inline]
+BUG: KMSAN: uninit-value in ax88179_led_setting+0x884/0x30b0 drivers/net/usb/ax88179_178a.c:1168
+ ax88179_check_eeprom drivers/net/usb/ax88179_178a.c:1074 [inline]
+ ax88179_led_setting+0x884/0x30b0 drivers/net/usb/ax88179_178a.c:1168
+ ax88179_bind+0xe75/0x1990 drivers/net/usb/ax88179_178a.c:1411
+ usbnet_probe+0x1284/0x4140 drivers/net/usb/usbnet.c:1747
+ usb_probe_interface+0xf19/0x1600 drivers/usb/core/driver.c:396
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach+0x593/0x8e0 drivers/base/dd.c:969
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:1016
+ bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
+ device_add+0x1d3e/0x2400 drivers/base/core.c:3394
+ usb_set_configuration+0x37e9/0x3ed0 drivers/usb/core/message.c:2170
+ usb_generic_driver_probe+0x13c/0x300 drivers/usb/core/generic.c:238
+ usb_probe_device+0x309/0x570 drivers/usb/core/driver.c:293
+ really_probe+0x67d/0x1510 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:751
+ driver_probe_device drivers/base/dd.c:781 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:898
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach+0x593/0x8e0 drivers/base/dd.c:969
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:1016
+ bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
+ device_add+0x1d3e/0x2400 drivers/base/core.c:3394
+ usb_new_device+0x1b8e/0x2950 drivers/usb/core/hub.c:2563
+ hub_port_connect drivers/usb/core/hub.c:5353 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
+ port_event drivers/usb/core/hub.c:5643 [inline]
+ hub_event+0x5ad2/0x8910 drivers/usb/core/hub.c:5725
+ process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
+ process_scheduled_works kernel/workqueue.c:2361 [inline]
+ worker_thread+0x1735/0x21f0 kernel/workqueue.c:2447
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+Local variable eeprom.i created at:
+ ax88179_check_eeprom drivers/net/usb/ax88179_178a.c:1045 [inline]
+ ax88179_led_setting+0x2e2/0x30b0 drivers/net/usb/ax88179_178a.c:1168
+ ax88179_bind+0xe75/0x1990 drivers/net/usb/ax88179_178a.c:1411
+
+CPU: 1 PID: 13457 Comm: kworker/1:0 Not tainted 5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+=====================================================
+
+
 ---
- drivers/tty/serial/8250/8250_mid.c | 16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/tty/serial/8250/8250_mid.c b/drivers/tty/serial/8250/8250_mid.c
-index 5616fc0f7403..a2a03acb04ad 100644
---- a/drivers/tty/serial/8250/8250_mid.c
-+++ b/drivers/tty/serial/8250/8250_mid.c
-@@ -377,16 +377,14 @@ static const struct mid8250_board dnv_board = {
- 	.exit = dnv_exit,
- };
- 
--#define MID_DEVICE(id, board) { PCI_VDEVICE(INTEL, id), (kernel_ulong_t)&board }
--
- static const struct pci_device_id pci_ids[] = {
--	MID_DEVICE(PCI_DEVICE_ID_INTEL_PNW_UART1, pnw_board),
--	MID_DEVICE(PCI_DEVICE_ID_INTEL_PNW_UART2, pnw_board),
--	MID_DEVICE(PCI_DEVICE_ID_INTEL_PNW_UART3, pnw_board),
--	MID_DEVICE(PCI_DEVICE_ID_INTEL_TNG_UART, tng_board),
--	MID_DEVICE(PCI_DEVICE_ID_INTEL_CDF_UART, dnv_board),
--	MID_DEVICE(PCI_DEVICE_ID_INTEL_DNV_UART, dnv_board),
--	{ },
-+	{ PCI_DEVICE_DATA(INTEL, PNW_UART1, &pnw_board) },
-+	{ PCI_DEVICE_DATA(INTEL, PNW_UART2, &pnw_board) },
-+	{ PCI_DEVICE_DATA(INTEL, PNW_UART3, &pnw_board) },
-+	{ PCI_DEVICE_DATA(INTEL, TNG_UART, &tng_board) },
-+	{ PCI_DEVICE_DATA(INTEL, CDF_UART, &dnv_board) },
-+	{ PCI_DEVICE_DATA(INTEL, DNV_UART, &dnv_board) },
-+	{ }
- };
- MODULE_DEVICE_TABLE(pci, pci_ids);
- 
--- 
-2.34.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

@@ -2,88 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA454B678D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BCD44B678E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235863AbiBOJ14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:27:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48532 "EHLO
+        id S235877AbiBOJ22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:28:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231675AbiBOJ1y (ORCPT
+        with ESMTP id S234904AbiBOJ21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:27:54 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41087F6EC;
-        Tue, 15 Feb 2022 01:27:44 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JybND3Sq6z4xNn;
-        Tue, 15 Feb 2022 20:27:40 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644917260;
-        bh=McdOwpaEj6gFhhNqxdSro7qiIBma8FGDAXXUlis6U/Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=RbHHSuExVJLIrwe2TGC9gaVKPD3i2XkOPnouY4HmiiTx/NFuigy1vXltxg4Dej3VN
-         waUwZeyXkQgdKb+D+QGoUOiog1y4YzU37GRqEOBACxMiudJaYXhvZfT/CP8W5PhPaA
-         8kS8xaVRrnWNdLzJKsI16FX3lW5nHC6agsiD8OjXCANMNSLSpQSw7SIP26GGgPnEzb
-         GfYDjI6GAc2M7EZg+jRW45Ad0kSVfipinaLKR5jzo1esK+VK5AyCYPSrMXwg2iWvIH
-         cl+C3PPWpuTUr3YxP5eYjy7aJo1EJofJAZNZQe07l+CHDTrmcn0lcNtnOTTTjheBjE
-         noARtUrmRH8ng==
-Date:   Tue, 15 Feb 2022 20:27:39 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Chuck Lever <chuck.lever@oracle.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the nfsd tree
-Message-ID: <20220215202739.39a276f4@canb.auug.org.au>
+        Tue, 15 Feb 2022 04:28:27 -0500
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EF38564C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:28:17 -0800 (PST)
+Received: by mail-vs1-xe2b.google.com with SMTP id e6so9982864vsa.8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:28:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=AuT4st4Mdz6E9ng3de55/ySJOc7SimIbntAvhT1m0cqPZOG6LuTnGC/6NPWMJM9aa3
+         GU6Xayt+4eWuUyMPl5Sgzde6f0W+8F7czDsC0ztr3vGyUkL27JqfpuKu0MicT3M/C0EC
+         JNXFfgNifPi7cYw7TOMn0ZLeToMElWTxOE0dsewnE17ULW4ejAOqSNh87fTVJarttdCk
+         YXdIlLPNsxrlZU6KKnJGOUMcsedx4vtj5hqjKVeNjTYUjEf6+Gy6JORuTwNaecppcWXG
+         z4Lp2t3viyr1CxuQQl1eDeNLq1RzzoTMQgCf43M+ZhJKmk++vF/d94P3ZkhCvXxuGfws
+         q3kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=CrDW0Dxg7m6qE0x2rlh2OEfet5rwRcDK7FVixi5RkYJG+ltOH9yGlVV63mSQx+x8yr
+         rBOX/taSlJURGRY5xAvLCRUiQEQZe8LdH9tmQoussZFOaEILOdocp9OYJIG6RdfTVSEw
+         TpUaCitXjtZKFzmOWsyFGcWdiH1hjSMglTo7l/2vtgV5piT+Tf4OsGi328/1bLNJj493
+         LiL4BpMxdkMulCQny+Tn0OCgnPAN0gtLkcbuj9vwd8gn/JpBrVaWQ1XZfjsOW4EVz3HU
+         XCJiYuXQWANLjVa5waKpbdY8Qf18XB+cVVsoAEz6xBp4fnKP5TyLN9QcDSdYdH+/RVsG
+         CJvA==
+X-Gm-Message-State: AOAM532DeKC6I/LvTPyiJy7cEX1qOAwSJTH4jhEwFclyImNERvJWOYal
+        x6INsAmHVpcl2hSwlcrLnlN2MADK6EHfPHKwxB8=
+X-Google-Smtp-Source: ABdhPJxuTONBmBP64sTTVG7d/1dnWCuVvKDwDdanYFvqIzYKLJUFlcRAzXvJDnB8GICyiS5tK54G/Ah/gzAdetc8vOU=
+X-Received: by 2002:a67:cc14:: with SMTP id q20mr1065811vsl.30.1644917296940;
+ Tue, 15 Feb 2022 01:28:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WB/10e_mJ+uptyhUrLKooAW";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:612c:1081:b0:280:7250:5ff2 with HTTP; Tue, 15 Feb 2022
+ 01:28:16 -0800 (PST)
+Reply-To: abrahamamesse@outlook.com
+From:   Abraham Amesse <lkpeazusgeorge@gmail.com>
+Date:   Tue, 15 Feb 2022 09:28:16 +0000
+Message-ID: <CAKrG5eUykiu06ftVP1RMXapb9k0ZEX0sKzyUHLXDHooQzoNoGw@mail.gmail.com>
+Subject: Please. I would like to know if you received the message which I sent
+ to you two days ago concerning humanitarian aid work.Many thanks and God bless
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e2b listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4435]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [lkpeazusgeorge[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/WB/10e_mJ+uptyhUrLKooAW
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
-
-After merging the nfsd tree, today's linux-next build (htmldocs) produced
-this warning:
-
-Documentation/networking/kapi:62: net/sunrpc/svc_xprt.c:331: WARNING: Unkno=
-wn target name: "sock".
-
-Introduced by commit
-
-  26978084103a ("SUNRPC: Rename svc_create_xprt()")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/WB/10e_mJ+uptyhUrLKooAW
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmILcgsACgkQAVBC80lX
-0GzM1AgAiUly3qExp9sgIg+7M8AD61k1YJAoZkxV8DRq4NyO77YKWAZEMSabP+VR
-IKgYOivfIhcCNILObv1/96arcDqwVeteK/x7K1Kpi9vbAfyEUrEYIsXXNd6/Z/AN
-6nFq3PEKvrZQqCpS4KUJJVBOPtcAqvibCPiH1YRmfUYVJg+cVwr7gT9aQckiNCjp
-WMnhvy/tevYjFQgsTF7rCdW5AKb/7nw6CjAsjqH4yQn8B/TU1biSzPrCGU64bsc2
-tEIPcMawb5xWPxencBf/Ha48bOp72wr7OjfYE6sEXBXxEAV/889BEbkPapgDLm7J
-leo4X2V3JTm7swVm51P2ntozqzOSNA==
-=OKbN
------END PGP SIGNATURE-----
-
---Sig_/WB/10e_mJ+uptyhUrLKooAW--

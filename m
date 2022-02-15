@@ -2,190 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0692F4B71FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 937D74B7177
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241444AbiBOQLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:11:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42022 "EHLO
+        id S241442AbiBOQLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:11:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241575AbiBOQLV (ORCPT
+        with ESMTP id S241623AbiBOQL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:11:21 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C966ACE91D
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:11:07 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id h5so717027ioj.3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:11:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Uya3VrJ5mbeW5e3EiyZomdfwW6pYC+/8k7L0vXEy/64=;
-        b=GqhrTd29C1Fa/GF7XdeyaZQ3hqUrBB2h17CHBFffHv2hxDx4zjmbEz0vOyg0Iq6R4M
-         2H7TFNA3sVqU8hkGQKByqZzQE7IH19x0/irG56NJvKU+wpiHH9Dv0RwN43FfYB3shghc
-         QMqwnn6TGVnovhyQd07APJlJB7dev7UiXwUtc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Uya3VrJ5mbeW5e3EiyZomdfwW6pYC+/8k7L0vXEy/64=;
-        b=gx9CtzNZJ2i3kdylPROMYTJ2oxhn+JNVY4SG2JTtmRt1Dyb8n89sccTr0nFlhwBgx3
-         rLJAu77dBo+R3mSTCIaw29TKp+UHTHDDF5ajo3xsJ+xDAqAUFIhoydnH2EYMfdqsGAJr
-         8oUqn0h+2jgZt00GzYq0hXy+bVD3hBWJyIm3auT2WFIIRnIGdJIbMqihtEgccy46hPaj
-         UaAD/teeCKktoeFOCfMLOx8d2zlmHmF8xEy7vLI8lQjopMjfMYtCgFIe+OdC9Jemt4g2
-         dpD+ElXM+q7dqQhmqrgVNI5/fCB2mx2VsNAGkc+S4o8PCci7Ai+S4oGMF3In81zUrdxv
-         Vjbg==
-X-Gm-Message-State: AOAM530oYtVeZH7vjgaVvkLy4bHY+1lDrKnfrzkQgF+cMhHFhkdWuh+g
-        LZiqtkPXc0p9btRz2ACJ979O0w==
-X-Google-Smtp-Source: ABdhPJwNMQ+hD4yYnX67fbKxMkuWIh4ikYUTO3MVI4i6Lb6x2R7QnWChrXVehVMDRoy3LOMo6wasHA==
-X-Received: by 2002:a05:6638:6bb:: with SMTP id d27mr3009674jad.231.1644941467203;
-        Tue, 15 Feb 2022 08:11:07 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id l2sm5384520ilv.66.2022.02.15.08.11.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 08:11:06 -0800 (PST)
-Subject: Re: [PATCH v2 6/6] selftests/bpf: Add test for
- bpf_lsm_kernel_read_file()
-To:     Roberto Sassu <roberto.sassu@huawei.com>, zohar@linux.ibm.com,
-        shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kpsingh@kernel.org, revest@chromium.org
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220215124042.186506-1-roberto.sassu@huawei.com>
- <20220215124042.186506-7-roberto.sassu@huawei.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <a06aaff2-2760-faff-db00-082543953bfe@linuxfoundation.org>
-Date:   Tue, 15 Feb 2022 09:11:05 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 15 Feb 2022 11:11:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D6C9AD96;
+        Tue, 15 Feb 2022 08:11:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18207B81B3D;
+        Tue, 15 Feb 2022 16:11:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1570C340F0;
+        Tue, 15 Feb 2022 16:11:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644941474;
+        bh=i5obIJ0DwCv/AaBdy0yjZuQs07k8fQqBuIkOGBE3DVA=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=I175An+sZ3Inl+RRsYN8U/CYYst114L6OrhxbcoSFmG06RAZh3Pw3c0590AKVpLUG
+         9FRaO1232fmttrW8JAnBnTm95boSVwCgY0ivuExL2nqd84GCgawIcq3U8xI0F2/4j2
+         z3su7G+u5EUirn/1mf2CWVZHmryEILU6jR8GOGtWVDpCxtplfgkI+p7pYLIVMhiZWb
+         ZLAbh7dR63vkp+q8EgQ0GmpsEr6bYsa02rp7lOEGObAJ5kP2B3za2WAdzWID3mCFkg
+         V7RnrMPpF3rPdvbO6OWOAO0C+8ifpWcoB9Vsjn1xlCmADOy4p9b3rze87XKT3SKHHb
+         7BbN4m2XwiDVQ==
+Date:   Tue, 15 Feb 2022 17:11:11 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Johannes Berg <johannes@sipsolutions.net>
+cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ping-Ke Shih <pkshih@realtek.com>
+Subject: [PATCH] rtw89: fix RCU usage in rtw89_core_txq_push() (was Re:
+ [PATCH] mac80211: fix RCU usage in ieee80211_tx_h_select_key())
+In-Reply-To: <af6abf72593074c007fe42205e941dabfd08bf3a.camel@sipsolutions.net>
+Message-ID: <nycvar.YFH.7.76.2202151700540.11721@cbobk.fhfr.pm>
+References: <nycvar.YFH.7.76.2202151643220.11721@cbobk.fhfr.pm> <af6abf72593074c007fe42205e941dabfd08bf3a.camel@sipsolutions.net>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <20220215124042.186506-7-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/22 5:40 AM, Roberto Sassu wrote:
-> Test the ability of bpf_lsm_kernel_read_file() to call the sleepable
-> functions bpf_ima_inode_hash() or bpf_ima_file_hash() to obtain a
-> measurement of a loaded IMA policy.
+On Tue, 15 Feb 2022, Johannes Berg wrote:
+
+> > 
+> > ieee80211_tx_h_select_key() is performing a series of RCU dereferences, 
+> > but none of the callers seems to be taking RCU read-side lock; let's 
+> > acquire the lock in ieee80211_tx_h_select_key() itself.
+> > 
+> but but ...
 > 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->   tools/testing/selftests/bpf/ima_setup.sh      |  2 ++
->   .../selftests/bpf/prog_tests/test_ima.c       |  3 +-
->   tools/testing/selftests/bpf/progs/ima.c       | 28 ++++++++++++++++---
->   3 files changed, 28 insertions(+), 5 deletions(-)
+> >   ieee80211_tx_dequeue+0x1a7/0x1260 [mac80211 911c23e2351c0ae60b597a67b1204a5ea955e365]
+> >   rtw89_core_txq_work+0x1a6/0x420 [rtw89_core b39ba493f2e517ad75e0f8187ecc24edf58bbbea]
 > 
-> diff --git a/tools/testing/selftests/bpf/ima_setup.sh b/tools/testing/selftests/bpf/ima_setup.sh
-> index 8e62581113a3..82530f19f85a 100755
-> --- a/tools/testing/selftests/bpf/ima_setup.sh
-> +++ b/tools/testing/selftests/bpf/ima_setup.sh
-> @@ -51,6 +51,7 @@ setup()
->   
->   	ensure_mount_securityfs
->   	echo "measure func=BPRM_CHECK fsuuid=${mount_uuid}" > ${IMA_POLICY_FILE}
-> +	echo "measure func=BPRM_CHECK fsuuid=${mount_uuid}" > ${mount_dir}/policy_test
->   }
->   
->   cleanup() {
-> @@ -74,6 +75,7 @@ run()
->   	local mount_dir="${tmp_dir}/mnt"
->   	local copied_bin_path="${mount_dir}/$(basename ${TEST_BINARY})"
->   
-> +	echo ${mount_dir}/policy_test > ${IMA_POLICY_FILE}
->   	exec "${copied_bin_path}"
->   }
->   
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_ima.c b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-> index 62bf0e830453..c4a62d7b70df 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_ima.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-> @@ -97,8 +97,9 @@ void test_test_ima(void)
->   	/*
->   	 * 1 sample with use_ima_file_hash = false
->   	 * 2 samples with use_ima_file_hash = true (./ima_setup.sh, /bin/true)
-> +	 * 1 sample with use_ima_file_hash = true (IMA policy)
->   	 */
-> -	ASSERT_EQ(err, 3, "num_samples_or_err");
-> +	ASSERT_EQ(err, 4, "num_samples_or_err");
->   	ASSERT_NEQ(ima_hash_from_bpf, 0, "ima_hash");
->   
->   close_clean:
-> diff --git a/tools/testing/selftests/bpf/progs/ima.c b/tools/testing/selftests/bpf/progs/ima.c
-> index 9bb63f96cfc0..9b4c03f30a1c 100644
-> --- a/tools/testing/selftests/bpf/progs/ima.c
-> +++ b/tools/testing/selftests/bpf/progs/ima.c
-> @@ -20,8 +20,7 @@ char _license[] SEC("license") = "GPL";
->   
->   bool use_ima_file_hash;
->   
-> -SEC("lsm.s/bprm_committed_creds")
-> -void BPF_PROG(ima, struct linux_binprm *bprm)
-> +static void ima_test_common(struct file *file)
->   {
->   	u64 ima_hash = 0;
->   	u64 *sample;
-> @@ -31,10 +30,10 @@ void BPF_PROG(ima, struct linux_binprm *bprm)
->   	pid = bpf_get_current_pid_tgid() >> 32;
->   	if (pid == monitored_pid) {
->   		if (!use_ima_file_hash)
-> -			ret = bpf_ima_inode_hash(bprm->file->f_inode, &ima_hash,
-> +			ret = bpf_ima_inode_hash(file->f_inode, &ima_hash,
->   						 sizeof(ima_hash));
->   		else
-> -			ret = bpf_ima_file_hash(bprm->file, &ima_hash,
-> +			ret = bpf_ima_file_hash(file, &ima_hash,
->   						sizeof(ima_hash));
->   		if (ret < 0 || ima_hash == 0)
-
-Is this considered an error? Does it make sense for this test to be
-void type and not return the error to its callers? One of the callers
-below seems to care for return values.
-
->   			return;
-> @@ -49,3 +48,24 @@ void BPF_PROG(ima, struct linux_binprm *bprm)
->   
->   	return;
->   }
-> +
-> +SEC("lsm.s/bprm_committed_creds")
-> +void BPF_PROG(ima, struct linux_binprm *bprm)
-> +{
-> +	ima_test_common(bprm->file);
-> +}
-> +
-> +SEC("lsm.s/kernel_read_file")
-> +int BPF_PROG(kernel_read_file, struct file *file, enum kernel_read_file_id id,
-> +	     bool contents)
-> +{
-> +	if (!contents)
-> +		return 0;
-> +
-> +	if (id != READING_POLICY)
-> +		return 0;
-> +
-> +	ima_test_common(file);
-
-This one here.
-
-> +
-> +	return 0;
-> +}
+> /**
+>  * ieee80211_tx_dequeue - dequeue a packet from a software tx queue
+>  *
+>  * @hw: pointer as obtained from ieee80211_alloc_hw()
+>  * @txq: pointer obtained from station or virtual interface, or from
+>  *      ieee80211_next_txq()
+>  *
+>  * Returns the skb if successful, %NULL if no frame was available.
+>  *
+>  * Note that this must be called in an rcu_read_lock() critical section,
+>  * which can only be released after the SKB was handled. Some pointers in
+> [...]
 > 
+> -> driver bug?
 
-thanks,
--- Shuah
+Right you are, thanks.
+
+CCing Ping-Ke Shih; find updated fix below.
+
+
+
+
+From: Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH] rtw89: fix RCU usage in rtw89_core_txq_push()
+
+ieee80211_tx_h_select_key() is performing a series of RCU dereferences,
+but rtw89_core_txq_push() is calling it (via ieee80211_tx_dequeue_ni())
+without RCU read-side lock held; fix that.
+
+This addresses the splat below.
+
+ =============================
+ WARNING: suspicious RCU usage
+ 5.17.0-rc4-00003-gccad664b7f14 #3 Tainted: G            E
+ -----------------------------
+ net/mac80211/tx.c:593 suspicious rcu_dereference_check() usage!
+
+ other info that might help us debug this:
+
+ rcu_scheduler_active = 2, debug_locks = 1
+ 2 locks held by kworker/u33:0/184:
+  #0: ffff9c0b14811d38 ((wq_completion)rtw89_tx_wq){+.+.}-{0:0}, at: process_one_work+0x258/0x660
+  #1: ffffb97380cf3e78 ((work_completion)(&rtwdev->txq_work)){+.+.}-{0:0}, at: process_one_work+0x258/0x660
+
+ stack backtrace:
+ CPU: 8 PID: 184 Comm: kworker/u33:0 Tainted: G            E     5.17.0-rc4-00003-gccad664b7f14 #3 473b49ab0e7c2d6af2900c756bfd04efd7a9de13
+ Hardware name: LENOVO 20UJS2B905/20UJS2B905, BIOS R1CET63W(1.32 ) 04/09/2021
+ Workqueue: rtw89_tx_wq rtw89_core_txq_work [rtw89_core]
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0x58/0x71
+  ieee80211_tx_h_select_key+0x2c0/0x530 [mac80211 911c23e2351c0ae60b597a67b1204a5ea955e365]
+  ieee80211_tx_dequeue+0x1a7/0x1260 [mac80211 911c23e2351c0ae60b597a67b1204a5ea955e365]
+  rtw89_core_txq_work+0x1a6/0x420 [rtw89_core b39ba493f2e517ad75e0f8187ecc24edf58bbbea]
+  process_one_work+0x2d8/0x660
+  worker_thread+0x39/0x3e0
+  ? process_one_work+0x660/0x660
+  kthread+0xe5/0x110
+  ? kthread_complete_and_exit+0x20/0x20
+  ret_from_fork+0x22/0x30
+  </TASK>
+
+ =============================
+ WARNING: suspicious RCU usage
+ 5.17.0-rc4-00003-gccad664b7f14 #3 Tainted: G            E
+ -----------------------------
+ net/mac80211/tx.c:607 suspicious rcu_dereference_check() usage!
+
+ other info that might help us debug this:
+
+ rcu_scheduler_active = 2, debug_locks = 1
+ 2 locks held by kworker/u33:0/184:
+  #0: ffff9c0b14811d38 ((wq_completion)rtw89_tx_wq){+.+.}-{0:0}, at: process_one_work+0x258/0x660
+  #1: ffffb97380cf3e78 ((work_completion)(&rtwdev->txq_work)){+.+.}-{0:0}, at: process_one_work+0x258/0x660
+
+ stack backtrace:
+ CPU: 8 PID: 184 Comm: kworker/u33:0 Tainted: G            E     5.17.0-rc4-00003-gccad664b7f14 #3 473b49ab0e7c2d6af2900c756bfd04efd7a9de13
+ Hardware name: LENOVO 20UJS2B905/20UJS2B905, BIOS R1CET63W(1.32 ) 04/09/2021
+ Workqueue: rtw89_tx_wq rtw89_core_txq_work [rtw89_core]
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0x58/0x71
+  ieee80211_tx_h_select_key+0x464/0x530 [mac80211 911c23e2351c0ae60b597a67b1204a5ea955e365]
+  ieee80211_tx_dequeue+0x1a7/0x1260 [mac80211 911c23e2351c0ae60b597a67b1204a5ea955e365]
+  rtw89_core_txq_work+0x1a6/0x420 [rtw89_core b39ba493f2e517ad75e0f8187ecc24edf58bbbea]
+  process_one_work+0x2d8/0x660
+  worker_thread+0x39/0x3e0
+  ? process_one_work+0x660/0x660
+  kthread+0xe5/0x110
+  ? kthread_complete_and_exit+0x20/0x20
+  ret_from_fork+0x22/0x30
+  </TASK>
+
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+---
+ drivers/net/wireless/realtek/rtw89/core.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/realtek/rtw89/core.c b/drivers/net/wireless/realtek/rtw89/core.c
+index a0737eea9f81..9632e7f218dd 100644
+--- a/drivers/net/wireless/realtek/rtw89/core.c
++++ b/drivers/net/wireless/realtek/rtw89/core.c
+@@ -1509,11 +1509,12 @@ static void rtw89_core_txq_push(struct rtw89_dev *rtwdev,
+ 	unsigned long i;
+ 	int ret;
+ 
++	rcu_read_lock();
+ 	for (i = 0; i < frame_cnt; i++) {
+ 		skb = ieee80211_tx_dequeue_ni(rtwdev->hw, txq);
+ 		if (!skb) {
+ 			rtw89_debug(rtwdev, RTW89_DBG_TXRX, "dequeue a NULL skb\n");
+-			return;
++			goto out;
+ 		}
+ 		rtw89_core_txq_check_agg(rtwdev, rtwtxq, skb);
+ 		ret = rtw89_core_tx_write(rtwdev, vif, sta, skb, NULL);
+@@ -1523,6 +1524,8 @@ static void rtw89_core_txq_push(struct rtw89_dev *rtwdev,
+ 			break;
+ 		}
+ 	}
++out:
++	rcu_read_unlock();
+ }
+ 
+ static u32 rtw89_check_and_reclaim_tx_resource(struct rtw89_dev *rtwdev, u8 tid)
+
+-- 
+Jiri Kosina
+SUSE Labs
+

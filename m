@@ -2,114 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701244B6A0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:00:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C71144B6A10
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236824AbiBOLAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 06:00:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37376 "EHLO
+        id S236834AbiBOLBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 06:01:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232569AbiBOLAO (ORCPT
+        with ESMTP id S232569AbiBOLBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 06:00:14 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F0BF9562;
-        Tue, 15 Feb 2022 03:00:03 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id qx21so3585538ejb.13;
-        Tue, 15 Feb 2022 03:00:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:date:in-reply-to:references:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=ghHnLt9KrJYO+G0i0QzfYNVgGr31SkfKmR4sqVkFlfs=;
-        b=Qgc2DVgHtdjILhRGkVrfMOxv9fz1gHVsohxebaioI2GQpfys/aMW1kuUyIfG48kORc
-         g+2QE5e9NYiCG5OaEaL6aq1GQu7ywGewcW954t7/VW9n6UrZSsryS82Faz1Yyp2hUhFS
-         ecuxrTqjq8emgnviOntB956S4OSQaPf8zH4XeL7qL+/C7Xmnm62KDYmfkGwR+NviiVnX
-         NYxqcK5/trQY4oEn611Jv6AAQPtwsC4uRB/J1IvuHh7wAg8OWJ0dYszHwKL3j05Z8z97
-         /+uaTf6kF1gpquLwlZk7MpT4Nw6OjzdJIx+x4bFeikc7pHf1pVYdg9D/+sNJEyZ4Lbzr
-         O3gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=ghHnLt9KrJYO+G0i0QzfYNVgGr31SkfKmR4sqVkFlfs=;
-        b=1GzBw6ZxrdkykNWanWPsx6mFRKyMSUt13e6qD0juyhesMukWO24snWU8YunsfNC5q0
-         YLHQlEAH0gjx2PxkbACgCE+zCrVxniMpFerxi8iyXXts/FavHlR3vUJAsELFJDas9+HO
-         dLSy6I4ybUIEjBxEeErH7qjrUmWajJuGnvEWb2vW3jwb3pfGyI41KY2zlXnzZA4osspv
-         cPOWTLonNcyxSxvQHYZD0AuTdK/1b0zJTAC0/ed3qvfrOGW+Onmj3sXy1E9m1lscxKkq
-         rVk1pd/qqDx+nZmfRDzmBlBVO3APwpzc1NDdqVFacnAW/tr7bYfVNAsEXuZ48GhAuO/o
-         tRZA==
-X-Gm-Message-State: AOAM530lFNzffTAIRrq0cQtjo4Oec4ie5A0GQr4GKB2feFE95fuStDhI
-        B/AaLk4Cv1IUlWANvZz9vUXUBO/NsMno2A==
-X-Google-Smtp-Source: ABdhPJwj/drfAuAWcIW3L+1EOkn9TG0P70eiS4wI5AnmiJdAA3KfpO1RZpUhHLgClx/hrpcheXMTHA==
-X-Received: by 2002:a17:906:a212:: with SMTP id r18mr2500109ejy.598.1644922802461;
-        Tue, 15 Feb 2022 03:00:02 -0800 (PST)
-Received: from ubuntu-laptop (p4fd5939b.dip0.t-ipconnect.de. [79.213.147.155])
-        by smtp.googlemail.com with ESMTPSA id q8sm5619340edd.10.2022.02.15.03.00.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 03:00:02 -0800 (PST)
-Message-ID: <1cb4db5f707692afedb005e2577f667f5e48e66e.camel@gmail.com>
-Subject: Re: [PATCH v1] scsi: ufs: remove clk_scaling_lock when clkscaling
- isn't supported.
-From:   Bean Huo <huobean@gmail.com>
-To:     Kiwoong Kim <kwmad.kim@samsung.com>,
-        'Adrian Hunter' <adrian.hunter@intel.com>,
-        'Avri Altman' <Avri.Altman@wdc.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alim.akhtar@samsung.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        cang@codeaurora.org, sc.suh@samsung.com, hy50.seo@samsung.com,
-        sh425.lee@samsung.com, bhoon95.kim@samsung.com,
-        vkumar.1997@samsung.com
-Date:   Tue, 15 Feb 2022 12:00:00 +0100
-In-Reply-To: <000001d81fcb$3b962f30$b2c28d90$@samsung.com>
-References: <CGME20220205074128epcas2p40901c37a7328e825d8697f8d3269edba@epcas2p4.samsung.com>
-         <1644046760-83345-1-git-send-email-kwmad.kim@samsung.com>
-         <DM6PR04MB657519E60FAFA19434531CE2FC2B9@DM6PR04MB6575.namprd04.prod.outlook.com>
-         <007101d81eed$4d120a60$e7361f20$@samsung.com>
-         <3f2938f7-2a9e-60e8-5237-fe7ebc3b4296@intel.com>
-         <000001d81fcb$3b962f30$b2c28d90$@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 15 Feb 2022 06:01:23 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0637AF9566;
+        Tue, 15 Feb 2022 03:01:14 -0800 (PST)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:6d7b:ae43:289b:7e7c])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 31C8E1F444CE;
+        Tue, 15 Feb 2022 11:01:12 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644922872;
+        bh=gsNBuzdzzks7myB40+JYRtDgIY/SWyjCVVU2wOm0oU8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=X4q/A1JquTkGBwGJh+GJwt0ouraY9iqgypV3DEBEMYfsDUltHT97Ws2nH9Bi/iFCX
+         cQ0dHTJo+H1uAbXmbhsO2H9eqw+rs+FJsarFyo6TS3Q6VUjucae2B2LDMmTge5bouv
+         kO3Tdue04FlGSGP4TV+na5bhCntlEkSr2pATtHHdBtXNgPYjq5NKvdT3JHNMztTzEY
+         ivTJL6dfBCGBMl9OvQW4WgPxd/vw5u5yAxL5YOgxl61qyB155R5taqCW42RqVZwXYY
+         dWkNE+2coTh4EHvIGzIT5HW4erFZMhUP1k4juRVm+ym9048QKDg/aAc2A9P8rwZhxs
+         ep66xzCq+Ph5A==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, hverkuil-cisco@xs4all.nl,
+        jonas@kwiboo.se, nicolas@ndufresne.ca
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com, knaerzche@gmail.com, jc@kynesim.co.uk,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [RFC v2 0/8] Move HEVC stateless controls out of staging
+Date:   Tue, 15 Feb 2022 12:00:55 +0100
+Message-Id: <20220215110103.241297-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-02-12 at 13:44 +0900, Kiwoong Kim wrote:
-> > The error handler really should have exclusive access.  One of the
-> > places
-> > you change does explain that:
-> > 
-> >  		 * Hold the scaling lock just in case dev cmds
-> >  		 * are sent via bsg and/or sysfs.
-> >  		 */
-> > -		down_write(&hba->clk_scaling_lock);
-> > +		if (ufshcd_is_clkscaling_supported(hba))
-> > +			down_write(&hba->clk_scaling_lock); 
-> 
-> Yeah.., I saw the comment but didn't get why.
-> 
-> Is there anyone who knows why it's necessary for all SoCs?
-> At lease, I know there is no reason to forbid concurrent executions
-> of dev cmd and power mode change.
-> 
-> If there's nothing, how about adding a quick to ignore it?
-> 
-> Thanks.
-> Kiwoong Kim
-> 
+This series aims to make HEVC uapi stable and usable for hardware
+decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
+and 2 out of the tree drivers (rkvdec and RPI).
 
-The name of clk_scaling_lock has explained everything, for the platform
-which doesn't support load-based clk scaling, doesn't need to hold this
-lock.
+The 3 first patches are from Hans to implement v4l2 dynamic control
+feature which is need by patch 7 for V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET
+definition.
 
-Acked-by: Bean Huo <beanhuo@micron.com>
+Patch 4 move the existing uapi to stable, including definitions renaming 
+and CID number change to fit with v4l2 naming.
+
+Patches 5 and 7 add fields needed for rkvdec and RPI decoders.
+
+Patches 6 is cleaning up the uapi of useless field.
+Patches 8 change one field description and name to define offset by
+bytes rather than by bits
+
+Benjamin
+
+Benjamin Gaignard (5):
+  media: uapi: Move HEVC stateless controls out of staging
+  media: uapi: Add fields needed for RKVDEC driver
+  media: uapi: Remove bit_size field from v4l2_ctrl_hevc_slice_params
+  media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET control
+  media: uapi: Change data_bit_offset definition
+
+Hans Verkuil (3):
+  videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
+  v4l2-ctrls: add support for dynamically allocated arrays.
+  vivid: add dynamic array test control
+
+ .../userspace-api/media/drivers/hantro.rst    |   5 -
+ .../media/v4l/ext-ctrls-codec.rst             |  58 ++--
+ .../media/v4l/vidioc-queryctrl.rst            |   8 +
+ .../media/test-drivers/vivid/vivid-ctrls.c    |  15 ++
+ drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 ++++++--
+ drivers/media/v4l2-core/v4l2-ctrls-core.c     | 182 ++++++++++---
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  32 +--
+ drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
+ drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
+ drivers/staging/media/hantro/hantro_drv.c     |  27 +-
+ drivers/staging/media/hantro/hantro_hevc.c    |   8 +-
+ drivers/staging/media/sunxi/cedrus/cedrus.c   |  24 +-
+ .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
+ .../staging/media/sunxi/cedrus/cedrus_h265.c  |  13 +-
+ include/linux/hantro-media.h                  |  17 ++
+ include/media/hevc-ctrls.h                    | 250 ------------------
+ include/media/v4l2-ctrls.h                    |  48 +++-
+ include/uapi/linux/v4l2-controls.h            | 224 ++++++++++++++++
+ include/uapi/linux/videodev2.h                |   8 +
+ 19 files changed, 640 insertions(+), 408 deletions(-)
+ create mode 100644 include/linux/hantro-media.h
+ delete mode 100644 include/media/hevc-ctrls.h
+
+-- 
+2.32.0
 

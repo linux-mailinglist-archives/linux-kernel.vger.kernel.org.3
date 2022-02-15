@@ -2,522 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38BB44B67F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E18DF4B67F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:44:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236032AbiBOJnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:43:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42328 "EHLO
+        id S236037AbiBOJnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:43:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236027AbiBOJnV (ORCPT
+        with ESMTP id S232267AbiBOJnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:43:21 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7926CE61CF
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:43:10 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id y84so23197949iof.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:43:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6tHFDIvb87NSnFH0znH/n5gCa3cgTrrsv5QaAXCdOkE=;
-        b=JO3VYUSC2HLBARd1ExWchNrQ6vu0/JjEAU/EUHkwn3VL5mCqqt0tvXi7KDJS+2laBs
-         ZyNJQY2l8255G59F3DFVNX9E4wabvF327qVGtW74SFcNVeipieR7A9BuRUVi+3jtxMKJ
-         NBjg5LMHJxiRsketJ5Jn/qu2cDMgDeS993n3c0mwGbk1p1aixI2/TwlrDXb90cZ7WN7Z
-         v8WKjS3Q9vkRup0SJ+EUq0GWZ8y2ikIL+5TXlzkzN/CfkEuwC/PC+/QDGMySFdbQI3tX
-         bVMq6sduaR9CKv6sQgK6fKSvP7zRyK3I6k/0YUTa4sX0eYOByDbCqOVVnAuYGBTW0EZj
-         rnIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6tHFDIvb87NSnFH0znH/n5gCa3cgTrrsv5QaAXCdOkE=;
-        b=IlvW5EbsnBjVjhRjUbPIqWK3meKN+J4pURqt2gTNHCf1haecPz6oYqiedYKA60g7yM
-         xdb3El8/qYNAATQ0BHDCnXiM16CJimeW326/mD8mcsspvwQzXN0gu6vup3lOvJEMIfB1
-         6UNr2V9LbG77yGvhT4vV33oGtpJMaX+4NS/oh8UBFSSuTgk9kIPcZ0Yn+K8rrEcsBh3K
-         eoKv35DluqZbtEatcV3gXo3oQLrsV4bAPxmipm/+nhe/Iu/3nlQO2cD7uxwt3aNSONi3
-         GTz1t3mE2W3cEFmZEXyB8qwY8KLmADj8Y29HAX6nwb2DiIUzQMqfyLvxy/hD4DxZOia2
-         IK1w==
-X-Gm-Message-State: AOAM533jtXL90vPK1xDIN+lm33gPCGWdcd4L1ROeqe2MgZC8bbi2va9A
-        58jtLAW77fxBHrK+PDghOtifaA==
-X-Google-Smtp-Source: ABdhPJx/2423fhU39BzE3R4zRmMiZgSHFNbE5rzTKl11GhzUsGbejxoQQUZz7P1O7m5jOjHiUVmE8Q==
-X-Received: by 2002:a05:6602:1547:: with SMTP id h7mr1971656iow.186.1644918189548;
-        Tue, 15 Feb 2022 01:43:09 -0800 (PST)
-Received: from google.com ([2620:15c:183:200:f0b9:9467:d51:bde])
-        by smtp.gmail.com with ESMTPSA id x4sm21438596ilv.2.2022.02.15.01.43.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 01:43:08 -0800 (PST)
-Date:   Tue, 15 Feb 2022 02:43:05 -0700
-From:   Yu Zhao <yuzhao@google.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
-        <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>
-Subject: Re: [PATCH v7 04/12] mm: multigenerational LRU: groundwork
-Message-ID: <Ygt1qaQM5YobEZK9@google.com>
-References: <20220208081902.3550911-1-yuzhao@google.com>
- <20220208081902.3550911-5-yuzhao@google.com>
- <YgV4lZXc6+jhUdsR@cmpxchg.org>
+        Tue, 15 Feb 2022 04:43:53 -0500
+Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.109.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C49E543E
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:43:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
+        t=1644918220;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ae5PjJ+Ev/y6BUQoglqLNZsoMTZzF3tXsn5ogVczADM=;
+        b=h2xRU+6yAHsf536auMpm1cwA2WEVixxL14umtx3tGw/WPZhldahgBK5kt8WOqdFVIXOKKn
+        Za1zj3JuuvdFaYlyS+cl87v42QK2iajSSJiPEpUEt2kk4rG8IRMwkUdKyfFo19BOA/ntBx
+        5JaOpunsI9H7KL5xe7G23EqfHC6hMSE=
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com
+ (mail-he1eur01lp2051.outbound.protection.outlook.com [104.47.0.51]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-37-2VZzoYtcOPmfz_4WMO57uA-1; Tue, 15 Feb 2022 10:43:39 +0100
+X-MC-Unique: 2VZzoYtcOPmfz_4WMO57uA-1
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kEQMg3z6hn/dIRnestQ5i7RmdjF0v5Qa4c1Oxiyhv5QryYbaJCD+QrC1XD3RIqumYZSG1CEhqcFUC9qrYa42bpWZ3tHFpfneuRQI1J7q3Yzhuj3+0BCzRGDm2JeDSXzxvhGFRKB5qbaxLLKgab7+Byxm8IIr3d66868UQaKKWHatkCIa726qvPAkJAdbGOvEolg/DQeOI56Jdp3E1pMkbWTJAfdrUZCI5XD+r/ZIMMlfHA4Jsjos9eiJVhcm58kWsuGFwguJCKeHB3D15fMuUycl21scKcxJxC+0heHDxP/DXrujWMJXny77E/asBaXvYxdOMAQGdoLf7vhd8I9b5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=avKtqVx+U4efoFglTtF2j/oidk95GIkpaixuQlWK+Qw=;
+ b=WGBVxjgeCZWsslV8N70W2uJ4MIdrXyQTAUxqwt8IoJ6MWU1+b+YLExed2jitTkMMtx8PLLeNslL8J56nbdSPuDuO5c0n/nIkM0rONKTn4ijcR6zd/G5ER+vKXIp/oWetdkb22jpoDGCO4Y0yjXt2oIkqWqjgPKis0YDmKDEjrbzwTQrhGAiOOOT8TbUeryc1X+DaCq64Q0qVHZy3OCkq8hd8Fgr71Uay+jVeZxXtrm+TQpHQ16epO8HFUpDsGs1wTKJqGOYy+y69UK9IYH6FUSUV9N9rtvmrsAfH9wo92TPSmdt8llCGVp7u1FTYmOKxjkMvhOcVLOe+kjL71RnwIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from DB7PR04MB5050.eurprd04.prod.outlook.com (2603:10a6:10:22::23)
+ by VI1PR04MB5566.eurprd04.prod.outlook.com (2603:10a6:803:d4::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.19; Tue, 15 Feb
+ 2022 09:43:37 +0000
+Received: from DB7PR04MB5050.eurprd04.prod.outlook.com
+ ([fe80::98e0:cb7:30fd:254f]) by DB7PR04MB5050.eurprd04.prod.outlook.com
+ ([fe80::98e0:cb7:30fd:254f%5]) with mapi id 15.20.4975.018; Tue, 15 Feb 2022
+ 09:43:37 +0000
+Message-ID: <db6c18cd-73ca-f7b3-d5b6-fad9b3733d41@suse.com>
+Date:   Tue, 15 Feb 2022 10:43:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] xhci: reduce xhci_handshake timeout in xhci_reset
+Content-Language: en-US
+To:     Jung Daehwan <dh10.jung@samsung.com>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>
+CC:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_ugoswami@quicinc.com
+References: <1644836663-29220-1-git-send-email-quic_pkondeti@quicinc.com>
+ <1644841216-1468-1-git-send-email-quic_pkondeti@quicinc.com>
+ <d82746d2-4096-1477-42dd-fd393e0ff827@linux.intel.com>
+ <CGME20220214135321epcas2p19dc7b60c27304181a8863248103e7493@epcas2p1.samsung.com>
+ <20220214135310.GC31021@hu-pkondeti-hyd.qualcomm.com>
+ <20220215085108.GH144890@ubuntu>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20220215085108.GH144890@ubuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: AS9PR06CA0414.eurprd06.prod.outlook.com
+ (2603:10a6:20b:461::26) To DB7PR04MB5050.eurprd04.prod.outlook.com
+ (2603:10a6:10:22::23)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgV4lZXc6+jhUdsR@cmpxchg.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7f264b86-0c3d-447b-6dc4-08d9f067a3aa
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5566:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR04MB5566E21DD82A6E5022F7D496C7349@VI1PR04MB5566.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lVFXYogtZQQb/jyYr9f6ZhD+F/ZN0c+6TAIc23UoVF8bjddD1kKPL3/l0H1qgOGxV7ptq8132T8mwWsL+hXYYBSN64AOqoH1TjCvI9+UsRd72MeL4vGQlSjPNcOnQqcqcUm74Edav7Qpy5ydbI9vehD+o9x+8Kg0etvT5u2qJ2cbAM7LiEcddy0E9JyVWbesQSZsj9lBg62V1TswWdQPuiq+l9WYV33WpwEl/fc5FV4bjd6oQHubZJ7ly8DOKcx2jwuNyYJL0DyltozavA6l7tEEs7zyltwyu7DUKMNFinwM4SmEueKNu9jO03NB5rhJD6fX+M7hrYYzVoVLFjIyD0a7G8Zl18ArjOCRiMPIqDFnoy40lj17BJEu3ZWcsSxp/Zh5gXSvo+XMAE5WG7qwjk9fLIxLOF8JQZq6t4UR43WLhq7Vr6bKNBNlmaEjuG5IL3IlesApylpyrbDaM17kHMOkOKcQXWnxwVuR2RpgWCHknqJahm/jhZpzfN9s3LDc/RgHCl+4EKWAqoEOn94iBx12Cu6GmXnEd5FmNdOHsb3r2lZtQftj7M1u5M0CHMPW3QCFoLKNR2bdsq9XNp1blr9Hiz1C/dLY1RDN3kuDtpyOJBKZnNIbk6fePlWUy6ATRqrjiTPwqUXDSaOkubfrwS2sOyHD8VetezwhkU1vY4HStUw7nryEhobwlnII1DQwhL49fFJ22M1P26PUf5r40qHKxEx8BrvHgNl3q+o5PHY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB5050.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(2616005)(186003)(66946007)(66476007)(66556008)(8676002)(4326008)(8936002)(6666004)(5660300002)(2906002)(6512007)(6506007)(110136005)(54906003)(53546011)(4744005)(508600001)(316002)(6486002)(86362001)(31696002)(36756003)(31686004)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YwvjIlZB4fL4Nu0HmG/C7dn5zFSEFRHP7IkuwnF+ZzLy4t/rKNuGJFWKmoUz?=
+ =?us-ascii?Q?FawXZz73Yxqr8sgj2FLf9A14ZySLbZCR3x85nuFFxlGonPuiHmZYfzToPVkf?=
+ =?us-ascii?Q?UvfIdiKbMUEK8dXI9PN6l0SiOyJz4koa8WxNzGFDeRh0s6PN/nuyahcNaYdF?=
+ =?us-ascii?Q?WtkB5oXEk52bRVy/kqmj5firH6CkOXCnTEF8INhUF9zUHQHfz3q9YMlHqlnZ?=
+ =?us-ascii?Q?/PBMxhGtpLyqmWCvwA3CTa2mRe8WEpRXnhDZ/0sQtP+WnHFRzPxibPyXu5C3?=
+ =?us-ascii?Q?JaNI+kolLr2q5+RbJX5D4hmhLxzsvbTOC40W0SGnjWsmLQ+jHN9ka21hJqbs?=
+ =?us-ascii?Q?Dx4sZy7BToBkPk7eZuSBdjbY6tNKwDvh+uy9RIF7V3Lr+TMnIgfGKbcLc9CB?=
+ =?us-ascii?Q?c3vD+YXZyiBD/w1zw338NlwHz9rypQvwGTaPXpjJZL4F4DjpsNI63jlL2jZ1?=
+ =?us-ascii?Q?egAtAGNmExh1FLzmm13oQSRgi8PZO9LQAr4E6UagN/GA5Cz7SspU9cK7KJk8?=
+ =?us-ascii?Q?5S+CtKsvrhmhbRDfcapsJ5fMLo/So3ZwE4D85INYRrOrdGgkQVrVSKWItld3?=
+ =?us-ascii?Q?Y41M8kPCpMg3pobUWWPdDjqFkANX3uCpZGCuRFX5YDZc2l8pa4jjSzzvCmsV?=
+ =?us-ascii?Q?E6CLfRGfvyS34mPibGrxKsWszYJFd6RDKjFmMvQlgYAgOKng9/zvP0mPjdmh?=
+ =?us-ascii?Q?LzdEA2bISrLLOuh/iqpXmcHrj4qfwAItBwjmIUe1hMPEKhw2AELQ9FlNlFA+?=
+ =?us-ascii?Q?GzZjd9jOuuSyFhGpyS6zX5tQ6FSF9HVnyIgLuFD7xpqYF6ulNl2pITcoqj24?=
+ =?us-ascii?Q?c549VmK04EpmXDEGmJT38N++WzJHFao32H7fh0dVOE6MVr6jjyoyKqBC1MhN?=
+ =?us-ascii?Q?IByXZL+E/PDSGF6tLMjEDRro3pZAJC9vBXbbLzMbufVESedMH2+fcGRNtXMR?=
+ =?us-ascii?Q?v+Ud1Yy7HIJnabAuDcRYi5hpUyIiwp+dGHTITcnoPJLi3ipx1FvJ7+Ch3L7E?=
+ =?us-ascii?Q?I8XMfXooIB878afuIVROqGOTVUXBDeCsbmlxmev1VqaOmRMzyJzv/R9l0W3w?=
+ =?us-ascii?Q?35uWM5nOqyY2FIRdz5l/RaJMEuoEpkWNAoaEt0l+c46qHjpCsYO78551jAJd?=
+ =?us-ascii?Q?3+mB9wvCJp12iVWa6UryatVYaxs0gXZAt1GII0pmnPkcKhXnOFMas5Ti+TGt?=
+ =?us-ascii?Q?BDPTRfqp5nGY/sFOPsuYlnFWIUImFJPE1H+pCuNuKO2WdHRteN3434oP4W4J?=
+ =?us-ascii?Q?7I/DGzYo3IZtAPv1zTeoS1r1+oiWFjqYHgt94YJNdnbFD6oyFS48s2ryGor3?=
+ =?us-ascii?Q?5/6LJX+OTvtjjBiND2JAlR2/oose+GpTbq8XuuMZRwokZQQzxW4kYPsHYkl3?=
+ =?us-ascii?Q?5548thuuDbJ+GOFDsDAUnf9PvP0bNssxUaev0DHppi0xrpfc1paQoxWQg3tu?=
+ =?us-ascii?Q?ONVRYBxPXRP7zjInx0PxQpG9TBs1QeWX1zTG3VQfViWtrwbFko4S/lc2zSHs?=
+ =?us-ascii?Q?JYmlpVfqX3PXb5trQcrnPEUhAS1h3Jc1eFiFxkFIGwm/tkvja+WtMpKw3xCK?=
+ =?us-ascii?Q?PCFLR9k5980l8hgvG9LcKoHtFJLPPjt758cFDit/wgo0N2+BkNRqjQg5Hw8h?=
+ =?us-ascii?Q?GxyBCWEbOx9ZjqBkJQbZQyE1YFCMHn0fLf9OizR6j5MwQyWums5JBLsorEHq?=
+ =?us-ascii?Q?uNMhvHRSABNm9SdNldDmVsf4z34=3D?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7f264b86-0c3d-447b-6dc4-08d9f067a3aa
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB5050.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2022 09:43:37.0288
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qwVI25x6Ra2d/x/0jTaNpseTD8dTgYdt8xoFQ1/yTZ3tvzQtaGab3tc9dnQO1W6lJ6hzvf+dX8o2EIYsQN2bXw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5566
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 03:41:57PM -0500, Johannes Weiner wrote:
 
-Thanks for reviewing.
+On 15.02.22 09:51, Jung Daehwan wrote:
+>
+> I also think it doesn't make sense 10 secs timeout with irqs disabled.
+> It could cause critical system problem as Pavan said. How about adding
+> new quirk for different timeout value?
+>
+Hi,
 
-> > +static inline bool lru_gen_is_active(struct lruvec *lruvec, int gen)
-> > +{
-> > +	unsigned long max_seq = lruvec->lrugen.max_seq;
-> > +
-> > +	VM_BUG_ON(gen >= MAX_NR_GENS);
-> > +
-> > +	/* see the comment on MIN_NR_GENS */
-> > +	return gen == lru_gen_from_seq(max_seq) || gen == lru_gen_from_seq(max_seq - 1);
-> > +}
-> 
-> I'm still reading the series, so correct me if I'm wrong: the "active"
-> set is split into two generations for the sole purpose of the
-> second-chance policy for fresh faults, right?
+I am afraid this amounts to putting bandages onto a fundamental
+flaw. We need a version of xhci_reset() that can sleep and if
+you need interrupts to be off to reset the HC, you are doing a bad design.
 
-To be precise, the active/inactive notion on top of generations is
-just for ABI compatibility, e.g., the counters in /proc/vmstat.
-Otherwise, this function wouldn't be needed.
+=C2=A0=C2=A0=C2=A0 Regards
+=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 Oliver
 
-> If so, it'd be better to have the comment here instead of down by
-> MIN_NR_GENS. This is the place that defines what "active" is, so this
-> is where the reader asks what it means and what it implies. The
-> definition of MIN_NR_GENS can be briefer: "need at least two for
-> second chance, see lru_gen_is_active() for details".
-
-This could be understood this way. It'd be more appropriate to see
-this function as an auxiliary and MIN_NR_GENS as something fundamental.
-Therefore the former should refer to the latter. Specifically, the
-"see the comment on MIN_NR_GENS" refers to this part:
-  And to be compatible with the active/inactive LRU, these two
-  generations are mapped to the active; the rest of generations, if
-  they exist, are mapped to the inactive.
-
-> > +static inline void lru_gen_update_size(struct lruvec *lruvec, enum lru_list lru,
-> > +				       int zone, long delta)
-> > +{
-> > +	struct pglist_data *pgdat = lruvec_pgdat(lruvec);
-> > +
-> > +	lockdep_assert_held(&lruvec->lru_lock);
-> > +	WARN_ON_ONCE(delta != (int)delta);
-> > +
-> > +	__mod_lruvec_state(lruvec, NR_LRU_BASE + lru, delta);
-> > +	__mod_zone_page_state(&pgdat->node_zones[zone], NR_ZONE_LRU_BASE + lru, delta);
-> > +}
-> 
-> This is a duplicate of update_lru_size(), please use that instead.
-> 
-> Yeah technically you don't need the mem_cgroup_update_lru_size() but
-> that's not worth sweating over, better to keep it simple.
-
-I agree we don't need the mem_cgroup_update_lru_size() -- let me spell
-out why:
-  this function is not needed here because it updates the counters used
-  only by the active/inactive lru code, i.e., get_scan_count().
-
-However, we can't reuse update_lru_size() because MGLRU can trip the
-WARN_ONCE() in mem_cgroup_update_lru_size().
-
-Unlike lru_zone_size[], lrugen->nr_pages[] is eventually consistent.
-To move a page to a different generation, the gen counter in page->flags
-is updated first, which doesn't require the LRU lock. The second step,
-i.e., the update of lrugen->nr_pages[], requires the LRU lock, and it
-usually isn't done immediately due to batching. Meanwhile, if this page
-is, for example, isolated, nr_pages[] becomes temporarily unbalanced.
-And this trips the WARN_ONCE().
-
-<snipped>
-
-> 	/* Promotion */
-> > +	if (!lru_gen_is_active(lruvec, old_gen) && lru_gen_is_active(lruvec, new_gen)) {
-> > +		lru_gen_update_size(lruvec, lru, zone, -delta);
-> > +		lru_gen_update_size(lruvec, lru + LRU_ACTIVE, zone, delta);
-> > +	}
-> > +
-> > +	/* Promotion is legit while a page is on an LRU list, but demotion isn't. */
-> 
-> 	/* Demotion happens during aging when pages are isolated, never on-LRU */
-> > +	VM_BUG_ON(lru_gen_is_active(lruvec, old_gen) && !lru_gen_is_active(lruvec, new_gen));
-> > +}
-> 
-> On that note, please move introduction of the promotion and demotion
-> bits to the next patch. They aren't used here yet, and I spent some
-> time jumping around patches to verify the promotion callers and
-> confirm the validy of the BUG_ON.
-
-Will do.
-
-> > +static inline bool lru_gen_add_folio(struct lruvec *lruvec, struct folio *folio, bool reclaiming)
-> > +{
-> > +	int gen;
-> > +	unsigned long old_flags, new_flags;
-> > +	int type = folio_is_file_lru(folio);
-> > +	int zone = folio_zonenum(folio);
-> > +	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-> > +
-> > +	if (folio_test_unevictable(folio) || !lrugen->enabled)
-> > +		return false;
-> 
-> These two checks should be in the callsite and the function should
-> return void. Otherwise you can't understand the callsite without
-> drilling down into lrugen code, even if lrugen is disabled.
-
-I agree it's a bit of nuisance this way. The alternative is we'd need
-ifdef or another helper at the call sites because lrugen->enabled is
-specific to lrugen.
-
-> > +	/*
-> > +	 * There are three common cases for this page:
-> > +	 * 1) If it shouldn't be evicted, e.g., it was just faulted in, add it
-> > +	 *    to the youngest generation.
-> 
-> "shouldn't be evicted" makes it sound like mlock. But they should just
-> be evicted last, right? Maybe:
-> 
-> 	/*
-> 	 * Pages start in different generations depending on
-> 	 * advance knowledge we have about their hotness and
-> 	 * evictability:
-> 	 * 
-> 	 * 1. Already active pages start out youngest. This can be
-> 	 *    fresh faults, or refaults of previously hot pages.
-> 	 * 2. Cold pages that require writeback before becoming
-> 	 *    evictable start on the second oldest generation.
-> 	 * 3. Everything else (clean, cold) starts old.
-> 	 */
-
-Will do.
-
-> On that note, I think #1 is reintroducing a problem we have fixed
-> before, which is trashing the workingset with a flood of use-once
-> mmapped pages. It's the classic scenario where LFU beats LRU.
-> 
-> Mapped streaming IO isn't very common, but it does happen. See these
-> commits:
-> 
-> dfc8d636cdb95f7b792d5ba8c9f3b295809c125d
-> 31c0569c3b0b6cc8a867ac6665ca081553f7984c
-> 645747462435d84c6c6a64269ed49cc3015f753d
-> 
-> From the changelog:
-> 
->     The used-once mapped file page detection patchset.
->     
->     It is meant to help workloads with large amounts of shortly used file
->     mappings, like rtorrent hashing a file or git when dealing with loose
->     objects (git gc on a bigger site?).
->     
->     Right now, the VM activates referenced mapped file pages on first
->     encounter on the inactive list and it takes a full memory cycle to
->     reclaim them again.  When those pages dominate memory, the system
->     no longer has a meaningful notion of 'working set' and is required
->     to give up the active list to make reclaim progress.  Obviously,
->     this results in rather bad scanning latencies and the wrong pages
->     being reclaimed.
->     
->     This patch makes the VM be more careful about activating mapped file
->     pages in the first place.  The minimum granted lifetime without
->     another memory access becomes an inactive list cycle instead of the
->     full memory cycle, which is more natural given the mentioned loads.
-> 
-> Translating this to multigen, it seems fresh faults should really
-> start on the second oldest rather than on the youngest generation, to
-> get a second chance but without jeopardizing the workingset if they
-> don't take it.
-
-This is a good point, and I had worked on a similar idea but failed
-to measure its benefits. In addition to placing mmapped file pages in
-older generations, I also tried placing refaulted anon pages in older
-generations. My conclusion was that the initial LRU positions of NFU
-pages are not a bottleneck for workloads I've tested. The efficiency
-of testing/clearing the accessed bit is.
-
-And some applications are smart enough to leverage MADV_SEQUENTIAL.
-In this case, MGLRU does place mmapped file pages in the oldest
-generation.
-
-I have an oversimplified script that uses memcached to mimic a
-non-streaming workload and fio a (mmapped) streaming workload:
-  1. With MADV_SEQUENTIAL, the non-streaming workload is about 5 times
-     faster when using MGLRU. Somehow the baseline (rc3) swapped a lot.
-     (It shouldn't, and I haven't figured out why.)
-  2. Without MADV_SEQUENTIAL, the non-streaming workload is about 1
-     time faster when using MGLRU. Both MGLRU and the baseline swapped
-     a lot.
-
-           MADV_SEQUENTIAL    non-streaming ops/sec (memcached)
-  rc3      yes                 292k
-  rc3      no                  203k
-  rc3+v7   yes                1967k
-  rc3+v7   no                  436k
-
-  cat mmap.sh
-  modprobe brd rd_nr=2 rd_size=56623104
-  
-  mkswap /dev/ram0
-  swapon /dev/ram0
-  
-  mkfs.ext4 /dev/ram1
-  mount -t ext4 /dev/ram1 /mnt
-  
-  memtier_benchmark -S /var/run/memcached/memcached.sock -P memcache_binary \
-    -n allkeys --key-minimum=1 --key-maximum=50000000 --key-pattern=P:P -c 1 \
-    -t 36 --ratio 1:0 --pipeline 8 -d 2000
-  
-  # streaming workload: --fadvise_hint=0 disables MADV_SEQUENTIAL
-  fio -name=mglru --numjobs=12 --directory=/mnt --size=4224m --buffered=1 \
-    --ioengine=mmap --iodepth=128 --iodepth_batch_submit=32 \
-    --iodepth_batch_complete=32 --rw=read --time_based --ramp_time=10m \
-    --runtime=180m --group_reporting &
-  pid=$!
-  
-  sleep 200
-  
-  # non-streaming workload
-  memtier_benchmark -S /var/run/memcached/memcached.sock -P memcache_binary \
-    -n allkeys --key-minimum=1 --key-maximum=50000000 --key-pattern=R:R \
-    -c 1 -t 36 --ratio 0:1 --pipeline 8 --randomize --distinct-client-seed
-  
-  kill -INT $pid
-  wait
-
-> > +	 * 2) If it can't be evicted immediately, i.e., it's an anon page and
-> > +	 *    not in swapcache, or a dirty page pending writeback, add it to the
-> > +	 *    second oldest generation.
-> > +	 * 3) If it may be evicted immediately, e.g., it's a clean page, add it
-> > +	 *    to the oldest generation.
-> > +	 */
-> > +	if (folio_test_active(folio))
-> > +		gen = lru_gen_from_seq(lrugen->max_seq);
-> > +	else if ((!type && !folio_test_swapcache(folio)) ||
-> > +		 (folio_test_reclaim(folio) &&
-> > +		  (folio_test_dirty(folio) || folio_test_writeback(folio))))
-> > +		gen = lru_gen_from_seq(lrugen->min_seq[type] + 1);
-> > +	else
-> > +		gen = lru_gen_from_seq(lrugen->min_seq[type]);
-> 
-> Condition #2 is not quite clear to me, and the comment is incomplete:
-> The code does put dirty/writeback pages on the oldest gen as long as
-> they haven't been marked for immediate reclaim by the scanner
-> yet.
-
-Right.
-
-> HOWEVER, once the scanner does see those pages and sets
-> PG_reclaim, it will also activate them to move them out of the way
-> until writeback finishes (see shrink_page_list()) - at which point
-> we'll trigger #1. So that second part of #2 appears unreachable.
-
-Yes, dirty file pages go to #1; dirty pages in swapcache go to #2.
-(Ideally we want dirty file pages go to #2 too. IMO, the code would
- be cleaner that way.)
-
-> It could be a good exercise to describe how cache pages move through
-> the generations, similar to the comment on lru_deactivate_file_fn().
-> It's a good example of intent vs implementation.
-
-Will do.
-
-> On another note, "!type" meaning "anon" is a bit rough. Please follow
-> the "bool file" convention used elsewhere.
-
-Originally I used "file", e.g., in v2:
-https://lore.kernel.org/linux-mm/20210413065633.2782273-9-yuzhao@google.com/
-
-But I was told to renamed it since "file" usually means file. Let me
-rename it back to "file", unless somebody still objects.
-
-> > @@ -113,6 +298,9 @@ void lruvec_add_folio_tail(struct lruvec *lruvec, struct folio *folio)
-> >  {
-> >  	enum lru_list lru = folio_lru_list(folio);
-> >  
-> > +	if (lru_gen_add_folio(lruvec, folio, true))
-> > +		return;
-> > +
-> 
-> bool parameters are notoriously hard to follow in the callsite. Can
-> you please add lru_gen_add_folio_tail() instead and have them use a
-> common helper?
-
-I'm not sure -- there are several places like this one. My question is
-whether we want to do it throughout this patchset. We'd end up with
-many helpers and duplicate code. E.g., in this file alone, we have two
-functions taking bool parameters:
-  lru_gen_add_folio(..., bool reclaiming)
-  lru_gen_del_folio(..., bool reclaiming)
-
-I can't say they are very readable; at least they are very compact
-right now. My concern is that we might loose the latter without having
-enough of the former.
-
-Perhaps this is something that we could revisit after you've finished
-reviewing the entire patchset?
-
-> > @@ -127,6 +315,9 @@ static __always_inline void add_page_to_lru_list_tail(struct page *page,
-> >  static __always_inline
-> >  void lruvec_del_folio(struct lruvec *lruvec, struct folio *folio)
-> >  {
-> > +	if (lru_gen_del_folio(lruvec, folio, false))
-> > +		return;
-> > +
-> >  	list_del(&folio->lru);
-> >  	update_lru_size(lruvec, folio_lru_list(folio), folio_zonenum(folio),
-> >  			-folio_nr_pages(folio));
-> > diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> > index aed44e9b5d89..0f5e8a995781 100644
-> > --- a/include/linux/mmzone.h
-> > +++ b/include/linux/mmzone.h
-> > @@ -303,6 +303,78 @@ enum lruvec_flags {
-> >  					 */
-> >  };
-> >  
-> > +struct lruvec;
-> > +
-> > +#define LRU_GEN_MASK		((BIT(LRU_GEN_WIDTH) - 1) << LRU_GEN_PGOFF)
-> > +#define LRU_REFS_MASK		((BIT(LRU_REFS_WIDTH) - 1) << LRU_REFS_PGOFF)
-> > +
-> > +#ifdef CONFIG_LRU_GEN
-> > +
-> > +#define MIN_LRU_BATCH		BITS_PER_LONG
-> > +#define MAX_LRU_BATCH		(MIN_LRU_BATCH * 128)
-> 
-> Those two aren't used in this patch, so it's hard to say whether they
-> are chosen correctly.
-
-Right. They slipped during the v6/v7 refactoring. Will move them to
-the next patch.
-
-> > + * Evictable pages are divided into multiple generations. The youngest and the
-> > + * oldest generation numbers, max_seq and min_seq, are monotonically increasing.
-> > + * They form a sliding window of a variable size [MIN_NR_GENS, MAX_NR_GENS]. An
-> > + * offset within MAX_NR_GENS, gen, indexes the LRU list of the corresponding
-> > + * generation. The gen counter in folio->flags stores gen+1 while a page is on
-> > + * one of lrugen->lists[]. Otherwise it stores 0.
-> > + *
-> > + * A page is added to the youngest generation on faulting. The aging needs to
-> > + * check the accessed bit at least twice before handing this page over to the
-> > + * eviction. The first check takes care of the accessed bit set on the initial
-> > + * fault; the second check makes sure this page hasn't been used since then.
-> > + * This process, AKA second chance, requires a minimum of two generations,
-> > + * hence MIN_NR_GENS. And to be compatible with the active/inactive LRU, these
-> > + * two generations are mapped to the active; the rest of generations, if they
-> > + * exist, are mapped to the inactive. PG_active is always cleared while a page
-> > + * is on one of lrugen->lists[] so that demotion, which happens consequently
-> > + * when the aging produces a new generation, needs not to worry about it.
-> > + */
-> > +#define MIN_NR_GENS		2U
-> > +#define MAX_NR_GENS		((unsigned int)CONFIG_NR_LRU_GENS)
-> > +
-> > +struct lru_gen_struct {
-> 
-> struct lrugen?
-> 
-> In fact, "lrugen" for the general function and variable namespace
-> might be better, the _ doesn't seem to pull its weight.
-> 
-> CONFIG_LRUGEN
-> struct lrugen
-> lrugen_foo()
-> etc.
-
-No strong opinion here. I usually add underscores to functions and
-types so that grep doesn't end up with tons of local variables.
-
-> > +	/* the aging increments the youngest generation number */
-> > +	unsigned long max_seq;
-> > +	/* the eviction increments the oldest generation numbers */
-> > +	unsigned long min_seq[ANON_AND_FILE];
-> 
-> The singular max_seq vs the split min_seq raises questions. Please add
-> a comment that explains or points to an explanation.
-
-Will do.
-
-> > +	/* the birth time of each generation in jiffies */
-> > +	unsigned long timestamps[MAX_NR_GENS];
-> 
-> This isn't in use until the thrashing-based OOM killing patch.
-
-Will move it there.
-
-> > +	/* the multigenerational LRU lists */
-> > +	struct list_head lists[MAX_NR_GENS][ANON_AND_FILE][MAX_NR_ZONES];
-> > +	/* the sizes of the above lists */
-> > +	unsigned long nr_pages[MAX_NR_GENS][ANON_AND_FILE][MAX_NR_ZONES];
-> > +	/* whether the multigenerational LRU is enabled */
-> > +	bool enabled;
-> 
-> Not (really) in use until the runtime switch. Best to keep everybody
-> checking the global flag for now, and have the runtime switch patch
-> introduce this flag and switch necessary callsites over.
-
-Will do.
-
-> > +void lru_gen_init_state(struct mem_cgroup *memcg, struct lruvec *lruvec);
-> 
-> "state" is what we usually init :) How about lrugen_init_lruvec()?
-
-Same story as "file", lol -- this used to be lru_gen_init_lruvec():
-https://lore.kernel.org/linux-mm/20210413065633.2782273-9-yuzhao@google.com/
-
-Naming is hard. Hopefully we can finalize it this time.
-
-> You can drop the memcg parameter and use lruvec_memcg().
-
-lruvec_memcg() isn't available yet when pgdat_init_internals() calls
-this function because mem_cgroup_disabled() is initialized afterward.
-
-> > +#ifdef CONFIG_MEMCG
-> > +void lru_gen_init_memcg(struct mem_cgroup *memcg);
-> > +void lru_gen_free_memcg(struct mem_cgroup *memcg);
-> 
-> This should be either init+exit, or alloc+free.
-
-Will do.

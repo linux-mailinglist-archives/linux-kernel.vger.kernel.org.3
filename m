@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559C64B6A35
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F1C4B6A2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236884AbiBOLGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 06:06:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57048 "EHLO
+        id S236825AbiBOLFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 06:05:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiBOLGC (ORCPT
+        with ESMTP id S234362AbiBOLFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 06:06:02 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6585B1074F0;
-        Tue, 15 Feb 2022 03:05:52 -0800 (PST)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21F9Uwof001961;
-        Tue, 15 Feb 2022 12:05:46 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=selector1;
- bh=BzGYCWiuAmnqSDxwbjn+OcaBHSUNhwIWqEfHFMygnKs=;
- b=kgsIoG3L/Uw+MAzaT9hI1A//b5+RnXoRzBJpfo58PjKcBZYXX7loGSVo3Puldfs/H6Eb
- 2NpMsoI7RQUgnCG3dQrkkQH2CcYbOE/x1voY/qWJoOzbMgjey1VYQQDbGFeSKCLbnrJq
- 64v+7/swPPd0gOo0CQUnzxrbLyqCbDZNToYDWKfLE6y6iZ0bTwgFoBJWS2MVUranJbnc
- bgJlbC4KdH+mHSVe0TYBYlCJ1vkibMkeTk+iYZjCP4TMTMEn44C/mKsv+aZYA/h/XbGy
- OeEkf8eOuQiqAaXloBBesxBhMuAnd7WU82YwlryVZCn5Z8elOKfg9sMUQtffojF8lQD5 ww== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e7pj7pbrj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Feb 2022 12:05:46 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0BBB610002A;
-        Tue, 15 Feb 2022 12:05:45 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 78C3021D3EC;
-        Tue, 15 Feb 2022 12:05:45 +0100 (CET)
-Received: from localhost (10.75.127.46) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 15 Feb 2022 12:05:45
- +0100
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To:     <hminas@synopsys.com>, <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <amelie.delaunay@foss.st.com>, <alexandre.torgue@foss.st.com>,
-        <fabrice.gasnier@foss.st.com>
-Subject: [PATCH v2] usb: dwc2: drd: fix soft connect when gadget is unconfigured
-Date:   Tue, 15 Feb 2022 12:04:19 +0100
-Message-ID: <1644923059-3619-1-git-send-email-fabrice.gasnier@foss.st.com>
-X-Mailer: git-send-email 2.7.4
+        Tue, 15 Feb 2022 06:05:22 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61B21074F0;
+        Tue, 15 Feb 2022 03:05:11 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JydXd6l0yz4xNq;
+        Tue, 15 Feb 2022 22:05:05 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1644923107;
+        bh=LoeNfqeXHZpw22Uq/3imGMD+iHu3vmdMmCYzm8O/0HE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=SHn+0P0fQHdthvYLHYFnoJt36LFHdIy60E+1+cApL4Qd3fRJ74pBCS79bFEQcIupt
+         vwupGcmCdq48K88sDm5KgEcS5aHkfeTfrotLL9p1pU6yi3vVdwxxeiqjZCp3iOiDSo
+         m8DyTQZKgC9cdIptSy7lGlVKcCH1lijaQoTFOZkodTrsxQnjlMF1pA9meNMLieskBv
+         24pHnMbAznFtrmC0gnqmVbn7E0ilcKPVgV88T3HxI/wSrVWI6lxav60uqi2mVrDtTZ
+         L54uDc4vn4/B/kV9YAv1+nOlse4K36BMU/DPR6ElvtOmkUNDcKrk8529uvKFOoib/W
+         gDLYqvVXRIB2A==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Ingo Molnar <mingo@redhat.com>, Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>
+Subject: Re: [PATCH v2 09/13] powerpc/ftrace: Implement
+ CONFIG_DYNAMIC_FTRACE_WITH_ARGS
+In-Reply-To: <1b28f52a-f8b7-6b5c-e726-feac4123517d@csgroup.eu>
+References: <cover.1640017960.git.christophe.leroy@csgroup.eu>
+ <5831f711a778fcd6eb51eb5898f1faae4378b35b.1640017960.git.christophe.leroy@csgroup.eu>
+ <1644852011.qg7ud9elo2.naveen@linux.ibm.com>
+ <1b28f52a-f8b7-6b5c-e726-feac4123517d@csgroup.eu>
+Date:   Tue, 15 Feb 2022 22:05:04 +1100
+Message-ID: <875ypgo0f3.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-15_04,2022-02-14_04,2021-12-02_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,72 +64,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the gadget driver hasn't been (yet) configured, and the cable is
-connected to a HOST, the SFTDISCON gets cleared unconditionally, so the
-HOST tries to enumerate it.
-At the host side, this can result in a stuck USB port or worse. When
-getting lucky, some dmesg can be observed at the host side:
- new high-speed USB device number ...
- device descriptor read/64, error -110
+Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> Le 14/02/2022 =C3=A0 16:25, Naveen N. Rao a =C3=A9crit=C2=A0:
+>> Christophe Leroy wrote:
+>>> Implement CONFIG_DYNAMIC_FTRACE_WITH_ARGS. It accelerates the call
+>>> of livepatching.
+>>>
+>>> Also note that powerpc being the last one to convert to
+>>> CONFIG_DYNAMIC_FTRACE_WITH_ARGS, it will now be possible to remove
+>>> klp_arch_set_pc() on all architectures.
+>>>
+>>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>>> ---
+>>> =C2=A0arch/powerpc/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 1 +
+>>> =C2=A0arch/powerpc/include/asm/ftrace.h=C2=A0=C2=A0=C2=A0 | 17 ++++++++=
++++++++++
+>>> =C2=A0arch/powerpc/include/asm/livepatch.h |=C2=A0 4 +---
+>>> =C2=A03 files changed, 19 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+>>> index cdac2115eb00..e2b1792b2aae 100644
+>>> --- a/arch/powerpc/Kconfig
+>>> +++ b/arch/powerpc/Kconfig
+>>> @@ -210,6 +210,7 @@ config PPC
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_DEBUG_KMEMLEAK
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_DEBUG_STACKOVERFLOW
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_DYNAMIC_FTRACE
+>>> +=C2=A0=C2=A0=C2=A0 select HAVE_DYNAMIC_FTRACE_WITH_ARGS=C2=A0=C2=A0=C2=
+=A0 if MPROFILE_KERNEL || PPC32
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_DYNAMIC_FTRACE_WITH_REGS=C2=A0=C2=
+=A0=C2=A0 if MPROFILE_KERNEL || PPC32
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_EBPF_JIT
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_EFFICIENT_UNALIGNED_ACCESS=C2=A0=
+=C2=A0=C2=A0 if !(CPU_LITTLE_ENDIAN=20
+>>> && POWER7_CPU)
+>>> diff --git a/arch/powerpc/include/asm/ftrace.h=20
+>>> b/arch/powerpc/include/asm/ftrace.h
+>>> index b3f6184f77ea..45c3d6f11daa 100644
+>>> --- a/arch/powerpc/include/asm/ftrace.h
+>>> +++ b/arch/powerpc/include/asm/ftrace.h
+>>> @@ -22,6 +22,23 @@ static inline unsigned long=20
+>>> ftrace_call_adjust(unsigned long addr)
+>>> =C2=A0struct dyn_arch_ftrace {
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 struct module *mod;
+>>> =C2=A0};
+>>> +
+>>> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_ARGS
+>>> +struct ftrace_regs {
+>>> +=C2=A0=C2=A0=C2=A0 struct pt_regs regs;
+>>> +};
+>>> +
+>>> +static __always_inline struct pt_regs *arch_ftrace_get_regs(struct=20
+>>> ftrace_regs *fregs)
+>>> +{
+>>> +=C2=A0=C2=A0=C2=A0 return &fregs->regs;
+>>> +}
+>>=20
+>> I think this is wrong. We need to differentiate between ftrace_caller()=
+=20
+>> and ftrace_regs_caller() here, and only return pt_regs if coming in=20
+>> through ftrace_regs_caller() (i.e., FL_SAVE_REGS is set).
+>
+> Not sure I follow you.
+>
+> This is based on 5740a7c71ab6 ("s390/ftrace: add=20
+> HAVE_DYNAMIC_FTRACE_WITH_ARGS support")
+>
+> It's all the point of HAVE_DYNAMIC_FTRACE_WITH_ARGS, have the regs also=20
+> with ftrace_caller().
+>
+> Sure you only have the params, but that's the same on s390, so what did=20
+> I miss ?
 
-Fix it in drd, by checking the enabled flag before calling
-dwc2_hsotg_core_connect(). It will be called later, once configured,
-by the normal flow:
-- udc_bind_to_driver
- - usb_gadget_connect
-   - dwc2_hsotg_pullup
-     - dwc2_hsotg_core_connect
+I already have this series in next, I can pull it out, but I'd rather
+not.
 
-Fixes: 17f934024e84 ("usb: dwc2: override PHY input signals with usb role switch support")
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
----
-Changes in v2:
-- Fix build error: 'struct dwc2_hsotg' has no member named 'enabled';
-  as reported by the kernel test robot.
-  https://lore.kernel.org/all/202202112236.AwoOTtHO-lkp@intel.com/
-  Add dwc2_is_device_enabled() macro to handle this.
----
- drivers/usb/dwc2/core.h | 2 ++
- drivers/usb/dwc2/drd.c  | 6 ++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+I'll leave it in for now, hopefully you two can agree overnight my time
+whether this is a big problem or something we can fix with a fixup
+patch.
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index 8a63da3..8a7751b 100644
---- a/drivers/usb/dwc2/core.h
-+++ b/drivers/usb/dwc2/core.h
-@@ -1418,6 +1418,7 @@ void dwc2_hsotg_core_connect(struct dwc2_hsotg *hsotg);
- void dwc2_hsotg_disconnect(struct dwc2_hsotg *dwc2);
- int dwc2_hsotg_set_test_mode(struct dwc2_hsotg *hsotg, int testmode);
- #define dwc2_is_device_connected(hsotg) (hsotg->connected)
-+#define dwc2_is_device_enabled(hsotg) ((hsotg)->enabled)
- int dwc2_backup_device_registers(struct dwc2_hsotg *hsotg);
- int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg, int remote_wakeup);
- int dwc2_gadget_enter_hibernation(struct dwc2_hsotg *hsotg);
-@@ -1454,6 +1455,7 @@ static inline int dwc2_hsotg_set_test_mode(struct dwc2_hsotg *hsotg,
- 					   int testmode)
- { return 0; }
- #define dwc2_is_device_connected(hsotg) (0)
-+#define dwc2_is_device_enabled(hsotg) (0)
- static inline int dwc2_backup_device_registers(struct dwc2_hsotg *hsotg)
- { return 0; }
- static inline int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg,
-diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
-index 1b39c47..d8d6493 100644
---- a/drivers/usb/dwc2/drd.c
-+++ b/drivers/usb/dwc2/drd.c
-@@ -130,8 +130,10 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
- 		already = dwc2_ovr_avalid(hsotg, true);
- 	} else if (role == USB_ROLE_DEVICE) {
- 		already = dwc2_ovr_bvalid(hsotg, true);
--		/* This clear DCTL.SFTDISCON bit */
--		dwc2_hsotg_core_connect(hsotg);
-+		if (dwc2_is_device_enabled(hsotg)) {
-+			/* This clear DCTL.SFTDISCON bit */
-+			dwc2_hsotg_core_connect(hsotg);
-+		}
- 	} else {
- 		if (dwc2_is_device_mode(hsotg)) {
- 			if (!dwc2_ovr_bvalid(hsotg, false))
--- 
-2.7.4
+>>> +static __always_inline void ftrace_instruction_pointer_set(struct=20
+>>> ftrace_regs *fregs,
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned long ip)
+>>> +{
+>>> +=C2=A0=C2=A0=C2=A0 regs_set_return_ip(&fregs->regs, ip);
+>>=20
+>> Should we use that helper here? regs_set_return_ip() also updates some=20
+>> other state related to taking interrupts and I don't think it makes=20
+>> sense for use with ftrace.
+>
+>
+> Today we have:
+>
+> 	static inline void klp_arch_set_pc(struct ftrace_regs *fregs, unsigned=20
+> long ip)
+> 	{
+> 		struct pt_regs *regs =3D ftrace_get_regs(fregs);
+>
+> 		regs_set_return_ip(regs, ip);
+> 	}
+>
+>
+> Which like x86 and s390 becomes:
+>
+> 	static inline void klp_arch_set_pc(struct ftrace_regs *fregs, unsigned=20
+> long ip)
+> 	{
+> 		ftrace_instruction_pointer_set(fregs, ip);
+> 	}
+>
+>
+>
+> That's the reason why I've been using regs_set_return_ip(). Do you think=
+=20
+> it was wrong to use regs_set_return_ip() in klp_arch_set_pc() ?
+>
+> That was added by 59dc5bfca0cb ("powerpc/64s: avoid reloading (H)SRR=20
+> registers if they are still valid")
 
+It's not wrong, but I think it's unnecessary. We need to use
+regs_set_return_ip() if we're changing the regs->ip of an interrupt
+frame, so that the interrupt return code will reload it.
+
+But AIUI in this case we're not doing that, we're changing the regs->ip
+of a pt_regs provided by ftrace, which shouldn't ever be an interrupt
+frame.
+
+So it's not a bug to use regs_set_return_ip(), but it is unncessary and
+means we'll reload the interrupt state unnecessarily on the next
+interrupt return.
+
+cheers

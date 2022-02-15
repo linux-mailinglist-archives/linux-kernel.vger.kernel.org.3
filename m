@@ -2,307 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E76E4B72D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2F424B711B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241403AbiBOQLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:11:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42456 "EHLO
+        id S241472AbiBOQMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:12:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241616AbiBOQL1 (ORCPT
+        with ESMTP id S241473AbiBOQMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:11:27 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC9889CEF;
-        Tue, 15 Feb 2022 08:11:16 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id bg21-20020a05600c3c9500b0035283e7a012so1750083wmb.0;
-        Tue, 15 Feb 2022 08:11:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=akgdp0nUv5uW3+1NF74dVrBjd5UKlSd+kdDxEGnURlI=;
-        b=OW5eC5e0Hw7A8e+obDqk/mPLrNgsKu4gUvOxpCk1fQ31ZU+HqUQASIID/sK08luaon
-         uTpX1ZKa3WoPtopByrinsY/9Vi8TcXr8l+tBThcHxLuOMOXQgvro9frSZncupt7ymjj1
-         xi+CfEY3VCyC0bVR4k3Qc9Z9vHlPiNbGfmt7DdqlO15Jp+ZtrgQnvn9KdjxjWzy9taIY
-         Y8jziBkOyx36BUc5vEOCtkch9jc91y5uGmQHxHEHEXLhGdxdmre4DCEyEPoiICk4gsxN
-         KkvS+0SX07teMVNjnAPsXb2BnpFxaAe81CZ4pR4Y0p1nvaKiJ2uvUi6oEa/4IhTocnLg
-         ioDw==
+        Tue, 15 Feb 2022 11:12:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB6CD14006
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:12:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644941542;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6yTu+Qfv1IpPv7AVu5hlJ/Sl4wvDv7oYgI9LSyTBR/g=;
+        b=IBcgMB4djne8MHc2fNes7w9YLiOhr16HhYcojvK5vNK6Ag9WuEDVZzNr8tjHnn4LS+90GU
+        WozG4rvXKJLNov2fvWpRjdRgpjl1fQpqa6POz3fc9CHl41q0+YYBpB+Ht0wqKHAjMbn1R8
+        usZFLjHcBcAxVrgFk4b4oqVCikm2usE=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-140-ZIe89mLnO06MgdxT7TendA-1; Tue, 15 Feb 2022 11:12:15 -0500
+X-MC-Unique: ZIe89mLnO06MgdxT7TendA-1
+Received: by mail-ej1-f71.google.com with SMTP id o4-20020a170906768400b006a981625756so7565134ejm.0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:12:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=akgdp0nUv5uW3+1NF74dVrBjd5UKlSd+kdDxEGnURlI=;
-        b=eX4YAb6aMb4CtIvwAc+gNCiNoRO8wS4krQdAJx47PALIPvLvpoikCMQmfHLFbT8a9u
-         7ogFlf1uZ3jpQFkcEshb6Vo0h99G+sIFH8+z6z1Qr1QxtJSIVDdr8dfyfjsZR6rag13X
-         U4izHoy02mrtI3OamPBK2BUWmOF3g/6GkPUjY0bm27dZ9F3p/8QYEeLHIW2iQr4edONG
-         9aDpwE2j1UAjvY123P9lmIDt/8EUZAaOyS7lQgyyVOdVhZIBNXIKlwpmzzI2hK/gJKJ1
-         vSe7vdFP1r8yuIJ4+dsWcnx1MbMwU7JRbdtQrJpi4FrGUBdkJZUMUncNOf/9aVC9EBa0
-         F33w==
-X-Gm-Message-State: AOAM531vUlgSc/eHZ9BAJSBXi7LdTcY0jTapXbn7Nq4oI4V5Yk/d4z8l
-        sHcEYeDGAvjgE4DD/b7seLg=
-X-Google-Smtp-Source: ABdhPJz+cr/FbFbp/YEWBzYvFGhBIyLbtURqpGlikSXHMAgdXnC/xWHzfx1gavbudlcdtP2aXAFQBQ==
-X-Received: by 2002:a05:600c:601a:: with SMTP id az26mr3769890wmb.2.1644941474494;
-        Tue, 15 Feb 2022 08:11:14 -0800 (PST)
-Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id a9sm17741358wrg.53.2022.02.15.08.11.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 08:11:13 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        John Cox <jc@kynesim.co.uk>
-Cc:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        hverkuil-cisco@xs4all.nl, jonas@kwiboo.se,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com, knaerzche@gmail.com
-Subject: Re: Re: [RFC v2 6/8] media: uapi: Remove bit_size field from v4l2_ctrl_hevc_slice_params
-Date:   Tue, 15 Feb 2022 17:11:12 +0100
-Message-ID: <2071229.OBFZWjSADL@kista>
-In-Reply-To: <48in0h5qq4ea87gcnmtkpsfqdk1r4tipid@4ax.com>
-References: <20220215110103.241297-1-benjamin.gaignard@collabora.com> <9a78eb88f8690d43d34d8140420dae3f5f043637.camel@ndufresne.ca> <48in0h5qq4ea87gcnmtkpsfqdk1r4tipid@4ax.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6yTu+Qfv1IpPv7AVu5hlJ/Sl4wvDv7oYgI9LSyTBR/g=;
+        b=3wX96ShIlfP+BQl2cCzh8EddpftFVIAL9L6TC7Y8tUizBYiHpkUvowyYSW5qIrgw9y
+         pur6xZcsHCoOx+dVlUnKdxGrCa5y6M/Luf0zuI4bm6d19SrPcPAiDstpYsEXVC0TzNbo
+         uY2EPAVy42VyhB66sDVgBO49q9NpVumx4MDIN1Dw9IRpHd6u3BSbNbDZ9zg2exjtTIwb
+         pBAXGFRsHX4s7stUGHM5nXucR/HMTn+7LDAgCX5o2cd5RIM2fTYcaFVp6s/sZoLHQlgc
+         qEHYHgZqdiy23IuFJAb6xah3O2SoblKIgW1j/N0kpW0EUSojju3dfTFb8h4Qxkem1q8u
+         CXNw==
+X-Gm-Message-State: AOAM530m/iVakaWVlvPw+N3UnAKZa6zbapAgUDi/I53x4wyrCf3O5Czq
+        WTY+t0SongCwy41sfmfxu4rqTOxZ2ruQwvIToU0uW7r9glKn/TAZw4SI8LYTrM6Amrr+CXfWhws
+        I6Z7+PM79Uw30RBxYJKoUFZvA
+X-Received: by 2002:a50:8e4b:: with SMTP id 11mr4650937edx.445.1644941533364;
+        Tue, 15 Feb 2022 08:12:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzftckYd5NKJC5MMKL5KSz/KVu2PoAWMB8ocFZSkMTrbX9sgdnbBvEL3rXT/dAeLNasexhiOQ==
+X-Received: by 2002:a50:8e4b:: with SMTP id 11mr4650912edx.445.1644941533147;
+        Tue, 15 Feb 2022 08:12:13 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id m28sm4256482ejn.50.2022.02.15.08.12.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 08:12:12 -0800 (PST)
+Message-ID: <05332ea8-2849-e567-1db3-3bdee97c2193@redhat.com>
+Date:   Tue, 15 Feb 2022 17:12:11 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [RFC 0/2] x86/PCI: Ignore EFI memmap MMIO entries
+Content-Language: en-US
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220214151759.98267-1-hdegoede@redhat.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220214151759.98267-1-hdegoede@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne torek, 15. februar 2022 ob 17:00:33 CET je John Cox napisal(a):
-> On Tue, 15 Feb 2022 10:28:55 -0500, you wrote:
->=20
-> >Le mardi 15 f=E9vrier 2022 =E0 14:50 +0000, John Cox a =E9crit :
-> >> On Tue, 15 Feb 2022 15:35:12 +0100, you wrote:
-> >>=20
-> >> >=20
-> >> > Le 15/02/2022 =E0 15:17, John Cox a =E9crit :
-> >> > > Hi
-> >> > >=20
-> >> > > > The bit size of the slice could be deduced from the buffer paylo=
-ad
-> >> > > > so remove bit_size field to avoid duplicated the information.
-> >> > > I think this is a bad idea. In the future we are (I hope) going to=
-=20
-want
-> >> > > to have an array (variable) of slice headers all referring to the=
-=20
-same
-> >> > > bit buffer.  When we do that we will need this field.
-> >> >=20
-> >> > I wonder if that could be considering like another decode mode and so
-> >> > use an other control ?
-> >>=20
-> >> I, personally, would be in favour of making the slice header control a
-> >> variable array just as it is.  If userland can't cope with multiple
-> >> entries then just send them one at a time and the code looks exactly
-> >> like it does at the moment and if the driver can't then set max array
-> >> entries to 1.
-> >>=20
-> >> Having implemented this in rpi port of ffmpeg and the RPi V4L2 driver I
-> >> can say with experience that the code and effort overhead is very low.
-> >>=20
-> >> Either way having a multiple slice header control in the UAPI is
-> >> important for efficiency.
-> >
-> >Just to clarify the idea, we would have a single slice controls, always=
-=20
-dynamic:
-> >
-> >1. For sliced based decoder
-> >
-> >The dynamic array slice control is implemented by the driver and its siz=
-e=20
-must
-> >be 1.
->=20
-> Yes
->=20
-> >2. For frame based decoder that don't care for slices
-> >
-> >The dynamic array slice controls is not implement. Userland detects that=
- at
-> >runtime, similar to the VP9 compressed headers.
->=20
-> If the driver parses all the slice header then that seems plausible
->=20
-> >3. For frame based decoders that needs slices (or driver that supports=20
-offset
-> >and can gain performance with such mode)
-> >
-> >The dynamic array slice controls is implemented, and should contain all =
-the
-> >slices found in the OUTPUT buffer.
-> >
-> >So the reason for this bit_size (not sure why its bits though, perhaps=20
-someone
-> >can educate me ?)
->=20
-> RPi doesn't need bits and would be happy with bytes however
-> slice_segment data isn't byte aligned at the end so its possible that
-> there might be decoders out there that want an accurate length for that.
+Hi All,
 
-There are two fields, please don't mix them up:
+On 2/14/22 16:17, Hans de Goede wrote:
+> Hi All,
+> 
+> Here is a new attempt at fixing the issue where on some laptops
+> there are EFI memmap MMIO entries covering the entire PCI bridge
+> mem window, causing Linux to be unable to find free space to
+> assign to unassigned BARs.
+> 
+> This is marked as RFC atm because I'm waiting for feedback from
+> testers.
 
-__u32	bit_size;
-__u32	data_bit_offset; (changed to data_byte_offset in this series)
+Unfortunately the troublesome 0xdfa00000-0xdfa0ffff region on
+the Lenovo X1 carbon gen 2 is marked as MMIO by the EFI memmap,
+so the approach from this series won't work.
 
-data_bit_offset/data_byte_offset is useful, while bit_size is IMO not. If y=
-ou=20
-have multiple slices in array, you only need to know start of the slice dat=
-a=20
-and that offset is always offset from start of the buffer (absolute, it's n=
-ot=20
-relative to previous slice data).
+Interestingly enough this RFC series does seem to help to fix
+the suspend/resume on this x1c2, since for some reason merely
+splitting the original:
 
-Best regards,
-Jernej
+BIOS-e820: [mem 0x00000000dceff000-0x00000000dfa0ffff] reserved
 
->=20
-> > Would be to let the driver offset inside the the single
-> >OUTPUT/bitstream buffer in case this is not automatically found by the=20
-driver
-> >(or that no start-code is needed). Is that last bit correct ? If so, sho=
-uld=20
-we
-> >change it to an offset rather then a size ? Shall we allow using offeset=
-s=20
-inside
-> >larger buffer (e.g. to avoid some memory copies) for the Sliced Base cas=
-es ?
->=20
-> I use (in the current structure) data_bit_offset to find the start of
-> each slice's slice_segment_data within the OUTPUT buffer and bit_size to
-> find the end.  RPi doesn't / can't parse the slice_header and so wants
-> all of that.  Decoders that do parse the header might plausably want
-> header offsets too and it would facilitate zero copy of the bit buffer.
->=20
-> =20
-> >> Regards
-> >>=20
-> >> John Cox
-> >>=20
-> >> > > > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.co=
-m>
-> >> > > > ---
-> >> > > > .../userspace-api/media/v4l/ext-ctrls-codec.rst       |  3 ---
-> >> > > > drivers/staging/media/sunxi/cedrus/cedrus_h265.c      | 11 +++
-+-------
-> >> > > > include/uapi/linux/v4l2-controls.h                    |  3 +--
-> >> > > > 3 files changed, 5 insertions(+), 12 deletions(-)
-> >> > > >=20
-> >> > > > diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-
-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> >> > > > index 3296ac3b9fca..c3ae97657fa7 100644
-> >> > > > --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> >> > > > +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> >> > > > @@ -2965,9 +2965,6 @@ enum v4l2_mpeg_video_hevc_size_of_length_f=
-ield=20
-=2D
-> >> > > >      :stub-columns: 0
-> >> > > >      :widths:       1 1 2
-> >> > > >=20
-> >> > > > -    * - __u32
-> >> > > > -      - ``bit_size``
-> >> > > > -      - Size (in bits) of the current slice data.
-> >> > > >      * - __u32
-> >> > > >        - ``data_bit_offset``
-> >> > > >        - Offset (in bits) to the video data in the current slice=
-=20
-data.
-> >> > > > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/
-drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-> >> > > > index 8ab2d9c6f048..db8c7475eeb8 100644
-> >> > > > --- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-> >> > > > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-> >> > > > @@ -312,8 +312,8 @@ static void cedrus_h265_setup(struct cedrus_=
-ctx=20
-*ctx,
-> >> > > > 	const struct v4l2_hevc_pred_weight_table *pred_weight_table;
-> >> > > > 	unsigned int width_in_ctb_luma, ctb_size_luma;
-> >> > > > 	unsigned int log2_max_luma_coding_block_size;
-> >> > > > +	size_t slice_bytes;
-> >> > > > 	dma_addr_t src_buf_addr;
-> >> > > > -	dma_addr_t src_buf_end_addr;
-> >> > > > 	u32 chroma_log2_weight_denom;
-> >> > > > 	u32 output_pic_list_index;
-> >> > > > 	u32 pic_order_cnt[2];
-> >> > > > @@ -370,8 +370,8 @@ static void cedrus_h265_setup(struct cedrus_=
-ctx=20
-*ctx,
-> >> > > >=20
-> >> > > > 	cedrus_write(dev, VE_DEC_H265_BITS_OFFSET, 0);
-> >> > > >=20
-> >> > > > -	reg =3D slice_params->bit_size;
-> >> > > > -	cedrus_write(dev, VE_DEC_H265_BITS_LEN, reg);
-> >> > > > +	slice_bytes =3D vb2_get_plane_payload(&run->src->vb2_buf, 0);
-> >> > > > +	cedrus_write(dev, VE_DEC_H265_BITS_LEN, slice_bytes);
-> >> > > I think one of these must be wrong. bit_size is in bits,
-> >> > > vb2_get_plane_payload is in bytes?
-> >> >=20
-> >> > You are right it should be vb2_get_plane_payload() * 8 to get the si=
-ze=20
-in bits.
-> >> >=20
-> >> > I will change that in v3.
-> >> >=20
-> >> > >=20
-> >> > > Regards
-> >> > >=20
-> >> > > John Cox
-> >> > >  =20
-> >> > > > 	/* Source beginning and end addresses. */
-> >> > > >=20
-> >> > > > @@ -384,10 +384,7 @@ static void cedrus_h265_setup(struct=20
-cedrus_ctx *ctx,
-> >> > > >=20
-> >> > > > 	cedrus_write(dev, VE_DEC_H265_BITS_ADDR, reg);
-> >> > > >=20
-> >> > > > -	src_buf_end_addr =3D src_buf_addr +
-> >> > > > -			   DIV_ROUND_UP(slice_params->bit_size,=20
-8);
-> >> > > > -
-> >> > > > -	reg =3D VE_DEC_H265_BITS_END_ADDR_BASE(src_buf_end_addr);
-> >> > > > +	reg =3D VE_DEC_H265_BITS_END_ADDR_BASE(src_buf_addr + slice_by=
-tes);
-> >> > > > 	cedrus_write(dev, VE_DEC_H265_BITS_END_ADDR, reg);
-> >> > > >=20
-> >> > > > 	/* Coding tree block address */
-> >> > > > diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/
-linux/v4l2-controls.h
-> >> > > > index b1a3dc05f02f..27f5d272dc43 100644
-> >> > > > --- a/include/uapi/linux/v4l2-controls.h
-> >> > > > +++ b/include/uapi/linux/v4l2-controls.h
-> >> > > > @@ -2457,7 +2457,6 @@ struct v4l2_hevc_pred_weight_table {
-> >> > > > #define V4L2_HEVC_SLICE_PARAMS_FLAG_DEPENDENT_SLICE_SEGMENT=09
-(1ULL << 9)
-> >> > > >=20
-> >> > > > struct v4l2_ctrl_hevc_slice_params {
-> >> > > > -	__u32	bit_size;
-> >> > > > 	__u32	data_bit_offset;
-> >> > > >=20
-> >> > > > 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
-> >> > > > @@ -2484,7 +2483,7 @@ struct v4l2_ctrl_hevc_slice_params {
-> >> > > > 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture timing SEI messag=
-e=20
-*/
-> >> > > > 	__u8	pic_struct;
-> >> > > >=20
-> >> > > > -	__u8	reserved;
-> >> > > > +	__u8	reserved[5];
-> >> > > >=20
-> >> > > > 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: General slice segment=20
-header */
-> >> > > > 	__u32	slice_segment_addr;
->=20
+range into:
 
+BIOS-e820: [mem 0x00000000dceff000-0x00000000df9fffff] reserved
+BIOS-e820: [mem 0x00000000dfa00000-0x00000000dfa0ffff] MMIO
+
+causes the PCI resource allocation code to pick slightly
+different resources avoiding the troublesome overlap, see:
+https://bugzilla.redhat.com/show_bug.cgi?id=2029207
+for logs.
+
+But I don't think we should rely in this, since from a
+arch_remove_reservations() pov the troublesome overlap area
+which is now marked as MMIO is fair game for PCI bars with
+the change to allow MMIO areas for PCI bars, so things seem
+to mostly work by sheer luck after this RFC series.
+
+So now I have yet another plan to fix this (see below) I'll get
+that tested and assuming it works post that as a proper patch.
+
+Regards,
+
+Hans
+
+
+
+diff --git a/arch/x86/include/asm/pci_x86.h b/arch/x86/include/asm/pci_x86.h
+index 490411dba438..573e1323f490 100644
+--- a/arch/x86/include/asm/pci_x86.h
++++ b/arch/x86/include/asm/pci_x86.h
+@@ -64,6 +64,8 @@ void pcibios_scan_specific_bus(int busn);
+ 
+ /* pci-irq.c */
+ 
++struct pci_dev;
++
+ struct irq_info {
+ 	u8 bus, devfn;			/* Bus, device and function */
+ 	struct {
+@@ -232,3 +234,9 @@ static inline void mmio_config_writel(void __iomem *pos, u32 val)
+ # define x86_default_pci_init_irq	NULL
+ # define x86_default_pci_fixup_irqs	NULL
+ #endif
++
++#if defined CONFIG_PCI && defined CONFIG_ACPI
++extern bool pci_use_e820;
++#else
++#define pci_use_e820 true
++#endif
+diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
+index 9b9fb7882c20..e8dc9bc327bd 100644
+--- a/arch/x86/kernel/resource.c
++++ b/arch/x86/kernel/resource.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <linux/ioport.h>
+ #include <asm/e820/api.h>
++#include <asm/pci_x86.h>
+ 
+ static void resource_clip(struct resource *res, resource_size_t start,
+ 			  resource_size_t end)
+@@ -28,6 +29,9 @@ static void remove_e820_regions(struct resource *avail)
+ 	int i;
+ 	struct e820_entry *entry;
+ 
++	if (!pci_use_e820)
++		return;
++
+ 	for (i = 0; i < e820_table->nr_entries; i++) {
+ 		entry = &e820_table->entries[i];
+ 
+diff --git a/arch/x86/pci/acpi.c b/arch/x86/pci/acpi.c
+index 052f1d78a562..7167934819b3 100644
+--- a/arch/x86/pci/acpi.c
++++ b/arch/x86/pci/acpi.c
+@@ -1,4 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
++#include <linux/efi.h>
+ #include <linux/pci.h>
+ #include <linux/acpi.h>
+ #include <linux/init.h>
+@@ -21,6 +22,7 @@ struct pci_root_info {
+ 
+ static bool pci_use_crs = true;
+ static bool pci_ignore_seg;
++bool pci_use_e820 = true;
+ 
+ static int __init set_use_crs(const struct dmi_system_id *id)
+ {
+@@ -291,6 +293,28 @@ static bool resource_is_pcicfg_ioport(struct resource *res)
+ 		res->start == 0xCF8 && res->end == 0xCFF;
+ }
+ 
++static bool resource_matches_efi_mmio_region(const struct resource *res)
++{
++	unsigned long long start, end;
++	efi_memory_desc_t *md;
++
++	if (!efi_enabled(EFI_MEMMAP))
++		return false;
++
++	for_each_efi_memory_desc(md) {
++		if (md->type != EFI_MEMORY_MAPPED_IO)
++			continue;
++
++		start = md->phys_addr;
++		end = start + (md->num_pages << EFI_PAGE_SHIFT) - 1;
++
++		if (res->start >= start && res->end <= end)
++			return true;
++	}
++
++	return false;
++}
++
+ static int pci_acpi_root_prepare_resources(struct acpi_pci_root_info *ci)
+ {
+ 	struct acpi_device *device = ci->bridge;
+@@ -300,9 +324,16 @@ static int pci_acpi_root_prepare_resources(struct acpi_pci_root_info *ci)
+ 
+ 	status = acpi_pci_probe_root_resources(ci);
+ 	if (pci_use_crs) {
+-		resource_list_for_each_entry_safe(entry, tmp, &ci->resources)
++		resource_list_for_each_entry_safe(entry, tmp, &ci->resources) {
+ 			if (resource_is_pcicfg_ioport(entry->res))
+ 				resource_list_destroy_entry(entry);
++			if (resource_matches_efi_mmio_region(entry->res)) {
++				dev_info(&device->dev,
++					"host bridge window %pR is marked by EFI as MMIO\n",
++					entry->res);
++				pci_use_e820 = false;
++			}
++		}
+ 		return status;
+ 	}
+ 
 

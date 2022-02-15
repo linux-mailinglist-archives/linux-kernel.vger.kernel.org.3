@@ -2,157 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215314B7900
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 883D54B7822
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:51:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242891AbiBOUfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 15:35:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53288 "EHLO
+        id S244110AbiBOUgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 15:36:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236290AbiBOUfX (ORCPT
+        with ESMTP id S244104AbiBOUgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 15:35:23 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5812D76E7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:35:11 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id hw13so18218117ejc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:35:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KePYcCl5a38qqRp4PlWIKJyXKZKQzDwLkIxZJtpH86s=;
-        b=TjWFfUMH/5M/aImVMoFiuz3ZvcaO/cos6XwrUYBV1zduc1Cwj9ORKwQ8gBkKx1kv3q
-         eqGaj9THZ4cCjfkgLJtX/iS/XdLY692b93Q4qZeaOqZDVcwHHSAtC6bGaW6OWSSj1skk
-         0IDe8gV5sQi9hGV2dHz5XcfdV1Xfyr1cAOQFYo9fQa+Y0wFqsRLyszyKN+cz3ojjZrrz
-         asjUssQFpyaC4Qoa14E4HyJ8NfDCAakA8qWRb88gGAyWPOQKvSYxxlUEHSL+5N2t95uk
-         CbVZuTzLB1QkD96EV8OUK10iHv+G/yqcjcMFlurbnNA5VLP0sguuydd1TH17mhKQzPZ9
-         rVxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KePYcCl5a38qqRp4PlWIKJyXKZKQzDwLkIxZJtpH86s=;
-        b=ymvFeOWYU1gdE7oRYVXaf+NgZ1G8QWgn5vCO0mTlI/ChK8yzisrXOUA4MPOtjObZBC
-         xkb+PIZqVnyXvJ06a3H12s1N0sNkaeQzFwjh2kHR5GEd2a7irQqKorydsgNtEaRhXaZp
-         XQTZQB72LaRq/ANu3UugF/Hp3+OdkTLDiqzHegBvsLyyltW78pgsBL8Pvdh/skR+AtU6
-         3t4SWkTIWbj7LaC1XLxLWDOfsaLTbHRby0sqAmfFg9k8exsSy2VkNiC4mijy2lVVCvyD
-         B3uLCWyXr8LiuuNVo9aejcpHdXz8cUtxf32GIw+B+V2KImxqrvtOXkWn6es/y8jyg0nG
-         339Q==
-X-Gm-Message-State: AOAM533i65nfUz8mVz0/tHSHqFgphiCPYv8o3+MXs4lXhp7GIyHGFUuM
-        9nKGfYKKG/JOF3nZwcF1xAvxb713c8qf6u9pDwT2
-X-Google-Smtp-Source: ABdhPJz1Tc45Xo6bFBvHTWEiDBZPvg/YToRg+d0x7DzZCYRR99sT5jdGxyicDniFd93V3RRkBGBRUsY70DgMCnKJwt0=
-X-Received: by 2002:a17:907:7409:: with SMTP id gj9mr713011ejc.112.1644957309973;
- Tue, 15 Feb 2022 12:35:09 -0800 (PST)
+        Tue, 15 Feb 2022 15:36:23 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01752D76E7;
+        Tue, 15 Feb 2022 12:36:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644957372; x=1676493372;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BRsO1OXc58Y4YpX42/iVa8NoeQ33hVpixGdTGcSifYA=;
+  b=bw6gKlZqH8V1gSEOxV+Hh7vVu9osWm+xggC9h3X3DDbCluKky2s1F39w
+   491wd/UTPsno2ReHtGBHripCR7rhARGXBoFHvR8TDcOH/CtMeeDncIg4X
+   O9O+BKnAU61Mfx/V0ND8zsNzNQ5r95jpdTulE7FU+PSCNRn5ITABwEu/6
+   pWl3n4/Hc2eo4D3hsa/x6A/QiQCjKw8OdskUJxQiRVWfZg/r6IH+VB6Z6
+   D0p7BvVUbJln+jY3czLFfuNFB4l6n2T9UVJ8YOsFHLMUf63FzTUzSl0DC
+   m0MWoH20wED1IzvgigrPGkuVNQDvsxOCPszZHpRjibzj6Zx6PawIRE9pA
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="311189333"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="311189333"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 12:36:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="497465016"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 15 Feb 2022 12:36:05 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nK4YO-000A0L-Cq; Tue, 15 Feb 2022 20:36:04 +0000
+Date:   Wed, 16 Feb 2022 04:35:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Herbert Xu <herbert@gondor.apana.org.au>
+Subject: Re: [PATCH v1 1/1] crypto: cavium/nitrox - don't cast parameter in
+ bit operations
+Message-ID: <202202160443.hqpSAgbP-lkp@intel.com>
+References: <20220215160641.51683-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <4df50e95-6173-4ed1-9d08-3c1c4abab23f@gmail.com>
- <CAHC9VhSjTqT-4TMxBnQOQHkj+djONihfeoPVyy1egrZY2t10XA@mail.gmail.com>
- <c8a616e4-26a6-af51-212c-31dca0e265cd@gmail.com> <CAHC9VhQTZdeNOx3AXdoc9LXUzDk5n7wyGBX-tV-ZaovhPAdWwQ@mail.gmail.com>
- <e85dd38b-ef7b-ed7e-882e-124cdf942c44@gmail.com> <CAHC9VhROuJtvNHuVaR6pEekNFacH3Tywx58_hn1f5Mwk+kjC8g@mail.gmail.com>
- <b7e55304-d114-bcbe-08d2-b54828121a01@gmail.com> <CAHC9VhSdgD4Nfaxbnnn4r-OK8koSZ7+zQoPShDbGi9PvkJFpng@mail.gmail.com>
- <478e1651-a383-05ff-d011-6dda771b8ce8@linux.microsoft.com>
- <875ypt5zmz.fsf@defensec.nl> <CAFftDdo9JmbyPzPWRjOYgZBOS9b5d+OGKKf8egS8_ysbbWW87Q@mail.gmail.com>
- <CABXk95Az0V0qWyB0Cp9D+MaCKNBfcdk4=bvXRdm5EXzHdjXJJg@mail.gmail.com>
-In-Reply-To: <CABXk95Az0V0qWyB0Cp9D+MaCKNBfcdk4=bvXRdm5EXzHdjXJJg@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 15 Feb 2022 15:34:59 -0500
-Message-ID: <CAHC9VhQKuQuR1pJfa0h2Y5dCjmrpiYaGpymwxxE1sa6jR3h-bA@mail.gmail.com>
-Subject: Re: [PATCH] SELinux: Always allow FIOCLEX and FIONCLEX
-To:     Demi Marie Obenour <demiobenour@gmail.com>
-Cc:     William Roberts <bill.c.roberts@gmail.com>,
-        Dominick Grift <dominick.grift@defensec.nl>,
-        Chris PeBenito <chpebeni@linux.microsoft.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        SElinux list <selinux@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        selinux-refpolicy@vger.kernel.org,
-        Jeffrey Vander Stoep <jeffv@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220215160641.51683-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 2:11 AM Jeffrey Vander Stoep <jeffv@google.com> wrote:
-> On Tue, Feb 8, 2022 at 3:18 PM William Roberts <bill.c.roberts@gmail.com> wrote:
-> >
-> > <snip>
-> >
-> > This is getting too long for me.
-> >
-> > > >
-> > > > I don't have a strong opinion either way.  If one were to allow this
-> > > > using a policy rule, it would result in a major policy breakage.  The
-> > > > rule would turn on extended perm checks across the entire system,
-> > > > which the SELinux Reference Policy isn't written for.  I can't speak
-> > > > to the Android policy, but I would imagine it would be the similar
-> > > > problem there too.
-> > >
-> > > Excuse me if I am wrong but AFAIK adding a xperm rule does not turn on
-> > > xperm checks across the entire system.
-> >
-> > It doesn't as you state below its target + class.
-> >
-> > >
-> > > If i am not mistaken it will turn on xperm checks only for the
-> > > operations that have the same source and target/target class.
-> >
-> > That's correct.
-> >
-> > >
-> > > This is also why i don't (with the exception TIOSCTI for termdev
-> > > chr_file) use xperms by default.
-> > >
-> > > 1. it is really easy to selectively filter ioctls by adding xperm rules
-> > > for end users (and since ioctls are often device/driver specific they
-> > > know best what is needed and what not)
-> >
-> > > >>> and FIONCLEX can be trivially bypassed unless fcntl(F_SETFD)
-> > >
-> > > 2. if you filter ioctls in upstream policy for example like i do with
-> > > TIOSCTI using for example (allowx foo bar (ioctl chr_file (not
-> > > (0xXXXX)))) then you cannot easily exclude additional ioctls later where source is
-> > > foo and target/tclass is bar/chr_file because there is already a rule in
-> > > place allowing the ioctl (and you cannot add rules)
-> >
-> > Currently, fcntl flag F_SETFD is never checked, it's silently allowed, but
-> > the equivalent FIONCLEX and FIOCLEX are checked. So if you wrote policy
-> > to block the FIO*CLEX flags, it would be bypassable through F_SETFD and
-> > FD_CLOEXEC. So the patch proposed makes the FIO flags behave like
-> > F_SETFD. Which means upstream policy users could drop this allow, which
-> > could then remove the target/class rule and allow all icotls. Which is easy
-> > to prevent and fix you could be a rule in to allowx 0 as documented in the
-> > wiki: https://selinuxproject.org/page/XpermRules
-> >
-> > The questions I think we have here are:
-> > 1. Do we agree that the behavior between SETFD and the FIO flags are equivalent?
-> >   I think they are.
-> > 2. Do we want the interfaces to behave the same?
-> >   I think they should.
-> > 3. Do upstream users of the policy construct care?
-> >   The patch is backwards compat, but I don't want their to be cruft
-> > floating around with extra allowxperm rules.
->
-> I think this proposed change is fine from Android's perspective. It
-> implements in the kernel what we've already already put in place in
-> our policy - that all domains are allowed to use these IOCLTs.
-> https://cs.android.com/android/platform/superproject/+/master:system/sepolicy/public/domain.te;l=312
->
-> It'll be a few years before we can clean up our policy since we need
-> to support older kernels, but that's fine.
+Hi Andy,
 
-Thanks for the discussion everyone, it sounds like everybody is okay
-with the change - that's good.  However, as I said earlier in this
-thread I think we need to put this behind a policy capability, how
-does POLICYDB_CAPABILITY_IOCTL_CLOEXEC/"ioctl_skip_cloexec" sound to
-everyone?
+I love your patch! Yet something to improve:
 
-Demi, are you able to respin this patch with policy capability changes?
+[auto build test ERROR on herbert-cryptodev-2.6/master]
+[also build test ERROR on herbert-crypto-2.6/master linux/master linus/master v5.17-rc4 next-20220215]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
--- 
-paul-moore.com
+url:    https://github.com/0day-ci/linux/commits/Andy-Shevchenko/crypto-cavium-nitrox-don-t-cast-parameter-in-bit-operations/20220216-000941
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20220216/202202160443.hqpSAgbP-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/51e27f6f33d377023ec5e097d18acb18f992f551
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/crypto-cavium-nitrox-don-t-cast-parameter-in-bit-operations/20220216-000941
+        git checkout 51e27f6f33d377023ec5e097d18acb18f992f551
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/crypto/cavium/nitrox/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/crypto/cavium/nitrox/nitrox_mbx.c: In function 'nitrox_pf2vf_mbox_handler':
+>> drivers/crypto/cavium/nitrox/nitrox_mbx.c:126:2: error: implicit declaration of function 'DEFINE_BITMAP'; did you mean 'DEFINE_TIMER'? [-Werror=implicit-function-declaration]
+     126 |  DEFINE_BITMAP(csr, 64);
+         |  ^~~~~~~~~~~~~
+         |  DEFINE_TIMER
+>> drivers/crypto/cavium/nitrox/nitrox_mbx.c:126:16: error: 'csr' undeclared (first use in this function); did you mean 'msr'?
+     126 |  DEFINE_BITMAP(csr, 64);
+         |                ^~~
+         |                msr
+   drivers/crypto/cavium/nitrox/nitrox_mbx.c:126:16: note: each undeclared identifier is reported only once for each function it appears in
+   drivers/crypto/cavium/nitrox/nitrox_mbx.c:127:2: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
+     127 |  u64 value, reg_addr;
+         |  ^~~
+   cc1: some warnings being treated as errors
+
+
+vim +126 drivers/crypto/cavium/nitrox/nitrox_mbx.c
+
+   121	
+   122	void nitrox_pf2vf_mbox_handler(struct nitrox_device *ndev)
+   123	{
+   124		struct nitrox_vfdev *vfdev;
+   125		struct pf2vf_work *pfwork;
+ > 126		DEFINE_BITMAP(csr, 64);
+   127		u64 value, reg_addr;
+   128		u32 i;
+   129		int vfno;
+   130	
+   131		/* loop for VF(0..63) */
+   132		reg_addr = NPS_PKT_MBOX_INT_LO;
+   133		value = nitrox_read_csr(ndev, reg_addr);
+   134		bitmap_from_u64(csr, value);
+   135		for_each_set_bit(i, csr, BITS_PER_TYPE(csr)) {
+   136			/* get the vfno from ring */
+   137			vfno = RING_TO_VFNO(i, ndev->iov.max_vf_queues);
+   138			vfdev = ndev->iov.vfdev + vfno;
+   139			vfdev->ring = i;
+   140			/* fill the vf mailbox data */
+   141			vfdev->msg.value = pf2vf_read_mbox(ndev, vfdev->ring);
+   142			pfwork = kzalloc(sizeof(*pfwork), GFP_ATOMIC);
+   143			if (!pfwork)
+   144				continue;
+   145	
+   146			pfwork->vfdev = vfdev;
+   147			pfwork->ndev = ndev;
+   148			INIT_WORK(&pfwork->pf2vf_resp, pf2vf_resp_handler);
+   149			queue_work(ndev->iov.pf2vf_wq, &pfwork->pf2vf_resp);
+   150			/* clear the corresponding vf bit */
+   151			nitrox_write_csr(ndev, reg_addr, BIT_ULL(i));
+   152		}
+   153	
+   154		/* loop for VF(64..127) */
+   155		reg_addr = NPS_PKT_MBOX_INT_HI;
+   156		value = nitrox_read_csr(ndev, reg_addr);
+   157		bitmap_from_u64(csr, value);
+   158		for_each_set_bit(i, csr, BITS_PER_TYPE(csr)) {
+   159			/* get the vfno from ring */
+   160			vfno = RING_TO_VFNO(i + 64, ndev->iov.max_vf_queues);
+   161			vfdev = ndev->iov.vfdev + vfno;
+   162			vfdev->ring = (i + 64);
+   163			/* fill the vf mailbox data */
+   164			vfdev->msg.value = pf2vf_read_mbox(ndev, vfdev->ring);
+   165	
+   166			pfwork = kzalloc(sizeof(*pfwork), GFP_ATOMIC);
+   167			if (!pfwork)
+   168				continue;
+   169	
+   170			pfwork->vfdev = vfdev;
+   171			pfwork->ndev = ndev;
+   172			INIT_WORK(&pfwork->pf2vf_resp, pf2vf_resp_handler);
+   173			queue_work(ndev->iov.pf2vf_wq, &pfwork->pf2vf_resp);
+   174			/* clear the corresponding vf bit */
+   175			nitrox_write_csr(ndev, reg_addr, BIT_ULL(i));
+   176		}
+   177	}
+   178	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

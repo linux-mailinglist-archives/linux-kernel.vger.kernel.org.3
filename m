@@ -2,292 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E974B69AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:48:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 272164B69B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:49:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236673AbiBOKsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 05:48:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55158 "EHLO
+        id S236682AbiBOKtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 05:49:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232378AbiBOKsl (ORCPT
+        with ESMTP id S236021AbiBOKtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 05:48:41 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBF6BB578;
-        Tue, 15 Feb 2022 02:48:29 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id f17so31418167edd.2;
-        Tue, 15 Feb 2022 02:48:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=1M5SOvvR5UxFyyhKJEPFzJaclHyq3gw5Z8ty3dGyG3U=;
-        b=RUZ6ElIuzBkDsHh4cMLyoJAlFhzyYs28MqDrmj7itCu3kYSJ+bRRsJQR7GYTe33zyH
-         HH4ln1cNxX2X2VRqgQHsAtrf5ejHxxfMkYED3ucMCauUuKERW/uUCQdHJs5yiV3AHkfD
-         eRwSay8GYw3hgFrNhRwr+7J5soKzzX1KIumv5jm/yg7BqNbfPe6CC7w90sX9gdGkdV0w
-         zrS2GGQMrqCIM8ewIZbvt40x5rGc7oZBcR9GSq0YKhgggV/JIQCfrLmfzyxkNWXCnmPN
-         1Wa5KBli2ZjCcFm9BvJoGcGUxHUiimUWcyB9B4Afqbl/SzcaERFJBesPG+O3USckjS6K
-         IG0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1M5SOvvR5UxFyyhKJEPFzJaclHyq3gw5Z8ty3dGyG3U=;
-        b=oEgqaFfj93YV094Wmiq654HpVC4Q1ajydGIAOwMzvaMqy7bSPwWddkEAecqxHwU9Y9
-         t70tmK90Ro1RkhuvRS4haPsoiZis1Y8LcMBziR8a053Et/gowgIlEY2Cce5xm9Yb2OCy
-         AHllrZPZwoI40T+XJeiYF9kpzKPD++H6l6qoevHrbAZ9UXiVHr1KKYVetol1Nrp4DYH9
-         j0bAOMZ7en8fZ1iv1PFly0nK/c7ErSnSzitncSnbFnOklVr/7PgYvwC1Kv6/okVxxxwr
-         3XFpDrOkpRznQhtDUZybl9MHHNofPSkmIFQKnKJB8gOco0NQQ3EbJH5bhPjibrmnQ87v
-         rOWg==
-X-Gm-Message-State: AOAM532a5YxSN/rRf+oG0IPa+P8GeCGl7xxd6O3aKPZrs2S1JbvNfIuJ
-        F2NCsYmL0UsT6ya+hLbWAcEL38diK9eDlP/i1qo=
-X-Google-Smtp-Source: ABdhPJzBJK61z/+n98rQlJ7TM8RncgIkE9xYPUqFPHexEGmqCyS7CjMirxLl1b2l6anz1sgrfT6S+OfTTkrHsJCvHw0=
-X-Received: by 2002:a05:6402:191:: with SMTP id r17mr3272762edv.348.1644922108457;
- Tue, 15 Feb 2022 02:48:28 -0800 (PST)
+        Tue, 15 Feb 2022 05:49:08 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6EDCF391
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 02:48:57 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 386AF1F38A;
+        Tue, 15 Feb 2022 10:48:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644922136; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m7XXWVLfP+1N3uj7TDnQ4HCyXl/MYTfBV62mk0GlDAw=;
+        b=z8nPDh0MPFO6nXgUSaV3eC4F0EUO7NlCynZF56nbti6261fZw8VGpEqOczfROjNycq1ab3
+        iSlVRxrBTnKU3F7YpE+gjWQ6Uzu4PPvPN+6ZNHAcXIIOexmgQF+D+pAvA1dZSWjL3LaY7j
+        Xc8rNM6eEEim3VOHsIf4rXh51vL7y1E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644922136;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m7XXWVLfP+1N3uj7TDnQ4HCyXl/MYTfBV62mk0GlDAw=;
+        b=3QLkWUR1PMVMmc09EU3ZnCMdppFBn4UJdgfO/X6pkDA2hhwMNi8LZHaq7rejvBF+pAzONB
+        6kFc9ZEn7QmN5ZDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 96F0D13C51;
+        Tue, 15 Feb 2022 10:48:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id LKyHIReFC2LPKQAAMHmgww
+        (envelope-from <osalvador@suse.de>); Tue, 15 Feb 2022 10:48:55 +0000
+Date:   Tue, 15 Feb 2022 11:48:53 +0100
+From:   osalvador <osalvador@suse.de>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Rafael Parra <rparrazo@redhat.com>
+Subject: Re: [PATCH v2 2/2] drivers/base/memory: determine and store zone for
+ single-zone memory blocks
+Message-ID: <YguFFRiNIktJhGnT@localhost.localdomain>
+References: <20220210184359.235565-1-david@redhat.com>
+ <20220210184359.235565-3-david@redhat.com>
 MIME-Version: 1.0
-References: <20220105150239.9628-1-pali@kernel.org> <20220112151814.24361-1-pali@kernel.org>
- <20220112151814.24361-12-pali@kernel.org> <87wnhxjxlq.fsf@BL-laptop>
- <20220214150923.a5ttxoh426cfxn4v@pali> <87tud1jwpr.fsf@BL-laptop> <CAEzXK1qYKVk7QiSY_DwqkZ7WV6WU06WBtiqZx0JJCc+mOP-7Kg@mail.gmail.com>
-In-Reply-To: <CAEzXK1qYKVk7QiSY_DwqkZ7WV6WU06WBtiqZx0JJCc+mOP-7Kg@mail.gmail.com>
-From:   =?UTF-8?B?THXDrXMgTWVuZGVz?= <luis.p.mendes@gmail.com>
-Date:   Tue, 15 Feb 2022 10:48:17 +0000
-Message-ID: <CAEzXK1rj7pOvJgAMd11TJVqzgWD2GSJ-25_BWL7X9wiZWOhieQ@mail.gmail.com>
-Subject: Re: [PATCH v2 11/11] ARM: dts: armada-385.dtsi: Add definitions for
- PCIe legacy INTx interrupts
-To:     Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210184359.235565-3-david@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Feb 10, 2022 at 07:43:59PM +0100, David Hildenbrand wrote:
+> test_pages_in_a_zone() is just another nasty PFN walker that can easily
+> stumble over ZONE_DEVICE memory ranges falling into the same memory block
+> as ordinary system RAM: the memmap of parts of these ranges might possibly
+> be uninitialized. In fact, we observed (on an older kernel) with UBSAN:
+> 
+> [ 7691.855626] UBSAN: Undefined behaviour in ./include/linux/mm.h:1133:50
+> [ 7691.862155] index 7 is out of range for type 'zone [5]'
+> [ 7691.867393] CPU: 121 PID: 35603 Comm: read_all Kdump: loaded Tainted: [...]
+> [ 7691.879990] Hardware name: Dell Inc. PowerEdge R7425/08V001, BIOS 1.12.2 11/15/2019
+> [ 7691.887643] Call Trace:
+> [ 7691.890107]  dump_stack+0x9a/0xf0
+> [ 7691.893438]  ubsan_epilogue+0x9/0x7a
+> [ 7691.897025]  __ubsan_handle_out_of_bounds+0x13a/0x181
+> [ 7691.902086]  ? __ubsan_handle_shift_out_of_bounds+0x289/0x289
+> [ 7691.907841]  ? sched_clock_cpu+0x18/0x1e0
+> [ 7691.911867]  ? __lock_acquire+0x610/0x38d0
+> [ 7691.915979]  test_pages_in_a_zone+0x3c4/0x500
+> [ 7691.920357]  show_valid_zones+0x1fa/0x380
+> [ 7691.924375]  ? print_allowed_zone+0x80/0x80
+> [ 7691.928571]  ? __lock_is_held+0xb4/0x140
+> [ 7691.932509]  ? __lock_is_held+0xb4/0x140
+> [ 7691.936447]  ? dev_attr_store+0x70/0x70
+> [ 7691.940296]  dev_attr_show+0x43/0xb0
+> [ 7691.943884]  ? memset+0x1f/0x40
+> [ 7691.947042]  sysfs_kf_seq_show+0x1c5/0x440
+> [ 7691.951153]  seq_read+0x49d/0x1190
+> [ 7691.954574]  ? seq_escape+0x1f0/0x1f0
+> [ 7691.958249]  ? fsnotify_first_mark+0x150/0x150
+> [ 7691.962713]  vfs_read+0xff/0x300
+> [ 7691.965952]  ksys_read+0xb8/0x170
+> [ 7691.969279]  ? kernel_write+0x130/0x130
+> [ 7691.973126]  ? entry_SYSCALL_64_after_hwframe+0x7a/0xdf
+> [ 7691.978365]  ? do_syscall_64+0x22/0x4b0
+> [ 7691.982212]  do_syscall_64+0xa5/0x4b0
+> [ 7691.985887]  entry_SYSCALL_64_after_hwframe+0x6a/0xdf
+> [ 7691.990947] RIP: 0033:0x7f01f4439b52
+> 
+> We seem to stumble over a memmap that contains a garbage zone id. While
+> we could try inserting pfn_to_online_page() calls, it will just make
+> memory offlining slower, because we use test_pages_in_a_zone() to make
+> sure we're offlining pages that all belong to the same zone.
+> 
+> Let's just get rid of this PFN walker and determine the single zone
+> of a memory block -- if any -- for early memory blocks during boot. For
+> memory onlining, we know the single zone already. Let's avoid any
+> additional memmap scanning and just rely on the zone information
+> available during boot.
+> 
+> For memory hot(un)plug, we only really care about memory blocks that:
+> * span a single zone (and, thereby, a single node)
+> * are completely System RAM (IOW, no holes, no ZONE_DEVICE)
+> If one of these conditions is not met, we reject memory offlining.
+> Hotplugged memory blocks (starting out offline), always meet both
+> conditions.
+> 
+> There are three scenarios to handle:
+> 
+> (1) Memory hot(un)plug
+> 
+> A memory block with zone == NULL cannot be offlined, corresponding to
+> our previous test_pages_in_a_zone() check.
+> 
+> After successful memory onlining/offlining, we simply set the zone
+> accordingly.
+> * Memory onlining: set the zone we just used for onlining
+> * Memory offlining: set zone = NULL
+> 
+> So a hotplugged memory block starts with zone = NULL. Once memory
+> onlining is done, we set the proper zone.
+> 
+> (2) Boot memory with !CONFIG_NUMA
+> 
+> We know that there is just a single pgdat, so we simply scan all zones
+> of that pgdat for an intersection with our memory block PFN range when
+> adding the memory block. If more than one zone intersects (e.g., DMA and
+> DMA32 on x86 for the first memory block) we set zone = NULL and
+> consequently mimic what test_pages_in_a_zone() used to do.
+> 
+> (3) Boot memory with CONFIG_NUMA
+> 
+> At the point in time we create the memory block devices during boot, we
+> don't know yet which nodes *actually* span a memory block. While we could
+> scan all zones of all nodes for intersections, overlapping nodes complicate
+> the situation and scanning all nodes is possibly expensive. But that
+> problem has already been solved by the code that sets the node of a memory
+> block and creates the link in the sysfs --
+> do_register_memory_block_under_node().
+> 
+> So, we hook into the code that sets the node id for a memory block. If
+> we already have a different node id set for the memory block, we know
+> that multiple nodes *actually* have PFNs falling into our memory block:
+> we set zone = NULL and consequently mimic what test_pages_in_a_zone() used
+> to do. If there is no node id set, we do the same as (2) for the given
+> node.
+> 
+> Note that the call order in driver_init() is:
+> -> memory_dev_init(): create memory block devices
+> -> node_dev_init(): link memory block devices to the node and set the
+> 		    node id
+> 
+> So in summary, we detect if there is a single zone responsible for this
+> memory block and we consequently store the zone in that case in the
+> memory block, updating it during memory onlining/offlining.
+> 
+> Reported-by: Rafael Parra <rparrazo@redhat.com>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Sorry for jumping in the conversation, but I read this thread and I
-have an Armada A388 HW so I can test it, if desired.
+Hi David
 
-Lu=C3=ADs
+Reviewed-by: Oscar Salvador <osalvador@suse.de>
+
+One minor thing below: 
+
+> @@ -663,6 +743,17 @@ static int init_memory_block(unsigned long block_id, unsigned long state,
+>  	mem->nr_vmemmap_pages = nr_vmemmap_pages;
+>  	INIT_LIST_HEAD(&mem->group_next);
+>  
+> +#ifndef CONFIG_NUMA
+> +	if (state == MEM_ONLINE)
+> +		/*
+> +		 * MEM_ONLINE at this point implies early memory. With NUMA,
+> +		 * we'll determine the zone when setting the node id via
+> +		 * memory_block_add_nid(). Memory hotplug updated the zone
+> +		 * manually when memory onlining/offlining succeeds.
+> +		 */
+> +		mem->zone = early_node_zone_for_memory_block(mem, NUMA_NO_NODE);
+
+I took me a couple of minutes to figure out that MEM_ONLINE implies
+early memory at this point because 1) of course early memory must be
+online and 2) the only caller that passes MEM_ONLINE to
+init_memory_block() is add_memory_block(), which only gets called at
+boot time. (btw, add_memory_block() really should use __init, right?)
+
+I guess what I am saying here is: I really like the comment, but I am not sure
+whether other people with a drifting brain like mine will also wonder about
+that.
 
 
-On Tue, Feb 15, 2022 at 10:47 AM Lu=C3=ADs Mendes <luis.p.mendes@gmail.com>=
- wrote:
->
-> Hello,
->
-> Sorry for jumping in the conversation, but I read this thread and I have =
-an Armada A388 HW so I can test it, if desired.
->
-> Lu=C3=ADs
->
-> On Mon, Feb 14, 2022 at 7:57 PM Gregory CLEMENT <gregory.clement@bootlin.=
-com> wrote:
->>
->> Hello,
->>
->> > On Monday 14 February 2022 16:07:13 Gregory CLEMENT wrote:
->> >> Hello Pali,
->> >>
->> >> > With this change legacy INTA, INTB, INTC and INTD interrupts are re=
-ported
->> >> > separately and not mixed into one Linux virq source anymore.
->> >> >
->> >> > Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
->> >> > ---
->> >> >  arch/arm/boot/dts/armada-385.dtsi | 52 ++++++++++++++++++++++++++-=
-----
->> >>
->> >> Is there any reason for not doing the same change in armada-380.dtsi =
-?
->> >
->> > I do not have A380 HW, so I did this change only for A385 which I have
->> > tested.
->>
->> OK fair enough.
->>
->> So you can add my
->> Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
->>
->> Moreover to keep biscetability  this patch should be merged after the
->> support in the driver. So the easier is to let merge it through the PCI
->> subsystem with the other patches from this series. I do not think there
->> will be any other changes in this file so there won't be any merge
->> conflicts.
->>
->> Thanks,
->>
->> Gr=C3=A9gory
->>
->>
->> >
->> >> Gr=C3=A9gory
->> >>
->> >> >  1 file changed, 44 insertions(+), 8 deletions(-)
->> >> >
->> >> > diff --git a/arch/arm/boot/dts/armada-385.dtsi b/arch/arm/boot/dts/=
-armada-385.dtsi
->> >> > index f0022d10c715..83392b92dae2 100644
->> >> > --- a/arch/arm/boot/dts/armada-385.dtsi
->> >> > +++ b/arch/arm/boot/dts/armada-385.dtsi
->> >> > @@ -69,16 +69,25 @@
->> >> >                            reg =3D <0x0800 0 0 0 0>;
->> >> >                            #address-cells =3D <3>;
->> >> >                            #size-cells =3D <2>;
->> >> > +                          interrupt-names =3D "intx";
->> >> > +                          interrupts-extended =3D <&gic GIC_SPI 29=
- IRQ_TYPE_LEVEL_HIGH>;
->> >> >                            #interrupt-cells =3D <1>;
->> >> >                            ranges =3D <0x82000000 0 0 0x82000000 0x=
-1 0 1 0
->> >> >                                      0x81000000 0 0 0x81000000 0x1 =
-0 1 0>;
->> >> >                            bus-range =3D <0x00 0xff>;
->> >> > -                          interrupt-map-mask =3D <0 0 0 0>;
->> >> > -                          interrupt-map =3D <0 0 0 0 &gic GIC_SPI =
-29 IRQ_TYPE_LEVEL_HIGH>;
->> >> > +                          interrupt-map-mask =3D <0 0 0 7>;
->> >> > +                          interrupt-map =3D <0 0 0 1 &pcie1_intc 0=
->,
->> >> > +                                          <0 0 0 2 &pcie1_intc 1>,
->> >> > +                                          <0 0 0 3 &pcie1_intc 2>,
->> >> > +                                          <0 0 0 4 &pcie1_intc 3>;
->> >> >                            marvell,pcie-port =3D <0>;
->> >> >                            marvell,pcie-lane =3D <0>;
->> >> >                            clocks =3D <&gateclk 8>;
->> >> >                            status =3D "disabled";
->> >> > +                          pcie1_intc: interrupt-controller {
->> >> > +                                  interrupt-controller;
->> >> > +                                  #interrupt-cells =3D <1>;
->> >> > +                          };
->> >> >                    };
->> >> >
->> >> >                    /* x1 port */
->> >> > @@ -88,16 +97,25 @@
->> >> >                            reg =3D <0x1000 0 0 0 0>;
->> >> >                            #address-cells =3D <3>;
->> >> >                            #size-cells =3D <2>;
->> >> > +                          interrupt-names =3D "intx";
->> >> > +                          interrupts-extended =3D <&gic GIC_SPI 33=
- IRQ_TYPE_LEVEL_HIGH>;
->> >> >                            #interrupt-cells =3D <1>;
->> >> >                            ranges =3D <0x82000000 0 0 0x82000000 0x=
-2 0 1 0
->> >> >                                      0x81000000 0 0 0x81000000 0x2 =
-0 1 0>;
->> >> >                            bus-range =3D <0x00 0xff>;
->> >> > -                          interrupt-map-mask =3D <0 0 0 0>;
->> >> > -                          interrupt-map =3D <0 0 0 0 &gic GIC_SPI =
-33 IRQ_TYPE_LEVEL_HIGH>;
->> >> > +                          interrupt-map-mask =3D <0 0 0 7>;
->> >> > +                          interrupt-map =3D <0 0 0 1 &pcie2_intc 0=
->,
->> >> > +                                          <0 0 0 2 &pcie2_intc 1>,
->> >> > +                                          <0 0 0 3 &pcie2_intc 2>,
->> >> > +                                          <0 0 0 4 &pcie2_intc 3>;
->> >> >                            marvell,pcie-port =3D <1>;
->> >> >                            marvell,pcie-lane =3D <0>;
->> >> >                            clocks =3D <&gateclk 5>;
->> >> >                            status =3D "disabled";
->> >> > +                          pcie2_intc: interrupt-controller {
->> >> > +                                  interrupt-controller;
->> >> > +                                  #interrupt-cells =3D <1>;
->> >> > +                          };
->> >> >                    };
->> >> >
->> >> >                    /* x1 port */
->> >> > @@ -107,16 +125,25 @@
->> >> >                            reg =3D <0x1800 0 0 0 0>;
->> >> >                            #address-cells =3D <3>;
->> >> >                            #size-cells =3D <2>;
->> >> > +                          interrupt-names =3D "intx";
->> >> > +                          interrupts-extended =3D <&gic GIC_SPI 70=
- IRQ_TYPE_LEVEL_HIGH>;
->> >> >                            #interrupt-cells =3D <1>;
->> >> >                            ranges =3D <0x82000000 0 0 0x82000000 0x=
-3 0 1 0
->> >> >                                      0x81000000 0 0 0x81000000 0x3 =
-0 1 0>;
->> >> >                            bus-range =3D <0x00 0xff>;
->> >> > -                          interrupt-map-mask =3D <0 0 0 0>;
->> >> > -                          interrupt-map =3D <0 0 0 0 &gic GIC_SPI =
-70 IRQ_TYPE_LEVEL_HIGH>;
->> >> > +                          interrupt-map-mask =3D <0 0 0 7>;
->> >> > +                          interrupt-map =3D <0 0 0 1 &pcie3_intc 0=
->,
->> >> > +                                          <0 0 0 2 &pcie3_intc 1>,
->> >> > +                                          <0 0 0 3 &pcie3_intc 2>,
->> >> > +                                          <0 0 0 4 &pcie3_intc 3>;
->> >> >                            marvell,pcie-port =3D <2>;
->> >> >                            marvell,pcie-lane =3D <0>;
->> >> >                            clocks =3D <&gateclk 6>;
->> >> >                            status =3D "disabled";
->> >> > +                          pcie3_intc: interrupt-controller {
->> >> > +                                  interrupt-controller;
->> >> > +                                  #interrupt-cells =3D <1>;
->> >> > +                          };
->> >> >                    };
->> >> >
->> >> >                    /*
->> >> > @@ -129,16 +156,25 @@
->> >> >                            reg =3D <0x2000 0 0 0 0>;
->> >> >                            #address-cells =3D <3>;
->> >> >                            #size-cells =3D <2>;
->> >> > +                          interrupt-names =3D "intx";
->> >> > +                          interrupts-extended =3D <&gic GIC_SPI 71=
- IRQ_TYPE_LEVEL_HIGH>;
->> >> >                            #interrupt-cells =3D <1>;
->> >> >                            ranges =3D <0x82000000 0 0 0x82000000 0x=
-4 0 1 0
->> >> >                                      0x81000000 0 0 0x81000000 0x4 =
-0 1 0>;
->> >> >                            bus-range =3D <0x00 0xff>;
->> >> > -                          interrupt-map-mask =3D <0 0 0 0>;
->> >> > -                          interrupt-map =3D <0 0 0 0 &gic GIC_SPI =
-71 IRQ_TYPE_LEVEL_HIGH>;
->> >> > +                          interrupt-map-mask =3D <0 0 0 7>;
->> >> > +                          interrupt-map =3D <0 0 0 1 &pcie4_intc 0=
->,
->> >> > +                                          <0 0 0 2 &pcie4_intc 1>,
->> >> > +                                          <0 0 0 3 &pcie4_intc 2>,
->> >> > +                                          <0 0 0 4 &pcie4_intc 3>;
->> >> >                            marvell,pcie-port =3D <3>;
->> >> >                            marvell,pcie-lane =3D <0>;
->> >> >                            clocks =3D <&gateclk 7>;
->> >> >                            status =3D "disabled";
->> >> > +                          pcie4_intc: interrupt-controller {
->> >> > +                                  interrupt-controller;
->> >> > +                                  #interrupt-cells =3D <1>;
->> >> > +                          };
->> >> >                    };
->> >> >            };
->> >> >    };
->> >> > --
->> >> > 2.20.1
->> >> >
->> >>
->> >> --
->> >> Gregory Clement, Bootlin
->> >> Embedded Linux and Kernel engineering
->> >> http://bootlin.com
->>
->> --
->> Gregory Clement, Bootlin
->> Embedded Linux and Kernel engineering
->> http://bootlin.com
+--
+Oscar Salvador
+SUSE Labs

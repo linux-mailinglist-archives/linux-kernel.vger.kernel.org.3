@@ -2,136 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 823974B6AD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F504B6AEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237143AbiBOLal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 06:30:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51250 "EHLO
+        id S237222AbiBOLbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 06:31:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237139AbiBOLae (ORCPT
+        with ESMTP id S237227AbiBOLbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 06:30:34 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD14710855E
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 03:30:24 -0800 (PST)
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com [209.85.161.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2020940333
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 11:30:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644924623;
-        bh=TQsWKxzWtW4CbZduV18nJ8RuXExNAqdKgvnVntrHDhc=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=Ih4nybmos/dYj9ptGC8iIbrR2f0liEqTSJ7K5toAJyiI0DQbr488UQsDEHvUkOBVL
-         Rel72W18wTWMaSFvUjpo+7TlK9i01THlKC/6k/DSkZvHICnVQRQ2xU2R+0HJrl4he1
-         YHT4anh7KNyaz10OJKGaYVmYQUgDDUdyZKduLJf2Sx3QZScuF7A0Mo+VOvnyrSHFNH
-         JiI+AimC3ocKRBnlzJ7TW+tz6pmJx5nN2ITd8FWoq48/Uwwq/9wavUQ9Kp+93d/dmS
-         c5Fb7s8L/CbmzaajY7ADu/ULYKHT8Lpch8yJUYnrWsz689GU06n2OLnMgy64Bx0g+g
-         SWO/AQdN/CHNA==
-Received: by mail-oo1-f72.google.com with SMTP id u13-20020a4ab5cd000000b002e021ad5bbcso12390976ooo.17
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 03:30:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TQsWKxzWtW4CbZduV18nJ8RuXExNAqdKgvnVntrHDhc=;
-        b=yGOjyi9AHseaIh2e/peFvy7VS1lLS6HbkuytRpYV0NQ4ALHWK0M3CvA6or8F8HRCW+
-         jWIJVJLn6sRFhoB94PNoaVbu4oAwky9rb3qzbDmdZ/79dgnxFzVZKthpYYJlqb/ukReh
-         1gpLVQ2tKUMDPKxcCzkfSGuN2mklJL+dqPsX/70sTObrtq2DTYh5tjmISlANNaTgRNtt
-         OZ+xFNl19PB57HHoEm7gUwrI7t1Y4fWHd8QjKSmRXHOh0UoZQEnJIKlEovcVOZqWmgtL
-         ngXFjKatJydoKzPjovN9tngxRaN9+HyKvX/OZ0exkepYRIxoVSyVATgwnPgL3xx+VgIC
-         GG8A==
-X-Gm-Message-State: AOAM5331Tpc753r2mMrndm1cQJMFZatxLsWffbHD6ja8pG+6xGEbhAcB
-        2u8FYNkPtEDt+wXDy9AZpl4w7FhwY9GhDNzflvdvP1xJWtLKfSc0yacCLrI2XRwU3/MhCQWsczc
-        c9vJEiAyrvoJ9kc8J7xej/O8/hghQE9K8WHFGi0YeiGlM8erL2pNEwWmd3g==
-X-Received: by 2002:a05:6870:1019:b0:ce:c0c9:631 with SMTP id 25-20020a056870101900b000cec0c90631mr1163423oai.131.1644924621950;
-        Tue, 15 Feb 2022 03:30:21 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxSDV3cX4UNce8B0x7g5PwElp6clHoeO17u/5Wi9aFeC595MGFUPB0PzJhz/IbYfeFikE2Tp9YmYSfowWCVBTw=
-X-Received: by 2002:a05:6870:1019:b0:ce:c0c9:631 with SMTP id
- 25-20020a056870101900b000cec0c90631mr1163415oai.131.1644924621695; Tue, 15
- Feb 2022 03:30:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20220215042011.2266897-1-kai.heng.feng@canonical.com> <CAHp75VfBQPgrbuxazuoyDbFtGZR=rU5wqPhSXhkoiA_2HR1EHA@mail.gmail.com>
-In-Reply-To: <CAHp75VfBQPgrbuxazuoyDbFtGZR=rU5wqPhSXhkoiA_2HR1EHA@mail.gmail.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Tue, 15 Feb 2022 19:30:10 +0800
-Message-ID: <CAAd53p6tjWtKSqDDG_hjbFGKeR7-L3uYwgOTRNHfwAhmE8nV+g@mail.gmail.com>
-Subject: Re: [PATCH v3] iio: accel: adxl345: Add ACPI HID table
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Tue, 15 Feb 2022 06:31:45 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D4013CFB;
+        Tue, 15 Feb 2022 03:31:29 -0800 (PST)
+X-UUID: 39c9a947dafe4ffb826bdea49c2bf5e9-20220215
+X-UUID: 39c9a947dafe4ffb826bdea49c2bf5e9-20220215
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1084979076; Tue, 15 Feb 2022 19:31:25 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 15 Feb 2022 19:31:24 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 15 Feb 2022 19:31:23 +0800
+Message-ID: <f2bce3870b3eacce0c9bcdf5a022e11371a9ace4.camel@mediatek.com>
+Subject: Re: [PATCH v2, 03/10] dt-bindings: media: mtk-vcodec: Adds encoder
+ cores dt-bindings for mt8195
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Hsin-Yi Wang <hsinyi@chromium.org>, <linux-media@vger.kernel.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        <linux-kernel@vger.kernel.org>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>, <srv_heupstream@mediatek.com>,
+        Tomasz Figa <tfiga@google.com>, Yong Wu <yong.wu@mediatek.com>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        Longfei Wang <longfei.wang@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Date:   Tue, 15 Feb 2022 19:31:23 +0800
+In-Reply-To: <1642433742.919482.3923083.nullmailer@robh.at.kernel.org>
+References: <20220117120615.21687-1-irui.wang@mediatek.com>
+         <20220117120615.21687-4-irui.wang@mediatek.com>
+         <1642433742.919482.3923083.nullmailer@robh.at.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 4:28 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Tue, Feb 15, 2022 at 6:20 AM Kai-Heng Feng
-> <kai.heng.feng@canonical.com> wrote:
-> >
-> > x86 boards may use ACPI HID "ADS0345" for adxl345 device.
-> >
-> > Analog replied:
-> > "ADS034X is not a valid PNP ID. ADS0345 would be.
-> > I'm not aware that this ID is already taken.
-> > Feel free to submit a mainline Linux input mailing list patch."
-> >
-> > So add an ACPI match table for that accordingly.
->
-> Thank you for the update, my comments below.
->
-> ...
->
-> > @@ -41,6 +41,7 @@ static int adxl345_i2c_probe(struct i2c_client *client,
-> >  static const struct i2c_device_id adxl345_i2c_id[] = {
-> >         { "adxl345", ADXL345 },
-> >         { "adxl375", ADXL375 },
->
-> > +       { "ADS0345:00", ADXL345 },
-> >         { }
-> >  };
-> >
->
-> This is wrong. First of all, on the left side you put the device
-> instance name (which must not be in the ID tables, since the device
-> instance name is "ID + instance number"). Second, the motivation of
-> this is not clear, if the device is enumerated by ACPI, why do you
-> care about board code?
+Dear Rob,
 
-I was uncertain on this at first, but later I saw some drivers use
-this form (*:00) too, so I just followed through.
+Many thanks for your comments.
 
-The intention is to accommodate adxl345_i2c_probe() without any modification.
+On Mon, 2022-01-17 at 09:35 -0600, Rob Herring wrote:
+> On Mon, 17 Jan 2022 20:06:08 +0800, Irui Wang wrote:
+> > Adds encoder cores dt-bindings for mt8195
+> > 
+> > Signed-off-by: Irui Wang <irui.wang@mediatek.com>
+> > ---
+> >  .../media/mediatek,vcodec-encoder-core.yaml   | 214
+> > ++++++++++++++++++
+> >  1 file changed, 214 insertions(+)
+> >  create mode 100644
+> > Documentation/devicetree/bindings/media/mediatek,vcodec-encoder-
+> > core.yaml
+> > 
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m
+> dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> Documentation/devicetree/bindings/media/mediatek,vcodec-encoder-
+> core.example.dts:20:18: fatal error: dt-bindings/memory/mt8195-
+> memory-port.h: No such file or directory
+>    20 |         #include <dt-bindings/memory/mt8195-memory-port.h>
+>       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> compilation terminated.
+> make[1]: *** [scripts/Makefile.lib:373:
+> Documentation/devicetree/bindings/media/mediatek,vcodec-encoder-
+> core.example.dt.yaml] Error 1
+> make[1]: *** Waiting for unfinished jobs....
+> make: *** [Makefile:1413: dt_binding_check] Error 2
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/patch/1580741
+> 
+> This check can fail if there are any dependencies. The base for a
+> patch
+> series is generally the most recent rc1.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up
+> to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit.
 
+This new encoder yaml includes mt8195 iommu and power&clock node, so it
+depends on patches:
+iommu:
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=551641
+power:
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=580579
 
->
-> Just don't add anything to this table.
+which are not accept yet. 
 
-Got it.
+But IOMMU and power already send new version series patches, I will
+rebase this series in next version.
 
->
-> The rest is good, but consider doing the same for _spi part of the driver.
+Thanks
+BRs
+> 
 
-OK, will do.
-
-Kai-Heng
-
->
-> --
-> With Best Regards,
-> Andy Shevchenko

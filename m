@@ -2,107 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AEBF4B755C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E8D4B75E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243976AbiBOUDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 15:03:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45716 "EHLO
+        id S243944AbiBOUDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 15:03:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243953AbiBOUD0 (ORCPT
+        with ESMTP id S243947AbiBOUDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 15:03:26 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AED71C97
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:03:04 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id z22so184341edd.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:03:04 -0800 (PST)
+        Tue, 15 Feb 2022 15:03:18 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0705379C43
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:02:59 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id w7so25345673ioj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:02:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=56tbQJVv90RABsQ0i0ptzrDmdvS83ZrjWE0KJ5/Juw8=;
-        b=sFifZ3ibKjhu/WnpE7XgZp/C2bXZ7ift+MmeAVSa1hznUw6Wm07gSdft5d2fUe2Vn2
-         RjiRCYgEeTYyWMTxD06Z5LMTyKQZ5RluV4mRPZ8hVkTVElWuISequYHNfnVgs1JVpq+h
-         xxaHe/Iv+2TTmvgqWPO0LZnQEBReR69V0AMuYUHxpEJAkG1St+MhQIgNHgZL37cOQaFq
-         LwC5kUW7OHpEbm/5XIti6ajkRvwQWpQC5DoqvzT+ZOX325bSVD1WtjOMcq8+I+dZAQAv
-         QXaY6x7vFTvffge/EC02QtULgmF6djGu6x5pF2BUtiqlB5PHHwiNmQmkGDrJbIl2VAHu
-         4iAw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Bku1Hl5fEkgz+otT988o7TuLWt5dY0nq0/c4iSTdkMc=;
+        b=bI4UKeyru4JVpL+f1sb1xj3fyM48nJ/VjjqBqQm8DTqc0JV//6TU28W47RbD351Aca
+         Jr3snuiQ8lPidQla1JW+xYeT/5QO5kwjg7Koqa/WmfzQLFoC5yBZF5TqMNsZ9Ju5guKw
+         VTs6XaVdUZ+muL4Tjq2t3T1cF0qzekqC7LR/wphZ6SK7IewFzKg7YPY6St89+3HdlcuU
+         lmE0VT7f7ol/0zGHTOa4RXYB/6A1UOHgyLXm9N63m+Ymb2lj3LKhs9AXgdY5nAtZyBim
+         MqLiP3dgHIMW8lPUiGt8T4Eu1ahm0ngh6cO+F5v3nT0CxSiYUSDtCwekr9bmXkepRXK5
+         iP4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=56tbQJVv90RABsQ0i0ptzrDmdvS83ZrjWE0KJ5/Juw8=;
-        b=gJBcGfJKD+8RxPuFJHtrPuI+ItlMSSrk3oeajCz7ROudykgBH77rxT27cgAre6sNx2
-         0hC0RIRvXiu6B8GUIK+NfLMB0AWQ9l5d0OLjO6wM/sbR+femgeaXSEQ+58Fez/BvEkuz
-         VjwWzfFP9Y2LlLxm6vSAr3q7fNPe/EyjoyPn71GdkQaaIT9dVygMnvEqHJXqb1V0x/Pg
-         p94dP+xzOpbpzwQjhX1WhfUFH2J4NcXkV3kric1WekgvmOKxpSN6wfHztN4ubpHjVdfz
-         aNc7VXrGuJi5LjZVQMUi/fjztG556+tk0qQHQCrQAH0yEUEhWVpmtOWzIDPLkha3RK9j
-         iGpg==
-X-Gm-Message-State: AOAM533NsKKZpPxIeVV5aTA5BVttc4hQ1fPknWJ52NOx+cWumqnQEZHO
-        pA/luLqYXMoZ2Spy8ht2I2A3O378HuKShEDBZ/Hu
-X-Google-Smtp-Source: ABdhPJwSh+Lbt7VtTxO+bjCuU4YBvFJI07pOtqxY+X5Ac/RcvpsJaiEfY8EBo10iskp6ziZLHDs9nkyLfRPbTaESgFg=
-X-Received: by 2002:a05:6402:35ca:: with SMTP id z10mr606628edc.43.1644955382916;
- Tue, 15 Feb 2022 12:03:02 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Bku1Hl5fEkgz+otT988o7TuLWt5dY0nq0/c4iSTdkMc=;
+        b=IAKGk1YNzHwIZRmvtZV340WC/Gyfo2eJo2FMZKirfxJgloe3eX3XfihuGHBmUBqVuY
+         WAH+yW/MgQJjepZH9FChst7oYxJbUaiyTfQBexZ4fRDF0VkRvg3yIT+QbqcuptiA90zA
+         i4qDY1xxWIHeBURHSwQv68CW+aSTuOHgsQnnPgv6bCj0zaLA2hayGWSz/Y6lDiNwD6BT
+         KVKe4Z62eAR5/fN44k79SqQPt9isVzd/PhkJOzUG60HyfKA7pDQZZPdl5LhiKDxWFMa2
+         oCcii4LUABCYwdZgU8eq3i15tIOsSl0V2eUy0eM6ns2PEQIxryRgvqq8Q9QOcFaWs0T0
+         B7tg==
+X-Gm-Message-State: AOAM5311HdQFKjP99iQc9xq8j2WEnVFXeb6POEi7aaAssjT2KvUea4yF
+        jMpUAENf/6Qb8N9akGuhlHAE+Q==
+X-Google-Smtp-Source: ABdhPJy8dHbbuYtLRyKXNCvGG8YTuestTDnVDk8gCge6PB3wsVsPXYEmIxpoTIVtMTg2EdDPvC5J5A==
+X-Received: by 2002:a6b:b7cf:: with SMTP id h198mr326683iof.166.1644955379353;
+        Tue, 15 Feb 2022 12:02:59 -0800 (PST)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id c24sm23651126ioh.40.2022.02.15.12.02.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 12:02:58 -0800 (PST)
+Message-ID: <1cdd8e0c-85d7-dd91-a6f1-1390e7854350@linaro.org>
+Date:   Tue, 15 Feb 2022 14:02:57 -0600
 MIME-Version: 1.0
-References: <20220212175922.665442-1-omosnace@redhat.com> <20220212175922.665442-3-omosnace@redhat.com>
- <CAHC9VhT90617FoqQJBCrDQ8gceVVA6a1h74h6T4ZOwNk6RVB3g@mail.gmail.com>
- <20220214165436.1f6a9987@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <CAFSqH7zC-4Ti_mzK4ZrpCVtNVCxD8h729MezG2avJLGJ2JrMTg@mail.gmail.com> <CADvbK_e+TUuWhBQz1NPPS2aE59tzPKXPfUogrZ526hvm6OvY9Q@mail.gmail.com>
-In-Reply-To: <CADvbK_e+TUuWhBQz1NPPS2aE59tzPKXPfUogrZ526hvm6OvY9Q@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 15 Feb 2022 15:02:51 -0500
-Message-ID: <CAHC9VhSHxk0MUR1krpmbot6iG-vqH48sRgKOnJQ0LsFTs6Jvqg@mail.gmail.com>
-Subject: Re: [PATCH net v3 2/2] security: implement sctp_assoc_established
- hook in selinux
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        SElinux list <selinux@vger.kernel.org>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        "open list:SCTP PROTOCOL" <linux-sctp@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Prashanth Prahlad <pprahlad@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 10/25] bus: mhi: ep: Add support for creating and
+ destroying MHI EP devices
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        mhi@lists.linux.dev
+Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
+        quic_jhugo@quicinc.com, vinod.koul@linaro.org,
+        bjorn.andersson@linaro.org, dmitry.baryshkov@linaro.org,
+        quic_vbadigan@quicinc.com, quic_cang@quicinc.com,
+        quic_skananth@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
+ <20220212182117.49438-11-manivannan.sadhasivam@linaro.org>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20220212182117.49438-11-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 11:13 PM Xin Long <lucien.xin@gmail.com> wrote:
-> Looks okay to me.
->
-> The difference from the old one is that: with
-> selinux_sctp_process_new_assoc() called in
-> selinux_sctp_assoc_established(), the client sksec->peer_sid is using
-> the first asoc's peer_secid, instead of the latest asoc's peer_secid.
-> And not sure if it will cause any problems when doing the extra check
-> sksec->peer_sid != asoc->peer_secid for the latest asoc and *returns
-> err*. But I don't know about selinux, I guess there must be a reason
-> from selinux side.
+On 2/12/22 12:21 PM, Manivannan Sadhasivam wrote:
+> This commit adds support for creating and destroying MHI endpoint devices.
+> The MHI endpoint devices binds to the MHI endpoint channels and are used
+> to transfer data between MHI host and endpoint device.
+> 
+> There is a single MHI EP device for each channel pair. The devices will be
+> created when the corresponding channels has been started by the host and
+> will be destroyed during MHI EP power down and reset.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Generally speaking we don't want to change any SELinux socket labels
-once it has been created.  While the peer_sid is a bit different,
-changing it after userspace has access to the socket could be
-problematic.  In the case where the peer_sid differs between the two
-we have a permission check which allows policy to control this
-behavior which seems like the best option at this point.
+A few comments again, nothing major.
 
-> I will ACK on patch 0/2.
+					-Alex
 
-Thanks, I'm going to go ahead and merge these two patches into
-selinux/next right now.
+> ---
+>   drivers/bus/mhi/ep/main.c | 77 +++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 77 insertions(+)
+> 
+> diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
+> index f66404181972..fcaacf9ddbd1 100644
+> --- a/drivers/bus/mhi/ep/main.c
+> +++ b/drivers/bus/mhi/ep/main.c
+> @@ -67,6 +67,83 @@ static struct mhi_ep_device *mhi_ep_alloc_device(struct mhi_ep_cntrl *mhi_cntrl,
+>   	return mhi_dev;
+>   }
+>   
+> +/*
+> + * MHI channels are always defined in pairs with UL as the even numbered
+> + * channel and DL as odd numbered one.
+> + */
 
--- 
-paul-moore.com
+Awesome comment.  And it seems that the channel ID passed
+here is even, and that there *must* be a second mhi_chan[]
+entry after the one specified.  And UL is also called the
+"primary" channel.
+
+> +static int mhi_ep_create_device(struct mhi_ep_cntrl *mhi_cntrl, u32 ch_id)
+> +{
+> +	struct mhi_ep_chan *mhi_chan = &mhi_cntrl->mhi_chan[ch_id];
+> +	struct mhi_ep_device *mhi_dev;
+> +	int ret;
+> +
+> +	/* Check if the channel name is same for both UL and DL */
+> +	if (strcmp(mhi_chan->name, mhi_chan[1].name))
+> +		return -EINVAL;
+
+Maybe log an error to say what's wrong with it?
+
+> +
+> +	mhi_dev = mhi_ep_alloc_device(mhi_cntrl, MHI_DEVICE_XFER);
+> +	if (IS_ERR(mhi_dev))
+> +		return PTR_ERR(mhi_dev);
+
+It looks like the only possible error is no memory, so you could
+just have mhi_ep_alloc_device() return NULL.
+
+> +
+> +	/* Configure primary channel */
+> +	mhi_dev->ul_chan = mhi_chan;
+> +	get_device(&mhi_dev->dev);
+> +	mhi_chan->mhi_dev = mhi_dev;
+> +
+> +	/* Configure secondary channel as well */
+> +	mhi_chan++;
+> +	mhi_dev->dl_chan = mhi_chan;
+> +	get_device(&mhi_dev->dev);
+> +	mhi_chan->mhi_dev = mhi_dev;
+> +
+> +	/* Channel name is same for both UL and DL */
+> +	mhi_dev->name = mhi_chan->name;
+> +	dev_set_name(&mhi_dev->dev, "%s_%s",
+> +		     dev_name(&mhi_cntrl->mhi_dev->dev),
+> +		     mhi_dev->name);
+> +
+> +	ret = device_add(&mhi_dev->dev);
+> +	if (ret)
+> +		put_device(&mhi_dev->dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static int mhi_ep_destroy_device(struct device *dev, void *data)
+> +{
+> +	struct mhi_ep_device *mhi_dev;
+> +	struct mhi_ep_cntrl *mhi_cntrl;
+> +	struct mhi_ep_chan *ul_chan, *dl_chan;
+> +
+> +	if (dev->bus != &mhi_ep_bus_type)
+> +		return 0;
+> +
+> +	mhi_dev = to_mhi_ep_device(dev);
+> +	mhi_cntrl = mhi_dev->mhi_cntrl;
+> +
+> +	/* Only destroy devices created for channels */
+> +	if (mhi_dev->dev_type == MHI_DEVICE_CONTROLLER)
+> +		return 0;
+> +
+> +	ul_chan = mhi_dev->ul_chan;
+> +	dl_chan = mhi_dev->dl_chan;
+
+Aren't they required to supply *both* channels?  Or maybe
+it's just required that there are transfer callback functions
+for both channels.  Anyway, no need to check for null, because
+the creation function guarantees they're both non-null I think.
+
+> +	if (ul_chan)
+> +		put_device(&ul_chan->mhi_dev->dev);
+> +
+> +	if (dl_chan)
+> +		put_device(&dl_chan->mhi_dev->dev);
+> +
+> +	dev_dbg(&mhi_cntrl->mhi_dev->dev, "Destroying device for chan:%s\n",
+> +		 mhi_dev->name);
+> +
+> +	/* Notify the client and remove the device from MHI bus */
+> +	device_del(dev);
+> +	put_device(dev);
+> +
+> +	return 0;
+> +}
+> +
+>   static int parse_ch_cfg(struct mhi_ep_cntrl *mhi_cntrl,
+>   			const struct mhi_ep_cntrl_config *config)
+>   {
+

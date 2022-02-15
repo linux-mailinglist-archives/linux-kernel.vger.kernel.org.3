@@ -2,97 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44EF74B6BC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC884B6BCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:13:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237541AbiBOMMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 07:12:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37076 "EHLO
+        id S235758AbiBOMNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 07:13:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233946AbiBOMME (ORCPT
+        with ESMTP id S232311AbiBOMNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 07:12:04 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B3DB7C43;
-        Tue, 15 Feb 2022 04:11:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644927113; x=1676463113;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=zT4S6A5ModLhQpd7e86PbFMHrNsbDenFUKNBpKpWx9k=;
-  b=KPngO8FNYHASWhRZmeCyzjnyeCiBxbrGCTv1xVLQKb8AGPGXiv29fmYP
-   2kWP/Sm7jV7mAupakoWZb46eWTin9UAo4Uhlr9jp41O7R9ygThyj2MF6U
-   7AJ9d7m1Iqq8iPESPA3j70Cahk8lrfSN31ItUrOOJZJb5S+y+XcXg715l
-   ngqFfVIHm2MVMKA31krJ8caxv8l0djjPfrSq9HMBU+BnvrIK7zfowragV
-   x3kj96QXmIMtnrTSoOToNUVh/iD9csKnqGutoSUyKzpeW/MSgbvvcHUql
-   WO82ExMpOsMqxCjj8AvMYEGXPXPIftCTg5/xOe4Gz2PdamVJVfQ5CMUGL
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="336769396"
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="336769396"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 04:11:53 -0800
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="528823662"
-Received: from ylian16-mobl1.ccr.corp.intel.com (HELO localhost) ([10.252.20.230])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 04:11:50 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Dave Airlie <airlied@linux.ie>
-Subject: Re: linux-next: build failure after merge of the drm-intel tree
-In-Reply-To: <20220215121039.1d1ec3e6@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220215121039.1d1ec3e6@canb.auug.org.au>
-Date:   Tue, 15 Feb 2022 14:11:47 +0200
-Message-ID: <87r1845ny4.fsf@intel.com>
+        Tue, 15 Feb 2022 07:13:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65DCF1074C0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:13:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644927180;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dYhGXns40WKrb1dRr7VTeOa9TxUg7lSt7cFUIfXHiJU=;
+        b=VT0XkWkGVklSHhrz1ruuiUJfBrwnIdXSFc7roImIprJTWCFj43s2poV9QVAoKMaxD4hgAt
+        u/8ngiDhqdp8vIsGRv8TZTeu/K+ihqg2bmswdH+xlluBi9fOrJjdBe1HRDcBw3HLi8/LEw
+        CBp0bMInwP1/G45+rrJ77dPbkTSg1jg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-661-ddxMi8VAOSSWAXeAhiIzXw-1; Tue, 15 Feb 2022 07:12:57 -0500
+X-MC-Unique: ddxMi8VAOSSWAXeAhiIzXw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0AA31108087A;
+        Tue, 15 Feb 2022 12:12:55 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.154])
+        by smtp.corp.redhat.com (Postfix) with SMTP id F078B7B9E0;
+        Tue, 15 Feb 2022 12:12:51 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Tue, 15 Feb 2022 13:12:54 +0100 (CET)
+Date:   Tue, 15 Feb 2022 13:12:50 +0100
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jann Horn <jannh@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Marco Elver <elver@google.com>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Rik van Riel <riel@redhat.com>
+Subject: Re: BUG: KCSAN: data-race in add_device_randomness+0x20d/0x290
+Message-ID: <20220215121250.GA15119@redhat.com>
+References: <e10b79cf-d6d5-ffcc-bce4-edd92b7cb6b9@molgen.mpg.de>
+ <CAHmME9pktmNpcBS_DJhJ5Z+6xO9P1wroQ9_gwx8KZMBxk1FBeQ@mail.gmail.com>
+ <5b3d6ad6-a506-7dae-0eb7-b7da080f6454@molgen.mpg.de>
+ <CAHmME9rgBJx+-wy-_GXPRMYEuTNyaa7SAr+nVOPh-Am2k6A2CA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHmME9rgBJx+-wy-_GXPRMYEuTNyaa7SAr+nVOPh-Am2k6A2CA@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Hi all,
+On 02/15, Jason A. Donenfeld wrote:
 >
-> After merging the drm-intel tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> void release_task(struct task_struct *p)
+> {
+> [...]
+>         cgroup_release(p);
 >
-> drivers/gpu/drm/i915/gvt/kvmgt.c: In function 'handle_edid_regs':
-> drivers/gpu/drm/i915/gvt/kvmgt.c:595:38: error: implicit declaration of function 'drm_edid_block_valid' [-Werror=implicit-function-declaration]
->   595 |                                 if (!drm_edid_block_valid(
->       |                                      ^~~~~~~~~~~~~~~~~~~~
+>         write_lock_irq(&tasklist_lock);
+>         ptrace_release_task(p);
+>         thread_pid = get_pid(p->thread_pid);
+>         __exit_signal(p);
+> [...]
+> }
+> static void __exit_signal(struct task_struct *tsk)
+> {
+> [...]
+>        add_device_randomness((const void*) &tsk->se.sum_exec_runtime,
+>                              sizeof(unsigned long long));
+> [...]
+> }
 >
-> Presumably caused by commit
+> Apparently the data that is being read by add_device_randomness() is
+> being modified while it's being read. This would be whatever is in
+> `tsk->se.sum_exec_runtime`.
 >
->   14da21cc4671 ("drm/i915: axe lots of unnecessary includes from i915_drv.h")
->
-> I am beginning to wonder if you guys run stuff through your CI before
-> relasing to linux-next.  Especially important when removing #include
-> statements from include files :-)
+> I'm not sure what's happening there, if this is "normal" and the task
+> can be scheduled out while exiting, causing the schedule to add to
+> sum_exec_runtime, or what.
 
-Thanks for the report. Apparently CI (and I) have VFIO=n, VFIO_MDEV=n,
-and DRM_I915_GVT_KVMGT=n.
+Yes, this is normal.
 
-BR,
-Jani.
+The parent can call release_task(child) right after the child has passed
+exit_notify(), the exiting child still runs and can be scheduled out until
+it does the last schedule from do_task_dead().
 
+Oleg.
 
->
-> I have used the drm-intel tree from next-20220214 for today.
-
--- 
-Jani Nikula, Intel Open Source Graphics Center

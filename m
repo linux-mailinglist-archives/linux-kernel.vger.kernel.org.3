@@ -2,145 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617D34B7644
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6125B4B778C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244149AbiBOUrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 15:47:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33790 "EHLO
+        id S244158AbiBOUrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 15:47:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232797AbiBOUrI (ORCPT
+        with ESMTP id S244152AbiBOUrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 15:47:08 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B6FD93;
-        Tue, 15 Feb 2022 12:46:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1644957995;
-        bh=0OSbOP7dVuxah5dzxOSWPDpWQt+waq4IO/yrm245na0=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=RM8lbqfXj4CquNffPjLDAk/zqsA2R7oPEntJIfErC/JFzifQUKiCCwI3sQ/AwS3UH
-         u+PDvEN61F59Ofw1QXdQ7s99jAvoAWJRtsvl3CYAHnhMh1rMymay5Nv8yKR1A9xG1K
-         XK+pIDDlkBrtJwgBGiQ/YPmKR4xRWeE8wNcYaJAw=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.185.100]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MJE27-1naNTk1Cfr-00KivD; Tue, 15
- Feb 2022 21:46:35 +0100
-Message-ID: <7e60cd01-8afc-ddb5-a1bb-6e9f53ccfba5@gmx.de>
-Date:   Tue, 15 Feb 2022 21:46:24 +0100
+        Tue, 15 Feb 2022 15:47:20 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A58B1106
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:47:09 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id v63so32749104ybv.10
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:47:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=T41ePHFV0yFOOsXNClLAtA/x+o8KEy6AoDggp2srYzE=;
+        b=fr6oWxoTzDtbYvaxIXq0fUxpvVr0x04DUX5wLQBL8LKzXgQVWGbjoar2jjdjM5S1DV
+         1urfngwM9WhtMp3MY6OKMFOt6Jo2o0gZx6M32xFP8vkPMdtbyN9ggBMfIarNp+JgPFUg
+         qWOq0wn8fOMEv15+6TItR2l2a83yNtoGiWl5M8ceFQsEB9Rlearzj25BbwVcYKEZHQAh
+         +m/MIN5TkqRXbquBnmVjQot2oXFVaFCpQjQWFYIZffzxrPF+N/DKFyiIRLnHadLWes7Y
+         zxm+yrUYvmVyrzBotDtotfADyjAF43d2qPAYPrliG1q/RQOf+PQOJ/nmxg3lTPexDb5e
+         voAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T41ePHFV0yFOOsXNClLAtA/x+o8KEy6AoDggp2srYzE=;
+        b=QHF7BBOBOufG4/IoO1fisl8Jr0i0PUE4DLEYIpWx2q7gDfURvhNZAhXUpsFGzQSE1w
+         cxbJkYoWvnvBG61mzpgkGl6m8hUkmoVUNZmkeOM46HSAz+StAFxc/8NOdMbxgVqm0IQK
+         B3p7KohRybM/n4LuD0WoAwT91H9Zq1qc97TOIUTwA9LMOWMV/JJkfl4dW2i4O7ou6jxg
+         aTkOtEX+sKYZVDpkyV6p6jdE2Z5BiCHDDx4aDJT3hDV24KXIpRbkkxWEVk6axZDmC5Tp
+         Kv77RHbxhP2bBUH0X3t1v/diYmmJsc5fDZ2CBghCYZBq2dXbrzK97ivPaqN3tsS/7bik
+         GBoQ==
+X-Gm-Message-State: AOAM532Pg5af7ToMzYe7CwD7/dF3xRvn5vPIoGI3SW9CmmavRB3M1ifS
+        ip0z8wk4aFbLgz1ihYOvfWzQUvYuRlpP3bf8vlxBlA==
+X-Google-Smtp-Source: ABdhPJwmdsuGjYfrOBPnDQhg/eRtU1Bu9W51ZB3QJAQWKMXfxyjW5ctW4UNISdKp6Akvl97iJFnpc7j/a/gdYJyxd2U=
+X-Received: by 2002:a25:d212:: with SMTP id j18mr720145ybg.243.1644958028195;
+ Tue, 15 Feb 2022 12:47:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 22/23] video: omapfb: dss: Make use of the helper
- component_compare_dev
-Content-Language: en-US
-To:     Yong Wu <yong.wu@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org
-Cc:     James Wang <james.qian.wang@arm.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        iommu@lists.linux-foundation.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-kernel@vger.kernel.org, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-mediatek@lists.infradead.org,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Tomasz Figa <tfiga@chromium.org>, srv_heupstream@mediatek.com,
-        Rob Clark <robdclark@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>, linux-omap@vger.kernel.org,
-        linux-fbdev@vger.kernel.org
-References: <20220214060819.7334-1-yong.wu@mediatek.com>
- <20220214060819.7334-23-yong.wu@mediatek.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20220214060819.7334-23-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:MjTT6/0mKscyzurmEJq+TRDLFWm722/o5oh1VceIWTDo9Su6z33
- Uqcw4r79WPXMZ1MHVQ5YZwMpT3/LUtQYuMEKT1s4Qsw268nztXs8M1PHTdwFSaaX3fRCVHa
- I5hj8j+9RzGYlu8e8qiZ43jIdVRKdmD+CGxvzWPF1Cw57f4/4D8ejp1FysOEiqU6iTGSqwc
- ErfKQfh2UKAhLIHNSceWg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:EO1+Ylb+ev0=:HpXUahwDBxS2Q6GJ/UdQMa
- n+62M3husXUXoHxxs8AxzjuuYDkqIBegYnyeAV7YgP0Mle0rT21+2LEV21Cm/oK+NdFah8S9W
- CpzPyAZIRuU01jq211YudtbXnvFOMgwbjvey4rIl2NTTJUDs+3nbJ6EgXSJwHO77nbgaCNttA
- G+VtN7qVCXCtu780Msj9tZjo7C1oDNvtl1Z0DVM0OdyjyuO5D93T57PbebQJO+46L8tQ0bfg4
- PClJhDBMO98xxmJRVp6iBSjNS7q7geteQaZ0ZJQVZhNyuKpKUNS7ESMvNsPEhSTzcXNJDdgSx
- Vq9g3AnCPk01P40v1QI4BqRKbdc93kQn/QMzvwnd6VKhhT5hOO0TqppV8u07Mwhznrax7VcRW
- +v1Ixw3WjKmrwEdG4wxBOsqT1dFC/6QoqorX3z1sqp7Ag6Ncwj2vZEjoNZ1YUThIr4BpD/vWq
- hjpVXVTw/vir74eHyvdnz2eZXfQD7YPWYiK3z1oTwSGkoUciP9hPqvp4WS1qWPD3Wx4UiMz4y
- 2dpK2641P1xHzfATt1y9hhMgc6vt9XFxpm9Ycl0uN+Nf/W9WIYa2fD+vPujh/CyO3jLklKrNP
- rhbT5NjDJGfC/AFaC2iH75aCY+P5r1pQZOBnvTunjmLUTuER4bhCqMQqM9G+WAIVA1mScRE7x
- z5RtmJWkKSwplc9SI/e09hsIAALu0cz7R3+T3vF1BUPB0RwiiTFPg2EbSOsu0l9GrJ8CkvoHP
- 6ajgPfPMXcn62tOWZWD9MMtunWjyjGeCeU0sZsO37FBgxO6O75XX5KNPo3ZtVKQ/rb45z2Rj6
- BmFoOKHsV5p6ypFwr9d2I3zNEcl0DYDNBnMwKA/3QTkYeOJgYkBDK8DU7dxFOUM6q9OWcMRcY
- NoMQI8g/0H0GxrMHZA3BmETGV399e4Ve0zB9yhBv/cd9YdH0LKj0wm2/KEIbC/oPNQrOB040l
- zX8J1rybbjKBBzimlhU2e1yTmGHdV4geJl204qxFdDOHSN0uiAnzvI89ljAQcys4MdV9EpQSa
- NnChsjeiQrZB5ZntJzdsbaO7RJJahTHLc0+epBUeuUd6C0orPGZgiQsH8Kwcy4p8Uu6vZoYIV
- JC4pPsVjDwiUHc=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220215201922.1908156-1-surenb@google.com> <20220215123741.8e757b337e1f2d32a1766d42@linux-foundation.org>
+ <CAJuCfpHwHRodo00gR=5=p+gvp60T+s04=5XBnCc9xsTOZCSE1Q@mail.gmail.com>
+In-Reply-To: <CAJuCfpHwHRodo00gR=5=p+gvp60T+s04=5XBnCc9xsTOZCSE1Q@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 15 Feb 2022 12:46:57 -0800
+Message-ID: <CAJuCfpE6sFMmfzjeMVDRp35eUro1dbOhHS86gj6Xce7mwuYeEw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] mm: fix use-after-free bug when mm->mmap is reused
+ after being freed
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@kernel.org>, Michal Hocko <mhocko@suse.com>,
+        Yang Shi <shy828301@gmail.com>,
+        David Rientjes <rientjes@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <guro@fb.com>, Rik van Riel <riel@surriel.com>,
+        Minchan Kim <minchan@kernel.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        Christoph Hellwig <hch@infradead.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jann Horn <jannh@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Jan Engelhardt <jengelh@inai.de>,
+        Tim Murray <timmurray@google.com>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel-team <kernel-team@android.com>,
+        syzbot <syzbot+2ccf63a4bd07cf39cab0@syzkaller.appspotmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/22 07:08, Yong Wu wrote:
-> Use the common compare helper from component.
+On Tue, Feb 15, 2022 at 12:45 PM Suren Baghdasaryan <surenb@google.com> wrote:
 >
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: linux-omap@vger.kernel.org
-> Cc: linux-fbdev@vger.kernel.org
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> On Tue, Feb 15, 2022 at 12:37 PM Andrew Morton
+> <akpm@linux-foundation.org> wrote:
+> >
+> > On Tue, 15 Feb 2022 12:19:22 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > > After exit_mmap frees all vmas in the mm, mm->mmap needs to be reset,
+> > > otherwise it points to a vma that was freed and when reused leads to
+> > > a use-after-free bug.
+> > >
+> > > ...
+> > >
+> > > --- a/mm/mmap.c
+> > > +++ b/mm/mmap.c
+> > > @@ -3186,6 +3186,7 @@ void exit_mmap(struct mm_struct *mm)
+> > >               vma = remove_vma(vma);
+> > >               cond_resched();
+> > >       }
+> > > +     mm->mmap = NULL;
+> > >       mmap_write_unlock(mm);
+> > >       vm_unacct_memory(nr_accounted);
+> > >  }
+> >
+> > https://lore.kernel.org/all/00000000000072ef2c05d7f81950@google.com/
+> >
+> > It would be nice to have a Fixes: for this.
+>
+> Oh, right. Should be:
+>
+> Fixes: 64591e8605d6 ("mm: protect free_pgtables with mmap_lock write
+> lock in exit_mmap")
 
-Applied to the fbdev for-next branch.
+Andrew, do you want me to post another version with Fixes:
+64591e8605d6 ("mm: protect free_pgtables with mmap_lock write lock in
+exit_mmap") added or you can add it directly?
 
-Thanks!
-Helge
 
->  drivers/video/fbdev/omap2/omapfb/dss/dss.c | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
 >
-> diff --git a/drivers/video/fbdev/omap2/omapfb/dss/dss.c b/drivers/video/=
-fbdev/omap2/omapfb/dss/dss.c
-> index a6b1c1598040..45b9d3cf3860 100644
-> --- a/drivers/video/fbdev/omap2/omapfb/dss/dss.c
-> +++ b/drivers/video/fbdev/omap2/omapfb/dss/dss.c
-> @@ -1193,12 +1193,6 @@ static const struct component_master_ops dss_comp=
-onent_ops =3D {
->  	.unbind =3D dss_unbind,
->  };
+> >
+> > Is it specific to process_mrelease(), or should we backport further?
 >
-> -static int dss_component_compare(struct device *dev, void *data)
-> -{
-> -	struct device *child =3D data;
-> -	return dev =3D=3D child;
-> -}
-> -
->  static int dss_add_child_component(struct device *dev, void *data)
->  {
->  	struct component_match **match =3D data;
-> @@ -1212,7 +1206,7 @@ static int dss_add_child_component(struct device *=
-dev, void *data)
->  	if (strstr(dev_name(dev), "rfbi"))
->  		return 0;
->
-> -	component_match_add(dev->parent, match, dss_component_compare, dev);
-> +	component_match_add(dev->parent, match, component_compare_dev, dev);
->
->  	return 0;
->  }
->
-
+> The broken change is recent and was introduced in v5.17-rc1.

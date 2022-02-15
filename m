@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E86E4B7299
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:42:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 529234B704C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239414AbiBOPmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:42:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38456 "EHLO
+        id S238588AbiBOPmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:42:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241642AbiBOPlk (ORCPT
+        with ESMTP id S241641AbiBOPlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 15 Feb 2022 10:41:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1719DB65
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:35:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5C89616A0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:35:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15830C340EB;
-        Tue, 15 Feb 2022 15:35:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644939347;
-        bh=WwwCEUptRQNEOeF0BNXF+xx9Qur6a0L+BPYNrj74ML4=;
-        h=Date:From:To:cc:Subject:From;
-        b=rOHu2/LhaO7fHu2VHeol8vWk8YYZ/0UpeMD4agxzaaHjJMnVrB6/21mitW1d9AWpg
-         ulWJBMza1COGX55mrxvXuMIvL1woTzZEj//naGbzGleCXVzH6p1c9T6r0kcfmRUw8P
-         IhJRzp9YwOJwbKScFiRj2oZZCVTuy1XBotPGFzlv7fxNhuUynAET0EKWvdnWaJ1hT+
-         SZUBPS0cNGhnMxu4lOeL42qgXR2OHfOXdt+qN8X1OHQ6zlXeIPe0wqaVwZFCVZ3eqk
-         b65pDxQbtIjJG/L0kUQbv0Gu56Dhy1FFD/Uvg4g+rEZrPeOKIJTVAzw3v1nydFTbJ9
-         34OXMKqqW4sKA==
-Date:   Tue, 15 Feb 2022 16:35:43 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [GIT PULL] HID fixes
-Message-ID: <nycvar.YFH.7.76.2202151633100.11721@cbobk.fhfr.pm>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11ADCF20
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:36:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=zdWjWKUr0FGB2DO0mrVmCFwXLaTbI5tPcsnYFGfBcAM=; b=u/J6LxpPxW+8S/4jZY64ox18Vv
+        53Kqv6Pqb4msIVZMZjR3gxuv3KrUee78AIHTIp6TLBIb7PTxIJGemN4NCgBDltMmWYSbKsK/pWG5o
+        2ppqN3Ea0eLvf9nRv4HOK1y1U9O/eP/GZ3TA9NHLSTSuq05/R6Y8cSWxyDfv/TY33+67aaZZrUHh+
+        vVNp8N810nxZ52uVHGGDdX0miuPs+sYlPk+DdDtCJ6WN7eZTize7h9H0596gxuYDynXAR9kCgqakl
+        n7j8xQBddoSPK8QEYJ+7hRGDflrNIuLV8RFo42JFks8tSfDt0qxmcDMLZp26HDnXo4a+Jxxnfd3SJ
+        h3/vl0PQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJzs4-00DxWc-Od; Tue, 15 Feb 2022 15:36:05 +0000
+Message-ID: <5d11b1a5-d222-1565-3d45-261e48d32522@infradead.org>
+Date:   Tue, 15 Feb 2022 07:36:00 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] firmware_loader: EXTRA_FIRMWARE does not support
+ compressed files
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+References: <20220214222311.9758-1-rdunlap@infradead.org>
+ <YgsHtdqm3xRU+QUD@bombadil.infradead.org>
+ <29f9b063-96c9-f120-0920-acd088b01b89@infradead.org>
+ <YgtWzLsIzXQX8jP/@bombadil.infradead.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <YgtWzLsIzXQX8jP/@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,57 +58,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
 
-please pull from
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-linus
+On 2/14/22 23:31, Luis Chamberlain wrote:
+> On Mon, Feb 14, 2022 at 07:30:22PM -0800, Randy Dunlap wrote:
+>>
+>>
+>> On 2/14/22 17:53, Luis Chamberlain wrote:
+>>> On Mon, Feb 14, 2022 at 02:23:11PM -0800, Randy Dunlap wrote:
+>>>> Document in the firmware loader Kconfig help text that firmware image
+>>>> file compression is not supported for builtin EXTRA_FIRMWARE files so
+>>>> that someone does not waste time trying that.
+>>>>
+>>>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>>>> Cc: Luis Chamberlain <mcgrof@kernel.org>
+>>>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>>> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+>>>> ---
+>>>> Yeah, I wasted some time trying to use an xz compressed file
+>>>> as builtin EXTRA_FIRMWARE, 
+>>>
+>>> Curious *why* you are using EXTRA_FIRMWARE BTW.
+>>
+>> Hi Luis,
+>>
+>> I need to load i915 firmware very early
+>> and I am not using an initramfs.
+> 
+> Curious, why don't you use an initramfs? I'm just
+> trying to gather users of EXTRA_FIRMWARE as I thought
+> they didn't exist.
 
-to receive HID subsystem fixes.
+It's an option, right?
+I just prefer to be able to boot a bare kernel.
 
-=====
-- memory leak fix for hid-elo driver (Dongliang Mu)
-- fix for hangs on newer AMD platforms with amd_sfh-driven hardware 
-  (Basavaraj Natikar )
-- locking fix in i2c-hid (Daniel Thompson)
-- a few device-ID specific quirks
-=====
-
-Thanks.
-
-----------------------------------------------------------------
-Alex Henrie (1):
-      HID: apple: Set the tilde quirk flag on the Wellspring 5 and later
-
-Basavaraj Natikar (7):
-      HID: amd_sfh: Increase sensor command timeout
-      HID: amd_sfh: Add illuminance mask to limit ALS max value
-      HID: amd_sfh: Handle amd_sfh work buffer in PM ops
-      HID: amd_sfh: Correct the structure field name
-      HID: amd_sfh: Disable the interrupt for all command
-      HID: amd_sfh: Add functionality to clear interrupts
-      HID: amd_sfh: Add interrupt handler to process interrupts
-
-Daniel Thompson (1):
-      HID: i2c-hid: goodix: Fix a lockdep splat
-
-Dongliang Mu (1):
-      HID: elo: fix memory leak in elo_probe
-
-Sergio Costas (1):
-      HID:Add support for UGTABLET WP5540
-
- drivers/hid/amd-sfh-hid/amd_sfh_pcie.c             | 76 +++++++++++++++++++++-
- drivers/hid/amd-sfh-hid/amd_sfh_pcie.h             |  4 +-
- .../amd-sfh-hid/hid_descriptor/amd_sfh_hid_desc.c  |  4 +-
- drivers/hid/hid-apple.c                            | 16 ++---
- drivers/hid/hid-elo.c                              |  1 +
- drivers/hid/hid-ids.h                              |  1 +
- drivers/hid/hid-quirks.c                           |  1 +
- drivers/hid/i2c-hid/i2c-hid-of-goodix.c            | 28 ++++----
- 8 files changed, 102 insertions(+), 29 deletions(-)
 
 -- 
-Jiri Kosina
-SUSE Labs
-
+~Randy

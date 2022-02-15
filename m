@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3154B7632
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2784B77CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:51:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243929AbiBOUCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 15:02:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43188 "EHLO
+        id S243940AbiBOUDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 15:03:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243916AbiBOUCt (ORCPT
+        with ESMTP id S243933AbiBOUCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 15:02:49 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0610716D5
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:02:36 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id c14so6110796ilm.4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:02:36 -0800 (PST)
+        Tue, 15 Feb 2022 15:02:55 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038C370876
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:02:44 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id w7so25344738ioj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:02:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qvjxUgIF+rKOUPd9f6VvJvf3pyS60KRglR8fnDm+3Wc=;
-        b=vKt2clBNjHlEuF+I3m3CDlRJbMhKkL4xoTuwwLQi5MhMT5RG/q16T/CuFUXu9wrHZY
-         xiNENEZCF269DM3cKBnWLZvL2D601+nrSuhhNLl4EsKCUsMUkU44TGwHsO5Ju0UDCni1
-         ag0+Fwkr7bINIhJl/M5Hs495jhizgGUsdfAr/eOE6OWc1u0hM6g4jU9hNaui1AWOeHfz
-         FXwAq0MD87aIk3/wZ2Ickwl+O4KhunqAn1WQx14/17GnAQgV8EkiK4XQhYgdTuhgocH9
-         LWHO/TagjJHNsq0a5/M4jwrp1yzaxwSbAnA/UYIhKZVMntDpz258LU0RFw0N03pL+MDU
-         vsDg==
+        bh=cc2okdfwpU6v3MTluxoRaJkx6yNhoy/GMswHLpFNKHM=;
+        b=cJ4W93bn1AB0SoCbfoMeGIb862goGzxIqYJJLXZi5fSboXxOHC86rO67khWFCfro9d
+         k0xQHMcoyMLdQs8TnTja3Y73A1MxktuIyeCVRAsEYiV3Zj55N+iavIIU3A0yuuS9y4FJ
+         vcPhvpjHR8Z9y49hvUptuJgLrSD/We1LYUPg9H/yawdtVpxfHydBVK0haFroCmwsjTXk
+         w2L943Z11U5uPYKX5N7qCX1bJ9dnn4doYIUQoABjFOomDXaLepp4rsTE6CRpHZ/4dszR
+         O0zZsHh+iCHnxhOyTlriUusKqLFbQDB7ILsHmVeVKvLWF1oCoZWxZurLNG0um95Z1F9W
+         Jy7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=qvjxUgIF+rKOUPd9f6VvJvf3pyS60KRglR8fnDm+3Wc=;
-        b=wbOCgv0GYXhhGx59Vz2N1kNemPAJdJNHsy+ITYEUqcOA7HWGws4sinoJWyQVOaOZ8B
-         Po9bo+fcqSuqC9cw5nGR31WjYXeLHFF+PHu6OmJVLrp76mJc9Qi8lp70n0GbK6UTZ/mK
-         Vijvj9pt6eUwwFpXMzEKXANmbpdqlvn6Xy+RNnU+1IBrSlgzQPHvGdnNbLzCcwxJYFGV
-         mNbskHmLII8oCOG9foTt0W5IDVL6P/PBCKWPwKPuph3qKW9vlAw6+T0zodQRzrfVyRZn
-         QwerAvHSLnWJKBwDgWoYaImXorv8VeTV8nA1JVHbi09eF360zMsJcEdqea/g4xtkxCE+
-         IapA==
-X-Gm-Message-State: AOAM531Nn7OgFfq/YDjqlo412dtYemMUEttUDDg/ukPLiiIRjkQk1zR6
-        W8JQwEZvOfut0qtBv0371x8PWQ==
-X-Google-Smtp-Source: ABdhPJw4TggQswIgXfpV5GnOuiUTOX/1eDwkjfESy26aBtWCc2sWHC2K2757XZfxXwBXQ6Mjyy3TGA==
-X-Received: by 2002:a92:c567:: with SMTP id b7mr454507ilj.24.1644955356198;
-        Tue, 15 Feb 2022 12:02:36 -0800 (PST)
+        bh=cc2okdfwpU6v3MTluxoRaJkx6yNhoy/GMswHLpFNKHM=;
+        b=Gv4EFQCreW648h9gaBlXHRUGiTn4V/85VqlKbzlN+jtBhuBcFXHCqkxPWxHnHG9akA
+         XJqXS3OtbofHwB4pnEr5pQm59Xi+V0yLJ/DuqD4KgqAqTjny3XUejmefGiui0Z85EQvW
+         ykPV1j6MUYECcC1BdYiD8kHY84c/RBb5C8q8dTVT03sJ3BRq5RuPU0Bkq0OBnfFLQPg0
+         JbhZzVjjn18SCoMUOM1CU0BZp1LA/9hG+q7G1f+ZvAx6deCozcNoWP2Sle4Hiykcx+NS
+         i4pmdja2DfPADuVmg+RexysvY0PHyfMsrTYwuQFucHlZYiswlclRqgBTFA1RosyyeMEY
+         DRGA==
+X-Gm-Message-State: AOAM532a3dBgS1k7wTA0YK3gSVhXklYB8vWxI6p3fvX/KPgOi9nHmKG+
+        2Pl1SeKQAd9bsgVGz6vf5Umieg==
+X-Google-Smtp-Source: ABdhPJxnvK5PDAQ35RlTyGmUqlEmlTU1ne4mRhDWnh7pLLiBOTckgRBiX/xAhza2m/FPlULwOwE0mQ==
+X-Received: by 2002:a05:6638:35a1:: with SMTP id v33mr338410jal.277.1644955363240;
+        Tue, 15 Feb 2022 12:02:43 -0800 (PST)
 Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id m1sm23871595ilu.87.2022.02.15.12.02.34
+        by smtp.googlemail.com with ESMTPSA id v16sm19993328ilm.25.2022.02.15.12.02.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 12:02:35 -0800 (PST)
-Message-ID: <75d684c3-ab7d-2543-bca2-3d8791dd06ce@linaro.org>
-Date:   Tue, 15 Feb 2022 14:02:34 -0600
+        Tue, 15 Feb 2022 12:02:42 -0800 (PST)
+Message-ID: <4cc78936-b419-4738-b5b2-65c53be06f33@linaro.org>
+Date:   Tue, 15 Feb 2022 14:02:41 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v3 07/25] bus: mhi: Get rid of SHIFT macros and use
- bitfield operations
+Subject: Re: [PATCH v3 08/25] bus: mhi: ep: Add support for registering MHI
+ endpoint controllers
 Content-Language: en-US
 To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         mhi@lists.linux.dev
@@ -66,9 +66,9 @@ Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
         quic_skananth@quicinc.com, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
- <20220212182117.49438-8-manivannan.sadhasivam@linaro.org>
+ <20220212182117.49438-9-manivannan.sadhasivam@linaro.org>
 From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <20220212182117.49438-8-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20220212182117.49438-9-manivannan.sadhasivam@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,625 +81,746 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/12/22 12:20 PM, Manivannan Sadhasivam wrote:
-> Instead of using the hardcoded SHIFT values, use the bitfield macros to
-> derive the shift value from mask during build time.
+On 2/12/22 12:21 PM, Manivannan Sadhasivam wrote:
+> This commit adds support for registering MHI endpoint controller drivers
+> with the MHI endpoint stack. MHI endpoint controller drivers manages
 
-You accomplished this by changing the way mhi_read_reg_field(),
-mhi_poll_reg_field(), and mhi_write_reg_field() are defined.
-It would be helpful for you to point out that fact up front.
-Then it's fairly clear that the _SHIFT (and _SHFT) definitions
-can just go away.  Very nice to remove those though.
+s/manages/manage/
 
-> For shift values that cannot be determined during build time, "__ffs()"
-> helper is used find the shift value in runtime.
+> the interaction with the host machines such as x86. They are also the
 
-Yeah this is an annoying feature of the bitfield functions,
-but you *know* when you're working with a variable mask.
+  (such as x86)
 
-I still think the mask values that are 32 bits wide are
-overkill, e.g.:
-
-   #define MHIREGLEN_MHIREGLEN_MASK	GENMASK(31, 0)
-
-
-Thise are full 32-bit registers, and I don't see any reason
-they would ever *not* be full registers, so there's no point
-in applying a mask to them.  Even if some day it did make
-sense to use a mask (less than 32 bits wide, for example),
-that's something that could be added when that becomes an
-issue, rather than complicating the code unnecessarily now.
-
-If you eliminate the 32-bit wide masks, great, but even if
-you don't:
-
-Reviewed-by: Alex Elder <elder@linaro.org>
-
-> Suggested-by: Alex Elder <elder@linaro.org>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->   drivers/bus/mhi/common.h        | 45 ----------------------
->   drivers/bus/mhi/host/boot.c     | 15 ++------
->   drivers/bus/mhi/host/debugfs.c  | 10 ++---
->   drivers/bus/mhi/host/init.c     | 67 +++++++++++++++------------------
->   drivers/bus/mhi/host/internal.h | 10 ++---
->   drivers/bus/mhi/host/main.c     | 16 ++++----
->   drivers/bus/mhi/host/pm.c       | 18 +++------
->   7 files changed, 55 insertions(+), 126 deletions(-)
+> MHI endpoint bus master in charge of managing the physical link between the
+> host and endpoint device.
 > 
-> diff --git a/drivers/bus/mhi/common.h b/drivers/bus/mhi/common.h
-> index f226f06d4ff9..728c82928d8d 100644
-> --- a/drivers/bus/mhi/common.h
-> +++ b/drivers/bus/mhi/common.h
-> @@ -63,9 +63,7 @@
+> The endpoint controller driver encloses all information about the
+> underlying physical bus like PCIe. The registration process involves
+
+s/like PCIe/(i.e., PCIe)/
+
+> parsing the channel configuration and allocating an MHI EP device.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+OK!!!  On to the MHI endpoint code!
+
+Quite a few comments below, but nothing very major.
+
+					-Alex
+
+> ---
+>   drivers/bus/mhi/Kconfig       |   1 +
+>   drivers/bus/mhi/Makefile      |   3 +
+>   drivers/bus/mhi/ep/Kconfig    |  10 ++
+>   drivers/bus/mhi/ep/Makefile   |   2 +
+>   drivers/bus/mhi/ep/internal.h | 160 +++++++++++++++++++++++
+>   drivers/bus/mhi/ep/main.c     | 234 ++++++++++++++++++++++++++++++++++
+>   include/linux/mhi_ep.h        | 143 +++++++++++++++++++++
+>   7 files changed, 553 insertions(+)
+>   create mode 100644 drivers/bus/mhi/ep/Kconfig
+>   create mode 100644 drivers/bus/mhi/ep/Makefile
+>   create mode 100644 drivers/bus/mhi/ep/internal.h
+>   create mode 100644 drivers/bus/mhi/ep/main.c
+>   create mode 100644 include/linux/mhi_ep.h
+> 
+> diff --git a/drivers/bus/mhi/Kconfig b/drivers/bus/mhi/Kconfig
+> index 4748df7f9cd5..b39a11e6c624 100644
+> --- a/drivers/bus/mhi/Kconfig
+> +++ b/drivers/bus/mhi/Kconfig
+> @@ -6,3 +6,4 @@
+>   #
 >   
->   /* BHI register bits */
->   #define BHI_TXDB_SEQNUM_BMSK				GENMASK(29, 0)
-> -#define BHI_TXDB_SEQNUM_SHFT				0
->   #define BHI_STATUS_MASK					GENMASK(31, 30)
-> -#define BHI_STATUS_SHIFT				30
->   #define BHI_STATUS_ERROR				0x03
->   #define BHI_STATUS_SUCCESS				0x02
->   #define BHI_STATUS_RESET				0x00
-> @@ -85,89 +83,51 @@
->   
->   /* BHIE register bits */
->   #define BHIE_TXVECDB_SEQNUM_BMSK			GENMASK(29, 0)
-> -#define BHIE_TXVECDB_SEQNUM_SHFT			0
->   #define BHIE_TXVECSTATUS_SEQNUM_BMSK			GENMASK(29, 0)
-> -#define BHIE_TXVECSTATUS_SEQNUM_SHFT			0
->   #define BHIE_TXVECSTATUS_STATUS_BMSK			GENMASK(31, 30)
-> -#define BHIE_TXVECSTATUS_STATUS_SHFT			30
->   #define BHIE_TXVECSTATUS_STATUS_RESET			0x00
->   #define BHIE_TXVECSTATUS_STATUS_XFER_COMPL		0x02
->   #define BHIE_TXVECSTATUS_STATUS_ERROR			0x03
->   #define BHIE_RXVECDB_SEQNUM_BMSK			GENMASK(29, 0)
-> -#define BHIE_RXVECDB_SEQNUM_SHFT			0
->   #define BHIE_RXVECSTATUS_SEQNUM_BMSK			GENMASK(29, 0)
-> -#define BHIE_RXVECSTATUS_SEQNUM_SHFT			0
->   #define BHIE_RXVECSTATUS_STATUS_BMSK			GENMASK(31, 30)
-> -#define BHIE_RXVECSTATUS_STATUS_SHFT			30
->   #define BHIE_RXVECSTATUS_STATUS_RESET			0x00
->   #define BHIE_RXVECSTATUS_STATUS_XFER_COMPL		0x02
->   #define BHIE_RXVECSTATUS_STATUS_ERROR			0x03
->   
->   /* MHI register bits */
->   #define MHIREGLEN_MHIREGLEN_MASK			GENMASK(31, 0)
-> -#define MHIREGLEN_MHIREGLEN_SHIFT			0
->   #define MHIVER_MHIVER_MASK				GENMASK(31, 0)
-> -#define MHIVER_MHIVER_SHIFT				0
->   #define MHICFG_NHWER_MASK				GENMASK(31, 24)
-> -#define MHICFG_NHWER_SHIFT				24
->   #define MHICFG_NER_MASK					GENMASK(23, 16)
-> -#define MHICFG_NER_SHIFT				16
->   #define MHICFG_NHWCH_MASK				GENMASK(15, 8)
-> -#define MHICFG_NHWCH_SHIFT				8
->   #define MHICFG_NCH_MASK					GENMASK(7, 0)
-> -#define MHICFG_NCH_SHIFT				0
->   #define CHDBOFF_CHDBOFF_MASK				GENMASK(31, 0)
-> -#define CHDBOFF_CHDBOFF_SHIFT				0
->   #define ERDBOFF_ERDBOFF_MASK				GENMASK(31, 0)
-> -#define ERDBOFF_ERDBOFF_SHIFT				0
->   #define BHIOFF_BHIOFF_MASK				GENMASK(31, 0)
-> -#define BHIOFF_BHIOFF_SHIFT				0
->   #define BHIEOFF_BHIEOFF_MASK				GENMASK(31, 0)
-> -#define BHIEOFF_BHIEOFF_SHIFT				0
->   #define DEBUGOFF_DEBUGOFF_MASK				GENMASK(31, 0)
-> -#define DEBUGOFF_DEBUGOFF_SHIFT				0
->   #define MHICTRL_MHISTATE_MASK				GENMASK(15, 8)
-> -#define MHICTRL_MHISTATE_SHIFT				8
->   #define MHICTRL_RESET_MASK				BIT(1)
-> -#define MHICTRL_RESET_SHIFT				1
->   #define MHISTATUS_MHISTATE_MASK				GENMASK(15, 8)
-> -#define MHISTATUS_MHISTATE_SHIFT			8
->   #define MHISTATUS_SYSERR_MASK				BIT(2)
-> -#define MHISTATUS_SYSERR_SHIFT				2
->   #define MHISTATUS_READY_MASK				BIT(0)
-> -#define MHISTATUS_READY_SHIFT				0
->   #define CCABAP_LOWER_CCABAP_LOWER_MASK			GENMASK(31, 0)
-> -#define CCABAP_LOWER_CCABAP_LOWER_SHIFT			0
->   #define CCABAP_HIGHER_CCABAP_HIGHER_MASK		GENMASK(31, 0)
-> -#define CCABAP_HIGHER_CCABAP_HIGHER_SHIFT		0
->   #define ECABAP_LOWER_ECABAP_LOWER_MASK			GENMASK(31, 0)
-> -#define ECABAP_LOWER_ECABAP_LOWER_SHIFT			0
->   #define ECABAP_HIGHER_ECABAP_HIGHER_MASK		GENMASK(31, 0)
-> -#define ECABAP_HIGHER_ECABAP_HIGHER_SHIFT		0
->   #define CRCBAP_LOWER_CRCBAP_LOWER_MASK			GENMASK(31, 0)
-> -#define CRCBAP_LOWER_CRCBAP_LOWER_SHIFT			0
->   #define CRCBAP_HIGHER_CRCBAP_HIGHER_MASK		GENMASK(31, 0)
-> -#define CRCBAP_HIGHER_CRCBAP_HIGHER_SHIFT		0
->   #define CRDB_LOWER_CRDB_LOWER_MASK			GENMASK(31, 0)
-> -#define CRDB_LOWER_CRDB_LOWER_SHIFT			0
->   #define CRDB_HIGHER_CRDB_HIGHER_MASK			GENMASK(31, 0)
-> -#define CRDB_HIGHER_CRDB_HIGHER_SHIFT			0
->   #define MHICTRLBASE_LOWER_MHICTRLBASE_LOWER_MASK	GENMASK(31, 0)
-> -#define MHICTRLBASE_LOWER_MHICTRLBASE_LOWER_SHIFT	0
->   #define MHICTRLBASE_HIGHER_MHICTRLBASE_HIGHER_MASK	GENMASK(31, 0)
-> -#define MHICTRLBASE_HIGHER_MHICTRLBASE_HIGHER_SHIFT	0
->   #define MHICTRLLIMIT_LOWER_MHICTRLLIMIT_LOWER_MASK	GENMASK(31, 0)
-> -#define MHICTRLLIMIT_LOWER_MHICTRLLIMIT_LOWER_SHIFT	0
->   #define MHICTRLLIMIT_HIGHER_MHICTRLLIMIT_HIGHER_MASK	GENMASK(31, 0)
-> -#define MHICTRLLIMIT_HIGHER_MHICTRLLIMIT_HIGHER_SHIFT	0
->   #define MHIDATABASE_LOWER_MHIDATABASE_LOWER_MASK	GENMASK(31, 0)
-> -#define MHIDATABASE_LOWER_MHIDATABASE_LOWER_SHIFT	0
->   #define MHIDATABASE_HIGHER_MHIDATABASE_HIGHER_MASK	GENMASK(31, 0)
-> -#define MHIDATABASE_HIGHER_MHIDATABASE_HIGHER_SHIFT	0
->   #define MHIDATALIMIT_LOWER_MHIDATALIMIT_LOWER_MASK	GENMASK(31, 0)
-> -#define MHIDATALIMIT_LOWER_MHIDATALIMIT_LOWER_SHIFT	0
->   #define MHIDATALIMIT_HIGHER_MHIDATALIMIT_HIGHER_MASK	GENMASK(31, 0)
-> -#define MHIDATALIMIT_HIGHER_MHIDATALIMIT_HIGHER_SHIFT	0
->   
->   /* Command Ring Element macros */
->   /* No operation command */
-> @@ -277,9 +237,7 @@ enum mhi_cmd_type {
->   
->   #define EV_CTX_RESERVED_MASK GENMASK(7, 0)
->   #define EV_CTX_INTMODC_MASK GENMASK(15, 8)
-> -#define EV_CTX_INTMODC_SHIFT 8
->   #define EV_CTX_INTMODT_MASK GENMASK(31, 16)
-> -#define EV_CTX_INTMODT_SHIFT 16
->   struct mhi_event_ctxt {
->   	__le32 intmod;
->   	__le32 ertype;
-> @@ -292,11 +250,8 @@ struct mhi_event_ctxt {
->   };
->   
->   #define CHAN_CTX_CHSTATE_MASK GENMASK(7, 0)
-> -#define CHAN_CTX_CHSTATE_SHIFT 0
->   #define CHAN_CTX_BRSTMODE_MASK GENMASK(9, 8)
-> -#define CHAN_CTX_BRSTMODE_SHIFT 8
->   #define CHAN_CTX_POLLCFG_MASK GENMASK(15, 10)
-> -#define CHAN_CTX_POLLCFG_SHIFT 10
->   #define CHAN_CTX_RESERVED_MASK GENMASK(31, 16)
->   struct mhi_chan_ctxt {
->   	__le32 chcfg;
-> diff --git a/drivers/bus/mhi/host/boot.c b/drivers/bus/mhi/host/boot.c
-> index 93cb705614c6..b0da7ca4519c 100644
-> --- a/drivers/bus/mhi/host/boot.c
-> +++ b/drivers/bus/mhi/host/boot.c
-> @@ -46,8 +46,7 @@ void mhi_rddm_prepare(struct mhi_controller *mhi_cntrl,
->   	sequence_id = MHI_RANDOM_U32_NONZERO(BHIE_RXVECSTATUS_SEQNUM_BMSK);
->   
->   	mhi_write_reg_field(mhi_cntrl, base, BHIE_RXVECDB_OFFS,
-> -			    BHIE_RXVECDB_SEQNUM_BMSK, BHIE_RXVECDB_SEQNUM_SHFT,
-> -			    sequence_id);
-> +			    BHIE_RXVECDB_SEQNUM_BMSK, sequence_id);
->   
->   	dev_dbg(dev, "Address: %p and len: 0x%zx sequence: %u\n",
->   		&mhi_buf->dma_addr, mhi_buf->len, sequence_id);
-> @@ -127,9 +126,7 @@ static int __mhi_download_rddm_in_panic(struct mhi_controller *mhi_cntrl)
->   
->   	while (retry--) {
->   		ret = mhi_read_reg_field(mhi_cntrl, base, BHIE_RXVECSTATUS_OFFS,
-> -					 BHIE_RXVECSTATUS_STATUS_BMSK,
-> -					 BHIE_RXVECSTATUS_STATUS_SHFT,
-> -					 &rx_status);
-> +					 BHIE_RXVECSTATUS_STATUS_BMSK, &rx_status);
->   		if (ret)
->   			return -EIO;
->   
-> @@ -168,7 +165,6 @@ int mhi_download_rddm_image(struct mhi_controller *mhi_cntrl, bool in_panic)
->   			   mhi_read_reg_field(mhi_cntrl, base,
->   					      BHIE_RXVECSTATUS_OFFS,
->   					      BHIE_RXVECSTATUS_STATUS_BMSK,
-> -					      BHIE_RXVECSTATUS_STATUS_SHFT,
->   					      &rx_status) || rx_status,
->   			   msecs_to_jiffies(mhi_cntrl->timeout_ms));
->   
-> @@ -203,8 +199,7 @@ static int mhi_fw_load_bhie(struct mhi_controller *mhi_cntrl,
->   	mhi_write_reg(mhi_cntrl, base, BHIE_TXVECSIZE_OFFS, mhi_buf->len);
->   
->   	mhi_write_reg_field(mhi_cntrl, base, BHIE_TXVECDB_OFFS,
-> -			    BHIE_TXVECDB_SEQNUM_BMSK, BHIE_TXVECDB_SEQNUM_SHFT,
-> -			    sequence_id);
-> +			    BHIE_TXVECDB_SEQNUM_BMSK, sequence_id);
->   	read_unlock_bh(pm_lock);
->   
->   	/* Wait for the image download to complete */
-> @@ -213,7 +208,6 @@ static int mhi_fw_load_bhie(struct mhi_controller *mhi_cntrl,
->   				 mhi_read_reg_field(mhi_cntrl, base,
->   						   BHIE_TXVECSTATUS_OFFS,
->   						   BHIE_TXVECSTATUS_STATUS_BMSK,
-> -						   BHIE_TXVECSTATUS_STATUS_SHFT,
->   						   &tx_status) || tx_status,
->   				 msecs_to_jiffies(mhi_cntrl->timeout_ms));
->   	if (MHI_PM_IN_ERROR_STATE(mhi_cntrl->pm_state) ||
-> @@ -265,8 +259,7 @@ static int mhi_fw_load_bhi(struct mhi_controller *mhi_cntrl,
->   	ret = wait_event_timeout(mhi_cntrl->state_event,
->   			   MHI_PM_IN_ERROR_STATE(mhi_cntrl->pm_state) ||
->   			   mhi_read_reg_field(mhi_cntrl, base, BHI_STATUS,
-> -					      BHI_STATUS_MASK, BHI_STATUS_SHIFT,
-> -					      &tx_status) || tx_status,
-> +					      BHI_STATUS_MASK, &tx_status) || tx_status,
->   			   msecs_to_jiffies(mhi_cntrl->timeout_ms));
->   	if (MHI_PM_IN_ERROR_STATE(mhi_cntrl->pm_state))
->   		goto invalid_pm_state;
-> diff --git a/drivers/bus/mhi/host/debugfs.c b/drivers/bus/mhi/host/debugfs.c
-> index 399d0db1f1eb..cfec7811dfbb 100644
-> --- a/drivers/bus/mhi/host/debugfs.c
-> +++ b/drivers/bus/mhi/host/debugfs.c
-> @@ -61,9 +61,9 @@ static int mhi_debugfs_events_show(struct seq_file *m, void *d)
->   
->   		seq_printf(m, "Index: %d intmod count: %lu time: %lu",
->   			   i, (le32_to_cpu(er_ctxt->intmod) & EV_CTX_INTMODC_MASK) >>
-> -			   EV_CTX_INTMODC_SHIFT,
-> +			   __ffs(EV_CTX_INTMODC_MASK),
->   			   (le32_to_cpu(er_ctxt->intmod) & EV_CTX_INTMODT_MASK) >>
-> -			   EV_CTX_INTMODT_SHIFT);
-> +			   __ffs(EV_CTX_INTMODT_MASK));
->   
->   		seq_printf(m, " base: 0x%0llx len: 0x%llx", le64_to_cpu(er_ctxt->rbase),
->   			   le64_to_cpu(er_ctxt->rlen));
-> @@ -107,10 +107,10 @@ static int mhi_debugfs_channels_show(struct seq_file *m, void *d)
->   		seq_printf(m,
->   			   "%s(%u) state: 0x%lx brstmode: 0x%lx pollcfg: 0x%lx",
->   			   mhi_chan->name, mhi_chan->chan, (le32_to_cpu(chan_ctxt->chcfg) &
-> -			   CHAN_CTX_CHSTATE_MASK) >> CHAN_CTX_CHSTATE_SHIFT,
-> +			   CHAN_CTX_CHSTATE_MASK) >> __ffs(CHAN_CTX_CHSTATE_MASK),
->   			   (le32_to_cpu(chan_ctxt->chcfg) & CHAN_CTX_BRSTMODE_MASK) >>
-> -			   CHAN_CTX_BRSTMODE_SHIFT, (le32_to_cpu(chan_ctxt->chcfg) &
-> -			   CHAN_CTX_POLLCFG_MASK) >> CHAN_CTX_POLLCFG_SHIFT);
-> +			   __ffs(CHAN_CTX_BRSTMODE_MASK), (le32_to_cpu(chan_ctxt->chcfg) &
-> +			   CHAN_CTX_POLLCFG_MASK) >> __ffs(CHAN_CTX_POLLCFG_MASK));
->   
->   		seq_printf(m, " type: 0x%x event ring: %u", le32_to_cpu(chan_ctxt->chtype),
->   			   le32_to_cpu(chan_ctxt->erindex));
-> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
-> index 0e301f3f305e..05e457d12446 100644
-> --- a/drivers/bus/mhi/host/init.c
-> +++ b/drivers/bus/mhi/host/init.c
-> @@ -4,6 +4,7 @@
->    *
->    */
->   
+>   source "drivers/bus/mhi/host/Kconfig"
+> +source "drivers/bus/mhi/ep/Kconfig"
+> diff --git a/drivers/bus/mhi/Makefile b/drivers/bus/mhi/Makefile
+> index 5f5708a249f5..46981331b38f 100644
+> --- a/drivers/bus/mhi/Makefile
+> +++ b/drivers/bus/mhi/Makefile
+> @@ -1,2 +1,5 @@
+>   # Host MHI stack
+>   obj-y += host/
+> +
+> +# Endpoint MHI stack
+> +obj-y += ep/
+> diff --git a/drivers/bus/mhi/ep/Kconfig b/drivers/bus/mhi/ep/Kconfig
+> new file mode 100644
+> index 000000000000..229c71397b30
+> --- /dev/null
+> +++ b/drivers/bus/mhi/ep/Kconfig
+> @@ -0,0 +1,10 @@
+> +config MHI_BUS_EP
+> +	tristate "Modem Host Interface (MHI) bus Endpoint implementation"
+> +	help
+> +	  Bus driver for MHI protocol. Modem Host Interface (MHI) is a
+> +	  communication protocol used by the host processors to control
+
+s/the host processors/a host processor/
+
+> +	  and communicate with modem devices over a high speed peripheral
+
+s/modem devices/a modem device/
+
+> +	  bus or shared memory.
+> +
+> +	  MHI_BUS_EP implements the MHI protocol for the endpoint devices
+> +	  like SDX55 modem connected to the host machine over PCIe.
+
+s/devices like/devices, such as/
+
+> diff --git a/drivers/bus/mhi/ep/Makefile b/drivers/bus/mhi/ep/Makefile
+> new file mode 100644
+> index 000000000000..64e29252b608
+> --- /dev/null
+> +++ b/drivers/bus/mhi/ep/Makefile
+> @@ -0,0 +1,2 @@
+> +obj-$(CONFIG_MHI_BUS_EP) += mhi_ep.o
+> +mhi_ep-y := main.o
+> diff --git a/drivers/bus/mhi/ep/internal.h b/drivers/bus/mhi/ep/internal.h
+> new file mode 100644
+> index 000000000000..e313a2546664
+> --- /dev/null
+> +++ b/drivers/bus/mhi/ep/internal.h
+> @@ -0,0 +1,160 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2021, Linaro Ltd.
+
+Update your copyright statement (here and everywhere before you
+send your next version).
+
+> + *
+> + */
+> +
+> +#ifndef _MHI_EP_INTERNAL_
+> +#define _MHI_EP_INTERNAL_
+> +
 > +#include <linux/bitfield.h>
->   #include <linux/debugfs.h>
->   #include <linux/device.h>
->   #include <linux/dma-direction.h>
-> @@ -283,11 +284,11 @@ int mhi_init_dev_ctxt(struct mhi_controller *mhi_cntrl)
->   
->   		tmp = le32_to_cpu(chan_ctxt->chcfg);
->   		tmp &= ~CHAN_CTX_CHSTATE_MASK;
-> -		tmp |= (MHI_CH_STATE_DISABLED << CHAN_CTX_CHSTATE_SHIFT);
-> +		tmp |= FIELD_PREP(CHAN_CTX_CHSTATE_MASK, MHI_CH_STATE_DISABLED);
->   		tmp &= ~CHAN_CTX_BRSTMODE_MASK;
-> -		tmp |= (mhi_chan->db_cfg.brstmode << CHAN_CTX_BRSTMODE_SHIFT);
-> +		tmp |= FIELD_PREP(CHAN_CTX_BRSTMODE_MASK, mhi_chan->db_cfg.brstmode);
->   		tmp &= ~CHAN_CTX_POLLCFG_MASK;
-> -		tmp |= (mhi_chan->db_cfg.pollcfg << CHAN_CTX_POLLCFG_SHIFT);
-> +		tmp |= FIELD_PREP(CHAN_CTX_POLLCFG_MASK, mhi_chan->db_cfg.pollcfg);
->   		chan_ctxt->chcfg = cpu_to_le32(tmp);
->   
->   		chan_ctxt->chtype = cpu_to_le32(mhi_chan->type);
-> @@ -319,7 +320,7 @@ int mhi_init_dev_ctxt(struct mhi_controller *mhi_cntrl)
->   		tmp = le32_to_cpu(er_ctxt->intmod);
->   		tmp &= ~EV_CTX_INTMODC_MASK;
->   		tmp &= ~EV_CTX_INTMODT_MASK;
-> -		tmp |= (mhi_event->intmod << EV_CTX_INTMODT_SHIFT);
-> +		tmp |= FIELD_PREP(EV_CTX_INTMODT_MASK, mhi_event->intmod);
->   		er_ctxt->intmod = cpu_to_le32(tmp);
->   
->   		er_ctxt->ertype = cpu_to_le32(MHI_ER_TYPE_VALID);
-> @@ -425,71 +426,70 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
->   	struct {
->   		u32 offset;
->   		u32 mask;
-> -		u32 shift;
->   		u32 val;
->   	} reg_info[] = {
->   		{
-> -			CCABAP_HIGHER, U32_MAX, 0,
-> +			CCABAP_HIGHER, U32_MAX,
->   			upper_32_bits(mhi_cntrl->mhi_ctxt->chan_ctxt_addr),
->   		},
->   		{
-> -			CCABAP_LOWER, U32_MAX, 0,
-> +			CCABAP_LOWER, U32_MAX,
->   			lower_32_bits(mhi_cntrl->mhi_ctxt->chan_ctxt_addr),
->   		},
->   		{
-> -			ECABAP_HIGHER, U32_MAX, 0,
-> +			ECABAP_HIGHER, U32_MAX,
->   			upper_32_bits(mhi_cntrl->mhi_ctxt->er_ctxt_addr),
->   		},
->   		{
-> -			ECABAP_LOWER, U32_MAX, 0,
-> +			ECABAP_LOWER, U32_MAX,
->   			lower_32_bits(mhi_cntrl->mhi_ctxt->er_ctxt_addr),
->   		},
->   		{
-> -			CRCBAP_HIGHER, U32_MAX, 0,
-> +			CRCBAP_HIGHER, U32_MAX,
->   			upper_32_bits(mhi_cntrl->mhi_ctxt->cmd_ctxt_addr),
->   		},
->   		{
-> -			CRCBAP_LOWER, U32_MAX, 0,
-> +			CRCBAP_LOWER, U32_MAX,
->   			lower_32_bits(mhi_cntrl->mhi_ctxt->cmd_ctxt_addr),
->   		},
->   		{
-> -			MHICFG, MHICFG_NER_MASK, MHICFG_NER_SHIFT,
-> +			MHICFG, MHICFG_NER_MASK,
->   			mhi_cntrl->total_ev_rings,
->   		},
->   		{
-> -			MHICFG, MHICFG_NHWER_MASK, MHICFG_NHWER_SHIFT,
-> +			MHICFG, MHICFG_NHWER_MASK,
->   			mhi_cntrl->hw_ev_rings,
->   		},
->   		{
-> -			MHICTRLBASE_HIGHER, U32_MAX, 0,
-> +			MHICTRLBASE_HIGHER, U32_MAX,
->   			upper_32_bits(mhi_cntrl->iova_start),
->   		},
->   		{
-> -			MHICTRLBASE_LOWER, U32_MAX, 0,
-> +			MHICTRLBASE_LOWER, U32_MAX,
->   			lower_32_bits(mhi_cntrl->iova_start),
->   		},
->   		{
-> -			MHIDATABASE_HIGHER, U32_MAX, 0,
-> +			MHIDATABASE_HIGHER, U32_MAX,
->   			upper_32_bits(mhi_cntrl->iova_start),
->   		},
->   		{
-> -			MHIDATABASE_LOWER, U32_MAX, 0,
-> +			MHIDATABASE_LOWER, U32_MAX,
->   			lower_32_bits(mhi_cntrl->iova_start),
->   		},
->   		{
-> -			MHICTRLLIMIT_HIGHER, U32_MAX, 0,
-> +			MHICTRLLIMIT_HIGHER, U32_MAX,
->   			upper_32_bits(mhi_cntrl->iova_stop),
->   		},
->   		{
-> -			MHICTRLLIMIT_LOWER, U32_MAX, 0,
-> +			MHICTRLLIMIT_LOWER, U32_MAX,
->   			lower_32_bits(mhi_cntrl->iova_stop),
->   		},
->   		{
-> -			MHIDATALIMIT_HIGHER, U32_MAX, 0,
-> +			MHIDATALIMIT_HIGHER, U32_MAX,
->   			upper_32_bits(mhi_cntrl->iova_stop),
->   		},
->   		{
-> -			MHIDATALIMIT_LOWER, U32_MAX, 0,
-> +			MHIDATALIMIT_LOWER, U32_MAX,
->   			lower_32_bits(mhi_cntrl->iova_stop),
->   		},
->   		{ 0, 0, 0 }
-> @@ -498,8 +498,7 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
->   	dev_dbg(dev, "Initializing MHI registers\n");
->   
->   	/* Read channel db offset */
-> -	ret = mhi_read_reg_field(mhi_cntrl, base, CHDBOFF, CHDBOFF_CHDBOFF_MASK,
-> -				 CHDBOFF_CHDBOFF_SHIFT, &val);
-> +	ret = mhi_read_reg_field(mhi_cntrl, base, CHDBOFF, CHDBOFF_CHDBOFF_MASK, &val);
->   	if (ret) {
->   		dev_err(dev, "Unable to read CHDBOFF register\n");
->   		return -EIO;
-> @@ -515,8 +514,7 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
->   		mhi_chan->tre_ring.db_addr = base + val;
->   
->   	/* Read event ring db offset */
-> -	ret = mhi_read_reg_field(mhi_cntrl, base, ERDBOFF, ERDBOFF_ERDBOFF_MASK,
-> -				 ERDBOFF_ERDBOFF_SHIFT, &val);
-> +	ret = mhi_read_reg_field(mhi_cntrl, base, ERDBOFF, ERDBOFF_ERDBOFF_MASK, &val);
->   	if (ret) {
->   		dev_err(dev, "Unable to read ERDBOFF register\n");
->   		return -EIO;
-> @@ -537,8 +535,7 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
->   	/* Write to MMIO registers */
->   	for (i = 0; reg_info[i].offset; i++)
->   		mhi_write_reg_field(mhi_cntrl, base, reg_info[i].offset,
-> -				    reg_info[i].mask, reg_info[i].shift,
-> -				    reg_info[i].val);
-> +				    reg_info[i].mask, reg_info[i].val);
->   
->   	return 0;
->   }
-> @@ -571,7 +568,7 @@ void mhi_deinit_chan_ctxt(struct mhi_controller *mhi_cntrl,
->   
->   	tmp = le32_to_cpu(chan_ctxt->chcfg);
->   	tmp &= ~CHAN_CTX_CHSTATE_MASK;
-> -	tmp |= (MHI_CH_STATE_DISABLED << CHAN_CTX_CHSTATE_SHIFT);
-> +	tmp |= FIELD_PREP(CHAN_CTX_CHSTATE_MASK, MHI_CH_STATE_DISABLED);
->   	chan_ctxt->chcfg = cpu_to_le32(tmp);
->   
->   	/* Update to all cores */
-> @@ -608,7 +605,7 @@ int mhi_init_chan_ctxt(struct mhi_controller *mhi_cntrl,
->   
->   	tmp = le32_to_cpu(chan_ctxt->chcfg);
->   	tmp &= ~CHAN_CTX_CHSTATE_MASK;
-> -	tmp |= (MHI_CH_STATE_ENABLED << CHAN_CTX_CHSTATE_SHIFT);
-> +	tmp |= FIELD_PREP(CHAN_CTX_CHSTATE_MASK, MHI_CH_STATE_ENABLED);
->   	chan_ctxt->chcfg = cpu_to_le32(tmp);
->   
->   	chan_ctxt->rbase = cpu_to_le64(tre_ring->iommu_base);
-> @@ -952,14 +949,10 @@ int mhi_register_controller(struct mhi_controller *mhi_cntrl,
->   	if (ret)
->   		goto err_destroy_wq;
->   
-> -	mhi_cntrl->family_number = (soc_info & SOC_HW_VERSION_FAM_NUM_BMSK) >>
-> -					SOC_HW_VERSION_FAM_NUM_SHFT;
-> -	mhi_cntrl->device_number = (soc_info & SOC_HW_VERSION_DEV_NUM_BMSK) >>
-> -					SOC_HW_VERSION_DEV_NUM_SHFT;
-> -	mhi_cntrl->major_version = (soc_info & SOC_HW_VERSION_MAJOR_VER_BMSK) >>
-> -					SOC_HW_VERSION_MAJOR_VER_SHFT;
-> -	mhi_cntrl->minor_version = (soc_info & SOC_HW_VERSION_MINOR_VER_BMSK) >>
-> -					SOC_HW_VERSION_MINOR_VER_SHFT;
-> +	mhi_cntrl->family_number = FIELD_GET(SOC_HW_VERSION_FAM_NUM_BMSK, soc_info);
-> +	mhi_cntrl->device_number = FIELD_GET(SOC_HW_VERSION_DEV_NUM_BMSK, soc_info);
-> +	mhi_cntrl->major_version = FIELD_GET(SOC_HW_VERSION_MAJOR_VER_BMSK, soc_info);
-> +	mhi_cntrl->minor_version = FIELD_GET(SOC_HW_VERSION_MINOR_VER_BMSK, soc_info);
->   
->   	mhi_cntrl->index = ida_alloc(&mhi_controller_ida, GFP_KERNEL);
->   	if (mhi_cntrl->index < 0) {
-> diff --git a/drivers/bus/mhi/host/internal.h b/drivers/bus/mhi/host/internal.h
-> index 762055a6ec9f..21381781d7c5 100644
-> --- a/drivers/bus/mhi/host/internal.h
-> +++ b/drivers/bus/mhi/host/internal.h
-> @@ -82,13 +82,9 @@ extern struct bus_type mhi_bus_type;
->   
->   #define SOC_HW_VERSION_OFFS		0x224
->   #define SOC_HW_VERSION_FAM_NUM_BMSK	GENMASK(31, 28)
-> -#define SOC_HW_VERSION_FAM_NUM_SHFT	28
->   #define SOC_HW_VERSION_DEV_NUM_BMSK	GENMASK(27, 16)
-> -#define SOC_HW_VERSION_DEV_NUM_SHFT	16
->   #define SOC_HW_VERSION_MAJOR_VER_BMSK	GENMASK(15, 8)
-> -#define SOC_HW_VERSION_MAJOR_VER_SHFT	8
->   #define SOC_HW_VERSION_MINOR_VER_BMSK	GENMASK(7, 0)
-> -#define SOC_HW_VERSION_MINOR_VER_SHFT	0
->   
->   struct mhi_ctxt {
->   	struct mhi_event_ctxt *er_ctxt;
-> @@ -393,14 +389,14 @@ int __must_check mhi_read_reg(struct mhi_controller *mhi_cntrl,
->   			      void __iomem *base, u32 offset, u32 *out);
->   int __must_check mhi_read_reg_field(struct mhi_controller *mhi_cntrl,
->   				    void __iomem *base, u32 offset, u32 mask,
-> -				    u32 shift, u32 *out);
-> +				    u32 *out);
->   int __must_check mhi_poll_reg_field(struct mhi_controller *mhi_cntrl,
->   				    void __iomem *base, u32 offset, u32 mask,
-> -				    u32 shift, u32 val, u32 delayus);
-> +				    u32 val, u32 delayus);
->   void mhi_write_reg(struct mhi_controller *mhi_cntrl, void __iomem *base,
->   		   u32 offset, u32 val);
->   void mhi_write_reg_field(struct mhi_controller *mhi_cntrl, void __iomem *base,
-> -			 u32 offset, u32 mask, u32 shift, u32 val);
-> +			 u32 offset, u32 mask, u32 val);
->   void mhi_ring_er_db(struct mhi_event *mhi_event);
->   void mhi_write_db(struct mhi_controller *mhi_cntrl, void __iomem *db_addr,
->   		  dma_addr_t db_val);
-> diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
-> index e436c2993d97..02ac5faf9178 100644
-> --- a/drivers/bus/mhi/host/main.c
-> +++ b/drivers/bus/mhi/host/main.c
-> @@ -24,7 +24,7 @@ int __must_check mhi_read_reg(struct mhi_controller *mhi_cntrl,
->   
->   int __must_check mhi_read_reg_field(struct mhi_controller *mhi_cntrl,
->   				    void __iomem *base, u32 offset,
-> -				    u32 mask, u32 shift, u32 *out)
-> +				    u32 mask, u32 *out)
->   {
->   	u32 tmp;
->   	int ret;
-> @@ -33,21 +33,20 @@ int __must_check mhi_read_reg_field(struct mhi_controller *mhi_cntrl,
->   	if (ret)
->   		return ret;
->   
-> -	*out = (tmp & mask) >> shift;
-> +	*out = (tmp & mask) >> __ffs(mask);
->   
->   	return 0;
->   }
->   
->   int __must_check mhi_poll_reg_field(struct mhi_controller *mhi_cntrl,
->   				    void __iomem *base, u32 offset,
-> -				    u32 mask, u32 shift, u32 val, u32 delayus)
-> +				    u32 mask, u32 val, u32 delayus)
->   {
->   	int ret;
->   	u32 out, retry = (mhi_cntrl->timeout_ms * 1000) / delayus;
->   
->   	while (retry--) {
-> -		ret = mhi_read_reg_field(mhi_cntrl, base, offset, mask, shift,
-> -					 &out);
-> +		ret = mhi_read_reg_field(mhi_cntrl, base, offset, mask, &out);
->   		if (ret)
->   			return ret;
->   
-> @@ -67,7 +66,7 @@ void mhi_write_reg(struct mhi_controller *mhi_cntrl, void __iomem *base,
->   }
->   
->   void mhi_write_reg_field(struct mhi_controller *mhi_cntrl, void __iomem *base,
-> -			 u32 offset, u32 mask, u32 shift, u32 val)
-> +			 u32 offset, u32 mask, u32 val)
->   {
->   	int ret;
->   	u32 tmp;
-> @@ -77,7 +76,7 @@ void mhi_write_reg_field(struct mhi_controller *mhi_cntrl, void __iomem *base,
->   		return;
->   
->   	tmp &= ~mask;
-> -	tmp |= (val << shift);
-> +	tmp |= (val << __ffs(mask));
->   	mhi_write_reg(mhi_cntrl, base, offset, tmp);
->   }
->   
-> @@ -159,8 +158,7 @@ enum mhi_state mhi_get_mhi_state(struct mhi_controller *mhi_cntrl)
->   {
->   	u32 state;
->   	int ret = mhi_read_reg_field(mhi_cntrl, mhi_cntrl->regs, MHISTATUS,
-> -				     MHISTATUS_MHISTATE_MASK,
-> -				     MHISTATUS_MHISTATE_SHIFT, &state);
-> +				     MHISTATUS_MHISTATE_MASK, &state);
->   	return ret ? MHI_STATE_MAX : state;
->   }
->   EXPORT_SYMBOL_GPL(mhi_get_mhi_state);
-> diff --git a/drivers/bus/mhi/host/pm.c b/drivers/bus/mhi/host/pm.c
-> index 088ade0f3e0b..3d90b8ecd3d9 100644
-> --- a/drivers/bus/mhi/host/pm.c
-> +++ b/drivers/bus/mhi/host/pm.c
-> @@ -131,11 +131,10 @@ void mhi_set_mhi_state(struct mhi_controller *mhi_cntrl, enum mhi_state state)
->   {
->   	if (state == MHI_STATE_RESET) {
->   		mhi_write_reg_field(mhi_cntrl, mhi_cntrl->regs, MHICTRL,
-> -				    MHICTRL_RESET_MASK, MHICTRL_RESET_SHIFT, 1);
-> +				    MHICTRL_RESET_MASK, 1);
->   	} else {
->   		mhi_write_reg_field(mhi_cntrl, mhi_cntrl->regs, MHICTRL,
-> -				    MHICTRL_MHISTATE_MASK,
-> -				    MHICTRL_MHISTATE_SHIFT, state);
-> +				    MHICTRL_MHISTATE_MASK, state);
->   	}
->   }
->   
-> @@ -167,16 +166,14 @@ int mhi_ready_state_transition(struct mhi_controller *mhi_cntrl)
->   
->   	/* Wait for RESET to be cleared and READY bit to be set by the device */
->   	ret = mhi_poll_reg_field(mhi_cntrl, mhi_cntrl->regs, MHICTRL,
-> -				 MHICTRL_RESET_MASK, MHICTRL_RESET_SHIFT, 0,
-> -				 interval_us);
-> +				 MHICTRL_RESET_MASK, 0, interval_us);
->   	if (ret) {
->   		dev_err(dev, "Device failed to clear MHI Reset\n");
->   		return ret;
->   	}
->   
->   	ret = mhi_poll_reg_field(mhi_cntrl, mhi_cntrl->regs, MHISTATUS,
-> -				 MHISTATUS_READY_MASK, MHISTATUS_READY_SHIFT, 1,
-> -				 interval_us);
-> +				 MHISTATUS_READY_MASK, 1, interval_us);
->   	if (ret) {
->   		dev_err(dev, "Device failed to enter MHI Ready\n");
->   		return ret;
-> @@ -470,8 +467,7 @@ static void mhi_pm_disable_transition(struct mhi_controller *mhi_cntrl)
->   
->   		/* Wait for the reset bit to be cleared by the device */
->   		ret = mhi_poll_reg_field(mhi_cntrl, mhi_cntrl->regs, MHICTRL,
-> -				 MHICTRL_RESET_MASK, MHICTRL_RESET_SHIFT, 0,
-> -				 25000);
-> +				 MHICTRL_RESET_MASK, 0, 25000);
->   		if (ret)
->   			dev_err(dev, "Device failed to clear MHI Reset\n");
->   
-> @@ -602,7 +598,6 @@ static void mhi_pm_sys_error_transition(struct mhi_controller *mhi_cntrl)
->   							    mhi_cntrl->regs,
->   							    MHICTRL,
->   							    MHICTRL_RESET_MASK,
-> -							    MHICTRL_RESET_SHIFT,
->   							    &in_reset) ||
->   					!in_reset, timeout);
->   		if (!ret || in_reset) {
-> @@ -1093,8 +1088,7 @@ int mhi_async_power_up(struct mhi_controller *mhi_cntrl)
->   	if (state == MHI_STATE_SYS_ERR) {
->   		mhi_set_mhi_state(mhi_cntrl, MHI_STATE_RESET);
->   		ret = mhi_poll_reg_field(mhi_cntrl, mhi_cntrl->regs, MHICTRL,
-> -				 MHICTRL_RESET_MASK, MHICTRL_RESET_SHIFT, 0,
-> -				 interval_us);
-> +				 MHICTRL_RESET_MASK, 0, interval_us);
->   		if (ret) {
->   			dev_info(dev, "Failed to reset MHI due to syserr state\n");
->   			goto error_exit;
+> +
+> +#include "../common.h"
+> +
+> +extern struct bus_type mhi_ep_bus_type;
+> +
+> +#define MHI_REG_OFFSET				0x100
+> +#define BHI_REG_OFFSET				0x200
+
+Rather than defining the REG_OFFSET values here and adding
+them to every definition below, why not have the base
+address used (e.g., in mhi_write_reg_field()) be adjusted
+by the constant amount?
+
+I'm just looking at mhi_init_mmio() (in the existing code)
+as an example, but for example, the base address used
+comes from mhi_cntrl->regs.  Can you instead just define
+a pointer somewhere that is the base of the MHI register
+range, which is already offset by the appropriate amount?
+
+> +
+> +/* MHI registers */
+> +#define MHIREGLEN				(MHI_REG_OFFSET + REG_MHIREGLEN)
+> +#define MHIVER					(MHI_REG_OFFSET + REG_MHIVER)
+> +#define MHICFG					(MHI_REG_OFFSET + REG_MHICFG)
+> +#define CHDBOFF					(MHI_REG_OFFSET + REG_CHDBOFF)
+> +#define ERDBOFF					(MHI_REG_OFFSET + REG_ERDBOFF)
+> +#define BHIOFF					(MHI_REG_OFFSET + REG_BHIOFF)
+> +#define BHIEOFF					(MHI_REG_OFFSET + REG_BHIEOFF)
+> +#define DEBUGOFF				(MHI_REG_OFFSET + REG_DEBUGOFF)
+> +#define MHICTRL					(MHI_REG_OFFSET + REG_MHICTRL)
+> +#define MHISTATUS				(MHI_REG_OFFSET + REG_MHISTATUS)
+> +#define CCABAP_LOWER				(MHI_REG_OFFSET + REG_CCABAP_LOWER)
+> +#define CCABAP_HIGHER				(MHI_REG_OFFSET + REG_CCABAP_HIGHER)
+> +#define ECABAP_LOWER				(MHI_REG_OFFSET + REG_ECABAP_LOWER)
+> +#define ECABAP_HIGHER				(MHI_REG_OFFSET + REG_ECABAP_HIGHER)
+> +#define CRCBAP_LOWER				(MHI_REG_OFFSET + REG_CRCBAP_LOWER)
+> +#define CRCBAP_HIGHER				(MHI_REG_OFFSET + REG_CRCBAP_HIGHER)
+> +#define CRDB_LOWER				(MHI_REG_OFFSET + REG_CRDB_LOWER)
+> +#define CRDB_HIGHER				(MHI_REG_OFFSET + REG_CRDB_HIGHER)
+> +#define MHICTRLBASE_LOWER			(MHI_REG_OFFSET + REG_MHICTRLBASE_LOWER)
+> +#define MHICTRLBASE_HIGHER			(MHI_REG_OFFSET + REG_MHICTRLBASE_HIGHER)
+> +#define MHICTRLLIMIT_LOWER			(MHI_REG_OFFSET + REG_MHICTRLLIMIT_LOWER)
+> +#define MHICTRLLIMIT_HIGHER			(MHI_REG_OFFSET + REG_MHICTRLLIMIT_HIGHER)
+> +#define MHIDATABASE_LOWER			(MHI_REG_OFFSET + REG_MHIDATABASE_LOWER)
+> +#define MHIDATABASE_HIGHER			(MHI_REG_OFFSET + REG_MHIDATABASE_HIGHER)
+> +#define MHIDATALIMIT_LOWER			(MHI_REG_OFFSET + REG_MHIDATALIMIT_LOWER)
+> +#define MHIDATALIMIT_HIGHER			(MHI_REG_OFFSET + REG_MHIDATALIMIT_HIGHER)
+> +
+> +/* MHI BHI registers */
+> +#define BHI_IMGTXDB				(BHI_REG_OFFSET + REG_BHI_IMGTXDB)
+> +#define BHI_EXECENV				(BHI_REG_OFFSET + REG_BHI_EXECENV)
+> +#define BHI_INTVEC				(BHI_REG_OFFSET + REG_BHI_INTVEC)
+> +
+> +/* MHI Doorbell registers */
+> +#define CHDB_LOWER_n(n)				(0x400 + 0x8 * (n))
+> +#define CHDB_HIGHER_n(n)			(0x404 + 0x8 * (n))
+> +#define ERDB_LOWER_n(n)				(0x800 + 0x8 * (n))
+> +#define ERDB_HIGHER_n(n)			(0x804 + 0x8 * (n))
+> +
+> +#define MHI_CTRL_INT_STATUS_A7			0x4
+> +#define MHI_CTRL_INT_STATUS_A7_MSK		BIT(0)
+> +#define MHI_CTRL_INT_STATUS_CRDB_MSK		BIT(1)
+> +#define MHI_CHDB_INT_STATUS_A7_n(n)		(0x28 + 0x4 * (n))
+> +#define MHI_ERDB_INT_STATUS_A7_n(n)		(0x38 + 0x4 * (n))
+> +
+> +#define MHI_CTRL_INT_CLEAR_A7			0x4c
+> +#define MHI_CTRL_INT_MMIO_WR_CLEAR		BIT(2)
+> +#define MHI_CTRL_INT_CRDB_CLEAR			BIT(1)
+> +#define MHI_CTRL_INT_CRDB_MHICTRL_CLEAR		BIT(0)
+> +
+> +#define MHI_CHDB_INT_CLEAR_A7_n(n)		(0x70 + 0x4 * (n))
+> +#define MHI_CHDB_INT_CLEAR_A7_n_CLEAR_ALL	GENMASK(31, 0)
+> +#define MHI_ERDB_INT_CLEAR_A7_n(n)		(0x80 + 0x4 * (n))
+> +#define MHI_ERDB_INT_CLEAR_A7_n_CLEAR_ALL	GENMASK(31, 0)
+> +
+> +/*
+> + * Unlike the usual "masking" convention, writing "1" to a bit in this register
+> + * enables the interrupt and writing "0" will disable it..
+> + */
+> +#define MHI_CTRL_INT_MASK_A7			0x94
+> +#define MHI_CTRL_INT_MASK_A7_MASK		GENMASK(1, 0)
+> +#define MHI_CTRL_MHICTRL_MASK			BIT(0)
+> +#define MHI_CTRL_CRDB_MASK			BIT(1)
+> +
+> +#define MHI_CHDB_INT_MASK_A7_n(n)		(0xb8 + 0x4 * (n))
+> +#define MHI_CHDB_INT_MASK_A7_n_EN_ALL		GENMASK(31, 0)
+> +#define MHI_ERDB_INT_MASK_A7_n(n)		(0xc8 + 0x4 * (n))
+> +#define MHI_ERDB_INT_MASK_A7_n_EN_ALL		GENMASK(31, 0)
+> +
+> +#define NR_OF_CMD_RINGS				1
+> +#define MHI_MASK_ROWS_CH_EV_DB			4
+> +#define MHI_MASK_CH_EV_LEN			32
+> +
+> +/* Generic context */
+> +struct mhi_generic_ctx {
+> +	__u32 reserved0;
+> +	__u32 reserved1;
+> +	__u32 reserved2;
+> +
+> +	__u64 rbase __packed __aligned(4);
+> +	__u64 rlen __packed __aligned(4);
+> +	__u64 rp __packed __aligned(4);
+> +	__u64 wp __packed __aligned(4);
+> +};
+
+I'm pretty sure this constitutes an external interface, so
+every field should have its endianness annotated.
+
+Mentioned elsewhere, I think you can define the structure
+with those attributes rather than the multiple fields.
+
+> +
+> +enum mhi_ep_ring_type {
+> +	RING_TYPE_CMD = 0,
+> +	RING_TYPE_ER,
+> +	RING_TYPE_CH,
+> +};
+> +
+> +struct mhi_ep_ring_element {
+> +	u64 ptr;
+> +	u32 dword[2];
+> +};
+
+Are these host resident rings?  Even if not, this is an external
+interface, so this should be defined with explicit endianness.
+The cpu_to_le64() call will be a no-op so there is no cost
+to correcting this.
+
+> +
+> +/* Ring element */
+> +union mhi_ep_ring_ctx {
+> +	struct mhi_cmd_ctxt cmd;
+> +	struct mhi_event_ctxt ev;
+> +	struct mhi_chan_ctxt ch;
+> +	struct mhi_generic_ctx generic;
+> +};
+> +
+> +struct mhi_ep_ring {
+> +	struct mhi_ep_cntrl *mhi_cntrl;
+> +	int (*ring_cb)(struct mhi_ep_ring *ring, struct mhi_ep_ring_element *el);
+> +	union mhi_ep_ring_ctx *ring_ctx;
+> +	struct mhi_ep_ring_element *ring_cache;
+> +	enum mhi_ep_ring_type type;
+> +	size_t rd_offset;
+> +	size_t wr_offset;
+> +	size_t ring_size;
+> +	u32 db_offset_h;
+> +	u32 db_offset_l;
+> +	u32 ch_id;
+> +};
+
+Not sure about the db_offset fields, etc. here, but it's possible
+they need endianness annotations.  I'm going to stop making this
+comment; please make sure anything that's exposed to the host
+specifies that it's little endian.  (The host and endpoint should
+have a common definition of these shared structures anyway; maybe
+I'm misreading this or assuming something incorrectly.)
+
+> +
+> +struct mhi_ep_cmd {
+> +	struct mhi_ep_ring ring;
+> +};
+> +
+> +struct mhi_ep_event {
+> +	struct mhi_ep_ring ring;
+> +};
+> +
+> +struct mhi_ep_chan {
+> +	char *name;
+> +	struct mhi_ep_device *mhi_dev;
+> +	struct mhi_ep_ring ring;
+> +	struct mutex lock;
+> +	void (*xfer_cb)(struct mhi_ep_device *mhi_dev, struct mhi_result *result);
+> +	enum mhi_ch_state state;
+> +	enum dma_data_direction dir;
+> +	u64 tre_loc;
+> +	u32 tre_size;
+> +	u32 tre_bytes_left;
+> +	u32 chan;
+> +	bool skip_td;
+> +};
+> +
+> +#endif
+> diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
+> new file mode 100644
+> index 000000000000..b006011d025d
+> --- /dev/null
+> +++ b/drivers/bus/mhi/ep/main.c
+> @@ -0,0 +1,234 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * MHI Bus Endpoint stack
+> + *
+> + * Copyright (C) 2021 Linaro Ltd.
+> + * Author: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/delay.h>
+> +#include <linux/dma-direction.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/mhi_ep.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include "internal.h"
+> +
+> +static DEFINE_IDA(mhi_ep_cntrl_ida);
+> +
+> +static void mhi_ep_release_device(struct device *dev)
+> +{
+> +	struct mhi_ep_device *mhi_dev = to_mhi_ep_device(dev);
+> +
+> +	if (mhi_dev->dev_type == MHI_DEVICE_CONTROLLER)
+> +		mhi_dev->mhi_cntrl->mhi_dev = NULL;
+> +
+> +	/*
+> +	 * We need to set the mhi_chan->mhi_dev to NULL here since the MHI
+> +	 * devices for the channels will only get created during start
+> +	 * channel if the mhi_dev associated with it is NULL.
+> +	 */
+
+Can you mention where in the code the above occurs?  Just for
+reference.  Like, "will only get created in mhi_ep_create_device()
+if the..." or whatever.
+
+> +	if (mhi_dev->ul_chan)
+> +		mhi_dev->ul_chan->mhi_dev = NULL;
+> +
+> +	if (mhi_dev->dl_chan)
+> +		mhi_dev->dl_chan->mhi_dev = NULL;
+> +
+> +	kfree(mhi_dev);
+> +}
+> +
+> +static struct mhi_ep_device *mhi_ep_alloc_device(struct mhi_ep_cntrl *mhi_cntrl,
+> +						 enum mhi_device_type dev_type)
+> +{
+> +	struct mhi_ep_device *mhi_dev;
+> +	struct device *dev;
+> +
+> +	mhi_dev = kzalloc(sizeof(*mhi_dev), GFP_KERNEL);
+> +	if (!mhi_dev)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	dev = &mhi_dev->dev;
+> +	device_initialize(dev);
+> +	dev->bus = &mhi_ep_bus_type;
+> +	dev->release = mhi_ep_release_device;
+> +
+
+Maybe mention that the controller device is always allocated
+first.
+
+> +	if (dev_type == MHI_DEVICE_CONTROLLER)
+> +		/* for MHI controller device, parent is the bus device (e.g. PCI EPF) */
+> +		dev->parent = mhi_cntrl->cntrl_dev;
+> +	else
+> +		/* for MHI client devices, parent is the MHI controller device */
+> +		dev->parent = &mhi_cntrl->mhi_dev->dev;
+> +
+> +	mhi_dev->mhi_cntrl = mhi_cntrl;
+> +	mhi_dev->dev_type = dev_type;
+> +
+> +	return mhi_dev;
+> +}
+> +
+
+I think the name of the next function could be better.  Yes, it
+parses the channel configuration, but what it *really* does is
+alloocate and initialize the channel array.  So maybe something
+more like mhi_chan_init()?
+
+> +static int parse_ch_cfg(struct mhi_ep_cntrl *mhi_cntrl,
+> +			const struct mhi_ep_cntrl_config *config)
+> +{
+> +	const struct mhi_ep_channel_config *ch_cfg;
+> +	struct device *dev = mhi_cntrl->cntrl_dev;
+> +	u32 chan, i;
+> +	int ret = -EINVAL;
+> +
+> +	mhi_cntrl->max_chan = config->max_channels;
+> +
+> +	/*
+> +	 * Allocate max_channels supported by the MHI endpoint and populate
+> +	 * only the defined channels
+> +	 */
+> +	mhi_cntrl->mhi_chan = kcalloc(mhi_cntrl->max_chan, sizeof(*mhi_cntrl->mhi_chan),
+> +				      GFP_KERNEL);
+> +	if (!mhi_cntrl->mhi_chan)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < config->num_channels; i++) {
+> +		struct mhi_ep_chan *mhi_chan;
+
+This entire block could be encapsulated in mhi_channel_add()
+or something,
+
+> +		ch_cfg = &config->ch_cfg[i];
+
+Move the above assignment down a few lines, to just before
+where it's used.
+
+> +
+> +		chan = ch_cfg->num;
+> +		if (chan >= mhi_cntrl->max_chan) {
+> +			dev_err(dev, "Channel %d not available\n", chan);
+
+Maybe report the maximum channel so it's obvious why it's
+not available.
+
+> +			goto error_chan_cfg;
+> +		}
+> +
+> +		/* Bi-directional and direction less channels are not supported */
+> +		if (ch_cfg->dir == DMA_BIDIRECTIONAL || ch_cfg->dir == DMA_NONE) {
+> +			dev_err(dev, "Invalid channel configuration\n");
+
+Maybe be more specific in your message about what's wrong here.
+
+> +			goto error_chan_cfg;
+> +		}
+> +
+> +		mhi_chan = &mhi_cntrl->mhi_chan[chan];
+> +		mhi_chan->name = ch_cfg->name;
+> +		mhi_chan->chan = chan;
+> +		mhi_chan->dir = ch_cfg->dir;
+> +		mutex_init(&mhi_chan->lock);
+> +	}
+> +
+> +	return 0;
+> +
+> +error_chan_cfg:
+> +	kfree(mhi_cntrl->mhi_chan);
+
+I'm not sure what the caller does, but maybe null this
+after it's freed, or don't assign mhi_cntrll->mhi_chan
+until the initialization is successful.
+
+
+> +	return ret;
+> +}
+> +
+> +/*
+> + * Allocate channel and command rings here. Event rings will be allocated
+> + * in mhi_ep_power_up() as the config comes from the host.
+> + */
+> +int mhi_ep_register_controller(struct mhi_ep_cntrl *mhi_cntrl,
+> +				const struct mhi_ep_cntrl_config *config)
+> +{
+> +	struct mhi_ep_device *mhi_dev;
+> +	int ret;
+> +
+> +	if (!mhi_cntrl || !mhi_cntrl->cntrl_dev)
+> +		return -EINVAL;
+> +
+> +	ret = parse_ch_cfg(mhi_cntrl, config);
+> +	if (ret)
+> +		return ret;
+> +
+> +	mhi_cntrl->mhi_cmd = kcalloc(NR_OF_CMD_RINGS, sizeof(*mhi_cntrl->mhi_cmd), GFP_KERNEL);
+
+I said before I thought it was silly to even define NR_OF_CMD_RINGS.
+Does the MHI specification actually allow more than one command
+ring for a given MHI controller?  Ever?
+
+> +	if (!mhi_cntrl->mhi_cmd) {
+> +		ret = -ENOMEM;
+> +		goto err_free_ch;
+> +	}
+> +
+> +	/* Set controller index */
+> +	mhi_cntrl->index = ida_alloc(&mhi_ep_cntrl_ida, GFP_KERNEL);
+> +	if (mhi_cntrl->index < 0) {
+> +		ret = mhi_cntrl->index;
+> +		goto err_free_cmd;
+> +	}
+> +
+> +	/* Allocate the controller device */
+> +	mhi_dev = mhi_ep_alloc_device(mhi_cntrl, MHI_DEVICE_CONTROLLER);
+> +	if (IS_ERR(mhi_dev)) {
+> +		dev_err(mhi_cntrl->cntrl_dev, "Failed to allocate controller device\n");
+> +		ret = PTR_ERR(mhi_dev);
+> +		goto err_ida_free;
+> +	}
+> +
+> +	dev_set_name(&mhi_dev->dev, "mhi_ep%d", mhi_cntrl->index);
+> +	mhi_dev->name = dev_name(&mhi_dev->dev);
+> +
+> +	ret = device_add(&mhi_dev->dev);
+> +	if (ret)
+> +		goto err_put_dev;
+> +
+
+Should the mhi_dev pointer be set before device_add() gets called?
+
+> +	mhi_cntrl->mhi_dev = mhi_dev;
+> +
+> +	dev_dbg(&mhi_dev->dev, "MHI EP Controller registered\n");
+> +
+> +	return 0;
+> +
+> +err_put_dev:
+> +	put_device(&mhi_dev->dev);
+> +err_ida_free:
+> +	ida_free(&mhi_ep_cntrl_ida, mhi_cntrl->index);
+> +err_free_cmd:
+> +	kfree(mhi_cntrl->mhi_cmd);
+> +err_free_ch:
+> +	kfree(mhi_cntrl->mhi_chan);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(mhi_ep_register_controller);
+> +
+> +void mhi_ep_unregister_controller(struct mhi_ep_cntrl *mhi_cntrl)
+> +{
+> +	struct mhi_ep_device *mhi_dev = mhi_cntrl->mhi_dev;
+> +
+> +	kfree(mhi_cntrl->mhi_cmd);
+> +	kfree(mhi_cntrl->mhi_chan);
+> +
+> +	device_del(&mhi_dev->dev);
+> +	put_device(&mhi_dev->dev);
+> +
+> +	ida_free(&mhi_ep_cntrl_ida, mhi_cntrl->index);
+> +}
+> +EXPORT_SYMBOL_GPL(mhi_ep_unregister_controller);
+> +
+> +static int mhi_ep_match(struct device *dev, struct device_driver *drv)
+> +{
+> +	struct mhi_ep_device *mhi_dev = to_mhi_ep_device(dev);
+> +
+> +	/*
+> +	 * If the device is a controller type then there is no client driver
+> +	 * associated with it
+> +	 */
+> +	if (mhi_dev->dev_type == MHI_DEVICE_CONTROLLER)
+> +		return 0;
+> +
+> +	return 0;
+> +};
+> +
+> +struct bus_type mhi_ep_bus_type = {
+> +	.name = "mhi_ep",
+> +	.dev_name = "mhi_ep",
+> +	.match = mhi_ep_match,
+> +};
+> +
+> +static int __init mhi_ep_init(void)
+> +{
+> +	return bus_register(&mhi_ep_bus_type);
+> +}
+> +
+> +static void __exit mhi_ep_exit(void)
+> +{
+> +	bus_unregister(&mhi_ep_bus_type);
+> +}
+> +
+> +postcore_initcall(mhi_ep_init);
+> +module_exit(mhi_ep_exit);
+> +
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_DESCRIPTION("MHI Bus Endpoint stack");
+> +MODULE_AUTHOR("Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>");
+> diff --git a/include/linux/mhi_ep.h b/include/linux/mhi_ep.h
+> new file mode 100644
+> index 000000000000..20238e9df1b3
+> --- /dev/null
+> +++ b/include/linux/mhi_ep.h
+> @@ -0,0 +1,143 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2021, Linaro Ltd.
+> + *
+> + */
+> +#ifndef _MHI_EP_H_
+> +#define _MHI_EP_H_
+> +
+> +#include <linux/dma-direction.h>
+> +#include <linux/mhi.h>
+> +
+> +#define MHI_EP_DEFAULT_MTU 0x8000
+> +
+> +/**
+> + * struct mhi_ep_channel_config - Channel configuration structure for controller
+> + * @name: The name of this channel
+> + * @num: The number assigned to this channel
+> + * @num_elements: The number of elements that can be queued to this channel
+> + * @dir: Direction that data may flow on this channel
+> + */
+> +struct mhi_ep_channel_config {
+> +	char *name;
+> +	u32 num;
+> +	u32 num_elements;
+> +	enum dma_data_direction dir;
+> +};
+> +
+> +/**
+> + * struct mhi_ep_cntrl_config - MHI Endpoint controller configuration
+> + * @max_channels: Maximum number of channels supported
+> + * @num_channels: Number of channels defined in @ch_cfg
+> + * @ch_cfg: Array of defined channels
+> + * @mhi_version: MHI spec version supported by the controller
+> + */
+> +struct mhi_ep_cntrl_config {
+> +	u32 max_channels;
+> +	u32 num_channels;
+> +	const struct mhi_ep_channel_config *ch_cfg;
+> +	u32 mhi_version;
+
+Put mhi_version first?
+
+> +};
+> +
+> +/**
+> + * struct mhi_ep_db_info - MHI Endpoint doorbell info
+> + * @mask: Mask of the doorbell interrupt
+> + * @status: Status of the doorbell interrupt
+> + */
+> +struct mhi_ep_db_info {
+> +	u32 mask;
+> +	u32 status;
+> +};
+> +
+> +/**
+> + * struct mhi_ep_cntrl - MHI Endpoint controller structure
+> + * @cntrl_dev: Pointer to the struct device of physical bus acting as the MHI
+> + *             Endpoint controller
+> + * @mhi_dev: MHI Endpoint device instance for the controller
+> + * @mmio: MMIO region containing the MHI registers
+> + * @mhi_chan: Points to the channel configuration table
+> + * @mhi_event: Points to the event ring configurations table
+> + * @mhi_cmd: Points to the command ring configurations table
+> + * @sm: MHI Endpoint state machine
+> + * @raise_irq: CB function for raising IRQ to the host
+> + * @alloc_addr: CB function for allocating memory in endpoint for storing host context
+> + * @map_addr: CB function for mapping host context to endpoint
+> + * @free_addr: CB function to free the allocated memory in endpoint for storing host context
+> + * @unmap_addr: CB function to unmap the host context in endpoint
+> + * @read_from_host: CB function for reading from host memory from endpoint
+> + * @write_to_host: CB function for writing to host memory from endpoint
+> + * @mhi_state: MHI Endpoint state
+> + * @max_chan: Maximum channels supported by the endpoint controller
+> + * @mru: MRU (Maximum Receive Unit) value of the endpoint controller
+> + * @index: MHI Endpoint controller index
+> + */
+> +struct mhi_ep_cntrl {
+> +	struct device *cntrl_dev;
+> +	struct mhi_ep_device *mhi_dev;
+> +	void __iomem *mmio;
+> +
+> +	struct mhi_ep_chan *mhi_chan;
+> +	struct mhi_ep_event *mhi_event;
+> +	struct mhi_ep_cmd *mhi_cmd;
+> +	struct mhi_ep_sm *sm;
+> +
+> +	void (*raise_irq)(struct mhi_ep_cntrl *mhi_cntrl, u32 vector);
+> +	void __iomem *(*alloc_addr)(struct mhi_ep_cntrl *mhi_cntrl, phys_addr_t *phys_addr,
+> +		       size_t size);
+> +	int (*map_addr)(struct mhi_ep_cntrl *mhi_cntrl, phys_addr_t phys_addr, u64 pci_addr,
+> +			size_t size);
+> +	void (*free_addr)(struct mhi_ep_cntrl *mhi_cntrl, phys_addr_t phys_addr,
+> +			  void __iomem *virt_addr, size_t size);
+> +	void (*unmap_addr)(struct mhi_ep_cntrl *mhi_cntrl, phys_addr_t phys_addr);
+> +	int (*read_from_host)(struct mhi_ep_cntrl *mhi_cntrl, u64 from, void __iomem *to,
+> +			      size_t size);
+> +	int (*write_to_host)(struct mhi_ep_cntrl *mhi_cntrl, void __iomem *from, u64 to,
+> +			     size_t size);
+> +
+> +	enum mhi_state mhi_state;
+> +
+> +	u32 max_chan;
+> +	u32 mru;
+> +	int index;
+
+Will index ever be negative?
+
+> +};
+> +
+> +/**
+> + * struct mhi_ep_device - Structure representing an MHI Endpoint device that binds
+> + *                     to channels or is associated with controllers
+> + * @dev: Driver model device node for the MHI Endpoint device
+> + * @mhi_cntrl: Controller the device belongs to
+> + * @id: Pointer to MHI Endpoint device ID struct
+> + * @name: Name of the associated MHI Endpoint device
+> + * @ul_chan: UL channel for the device
+> + * @dl_chan: DL channel for the device
+> + * @dev_type: MHI device type
+> + */
+> +struct mhi_ep_device {
+> +	struct device dev;
+> +	struct mhi_ep_cntrl *mhi_cntrl;
+> +	const struct mhi_device_id *id;
+> +	const char *name;
+> +	struct mhi_ep_chan *ul_chan;
+> +	struct mhi_ep_chan *dl_chan;
+> +	enum mhi_device_type dev_type;
+
+There are two device types, controller and transfer.  Unless
+there is ever going to be anything more than that, I think
+the distinction is better represented as a Boolean, such as:
+
+	bool controller;
+
+> +};
+> +
+> +#define to_mhi_ep_device(dev) container_of(dev, struct mhi_ep_device, dev)
+> +
+> +/**
+> + * mhi_ep_register_controller - Register MHI Endpoint controller
+> + * @mhi_cntrl: MHI Endpoint controller to register
+> + * @config: Configuration to use for the controller
+> + *
+> + * Return: 0 if controller registrations succeeds, a negative error code otherwise.
+> + */
+> +int mhi_ep_register_controller(struct mhi_ep_cntrl *mhi_cntrl,
+> +			       const struct mhi_ep_cntrl_config *config);
+> +
+> +/**
+> + * mhi_ep_unregister_controller - Unregister MHI Endpoint controller
+> + * @mhi_cntrl: MHI Endpoint controller to unregister
+> + */
+> +void mhi_ep_unregister_controller(struct mhi_ep_cntrl *mhi_cntrl);
+> +
+> +#endif
 

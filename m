@@ -2,81 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F205B4B6D04
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:07:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A462C4B6D06
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:08:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238109AbiBONHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 08:07:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46366 "EHLO
+        id S238068AbiBONIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 08:08:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236820AbiBONH2 (ORCPT
+        with ESMTP id S231377AbiBONIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 08:07:28 -0500
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9BCB0A41;
-        Tue, 15 Feb 2022 05:07:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1644930438; x=1676466438;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=9btP8uEaJC0GxydzcBL9hGXrHqbmd82Gv2vpIfE35jI=;
-  b=Yj9BoEQ7p0TtTkZUmp8Ptr/JOc0qaf8IrvBjPil7kwtSfEqj26/8yUvY
-   RV11YKlvNYyWb+KQARYSeJ9VGU1rHTHpnobKWRqRtm45q2bc3csa7Wr8i
-   36MtCDXKsNKo4NTIeXgX+a5zBJ5i29H8XsHgYcpmvpsQSSlc4jpbOqXKl
-   Y=;
-X-IronPort-AV: E=Sophos;i="5.88,370,1635206400"; 
-   d="scan'208";a="992139479"
-Subject: Re: [PATCH 1/4] EDAC: Fix calculation of returned address and next offset in
- edac_align_ptr()
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-5c4a15b1.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP; 15 Feb 2022 13:07:03 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2c-5c4a15b1.us-west-2.amazon.com (Postfix) with ESMTPS id BE87141A63;
-        Tue, 15 Feb 2022 13:07:03 +0000 (UTC)
-Received: from EX13D13UWB003.ant.amazon.com (10.43.161.233) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Tue, 15 Feb 2022 13:07:02 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
- EX13D13UWB003.ant.amazon.com (10.43.161.233) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Tue, 15 Feb 2022 13:07:01 +0000
-Received: from [10.95.85.216] (10.95.85.216) by mail-relay.amazon.com
- (10.43.161.249) with Microsoft SMTP Server id 15.0.1497.28 via Frontend
- Transport; Tue, 15 Feb 2022 13:06:59 +0000
-Message-ID: <6cbcf540-8f58-3b67-77e6-308b587695f7@amazon.com>
-Date:   Tue, 15 Feb 2022 15:06:58 +0200
+        Tue, 15 Feb 2022 08:08:12 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2178AB16EC;
+        Tue, 15 Feb 2022 05:08:02 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DD2631480;
+        Tue, 15 Feb 2022 05:08:01 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.89.173])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 099533F718;
+        Tue, 15 Feb 2022 05:07:59 -0800 (PST)
+Date:   Tue, 15 Feb 2022 13:07:56 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     madvenka@linux.microsoft.com
+Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v13 04/11] arm64: Split unwind_init()
+Message-ID: <YgulrExdlfBcHoKP@FVFF77S0Q05N>
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220117145608.6781-1-madvenka@linux.microsoft.com>
+ <20220117145608.6781-5-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-CC:     <mchehab@kernel.org>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <ronenk@amazon.com>,
-        <talel@amazon.com>, <hhhawa@amazon.com>, <jonnyc@amazon.com>,
-        <hanochu@amazon.com>
-References: <20220113100622.12783-1-farbere@amazon.com>
- <20220113100622.12783-2-farbere@amazon.com> <YfALFy7LGGIOS2Fv@zn.tnic>
- <9bd8f3c5-2281-8235-9eac-d2c371245a54@amazon.com> <YgudxpqAlyQ5UqlF@zn.tnic>
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <YgudxpqAlyQ5UqlF@zn.tnic>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220117145608.6781-5-madvenka@linux.microsoft.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/2022 2:34 PM, Borislav Petkov wrote:
-> Just to make sure I understand you correctly: you're talking about some
-> internal version of al_mc_edac - not what's upstream?
+Hi Madhavan,
 
-Yes, I'm talking about an internal version that wasn't up-streamed yet.
+The diff itself largely looks good, but we need to actually write the comments.
+Can you pleaes pick up the wording I've written below for those?
 
---
-Regards, Eliav
+That and renaming `unwind_init_from_current` to `unwind_init_from_caller`.
 
+With those I think this is good, but I'd like to see the updated version before
+I provide Acked-by or Reviewed-by tags -- hopefully that's just a formality! :)
+
+On Mon, Jan 17, 2022 at 08:56:01AM -0600, madvenka@linux.microsoft.com wrote:
+> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+> 
+> unwind_init() is currently a single function that initializes all of the
+> unwind state. Split it into the following functions and call them
+> appropriately:
+> 
+> 	- unwind_init_from_regs() - initialize from regs passed by caller.
+> 
+> 	- unwind_init_from_current() - initialize for the current task
+> 	  from the caller of arch_stack_walk().
+> 
+> 	- unwind_init_from_task() - initialize from the saved state of a
+> 	  task other than the current task. In this case, the other
+> 	  task must not be running.
+> 
+> This is done for two reasons:
+> 
+> 	- the different ways of initializing are clear
+> 
+> 	- specialized code can be added to each initializer in the future.
+> 
+> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+> ---
+>  arch/arm64/kernel/stacktrace.c | 54 +++++++++++++++++++++++++++-------
+>  1 file changed, 44 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+> index a1a7ff93b84f..b2b568e5deba 100644
+> --- a/arch/arm64/kernel/stacktrace.c
+> +++ b/arch/arm64/kernel/stacktrace.c
+> @@ -33,11 +33,8 @@
+>   */
+>  
+>  
+> -static void unwind_init(struct unwind_state *state, unsigned long fp,
+> -			unsigned long pc)
+> +static void unwind_init_common(struct unwind_state *state)
+>  {
+> -	state->fp = fp;
+> -	state->pc = pc;
+>  #ifdef CONFIG_KRETPROBES
+>  	state->kr_cur = NULL;
+>  #endif
+> @@ -56,6 +53,46 @@ static void unwind_init(struct unwind_state *state, unsigned long fp,
+>  	state->prev_type = STACK_TYPE_UNKNOWN;
+>  }
+>  
+> +/*
+> + * TODO: document requirements here.
+> + */
+
+Please make this:
+
+/*
+ * Start an unwind from a pt_regs.
+ *
+ * The unwind will begin at the PC within the regs.
+ *
+ * The regs must be on a stack currently owned by the calling task.
+ */
+
+> +static inline void unwind_init_from_regs(struct unwind_state *state,
+> +					 struct pt_regs *regs)
+> +{
+
+In future we could add:
+
+	WARN_ON_ONCE(!on_accessible_stack(current, regs, sizeof(*regs), NULL));
+
+... to validate the requirements, but I'm happy to lave that for a future patch
+so this patch can be a pure refactoring.
+
+> +	unwind_init_common(state);
+> +
+> +	state->fp = regs->regs[29];
+> +	state->pc = regs->pc;
+> +}
+> +
+> +/*
+> + * TODO: document requirements here.
+> + *
+> + * Note: this is always inlined, and we expect our caller to be a noinline
+> + * function, such that this starts from our caller's caller.
+> + */
+
+Please make this:
+
+/*
+ * Start an unwind from a caller.
+ *
+ * The unwind will begin at the caller of whichever function this is inlined
+ * into.
+ *
+ * The function which invokes this must be noinline.
+ */
+
+> +static __always_inline void unwind_init_from_current(struct unwind_state *state)
+
+Can we please rename s/current/caller/ here? That way it's clear *where* in
+current we're unwinding from, and the fact that it's current is implicit but
+obvious.
+
+> +{
+
+Similarly to unwind_init_from_regs(), in a future patch we could add:
+
+	WARN_ON_ONCE(task == current);
+
+... but for now we can omit that so this patch can be a pure refactoring.
+
+> +	unwind_init_common(state);
+> +
+> +	state->fp = (unsigned long)__builtin_frame_address(1);
+> +	state->pc = (unsigned long)__builtin_return_address(0);
+> +}
+> +
+> +/*
+> + * TODO: document requirements here.
+> + *
+> + * The caller guarantees that the task is not running.
+> + */
+
+Please make this:
+
+/*
+ * Start an unwind from a blocked task.
+ *
+ * The unwind will begin at the blocked tasks saved PC (i.e. the caller of
+ * cpu_switch_to()).
+ *
+ * The caller should ensure the task is blocked in cpu_switch_to() for the
+ * duration of the unwind, or the unwind will be bogus. It is never valid to
+ * call this for the current task.
+ */
+
+Thanks,
+Mark.
+
+> +static inline void unwind_init_from_task(struct unwind_state *state,
+> +					 struct task_struct *task)
+> +{
+> +	unwind_init_common(state);
+> +
+> +	state->fp = thread_saved_fp(task);
+> +	state->pc = thread_saved_pc(task);
+> +}
+> +
+>  /*
+>   * Unwind from one frame record (A) to the next frame record (B).
+>   *
+> @@ -195,14 +232,11 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
+>  	struct unwind_state state;
+>  
+>  	if (regs)
+> -		unwind_init(&state, regs->regs[29], regs->pc);
+> +		unwind_init_from_regs(&state, regs);
+>  	else if (task == current)
+> -		unwind_init(&state,
+> -				(unsigned long)__builtin_frame_address(1),
+> -				(unsigned long)__builtin_return_address(0));
+> +		unwind_init_from_current(&state);
+>  	else
+> -		unwind_init(&state, thread_saved_fp(task),
+> -				thread_saved_pc(task));
+> +		unwind_init_from_task(&state, task);
+>  
+>  	unwind(task, &state, consume_entry, cookie);
+>  }
+> -- 
+> 2.25.1
+> 

@@ -2,233 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6A04B731C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2714B70CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239524AbiBOPCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:02:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52220 "EHLO
+        id S239529AbiBOPCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:02:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235665AbiBOPCJ (ORCPT
+        with ESMTP id S235665AbiBOPCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:02:09 -0500
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4D113FB5;
-        Tue, 15 Feb 2022 07:01:59 -0800 (PST)
-Received: by mail-qk1-x72b.google.com with SMTP id b35so17492261qkp.6;
-        Tue, 15 Feb 2022 07:01:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=78EMwAad67P7bAo3QUQ6bXtnkwhqSI/m9kJsVLcGj/k=;
-        b=meo1miUHcsSJvQru3V9p75oQgJIH5SBCWHIKXEB/TwtaGfhU0cR4be62CMC/OFW72n
-         8KEhkAheAvytB2j9xImDIpi1KBJ0tswcDQd+q/HUAqYNhVEUJB5I4pPqEa3xobh3LPRq
-         RUX+ko0+K7BUZavzX789Xe4N65eFa0WrEseOVL6OcEOh1Q5SJwO96I8LeLoSFKZvJdK6
-         Hxet4TRv7Jhdq0g4erUB8amiAoH4+yXLna9F4aJdgeBFhMU3lmtukJIzxOu+7hZKGjaW
-         YXV2E8CajieXf+nIBeIxWifYMFb5AdE8GpNNu8FbLWBRgAmDt6bffi5BSRKn/8cMhkWU
-         6jWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=78EMwAad67P7bAo3QUQ6bXtnkwhqSI/m9kJsVLcGj/k=;
-        b=a+WWLUOHUja47otOCFfkoRhTwEcfyj5n/t4eYNJcs5coDox1VLei3IONWbJT9xDc1W
-         S3FmfPZcnZlhUGWerDvxOjufbCtmVb731e5P3K0vWRQnLbjUwKIHjkHA7Ac67NdqcCkV
-         xoNZbck374hAccLaqzBt8ioW7wS2a8Eix1Al+7uBF8VPaun/FeQFtEspWnHNBwX3IiSV
-         T5zCZlKEzbx0ZlsMRj2P7HxmYBMH82Ps6vKPkzidfxP7oSpSGBgGIBZ2TI0S5nOI1fYc
-         JtmNMj8rQJjAcaHXp/6oAFrYgnm67xGWLz+jRIOqWPfVPhRXH+yIS/4I/urO0WRyWrAU
-         7U4g==
-X-Gm-Message-State: AOAM532eJUU+jgTmXEGD7CGgHBam01v04VWcNzHWgrdU9xYESyyoPhv4
-        rizcLNkPzE8XkdMgZdgtlHxddrDGBjFgtMZ4YXo=
-X-Google-Smtp-Source: ABdhPJxlCXo4g+H0TJaGJZDZUAAspkcwT4TeqvyFGLSljHY3RAa0tj0rh6FtdVbr5j66Zr8z/+ty/p3+MELPZSJQ41Y=
-X-Received: by 2002:a05:620a:1327:: with SMTP id p7mr463519qkj.741.1644937318254;
- Tue, 15 Feb 2022 07:01:58 -0800 (PST)
+        Tue, 15 Feb 2022 10:02:50 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175351EAEA;
+        Tue, 15 Feb 2022 07:02:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1644937342;
+        bh=wa0JzlxCJP6FT5B/WCabwme/3GDUXb4BZx1q77XkiJo=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=SiTvSscv6dsdawlwf4tFoOkjjTPVTbRjj0QB6vLWukFyKr5wWNtUY6annljpvpmFP
+         CVm9ZKEXV6b1+qsH5fPHBiE8Azi1Lg5J4gFa5b3FbXSbkcMEpXS4cYMmy82VGvlBW5
+         4cS28SVa36iP5bQ/+AsU+Vg3emvXJKr+YmRvyvsc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ls3530 ([92.116.185.100]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MfYLa-1nvH661irQ-00g0c6; Tue, 15
+ Feb 2022 16:02:22 +0100
+Date:   Tue, 15 Feb 2022 16:02:13 +0100
+From:   Helge Deller <deller@gmx.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        John David Anglin <dave.anglin@bell.net>,
+        Sven Schnelle <svens@stackframe.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [GIT PULL] parisc architecture fixes for v5.17-rc5
+Message-ID: <YgvAdaab22aRk18r@ls3530>
 MIME-Version: 1.0
-References: <20220213150234.31602-1-thomas.liu@ucloud.cn> <CA+FuTSdODATw3hSAMv9aZUmJNM8ZE-YP58pr17bO9rGJUgfegw@mail.gmail.com>
- <CFD9B65A-6762-4D9B-ADEB-B4C0B1902E02@ucloud.cn> <CA+FuTSfQOUEyEDnOU8VVZ=STw_ii-hTwyg-cvpcViPkVK4pLUA@mail.gmail.com>
- <42554FCB-9180-4B32-B5CF-6D3236237D99@ucloud.cn>
-In-Reply-To: <42554FCB-9180-4B32-B5CF-6D3236237D99@ucloud.cn>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Tue, 15 Feb 2022 10:01:22 -0500
-Message-ID: <CAF=yD-+1RSj_o8n5LDOLVyn_dvVQvmDQo5pacSoDFPOR3M2g5g@mail.gmail.com>
-Subject: Re: [PATCH] gso: do not skip outer ip header in case of ipip and net_failover
-To:     Tao Liu <thomas.liu@ucloud.cn>
-Cc:     David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "Samudrala, Sridhar" <sridhar.samudrala@intel.com>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Provags-ID: V03:K1:DthRBr0+MoN09uePx4rSBjbxJokAu2S8IlkuYcCYYFARHNUAbKy
+ wp4L2PL+wr4lhHp0w+0xRq0hPodpMEbUhnP+PbWh5Fqij6V0jZeN4anS8PCeNENbjJjhc68
+ DVfIg5YGY7gnSkG7biN7cVBVztGn9yLLljLvqzHnnaKs9VB/irbMZGP6fFl4tUGX/gJFNFC
+ 01QWimEyQXjDskCDNGaXw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:27VC9SX74C4=:6H6fUQrVJQp9H0Y1RavvB0
+ VdWbD6a5+2pigzcLDa6kyTAG5IxFeZhdU9QOWeWUNmgbPyid8iSkfEm7R5D8woc+S3qZyxDVz
+ sHAA/sManypw+g2BnWeqvrXfB2Dpiy73YGcwc5o6/7akFHQTXm/L05JexqCRE4ZhdhMfXtBak
+ XJ6FMLknTbQrtNBiUu36Mpn29NeqLdYy5ydzsPeoj0AJx8xlib9RtaORuZQvcpX1qJix7Szqd
+ 4N3lm1HqE/V9+JKAd6Lo1k9P1CxYV8CYVaU2F6wOun0JwESdYyOM3bJvhptPmo1aCOvA5Fgc3
+ ARhA4aZQKlBWZiu+f/uhk8PKVnTfud5Muz/uG8uuYy75YQn+sZS9QLVI3sBFcFxcxcwGFuyZU
+ 4Q3998pphriykn/XT2PRuBbA5danZuU2ArYOHWHYx3hs3JSRWmchlHgOpYtm6wMeC4EHwLWZl
+ x5x8ZhgynQdrTvQUV+U+KB63sabRRlY0GHVbvsfgGkq6J70Y93siQf6l+SHE7W/ulI0VN6ePu
+ ZkvyYT6MRcN0djJ3HiDGc4m202PdZ7QUD/RrIFJu7JC0z/ikksngDcaitmoIxm10Kb+/EmUxi
+ uo6rUXHMYnNKhFwBnK6fLPiBQrdjRoHsi2uSuCQ0OuFbnXrSmM7Igkh4POElY27FyEJeANKcI
+ DFC0IjycWOdy7LwnZD2DGIZiUq1xWV4XY8taXlyPGK4aJSTyrr95u2KYKNaGwoaiZEV2h2AI6
+ J4+18lNu9YMGIcqw1t7dMzBMBIKKGewEKG3yPbBF/IS0kQU6hV8XNYF85tbRZic/qbWOTkaVU
+ HeY/Lkw9z/x4vIee+AIwP/5LBZDo01zIv1EFWlWDKcJTLYdZAUFvDkyq4fp+jVGrz9csv4GSv
+ zbPi9QEnMd5+iaecB0pA/3gzMVFbDBjj/lXevld9q40o3JMWk6Iz2JAFVWsnznpp4i3uy/nFp
+ lUSs0O+v/iCN0Rp664cpcFVR3+2rkOxCMxVXzwi5+WCdTuzkhewzlpV8Z+LAhLg2uk22ornB3
+ BqdpsOrl82tpfgmpA97347FbGM76eqq6ww+GXIjD4/OgPUhELytIa+8w4musSH8KLMbhaDMXp
+ nwmviLutDGsvxI=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 8:38 PM Tao Liu <thomas.liu@ucloud.cn> wrote:
->
-> Sorry to resend it.
->
-> 2022=E5=B9=B42=E6=9C=8814=E6=97=A5 12:27=EF=BC=8CWillem de Bruijn <willem=
-debruijn.kernel@gmail.com> =E5=86=99=E9=81=93=EF=BC=9A
->
-> On Sun, Feb 13, 2022 at 11:03 PM Tao Liu <thomas.liu@ucloud.cn> wrote:
->
->
-> Sorry for bothering, just repost it.
->
-> 2022=E5=B9=B42=E6=9C=8814=E6=97=A5 09:28=EF=BC=8CWillem de Bruijn <willem=
-debruijn.kernel@gmail.com> =E5=86=99=E9=81=93=EF=BC=9A
->
-> On Sun, Feb 13, 2022 at 10:10 AM Tao Liu <thomas.liu@ucloud.cn> wrote:
->
->
-> We encouter a tcp drop issue in our cloud environment. Packet GROed in ho=
-st
-> forwards to a VM virtio_net nic with net_failover enabled. VM acts as a
-> IPVS LB with ipip encapsulation. The full path like:
-> host gro -> vm virtio_net rx -> net_failover rx -> ipvs fullnat
-> -> ipip encap -> net_failover tx -> virtio_net tx
->
-> When net_failover transmits a ipip pkt (gso_type =3D 0x0103), there is no=
- gso
-> performed because it supports TSO and GSO_IPXIP4. But network_header has
-> been pointing to inner ip header.
->
->
-> If the packet is configured correctly, and net_failover advertises
-> that it can handle TSO packets with IPIP encap, then still virtio_net
-> should not advertise it and software GSO be applied on its
-> dev_queue_xmit call.
->
-> This is assuming that the packet not only has SKB_GSO_IPXIP4 correctly
-> set, but also tunneling fields like skb->encapsulated and
-> skb_inner_network_header.
->
-> Thanks very much for your comment!
->
-> Yes, the packet is correct. Another thing i have not pointed directly is
-> that the pkt has SKB_GSO_DODGY. net_failover do not advertises GSO_ROBUST
-> but virtio_net do.
->
->
-> If net_failover does not advertise NETIF_F_GSO_ROBUST, then
-> tcp_gso_segment will pass a packet with SKB_GSO_DODGY to the
-> software gso stack, not taking the branch
->
->        if (skb_gso_ok(skb, features | NETIF_F_GSO_ROBUST)) {
->
-> As i tested, packet with SKB_GSO_DODGY hits this branch. packet's gso_typ=
-e=3D0x0103, which
-> means SKB_GSO_TCPV4, SKB_GSO_DODGY and SKB_GSO_IPXIP4. net_failover match=
-es
-> the condition.
->
-> Consequently, tcp_gso_segment returns NULL, there is no software gso did =
-here. And
-> network_header points to inner iph.
->
-> Software gso is did by virtio_net which not advertises NETIF_F_GSO_IPXIP4=
-. It skips the outer
-> iph, and keeps it unchanged.
->
-> ---
-> net/ipv4/af_inet.c | 10 +++++++++-
-> 1 file changed, 9 insertions(+), 1 deletion(-)
->
-> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-> index 9c465ba..f8b3f8a 100644
-> --- a/net/ipv4/af_inet.c
-> +++ b/net/ipv4/af_inet.c
-> @@ -1425,10 +1425,18 @@ struct sk_buff *inet_gso_segment(struct sk_buff *=
-skb,
-> static struct sk_buff *ipip_gso_segment(struct sk_buff *skb,
->                                       netdev_features_t features)
-> {
-> +       struct sk_buff *segs;
-> +       int nhoff;
-> +
->       if (!(skb_shinfo(skb)->gso_type & SKB_GSO_IPXIP4))
->               return ERR_PTR(-EINVAL);
->
-> -       return inet_gso_segment(skb, features);
-> +       nhoff =3D skb_network_header(skb) - skb_mac_header(skb);
-> +       segs =3D inet_gso_segment(skb, features);
-> +       if (!segs)
-> +               skb->network_header =3D skb_mac_header(skb) + nhoff - skb=
-->head;
-> +
-> +       return segs;
-> }
->
->
-> If this would be needed for IPIP, then the same would be needed for SIT, =
-etc.
->
-> Is the skb_network_header
->
-> 1. correctly pointing to the outer header of the TSO packet before the
-> call to inet_gso_segment
-> 2. incorrectly pointing to the inner header of the (still) TSO packet
-> after the call to inet_gso_segment
->
-> inet_gso_segment already does the same operation: save nhoff, pull
-> network header, call callbacks.gso_segment (which can be
-> ipip_gso_segment->inet_gso_segment), then place the network header
-> back at nhoff.
->
-> values print in skb_mac_gso_segment() before callbacks.gso_segment:
-> ipip:               vlan_depth=3D0 mac_len=3D0 skb->network_header=3D206
-> net_failover:  vlan_depth=3D14 mac_len=3D14 skb->network_header=3D186
-> virtio_net:      vlan_depth=3D34 mac_len=3D34 skb->network_header=3D206
->
-> agree to add sit/ip4ip6/ip6ip6, and patch can be simplified as:
->
->
-> If IPIP GSO was so broken, I think we would have found it long before.
->
-> As said, inet_gso_segment should already do the right thing for ipip:
-> it will be called twice.
->
->
-> SKB_GSO_DODGY flag and net_failover conduct this issue. local traffic jus=
-t works fine.
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-Got it. That is an uncommon combination. SKB_GSO_DODGY is set from
-external virtio_net, which does not support tunnels. But a path with
-an added tunnel might cause this combination.
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
-And inet_gso_segment resets the network header, both times, before
-calling callbacks.gso_segment()
+are available in the Git repository at:
 
-        skb_reset_network_header(skb);
-        nhoff =3D skb_network_header(skb) - skb_mac_header(skb);
+  http://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git tags/for-5.17/parisc-3
 
-        [...]
+for you to fetch changes up to 6e8793674bb0d1135ca0e5c9f7e16fecbf815926:
 
-        if (likely(ops && ops->callbacks.gso_segment))
-                segs =3D ops->callbacks.gso_segment(skb, features);
+  serial: parisc: GSC: fix build when IOSAPIC is not set (2022-02-14 19:34:42 +0100)
 
-And resets that after for each skb in segs.
+----------------------------------------------------------------
+parisc architecture fixes for kernel v5.17-rc5
 
-        skb =3D segs;
-        do {
-                [...]
-                skb->network_header =3D (u8 *)iph - skb->head;
+- Fix miscompilations when function calls are made from inside a
+  put_user() call
+- Drop __init from map_pages() declaration to avoid random boot crashes
+- Added #error messages if a 64-bit compiler was used to build a 32-bit
+  kernel (and vice versa)
+- Fix out-of-bound data TLB miss faults in sba_iommu and ccio-dma
+  drivers
+- Add ioread64_lo_hi() and iowrite64_lo_hi() functions to avoid kernel
+  test robot errors
+- Fix link failure when 8250_gsc driver is built without CONFIG_IOSAPIC
 
-But does not do this if segs =3D=3D NULL.
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      parisc: Add ioread64_lo_hi() and iowrite64_lo_hi()
 
-The packet has to be restored before it is passed to the device. I
-think we have to handle this case correctly in inet_gso_segment,
-instead of patching it up in all the various tunnel devices.
+Helge Deller (2):
+      parisc: Show error if wrong 32/64-bit compiler is being used
+      parisc: Fix some apparent put_user() failures
 
-The same holds for ipv6_gso_segment.
+John David Anglin (3):
+      parisc: Drop __init from map_pages declaration
+      parisc: Fix data TLB miss in sba_unmap_sg
+      parisc: Fix sglist access in ccio-dma.c
+
+Randy Dunlap (1):
+      serial: parisc: GSC: fix build when IOSAPIC is not set
+
+ arch/parisc/include/asm/bitops.h   |  8 ++++++++
+ arch/parisc/include/asm/uaccess.h  | 29 +++++++++++++++--------------
+ arch/parisc/lib/iomap.c            | 18 ++++++++++++++++++
+ arch/parisc/mm/init.c              |  9 ++++-----
+ drivers/parisc/ccio-dma.c          |  3 ++-
+ drivers/parisc/sba_iommu.c         |  3 ++-
+ drivers/tty/serial/8250/8250_gsc.c |  2 +-
+ 7 files changed, 50 insertions(+), 22 deletions(-)

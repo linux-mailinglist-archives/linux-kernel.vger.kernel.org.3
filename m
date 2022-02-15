@@ -2,122 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 856134B67DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF084B67DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235979AbiBOJlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:41:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60928 "EHLO
+        id S235985AbiBOJld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:41:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233978AbiBOJlS (ORCPT
+        with ESMTP id S235983AbiBOJlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:41:18 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACA4E373D;
-        Tue, 15 Feb 2022 01:41:09 -0800 (PST)
+        Tue, 15 Feb 2022 04:41:31 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCB0E4D07
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:41:20 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id p9so10520333wra.12
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:41:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644918069; x=1676454069;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7jFBmRsokxLTHy5wctRuheDhtuL9EHujzt5OiFap7wI=;
-  b=AoBbRyQHq/hanCOHcD7oX/W0hHSoGVtrkJDhZhk5ARbG4buV0jzFK7t5
-   6YFEKIOy6/JmDwMsKfBkqfpSTJdC+5rLDK+W4HmQ6LV5lHm0SzPiJzHLe
-   eDubsxmahsA9IbLcIGIa9lDPdsY5MTYIqSX1ZzLal6X3CvuFKjP3aDPrD
-   c=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 15 Feb 2022 01:41:08 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 01:41:08 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 15 Feb 2022 01:41:07 -0800
-Received: from [10.216.25.137] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 15 Feb
- 2022 01:41:02 -0800
-Message-ID: <0e006cc0-2760-195a-35b9-0a2f6e8452c5@quicinc.com>
-Date:   Tue, 15 Feb 2022 15:10:58 +0530
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=t1wflCr1vStMilehgvIe0w5v3TJPtXNP/omwaXqFnbs=;
+        b=X2ztBi1BvP5dZxfZSWhpEp86yS7NH+aFVQUGt8uylxVUHrTPgLxljm/I823I20QDAC
+         myDO9b6pKdhXfxOflamUH9a0V56xRHIzRt+zobHm2aSQI9lX2AtyVbvDJ4b/hbAVMJwj
+         O9vb1GNkZY2UcPTCqfIbCX+8y2sqNQNjI5x14V4+FrxOupZqMwREoOU7tUaRNhVammTS
+         15HBCcV5/vHuri9+ncnfWaytYpmQXGl85VY7/QOaHfZV4ygqrf/US1M/Trp4pBEdNttY
+         GmI4NuNrS9A1UQGLBpSYyXFp+7ZES8mph1JTwI5jnuKmU+GSd5GjMsnzQcXxqbHmEldG
+         KnAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=t1wflCr1vStMilehgvIe0w5v3TJPtXNP/omwaXqFnbs=;
+        b=wyD84+PsfYNWD0W/tR42mRoHQZSL7LljoTMx6ynZHqCeX6SEEAJQTpaCH0n0M2VvEl
+         SOMGB0mU7rjvIDVezYzQrnXj5ZTYCj2O0TYG5a5PX2OgKSzr/FZyDosYJePigWKBuj7W
+         fJGrLtcJ3YALYCGZI4hvKHQ3jiRbRoYDf6Dfl5A2y40m4XHHluJuyP81uVLmPCfh5gsH
+         ViOnWTDjM8sObQB12eV2g0DsFHAoCjZSdSHV+fNAIBddviIt8MxWxKq1Lkxmf4zOeujo
+         2n7ixxNBcktEAIMhIoKnifpgRO6WqFFffuHn3XURc72YMyzFF/EUg6jq2LjRbC/VBhGf
+         UG5g==
+X-Gm-Message-State: AOAM531F7EpZDc7BAUqxbx46TpdWPtH3mHMAnarqCYXGm3DrCGEdo3IO
+        KIOL0NRecM6ACiKBxqkVWCE3m9sUd4c+9wccl+g/vQ==
+X-Google-Smtp-Source: ABdhPJycaBm0tTnyxaAYB2jLzb26nfkOtUFXqf8v+zAItEOizp7OLUjLiobN4Bd6P0OekZnQ3wsTWbSu3Eh+8hJtkd0=
+X-Received: by 2002:a5d:4209:: with SMTP id n9mr2515369wrq.86.1644918078895;
+ Tue, 15 Feb 2022 01:41:18 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v10 6/6] usb: dwc3: qcom: Enable the interrupts during
- probe
-Content-Language: en-US
-To:     Steev Klimaszewski <steev@kali.org>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>
-References: <1642398248-21753-1-git-send-email-quic_c_sanm@quicinc.com>
- <1642398248-21753-7-git-send-email-quic_c_sanm@quicinc.com>
- <93b68251-7e7e-ac92-fb47-346c410744b2@kali.org>
- <20220118095255.GB11385@hu-pkondeti-hyd.qualcomm.com>
- <78c90e46-666b-bc9b-235d-ae4c69e19929@quicinc.com>
- <601cdc74-392f-dd4f-7ea0-8e65c6b6d7e2@quicinc.com>
- <52b37547-3e78-b18c-307d-7eedf5baab0d@kali.org>
-From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-In-Reply-To: <52b37547-3e78-b18c-307d-7eedf5baab0d@kali.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220215090211.911366-1-atishp@rivosinc.com> <20220215090211.911366-2-atishp@rivosinc.com>
+In-Reply-To: <20220215090211.911366-2-atishp@rivosinc.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Tue, 15 Feb 2022 15:11:06 +0530
+Message-ID: <CAAhSdy0+K+ADhO0oSoW7QUF582UvbaUbNPyAcBs5RMhUsm91Rw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] RISC-V: Correctly print supported extensions
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steev,
-
-On 1/28/2022 2:06 PM, Steev Klimaszewski wrote:
-> Hi Sandeep,
+On Tue, Feb 15, 2022 at 2:32 PM Atish Patra <atishp@rivosinc.com> wrote:
 >
-> On 1/25/22 3:17 AM, Sandeep Maheswaram wrote:
->> Hi Steev,
->>
->>> I didn't face any such issue with devices connected.
->>>
->>> I think this is because I used IRQ_TYPE_EDGE_BOTH in device tree and 
->>> Steev has IRQ_TYPE_LEVEL_HIGH in his device tree.
->>>
->>> When i changed to IRQ_TYPE_LEVEL_HIGH I also observed a storm of 
->>> interrupts in my device though it booted .
->>>
->>> Regards
->>>
->>> Sandeep
->>>
->> Can you try with IRQ_TYPE_EDGE_BOTH in your device tree and see if 
->> you are getting the issue.
->>
->> Regards
->>
->> Sandeep
->>
-> I just tested here, changing both of the IRQ_TYPE_LEVEL_HIGH in the 
-> yoga's dts to EDGE_BOTH and I still do not get a booting system.
+> From: Tsukasa OI <research_trasio@irq.a4lg.com>
 >
-> -- Steev
+> This commit replaces BITS_PER_LONG with number of alphabet letters.
 >
-Please let us know what devices are connected to your setup and share 
-the device tree file you are using.
+> Current ISA pretty-printing code expects extension 'a' (bit 0) through
+> 'z' (bit 25).  Although bit 26 and higher is not currently used (thus never
+> cause an issue in practice), it will be an annoying problem if we start to
+> use those in the future.
+>
+> This commit disables printing high bits for now.
+>
+> Signed-off-by: Tsukasa OI <research_trasio@irq.a4lg.com>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> Tested-by: Heiko Stuebner <heiko@sntech.de>
 
-Please share the failure logs also,
+Looks good to me.
 
-Regards
+Reviewed-by: Anup Patel <anup@brainfault.org>
 
-Sandeep
+Regards,
+Anup
 
+> ---
+>  arch/riscv/kernel/cpufeature.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index d959d207a40d..dd3d57eb4eea 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -13,6 +13,8 @@
+>  #include <asm/smp.h>
+>  #include <asm/switch_to.h>
+>
+> +#define NUM_ALPHA_EXTS ('z' - 'a' + 1)
+> +
+>  unsigned long elf_hwcap __read_mostly;
+>
+>  /* Host ISA bitmap */
+> @@ -63,7 +65,7 @@ void __init riscv_fill_hwcap(void)
+>  {
+>         struct device_node *node;
+>         const char *isa;
+> -       char print_str[BITS_PER_LONG + 1];
+> +       char print_str[NUM_ALPHA_EXTS + 1];
+>         size_t i, j, isa_len;
+>         static unsigned long isa2hwcap[256] = {0};
+>
+> @@ -133,13 +135,13 @@ void __init riscv_fill_hwcap(void)
+>         }
+>
+>         memset(print_str, 0, sizeof(print_str));
+> -       for (i = 0, j = 0; i < BITS_PER_LONG; i++)
+> +       for (i = 0, j = 0; i < NUM_ALPHA_EXTS; i++)
+>                 if (riscv_isa[0] & BIT_MASK(i))
+>                         print_str[j++] = (char)('a' + i);
+>         pr_info("riscv: ISA extensions %s\n", print_str);
+>
+>         memset(print_str, 0, sizeof(print_str));
+> -       for (i = 0, j = 0; i < BITS_PER_LONG; i++)
+> +       for (i = 0, j = 0; i < NUM_ALPHA_EXTS; i++)
+>                 if (elf_hwcap & BIT_MASK(i))
+>                         print_str[j++] = (char)('a' + i);
+>         pr_info("riscv: ELF capabilities %s\n", print_str);
+> --
+> 2.30.2
+>

@@ -2,95 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9AE4B603B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 02:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2C94B603F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 02:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233144AbiBOBwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 20:52:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38236 "EHLO
+        id S232812AbiBOBxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 20:53:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiBOBwg (ORCPT
+        with ESMTP id S229996AbiBOBxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 20:52:36 -0500
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B779D557F;
-        Mon, 14 Feb 2022 17:52:28 -0800 (PST)
-Received: by mail-oo1-xc2d.google.com with SMTP id o192-20020a4a2cc9000000b00300af40d795so21511865ooo.13;
-        Mon, 14 Feb 2022 17:52:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lzABjmLa5uOh3u3OZJQYH+o6ilvxMW8Cvn4GHSn8Nfg=;
-        b=GNDm3XYdWRLsyYUSawshiUx6lzUZZtrcVfOJNEHdK7zTRKnOA4fdzh0t5tth+aWwXK
-         CpBLCc89Z3usTihP4NijhBpUnvbl7pij8e86CdmFDRlnb8HV622Ntjqz11ELh9NpXJTz
-         KAxlKdIQ022PA2zU8EVgK+1qqLVMn8Anha5CZzcTM3+clamsTSVKvbaG5sLqDhoZpfdP
-         4YD6dwqG9paZ5J7rAYOWvGQgzDga8YENCPOmjkeLKa5YRnG1SMijD3iWHuA/jwOEBE4G
-         c7pgvcOflTAGjAsJ4p1DeitxcqKB7x5y1oNT/mMp3aZQNDCENZahBFUSUbUlQPf80tjb
-         7aUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=lzABjmLa5uOh3u3OZJQYH+o6ilvxMW8Cvn4GHSn8Nfg=;
-        b=Yrap16GJ2nPD43XMw6RfAjTqsGawBa88TvJNVaas9W7dkrZkvrVu9T0DXsX0aJOZZl
-         ceOeRmGSVEZPc0KepeznPJoe/aA+ejsTuQTkwacY3lLIu2cUIiCIAiMb8TOcAboQPTpD
-         gDQREF9RnjjvWoEccElE/bZXliWG0uNHNHDnXluTU0ddxM1/Z893QwlOTugoDja4r15e
-         zJBJfXjhVoatSy5LZsXVpP/uENWQisJ9N0LbJ1DLz7FN+wU/OlFla3etIznEMyoZYRny
-         IUpDPAf3uZwwVC4BIphAEjYVEXpEjqkaeMlbWZEc++jv7MPXOGtzGxAjqYbO8jNb4Ceg
-         3gRQ==
-X-Gm-Message-State: AOAM530mnjQD9wXlN8pfwiY6biyzJFo6LhezTCwTVWce09iShO2VAbMh
-        F6OSuvmGJPoCeGABNfkGMjo=
-X-Google-Smtp-Source: ABdhPJyIIhq6/O84RKP5i0aPCdbZCYZIu57Tr1aB3EIsqpKdLz+VKTjMqVXcGoLZkQlZaU+6HDSGCQ==
-X-Received: by 2002:a05:6870:d8af:: with SMTP id dv47mr646910oab.28.1644889947567;
-        Mon, 14 Feb 2022 17:52:27 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h2sm13165557ots.51.2022.02.14.17.52.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 17:52:26 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 14 Feb 2022 17:52:25 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 000/116] 5.10.101-rc1 review
-Message-ID: <20220215015225.GE432640@roeck-us.net>
-References: <20220214092458.668376521@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 14 Feb 2022 20:53:20 -0500
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DDC1405FD;
+        Mon, 14 Feb 2022 17:53:11 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R581e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=jnwang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V4VVSdE_1644889961;
+Received: from rsjc10526.et2sqa.tbsite.net(mailfrom:jnwang@linux.alibaba.com fp:SMTPD_---0V4VVSdE_1644889961)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 15 Feb 2022 09:53:08 +0800
+From:   James Wang <jnwang@linux.alibaba.com>
+To:     don.brace@microsemi.com, jejb@linux.vnet.ibm.com,
+        martin.petersen@oracle.com, esc.storagedev@microsemi.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH v2] [hpsa] Fix the wrong chars in comment section
+Date:   Tue, 15 Feb 2022 09:52:41 +0800
+Message-Id: <1644889961-61470-1-git-send-email-jnwang@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <974edf4d-37fa-b25a-d0ac-33ac502381d8@acm.org>
+References: <974edf4d-37fa-b25a-d0ac-33ac502381d8@acm.org>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 10:24:59AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.101 release.
-> There are 116 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
-> Anything received after that time might be too late.
-> 
+These '+' should be redundant.
 
-Build results:
-	total: 161 pass: 161 fail: 0
-Qemu test results:
-	total: 477 pass: 477 fail: 0
+Signed-off-by: James Wang <jnwang@linux.alibaba.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+---
+ drivers/scsi/hpsa.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
+index a47bcce..34cd6c8 100644
+--- a/drivers/scsi/hpsa.c
++++ b/drivers/scsi/hpsa.c
+@@ -7641,8 +7641,8 @@ static void hpsa_free_cfgtables(struct ctlr_info *h)
+ }
+ 
+ /* Find and map CISS config table and transfer table
+-+ * several items must be unmapped (freed) later
+-+ * */
++ * several items must be unmapped (freed) later
++ */
+ static int hpsa_find_cfgtables(struct ctlr_info *h)
+ {
+ 	u64 cfg_offset;
+-- 
+1.8.3.1
 
-Guenter

@@ -2,105 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7DE34B60BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 03:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC6D4B60BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 03:06:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233409AbiBOCFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 21:05:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49356 "EHLO
+        id S232573AbiBOCGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 21:06:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231868AbiBOCFi (ORCPT
+        with ESMTP id S230498AbiBOCF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 21:05:38 -0500
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E511EC75;
-        Mon, 14 Feb 2022 18:05:28 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R261e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V4WCuSn_1644890725;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V4WCuSn_1644890725)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 15 Feb 2022 10:05:26 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     jejb@linux.ibm.com
-Cc:     martin.petersen@oracle.com, john.garry@huawei.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] scsi: hisi_sas: Remove unnecessary print function dev_err()
-Date:   Tue, 15 Feb 2022 10:05:24 +0800
-Message-Id: <20220215020524.44268-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Mon, 14 Feb 2022 21:05:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8652246
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 18:05:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644890748;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rcVCDBo5DVaghZVQQl2zbGTyQ7E+laKLLxGgEjqHxnk=;
+        b=BsxIUDJ0NFwUiJ43PxEXU25y1vTuIzFDlJT36TVEeYsSeAjix370M3S14x+VeiVImZpYVh
+        ybAaCpPtG7IAqjI2MIlyPAfEqj5tohTeDvfW1P383T/n32JInI3MLvmIx6m44mo3fpgB5S
+        HGUF20Hn81Et1PA9gKO6PtJYyrlm8GU=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-20-FwxPgrQzM-2Owczkqe46SA-1; Mon, 14 Feb 2022 21:05:47 -0500
+X-MC-Unique: FwxPgrQzM-2Owczkqe46SA-1
+Received: by mail-oo1-f69.google.com with SMTP id v10-20020a4ade8a000000b003177422e81dso11707435oou.3
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 18:05:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rcVCDBo5DVaghZVQQl2zbGTyQ7E+laKLLxGgEjqHxnk=;
+        b=ZUY+P9geHRG61LrfvO8WOHLoPuNyp+kUpqpF2GZSPpa8xnAdESLG5O3/JtK9lyMSgb
+         KwinOFes0+9vkrsOfJhsAA7ctQ4/IDbZyZbisd+3z4MhpiXknklcCKzF3rWK8FH4PMKt
+         8YadA477VZ7NXCVGq+3cQC3ktVuJlXMJ7D2el2ZVqOcQvXzQxt3IbuD/JfXp7bOaOKU/
+         CliW8HWgoBatVfp/lzmaps02UMYb9pXgBMqu5Ynb2/GL5Cv5j5NZ3qyF8Ku+NccTtgr2
+         EFtabWQZb62gePaKTEkxRjwVuzv7CnKqANZUUKsxyWvbvdNrjz1x9r4D1Q06SoWutb3Q
+         lBQQ==
+X-Gm-Message-State: AOAM533WWipJMStUKL3OUQ2WEUZ0G5pze7odcAdvdRDVw854vKc4nz3i
+        1a4j9o5tWV62CoIljJ76uunpo0NIB7l7UV67TzYbzUqKImXvNlRBhBNK5M4CjhM04cGWeinDrBv
+        rVpiDym963r56tMoaEvLZpmaX
+X-Received: by 2002:a05:6830:4113:: with SMTP id w19mr688306ott.120.1644890746728;
+        Mon, 14 Feb 2022 18:05:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzEs/cQG7EnoAYBz/PX072UhjyPsRpX8PJZ5Lr3Q9WSLBCh3TgTI0hgly/YAlr42AGrYmPADg==
+X-Received: by 2002:a05:6830:4113:: with SMTP id w19mr688302ott.120.1644890746552;
+        Mon, 14 Feb 2022 18:05:46 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id r41sm14527325oap.2.2022.02.14.18.05.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 18:05:46 -0800 (PST)
+From:   trix@redhat.com
+To:     jk@codeconstruct.com.au, matt@codeconstruct.com.au,
+        davem@davemloft.net, kuba@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH v2] mctp: fix use after free
+Date:   Mon, 14 Feb 2022 18:05:41 -0800
+Message-Id: <20220215020541.2944949-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The print function dev_err() is redundant because platform_get_irq()
-already prints an error.
+From: Tom Rix <trix@redhat.com>
 
-Eliminate the follow coccicheck warnings:
-./drivers/scsi/hisi_sas/hisi_sas_v1_hw.c:1661:3-10: line 1661 is
-redundant because platform_get_irq() already prints an error
-./drivers/scsi/hisi_sas/hisi_sas_v1_hw.c:1642:4-11: line 1642 is
-redundant because platform_get_irq() already prints an error
-./drivers/scsi/hisi_sas/hisi_sas_v1_hw.c:1679:3-10: line 1679 is
-redundant because platform_get_irq() already prints an error
+Clang static analysis reports this problem
+route.c:425:4: warning: Use of memory after it is freed
+  trace_mctp_key_acquire(key);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+When mctp_key_add() fails, key is freed but then is later
+used in trace_mctp_key_acquire().  Add an else statement
+to use the key only when mctp_key_add() is successful.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Fixes: 4f9e1ba6de45 ("mctp: Add tracepoints for tag/key handling")
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas_v1_hw.c | 15 +++------------
- 1 file changed, 3 insertions(+), 12 deletions(-)
+v2: change the Fixes: line
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-index 6914e992a02e..e564c78ff910 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-@@ -1638,11 +1638,8 @@ static int interrupt_init_v1_hw(struct hisi_hba *hisi_hba)
- 		idx = i * HISI_SAS_PHY_INT_NR;
- 		for (j = 0; j < HISI_SAS_PHY_INT_NR; j++, idx++) {
- 			irq = platform_get_irq(pdev, idx);
--			if (irq < 0) {
--				dev_err(dev, "irq init: fail map phy interrupt %d\n",
--					idx);
-+			if (irq < 0)
- 				return irq;
--			}
+ net/mctp/route.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/net/mctp/route.c b/net/mctp/route.c
+index 17e3482aa770..0c4c56e1bd6e 100644
+--- a/net/mctp/route.c
++++ b/net/mctp/route.c
+@@ -419,13 +419,14 @@ static int mctp_route_input(struct mctp_route *route, struct sk_buff *skb)
+ 			 * this function.
+ 			 */
+ 			rc = mctp_key_add(key, msk);
+-			if (rc)
++			if (rc) {
+ 				kfree(key);
++			} else {
++				trace_mctp_key_acquire(key);
  
- 			rc = devm_request_irq(dev, irq, phy_interrupts[j], 0,
- 					      DRV_NAME " phy", phy);
-@@ -1657,11 +1654,8 @@ static int interrupt_init_v1_hw(struct hisi_hba *hisi_hba)
- 	idx = hisi_hba->n_phy * HISI_SAS_PHY_INT_NR;
- 	for (i = 0; i < hisi_hba->queue_count; i++, idx++) {
- 		irq = platform_get_irq(pdev, idx);
--		if (irq < 0) {
--			dev_err(dev, "irq init: could not map cq interrupt %d\n",
--				idx);
-+		if (irq < 0)
- 			return irq;
--		}
+-			trace_mctp_key_acquire(key);
+-
+-			/* we don't need to release key->lock on exit */
+-			mctp_key_unref(key);
++				/* we don't need to release key->lock on exit */
++				mctp_key_unref(key);
++			}
+ 			key = NULL;
  
- 		rc = devm_request_irq(dev, irq, cq_interrupt_v1_hw, 0,
- 				      DRV_NAME " cq", &hisi_hba->cq[i]);
-@@ -1675,11 +1669,8 @@ static int interrupt_init_v1_hw(struct hisi_hba *hisi_hba)
- 	idx = (hisi_hba->n_phy * HISI_SAS_PHY_INT_NR) + hisi_hba->queue_count;
- 	for (i = 0; i < HISI_SAS_FATAL_INT_NR; i++, idx++) {
- 		irq = platform_get_irq(pdev, idx);
--		if (irq < 0) {
--			dev_err(dev, "irq init: could not map fatal interrupt %d\n",
--				idx);
-+		if (irq < 0)
- 			return irq;
--		}
- 
- 		rc = devm_request_irq(dev, irq, fatal_interrupts[i], 0,
- 				      DRV_NAME " fatal", hisi_hba);
+ 		} else {
 -- 
-2.20.1.7.g153144c
+2.26.3
 

@@ -2,387 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 337AF4B61F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 05:12:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9085F4B61FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 05:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231873AbiBOEMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 23:12:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43260 "EHLO
+        id S233889AbiBOENk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 23:13:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiBOEMx (ORCPT
+        with ESMTP id S230351AbiBOENi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 23:12:53 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B79B5616
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 20:12:44 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id b17-20020a9d4791000000b005a17fc2dfc1so13037436otf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 20:12:44 -0800 (PST)
+        Mon, 14 Feb 2022 23:13:38 -0500
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C6CB5636;
+        Mon, 14 Feb 2022 20:13:30 -0800 (PST)
+Received: by mail-oo1-xc2b.google.com with SMTP id c7-20020a4ad207000000b002e7ab4185d2so21807457oos.6;
+        Mon, 14 Feb 2022 20:13:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QHBlAe1imB9wB10ptbc1elqgvyeO+rwXBHar9R5XADk=;
-        b=EonIx2iIoiubRkWH7QB1h3f8w8B4hkUF2P+mFr3NycUcTHfTF6QIILMgWOP7QugdbS
-         StwdAChLQhnLdS+XyOhFJhfeYgacHmkqdaADo2AGMUfQyQImtpQdiAhrP9cyGUPsCk3r
-         c0ClTYHlIewOoHg5WzKFY8K3qV/TSN7EOjR4jWePl0G+ydZLInzV+vw3YhxnziyCnCwS
-         +WDq3Rp84SP6k9AOYciXSahesmnqehou65MIXhLCbh5wOQY0yxO+jStBheom1pFCy6WV
-         S2hMNEo530EDTs28n5F4sGzA/T6nOjInxyGMETnQbGn7YlkX1hBeDWRO4j5r84gLosTK
-         9lYA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DyvZcNLcNBSonuNQofcH6r4vfSuYjf5nJGslJ4n/qE4=;
+        b=WP3m4zx5iAED+MlyniilJaQ8dYODxawV3LXi59r6FavYU3Q90OjEW8PGEnuHFVPFdE
+         PRFq+jn4S8vOOBIlNc+enPj3UwsfUVJ3l7PI0MXJd/6RM6fnTuinYCK72n9nw3k3aFwd
+         n/1xK/xbZUgAarqQJcUysW/DlF04L8iqhEztebgko+SaNoB8JQotYdqXfa4jOAtC8eld
+         x5so6nyEXBShFb+H4gfNLn55La5yDaoB1lwJ2uRbETbFGFvAEa52K0N/KLtwBDPE+dxa
+         wKEyNfA3V1oxAMoX46YIKaCn2UtZ5ZiI9e7HBqDsozqXS63p4946bVd57d06KIA7YxZN
+         EXag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QHBlAe1imB9wB10ptbc1elqgvyeO+rwXBHar9R5XADk=;
-        b=kphLcVIsg2jHyh/6C44KAyS3XZrrPrBLl5C795abiehVgFLJPFEzLYK54yZ7unj3ty
-         qwrwEpTG13g8Y7SibjsqY9+CRi0DPM1KEBseCj0pPQlaIzmhpIHuBCM4Gdn0SFYAnNEI
-         p+hDIBDcDl2IEf5kWXLhJIvNOiEt/Qn84292rNHfPTEZaREaiHvyo9gJxvA9IBGwLhIL
-         Rr+1Wrw26nh47WkE7K4+/DIbLOmBylZMpwL6GlPPhxJF6P5FGaqSR2TjjrtN5IQhpga3
-         yMOfiQxMwbZswztDiRUBbS0fafgZOOJPSJxaw6k9hOA6IqGA8G5HAe6lCZoRO86r2LSI
-         alNg==
-X-Gm-Message-State: AOAM53327A1uYvUOpiheu4rZnGCRQoUXCJ73c7kBv9QYV8gL9Y8JdMBo
-        5c5u97AeFbyxOwms2aFBdZLGOQ==
-X-Google-Smtp-Source: ABdhPJzlNzV/ez8v3xTrbWZkPBvX158/9VDJYu18ragNQGlZ9CrYxrAF3y/k/r1DMPzf9GD6FAqwMQ==
-X-Received: by 2002:a05:6830:2aa1:: with SMTP id s33mr746579otu.117.1644898363519;
-        Mon, 14 Feb 2022 20:12:43 -0800 (PST)
-Received: from yoga ([2600:1700:a0:3dc8:5c39:baff:fe03:898d])
-        by smtp.gmail.com with ESMTPSA id ek4sm15333559oab.23.2022.02.14.20.12.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 20:12:42 -0800 (PST)
-Date:   Mon, 14 Feb 2022 22:12:40 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, vkoul@kernel.org,
-        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
-        dmitry.baryshkov@linaro.org, quic_abhinavk@quicinc.com,
-        quic_aravindh@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] drm/msm/dp:  revise timing engine programming to
- support widebus feature
-Message-ID: <YgsoOP3DegHz9zA8@yoga>
-References: <1644878346-28511-1-git-send-email-quic_khsieh@quicinc.com>
- <1644878346-28511-2-git-send-email-quic_khsieh@quicinc.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DyvZcNLcNBSonuNQofcH6r4vfSuYjf5nJGslJ4n/qE4=;
+        b=p76qjpMhrD09wBSh8pynHmzn9FmrSiJKWqVqpiAHIsEwUlaRfw4ZJ9f0YVY/VSYXF6
+         Q5HecezufXUXpMwC0sB3JJhD09p2Io1qJqvgBsNv0XcnXR6J4t6hpE1IlBMoHWlWfkAm
+         igRJxD4EE4wdxP023/NYZuxBm/iAJAkrg545j4p8LN/kJl+Ai6aKbAw0X8Z6SDHuP4Vs
+         7PyUMieFG6hnAONVI9v9jCrYDXDsyEBgVryuvODOdT25NABT5MAMsft3Q0d5U5orSNAX
+         hmHoTMeNfdA0zN81U3/8prnXVNrxQvj7PRKNbr3Q+ol5z28rxD2WupaskZMMhTF23rbB
+         5xmQ==
+X-Gm-Message-State: AOAM532x2GlvDvGAdEeXHFXaKqBiCnSIMNzIAuKH3gc4UTMMQXmC1sP4
+        RjJqZn0EG3G0jI/6FY6Wn+l9uUImkiIB3e9UvoXu7ZZZEzjvkQ==
+X-Google-Smtp-Source: ABdhPJy5aXEkRLZumPoM5Mgh/edOuNIwXYqC3joRlEHf/C6lVmUhZowEme0ouLxoOYDErexX1q2f2+eNDl8XKYBT0/w=
+X-Received: by 2002:a05:6870:5496:: with SMTP id f22mr726575oan.42.1644898409361;
+ Mon, 14 Feb 2022 20:13:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1644878346-28511-2-git-send-email-quic_khsieh@quicinc.com>
+References: <20220212175922.665442-1-omosnace@redhat.com> <20220212175922.665442-3-omosnace@redhat.com>
+ <CAHC9VhT90617FoqQJBCrDQ8gceVVA6a1h74h6T4ZOwNk6RVB3g@mail.gmail.com>
+ <20220214165436.1f6a9987@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com> <CAFSqH7zC-4Ti_mzK4ZrpCVtNVCxD8h729MezG2avJLGJ2JrMTg@mail.gmail.com>
+In-Reply-To: <CAFSqH7zC-4Ti_mzK4ZrpCVtNVCxD8h729MezG2avJLGJ2JrMTg@mail.gmail.com>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Tue, 15 Feb 2022 12:13:17 +0800
+Message-ID: <CADvbK_e+TUuWhBQz1NPPS2aE59tzPKXPfUogrZ526hvm6OvY9Q@mail.gmail.com>
+Subject: Re: [PATCH net v3 2/2] security: implement sctp_assoc_established
+ hook in selinux
+To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Paul Moore <paul@paul-moore.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        SElinux list <selinux@vger.kernel.org>,
+        Richard Haines <richard_c_haines@btinternet.com>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        "open list:SCTP PROTOCOL" <linux-sctp@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Prashanth Prahlad <pprahlad@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 14 Feb 16:39 CST 2022, Kuogee Hsieh wrote:
+On Tue, Feb 15, 2022 at 11:58 AM Marcelo Ricardo Leitner
+<marcelo.leitner@gmail.com> wrote:
+>
+>
+>
+> Em seg., 14 de fev. de 2022 21:54, Jakub Kicinski <kuba@kernel.org> escreveu:
+>>
+>> On Mon, 14 Feb 2022 17:14:04 -0500 Paul Moore wrote:
+>> > If I can get an ACK from one of the SCTP and/or netdev folks I'll
+>> > merge this into the selinux/next branch.
+>>
+>> No objections here FWIW, I'd defer the official acking to the SCTP
+>> maintainers.
+>
+>
+> None from my side either, but I really want to hear from Xin. He has worked on this since day 0.
+>
+Looks okay to me.
 
-> Widebus feature will transmit two pixel data per pixel clock to interface.
-> Timing engine provides driving force for this purpose. This patch base
-> on HPG (Hardware Programming Guide) to revise timing engine register
-> setting to accommodate both widebus and non widebus application. Also
-> horizontal width parameters need to be reduced by half since two pixel
-> data are clocked out per pixel clock when widebus feature enabled.
-> 
-> Widebus can be enabled individually at DP. However at DSI, widebus have
-> to be enabled along with DSC enabled to achieve pixel clock rate be
-> scaled down with same ratio as compression ratio when 10 bits per source
-> component. Therefore this patch have both widebus and compression covered
-> together so tat less efforts will be required when DSC enabled later.
-> 
-> Changes in v2:
-> -- remove compression related code from timing
-> -- remove op_info from  struct msm_drm_private
-> -- remove unnecessary wide_bus_en variables
-> -- pass wide_bus_en into timing configuration by struct msm_dp
-> 
-> Changes in v3:
-> -- split patch into 3 patches
-> 
-> Changes in v4:
-> -- rework timing engine to not interfere with dsi/hdmi
-> -- cover both widebus and compression
-> 
+The difference from the old one is that: with
+selinux_sctp_process_new_assoc() called in
+selinux_sctp_assoc_established(), the client sksec->peer_sid is using
+the first asoc's peer_secid, instead of the latest asoc's peer_secid.
+And not sure if it will cause any problems when doing the extra check
+sksec->peer_sid != asoc->peer_secid for the latest asoc and *returns
+err*. But I don't know about selinux, I guess there must be a reason
+from selinux side.
 
-Even though the change relates to DP, I think it would be appropriate to
-change the $subject prefix to "drm/msm/dpu".
+I will ACK on patch 0/2.
 
-When booting sc8180x the bootloader leaves widebus enabled in the eDP
-controller, and the two patches takes care of this problem for me. I
-also checked the DP still works.
-
-Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Thanks,
-Bjorn
-
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        | 10 +++
->  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h        |  2 +
->  .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   | 14 +++
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        | 99 ++++++++++++++++++----
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h        |  6 ++
->  5 files changed, 115 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> index 0d315b4..0c22839 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> @@ -208,6 +208,8 @@ struct dpu_encoder_virt {
->  
->  	u32 idle_timeout;
->  
-> +	bool wide_bus_en;
-> +
->  	struct msm_dp *dp;
->  };
->  
-> @@ -217,6 +219,14 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
->  	15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
->  };
->  
-> +
-> +bool dpu_encoder_is_widebus_enabled(struct drm_encoder *drm_enc)
-> +{
-> +	struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
-> +
-> +	return dpu_enc->wide_bus_en;
-> +}
-> +
->  static void _dpu_encoder_setup_dither(struct dpu_hw_pingpong *hw_pp, unsigned bpc)
->  {
->  	struct dpu_hw_dither_cfg dither_cfg = { 0 };
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-> index 99a5d73..893d74d 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-> @@ -168,4 +168,6 @@ int dpu_encoder_get_linecount(struct drm_encoder *drm_enc);
->   */
->  int dpu_encoder_get_frame_count(struct drm_encoder *drm_enc);
->  
-> +bool dpu_encoder_is_widebus_enabled(struct drm_encoder *drm_enc);
-> +
->  #endif /* __DPU_ENCODER_H__ */
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
-> index 185379b..2af2bb7 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
-> @@ -110,6 +110,20 @@ static void drm_mode_to_intf_timing_params(
->  		timing->v_back_porch += timing->v_front_porch;
->  		timing->v_front_porch = 0;
->  	}
-> +
-> +	timing->wide_bus_en = dpu_encoder_is_widebus_enabled(phys_enc->parent);
-> +
-> +	/*
-> +	 * for DP, divide the horizonal parameters by 2 when
-> +	 * widebus is enabled
-> +	 */
-> +	if (phys_enc->hw_intf->cap->type == INTF_DP && timing->wide_bus_en) {
-> +		timing->width = timing->width >> 1;
-> +		timing->xres = timing->xres >> 1;
-> +		timing->h_back_porch = timing->h_back_porch >> 1;
-> +		timing->h_front_porch = timing->h_front_porch >> 1;
-> +		timing->hsync_pulse_width = timing->hsync_pulse_width >> 1;
-> +	}
->  }
->  
->  static u32 get_horizontal_total(const struct intf_timing_params *timing)
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-> index 116e2b5..3b9273e 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-> @@ -33,6 +33,7 @@
->  #define INTF_TP_COLOR1                  0x05C
->  #define INTF_CONFIG2                    0x060
->  #define INTF_DISPLAY_DATA_HCTL          0x064
-> +#define INTF_ACTIVE_DATA_HCTL           0x068
->  #define INTF_FRAME_LINE_COUNT_EN        0x0A8
->  #define INTF_FRAME_COUNT                0x0AC
->  #define   INTF_LINE_COUNT               0x0B0
-> @@ -60,6 +61,14 @@
->  
->  #define   INTF_MUX                      0x25C
->  
-> +#define BIT_INTF_CFG_ACTIVE_H_EN	BIT(29)
-> +#define BIT_INTF_CFG_ACTIVE_V_EN	BIT(30)
-> +
-> +#define BIT_INTF_CFG2_DATABUS_WIDEN	BIT(0)
-> +#define BIT_INTF_CFG2_DATA_HCTL_EN	BIT(4)
-> +#define BIT_INTF_CFG2_DCE_DATA_COMPRESS	BIT(12)
-> +
-> +
->  static const struct dpu_intf_cfg *_intf_offset(enum dpu_intf intf,
->  		const struct dpu_mdss_cfg *m,
->  		void __iomem *addr,
-> @@ -90,15 +99,23 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
->  	u32 hsync_period, vsync_period;
->  	u32 display_v_start, display_v_end;
->  	u32 hsync_start_x, hsync_end_x;
-> +	u32 hsync_data_start_x, hsync_data_end_x;
->  	u32 active_h_start, active_h_end;
->  	u32 active_v_start, active_v_end;
->  	u32 active_hctl, display_hctl, hsync_ctl;
->  	u32 polarity_ctl, den_polarity, hsync_polarity, vsync_polarity;
->  	u32 panel_format;
-> -	u32 intf_cfg, intf_cfg2 = 0, display_data_hctl = 0;
-> +	u32 intf_cfg, intf_cfg2 = 0;
-> +	u32 display_data_hctl = 0, active_data_hctl = 0;
-> +	u32 data_width;
-> +	bool dp_intf = false;
->  
->  	/* read interface_cfg */
->  	intf_cfg = DPU_REG_READ(c, INTF_CONFIG);
-> +
-> +	if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP)
-> +		dp_intf = true;
-> +
->  	hsync_period = p->hsync_pulse_width + p->h_back_porch + p->width +
->  	p->h_front_porch;
->  	vsync_period = p->vsync_pulse_width + p->v_back_porch + p->height +
-> @@ -112,7 +129,10 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
->  	hsync_start_x = p->h_back_porch + p->hsync_pulse_width;
->  	hsync_end_x = hsync_period - p->h_front_porch - 1;
->  
-> -	if (p->width != p->xres) {
-> +	hsync_ctl = (hsync_period << 16) | p->hsync_pulse_width;
-> +	display_hctl = (hsync_end_x << 16) | hsync_start_x;
-> +
-> +	if (p->width != p->xres) { /* border fill added */
->  		active_h_start = hsync_start_x;
->  		active_h_end = active_h_start + p->xres - 1;
->  	} else {
-> @@ -130,27 +150,78 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
->  
->  	if (active_h_end) {
->  		active_hctl = (active_h_end << 16) | active_h_start;
-> -		intf_cfg |= BIT(29);	/* ACTIVE_H_ENABLE */
-> +		intf_cfg |= BIT_INTF_CFG_ACTIVE_H_EN;
->  	} else {
->  		active_hctl = 0;
->  	}
->  
->  	if (active_v_end)
-> -		intf_cfg |= BIT(30); /* ACTIVE_V_ENABLE */
-> +		intf_cfg |= BIT_INTF_CFG_ACTIVE_V_EN;
->  
-> -	hsync_ctl = (hsync_period << 16) | p->hsync_pulse_width;
-> -	display_hctl = (hsync_end_x << 16) | hsync_start_x;
-> +	/*
-> +	 * DATA_HCTL_EN controls data timing which can be different from
-> +	 * video timing. It is recommended to enable it for all cases, except
-> +	 * if compression is enabled in 1 pixel per clock mode
-> +	 */
-> +	if (!p->compression_en || p->wide_bus_en)
-> +		intf_cfg2 |= BIT_INTF_CFG2_DATA_HCTL_EN;
-> +
-> +	if (p->wide_bus_en)
-> +		intf_cfg2 |=  BIT_INTF_CFG2_DATABUS_WIDEN;
-> +
-> +	/*
-> +	 * If widebus is disabled:
-> +	 * For uncompressed stream, the data is valid for the entire active
-> +	 * window period.
-> +	 * For compressed stream, data is valid for a shorter time period
-> +	 * inside the active window depending on the compression ratio.
-> +	 *
-> +	 * If widebus is enabled:
-> +	 * For uncompressed stream, data is valid for only half the active
-> +	 * window, since the data rate is doubled in this mode.
-> +	 * p->width holds the adjusted width for DP but unadjusted width for DSI
-> +	 * For compressed stream, data validity window needs to be adjusted for
-> +	 * compression ratio and then further halved.
-> +	 */
-> +	data_width = p->width;
-> +
-> +	if (p->compression_en) {
-> +		data_width = DIV_ROUND_UP(p->dce_bytes_per_line, 3);
-> +
-> +		if (p->wide_bus_en)
-> +			data_width >>= 1;
-> +	} else if (!dp_intf && p->wide_bus_en) {
-> +		data_width = p->width >> 1;
-> +	}
-> +
-> +	hsync_data_start_x = hsync_start_x;
-> +	hsync_data_end_x =  hsync_start_x + data_width - 1;
-> +
-> +	display_data_hctl = (hsync_data_end_x << 16) | hsync_data_start_x;
-> +
-> +	if (dp_intf) {
-> +		/* DP timing adjustment */
-> +		display_v_start += p->hsync_pulse_width + p->h_back_porch;
-> +		display_v_end   -= p->h_front_porch;
->  
-> -	if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP) {
->  		active_h_start = hsync_start_x;
->  		active_h_end = active_h_start + p->xres - 1;
->  		active_v_start = display_v_start;
->  		active_v_end = active_v_start + (p->yres * hsync_period) - 1;
->  
-> -		display_v_start += p->hsync_pulse_width + p->h_back_porch;
-> -
->  		active_hctl = (active_h_end << 16) | active_h_start;
->  		display_hctl = active_hctl;
-> +
-> +		intf_cfg |= BIT_INTF_CFG_ACTIVE_H_EN;
-> +		intf_cfg |= BIT_INTF_CFG_ACTIVE_V_EN;
-> +
-> +		if (p->compression_en) {
-> +			active_data_hctl = (hsync_start_x +
-> +					p->extra_dto_cycles) << 16;
-> +			active_data_hctl += hsync_start_x;
-> +
-> +			display_data_hctl = active_data_hctl;
-> +		}
->  	}
->  
->  	den_polarity = 0;
-> @@ -180,13 +251,6 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
->  				(COLOR_8BIT << 4) |
->  				(0x21 << 8));
->  
-> -	if (ctx->cap->features & BIT(DPU_DATA_HCTL_EN)) {
-> -		intf_cfg2 |= BIT(4);
-> -		display_data_hctl = display_hctl;
-> -		DPU_REG_WRITE(c, INTF_CONFIG2, intf_cfg2);
-> -		DPU_REG_WRITE(c, INTF_DISPLAY_DATA_HCTL, display_data_hctl);
-> -	}
-> -
->  	DPU_REG_WRITE(c, INTF_HSYNC_CTL, hsync_ctl);
->  	DPU_REG_WRITE(c, INTF_VSYNC_PERIOD_F0, vsync_period * hsync_period);
->  	DPU_REG_WRITE(c, INTF_VSYNC_PULSE_WIDTH_F0,
-> @@ -204,6 +268,9 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
->  	DPU_REG_WRITE(c, INTF_FRAME_LINE_COUNT_EN, 0x3);
->  	DPU_REG_WRITE(c, INTF_CONFIG, intf_cfg);
->  	DPU_REG_WRITE(c, INTF_PANEL_FORMAT, panel_format);
-> +	DPU_REG_WRITE(c, INTF_CONFIG2, intf_cfg2);
-> +	DPU_REG_WRITE(c, INTF_DISPLAY_DATA_HCTL, display_data_hctl);
-> +	DPU_REG_WRITE(c, INTF_ACTIVE_DATA_HCTL, active_data_hctl);
->  }
->  
->  static void dpu_hw_intf_enable_timing_engine(
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
-> index 3568be8..299c9c1 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
-> @@ -30,6 +30,12 @@ struct intf_timing_params {
->  	u32 border_clr;
->  	u32 underflow_clr;
->  	u32 hsync_skew;
-> +
-> +	bool wide_bus_en;
-> +	bool compression_en;
-> +	u32 extra_dto_cycles;   /* for DP only */
-> +	bool dsc_4hs_merge;     /* DSC 4HS merge */
-> +	u32 dce_bytes_per_line;
->  };
->  
->  struct intf_prog_fetch {
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
-> 
+Thanks Ondrej for working on this patiently.

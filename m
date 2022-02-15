@@ -2,127 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 066654B6A7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C324B6A85
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237015AbiBOLQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 06:16:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38032 "EHLO
+        id S237028AbiBOLRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 06:17:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233054AbiBOLQ2 (ORCPT
+        with ESMTP id S234215AbiBOLRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 06:16:28 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EAC108184;
-        Tue, 15 Feb 2022 03:16:18 -0800 (PST)
-Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jydn63pb7z6873Q;
-        Tue, 15 Feb 2022 19:15:54 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 15 Feb 2022 12:16:16 +0100
-Received: from [10.47.81.62] (10.47.81.62) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.21; Tue, 15 Feb
- 2022 11:16:14 +0000
-Message-ID: <06412caf-42e4-5c4b-c9b3-9691075405bd@huawei.com>
-Date:   Tue, 15 Feb 2022 11:16:16 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: Test 73 Sig_trap fails on arm64 (was Re: [PATCH] perf test: Test
- 73 Sig_trap fails on s390)
-From:   John Garry <john.garry@huawei.com>
-To:     Leo Yan <leo.yan@linaro.org>, Marco Elver <elver@google.com>,
-        Will Deacon <will@kernel.org>
-CC:     Thomas Richter <tmricht@linux.ibm.com>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <acme@kernel.org>, <svens@linux.ibm.com>, <gor@linux.ibm.com>,
-        <sumanthk@linux.ibm.com>, <hca@linux.ibm.com>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, <dvyukov@google.com>
-References: <20211216151454.752066-1-tmricht@linux.ibm.com>
- <CANpmjNNMWtjcKa961SjEvRbbPXyw5M5SkrXbb3tnyL3_XyniCw@mail.gmail.com>
- <90efb5a9-612a-919e-cf2f-c528692d61e2@huawei.com>
- <20220118091827.GA98966@leoy-ThinkPad-X240s>
- <CANpmjNMPoU+1b1fKFuYDYwisW2YfjQHxGt5hgLp1tioG7C2jmg@mail.gmail.com>
- <20220118124343.GC98966@leoy-ThinkPad-X240s>
- <bfa0af18-04ac-857d-d3d8-ad9290f912c8@huawei.com>
-In-Reply-To: <bfa0af18-04ac-857d-d3d8-ad9290f912c8@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.47.81.62]
-X-ClientProxiedBy: lhreml703-chm.china.huawei.com (10.201.108.52) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 15 Feb 2022 06:17:31 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7F4107D07;
+        Tue, 15 Feb 2022 03:17:22 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21FAT8TJ002362;
+        Tue, 15 Feb 2022 11:16:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=7/+NZcf/3caTHbY6f91RIKORInAbuuiacwvRzcQa77o=;
+ b=ryn961nZHZ/3ntt4lHSqczxQc9UIibHxqjWBW/pTXlsHCZM9/Kbck6MZ5t2tumfea9Xv
+ NfHpy+NI9Ok42Gqar8cRPEwr0hGbHVtA5sfjBiD5YUqopeoAKLZGURj+6pREj3ulHRxq
+ GLPGytK+QWB/Cs7C+5olxpRu2BLJaObC08XUfFBCXPuqYKKrR6d+pfZhZhoolsyc6bQb
+ cnqIC1oYW6+4I9fBB0CgojD/zICPg4IPPqcgrurR23f7DzIgJoca8/D4YyTerzL6NNPc
+ Lw7yKgtdtSP2ZbdDl1YUpw2dqQ9bErCDcZv5AkQCwCh2QZspGFOQfSNCUePlctnF8DgF 4Q== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8afcs53w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 11:16:59 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21FBDZjX030692;
+        Tue, 15 Feb 2022 11:16:57 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06fra.de.ibm.com with ESMTP id 3e645jn7h8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 11:16:57 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21FB6X0q47317352
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Feb 2022 11:06:33 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 74AC2A4051;
+        Tue, 15 Feb 2022 11:16:54 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AAAA3A405D;
+        Tue, 15 Feb 2022 11:16:52 +0000 (GMT)
+Received: from sig-9-65-71-246.ibm.com (unknown [9.65.71.246])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 15 Feb 2022 11:16:52 +0000 (GMT)
+Message-ID: <a769e5b91b573691ba1c76545b2b62d1b7b48e4c.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: Calculate digest in ima_inode_hash() if not
+ available
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        Florent Revest <revest@chromium.org>
+Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Tue, 15 Feb 2022 06:16:52 -0500
+In-Reply-To: <311b5d0b3b824c548a4032a76a408944@huawei.com>
+References: <20220211104828.4061334-1-roberto.sassu@huawei.com>
+         <537635732d9cbcc42bcf7be5ed932d284b03d39f.camel@linux.ibm.com>
+         <cc6bcb7742dc432ba990ee38b5909496@huawei.com>
+         <36f85113f181f78eda3576823bd92be3f9cd1802.camel@linux.ibm.com>
+         <311b5d0b3b824c548a4032a76a408944@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: rwMMYNIQidnzCGaL7FZviIusmsaDwFSF
+X-Proofpoint-ORIG-GUID: rwMMYNIQidnzCGaL7FZviIusmsaDwFSF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-15_04,2022-02-14_04,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 bulkscore=0 spamscore=0 malwarescore=0 clxscore=1015
+ mlxscore=0 suspectscore=0 mlxlogscore=999 impostorscore=0
+ lowpriorityscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2202150063
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/2022 09:19, John Garry wrote:
-
-Hi Will,
-
-Have you had a chance to check this or the mail from Dmitry?
-
-https://lore.kernel.org/linux-perf-users/CACT4Y+YVyJcqbR5j2fsSQ+C5hy78X+aobrUHaZKghFf0_NMv=A@mail.gmail.com/
-
-If we can't make progress then we just need to skip the test on arm64 
-for now.
-
-Thanks,
-John
-
+On Tue, 2022-02-15 at 08:00 +0000, Roberto Sassu wrote:
+> > >
+> > > I found that just checking that iint->ima_hash is not NULL is not enough
+> > > (ima_inode_hash() might still return the old digest after a file write).
+> > > Should I replace that check with !(iint->flags & IMA_COLLECTED)?
+> > > Or should I do only for ima_file_hash() and recalculate the digest
+> > > if necessary?
+> > 
+> > Updating the file hash after each write would really impact IMA
+> > performance.  If you really want to detect any file change, no matter
+> > how frequently it occurs, your best bet would be to track i_generation
+> > and i_version.  Stefan is already adding "i_generation" for IMA
+> > namespacing.
 > 
->> On Tue, Jan 18, 2022 at 12:40:04PM +0100, Marco Elver wrote:
->>
->> [...]
->>
->>>> Both Arm and Arm64 platforms cannot support signal handler with
->>>> breakpoint, please see the details in [1].  So I think we need
->>>> something like below:
->>>>
->>>> static int test__sigtrap(struct test_suite *test __maybe_unused, int 
->>>> subtest __maybe_unused)
->>>> {
->>>>          ...
->>>>
->>>>          if (!BP_SIGNAL_IS_SUPPORTED) {
->>>>                  pr_debug("Test not supported on this architecture");
->>>>                  return TEST_SKIP;
->>>>          }
->>>>
->>>>          ...
->>>> }
->>>>
->>>> Since we have defined BP_SIGNAL_IS_SUPPORTED, I think we can reuse 
->>>> it at
->>>> here.
->>>>
->>>> [1]https://lore.kernel.org/lkml/157169993406.29376.12473771029179755767.tip-bot2@tip-bot2/ 
->>>>
->>> Does this limitation also exist for address watchpoints? The sigtrap
->>> test does not make use of instruction breakpoints, but instead just
->>> sets up a watchpoint on access to a data address.
->> Yes, after reading the code, the flow for either instrution breakpoint
->> or watchpoint both use the single step [1], thus the signal handler will
->> take the single step execution and lead to the infinite loop.
->>
->> I am not the best person to answer this question; @Will, could you
->> confirm for this?  Thanks!
->>
->> Leo
->>
->> [1]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/kernel/hw_breakpoint.c 
->>
-> 
-> .
+> I just wanted the ability to get a fresh digest after a file opened
+> for writing is closed. Since in my use case I would not use an IMA
+> policy, that would not be a problem.
+
+As I recall, the __fput() delay was to prevent locking ordering issues
+- inode, iint.
+
+-- 
+thanks,
+
+Mimi
 

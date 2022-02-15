@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA3C4B670F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:11:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3CFA4B6718
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235678AbiBOJLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:11:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52896 "EHLO
+        id S235690AbiBOJMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:12:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235674AbiBOJL3 (ORCPT
+        with ESMTP id S235689AbiBOJMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:11:29 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2531313DDF;
-        Tue, 15 Feb 2022 01:11:19 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id e17so14325424pfv.5;
-        Tue, 15 Feb 2022 01:11:19 -0800 (PST)
+        Tue, 15 Feb 2022 04:12:05 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA511C92A
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:11:56 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id bs32so16773184qkb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:11:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=CENX30cS1AwqRdGdR2LGQaXDhJCf//o48FSLd1tc1dM=;
-        b=EXpVWUDmG/suSPOYNy4mBNNV+Gq7GkpSFYiuNKXihpliObBZlZeaj+oh24WJxQz8F5
-         tp095SeKWhqL8MegSIxzs2lmJW56ohOJuRdLlXZZH7kFB7ih2L3685C580np9GeealHA
-         sV1ev7aZ8mOJTZe9nmcpiPbaZOj9bCafUvpwImMAKkjJNVWgcGxJIO74ziKY8n8AWUaq
-         GkaCpOkdUSzE9yP4YpxOucpy9dL7qSs+S0XVUjoE0pVMs53JEVEjJcF40qyI3zVedz6l
-         Ps37MnFNGXuZQuIj7LfLLEIgDaJogZdojdasL0l1xONhSyCc21ErThIkivZrTGn+3etv
-         4c5A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YBQscFyooYL0WHuST9zmiXq7toDSTo9x20y433njXvY=;
+        b=CUvbeESCjAqhXzzfxF/YYa6U3SM4LMGYKlC7SDkDR1uhzWCLBoEldyNjHc/MwM+Jqt
+         4pPfqpLePsZCSFx+7tpIPqSBGnq4Hjeg6k1HyrJZukjNbYEQuobWYo41naoqODynPPZo
+         f4PX12XFozrF2o7h/ScjfH+qvIh6UT068hiTttGh0P4ulZuLI4lN0Rv0S3ewaEoYQ6H4
+         D8C69zV9DlfMSDeJ6mK8HrE+xx2GzFkpH79qQaz+FiWQVwyzsvhMl8DaNIWLVrAG9iol
+         d5IUK6aoMjRZQB2RfR0jEzeIYr6EChVWSe3awOtMZy1hiEkWLE7zO2rmxvsnq2gZT6PF
+         7Bnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=CENX30cS1AwqRdGdR2LGQaXDhJCf//o48FSLd1tc1dM=;
-        b=bBYnVlna7yAdx2i7JZOhl4wIfzl2CBzHjA/Qvzti3N6z5XpfaIWn0YfduBewCiKuDA
-         u4Lh2qS3qJoWu835ld3Ac7zLXU+t+P7SWQ+gLIfzn3q6DSnhPIBcbkyqjf4vawjThoeZ
-         TW8d5kH5TSfZ1Yyll/biFNwbxoaIJKYh/MabZLDQJAVShFXt3RjP0KUNVdXI+wFkz07Z
-         ztNxfj+2Hwzp22FtzA83Ykw8GqXw8DOAGQOAlPoCFJ9KiQYJL3ZGjx2UA/PmDMQE3vAs
-         dC/08jYMIBkoRPHPnJhcdSAzNdXTMwPfZXmpUo3X9K20HjAw1xHQFZucqr9evbQTbkvd
-         IY0g==
-X-Gm-Message-State: AOAM5330XELfHBQ/BZCn1xQP5SwibIX1pbD845YPO7gR8tR2z832Ckyh
-        nCYctVh89rLEboToBPnDHXw=
-X-Google-Smtp-Source: ABdhPJxgbzmTCJqIiTWlG5h2H7sIuaDs6lIwJVhjipJPrxaUDEMZTFJppnHGmXxUScH8x6CrkI+Mrg==
-X-Received: by 2002:a63:8549:: with SMTP id u70mr2785919pgd.266.1644916278530;
-        Tue, 15 Feb 2022 01:11:18 -0800 (PST)
-Received: from [192.168.43.80] (subs28-116-206-12-52.three.co.id. [116.206.12.52])
-        by smtp.gmail.com with ESMTPSA id j2sm39099118pfc.209.2022.02.15.01.11.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 01:11:18 -0800 (PST)
-Message-ID: <d82db5a9-ec38-28cd-831f-cb8755fb5a77@gmail.com>
-Date:   Tue, 15 Feb 2022 16:11:13 +0700
+        bh=YBQscFyooYL0WHuST9zmiXq7toDSTo9x20y433njXvY=;
+        b=w/muaDcgjYX+SsrpweDDyAkmquoPcJXSjlZFzr0D3KmxIOCIDEQzK/grQJrh7xWyl1
+         vgDO3ou1++xe1kuxgmWsLJJ7whz6aHt5dXW+Q7w6BYSMPPyO/BrR6Pr5x8jYXu5Egygc
+         QhykrZrOhhzqUnbi+jFiXKmm1ro/PjzODseAgwrVzwtu014xB2+UHiXqivA1EE6Ubg9W
+         H093R1JCzFhC/0XPgMgo/qNbVlXrDzW2j7smx+BhqA8kILwlNQlATDd948onX5TBnqi0
+         +LzAlvSckeZ2HdpWfeO3HGG38trzKocMxRsK3pI3kOqRfCgP+gEFHwIibGICt9sqbyIz
+         5shw==
+X-Gm-Message-State: AOAM531aQDJrl/bK+1xadi4+V/vIWPrK/8Q9Lnj+Ayf7+pm+zVJG3xEN
+        e6dMIHEuqIp8wPzB84Y6cb6xlvsccD0=
+X-Google-Smtp-Source: ABdhPJzt2l3x8XeZpyli8EcdnuyjGHmBO9r/EPioUdHk5iFiWxXUFc2BA0D+lX3UAgQSkHxG7KiAfw==
+X-Received: by 2002:a05:620a:2589:: with SMTP id x9mr1457241qko.335.1644916315265;
+        Tue, 15 Feb 2022 01:11:55 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id r3sm16683371qkm.56.2022.02.15.01.11.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 01:11:54 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     Felix.Kuehling@amd.com
+Cc:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] drm/amdkfd: Replace zero-length array with flexible-array member
+Date:   Tue, 15 Feb 2022 09:11:42 +0000
+Message-Id: <20220215091142.1775600-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Re: [PATCH 5.16 000/203] 5.16.10-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220214092510.221474733@linuxfoundation.org>
-Content-Language: en-US
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,17 +73,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/22 16.24, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.10 release.
-> There are 203 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0)
-and powerpc (ps3_defconfig, gcc 11.2.0).
+There is a regular need in the kernel to provide a way to declare having
+a dynamically sized set of trailing elements in a structure. Kernel code
+should always use "flexible array members" for these cases. The older
+style of one-element or zero-length arrays should no longer be used.
+Reference:
+https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+---
+ drivers/gpu/drm/amd/amdkfd/kfd_priv.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_priv.h b/drivers/gpu/drm/amd/amdkfd/kfd_priv.h
+index e54a52785690..7d39191d13f6 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_priv.h
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_priv.h
+@@ -1084,7 +1084,7 @@ struct kfd_criu_svm_range_priv_data {
+ 	uint64_t start_addr;
+ 	uint64_t size;
+ 	/* Variable length array of attributes */
+-	struct kfd_ioctl_svm_attribute attrs[0];
++	struct kfd_ioctl_svm_attribute attrs[];
+ };
+ 
+ struct kfd_criu_queue_priv_data {
 -- 
-An old man doll... just what I always wanted! - Clara
+2.25.1
+

@@ -2,277 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA9E4B7682
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 886B04B786B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243700AbiBOTiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 14:38:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43222 "EHLO
+        id S243738AbiBOTiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 14:38:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234094AbiBOTiB (ORCPT
+        with ESMTP id S243701AbiBOTiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 14:38:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414C9627D;
-        Tue, 15 Feb 2022 11:37:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 15 Feb 2022 14:38:02 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FDE6301;
+        Tue, 15 Feb 2022 11:37:52 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 689681F37B;
+        Tue, 15 Feb 2022 19:37:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1644953871; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=y/qjbYgEthADxutskRuqAtoMhMng2hMp57R8uqULpbI=;
+        b=ASyO1UJjvhoTT+rCCbegiy15Ea1VTCtrW/bQtoFRPi3Q2U+ITKr8trHSNwPWBboHHteXqT
+        a/iGSNF0t1j9oa7SGopd9pbF769jdwF8XMnelHwVn1uhqsxmylxF1Ar/9NFRZxY8aPgl3L
+        zhRrFp5ZR1gij2vpnrnZvHBmIg/Rxsw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1644953871;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=y/qjbYgEthADxutskRuqAtoMhMng2hMp57R8uqULpbI=;
+        b=8VBe4UE97RJoV6pOXqj2B+/+iadiJN7I9EWaXD9IxjEjucDV5ZDlCXXweL/lqTykpq7tYU
+        y1i7FLnlNoDrG6Cg==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7091FB81BE4;
-        Tue, 15 Feb 2022 19:37:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD099C340EB;
-        Tue, 15 Feb 2022 19:37:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644953867;
-        bh=u5Q7TysgiABO3PGXeNAE+IzNlfP0uAbXnbfmkzC94zE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C9yFTdediVIWwyRutFDlHJg8aVVgNvPfleRB+SfdsZAwVVuu01gQXZUCOjJ66HYb8
-         4WUViBK8nPWBV+DO7KJo1hbqrRbyE/GW1+g54+V74v2baLQGqlV3mNtF8If9/+k9by
-         yO6nGP4UUgknqdBD2dilEzq/Z9L4BwaIFTc3ry56/Xf+5FxbSvM/F43PIdeJHIvJf7
-         AH3ViUsJDoPP/Ov1kmxsYULlMpBtw7XksbfviT62adSApnhb5e0USWX5dTE8yuHGeG
-         XpjXZKzp393hKTVyGo1J66/PB7txcaODk9Twxgo6uhoKc75Dbs+V/AEVSRFjSoAJ0v
-         i2PkoEhAkWx4w==
-Received: by pali.im (Postfix)
-        id 77405F13; Tue, 15 Feb 2022 20:37:44 +0100 (CET)
-Date:   Tue, 15 Feb 2022 20:37:44 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/7] hwmon: (dell-smm) Make fan/temp sensor number a u8
-Message-ID: <20220215193744.vujcuuc3l52unvxf@pali>
-References: <20220215191113.16640-1-W_Armin@gmx.de>
- <20220215191113.16640-4-W_Armin@gmx.de>
+        by relay2.suse.de (Postfix) with ESMTPS id 1CC26A3B8B;
+        Tue, 15 Feb 2022 19:37:51 +0000 (UTC)
+Date:   Tue, 15 Feb 2022 20:37:51 +0100 (CET)
+From:   Jiri Kosina <jkosina@suse.cz>
+To:     Kalle Valo <kvalo@kernel.org>
+cc:     Johannes Berg <johannes@sipsolutions.net>,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ping-Ke Shih <pkshih@realtek.com>
+Subject: [PATCH] rtw89: fix RCU usage in rtw89_core_txq_push()
+Message-ID: <nycvar.YFH.7.76.2202152037000.11721@cbobk.fhfr.pm>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220215191113.16640-4-W_Armin@gmx.de>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 15 February 2022 20:11:09 Armin Wolf wrote:
-> Right now, we only use bits 0 to 7 of the fan/temp sensor number
-> by doing number & 0xff. Passing the value as a u8 makes this
-> step unnecessary. Also add checks to the ioctl handler since
-> users might get confused when passing 0x00000101 does the same
-> as passing 0x00000001.
-> 
-> Tested on a Dell Inspiron 3505.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+From: Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH] rtw89: fix RCU usage in rtw89_core_txq_push()
 
-Reviewed-by: Pali Rohár <pali@kernel.org>
+ieee80211_tx_h_select_key() is performing a series of RCU dereferences,
+but rtw89_core_txq_push() is calling it (via ieee80211_tx_dequeue_ni())
+without RCU read-side lock held; fix that.
 
-> ---
->  drivers/hwmon/dell-smm-hwmon.c | 68 ++++++++++++++++++++++------------
->  1 file changed, 45 insertions(+), 23 deletions(-)
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 3b49e55d060f..a102034a1d38 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -21,6 +21,7 @@
->  #include <linux/errno.h>
->  #include <linux/hwmon.h>
->  #include <linux/init.h>
-> +#include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
->  #include <linux/platform_device.h>
-> @@ -254,46 +255,52 @@ static int i8k_smm(struct smm_regs *regs)
->  /*
->   * Read the fan status.
->   */
-> -static int i8k_get_fan_status(const struct dell_smm_data *data, int fan)
-> +static int i8k_get_fan_status(const struct dell_smm_data *data, u8 fan)
->  {
-> -	struct smm_regs regs = { .eax = I8K_SMM_GET_FAN, };
-> +	struct smm_regs regs = {
-> +		.eax = I8K_SMM_GET_FAN,
-> +		.ebx = fan,
-> +	};
-> 
->  	if (data->disallow_fan_support)
->  		return -EINVAL;
-> 
-> -	regs.ebx = fan & 0xff;
->  	return i8k_smm(&regs) ? : regs.eax & 0xff;
->  }
-> 
->  /*
->   * Read the fan speed in RPM.
->   */
-> -static int i8k_get_fan_speed(const struct dell_smm_data *data, int fan)
-> +static int i8k_get_fan_speed(const struct dell_smm_data *data, u8 fan)
->  {
-> -	struct smm_regs regs = { .eax = I8K_SMM_GET_SPEED, };
-> +	struct smm_regs regs = {
-> +		.eax = I8K_SMM_GET_SPEED,
-> +		.ebx = fan,
-> +	};
-> 
->  	if (data->disallow_fan_support)
->  		return -EINVAL;
-> 
-> -	regs.ebx = fan & 0xff;
->  	return i8k_smm(&regs) ? : (regs.eax & 0xffff) * data->i8k_fan_mult;
->  }
-> 
->  /*
->   * Read the fan type.
->   */
-> -static int _i8k_get_fan_type(const struct dell_smm_data *data, int fan)
-> +static int _i8k_get_fan_type(const struct dell_smm_data *data, u8 fan)
->  {
-> -	struct smm_regs regs = { .eax = I8K_SMM_GET_FAN_TYPE, };
-> +	struct smm_regs regs = {
-> +		.eax = I8K_SMM_GET_FAN_TYPE,
-> +		.ebx = fan,
-> +	};
-> 
->  	if (data->disallow_fan_support || data->disallow_fan_type_call)
->  		return -EINVAL;
-> 
-> -	regs.ebx = fan & 0xff;
->  	return i8k_smm(&regs) ? : regs.eax & 0xff;
->  }
-> 
-> -static int i8k_get_fan_type(struct dell_smm_data *data, int fan)
-> +static int i8k_get_fan_type(struct dell_smm_data *data, u8 fan)
->  {
->  	/* I8K_SMM_GET_FAN_TYPE SMM call is expensive, so cache values */
->  	if (data->fan_type[fan] == INT_MIN)
-> @@ -305,14 +312,16 @@ static int i8k_get_fan_type(struct dell_smm_data *data, int fan)
->  /*
->   * Read the fan nominal rpm for specific fan speed.
->   */
-> -static int __init i8k_get_fan_nominal_speed(const struct dell_smm_data *data, int fan, int speed)
-> +static int __init i8k_get_fan_nominal_speed(const struct dell_smm_data *data, u8 fan, int speed)
->  {
-> -	struct smm_regs regs = { .eax = I8K_SMM_GET_NOM_SPEED, };
-> +	struct smm_regs regs = {
-> +		.eax = I8K_SMM_GET_NOM_SPEED,
-> +		.ebx = fan | (speed << 8),
-> +	};
-> 
->  	if (data->disallow_fan_support)
->  		return -EINVAL;
-> 
-> -	regs.ebx = (fan & 0xff) | (speed << 8);
->  	return i8k_smm(&regs) ? : (regs.eax & 0xffff) * data->i8k_fan_mult;
->  }
-> 
-> @@ -333,7 +342,7 @@ static int i8k_enable_fan_auto_mode(const struct dell_smm_data *data, bool enabl
->  /*
->   * Set the fan speed (off, low, high, ...).
->   */
-> -static int i8k_set_fan(const struct dell_smm_data *data, int fan, int speed)
-> +static int i8k_set_fan(const struct dell_smm_data *data, u8 fan, int speed)
->  {
->  	struct smm_regs regs = { .eax = I8K_SMM_SET_FAN, };
-> 
-> @@ -341,33 +350,35 @@ static int i8k_set_fan(const struct dell_smm_data *data, int fan, int speed)
->  		return -EINVAL;
-> 
->  	speed = (speed < 0) ? 0 : ((speed > data->i8k_fan_max) ? data->i8k_fan_max : speed);
-> -	regs.ebx = (fan & 0xff) | (speed << 8);
-> +	regs.ebx = fan | (speed << 8);
-> 
->  	return i8k_smm(&regs);
->  }
-> 
-> -static int __init i8k_get_temp_type(int sensor)
-> +static int __init i8k_get_temp_type(u8 sensor)
->  {
-> -	struct smm_regs regs = { .eax = I8K_SMM_GET_TEMP_TYPE, };
-> +	struct smm_regs regs = {
-> +		.eax = I8K_SMM_GET_TEMP_TYPE,
-> +		.ebx = sensor,
-> +	};
-> 
-> -	regs.ebx = sensor & 0xff;
->  	return i8k_smm(&regs) ? : regs.eax & 0xff;
->  }
-> 
->  /*
->   * Read the cpu temperature.
->   */
-> -static int _i8k_get_temp(int sensor)
-> +static int _i8k_get_temp(u8 sensor)
->  {
->  	struct smm_regs regs = {
->  		.eax = I8K_SMM_GET_TEMP,
-> -		.ebx = sensor & 0xff,
-> +		.ebx = sensor,
->  	};
-> 
->  	return i8k_smm(&regs) ? : regs.eax & 0xff;
->  }
-> 
-> -static int i8k_get_temp(int sensor)
-> +static int i8k_get_temp(u8 sensor)
->  {
->  	int temp = _i8k_get_temp(sensor);
-> 
-> @@ -500,6 +511,9 @@ static long i8k_ioctl(struct file *fp, unsigned int cmd, unsigned long arg)
->  		if (copy_from_user(&val, argp, sizeof(int)))
->  			return -EFAULT;
-> 
-> +		if (val > U8_MAX || val < 0)
-> +			return -EINVAL;
-> +
->  		val = i8k_get_fan_speed(data, val);
->  		break;
-> 
-> @@ -507,6 +521,9 @@ static long i8k_ioctl(struct file *fp, unsigned int cmd, unsigned long arg)
->  		if (copy_from_user(&val, argp, sizeof(int)))
->  			return -EFAULT;
-> 
-> +		if (val > U8_MAX || val < 0)
-> +			return -EINVAL;
-> +
->  		val = i8k_get_fan_status(data, val);
->  		break;
-> 
-> @@ -517,6 +534,9 @@ static long i8k_ioctl(struct file *fp, unsigned int cmd, unsigned long arg)
->  		if (copy_from_user(&val, argp, sizeof(int)))
->  			return -EFAULT;
-> 
-> +		if (val > U8_MAX || val < 0)
-> +			return -EINVAL;
-> +
->  		if (copy_from_user(&speed, argp + 1, sizeof(int)))
->  			return -EFAULT;
-> 
-> @@ -924,7 +944,8 @@ static int __init dell_smm_init_hwmon(struct device *dev)
->  {
->  	struct dell_smm_data *data = dev_get_drvdata(dev);
->  	struct device *dell_smm_hwmon_dev;
-> -	int i, state, err;
-> +	int state, err;
-> +	u8 i;
-> 
->  	for (i = 0; i < DELL_SMM_NO_TEMP; i++) {
->  		data->temp_type[i] = i8k_get_temp_type(i);
-> @@ -1245,7 +1266,8 @@ static int __init dell_smm_probe(struct platform_device *pdev)
->  {
->  	struct dell_smm_data *data;
->  	const struct dmi_system_id *id, *fan_control;
-> -	int fan, ret;
-> +	int ret;
-> +	u8 fan;
-> 
->  	data = devm_kzalloc(&pdev->dev, sizeof(struct dell_smm_data), GFP_KERNEL);
->  	if (!data)
-> --
-> 2.30.2
-> 
+This addresses the splat below.
+
+ =============================
+ WARNING: suspicious RCU usage
+ 5.17.0-rc4-00003-gccad664b7f14 #3 Tainted: G            E
+ -----------------------------
+ net/mac80211/tx.c:593 suspicious rcu_dereference_check() usage!
+
+ other info that might help us debug this:
+
+ rcu_scheduler_active = 2, debug_locks = 1
+ 2 locks held by kworker/u33:0/184:
+  #0: ffff9c0b14811d38 ((wq_completion)rtw89_tx_wq){+.+.}-{0:0}, at: process_one_work+0x258/0x660
+  #1: ffffb97380cf3e78 ((work_completion)(&rtwdev->txq_work)){+.+.}-{0:0}, at: process_one_work+0x258/0x660
+
+ stack backtrace:
+ CPU: 8 PID: 184 Comm: kworker/u33:0 Tainted: G            E     5.17.0-rc4-00003-gccad664b7f14 #3 473b49ab0e7c2d6af2900c756bfd04efd7a9de13
+ Hardware name: LENOVO 20UJS2B905/20UJS2B905, BIOS R1CET63W(1.32 ) 04/09/2021
+ Workqueue: rtw89_tx_wq rtw89_core_txq_work [rtw89_core]
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0x58/0x71
+  ieee80211_tx_h_select_key+0x2c0/0x530 [mac80211 911c23e2351c0ae60b597a67b1204a5ea955e365]
+  ieee80211_tx_dequeue+0x1a7/0x1260 [mac80211 911c23e2351c0ae60b597a67b1204a5ea955e365]
+  rtw89_core_txq_work+0x1a6/0x420 [rtw89_core b39ba493f2e517ad75e0f8187ecc24edf58bbbea]
+  process_one_work+0x2d8/0x660
+  worker_thread+0x39/0x3e0
+  ? process_one_work+0x660/0x660
+  kthread+0xe5/0x110
+  ? kthread_complete_and_exit+0x20/0x20
+  ret_from_fork+0x22/0x30
+  </TASK>
+
+ =============================
+ WARNING: suspicious RCU usage
+ 5.17.0-rc4-00003-gccad664b7f14 #3 Tainted: G            E
+ -----------------------------
+ net/mac80211/tx.c:607 suspicious rcu_dereference_check() usage!
+
+ other info that might help us debug this:
+
+ rcu_scheduler_active = 2, debug_locks = 1
+ 2 locks held by kworker/u33:0/184:
+  #0: ffff9c0b14811d38 ((wq_completion)rtw89_tx_wq){+.+.}-{0:0}, at: process_one_work+0x258/0x660
+  #1: ffffb97380cf3e78 ((work_completion)(&rtwdev->txq_work)){+.+.}-{0:0}, at: process_one_work+0x258/0x660
+
+ stack backtrace:
+ CPU: 8 PID: 184 Comm: kworker/u33:0 Tainted: G            E     5.17.0-rc4-00003-gccad664b7f14 #3 473b49ab0e7c2d6af2900c756bfd04efd7a9de13
+ Hardware name: LENOVO 20UJS2B905/20UJS2B905, BIOS R1CET63W(1.32 ) 04/09/2021
+ Workqueue: rtw89_tx_wq rtw89_core_txq_work [rtw89_core]
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0x58/0x71
+  ieee80211_tx_h_select_key+0x464/0x530 [mac80211 911c23e2351c0ae60b597a67b1204a5ea955e365]
+  ieee80211_tx_dequeue+0x1a7/0x1260 [mac80211 911c23e2351c0ae60b597a67b1204a5ea955e365]
+  rtw89_core_txq_work+0x1a6/0x420 [rtw89_core b39ba493f2e517ad75e0f8187ecc24edf58bbbea]
+  process_one_work+0x2d8/0x660
+  worker_thread+0x39/0x3e0
+  ? process_one_work+0x660/0x660
+  kthread+0xe5/0x110
+  ? kthread_complete_and_exit+0x20/0x20
+  ret_from_fork+0x22/0x30
+  </TASK>
+
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+---
+ drivers/net/wireless/realtek/rtw89/core.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/realtek/rtw89/core.c b/drivers/net/wireless/realtek/rtw89/core.c
+index a0737eea9f81..9632e7f218dd 100644
+--- a/drivers/net/wireless/realtek/rtw89/core.c
++++ b/drivers/net/wireless/realtek/rtw89/core.c
+@@ -1509,11 +1509,12 @@ static void rtw89_core_txq_push(struct rtw89_dev *rtwdev,
+ 	unsigned long i;
+ 	int ret;
+ 
++	rcu_read_lock();
+ 	for (i = 0; i < frame_cnt; i++) {
+ 		skb = ieee80211_tx_dequeue_ni(rtwdev->hw, txq);
+ 		if (!skb) {
+ 			rtw89_debug(rtwdev, RTW89_DBG_TXRX, "dequeue a NULL skb\n");
+-			return;
++			goto out;
+ 		}
+ 		rtw89_core_txq_check_agg(rtwdev, rtwtxq, skb);
+ 		ret = rtw89_core_tx_write(rtwdev, vif, sta, skb, NULL);
+@@ -1523,6 +1524,8 @@ static void rtw89_core_txq_push(struct rtw89_dev *rtwdev,
+ 			break;
+ 		}
+ 	}
++out:
++	rcu_read_unlock();
+ }
+ 
+ static u32 rtw89_check_and_reclaim_tx_resource(struct rtw89_dev *rtwdev, u8 tid)
+
+-- 
+Jiri Kosina
+SUSE Labs
+
+

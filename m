@@ -2,43 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A462C4B6D06
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:08:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3E24B6D12
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:09:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238068AbiBONIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 08:08:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50738 "EHLO
+        id S238114AbiBONIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 08:08:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231377AbiBONIM (ORCPT
+        with ESMTP id S238115AbiBONIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 08:08:12 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2178AB16EC;
-        Tue, 15 Feb 2022 05:08:02 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DD2631480;
-        Tue, 15 Feb 2022 05:08:01 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.89.173])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 099533F718;
-        Tue, 15 Feb 2022 05:07:59 -0800 (PST)
-Date:   Tue, 15 Feb 2022 13:07:56 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     madvenka@linux.microsoft.com
-Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v13 04/11] arm64: Split unwind_init()
-Message-ID: <YgulrExdlfBcHoKP@FVFF77S0Q05N>
-References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
- <20220117145608.6781-1-madvenka@linux.microsoft.com>
- <20220117145608.6781-5-madvenka@linux.microsoft.com>
+        Tue, 15 Feb 2022 08:08:53 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB7BC24A1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 05:08:42 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id h11so14731229ilq.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 05:08:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=h8vn3ZFW8UjLnMLsgl86dcA80MaxOlksJ/pmKV8vWGU=;
+        b=Xw6MjLP9Kt6wH/XPSkTrQGGvUPWDpKraFYxM4d6yH3RKbYA/YECy72aCJttKSuP587
+         10FtshqY75bNZ0wPI428PCyMW2OAb6yh/TT1o8uOiXl/AYRQtBPDYcnJeIpx7cQYKuhp
+         wqae+oOmMT9dVZpOYgXDUMAKab0DYkhYdVNJ0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h8vn3ZFW8UjLnMLsgl86dcA80MaxOlksJ/pmKV8vWGU=;
+        b=E6gcQVIAfk1BqwwzUhSqXj6J93KCHv7N/x+NBPh8U+++xuqrJnpArqzioWr15DjVZ9
+         9xMEHge5ZFmS6uoxgNL5DsllwsmJzt/A69jQd2UCopgmDaYjn6tGyST2ObzIlNnoRn5A
+         O1qwehUn3n5XyxyGE0re0lSyDGnwjeyh/DlNt9nk369wacNOCooePFk2Yp+ttrgf5ouH
+         EWv8M4ncjSNUDPNzpz9Z2/YNNrJ08Z9m+vw8bGSXF+YNCovWFNd0yACmdCQentAShaY3
+         8tpluZ3FT+A0zfnBLeu+yp3YEISJnfi/nlyDONAJ0knkMFKIpKs9J+6IuO3WguEeB/r6
+         jrNQ==
+X-Gm-Message-State: AOAM531J9+O88/duHbFLifh71WQHqDqHk7mjIWL+2Ohrnxxzi1tzF93v
+        7Moh83L2RJJ1tXqDaDx3lz4N80171hvyBM61TZplUg==
+X-Google-Smtp-Source: ABdhPJyn0t3qtaQoYKT56xmJWFr+oDNaEgC/gP1GxkSxrJmyzV5aD6tH7GwuIxyug6WO9KvMRXh2z7t2mVNvKMkI28E=
+X-Received: by 2002:a05:6e02:18c6:: with SMTP id s6mr2544341ilu.230.1644930522121;
+ Tue, 15 Feb 2022 05:08:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220117145608.6781-5-madvenka@linux.microsoft.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+References: <20220208084234.1684930-1-hsinyi@chromium.org> <87leydhqt3.fsf@collabora.com>
+ <CAJMQK-igpiYj-pkgG9amrQuVzf1Mc9BDDOwOdKLUbceKr=CHiQ@mail.gmail.com> <87czjoixno.fsf@collabora.com>
+In-Reply-To: <87czjoixno.fsf@collabora.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Tue, 15 Feb 2022 21:08:16 +0800
+Message-ID: <CAJMQK-gvvvhj2dsu8bkT6ytj=0MZaRFmsVOqJVrtVo4Y+XCEdQ@mail.gmail.com>
+Subject: Re: [PATCH v8 1/3] gpu: drm: separate panel orientation property
+ creating and value setting
+To:     Gabriel Krisman Bertazi <krisman@collabora.com>
+Cc:     dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Sean Paul <sean@poorly.run>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Simon Ser <contact@emersion.fr>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,185 +78,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Madhavan,
+On Tue, Feb 15, 2022 at 12:03 PM Gabriel Krisman Bertazi
+<krisman@collabora.com> wrote:
+>
+> Hsin-Yi Wang <hsinyi@chromium.org> writes:
+>
+> > On Tue, Feb 15, 2022 at 9:17 AM Gabriel Krisman Bertazi
+> > <krisman@collabora.com> wrote:
+> >>
+> >> Hsin-Yi Wang <hsinyi@chromium.org> writes:
+> >>
+> >> > drm_dev_register() sets connector->registration_state to
+> >> > DRM_CONNECTOR_REGISTERED and dev->registered to true. If
+> >> > drm_connector_set_panel_orientation() is first called after
+> >> > drm_dev_register(), it will fail several checks and results in following
+> >> > warning.
+> >>
+> >> Hi,
+> >>
+> >> I stumbled upon this when investigating the same WARN_ON on amdgpu.
+> >> Thanks for the patch :)
+> >>
+> >> > diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
+> >> > index a50c82bc2b2fec..572ead7ac10690 100644
+> >> > --- a/drivers/gpu/drm/drm_connector.c
+> >> > +++ b/drivers/gpu/drm/drm_connector.c
+> >> > @@ -1252,7 +1252,7 @@ static const struct drm_prop_enum_list dp_colorspaces[] = {
+> >> >   *   INPUT_PROP_DIRECT) will still map 1:1 to the actual LCD panel
+> >> >   *   coordinates, so if userspace rotates the picture to adjust for
+> >> >   *   the orientation it must also apply the same transformation to the
+> >> > - *   touchscreen input coordinates. This property is initialized by calling
+> >> > + *   touchscreen input coordinates. This property value is set by calling
+> >> >   *   drm_connector_set_panel_orientation() or
+> >> >   *   drm_connector_set_panel_orientation_with_quirk()
+> >> >   *
+> >> > @@ -2341,8 +2341,8 @@ EXPORT_SYMBOL(drm_connector_set_vrr_capable_property);
+> >> >   * @connector: connector for which to set the panel-orientation property.
+> >> >   * @panel_orientation: drm_panel_orientation value to set
+> >> >   *
+> >> > - * This function sets the connector's panel_orientation and attaches
+> >> > - * a "panel orientation" property to the connector.
+> >> > + * This function sets the connector's panel_orientation value. If the property
+> >> > + * doesn't exist, it will try to create one.
+> >> >   *
+> >> >   * Calling this function on a connector where the panel_orientation has
+> >> >   * already been set is a no-op (e.g. the orientation has been overridden with
+> >> > @@ -2373,19 +2373,12 @@ int drm_connector_set_panel_orientation(
+> >> >       info->panel_orientation = panel_orientation;
+> >> >
+> >> >       prop = dev->mode_config.panel_orientation_property;
+> >> > -     if (!prop) {
+> >> > -             prop = drm_property_create_enum(dev, DRM_MODE_PROP_IMMUTABLE,
+> >> > -                             "panel orientation",
+> >> > -                             drm_panel_orientation_enum_list,
+> >> > -                             ARRAY_SIZE(drm_panel_orientation_enum_list));
+> >> > -             if (!prop)
+> >> > -                     return -ENOMEM;
+> >> > -
+> >> > -             dev->mode_config.panel_orientation_property = prop;
+> >> > -     }
+> >> > +     if (!prop &&
+> >> > +         drm_connector_init_panel_orientation_property(connector) < 0)
+> >> > +             return -ENOMEM;
+> >> >
+> >>
+> >> In the case where the property has not been created beforehand, you
+> >> forgot to reinitialize prop here, after calling
+> >> drm_connector_init_panel_orientation_property().  This means
+> > hi Gabriel,
+> >
+> > drm_connector_init_panel_orientation_property() will create prop if
+> > it's null. If prop fails to be created there, it will return -ENOMEM.
+>
+> Yes.  But *after the property is successfully created*, the prop variable is still
+> NULL.  And then you call the following, using prop, which is still NULL:
+>
+> >> > +     drm_object_property_set_value(&connector->base, prop,
+> >> > +                                   info->panel_orientation);
+>
+> This will do property->dev right on the first line of code, and dereference the
+> null prop pointer.
 
-The diff itself largely looks good, but we need to actually write the comments.
-Can you pleaes pick up the wording I've written below for those?
+Ah, right. Sorry that I totally missed this.
+I'll fix it in the next version if the idea of this patch is accepted.
+There might be another preferred solution for this.
 
-That and renaming `unwind_init_from_current` to `unwind_init_from_caller`.
-
-With those I think this is good, but I'd like to see the updated version before
-I provide Acked-by or Reviewed-by tags -- hopefully that's just a formality! :)
-
-On Mon, Jan 17, 2022 at 08:56:01AM -0600, madvenka@linux.microsoft.com wrote:
-> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-> 
-> unwind_init() is currently a single function that initializes all of the
-> unwind state. Split it into the following functions and call them
-> appropriately:
-> 
-> 	- unwind_init_from_regs() - initialize from regs passed by caller.
-> 
-> 	- unwind_init_from_current() - initialize for the current task
-> 	  from the caller of arch_stack_walk().
-> 
-> 	- unwind_init_from_task() - initialize from the saved state of a
-> 	  task other than the current task. In this case, the other
-> 	  task must not be running.
-> 
-> This is done for two reasons:
-> 
-> 	- the different ways of initializing are clear
-> 
-> 	- specialized code can be added to each initializer in the future.
-> 
-> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
-> ---
->  arch/arm64/kernel/stacktrace.c | 54 +++++++++++++++++++++++++++-------
->  1 file changed, 44 insertions(+), 10 deletions(-)
-> 
-> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
-> index a1a7ff93b84f..b2b568e5deba 100644
-> --- a/arch/arm64/kernel/stacktrace.c
-> +++ b/arch/arm64/kernel/stacktrace.c
-> @@ -33,11 +33,8 @@
->   */
->  
->  
-> -static void unwind_init(struct unwind_state *state, unsigned long fp,
-> -			unsigned long pc)
-> +static void unwind_init_common(struct unwind_state *state)
->  {
-> -	state->fp = fp;
-> -	state->pc = pc;
->  #ifdef CONFIG_KRETPROBES
->  	state->kr_cur = NULL;
->  #endif
-> @@ -56,6 +53,46 @@ static void unwind_init(struct unwind_state *state, unsigned long fp,
->  	state->prev_type = STACK_TYPE_UNKNOWN;
->  }
->  
-> +/*
-> + * TODO: document requirements here.
-> + */
-
-Please make this:
-
-/*
- * Start an unwind from a pt_regs.
- *
- * The unwind will begin at the PC within the regs.
- *
- * The regs must be on a stack currently owned by the calling task.
- */
-
-> +static inline void unwind_init_from_regs(struct unwind_state *state,
-> +					 struct pt_regs *regs)
-> +{
-
-In future we could add:
-
-	WARN_ON_ONCE(!on_accessible_stack(current, regs, sizeof(*regs), NULL));
-
-... to validate the requirements, but I'm happy to lave that for a future patch
-so this patch can be a pure refactoring.
-
-> +	unwind_init_common(state);
-> +
-> +	state->fp = regs->regs[29];
-> +	state->pc = regs->pc;
-> +}
-> +
-> +/*
-> + * TODO: document requirements here.
-> + *
-> + * Note: this is always inlined, and we expect our caller to be a noinline
-> + * function, such that this starts from our caller's caller.
-> + */
-
-Please make this:
-
-/*
- * Start an unwind from a caller.
- *
- * The unwind will begin at the caller of whichever function this is inlined
- * into.
- *
- * The function which invokes this must be noinline.
- */
-
-> +static __always_inline void unwind_init_from_current(struct unwind_state *state)
-
-Can we please rename s/current/caller/ here? That way it's clear *where* in
-current we're unwinding from, and the fact that it's current is implicit but
-obvious.
-
-> +{
-
-Similarly to unwind_init_from_regs(), in a future patch we could add:
-
-	WARN_ON_ONCE(task == current);
-
-... but for now we can omit that so this patch can be a pure refactoring.
-
-> +	unwind_init_common(state);
-> +
-> +	state->fp = (unsigned long)__builtin_frame_address(1);
-> +	state->pc = (unsigned long)__builtin_return_address(0);
-> +}
-> +
-> +/*
-> + * TODO: document requirements here.
-> + *
-> + * The caller guarantees that the task is not running.
-> + */
-
-Please make this:
-
-/*
- * Start an unwind from a blocked task.
- *
- * The unwind will begin at the blocked tasks saved PC (i.e. the caller of
- * cpu_switch_to()).
- *
- * The caller should ensure the task is blocked in cpu_switch_to() for the
- * duration of the unwind, or the unwind will be bogus. It is never valid to
- * call this for the current task.
- */
-
-Thanks,
-Mark.
-
-> +static inline void unwind_init_from_task(struct unwind_state *state,
-> +					 struct task_struct *task)
-> +{
-> +	unwind_init_common(state);
-> +
-> +	state->fp = thread_saved_fp(task);
-> +	state->pc = thread_saved_pc(task);
-> +}
-> +
->  /*
->   * Unwind from one frame record (A) to the next frame record (B).
->   *
-> @@ -195,14 +232,11 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
->  	struct unwind_state state;
->  
->  	if (regs)
-> -		unwind_init(&state, regs->regs[29], regs->pc);
-> +		unwind_init_from_regs(&state, regs);
->  	else if (task == current)
-> -		unwind_init(&state,
-> -				(unsigned long)__builtin_frame_address(1),
-> -				(unsigned long)__builtin_return_address(0));
-> +		unwind_init_from_current(&state);
->  	else
-> -		unwind_init(&state, thread_saved_fp(task),
-> -				thread_saved_pc(task));
-> +		unwind_init_from_task(&state, task);
->  
->  	unwind(task, &state, consume_entry, cookie);
->  }
-> -- 
-> 2.25.1
-> 
+>
+> You must do
+>
+>   prop = dev->mode_config.panel_orientation_property;
+>
+> again after drm_connector_init_panel_orientation_property successfully
+> returns, or call drm_object_property_set_value using
+> dev->mode_config.panel_orientation_property directly:
+>
+>   drm_object_property_set_value(&connector->base,
+>                         dev->mode_config.panel_orientation_property
+>                         info->panel_orientation);
+>
+> --
+> Gabriel Krisman Bertazi

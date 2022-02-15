@@ -2,64 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CAC64B7B17
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C25E44B7B1B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244754AbiBOXQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 18:16:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55172 "EHLO
+        id S244762AbiBOXSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 18:18:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239700AbiBOXQN (ORCPT
+        with ESMTP id S231588AbiBOXSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 18:16:13 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51A9F8B93;
-        Tue, 15 Feb 2022 15:16:02 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        Tue, 15 Feb 2022 18:18:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C17FC1C9E;
+        Tue, 15 Feb 2022 15:18:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 5ECC4385;
-        Tue, 15 Feb 2022 23:16:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 5ECC4385
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1644966962; bh=vpOsw9X1kqHqWwkdogeCZakYlpuIkHDxESWMtj103W0=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Bc5haah1QXE5NxadYz6KqD10lX5DPDeH0N32CWjgJG5N47yn+E1CuXH5qUTveQn53
-         BHx1h91ypKYXtPaxCInraeE/g6E0fJV76HNc33maI4g4E6L0QK6SQxumeeJ+eEO6mL
-         PYDNPNB6SfTZlMTZ7eXmxtEsQfSm+LNqLQvEszgoju85pIuQHXrf7qZoM6TgK1h/K0
-         3j/7PIcSnV35RiW4pgRj2y7kjLpAdsuo6BlqDgnVeiTJRwd701g/BYL/gbwBJW8uTt
-         Fbn585/gPJHBZ8zKoL6DqccJvD+pyFOxJsjAHXgNZAqQBBXXY2bGLPIOPK0Vl1bm7d
-         UEMMW114jDDFw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
-        Phillip Potter <phil@philpotter.co.uk>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Documentation: Fix links for udftools project and
- pktcdvd tool
-In-Reply-To: <20220210192200.30828-1-pali@kernel.org>
-References: <20220210192200.30828-1-pali@kernel.org>
-Date:   Tue, 15 Feb 2022 16:16:01 -0700
-Message-ID: <87o8377mby.fsf@meer.lwn.net>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37040B81D51;
+        Tue, 15 Feb 2022 23:18:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC4E2C340EB;
+        Tue, 15 Feb 2022 23:18:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644967118;
+        bh=QeVPmQZzGvl7DCajPZBM5E4Qcbgt1kD5MfDXO75+qHk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=m8+AUeNcUDoZs97Qg40DOO5XchTZ4gs3/gyYht8NogHZqbIloXkURTiPVfO/wkjUU
+         3K6Es5VOMblyHHNilajuGmt8jsmRTOguJ16fZTqCgtPvDJQyiwKjHK4etM/4IOhnDn
+         tQMgdl4TpQUzFNHM4rr71tmrptL6YParxXu4cGAqrQ0QeWgKkhrIGZtQfr3nRutGIh
+         uxuKDivncOz/ZMMKTQF9TuJI3ABqpS0xGsVr1A86HJrp3rgTXNT8ZgYEkrjrOaZ0p5
+         oKW7EccrvKsOrrwLJ3ppVIM7sQg32LRqZMsL+tIsrevvgPe6+/P7QQkq3t9rylEYc3
+         uh0G3tYDDzvFA==
+From:   Will Deacon <will@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Andre Przywara <andre.przywara@arm.com>
+Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 0/2] arm64: booting.rst: Clarify EL2 and cover v8-R64
+Date:   Tue, 15 Feb 2022 23:18:20 +0000
+Message-Id: <164493738020.3934087.8555074967425195921.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220107160056.322141-1-andre.przywara@arm.com>
+References: <20220107160056.322141-1-andre.przywara@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pali Roh=C3=A1r <pali@kernel.org> writes:
+On Fri, 7 Jan 2022 16:00:54 +0000, Andre Przywara wrote:
+> clarify the wording of the ARM64 boot protocol requirements, to both
+> cater for the introduction of secure EL2 in Armv8.4, but also for the
+> addition of the Armv8-R64 architecture branch.
+> There is an ARM ARM supplement for v8-R64[1], and also a free model[2].
+> 
+> On top of those clarifications, there are at least two other issues to
+> consider for v8-R64 on Linux, I wonder if those should be documented
+> somewhere, although I doubt that booting.rst is the right place:
+> - Linux clears the NS/NSTable bit in the PTEs. In non-secure world those
+>   bits are ignored, but when in secure world this means "secure PA".
+>   That luckily matches the design here (secure-only), but we should avoid
+>   re-purposing those bits in the future (which would be technically
+>   possible when running only non-secure).
+> - The GIC needs to be implemented using a "single Security state" for
+>   the Linux GIC driver to work. The model mentioned above defaults to
+>   a security aware GIC, so needs to be told off using the command line.
+>   I wonder if this is should be explicitly mentioned somewhere, to avoid
+>   disappointment by implementors later.
+> 
+> [...]
 
-> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
-> ---
->  Documentation/cdrom/packet-writing.rst             | 4 ++--
->  Documentation/userspace-api/ioctl/ioctl-number.rst | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Applied first patch to arm64 (for-next/docs), thanks!
 
-Applied, thanks.
+[1/2] arm64: booting.rst: Clarify on requiring non-secure EL2
+      https://git.kernel.org/arm64/c/b8ac4ee08d48
 
-jon
+Cheers,
+-- 
+Will
+
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev

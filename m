@@ -2,42 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F224B72E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 646414B7332
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:43:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239613AbiBOPHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:07:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38608 "EHLO
+        id S239472AbiBOPAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:00:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236756AbiBOPG6 (ORCPT
+        with ESMTP id S239385AbiBOO7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:06:58 -0500
-X-Greylist: delayed 431 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 07:06:47 PST
-Received: from unicorn.mansr.com (unicorn.mansr.com [IPv6:2001:8b0:ca0d:8d8e::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C8F6384;
-        Tue, 15 Feb 2022 07:06:47 -0800 (PST)
-Received: from raven.mansr.com (raven.mansr.com [81.2.72.235])
-        by unicorn.mansr.com (Postfix) with ESMTPS id D195915360;
-        Tue, 15 Feb 2022 14:59:32 +0000 (GMT)
-Received: by raven.mansr.com (Postfix, from userid 51770)
-        id CEC7A219C0A; Tue, 15 Feb 2022 14:59:32 +0000 (GMT)
-From:   Mans Rullgard <mans@mansr.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Juergen Borleis <jbe@pengutronix.de>, netdev@vger.kernel.org,
+        Tue, 15 Feb 2022 09:59:50 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CA0DFA8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 06:59:39 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 0F8311F382;
+        Tue, 15 Feb 2022 14:59:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1644937178; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MrGnJrAMCFPmLc65vlRdt3pXviCilvLZaB4FGAskoQA=;
+        b=s7bRVkZCZkaMjew3RsH07f3hJ1tqZRLCECOuJC73PrVN8Z734MBzJLtQaj6Vh6zlA0gXaZ
+        oRLL1XJhmgsQH7ntw/71HkQSiQOgu6qmnEgfkvxGeJ5jgfiQjHKaJ/4aqJ+Mg+YsWVlS7Y
+        ZWpMnw5WDjWXV+yoThar8f7KMQtJ2Mc=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B35BDA3BA1;
+        Tue, 15 Feb 2022 14:59:37 +0000 (UTC)
+Date:   Tue, 15 Feb 2022 15:59:35 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] net: dsa: lan9303: handle hwaccel VLAN tags
-Date:   Tue, 15 Feb 2022 14:59:13 +0000
-Message-Id: <20220215145913.10694-1-mans@mansr.com>
-X-Mailer: git-send-email 2.35.1
+Subject: Re: [PATCH printk v1 05/13] printk: call boot_delay_msec() in
+ printk_delay()
+Message-ID: <Ygu/1/Y+vTNhulUX@alley>
+References: <20220207194323.273637-1-john.ogness@linutronix.de>
+ <20220207194323.273637-6-john.ogness@linutronix.de>
+ <YgtBGx8FD/AA23Qk@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgtBGx8FD/AA23Qk@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,63 +58,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check for a hwaccel VLAN tag on rx and use it if present.  Otherwise,
-use __skb_vlan_pop() like the other tag parsers do.  This fixes the case
-where the VLAN tag has already been consumed by the master.
+On Tue 2022-02-15 14:58:51, Sergey Senozhatsky wrote:
+> On (22/02/07 20:49), John Ogness wrote:
+> > boot_delay_msec() is always called immediately before printk_delay()
+> > so just call it from within printk_delay().
+> > 
+> > Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> 
+> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> 
+> > -static inline void printk_delay(void)
+> > +static inline void printk_delay(int level)
+> >  {
+> > +	boot_delay_msec(level);
+> > +
+> >  	if (unlikely(printk_delay_msec)) {
+> >  		int m = printk_delay_msec;
+> >  
+> > @@ -2224,8 +2226,7 @@ asmlinkage int vprintk_emit(int facility, int level,
+> >  		in_sched = true;
+> >  	}
+> >  
+> > -	boot_delay_msec(level);
+> > -	printk_delay();
+> > +	printk_delay(level);
+> 
+> As a side note, I wonder why do boot_delay_msec() and printk_delay()
+> touch only NMI watchdog. Shouldn't they also touch softlockup, WQ,
+> RCU, etc. watchdogs?
 
-Signed-off-by: Mans Rullgard <mans@mansr.com>
----
- net/dsa/tag_lan9303.c | 21 +++++++--------------
- 1 file changed, 7 insertions(+), 14 deletions(-)
+It seems that touch_nmi_watchdog() actually calls touch_softlockup_watchdog()
+that calls wq_watchdog_touch().
 
-diff --git a/net/dsa/tag_lan9303.c b/net/dsa/tag_lan9303.c
-index cb548188f813..7fe180941ac4 100644
---- a/net/dsa/tag_lan9303.c
-+++ b/net/dsa/tag_lan9303.c
-@@ -77,7 +77,6 @@ static struct sk_buff *lan9303_xmit(struct sk_buff *skb, struct net_device *dev)
- 
- static struct sk_buff *lan9303_rcv(struct sk_buff *skb, struct net_device *dev)
- {
--	__be16 *lan9303_tag;
- 	u16 lan9303_tag1;
- 	unsigned int source_port;
- 
-@@ -87,14 +86,15 @@ static struct sk_buff *lan9303_rcv(struct sk_buff *skb, struct net_device *dev)
- 		return NULL;
- 	}
- 
--	lan9303_tag = dsa_etype_header_pos_rx(skb);
--
--	if (lan9303_tag[0] != htons(ETH_P_8021Q)) {
--		dev_warn_ratelimited(&dev->dev, "Dropping packet due to invalid VLAN marker\n");
--		return NULL;
-+	skb_push_rcsum(skb, ETH_HLEN);
-+	if (skb_vlan_tag_present(skb)) {
-+		lan9303_tag1 = skb_vlan_tag_get(skb);
-+		__vlan_hwaccel_clear_tag(skb);
-+	} else {
-+		__skb_vlan_pop(skb, &lan9303_tag1);
- 	}
-+	skb_pull_rcsum(skb, ETH_HLEN);
- 
--	lan9303_tag1 = ntohs(lan9303_tag[1]);
- 	source_port = lan9303_tag1 & 0x3;
- 
- 	skb->dev = dsa_master_find_slave(dev, 0, source_port);
-@@ -103,13 +103,6 @@ static struct sk_buff *lan9303_rcv(struct sk_buff *skb, struct net_device *dev)
- 		return NULL;
- 	}
- 
--	/* remove the special VLAN tag between the MAC addresses
--	 * and the current ethertype field.
--	 */
--	skb_pull_rcsum(skb, 2 + 2);
--
--	dsa_strip_etype_header(skb, LAN9303_TAG_LEN);
--
- 	if (!(lan9303_tag1 & LAN9303_TAG_RX_TRAPPED_TO_CPU))
- 		dsa_default_offload_fwd_mark(skb);
- 
--- 
-2.35.1
-
+Best Regards,
+Petr

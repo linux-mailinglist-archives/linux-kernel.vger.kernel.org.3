@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B95F44B623F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 05:54:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 611124B6243
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 05:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231685AbiBOEyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 23:54:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35800 "EHLO
+        id S233933AbiBOEyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 23:54:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiBOEyJ (ORCPT
+        with ESMTP id S232367AbiBOEyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 23:54:09 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9256C55A2;
-        Mon, 14 Feb 2022 20:53:59 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id d187so32873945pfa.10;
-        Mon, 14 Feb 2022 20:53:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CQkfdtClRni2h3znN9UiF7Ukufkj8rvzkK7VvnWbIxI=;
-        b=J5PPM7uKwIIklULMzXC7qYZ9Iy+6WXGAZQQjEFuSbVQowFhJY53o2fU3iA5BQeHd79
-         TAMz1TprnJPfTs3XxqRua76HVRPr9l8HJI2wZcyTlXu9t3CeGTonOC7z6CBqfpGEKfT6
-         +13VheAo/OWeZOmBQp0cGRXT6OuvbfdupfmVL947OaWyi79orjagslIyVQshaygrEDMN
-         1d2DnBgvYbNL+oH/AEL4hH6H94faYmNS8/QUmwO0+gH67XzEZk+aureuU3FS18HxlCZI
-         lLkstQdlv6GDreuqt66NCqHZ1ertoFZMbc5y3x990YvCSp5XCQZ4Ui8ilDwtEWkS5t8b
-         0SAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CQkfdtClRni2h3znN9UiF7Ukufkj8rvzkK7VvnWbIxI=;
-        b=cF5e8iTJZO9+Lo11EszDIzn1c+aLWKVxBrV+6JjJAB0dYlmHKfhX5v07bteMqSDJ+T
-         15XmlULiWGLk8vUvIx6ivTeJY2MndJYHG9vW7XI1jz0Cm48YcTJsMJm53fu+lNwddx1L
-         YMf2S/sfMKM92nYQkXSUJ4uzyW4xhdejDdg2GsfzM7Egk4WdVzJuKfAesDmeSAoWcR5p
-         XvLRqbe/hWZsaBo8/QvXBhJ/3AAdQ8l+CDki2H7awrZNXGeQUQnRL1KE23Fz3DZiYw/X
-         DqesSL2UATBJPP2MgfJ/YsA03RRnVo9lChs7RboR50+g6/krd2QWwjo4a51jaUY9jpB/
-         MU/A==
-X-Gm-Message-State: AOAM533luuKAhfC0eUcOsnE/yigRh+MEBWHG8rrAHsOy17I4F6oOv8F/
-        gH7rVdCAKGz68vFrZZy7aBpC/2thkQP9ZzTeaHw=
-X-Google-Smtp-Source: ABdhPJw+2zcSDSURptSVJWKFp7tZkQZ73Obmk+E49D65vtMbPuQvYRjHFB6H8ALaGtr/6pUJjblCGBQRVU/phWxNjis=
-X-Received: by 2002:a65:6090:: with SMTP id t16mr2015509pgu.323.1644900839188;
- Mon, 14 Feb 2022 20:53:59 -0800 (PST)
+        Mon, 14 Feb 2022 23:54:45 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF10C5D84;
+        Mon, 14 Feb 2022 20:54:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644900875; x=1676436875;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ToPYTSKqgT3dHAF94OVKr+aABefwhPvEIXV8gTUWHE4=;
+  b=OJ5mlsxKVhXToEKmGwx3L2WnzhZbXXTRi6YWelSyddUA76r4a3KGgKXF
+   lFc8Q+5060DwaCVSqiZPONaWV53XyMx6OHQdk9pNzpRuuS0VpBkUmaqQY
+   MFE7K+PqxE9AaJWbzD0iYpN/YYA/FFbhXM+Up17YmfoDLN9nWiT6y1OhU
+   3ucT2aJ/MwWZmM+NS6HhoF7BD66jF6/o43n0fciyibJ8b5ZSPI4KTLSoA
+   kItC/TW9C2gCANf6v7TyqdPDUBwTxZqzkdGNDyn7W11ccwnh7L2bnpQ7v
+   94p8BDB/hBA8d7LthCddVzuFA10JObYJOGUQJQnCs1kBPg31IpgTfGIfw
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="247844134"
+X-IronPort-AV: E=Sophos;i="5.88,369,1635231600"; 
+   d="scan'208";a="247844134"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 20:54:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,369,1635231600"; 
+   d="scan'208";a="570633505"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 14 Feb 2022 20:54:33 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJprF-0009Hr-1g; Tue, 15 Feb 2022 04:54:33 +0000
+Date:   Tue, 15 Feb 2022 12:54:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH] ata: add/use ata_taskfile::{error|status} fields
+Message-ID: <202202151209.hSVAcH7A-lkp@intel.com>
+References: <e99172ca-cf0e-5510-60fc-b19dc48658ac@omp.ru>
 MIME-Version: 1.0
-References: <20220210085225.551891-1-tz.stoyanov@gmail.com>
-In-Reply-To: <20220210085225.551891-1-tz.stoyanov@gmail.com>
-From:   Tzvetomir Stoyanov <tz.stoyanov@gmail.com>
-Date:   Tue, 15 Feb 2022 06:53:42 +0200
-Message-ID: <CAPpZLN4c=PW0m5fvUJ4ugaGCYOiZfs+bNzJKOfJjWzEcBa0FOA@mail.gmail.com>
-Subject: Re: [PATCH] libperf: Add API for allocating new thread map
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <olsajiri@gmail.com>, Ian Rogers <irogers@google.com>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e99172ca-cf0e-5510-60fc-b19dc48658ac@omp.ru>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,154 +65,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A gentle ping.
-I'll be glad for any comments or suggestions for a possible workaround
-of this problem.
-Thanks!
+Hi Sergey,
 
-On Thu, Feb 10, 2022 at 10:52 AM Tzvetomir Stoyanov (VMware)
-<tz.stoyanov@gmail.com> wrote:
->
-> The existing API perf_thread_map__new_dummy() allocates new thread map
-> for one thread. I couldn't find a way to reallocate the map with more
-> threads, or to allocate a new map for more than one thread. Having
-> multiple threads in a thread map is essential for some use cases.
-> That's why a new API is proposed, which allocates a new thread map
-> for given number of threads:
->  perf_thread_map__new()
->
-> Signed-off-by: Tzvetomir Stoyanov (VMware) <tz.stoyanov@gmail.com>
-> ---
->  tools/lib/perf/Documentation/libperf.txt |  1 +
->  tools/lib/perf/include/perf/threadmap.h  |  1 +
->  tools/lib/perf/libperf.map               |  1 +
->  tools/lib/perf/tests/test-threadmap.c    | 27 ++++++++++++++++++++++++
->  tools/lib/perf/threadmap.c               | 15 +++++++++----
->  5 files changed, 41 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/lib/perf/Documentation/libperf.txt b/tools/lib/perf/Documentation/libperf.txt
-> index 32c5051c24eb..9cbd41c29bff 100644
-> --- a/tools/lib/perf/Documentation/libperf.txt
-> +++ b/tools/lib/perf/Documentation/libperf.txt
-> @@ -62,6 +62,7 @@ SYNOPSIS
->    struct perf_thread_map;
->
->    struct perf_thread_map *perf_thread_map__new_dummy(void);
-> +  struct perf_thread_map *perf_thread_map__new(int nr);
->
->    void perf_thread_map__set_pid(struct perf_thread_map *map, int thread, pid_t pid);
->    char *perf_thread_map__comm(struct perf_thread_map *map, int thread);
-> diff --git a/tools/lib/perf/include/perf/threadmap.h b/tools/lib/perf/include/perf/threadmap.h
-> index a7c50de8d010..47d433416040 100644
-> --- a/tools/lib/perf/include/perf/threadmap.h
-> +++ b/tools/lib/perf/include/perf/threadmap.h
-> @@ -8,6 +8,7 @@
->  struct perf_thread_map;
->
->  LIBPERF_API struct perf_thread_map *perf_thread_map__new_dummy(void);
-> +LIBPERF_API struct perf_thread_map *perf_thread_map__new(int nr);
->
->  LIBPERF_API void perf_thread_map__set_pid(struct perf_thread_map *map, int thread, pid_t pid);
->  LIBPERF_API char *perf_thread_map__comm(struct perf_thread_map *map, int thread);
-> diff --git a/tools/lib/perf/libperf.map b/tools/lib/perf/libperf.map
-> index 93696affda2e..240a2f087b70 100644
-> --- a/tools/lib/perf/libperf.map
-> +++ b/tools/lib/perf/libperf.map
-> @@ -11,6 +11,7 @@ LIBPERF_0.0.1 {
->                 perf_cpu_map__empty;
->                 perf_cpu_map__max;
->                 perf_cpu_map__has;
-> +               perf_thread_map__new;
->                 perf_thread_map__new_dummy;
->                 perf_thread_map__set_pid;
->                 perf_thread_map__comm;
-> diff --git a/tools/lib/perf/tests/test-threadmap.c b/tools/lib/perf/tests/test-threadmap.c
-> index 5e2a0291e94c..3388bf36dfc0 100644
-> --- a/tools/lib/perf/tests/test-threadmap.c
-> +++ b/tools/lib/perf/tests/test-threadmap.c
-> @@ -11,9 +11,12 @@ static int libperf_print(enum libperf_print_level level,
->         return vfprintf(stderr, fmt, ap);
->  }
->
-> +#define THREADS_NR     5
-> +
->  int test_threadmap(int argc, char **argv)
->  {
->         struct perf_thread_map *threads;
-> +       int i;
->
->         __T_START;
->
-> @@ -27,6 +30,30 @@ int test_threadmap(int argc, char **argv)
->         perf_thread_map__put(threads);
->         perf_thread_map__put(threads);
->
-> +       threads = perf_thread_map__new(THREADS_NR);
-> +       if (!threads)
-> +               tests_failed++;
-> +
-> +       if (perf_thread_map__nr(threads) != THREADS_NR)
-> +               tests_failed++;
-> +
-> +       for (i = 0; i < THREADS_NR; i++) {
-> +               if (perf_thread_map__pid(threads, i) != -1)
-> +                       tests_failed++;
-> +       }
-> +
-> +       for (i = 1; i < THREADS_NR; i++)
-> +               perf_thread_map__set_pid(threads, i, i * 100);
-> +
-> +       if (perf_thread_map__pid(threads, 0) != -1)
-> +               tests_failed++;
-> +
-> +       for (i = 1; i < THREADS_NR; i++) {
-> +               if (perf_thread_map__pid(threads, i) != i * 100)
-> +                       tests_failed++;
-> +       }
-> +       perf_thread_map__put(threads);
-> +
->         __T_END;
->         return tests_failed == 0 ? 0 : -1;
->  }
-> diff --git a/tools/lib/perf/threadmap.c b/tools/lib/perf/threadmap.c
-> index e92c368b0a6c..843fe1070cc9 100644
-> --- a/tools/lib/perf/threadmap.c
-> +++ b/tools/lib/perf/threadmap.c
-> @@ -42,18 +42,25 @@ char *perf_thread_map__comm(struct perf_thread_map *map, int thread)
->         return map->map[thread].comm;
->  }
->
-> -struct perf_thread_map *perf_thread_map__new_dummy(void)
-> +struct perf_thread_map *perf_thread_map__new(int nr)
->  {
-> -       struct perf_thread_map *threads = thread_map__alloc(1);
-> +       struct perf_thread_map *threads = thread_map__alloc(nr);
-> +       int i;
->
->         if (threads != NULL) {
-> -               perf_thread_map__set_pid(threads, 0, -1);
-> -               threads->nr = 1;
-> +               for (i = 0; i < nr; i++)
-> +                       perf_thread_map__set_pid(threads, i, -1);
-> +               threads->nr = nr;
->                 refcount_set(&threads->refcnt, 1);
->         }
->         return threads;
->  }
->
-> +struct perf_thread_map *perf_thread_map__new_dummy(void)
-> +{
-> +       return perf_thread_map__new(1);
-> +}
-> +
->  static void perf_thread_map__delete(struct perf_thread_map *threads)
->  {
->         if (threads) {
-> --
-> 2.34.1
->
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.17-rc4 next-20220214]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Sergey-Shtylyov/ata-add-use-ata_taskfile-error-status-fields/20220215-044836
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git d567f5db412ed52de0b3b3efca4a451263de6108
+config: i386-buildonly-randconfig-r006-20220214 (https://download.01.org/0day-ci/archive/20220215/202202151209.hSVAcH7A-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/5d89e7cd8ab42fd2cb6f59a7922784b0cce835bf
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Sergey-Shtylyov/ata-add-use-ata_taskfile-error-status-fields/20220215-044836
+        git checkout 5d89e7cd8ab42fd2cb6f59a7922784b0cce835bf
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/ata/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/ata/sata_vsc.c:203:21: error: use of undeclared identifier 'feature'; did you mean 'return'?
+                   tf->hob_feature = feature >> 8;
+                                     ^~~~~~~
+                                     return
+>> drivers/ata/sata_vsc.c:203:21: error: expected expression
+   2 errors generated.
 
 
--- 
-Tzvetomir (Ceco) Stoyanov
-VMware Open Source Technology Center
+vim +203 drivers/ata/sata_vsc.c
+
+^1da177e4c3f41 drivers/scsi/sata_vsc.c Linus Torvalds  2005-04-16  181  
+^1da177e4c3f41 drivers/scsi/sata_vsc.c Linus Torvalds  2005-04-16  182  
+^1da177e4c3f41 drivers/scsi/sata_vsc.c Linus Torvalds  2005-04-16  183  static void vsc_sata_tf_read(struct ata_port *ap, struct ata_taskfile *tf)
+^1da177e4c3f41 drivers/scsi/sata_vsc.c Linus Torvalds  2005-04-16  184  {
+^1da177e4c3f41 drivers/scsi/sata_vsc.c Linus Torvalds  2005-04-16  185  	struct ata_ioports *ioaddr = &ap->ioaddr;
+5d89e7cd8ab42f drivers/ata/sata_vsc.c  Sergey Shtylyov 2022-02-14  186  	u16 nsect, lbal, lbam, lbah, error;
+^1da177e4c3f41 drivers/scsi/sata_vsc.c Linus Torvalds  2005-04-16  187  
+5d89e7cd8ab42f drivers/ata/sata_vsc.c  Sergey Shtylyov 2022-02-14  188  	tf->status = ata_sff_check_status(ap);
+0d5ff566779f89 drivers/ata/sata_vsc.c  Tejun Heo       2007-02-01  189  	tf->device = readw(ioaddr->device_addr);
+5d89e7cd8ab42f drivers/ata/sata_vsc.c  Sergey Shtylyov 2022-02-14  190  	error = readw(ioaddr->error_addr);
+0d5ff566779f89 drivers/ata/sata_vsc.c  Tejun Heo       2007-02-01  191  	nsect = readw(ioaddr->nsect_addr);
+0d5ff566779f89 drivers/ata/sata_vsc.c  Tejun Heo       2007-02-01  192  	lbal = readw(ioaddr->lbal_addr);
+0d5ff566779f89 drivers/ata/sata_vsc.c  Tejun Heo       2007-02-01  193  	lbam = readw(ioaddr->lbam_addr);
+0d5ff566779f89 drivers/ata/sata_vsc.c  Tejun Heo       2007-02-01  194  	lbah = readw(ioaddr->lbah_addr);
+ac19bff25b6834 drivers/scsi/sata_vsc.c Jeff Garzik     2005-10-29  195  
+5d89e7cd8ab42f drivers/ata/sata_vsc.c  Sergey Shtylyov 2022-02-14  196  	tf->error = error;
+ac19bff25b6834 drivers/scsi/sata_vsc.c Jeff Garzik     2005-10-29  197  	tf->nsect = nsect;
+ac19bff25b6834 drivers/scsi/sata_vsc.c Jeff Garzik     2005-10-29  198  	tf->lbal = lbal;
+ac19bff25b6834 drivers/scsi/sata_vsc.c Jeff Garzik     2005-10-29  199  	tf->lbam = lbam;
+ac19bff25b6834 drivers/scsi/sata_vsc.c Jeff Garzik     2005-10-29  200  	tf->lbah = lbah;
+^1da177e4c3f41 drivers/scsi/sata_vsc.c Linus Torvalds  2005-04-16  201  
+^1da177e4c3f41 drivers/scsi/sata_vsc.c Linus Torvalds  2005-04-16  202  	if (tf->flags & ATA_TFLAG_LBA48) {
+ac19bff25b6834 drivers/scsi/sata_vsc.c Jeff Garzik     2005-10-29 @203  		tf->hob_feature = feature >> 8;
+^1da177e4c3f41 drivers/scsi/sata_vsc.c Linus Torvalds  2005-04-16  204  		tf->hob_nsect = nsect >> 8;
+^1da177e4c3f41 drivers/scsi/sata_vsc.c Linus Torvalds  2005-04-16  205  		tf->hob_lbal = lbal >> 8;
+^1da177e4c3f41 drivers/scsi/sata_vsc.c Linus Torvalds  2005-04-16  206  		tf->hob_lbam = lbam >> 8;
+^1da177e4c3f41 drivers/scsi/sata_vsc.c Linus Torvalds  2005-04-16  207  		tf->hob_lbah = lbah >> 8;
+^1da177e4c3f41 drivers/scsi/sata_vsc.c Linus Torvalds  2005-04-16  208  	}
+^1da177e4c3f41 drivers/scsi/sata_vsc.c Linus Torvalds  2005-04-16  209  }
+^1da177e4c3f41 drivers/scsi/sata_vsc.c Linus Torvalds  2005-04-16  210  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

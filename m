@@ -2,67 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1624B66F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE474B66F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235435AbiBOJE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:04:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43608 "EHLO
+        id S235572AbiBOJGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:06:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235314AbiBOJEw (ORCPT
+        with ESMTP id S229470AbiBOJGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:04:52 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82051160E6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:04:42 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id p5so53763209ybd.13
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:04:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LXyU3TMYJOTYLwfoTA9DPkdeJqji2Meoteuh0Ak6tJI=;
-        b=vK8HB+w+227qiYy9jQ0o/EUJrbJWJ3IxR8YLUp45GrBNUkgRrIoBQaprNkclJ3UVLC
-         d07Wuj3xHr+Jgd1ROTq22iJSqltqQ7W6oy+hxD8uh7EJoq0WLq1AJ4968clZ9FIxMqB+
-         hk4kCS3/mTAjls4AGJczDrIR/cetgsbyMNFiED0uzS22JuRCIGTBetyYsd6XD1Hz24cx
-         Xpojx4yfkc9EhxLQG+4qvBOjSCwjta3aJ99KHM/oCR6utxofQiHl1YUSqRcLks2EEt7J
-         vzRbCV6XjBOogNBN9NBhVdrOD1YLc5b9M/cJiqyjGuLwfidXNqOxhIFhIyI9dPRuO/85
-         gBMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LXyU3TMYJOTYLwfoTA9DPkdeJqji2Meoteuh0Ak6tJI=;
-        b=YcIjmSuWqlRo1QsurfyGTT/237YQgu/o6Ro54lDWG0EJ7PtW79k0xSfrg4zdfH0Wjk
-         p/mz12pn2NbripuLGs1Rn0fgb8/sLnA/uaJ2L3iQDsMiA1gZZRFc07vDnO2yf9Id5l0d
-         TN6VdFYgG8uhP/PIbRT/fwRB491X/QxlWhv80UKGbQ5yMQCCXE0ELeliHL/U3wBZQa1w
-         Fa75YaZqmx251ZVnmDN7lAFdTbmSWO+nwAdwI/HeYrc33VmjsyN1xzdDt7ji4NPSRmXR
-         Hu2khWul3BiGHsI1Jmo22H/cRR+Syu9sigthRxU7L3DP4CbVL6UIGEd6WKtPAZXTDcGt
-         Y6hg==
-X-Gm-Message-State: AOAM532BxbwRgskYtZLmUtZCCvMdZtAzwWG81r34C3HTWyjremzLFoxH
-        pIUnWkwda9kZe5pEh3hhvtZ+hh5oJmBFvjcW7WbZnw==
-X-Google-Smtp-Source: ABdhPJx4A8t0cA0oOLKHs+nQ1VCfgcbCCv3Mbf0JNfrzPCLBbWfsyI+1WNFHsI28VLH0Mjv8kIaKrLVbYLb/+hAQlUA=
-X-Received: by 2002:a05:6902:1201:: with SMTP id s1mr3081406ybu.704.1644915881755;
- Tue, 15 Feb 2022 01:04:41 -0800 (PST)
+        Tue, 15 Feb 2022 04:06:34 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C93C10610A;
+        Tue, 15 Feb 2022 01:06:21 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 618881F43CBD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644915980;
+        bh=KT3ZzPL5bMaQsMc6VIAvOaWmPqUEHPijK80eTrRqlyU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jVL9UMVhkEC02XIfCXepsseP84rrZ37lMw+YnM3XbD0hVbwPUVUkDd+dXEgai7UbE
+         y2fBhkPw+u/DpNe3Ym0VMOMiL5NmM9GL/pit0vOPwk4N1xBsCHhFpWwCjZyaIXnzMy
+         +uhN+4CooMPCBzQlnpyXYsoPEUop6EhPnK2uca6jcbdEhzjlgxceMi2T270017ub2x
+         485O6jZHlxN14XmDqI/JcaATm8E5zFOAaSj27/n7F+OnqZmS3aB8+d9TtGzsMDXWlx
+         Vc5F3ssQqtT6M9CnULDLKxgU4vkDQhLB4+qBYyXTD9f1tlmzJooxiAzDhq8cO038bz
+         raylOxkRSmoRw==
+Message-ID: <319d7236-292c-787f-4578-bffe75e33ba1@collabora.com>
+Date:   Tue, 15 Feb 2022 10:06:17 +0100
 MIME-Version: 1.0
-References: <20220214092458.668376521@linuxfoundation.org>
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 15 Feb 2022 14:34:30 +0530
-Message-ID: <CA+G9fYvFCWaz_8L6fbud46RLgkrVTgj9EZM_OfUn=6nXwYs_5w@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/116] 5.10.101-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [v7 0/5] Mediatek MT8195 power domain support
+Content-Language: en-US
+To:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        srv_heupstream@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220130012104.5292-1-chun-jie.chen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220130012104.5292-1-chun-jie.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,191 +60,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Feb 2022 at 15:10, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.101 release.
-> There are 116 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.101-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Il 30/01/22 02:20, Chun-Jie Chen ha scritto:
+> This patch series adds power domain support for MT8195
+> and is based on 5.17-rc1.
 
+Hello Matthias,
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+this series has been tested for a while on multiple MediaTek platforms, hence
+new versions will not be necessary.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Can you please pick it for v5.18?
 
-## Build
-* kernel: 5.10.101-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: 8d15f8eda4b30d50abb1c58be6a175f2ec07888c
-* git describe: v5.10.100-117-g8d15f8eda4b3
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.100-117-g8d15f8eda4b3
+Thank you,
+Angelo
 
-## Test Regressions (compared to v5.10.100-117-gb184da91385d)
-No test regressions found.
+> 
+> change since v6:
+> - rebase to 5.17-rc1
+> 
+> change since v5:
+> - rebase to 5.16-rc1
+> - add domain capacity in mfg power domain
+> 
+> change since v4:
+> - rebase to 5.15-rc1 (fix conflict at patch 4 in this series)
+> - change license
+> 
+> change since v3:
+> - remove redundant bus protection steps
+> - remove unused power domain
+> 
+> change since v2:
+> - move modification of wakeup capacity to single patch
+> 
+> reason for resend v2:
+> - miss patch version in series
+> 
+> changes since v1:
+> - fix signed-off name
+> - describe more detail in patch 3
+> - move modification of removing redundant macro to single patch
+> 
+> Chun-Jie Chen (5):
+>    dt-bindings: power: Add MT8195 power domains
+>    soc: mediatek: pm-domains: Add wakeup capacity support in power domain
+>    soc: mediatek: pm-domains: Remove unused macro
+>    soc: mediatek: pm-domains: Move power status offset to power domain
+>      data
+>    soc: mediatek: pm-domains: Add support for mt8195
+> 
+>   .../power/mediatek,power-controller.yaml      |   2 +
+>   drivers/soc/mediatek/mt8167-pm-domains.h      |  16 +-
+>   drivers/soc/mediatek/mt8173-pm-domains.h      |  22 +-
+>   drivers/soc/mediatek/mt8183-pm-domains.h      |  32 +-
+>   drivers/soc/mediatek/mt8192-pm-domains.h      |  44 +-
+>   drivers/soc/mediatek/mt8195-pm-domains.h      | 613 ++++++++++++++++++
+>   drivers/soc/mediatek/mtk-pm-domains.c         |  12 +-
+>   drivers/soc/mediatek/mtk-pm-domains.h         |   8 +-
+>   include/dt-bindings/power/mt8195-power.h      |  46 ++
+>   include/linux/soc/mediatek/infracfg.h         |  82 +++
+>   10 files changed, 862 insertions(+), 15 deletions(-)
+>   create mode 100644 drivers/soc/mediatek/mt8195-pm-domains.h
+>   create mode 100644 include/dt-bindings/power/mt8195-power.h
+> 
 
-## Metric Regressions (compared to v5.10.100-117-gb184da91385d)
-No metric regressions found.
-
-## Test Fixes (compared to v5.10.100-117-gb184da91385d)
-No test fixes found.
-
-## Metric Fixes (compared to v5.10.100-117-gb184da91385d)
-No metric fixes found.
-
-## Test result summary
-total: 94250, pass: 80953, fail: 542, skip: 11915, xfail: 840
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 259 total, 259 passed, 0 failed
-* arm64: 37 total, 35 passed, 2 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 36 total, 36 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 34 total, 34 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 37 passed, 15 failed
-* riscv: 24 total, 24 passed, 0 failed
-* s390: 18 total, 18 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 37 total, 37 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org

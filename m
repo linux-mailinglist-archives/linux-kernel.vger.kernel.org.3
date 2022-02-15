@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989094B72C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFCB54B71BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240470AbiBOPpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:45:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60272 "EHLO
+        id S240474AbiBOPrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:47:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234702AbiBOPp2 (ORCPT
+        with ESMTP id S240966AbiBOPpc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:45:28 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D93149BA8;
-        Tue, 15 Feb 2022 07:40:07 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id q7so32690561wrc.13;
-        Tue, 15 Feb 2022 07:40:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xRfR/3cl8ngHKj2jF/8jnAtft+nkVrmLjzr2g6FmtNs=;
-        b=HlCeRB4UmweM9i3yvrc8utK/dbRmdx0h3G3wkWJWdGGtk3peH2YVMyIRdrp+xYxw52
-         Fhif/0VFBdswKLPW+17vXvbI/GnrROHAQbL7tQF4NT/CpA84OjUE/BCEF0FdW7jkxWDd
-         Sz24Q9sM4WVUbwptdl1gM3kAOokwSRwax8xBrkw8JJ0u6SyOhyjrb6iMDJScIwtkpOF3
-         HSzXgYPCDM2jAmBKAkuTns1V4QUr7DdiYc0H/A2EI7JA/MTtY1JwjiKfUz9uMIf2Bl+s
-         43nb2cHiwwjOxrakxOu9G1NZrOoPCs3CKHh6TSm1IoqLTNLdYTImE7Yzc9FM8ByAgg1d
-         +WCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xRfR/3cl8ngHKj2jF/8jnAtft+nkVrmLjzr2g6FmtNs=;
-        b=mDfmyMGoI+eUzKh8PrpDYe9nuxgov2FVmcY9NwlIMa0VUC81kFXfqHLa22XprfwKAK
-         CtzVCcmlJAucoI8HOjIglJt+roLpYcz6C2cC2zFhRIPYYi0Y6VT9HvPHNJbP3HkBdBdP
-         WZwsvf0VTlvPn8rZhdHYQxTZoZX9IAJGVkw0ITTXjyd0vIIALX4iPhDNUObHfsNW5yV9
-         A4OM3SykWhdjoUEGFUCQ23qCC9OAuezKiIjeKFiXNjqECmvmoD7uhxD2ewESl76NdP68
-         /suXSCRw/Y2uzH/zf1EoOnuo+P5r7xO8FG44HPcBsBzkndP6SkXGwAo0RddkE+zI1qnk
-         Vwqw==
-X-Gm-Message-State: AOAM533BqwDTQddjvWIU0nbjK/ftI85Vo7/xgkP6L9gdpj6QZWzb8WLq
-        bH4f/+1CAhA4FES+puXj8uc=
-X-Google-Smtp-Source: ABdhPJzJq7MB60D6D77HTVecIFAuon+J4kqwg747+Jptz0ejRLFXLZ54BqFzWgiuNPskPUtplqeEAA==
-X-Received: by 2002:adf:f690:: with SMTP id v16mr3703067wrp.707.1644939605970;
-        Tue, 15 Feb 2022 07:40:05 -0800 (PST)
-Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
-        by smtp.gmail.com with ESMTPSA id ay38sm18225926wmb.3.2022.02.15.07.40.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 07:40:05 -0800 (PST)
-Date:   Tue, 15 Feb 2022 15:40:03 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.4 00/71] 5.4.180-rc1 review
-Message-ID: <YgvJU9rXZnUku/44@debian>
-References: <20220214092452.020713240@linuxfoundation.org>
+        Tue, 15 Feb 2022 10:45:32 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAE8123BD2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:41:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644939662; x=1676475662;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QV2lpkZ1uoeX6MQ6u1abca3syu0nEO8PCNGkVo6xNn8=;
+  b=IVxYpOEkOnnQv3WyV+EjQIZFCnmjOR9St01j6y03v3nAk9Je/lbTrQ5g
+   bkPLMGt7XyKErTk4U+/DoVgfV8qpbZTB/Kc+Lm6Lx9BVbKOVghY3fpkbR
+   7kg/78MbDJVLcevJNimKy+UVNcCIylbemckhh1gldsQX61rsy8xpdMJIe
+   fMnS113aMZJlP+gJWwnNyuU6kcFH3lZP23P8dh/0HQmZxTpL0QAFPmMQf
+   cF0/3R9W4Pt30R2y4zjhacFQBuW3JEgSO5WyBn/fnMoxp4GHJnerYhCch
+   HYF3Nlj3GiQQnNZbFWzZz8zAbXHRc+/K/Z5LcYRfKq7wiT96zan77AnoG
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="250320820"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="250320820"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 07:40:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="539378825"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
+  by fmsmga007.fm.intel.com with ESMTP; 15 Feb 2022 07:40:46 -0800
+Message-ID: <f2c2389e-db62-c307-b5d7-6a8d9df70b7e@intel.com>
+Date:   Tue, 15 Feb 2022 17:40:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH V2 0/2] perf/x86/intel/pt: Add support for event tracing
+ and TNT disabling
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        H Peter Anvin <hpa@zytor.com>
+References: <20220126104815.2807416-1-adrian.hunter@intel.com>
+ <YgvIJop34KuyUIx6@hirez.programming.kicks-ass.net>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <YgvIJop34KuyUIx6@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,33 +72,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Mon, Feb 14, 2022 at 10:25:28AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.180 release.
-> There are 71 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 15/02/2022 17:35, Peter Zijlstra wrote:
+> On Wed, Jan 26, 2022 at 12:48:13PM +0200, Adrian Hunter wrote:
+>> Hi
+>>
+>> As of Intel SDM (https://www.intel.com/sdm) version 076, there are 2 new
+>> Intel PT features called Event Trace and TNT-Disable.
+>>
+>> Event Trace exposes details about asynchronous events such as interrupts
+>> and VM-Entry/Exit.
+>>
+>> TNT-Disable disables TNT packets to reduce the tracing overhead, but with
+>> the result that exact control flow information is lost.
 > 
-> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
-> Anything received after that time might be too late.
+> What's a TNT?
 
-Build test:
-mips (gcc version 11.2.1 20220213): 65 configs -> no new failure
-arm (gcc version 11.2.1 20220213): 107 configs -> no new failure
-arm64 (gcc version 11.2.1 20220213): 2 configs -> no failure
-x86_64 (gcc version 11.2.1 20220213): 4 configs -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/760
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
-
+The TNT packet indicates whether conditional branches were taken
+or not taken.

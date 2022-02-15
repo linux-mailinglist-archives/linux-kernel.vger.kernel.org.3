@@ -2,75 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D77FC4B6CF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA284B6D01
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:07:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238065AbiBONFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 08:05:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41480 "EHLO
+        id S238095AbiBONHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 08:07:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238067AbiBONFq (ORCPT
+        with ESMTP id S234583AbiBONHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 08:05:46 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE67AA0BC9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 05:05:34 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id i62so23714470ioa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 05:05:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PaZVevCVWnJLVjvrHlW/dnI5NADyeCbLBAp7MlyZJEs=;
-        b=TDZSGSZDOR6tESGKMffWCPAQg0pmlp4Qd/GfZoTuMP4o9VEdBnDeiiE6GGqWBPQsgN
-         qd+VnUyyPezL+pBRqSdBPDVYO2zc+Rl12fctv8JMQmtfQHTIFV1VisAraOidRtzcv7az
-         h+RdY2hixZ3rguGFXADmEsNVOk97TpExpsPCM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PaZVevCVWnJLVjvrHlW/dnI5NADyeCbLBAp7MlyZJEs=;
-        b=ryJc2hh9aBhvDYSrXysOrwYIKuoWhi3cuhkvefq0HPGA9WwQQFbIEiVTaC9l9xLYbW
-         /a95w1/SyA+sMZl+qiTGFvYABNteLSpaq++KIeiVgYjIAjpfknJsYcTlgoyOePwBr9X3
-         4gb9UoyPas8EwuZuWGbU3oRsWX8eK5cmFZyaF3hfyTepjgvu/JnaDsp/gYcdT/SqFlcN
-         fkJpH3lgHDyQRfdBsa/rnVvccqg4V19n5dQnW65WyeeXdjGMIe5eyiXAYobQ2TzyOi+y
-         8gEjoZOoZrVIBM/NXYDCWjlM2mUMAx2i5dMv5Bh7Pf46m0JYtOg1T4q4iQPz92sxLbOT
-         mcVQ==
-X-Gm-Message-State: AOAM532mWCHhBkq8drv4DjQyEz3mXExxSHm1IEJVUxk+CYtJV59LxBYY
-        TtyUCKjG+N4nbVeQ8yWInQ64BFlLYqHaGsLAq/OzNg==
-X-Google-Smtp-Source: ABdhPJxtJIM9RHnfQcz4LMCrnzRwoEV55yIyUKbwloRDyJHYmE4ariqr/kbm/w8QO90RNrUQBhZreEm0Z7T5jqeF5Iw=
-X-Received: by 2002:a05:6638:3785:: with SMTP id w5mr2736567jal.210.1644930334003;
- Tue, 15 Feb 2022 05:05:34 -0800 (PST)
+        Tue, 15 Feb 2022 08:07:02 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E9A2A26C;
+        Tue, 15 Feb 2022 05:06:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644930412; x=1676466412;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2FCB7XCUy/Va+LwVfTWnmqFaNBc9mwY+9pf6LoBiIRY=;
+  b=grF5vEg1jjrx2H9KSuH6elpIMrqbhoQukfHvzthMFbvSDLyaz9QjPtSC
+   3prpC1pbdBG2qAgDwxHDNnPapWCuJx/AMyQc+h4QgEtpvhQlaJIb575ms
+   uM6/t4O8+I3dpCkDxCPIAlypVk+d0DimDheRQdyEl3Eb8O91uvp82kZN5
+   Zpfw2RWvNfmqrb6TpMG2D2sDu+nrqs8nBVpmgaFFz7ACyNasNrf5CJAe2
+   jivVmBIjgvWdzcvflitA2iQ1QoaJpLe5ftwdi/jNe6Cb0WaqRj4ser7Gk
+   eplA1aqk0jvaFNB3yb9H4mzP2/z2pR2XIb0nnzOFLgqH5jv8PFhKagAOR
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="313621068"
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="313621068"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 05:06:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="635865651"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 15 Feb 2022 05:06:50 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJxXd-0009fn-BA; Tue, 15 Feb 2022 13:06:49 +0000
+Date:   Tue, 15 Feb 2022 21:05:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guixin Liu <kanie@linux.alibaba.com>, bostroesser@gmail.com,
+        martin.petersen@oracle.com
+Cc:     kbuild-all@lists.01.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xiaoguang.wang@linux.alibaba.com, xlpang@linux.alibaba.com
+Subject: Re: [PATCH V3] scsi: target: tcmu: Make cmd_ring_size changeable via
+ configfs.
+Message-ID: <202202152052.AEF7jHIH-lkp@intel.com>
+References: <1644912216-97633-1-git-send-email-kanie@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20220208084234.1684930-1-hsinyi@chromium.org> <CACvgo53u01BK_D0ZssV+gCepjxSz23Nr5Dy1qXeaAoJuu6VCFQ@mail.gmail.com>
-In-Reply-To: <CACvgo53u01BK_D0ZssV+gCepjxSz23Nr5Dy1qXeaAoJuu6VCFQ@mail.gmail.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Tue, 15 Feb 2022 21:05:08 +0800
-Message-ID: <CAJMQK-gvhsk3U7QK9B-28kJ4fKbO8UB01i-_rMMe_GT2pM74gg@mail.gmail.com>
-Subject: Re: [Intel-gfx] [PATCH v8 1/3] gpu: drm: separate panel orientation
- property creating and value setting
-To:     Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     ML dri-devel <dri-devel@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Simon Ser <contact@emersion.fr>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        LAKML <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1644912216-97633-1-git-send-email-kanie@linux.alibaba.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,72 +67,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 8:04 PM Emil Velikov <emil.l.velikov@gmail.com> wrote:
->
-> Greetings everyone,
->
-> Padron for joining in so late o/
->
-> On Tue, 8 Feb 2022 at 08:42, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
-> >
-> > drm_dev_register() sets connector->registration_state to
-> > DRM_CONNECTOR_REGISTERED and dev->registered to true. If
-> > drm_connector_set_panel_orientation() is first called after
-> > drm_dev_register(), it will fail several checks and results in following
-> > warning.
-> >
-> > Add a function to create panel orientation property and set default value
-> > to UNKNOWN, so drivers can call this function to init the property earlier
-> > , and let the panel set the real value later.
-> >
->
-> The warning illustrates a genuine race condition, where userspace will
-> read the old/invalid property value/state. So this patch masks away
-> the WARNING without addressing the actual issue.
-> Instead can we fix the respective drivers, so that no properties are
-> created after drm_dev_register()?
->
-1. How about the proposal in previous version:
-v7 https://patchwork.kernel.org/project/linux-mediatek/patch/20220208073714.1540390-1-hsinyi@chromium.org/
-we separate property creation
-(drm_connector_init_panel_orientation_property) and value setting
-(drm_connector_set_panel_orientation). This is also similar to some of
-other optional properties are created, eg. vrr_capable.
+Hi Guixin,
 
-And drm drivers have to make sure that if they want to use this
-property, they have to create it before drm_dev_register(). For
-example, in the 2nd patch, mtk_drm sets the property before calling
-drm_dev_register().
+Thank you for the patch! Perhaps something to improve:
 
-2. I'm not sure how to handle the case that if user space tries to
-read the property before the proper value is set. Currently drm
-creates this property and the panels[1] will set the correct value
-parsed from DT. If userspace calls before the panel sets the correct
-value, it will get unknown (similar to the illustration you mentioned
-below). Do you think that the drm should be responsible for parsing
-the value if the panel provides it? In this way it's guaranteed that
-the value is set when the property is created.
+[auto build test WARNING on mkp-scsi/for-next]
+[also build test WARNING on v5.17-rc4 next-20220215]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-[1] https://elixir.bootlin.com/linux/latest/A/ident/drm_connector_set_panel_orientation
+url:    https://github.com/0day-ci/linux/commits/Guixin-Liu/scsi-target-tcmu-Make-cmd_ring_size-changeable-via-configfs/20220215-160505
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220215/202202152052.AEF7jHIH-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/7f77700542b8196c546ef10656dda7a107d8d1ad
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Guixin-Liu/scsi-target-tcmu-Make-cmd_ring_size-changeable-via-configfs/20220215-160505
+        git checkout 7f77700542b8196c546ef10656dda7a107d8d1ad
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/target/
 
-> Longer version:
-> As we look into drm_dev_register() it's in charge of creating the
-> dev/sysfs nodes (et al). Note that connectors cannot disappear at
-> runtime.
-> For panel orientation, we are creating an immutable connector
-> properly, meaning that as soon as drm_dev_register() is called we must
-> ensure that the property is available (if applicable) and set to the
-> correct value.
->
-> For illustration, consider the following scenario:
->  - DRM modules are loaded late - are not built-in and not part of
-> initrd (or there's no initrd)
->  - kernel boots
->  - plymouth/similar user-space component kicks in before the
-> driver/module is loaded
->  - module gets loaded, drm_dev_register() kicks in populating /dev/dri/card0
->  - plymouth opens the dev node and reads DRM_MODE_PANEL_ORIENTATION_UNKNOWN
->  - module updates the orientation property
->
-> Thanks
-> Emil
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/target/target_core_user.c: In function 'tcmu_show_configfs_dev_params':
+>> drivers/target/target_core_user.c:2627:41: warning: format '%u' expects argument of type 'unsigned int', but argument 3 has type 'long unsigned int' [-Wformat=]
+    2627 |  bl += sprintf(b + bl, "CmdRingSizeMB: %u\n",
+         |                                        ~^
+         |                                         |
+         |                                         unsigned int
+         |                                        %lu
+    2628 |         (udev->cmdr_size + CMDR_OFF) >> 20);
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                      |
+         |                                      long unsigned int
+   drivers/target/target_core_user.c: In function 'tcmu_cmd_ring_size_mb_show':
+   drivers/target/target_core_user.c:2743:37: warning: format '%u' expects argument of type 'unsigned int', but argument 4 has type 'long unsigned int' [-Wformat=]
+    2743 |  return snprintf(page, PAGE_SIZE, "%u\n",
+         |                                    ~^
+         |                                     |
+         |                                     unsigned int
+         |                                    %lu
+    2744 |    (udev->cmdr_size + CMDR_OFF) >> 20);
+         |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                 |
+         |                                 long unsigned int
+
+
+vim +2627 drivers/target/target_core_user.c
+
+  2616	
+  2617	static ssize_t tcmu_show_configfs_dev_params(struct se_device *dev, char *b)
+  2618	{
+  2619		struct tcmu_dev *udev = TCMU_DEV(dev);
+  2620		ssize_t bl = 0;
+  2621	
+  2622		bl = sprintf(b + bl, "Config: %s ",
+  2623			     udev->dev_config[0] ? udev->dev_config : "NULL");
+  2624		bl += sprintf(b + bl, "Size: %llu ", udev->dev_size);
+  2625		bl += sprintf(b + bl, "MaxDataAreaMB: %u ", udev->data_area_mb);
+  2626		bl += sprintf(b + bl, "DataPagesPerBlk: %u", udev->data_pages_per_blk);
+> 2627		bl += sprintf(b + bl, "CmdRingSizeMB: %u\n",
+  2628			      (udev->cmdr_size + CMDR_OFF) >> 20);
+  2629	
+  2630		return bl;
+  2631	}
+  2632	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

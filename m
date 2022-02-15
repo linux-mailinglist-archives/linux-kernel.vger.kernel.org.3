@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BC94B6532
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:05:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 634024B6542
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235130AbiBOIFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 03:05:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38232 "EHLO
+        id S235137AbiBOIKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 03:10:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235125AbiBOIFG (ORCPT
+        with ESMTP id S231454AbiBOIKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 03:05:06 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C907126563
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 00:04:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644912296; x=1676448296;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hlQlnq2dnqtnhMrkt80trZW3AYKZBV32YQ9EvBHZ6a8=;
-  b=b6j3WsR82ZIyP5tb+tJubKhXm1HRSbe8jOV0lNW0wERjBLkKi5PGzEU4
-   vBSJTzjNJvFsrYqlmUiuUPeizYoPuYt9qC/Bmerodj952OPxCOePP0X+5
-   0oKvNVIk4yLavDvhe74z62Ae8lLo6N1ObYomCaBSwTbqarHIlNNozSUsF
-   dinmgh5rC/PB6L5FnCUnqHf0ZjYEWu042Ii4s5iKpzqc0kLWe6fjUl6VI
-   ST6WTY63JbcCjdUk4Eme/bQfl1PjGSiGI5uzD95vTdSRqckVPkvegOetq
-   kh4quXu94cIr+jpROMsbMDYgnm+ht473JO7PMWh850IWFSFG1ZwY3nNri
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="336703253"
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="336703253"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 00:04:55 -0800
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="703498915"
-Received: from twinkler-lnx.jer.intel.com ([10.12.91.43])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 00:04:53 -0800
-From:   Tomas Winkler <tomas.winkler@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Tomas Winkler <tomas.winkler@intel.com>
-Subject: [char-misc-next 4/4] mei: do not overwrite state on hw start
-Date:   Tue, 15 Feb 2022 10:04:38 +0200
-Message-Id: <20220215080438.264876-4-tomas.winkler@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220215080438.264876-1-tomas.winkler@intel.com>
-References: <20220215080438.264876-1-tomas.winkler@intel.com>
+        Tue, 15 Feb 2022 03:10:06 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3BD2DAA6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 00:09:57 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nJsu4-0002EE-5h; Tue, 15 Feb 2022 09:09:40 +0100
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nJsu2-009Ukl-3n; Tue, 15 Feb 2022 09:09:38 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Scott Branden <sbranden@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tony Lindgren <tony@atomide.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH v3 1/8] dt-bindings: net: add schema for ASIX USB Ethernet controllers
+Date:   Tue, 15 Feb 2022 09:09:30 +0100
+Message-Id: <20220215080937.2263111-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,39 +61,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Usyskin <alexander.usyskin@intel.com>
+Create schema for ASIX USB Ethernet controllers and import some of
+currently supported USB IDs form drivers/net/usb/asix_devices.c
 
-During the hardware start sequence, do not overwrite the driver state
-and do not proceed with the initialization sequence if the state
-was changed while the driver was waiting for the start interrupt.
+This devices are already used in some of DTs. So, this schema makes it official.
+NOTE: there was no previously documented txt based DT binding for this
+controllers.
 
-This can happen if the driver's removal/stop procedure was triggered
-from the parent level while the driver is waiting for the start
-interrupt. This may lead to stray the reset work or the timer
-after driver were removed.
-
-Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
-Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- drivers/misc/mei/init.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../devicetree/bindings/net/asix,ax88178.yaml | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/asix,ax88178.yaml
 
-diff --git a/drivers/misc/mei/init.c b/drivers/misc/mei/init.c
-index f79076c67256..eb052005ca86 100644
---- a/drivers/misc/mei/init.c
-+++ b/drivers/misc/mei/init.c
-@@ -161,6 +161,11 @@ int mei_reset(struct mei_device *dev)
- 		return ret;
- 	}
- 
-+	if (dev->dev_state != MEI_DEV_RESETTING) {
-+		dev_dbg(dev->dev, "wrong state = %d on link start\n", dev->dev_state);
-+		return 0;
-+	}
+diff --git a/Documentation/devicetree/bindings/net/asix,ax88178.yaml b/Documentation/devicetree/bindings/net/asix,ax88178.yaml
+new file mode 100644
+index 000000000000..1af52358de4c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/asix,ax88178.yaml
+@@ -0,0 +1,68 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/asix,ax88178.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- 	dev_dbg(dev->dev, "link is established start sending messages.\n");
- 
- 	mei_set_devstate(dev, MEI_DEV_INIT_CLIENTS);
++title: The device tree bindings for the USB Ethernet controllers
++
++maintainers:
++  - Oleksij Rempel <o.rempel@pengutronix.de>
++
++description: |
++  Device tree properties for hard wired USB Ethernet devices.
++
++allOf:
++  - $ref: ethernet-controller.yaml#
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - usbb95,1720   # ASIX AX88172
++          - usbb95,172a   # ASIX AX88172A
++          - usbb95,1780   # ASIX AX88178
++          - usbb95,7720   # ASIX AX88772
++          - usbb95,772a   # ASIX AX88772A
++          - usbb95,772b   # ASIX AX88772B
++          - usbb95,7e2b   # ASIX AX88772B
++
++  reg: true
++  local-mac-address: true
++  mac-address: true
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    usb {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        ethernet@1 {
++            compatible = "usbb95,7e2b";
++            reg = <1>;
++            local-mac-address = [00 00 00 00 00 00];
++        };
++    };
++  - |
++    usb {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        usb1@1 {
++            compatible = "usb1234,5678";
++            reg = <1>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            ethernet@1 {
++               compatible = "usbb95,772b";
++               reg = <1>;
++            };
++        };
++    };
 -- 
-2.34.1
+2.30.2
 

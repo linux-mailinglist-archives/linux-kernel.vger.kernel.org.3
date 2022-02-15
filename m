@@ -2,208 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5EDE4B6342
+	by mail.lfdr.de (Postfix) with ESMTP id D71444B6343
 	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234304AbiBOGH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 01:07:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60602 "EHLO
+        id S232010AbiBOGHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 01:07:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232543AbiBOGHW (ORCPT
+        with ESMTP id S229773AbiBOGHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 01:07:22 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAF1B0E89
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 22:06:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644905232; x=1676441232;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sQpg1bcGLPLlgQzv+jURlftgSaNCZRBDEppXNWGp38U=;
-  b=AA/534AqJQai2jACXeUTCHj2+8Rj9Jn2IIy8pUpdP2QlZkWqSUJFYYlV
-   +aUHxsijBI2Lc+Im18FU5g8o4Cie8mbNEbo/IjvPnI6UzIBBNZtXJXzKl
-   DSWjvEZIBBhT2jqfHTAYNH9E9WT0vqFtZKcb7jXxayU1kOWrhD9RKbWd0
-   3VMIyXdm4uNDe0MjblF/H7UFoC+jdqUyiyxGhHD/SWfBtW9O/Evn4T1rS
-   22MvtWTErEn8kj0jwhM3s9GSIhU0qvLAhqNiIMtRcfu8iMODe1OcTiwqr
-   skXm//zIezGLbgrAyyQqCO4qcxAs54ht4wLN+0DH77v2PKnI7AhtBu6iQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="310993438"
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="310993438"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 22:06:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="485983741"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 14 Feb 2022 22:06:37 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nJqyy-0009KH-Gw; Tue, 15 Feb 2022 06:06:36 +0000
-Date:   Tue, 15 Feb 2022 14:05:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chuck Lever <chuck.lever@oracle.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [cel:nfsd-courteous-server 32/34] fs/nfsd/nfs4state.c:5893:2: error:
- implicit declaration of function 'nfsd4_get_client_reaplist'
-Message-ID: <202202151415.pbD8co6c-lkp@intel.com>
+        Tue, 15 Feb 2022 01:07:20 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD50D43AF3;
+        Mon, 14 Feb 2022 22:07:02 -0800 (PST)
+X-UUID: a2cb53b2c3f644f8bba8ce770ec60631-20220215
+X-UUID: a2cb53b2c3f644f8bba8ce770ec60631-20220215
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <chun-jie.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 609010241; Tue, 15 Feb 2022 14:06:56 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 15 Feb 2022 14:06:54 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 15 Feb 2022 14:06:54 +0800
+Message-ID: <5c2b97a1260b9349b151448d09e6308c2a3b252b.camel@mediatek.com>
+Subject: Re: [PATCH v3 01/31] clk: mediatek: Use %pe to print errors
+From:   Chun-Jie Chen <chun-jie.chen@mediatek.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Date:   Tue, 15 Feb 2022 14:06:48 +0800
+In-Reply-To: <20220208124034.414635-2-wenst@chromium.org>
+References: <20220208124034.414635-1-wenst@chromium.org>
+         <20220208124034.414635-2-wenst@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux nfsd-courteous-server
-head:   4b14f83e0bc79cb49f28fdc63a370c19637e2bfc
-commit: 2fb4c8cd9a292bbee4428e9c6d33be28ca5775c6 [32/34] NFSD: Refactor nfsd4_laundromat()
-config: hexagon-randconfig-r036-20220214 (https://download.01.org/0day-ci/archive/20220215/202202151415.pbD8co6c-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=2fb4c8cd9a292bbee4428e9c6d33be28ca5775c6
-        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-        git fetch --no-tags cel nfsd-courteous-server
-        git checkout 2fb4c8cd9a292bbee4428e9c6d33be28ca5775c6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/nfsd/
+On Tue, 2022-02-08 at 20:40 +0800, Chen-Yu Tsai wrote:
+> If %pe is used to print errors, a string representation of the error
+> would be printed instead of a number as with %ld. Also, all the sites
+> printing errors are deriving the error code from a pointer. Using %pe
+> is more straightforward.
+> 
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
+> ---
+>  drivers/clk/mediatek/clk-apmixed.c |  2 +-
+>  drivers/clk/mediatek/clk-cpumux.c  |  6 ++----
+>  drivers/clk/mediatek/clk-mtk.c     | 18 ++++++------------
+>  drivers/clk/mediatek/clk-mux.c     |  6 ++----
+>  drivers/clk/mediatek/clk-pll.c     |  3 +--
+>  drivers/clk/mediatek/reset.c       |  3 +--
+>  6 files changed, 13 insertions(+), 25 deletions(-)
+> 
+> diff --git a/drivers/clk/mediatek/clk-apmixed.c
+> b/drivers/clk/mediatek/clk-apmixed.c
+> index caa9119413f1..a29339cc26c4 100644
+> --- a/drivers/clk/mediatek/clk-apmixed.c
+> +++ b/drivers/clk/mediatek/clk-apmixed.c
+> @@ -92,7 +92,7 @@ struct clk * __init
+> mtk_clk_register_ref2usb_tx(const char *name,
+>  	clk = clk_register(NULL, &tx->hw);
+>  
+>  	if (IS_ERR(clk)) {
+> -		pr_err("Failed to register clk %s: %ld\n", name,
+> PTR_ERR(clk));
+> +		pr_err("Failed to register clk %s: %pe\n", name, clk);
+>  		kfree(tx);
+>  	}
+>  
+> diff --git a/drivers/clk/mediatek/clk-cpumux.c
+> b/drivers/clk/mediatek/clk-cpumux.c
+> index e188018bc906..cab5095416b6 100644
+> --- a/drivers/clk/mediatek/clk-cpumux.c
+> +++ b/drivers/clk/mediatek/clk-cpumux.c
+> @@ -87,8 +87,7 @@ int mtk_clk_register_cpumuxes(struct device_node
+> *node,
+>  
+>  	regmap = device_node_to_regmap(node);
+>  	if (IS_ERR(regmap)) {
+> -		pr_err("Cannot find regmap for %pOF: %ld\n", node,
+> -		       PTR_ERR(regmap));
+> +		pr_err("Cannot find regmap for %pOF: %pe\n", node,
+> regmap);
+>  		return PTR_ERR(regmap);
+>  	}
+>  
+> @@ -97,8 +96,7 @@ int mtk_clk_register_cpumuxes(struct device_node
+> *node,
+>  
+>  		clk = mtk_clk_register_cpumux(mux, regmap);
+>  		if (IS_ERR(clk)) {
+> -			pr_err("Failed to register clk %s: %ld\n",
+> -			       mux->name, PTR_ERR(clk));
+> +			pr_err("Failed to register clk %s: %pe\n", mux-
+> >name, clk);
+>  			continue;
+>  		}
+>  
+> diff --git a/drivers/clk/mediatek/clk-mtk.c
+> b/drivers/clk/mediatek/clk-mtk.c
+> index 8d5791b3f460..519a461cbb6f 100644
+> --- a/drivers/clk/mediatek/clk-mtk.c
+> +++ b/drivers/clk/mediatek/clk-mtk.c
+> @@ -70,8 +70,7 @@ void mtk_clk_register_fixed_clks(const struct
+> mtk_fixed_clk *clks,
+>  					      rc->rate);
+>  
+>  		if (IS_ERR(clk)) {
+> -			pr_err("Failed to register clk %s: %ld\n",
+> -					rc->name, PTR_ERR(clk));
+> +			pr_err("Failed to register clk %s: %pe\n", rc-
+> >name, clk);
+>  			continue;
+>  		}
+>  
+> @@ -97,8 +96,7 @@ void mtk_clk_register_factors(const struct
+> mtk_fixed_factor *clks,
+>  				CLK_SET_RATE_PARENT, ff->mult, ff-
+> >div);
+>  
+>  		if (IS_ERR(clk)) {
+> -			pr_err("Failed to register clk %s: %ld\n",
+> -					ff->name, PTR_ERR(clk));
+> +			pr_err("Failed to register clk %s: %pe\n", ff-
+> >name, clk);
+>  			continue;
+>  		}
+>  
+> @@ -122,8 +120,7 @@ int mtk_clk_register_gates_with_dev(struct
+> device_node *node,
+>  
+>  	regmap = device_node_to_regmap(node);
+>  	if (IS_ERR(regmap)) {
+> -		pr_err("Cannot find regmap for %pOF: %ld\n", node,
+> -				PTR_ERR(regmap));
+> +		pr_err("Cannot find regmap for %pOF: %pe\n", node,
+> regmap);
+>  		return PTR_ERR(regmap);
+>  	}
+>  
+> @@ -141,8 +138,7 @@ int mtk_clk_register_gates_with_dev(struct
+> device_node *node,
+>  				gate->shift, gate->ops, gate->flags,
+> dev);
+>  
+>  		if (IS_ERR(clk)) {
+> -			pr_err("Failed to register clk %s: %ld\n",
+> -					gate->name, PTR_ERR(clk));
+> +			pr_err("Failed to register clk %s: %pe\n",
+> gate->name, clk);
+>  			continue;
+>  		}
+>  
+> @@ -264,8 +260,7 @@ void mtk_clk_register_composites(const struct
+> mtk_composite *mcs,
+>  		clk = mtk_clk_register_composite(mc, base, lock);
+>  
+>  		if (IS_ERR(clk)) {
+> -			pr_err("Failed to register clk %s: %ld\n",
+> -					mc->name, PTR_ERR(clk));
+> +			pr_err("Failed to register clk %s: %pe\n", mc-
+> >name, clk);
+>  			continue;
+>  		}
+>  
+> @@ -293,8 +288,7 @@ void mtk_clk_register_dividers(const struct
+> mtk_clk_divider *mcds,
+>  			mcd->div_width, mcd->clk_divider_flags, lock);
+>  
+>  		if (IS_ERR(clk)) {
+> -			pr_err("Failed to register clk %s: %ld\n",
+> -				mcd->name, PTR_ERR(clk));
+> +			pr_err("Failed to register clk %s: %pe\n", mcd-
+> >name, clk);
+>  			continue;
+>  		}
+>  
+> diff --git a/drivers/clk/mediatek/clk-mux.c
+> b/drivers/clk/mediatek/clk-mux.c
+> index 6d3a50eb7d6f..89f23e111d91 100644
+> --- a/drivers/clk/mediatek/clk-mux.c
+> +++ b/drivers/clk/mediatek/clk-mux.c
+> @@ -175,8 +175,7 @@ int mtk_clk_register_muxes(const struct mtk_mux
+> *muxes,
+>  
+>  	regmap = device_node_to_regmap(node);
+>  	if (IS_ERR(regmap)) {
+> -		pr_err("Cannot find regmap for %pOF: %ld\n", node,
+> -		       PTR_ERR(regmap));
+> +		pr_err("Cannot find regmap for %pOF: %pe\n", node,
+> regmap);
+>  		return PTR_ERR(regmap);
+>  	}
+>  
+> @@ -187,8 +186,7 @@ int mtk_clk_register_muxes(const struct mtk_mux
+> *muxes,
+>  			clk = mtk_clk_register_mux(mux, regmap, lock);
+>  
+>  			if (IS_ERR(clk)) {
+> -				pr_err("Failed to register clk %s:
+> %ld\n",
+> -				       mux->name, PTR_ERR(clk));
+> +				pr_err("Failed to register clk %s:
+> %pe\n", mux->name, clk);
+>  				continue;
+>  			}
+>  
+> diff --git a/drivers/clk/mediatek/clk-pll.c
+> b/drivers/clk/mediatek/clk-pll.c
+> index 60d7ffa0b924..f04f724e12e5 100644
+> --- a/drivers/clk/mediatek/clk-pll.c
+> +++ b/drivers/clk/mediatek/clk-pll.c
+> @@ -378,8 +378,7 @@ void mtk_clk_register_plls(struct device_node
+> *node,
+>  		clk = mtk_clk_register_pll(pll, base);
+>  
+>  		if (IS_ERR(clk)) {
+> -			pr_err("Failed to register clk %s: %ld\n",
+> -					pll->name, PTR_ERR(clk));
+> +			pr_err("Failed to register clk %s: %pe\n", pll-
+> >name, clk);
+>  			continue;
+>  		}
+>  
+> diff --git a/drivers/clk/mediatek/reset.c
+> b/drivers/clk/mediatek/reset.c
+> index ffe464ce7ff8..bcec4b89f449 100644
+> --- a/drivers/clk/mediatek/reset.c
+> +++ b/drivers/clk/mediatek/reset.c
+> @@ -100,8 +100,7 @@ static void
+> mtk_register_reset_controller_common(struct device_node *np,
+>  
+>  	regmap = device_node_to_regmap(np);
+>  	if (IS_ERR(regmap)) {
+> -		pr_err("Cannot find regmap for %pOF: %ld\n", np,
+> -				PTR_ERR(regmap));
+> +		pr_err("Cannot find regmap for %pOF: %pe\n", np,
+> regmap);
+>  		return;
+>  	}
+>  
 
-All errors (new ones prefixed by >>):
-
->> fs/nfsd/nfs4state.c:5893:2: error: implicit declaration of function 'nfsd4_get_client_reaplist' [-Werror,-Wimplicit-function-declaration]
-           nfsd4_get_client_reaplist(nn, &reaplist, &lt);
-           ^
-   fs/nfsd/nfs4state.c:5893:2: note: did you mean 'nfs4_get_client_reaplist'?
-   fs/nfsd/nfs4state.c:5841:1: note: 'nfs4_get_client_reaplist' declared here
-   nfs4_get_client_reaplist(struct nfsd_net *nn, struct list_head *reaplist,
-   ^
-   1 error generated.
-
-
-vim +/nfsd4_get_client_reaplist +5893 fs/nfsd/nfs4state.c
-
-  5860	
-  5861	static time64_t
-  5862	nfs4_laundromat(struct nfsd_net *nn)
-  5863	{
-  5864		struct nfs4_client *clp;
-  5865		struct nfs4_openowner *oo;
-  5866		struct nfs4_delegation *dp;
-  5867		struct nfs4_ol_stateid *stp;
-  5868		struct nfsd4_blocked_lock *nbl;
-  5869		struct list_head *pos, *next, reaplist;
-  5870		struct laundry_time lt = {
-  5871			.cutoff = ktime_get_boottime_seconds() - nn->nfsd4_lease,
-  5872			.new_timeo = nn->nfsd4_lease
-  5873		};
-  5874		struct nfs4_cpntf_state *cps;
-  5875		copy_stateid_t *cps_t;
-  5876		int i;
-  5877	
-  5878		if (clients_still_reclaiming(nn)) {
-  5879			lt.new_timeo = 0;
-  5880			goto out;
-  5881		}
-  5882		nfsd4_end_grace(nn);
-  5883	
-  5884		spin_lock(&nn->s2s_cp_lock);
-  5885		idr_for_each_entry(&nn->s2s_cp_stateids, cps_t, i) {
-  5886			cps = container_of(cps_t, struct nfs4_cpntf_state, cp_stateid);
-  5887			if (cps->cp_stateid.sc_type == NFS4_COPYNOTIFY_STID &&
-  5888					state_expired(&lt, cps->cpntf_time))
-  5889				_free_cpntf_state_locked(nn, cps);
-  5890		}
-  5891		spin_unlock(&nn->s2s_cp_lock);
-  5892	
-> 5893		nfsd4_get_client_reaplist(nn, &reaplist, &lt);
-  5894		list_for_each_safe(pos, next, &reaplist) {
-  5895			clp = list_entry(pos, struct nfs4_client, cl_lru);
-  5896			trace_nfsd_clid_purged(&clp->cl_clientid);
-  5897			list_del_init(&clp->cl_lru);
-  5898			expire_client(clp);
-  5899		}
-  5900		spin_lock(&state_lock);
-  5901		list_for_each_safe(pos, next, &nn->del_recall_lru) {
-  5902			dp = list_entry (pos, struct nfs4_delegation, dl_recall_lru);
-  5903			if (!state_expired(&lt, dp->dl_time))
-  5904				break;
-  5905			WARN_ON(!unhash_delegation_locked(dp));
-  5906			list_add(&dp->dl_recall_lru, &reaplist);
-  5907		}
-  5908		spin_unlock(&state_lock);
-  5909		while (!list_empty(&reaplist)) {
-  5910			dp = list_first_entry(&reaplist, struct nfs4_delegation,
-  5911						dl_recall_lru);
-  5912			list_del_init(&dp->dl_recall_lru);
-  5913			revoke_delegation(dp);
-  5914		}
-  5915	
-  5916		spin_lock(&nn->client_lock);
-  5917		while (!list_empty(&nn->close_lru)) {
-  5918			oo = list_first_entry(&nn->close_lru, struct nfs4_openowner,
-  5919						oo_close_lru);
-  5920			if (!state_expired(&lt, oo->oo_time))
-  5921				break;
-  5922			list_del_init(&oo->oo_close_lru);
-  5923			stp = oo->oo_last_closed_stid;
-  5924			oo->oo_last_closed_stid = NULL;
-  5925			spin_unlock(&nn->client_lock);
-  5926			nfs4_put_stid(&stp->st_stid);
-  5927			spin_lock(&nn->client_lock);
-  5928		}
-  5929		spin_unlock(&nn->client_lock);
-  5930	
-  5931		/*
-  5932		 * It's possible for a client to try and acquire an already held lock
-  5933		 * that is being held for a long time, and then lose interest in it.
-  5934		 * So, we clean out any un-revisited request after a lease period
-  5935		 * under the assumption that the client is no longer interested.
-  5936		 *
-  5937		 * RFC5661, sec. 9.6 states that the client must not rely on getting
-  5938		 * notifications and must continue to poll for locks, even when the
-  5939		 * server supports them. Thus this shouldn't lead to clients blocking
-  5940		 * indefinitely once the lock does become free.
-  5941		 */
-  5942		BUG_ON(!list_empty(&reaplist));
-  5943		spin_lock(&nn->blocked_locks_lock);
-  5944		while (!list_empty(&nn->blocked_locks_lru)) {
-  5945			nbl = list_first_entry(&nn->blocked_locks_lru,
-  5946						struct nfsd4_blocked_lock, nbl_lru);
-  5947			if (!state_expired(&lt, nbl->nbl_time))
-  5948				break;
-  5949			list_move(&nbl->nbl_lru, &reaplist);
-  5950			list_del_init(&nbl->nbl_list);
-  5951		}
-  5952		spin_unlock(&nn->blocked_locks_lock);
-  5953	
-  5954		while (!list_empty(&reaplist)) {
-  5955			nbl = list_first_entry(&reaplist,
-  5956						struct nfsd4_blocked_lock, nbl_lru);
-  5957			list_del_init(&nbl->nbl_lru);
-  5958			free_blocked_lock(nbl);
-  5959		}
-  5960	#ifdef CONFIG_NFSD_V4_2_INTER_SSC
-  5961		/* service the server-to-server copy delayed unmount list */
-  5962		nfsd4_ssc_expire_umount(nn);
-  5963	#endif
-  5964	out:
-  5965		return max_t(time64_t, lt.new_timeo, NFSD_LAUNDROMAT_MINTIMEOUT);
-  5966	}
-  5967	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

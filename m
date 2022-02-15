@@ -2,66 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 932B54B6D27
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:16:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B2444B6D35
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:17:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238158AbiBONRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 08:17:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46804 "EHLO
+        id S238179AbiBONR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 08:17:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbiBONRE (ORCPT
+        with ESMTP id S238160AbiBONRV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 08:17:04 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53240C7D4E;
-        Tue, 15 Feb 2022 05:16:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644931014; x=1676467014;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w/fCEkspTynMx/KBUNmalbFEyHPshGMZWUJ7Yi9YEdY=;
-  b=VX4GJyTTpn49ihfaU96YFA3qbY232+7ltnC49JbTlqVZbPeW8IAIFC3g
-   KygJFJKrtY+CrtC7bd4de63mCvsyeCK/4LThZHtxf6rZntEBI0lV/zvCZ
-   02zStrQr14gAneRRxkwylbtwEEyJP9T7pLWlrOPTbdT7ybUFh/M2pNg6E
-   2RYM3LzLiT5ATbAdB2ZKtazS6W35dlKZpA7buRWAmGRd5lnky8Vfu/ZVv
-   qyHtV9Yhz+ABSH9FKPSqO321gvBpMJiQ3qKWs4rqqy+avcs57id29Xhmy
-   ob/F5uD5sNKOMsNqXVGotuUPvoaDF1OSsScZ2snWUxJMEoM9ybvadp40z
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="230976804"
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="230976804"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 05:16:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="703670560"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 15 Feb 2022 05:16:50 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nJxhJ-0009gq-Kk; Tue, 15 Feb 2022 13:16:49 +0000
-Date:   Tue, 15 Feb 2022 21:16:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Deepak Kumar Singh <quic_deesin@quicinc.com>,
-        bjorn.andersson@linaro.org, quic_clew@quicinc.com,
-        mathieu.poirier@linaro.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Deepak Kumar Singh <quic_deesin@quicinc.com>,
-        Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH V4 2/2] soc: qcom: smem: validate fields of shared
- structures
-Message-ID: <202202152150.EZ8yJDzm-lkp@intel.com>
-References: <1644849974-8043-2-git-send-email-quic_deesin@quicinc.com>
+        Tue, 15 Feb 2022 08:17:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394D2D10A6;
+        Tue, 15 Feb 2022 05:17:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2493B819C2;
+        Tue, 15 Feb 2022 13:17:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75858C340FA;
+        Tue, 15 Feb 2022 13:17:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644931028;
+        bh=yV4ORJd5b6IZao4Zu1H2u9bAD/0nkvfeGMC8j+boEO0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Y1UbQDYKVd/W55uCfVo2WGlgo3dfDZUC0yTFtlZUY0DOBzt83pgV9/7gMxh05e3AH
+         lgukd8DqmxPwxja7mK4vtMYnDC6X4AvagIoktla5uPG7vSSfPBtEQFLrXn9FMcdgHH
+         E1qEJeHLjvJUuBL6dqkrwsbxdH4jW8atiF/scjZBMC9lLF7Ype1WGnPRnqUer24JD8
+         tu4gGKuwZtD0+Nibza1Ys9PPtyZzsqg7g90GGNebDRKc+NU4HRCxVmDtvM0+9S5mSP
+         qhfZT5HIgJ8aWSTxW8hfUnfgxShZHe3y/AzzhEX87Jyr/ToKwZr4yc1EXWSuI0q6BQ
+         u0/dxkrR5dDfA==
+Received: by mail-wm1-f52.google.com with SMTP id l67-20020a1c2546000000b00353951c3f62so1379952wml.5;
+        Tue, 15 Feb 2022 05:17:08 -0800 (PST)
+X-Gm-Message-State: AOAM531nWLz2K8rL/bc46tYq+Deksn/ZiXUMR8HxJ4KV/G/F9pyHwQOj
+        z0x5V3QvmmSWc4VSjahm5CFqvuHjNvNkD91335I=
+X-Google-Smtp-Source: ABdhPJzhbiTSvbv50mQWSJ7smaLZnr2q978YJ0F6+MeQ3SrwEp5s0NrkvRE5+WnWUVexqYiFblH5E9BGGqHgxsxWGyI=
+X-Received: by 2002:a05:600c:4ecb:: with SMTP id g11mr3088436wmq.98.1644931026534;
+ Tue, 15 Feb 2022 05:17:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1644849974-8043-2-git-send-email-quic_deesin@quicinc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220214163452.1568807-1-arnd@kernel.org> <20220214163452.1568807-6-arnd@kernel.org>
+ <Ygr0eAA+ZR1eX0wb@zeniv-ca.linux.org.uk>
+In-Reply-To: <Ygr0eAA+ZR1eX0wb@zeniv-ca.linux.org.uk>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 15 Feb 2022 14:16:50 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2+qG=Q9Si_2D7wjM7Qao2JCnYqKgU=W-SFwoG+fT-U3A@mail.gmail.com>
+Message-ID: <CAK8P3a2+qG=Q9Si_2D7wjM7Qao2JCnYqKgU=W-SFwoG+fT-U3A@mail.gmail.com>
+Subject: Re: [PATCH 05/14] uaccess: add generic __{get,put}_kernel_nofault
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Rich Felker <dalias@libc.org>,
+        David Miller <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,156 +110,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Deepak,
+On Tue, Feb 15, 2022 at 1:31 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> On Mon, Feb 14, 2022 at 05:34:43PM +0100, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > All architectures that don't provide __{get,put}_kernel_nofault() yet
+> > can implement this on top of __{get,put}_user.
+> >
+> > Add a generic version that lets everything use the normal
+> > copy_{from,to}_kernel_nofault() code based on these, removing the last
+> > use of get_fs()/set_fs() from architecture-independent code.
+>
+> I'd put the list of those architectures (AFAICS, that's alpha, ia64,
+> microblaze, nds32, nios2, openrisc, sh, sparc32, xtensa) into commit
+> message - it's not that hard to find out, but...
 
-Thank you for the patch! Perhaps something to improve:
+done.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.17-rc4 next-20220215]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> And AFAICS, you've missed nios2 - see
+> #define __put_user(x, ptr) put_user(x, ptr)
+> in there.  nds32 oddities are dealt with earlier in the series, this
+> one is not...
 
-url:    https://github.com/0day-ci/linux/commits/Deepak-Kumar-Singh/soc-qcom-smem-map-only-partitions-used-by-local-HOST/20220214-224750
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 754e0b0e35608ed5206d6a67a791563c631cec07
-config: openrisc-randconfig-s031-20220214 (https://download.01.org/0day-ci/archive/20220215/202202152150.EZ8yJDzm-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/cfc33be784b2bfdafba0ae278dfbf92bdd9111da
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Deepak-Kumar-Singh/soc-qcom-smem-map-only-partitions-used-by-local-HOST/20220214-224750
-        git checkout cfc33be784b2bfdafba0ae278dfbf92bdd9111da
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=openrisc SHELL=/bin/bash drivers/soc/qcom/
+Ok, fixed my bug in nios2 __put_user() as well now. This one is not nearly
+as bad as nds32, at least without my patches it should work as expected.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Unfortunately I also noticed that __get_user() on microblaze and nios2
+is completely broken for 64-bit arguments, where these copy eight bytes
+into a four byte buffer. I'll try to come up with a fix for this as well then.
 
-
-sparse warnings: (new ones prefixed by >>)
-   drivers/soc/qcom/smem.c:430:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_header *header @@     got void [noderef] __iomem *virt_base @@
-   drivers/soc/qcom/smem.c:430:16: sparse:     expected struct smem_header *header
-   drivers/soc/qcom/smem.c:430:16: sparse:     got void [noderef] __iomem *virt_base
-   drivers/soc/qcom/smem.c:517:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_header *header @@     got void [noderef] __iomem *virt_base @@
-   drivers/soc/qcom/smem.c:517:16: sparse:     expected struct smem_header *header
-   drivers/soc/qcom/smem.c:517:16: sparse:     got void [noderef] __iomem *virt_base
-   drivers/soc/qcom/smem.c:534:50: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void * @@     got void [noderef] __iomem * @@
-   drivers/soc/qcom/smem.c:534:50: sparse:     expected void *
-   drivers/soc/qcom/smem.c:534:50: sparse:     got void [noderef] __iomem *
->> drivers/soc/qcom/smem.c:695:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_partition_header *phdr @@     got void [noderef] __iomem *virt_base @@
-   drivers/soc/qcom/smem.c:695:22: sparse:     expected struct smem_partition_header *phdr
-   drivers/soc/qcom/smem.c:695:22: sparse:     got void [noderef] __iomem *virt_base
->> drivers/soc/qcom/smem.c:699:27: sparse: sparse: cast to restricted __le32
->> drivers/soc/qcom/smem.c:699:27: sparse: sparse: cast to restricted __le32
->> drivers/soc/qcom/smem.c:699:27: sparse: sparse: cast to restricted __le32
->> drivers/soc/qcom/smem.c:699:27: sparse: sparse: cast to restricted __le32
->> drivers/soc/qcom/smem.c:699:27: sparse: sparse: cast to restricted __le32
->> drivers/soc/qcom/smem.c:699:27: sparse: sparse: cast to restricted __le32
-   drivers/soc/qcom/smem.c:703:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_partition_header *phdr @@     got void [noderef] __iomem *virt_base @@
-   drivers/soc/qcom/smem.c:703:22: sparse:     expected struct smem_partition_header *phdr
-   drivers/soc/qcom/smem.c:703:22: sparse:     got void [noderef] __iomem *virt_base
-   drivers/soc/qcom/smem.c:707:27: sparse: sparse: cast to restricted __le32
-   drivers/soc/qcom/smem.c:707:27: sparse: sparse: cast to restricted __le32
-   drivers/soc/qcom/smem.c:707:27: sparse: sparse: cast to restricted __le32
-   drivers/soc/qcom/smem.c:707:27: sparse: sparse: cast to restricted __le32
-   drivers/soc/qcom/smem.c:707:27: sparse: sparse: cast to restricted __le32
-   drivers/soc/qcom/smem.c:707:27: sparse: sparse: cast to restricted __le32
-   drivers/soc/qcom/smem.c:710:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_header *header @@     got void [noderef] __iomem *virt_base @@
-   drivers/soc/qcom/smem.c:710:24: sparse:     expected struct smem_header *header
-   drivers/soc/qcom/smem.c:710:24: sparse:     got void [noderef] __iomem *virt_base
-   drivers/soc/qcom/smem.c:723:30: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/soc/qcom/smem.c:723:30: sparse:    void *
-   drivers/soc/qcom/smem.c:723:30: sparse:    void [noderef] __iomem *
-   drivers/soc/qcom/smem.c:744:36: sparse: sparse: subtraction of different types can't work (different address spaces)
-   drivers/soc/qcom/smem.c:753:28: sparse: sparse: subtraction of different types can't work (different address spaces)
-   drivers/soc/qcom/smem.c:762:36: sparse: sparse: subtraction of different types can't work (different address spaces)
-   drivers/soc/qcom/smem.c:777:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_header *header @@     got void [noderef] __iomem *virt_base @@
-   drivers/soc/qcom/smem.c:777:16: sparse:     expected struct smem_header *header
-   drivers/soc/qcom/smem.c:777:16: sparse:     got void [noderef] __iomem *virt_base
-   drivers/soc/qcom/smem.c:810:57: sparse: sparse: restricted __le32 degrades to integer
-   drivers/soc/qcom/smem.c:831:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_partition_header *header @@     got void [noderef] __iomem * @@
-   drivers/soc/qcom/smem.c:831:16: sparse:     expected struct smem_partition_header *header
-   drivers/soc/qcom/smem.c:831:16: sparse:     got void [noderef] __iomem *
-   drivers/soc/qcom/smem.c:982:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_ptable *ptable @@     got void [noderef] __iomem * @@
-   drivers/soc/qcom/smem.c:982:22: sparse:     expected struct smem_ptable *ptable
-   drivers/soc/qcom/smem.c:982:22: sparse:     got void [noderef] __iomem *
-   drivers/soc/qcom/smem.c:1091:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_header *header @@     got void [noderef] __iomem *virt_base @@
-   drivers/soc/qcom/smem.c:1091:16: sparse:     expected struct smem_header *header
-   drivers/soc/qcom/smem.c:1091:16: sparse:     got void [noderef] __iomem *virt_base
->> drivers/soc/qcom/smem.c:1112:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/soc/qcom/smem.c:1112:31: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/soc/qcom/smem.c:1112:31: sparse:     got restricted __le32 *
-   drivers/soc/qcom/smem.c:1112:67: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got restricted __le32 * @@
-   drivers/soc/qcom/smem.c:1112:67: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/soc/qcom/smem.c:1112:67: sparse:     got restricted __le32 *
-   drivers/soc/qcom/smem.c: note: in included file (through arch/openrisc/include/asm/io.h, include/linux/io.h):
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-
-vim +695 drivers/soc/qcom/smem.c
-
-4b638df4c9d556 Bjorn Andersson    2015-06-26  675  
-4b638df4c9d556 Bjorn Andersson    2015-06-26  676  /**
-4b638df4c9d556 Bjorn Andersson    2015-06-26  677   * qcom_smem_get_free_space() - retrieve amount of free space in a partition
-4b638df4c9d556 Bjorn Andersson    2015-06-26  678   * @host:	the remote processor identifying a partition, or -1
-4b638df4c9d556 Bjorn Andersson    2015-06-26  679   *
-4b638df4c9d556 Bjorn Andersson    2015-06-26  680   * To be used by smem clients as a quick way to determine if any new
-4b638df4c9d556 Bjorn Andersson    2015-06-26  681   * allocations has been made.
-4b638df4c9d556 Bjorn Andersson    2015-06-26  682   */
-4b638df4c9d556 Bjorn Andersson    2015-06-26  683  int qcom_smem_get_free_space(unsigned host)
-4b638df4c9d556 Bjorn Andersson    2015-06-26  684  {
-70716a4ee6c89c Deepak Kumar Singh 2022-02-14  685  	struct smem_partition *part;
-4b638df4c9d556 Bjorn Andersson    2015-06-26  686  	struct smem_partition_header *phdr;
-4b638df4c9d556 Bjorn Andersson    2015-06-26  687  	struct smem_header *header;
-4b638df4c9d556 Bjorn Andersson    2015-06-26  688  	unsigned ret;
-4b638df4c9d556 Bjorn Andersson    2015-06-26  689  
-4b638df4c9d556 Bjorn Andersson    2015-06-26  690  	if (!__smem)
-4b638df4c9d556 Bjorn Andersson    2015-06-26  691  		return -EPROBE_DEFER;
-4b638df4c9d556 Bjorn Andersson    2015-06-26  692  
-70716a4ee6c89c Deepak Kumar Singh 2022-02-14  693  	if (host < SMEM_HOST_COUNT && __smem->partitions[host].virt_base) {
-70716a4ee6c89c Deepak Kumar Singh 2022-02-14  694  		part = &__smem->partitions[host];
-70716a4ee6c89c Deepak Kumar Singh 2022-02-14 @695  		phdr = part->virt_base;
-9806884d8cd552 Stephen Boyd       2015-09-02  696  		ret = le32_to_cpu(phdr->offset_free_cached) -
-9806884d8cd552 Stephen Boyd       2015-09-02  697  		      le32_to_cpu(phdr->offset_free_uncached);
-cfc33be784b2bf Deepak Kumar Singh 2022-02-14  698  
-cfc33be784b2bf Deepak Kumar Singh 2022-02-14 @699  		if (ret > le32_to_cpu(part->size))
-cfc33be784b2bf Deepak Kumar Singh 2022-02-14  700  			return -EINVAL;
-70716a4ee6c89c Deepak Kumar Singh 2022-02-14  701  	} else if (__smem->global_partition.virt_base) {
-70716a4ee6c89c Deepak Kumar Singh 2022-02-14  702  		part = &__smem->global_partition;
-70716a4ee6c89c Deepak Kumar Singh 2022-02-14  703  		phdr = part->virt_base;
-d52e404874369f Chris Lew          2017-10-11  704  		ret = le32_to_cpu(phdr->offset_free_cached) -
-d52e404874369f Chris Lew          2017-10-11  705  		      le32_to_cpu(phdr->offset_free_uncached);
-cfc33be784b2bf Deepak Kumar Singh 2022-02-14  706  
-cfc33be784b2bf Deepak Kumar Singh 2022-02-14  707  		if (ret > le32_to_cpu(part->size))
-cfc33be784b2bf Deepak Kumar Singh 2022-02-14  708  			return -EINVAL;
-4b638df4c9d556 Bjorn Andersson    2015-06-26  709  	} else {
-4b638df4c9d556 Bjorn Andersson    2015-06-26  710  		header = __smem->regions[0].virt_base;
-9806884d8cd552 Stephen Boyd       2015-09-02  711  		ret = le32_to_cpu(header->available);
-cfc33be784b2bf Deepak Kumar Singh 2022-02-14  712  
-cfc33be784b2bf Deepak Kumar Singh 2022-02-14  713  		if (ret > __smem->regions[0].size)
-cfc33be784b2bf Deepak Kumar Singh 2022-02-14  714  			return -EINVAL;
-4b638df4c9d556 Bjorn Andersson    2015-06-26  715  	}
-4b638df4c9d556 Bjorn Andersson    2015-06-26  716  
-4b638df4c9d556 Bjorn Andersson    2015-06-26  717  	return ret;
-4b638df4c9d556 Bjorn Andersson    2015-06-26  718  }
-4b638df4c9d556 Bjorn Andersson    2015-06-26  719  EXPORT_SYMBOL(qcom_smem_get_free_space);
-4b638df4c9d556 Bjorn Andersson    2015-06-26  720  
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+         Arnd

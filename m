@@ -2,127 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25684B716D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:40:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32ABF4B73AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:44:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239289AbiBOOyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 09:54:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34020 "EHLO
+        id S239299AbiBOOyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 09:54:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239492AbiBOOxa (ORCPT
+        with ESMTP id S239356AbiBOOyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 09:53:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911F4102423;
-        Tue, 15 Feb 2022 06:52:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 15 Feb 2022 09:54:08 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EABAF1D6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 06:53:56 -0800 (PST)
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 72C1DB819FA;
-        Tue, 15 Feb 2022 14:52:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17ADDC340EB;
-        Tue, 15 Feb 2022 14:52:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644936763;
-        bh=oHvI812wnFSZHuTw2mFyGnMQwXFVGo3Bnh6xMpiP8xM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jdjq0iQ6XSjhEYl/rI1cMvQa82uF75FAMOBXuy7bNuCfqoEzx0NcmpyeJezq3L7ew
-         URSopB2PK2NyBTFqz0r9jyPK2VTDNfvtCppZSP+t/GCERdYQYdJeqcuUfxQTnisZGk
-         cml/ziTELZQLptSUs5TIbSmtef8xgYwEfUX5FM4xwuEroLXwZLYf6WX9pi+1ywDUuS
-         9fvEnwP8w+a9j8ocwNXhu3KI8iM3Pwv6bip2xkgj5FfrcDyGIyZDCMd5SlM+GYLRRq
-         iX5V4PuFkYkSFlEBva298QHJEU3lHX8AMH6Y1EMJnWftKenGvzPucWDqwumNzOQtgf
-         JgvPE//08keuw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id C3089400FE; Tue, 15 Feb 2022 11:52:40 -0300 (-03)
-Date:   Tue, 15 Feb 2022 11:52:40 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     James Clark <james.clark@arm.com>, mathieu.poirier@linaro.org,
-        coresight@lists.linaro.org, leo.yan@linaro.com,
-        mike.leach@linaro.org, Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v2 3/6] perf cs-etm: Update deduction of TRCCONFIGR
- register for branch broadcast
-Message-ID: <Ygu+OHnxYAyqLFwB@kernel.org>
-References: <20220113091056.1297982-1-james.clark@arm.com>
- <20220113091056.1297982-4-james.clark@arm.com>
- <25b85560-dd95-2569-d1bc-872902d6343f@arm.com>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 098EC3F1E8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 14:53:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644936829;
+        bh=nPMJHTnYZbzS8znk5AsEiCmewu+zF2DU271/1BBA6Eo=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=pgRbLzC7Vma+2T8v8tH4OvJds0ho/7egymd3saiOKXwwXSX61jtQweMxveFjob4dv
+         kh3XAf7kP6zlVfNIVT23jwUnu08ia97GcUtVWdCnH4sP1WNHqV7vWZ+F5c54nGcQBI
+         z2HmQgeJNv1KDHqWGlgk6DqqjSXYERtHaIdJh6mN5yJdoKg4+jqMMgeE/suR817taD
+         drevrlMBF9I0Ax918bdQdeyjn7q0zLSeLlJnt+q6+vRbtp638nxKnzV2TUXAdATGtu
+         q2TB8+9u0kKc6UAzicSq+nTG9vfktlSVikLjOO99BlOtEiBevb1H5Qxc7VrSl6NLq9
+         sCYXp0T/AxVGw==
+Received: by mail-wm1-f71.google.com with SMTP id h82-20020a1c2155000000b003552c13626cso1522148wmh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 06:53:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nPMJHTnYZbzS8znk5AsEiCmewu+zF2DU271/1BBA6Eo=;
+        b=DnZVKaUBIA9w68V3pKZUxOR4TsZ5Ns2UGZ2dhxLwYJHmIGWrWYs95qIoBva2E7wOmk
+         ADBFPpmz7jCbp9uHG8MM+ZNfOzEtn/2d02itxOPD4SkkGtvKsRSikX1zEQfrw0YDHBmk
+         IHw/kJOYlwcaFUGkiOe/qpfSKTdpRIi1MKAwcFSsI/VX6MFzaBCQsKR9XVY9T3A+N3yI
+         Ki+5zUoIh1RDhmkOU32Nt5fjgErSmE9AsgZbeq6hIUuQ1bUxRAXKtKh3xn0oQWkCogrF
+         6LSuOYSPZIZvRLkzGoKKabPav8+xU/93mqaeZZLrasM9pJ6mBCKZy95VaBKN2PH4X3K7
+         l/6g==
+X-Gm-Message-State: AOAM533aRBWD4r6G1FwVjOwkOE+8nB8OAUQmlmSXYTLnzRHbviQaKOTt
+        tWgn1wU501meVLBjZ5pS7S61kdc/3KkR8iVu60b6xXnbZt0p4scDoroMe20eeeLQUOCWfC2b4iD
+        kzJjWffwd4566tNwopZdeGe02sKb+XY/QX67+QhTesA==
+X-Received: by 2002:a05:600c:34c4:b0:37b:f84d:d55a with SMTP id d4-20020a05600c34c400b0037bf84dd55amr3308662wmq.123.1644936828657;
+        Tue, 15 Feb 2022 06:53:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwon3JF6xxLKESk658q0+LTv95ZfTFy8vR9jXtExV/jZEWdqZ1UK6aKau2J/Bpu24pZQ9e+pQ==
+X-Received: by 2002:a05:600c:34c4:b0:37b:f84d:d55a with SMTP id d4-20020a05600c34c400b0037bf84dd55amr3308637wmq.123.1644936828425;
+        Tue, 15 Feb 2022 06:53:48 -0800 (PST)
+Received: from [192.168.0.108] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id r2sm19588933wmq.24.2022.02.15.06.53.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 06:53:48 -0800 (PST)
+Message-ID: <b50bf9ef-eb38-8e86-70f9-7a9a959be67b@canonical.com>
+Date:   Tue, 15 Feb 2022 15:53:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <25b85560-dd95-2569-d1bc-872902d6343f@arm.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v8 1/2] dt-bindings:serial:Add bindings doc for Sunplus
+ SoC UART Driver
+Content-Language: en-US
+To:     Hammer Hsieh <hammerh0314@gmail.com>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, linux-serial@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jirislaby@kernel.org, p.zabel@pengutronix.de
+Cc:     wells.lu@sunplus.com, hammer.hsieh@sunplus.com
+References: <1644917065-23168-1-git-send-email-hammerh0314@gmail.com>
+ <1644917065-23168-2-git-send-email-hammerh0314@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <1644917065-23168-2-git-send-email-hammerh0314@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Jan 28, 2022 at 11:25:24AM +0000, Suzuki K Poulose escreveu:
-> On 13/01/2022 09:10, James Clark wrote:
-> > Now that a config flag for branch broadcast has been added, take it into
-> > account when trying to deduce what the driver would have programmed the
-> > TRCCONFIGR register to.
-
-Thanks, applied this one, the tools/ part.
-
-- Arnaldo
-
- 
-> > Reviewed-by: Leo Yan <leo.yan@linaro.org>
-> > Signed-off-by: James Clark <james.clark@arm.com>
-> > ---
-> >   tools/include/linux/coresight-pmu.h | 2 ++
-> >   tools/perf/arch/arm/util/cs-etm.c   | 3 +++
-> >   2 files changed, 5 insertions(+)
-> > 
-> > diff --git a/tools/include/linux/coresight-pmu.h b/tools/include/linux/coresight-pmu.h
-> > index 4ac5c081af93..6c2fd6cc5a98 100644
-> > --- a/tools/include/linux/coresight-pmu.h
-> > +++ b/tools/include/linux/coresight-pmu.h
-> > @@ -18,6 +18,7 @@
-> >    * ETMv3.5/PTM doesn't define ETMCR config bits with prefix "ETM3_" and
-> >    * directly use below macros as config bits.
-> >    */
-> > +#define ETM_OPT_BRANCH_BROADCAST 8
-> >   #define ETM_OPT_CYCACC		12
-> >   #define ETM_OPT_CTXTID		14
-> >   #define ETM_OPT_CTXTID2		15
-> > @@ -25,6 +26,7 @@
-> >   #define ETM_OPT_RETSTK		29
-> >   /* ETMv4 CONFIGR programming bits for the ETM OPTs */
-> > +#define ETM4_CFG_BIT_BB         3
-> >   #define ETM4_CFG_BIT_CYCACC	4
-> >   #define ETM4_CFG_BIT_CTXTID	6
-> >   #define ETM4_CFG_BIT_VMID	7
-> > diff --git a/tools/perf/arch/arm/util/cs-etm.c b/tools/perf/arch/arm/util/cs-etm.c
-> > index 293a23bf8be3..c7ef4e9b4a3a 100644
-> > --- a/tools/perf/arch/arm/util/cs-etm.c
-> > +++ b/tools/perf/arch/arm/util/cs-etm.c
-> > @@ -527,6 +527,9 @@ static u64 cs_etmv4_get_config(struct auxtrace_record *itr)
-> >   	if (config_opts & BIT(ETM_OPT_CTXTID2))
-> >   		config |= BIT(ETM4_CFG_BIT_VMID) |
-> >   			  BIT(ETM4_CFG_BIT_VMID_OPT);
-> > +	if (config_opts & BIT(ETM_OPT_BRANCH_BROADCAST))
-> > +		config |= BIT(ETM4_CFG_BIT_BB);
-> > +
-> >   	return config;
+On 15/02/2022 10:24, Hammer Hsieh wrote:
+> Add bindings doc for Sunplus SoC UART Driver
 > 
-> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Hammer Hsieh <hammerh0314@gmail.com>
+> ---
+> Changes in v8:
+>  - no change.
 > 
-> >   }
+>  .../bindings/serial/sunplus,sp7021-uart.yaml       | 56 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  5 ++
+>  2 files changed, 61 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml b/Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
+> new file mode 100644
+> index 0000000..894324c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
+> @@ -0,0 +1,56 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) Sunplus Co., Ltd. 2021
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/serial/sunplus,sp7021-uart.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Sunplus SoC SP7021 UART Controller Device Tree Bindings
+> +
+> +maintainers:
+> +  - Hammer Hsieh <hammerh0314@gmail.com>
+> +
+> +allOf:
+> +  - $ref: serial.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: sunplus,sp7021-uart
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - resets
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    aliases {
+> +            serial0 = &uart0;
 
--- 
+Incorrect indentation. With this fixed:
 
-- Arnaldo
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+
+Best regards,
+Krzysztof

@@ -2,135 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6125B4B778C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7BC4B7905
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244158AbiBOUrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 15:47:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34466 "EHLO
+        id S244166AbiBOUrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 15:47:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244152AbiBOUrU (ORCPT
+        with ESMTP id S237521AbiBOUro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 15:47:20 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A58B1106
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:47:09 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id v63so32749104ybv.10
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:47:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T41ePHFV0yFOOsXNClLAtA/x+o8KEy6AoDggp2srYzE=;
-        b=fr6oWxoTzDtbYvaxIXq0fUxpvVr0x04DUX5wLQBL8LKzXgQVWGbjoar2jjdjM5S1DV
-         1urfngwM9WhtMp3MY6OKMFOt6Jo2o0gZx6M32xFP8vkPMdtbyN9ggBMfIarNp+JgPFUg
-         qWOq0wn8fOMEv15+6TItR2l2a83yNtoGiWl5M8ceFQsEB9Rlearzj25BbwVcYKEZHQAh
-         +m/MIN5TkqRXbquBnmVjQot2oXFVaFCpQjQWFYIZffzxrPF+N/DKFyiIRLnHadLWes7Y
-         zxm+yrUYvmVyrzBotDtotfADyjAF43d2qPAYPrliG1q/RQOf+PQOJ/nmxg3lTPexDb5e
-         voAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T41ePHFV0yFOOsXNClLAtA/x+o8KEy6AoDggp2srYzE=;
-        b=QHF7BBOBOufG4/IoO1fisl8Jr0i0PUE4DLEYIpWx2q7gDfURvhNZAhXUpsFGzQSE1w
-         cxbJkYoWvnvBG61mzpgkGl6m8hUkmoVUNZmkeOM46HSAz+StAFxc/8NOdMbxgVqm0IQK
-         B3p7KohRybM/n4LuD0WoAwT91H9Zq1qc97TOIUTwA9LMOWMV/JJkfl4dW2i4O7ou6jxg
-         aTkOtEX+sKYZVDpkyV6p6jdE2Z5BiCHDDx4aDJT3hDV24KXIpRbkkxWEVk6axZDmC5Tp
-         Kv77RHbxhP2bBUH0X3t1v/diYmmJsc5fDZ2CBghCYZBq2dXbrzK97ivPaqN3tsS/7bik
-         GBoQ==
-X-Gm-Message-State: AOAM532Pg5af7ToMzYe7CwD7/dF3xRvn5vPIoGI3SW9CmmavRB3M1ifS
-        ip0z8wk4aFbLgz1ihYOvfWzQUvYuRlpP3bf8vlxBlA==
-X-Google-Smtp-Source: ABdhPJwmdsuGjYfrOBPnDQhg/eRtU1Bu9W51ZB3QJAQWKMXfxyjW5ctW4UNISdKp6Akvl97iJFnpc7j/a/gdYJyxd2U=
-X-Received: by 2002:a25:d212:: with SMTP id j18mr720145ybg.243.1644958028195;
- Tue, 15 Feb 2022 12:47:08 -0800 (PST)
+        Tue, 15 Feb 2022 15:47:44 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD685FBF;
+        Tue, 15 Feb 2022 12:47:33 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id C8A071F37B;
+        Tue, 15 Feb 2022 20:47:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644958051; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FlfsyHCAs0rdIX//YatnIpiwimkoa18Lt0kLGHb4O7E=;
+        b=OARPnhmPW7qBVTlDY6oU/h/RXco0jkDnGZJwh7Qzb65K1gtp0B2Y2N4GnqEQYZj8Pp0sbN
+        AdWt2MzVAqrrwO2oUaXSeVgeRYwF7OkNORYRlp22XWtm7O3mKr6KnB4guXqUfnnJUu94GW
+        vPY36B6Jf3wxAgqmLYS26q1rp+O/vzs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644958051;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FlfsyHCAs0rdIX//YatnIpiwimkoa18Lt0kLGHb4O7E=;
+        b=J6eCNMY6o4jcfwtx/YyCr2tGzh12PjjFMaNcT6a8Lmgs3C8jzDsc69GNV/ct8k1n8uhUHY
+        wg2yBhsE/yKZ73Dw==
+Received: from kunlun.suse.cz (unknown [10.100.128.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 83940A3B83;
+        Tue, 15 Feb 2022 20:47:31 +0000 (UTC)
+Date:   Tue, 15 Feb 2022 21:47:30 +0100
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Philipp Rudo <prudo@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>,
+        James Morse <james.morse@arm.com>,
+        Dave Young <dyoung@redhat.com>,
+        Kairui Song <kasong@redhat.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-modules@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        stable@kernel.org, Eric Snowberg <eric.snowberg@oracle.com>
+Subject: Re: [PATCH 4/4] module, KEYS: Make use of platform keyring for
+ signature verification
+Message-ID: <20220215204730.GQ3113@kunlun.suse.cz>
+References: <cover.1644953683.git.msuchanek@suse.de>
+ <840433bc93a58d6dfc4d96c34c0c3b158a0e669d.1644953683.git.msuchanek@suse.de>
+ <3e39412657a4b0839bcf38544d591959e89877b8.camel@linux.ibm.com>
 MIME-Version: 1.0
-References: <20220215201922.1908156-1-surenb@google.com> <20220215123741.8e757b337e1f2d32a1766d42@linux-foundation.org>
- <CAJuCfpHwHRodo00gR=5=p+gvp60T+s04=5XBnCc9xsTOZCSE1Q@mail.gmail.com>
-In-Reply-To: <CAJuCfpHwHRodo00gR=5=p+gvp60T+s04=5XBnCc9xsTOZCSE1Q@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 15 Feb 2022 12:46:57 -0800
-Message-ID: <CAJuCfpE6sFMmfzjeMVDRp35eUro1dbOhHS86gj6Xce7mwuYeEw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] mm: fix use-after-free bug when mm->mmap is reused
- after being freed
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Michal Hocko <mhocko@kernel.org>, Michal Hocko <mhocko@suse.com>,
-        Yang Shi <shy828301@gmail.com>,
-        David Rientjes <rientjes@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, Rik van Riel <riel@surriel.com>,
-        Minchan Kim <minchan@kernel.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Christoph Hellwig <hch@infradead.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Jan Engelhardt <jengelh@inai.de>,
-        Tim Murray <timmurray@google.com>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-team <kernel-team@android.com>,
-        syzbot <syzbot+2ccf63a4bd07cf39cab0@syzkaller.appspotmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3e39412657a4b0839bcf38544d591959e89877b8.camel@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 12:45 PM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Tue, Feb 15, 2022 at 12:37 PM Andrew Morton
-> <akpm@linux-foundation.org> wrote:
-> >
-> > On Tue, 15 Feb 2022 12:19:22 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
-> >
-> > > After exit_mmap frees all vmas in the mm, mm->mmap needs to be reset,
-> > > otherwise it points to a vma that was freed and when reused leads to
-> > > a use-after-free bug.
-> > >
-> > > ...
-> > >
-> > > --- a/mm/mmap.c
-> > > +++ b/mm/mmap.c
-> > > @@ -3186,6 +3186,7 @@ void exit_mmap(struct mm_struct *mm)
-> > >               vma = remove_vma(vma);
-> > >               cond_resched();
-> > >       }
-> > > +     mm->mmap = NULL;
-> > >       mmap_write_unlock(mm);
-> > >       vm_unacct_memory(nr_accounted);
-> > >  }
-> >
-> > https://lore.kernel.org/all/00000000000072ef2c05d7f81950@google.com/
-> >
-> > It would be nice to have a Fixes: for this.
->
-> Oh, right. Should be:
->
-> Fixes: 64591e8605d6 ("mm: protect free_pgtables with mmap_lock write
-> lock in exit_mmap")
+Hello,
 
-Andrew, do you want me to post another version with Fixes:
-64591e8605d6 ("mm: protect free_pgtables with mmap_lock write lock in
-exit_mmap") added or you can add it directly?
+On Tue, Feb 15, 2022 at 03:08:18PM -0500, Mimi Zohar wrote:
+> [Cc'ing Eric Snowberg]
+> 
+> Hi Michal,
+> 
+> On Tue, 2022-02-15 at 20:39 +0100, Michal Suchanek wrote:
+> > Commit 278311e417be ("kexec, KEYS: Make use of platform keyring for signature verify")
+> > adds support for use of platform keyring in kexec verification but
+> > support for modules is missing.
+> > 
+> > Add support for verification of modules with keys from platform keyring
+> > as well.
+> 
+> Permission for loading the pre-OS keys onto the "platform" keyring and
+> using them is limited to verifying the kexec kernel image, nothing
+> else.
 
+Why is the platform keyring limited to kexec, and nothing else?
 
->
-> >
-> > Is it specific to process_mrelease(), or should we backport further?
->
-> The broken change is recent and was introduced in v5.17-rc1.
+It should either be used for everything or for nothing. You have the
+option to compile it in and then it should be used, and the option to
+not compile it in and then it cannot be used.
+
+There are two basic use cases:
+
+(1) there is a vendor key which is very hard to use so you sign
+something small and simple like shim with the vendor key, and sign your
+kernel and modules with your own key that's typically enrolled with shim
+MOK, and built into the kernel.
+
+(2) you import your key into the firmware, and possibly disable the
+vendor key. You can load the kernel directly without shim, and then your
+signing key is typically in the platform keyring and built into the
+kernel.
+
+In neither case do I see any reason to use some keyrings for kexec and
+other keyrings for modules.
+
+Thanks
+
+Michal

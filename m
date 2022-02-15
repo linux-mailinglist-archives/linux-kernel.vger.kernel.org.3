@@ -2,107 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591C64B72A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6306A4B730B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235426AbiBOP4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:56:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53454 "EHLO
+        id S241212AbiBOQFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:05:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241067AbiBOP41 (ORCPT
+        with ESMTP id S238118AbiBOQFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:56:27 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C306FA6452;
-        Tue, 15 Feb 2022 07:56:16 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id p9so12351056wra.12;
-        Tue, 15 Feb 2022 07:56:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=L8pD5pTeZRDlCwsrtjOaMUOCMqHiT6qC1hC1m5nk1Nw=;
-        b=ggddP0PPikdQWCi0iGr+20aK6yQ6gvPybEbWMhCG9D8nbvd0GX9hpItLzKrU6F8Thw
-         H9nLWnxPIBS7sr6kwBlhq0FGC1vexgJ/WsnD20DN8IUagXRl8TUQx4gaIBhAumi4jBHo
-         O7wIMptdVJLtZZJBC70WnQKWV+0hcKnWg+6cjdWkrzG2Oo5q4dHH2X/EWVHVTzv4Z5vk
-         s/Er5qyoKN/Dc2KkYqFazDyS/zZEp4aQElcs+V/fgTb9q4pgOmRFcNlD5xzlcZqVA03r
-         vG7vQ1pRK5g94dVdkEwWoEqV/kxmntgF2bJww1WTYJBoLvsajSFY05EaFZ/gjdjmGMac
-         8Deg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=L8pD5pTeZRDlCwsrtjOaMUOCMqHiT6qC1hC1m5nk1Nw=;
-        b=Z4eL6aLFCfRBcH3fDiNscaJF2/x15/POJni0pTwsvep+ZmSpnfC+3tx8ytsIk9kG5r
-         tFs8NzxXx4O4M5Ain6c59VBHcY8MEybtWfEvlTsONI6e3Z3ToVT5B8h78mCHTxUq77uM
-         c0UzKVw4/LSqgLq0xQByfy98mQ1pfbiXVuyeKLybB+Q1WMipXmtVGTY1K97m1/iTmXlq
-         1QfCu4cc8LhVxelyJmTPjJSYiAV/G8RGQF6WYi9LXAQHiVBuRzcWiz6J1vTZ1UIIBl48
-         TmoMdoZXHWM5AgGNi7d47VlPLp7IDl6VS1Q4Mhm7KQE2321I0q6jCeJta5zFTz2RFVZC
-         4CbA==
-X-Gm-Message-State: AOAM531gfZMwm355W9UDObfEwnkd+2yriWToX0ln7zwk4FuTTGiEsAdz
-        oLQQ4k7ufeBNVStM8TaSNq0=
-X-Google-Smtp-Source: ABdhPJyaTXX/oYARKTiObf9aX6tUeT9wQGHNWODjX+ABwp6AdVfMoKGLK3kd5yQqmVdNF4rCcsKlWQ==
-X-Received: by 2002:adf:e109:: with SMTP id t9mr3872501wrz.73.1644940575420;
-        Tue, 15 Feb 2022 07:56:15 -0800 (PST)
-Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
-        by smtp.gmail.com with ESMTPSA id t16sm6793301wmq.43.2022.02.15.07.56.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 07:56:15 -0800 (PST)
-Date:   Tue, 15 Feb 2022 15:56:13 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/172] 5.15.24-rc1 review
-Message-ID: <YgvNHRKKl2fI1LQc@debian>
-References: <20220214092506.354292783@linuxfoundation.org>
+        Tue, 15 Feb 2022 11:05:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4A965BA;
+        Tue, 15 Feb 2022 08:04:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9B50B81AF1;
+        Tue, 15 Feb 2022 16:04:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8326EC340EB;
+        Tue, 15 Feb 2022 16:04:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644941089;
+        bh=4Fn2tQZHYMpisfGny9s7PMSOteToJFxy1fpDT9qsL/M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LyqJauKIRL7zzFOxSSzuV4sPvHKSMks6LI3MMs8fyKao/BGBPT0csBYTLJQeTW/JD
+         ps+YGpJ5YBqPHliptwQ/eEcJ275mryrK2t2bGi62nvnUp6UWafLdCEbzz079z6ucVd
+         Dgb69zOS6zpYfDdiUVv33JTYt0LEOCCjhyULPgUGwhI52lDB4T6ix82Fmjv230cqCd
+         XRqyoV+TClHwmZvAiic80eERxMH09CdM3xcQgxP3Pt0zBu8KeFI9q4ymsXYWSbj66/
+         OYnLtWQ34FueotGYUpxbz1zXQKuJ8XIOJXWE/ZBq/FrjFM2V65wBZJcXWSfDmzFkt1
+         DY7YI5Qr7mL9g==
+Date:   Tue, 15 Feb 2022 23:56:57 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-riscv@lists.infradead.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v3 0/6] Provide a fraemework for RISC-V ISA extensions
+Message-ID: <YgvNSeUekqEVS1yE@xhacker>
+References: <20220215090211.911366-1-atishp@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220215090211.911366-1-atishp@rivosinc.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Mon, Feb 14, 2022 at 10:24:18AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.24 release.
-> There are 172 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, Feb 15, 2022 at 01:02:05AM -0800, Atish Patra wrote:
+> This series implements a generic framework to parse multi-letter ISA
+> extensions. This series is based on Tsukasa's v3 isa extension improvement
+> series[1]. I have fixed few bugs and improved comments from that series
+> (PATCH1-3). I have not used PATCH 4 from that series as we are not using
+> ISA extension versioning as of now. We can add that later if required.
 > 
-> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
-> Anything received after that time might be too late.
+> PATCH 4 allows the probing of multi-letter extensions via a macro.
+> It continues to use the common isa extensions between all the harts.
+> Thus hetergenous hart systems will only see the common ISA extensions.
+> 
+> PATCH 6 improves the /proc/cpuinfo interface for the available ISA extensions
+> via /proc/cpuinfo.
+> 
+> Here is the example output of /proc/cpuinfo:
+> (with debug patches in Qemu and Linux kernel)
+> 
+> / # cat /proc/cpuinfo
+> processor	: 0
+> hart		: 0
+> isa		: rv64imafdcsu
+> isa-ext		: sstc,sscofpmf
+> mmu		: sv48
+> 
+> processor	: 1
+> hart		: 1
+> isa		: rv64imafdcsu
+> isa-ext		: sstc,sscofpmf
+> mmu		: sv48
+> 
+> processor	: 2
+> hart		: 2
+> isa		: rv64imafdcsu
+> isa-ext		: sstc,sscofpmf
+> mmu		: sv48
+> 
+> processor	: 3
+> hart		: 3
+> isa		: rv64imafdcsu
+> isa-ext		: sstc,sscofpmf
+> mmu		: sv48
+> 
+> Anybody adding support for any new multi-letter extensions should add an
+> entry to the riscv_isa_ext_id and the isa extension array. 
+> E.g. The patch[2] adds the support for various ISA extensions.
 
-Build test:
-mips (gcc version 11.2.1 20220213): 62 configs -> no new failure
-arm (gcc version 11.2.1 20220213): 100 configs -> no new failure
-arm64 (gcc version 11.2.1 20220213): 3 configs -> no failure
-x86_64 (gcc version 11.2.1 20220213): 4 configs -> no failure
+Hi Atish,
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+Thanks for this series. I'm thinking cpu features VS ISA extenstions.
+I'm converting the sv48 to static key:
+https://lore.kernel.org/linux-riscv/20220125165036.987-1-jszhang@kernel.org/
 
-[1]. https://openqa.qa.codethink.co.uk/tests/764
-[2]. https://openqa.qa.codethink.co.uk/tests/766
-[3]. https://openqa.qa.codethink.co.uk/tests/767
+Previously, I thought the SV48 as a cpu feature, and there will be
+more and more cpu features, so I implemented an unified static key
+mechanism for CPU features. But after reading this series, I think
+I may need to rebase(even reimplement) the above patch to your series.
+But I'm a bit confused by CPU features VS ISA extenstions now:
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+1. Is cpu feature  == ISA extension?
 
---
-Regards
-Sudip
+2. Is SV48 considered as ISA extension?
+If yes, now SV48 or not is determined during runtime, but current ISA
+extensions seem parsed from DT. So how to support those ISA extensions
+which can be determined during runtime?
 
+Could you please share your thought?
+
+Thanks

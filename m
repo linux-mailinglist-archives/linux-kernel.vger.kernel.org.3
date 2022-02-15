@@ -2,98 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE3DD4B778A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D824B7536
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242534AbiBOR3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 12:29:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42962 "EHLO
+        id S242539AbiBOR31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 12:29:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242524AbiBOR27 (ORCPT
+        with ESMTP id S242524AbiBOR3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 12:28:59 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1D0DB4BF
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:28:49 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id q11-20020a17090a304b00b001b94d25eaecso2724213pjl.4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:28:49 -0800 (PST)
+        Tue, 15 Feb 2022 12:29:25 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C76DA865
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:29:14 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id y5so36026542pfe.4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:29:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=In6ibvsbevR+oUF1CNB4sd3J1jo3GRL6oP9ohnz3F4Q=;
-        b=PavXSWFp42Rb3JhXSuid9+itRv8kFh6GIZuLY2gAhYwo3oc4KsMKMdg91czh/h6Qyo
-         /mGMYVMcivtoahXjbQnw5TZAhfVIIDp+E5QCsL/X6VJ9piDGbmQRdfAyWdPYB33yDrlf
-         LW/RAqpaseffxKwbcfXWLO+TCFNgnMalHJro+bQdWT0swIlsnrE3e5MjEFWQC06NQ7DQ
-         UUuqdlzoG3NdkdmVki7b/1MJ87uOQKhZjDr9QNn9+tY7SKRYmUx08fkXzPJloY59m41M
-         d20QVcx3qigbwwURbtc1rOkvtU4+BgKlYYT6moF9Kp2QSqmKqVXRQMAb6FoLvxQkqs+o
-         abFQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LD4Ti0KcI0wwpDbP7a3Bw9j3YjUZkmA5OGrac5sTet4=;
+        b=EUmyAq1WdDarRMyF/Z+zojJwktFK6mFyL2Dsxwj0fwYE8pODdL4f0tQ9y1pO1V8Ep/
+         uuMUo8prjiFWmkNvFR8Yu8xY5NmgpatV0uKVSLRH/uR0mlePE6sI2s+YI0q5bKy8YCGS
+         jMRAs6RUOkBNCcS+9PbmLDuLeayS2Oal0F1t1h8kYLqMmSUoeuREMMijl+RIyBzZbwBg
+         l9e9b67GTCsFi2p6jPCKYEudsIM3vrqLIW+l84LU9dx1rdGlbuEokHEhFJPBUo8XIu4I
+         68qfm1yLGboQ8k98B21pqJ0Z8JmO7wB7ZSd+6iie+e1a+g/QL4zQfSGkiQmnUmUq27Is
+         IYuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=In6ibvsbevR+oUF1CNB4sd3J1jo3GRL6oP9ohnz3F4Q=;
-        b=FTnFjuwG6skU5IzflEM4FFpdWVe5WQfvUmg2dZSIkvcmSJUAI55d9T6f2RXAVs5b69
-         whqtv3ecN6iLezbDZR/EFEAmxxLF/KQCOBGraLzl9wpjs0hLxKCGCxT/6fGVXAS9m2wz
-         WiVob4xgrqQeWeGcuGFJITZCHw8uzeLeEDZRdwF/bwaS+JWdMSrSq0eEeq0Ktugb1Jss
-         zBttIsWNpCCE2feZOQ1f0vSK/t6Y9YaeyiUi/z+zgrdntig6W2tTTleI1mbJCB3Cf/S3
-         64g0PO5wwQFUXA4Ngqgt11NUJXQmluiDNq/n1f2IYVksQRx0sfIkD2D51rDVKUtRLZU2
-         03MQ==
-X-Gm-Message-State: AOAM531unNS7BhIUFCtd10nuz8Kq1X0QizZE3VOWy8f7qk2WMLk4+E7q
-        /LhnjKEl8JhsgJfq6nySqVRBQXLSVwSBxgafTrt/tw==
-X-Google-Smtp-Source: ABdhPJwZnJDH0ZZkUy+8spEtdicBcwJ01t47bO4NgUDlXJmAx54plZE8XmZ+xaHrg9DlDbWQu4mo0doKyyMpgKDxO6E=
-X-Received: by 2002:a17:902:ce12:: with SMTP id k18mr75487plg.34.1644946129176;
- Tue, 15 Feb 2022 09:28:49 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LD4Ti0KcI0wwpDbP7a3Bw9j3YjUZkmA5OGrac5sTet4=;
+        b=KQ9zqn4lrzyxMewNR9kHJ9HHrDw6By4AsDBY8q/s/lGuwje3GaH+nvNddhKBxnNoEY
+         MsF0ExwTfEcWzYs6v15I/g1Uu0XMxQGH5Tr9TUgmnOe3qujlm6ODetCA+RW5oR0R8H+o
+         I41mTP2c2Srf+szvbgsWxaUxAj+FSVHEmpxYg6LURRhyhKLJSSMo2g+nYxIMOotjRqsh
+         vets/khP5mPlYr4dHH4l+laBvp0gVt/sa2kHoonsxX61FA/NOgmhUv/QTDWnzR9tHXCL
+         pGcsQjzycTi9UaN0qRkhc7sqtucmzOuygVelmuT24cB/w1irM/YmimzrYkiK5ZYgD2XX
+         047Q==
+X-Gm-Message-State: AOAM530fzRXjbdrF1na4879tEeYek2qKBs6DGfxrQ5T2CzYJBfMO6MV6
+        rPCtQuQqibZkqRQFHOOtauOfk3gORzUpbQ==
+X-Google-Smtp-Source: ABdhPJyQLMJpy78D/uXgyKx88FDyuAlOwbMe4oENO7qfMoXcmEbS3VbXaS+SctSh03YRotEsGA+zbg==
+X-Received: by 2002:a65:4286:: with SMTP id j6mr4304847pgp.619.1644946154212;
+        Tue, 15 Feb 2022 09:29:14 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id p16sm2531629pfh.89.2022.02.15.09.29.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 09:29:13 -0800 (PST)
+Date:   Tue, 15 Feb 2022 17:29:10 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] KVM: x86: allow defining return-0 static calls
+Message-ID: <Ygvi5jr4V8S/bKSe@google.com>
+References: <20220214131614.3050333-1-pbonzini@redhat.com>
+ <20220214131614.3050333-6-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <55f5c077-061c-7e53-b02d-53dde1dd654f@molgen.mpg.de>
- <CAPcyv4jSP4PTehMdkcpZfpDcz1HZ0ekjx+WztOiqpwGFU-1iBg@mail.gmail.com> <CAJZ5v0hv2P9_g0QAsY_guvYA_vSE-q4jz2902Df7r9KS=iRfMg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hv2P9_g0QAsY_guvYA_vSE-q4jz2902Df7r9KS=iRfMg@mail.gmail.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Tue, 15 Feb 2022 09:28:42 -0800
-Message-ID: <CAPcyv4jTe48rqGvLBXOH4tLtYM5q6JX1dF7EBApnD291+NaUgg@mail.gmail.com>
-Subject: Re: New warning: ACPI: CEDT not present
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, regressions@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220214131614.3050333-6-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 9:14 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Tue, Feb 15, 2022 at 5:22 PM Dan Williams <dan.j.williams@intel.com> wrote:
-> >
-> > On Mon, Feb 14, 2022 at 11:52 PM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
-> > >
-> > > #regzbot introduced: 2d03e46a4bad20191d07b83ec1242d5f002577be
-> > >
-> > > Dear Dan,
-> > >
-> > >
-> > > On the Dell Latitude E7250, Linux 5.17-rc3 logs the warning below
-> > > (`dmesg --level=warn`):
-> > >
-> > >      ACPI: CEDT not present
-> > >
-> > > I think commit 2d03e46a4bad (ACPI: Add a context argument for table
-> > > parsing handlers), part of Linux since 5.17-rc1, is the reason.
-> > >
-> > > If I understand it correctly, CEDT is not to be expected on older
-> > > devices, so the warning is not justified. Can something be done about it?
-> >
-> > Rafael,
-> >
-> > I'm inclined to just delete the warning altogether, but special casing
-> > is also an option. Any preference?
->
-> Change it into pr_debug()?
+On Mon, Feb 14, 2022, Paolo Bonzini wrote:
+> A few vendor callbacks are only used by VMX, but they return an integer
+> or bool value.  Introduce KVM_X86_OP_RET0 for them: a NULL value in
 
-Sounds good, patch inbound.
+s/KVM_X86_OP_RET0/KVM_X86_OP_OPTIONAL_RET0
+
+And maybe "NULL func" instead of "NULL value", since some members of kvm_x86_ops
+hold a value, not a func.
+
+> struct kvm_x86_ops will be changed to __static_call_return0.
+
+This implies kvm_x86_ops itself is changed, which is incorrect.  "will be patched
+to __static_call_return0() when updating static calls" or so.
+
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/include/asm/kvm-x86-ops.h | 20 +++++++++++++-------
+>  arch/x86/include/asm/kvm_host.h    |  4 ++++
+>  arch/x86/kvm/svm/avic.c            |  5 -----
+>  arch/x86/kvm/svm/svm.c             | 26 --------------------------
+>  arch/x86/kvm/x86.c                 |  2 +-
+>  kernel/static_call.c               |  1 +
+>  6 files changed, 19 insertions(+), 39 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index 0a074354aaf7..ad75ff5ac220 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -6,14 +6,19 @@ BUILD_BUG_ON(1)
+>  /*
+>   * KVM_X86_OP() and KVM_X86_OP_OPTIONAL() are used to help generate
+>   * "static_call()"s. They are also intended for use when defining
+> - * the vmx/svm kvm_x86_ops. KVM_X86_OP_OPTIONAL() can be used for those
+> + * the vmx/svm kvm_x86_ops.
+> + *
+> + * KVM_X86_OP_OPTIONAL() can be used for those
+>   * functions that can have a NULL definition, for example if
+>   * "static_call_cond()" will be used at the call sites.
+> + * KVM_X86_OP_OPTIONAL_RET0() can be used likewise to make
+> + * a definition optional, but in this case the default will 
+
+ERROR: trailing whitespace
+#35: FILE: arch/x86/include/asm/kvm-x86-ops.h:15:
++ * a definition optional, but in this case the default will $
+
+> + * be __static_call_return0.
+
+Uber nit, __static_call_return0() to make it clear that that's a function, not a
+magic return value (though arguably it's that too).
+
+>   */
+>  KVM_X86_OP(hardware_enable)
+>  KVM_X86_OP(hardware_disable)
+>  KVM_X86_OP(hardware_unsetup)
+> -KVM_X86_OP(cpu_has_accelerated_tpr)
+> +KVM_X86_OP_OPTIONAL_RET0(cpu_has_accelerated_tpr)
+
+Can we instead just remove this helper entirely and return '1' unconditionally
+from KVM_CAP_VAPIC?
+
+The usage appears to be wrong, this will return '0' for VMX, '1' for SVM.
+
+	case KVM_CAP_VAPIC:
+		r = !static_call(kvm_x86_cpu_has_accelerated_tpr)();
+		break;
+
+Further more, our uapi says:
+
+  /* Available with KVM_CAP_VAPIC */
+  #define KVM_TPR_ACCESS_REPORTING  _IOWR(KVMIO, 0x92, struct kvm_tpr_access_ctl)
+  /* Available with KVM_CAP_VAPIC */
+  #define KVM_SET_VAPIC_ADDR        _IOW(KVMIO,  0x93, struct kvm_vapic_addr)
+
+But neither of those check cpu_has_accelerated_tpr().  QEMU doesn't check the
+cap, and AFAICT neither does our VMM.

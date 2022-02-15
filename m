@@ -2,103 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C414B6C1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:36:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF934B6C22
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:38:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237695AbiBOMg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 07:36:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42208 "EHLO
+        id S237705AbiBOMis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 07:38:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiBOMg4 (ORCPT
+        with ESMTP id S229824AbiBOMir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 07:36:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1645C10D6;
-        Tue, 15 Feb 2022 04:36:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64FED61690;
-        Tue, 15 Feb 2022 12:36:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 600B6C340EB;
-        Tue, 15 Feb 2022 12:36:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644928605;
-        bh=+Fx82csho4bi9Bhwr3sF7WXHtnIqEKHbXNQg/Lt7SSg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cCnN4ckpP3IPeqyTF2eF29V2sLdIB+sp/B/AmCTbv6MUdKamnqAk5jOZ7cVkugTgE
-         NzP3kPRCYTzfMT8rGT3+lvLvq4Lz8S/d0n1px65f3j8jOr4HS0fNMipfiihYM8JFcM
-         hkzFPignEDEPsDG5XucPKiFqfJ4LRuyml8DgpiURGX4PsxEBGzwGcanXCpJv6azgVn
-         Y6MdZSU23/+58Hc9QVfQIFmTZ4IxetLAKEGHRRB36/vU477zp89OfkKXqi2IT6pher
-         0rCOvLFA0LcIfPLpmAo0aWw7R1WtQBtZCdK8Y05rvPu/6C7CMwhtbsJOubaROnd+FJ
-         E1gSgNGyPhzOg==
-Date:   Tue, 15 Feb 2022 12:36:40 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jon Lin <jon.lin@rock-chips.com>
-Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/6] spi: rockchip: Preset cs-high and clk polarity in
- setup progress
-Message-ID: <YgueWHKur2w55s+0@sirena.org.uk>
-References: <20220211034344.4130-1-jon.lin@rock-chips.com>
- <20220211034344.4130-2-jon.lin@rock-chips.com>
- <YgZHalrdhhilxROt@sirena.org.uk>
- <4222ce7d-a1e3-1728-fec2-976946b06ba9@rock-chips.com>
- <YgpP9j80OuhkCN8p@sirena.org.uk>
- <e0f0ca0d-40df-cf86-9471-9272bcc171f9@rock-chips.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+aDZkCYiUMiCzT/F"
-Content-Disposition: inline
-In-Reply-To: <e0f0ca0d-40df-cf86-9471-9272bcc171f9@rock-chips.com>
-X-Cookie: I have accepted Provolone into my life!
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 15 Feb 2022 07:38:47 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE52869CF8;
+        Tue, 15 Feb 2022 04:38:37 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id ki18-20020a17090ae91200b001b8be87e9abso1767311pjb.1;
+        Tue, 15 Feb 2022 04:38:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=4x5A716mj+zEhGl7gOIgN6+n2BW6656LjfYHdjUp6NA=;
+        b=LtyMpZUVvjy6QznHcU4jrAfUQrh16mEH2fTxY2JvoeWhF8fERit41YQtoF3A7t5pr2
+         24V2D0wr2SwW0YYGO0uXvgRPZjcjb02X/QnfI4br8kwRZ5wkuaX9tJJQD72v58ODCP4t
+         oz5T3zsttdVPcA6UwxEjaOy9bt2WodiUUBt413pPSFmrJ6KscmCZ2oWddNT4jLhGZAJN
+         p260TY1yv9QSSqm6bbkd4M3KN1PryRJcN091sSVd/tCONp5FmnY8ncWIb1Ljvg18u5Je
+         Z8trs2x+CyahYY1w+lOgaPJgoZ/Zqcyjm2lBlK3O6szgt5C5MHRQ1RIBR9zbc9p514P/
+         ssbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=4x5A716mj+zEhGl7gOIgN6+n2BW6656LjfYHdjUp6NA=;
+        b=4jWMW0vw1I0n2Oe4LSWw9mNAp7hfzvh6QI2PHnAcEVF1ybcw2JkTydtCfpWUpo3TN1
+         EAgKnWhxugyLZnf+A1ohSu3LDNjFdYihTUiumaCMvw+7EKuy30AnbZQvCBTj9v2x6g86
+         w3w4wsuE4bHutm6JwwXp2FTeLs5rPBJ/svXzz1Eq1kFGUUfgTcQF/2f/fbNNnnZB1fJ8
+         hiBpJq6t1xw0Fga1Xu33Dj4NbWgZmzTEdjN/3L90QayAIqlw9ukPSJm7UY1rSEYcj0n8
+         W9FE/CntLWG2DKda5S57zmvD31xkph+ocyC0UrWpamfejyxni+Xf0UDgzZ0Ba9zRMFlk
+         g0RQ==
+X-Gm-Message-State: AOAM530z4dOl5mNTB2A2owrz1cWxuOjXTkgNXSCazmH22s5AbjvX3LP2
+        1t02tcceRZi9dDEAeOTbgx8=
+X-Google-Smtp-Source: ABdhPJyqlvw6+qdu4Dpm2m+IOMI6xJWfTxv9apdaQweqUcKWc3YCywhlw1juRuu/ayMt7zc2cqIk1w==
+X-Received: by 2002:a17:90a:7f03:b0:1b8:8d90:b194 with SMTP id k3-20020a17090a7f0300b001b88d90b194mr4241533pjl.2.1644928716824;
+        Tue, 15 Feb 2022 04:38:36 -0800 (PST)
+Received: from localhost.localdomain ([162.219.34.248])
+        by smtp.gmail.com with ESMTPSA id q8sm44017803pfl.143.2022.02.15.04.38.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 04:38:36 -0800 (PST)
+From:   "Wang Jianchao (Kuaishou)" <jianchao.wan9@gmail.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     hch@infradead.org, Josef Bacik <jbacik@fb.com>,
+        Tejun Heo <tj@kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC V2 0/6] blk: make blk-rq-qos policies pluggable and modular
+Date:   Tue, 15 Feb 2022 20:36:59 +0800
+Message-Id: <20220215123705.58968-1-jianchao.wan9@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jens
 
---+aDZkCYiUMiCzT/F
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+blk-rq-qos is a standalone framework out of io-sched and can be used to
+control or observe the IO progress in block-layer with hooks. blk-rq-qos
+is a great design but right now, it is totally fixed and built-in and shut
+out peoples who want to use it with external module.
 
-On Tue, Feb 15, 2022 at 11:00:54AM +0800, Jon Lin wrote:
-> =E5=9C=A8 2022/2/14 20:49, Mark Brown =E5=86=99=E9=81=93:
+This patchset attempts to make blk-rq-qos framework pluggable and modular.
+Then we can update the blk-rq-qos policy module w/o stopping the IO workload.
+And it is more convenient to introduce new policy on old machines w/o udgrade
+kernel. And we can close all of the blk-rq-qos policy if we needn't any of
+them. At the moment, the request_queue.rqos list is empty, we needn't to
+waste cpu cyles on them.
 
-> > As covered in the documentation setup() for one device may run while
-> > another is active, therefore if multiple devices are configured in the
-> > same register you should use a lock to ensure there can't be multiple
-> > writes.  Note that the above appears to not just be setting the mode but
-> > also the chip select so if you've got two SPI_CS_HIGH devices then
-> > they'll both be going in and separately setting cr0.
+Changes since v1:
+ - Just make iocost and iolatency pluggable, then we needn't to export
+   those interfaces
+ - Remove the iostat rqos policy
+ - Rename module of blk-ioprio to io-prio to avoid rename ioprio.c file
 
-> Is the io_mutex in function spi_setup is good enough?
+WangJianchao(6):
+	blk: make blk-rq-qos support pluggable and modular
+    blk-wbt: make wbt pluggable
+    blk-iolatency: make iolatency pluggable
+    blk-iocost: make iocost pluggable
+    blk-ioprio: make ioprio pluggable and modular
+    blk: remove unused interfaces of blk-rq-qos
 
-It's not supposed to be for that but looking at the code quickly I
-*think* setup() is never called with io_mutex held so it might well be
-fine - you should double check though.  If not you'd need to add another
-lock in your driver data.
+block/Kconfig          |   2 +-
+ block/Makefile         |   3 +-
+ block/blk-cgroup.c     |  11 ---
+ block/blk-core.c       |   2 +
+ block/blk-iocost.c     |  59 ++++++++------
+ block/blk-iolatency.c  |  33 ++++++--
+ block/blk-ioprio.c     |  50 +++++++-----
+ block/blk-ioprio.h     |  19 -----
+ block/blk-mq-debugfs.c |  18 +----
+ block/blk-rq-qos.c     | 312 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ block/blk-rq-qos.h     | 104 +++++++++++--------------
+ block/blk-sysfs.c      |   9 +--
+ block/blk-wbt.c        |  36 +++++++--
+ block/blk-wbt.h        |   8 +-
+ block/blk.h            |   6 --
+ block/elevator.c       |   3 +
+ block/genhd.c          |   2 -
+ include/linux/blkdev.h |   4 +
+ 18 files changed, 501 insertions(+), 180 deletions(-)
 
---+aDZkCYiUMiCzT/F
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmILnlgACgkQJNaLcl1U
-h9B2NAf/QN5joxtVPoutx+2TSlooN/Z0rZTKsAu3UvL8NbXQpUZK/TYIaBtXXMWp
-CaQgwdWxzZCAtUVulGlp1i8i/CKSyGevk9eYqtCiN3iKS96RmvScrd9Hrh746PZx
-RNbS+c6qFodIXVjq0RJPAAXIhH33HrFplqa0qipfbI4YEvKPZLAdJKi8hLEv51tP
-UpD0GpZ2StBDrwmHdRjGS7EtKJ9gbqqJBdokKnv1OXZobdBEWnkKq7btqxDyMkTo
-w9wNNM+xhOqWIZF+Jwm0lLVkju19tjqbZ5782yI+YSNhBMtp91PeN1efmLQs9+Lp
-PCwRQQDLfe8UttKpOX1qpaRZrMGprw==
-=DFZt
------END PGP SIGNATURE-----
-
---+aDZkCYiUMiCzT/F--

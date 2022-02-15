@@ -2,58 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E58D34B706D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A0D4B7193
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238708AbiBOO4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 09:56:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41212 "EHLO
+        id S239395AbiBOOwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 09:52:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231856AbiBOO40 (ORCPT
+        with ESMTP id S239504AbiBOOvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 09:56:26 -0500
-X-Greylist: delayed 378 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 06:56:16 PST
-Received: from mail-4327.protonmail.ch (mail-4327.protonmail.ch [185.70.43.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760339FE5;
-        Tue, 15 Feb 2022 06:56:16 -0800 (PST)
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        by mail-4321.protonmail.ch (Postfix) with ESMTPS id 4JykWy17Jvz4x6KM;
-        Tue, 15 Feb 2022 14:49:50 +0000 (UTC)
-Authentication-Results: mail-4321.protonmail.ch;
-        dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="BDvn1o1Z"
-Date:   Tue, 15 Feb 2022 14:49:00 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-        s=protonmail2; t=1644936545;
-        bh=BNi3yC/9jw1c/szfUfUGT5h9vUtlRUvDAK4sFcLdjmk=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID;
-        b=BDvn1o1ZnCovptmLn11diWMUEAWct4RD312L8UhYymcv2YyALQ0+t4WLvihd2EiZC
-         tPc5WJekOp7nZTc3KwH24zmXXoHCubCivqzXXamMSRzo5TgUJkbYT+22j7Nu8u82Ai
-         Z99eglNVPxJLUMXHt20FU09SULmsFJkzUZZNMJXnqxMqGItr5a+HEju7xrB+xwjtHH
-         /ABhwuILabSjR0rBdRp/niEjUx8Ghyfouiy//TJCKQO2uoNzNSLWxqUpxdmehiglJ+
-         ASV2R5Klz+28noHpnpCsQBmCuQic75pIp8Y+1uWN5ADRY5i92MirLhvMCNoKobJ86+
-         f0ojLOvQR2VYg==
-To:     =?utf-8?Q?Philippe_Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH mips-fixes] MIPS: smp: fill in sibling and core maps earlier
-Message-ID: <5324be35-5c49-31c1-3f9a-267a5dae8c84@amsat.org>
+        Tue, 15 Feb 2022 09:51:39 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9570711B325;
+        Tue, 15 Feb 2022 06:50:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644936611; x=1676472611;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xFA9nntrtGrpU/cgN8W3xUF0mYNVZIjdFM78u82ttwU=;
+  b=GsA1Ih/U6EHGkLWy/ASI/7pjcl7fs9MnLUZNHtb1wO8JuvI6nqxsHCFz
+   IX6SwHcSqLDFA7eolfSrtNJn235A2qoycwqIGgz5Nk9HovJrAGo4HbV0M
+   g7mulxfE8V7mOvEyViZW/FXe3znO6RhnFsM5gqsAmAQPEBvhCytGsMaXf
+   bROfPE70FLZcfg8vrkGMpZyy4AEMPKBHSOMFdmIn5sPPgSsomSSznxMcg
+   HTUKpZEUhjN456Pv7i0L+k82z/ykPmsLtE2LmUyCga3WHY2ngVAj2IEmc
+   R0lUuCt8YY5RUVHe3d3EgBKdKy4bvG9yLHoKv8yJHejK/YHalKSkxrB4s
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="233907259"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="233907259"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 06:49:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="486204509"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 15 Feb 2022 06:49:52 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJz9L-0009lk-Vv; Tue, 15 Feb 2022 14:49:51 +0000
+Date:   Tue, 15 Feb 2022 22:49:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guixin Liu <kanie@linux.alibaba.com>, bostroesser@gmail.com,
+        martin.petersen@oracle.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xiaoguang.wang@linux.alibaba.com,
+        xlpang@linux.alibaba.com
+Subject: Re: [PATCH V3] scsi: target: tcmu: Make cmd_ring_size changeable via
+ configfs.
+Message-ID: <202202152239.8LJNreof-lkp@intel.com>
+References: <1644912216-97633-1-git-send-email-kanie@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1644912216-97633-1-git-send-email-kanie@linux.alibaba.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,45 +68,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philippe Mathieu-Daud=C3=A9 <f4bug@amsat.org>
-Date: Mon, 14 Feb 2022 20:00:12 +0100
+Hi Guixin,
 
-> On 12/2/22 23:21, Alexander Lobakin wrote:
-> > After enabling CONFIG_SCHED_CORE (landed during 5.14 cycle),
-> > 2-core 2-thread-per-core interAptiv (CPS-driven) started emitting
-> > the following:
-> >
+Thank you for the patch! Perhaps something to improve:
 
---- 8< ---
+[auto build test WARNING on mkp-scsi/for-next]
+[also build test WARNING on v5.17-rc4 next-20220215]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> >
-> > [    0.048433] CPU: 1, smt_mask: 0-1
-> >
-> > [0] https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/comm=
-it/?id=3D76ce7cfe35ef
->
-> Isn't it worth Cc'ing stable@vger.kernel.org here?
+url:    https://github.com/0day-ci/linux/commits/Guixin-Liu/scsi-target-tcmu-Make-cmd_ring_size-changeable-via-configfs/20220215-160505
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+config: x86_64-randconfig-a005-20220214 (https://download.01.org/0day-ci/archive/20220215/202202152239.8LJNreof-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/7f77700542b8196c546ef10656dda7a107d8d1ad
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Guixin-Liu/scsi-target-tcmu-Make-cmd_ring_size-changeable-via-configfs/20220215-160505
+        git checkout 7f77700542b8196c546ef10656dda7a107d8d1ad
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/target/
 
-Probably. It doesn't have any Fixes tag (this is a fix, but the bug
-is caused not by a particular commit, rather by a combination of
-changes and code flows from the past), but it still can be
-backported, right.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thomas, should I queue a v2 with this tag added?
+All warnings (new ones prefixed by >>):
 
-Cc: stable@vger.kernel.org # 5.14+
+>> drivers/target/target_core_user.c:2628:9: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
+                         (udev->cmdr_size + CMDR_OFF) >> 20);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/target/target_core_user.c:2744:4: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
+                           (udev->cmdr_size + CMDR_OFF) >> 20);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
 
-Or it can be picked up automatically?
 
->
-> > Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> > ---
-> >   arch/mips/kernel/smp.c | 6 +++---
-> >   1 file changed, 3 insertions(+), 3 deletions(-)
->
-> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <f4bug@amsat.org>
+vim +2628 drivers/target/target_core_user.c
 
-Thanks!
+  2616	
+  2617	static ssize_t tcmu_show_configfs_dev_params(struct se_device *dev, char *b)
+  2618	{
+  2619		struct tcmu_dev *udev = TCMU_DEV(dev);
+  2620		ssize_t bl = 0;
+  2621	
+  2622		bl = sprintf(b + bl, "Config: %s ",
+  2623			     udev->dev_config[0] ? udev->dev_config : "NULL");
+  2624		bl += sprintf(b + bl, "Size: %llu ", udev->dev_size);
+  2625		bl += sprintf(b + bl, "MaxDataAreaMB: %u ", udev->data_area_mb);
+  2626		bl += sprintf(b + bl, "DataPagesPerBlk: %u", udev->data_pages_per_blk);
+  2627		bl += sprintf(b + bl, "CmdRingSizeMB: %u\n",
+> 2628			      (udev->cmdr_size + CMDR_OFF) >> 20);
+  2629	
+  2630		return bl;
+  2631	}
+  2632	
 
-Al
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

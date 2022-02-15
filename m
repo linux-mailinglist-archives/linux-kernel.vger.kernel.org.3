@@ -2,281 +2,484 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63CCE4B6A67
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDFE44B6A77
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:14:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236977AbiBOLMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 06:12:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35896 "EHLO
+        id S237003AbiBOLNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 06:13:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236969AbiBOLMF (ORCPT
+        with ESMTP id S236993AbiBOLNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 06:12:05 -0500
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D463107DBE;
-        Tue, 15 Feb 2022 03:11:54 -0800 (PST)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21F9Bucp025990;
-        Tue, 15 Feb 2022 12:11:39 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=on4k+60RiSNwLWTdRuXuMFB/7V82oPjCfha0VCpeuH4=;
- b=5CUPCiDNY9q7t2d/i6z1C9lnGp9GYZsYAZzGt4o8+GkgRmivAiWekflryER54LrT0fan
- qk0vBMK/d4Ae1rHgUeuVrvyzf3Lvswc9rZza1XHXPcnr/CFi42ebyzJdLMnFYtUWsGtL
- rADFSvXMz6Ja0qabzcucj7VYh06GZKu7wX3zE6oXv3GtwLerQimbn2w0GqJsBNwNsP12
- sB2CN960JnlPznH2g5BgPTuIgTpZZfFL9CtmF+MAjIwmcVjwAW8AMqtu6kdCjLCcj8yt
- HKhUyIQPE06qSYDOBJmo8vxPW0fvZA2SwgdZQcTV6iLiOLDlBB9p+CpZtMUSeUgmq/W0 2w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e89b5grs3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Feb 2022 12:11:39 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DAFF1100038;
-        Tue, 15 Feb 2022 12:11:37 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CD95521E691;
-        Tue, 15 Feb 2022 12:11:37 +0100 (CET)
-Received: from [10.211.1.48] (10.75.127.44) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 15 Feb
- 2022 12:11:37 +0100
-Message-ID: <b483084b-59ab-4821-8079-4999236aec9d@foss.st.com>
-Date:   Tue, 15 Feb 2022 12:11:36 +0100
+        Tue, 15 Feb 2022 06:13:50 -0500
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49532108180;
+        Tue, 15 Feb 2022 03:13:39 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V4YJdH5_1644923615;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V4YJdH5_1644923615)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 15 Feb 2022 19:13:36 +0800
+From:   Jeffle Xu <jefflexu@linux.alibaba.com>
+To:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org
+Cc:     torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 05/23] cachefiles: introduce new devnode for on-demand read mode
+Date:   Tue, 15 Feb 2022 19:13:35 +0800
+Message-Id: <20220215111335.123528-1-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <bd9cb3bb-e29c-d4b3-e9bf-915b9771b553@linux.alibaba.com>
+References: <bd9cb3bb-e29c-d4b3-e9bf-915b9771b553@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH v3 0/4] remoteproc: restructure the remoteproc VirtIO
- device
-Content-Language: en-US
-To:     Peng Fan <peng.fan@nxp.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        Stefano Stabellini <stefanos@xilinx.com>,
-        Bruce Ashfield <bruce.ashfield@xilinx.com>
-References: <20220126162405.1131323-1-arnaud.pouliquen@foss.st.com>
- <DU0PR04MB941722D995004F877DC6171D88349@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-In-Reply-To: <DU0PR04MB941722D995004F877DC6171D88349@DU0PR04MB9417.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-15_04,2022-02-14_04,2021-12-02_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch introduces a new devnode 'cachefiles_ondemand' to support the
+newly introduced on-demand read mode.
 
+The precondition for on-demand reading semantics is that, all blob files
+have been placed under corresponding directory with correct file size
+(sparse files) on the first beginning. When upper fs starts to access
+the blob file, it will "cache miss" (hit the hole) and then turn to user
+daemon for preparing the data.
 
-On 2/15/22 09:34, Peng Fan wrote:
->> Subject: [RFC PATCH v3 0/4] remoteproc: restructure the remoteproc VirtIO
->> device
->>
->> Update from V2 [1]:
->> In order to better handle error cases and to have something more
->> symmetrical between the functions in charge of rvdev initialization/deletion,
->> the patchset has been reworked.
->>  - Introduction in the first patch, of rproc_vdev_data structure which allows
->> to better
->>    decorrelate the rproc from the management of the rvdev structure. This
->> structure is reused
->>    in the last patch of the series for the creation of the remoteproc virtio
->> platform device.
->>  - In addition to the previous version, the management of the vring lifecycle
->> has been fully
->>    migrated to the remoteproc_virtio.c (rproc_parse_vring, rproc_alloc_vring,
->> rproc_free_vring)
->>
->> [1]
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.or
->> g%2Flkml%2F2021%2F12%2F22%2F111&amp;data=04%7C01%7Cpeng.fan%4
->> 0nxp.com%7C9e663eefc30a4fbb1fdb08d9e0e855e2%7C686ea1d3bc2b4c6fa
->> 92cd99c5c301635%7C0%7C0%7C637788110748757786%7CUnknown%7CT
->> WFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLC
->> JXVCI6Mn0%3D%7C3000&amp;sdata=bFfSxpPMpPRGYcMBcwxaQ152mRzf3c
->> fwoFPjiJ0SIgw%3D&amp;reserved=0
->>
->> Patchset description:
->>
->> This series is a part of the work initiated a long time ago in the series
->> "remoteproc: Decorelate virtio from core"[2]
->>
->> Objective of the work:
->> - Update the remoteproc VirtIO device creation (use platform device)
->> - Allow to declare remoteproc VirtIO device in DT
-> 
-> This means not using resource table anymore with new approach?
-> If yes, would that introduce a problem that different M-core images
-> requires different dtb?
+The interaction between kernel and user daemon is described as below.
+1. Once cache miss, .ondemand_read() callback of corresponding fscache
+   backend is called to prepare the data. As for cachefiles, it just
+   packages related metadata (file range to read, etc.) into a pending
+   read request, and then the process triggering cache miss will fall
+   asleep until the corresponding data gets fetched later.
+2. User daemon needs to poll on the devnode ('cachefiles_ondemand'),
+   waiting for pending read request.
+3. Once there's pending read request, user daemon will be notified and
+   shall read the devnode ('cachefiles_ondemand') to fetch one pending
+   read request to process.
+4. For the fetched read request, user daemon need to somehow prepare the
+   data (e.g. download from remote through network) and then write the
+   fetched data into the backing file to fill the hole.
+5. After that, user daemon need to notify cachefiles backend by writing a
+   'done' command to devnode ('cachefiles_ondemand'). It will also
+   awake the previous asleep process triggering cache miss.
+6. By the time the process gets awaken, the data has been ready in the
+   backing file. Then process can re-initiate a read request from the
+   backing file.
 
-The resource table still exists. The main difference is that the virtio devices
-would be predefined in the DT with their own resources ( memories , mailboxes,...)
-No need to inherit from the rproc device.
+If user daemon exits in advance when upper fs still mounted, no new
+on-demand read request can be queued anymore and the existing pending
+read requests will fail with -EIO.
 
+Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+---
+ fs/cachefiles/daemon.c                   | 185 +++++++++++++++++++++++
+ fs/cachefiles/internal.h                 |  12 ++
+ fs/cachefiles/io.c                       |  64 ++++++++
+ fs/cachefiles/main.c                     |  27 ++++
+ include/uapi/linux/cachefiles_ondemand.h |  14 ++
+ 5 files changed, 302 insertions(+)
+ create mode 100644 include/uapi/linux/cachefiles_ondemand.h
 
-On resource table parsing, the remoteproc looks first for pre registered 
-rproc_virtio devices. If found then it uses it. Else it instantiates a new 
-one (legacy method).  
+diff --git a/fs/cachefiles/daemon.c b/fs/cachefiles/daemon.c
+index 6b8d7c5bbe5d..96aee8e0eb14 100644
+--- a/fs/cachefiles/daemon.c
++++ b/fs/cachefiles/daemon.c
+@@ -757,3 +757,188 @@ static void cachefiles_daemon_unbind(struct cachefiles_cache *cache)
+ 
+ 	_leave("");
+ }
++
++#ifdef CONFIG_CACHEFILES_ONDEMAND
++static unsigned long cachefiles_open_ondemand;
++
++static int cachefiles_ondemand_open(struct inode *inode, struct file *file);
++static int cachefiles_ondemand_release(struct inode *inode, struct file *file);
++static ssize_t cachefiles_ondemand_write(struct file *, const char __user *,
++					 size_t, loff_t *);
++static ssize_t cachefiles_ondemand_read(struct file *, char __user *, size_t,
++					loff_t *);
++static __poll_t cachefiles_ondemand_poll(struct file *,
++					 struct poll_table_struct *);
++static int cachefiles_daemon_done(struct cachefiles_cache *, char *);
++
++const struct file_operations cachefiles_ondemand_fops = {
++	.owner		= THIS_MODULE,
++	.open		= cachefiles_ondemand_open,
++	.release	= cachefiles_ondemand_release,
++	.read		= cachefiles_ondemand_read,
++	.write		= cachefiles_ondemand_write,
++	.poll		= cachefiles_ondemand_poll,
++	.llseek		= noop_llseek,
++};
++
++static const struct cachefiles_daemon_cmd cachefiles_ondemand_cmds[] = {
++	{ "bind",	cachefiles_daemon_bind		},
++	{ "brun",	cachefiles_daemon_brun		},
++	{ "bcull",	cachefiles_daemon_bcull		},
++	{ "bstop",	cachefiles_daemon_bstop		},
++	{ "cull",	cachefiles_daemon_cull		},
++	{ "debug",	cachefiles_daemon_debug		},
++	{ "dir",	cachefiles_daemon_dir		},
++	{ "frun",	cachefiles_daemon_frun		},
++	{ "fcull",	cachefiles_daemon_fcull		},
++	{ "fstop",	cachefiles_daemon_fstop		},
++	{ "inuse",	cachefiles_daemon_inuse		},
++	{ "secctx",	cachefiles_daemon_secctx	},
++	{ "tag",	cachefiles_daemon_tag		},
++	{ "done",	cachefiles_daemon_done		},
++	{ "",		NULL				}
++};
++
++static int cachefiles_ondemand_open(struct inode *inode, struct file *file)
++{
++	struct cachefiles_cache *cache;
++
++	_enter("");
++
++	/* only the superuser may do this */
++	if (!capable(CAP_SYS_ADMIN))
++		return -EPERM;
++
++	/* the cachefiles device may only be open once at a time */
++	if (xchg(&cachefiles_open_ondemand, 1) == 1)
++		return -EBUSY;
++
++	cache = cachefiles_daemon_open_cache();
++	if (!cache) {
++		cachefiles_open_ondemand = 0;
++		return -ENOMEM;
++	}
++
++	xa_init_flags(&cache->reqs, XA_FLAGS_ALLOC);
++	set_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags);
++
++	file->private_data = cache;
++	cache->cachefilesd = file;
++	return 0;
++}
++
++static void cachefiles_ondemand_flush_reqs(struct cachefiles_cache *cache)
++{
++	struct cachefiles_req *req;
++	unsigned long index;
++
++	xa_for_each(&cache->reqs, index, req) {
++		req->error = -EIO;
++		complete(&req->done);
++	}
++}
++
++static int cachefiles_ondemand_release(struct inode *inode, struct file *file)
++{
++	struct cachefiles_cache *cache = file->private_data;
++
++	_enter("");
++
++	ASSERT(cache);
++
++	set_bit(CACHEFILES_DEAD, &cache->flags);
++
++	cachefiles_ondemand_flush_reqs(cache);
++	cachefiles_daemon_unbind(cache);
++
++	/* clean up the control file interface */
++	xa_destroy(&cache->reqs);
++	cache->cachefilesd = NULL;
++	file->private_data = NULL;
++	cachefiles_open_ondemand = 0;
++
++	kfree(cache);
++
++	_leave("");
++	return 0;
++}
++
++static ssize_t cachefiles_ondemand_write(struct file *file,
++					 const char __user *_data,
++					 size_t datalen,
++					 loff_t *pos)
++{
++	return cachefiles_daemon_do_write(file, _data, datalen, pos,
++					  cachefiles_ondemand_cmds);
++}
++
++static ssize_t cachefiles_ondemand_read(struct file *file, char __user *_buffer,
++					size_t buflen, loff_t *pos)
++{
++	struct cachefiles_cache *cache = file->private_data;
++	struct cachefiles_req *req;
++	unsigned long id = 0;
++	int n;
++
++	if (!test_bit(CACHEFILES_READY, &cache->flags))
++		return 0;
++
++	req = xa_find(&cache->reqs, &id, UINT_MAX, XA_PRESENT);
++	if (!req)
++		return 0;
++
++	n = sizeof(struct cachefiles_req_in);
++	if (n > buflen)
++		return -EMSGSIZE;
++
++	req->base.id = id;
++	if (copy_to_user(_buffer, &req->base, n) != 0)
++		return -EFAULT;
++
++	return n;
++}
++
++static __poll_t cachefiles_ondemand_poll(struct file *file,
++					 struct poll_table_struct *poll)
++{
++	struct cachefiles_cache *cache = file->private_data;
++	__poll_t mask;
++
++	poll_wait(file, &cache->daemon_pollwq, poll);
++	mask = 0;
++
++	if (!xa_empty(&cache->reqs))
++		mask |= EPOLLIN;
++
++	return mask;
++}
++
++/*
++ * Request completion
++ * - command: "done <id>"
++ */
++static int cachefiles_daemon_done(struct cachefiles_cache *cache, char *args)
++{
++	struct cachefiles_req *req;
++	unsigned long id;
++	int ret;
++
++	_enter(",%s", args);
++
++	if (!*args) {
++		pr_err("Empty id specified\n");
++		return -EINVAL;
++	}
++
++	ret = kstrtoul(args, 0, &id);
++	if (ret)
++		return ret;
++
++	req = xa_erase(&cache->reqs, id);
++	if (!req)
++		return -EINVAL;
++
++	complete(&req->done);
++	return 0;
++}
++#endif
+diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
+index 6473634c41a9..59dd11e42cb3 100644
+--- a/fs/cachefiles/internal.h
++++ b/fs/cachefiles/internal.h
+@@ -15,6 +15,8 @@
+ #include <linux/fscache-cache.h>
+ #include <linux/cred.h>
+ #include <linux/security.h>
++#include <linux/xarray.h>
++#include <linux/cachefiles_ondemand.h>
+ 
+ #define CACHEFILES_DIO_BLOCK_SIZE 4096
+ 
+@@ -102,6 +104,15 @@ struct cachefiles_cache {
+ 	char				*rootdirname;	/* name of cache root directory */
+ 	char				*secctx;	/* LSM security context */
+ 	char				*tag;		/* cache binding tag */
++#ifdef CONFIG_CACHEFILES_ONDEMAND
++	struct xarray			reqs;
++#endif
++};
++
++struct cachefiles_req {
++	struct cachefiles_req_in base;
++	struct completion done;
++	int error;
+ };
+ 
+ #include <trace/events/cachefiles.h>
+@@ -146,6 +157,7 @@ extern int cachefiles_has_space(struct cachefiles_cache *cache,
+  * daemon.c
+  */
+ extern const struct file_operations cachefiles_daemon_fops;
++extern const struct file_operations cachefiles_ondemand_fops;
+ 
+ /*
+  * error_inject.c
+diff --git a/fs/cachefiles/io.c b/fs/cachefiles/io.c
+index 753986ea1583..7c51e53d52d1 100644
+--- a/fs/cachefiles/io.c
++++ b/fs/cachefiles/io.c
+@@ -597,6 +597,67 @@ static void cachefiles_end_operation(struct netfs_cache_resources *cres)
+ 	fscache_end_cookie_access(fscache_cres_cookie(cres), fscache_access_io_end);
+ }
+ 
++#ifdef CONFIG_CACHEFILES_ONDEMAND
++static struct cachefiles_req *cachefiles_alloc_req(struct cachefiles_object *object,
++						   loff_t start_pos,
++						   size_t len)
++{
++	struct cachefiles_req *req;
++	struct cachefiles_req_in *base;
++
++	req = kzalloc(sizeof(*req), GFP_KERNEL);
++	if (!req)
++		return NULL;
++
++	base = &req->base;
++
++	base->off = start_pos;
++	base->len = len;
++	strncpy(base->path, object->d_name, sizeof(base->path) - 1);
++
++	init_completion(&req->done);
++
++	return req;
++}
++
++static int cachefiles_ondemand_read(struct netfs_cache_resources *cres,
++				    loff_t start_pos, size_t len)
++{
++	struct cachefiles_object *object;
++	struct cachefiles_cache *cache;
++	struct cachefiles_req *req;
++	int ret;
++	u32 id;
++
++	object = cachefiles_cres_object(cres);
++	cache = object->volume->cache;
++
++	if (!test_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags))
++		return -EOPNOTSUPP;
++
++	if (test_bit(CACHEFILES_DEAD, &cache->flags))
++		return -EIO;
++
++	req = cachefiles_alloc_req(object, start_pos, len);
++	if (!req)
++		return -ENOMEM;
++
++	ret = xa_alloc(&cache->reqs, &id, req, xa_limit_32b, GFP_KERNEL);
++	if (ret) {
++		kfree(req);
++		return -ENOMEM;
++	}
++
++	wake_up_all(&cache->daemon_pollwq);
++
++	wait_for_completion(&req->done);
++	ret = req->error;
++	kfree(req);
++
++	return ret;
++}
++#endif
++
+ static const struct netfs_cache_ops cachefiles_netfs_cache_ops = {
+ 	.end_operation		= cachefiles_end_operation,
+ 	.read			= cachefiles_read,
+@@ -604,6 +665,9 @@ static const struct netfs_cache_ops cachefiles_netfs_cache_ops = {
+ 	.prepare_read		= cachefiles_prepare_read,
+ 	.prepare_write		= cachefiles_prepare_write,
+ 	.query_occupancy	= cachefiles_query_occupancy,
++#ifdef CONFIG_CACHEFILES_ONDEMAND
++	.ondemand_read		= cachefiles_ondemand_read,
++#endif
+ };
+ 
+ /*
+diff --git a/fs/cachefiles/main.c b/fs/cachefiles/main.c
+index 3f369c6f816d..eab17c3140d9 100644
+--- a/fs/cachefiles/main.c
++++ b/fs/cachefiles/main.c
+@@ -39,6 +39,27 @@ static struct miscdevice cachefiles_dev = {
+ 	.fops	= &cachefiles_daemon_fops,
+ };
+ 
++#ifdef CONFIG_CACHEFILES_ONDEMAND
++static struct miscdevice cachefiles_ondemand_dev = {
++	.minor	= MISC_DYNAMIC_MINOR,
++	.name	= "cachefiles_ondemand",
++	.fops	= &cachefiles_ondemand_fops,
++};
++
++static inline int cachefiles_init_ondemand(void)
++{
++	return misc_register(&cachefiles_ondemand_dev);
++}
++
++static inline void cachefiles_exit_ondemand(void)
++{
++	misc_deregister(&cachefiles_ondemand_dev);
++}
++#else
++static inline int cachefiles_init_ondemand(void) { return 0; }
++static inline void cachefiles_exit_ondemand(void) {}
++#endif
++
+ /*
+  * initialise the fs caching module
+  */
+@@ -52,6 +73,9 @@ static int __init cachefiles_init(void)
+ 	ret = misc_register(&cachefiles_dev);
+ 	if (ret < 0)
+ 		goto error_dev;
++	ret = cachefiles_init_ondemand();
++	if (ret < 0)
++		goto error_ondemand_dev;
+ 
+ 	/* create an object jar */
+ 	ret = -ENOMEM;
+@@ -68,6 +92,8 @@ static int __init cachefiles_init(void)
+ 	return 0;
+ 
+ error_object_jar:
++	cachefiles_exit_ondemand();
++error_ondemand_dev:
+ 	misc_deregister(&cachefiles_dev);
+ error_dev:
+ 	cachefiles_unregister_error_injection();
+@@ -86,6 +112,7 @@ static void __exit cachefiles_exit(void)
+ 	pr_info("Unloading\n");
+ 
+ 	kmem_cache_destroy(cachefiles_object_jar);
++	cachefiles_exit_ondemand();
+ 	misc_deregister(&cachefiles_dev);
+ 	cachefiles_unregister_error_injection();
+ }
+diff --git a/include/uapi/linux/cachefiles_ondemand.h b/include/uapi/linux/cachefiles_ondemand.h
+new file mode 100644
+index 000000000000..e639a82f1098
+--- /dev/null
++++ b/include/uapi/linux/cachefiles_ondemand.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++#ifndef _LINUX_CACHEFILES_ONDEMAND_H
++#define _LINUX_CACHEFILES_ONDEMAND_H
++
++#include <linux/limits.h>
++
++struct cachefiles_req_in {
++	uint64_t id;
++	uint64_t off;
++	uint64_t len;
++	char path[NAME_MAX];
++};
++
++#endif
+-- 
+2.27.0
 
-
-> 
->>     - declare resources associated to a remote proc VirtIO
->>     - declare a list of VirtIO supported by the platform.
->> - Prepare the enhancement to more VirtIO devices (e.g I2C, audio, video, ...).
->>   For instance be able to declare a I2C device in a virtio-i2C node.
-> 
-> As my understanding virtio-i2c is a i2c bus, you could declare a i2c device
-> in the virtual bus without your patchset, would you please share more?
-
-Yes virtio-i2c is a bus, There is different methods to declare I2C device on
-a bus[1].
-
-In ST we rely on DT to statically declare an I2C device,as child of the I2C
-adapter node.
-I haven't implemented the virtio-I2C part yet, but it would make sense to have
-such an implementation.
-
-Which alternative have you in mind?  
-
-[1] https://www.kernel.org/doc/html/latest/i2c/instantiating-devices.html
-
-Thanks,
-Arnaud
-
-> 
-> Thanks,
-> Peng.
-> 
->> - Keep the legacy working!
->> - Try to improve the picture about concerns reported by Christoph Hellwing
->> [3][4]
->>
->> [2]
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.or
->> g%2Flkml%2F2020%2F4%2F16%2F1817&amp;data=04%7C01%7Cpeng.fan%4
->> 0nxp.com%7C9e663eefc30a4fbb1fdb08d9e0e855e2%7C686ea1d3bc2b4c6fa
->> 92cd99c5c301635%7C0%7C0%7C637788110748757786%7CUnknown%7CT
->> WFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLC
->> JXVCI6Mn0%3D%7C3000&amp;sdata=O2BZw5PCY19eD5xMGxrGUKC%2Fty1
->> Sdc3LE6rhK4cSXvs%3D&amp;reserved=0
->> [3]
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.or
->> g%2Flkml%2F2021%2F6%2F23%2F607&amp;data=04%7C01%7Cpeng.fan%40
->> nxp.com%7C9e663eefc30a4fbb1fdb08d9e0e855e2%7C686ea1d3bc2b4c6fa9
->> 2cd99c5c301635%7C0%7C0%7C637788110748757786%7CUnknown%7CTW
->> FpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJX
->> VCI6Mn0%3D%7C3000&amp;sdata=xqX50iDeL%2BtFBOgyADnEUE5HH4gogK
->> C0MwyqZSxVqNo%3D&amp;reserved=0
->> [4]
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpatch
->> work.kernel.org%2Fproject%2Flinux-remoteproc%2Fpatch%2FAOKowLclCbO
->> CKxyiJ71WeNyuAAj2q8EUtxrXbyky5E%40cp7-web-042.plabs.ch%2F&amp;da
->> ta=04%7C01%7Cpeng.fan%40nxp.com%7C9e663eefc30a4fbb1fdb08d9e0e85
->> 5e2%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637788110748
->> 757786%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2
->> luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=mvSm3wM
->> LgQ%2BDFhqjXIkG8de58zFjwPSURzw55JhGNaA%3D&amp;reserved=0
->>
->> In term of device tree this would result in such hiearchy (stm32mp1 example
->> with 2 virtio RPMSG):
->>
->> 	m4_rproc: m4@10000000 {
->> 		compatible = "st,stm32mp1-m4";
->> 		reg = <0x10000000 0x40000>,
->> 		      <0x30000000 0x40000>,
->> 		      <0x38000000 0x10000>;
->>         memory-region = <&retram>, <&mcuram>,<&mcuram2>;
->>         mboxes = <&ipcc 2>, <&ipcc 3>;
->>         mbox-names = "shutdown", "detach";
->>         status = "okay";
->>
->>         #address-cells = <1>;
->>         #size-cells = <0>;
->>
->>         vdev@0 {
->> 		compatible = "rproc-virtio";
->> 		reg = <0>;
->> 		virtio,id = <7>;  /* RPMSG */
->> 		memory-region = <&vdev0vring0>, <&vdev0vring1>,
->> <&vdev0buffer>;
->> 		mboxes = <&ipcc 0>, <&ipcc 1>;
->> 		mbox-names = "vq0", "vq1";
->> 		status = "okay";
->>         };
->>
->>         vdev@1 {
->> 		compatible = "rproc-virtio";
->> 		reg = <1>;
->> 		virtio,id = <7>;  /*RPMSG */
->> 		memory-region = <&vdev1vring0>, <&vdev1vring1>,
->> <&vdev1buffer>;
->> 		mboxes = <&ipcc 4>, <&ipcc 5>;
->> 		mbox-names = "vq0", "vq1";
->> 		status = "okay";
->>         };
->> };
->>
->> I have divided the work in 4 steps to simplify the review, This series
->> implements only the step 1:
->> step 1:  redefine the remoteproc VirtIO device as a platform device
->>   - migrate rvdev management in remoteproc virtio.c,
->>   - create a remotproc virtio config ( can be disabled for platform that not use
->> VirtIO IPC.
->> step 2: add possibility to declare and prob a VirtIO sub node
->>   - VirtIO bindings declaration,
->>   - multi DT VirtIO devices support,
->>   - introduction of a remote proc virtio bind device mechanism , =>
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.
->> com%2Farnopo%2Flinux%2Fcommits%2Fstep2-virtio-in-DT&amp;data=04%7
->> C01%7Cpeng.fan%40nxp.com%7C9e663eefc30a4fbb1fdb08d9e0e855e2%7C
->> 686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637788110748757786
->> %7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiL
->> CJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=X%2B462681gcxe6
->> 2GP%2BV7ji2nef%2FuTbQVvIlddcMQwtmg%3D&amp;reserved=0
->> step 3: Add memory declaration in VirtIO subnode =>
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.
->> com%2Farnopo%2Flinux%2Fcommits%2Fstep3-virtio-memories&amp;data=0
->> 4%7C01%7Cpeng.fan%40nxp.com%7C9e663eefc30a4fbb1fdb08d9e0e855e2
->> %7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637788110748757
->> 786%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luM
->> zIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=eMlXgCgrV6l46
->> h3Ywv1%2BCoX3gLBabdTZs9ybsm4t4ys%3D&amp;reserved=0
->> step 4: Add mailbox declaration in VirtIO subnode =>
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.
->> com%2Farnopo%2Flinux%2Fcommits%2Fstep4-virtio-mailboxes&amp;data=0
->> 4%7C01%7Cpeng.fan%40nxp.com%7C9e663eefc30a4fbb1fdb08d9e0e855e2
->> %7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637788110748757
->> 786%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luM
->> zIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=75hApOwihqMZ
->> UUKz1VcitY2VPDc6KAIwAvH8enEZOPY%3D&amp;reserved=0
->>
->> Arnaud Pouliquen (4):
->>   remoteproc: core: Introduce virtio device add/remove functions
->>   remoteproc: core: Introduce rproc_register_rvdev function
->>   remoteproc: Move rproc_vdev management to remoteproc_virtio.c
->>   remoteproc: virtio: Create platform device for the remoteproc_virtio
->>
->>  drivers/remoteproc/remoteproc_core.c     | 159 +++----------------
->>  drivers/remoteproc/remoteproc_internal.h |  33 +++-
->>  drivers/remoteproc/remoteproc_virtio.c   | 193
->> ++++++++++++++++++++---
->>  include/linux/remoteproc.h               |   6 +-
->>  4 files changed, 227 insertions(+), 164 deletions(-)
->>
->> --
->> 2.25.1
-> 

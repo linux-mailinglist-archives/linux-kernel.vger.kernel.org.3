@@ -2,119 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B154B7852
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:51:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 145D24B7544
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:47:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234053AbiBOSXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 13:23:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38390 "EHLO
+        id S242856AbiBOSFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 13:05:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232405AbiBOSXX (ORCPT
+        with ESMTP id S236250AbiBOSFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 13:23:23 -0500
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342DFC4E29;
-        Tue, 15 Feb 2022 10:23:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
-         references;
-        bh=4ea0lgdbQAVCZDxpFFT2YdXX5BI7YGO8Ht6ckrwZhHg=;
-        b=X63cxMFShB+1K/6yb0SV1pd0O+vzkwkregB6VG6YR+lXD/XkFpeIT+XRw6VNpW0NVaavwFFWLqXf9
-         4Ckk3tfS+E/lKjlHJxHlQX3FDmzShgw1JO1235CeI4VuRSCAS/N5uulpeKSkVnG0JhOOZYRDOBrdQA
-         UgznDdK3ctb9FeHys454IZMCJ45LihKAIxIKOe5O7rssq9P1D7H1IDSSzg2RMvr7SUsxvulNnMtVhl
-         3SU+CcwHpMLKltJz/scvfYOeHjFaL652mE61UQqAMJhd7e8jTJ6k52a50n8GtJpgW1G+RqmpY3HfW+
-         SIJnmW7Q+zyGvMH5iLtbgPDJBvK+Gpw==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.2.1403, Stamp: 3], Multi: [Enabled, t: (0.000009,0.008659)], BW: [Enabled, t: (0.000022,0.000002)], RTDA: [Enabled, t: (0.064652), Hit: No, Details: v2.25.0; Id: 15.52k0kj.1frv9v0as.6jqg; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from x260 ([178.70.66.234])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Tue, 15 Feb 2022 21:22:50 +0300
-Date:   Tue, 15 Feb 2022 21:05:02 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     Moritz Fischer <mdf@kernel.org>
-Cc:     Conor Dooley <mail@conchuod.ie>, hao.wu@intel.com,
-        yilun.xu@intel.com, trix@redhat.com, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org, system@metrotek.ru
-Subject: Re: [PATCH v2] fpga: microsemi-spi: add Microsemi FPGA manager
-Message-ID: <20220215180502.gqcsz7rdxygiva3y@x260>
-References: <20220214133835.25097-1-i.bornyakov@metrotek.ru>
- <20220215115853.26491-1-i.bornyakov@metrotek.ru>
- <d0890e09-5d4a-5cce-832d-26e64b74ac54@conchuod.ie>
- <YgvoXgqM65M97qib@epycbox.lan>
+        Tue, 15 Feb 2022 13:05:34 -0500
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96C6119410;
+        Tue, 15 Feb 2022 10:05:23 -0800 (PST)
+Received: by mail-vk1-xa2b.google.com with SMTP id f12so3503133vkl.2;
+        Tue, 15 Feb 2022 10:05:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=gLFgGT6YwvXW1wx34JstmO2egBx2eW53mLM0rtTg/Sc=;
+        b=KID333ITUi73ySWGz7NI+m+E5EGqFpblrSqIqmNw1gXZev9/XDAyukTbxvSCm4gKSe
+         4hYTBpYMUl4w0qe6b2urizheFZs7flA7mMy2m+0fkW90KTAMc+4l9325zTeoom60nPYs
+         i+UJ1fb2Wu06ksFS/igVcQQwtTeaW27Mni+l43Dx8F84mRa5xhAlk0ArF6LaheuBX6UJ
+         WHqlzTFf2rTWdyR0g6exXoLT4XNmSbbdBXaXd9n+7Gd5TlNR6J7zfjZ5wdPk+lhxINmr
+         oHu0f4OoYTlA1u0+xeryBjS4Nv1D6zvvWZo2zQnWHVoFn8lk/rrpf7ABra2C4cpBlveU
+         hhcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=gLFgGT6YwvXW1wx34JstmO2egBx2eW53mLM0rtTg/Sc=;
+        b=U8jzPXmfTs1E3eZFsBePME+9oxHNW7t85bCsW3NOyYsIVUERF94d2q5gUxqz2iDf8G
+         vXT3p8HGuNNrC7ambIS5pct8R4mFiW8h4zuFns2vDl9rXN7ilAThNSjUVIOsyd5jHuRi
+         9T/rIsG/BXRndmVAVm+YWVsVqmoBrQM/hacUT6aua3Y//YA6606zYv44/pXKiVhZAsqT
+         ZYgt1ZHaUlqcK5ZxL+FLKPOTMc5hP6FDuzX2DgV2wzN/SA7o08sR4hMNdfcopinz9UWV
+         fNZ7j21OeEtvjpvOV7M7yqyggDStLo6TcP7oozLS28h6nbtKImJoHFOdy7Ek+Y5FDpzq
+         l8AA==
+X-Gm-Message-State: AOAM5326sfqanDRs9LTumaCp+0bfmiqAw9HuzRQHvC7OzZZTw3W9ihQt
+        KK8bH4xXFC5uu5TWor9rQ/7yKCkVDVVsdRN8Oco=
+X-Google-Smtp-Source: ABdhPJwZ2c4DluFw+8AgtAZO4eg8n+SwcAKGWvctDBdUls3kAzfoEoE5KmSOu0LxpAWQttLVgi0QdO4HXYfEG/R2j3s=
+X-Received: by 2002:a05:6122:54e:: with SMTP id y14mr63443vko.37.1644948322750;
+ Tue, 15 Feb 2022 10:05:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgvoXgqM65M97qib@epycbox.lan>
+References: <20220126175604.17919-1-romain.perier@gmail.com>
+In-Reply-To: <20220126175604.17919-1-romain.perier@gmail.com>
+From:   Romain Perier <romain.perier@gmail.com>
+Date:   Tue, 15 Feb 2022 19:05:11 +0100
+Message-ID: <CABgxDo+hRsDo-Hmf4TUmuWQFo0+LnWOTrEQQz0beSjBhxkZ6_Q@mail.gmail.com>
+Subject: Re: [PATCH v4 0/8] ARM: mstar: cpupll
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>,
+        Romain Perier <romain.perier@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Conor, Moritz
+Hi,
 
-On Tue, Feb 15, 2022 at 09:52:30AM -0800, Moritz Fischer wrote:
-> Hi Conor, Ivan,
-> 
-> On Tue, Feb 15, 2022 at 05:37:04PM +0000, Conor Dooley wrote:
-> > Hey Ivan,
-> > Firstly thanks for the patch(es), stumbled across them today.
-> > As you may know Microsemi has been acquired by Microchip, so
-> > s/microsemi/microchip/ please. This would make the correct vendor
-> > prefix for compatible strings "microchip". While you've said this is
-> > for the PolarFire FPGA, there is prescendent for using "mpfs" for the
-> > PolarFire SoC FPGA in the kernel - so if you could change the uses of
-> > "polarfire" to "mpf" that'd be great.
-> 
-> I personally don't have a strong opinion on hte microchip vs microsemi
-> here. We have precedent with intel/altera.
-> 
+ping :)
 
-Me neither, so I'll do what Conor asked.
+Regards,
+Romain
 
-> > 
-> > The current item on my own todo list is the opposite side of this,
-> > reprogramming the FPGA via the system controller acting as a SPI
-> > master for PolarFire SoC.
-> > I will get back to you when I have a better idea of what (if any) code
-> > can be made generic between both modes. In the meantime, I will get
-> > together a setup to test SPI slave reprogramming of the PolarFire (SoC)
-> > 
-> > Thanks,
-> > Conor <conor.dooley@microchip.com>
-> 
-> Thanks for chiming in. Always nice to have vendors help out reviewing.
+Le mer. 26 janv. 2022 =C3=A0 18:56, Romain Perier <romain.perier@gmail.com>=
+ a =C3=A9crit :
 >
-
-Yeah, that's great, thanks in advance Conor.
-
-> > > Add support to the FPGA manager for programming Microsemi Polarfire
-> > > FPGAs over slave SPI interface.
-> > >
-> > > Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> > > ---
-> > > Changelog:
-> > >   v1 -> v2: fix printk formating
-> > >
-> > >  drivers/fpga/Kconfig         |   9 +
-> > >  drivers/fpga/Makefile        |   1 +
-> > >  drivers/fpga/microsemi-spi.c | 366 +++++++++++++++++++++++++++++++++++
-> > >  3 files changed, 376 insertions(+)
-> > >  create mode 100644 drivers/fpga/microsemi-spi.c
-> > >
-> > --<snip>--
-> 
-> I'll take a closer look once the bot's complaints are addressed.
-> 
-> Thanks,
-> Moritz
-
-Thanks in advance Moritz.
-
+> This series adds a basic driver for the PLL that generates
+> the cpu clock on MStar/SigmaStar ARMv7 SoCs.
+>
+> Unfortunately there isn't much documentation for this thing
+> so there are few magic values and guesses.
+>
+> This needs to come after the MPLL DT changes.
+>
+> Changes since v3:
+> - Added Reviewed-by on Daniel's patches
+> - Removed "[PATCH v3 8/9] ARM: mstar: Add OPP table for mercury5"
+>
+> Changes since v2:
+> - Re-ordered Kconfig by name
+> - Re-ordered includes alphabetically and removed useless ones
+> - Used timeout for cpu_relax
+> - Returned DIV_ROUND_DOWN_ULL() directly in
+>   msc313_cpupll_frequencyforreg()
+> - Returned DIV_ROUND_DOWN_ULL() directly in
+>   msc313_cpupll_regforfrequecy()
+> - Reduced the number of lines for msc313_cpupll_of_match
+> - Removed CLK_IS_CRITICAL
+>
+> Changes since v1:
+> - Re-worked the series and ensure that 'make dt_binding_check' passes.
+>   The required commit is merged now, so it is okay.
+> - Fixed coding style issues in the driver and makes check_patch.pl happy
+> - Added one more commit for extending the opp_table for infinity2m.
+>
+> Daniel Palmer (7):
+>   dt-bindings: clk: mstar msc313 cpupll binding description
+>   clk: mstar: msc313 cpupll clk driver
+>   ARM: mstar: Add cpupll to base dtsi
+>   ARM: mstar: Link cpupll to cpu
+>   ARM: mstar: Link cpupll to second core
+>   ARM: mstar: Add OPP table for infinity
+>   ARM: mstar: Add OPP table for infinity3
+>
+> Romain Perier (1):
+>   ARM: mstar: Extend opp_table for infinity2m
+>
+>  .../bindings/clock/mstar,msc313-cpupll.yaml   |  45 ++++
+>  arch/arm/boot/dts/mstar-infinity.dtsi         |  34 +++
+>  arch/arm/boot/dts/mstar-infinity2m.dtsi       |  17 ++
+>  arch/arm/boot/dts/mstar-infinity3.dtsi        |  58 +++++
+>  arch/arm/boot/dts/mstar-v7.dtsi               |   9 +
+>  drivers/clk/mstar/Kconfig                     |   8 +
+>  drivers/clk/mstar/Makefile                    |   2 +-
+>  drivers/clk/mstar/clk-msc313-cpupll.c         | 221 ++++++++++++++++++
+>  8 files changed, 393 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/devicetree/bindings/clock/mstar,msc313-=
+cpupll.yaml
+>  create mode 100644 drivers/clk/mstar/clk-msc313-cpupll.c
+>
+> --
+> 2.34.1
+>

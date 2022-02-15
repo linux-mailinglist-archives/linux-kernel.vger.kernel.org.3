@@ -2,150 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C104B662F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 141784B6639
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235474AbiBOIdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 03:33:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40982 "EHLO
+        id S234070AbiBOIfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 03:35:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234351AbiBOIdU (ORCPT
+        with ESMTP id S232284AbiBOIe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 03:33:20 -0500
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90078.outbound.protection.outlook.com [40.107.9.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B50E687A;
-        Tue, 15 Feb 2022 00:33:09 -0800 (PST)
+        Tue, 15 Feb 2022 03:34:59 -0500
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-eopbgr130049.outbound.protection.outlook.com [40.107.13.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341BCC3312;
+        Tue, 15 Feb 2022 00:34:49 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fsPGvz75HXbgU+UKgSbnQE+19g6aVwMaqQ+RzBNAEGff62gs6PdA8cY2US3cBeFvvOkryXpTTnKyB218X1DDjD9aaLxbjDmdqnfHswbUPCdpV8pxsLThHWmZjohbGATzyBrRit/4zCKT/UUHsSrUKrF9qKconk0iSDOgSjKWlyIWqWSaHyyPiYvlo6vHHYh8X+qQZiJCUPwq0DYaWGe8cfvq3SI7CAG+9P5k7vpguC5y/zi0DiBNgzJXPTUD9ECj5JtGemNb2Y0imNU20eoBqRjdih0nTCAuscsDHZK5EAOj1Npeqc7DHvabnlQFxHBODJDSzBLCWDUyqUdg5ZSJzQ==
+ b=hKiqnPR/usSCmHG1uhP8ze9zkX4ZiAAbmDmoae/kUry9I/e4R+dUF1q44a1KIuzrYdmPiBXOcygWMxzQIvzjtG3KFwU6v26lTMJ7/BUQiOyIbfg3GLwdrGX8tV+EbnjTGxP7PFEZgFSVjVZWYemJJOqdHFIvPgaINxUMz8/eCTjbQIAD6Xlu7AWxswbBqmDIc55Lj3VcO4cLj0h62pxDr0s1K+qlBT2d4D1nefTtYWZfO8m/oSga6DS9RFkiVqu8Bnd6X5x0wnHwpK5nsSx4k9kLCSpUpxXixh4NRwzB/3n+greyey09SDtJXO8G4Kh37voRvVbTALCkzrS5AJMjAQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XrckqNSeE29e3Yq5+/cQhv4/KsZXD0Xc31e3XFfHpl8=;
- b=foOVuG3ElOvz6DNsgZg/zfW0HBFj9FFveJ/UJQbRfZb/ZR5zP1zZSrceZWT+p+TiRrv3nmPTkkkOrYJ5HJ2iC3b/zxf44pMWisC9KX4v7AgiwrIgY3rXQECHKIdtWkwFfvaGNGHc1lwnUSpaDYs1N7+1oqHL0Gebp/9yZa/cONfGFon9KFZ6OoDiDFHhdDAIOriF1MS1iqF795+ONuiX3raA6/OT0suUIsxtnoXPfDwWYH4s+R9D8NCV031e1qkhTsTGQOPdAuaa2ssgvt/ZfqjtNFNrt42dNdcr7q8ftjEjS4TKUdDTwKNlCedFQRRH0MJo9HmnPH0xhcOolS7uXw==
+ bh=0FsFPw51qzEk89oKjXpQZSrYUXtW96GExiMxkaq65oA=;
+ b=HSjQXDRRnbwklV3RfGemL8yBR50QELWu1GdEu/AuwHo9EPJspHEKSGyJWIDuhtcLhWWPnNTIpkyOKxkpDIl7LXmmeCMYZn6EPK6lOIiFkuk8dJgscJY8XXgFc+SfPWTfKmC9uPxyIZnYfIW5GxKVidJCWVf/pUivK1EzXBYkvyVzAidD7Tvlp7zjm9jVj1Mqgz6nivoMdI03L/scO9yGQR51xEnxul1NEzAMis6irHxTQYl1AD2kcu8YmIhCOELtCMvRw5LhlxzEFyvopRY2dFxGQeBMh+G8P+UN0XJGmz3gQkamIyVR6mcw2ki1Um7JVu2Nsffe9zgyfg1n1sUTJQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR1P264MB2192.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:193::15) with
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0FsFPw51qzEk89oKjXpQZSrYUXtW96GExiMxkaq65oA=;
+ b=gDZ5XiegTBRxMsIZFKU0rlkZh09FzIdrj2p6Sv7qMeXu3Hds0DLf8TkaTNuEsfFw8l9Eg+zblm9IhJV13xovy4V+CXkco7OkO8HIl0oXMYrOhK+bIBzgx7hkmRAX4MF5+C8Mkkvj2DXCWGIh7JQI4VGn+aTgIxQTFmufUQ7cqd4=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by PR3PR04MB7434.eurprd04.prod.outlook.com (2603:10a6:102:8e::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Tue, 15 Feb
- 2022 08:33:07 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c9a2:1db0:5469:54e1]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c9a2:1db0:5469:54e1%9]) with mapi id 15.20.4975.019; Tue, 15 Feb 2022
- 08:33:07 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Ingo Molnar <mingo@redhat.com>, Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>
-Subject: Re: [PATCH v2 12/13] powerpc/ftrace: Prepare ftrace_64_mprofile.S for
- reuse by PPC32
-Thread-Topic: [PATCH v2 12/13] powerpc/ftrace: Prepare ftrace_64_mprofile.S
- for reuse by PPC32
-Thread-Index: AQHX9cAL+q8e/kpRIUG40cd4NXnolKyTq5wAgAD2MgA=
-Date:   Tue, 15 Feb 2022 08:33:07 +0000
-Message-ID: <758cd183-b2cf-3cab-7fcb-6fa485997209@csgroup.eu>
-References: <cover.1640017960.git.christophe.leroy@csgroup.eu>
- <82a732915dc71ee766e31809350939331944006d.1640017960.git.christophe.leroy@csgroup.eu>
- <1644860537.hyunv1mld0.naveen@linux.ibm.com>
-In-Reply-To: <1644860537.hyunv1mld0.naveen@linux.ibm.com>
-Accept-Language: fr-FR, en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.19; Tue, 15 Feb
+ 2022 08:34:46 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::448c:19d:ca9a:123e]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::448c:19d:ca9a:123e%7]) with mapi id 15.20.4975.018; Tue, 15 Feb 2022
+ 08:34:46 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Stefano Stabellini <stefanos@xilinx.com>,
+        Bruce Ashfield <bruce.ashfield@xilinx.com>
+Subject: RE: [RFC PATCH v3 0/4] remoteproc: restructure the remoteproc VirtIO
+ device
+Thread-Topic: [RFC PATCH v3 0/4] remoteproc: restructure the remoteproc VirtIO
+ device
+Thread-Index: AQHYEtE0wJ0OgErjykyAoYmEY+BNQKyUZypw
+Date:   Tue, 15 Feb 2022 08:34:46 +0000
+Message-ID: <DU0PR04MB941722D995004F877DC6171D88349@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20220126162405.1131323-1-arnaud.pouliquen@foss.st.com>
+In-Reply-To: <20220126162405.1131323-1-arnaud.pouliquen@foss.st.com>
+Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
+ header.d=none;dmarc=none action=none header.from=nxp.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d1736773-1f3f-4b62-539e-08d9f05dcabe
-x-ms-traffictypediagnostic: PR1P264MB2192:EE_
-x-microsoft-antispam-prvs: <PR1P264MB2192F4751E037AA53AD89954ED349@PR1P264MB2192.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:4941;
+x-ms-office365-filtering-correlation-id: 4cf6a537-5962-4d97-dbef-08d9f05e05e3
+x-ms-traffictypediagnostic: PR3PR04MB7434:EE_
+x-microsoft-antispam-prvs: <PR3PR04MB74349429ACF6E4989B128EC988349@PR3PR04MB7434.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3UYZ9kBI+iFvVSAH+o3qdOzss7ySCwSGPMPsM2sasuYvLmAsrADGzesJMG4uGVRq4TY4lqUnFuCpmSMD4GXTBx/86f3FKTHcsSzC3LpQzXYdN+5JIRbgRgDHG/jmYQykNj6Cl26mDzZ4N6fdXYgA+UIveUfW0QYjrXtjMyyM7XDR9i0aJWK7XI0n63a5QoHsd8CW+izXQYq7QMbuh8tbRa8TPMd/i7TxWzumYMTBQzY+TXwk9BoEoT381aMgPb14NTEHNmFtQqaXwaWd03T9abGoNZWT30sGKHghjGaw+5MybkXNMwm6ngNQlP4hVVbkEvjmmZIHHgiawa/cRmSa6IsyLgFOkzzyOe89FFrXS/xYPoDhESSsGQ0XGrvYzP2ooT6wawhUmG+Aut130OjclA/tg/SBFrQxQdQQfJhpZVrEEiCf1+wKoWJzrg3jZl2k/FZA3pJAaek7SfP4LEGFmjjtgfw7wwIwYHqc7ttwgsfrHvTDr9FGEakwc4gMsNGecDj4eo9ZKNOSbw/0lvwBwU5MPPH66TaY6MatFq1d1KTtdteZudqkcHeZSXebZNmMptvU6BPe+44vFd6wWfoUGvYpDO6PVtjz1TromWn6mW3WgjuWZHMqL6fyZu2JVtzWZkYBF+KvYJJsp2Ng//Wbm4bB/NTRTNVm2QPzoAcHxewwSEZ7Sizo7M9fS5SdRw44nLOmtQiBMDiWdB8avi82JzY/mZ7ya0b13qTGSkCYn3DPkhNQNWGYvG4vdwnCeu7TzaTIDfjvIiSedkCkwGWQUQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(44832011)(4744005)(7416002)(6512007)(2616005)(31686004)(5660300002)(36756003)(186003)(26005)(8936002)(38100700002)(71200400001)(2906002)(83380400001)(6506007)(38070700005)(66556008)(76116006)(8676002)(91956017)(4326008)(66476007)(66946007)(6486002)(66446008)(508600001)(64756008)(86362001)(122000001)(31696002)(110136005)(54906003)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: 8iTjSxfwSfOQh1ai/QvMenfj9FHP+thP4veItWzhBUzQlZ8yFeIqtxldilGXbeCi3zL0EtSQ2RjVyx+r1GdfBP820OvOR1TJj0Ug/xOT6O7WOqaz+NhLS5RP+RqzRl6X7NZy1cjvJShMTl+mXMbYvZp5zMg++6XYGV12gpL3wh3ej5+GCRXXdUk2b1skET/QzDNIG6YNOfti7I9A65DQujAlTxjUYoyR9m+JH3j9BqProd6h9+SUmYdD+Jz55T9LeXtUKVpBB8f8en8Q3lSBYLaM3HlKHjLaW9Mtc5zd8GhBsmT8Mmzc6vfN3rMU+0WgnyhGlvgHQfkKiWgpFLObiZyWg0CDxtzWLasPKaxvZQnxNJBWYpm3YXAjefWmYM228IGoDjwF2OWwoy4LH2wdRi3mFfl/orlX/hqJrm0T8mrtuKYS/PLy8EZhDITNd6o9Rws3/hRtfFOVNJZ+Rw/XXuOWJM84MFgA4Rt6MVm2GfDbV+JS60u5kToYQMZayfHlgC/8LqfUL6DEhztJsYPAlYq9V2Rt/7YbWuMqVQBMthNQLwWYoqCcvDX8t9g55wIQC7Vkcc4d5Mrrci44nK1fXkBOCFcr2aaUfaGZULpUs1LBisjoJ5pjMpgVK/gLtzkZShm/Jy/47M8K1q94gTSd+bPCUn+um3wY8sTTTTjkPNYQgtq5S3N+tNzFjLmPcsdtmUc8qQpwnVEEkab5sYetI4qd3+iWxx0EuM1vKuaEeBrlH1PLRXcg+6xFpO7iHyvK2feQq2BN69z78H5Xo+V7NhNhyAEqp94fvhp9a1XK2pEWnUyDtxPDFTJ7+fpaDjuTMaVnSCK5S2rKKqOvV8bqpg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(54906003)(44832011)(71200400001)(2906002)(110136005)(316002)(9686003)(5660300002)(33656002)(55016003)(7416002)(83380400001)(86362001)(38070700005)(8936002)(122000001)(66556008)(64756008)(66446008)(66476007)(76116006)(8676002)(4326008)(7696005)(6506007)(186003)(66946007)(45080400002)(38100700002)(508600001)(52536014)(966005)(26005);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?c0JURERmVUcra3RFVHlXajZHbXlHK0t1MXFzT1JVOXpiVHpjdnkvU3ZEbVRU?=
- =?utf-8?B?MS9rQ1hXejdWaEhWdTAvYmJtcm1YbHZVbFlXWk5NQ2FtK2J1cWNsc29FZ3Nk?=
- =?utf-8?B?Ni9KR3NNdGNxaWhXNTdHaTYyL0x4RTFmYUVpUDdjQjREVVNiTll6Mk1sd0Vk?=
- =?utf-8?B?SGdrZUVBbVRIUjFLc1FBakpzY1IyZWZ4NkJtRkhWa1hFdEJ3QlBnTXBGaldP?=
- =?utf-8?B?cDV0dFJEeGdyWmlIMmpLK0FKcTA4bk1vNFk1Y0FCU3Z0b1VBaHFYNGk4UXZG?=
- =?utf-8?B?OVBLUDZ5ZFNEMElycjlLcDBYVzFYZ0ZWT2NiYTZSWU9EMVVIS1o5Umg1bFJn?=
- =?utf-8?B?dHk2TTNpSnU0ZXdaaUV4ZHZ6SlFUWVdpSmlwZzBJWk5wODdDeUpPZForQ1Ni?=
- =?utf-8?B?aEgrcVlOaDVBdGVDcWRJTnZaQVkzUnRuN0ZVWEtyY25tU1E3eUN1Mlc1eGdK?=
- =?utf-8?B?OExlZ1ZSL1hvQk1qejF6eW42Y29id0w4YUlqc1lqN1RhamQvcXdwenRhSmlL?=
- =?utf-8?B?WnFaV1I2SUlwZ1hiZ21WaFBsWE1JbTk3bEtWay83M1RjVDFHdTVabWR1d3Fy?=
- =?utf-8?B?UFZJdXdZejJMQjVPTlA3emdRY2wzdFJ5MENhZm1kSVVBYlhkODU5OTdlbHNR?=
- =?utf-8?B?UmdmckljZGUwTG5Oc2xTSkVLbXVYYTgvcTRpV1F5NWcrL2NMZUhIaEhPSjk2?=
- =?utf-8?B?VE12MVJzdEhUWVlwRlVJM0toVmx6Z1BEa1dNdFp2YVpwYzlDSEZPNysrd2V5?=
- =?utf-8?B?bU5EYXdaeEZZbFJGMmJqU3RHN0JZdU04VFpnYXl5WGxKZjVXb0hFcHFDczVP?=
- =?utf-8?B?dUpxSFNoMkRRS2tiNmR3UnpQN0FwWUpwUmRLNFBMSVAyMWI4cVpDcW9YcVhm?=
- =?utf-8?B?anFZL3htYTFtVjc1MTgzdlFzeVQvYkl5SnFURDExUVpJU01DUmJrTHIwenB3?=
- =?utf-8?B?REtwRTJnS21MVlltVzc1RS8vS2ErUWxhMTJvTVk5UTE1WXp0Rm9rVnZjblpW?=
- =?utf-8?B?YTVCOG9NalM0SFdiSThLdlNtOG1hY0MzU0ZqbVFCRS9ZdW14dVF4TDZiV0Y5?=
- =?utf-8?B?K3k1VjZTbmhOR1ZWV3RpVUl2YUgrZmZhYzVPQ294b3NJb3lGSXU0TEZtVVNR?=
- =?utf-8?B?VlVKek9ORUVEQnpBWEhzUlZTa2t5MTZOdis4dllMcFZYNW5oZC9tSHMwcFdI?=
- =?utf-8?B?a0JWeVFUMGorajdTWC94L1dXaTdhb3JzUWliVTVkSnBjQlZURkZLYkE4RXFJ?=
- =?utf-8?B?Sk4vWmx1RExmbHo0bDBnSS85QTdWUXBNelgwSTY1ZXFjWER3VncxVzA1YXFC?=
- =?utf-8?B?REhpelN6UUUweVUxYkpGYWxLSjhOcGQwQnRaamVqQXNNNzdVK3czbEErVitG?=
- =?utf-8?B?MEwzN3ZsejlGcWNzcWI0c214OWM1Qk5iUC9najFWMlNEL3lMSXpwck9jaEJ5?=
- =?utf-8?B?UVc4YTRuM1YrZEE1UU9nckRhWmJ5S2JQd3dTdk9weTZzcXpoTzlNYjRSR3JE?=
- =?utf-8?B?NUlZS2RPcDVTbWVMdjZTdkE1Vktabkt3cHFnYVptY1Zaa1VNeGFKbVYvTHFT?=
- =?utf-8?B?SmV1SjlUQ0VDejRqZ3FFOU12UDRFVmJqemJlZ2l6TndtQnZsbWJiL0RXN1hU?=
- =?utf-8?B?MHdZMkxvL2VGV2JlNFJzei9vOFM5VnJ1VXJrczhieUxhZHUrN2ZhZzgyVjZ4?=
- =?utf-8?B?bUE1Y2xvQW5SZmV3VGpYS0lVMmhMWkNlRHp6Tzlud2xtM3p1cng0NDl4bE1y?=
- =?utf-8?B?RjBJTm9PVVdVYlFsOER1SWxiU3Q3cmU3cTg5UGFWb3gzNTY0blFxYUNMalJk?=
- =?utf-8?B?eHhlMVZmM1NlODc0VHRUZGdOQ3Nyenk3U28rR29zbXJyZHhNNUlkaVN5cGJ5?=
- =?utf-8?B?b1ZMdGhzNFdyTjlCS3BXZmhXZCszQzJNYktiZllML1BIM0MzY1A1Smx0UjZn?=
- =?utf-8?B?dXR2VHlHdjYvTGY2Tkd0RERQRHBMRG5US0cwd0VXNXN3SnVKc3BGU2JLWWl5?=
- =?utf-8?B?eGZndk01TGxuVWZJK1dsZGhkOVhQVGdGb1h4WFd3MzE5cm1rWVg3QzkvMXhw?=
- =?utf-8?B?a0FMOVVPbHlRQXFibXlWNGxRRUdmcUpkbkJSV3VxcGpEK3dIeTJUMmNSbW5L?=
- =?utf-8?B?bzFkZnh2ckZRTXc3V2Z4b0pQLzZEVTN3MWRMM0FONlFHVXJaOEJOUkJQa2VN?=
- =?utf-8?B?c3lHZ3dEcHpxK1J2UWxaVUdySlRpRTRzU1lFcUhLSzVZUWUzWmVmdFJ6MkZO?=
- =?utf-8?Q?41qNj7Tu2DQTIKO3mcyxqWa+OZLIRG7kVm3wSMu4AY=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <49EF578B8568E54EBB291F6C9A3D27D4@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?qfMV9k/cXjBb8vgCb/hAxS7wxf+bgT2h5KTrB3z4UxfwyAnQxqfh7/5WiSP4?=
+ =?us-ascii?Q?a/zGY4D2BOmufVd+4syf3MhRQmNPaQezST8/rp5TE9Z59JWMHdbdAmH5Tk8v?=
+ =?us-ascii?Q?/XAiiGGlIw5lSOmOaZnAuB0VxMss/B6pLyirHApcbpESXDiaCjPEm8pgjrvV?=
+ =?us-ascii?Q?02EGw1826s7hpgyRikBXRDYlbdjNHDYAg08FtoXN5qcavqIRbK/GPXHZaa9S?=
+ =?us-ascii?Q?yWygd7S9zNzK9FqLZoKApZv+HlEqOgSfnPniXav8rhgb2iYy/piHin2Wp4DK?=
+ =?us-ascii?Q?RDzjiUFziYkG0+67DDLXBMKD29u2qJjT8tVDSs0yncIDtejdb4sFRcvvgN0j?=
+ =?us-ascii?Q?WToA6rnnVtJHI5pTBxilW+qFsa7dKZgGDpn9uju35KcFOHu1wCC/9Q69kq/w?=
+ =?us-ascii?Q?TJzpwrnYacxF/4tSb13cNNBHWCB4xPDhCgkRQBI1YNqjkY7iOMTcG/NWZ0NW?=
+ =?us-ascii?Q?gkhROJoVnGciYJzIXRwEOBC0OlT8w0rxIfdx1E2FIDpg3ckXHtbL0oqyFXDj?=
+ =?us-ascii?Q?crZVgXgAXSP1IzDIlq2tfH/xy0vhjEi3YUtowbeuAfJ86hdWWCAtKmXQMYGm?=
+ =?us-ascii?Q?M+p7H58CqsIewWRNwdZvHToZB4nwK0f3oE5x684tTSDcUvc9OMbU89/1aMK+?=
+ =?us-ascii?Q?bCCX884lXY3QzavymF3KSVoq6R+LKzc+Bd+BFCQYhVMpik4ZqfQPEbWp5kda?=
+ =?us-ascii?Q?0L0UJcyWl7HaGxDDWPL7yADdEVwJPuYgPKWTpJlsA7eVtrc6FbTPN3ZB+HX4?=
+ =?us-ascii?Q?Ob8GLCDAIhSMUaQhmE/beSgm2xegrNDQ6c7eYnlWZw7PY1rPsBBTlI9wJxDZ?=
+ =?us-ascii?Q?52QzABpGYok6O+cQRVwujVO6Rzby1ho9jfdfkBo5b+YUYFn0/kqUvl7OYtXW?=
+ =?us-ascii?Q?KZE3Of8373ogWE6Dwh84bqZlxWTNy0juERcFuooDT+6RPvfP5BRjeXYl4Vde?=
+ =?us-ascii?Q?wpDp+RC4nKdU1I9T7f8gBZIQm4Xfs29+yPcDwxQ6dPB9BB+shZ9XclfcoU8G?=
+ =?us-ascii?Q?s9el+TnHm5IJsm+bwLJfUvujJuALcmNPuPSnQLiqDh8QWakHXmKdmh+bJqCo?=
+ =?us-ascii?Q?Biu1juMBBIcrXF4MOWGNuUGU1lbroxvTfH8OoZvAeUk5sWs8Fa7GnDFeN0Fi?=
+ =?us-ascii?Q?/BSmKd/o2anUU0RV8YWk6Ec+Dz49GVr9wXYAKpCjijo1tkZrCnRLl1Gk+Qeu?=
+ =?us-ascii?Q?1W4OD6oSUaZJTI1TIhPHYN34Ue5zpqJparqXEkNFnkgP3nVrXIpXytJlkQqC?=
+ =?us-ascii?Q?MhOljnYx4RegWdPyxI3Ht6Xoa/Yf9+DAGKJV5JZ7vnX1BXDJwBDzg/JY3K5c?=
+ =?us-ascii?Q?Fms2kZnYJDoWC2FOGBUbRKE0kOchgxxfVeJdkYQGpn8esfkt03Pkm+n06TTP?=
+ =?us-ascii?Q?SDlkyQ1nv55gkRBYnX7kNGlRDIiQXl+/8ao7fzVfGme/aqsRaD3zooXk0daQ?=
+ =?us-ascii?Q?bMmByVaZAfV2TFCosv9B7TsvTdj9FFLeMY0ksS5p7rPGdQZHtECm0L3cLYTo?=
+ =?us-ascii?Q?3UyNgqDil0xsdv4jiYN3pHSBxkKABDuHG0RVCG/NMme8OhLHWpu6fpQU6PU2?=
+ =?us-ascii?Q?dxh/Hezv+MlxzsJF6fp9tzhqgavB9MrzTntB2UU6ixE2GWuAV/Tlkeee3CMM?=
+ =?us-ascii?Q?7w=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1736773-1f3f-4b62-539e-08d9f05dcabe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2022 08:33:07.2937
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4cf6a537-5962-4d97-dbef-08d9f05e05e3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2022 08:34:46.4797
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: shIF8ffVMXuY/9vEyevd3CkNJsyqxcBOrLOw+g5t2XryCaqL1gZovO+6FaYrpe2vjXl6bmXox0qWkNAdAsvX9f370oyGeHuiT+UC9SFuTBA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB2192
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: XQxU60kRgmM+4uyJzL8dUpvAbtH6hkswVPEa16cf+Lr/s37LEcIeIX5xqG55lJEwe4xi8z6kaEL9W0zPhmPtkw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR04MB7434
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDE0LzAyLzIwMjIgw6AgMTg6NTEsIE5hdmVlbiBOLiBSYW8gYSDDqWNyaXTCoDoNCj4g
-Q2hyaXN0b3BoZSBMZXJveSB3cm90ZToNCj4+IFBQQzY0IG1wcm9maWxlIHZlcnNpb25zIGFuZCBQ
-UEMzMiBhcmUgdmVyeSBzaW1pbGFyLg0KPj4NCj4+IE1vZGlmeSBQUEM2NCB2ZXJzaW9uIHNvIHRo
-YXQgaWYgY2FuIGJlIHJldXNlZCBmb3IgUFBDMzIuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogQ2hy
-aXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Pg0KPj4gLS0tDQo+PiDC
-oC4uLi9wb3dlcnBjL2tlcm5lbC90cmFjZS9mdHJhY2VfNjRfbXByb2ZpbGUuUyB8IDczICsrKysr
-KysrKysrKystLS0tLS0NCj4+IMKgMSBmaWxlIGNoYW5nZWQsIDUxIGluc2VydGlvbnMoKyksIDIy
-IGRlbGV0aW9ucygtKQ0KPiANCj4gV2hpbGUgSSBhZ3JlZSB0aGF0IHBwYzMyIGFuZCAtbXByb2Zp
-bGUta2VybmVsIGZ0cmFjZSBjb2RlIGFyZSB2ZXJ5IA0KPiBzaW1pbGFyLCBJIHRoaW5rIHRoaXMg
-cGF0Y2ggYWRkcyB3YXkgdG9vIG1hbnkgI2lmZGVmcy4gSU1ITywgdGhpcw0KPiBtYWtlcyB0aGUg
-cmVzdWx0YW50IGNvZGUgcXVpdGUgZGlmZmljdWx0IHRvIGZvbGxvdy4NCg0KT2ssIEkgY2FuIGlu
-dHJvZHVjZSBzb21lIEdBUyBtYWNyb3MgZm9yIGEgZmV3IG9mIHRoZW0gaW4gYSBmb2xsb3d1cCBw
-YXRjaC4NCg0KQ2hyaXN0b3BoZQ==
+> Subject: [RFC PATCH v3 0/4] remoteproc: restructure the remoteproc VirtIO
+> device
+>=20
+> Update from V2 [1]:
+> In order to better handle error cases and to have something more
+> symmetrical between the functions in charge of rvdev initialization/delet=
+ion,
+> the patchset has been reworked.
+>  - Introduction in the first patch, of rproc_vdev_data structure which al=
+lows
+> to better
+>    decorrelate the rproc from the management of the rvdev structure. This
+> structure is reused
+>    in the last patch of the series for the creation of the remoteproc vir=
+tio
+> platform device.
+>  - In addition to the previous version, the management of the vring lifec=
+ycle
+> has been fully
+>    migrated to the remoteproc_virtio.c (rproc_parse_vring, rproc_alloc_vr=
+ing,
+> rproc_free_vring)
+>=20
+> [1]
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flkml.=
+or
+> g%2Flkml%2F2021%2F12%2F22%2F111&amp;data=3D04%7C01%7Cpeng.fan%4
+> 0nxp.com%7C9e663eefc30a4fbb1fdb08d9e0e855e2%7C686ea1d3bc2b4c6fa
+> 92cd99c5c301635%7C0%7C0%7C637788110748757786%7CUnknown%7CT
+> WFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLC
+> JXVCI6Mn0%3D%7C3000&amp;sdata=3DbFfSxpPMpPRGYcMBcwxaQ152mRzf3c
+> fwoFPjiJ0SIgw%3D&amp;reserved=3D0
+>=20
+> Patchset description:
+>=20
+> This series is a part of the work initiated a long time ago in the series
+> "remoteproc: Decorelate virtio from core"[2]
+>=20
+> Objective of the work:
+> - Update the remoteproc VirtIO device creation (use platform device)
+> - Allow to declare remoteproc VirtIO device in DT
+
+This means not using resource table anymore with new approach?
+If yes, would that introduce a problem that different M-core images
+requires different dtb?
+
+>     - declare resources associated to a remote proc VirtIO
+>     - declare a list of VirtIO supported by the platform.
+> - Prepare the enhancement to more VirtIO devices (e.g I2C, audio, video, =
+...).
+>   For instance be able to declare a I2C device in a virtio-i2C node.
+
+As my understanding virtio-i2c is a i2c bus, you could declare a i2c device
+in the virtual bus without your patchset, would you please share more?
+
+Thanks,
+Peng.
+
+> - Keep the legacy working!
+> - Try to improve the picture about concerns reported by Christoph Hellwin=
+g
+> [3][4]
+>=20
+> [2]
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flkml.=
+or
+> g%2Flkml%2F2020%2F4%2F16%2F1817&amp;data=3D04%7C01%7Cpeng.fan%4
+> 0nxp.com%7C9e663eefc30a4fbb1fdb08d9e0e855e2%7C686ea1d3bc2b4c6fa
+> 92cd99c5c301635%7C0%7C0%7C637788110748757786%7CUnknown%7CT
+> WFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLC
+> JXVCI6Mn0%3D%7C3000&amp;sdata=3DO2BZw5PCY19eD5xMGxrGUKC%2Fty1
+> Sdc3LE6rhK4cSXvs%3D&amp;reserved=3D0
+> [3]
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flkml.=
+or
+> g%2Flkml%2F2021%2F6%2F23%2F607&amp;data=3D04%7C01%7Cpeng.fan%40
+> nxp.com%7C9e663eefc30a4fbb1fdb08d9e0e855e2%7C686ea1d3bc2b4c6fa9
+> 2cd99c5c301635%7C0%7C0%7C637788110748757786%7CUnknown%7CTW
+> FpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJX
+> VCI6Mn0%3D%7C3000&amp;sdata=3DxqX50iDeL%2BtFBOgyADnEUE5HH4gogK
+> C0MwyqZSxVqNo%3D&amp;reserved=3D0
+> [4]
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpatch
+> work.kernel.org%2Fproject%2Flinux-remoteproc%2Fpatch%2FAOKowLclCbO
+> CKxyiJ71WeNyuAAj2q8EUtxrXbyky5E%40cp7-web-042.plabs.ch%2F&amp;da
+> ta=3D04%7C01%7Cpeng.fan%40nxp.com%7C9e663eefc30a4fbb1fdb08d9e0e85
+> 5e2%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637788110748
+> 757786%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2
+> luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=3DmvSm3wM
+> LgQ%2BDFhqjXIkG8de58zFjwPSURzw55JhGNaA%3D&amp;reserved=3D0
+>=20
+> In term of device tree this would result in such hiearchy (stm32mp1 examp=
+le
+> with 2 virtio RPMSG):
+>=20
+> 	m4_rproc: m4@10000000 {
+> 		compatible =3D "st,stm32mp1-m4";
+> 		reg =3D <0x10000000 0x40000>,
+> 		      <0x30000000 0x40000>,
+> 		      <0x38000000 0x10000>;
+>         memory-region =3D <&retram>, <&mcuram>,<&mcuram2>;
+>         mboxes =3D <&ipcc 2>, <&ipcc 3>;
+>         mbox-names =3D "shutdown", "detach";
+>         status =3D "okay";
+>=20
+>         #address-cells =3D <1>;
+>         #size-cells =3D <0>;
+>=20
+>         vdev@0 {
+> 		compatible =3D "rproc-virtio";
+> 		reg =3D <0>;
+> 		virtio,id =3D <7>;  /* RPMSG */
+> 		memory-region =3D <&vdev0vring0>, <&vdev0vring1>,
+> <&vdev0buffer>;
+> 		mboxes =3D <&ipcc 0>, <&ipcc 1>;
+> 		mbox-names =3D "vq0", "vq1";
+> 		status =3D "okay";
+>         };
+>=20
+>         vdev@1 {
+> 		compatible =3D "rproc-virtio";
+> 		reg =3D <1>;
+> 		virtio,id =3D <7>;  /*RPMSG */
+> 		memory-region =3D <&vdev1vring0>, <&vdev1vring1>,
+> <&vdev1buffer>;
+> 		mboxes =3D <&ipcc 4>, <&ipcc 5>;
+> 		mbox-names =3D "vq0", "vq1";
+> 		status =3D "okay";
+>         };
+> };
+>=20
+> I have divided the work in 4 steps to simplify the review, This series
+> implements only the step 1:
+> step 1:  redefine the remoteproc VirtIO device as a platform device
+>   - migrate rvdev management in remoteproc virtio.c,
+>   - create a remotproc virtio config ( can be disabled for platform that =
+not use
+> VirtIO IPC.
+> step 2: add possibility to declare and prob a VirtIO sub node
+>   - VirtIO bindings declaration,
+>   - multi DT VirtIO devices support,
+>   - introduction of a remote proc virtio bind device mechanism , =3D>
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgithu=
+b.
+> com%2Farnopo%2Flinux%2Fcommits%2Fstep2-virtio-in-DT&amp;data=3D04%7
+> C01%7Cpeng.fan%40nxp.com%7C9e663eefc30a4fbb1fdb08d9e0e855e2%7C
+> 686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637788110748757786
+> %7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiL
+> CJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=3DX%2B462681gcxe6
+> 2GP%2BV7ji2nef%2FuTbQVvIlddcMQwtmg%3D&amp;reserved=3D0
+> step 3: Add memory declaration in VirtIO subnode =3D>
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgithu=
+b.
+> com%2Farnopo%2Flinux%2Fcommits%2Fstep3-virtio-memories&amp;data=3D0
+> 4%7C01%7Cpeng.fan%40nxp.com%7C9e663eefc30a4fbb1fdb08d9e0e855e2
+> %7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637788110748757
+> 786%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luM
+> zIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=3DeMlXgCgrV6l46
+> h3Ywv1%2BCoX3gLBabdTZs9ybsm4t4ys%3D&amp;reserved=3D0
+> step 4: Add mailbox declaration in VirtIO subnode =3D>
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgithu=
+b.
+> com%2Farnopo%2Flinux%2Fcommits%2Fstep4-virtio-mailboxes&amp;data=3D0
+> 4%7C01%7Cpeng.fan%40nxp.com%7C9e663eefc30a4fbb1fdb08d9e0e855e2
+> %7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637788110748757
+> 786%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luM
+> zIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=3D75hApOwihqMZ
+> UUKz1VcitY2VPDc6KAIwAvH8enEZOPY%3D&amp;reserved=3D0
+>=20
+> Arnaud Pouliquen (4):
+>   remoteproc: core: Introduce virtio device add/remove functions
+>   remoteproc: core: Introduce rproc_register_rvdev function
+>   remoteproc: Move rproc_vdev management to remoteproc_virtio.c
+>   remoteproc: virtio: Create platform device for the remoteproc_virtio
+>=20
+>  drivers/remoteproc/remoteproc_core.c     | 159 +++----------------
+>  drivers/remoteproc/remoteproc_internal.h |  33 +++-
+>  drivers/remoteproc/remoteproc_virtio.c   | 193
+> ++++++++++++++++++++---
+>  include/linux/remoteproc.h               |   6 +-
+>  4 files changed, 227 insertions(+), 164 deletions(-)
+>=20
+> --
+> 2.25.1
+

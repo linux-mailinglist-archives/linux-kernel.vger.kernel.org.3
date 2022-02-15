@@ -2,226 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD1C4B75FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 123E64B7643
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242207AbiBORJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 12:09:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35402 "EHLO
+        id S242216AbiBORJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 12:09:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239266AbiBORJc (ORCPT
+        with ESMTP id S242215AbiBORJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 12:09:32 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAD9107091
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:09:21 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id bu29so32949977lfb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:09:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=C6Ks1bxyjv4CyjsUd6HI77S/5YTewVrvJUs6SzWTOjs=;
-        b=yqQlX4sBb53DUhpeD5yPeajk/6KYmz1xYxhaQjDHT9zrQ9WriJM5QuIT6/gTO7OcHu
-         s9RQX6tBFQ858AGmi5lwFg4VMF/Sl3JjqmYEFplzB56n8ZOWOdH0nYXxrIUil+Vx7Ta5
-         cBruOk6TqqMLRJ02buSk6hb76XCP+24CzAKSChZvKXPVrfDMIe1wWyTJk/PK4YnEEpFs
-         iBX9rp2sdhoGV2ptxxrgPlIKIJTOJRD5/N4erh/L1W2Hlw/aUYtxBZJmUAAyBPat9wh9
-         2EZtPfbqfpV8GkWW0Yrg1SdNgK3LUeoMeqjcCvuVvKbCMi748OjcofVdyfQam60PHD0Z
-         iDRA==
+        Tue, 15 Feb 2022 12:09:39 -0500
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681B911ACD7;
+        Tue, 15 Feb 2022 09:09:29 -0800 (PST)
+Received: by mail-yb1-f173.google.com with SMTP id j12so35870115ybh.8;
+        Tue, 15 Feb 2022 09:09:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=C6Ks1bxyjv4CyjsUd6HI77S/5YTewVrvJUs6SzWTOjs=;
-        b=hAoZUsYc7kzYJd6MF30crL8DWLWpe9N8q+wfoEt5bxf/yzcMguOZ0Qb0t6or+biDdV
-         fO5KVaho0mnS4Yt8+nb4XJkzqRFRLfD5HzffyxV9x05US1MeR4RIlCjxy4UIJI6Tb22p
-         VxHn1qwNVy1940Xz0lxRyAP8NkQYb2qz1EbCxUPLo35QaUkD2S1kt26m+p/GEOagcidY
-         5OT/GdBMb8rKOvbNOwENW11tJWY/6wzL/i8EFpBCJPUI2Eyc0wqDM5GRn+kpher+cpPZ
-         c4LoO5z53FyVg7MXYdZAnFIhOuDvdN32E7zEuqnlvJG0Jfc9VAggX71KJKIvSP0Fm/r5
-         NrPw==
-X-Gm-Message-State: AOAM531kyNeq8mECUi78p4AFZR7j0WNUa1Z+277zp+DWgPnnlA6Q7gjd
-        7A0RRQ7102li8m3cyiJW40ZPR06YUaT0Kkl7BCfIvw==
-X-Google-Smtp-Source: ABdhPJzUyFGOSo3HgMe/aIzYTZtiyQZdldDyXrRKgvZY6ym40yUafL7FLs22+qoHAc4ISXxWGvv5kN6g6fo8aRcwjes=
-X-Received: by 2002:a05:6512:3e14:: with SMTP id i20mr50149lfv.18.1644944959878;
- Tue, 15 Feb 2022 09:09:19 -0800 (PST)
+        bh=aJg+8ODLSufI3YJAkdNmRKsDBXNNQeuaQZl515K2Cg0=;
+        b=CLwrFui3vXLy0KnztE6pgFcZnRP1t5PU3k5bVcF0cLARq6ogCwQ+7VT8KpFZH7wjyU
+         GcJKrs+21rjaAnBtyJ1wSwpRI3jfaHw41uOLa0gRXHYY9gMObP5HmBIBtWoUz+x2k3X9
+         AZDCXU4XHZ6uv8r4PObxu0gQWXu4b8jmadznigwjKJ82A0QSDjvA02GMZCXcHM8D+o3z
+         5g9wE9Ev2eJoWTOejvatnGCliYo6ryEgagkY3s/RnnO8eRXLAnz/m/1stePJj8AQrK8D
+         XthPjz0LDHu+25ihOiNbu9VX0IIlfRyzbGLVn+eyaqypf0ZQwWpmHGhX5p3dyqH8fKBd
+         hCCw==
+X-Gm-Message-State: AOAM532XQaZAovB8/S0gzefBz8x6YuqvHu58OX5s3QFlLpoefGIzirN2
+        8VEqHqPR+BDq/TPNbQCHYW9fCFuLHJPURCz0uhQ=
+X-Google-Smtp-Source: ABdhPJzMObvzFyK2JDA1fz4991a3kpJmlz6YK+5txcVkUYOdgEEjXW3+czvppRdqGKQmpYG047qtCup1MpOfjrGDyp8=
+X-Received: by 2002:a25:fc0d:: with SMTP id v13mr4593644ybd.272.1644944966645;
+ Tue, 15 Feb 2022 09:09:26 -0800 (PST)
 MIME-Version: 1.0
-References: <8c4a69eca4d0591f30c112df59c5098c24923bd3.1644543449.git.darren@os.amperecomputing.com>
- <ec9be4eb7a0548178191edd51ddd309f@hisilicon.com> <20220215163858.GA8458@willie-the-truck>
- <YgvYZy5xv1g+u5wp@fedora> <20220215164639.GC8458@willie-the-truck>
-In-Reply-To: <20220215164639.GC8458@willie-the-truck>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 15 Feb 2022 18:09:08 +0100
-Message-ID: <CAKfTPtAFsL+uqQiGcuh+JJZB=rPrez0=kotq76CVRcBQhcPefg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: smp: Skip MC domain for SoCs without shared cache
-To:     Will Deacon <will@kernel.org>
-Cc:     Darren Hart <darren@os.amperecomputing.com>,
-        "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Arm <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <Catalin.Marinas@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <Valentin.Schneider@arm.com>,
-        "D . Scott Phillips" <scott@os.amperecomputing.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <CAAd53p6hATV8TOcJ9Qi2rMwVi=y_9+tQu6KhDkAm6Y8=cQ_xoA@mail.gmail.com>
+ <20220215150939.GA106706@bhelgaas>
+In-Reply-To: <20220215150939.GA106706@bhelgaas>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 15 Feb 2022 18:09:15 +0100
+Message-ID: <CAJZ5v0i6+EMMGuKckhtTdt7TgC3LbofW7oS7B5=McSNjEh1yKA@mail.gmail.com>
+Subject: Re: [PATCH v3] PCI: vmd: Honor ACPI _OSC on PCIe features
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Nirmal Patel <nirmal.patel@linux.intel.com>,
+        Jonathan Derrick <jonathan.derrick@linux.dev>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022 at 17:46, Will Deacon <will@kernel.org> wrote:
+On Tue, Feb 15, 2022 at 4:09 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
 >
-> On Tue, Feb 15, 2022 at 08:44:23AM -0800, Darren Hart wrote:
-> > On Tue, Feb 15, 2022 at 04:38:59PM +0000, Will Decon wrote:
-> > > On Fri, Feb 11, 2022 at 03:20:51AM +0000, Song Bao Hua (Barry Song) wrote:
+> On Mon, Feb 14, 2022 at 08:23:05AM +0800, Kai-Heng Feng wrote:
+> > On Thu, Feb 10, 2022 at 5:36 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > On Tue, Dec 07, 2021 at 02:15:04PM +0100, Rafael J. Wysocki wrote:
+> > > > On Tue, Dec 7, 2021 at 12:12 AM Keith Busch <kbusch@kernel.org> wrote:
+> > > > > On Fri, Dec 03, 2021 at 11:15:41AM +0800, Kai-Heng Feng wrote:
+> > > > > > When Samsung PCIe Gen4 NVMe is connected to Intel ADL VMD, the
+> > > > > > combination causes AER message flood and drags the system performance
+> > > > > > down.
+> > > > > >
+> > > > > > The issue doesn't happen when VMD mode is disabled in BIOS, since AER
+> > > > > > isn't enabled by acpi_pci_root_create() . When VMD mode is enabled, AER
+> > > > > > is enabled regardless of _OSC:
+> > > > > > [    0.410076] acpi PNP0A08:00: _OSC: platform does not support [AER]
+> > > > > > ...
+> > > > > > [    1.486704] pcieport 10000:e0:06.0: AER: enabled with IRQ 146
+> > > > > >
+> > > > > > Since VMD is an aperture to regular PCIe root ports, honor ACPI _OSC to
+> > > > > > disable PCIe features accordingly to resolve the issue.
+> > > > >
+> > > > > At least for some versions of this hardare, I recall ACPI is unaware of
+> > > > > any devices in the VMD domain; the platform can not see past the VMD
+> > > > > endpoint, so I throught the driver was supposed to always let the VMD
+> > > > > domain use OS native support regardless of the parent's ACPI _OSC.
 > > > >
+> > > > This is orthogonal to whether or not ACPI is aware of the VMD domain
+> > > > or the devices in it.
 > > > >
-> > > > > -----Original Message-----
-> > > > > From: Darren Hart [mailto:darren@os.amperecomputing.com]
-> > > > > Sent: Friday, February 11, 2022 2:43 PM
-> > > > > To: LKML <linux-kernel@vger.kernel.org>; Linux Arm
-> > > > > <linux-arm-kernel@lists.infradead.org>
-> > > > > Cc: Catalin Marinas <catalin.marinas@arm.com>; Will Deacon <will@kernel.org>;
-> > > > > Peter Zijlstra <peterz@infradead.org>; Vincent Guittot
-> > > > > <vincent.guittot@linaro.org>; Song Bao Hua (Barry Song)
-> > > > > <song.bao.hua@hisilicon.com>; Valentin Schneider
-> > > > > <valentin.schneider@arm.com>; D . Scott Phillips
-> > > > > <scott@os.amperecomputing.com>; Ilkka Koskinen
-> > > > > <ilkka@os.amperecomputing.com>; stable@vger.kernel.org
-> > > > > Subject: [PATCH] arm64: smp: Skip MC domain for SoCs without shared cache
-> > > > >
-> > > > > SoCs such as the Ampere Altra define clusters but have no shared
-> > > > > processor-side cache. As of v5.16 with CONFIG_SCHED_CLUSTER and
-> > > > > CONFIG_SCHED_MC, build_sched_domain() will BUG() with:
-> > > > >
-> > > > > BUG: arch topology borken
-> > > > >      the CLS domain not a subset of the MC domain
-> > > > >
-> > > > > for each CPU (160 times for a 2 socket 80 core Altra system). The MC
-> > > > > level cpu mask is then extended to that of the CLS child, and is later
-> > > > > removed entirely as redundant.
-> > > > >
-> > > > > This change detects when all cpu_coregroup_mask weights=1 and uses an
-> > > > > alternative sched_domain_topology equivalent to the default if
-> > > > > CONFIG_SCHED_MC were disabled.
-> > > > >
-> > > > > The final resulting sched domain topology is unchanged with or without
-> > > > > CONFIG_SCHED_CLUSTER, and the BUG is avoided:
-> > > > >
-> > > > > For CPU0:
-> > > > >
-> > > > > With CLS:
-> > > > > CLS  [0-1]
-> > > > > DIE  [0-79]
-> > > > > NUMA [0-159]
-> > > > >
-> > > > > Without CLS:
-> > > > > DIE  [0-79]
-> > > > > NUMA [0-159]
-> > > > >
-> > > > > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > > > > Cc: Will Deacon <will@kernel.org>
-> > > > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > > > > Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> > > > > Cc: Barry Song <song.bao.hua@hisilicon.com>
-> > > > > Cc: Valentin Schneider <valentin.schneider@arm.com>
-> > > > > Cc: D. Scott Phillips <scott@os.amperecomputing.com>
-> > > > > Cc: Ilkka Koskinen <ilkka@os.amperecomputing.com>
-> > > > > Cc: <stable@vger.kernel.org> # 5.16.x
-> > > > > Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
-> > > >
-> > > > Hi Darrent,
-> > > > What kind of resources are clusters sharing on Ampere Altra?
-> > > > So on Altra, cpus are not sharing LLC? Each LLC is separate
-> > > > for each cpu?
-> > > >
-> > > > > ---
-> > > > >  arch/arm64/kernel/smp.c | 32 ++++++++++++++++++++++++++++++++
-> > > > >  1 file changed, 32 insertions(+)
-> > > > >
-> > > > > diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-> > > > > index 27df5c1e6baa..0a78ac5c8830 100644
-> > > > > --- a/arch/arm64/kernel/smp.c
-> > > > > +++ b/arch/arm64/kernel/smp.c
-> > > > > @@ -715,9 +715,22 @@ void __init smp_init_cpus(void)
-> > > > >         }
-> > > > >  }
-> > > > >
-> > > > > +static struct sched_domain_topology_level arm64_no_mc_topology[] = {
-> > > > > +#ifdef CONFIG_SCHED_SMT
-> > > > > +       { cpu_smt_mask, cpu_smt_flags, SD_INIT_NAME(SMT) },
-> > > > > +#endif
-> > > > > +
-> > > > > +#ifdef CONFIG_SCHED_CLUSTER
-> > > > > +       { cpu_clustergroup_mask, cpu_cluster_flags, SD_INIT_NAME(CLS) },
-> > > > > +#endif
-> > > > > +       { cpu_cpu_mask, SD_INIT_NAME(DIE) },
-> > > > > +       { NULL, },
-> > > > > +};
-> > > > > +
-> > > > >  void __init smp_prepare_cpus(unsigned int max_cpus)
-> > > > >  {
-> > > > >         const struct cpu_operations *ops;
-> > > > > +       bool use_no_mc_topology = true;
-> > > > >         int err;
-> > > > >         unsigned int cpu;
-> > > > >         unsigned int this_cpu;
-> > > > > @@ -758,6 +771,25 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
-> > > > >
-> > > > >                 set_cpu_present(cpu, true);
-> > > > >                 numa_store_cpu_info(cpu);
-> > > > > +
-> > > > > +               /*
-> > > > > +                * Only use no_mc topology if all cpu_coregroup_mask weights=1
-> > > > > +                */
-> > > > > +               if (cpumask_weight(cpu_coregroup_mask(cpu)) > 1)
-> > > > > +                       use_no_mc_topology = false;
-> > > >
-> > > > This seems to be wrong? If you have 5 cpus,
-> > > > Cpu0 has cpu_coregroup_mask(cpu)== 1, cpu1-4
-> > > > has cpu_coregroup_mask(cpu)== 4, for cpu0, you still
-> > > > need to remove MC, but for cpu1-4, you will need
-> > > > CLS and MC both?
+> > > > If the platform firmware does not allow the OS to control specific
+> > > > PCIe features at the physical host bridge level, that extends to the
+> > > > VMD "bus", because it is just a way to expose a hidden part of the
+> > > > PCIe hierarchy.
 > > >
-> > > What is the *current* behaviour on such a system?
+> > > I don't understand what's going on here.  Do we understand the AER
+> > > message flood?  Are we just papering over it by disabling AER?
+> >
+> > To be more precise, AER is disabled by the platform vendor in BIOS to
+> > paper over the issue.
+> > The only viable solution for us is to follow their settings. We may
+> > never know what really happens underneath.
+> >
+> > Disabling ASPM/AER/PME etc is a normal practice for ODMs unfortunately.
+>
+> OK.  So this patch actually has nothing in particular to do with AER.
+> It's about making _OSC apply to *all* devices below a host bridge,
+> even those below a VMD.
+
+Right.
+
+> This is slightly ambiguous because while "_OSC applies to the entire
+> hierarchy originated by a PCI Host Bridge" (PCI Firmware spec r3.3,
+> sec 4.5.1), vmd.c creates a logical view where devices below the VMD
+> are in a separate hierarchy with a separate domain.
+
+But from the HW perspective they still are in the same hierarchy below
+the original host bridge.
+
+> The interpretation that _OSC applies to devices below VMD should work,
+> as long as it is possible for platform firmware to manage services
+> (AER, pciehp, etc) for things below VMD without getting in the way of
+> vmd.c.
+
+vmd.c actually exposes things hidden by the firmware and the point of
+the patch is to still let the firmware control them if it wants/needs
+to IIUC.
+
+> But I think one implication of this is that we cannot support
+> hot-added VMDs.  For example, firmware that wants to manage AER will
+> use _OSC to retain AER control.  But if the firmware doesn't know how
+> VMDs work, it will not be able to handle AER for devices below the
+> VMD.
+
+Well, the firmware needs to know how stuff works to hide it in the
+first place ...
+
+> > > If an error occurs below a VMD, who notices and reports it?  If we
+> > > disable native AER below VMD because of _OSC, as this patch does, I
+> > > guess we're assuming the platform will handle AER events below VMD.
+> > > Is that really true?  Does the platform know how to find AER log
+> > > registers of devices below VMD?
 > > >
-> >
-> > As I understand it, any system that uses the default topology which has
-> > a cpus_coregroup weight of 1 and a child (cluster, smt, ...) weight > 1
-> > will behave as described above by printing the following for each CPU
-> > matching this criteria:
-> >
-> >   BUG: arch topology borken
-> >         the [CLS,SMT,...] domain not a subset of the MC domain
-> >
-> > And then extend the MC domain cpumask to match that of the child and continue
-> > on.
-> >
-> > That would still be the behavior for this type of system after this
-> > patch is applied.
->
-> That's what I thought, but in that case applying your patch is a net
-> improvement: systems either get current or better behaviour.
-
-CLUSTER level is normally defined as a intermediate group of the MC
-level and both levels have the scheduler flag SD_SHARE_PKG_RESOURCES
-flag
-
-In the case of Ampere altra, they consider that CPUA have a CLUSTER
-level which SD_SHARE_PKG_RESOURCES with another CPUB but the next and
-larger MC level then says that CPUA doesn't SD_SHARE_PKG_RESOURCES
-with CPUB which seems to be odd because the SD_SHARE_PKG_RESOURCES has
-not disappeared.
-Looks like there is a mismatch in topology description
-
-
->
-> Barry -- why shouldn't we take this as-is?
->
-> Will
+> > > > The platform firmware does that through ACPI _OSC under the host
+> > > > bridge device (not under the VMD device) which it is very well aware
+> > > > of.

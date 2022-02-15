@@ -2,215 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B84A4B707A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:39:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A56EA4B7361
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237573AbiBOPqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:46:46 -0500
+        id S241317AbiBOPr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:47:27 -0500
 Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241171AbiBOPqQ (ORCPT
+        with ESMTP id S241161AbiBOPrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:46:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905FDF11A4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:43:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E0C8B81AFB
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:43:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2B52C340EB;
-        Tue, 15 Feb 2022 15:43:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644939791;
-        bh=SKGn7wND7KsEt36XShzXq7j0Folx5a1fiX2ekqpJ1GI=;
-        h=Date:From:To:cc:Subject:From;
-        b=fNOn8vALJVmXGzrsUX16C3s9cuKmdnX0wryuVtmQkiLH1ftCdRaHdgu22H+w9XMvK
-         0Mbyn1H9RHQQ0r91MwaVV7f30yl+XkCR/FAUufv9VZDr+daiQNlo5m7DmN4x5tvDth
-         0KEKd0160VQny9iNZkiF4gtaZ/ei6RVSeeZeUPeysacJQI1bptdzIgzCn5USOSJPvJ
-         8yZz364boDacSkjWahmjLbyTrVQ54ubVtZ/6U/TbAMhniGDX9eZjf2SnYSIjeZXz4o
-         r7qnOGi+WQq8EgHM2cARhgS8g/J7NryPHpYm0G0o4JNoDRbkxMULPi+zzgFXvhihDu
-         0zBy5sr4uK2YA==
-Date:   Tue, 15 Feb 2022 16:43:08 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sebastian Siewior <bigeasy@linutronix.de>
-cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm: fb-helper: Avoid nesting spinlock_t into
- raw_spinlock_t
-Message-ID: <nycvar.YFH.7.76.2202151640200.11721@cbobk.fhfr.pm>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Tue, 15 Feb 2022 10:47:14 -0500
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C173CC0539
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:46:03 -0800 (PST)
+Received: by mail-vk1-xa31.google.com with SMTP id j9so2915902vkj.1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:46:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BedxqyA3+r1aQxFPn5bMgkj70sSLNh7OJO9s5zLmB+g=;
+        b=pS9E5M7E21dgGsY388BFHVXaAKwO4RSi+3GNyKpePpG3i3/VSPOaDNIH5KE1pGiK+E
+         EcpJrr127komE34aJPyorPnQj9zlij5HTo1kogQW6DHZRo+grYjzFweW1HK4Il3zblRa
+         jYkudAN3kN/oIpqt0XZl+YHkA9oi2yMEMtOwBzLr4KWrkGsH6Ae6xdVF9JF8Sac19VVa
+         6sNQZFBLTSOJ4TXZXc7uGA2NxcIfOMWSeQzwUdi9l8q6BUvqrKa99joJ7b0pFsJt2Vml
+         JI3g+gYxn/2caKC8oZEXlCnkjuHC/kltUBaoD9BBJ2mrqyVGTNmYZEgFTuUTm9tbzz2R
+         znVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BedxqyA3+r1aQxFPn5bMgkj70sSLNh7OJO9s5zLmB+g=;
+        b=HPZHZPovWhIPGRFCj7Dj5bbP7/B+NJFtT6bJSNWRdR6amjAlOaUs5zUDef7WRWvbYI
+         s8zjnN96GAH/P6tnTFplA34wrq0abF1gugAeuBjPQsKoiJTWb4moZds69gj/7XgMC+Qd
+         ctDQeKNErw8UoihBSzFVr1bA/04/dZEt581LIPzpvI/VavSFaXVNNL+CBesumnrnazIC
+         jXYKS9aip4M/wH46K10lvkg+4uJhohOU4h/65fLpiZgN6MY1LaL4l8hkcuox3JgqpHwi
+         DSPtSk3qqAXEaCiYPheczYexfORQweVCeVhQF3iYwveXqhB3Ig2dG1LqDkN9DnVXm6Wl
+         Ly3Q==
+X-Gm-Message-State: AOAM531NflDWKaj4kPxUDXyJ2Ui5rLVDFIBzKnu3ZgpefZVucIobtFep
+        UNoppfXIkxj8i+k/zOlw3d0iSw1mvxg=
+X-Google-Smtp-Source: ABdhPJz8myMWlyAxIjrSlDpCe1/y32nhwu0oUb49Td4a0nYbYmSgZMKV4x/JZ66LPYp/Qny3KMNZSg==
+X-Received: by 2002:a05:6122:2319:: with SMTP id bq25mr1453055vkb.41.1644939962442;
+        Tue, 15 Feb 2022 07:46:02 -0800 (PST)
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
+        by smtp.gmail.com with ESMTPSA id o11sm52705vsl.0.2022.02.15.07.46.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 07:46:01 -0800 (PST)
+Received: by mail-ua1-f48.google.com with SMTP id v5so10036677uam.3
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:46:01 -0800 (PST)
+X-Received: by 2002:ab0:384c:: with SMTP id h12mr1480520uaw.122.1644939961027;
+ Tue, 15 Feb 2022 07:46:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220213150234.31602-1-thomas.liu@ucloud.cn> <CA+FuTSdODATw3hSAMv9aZUmJNM8ZE-YP58pr17bO9rGJUgfegw@mail.gmail.com>
+ <CFD9B65A-6762-4D9B-ADEB-B4C0B1902E02@ucloud.cn> <CA+FuTSfQOUEyEDnOU8VVZ=STw_ii-hTwyg-cvpcViPkVK4pLUA@mail.gmail.com>
+ <42554FCB-9180-4B32-B5CF-6D3236237D99@ucloud.cn> <CAF=yD-+1RSj_o8n5LDOLVyn_dvVQvmDQo5pacSoDFPOR3M2g5g@mail.gmail.com>
+ <CANn89i+T=Ny7pfUomSsa1ub77u8LfYtRZPzmp_0-=oWKt0abLg@mail.gmail.com>
+In-Reply-To: <CANn89i+T=Ny7pfUomSsa1ub77u8LfYtRZPzmp_0-=oWKt0abLg@mail.gmail.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Tue, 15 Feb 2022 10:45:24 -0500
+X-Gmail-Original-Message-ID: <CA+FuTSc9ZeuLE7tqNT-GnqHb27SE7UAtVRVsZHR+dV6ua=UKPA@mail.gmail.com>
+Message-ID: <CA+FuTSc9ZeuLE7tqNT-GnqHb27SE7UAtVRVsZHR+dV6ua=UKPA@mail.gmail.com>
+Subject: Re: [PATCH] gso: do not skip outer ip header in case of ipip and net_failover
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Tao Liu <thomas.liu@ucloud.cn>,
+        David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Samudrala, Sridhar" <sridhar.samudrala@intel.com>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Kosina <jkosina@suse.cz>
+> > Got it. That is an uncommon combination. SKB_GSO_DODGY is set from
+> > external virtio_net, which does not support tunnels. But a path with
+> > an added tunnel might cause this combination.
+> >
+> > And inet_gso_segment resets the network header, both times, before
+> > calling callbacks.gso_segment()
+> >
+> >         skb_reset_network_header(skb);
+> >         nhoff = skb_network_header(skb) - skb_mac_header(skb);
+> >
+> >         [...]
+> >
+> >         if (likely(ops && ops->callbacks.gso_segment))
+> >                 segs = ops->callbacks.gso_segment(skb, features);
+> >
+> > And resets that after for each skb in segs.
+> >
+> >         skb = segs;
+> >         do {
+> >                 [...]
+> >                 skb->network_header = (u8 *)iph - skb->head;
+> >
+> > But does not do this if segs == NULL.
+> >
+> > The packet has to be restored before it is passed to the device. I
+> > think we have to handle this case correctly in inet_gso_segment,
+> > instead of patching it up in all the various tunnel devices.
+> >
+> > The same holds for ipv6_gso_segment.
+>
+> Back in the days, GRO was modified so that we passed a context (nhoff)
+> in called functions,
+> instead of changing skb offsets. The concept of outer/inner header
+> only works with 1 encap.
+>
+> Perhaps it is time to do the same in GSO, to allow arbitrary levels of
+> encapsulation.
+> Then we no longer mess with these limited
+> 'network_header/inner_network_header' fields
+> in the skb.
+>
+> Stuffing state in the skb has been a mistake I think.
 
-drm_fb_helper_damage() is acquiring spinlock_t (helper->damage_lock), 
-while it can be called from contexts where raw_spinlock_t is held (e.g. 
-console_owner lock obtained on vprintk_emit() codepath).
+If we could unwind those skb inner_* fields (and reclaim the skbuff
+space!) that would be fantastic.
 
-As the critical sections protected by damage_lock are super-tiny, let's 
-fix this by converting it to raw_spinlock_t in order not to violate 
-PREEMPT_RT-imposed lock nesting rules.
-
-This fixes the splat below.
-
- =============================
- [ BUG: Invalid wait context ]
- 5.17.0-rc4-00002-gd567f5db412e #1 Not tainted
- -----------------------------
- swapper/0/0 is trying to lock:
- ffff8c5687cc4158 (&helper->damage_lock){....}-{3:3}, at: drm_fb_helper_damage.isra.22+0x4a/0xf0
- other info that might help us debug this:
- context-{2:2}
- 3 locks held by swapper/0/0:
-  #0: ffffffffad776520 (console_lock){+.+.}-{0:0}, at: vprintk_emit+0xb8/0x2a0
-  #1: ffffffffad696120 (console_owner){-...}-{0:0}, at: console_unlock+0x17f/0x550
-  #2: ffffffffad926a58 (printing_lock){....}-{3:3}, at: vt_console_print+0x7d/0x3e0
- stack backtrace:
- CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc4-00002-gd567f5db412e #1 bed1d5e19e0e7e8c9d97fd8afa1322f7f47a4f38
- Hardware name: LENOVO 20UJS2B905/20UJS2B905, BIOS R1CET63W(1.32 ) 04/09/2021
- Call Trace:
-  <IRQ>
-  dump_stack_lvl+0x58/0x71
-  __lock_acquire+0x165b/0x1780
-  ? secondary_startup_64_no_verify+0xd5/0xdb
-  lock_acquire+0x278/0x300
-  ? drm_fb_helper_damage.isra.22+0x4a/0xf0
-  ? save_trace+0x3e/0x340
-  ? __bfs+0x10f/0x240
-  _raw_spin_lock_irqsave+0x48/0x60
-  ? drm_fb_helper_damage.isra.22+0x4a/0xf0
-  drm_fb_helper_damage.isra.22+0x4a/0xf0
-  soft_cursor+0x194/0x240
-  bit_cursor+0x386/0x630
-  ? get_color+0x29/0x120
-  ? bit_putcs+0x4b0/0x4b0
-  ? console_unlock+0x17f/0x550
-  hide_cursor+0x2f/0x90
-  vt_console_print+0x3c5/0x3e0
-  ? console_unlock+0x17f/0x550
-  console_unlock+0x515/0x550
-  vprintk_emit+0x1c8/0x2a0
-  _printk+0x52/0x6e
-  ? sched_clock_tick+0x3d/0x60
-  collect_cpu_info_amd+0x93/0xd0
-  collect_cpu_info_local+0x23/0x30
-  flush_smp_call_function_queue+0x137/0x220
-  __sysvec_call_function_single+0x43/0x1c0
-  sysvec_call_function_single+0x43/0x80
-  </IRQ>
-  <TASK>
-  asm_sysvec_call_function_single+0x12/0x20
- RIP: 0010:cpuidle_enter_state+0x111/0x4b0
- Code: 7c ff 45 84 ff 74 17 9c 58 0f 1f 44 00 00 f6 c4 02 0f 85 71 03 00 00 31 ff e8 bb 21 86 ff e8 76 2f 8e ff fb 66 0f 1f 44 00 00 <45> 85 f6 0f 88 12 01 00 00 49 63 d6 4c 2b 24 24 48 8d 04 52 48 8d
- RSP: 0018:ffffffffad603e48 EFLAGS: 00000206
- RAX: 00000000000127c3 RBX: 0000000000000003 RCX: 0000000000000000
- RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffffffac32617a
- RBP: ffff8c5687ba4400 R08: 0000000000000001 R09: 0000000000000001
- R10: ffffffffad603e10 R11: 0000000000000000 R12: 00000000685eb4a0
- R13: ffffffffad918f80 R14: 0000000000000003 R15: 0000000000000000
-  ? cpuidle_enter_state+0x10a/0x4b0
-  ? cpuidle_enter_state+0x10a/0x4b0
-  cpuidle_enter+0x29/0x40
-  do_idle+0x24d/0x2c0
-  cpu_startup_entry+0x19/0x20
-  start_kernel+0x9c2/0x9e9
-  secondary_startup_64_no_verify+0xd5/0xdb
-  </TASK>
-
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
----
- drivers/gpu/drm/drm_fb_helper.c | 14 +++++++-------
- include/drm/drm_fb_helper.h     |  2 +-
- 2 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
-index ed43b987d306..7c4ab6e6f865 100644
---- a/drivers/gpu/drm/drm_fb_helper.c
-+++ b/drivers/gpu/drm/drm_fb_helper.c
-@@ -436,11 +436,11 @@ static void drm_fb_helper_damage_work(struct work_struct *work)
- 	unsigned long flags;
- 	int ret;
- 
--	spin_lock_irqsave(&helper->damage_lock, flags);
-+	raw_spin_lock_irqsave(&helper->damage_lock, flags);
- 	clip_copy = *clip;
- 	clip->x1 = clip->y1 = ~0;
- 	clip->x2 = clip->y2 = 0;
--	spin_unlock_irqrestore(&helper->damage_lock, flags);
-+	raw_spin_unlock_irqrestore(&helper->damage_lock, flags);
- 
- 	/* Call damage handlers only if necessary */
- 	if (!(clip_copy.x1 < clip_copy.x2 && clip_copy.y1 < clip_copy.y2))
-@@ -465,12 +465,12 @@ static void drm_fb_helper_damage_work(struct work_struct *work)
- 	 * Restore damage clip rectangle on errors. The next run
- 	 * of the damage worker will perform the update.
- 	 */
--	spin_lock_irqsave(&helper->damage_lock, flags);
-+	raw_spin_lock_irqsave(&helper->damage_lock, flags);
- 	clip->x1 = min_t(u32, clip->x1, clip_copy.x1);
- 	clip->y1 = min_t(u32, clip->y1, clip_copy.y1);
- 	clip->x2 = max_t(u32, clip->x2, clip_copy.x2);
- 	clip->y2 = max_t(u32, clip->y2, clip_copy.y2);
--	spin_unlock_irqrestore(&helper->damage_lock, flags);
-+	raw_spin_unlock_irqrestore(&helper->damage_lock, flags);
- }
- 
- /**
-@@ -486,7 +486,7 @@ void drm_fb_helper_prepare(struct drm_device *dev, struct drm_fb_helper *helper,
- 			   const struct drm_fb_helper_funcs *funcs)
- {
- 	INIT_LIST_HEAD(&helper->kernel_fb_list);
--	spin_lock_init(&helper->damage_lock);
-+	raw_spin_lock_init(&helper->damage_lock);
- 	INIT_WORK(&helper->resume_work, drm_fb_helper_resume_worker);
- 	INIT_WORK(&helper->damage_work, drm_fb_helper_damage_work);
- 	helper->damage_clip.x1 = helper->damage_clip.y1 = ~0;
-@@ -670,12 +670,12 @@ static void drm_fb_helper_damage(struct fb_info *info, u32 x, u32 y,
- 	if (!drm_fbdev_use_shadow_fb(helper))
- 		return;
- 
--	spin_lock_irqsave(&helper->damage_lock, flags);
-+	raw_spin_lock_irqsave(&helper->damage_lock, flags);
- 	clip->x1 = min_t(u32, clip->x1, x);
- 	clip->y1 = min_t(u32, clip->y1, y);
- 	clip->x2 = max_t(u32, clip->x2, x + width);
- 	clip->y2 = max_t(u32, clip->y2, y + height);
--	spin_unlock_irqrestore(&helper->damage_lock, flags);
-+	raw_spin_unlock_irqrestore(&helper->damage_lock, flags);
- 
- 	schedule_work(&helper->damage_work);
- }
-diff --git a/include/drm/drm_fb_helper.h b/include/drm/drm_fb_helper.h
-index 3af4624368d8..91178958896e 100644
---- a/include/drm/drm_fb_helper.h
-+++ b/include/drm/drm_fb_helper.h
-@@ -131,7 +131,7 @@ struct drm_fb_helper {
- 	struct fb_info *fbdev;
- 	u32 pseudo_palette[17];
- 	struct drm_clip_rect damage_clip;
--	spinlock_t damage_lock;
-+	raw_spinlock_t damage_lock;
- 	struct work_struct damage_work;
- 	struct work_struct resume_work;
- 
-
--- 
-Jiri Kosina
-SUSE Labs
-
+Immediately for this bug: perhaps it can be fixed by resetting the
+network_header on the gso skb if segs == NULL. As the offset is stored
+on the stack.

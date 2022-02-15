@@ -2,271 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 610094B69C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:52:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 069604B69D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235334AbiBOKwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 05:52:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36150 "EHLO
+        id S236736AbiBOKyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 05:54:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbiBOKw2 (ORCPT
+        with ESMTP id S230356AbiBOKyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 05:52:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71791888C9;
-        Tue, 15 Feb 2022 02:52:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D8EB614B7;
-        Tue, 15 Feb 2022 10:52:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F610C340EB;
-        Tue, 15 Feb 2022 10:52:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644922337;
-        bh=HfhL1YOyThE8eIJjbEXTmdOkgir/e14DI5CCQpAi0RA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oLRpRB9ZIeBxw8CF/njTbtsBR3/u9dR1EWVLSMGbeKUe9AetFRV0o9i5Z4vsAP/ZH
-         R5UdZZlCDrV0bsYiFiMBRC0WC1RWimiXXLCUMbzp9JoBtTYZJC97JmMTCNhPD8grwp
-         xNa55r24v+IIhesR0cJL61B1/CnJoVHutzXKlJRBHun82dT1CqpARrkmK18Z3jodgF
-         vHyG94f9quKhYO75mj14fPt9n6zyuynC1z7bTnEVcT6MKdK1vo86SFjiiZwOhUrmpx
-         UZdHdKvvkBYUjWkRjIPiQZBlvRbZ1PNnv+ij1N+Agqu6KPJr62Q5s8qKZzFVZzpbgT
-         yOYfCHs+UCpwQ==
-Received: by pali.im (Postfix)
-        id 703B0F13; Tue, 15 Feb 2022 11:52:14 +0100 (CET)
-Date:   Tue, 15 Feb 2022 11:52:14 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     =?utf-8?B?THXDrXM=?= Mendes <luis.p.mendes@gmail.com>
-Cc:     Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 11/11] ARM: dts: armada-385.dtsi: Add definitions for
- PCIe legacy INTx interrupts
-Message-ID: <20220215105214.f5biuptsruoredqi@pali>
-References: <20220105150239.9628-1-pali@kernel.org>
- <20220112151814.24361-1-pali@kernel.org>
- <20220112151814.24361-12-pali@kernel.org>
- <87wnhxjxlq.fsf@BL-laptop>
- <20220214150923.a5ttxoh426cfxn4v@pali>
- <87tud1jwpr.fsf@BL-laptop>
- <CAEzXK1qYKVk7QiSY_DwqkZ7WV6WU06WBtiqZx0JJCc+mOP-7Kg@mail.gmail.com>
- <CAEzXK1rj7pOvJgAMd11TJVqzgWD2GSJ-25_BWL7X9wiZWOhieQ@mail.gmail.com>
+        Tue, 15 Feb 2022 05:54:38 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD42C6220;
+        Tue, 15 Feb 2022 02:54:28 -0800 (PST)
+Date:   Tue, 15 Feb 2022 10:54:24 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644922466;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gq8JkGp7txklDWvEWlo9O1PgemKRDCD3AFK4Be8fUDU=;
+        b=zEByKY6nS3XXm6LTHvcMVlReoFpuigW47wjkpjjMfvsvehIlDtNDd57S3TpByMkWX9282u
+        uPKku3w2HzVt0xgDWT0A4SE2eTQmxGDe8WL7dozlD7gr7qv6EjDzkBiqP1tOXQK+5TEPag
+        t56nlrbriXQmKgHsO6p8s+PzfaiExdqwVCzQwB5D0fDwIKiiSgGNFpkvuT2cAB4dGXpvm9
+        D+DoYmwjke/Avwan72NNiR8FvyAhTF2TV/MoXP+3Gln5w91fu3Yg8OrbGo/9Vt14Jcax0Z
+        AUDwl2L4+2o+D8AUByedtSPdSYZO0lDNp04aO6r42XpNQy1O4sKpE68S66n4zA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644922466;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gq8JkGp7txklDWvEWlo9O1PgemKRDCD3AFK4Be8fUDU=;
+        b=C4D+GLTgsQIqoy5nuB7I3KHx4MiI5Jlk1BUAes1XXd76zZXFU8l829xKs7t+BX1TFp5Odt
+        19WzDsuTcn0cQfBA==
+From:   "tip-bot2 for Fenghua Yu" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/pasid] Documentation/x86: Update documentation for SVA
+ (Shared Virtual Addressing)
+Cc:     Fenghua Yu <fenghua.yu@intel.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220207230254.3342514-12-fenghua.yu@intel.com>
+References: <20220207230254.3342514-12-fenghua.yu@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEzXK1rj7pOvJgAMd11TJVqzgWD2GSJ-25_BWL7X9wiZWOhieQ@mail.gmail.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <164492246461.16921.16965885697297666355.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello! armada-388.dtsi file has #include "armada-385.dtsi" line and
-therefore is already covered by this my patch.
+The following commit has been merged into the x86/pasid branch of tip:
 
-Gregory's question was about A380.
+Commit-ID:     83aa52ffed5d35a08e24452d0471e1684075cdf8
+Gitweb:        https://git.kernel.org/tip/83aa52ffed5d35a08e24452d0471e1684075cdf8
+Author:        Fenghua Yu <fenghua.yu@intel.com>
+AuthorDate:    Mon, 07 Feb 2022 15:02:54 -08:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Tue, 15 Feb 2022 11:31:43 +01:00
 
-But if you want, you can test this patch series (which already covers
-A388) on your A388 HW. It is still better to do tests on more HW.
+Documentation/x86: Update documentation for SVA (Shared Virtual Addressing)
 
-On Tuesday 15 February 2022 10:48:17 Luís Mendes wrote:
-> Hello,
-> 
-> Sorry for jumping in the conversation, but I read this thread and I
-> have an Armada A388 HW so I can test it, if desired.
-> 
-> Luís
-> 
-> 
-> On Tue, Feb 15, 2022 at 10:47 AM Luís Mendes <luis.p.mendes@gmail.com> wrote:
-> >
-> > Hello,
-> >
-> > Sorry for jumping in the conversation, but I read this thread and I have an Armada A388 HW so I can test it, if desired.
-> >
-> > Luís
-> >
-> > On Mon, Feb 14, 2022 at 7:57 PM Gregory CLEMENT <gregory.clement@bootlin.com> wrote:
-> >>
-> >> Hello,
-> >>
-> >> > On Monday 14 February 2022 16:07:13 Gregory CLEMENT wrote:
-> >> >> Hello Pali,
-> >> >>
-> >> >> > With this change legacy INTA, INTB, INTC and INTD interrupts are reported
-> >> >> > separately and not mixed into one Linux virq source anymore.
-> >> >> >
-> >> >> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> >> >> > ---
-> >> >> >  arch/arm/boot/dts/armada-385.dtsi | 52 ++++++++++++++++++++++++++-----
-> >> >>
-> >> >> Is there any reason for not doing the same change in armada-380.dtsi ?
-> >> >
-> >> > I do not have A380 HW, so I did this change only for A385 which I have
-> >> > tested.
-> >>
-> >> OK fair enough.
-> >>
-> >> So you can add my
-> >> Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> >>
-> >> Moreover to keep biscetability  this patch should be merged after the
-> >> support in the driver. So the easier is to let merge it through the PCI
-> >> subsystem with the other patches from this series. I do not think there
-> >> will be any other changes in this file so there won't be any merge
-> >> conflicts.
-> >>
-> >> Thanks,
-> >>
-> >> Grégory
-> >>
-> >>
-> >> >
-> >> >> Grégory
-> >> >>
-> >> >> >  1 file changed, 44 insertions(+), 8 deletions(-)
-> >> >> >
-> >> >> > diff --git a/arch/arm/boot/dts/armada-385.dtsi b/arch/arm/boot/dts/armada-385.dtsi
-> >> >> > index f0022d10c715..83392b92dae2 100644
-> >> >> > --- a/arch/arm/boot/dts/armada-385.dtsi
-> >> >> > +++ b/arch/arm/boot/dts/armada-385.dtsi
-> >> >> > @@ -69,16 +69,25 @@
-> >> >> >                            reg = <0x0800 0 0 0 0>;
-> >> >> >                            #address-cells = <3>;
-> >> >> >                            #size-cells = <2>;
-> >> >> > +                          interrupt-names = "intx";
-> >> >> > +                          interrupts-extended = <&gic GIC_SPI 29 IRQ_TYPE_LEVEL_HIGH>;
-> >> >> >                            #interrupt-cells = <1>;
-> >> >> >                            ranges = <0x82000000 0 0 0x82000000 0x1 0 1 0
-> >> >> >                                      0x81000000 0 0 0x81000000 0x1 0 1 0>;
-> >> >> >                            bus-range = <0x00 0xff>;
-> >> >> > -                          interrupt-map-mask = <0 0 0 0>;
-> >> >> > -                          interrupt-map = <0 0 0 0 &gic GIC_SPI 29 IRQ_TYPE_LEVEL_HIGH>;
-> >> >> > +                          interrupt-map-mask = <0 0 0 7>;
-> >> >> > +                          interrupt-map = <0 0 0 1 &pcie1_intc 0>,
-> >> >> > +                                          <0 0 0 2 &pcie1_intc 1>,
-> >> >> > +                                          <0 0 0 3 &pcie1_intc 2>,
-> >> >> > +                                          <0 0 0 4 &pcie1_intc 3>;
-> >> >> >                            marvell,pcie-port = <0>;
-> >> >> >                            marvell,pcie-lane = <0>;
-> >> >> >                            clocks = <&gateclk 8>;
-> >> >> >                            status = "disabled";
-> >> >> > +                          pcie1_intc: interrupt-controller {
-> >> >> > +                                  interrupt-controller;
-> >> >> > +                                  #interrupt-cells = <1>;
-> >> >> > +                          };
-> >> >> >                    };
-> >> >> >
-> >> >> >                    /* x1 port */
-> >> >> > @@ -88,16 +97,25 @@
-> >> >> >                            reg = <0x1000 0 0 0 0>;
-> >> >> >                            #address-cells = <3>;
-> >> >> >                            #size-cells = <2>;
-> >> >> > +                          interrupt-names = "intx";
-> >> >> > +                          interrupts-extended = <&gic GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
-> >> >> >                            #interrupt-cells = <1>;
-> >> >> >                            ranges = <0x82000000 0 0 0x82000000 0x2 0 1 0
-> >> >> >                                      0x81000000 0 0 0x81000000 0x2 0 1 0>;
-> >> >> >                            bus-range = <0x00 0xff>;
-> >> >> > -                          interrupt-map-mask = <0 0 0 0>;
-> >> >> > -                          interrupt-map = <0 0 0 0 &gic GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
-> >> >> > +                          interrupt-map-mask = <0 0 0 7>;
-> >> >> > +                          interrupt-map = <0 0 0 1 &pcie2_intc 0>,
-> >> >> > +                                          <0 0 0 2 &pcie2_intc 1>,
-> >> >> > +                                          <0 0 0 3 &pcie2_intc 2>,
-> >> >> > +                                          <0 0 0 4 &pcie2_intc 3>;
-> >> >> >                            marvell,pcie-port = <1>;
-> >> >> >                            marvell,pcie-lane = <0>;
-> >> >> >                            clocks = <&gateclk 5>;
-> >> >> >                            status = "disabled";
-> >> >> > +                          pcie2_intc: interrupt-controller {
-> >> >> > +                                  interrupt-controller;
-> >> >> > +                                  #interrupt-cells = <1>;
-> >> >> > +                          };
-> >> >> >                    };
-> >> >> >
-> >> >> >                    /* x1 port */
-> >> >> > @@ -107,16 +125,25 @@
-> >> >> >                            reg = <0x1800 0 0 0 0>;
-> >> >> >                            #address-cells = <3>;
-> >> >> >                            #size-cells = <2>;
-> >> >> > +                          interrupt-names = "intx";
-> >> >> > +                          interrupts-extended = <&gic GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
-> >> >> >                            #interrupt-cells = <1>;
-> >> >> >                            ranges = <0x82000000 0 0 0x82000000 0x3 0 1 0
-> >> >> >                                      0x81000000 0 0 0x81000000 0x3 0 1 0>;
-> >> >> >                            bus-range = <0x00 0xff>;
-> >> >> > -                          interrupt-map-mask = <0 0 0 0>;
-> >> >> > -                          interrupt-map = <0 0 0 0 &gic GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
-> >> >> > +                          interrupt-map-mask = <0 0 0 7>;
-> >> >> > +                          interrupt-map = <0 0 0 1 &pcie3_intc 0>,
-> >> >> > +                                          <0 0 0 2 &pcie3_intc 1>,
-> >> >> > +                                          <0 0 0 3 &pcie3_intc 2>,
-> >> >> > +                                          <0 0 0 4 &pcie3_intc 3>;
-> >> >> >                            marvell,pcie-port = <2>;
-> >> >> >                            marvell,pcie-lane = <0>;
-> >> >> >                            clocks = <&gateclk 6>;
-> >> >> >                            status = "disabled";
-> >> >> > +                          pcie3_intc: interrupt-controller {
-> >> >> > +                                  interrupt-controller;
-> >> >> > +                                  #interrupt-cells = <1>;
-> >> >> > +                          };
-> >> >> >                    };
-> >> >> >
-> >> >> >                    /*
-> >> >> > @@ -129,16 +156,25 @@
-> >> >> >                            reg = <0x2000 0 0 0 0>;
-> >> >> >                            #address-cells = <3>;
-> >> >> >                            #size-cells = <2>;
-> >> >> > +                          interrupt-names = "intx";
-> >> >> > +                          interrupts-extended = <&gic GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
-> >> >> >                            #interrupt-cells = <1>;
-> >> >> >                            ranges = <0x82000000 0 0 0x82000000 0x4 0 1 0
-> >> >> >                                      0x81000000 0 0 0x81000000 0x4 0 1 0>;
-> >> >> >                            bus-range = <0x00 0xff>;
-> >> >> > -                          interrupt-map-mask = <0 0 0 0>;
-> >> >> > -                          interrupt-map = <0 0 0 0 &gic GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
-> >> >> > +                          interrupt-map-mask = <0 0 0 7>;
-> >> >> > +                          interrupt-map = <0 0 0 1 &pcie4_intc 0>,
-> >> >> > +                                          <0 0 0 2 &pcie4_intc 1>,
-> >> >> > +                                          <0 0 0 3 &pcie4_intc 2>,
-> >> >> > +                                          <0 0 0 4 &pcie4_intc 3>;
-> >> >> >                            marvell,pcie-port = <3>;
-> >> >> >                            marvell,pcie-lane = <0>;
-> >> >> >                            clocks = <&gateclk 7>;
-> >> >> >                            status = "disabled";
-> >> >> > +                          pcie4_intc: interrupt-controller {
-> >> >> > +                                  interrupt-controller;
-> >> >> > +                                  #interrupt-cells = <1>;
-> >> >> > +                          };
-> >> >> >                    };
-> >> >> >            };
-> >> >> >    };
-> >> >> > --
-> >> >> > 2.20.1
-> >> >> >
-> >> >>
-> >> >> --
-> >> >> Gregory Clement, Bootlin
-> >> >> Embedded Linux and Kernel engineering
-> >> >> http://bootlin.com
-> >>
-> >> --
-> >> Gregory Clement, Bootlin
-> >> Embedded Linux and Kernel engineering
-> >> http://bootlin.com
+Adjust the documentation to the new way how a PASID is being allocated,
+freed and fixed up.
+
+Based on a patch by Ashok Raj <ashok.raj@intel.com>
+
+  [ bp: Massage commit message, fix htmldocs build warning ]
+
+Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Acked-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/r/20220207230254.3342514-12-fenghua.yu@intel.com
+---
+ Documentation/x86/sva.rst | 53 +++++++++++++++++++++++++++++---------
+ 1 file changed, 41 insertions(+), 12 deletions(-)
+
+diff --git a/Documentation/x86/sva.rst b/Documentation/x86/sva.rst
+index 076efd5..2e9b8b0 100644
+--- a/Documentation/x86/sva.rst
++++ b/Documentation/x86/sva.rst
+@@ -104,18 +104,47 @@ The MSR must be configured on each logical CPU before any application
+ thread can interact with a device. Threads that belong to the same
+ process share the same page tables, thus the same MSR value.
+ 
+-PASID is cleared when a process is created. The PASID allocation and MSR
+-programming may occur long after a process and its threads have been created.
+-One thread must call iommu_sva_bind_device() to allocate the PASID for the
+-process. If a thread uses ENQCMD without the MSR first being populated, a #GP
+-will be raised. The kernel will update the PASID MSR with the PASID for all
+-threads in the process. A single process PASID can be used simultaneously
+-with multiple devices since they all share the same address space.
+-
+-One thread can call iommu_sva_unbind_device() to free the allocated PASID.
+-The kernel will clear the PASID MSR for all threads belonging to the process.
+-
+-New threads inherit the MSR value from the parent.
++PASID Life Cycle Management
++===========================
++
++PASID is initialized as INVALID_IOASID (-1) when a process is created.
++
++Only processes that access SVA-capable devices need to have a PASID
++allocated. This allocation happens when a process opens/binds an SVA-capable
++device but finds no PASID for this process. Subsequent binds of the same, or
++other devices will share the same PASID.
++
++Although the PASID is allocated to the process by opening a device,
++it is not active in any of the threads of that process. It's loaded to the
++IA32_PASID MSR lazily when a thread tries to submit a work descriptor
++to a device using the ENQCMD.
++
++That first access will trigger a #GP fault because the IA32_PASID MSR
++has not been initialized with the PASID value assigned to the process
++when the device was opened. The Linux #GP handler notes that a PASID has
++been allocated for the process, and so initializes the IA32_PASID MSR
++and returns so that the ENQCMD instruction is re-executed.
++
++On fork(2) or exec(2) the PASID is removed from the process as it no
++longer has the same address space that it had when the device was opened.
++
++On clone(2) the new task shares the same address space, so will be
++able to use the PASID allocated to the process. The IA32_PASID is not
++preemptively initialized as the PASID value might not be allocated yet or
++the kernel does not know whether this thread is going to access the device
++and the cleared IA32_PASID MSR reduces context switch overhead by xstate
++init optimization. Since #GP faults have to be handled on any threads that
++were created before the PASID was assigned to the mm of the process, newly
++created threads might as well be treated in a consistent way.
++
++Due to complexity of freeing the PASID and clearing all IA32_PASID MSRs in
++all threads in unbind, free the PASID lazily only on mm exit.
++
++If a process does a close(2) of the device file descriptor and munmap(2)
++of the device MMIO portal, then the driver will unbind the device. The
++PASID is still marked VALID in the PASID_MSR for any threads in the
++process that accessed the device. But this is harmless as without the
++MMIO portal they cannot submit new work to the device.
+ 
+ Relationships
+ =============

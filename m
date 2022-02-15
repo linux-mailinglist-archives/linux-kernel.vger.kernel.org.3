@@ -2,97 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198B74B7585
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 854DE4B759E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242181AbiBORF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 12:05:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60938 "EHLO
+        id S242170AbiBORHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 12:07:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233335AbiBORFv (ORCPT
+        with ESMTP id S242164AbiBORHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 12:05:51 -0500
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13EE119F7D;
-        Tue, 15 Feb 2022 09:05:41 -0800 (PST)
-Received: by mail-pl1-f179.google.com with SMTP id w20so13546500plq.12;
-        Tue, 15 Feb 2022 09:05:41 -0800 (PST)
+        Tue, 15 Feb 2022 12:07:03 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CABFBDE7D
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:06:53 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id i14so33182709wrc.10
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:06:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=64ujAZGCy+wXFieA5/Bj8ZqtpVN9eii19Jh2KoGa8VQ=;
+        b=L2GzMwlPsZ7uQ/GDO30qwxGgBGqGNVBqZLTl0CXEl3tlyoMniWdKzQPzNGWr9Zxt7/
+         S5EcncmoO3Vw6GI+9aYAF8XbQ2lw3eyls4FC+lu2pAGfHzvu7Ob9zAEnfKAY55nAZ6d7
+         12ZXoaI6kh9hCMmHJKPUPJWRfpf6aZb1MOCaA/opO4hgdQ7V4m3ZtnODWzCIGCLjzaPX
+         8pch32l9fJrzyx5tHBR80+hjG6gWW502dJ5O6nBV6jv+wteAuFr6DruQCRQ44Q7mlt0o
+         yQp/0bUYoYSK3/5I6s8OVvcmzbUB0SR0uAoaemIRpTrOX7Vp8Q7iZY+iMwRGautRQehC
+         2LFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=4XleEJH2PpPwterBCnSkkR/rDNNZHaszB5/lLGm5Jr8=;
-        b=YKmxkeg86vq5E6cymgjlRtdMG5D6dpssYCjoegbIsVpE/2JlNnLl/J9tubFrO5Hyj1
-         8dy5PBYZFHxib97TngQe/Sdbg4X4v9QYYwSZcLbf+/6ZCqRPBW8FwHfcgUjdtN3pSNYE
-         qaESZmHIjD77qS9CcClAvqXGhvkuch5Voc2e/ewVjn0F8aqkRNiebLZzdQzUCVn9wHYH
-         eYDf1iTVJi7NTD26NOyADrhG1rHkad2e/5Za3A+H6cbTqJuqN/fdilqEjO31CvU/JXe7
-         EPgewtJk+gKXob9FtgOrXVsSR+qL7z4QYI5aSIHc/leX9mIIeO+q25FkNbBguWE+YkDM
-         gkSA==
-X-Gm-Message-State: AOAM533m8oqF4UzPUgCF45vKzCNEGRY2D3faipQJ8AQGgLk+OxkY+rKn
-        R3VozphTJFXopjHHODevGnZKLmmV5XS0OA==
-X-Google-Smtp-Source: ABdhPJyH++fmcBHWOXSUsKOkMW1j6B4LcjIc70lGuuPs7x7cKgQoWskWdeF3hKJdcYUo9xL4U90E4g==
-X-Received: by 2002:a17:90b:1b0e:: with SMTP id nu14mr5451669pjb.233.1644944740896;
-        Tue, 15 Feb 2022 09:05:40 -0800 (PST)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id j12sm35280608pfu.79.2022.02.15.09.05.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 09:05:40 -0800 (PST)
-Message-ID: <1b70929f-1f73-c549-64c1-94cea2c1a36c@acm.org>
-Date:   Tue, 15 Feb 2022 09:05:38 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=64ujAZGCy+wXFieA5/Bj8ZqtpVN9eii19Jh2KoGa8VQ=;
+        b=CqMIGINtUU1EXO1HVBD4TOekI/EREDoQmpz5M9Sy2vvwtOsal7YPcLeJ68mJOhR+7s
+         ZnIihwgO7fXHzk4AdhxgYbcPx0rJcN+K7oH3+SM7n/5t7pzdAtN9KuJS95E145xLuYu3
+         rJc+DjE2/uIkZOXgUo7W0bxDLZQUa7VrKOR7gxSpwsBh5pSgBMqySkNkHIKXe78NZmpa
+         UYzaU7UzjbICh2zGM7jY3FQTS+A+hpclUywMHRiLKF1kuFIIdYNRdJ524zS6H2iRp0QM
+         4+dNKReRJ0PD6epuKsuiyqkfP2Y67FXuE5xRtbFjvoD7/COI6iLkHDMsuDj9u4A+yxFQ
+         KUPQ==
+X-Gm-Message-State: AOAM532Oqjtn8SHWNu+gl48ibjujIIOqHFhJnUmaNAUwk5DzxtQ2aZ5z
+        s/QzNA6foiQDwydQa6Y70ZL3zDzfdk0x/qXvVkxudw==
+X-Google-Smtp-Source: ABdhPJxt7DoTqqlSMnPR20BUAU/D51eBUmhuL5qPMitPYI1QjXmZpvB3HO4dQNvSBDK/LIrFk4jiPFqroLEgJdBXdCk=
+X-Received: by 2002:a5d:47cf:: with SMTP id o15mr3959105wrc.412.1644944811535;
+ Tue, 15 Feb 2022 09:06:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-From:   Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [syzbot] possible deadlock in worker_thread
-To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Haakon Bugge <haakon.bugge@oracle.com>
-Cc:     Tejun Heo <tj@kernel.org>,
-        syzbot <syzbot+831661966588c802aae9@syzkaller.appspotmail.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        LKML <linux-kernel@vger.kernel.org>,
-        OFED mailing list <linux-rdma@vger.kernel.org>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-References: <0000000000005975a605d7aef05e@google.com>
- <8ea57ddf-a09c-43f2-4285-4dfb908ad967@acm.org>
- <ccd04d8a-154b-543e-e1c3-84bc655508d1@I-love.SAKURA.ne.jp>
- <71d6f14e-46af-cc5a-bc70-af1cdc6de8d5@acm.org>
- <309c86b7-2a4c-1332-585f-7bcd59cfd762@I-love.SAKURA.ne.jp>
- <aa2bf24e-981a-a811-c5d8-a75f0b8f693a@acm.org>
- <2959649d-cfbc-bdf2-02ac-053b8e7af030@I-love.SAKURA.ne.jp>
- <YgnQGZWT/n3VAITX@slm.duckdns.org>
- <8ebd003c-f748-69b4-3a4f-fb80a3f39d36@I-love.SAKURA.ne.jp>
- <YgqSsuSN5C7StvKx@slm.duckdns.org>
- <a07e464c-69c6-6165-e88c-5a2eded79138@I-love.SAKURA.ne.jp>
- <76616D2F-14F2-4D83-9DB4-576FB2ACB72C@oracle.com>
- <fb854eea-a7e7-b526-a989-95784c1c593c@I-love.SAKURA.ne.jp>
-Content-Language: en-US
-In-Reply-To: <fb854eea-a7e7-b526-a989-95784c1c593c@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220213150234.31602-1-thomas.liu@ucloud.cn> <CA+FuTSdODATw3hSAMv9aZUmJNM8ZE-YP58pr17bO9rGJUgfegw@mail.gmail.com>
+ <CFD9B65A-6762-4D9B-ADEB-B4C0B1902E02@ucloud.cn> <CA+FuTSfQOUEyEDnOU8VVZ=STw_ii-hTwyg-cvpcViPkVK4pLUA@mail.gmail.com>
+ <42554FCB-9180-4B32-B5CF-6D3236237D99@ucloud.cn> <CAF=yD-+1RSj_o8n5LDOLVyn_dvVQvmDQo5pacSoDFPOR3M2g5g@mail.gmail.com>
+ <CANn89i+T=Ny7pfUomSsa1ub77u8LfYtRZPzmp_0-=oWKt0abLg@mail.gmail.com> <CA+FuTSc9ZeuLE7tqNT-GnqHb27SE7UAtVRVsZHR+dV6ua=UKPA@mail.gmail.com>
+In-Reply-To: <CA+FuTSc9ZeuLE7tqNT-GnqHb27SE7UAtVRVsZHR+dV6ua=UKPA@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 15 Feb 2022 09:06:39 -0800
+Message-ID: <CANn89iLtXW-MFJ74UhP4WyC3a60LrevAxddBjJ1nGu78eSG1DQ@mail.gmail.com>
+Subject: Re: [PATCH] gso: do not skip outer ip header in case of ipip and net_failover
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     Tao Liu <thomas.liu@ucloud.cn>, David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Samudrala, Sridhar" <sridhar.samudrala@intel.com>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/22 04:48, Tetsuo Handa wrote:
-> I do not want to do like
-> 
-> -	system_wq = alloc_workqueue("events", 0, 0);
-> +	system_wq = alloc_workqueue("events", __WQ_SYSTEM_WIDE, 0);
-> 
-> because the intent of this change is to ask developers to create their own WQs.
+On Tue, Feb 15, 2022 at 7:46 AM Willem de Bruijn
+<willemdebruijn.kernel@gmail.com> wrote:
 
-I want more developers to use the system-wide workqueues since that 
-reduces memory usage. That matters for embedded devices running Linux.
+> > Stuffing state in the skb has been a mistake I think.
+>
+> If we could unwind those skb inner_* fields (and reclaim the skbuff
+> space!) that would be fantastic.
 
-Thanks,
+Not sure we can easily remove the space, many networking drivers need them,
+we probably do not want to dissect packets in their ndo_start_xmit()
 
-Bart.
+>
+> Immediately for this bug: perhaps it can be fixed by resetting the
+> network_header on the gso skb if segs == NULL. As the offset is stored
+> on the stack.
+
+It seems correct. Any other fields we need to take care of ?

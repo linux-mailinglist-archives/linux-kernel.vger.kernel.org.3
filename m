@@ -2,59 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71134B6221
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 05:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03AD54B621C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 05:31:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbiBOEeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 23:34:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39090 "EHLO
+        id S233867AbiBOEbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 23:31:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbiBOEep (ORCPT
+        with ESMTP id S229591AbiBOEbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 23:34:45 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3658AA9A63
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 20:34:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644899675; x=1676435675;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sQoCwA26t7bohLjBxsistapM0bOlvqxoeLeHcbXfGVU=;
-  b=j7t7DWgBzpSMFvCWV2UcCE74tLSL3aL6Jngj8y11tkksUbBr5cWFzfaz
-   Ax0uWf2/97Ze51Xhkec4uXO8wdMowc3y7zrL+6GOgqaHgUUEswJHU0Lrp
-   pLLZaf9kIwgEpF2FiNAQnM2nm8GeNVr/wJTvqtp6neAs1E3h0DndJaynl
-   s3iP4RillAsG69Le9eZ3BJT9lxhkoIXXLsSyaIM8jzJvSVbx/vYZFywzb
-   0s/HNDFB6bzSAKOiYyclzUWGCdAgjrRmpB6Z4HWORs079tzu4iflbRnBu
-   LPWXVHV8XBrEzOUfvlJ1jL+H/4FH5yKw8n4OlbfJV8I5E5POcoNv/Oq58
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="250194201"
-X-IronPort-AV: E=Sophos;i="5.88,369,1635231600"; 
-   d="scan'208";a="250194201"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 20:34:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,369,1635231600"; 
-   d="scan'208";a="485951089"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 14 Feb 2022 20:34:33 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nJpXs-0009Gr-IU; Tue, 15 Feb 2022 04:34:32 +0000
-Date:   Tue, 15 Feb 2022 12:33:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [jlayton:ceph-sparse-read 13/13] net/ceph/messenger_v2.c:3642:56:
- warning: variable 'recved' is uninitialized when used here
-Message-ID: <202202151220.h4Fu215q-lkp@intel.com>
+        Mon, 14 Feb 2022 23:31:52 -0500
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4C01C135
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 20:31:43 -0800 (PST)
+Received: by mail-oo1-xc33.google.com with SMTP id p190-20020a4a2fc7000000b0031820de484aso21815196oop.9
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 20:31:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D7WsWCRqMLz25vENb3RcLmuP7khzK1rVK0lqIZnKd40=;
+        b=qErQvLRHn4lNi32tmw38jEAFNYywB5rAnIRozMJp3Wu3QmiUz3kavqhSmwRx+OyGdY
+         LtFC0T6uamzGnphHeZAlx2E1u/X08Qdv0rSQVmPBMCw/bxC7HPu1UmcuD1XhaM4JDvYX
+         I4bDSc2FY1CS/fmpYAxzwSHegdZOpTn3+JHe4HYhGhAAJvYYWrMeR1jB2KswbOlvhXRY
+         vcBCpFE2SKQZI0N3AJjoxA/7iO58Xne2M4Qub/qxrwYEplfa7J2L9DwvSjOrBF9h5Knq
+         N7E5+9wOTrS8FWn7D59QuP6De+aGmzBjM7fKCSdus9AG6+5zH9nefOBQushQwXNqnQi9
+         6HmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D7WsWCRqMLz25vENb3RcLmuP7khzK1rVK0lqIZnKd40=;
+        b=mZSN0V4j1S9YCCmIVfR84sJ9bsJeggRQ+UzLbSwcmERG1IRMfqQB0J9h6ZgWYMLcig
+         TweM9kiQ5u55ls39hVxG5OSDnH1FLwuqDkzCod/0JCIpAxmsbye6Xga1fb7SGFVMM0wX
+         7trmvY0qvLktGyaR9zJaM+EFzDn+FU/O81E02fU8DIiDgium/75Ms5+FXbg7Ps02sNRR
+         Rz9LTyH7lMZb+bz7n9VPVMdXmFt0y/Kiquon3J2UKMKT6B7M2w0Cb1wCROOQwPTwdLnA
+         TeRtt+u+Jppb5Qg4DGKFGdLijENJkRxUucDE5J6mZ0H7jC0GEoDLYA20/B6pA9Z0tO0f
+         X58Q==
+X-Gm-Message-State: AOAM530Zbhg6N6347aIIS8av44BvfhdLUHWN2q3nKJM8fDQlebPjQ77u
+        g7MpSgR2/m6rIh+CwcjpCWdVVw==
+X-Google-Smtp-Source: ABdhPJxYZ98hSXj39qS4Lid82RoCU1bJQMN1rQR1NrXEQZ6QwcOrw3ie1V58t9SRMlck6xKqEZOWcw==
+X-Received: by 2002:a05:6870:6296:: with SMTP id s22mr800654oan.338.1644899502683;
+        Mon, 14 Feb 2022 20:31:42 -0800 (PST)
+Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id z4sm12926964otu.24.2022.02.14.20.31.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 20:31:42 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] drm/msm/dpu: Add INTF_5 interrupts
+Date:   Mon, 14 Feb 2022 20:33:52 -0800
+Message-Id: <20220215043353.1256754-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,73 +70,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git ceph-sparse-read
-head:   c0521644c264a8578ab61182209f303610af16e7
-commit: c0521644c264a8578ab61182209f303610af16e7 [13/13] libceph: add revoke support for sparse data
-config: i386-randconfig-a003-20220214 (https://download.01.org/0day-ci/archive/20220215/202202151220.h4Fu215q-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=c0521644c264a8578ab61182209f303610af16e7
-        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
-        git fetch --no-tags jlayton ceph-sparse-read
-        git checkout c0521644c264a8578ab61182209f303610af16e7
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/ceph/
+SC8180x has the eDP controller wired up to INTF_5, so add the interrupt
+register block for this interface to the list.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> net/ceph/messenger_v2.c:3642:56: warning: variable 'recved' is uninitialized when used here [-Wuninitialized]
-           dout("%s con %p recved %d resid %d\n", __func__, con, recved, resid);
-                                                                 ^~~~~~
-   include/linux/ceph/ceph_debug.h:35:45: note: expanded from macro 'dout'
-   # define dout(fmt, ...) pr_debug(" " fmt, ##__VA_ARGS__)
-                                               ^~~~~~~~~~~
-   include/linux/printk.h:570:26: note: expanded from macro 'pr_debug'
-           dynamic_pr_debug(fmt, ##__VA_ARGS__)
-                                   ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:163:22: note: expanded from macro 'dynamic_pr_debug'
-                              pr_fmt(fmt), ##__VA_ARGS__)
-                                             ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
-           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
-                                                                 ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
-                   func(&id, ##__VA_ARGS__);               \
-                               ^~~~~~~~~~~
-   net/ceph/messenger_v2.c:3635:12: note: initialize the variable 'recved' to silence this warning
-           int recved, resid;  /* current piece of data */
-                     ^
-                      = 0
-   1 warning generated.
-
-
-vim +/recved +3642 net/ceph/messenger_v2.c
-
-  3632	
-  3633	static void revoke_at_prepare_sparse_data(struct ceph_connection *con)
-  3634	{
-  3635		int recved, resid;  /* current piece of data */
-  3636		int remaining;
-  3637	
-  3638		WARN_ON(con_secure(con));
-  3639		WARN_ON(!data_len(con->in_msg));
-  3640		WARN_ON(!iov_iter_is_bvec(&con->v2.in_iter));
-  3641		resid = iov_iter_count(&con->v2.in_iter);
-> 3642		dout("%s con %p recved %d resid %d\n", __func__, con, recved, resid);
-  3643	
-  3644		remaining = CEPH_EPILOGUE_PLAIN_LEN + con->v2.data_len_remain;
-  3645		con->v2.in_iter.count -= resid;
-  3646		set_in_skip(con, resid + remaining);
-  3647		con->v2.in_state = IN_S_FINISH_SKIP;
-  3648	}
-  3649	
-
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+Changes since v1:
+- None
+
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 6 ++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h | 1 +
+ 2 files changed, 7 insertions(+)
+
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+index a77a5eaa78ad..dd2161e7bdb6 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+@@ -23,6 +23,7 @@
+ #define MDP_INTF_2_OFF			0x6B000
+ #define MDP_INTF_3_OFF			0x6B800
+ #define MDP_INTF_4_OFF			0x6C000
++#define MDP_INTF_5_OFF			0x6C800
+ #define MDP_AD4_0_OFF			0x7C000
+ #define MDP_AD4_1_OFF			0x7D000
+ #define MDP_AD4_INTR_EN_OFF		0x41c
+@@ -93,6 +94,11 @@ static const struct dpu_intr_reg dpu_intr_set[] = {
+ 		MDP_INTF_4_OFF+INTF_INTR_EN,
+ 		MDP_INTF_4_OFF+INTF_INTR_STATUS
+ 	},
++	{
++		MDP_INTF_5_OFF+INTF_INTR_CLEAR,
++		MDP_INTF_5_OFF+INTF_INTR_EN,
++		MDP_INTF_5_OFF+INTF_INTR_STATUS
++	},
+ 	{
+ 		MDP_AD4_0_OFF + MDP_AD4_INTR_CLEAR_OFF,
+ 		MDP_AD4_0_OFF + MDP_AD4_INTR_EN_OFF,
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h
+index 1ab75cccd145..37379966d8ec 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h
+@@ -22,6 +22,7 @@ enum dpu_hw_intr_reg {
+ 	MDP_INTF2_INTR,
+ 	MDP_INTF3_INTR,
+ 	MDP_INTF4_INTR,
++	MDP_INTF5_INTR,
+ 	MDP_AD4_0_INTR,
+ 	MDP_AD4_1_INTR,
+ 	MDP_INTF0_7xxx_INTR,
+-- 
+2.33.1
+

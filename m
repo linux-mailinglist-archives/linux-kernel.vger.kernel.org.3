@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DCF54B767D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB654B7595
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243239AbiBOSrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 13:47:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56260 "EHLO
+        id S243226AbiBOSrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 13:47:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243202AbiBOSqy (ORCPT
+        with ESMTP id S243205AbiBOSqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 13:46:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E8A2B273
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:46:43 -0800 (PST)
+        Tue, 15 Feb 2022 13:46:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE67B2BB0D
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:46:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A686BB81C36
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:46:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08293C340EB;
-        Tue, 15 Feb 2022 18:46:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 808A7B81BE4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:46:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7D63C340F2;
+        Tue, 15 Feb 2022 18:46:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644950801;
-        bh=hoGpv2c9vxG5UOx59LPqcWVHhPYMNKelW2hmb3S3rQ8=;
+        s=k20201202; t=1644950802;
+        bh=XXGeNtrspMb0Dwxmyk26Ohtm/O4a1cfPDFdOFE7eyIk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J6boZa0aJcnn9cPctIu3L/+2MQPxJjAy55OP8bWG8ba4p3Znl6Ak1oVsLdsrf/ByD
-         U+D7weRihQK42CUUqVUdy8q5mpV6YIYB500IbMSZYa4Zcbm4PICMraoN7ZXVd4MS6b
-         mzc+lMiDHU6qmJq17ptKIcK5Ziayauac7jO3GtLxhPT9IHhXCEFf+yrXa2GggyqU/1
-         xLOigGxKlRZ+q+jbnctLgkEO2AIztPciHWjzUPV/JS93qXbu/YkKLpNgUmQmcpni1a
-         h+i9n/u2L/C6W2ATMRpn3Tn0Z7B1wc63a51bYckvLggC9vbRdnBu5vWg+DTpET/z8s
-         954LL+ZqvV3jw==
+        b=a3Asl/Q0jZHzZ8Fx18aS9Edo012+2tW8XzSsF+ko6ooB0CUZ014JYnq8gv3cZY7ho
+         ywxRC5EIwUEzNjahfZ5A7JXMOTEX1e/qYX7RQNx+lPvfBWHuK/n/ne7TIYCWNhSplS
+         fAei8gKcZhNrT6fYpgw/EuJya/XutP92YBGFVZQulobaWum0Qv8ydZGAPttHIbOusg
+         i13hw9VVXETh0QI6IEWmbw09HRwlYJFUXqXqXrHxcqLwGjUweJ0h4zhaM6EdfdmM1C
+         askxjC7YovIT/JDpyh0X1GLsXEqlscTjfRFmDmef49vmI2U09TBJJHIjju28rqt3MP
+         XvIQjnVzLjaNw==
 From:   SeongJae Park <sj@kernel.org>
 To:     akpm@linux-foundation.org
 Cc:     xhao@linux.alibaba.com, rientjes@google.com, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH 5/8] mm/damon/dbgfs: Use damon_select_ops() instead of damon_{v,p}a_set_operations()
-Date:   Tue, 15 Feb 2022 18:46:00 +0000
-Message-Id: <20220215184603.1479-6-sj@kernel.org>
+Subject: [PATCH 6/8] mm/damon/dbgfs: Use operations id for knowing if the target has pid
+Date:   Tue, 15 Feb 2022 18:46:01 +0000
+Message-Id: <20220215184603.1479-7-sj@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220215184603.1479-1-sj@kernel.org>
 References: <20220215184603.1479-1-sj@kernel.org>
@@ -52,56 +52,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit makes DAMON debugfs interface to select the registered
-monitoring operations for the physical address space or virtual address
-spaces depending on user requests instead of setting it on its own.
-Note that DAMON debugfs interface is still dependent to DAMON_VADDR with
-this change, because it is also using its symbol,
-'damon_va_target_valid'.
+DAMON debugfs interface depends on monitoring operations for virtual
+address spaces because it knows if the target has pid or not by seeing
+if the context is configured to use one of the virtual address space
+monitoring operation functions.  We can replace that check with
+'enum damon_ops_id' now, to make it independent.  This commit makes the
+change.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- mm/damon/dbgfs.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ mm/damon/dbgfs.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
-index 719278a8cc5e..8bf9e38b60f4 100644
+index 8bf9e38b60f4..05b574cbcea8 100644
 --- a/mm/damon/dbgfs.c
 +++ b/mm/damon/dbgfs.c
-@@ -474,12 +474,18 @@ static ssize_t dbgfs_target_ids_write(struct file *file,
+@@ -277,7 +277,7 @@ static ssize_t dbgfs_schemes_write(struct file *file, const char __user *buf,
  
- 	/* remove previously set targets */
- 	dbgfs_set_targets(ctx, 0, NULL);
-+	if (!nr_targets) {
-+		ret = count;
-+		goto unlock_out;
-+	}
+ static inline bool target_has_pid(const struct damon_ctx *ctx)
+ {
+-	return ctx->ops.target_valid == damon_va_target_valid;
++	return ctx->ops.id == DAMON_OPS_VADDR;
+ }
  
- 	/* Configure the context for the address space type */
- 	if (id_is_pid)
--		damon_va_set_operations(ctx);
-+		ret = damon_select_ops(ctx, DAMON_OPS_VADDR);
- 	else
--		damon_pa_set_operations(ctx);
-+		ret = damon_select_ops(ctx, DAMON_OPS_PADDR);
-+	if (ret)
-+		goto unlock_out;
- 
- 	ret = dbgfs_set_targets(ctx, nr_targets, target_pids);
- 	if (!ret)
-@@ -735,7 +741,11 @@ static struct damon_ctx *dbgfs_new_ctx(void)
+ static ssize_t sprint_target_ids(struct damon_ctx *ctx, char *buf, ssize_t len)
+@@ -741,8 +741,8 @@ static struct damon_ctx *dbgfs_new_ctx(void)
  	if (!ctx)
  		return NULL;
  
--	damon_va_set_operations(ctx);
-+	if (damon_select_ops(ctx, DAMON_OPS_VADDR) && damon_select_ops(ctx,
-+				DAMON_OPS_PADDR)) {
-+		damon_destroy_ctx(ctx);
-+		return NULL;
-+	}
- 	ctx->callback.before_terminate = dbgfs_before_terminate;
- 	return ctx;
- }
+-	if (damon_select_ops(ctx, DAMON_OPS_VADDR) && damon_select_ops(ctx,
+-				DAMON_OPS_PADDR)) {
++	if (damon_select_ops(ctx, DAMON_OPS_VADDR) &&
++			damon_select_ops(ctx, DAMON_OPS_PADDR)) {
+ 		damon_destroy_ctx(ctx);
+ 		return NULL;
+ 	}
 -- 
 2.17.1
 

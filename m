@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D693C4B631D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 06:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 604494B6325
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 06:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234221AbiBOFvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 00:51:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44088 "EHLO
+        id S234231AbiBOFwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 00:52:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231481AbiBOFvw (ORCPT
+        with ESMTP id S230463AbiBOFwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 00:51:52 -0500
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7D77647;
-        Mon, 14 Feb 2022 21:51:42 -0800 (PST)
-Received: by mail-qv1-xf2b.google.com with SMTP id h9so16801154qvm.0;
-        Mon, 14 Feb 2022 21:51:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iytJY9QGZHgK1dR7TRPlRfso2KgivSYIHxmNeKfZdsI=;
-        b=dGCZJuImpISwcylMeDy7jztHJX1LTHvxJ/hDdJyyJfEw7baQk+ZA/B+5N5e8pDZRPg
-         AunIC0bQysjAao0JMBU6Ps/exYHloD9TOOvF3DIGIWGWt8wcm6FKqTrhgf2wryJuwYFM
-         vkn8CDHe0lTFepxz18DqiyMnf2dKQNTEU9th4=
+        Tue, 15 Feb 2022 00:52:16 -0500
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7B87660;
+        Mon, 14 Feb 2022 21:52:06 -0800 (PST)
+Received: by mail-ed1-f44.google.com with SMTP id z22so4923802edd.1;
+        Mon, 14 Feb 2022 21:52:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iytJY9QGZHgK1dR7TRPlRfso2KgivSYIHxmNeKfZdsI=;
-        b=0npTYWJDGEl1zdu62rSfjzCSfKo5Ag1nglcmYunujak8Ur/K0WLwo0LXRiplwis716
-         m/tbdiyLzLnI+I3SIFcQ1xJQvJ+RaGeGABa5caAc9cx33czyHc+N0C7z8pH2IllAf3ja
-         Shm4rIxuQG6HVXKhNhYBN+x6oFmRpWTY0u1jc7kiOnFID6NYkVcBESC6ECjiEGhmTPoR
-         DlcCoN/dVzBbdJKvdUer9du8s+tzoNhELNVvTCBX51u94NrP9FDO++y8fQ7HE23I38Ne
-         dVABbE0jlVgd66j/j/ZAQo55C4Sn9HG2Pyj311uuS33nj9gCo2z4eJSXXzgUJB+setWm
-         l6sw==
-X-Gm-Message-State: AOAM530fwbL6qpvQBbQd7AmzpwYhomH+bl2Um7XAqpPJHpg6ic8/y6Ni
-        jMK68wQaBY8vRRsL4yprdvek2m36SzH0tJrwHAtTKUd3
-X-Google-Smtp-Source: ABdhPJyviT6pQp+V6F57xIT2apVk7qMUv7vZUfJEXbd3ulavwnbHnrmHmHTrsCKbBGiomLGp5xGIQpfdT5bWcMLIClg=
-X-Received: by 2002:ad4:5dcb:: with SMTP id m11mr1565762qvh.130.1644904301705;
- Mon, 14 Feb 2022 21:51:41 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/nwdQqGWMuoLKw2FCtFecdNjRci4zjN8KGSxzNh0v6c=;
+        b=T9ascm511ZeaXbw6JIc9vjxQ1tG9u0MyKMyb8GXPWTd2kZflSDXPw//IK/fQ2ODn4J
+         K9mt6k1kc+8TG3ck1PMls6/BWSuZ3+GCmeBpPd7tDQ+4eg5QdmqaaqcHl6qs9J0Cm/1e
+         FrxR+IianNGLQKyZELTz3hhMp9ZsSXxmXTjz4sAIfmUQdEm7Ss9c/niqMtdVfC2fxXuP
+         i0aRNt7oGIyIJI9w9+aKynX9lle1wmF6Hf8F6mE1KQGjyB9R862b7ali73p6O6TwcgI3
+         MLYjmg1BprPptT0S9b8AmZEdgrD1TfgiQBodgJHRvdfGsBUEhlr3b2gSmCLrAxdEQKoX
+         ujcw==
+X-Gm-Message-State: AOAM532QNTRmTVWG3jF+2ggDtExdSkUXrGcqZMpMOCMgmn0j0fw/NoDR
+        CXzFNBbx8/6D3UbgnQoAwow=
+X-Google-Smtp-Source: ABdhPJyojxvvk2j3yDGePKUIH/TBjPV7KtcMWADsM3HlHGLiWSq0cMw+Nou13oAjTw0kCCfQrroEZA==
+X-Received: by 2002:a05:6402:354d:: with SMTP id f13mr2230789edd.289.1644904325348;
+        Mon, 14 Feb 2022 21:52:05 -0800 (PST)
+Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
+        by smtp.gmail.com with ESMTPSA id h27sm2982927ejb.13.2022.02.14.21.52.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 21:52:04 -0800 (PST)
+Message-ID: <91301fc3-e121-8f73-700b-323f7a9f4706@kernel.org>
+Date:   Tue, 15 Feb 2022 06:52:03 +0100
 MIME-Version: 1.0
-References: <20220214042538.12132-1-potin.lai@quantatw.com>
-In-Reply-To: <20220214042538.12132-1-potin.lai@quantatw.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Tue, 15 Feb 2022 05:51:29 +0000
-Message-ID: <CACPK8Xcs7y2d9AGfizv9+Lr_Ri3gaq2gmwXMFt=04z7s9XmAMg@mail.gmail.com>
-Subject: Re: [PATCH v2 00/10] update Facebook Bletchley BMC
-To:     Potin Lai <potin.lai@quantatw.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andrew Jeffery <andrew@aj.id.au>,
-        Patrick Williams <patrick@stwcx.xyz>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v2] ath5k: use swap() to make code cleaner
+Content-Language: en-US
+To:     davidcomponentone@gmail.com
+Cc:     mickflemm@gmail.com, mcgrof@kernel.org, kvalo@kernel.org,
+        davem@davemloft.net, kuba@kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Guang <yang.guang5@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <b6931732c22b074413e63151b93cfcf3f70fcaa5.1644891799.git.yang.guang5@zte.com.cn>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <b6931732c22b074413e63151b93cfcf3f70fcaa5.1644891799.git.yang.guang5@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,70 +67,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Feb 2022 at 04:26, Potin Lai <potin.lai@quantatw.com> wrote:
->
-> This patch series update Facebook Bletchley BMC devicetree base on EVT HW
-> schematioc design, and rebase SLED numbering to 1-based for OpenBMC
-> multi-host.
->
-> - GPIO:
->   - adding more gpio line names
->   - include interrupt line in io expander for gpio interrupt monitoring
->
-> - SPI flash:
->   - adding dual flash BSM module support
->   - switch to spi2-gpio on spi2 due to unstable signal issue
->
-> - Hwmon Sensors:
->   - adding INA230 sensors for monitoring
->   - fix ADM1278 shunt-resistor
->
-> - MDIO Bus: enable mido3 bus
->
-> - RTC: switch to external battery-backed rtc
->
-> - OpenBMC: 1-based SLED numbering
->
->
-> LINK: [v1] https://lore.kernel.org/all/20220211014347.24841-1-potin.lai@quantatw.com/
->
->
-> Changes v1 --> v2:
-> - update the details of new added gpio line names in commit message
-> - add battery-backed rtc information in comment and commit message
+On 15. 02. 22, 3:31, davidcomponentone@gmail.com wrote:
+> From: Yang Guang <yang.guang5@zte.com.cn>
+> 
+> Use the macro 'swap()' defined in 'include/linux/minmax.h' to avoid
+> opencoding it.
 
-Looks good. I made some comments on the spi2 patch, please fix those
-up and I will merge.
+Ah, v2 already. Why do people tend to send versions of patches in an 
+hours interval? The comment from before few minutes on v1 still holds:
+ > Why don't you include that file then?
 
-Note that the convention for patch names is:
+And also I commented on this very same patch sent on Nov 4 2021 (you did 
+it correctly on the first attempt back then) [1]:
+ > Why not just use sort() instead of the double loop?
 
-ARM: dts: aspeed: bletchley: Description with sentence case
+So you even skip reviewers' comments. Not good.
 
-If you could update your patches to follow that it would be appreciated.
+[1] 
+https://lore.kernel.org/all/0c3acbd4-6ab2-5cc5-6293-54e30093cce2@kernel.org/
 
-There's no need to re-send your series for the openbmc tree; I can
-merge those once we've reviewed the ones for mainline.
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
 
-Cheers,
+The mailbox does not seem to exist:
+550 5.1.1 User unknown id=620B3CA9.000
 
-Joel
+So it's pointless to put it here to bother everyone with undeliverable 
+e-mails.
 
->
-> Potin Lai (10):
->   arch: arm: dts: bletchley: switch sled numbering to 1-based
->   arch: arm: dts: bletchley: separate leds into multiple groups
->   arch: arm: dts: bletchley: update gpio-line-names
->   arch: arm: dts: bletchley: update fmc configurations
->   arch: arm: dts: bletchley: switch to spi-gpio for spi2
->   arch: arm: dts: bletchley: add interrupt support for sled io expander
->   arch: arm: dts: bletchley: add shunt-resistor for ADM1278
->   arch: arm: dts: bletchley: add INA230 sensor on each sled
->   arch: arm: dts: bletchley: enable mdio3 bus
->   arch: arm: dts: bletchley: cleanup redundant nodes
->
->  .../dts/aspeed-bmc-facebook-bletchley.dts     | 303 +++++++++++-------
->  1 file changed, 194 insertions(+), 109 deletions(-)
->
-> --
-> 2.17.1
->
+> Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+> Signed-off-by: David Yang <davidcomponentone@gmail.com>
+> ---
+> Changes from v1->v2:
+> - Fix the typo "sort" to "swap"
+> 
+> ---
+>   drivers/net/wireless/ath/ath5k/phy.c | 5 +----
+>   1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/wireless/ath/ath5k/phy.c b/drivers/net/wireless/ath/ath5k/phy.c
+> index 00f9e347d414..08dc12611f8d 100644
+> --- a/drivers/net/wireless/ath/ath5k/phy.c
+> +++ b/drivers/net/wireless/ath/ath5k/phy.c
+> @@ -1562,16 +1562,13 @@ static s16
+>   ath5k_hw_get_median_noise_floor(struct ath5k_hw *ah)
+>   {
+>   	s16 sort[ATH5K_NF_CAL_HIST_MAX];
+> -	s16 tmp;
+>   	int i, j;
+>   
+>   	memcpy(sort, ah->ah_nfcal_hist.nfval, sizeof(sort));
+>   	for (i = 0; i < ATH5K_NF_CAL_HIST_MAX - 1; i++) {
+>   		for (j = 1; j < ATH5K_NF_CAL_HIST_MAX - i; j++) {
+>   			if (sort[j] > sort[j - 1]) {
+> -				tmp = sort[j];
+> -				sort[j] = sort[j - 1];
+> -				sort[j - 1] = tmp;
+> +				swap(sort[j], sort[j - 1]);
+>   			}
+>   		}
+>   	}
+
+Curly braces not needed now.
+
+regards,
+-- 
+js
+suse labs

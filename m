@@ -2,113 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF314B7715
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 198B74B7585
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:47:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242143AbiBORFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 12:05:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60500 "EHLO
+        id S242181AbiBORF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 12:05:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234951AbiBORFM (ORCPT
+        with ESMTP id S233335AbiBORFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 12:05:12 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4382D11AA1F;
-        Tue, 15 Feb 2022 09:04:59 -0800 (PST)
-Received: from fraeml708-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JynQl6ZBqz67KsG;
-        Wed, 16 Feb 2022 01:00:31 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml708-chm.china.huawei.com (10.206.15.36) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 15 Feb 2022 18:04:56 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
- Tue, 15 Feb 2022 18:04:56 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Yonghong Song <yhs@fb.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "revest@chromium.org" <revest@chromium.org>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 3/6] bpf-lsm: Introduce new helper bpf_ima_file_hash()
-Thread-Topic: [PATCH v2 3/6] bpf-lsm: Introduce new helper bpf_ima_file_hash()
-Thread-Index: AQHYImlh7GCSPCaH8Uastxbf0OJz26yUxh4AgAARGHA=
-Date:   Tue, 15 Feb 2022 17:04:56 +0000
-Message-ID: <b896e06f871645a6a2fb9a6f6cf4a8ff@huawei.com>
-References: <20220215124042.186506-1-roberto.sassu@huawei.com>
- <20220215124042.186506-4-roberto.sassu@huawei.com>
- <f939bd53-96d0-d1dc-306f-6215ade6a7f1@fb.com>
-In-Reply-To: <f939bd53-96d0-d1dc-306f-6215ade6a7f1@fb.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.33]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 15 Feb 2022 12:05:51 -0500
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13EE119F7D;
+        Tue, 15 Feb 2022 09:05:41 -0800 (PST)
+Received: by mail-pl1-f179.google.com with SMTP id w20so13546500plq.12;
+        Tue, 15 Feb 2022 09:05:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=4XleEJH2PpPwterBCnSkkR/rDNNZHaszB5/lLGm5Jr8=;
+        b=YKmxkeg86vq5E6cymgjlRtdMG5D6dpssYCjoegbIsVpE/2JlNnLl/J9tubFrO5Hyj1
+         8dy5PBYZFHxib97TngQe/Sdbg4X4v9QYYwSZcLbf+/6ZCqRPBW8FwHfcgUjdtN3pSNYE
+         qaESZmHIjD77qS9CcClAvqXGhvkuch5Voc2e/ewVjn0F8aqkRNiebLZzdQzUCVn9wHYH
+         eYDf1iTVJi7NTD26NOyADrhG1rHkad2e/5Za3A+H6cbTqJuqN/fdilqEjO31CvU/JXe7
+         EPgewtJk+gKXob9FtgOrXVsSR+qL7z4QYI5aSIHc/leX9mIIeO+q25FkNbBguWE+YkDM
+         gkSA==
+X-Gm-Message-State: AOAM533m8oqF4UzPUgCF45vKzCNEGRY2D3faipQJ8AQGgLk+OxkY+rKn
+        R3VozphTJFXopjHHODevGnZKLmmV5XS0OA==
+X-Google-Smtp-Source: ABdhPJyH++fmcBHWOXSUsKOkMW1j6B4LcjIc70lGuuPs7x7cKgQoWskWdeF3hKJdcYUo9xL4U90E4g==
+X-Received: by 2002:a17:90b:1b0e:: with SMTP id nu14mr5451669pjb.233.1644944740896;
+        Tue, 15 Feb 2022 09:05:40 -0800 (PST)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id j12sm35280608pfu.79.2022.02.15.09.05.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 09:05:40 -0800 (PST)
+Message-ID: <1b70929f-1f73-c549-64c1-94cea2c1a36c@acm.org>
+Date:   Tue, 15 Feb 2022 09:05:38 -0800
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+From:   Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [syzbot] possible deadlock in worker_thread
+To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Haakon Bugge <haakon.bugge@oracle.com>
+Cc:     Tejun Heo <tj@kernel.org>,
+        syzbot <syzbot+831661966588c802aae9@syzkaller.appspotmail.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        LKML <linux-kernel@vger.kernel.org>,
+        OFED mailing list <linux-rdma@vger.kernel.org>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+References: <0000000000005975a605d7aef05e@google.com>
+ <8ea57ddf-a09c-43f2-4285-4dfb908ad967@acm.org>
+ <ccd04d8a-154b-543e-e1c3-84bc655508d1@I-love.SAKURA.ne.jp>
+ <71d6f14e-46af-cc5a-bc70-af1cdc6de8d5@acm.org>
+ <309c86b7-2a4c-1332-585f-7bcd59cfd762@I-love.SAKURA.ne.jp>
+ <aa2bf24e-981a-a811-c5d8-a75f0b8f693a@acm.org>
+ <2959649d-cfbc-bdf2-02ac-053b8e7af030@I-love.SAKURA.ne.jp>
+ <YgnQGZWT/n3VAITX@slm.duckdns.org>
+ <8ebd003c-f748-69b4-3a4f-fb80a3f39d36@I-love.SAKURA.ne.jp>
+ <YgqSsuSN5C7StvKx@slm.duckdns.org>
+ <a07e464c-69c6-6165-e88c-5a2eded79138@I-love.SAKURA.ne.jp>
+ <76616D2F-14F2-4D83-9DB4-576FB2ACB72C@oracle.com>
+ <fb854eea-a7e7-b526-a989-95784c1c593c@I-love.SAKURA.ne.jp>
+Content-Language: en-US
+In-Reply-To: <fb854eea-a7e7-b526-a989-95784c1c593c@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBZb25naG9uZyBTb25nIFttYWlsdG86eWhzQGZiLmNvbV0NCj4gU2VudDogVHVlc2Rh
-eSwgRmVicnVhcnkgMTUsIDIwMjIgNjowMyBQTQ0KPiBPbiAyLzE1LzIyIDQ6NDAgQU0sIFJvYmVy
-dG8gU2Fzc3Ugd3JvdGU6DQo+ID4gaW1hX2ZpbGVfaGFzaCgpIGhhcyBiZWVuIG1vZGlmaWVkIHRv
-IGNhbGN1bGF0ZSB0aGUgbWVhc3VyZW1lbnQgb2YgYSBmaWxlIG9uDQo+ID4gZGVtYW5kLCBpZiBp
-dCBoYXMgbm90IGJlZW4gYWxyZWFkeSBwZXJmb3JtZWQgYnkgSU1BLiBGb3IgY29tcGF0aWJpbGl0
-eQ0KPiA+IHJlYXNvbnMsIGltYV9pbm9kZV9oYXNoKCkgcmVtYWlucyB1bmNoYW5nZWQuDQo+ID4N
-Cj4gPiBLZWVwIHRoZSBzYW1lIGFwcHJvYWNoIGluIGVCUEYgYW5kIGludHJvZHVjZSB0aGUgbmV3
-IGhlbHBlcg0KPiA+IGJwZl9pbWFfZmlsZV9oYXNoKCkgdG8gdGFrZSBhZHZhbnRhZ2Ugb2YgdGhl
-IG1vZGlmaWVkIGJlaGF2aW9yIG9mDQo+ID4gaW1hX2ZpbGVfaGFzaCgpLg0KPiA+DQo+ID4gU2ln
-bmVkLW9mZi1ieTogUm9iZXJ0byBTYXNzdSA8cm9iZXJ0by5zYXNzdUBodWF3ZWkuY29tPg0KPiA+
-IC0tLQ0KPiA+ICAgaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oICAgICAgIHwgMTEgKysrKysrKysr
-KysNCj4gPiAgIGtlcm5lbC9icGYvYnBmX2xzbS5jICAgICAgICAgICB8IDIwICsrKysrKysrKysr
-KysrKysrKysrDQo+ID4gICB0b29scy9pbmNsdWRlL3VhcGkvbGludXgvYnBmLmggfCAxMSArKysr
-KysrKysrKw0KPiA+ICAgMyBmaWxlcyBjaGFuZ2VkLCA0MiBpbnNlcnRpb25zKCspDQo+ID4NCj4g
-PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oIGIvaW5jbHVkZS91YXBpL2xp
-bnV4L2JwZi5oDQo+ID4gaW5kZXggYjAzODNkMzcxYjlhLi5iYTMzZDU3MThkNmIgMTAwNjQ0DQo+
-ID4gLS0tIGEvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oDQo+ID4gKysrIGIvaW5jbHVkZS91YXBp
-L2xpbnV4L2JwZi5oDQo+ID4gQEAgLTQ2NDgsNiArNDY0OCwxNiBAQCB1bmlvbiBicGZfYXR0ciB7
-DQo+ID4gICAgKgkJKiotRU9QTk9UU1VQKiogaWYgSU1BIGlzIGRpc2FibGVkIG9yICoqLUVJTlZB
-TCoqIGlmDQo+ID4gICAgKgkJaW52YWxpZCBhcmd1bWVudHMgYXJlIHBhc3NlZC4NCj4gPiAgICAq
-DQo+ID4gKyAqIGxvbmcgYnBmX2ltYV9maWxlX2hhc2goc3RydWN0IGZpbGUgKmZpbGUsIHZvaWQg
-KmRzdCwgdTMyIHNpemUpDQo+ID4gKyAqCURlc2NyaXB0aW9uDQo+ID4gKyAqCQlSZXR1cm5zIGEg
-Y2FsY3VsYXRlZCBJTUEgaGFzaCBvZiB0aGUgKmZpbGUqLg0KPiA+ICsgKgkJSWYgdGhlIGhhc2gg
-aXMgbGFyZ2VyIHRoYW4gKnNpemUqLCB0aGVuIG9ubHkgKnNpemUqDQo+ID4gKyAqCQlieXRlcyB3
-aWxsIGJlIGNvcGllZCB0byAqZHN0Kg0KPiA+ICsgKglSZXR1cm4NCj4gPiArICoJCVRoZSAqKmhh
-c2hfYWxnbyoqIGlzIHJldHVybmVkIG9uIHN1Y2Nlc3MsDQo+ID4gKyAqCQkqKi1FT1BOT1RTVVAq
-KiBpZiB0aGUgaGFzaCBjYWxjdWxhdGlvbiBmYWlsZWQgb3IgKiotRUlOVkFMKioNCj4gaWYNCj4g
-PiArICoJCWludmFsaWQgYXJndW1lbnRzIGFyZSBwYXNzZWQuDQo+ID4gKyAqDQo+ID4gICAgKiBz
-dHJ1Y3Qgc29ja2V0ICpicGZfc29ja19mcm9tX2ZpbGUoc3RydWN0IGZpbGUgKmZpbGUpDQo+ID4g
-ICAgKglEZXNjcmlwdGlvbg0KPiA+ICAgICoJCUlmIHRoZSBnaXZlbiBmaWxlIHJlcHJlc2VudHMg
-YSBzb2NrZXQsIHJldHVybnMgdGhlIGFzc29jaWF0ZWQNCj4gPiBAQCAtNTE4Miw2ICs1MTkyLDcg
-QEAgdW5pb24gYnBmX2F0dHIgew0KPiA+ICAgCUZOKGJwcm1fb3B0c19zZXQpLAkJXA0KPiA+ICAg
-CUZOKGt0aW1lX2dldF9jb2Fyc2VfbnMpLAlcDQo+ID4gICAJRk4oaW1hX2lub2RlX2hhc2gpLAkJ
-XA0KPiA+ICsJRk4oaW1hX2ZpbGVfaGFzaCksCQlcDQo+IA0KPiBQbGVhc2UgcHV0IHRoZSBhYm92
-ZSBGTihpbWFfZmlsZV9oYXNoKSB0byB0aGUgZW5kIG9mIHRoZSBsaXN0Lg0KPiBPdGhlcndpc2Us
-IHdlIGhhdmUgYSBiYWNrd2FyZCBjb21wYXRhYmlsaXR5IGlzc3VlLg0KDQpIaSBZb25naG9uZw0K
-DQpzdXJlLCB3aWxsIGRvLg0KDQpUaGFua3MNCg0KUm9iZXJ0bw0KDQpIVUFXRUkgVEVDSE5PTE9H
-SUVTIER1ZXNzZWxkb3JmIEdtYkgsIEhSQiA1NjA2Mw0KTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBl
-bmcsIFpob25nIFJvbmdodWENCg0KPiA+ICAgCUZOKHNvY2tfZnJvbV9maWxlKSwJCVwNCj4gPiAg
-IAlGTihjaGVja19tdHUpLAkJCVwNCj4gPiAgIAlGTihmb3JfZWFjaF9tYXBfZWxlbSksCQlcDQo+
-ID4gZGlmZiAtLWdpdCBhL2tlcm5lbC9icGYvYnBmX2xzbS5jIGIva2VybmVsL2JwZi9icGZfbHNt
-LmMNCj4gPiBpbmRleCA5ZTRlY2M5OTA2NDcuLmU4ZDI3YWY1YmJjYyAxMDA2NDQNCj4gPiAtLS0g
-YS9rZXJuZWwvYnBmL2JwZl9sc20uYw0KPiA+ICsrKyBiL2tlcm5lbC9icGYvYnBmX2xzbS5jDQo+
-IFsuLi5dDQo=
+On 2/15/22 04:48, Tetsuo Handa wrote:
+> I do not want to do like
+> 
+> -	system_wq = alloc_workqueue("events", 0, 0);
+> +	system_wq = alloc_workqueue("events", __WQ_SYSTEM_WIDE, 0);
+> 
+> because the intent of this change is to ask developers to create their own WQs.
+
+I want more developers to use the system-wide workqueues since that 
+reduces memory usage. That matters for embedded devices running Linux.
+
+Thanks,
+
+Bart.

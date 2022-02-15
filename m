@@ -2,96 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 230434B7176
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D01FA4B71D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241253AbiBOQCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:02:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59276 "EHLO
+        id S241244AbiBOQFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:05:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241205AbiBOQCg (ORCPT
+        with ESMTP id S241216AbiBOQFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:02:36 -0500
-Received: from hs01.dk-develop.de (hs01.dk-develop.de [173.249.23.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E412BD;
-        Tue, 15 Feb 2022 08:02:25 -0800 (PST)
-From:   Danilo Krummrich <danilokrummrich@dk-develop.de>
-To:     dmitry.torokhov@gmail.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linus.walleij@linaro.org,
-        Danilo Krummrich <danilokrummrich@dk-develop.de>
-Subject: [PATCH 4/4] input: ps2-gpio: don't send rx data before the stop bit
-Date:   Tue, 15 Feb 2022 17:02:08 +0100
-Message-Id: <20220215160208.34826-5-danilokrummrich@dk-develop.de>
-In-Reply-To: <20220215160208.34826-1-danilokrummrich@dk-develop.de>
-References: <20220215160208.34826-1-danilokrummrich@dk-develop.de>
+        Tue, 15 Feb 2022 11:05:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B9D624A;
+        Tue, 15 Feb 2022 08:04:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94D706178E;
+        Tue, 15 Feb 2022 16:04:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD42EC340EB;
+        Tue, 15 Feb 2022 16:04:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644941095;
+        bh=VF83nphVbta3s2UkOE4pwD7kf6THCxG98ABjVxxvqhI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CeMZ3PxEzTmhqApjIO//PJFjrUlOdF1vUc7Cs7PFmnlYIrdiSBdHbT5dtqvEEKFi5
+         ArYlnENLlIrkba2Eq/jUSYv+0PL7vxZ3qlR6dC2DSJi6kK2e0UKx6rQcRdrZ+tgV7L
+         b9YkJo7dZ7tuj/TGSgJW8GVR4dbMwv9RoLGqukFT2G092aHmVVt/4MTS5bi/h2AUPw
+         Bj5HdDs7DUVH9xagu+lU0eJcy+2GSzHGfiaiTr1esMsrBhWNRTJcHwrMPXf7J0mAr/
+         ozExV9WWHehfD90y4rG+B4AxyjtWHCgexI7Lxcv50YzBnNqn0hjMC5Irctw+0oKf18
+         qzFIPbqdvNDnQ==
+Date:   Tue, 15 Feb 2022 08:04:52 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     menglong8.dong@gmail.com
+Cc:     dsahern@kernel.org, edumazet@google.com, davem@davemloft.net,
+        rostedt@goodmis.org, mingo@redhat.com, yoshfuji@linux-ipv6.org,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com, imagedong@tencent.com,
+        talalahmad@google.com, keescook@chromium.org,
+        ilias.apalodimas@linaro.org, alobakin@pm.me, memxor@gmail.com,
+        atenart@kernel.org, bigeasy@linutronix.de, pabeni@redhat.com,
+        linyunsheng@huawei.com, arnd@arndb.de, yajun.deng@linux.dev,
+        roopa@nvidia.com, willemb@google.com, vvs@virtuozzo.com,
+        cong.wang@bytedance.com, luiz.von.dentz@intel.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, flyingpeng@tencent.com
+Subject: Re: [PATCH net-next 00/19] net: add skb drop reasons for TCP, IP,
+ dev and neigh
+Message-ID: <20220215080452.2898495a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220215112812.2093852-1-imagedong@tencent.com>
+References: <20220215112812.2093852-1-imagedong@tencent.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sending the data before processing the stop bit from the device already
-saves the data of the current xfer in case the stop bit is missed.
+On Tue, 15 Feb 2022 19:27:53 +0800 menglong8.dong@gmail.com wrote:
+> From: Menglong Dong <imagedong@tencent.com>
+> 
+> In this series patches, reasons for skb drops are added to TCP, IP, dev
+> and neigh.
+> 
+> For TCP layer, the path of TCP data receive and enqueue are considered.
+> However, it's more complex for TCP state processing, as I find that it's
+> hard to report skb drop reasons to where it is freed. For example,
+> when skb is dropped in tcp_rcv_state_process(), the reason can be caused
+> by the call of tcp_v4_conn_request(), and it's hard to return a drop
+> reason from tcp_v4_conn_request(). So I just skip such case for this
+> moment.
+> 
+> For IP layer, skb drop reasons are added to the packet outputting path.
+> Seems the reasons are not complex, so I didn't split the commits by
+> functions.
+> 
+> For neighbour part, SKB_DROP_REASON_NEIGH_FAILED and
+> SKB_DROP_REASON_NEIGH_QUEUEFULL are added.
+> 
+> For link layer, reasons are added for both packet inputting and
+> outputting path.
+> 
+> The amount of patches in this series seems a bit too many, maybe I should
+> join some of them? For example, combine the patches of dev to one.
 
-However, when TX xfers are enabled this introduces a race condition when
-a peripheral driver using the bus immediately requests a TX xfer from IRQ
-context.
+This series does not apply cleanly.
 
-Therefore the data must be send after receiving the stop bit, although
-it is possible the data is lost when missing the stop bit.
-
-Signed-off-by: Danilo Krummrich <danilokrummrich@dk-develop.de>
----
- drivers/input/serio/ps2-gpio.c | 21 ++++++++-------------
- 1 file changed, 8 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/input/serio/ps2-gpio.c b/drivers/input/serio/ps2-gpio.c
-index f47a967f7521..17091b137744 100644
---- a/drivers/input/serio/ps2-gpio.c
-+++ b/drivers/input/serio/ps2-gpio.c
-@@ -231,6 +231,13 @@ static irqreturn_t ps2_gpio_irq_rx(struct ps2_gpio_data *drvdata)
- 			if (!drvdata->write_enable)
- 				goto err;
- 		}
-+		break;
-+	case PS2_STOP_BIT:
-+		/* stop bit should be high */
-+		if (unlikely(!data)) {
-+			dev_err(drvdata->dev, "RX: stop bit should be high\n");
-+			goto err;
-+		}
- 
- 		/* Do not send spurious ACK's and NACK's when write fn is
- 		 * not provided.
-@@ -242,21 +249,9 @@ static irqreturn_t ps2_gpio_irq_rx(struct ps2_gpio_data *drvdata)
- 				break;
- 		}
- 
--		/* Let's send the data without waiting for the stop bit to be
--		 * sent. It may happen that we miss the stop bit. When this
--		 * happens we have no way to recover from this, certainly
--		 * missing the parity bit would be recognized when processing
--		 * the stop bit. When missing both, data is lost.
--		 */
- 		serio_interrupt(drvdata->serio, byte, rxflags);
- 		dev_dbg(drvdata->dev, "RX: sending byte 0x%x\n", byte);
--		break;
--	case PS2_STOP_BIT:
--		/* stop bit should be high */
--		if (unlikely(!data)) {
--			dev_err(drvdata->dev, "RX: stop bit should be high\n");
--			goto err;
--		}
-+
- 		cnt = byte = 0;
- 
- 		goto end; /* success */
--- 
-2.35.1
-
+There's no reason to send 19 patches at a time. Please try to send
+smaller series, that's are easier to review, under 10 patches
+preferably, certainly under 15.

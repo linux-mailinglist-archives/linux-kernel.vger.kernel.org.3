@@ -2,503 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D9964B69B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A224B69B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236698AbiBOKtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 05:49:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59398 "EHLO
+        id S236691AbiBOKtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 05:49:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231678AbiBOKtq (ORCPT
+        with ESMTP id S236021AbiBOKti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 05:49:46 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A62D0B74;
-        Tue, 15 Feb 2022 02:49:35 -0800 (PST)
-X-UUID: 3c75f4b620a340b8bed60ca644aab630-20220215
-X-UUID: 3c75f4b620a340b8bed60ca644aab630-20220215
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <chun-jie.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 197399030; Tue, 15 Feb 2022 18:49:32 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 15 Feb 2022 18:49:31 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 15 Feb 2022 18:49:30 +0800
-From:   Chun-Jie Chen <chun-jie.chen@mediatek.com>
-To:     Enric Balletbo Serra <eballetbo@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        "Rob Herring" <robh+dt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>
-Subject: [v2 2/2] soc: mediatek: pm-domains: Add support for mt8186
-Date:   Tue, 15 Feb 2022 18:49:17 +0800
-Message-ID: <20220215104917.5726-3-chun-jie.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220215104917.5726-1-chun-jie.chen@mediatek.com>
-References: <20220215104917.5726-1-chun-jie.chen@mediatek.com>
+        Tue, 15 Feb 2022 05:49:38 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4898ABB56D;
+        Tue, 15 Feb 2022 02:49:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644922168; x=1676458168;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=d8wfwR/uCveJ2Q94/EFl7igRbByuFJMssLIeSVMsf1s=;
+  b=Xd9HPtVv6QpbV4HWuI4bTcqWrv1KyCDoj4d/3QeAXiWQvsjy5VI6iZU6
+   bgrDjFeM9tiZiS5TrDuwdnUSvVuTMcemvX3sTYwjArx5wbjn2uarhk5A6
+   KxHEKI6vJ+hWMXHtqFjooL6GSjSstm0pVHFqWREQTtBq2wKq6YUecnonh
+   k=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 15 Feb 2022 02:49:27 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 02:49:27 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 15 Feb 2022 02:49:27 -0800
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 15 Feb 2022 02:49:24 -0800
+Date:   Tue, 15 Feb 2022 16:19:20 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ugoswami@quicinc.com>, Jung Daehwan <dh10.jung@samsung.com>
+Subject: Re: [PATCH v2] xhci: reduce xhci_handshake timeout in xhci_reset
+Message-ID: <20220215104920.GE31021@hu-pkondeti-hyd.qualcomm.com>
+References: <1644836663-29220-1-git-send-email-quic_pkondeti@quicinc.com>
+ <1644841216-1468-1-git-send-email-quic_pkondeti@quicinc.com>
+ <d82746d2-4096-1477-42dd-fd393e0ff827@linux.intel.com>
+ <20220214135310.GC31021@hu-pkondeti-hyd.qualcomm.com>
+ <1b9e7641-2ae9-0f81-2ad9-18340d5e148f@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1b9e7641-2ae9-0f81-2ad9-18340d5e148f@linux.intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add power domain control data in mt8186.
+Hi Mathias,
 
-Signed-off-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
----
- drivers/soc/mediatek/mt8186-pm-domains.h | 344 +++++++++++++++++++++++
- drivers/soc/mediatek/mtk-pm-domains.c    |   5 +
- include/linux/soc/mediatek/infracfg.h    |  48 ++++
- 3 files changed, 397 insertions(+)
- create mode 100644 drivers/soc/mediatek/mt8186-pm-domains.h
+On Tue, Feb 15, 2022 at 12:16:12PM +0200, Mathias Nyman wrote:
+> On 14.2.2022 15.53, Pavan Kondeti wrote:
+> > Hi Mathias,
+> > 
+> > On Mon, Feb 14, 2022 at 02:51:54PM +0200, Mathias Nyman wrote:
+> >> On 14.2.2022 14.20, Pavankumar Kondeti wrote:
+> >>> From: Daehwan Jung <dh10.jung@samsung.com>
+> >>>
+> >>> xhci_reset() is called with interrupts disabled. Waiting 10 seconds for
+> >>> controller reset and controller ready operations can be fatal to the
+> >>> system when controller is timed out. Reduce the timeout to 1 second
+> >>> and print a error message when the time out happens.
+> >>>
+> >>> Fixes: 22ceac191211 ("xhci: Increase reset timeout for Renesas 720201 host.")
+> >>
+> >>
+> >> The commit 22ceac191211 ("xhci: Increase reset timeout for Renesas 720201 host.")
+> >> intentionally increased the timeout to 10 seconds as that host might take 9
+> >> seconds to complete reset. This was done almost 10 years ago so I don't know
+> >> if it really is an issue anymore.
+> >>
+> >> Anyways, your patch might break Renesas 72021 instead of fixing it.
+> > 
+> > Unfortunately, yes :-( . We have this reduced timeout patch in our previous
+> > commercialized products so thought this would be a good time to fix this
+> > once for all. Since this patch has been 10 years long, not sure if any other
+> > controllers also need 10 sec timeout. It would probably better
+> > 
+> >>
+> >> I agree that busylooping up to 10 seconds with interrupts disabled doesn't make sense.
+> >>
+> >> Lets see if there is another solution for your case.
+> >>
+> >> - Does a "guard interval" after writing the reset help?
+> >>   For example Intel xHCI needs 1ms before touching xHC after writing the reset bit
+> > 
+> > I will ask this question to our hardware team. Setting that one quirk from
+> > DWC3 host might require other changes like this [1].
+> >>
+> >> - Is it the CNR bit or the RESET bit that fails? could be just stuck CNR bit? 
+> > 
+> > The RESET bit never gets cleared from USBCMD register.
+> > 
+> >>  
+> >> - we only disable local interrupts when xhci_reset() is called from xhci_stop(),
+> >>   and sometimes from xhci_shutdown() and xhci_resume() if some conditions are met.
+> >>   Have you identified which one is the problematic case?
+> > 
+> > The crash reports I have seen are pointing to
+> > 
+> > usb_remove_hcd()->xhci_stop()->xhci_reset()
+> 
+> Ok, so xhci_stop() and xhci_shutdown() both may call xhci_reset() with interrupts
+> disabled and spinlock held. In both these cases we're not that interested in the
+> outcome of xhci_reset().
+> 
+> But during probe we call xhci_reset() with interrupts enabled without spinlock,
+> and here we really care about it succeeding.
+> I'm also guessing reset could take a longer time during probe due to possible recent
+> BIOS handover, or firmware loading etc.
+> 
+> So how about passing a timeout value to xhci_reset()?
+> Give it 10 seconds during probe, and 250ms in the other cases.
+> 
 
-diff --git a/drivers/soc/mediatek/mt8186-pm-domains.h b/drivers/soc/mediatek/mt8186-pm-domains.h
-new file mode 100644
-index 000000000000..bf2dd0cdc3a8
---- /dev/null
-+++ b/drivers/soc/mediatek/mt8186-pm-domains.h
-@@ -0,0 +1,344 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (c) 2022 MediaTek Inc.
-+ * Author: Chun-Jie Chen <chun-jie.chen@mediatek.com>
-+ */
-+
-+#ifndef __SOC_MEDIATEK_MT8186_PM_DOMAINS_H
-+#define __SOC_MEDIATEK_MT8186_PM_DOMAINS_H
-+
-+#include "mtk-pm-domains.h"
-+#include <dt-bindings/power/mt8186-power.h>
-+
-+/*
-+ * MT8186 power domain support
-+ */
-+
-+static const struct scpsys_domain_data scpsys_domain_data_mt8186[] = {
-+	[MT8186_POWER_DOMAIN_MFG0] = {
-+		.name = "mfg0",
-+		.sta_mask = BIT(2),
-+		.ctl_offs = 0x308,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.sram_pdn_bits = BIT(8),
-+		.sram_pdn_ack_bits = BIT(12),
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_DOMAIN_SUPPLY,
-+	},
-+	[MT8186_POWER_DOMAIN_MFG1] = {
-+		.name = "mfg1",
-+		.sta_mask = BIT(3),
-+		.ctl_offs = 0x30c,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.sram_pdn_bits = BIT(8),
-+		.sram_pdn_ack_bits = BIT(12),
-+		.bp_infracfg = {
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_1_MFG1_STEP1,
-+				MT8186_TOP_AXI_PROT_EN_1_SET,
-+				MT8186_TOP_AXI_PROT_EN_1_CLR,
-+				MT8186_TOP_AXI_PROT_EN_1_STA),
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_MFG1_STEP2,
-+				MT8186_TOP_AXI_PROT_EN_SET,
-+				MT8186_TOP_AXI_PROT_EN_CLR,
-+				MT8186_TOP_AXI_PROT_EN_STA),
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_MFG1_STEP3,
-+				MT8186_TOP_AXI_PROT_EN_SET,
-+				MT8186_TOP_AXI_PROT_EN_CLR,
-+				MT8186_TOP_AXI_PROT_EN_STA),
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_1_MFG1_STEP4,
-+				MT8186_TOP_AXI_PROT_EN_1_SET,
-+				MT8186_TOP_AXI_PROT_EN_1_CLR,
-+				MT8186_TOP_AXI_PROT_EN_1_STA),
-+		},
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-+	},
-+	[MT8186_POWER_DOMAIN_MFG2] = {
-+		.name = "mfg2",
-+		.sta_mask = BIT(4),
-+		.ctl_offs = 0x310,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.sram_pdn_bits = BIT(8),
-+		.sram_pdn_ack_bits = BIT(12),
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-+	},
-+	[MT8186_POWER_DOMAIN_MFG3] = {
-+		.name = "mfg3",
-+		.sta_mask = BIT(5),
-+		.ctl_offs = 0x314,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.sram_pdn_bits = BIT(8),
-+		.sram_pdn_ack_bits = BIT(12),
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-+	},
-+	[MT8186_POWER_DOMAIN_SSUSB] = {
-+		.name = "ssusb",
-+		.sta_mask = BIT(20),
-+		.ctl_offs = 0x9F0,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.sram_pdn_bits = BIT(8),
-+		.sram_pdn_ack_bits = BIT(12),
-+		.caps = MTK_SCPD_ACTIVE_WAKEUP,
-+	},
-+	[MT8186_POWER_DOMAIN_SSUSB_P1] = {
-+		.name = "ssusb_p1",
-+		.sta_mask = BIT(19),
-+		.ctl_offs = 0x9F4,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.sram_pdn_bits = BIT(8),
-+		.sram_pdn_ack_bits = BIT(12),
-+		.caps = MTK_SCPD_ACTIVE_WAKEUP,
-+	},
-+	[MT8186_POWER_DOMAIN_DIS] = {
-+		.name = "dis",
-+		.sta_mask = BIT(21),
-+		.ctl_offs = 0x354,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.sram_pdn_bits = BIT(8),
-+		.sram_pdn_ack_bits = BIT(12),
-+		.bp_infracfg = {
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_1_DIS_STEP1,
-+				MT8186_TOP_AXI_PROT_EN_1_SET,
-+				MT8186_TOP_AXI_PROT_EN_1_CLR,
-+				MT8186_TOP_AXI_PROT_EN_1_STA),
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_DIS_STEP2,
-+				MT8186_TOP_AXI_PROT_EN_SET,
-+				MT8186_TOP_AXI_PROT_EN_CLR,
-+				MT8186_TOP_AXI_PROT_EN_STA),
-+		},
-+	},
-+	[MT8186_POWER_DOMAIN_IMG] = {
-+		.name = "img",
-+		.sta_mask = BIT(13),
-+		.ctl_offs = 0x334,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.sram_pdn_bits = BIT(8),
-+		.sram_pdn_ack_bits = BIT(12),
-+		.bp_infracfg = {
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_1_IMG_STEP1,
-+				MT8186_TOP_AXI_PROT_EN_1_SET,
-+				MT8186_TOP_AXI_PROT_EN_1_CLR,
-+				MT8186_TOP_AXI_PROT_EN_1_STA),
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_1_IMG_STEP2,
-+				MT8186_TOP_AXI_PROT_EN_1_SET,
-+				MT8186_TOP_AXI_PROT_EN_1_CLR,
-+				MT8186_TOP_AXI_PROT_EN_1_STA),
-+		},
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-+	},
-+	[MT8186_POWER_DOMAIN_IMG2] = {
-+		.name = "img2",
-+		.sta_mask = BIT(14),
-+		.ctl_offs = 0x338,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.sram_pdn_bits = BIT(8),
-+		.sram_pdn_ack_bits = BIT(12),
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-+	},
-+	[MT8186_POWER_DOMAIN_IPE] = {
-+		.name = "ipe",
-+		.sta_mask = BIT(15),
-+		.ctl_offs = 0x33C,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.sram_pdn_bits = BIT(8),
-+		.sram_pdn_ack_bits = BIT(12),
-+		.bp_infracfg = {
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_1_IPE_STEP1,
-+				MT8186_TOP_AXI_PROT_EN_1_SET,
-+				MT8186_TOP_AXI_PROT_EN_1_CLR,
-+				MT8186_TOP_AXI_PROT_EN_1_STA),
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_1_IPE_STEP2,
-+				MT8186_TOP_AXI_PROT_EN_1_SET,
-+				MT8186_TOP_AXI_PROT_EN_1_CLR,
-+				MT8186_TOP_AXI_PROT_EN_1_STA),
-+		},
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-+	},
-+	[MT8186_POWER_DOMAIN_CAM] = {
-+		.name = "cam",
-+		.sta_mask = BIT(23),
-+		.ctl_offs = 0x35C,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.sram_pdn_bits = BIT(8),
-+		.sram_pdn_ack_bits = BIT(12),
-+		.bp_infracfg = {
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_1_CAM_STEP1,
-+				MT8186_TOP_AXI_PROT_EN_1_SET,
-+				MT8186_TOP_AXI_PROT_EN_1_CLR,
-+				MT8186_TOP_AXI_PROT_EN_1_STA),
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_1_CAM_STEP2,
-+				MT8186_TOP_AXI_PROT_EN_1_SET,
-+				MT8186_TOP_AXI_PROT_EN_1_CLR,
-+				MT8186_TOP_AXI_PROT_EN_1_STA),
-+		},
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-+	},
-+	[MT8186_POWER_DOMAIN_CAM_RAWA] = {
-+		.name = "cam_rawa",
-+		.sta_mask = BIT(24),
-+		.ctl_offs = 0x360,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.sram_pdn_bits = BIT(8),
-+		.sram_pdn_ack_bits = BIT(12),
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-+	},
-+	[MT8186_POWER_DOMAIN_CAM_RAWB] = {
-+		.name = "cam_rawb",
-+		.sta_mask = BIT(25),
-+		.ctl_offs = 0x364,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.sram_pdn_bits = BIT(8),
-+		.sram_pdn_ack_bits = BIT(12),
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-+	},
-+	[MT8186_POWER_DOMAIN_VENC] = {
-+		.name = "venc",
-+		.sta_mask = BIT(18),
-+		.ctl_offs = 0x348,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.sram_pdn_bits = BIT(8),
-+		.sram_pdn_ack_bits = BIT(12),
-+		.bp_infracfg = {
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_1_VENC_STEP1,
-+				MT8186_TOP_AXI_PROT_EN_1_SET,
-+				MT8186_TOP_AXI_PROT_EN_1_CLR,
-+				MT8186_TOP_AXI_PROT_EN_1_STA),
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_1_VENC_STEP2,
-+				MT8186_TOP_AXI_PROT_EN_1_SET,
-+				MT8186_TOP_AXI_PROT_EN_1_CLR,
-+				MT8186_TOP_AXI_PROT_EN_1_STA),
-+		},
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-+	},
-+	[MT8186_POWER_DOMAIN_VDEC] = {
-+		.name = "vdec",
-+		.sta_mask = BIT(16),
-+		.ctl_offs = 0x340,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.sram_pdn_bits = BIT(8),
-+		.sram_pdn_ack_bits = BIT(12),
-+		.bp_infracfg = {
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_1_VDEC_STEP1,
-+				MT8186_TOP_AXI_PROT_EN_1_SET,
-+				MT8186_TOP_AXI_PROT_EN_1_CLR,
-+				MT8186_TOP_AXI_PROT_EN_1_STA),
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_1_VDEC_STEP2,
-+				MT8186_TOP_AXI_PROT_EN_1_SET,
-+				MT8186_TOP_AXI_PROT_EN_1_CLR,
-+				MT8186_TOP_AXI_PROT_EN_1_STA),
-+		},
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-+	},
-+	[MT8186_POWER_DOMAIN_WPE] = {
-+		.name = "wpe",
-+		.sta_mask = BIT(0),
-+		.ctl_offs = 0x3F8,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.sram_pdn_bits = BIT(8),
-+		.sram_pdn_ack_bits = BIT(12),
-+		.bp_infracfg = {
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_2_WPE_STEP1,
-+				MT8186_TOP_AXI_PROT_EN_2_SET,
-+				MT8186_TOP_AXI_PROT_EN_2_CLR,
-+				MT8186_TOP_AXI_PROT_EN_2_STA),
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_2_WPE_STEP2,
-+				MT8186_TOP_AXI_PROT_EN_2_SET,
-+				MT8186_TOP_AXI_PROT_EN_2_CLR,
-+				MT8186_TOP_AXI_PROT_EN_2_STA),
-+		},
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-+	},
-+	[MT8186_POWER_DOMAIN_CONN_ON] = {
-+		.name = "conn_on",
-+		.sta_mask = BIT(1),
-+		.ctl_offs = 0x304,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.bp_infracfg = {
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_1_CONN_ON_STEP1,
-+				MT8186_TOP_AXI_PROT_EN_1_SET,
-+				MT8186_TOP_AXI_PROT_EN_1_CLR,
-+				MT8186_TOP_AXI_PROT_EN_1_STA),
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_CONN_ON_STEP2,
-+				MT8186_TOP_AXI_PROT_EN_SET,
-+				MT8186_TOP_AXI_PROT_EN_CLR,
-+				MT8186_TOP_AXI_PROT_EN_STA),
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_CONN_ON_STEP3,
-+				MT8186_TOP_AXI_PROT_EN_SET,
-+				MT8186_TOP_AXI_PROT_EN_CLR,
-+				MT8186_TOP_AXI_PROT_EN_STA),
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_CONN_ON_STEP4,
-+				MT8186_TOP_AXI_PROT_EN_SET,
-+				MT8186_TOP_AXI_PROT_EN_CLR,
-+				MT8186_TOP_AXI_PROT_EN_STA),
-+		},
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_ACTIVE_WAKEUP,
-+	},
-+	[MT8186_POWER_DOMAIN_CSIRX_TOP] = {
-+		.name = "csirx_top",
-+		.sta_mask = BIT(6),
-+		.ctl_offs = 0x318,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.sram_pdn_bits = BIT(8),
-+		.sram_pdn_ack_bits = BIT(12),
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-+	},
-+	[MT8186_POWER_DOMAIN_ADSP_AO] = {
-+		.name = "adsp_ao",
-+		.sta_mask = BIT(17),
-+		.ctl_offs = 0x9FC,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-+	},
-+	[MT8186_POWER_DOMAIN_ADSP_INFRA] = {
-+		.name = "adsp_infra",
-+		.sta_mask = BIT(10),
-+		.ctl_offs = 0x9F8,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-+	},
-+	[MT8186_POWER_DOMAIN_ADSP_TOP] = {
-+		.name = "adsp_top",
-+		.sta_mask = BIT(31),
-+		.ctl_offs = 0x3E4,
-+		.pwr_sta_offs = 0x16C,
-+		.pwr_sta2nd_offs = 0x170,
-+		.sram_pdn_bits = BIT(8),
-+		.sram_pdn_ack_bits = BIT(12),
-+		.bp_infracfg = {
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_3_ADSP_TOP_STEP1,
-+				MT8186_TOP_AXI_PROT_EN_3_SET,
-+				MT8186_TOP_AXI_PROT_EN_3_CLR,
-+				MT8186_TOP_AXI_PROT_EN_3_STA),
-+			BUS_PROT_WR_IGN(MT8186_TOP_AXI_PROT_EN_3_ADSP_TOP_STEP2,
-+				MT8186_TOP_AXI_PROT_EN_3_SET,
-+				MT8186_TOP_AXI_PROT_EN_3_CLR,
-+				MT8186_TOP_AXI_PROT_EN_3_STA),
-+		},
-+		.caps = MTK_SCPD_SRAM_ISO | MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_ACTIVE_WAKEUP,
-+	},
-+};
-+
-+static const struct scpsys_soc_data mt8186_scpsys_data = {
-+	.domains_data = scpsys_domain_data_mt8186,
-+	.num_domains = ARRAY_SIZE(scpsys_domain_data_mt8186),
-+};
-+
-+#endif /* __SOC_MEDIATEK_MT8186_PM_DOMAINS_H */
-diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/soc/mediatek/mtk-pm-domains.c
-index 61973a306e97..5ced254b082b 100644
---- a/drivers/soc/mediatek/mtk-pm-domains.c
-+++ b/drivers/soc/mediatek/mtk-pm-domains.c
-@@ -19,6 +19,7 @@
- #include "mt8167-pm-domains.h"
- #include "mt8173-pm-domains.h"
- #include "mt8183-pm-domains.h"
-+#include "mt8186-pm-domains.h"
- #include "mt8192-pm-domains.h"
- #include "mt8195-pm-domains.h"
- 
-@@ -566,6 +567,10 @@ static const struct of_device_id scpsys_of_match[] = {
- 		.compatible = "mediatek,mt8183-power-controller",
- 		.data = &mt8183_scpsys_data,
- 	},
-+	{
-+		.compatible = "mediatek,mt8186-power-controller",
-+		.data = &mt8186_scpsys_data,
-+	},
- 	{
- 		.compatible = "mediatek,mt8192-power-controller",
- 		.data = &mt8192_scpsys_data,
-diff --git a/include/linux/soc/mediatek/infracfg.h b/include/linux/soc/mediatek/infracfg.h
-index d858e0bab7a2..8a1c2040a28e 100644
---- a/include/linux/soc/mediatek/infracfg.h
-+++ b/include/linux/soc/mediatek/infracfg.h
-@@ -140,6 +140,54 @@
- #define MT8192_TOP_AXI_PROT_EN_MM_2_MDP_2ND		BIT(13)
- #define MT8192_TOP_AXI_PROT_EN_VDNR_CAM			BIT(21)
- 
-+#define MT8186_TOP_AXI_PROT_EN_SET			(0x2A0)
-+#define MT8186_TOP_AXI_PROT_EN_CLR			(0x2A4)
-+#define MT8186_TOP_AXI_PROT_EN_STA			(0x228)
-+#define MT8186_TOP_AXI_PROT_EN_1_SET			(0x2A8)
-+#define MT8186_TOP_AXI_PROT_EN_1_CLR			(0x2AC)
-+#define MT8186_TOP_AXI_PROT_EN_1_STA			(0x258)
-+#define MT8186_TOP_AXI_PROT_EN_2_SET			(0x2B0)
-+#define MT8186_TOP_AXI_PROT_EN_2_CLR			(0x2B4)
-+#define MT8186_TOP_AXI_PROT_EN_2_STA			(0x26C)
-+#define MT8186_TOP_AXI_PROT_EN_3_SET			(0x2B8)
-+#define MT8186_TOP_AXI_PROT_EN_3_CLR			(0x2BC)
-+#define MT8186_TOP_AXI_PROT_EN_3_STA			(0x2C8)
-+
-+/* MFG1 */
-+#define MT8186_TOP_AXI_PROT_EN_1_MFG1_STEP1		(GENMASK(28, 27))
-+#define MT8186_TOP_AXI_PROT_EN_MFG1_STEP2		(GENMASK(22, 21))
-+#define MT8186_TOP_AXI_PROT_EN_MFG1_STEP3		(BIT(25))
-+#define MT8186_TOP_AXI_PROT_EN_1_MFG1_STEP4		(BIT(29))
-+/* DIS */
-+#define MT8186_TOP_AXI_PROT_EN_1_DIS_STEP1		(GENMASK(12, 11))
-+#define MT8186_TOP_AXI_PROT_EN_DIS_STEP2		(GENMASK(2, 1) | GENMASK(11, 10))
-+/* IMG */
-+#define MT8186_TOP_AXI_PROT_EN_1_IMG_STEP1		(BIT(23))
-+#define MT8186_TOP_AXI_PROT_EN_1_IMG_STEP2		(BIT(15))
-+/* IPE */
-+#define MT8186_TOP_AXI_PROT_EN_1_IPE_STEP1		(BIT(24))
-+#define MT8186_TOP_AXI_PROT_EN_1_IPE_STEP2		(BIT(16))
-+/* CAM */
-+#define MT8186_TOP_AXI_PROT_EN_1_CAM_STEP1		(GENMASK(22, 21))
-+#define MT8186_TOP_AXI_PROT_EN_1_CAM_STEP2		(GENMASK(14, 13))
-+/* VENC */
-+#define MT8186_TOP_AXI_PROT_EN_1_VENC_STEP1		(BIT(31))
-+#define MT8186_TOP_AXI_PROT_EN_1_VENC_STEP2		(BIT(19))
-+/* VDEC */
-+#define MT8186_TOP_AXI_PROT_EN_1_VDEC_STEP1		(BIT(30))
-+#define MT8186_TOP_AXI_PROT_EN_1_VDEC_STEP2		(BIT(17))
-+/* WPE */
-+#define MT8186_TOP_AXI_PROT_EN_2_WPE_STEP1		(BIT(17))
-+#define MT8186_TOP_AXI_PROT_EN_2_WPE_STEP2		(BIT(16))
-+/* CONN_ON */
-+#define MT8186_TOP_AXI_PROT_EN_1_CONN_ON_STEP1		(BIT(18))
-+#define MT8186_TOP_AXI_PROT_EN_CONN_ON_STEP2		(BIT(14))
-+#define MT8186_TOP_AXI_PROT_EN_CONN_ON_STEP3		(BIT(13))
-+#define MT8186_TOP_AXI_PROT_EN_CONN_ON_STEP4		(BIT(16))
-+/* ADSP_TOP */
-+#define MT8186_TOP_AXI_PROT_EN_3_ADSP_TOP_STEP1		(GENMASK(12, 11))
-+#define MT8186_TOP_AXI_PROT_EN_3_ADSP_TOP_STEP2		(GENMASK(1, 0))
-+
- #define MT8183_TOP_AXI_PROT_EN_STA1			0x228
- #define MT8183_TOP_AXI_PROT_EN_STA1_1			0x258
- #define MT8183_TOP_AXI_PROT_EN_SET			0x2a0
--- 
-2.18.0
+Thanks for this suggestion.
 
+This sounds better compared to the quirks approach. xhci_resume() also seems
+to be calling xhci_reset() in the hibernation path, I believe we should treat
+this like probe()/startup case and give larger timeout.
+
+Thanks,
+Pavan

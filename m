@@ -2,100 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B414B64E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D333E4B650A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:03:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235003AbiBOIAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 03:00:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49506 "EHLO
+        id S235074AbiBOICU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 03:02:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiBOIAP (ORCPT
+        with ESMTP id S235033AbiBOICJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 03:00:15 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AADC13D30
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 00:00:05 -0800 (PST)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3237F4033B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:00:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644912004;
-        bh=WKmF3ofcPXNkDjn7YKxiUvOekr6rsM7Z5lgS0lqXT8w=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=ImtJcd9Y2EJZSTmmzMcLpF6yEhEB6ow/DW0+JbMdIUNHvJ8MguMcaySEAfvTj3fzp
-         xLapMygUHhEfYchXZIThst6cwQXK8IWTNyPPe5ijKDpZ6LVwLd6my8Er0sC13gihUi
-         1V+CVAWmjIcUOgPoZ0yfaNTwczo0WIop6hXNbjgiTXX0FgykvsvMzuu96qSV2AYdHK
-         Dp5qmgWHiqQL77tPBNY1psn/N6EWfHYTE9ljby1J/79L+V2MqUKeLuyJP+HpsMYivf
-         7u/Jy5OmzGDeCyHRFXvZjGGGZ1owDbtjIRGlX5aqVTsui/N67OdFU1M0WpUw73+g4n
-         ohS2iRVjeqO5A==
-Received: by mail-ed1-f70.google.com with SMTP id z8-20020a05640240c800b0041003c827edso10225050edb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 00:00:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=WKmF3ofcPXNkDjn7YKxiUvOekr6rsM7Z5lgS0lqXT8w=;
-        b=nR/s05hHhgKfgsJHNxjIpFMtdPtuRCGcKuVk9xIPcRUTuqGN3kKQg/21EDTZX3VjoQ
-         v8Bjs3m1TDUdgNGh+OTkZmYmwXGjId3OBlhf/ceKXbzz8RK6hvOs8sLIWHVt+kW47TQ6
-         GuBV4ukC1UJNnfiFBKc/6Z3nqBIn010JVchshX5jSzh/TM277RBMLI0zaiFZOMLc5C9Q
-         i/vZfBg2BgjSv6ihseqb8tdD4i4uZEhZF+2nOKN/S/JGlaeK4OMy7H7XDiV1u8OFy7u1
-         M5TnQx691mIVrjHznSwup9jq6zE2+HAZXONRzrYkYT9aMz8wHw3a6sP0qJtSE61lJrNK
-         F7BQ==
-X-Gm-Message-State: AOAM531zkg16Uk1D18gbMrWM5J1nHObDqfgsVti3VRiByRGItuYuzig5
-        mDv20zmuC/Ol8MuPOKGhNR2uv1pTZPUQ6WXliclSh2AQeYVJ0ukwfgF1CVs1QVO+HB4zUpU2Vbi
-        BpSpGTaAA68r8eo7q14H02VpDabKjmCRUOWxnbmoYvW02FTJtOvWSYni1gQ==
-X-Received: by 2002:a17:907:1c01:: with SMTP id nc1mr2010487ejc.659.1644912003555;
-        Tue, 15 Feb 2022 00:00:03 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwuZ4VRaFsrBt53zgXGJrUAfN8tOgQwKpQDCWWN0b0yuET7r2Bc26aSK/euYsuMQ1hH/V9RfLx8GOJpFFdq8EM=
-X-Received: by 2002:a17:907:1c01:: with SMTP id nc1mr2010457ejc.659.1644912003335;
- Tue, 15 Feb 2022 00:00:03 -0800 (PST)
+        Tue, 15 Feb 2022 03:02:09 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BBA1EED3;
+        Tue, 15 Feb 2022 00:01:59 -0800 (PST)
+X-UUID: f040adba2e9343cc8528165acfa3bb8f-20220215
+X-UUID: f040adba2e9343cc8528165acfa3bb8f-20220215
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1090011818; Tue, 15 Feb 2022 16:01:53 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 15 Feb 2022 16:01:52 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 15 Feb 2022 16:01:52 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <chunkuang.hu@kernel.org>, <matthias.bgg@gmail.com>,
+        <robh+dt@kernel.org>
+CC:     <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <jassisinghbrar@gmail.com>, <fparent@baylibre.com>,
+        <yongqiang.niu@mediatek.com>, <hsinyi@chromium.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [v2,6/6] drm/mediatek: add display support for MT8186
+Date:   Tue, 15 Feb 2022 15:59:53 +0800
+Message-ID: <20220215075953.3310-7-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220215075953.3310-1-rex-bc.chen@mediatek.com>
+References: <20220215075953.3310-1-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
-References: <20220214212154.8853-1-krzysztof.kozlowski@canonical.com> <20220215074030.3nugwproxjh3lwhl@pengutronix.de>
-In-Reply-To: <20220215074030.3nugwproxjh3lwhl@pengutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Date:   Tue, 15 Feb 2022 08:59:52 +0100
-Message-ID: <CA+Eumj42Hojp1m4deuWnqMOaaNaupTSkzPaNbL_0eyBL-aDi_g@mail.gmail.com>
-Subject: Re: [PATCH v2 00/15] pwm: dt-bindings: Include generic pwm schema
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>,
-        Rahul Tanwar <rtanwar@maxlinear.com>,
-        Jeff LaBundy <jeff@labundy.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Vignesh R <vigneshr@ti.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,56 +58,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022 at 08:40, Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> Hello,
->
-> [dropped Anson Huang and Yash Shah from Cc: which were not reachable for
-> my last mail]
->
-> On Mon, Feb 14, 2022 at 10:21:39PM +0100, Krzysztof Kozlowski wrote:
-> > Hi,
-> >
-> > Changes since v1:
-> > 1. Add tags.
-> > 2. Adjust subject (Uwe).
->
-> However you only took a part of my suggestion ...
->
-> > Krzysztof Kozlowski (15):
-> >   dt-bindings: pwm: allwinner,sun4i-a10: Include generic pwm schema
-> >   dt-bindings: pwm: imx: Include generic pwm schema
-> >   dt-bindings: pwm: intel,lgm: Include generic pwm schema
-> >   dt-bindings: pwm: iqs620a: Include generic pwm schema
-> >   dt-bindings: pwm: mxs: Include generic pwm schema
-> >   dt-bindings: pwm: rockchip: Include generic pwm schema
-> >   dt-bindings: pwm: sifive: Include generic pwm schema
-> >   dt-bindings: pwm: renesas,pwm: Include generic pwm schema
-> >   dt-bindings: pwm: toshiba,visconti: Include generic pwm schema
-> >   dt-bindings: pwm: brcm,bcm7038: Do not require pwm-cells twice
-> >   dt-bindings: pwm: intel,keembay: Do not require pwm-cells twice
->
-> ... The actual patch has a space after the comma, I like this variant
-> without comma better as this is a compatible string.
+From: Yongqiang Niu <yongqiang.niu@mediatek.com>
 
-I am confused. My patch does not have comma after space. Your reply
-had such in the subject, but not in the proposed new subject you wrote
-in msg, so I left it as is. Without comma. If you still see comma, it
-is something with your mail client.
+- Add driver data for MT8186 in mtk_drm_drv.c.
+- Add mtk-disp-ovl and mt-disp-ovl-2l support for MT8186.
 
-See:
-https://lore.kernel.org/linux-devicetree/20220214212154.8853-12-krzysztof.k=
-ozlowski@canonical.com/T/#u
+Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
+Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+---
+ drivers/gpu/drm/mediatek/mtk_disp_ovl.c | 20 +++++++++++++
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c  | 39 +++++++++++++++++++++++++
+ 2 files changed, 59 insertions(+)
 
-Also reply from Vijayakannan does not have comma:
-https://lore.kernel.org/linux-devicetree/20220214081605.161394-11-krzysztof=
-.kozlowski@canonical.com/T/#m80af695f2c751341bc971114aefa00ccc929a3ec
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+index 2146299e5f52..5fa56c7b9f5f 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+@@ -456,6 +456,22 @@ static const struct mtk_disp_ovl_data mt8183_ovl_2l_driver_data = {
+ 	.fmt_rgb565_is_0 = true,
+ };
+ 
++static const struct mtk_disp_ovl_data mt8186_ovl_driver_data = {
++	.addr = DISP_REG_OVL_ADDR_MT8173,
++	.gmc_bits = 10,
++	.layer_nr = 4,
++	.fmt_rgb565_is_0 = true,
++	.smi_id_en = true,
++};
++
++static const struct mtk_disp_ovl_data mt8186_ovl_2l_driver_data = {
++	.addr = DISP_REG_OVL_ADDR_MT8173,
++	.gmc_bits = 10,
++	.layer_nr = 2,
++	.fmt_rgb565_is_0 = true,
++	.smi_id_en = true,
++};
++
+ static const struct mtk_disp_ovl_data mt8192_ovl_driver_data = {
+ 	.addr = DISP_REG_OVL_ADDR_MT8173,
+ 	.gmc_bits = 10,
+@@ -479,8 +495,12 @@ static const struct of_device_id mtk_disp_ovl_driver_dt_match[] = {
+ 	  .data = &mt8173_ovl_driver_data},
+ 	{ .compatible = "mediatek,mt8183-disp-ovl",
+ 	  .data = &mt8183_ovl_driver_data},
++	{ .compatible = "mediatek,mt8186-disp-ovl",
++	  .data = &mt8186_ovl_driver_data},
+ 	{ .compatible = "mediatek,mt8183-disp-ovl-2l",
+ 	  .data = &mt8183_ovl_2l_driver_data},
++	{ .compatible = "mediatek,mt8186-disp-ovl-2l",
++	  .data = &mt8186_ovl_2l_driver_data},
+ 	{ .compatible = "mediatek,mt8192-disp-ovl",
+ 	  .data = &mt8192_ovl_driver_data},
+ 	{ .compatible = "mediatek,mt8192-disp-ovl-2l",
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+index 6efb423ccc92..754b1be25d0d 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+@@ -158,6 +158,24 @@ static const enum mtk_ddp_comp_id mt8183_mtk_ddp_ext[] = {
+ 	DDP_COMPONENT_DPI0,
+ };
+ 
++static const enum mtk_ddp_comp_id mt8186_mtk_ddp_main[] = {
++	DDP_COMPONENT_OVL0,
++	DDP_COMPONENT_RDMA0,
++	DDP_COMPONENT_COLOR0,
++	DDP_COMPONENT_CCORR,
++	DDP_COMPONENT_AAL0,
++	DDP_COMPONENT_GAMMA,
++	DDP_COMPONENT_POSTMASK0,
++	DDP_COMPONENT_DITHER,
++	DDP_COMPONENT_DSI0,
++};
++
++static const enum mtk_ddp_comp_id mt8186_mtk_ddp_ext[] = {
++	DDP_COMPONENT_OVL_2L0,
++	DDP_COMPONENT_RDMA1,
++	DDP_COMPONENT_DPI0,
++};
++
+ static const enum mtk_ddp_comp_id mt8192_mtk_ddp_main[] = {
+ 	DDP_COMPONENT_OVL0,
+ 	DDP_COMPONENT_OVL_2L0,
+@@ -221,6 +239,13 @@ static const struct mtk_mmsys_driver_data mt8183_mmsys_driver_data = {
+ 	.ext_len = ARRAY_SIZE(mt8183_mtk_ddp_ext),
+ };
+ 
++static const struct mtk_mmsys_driver_data mt8186_mmsys_driver_data = {
++	.main_path = mt8186_mtk_ddp_main,
++	.main_len = ARRAY_SIZE(mt8186_mtk_ddp_main),
++	.ext_path = mt8186_mtk_ddp_ext,
++	.ext_len = ARRAY_SIZE(mt8186_mtk_ddp_ext),
++};
++
+ static const struct mtk_mmsys_driver_data mt8192_mmsys_driver_data = {
+ 	.main_path = mt8192_mtk_ddp_main,
+ 	.main_len = ARRAY_SIZE(mt8192_mtk_ddp_main),
+@@ -463,6 +488,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
+ 	  .data = (void *)MTK_DISP_MUTEX },
+ 	{ .compatible = "mediatek,mt8183-disp-mutex",
+ 	  .data = (void *)MTK_DISP_MUTEX },
++	{ .compatible = "mediatek,mt8186-disp-mutex",
++	  .data = (void *)MTK_DISP_MUTEX },
+ 	{ .compatible = "mediatek,mt8192-disp-mutex",
+ 	  .data = (void *)MTK_DISP_MUTEX },
+ 	{ .compatible = "mediatek,mt8173-disp-od",
+@@ -475,14 +502,20 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
+ 	  .data = (void *)MTK_DISP_OVL },
+ 	{ .compatible = "mediatek,mt8183-disp-ovl",
+ 	  .data = (void *)MTK_DISP_OVL },
++	{ .compatible = "mediatek,mt8186-disp-ovl",
++	  .data = (void *)MTK_DISP_OVL },
+ 	{ .compatible = "mediatek,mt8192-disp-ovl",
+ 	  .data = (void *)MTK_DISP_OVL },
+ 	{ .compatible = "mediatek,mt8183-disp-ovl-2l",
+ 	  .data = (void *)MTK_DISP_OVL_2L },
++	{ .compatible = "mediatek,mt8186-disp-ovl-2l",
++	  .data = (void *)MTK_DISP_OVL_2L },
+ 	{ .compatible = "mediatek,mt8192-disp-ovl-2l",
+ 	  .data = (void *)MTK_DISP_OVL_2L },
+ 	{ .compatible = "mediatek,mt8192-disp-postmask",
+ 	  .data = (void *)MTK_DISP_POSTMASK },
++	{ .compatible = "mediatek,mt8186-disp-postmask",
++	  .data = (void *)MTK_DISP_POSTMASK},
+ 	{ .compatible = "mediatek,mt2701-disp-pwm",
+ 	  .data = (void *)MTK_DISP_BLS },
+ 	{ .compatible = "mediatek,mt8167-disp-pwm",
+@@ -511,12 +544,16 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
+ 	  .data = (void *)MTK_DPI },
+ 	{ .compatible = "mediatek,mt8183-dpi",
+ 	  .data = (void *)MTK_DPI },
++	{ .compatible = "mediatek,mt8186-dpi",
++	  .data = (void *)MTK_DPI },
+ 	{ .compatible = "mediatek,mt2701-dsi",
+ 	  .data = (void *)MTK_DSI },
+ 	{ .compatible = "mediatek,mt8173-dsi",
+ 	  .data = (void *)MTK_DSI },
+ 	{ .compatible = "mediatek,mt8183-dsi",
+ 	  .data = (void *)MTK_DSI },
++	{ .compatible = "mediatek,mt8186-dsi",
++	  .data = (void *)MTK_DSI },
+ 	{ }
+ };
+ 
+@@ -533,6 +570,8 @@ static const struct of_device_id mtk_drm_of_ids[] = {
+ 	  .data = &mt8173_mmsys_driver_data},
+ 	{ .compatible = "mediatek,mt8183-mmsys",
+ 	  .data = &mt8183_mmsys_driver_data},
++	{ .compatible = "mediatek,mt8186-mmsys",
++	  .data = &mt8186_mmsys_driver_data},
+ 	{ .compatible = "mediatek,mt8192-mmsys",
+ 	  .data = &mt8192_mmsys_driver_data},
+ 	{ }
+-- 
+2.18.0
 
-> Also a # before
-> pwm-cells would be nice.
-
-I can add this.
-
-Best regards,
-Krzysztof

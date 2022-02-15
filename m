@@ -2,116 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04AD54B5E7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 00:58:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E136E4B5E99
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 01:04:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232276AbiBNX6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 18:58:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34062 "EHLO
+        id S231395AbiBOAEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 19:04:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiBNX6k (ORCPT
+        with ESMTP id S230167AbiBOAEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 18:58:40 -0500
-Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A072AC66
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 15:58:31 -0800 (PST)
-Received: from gproxy2-pub.mail.unifiedlayer.com (unknown [69.89.18.3])
-        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id B8C788031CCF
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 23:58:30 +0000 (UTC)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 0D7C21004837D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 23:58:30 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id JlEjn6lUu2s5dJlEjnn6CO; Mon, 14 Feb 2022 23:58:30 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=BOh2EHcG c=1 sm=1 tr=0 ts=620aeca6
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=oGFeUVbbRNcA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ScEyoHUccvNVCjYeOJrZASzf1PVV3fhbdAISfsk9YVQ=; b=mYnlATE2wAPc/qkXEbilWbK9zP
-        IYHKd+RD2dGrswOQctONmhQtH0sUJdKhmDxEhFSUstgAz0Vj03dnJ2puJK6XDekShagccCiFZvEWf
-        ru9vrBxIwoVDDvdmgoKHvOI6f;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:54484 helo=[10.0.1.23])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nJlEi-000FYY-UJ; Mon, 14 Feb 2022 16:58:28 -0700
-Message-ID: <ca5640d6-d4b1-e51f-6d9f-58f5705cc1e3@w6rz.net>
-Date:   Mon, 14 Feb 2022 15:58:27 -0800
+        Mon, 14 Feb 2022 19:04:00 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F9D66CA2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 16:03:51 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id f17so29549903edd.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 16:03:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=goL4SDS7AKRornMukk78aUmCRfQsSfNIpL54XKAlePs=;
+        b=XzWME/tX9Pwn10nvDtBLix/JWvTxUWXpra89PLWebeGid3kJF+yJ94sCAp3TEJ2Pb7
+         KG+sCzgGuo2pIRe0MLD2cGyPkH9DnNc4+Ycb3JPr0uTMGORv8lpEhVpJcM44oxYId87N
+         mtZE6Uf/V6v6acN77V0+9wlwvLosHWzh/Ohh4kdpAKLU/nb4OYpkbF+ZHYTD6xz1sO1C
+         gFbbdJdvLk14r+s/gvut3A9KnLjWkee0MkMQ92QylFULzIK2e64RbU0SODfunYR0uoJL
+         dT8C0AKHleHQkF1jN8kfi3K2yMpxQjflv9wArFKb5HhuIO4KJiqOhHiDExOSjEXWShO0
+         O3lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=goL4SDS7AKRornMukk78aUmCRfQsSfNIpL54XKAlePs=;
+        b=iunkdEuL56wr+5bl+DOsIuPmO+vxJy2YzkV/8o03kf9nVsbf749jiwmjdRD5aHfbQy
+         YGkVJeC2M6uh0ZiF5g791JD4uo2k4wR6F0vTaLvz8F3x3BMRbrnlEId1q1MyEBjzoFiX
+         BA0cpRBPmaIAoIJMT4t0W571oKvPoS8MTBzt5QGiewh4unvl4W2ZWc5NwXHUUYm/bXFS
+         ufkJRafoDBJZ3+MvVTrxA86V8kGa6UA1xbxqp1JXyUqw7y/JqXMYFxppCTEPiMHkrUyV
+         p2WtrLhvTAa3Lgr/x210XcIQWWuKYlu1Dl/GFVtFHJXn73U2lbtEzTVsktyef+b2Rtlj
+         rEtw==
+X-Gm-Message-State: AOAM531DE2JlxYSbRzSHya6gZIhNPqSqOcy8eDtgTNQiRzQdFvw1Y6rP
+        6FmcGsXJCACX3uLUAGwd3XoXc5pb80h1p7mV24UETA==
+X-Google-Smtp-Source: ABdhPJxAtnWhygjfdRdPmkvAqKQauo1KJKZ52IV82X0eQflqoUGfUG0iTb+vi8L0jmGH8ye8Rphg9kzZiPnIMct0HzM=
+X-Received: by 2002:a05:6402:5c9:: with SMTP id n9mr1308182edx.207.1644883429474;
+ Mon, 14 Feb 2022 16:03:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.15 000/172] 5.15.24-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220214092506.354292783@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nJlEi-000FYY-UJ
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:54484
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 13
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220211161831.3493782-1-tjmercier@google.com>
+ <20220211161831.3493782-7-tjmercier@google.com> <CAHRSSEwWEeW2+Pd17VUNrPYSWhOu-ao7rgnk-pNROcfH6abTzA@mail.gmail.com>
+In-Reply-To: <CAHRSSEwWEeW2+Pd17VUNrPYSWhOu-ao7rgnk-pNROcfH6abTzA@mail.gmail.com>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Mon, 14 Feb 2022 16:03:38 -0800
+Message-ID: <CABdmKX33PDEioxdQSFpQEFdK58kDo==JeUN_1m_NB__5qGMJ0Q@mail.gmail.com>
+Subject: Re: [RFC v2 6/6] android: binder: Add a buffer flag to relinquish
+ ownership of fds
+To:     Todd Kjos <tkjos@google.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/22 01:24, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.24 release.
-> There are 172 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Feb 14, 2022 at 1:26 PM Todd Kjos <tkjos@google.com> wrote:
 >
-> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
-> Anything received after that time might be too late.
+> On Fri, Feb 11, 2022 at 8:19 AM T.J. Mercier <tjmercier@google.com> wrote=
+:
+> >
+> > This patch introduces a buffer flag BINDER_BUFFER_FLAG_SENDER_NO_NEED
+> > that a process sending an fd array to another process over binder IPC
+> > can set to relinquish ownership of the fds being sent for memory
+> > accounting purposes. If the flag is found to be set during the fd array
+> > translation and the fd is for a DMA-BUF, the buffer is uncharged from
+> > the sender's cgroup and charged to the receiving process's cgroup
+> > instead.
+> >
+> > It is up to the sending process to ensure that it closes the fds
+> > regardless of whether the transfer failed or succeeded.
+> >
+> > Most graphics shared memory allocations in Android are done by the
+> > graphics allocator HAL process. On requests from clients, the HAL proce=
+ss
+> > allocates memory and sends the fds to the clients over binder IPC.
+> > The graphics allocator HAL will not retain any references to the
+> > buffers. When the HAL sets the BINDER_BUFFER_FLAG_SENDER_NO_NEED for fd
+> > arrays holding DMA-BUF fds, the gpu cgroup controller will be able to
+> > correctly charge the buffers to the client processes instead of the
+> > graphics allocator HAL.
+> >
+> > From: Hridya Valsaraju <hridya@google.com>
+> > Signed-off-by: Hridya Valsaraju <hridya@google.com>
+> > Co-developed-by: T.J. Mercier <tjmercier@google.com>
+> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> > ---
+> > changes in v2
+> > - Move dma-buf cgroup charge transfer from a dma_buf_op defined by ever=
+y
+> > heap to a single dma-buf function for all heaps per Daniel Vetter and
+> > Christian K=C3=B6nig.
+> >
+> >  drivers/android/binder.c            | 26 ++++++++++++++++++++++++++
+> >  include/uapi/linux/android/binder.h |  1 +
+> >  2 files changed, 27 insertions(+)
+> >
+> > diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+> > index 8351c5638880..f50d88ded188 100644
+> > --- a/drivers/android/binder.c
+> > +++ b/drivers/android/binder.c
+> > @@ -42,6 +42,7 @@
+> >
+> >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> >
+> > +#include <linux/dma-buf.h>
+> >  #include <linux/fdtable.h>
+> >  #include <linux/file.h>
+> >  #include <linux/freezer.h>
+> > @@ -2482,8 +2483,10 @@ static int binder_translate_fd_array(struct list=
+_head *pf_head,
 >
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.24-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
+> Is this only needed for the BINDER_TYPE_FDA case (multiple fds)? This
+> never needs to be done in the BINDER_TYPE_FD case (single fd)?
 >
-> thanks,
->
-> greg k-h
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Currently this is the case as there is no user who would benefit from
+the single fd case. The only known user is the gralloc HAL which
+always uses BINDER_TYPE_FDA to send dmabufs. I guess we could move the
+code into binder_translate_fd if we were willing to bring back
+binder_fd_object's flags field. This looks possible, but I think it'd
+be a more intrusive change.
 
-Tested-by: Ron Economos <re@w6rz.net>
-
+> >  {
+> >         binder_size_t fdi, fd_buf_size;
+> >         binder_size_t fda_offset;
+> > +       bool transfer_gpu_charge =3D false;
+> >         const void __user *sender_ufda_base;
+> >         struct binder_proc *proc =3D thread->proc;
+> > +       struct binder_proc *target_proc =3D t->to_proc;
+> >         int ret;
+> >
+> >         fd_buf_size =3D sizeof(u32) * fda->num_fds;
+> > @@ -2521,8 +2524,15 @@ static int binder_translate_fd_array(struct list=
+_head *pf_head,
+> >         if (ret)
+> >                 return ret;
+> >
+> > +       if (IS_ENABLED(CONFIG_CGROUP_GPU) &&
+> > +               parent->flags & BINDER_BUFFER_FLAG_SENDER_NO_NEED)
+> > +               transfer_gpu_charge =3D true;
+> > +
+> >         for (fdi =3D 0; fdi < fda->num_fds; fdi++) {
+> >                 u32 fd;
+> > +               struct dma_buf *dmabuf;
+> > +               struct gpucg *gpucg;
+> > +
+> >                 binder_size_t offset =3D fda_offset + fdi * sizeof(fd);
+> >                 binder_size_t sender_uoffset =3D fdi * sizeof(fd);
+> >
+> > @@ -2532,6 +2542,22 @@ static int binder_translate_fd_array(struct list=
+_head *pf_head,
+> >                                                   in_reply_to);
+> >                 if (ret)
+> >                         return ret > 0 ? -EINVAL : ret;
+> > +
+> > +               if (!transfer_gpu_charge)
+> > +                       continue;
+> > +
+> > +               dmabuf =3D dma_buf_get(fd);
+> > +               if (IS_ERR(dmabuf))
+> > +                       continue;
+> > +
+> > +               gpucg =3D gpucg_get(target_proc->tsk);
+> > +               ret =3D dma_buf_charge_transfer(dmabuf, gpucg);
+> > +               if (ret) {
+> > +                       pr_warn("%d:%d Unable to transfer DMA-BUF fd ch=
+arge to %d",
+> > +                               proc->pid, thread->pid, target_proc->pi=
+d);
+> > +                       gpucg_put(gpucg);
+> > +               }
+> > +               dma_buf_put(dmabuf);
+> >         }
+> >         return 0;
+> >  }
+> > diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/a=
+ndroid/binder.h
+> > index 3246f2c74696..169fd5069a1a 100644
+> > --- a/include/uapi/linux/android/binder.h
+> > +++ b/include/uapi/linux/android/binder.h
+> > @@ -137,6 +137,7 @@ struct binder_buffer_object {
+> >
+> >  enum {
+> >         BINDER_BUFFER_FLAG_HAS_PARENT =3D 0x01,
+> > +       BINDER_BUFFER_FLAG_SENDER_NO_NEED =3D 0x02,
+> >  };
+> >
+> >  /* struct binder_fd_array_object - object describing an array of fds i=
+n a buffer
+> > --
+> > 2.35.1.265.g69c8d7142f-goog
+> >

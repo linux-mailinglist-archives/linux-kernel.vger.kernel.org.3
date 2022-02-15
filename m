@@ -2,140 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00C34B7685
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4A64B76DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242598AbiBORfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 12:35:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59796 "EHLO
+        id S242609AbiBORfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 12:35:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242592AbiBORfG (ORCPT
+        with ESMTP id S242602AbiBORfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 12:35:06 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540CA2BB26
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:34:56 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id j2so58504809ybu.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:34:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BzSwHLb103hYeBDvOU2heIFUN8ZLSUmxkKK9+4IBNa4=;
-        b=KrIOeEBFwQFiJVrFBJLn0Fb7+Ir/9Pofb0b0KLL3K6cxvQ+FCoP27/zEjpiCoEG5sV
-         SFhhtggF92ERcKjrUDsyc5aq3mYTMlQPpJYfomqMr89r0P5WHgNM/Pum6+BYsXe+qocJ
-         Yp4KbxzW+mxHdHxDWH7oKDV1qg+u8J5u+gn0HhnxE18qK3E6mXynKIZ+zGrexRnwz45C
-         ovVsKT3UYvR2jDyBegAxRV6w03TFE6x5rUFEdSrk98yhxWg5BmnGHNZ518bltR3RMFKC
-         Pfs8HldFX1t5lZTZkdMA8wAv8ubaOPbUSrDxINAaaIZ7hJoK9+YZPufVCjUD0YvPiWpb
-         h2gQ==
+        Tue, 15 Feb 2022 12:35:39 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFFAADFD6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:35:26 -0800 (PST)
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C8436402E0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:35:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644946524;
+        bh=+P9PcpKT0xdbty/hJ1bxhDi4Mvr/vrZbJ+31zABw+Os=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=MbRw2Ve1X/XfWjVfW69aWnIHbQnCdkusELs8x/o/Z+j2d33oozjvjFivXBHD//Ns7
+         JaPj6G7n0sUA2G31wKU1sDJTUGlOMHPyztsPg+3rpvv6YoxOEmM1llt1kEX8ne51HR
+         YHFO9pgVDC1Be/XC8RAhFrgHWkvb/c5TefolV9svt8MPBKOhYV9Pe6jSWoJuDDemqs
+         7GkavfZsK9MupVej/ptlO4GgD+SeYla0Az6Buq5BFzqPIcE6thnQzl/c9XMyDTX0Ly
+         S1czT2KzvFqJ6UrVjw3TsafYTF3v0tL2TUnxLzPZeNeDeLP2Gaa0QKFnZGqyJAhPWr
+         RpHHMLqS9Bw5A==
+Received: by mail-wr1-f71.google.com with SMTP id k3-20020adfb343000000b001e463e6af20so8608365wrd.8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:35:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BzSwHLb103hYeBDvOU2heIFUN8ZLSUmxkKK9+4IBNa4=;
-        b=AemSr11NlpOWibUyo6jb193tAqBO3EHNe9xTWDABM567jZ99qz24FPzDRLAluMBOHk
-         Zrpq8d45462R7fE8FVkncKVF1Ve31w5YMUHr/r7DAr6mbDx9O7HvUPBQ9L/xxi+O2ixK
-         oUoDrd3MYEVBSgHdEaKjFLofsNZBK1uov/PbCpdSSWjoEMnPrcJ1s7y5d0ZMkyLzZfwB
-         3S9osd0coGtPmBAiJ/DoW4ildq17ObKAvj+naAzjBKPW61+kZfgEPQd+4McMerlZabae
-         FZV6gMj+agJOHPOIchGQUXg6XR+Xf1vGjNIvUoqsNsGce5RrZy/O+KopZB0+z28/pdSl
-         gCIQ==
-X-Gm-Message-State: AOAM532boubzHI2J9dzexdrnbAX+Cqp7mu2/rh+5Pi0Q/BWWoRjidNTZ
-        qa9FkF+UDE2ZsqADrbvFt0WVkILPAXTSr183TYNFsA==
-X-Google-Smtp-Source: ABdhPJxu89+Z8sRKF9zGwgYt/T7SyMBaRjbf1acH6Iy0s1tiNyXgKzYrjSYee5hT8cWYikqq6sF9corJOHo7u/zwMew=
-X-Received: by 2002:a25:d203:: with SMTP id j3mr4691620ybg.534.1644946495082;
- Tue, 15 Feb 2022 09:34:55 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+P9PcpKT0xdbty/hJ1bxhDi4Mvr/vrZbJ+31zABw+Os=;
+        b=ZCPpvyx3oGSF6ud5JFUmORRHnC0ydXCZb+Kcbzb0KRFQG6IfyRP+N2zVcPiZGxkIWS
+         0WU3Pu2GmpXn5RN/RhtHK9nICg7YhTsDlaEomRFOzGAtCmgRMl6z2jZcBAkkKczNCbmu
+         vHjMKL3Dq9r4jpkuZW12LsKnrpq9U+oPDakKteVLf45DAEPl4zU4I3NNx59i3uU/CfDp
+         yh60mbpnfSzlhyOLDDwbloYtdVcSlKpo+lDLeosPGeLwGNaKU8I3rTTcegnaP7W37VJ5
+         p205VeaEu6wVbsoym1eSUmb2WTjCceVTWj8tclaux+rQswfPCeYUOrsiPa6hcE7Sz0Tj
+         AtSA==
+X-Gm-Message-State: AOAM531zXdWYicPbbPmTBNBBYM9QPNuc45AQFLRRDRuu+iGvFq/Divji
+        qzN7hneQdyKUOT/aMc1aeMSDnJDvaA1E6fu0LJIM41siQCd0b2wbL6ooS/9BiMNrhYtw/WcSmMW
+        CmCA2CQTIFTKx0xa4BDatUEmeU+8QWZdpsWOMkovg4A==
+X-Received: by 2002:a5d:68cd:: with SMTP id p13mr25434wrw.537.1644946524401;
+        Tue, 15 Feb 2022 09:35:24 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwHVvxLlKwb0vEtmbBdnfyiKN8+jTxOLmhaciEyPHxsyHO6/CWWCijyKhPRtdxqziX1NdO0/Q==
+X-Received: by 2002:a5d:68cd:: with SMTP id p13mr25416wrw.537.1644946524266;
+        Tue, 15 Feb 2022 09:35:24 -0800 (PST)
+Received: from [192.168.0.110] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id s7sm16804963wrw.71.2022.02.15.09.35.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 09:35:23 -0800 (PST)
+Message-ID: <d1ce6c2b-e1f3-1c2e-a6fd-d506848b2c12@canonical.com>
+Date:   Tue, 15 Feb 2022 18:35:22 +0100
 MIME-Version: 1.0
-References: <20220215112812.2093852-1-imagedong@tencent.com> <20220215112812.2093852-2-imagedong@tencent.com>
-In-Reply-To: <20220215112812.2093852-2-imagedong@tencent.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 15 Feb 2022 09:34:44 -0800
-Message-ID: <CANn89iLWOBy=X1CpY+gvukhQ-bb7hDWd5y+m46K7o5XR0Pbt_A@mail.gmail.com>
-Subject: Re: [PATCH net-next 01/19] net: tcp: introduce tcp_drop_reason()
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        Talal Ahmad <talalahmad@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        flyingpeng@tencent.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v6 25/35] iommu/mediatek: Migrate to aggregate driver
+Content-Language: en-US
+To:     Yong Wu <yong.wu@mediatek.com>, Stephen Boyd <swboyd@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Saravana Kannan <saravanak@google.com>
+References: <20220127200141.1295328-1-swboyd@chromium.org>
+ <20220127200141.1295328-26-swboyd@chromium.org>
+ <7c517b787d1dd768372d0141f5078e3089e883cb.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <7c517b787d1dd768372d0141f5078e3089e883cb.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 3:30 AM <menglong8.dong@gmail.com> wrote:
->
-> From: Menglong Dong <imagedong@tencent.com>
->
-> For TCP protocol, tcp_drop() is used to free the skb when it needs
-> to be dropped. To make use of kfree_skb_reason() and collect drop
-> reasons, introduce the function tcp_drop_reason().
->
-> tcp_drop_reason() will finally call kfree_skb_reason() and pass the
-> drop reason to 'kfree_skb' tracepoint.
->
-> PS: __kfree_skb() was used in tcp_drop(), I'm not sure if it's ok
-> to replace it with kfree_skb_reason().
->
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> ---
->  net/ipv4/tcp_input.c | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
->
-> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-> index af94a6d22a9d..e3811afd1756 100644
-> --- a/net/ipv4/tcp_input.c
-> +++ b/net/ipv4/tcp_input.c
-> @@ -4684,10 +4684,19 @@ static bool tcp_ooo_try_coalesce(struct sock *sk,
->         return res;
->  }
->
-> -static void tcp_drop(struct sock *sk, struct sk_buff *skb)
-> +static void tcp_drop_reason(struct sock *sk, struct sk_buff *skb,
-> +                           enum skb_drop_reason reason)
->  {
->         sk_drops_add(sk, skb);
-> -       __kfree_skb(skb);
-> +       /* why __kfree_skb() used here before, other than kfree_skb()?
-> +        * confusing......
+On 10/02/2022 12:03, Yong Wu wrote:
+> On Thu, 2022-01-27 at 12:01 -0800, Stephen Boyd wrote:
+>> Use an aggregate driver instead of component ops so that we can get
+>> proper driver probe ordering of the aggregate device with respect to
+>> all
+>> the component devices that make up the aggregate device.
+>>
+>> Cc: Yong Wu <yong.wu@mediatek.com>
+>> Cc: Joerg Roedel <joro@8bytes.org>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+>> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+>> Cc: Rob Clark <robdclark@gmail.com>
+>> Cc: Russell King <rmk+kernel@arm.linux.org.uk>
+>> Cc: Saravana Kannan <saravanak@google.com>
+>> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> 
+> + Krzysztof
+> 
+> The memory/mtk-smi.c is expected to get Ack from Krzysztof.
+> 
 
-Do not add comments like that if you do not know the difference...
+Please resend with cc-ing me. I don't have the patch in my mailbox (wes
+not on address list) and I also cannot find it in linux-arm-kernel.
 
-__kfree_skb() is used by TCP stack because it owns skb in receive
-queues, and avoids touching skb->users
-because it must be one already.
-
-(We made sure not using skb_get() in TCP)
-
-It seems fine to use kfree_skb() in tcp_drop(), it is hardly fast
-path, and the added cost is pure noise.
+Best regards,
+Krzysztof

@@ -2,103 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7854B6BF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A51AB4B6B51
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 12:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236767AbiBOMZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 07:25:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34546 "EHLO
+        id S237214AbiBOLmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 06:42:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232191AbiBOMZg (ORCPT
+        with ESMTP id S230344AbiBOLml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 07:25:36 -0500
-X-Greylist: delayed 437 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 04:25:25 PST
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98489107AA9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:25:25 -0800 (PST)
-Received: from epcas3p2.samsung.com (unknown [182.195.41.20])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220215121802epoutp0224e8823b84944bcaceac18e348d4ebcc~T9NR5_Vfw1394113941epoutp02R
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 12:18:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220215121802epoutp0224e8823b84944bcaceac18e348d4ebcc~T9NR5_Vfw1394113941epoutp02R
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1644927482;
-        bh=gFH/O+Wwc4cOaRG+Ce3cxW3yMZxYDCdcbdpfz+GoqEI=;
-        h=Subject:Reply-To:From:To:Date:References:From;
-        b=jXCJwOE5sTQnteFunbis4gvquuLY4r+Fc++uZfECXWhSZHbCjnx8iKJaya1fe8GQC
-         WHqo4O6+qGPL7R8IjRF8aarMdqH5xsKCAjMxctUdpR5s9Mg6BYICwUTccQCglkCUey
-         wRoqw01oQUGub6pazRizoou1csXo6U4rEnpMovUM=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas3p2.samsung.com (KnoxPortal) with ESMTP id
-        20220215121801epcas3p2104ee63750619de84afdcdec064da235~T9NRYlWeI1114711147epcas3p2X;
-        Tue, 15 Feb 2022 12:18:01 +0000 (GMT)
-Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp1.localdomain
-        (Postfix) with ESMTP id 4Jyg8n5CJLz4x9Pp; Tue, 15 Feb 2022 12:18:01 +0000
-        (GMT)
-Mime-Version: 1.0
-Subject: [PATCH] scsi: ufs: Remove wlun_dev_to_hba()
-Reply-To: keosung.park@samsung.com
-Sender: Keoseong Park <keosung.park@samsung.com>
-From:   Keoseong Park <keosung.park@samsung.com>
-To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <1891546521.01644927481711.JavaMail.epsvc@epcpadp4>
-Date:   Tue, 15 Feb 2022 20:40:02 +0900
-X-CMS-MailID: 20220215114002epcms2p1eb4e53507c96e0f24770af16aedcf5c6
+        Tue, 15 Feb 2022 06:42:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15910193CC
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 03:42:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644925350;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PjnbuWeKFhqOoYjM7TShoqpYbBMxPZgJhbxy0whFK08=;
+        b=F4CeQxhaYLYgzE/3n7k44wh1ep1wqa6hx4m0YQJub0Tr3nICNmSiHRVcMZHAlzP+0xqarU
+        fVY13jw7TvGST9hXTEU37hBypQwx6inIx9fZ8JRa9dwr6ImWFU+GwmZkoB4udmMPfy1uyG
+        IKFVshwzPl+fettXxi3MDwaeC1Glff4=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-586-PfqYmJ0POUaApCD2roxXJw-1; Tue, 15 Feb 2022 06:42:28 -0500
+X-MC-Unique: PfqYmJ0POUaApCD2roxXJw-1
+Received: by mail-wm1-f70.google.com with SMTP id k30-20020a05600c1c9e00b0037d1bee4847so1249808wms.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 03:42:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=PjnbuWeKFhqOoYjM7TShoqpYbBMxPZgJhbxy0whFK08=;
+        b=4EQGp6vLzwq0OCh3vZBJX/oW+chvbVrNXj67uirnoAFAJisALoqtT/m+qfbtZl1esz
+         EKzCmUs+pcwdug68zy+jppafvuGRRCToHB+aBDYZCdXsuWTZjZ1bbUxoPd82jp5mweWk
+         dSrieOajTjUvDxXbAKGcCD8gXO571h66qshuW0vlHyV52HQwQAYXZwUVjTbIBqlH0ngP
+         t8cZY14iTPptsh6p2x7E6PlWaSU24dm8PFeFOVKX9brLUybMdrmGxHNhwVS1UinZiSCC
+         MGtaBG7J0xNY4lNcVfCtX5elfRh5WK3ac6TR45WQMzkyk1VOpDkoKjBqDu8ArSPwOU9Z
+         MZDg==
+X-Gm-Message-State: AOAM533kjBcH32bdLdy6pwMkdM/E5ZzbTyA03AFhybO5dEuGS8Ogiyz4
+        4OCvg6Y5FNn30NQfiPV1min0z+HtWfCINOx6vmF2sJtMO719G4tEIVrjwJxAVFalhgiTE9RExTy
+        sgUTzd5lA1Lx3tHp7KMGHnAUw
+X-Received: by 2002:a7b:ca56:0:b0:37c:321e:9947 with SMTP id m22-20020a7bca56000000b0037c321e9947mr2752183wml.14.1644925347641;
+        Tue, 15 Feb 2022 03:42:27 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxoBwAwhuNEUS135wctuAV6IRl4SdvK7l5cFBUZJc6WBHpZGx/EhPB4rfRNzOYOBK5c9+C7kA==
+X-Received: by 2002:a7b:ca56:0:b0:37c:321e:9947 with SMTP id m22-20020a7bca56000000b0037c321e9947mr2752161wml.14.1644925347419;
+        Tue, 15 Feb 2022 03:42:27 -0800 (PST)
+Received: from ?IPV6:2003:cb:c70e:3700:9260:2fb2:742d:da3e? (p200300cbc70e370092602fb2742dda3e.dip0.t-ipconnect.de. [2003:cb:c70e:3700:9260:2fb2:742d:da3e])
+        by smtp.gmail.com with ESMTPSA id j10sm9472254wmq.20.2022.02.15.03.42.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 03:42:27 -0800 (PST)
+Message-ID: <e85b6271-5510-959b-efdc-7ba318f114bc@redhat.com>
+Date:   Tue, 15 Feb 2022 12:42:26 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Kameron Lutes <kalutes@google.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, virtio-dev@lists.oasis-open.org,
+        kvm@vger.kernel.org
+Cc:     Suleiman Souhlal <suleiman@chromium.org>,
+        Charles William Dick <cwd@google.com>,
+        David Stevens <stevensd@chromium.org>
+References: <20220214195908.4070138-1-kalutes@google.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] Virtio-balloon: add user space API for sizing
+In-Reply-To: <20220214195908.4070138-1-kalutes@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20220215114002epcms2p1eb4e53507c96e0f24770af16aedcf5c6
-References: <CGME20220215114002epcms2p1eb4e53507c96e0f24770af16aedcf5c6@epcms2p1>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit edc0596cc04b ("scsi: ufs: core: Stop clearing UNIT ATTENTIONS")
-removed all callers of wlun_dev_to_hba(). Hence also remove the macro itself.
+On 14.02.22 20:59, Kameron Lutes wrote:
+> This new linux API will allow user space applications to directly
+> control the size of the virtio-balloon. This is useful in
+> situations where the guest must quickly respond to drastically
+> increased memory pressure and cannot wait for the host to adjust
+> the balloon's size.
+> 
+> Under the current wording of the Virtio spec, guest driven
+> behavior such as this is permitted:
+> 
+> VIRTIO Version 1.1 Section 5.5.6
+> "The device is driven either by the receipt of a configuration
+> change notification, or by changing guest memory needs, such as
+> performing memory compaction or responding to out of memory
+> conditions."
 
-Signed-off-by: Keoseong Park <keosung.park@samsung.com>
----
- drivers/scsi/ufs/ufshcd.c | 2 --
- 1 file changed, 2 deletions(-)
+Not quite. num_pages is determined by the hypervisor only and the guest
+is not expected to change it, and if it does, it's ignored.
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 41d85b69fa50..1243d73d669b 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -83,8 +83,6 @@
- /* Polling time to wait for fDeviceInit */
- #define FDEVICEINIT_COMPL_TIMEOUT 1500 /* millisecs */
- 
--#define wlun_dev_to_hba(dv) shost_priv(to_scsi_device(dv)->host)
--
- #define ufshcd_toggle_vreg(_dev, _vreg, _on)				\
- 	({                                                              \
- 		int _ret;                                               \
+5.5.6 does not indicate at all that the guest may change it or that it
+would have any effect. num_pages is examined only, actual is updated by
+the driver.
+
+5.5.6.1 documents what's allowed, e.g.,
+
+  The driver SHOULD supply pages to the balloon when num_pages is
+  greater than the actual number of pages in the balloon.
+
+  The driver MAY use pages from the balloon when num_pages is less than
+  the actual number of pages in the balloon.
+
+and special handling for VIRTIO_BALLOON_F_DEFLATE_ON_OOM.
+
+Especially, we have
+
+  The driver MUST update actual after changing the number of pages in
+  the balloon.
+
+  The driver MAY update actual once after multiple inflate and deflate
+  operations.
+
+That's also why QEMU never syncs back the num_pages value from the guest
+when writing the config.
+
+
+Current spec does not allow for what you propose.
+
+
+> 
+> The intended use case for this API is one where the host
+> communicates a deflation limit to the guest. The guest may then
+> choose to respond to memory pressure by deflating its balloon down
+> to the guest's allowable limit.
+
+It would be good to have a full proposal and a proper spec update. I'd
+assume you'd want separate values for soft vs. hard num_values -- if
+that's what we really want.
+
+BUT
+
+There seems to be recent interest in handling memory pressure in a
+better way (although how to really detect "serious memory pressure" vs
+"ordinary reclaim" in Linux is still to be figured out). There is
+already a discussion going on how that could happen. Adding random user
+space toggles might not be the best idea. We might want a single
+mechanism to achieve that.
+
+https://lists.oasis-open.org/archives/virtio-comment/202201/msg00139.html
+
 -- 
-2.17.1
+Thanks,
+
+David / dhildenb
 

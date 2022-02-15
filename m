@@ -2,107 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A45DF4B6712
+	by mail.lfdr.de (Postfix) with ESMTP id 598B74B6711
 	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235672AbiBOJLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:11:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52624 "EHLO
+        id S235670AbiBOJLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:11:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235657AbiBOJLP (ORCPT
+        with ESMTP id S229667AbiBOJLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:11:15 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18A9F13DD4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:11:06 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A78C11063;
-        Tue, 15 Feb 2022 01:11:05 -0800 (PST)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE4E33F66F;
-        Tue, 15 Feb 2022 01:11:03 -0800 (PST)
-Date:   Tue, 15 Feb 2022 09:11:01 +0000
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        mst@redhat.com
-Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
-        souvik.chakravarty@arm.com, peter.hilber@opensynergy.com,
-        igor.skalkin@opensynergy.com,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v4 3/8] firmware: arm_scmi: Add atomic mode support to
- virtio transport
-Message-ID: <20220215091046.GF2535@e120937-lin>
-References: <20220213195832.27932-1-cristian.marussi@arm.com>
- <20220213195832.27932-4-cristian.marussi@arm.com>
+        Tue, 15 Feb 2022 04:11:14 -0500
+Received: from theia.8bytes.org (8bytes.org [81.169.241.247])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0645913DD4;
+        Tue, 15 Feb 2022 01:11:04 -0800 (PST)
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id CA08436D; Tue, 15 Feb 2022 10:11:02 +0100 (CET)
+Date:   Tue, 15 Feb 2022 10:11:01 +0100
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Will Deacon <will@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 5/8] iommu/amd: Use iommu_attach/detach_device()
+Message-ID: <YgtuJQhY8SNlv9/6@8bytes.org>
+References: <20220106022053.2406748-1-baolu.lu@linux.intel.com>
+ <20220106022053.2406748-6-baolu.lu@linux.intel.com>
+ <20220106143345.GC2328285@nvidia.com>
+ <Ygo8iek2CwtPp2hj@8bytes.org>
+ <20220214131544.GX4160@nvidia.com>
+ <Ygpb6CxmTdUHiN50@8bytes.org>
+ <20220214140236.GC929467@nvidia.com>
+ <YgplyyjofwlM+1tc@8bytes.org>
+ <20220214150059.GE4160@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220213195832.27932-4-cristian.marussi@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220214150059.GE4160@nvidia.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 13, 2022 at 07:58:27PM +0000, Cristian Marussi wrote:
-> Add support for .mark_txdone and .poll_done transport operations to SCMI
-> VirtIO transport as pre-requisites to enable atomic operations.
+On Mon, Feb 14, 2022 at 11:00:59AM -0400, Jason Gunthorpe wrote:
+> On Mon, Feb 14, 2022 at 03:23:07PM +0100, Joerg Roedel wrote:
 > 
-> Add a Kernel configuration option to enable SCMI VirtIO transport polling
-> and atomic mode for selected SCMI transactions while leaving it default
-> disabled.
+> > Device drivers calling into iommu_attach_device() is seldom a good
+> > idea.  In this case the sound device has some generic hardware
+> > interface so that an existing sound driver can be re-used. Making this
+> > driver call iommu-specific functions for some devices is something hard
+> > to justify.
 > 
-> Cc: "Michael S. Tsirkin" <mst@redhat.com>
-> Cc: Igor Skalkin <igor.skalkin@opensynergy.com>
-> Cc: Peter Hilber <peter.hilber@opensynergy.com>
-> Cc: virtualization@lists.linux-foundation.org
-> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> ---
-> v1 --> v2
-> - shrinked spinlocked section within virtio_poll_done to exclude
->   virtqueue_poll
-> - removed poll_lock
-> - use vio channel refcount acquire/release logic when polling
-> - using new free_list accessors
-> - added new dedicated pending_lock to access pending_cmds_list
-> - fixed a few comments
-> 
-> v0 --> v1
-> - check for deferred_wq existence before queueing work to avoid
->   race at driver removal time
-> - changed mark_txdone decision-logic about message release
-> - fixed race while checking for msg polled from another thread
-> - using dedicated poll_status instead of poll_idx upper bits
-> - pick initial poll_idx earlier inside send_message to avoid missing
->   early replies
-> - removed F_NOTIFY mention in comment
-> - clearing xfer->priv on the IRQ tx path once message has been fetched
-> - added some store barriers
-> - updated some comments
-> ---
->  drivers/firmware/arm_scmi/Kconfig  |  15 ++
->  drivers/firmware/arm_scmi/driver.c |   9 +-
->  drivers/firmware/arm_scmi/virtio.c | 277 ++++++++++++++++++++++++++++-
->  3 files changed, 291 insertions(+), 10 deletions(-)
-> 
+> Er, so this is transparent to the generic sound device? I guess
+> something fixed up the dma_api on that device to keep working?
 
-Hi Michael,
+Right, this is completly transparent to the sound device. The IOMMU code
+will not set dma_ops on the device because it uses a direct mapping and
+so the standard implementation will be used.
 
-how do you feel about the current status of this patch and the previous
-two in this series about SCMI virtio polling support after the last
-fixes ?
+> But, then, the requirement is that nobody is using the dma API when we
+> make this change?
 
-Could we start thinking about merging this series on the SCMI side, leaving
-aside for the next iteration the polling ABA-problem mitigation I proposed
-in the virtio core (wrap counters and new API to enable them) that is now
-in a distinct series ? (and probably needs more tests/perfs/feedback...)
+That is the tricky part. DMA-API keeps working after the change is made,
+because the new domain is also direct mapped. The new domain just has
+the ability to assign host page-tables to device PASIDs, so that DMA
+requests with a PASID TLP will be remapped.
 
-Thank you,
-Cristian
+It was actually a requirement for this code that when it jumps in, the
+DMA-API mappings stay live. And the reason a direct mapping is used at
+all is that the page-table walker of the IOMMU is a two-dimensional
+walker, which will treat the addresses found in the host page-tables as
+IO-virtual an translates them through the underlying page-table. So to
+use host-pagetables the underlying mapping must be direct mapped.
+
+
+> I don't think it matters how big/small the group is, only that when we
+> change the domain we know everything flowing through the domain is
+> still happy.
+
+Yes, that matters. The group size matters too for DMA-API performance.
+If two devices compete for the same lock in the allocator and/or the
+same cached magazines, things will slow down. That only matters for
+high-throughput devices, but still...
+
+Regards,
+
+	Joerg
+

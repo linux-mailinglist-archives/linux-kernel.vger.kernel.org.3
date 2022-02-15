@@ -2,88 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BCD44B678E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 470674B678F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:28:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235877AbiBOJ22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:28:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51628 "EHLO
+        id S235883AbiBOJ2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:28:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234904AbiBOJ21 (ORCPT
+        with ESMTP id S234904AbiBOJ2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:28:27 -0500
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EF38564C
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:28:17 -0800 (PST)
-Received: by mail-vs1-xe2b.google.com with SMTP id e6so9982864vsa.8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:28:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=AuT4st4Mdz6E9ng3de55/ySJOc7SimIbntAvhT1m0cqPZOG6LuTnGC/6NPWMJM9aa3
-         GU6Xayt+4eWuUyMPl5Sgzde6f0W+8F7czDsC0ztr3vGyUkL27JqfpuKu0MicT3M/C0EC
-         JNXFfgNifPi7cYw7TOMn0ZLeToMElWTxOE0dsewnE17ULW4ejAOqSNh87fTVJarttdCk
-         YXdIlLPNsxrlZU6KKnJGOUMcsedx4vtj5hqjKVeNjTYUjEf6+Gy6JORuTwNaecppcWXG
-         z4Lp2t3viyr1CxuQQl1eDeNLq1RzzoTMQgCf43M+ZhJKmk++vF/d94P3ZkhCvXxuGfws
-         q3kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=CrDW0Dxg7m6qE0x2rlh2OEfet5rwRcDK7FVixi5RkYJG+ltOH9yGlVV63mSQx+x8yr
-         rBOX/taSlJURGRY5xAvLCRUiQEQZe8LdH9tmQoussZFOaEILOdocp9OYJIG6RdfTVSEw
-         TpUaCitXjtZKFzmOWsyFGcWdiH1hjSMglTo7l/2vtgV5piT+Tf4OsGi328/1bLNJj493
-         LiL4BpMxdkMulCQny+Tn0OCgnPAN0gtLkcbuj9vwd8gn/JpBrVaWQ1XZfjsOW4EVz3HU
-         XCJiYuXQWANLjVa5waKpbdY8Qf18XB+cVVsoAEz6xBp4fnKP5TyLN9QcDSdYdH+/RVsG
-         CJvA==
-X-Gm-Message-State: AOAM532DeKC6I/LvTPyiJy7cEX1qOAwSJTH4jhEwFclyImNERvJWOYal
-        x6INsAmHVpcl2hSwlcrLnlN2MADK6EHfPHKwxB8=
-X-Google-Smtp-Source: ABdhPJxuTONBmBP64sTTVG7d/1dnWCuVvKDwDdanYFvqIzYKLJUFlcRAzXvJDnB8GICyiS5tK54G/Ah/gzAdetc8vOU=
-X-Received: by 2002:a67:cc14:: with SMTP id q20mr1065811vsl.30.1644917296940;
- Tue, 15 Feb 2022 01:28:16 -0800 (PST)
+        Tue, 15 Feb 2022 04:28:45 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAD197BAD
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:28:35 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JybJD4cZRzZfGh;
+        Tue, 15 Feb 2022 17:24:12 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 15 Feb 2022 17:28:32 +0800
+Subject: Re: [PATCH 4/8] mm/memory-failure.c: remove unneeded orig_head
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+CC:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220210141733.1908-1-linmiaohe@huawei.com>
+ <20220210141733.1908-5-linmiaohe@huawei.com> <20220214145019.GD2624914@u2004>
+ <f19c8477-c352-c1e1-74a4-3298511f10cf@huawei.com>
+ <20220215084813.GA1971011@hori.linux.bs1.fc.nec.co.jp>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <9e6c4031-18eb-c4fb-d30c-3fa5767f07f8@huawei.com>
+Date:   Tue, 15 Feb 2022 17:28:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Received: by 2002:a05:612c:1081:b0:280:7250:5ff2 with HTTP; Tue, 15 Feb 2022
- 01:28:16 -0800 (PST)
-Reply-To: abrahamamesse@outlook.com
-From:   Abraham Amesse <lkpeazusgeorge@gmail.com>
-Date:   Tue, 15 Feb 2022 09:28:16 +0000
-Message-ID: <CAKrG5eUykiu06ftVP1RMXapb9k0ZEX0sKzyUHLXDHooQzoNoGw@mail.gmail.com>
-Subject: Please. I would like to know if you received the message which I sent
- to you two days ago concerning humanitarian aid work.Many thanks and God bless
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e2b listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4435]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [lkpeazusgeorge[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+In-Reply-To: <20220215084813.GA1971011@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/2/15 16:48, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Tue, Feb 15, 2022 at 11:14:07AM +0800, Miaohe Lin wrote:
+>> On 2022/2/14 22:50, Naoya Horiguchi wrote:
+>>> On Thu, Feb 10, 2022 at 10:17:29PM +0800, Miaohe Lin wrote:
+>>>> orig_head is used to check whether the page have changed compound pages
+>>>> during the locking. But it's always equal to hpage. So we can use hpage
+>>>> directly and remove this redundant one.
+>>>>
+>>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>>> ---
+>>>>  mm/memory-failure.c | 5 ++---
+>>>>  1 file changed, 2 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>>>> index 2dd7f35ee65a..4370c2f407c5 100644
+>>>> --- a/mm/memory-failure.c
+>>>> +++ b/mm/memory-failure.c
+>>>> @@ -1691,7 +1691,6 @@ int memory_failure(unsigned long pfn, int flags)
+>>>>  {
+>>>>  	struct page *p;
+>>>>  	struct page *hpage;
+>>>> -	struct page *orig_head;
+>>>>  	struct dev_pagemap *pgmap;
+>>>>  	int res = 0;
+>>>>  	unsigned long page_flags;
+>>>> @@ -1737,7 +1736,7 @@ int memory_failure(unsigned long pfn, int flags)
+>>>>  		goto unlock_mutex;
+>>>>  	}
+>>>>
+>>>> -	orig_head = hpage = compound_head(p);
+>>>> +	hpage = compound_head(p);
+>>>>  	num_poisoned_pages_inc();
+>>>>
+>>>>  	/*
+>>>> @@ -1821,7 +1820,7 @@ int memory_failure(unsigned long pfn, int flags)
+>>>>  	 * The page could have changed compound pages during the locking.
+>>>>  	 * If this happens just bail out.
+>>>>  	 */
+>>>> -	if (PageCompound(p) && compound_head(p) != orig_head) {
+>>>> +	if (PageCompound(p) && compound_head(p) != hpage) {
+>>>
+>>> I think that this if-check was intended to detect the case that page p
+>>> belongs to a thp when memory_failure() is called and belongs to a compound
+>>> page in different size (like slab or some driver page) after the thp is
+>>> split.  But your suggestion makes me aware that the page p could be embedded
+>>> on a thp again after thp split.  I think this might be rare, but if it
+>>
+>> IIUC, this page can't be embedded on a thp again after thp split because memory_failure hold
+>> an __extra__ page refcnt. I think there exist below race windows:
+>>
+>> memory_failure
+>>   orig_head = hpage = compound_head(p); -- page is Non-compound yet
+>>   < -- Page becomes compound page, like thp, slab, some driver page and even hugetlb page -- >
+>>   get_hwpoison_page
+>>   failed to split thp page, as hpage is Non-compound ...
+>>   lock_page
+>>
+>>> happens the current if-check (or suggested one) cannot detect it.
+>>> So I feel that simply dropping compound_head() check might be better?
+>>>
+>>> -	if (PageCompound(p) && compound_head(p) != orig_head) {
+>>> +	if (PageCompound(p)) {
+>>
+>> However this change could also catch the above race correctly. In fact, we can't handle
+>> compound page here. But is it enough to just return -EBUSY here as it's really rare or
+>> we should do more things (like split thp, retry if in PageHuge case)?
+> 
+> Hmm, both could make sense and hard to judge to me, so it's upto you.
+> We already have goto label "try_again" so retrying might not be so surprising.
+> 
+
+try_again sounds a good idea. Will send a V2. Many thanks.
+
+> Thanks,
+> Naoya Horiguchi
+> 
 

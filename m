@@ -2,230 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E136E4B5E99
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 01:04:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC8A4B5ECD
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 01:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbiBOAEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 19:04:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51940 "EHLO
+        id S232390AbiBOAIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 19:08:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbiBOAEA (ORCPT
+        with ESMTP id S232045AbiBOAIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 19:04:00 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F9D66CA2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 16:03:51 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id f17so29549903edd.2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 16:03:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=goL4SDS7AKRornMukk78aUmCRfQsSfNIpL54XKAlePs=;
-        b=XzWME/tX9Pwn10nvDtBLix/JWvTxUWXpra89PLWebeGid3kJF+yJ94sCAp3TEJ2Pb7
-         KG+sCzgGuo2pIRe0MLD2cGyPkH9DnNc4+Ycb3JPr0uTMGORv8lpEhVpJcM44oxYId87N
-         mtZE6Uf/V6v6acN77V0+9wlwvLosHWzh/Ohh4kdpAKLU/nb4OYpkbF+ZHYTD6xz1sO1C
-         gFbbdJdvLk14r+s/gvut3A9KnLjWkee0MkMQ92QylFULzIK2e64RbU0SODfunYR0uoJL
-         dT8C0AKHleHQkF1jN8kfi3K2yMpxQjflv9wArFKb5HhuIO4KJiqOhHiDExOSjEXWShO0
-         O3lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=goL4SDS7AKRornMukk78aUmCRfQsSfNIpL54XKAlePs=;
-        b=iunkdEuL56wr+5bl+DOsIuPmO+vxJy2YzkV/8o03kf9nVsbf749jiwmjdRD5aHfbQy
-         YGkVJeC2M6uh0ZiF5g791JD4uo2k4wR6F0vTaLvz8F3x3BMRbrnlEId1q1MyEBjzoFiX
-         BA0cpRBPmaIAoIJMT4t0W571oKvPoS8MTBzt5QGiewh4unvl4W2ZWc5NwXHUUYm/bXFS
-         ufkJRafoDBJZ3+MvVTrxA86V8kGa6UA1xbxqp1JXyUqw7y/JqXMYFxppCTEPiMHkrUyV
-         p2WtrLhvTAa3Lgr/x210XcIQWWuKYlu1Dl/GFVtFHJXn73U2lbtEzTVsktyef+b2Rtlj
-         rEtw==
-X-Gm-Message-State: AOAM531DE2JlxYSbRzSHya6gZIhNPqSqOcy8eDtgTNQiRzQdFvw1Y6rP
-        6FmcGsXJCACX3uLUAGwd3XoXc5pb80h1p7mV24UETA==
-X-Google-Smtp-Source: ABdhPJxAtnWhygjfdRdPmkvAqKQauo1KJKZ52IV82X0eQflqoUGfUG0iTb+vi8L0jmGH8ye8Rphg9kzZiPnIMct0HzM=
-X-Received: by 2002:a05:6402:5c9:: with SMTP id n9mr1308182edx.207.1644883429474;
- Mon, 14 Feb 2022 16:03:49 -0800 (PST)
+        Mon, 14 Feb 2022 19:08:32 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E0B97BAD;
+        Mon, 14 Feb 2022 16:08:23 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21E8pDbh031979;
+        Mon, 14 Feb 2022 18:08:16 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=mtESrcOKgKXQmkilrqoNob9Tn40gKNW7FNM5KPZ6lbo=;
+ b=VeHDeNsNvFYJIxCyhnueLa68XkAkukEL3dTslLrhvuFfLghB1i3rxbl7jN4juk2bBXZb
+ jHjrQMJxTcepufI/ZtHBDexDOCj2mfHvZMGegYKya20l8/rs0QuqEXKKxkLpSeEGuptU
+ XcAwrK6DUFPdTeJfm+r5BXQk3YXI/nqbH51kr9g+1IhxaJHwcbeQP1wmqiu/dQ+1m2Tl
+ ELWZ6/l7r+0ToY+q8UvdOQ8M55mkqdhRwPxrSpbpUZpUS1kcsPgVs9ujO/WXZiojBgPQ
+ YJonY7tXGx2epR6MuBoRaN7sO5JJET1R2prGdksT+Kz41S71ED3/nVuF0CLR57d6+s69 0A== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3e7kx7rukt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 14 Feb 2022 18:08:16 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 15 Feb
+ 2022 00:08:14 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Tue, 15 Feb 2022 00:08:14 +0000
+Received: from ricardo-lws.crystal.cirrus.com (ricardo-lws.ad.cirrus.com [141.131.206.19])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 4C443B16;
+        Tue, 15 Feb 2022 00:08:13 +0000 (UTC)
+From:   Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
+To:     <sre@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
+CC:     Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
+Subject: [PATCH v3 0/3] Introduces bypass charge type property
+Date:   Mon, 14 Feb 2022 18:07:55 -0600
+Message-ID: <20220215000758.803501-1-rriveram@opensource.cirrus.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220211161831.3493782-1-tjmercier@google.com>
- <20220211161831.3493782-7-tjmercier@google.com> <CAHRSSEwWEeW2+Pd17VUNrPYSWhOu-ao7rgnk-pNROcfH6abTzA@mail.gmail.com>
-In-Reply-To: <CAHRSSEwWEeW2+Pd17VUNrPYSWhOu-ao7rgnk-pNROcfH6abTzA@mail.gmail.com>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Mon, 14 Feb 2022 16:03:38 -0800
-Message-ID: <CABdmKX33PDEioxdQSFpQEFdK58kDo==JeUN_1m_NB__5qGMJ0Q@mail.gmail.com>
-Subject: Re: [RFC v2 6/6] android: binder: Add a buffer flag to relinquish
- ownership of fds
-To:     Todd Kjos <tkjos@google.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Liam Mark <lmark@codeaurora.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: N6q8uNKCTZuEWo0H3ePjHx_1vEof2trH
+X-Proofpoint-GUID: N6q8uNKCTZuEWo0H3ePjHx_1vEof2trH
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 1:26 PM Todd Kjos <tkjos@google.com> wrote:
->
-> On Fri, Feb 11, 2022 at 8:19 AM T.J. Mercier <tjmercier@google.com> wrote=
-:
-> >
-> > This patch introduces a buffer flag BINDER_BUFFER_FLAG_SENDER_NO_NEED
-> > that a process sending an fd array to another process over binder IPC
-> > can set to relinquish ownership of the fds being sent for memory
-> > accounting purposes. If the flag is found to be set during the fd array
-> > translation and the fd is for a DMA-BUF, the buffer is uncharged from
-> > the sender's cgroup and charged to the receiving process's cgroup
-> > instead.
-> >
-> > It is up to the sending process to ensure that it closes the fds
-> > regardless of whether the transfer failed or succeeded.
-> >
-> > Most graphics shared memory allocations in Android are done by the
-> > graphics allocator HAL process. On requests from clients, the HAL proce=
-ss
-> > allocates memory and sends the fds to the clients over binder IPC.
-> > The graphics allocator HAL will not retain any references to the
-> > buffers. When the HAL sets the BINDER_BUFFER_FLAG_SENDER_NO_NEED for fd
-> > arrays holding DMA-BUF fds, the gpu cgroup controller will be able to
-> > correctly charge the buffers to the client processes instead of the
-> > graphics allocator HAL.
-> >
-> > From: Hridya Valsaraju <hridya@google.com>
-> > Signed-off-by: Hridya Valsaraju <hridya@google.com>
-> > Co-developed-by: T.J. Mercier <tjmercier@google.com>
-> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> > ---
-> > changes in v2
-> > - Move dma-buf cgroup charge transfer from a dma_buf_op defined by ever=
-y
-> > heap to a single dma-buf function for all heaps per Daniel Vetter and
-> > Christian K=C3=B6nig.
-> >
-> >  drivers/android/binder.c            | 26 ++++++++++++++++++++++++++
-> >  include/uapi/linux/android/binder.h |  1 +
-> >  2 files changed, 27 insertions(+)
-> >
-> > diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-> > index 8351c5638880..f50d88ded188 100644
-> > --- a/drivers/android/binder.c
-> > +++ b/drivers/android/binder.c
-> > @@ -42,6 +42,7 @@
-> >
-> >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> >
-> > +#include <linux/dma-buf.h>
-> >  #include <linux/fdtable.h>
-> >  #include <linux/file.h>
-> >  #include <linux/freezer.h>
-> > @@ -2482,8 +2483,10 @@ static int binder_translate_fd_array(struct list=
-_head *pf_head,
->
-> Is this only needed for the BINDER_TYPE_FDA case (multiple fds)? This
-> never needs to be done in the BINDER_TYPE_FD case (single fd)?
->
+Hello,
 
-Currently this is the case as there is no user who would benefit from
-the single fd case. The only known user is the gralloc HAL which
-always uses BINDER_TYPE_FDA to send dmabufs. I guess we could move the
-code into binder_translate_fd if we were willing to bring back
-binder_fd_object's flags field. This looks possible, but I think it'd
-be a more intrusive change.
+This patch series introduces a new POWER_SUPPLY_CHARGE_TYPE for bypass charging
+operation.
 
-> >  {
-> >         binder_size_t fdi, fd_buf_size;
-> >         binder_size_t fda_offset;
-> > +       bool transfer_gpu_charge =3D false;
-> >         const void __user *sender_ufda_base;
-> >         struct binder_proc *proc =3D thread->proc;
-> > +       struct binder_proc *target_proc =3D t->to_proc;
-> >         int ret;
-> >
-> >         fd_buf_size =3D sizeof(u32) * fda->num_fds;
-> > @@ -2521,8 +2524,15 @@ static int binder_translate_fd_array(struct list=
-_head *pf_head,
-> >         if (ret)
-> >                 return ret;
-> >
-> > +       if (IS_ENABLED(CONFIG_CGROUP_GPU) &&
-> > +               parent->flags & BINDER_BUFFER_FLAG_SENDER_NO_NEED)
-> > +               transfer_gpu_charge =3D true;
-> > +
-> >         for (fdi =3D 0; fdi < fda->num_fds; fdi++) {
-> >                 u32 fd;
-> > +               struct dma_buf *dmabuf;
-> > +               struct gpucg *gpucg;
-> > +
-> >                 binder_size_t offset =3D fda_offset + fdi * sizeof(fd);
-> >                 binder_size_t sender_uoffset =3D fdi * sizeof(fd);
-> >
-> > @@ -2532,6 +2542,22 @@ static int binder_translate_fd_array(struct list=
-_head *pf_head,
-> >                                                   in_reply_to);
-> >                 if (ret)
-> >                         return ret > 0 ? -EINVAL : ret;
-> > +
-> > +               if (!transfer_gpu_charge)
-> > +                       continue;
-> > +
-> > +               dmabuf =3D dma_buf_get(fd);
-> > +               if (IS_ERR(dmabuf))
-> > +                       continue;
-> > +
-> > +               gpucg =3D gpucg_get(target_proc->tsk);
-> > +               ret =3D dma_buf_charge_transfer(dmabuf, gpucg);
-> > +               if (ret) {
-> > +                       pr_warn("%d:%d Unable to transfer DMA-BUF fd ch=
-arge to %d",
-> > +                               proc->pid, thread->pid, target_proc->pi=
-d);
-> > +                       gpucg_put(gpucg);
-> > +               }
-> > +               dma_buf_put(dmabuf);
-> >         }
-> >         return 0;
-> >  }
-> > diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/a=
-ndroid/binder.h
-> > index 3246f2c74696..169fd5069a1a 100644
-> > --- a/include/uapi/linux/android/binder.h
-> > +++ b/include/uapi/linux/android/binder.h
-> > @@ -137,6 +137,7 @@ struct binder_buffer_object {
-> >
-> >  enum {
-> >         BINDER_BUFFER_FLAG_HAS_PARENT =3D 0x01,
-> > +       BINDER_BUFFER_FLAG_SENDER_NO_NEED =3D 0x02,
-> >  };
-> >
-> >  /* struct binder_fd_array_object - object describing an array of fds i=
-n a buffer
-> > --
-> > 2.35.1.265.g69c8d7142f-goog
-> >
+In fast charging ICs, the bypass operation is used to bypass the charging path
+around the charging IC's integrated power converter to its load. This allows
+for "smart" wall adaptors (such as USB PPS standard power adaptors) to handle
+the power conversion and heat dissipation externally.
+
+Best Regards,
+Ricardo
+
+Ricardo Rivera-Matos (2):
+  power: supply: Introduces bypass charging property
+  power: supply: bq25980: Implements POWER_SUPPLY_CHARGE_TYPE_BYPASS
+
+ drivers/power/supply/bq25980_charger.c    | 2 +-
+ drivers/power/supply/power_supply_sysfs.c | 1 +
+ include/linux/power_supply.h              | 1 +
+ 3 files changed, 3 insertions(+), 1 deletion(-)
+
+-- 
+2.25.1
+

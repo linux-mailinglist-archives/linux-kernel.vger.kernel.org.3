@@ -2,97 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A3214B61C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 04:38:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 738944B61CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 04:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233818AbiBODih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 22:38:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39642 "EHLO
+        id S233848AbiBODj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 22:39:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbiBODif (ORCPT
+        with ESMTP id S229883AbiBODj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 22:38:35 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87E295A2E;
-        Mon, 14 Feb 2022 19:38:26 -0800 (PST)
+        Mon, 14 Feb 2022 22:39:26 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE03B16FA
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 19:39:15 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id p19so52143937ybc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 19:39:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644896306; x=1676432306;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=k/UOigYSrO779wbjOBp/W7DmwwybqRpUs2WFG9x/VnM=;
-  b=XxLvcv90H74FFrox2qqUqM5Lo5h/qJBKyTvVYTrEqOVIrR2QwhDMeuSZ
-   4Fpi3u+oXCTDLW03H5XBAhh61e3OaWpSifIcLJMM+owGcPoZ3HQJbtlQ5
-   QXdaScSd3/Uj4DYN7ZvrvTUKBQ/M0hCvupeKtjVrvYkaE+lDfXMCyoCdF
-   w=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Feb 2022 19:38:26 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 19:38:26 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Mon, 14 Feb 2022 19:38:25 -0800
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 14 Feb 2022 19:38:22 -0800
-Date:   Tue, 15 Feb 2022 09:08:18 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-CC:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        "Sarah Sharp" <sarah.a.sharp@linux.intel.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ugoswami@quicinc.com>, Jung Daehwan <dh10.jung@samsung.com>
-Subject: Re: [PATCH] xhci: reduce xhci_handshake timeout in xhci_reset
-Message-ID: <20220215033818.GD31021@hu-pkondeti-hyd.qualcomm.com>
-References: <1644836663-29220-1-git-send-email-quic_pkondeti@quicinc.com>
- <766b6370-979e-cd3c-cb64-44abce1977d7@gmail.com>
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=65ev4aSOrbtFuLvkpx4wQjbsqqQphX6/FnioNlaoiX0=;
+        b=qDRSUZN1/Iyn/I4TkfbdU89WeliG1tqjHT8h7ohpLthsgUq28qLEjCtV9rXjCu8ui0
+         Mg5ptTQK/o71Z68wsPJV2eCN2MYtJO2g/nDqMVkU8eZkLggcl7+eh8ol4dtHakR+h1BL
+         VyyTS2fQ7B4Q9zuB09Euw8l6yLwp0GuhHcNAovsPn0P8J+oobJAfsgVzyTLb9b7Ls1Od
+         +06xKYAr6uc8ouvWxA45LjHTNoXyN/c4pZ+VzF3FLwZZTjvlPKkgVKGNFf9uHwYRhOUf
+         yGH2SnQhOCfEmsAzz1E4LBJTK+PT31E/GYx46rLfKtECbNoOesLJzM8dJLf1xKvyZ8EG
+         lzCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=65ev4aSOrbtFuLvkpx4wQjbsqqQphX6/FnioNlaoiX0=;
+        b=QA58ccg90HNnpmnLTfltXwrSBb6x/3hY3+zjkXK1ac895uyFwIpTJ+bo0WM6RFTYGi
+         IvELogUlIog3Yel3pZkGZ9rkS7NTG23YOurzA+ewUlEI9gQWDAyH3HEbh09ZjgKiVB3u
+         GRnyDoH3yfpYpuF3Ctf0drOtML9EAt7qzHbbiTDjwCGnrmi4xUbquEdZhJbVczF0dRP3
+         zVYTbwxaFSUUFQl2T+9ldqtNLjps85ADWSs4vdnVQZ7fZY99WA6AsA9c0gO9cWP5SGwy
+         o79E6PhurpYQUu3v971m3JyIc7DKbCGVppTSRhlWen2iEI78GCco5eV/j48KgTHGay+o
+         lN6g==
+X-Gm-Message-State: AOAM531A7+rHau5tmHLDQcp1J0CKaiMaO2z34t79bFbeOA4eVTW3U9F3
+        qrE+AVxwRioZHKDaGFXItX/y+jppIIRKmWnb3nx5aQ==
+X-Google-Smtp-Source: ABdhPJyXhBV8FivHAynLNi3gzMN1/fbBCIHAYlo9R8xS4bYuHMl0TmaN4+LCg6T9pNpJQ+O03pcfwkgn7Gra6qIH1tw=
+X-Received: by 2002:a0d:f601:: with SMTP id g1mr1823323ywf.441.1644896355001;
+ Mon, 14 Feb 2022 19:39:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <766b6370-979e-cd3c-cb64-44abce1977d7@gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 15 Feb 2022 09:09:03 +0530
+Message-ID: <CA+G9fYtiiJj6dzu3iPjQ2Aafx+UP4pmWV1taH7_2gZQqzYc7GQ@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/172] 5.15.24-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 06:45:30PM +0300, Sergei Shtylyov wrote:
-> Hello!
-> 
-> On 2/14/22 2:04 PM, Pavankumar Kondeti wrote:
-> 
-> > From: Daehwan Jung <dh10.jung@samsung.com>
-> > 
-> > xhci_reset() is called with interrupts disabled. Waiting 10 seconds for
-> > controller reset and controller ready operations can be fatal to the
-> > system when controller is timed out. Reduce the timeout to 1 second
-> > and print a error message when the time out happens.
-> 
->    Waiting 1 second with IRQs diabled is also hardly acceptable. :-/
-> 
+On Mon, 14 Feb 2022 at 15:16, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.24 release.
+> There are 172 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.24-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Thanks for making this point clear.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Having debugged several performance issue related to preemption and irqs
-disabled, I can't agree more. We had to chase down the code that disable
-scheduling for more than 2-3 msec in our downstream kernels on a mobile
-SoC.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-However in this case, we run into timeout very very rarely in which case
-10 sec timeout is causing system hang like symptops which we want to avoid.
+## Build
+* kernel: 5.15.24-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.15.y
+* git commit: 2092ea8331071900a0b3ed6ce06daae663215b92
+* git describe: v5.15.23-173-g2092ea833107
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.23-173-g2092ea833107
 
-Thanks,
-Pavan
+## Test Regressions (compared to v5.15.22-6-g722769939d60)
+No test regressions found.
+
+## Metric Regressions (compared to v5.15.22-6-g722769939d60)
+No metric regressions found.
+
+## Test Fixes (compared to v5.15.22-6-g722769939d60)
+No test fixes found.
+
+## Metric Fixes (compared to v5.15.22-6-g722769939d60)
+No metric fixes found.
+
+## Test result summary
+total: 98687, pass: 84389, fail: 1195, skip: 12142, xfail: 961
+
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 263 total, 261 passed, 2 failed
+* arm64: 42 total, 40 passed, 2 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 40 total, 37 passed, 3 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 35 passed, 2 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 56 total, 40 passed, 16 failed
+* riscv: 28 total, 24 passed, 4 failed
+* s390: 22 total, 20 passed, 2 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 42 total, 42 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

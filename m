@@ -2,245 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F284B650F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A91B34B6507
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 09:03:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234540AbiBOICi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 03:02:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56340 "EHLO
+        id S235091AbiBOICu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 03:02:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233948AbiBOICg (ORCPT
+        with ESMTP id S231487AbiBOICs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 03:02:36 -0500
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC68A20F43
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 00:02:26 -0800 (PST)
-Received: by mail-io1-f42.google.com with SMTP id w7so22896989ioj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 00:02:26 -0800 (PST)
+        Tue, 15 Feb 2022 03:02:48 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7FF2408E
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 00:02:38 -0800 (PST)
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id BEB063F1E3
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:02:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644912157;
+        bh=p0wXUzG9Qlg9XGpXItbSdQyLJQ63vtplPmOBRka8DjY=;
+        h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+         In-Reply-To:Content-Type;
+        b=Bul6c5mZ7d2CR9Ltht+CN7+BfxzxaHOaI/Y9bFhOLWgYmtTCEeHWYLC4hn6S9izq6
+         CFsDKAjAh+4iZmaFyOWfaIIn0WzTr+TZTWJJ/9W4o8Qlub0iwKObIqTjJGec9rOLuY
+         u4ULjo9IV6tfkheQz/Bc068GqgimmPrVokMjpVPw/ul5Mk+Y+ympd1fvhprwILla4M
+         xQD3W7Mde5I1tqxD7FgyONcdmMAi6KpoTXgG9KUKF/CjBbSSrsnuIA8oWULUBH6FEg
+         tz8bGxUDGs1bUkZNaqfdj7ExaqnUos9MiKvGfwRHbiLQ9YL9DjMfrsW0HXu449g+Qg
+         gMvUZVltpPdIw==
+Received: by mail-lf1-f70.google.com with SMTP id h16-20020a056512221000b00442f7ad732bso3345427lfu.15
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 00:02:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oCLNB+k+sgHbzufJWoJQtSnHzgj4pB5QeYzqlBfwivU=;
-        b=aMHTlUlu2u/MqiYLnNLLVdmQCPpeRD+1jkVTXfekaznPPTSU4Kn3bE0B9MUh/IBFxm
-         q4w+wrHrwFxzMost8J/4vPyxLQ/sTDM/uZjOiRgbA1ax9gKy9Ccxs4Ik5KwfxCQs6dlD
-         tngKgaroc/T/ELOTKzgfhN6QiAjg0Em4U3++6YReHT2CSowGTEPiGQT5gg6bo4h/AuLM
-         b+IHSm/5jqIwT+EdovavEude2Hugwtbl25EAD83vHTiQYw6OMUWfukEkY6yUiC2SUFJ4
-         m2iHN/VeDD1vFEGEsXgWa07T4foRMPW3B2qaQW+ZZJs4vp5Ct4pmcqI5RNC88TgMYoCH
-         2m3A==
-X-Gm-Message-State: AOAM530ur6pKqqjYfyEDauvF/a3sZ1GT5C+nCIGMXAszjktD0jQGMuVp
-        +qf5t/sf7+wrQT46XDbgaR/C+AmqC/geWfJq0A==
-X-Google-Smtp-Source: ABdhPJwAEfL5GzvWHtQJrlApikuhnIb6/vTTKFagr9Och0ldPyKwBOEAC/gVOmFXMok32yiOkjiQU+1zNcg1k6n9Eco=
-X-Received: by 2002:a05:6602:2c83:: with SMTP id i3mr1711634iow.105.1644912145656;
- Tue, 15 Feb 2022 00:02:25 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=p0wXUzG9Qlg9XGpXItbSdQyLJQ63vtplPmOBRka8DjY=;
+        b=YWVwkzu8mg6Wqn6cmIPDqP+SfG/ch7usxgN4jKVhwSSgzuXchsp8LOKxfUX6riN8Fx
+         +3JCNXLwcNCrvdSIOMCxmhL3si8OVA7d+gmc5XHi1EI1YNJrF5gZaJqgLu3ndoPL3HKj
+         TFHekOnlfZEr0C4diCZzHWsbPMnzWEK+2zEIQ1Hk5q+o8Rxghb877lq7FrU362DhmL0L
+         OImESuVctFNBT1L26hjiRShaCO5Puc9OZfJYgFIGen270/pbSV1wHfeo0kwbuhpQoxLd
+         BB2dHTp4VFyixuJwI/sJ3xXJqt2LLpMAMB0tBSSTcSM1Q70EyU4SukwPOalsIlMeowAe
+         yWvw==
+X-Gm-Message-State: AOAM531VJyGTqnYvmlZUjl3nRyHLSmQbRYUZDDKmgmn4wR/RpOGJ3n4F
+        wlY84W7cSx8I+czM98FrMFaMnW6zHBFbClXBaYParBzFF97ZYoAfrNr5RiC+K6Aiuc1Cpvw1wlr
+        jLW9YmN2vIzXyWaQrrpSFOzXcpn6sAsVqDHbjLQSTNA==
+X-Received: by 2002:a05:6402:424f:: with SMTP id g15mr2757494edb.158.1644912147102;
+        Tue, 15 Feb 2022 00:02:27 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyJL82lo1kjPeRqjS+9jNzssv8tXjpHeHazeL4p0HZJxneIppz7pU1JsXMs2O9NT8eS3yVbFg==
+X-Received: by 2002:a05:6402:424f:: with SMTP id g15mr2757450edb.158.1644912146878;
+        Tue, 15 Feb 2022 00:02:26 -0800 (PST)
+Received: from [192.168.0.106] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id jz17sm11534425ejb.195.2022.02.15.00.02.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 00:02:26 -0800 (PST)
+Message-ID: <7df71f8d-cdc3-4b2e-cf0a-7112eff28142@canonical.com>
+Date:   Tue, 15 Feb 2022 09:02:25 +0100
 MIME-Version: 1.0
-References: <CAJtcoLbNJrTjjHpFxgXwe+aJaw4=Und37yuym89RKSBCwSyCSQ@mail.gmail.com>
- <CAJtcoLaCGk8E2Fa8mxW2MG4LNq_-J31rOejMLou1MUqu_KMOQg@mail.gmail.com>
- <CACO55tt9FdooA4X-X5oNCSKBNwpOmRKkPxPaYVznw=+vg1XG_g@mail.gmail.com> <CACO55tts8g1X=uNCtUvsqbCnxoN6eVycVecQ3Kfus+aNFE146g@mail.gmail.com>
-In-Reply-To: <CACO55tts8g1X=uNCtUvsqbCnxoN6eVycVecQ3Kfus+aNFE146g@mail.gmail.com>
-From:   Martin Knoblauch <knobi@knobisoft.de>
-Date:   Tue, 15 Feb 2022 09:02:14 +0100
-Message-ID: <CAJtcoLZo+oD++j4ESUfk7UyjdiaKYU0dU8UtmGOqfNbxyWcBWw@mail.gmail.com>
-Subject: Re: Possible regression on suspend (mem/s2idle) between 5.15 and 5.16
-To:     Karol Herbst <kherbst@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, bskeggs@redhat.com,
-        sashal@kernel.org, gregkh@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 00/15] pwm: dt-bindings: Include generic pwm schema
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>,
+        Rahul Tanwar <rtanwar@maxlinear.com>,
+        Jeff LaBundy <jeff@labundy.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Vignesh R <vigneshr@ti.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org
+References: <20220214212154.8853-1-krzysztof.kozlowski@canonical.com>
+ <20220215074030.3nugwproxjh3lwhl@pengutronix.de>
+ <CA+Eumj42Hojp1m4deuWnqMOaaNaupTSkzPaNbL_0eyBL-aDi_g@mail.gmail.com>
+In-Reply-To: <CA+Eumj42Hojp1m4deuWnqMOaaNaupTSkzPaNbL_0eyBL-aDi_g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 11:00 PM Karol Herbst <kherbst@redhat.com> wrote:
->
-> On Mon, Feb 14, 2022 at 3:41 PM Karol Herbst <kherbst@redhat.com> wrote:
-> >
-> > On Mon, Feb 14, 2022 at 3:36 PM Martin Knoblauch <knobi@knobisoft.de> wrote:
-> > >
-> > > On Fri, Feb 11, 2022 at 4:26 PM Martin Knoblauch <knobi@knobisoft.de> wrote:
-> > > >
-> > > > Hi,
-> > > >
-> > > >  sorry for the likely insufficient report. I am running Tumbleweed on
-> > > > a Dell Notebook with a TU117GLM gfx, using the Nouveau driver. Kernel
-> > > > is homegrown. Ever since going from 5.15.12 to 5.16.x (x now 9),
-> > > > suspend stopped working reliably. After a maximum of three
-> > > > suspend/resume cycles the box would reboot spontaneously.
-> > > >
-> > > > I have found the following in dmesg output:
-> > > >
-> > > > # cat > bad-suspend.txt
-> > > > [   87.120765] PM: suspend entry (s2idle)
-> > > > [   87.124895] Filesystems sync: 0.004 seconds
-> > > > [   87.155826] Freezing user space processes ... (elapsed 0.001 seconds) done.
-> > > > [   87.157424] OOM killer disabled.
-> > > > [   87.157424] Freezing remaining freezable tasks ... (elapsed 0.001
-> > > > seconds) done.
-> > > > [   87.158520] printk: Suspending console(s) (use no_console_suspend to debug)
-> > > > [   87.159501] e1000e: EEE TX LPI TIMER: 00000011
-> > > > [   87.164889] sd 4:0:0:0: [sda] Synchronizing SCSI cache
-> > > > [   87.164980] sd 4:0:0:0: [sda] Stopping disk
-> > > > ==> [   87.169576] nouveau 0000:01:00.0: acr: unload binary failed
-> > > > [   87.622136] ACPI: EC: interrupt blocked
-> > > > [   99.986273] ACPI: EC: interrupt unblocked
-> > > > [  102.826726] sd 4:0:0:0: [sda] Starting disk
-> > > > [  102.836370] nouveau 0000:01:00.0: fifo: fault 00 [VIRT_READ] at
-> > > > 0000000000000000 engine 0e [sec2] client 16 [HUB/SEC] reason 00 [PDE]
-> > > > on channel -1 [00ffe5d000 unknown]
-> > > > [  102.836389] nouveau 0000:01:00.0: fifo: runlist 3: scheduled for recovery
-> > > > [  102.836395] nouveau 0000:01:00.0: fifo: engine 3: scheduled for recovery
-> > > > [  102.936294] ------------[ cut here ]------------
-> > > > [  102.936295] nouveau 0000:01:00.0: timeout
-> > > > [  102.936312] WARNING: CPU: 3 PID: 3734 at
-> > > > drivers/gpu/drm/nouveau/nvkm/falcon/v1.c:247
-> > > > nvkm_falcon_v1_wait_for_halt+0xb7/0xc0 [nouveau]
-> > > > [  102.936351] Modules linked in: uvcvideo videobuf2_vmalloc
-> > > > snd_usb_audio videobuf2_memops videobuf2_v4l2 snd_usbmidi_lib
-> > > > videobuf2_common snd_rawmidi cmac algif_hash algif_skcipher af_alg
-> > > > bnep af_packet btusb btrtl btbcm btintel bluetooth ecdh_generic ecc
-> > > > vboxnetadp(O) vboxnetflt(O) vboxdrv(O) iwlmvm mac80211 libarc4
-> > > > iTCO_wdt iTCO_vendor_support x86_pkg_temp_thermal intel_powerclamp
-> > > > coretemp dell_smm_hwmon kvm_intel iwlwifi snd_ctl_led
-> > > > snd_hda_codec_realtek kvm snd_hda_codec_generic ledtrig_audio
-> > > > snd_hda_codec_hdmi irqbypass sha256_ssse3 sha256_generic libsha256
-> > > > pcspkr wmi_bmof snd_hda_intel cfg80211 snd_intel_dspcfg e1000e
-> > > > i2c_i801 snd_hda_codec i2c_smbus rfkill snd_hwdep snd_hda_core snd_pcm
-> > > > snd_timer mei_me snd mei soundcore thermal battery ac nls_iso8859_1
-> > > > nls_cp437 vfat fat squashfs loop fuse configfs crct10dif_pclmul
-> > > > crc32_pclmul ghash_clmulni_intel aesni_intel nouveau crypto_simd i915
-> > > > cryptd drm_ttm_helper mxm_wmi i2c_algo_bit ttm serio_raw
-> > > > drm_kms_helper nvme xhci_pci nvme_core
-> > > > [  102.936378]  drm xhci_hcd wmi video button btrfs blake2b_generic
-> > > > libcrc32c crc32c_intel xor raid6_pq zstd_compress sg dm_multipath
-> > > > dm_mod scsi_dh_rdac scsi_dh_emc scsi_dh_alua
-> > > > [  102.936385] CPU: 3 PID: 3734 Comm: kworker/u24:53 Tainted: G
-> > > >    O      5.16.9-1-default #1
-> > > > [  102.936386] Hardware name: Dell Inc. Precision 7540/0JWGT7, BIOS
-> > > > 1.7.0 01/07/2020
-> > > > [  102.936387] Workqueue: events_unbound async_run_entry_fn
-> > > > [  102.936391] RIP: 0010:nvkm_falcon_v1_wait_for_halt+0xb7/0xc0 [nouveau]
-> > > > [  102.936422] Code: 8b 40 10 48 8b 78 10 4c 8b 67 50 4d 85 e4 75 03
-> > > > 4c 8b 27 e8 cb 90 dd e0 4c 89 e2 48 c7 c7 32 35 a7 a0 48 89 c6 e8 e0
-> > > > 8a 12 e1 <0f> 0b eb a7 e8 40 ee 17 e1 0f 1f 44 00 00 41 54 be 80 96 98
-> > > > 00 55
-> > > > [  102.936422] RSP: 0018:ffffc90002aebb70 EFLAGS: 00010246
-> > > > [  102.936424] RAX: 0000000000000000 RBX: ffffffffffffff92 RCX: 0000000000000000
-> > > > [  102.936425] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-> > > > [  102.936425] RBP: ffff88810bbdfc98 R08: 0000000000000000 R09: 0000000000000000
-> > > > [  102.936426] R10: 0000000000000000 R11: 0000000000000000 R12: ffff888101d83bc0
-> > > > [  102.936426] R13: 0000000000000000 R14: 0000000000000000 R15: ffff888102f13400
-> > > > [  102.936427] FS:  0000000000000000(0000) GS:ffff88887c2c0000(0000)
-> > > > knlGS:0000000000000000
-> > > > [  102.936428] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > > [  102.936429] CR2: 0000562dd42c70a2 CR3: 000000000560a001 CR4: 00000000003706e0
-> > > > [  102.936430] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > > [  102.936430] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > > [  102.936431] Call Trace:
-> > > > [  102.936432]  <TASK>
-> > > > [  102.936434]  gm200_acr_hsfw_boot+0xc6/0x170 [nouveau]
-> > > > [  102.936466]  nvkm_acr_hsf_boot+0x82/0x100 [nouveau]
-> > > > [  102.936496]  tu102_acr_init+0x15/0x30 [nouveau]
-> > > > [  102.936526]  nvkm_acr_load+0x3e/0x110 [nouveau]
-> > > > [  102.936555]  ? nvkm_notify_get+0x5c/0x70 [nouveau]
-> > > > [  102.936583]  ? ktime_get+0x39/0xa0
-> > > > [  102.936586]  nvkm_subdev_init+0x97/0xe0 [nouveau]
-> > > > [  102.936614]  ? ktime_get+0x39/0xa0
-> > > > [  102.936616]  nvkm_device_init+0x127/0x1d0 [nouveau]
-> > > > [  102.936664]  nvkm_udevice_init+0x45/0x70 [nouveau]
-> > > > [  102.936709]  nvkm_object_init+0x3b/0x130 [nouveau]
-> > > > [  102.936738]  nvkm_object_init+0x73/0x130 [nouveau]
-> > > > [  102.936766]  nvkm_object_init+0x73/0x130 [nouveau]
-> > > > [  102.936795]  nouveau_do_resume+0x2b/0xc0 [nouveau]
-> > > > [  102.936842]  nouveau_pmops_resume+0x67/0x90 [nouveau]
-> > > > [  102.936888]  ? pci_legacy_resume+0x80/0x80
-> > > > [  102.936891]  dpm_run_callback+0x49/0x150
-> > > > [  102.936893]  device_resume+0x105/0x280
-> > > > [  102.936895]  ? pm_dev_err+0x34/0x34
-> > > > [  102.936897]  async_resume+0x19/0x30
-> > > > [  102.936899]  async_run_entry_fn+0x2b/0x110
-> > > > [  102.936901]  process_one_work+0x1e5/0x3b0
-> > > > [  102.936903]  worker_thread+0x4d/0x3e0
-> > > > [  102.936904]  ? rescuer_thread+0x3a0/0x3a0
-> > > > [  102.936905]  kthread+0x146/0x170
-> > > > [  102.936906]  ? set_kthread_struct+0x50/0x50
-> > > > [  102.936907]  ret_from_fork+0x1f/0x30
-> > > > [  102.936910]  </TASK>
-> > > > [  102.936910] ---[ end trace e592260dfc1c79fb ]---
-> > > > [  102.936912] nouveau 0000:01:00.0: acr: AHESASC binary failed
-> > > > [  102.936913] nouveau 0000:01:00.0: acr: init failed, -110
-> > > > [  102.937027] nouveau 0000:01:00.0: init failed with -110
-> > > > [  102.937028] nouveau: Xorg.bin[1996]:00000000:00000080: init failed with -110
-> > > > [  102.937029] nouveau: DRM-master:00000000:00000000: init failed with -110
-> > > > [  102.937029] nouveau: DRM-master:00000000:00000000: init failed with -110
-> > > > [  102.937030] nouveau 0000:01:00.0: DRM: Client resume failed with error: -110
-> > > > [  102.937032] PM: dpm_run_callback(): pci_pm_resume+0x0/0xe0 returns -110
-> > > > [  102.937040] nouveau 0000:01:00.0: PM: failed to resume async: error -110
-> > > > [  103.134577] ata5: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-> > > > [  103.137666] ata5.00: ACPI cmd ef/10:06:00:00:00:00 (SET FEATURES) succeeded
-> > > > [  103.137670] ata5.00: ACPI cmd f5/00:00:00:00:00:00 (SECURITY FREEZE
-> > > > LOCK) filtered out
-> > > > [  103.137672] ata5.00: ACPI cmd b1/c1:00:00:00:00:00 (DEVICE
-> > > > CONFIGURATION OVERLAY) filtered out
-> > > > [  103.137838] ata5.00: ACPI cmd 00/00:00:00:00:00:a0 (NOP) rejected
-> > > > by device (Stat=0x51 Err=0x04)
-> > > > [  103.138290] ata5.00: supports DRM functions and may not be fully accessible
-> > > > [  103.139265] ata5.00: disabling queued TRIM support
-> > > > [  103.143959] ata5.00: ACPI cmd ef/10:06:00:00:00:00 (SET FEATURES) succeeded
-> > > > [  103.143963] ata5.00: ACPI cmd f5/00:00:00:00:00:00 (SECURITY FREEZE
-> > > > LOCK) filtered out
-> > > > [  103.143964] ata5.00: ACPI cmd b1/c1:00:00:00:00:00 (DEVICE
-> > > > CONFIGURATION OVERLAY) filtered out
-> > > > [  103.144103] ata5.00: ACPI cmd 00/00:00:00:00:00:a0 (NOP) rejected
-> > > > by device (Stat=0x51 Err=0x04)
-> > > > [  103.144532] ata5.00: supports DRM functions and may not be fully accessible
-> > > > [  103.145328] ata5.00: disabling queued TRIM support
-> > > > [  103.148888] ata5.00: configured for UDMA/133
-> > > > [  103.159132] ahci 0000:00:17.0: port does not support device sleep
-> > > > [  103.159591] ata5.00: Enabling discard_zeroes_data
-> > > > [  103.674691] OOM killer enabled.
-> > > > [  103.674692] Restarting tasks ... done.
-> > > > [  103.719371] PM: suspend exit
-> > > > [  103.992941] [drm:lspcon_init [i915]] *ERROR* Failed to probe lspcon
-> > > > [  103.993000] [drm:intel_dp_detect_dpcd [i915]] *ERROR* LSPCON init
-> > > > failed on port D
-> > > > [  106.221326] e1000e 0000:00:1f.6 em1: NIC Link is Up 1000 Mbps Full
-> > > > Duplex, Flow Control: Rx/Tx
-> > > >
-> > > > The unusual thing is the "nouveau 0000:01:00.0: acr: unload binary
-> > > > failed" message. This does not happen with 5.15.x kernels. Has anybody
-> > > > else seen this with 5.16?
-> > > >
-> > > > Happy weekend
-> > > > Martin
-> > >
-> > > OK, so I did a coarse bisection and found that the problem started
-> > > between 5.16.2 and 5.16.3. Reverting commit
-> > > 9b98913f3d035f639eda2e213e308fd5567c00d2 makes it go away. The funny
-> > > thing is, that the same change to
-> > > drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c is in 5.17-rc where it
-> > > works. So I suspect that the 5.16 stable patches are missing another
-> > > piece to work. Hope this helps.
-> > >
-> >
-> > ohh, that indeed helps. Thanks for testing that. I will see if I can verify it.
-> >
->
-> mind applying 4cdd2450bf739bada353e82d27b00db9af8c3001 on top of
-> 5.16/5.15 and see if that fixes the issue? Thanks!
->
+On 15/02/2022 08:59, Krzysztof Kozlowski wrote:
+> On Tue, 15 Feb 2022 at 08:40, Uwe Kleine-König
+> <u.kleine-koenig@pengutronix.de> wrote:
+>>
+>> Hello,
+>>
+>> [dropped Anson Huang and Yash Shah from Cc: which were not reachable for
+>> my last mail]
+>>
+>> On Mon, Feb 14, 2022 at 10:21:39PM +0100, Krzysztof Kozlowski wrote:
+>>> Hi,
+>>>
+>>> Changes since v1:
+>>> 1. Add tags.
+>>> 2. Adjust subject (Uwe).
+>>
+>> However you only took a part of my suggestion ...
+>>
+>>> Krzysztof Kozlowski (15):
+>>>   dt-bindings: pwm: allwinner,sun4i-a10: Include generic pwm schema
+>>>   dt-bindings: pwm: imx: Include generic pwm schema
+>>>   dt-bindings: pwm: intel,lgm: Include generic pwm schema
+>>>   dt-bindings: pwm: iqs620a: Include generic pwm schema
+>>>   dt-bindings: pwm: mxs: Include generic pwm schema
+>>>   dt-bindings: pwm: rockchip: Include generic pwm schema
+>>>   dt-bindings: pwm: sifive: Include generic pwm schema
+>>>   dt-bindings: pwm: renesas,pwm: Include generic pwm schema
+>>>   dt-bindings: pwm: toshiba,visconti: Include generic pwm schema
+>>>   dt-bindings: pwm: brcm,bcm7038: Do not require pwm-cells twice
+>>>   dt-bindings: pwm: intel,keembay: Do not require pwm-cells twice
+>>
+>> ... The actual patch has a space after the comma, I like this variant
+>> without comma better as this is a compatible string.
+> 
+> I am confused. My patch does not have comma after space. Your reply
+> had such in the subject, but not in the proposed new subject you wrote
+> in msg, so I left it as is. Without comma. If you still see comma, it
+> is something with your mail client.
+> 
+> See:
+> https://lore.kernel.org/linux-devicetree/20220214212154.8853-12-krzysztof.kozlowski@canonical.com/T/#u
+> 
+> Also reply from Vijayakannan does not have comma:
+> https://lore.kernel.org/linux-devicetree/20220214081605.161394-11-krzysztof.kozlowski@canonical.com/T/#m80af695f2c751341bc971114aefa00ccc929a3ec
+> 
+>> Also a # before
+>> pwm-cells would be nice.
+> 
+> I can add this.
 
- not at all. Applying that commit on top of 5.16.9 solves it for me.
-No problems after 10 suspend/resume cycles. Will you push this to Greg
-for 5.16.x inclusion? Here my
+Just one more clarification - you proposed also to remove "pwm:"
+middle-prefix. Shall I remove it from every patch and use instead full
+file name?
 
-Tested-by: Martin Knoblauch <knobi@knobisoft.de>
-Reported-By: Martin Knoblauch <knobi@knobisoft.de>
 
-I did not test on 5.15.x, as I never had the problem there.
-
-Martin
+Best regards,
+Krzysztof

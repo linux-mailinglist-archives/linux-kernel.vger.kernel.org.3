@@ -2,147 +2,365 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763784B60B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 03:03:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9604B60B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 03:04:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233443AbiBOCD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 21:03:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47170 "EHLO
+        id S232600AbiBOCEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 21:04:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233545AbiBOCDB (ORCPT
+        with ESMTP id S231868AbiBOCEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 21:03:01 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2100.outbound.protection.outlook.com [40.107.255.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6860BC12C8;
-        Mon, 14 Feb 2022 18:02:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bISQYVO5IyIvi4NMf+tDyS+9MbNEjZvuhB0+8jh+BJZEMfUoC3Kti4CWCDG9S0dDrFb1EV3V+e3BZ1ZRdhYvJCiob5XvmS9sFCoqdgY/KL85QgmFiIczTstuLvDR+5Vd3DLtcBQ/ekYH8b/YurdcMlGLM1V8WxdxreCIgNM+pCmVXtow6y+mYmSSFLlqqZxUV2aSP4micVdeqWVwxGnC91ruExI9gtcW9YwVwFc8QHoOwtb3cIWjrahPWx+Nq7a39dIYGrjTi7ewWhs0pmyhmTufflfLQUa+6LqdO+jsGrXf0uvy4yIYRo32ZGWCYWDSJVlXbCeYkefa/m6r+q3S6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VbT87ECK3tkcuzgFCVCn/Ps3r1QcJVlwvcsyxI7ipvk=;
- b=Q8KN8jHviDFwyezPGbE0+ISECGWmumYrWMBMAcCHBlSg0kjoLvl6xUI+U4VpSHqZCgV0rLhQgE97Xe8M5HcTGZk7R+g50H427L+BCfJLGFcv+TaYcMDoSdzwSFmElv4Pf8KMQB/wySVnVeyR2f6+xDhSxX9lN7md5HWpSE3wQOq42PTFYYETYq4rl8ObzrSKxgMysedQNXXUJsSz5Z8D/XGGoFavoCLlDcXNNtvXgJWagiMRI4N7Zql4cfsyiPsnjmcbn0e0cJFLjqdnPdtkLr8+lfqvp+TJyJxnmDZr8fk71nHnr/xAtpqpdUkPtoPuiH7oLSOWCYkgEzkf/a4TDw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VbT87ECK3tkcuzgFCVCn/Ps3r1QcJVlwvcsyxI7ipvk=;
- b=iqLmRPGRT7QUFLFqzMiMy+kR6kQ61FFcrPhlU5O0fghN8JJtJ3fM561ZiysNdFu827EjTlKQhQpohJIc6O0q8Ftyo7i4Um1tKYVPPzRgXXZOIrDzL6elIEF7uJ68L1lRR4ACB1ZF7rpoywga+NANJK2JP2yb9INYiFPiTdxekv8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
- by TYZPR06MB4510.apcprd06.prod.outlook.com (2603:1096:400:65::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.15; Tue, 15 Feb
- 2022 02:02:25 +0000
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::80b4:e787:47a9:41bb]) by SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::80b4:e787:47a9:41bb%4]) with mapi id 15.20.4975.019; Tue, 15 Feb 2022
- 02:02:25 +0000
-From:   Qing Wang <wangqing@vivo.com>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Wang Qing <wangqing@vivo.com>
-Subject: [PATCH] net: bluetooth: assign len after null check
-Date:   Mon, 14 Feb 2022 18:01:56 -0800
-Message-Id: <1644890516-65362-1-git-send-email-wangqing@vivo.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: SG2P153CA0008.APCP153.PROD.OUTLOOK.COM (2603:1096::18) To
- SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
+        Mon, 14 Feb 2022 21:04:32 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178CD246;
+        Mon, 14 Feb 2022 18:04:23 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id b5so17211353qtq.11;
+        Mon, 14 Feb 2022 18:04:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RY3hPu0eYznmJ1wv60D8yqIoxL5AcD8VFfxgkL4Y/Fo=;
+        b=J1N+91krUrrbs2vmM/dl9OLcuxIrdwW15uOPD4fXjHLn7gT+z7qMpxkI7gP9pz1RjX
+         ONF6sNw7QyBT/gc0yA57fImANC+JXUT5rqdIog7gTMKX/tp5eOQTGWhDaKxWEtQg/hjg
+         rWSQyN+TlSL719hxVuSZCRXKlQOl0FBhJs78VFDbF/IG4enTQDSr38qu/Qoy0cjRzr4w
+         DZhVxvZKFYEjP2sJ+tM53JWYJ3HnR17USJt25+4G6+GJ/sLF+oZHG1gHoRoh9WBmzXwj
+         wGIIUlvvZ9y0azqY0muaCAsrA3fq926RlDIbp6oWj9/xb8e2JXSsC1piCqYTa6VwXrNo
+         GXDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RY3hPu0eYznmJ1wv60D8yqIoxL5AcD8VFfxgkL4Y/Fo=;
+        b=u5UXnYDwIwEcsv56Lt8QtuwaHnp2wiVncFH+bjAccIxKOBSavuaHwiEBM5Y6JESz1G
+         xHoj/bIy5vPMIVYxdoK4b7gCrL0ENrlX7rhDYKwSZcIzVjz2pJNCqiP7Ldpes+sm83JR
+         0kvCgAmXTGzeaEW43D9fAgdqniy5XWGwUDHrwu5Zx7B3EFdq/Aedu8kbSGjhjou7zThj
+         R4wp6/2XORmsSMKJFYE3L6R3RYA/zDuy8B0G+lQlSV1jl8iwHZBOxuQUhWj7PG0G9+GB
+         VJMDRHGAdXd8MOM1Dbk5bAbBju8tJES7hoZl5aflu1fgPsTAXYvhvq4P9atguxxrjF2u
+         4vtQ==
+X-Gm-Message-State: AOAM532KOo4g8u6snKiuRDBpNZjgJGHDF5JYDfWkjE/uU4Au/+fgCK1M
+        w7PPRdIHCTtx0jGoqaP9Uf4mx95+z40kjs00vxVl8P9M
+X-Google-Smtp-Source: ABdhPJyHb+9vNUNBrn9tP3r5axEzGzX4CFU+9PXTEvYEwXnN432HeGIRlNUBhhg6WeJoh29FZkYnpaUsEhXU1oOoWNM=
+X-Received: by 2002:ac8:5708:: with SMTP id 8mr1288562qtw.668.1644890662050;
+ Mon, 14 Feb 2022 18:04:22 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 098a09ac-385c-4f96-45bf-08d9f027364b
-X-MS-TrafficTypeDiagnostic: TYZPR06MB4510:EE_
-X-Microsoft-Antispam-PRVS: <TYZPR06MB4510472F108B8CF51C5FC753BD349@TYZPR06MB4510.apcprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:415;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3SyxE8fYne+TdCFSpmSwMsDS0GQoOTp5eXuGdXQJnR1yxPJYpZLl/LG2xEnwEm5Uo2Rux8SGz1+5qrcEouu6mbF1iEWaASf/Po1cFEeYM9SN5F5nXXu3Dtb6LKln0kF14Aqmtrtnezx0q7GV8mJPVcFZPblMd0uksBYf19e5xMrAVPInS5qPr2t8HI0sJjOQABQRrbw+nksGC9Xv7qbnSL/iZYOmkGWVtehy/sr/JWe9tAoVp4djUANoAVE0crmAdc5RNY9+j3Hp1YwipTMgdJeXvInrpJRUl92sFJEGw1aFU1XCqguVR8oXJ3iOV0PE4kfe5ULnRC4gqnLNGiKuMZeFjsShGL1ZwJNlyfT9a4RkA/5YpCzfLL3wXNy2Yw+L3BRaHqCnEIOQf+axE3u5gt5VBVKGCKK4HA8pVhsSwgIOnGvLk54cm8Haex50XM8x/txUz7HcEH8TPdL8XfgVY2hSJz9/cfdfnZ5PAlb1tdy/UBeUFqTgv/Te8XqmVVbfQz9Rw/S7VtRSS0uB6fUUnGwQ3Xvt8Y9xTAPU64rwuzJESCZ0juCAGKAtlH2vgL12grKfzqz59uO/zhLLcRma+8LBHBWYoPEo+GRLKDhXvH5XaJ0Hrg6Lt5irIVB0VO+vx2Jt7jxBjFXJdsGNtWTBBTEt5WhbT7QFYc5ffSwyTjc5fXJdQWzxNsB4HkpJkVvtMcZRl90tqlfIfwcmXfZCIQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(86362001)(83380400001)(107886003)(52116002)(186003)(26005)(6512007)(6486002)(2616005)(6666004)(110136005)(4744005)(508600001)(8936002)(66946007)(4326008)(66476007)(66556008)(5660300002)(2906002)(38100700002)(38350700002)(36756003)(316002)(8676002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ha1/DhTUa4FwpkkKylx23HckJJBNVNy6v8TDBf3y8zwdKFMFmkaMDmp84Gg7?=
- =?us-ascii?Q?IDcSUdGg/zOTmce8elBlmbDNn7/9NymoxGzKcX9EDtBPxPtAT9vbZ5n6EVoj?=
- =?us-ascii?Q?QtJVl+pkxsqfMF9cGkmenl4KvNaS1Zvc4gp9TBXYBh60lXaWZG0QZRMoiVRs?=
- =?us-ascii?Q?18gcmQw1OKDLbjWJET4HDY1gWHIrV868H0xM6u7mW52NYcvYbmOopr/rHYAa?=
- =?us-ascii?Q?LXy7TW15nZGh4PYSFJGbjTO4FZvn3cBKOPXdeRO0y9LOmcTYbJ7EnwvAF/JB?=
- =?us-ascii?Q?YnUv3R/DE/Uk02j8OtDMjvh1bXShP+tWcbHRMuOj/RsO+MaK7Olwg8q8mEQ3?=
- =?us-ascii?Q?N6PMCFKPDDoj3UFlbgnXZEki+T+OFSrQ3wo+0+qmXREdxyKkILRpUoxdCaGu?=
- =?us-ascii?Q?3Snb6cOQFEROXCHP+3mStVgJdM1lazzRdRPElb+79Yotz/vAXc01o6xWeF2d?=
- =?us-ascii?Q?Psx+L/NcLnCm8iKBmKXP0mBdQryBSzzYZu1WgyNFvI7u1GwBvVvHH3kc1hC+?=
- =?us-ascii?Q?qEcH+ZYxNl05xo62cQf4BBCZKvBDqamd3/rxh+AprpZsu5w5PtJxvh3xMYii?=
- =?us-ascii?Q?sc7rEajv4YjDrvb8w4reklQWoDspm978FugzMkYXc1Ok2YJXwhM5kC68r2+U?=
- =?us-ascii?Q?wqC6Dv8PoaJWbhvvjIGvsJx02e+gL6/rZsJcyrkDmhXd3+mzUYx/eV09cDFQ?=
- =?us-ascii?Q?0us+nt38Uv/DbbB4BEjRGAtr9xRULciTZO3pSzFZYZly8M91hRulfHwPTrbL?=
- =?us-ascii?Q?O/04owGoKKuNEibPfcXEcUdE6thJ5J1SPilaZF8u+4Wl6p8eiCzIf5lI+iRp?=
- =?us-ascii?Q?alFufgSu0Xe8LAQlp0umLh6KFBrgP6K+phJWfkgKZqOhRMib0iy1WTVh52dV?=
- =?us-ascii?Q?wHBiwVRkDoTOQLKbFFt9CLm8KaVqw+EQDS4BYtajP9SC2i7UmhxjoI4KcuJY?=
- =?us-ascii?Q?CGsAaIgzt0vRCay8wrOVkqK6skzIkQpNoxXMFBrtjYTsZnJXAGA1x+oOE2hK?=
- =?us-ascii?Q?oDbKaXggVj87ylkjz1jkrMPS5A1TYoTV8Qbb/Mq1/kszlV/K4gycpmI4KSUl?=
- =?us-ascii?Q?ShUJssbKvyl9uLDxdiAnFtkTqNbfKkR0/xrCXsxqHVrpBcuM1co8LXKajk0h?=
- =?us-ascii?Q?sniIKOkWGkDG2ts5M3P7cG05VtY5UVLby+Z9Zf50Ao/1oFEEKA6n8LJuYuUM?=
- =?us-ascii?Q?O435OI9rr3pB8whwBC1zKfSe8PtCYrNQ0wjO/GlJkPXdD5/LzCJeQncXUaTj?=
- =?us-ascii?Q?pz0tMoe2teSVeoPach398nqRaMNis6TOAMCOu3E6eVMi7KEJBy+uFXQ8mxn3?=
- =?us-ascii?Q?egL+47NLnDmTT/y+VBt66RMukE3b95k+xPDXeF3FKwEtY0R8m/wIVp995UM6?=
- =?us-ascii?Q?7O8sGcPuJ4D+U6qfVa305e0CHlXZaVQUsxis5rqu/mhhhNJcNRfGmplkxRDC?=
- =?us-ascii?Q?hqyHFRyhnKvdpeHLKAPyp6cDizOZy3nu7YdFHdZPcBhJ9hKsEFBcXHVobu47?=
- =?us-ascii?Q?+QCIfVXDwMcQjz65qWY0mAw66rEUuFtZR0sm9yFVusHS8M4NqiR53AjPcMZX?=
- =?us-ascii?Q?ZxtjpLrqhvUPqIp2dAQvLJXnHmaVXWoMpJThD4tMWDF6xuofInxWJ+/TucBQ?=
- =?us-ascii?Q?us/7SRqzU6eWGkwpyVHQ4lk=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 098a09ac-385c-4f96-45bf-08d9f027364b
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2022 02:02:25.7116
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: u6u+yKqr/IsLbIvSMI3GupLVUFuyVlaq/LjtT6GJzsdajF7DqseAp78rXFgDdJr7DZYB53lnMhWBuzaNmj96vQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4510
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220203143226.4023622-1-benjamin.tissoires@redhat.com>
+ <20220203143226.4023622-11-benjamin.tissoires@redhat.com> <CAF8JNhKbEWj1b4o2Uv7snXa_JGt0bk5wyUGP4_77aHTLhPRT3w@mail.gmail.com>
+ <CAF8JNhLeOn==FhaujjYY7o+f3J7xQcitdUUUJOOeZL1QEGKhRA@mail.gmail.com> <CAO-hwJ+NVb=Z0=1jeLuCFjGPAXnjn6hgHDjWx0+ETcE3uQhhzQ@mail.gmail.com>
+In-Reply-To: <CAO-hwJ+NVb=Z0=1jeLuCFjGPAXnjn6hgHDjWx0+ETcE3uQhhzQ@mail.gmail.com>
+From:   Ping Cheng <pinglinux@gmail.com>
+Date:   Mon, 14 Feb 2022 18:04:10 -0800
+Message-ID: <CAF8JNhLUWJXbWG2rsYZvemm+3LbHA0QwAND05h9oM74LKDAfLA@mail.gmail.com>
+Subject: Re: [PATCH v2 10/12] HID: input: remove the need for HID_QUIRK_INVERT
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>,
+        Aaron Armstrong Skomra <skomra@gmail.com>,
+        Jason Gerecke <killertofu@gmail.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Qing <wangqing@vivo.com>
+On Mon, Feb 14, 2022 at 2:23 AM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+>
+> Hi Ping,
+>
+> On Thu, Feb 10, 2022 at 6:44 AM Ping Cheng <pinglinux@gmail.com> wrote:
+> >
+> > Sorry for the noise. Hit the wrong buttons...
+> >
+> > On Wed, Feb 9, 2022 at 9:21 PM Ping Cheng <pinglinux@gmail.com> wrote:
+> > >
+> > > On Thu, Feb 3, 2022 at 6:33 AM Benjamin Tissoires
+> > > <benjamin.tissoires@redhat.com> wrote:
+> > > >
+> > > > HID_QUIRK_INVERT is kind of complex to deal with and was bogus.
+> > > >
+> > > > Furthermore, it didn't make sense to use a global per struct hid_device
+> > > > quirk for something dynamic as the current state.
+> > > >
+> > > > Store the current tool information in the report itself, and re-order
+> > > > the processing of the fields to enforce having all the tablet "state"
+> > > > fields before getting to In Range and other input fields.
+> > > >
+> > > > This way, we now have all the information whether a tool is present
+> > > > or not while processing In Range.
+> > > >
+> > > > This new behavior enforces that only one tool gets forwarded to userspace
+> > > > at the same time, and that if either eraser or invert is set, we enforce
+> > > > BTN_TOOL_RUBBER.
+> > > >
+> > > > Note that the release of the previous tool now happens in its own EV_SYN
+> > > > report so userspace doesn't get confused by having 2 tools.
+> > > >
+> > > > These changes are tested in the following hid-tools regression tests:
+> > > > https://gitlab.freedesktop.org/libevdev/hid-tools/-/merge_requests/127
+> > > >
+> > > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > > >
+> > > > ---
+> > > >
+> > > > Changes in v2:
+> > > > - rework the entire tool switching, this makes the processing
+> > > >   slightly more complex but is better for existing userspace.
+> > > > ---
+> > > >  drivers/hid/hid-input.c | 98 +++++++++++++++++++++++++++++++++++++----
+> > > >  include/linux/hid.h     |  6 ++-
+> > > >  2 files changed, 95 insertions(+), 9 deletions(-)
+> > > >
+> > > > diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+> > > > index 61d91117f4ae..9f8853640648 100644
+> > > > --- a/drivers/hid/hid-input.c
+> > > > +++ b/drivers/hid/hid-input.c
+> > > > @@ -63,8 +63,11 @@ static const struct {
+> > > >   * This still leaves us 65535 individual priority values.
+> > > >   */
+> > > >  static const __u32 hidinput_usages_priorities[] = {
+> > > > +       HID_DG_ERASER,          /* Eraser (eraser touching) must always come before tipswitch */
+> > > >         HID_DG_INVERT,          /* Invert must always come before In Range */
+> > > > -       HID_DG_INRANGE,
+> > > > +       HID_DG_TIPSWITCH,       /* Is the tip of the tool touching? */
+> > > > +       HID_DG_TIPPRESSURE,     /* Tip Pressure might emulate tip switch */
+> > > > +       HID_DG_INRANGE,         /* In Range needs to come after the other tool states */
+> > > >  };
+> > > >
+> > > >  #define map_abs(c)     hid_map_usage(hidinput, usage, &bit, &max, EV_ABS, (c))
+> > > > @@ -1365,9 +1368,38 @@ static void hidinput_handle_scroll(struct hid_usage *usage,
+> > > >         input_event(input, EV_REL, usage->code, hi_res);
+> > > >  }
+> > > >
+> > > > +static void hid_report_release_tool(struct hid_report *report, struct input_dev *input,
+> > > > +                                   unsigned int tool)
+> > > > +{
+> > > > +       /* if the given tool is not currently reported, ignore */
+> > > > +       if (!test_bit(tool, input->key))
+> > > > +               return;
+> > > > +
+> > > > +       /*
+> > > > +        * if the given tool was previously set, release it,
+> > > > +        * release any TOUCH and send an EV_SYN
+> > > > +        */
+> > > > +       input_event(input, EV_KEY, BTN_TOUCH, 0);
+> > > > +       input_event(input, EV_KEY, tool, 0);
+> >
+> > Took a while for me to find the right device and setup the proper
+> > system for the testing. This block missing the serial number:
+> >
+> >         input_event(input, EV_MSC, MSC_SERIAL, 0);
+> >
+> > Without this line, the next tool will not get its serial number.
+>
+> I am tempted to simply disregard this request. It has been known for
+> ages that the evdev values are cached, so if you do not have the value
+> you need that means that the value has been sent previously (or you
+> can request it upon start with an ioctl). So in this particular case,
+> I don't really see the logic in forcing the SERIAL into the TOOL type
+> when the tool is clearly unrelated to the serial.
+>
+> My fear here is that by linking together too many axes, we may enter
+> in a state where we can not untangle them when needed.
 
-len should be assigned after a null check
+I see your point. We indeed added those ioctl's in the X driver to
+avoid missing the initial states of some of the key events.
 
-Signed-off-by: Wang Qing <wangqing@vivo.com>
----
- net/bluetooth/mgmt_util.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > > > +       input_event(input, EV_SYN, SYN_REPORT, 0);
+> > > > +
+> > > > +       report->tool = 0;
+> > > > +}
+> > > > +
+> > > > +static void hid_report_set_tool(struct hid_report *report, struct input_dev *input,
+> > > > +                               unsigned int new_tool)
+> > > > +{
+> > > > +       if (report->tool != new_tool)
+> > > > +               hid_report_release_tool(report, input, report->tool);
+> > > > +
+> > > > +       input_event(input, EV_KEY, new_tool, 1);
+> > > > +       report->tool = new_tool;
+> > > > +}
+> > > > +
+> > > >  void hidinput_hid_event(struct hid_device *hid, struct hid_field *field, struct hid_usage *usage, __s32 value)
+> > > >  {
+> > > >         struct input_dev *input;
+> > > > +       struct hid_report *report = field->report;
+> > > >         unsigned *quirks = &hid->quirks;
+> > > >
+> > > >         if (!usage->type)
+> > > > @@ -1418,25 +1450,75 @@ void hidinput_hid_event(struct hid_device *hid, struct hid_field *field, struct
+> > > >         }
+> > > >
+> > > >         switch (usage->hid) {
+> > > > +       case HID_DG_ERASER:
+> > > > +               report->tool_active |= !!value;
+> > > > +
+> > > > +               /*
+> > > > +                * if eraser is set, we must enforce BTN_TOOL_RUBBER
+> > > > +                * to accommodate for devices not following the spec.
+> > > > +                */
+> > > > +               if (value)
+> > > > +                       hid_report_set_tool(report, input, BTN_TOOL_RUBBER);
+> > > > +               else if (report->tool != BTN_TOOL_RUBBER)
+> > > > +                       /* value is off, tool is not rubber, ignore */
+> > > > +                       return;
+> > > > +
+> > > > +               /* let hid-input set BTN_TOUCH */
+> > > > +               break;
+> > > > +
+> > > >         case HID_DG_INVERT:
+> > > > -               *quirks = value ? (*quirks | HID_QUIRK_INVERT) : (*quirks & ~HID_QUIRK_INVERT);
+> > > > +               report->tool_active |= !!value;
+> > > > +
+> > > > +               /*
+> > > > +                * If invert is set, we store BTN_TOOL_RUBBER.
+> > > > +                */
+> > > > +               if (value)
+> > > > +                       hid_report_set_tool(report, input, BTN_TOOL_RUBBER);
+> > > > +               else if (!report->tool_active)
+> > > > +                       /* tool_active not set means Invert and Eraser are not set */
+> > > > +                       hid_report_release_tool(report, input, BTN_TOOL_RUBBER);
+> > > > +
+> > > > +               /* no further processing */
+> > > >                 return;
+> > > >
+> > > >         case HID_DG_INRANGE:
+> > > > -               if (value) {
+> > > > -                       input_event(input, usage->type, (*quirks & HID_QUIRK_INVERT) ? BTN_TOOL_RUBBER : usage->code, 1);
+> > > > -                       return;
+> > > > +               report->tool_active |= !!value;
+> > > > +
+> > > > +               if (report->tool_active) {
+> > > > +                       /*
+> > > > +                        * if tool is not set but is marked as active,
+> > > > +                        * assume ours
+> > > > +                        */
+> > > > +                       if (!report->tool)
+> > > > +                               hid_report_set_tool(report, input, usage->code);
+> > > > +               } else {
+> > > > +                       hid_report_release_tool(report, input, usage->code);
+> > > >                 }
+> > > > -               input_event(input, usage->type, usage->code, 0);
+> > > > -               input_event(input, usage->type, BTN_TOOL_RUBBER, 0);
+> > > > +
+> > > > +               /* reset tool_active for the next event */
+> > > > +               report->tool_active = false;
+> > > > +
+> > > > +               /* no further processing */
+> > > >                 return;
+> > > >
+> > > > +       case HID_DG_TIPSWITCH:
+> > > > +               report->tool_active |= !!value;
+> > > > +
+> > > > +               /* if tool is set to RUBBER we should ignore the current value */
+> > > > +               if (report->tool == BTN_TOOL_RUBBER)
+> > > > +                       return;
+> >
+> > This case should return before HID_DG_INVERT is checked since we may
+> > get TIPSWITCH bit before INVERT. In fact, the device that I tested
+> > sends the tipswatch bit before the invert bit. So, I alway get a PEN
+> > in and out before I get ERASER events, when I bring the pen in with
+> > the side-switch/invert bit pressed.
+> >
+> > However, we know not all devices support INVERT. We probably have to
+> > keep the invert quirk to decide if BTN_TOOL_PEN should be set here or
+> > wait until HID_DG_INVERT is reached.
+>
+> I am under the impression that you completely missed the point of the
+> patch series. This series re-orders the processing of the events, and
+> if you look at the very first hunk in this patch, you'll see that the
+> new processing ensures we treat INVERT and ERASER before TIPSWITCH, no
+> matter the order of the device.
 
-diff --git a/net/bluetooth/mgmt_util.c b/net/bluetooth/mgmt_util.c
-index edee60b..37eef2c
---- a/net/bluetooth/mgmt_util.c
-+++ b/net/bluetooth/mgmt_util.c
-@@ -77,11 +77,12 @@ int mgmt_send_event_skb(unsigned short channel, struct sk_buff *skb, int flag,
- {
- 	struct hci_dev *hdev;
- 	struct mgmt_hdr *hdr;
--	int len = skb->len;
-+	int len;
- 
- 	if (!skb)
- 		return -EINVAL;
- 
-+	len = skb->len;
- 	hdev = bt_cb(skb)->mgmt.hdev;
- 
- 	/* Time stamp */
--- 
-2.7.4
+Yeah, I read that part of the code, more than once. But, my evtest
+gave me an extra set of TOOL_PEN events before TOOL_ERASER. I was
+confused too. Then I thought maybe the code still relies on the actual
+order of the usages. Anyway, we've done enough discussion and testing,
+let's move on. The patchset is:
 
+Reviewed-by: Ping Cheng <ping.cheng@wacom.com>
+Tested-by: Ping Cheng <ping.cheng@wacom.com>
+
+Thank you for your effort, Benjamin!
+Ping
+
+> So when we process TIPSWITCH here, we are sure that if BTN_TOOL_RUBBER
+> is set, either INVERT or ERASER is set to 1, whether or not they come
+> before or after in the report.
+>
+> >
+> > If you are interested in the evtest output, please let me know. I'll
+> > share it with you offline so we don't abuse this list...
+>
+> evtest is the output of the kernel, and it doesn't give me much more
+> than "it's broken". However, if you can give me the hid-recorder
+> outputs, I'll be able to reproduce locally and compare the output as I
+> fix the code. Of course the best would be to add test cases in the
+> hid-tools repo, but I'll need the hid-recorder anyway to understand
+> what is failing and to be able to write the tests.
+>
+> Cheers,
+> Benjamin
+>
+> >
+> > Cheers,
+> > Ping
+> >
+> > > > +               break;
+> > > > +
+> > > >         case HID_DG_TIPPRESSURE:
+> > > >                 if (*quirks & HID_QUIRK_NOTOUCH) {
+> > > >                         int a = field->logical_minimum;
+> > > >                         int b = field->logical_maximum;
+> > > >
+> > > > -                       input_event(input, EV_KEY, BTN_TOUCH, value > a + ((b - a) >> 3));
+> > > > +                       if (value > a + ((b - a) >> 3)) {
+> > > > +                               input_event(input, EV_KEY, BTN_TOUCH, 1);
+> > > > +                               report->tool_active = true;
+> > > > +                       }
+> > > >                 }
+> > > >                 break;
+> > > >
+> > > > diff --git a/include/linux/hid.h b/include/linux/hid.h
+> > > > index eaad0655b05c..feb8df61168f 100644
+> > > > --- a/include/linux/hid.h
+> > > > +++ b/include/linux/hid.h
+> > > > @@ -347,7 +347,7 @@ struct hid_item {
+> > > >   */
+> > > >  #define MAX_USBHID_BOOT_QUIRKS 4
+> > > >
+> > > > -#define HID_QUIRK_INVERT                       BIT(0)
+> > > > +/* BIT(0) reserved for backward compatibility, was HID_QUIRK_INVERT */
+> > > >  #define HID_QUIRK_NOTOUCH                      BIT(1)
+> > > >  #define HID_QUIRK_IGNORE                       BIT(2)
+> > > >  #define HID_QUIRK_NOGET                                BIT(3)
+> > > > @@ -515,6 +515,10 @@ struct hid_report {
+> > > >         unsigned maxfield;                              /* maximum valid field index */
+> > > >         unsigned size;                                  /* size of the report (bits) */
+> > > >         struct hid_device *device;                      /* associated device */
+> > > > +
+> > > > +       /* tool related state */
+> > > > +       bool tool_active;                               /* whether the current tool is active */
+> > > > +       unsigned int tool;                              /* BTN_TOOL_* */
+> > > >  };
+> > > >
+> > > >  #define HID_MAX_IDS 256
+> > > > --
+> > > > 2.33.1
+> > > >
+> >
+>

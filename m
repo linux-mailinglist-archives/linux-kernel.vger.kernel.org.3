@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C294B7A79
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 23:32:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E0B4B7A82
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 23:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240501AbiBOWcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 17:32:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53712 "EHLO
+        id S230326AbiBOWgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 17:36:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233342AbiBOWcp (ORCPT
+        with ESMTP id S229481AbiBOWgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 17:32:45 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF559FB42
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 14:32:34 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: alyssa)
-        with ESMTPSA id 775CD1F44DC5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644964352;
-        bh=qG9SVvMjlyz4qoL+19w6ELJjlO669Za8jz7+TJy+kt8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kxjgBS55i5eKGUrYZHuVMmSeaaOnUvH++tqFW41kGog7o9dHnReY/PYeP4zwiQER2
-         QZHvYJOyvg4YyYuwcnJtJVifWEXS/u0fqrikPt2lnTMuyW2FGlJeel4ZP3Pg/AIngS
-         7Drpx+Y1yfOAmScLs747gxCDTqvH5D60TytlpM6nvh5zIFw9wKCKrjsDxGS6CRmQyV
-         hXV6iiUZmJA+1wl2xRCAfhX/qxjr6gdjv+c0mzTKw70JrRdfltKbWe0uDG6TJlIq0C
-         ShWJqqnYkAxDc2SMM+cbhnMXZpGHnXu/9W6XE51SkG0SzQrZYEBNA96h69IoRdjoGk
-         285SVnwOf75sQ==
-Date:   Tue, 15 Feb 2022 17:32:24 -0500
-From:   Alyssa Rosenzweig <alyssa@collabora.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Steven Price <steven.price@arm.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH] drm/panfrost: Dynamically allocate pm_domains
-Message-ID: <Ygwp+LDliCnbkMZQ@maud>
-References: <20220214203132.4722-1-alyssa.rosenzweig@collabora.com>
- <CAL_JsqKdb0_N252hR=iv3Lpi6T9+iCRBwzBQhS7UQGFNhM5k=A@mail.gmail.com>
+        Tue, 15 Feb 2022 17:36:11 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4C6DF4BA;
+        Tue, 15 Feb 2022 14:36:00 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 82844FF805;
+        Tue, 15 Feb 2022 22:35:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1644964558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lBalxrzov6e2o+ggkJX3OhifLZtzYDKI+iOG8iH+4r8=;
+        b=FlJAN/ZwqQb5nCjZP4a01Z71873HDIe0OvqJNQ1P9977sj2UI8LjQ5IHD9M+lcGqKaXtAh
+        in77fdQxK66rxQtAeTWFqqrcUnJE3kILPlV1ks+KSDyVRKPS3BqEPazIFffQXCk4WBbIfI
+        nLifuUKP6stDCXuwOBtguuGwRaFn6IQSMTG8L9b/852mRQb1RC/A3SFCvcJLdwrVm9snKC
+        5UWTGn6VF5lTvwux0btBrxmZj281twzK0dQ9nkIFHrjzP9g3pZQZVI5QSQCU7Od9YXQGt6
+        qPGqHPzp4NKza0WgP9cOhE4Tn6dnFzWAUywwkKViqmhjH7YDDCRssyUt5snVzQ==
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>,
+        Alessandro Zummo <a.zummo@towertech.it>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: pcf2127: fix bug when reading alarm registers
+Date:   Tue, 15 Feb 2022 23:35:57 +0100
+Message-Id: <164496455010.67358.12781580107745972027.b4-ty@bootlin.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220208162908.3182581-1-hugo@hugovil.com>
+References: <20220208162908.3182581-1-hugo@hugovil.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqKdb0_N252hR=iv3Lpi6T9+iCRBwzBQhS7UQGFNhM5k=A@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,10 +55,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I'd do the oneliner changing it to 5 and be done with it. That being
-> said, we have plenty of examples of doing this both ways, so whatever
-> makes people happy.
+On Tue, 8 Feb 2022 11:29:07 -0500, Hugo Villeneuve wrote:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> 
+> The first bug is that reading the 5 alarm registers results in a read
+> operation of 20 bytes. The reason is because the destination buffer is
+> defined as an array of "unsigned int", and we use the sizeof()
+> operator on this array to define the bulk read count.
+> 
+> [...]
 
-Excellent, that's the patch I wrote originally :-)
+Applied, thanks!
 
-Dropping this patch, unless Angelo (or someone else) strongly objects.
+[1/1] rtc: pcf2127: fix bug when reading alarm registers
+      commit: 73ce05302007eece23a6acb7dc124c92a2209087
+
+Best regards,
+-- 
+Alexandre Belloni <alexandre.belloni@bootlin.com>

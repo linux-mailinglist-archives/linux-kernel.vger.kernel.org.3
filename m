@@ -2,226 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E4A4B6966
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:36:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 531194B696A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:37:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236548AbiBOKhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 05:37:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42990 "EHLO
+        id S236567AbiBOKha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 05:37:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiBOKg5 (ORCPT
+        with ESMTP id S229448AbiBOKh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 05:36:57 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5176CA7A
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 02:36:47 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id 124so26487522ybn.11
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 02:36:47 -0800 (PST)
+        Tue, 15 Feb 2022 05:37:29 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FA070F7C;
+        Tue, 15 Feb 2022 02:37:18 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id m22so14949849pfk.6;
+        Tue, 15 Feb 2022 02:37:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=4KTL35Bo4Fdy1NiVAS6uRnpi0byqJqzZzyqoX1d6AMs=;
-        b=fE3z6ZYl6X4ABGnmSHSpwe0HwMl1WxtAS/2YGV2fOgHnRVHhIl6iyWYFGxrFTwEwSS
-         8vcaYnYu2nsKDAxuwciBHoxnCfWgvXwyJgBXiBN8MjgYDOk8JCGXn31z8DqkanSBkX2K
-         jzjmDL3gzxX2qnxdl+7Uh8p8zxjd2jTQzd1IGqYS0WyArr36aGrmIyJ69n/w5QjskDz4
-         uIhe8H/grP8mPk5X1Fut0IW90JGPzQc7RV4v61TxUZQSUioteyVapWX4q0Hxb5kbGlsM
-         JU5QG3enx40mpm9qX51XTwrAegajd4voE0I4txqO5FWk1A9f6IxYDvXwBn5pMieXuDZm
-         GWuA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=o7EA9TEAuJMo56GB1oxjqr4sMG5yZbF1t8svUxaUlWc=;
+        b=nMU/2kft/oSs9PdmnYhOULCiNiCJ/N1FNKZ3dYRsPy4L7W+tiStxq/+4GwfhOig56g
+         yuzlp8ySDrGp1c4Y9JdZjbA7EUqYKG9UgrBDxrYopRsZkYYB8wb5aoydChfKT5ophvNj
+         8kpOZk3p6aafsvb71AwFzkq1fGQNA14iHngpQqTi1YcpdYAXD+LEzVjI6Hexex6Dy90Z
+         KVBMfZXXLtSa92wJgtSextVLesT4PQJxh7as+fhE/pTF60vII7nppoczbLQOxEs3eB+R
+         06LHsSMOzrPx887o5E3SQpoDH7+52gpoBhIYJ1t386dnyYuXoTAvmhba2lwjK2UDRklo
+         9DJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4KTL35Bo4Fdy1NiVAS6uRnpi0byqJqzZzyqoX1d6AMs=;
-        b=gM/z7mn0PQ6ORJChm97Imk/WbFvHgjyp4zPiQM3m9LH9PSLyagoZmhqoMk80+Bg0wD
-         Av9dZEKk4ecisGXBN+gujhLltHTV9+lLtpDEGs3Ue4H54aC9yPE6x1beu49HyhFxMIkp
-         KDUwN29eXwZinFU23rk/LwBjCyy7Yg1exB5/guoxYEnVJOKyqGYXyIEJGxJx87bfoaFY
-         pX1LogCJLVhM4CUJzm2Hlj5d4X25tM+3elF3wJgw4YHmd/xbNfuYF+lv3ebW/d/vll6T
-         RJZNv/0Xi59lfy0GxE0N3ywFzeHhvnjLlbqTEcS8FDkT0PVKuEtTr646xRB1bpuPkTFc
-         v89Q==
-X-Gm-Message-State: AOAM5327r1e0zAueo2NUXcKm25uca+VvTczHLIbrtf08jcDNPSk8c9yh
-        Uz7VEOAFvg4Y8np2///i0Fx5sZpLNBD6usOnfs03Nw==
-X-Google-Smtp-Source: ABdhPJzQVdNWMINzfp0BMtejmWzhKosM7Sbl6myl20Ydx3Ej4p2wfX6qPfsp9/ZfESlk+K8jsEzqEELiMpshJ2npgn0=
-X-Received: by 2002:a05:6902:1201:: with SMTP id s1mr3337961ybu.704.1644921406275;
- Tue, 15 Feb 2022 02:36:46 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=o7EA9TEAuJMo56GB1oxjqr4sMG5yZbF1t8svUxaUlWc=;
+        b=D1K6UrfNkCODbBzM82iIIyPfC7dFcZLh66hvKC1P8SnjpueEFwbG7NJN7alQg2a0Xq
+         0Hg7c4xclyPqiSZnjlpwx1DLjZDJ7DeSR8xWvBcf+brDFvrp7pPDfFQb0SnllD/uDzEL
+         rM9RQWf6j07hw1gTzhMobvszl/NRWJI1masvMoTXO9NIENfMdFVDWKnoeRagk78ogc51
+         gU6iPZhKWqEuGHQW3e+auCQkDI1S/9MqyKiHahgVj6RyhS4WF1DUz4nX0KhydlNMED6n
+         RnGT602ow5PxYoIpxfEqNC62EqVQ9dXVNfS9XjmfMt6rpaRkVbav69uT1phmI6/SKf7E
+         Pqdw==
+X-Gm-Message-State: AOAM5333HukllsSTi/8EZiH8bhiZZcrK6XkI4gmSXHfeNchVhUSqkQju
+        wTBnIszLlNy03MoqmKA0jdY=
+X-Google-Smtp-Source: ABdhPJwOLEVABPhET1mCtpLiwD7OASr6UCShYK71di9VS/O2Nue+QgDeTSCAYD3igXq+X6ki/obJKA==
+X-Received: by 2002:a63:4e0e:: with SMTP id c14mr3006920pgb.490.1644921438118;
+        Tue, 15 Feb 2022 02:37:18 -0800 (PST)
+Received: from localhost.localdomain ([162.219.34.248])
+        by smtp.gmail.com with ESMTPSA id a17sm16712622pju.15.2022.02.15.02.37.13
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 15 Feb 2022 02:37:17 -0800 (PST)
+From:   kerneljasonxing@gmail.com
+To:     davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, edumazet@google.com, pabeni@redhat.com,
+        weiwan@google.com, aahringo@redhat.com, yangbo.lu@nxp.com,
+        fw@strlen.de, xiangxia.m.yue@gmail.com, tglx@linutronix.de
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kerneljasonxing@gmail.com,
+        Jason Xing <xingwanli@kuaishou.com>
+Subject: [PATCH] net: do not set SOCK_RCVBUF_LOCK if sk_rcvbuf isn't reduced
+Date:   Tue, 15 Feb 2022 18:36:39 +0800
+Message-Id: <20220215103639.11739-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-References: <20220214092445.946718557@linuxfoundation.org>
-In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 15 Feb 2022 16:06:35 +0530
-Message-ID: <CA+G9fYuswGGxTH7j17P69+zfx0TZMSjCU1pfQqU3kyxW7aNX0A@mail.gmail.com>
-Subject: Re: [PATCH 4.9 00/34] 4.9.302-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Feb 2022 at 14:58, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.9.302 release.
-> There are 34 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.9.302-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.9.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+From: Jason Xing <xingwanli@kuaishou.com>
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Normally, user doesn't care the logic behind the kernel if they're
+trying to set receive buffer via setsockopt. However, if the new value
+of the receive buffer is not smaller than the initial value which is
+sysctl_tcp_rmem[1] implemented in tcp_rcv_space_adjust(), the server's
+wscale will shrink and then lead to the bad bandwidth. I think it is
+not appropriate.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Here are some numbers:
+$ sysctl -a | grep rmem
+net.core.rmem_default = 212992
+net.core.rmem_max = 40880000
+net.ipv4.tcp_rmem = 4096	425984	40880000
 
-## Build
-* kernel: 4.9.302-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.9.y
-* git commit: 133617288e03af9de3f241a342aa8d75164a2b46
-* git describe: v4.9.301-35-g133617288e03
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.3=
-01-35-g133617288e03
+Case 1
+on the server side
+    # iperf -s -p 5201
+on the client side
+    # iperf -c [client ip] -p 5201
+It turns out that the bandwidth is 9.34 Gbits/sec while the wscale of
+server side is 10. It's good.
 
-## Test Regressions (compared to v4.9.301)
-No test regressions found.
+Case 2
+on the server side
+    #iperf -s -p 5201 -w 425984
+on the client side
+    # iperf -c [client ip] -p 5201
+It turns out that the bandwidth is reduced to 2.73 Gbits/sec while the
+wcale is 2, even though the receive buffer is not changed at all at the
+very beginning.
 
-## Metric Regressions (compared to v4.9.301)
-No metric regressions found.
+Therefore, I added one condition where only user is trying to set a
+smaller rx buffer. After this patch is applied, the bandwidth of case 2
+is recovered to 9.34 Gbits/sec.
 
-## Test Fixes (compared to v4.9.301)
-No test fixes found.
+Fixes: e88c64f0a425 ("tcp: allow effective reduction of TCP's rcv-buffer via setsockopt")
+Signed-off-by: Jason Xing <xingwanli@kuaishou.com>
+---
+ net/core/filter.c | 7 ++++---
+ net/core/sock.c   | 8 +++++---
+ 2 files changed, 9 insertions(+), 6 deletions(-)
 
-## Metric Fixes (compared to v4.9.301)
-No metric fixes found.
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 4603b7c..99f5d9c 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4795,9 +4795,10 @@ static int _bpf_setsockopt(struct sock *sk, int level, int optname,
+ 		case SO_RCVBUF:
+ 			val = min_t(u32, val, sysctl_rmem_max);
+ 			val = min_t(int, val, INT_MAX / 2);
+-			sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
+-			WRITE_ONCE(sk->sk_rcvbuf,
+-				   max_t(int, val * 2, SOCK_MIN_RCVBUF));
++			val = max_t(int, val * 2, SOCK_MIN_RCVBUF);
++			if (val < sock_net(sk)->ipv4.sysctl_tcp_rmem[1])
++				sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
++			WRITE_ONCE(sk->sk_rcvbuf, val);
+ 			break;
+ 		case SO_SNDBUF:
+ 			val = min_t(u32, val, sysctl_wmem_max);
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 4ff806d..e5e9cb0 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -923,8 +923,6 @@ static void __sock_set_rcvbuf(struct sock *sk, int val)
+ 	 * as a negative value.
+ 	 */
+ 	val = min_t(int, val, INT_MAX / 2);
+-	sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
+-
+ 	/* We double it on the way in to account for "struct sk_buff" etc.
+ 	 * overhead.   Applications assume that the SO_RCVBUF setting they make
+ 	 * will allow that much actual data to be received on that socket.
+@@ -935,7 +933,11 @@ static void __sock_set_rcvbuf(struct sock *sk, int val)
+ 	 * And after considering the possible alternatives, returning the value
+ 	 * we actually used in getsockopt is the most desirable behavior.
+ 	 */
+-	WRITE_ONCE(sk->sk_rcvbuf, max_t(int, val * 2, SOCK_MIN_RCVBUF));
++	val = max_t(int, val * 2, SOCK_MIN_RCVBUF);
++	if (val < sock_net(sk)->ipv4.sysctl_tcp_rmem[1])
++		sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
++
++	WRITE_ONCE(sk->sk_rcvbuf, val);
+ }
+ 
+ void sock_set_rcvbuf(struct sock *sk, int val)
+-- 
+1.8.3.1
 
-## Test result summary
-total: 58950, pass: 48443, fail: 310, skip: 9068, xfail: 1129
-
-## Build Summary
-* arm: 254 total, 238 passed, 16 failed
-* arm64: 32 total, 31 passed, 1 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 18 total, 18 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 31 total, 31 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org

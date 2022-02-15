@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C842B4B7606
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 894E74B78C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244019AbiBOUKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 15:10:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47986 "EHLO
+        id S244071AbiBOUKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 15:10:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241321AbiBOUKa (ORCPT
+        with ESMTP id S244038AbiBOUKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 15:10:30 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE835DB867;
-        Tue, 15 Feb 2022 12:10:18 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21FKA9IH071778;
+        Tue, 15 Feb 2022 15:10:36 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36E4B0A78;
+        Tue, 15 Feb 2022 12:10:25 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21FKA9bI018348;
         Tue, 15 Feb 2022 14:10:09 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1644955809;
-        bh=oRGfgk65UBNyDtOEXhs/elyUR2uWsKKCsKDcR1SgWNc=;
+        s=ti-com-17Q1; t=1644955810;
+        bh=tMaUBK9GS2DYL8XYqxg51eAoO9e0JArwp8CSwzE7WZg=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=yRuKkDfob0k4EWbdO0JUvwzZPD7fQ0yAHvwGt6yOJOBy/92rFsP+3Brb0WbWAbU9g
-         X7t+NUc+L5l2e0KIgIxAOqU9oFlKlU+rDRS4TwjlxY3l4obk2LDs64au4QIpw1FTVV
-         P1kFfiTDIWPyKcQZ7TntlnZGTbedEn6IuDAS4u6o=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21FKA9PB114900
+        b=FFV5muA7ouHmwwi/WFmMbyXwVNrfZzAbnCxixFrwCnDQpcAA2Vf75rzz5BXpM78kl
+         xjG7TFUsC2GyDuB8spzeS9xZJ55USDT+yse6+wXAfRwUh04v7nYKlzUz7DJbaMTDG0
+         UwYbEMn6/sLh5q5xZ4yQTcOu+aNqLqg5UVzdn7q4=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21FKA9UV105494
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Tue, 15 Feb 2022 14:10:09 -0600
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 15
  Feb 2022 14:10:09 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
  Frontend Transport; Tue, 15 Feb 2022 14:10:09 -0600
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21FKA9sU114677;
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21FKA9pV127941;
         Tue, 15 Feb 2022 14:10:09 -0600
 From:   Nishanth Menon <nm@ti.com>
 To:     Tero Kristo <kristo@kernel.org>,
@@ -49,9 +49,9 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Rob Herring <robh+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
         <stable@vger.kernel.org>
-Subject: [PATCH 2/5] arm64: dts: ti: k3-j721e: Fix gic-v3 compatible regs
-Date:   Tue, 15 Feb 2022 14:10:05 -0600
-Message-ID: <20220215201008.15235-3-nm@ti.com>
+Subject: [PATCH 3/5] arm64: dts: ti: k3-j7200: Fix gic-v3 compatible regs
+Date:   Tue, 15 Feb 2022 14:10:06 -0600
+Message-ID: <20220215201008.15235-4-nm@ti.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220215201008.15235-1-nm@ti.com>
 References: <20220215201008.15235-1-nm@ti.com>
@@ -61,8 +61,8 @@ Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,23 +83,23 @@ gic-v2 emulation.
 [2] https://lore.kernel.org/all/87k0e0tirw.wl-maz@kernel.org/
 [3] https://developer.arm.com/documentation/100095/0002/way1382452674438
 
-Fixes: 2d87061e70de ("arm64: dts: ti: Add Support for J721E SoC")
-Cc: stable@vger.kernel.org # 5.10+
+Fixes: d361ed88455f ("arm64: dts: ti: Add support for J7200 SoC")
+Cc: stable@vger.kernel.org
 Reported-by: Marc Zyngier <maz@kernel.org>
 Signed-off-by: Nishanth Menon <nm@ti.com>
 ---
 Testing: based on next-20220215
-j721e-sk: https://gist.github.com/nmenon/db3f29f2f241f1b5294c7e4054c3fbf1
+j7200-evm: https://gist.github.com/nmenon/23a7844a794a0123af9b211eee2b7d0b
 
- arch/arm64/boot/dts/ti/k3-j721e-main.dtsi | 5 ++++-
- arch/arm64/boot/dts/ti/k3-j721e.dtsi      | 1 +
+ arch/arm64/boot/dts/ti/k3-j7200-main.dtsi | 5 ++++-
+ arch/arm64/boot/dts/ti/k3-j7200.dtsi      | 1 +
  2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-index 599861259a30..db0669985e42 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-@@ -76,7 +76,10 @@ gic500: interrupt-controller@1800000 {
+diff --git a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
+index 05a627ad6cdc..16684a2f054d 100644
+--- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
+@@ -54,7 +54,10 @@ gic500: interrupt-controller@1800000 {
  		#interrupt-cells = <3>;
  		interrupt-controller;
  		reg = <0x00 0x01800000 0x00 0x10000>,	/* GICD */
@@ -111,18 +111,18 @@ index 599861259a30..db0669985e42 100644
  
  		/* vcpumntirq: virtual CPU interface maintenance interrupt */
  		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e.dtsi b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
-index 4a3872fce533..0e23886c9fd1 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
-@@ -139,6 +139,7 @@ cbass_main: bus@100000 {
- 			 <0x00 0x0e000000 0x00 0x0e000000 0x00 0x01800000>, /* PCIe Core*/
- 			 <0x00 0x10000000 0x00 0x10000000 0x00 0x10000000>, /* PCIe DAT */
- 			 <0x00 0x64800000 0x00 0x64800000 0x00 0x00800000>, /* C71 */
+diff --git a/arch/arm64/boot/dts/ti/k3-j7200.dtsi b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
+index 64fef4e67d76..b6da0454cc5b 100644
+--- a/arch/arm64/boot/dts/ti/k3-j7200.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
+@@ -129,6 +129,7 @@ cbass_main: bus@100000 {
+ 			 <0x00 0x00a40000 0x00 0x00a40000 0x00 0x00000800>, /* timesync router */
+ 			 <0x00 0x01000000 0x00 0x01000000 0x00 0x0d000000>, /* Most peripherals */
+ 			 <0x00 0x30000000 0x00 0x30000000 0x00 0x0c400000>, /* MAIN NAVSS */
 +			 <0x00 0x6f000000 0x00 0x6f000000 0x00 0x00310000>, /* A72 PERIPHBASE */
- 			 <0x44 0x00000000 0x44 0x00000000 0x00 0x08000000>, /* PCIe2 DAT */
- 			 <0x44 0x10000000 0x44 0x10000000 0x00 0x08000000>, /* PCIe3 DAT */
- 			 <0x4d 0x80800000 0x4d 0x80800000 0x00 0x00800000>, /* C66_0 */
+ 			 <0x00 0x70000000 0x00 0x70000000 0x00 0x00800000>, /* MSMC RAM */
+ 			 <0x00 0x18000000 0x00 0x18000000 0x00 0x08000000>, /* PCIe1 DAT0 */
+ 			 <0x41 0x00000000 0x41 0x00000000 0x01 0x00000000>, /* PCIe1 DAT1 */
 -- 
 2.31.1
 

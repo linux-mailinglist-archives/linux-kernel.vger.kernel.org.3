@@ -2,123 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29BCB4B6989
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:39:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9564B698E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 11:40:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236578AbiBOKja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 05:39:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55554 "EHLO
+        id S236615AbiBOKjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 05:39:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234419AbiBOKj1 (ORCPT
+        with ESMTP id S236620AbiBOKjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 05:39:27 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85EBC8AE4A;
-        Tue, 15 Feb 2022 02:39:17 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 31E1E13D5;
-        Tue, 15 Feb 2022 02:39:17 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.89.144])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4B7AE3F66F;
-        Tue, 15 Feb 2022 02:39:10 -0800 (PST)
-Date:   Tue, 15 Feb 2022 10:39:06 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>, X86 ML <x86@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:S390" <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [PATCH 08/14] arm64: simplify access_ok()
-Message-ID: <YguCysZGYYWUhAPk@FVFF77S0Q05N>
-References: <20220214163452.1568807-1-arnd@kernel.org>
- <20220214163452.1568807-9-arnd@kernel.org>
- <CAMj1kXHixUFjV=4m3tzfGz7AiRWc-VczymbKuZq7dyZZNuLKxQ@mail.gmail.com>
- <CAK8P3a2VfvDkueaJNTA9SiB+PFsi_Q17AX+aL46ueooW2ahmQw@mail.gmail.com>
- <CAMj1kXGkG0KMD2rnKAJc3V7X9LP1grbcHTNYMnj_q4GiYfG2pQ@mail.gmail.com>
- <CAK8P3a0NTqK_m7q909d8FN6is8k4_u3zeckC9XOrjEi7kqSvmg@mail.gmail.com>
+        Tue, 15 Feb 2022 05:39:42 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4C78AE56;
+        Tue, 15 Feb 2022 02:39:23 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id m126-20020a1ca384000000b0037bb8e379feso1131350wme.5;
+        Tue, 15 Feb 2022 02:39:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dY2qoYSu/ufPuibmcjrwAakA38kBxe3PyTTX05JNu5M=;
+        b=eGMVegXMtfU89YJ+2QMpOisJ6p4W2cZT3XH93Lp7B+TJumy3ZAjqHYNNGRnUZ/q1f3
+         pgOU9izly1xmrxbx+jXIhJA6DmaFzqQIgCVCXb2ZEvQbwWPBxP/ZmHGgJoULZYmCjHVb
+         i9Iv0gI7vQ+0yK7FawVx1j17jDDoBpjnkq9XLNqrbz3A2vUrlW6A8ohU9QfqBwWhDbhQ
+         LF6D7xEp8FTvbmVYxSqhE78rBQ2IkZBKWCPn4jQ6I674z8Eza8KO8niaFKM9W+NnyGEV
+         qOmwkCKpAL7361ue5KStQA5Ilk5ZEl1wMBbCY2y/Syb9UQo4TGjEPF2SC3jdZLoNrL6p
+         fFRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dY2qoYSu/ufPuibmcjrwAakA38kBxe3PyTTX05JNu5M=;
+        b=CuptPR3U/STox2lnfeBriEnJdQY5f5VUgWMFufTH2J18beEIDoFBeUZsHnp+XITL+z
+         +HOX9uRrkvtEGKNI0SYbsME/P2EwWg3RxM+dcShzNZTS7tEnRfJXZG5gmCIrbl5RnY27
+         k1hu+0kAHMTUAEhJAfbxgqsJ6tvLURzAiTBBpKLoF8O+0jydZ3itzzM3BvwJHQtqQUbF
+         Nxojh4bVWf0fms1Grwkz688r4PEjZmNydKaWN1D9XfOGLSCXjP/xIu9S3DgpCJqtipgZ
+         +FT9oZRYR4z7x8l1ZbhBti/4t+5RW+hLmfSUx6Q+zwgB/D+NFXEDhqlh1bHTABjcqWTl
+         waUQ==
+X-Gm-Message-State: AOAM530WKKy4qlI21U5DSTra4N7HD+y2hsSzkA3BKDVXby327lSLtzqh
+        Axza05nw1sjXC/BMmz7vHVE=
+X-Google-Smtp-Source: ABdhPJwudJ2tF7gx/s45232Z3eqIWAB37px39FLPN+n6UA9ntFJydj6DLcA/ypdW3+6RwfN9kX1J9A==
+X-Received: by 2002:a7b:cdfa:: with SMTP id p26mr2547773wmj.109.1644921562324;
+        Tue, 15 Feb 2022 02:39:22 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id j15sm11949254wmq.6.2022.02.15.02.39.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 02:39:21 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Joseph CHAMG <josright123@gmail.com>, netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] net: dm9051: Fix spelling mistake "eror" -> "error"
+Date:   Tue, 15 Feb 2022 10:39:20 +0000
+Message-Id: <20220215103920.78380-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0NTqK_m7q909d8FN6is8k4_u3zeckC9XOrjEi7kqSvmg@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 10:39:46AM +0100, Arnd Bergmann wrote:
-> On Tue, Feb 15, 2022 at 10:21 AM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > On Tue, 15 Feb 2022 at 10:13, Arnd Bergmann <arnd@kernel.org> wrote:
-> >
-> > arm64 also has this leading up to the range check, and I think we'd no
-> > longer need it:
-> >
-> >     if (IS_ENABLED(CONFIG_ARM64_TAGGED_ADDR_ABI) &&
-> >         (current->flags & PF_KTHREAD || test_thread_flag(TIF_TAGGED_ADDR)))
-> >             addr = untagged_addr(addr);
-> 
-> I suspect the expensive part here is checking the two flags, as untagged_addr()
-> seems to always just add a sbfx instruction. Would this work?
-> 
-> #ifdef CONFIG_ARM64_TAGGED_ADDR_ABI
-> #define access_ok(ptr, size) __access_ok(untagged_addr(ptr), (size))
-> #else // the else path is the default, this can be left out.
-> #define access_ok(ptr, size) __access_ok((ptr), (size))
-> #endif
+There are spelling mistakes in debug messages. Fix them.
 
-This would be an ABI change, e.g. for tasks without TIF_TAGGED_ADDR.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/net/ethernet/davicom/dm9051.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I don't think we should change this as part of this series.
+diff --git a/drivers/net/ethernet/davicom/dm9051.c b/drivers/net/ethernet/davicom/dm9051.c
+index d2513c97f83e..a63d17e669a0 100644
+--- a/drivers/net/ethernet/davicom/dm9051.c
++++ b/drivers/net/ethernet/davicom/dm9051.c
+@@ -771,11 +771,11 @@ static int dm9051_loop_rx(struct board_info *db)
+ 
+ 			if (db->rxhdr.status & RSR_ERR_BITS) {
+ 				db->bc.status_err_counter++;
+-				netdev_dbg(ndev, "check rxstatus-eror (%02x)\n",
++				netdev_dbg(ndev, "check rxstatus-error (%02x)\n",
+ 					   db->rxhdr.status);
+ 			} else {
+ 				db->bc.large_err_counter++;
+-				netdev_dbg(ndev, "check rxlen large-eror (%d > %d)\n",
++				netdev_dbg(ndev, "check rxlen large-error (%d > %d)\n",
+ 					   rxlen, DM9051_PKT_MAX);
+ 			}
+ 			return dm9051_all_restart(db);
+-- 
+2.34.1
 
-Thanks,
-Mark.

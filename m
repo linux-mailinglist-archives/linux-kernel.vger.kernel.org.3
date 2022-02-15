@@ -2,80 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D68104B6CD6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:59:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FD04B6CD3
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238020AbiBOM7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 07:59:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52202 "EHLO
+        id S237984AbiBOM7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 07:59:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235619AbiBOM7o (ORCPT
+        with ESMTP id S236600AbiBOM7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 07:59:44 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59F07F6ED
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:59:34 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJxQA-0008UY-W5; Tue, 15 Feb 2022 13:59:07 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJxQ2-00Gku7-Gs; Tue, 15 Feb 2022 13:58:57 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJxQ1-003Kkc-4f; Tue, 15 Feb 2022 13:58:57 +0100
-Date:   Tue, 15 Feb 2022 13:58:56 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-riscv@lists.infradead.org, Vignesh R <vigneshr@ti.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-rockchip@lists.infradead.org,
-        Rahul Tanwar <rtanwar@maxlinear.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Jeff LaBundy <jeff@labundy.com>, linux-sunxi@lists.linux.dev,
-        linux-pwm@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH v2 00/15] pwm: dt-bindings: Include generic pwm schema
-Message-ID: <20220215125856.es2euyoqo6mp4y2t@pengutronix.de>
-References: <20220214212154.8853-1-krzysztof.kozlowski@canonical.com>
- <20220215074030.3nugwproxjh3lwhl@pengutronix.de>
- <CA+Eumj42Hojp1m4deuWnqMOaaNaupTSkzPaNbL_0eyBL-aDi_g@mail.gmail.com>
- <7df71f8d-cdc3-4b2e-cf0a-7112eff28142@canonical.com>
- <20220215094106.k35pmoxt2nk44dsj@pengutronix.de>
- <20220215104952.3z7y2t5udwab64kh@pengutronix.de>
- <d042abb2-e5df-42b9-824a-6fc3b9c6df6c@canonical.com>
+        Tue, 15 Feb 2022 07:59:13 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542727F6F3
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:59:03 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id j26so21137336wrb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:59:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=zCpn2JXq0VskflvQH2SSx8I9uTFbNRNFydiZKPnDvhI=;
+        b=lDOFr/XxJeC0Y/42M08O7MvgoGf2FhswQUQpb+D1iRzw+/MCqXjZyDN32KSXivqcP6
+         3FBgZILaDnjuOZgwIzIzZcObKk6UmZhc/Fa0tBVi7aLeWjLmh99S8enRwY8dE4VeOyBW
+         elAzCU/6enOMQFl15N1Tgg1v7JDAPXYbP1W1iS1YkcanoBEbu0hzkPdqblqU3FEkaPgt
+         AmbgkacxfeuhcI9Vg9u8r924SDfc0q7H8zX6+mBCu9aebjIKFPaCxnugvp1a63s04FEW
+         yC/Pe5igxodlc4AKf6Tas1Q8fPsPMxVUpYcjPziF7yDdtWqU7NREx5gUtBdizd1nRYxy
+         9XsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=zCpn2JXq0VskflvQH2SSx8I9uTFbNRNFydiZKPnDvhI=;
+        b=rS/dyYOJcCkB4yg6JsGgXEUPC0e8a2u8LGqFrFjaChMtdX5riMZGpTQuiZXc6DVNbY
+         JIwbgu5hYAPfKUPt/6YY1O4x8tY5GXPjmwVpkrV6TkyLJw8OHOVT+A/MgocoItJt3ol0
+         mFYYBb0nfcQf/jDSWyGB0RU5n8ciMSRQI4CYA7Nhna+RJLLoTIekmi7BOSW9YlmHBbUk
+         JsyBqLfOkORS4tBunTTHBW6gD0AC1zWk2haWlH6FAVGHJpVvD4MGirf8VGRTDK8FjTwR
+         EqhTzy3bA5Gi1ValJOhuWPQDEYfv9Pcb+sS4ZahNcYBOML1bE3q6tRvfkqnm2MMnbiT7
+         r5vQ==
+X-Gm-Message-State: AOAM5315ZkPGhDcN06QdFHAIBlOrKW5m/cU58gV4qsFBx9wJoGctDfe5
+        Q3PLeF8nZED1EMl8r4EfURg1pw==
+X-Google-Smtp-Source: ABdhPJzR05gOWEzqqC2fldn5T2nllYrHfwlb4CSV4AZs7n55qc988hVFpstMdBCmyRZ47NemCaA44w==
+X-Received: by 2002:adf:f803:: with SMTP id s3mr3237755wrp.660.1644929941843;
+        Tue, 15 Feb 2022 04:59:01 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id bg23sm20081554wmb.5.2022.02.15.04.59.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 04:59:01 -0800 (PST)
+Date:   Tue, 15 Feb 2022 12:58:59 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/15] dt-bindings: mfd: qcom,tcsr: Document msm8953
+ compatible
+Message-ID: <YgujkzAezfFBNRDP@google.com>
+References: <20220112194118.178026-1-luca@z3ntu.xyz>
+ <20220112194118.178026-4-luca@z3ntu.xyz>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t6gdx5ppa5aoudwv"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d042abb2-e5df-42b9-824a-6fc3b9c6df6c@canonical.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220112194118.178026-4-luca@z3ntu.xyz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,114 +79,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 12 Jan 2022, Luca Weiss wrote:
 
---t6gdx5ppa5aoudwv
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Document the compatible for tcsr found in msm8953.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> ---
+>  Documentation/devicetree/bindings/mfd/qcom,tcsr.txt | 1 +
+>  1 file changed, 1 insertion(+)
 
-On Tue, Feb 15, 2022 at 01:41:20PM +0100, Krzysztof Kozlowski wrote:
-> On 15/02/2022 11:49, Uwe Kleine-K=F6nig wrote:
-> > On Tue, Feb 15, 2022 at 10:41:06AM +0100, Uwe Kleine-K=F6nig wrote:
-> >> On Tue, Feb 15, 2022 at 09:02:25AM +0100, Krzysztof Kozlowski wrote:
-> >>> On 15/02/2022 08:59, Krzysztof Kozlowski wrote:
-> >>>> On Tue, 15 Feb 2022 at 08:40, Uwe Kleine-K=F6nig
-> >>>> <u.kleine-koenig@pengutronix.de> wrote:
-> >>>>>
-> >>>>> Hello,
-> >>>>>
-> >>>>> [dropped Anson Huang and Yash Shah from Cc: which were not reachabl=
-e for
-> >>>>> my last mail]
-> >>>>>
-> >>>>> On Mon, Feb 14, 2022 at 10:21:39PM +0100, Krzysztof Kozlowski wrote:
-> >>>>>> Hi,
-> >>>>>>
-> >>>>>> Changes since v1:
-> >>>>>> 1. Add tags.
-> >>>>>> 2. Adjust subject (Uwe).
-> >>>>>
-> >>>>> However you only took a part of my suggestion ...
-> >>>>>
-> >>>>>> Krzysztof Kozlowski (15):
-> >>>>>>   dt-bindings: pwm: allwinner,sun4i-a10: Include generic pwm schema
-> >>>>>>   dt-bindings: pwm: imx: Include generic pwm schema
-> >>>>>>   dt-bindings: pwm: intel,lgm: Include generic pwm schema
-> >>>>>>   dt-bindings: pwm: iqs620a: Include generic pwm schema
-> >>>>>>   dt-bindings: pwm: mxs: Include generic pwm schema
-> >>>>>>   dt-bindings: pwm: rockchip: Include generic pwm schema
-> >>>>>>   dt-bindings: pwm: sifive: Include generic pwm schema
-> >>>>>>   dt-bindings: pwm: renesas,pwm: Include generic pwm schema
-> >>>>>>   dt-bindings: pwm: toshiba,visconti: Include generic pwm schema
-> >>>>>>   dt-bindings: pwm: brcm,bcm7038: Do not require pwm-cells twice
-> >>>>>>   dt-bindings: pwm: intel,keembay: Do not require pwm-cells twice
-> >>>>>
-> >>>>> ... The actual patch has a space after the comma, I like this varia=
-nt
-> >>>>> without comma better as this is a compatible string.
-> >>>>
-> >>>> I am confused. My patch does not have comma after space. Your reply
-> >>>> had such in the subject, but not in the proposed new subject you wro=
-te
-> >>>> in msg, so I left it as is. Without comma. If you still see comma, it
-> >>>> is something with your mail client.
-> >>>>
-> >>>> See:
-> >>>> https://lore.kernel.org/linux-devicetree/20220214212154.8853-12-krzy=
-sztof.kozlowski@canonical.com/T/#u
-> >>>>
-> >>>> Also reply from Vijayakannan does not have comma:
-> >>>> https://lore.kernel.org/linux-devicetree/20220214081605.161394-11-kr=
-zysztof.kozlowski@canonical.com/T/#m80af695f2c751341bc971114aefa00ccc929a3ec
-> >>
-> >> Strange: I have this mail four times in my mailboxes (via
-> >> linux-arm-kernel, linux-pwm, kernel@pengutronix.de and directly). In t=
-he
-> >> two latter the Subject line is broken in two:
-> >=20
-> > I was wrong. The ones to kernel@pengutronix.de and the linux-arm-kernel
-> > one are the ones with the linebreak.
-> >=20
-> > Hmm,
-> >=20
-> > http://lists.infradead.org/pipermail/linux-arm-kernel/2022-February/717=
-310.html
-> > http://lists.infradead.org/pipermail/linux-arm-kernel/2022-February/717=
-304.html
-> >=20
-> > has the linebreaks, too. Still I wonder what is different between
-> > kernel@pengutronix.de and u.kleine-koenig@pengutronix.de.
->=20
-> Other threads - not only mine - are also affected:
-> http://lists.infradead.org/pipermail/linux-arm-kernel/2022-February/71431=
-1.html
-> http://lists.infradead.org/pipermail/linux-arm-kernel/2022-February/71431=
-6.html
-> http://lists.infradead.org/pipermail/linux-arm-kernel/2022-February/71436=
-4.html
+Doesn't seem to apply.
 
-In the meantime I'm confident that mailman2 is the culprit.
+Could you please rebase.
 
-Best regards
-Uwe
+> diff --git a/Documentation/devicetree/bindings/mfd/qcom,tcsr.txt b/Documentation/devicetree/bindings/mfd/qcom,tcsr.txt
+> index c5f4f0ddfcc3..add61bcc3c74 100644
+> --- a/Documentation/devicetree/bindings/mfd/qcom,tcsr.txt
+> +++ b/Documentation/devicetree/bindings/mfd/qcom,tcsr.txt
+> @@ -10,6 +10,7 @@ Required properties:
+>  		"qcom,tcsr-ipq8064", "syscon" for IPQ8064
+>  		"qcom,tcsr-apq8064", "syscon" for APQ8064
+>  		"qcom,tcsr-msm8660", "syscon" for MSM8660
+> +		"qcom,tcsr-msm8953", "syscon" for MSM8953
+>  		"qcom,tcsr-msm8960", "syscon" for MSM8960
+>  		"qcom,tcsr-msm8974", "syscon" for MSM8974
+>  		"qcom,tcsr-apq8084", "syscon" for APQ8084
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---t6gdx5ppa5aoudwv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmILo40ACgkQwfwUeK3K
-7AnvIwgAjV+YrVWzVl6/EalqkA0yXEPvLD0BIjc8GppPn0QIHRx5V3D1pFSohQMe
-5/B2Qed1xooVWuf0uGv8px49fkHuRjJmjJGyCqzzqljJK8kHyRtXs9J9+1SM5Grb
-KvVqy2mGU91WjUIFP1wUjOemZ5KQSdbXBRhPpT4rjoOia/t5VBxvosGde1oZnRWc
-lLE2zzwxRLz52uycLpDKCeLKvpohBy5rbd3R5lRvyCH25zIYRbnkGPRhE+Vpv2ec
-bU5gO5jQZss+5auIIrmYcpyjK2eS0nzYA6JW0jDLzC4+UB4RPAKPi2nEhD+LdD44
-d1DHbpi4cOq5fCyjQM93xFg5Xyz1sA==
-=+q5K
------END PGP SIGNATURE-----
-
---t6gdx5ppa5aoudwv--
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 823834B6EE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 15:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C7E4B6ED8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 15:33:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238628AbiBOOaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 09:30:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51268 "EHLO
+        id S238645AbiBOOae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 09:30:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238625AbiBOOaU (ORCPT
+        with ESMTP id S238635AbiBOOa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 09:30:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52498EDF24;
-        Tue, 15 Feb 2022 06:30:11 -0800 (PST)
+        Tue, 15 Feb 2022 09:30:27 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E610BEDF11;
+        Tue, 15 Feb 2022 06:30:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E31376177D;
-        Tue, 15 Feb 2022 14:30:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4EB1AC340F1;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5A7D5CE1FE7;
+        Tue, 15 Feb 2022 14:30:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 92B45C340F8;
         Tue, 15 Feb 2022 14:30:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1644935410;
-        bh=Ul9wORTglUXgvl28HPxbdqaB6WKzDL2m9BqXLWKhVyk=;
+        bh=BNpHF5ZbFhswEdFNrdVNUhGYlhfjthh+/3dIEwBWkyo=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ng8qN/j0zgUxGme3kedt/cjhrGSre7Ku6JJNnlxRWJjTFY1k9hXXlrn6lXuGyfex1
-         xZlcwg1am5CZprhKYZ1icOWdWNkEPCCTlpg+XC9pV6CwWra+QVjqQCtFcgL9oVEr9o
-         mvkNYQirBRq5RjzU91lICzMIrSozLLPwpvQlZD4TyXYdWyWJEi/UsLiP1hbCZjphCO
-         oEYCUL0UQWdbZkw47KavM7TmWeN/JuIQYl3bE8+1ZiqRXt4i9puDGMG78VdrR6sa8S
-         va5/SHGRap3yFNOCCzieAlpbKIILrtK7GEPx5p+1Wf3FcE2LatMKmOyxkaNuY/AqVP
-         1r4tx6r3K7jWA==
+        b=IJdVJe0eVaqY31JG/azMG2y4iIeb0UmtMnQR8xuAxQ8kPM1+KoUHYaybzfcbe52/J
+         EWSRx5dKeCnEAdpMq+83ZU8h7tGzMcbAuTS4CPxQga0kaJo8vTblV31S7ZuG13U059
+         HnSuQC3PbulYdrb9YRqSE3O0Rr20YIKv4FCgnZyZp50DK5omduCwwj7tMdP35UQVrY
+         HLKDITZ/OHokeWU6AOb+r5ssGu3Cqnc2ABLR29I0bsDx/3IT+HD1sGci74Yek9nuoA
+         0e0o7mF9GwW0PE/EcshtJnx4hUL5k0PWbp6v7BHQ5Ir9zfcVShfp8MaIbG+6bEYSVh
+         ssT0pVGLrZqeA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 34BA2E6BBD2;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 81DCDE6D447;
         Tue, 15 Feb 2022 14:30:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: phy: mediatek: remove PHY mode check on MT7531
+Subject: Re: [PATCH] virtio_net: Fix code indent error
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164493541021.26708.6388647130926392224.git-patchwork-notify@kernel.org>
+Message-Id: <164493541052.26708.11689283036672859693.git-patchwork-notify@kernel.org>
 Date:   Tue, 15 Feb 2022 14:30:10 +0000
-References: <20220209143948.445823-1-dqfext@gmail.com>
-In-Reply-To: <20220209143948.445823-1-dqfext@gmail.com>
-To:     DENG Qingfang <dqfext@gmail.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, kuba@kernel.org, matthias.bgg@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, arinc.unal@arinc9.com,
-        hauke@hauke-m.de
+References: <Ygi65QUzYL9oawO8@fedora>
+In-Reply-To: <Ygi65QUzYL9oawO8@fedora>
+To:     Michael Catanzaro <mcatanzaro.kernel@gmail.com>
+Cc:     mst@redhat.com, jasowang@redhat.com, davem@davemloft.net,
+        kuba@kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,23 +60,23 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net.git (master)
+This patch was applied to netdev/net-next.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Wed,  9 Feb 2022 22:39:47 +0800 you wrote:
-> The function mt7531_phy_mode_supported in the DSA driver set supported
-> mode to PHY_INTERFACE_MODE_GMII instead of PHY_INTERFACE_MODE_INTERNAL
-> for the internal PHY, so this check breaks the PHY initialization:
+On Sun, 13 Feb 2022 02:01:41 -0600 you wrote:
+> This patch fixes the checkpatch.pl warning:
 > 
-> mt7530 mdio-bus:00 wan (uninitialized): failed to connect to PHY: -EINVAL
+> ERROR: code indent should use tabs where possible #3453: FILE: drivers/net/virtio_net.c:3453: ret = register_virtio_driver(&virtio_net_driver);$
 > 
-> Remove the check to make it work again.
+> Uneccessary newline was also removed making line 3453 now 3452.
+> 
+> Signed-off-by: Michael Catanzaro <mcatanzaro.kernel@gmail.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [net] net: phy: mediatek: remove PHY mode check on MT7531
-    https://git.kernel.org/netdev/net/c/525b108e6d95
+  - virtio_net: Fix code indent error
+    https://git.kernel.org/netdev/net-next/c/4f50ef152ec6
 
 You are awesome, thank you!
 -- 

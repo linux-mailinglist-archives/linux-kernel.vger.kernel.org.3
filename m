@@ -2,108 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9881F4B79D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:50:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CBE24B79AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:49:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244302AbiBOVOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 16:14:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42216 "EHLO
+        id S244309AbiBOVOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 16:14:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240516AbiBOVOB (ORCPT
+        with ESMTP id S240516AbiBOVOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 16:14:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C306371C97;
-        Tue, 15 Feb 2022 13:13:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FEC8618FA;
-        Tue, 15 Feb 2022 21:13:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E1EC340EB;
-        Tue, 15 Feb 2022 21:13:49 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="IgL/2/E1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644959627;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kp7eWj533NNXB9m2ob0Q6FbMxEEdkB1SZsAocpyT3WI=;
-        b=IgL/2/E1e1E7zCYvhET5dX678TGPh3WQ9Dx3D2r2DuwZb/dXyQfElTGoySAuZbdUNtyQi9
-        bmDP8eQZVd38ZBtYLXDl6Z6QU56IDPwKCtEKUnRiVNeiDrsqXpP21hwil5o8HswG7jWDHc
-        ml+m0C7a8CwyxK/wT/cqDQaDnY9zGyU=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6df90ad4 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 15 Feb 2022 21:13:47 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>
-Subject: [PATCH v3] random: absorb fast pool into input pool after fast load
-Date:   Tue, 15 Feb 2022 22:13:33 +0100
-Message-Id: <20220215211333.244383-1-Jason@zx2c4.com>
-In-Reply-To: <CAHmME9qMRO0YFwQRUZfuUjTy2=C0QYkNLZSK5YgVD0xpcP2qbQ@mail.gmail.com>
-References: <CAHmME9qMRO0YFwQRUZfuUjTy2=C0QYkNLZSK5YgVD0xpcP2qbQ@mail.gmail.com>
+        Tue, 15 Feb 2022 16:14:12 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2498771C9F
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:14:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=AW3+kFqBCuVeSlOqKbaIKUl7wEnUfx5xLlZmgik9f+o=; b=kqfxqqiILWOBSOqG0xYG7VV/HD
+        LPrseCDCa5kITdRF7VCF7MUWyuJfRHmIZ+51LBxfX0qJ7UlwFuCqYvkmgvUXyuRPkUav6dqyto0IT
+        qukcqSZGiJx0Mt5WeAZ6ooBlFopIYUdKY6evzrOBMYV1diWbG0WPgBWOuvp0OTD/nbdmZCOTFLEpJ
+        n9clzwTFd96tVWpxyRhNyLHua6ikc36tC+/q5YfF4AtI8ChTWxxqatcHwtCJb4q1IXDg44FStY42b
+        WlFYpVez5XE/9f45fS5GH0U6mNM4yNaUjEOo6CpkzeySF0n46KrR8xEn8IjKgke/3+YYzWUm48hvu
+        wjFiHQMg==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nK595-00ABL8-2D; Tue, 15 Feb 2022 21:13:59 +0000
+Message-ID: <6f4af4c2-3ac0-a4d0-96c7-7164417cb8d7@infradead.org>
+Date:   Tue, 15 Feb 2022 13:13:53 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: Build regressions/improvements in v5.17-rc4
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-kernel@vger.kernel.org
+References: <20220214093704.1773948-1-geert@linux-m68k.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220214093704.1773948-1-geert@linux-m68k.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During crng_init == 0, we never credit entropy in add_interrupt_
-randomness(), but instead dump it directly into the primary_crng. That's
-fine, except for the fact that we then wind up throwing away that
-entropy later when we switch to extracting from the input pool and
-overwriting the primary_crng key. The two other early init sites --
-add_hwgenerator_randomness()'s use crng_fast_load() and add_device_
-randomness()'s use of crng_slow_load() -- always additionally give their
-inputs to the input pool. But not add_interrupt_randomness().
+Hi Geert,
 
-This commit fixes that shortcoming by calling mix_pool_bytes() after
-crng_fast_load() in add_interrupt_randomness(). That's partially
-verboten on PREEMPT_RT, where it implies taking spinlock_t from an IRQ
-handler. But this also only happens during early boot and then never
-again after that. Plus it's a trylock so it has the same considerations
-as calling crng_fast_load(), which we're already using.
+On 2/14/22 01:37, Geert Uytterhoeven wrote:
+> Below is the list of build error/warning regressions/improvements in
+> v5.17-rc4[1] compared to v5.16[2].
+> 
+> Summarized:
+>   - build errors: +14/-2
+>   - build warnings: +23/-25
+> 
+> JFYI, when comparing v5.17-rc4[1] to v5.17-rc3[3], the summaries are:
+>   - build errors: +1/-0
+>   - build warnings: +0/-0
+> 
+> Note that there may be false regressions, as some logs are incomplete.
+> Still, they're build errors/warnings.
+> 
+> Happy fixing! ;-)
+> 
+> Thanks to the linux-next team for providing the build service.
+> 
+> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/754e0b0e35608ed5206d6a67a791563c631cec07/ (all 99 configs)
+> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/df0cc57e057f18e44dac8e6c18aba47ab53202f9/ (98 out of 99 configs)
+> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/dfd42facf1e4ada021b939b4e19c935dcdd55566/ (all 99 configs)
+> 
+> 
+> *** ERRORS ***
+> 
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Suggested-by: Eric Biggers <ebiggers@google.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-v3 uses a trylock instead of a spinlock, just like all the other locks
-taken in hard irq. (Incidentally, we're now talking about moving this
-into the deferred stage, so that at can be a spinlock, but at least with
-what we have here, this really must be a trylock.)
 
- drivers/char/random.c | 4 ++++
- 1 file changed, 4 insertions(+)
+> *** WARNINGS ***
+> 
+> 23 warning regressions:
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14410): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14428): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14440): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14458): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14470): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14488): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x144a0): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x144f0): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14508): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14520): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14538): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14550): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14568): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14580): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14598): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4790): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47a8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47c0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47d8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47f0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4808): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+>   + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4820): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+>   + modpost: WARNING: modpost: vmlinux.o(.text.unlikely+0x4540): Section mismatch in reference from the function __trace_event_discard_commit() to the variable .init.data:initcall_level_names:  => N/A
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index d31b0b3afe2e..f3179c67010b 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -850,6 +850,10 @@ void add_interrupt_randomness(int irq)
- 		    crng_fast_load((u8 *)fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
- 			fast_pool->count = 0;
- 			fast_pool->last = now;
-+			if (spin_trylock(&input_pool.lock)) {
-+				_mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
-+				spin_unlock(&input_pool.lock);
-+			}
- 		}
- 		return;
- 	}
+This is a little confusing. Was there a problem with qed and qede network drivers?
+Is it still a problem?
+Many of the lines above and below are very similar.
+
+If there is still a problem, what $ARCH and config(s) cause it?
+I can't reproduce it on 11 $ARCH tries.
+Or maybe it is compiler-specific also.
+
+> 25 warning improvements:
+>   - arch/m68k/configs/multi_defconfig: warning: symbol value 'm' invalid for MCTP: 322 => 
+>   - arch/m68k/configs/sun3_defconfig: warning: symbol value 'm' invalid for MCTP: 295 => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x136d0): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x136e8): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13700): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13718): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13730): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13748): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13760): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x137b0): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x137c8): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x137e0): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x137f8): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13810): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13828): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13840): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13858): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4610): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4628): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4640): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4658): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4670): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4688): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+>   - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x46a0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+>   - modpost: WARNING: modpost: vmlinux.o(.text.unlikely+0x45e4): Section mismatch in reference from the function __trace_event_discard_commit() to the variable .init.data:initcall_level_names: N/A => 
+
+thanks.
 -- 
-2.35.0
-
+~Randy

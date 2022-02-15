@@ -2,58 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698C34B76A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B0144B75C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243170AbiBOSnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 13:43:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45700 "EHLO
+        id S243191AbiBOSoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 13:44:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243171AbiBOSm7 (ORCPT
+        with ESMTP id S241980AbiBOSoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 13:42:59 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DB927FEA
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:42:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644950566; x=1676486566;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Uq3mK2F4oBeJy49d6SR0mO9NdzovVt3JSrPgHEwNGYw=;
-  b=W5YTAaFfp7s1FpSHaJ9WNGYT3P2ugleLxF6xKi8I8zrdGd5Vj8hX7AOe
-   QxerCg3RQ3Vm37LVgzaFJBmG19y7NGIkqbZkPuemIep89kORBbrnHTTr3
-   8CougRYcS/lBM38SHVjwBzYrZ+A1+KSIw6qPaKTGtohR3UFgwFW1TrXWw
-   NT+atc1II32rMbbFet12Hq21a0o484tWISodtRPkYZYfVRrRpwdZZz2DL
-   wfAzkfk9tJxVfMIcmWtFzU0ZXZwQk/2A6dg91WQQOciZIXRZJ0MDbGe18
-   yOWXbed1HRZuRc3dF7VKzn4hnR9cPSkNylRa+72Fc+Kn+oLEARqOj+6y7
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="311167725"
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="311167725"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 10:42:43 -0800
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="624957742"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.60])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 10:42:43 -0800
-Date:   Tue, 15 Feb 2022 10:42:42 -0800
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Jue Wang <juew@google.com>
-Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH] x86/mce: Add workaround for SKX/CLX/CPX spurious machine
- checks
-Message-ID: <Ygv0IncyBA3pXR7Q@agluck-desk3.sc.intel.com>
-References: <CAPcxDJ7nriZEJHF6dMPR7tQ+dGuueyRjw1NC+4CbjxiAT_S+ZA@mail.gmail.com>
- <20220208150945.266978-1-juew@google.com>
+        Tue, 15 Feb 2022 13:44:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE3527FF6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:43:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29456616C7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:43:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C250FC340EC;
+        Tue, 15 Feb 2022 18:43:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644950633;
+        bh=jVE2UPwQbGumrX229wqA975K+AttmZ9p0pF/nvpok9Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SRhqgjz47Z9NvbRe3aKfoY+SUjDETfnk4XZJxkkyoh9YYzrgdktOTgRbgfT75inLW
+         Pasx0y++4oWIo5MUdNNH+FbuGbMAFsdDLPHxo+sfO1H2RjX9LQKa4dRZusD6SRDEhq
+         I7xfG4nUoW/Lq2Ge5F08+EwLr6unbd6cFofQ+Lh2o7Aywm0a7JZEdgX84npyygGkTN
+         M3jTDum3/wUjb9BQIGg9EO4TD+io7PxDGaDAmFkTMdjngJjPslzVdfVebCjCD0ytyr
+         ljQ2Q9/cymblwFUceu7qvDG8YxyD2s4XnitPHG5M5d/+/ACa2Fa20hD1ylmRp7VLUf
+         y1LrBtwqrKcoQ==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        "kernelci.org bot" <bot@kernelci.org>
+Subject: [PATCH] mm/page_alloc: Mark pagesets as __maybe_unused
+Date:   Tue, 15 Feb 2022 11:43:22 -0700
+Message-Id: <20220215184322.440969-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220208150945.266978-1-juew@google.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,39 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 07:09:45AM -0800, Jue Wang wrote:
-> +static bool quirk_skylake_repmov(void)
-> +{
-> +	u64 mcgstatus = mce_rdmsrl(MSR_IA32_MCG_STATUS);
-> +	u64 misc_enable = __rdmsr(MSR_IA32_MISC_ENABLE);
-> +
-> +	if ((mcgstatus & MCG_STATUS_LMCES) &&
-> +	    unlikely(misc_enable & MSR_IA32_MISC_ENABLE_FAST_STRING)) {
-> +		u64 mc1_status = mce_rdmsrl(MSR_IA32_MCx_STATUS(1));
-> +
+Commit 9983a9d577db ("locking/local_lock: Make the empty local_lock_*()
+function a macro.") in the -tip tree converted the local_lock_*()
+functions into macros, which causes a warning with clang with
+CONFIG_PREEMPT_RT=n + CONFIG_DEBUG_LOCK_ALLOC=n:
 
-Needs a comment that this big blob of logic is checking for a software
-recoverable data fetch error.
+  mm/page_alloc.c:131:40: error: variable 'pagesets' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
+  static DEFINE_PER_CPU(struct pagesets, pagesets) = {
+                                         ^
+  1 error generated.
 
-> +		if ((mc1_status &
-> +		     (MCI_STATUS_VAL|MCI_STATUS_OVER|MCI_STATUS_UC|MCI_STATUS_EN|
-> +		      MCI_STATUS_ADDRV|MCI_STATUS_MISCV|MCI_STATUS_PCC|
-> +		      MCI_STATUS_AR|MCI_STATUS_S)) ==
-> +		    (MCI_STATUS_VAL|MCI_STATUS_UC|MCI_STATUS_EN|MCI_STATUS_ADDRV|
-> +		     MCI_STATUS_MISCV|MCI_STATUS_AR|MCI_STATUS_S)) {
-> +			msr_clear_bit(MSR_IA32_MISC_ENABLE,
-> +				      MSR_IA32_MISC_ENABLE_FAST_STRING_BIT);
-> +			mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
-> +			mce_wrmsrl(MSR_IA32_MCx_STATUS(1), 0);
-> +			pr_err_once("Errata detected, disable fast string copy instructions.\n");
-> +			return true;
-> +		}
-> +	}
-> +	return false;
-> +}
+Prior to that change, clang was not able to tell that pagesets was
+unused in this configuration because it does not perform cross function
+analysis in the frontend. After that change, it sees that the macros
+just do a typecheck on the lock member of pagesets, which is evaluated
+at compile time (so the variable is technically "used"), meaning the
+variable is not needed in the final assembly, as the warning states.
 
-Otherwise:
+Mark the variable as __maybe_unused to make it clear to clang that this
+is expected in this configuration so there is no more warning.
 
-Reviewed-by: Tony Luck <tony.luck@intel.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1593
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ mm/page_alloc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--Tony
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 7ff1efc84205..406f5d0c610f 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -128,7 +128,7 @@ static DEFINE_MUTEX(pcp_batch_high_lock);
+ struct pagesets {
+ 	local_lock_t lock;
+ };
+-static DEFINE_PER_CPU(struct pagesets, pagesets) = {
++static DEFINE_PER_CPU(struct pagesets, pagesets) __maybe_unused = {
+ 	.lock = INIT_LOCAL_LOCK(lock),
+ };
+ 
+
+base-commit: 10a64d66e319e6ea3a19f9d2e7c4f0dee90ce6e0
+-- 
+2.35.1
+

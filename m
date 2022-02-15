@@ -2,151 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4564B6477
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 08:38:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D8A4B648F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 08:41:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234868AbiBOHiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 02:38:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60272 "EHLO
+        id S234871AbiBOHlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 02:41:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiBOHiC (ORCPT
+        with ESMTP id S232642AbiBOHlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 02:38:02 -0500
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E822110F981
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 23:37:52 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id b22so16573976qkk.12
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 23:37:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=F0LAKoVYl1MZjeStkRC8r6GRhivZgElOJcOkTtD3oHM=;
-        b=UrKdO7iAVP05Udr/yHw9mtXB74ZzhFVugvZUCBwKtyzUlNBB8LrM73EScng7W54qvp
-         U6DGBzIG1kASMH4hmaIuCsz4JjiZTe9ZFwK8Jmh1sg9q9mHVcKjTPj50iNb76kvOykS8
-         BKGdl0ojsCoZdGPj9xcsqWMSnFsBZB7VZbtsPy7VxpG9dUSqeASXLC7Y7hC9f3/haIaP
-         fUQoII7cuBmp4qt7QufPabSr7qketWiYvApkk1XAmsc63DnlP7Tay04MqrE6bUbeNQm6
-         laTV16SwXwP4lX2Nh7Wlk498o3QHtx2PeWJ3Hte5hoNW7MnZQ/qlwxcaPQfF9cm19sRz
-         FZgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=F0LAKoVYl1MZjeStkRC8r6GRhivZgElOJcOkTtD3oHM=;
-        b=U8hHvPogTU01X+tKXdwPTIfGrjo6FuieW5qEfJnBYR97+aflwIgFtm7oHUlbkN6uOd
-         etwyENIlwKJO+mvr7F6uRB34kaNDO+7Ke6tu/dou2UdQiSWyAOCO4686IWh5IlZLJ0Wz
-         vET3gY3cHjU7zAzoR9naf/QiALdV6dHt/LgsF9pLMgaYixypQoPk3uGz7nRsmSR8B1Gq
-         HmP47+kyRop9OeDmRXJhRMyY/rcZCvRzF6HhPVaq+scr3tyidNT56LSWjUBYt0jic32m
-         MivUG1KiHN8AfWkDdXUYZto19RRhGEMaoPAbhgWbMeYhzToox5lCJQG35G2/JV+yUII9
-         /Lzw==
-X-Gm-Message-State: AOAM533vCkCnVzEVbO4bTHy5lmgOOXVYYYWD/5PCG0HQFOgmcRyHb6Ks
-        JBOWr4XNdHsV+zNJOpJLlaE=
-X-Google-Smtp-Source: ABdhPJz0/j8DkupPrdaGaUjXGHFu2oCDBSGC0sqidg2/kdymnXTBSpLoE9Uk1tN/YIAMhuh0cXJnMA==
-X-Received: by 2002:a05:620a:12ae:: with SMTP id x14mr1361641qki.610.1644910672135;
-        Mon, 14 Feb 2022 23:37:52 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id e1sm10644995qtw.71.2022.02.14.23.37.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 23:37:51 -0800 (PST)
-From:   cgel.zte@gmail.com
-To:     hughd@google.com, mike.kravetz@oracle.com, kirill@shutemov.name,
-        songliubraving@fb.com, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        yang.yang29@zte.com.cn, wang.yong12@zte.com.cn,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] Fix shmem huge page failed to set F_SEAL_WRITE attribute problem
-Date:   Tue, 15 Feb 2022 07:37:43 +0000
-Message-Id: <20220215073743.1769979-1-cgel.zte@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 15 Feb 2022 02:41:16 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85121119860
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 23:41:07 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJsS0-0006FP-9s; Tue, 15 Feb 2022 08:40:40 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJsRu-00GhwB-EV; Tue, 15 Feb 2022 08:40:33 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJsRt-003I1A-4j; Tue, 15 Feb 2022 08:40:33 +0100
+Date:   Tue, 15 Feb 2022 08:40:30 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>,
+        Rahul Tanwar <rtanwar@maxlinear.com>,
+        Jeff LaBundy <jeff@labundy.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Vignesh R <vigneshr@ti.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 00/15] pwm: dt-bindings: Include generic pwm schema
+Message-ID: <20220215074030.3nugwproxjh3lwhl@pengutronix.de>
+References: <20220214212154.8853-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="75mhjvzsa3tznmbu"
+Content-Disposition: inline
+In-Reply-To: <20220214212154.8853-1-krzysztof.kozlowski@canonical.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: wangyong <wang.yong12@zte.com.cn>
 
-After enabling tmpfs filesystem to support transparent hugepage with the
-following command:
- echo always > /sys/kernel/mm/transparent_hugepage/shmem_enabled
-The docker program adds F_SEAL_WRITE through the following command will
-prompt EBUSY.
- fcntl(5, F_ADD_SEALS, F_SEAL_WRITE)=-1.
+--75mhjvzsa3tznmbu
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It is found that in memfd_wait_for_pins function, the page_count of
-hugepage is 512 and page_mapcount is 0, which does not meet the
-conditions:
- page_count(page) - page_mapcount(page) != 1.
-But the page is not busy at this time, therefore, the page_order of
-hugepage should be taken into account in the calculation.
+Hello,
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: wangyong <wang.yong12@zte.com.cn>
----
- mm/memfd.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+[dropped Anson Huang and Yash Shah from Cc: which were not reachable for
+my last mail]
 
-diff --git a/mm/memfd.c b/mm/memfd.c
-index 9f80f162791a..26d1d390a22a 100644
---- a/mm/memfd.c
-+++ b/mm/memfd.c
-@@ -31,6 +31,7 @@
- static void memfd_tag_pins(struct xa_state *xas)
- {
- 	struct page *page;
-+	int count = 0;
- 	unsigned int tagged = 0;
- 
- 	lru_add_drain();
-@@ -39,8 +40,12 @@ static void memfd_tag_pins(struct xa_state *xas)
- 	xas_for_each(xas, page, ULONG_MAX) {
- 		if (xa_is_value(page))
- 			continue;
-+
- 		page = find_subpage(page, xas->xa_index);
--		if (page_count(page) - page_mapcount(page) > 1)
-+		count = page_count(page);
-+		if (PageTransCompound(page))
-+			count -= (1 << compound_order(compound_head(page))) - 1;
-+		if (count - page_mapcount(page) > 1)
- 			xas_set_mark(xas, MEMFD_TAG_PINNED);
- 
- 		if (++tagged % XA_CHECK_SCHED)
-@@ -67,11 +72,12 @@ static int memfd_wait_for_pins(struct address_space *mapping)
- {
- 	XA_STATE(xas, &mapping->i_pages, 0);
- 	struct page *page;
--	int error, scan;
-+	int error, scan, count;
- 
- 	memfd_tag_pins(&xas);
- 
- 	error = 0;
-+	count = 0;
- 	for (scan = 0; scan <= LAST_SCAN; scan++) {
- 		unsigned int tagged = 0;
- 
-@@ -89,8 +95,12 @@ static int memfd_wait_for_pins(struct address_space *mapping)
- 			bool clear = true;
- 			if (xa_is_value(page))
- 				continue;
-+
- 			page = find_subpage(page, xas.xa_index);
--			if (page_count(page) - page_mapcount(page) != 1) {
-+			count = page_count(page);
-+			if (PageTransCompound(page))
-+				count -= (1 << compound_order(compound_head(page))) - 1;
-+			if (count - page_mapcount(page) != 1) {
- 				/*
- 				 * On the last scan, we clean up all those tags
- 				 * we inserted; but make a note that we still
--- 
-2.15.2
+On Mon, Feb 14, 2022 at 10:21:39PM +0100, Krzysztof Kozlowski wrote:
+> Hi,
+>=20
+> Changes since v1:
+> 1. Add tags.
+> 2. Adjust subject (Uwe).
 
+However you only took a part of my suggestion ...
 
+> Krzysztof Kozlowski (15):
+>   dt-bindings: pwm: allwinner,sun4i-a10: Include generic pwm schema
+>   dt-bindings: pwm: imx: Include generic pwm schema
+>   dt-bindings: pwm: intel,lgm: Include generic pwm schema
+>   dt-bindings: pwm: iqs620a: Include generic pwm schema
+>   dt-bindings: pwm: mxs: Include generic pwm schema
+>   dt-bindings: pwm: rockchip: Include generic pwm schema
+>   dt-bindings: pwm: sifive: Include generic pwm schema
+>   dt-bindings: pwm: renesas,pwm: Include generic pwm schema
+>   dt-bindings: pwm: toshiba,visconti: Include generic pwm schema
+>   dt-bindings: pwm: brcm,bcm7038: Do not require pwm-cells twice
+>   dt-bindings: pwm: intel,keembay: Do not require pwm-cells twice
+
+=2E.. The actual patch has a space after the comma, I like this variant
+without comma better as this is a compatible string. Also a # before
+pwm-cells would be nice.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--75mhjvzsa3tznmbu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmILWOsACgkQwfwUeK3K
+7An9UAf/fphlT382o9/FKqwTAw/JDCNvTPyXDeOLfHI7s5jElS2X/z6Ev+qvlRbO
+c69X0dIeX0m3ZG2Aqq9zXkzrEjLiv5BUPTnaA/EsPCkU8TWyTQa/cd+y7kAnqVxx
+63Vj1JFt9TxNaAR/+EebmDui9nLX3D/hUYNaJn+JbAZlLGGdzcmbovc5YmB1lw/M
+qByp61tL/ib3x+KV8tA4Rccvu1uxZTmU7VUf15xsHOdY1LXDeu/ZCbWIWOy0AeNa
+dlLq2yiogwbckiquxxHnHm3yVPt1ncclAYeUT3VY9VeHvU6OQkNvJgtdmsGkEFfn
+ZVt42/xmkq2p4d6tMsSkQzJGnR6DRA==
+=6jay
+-----END PGP SIGNATURE-----
+
+--75mhjvzsa3tznmbu--

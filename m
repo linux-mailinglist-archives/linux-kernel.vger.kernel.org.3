@@ -2,195 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A08584B633F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5EDE4B6342
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 07:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233526AbiBOGFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 01:05:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57390 "EHLO
+        id S234304AbiBOGH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 01:07:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiBOGFs (ORCPT
+        with ESMTP id S232543AbiBOGHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 01:05:48 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F37C4B65
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 22:05:39 -0800 (PST)
+        Tue, 15 Feb 2022 01:07:22 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAF1B0E89
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 22:06:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644905139; x=1676441139;
+  t=1644905232; x=1676441232;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9T1Zhf11T2THdcQwM7OSO3iT2Z5DgFxy8/YrIQD9NXo=;
-  b=WaKmqozGyUvm8nvU8tUej+LN9pq1W3Z4VtOFLwXW0Hrumi30jdss/VOt
-   B2vh2I6QRtUR47xV5OMwvNiyGT728sGzdMunuEoRV1BvTDtZ6RY49x5qK
-   N36RPQK6LLsXl89Z/ENpAV1YpgKh1XL0d+PQ4rE2QmdeRiHsiMNF9yrbm
-   VZP7+BSguWHphcQvFWSdCU3aKq2Kkku/kWYf0uZ/4OaUYUO0iBQ+l8tul
-   lA1Txghh1FXpjp3Kb5RakDK0yWeVgyKebW98dWvE/XS1HmleQcJGgEI6X
-   mtFSZMVb4fmCSU34eoXKGrE3vfaHCmn9vXVEs8EIYysgSdS2HOZGil2U/
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="230893924"
+  bh=sQpg1bcGLPLlgQzv+jURlftgSaNCZRBDEppXNWGp38U=;
+  b=AA/534AqJQai2jACXeUTCHj2+8Rj9Jn2IIy8pUpdP2QlZkWqSUJFYYlV
+   +aUHxsijBI2Lc+Im18FU5g8o4Cie8mbNEbo/IjvPnI6UzIBBNZtXJXzKl
+   DSWjvEZIBBhT2jqfHTAYNH9E9WT0vqFtZKcb7jXxayU1kOWrhD9RKbWd0
+   3VMIyXdm4uNDe0MjblF/H7UFoC+jdqUyiyxGhHD/SWfBtW9O/Evn4T1rS
+   22MvtWTErEn8kj0jwhM3s9GSIhU0qvLAhqNiIMtRcfu8iMODe1OcTiwqr
+   skXm//zIezGLbgrAyyQqCO4qcxAs54ht4wLN+0DH77v2PKnI7AhtBu6iQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="310993438"
 X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="230893924"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 22:05:38 -0800
+   d="scan'208";a="310993438"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 22:06:38 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="703453297"
+   d="scan'208";a="485983741"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 14 Feb 2022 22:05:36 -0800
+  by orsmga003.jf.intel.com with ESMTP; 14 Feb 2022 22:06:37 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nJqy0-0009K4-9B; Tue, 15 Feb 2022 06:05:36 +0000
-Date:   Tue, 15 Feb 2022 14:05:31 +0800
+        id 1nJqyy-0009KH-Gw; Tue, 15 Feb 2022 06:06:36 +0000
+Date:   Tue, 15 Feb 2022 14:05:35 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Manisha Chinthapally <manisha.chinthapally@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mchinth:sep_socwatch_linux_5_16 1/1]
- drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse: sparse: incorrect
- type in initializer (incompatible argument 2 (different address spaces))
-Message-ID: <202202151426.RB8miR3A-lkp@intel.com>
+To:     Chuck Lever <chuck.lever@oracle.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [cel:nfsd-courteous-server 32/34] fs/nfsd/nfs4state.c:5893:2: error:
+ implicit declaration of function 'nfsd4_get_client_reaplist'
+Message-ID: <202202151415.pbD8co6c-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/mchinth/linux sep_socwatch_linux_5_16
-head:   4cbfca15a262729ae8557758b49226fe4769f582
-commit: 4cbfca15a262729ae8557758b49226fe4769f582 [1/1] Platform/x86 Updated SEP/SOCPERF drivers to latest version
-config: i386-randconfig-s002-20220214 (https://download.01.org/0day-ci/archive/20220215/202202151426.RB8miR3A-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/mchinth/linux/commit/4cbfca15a262729ae8557758b49226fe4769f582
-        git remote add mchinth https://github.com/mchinth/linux
-        git fetch --no-tags mchinth sep_socwatch_linux_5_16
-        git checkout 4cbfca15a262729ae8557758b49226fe4769f582
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux nfsd-courteous-server
+head:   4b14f83e0bc79cb49f28fdc63a370c19637e2bfc
+commit: 2fb4c8cd9a292bbee4428e9c6d33be28ca5775c6 [32/34] NFSD: Refactor nfsd4_laundromat()
+config: hexagon-randconfig-r036-20220214 (https://download.01.org/0day-ci/archive/20220215/202202151415.pbD8co6c-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=2fb4c8cd9a292bbee4428e9c6d33be28ca5775c6
+        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
+        git fetch --no-tags cel nfsd-courteous-server
+        git checkout 2fb4c8cd9a292bbee4428e9c6d33be28ca5775c6
         # save the config file to linux build tree
         mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/x86/socperf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/nfsd/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/platform/x86/socperf/socperfdrv.c:208:13: sparse: sparse: function 'SOCPERF_Read_Data3' with external linkage has definition
-   drivers/platform/x86/socperf/socperfdrv.c:1175:13: sparse: sparse: function 'lwpmudrv_Stop_Mem' with external linkage has definition
-   drivers/platform/x86/socperf/socperfdrv.c:1392:22: sparse: sparse: function 'socperf_Service_IOCTL' with external linkage has definition
-   drivers/platform/x86/socperf/socperfdrv.c:1516:13: sparse: sparse: function 'socperf_Device_Control' with external linkage has definition
-   drivers/platform/x86/socperf/socperfdrv.c:1602:12: sparse: sparse: function 'SOCPERF_Abnormal_Terminate' with external linkage has definition
-   drivers/platform/x86/socperf/socperfdrv.c:104:22: sparse: sparse: symbol 'socperf_drv_version' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:105:5: sparse: sparse: symbol 'read_unc_ctr_info' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:106:10: sparse: sparse: symbol 'dispatch_uncore' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:108:14: sparse: sparse: symbol 'socperf_global_ec' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:109:14: sparse: sparse: symbol 'socperf_abnormal_terminate' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:110:11: sparse: sparse: symbol 'socperf_control' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:114:8: sparse: sparse: symbol 'socperf_pcb_size' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __user *ptr @@     got unsigned int [usertype] * @@
-   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     expected void const volatile [noderef] __user *ptr
-   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     got unsigned int [usertype] *
-   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __user *__ptr_pu @@     got unsigned int [usertype] * @@
-   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     expected void [noderef] __user *__ptr_pu
-   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     got unsigned int [usertype] *
-   drivers/platform/x86/socperf/socperfdrv.c:328:37: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got void *[usertype] buf_drv_to_usr @@
-   drivers/platform/x86/socperf/socperfdrv.c:328:37: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:328:37: sparse:     got void *[usertype] buf_drv_to_usr
-   drivers/platform/x86/socperf/socperfdrv.c:407:62: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got void *[usertype] buf_drv_to_usr @@
-   drivers/platform/x86/socperf/socperfdrv.c:407:62: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:407:62: sparse:     got void *[usertype] buf_drv_to_usr
-   drivers/platform/x86/socperf/socperfdrv.c:559:63: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
-   drivers/platform/x86/socperf/socperfdrv.c:559:63: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:559:63: sparse:     got char *[usertype] buf_usr_to_drv
-   drivers/platform/x86/socperf/socperfdrv.c:641:39: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
-   drivers/platform/x86/socperf/socperfdrv.c:641:39: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:641:39: sparse:     got char *[usertype] buf_usr_to_drv
-   drivers/platform/x86/socperf/socperfdrv.c:742:64: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
-   drivers/platform/x86/socperf/socperfdrv.c:742:64: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:742:64: sparse:     got char *[usertype] buf_usr_to_drv
-   drivers/platform/x86/socperf/socperfdrv.c:1043:43: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got unsigned int [usertype] * @@
-   drivers/platform/x86/socperf/socperfdrv.c:1043:43: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:1043:43: sparse:     got unsigned int [usertype] *
-   drivers/platform/x86/socperf/socperfdrv.c:1066:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
-   drivers/platform/x86/socperf/socperfdrv.c:1066:29: sparse:     expected void [noderef] __user *to
-   drivers/platform/x86/socperf/socperfdrv.c:1066:29: sparse:     got char *[usertype] buf_drv_to_usr
-   drivers/platform/x86/socperf/socperfdrv.c:1089:28: sparse: sparse: Using plain integer as NULL pointer
-   drivers/platform/x86/socperf/socperfdrv.c:1100:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
-   drivers/platform/x86/socperf/socperfdrv.c:1100:29: sparse:     expected void [noderef] __user *to
-   drivers/platform/x86/socperf/socperfdrv.c:1100:29: sparse:     got char *[usertype] buf_drv_to_usr
-   drivers/platform/x86/socperf/socperfdrv.c:1135:45: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got unsigned long long [usertype] * @@
-   drivers/platform/x86/socperf/socperfdrv.c:1135:45: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:1135:45: sparse:     got unsigned long long [usertype] *
-   drivers/platform/x86/socperf/socperfdrv.c:1154:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
-   drivers/platform/x86/socperf/socperfdrv.c:1154:29: sparse:     expected void [noderef] __user *to
-   drivers/platform/x86/socperf/socperfdrv.c:1154:29: sparse:     got char *[usertype] buf_drv_to_usr
-   drivers/platform/x86/socperf/socperfdrv.c:1175:13: sparse: sparse: symbol 'lwpmudrv_Stop_Mem' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:1286:54: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
-   drivers/platform/x86/socperf/socperfdrv.c:1286:54: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:1286:54: sparse:     got char *[usertype] buf_usr_to_drv
-   drivers/platform/x86/socperf/socperfdrv.c:1310:30: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
-   drivers/platform/x86/socperf/socperfdrv.c:1310:30: sparse:     expected void [noderef] __user *to
-   drivers/platform/x86/socperf/socperfdrv.c:1310:30: sparse:     got char *[usertype] buf_drv_to_usr
-   drivers/platform/x86/socperf/socperfdrv.c:1348:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *buf @@
-   drivers/platform/x86/socperf/socperfdrv.c:1348:26: sparse:     expected void [noderef] __user *to
-   drivers/platform/x86/socperf/socperfdrv.c:1348:26: sparse:     got char *buf
-   drivers/platform/x86/socperf/socperfdrv.c:1368:76: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char const * @@
-   drivers/platform/x86/socperf/socperfdrv.c:1368:76: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:1368:76: sparse:     got char const *
-   drivers/platform/x86/socperf/socperfdrv.c:1392:22: sparse: sparse: symbol 'socperf_Service_IOCTL' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:1537:55: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got struct IOCTL_ARGS_NODE_S [usertype] *[usertype] @@
-   drivers/platform/x86/socperf/socperfdrv.c:1537:55: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:1537:55: sparse:     got struct IOCTL_ARGS_NODE_S [usertype] *[usertype]
-   drivers/platform/x86/socperf/socperfdrv.c:1516:13: sparse: sparse: symbol 'socperf_Device_Control' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:1602:12: sparse: sparse: symbol 'SOCPERF_Abnormal_Terminate' was not declared. Should it be static?
->> drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse: sparse: incorrect type in initializer (incompatible argument 2 (different address spaces)) @@     expected int ( *read )( ... ) @@     got int ( * )( ... ) @@
-   drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse:     expected int ( *read )( ... )
-   drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse:     got int ( * )( ... )
->> drivers/platform/x86/socperf/socperfdrv.c:1638:18: sparse: sparse: incorrect type in initializer (incompatible argument 2 (different address spaces)) @@     expected int ( *write )( ... ) @@     got int ( * )( ... ) @@
-   drivers/platform/x86/socperf/socperfdrv.c:1638:18: sparse:     expected int ( *write )( ... )
-   drivers/platform/x86/socperf/socperfdrv.c:1638:18: sparse:     got int ( * )( ... )
+>> fs/nfsd/nfs4state.c:5893:2: error: implicit declaration of function 'nfsd4_get_client_reaplist' [-Werror,-Wimplicit-function-declaration]
+           nfsd4_get_client_reaplist(nn, &reaplist, &lt);
+           ^
+   fs/nfsd/nfs4state.c:5893:2: note: did you mean 'nfs4_get_client_reaplist'?
+   fs/nfsd/nfs4state.c:5841:1: note: 'nfs4_get_client_reaplist' declared here
+   nfs4_get_client_reaplist(struct nfsd_net *nn, struct list_head *reaplist,
+   ^
+   1 error generated.
 
-vim +1637 drivers/platform/x86/socperf/socperfdrv.c
 
-f57492d07625dd Manisha Chinthapally 2019-05-01  1619  
-f57492d07625dd Manisha Chinthapally 2019-05-01  1620  /*****************************************************************************************
-f57492d07625dd Manisha Chinthapally 2019-05-01  1621   *
-f57492d07625dd Manisha Chinthapally 2019-05-01  1622   *   Driver Entry / Exit functions that will be called on when the driver is loaded and
-f57492d07625dd Manisha Chinthapally 2019-05-01  1623   *   unloaded
-f57492d07625dd Manisha Chinthapally 2019-05-01  1624   *
-f57492d07625dd Manisha Chinthapally 2019-05-01  1625   ****************************************************************************************/
-f57492d07625dd Manisha Chinthapally 2019-05-01  1626  
-f57492d07625dd Manisha Chinthapally 2019-05-01  1627  /*
-f57492d07625dd Manisha Chinthapally 2019-05-01  1628   * Structure that declares the usual file access functions
-f57492d07625dd Manisha Chinthapally 2019-05-01  1629   * First one is for lwpmu_c, the control functions
-f57492d07625dd Manisha Chinthapally 2019-05-01  1630   */
-f57492d07625dd Manisha Chinthapally 2019-05-01  1631  static struct file_operations socperf_Fops = {
-f57492d07625dd Manisha Chinthapally 2019-05-01  1632  	.owner = THIS_MODULE,
-f57492d07625dd Manisha Chinthapally 2019-05-01  1633  	IOCTL_OP = socperf_Device_Control,
-f57492d07625dd Manisha Chinthapally 2019-05-01  1634  #if defined(CONFIG_COMPAT) && defined(DRV_EM64T)
-f57492d07625dd Manisha Chinthapally 2019-05-01  1635  	.compat_ioctl = socperf_Device_Control_Compat,
-f57492d07625dd Manisha Chinthapally 2019-05-01  1636  #endif
-f57492d07625dd Manisha Chinthapally 2019-05-01 @1637  	.read = socperf_Read,
-f57492d07625dd Manisha Chinthapally 2019-05-01 @1638  	.write = socperf_Write,
-f57492d07625dd Manisha Chinthapally 2019-05-01  1639  	.open = socperf_Open,
-f57492d07625dd Manisha Chinthapally 2019-05-01  1640  	.release = NULL,
-f57492d07625dd Manisha Chinthapally 2019-05-01  1641  	.llseek = NULL,
-f57492d07625dd Manisha Chinthapally 2019-05-01  1642  };
-f57492d07625dd Manisha Chinthapally 2019-05-01  1643  
+vim +/nfsd4_get_client_reaplist +5893 fs/nfsd/nfs4state.c
 
-:::::: The code at line 1637 was first introduced by commit
-:::::: f57492d07625dddac7920eccdb5be08c55ee16fa platform/x86: SOCPERF3 support for sep & socwatch
-
-:::::: TO: Manisha Chinthapally <manisha.chinthapally@intel.com>
-:::::: CC: Faycal Benmlih <faycal.benmlih@intel.com>
+  5860	
+  5861	static time64_t
+  5862	nfs4_laundromat(struct nfsd_net *nn)
+  5863	{
+  5864		struct nfs4_client *clp;
+  5865		struct nfs4_openowner *oo;
+  5866		struct nfs4_delegation *dp;
+  5867		struct nfs4_ol_stateid *stp;
+  5868		struct nfsd4_blocked_lock *nbl;
+  5869		struct list_head *pos, *next, reaplist;
+  5870		struct laundry_time lt = {
+  5871			.cutoff = ktime_get_boottime_seconds() - nn->nfsd4_lease,
+  5872			.new_timeo = nn->nfsd4_lease
+  5873		};
+  5874		struct nfs4_cpntf_state *cps;
+  5875		copy_stateid_t *cps_t;
+  5876		int i;
+  5877	
+  5878		if (clients_still_reclaiming(nn)) {
+  5879			lt.new_timeo = 0;
+  5880			goto out;
+  5881		}
+  5882		nfsd4_end_grace(nn);
+  5883	
+  5884		spin_lock(&nn->s2s_cp_lock);
+  5885		idr_for_each_entry(&nn->s2s_cp_stateids, cps_t, i) {
+  5886			cps = container_of(cps_t, struct nfs4_cpntf_state, cp_stateid);
+  5887			if (cps->cp_stateid.sc_type == NFS4_COPYNOTIFY_STID &&
+  5888					state_expired(&lt, cps->cpntf_time))
+  5889				_free_cpntf_state_locked(nn, cps);
+  5890		}
+  5891		spin_unlock(&nn->s2s_cp_lock);
+  5892	
+> 5893		nfsd4_get_client_reaplist(nn, &reaplist, &lt);
+  5894		list_for_each_safe(pos, next, &reaplist) {
+  5895			clp = list_entry(pos, struct nfs4_client, cl_lru);
+  5896			trace_nfsd_clid_purged(&clp->cl_clientid);
+  5897			list_del_init(&clp->cl_lru);
+  5898			expire_client(clp);
+  5899		}
+  5900		spin_lock(&state_lock);
+  5901		list_for_each_safe(pos, next, &nn->del_recall_lru) {
+  5902			dp = list_entry (pos, struct nfs4_delegation, dl_recall_lru);
+  5903			if (!state_expired(&lt, dp->dl_time))
+  5904				break;
+  5905			WARN_ON(!unhash_delegation_locked(dp));
+  5906			list_add(&dp->dl_recall_lru, &reaplist);
+  5907		}
+  5908		spin_unlock(&state_lock);
+  5909		while (!list_empty(&reaplist)) {
+  5910			dp = list_first_entry(&reaplist, struct nfs4_delegation,
+  5911						dl_recall_lru);
+  5912			list_del_init(&dp->dl_recall_lru);
+  5913			revoke_delegation(dp);
+  5914		}
+  5915	
+  5916		spin_lock(&nn->client_lock);
+  5917		while (!list_empty(&nn->close_lru)) {
+  5918			oo = list_first_entry(&nn->close_lru, struct nfs4_openowner,
+  5919						oo_close_lru);
+  5920			if (!state_expired(&lt, oo->oo_time))
+  5921				break;
+  5922			list_del_init(&oo->oo_close_lru);
+  5923			stp = oo->oo_last_closed_stid;
+  5924			oo->oo_last_closed_stid = NULL;
+  5925			spin_unlock(&nn->client_lock);
+  5926			nfs4_put_stid(&stp->st_stid);
+  5927			spin_lock(&nn->client_lock);
+  5928		}
+  5929		spin_unlock(&nn->client_lock);
+  5930	
+  5931		/*
+  5932		 * It's possible for a client to try and acquire an already held lock
+  5933		 * that is being held for a long time, and then lose interest in it.
+  5934		 * So, we clean out any un-revisited request after a lease period
+  5935		 * under the assumption that the client is no longer interested.
+  5936		 *
+  5937		 * RFC5661, sec. 9.6 states that the client must not rely on getting
+  5938		 * notifications and must continue to poll for locks, even when the
+  5939		 * server supports them. Thus this shouldn't lead to clients blocking
+  5940		 * indefinitely once the lock does become free.
+  5941		 */
+  5942		BUG_ON(!list_empty(&reaplist));
+  5943		spin_lock(&nn->blocked_locks_lock);
+  5944		while (!list_empty(&nn->blocked_locks_lru)) {
+  5945			nbl = list_first_entry(&nn->blocked_locks_lru,
+  5946						struct nfsd4_blocked_lock, nbl_lru);
+  5947			if (!state_expired(&lt, nbl->nbl_time))
+  5948				break;
+  5949			list_move(&nbl->nbl_lru, &reaplist);
+  5950			list_del_init(&nbl->nbl_list);
+  5951		}
+  5952		spin_unlock(&nn->blocked_locks_lock);
+  5953	
+  5954		while (!list_empty(&reaplist)) {
+  5955			nbl = list_first_entry(&reaplist,
+  5956						struct nfsd4_blocked_lock, nbl_lru);
+  5957			list_del_init(&nbl->nbl_lru);
+  5958			free_blocked_lock(nbl);
+  5959		}
+  5960	#ifdef CONFIG_NFSD_V4_2_INTER_SSC
+  5961		/* service the server-to-server copy delayed unmount list */
+  5962		nfsd4_ssc_expire_umount(nn);
+  5963	#endif
+  5964	out:
+  5965		return max_t(time64_t, lt.new_timeo, NFSD_LAUNDROMAT_MINTIMEOUT);
+  5966	}
+  5967	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

@@ -2,99 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2244B632E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 06:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE394B6333
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 06:56:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234259AbiBOFzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 00:55:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55448 "EHLO
+        id S233814AbiBOF4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 00:56:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbiBOFzu (ORCPT
+        with ESMTP id S230182AbiBOF4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 00:55:50 -0500
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC738F9BD;
-        Mon, 14 Feb 2022 21:55:41 -0800 (PST)
-Received: by mail-ej1-f41.google.com with SMTP id a8so41914453ejc.8;
-        Mon, 14 Feb 2022 21:55:41 -0800 (PST)
+        Tue, 15 Feb 2022 00:56:39 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2064132C;
+        Mon, 14 Feb 2022 21:56:30 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id l14so17611692qtp.7;
+        Mon, 14 Feb 2022 21:56:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=uPUj/2D0fnRRHEGsxfFw4uPYjIMmB8m7B7g+xVLuCTs=;
+        b=e7EkjOF9JnmPm2zvwdTKMlYivOB6v4VFpWSOnTeskfEh9TmfPrj9ow39Zv8UTTKTDD
+         GCALVJO2THsTZ9IRY73lRRhUJettrYNXO6G+v6eI7xNrz6nwh2hfeArS1DWLdU54W3r1
+         XqSl0wO9nM2J38wWwIORRLsAWma/NjrwNvmXU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gp8ebT5rOJ2rAFinWwNQFlP6FSvniebTOjl8cmXAgEY=;
-        b=EsphDjdXfTtnyNS4Txc3RCr02CfJNaPcTwSMUFPtvY9J0nwJ7WXfLF+/hpFFMfYbfS
-         btGk/CJg5Zdl5eYyToNZFgjJEL5LjvLAQePsXxWxQj6nb7+q7YOcj8Cov9w4aI9i+95n
-         3tmuMm5SwffXKz1i05mUJnPzvDpqWicvhxwQxJu1LkdRDVE+Yy02ObHlBeRXKfDuwrfR
-         KKKS0oI+4MA8R19Aq1F6XQT+mU75Wb4pI1jpYU8kjsjwLOcifs7eaaG/r37S+NfjTd7W
-         D2E6jr/5jyogTaBc/v9LgIzcHqRn0om/nC6RpIdqVjHF09c1U4tMp9Zm53uXHy75Pf7+
-         Asbg==
-X-Gm-Message-State: AOAM533WOMUYj/1n6j/aq6wymuzox7layOQmOn94qgd39CZ2tgzfwMcH
-        Gnv49v3NYgtrayhwDsBtSoEwfedzRws=
-X-Google-Smtp-Source: ABdhPJyrPL/Y79/an13ElJxSImi+bGwiinWqWkElWMGy55bQXJVKYjwB12opX7WttphtP3ne6+pdXA==
-X-Received: by 2002:a17:907:16a8:: with SMTP id hc40mr1617582ejc.739.1644904539831;
-        Mon, 14 Feb 2022 21:55:39 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id p16sm6035084ejn.54.2022.02.14.21.55.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 21:55:39 -0800 (PST)
-Message-ID: <67ace5d3-02b3-034d-969f-9a05bbdd8e30@kernel.org>
-Date:   Tue, 15 Feb 2022 06:55:38 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=uPUj/2D0fnRRHEGsxfFw4uPYjIMmB8m7B7g+xVLuCTs=;
+        b=HcjgLb8AY/Ac1hwF5vbb+bjj0+y03s3EcStNpkJLJUwaoEEAyR29JhNv110l5/5KWe
+         7iZ7sqhoNAl4DyBuyLh3ekaEpTmh8ZUN9AmaJfsJxcgiMm74iwjN/LF63c/ciWC1kOEq
+         wbIGe9Z9GKImqGO9rMsUKBVfAhMD0oluYahZzoN4AF6pLW7gP7ikqD1UH684BfkLNB6n
+         GwkDam8jbXW07w9dhB/r+iQlDLKJmYRfcv7zCUHQZN+LOxJP/tx5Z17w7dPz2Fk8Vfcr
+         KlUmPZdgBoG7CjUWf2RmomnsfrLHKJGKpPILynY08JjZmgZYc20QfykPsmDcaymyuV4w
+         Tq0g==
+X-Gm-Message-State: AOAM5318075vXVHvyjESPXrxDpu+jZSxKD17z/JErlATvuC3epeeDUQ/
+        xzixCsMkIj75YfYebtduXoBXQHRBYR6GzJcTmfw=
+X-Google-Smtp-Source: ABdhPJxDiNItJktz4LNO+XrPyLIgW4R0iAfyKu+KkaTWOe+XGOJYyD101ljPiR6VxTVgla4El5GLg42q9jEpkrRZCeQ=
+X-Received: by 2002:ac8:7e91:: with SMTP id w17mr1635736qtj.678.1644904589150;
+ Mon, 14 Feb 2022 21:56:29 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] tty: serial: 8250: add missing pci_dev_put() before
- return
-Content-Language: en-US
-To:     Qing Wang <wangqing@vivo.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1644890454-65258-1-git-send-email-wangqing@vivo.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <1644890454-65258-1-git-send-email-wangqing@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220129115228.2257310-1-j.neuschaefer@gmx.net>
+ <CACRpkdYEigGHkoGfBg15tFXadgpXUAjDOnw7ePXhmvHJqPEJXw@mail.gmail.com>
+ <YfZkis8M81Ejpagq@latitude> <CACPK8XdFXRQf3MpPh3z=EMAKtnQSHL+iwwMCVYc5dP9DfQEN+Q@mail.gmail.com>
+ <YfpyjDBH83FE7r4o@latitude> <CAHp75Vdg8zFSHaTP_8jQua5QfRYbvZ4_rLdCtt3ks8YEibseTg@mail.gmail.com>
+ <YgdyjUbb4lnrVHmJ@latitude>
+In-Reply-To: <YgdyjUbb4lnrVHmJ@latitude>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Tue, 15 Feb 2022 05:56:17 +0000
+Message-ID: <CACPK8Xe-t8Qso_AX+q08OxrgmUPbEayhnHXH5xiLr7M6rDxjuw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/9] Nuvoton WPCM450 pinctrl and GPIO driver
+To:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15. 02. 22, 3:00, Qing Wang wrote:
-> From: Wang Qing <wangqing@vivo.com>
-> 
-> pci_get_slot() increases its reference count, the caller must
-> decrement the reference count by calling pci_dev_put()
-> 
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
-> ---
->   drivers/tty/serial/8250/8250_lpss.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
-> index d3bafec..57e462f
-> --- a/drivers/tty/serial/8250/8250_lpss.c
-> +++ b/drivers/tty/serial/8250/8250_lpss.c
-> @@ -149,6 +149,8 @@ static int byt_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
->   	/* Disable TX counter interrupts */
->   	writel(BYT_TX_OVF_INT_MASK, port->membase + BYT_TX_OVF_INT);
->   
-> +	pci_dev_put(dma_dev);
+On Mon, 14 Feb 2022 at 12:05, Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.n=
+et> wrote:
+>
+> On Wed, Feb 02, 2022 at 02:10:44PM +0200, Andy Shevchenko wrote:
+> > On Wed, Feb 2, 2022 at 2:01 PM Jonathan Neusch=C3=A4fer
+> > <j.neuschaefer@gmx.net> wrote:
+> > > On Tue, Feb 01, 2022 at 11:42:11PM +0000, Joel Stanley wrote:
+> > > > On Tue, 1 Feb 2022 at 13:05, Jonathan Neusch=C3=A4fer <j.neuschaefe=
+r@gmx.net> wrote:
+> >
+> > ...
+> >
+> > > > I assume you're sending a v6 to fix some of the warnings?
+> > >
+> > > No, the warnings are fairly independent of this patchset, it's just t=
+hat
+> > > the adjacent pinctrl-npcm7xx driver started to be built by the bot, d=
+ue
+> > > to my Kconfig change. I'll fix them in a separate patchset.
+> >
+> > I guess you need to fix that first.
+> >
+> > Because now and then all CIs will complain to your patch and confuse pe=
+ople.
+>
+> FWIW, Linus has applied the npcm7xx fixes to for-next in the pinctrl tree=
+,
+> which means that they are not blocking this patchset anymore, AFAICS.
 
+I've applied the device tree changes, and I will send a pull request
+for v5.18 with those.
 
-What about the "return -ENODEV" few lines above?
+I assume you want Linus to merge the pinctrl bindings and driver
+through his tree.
 
->   	return 0;
->   }
->   
+Cheers,
 
-
--- 
-js
-suse labs
+Joel

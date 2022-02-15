@@ -2,192 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF1F4B720F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 563364B7242
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241086AbiBOPsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:48:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34812 "EHLO
+        id S237507AbiBOPtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:49:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241082AbiBOPsI (ORCPT
+        with ESMTP id S229616AbiBOPtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:48:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAE4AFF6D;
-        Tue, 15 Feb 2022 07:47:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E252161733;
-        Tue, 15 Feb 2022 15:47:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D834C340EB;
-        Tue, 15 Feb 2022 15:47:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644940023;
-        bh=CiYsFsleEmFiP9wgHpNttT8nePiRXeGuXEYD/WN097I=;
-        h=Date:From:To:cc:Subject:From;
-        b=rdmwSsW7TUPA0WcHuIfaCz4QVPEPcvdzXEgHJeLuWsNah5e/RDEfA38ZbkSWxPPzz
-         QXPjhlB6IyMJw8vIK/LW/KAoTXmBOKuGBzNotBIATNFBqYncXnpoNB5Jy3B1rfzWca
-         Hz4LDdC6Rs6O0rglZd04Yb9pKOshQL0iaf7cFh6zISP5WDLOW7APySdZLZWAt59PPI
-         t1bj/hxIind2cKx2WKZN03RC9O4/BztMiXWZ+4tzk4sWY9KyXzeN9Mj0xqBLylccTd
-         4x3x2bCsAuHXxRGg2C8Bl2Jl/sx7711lX6x6PhR5gQeuqn02+iAOTVlfwrRO/dp3Zg
-         WkWxtIZM0l19w==
-Date:   Tue, 15 Feb 2022 16:47:00 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Johannes Berg <johannes@sipsolutions.net>
-cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mac80211: fix RCU usage in ieee80211_tx_h_select_key()
-Message-ID: <nycvar.YFH.7.76.2202151643220.11721@cbobk.fhfr.pm>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Tue, 15 Feb 2022 10:49:23 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22B4241
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:49:12 -0800 (PST)
+Date:   Tue, 15 Feb 2022 16:49:10 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644940151;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CTD2emJVAMyrhz49dgY9PFY8c6oHOUAD1tBKxJ4b55g=;
+        b=YLkB0R0INUJzd1184OAw5Yr3P464LTg+UcqO0k7NQ+gAHuXv+LcgRnqZVIoXArB+2DFkQY
+        zPFvJLH/2X0UNMUAHUtqyawtmrp7E2rvuA9M9Z5CerUGhBQE+kxw8WKoLN8o+pWHxv+7p3
+        hQGUi1fhAQcT+4GrdLva/N3J7DJK3ECKYeHApH2WyX4Nz7p82feTNTLvn6ulFRZslAoYM2
+        +uSlpTrt9/9nnHQ1PWJ70RHsuccfu9M6Ap+E6CVpLgvwvcxzdplj8Scrn1ce0cRQsez4OH
+        w6bTOZBXtTvnNea6IdpoKBdOhcean+L7T0nIUHPEYNSJVi/1EaSCnJTdyomW5A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644940151;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CTD2emJVAMyrhz49dgY9PFY8c6oHOUAD1tBKxJ4b55g=;
+        b=W/3qaydenUTXwhOMjL6vw8V4MVyll5xn08I1Mmy67+J0t+ST+neehI11KtQ4VWCSTWnaly
+        eH1CxO8iBBXRuxCQ==
+From:   Sebastian Siewior <bigeasy@linutronix.de>
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        John Ogness <john.ogness@linutronix.de>
+Subject: Re: [PATCH] drm: fb-helper: Avoid nesting spinlock_t into
+ raw_spinlock_t
+Message-ID: <YgvLdvPihuQ9KZ6/@linutronix.de>
+References: <nycvar.YFH.7.76.2202151640200.11721@cbobk.fhfr.pm>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <nycvar.YFH.7.76.2202151640200.11721@cbobk.fhfr.pm>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Kosina <jkosina@suse.cz>
+On 2022-02-15 16:43:08 [+0100], Jiri Kosina wrote:
+> From: Jiri Kosina <jkosina@suse.cz>
+> 
+> drm_fb_helper_damage() is acquiring spinlock_t (helper->damage_lock), 
+> while it can be called from contexts where raw_spinlock_t is held (e.g. 
+> console_owner lock obtained on vprintk_emit() codepath).
+> 
+> As the critical sections protected by damage_lock are super-tiny, let's 
+> fix this by converting it to raw_spinlock_t in order not to violate 
+> PREEMPT_RT-imposed lock nesting rules.
+> 
+> This fixes the splat below.
+> 
+>  =============================
+>  [ BUG: Invalid wait context ]
+>  5.17.0-rc4-00002-gd567f5db412e #1 Not tainted
 
-ieee80211_tx_h_select_key() is performing a series of RCU dereferences, 
-but none of the callers seems to be taking RCU read-side lock; let's 
-acquire the lock in ieee80211_tx_h_select_key() itself.
+rc4. Is this also the case in the RT tree which includes John's printk
+changes?
 
-Spotted with rtw89 driver.
+>  -----------------------------
+>  swapper/0/0 is trying to lock:
+>  ffff8c5687cc4158 (&helper->damage_lock){....}-{3:3}, at: drm_fb_helper_damage.isra.22+0x4a/0xf0
+>  other info that might help us debug this:
+>  context-{2:2}
+>  3 locks held by swapper/0/0:
+>   #0: ffffffffad776520 (console_lock){+.+.}-{0:0}, at: vprintk_emit+0xb8/0x2a0
+>   #1: ffffffffad696120 (console_owner){-...}-{0:0}, at: console_unlock+0x17f/0x550
+>   #2: ffffffffad926a58 (printing_lock){....}-{3:3}, at: vt_console_print+0x7d/0x3e0
+>  stack backtrace:
+>  CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc4-00002-gd567f5db412e #1 bed1d5e19e0e7e8c9d97fd8afa1322f7f47a4f38
+>  Hardware name: LENOVO 20UJS2B905/20UJS2B905, BIOS R1CET63W(1.32 ) 04/09/2021
+>  Call Trace:
+>   <IRQ>
+>   dump_stack_lvl+0x58/0x71
+>   __lock_acquire+0x165b/0x1780
+>   ? secondary_startup_64_no_verify+0xd5/0xdb
+>   lock_acquire+0x278/0x300
+>   ? drm_fb_helper_damage.isra.22+0x4a/0xf0
+>   ? save_trace+0x3e/0x340
+>   ? __bfs+0x10f/0x240
+>   _raw_spin_lock_irqsave+0x48/0x60
+>   ? drm_fb_helper_damage.isra.22+0x4a/0xf0
+>   drm_fb_helper_damage.isra.22+0x4a/0xf0
+>   soft_cursor+0x194/0x240
+>   bit_cursor+0x386/0x630
+>   ? get_color+0x29/0x120
+>   ? bit_putcs+0x4b0/0x4b0
+>   ? console_unlock+0x17f/0x550
+>   hide_cursor+0x2f/0x90
+>   vt_console_print+0x3c5/0x3e0
+>   ? console_unlock+0x17f/0x550
+>   console_unlock+0x515/0x550
+>   vprintk_emit+0x1c8/0x2a0
+>   _printk+0x52/0x6e
+>   ? sched_clock_tick+0x3d/0x60
+>   collect_cpu_info_amd+0x93/0xd0
+>   collect_cpu_info_local+0x23/0x30
+>   flush_smp_call_function_queue+0x137/0x220
+>   __sysvec_call_function_single+0x43/0x1c0
+>   sysvec_call_function_single+0x43/0x80
+>   </IRQ>
+>   <TASK>
+>   asm_sysvec_call_function_single+0x12/0x20
+>  RIP: 0010:cpuidle_enter_state+0x111/0x4b0
+>  Code: 7c ff 45 84 ff 74 17 9c 58 0f 1f 44 00 00 f6 c4 02 0f 85 71 03 00 00 31 ff e8 bb 21 86 ff e8 76 2f 8e ff fb 66 0f 1f 44 00 00 <45> 85 f6 0f 88 12 01 00 00 49 63 d6 4c 2b 24 24 48 8d 04 52 48 8d
+>  RSP: 0018:ffffffffad603e48 EFLAGS: 00000206
+>  RAX: 00000000000127c3 RBX: 0000000000000003 RCX: 0000000000000000
+>  RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffffffac32617a
+>  RBP: ffff8c5687ba4400 R08: 0000000000000001 R09: 0000000000000001
+>  R10: ffffffffad603e10 R11: 0000000000000000 R12: 00000000685eb4a0
+>  R13: ffffffffad918f80 R14: 0000000000000003 R15: 0000000000000000
+>   ? cpuidle_enter_state+0x10a/0x4b0
+>   ? cpuidle_enter_state+0x10a/0x4b0
+>   cpuidle_enter+0x29/0x40
+>   do_idle+0x24d/0x2c0
+>   cpu_startup_entry+0x19/0x20
+>   start_kernel+0x9c2/0x9e9
+>   secondary_startup_64_no_verify+0xd5/0xdb
+>   </TASK>
+> 
+> Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+> ---
+>  drivers/gpu/drm/drm_fb_helper.c | 14 +++++++-------
+>  include/drm/drm_fb_helper.h     |  2 +-
+>  2 files changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
+> index ed43b987d306..7c4ab6e6f865 100644
+> --- a/drivers/gpu/drm/drm_fb_helper.c
+> +++ b/drivers/gpu/drm/drm_fb_helper.c
+> @@ -436,11 +436,11 @@ static void drm_fb_helper_damage_work(struct work_struct *work)
+>  	unsigned long flags;
+>  	int ret;
+>  
+> -	spin_lock_irqsave(&helper->damage_lock, flags);
+> +	raw_spin_lock_irqsave(&helper->damage_lock, flags);
+>  	clip_copy = *clip;
+>  	clip->x1 = clip->y1 = ~0;
+>  	clip->x2 = clip->y2 = 0;
+> -	spin_unlock_irqrestore(&helper->damage_lock, flags);
+> +	raw_spin_unlock_irqrestore(&helper->damage_lock, flags);
+>  
+>  	/* Call damage handlers only if necessary */
+>  	if (!(clip_copy.x1 < clip_copy.x2 && clip_copy.y1 < clip_copy.y2))
+> @@ -465,12 +465,12 @@ static void drm_fb_helper_damage_work(struct work_struct *work)
+>  	 * Restore damage clip rectangle on errors. The next run
+>  	 * of the damage worker will perform the update.
+>  	 */
+> -	spin_lock_irqsave(&helper->damage_lock, flags);
+> +	raw_spin_lock_irqsave(&helper->damage_lock, flags);
+>  	clip->x1 = min_t(u32, clip->x1, clip_copy.x1);
+>  	clip->y1 = min_t(u32, clip->y1, clip_copy.y1);
+>  	clip->x2 = max_t(u32, clip->x2, clip_copy.x2);
+>  	clip->y2 = max_t(u32, clip->y2, clip_copy.y2);
+> -	spin_unlock_irqrestore(&helper->damage_lock, flags);
+> +	raw_spin_unlock_irqrestore(&helper->damage_lock, flags);
+>  }
+>  
+>  /**
+> @@ -486,7 +486,7 @@ void drm_fb_helper_prepare(struct drm_device *dev, struct drm_fb_helper *helper,
+>  			   const struct drm_fb_helper_funcs *funcs)
+>  {
+>  	INIT_LIST_HEAD(&helper->kernel_fb_list);
+> -	spin_lock_init(&helper->damage_lock);
+> +	raw_spin_lock_init(&helper->damage_lock);
+>  	INIT_WORK(&helper->resume_work, drm_fb_helper_resume_worker);
+>  	INIT_WORK(&helper->damage_work, drm_fb_helper_damage_work);
+>  	helper->damage_clip.x1 = helper->damage_clip.y1 = ~0;
+> @@ -670,12 +670,12 @@ static void drm_fb_helper_damage(struct fb_info *info, u32 x, u32 y,
+>  	if (!drm_fbdev_use_shadow_fb(helper))
+>  		return;
+>  
+> -	spin_lock_irqsave(&helper->damage_lock, flags);
+> +	raw_spin_lock_irqsave(&helper->damage_lock, flags);
+>  	clip->x1 = min_t(u32, clip->x1, x);
+>  	clip->y1 = min_t(u32, clip->y1, y);
+>  	clip->x2 = max_t(u32, clip->x2, x + width);
+>  	clip->y2 = max_t(u32, clip->y2, y + height);
+> -	spin_unlock_irqrestore(&helper->damage_lock, flags);
+> +	raw_spin_unlock_irqrestore(&helper->damage_lock, flags);
+>  
+>  	schedule_work(&helper->damage_work);
+>  }
+> diff --git a/include/drm/drm_fb_helper.h b/include/drm/drm_fb_helper.h
+> index 3af4624368d8..91178958896e 100644
+> --- a/include/drm/drm_fb_helper.h
+> +++ b/include/drm/drm_fb_helper.h
+> @@ -131,7 +131,7 @@ struct drm_fb_helper {
+>  	struct fb_info *fbdev;
+>  	u32 pseudo_palette[17];
+>  	struct drm_clip_rect damage_clip;
+> -	spinlock_t damage_lock;
+> +	raw_spinlock_t damage_lock;
+>  	struct work_struct damage_work;
+>  	struct work_struct resume_work;
+>  
+> 
 
-This fixes the splat below.
-
- =============================
- WARNING: suspicious RCU usage
- 5.17.0-rc4-00003-gccad664b7f14 #3 Tainted: G            E
- -----------------------------
- net/mac80211/tx.c:593 suspicious rcu_dereference_check() usage!
-
- other info that might help us debug this:
-
- rcu_scheduler_active = 2, debug_locks = 1
- 2 locks held by kworker/u33:0/184:
-  #0: ffff9c0b14811d38 ((wq_completion)rtw89_tx_wq){+.+.}-{0:0}, at: process_one_work+0x258/0x660
-  #1: ffffb97380cf3e78 ((work_completion)(&rtwdev->txq_work)){+.+.}-{0:0}, at: process_one_work+0x258/0x660
-
- stack backtrace:
- CPU: 8 PID: 184 Comm: kworker/u33:0 Tainted: G            E     5.17.0-rc4-00003-gccad664b7f14 #3 473b49ab0e7c2d6af2900c756bfd04efd7a9de13
- Hardware name: LENOVO 20UJS2B905/20UJS2B905, BIOS R1CET63W(1.32 ) 04/09/2021
- Workqueue: rtw89_tx_wq rtw89_core_txq_work [rtw89_core]
- Call Trace:
-  <TASK>
-  dump_stack_lvl+0x58/0x71
-  ieee80211_tx_h_select_key+0x2c0/0x530 [mac80211 911c23e2351c0ae60b597a67b1204a5ea955e365]
-  ieee80211_tx_dequeue+0x1a7/0x1260 [mac80211 911c23e2351c0ae60b597a67b1204a5ea955e365]
-  rtw89_core_txq_work+0x1a6/0x420 [rtw89_core b39ba493f2e517ad75e0f8187ecc24edf58bbbea]
-  process_one_work+0x2d8/0x660
-  worker_thread+0x39/0x3e0
-  ? process_one_work+0x660/0x660
-  kthread+0xe5/0x110
-  ? kthread_complete_and_exit+0x20/0x20
-  ret_from_fork+0x22/0x30
-  </TASK>
-
- =============================
- WARNING: suspicious RCU usage
- 5.17.0-rc4-00003-gccad664b7f14 #3 Tainted: G            E
- -----------------------------
- net/mac80211/tx.c:607 suspicious rcu_dereference_check() usage!
-
- other info that might help us debug this:
-
- rcu_scheduler_active = 2, debug_locks = 1
- 2 locks held by kworker/u33:0/184:
-  #0: ffff9c0b14811d38 ((wq_completion)rtw89_tx_wq){+.+.}-{0:0}, at: process_one_work+0x258/0x660
-  #1: ffffb97380cf3e78 ((work_completion)(&rtwdev->txq_work)){+.+.}-{0:0}, at: process_one_work+0x258/0x660
-
- stack backtrace:
- CPU: 8 PID: 184 Comm: kworker/u33:0 Tainted: G            E     5.17.0-rc4-00003-gccad664b7f14 #3 473b49ab0e7c2d6af2900c756bfd04efd7a9de13
- Hardware name: LENOVO 20UJS2B905/20UJS2B905, BIOS R1CET63W(1.32 ) 04/09/2021
- Workqueue: rtw89_tx_wq rtw89_core_txq_work [rtw89_core]
- Call Trace:
-  <TASK>
-  dump_stack_lvl+0x58/0x71
-  ieee80211_tx_h_select_key+0x464/0x530 [mac80211 911c23e2351c0ae60b597a67b1204a5ea955e365]
-  ieee80211_tx_dequeue+0x1a7/0x1260 [mac80211 911c23e2351c0ae60b597a67b1204a5ea955e365]
-  rtw89_core_txq_work+0x1a6/0x420 [rtw89_core b39ba493f2e517ad75e0f8187ecc24edf58bbbea]
-  process_one_work+0x2d8/0x660
-  worker_thread+0x39/0x3e0
-  ? process_one_work+0x660/0x660
-  kthread+0xe5/0x110
-  ? kthread_complete_and_exit+0x20/0x20
-  ret_from_fork+0x22/0x30
-  </TASK>
-
-Fixes: a0761a301746e ("mac80211: drop data frames without key on encrypted links")
-Fixes: 46f6b06050b73 ("mac80211: Encrypt "Group addressed privacy" action frames")
-Fixes: 3cfcf6ac6d69d ("mac80211: 802.11w - Use BIP (AES-128-CMAC)")
-Fixes: f7e0104c1a4e7 ("mac80211: support separate default keys")
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
----
-
-Unless I am missing something, this seems to have been buggy for over a 
-decade ... ?
-
- net/mac80211/tx.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
-
-diff --git a/net/mac80211/tx.c b/net/mac80211/tx.c
-index 6d054fed062f..50b33ef70627 100644
---- a/net/mac80211/tx.c
-+++ b/net/mac80211/tx.c
-@@ -580,6 +580,7 @@ ieee80211_tx_h_check_control_port_protocol(struct ieee80211_tx_data *tx)
- static ieee80211_tx_result debug_noinline
- ieee80211_tx_h_select_key(struct ieee80211_tx_data *tx)
- {
-+	int ret;
- 	struct ieee80211_key *key;
- 	struct ieee80211_tx_info *info = IEEE80211_SKB_CB(tx->skb);
- 	struct ieee80211_hdr *hdr = (struct ieee80211_hdr *)tx->skb->data;
-@@ -589,6 +590,8 @@ ieee80211_tx_h_select_key(struct ieee80211_tx_data *tx)
- 		return TX_CONTINUE;
- 	}
- 
-+	rcu_read_lock();
-+
- 	if (tx->sta &&
- 	    (key = rcu_dereference(tx->sta->ptk[tx->sta->ptk_idx])))
- 		tx->key = key;
-@@ -645,18 +648,23 @@ ieee80211_tx_h_select_key(struct ieee80211_tx_data *tx)
- 		}
- 
- 		if (unlikely(tx->key && tx->key->flags & KEY_FLAG_TAINTED &&
--			     !ieee80211_is_deauth(hdr->frame_control)))
--			return TX_DROP;
-+			     !ieee80211_is_deauth(hdr->frame_control))) {
-+			ret = TX_DROP;
-+			goto out;
-+		}
- 
- 		if (!skip_hw && tx->key &&
- 		    tx->key->flags & KEY_FLAG_UPLOADED_TO_HARDWARE)
- 			info->control.hw_key = &tx->key->conf;
- 	} else if (ieee80211_is_data_present(hdr->frame_control) && tx->sta &&
- 		   test_sta_flag(tx->sta, WLAN_STA_USES_ENCRYPTION)) {
--		return TX_DROP;
-+		ret = TX_DROP;
-+		goto out;
- 	}
--
--	return TX_CONTINUE;
-+	ret = TX_CONTINUE;
-+out:
-+	rcu_read_unlock();
-+	return ret;
- }
- 
- static ieee80211_tx_result debug_noinline
-
--- 
-Jiri Kosina
-SUSE Labs
-
+Sebastian

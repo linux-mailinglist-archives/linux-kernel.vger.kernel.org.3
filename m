@@ -2,140 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BE44B786C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08BE44B769C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242337AbiBORNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 12:13:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39142 "EHLO
+        id S242346AbiBORPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 12:15:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242316AbiBORNV (ORCPT
+        with ESMTP id S238437AbiBORPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 12:13:21 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F228E11ACED
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:13:10 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id s24so21461579oic.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 09:13:10 -0800 (PST)
+        Tue, 15 Feb 2022 12:15:00 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5901311ACED;
+        Tue, 15 Feb 2022 09:14:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dkNaB6kzC0t6gTi2pQx30aeojCMITTvkle2ZzaYqdBM=;
-        b=Tl08YyyCqUz7jPsZpEIFs7dcAC/J3b3HZaMGn2NtoxJdeiQj1zWTIhiXMGBdMH83VQ
-         1PghJf9UK1UklkzjUbCFtG0ZVytd3YE5L/JU7Kj9Z9cs0Wvvd+DGV0TXm+DgvCOhGcRs
-         VqO1dAL9k6fwlwYV03cAC0TdOdS+Q/ZQe65153sA+YsBU6iS7zg3OCu919enunaT31XZ
-         6oWEyPxUX6PDYpqqXRNWTgCxfQoV6e0VL/fBBeLHnuF3Tf+jt5xEugirI7diCJWGCLov
-         0y2Sg+P0c8WXjiAhxG6TJ0z3N43nJ9hDxYQULHaF9eUw6VZjJNwxw8XyTyxWSPqnnyu6
-         bEnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dkNaB6kzC0t6gTi2pQx30aeojCMITTvkle2ZzaYqdBM=;
-        b=aiOvL/h1mfiO2Ne7K/2qlA5geruegeBON6vJurzl9F63RvsH1udQDl1XUbGV0Xx4sm
-         113Pmu9MamO5ID/jLv794Q/2AdH919lKzU++XqXTiqzjN9jjqSn8/Gb61nphpYhN4I3q
-         m+OKlvAZz5tgLepFyuD2mnSKMfmcqqqJUpeJb84/WHtSdQ7OpOY/4+1Rr2ROj0BIVr8k
-         JQmvdmaJKNqGa4R5Kmc7So85L9pGXo2L9IqVaY/3M+ny5havYObwbK5U5Nb1TnZhyvVW
-         wT6i7Yw8wcP6LYJOoCi4WY+obxUzUCm26GRuplyVVV+i9HPzTH2OsYRE5SYCa1MTVM+Y
-         oxuw==
-X-Gm-Message-State: AOAM532McjiblyzgyFxxSR9tT4SiRB2AKQ0R6fnPNo5xoAvy3QJSN6em
-        e7zA0UUdWlxkzGpgk9KyeoEsgJ6thoQnlVC4d7syqQ==
-X-Google-Smtp-Source: ABdhPJyF2d6aFudNgPHq5wPVAths+OUdollkoCVet7aNgbJuaRRSllKYLRFDUcSQY12kE4kPlhzrLKhEIuiY531pZK0=
-X-Received: by 2002:a05:6808:3021:b0:2d4:40f3:6b30 with SMTP id
- ay33-20020a056808302100b002d440f36b30mr605011oib.31.1644945190003; Tue, 15
- Feb 2022 09:13:10 -0800 (PST)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644945290; x=1676481290;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=tPJENVEdfC+s4zuiG00otn2XOucscnt3AglEbQytMTM=;
+  b=Db09LiU3anCYdS8810tiBWXkiHLlBcwwNV2LWn42ZGWcFeKVfdW57RYU
+   Fi0ZIogY+a+DR5U7/RMZPrUZGK3t05vV52qFnNZnPT+sSlzYgCuW9+oh/
+   t71HlPSyn8a2ES9yTO6IkipuAhraOTFY5ZjY6F1TFYM0wRQZYNB/zjFB6
+   c=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 15 Feb 2022 09:14:50 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 09:14:49 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 15 Feb 2022 09:14:49 -0800
+Received: from [10.111.168.21] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 15 Feb
+ 2022 09:14:47 -0800
+Message-ID: <be397e2e-05ab-5c18-8e2d-16c443f0a6d1@quicinc.com>
+Date:   Tue, 15 Feb 2022 09:14:45 -0800
 MIME-Version: 1.0
-References: <00000000000038779505d5d8b372@google.com> <CANp29Y7WjwXwgxPrNq0XXjXPu+wGFqTreh9gry=O6aE7+cKpLQ@mail.gmail.com>
- <CA+zEjCvu76yW7zfM+qJUe+t5y23oPdzR4KDV1mOdqH8bB4GmTw@mail.gmail.com>
-In-Reply-To: <CA+zEjCvu76yW7zfM+qJUe+t5y23oPdzR4KDV1mOdqH8bB4GmTw@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 15 Feb 2022 18:12:58 +0100
-Message-ID: <CACT4Y+arufrRgwmN66wUU+_FGxMy-sTkjMQnRN8U2H2tQuhB7A@mail.gmail.com>
-Subject: Re: [syzbot] riscv/fixes boot error: can't ssh into the instance
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     Aleksandr Nogikh <nogikh@google.com>,
-        linux-riscv@lists.infradead.org,
-        kasan-dev <kasan-dev@googlegroups.com>, palmer@dabbelt.com,
-        syzbot <syzbot+330a558d94b58f7601be@syzkaller.appspotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Add SC8180x to hw catalog
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20220215043353.1256754-1-bjorn.andersson@linaro.org>
+ <20220215043353.1256754-2-bjorn.andersson@linaro.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20220215043353.1256754-2-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Feb 2022 at 14:18, Alexandre Ghiti
-<alexandre.ghiti@canonical.com> wrote:
->
-> Hi Aleksandr,
->
-> On Wed, Feb 2, 2022 at 12:08 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> >
-> > Hello,
-> >
-> > syzbot has already not been able to fuzz its RISC-V instance for 97
->
-> That's a longtime, I'll take a look more regularly.
->
-> > days now because the compiled kernel cannot boot. I bisected the issue
-> > to the following commit:
-> >
-> > commit 54c5639d8f507ebefa814f574cb6f763033a72a5
-> > Author: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-> > Date:   Fri Oct 29 06:59:27 2021 +0200
-> >
-> >     riscv: Fix asan-stack clang build
-> >
-> > Apparently, the problem appears on GCC-built RISC-V kernels with KASAN
-> > enabled. In the previous message syzbot mentions
-> > "riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU
-> > Binutils for Debian) 2.35.2", but the issue also reproduces finely on
-> > a newer GCC compiler: "riscv64-linux-gnu-gcc (Debian 11.2.0-10)
-> > 11.2.0, GNU ld (GNU Binutils for Debian) 2.37".
-> > For convenience, I also duplicate the .config file from the bot's
-> > message: https://syzkaller.appspot.com/x/.config?x=522544a2e0ef2a7d
-> >
-> > Can someone with KASAN and RISC-V expertise please take a look?
->
-> I'll take a look at that today.
->
-> Thanks for reporting the issue,
-
-Hi Alex,
-
-Do you have any updates on this? This is still blocking syzbot:
-https://syzkaller.appspot.com/bug?extid=330a558d94b58f7601be
-
-Do you use KASAN with clang or gcc? We can't boot riscv kernel with neither.
 
 
-> > --
-> > Best Regards,
-> > Aleksandr
-> >
-> >
-> > On Tue, Jan 18, 2022 at 11:26 AM syzbot
-> > <syzbot+330a558d94b58f7601be@syzkaller.appspotmail.com> wrote:
-> > >
-> > > Hello,
-> > >
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    f6f7fbb89bf8 riscv: dts: sifive unmatched: Link the tmp451..
-> > > git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=1095f85bb00000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=522544a2e0ef2a7d
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=330a558d94b58f7601be
-> > > compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > userspace arch: riscv64
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+330a558d94b58f7601be@syzkaller.appspotmail.com
+On 2/14/2022 8:33 PM, Bjorn Andersson wrote:
+> From: Rob Clark <robdclark@chromium.org>
+> 
+> Add SC8180x to the hardware catalog, for initial support for the
+> platform. Due to limitations in the DP driver only one of the four DP
+> interfaces is left enabled.
+> 
+> The SC8180x platform supports the newly added DPU_INTF_WIDEBUS flag and
+> the Windows-on-Snapdragon bootloader leaves the widebus bit set, so this
+> is flagged appropriately to ensure widebus is disabled - for now.
+> 
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> [bjorn: Reworked intf and irq definitions]
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+> 
+> Changes since v1:
+> - Dropped widebus flag
+> 
+>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 129 ++++++++++++++++++
+>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |   1 +
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |   1 +
+>   drivers/gpu/drm/msm/msm_drv.c                 |   1 +
+>   4 files changed, 132 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> index aa75991903a6..7ac0fe32df49 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> @@ -90,6 +90,17 @@
+>   			 BIT(MDP_INTF3_INTR) | \
+>   			 BIT(MDP_INTF4_INTR))
+>   
+> +#define IRQ_SC8180X_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+> +			  BIT(MDP_SSPP_TOP0_INTR2) | \
+> +			  BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+> +			  BIT(MDP_INTF0_INTR) | \
+> +			  BIT(MDP_INTF1_INTR) | \
+> +			  BIT(MDP_INTF2_INTR) | \
+> +			  BIT(MDP_INTF3_INTR) | \
+> +			  BIT(MDP_INTF4_INTR) | \
+> +			  BIT(MDP_INTF5_INTR) | \
+> +			  BIT(MDP_AD4_0_INTR) | \
+> +			  BIT(MDP_AD4_1_INTR))
+>   
+>   #define DEFAULT_PIXEL_RAM_SIZE		(50 * 1024)
+>   #define DEFAULT_DPU_LINE_WIDTH		2048
+> @@ -225,6 +236,22 @@ static const struct dpu_caps sm8150_dpu_caps = {
+>   	.max_vdeci_exp = MAX_VERT_DECIMATION,
+>   };
+>   
+> +static const struct dpu_caps sc8180x_dpu_caps = {
+> +	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
+> +	.max_mixer_blendstages = 0xb,
+> +	.qseed_type = DPU_SSPP_SCALER_QSEED3,
+> +	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
+> +	.ubwc_version = DPU_HW_UBWC_VER_30,
+> +	.has_src_split = true,
+> +	.has_dim_layer = true,
+> +	.has_idle_pc = true,
+> +	.has_3d_merge = true,
+> +	.max_linewidth = 4096,
+> +	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
+> +	.max_hdeci_exp = MAX_HORZ_DECIMATION,
+> +	.max_vdeci_exp = MAX_VERT_DECIMATION,
+> +};
+> +
+>   static const struct dpu_caps sm8250_dpu_caps = {
+>   	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
+>   	.max_mixer_blendstages = 0xb,
+> @@ -293,6 +320,31 @@ static const struct dpu_mdp_cfg sc7180_mdp[] = {
+>   	},
+>   };
+>   
+> +static const struct dpu_mdp_cfg sc8180x_mdp[] = {
+> +	{
+> +	.name = "top_0", .id = MDP_TOP,
+> +	.base = 0x0, .len = 0x45C,
+> +	.features = 0,
+> +	.highest_bank_bit = 0x3,
+> +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = {
+> +			.reg_off = 0x2AC, .bit_off = 0},
+> +	.clk_ctrls[DPU_CLK_CTRL_VIG1] = {
+> +			.reg_off = 0x2B4, .bit_off = 0},
+> +	.clk_ctrls[DPU_CLK_CTRL_VIG2] = {
+> +			.reg_off = 0x2BC, .bit_off = 0},
+> +	.clk_ctrls[DPU_CLK_CTRL_VIG3] = {
+> +			.reg_off = 0x2C4, .bit_off = 0},
+> +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = {
+> +			.reg_off = 0x2AC, .bit_off = 8},
+> +	.clk_ctrls[DPU_CLK_CTRL_DMA1] = {
+> +			.reg_off = 0x2B4, .bit_off = 8},
+> +	.clk_ctrls[DPU_CLK_CTRL_CURSOR0] = {
+> +			.reg_off = 0x2BC, .bit_off = 8},
+> +	.clk_ctrls[DPU_CLK_CTRL_CURSOR1] = {
+> +			.reg_off = 0x2C4, .bit_off = 8},
+> +	},
+> +};
+> +
+>   static const struct dpu_mdp_cfg sm8250_mdp[] = {
+>   	{
+>   	.name = "top_0", .id = MDP_TOP,
+> @@ -861,6 +913,16 @@ static const struct dpu_intf_cfg sc7280_intf[] = {
+>   	INTF_BLK("intf_5", INTF_5, 0x39000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
+>   };
+>   
+> +static const struct dpu_intf_cfg sc8180x_intf[] = {
+> +	INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+> +	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> +	INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
+> +	/* INTF_3 is for MST, wired to INTF_DP 0 and 1, use dummy index until this is supported */
+> +	INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_DP, 999, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
+> +	INTF_BLK("intf_4", INTF_4, 0x6C000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 20, 21),
+> +	INTF_BLK("intf_5", INTF_5, 0x6C800, INTF_DP, MSM_DP_CONTROLLER_2, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
+
+This is a continued discussion from 
+https://patchwork.freedesktop.org/patch/474179/.
+
+Shouldnt INTF_5 be marked as INTF_eDP?
+
+> +};
+> +
+>   /*************************************************************
+>    * VBIF sub blocks config
+>    *************************************************************/
+> @@ -931,6 +993,10 @@ static const struct dpu_qos_lut_entry sm8150_qos_linear[] = {
+>   	{.fl = 0, .lut = 0x0011222222223357 },
+>   };
+>   
+> +static const struct dpu_qos_lut_entry sc8180x_qos_linear[] = {
+> +	{.fl = 4, .lut = 0x0000000000000357 },
+> +};
+> +
+>   static const struct dpu_qos_lut_entry sdm845_qos_macrotile[] = {
+>   	{.fl = 10, .lut = 0x344556677},
+>   	{.fl = 11, .lut = 0x3344556677},
+> @@ -944,6 +1010,10 @@ static const struct dpu_qos_lut_entry sc7180_qos_macrotile[] = {
+>   	{.fl = 0, .lut = 0x0011223344556677},
+>   };
+>   
+> +static const struct dpu_qos_lut_entry sc8180x_qos_macrotile[] = {
+> +	{.fl = 10, .lut = 0x0000000344556677},
+> +};
+> +
+>   static const struct dpu_qos_lut_entry sdm845_qos_nrt[] = {
+>   	{.fl = 0, .lut = 0x0},
+>   };
+> @@ -1045,6 +1115,33 @@ static const struct dpu_perf_cfg sm8150_perf_data = {
+>   	.bw_inefficiency_factor = 120,
+>   };
+>   
+> +static const struct dpu_perf_cfg sc8180x_perf_data = {
+> +	.max_bw_low = 9600000,
+> +	.max_bw_high = 9600000,
+> +	.min_core_ib = 2400000,
+> +	.min_llcc_ib = 800000,
+> +	.min_dram_ib = 800000,
+> +	.danger_lut_tbl = {0xf, 0xffff, 0x0, 0x0},
+> +	.qos_lut_tbl = {
+> +		{.nentry = ARRAY_SIZE(sc8180x_qos_linear),
+> +		.entries = sc8180x_qos_linear
+> +		},
+> +		{.nentry = ARRAY_SIZE(sc8180x_qos_macrotile),
+> +		.entries = sc8180x_qos_macrotile
+> +		},
+> +		{.nentry = ARRAY_SIZE(sc7180_qos_nrt),
+> +		.entries = sc7180_qos_nrt
+> +		},
+> +		/* TODO: macrotile-qseed is different from macrotile */
+> +	},
+> +	.cdp_cfg = {
+> +		{.rd_enable = 1, .wr_enable = 1},
+> +		{.rd_enable = 1, .wr_enable = 0}
+> +	},
+> +	.clk_inefficiency_factor = 105,
+> +	.bw_inefficiency_factor = 120,
+> +};
+> +
+>   static const struct dpu_perf_cfg sm8250_perf_data = {
+>   	.max_bw_low = 13700000,
+>   	.max_bw_high = 16600000,
+> @@ -1199,6 +1296,37 @@ static void sm8150_cfg_init(struct dpu_mdss_cfg *dpu_cfg)
+>   	};
+>   }
+>   
+> +/*
+> + * sc8180x_cfg_init(): populate sc8180 dpu sub-blocks reg offsets
+> + * and instance counts.
+> + */
+> +static void sc8180x_cfg_init(struct dpu_mdss_cfg *dpu_cfg)
+> +{
+> +	*dpu_cfg = (struct dpu_mdss_cfg){
+> +		.caps = &sc8180x_dpu_caps,
+> +		.mdp_count = ARRAY_SIZE(sc8180x_mdp),
+> +		.mdp = sc8180x_mdp,
+> +		.ctl_count = ARRAY_SIZE(sm8150_ctl),
+> +		.ctl = sm8150_ctl,
+> +		.sspp_count = ARRAY_SIZE(sdm845_sspp),
+> +		.sspp = sdm845_sspp,
+> +		.mixer_count = ARRAY_SIZE(sm8150_lm),
+> +		.mixer = sm8150_lm,
+> +		.pingpong_count = ARRAY_SIZE(sm8150_pp),
+> +		.pingpong = sm8150_pp,
+> +		.merge_3d_count = ARRAY_SIZE(sm8150_merge_3d),
+> +		.merge_3d = sm8150_merge_3d,
+> +		.intf_count = ARRAY_SIZE(sc8180x_intf),
+> +		.intf = sc8180x_intf,
+> +		.vbif_count = ARRAY_SIZE(sdm845_vbif),
+> +		.vbif = sdm845_vbif,
+> +		.reg_dma_count = 1,
+> +		.dma_cfg = sm8150_regdma,
+> +		.perf = sc8180x_perf_data,
+> +		.mdss_irqs = IRQ_SC8180X_MASK,
+> +	};
+> +}
+> +
+>   /*
+>    * sm8250_cfg_init(): populate sm8250 dpu sub-blocks reg offsets
+>    * and instance counts.
+> @@ -1260,6 +1388,7 @@ static const struct dpu_mdss_hw_cfg_handler cfg_handler[] = {
+>   	{ .hw_rev = DPU_HW_VER_401, .cfg_init = sdm845_cfg_init},
+>   	{ .hw_rev = DPU_HW_VER_500, .cfg_init = sm8150_cfg_init},
+>   	{ .hw_rev = DPU_HW_VER_501, .cfg_init = sm8150_cfg_init},
+> +	{ .hw_rev = DPU_HW_VER_510, .cfg_init = sc8180x_cfg_init},
+>   	{ .hw_rev = DPU_HW_VER_600, .cfg_init = sm8250_cfg_init},
+>   	{ .hw_rev = DPU_HW_VER_620, .cfg_init = sc7180_cfg_init},
+>   	{ .hw_rev = DPU_HW_VER_720, .cfg_init = sc7280_cfg_init},
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> index 31af04afda7d..9572d29ff2ff 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> @@ -39,6 +39,7 @@
+>   #define DPU_HW_VER_410	DPU_HW_VER(4, 1, 0) /* sdm670 v1.0 */
+>   #define DPU_HW_VER_500	DPU_HW_VER(5, 0, 0) /* sm8150 v1.0 */
+>   #define DPU_HW_VER_501	DPU_HW_VER(5, 0, 1) /* sm8150 v2.0 */
+> +#define DPU_HW_VER_510	DPU_HW_VER(5, 1, 1) /* sc8180 */
+>   #define DPU_HW_VER_600	DPU_HW_VER(6, 0, 0) /* sm8250 */
+>   #define DPU_HW_VER_620	DPU_HW_VER(6, 2, 0) /* sc7180 v1.0 */
+>   #define DPU_HW_VER_720	DPU_HW_VER(7, 2, 0) /* sc7280 */
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> index 47fe11a84a77..cedc631f8498 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> @@ -1351,6 +1351,7 @@ const struct of_device_id dpu_dt_match[] = {
+>   	{ .compatible = "qcom,sdm845-dpu", },
+>   	{ .compatible = "qcom,sc7180-dpu", },
+>   	{ .compatible = "qcom,sc7280-dpu", },
+> +	{ .compatible = "qcom,sc8180x-dpu", },
+>   	{ .compatible = "qcom,sm8150-dpu", },
+>   	{ .compatible = "qcom,sm8250-dpu", },
+>   	{}
+> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+> index 555666e3f960..0f441d358b60 100644
+> --- a/drivers/gpu/drm/msm/msm_drv.c
+> +++ b/drivers/gpu/drm/msm/msm_drv.c
+> @@ -1438,6 +1438,7 @@ static const struct of_device_id dt_match[] = {
+>   	{ .compatible = "qcom,sdm845-mdss", .data = (void *)KMS_DPU },
+>   	{ .compatible = "qcom,sc7180-mdss", .data = (void *)KMS_DPU },
+>   	{ .compatible = "qcom,sc7280-mdss", .data = (void *)KMS_DPU },
+> +	{ .compatible = "qcom,sc8180x-mdss", .data = (void *)KMS_DPU },
+>   	{ .compatible = "qcom,sm8150-mdss", .data = (void *)KMS_DPU },
+>   	{ .compatible = "qcom,sm8250-mdss", .data = (void *)KMS_DPU },
+>   	{}

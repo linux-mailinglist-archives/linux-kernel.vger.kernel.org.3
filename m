@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1BE4B774F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C03794B75A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:48:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241810AbiBOQul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:50:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53820 "EHLO
+        id S241820AbiBOQvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:51:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233991AbiBOQuk (ORCPT
+        with ESMTP id S236475AbiBOQvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:50:40 -0500
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50761106CAA;
-        Tue, 15 Feb 2022 08:50:30 -0800 (PST)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21FBRIwP004184;
-        Tue, 15 Feb 2022 17:50:16 +0100
+        Tue, 15 Feb 2022 11:51:01 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D4C106CA7;
+        Tue, 15 Feb 2022 08:50:50 -0800 (PST)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21FFdQgu002023;
+        Tue, 15 Feb 2022 17:50:31 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=selector1;
- bh=72FKfmKaXVy0smLclYBQZiwgyrB0hpbbniRekC8YAME=;
- b=mBaRWpqk5redgQO/Rp/7FRggsIZtknuQQrOX1cUKOqnVn3j6LY8CmhTSPr6zOjs3ZSuQ
- P7p6ihJHrP4Qd2+AKrc1MVleyZLGxT4dlpsBPu3pM54jrqub/HTlGYQ6c6Wiph4lMht4
- QJgwx1AzX3zmKnxwq59ZvT3ZwFRdJGMeACS2qNNbQKD8JiY4DW+/2irWww+kO307ZbE9
- tyJvhQl54htkX/lnO/sUcK7j1X+bUmdP1X68180E4sqPkGrv+/U90jNSlBTz4ScdnzhQ
- +L2SzRj0TQwFlb21eubhVD4XB6J9YiSOR0l2Xt/8365CbZSHilx7JEbSOKLLhsJ7dkJj iA== 
+ bh=DiSVLeVxr0OnHDk7/fYWUPn7lqKgMv+HqSM4wKwxwYM=;
+ b=xg1E8gyBecspX3HnF/lkQYDlKn6PDTBM1VvKwJZANumNGpmGng/G0H2A3x60289asYAZ
+ TxIsAUHPaeLdxc+kmASdlS+WtrxTG0FC35ZqcNviyVnG99lKbxaw644Cav80U7dAEne4
+ teM0DCM8DAWfMJ2CnxnJS6+VTBaHijr7RP6L+6HyEzX+tKzH3K1PCjLF+NLbXjS9rYB8
+ DIBw+iZTXUf8L4gFVrEonsMw/M9dZEUHcYLgCJ3yeE6fJa89M0FbHvHZqwf2WVoE+ng7
+ HVN3UHpMq15NT6n8P0NKC8KFab0w6wzpG8z41UHoomVn2xFZ+8b7aTmHAh25PMpUhSQJ Cw== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e87me3dmc-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e7pj7r54e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Feb 2022 17:50:16 +0100
+        Tue, 15 Feb 2022 17:50:31 +0100
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0986A10002A;
-        Tue, 15 Feb 2022 17:50:16 +0100 (CET)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DAE0310002A;
+        Tue, 15 Feb 2022 17:50:30 +0100 (CET)
 Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 00FE822FA27;
-        Tue, 15 Feb 2022 17:50:16 +0100 (CET)
-Received: from [10.201.21.201] (10.75.127.49) by SFHDAG2NODE2.st.com
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CDCE122AFF2;
+        Tue, 15 Feb 2022 17:50:30 +0100 (CET)
+Received: from [10.201.21.201] (10.75.127.50) by SFHDAG2NODE2.st.com
  (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 15 Feb
- 2022 17:50:15 +0100
-Message-ID: <cc993fa1-9a50-df5c-f1c9-652bcaa7e08b@foss.st.com>
-Date:   Tue, 15 Feb 2022 17:50:15 +0100
+ 2022 17:50:30 +0100
+Message-ID: <4f080424-0f17-3b5d-4687-553480b8ad34@foss.st.com>
+Date:   Tue, 15 Feb 2022 17:50:29 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/7] ARM: dts: sti: ensure unique unit-address in
- stih410-clock
+Subject: Re: [PATCH v2 3/7] ARM: dts: sti: ensure unique unit-address in
+ stih418-clock
 Content-Language: en-US
 To:     Alain Volmat <avolmat@me.com>, Rob Herring <robh+dt@kernel.org>
 CC:     Arnd Bergmann <arnd@arndb.de>,
         <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 References: <20220211181614.683497-1-avolmat@me.com>
- <20220211181614.683497-3-avolmat@me.com>
+ <20220211181614.683497-4-avolmat@me.com>
 From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <20220211181614.683497-3-avolmat@me.com>
+In-Reply-To: <20220211181614.683497-4-avolmat@me.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
  (10.75.127.5)
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
@@ -74,7 +74,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alain
+Hi ALain
 
 On 2/11/22 19:16, Alain Volmat wrote:
 > Move quadfs and a9-mux clocks nodes into clockgen nodes so
@@ -83,13 +83,13 @@ On 2/11/22 19:16, Alain Volmat wrote:
 > 
 > Signed-off-by: Alain Volmat <avolmat@me.com>
 > ---
->  arch/arm/boot/dts/stih410-clock.dtsi | 100 +++++++++++++--------------
->  1 file changed, 48 insertions(+), 52 deletions(-)
+>  arch/arm/boot/dts/stih418-clock.dtsi | 101 +++++++++++++--------------
+>  1 file changed, 48 insertions(+), 53 deletions(-)
 > 
-> diff --git a/arch/arm/boot/dts/stih410-clock.dtsi b/arch/arm/boot/dts/stih410-clock.dtsi
-> index 6b0e6d4477a3..abac98a1810b 100644
-> --- a/arch/arm/boot/dts/stih410-clock.dtsi
-> +++ b/arch/arm/boot/dts/stih410-clock.dtsi
+> diff --git a/arch/arm/boot/dts/stih418-clock.dtsi b/arch/arm/boot/dts/stih418-clock.dtsi
+> index e84c476b83ed..e1749e92a2e7 100644
+> --- a/arch/arm/boot/dts/stih418-clock.dtsi
+> +++ b/arch/arm/boot/dts/stih418-clock.dtsi
 > @@ -32,7 +32,7 @@ clocks {
 >  		 */
 >  		clockgen-a9@92b0000 {
@@ -99,12 +99,12 @@ On 2/11/22 19:16, Alain Volmat wrote:
 >  
 >  			clockgen_a9_pll: clockgen-a9-pll {
 >  				#clock-cells = <1>;
-> @@ -40,29 +40,29 @@ clockgen_a9_pll: clockgen-a9-pll {
+> @@ -40,30 +40,29 @@ clockgen_a9_pll: clockgen-a9-pll {
 >  
 >  				clocks = <&clk_sysin>;
 >  			};
 > -		};
->  
+> -
 > -		/*
 > -		 * ARM CPU related clocks.
 > -		 */
@@ -117,6 +117,7 @@ On 2/11/22 19:16, Alain Volmat wrote:
 > -				 <&clockgen_a9_pll 0>,
 > -				 <&clk_s_c0_flexgen 13>,
 > -				 <&clk_m_a9_ext2f_div2>;
+>  
 >  			/*
 > -			 * ARM Peripheral clock for timers
 > +			 * ARM CPU related clocks.
@@ -148,7 +149,7 @@ On 2/11/22 19:16, Alain Volmat wrote:
 >  			};
 >  		};
 >  
-> @@ -87,14 +87,6 @@ clk_s_a0_flexgen: clk-s-a0-flexgen {
+> @@ -88,14 +87,6 @@ clk_s_a0_flexgen: clk-s-a0-flexgen {
 >  			};
 >  		};
 >  
@@ -163,7 +164,7 @@ On 2/11/22 19:16, Alain Volmat wrote:
 >  		clk_s_c0: clockgen-c@9103000 {
 >  			compatible = "st,clkgen-c32";
 >  			reg = <0x9103000 0x1000>;
-> @@ -113,6 +105,13 @@ clk_s_c0_pll1: clk-s-c0-pll1 {
+> @@ -114,6 +105,13 @@ clk_s_c0_pll1: clk-s-c0-pll1 {
 >  				clocks = <&clk_sysin>;
 >  			};
 >  
@@ -176,8 +177,8 @@ On 2/11/22 19:16, Alain Volmat wrote:
 > +
 >  			clk_s_c0_flexgen: clk-s-c0-flexgen {
 >  				#clock-cells = <1>;
->  				compatible = "st,flexgen", "st,flexgen-stih410-c0";
-> @@ -142,18 +141,17 @@ clk_m_a9_ext2f_div2: clk-m-a9-ext2f-div2s {
+>  				compatible = "st,flexgen", "st,flexgen-stih418-c0";
+> @@ -143,18 +141,17 @@ clk_m_a9_ext2f_div2: clk-m-a9-ext2f-div2s {
 >  			};
 >  		};
 >  
@@ -203,7 +204,7 @@ On 2/11/22 19:16, Alain Volmat wrote:
 >  			clk_s_d0_flexgen: clk-s-d0-flexgen {
 >  				#clock-cells = <1>;
 >  				compatible = "st,flexgen", "st,flexgen-stih410-d0";
-> @@ -166,18 +164,17 @@ clk_s_d0_flexgen: clk-s-d0-flexgen {
+> @@ -167,18 +164,17 @@ clk_s_d0_flexgen: clk-s-d0-flexgen {
 >  			};
 >  		};
 >  
@@ -228,8 +229,8 @@ On 2/11/22 19:16, Alain Volmat wrote:
 > +
 >  			clk_s_d2_flexgen: clk-s-d2-flexgen {
 >  				#clock-cells = <1>;
->  				compatible = "st,flexgen", "st,flexgen-stih407-d2";
-> @@ -192,18 +189,17 @@ clk_s_d2_flexgen: clk-s-d2-flexgen {
+>  				compatible = "st,flexgen", "st,flexgen-stih418-d2";
+> @@ -193,18 +189,17 @@ clk_s_d2_flexgen: clk-s-d2-flexgen {
 >  			};
 >  		};
 >  

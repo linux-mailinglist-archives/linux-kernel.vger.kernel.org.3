@@ -2,86 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5744E4B772D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 075CE4B76F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242929AbiBOSLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 13:11:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59806 "EHLO
+        id S242934AbiBOSNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 13:13:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235191AbiBOSLu (ORCPT
+        with ESMTP id S235191AbiBOSND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 13:11:50 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1627119433;
-        Tue, 15 Feb 2022 10:11:39 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21FGDFan030060;
-        Tue, 15 Feb 2022 18:11:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=f2sl2vrF5Du39vLhEqi94RE6S3He2uQNXfw3pVxQB+4=;
- b=PeUGiT1izDi1oKNZPaX5T67thkz8ajhYm6VSX1QRCigMNAuqlFEkOfkQ8pFKZpy5wkxn
- XmbF7bIt+YM+u2iXTQ43AAjdCxlgPG7wkL4q242JRubGSwKOE+A3iQo6pDG/w77hTPFn
- URsmlhhZuq14y5f6HMq4Z/eTrravUVC3hP6k9FJO/b0e4P33RSyqxD4TQf1anW/snCrz
- Q3XKJToHirti1CD4NQFsYMmkSz75u7GFb+olqT47i4ieIf2WD4dWypXTPCkliO9iwUi9
- T5BzWW+nzx1wePVf2wj9J6MBfJwRsHCN15+AvG4Hk2Pf4tMEoaW2U7gmyr6vIfh85i33 rA== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e8ekvmqme-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Feb 2022 18:11:36 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21FIAAqJ020040;
-        Tue, 15 Feb 2022 18:11:35 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06fra.de.ibm.com with ESMTP id 3e645jrju1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Feb 2022 18:11:35 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21FIBXl144040626
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Feb 2022 18:11:33 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0DBE811C054;
-        Tue, 15 Feb 2022 18:11:33 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 37D7311C050;
-        Tue, 15 Feb 2022 18:11:32 +0000 (GMT)
-Received: from sig-9-65-88-149.ibm.com (unknown [9.65.88.149])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 15 Feb 2022 18:11:32 +0000 (GMT)
-Message-ID: <b59e8bc8f6b880ab16d4b883a32b537321f513d4.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 1/8] ima: rename IMA_ACTION_FLAGS to
- IMA_NONACTION_FLAGS
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 15 Feb 2022 13:11:31 -0500
-In-Reply-To: <ea619561-fe29-6864-0a07-a49dee8549ab@linux.ibm.com>
-References: <20220211214310.119257-1-zohar@linux.ibm.com>
-         <20220211214310.119257-2-zohar@linux.ibm.com>
-         <ea619561-fe29-6864-0a07-a49dee8549ab@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Tue, 15 Feb 2022 13:13:03 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2BB97A98A;
+        Tue, 15 Feb 2022 10:12:53 -0800 (PST)
+Received: from [192.168.254.32] (unknown [47.187.212.181])
+        by linux.microsoft.com (Postfix) with ESMTPSA id A581420B9CF5;
+        Tue, 15 Feb 2022 10:12:52 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A581420B9CF5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1644948773;
+        bh=CrIgQUKb1HglN6AVYkIW+bL+3Y+CE5Nv6JIlctqQHXk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=D0f/EsmVjfNeQ8g+rDkBc2/fwtcu3WJaAEgaU6AwIpiN27m1SMPKmugMMJUCjRkbt
+         zKIdrYOEfzWAEpSKN4qkQQhula/OcmSfeXPE+KlJ+SOeTen/wYsCOAEGoi1QyPQsBk
+         GRQSOqt/g8A8SsyFIKUhbsO0fuN9jSRMuOm2EEgQ=
+Message-ID: <a6c605a7-71fa-077e-0bca-33c76fc13ad3@linux.microsoft.com>
+Date:   Tue, 15 Feb 2022 12:12:51 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v13 06/11] arm64: Use stack_trace_consume_fn and rename
+ args to unwind()
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220117145608.6781-1-madvenka@linux.microsoft.com>
+ <20220117145608.6781-7-madvenka@linux.microsoft.com>
+ <YgutJKqYe8ss8LLd@FVFF77S0Q05N>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+In-Reply-To: <YgutJKqYe8ss8LLd@FVFF77S0Q05N>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: n0wWR8g5qFmDprcTzT_eMi_FRUarSV0v
-X-Proofpoint-ORIG-GUID: n0wWR8g5qFmDprcTzT_eMi_FRUarSV0v
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-15_05,2022-02-14_04,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- suspectscore=0 phishscore=0 clxscore=1015 priorityscore=1501 mlxscore=0
- mlxlogscore=900 lowpriorityscore=0 impostorscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202150101
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,32 +59,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-02-14 at 15:03 -0500, Stefan Berger wrote:
-> On 2/11/22 16:43, Mimi Zohar wrote:
-> > Simple policy rule options, such as fowner, uid, or euid, can be checked
-> > immediately, while other policy rule options, such as requiring a file
-> > signature, need to be deferred.
-> >
-> > The 'flags' field in the integrity_iint_cache struct contains the policy
-> > action', 'subaction', and non action/subaction.
-> >
-> > action: measure/measured, appraise/appraised, (collect)/collected,
-> >          audit/audited
-> > subaction: appraise status for each hook (e.g. file, mmap, bprm, read,
-> >          creds)
-> > non action/subaction: deferred policy rule options and state
-> >
-> > Rename the IMA_ACTION_FLAGS to IMA_NONACTION_FLAGS.
-> >
-> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+
+
+On 2/15/22 07:39, Mark Rutland wrote:
+> On Mon, Jan 17, 2022 at 08:56:03AM -0600, madvenka@linux.microsoft.com wrote:
+>> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+>>
+>> Rename the arguments to unwind() for better consistency. Also, use the
+>> typedef stack_trace_consume_fn for the consume_entry function as it is
+>> already defined in linux/stacktrace.h.
+>>
+>> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
 > 
-> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> How about: 
+> 
+> | arm64: align with common stracktrace naming
+> |
+> | For historical reasons, the naming of parameters and their types in the arm64
+> | stacktrace code differs from that used in generic code and other
+> | architectures, even though the types are equivalent.
+> |
+> | For consistency and clarity, use the generic names.
+> 
 
-Thanks, Stefan.  Both 1/8 & 2/8 cleanup are now queued in next-
-integrity.
+Will add this.
 
--- 
-thanks,
+Madhavan
 
-Mimi
-
+> Either way:
+> 
+> Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+> 
+> Mark.
+> 
+>> ---
+>>  arch/arm64/kernel/stacktrace.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+>> index 1b32e55735aa..f772dac78b11 100644
+>> --- a/arch/arm64/kernel/stacktrace.c
+>> +++ b/arch/arm64/kernel/stacktrace.c
+>> @@ -181,12 +181,12 @@ static int notrace unwind_next(struct unwind_state *state)
+>>  NOKPROBE_SYMBOL(unwind_next);
+>>  
+>>  static void notrace unwind(struct unwind_state *state,
+>> -			   bool (*fn)(void *, unsigned long), void *data)
+>> +			   stack_trace_consume_fn consume_entry, void *cookie)
+>>  {
+>>  	while (1) {
+>>  		int ret;
+>>  
+>> -		if (!fn(data, state->pc))
+>> +		if (!consume_entry(cookie, state->pc))
+>>  			break;
+>>  		ret = unwind_next(state);
+>>  		if (ret < 0)
+>> -- 
+>> 2.25.1
+>>

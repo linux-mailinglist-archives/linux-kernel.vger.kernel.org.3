@@ -2,104 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CAA74B5FD6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 02:10:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 048AF4B5FDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 02:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232448AbiBOBK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 20:10:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35594 "EHLO
+        id S232993AbiBOBMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 20:12:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiBOBK4 (ORCPT
+        with ESMTP id S229445AbiBOBMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 20:10:56 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BD0DAAE7;
-        Mon, 14 Feb 2022 17:10:46 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JyNLn13Pvz4xPt;
-        Tue, 15 Feb 2022 12:10:40 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644887443;
-        bh=sysgHelvaGoQWQhsN/U+bLrl1/j7SLwzQMRnwQ93Qtk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=nJT0knRktIBysfBdBqRbXOk7CvLgaEknFetdRitCChZO3X6ETKMewHVDjLFrY3Aob
-         19FX943QlH4PiSHyR2ZA32uEDly9TxXItixvkjnkRP2mng+yEdmFuDh79iyrVy9xr1
-         r1CDY3eAjQYcYM5aK7cUGF9XcmqY1CQGkrzNhcev0TXCYjgvyFbrqAZ9qrMBTXrGy6
-         TnoqhDpWt00N72nVwKR17PrNJrkqFmfYiNOED6boYSEK4uGoE7zJNowElNjN/aAgg0
-         0J2cK/bfykgGh2SpahSAianwEsBl5ZtCp9m9Pq5x7nYG0F75y6/c9kJp2TSRkaZJFw
-         pthNEkhmtAw0w==
-Date:   Tue, 15 Feb 2022 12:10:39 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Dave Airlie <airlied@linux.ie>
-Subject: linux-next: build failure after merge of the drm-intel tree
-Message-ID: <20220215121039.1d1ec3e6@canb.auug.org.au>
+        Mon, 14 Feb 2022 20:12:17 -0500
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5539DDEBF
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 17:12:09 -0800 (PST)
+Received: by mail-oo1-xc2d.google.com with SMTP id c7-20020a4ad207000000b002e7ab4185d2so21428889oos.6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 17:12:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=2z0HLBtdwl7RuykFNoLcrOpeQoN2RrPQlxsn50U+srI=;
+        b=Q85Iy1x0nXlLnvvWd0qW9X3s9tgMAJ7AnlBSq3D89DE5VcsaJ25zy163dK52rAgG+C
+         G1Rp6kBsRRKD5HB17M3DH8DPVV2g7hkKKTDgG9GLsFrH4GEKh57ytrF0L8TgjrWgWNpx
+         beKuRv5pUE2ndVw+oZhC8NrzutWuu1E2niMDc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=2z0HLBtdwl7RuykFNoLcrOpeQoN2RrPQlxsn50U+srI=;
+        b=NpdJc+9OTRg1/iwBJTn5iSie8GdpxG9YPaHVQXjUwIqFi3Ttsa60zNrAFWsBQHGCMJ
+         WKiydENhzuBCc3hxZFm8TSqRgYv2U78QZZU99/RX/kkKgIxK0L057tJMaq2mvqBTHa/t
+         eCvZyuuHOnFzwfrFNRC2+1PhsGhmw7nrb9/FTWAbKdZn9FqK5XKPbvasuzkOFJnfisGk
+         mvG9QqkAwH8Fdl+elzLhFeWDCkxzXS/GYZyJ9CF0ipzw9qxWIEKKBjJL7jjAwlzG0fU9
+         t37FKDeCEUQagyUMII1MK50BJUHSDjdTK/4bYFysXdVGz5T/G7rRCROBiDaXJUzBYJa+
+         ciaQ==
+X-Gm-Message-State: AOAM531LvFjWxXlRuocyyvoN/X4sSTOkIgOcSHyNJpb5Ex9zNYPHfzp6
+        6nF0sMwzMTxhnvSNXWcpiRLstPsreYkgPpn6xSKwng==
+X-Google-Smtp-Source: ABdhPJzqr0qj+6PGWqY06otbFxJxLPzm/naHHRbTzZGQw8jz3YGa4aV1SMC/JucpyLkPPx1hqwG9ibRXSdkd51IAglA=
+X-Received: by 2002:a05:6870:d413:: with SMTP id i19mr598159oag.54.1644887528729;
+ Mon, 14 Feb 2022 17:12:08 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 14 Feb 2022 17:12:08 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/iNPkmkrXrHfJuuRrqT7jTy7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1644850708-11099-6-git-send-email-quic_srivasam@quicinc.com>
+References: <1644850708-11099-1-git-send-email-quic_srivasam@quicinc.com> <1644850708-11099-6-git-send-email-quic_srivasam@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 14 Feb 2022 17:12:08 -0800
+Message-ID: <CAE-0n53iKwT8u=d2KG5KX8fJgFs1JhTnaGCfG=OLarhvLdmf3Q@mail.gmail.com>
+Subject: Re: [RESEND v13 05/10] ASoC: qcom: Add register definition for codec
+ rddma and wrdma
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, alsa-devel@alsa-project.org,
+        bgoswami@codeaurora.org, bjorn.andersson@linaro.org,
+        broonie@kernel.org, devicetree@vger.kernel.org,
+        judyhsiao@chromium.org, lgirdwood@gmail.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        perex@perex.cz, quic_plai@quicinc.com, robh+dt@kernel.org,
+        rohitkr@codeaurora.org, srinivas.kandagatla@linaro.org,
+        tiwai@suse.com
+Cc:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/iNPkmkrXrHfJuuRrqT7jTy7
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Quoting Srinivasa Rao Mandadapu (2022-02-14 06:58:23)
+> This patch adds register definitions for codec read dma and write dma
 
-Hi all,
+ git grep "This patch" -- Documentation/process/
 
-After merging the drm-intel tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+> lpass interface.
+>
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-drivers/gpu/drm/i915/gvt/kvmgt.c: In function 'handle_edid_regs':
-drivers/gpu/drm/i915/gvt/kvmgt.c:595:38: error: implicit declaration of fun=
-ction 'drm_edid_block_valid' [-Werror=3Dimplicit-function-declaration]
-  595 |                                 if (!drm_edid_block_valid(
-      |                                      ^~~~~~~~~~~~~~~~~~~~
+> diff --git a/sound/soc/qcom/lpass.h b/sound/soc/qcom/lpass.h
+> index 7cc3763..e059c4a 100644
+> --- a/sound/soc/qcom/lpass.h
+> +++ b/sound/soc/qcom/lpass.h
+> @@ -39,6 +39,29 @@
+>                         return -EINVAL;         \
+>         } while (0)
+>
+> +static inline bool is_cdc_dma_port(int dai_id)
+> +{
+> +       switch (dai_id) {
+> +       case LPASS_CDC_DMA_RX0 ... LPASS_CDC_DMA_RX9:
+> +       case LPASS_CDC_DMA_TX0 ... LPASS_CDC_DMA_TX8:
+> +       case LPASS_CDC_DMA_VA_TX0 ... LPASS_CDC_DMA_VA_TX8:
+> +               return true;
+> +       default:
 
-Presumably caused by commit
+Drop case
 
-  14da21cc4671 ("drm/i915: axe lots of unnecessary includes from i915_drv.h=
-")
+> +               return false;
+> +       }
 
-I am beginning to wonder if you guys run stuff through your CI before
-relasing to linux-next.  Especially important when removing #include
-statements from include files :-)
+return false;
 
-I have used the drm-intel tree from next-20220214 for today.
+would be shorter.
 
---=20
-Cheers,
-Stephen Rothwell
+> +}
+> +
+> +static inline bool is_rxtx_cdc_dma_port(int dai_id)
+> +{
+> +       switch (dai_id) {
+> +       case LPASS_CDC_DMA_RX0 ... LPASS_CDC_DMA_RX9:
+> +       case LPASS_CDC_DMA_TX0 ... LPASS_CDC_DMA_TX8:
+> +               return true;
+> +       default:
+> +               return false;
+> +       }
 
---Sig_/iNPkmkrXrHfJuuRrqT7jTy7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Same.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIK/Y8ACgkQAVBC80lX
-0GzcTQf+LTxs6K5vvlhHDFfi9sLywA62S26SiPukd5M8LQmFQUfrnS3k84wRNyaf
-ljDaUrdT1TxCmk4STGKGYq+jaYCHlt7fVwA2Cps5F7BSYibeGWLaBdEvNdfn0CFE
-3ycP7KLf7c3cdY5ks2MU+d/vKhTm0s/wtFcXzFJ6zrXxnUXakL0EJ2PPh/WaIlna
-r4mNbGMyhvK+SAZQ4sBo77m+KK6RN6f/Mh7qwpHI1UBL6lrOwiTltwlUkoJFT8xT
-O7o/eh13cvuGAcMWxHHPfV95YNgp7gf2zpYGDlSE0s6r2NO0b80LHPRjrThVxKuk
-byH3Zfrkz51IxRX6upG3kJSErt68TA==
-=rp64
------END PGP SIGNATURE-----
-
---Sig_/iNPkmkrXrHfJuuRrqT7jTy7--
+> +}
+> +
+>  struct lpaif_i2sctl {
+>         struct regmap_field *loopback;
+>         struct regmap_field *spken;

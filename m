@@ -2,101 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E674B6E46
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 15:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F392A4B6E48
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 15:05:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238488AbiBOOEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 09:04:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57224 "EHLO
+        id S238491AbiBOOFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 09:05:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231429AbiBOOEj (ORCPT
+        with ESMTP id S231429AbiBOOFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 09:04:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F4B2C66A;
-        Tue, 15 Feb 2022 06:04:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D115161745;
-        Tue, 15 Feb 2022 14:04:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D82AC340EB;
-        Tue, 15 Feb 2022 14:04:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644933868;
-        bh=355sKNy7QprICvidLmVg5A/VTWtCgubbSjFyGihoFQo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I6U7CNYgyGcaTMDAHdmMDrZiAAmQI11fdOjdK1TpR0/ahCxPqvnHgSbqaCHOGDqA7
-         MvQVbTXf1S/YngCd1hBQUhmtyVhKkEsVYig11lrKTnFNU+vM565uueqsBQ5eTaK3HH
-         tk1CJ0/bRJYu3a3LroDR3iLI5Zx23lA2oe1QT+mk=
-Date:   Tue, 15 Feb 2022 15:04:20 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Cc:     hminas@synopsys.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        amelie.delaunay@foss.st.com, alexandre.torgue@foss.st.com
-Subject: Re: [PATCH v2] usb: dwc2: drd: fix soft connect when gadget is
- unconfigured
-Message-ID: <Yguy5OMW477VmMuv@kroah.com>
-References: <1644923059-3619-1-git-send-email-fabrice.gasnier@foss.st.com>
+        Tue, 15 Feb 2022 09:05:16 -0500
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76C43DA6A;
+        Tue, 15 Feb 2022 06:05:06 -0800 (PST)
+Received: by mail-yb1-f176.google.com with SMTP id bt13so56437169ybb.2;
+        Tue, 15 Feb 2022 06:05:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=biihkIRRAWUxBq84lbu+MibkbUJ2P2qW/GI/W7wbU00=;
+        b=rQ0Eeyb0ZKmV5ROvn1X+wRqZ3UAMiLmzfLzEr9TjEy+lf7GqgWj1kpq2kiC0BViQWl
+         G+GIXMjg/neJNHmjD0MhN02J23DTtCz8fsDnrapkOZJ6EujaC0iQBK7wxL6qJN2YG2h5
+         lsCATVC4tg+4bPECmqxJfup6J6FBJyJqvqRFJVfun0HVx84Al7eHJDya5meSjnhLUaAa
+         GbGgV6zB+7Dwp9e9Pgb4xxVOVk8o8beLKLICqVBdny6NPVacFaERzCLYBzLekm3z1VVv
+         pNp5PMsZCBMizaIdVx0YMMf1k1OLJ4uKuGpVk/s2onmcK/kbM2tIZD5YBapHc6sSQR4a
+         VS8w==
+X-Gm-Message-State: AOAM531ApD4wufzhlMm8pC2thmZFEHWUy/ufXCNXCwfHvdt7HaQlDTE7
+        /8AEvLf9UMu2au1y4TxnB5pWQVioPjhs5iatiIw=
+X-Google-Smtp-Source: ABdhPJwohV5p5W0xMq6SsY3kDJ4bDpjPyOp8iNfsPm0YBTpI4ktPEEsJgGDjxRd+WdM6XA6RdzVGJAGOJgGbbO2u9dc=
+X-Received: by 2002:a25:bd0b:: with SMTP id f11mr2133099ybk.475.1644933905348;
+ Tue, 15 Feb 2022 06:05:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1644923059-3619-1-git-send-email-fabrice.gasnier@foss.st.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220211023008.3197397-1-wonchung@google.com> <CAJZ5v0gD4zs3uBAYv6M4_1gNpkZ-g9XKOywJnf5007e6GwoGVA@mail.gmail.com>
+ <CAOvb9yjpruiHxkZyZ8BOT0Hi_iV7xMOnBCr59BZX3eah_Zcy_w@mail.gmail.com> <CAOvb9yh7jo27NH32tbAOtkJrnC9LwUFgFbHRbdbArwiU+YSmdw@mail.gmail.com>
+In-Reply-To: <CAOvb9yh7jo27NH32tbAOtkJrnC9LwUFgFbHRbdbArwiU+YSmdw@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 15 Feb 2022 15:04:54 +0100
+Message-ID: <CAJZ5v0gwMSWXMA4XmEioUr2ML3y_NPe9WYUCj2XUj++9ivSLTA@mail.gmail.com>
+Subject: Re: [PATCH v6] ACPI: device_sysfs: Add sysfs support for _PLD
+To:     Won Chung <wonchung@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 12:04:19PM +0100, Fabrice Gasnier wrote:
-> When the gadget driver hasn't been (yet) configured, and the cable is
-> connected to a HOST, the SFTDISCON gets cleared unconditionally, so the
-> HOST tries to enumerate it.
-> At the host side, this can result in a stuck USB port or worse. When
-> getting lucky, some dmesg can be observed at the host side:
->  new high-speed USB device number ...
->  device descriptor read/64, error -110
-> 
-> Fix it in drd, by checking the enabled flag before calling
-> dwc2_hsotg_core_connect(). It will be called later, once configured,
-> by the normal flow:
-> - udc_bind_to_driver
->  - usb_gadget_connect
->    - dwc2_hsotg_pullup
->      - dwc2_hsotg_core_connect
-> 
-> Fixes: 17f934024e84 ("usb: dwc2: override PHY input signals with usb role switch support")
-> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-> ---
-> Changes in v2:
-> - Fix build error: 'struct dwc2_hsotg' has no member named 'enabled';
->   as reported by the kernel test robot.
->   https://lore.kernel.org/all/202202112236.AwoOTtHO-lkp@intel.com/
->   Add dwc2_is_device_enabled() macro to handle this.
-> ---
->  drivers/usb/dwc2/core.h | 2 ++
->  drivers/usb/dwc2/drd.c  | 6 ++++--
->  2 files changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-> index 8a63da3..8a7751b 100644
-> --- a/drivers/usb/dwc2/core.h
-> +++ b/drivers/usb/dwc2/core.h
-> @@ -1418,6 +1418,7 @@ void dwc2_hsotg_core_connect(struct dwc2_hsotg *hsotg);
->  void dwc2_hsotg_disconnect(struct dwc2_hsotg *dwc2);
->  int dwc2_hsotg_set_test_mode(struct dwc2_hsotg *hsotg, int testmode);
->  #define dwc2_is_device_connected(hsotg) (hsotg->connected)
-> +#define dwc2_is_device_enabled(hsotg) ((hsotg)->enabled)
+Adding Greg, who should be involved in this discussion IMO.
 
-Why the extra ()?  dwc2_is_device_connected does not have it, so this
-one probably should not either, right?
+On Mon, Feb 14, 2022 at 11:59 PM Won Chung <wonchung@google.com> wrote:
+>
+> On Mon, Feb 14, 2022 at 12:30 PM Won Chung <wonchung@google.com> wrote:
+> >
+> > On Mon, Feb 14, 2022 at 11:12 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > >
+> > > On Fri, Feb 11, 2022 at 3:30 AM Won Chung <wonchung@google.com> wrote:
+> > > >
+> > > > When ACPI table includes _PLD fields for a device, create a new
+> > > > directory (pld) in sysfs to share _PLD fields.
+> > >
+> > > This version of the patch loos better to me, but I'm not sure if it
+> > > goes into the right direction overall.
+> > >
+> > > > Currently without PLD information, when there are multiple of same
+> > > > devices, it is hard to distinguish which device corresponds to which
+> > > > physical device in which location. For example, when there are two Type
+> > > > C connectors, it is hard to find out which connector corresponds to the
+> > > > Type C port on the left panel versus the Type C port on the right panel.
+> > >
+> > > So I think that this is your primary use case and I'm wondering if
+> > > this is the best way to address it.
+> > >
+> > > Namely, by exposing _PLD information under the ACPI device object,
+> > > you'll make user space wanting to use that information depend on this
+> > > interface, but the problem is not ACPI-specific (inevitably, it will
+> > > appear on systems using DT, sooner or later) and making the user space
+> > > interface related to it depend on ACPI doesn't look like a perfect
+> > > choice.
+> > >
+> > > IOW, why don't you create a proper ABI for this in the Type C
+> > > subsystem and expose the information needed by user space in a generic
+> > > way that can be based on the _PLD information on systems with ACPI?
+> >
+> > Hi Rafael,
+> >
+> > Thank you for the review.
+> >
+> > I was thinking that _PLD info is specific to ACPI since it is part of
+> > the ACPI table. Could you explain a little bit more on why you think
+> > exposing _PLD fields is not an ACPI-specific problem?
 
-thanks,
+_PLD is an interface defined by ACPI, but its purpose is not ACPI-specific.
 
-greg k-h
+> Hi Rafael again,
+>
+> Sorry for the silly question here. I misunderstood your comment a bit,
+> but I talked to Benson and Prashant for clarification. I understand
+> now what you mean by it is not an ACPI-specific problem and exposing
+> PLD would depend on ACPI.
+
+Right.
+
+> >
+> > I gave an example of how _PLD fields can be used for specifying Type C
+> > connectors, but it is not Type C specific. For Chrome OS, we plan to
+> > initially add PLD to not only Type C connectors but also USB port
+> > devices (including Type C and Type A). Also, PLD can be used in the
+> > future for describing other types of ports too like HDMI. (Benson and
+> > Prashant, please correct or add if I am wrong or missing some
+> > information) Maybe my commit message was not detailed enough..
+> >
+> > I am also curious what Heikki thinks about this. Heikki, can you take
+> > a look and share your thoughts?
+>
+> I am still curious what you and Heikki think about this since it may
+> not be a Type C specific issue. We can start from adding generic
+> location info to Type C subsystem first, as you suggested, then
+> consider how to do the same for USB devices and Type A ports
+> afterwards. I would appreciate sharing any thoughts or feedback. Thank
+> you very much!
+
+I don't really think that this is a Type C problem either.
+
+It has existed for a long time in the USB world, for example, or
+wherever there are user-accessible ports, but it looks like in the
+Type C case it has become vitally important.
+
+My point is that writing user space depending on accessing _PLD
+information exposed under an ACPI device interface that only
+corresponds to the device in question and in the ACPI-specific format
+would be a mistake (Greg, please let me know if you disagree).  That's
+because (a) it would depend on ACPI tables being present (so it
+wouldn't work on systems without them) and (b) it would depend on the
+format of data which covers information that isn't likely to be
+relevant.
+
+If this information is exposed by the kernel verbatim and user space
+depending on this information is created, it will not be possible to
+unexpose it even if it turns out that exposing it has been a mistake.
+
+OTOH, if only the relevant pieces of information are exposed in a
+generic way, it is always possible to expose more pieces of it in the
+future as needed.

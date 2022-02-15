@@ -2,96 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 842084B79AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:49:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2EC4B7970
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 22:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240567AbiBOVaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 16:30:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42196 "EHLO
+        id S244445AbiBOVbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 16:31:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244411AbiBOVaK (ORCPT
+        with ESMTP id S243476AbiBOVbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 16:30:10 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4012E6874;
-        Tue, 15 Feb 2022 13:29:56 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JyvPX4hlHz4xcY;
-        Wed, 16 Feb 2022 08:29:52 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644960592;
-        bh=pwmoRh+xNWdVdREPS54AAjyj75LCvfppmcESRwDk39E=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IxLwGx2wKcydh1WVwuHZ9pEybwScibPOFe0X/0755CWfkxB93U5TbRjFjj9+SwtOo
-         YSW8f4t1k5JgvrFmz0VGsnD5/qshdmhPNTw8PVmChZ2Bz6RhCu2D/jCJsqIpzlnVPS
-         LfxhtFt7y6dPASJscxjmC1YsP7Mw4vQlTbkxYV14GvqUQ35cj5PnPKBf9CMWzurG/A
-         K7Htn1RLNcMdHrWljyO1FN5ZaEiI5djC1DZWLiDh3v88UV5PYv3GAZ74V7bOJWhTJm
-         wYhzyMQXIVA13VWgdI/0/sqnFEO5ItqXfrc8tIKUJ6AsgH7pa8B5XmxSFwZVBfKFR2
-         8/cIU3ygxvhqA==
-Date:   Wed, 16 Feb 2022 08:29:51 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commits in the folio tree
-Message-ID: <20220216082951.4bffb750@canb.auug.org.au>
+        Tue, 15 Feb 2022 16:31:34 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F373EB4F
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:31:23 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id w7so50473ioj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:31:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fele8naCnj1tSHRyG9Ogo68xWxTgJNE5hEc6t985U/Y=;
+        b=LZbo2DiOH2tF8Tl/t20r4OjE/KvnsUs22LNv7+pZLZ5HIaTwZBqaF3RtAUUkAPDCOZ
+         GumOIavgQoROuq7iGLNguigwifsX10SlH0/8Rh9RwLTK2Tp2DNoNJkJcc2FBrePaIk6L
+         lbGzzlgNgGf7bUUma7sCUxDF7/TpqLm2sRqnU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fele8naCnj1tSHRyG9Ogo68xWxTgJNE5hEc6t985U/Y=;
+        b=Kj1Cj60O59kA6boxd/E+ouLDcLatBDfUdXp5ZR9D5hSifzfJ77pcNLg7sFV3rPcGkQ
+         9MGIQLmY/1RntYLaZVYDVEhoBz97ek8EvRuUED0tcHN9dBWEtiSo2Zl/uFMy6B/NeGQR
+         42XBt83fnGwtdDOIZByMFR3vlTGBboQ1q+QuAHLXgaqoJqbNjPdZbPJdIANrDUaxHonr
+         JP03fTNYsYfxGmX5d+z+FxoTscuZKEvHbHY//ttDPqQ5PFnngULqMjG24SIy0hI9jFSD
+         lnkynEx/ZTekO4FXGrI4CcviyU34ya/wwF0UVb5DxhxC8fw3WwKhRXxfimFl/UFPJzy1
+         oEwA==
+X-Gm-Message-State: AOAM532W7kODJuKW1cO9vDR+ohzPY/EoC8v1i0ZDfEQTltNPR0WBHX0t
+        G/zNGx3xBZsqVdaBYkvqcIgdUZ+siqIEDg==
+X-Google-Smtp-Source: ABdhPJxWnvg5vUmoT+BDQa1Y66G5ENMlxYWiaKd+hWOTrvZCK6jmdc5YrTrifGrfN22UJXCz4SCruQ==
+X-Received: by 2002:a05:6602:2d0a:: with SMTP id c10mr537604iow.80.1644960682961;
+        Tue, 15 Feb 2022 13:31:22 -0800 (PST)
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com. [209.85.166.177])
+        by smtp.gmail.com with ESMTPSA id h13sm6706230ili.28.2022.02.15.13.31.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 13:31:21 -0800 (PST)
+Received: by mail-il1-f177.google.com with SMTP id c14so24210ilm.4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 13:31:21 -0800 (PST)
+X-Received: by 2002:a05:6e02:1bef:: with SMTP id y15mr639379ilv.120.1644960680707;
+ Tue, 15 Feb 2022 13:31:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Avm4GGYns9gcbhJ5.=vHY+g";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20211001144212.v2.1.I773a08785666ebb236917b0c8e6c05e3de471e75@changeid>
+In-Reply-To: <20211001144212.v2.1.I773a08785666ebb236917b0c8e6c05e3de471e75@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 15 Feb 2022 13:31:09 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=XU0bYVZk+-jPWZVoODW79QXOJ=NQy+RH=fYyX+LCZb2Q@mail.gmail.com>
+Message-ID: <CAD=FV=XU0bYVZk+-jPWZVoODW79QXOJ=NQy+RH=fYyX+LCZb2Q@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/bridge: analogix_dp: Grab runtime PM reference for DP-AUX
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Sean Paul <sean@poorly.run>, Jonas Karlman <jonas@kwiboo.se>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "# 4.0+" <stable@vger.kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Avm4GGYns9gcbhJ5.=vHY+g
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-Hi all,
+On Fri, Oct 1, 2021 at 2:50 PM Brian Norris <briannorris@chromium.org> wrote:
+>
+> If the display is not enable()d, then we aren't holding a runtime PM
+> reference here. Thus, it's easy to accidentally cause a hang, if user
+> space is poking around at /dev/drm_dp_aux0 at the "wrong" time.
+>
+> Let's get the panel and PM state right before trying to talk AUX.
+>
+> Fixes: 0d97ad03f422 ("drm/bridge: analogix_dp: Remove duplicated code")
+> Cc: <stable@vger.kernel.org>
+> Cc: Tomeu Vizoso <tomeu.vizoso@collabora.com>
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> ---
+>
+> Changes in v2:
+> - Fix spelling in Subject
+> - DRM_DEV_ERROR() -> drm_err()
+> - Propagate errors from un-analogix_dp_prepare_panel()
+>
+>  .../drm/bridge/analogix/analogix_dp_core.c    | 21 ++++++++++++++++++-
+>  1 file changed, 20 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
+> index b7d2e4449cfa..6fc46ac93ef8 100644
+> --- a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
+> +++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
+> @@ -1632,8 +1632,27 @@ static ssize_t analogix_dpaux_transfer(struct drm_dp_aux *aux,
+>                                        struct drm_dp_aux_msg *msg)
+>  {
+>         struct analogix_dp_device *dp = to_dp(aux);
+> +       int ret, ret2;
+>
+> -       return analogix_dp_transfer(dp, msg);
+> +       ret = analogix_dp_prepare_panel(dp, true, false);
+> +       if (ret) {
+> +               drm_err(dp->drm_dev, "Failed to prepare panel (%d)\n", ret);
+> +               return ret;
+> +       }
+> +
+> +       pm_runtime_get_sync(dp->dev);
+> +       ret = analogix_dp_transfer(dp, msg);
+> +       pm_runtime_put(dp->dev);
 
-Commits
+I've spent an unfortunate amount of time digging around the DP AUX bus
+recently, so I can at least say that I have some experience and some
+opinions here.
 
-  9864078ecbb0 ("mm/thp: shrink_page_list() avoid splitting VM_LOCKED THP")
-  6a04fcd09a18 ("mm/thp: collapse_file() do try_to_unmap(TTU_BATCH_FLUSH)")
-  52322c19db3b ("mm/munlock: page migration needs mlock pagevec drained")
-  fc43a522c2b6 ("mm/munlock: mlock_page() munlock_page() batch by pagevec")
-  b60d40429fe9 ("mm/munlock: delete smp_mb() from __pagevec_lru_add_fn()")
-  d1dfa0133d1d ("mm/migrate: __unmap_and_move() push good newpage to LRU")
-  27649a0ad4f2 ("mm/munlock: mlock_pte_range() when mlocking or munlocking")
-  a098b3660d99 ("mm/munlock: maintain page->mlock_count while unevictable")
-  4aefb923cead ("mm/munlock: replace clear_page_mlock() by final clearance")
-  8a2bfd6e9bc1 ("mm/munlock: rmap call mlock_vma_page() munlock_vma_page()")
-  0942176186ca ("mm/munlock: delete munlock_vma_pages_all(), allow oomreap")
-  190136f4d2e7 ("mm/munlock: delete FOLL_MLOCK and FOLL_POPULATE")
-  9833b8ff6c78 ("mm/munlock: delete page_mlock() and all its works")
+IMO:
 
-are missing a Signed-off-by from their committer.
+1. Don't power the panel on. If the panel isn't powered on then the DP
+AUX transfer will timeout. Tough nuggies. Think of yourself more like
+an i2c controller and of this as an i2c transfer implementation. The
+i2c controller isn't in charge of powering up the i2c devices on the
+bus. If userspace does an "i2c detect" on an i2c bus and some of the
+devices aren't powered then they won't be found. If you try to
+read/write from a powered off device that won't work either.
 
---=20
-Cheers,
-Stephen Rothwell
+2. In theory if the DP driver can read HPD (I haven't looked through
+the analogix code to see how it handles it) then you can fail an AUX
+transfer right away if HPD isn't asserted instead of timing out. If
+this is hard, it's probably fine to just time out though.
 
---Sig_/Avm4GGYns9gcbhJ5.=vHY+g
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+3. Do the "pm_runtime" calls, but enable "autosuspend" with something
+~1 second autosuspend delay. When using the AUX bus to read an EDID
+the underlying code will call your function 16 times in quick
+succession. If you're powering up and down constantly that'll be a bit
+of a waste.
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIMG08ACgkQAVBC80lX
-0Gw2RAf+IAAq5trzuU7i3KTv17vvzslo4FWE4+QEbhig0En2mXI4VcBAwf6dqqp7
-1ZyOEJZHU9mXRuguxyDqMPnZzYjJSKOpPritrzxksQLNBQ/P8z+u2DHsYTJjyjgs
-ycPSmRsNY2CpogPxQcRWWuDvCyVFLhwwKwIG5lvVNbSio3xPjbxNZR+WIdCFJDKl
-mRz6G5YgsMy5ggIAGIYzCcY/TQp8AApda+2P42tsUkzAie0ATS/qckLPRc/l4y2m
-GpD+kSZpNbYnerJjokSrATmUm26irZivfAmJBuOCRzwkUTlKoQr9DO4X5T0wulgC
-kyecBmXIVepxA2BNmeSFE6ZyMlEnXQ==
-=sg1L
------END PGP SIGNATURE-----
+The above will help set us up for when someone goes through and
+enables the "new" DP AUX bus and generic eDP panels on for
+analogix-edp. See commit aeb33699fc2c ("drm: Introduce the DP AUX
+bus"). In that case panels will actually be instantiated DP AUX
+Endpoints instead of platform devices. They'll be given the DP AUX bus
+and they'll be able to read the EDID over that. In this case, the
+panel code turns itself on (it knows how to turn itself on enough to
+read the EDID) and then calls the DP AUX transfer code. :-)
 
---Sig_/Avm4GGYns9gcbhJ5.=vHY+g--
+
+For a reference, you could look at
+`drivers/gpu/drm/bridge/ti-sn65dsi86.c`. Also
+`drivers/gpu/drm/bridge/parade-ps8640.c`
+
+-Doug

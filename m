@@ -2,124 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 588FC4B71B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D53F4B71F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239742AbiBOPXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:23:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32776 "EHLO
+        id S235614AbiBOPZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:25:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239746AbiBOPXL (ORCPT
+        with ESMTP id S230210AbiBOPZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:23:11 -0500
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA118AE4A;
-        Tue, 15 Feb 2022 07:22:58 -0800 (PST)
-Received: by mail-il1-f173.google.com with SMTP id h11so15040135ilq.9;
-        Tue, 15 Feb 2022 07:22:58 -0800 (PST)
+        Tue, 15 Feb 2022 10:25:14 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F13C8E19B
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:25:04 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id h5so520639ioj.3
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:25:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=STSfeMkR8sO6JKdBEzPJOeiPGWaxCEMoqHon21FihTU=;
+        b=YJUS8WZ6GALIAGJCgBqidA/jRC7Y4VlfQon9K7eJGbV5JFiV8G0w1bkomi5BZCStpo
+         emu7g8n7Y+/hd7YAaj3mNC5X9GOT0unsqyZ6koBcMT4NHVx/u3LydOeUDO6Ov0P1JZAE
+         iT3hqQ4GGlayHiq7Kauf4oVzTr3qwGqqaWZNE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=5VCIuSaUaGTs0ZgwHiplE8qOxEpyPo50926xTtWMFIE=;
-        b=X06Tup3MwxAjcnMdvRjx5rBalcA51ZUwrAg8IwrxWUG9Ekq42x8eg4sDHa2gwOXQhJ
-         JEr7tRgvIvlKEls4bUnW9KASTqEeBdVwKM8bRVkwu4fsFytPLpX+e9Tfqtigf93TRF+6
-         7YIGFlqvQPeCrnTHvko2c8wtalz0vlDNmriQuMCzTowc3DvJth1w3OcRWkrQx+APATE4
-         NqIp4oeTg08DXyf2dKosCfb6bqTRFyPfFTpzQZghRhnKiCDbQtaqNddVaYAyqvP5NPut
-         TTIlCqgcSESuDiGfeVu7onKaP3EQt6kQXWyAuvr/RvC54uWA3TfI7Aa+jXHgAM6vDs2J
-         AkDA==
-X-Gm-Message-State: AOAM533Q4CECH24ZuYJz/BcQA5aRjz5yJEUv/rQac6RGWpCkZ+oBo9nk
-        /tghiG3uWZuQ4tDd4EYPyA==
-X-Google-Smtp-Source: ABdhPJwoWBynoWihqkBcd1NfufxvSR86qj7ghYMDulkjze8yUyVxHyVhrB0iBONiVGy1uK3jbbtb9Q==
-X-Received: by 2002:a05:6e02:194b:: with SMTP id x11mr2771254ilu.123.1644938578112;
-        Tue, 15 Feb 2022 07:22:58 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id l2sm5303071ilv.66.2022.02.15.07.22.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 07:22:57 -0800 (PST)
-Received: (nullmailer pid 3450860 invoked by uid 1000);
-        Tue, 15 Feb 2022 15:22:45 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        linux-input@vger.kernel.org
-In-Reply-To: <20220213171532.346270-2-dario.binacchi@amarulasolutions.com>
-References: <20220213171532.346270-1-dario.binacchi@amarulasolutions.com> <20220213171532.346270-2-dario.binacchi@amarulasolutions.com>
-Subject: Re: [PATCH 1/6] dt-bindings: input: touchscreen: edt-ft5x06: add report-rate
-Date:   Tue, 15 Feb 2022 09:22:45 -0600
-Message-Id: <1644938565.059972.3450859.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=STSfeMkR8sO6JKdBEzPJOeiPGWaxCEMoqHon21FihTU=;
+        b=GTwaaMGLhbqKr2ImTE41KvadiS469Vxnyb7Q2ENrevCqQg58AeUvglsoTlIf8w6YQL
+         Pe+tHSYVM8x8jBaCcWbIvxqtUTxvEQ/oErKClC44/2lhYiqqkQ/l7XfR9cLx/H4+R+wh
+         2s1BCn2T7QJisS4toEWWIOvPT4VcsfMVoczgwjsyPLN2PA7OZaH/PjbdIBG6IaRR5ZP/
+         /RYBRTGo1kVR3rrGxpUpLzswwiW8ulbIzXvATU3HsVxEwUjEWPhCmsfg6U00O7a/Y79K
+         zPkcVNqowbNOQk6Y41qQcs5xrTs0hV+Mu2noiLQMnZ0bTyhAnjfUIZ5/otlmeLs47TGZ
+         ib0w==
+X-Gm-Message-State: AOAM530qOFnmG0n52BfxzK23CG37wnK7Bz5puWmLcrYeMV19a9ed9RNT
+        JP4YIKmIgRyMliYHmUd6g/AiDQ==
+X-Google-Smtp-Source: ABdhPJy+IcgP1I/EPyq/Kpzq9SYpM21us3QTIGn6lhDEubr9KH/TzO2vI54UO9yXV6od31OPqFQCyA==
+X-Received: by 2002:a05:6602:2ac1:: with SMTP id m1mr2681467iov.123.1644938703517;
+        Tue, 15 Feb 2022 07:25:03 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id r13sm10603485ilb.35.2022.02.15.07.25.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 07:25:03 -0800 (PST)
+Subject: Re: [PATCH] selftests: kvm: Check whether SIDA memop fails for normal
+ guests
+To:     Thomas Huth <thuth@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220215074824.188440-1-thuth@redhat.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <d576d8f7-980f-3bc6-87ad-5a6ae45609b8@linuxfoundation.org>
+Date:   Tue, 15 Feb 2022 08:25:02 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <20220215074824.188440-1-thuth@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 13 Feb 2022 18:15:27 +0100, Dario Binacchi wrote:
-> It allows to change the M06/M12 default scan rate.
+On 2/15/22 12:48 AM, Thomas Huth wrote:
+> Commit 2c212e1baedc ("KVM: s390: Return error on SIDA memop on normal
+> guest") fixed the behavior of the SIDA memops for normal guests. It
+> would be nice to have a way to test whether the current kernel has
+> the fix applied or not. Thus add a check to the KVM selftests for
+> these two memops.
 > 
-> Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
 > ---
+>   tools/testing/selftests/kvm/s390x/memop.c | 15 +++++++++++++++
+>   1 file changed, 15 insertions(+)
 > 
->  .../devicetree/bindings/input/touchscreen/edt-ft5x06.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+> index 9f49ead380ab..d19c3ffdea3f 100644
+> --- a/tools/testing/selftests/kvm/s390x/memop.c
+> +++ b/tools/testing/selftests/kvm/s390x/memop.c
+> @@ -160,6 +160,21 @@ int main(int argc, char *argv[])
+>   	run->psw_mask &= ~(3UL << (63 - 17));   /* Disable AR mode */
+>   	vcpu_run(vm, VCPU_ID);                  /* Run to sync new state */
+>   
+> +	/* Check that the SIDA calls are rejected for non-protected guests */
+> +	ksmo.gaddr = 0;
+> +	ksmo.flags = 0;
+> +	ksmo.size = 8;
+> +	ksmo.op = KVM_S390_MEMOP_SIDA_READ;
+> +	ksmo.buf = (uintptr_t)mem1;
+> +	ksmo.sida_offset = 0x1c0;
+> +	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+> +	TEST_ASSERT(rv == -1 && errno == EINVAL,
+> +		    "ioctl does not reject SIDA_READ in non-protected mode");
+
+Printing what passed would be a good addition to understand the tests that
+get run and expected to pass.
+
+> +	ksmo.op = KVM_S390_MEMOP_SIDA_WRITE;
+> +	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+> +	TEST_ASSERT(rv == -1 && errno == EINVAL,
+> +		    "ioctl does not reject SIDA_WRITE in non-protected mode");
+> +
+
+Same here.
+
+>   	kvm_vm_free(vm);
+>   
+>   	return 0;
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Something to consider in a follow-on patch and future changes to these tests.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.yaml:90:21: [error] syntax error: mapping values are not allowed here (syntax)
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.yaml:  mapping values are not allowed in this context
-  in "<unicode string>", line 90, column 21
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.example.dts'
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-extract-example", line 46, in <module>
-    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
-    return constructor.get_single_data()
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 119, in get_single_data
-    node = self.composer.get_single_node()
-  File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
-  File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
-  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
-  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
-  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
-  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
-  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
-  File "_ruamel_yaml.pyx", line 891, in _ruamel_yaml.CParser._compose_mapping_node
-  File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
-ruamel.yaml.scanner.ScannerError: mapping values are not allowed in this context
-  in "<unicode string>", line 90, column 21
-make[1]: *** [Documentation/devicetree/bindings/Makefile:25: Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.yaml: ignoring, error parsing file
-make: *** [Makefile:1398: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1592123
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+thanks,
+-- Shuah

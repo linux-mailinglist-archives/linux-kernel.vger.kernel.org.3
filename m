@@ -2,100 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B594B6BBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8CA4B6BC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 13:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237529AbiBOMKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 07:10:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33654 "EHLO
+        id S237537AbiBOMLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 07:11:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237518AbiBOMKV (ORCPT
+        with ESMTP id S232629AbiBOMLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 07:10:21 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBC9F68EC
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:10:10 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id c10so8940486pfv.8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 04:10:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Rvc5VFNuQvOUoAjdswhh5nR82Ho+mPvuJf8m7WDO3Qs=;
-        b=xtE/ytqcCPY1yN5pIplQeeZomXpKV5da0WHr6CnDmO4fmr9rg8Zr9b3UABGLxx8V3u
-         NDNsNtiv5jxI1QCHK7eI3QQKYPuOnQoFIk7qgfFewZ7YvL7MNyQAmr7w1JwmKQxwcAiw
-         GJwoOrkN7OZ4C4IKmVNpoSCOB3apeP2UORrDJRJa1/lkq5lBbX+pSCaIM1fIYLOQep5i
-         OdNRbnYd+Qc74cE8kHsyBYQNbsumy3whUl0KtR/KQb+tWGWQJ5FrYimIpbZejLR/Gefh
-         cLpIHXyY/a5xV3XSh9/zfHngVTYXBqsFWdxKHGGF409sAG6RXss20rkdj+DIkw7G2Hld
-         tGKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Rvc5VFNuQvOUoAjdswhh5nR82Ho+mPvuJf8m7WDO3Qs=;
-        b=Y9kWhqsfD57XVjKiEjqXpZTXKygr4XR98YoPIIppzxtufSNGvFS0KPp3mNrLnPBL2V
-         swGgI8ep09qEH8yT45jR5iNmhoiJMvREHOPGbPPIv6l/JO4TK/9CVxCXevsAI8OiKH4c
-         e8iOO0ljy25Jmlv916f747gjIBGHvV1aVeZ1i+/atvXvXdYHrJKAdVer8sXmF6vf+hPN
-         JJbIiSTSd+lq0eYxQ0E32Eu8Y/ucHY9aQ4gXhXAQLv2JZjbCdbN5lQjOAC7Tx9rrwTUq
-         4u61d173s1WnBvfRt/rBLx9JRqw99c/Pp8tQTj9UJL9xSsocA1Iws+EaWaWguxTL8S9R
-         SPRg==
-X-Gm-Message-State: AOAM5337PReZDCKfElRwY2HvPG3TKztUNw4/+aLE1E13zfdIznog+43c
-        p7hlyk2pLPmkYc9zUFUZKquAtHDbCU/7pA==
-X-Google-Smtp-Source: ABdhPJyywc6pxdHcOr/YlYI/BiLGm6yw8O3kIJaImkJ35VKGI9WA1zODQyKYxzF/X12TQesyAppR4Q==
-X-Received: by 2002:aa7:88d1:: with SMTP id k17mr3619040pff.38.1644927010288;
-        Tue, 15 Feb 2022 04:10:10 -0800 (PST)
-Received: from [10.255.13.118] ([139.177.225.230])
-        by smtp.gmail.com with ESMTPSA id h9sm41137904pfi.124.2022.02.15.04.10.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 04:10:09 -0800 (PST)
-Message-ID: <c4b3b8c3-890a-59d1-623a-3341abcf290e@bytedance.com>
-Date:   Tue, 15 Feb 2022 20:10:05 +0800
+        Tue, 15 Feb 2022 07:11:20 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E47AF68EA;
+        Tue, 15 Feb 2022 04:11:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644927066; x=1676463066;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bvHEaZ2uSpy8y3b69ROVRV1b0rGK089uqW/KMJ+6S0E=;
+  b=Pp9iUDi718wqnswlcyVor+N7Dyi3l1LNa4KpENcFCTjpVByfOINkw2Cz
+   d4vgLkg2aWwQptB36jG8/2gjh84zvT6fHCmM81I/7rn0Yu/WIX7KirBc8
+   iu0Vf6AxJ3P3FgFq7mpMOQD/onTlDfNzp8HhJZ9F/QibfFxyFd3VEsMpx
+   L/u3LUlK3vxZMd5U8lGTzyW3KIMSsTzoaNVfnNpvdDxTCDAnWaAJvvpED
+   fQreunBlPN25RoRYLq34d2A0KCBizzaY0aVhE3N1keZod0b9KfQp7x5dh
+   vIrdj6TrWIf+aWtcIJfnHrdd8F7Xv0J+395JFnixtmEuMrWg+BpjWarIF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="237742214"
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="237742214"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 04:11:06 -0800
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="570794182"
+Received: from guptapa-mobl1.amr.corp.intel.com ([10.212.198.79])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 04:11:05 -0800
+Date:   Tue, 15 Feb 2022 04:11:03 -0800
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
+        antonio.gomez.iglesias@linux.intel.com, neelima.krishnan@intel.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] x86/tsx: Use MSR_TSX_CTRL to clear CPUID bits
+Message-ID: <20220215121103.vhb2lpoygxn3xywy@guptapa-mobl1.amr.corp.intel.com>
+References: <5bd785a1d6ea0b572250add0c6617b4504bc24d1.1644440311.git.pawan.kumar.gupta@linux.intel.com>
+ <YgqToxbGQluNHABF@zn.tnic>
+ <20220214224121.ilhu23cfjdyhvahk@guptapa-mobl1.amr.corp.intel.com>
+ <YgrltbToK8+tG2qK@zn.tnic>
+ <20220215002014.mb7g4y3hfefmyozx@guptapa-mobl1.amr.corp.intel.com>
+ <Ygt/QSTSMlUJnzFS@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [Phishing Risk] [External] Re: [PATCH] blk-cgroup: set blkg
- iostat after percpu stat aggregation
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     axboe@kernel.dk, boris@bur.io, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220213085902.88884-1-zhouchengming@bytedance.com>
- <Ygqmjsbu96+UZDw+@slm.duckdns.org>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <Ygqmjsbu96+UZDw+@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Ygt/QSTSMlUJnzFS@zn.tnic>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/2/15 2:59 上午, Tejun Heo wrote:
-> On Sun, Feb 13, 2022 at 04:59:02PM +0800, Chengming Zhou wrote:
->> Don't need to do blkg_iostat_set for top blkg iostat on each CPU,
->> so move it after percpu stat aggregation.
->>
->> Fixes: ef45fe470e1e ("blk-cgroup: show global disk stats in root cgroup
->> io.stat")
-> 
-> I'm not sure Fixes tag is necessary here.
+On 15.02.2022 11:24, Borislav Petkov wrote:
+>On Mon, Feb 14, 2022 at 04:20:14PM -0800, Pawan Gupta wrote:
+>> ... we are calling tsx_clear_cpuid() unconditionally.
+>
+>I know, that's why I asked...
+>
+>> > If those CPUs which support only disabling TSX through MSR_IA32_TSX_CTRL
+>> > but don't have MSR_TSX_FORCE_ABORT - if those CPUs set
+>> > X86_FEATURE_RTM_ALWAYS_ABORT too, then this should work.
+>
+>... this^^.
+>
+>IOW, what are you fixing here exactly?
+>
+>Let's look at the two callsites of tsx_clear_cpuid():
+>
+>1. tsx_init: that will do something on X86_FEATURE_RTM_ALWAYS_ABORT CPUs.
+>
+>2. init_intel: that will get called when
+>
+>	tsx_ctrl_state == TSX_CTRL_RTM_ALWAYS_ABORT
+>
+>But TSX_CTRL_RTM_ALWAYS_ABORT gets set only when
+>X86_FEATURE_RTM_ALWAYS_ABORT is set. I.e., the first case, in
+>tsx_init().
+>
+>So, IIUC, you wanna fix the case where CPUs which set
+>X86_FEATURE_RTM_ALWAYS_ABORT but *don't* have MSR_TSX_FORCE_ABORT, those
+>CPUs should still disable TSX through MSR_IA32_TSX_CTRL.
+>
+>Correct?
 
-I'm also not sure, since the io.stat reports correct data after all. I put
-the Fixes tag here in case someone wants it. Please feel free to delete it.
+That is exactly what this patch is fixing. Please let me know if you
+have any questions.
 
-Thanks.
-
-> 
->> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> 
-> but other than that,
-> 
-> Acked-by: Tejun Heo <tj@kernel.org>
-> 
-> Thanks.
-> 
+Thanks,
+Pawan

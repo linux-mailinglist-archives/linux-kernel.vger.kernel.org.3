@@ -2,117 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 847FE4B76AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C9374B786A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241310AbiBOSUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 13:20:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36444 "EHLO
+        id S241340AbiBOSWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 13:22:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiBOSUD (ORCPT
+        with ESMTP id S234053AbiBOSWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 13:20:03 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1F7119F5F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:19:53 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id y17so820715edd.10
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:19:53 -0800 (PST)
+        Tue, 15 Feb 2022 13:22:17 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BC2C4E29
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:22:06 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id c188so24946195iof.6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:22:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=lY9tt/IhIWv9LzXk1s5BH9xemeCbBCE2YYRK5FOvrNE=;
-        b=XhiGCPJDX1x5n00gfop8vtHbzQ5XsVZvmshgTu4acZkOhiIVmg/2mfQGC7XefOGSQh
-         7QEmeeiaF4k3W7qS2sAFNPenGR196oA+WUOgM2DQXvT/BU9Crqh1zHzDT8I6gukAbcSH
-         hGMB/G1SaWUZOj0oRkIv3C5EcIXNTb0NCynacztYe5+s2TPOQ6Pik+hE6AOGmHOJ+CI7
-         usS3nTdkUOGZpWn3+lCNPo+9+f46XQIwlfOliH5nHYU4O+b8NWRFq8IrwdEPYd51Ztfo
-         CVShgB/CHFN5ZljM+JZt1ah9C79Lfq362kngCQUH5StBUEXRZ4485gF11p4WLnNcO/Ty
-         86rA==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=N8lffARva8AUjhNmcIem8/yhryRPGbgPr4I4vKv4iZU=;
+        b=xoqOuEmlurEBAh7hsyg3JdbuYdQBDxBQPCxuZ4GYuEkH08WiMo4Mnj5Q9gOffupNVs
+         C+XFSN4fQPBzBueTh5typDjXEZ1hqwlgP/CSApofsKYfoB+9pc4f0uA8pR5bBAGx7RUD
+         u9A+Unbkiu7+7T5zJj7vonzxIQELIm0xGxbzQMQfAySVSjszzCoTF4UfykYDvrqUtnx3
+         9vZ55DBn78FdwRuGKa4hwgCrkjZyHP0M1DUq2BiP+zwmE3mmRiuxZ8Ohtwcm596KVmzi
+         bc7kOj3lzQwb425MtvheHM2SfbCwYPPZis7aA/B7qOGp5XNjZvK0Q3B0sFtyXFZdpe2z
+         OFSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=lY9tt/IhIWv9LzXk1s5BH9xemeCbBCE2YYRK5FOvrNE=;
-        b=1czCF4GzX6WRgsjm4s8S6rtzzXiF9aDW2xwl5gE/ytMI6uudPvk2/1/hIK/U1alFPm
-         VdiQmi3YPuP93icnYe+f9aExQ9WJe5eUuJzFrCJqQamF+y2JzoqHjvjv0dI4ostHlJtH
-         y1LXaGi3JQAC5Ij6Snj3IQcY7SXEd0XG1HvDfM9AWSZ8rnJYfXLfqXrkLVIsn8xdZsSv
-         c1lafpz9al/Z0r2VW1404AApzweEwxaJxHI7DtHDgPGRLoJNE50aeSB/eShN6t7UxhJs
-         lsaKMsP8Ee9FwTT2rWchxbbAYtuwvmEH83mrYzEbOkHLRBXOKYK61SLc7QV5ttsEZdAQ
-         fMOw==
-X-Gm-Message-State: AOAM530C+wrdm7F4kJZ2O7+P/1IHtimOExYQHPcCedJ/w9VHCDLbtpLs
-        eqLPH8sF8lj8ipnqsxDmFi5MOBfJ2E7fczVuiFU=
-X-Google-Smtp-Source: ABdhPJyOokKo/hunjO+CnmnpwKZ0ntLwWp2hx7HBUYTkhBb6eeghBzrAkuDAQczr/LskEt8nG1j3pM9F9r9kIb+Z9z0=
-X-Received: by 2002:aa7:ce90:: with SMTP id y16mr204238edv.292.1644949191868;
- Tue, 15 Feb 2022 10:19:51 -0800 (PST)
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=N8lffARva8AUjhNmcIem8/yhryRPGbgPr4I4vKv4iZU=;
+        b=2ctjVA8hNDSbMDK8TMlVSS8InoJ3N/fiWtFqhUEcenlr4e7qJlXebpvqsgqY92kzn8
+         PuStQYzhS0MhSKfXLlqYR+i6prsjOJc7l7YHLUsFiZeG8lFRYlBG+4A3n820vHsv7ngJ
+         eIuV//5I2dtjUmvWF9bPfuVaYxmGz+YZn0ybma+D/bxWO34hpG0mgADcFdOSVCwpXm8U
+         HHBnqfwUZ0vORSahIdjMvGGnvcIbXOyUYpOSGqXJMOga2m67JZ1646ib188ZU7Dpx+vC
+         gNnMhKcxXxtFPa7Uhs7t4Cc/A1wUQBe4yZB6MOD+Ttg+mQVb0EjOxYZyHdxjfq+yzlQw
+         luxQ==
+X-Gm-Message-State: AOAM531I4Ns1Vs/NIS6sm0fy2BJCc9/0f1x4M1vGonxIf69lIWgaWQ49
+        bavW4MMiXkwFh7CwssR8EmH1SFpoMtJIWg==
+X-Google-Smtp-Source: ABdhPJxCNsT+FRKu3WkM4M10HW1yuVivlwF5YmW3Q74Xigt7ShW2zoGcGwH1pzGCzQ4byStd7q6+xg==
+X-Received: by 2002:a02:3f42:: with SMTP id c2mr104978jaf.161.1644949325774;
+        Tue, 15 Feb 2022 10:22:05 -0800 (PST)
+Received: from [192.168.1.30] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id q18sm18761446ils.78.2022.02.15.10.22.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 10:22:05 -0800 (PST)
+To:     heikki.krogerus@linux.intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Sven Peter <sven@svenpeter.dev>
+From:   Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH] tps6598x: clear int mask on probe failure
+Message-ID: <e6b80669-20f3-06e7-9ed5-8951a9c6db6f@kernel.dk>
+Date:   Tue, 15 Feb 2022 11:22:04 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Sender: mrsaliceragnvar@gmail.com
-Received: by 2002:a17:907:9491:0:0:0:0 with HTTP; Tue, 15 Feb 2022 10:19:51
- -0800 (PST)
-From:   Aisha Al-Qaddafi <aishagaddafi1894@gmail.com>
-Date:   Tue, 15 Feb 2022 18:19:51 +0000
-X-Google-Sender-Auth: NlQaCYS33jJ-knYs833tgwmUXrw
-Message-ID: <CAGHGhXAxG0-TBCBdRxXUbdLcEv_XLE9-+OSKLNf=FQ5a18i=Og@mail.gmail.com>
-Subject: Investment proposal,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_60,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:52f listed in]
-        [list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.6409]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrsaliceragnvar[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.6 URG_BIZ Contains urgent matter
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear Friend,
+The interrupt mask is enabled before any potential failure points in
+the driver, which can leave a failure path where we exit with
+interrupts enabled but the device not live. This causes an infinite
+stream of interrupts on an Apple M1 Pro laptop on USB-C.
 
-With due respect to your person and much sincerity of purpose I wish
-to write to you today for our mutual benefit in this investment
-transaction..
-I'm Mrs. Aisha Al-Gaddafi, presently residing herein Oman the
-Southeastern coast of the Arabian Peninsula in Western Asia, I'm a
-single Mother and a widow with three Children. I am the only
-biological Daughter of the late Libyan President (Late Colonel Muammar
-Gaddafi). I have an investment funds worth Twenty Seven Million Five
-Hundred Thousand United State Dollars ($27.500.000.00 ) and i need an
-investment Manager/Partner and because of my Asylum Status I will
-authorize you the ownership of the investment funds, However, I am
-interested in you for investment project assistance in your country,
-may be from there,. we can build a business relationship in the
-nearest future.
+Add a failure label that's used post enabling interrupts, where we
+mask them again before returning an error.
 
-I am willing to negotiate an investment/business profit sharing ratio
-with you based on the future investment earning profits. If you are
-willing to handle this project kindly reply urgently to enable me to
-provide you more information about the investment funds..
+Suggested-by: Sven Peter <sven@svenpeter.dev>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ drivers/usb/typec/tipd/core.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Your urgent reply will be appreciated if only you are interested in
-this investment project.
-Best Regards
-Mrs. Aisha Al-Gaddafi.
+diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+index 6d27a5b5e3ca..7ffcda94d323 100644
+--- a/drivers/usb/typec/tipd/core.c
++++ b/drivers/usb/typec/tipd/core.c
+@@ -761,12 +761,12 @@ static int tps6598x_probe(struct i2c_client *client)
+ 
+ 	ret = tps6598x_read32(tps, TPS_REG_STATUS, &status);
+ 	if (ret < 0)
+-		return ret;
++		goto err_clear_mask;
+ 	trace_tps6598x_status(status);
+ 
+ 	ret = tps6598x_read32(tps, TPS_REG_SYSTEM_CONF, &conf);
+ 	if (ret < 0)
+-		return ret;
++		goto err_clear_mask;
+ 
+ 	/*
+ 	 * This fwnode has a "compatible" property, but is never populated as a
+@@ -855,7 +855,8 @@ static int tps6598x_probe(struct i2c_client *client)
+ 	usb_role_switch_put(tps->role_sw);
+ err_fwnode_put:
+ 	fwnode_handle_put(fwnode);
+-
++err_clear_mask:
++	tps6598x_write64(tps, TPS_REG_INT_MASK1, 0);
+ 	return ret;
+ }
+ 
+-- 
+2.34.1
+
+-- 
+Jens Axboe
+

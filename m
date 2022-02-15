@@ -2,65 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 541504B7182
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E699E4B7149
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:40:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239192AbiBOPnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:43:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39762 "EHLO
+        id S240946AbiBOPol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:44:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242237AbiBOPmR (ORCPT
+        with ESMTP id S240315AbiBOPoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:42:17 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAC5CEA00
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:37:14 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id b12-20020a056902030c00b0061d720e274aso41352913ybs.20
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:37:14 -0800 (PST)
+        Tue, 15 Feb 2022 10:44:18 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AC6EA363;
+        Tue, 15 Feb 2022 07:38:31 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id p9so22202235ejd.6;
+        Tue, 15 Feb 2022 07:38:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=nh+sVpD80A6shLvILTn05Ew0Y8LiljouUPL3DGf7rDU=;
-        b=Za6kh7UUq6kFoRp3AnGRu+4Sa/Vqbhlt9NgYc6KoqFNbNkhpQnbVp8683+w52g1Bwr
-         6autASyVISW8izdNV6Qv9EKfqWfi+zwjgSaawXxCspjhEzSgye0e+VsOdfgW+23XXI19
-         TPo34hzsiKbwumJ2QWMnBx+mijIMIGXZ7Ilx4pZLCkbm5KigOwHMTYqqu7kgyFWFO2BB
-         9Bb7ALyTwGRpr5PvckbEPT8sg/xc+eERTmr1ZX/+VC+/DiqNNlud7eqmT/iyZsa0msSs
-         mieCHsanHE+xf3SbyryOai+Fvc82ebgt1iJ0RSmZgueeAxwm6skeTZ0fyezPz+1t7TtG
-         BQQQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4c4uLg+6xK62uK/uIKxvl/o7vQn8X9pm3rRoIxcYStc=;
+        b=hVRSoNqL5G26KGJupiMcqpIIJ6KdnEX2br5Ah4u+93CBcx13OUAYoHcTpp+gHXlTtZ
+         Pwp+IBPNf5Asgg2RQmCkRE7/lkz9CKKIaLCfpfYqMWpxk+zR7r6YGKl1jaQg8OpEj7ro
+         Hc9uS0htjha3XdJfKpvdXvF4M4P54Z+y1ymAPxsTq68GdiD/1R9Gf8IU2fc37Hm5fs0W
+         QUK7wqnbwk6FMrL/Slbkr85sGi0OIrcPgmxui55rTRdDso9F9WrOGZvrUeOZWw5d5OrF
+         NvA0iYYv4uRWI9SxzRheHl6iNMzJ2Dl2G3KVOvBA+ltg9yN7vbN1az2T7ZDOtglfYidf
+         6Y0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=nh+sVpD80A6shLvILTn05Ew0Y8LiljouUPL3DGf7rDU=;
-        b=zj1Y3oLxafdxO2ok7MZs1pCYkXytPexq6isPVn6OxXqCl+xwn0QVzjiJ54aqX9okLs
-         pv4HQzmT1ZBLuhdKtlFBi4CsHIL63MTN1NOKy3KFUVvYj3pGsNaSF4Cm1aDKPEOsYH9Q
-         1eMJKizz1U55hVdgfTzS7k6zIund68c84ZjM8zhhQCzN+9aXfjjuslMR2NIwPcpttt3y
-         1pHvxGEXMmJZy3GLJ8OaOgM7h5kWhhiP3yjR2bS/OT5MWzvyJ5apD+x/U3DB/oMYU0mA
-         tijKKL2uFTa55bwU0HZUdi6XCkLI3RTOuqpOO5Jl09puKTAJEW3ixD3oD+Ns26A68+Ox
-         GSVA==
-X-Gm-Message-State: AOAM532yYeSmOLz5sBpuL36ihqfXztB9P66+BAZbQJGvRAxO0Mjg8hxu
-        E5l8ZE6RVgSB0pz2sdANgzzaOWpxZIJF
-X-Google-Smtp-Source: ABdhPJwZphDpZK5w+SNtxL8aRxpQJ/Br4sTTzmcveEKO1iEOmvKB8/KvFavtIpdL/Yb2ywfIeTfilgCvojRw
-X-Received: from bg.sfo.corp.google.com ([2620:15c:11a:202:d51c:4157:9d6d:63e4])
- (user=bgeffon job=sendgmr) by 2002:a81:ee10:: with SMTP id
- l16mr4280164ywm.32.1644939433331; Tue, 15 Feb 2022 07:37:13 -0800 (PST)
-Date:   Tue, 15 Feb 2022 07:36:44 -0800
-Message-Id: <20220215153644.3654582-1-bgeffon@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH] x86/fpu: Correct pkru/xstate inconsistency
-From:   Brian Geffon <bgeffon@google.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Willis Kung <williskung@google.com>,
-        Guenter Roeck <groeck@google.com>,
-        Borislav Petkov <bp@suse.de>,
-        Andy Lutomirski <luto@kernel.org>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Brian Geffon <bgeffon@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4c4uLg+6xK62uK/uIKxvl/o7vQn8X9pm3rRoIxcYStc=;
+        b=E7cQR337+T/dwSlios1cXy/HrOEu6K8t4vw2qKRnGY4rnrRt+7avOyfnFSxPLVJ2fN
+         NqJ/PLopN/Ag9Ai6CHYoPVK/ZpTByytLsCFoUf2XpjngEgpbOCurD+IuhNptnnRWNCJu
+         u/wJdCzK4D84dlgmRtxobmtbOuf5pRDcLu+L9x7qM0BTpnbp+quz/Np3b+3zfbHnTC9Z
+         uEeTLE9WP0CncfWfvIj0DjGNbUf3eGuNyErA1E70+KgKuJ3STB49yhHf9Dp/TAjBnEMf
+         a0M15DoXqlJIXjaGCLLbB12UH5f/3gY/j3pisTo1izpw1k7EM50IT1CGrwQq8FfBrQHz
+         K/1A==
+X-Gm-Message-State: AOAM5302nncZOJ+DicpCfQ6VEB5iAmjaKDS3FxdVZrI3MGrkak842EIz
+        Twk/vPhoI8PDAG/MR+4zVASmFqNpi4lQUW0VU1o=
+X-Google-Smtp-Source: ABdhPJxQGBopSj3C6s+jqyN0nrwN12siEVw8h8G+/ijRyT5ogzTJ7KsTO9W46tWw5cDOyfkQckGvDJf4RDiA7ZGISGM=
+X-Received: by 2002:a17:906:99c5:: with SMTP id s5mr3466341ejn.497.1644939510133;
+ Tue, 15 Feb 2022 07:38:30 -0800 (PST)
+MIME-Version: 1.0
+References: <20220209162607.1118325-1-maz@kernel.org> <CACRpkdYfrAexUhFV6e86QW+GSc3hM=38VNucKLhPppJ2ZdQ7fA@mail.gmail.com>
+In-Reply-To: <CACRpkdYfrAexUhFV6e86QW+GSc3hM=38VNucKLhPppJ2ZdQ7fA@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 15 Feb 2022 17:37:01 +0200
+Message-ID: <CAHp75VdmKqViM5393w=frbX77te6X-VnMe5+VZwxY4PBw12Pdw@mail.gmail.com>
+Subject: Re: [PATCH 00/10] irqchip: Prevent drivers abusing irq_chip::name
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Android Kernel Team <kernel-team@android.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,101 +78,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are two issues with PKRU handling prior to 5.13. The first is that
-when eagerly switching PKRU we check that current is not a kernel
-thread as kernel threads will never use PKRU. It's possible that
-this_cpu_read_stable() on current_task (ie. get_current()) is returning
-an old cached value. By forcing the read with this_cpu_read() the
-correct task is used. Without this it's possible when switching from
-a kernel thread to a userspace thread that we'll still observe the
-PF_KTHREAD flag and never restore the PKRU. And as a result this
-issue only occurs when switching from a kernel thread to a userspace
-thread, switching from a non kernel thread works perfectly fine because
-all we consider in that situation is the flags from some other non
-kernel task and the next fpu is passed in to switch_fpu_finish().
+On Fri, Feb 11, 2022 at 8:31 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> On Wed, Feb 9, 2022 at 5:26 PM Marc Zyngier <maz@kernel.org> wrote:
 
-Without reloading the value finish_fpu_load() after being inlined into
-__switch_to() uses a stale value of current:
+...
 
-  ba1:   8b 35 00 00 00 00       mov    0x0(%rip),%esi
-  ba7:   f0 41 80 4d 01 40       lock orb $0x40,0x1(%r13)
-  bad:   e9 00 00 00 00          jmp    bb2 <__switch_to+0x1eb>
-  bb2:   41 f6 45 3e 20          testb  $0x20,0x3e(%r13)
-  bb7:   75 1c                   jne    bd5 <__switch_to+0x20e>
+> Since ... I am mostly
+> playing with a baby during the daytime
 
-By using this_cpu_read() and avoiding the cached value the compiler does
-insert an additional load instruction and observes the correct value now:
+A bit of a side topic, since I need to send a PR for fixes before my
+vacation starts tomorrow, should I Cc my PR to that Linus as well, so
+he can accept it?
+It will contain two one-liner ID patches to pin control Intel drivers
+and won't conflict with anything (as far as I am aware and know).
 
-  ba1:   8b 35 00 00 00 00       mov    0x0(%rip),%esi
-  ba7:   f0 41 80 4d 01 40       lock orb $0x40,0x1(%r13)
-  bad:   e9 00 00 00 00          jmp    bb2 <__switch_to+0x1eb>
-  bb2:   65 48 8b 05 00 00 00    mov    %gs:0x0(%rip),%rax
-  bb9:   00
-  bba:   f6 40 3e 20             testb  $0x20,0x3e(%rax)
-  bbe:   75 1c                   jne    bdc <__switch_to+0x215>
-
-The second issue is when using write_pkru() we only write to the
-xstate when the feature bit is set because get_xsave_addr() returns
-NULL when the feature bit is not set. This is problematic as the CPU
-is free to clear the feature bit when it observes the xstate in the
-init state, this behavior seems to be documented a few places throughout
-the kernel. If the bit was cleared then in write_pkru() we would happily
-write to PKRU without ever updating the xstate, and the FPU restore on
-return to userspace would load the old value agian.
-
-Fixes: 0cecca9d03c9 ("x86/fpu: Eager switch PKRU state")
-Signed-off-by: Brian Geffon <bgeffon@google.com>
-Signed-off-by: Willis Kung <williskung@google.com>
-Tested-by: Willis Kung <williskung@google.com>
----
- arch/x86/include/asm/fpu/internal.h |  2 +-
- arch/x86/include/asm/pgtable.h      | 14 ++++++++++----
- 2 files changed, 11 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/include/asm/fpu/internal.h b/arch/x86/include/asm/fpu/internal.h
-index 03b3de491b5e..540bda5bdd28 100644
---- a/arch/x86/include/asm/fpu/internal.h
-+++ b/arch/x86/include/asm/fpu/internal.h
-@@ -598,7 +598,7 @@ static inline void switch_fpu_finish(struct fpu *new_fpu)
- 	 * PKRU state is switched eagerly because it needs to be valid before we
- 	 * return to userland e.g. for a copy_to_user() operation.
- 	 */
--	if (!(current->flags & PF_KTHREAD)) {
-+	if (!(this_cpu_read(current_task)->flags & PF_KTHREAD)) {
- 		/*
- 		 * If the PKRU bit in xsave.header.xfeatures is not set,
- 		 * then the PKRU component was in init state, which means
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 9e71bf86d8d0..aa381b530de0 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -140,16 +140,22 @@ static inline void write_pkru(u32 pkru)
- 	if (!boot_cpu_has(X86_FEATURE_OSPKE))
- 		return;
- 
--	pk = get_xsave_addr(&current->thread.fpu.state.xsave, XFEATURE_PKRU);
--
- 	/*
- 	 * The PKRU value in xstate needs to be in sync with the value that is
- 	 * written to the CPU. The FPU restore on return to userland would
- 	 * otherwise load the previous value again.
- 	 */
- 	fpregs_lock();
--	if (pk)
--		pk->pkru = pkru;
-+	/*
-+	 * The CPU is free to clear the feature bit when the xstate is in the
-+	 * init state. For this reason, we need to make sure the feature bit is
-+	 * reset when we're explicitly writing to pkru. If we did not then we
-+	 * would write to pkru and it would not be saved on a context switch.
-+	 */
-+	current->thread.fpu.state.xsave.header.xfeatures |= XFEATURE_MASK_PKRU;
-+	pk = get_xsave_addr(&current->thread.fpu.state.xsave, XFEATURE_PKRU);
-+	BUG_ON(!pk);
-+	pk->pkru = pkru;
- 	__write_pkru(pkru);
- 	fpregs_unlock();
- }
 -- 
-2.35.1.265.g69c8d7142f-goog
-
+With Best Regards,
+Andy Shevchenko

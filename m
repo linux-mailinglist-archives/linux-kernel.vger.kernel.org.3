@@ -2,76 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679DA4B71CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF59F4B71B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:41:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241121AbiBOPqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 10:46:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34664 "EHLO
+        id S240913AbiBOPrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 10:47:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241016AbiBOPpc (ORCPT
+        with ESMTP id S241024AbiBOPpc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 15 Feb 2022 10:45:32 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41624333
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:41:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=esxeZM4q/UNDHpoEiVgydHmJA07+/Q3fcOjToRBk7e4=; b=Kpyy6zHsncrLBdN3W8+SLV1um+
-        u6dw+y/n2VWj3scnjt2WRjNuAUnhKaZx/jvO4El8mBTvl28eQunsrQiBmxZl4TLxCCfWFd28/rzsC
-        lwRqC4MLn2YkkanzAiJHZv2dYaGnrzGQnhlI418EjAflVkAMnFZaFC+TO3cjwpdafOtxyaa51KrOC
-        AfcISlOoJ01ZQSAtcOgtatCC9mkBxdd/HieoSdsuQYivmn1NS5WW9Oc5oyLluwOkIxaXXantk2YmQ
-        iqwHaYjrFlZMpcyPcP5GBphaHBZvWligIWB5O+e5sv1A39pQ6NT8oKw5EUTwxUSaWSYEPOCBPJvyT
-        hwO3ipUA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJzx3-00A8ip-T5; Tue, 15 Feb 2022 15:41:14 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 420E73001F3;
-        Tue, 15 Feb 2022 16:41:13 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 21C352D7640D3; Tue, 15 Feb 2022 16:41:13 +0100 (CET)
-Date:   Tue, 15 Feb 2022 16:41:13 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        H Peter Anvin <hpa@zytor.com>
-Subject: Re: [PATCH V2 0/2] perf/x86/intel/pt: Add support for event tracing
- and TNT disabling
-Message-ID: <YgvJmf0kc4+EXqmC@hirez.programming.kicks-ass.net>
-References: <20220126104815.2807416-1-adrian.hunter@intel.com>
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7267124C1F
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 07:41:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644939669; x=1676475669;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eY2KZ759nJJ193QyirITPXbPZMmn0kpdQZNK786m41o=;
+  b=Chsly+UK+5A18hv/z8g4MLfDYrdZW2ued2oxvgXj1nmfoFEByEDUe7cJ
+   ZHXnN+0xIjVG744Zt7F8+vq29aqSnF6wM6PdROxcQb7h4NPzC3P4Zo0NF
+   4zxeyQiE9wZe5mD6GxWWfX7tBKnEhNqgwvWnyRRJdLrwA1bROdv4j2sC3
+   mcNFCiwj4bT4y2UGcFKIkDWA4m3iSCiRsdfW0a7X7Q1Sp8AUKUwa3AKrp
+   SJgIt34ZZNcIHEJXL2KLpeo+e0RksIFJQkqih6uKeKYL3ytvoybmXu5SW
+   GOg2sMY9gektp8TD9xtUtpGnPhl564fL5hkLGvU0/Gb5nQlRwWe/ZXmQY
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="247973908"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="247973908"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 07:41:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="528924530"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga007.jf.intel.com with ESMTP; 15 Feb 2022 07:41:03 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 08A12107; Tue, 15 Feb 2022 17:41:18 +0200 (EET)
+Date:   Tue, 15 Feb 2022 18:41:18 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>, tglx@linutronix.de,
+        mingo@redhat.com, luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 22/29] x86/tdx: Make pages shared in ioremap()
+Message-ID: <20220215154118.ldpvvk5seljntl44@black.fi.intel.com>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-23-kirill.shutemov@linux.intel.com>
+ <YgFIaJ8ijgQQ04Nv@zn.tnic>
+ <1d77e91c-e151-7846-6cd4-6264236ca5ae@intel.com>
+ <YgFWpGQfA84Y0mW/@zn.tnic>
+ <20220214220926.fjwlyieatwjhcpij@black.fi.intel.com>
+ <f1dfc268-7b2f-9980-27ce-0b5bb1aea962@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220126104815.2807416-1-adrian.hunter@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <f1dfc268-7b2f-9980-27ce-0b5bb1aea962@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 12:48:13PM +0200, Adrian Hunter wrote:
-> Alexander Shishkin (2):
->       perf/x86/intel/pt: Add a capability and config bit for event tracing
->       perf/x86/intel/pt: Add a capability and config bit for disabling TNTs
+On Tue, Feb 15, 2022 at 08:49:34AM -0600, Tom Lendacky wrote:
+> On 2/14/22 16:09, Kirill A. Shutemov wrote:
+> > On Mon, Feb 07, 2022 at 06:28:04PM +0100, Borislav Petkov wrote:
+> > > On Mon, Feb 07, 2022 at 08:57:39AM -0800, Dave Hansen wrote:
+> > > > We can surely *do* this with cc_something() helpers.  It's just not as
+> > > > easy as making cc_set/cc_clear().
+> > > 
+> > > Sure, that's easy: cc_pgprot_{enc,dec}() or so.
+> > 
+> > So, I've ended up with this in <asm/pgtable.h>
+> > 
+> > /*
+> >   * Macros to add or remove encryption attribute
+> >   */
+> > #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
+> > pgprotval_t cc_enc(pgprotval_t protval);
+> > pgprotval_t cc_dec(pgprotval_t protval);
+> > #define pgprot_encrypted(prot)	__pgprot(cc_enc(pgprot_val(prot)))
+> > #define pgprot_decrypted(prot)	__pgprot(cc_dec(pgprot_val(prot)))
+> > #else
+> > #define pgprot_encrypted(prot) (prot)
+> > #define pgprot_decrypted(prot) (prot)
+> > #endif
 > 
->  arch/x86/events/intel/pt.c       | 16 ++++++++++++++++
->  arch/x86/include/asm/intel_pt.h  |  2 ++
->  arch/x86/include/asm/msr-index.h |  2 ++
->  3 files changed, 20 insertions(+)
+> A couple of things. I think cc_pgprot_enc() and cc_pgprot_dec() would be
+> more descriptive/better names to use here.
+> 
+> Also, can they be defined in include/linux/cc_platform.h (with two versions
+> based on CONFIG_ARCH_HAS_CC_PLATFORM) and have that included here? Or is
+> there some header file include issues when trying to include it? That would
+> clean this block up into just two lines.
 
-patches look Ok otherwise, I'll queue then in perf/core
+Well, pgprotval_t is x86-specific. It cannot be used in generic headers.
+We can use u64 here instead. It is wider than pgprotval_t on 2-level
+paging x86, but should work.
+
+But with u64 as type, I'm not sure 'pgprot' in the name is jutified.
+
+Hm?
+
+-- 
+ Kirill A. Shutemov

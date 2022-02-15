@@ -2,93 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0504B6D4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BA44B6D52
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:24:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238232AbiBONXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 08:23:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41590 "EHLO
+        id S238230AbiBONZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 08:25:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238192AbiBONXA (ORCPT
+        with ESMTP id S233549AbiBONZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 08:23:00 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0F3106628
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 05:22:50 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id v12so32144235wrv.2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 05:22:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=OhoR4XATjA7zKN/RXHZHTsGzRsSVf9+O2oXzvEdltm4=;
-        b=b37OwHeSwfGsU9K1T22xDFIAhKSKSenRPOPbaBz5dZ/gVxQWzkw8Y3f1IAXCFdvB5m
-         +rSWAbEkBChDH+rt2BOUIkYYjYF1LSICd9lKhJIBHYcdADSvzXh1Gtm+OqkvSP1NqtEC
-         G2mE+1Epjaafm5Q66Hno5vMzoyv3AhZXIFAoMK3NVIV+pK5/ssYk2jOK7jIou3xRnGdd
-         kpGaGU3vcaN+DqVvayYZvOe6PnvMl98owWy9NR0ZvCmpYpJWiq0wys4JDCviEwdDf5Rj
-         24EK3QIdRsEIulb0NtGI8z6Buh2SHfkNgIrxKGAISAyEDWGTW05NanSb53nDjsTn42Gi
-         MiKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=OhoR4XATjA7zKN/RXHZHTsGzRsSVf9+O2oXzvEdltm4=;
-        b=e8fAGBv+s54mUvEhGai7s9Nmtft4+2U7a4iDkL6tG1ta3HzIHAI8FguGTxzbz9H60S
-         HqRGEUaIfu0o3ddW6wckvvFDbsDl/7R2TabIk0E2V97WRr5PJ9NeDXuXhcHN3nJF68z+
-         V6ZyzHs0ZkVNFgK+u6pkRUTj1o4gdzcGtAfR6Pns+i8MYTUf2WqSHXqtc2gVloMvM/lS
-         Bo7IYWBxvebzxZaQF64qoDffOUUb2YEeThtbmLc5xfueTcW4tQlgf4CfYDneCR11SpJc
-         Vr0DOYVUR8m2q/JoOT3QEddrGo8ixt8axLvF4xT9gwz3jMi72toJIal95xzPSt5N1pdf
-         VFLg==
-X-Gm-Message-State: AOAM533/fMWIvFX9T14gco1ul9bMiKJPa4SNdJudEibwqqMm46YlSuS/
-        FbVAU4tVnbGcIbwZ6RO00wcOzLbVXcSTwQ==
-X-Google-Smtp-Source: ABdhPJwcKJSqTBvxL+OpSByXJmDucyG0ZiWYSfuT5Cbu9ZCkArRBYTg7i2nkZMigKRRU51tW62ISkg==
-X-Received: by 2002:a5d:484e:: with SMTP id n14mr3147271wrs.574.1644931369364;
-        Tue, 15 Feb 2022 05:22:49 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id m31sm16135529wms.34.2022.02.15.05.22.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 05:22:48 -0800 (PST)
-Date:   Tue, 15 Feb 2022 13:22:46 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 9/9] mfd: sta2x11: use GFP_KERNEL
-Message-ID: <YgupJrUGnOh1vxr5@google.com>
-References: <20220210204223.104181-1-Julia.Lawall@inria.fr>
- <20220210204223.104181-10-Julia.Lawall@inria.fr>
+        Tue, 15 Feb 2022 08:25:00 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA10C106626;
+        Tue, 15 Feb 2022 05:24:50 -0800 (PST)
+Received: from [IPV6:2a01:e0a:120:3210:6d7b:ae43:289b:7e7c] (unknown [IPv6:2a01:e0a:120:3210:6d7b:ae43:289b:7e7c])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id EB6CD1F449A4;
+        Tue, 15 Feb 2022 13:24:48 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644931489;
+        bh=hF6RqNWPIf6kemqF5dvkZw9bQuC7lSX855MH4lfmnI8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ynv4ugpYO8nS/XAc1LO/PNI6/X8naU88NxgCSMuCMfcW5WhDUUNzk/s6NxUFUlYXS
+         E2qAjk04bZxDB1IGwEX5xSi4s9CIJ+7LWrV40qpWnJoY9NlS8lpH2A0gBOfV4JHLXy
+         EHFA2fQ2Slzl3EfMeUncZg3uXbi/IYmySyhIeHOmZUhhkQqPRM22FYYWSt1TXzutOY
+         czQlq6DowoA5V96r/0qNlj0hl2XvGhhtlzLQNQNgTGoSQGHSyZ9Yewfsxf/Nwcla3+
+         PvFFgZEiJJkC938tFysoeo/5gttb4+hIOnORwwcKMZFS02fyl9dwSPBKbZj7W48vu2
+         ApMe2dfr+omnw==
+Message-ID: <d9f1923a-dfca-0b3a-bfd6-2d1144f9bcd1@collabora.com>
+Date:   Tue, 15 Feb 2022 14:24:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC v2 0/8] Move HEVC stateless controls out of staging
+Content-Language: en-US
+To:     Sebastian Fricke <sebastian.fricke@collabora.com>
+Cc:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, hverkuil-cisco@xs4all.nl,
+        jonas@kwiboo.se, nicolas@ndufresne.ca, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com, knaerzche@gmail.com, jc@kynesim.co.uk
+References: <20220215110103.241297-1-benjamin.gaignard@collabora.com>
+ <20220215130121.4ekixb457ot6zaqi@basti-XPS-13-9310>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <20220215130121.4ekixb457ot6zaqi@basti-XPS-13-9310>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220210204223.104181-10-Julia.Lawall@inria.fr>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Feb 2022, Julia Lawall wrote:
 
-> Pci_driver probe functions aren't called with locks held and
-> thus don't need GFP_ATOMIC. Use GFP_KERNEL instead.
-> 
-> Problem found with Coccinelle.
-> 
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
-> 
-> ---
->  drivers/mfd/sta2x11-mfd.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Le 15/02/2022 à 14:01, Sebastian Fricke a écrit :
+> Hey Benjamin,
+>
+> On 15.02.2022 12:00, Benjamin Gaignard wrote:
+>> This series aims to make HEVC uapi stable and usable for hardware
+>> decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
+>> and 2 out of the tree drivers (rkvdec and RPI).
+>
+> Why is rkvdec out-of-tree? It is in the staging directory just like
+> hantro and cedrus? Am I missing something here?
 
-Applied, thanks.
+I have made a shortcut here: HEVC part of rkvdec isn't in staging directory.
+I hope that this series will enough to add it after.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Regards,
+Benjamin
+
+>
+> Greetings,
+> Sebastian
+>
+>>
+>> The 3 first patches are from Hans to implement v4l2 dynamic control
+>> feature which is need by patch 7 for 
+>> V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET
+>> definition.
+>>
+>> Patch 4 move the existing uapi to stable, including definitions renaming
+>> and CID number change to fit with v4l2 naming.
+>>
+>> Patches 5 and 7 add fields needed for rkvdec and RPI decoders.
+>>
+>> Patches 6 is cleaning up the uapi of useless field.
+>> Patches 8 change one field description and name to define offset by
+>> bytes rather than by bits
+>>
+>> Benjamin
+>>
+>> Benjamin Gaignard (5):
+>>  media: uapi: Move HEVC stateless controls out of staging
+>>  media: uapi: Add fields needed for RKVDEC driver
+>>  media: uapi: Remove bit_size field from v4l2_ctrl_hevc_slice_params
+>>  media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET control
+>>  media: uapi: Change data_bit_offset definition
+>>
+>> Hans Verkuil (3):
+>>  videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
+>>  v4l2-ctrls: add support for dynamically allocated arrays.
+>>  vivid: add dynamic array test control
+>>
+>> .../userspace-api/media/drivers/hantro.rst    |   5 -
+>> .../media/v4l/ext-ctrls-codec.rst             |  58 ++--
+>> .../media/v4l/vidioc-queryctrl.rst            |   8 +
+>> .../media/test-drivers/vivid/vivid-ctrls.c    |  15 ++
+>> drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 ++++++--
+>> drivers/media/v4l2-core/v4l2-ctrls-core.c     | 182 ++++++++++---
+>> drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  32 +--
+>> drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
+>> drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
+>> drivers/staging/media/hantro/hantro_drv.c     |  27 +-
+>> drivers/staging/media/hantro/hantro_hevc.c    |   8 +-
+>> drivers/staging/media/sunxi/cedrus/cedrus.c   |  24 +-
+>> .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
+>> .../staging/media/sunxi/cedrus/cedrus_h265.c  |  13 +-
+>> include/linux/hantro-media.h                  |  17 ++
+>> include/media/hevc-ctrls.h                    | 250 ------------------
+>> include/media/v4l2-ctrls.h                    |  48 +++-
+>> include/uapi/linux/v4l2-controls.h            | 224 ++++++++++++++++
+>> include/uapi/linux/videodev2.h                |   8 +
+>> 19 files changed, 640 insertions(+), 408 deletions(-)
+>> create mode 100644 include/linux/hantro-media.h
+>> delete mode 100644 include/media/hevc-ctrls.h
+>>
+>> -- 
+>> 2.32.0
+>>

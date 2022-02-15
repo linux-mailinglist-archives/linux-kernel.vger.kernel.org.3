@@ -2,176 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 268FB4B6E4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 15:06:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB17C4B6E52
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 15:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238506AbiBOOHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 09:07:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32972 "EHLO
+        id S238515AbiBOOHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 09:07:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbiBOOHD (ORCPT
+        with ESMTP id S238508AbiBOOHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 09:07:03 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4DA76622A
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 06:06:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644934012; x=1676470012;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=nCQeDJLJnmRjwfyLxCNyYQOp5yH3urqb4DZozgnaVxU=;
-  b=LssZiji2CpaecnM8o/pShZO9T5QYEPfSrb/z5mVv0cS7dRw53AAfzsWu
-   Lf+WHsNi7BPm6vjtyyqHB7rwYbMzIkGyrabIznTYkwL5AA9dDuMSAHqJz
-   mWhD5mcErm20fWr5BPMeVglPq6hE72wGBpZAZeHMvm8Cn9CbYfabjPbUn
-   9epBPdXyNNphE2iJ3XgfG2GfDmzCWBX3OO43nuZCWmFbxIpPvGco8WimX
-   GN6kxJUcASeKM1NuuJd7yWJwREG1Ib6HMxW3+JX0hhW09+WboaFG4uxz7
-   2V3VkXrf7FqXGE76Cg/PPC6b/MbRqYPt8NMmGG2mJFhkI4+22u1Pfb99y
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="250097966"
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="250097966"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 06:06:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="497175635"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 15 Feb 2022 06:06:51 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nJyTi-0009j3-Kn; Tue, 15 Feb 2022 14:06:50 +0000
-Date:   Tue, 15 Feb 2022 22:06:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- fbc1ed420b65795e63ebe65a6f39bfd71f33dc45
-Message-ID: <620bb356.rxoZSqD86AIvTKsk%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 15 Feb 2022 09:07:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C916F6A39D;
+        Tue, 15 Feb 2022 06:07:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63D986175E;
+        Tue, 15 Feb 2022 14:07:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65811C340ED;
+        Tue, 15 Feb 2022 14:07:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644934024;
+        bh=npFLVpEh73ePajA6yVLxydXgeScMGNmeCsTfKW2ZvBw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J6f7RqcCqaIWC2zar2P4aZoHHUpVYwvbbNCkvhUI+Bk2qaObnXF1hnRPqH/Kb3zaM
+         2/+FUF26wif66N77ZP6bDQSU511RTeSQYm5P/xN+E90Rd/5uNwWs7xi3BT/CN5AKi3
+         FVr+s7ByYLfSG0sh+f/1TeGis2dKA341gf4nnyN8=
+Date:   Tue, 15 Feb 2022 15:07:02 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     3090101217@zju.edu.cn
+Cc:     balbi@kernel.org, jleng@ambarella.com,
+        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usb: gadget: f_uvc: fix superspeedplus transfer
+Message-ID: <Yguzht2JJtF+8N76@kroah.com>
+References: <Ygow+EB1P84VflBb@kroah.com>
+ <20220215021647.4316-1-3090101217@zju.edu.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20220215021647.4316-1-3090101217@zju.edu.cn>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: fbc1ed420b65795e63ebe65a6f39bfd71f33dc45  lib/irq_poll: Declare IRQ_POLL softirq vector as ksoftirqd-parking safe
+On Tue, Feb 15, 2022 at 10:16:47AM +0800, 3090101217@zju.edu.cn wrote:
+> From: Jing Leng <jleng@ambarella.com>
+> 
+> UVC driver doesn't set ssp_descriptors in struct usb_function,
+> If UVC uses superspeedplus UDC (e.g. cdnsp), when
+> config_ep_by_speed_and_alt is called, the g->speed is
+> USB_SPEED_SUPER_PLUS, and f->ssp_descriptors is NULL,
+> So kernel will access NULL pointer of speed_desc.
+> 
+> Call trace:
+>  config_ep_by_speed_and_alt+0x3c/0x2a0 [libcomposite]
+>  uvc_function_set_alt+0xd4/0x2e8 [usb_f_uvc]
+>  set_config.constprop.0+0x154/0x3a0 [libcomposite]
+>  composite_setup+0x314/0xb44 [libcomposite]
+>  configfs_composite_setup+0x84/0xb0 [libcomposite]
+>  cdnsp_ep0_std_request+0x25c/0x470 [cdns3]
+>  cdnsp_setup_analyze+0x94/0x25c [cdns3]
+>  cdnsp_handle_event+0xe8/0x23c [cdns3]
+>  cdnsp_thread_irq_handler+0x58/0xe8 [cdns3]
+>  irq_thread_fn+0x2c/0xa0
+>  irq_thread+0x164/0x280
+>  kthread+0x128/0x134
+>  ret_from_fork+0x10/0x40
 
-elapsed time: 1029m
+What does "call trace" here mean?  Is this an error?  Something else?
 
-configs tested: 95
-configs skipped: 3
+> 
+> Signed-off-by: Jing Leng <jleng@ambarella.com>
+> ---
+>  drivers/usb/gadget/function/f_uvc.c | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+You did not read the information that my bot told you to read, for how
+to properly version your patches :(
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc                     tqm8541_defconfig
-powerpc                 mpc8540_ads_defconfig
-powerpc                     mpc83xx_defconfig
-arm                        trizeps4_defconfig
-powerpc                       ppc64_defconfig
-sh                     magicpanelr2_defconfig
-m68k                          hp300_defconfig
-arm                     eseries_pxa_defconfig
-arm                            pleb_defconfig
-sh                           se7721_defconfig
-arm                  randconfig-c002-20220214
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-sparc                            allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a013-20220214
-x86_64               randconfig-a014-20220214
-x86_64               randconfig-a012-20220214
-x86_64               randconfig-a015-20220214
-x86_64               randconfig-a011-20220214
-x86_64               randconfig-a016-20220214
-i386                 randconfig-a013-20220214
-i386                 randconfig-a016-20220214
-i386                 randconfig-a012-20220214
-i386                 randconfig-a015-20220214
-i386                 randconfig-a011-20220214
-i386                 randconfig-a014-20220214
-riscv                randconfig-r042-20220214
-arc                  randconfig-r043-20220214
-s390                 randconfig-r044-20220214
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+Please go back and do so when you resend all of them.
 
-clang tested configs:
-x86_64               randconfig-a002-20220214
-x86_64               randconfig-a006-20220214
-x86_64               randconfig-a005-20220214
-x86_64               randconfig-a004-20220214
-x86_64               randconfig-a003-20220214
-x86_64               randconfig-a001-20220214
-i386                 randconfig-a004-20220214
-i386                 randconfig-a005-20220214
-i386                 randconfig-a006-20220214
-i386                 randconfig-a003-20220214
-i386                 randconfig-a001-20220214
-i386                 randconfig-a002-20220214
-hexagon              randconfig-r045-20220214
-hexagon              randconfig-r041-20220214
+Also this is not a patch series?  Why not?
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+thanks,
+
+greg k-h

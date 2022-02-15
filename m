@@ -2,42 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3B84B7794
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A250C4B7679
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 21:49:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243250AbiBOStt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 13:49:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41756 "EHLO
+        id S241634AbiBOStq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 13:49:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233448AbiBOStp (ORCPT
+        with ESMTP id S229693AbiBOSto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 13:49:45 -0500
-Received: from mxout02.lancloud.ru (mxout02.lancloud.ru [45.84.86.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A03673EC;
+        Tue, 15 Feb 2022 13:49:44 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28732674D4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:49:33 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id n24so25388738ljj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 10:49:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kTtmg6ktAgJwq5MZnJ5eet949KxjKcTh/gStfNg5//s=;
+        b=mxCurUCVewHQoySZecTezkZpd491SJOV26FBezRGliAgBwymStY35QI5At/pQ3Xub2
+         J3D1Zd64MTSnnmmMe22rJ4Lg5H9o9IiVzsN61N0j5+TCr/2CDU0CG93cty2qhE9K8xSJ
+         /MbgffX1WgdOJA9c09hKeDREI+4UzDJ9YQ6vohijyBnpUVt3ipAz3pGk184ldls+F1Qy
+         gsSjYYlPrYxQQ3BMoQ0wPise7fLz00kMKslwTpAn1/ihtTX+p0B23DF9cn3baa/nor7W
+         xRlTGmAwZg7di2Cqdd76B5GEcY9Ibm0PHbeVDoH3lZHdg+ZtbpgU6nitfHwXFnnNYjB6
+         K1KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kTtmg6ktAgJwq5MZnJ5eet949KxjKcTh/gStfNg5//s=;
+        b=yluzvpas+GOdI/z8bQbGhyimje8Ny1I5Ega5dGMeA4lUMvjPQ4nfILbb55+cThAT1f
+         hZANTHhtJElPG4doTChC1c96+0y6BKxq5gB4x7c1hx7JwLnXvyWL8G1aJNrghHb9oEGb
+         dXAuo2tyIRL6kIrgykdWrqUtw6NNmrj9RO1wC4S9EPWNeQ6yxZMZ8ZMksX6ybehXVmjL
+         VnJiOcAC7Qf7xLB87Fdgvi6tIo0TRRIVq59Ppwho7Jm1/m3bqhmtuxCYwfaexJnomPv5
+         /uqjGycNIWMKIlLZ8DwGWH0sk2gQb9ZVK8WehbeMw1mMw8MThv7sM66m3TVNYYc5vPla
+         6OGQ==
+X-Gm-Message-State: AOAM5333yzSuAKEYCvvK5rzEI2/Ya3dgtvroiY5o4/bU36ImpEtH2sNR
+        lTSHaJNTraTH3QnW7/5R76VmfA==
+X-Google-Smtp-Source: ABdhPJx+9+PsOl6Q8gncO2syD37SkX6in1J2+l8UQdOPTSq+LigA0ypwIKqWPateUelxaClG6IWR2g==
+X-Received: by 2002:a05:651c:545:: with SMTP id q5mr245400ljp.393.1644950971396;
+        Tue, 15 Feb 2022 10:49:31 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id c4sm724798lfs.220.2022.02.15.10.49.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Tue, 15 Feb 2022 10:49:30 -0800 (PST)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 00FEB207D564
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: [PATCH v2] ata: add/use ata_taskfile::{error|status} fields
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Organization: Open Mobile Platform
-Message-ID: <8ecca7a5-1930-b2c5-d850-17caa4b95644@omp.ru>
-Date:   Tue, 15 Feb 2022 21:49:26 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+Message-ID: <98f5ec0b-2279-04af-f333-e1d56be0d171@linaro.org>
+Date:   Tue, 15 Feb 2022 21:49:30 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v4 2/2] drm/msm/dp: enable widebus feature for display
+ port
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, vkoul@kernel.org,
+        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
+        bjorn.andersson@linaro.org, quic_abhinavk@quicinc.com,
+        quic_aravindh@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1644878346-28511-1-git-send-email-quic_khsieh@quicinc.com>
+ <1644878346-28511-3-git-send-email-quic_khsieh@quicinc.com>
+ <db5ecfec-c61e-43ff-4e76-5517fd671503@linaro.org>
+ <5682ea06-5853-158d-777a-7d59935fb4dc@quicinc.com>
+ <CAA8EJppVih5vojR623M=DjA4QyxfBs_Q14CognuRpLWBDyvf3w@mail.gmail.com>
+ <74351326-8375-61fd-b967-57092c85d319@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <74351326-8375-61fd-b967-57092c85d319@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,682 +85,390 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the explicit error and status register fields to 'struct ata_taskfile'
-using the anonymous *union*s ('struct ide_taskfile' had that for ages!) and
-update the libata taskfile code accordingly. There should be no object code
-changes resulting from that...
+On 15/02/2022 21:39, Kuogee Hsieh wrote:
+> 
+> On 2/15/2022 10:30 AM, Dmitry Baryshkov wrote:
+>> On Tue, 15 Feb 2022 at 20:49, Kuogee Hsieh <quic_khsieh@quicinc.com> 
+>> wrote:
+>>>
+>>> On 2/15/2022 5:34 AM, Dmitry Baryshkov wrote:
+>>>> On 15/02/2022 01:39, Kuogee Hsieh wrote:
+>>>>> Widebus feature will transmit two pixel data per pixel clock to
+>>>>> interface.
+>>>>> This feature now is required to be enabled to easy migrant to higher
+>>>>> resolution applications in future. However since some legacy chipsets
+>>>>> does not support this feature, this feature is enabled base on chip's
+>>>>> hardware revision.
+>>>>>
+>>>>> changes in v2:
+>>>>> -- remove compression related code from timing
+>>>>> -- remove op_info from  struct msm_drm_private
+>>>>> -- remove unnecessary wide_bus_en variables
+>>>>> -- pass wide_bus_en into timing configuration by struct msm_dp
+>>>>>
+>>>>> Changes in v3:
+>>>>> -- split patch into 3 patches
+>>>>> -- enable widebus feature base on chip hardware revision
+>>>>>
+>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>>>>> ---
+>>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c |  4 +++-
+>>>>>    drivers/gpu/drm/msm/dp/dp_catalog.c         | 36
+>>>>> +++++++++++++++++++++++++++--
+>>>>>    drivers/gpu/drm/msm/dp/dp_catalog.h         |  3 ++-
+>>>>>    drivers/gpu/drm/msm/dp/dp_ctrl.c            | 13 +++++++----
+>>>>>    drivers/gpu/drm/msm/dp/dp_ctrl.h            |  1 +
+>>>>>    drivers/gpu/drm/msm/dp/dp_display.c         | 30
+>>>>> ++++++++++++++++++++++++
+>>>>>    drivers/gpu/drm/msm/dp/dp_display.h         |  2 ++
+>>>>>    drivers/gpu/drm/msm/dp/dp_panel.c           |  4 ++--
+>>>>>    drivers/gpu/drm/msm/dp/dp_panel.h           |  2 +-
+>>>>>    drivers/gpu/drm/msm/msm_drv.h               |  6 +++++
+>>>>>    10 files changed, 90 insertions(+), 11 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>>>>> index 0c22839..b2d23c2 100644
+>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>>>>> @@ -2167,8 +2167,10 @@ int dpu_encoder_setup(struct drm_device *dev,
+>>>>> struct drm_encoder *enc,
+>>>>>            timer_setup(&dpu_enc->vsync_event_timer,
+>>>>>                    dpu_encoder_vsync_event_handler,
+>>>>>                    0);
+>>>>> -    else if (disp_info->intf_type == DRM_MODE_ENCODER_TMDS)
+>>>>> +    else if (disp_info->intf_type == DRM_MODE_ENCODER_TMDS) {
+>>>>>            dpu_enc->dp = priv->dp[disp_info->h_tile_instance[0]];
+>>>>> +        dpu_enc->wide_bus_en = msm_dp_wide_bus_enable(dpu_enc->dp);
+>>>>> +    }
+>>>> Please revert the order of the patches and move this chunk into the
+>>>> DPU patch.
+>>> There is chicken  and egg issue here.
+>>>
+>>> I think we should create an communication channel to pass dp/dsi driver
+>>> info to drm, such as wide_bus_en and dsc compression, etc.
+>>>
+>>> By function calls like this will create more unnecessary tangles between
+>>> driver and drm layer.
+>> I'm fine with the function call. I'm suggesting another thing. If you
+>> change the order of these two patches (#1 - dp, #2 - dpu), the
+>> msm_dp_wide_bus_enable() will get added in patch#1 and will be
+>> available to be called in the patch#2.
+> 
+> By doing that, we have wile widebus enabled at (#1 -dp) patch but has no 
+> timing engine changes at (#2 -dpu) to support it. This means (#1 -dp) 
+> will break dp until (#2 -dpu) merged.
+> 
+> Is this ok?
 
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Ah, I missed this. Please excuse me. It's fine to leave the order as is 
+then.
 
----
-This patch is against the 'for-next' branch of Damien Le Moal's 'libata.git'
-repo plus the recently posted patches:
+> 
+> 
+>>>>> INIT_DELAYED_WORK(&dpu_enc->delayed_off_work,
+>>>>>                dpu_encoder_off_work);
+>>>>> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c
+>>>>> b/drivers/gpu/drm/msm/dp/dp_catalog.c
+>>>>> index 64f0b26..99d087e 100644
+>>>>> --- a/drivers/gpu/drm/msm/dp/dp_catalog.c
+>>>>> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
+>>>>> @@ -483,6 +483,27 @@ int dp_catalog_ctrl_set_pattern_state_bit(struct
+>>>>> dp_catalog *dp_catalog,
+>>>>>    }
+>>>>>      /**
+>>>>> + * dp_catalog_hw_revision() - retrieve DP hw revision
+>>>>> + *
+>>>>> + * @dp_catalog: DP catalog structure
+>>>>> + *
+>>>>> + * return: u32
+>>>>> + *
+>>>>> + * This function return the DP controller hw revision
+>>>>> + *
+>>>>> + */
+>>>>> +u32 dp_catalog_hw_revision(struct dp_catalog *dp_catalog)
+>>>>> +{
+>>>>> +    u32 revision;
+>>>>> +    struct dp_catalog_private *catalog = container_of(dp_catalog,
+>>>>> +                struct dp_catalog_private, dp_catalog);
+>>>>> +
+>>>>> +    revision = dp_read_ahb(catalog, REG_DP_HW_VERSION);
+>>>>> +
+>>>>> +    return revision;
+>>>>> +}
+>>>>> +
+>>>>> +/**
+>>>>>     * dp_catalog_ctrl_reset() - reset DP controller
+>>>>>     *
+>>>>>     * @dp_catalog: DP catalog structure
+>>>>> @@ -739,10 +760,11 @@ u32 dp_catalog_ctrl_read_phy_pattern(struct
+>>>>> dp_catalog *dp_catalog)
+>>>>>    }
+>>>>>      /* panel related catalog functions */
+>>>>> -int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog)
+>>>>> +int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog, bool
+>>>>> wide_bus_en)
+>>>>>    {
+>>>>>        struct dp_catalog_private *catalog = container_of(dp_catalog,
+>>>>>                    struct dp_catalog_private, dp_catalog);
+>>>>> +    u32 reg;
+>>>>>          dp_write_link(catalog, REG_DP_TOTAL_HOR_VER,
+>>>>>                    dp_catalog->total);
+>>>>> @@ -751,7 +773,17 @@ int dp_catalog_panel_timing_cfg(struct
+>>>>> dp_catalog *dp_catalog)
+>>>>>        dp_write_link(catalog, REG_DP_HSYNC_VSYNC_WIDTH_POLARITY,
+>>>>>                    dp_catalog->width_blanking);
+>>>>>        dp_write_link(catalog, REG_DP_ACTIVE_HOR_VER,
+>>>>> dp_catalog->dp_active);
+>>>>> -    dp_write_p0(catalog, MMSS_DP_INTF_CONFIG, 0);
+>>>>> +
+>>>>> +    reg = dp_read_p0(catalog, MMSS_DP_INTF_CONFIG);
+>>>>> +
+>>>>> +    if (wide_bus_en)
+>>>>> +        reg |= BIT(4);    /* DATABUS_WIDEN */
+>>>>> +    else
+>>>>> +        reg &= ~BIT(4);
+>>>>> +
+>>>>> +    DRM_DEBUG_DP("wide_bus_en=%d reg=%x\n", wide_bus_en, reg);
+>>>>> +
+>>>>> +    dp_write_p0(catalog, MMSS_DP_INTF_CONFIG, reg);
+>>>>>        return 0;
+>>>>>    }
+>>>>>    diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.h
+>>>>> b/drivers/gpu/drm/msm/dp/dp_catalog.h
+>>>>> index 7dea101..a3a0129 100644
+>>>>> --- a/drivers/gpu/drm/msm/dp/dp_catalog.h
+>>>>> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.h
+>>>>> @@ -95,6 +95,7 @@ void dp_catalog_ctrl_config_misc(struct dp_catalog
+>>>>> *dp_catalog, u32 cc, u32 tb);
+>>>>>    void dp_catalog_ctrl_config_msa(struct dp_catalog *dp_catalog, u32
+>>>>> rate,
+>>>>>                    u32 stream_rate_khz, bool fixed_nvid);
+>>>>>    int dp_catalog_ctrl_set_pattern_state_bit(struct dp_catalog
+>>>>> *dp_catalog, u32 pattern);
+>>>>> +u32 dp_catalog_hw_revision(struct dp_catalog *dp_catalog);
+>>>>>    void dp_catalog_ctrl_reset(struct dp_catalog *dp_catalog);
+>>>>>    bool dp_catalog_ctrl_mainlink_ready(struct dp_catalog *dp_catalog);
+>>>>>    void dp_catalog_ctrl_enable_irq(struct dp_catalog *dp_catalog, bool
+>>>>> enable);
+>>>>> @@ -115,7 +116,7 @@ void dp_catalog_ctrl_send_phy_pattern(struct
+>>>>> dp_catalog *dp_catalog,
+>>>>>    u32 dp_catalog_ctrl_read_phy_pattern(struct dp_catalog 
+>>>>> *dp_catalog);
+>>>>>      /* DP Panel APIs */
+>>>>> -int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog);
+>>>>> +int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog, bool
+>>>>> wide_bus_en);
+>>>>>    void dp_catalog_dump_regs(struct dp_catalog *dp_catalog);
+>>>>>    void dp_catalog_panel_tpg_enable(struct dp_catalog *dp_catalog,
+>>>>>                    struct drm_display_mode *drm_mode);
+>>>>> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>>>>> b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>>>>> index 245e1b9..1c4cf9d 100644
+>>>>> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>>>>> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>>>>> @@ -154,7 +154,7 @@ static void dp_ctrl_config_ctrl(struct
+>>>>> dp_ctrl_private *ctrl)
+>>>>>        dp_catalog_ctrl_config_ctrl(ctrl->catalog, config);
+>>>>>    }
+>>>>>    -static void dp_ctrl_configure_source_params(struct dp_ctrl_private
+>>>>> *ctrl)
+>>>>> +static void dp_ctrl_configure_source_params(struct dp_ctrl_private
+>>>>> *ctrl, bool wide_bus_en)
+>>>>>    {
+>>>>>        u32 cc, tb;
+>>>>>    @@ -167,7 +167,7 @@ static void
+>>>>> dp_ctrl_configure_source_params(struct dp_ctrl_private *ctrl)
+>>>>>            ctrl->panel->dp_mode.bpp);
+>>>>>        cc = dp_link_get_colorimetry_config(ctrl->link);
+>>>>>        dp_catalog_ctrl_config_misc(ctrl->catalog, cc, tb);
+>>>>> -    dp_panel_timing_cfg(ctrl->panel);
+>>>>> +    dp_panel_timing_cfg(ctrl->panel, wide_bus_en);
+>>>>>    }
+>>>>>      /*
+>>>>> @@ -1796,6 +1796,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+>>>>>        int ret = 0;
+>>>>>        bool mainlink_ready = false;
+>>>>>        struct dp_ctrl_private *ctrl;
+>>>>> +    u32 pixel_rate_orig;
+>>>>>          if (!dp_ctrl)
+>>>>>            return -EINVAL;
+>>>>> @@ -1804,6 +1805,10 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+>>>>>          ctrl->dp_ctrl.pixel_rate = 
+>>>>> ctrl->panel->dp_mode.drm_mode.clock;
+>>>>>    +    pixel_rate_orig = ctrl->dp_ctrl.pixel_rate;
+>>>>> +    if (dp_ctrl->wide_bus_en)
+>>>>> +        ctrl->dp_ctrl.pixel_rate >>= 1;
+>>>>> +
+>>>>>        DRM_DEBUG_DP("rate=%d, num_lanes=%d, pixel_rate=%d\n",
+>>>>>            ctrl->link->link_params.rate,
+>>>>>            ctrl->link->link_params.num_lanes, 
+>>>>> ctrl->dp_ctrl.pixel_rate);
+>>>>> @@ -1839,11 +1844,11 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+>>>>>         */
+>>>>>        reinit_completion(&ctrl->video_comp);
+>>>>>    -    dp_ctrl_configure_source_params(ctrl);
+>>>>> +    dp_ctrl_configure_source_params(ctrl, dp_ctrl->wide_bus_en);
+>>>>>          dp_catalog_ctrl_config_msa(ctrl->catalog,
+>>>>>            ctrl->link->link_params.rate,
+>>>>> -        ctrl->dp_ctrl.pixel_rate, dp_ctrl_use_fixed_nvid(ctrl));
+>>>>> +        pixel_rate_orig, dp_ctrl_use_fixed_nvid(ctrl));
+>>>>>          dp_ctrl_setup_tr_unit(ctrl);
+>>>>>    diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h
+>>>>> b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+>>>>> index 2433edb..4dff44d 100644
+>>>>> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
+>>>>> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+>>>>> @@ -17,6 +17,7 @@ struct dp_ctrl {
+>>>>>        bool orientation;
+>>>>>        atomic_t aborted;
+>>>>>        u32 pixel_rate;
+>>>>> +    bool wide_bus_en;
+>>>>>    };
+>>>>>      int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl);
+>>>>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c
+>>>>> b/drivers/gpu/drm/msm/dp/dp_display.c
+>>>>> index e89556ad..d45a3aa 100644
+>>>>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>>>>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>>>>> @@ -117,6 +117,8 @@ struct dp_display_private {
+>>>>>        struct dp_event event_list[DP_EVENT_Q_MAX];
+>>>>>        spinlock_t event_lock;
+>>>>>    +    bool wide_bus_en;
+>>>>> +
+>>>>>        struct dp_audio *audio;
+>>>>>    };
+>>>>>    @@ -845,6 +847,8 @@ static int dp_display_enable(struct
+>>>>> dp_display_private *dp, u32 data)
+>>>>>            return 0;
+>>>>>        }
+>>>>>    +    dp->ctrl->wide_bus_en = dp->wide_bus_en;
+>>>>> +
+>>>>>        rc = dp_ctrl_on_stream(dp->ctrl);
+>>>>>        if (!rc)
+>>>>>            dp_display->power_on = true;
+>>>>> @@ -979,6 +983,7 @@ int dp_display_get_modes(struct msm_dp *dp,
+>>>>>            dp->connector, dp_mode);
+>>>>>        if (dp_mode->drm_mode.clock)
+>>>>>            dp->max_pclk_khz = dp_mode->drm_mode.clock;
+>>>>> +
+>>>>>        return ret;
+>>>>>    }
+>>>>>    @@ -1451,6 +1456,28 @@ void msm_dp_irq_postinstall(struct msm_dp
+>>>>> *dp_display)
+>>>>>        }
+>>>>>    }
+>>>>>    +bool msm_dp_wide_bus_enable(struct msm_dp *dp_display)
+>>>>> +{
+>>>>> +    struct dp_display_private *dp;
+>>>>> +    u32 revision, major, minor;
+>>>>> +
+>>>>> +    dp = container_of(dp_display, struct dp_display_private,
+>>>>> dp_display);
+>>>>> +
+>>>>> +    /* for the time being widebus only support on DP */
+>>>>> +    if (dp_display->connector_type  ==
+>>>>> DRM_MODE_CONNECTOR_DisplayPort) {
+>>>>> +        revision = dp_catalog_hw_revision(dp->catalog);
+>>>>> +        major = ((revision >> 28) & 0x0ff);
+>>>>> +        minor = ((revision >> 16) & 0x0fff);
+>>>>> +
+>>>>> +    DRM_DEBUG_DP("id=%d major=%d minor=%d\n", dp->id, major, minor);
+>>>>> +
+>>>>> +        if (major >= 1 && minor >= 2)
+>>>>> +            return true;
+>>>>> +    }
+>>>>> +
+>>>>> +    return false;
+>>>>> +}
+>>>>> +
+>>>>>    void msm_dp_debugfs_init(struct msm_dp *dp_display, struct
+>>>>> drm_minor *minor)
+>>>>>    {
+>>>>>        struct dp_display_private *dp;
+>>>>> @@ -1505,6 +1532,9 @@ int msm_dp_modeset_init(struct msm_dp
+>>>>> *dp_display, struct drm_device *dev,
+>>>>>        dp_priv->panel->connector = dp_display->connector;
+>>>>>          priv->connectors[priv->num_connectors++] =
+>>>>> dp_display->connector;
+>>>>> +
+>>>>> +    dp_priv->wide_bus_en = msm_dp_wide_bus_enable(dp_display);
+>>>>> +
+>>>>>        return 0;
+>>>>>    }
+>>>>>    diff --git a/drivers/gpu/drm/msm/dp/dp_display.h
+>>>>> b/drivers/gpu/drm/msm/dp/dp_display.h
+>>>>> index 8e80e3b..d9cb9ee 100644
+>>>>> --- a/drivers/gpu/drm/msm/dp/dp_display.h
+>>>>> +++ b/drivers/gpu/drm/msm/dp/dp_display.h
+>>>>> @@ -23,6 +23,8 @@ struct msm_dp {
+>>>>>          hdmi_codec_plugged_cb plugged_cb;
+>>>>>    +    bool wide_bus_en;
+>>>>> +
+>>>>>        u32 max_pclk_khz;
+>>>>>          u32 max_dp_lanes;
+>>>>> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c
+>>>>> b/drivers/gpu/drm/msm/dp/dp_panel.c
+>>>>> index 71db10c..71deb1e 100644
+>>>>> --- a/drivers/gpu/drm/msm/dp/dp_panel.c
+>>>>> +++ b/drivers/gpu/drm/msm/dp/dp_panel.c
+>>>>> @@ -353,7 +353,7 @@ void dp_panel_dump_regs(struct dp_panel *dp_panel)
+>>>>>        dp_catalog_dump_regs(catalog);
+>>>>>    }
+>>>>>    -int dp_panel_timing_cfg(struct dp_panel *dp_panel)
+>>>>> +int dp_panel_timing_cfg(struct dp_panel *dp_panel, bool wide_bus_en)
+>>>>>    {
+>>>>>        u32 data, total_ver, total_hor;
+>>>>>        struct dp_catalog *catalog;
+>>>>> @@ -404,7 +404,7 @@ int dp_panel_timing_cfg(struct dp_panel *dp_panel)
+>>>>>          catalog->dp_active = data;
+>>>>>    -    dp_catalog_panel_timing_cfg(catalog);
+>>>>> +    dp_catalog_panel_timing_cfg(catalog, wide_bus_en);
+>>>>>        panel->panel_on = true;
+>>>>>          return 0;
+>>>>> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.h
+>>>>> b/drivers/gpu/drm/msm/dp/dp_panel.h
+>>>>> index 9023e5b..5ec341a 100644
+>>>>> --- a/drivers/gpu/drm/msm/dp/dp_panel.h
+>>>>> +++ b/drivers/gpu/drm/msm/dp/dp_panel.h
+>>>>> @@ -57,7 +57,7 @@ struct dp_panel {
+>>>>>      int dp_panel_init_panel_info(struct dp_panel *dp_panel);
+>>>>>    int dp_panel_deinit(struct dp_panel *dp_panel);
+>>>>> -int dp_panel_timing_cfg(struct dp_panel *dp_panel);
+>>>>> +int dp_panel_timing_cfg(struct dp_panel *dp_panel, bool wide_bus_en);
+>>>>>    void dp_panel_dump_regs(struct dp_panel *dp_panel);
+>>>>>    int dp_panel_read_sink_caps(struct dp_panel *dp_panel,
+>>>>>            struct drm_connector *connector);
+>>>>> diff --git a/drivers/gpu/drm/msm/msm_drv.h
+>>>>> b/drivers/gpu/drm/msm/msm_drv.h
+>>>>> index 07f6c41..667f3a8 100644
+>>>>> --- a/drivers/gpu/drm/msm/msm_drv.h
+>>>>> +++ b/drivers/gpu/drm/msm/msm_drv.h
+>>>>> @@ -398,6 +398,7 @@ void msm_dp_irq_postinstall(struct msm_dp
+>>>>> *dp_display);
+>>>>>    void msm_dp_snapshot(struct msm_disp_state *disp_state, struct
+>>>>> msm_dp *dp_display);
+>>>>>      void msm_dp_debugfs_init(struct msm_dp *dp_display, struct
+>>>>> drm_minor *minor);
+>>>>> +bool msm_dp_wide_bus_enable(struct msm_dp *dp_display);
+>>>>>      #else
+>>>>>    static inline int __init msm_dp_register(void)
+>>>>> @@ -448,6 +449,11 @@ static inline void msm_dp_debugfs_init(struct
+>>>>> msm_dp *dp_display,
+>>>>>    {
+>>>>>    }
+>>>>>    +bool msm_dp_wide_bus_enable(struct msm_dp *dp_display)
+>>>>> +{
+>>>>> +    return false;
+>>>>> +}
+>>>>> +
+>>>>>    #endif
+>>>>>      void __init msm_mdp_register(void);
+>>>>
+>>
+>>
 
-https://lore.kernel.org/all/20220213151032.4694-1-s.shtylyov@omp.ru/
-https://lore.kernel.org/all/7440bd27-b841-c3f0-2b47-4ab3f0ac0c83@omp.ru/
 
-Changes in version 2:
-- fixed the compilation error in 'sata_vsc.c'.
-
- drivers/ata/acard-ahci.c      |    2 +-
- drivers/ata/ahci.c            |    4 ++--
- drivers/ata/ahci_qoriq.c      |    2 +-
- drivers/ata/ahci_xgene.c      |    2 +-
- drivers/ata/libahci.c         |    4 ++--
- drivers/ata/libata-acpi.c     |    8 ++++----
- drivers/ata/libata-core.c     |   12 ++++++------
- drivers/ata/libata-eh.c       |   42 +++++++++++++++++++++---------------------
- drivers/ata/libata-sata.c     |   10 +++++-----
- drivers/ata/libata-scsi.c     |   22 +++++++++++-----------
- drivers/ata/libata-sff.c      |    6 +++---
- drivers/ata/pata_ep93xx.c     |    4 ++--
- drivers/ata/pata_ns87415.c    |    4 ++--
- drivers/ata/pata_octeon_cf.c  |    4 ++--
- drivers/ata/pata_samsung_cf.c |    2 +-
- drivers/ata/sata_highbank.c   |    2 +-
- drivers/ata/sata_inic162x.c   |   10 +++++-----
- drivers/ata/sata_rcar.c       |    4 ++--
- drivers/ata/sata_svw.c        |   10 +++++-----
- drivers/ata/sata_vsc.c        |   10 +++++-----
- include/linux/libata.h        |   10 ++++++++--
- 21 files changed, 90 insertions(+), 84 deletions(-)
-
-Index: libata/drivers/ata/acard-ahci.c
-===================================================================
---- libata.orig/drivers/ata/acard-ahci.c
-+++ libata/drivers/ata/acard-ahci.c
-@@ -265,7 +265,7 @@ static bool acard_ahci_qc_fill_rtf(struc
- 	if (qc->tf.protocol == ATA_PROT_PIO && qc->dma_dir == DMA_FROM_DEVICE &&
- 	    !(qc->flags & ATA_QCFLAG_FAILED)) {
- 		ata_tf_from_fis(rx_fis + RX_FIS_PIO_SETUP, &qc->result_tf);
--		qc->result_tf.command = (rx_fis + RX_FIS_PIO_SETUP)[15];
-+		qc->result_tf.status = (rx_fis + RX_FIS_PIO_SETUP)[15];
- 	} else
- 		ata_tf_from_fis(rx_fis + RX_FIS_D2H_REG, &qc->result_tf);
- 
-Index: libata/drivers/ata/ahci.c
-===================================================================
---- libata.orig/drivers/ata/ahci.c
-+++ libata/drivers/ata/ahci.c
-@@ -739,7 +739,7 @@ static int ahci_p5wdh_hardreset(struct a
- 
- 	/* clear D2H reception area to properly wait for D2H FIS */
- 	ata_tf_init(link->device, &tf);
--	tf.command = ATA_BUSY;
-+	tf.status = ATA_BUSY;
- 	ata_tf_to_fis(&tf, 0, 0, d2h_fis);
- 
- 	rc = sata_link_hardreset(link, sata_ehc_deb_timing(&link->eh_context),
-@@ -808,7 +808,7 @@ static int ahci_avn_hardreset(struct ata
- 
- 		/* clear D2H reception area to properly wait for D2H FIS */
- 		ata_tf_init(link->device, &tf);
--		tf.command = ATA_BUSY;
-+		tf.status = ATA_BUSY;
- 		ata_tf_to_fis(&tf, 0, 0, d2h_fis);
- 
- 		rc = sata_link_hardreset(link, timing, deadline, &online,
-Index: libata/drivers/ata/ahci_qoriq.c
-===================================================================
---- libata.orig/drivers/ata/ahci_qoriq.c
-+++ libata/drivers/ata/ahci_qoriq.c
-@@ -123,7 +123,7 @@ static int ahci_qoriq_hardreset(struct a
- 
- 	/* clear D2H reception area to properly wait for D2H FIS */
- 	ata_tf_init(link->device, &tf);
--	tf.command = ATA_BUSY;
-+	tf.status = ATA_BUSY;
- 	ata_tf_to_fis(&tf, 0, 0, d2h_fis);
- 
- 	rc = sata_link_hardreset(link, timing, deadline, &online,
-Index: libata/drivers/ata/ahci_xgene.c
-===================================================================
---- libata.orig/drivers/ata/ahci_xgene.c
-+++ libata/drivers/ata/ahci_xgene.c
-@@ -365,7 +365,7 @@ static int xgene_ahci_do_hardreset(struc
- 	do {
- 		/* clear D2H reception area to properly wait for D2H FIS */
- 		ata_tf_init(link->device, &tf);
--		tf.command = ATA_BUSY;
-+		tf.status = ATA_BUSY;
- 		ata_tf_to_fis(&tf, 0, 0, d2h_fis);
- 		rc = sata_link_hardreset(link, timing, deadline, online,
- 				 ahci_check_ready);
-Index: libata/drivers/ata/libahci.c
-===================================================================
---- libata.orig/drivers/ata/libahci.c
-+++ libata/drivers/ata/libahci.c
-@@ -1561,7 +1561,7 @@ int ahci_do_hardreset(struct ata_link *l
- 
- 	/* clear D2H reception area to properly wait for D2H FIS */
- 	ata_tf_init(link->device, &tf);
--	tf.command = ATA_BUSY;
-+	tf.status = ATA_BUSY;
- 	ata_tf_to_fis(&tf, 0, 0, d2h_fis);
- 
- 	rc = sata_link_hardreset(link, timing, deadline, online,
-@@ -2033,7 +2033,7 @@ static bool ahci_qc_fill_rtf(struct ata_
- 	if (qc->tf.protocol == ATA_PROT_PIO && qc->dma_dir == DMA_FROM_DEVICE &&
- 	    !(qc->flags & ATA_QCFLAG_FAILED)) {
- 		ata_tf_from_fis(rx_fis + RX_FIS_PIO_SETUP, &qc->result_tf);
--		qc->result_tf.command = (rx_fis + RX_FIS_PIO_SETUP)[15];
-+		qc->result_tf.status = (rx_fis + RX_FIS_PIO_SETUP)[15];
- 	} else
- 		ata_tf_from_fis(rx_fis + RX_FIS_D2H_REG, &qc->result_tf);
- 
-Index: libata/drivers/ata/libata-acpi.c
-===================================================================
---- libata.orig/drivers/ata/libata-acpi.c
-+++ libata/drivers/ata/libata-acpi.c
-@@ -546,13 +546,13 @@ static void ata_acpi_gtf_to_tf(struct at
- 
- 	tf->flags |= ATA_TFLAG_ISADDR | ATA_TFLAG_DEVICE;
- 	tf->protocol = ATA_PROT_NODATA;
--	tf->feature = gtf->tf[0];	/* 0x1f1 */
-+	tf->error   = gtf->tf[0];	/* 0x1f1 */
- 	tf->nsect   = gtf->tf[1];	/* 0x1f2 */
- 	tf->lbal    = gtf->tf[2];	/* 0x1f3 */
- 	tf->lbam    = gtf->tf[3];	/* 0x1f4 */
- 	tf->lbah    = gtf->tf[4];	/* 0x1f5 */
- 	tf->device  = gtf->tf[5];	/* 0x1f6 */
--	tf->command = gtf->tf[6];	/* 0x1f7 */
-+	tf->status  = gtf->tf[6];	/* 0x1f7 */
- }
- 
- static int ata_acpi_filter_tf(struct ata_device *dev,
-@@ -679,7 +679,7 @@ static int ata_acpi_run_tf(struct ata_de
- 				"(%s) rejected by device (Stat=0x%02x Err=0x%02x)",
- 				tf.command, tf.feature, tf.nsect, tf.lbal,
- 				tf.lbam, tf.lbah, tf.device, descr,
--				rtf.command, rtf.feature);
-+				rtf.status, rtf.error);
- 			rc = 0;
- 			break;
- 
-@@ -689,7 +689,7 @@ static int ata_acpi_run_tf(struct ata_de
- 				"(%s) failed (Emask=0x%x Stat=0x%02x Err=0x%02x)",
- 				tf.command, tf.feature, tf.nsect, tf.lbal,
- 				tf.lbam, tf.lbah, tf.device, descr,
--				err_mask, rtf.command, rtf.feature);
-+				err_mask, rtf.status, rtf.error);
- 			rc = -EIO;
- 			break;
- 		}
-Index: libata/drivers/ata/libata-core.c
-===================================================================
---- libata.orig/drivers/ata/libata-core.c
-+++ libata/drivers/ata/libata-core.c
-@@ -1171,7 +1171,7 @@ static int ata_read_native_max_address(s
- 		ata_dev_warn(dev,
- 			     "failed to read native max address (err_mask=0x%x)\n",
- 			     err_mask);
--		if (err_mask == AC_ERR_DEV && (tf.feature & ATA_ABORTED))
-+		if (err_mask == AC_ERR_DEV && (tf.error & ATA_ABORTED))
- 			return -EACCES;
- 		return -EIO;
- 	}
-@@ -1235,7 +1235,7 @@ static int ata_set_max_sectors(struct at
- 			     "failed to set max address (err_mask=0x%x)\n",
- 			     err_mask);
- 		if (err_mask == AC_ERR_DEV &&
--		    (tf.feature & (ATA_ABORTED | ATA_IDNF)))
-+		    (tf.error & (ATA_ABORTED | ATA_IDNF)))
- 			return -EACCES;
- 		return -EIO;
- 	}
-@@ -1584,7 +1584,7 @@ unsigned ata_exec_internal_sg(struct ata
- 
- 	/* perform minimal error analysis */
- 	if (qc->flags & ATA_QCFLAG_FAILED) {
--		if (qc->result_tf.command & (ATA_ERR | ATA_DF))
-+		if (qc->result_tf.status & (ATA_ERR | ATA_DF))
- 			qc->err_mask |= AC_ERR_DEV;
- 
- 		if (!qc->err_mask)
-@@ -1593,7 +1593,7 @@ unsigned ata_exec_internal_sg(struct ata
- 		if (qc->err_mask & ~AC_ERR_OTHER)
- 			qc->err_mask &= ~AC_ERR_OTHER;
- 	} else if (qc->tf.command == ATA_CMD_REQ_SENSE_DATA) {
--		qc->result_tf.command |= ATA_SENSE;
-+		qc->result_tf.status |= ATA_SENSE;
- 	}
- 
- 	/* finish up */
-@@ -1813,7 +1813,7 @@ retry:
- 			return 0;
- 		}
- 
--		if ((err_mask == AC_ERR_DEV) && (tf.feature & ATA_ABORTED)) {
-+		if ((err_mask == AC_ERR_DEV) && (tf.error & ATA_ABORTED)) {
- 			/* Device or controller might have reported
- 			 * the wrong device class.  Give a shot at the
- 			 * other IDENTIFY if the current one is
-@@ -4375,7 +4375,7 @@ static unsigned int ata_dev_init_params(
- 	/* A clean abort indicates an original or just out of spec drive
- 	   and we should continue as we issue the setup based on the
- 	   drive reported working geometry */
--	if (err_mask == AC_ERR_DEV && (tf.feature & ATA_ABORTED))
-+	if (err_mask == AC_ERR_DEV && (tf.error & ATA_ABORTED))
- 		err_mask = 0;
- 
- 	return err_mask;
-Index: libata/drivers/ata/libata-eh.c
-===================================================================
---- libata.orig/drivers/ata/libata-eh.c
-+++ libata/drivers/ata/libata-eh.c
-@@ -1386,7 +1386,7 @@ unsigned int atapi_eh_tur(struct ata_dev
- 
- 	err_mask = ata_exec_internal(dev, &tf, cdb, DMA_NONE, NULL, 0, 0);
- 	if (err_mask == AC_ERR_DEV)
--		*r_sense_key = tf.feature >> 4;
-+		*r_sense_key = tf.error >> 4;
- 	return err_mask;
- }
- 
-@@ -1429,12 +1429,12 @@ static void ata_eh_request_sense(struct
- 
- 	err_mask = ata_exec_internal(dev, &tf, NULL, DMA_NONE, NULL, 0, 0);
- 	/* Ignore err_mask; ATA_ERR might be set */
--	if (tf.command & ATA_SENSE) {
-+	if (tf.status & ATA_SENSE) {
- 		ata_scsi_set_sense(dev, cmd, tf.lbah, tf.lbam, tf.lbal);
- 		qc->flags |= ATA_QCFLAG_SENSE_VALID;
- 	} else {
- 		ata_dev_warn(dev, "request sense failed stat %02x emask %x\n",
--			     tf.command, err_mask);
-+			     tf.status, err_mask);
- 	}
- }
- 
-@@ -1557,7 +1557,7 @@ static unsigned int ata_eh_analyze_tf(st
- 				      const struct ata_taskfile *tf)
- {
- 	unsigned int tmp, action = 0;
--	u8 stat = tf->command, err = tf->feature;
-+	u8 stat = tf->status, err = tf->error;
- 
- 	if ((stat & (ATA_BUSY | ATA_DRQ | ATA_DRDY)) != ATA_DRDY) {
- 		qc->err_mask |= AC_ERR_HSM;
-@@ -1594,7 +1594,7 @@ static unsigned int ata_eh_analyze_tf(st
- 		if (!(qc->ap->pflags & ATA_PFLAG_FROZEN)) {
- 			tmp = atapi_eh_request_sense(qc->dev,
- 						qc->scsicmd->sense_buffer,
--						qc->result_tf.feature >> 4);
-+						qc->result_tf.error >> 4);
- 			if (!tmp)
- 				qc->flags |= ATA_QCFLAG_SENSE_VALID;
- 			else
-@@ -2360,7 +2360,7 @@ static void ata_eh_link_report(struct at
- 			cmd->hob_feature, cmd->hob_nsect,
- 			cmd->hob_lbal, cmd->hob_lbam, cmd->hob_lbah,
- 			cmd->device, qc->tag, data_buf, cdb_buf,
--			res->command, res->feature, res->nsect,
-+			res->status, res->error, res->nsect,
- 			res->lbal, res->lbam, res->lbah,
- 			res->hob_feature, res->hob_nsect,
- 			res->hob_lbal, res->hob_lbam, res->hob_lbah,
-@@ -2368,28 +2368,28 @@ static void ata_eh_link_report(struct at
- 			qc->err_mask & AC_ERR_NCQ ? " <F>" : "");
- 
- #ifdef CONFIG_ATA_VERBOSE_ERROR
--		if (res->command & (ATA_BUSY | ATA_DRDY | ATA_DF | ATA_DRQ |
--				    ATA_SENSE | ATA_ERR)) {
--			if (res->command & ATA_BUSY)
-+		if (res->status & (ATA_BUSY | ATA_DRDY | ATA_DF | ATA_DRQ |
-+				   ATA_SENSE | ATA_ERR)) {
-+			if (res->status & ATA_BUSY)
- 				ata_dev_err(qc->dev, "status: { Busy }\n");
- 			else
- 				ata_dev_err(qc->dev, "status: { %s%s%s%s%s}\n",
--				  res->command & ATA_DRDY ? "DRDY " : "",
--				  res->command & ATA_DF ? "DF " : "",
--				  res->command & ATA_DRQ ? "DRQ " : "",
--				  res->command & ATA_SENSE ? "SENSE " : "",
--				  res->command & ATA_ERR ? "ERR " : "");
-+				  res->status & ATA_DRDY ? "DRDY " : "",
-+				  res->status & ATA_DF ? "DF " : "",
-+				  res->status & ATA_DRQ ? "DRQ " : "",
-+				  res->status & ATA_SENSE ? "SENSE " : "",
-+				  res->status & ATA_ERR ? "ERR " : "");
- 		}
- 
- 		if (cmd->command != ATA_CMD_PACKET &&
--		    (res->feature & (ATA_ICRC | ATA_UNC | ATA_AMNF |
--				     ATA_IDNF | ATA_ABORTED)))
-+		    (res->error & (ATA_ICRC | ATA_UNC | ATA_AMNF | ATA_IDNF |
-+				   ATA_ABORTED)))
- 			ata_dev_err(qc->dev, "error: { %s%s%s%s%s}\n",
--			  res->feature & ATA_ICRC ? "ICRC " : "",
--			  res->feature & ATA_UNC ? "UNC " : "",
--			  res->feature & ATA_AMNF ? "AMNF " : "",
--			  res->feature & ATA_IDNF ? "IDNF " : "",
--			  res->feature & ATA_ABORTED ? "ABRT " : "");
-+				    res->error & ATA_ICRC ? "ICRC " : "",
-+				    res->error & ATA_UNC ? "UNC " : "",
-+				    res->error & ATA_AMNF ? "AMNF " : "",
-+				    res->error & ATA_IDNF ? "IDNF " : "",
-+				    res->error & ATA_ABORTED ? "ABRT " : "");
- #endif
- 	}
- }
-Index: libata/drivers/ata/libata-sata.c
-===================================================================
---- libata.orig/drivers/ata/libata-sata.c
-+++ libata/drivers/ata/libata-sata.c
-@@ -191,8 +191,8 @@ EXPORT_SYMBOL_GPL(ata_tf_to_fis);
- 
- void ata_tf_from_fis(const u8 *fis, struct ata_taskfile *tf)
- {
--	tf->command	= fis[2];	/* status */
--	tf->feature	= fis[3];	/* error */
-+	tf->status	= fis[2];
-+	tf->error	= fis[3];
- 
- 	tf->lbal	= fis[4];
- 	tf->lbam	= fis[5];
-@@ -1406,8 +1406,8 @@ static int ata_eh_read_log_10h(struct at
- 
- 	*tag = buf[0] & 0x1f;
- 
--	tf->command = buf[2];
--	tf->feature = buf[3];
-+	tf->status = buf[2];
-+	tf->error = buf[3];
- 	tf->lbal = buf[4];
- 	tf->lbam = buf[5];
- 	tf->lbah = buf[6];
-@@ -1482,7 +1482,7 @@ void ata_eh_analyze_ncq_error(struct ata
- 	qc->result_tf.flags = ATA_TFLAG_ISADDR | ATA_TFLAG_LBA | ATA_TFLAG_LBA48;
- 	qc->err_mask |= AC_ERR_DEV | AC_ERR_NCQ;
- 	if (dev->class == ATA_DEV_ZAC &&
--	    ((qc->result_tf.command & ATA_SENSE) || qc->result_tf.auxiliary)) {
-+	    ((qc->result_tf.status & ATA_SENSE) || qc->result_tf.auxiliary)) {
- 		char sense_key, asc, ascq;
- 
- 		sense_key = (qc->result_tf.auxiliary >> 16) & 0xff;
-Index: libata/drivers/ata/libata-scsi.c
-===================================================================
---- libata.orig/drivers/ata/libata-scsi.c
-+++ libata/drivers/ata/libata-scsi.c
-@@ -680,7 +680,7 @@ static void ata_qc_set_pc_nbytes(struct
-  */
- static void ata_dump_status(struct ata_port *ap, struct ata_taskfile *tf)
- {
--	u8 stat = tf->command, err = tf->feature;
-+	u8 stat = tf->status, err = tf->error;
- 
- 	if (stat & ATA_BUSY) {
- 		ata_port_warn(ap, "status=0x%02x {Busy} ", stat);
-@@ -871,8 +871,8 @@ static void ata_gen_passthru_sense(struc
- 	 * onto sense key, asc & ascq.
- 	 */
- 	if (qc->err_mask ||
--	    tf->command & (ATA_BUSY | ATA_DF | ATA_ERR | ATA_DRQ)) {
--		ata_to_sense_error(qc->ap->print_id, tf->command, tf->feature,
-+	    tf->status & (ATA_BUSY | ATA_DF | ATA_ERR | ATA_DRQ)) {
-+		ata_to_sense_error(qc->ap->print_id, tf->status, tf->error,
- 				   &sense_key, &asc, &ascq, verbose);
- 		ata_scsi_set_sense(qc->dev, cmd, sense_key, asc, ascq);
- 	} else {
-@@ -901,13 +901,13 @@ static void ata_gen_passthru_sense(struc
- 		 * Copy registers into sense buffer.
- 		 */
- 		desc[2] = 0x00;
--		desc[3] = tf->feature;	/* == error reg */
-+		desc[3] = tf->error;
- 		desc[5] = tf->nsect;
- 		desc[7] = tf->lbal;
- 		desc[9] = tf->lbam;
- 		desc[11] = tf->lbah;
- 		desc[12] = tf->device;
--		desc[13] = tf->command; /* == status reg */
-+		desc[13] = tf->status;
- 
- 		/*
- 		 * Fill in Extend bit, and the high order bytes
-@@ -922,8 +922,8 @@ static void ata_gen_passthru_sense(struc
- 		}
- 	} else {
- 		/* Fixed sense format */
--		desc[0] = tf->feature;
--		desc[1] = tf->command; /* status */
-+		desc[0] = tf->error;
-+		desc[1] = tf->status;
- 		desc[2] = tf->device;
- 		desc[3] = tf->nsect;
- 		desc[7] = 0;
-@@ -972,14 +972,14 @@ static void ata_gen_ata_sense(struct ata
- 	 * onto sense key, asc & ascq.
- 	 */
- 	if (qc->err_mask ||
--	    tf->command & (ATA_BUSY | ATA_DF | ATA_ERR | ATA_DRQ)) {
--		ata_to_sense_error(qc->ap->print_id, tf->command, tf->feature,
-+	    tf->status & (ATA_BUSY | ATA_DF | ATA_ERR | ATA_DRQ)) {
-+		ata_to_sense_error(qc->ap->print_id, tf->status, tf->error,
- 				   &sense_key, &asc, &ascq, verbose);
- 		ata_scsi_set_sense(dev, cmd, sense_key, asc, ascq);
- 	} else {
- 		/* Could not decode error */
- 		ata_dev_warn(dev, "could not decode error status 0x%x err_mask 0x%x\n",
--			     tf->command, qc->err_mask);
-+			     tf->status, qc->err_mask);
- 		ata_scsi_set_sense(dev, cmd, ABORTED_COMMAND, 0, 0);
- 		return;
- 	}
-@@ -2473,7 +2473,7 @@ static void atapi_request_sense(struct a
- 
- 	/* fill these in, for the case where they are -not- overwritten */
- 	cmd->sense_buffer[0] = 0x70;
--	cmd->sense_buffer[2] = qc->tf.feature >> 4;
-+	cmd->sense_buffer[2] = qc->tf.error >> 4;
- 
- 	ata_qc_reinit(qc);
- 
-Index: libata/drivers/ata/libata-sff.c
-===================================================================
---- libata.orig/drivers/ata/libata-sff.c
-+++ libata/drivers/ata/libata-sff.c
-@@ -449,8 +449,8 @@ void ata_sff_tf_read(struct ata_port *ap
- {
- 	struct ata_ioports *ioaddr = &ap->ioaddr;
- 
--	tf->command = ata_sff_check_status(ap);
--	tf->feature = ioread8(ioaddr->error_addr);
-+	tf->status = ata_sff_check_status(ap);
-+	tf->error = ioread8(ioaddr->error_addr);
- 	tf->nsect = ioread8(ioaddr->nsect_addr);
- 	tf->lbal = ioread8(ioaddr->lbal_addr);
- 	tf->lbam = ioread8(ioaddr->lbam_addr);
-@@ -1824,7 +1824,7 @@ unsigned int ata_sff_dev_classify(struct
- 	memset(&tf, 0, sizeof(tf));
- 
- 	ap->ops->sff_tf_read(ap, &tf);
--	err = tf.feature;
-+	err = tf.error;
- 	if (r_err)
- 		*r_err = err;
- 
-Index: libata/drivers/ata/pata_ep93xx.c
-===================================================================
---- libata.orig/drivers/ata/pata_ep93xx.c
-+++ libata/drivers/ata/pata_ep93xx.c
-@@ -416,8 +416,8 @@ static void ep93xx_pata_tf_read(struct a
- {
- 	struct ep93xx_pata_data *drv_data = ap->host->private_data;
- 
--	tf->command = ep93xx_pata_check_status(ap);
--	tf->feature = ep93xx_pata_read_reg(drv_data, IDECTRL_ADDR_FEATURE);
-+	tf->status = ep93xx_pata_check_status(ap);
-+	tf->error = ep93xx_pata_read_reg(drv_data, IDECTRL_ADDR_FEATURE);
- 	tf->nsect = ep93xx_pata_read_reg(drv_data, IDECTRL_ADDR_NSECT);
- 	tf->lbal = ep93xx_pata_read_reg(drv_data, IDECTRL_ADDR_LBAL);
- 	tf->lbam = ep93xx_pata_read_reg(drv_data, IDECTRL_ADDR_LBAM);
-Index: libata/drivers/ata/pata_ns87415.c
-===================================================================
---- libata.orig/drivers/ata/pata_ns87415.c
-+++ libata/drivers/ata/pata_ns87415.c
-@@ -264,8 +264,8 @@ void ns87560_tf_read(struct ata_port *ap
- {
- 	struct ata_ioports *ioaddr = &ap->ioaddr;
- 
--	tf->command = ns87560_check_status(ap);
--	tf->feature = ioread8(ioaddr->error_addr);
-+	tf->status = ns87560_check_status(ap);
-+	tf->error = ioread8(ioaddr->error_addr);
- 	tf->nsect = ioread8(ioaddr->nsect_addr);
- 	tf->lbal = ioread8(ioaddr->lbal_addr);
- 	tf->lbam = ioread8(ioaddr->lbam_addr);
-Index: libata/drivers/ata/pata_octeon_cf.c
-===================================================================
---- libata.orig/drivers/ata/pata_octeon_cf.c
-+++ libata/drivers/ata/pata_octeon_cf.c
-@@ -382,7 +382,7 @@ static void octeon_cf_tf_read16(struct a
- 	void __iomem *base = ap->ioaddr.data_addr;
- 
- 	blob = __raw_readw(base + 0xc);
--	tf->feature = blob >> 8;
-+	tf->error = blob >> 8;
- 
- 	blob = __raw_readw(base + 2);
- 	tf->nsect = blob & 0xff;
-@@ -394,7 +394,7 @@ static void octeon_cf_tf_read16(struct a
- 
- 	blob = __raw_readw(base + 6);
- 	tf->device = blob & 0xff;
--	tf->command = blob >> 8;
-+	tf->status = blob >> 8;
- 
- 	if (tf->flags & ATA_TFLAG_LBA48) {
- 		if (likely(ap->ioaddr.ctl_addr)) {
-Index: libata/drivers/ata/pata_samsung_cf.c
-===================================================================
---- libata.orig/drivers/ata/pata_samsung_cf.c
-+++ libata/drivers/ata/pata_samsung_cf.c
-@@ -213,7 +213,7 @@ static void pata_s3c_tf_read(struct ata_
- {
- 	struct ata_ioports *ioaddr = &ap->ioaddr;
- 
--	tf->feature = ata_inb(ap->host, ioaddr->error_addr);
-+	tf->error = ata_inb(ap->host, ioaddr->error_addr);
- 	tf->nsect = ata_inb(ap->host, ioaddr->nsect_addr);
- 	tf->lbal = ata_inb(ap->host, ioaddr->lbal_addr);
- 	tf->lbam = ata_inb(ap->host, ioaddr->lbam_addr);
-Index: libata/drivers/ata/sata_highbank.c
-===================================================================
---- libata.orig/drivers/ata/sata_highbank.c
-+++ libata/drivers/ata/sata_highbank.c
-@@ -400,7 +400,7 @@ static int ahci_highbank_hardreset(struc
- 
- 	/* clear D2H reception area to properly wait for D2H FIS */
- 	ata_tf_init(link->device, &tf);
--	tf.command = ATA_BUSY;
-+	tf.status = ATA_BUSY;
- 	ata_tf_to_fis(&tf, 0, 0, d2h_fis);
- 
- 	do {
-Index: libata/drivers/ata/sata_inic162x.c
-===================================================================
---- libata.orig/drivers/ata/sata_inic162x.c
-+++ libata/drivers/ata/sata_inic162x.c
-@@ -557,13 +557,13 @@ static void inic_tf_read(struct ata_port
- {
- 	void __iomem *port_base = inic_port_base(ap);
- 
--	tf->feature	= readb(port_base + PORT_TF_FEATURE);
-+	tf->error	= readb(port_base + PORT_TF_FEATURE);
- 	tf->nsect	= readb(port_base + PORT_TF_NSECT);
- 	tf->lbal	= readb(port_base + PORT_TF_LBAL);
- 	tf->lbam	= readb(port_base + PORT_TF_LBAM);
- 	tf->lbah	= readb(port_base + PORT_TF_LBAH);
- 	tf->device	= readb(port_base + PORT_TF_DEVICE);
--	tf->command	= readb(port_base + PORT_TF_COMMAND);
-+	tf->status	= readb(port_base + PORT_TF_COMMAND);
- }
- 
- static bool inic_qc_fill_rtf(struct ata_queued_cmd *qc)
-@@ -580,11 +580,11 @@ static bool inic_qc_fill_rtf(struct ata_
- 	 */
- 	inic_tf_read(qc->ap, &tf);
- 
--	if (!(tf.command & ATA_ERR))
-+	if (!(tf.status & ATA_ERR))
- 		return false;
- 
--	rtf->command = tf.command;
--	rtf->feature = tf.feature;
-+	rtf->status = tf.status;
-+	rtf->error = tf.error;
- 	return true;
- }
- 
-Index: libata/drivers/ata/sata_rcar.c
-===================================================================
---- libata.orig/drivers/ata/sata_rcar.c
-+++ libata/drivers/ata/sata_rcar.c
-@@ -394,8 +394,8 @@ static void sata_rcar_tf_read(struct ata
- {
- 	struct ata_ioports *ioaddr = &ap->ioaddr;
- 
--	tf->command = sata_rcar_check_status(ap);
--	tf->feature = ioread32(ioaddr->error_addr);
-+	tf->status = sata_rcar_check_status(ap);
-+	tf->error = ioread32(ioaddr->error_addr);
- 	tf->nsect = ioread32(ioaddr->nsect_addr);
- 	tf->lbal = ioread32(ioaddr->lbal_addr);
- 	tf->lbam = ioread32(ioaddr->lbam_addr);
-Index: libata/drivers/ata/sata_svw.c
-===================================================================
---- libata.orig/drivers/ata/sata_svw.c
-+++ libata/drivers/ata/sata_svw.c
-@@ -194,24 +194,24 @@ static void k2_sata_tf_load(struct ata_p
- static void k2_sata_tf_read(struct ata_port *ap, struct ata_taskfile *tf)
- {
- 	struct ata_ioports *ioaddr = &ap->ioaddr;
--	u16 nsect, lbal, lbam, lbah, feature;
-+	u16 nsect, lbal, lbam, lbah, error;
- 
--	tf->command = k2_stat_check_status(ap);
-+	tf->status = k2_stat_check_status(ap);
- 	tf->device = readw(ioaddr->device_addr);
--	feature = readw(ioaddr->error_addr);
-+	error = readw(ioaddr->error_addr);
- 	nsect = readw(ioaddr->nsect_addr);
- 	lbal = readw(ioaddr->lbal_addr);
- 	lbam = readw(ioaddr->lbam_addr);
- 	lbah = readw(ioaddr->lbah_addr);
- 
--	tf->feature = feature;
-+	tf->error = error;
- 	tf->nsect = nsect;
- 	tf->lbal = lbal;
- 	tf->lbam = lbam;
- 	tf->lbah = lbah;
- 
- 	if (tf->flags & ATA_TFLAG_LBA48) {
--		tf->hob_feature = feature >> 8;
-+		tf->hob_feature = error >> 8;
- 		tf->hob_nsect = nsect >> 8;
- 		tf->hob_lbal = lbal >> 8;
- 		tf->hob_lbam = lbam >> 8;
-Index: libata/drivers/ata/sata_vsc.c
-===================================================================
---- libata.orig/drivers/ata/sata_vsc.c
-+++ libata/drivers/ata/sata_vsc.c
-@@ -183,24 +183,24 @@ static void vsc_sata_tf_load(struct ata_
- static void vsc_sata_tf_read(struct ata_port *ap, struct ata_taskfile *tf)
- {
- 	struct ata_ioports *ioaddr = &ap->ioaddr;
--	u16 nsect, lbal, lbam, lbah, feature;
-+	u16 nsect, lbal, lbam, lbah, error;
- 
--	tf->command = ata_sff_check_status(ap);
-+	tf->status = ata_sff_check_status(ap);
- 	tf->device = readw(ioaddr->device_addr);
--	feature = readw(ioaddr->error_addr);
-+	error = readw(ioaddr->error_addr);
- 	nsect = readw(ioaddr->nsect_addr);
- 	lbal = readw(ioaddr->lbal_addr);
- 	lbam = readw(ioaddr->lbam_addr);
- 	lbah = readw(ioaddr->lbah_addr);
- 
--	tf->feature = feature;
-+	tf->error = error;
- 	tf->nsect = nsect;
- 	tf->lbal = lbal;
- 	tf->lbam = lbam;
- 	tf->lbah = lbah;
- 
- 	if (tf->flags & ATA_TFLAG_LBA48) {
--		tf->hob_feature = feature >> 8;
-+		tf->hob_feature = error >> 8;
- 		tf->hob_nsect = nsect >> 8;
- 		tf->hob_lbal = lbal >> 8;
- 		tf->hob_lbam = lbam >> 8;
-Index: libata/include/linux/libata.h
-===================================================================
---- libata.orig/include/linux/libata.h
-+++ libata/include/linux/libata.h
-@@ -518,7 +518,10 @@ struct ata_taskfile {
- 	u8			hob_lbam;
- 	u8			hob_lbah;
- 
--	u8			feature;
-+	union {
-+		u8		error;
-+		u8		feature;
-+	};
- 	u8			nsect;
- 	u8			lbal;
- 	u8			lbam;
-@@ -526,7 +529,10 @@ struct ata_taskfile {
- 
- 	u8			device;
- 
--	u8			command;	/* IO operation */
-+	union {
-+		u8		status;
-+		u8		command;
-+	};
- 
- 	u32			auxiliary;	/* auxiliary field */
- 						/* from SATA 3.1 and */
+-- 
+With best wishes
+Dmitry

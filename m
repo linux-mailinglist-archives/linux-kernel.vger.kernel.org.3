@@ -2,71 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255FE4B7B41
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D0F4B7B46
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 00:38:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244821AbiBOXcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 18:32:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39818 "EHLO
+        id S244557AbiBOXit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 18:38:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231760AbiBOXce (ORCPT
+        with ESMTP id S231871AbiBOXir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 18:32:34 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E290066639;
-        Tue, 15 Feb 2022 15:32:23 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 86BE835F;
-        Tue, 15 Feb 2022 23:32:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 86BE835F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1644967943; bh=7DxpN4wzbn4CODMyzgxFFGlGqYFqY22/e9LTczIG2OU=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=TK7Q9BwRKshNVecx6N+fGxQUGPpzAzKMsPjmyXQdznW9W9hSUdz282IGXvSdnXJx+
-         3AILEsoCpm9x1dkVxbOb4a6/4BRj6UJ/I/WiM1AK0PvcRWaJrcLVKkBzpPCS2O8CxX
-         K0fwE4HiH0MFvPNF058/462Q2+Mfpk1yu+KIaiaeaIZpIE6JkEZpEXjwf2A1FLbEui
-         Jku8lZr6OD9am2oLSW/psVj2/3Gwg5BQdZ5hokQ5mq7rOJnyINA777TQS+vji8GLYD
-         Jj19Wtz/KFHgAQsfA62b1svcVgdd8anpml/IN1AY3Qg24gg+s9o2w4Vj3uSKfXPKOq
-         yWGKo1hzvckHw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Ethan Dye <mrtops03@gmail.com>
-Cc:     Ethan Dye <mrtops03@gmail.com>, Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        linux-kernel@vger.kernel.org, drbd-dev@lists.linbit.com,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH] block/zram: Fix wording in optional feature docs
-In-Reply-To: <20220207235442.95090-1-mrtops03@gmail.com>
-References: <20220207235442.95090-1-mrtops03@gmail.com>
-Date:   Tue, 15 Feb 2022 16:32:23 -0700
-Message-ID: <874k4z7lko.fsf@meer.lwn.net>
+        Tue, 15 Feb 2022 18:38:47 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7877C9A4FB
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 15:38:36 -0800 (PST)
+Received: (Authenticated sender: joao@overdrivepizza.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 3EEEF240004;
+        Tue, 15 Feb 2022 23:38:33 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Tue, 15 Feb 2022 15:38:33 -0800
+From:   Joao Moreira <joao@overdrivepizza.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        X86 ML <x86@kernel.org>, hjl.tools@gmail.com,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        andrew.cooper3@citrix.com, LKML <linux-kernel@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev
+Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
+In-Reply-To: <202202151503.91E9B76B@keescook>
+References: <202202081541.900F9E1B@keescook>
+ <ad6c2633f39e39583bc5c5eaf7ccbe52@overdrivepizza.com>
+ <202202082003.FA77867@keescook>
+ <9ea50c51ee8db366430c9dc697a83923@overdrivepizza.com>
+ <20220211133803.GV23216@worktop.programming.kicks-ass.net>
+ <CABCJKuciRBnz4JxBDJC=+kuJn4pU2uBkWPBov7-VL2o2j0F4SA@mail.gmail.com>
+ <20220214222550.GB23216@worktop.programming.kicks-ass.net>
+ <CABCJKuf-wouSCh4u43GPQHPPgG=mqOGboSoHPQRfmgQSBkFrMg@mail.gmail.com>
+ <202202151129.1A5C5FE42@keescook>
+ <20220215210550.GD23216@worktop.programming.kicks-ass.net>
+ <202202151503.91E9B76B@keescook>
+Message-ID: <4553dfb68285a686737969e117bf48cc@overdrivepizza.com>
+X-Sender: joao@overdrivepizza.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ethan Dye <mrtops03@gmail.com> writes:
+>> 
+>> Mostly so that we can deduce the address of the trap from the 
+>> retpoline
+>> site, also the above has a fairly high chance of using jcc.d32 which 
+>> is
+>> actually larger than jcc.d8+ud2.
+> 
+> Ah, yeah, that's an interesting point.
+> 
+> Still, I worry about finding ways to convinces Clang to emit precisely
+> cmp/je/trap/call, but I guess we'll catch it immediately if it doesn't.
+> :P
 
-> This fixes some simple grammar errors in the documentation for zram,
-> specifically errors in the optional featue section of the zram
-> documentation.
->
-> Signed-off-by: Ethan Dye <mrtops03@gmail.com>
-> ---
->  Documentation/admin-guide/blockdev/zram.rst | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
+This can probably be done more easily/precisely if implemented directly
+in the compiler's arch-specific backend. At least for x86 it wasn't a
+hassle to emit a defined sequence of instructions in the past. The price
+is that it will require a pass specific to each supported architecture,
+but I guess this isn't that bad.
 
-This document could use a lot more help than that, but this is a
-start...applied, thanks.
-
-jon
+Perhaps this is discussion for a different mailing list, idk... but
+just pointing that it is not a huge wall.

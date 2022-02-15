@@ -2,112 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83CC54B600F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 02:38:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9B84B600C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 02:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbiBOBiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 20:38:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53504 "EHLO
+        id S233045AbiBOBhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 20:37:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233054AbiBOBiO (ORCPT
+        with ESMTP id S229484AbiBOBhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 20:38:14 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C9312D923
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 17:38:04 -0800 (PST)
-Received: from epcas3p2.samsung.com (unknown [182.195.41.20])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220215013802epoutp01d569202818806967eff6a83570159ccd~T0efDQwMN2980329803epoutp012
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 01:38:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220215013802epoutp01d569202818806967eff6a83570159ccd~T0efDQwMN2980329803epoutp012
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1644889082;
-        bh=yniUWdfJGZEl35uzkUUQAwHkGQZ3SGcv6n9cR6PnOiw=;
-        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
-        b=DDeDYUnkyh6DrciiiFjvUhQ0SVopRUMG4WRO2IyZCdwCu5cZV/jt8KpqzZIparcNx
-         MjH4YPXc2mPXaTX3jb7QOan6lGfz6xUFSKvCWsA++K09Tjr+H4BYT5220EuCQQw/Px
-         IotkawAkS7OloeNYYtxJExaZs10G+yL4tSbnx0TY=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas3p3.samsung.com (KnoxPortal) with ESMTP id
-        20220215013801epcas3p31522f78ba966b954c5015f09629140bb~T0een__3q1597415974epcas3p3o;
-        Tue, 15 Feb 2022 01:38:01 +0000 (GMT)
-Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp4.localdomain
-        (Postfix) with ESMTP id 4JyNyK5Shzz4x9QK; Tue, 15 Feb 2022 01:38:01 +0000
-        (GMT)
-Mime-Version: 1.0
-Subject: RE:(2) [PATCH] scsi: ufs: Fix divide zero case in
- ufshcd_map_queues()
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     Bart Van Assche <bvanassche@acm.org>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <7a324bb2-c748-4d48-8f55-13f35de5a35e@acm.org>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <1891546521.01644889081701.JavaMail.epsvc@epcpadp4>
-Date:   Tue, 15 Feb 2022 10:35:10 +0900
-X-CMS-MailID: 20220215013510epcms2p579847dd4aa388312f9d1fc0be9cfbc35
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20220214103352epcms2p79697c0fcaa2755dd89af9de887ff14cd
-References: <7a324bb2-c748-4d48-8f55-13f35de5a35e@acm.org>
-        <1891546521.01644873481638.JavaMail.epsvc@epcpadp4>
-        <CGME20220214103352epcms2p79697c0fcaa2755dd89af9de887ff14cd@epcms2p5>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 14 Feb 2022 20:37:54 -0500
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1151275C1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 17:37:41 -0800 (PST)
+Received: from imladris.surriel.com ([96.67.55.152])
+        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <riel@shelob.surriel.com>)
+        id 1nJmmV-0007om-I1; Mon, 14 Feb 2022 20:37:27 -0500
+Message-ID: <6f70cc26ccc92d099f1080e4c57ab44709bafd68.camel@surriel.com>
+Subject: Re: [PATCH v2] mm: clean up hwpoison page cache page in fault path
+From:   Rik van Riel <riel@surriel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        linux-mm@kvack.org, Miaohe Lin <linmiaohe@huawei.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
+Date:   Mon, 14 Feb 2022 20:37:26 -0500
+In-Reply-To: <20220214152407.67e0d7dd1a532252c9dd203e@linux-foundation.org>
+References: <20220212213740.423efcea@imladris.surriel.com>
+         <20220214152407.67e0d7dd1a532252c9dd203e@linux-foundation.org>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-b7zfiHYjDu/3wMt4SsyU"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+MIME-Version: 1.0
+Sender: riel@shelob.surriel.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On=C2=A02/14/22=C2=A002:33,=C2=A0Jinyoung=C2=A0CHOI=C2=A0wrote:
->>=C2=A0Before=C2=A0calling=C2=A0blk_mq_map_queues(),=C2=A0the=C2=A0mq_map=
-=C2=A0and=C2=A0nr_queues=C2=A0belonging
->>=C2=A0to=C2=A0"struct=C2=A0blk_mq_queue_map"=C2=A0must=C2=A0be=C2=A0a=C2=
-=A0vaild=C2=A0value.
->=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-^^=C2=A0=C2=A0=C2=A0^^^^^
->=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0have=C2=A0=
-=C2=A0=C2=A0valid
->=C2=A0
->>=C2=A0If=C2=A0nr_queues=C2=A0is=C2=A0set=C2=A0to=C2=A00,=C2=A0the=C2=A0sy=
-stem=C2=A0may=C2=A0encounter=C2=A0the=C2=A0"divide=C2=A0zero"
->>=C2=A0depending=C2=A0on=C2=A0the=C2=A0type=C2=A0of=C2=A0architecture.
->=C2=A0
->Anyway:
->
->Reviewed-by:=C2=A0Bart=C2=A0Van=C2=A0Assche=C2=A0<bvanassche@acm.org>
 
-Hi, Bart.
+--=-b7zfiHYjDu/3wMt4SsyU
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for your review.
-I will be careful of typo. :)
+On Mon, 2022-02-14 at 15:24 -0800, Andrew Morton wrote:
+>=20
+> > Subject: [PATCH v2] mm: clean up hwpoison page cache page in fault
+> > path
+>=20
+> At first scan I thought this was a code cleanup.
+>=20
+> I think I'll do s/clean up/invalidate/.
+>=20
+OK, that sounds good.
 
-Best Regards,
-Jinyoung Choi
+> On Sat, 12 Feb 2022 21:37:40 -0500 Rik van Riel <riel@surriel.com>
+> wrote:
+>=20
+> > Sometimes the page offlining code can leave behind a hwpoisoned
+> > clean
+> > page cache page.
+>=20
+> Is this correct behaviour?
+
+It is not desirable, and the soft page offlining code
+tries to invalidate the page, but I don't think overhauling
+the way we lock and refcount page cache pages just to make
+offlining them more reliable would be worthwhile, when we
+already have a branch in the page fault handler to deal with
+these pages, anyway.
+
+> > This can lead to programs being killed over and over
+> > and over again as they fault in the hwpoisoned page, get killed,
+> > and
+> > then get re-spawned by whatever wanted to run them.
+> >=20
+> > This is particularly embarrassing when the page was offlined due to
+> > having too many corrected memory errors. Now we are killing tasks
+> > due to them trying to access memory that probably isn't even
+> > corrupted.
+> >=20
+> > This problem can be avoided by invalidating the page from the page
+> > fault handler, which already has a branch for dealing with these
+> > kinds of pages. With this patch we simply pretend the page fault
+> > was successful if the page was invalidated, return to userspace,
+> > incur another page fault, read in the file from disk (to a new
+> > memory page), and then everything works again.
+>=20
+> Is this worth a cc:stable?
+
+Maybe. I don't know how far back this issue goes...
+
+--=20
+All Rights Reversed.
+
+--=-b7zfiHYjDu/3wMt4SsyU
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAmILA9YACgkQznnekoTE
+3oOFvAf1Eybcb8fqZjb7Qum00p9okDKc5SuiWsTTFGEsKIXcC7BlUhFblo2zFQEX
+98tgwOw5KzXtj5iuvkEw2VLja8XbaH/uWDVMi8OOFwKyPhj2wmnDsS1z3bmhnFbM
+Gq36IigdymUctDQnUIJFkXsdVEB+O0LzG19JLbi6BEhnio1Qq6u5Zsu+1bwNvuP3
+zOI2rM3Lk4o4++0WidG8W1jQ3aCmMXlZmCqciWkWl4dIP9Gqm21rSSHIhVfgCaKs
+PMXMjlX4XbEASBA3pvt2YBa3GRFoUxYlgGqwryzMnO4XZpudG4BfbIV9Ymkx9Rie
+Oun+LZjwhT+8180Ks+JvjU0o5Z9E
+=UKB2
+-----END PGP SIGNATURE-----
+
+--=-b7zfiHYjDu/3wMt4SsyU--

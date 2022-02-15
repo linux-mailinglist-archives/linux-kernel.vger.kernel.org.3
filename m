@@ -2,105 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085044B5FBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 02:04:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0144B5FC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 02:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232903AbiBOBEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 20:04:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46464 "EHLO
+        id S232921AbiBOBEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 20:04:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiBOBEV (ORCPT
+        with ESMTP id S229603AbiBOBEh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 20:04:21 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B99B1A98;
-        Mon, 14 Feb 2022 17:04:13 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id A7AA6580667;
-        Mon, 14 Feb 2022 20:04:10 -0500 (EST)
-Received: from imap49 ([10.202.2.99])
-  by compute2.internal (MEProxy); Mon, 14 Feb 2022 20:04:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        sladewatkins.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; bh=ApqcJV6HP092h+
-        3acC9Hhy34t2sesmOkc4F5WsCNn2M=; b=nasGTWXn879CwSKMn2nC61zJaBaAn9
-        ZAeTk/qOIXGaAPElYcE8bg2OFi3/OQry0eWO4+FxL3Ktd4WHU+3ZRvv1fSdrNAcP
-        cprPcGLn7Z/KUAS1H8LtUvLp19Rv9OJqWCQiDrZzvrmwucY0wO7kBvq9uMGgSLld
-        bYiHRd1aUm5o9vjiA1acKS2AQn5jquIUrqt2iOgeU5zssbFs9+WWdpSsWdLm9H50
-        4nZoemA0LBJT3At5qR4U/8UYfEm8jGdlGtfQp74lDzuXgxr4LHDRjJ7bl0ZuOiXb
-        pMSQBHFKGbPPta5RqOjDbmB+ZCXuLDKD3P9xOMdtixxieNoTelaLvkww==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=ApqcJV6HP092h+3ac
-        C9Hhy34t2sesmOkc4F5WsCNn2M=; b=XlUrkvIJ55K+Yq1Vq8FCwr/i7FsIR8ZT6
-        i77YOuo5Wc/XZ1UQQnN6sRJIKY0tqrdJR/51T0mNN0IA+jIQbwMluE+kgtR35CjP
-        i4ZkWIAlyPf0ubgsdWafctUPyPB2r9eyA4JlkJfkO/iMjW1CFD8Zm2VF25usY+MQ
-        IWznqMvhnBUf3znR2hAKFfYMs03reocriwV/cAXLtDUme9SttYJquzkLDgZEFVkt
-        kYncIJb4mEdo0r0RqB2XVXZm4ybdea/cDsxGnC9NrczwyMx09aUQX0zLlhRTRtuA
-        bK08OJ44flqgV5ghj0qlxqGpw7ASVmdtxZPzWkjxaqHeE11X18mDw==
-X-ME-Sender: <xms:CfwKYmLaX4FgSSTcuIzCugdGHzm5_YimMe5ZwCptSGaoK7PHvbdaFg>
-    <xme:CfwKYuIjUspGPDwhk68f1pr81WB0WpKvdEJiyQRsd6b3b46vWFv-o0dJ1MocQKvUV
-    XVtBeFOzEWwVTbSoRM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjeefgddvlecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhlrggu
-    vgcuhggrthhkihhnshdfuceoshhlrgguvgesshhlrgguvgifrghtkhhinhhsrdgtohhmqe
-    enucggtffrrghtthgvrhhnpeeuieffteejieetgfevteelheevudehteeihffhteehtdet
-    leegtedtvdevvddugeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehslhgruggvsehslhgruggvfigrthhkihhnshdrtghomh
-X-ME-Proxy: <xmx:CfwKYmur7vg-2kG8xw1qeMQlsFFrNHyraO3Dp6mk0z4JMiTJXXD_TA>
-    <xmx:CfwKYraKKIF2dVtYfi8KopkUR_FFu1s-aCcb8XdxovJ2_0rAnOQmwA>
-    <xmx:CfwKYtZX7loBMYMppLazhWy5aCBAKqiyvHjqXTmyQCB0OJpt7Pm-lw>
-    <xmx:CvwKYqSLkpDZyfXz1EBkZbcwpMATVV_s1KUo1VjzHo3mV8QBmig8LvEdF2k>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 95083F60083; Mon, 14 Feb 2022 20:04:09 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4748-g31a5b5f50e-fm-cal2020-20220204.001-g31a5b5f5
-Mime-Version: 1.0
-Message-Id: <315450ef-3234-4272-8b1f-dcefd1251977@www.fastmail.com>
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
-Date:   Mon, 14 Feb 2022 20:04:09 -0500
-From:   "Slade Watkins" <slade@sladewatkins.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Guenter Roeck" <linux@roeck-us.net>, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        "Pavel Machek" <pavel@denx.de>,
-        "Jon Hunter" <jonathanh@nvidia.com>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>
-Subject: Re: [PATCH 5.15 000/172] 5.15.24-rc1 review
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 14 Feb 2022 20:04:37 -0500
+Received: from m43-7.mailgun.net (m43-7.mailgun.net [69.72.43.7])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id EE063B8238
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 17:04:27 -0800 (PST)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1644887067; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: From: References: Cc: To: Subject: MIME-Version: Date:
+ Message-ID: Sender; bh=TbKrSdPeOmU9I/7yAa8+efMmXNFvoFbYlAZx4JzTiLQ=; b=XEnbCpYDDTjfcQuXhhbU7GQmeCjw31Z+0VZYGmY6y5tZvorGpWFBeL5yLZDPiG/m2QBgx44o
+ 6PfrY5Nonda6JHv41KC6ZSX663bgtjBfMtn47sSmjHOY2w7GmcuAknXwIiEwOqZ3jg4/X8Cb
+ Mf67q1hH/OBlfi0lw+ZZApkaHP8=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
+ 620afc1919d16b66a9c0b370 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 15 Feb 2022 01:04:25
+ GMT
+Sender: hemantk=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id C1471C43616; Tue, 15 Feb 2022 01:04:25 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from [192.168.1.14] (cpe-76-176-73-171.san.res.rr.com [76.176.73.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: hemantk)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id CDF3BC4338F;
+        Tue, 15 Feb 2022 01:04:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org CDF3BC4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Message-ID: <071200b2-8033-7016-f7e0-2a6ae6c947f2@codeaurora.org>
+Date:   Mon, 14 Feb 2022 17:04:23 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v3 08/25] bus: mhi: ep: Add support for registering MHI
+ endpoint controllers
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        mhi@lists.linux.dev
+Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
+        quic_jhugo@quicinc.com, vinod.koul@linaro.org,
+        bjorn.andersson@linaro.org, dmitry.baryshkov@linaro.org,
+        quic_vbadigan@quicinc.com, quic_cang@quicinc.com,
+        quic_skananth@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, elder@linaro.org
+References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
+ <20220212182117.49438-9-manivannan.sadhasivam@linaro.org>
+From:   Hemant Kumar <hemantk@codeaurora.org>
+In-Reply-To: <20220212182117.49438-9-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022, at 4:24 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.24 release.
-> There are 172 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
-> Anything received after that time might be too late.
+Hi Mani,
 
-5.15.24-rc1 on my x86_64 test system compiled and booted with no errors or regressions.
+On 2/12/2022 10:21 AM, Manivannan Sadhasivam wrote:
+> This commit adds support for registering MHI endpoint controller drivers
+> with the MHI endpoint stack. MHI endpoint controller drivers manages
+> the interaction with the host machines such as x86. They are also the
+> MHI endpoint bus master in charge of managing the physical link between the
+> host and endpoint device.
+> 
+> The endpoint controller driver encloses all information about the
+> underlying physical bus like PCIe. The registration process involves
+> parsing the channel configuration and allocating an MHI EP device.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>   drivers/bus/mhi/Kconfig       |   1 +
+>   drivers/bus/mhi/Makefile      |   3 +
+>   drivers/bus/mhi/ep/Kconfig    |  10 ++
+>   drivers/bus/mhi/ep/Makefile   |   2 +
+>   drivers/bus/mhi/ep/internal.h | 160 +++++++++++++++++++++++
+>   drivers/bus/mhi/ep/main.c     | 234 ++++++++++++++++++++++++++++++++++
+>   include/linux/mhi_ep.h        | 143 +++++++++++++++++++++
+>   7 files changed, 553 insertions(+)
+>   create mode 100644 drivers/bus/mhi/ep/Kconfig
+>   create mode 100644 drivers/bus/mhi/ep/Makefile
+>   create mode 100644 drivers/bus/mhi/ep/internal.h
+>   create mode 100644 drivers/bus/mhi/ep/main.c
+>   create mode 100644 include/linux/mhi_ep.h
+> 
+> diff --git a/drivers/bus/mhi/Kconfig b/drivers/bus/mhi/Kconfig
+> index 4748df7f9cd5..b39a11e6c624 100644
+> --- a/drivers/bus/mhi/Kconfig
+> +++ b/drivers/bus/mhi/Kconfig
+> @@ -6,3 +6,4 @@
+>   #
+>   
+>   source "drivers/bus/mhi/host/Kconfig"
+> +source "drivers/bus/mhi/ep/Kconfig"
+> diff --git a/drivers/bus/mhi/Makefile b/drivers/bus/mhi/Makefile
+> index 5f5708a249f5..46981331b38f 100644
+> --- a/drivers/bus/mhi/Makefile
+> +++ b/drivers/bus/mhi/Makefile
+> @@ -1,2 +1,5 @@
+>   # Host MHI stack
+>   obj-y += host/
+> +
+> +# Endpoint MHI stack
+> +obj-y += ep/
+> diff --git a/drivers/bus/mhi/ep/Kconfig b/drivers/bus/mhi/ep/Kconfig
+> new file mode 100644
+> index 000000000000..229c71397b30
+> --- /dev/null
+> +++ b/drivers/bus/mhi/ep/Kconfig
+> @@ -0,0 +1,10 @@
+> +config MHI_BUS_EP
+> +	tristate "Modem Host Interface (MHI) bus Endpoint implementation"
+> +	help
+> +	  Bus driver for MHI protocol. Modem Host Interface (MHI) is a
+> +	  communication protocol used by the host processors to control
+> +	  and communicate with modem devices over a high speed peripheral
+> +	  bus or shared memory.
+> +
+> +	  MHI_BUS_EP implements the MHI protocol for the endpoint devices
+> +	  like SDX55 modem connected to the host machine over PCIe.
+> diff --git a/drivers/bus/mhi/ep/Makefile b/drivers/bus/mhi/ep/Makefile
+> new file mode 100644
+> index 000000000000..64e29252b608
+> --- /dev/null
+> +++ b/drivers/bus/mhi/ep/Makefile
+> @@ -0,0 +1,2 @@
+> +obj-$(CONFIG_MHI_BUS_EP) += mhi_ep.o
+> +mhi_ep-y := main.o
+> diff --git a/drivers/bus/mhi/ep/internal.h b/drivers/bus/mhi/ep/internal.h
+> new file mode 100644
+> index 000000000000..e313a2546664
+> --- /dev/null
+> +++ b/drivers/bus/mhi/ep/internal.h
+> @@ -0,0 +1,160 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2021, Linaro Ltd.
+> + *
+> + */
+> +
+> +#ifndef _MHI_EP_INTERNAL_
+> +#define _MHI_EP_INTERNAL_
+> +
+> +#include <linux/bitfield.h>
+> +
+> +#include "../common.h"
+> +
+> +extern struct bus_type mhi_ep_bus_type;
+> +
+> +#define MHI_REG_OFFSET				0x100
+> +#define BHI_REG_OFFSET				0x200
+> +
+> +/* MHI registers */
+> +#define MHIREGLEN				(MHI_REG_OFFSET + REG_MHIREGLEN)
+> +#define MHIVER					(MHI_REG_OFFSET + REG_MHIVER)
+> +#define MHICFG					(MHI_REG_OFFSET + REG_MHICFG)
+> +#define CHDBOFF					(MHI_REG_OFFSET + REG_CHDBOFF)
+> +#define ERDBOFF					(MHI_REG_OFFSET + REG_ERDBOFF)
+> +#define BHIOFF					(MHI_REG_OFFSET + REG_BHIOFF)
+> +#define BHIEOFF					(MHI_REG_OFFSET + REG_BHIEOFF)
+> +#define DEBUGOFF				(MHI_REG_OFFSET + REG_DEBUGOFF)
+> +#define MHICTRL					(MHI_REG_OFFSET + REG_MHICTRL)
+> +#define MHISTATUS				(MHI_REG_OFFSET + REG_MHISTATUS)
+> +#define CCABAP_LOWER				(MHI_REG_OFFSET + REG_CCABAP_LOWER)
+> +#define CCABAP_HIGHER				(MHI_REG_OFFSET + REG_CCABAP_HIGHER)
+> +#define ECABAP_LOWER				(MHI_REG_OFFSET + REG_ECABAP_LOWER)
+> +#define ECABAP_HIGHER				(MHI_REG_OFFSET + REG_ECABAP_HIGHER)
+> +#define CRCBAP_LOWER				(MHI_REG_OFFSET + REG_CRCBAP_LOWER)
+> +#define CRCBAP_HIGHER				(MHI_REG_OFFSET + REG_CRCBAP_HIGHER)
+> +#define CRDB_LOWER				(MHI_REG_OFFSET + REG_CRDB_LOWER)
+> +#define CRDB_HIGHER				(MHI_REG_OFFSET + REG_CRDB_HIGHER)
+> +#define MHICTRLBASE_LOWER			(MHI_REG_OFFSET + REG_MHICTRLBASE_LOWER)
+> +#define MHICTRLBASE_HIGHER			(MHI_REG_OFFSET + REG_MHICTRLBASE_HIGHER)
+> +#define MHICTRLLIMIT_LOWER			(MHI_REG_OFFSET + REG_MHICTRLLIMIT_LOWER)
+> +#define MHICTRLLIMIT_HIGHER			(MHI_REG_OFFSET + REG_MHICTRLLIMIT_HIGHER)
+> +#define MHIDATABASE_LOWER			(MHI_REG_OFFSET + REG_MHIDATABASE_LOWER)
+> +#define MHIDATABASE_HIGHER			(MHI_REG_OFFSET + REG_MHIDATABASE_HIGHER)
+> +#define MHIDATALIMIT_LOWER			(MHI_REG_OFFSET + REG_MHIDATALIMIT_LOWER)
+> +#define MHIDATALIMIT_HIGHER			(MHI_REG_OFFSET + REG_MHIDATALIMIT_HIGHER)
+> +
+> +/* MHI BHI registers */
+> +#define BHI_IMGTXDB				(BHI_REG_OFFSET + REG_BHI_IMGTXDB)
+> +#define BHI_EXECENV				(BHI_REG_OFFSET + REG_BHI_EXECENV)
+> +#define BHI_INTVEC				(BHI_REG_OFFSET + REG_BHI_INTVEC)
+> +
+> +/* MHI Doorbell registers */
+> +#define CHDB_LOWER_n(n)				(0x400 + 0x8 * (n))
+> +#define CHDB_HIGHER_n(n)			(0x404 + 0x8 * (n))
+> +#define ERDB_LOWER_n(n)				(0x800 + 0x8 * (n))
+> +#define ERDB_HIGHER_n(n)			(0x804 + 0x8 * (n))
+> +
+> +#define MHI_CTRL_INT_STATUS_A7			0x4
+can we get rid of all instances of "_A7" as this corresponds to 
+Cortex-A7, in future this can change? At MHI core layer, we can avoid 
+this naming convetion, even though register names are inculding them now 
+and may change to something different later. This MHI EP driver would 
+still be used for those new cortex vers.
+> +#define MHI_CTRL_INT_STATUS_A7_MSK		BIT(0)
+> +#define MHI_CTRL_INT_STATUS_CRDB_MSK		BIT(1)
+> +#define MHI_CHDB_INT_STATUS_A7_n(n)		(0x28 + 0x4 * (n))
+> +#define MHI_ERDB_INT_STATUS_A7_n(n)		(0x38 + 0x4 * (n))
+> +
+[..]
 
-Tested-by: Slade Watkins <slade@sladewatkins.com>
-
-Thanks,
-Slade
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
+Forum, a Linux Foundation Collaborative Project

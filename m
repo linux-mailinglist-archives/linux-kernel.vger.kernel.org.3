@@ -2,128 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2163B4B6CF1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:03:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D77FC4B6CF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 14:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238063AbiBONDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 08:03:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34558 "EHLO
+        id S238065AbiBONFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 08:05:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235227AbiBONDR (ORCPT
+        with ESMTP id S238067AbiBONFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 08:03:17 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E8899FB52;
-        Tue, 15 Feb 2022 05:03:07 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2C0581480;
-        Tue, 15 Feb 2022 05:03:07 -0800 (PST)
-Received: from [10.57.70.89] (unknown [10.57.70.89])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D094A3F718;
-        Tue, 15 Feb 2022 05:03:02 -0800 (PST)
-Message-ID: <b2fd22a1-b52b-8eb1-91e9-9829830f1400@arm.com>
-Date:   Tue, 15 Feb 2022 13:02:58 +0000
+        Tue, 15 Feb 2022 08:05:46 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE67AA0BC9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 05:05:34 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id i62so23714470ioa.1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 05:05:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PaZVevCVWnJLVjvrHlW/dnI5NADyeCbLBAp7MlyZJEs=;
+        b=TDZSGSZDOR6tESGKMffWCPAQg0pmlp4Qd/GfZoTuMP4o9VEdBnDeiiE6GGqWBPQsgN
+         qd+VnUyyPezL+pBRqSdBPDVYO2zc+Rl12fctv8JMQmtfQHTIFV1VisAraOidRtzcv7az
+         h+RdY2hixZ3rguGFXADmEsNVOk97TpExpsPCM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PaZVevCVWnJLVjvrHlW/dnI5NADyeCbLBAp7MlyZJEs=;
+        b=ryJc2hh9aBhvDYSrXysOrwYIKuoWhi3cuhkvefq0HPGA9WwQQFbIEiVTaC9l9xLYbW
+         /a95w1/SyA+sMZl+qiTGFvYABNteLSpaq++KIeiVgYjIAjpfknJsYcTlgoyOePwBr9X3
+         4gb9UoyPas8EwuZuWGbU3oRsWX8eK5cmFZyaF3hfyTepjgvu/JnaDsp/gYcdT/SqFlcN
+         fkJpH3lgHDyQRfdBsa/rnVvccqg4V19n5dQnW65WyeeXdjGMIe5eyiXAYobQ2TzyOi+y
+         8gEjoZOoZrVIBM/NXYDCWjlM2mUMAx2i5dMv5Bh7Pf46m0JYtOg1T4q4iQPz92sxLbOT
+         mcVQ==
+X-Gm-Message-State: AOAM532mWCHhBkq8drv4DjQyEz3mXExxSHm1IEJVUxk+CYtJV59LxBYY
+        TtyUCKjG+N4nbVeQ8yWInQ64BFlLYqHaGsLAq/OzNg==
+X-Google-Smtp-Source: ABdhPJxtJIM9RHnfQcz4LMCrnzRwoEV55yIyUKbwloRDyJHYmE4ariqr/kbm/w8QO90RNrUQBhZreEm0Z7T5jqeF5Iw=
+X-Received: by 2002:a05:6638:3785:: with SMTP id w5mr2736567jal.210.1644930334003;
+ Tue, 15 Feb 2022 05:05:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v1 5/8] iommu/amd: Use iommu_attach/detach_device()
-Content-Language: en-GB
-To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Will Deacon <will@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
+References: <20220208084234.1684930-1-hsinyi@chromium.org> <CACvgo53u01BK_D0ZssV+gCepjxSz23Nr5Dy1qXeaAoJuu6VCFQ@mail.gmail.com>
+In-Reply-To: <CACvgo53u01BK_D0ZssV+gCepjxSz23Nr5Dy1qXeaAoJuu6VCFQ@mail.gmail.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Tue, 15 Feb 2022 21:05:08 +0800
+Message-ID: <CAJMQK-gvhsk3U7QK9B-28kJ4fKbO8UB01i-_rMMe_GT2pM74gg@mail.gmail.com>
+Subject: Re: [Intel-gfx] [PATCH v8 1/3] gpu: drm: separate panel orientation
+ property creating and value setting
+To:     Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     ML dri-devel <dri-devel@lists.freedesktop.org>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220106022053.2406748-1-baolu.lu@linux.intel.com>
- <20220106022053.2406748-6-baolu.lu@linux.intel.com>
- <20220106143345.GC2328285@nvidia.com> <Ygo8iek2CwtPp2hj@8bytes.org>
- <20220214131544.GX4160@nvidia.com> <Ygpb6CxmTdUHiN50@8bytes.org>
- <20220214140236.GC929467@nvidia.com> <YgplyyjofwlM+1tc@8bytes.org>
- <20220214150059.GE4160@nvidia.com> <YgtuJQhY8SNlv9/6@8bytes.org>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <YgtuJQhY8SNlv9/6@8bytes.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Simon Ser <contact@emersion.fr>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        LAKML <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-15 09:11, Joerg Roedel wrote:
-> On Mon, Feb 14, 2022 at 11:00:59AM -0400, Jason Gunthorpe wrote:
->> On Mon, Feb 14, 2022 at 03:23:07PM +0100, Joerg Roedel wrote:
->>
->>> Device drivers calling into iommu_attach_device() is seldom a good
->>> idea.  In this case the sound device has some generic hardware
->>> interface so that an existing sound driver can be re-used. Making this
->>> driver call iommu-specific functions for some devices is something hard
->>> to justify.
->>
->> Er, so this is transparent to the generic sound device? I guess
->> something fixed up the dma_api on that device to keep working?
-> 
-> Right, this is completly transparent to the sound device. The IOMMU code
-> will not set dma_ops on the device because it uses a direct mapping and
-> so the standard implementation will be used.
-> 
->> But, then, the requirement is that nobody is using the dma API when we
->> make this change?
-> 
-> That is the tricky part. DMA-API keeps working after the change is made,
-> because the new domain is also direct mapped. The new domain just has
-> the ability to assign host page-tables to device PASIDs, so that DMA
-> requests with a PASID TLP will be remapped.
-> 
-> It was actually a requirement for this code that when it jumps in, the
-> DMA-API mappings stay live. And the reason a direct mapping is used at
-> all is that the page-table walker of the IOMMU is a two-dimensional
-> walker, which will treat the addresses found in the host page-tables as
-> IO-virtual an translates them through the underlying page-table. So to
-> use host-pagetables the underlying mapping must be direct mapped.
+On Tue, Feb 15, 2022 at 8:04 PM Emil Velikov <emil.l.velikov@gmail.com> wrote:
+>
+> Greetings everyone,
+>
+> Padron for joining in so late o/
+>
+> On Tue, 8 Feb 2022 at 08:42, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+> >
+> > drm_dev_register() sets connector->registration_state to
+> > DRM_CONNECTOR_REGISTERED and dev->registered to true. If
+> > drm_connector_set_panel_orientation() is first called after
+> > drm_dev_register(), it will fail several checks and results in following
+> > warning.
+> >
+> > Add a function to create panel orientation property and set default value
+> > to UNKNOWN, so drivers can call this function to init the property earlier
+> > , and let the panel set the real value later.
+> >
+>
+> The warning illustrates a genuine race condition, where userspace will
+> read the old/invalid property value/state. So this patch masks away
+> the WARNING without addressing the actual issue.
+> Instead can we fix the respective drivers, so that no properties are
+> created after drm_dev_register()?
+>
+1. How about the proposal in previous version:
+v7 https://patchwork.kernel.org/project/linux-mediatek/patch/20220208073714.1540390-1-hsinyi@chromium.org/
+we separate property creation
+(drm_connector_init_panel_orientation_property) and value setting
+(drm_connector_set_panel_orientation). This is also similar to some of
+other optional properties are created, eg. vrr_capable.
 
-Given how things have evolved since that code was originally written, 
-and that we seemingly now have the def_domain_type override kicking in 
-as soon as we first see an IOMMUv2-capable device, do we even need to 
-then subsequently switch to this special unmanaged domain with its 
-pagetable sucked out, or could we just install the PASID table in the 
-default domain itself?
+And drm drivers have to make sure that if they want to use this
+property, they have to create it before drm_dev_register(). For
+example, in the 2nd patch, mtk_drm sets the property before calling
+drm_dev_register().
 
-Robin.
+2. I'm not sure how to handle the case that if user space tries to
+read the property before the proper value is set. Currently drm
+creates this property and the panels[1] will set the correct value
+parsed from DT. If userspace calls before the panel sets the correct
+value, it will get unknown (similar to the illustration you mentioned
+below). Do you think that the drm should be responsible for parsing
+the value if the panel provides it? In this way it's guaranteed that
+the value is set when the property is created.
 
->> I don't think it matters how big/small the group is, only that when we
->> change the domain we know everything flowing through the domain is
->> still happy.
-> 
-> Yes, that matters. The group size matters too for DMA-API performance.
-> If two devices compete for the same lock in the allocator and/or the
-> same cached magazines, things will slow down. That only matters for
-> high-throughput devices, but still...
-> 
-> Regards,
-> 
-> 	Joerg
-> 
+[1] https://elixir.bootlin.com/linux/latest/A/ident/drm_connector_set_panel_orientation
+
+> Longer version:
+> As we look into drm_dev_register() it's in charge of creating the
+> dev/sysfs nodes (et al). Note that connectors cannot disappear at
+> runtime.
+> For panel orientation, we are creating an immutable connector
+> properly, meaning that as soon as drm_dev_register() is called we must
+> ensure that the property is available (if applicable) and set to the
+> correct value.
+>
+> For illustration, consider the following scenario:
+>  - DRM modules are loaded late - are not built-in and not part of
+> initrd (or there's no initrd)
+>  - kernel boots
+>  - plymouth/similar user-space component kicks in before the
+> driver/module is loaded
+>  - module gets loaded, drm_dev_register() kicks in populating /dev/dri/card0
+>  - plymouth opens the dev node and reads DRM_MODE_PANEL_ORIENTATION_UNKNOWN
+>  - module updates the orientation property
+>
+> Thanks
+> Emil

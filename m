@@ -2,106 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47BAC4B73D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:44:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B70DD4B73CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 17:44:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241786AbiBOQlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 11:41:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50256 "EHLO
+        id S241701AbiBOQkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 11:40:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235181AbiBOQlK (ORCPT
+        with ESMTP id S239370AbiBOQkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 11:41:10 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B594F2135;
-        Tue, 15 Feb 2022 08:41:00 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id e5so8207818lfr.9;
-        Tue, 15 Feb 2022 08:41:00 -0800 (PST)
+        Tue, 15 Feb 2022 11:40:17 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BABEFF91
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:40:07 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id v4so17857771pjh.2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 08:40:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KjPOeSE+RdrU9J1G95EImhMutKQlZfD+MfnQPmxkIM4=;
-        b=iqxLiVFDhQ8rUiXvcWGTD8xi2LzcZdiT9P+dVlz8CO9P4HeVLyisSID8nN1JkC91iJ
-         aZkgZU1FAk3g3rsAHUkVaJpKSu+h5FvYMLWxEcjMBd9uKNThzu6wMAdH9xB0mwe+xHzF
-         UftxSRyUyhHHJal8VjaQl8T4Lb8DX8zbQY804jUhbDiCLqo6/sJ9w2IrHiMfP9bV66Zq
-         4m4vEahHsDEKcY6UseJwYA+oIpBVEctuIyp5OLmy53IAOF/rmMpzhq5wF0J1pVz47EA3
-         X8elvkx7bY6BC9TvchH3AnVvOWAx50nZ2umjKlWOI5r+Xp5u++rZB+pxQlB26x0dYQaD
-         RKbQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GjzGhBOh8jK25Hj15polj7Q2qGK/jzjkg+lJ5DCE9Bs=;
+        b=mDwJxlM9ua3Q2EgY+L5cfx6nvP4xPP+V5PVHN/8DFq6tukufpnQnRJFRhRH+X1Kg2g
+         7yYY6qmmd/2hMLGnJj75Yoww4EO20Uj5zU/pEhf5S8Bdr74ZZGkiRWnOlSGGQldMtnC2
+         v/cbHY8fGp1O7j7LN65MwzB40H7TV+ABMpVILP6pEhtkKCVIt0JQviHRDltnyeifZxLw
+         BEPuP5UFkVICiZKm/uv/71YmeDwxxKLbVFfNzkNgSe3ro8V+eHbWWL7dQvXY4KoB9wrc
+         hAiv0sAKz3QnPf/sZ0ZfmS1SMjQU4Gg/cIE+ByBPlcNvCO1sY7N1GxjQn2HRwjghj0Oh
+         HPAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KjPOeSE+RdrU9J1G95EImhMutKQlZfD+MfnQPmxkIM4=;
-        b=K8IAoI2Epz451R2OeKJK/ocAqVCT6nGy7NRyWiXgbRgd1VmgaQrSauGoYv2GOJU2F3
-         I86u8n2oq4NmB4gUEbOUlMisj1HYjb3K9k2WBrg0JlIEmbIBMWzmZZv4oY0dSuk/rJ3k
-         M+neluWiFYSYsXY3KxHQPcYRkB8FNiVyOEDx59RnlrQLdLFwXmx3wfjmdJ05urofbZvl
-         qkxnn1BSIFfyl0kILICRTyffwfmp2xSZtjScBaMdIpJrLSDzGkOoCP2HYcsQtfq7s1xb
-         hFNpnoOp4IFR9CGXaeJh1iI1UT7dmWBF3CR6IndcQZKXlGh5lV75ZFhbMcfzZ/l9IGtk
-         vfTA==
-X-Gm-Message-State: AOAM533SqFXFrmv8dAazPiai9MleqN0eA7XTCbxy8i2EiwIsbB0R2Z2s
-        7/U2bBVykZroAQq7+56M8Ac=
-X-Google-Smtp-Source: ABdhPJzf3WF+0Mr2b/W2BMKEHFQ7z07BI22BudPKSaDp5F5o/heoVcBa1vbxwGm8zWQP+L6B81cixg==
-X-Received: by 2002:a05:6512:e9d:: with SMTP id bi29mr3651986lfb.652.1644943257110;
-        Tue, 15 Feb 2022 08:40:57 -0800 (PST)
-Received: from WBEC678.wbe.local (xt27d8.stansat.pl. [83.243.39.216])
-        by smtp.gmail.com with ESMTPSA id s1sm1127092ljd.18.2022.02.15.08.40.56
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GjzGhBOh8jK25Hj15polj7Q2qGK/jzjkg+lJ5DCE9Bs=;
+        b=XauxfMAUDOkvjJGVre0ILWvEcPsXDIZqEFVlR20jvbv1FsgR8iQ4oh1eVwrCArVjc+
+         66gykahdNqGA6OyQ5nIwwk6kBaAMZy4P1e2KdCT1s39VJ8Xe5pWBsHS/X1vgZodwha1Z
+         awbYyeegNwXSTsBSGVWH4+a/7lgSB0PJmLh+g7/0MzRHFCZygenREhLe7GS51gL0F7S3
+         IBFv2mbvUq48+y+2d4GCCgwX5cKUb39cV4NTo4MOHUn8glNCOl5s5PZF8rRma8DMyV+G
+         GSfOZSdq8Mi6Q9s2l2LZ5X6+ts7Om6Fpxs9KcyyAAjg6PhifXj0G45OSN6jLiODhNXQs
+         pyVQ==
+X-Gm-Message-State: AOAM530ldvV+83KGrtEi9lEHLZA02GxRggeEqc/cbpuMthaqG/YCXaPx
+        Ue7CxjCAG/mvNQmXJx6aDPirBSrQt2rJ5w==
+X-Google-Smtp-Source: ABdhPJzp3QQbBsaFv+7+b6FImzl1ZX+uzkVQdvAA7LZJnDAJM8bbYxLOXQYZ8csVnKZYU87zVSDD6g==
+X-Received: by 2002:a17:90b:4f42:b0:1b9:5a43:2278 with SMTP id pj2-20020a17090b4f4200b001b95a432278mr5313268pjb.158.1644943207065;
+        Tue, 15 Feb 2022 08:40:07 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id oj10sm18803477pjb.7.2022.02.15.08.40.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 08:40:56 -0800 (PST)
-From:   Pawel Dembicki <paweldembicki@gmail.com>
-Cc:     Pawel Dembicki <paweldembicki@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Hao Fang <fanghao11@huawei.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] dt-bindings: vendor-prefixes: Add Ctera Networks
-Date:   Tue, 15 Feb 2022 17:39:23 +0100
-Message-Id: <20220215163926.894-2-paweldembicki@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220215163926.894-1-paweldembicki@gmail.com>
-References: <20220215163926.894-1-paweldembicki@gmail.com>
+        Tue, 15 Feb 2022 08:40:06 -0800 (PST)
+Date:   Tue, 15 Feb 2022 16:40:03 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zeng Guang <guang.zeng@intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Subject: Re: [PATCH 09/11] KVM: x86: Treat x2APIC's ICR as a 64-bit register,
+ not two 32-bit regs
+Message-ID: <YgvXY98ah4uIECee@google.com>
+References: <20220204214205.3306634-1-seanjc@google.com>
+ <20220204214205.3306634-10-seanjc@google.com>
+ <20220215032712.GB28478@gao-cwp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220215032712.GB28478@gao-cwp>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CTERA Networks Intl. is a company based in Israel.
-They manufacture NASes, network devices and provide software
-products for cloud storage and IT security.
+On Tue, Feb 15, 2022, Chao Gao wrote:
+> > 	case APIC_SELF_IPI:
+> >-		if (apic_x2apic_mode(apic)) {
+> >-			kvm_lapic_reg_write(apic, APIC_ICR,
+> >-					    APIC_DEST_SELF | (val & APIC_VECTOR_MASK));
+> >-		} else
+> >+		if (apic_x2apic_mode(apic))
+> >+			kvm_x2apic_icr_write(apic, APIC_DEST_SELF | (val & APIC_VECTOR_MASK));
+> >+		else
+> 
+> The original code looks incorrect. Emulating writes to SELF_IPI by writes to
+> ICR has an unwanted side-effect: the value of ICR in vAPIC page gets changed.
+> 
+> It is better to use kvm_apic_send_ipi() directly.
 
-Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
----
-v2: no changes
+Agreed, the SDM lists SELF_IPI as write-only, with no associated MMIO offset, so
+it should have no visible side effect in the vAPIC.  I'll add a patch to fix this.
 
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index c48ce3c54951..9e247353b6bc 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -275,6 +275,8 @@ patternProperties:
-     description: Hangzhou C-SKY Microsystems Co., Ltd
-   "^csq,.*":
-     description: Shenzen Chuangsiqi Technology Co.,Ltd.
-+  "^ctera,.*":
-+    description: CTERA Networks Intl.
-   "^cubietech,.*":
-     description: Cubietech, Ltd.
-   "^cui,.*":
--- 
-2.25.1
-
+Thanks!

@@ -2,56 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE474B66F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:06:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D2D4B66F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 10:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235572AbiBOJGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 04:06:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44628 "EHLO
+        id S235578AbiBOJHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 04:07:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiBOJGe (ORCPT
+        with ESMTP id S229470AbiBOJHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 04:06:34 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C93C10610A;
-        Tue, 15 Feb 2022 01:06:21 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 618881F43CBD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644915980;
-        bh=KT3ZzPL5bMaQsMc6VIAvOaWmPqUEHPijK80eTrRqlyU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jVL9UMVhkEC02XIfCXepsseP84rrZ37lMw+YnM3XbD0hVbwPUVUkDd+dXEgai7UbE
-         y2fBhkPw+u/DpNe3Ym0VMOMiL5NmM9GL/pit0vOPwk4N1xBsCHhFpWwCjZyaIXnzMy
-         +uhN+4CooMPCBzQlnpyXYsoPEUop6EhPnK2uca6jcbdEhzjlgxceMi2T270017ub2x
-         485O6jZHlxN14XmDqI/JcaATm8E5zFOAaSj27/n7F+OnqZmS3aB8+d9TtGzsMDXWlx
-         Vc5F3ssQqtT6M9CnULDLKxgU4vkDQhLB4+qBYyXTD9f1tlmzJooxiAzDhq8cO038bz
-         raylOxkRSmoRw==
-Message-ID: <319d7236-292c-787f-4578-bffe75e33ba1@collabora.com>
-Date:   Tue, 15 Feb 2022 10:06:17 +0100
+        Tue, 15 Feb 2022 04:07:31 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C9B5FF6;
+        Tue, 15 Feb 2022 01:07:20 -0800 (PST)
+X-UUID: cf75595ca2d841329b55b4771b8ac7e0-20220215
+X-UUID: cf75595ca2d841329b55b4771b8ac7e0-20220215
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1528053680; Tue, 15 Feb 2022 17:07:17 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 15 Feb 2022 17:07:16 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 15 Feb 2022 17:07:16 +0800
+Message-ID: <f7de15857fe110dcd9e3a6fc342bf253fd201f7b.camel@mediatek.com>
+Subject: Re: [v2,2/6] dt-bindings: display: mediatek: update supported SoC
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <airlied@linux.ie>,
+        <jassisinghbrar@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <yongqiang.niu@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <fparent@baylibre.com>, <linux-mediatek@lists.infradead.org>,
+        <hsinyi@chromium.org>, <linux-arm-kernel@lists.infradead.org>
+Date:   Tue, 15 Feb 2022 17:07:16 +0800
+In-Reply-To: <0de5fc29ed65eb5c6e9f227ec5e77cd4312718f4.camel@mediatek.com>
+References: <20220215075953.3310-1-rex-bc.chen@mediatek.com>
+         <20220215075953.3310-3-rex-bc.chen@mediatek.com>
+         <0de5fc29ed65eb5c6e9f227ec5e77cd4312718f4.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [v7 0/5] Mediatek MT8195 power domain support
-Content-Language: en-US
-To:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        srv_heupstream@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220130012104.5292-1-chun-jie.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220130012104.5292-1-chun-jie.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,67 +57,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 30/01/22 02:20, Chun-Jie Chen ha scritto:
-> This patch series adds power domain support for MT8195
-> and is based on 5.17-rc1.
+On Tue, 2022-02-15 at 16:48 +0800, CK Hu wrote:
+> Hi, Rex:
+> 
+> On Tue, 2022-02-15 at 15:59 +0800, Rex-BC Chen wrote:
+> > Add decriptions about supported SoC: MT8186.
+> > 
+> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  .../devicetree/bindings/display/mediatek/mediatek,disp.txt      |
+> > 2
+> > +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.
+> > tx
+> > t
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.
+> > tx
+> > t
+> > index 78044c340e20..f22b3d90d45a 100644
+> > ---
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.
+> > tx
+> > t
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.
+> > tx
+> > t
+> > @@ -44,7 +44,7 @@ Required properties (all function blocks):
+> >  	"mediatek,<chip>-dpi"        		- DPI controller,
+> > see
+> > mediatek,dpi.txt
+> >  	"mediatek,<chip>-disp-mutex" 		- display mutex
+> >  	"mediatek,<chip>-disp-od"    		- overdrive
+> > -  the supported chips are mt2701, mt7623, mt2712, mt8167, mt8173,
+> > mt8183 and mt8192.
+> > +  the supported chips are mt2701, mt7623, mt2712, mt8167, mt8173,
+> > mt8183, mt8186 and mt8192.
+> 
+> I've applied [1], so please depend on [1] to send this patch.
+> 
+> [1] 
+> 
+https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/commit/?h=mediatek-drm-next&id=4ed545e7d10049b5492afc184e61a67e478a2cfd
+> 
+> Regards,
+> CK
+> 
+Hello CK,
 
-Hello Matthias,
+Thanks for your review.
+I will modify display binding based on [1] for next version.
 
-this series has been tested for a while on multiple MediaTek platforms, hence
-new versions will not be necessary.
-
-Can you please pick it for v5.18?
-
-Thank you,
-Angelo
-
+BRs,
+Rex-BC Chen
+> >  - reg: Physical base address and length of the function block
+> > register space
+> >  - interrupts: The interrupt signal from the function block
+> > (required, except for
+> >    merge and split function blocks).
 > 
-> change since v6:
-> - rebase to 5.17-rc1
-> 
-> change since v5:
-> - rebase to 5.16-rc1
-> - add domain capacity in mfg power domain
-> 
-> change since v4:
-> - rebase to 5.15-rc1 (fix conflict at patch 4 in this series)
-> - change license
-> 
-> change since v3:
-> - remove redundant bus protection steps
-> - remove unused power domain
-> 
-> change since v2:
-> - move modification of wakeup capacity to single patch
-> 
-> reason for resend v2:
-> - miss patch version in series
-> 
-> changes since v1:
-> - fix signed-off name
-> - describe more detail in patch 3
-> - move modification of removing redundant macro to single patch
-> 
-> Chun-Jie Chen (5):
->    dt-bindings: power: Add MT8195 power domains
->    soc: mediatek: pm-domains: Add wakeup capacity support in power domain
->    soc: mediatek: pm-domains: Remove unused macro
->    soc: mediatek: pm-domains: Move power status offset to power domain
->      data
->    soc: mediatek: pm-domains: Add support for mt8195
-> 
->   .../power/mediatek,power-controller.yaml      |   2 +
->   drivers/soc/mediatek/mt8167-pm-domains.h      |  16 +-
->   drivers/soc/mediatek/mt8173-pm-domains.h      |  22 +-
->   drivers/soc/mediatek/mt8183-pm-domains.h      |  32 +-
->   drivers/soc/mediatek/mt8192-pm-domains.h      |  44 +-
->   drivers/soc/mediatek/mt8195-pm-domains.h      | 613 ++++++++++++++++++
->   drivers/soc/mediatek/mtk-pm-domains.c         |  12 +-
->   drivers/soc/mediatek/mtk-pm-domains.h         |   8 +-
->   include/dt-bindings/power/mt8195-power.h      |  46 ++
->   include/linux/soc/mediatek/infracfg.h         |  82 +++
->   10 files changed, 862 insertions(+), 15 deletions(-)
->   create mode 100644 drivers/soc/mediatek/mt8195-pm-domains.h
->   create mode 100644 include/dt-bindings/power/mt8195-power.h
 > 
 

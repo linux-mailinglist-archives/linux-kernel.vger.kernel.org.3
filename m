@@ -2,55 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EFC24B6ECB
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 15:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D6E4B6EE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 15:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238555AbiBOO1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 09:27:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40150 "EHLO
+        id S238600AbiBOO2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 09:28:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbiBOO1t (ORCPT
+        with ESMTP id S231537AbiBOO2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 09:27:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179D7CD322
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 06:27:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9237B6177F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 14:27:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCC95C340F1;
-        Tue, 15 Feb 2022 14:27:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644935258;
-        bh=K8CwRMcEe6pZjcF6+lE5iZELKSpvgn/qaNeXWqgk7bE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mAEwGL0A5PgKjx2HZKhRNj/Qy0qlfd/6tCfNLopkbWB6JwtYBNj0J8lu6pV1sjTQI
-         32D7WtYskHlUdhi7hkCQCEc/uMmq/WM6e4Q3IDovmAV5vgIn6Nf6+eYGYkRTkH9OIM
-         siZ6DLEcDDf2LPhl0FtdLyG0o4F91hkahBu5FQTwvLhI3mJCjAh18S/uefXnrJpr1V
-         7yjGPDO4vocfa0PFE1D+aP3EpVt2hG+fda9htNZ3EE6ZsIie/54NeuqCEchjv/YhRX
-         6BpAP7eMx15jKaLLNn0U3d5rNbyDvDBcrw/1bALniC/u+Mu9WZkN+GkHTI8+htZ26R
-         mCzuwtX2zlReA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A36D4400FE; Tue, 15 Feb 2022 11:27:34 -0300 (-03)
-Date:   Tue, 15 Feb 2022 11:27:34 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/25] perf intel-pt: Add support for Event Trace and TNT
- disable
-Message-ID: <Ygu4VgqvrEyWgMqu@kernel.org>
-References: <20220124084201.2699795-1-adrian.hunter@intel.com>
+        Tue, 15 Feb 2022 09:28:20 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5895CD5C6;
+        Tue, 15 Feb 2022 06:28:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644935291; x=1676471291;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=IxZPRn3PRww00HcXj8jTGAVMUoCeGo47bOY16z1HyQk=;
+  b=idFyYX/mYcPvYsR9+X4ZRWH7iCr8HkQDGMTfs2GmY/MZ0Uh7N1wjIkr5
+   0w8IvOgsxLo5dmUC5sL4ZYEVdMpoumGZIF1uB27qzMQuLNn9UwewXP6vH
+   8As2FYJYZ0592X6Ox2i4N1cXCUWv2KJczwZrpqAfHMvXqMRoE0g4qhOeq
+   c=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 15 Feb 2022 06:28:11 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 06:28:10 -0800
+Received: from [10.216.42.218] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Tue, 15 Feb
+ 2022 06:28:07 -0800
+Message-ID: <ea2984ff-b4b4-8814-15e8-78366def3ad1@quicinc.com>
+Date:   Tue, 15 Feb 2022 19:58:02 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124084201.2699795-1-adrian.hunter@intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH rcu 3/3] rcu: Allow expedited RCU grace periods on
+ incoming CPUs
+Content-Language: en-US
+To:     <paulmck@kernel.org>, <kernel-team@fb.com>,
+        <linux-kernel@vger.kernel.org>, <rcu@vger.kernel.org>,
+        <rostedt@goodmis.org>, <tj@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20220209233811.GC557593@lothringen>
+ <20220214164435.GA2805255@paulmck-ThinkPad-P17-Gen-1>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20220214164435.GA2805255@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.47.97.222)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,78 +65,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jan 24, 2022 at 10:41:36AM +0200, Adrian Hunter escreveu:
-> Hi
-> 
-> Brief documentation is in the last patch with more technical details in
-> Intel SDM (https://www.intel.com/sdm) version 076.
-> 
-> The patches touch mostly Intel PT and auxtrace code, with a few supporting
-> changes to perf script.
-> 
-> I am not aware of any hardware that has the new capabilities yet.
-> 
-> Patches can also be found here:
-> 
-> 	https://github.com/ahunter6/linux/tree/event-trace
-> 
 
-Thanks, applied.
+On 2/14/2022 10:14 PM, Paul E. McKenney wrote:
+> On Thu, Feb 10, 2022 at 12:38:11AM +0100, Frederic Weisbecker wrote:
+>> On Fri, Feb 04, 2022 at 02:55:07PM -0800, Paul E. McKenney wrote:
+>>> Although it is usually safe to invoke synchronize_rcu_expedited() from a
+>>> preemption-enabled CPU-hotplug notifier, if it is invoked from a notifier
+>>> between CPUHP_AP_RCUTREE_ONLINE and CPUHP_AP_ACTIVE, its attempts to
+>>> invoke a workqueue handler will hang due to RCU waiting on a CPU that
+>>> the scheduler is not paying attention to.  This commit therefore expands
+>>> use of the existing workqueue-independent synchronize_rcu_expedited()
+>>> from early boot to also include CPUs that are being hotplugged.
+>>>
+>>> Link: https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/
+>>> Reported-by: Mukesh Ojha <quic_mojha@quicinc.com>
+>>> Cc: Tejun Heo <tj@kernel.org>
+>>> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+>> I'm surprised by this scheduler behaviour.
+>>
+>> Since sched_cpu_activate() hasn't been called yet,
+>> rq->balance_callback = balance_push_callback. As a result, balance_push() should
+>> be called at the end of schedule() when the workqueue is picked as the next task.
+>> Then eventually the workqueue should be immediately preempted by the stop task to
+>> be migrated elsewhere.
+>>
+>> So I must be missing something. For the fun, I booted the following and it
+>> didn't produce any issue:
+>>
+>> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+>> index 80faf2273ce9..b1e74a508881 100644
+>> --- a/kernel/rcu/tree.c
+>> +++ b/kernel/rcu/tree.c
+>> @@ -4234,6 +4234,8 @@ int rcutree_online_cpu(unsigned int cpu)
+>>   
+>>   	// Stop-machine done, so allow nohz_full to disable tick.
+>>   	tick_dep_clear(TICK_DEP_BIT_RCU);
+>> +	if (cpu != 0)
+>> +		synchronize_rcu_expedited();
+>>   	return 0;
+>>   }
+> That does seem compelling.  And others have argued that the workqueue
+> system's handling of offline CPUs should deal with this.
+>
+> Mukesh, was this a theoretical bug, or did you actually make it happen?
+> If you made it happen, as seems to have been the case given your original
+> email [1], could you please post your reproducer?
+>
+> 							Thanx, Paul
 
-- Arnaldo
 
- 
-> Adrian Hunter (25):
->       perf intel-pt: pkt-decoder-test: Fix scope of test_data
->       perf intel-pt: pkt-decoder: Remove misplaced linebreak
->       perf intel-pt: pkt-decoder: Add CFE and EVD packets
->       perf intel-pt: pkt-decoder: Add MODE.Exec IFLAG bit
->       perf intel-pt: decoder: Add config bit definitions
->       perf intel-pt: decoder: Factor out clearing of FUP event variables
->       perf intel-pt: decoder: Add CFE and EVD processing
->       perf intel-pt: decoder: Add MODE.Exec IFLAG processing
->       perf tools: Define Intel PT CFE / EVD event
->       perf tools: Define Intel PT iflag synthesized event
->       perf tools: Define new D and t flags
->       perf auxtrace: Add itrace option "I"
->       perf intel-pt: Record Event Trace capability flag
->       perf intel-pt: Synthesize CFE / EVD event
->       perf intel-pt: Synthesize iflag event
->       perf intel-pt: Synthesize new D and t flags
->       perf intel-pt: Force 'quick' mode when TNT is disabled
->       perf script: Display Intel PT CFE / EVD synthesized event
->       perf script: Display Intel PT iflag synthesized event
->       perf script: Display new D and t flags
->       perf scripts python: intel-pt-events.py: Add Event Trace
->       perf scripting python: Add all sample flags to DB export
->       perf scripts python: export-to-sqlite.py: Export all sample flags
->       perf scripts python: export-to-postgresql.py: Export all sample flags
->       perf intel-pt: Add documentation for Event Trace and TNT disable
-> 
->  tools/perf/Documentation/itrace.txt                |   2 +
->  tools/perf/Documentation/perf-intel-pt.txt         | 104 ++++++++-
->  tools/perf/Documentation/perf-script.txt           |  13 +-
->  .../arch/x86/tests/intel-pt-pkt-decoder-test.c     |  17 +-
->  tools/perf/arch/x86/util/intel-pt.c                |   7 +
->  tools/perf/builtin-script.c                        |  78 ++++++-
->  tools/perf/scripts/python/export-to-postgresql.py  |  17 +-
->  tools/perf/scripts/python/export-to-sqlite.py      |  19 +-
->  tools/perf/scripts/python/intel-pt-events.py       |  55 ++++-
->  tools/perf/util/auxtrace.c                         |   4 +
->  tools/perf/util/auxtrace.h                         |   4 +
->  tools/perf/util/event.h                            |  45 +++-
->  .../perf/util/intel-pt-decoder/intel-pt-decoder.c  | 245 +++++++++++++++++++--
->  .../perf/util/intel-pt-decoder/intel-pt-decoder.h  |  21 ++
->  .../util/intel-pt-decoder/intel-pt-pkt-decoder.c   |  47 +++-
->  .../util/intel-pt-decoder/intel-pt-pkt-decoder.h   |   3 +
->  tools/perf/util/intel-pt.c                         | 164 +++++++++++++-
->  .../util/scripting-engines/trace-event-python.c    |   3 +-
->  18 files changed, 779 insertions(+), 69 deletions(-)
-> 
-> 
-> Regards
-> Adrian
+No, it was not theoretical one. We saw this issue only once in our 
+testing and i don't think it is easy to reproduce otherwise
+it would been fixed by now.
 
--- 
+When one of thread calling synchronize_expedite_rcu with timer of 20s 
+but it did not get the exp funnel
+lock for 20s and there we crash it with panic() on timeout.
 
-- Arnaldo
+The other thread cpuhp which was having the lock got stuck at the point 
+mentioned at the below link.
+
+> [1] https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/
+
+Below sample test in combination of many other tests
+
+:loop
+adb shell "echo 0 > /sys/devices/system/cpu/cpu0/online"
+adb shell "echo 1 > /sys/devices/system/cpu/cpu0/online"
+adb shell "echo 0 > /sys/devices/system/cpu/cpu1/online"
+adb shell "echo 1 > /sys/devices/system/cpu/cpu1/online"
+adb shell "echo 0 > /sys/devices/system/cpu/cpu2/online"
+adb shell "echo 1 > /sys/devices/system/cpu/cpu2/online"
+adb shell "echo 0 > /sys/devices/system/cpu/cpu3/online"
+adb shell "echo 1 > /sys/devices/system/cpu/cpu3/online"
+adb shell "echo 0 > /sys/devices/system/cpu/cpu4/online"
+adb shell "echo 1 > /sys/devices/system/cpu/cpu4/online"
+adb shell "echo 0 > /sys/devices/system/cpu/cpu5/online"
+adb shell "echo 1 > /sys/devices/system/cpu/cpu5/online"
+adb shell "echo 0 > /sys/devices/system/cpu/cpu6/online"
+adb shell "echo 1 > /sys/devices/system/cpu/cpu6/online"
+adb shell "echo 0 > /sys/devices/system/cpu/cpu7/online"
+adb shell "echo 1 > /sys/devices/system/cpu/cpu7/online"
+goto loop
+
+-Mukesh

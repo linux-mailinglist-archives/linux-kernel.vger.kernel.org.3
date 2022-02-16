@@ -2,238 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD7E94B7CBE
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:56:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 931C84B7CD8
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245589AbiBPBrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 20:47:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35708 "EHLO
+        id S245634AbiBPBrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 20:47:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237223AbiBPBrb (ORCPT
+        with ESMTP id S245628AbiBPBri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 20:47:31 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDCF2BB11
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:47:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644976040; x=1676512040;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=eYUNITBN6R4wn0hwaSp8uqSR8Q2/MSgeFBEFFWfdDBk=;
-  b=BKmR61i8OGMmG6wE5IMdmILxwnpFMQ/zKb0cJBruVkAtWltbb1Qq7Wrc
-   j25FWAr11aVfQu+Kq4zx95485ZmziN1wFGZxTjCEeEQXjzCWTZfz9Pf2N
-   dRzuyA1w2NwD0UF27xf0tuAIawgbHFPF5iX5XZECQGQtagou8xpHiaP3S
-   T6C8dtMoBn6umHeFtvfxzdGFePetV4MSSdm2M1uEItMElAgMpmXu4/rsM
-   gwG0MkV6wsaxQdDQAR2Lb6/cAvY6WHR+DGu3MnFlels7p76GWfx1kJ3zg
-   vP86ETcvhXWhlsPK0kzrlF1Q2h04BCVqWBnrM50H+9h/o9Z78ezHsk1rY
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="231127117"
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="231127117"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 17:47:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="636255399"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 15 Feb 2022 17:47:18 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nK9PZ-000AFp-Pt; Wed, 16 Feb 2022 01:47:17 +0000
-Date:   Wed, 16 Feb 2022 09:47:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 0ef7c79e43d05936b83f0e6d8e33cc7cfaebaf18
-Message-ID: <620c579b.yQC747/kRGRy0S4I%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 15 Feb 2022 20:47:38 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310522BB17
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:47:26 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id h7-20020a17090a648700b001b927560c2bso1043467pjj.1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:47:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nlq8z2arOhNkxaYYwLaD3RpZ3GoR+UWwTLLnfnZTXnY=;
+        b=DMFJ896b0Vz97kUGCM8E2K0r8djjVIJRIYsuIAYOAkaBkfNx2QQREloFJCf8CCj90h
+         nKbD8u01PBQSSUY4vqTZ47YDWw/7PCDnAZR43J2UUhOWiepjRATef/AE87HO4hR7J2nz
+         GU11Ftko5mrJ93140D/KkqH3K/LZp7UXoU/O7KYuYnti1rfi+dGGasqbL8Ese5rf7bo9
+         0zlx0b2y45jW/cov0X+AFCz60VpwmqGu+eu6OeJ6DLRZRoZejU+362F7o9KjYYX+BWaK
+         Z6uEVIvEuOOUm7Sj5OgLhqGQtk5FGMlS5mNoa//ff5PaLIM4owD5EtniIIHFb0scDZ9e
+         EWmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nlq8z2arOhNkxaYYwLaD3RpZ3GoR+UWwTLLnfnZTXnY=;
+        b=UDLzxXlV8lJoEg7UoPJ0BHI/k5bhW41hzGDxUMaQ3RKMKKUcMDInpmaG1wePgUbzTD
+         5r2FW0dKUV6oYvHcYw+JNu7SUfEzzIJVIG3368rNtk8fXtFIypUGJRY/8lch7e8UrjOE
+         pbVOwJJvgKkB1szN4XbrEpK+WuTrMqIL7Vo+0BPmO96vVLrzKQMZ1vNZRSg1a4kxLjmP
+         NqyjLDn2osIzlLhiBnkKZH6TUoFsiDZAu5HgBIajNLWP/l/2XL7q32xAfdRwqvzPzxCA
+         9CF/6Jvyb4/yWgkuDIW2UECDJab/UbPfI6sd3wnrI3RjTZc2j3tb3M3EHbA8xO1h7/v0
+         6okw==
+X-Gm-Message-State: AOAM531uBzsMasQjFiseP6lS7CcX71DtM03pbSM1JURSImJ8K0/5zxPB
+        hOfdiG8/nt9hTVCzc+a1q17ADe8KTZw7OZ+iJrQPp//XXok=
+X-Google-Smtp-Source: ABdhPJwT3hvSagc3TEPzllcZbvtit0z9Qok37GmkfTUSfHMWGioDKT1cQ4/685zOQu/6xCOe6mcuODN03F7rGWAFZWg=
+X-Received: by 2002:a17:902:7296:b0:14b:4bc6:e81 with SMTP id
+ d22-20020a170902729600b0014b4bc60e81mr636363pll.132.1644976045685; Tue, 15
+ Feb 2022 17:47:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220127124058.1172422-1-ruansy.fnst@fujitsu.com> <20220127124058.1172422-8-ruansy.fnst@fujitsu.com>
+In-Reply-To: <20220127124058.1172422-8-ruansy.fnst@fujitsu.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 15 Feb 2022 17:47:19 -0800
+Message-ID: <CAPcyv4i_mGFO4z3sVYShhhvBO_WASee-EfZK0U+qWw5usDWzxQ@mail.gmail.com>
+Subject: Re: [PATCH v10 7/9] mm: Introduce mf_dax_kill_procs() for fsdax case
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>, david <david@fromorbit.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jane Chu <jane.chu@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 0ef7c79e43d05936b83f0e6d8e33cc7cfaebaf18  Merge x86/pasid into tip/master
+On Thu, Jan 27, 2022 at 4:41 AM Shiyang Ruan <ruansy.fnst@fujitsu.com> wrote:
+>
+> This function is called at the end of RMAP routine, i.e. filesystem
+> recovery function, to collect and kill processes using a shared page of
+> DAX file.  The difference with mf_generic_kill_procs() is, it accepts
+> file's (mapping,offset) instead of struct page because different files'
+> mappings and offsets may share the same page in fsdax mode.
+> It will be called when filesystem's RMAP results are found.
+>
+> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> ---
+>  include/linux/mm.h  |  4 ++
+>  mm/memory-failure.c | 91 +++++++++++++++++++++++++++++++++++++++------
+>  2 files changed, 84 insertions(+), 11 deletions(-)
+>
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 9b1d56c5c224..0420189e4788 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3195,6 +3195,10 @@ enum mf_flags {
+>         MF_SOFT_OFFLINE = 1 << 3,
+>         MF_UNPOISON = 1 << 4,
+>  };
+> +#if IS_ENABLED(CONFIG_FS_DAX)
+> +int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
+> +                     unsigned long count, int mf_flags);
+> +#endif /* CONFIG_FS_DAX */
+>  extern int memory_failure(unsigned long pfn, int flags);
+>  extern void memory_failure_queue(unsigned long pfn, int flags);
+>  extern void memory_failure_queue_kick(int cpu);
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index b2d13eba1071..8d123cc4102e 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -304,10 +304,9 @@ void shake_page(struct page *p)
+>  }
+>  EXPORT_SYMBOL_GPL(shake_page);
+>
+> -static unsigned long dev_pagemap_mapping_shift(struct page *page,
+> -               struct vm_area_struct *vma)
+> +static unsigned long dev_pagemap_mapping_shift(struct vm_area_struct *vma,
+> +               unsigned long address)
+>  {
+> -       unsigned long address = vma_address(page, vma);
+>         unsigned long ret = 0;
+>         pgd_t *pgd;
+>         p4d_t *p4d;
+> @@ -347,9 +346,8 @@ static unsigned long dev_pagemap_mapping_shift(struct page *page,
+>   * Schedule a process for later kill.
+>   * Uses GFP_ATOMIC allocations to avoid potential recursions in the VM.
+>   */
+> -static void add_to_kill(struct task_struct *tsk, struct page *p,
+> -                      struct vm_area_struct *vma,
+> -                      struct list_head *to_kill)
+> +static void add_to_kill(struct task_struct *tsk, struct page *p, pgoff_t pgoff,
+> +                       struct vm_area_struct *vma, struct list_head *to_kill)
+>  {
+>         struct to_kill *tk;
+>
+> @@ -360,9 +358,15 @@ static void add_to_kill(struct task_struct *tsk, struct page *p,
+>         }
+>
+>         tk->addr = page_address_in_vma(p, vma);
+> -       if (is_zone_device_page(p))
+> -               tk->size_shift = dev_pagemap_mapping_shift(p, vma);
+> -       else
+> +       if (is_zone_device_page(p)) {
+> +               /*
+> +                * Since page->mapping is not used for fsdax, we need
+> +                * calculate the address based on the vma.
+> +                */
+> +               if (p->pgmap->type == MEMORY_DEVICE_FS_DAX)
+> +                       tk->addr = vma_pgoff_address(vma, pgoff);
+> +               tk->size_shift = dev_pagemap_mapping_shift(vma, tk->addr);
+> +       } else
+>                 tk->size_shift = page_shift(compound_head(p));
+>
+>         /*
+> @@ -510,7 +514,7 @@ static void collect_procs_anon(struct page *page, struct list_head *to_kill,
+>                         if (!page_mapped_in_vma(page, vma))
+>                                 continue;
+>                         if (vma->vm_mm == t->mm)
+> -                               add_to_kill(t, page, vma, to_kill);
+> +                               add_to_kill(t, page, 0, vma, to_kill);
 
-elapsed time: 727m
+Why is the @pgoff argument 0? @pgoff is available. Not that I expect
+dax pages will ever be anonymous, might as well not leave that land
+mine for future refactoring.
 
-configs tested: 154
-configs skipped: 3
+Other than that you can add:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20220214
-mips                 randconfig-c004-20220214
-mips                      fuloong2e_defconfig
-sh                        sh7763rdp_defconfig
-arm                        realview_defconfig
-arm                          iop32x_defconfig
-arm                          simpad_defconfig
-csky                                defconfig
-mips                         rt305x_defconfig
-sh                           se7206_defconfig
-arm                         axm55xx_defconfig
-powerpc                     pq2fads_defconfig
-mips                         mpc30x_defconfig
-nios2                               defconfig
-arm                        spear6xx_defconfig
-powerpc                     mpc83xx_defconfig
-powerpc                 mpc8540_ads_defconfig
-arm                       imx_v6_v7_defconfig
-sh                            shmin_defconfig
-powerpc                      arches_defconfig
-arm                          pxa910_defconfig
-arm                            pleb_defconfig
-mips                           xway_defconfig
-mips                          rb532_defconfig
-sh                           se7721_defconfig
-ia64                             allmodconfig
-xtensa                    xip_kc705_defconfig
-mips                         db1xxx_defconfig
-sh                            titan_defconfig
-sparc                               defconfig
-arm64                            alldefconfig
-arm                        mvebu_v7_defconfig
-sh                          kfr2r09_defconfig
-arm                            xcep_defconfig
-m68k                        stmark2_defconfig
-s390                                defconfig
-sh                        edosk7705_defconfig
-arm                         at91_dt_defconfig
-powerpc                    klondike_defconfig
-h8300                               defconfig
-sh                             espt_defconfig
-mips                       capcella_defconfig
-arm                        cerfcube_defconfig
-mips                      loongson3_defconfig
-sh                          rsk7269_defconfig
-powerpc                      ppc6xx_defconfig
-microblaze                          defconfig
-powerpc                         wii_defconfig
-powerpc                 mpc837x_mds_defconfig
-arc                        nsimosci_defconfig
-xtensa                  nommu_kc705_defconfig
-arm                  randconfig-c002-20220214
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allmodconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a013-20220214
-x86_64               randconfig-a014-20220214
-x86_64               randconfig-a012-20220214
-x86_64               randconfig-a015-20220214
-x86_64               randconfig-a011-20220214
-x86_64               randconfig-a016-20220214
-i386                 randconfig-a013-20220214
-i386                 randconfig-a016-20220214
-i386                 randconfig-a012-20220214
-i386                 randconfig-a015-20220214
-i386                 randconfig-a011-20220214
-i386                 randconfig-a014-20220214
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                randconfig-r042-20220214
-arc                  randconfig-r043-20220214
-s390                 randconfig-r044-20220214
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-riscv                randconfig-c006-20220214
-i386                 randconfig-c001-20220214
-x86_64               randconfig-c007-20220214
-powerpc              randconfig-c003-20220214
-arm                  randconfig-c002-20220214
-mips                 randconfig-c004-20220214
-riscv                randconfig-c006-20220215
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220215
-arm                  randconfig-c002-20220215
-i386                          randconfig-c001
-mips                 randconfig-c004-20220215
-arm                        neponset_defconfig
-powerpc                      ppc44x_defconfig
-powerpc               mpc834x_itxgp_defconfig
-mips                          rm200_defconfig
-arm                         palmz72_defconfig
-arm                         mv78xx0_defconfig
-powerpc                     kmeter1_defconfig
-powerpc                      obs600_defconfig
-powerpc                     tqm8560_defconfig
-arm                         lpc32xx_defconfig
-mips                     cu1830-neo_defconfig
-x86_64               randconfig-a002-20220214
-x86_64               randconfig-a006-20220214
-x86_64               randconfig-a005-20220214
-x86_64               randconfig-a004-20220214
-x86_64               randconfig-a003-20220214
-x86_64               randconfig-a001-20220214
-i386                 randconfig-a004-20220214
-i386                 randconfig-a005-20220214
-i386                 randconfig-a006-20220214
-i386                 randconfig-a002-20220214
-i386                 randconfig-a003-20220214
-i386                 randconfig-a001-20220214
-hexagon              randconfig-r045-20220214
-hexagon              randconfig-r041-20220214
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>

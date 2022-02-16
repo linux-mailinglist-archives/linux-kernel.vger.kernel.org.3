@@ -2,99 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D6954B8769
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 13:13:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F914B8772
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 13:20:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233027AbiBPMN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 07:13:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33078 "EHLO
+        id S233089AbiBPMUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 07:20:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbiBPMNZ (ORCPT
+        with ESMTP id S230059AbiBPMUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 07:13:25 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B3B2A228E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 04:13:13 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id bg10so1844715ejb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 04:13:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Jn+zGX1FBd9vuS3OAi6WVZ0soSNdyvhXWR8AhE72jvI=;
-        b=cDwxlDNxUlDIJ9vH2rzXMofLaiR4eDlOVY2DTfpe+3/cvuGEOl72GXzY4g7JK2A93H
-         Wktxo81+/osKy1wWWLCZFOEqheduKb/oSwjHtqtQtImUbEoCP9eDDUHwidHFUG4Jfnp1
-         5MRogANZxCY1mvcTgsleVDbitLGgEtZpgCZVNFSE0+SSLoFQKGSNx4LP79k6sJ8iexdY
-         p3vwwQo6cTMWt4nX8xubUZ+u7q6jEYe/26SST1IDESpxEXMW0kY+LDvxXewIXBjE8N+5
-         phMQS+22eCrZlbq/1qNjW6M8sOlkmXPs6Rm4MKtSWDF/7xxpfLbawrPaHDY5Bwd6TQjJ
-         EFvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Jn+zGX1FBd9vuS3OAi6WVZ0soSNdyvhXWR8AhE72jvI=;
-        b=LI6c8ummEeL83RrE37TcfW3s1aBQx8BoqbPhG6eN51pFHnzBEMpgkzAIcPWdN794DQ
-         l98hnABzW+FNCqi1YsWzkB3lr49I8CZWAkK/HzZRim9kGp1hINLcJzVy3SzoOPoxwFkb
-         eh2XeWDfBRdBi8YhTnLNXDNLGN3O54C2ARz2IEivXV+K6TU1z38jFQB4vUi4WR21C0zG
-         eMd7j/+4jfitLWR9FQG5l3+GwMCnKHIkMByUpNB5zlnq9PyeSZ20F26F9k4qBGnzCRLb
-         YZTjlnl2O59BJQSRecicGD/4FNemJp6nyT6bp3CcHxMbT+81NyUy/l840027BBPe3Hih
-         lErA==
-X-Gm-Message-State: AOAM533wAeVm4ReiciKLa4dXjCBMkT8IpAHA6Q2e6RRWEyhb2m9iYLEh
-        p8CWnnXXEE036d1MmVWB4NASXYUI6Ej9TovyCvU=
-X-Google-Smtp-Source: ABdhPJxoC5M0Rs/v2YU1snALWN0eUF4+bPCK/d9abePkPEdarkXB0MAnNsh3OcL5+o+BDGTnQ1g0U1otBRrNKC1uL8M=
-X-Received: by 2002:a17:906:e92:b0:6ce:3f3a:5e64 with SMTP id
- p18-20020a1709060e9200b006ce3f3a5e64mr2112607ejf.194.1645013591907; Wed, 16
- Feb 2022 04:13:11 -0800 (PST)
+        Wed, 16 Feb 2022 07:20:30 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A5D7A99D
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 04:20:17 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7BC8E21763;
+        Wed, 16 Feb 2022 12:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645014016; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HyH1MNE7egLvg30v1Q1SxaIZhjjprdO4nNoi0o4PKa8=;
+        b=WWETuMwuBOenVDtlSZtdg7qqGDzPn0fgx99DAKbozjG8sdmVCsC9+nKEqF1ekBW9CXL6ck
+        jVFu3tMu/ZqFbqpvDnxEG8ylT9nWE0P+eAwrpP7klP4oRv489SuoxlM0FO/MtOw9PB/Z9w
+        KiyAa7ZlP0fenzWDaIk+B//Uhf2a08Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645014016;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HyH1MNE7egLvg30v1Q1SxaIZhjjprdO4nNoi0o4PKa8=;
+        b=/MZTtvo12He7rxSHhCntTxeZs104nSh/dCL9HlXACuboZpW6uT+Mni5qcjCcgoiX/9wLEA
+        e7oI0dYcTfmmwpCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5BFE413AF3;
+        Wed, 16 Feb 2022 12:20:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id lzTZFQDsDGIeSgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 16 Feb 2022 12:20:16 +0000
+Message-ID: <fd811d55-f14b-4203-0651-daf56e329d79@suse.cz>
+Date:   Wed, 16 Feb 2022 13:20:16 +0100
 MIME-Version: 1.0
-Received: by 2002:a17:907:6d12:0:0:0:0 with HTTP; Wed, 16 Feb 2022 04:13:11
- -0800 (PST)
-Reply-To: michellegoodman45@gmail.com
-From:   Michelle Goodman <sarahtage24@gmail.com>
-Date:   Wed, 16 Feb 2022 12:13:11 +0000
-Message-ID: <CAK7Gz5wng-Yx3OTnaV0z+vYnsB_F9_jATXRu9khkArPCxEHFjw@mail.gmail.com>
-Subject: Halllo
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:62a listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4895]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [michellegoodman45[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [sarahtage24[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [sarahtage24[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 3/5] mm/page_alloc: Simplify how many pages are selected
+ per pcp list during bulk free
+Content-Language: en-US
+To:     Mel Gorman <mgorman@techsingularity.net>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Aaron Lu <aaron.lu@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+References: <20220215145111.27082-1-mgorman@techsingularity.net>
+ <20220215145111.27082-4-mgorman@techsingularity.net>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220215145111.27082-4-mgorman@techsingularity.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hallo, ich hoffe du hast meine Nachricht erhalten.
-Ich brauche schnelle Antworten
-Danke.
-Mchelle
+On 2/15/22 15:51, Mel Gorman wrote:
+> free_pcppages_bulk() selects pages to free by round-robining between
+> lists. Originally this was to evenly shrink pages by migratetype
+> but uneven freeing is inevitable due to high pages. Simplify list
+> selection by starting with a list that definitely has pages on it in
+> free_unref_page_commit() and for drain, it does not matter where draining
+> starts as all pages are removed.
+> 
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+
+Now pindex is passed instead of initialized to 0, but still incremented
+first before doing anything with it, which AFAICS is wrong. But that
+predates this patch, which itself seems ok, so:
+
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+
+> ---
+>  mm/page_alloc.c | 34 +++++++++++-----------------------
+>  1 file changed, 11 insertions(+), 23 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index c5110fdeb115..5e8c7cbe7a41 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -1447,13 +1447,11 @@ static inline void prefetch_buddy(struct page *page, unsigned int order)
+>   * count is the number of pages to free.
+>   */
+>  static void free_pcppages_bulk(struct zone *zone, int count,
+> -					struct per_cpu_pages *pcp)
+> +					struct per_cpu_pages *pcp,
+> +					int pindex)
+>  {
+> -	int pindex = 0;
+>  	int min_pindex = 0;
+>  	int max_pindex = NR_PCP_LISTS - 1;
+> -	int batch_free = 0;
+> -	int nr_freed = 0;
+>  	unsigned int order;
+>  	int prefetch_nr = READ_ONCE(pcp->batch);
+>  	bool isolated_pageblocks;
+> @@ -1467,16 +1465,10 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+>  	count = min(pcp->count, count);
+>  	while (count > 0) {
+>  		struct list_head *list;
+> +		int nr_pages;
+>  
+> -		/*
+> -		 * Remove pages from lists in a round-robin fashion. A
+> -		 * batch_free count is maintained that is incremented when an
+> -		 * empty list is encountered.  This is so more pages are freed
+> -		 * off fuller lists instead of spinning excessively around empty
+> -		 * lists
+> -		 */
+> +		/* Remove pages from lists in a round-robin fashion. */
+>  		do {
+> -			batch_free++;
+>  			if (++pindex == NR_PCP_LISTS)
+>  				pindex = 0;
+>  			list = &pcp->lists[pindex];
+> @@ -1489,18 +1481,15 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+>  				min_pindex++;
+>  		} while (1);
+>  
+> -		/* This is the only non-empty list. Free them all. */
+> -		if (batch_free >= max_pindex - min_pindex)
+> -			batch_free = count;
+> -
+>  		order = pindex_to_order(pindex);
+> +		nr_pages = 1 << order;
+>  		BUILD_BUG_ON(MAX_ORDER >= (1<<NR_PCP_ORDER_WIDTH));
+>  		do {
+>  			page = list_last_entry(list, struct page, lru);
+>  			/* must delete to avoid corrupting pcp list */
+>  			list_del(&page->lru);
+> -			nr_freed += 1 << order;
+> -			count -= 1 << order;
+> +			count -= nr_pages;
+> +			pcp->count -= nr_pages;
+>  
+>  			if (bulkfree_pcp_prepare(page))
+>  				continue;
+> @@ -1524,9 +1513,8 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+>  				prefetch_buddy(page, order);
+>  				prefetch_nr--;
+>  			}
+> -		} while (count > 0 && --batch_free && !list_empty(list));
+> +		} while (count > 0 && !list_empty(list));
+>  	}
+> -	pcp->count -= nr_freed;
+>  
+>  	/*
+>  	 * local_lock_irq held so equivalent to spin_lock_irqsave for
+> @@ -3095,7 +3083,7 @@ void drain_zone_pages(struct zone *zone, struct per_cpu_pages *pcp)
+>  	batch = READ_ONCE(pcp->batch);
+>  	to_drain = min(pcp->count, batch);
+>  	if (to_drain > 0)
+> -		free_pcppages_bulk(zone, to_drain, pcp);
+> +		free_pcppages_bulk(zone, to_drain, pcp, 0);
+>  	local_unlock_irqrestore(&pagesets.lock, flags);
+>  }
+>  #endif
+> @@ -3116,7 +3104,7 @@ static void drain_pages_zone(unsigned int cpu, struct zone *zone)
+>  
+>  	pcp = per_cpu_ptr(zone->per_cpu_pageset, cpu);
+>  	if (pcp->count)
+> -		free_pcppages_bulk(zone, pcp->count, pcp);
+> +		free_pcppages_bulk(zone, pcp->count, pcp, 0);
+>  
+>  	local_unlock_irqrestore(&pagesets.lock, flags);
+>  }
+> @@ -3397,7 +3385,7 @@ static void free_unref_page_commit(struct page *page, unsigned long pfn,
+>  	if (pcp->count >= high) {
+>  		int batch = READ_ONCE(pcp->batch);
+>  
+> -		free_pcppages_bulk(zone, nr_pcp_free(pcp, high, batch), pcp);
+> +		free_pcppages_bulk(zone, nr_pcp_free(pcp, high, batch), pcp, pindex);
+>  	}
+>  }
+>  
+

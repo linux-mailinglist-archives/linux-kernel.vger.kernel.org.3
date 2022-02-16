@@ -2,280 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BE04B7C8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 413A34B7C51
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:12:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245459AbiBPBYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 20:24:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43968 "EHLO
+        id S245241AbiBPBCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 20:02:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240360AbiBPBYr (ORCPT
+        with ESMTP id S245235AbiBPBC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 20:24:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5D8A279C;
-        Tue, 15 Feb 2022 17:24:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 176A4B81204;
-        Wed, 16 Feb 2022 01:24:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C025DC340EB;
-        Wed, 16 Feb 2022 01:24:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644974673;
-        bh=hrfBIdKht3dcKeSKr/sHyUC3lpNs97F3l7gh+ZVQELo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qBgcbf5kEm16L57DlbBeR9ECJsFyNnzk4Rwpso5PHEhxoW4db5nipJRVek9+mqXdq
-         DsHrUBWesS46N4k3DuNrvYoTay3yrn8FG0DvTIChUL+8+atDm5OC7bHicMDRrOnEwv
-         e4+26SfEoJVqVUtvwNNJb0bqOCH62tnld0i8Gh9f3UQKdXbf+y+8pJ4S2towFFXtJC
-         jvKHFORkAXo2OdrOUsQB9RMh9+75EPilngHJgXd/qxYJrphVKwpQiM08UDQw3uWOGe
-         hJ8fd0dh1EtPsfi533y9ddj3Q6aXeXRbh7JfVwAN/l/lxkrEHo4QrN/lDbXyuJ2F+K
-         FM6rAd0U+RdjA==
-Date:   Tue, 15 Feb 2022 17:24:33 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     xfs <linux-xfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/3] xfs: introduce xfs_bremapi_from_cowfork()
-Message-ID: <20220216012433.GI8338@magnolia>
-References: <20220209073655.22162-1-hsiangkao@linux.alibaba.com>
- <20220209073655.22162-4-hsiangkao@linux.alibaba.com>
+        Tue, 15 Feb 2022 20:02:29 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1748879F
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:02:17 -0800 (PST)
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220216010215epoutp044337a28cb135aa681bc0844dca9cc084~UHohwmpF41566215662epoutp04C
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:02:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220216010215epoutp044337a28cb135aa681bc0844dca9cc084~UHohwmpF41566215662epoutp04C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1644973335;
+        bh=W76p5lzZuTrN/LwNZhMY5heYVmdXwnLF1jR2bQKZcjo=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=FXAIq+y8cRIA6LpnoiMatK9GdAARFEDOdeoNWfKvMf2a7vEge3vaFskuwbXZA4D5b
+         lwubJybHcTpg9emuqhAYgaWQimXVaPUl+S32y+epmLjjDGDwFJS6+KkZjpZ0SC0fyB
+         BbbOpbyd/ARsplgLodSfXN6I4QfzyAXA8sNKdZpA=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220216010214epcas1p2f4e8fe0a9815a2e4f2667ef9daec3820~UHohgW00X0154301543epcas1p2g;
+        Wed, 16 Feb 2022 01:02:14 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.36.136]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4Jz06V1DySz4x9QQ; Wed, 16 Feb
+        2022 01:02:10 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        23.B1.28648.E0D4C026; Wed, 16 Feb 2022 10:02:06 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220216010206epcas1p3532638080c2ec47aec8add2f126128f8~UHoZvVtk91822018220epcas1p3O;
+        Wed, 16 Feb 2022 01:02:06 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220216010206epsmtrp20792e037782f16ef98bb9cd82ee04ef9~UHoZudLhE1789517895epsmtrp2u;
+        Wed, 16 Feb 2022 01:02:06 +0000 (GMT)
+X-AuditID: b6c32a39-003ff70000006fe8-1d-620c4d0eb184
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        44.C3.08738.E0D4C026; Wed, 16 Feb 2022 10:02:06 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220216010206epsmtip18ff9dd2f9c213256a4ea2d57c17fa31f~UHoZiM0P03127131271epsmtip1L;
+        Wed, 16 Feb 2022 01:02:06 +0000 (GMT)
+Subject: Re: [PATCH][next] extcon: usbc-cros-ec: Use struct_size() helper in
+ kzalloc()
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <3136d3aa-4c01-33be-86de-1a2b3b6b6733@samsung.com>
+Date:   Wed, 16 Feb 2022 10:26:34 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209073655.22162-4-hsiangkao@linux.alibaba.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220125192634.GA70834@embeddedor>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprIJsWRmVeSWpSXmKPExsWy7bCmvi6fL0+SwY8PlhbTn1xmsTj1ahmz
+        xa+L01gt5q3/yWhxedccNovbjSvYHNg8ZjdcZPHYtKqTzaNvyypGj8+b5AJYorJtMlITU1KL
+        FFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4CWKymUJeaUAoUCEouL
+        lfTtbIryS0tSFTLyi0tslVILUnIKTAv0ihNzi0vz0vXyUkusDA0MjEyBChOyM870bGUt6OCu
+        +L7xEVMD4ybOLkZODgkBE4k/TZOYuhi5OIQEdjBKXDz7mxHC+cQo0d2ynh3C+cwo8X0/SAai
+        5fubGcwQiV2MEt/+P2eFcN4zSpybdY8FpEpYIELi/+KHYAkRgeWMElOf32MDSTALOEq0vt4M
+        ZrMJaEnsf3EDzOYXUJS4+uMx2ApeATuJ20dusYLYLAKqEgdnnWUHsUUFwiRObmuBqhGUODnz
+        CdgyTgEDiZsTzrJAzBeXuPVkPhOELS+x/e0csFMlBHo5JN5/vQr1g4tE579DULawxKvjW9gh
+        bCmJz+/2skE0NDNKNLy4zQjh9DBKHH3WxwJRZSyxf+lkoBUcQCs0Jdbv0ocIK0rs/D2XEWIz
+        n8S7rz2sICUSArwSHW1CECXKEpcf3GWCsCUlFrd3sk1gVJqF5J9ZSH6YheSHWQjLFjCyrGIU
+        Sy0ozk1PLTYsMIVHeHJ+7iZGcNrUstzBOP3tB71DjEwcjIcYJTiYlUR4485yJgnxpiRWVqUW
+        5ccXleakFh9iNAWG8ERmKdHkfGDiziuJNzSxNDAxMzI2sTA0M1QS51017XSikEB6Yklqdmpq
+        QWoRTB8TB6dUA9OG3YJ9EdeOJ/7XZQrPl/6ysenr6w0Hw9LKwsVOrJ3xyyplx+ca8apZloVn
+        v1bFVW80+BW+3nmz1qbI1Nlpxqrzppa9LvxWFuB57nHC22nCzG0bftoHP3nvJPTLxl/F2PzC
+        w4bg9Z13D+sr74mw1WFfcbk6I4A3wM+efYY9/yzb77UcG/8H5xf+15nrWx5r8OL2jxzJ8Nlt
+        0obHGcNXXPw18/2iCodLDqL2N3emSf59/+Gn6vXrmwo1U40UiqtX+Bg09B6an9toaLDjfpn9
+        p82Pn6e5st48kH6vk0ExnTHbPo/lpt40lY60ZunwZVFnOP+9sVvdfWPCT+ndaW7vZs7942oS
+        G5PGZLeJ92bgYiWW4oxEQy3mouJEAK7fnyQkBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrFLMWRmVeSWpSXmKPExsWy7bCSnC6fL0+SwazP8hbTn1xmsTj1ahmz
+        xa+L01gt5q3/yWhxedccNovbjSvYHNg8ZjdcZPHYtKqTzaNvyypGj8+b5AJYorhsUlJzMstS
+        i/TtErgyzvRsZS3o4K74vvERUwPjJs4uRk4OCQETie9vZjB3MXJxCAnsYJTY2jSRBSIhKTHt
+        4lGgBAeQLSxx+HAxRM1bRom9P5awgtQIC0RI/F/8kBUkISKwnFHi9YGZYAlmAUeJ1teb2SA6
+        mhklJnffA0uwCWhJ7H9xgw3E5hdQlLj64zEjiM0rYCdx+8gtsBoWAVWJg7POsoPYogJhEjuX
+        PGaCqBGUODnzCdh1nAIGEjcnnGWBWKYu8WfeJWYIW1zi1pP5TBC2vMT2t3OYJzAKz0LSPgtJ
+        yywkLbOQtCxgZFnFKJlaUJybnltsWGCUl1quV5yYW1yal66XnJ+7iREcPVpaOxj3rPqgd4iR
+        iYPxEKMEB7OSCG/cWc4kId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rwXuk7GCwmkJ5akZqemFqQW
+        wWSZODilGpiixc4XzDZd9On0rv13nOu9ItSPm/5d8zoqZA73mz08hZprv8Syq96fufBdfFgI
+        w9wJ3seufhHJYLb/9e1rs/iFW00Sp7Vm52bfYGWqP8kyYe3Mrj28XTemLRHxMHZbsMWrxVH4
+        xz6Hj2KmohJac4rOpt+0Dby4iOVbYYChXcjnrZPE+Teeyp4j/uTHhlzN6w86uaev6eTKDfa4
+        eJt1+12mkJKVbsJMcf0zMz+FNZ0TuZl6Zs3GtFc1ne8Vpb7P537pezA/cc+fFcnLUs/P1ZO4
+        2a++IWtr+vPIHg9lQfcGzQDRX8anliVvWZDZuJHN7sn2H2dk0mXCLTaZrZ2qondhn872hUfu
+        7H8taGjAYaCjxFKckWioxVxUnAgAcHk94Q0DAAA=
+X-CMS-MailID: 20220216010206epcas1p3532638080c2ec47aec8add2f126128f8
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220125192140epcas1p27d09a1d2ceaed49dd7c410c0223c51d7
+References: <CGME20220125192140epcas1p27d09a1d2ceaed49dd7c410c0223c51d7@epcas1p2.samsung.com>
+        <20220125192634.GA70834@embeddedor>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 03:36:55PM +0800, Gao Xiang wrote:
-> Previously, xfs_reflink_end_cow_extent() will unconditionally unmap
-> the corresponding old extent and remap an extent from COW fork.
-> However, it seems somewhat ineffective since the old bmbt records can
-> be directly updated for many cases instead.
+On 1/26/22 4:26 AM, Gustavo A. R. Silva wrote:
+> Make use of the struct_size() helper instead of an open-coded version,
+> in order to avoid any potential type mistakes or integer overflows that,
+> in the worst scenario, could lead to heap overflows.
 > 
-> This patch uses introduced xfs_bmap_update_extent_real() in the
-> previous patch for most extent inclusive cases or it will fall back
-> to the old way if such replacement is not possible.
+> Also, address the following sparse warnings:
+> drivers/extcon/extcon-usbc-cros-ec.c:71:23: warning: using sizeof on a flexible structure
 > 
-> Actually, we're planing to use a modified alway-cow like atomic write
-> approach internally, therefore it'd be nice to do some optimization
-> to reduce some metadata overhead.
-> 
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> Link: https://protect2.fireeye.com/v1/url?k=2dc5c327-725efa52-2dc44868-0cc47a31ce4e-cb277ab0badba227&q=1&e=e53efbe1-ab25-4a39-a8b1-9e099fcccde3&u=https%3A%2F%2Fgithub.com%2FKSPP%2Flinux%2Fissues%2F174
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 > ---
->  fs/xfs/libxfs/xfs_bmap.c | 117 ++++++++++++++++++++++++++++++++++++---
->  fs/xfs/libxfs/xfs_bmap.h |   3 +
->  fs/xfs/xfs_reflink.c     |  19 +------
->  3 files changed, 112 insertions(+), 27 deletions(-)
+>  drivers/extcon/extcon-usbc-cros-ec.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/fs/xfs/libxfs/xfs_bmap.c b/fs/xfs/libxfs/xfs_bmap.c
-> index a10476dee701..0e132f811f7a 100644
-> --- a/fs/xfs/libxfs/xfs_bmap.c
-> +++ b/fs/xfs/libxfs/xfs_bmap.c
-> @@ -5880,6 +5880,114 @@ xfs_bmap_collapse_extents(
->  	return error;
->  }
+> diff --git a/drivers/extcon/extcon-usbc-cros-ec.c b/drivers/extcon/extcon-usbc-cros-ec.c
+> index 5290cc2d19d9..fde1db62be0d 100644
+> --- a/drivers/extcon/extcon-usbc-cros-ec.c
+> +++ b/drivers/extcon/extcon-usbc-cros-ec.c
+> @@ -68,7 +68,7 @@ static int cros_ec_pd_command(struct cros_ec_extcon_info *info,
+>  	struct cros_ec_command *msg;
+>  	int ret;
 >  
-> +/* Deferred mapping is only for real extents in the data fork. */
-> +static bool
-> +xfs_bmap_is_update_needed(
-> +	struct xfs_bmbt_irec	*bmap)
-> +{
-> +	return  bmap->br_startblock != HOLESTARTBLOCK &&
-> +		bmap->br_startblock != DELAYSTARTBLOCK;
-> +}
-> +
-> +/* del is an extent from COW fork */
-> +int
-> +xfs_bremapi_from_cowfork(
-> +	struct xfs_trans	*tp,
-> +	struct xfs_inode	*ip,
-> +	struct xfs_bmbt_irec	*icow)
-> +{
-> +	int			error;
-> +	xfs_filblks_t		rlen;
-> +
-> +	/* Use the old (unmap-remap) way for real-time inodes instead */
-> +	if (!XFS_IS_REALTIME_INODE(ip) && xfs_bmap_is_update_needed(icow)) {
-
-When would be be remapping a realtime file with a COW fork?
-
-> +		xfs_fileoff_t		start, end, max_len;
-> +		struct xfs_bmbt_irec	got;
-> +		struct xfs_iext_cursor	icur;
-> +		struct xfs_btree_cur	*cur = NULL;
-> +		struct xfs_ifork	*ifp = XFS_IFORK_PTR(ip, XFS_DATA_FORK);
-> +		int			logflags = 0;
-> +
-> +		error = xfs_iread_extents(tp, ip, XFS_DATA_FORK);
-> +		if (error)
-> +			return error;
-> +
-> +		max_len = xfs_refcount_max_unmap(tp->t_log_res);
-> +		if (max_len < icow->br_blockcount) {
-> +			icow->br_startoff += icow->br_blockcount - max_len;
-> +			icow->br_startblock += icow->br_blockcount - max_len;
-> +			icow->br_blockcount = max_len;
-> +		}
-> +
-> +		end = icow->br_startoff + icow->br_blockcount;
-> +		if (!xfs_iext_count(ifp) || !xfs_iext_lookup_extent_before(ip,
-> +				ifp, &end, &icur, &got) ||
-> +		    isnullstartblock(got.br_startblock) ||
-> +		    icow->br_startoff + icow->br_blockcount > got.br_startoff +
-> +				got.br_blockcount) {
-> +			error = -EAGAIN;
-> +		} else {
-> +			end = icow->br_startoff + icow->br_blockcount;
-> +			start = XFS_FILEOFF_MAX(icow->br_startoff,
-> +						got.br_startoff);
-> +			ASSERT(start < end);
-> +
-> +			/* Trim the extent to what we need */
-> +			xfs_trim_extent(icow, start, end - start);
-> +			xfs_trim_extent(&got, start, end - start);
-> +
-> +			if (ifp->if_format == XFS_DINODE_FMT_BTREE) {
-> +				cur = xfs_bmbt_init_cursor(tp->t_mountp, tp, ip,
-> +							   XFS_DATA_FORK);
-> +				cur->bc_ino.flags = 0;
-> +			}
-> +
-> +			/*
-> +			 * Free the CoW orphan record (it should be done here
-> +			 * before updating extent due to rmapbt update)
-> +			 */
-> +			xfs_refcount_free_cow_extent(tp, icow->br_startblock,
-> +						     icow->br_blockcount);
-> +
-> +			xfs_bmap_update_extent_real(tp, ip, XFS_DATA_FORK,
-> +					&icur, &cur, icow, &logflags, false);
-
-Hmm... are you directly updating the data fork mapping record from the
-COW fork mapping record?  Is the performance advantage you mentioned
-earlier a result of this code no longer logging a bmap map intent item
-and reducing the transaction roll count by one?
-
---D
-
-> +
-> +			/* Free previous referenced space */
-> +			xfs_refcount_decrease_extent(tp, &got);
-> +
-> +			trace_xfs_reflink_cow_remap(ip, icow);
-> +			error = 0;
-> +		}
-> +		if (cur)
-> +			xfs_btree_del_cursor(cur, 0);
-> +		if (logflags)
-> +			xfs_trans_log_inode(tp, ip, logflags);
-> +		if (!error)
-> +			return 0;
-> +	}
-> +
-> +	rlen = icow->br_blockcount;
-> +	error = __xfs_bunmapi(tp, ip, icow->br_startoff, &rlen, 0, 1);
-> +	if (error)
-> +		return error;
-> +
-> +	/* Trim the extent to whatever got unmapped. */
-> +	xfs_trim_extent(icow, icow->br_startoff + rlen,
-> +			icow->br_blockcount - rlen);
-> +	/* Free the CoW orphan record. */
-> +	xfs_refcount_free_cow_extent(tp, icow->br_startblock,
-> +				     icow->br_blockcount);
-> +
-> +	/* Map the new blocks into the data fork. */
-> +	xfs_bmap_map_extent(tp, ip, icow);
-> +
-> +	/* Charge this new data fork mapping to the on-disk quota. */
-> +	xfs_trans_mod_dquot_byino(tp, ip, XFS_TRANS_DQ_DELBCOUNT,
-> +			(long)icow->br_blockcount);
-> +	trace_xfs_reflink_cow_remap(ip, icow);
-> +	return 0;
-> +}
-> +
->  /* Make sure we won't be right-shifting an extent past the maximum bound. */
->  int
->  xfs_bmap_can_insert_extents(
-> @@ -6123,15 +6231,6 @@ xfs_bmap_split_extent(
->  	return error;
->  }
+> -	msg = kzalloc(sizeof(*msg) + max(outsize, insize), GFP_KERNEL);
+> +	msg = kzalloc(struct_size(msg, data, max(outsize, insize)), GFP_KERNEL);
+>  	if (!msg)
+>  		return -ENOMEM;
 >  
-> -/* Deferred mapping is only for real extents in the data fork. */
-> -static bool
-> -xfs_bmap_is_update_needed(
-> -	struct xfs_bmbt_irec	*bmap)
-> -{
-> -	return  bmap->br_startblock != HOLESTARTBLOCK &&
-> -		bmap->br_startblock != DELAYSTARTBLOCK;
-> -}
-> -
->  /* Record a bmap intent. */
->  static int
->  __xfs_bmap_add(
-> diff --git a/fs/xfs/libxfs/xfs_bmap.h b/fs/xfs/libxfs/xfs_bmap.h
-> index c52ff94786e2..9da1cff41c1c 100644
-> --- a/fs/xfs/libxfs/xfs_bmap.h
-> +++ b/fs/xfs/libxfs/xfs_bmap.h
-> @@ -220,6 +220,9 @@ int	xfs_bmap_update_extent_real(struct xfs_trans *tp,
->  		struct xfs_inode *ip, int whichfork,
->  		struct xfs_iext_cursor *icur, struct xfs_btree_cur **curp,
->  		struct xfs_bmbt_irec *new, int *logflagsp, bool convert);
-> +int
-> +xfs_bremapi_from_cowfork(struct xfs_trans *tp, struct xfs_inode *ip,
-> +		struct xfs_bmbt_irec *icow);
->  
->  enum xfs_bmap_intent_type {
->  	XFS_BMAP_MAP = 1,
-> diff --git a/fs/xfs/xfs_reflink.c b/fs/xfs/xfs_reflink.c
-> index 276387a6a85d..75bd2e03cd5b 100644
-> --- a/fs/xfs/xfs_reflink.c
-> +++ b/fs/xfs/xfs_reflink.c
-> @@ -590,7 +590,6 @@ xfs_reflink_end_cow_extent(
->  	struct xfs_mount	*mp = ip->i_mount;
->  	struct xfs_trans	*tp;
->  	struct xfs_ifork	*ifp = XFS_IFORK_PTR(ip, XFS_COW_FORK);
-> -	xfs_filblks_t		rlen;
->  	unsigned int		resblks;
->  	int			error;
->  
-> @@ -651,26 +650,10 @@ xfs_reflink_end_cow_extent(
->  		goto out_cancel;
->  	}
->  
-> -	/* Unmap the old blocks in the data fork. */
-> -	rlen = del.br_blockcount;
-> -	error = __xfs_bunmapi(tp, ip, del.br_startoff, &rlen, 0, 1);
-> +	error = xfs_bremapi_from_cowfork(tp, ip, &del);
->  	if (error)
->  		goto out_cancel;
->  
-> -	/* Trim the extent to whatever got unmapped. */
-> -	xfs_trim_extent(&del, del.br_startoff + rlen, del.br_blockcount - rlen);
-> -	trace_xfs_reflink_cow_remap(ip, &del);
-> -
-> -	/* Free the CoW orphan record. */
-> -	xfs_refcount_free_cow_extent(tp, del.br_startblock, del.br_blockcount);
-> -
-> -	/* Map the new blocks into the data fork. */
-> -	xfs_bmap_map_extent(tp, ip, &del);
-> -
-> -	/* Charge this new data fork mapping to the on-disk quota. */
-> -	xfs_trans_mod_dquot_byino(tp, ip, XFS_TRANS_DQ_DELBCOUNT,
-> -			(long)del.br_blockcount);
-> -
->  	/* Remove the mapping from the CoW fork. */
->  	xfs_bmap_del_extent_cow(ip, &icur, &got, &del);
->  
-> -- 
-> 2.24.4
 > 
+
+Applied it. Thanks.
+
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics

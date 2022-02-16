@@ -2,51 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA5D4B8C3C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:16:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5DC24B8C35
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:16:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235481AbiBPPRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 10:17:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40880 "EHLO
+        id S232005AbiBPPQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 10:16:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233873AbiBPPRB (ORCPT
+        with ESMTP id S233873AbiBPPQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 10:17:01 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 069B39F391
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 07:16:49 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AB8FCD6E;
-        Wed, 16 Feb 2022 07:16:48 -0800 (PST)
-Received: from [10.1.31.148] (e127744.cambridge.arm.com [10.1.31.148])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 550963F70D;
-        Wed, 16 Feb 2022 07:16:47 -0800 (PST)
-Subject: Re: [RFC PATCH 1/2] perf: arm_spe: Fix consistency of PMSCR register
- bit CX
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, mark.rutland@arm.com, james.clark@arm.com
-References: <20220117124432.3119132-1-german.gomez@arm.com>
- <20220117124432.3119132-2-german.gomez@arm.com>
- <20220205153940.GB391033@leoy-ThinkPad-X240s>
- <4d5951ee-d7d2-1e76-eb24-5f3c46d1662c@arm.com>
- <20220208130047.GA273989@leoy-ThinkPad-X240s>
- <e68839bc-b4f0-1fe8-1748-484254ded37a@arm.com>
- <20220211104528.GA475776@leoy-ThinkPad-X240s>
- <d59e99ad-dfc6-27ee-d952-7455d8e9fda6@arm.com>
- <20220216132257.GB56419@leoy-ThinkPad-X240s>
-From:   German Gomez <german.gomez@arm.com>
-Message-ID: <7d50f7ba-d8e5-1fbc-e9e6-749a24e26555@arm.com>
-Date:   Wed, 16 Feb 2022 15:16:01 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 16 Feb 2022 10:16:30 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70F929E953;
+        Wed, 16 Feb 2022 07:16:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645024577; x=1676560577;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=FHy/9zNLmutb0+uSh1eGvqBbF76nw1m+hfg36Cxc6W4=;
+  b=RYzMSfwXPAGHmFQANrkcAaKA97XwkRbEdRkNvM9/GNsr1l52Q/mss6gt
+   SlsjVHNKTwqomEpIzvdrDfbp4hR54RHBa5LdIctZ9/VUqi2fGAined5eT
+   N3ZGFj5PWfOBvIpHMHQmI6Gs1Ru9GDETrdaL2F7J7lyPV3Ke5Nb7XDyaz
+   Ks1S7KWC77G11A9sOLHzxsBDv/YXf30BnwnXEvfnKY5eOEYNWqLrZjGwx
+   hQZZ0RBwSRvwKcsE7yOP7HkcmHghJnIe3MkWhj0f3xAUua63vpvnDrBV/
+   647YjzJC3FlYUhQ5AtkrbP/PBBO5QexduTrt4fWO2AG/NjYpxrWeRWsBp
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="311363145"
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="311363145"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 07:16:17 -0800
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="503061253"
+Received: from mjjoshi-mobl.amr.corp.intel.com (HELO [10.209.90.109]) ([10.209.90.109])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 07:16:17 -0800
+Message-ID: <fc86d51c-7aa2-6379-5f26-ad533c762da3@intel.com>
+Date:   Wed, 16 Feb 2022 07:16:13 -0800
 MIME-Version: 1.0
-In-Reply-To: <20220216132257.GB56419@leoy-ThinkPad-X240s>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
 Content-Language: en-US
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Brian Geffon <bgeffon@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Willis Kung <williskung@google.com>,
+        Guenter Roeck <groeck@google.com>,
+        Borislav Petkov <bp@suse.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        "# v4 . 10+" <stable@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <543efc25-9b99-53cd-e305-d8b4d917b64b@intel.com>
+ <20220215192233.8717-1-bgeffon@google.com> <YgwCuGcg6adXAXIz@kroah.com>
+ <CADyq12wByWhsHNOnokrSwCDeEhPdyO6WNJNjpHE1ORgKwwwXgg@mail.gmail.com>
+ <YgzMTrVMCVt+n7cE@kroah.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH stable 5.4,5.10] x86/fpu: Correct pkru/xstate
+ inconsistency
+In-Reply-To: <YgzMTrVMCVt+n7cE@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,106 +73,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leo,
+On 2/16/22 02:05, Greg KH wrote:
+>>> How was this tested, and what do the maintainers of this subsystem
+>>> think?  And will you be around to fix the bugs in this when they are
+>>> found?
+>> This has been trivial to reproduce, I've used a small repro which I've
+>> put here: https://gist.github.com/bgaff/9f8cbfc8dd22e60f9492e4f0aff8f04f
+>> , I also was able to reproduce this using the protection_keys self
+>> tests on a 11th Gen Core i5-1135G7. I'm happy to commit to addressing
+>> any bugs that may appear. I'll see what the maintainers say, but there
+>> is also a smaller fix that just involves using this_cpu_read() in
+>> switch_fpu_finish() for this specific issue, although that approach
+>> isn't as clean.
+> Can you add the test to the in-kernel tests so that we make sure it is
+> fixed and never comes back?
 
-Thanks for the review
+It would be great if Brian could confirm this.  But, I'm 99% sure that
+this can be reproduced in the vm/protection_keys.c selftest, if you run
+it for long enough.
 
-On 16/02/2022 13:22, Leo Yan wrote:
-> On Tue, Feb 15, 2022 at 02:29:27PM +0000, German Gomez wrote:
->
-> [...]
->
->> Thanks for the suggestion. I recorded the following stacktrace:
->>
->>  perf-323841 [052] d.... 3996.528812: arm_spe_pmu_setup_aux: (arm_spe_pmu_setup_aux+0x60/0x1c0 [arm_spe_pmu])
->>  perf-323841 [052] d.... 3996.528813: <stack trace>
-> Yeah, this show arm_spe_pmu_setup_aux() is called in perf process.
->
->>  => kprobe_dispatcher
->>  => kprobe_breakpoint_handler
->>  => call_break_hook
->>  => brk_handler
->>  => do_debug_exception
->>  => el1_dbg
->>  => el1h_64_sync_handler
->>  => el1h_64_sync
->>  => arm_spe_pmu_setup_aux
->>  => perf_mmap
->>  => mmap_region
->>  => do_mmap
->>  => vm_mmap_pgoff
->>  => ksys_mmap_pgoff
->>  => __arm64_sys_mmap
->>  => invoke_syscall
->>  => el0_svc_common.constprop.0
->>  => do_el0_svc
->>  => el0_svc
->>  => el0t_64_sync_handler
->>  => el0t_64_sync
->>
->> So for a v2 I may include something like this:
-> The change looks good to me, please see below minor comment.
->
->> diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
->> index d44bcc29d..aadec5a0e 100644
->> --- a/drivers/perf/arm_spe_pmu.c
->> +++ b/drivers/perf/arm_spe_pmu.c
->> @@ -45,6 +45,7 @@ struct arm_spe_pmu_buf {
->>      int                    nr_pages;
->>      bool                    snapshot;
->>      void                    *base;
->> +    u64                    pmscr;
->>  };
->>  
->>  struct arm_spe_pmu {
->> @@ -748,7 +749,7 @@ static void arm_spe_pmu_start(struct perf_event *event, int flags)
->>          write_sysreg_s(reg, SYS_PMSICR_EL1);
->>      }
->>  
->> -    reg = arm_spe_event_to_pmscr(event);
->> +    reg = ((struct arm_spe_pmu_buf *) perf_get_aux(handle))->pmscr;
->>      isb();
->>      write_sysreg_s(reg, SYS_PMSCR_EL1);
-> Just nitpick (or it's just my preferring coding style), we can define
-> a local pointer variable 'buf':
->
->   struct arm_spe_pmu_buf *buf = perf_get_aux(handle);
+The symptom here is corruption of the PKRU register.  I created *lots*
+of bugs like this during protection keys development so the selftest
+keeps a shadow copy of the register to specifically watch for corruption.
 
-I need to make sure perf_get_aux(..) is called between perf_aux_output_begin and *_end though (so, after arm_spe_perf_aux_output_begin(..)):
-
- buf = perf_get_aux(handle);
- reg = buf->pmscr;
- isb();
- write_sysreg_s(buf, SYS_PMSCR_EL1);
-
-Alternatively, we set the register inside of perf_aux_output_begin. It might be confusing for casual readers because the function handles a case where perf_get_aux(..) returns NULL.
-
-Alternatively, we could also wrap perf_get_aux(..) in a static inline function that returns the correct type and do:
-
- reg = arm_spe_get_aux(handle)->pmscr;
- isb();
- write_sysreg_s(reg, SYS_PMSCR_EL1);
-
-So that it looks cleaner.
-
->
->   ...
->
->   isb();
->   write_sysreg_s(buf->pmscr, SYS_PMSCR_EL1);
->
-> Thanks,
-> Leo
->
->>  }
->> @@ -855,6 +856,8 @@ static void *arm_spe_pmu_setup_aux(struct perf_event *event, void **pages,
->>      if (!pglist)
->>          goto out_free_buf;
->>  
->> +    buf->pmscr = arm_spe_event_to_pmscr(event);
->> +
->>      for (i = 0; i < nr_pages; ++i)
->>          pglist[i] = virt_to_page(pages[i]);
->>
->>> Thanks,
->>> Leo
+It's _plausible_ that no one ever ran the pkey selftests with a
+clang-compiled kernel for long enough to hit this issue.

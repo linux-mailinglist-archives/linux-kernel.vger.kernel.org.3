@@ -2,71 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B4B4B82BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:16:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB854B82B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbiBPIOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 03:14:49 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:50994 "EHLO
+        id S231570AbiBPIQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 03:16:05 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbiBPIOj (ORCPT
+        with ESMTP id S231528AbiBPIQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 03:14:39 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEEB251E6C;
-        Wed, 16 Feb 2022 00:14:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eK7JQP3AD1+05eQk/cFJFk4JohXRVweM/+B5FTB73ng=; b=SvNQmY6s0tTSr74RpoPjpXFknN
-        +ih/jXI0aVHS0v3cvv4SeAQUyxAkHesXys2OtGPFSpuO1g7lhDeXluXHsYHr6jbsd4LKXsV+I+EDS
-        mwITAK1Hdq6ubXuCm+ukvvLFAzw7wkLOUZOVz7PtfrjAMFJvmn0abE44k8/+98JjKBk+OHOA5WwLm
-        M5oRguh70Q5PNjzWhuHMWz4DS8yE7lugU+fx4oC7wzXq9Fqs833hNE19gwmTP31llnRs6XSduqhoE
-        6lVEAooGgzrhF3wUVQz6yZjdhocY2PL+tiQzXzgTtfu+hQ2rkmzkB7ls/4peyTwp1OTzsa9X+Zcy4
-        U6RQMGcg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nKFS2-0063dZ-Js; Wed, 16 Feb 2022 08:14:14 +0000
-Date:   Wed, 16 Feb 2022 00:14:14 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Nirmal Patel <nirmal.patel@linux.intel.com>,
-        Jonathan Derrick <jonathan.derrick@linux.dev>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] PCI: vmd: Honor ACPI _OSC on PCIe features
-Message-ID: <YgyyVtDVV+0Jrogi@infradead.org>
-References: <CAJZ5v0i6+EMMGuKckhtTdt7TgC3LbofW7oS7B5=McSNjEh1yKA@mail.gmail.com>
- <20220216015303.GA137820@bhelgaas>
+        Wed, 16 Feb 2022 03:16:04 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86CA13D3D
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:15:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644999352; x=1676535352;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mZe1Um7zlEYvfSJSwbgaDtjTEuNMEhb6+5hvoEsUI10=;
+  b=NQmL76GEyhrzoQqAzbaKDepd2WTgA5uhjC1FeXoyhRet8ryMxORa5ZSg
+   aclVgKrQTk7u1/y7z0lfc0Q4fytMhLtezHU7Cf0z5aCG+gpa9ZtviluAx
+   CehuouT/dxzc8/Hy40Ekh+8rV30ezvrcwXUTa5XxtZg2oK1VjwOhD+mbQ
+   7ld+DZ/rA5ziDV5xXPIfllhHCoGsiBCEwYyZR13ayndvUia9uMJIEmRGV
+   an7TKep76O5ZWzIIA723YaxqF4aJ/9/aL6fdKO9BjkRwQ7OCnGURJ3aeE
+   v4xmEKVWKmK06jNUP1HklnztNaQQPzwSDp8UJ/GkjgYpYm4Zw5lAX6OQt
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="250750868"
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="250750868"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 00:15:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="773920851"
+Received: from pglc00512.png.intel.com ([10.221.239.204])
+  by fmsmga006.fm.intel.com with ESMTP; 16 Feb 2022 00:15:51 -0800
+From:   tien.sung.ang@intel.com
+To:     Dinh Nguyen <dinguyen@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Ang Tien Sung <tien.sung.ang@intel.com>
+Subject: [PATCH] firmware: stratix10-svc: add missing callback parameter on RSU
+Date:   Wed, 16 Feb 2022 16:15:13 +0800
+Message-Id: <20220216081513.28319-1-tien.sung.ang@intel.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216015303.GA137820@bhelgaas>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 07:53:03PM -0600, Bjorn Helgaas wrote:
-> Apparently there's a firmware toggle, but I don't know exactly what it
-> does.  Maybe if the toggle is set to disable VMD, the VMD device looks
-> like a regular Root Port and the devices below are enumerated
-> normally even without any vmd.c?
+From: Ang Tien Sung <tien.sung.ang@intel.com>
 
-Yes.  VMD is just an intel invention to make the OSes life incredibly
-painful (and to allow Intel to force binding their NVMe driver instead
-of the Microsoft one on windows).
+Fix a bug whereby, the return response of parameter a1 from an
+SMC call is not properly set to the callback data during an
+INTEL_SIP_SMC_RSU_ERROR command.
+
+Fixes: 6b50d882d38d ("firmware: add remote status update client support")
+Signed-off-by: Ang Tien Sung <tien.sung.ang@intel.com>
+---
+ drivers/firmware/stratix10-svc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix10-svc.c
+index 29c0a616b317..c4bf934e3553 100644
+--- a/drivers/firmware/stratix10-svc.c
++++ b/drivers/firmware/stratix10-svc.c
+@@ -477,7 +477,7 @@ static int svc_normal_to_secure_thread(void *data)
+ 		case INTEL_SIP_SMC_RSU_ERROR:
+ 			pr_err("%s: STATUS_ERROR\n", __func__);
+ 			cbdata->status = BIT(SVC_STATUS_ERROR);
+-			cbdata->kaddr1 = NULL;
++			cbdata->kaddr1 = &res.a1;
+ 			cbdata->kaddr2 = NULL;
+ 			cbdata->kaddr3 = NULL;
+ 			pdata->chan->scl->receive_cb(pdata->chan->scl, cbdata);
+-- 
+2.26.2
+

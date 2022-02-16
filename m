@@ -2,71 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9954F4B8AA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:48:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9950C4B8ACD
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:52:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234510AbiBPNss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:48:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44094 "EHLO
+        id S234738AbiBPNwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 08:52:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbiBPNsp (ORCPT
+        with ESMTP id S233689AbiBPNwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:48:45 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3449C7F6D2;
-        Wed, 16 Feb 2022 05:48:32 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id g7so4020802edb.5;
-        Wed, 16 Feb 2022 05:48:32 -0800 (PST)
+        Wed, 16 Feb 2022 08:52:32 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3986D2B25A;
+        Wed, 16 Feb 2022 05:52:20 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id t14so3395609ljh.8;
+        Wed, 16 Feb 2022 05:52:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=FlRChV2ED66U1fV2UHlPevpzTBOWajWUQYxF7iIvvyk=;
-        b=qv/vc03s2YbobtXaOohRYrtMGKaiPeoul7yaXpDYp9Y8BCPMXPgdTH8hkDVyyxKKzc
-         ieV6spSKvomI4/UXpEouoWG/oY9V63xQPHlTU7P8iAwoRd29MbwfCS8x/HPZ5daqjKpo
-         7FdSTmIpY9smQlACRWFTIsUn6Yas6dm9VrbtgNW1T/+ZOmd2WVPBUWzcCbXeXRwIa3o4
-         fABK7daW4Y09JE81WsWyCmDM2Bv/HN7mg7tAmU2psxcdCsBBqOLelrT9DmZkY4ZIyPdO
-         QwG4SrNtCZ5km0oe8JP1kO67fwzSI4/gG2rx79OPI5NhQQTn+zqAfRivbZNvEsonmdYa
-         NbeQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q4EiYPm2+HRbScmOb/jcDnsvCiWEez/3XhwQHbUUhXA=;
+        b=UPAr3hbP4qmCmUzh2N1lcrpDce/QofsGFvr0EOGtApfPjTXGT2StAgdjzFt735kXqg
+         mZEree2WrFpMRPnuU3IYK3hqb3P9miUjJROXFfbODy8h1fLfIyRYextRYlXh2+Rf6PDh
+         fP1d8ni987rFFwkCBetTKrDr9SsRGYpvN0Rw/uunEKQYAlgfwShSW27LU7OcLyPmTCbW
+         beNDTouLUC3FhbVcEM2SgvwjLs3ZreBTRyO5X6lKnv4AFIp2GyMSCVm87kKU39RFftop
+         tLaoj+w95da6LKkKp3L/+rt8aBN9Xrvk8q1SYA2aq94FPSjT6D+noewaToJzD3gSBi9l
+         vbDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FlRChV2ED66U1fV2UHlPevpzTBOWajWUQYxF7iIvvyk=;
-        b=C+3Pt4+OawqGHF4kDeyy4NfGCYOeUNDp3AVlH9SgLL/oy5dbj1LLd480l+W1fTAwrX
-         z9mCbSXWjyH0yRH1jooT9oiCJGbOeqkJVTLUfK+TwJX2JdWuQeX1JBY9VHsO56YKCV66
-         EEQq0gEG5yoOSNWAsa3v3HKD8lSG1GMd9pl6DYjQLaOXRY/efbHJ4IGk6ClMZVJRUhIe
-         owQceMo6/L5blzF8JWry/bnLLbKRzMZfhxf92rSjMLTXlJu5LD062YQ6B/fTtjJ/R9Wx
-         snE0ficbiHOz9UUDoUxmQ8xl1Juw6mcEiEp5LP2wpbzfnSzy5QiLooYuZdXu2OXrg9QY
-         3JNQ==
-X-Gm-Message-State: AOAM532hI/RvkTIw74bcuNaX2efjth1Z71baujD0uH6s3yseUuAjoso4
-        82vFk6ft2seuXolYUmVbWwI=
-X-Google-Smtp-Source: ABdhPJywvjh3cUfTL6Z618E7/SfBQBXo7KQhw71ZpUbdF4ZEaTN3AkTWga5vyZBBC2CiwwhHXNUqdQ==
-X-Received: by 2002:a05:6402:2694:b0:411:f0b1:7f90 with SMTP id w20-20020a056402269400b00411f0b17f90mr2995670edd.398.1645019310575;
-        Wed, 16 Feb 2022 05:48:30 -0800 (PST)
-Received: from orome ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id p25sm5245206ejn.33.2022.02.16.05.48.28
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q4EiYPm2+HRbScmOb/jcDnsvCiWEez/3XhwQHbUUhXA=;
+        b=ccbVXL1OFyA6Kvm1FOtLc9R1qMJpZzpo6wOdWXSzSPWY5zwzhyDWJ97zk2vNJjFB9j
+         p7FYHeDkSDK3tFj31dVAfbm0YpH2L3a9+C9CmhX6Yz5AH/mvbQWKPAWXjuEt60vqFcgk
+         pHsx7BFHe14/g7Kwu4OBBAbTJIVtoa+kiQmlMlW5xQc+o57Yhn2j+P5GIl2wGON4gBSL
+         KDr0u5gP4BtZrqNcmuYkpPRKUcwZHBJjqkPGCTq+SNZ4Y3FgsoVEMs6icDW0fMqPMa1o
+         8n744PY0aivBiiZnIO3u6BTs6KpvrvRQ1ug28enOK7yTf9xTICRLDlEM0Eo3GwE6AJA9
+         bOxg==
+X-Gm-Message-State: AOAM531/C9BTrevRjGyV/b+MFs/+dmC4W6E+O7/SHhQ7LCv8SLw9zbph
+        oYdYQLkcsMSUTjuKDvW4GeV3NwS96HzYOQ==
+X-Google-Smtp-Source: ABdhPJyXUZm9WRFHJO5mC+6U9BqdYlz5AYmSqaBZHIfudZ8P8JlG5sSmpBrg/AjbXTYHAZNpWmDSKA==
+X-Received: by 2002:a2e:b8c3:0:b0:244:8a88:6bf9 with SMTP id s3-20020a2eb8c3000000b002448a886bf9mr2187033ljp.67.1645019538355;
+        Wed, 16 Feb 2022 05:52:18 -0800 (PST)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id y38sm2923227lfa.145.2022.02.16.05.52.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 05:48:29 -0800 (PST)
-Date:   Wed, 16 Feb 2022 14:48:26 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Krishna Reddy <vdumpa@nvidia.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        linux-tegra@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu/tegra-smmu: Fix missing put_device() call in
- tegra_smmu_find
-Message-ID: <Yg0AqkLA7eXQOuh2@orome>
-References: <20220107080915.12686-1-linmq006@gmail.com>
+        Wed, 16 Feb 2022 05:52:17 -0800 (PST)
+From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Axtens <dja@axtens.net>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraju@codeaurora.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Theodore Y . Ts'o" <tytso@mit.edu>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>
+Subject: [PATCH 1/1] rcu: Introduce CONFIG_RCU_EXP_CPU_STALL_TIMEOUT
+Date:   Wed, 16 Feb 2022 14:52:09 +0100
+Message-Id: <20220216135209.3070-1-urezki@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="enq9AsaXPXANugPJ"
-Content-Disposition: inline
-In-Reply-To: <20220107080915.12686-1-linmq006@gmail.com>
-User-Agent: Mutt/2.2 (7160e05a) (2022-02-12)
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -77,68 +80,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Uladzislau Rezki <uladzislau.rezki@sony.com>
 
---enq9AsaXPXANugPJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Currently for both expedited and regular grace periods stall
+warnings are emitted based on one timeout value that is defined
+in seconds. The problem is that, a stall timeout in seconds for
+expedited grace period is a way long.
 
-On Fri, Jan 07, 2022 at 08:09:11AM +0000, Miaoqian Lin wrote:
-> The reference taken by 'of_find_device_by_node()' must be released when
-> not needed anymore.
-> Add the corresponding 'put_device()' in the error handling path.
->=20
-> Fixes: 765a9d1d02b2 ("iommu/tegra-smmu: Fix mc errors on tegra124-nyan")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/iommu/tegra-smmu.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/iommu/tegra-smmu.c b/drivers/iommu/tegra-smmu.c
-> index e900e3c46903..2561ce8a2ce8 100644
-> --- a/drivers/iommu/tegra-smmu.c
-> +++ b/drivers/iommu/tegra-smmu.c
-> @@ -808,8 +808,10 @@ static struct tegra_smmu *tegra_smmu_find(struct dev=
-ice_node *np)
->  		return NULL;
-> =20
->  	mc =3D platform_get_drvdata(pdev);
-> -	if (!mc)
-> +	if (!mc) {
-> +		put_device(&pdev->dev);
->  		return NULL;
-> +	}
-> =20
->  	return mc->smmu;
->  }
+The idea of expedited grace period is to force CPUs to report
+their quiescent states as fast as possible. If in RCU read-side
+critical section, it will request the next rcu_read_unlock() to
+record the quiescent state. If not either it reports immediately
+or set TIF_NEED_RESCHED to initiate the task switch.
 
-Sorry for the late reply, looks correct. We probably also need a similar
-call in ->release_device(). I also wonder if we should be returning an
--EPROBE_DEFER here, which is technically the correct thing to do, though
-in practice that will likely never happen because these pointers are set
-during an arch_initcall, so should always be available by the time a
-driver tries to attach to an IOMMU.
+Therefore introduce the CONFIG_RCU_EXP_CPU_STALL_TIMEOUT kernel
+configuration that is set to 20 msec. It also can be changed in
+run-time via: /sys/.../parameters/rcu_exp_cpu_stall_timeout.
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+Signed-off-by: Uladzislau Rezki <uladzislau.rezki@sony.com>
+Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+---
+ Documentation/RCU/stallwarn.rst               | 18 +++++++++++++
+ .../admin-guide/kernel-parameters.txt         |  6 +++++
+ kernel/rcu/Kconfig.debug                      | 12 +++++++++
+ kernel/rcu/rcu.h                              |  2 ++
+ kernel/rcu/tree_exp.h                         |  4 +--
+ kernel/rcu/tree_stall.h                       | 26 +++++++++++++++++++
+ kernel/rcu/update.c                           |  2 ++
+ 7 files changed, 68 insertions(+), 2 deletions(-)
 
---enq9AsaXPXANugPJ
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
+index 78404625bad2..b9ce89980779 100644
+--- a/Documentation/RCU/stallwarn.rst
++++ b/Documentation/RCU/stallwarn.rst
+@@ -162,6 +162,24 @@ CONFIG_RCU_CPU_STALL_TIMEOUT
+ 	Stall-warning messages may be enabled and disabled completely via
+ 	/sys/module/rcupdate/parameters/rcu_cpu_stall_suppress.
+ 
++CONFIG_RCU_EXP_CPU_STALL_TIMEOUT
++--------------------------------
++
++	Same as the CONFIG_RCU_CPU_STALL_TIMEOUT parameter but only for
++	the expedited grace period. This parameter defines the period of
++	time that RCU will wait from the beginning of an expedited grace
++	period until it issues an RCU CPU stall warning. This time period
++	is normally 20 milliseconds.
++
++	This configuration parameter may be changed at runtime via the
++	/sys/module/rcupdate/parameters/rcu_exp_cpu_stall_timeout, however
++	this parameter is checked only at the beginning of a cycle. If you
++	are in a current stall cycle, setting it to a new value will change
++	the timeout for the -next- stall.
++
++	Stall-warning messages may be enabled and disabled completely via
++	/sys/module/rcupdate/parameters/rcu_cpu_stall_suppress.
++
+ RCU_STALL_DELAY_DELTA
+ ---------------------
+ 
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 9ab6a4a5be06..9a32030f5d1e 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -4817,6 +4817,12 @@
+ 	rcupdate.rcu_cpu_stall_timeout= [KNL]
+ 			Set timeout for RCU CPU stall warning messages.
+ 
++	rcupdate.rcu_exp_cpu_stall_timeout= [KNL]
++			Set timeout for expedited RCU CPU stall warning messages.
++			The value is in milliseconds and a maximum allowed parameter
++			is 21000 milliseconds. Please note, a set value is adjusted
++			to an arch timer tick resolution.
++
+ 	rcupdate.rcu_expedited= [KNL]
+ 			Use expedited grace-period primitives, for
+ 			example, synchronize_rcu_expedited() instead
+diff --git a/kernel/rcu/Kconfig.debug b/kernel/rcu/Kconfig.debug
+index 4fd64999300f..e0f2c5edef44 100644
+--- a/kernel/rcu/Kconfig.debug
++++ b/kernel/rcu/Kconfig.debug
+@@ -91,6 +91,18 @@ config RCU_CPU_STALL_TIMEOUT
+ 	  RCU grace period persists, additional CPU stall warnings are
+ 	  printed at more widely spaced intervals.
+ 
++config RCU_EXP_CPU_STALL_TIMEOUT
++	int "Expedited RCU CPU stall timeout in milliseconds"
++	depends on RCU_STALL_COMMON
++	range 1 21000
++	default 20
++
++	help
++	  If a given expedited RCU grace period extends more than the
++	  specified number of milliseconds, a CPU stall warning is printed.
++	  If the RCU grace period persists, additional CPU stall warnings
++	  are printed at more widely spaced intervals.
++
+ config RCU_TRACE
+ 	bool "Enable tracing for RCU"
+ 	depends on DEBUG_KERNEL
+diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+index 819f9d979e61..f8ec1df4b91e 100644
+--- a/kernel/rcu/rcu.h
++++ b/kernel/rcu/rcu.h
+@@ -217,7 +217,9 @@ static inline bool rcu_stall_is_suppressed_at_boot(void)
+ extern int rcu_cpu_stall_ftrace_dump;
+ extern int rcu_cpu_stall_suppress;
+ extern int rcu_cpu_stall_timeout;
++extern int rcu_exp_cpu_stall_timeout;
+ int rcu_jiffies_till_stall_check(void);
++int rcu_exp_jiffies_till_stall_check(void);
+ 
+ static inline bool rcu_stall_is_suppressed(void)
+ {
+diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+index 404198808683..30f05fd080ca 100644
+--- a/kernel/rcu/tree_exp.h
++++ b/kernel/rcu/tree_exp.h
+@@ -496,7 +496,7 @@ static void synchronize_rcu_expedited_wait(void)
+ 	struct rcu_node *rnp_root = rcu_get_root();
+ 
+ 	trace_rcu_exp_grace_period(rcu_state.name, rcu_exp_gp_seq_endval(), TPS("startwait"));
+-	jiffies_stall = rcu_jiffies_till_stall_check();
++	jiffies_stall = rcu_exp_jiffies_till_stall_check();
+ 	jiffies_start = jiffies;
+ 	if (tick_nohz_full_enabled() && rcu_inkernel_boot_has_ended()) {
+ 		if (synchronize_rcu_expedited_wait_once(1))
+@@ -571,7 +571,7 @@ static void synchronize_rcu_expedited_wait(void)
+ 				dump_cpu_task(cpu);
+ 			}
+ 		}
+-		jiffies_stall = 3 * rcu_jiffies_till_stall_check() + 3;
++		jiffies_stall = 3 * rcu_exp_jiffies_till_stall_check() + 3;
+ 	}
+ }
+ 
+diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
+index 0c5d8516516a..84b812a3ab44 100644
+--- a/kernel/rcu/tree_stall.h
++++ b/kernel/rcu/tree_stall.h
+@@ -25,6 +25,32 @@ int sysctl_max_rcu_stall_to_panic __read_mostly;
+ #define RCU_STALL_MIGHT_DIV		8
+ #define RCU_STALL_MIGHT_MIN		(2 * HZ)
+ 
++int rcu_exp_jiffies_till_stall_check(void)
++{
++	int cpu_stall_timeout = READ_ONCE(rcu_exp_cpu_stall_timeout);
++	int exp_stall_delay_delta = 0;
++	int till_stall_check;
++
++	/*
++	 * Limit check must be consistent with the Kconfig limits for
++	 * CONFIG_RCU_EXP_CPU_STALL_TIMEOUT, so check the allowed range.
++	 * The minimum clamped value is "2UL", because at least one full
++	 * tick has to be guaranteed.
++	 */
++	till_stall_check = clamp(msecs_to_jiffies(cpu_stall_timeout), 2UL, 21UL * HZ);
++
++	if (jiffies_to_msecs(till_stall_check) != cpu_stall_timeout)
++		WRITE_ONCE(rcu_exp_cpu_stall_timeout, jiffies_to_msecs(till_stall_check));
++
++#ifdef CONFIG_PROVE_RCU
++	/* Add extra ~25% out of till_stall_check. */
++	exp_stall_delay_delta = ((till_stall_check * 25) / 100) + 1;
++#endif
++
++	return till_stall_check + exp_stall_delay_delta;
++}
++EXPORT_SYMBOL_GPL(rcu_exp_jiffies_till_stall_check);
++
+ /* Limit-check stall timeouts specified at boottime and runtime. */
+ int rcu_jiffies_till_stall_check(void)
+ {
+diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
+index 180ff9c41fa8..fc7fef575606 100644
+--- a/kernel/rcu/update.c
++++ b/kernel/rcu/update.c
+@@ -506,6 +506,8 @@ EXPORT_SYMBOL_GPL(rcu_cpu_stall_suppress);
+ module_param(rcu_cpu_stall_suppress, int, 0644);
+ int rcu_cpu_stall_timeout __read_mostly = CONFIG_RCU_CPU_STALL_TIMEOUT;
+ module_param(rcu_cpu_stall_timeout, int, 0644);
++int rcu_exp_cpu_stall_timeout __read_mostly = CONFIG_RCU_EXP_CPU_STALL_TIMEOUT;
++module_param(rcu_exp_cpu_stall_timeout, int, 0644);
+ #endif /* #ifdef CONFIG_RCU_STALL_COMMON */
+ 
+ // Suppress boot-time RCU CPU stall warnings and rcutorture writer stall
+-- 
+2.30.2
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmINAKcACgkQ3SOs138+
-s6E1Dw/+JdYuxQb5lyl9zrWDXni3KEEqylRty/S9yBZqB5op/xogYj6rZ/tCOc66
-CAA/cFSERk918QsbfuuajpAwiDBoivU8XAjn2pRhwfS30pE1wttCbvnYx/Pa6fhj
-rFCI7P86LtlW8ppsKt2j2YE6Ro6iBe78vMu2NHsRyF/dTqdF77LBBbHc/1D7jvKJ
-E516Wgps8uBmnElGaBXaWqBJm9gF+1DUcRB2iCqqKoKcZGd4cU1Z97caIfwzmxF8
-+Pfy3xsZQUM/q0NEUQkYS24RhFaPIMSlVNJuBq4X8RUkobx/bSaQQybtY+CYeOfE
-CdZhCt1Uvwt3REBb4crS1obr39XHDrmg9DPhwBPOxXJdoT+gHntny13RVB9PysER
-SXDv62b8R/ZR4ORh9vNSlY355IauVLEJGgRqyloH0W6ylj5QVM1/PEnHUJu+E6Bp
-tXAyNRwUfysUryxZgjhVjYTJnCzxhszhR8hPhwk5uxyyyzBI7oB8T9FwIuVukkqW
-bw5UvHWlrKj1dQVu1Eup9qn039PjZs4cHldFi9gkjMFAupaS07mAY1FHPe2U1lD0
-bq+aIHuenFUa3F+sfC4PTptGWxEcfPWEPk0QHts7FTRLEBwy4b97RLRKHwa942v6
-wPzUzR62Raw96lTAPiq8UYPqB82nxDiRTIqalgVPL9DJTyk4lOA=
-=FvXw
------END PGP SIGNATURE-----
-
---enq9AsaXPXANugPJ--

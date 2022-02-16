@@ -2,67 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2E44B8A55
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:36:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51FA04B8A61
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234578AbiBPNhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:37:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58668 "EHLO
+        id S234600AbiBPNh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 08:37:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiBPNhH (ORCPT
+        with ESMTP id S233183AbiBPNhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:37:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D396F1A76EA;
-        Wed, 16 Feb 2022 05:36:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 892D4B81EE6;
-        Wed, 16 Feb 2022 13:36:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02594C004E1;
-        Wed, 16 Feb 2022 13:36:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645018612;
-        bh=ZSkVb1slYA4F/pp9dzxY4tduW9grcjLC4TTtHzhDpuM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h4fYWrQCCOolWCrtXeDOPaIlXIxxB1dSAl1tLxSPrm5HxzV1eqJb0518M0U9tnxn6
-         1OGLMcVglnEyWOBv8QVpLFmTt0WGJg/FGRE6dRwuCrmSWOFaeG9QIqK3NCaefC8joj
-         aCgDQHnFOjSEdZcE31JQWrOveNtc9bX9WziBEAylLh+HwRK2Z/3EGeMwm1TCnACaIu
-         gn3as+6A1gEkF+Db5gfpdtdLZ60n3lpokYvxrMFMXAeZPXdEHSaDoqcASLyXIY6LA1
-         KZ5mFQpJ6hbObwDvl+zo1gHpiJa4E6gLXtrfsCb282+L/ae7cLJr3xI6APHI+4aWO4
-         /Vn5ZWq4/MW9A==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 229E4400FE; Wed, 16 Feb 2022 10:36:49 -0300 (-03)
-Date:   Wed, 16 Feb 2022 10:36:49 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     German Gomez <german.gomez@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, irogers@google.com
-Subject: Re: [PATCH] perf test: update arm64 perf_event_attr tests for
- --call-graph
-Message-ID: <Ygz98VJyz418jv55@kernel.org>
-References: <20220125104435.2737-1-german.gomez@arm.com>
- <622a42bd-69da-0df4-bbf3-7d21de77c73b@arm.com>
+        Wed, 16 Feb 2022 08:37:52 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554A02A39D3
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:37:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645018660; x=1676554660;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eMKwLxYUL/GXMxK+okjyuwQUCIzuRwZI2UA1n8U3xT8=;
+  b=FDHgDtj35rgvzbLQbW7aaYBJO0/b6xvHhx7/A77oPUK7DEPv/tWlDVlY
+   1A76MKWA8sm/EKQkZOKFoDBuM0+oTCqMYyj2zLqFyv0tJa1TBRQfD1exa
+   FDaBoPK9yA48SFPDIYWV7Tc1DslFNnpvAa50+JmdzCmMC7Po9prdWv3py
+   mCv+fTZoQU3EXzhjxdQYTjBJ1ZVqLQUMz+OjI0yyh9YnEtsDQJy4zoEHn
+   70WAN2ItvvbaTBvEB7Fs9VHv82OfwKQVQllMoW2CMyxvuOwTy8BjpYBa8
+   nktYJ0lxN89t13osp8TaEmPX0QAMQhGvm6sb6LSi2TIZ3sHRksyWNwn0/
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="313875028"
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="313875028"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 05:37:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="774043839"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 16 Feb 2022 05:37:38 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKKV0-000Ape-3e; Wed, 16 Feb 2022 13:37:38 +0000
+Date:   Wed, 16 Feb 2022 21:37:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Zhu Lingshan <lingshan.zhu@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [ls-zhu:shared_irq_v4 3/3] drivers/vdpa/ifcvf/ifcvf_main.c:94:13:
+ warning: variable 'max_intr' set but not used
+Message-ID: <202202162105.kmic72fi-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <622a42bd-69da-0df4-bbf3-7d21de77c73b@arm.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,138 +61,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Feb 16, 2022 at 01:17:56PM +0000, German Gomez escreveu:
-> Hi,
-> 
-> Friendly ping on this perf-test fix for arm64
+tree:   https://github.com/ls-zhu/linux shared_irq_v4
+head:   25e932e005734a4b8924e41bbedafa9dd394aead
+commit: 25e932e005734a4b8924e41bbedafa9dd394aead [3/3] vDPA/ifcvf: implement device MSIX vector allocator
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220216/202202162105.kmic72fi-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ls-zhu/linux/commit/25e932e005734a4b8924e41bbedafa9dd394aead
+        git remote add ls-zhu https://github.com/ls-zhu/linux
+        git fetch --no-tags ls-zhu shared_irq_v4
+        git checkout 25e932e005734a4b8924e41bbedafa9dd394aead
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/vdpa/ifcvf/
 
-> I will include some quick test notes:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks, adding it to the cset, applying.
+All warnings (new ones prefixed by >>):
 
-- Arnaldo
+   drivers/vdpa/ifcvf/ifcvf_main.c: In function 'ifcvf_request_irq':
+>> drivers/vdpa/ifcvf/ifcvf_main.c:94:13: warning: variable 'max_intr' set but not used [-Wunused-but-set-variable]
+      94 |         u16 max_intr;
+         |             ^~~~~~~~
 
-> Before:
- 
-> $ ./perf test 17 -v
-> 17: Setup struct perf_event_attr
-> [...]
-> running './tests/attr/test-record-graph-default'
-> expected sample_type=295, got 4391
-> expected sample_regs_user=0, got 1073741824
-> FAILED './tests/attr/test-record-graph-default' - match failure
-> test child finished with -1
-> ---- end ----
-> 
-> After:
-> 
-> [...]
-> running './tests/attr/test-record-graph-default-aarch64'
-> test limitation 'aarch64'
-> running './tests/attr/test-record-graph-fp-aarch64'
-> test limitation 'aarch64'
-> running './tests/attr/test-record-graph-default'
-> test limitation '!aarch64'
-> excluded architecture list ['aarch64']
-> skipped [aarch64] './tests/attr/test-record-graph-default'
-> running './tests/attr/test-record-graph-fp'
-> test limitation '!aarch64'
-> excluded architecture list ['aarch64']
-> skipped [aarch64] './tests/attr/test-record-graph-fp'
-> [...]
-> 
-> Thanks,
-> German
-> 
-> On 25/01/2022 10:44, German Gomez wrote:
-> > The struct perf_event_attr is initialised differently in Arm64 when
-> > recording in call-graph fp mode, so update the relevant tests, and add
-> > two extra arm64-only tests.
-> >
-> > Fixes: 7248e308a575 ("perf tools: Record ARM64 LR register automatically")
-> > Signed-off-by: German Gomez <german.gomez@arm.com>
-> > ---
-> >  tools/perf/tests/attr/README                            | 2 ++
-> >  tools/perf/tests/attr/test-record-graph-default         | 2 ++
-> >  tools/perf/tests/attr/test-record-graph-default-aarch64 | 9 +++++++++
-> >  tools/perf/tests/attr/test-record-graph-fp              | 2 ++
-> >  tools/perf/tests/attr/test-record-graph-fp-aarch64      | 9 +++++++++
-> >  5 files changed, 24 insertions(+)
-> >  create mode 100644 tools/perf/tests/attr/test-record-graph-default-aarch64
-> >  create mode 100644 tools/perf/tests/attr/test-record-graph-fp-aarch64
-> >
-> > diff --git a/tools/perf/tests/attr/README b/tools/perf/tests/attr/README
-> > index a36f49fb4dbe..1116fc6bf2ac 100644
-> > --- a/tools/perf/tests/attr/README
-> > +++ b/tools/perf/tests/attr/README
-> > @@ -45,8 +45,10 @@ Following tests are defined (with perf commands):
-> >    perf record -d kill                           (test-record-data)
-> >    perf record -F 100 kill                       (test-record-freq)
-> >    perf record -g kill                           (test-record-graph-default)
-> > +  perf record -g kill                           (test-record-graph-default-aarch64)
-> >    perf record --call-graph dwarf kill		(test-record-graph-dwarf)
-> >    perf record --call-graph fp kill              (test-record-graph-fp)
-> > +  perf record --call-graph fp kill              (test-record-graph-fp-aarch64)
-> >    perf record --group -e cycles,instructions kill (test-record-group)
-> >    perf record -e '{cycles,instructions}' kill   (test-record-group1)
-> >    perf record -e '{cycles/period=1/,instructions/period=2/}:S' kill (test-record-group2)
-> > diff --git a/tools/perf/tests/attr/test-record-graph-default b/tools/perf/tests/attr/test-record-graph-default
-> > index 5d8234d50845..f0a18b4ea4f5 100644
-> > --- a/tools/perf/tests/attr/test-record-graph-default
-> > +++ b/tools/perf/tests/attr/test-record-graph-default
-> > @@ -2,6 +2,8 @@
-> >  command = record
-> >  args    = --no-bpf-event -g kill >/dev/null 2>&1
-> >  ret     = 1
-> > +# arm64 enables registers in the default mode (fp)
-> > +arch    = !aarch64
-> >  
-> >  [event:base-record]
-> >  sample_type=295
-> > diff --git a/tools/perf/tests/attr/test-record-graph-default-aarch64 b/tools/perf/tests/attr/test-record-graph-default-aarch64
-> > new file mode 100644
-> > index 000000000000..e98d62efb6f7
-> > --- /dev/null
-> > +++ b/tools/perf/tests/attr/test-record-graph-default-aarch64
-> > @@ -0,0 +1,9 @@
-> > +[config]
-> > +command = record
-> > +args    = --no-bpf-event -g kill >/dev/null 2>&1
-> > +ret     = 1
-> > +arch    = aarch64
-> > +
-> > +[event:base-record]
-> > +sample_type=4391
-> > +sample_regs_user=1073741824
-> > diff --git a/tools/perf/tests/attr/test-record-graph-fp b/tools/perf/tests/attr/test-record-graph-fp
-> > index 5630521c0b0f..a6e60e839205 100644
-> > --- a/tools/perf/tests/attr/test-record-graph-fp
-> > +++ b/tools/perf/tests/attr/test-record-graph-fp
-> > @@ -2,6 +2,8 @@
-> >  command = record
-> >  args    = --no-bpf-event --call-graph fp kill >/dev/null 2>&1
-> >  ret     = 1
-> > +# arm64 enables registers in fp mode
-> > +arch    = !aarch64
-> >  
-> >  [event:base-record]
-> >  sample_type=295
-> > diff --git a/tools/perf/tests/attr/test-record-graph-fp-aarch64 b/tools/perf/tests/attr/test-record-graph-fp-aarch64
-> > new file mode 100644
-> > index 000000000000..cbeea9971285
-> > --- /dev/null
-> > +++ b/tools/perf/tests/attr/test-record-graph-fp-aarch64
-> > @@ -0,0 +1,9 @@
-> > +[config]
-> > +command = record
-> > +args    = --no-bpf-event --call-graph fp kill >/dev/null 2>&1
-> > +ret     = 1
-> > +arch    = aarch64
-> > +
-> > +[event:base-record]
-> > +sample_type=4391
-> > +sample_regs_user=1073741824
 
--- 
+vim +/max_intr +94 drivers/vdpa/ifcvf/ifcvf_main.c
 
-- Arnaldo
+    88	
+    89	static int ifcvf_request_irq(struct ifcvf_adapter *adapter)
+    90	{
+    91		struct pci_dev *pdev = adapter->pdev;
+    92		struct ifcvf_hw *vf = &adapter->vf;
+    93		int vector, nvectors, i, ret, irq;
+  > 94		u16 max_intr;
+    95	
+    96		nvectors = ifcvf_alloc_vectors(adapter);
+    97		if (nvectors <=0)
+    98			return nvectors;
+    99	
+   100		max_intr = vf->nr_vring + 1;
+   101		snprintf(vf->config_msix_name, 256, "ifcvf[%s]-config\n",
+   102			 pci_name(pdev));
+   103		vector = 0;
+   104		vf->config_irq = pci_irq_vector(pdev, vector);
+   105		ret = devm_request_irq(&pdev->dev, vf->config_irq,
+   106				       ifcvf_config_changed, 0,
+   107				       vf->config_msix_name, vf);
+   108		if (ret) {
+   109			IFCVF_ERR(pdev, "Failed to request config irq\n");
+   110			return ret;
+   111		}
+   112	
+   113		for (i = 0; i < vf->nr_vring; i++) {
+   114			snprintf(vf->vring[i].msix_name, 256, "ifcvf[%s]-%d\n",
+   115				 pci_name(pdev), i);
+   116			vector = i + IFCVF_MSI_QUEUE_OFF;
+   117			irq = pci_irq_vector(pdev, vector);
+   118			ret = devm_request_irq(&pdev->dev, irq,
+   119					       ifcvf_intr_handler, 0,
+   120					       vf->vring[i].msix_name,
+   121					       &vf->vring[i]);
+   122			if (ret) {
+   123				IFCVF_ERR(pdev,
+   124					  "Failed to request irq for vq %d\n", i);
+   125				ifcvf_free_irq(adapter, i);
+   126	
+   127				return ret;
+   128			}
+   129	
+   130			vf->vring[i].irq = irq;
+   131		}
+   132	
+   133		return 0;
+   134	}
+   135	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

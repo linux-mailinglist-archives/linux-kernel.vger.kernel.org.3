@@ -2,32 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3AB4B8304
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:39:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 076FD4B830F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbiBPIbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 03:31:00 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34768 "EHLO
+        id S230015AbiBPIbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 03:31:03 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiBPIa6 (ORCPT
+        with ESMTP id S229510AbiBPIa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 03:30:58 -0500
+        Wed, 16 Feb 2022 03:30:59 -0500
 Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8C221E31
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:30:46 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V4cXjy8_1645000243;
-Received: from localhost.localdomain(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0V4cXjy8_1645000243)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9AA22BF7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:30:47 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V4cXjyS_1645000244;
+Received: from localhost.localdomain(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0V4cXjyS_1645000244)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 16 Feb 2022 16:30:44 +0800
+          Wed, 16 Feb 2022 16:30:45 +0800
 From:   Xin Hao <xhao@linux.alibaba.com>
 To:     sj@kernel.org
 Cc:     xhao@linux.alibaba.com, rongwei.wang@linux.alibaba.com,
         akpm@linux-foundation.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [RFC PATCH V1 0/5] mm/damon: Add NUMA access statistics function support
-Date:   Wed, 16 Feb 2022 16:30:36 +0800
-Message-Id: <cover.1645024354.git.xhao@linux.alibaba.com>
+Subject: [RFC PATCH V1 1/5] mm/damon: Add NUMA local and remote variables in 'damon_region'
+Date:   Wed, 16 Feb 2022 16:30:37 +0800
+Message-Id: <2fb03665b39d7e3b222955ff690d73fe8e201c24.1645024354.git.xhao@linux.alibaba.com>
 X-Mailer: git-send-email 2.31.0
+In-Reply-To: <cover.1645024354.git.xhao@linux.alibaba.com>
+References: <cover.1645024354.git.xhao@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
@@ -40,72 +42,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On today's cloud computing service scenario, NUMA (non uniform memory access)
-architecture server has been applied on a large scale. Using Damon function,
-it can easily and lightweight identify hot and cold memory, but it can not
-display the situation of locale and remote NUMA memory access.
+The purpose of adding these two variables 'local' & 'remote'
+is to obtain the struct 'damon_region' numa access status.
 
-The purpose of these serie patches is to identify the situation of NUMA access
-in combination with DAMON, especially for remote NUMA access in hot memory.
-We hope to detect this situation in the data center and use page migration or
-multi backup page technology to optimize the behavior of memory access.
+Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
+Signed-off-by: Rongwei Wang <rongwei.wang@linux.alibaba.com>
+---
+ include/linux/damon.h | 4 ++++
+ mm/damon/core.c       | 6 ++++++
+ 2 files changed, 10 insertions(+)
 
-So next, we will further improve Damon NUMA function:
-1. Support hugtlbfs NUMA access statistics.
-2. Add the DAMO tool to parse NUMA local & remote in "damon_region" support.
-3. For hot memory remote NUMA access, support page migration or multi backup page.
-
-About DAMON correctness of numa access statistics
-We wrote a test case, allocate about 1G memory, and use numa_alloc(), set 512M in
-NUMA node0 and 512M in NUMA node1, and The test case alternately accesses the 1G of memory.
-
-We used "perf record -e damon:damon_aggregated" and "perf script"
-cmd to obtain data, like this:
-kdamond.0  target_id=0 nr_regions=10 281473056325632-281473127964672:: 12 0 5243 5513
-kdamond.0  target_id=0 nr_regions=10 281473127964672-281473238028288: 8 1 5427  5399
-...
-kdamond.0   target_id=0 nr_regions=10 281473056325632-281473127964672: 9 3 7669 7632
-kdamond.0   target_id=0  nr_regions=10 281473127964672-281473238028288: 7 2 7913 7892
-
-And compared with numastat like this:
-Per-node process memory usage (in MBs) for PID 111676 (lt-numademo)
-                           Node 0          Node 1          Node 2
-                  --------------- --------------- ---------------
-Huge                         0.00            0.00            0.00
-Heap                         0.02            0.00            0.00
-Stack                        0.01            0.00            0.00
-Private                    565.24          564.00            0.00
-----------------  --------------- --------------- ---------------
-Total                      565.27          564.00            0.00
-This comparison can determine the accuracy of Damon NUMA memory access statistics.
-
-About the impact of DAMON NUMA access on Performance
-During the  benchmakr test, we found that the MBW benchmark memcpy test item
-will cause about 3% performance degradation, and there is no performance degradation
-in other benchmarks.
-So we added "numa_stat" switch in DAMON dbgfs interface, turn on this switch when NUMA access
-statistics is required.
-
-
-Xin Hao (5):
-  mm/damon: Add NUMA local and remote variables in 'damon_region'
-  mm/damon: Add 'damon_region' NUMA fault simulation support
-  mm/damon: Add 'damon_region' NUMA access statistics core
-    implementation
-  mm/damon/dbgfs: Add numa simulate switch
-  mm/damon/tracepoint: Add 'damon_region' NUMA access statistics support
-
- include/linux/damon.h        | 25 ++++++++++
- include/trace/events/damon.h |  9 +++-
- mm/damon/core.c              | 94 +++++++++++++++++++++++++++++++++++-
- mm/damon/dbgfs.c             | 70 ++++++++++++++++++++++++---
- mm/damon/paddr.c             | 25 ++++++++--
- mm/damon/prmtv-common.c      | 44 +++++++++++++++++
- mm/damon/prmtv-common.h      |  3 ++
- mm/damon/vaddr.c             | 45 ++++++++++-------
- mm/huge_memory.c             |  5 ++
- mm/memory.c                  |  5 ++
- 10 files changed, 292 insertions(+), 33 deletions(-)
-
---
+diff --git a/include/linux/damon.h b/include/linux/damon.h
+index 5e1e3a128b77..77d0937dcab5 100644
+--- a/include/linux/damon.h
++++ b/include/linux/damon.h
+@@ -41,6 +41,8 @@ struct damon_addr_range {
+  * @nr_accesses:	Access frequency of this region.
+  * @list:		List head for siblings.
+  * @age:		Age of this region.
++ * @local:		Local numa node accesses.
++ * @remote:		Remote numa node accesses.
+  *
+  * @age is initially zero, increased for each aggregation interval, and reset
+  * to zero again if the access frequency is significantly changed.  If two
+@@ -56,6 +58,8 @@ struct damon_region {
+ 	unsigned int age;
+ /* private: Internal value for age calculation. */
+ 	unsigned int last_nr_accesses;
++	unsigned long local;
++	unsigned long remote;
+ };
+ 
+ /**
+diff --git a/mm/damon/core.c b/mm/damon/core.c
+index 1dd153c31c9e..933ef51afa71 100644
+--- a/mm/damon/core.c
++++ b/mm/damon/core.c
+@@ -45,6 +45,8 @@ struct damon_region *damon_new_region(unsigned long start, unsigned long end)
+ 
+ 	region->age = 0;
+ 	region->last_nr_accesses = 0;
++	region->local = 0;
++	region->remote = 0;
+ 
+ 	return region;
+ }
+@@ -740,6 +742,8 @@ static void damon_merge_two_regions(struct damon_target *t,
+ 
+ 	l->nr_accesses = (l->nr_accesses * sz_l + r->nr_accesses * sz_r) /
+ 			(sz_l + sz_r);
++	l->remote = (l->remote * sz_l + r->remote * sz_r) / (sz_l + sz_r);
++	l->local = (l->local * sz_l + r->local * sz_r) / (sz_l + sz_r);
+ 	l->age = (l->age * sz_l + r->age * sz_r) / (sz_l + sz_r);
+ 	l->ar.end = r->ar.end;
+ 	damon_destroy_region(r, t);
+@@ -812,6 +816,8 @@ static void damon_split_region_at(struct damon_ctx *ctx,
+ 
+ 	new->age = r->age;
+ 	new->last_nr_accesses = r->last_nr_accesses;
++	new->local = r->local;
++	new->remote = r->remote;
+ 
+ 	damon_insert_region(new, r, damon_next_region(r), t);
+ }
+-- 
 2.27.0
+

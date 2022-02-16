@@ -2,92 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46A8C4B8532
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 11:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6BB44B853E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 11:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232674AbiBPKFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 05:05:49 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38898 "EHLO
+        id S232691AbiBPKH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 05:07:28 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232692AbiBPKFs (ORCPT
+        with ESMTP id S232660AbiBPKH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 05:05:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5A79DD4F;
-        Wed, 16 Feb 2022 02:05:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 16 Feb 2022 05:07:26 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41CA1B85A3
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 02:07:13 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46F37B81E5F;
-        Wed, 16 Feb 2022 10:05:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65305C004E1;
-        Wed, 16 Feb 2022 10:05:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645005934;
-        bh=2J7xwzqTHWSDu2LH2Tt6SfS/J8p3zgSgjxdggOct+0A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z4pivZNnjcWwH5gWkuZPpjR0L6KEqfJdR6PwK5kDhXQ8A3vR5/OYVmdZ1WCbQaA49
-         dQjJ1epwQ1D/MLUj1C8LE5hNAcDDyhq3VNC/2vtvIhUf7E9R7IbtvQJa11JxX1sV34
-         02B6PA4yjOIesDlOX37gQ6sdKQwFVe8vESYTHhxQ=
-Date:   Wed, 16 Feb 2022 11:05:31 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Brian Geffon <bgeffon@google.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Willis Kung <williskung@google.com>,
-        Guenter Roeck <groeck@google.com>,
-        Borislav Petkov <bp@suse.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        "# v4 . 10+" <stable@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH stable 5.4,5.10] x86/fpu: Correct pkru/xstate
- inconsistency
-Message-ID: <YgzMa7VcdzRCyYGn@kroah.com>
-References: <543efc25-9b99-53cd-e305-d8b4d917b64b@intel.com>
- <20220215192233.8717-1-bgeffon@google.com>
- <YgwCuGcg6adXAXIz@kroah.com>
- <CADyq12wByWhsHNOnokrSwCDeEhPdyO6WNJNjpHE1ORgKwwwXgg@mail.gmail.com>
- <066c9f4b-b0a3-9343-9db9-1c1c7303da6f@intel.com>
- <CADyq12yuzOPbv+jrdhf8unzsifVXGw31LbW+Sh2tZ3qG=xjGjg@mail.gmail.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 614A41EC04C1;
+        Wed, 16 Feb 2022 11:07:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1645006028;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Mc1byk01SMNlUFOzzBp9ZSJPPb31u5PB8VWGi7eix5E=;
+        b=Z0zaQ3nbJ1YzlRMd4uKT4BEkM8VbIWo5VeAxr/dS5ZVBnKq+WYSOCRgQEtRseB00CnpPFV
+        TBXzGqsZfLiTVfCAVPNivNdefp+hgFsC4WoR7Ch0iJ827aTBCrMSiGVwAk+3Nzr+SRseCb
+        3EBUIDPrq8bvl9zxAQF5XDkq2fK5yhQ=
+Date:   Wed, 16 Feb 2022 11:07:15 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     "Kuppuswamy, Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Kai Huang <kai.huang@intel.com>
+Subject: Re: [PATCHv2 16/29] x86/boot: Add a trampoline for booting APs via
+ firmware handoff
+Message-ID: <YgzM03ovVdaXhT39@zn.tnic>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-17-kirill.shutemov@linux.intel.com>
+ <Yfpqk0amEbcyte+w@zn.tnic>
+ <25fec256-7feb-e94d-5e37-3a174b6c6a66@linux.intel.com>
+ <Yf0vB+TBR2AjHmV5@zn.tnic>
+ <20220215213624.tzdahmbhucupwtqe@black.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CADyq12yuzOPbv+jrdhf8unzsifVXGw31LbW+Sh2tZ3qG=xjGjg@mail.gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220215213624.tzdahmbhucupwtqe@black.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 09:01:54PM -0500, Brian Geffon wrote:
-> On Tue, Feb 15, 2022 at 4:42 PM Dave Hansen <dave.hansen@intel.com> wrote:
-> >
-> > On 2/15/22 13:32, Brian Geffon wrote:
-> > >> How was this tested, and what do the maintainers of this subsystem
-> > >> think?  And will you be around to fix the bugs in this when they are
-> > >> found?
-> > > This has been trivial to reproduce, I've used a small repro which I've
-> > > put here: https://gist.github.com/bgaff/9f8cbfc8dd22e60f9492e4f0aff8f04f
-> > > , I also was able to reproduce this using the protection_keys self
-> > > tests on a 11th Gen Core i5-1135G7.
-> >
-> > I've got an i7-1165G7, but I'm not seeing any failures on a
-> > 5.11 distro kernel.
-> >
-> 
-> Hi Dave,
-> I suspect the reason you're not seeing it is toolchain related, I'm
-> building with clang 14.0.0 and it produces the sequence of
-> instructions which use the cached value. Let me know if there is
-> anything I can do to help you investigate this further.
+On Wed, Feb 16, 2022 at 12:36:24AM +0300, Kirill A. Shutemov wrote:
+> How can signle trampoline_start cover all cases?
 
-Do older versions of clang have this problem?
+All I'm saying is that the real mode header should have a single
 
-thanks,
+	u32     trampoline_start;
 
-greg k-h
+instead of:
+
+	u32     trampoline_start;
+	u32     sev_es_trampoline_start;
+	u32     trampoline_start64;
+
+which all are the same thing on a single system.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

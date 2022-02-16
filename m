@@ -2,50 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0B04B7E67
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 04:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7E74B7E17
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 04:15:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344033AbiBPDGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 22:06:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54544 "EHLO
+        id S1344002AbiBPDHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 22:07:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344018AbiBPDF6 (ORCPT
+        with ESMTP id S237823AbiBPDHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 22:05:58 -0500
-Received: from qq.com (smtpbg472.qq.com [59.36.132.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18505FDFA7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 19:05:46 -0800 (PST)
-X-QQ-mid: bizesmtp90t1644980693tylaq75g
-Received: from localhost.localdomain (unknown [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 16 Feb 2022 11:04:41 +0800 (CST)
-X-QQ-SSF: 01400000002000B0E000B00A0000000
-X-QQ-FEAT: G+mSt178IQqtrmaXXYz7lyJ3KPDNlaIiWGgP5TqNWATsAk5FNjA6Hpx8ZL6bA
-        ZxDb1yzWaOxKOFBHgb8MJGjuZXSvhgysm10z5X+aHlHK4bXs+sK08W2IBG1mN1GFPo60TTX
-        PjFiyDgNr0Q54GGlU9Yp22YFB+z4TA81L4Wt6iav0ITlcyMRs+JYs2f3HunMvRvlXWr9tyD
-        +mtDfFrtxD9UKdXq4mO2bOwmV4dlxUHJai+QqFppNKRC0S9zwY5uq4DPGq0qC/fwoExFE80
-        JIMmVM2DNz2ZzG+wq51B8QKitjs1ikMtp0KU5g/jn/JrOAsNQ8UuQbn+9sX1IBXmGtjd7R+
-        U6nIGiN1ncPIg/0kM25gNH1zpK8lg==
-X-QQ-GoodBg: 2
-From:   tangmeng <tangmeng@uniontech.com>
-To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tangmeng <tangmeng@uniontech.com>
-Subject: [PATCH 2/2] perf tools: Remove redundant err variable
-Date:   Wed, 16 Feb 2022 11:04:25 +0800
-Message-Id: <20220216030425.27779-2-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220216030425.27779-1-tangmeng@uniontech.com>
-References: <20220216030425.27779-1-tangmeng@uniontech.com>
+        Tue, 15 Feb 2022 22:07:01 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD2D2A270;
+        Tue, 15 Feb 2022 19:06:49 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id ca12so895610qtb.4;
+        Tue, 15 Feb 2022 19:06:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lWbWPRpljqyxUHO/4PPZALOIacGNZAKBTnuOLqqWIhs=;
+        b=Jbs61Yb2r2ZUEIR9A1UgOmQ9u4kR0q9hl/FV0ymx/e9E+nTqShQq/RLj/5lDCk1ib1
+         tOqkro+vkfo26b0R5PUPe/bPO+0KujlmRMMsaNOUFaD+/nVKVogL/m3J8g7luuMswJ0Z
+         cC5xbasFfHLherFK8eQ6P6I74iJBspgHFqC25PZCdzX3sEm2VAOUGbD89IR6sWQjuI4R
+         gKuFoThRa6c2BxfjlBiLVGQoEdbOGJCYr+QlcC+gBgNiCqqFfR+g/7qW212nKoiNTlNn
+         /ZGr5JmidTkzTgMJsnAPE3MzfRXoJ7GMXEm4Eu4bT/ZanDe/kG82eDE/9oNTDabAg5Sc
+         JX6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lWbWPRpljqyxUHO/4PPZALOIacGNZAKBTnuOLqqWIhs=;
+        b=DtQKCHspkgIo9bWm3BtgmlBCYIqpT5mK/5A70QPbvmp5X4F2YhapVU/lGQOxcl6NOS
+         aCpx7G+DmU09Sv+2kdbKuXFf9mQ+3XzIt17/zXzZ7nwqoYdKeV1tpOEJ99XAEEiMHGJO
+         SRa+elkfxUDq1goreFvjXLGFbM9vLz98ufhaxZiMiHnfxMFfST765i65asLIHSlV7Wh7
+         /NjIrig5ySfS19w61w+QTwXkGSb7R4CPN44BQ94vyKYUaetKq15GCtZafc78LWBhi1EM
+         8hmsTZ0aJdq1vVHfuVkLAONkPohtYcFd9r+kgxkPt8deOfdEB4qImt310UezI846JsMY
+         4f2g==
+X-Gm-Message-State: AOAM5332gpG5qZX5Boj2boy/CVnq1P9j2Ag7mwoAbsS9e+DqGcChQCnB
+        dVQUE7t8Ul7UwDsmFdTCZPTC6fBzeFw=
+X-Google-Smtp-Source: ABdhPJxofywMtYxXGkQSNPL94EkZi7+ZP0qtW5bAL+8Ub19FVxW4Q6TuoIJejiszbdQgnN72rw470g==
+X-Received: by 2002:ac8:5bd1:0:b0:2d0:a800:21c1 with SMTP id b17-20020ac85bd1000000b002d0a80021c1mr735525qtb.446.1644980809109;
+        Tue, 15 Feb 2022 19:06:49 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id h13sm9717122qkp.77.2022.02.15.19.06.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 19:06:48 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     sathya.prakash@broadcom.com
+Cc:     sreekanth.reddy@broadcom.com,
+        suganath-prabu.subramani@broadcom.com,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] message/fusion: use struct_size over open coded arithmetic
+Date:   Wed, 16 Feb 2022 03:06:41 +0000
+Message-Id: <20220216030641.1839422-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign6
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,41 +72,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable err in the perf_event__process_sample is only used
-in the only one judgment statement, it is not used in other places.
+From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 
-So, use the return value from hist_entry_iter__add() directly
-instead of taking this in another redundant variable.
+Replace zero-length array with flexible-array member and make use
+of the struct_size() helper in kzalloc(). For example:
 
-Signed-off-by: tangmeng <tangmeng@uniontech.com>
+struct fw_event_work {
+	...
+	u8			retries;
+	char			event_data[] __aligned(4);
+};
+
+Make use of the struct_size() helper instead of an open-coded version
+in order to avoid any potential type mistakes.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 ---
- tools/perf/builtin-top.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/message/fusion/mptsas.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-index 1fc390f136dd..3c8c60b7f6f0 100644
---- a/tools/perf/builtin-top.c
-+++ b/tools/perf/builtin-top.c
-@@ -746,7 +746,6 @@ static void perf_event__process_sample(struct perf_tool *tool,
- {
- 	struct perf_top *top = container_of(tool, struct perf_top, tool);
- 	struct addr_location al;
--	int err;
+diff --git a/drivers/message/fusion/mptsas.c b/drivers/message/fusion/mptsas.c
+index 4acd8f9a48e1..c6fb4fd75434 100644
+--- a/drivers/message/fusion/mptsas.c
++++ b/drivers/message/fusion/mptsas.c
+@@ -5113,7 +5113,7 @@ mptsas_event_process(MPT_ADAPTER *ioc, EventNotificationReply_t *reply)
  
- 	if (!machine && perf_guest) {
- 		static struct intlist *seen;
-@@ -839,8 +838,7 @@ static void perf_event__process_sample(struct perf_tool *tool,
- 
- 		pthread_mutex_lock(&hists->lock);
- 
--		err = hist_entry_iter__add(&iter, &al, top->max_stack, top);
--		if (err < 0)
-+		if (hist_entry_iter__add(&iter, &al, top->max_stack, top) < 0)
- 			pr_err("Problem incrementing symbol period, skipping event\n");
- 
- 		pthread_mutex_unlock(&hists->lock);
+ 	event_data_sz = ((reply->MsgLength * 4) -
+ 	    offsetof(EventNotificationReply_t, Data));
+-	fw_event = kzalloc(sizeof(*fw_event) + event_data_sz, GFP_ATOMIC);
++	fw_event = kzalloc(struct_size(fw_event, event_data, event_data_sz), GFP_ATOMIC);
+ 	if (!fw_event) {
+ 		printk(MYIOC_s_WARN_FMT "%s: failed at (line=%d)\n", ioc->name,
+ 		 __func__, __LINE__);
 -- 
-2.20.1
-
-
+2.25.1
 

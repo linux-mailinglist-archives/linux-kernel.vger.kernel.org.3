@@ -2,178 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04FFE4B8749
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 13:00:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 821F04B874D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 13:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232911AbiBPMA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 07:00:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45082 "EHLO
+        id S232963AbiBPMCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 07:02:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232902AbiBPMA5 (ORCPT
+        with ESMTP id S232909AbiBPMCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 07:00:57 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28378271E17;
-        Wed, 16 Feb 2022 04:00:44 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id e22so1805024qvf.9;
-        Wed, 16 Feb 2022 04:00:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cQvOjIROjp4zDNuMZYbqh86L4m+vxJGvKJ604jfTJTw=;
-        b=N9wnl8+At1bfN/IgY71qE/9enXNC/I0uomEOiyCqHs1huRf80v1vPyf1KPwTBtuuMY
-         ySRrLpd/13BnMtPnT7dsgCj7vksrB9Vnz5k521h31u402pz97WT/nQvNlr7HCmrEk5Jd
-         S8QvmdldTCng6bBWqBb9wbHuEGB687ESAVndbnYFA3Ic7aaUpeTGW3Pil6EbgJ3yw84R
-         GILrnTSmsLHTiUVrt79J9hMQqfjtojnyiim9lpVXK9cSf9sUTip3OqGYZkBMxYDh03yi
-         MJ3IwWCRgjUyTDySrE7H66awu/k+u62bEdMul20Kqp+EOUn6qGgKHBaI99awmFHe8Cc0
-         3n2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cQvOjIROjp4zDNuMZYbqh86L4m+vxJGvKJ604jfTJTw=;
-        b=6Hd0UtCoS6WSGOmI4tKkvvfojZxd01x/yxCHLa45tabWVZpBvVq5EPlu8BSB7NaenD
-         auKO5Q9vXKBR2buoNzrC0u85qV+4CVEbPYtZno6ibC85U943AV/NdP9M9VM2EImSUFcO
-         W/kXcAqDw0Mb45osDCyuTGzKJrN21vCg0AF/bgKEc3lOwEQMke+NAsCwJP5a2gSf94QU
-         JOZJy1LXT/UvJKHFQwB59CWef0dVR6JaNSon8Uhb8wlgMUH15nU1/1cCSnTCgpuEBiVX
-         Py4Bdi54vdoSlu+1QI2zVqZUwmrFyQL5QqKvCkN3x3CrSuvcFKYzxl+TSQJQ3RWS1VGH
-         fhfw==
-X-Gm-Message-State: AOAM530kYdmMjiLdOOVRJFC24QjO9wwhBmWEgsP8HcwwQ/muCLS9DRYr
-        LD+X/kLGFxIwigTDS8tVKwdEpaR6vj2SS/HTVQ8=
-X-Google-Smtp-Source: ABdhPJwg7yjA4t72Kpkib54Bk/3LZCXg5ZKFnD3VS3sB64mSjOVkkzuHZ7deSjR6ZyjiByrca9BkgKOtd/mBXxfw0Cc=
-X-Received: by 2002:ad4:58af:0:b0:42c:33e5:ddda with SMTP id
- ea15-20020ad458af000000b0042c33e5dddamr1483996qvb.27.1645012843985; Wed, 16
- Feb 2022 04:00:43 -0800 (PST)
+        Wed, 16 Feb 2022 07:02:15 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829B8E7F43
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 04:02:03 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3AF0321763;
+        Wed, 16 Feb 2022 12:02:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645012922; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kr9dETkBJpugtcSkfZO+bjcmUGF0KSfTN/IBCGVngP4=;
+        b=nfePnksG+NG2Z0qM7wRUlAloNATUCtIQUk6znsvYEpA4hxSTZsw5bFcerWsG8u8cpTCe8d
+        EFqsssmkAnhb6wUyRkbLkp+4dkvBgCi/kpKbIgjVAoGKU4TP7pL3+kw+KhTuaT2uck89BN
+        RKLIIhI63NxuWfr0co0p9JtcCWR4e6o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645012922;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kr9dETkBJpugtcSkfZO+bjcmUGF0KSfTN/IBCGVngP4=;
+        b=Dd1MZt1sZ8lHTN+X+ydf4DfYr812TeEkgjBiybL0cdX7B9OK5TtVvtm/FEqztwOeS8ZBwR
+        xp+n6JXhvcgHoZDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1A04513AF3;
+        Wed, 16 Feb 2022 12:02:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id H5ShBbrnDGJqQAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 16 Feb 2022 12:02:02 +0000
+Message-ID: <d6f991f6-ce07-853a-e87b-5eda97a35733@suse.cz>
+Date:   Wed, 16 Feb 2022 13:02:01 +0100
 MIME-Version: 1.0
-References: <20220208084234.1684930-1-hsinyi@chromium.org> <CACvgo53u01BK_D0ZssV+gCepjxSz23Nr5Dy1qXeaAoJuu6VCFQ@mail.gmail.com>
- <KW6DNh6IRRgVJx9DfOFBnEqc4a0x-AnDXEbMxwpfEbk8dOn_KGVzAfo-slJWq-4nWW728Uc-OVpFh2w4fDE4-bxfkDuz1hFILRVvbcuXqaw=@emersion.fr>
- <CACvgo532-pC+7DLFCo=DWTX-OnJEJvSoTmQnt3_qLhiT4cqEMg@mail.gmail.com> <GYG6EVT1MqtmfKiPpMhDG9mpuATnmwVDq2PuE_dpDat5oQW_t1tUfm39lSWHj32D5r7mrog27sL4dkgdMYQ5BN830TfVOrgQ4Ts8LcO8Hcs=@emersion.fr>
-In-Reply-To: <GYG6EVT1MqtmfKiPpMhDG9mpuATnmwVDq2PuE_dpDat5oQW_t1tUfm39lSWHj32D5r7mrog27sL4dkgdMYQ5BN830TfVOrgQ4Ts8LcO8Hcs=@emersion.fr>
-From:   Emil Velikov <emil.l.velikov@gmail.com>
-Date:   Wed, 16 Feb 2022 12:00:32 +0000
-Message-ID: <CACvgo52+o9_ETC+1RKzqKkyw3ZJ28RjH0BqC9DfmNAKqByud8Q@mail.gmail.com>
-Subject: Re: [Intel-gfx] [PATCH v8 1/3] gpu: drm: separate panel orientation
- property creating and value setting
-To:     Simon Ser <contact@emersion.fr>
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        LAKML <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Content-Language: en-US
+To:     Mel Gorman <mgorman@techsingularity.net>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Aaron Lu <aaron.lu@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+References: <20220215145111.27082-1-mgorman@techsingularity.net>
+ <20220215145111.27082-3-mgorman@techsingularity.net>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH 2/5] mm/page_alloc: Track range of active PCP lists during
+ bulk free
+In-Reply-To: <20220215145111.27082-3-mgorman@techsingularity.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022 at 16:37, Simon Ser <contact@emersion.fr> wrote:
->
-> On Tuesday, February 15th, 2022 at 15:38, Emil Velikov <emil.l.velikov@gmail.com> wrote:
->
-> > On Tue, 15 Feb 2022 at 13:55, Simon Ser <contact@emersion.fr> wrote:
-> > >
-> > > On Tuesday, February 15th, 2022 at 13:04, Emil Velikov <emil.l.velikov@gmail.com> wrote:
-> > >
-> > > > Greetings everyone,
-> > > >
-> > > > Padron for joining in so late o/
-> > > >
-> > > > On Tue, 8 Feb 2022 at 08:42, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
-> > > > >
-> > > > > drm_dev_register() sets connector->registration_state to
-> > > > > DRM_CONNECTOR_REGISTERED and dev->registered to true. If
-> > > > > drm_connector_set_panel_orientation() is first called after
-> > > > > drm_dev_register(), it will fail several checks and results in following
-> > > > > warning.
-> > > > >
-> > > > > Add a function to create panel orientation property and set default value
-> > > > > to UNKNOWN, so drivers can call this function to init the property earlier
-> > > > > , and let the panel set the real value later.
-> > > > >
-> > > >
-> > > > The warning illustrates a genuine race condition, where userspace will
-> > > > read the old/invalid property value/state. So this patch masks away
-> > > > the WARNING without addressing the actual issue.
-> > > > Instead can we fix the respective drivers, so that no properties are
-> > > > created after drm_dev_register()?
-> > > >
-> > > > Longer version:
-> > > > As we look into drm_dev_register() it's in charge of creating the
-> > > > dev/sysfs nodes (et al). Note that connectors cannot disappear at
-> > > > runtime.
-> > > > For panel orientation, we are creating an immutable connector
-> > > > properly, meaning that as soon as drm_dev_register() is called we must
-> > > > ensure that the property is available (if applicable) and set to the
-> > > > correct value.
-> > >
-> > > Unfortunately we can't quite do this. To apply the panel orientation quirks we
-> > > need to grab the EDID of the eDP connector, and this happened too late in my
-> > > testing.
-> > >
-> > > What we can do is create the prop early during module load, and update it when
-> > > we read the EDID (at the place where we create it right now). User-space will
-> > > receive a hotplug event after the EDID is read, so will be able to pick up the
-> > > new value if any.
-> >
-> > Didn't quite get that, are you saying that a GETPROPERTY for the EDID,
-> > the ioctl blocks or that we get an empty EDID?
->
-> I'm not referring to GETPROPERTY, I'm referring to the driver getting the EDID
-> from the sink (here, the eDP panel). In my experimentations with amdgpu I
-> noticed that the driver module load finished before the EDID was available to
-> the driver. Maybe other drivers behave differently and probe connectors when
-> loaded, not sure.
->
-I see thanks.
+On 2/15/22 15:51, Mel Gorman wrote:
+> free_pcppages_bulk() frees pages in a round-robin fashion. Originally,
+> this was dealing only with migratetypes but storing high-order pages
+> means that there can be many more empty lists that are uselessly
+> checked. Track the minimum and maximum active pindex to reduce the
+> search space.
+> 
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> ---
+>  mm/page_alloc.c | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 08de32cfd9bb..c5110fdeb115 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -1450,6 +1450,8 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+>  					struct per_cpu_pages *pcp)
+>  {
+>  	int pindex = 0;
+> +	int min_pindex = 0;
+> +	int max_pindex = NR_PCP_LISTS - 1;
+>  	int batch_free = 0;
+>  	int nr_freed = 0;
+>  	unsigned int order;
+> @@ -1478,10 +1480,17 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+>  			if (++pindex == NR_PCP_LISTS)
 
-> > The EDID hotplug even thing is neat - sounds like it also signals on
-> > panel orientation, correct?
-> > On such an event, which properties userspace should be re-fetching -
-> > everything or guess randomly?
-> >
-> > Looking through the documentation, I cannot see a clear answer :-\
->
-> User-space should re-fetch *all* properties. In practice some user-space may
-> only be fetching some properties, but that should get fixed in user-space.
->
-> Also the kernel can indicate that only a single connector changed via the
-> "CONNECTOR" uevent prop, or even a single connector property via "PROPERTY".
-> See [1] for a user-space implementation. But all of this is purely an optional
-> optimization. Re-fetching all properties is a bit slower (especially if some
-> drmModeGetConnector calls force-probe connectors) but works perfectly fine.
->
-Looking at KDE/kwin (the one I'm running) - doesn't seem like it
-handles any of the three "HOTPLUG", "PROPERTY" or "CONNECTOR" uevents
-:-\
-Skimming through GNOME/mutter - it handles "HOTPLUG", but not the optional ones.
+Hmm, so in the very first iteration at this point pindex is already 1. This
+looks odd even before the patch, as order 0 MIGRATE_UNMOVABLE list is only
+processed after all the higher orders?
 
-Guess we're in the clear wrt potential races, even though the
-documentation on the topic is lacklustre.
+>  				pindex = 0;
 
-> It would be nice to document, if you have the time feel free to send a patch
-> and CC danvet, pq and me.
->
+Also shouldn't this wrap-around check also use min_index/max_index instead
+of NR_PCP_LISTS and 0?
 
-Doubt I will have the time in the upcoming weeks, but I'll add it to
-my ever-growing TODO list :-P
+>  			list = &pcp->lists[pindex];
+> -		} while (list_empty(list));
+> +			if (!list_empty(list))
+> +				break;
+> +
+> +			if (pindex == max_pindex)
+> +				max_pindex--;
+> +			if (pindex == min_pindex)
 
-Thanks
-Emil
+So with pindex 1 and min_pindex == 0 this will not trigger until
+(eventually) the first pindex wrap around, which seems suboptimal. But I can
+see the later patches change things substantially anyway so it may be moot...
+
+> +				min_pindex++;
+> +		} while (1);
+>  
+>  		/* This is the only non-empty list. Free them all. */
+> -		if (batch_free == NR_PCP_LISTS)
+> +		if (batch_free >= max_pindex - min_pindex)
+>  			batch_free = count;
+>  
+>  		order = pindex_to_order(pindex);
+

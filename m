@@ -2,62 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA5C4B7C04
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 01:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 134344B7C09
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 01:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244167AbiBPAkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 19:40:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51690 "EHLO
+        id S245091AbiBPAlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 19:41:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243144AbiBPAka (ORCPT
+        with ESMTP id S243144AbiBPAlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 19:40:30 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493C7F8B93
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 16:40:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644972019; x=1676508019;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qjwGTshsg0Dm9IvhRP+zUM6LzmwFYMHgLZsHLiyiOfQ=;
-  b=boTLekJrP76d7Mu3SARMMSQUkavEVo6Q4w+Zzn8OKNs5vKXqvkTDimBB
-   Xvze6r6PMw77+wA4XcVwuDNzyutDVV4XWiJUvtGuuUKS03fMwdhvQQZPj
-   RlmXRstwobniSl/JEGmbzBEZAlcer3gCyQpUJUdQnHrMKN5RZMgCXj05S
-   Ms4opUMgvybd0K3+djmdtQqo6+oJ4QyEQevWALhQBMoMcplOYDmOUscBC
-   Xp+J16dlqw/YxsyvX3y6K1bs5ktVvaJuhXsbGMf/cBmjkMAdP1Gi+keEt
-   V+LThLe+K7hbN4Yt5+TgriGH8FgqtA5YzFKQhCMlJvSotbbNWayovQ0Sk
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="311231772"
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="311231772"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 16:40:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="636227156"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 15 Feb 2022 16:40:17 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nK8Mi-000ADK-MD; Wed, 16 Feb 2022 00:40:16 +0000
-Date:   Wed, 16 Feb 2022 08:40:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 28/43]
- fs/netfs/write_helper.c:28:26: warning: comparison of distinct pointer types
- ('typeof (((1UL) << (12)) - offset) *' (aka 'unsigned long *') and 'typeof
- (size) *' (aka 'unsigned int *'))
-Message-ID: <202202160826.zdpmsgyh-lkp@intel.com>
+        Tue, 15 Feb 2022 19:41:18 -0500
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E03F94C2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 16:41:03 -0800 (PST)
+Received: by mail-oo1-xc30.google.com with SMTP id i10-20020a4aab0a000000b002fccf890d5fso697026oon.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 16:41:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=D6kOuJ3sFRAfxlfcJvGvD0WdwWS/gNKzCWsG8Lno9eY=;
+        b=iX4gNuGKYZNG9hM1lAyY7Nf/bZLA5KTwEcEMmT3v/Wkao8xyAeGNUtg1UxOYaO42aC
+         XZstBpPHLaxU6YJNIWfSub+ULsZeKmX/L7ae/TPdpY5zEOmW7JYZjAIs56FeEgSA/CLE
+         wG0hkTYT7TAeJo1PVmmZFXS/PQWpRu2EtuOzM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=D6kOuJ3sFRAfxlfcJvGvD0WdwWS/gNKzCWsG8Lno9eY=;
+        b=onZyw0LI9koZF6f1tik1/RTd672g3ji8wncLLEcV4dsPwvpAeNzVvDdDMSqPJHpeUc
+         QqrQvq3+tJKimHJLDLSxtYSJX4iIBbJgtHobRGozMeXtay1hSMqR5NZGNrUFdoLoxlJW
+         NCXRIKOJsEuANis52xKCeUfTYvbfkrgRtS72LEKxg259SLLYM7SFXyYnUNxD+Aycqktr
+         37nFb45Ee2X38KFn7WXhOF/Yu2Elc0tw6kALvsk+ay7FXMv17v/tvpk3kZoJAe2o6AGt
+         TDt3Q6fRl/hL9kLrKNhoejucx+cEM2DvWP1e1rRmzK4uQLUNBYFxwPkbc2rfGjs2u11Z
+         QkLg==
+X-Gm-Message-State: AOAM533DYQ4rs0K+3E9AmsjGS3P7wZajMK4LypqTrdQb7y+0NXisTZnj
+        dIDsXnDe69xsB2/XSPuNCFyveaY8DZxgjg==
+X-Google-Smtp-Source: ABdhPJyL8AftNftGr+LuQUdrA+hXxGxr0dlBNVZdTGaHIup4R7JXn4LOAjBIPinmrzYttC2FN+FuhA==
+X-Received: by 2002:a4a:301c:0:b0:2dc:dcf1:8a62 with SMTP id q28-20020a4a301c000000b002dcdcf18a62mr133667oof.7.1644972062722;
+        Tue, 15 Feb 2022 16:41:02 -0800 (PST)
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com. [209.85.167.172])
+        by smtp.gmail.com with ESMTPSA id y1sm17225052oad.38.2022.02.15.16.41.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 16:41:02 -0800 (PST)
+Received: by mail-oi1-f172.google.com with SMTP id x193so909605oix.0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 16:41:01 -0800 (PST)
+X-Received: by 2002:a05:6808:1b29:b0:2ce:6ee7:2cc5 with SMTP id
+ bx41-20020a0568081b2900b002ce6ee72cc5mr2715980oib.243.1644972061370; Tue, 15
+ Feb 2022 16:41:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20211001144212.v2.1.I773a08785666ebb236917b0c8e6c05e3de471e75@changeid>
+ <CAD=FV=XU0bYVZk+-jPWZVoODW79QXOJ=NQy+RH=fYyX+LCZb2Q@mail.gmail.com>
+ <CA+ASDXPXKVwcZGYoagJYPm4E7DzaJmEVEv2FANhLH-juJw+r+Q@mail.gmail.com> <CAD=FV=VYe1rLKANQ8eom7g8x1v6_s_OYnX819Ax4m7O3UwDHmg@mail.gmail.com>
+In-Reply-To: <CAD=FV=VYe1rLKANQ8eom7g8x1v6_s_OYnX819Ax4m7O3UwDHmg@mail.gmail.com>
+From:   Brian Norris <briannorris@chromium.org>
+Date:   Tue, 15 Feb 2022 16:40:49 -0800
+X-Gmail-Original-Message-ID: <CA+ASDXO8c4dK31p=kvBABJQsDUs20qVHM6NxYf1JQDCr2oswAw@mail.gmail.com>
+Message-ID: <CA+ASDXO8c4dK31p=kvBABJQsDUs20qVHM6NxYf1JQDCr2oswAw@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/bridge: analogix_dp: Grab runtime PM reference for DP-AUX
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Sean Paul <sean@poorly.run>, Jonas Karlman <jonas@kwiboo.se>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "# 4.0+" <stable@vger.kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,102 +83,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   d40df0841e9f8de3713a19dd3f0ba283c860cb93
-commit: 7de6bd1573006959937bf5d90e85f16cdec38284 [28/43] netfs: Implement buffered writes through netfs_file_write_iter()
-config: riscv-randconfig-r033-20220214 (https://download.01.org/0day-ci/archive/20220216/202202160826.zdpmsgyh-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/7de6bd1573006959937bf5d90e85f16cdec38284
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout 7de6bd1573006959937bf5d90e85f16cdec38284
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/netfs/
+On Tue, Feb 15, 2022 at 3:46 PM Doug Anderson <dianders@chromium.org> wrote:
+> On Tue, Feb 15, 2022 at 2:52 PM Brian Norris <briannorris@chromium.org> wrote:
+> > It still makes me wonder what the point
+> > of the /dev/drm_dp_aux<N> interface is though, because it seems like
+> > you're pretty much destined to not have reliable operation through
+> > that means.
+>
+> I can't say I have tons of history for those files. I seem to recall
+> maybe someone using them to have userspace tweak the embedded
+> backlight on some external DP connected panels? I think we also might
+> use it in Chrome OS to update the firmware of panels (dunno if
+> internal or external) in some cases too? I suspect that it works OK
+> for certain situations but it's really not going to work in all
+> cases...
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yes, I believe I'm only submitting patches like this because fwupd
+apparently likes to indiscriminately whack at dpaux devices:
+https://github.com/fwupd/fwupd/tree/main/plugins/synaptics-mst#kernel-dp-aux-interface
 
-All warnings (new ones prefixed by >>):
+That seems like a bad idea.
 
->> fs/netfs/write_helper.c:28:26: warning: comparison of distinct pointer types ('typeof (((1UL) << (12)) - offset) *' (aka 'unsigned long *') and 'typeof (size) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-                   unsigned int psize   = min(PAGE_SIZE - offset, size);
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/netfs/write_helper.c:95:18: warning: comparison of distinct pointer types ('typeof (target->from) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
-           target->from  = min(target->from, folio_pos(folio) + offset);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/netfs/write_helper.c:96:18: warning: comparison of distinct pointer types ('typeof (target->to) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset + len) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
-           target->to    = max(target->to,   folio_pos(folio) + offset + len);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:52:19: note: expanded from macro 'max'
-   #define max(x, y)       __careful_cmp(x, y, >)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   3 warnings generated.
+(We've already disabled that plugin on these systems, but it seems
+wise not to leave the stumbling block here for the next time.)
 
+> I suppose this just further proves the point that this is really not a
+> great interface to rely on. It's fine for debugging during hardware
+> bringup and I guess in limited situations it might be OK, but it's
+> really not something we want userspace tweaking with anyway, right? In
+> general I expect it's up to the kernel to be controlling peripherals
+> on the DP AUX bus. The kernel should have a backlight driver and
+> should do the AUX transfers needed. Having userspace in there mucking
+> with things is just a bad idea. I mean, userspace also doesn't know
+> when a panel has been power cycled and potentially lost any changes
+> that they might have written, right?
+>
+> I sorta suspect that most of the uses of these files are there because
+> there wasn't a kernel driver and someone thought that doing it in
+> userspace was the way to go?
 
-vim +28 fs/netfs/write_helper.c
+*shrug* beats me.
 
-    18	
-    19	static size_t copy_folio_from_iter_atomic(struct folio *folio,
-    20						  unsigned int offset, size_t size,
-    21						  struct iov_iter *i)
-    22	{
-    23		size_t copied = 0, n;
-    24	
-    25		do {
-    26			unsigned int index   = offset / PAGE_SIZE;
-    27			unsigned int poffset = offset % PAGE_SIZE;
-  > 28			unsigned int psize   = min(PAGE_SIZE - offset, size);
-    29	
-    30			n = copy_page_from_iter_atomic(folio_file_page(folio, index),
-    31						       poffset, psize, i);
-    32			copied += n;
-    33			if (n < psize)
-    34				break;
-    35			size -= n;
-    36		} while (size);
-    37		return copied;
-    38	}
-    39	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Brian

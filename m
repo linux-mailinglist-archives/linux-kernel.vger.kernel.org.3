@@ -2,193 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 487314B7DDD
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 03:51:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 425DE4B7DE0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 03:51:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343774AbiBPCbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 21:31:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37902 "EHLO
+        id S1343759AbiBPCbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 21:31:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343760AbiBPCbH (ORCPT
+        with ESMTP id S236576AbiBPCbr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 21:31:07 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E15EF5439
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:30:56 -0800 (PST)
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com [209.85.161.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A772E3F4B4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 02:30:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644978654;
-        bh=DRpDpqQiuMMldgIWegtfvVNJCD2dQ9IK5RuKdfq/h34=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=H5UEtIe0dUWEaKkkWc5pW4VBsWHl7h8tYbDW99AZMBnRj9vCD2qr5zO/9T0TPTWCD
-         bmiDMmeJj8zMQQhkEXpSTudmu6aq52fne369rNH7rgU02A0lmjEfhEI93Wd2PFUr/p
-         NJfCwWayNhX9mE4evApH+X0vzN1IBlLFXrF0r2ctEmyx+XiQzhH2XVFbTj6hBMFEUX
-         SMi/19p5Ad5AlXwx8tx982SqCp/m8Bs1p4PabsJm/smxFMXZMduj5fhSlRfh78yDXT
-         Cg4CeEVLa1LVJKoWbMRp0ChCwaucwh7dDYJE8VLQg0W6ut3NSMeH1pU3IkkaBMudyO
-         QM8yumAkeguxg==
-Received: by mail-oo1-f70.google.com with SMTP id h7-20020a4aa287000000b002eb15de5797so485242ool.23
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:30:54 -0800 (PST)
+        Tue, 15 Feb 2022 21:31:47 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6A5996BE
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:31:36 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id w20so863103plq.12
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:31:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tMSwIfjOv1Uyh0Rn8c3FPvnNt2awh1M6+sjpagFNNPs=;
+        b=MrvjeIXCQ0Ol/ZNcfXLD9ryra3Lxo0LuahOeXNhhVa8XVLk1mUyCn13YOkRJMEu7rU
+         /IiaUHNDr77cLli/X5P8Akq/dF6VCwimLY3cWD9peCVXcnFV56IY9C7gNqaju6Y/YLy3
+         eWTGx5T7KUECG4JNaraqfYDi4uVSFg/kF5Iv+0n6BeHzpnTgQ2e9eIrsYZF3XfWZ3GhB
+         WuEwHitGwU6yPS5Z7i9bu7dfGGKty0EU7dChAqeZ/QpqjScnH0TkUWB4Mm5UyxLYNufD
+         qI3yU6sUDxkiD/3h9BfUlAfCRDkDWa7tEV0xEIg4ifAS6TMM+5ZGqlOi2GdVTXx1/dcO
+         Nq9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DRpDpqQiuMMldgIWegtfvVNJCD2dQ9IK5RuKdfq/h34=;
-        b=K0N6GAcnS0EENWKtwErpjV49oARIKZc0+1XeGWUSFSeWix/uXLJIiRc20rVe4ZdKTi
-         xJdS0wt034bDZVHZxRS7fUbsXE3vJ2h6h2UMZf16qVjFZR4/LhndgT288xqvOegY56oU
-         QdR8Ga4KSsBXeIJtIZu7iXMVs7jDlrJ/AJgRzKKSaBgZpGUy4kwhvIjsyWen393qtyCk
-         VukvmdI+yUUCwejD0o+IxkpyWSTSe8DKIkJsMgkXeDOs8b+XdOobehURpOLT7A7rKKgq
-         DTltD0SMir/kp+Ws8YiappzCv1YBGaXCyUdJ0fELSVtijct1xw0tfnH9FU+fPJuDgPEI
-         8Hww==
-X-Gm-Message-State: AOAM531m2pK+b/EtLVV82Q9lcjx4GsRt8UMUuZhsKtQ8/1f84h+NE0m/
-        3NIF4Tl957ngosBSb16U2Skul+8cNEWmPgtLovo1q3RXkm7kP8gjVY8SuZqhFb8eZ/VjMNnAu+j
-        PrdkXmmB80zPfc36neTgZ+0y9ggDNM0JhG4audFWrZ42xg9ldKfPbq3U3bw==
-X-Received: by 2002:a05:6808:2110:b0:2d4:4137:b4fc with SMTP id r16-20020a056808211000b002d44137b4fcmr1437205oiw.111.1644978653242;
-        Tue, 15 Feb 2022 18:30:53 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxKcxvfa5TGSRV5o84na68B8EZ+r4ouH5y0ksyeGSQjbiQCwHBY/Dz9pUtQROobZB9JcDQDjlETALEg+JopC1o=
-X-Received: by 2002:a05:6808:2110:b0:2d4:4137:b4fc with SMTP id
- r16-20020a056808211000b002d44137b4fcmr1437198oiw.111.1644978652934; Tue, 15
- Feb 2022 18:30:52 -0800 (PST)
-MIME-Version: 1.0
-References: <20220120051929.1625791-1-kai.heng.feng@canonical.com>
- <YelxMFOiqnfIVmyy@lunn.ch> <CAAd53p7NjvzsBs2aWTP-3GMjoyefMmLB3ou+7fDcrNVfKwALHw@mail.gmail.com>
- <Yeqzhx3GbMzaIbj6@lunn.ch> <CAAd53p5pF+SRfwGfJaBTPkH7+9Z6vhPHcuk-c=w8aPTzMBxPcg@mail.gmail.com>
- <YerOIXi7afbH/3QJ@lunn.ch> <3d7b1ff0-6776-6480-ed20-c9ad61b400f7@gmail.com>
- <Yex0rZ0wRWQH/L4n@lunn.ch> <CAAd53p6pfuYDor3vgm_bHFe_o7urNhv7W6=QGxVz6c=htt7wLg@mail.gmail.com>
- <YgwMslde2OxOOp9d@lunn.ch>
-In-Reply-To: <YgwMslde2OxOOp9d@lunn.ch>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Wed, 16 Feb 2022 10:30:41 +0800
-Message-ID: <CAAd53p4QXHe7XTv5ntsdnC1Z9EpDfXQECKHDEsRA++SEQSdbYQ@mail.gmail.com>
-Subject: Re: [PATCH v2] net: phy: marvell: Honor phy LED set by system
- firmware on a Dell hardware
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>, linux@armlinux.org.uk,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tMSwIfjOv1Uyh0Rn8c3FPvnNt2awh1M6+sjpagFNNPs=;
+        b=KxVm97Gs7UDNlE9rEWhjjZJh7wgzL1qPM+rSTSC1DOjeVy786OB/QcH1rVMJ9cgraB
+         G/Ecs0Q5K7JQa243Qr1I3VeySo3glVO9DJ6htqoh6+FGhbKWfRIdGoihNIhQSdkzOUYT
+         Jx5IKMCACB7rRB3MKuVJGCUN17lbj8Zg3WiOPgtVEotE6ytxjkYQlTGajsyfi4RHpa9T
+         QGeCfsvTgyzXuFfxPreJ4m6xbn8RNbLMis5OAOnEuJMHWbNnWrslN6DR1EopoX68WxDS
+         xccqdDnN0hruq4fn6c0D2phxXU3uf3Rv31G6MQ8OU++nKBZMr79eKJ4y9Eiiy0tClNs/
+         L+qA==
+X-Gm-Message-State: AOAM532vZK6G/w67lgKuGP5jwnbC7znkg5HARqCxQfxjd/KlRRecDCii
+        6DiTAg69ToitCREy02t6V4DHTw==
+X-Google-Smtp-Source: ABdhPJyU2ukSn0pACLz1YQlEvjfxSBDTqZwAmjsrkqyhGVLNZmkSRDuKwLpWoQymGsMeVVJJ0nyyig==
+X-Received: by 2002:a17:902:82c7:b0:14f:252d:67e7 with SMTP id u7-20020a17090282c700b0014f252d67e7mr777069plz.27.1644978695666;
+        Tue, 15 Feb 2022 18:31:35 -0800 (PST)
+Received: from google.com ([2401:fa00:1:10:adf7:46e7:cef5:ba49])
+        by smtp.gmail.com with ESMTPSA id 7sm18442035pjo.45.2022.02.15.18.31.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 18:31:35 -0800 (PST)
+Date:   Wed, 16 Feb 2022 10:31:32 +0800
+From:   Tzung-Bi Shih <tzungbi@google.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     bleung@chromium.org, groeck@chromium.org, robh+dt@kernel.org,
+        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 4/5] platform/chrome: cros_kbd_led_backlight: support OF
+ match
+Message-ID: <YgxiBO7jDtyhWwlb@google.com>
+References: <20220214053646.3088298-1-tzungbi@google.com>
+ <20220214053646.3088298-5-tzungbi@google.com>
+ <CACeCKac+b1Rp6bZFALn=sbh8gkJbWeKTC=8bdzp+-90pgq=wSw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACeCKac+b1Rp6bZFALn=sbh8gkJbWeKTC=8bdzp+-90pgq=wSw@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 4:27 AM Andrew Lunn <andrew@lunn.ch> wrote:
->
-> On Mon, Feb 14, 2022 at 01:40:43PM +0800, Kai-Heng Feng wrote:
-> > On Sun, Jan 23, 2022 at 5:18 AM Andrew Lunn <andrew@lunn.ch> wrote:
-> > >
-> > > > One more idea:
-> > > > The hw reset default for register 16 is 0x101e. If the current value
-> > > > is different when entering config_init then we could preserve it
-> > > > because intentionally a specific value has been set.
-> > > > Only if we find the hw reset default we'd set the values according
-> > > > to the current code.
-> > >
-> > > We can split the problem into two.
-> > >
-> > > 1) I think saving LED configuration over suspend/resume is not an
-> > > issue. It is probably something we will be needed if we ever get PHY
-> > > LED configuration via sys/class/leds.
-> > >
-> > > 2) Knowing something else has configured the LEDs and the Linux driver
-> > > should not touch it. In general, Linux tries not to trust the
-> > > bootloader, because experience has shown bad things can happen when
-> > > you do. We cannot tell if the LED configuration is different to
-> > > defaults because something has deliberately set it, or it is just
-> > > messed up, maybe from the previous boot/kexec, maybe by the
-> > > bootloader. Even this Dell system BIOS gets it wrong, it configures
-> > > the LED on power on, but not resume !?!?!. And what about reboot?
+On Tue, Feb 15, 2022 at 05:10:04PM -0800, Prashant Malani wrote:
+> On Sun, Feb 13, 2022 at 9:37 PM Tzung-Bi Shih <tzungbi@google.com> wrote:
+> > diff --git a/drivers/platform/chrome/cros_kbd_led_backlight.c b/drivers/platform/chrome/cros_kbd_led_backlight.c
+> > index 814f2b74c602..ba853e55d29a 100644
+> > --- a/drivers/platform/chrome/cros_kbd_led_backlight.c
+> > +++ b/drivers/platform/chrome/cros_kbd_led_backlight.c
+> > @@ -10,6 +10,7 @@
+> >  #include <linux/kernel.h>
+> >  #include <linux/leds.h>
+> >  #include <linux/module.h>
+> > +#include <linux/of_device.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/slab.h>
 > >
-> > The LED will be reconfigured correctly after each reboot.
-> > The platform firmware folks doesn't want to restore the value on
-> > resume because the Windows driver already does that. They are afraid
-> > it may cause regression if firmware does the same thing.
->
-> How can it cause regressions? Why would the Windows driver decide that
-> if the PHY already has the correct configuration is should mess it all
-> up? Have you looked at the sources and check what it does?
-
-Unfortunately I don't and won't have access to the driver source for Windows.
-
->
-> Anyway, we said that we need to save and restore the LED configuration
-> over suspend/resume because at some point in the maybe distant future,
-> we are going to support user configuration of the LEDs via
-> /sys/class/leds. So you can add the needed support to the PHY driver.
-
-OK.
-
->
-> > This is an ACPI based platform and we are working on new firmware
-> > property "use-firmware-led" to give driver a hint:
-> > ...
-> >     Scope (_SB.PC00.OTN0)
-> >     {
-> >         Name (_DSD, Package (0x02)  // _DSD: Device-Specific Data
-> >         {
-> >             ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301") /* Device
-> > Properties for _DSD */,
-> >             Package (0x01)
-> >             {
-> >                 Package (0x02)
-> >                 {
-> >                     "use-firmware-led",
-> >                     One
-> >                 }
-> >             }
-> >         })
-> >     }
-> > ...
+> > @@ -128,8 +129,11 @@ static int keyboard_led_probe(struct platform_device *pdev)
+> >         int error;
 > >
-> > Because the property is under PCI device namespace, I am not sure how
-> > to (cleanly) bring the property from the phylink side to phydev side.
-> > Do you have any suggestion?
->
-> I'm no ACPI expert, but i think
-> Documentation/firmware-guide/acpi/dsd/phy.rst gives you the basis:
->
->     During the MDIO bus driver initialization, PHYs on this bus are probed
->     using the _ADR object as shown below and are registered on the MDIO bus.
->
->       Scope(\_SB.MDI0)
->       {
->         Device(PHY1) {
->           Name (_ADR, 0x1)
->         } // end of PHY1
->
->         Device(PHY2) {
->           Name (_ADR, 0x2)
->         } // end of PHY2
->       }
->
-> These are the PHYs on the MDIO bus. I _think_ that next to the Name,
-> you can add additional properties, like your "use-firmware-led". This
-> would then be very similar to DT, which is in effect what ACPI is
-> copying. So you need to update this document with your new property,
-> making it clear that this property only applies to boot, not
-> suspend/resume. And fwnode_mdiobus_register_phy() can look for the
-> property and set a flag in the phydev structure indicating that ACPI
-> is totally responsible for LEDs at boot time.
+> >         drvdata = acpi_device_get_match_data(&pdev->dev);
+> > -       if (!drvdata)
+> > -               return -EINVAL;
+> > +       if (!drvdata) {
+> > +               drvdata = of_device_get_match_data(&pdev->dev);
+> > +               if (!drvdata)
+> > +                       return -EINVAL;
+> > +       }
+> 
+> I'm not familiar with this driver, so can't do a full review, but
+> shouldn't device_get_match_data()
+> from property.h [1] be able to handle both DT and ACPI cases?
+> 
+> [1]: https://elixir.bootlin.com/linux/v5.17-rc4/source/include/linux/property.h
 
-The problem here is there's no MDIO bus in ACPI namespace, namely no
-"Scope(\_SB.MDI0)" on this platform.
+Yes, it does[2][3].  Thanks for the feedback, will fix it in next version.
 
-Since the phydev doesn't have a fwnode, the new property needs to be
-passed from phylink to phydev, and right now I can't find a clean way
-to do it.
-
-Kai-Heng
-
->
->         Andrew
+[2]: https://elixir.bootlin.com/linux/v5.17-rc4/source/drivers/of/property.c#L1474
+[3]: https://elixir.bootlin.com/linux/v5.17-rc4/source/drivers/acpi/property.c#L1386

@@ -2,75 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 471194B86B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 12:32:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBEA64B86B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 12:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231596AbiBPLcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 06:32:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42242 "EHLO
+        id S231721AbiBPLdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 06:33:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiBPLcv (ORCPT
+        with ESMTP id S230007AbiBPLdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 06:32:51 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A7E1EC66;
-        Wed, 16 Feb 2022 03:32:39 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0E1A51F383;
-        Wed, 16 Feb 2022 11:32:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1645011158; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L9+Yeu3hCssm1DnX2Utx6ifmH+5dNqbEfg/BNDzwuCA=;
-        b=f1mvO8mWa3qxAfrnnn6xUDrWm874NLgzMvkb2j0LcnYdJi4/euhFVy6ZATEMSUG63cQnuM
-        4KbxJZT/ji3a9Xqj76fnc5fWmm+4KnRYQgsMsFZ34hpF/DFyPksP4mXeBxNTHn/F9fT9Xh
-        XnmkwuEjt+lQwP6wAuXcm6yO27lKoCI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1645011158;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L9+Yeu3hCssm1DnX2Utx6ifmH+5dNqbEfg/BNDzwuCA=;
-        b=LpPtYjywAl6GtaWQhWHeHae1Khkxa4osg1FlKgLj5P+SMNBNI86w1+TTeuvkjI1GHfteN6
-        3Ey5pPGoItBljaCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E3D0D13AF3;
-        Wed, 16 Feb 2022 11:32:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id D9hXN9XgDGIcMQAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 16 Feb 2022 11:32:37 +0000
-Message-ID: <ccca97fb-0dab-0a8f-d2ac-247ba160288d@suse.de>
-Date:   Wed, 16 Feb 2022 12:32:37 +0100
+        Wed, 16 Feb 2022 06:33:18 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7D71A9350
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 03:33:05 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id p19so5086468ybc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 03:33:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=674Fl170FM85N3RqdRnoVviMkGCxcWyEh6yo5TEOFT8=;
+        b=m+O5ZXJ3y6Ay2MlyItpq0ACWrBov3P5ke6TnpYwKaVg3VC/0ulQZQB/A/9fmy+2Egn
+         iMhYmVE58aXQeKe+Ya4xFa16yXiEwjzSGuwiL5uD+OWuSia4WyJW4fJGVuhVX6gQpEFw
+         fJ7Jq5wPpInjUAx0MTwqcUjbLCKh799onw2brXoUlK1gJCBZ61wNOZDvW0+ID4/6RVgO
+         +f92zK6kR5DqYQPDGseB5OpzYsdByKlWys2n4mHum1oFeSSBjWtCBqF4m3VTeyIxuSBZ
+         ql4bp0vOGB8vhJzir62nTcOznlhlnb3elwFg2KG78xP/MsNcpHvvOvTztaspjBh2AxLr
+         qBcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=674Fl170FM85N3RqdRnoVviMkGCxcWyEh6yo5TEOFT8=;
+        b=IwiXCqAKRD3Xxb2Ncw/0nP5mVc3mvQk4on1Kk/RebgVYxiZ7Ce2lb0x/gGoHUcUrGL
+         xHYFf9/Y/ZUDPGcX/elrfxcUDH7Lh6OrXK5UTI6GcvC8DP85LdgKzhPHGDs9ERFBD+DY
+         5PqikVBbfRqJ7M0HwiC5sKkNy+U/YV0vN+pnpRFXlUHRKTwXFQfldWUoybYcK4mC/uOb
+         tYEQLR6MABQwRax+gjO6EjZBqxSAU5r/d342ofNao6I0+373xnnqlFqNJO8LFJcq3B4n
+         5lbygno3D0OA6uUj0Zd9aQbbEp2dKqq+8XaTr3UdWDd6HWzi7lShR6MYdG5tDWb51jhF
+         bCAg==
+X-Gm-Message-State: AOAM530OARCyoJe4X10efmTMKithfKaau1ANxb8xgBbe3HEOUES2KGlF
+        0BocW9isc/guCqFS3Nl4jxCgyHBlkZ23jxFgNiMAfuIINjSwlA==
+X-Google-Smtp-Source: ABdhPJwHA7U1nVP7k6/PR/U/PTgFSxFN6cvuIlRcpDFhII6JURLw5FytD0tCqhl7men1feQqR1H1TPA6qB202EkHLNM=
+X-Received: by 2002:a81:5454:0:b0:2d0:e7d6:ebac with SMTP id
+ i81-20020a815454000000b002d0e7d6ebacmr2063610ywb.166.1645011184956; Wed, 16
+ Feb 2022 03:33:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     =?UTF-8?Q?Markus_Bl=c3=b6chl?= <Markus.Bloechl@ipetronik.com>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stefan Roese <sr@denx.de>
-References: <20220214095107.3t5en5a3tosaeoo6@ipetronik.com>
- <20220215191731.GB25076@lst.de>
- <20220216111841.jaunxn6blouzjleg@ipetronik.com>
-From:   Hannes Reinecke <hare@suse.de>
-Subject: Re: [RFC PATCH] nvme: prevent hang on surprise removal of NVMe disk
-In-Reply-To: <20220216111841.jaunxn6blouzjleg@ipetronik.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+References: <720d0a9a42e33148fcac45cd39a727093a32bf32.1614965598.git.robin.murphy@arm.com>
+ <a730070d718cb119f77c8ca1782a0d4189bfb3e7.1614965598.git.robin.murphy@arm.com>
+ <0a1d437d-9ea0-de83-3c19-e07f560ad37c@arm.com> <20210730143431.GB1517404@mutt>
+ <8b358507-dbdf-b05b-c1da-2ec9903a2912@arm.com> <CADYN=9LE2JnE+vmv_UaeyJj_RpHcp+zZUv711VuQekLSiQ2bJA@mail.gmail.com>
+ <CA+G9fYu7ctvOfdvBkDZ1nABz0TaYZ49FUKVTctn+mBTCmk9JCQ@mail.gmail.com>
+ <20220214141303.3lmnassl4qibsp3y@bogus> <CA+G9fYsUX2vHjNwZ7u=JtACEyfe9SkSHtYnwJXJ1JytF9+pSAQ@mail.gmail.com>
+In-Reply-To: <CA+G9fYsUX2vHjNwZ7u=JtACEyfe9SkSHtYnwJXJ1JytF9+pSAQ@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 16 Feb 2022 17:02:53 +0530
+Message-ID: <CA+G9fYsz89w-4-2GggA4ELOkNJ+pD4+u0=PEBZqiSDJea-aCoA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] arm64: dts: juno: Enable more SMMUs
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Liviu Dudau <Liviu.Dudau@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-stable <stable@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        lkft-triage@lists.linaro.org,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,39 +81,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/16/22 12:18, Markus Blöchl wrote:
-> On Tue, Feb 15, 2022 at 08:17:31PM +0100, Christoph Hellwig wrote:
->> On Mon, Feb 14, 2022 at 10:51:07AM +0100, Markus Blöchl wrote:
->>> After the surprise removal of a mounted NVMe disk the pciehp task
->>> reliably hangs forever with a trace similar to this one:
->>
->> Do you have a specific reproducer? At least with doing a
->>
->> echo 1 > /sys/.../remove
->>
->> while running fsx on a file system I can't actually reproduce it.
-> 
-> We built our own enclosures with a custom connector to plug the disks.
-> 
-> So an external enclosure for thunderbolt is probably very similar.
-> (or just ripping an unscrewed NVMe out of the M.2 ...)
-> 
-> But as already suggested, qemu might also be very useful here as it also
-> allows us to test multiple namespaces and multipath I/O, if you/someone
-> wants to check those too (hotplug with multipath I/O really scares me).
-> 
-Nothing to be scared of.
-I've tested this extensively in the run up to commit 5396fdac56d8 
-("nvme: fix refcounting imbalance when all paths are down") which,
-incidentally, is something you need if you want to test things.
+Hi Sudeep,
 
-Let me see if I can dig up the testbed.
+On Mon, 14 Feb 2022 at 20:41, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> On Mon, 14 Feb 2022 at 19:43, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
+> > On Mon, Feb 14, 2022 at 07:36:00PM +0530, Naresh Kamboju wrote:
+> > > Hi Robin,
+> > >
+> > > Since we did not get a reply on this email thread.
+> > > and those intermittent failures are causing a lot of noise in reports summary.
+> > > We will wait one more week and stop running 64k page size testing on
+> > > Juno-r2 devices.
+> > >
+> > > > > > diff --git a/arch/arm64/boot/dts/arm/juno-base.dtsi b/arch/arm64/boot/dts/arm/juno-base.dtsi
+> > > > > > index 8e7a66943b01..d3148730e951 100644
+> > > > > > --- a/arch/arm64/boot/dts/arm/juno-base.dtsi
+> > > > > > +++ b/arch/arm64/boot/dts/arm/juno-base.dtsi
+> > > > > > @@ -545,8 +545,7 @@ pcie_ctlr: pcie@40000000 {
+> > > > > >                           <0x02000000 0x00 0x50000000 0x00 0x50000000 0x0 0x08000000>,
+> > > > > >                           <0x42000000 0x40 0x00000000 0x40 0x00000000 0x1 0x00000000>;
+> > > > > >                  /* Standard AXI Translation entries as programmed by EDK2 */
+> > > > > > -               dma-ranges = <0x02000000 0x0 0x2c1c0000 0x0 0x2c1c0000 0x0 0x00040000>,
+> > > > > > -                            <0x02000000 0x0 0x80000000 0x0 0x80000000 0x0 0x80000000>,
+> > > > > > +               dma-ranges = <0x02000000 0x0 0x80000000 0x0 0x80000000 0x0 0x80000000>,
+> > > > > >                               <0x43000000 0x8 0x00000000 0x8 0x00000000 0x2 0x00000000>;
+> > > > > >                  #interrupt-cells = <1>;
+> > > > > >                  interrupt-map-mask = <0 0 0 7>;
+> > > > > >
+> > >
+> > > Reference email thread,
+> > > https://lore.kernel.org/stable/0a1d437d-9ea0-de83-3c19-e07f560ad37c@arm.com/
+> > >
+> >
+> > I was about to tag the fix for this and was just reading this thread. I will
+> > send the pull request soon. Sorry for the delay, it is in next for some time
+> > now. Are you seeing the issue even in linux-next ?
 
-Cheers,
+I have tested Linux next arm64 64k page size builds on Juno-r2 and confirm that
+the reported issue is fixed now.
 
-Hannes
--- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+- Naresh Kamboju
+
+--
+Linaro LKFT
+https://lkft.linaro.org

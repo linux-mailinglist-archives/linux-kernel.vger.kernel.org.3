@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFB14B7D2D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 03:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2004B7D46
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 03:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343614AbiBPCNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 21:13:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59520 "EHLO
+        id S238783AbiBPCOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 21:14:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343573AbiBPCNc (ORCPT
+        with ESMTP id S238422AbiBPCOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 21:13:32 -0500
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76871EC6F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:13:20 -0800 (PST)
-Received: by mail-oo1-xc29.google.com with SMTP id u25-20020a4ad0d9000000b002e8d4370689so852662oor.12
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:13:20 -0800 (PST)
+        Tue, 15 Feb 2022 21:14:47 -0500
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB440E7F72
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:14:35 -0800 (PST)
+Received: by mail-oo1-xc36.google.com with SMTP id s203-20020a4a3bd4000000b003191c2dcbe8so871294oos.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:14:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=taHbG7vguVUZGIRIt0xRnIiEKtB/IGIttgv3NTDr6gs=;
-        b=h2UalFiYpNDlTDki+0A62tKmSWsYYNjV6hmMaPMU+3FpXazninHX/6hheyBNbTxxZl
-         gymYvx/OspLZBOPsQO169uYqB3bhtHeh9CfE3YrAupjKc7rF505e6mTSvbL0NhmgjaGN
-         NvxV6F0nhliU4tVjhgsJUwgghCPfZpjxD9tFs=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qs5Wv3pL+wFWfpiRhHn2AdJWY7PJclGJQXknrkKkS5Q=;
+        b=DPHS3FA258EKnrCH+ke1TpLXySX6tU9Lt+zh4YgoJ9WdSvHN9o2N/qViFYXwenkbdA
+         TRzVNQzOiApWxViOwGaNRA4yNodmKBX3tO7J4B9FrIAkSJPWCXgyEkE+qHhd9T78E6bj
+         HBYdsc+mm/xiNTXFNd4DBY42XK/BhP4ZHY2UjZ0t2Fg2QR98DtwFeuOthNQCsv/mgXte
+         63ZitVCjQaEJOogvzsp10p3xGGSw6EldbxNNpeKqSycGfH1HT1Xfcq/alSeYvBiFr72J
+         NBJDtogM+uDxm1nAY/zPI7+WbL7sHoh4IM8uueJACVBnEFkTdqav8ks86k5lU/uBGwP5
+         TTUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=taHbG7vguVUZGIRIt0xRnIiEKtB/IGIttgv3NTDr6gs=;
-        b=ApYkzDyqZ4149hN/m5Jh9S5D3po4wkNKiYofL5GT83u5X+sQH14jaQD01vb56nmGA0
-         4wOQl+xIcPTf19PhP2oi2V8XvGJPCapQmf03eCbPrw7cArdXywp0N188y3JVXfGgfwOJ
-         SnGH+Yk2On8CWJ0wtHb4st15EN3DTlyACYHObucQkmual0ldrZWoPI0A1vuI3pob6Nej
-         g2UccOYg2xNv5qbU+Pp0RqPHo1ViCzxjpvxpHh9H7sfAi0t2bnF9vOyM+n5lZVRznwBb
-         0X+whGRproZ8AP1fjDQhxqKQoQQtgNmMI5c0fjExA6SQQGgnEvwWze8dQoi5zlbh5Se3
-         EaxA==
-X-Gm-Message-State: AOAM533uX2b3EQC/r4LtEzKzkQhMHD9E2PoseOzh35q67UNwfhcLpU7c
-        rfg6ScZw4OqCnPuXV8ad7CE3V7/S5L/PD9v46moJ4Q==
-X-Google-Smtp-Source: ABdhPJxWIA5NJGfvSR96eXmNG+KkosKCT5zXWtFTw3F3O/ohr//+bginiELxGFqcnrY10SPLW//S8meYeB0ReME7oJA=
-X-Received: by 2002:a4a:a9cf:0:b0:2e9:5c75:e242 with SMTP id
- h15-20020a4aa9cf000000b002e95c75e242mr220837oon.25.1644977599258; Tue, 15 Feb
- 2022 18:13:19 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 15 Feb 2022 18:13:18 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qs5Wv3pL+wFWfpiRhHn2AdJWY7PJclGJQXknrkKkS5Q=;
+        b=NzJEWDb7MPowRu9PVVzgX9DPcdutaBhhBbRv2b6UE0nPvK8xtHPeDrXZ+foO/YRQnH
+         u/gg0ghwFOGZto/p5twfevMfQRK8FXB8xFOnNzAdcrwObPDnZmQmOHzK1fJBIY8x6x73
+         D+7W2b2oUG+g4T+4m2IZjMnwxjUD0T7yMUKwa5Sc5yrPTllYA/Hax6d/iCxLDRhEq5St
+         BZfU0vaDi7xdABHYXg2WYfreNflTTWQK7iVda4encmDecaxJFYjJL4CHzvwjrdgh5iPS
+         sD5WXOwnKbWSR/pzmqV2xzBFfPNSXAJEvajFn4uWkZZD8HQ1zkSxfoZ+a2RdJMjaVmO5
+         a/Bw==
+X-Gm-Message-State: AOAM530dFPwIl1BfhnEY7Eek/AtLUX+BQvFbVSLjB5zIak+gtBPKEP7k
+        KRacTrbUF5tREbJN9G1o4/VOw+gboVBrHA==
+X-Google-Smtp-Source: ABdhPJyw8MHZ2eUchmz87xRT+ihExh1FY1306UMIXaLsKy270Z8smoUE5bHuN3hbumiSLC9Pkg43QA==
+X-Received: by 2002:a05:6870:4994:b0:c4:7dc0:d74b with SMTP id ho20-20020a056870499400b000c47dc0d74bmr281884oab.286.1644977675001;
+        Tue, 15 Feb 2022 18:14:35 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id bj8sm15451410oib.20.2022.02.15.18.14.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 18:14:34 -0800 (PST)
+Date:   Tue, 15 Feb 2022 20:14:32 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Add SC8180x to hw catalog
+Message-ID: <YgxeCHi5AsYPTmeZ@builder.lan>
+References: <20220215043353.1256754-1-bjorn.andersson@linaro.org>
+ <20220215043353.1256754-2-bjorn.andersson@linaro.org>
+ <be397e2e-05ab-5c18-8e2d-16c443f0a6d1@quicinc.com>
+ <Ygvisfhi0SY6XdAz@builder.lan>
+ <6a3ef247-b26b-d505-cd85-92fb277163dd@quicinc.com>
 MIME-Version: 1.0
-In-Reply-To: <1644949454-814-2-git-send-email-quic_c_sanm@quicinc.com>
-References: <1644949454-814-1-git-send-email-quic_c_sanm@quicinc.com> <1644949454-814-2-git-send-email-quic_c_sanm@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 15 Feb 2022 18:13:18 -0800
-Message-ID: <CAE-0n522ctciYfxCxKqF0p3QFWcZU03nP5HoKsc=uKnokg7BCQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] usb: xhci: refactor quirks and plat private data
-To:     Aswath Govindraju <a-govindraju@ti.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6a3ef247-b26b-d505-cd85-92fb277163dd@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,47 +76,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Sandeep Maheswaram (2022-02-15 10:24:13)
-> From: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
->
-> This refactoring allows drivers like dwc3 host glue driver to
-> specify their xhci quirks.
->
-> Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+On Tue 15 Feb 11:42 CST 2022, Abhinav Kumar wrote:
 
-Your SoB should be here as well.
+> 
+> 
+> On 2/15/2022 9:28 AM, Bjorn Andersson wrote:
+> > On Tue 15 Feb 11:14 CST 2022, Abhinav Kumar wrote:
+> > 
+> > > 
+> > > 
+> > > On 2/14/2022 8:33 PM, Bjorn Andersson wrote:
+> > > > From: Rob Clark <robdclark@chromium.org>
+> > > > 
+> > > > Add SC8180x to the hardware catalog, for initial support for the
+> > > > platform. Due to limitations in the DP driver only one of the four DP
+> > > > interfaces is left enabled.
+> > > > 
+> > > > The SC8180x platform supports the newly added DPU_INTF_WIDEBUS flag and
+> > > > the Windows-on-Snapdragon bootloader leaves the widebus bit set, so this
+> > > > is flagged appropriately to ensure widebus is disabled - for now.
+> > > > 
+> > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > > > [bjorn: Reworked intf and irq definitions]
+> > > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > > > ---
+> > > > 
+> > > > Changes since v1:
+> > > > - Dropped widebus flag
+> > > > 
+> > > >    .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 129 ++++++++++++++++++
+> > > >    .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |   1 +
+> > > >    drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |   1 +
+> > > >    drivers/gpu/drm/msm/msm_drv.c                 |   1 +
+> > > >    4 files changed, 132 insertions(+)
+> > > > 
+> > > > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> > > > index aa75991903a6..7ac0fe32df49 100644
+> > > > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> > > > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> > > > @@ -90,6 +90,17 @@
+> > > >    			 BIT(MDP_INTF3_INTR) | \
+> > > >    			 BIT(MDP_INTF4_INTR))
+> > > > +#define IRQ_SC8180X_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+> > > > +			  BIT(MDP_SSPP_TOP0_INTR2) | \
+> > > > +			  BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+> > > > +			  BIT(MDP_INTF0_INTR) | \
+> > > > +			  BIT(MDP_INTF1_INTR) | \
+> > > > +			  BIT(MDP_INTF2_INTR) | \
+> > > > +			  BIT(MDP_INTF3_INTR) | \
+> > > > +			  BIT(MDP_INTF4_INTR) | \
+> > > > +			  BIT(MDP_INTF5_INTR) | \
+> > > > +			  BIT(MDP_AD4_0_INTR) | \
+> > > > +			  BIT(MDP_AD4_1_INTR))
+> > > >    #define DEFAULT_PIXEL_RAM_SIZE		(50 * 1024)
+> > > >    #define DEFAULT_DPU_LINE_WIDTH		2048
+> > > > @@ -225,6 +236,22 @@ static const struct dpu_caps sm8150_dpu_caps = {
+> > > >    	.max_vdeci_exp = MAX_VERT_DECIMATION,
+> > > >    };
+> > > > +static const struct dpu_caps sc8180x_dpu_caps = {
+> > > > +	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
+> > > > +	.max_mixer_blendstages = 0xb,
+> > > > +	.qseed_type = DPU_SSPP_SCALER_QSEED3,
+> > > > +	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
+> > > > +	.ubwc_version = DPU_HW_UBWC_VER_30,
+> > > > +	.has_src_split = true,
+> > > > +	.has_dim_layer = true,
+> > > > +	.has_idle_pc = true,
+> > > > +	.has_3d_merge = true,
+> > > > +	.max_linewidth = 4096,
+> > > > +	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
+> > > > +	.max_hdeci_exp = MAX_HORZ_DECIMATION,
+> > > > +	.max_vdeci_exp = MAX_VERT_DECIMATION,
+> > > > +};
+> > > > +
+> > > >    static const struct dpu_caps sm8250_dpu_caps = {
+> > > >    	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
+> > > >    	.max_mixer_blendstages = 0xb,
+> > > > @@ -293,6 +320,31 @@ static const struct dpu_mdp_cfg sc7180_mdp[] = {
+> > > >    	},
+> > > >    };
+> > > > +static const struct dpu_mdp_cfg sc8180x_mdp[] = {
+> > > > +	{
+> > > > +	.name = "top_0", .id = MDP_TOP,
+> > > > +	.base = 0x0, .len = 0x45C,
+> > > > +	.features = 0,
+> > > > +	.highest_bank_bit = 0x3,
+> > > > +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = {
+> > > > +			.reg_off = 0x2AC, .bit_off = 0},
+> > > > +	.clk_ctrls[DPU_CLK_CTRL_VIG1] = {
+> > > > +			.reg_off = 0x2B4, .bit_off = 0},
+> > > > +	.clk_ctrls[DPU_CLK_CTRL_VIG2] = {
+> > > > +			.reg_off = 0x2BC, .bit_off = 0},
+> > > > +	.clk_ctrls[DPU_CLK_CTRL_VIG3] = {
+> > > > +			.reg_off = 0x2C4, .bit_off = 0},
+> > > > +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = {
+> > > > +			.reg_off = 0x2AC, .bit_off = 8},
+> > > > +	.clk_ctrls[DPU_CLK_CTRL_DMA1] = {
+> > > > +			.reg_off = 0x2B4, .bit_off = 8},
+> > > > +	.clk_ctrls[DPU_CLK_CTRL_CURSOR0] = {
+> > > > +			.reg_off = 0x2BC, .bit_off = 8},
+> > > > +	.clk_ctrls[DPU_CLK_CTRL_CURSOR1] = {
+> > > > +			.reg_off = 0x2C4, .bit_off = 8},
+> > > > +	},
+> > > > +};
+> > > > +
+> > > >    static const struct dpu_mdp_cfg sm8250_mdp[] = {
+> > > >    	{
+> > > >    	.name = "top_0", .id = MDP_TOP,
+> > > > @@ -861,6 +913,16 @@ static const struct dpu_intf_cfg sc7280_intf[] = {
+> > > >    	INTF_BLK("intf_5", INTF_5, 0x39000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
+> > > >    };
+> > > > +static const struct dpu_intf_cfg sc8180x_intf[] = {
+> > > > +	INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+> > > > +	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> > > > +	INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
+> > > > +	/* INTF_3 is for MST, wired to INTF_DP 0 and 1, use dummy index until this is supported */
+> > > > +	INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_DP, 999, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
+> > > > +	INTF_BLK("intf_4", INTF_4, 0x6C000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 20, 21),
+> > > > +	INTF_BLK("intf_5", INTF_5, 0x6C800, INTF_DP, MSM_DP_CONTROLLER_2, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
+> > > 
+> > > This is a continued discussion from
+> > > https://patchwork.freedesktop.org/patch/474179/.
+> > > 
+> > > Shouldnt INTF_5 be marked as INTF_eDP?
+> > > 
+> > 
+> > Might be, I didn't even know we had an INTF_EDP define...
+> > 
+> > Is there any reason to distinguish DP and EDP in the DPU?  I see sc7280
+> > doesn't distinguish the DP and EDP interfaces.
+> > 
+> > Regards,
+> > Bjorn
+> > 
+> 
+> Like I have mentioned in the other patch, I think we have enough confusion
+> between eDP and DP with the common driver. Since DPU does have separate
+> interfaces I think we should fix that.
+> 
+> Regarding sc7280 using INTF_DP, I synced up with Sankeerth. He referred to
+> your change
+> https://patchwork.freedesktop.org/patch/457776/?series=92992&rev=5 as it was
+> posted earlier and ended up using the same INTF_DP macro. So its turning out
+> to be a cyclical error.
+> 
 
-> diff --git a/include/linux/usb/xhci-plat.h b/include/linux/usb/xhci-plat.h
-> new file mode 100644
-> index 0000000..58a56ae
-> --- /dev/null
-> +++ b/include/linux/usb/xhci-plat.h
-> @@ -0,0 +1,24 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * xhci-plat.h - xHCI host controller driver platform Bus Glue.
-> + *
-> + * Copyright (C) 2015 Renesas Electronics Corporation
-> + */
-> +
-> +#ifndef _XHCI_PLAT_H
-> +#define _XHCI_PLAT_H
-> +
-> +#include <linux/types.h>
-> +#include <linux/usb/hcd.h>
+That made me take a second look at the HPG, and sure enough INTF_5 on
+SC7280 is connected to a eDP/DP Combo PHY. We have the same setup in
+SC8280XP.
 
-It would be great to remove this include and forward declare struct
-usb_hcd instead to avoid include hell. Maybe a followup patch?
+In SC8180X, INTF_5 is documented as being connected to a eDP (only) PHY,
+so perhaps it makes sense to do it there, but for the others its wrong.
 
-> +
-> +struct xhci_plat_priv {
-> +       const char *firmware_name;
-> +       unsigned long long quirks;
-> +       int (*plat_setup)(struct usb_hcd *hcd);
-> +       void (*plat_start)(struct usb_hcd *hcd);
-> +       int (*init_quirk)(struct usb_hcd *hcd);
-> +       int (*suspend_quirk)(struct usb_hcd *hcd);
-> +       int (*resume_quirk)(struct usb_hcd *hcd);
-> +};
-> +
-> +#endif /* _XHCI_PLAT_H */
+Regards,
+Bjorn

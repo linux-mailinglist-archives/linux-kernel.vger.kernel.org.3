@@ -2,75 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4194B935A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 22:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66BC54B9361
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 22:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235639AbiBPVpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 16:45:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43496 "EHLO
+        id S235766AbiBPVxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 16:53:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235531AbiBPVpA (ORCPT
+        with ESMTP id S233724AbiBPVxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 16:45:00 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77110216179;
-        Wed, 16 Feb 2022 13:44:47 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id r64-20020a17090a43c600b001b8854e682eso3665432pjg.0;
-        Wed, 16 Feb 2022 13:44:47 -0800 (PST)
+        Wed, 16 Feb 2022 16:53:33 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECA91F4655
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 13:53:17 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id ay10-20020a17090b030a00b001b8a4029ba0so5219304pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 13:53:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=dgevcK5R5m/mKgU/mUZovQ8cDU/HLiXrSNnllT0PFZ4=;
-        b=fI6BiBaB/KFR8JIrwfTJR9IpZIIkqHBKqnlj36NGUYWjFwh11k/Lr+FT9nLPhS+Ap0
-         KFG8eFE3XIj0cxXPZ842euCnRnXFQc6Gors5iv3WL1NDiywM2a6PzFH3tVlSMwNoSdAD
-         YU7pvKzwpaANZr1WrPp8pkGr9KY1EJ4f2dgId7t8xs3be5/fp7jK2NmZWbAxjKGMfy6y
-         tqSJFXso75yGROqBI9YcLSee1bIyg1uq15hzMIoijCG3ADg3QveWR/VLvUfQNtDdlp52
-         22dTJ1zOCVCxPdPyeHhD5KnmL8t/Q+fp75ioHCaxxH+1ggTLYRCkvoVcSeQ4Gz4x6gsq
-         PgKw==
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=tKxMnnjXgKWYzOMe8JPy0W04lQPVzibEjMdAZvml6iQ=;
+        b=iL/vwgn2Mgc+bA0KeYitrCvpSfslRQT9OJpyeDmnokroQnet684RHgN81jVcyYK5t4
+         +LSdjRqbyeeB+QtuOF2KjG5iB9hjG7hlayemXSaptOxuri2t/7R4bur+FdYR++F33+kI
+         El6qoy7wh/WaCLl2RQ8evqDI+PA2DDC4bzSG1/lGk4oJvDo8dIlH9wn+6gfWkAk+DdZm
+         5mU+Kg04JbSqgvcdaMZFOLBZhip1r0dk+rPWo5WwhlH/1+TnJ0ZD6ouKXrnw6WRh7PYV
+         2fvXCMFMAvF8o2CYy/nIZ5jTJICtnr6uV1gZmQOaxnj85beJgXmzpJlJrVEMmThLAIAh
+         3/Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=dgevcK5R5m/mKgU/mUZovQ8cDU/HLiXrSNnllT0PFZ4=;
-        b=SjWtPmT5jsvHDMufdkWWaWyOvx47iEhMQoJBP8H0SdvkP2MmLfvVCK8pX/JbzHeXC0
-         PNVN2RO6GQlsdtiQygA5Njy2Hx+vfQJkcs6CWsMozEavICy57fo9ZLTbusjj5r1SRScJ
-         LwK9QVg7aXOpCkA3OGe1FTXMBWdANQwwL43weG1hyn40CcaPn3nWkNVKnqfi9Zcs0Wb3
-         /qh+9+m3tGCIQB3lOuBRdrGwOt2iHd0IeCb9ShA618Iu43mJYJzpnrucHuM1Z3qb8ytB
-         QsfjVxoBrgOqAUrAkXjZSP+oxfcCyR+URpt8t3DUpLWVvrPL4rMioVoRwuuBCoh/3mH0
-         IirA==
-X-Gm-Message-State: AOAM5326CfRVtnpGWBvoD+zWwbWBVrWjPdbRZCQlPhRj78t5eG+AQQvW
-        jNqWm1DpmxjSHd6cVzLeCT4wQeLfHyg=
-X-Google-Smtp-Source: ABdhPJwjSqZG6jHNYjFZLHiYiyyR189FywSx/+qPJ60bxqqfQpHg8qI9iYmP0cC4MwLg4KJplox7dQ==
-X-Received: by 2002:a17:902:7043:b0:14f:47:a455 with SMTP id h3-20020a170902704300b0014f0047a455mr4322627plt.44.1645047886611;
-        Wed, 16 Feb 2022 13:44:46 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id s37sm49276554pfg.144.2022.02.16.13.44.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 13:44:45 -0800 (PST)
-Subject: Re: [PATCH v2] net: dsa: lan9303: add VLAN IDs to master device
-To:     Mans Rullgard <mans@mansr.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Juergen Borleis <kernel@pengutronix.de>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220216204818.28746-1-mans@mansr.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <b29ad7bc-c454-06c2-7f9e-23007339e4b2@gmail.com>
-Date:   Wed, 16 Feb 2022 13:44:43 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <20220216204818.28746-1-mans@mansr.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=tKxMnnjXgKWYzOMe8JPy0W04lQPVzibEjMdAZvml6iQ=;
+        b=xMn4sUCVAJ8+utGoezF5suxRZBXaBM0PdzgX3W86jV8U4jscTZ2QCGHK9hT4Q5mi7O
+         K2t1JWB1Klqt1Onv1TAr+6JSmrhar/Y6BciHeu4VV8SPQc7r+9tQ0g4o4Fs/t2rHbfu5
+         nRLPNY1LTCGmqLaheu1AyAO+kCJ1jJyBb6EIKdxIrgW/YCKLvaKs+8NySwxo85lztno/
+         HtWNK8D70VjkxqlF4zWU8LMlFnAC2XD212oWIKh9w5td1K3c4ENy1YMMze8pupvEWngY
+         31vMRmBwPoFjNrIzujUvzS33w1QnzI8r2Oq0JHTa2586F59EoVcJw+D9SMqXMgvCM1ZD
+         8g9A==
+X-Gm-Message-State: AOAM5306xcM/2XJ5d2ko1XkBy1O0oUdptaRlhVL2jJwAW5bjDZBDVVQS
+        ABObuxweEYVCKGS0mmiBWeiaP9nM
+X-Google-Smtp-Source: ABdhPJycvUPdTzZFPzztRoaTFdPMhpEeiTf9MaUSQSNkLE+F4jWrTgDfoSJ86WePlyCs5dve1mHEFSFP
+X-Received: from juew-desktop.sea.corp.google.com ([2620:15c:100:202:aa7e:772c:ae40:cf58])
+ (user=juew job=sendgmr) by 2002:a17:903:204a:b0:14e:b8d9:b13a with SMTP id
+ q10-20020a170903204a00b0014eb8d9b13amr4565898pla.10.1645048396587; Wed, 16
+ Feb 2022 13:53:16 -0800 (PST)
+Date:   Wed, 16 Feb 2022 13:53:13 -0800
+In-Reply-To: <CAPcxDJ5t47M-+Bn_D+Vj7zbJTxhjrx=HsLX=iQj-EF_h2oVTsg@mail.gmail.com>
+Message-Id: <20220216215313.1707663-1-juew@google.com>
+Mime-Version: 1.0
+References: <CAPcxDJ5t47M-+Bn_D+Vj7zbJTxhjrx=HsLX=iQj-EF_h2oVTsg@mail.gmail.com>
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+Subject: [PATCH] x86/mce: work around an erratum on fast string copy instructions.
+From:   Jue Wang <juew@google.com>
+To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Jue Wang <juew@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,18 +68,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/16/22 12:48 PM, Mans Rullgard wrote:
-> If the master device does VLAN filtering, the IDs used by the switch
-> must be added for any frames to be received.  Do this in the
-> port_enable() function, and remove them in port_disable().
-> 
-> Signed-off-by: Mans Rullgard <mans@mansr.com>
+A rare kernel panic scenario can happen when the following conditions
+are met due to an erratum on fast string copy instructions.
+1) An uncorrected error.
+2) That error must be in first cache line of a page.
+3) Kernel must execute page_copy from the page immediately before that
+page.
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+The fast string copy instructions ("REP; MOVS*") could consume an
+uncorrectable memory error in the cache line _right after_ the
+desired region to copy and raise an MCE.
 
-Should this have :
+Bit 0 of MSR_IA32_MISC_ENABLE can be cleared to disable fast string copy
+and will avoid such spurious machine checks. However, that is less
+preferable due to the permanent performance impact. Considering memory
+poison is rare, it's desirable to keep fast string copy enabled until
+an MCE is seen.
 
-Fixes: a1292595e006 ("net: dsa: add new DSA switch driver for the
-SMSC-LAN9303")
+Intel has confirmed the following:
+1. The CPU erratum of fast string copy only applies to Skylake,
+Cascade Lake and Cooper Lake generations.
+
+Directly return from the MCE handler:
+2. Will result in complete execution of the "REP; MOVS*" with no data
+loss or corruption.
+3. Will not result in another MCE firing on the next poisoned cache line
+due to "REP; MOVS*".
+4. Will resume execution from a correct point in code.
+5. Will result in the same instruction that triggered the MCE firing a
+second MCE immediately for any other software recoverable data fetch
+errors.
+6. Is not safe without disabling the fast string copy, as the next fast
+string copy of the same buffer on the same CPU would result in a PANIC
+MCE.
+
+This should mitigate the erratum completely with the only caveat that
+the fast string copy is disabled on the affected hyper thread thus
+performance degradation.
+
+This is still better than the OS crashes on MCEs raised on an
+irrelevant process due to "REP; MOVS*' accesses in a kernel context,
+e.g., copy_page.
+
+Tested:
+
+Injected errors on 1st cache line of 8 anonymous pages of process
+'proc1' and observed MCE consumption from 'proc2' with no panic
+(directly returned).
+
+Without the fix, the host panicked within a few minutes on a
+random 'proc2' process due to kernel access from copy_page.
+
+Signed-off-by: Jue Wang <juew@google.com>
+---
+ arch/x86/kernel/cpu/mce/core.c     | 56 ++++++++++++++++++++++++++++++
+ arch/x86/kernel/cpu/mce/internal.h |  5 ++-
+ 2 files changed, 60 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 5818b837fd4d..5c9d200ec4cd 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -834,6 +834,52 @@ static void quirk_sandybridge_ifu(int bank, struct mce *m, struct pt_regs *regs)
+ 	m->cs = regs->cs;
+ }
+ 
++/*
++ * Disable fast string copy and return from the MCE handler upon the first SRAR
++ * MCE on bank 1 due to a CPU erratum on Intel Skylake/Cascade Lake/Cooper Lake
++ * CPUs.
++ * The fast string copy instructions ("REP; MOVS*") could consume an
++ * uncorrectable memory error in the cache line _right after_ the desired region
++ * to copy and raise an MCE with RIP pointing to the instruction _after_ the
++ * "REP; MOVS*".
++ * This mitigation addresses the issue completely with the caveat of performance
++ * degradation on the CPU affected. This is still better than the OS crashes on
++ * MCEs raised on an irrelevant process due to "REP; MOVS*" accesses from a
++ * kernel context (e.g., copy_page).
++ *
++ * Returns true when fast string copy on CPU should be disabled.
++ */
++static noinstr bool quirk_skylake_repmov(void)
++{
++	u64 mcgstatus = mce_rdmsrl(MSR_IA32_MCG_STATUS);
++	u64 misc_enable = __rdmsr(MSR_IA32_MISC_ENABLE);
++
++	// Only applies the quirk to local machine checks, i.e., no broadcast
++	// sync is needed.
++	if ((mcgstatus & MCG_STATUS_LMCES) &&
++	    unlikely(misc_enable & MSR_IA32_MISC_ENABLE_FAST_STRING)) {
++		u64 mc1_status = mce_rdmsrl(MSR_IA32_MCx_STATUS(1));
++
++		// The blob of logic below is checking for a software
++		// recoverable data fetch error.
++		if ((mc1_status &
++		     (MCI_STATUS_VAL | MCI_STATUS_OVER | MCI_STATUS_UC | MCI_STATUS_EN |
++		      MCI_STATUS_ADDRV | MCI_STATUS_MISCV | MCI_STATUS_PCC |
++		      MCI_STATUS_AR | MCI_STATUS_S)) ==
++		     (MCI_STATUS_VAL |                   MCI_STATUS_UC | MCI_STATUS_EN |
++		      MCI_STATUS_ADDRV | MCI_STATUS_MISCV |
++		      MCI_STATUS_AR | MCI_STATUS_S)) {
++			msr_clear_bit(MSR_IA32_MISC_ENABLE,
++				      MSR_IA32_MISC_ENABLE_FAST_STRING_BIT);
++			mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
++			mce_wrmsrl(MSR_IA32_MCx_STATUS(1), 0);
++			pr_err_once("Errata detected, disable fast string copy instructions.\n");
++			return true;
++		}
++	}
++	return false;
++}
++
+ /*
+  * Do a quick check if any of the events requires a panic.
+  * This decides if we keep the events around or clear them.
+@@ -1403,6 +1449,9 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 	else if (unlikely(!mca_cfg.initialized))
+ 		return unexpected_machine_check(regs);
+ 
++	if (mce_flags.skx_repmov_quirk && quirk_skylake_repmov())
++		return;
++
+ 	/*
+ 	 * Establish sequential order between the CPUs entering the machine
+ 	 * check handler.
+@@ -1858,6 +1907,13 @@ static int __mcheck_cpu_apply_quirks(struct cpuinfo_x86 *c)
+ 
+ 		if (c->x86 == 6 && c->x86_model == 45)
+ 			mce_flags.snb_ifu_quirk = 1;
++
++		/*
++		 * Skylake, Cascacde Lake and Cooper Lake require a quirk on
++		 * rep movs.
++		 */
++		if (c->x86 == 6 && c->x86_model == INTEL_FAM6_SKYLAKE_X)
++			mce_flags.skx_repmov_quirk = 1;
+ 	}
+ 
+ 	if (c->x86_vendor == X86_VENDOR_ZHAOXIN) {
+diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
+index 52c633950b38..cec227c25138 100644
+--- a/arch/x86/kernel/cpu/mce/internal.h
++++ b/arch/x86/kernel/cpu/mce/internal.h
+@@ -170,7 +170,10 @@ struct mce_vendor_flags {
+ 	/* SandyBridge IFU quirk */
+ 	snb_ifu_quirk		: 1,
+ 
+-	__reserved_0		: 57;
++	/* Skylake, Cascade Lake, Cooper Lake rep movs quirk */
++	skx_repmov_quirk		: 1,
++
++	__reserved_0		: 56;
+ };
+ 
+ extern struct mce_vendor_flags mce_flags;
 -- 
-Florian
+2.35.1.265.g69c8d7142f-goog
+

@@ -2,69 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2C54B943C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 23:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 802EF4B9442
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 23:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233095AbiBPW5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 17:57:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34388 "EHLO
+        id S237976AbiBPXAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 18:00:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232633AbiBPW5k (ORCPT
+        with ESMTP id S229553AbiBPXAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 17:57:40 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434341BAC52
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 14:57:25 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id lw4so2564704ejb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 14:57:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Mqe0+G6V9CfdIdvkgSzyYRhAkhfJCdArCtl4cStmXYw=;
-        b=Mx0zyCTQHb8b40DJsEN5lfCGG5aX/JxpgnXCQaly5oZBTwEshxRJ3WtGq/5x4qRQxm
-         Pm34+0qA7QAtQqPXg1o0rFWpmlxiE3CSLU3d5TNeNnQQc6FOIO/bQBxRMfcNPSvUsnRU
-         +Fmin0xO5wtAVNqyUVFivgOIGwbVxTJBeqcPT6iZTQwsI1r2BopcbvkaDfRWWM2ZDc0T
-         yFf5k2bDUkSDFuod2BUuCwFvl2CIegE6CdMktUCGh9gXS+BkvMSrW7fZ8iq/1zwfO6tB
-         Xh/IWd3hc1jENu+uaJR9hkfgQ5bWMmtNOjofbhHJNPbUwXIMBOvVCeO+6yIZ1Vnr7ujC
-         euIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Mqe0+G6V9CfdIdvkgSzyYRhAkhfJCdArCtl4cStmXYw=;
-        b=5FajMybY8Pje3mQ3q8YC9cS3pga0KcR6X9WD72usUbnJcxgAWW90HlbjNsKaizzm0L
-         eRYmYfZ/D8bO5piBf8OsG5R0pPMTReghge/Jg6jbxnG+SURU0YrJnNd+vKlIuq8GNaSV
-         eRmbjzT42QCtkNBvuB0aIRGTuQbuE5QQGE1KB8OEgeLK2iucfSg3Glbn8q6bzfpxg5q3
-         +WyL6iU8qr5yKr7YcyeCVDQpEocRLQ2ihCSF48aX1BuiD4sP+FoFL/clS+JWShJCsPgj
-         artQj6HurRoBKfgg/TSJ+airVfgBl6TFJndnmAAS2/gZIjhWin2Nx/NZRctZYERR0ESe
-         RyxA==
-X-Gm-Message-State: AOAM533vhM0EY5SfE/T8WDfwsvTvjmAxkvn6ghdss3SYH+Q6Ty7o17Vu
-        r3a0AtLmGh+P5PpxqxE5LzDELYJBgYmKTVKNdX/bmg==
-X-Google-Smtp-Source: ABdhPJxAVfEvjiN8ca3NdECukV4qwRBC9aW+a1f/kFGrmImX7x3jl6N2q1lGR6nJ8xJMqXQbRdBdziIqChpeo1RhcVU=
-X-Received: by 2002:a17:906:c282:b0:6ce:369d:3d5 with SMTP id
- r2-20020a170906c28200b006ce369d03d5mr177440ejz.425.1645052243504; Wed, 16 Feb
- 2022 14:57:23 -0800 (PST)
+        Wed, 16 Feb 2022 18:00:07 -0500
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2069.outbound.protection.outlook.com [40.107.102.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5EA2A0D69;
+        Wed, 16 Feb 2022 14:59:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RQmapvYEmN1RmNgLHo6JL4N16A6Ytu4W20MGRxT6gUKuALyPVSdaOsl4tEA3FKyYLFeg1DLJCppDqM6gXKSCmDzTLu35piPFpC9KAvzWGuI927r+tMbfRys6/s5ENC8IfmnKtrEGpJuTjjirut4l+zN3Y0Jq+OquMi1fQlkxXiDnU9rZTmOk8Q2NHoYDsVmmxBjh9s3RFbzKWF+G8kMxNDDVhkR+outO6dgi2YCO2NchuyqyON0R9cQUKR+8eTj9qC3GwSmeU3WGUjMXOIqJxN8fqJBIG170v6/fv2QouBJl1omgU4JDvD61xhRSyCs4XsEoFcckIZgalhroVtjvPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5+BjxXUzhX9by+B2NbtMJ72ACB6YvWqdpQejX7pBOeo=;
+ b=KMQeRhqIbzS/LK7DZMAdiBU+YEiX/pNxm5laqrCVqfoD1N11ueNodNBWMhb9dPCh2oR/X9XoqNFUjW/TA1KpEKv/WeEjurVew1kvrmNIj6OHxYyIwKk4sHJzNTMh1NPlcMJj/5FZInx0TluyEGbHydY+SAVQyRNGNIGfAsFdqqs56qwwdNCjrSEq2MHAHXQpEJsTxjMUfDTJqlWpGDWrlj7CdrP8BcRpOafP/nWEXv8Ef6Wi69ylfVtExZzxaWWzN8UBZaLH/0sRjWvVHuLopgTbbrURKcetgTpgFY9n9z93w2aQRfAIKg5/v6dXbKhdg8vheceBt1XZSY083E+gMg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5+BjxXUzhX9by+B2NbtMJ72ACB6YvWqdpQejX7pBOeo=;
+ b=lxjZNP7i+jXt8YIVOWwnyp6FH50Khdm7R/vIE+H89Q6N/qyYTd44MgZixQ/ARmiMW6Pc/PXZS7x8ajNJjrZk+rRtVM9LyW621HZ4ZX7M2sNOqbR3lwa0s/a1uu82okgK/xtiHqPqY4hbs8M1ppFYiBi5abKA2O6Ao+q4+Sw8l6A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7) by
+ MWHPR12MB1679.namprd12.prod.outlook.com (2603:10b6:301:f::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4995.14; Wed, 16 Feb 2022 22:59:50 +0000
+Received: from DM8PR12MB5445.namprd12.prod.outlook.com
+ ([fe80::74f0:93a2:5654:588c]) by DM8PR12MB5445.namprd12.prod.outlook.com
+ ([fe80::74f0:93a2:5654:588c%5]) with mapi id 15.20.4975.015; Wed, 16 Feb 2022
+ 22:59:50 +0000
+Message-ID: <5dd76348-f89c-58d9-1f6b-a6031b984330@amd.com>
+Date:   Thu, 17 Feb 2022 05:59:37 +0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v6] KVM: SVM: Allow AVIC support on system w/ physical
+ APIC ID > 255
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, x86@kernel.org
+Cc:     seanjc@google.com, mlevitsk@redhat.com, pbonzini@redhat.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, peterz@infradead.org, hpa@zytor.com,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com,
+        stable@vger.kernel.org
+References: <20220211000851.185799-1-suravee.suthikulpanit@amd.com>
+From:   "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
+In-Reply-To: <20220211000851.185799-1-suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: HK2PR02CA0152.apcprd02.prod.outlook.com
+ (2603:1096:201:1f::12) To DM8PR12MB5445.namprd12.prod.outlook.com
+ (2603:10b6:8:24::7)
 MIME-Version: 1.0
-References: <20220216224153.2242451-1-keescook@chromium.org>
-In-Reply-To: <20220216224153.2242451-1-keescook@chromium.org>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Wed, 16 Feb 2022 14:57:12 -0800
-Message-ID: <CAGS_qxoOYjOtX6BQm-ozcarnazyED2vocd4iV+VdDVnMWpjWjg@mail.gmail.com>
-Subject: Re: [PATCH] lib: overflow: Convert to Kunit
-To:     Kees Cook <keescook@chromium.org>
-Cc:     David Gow <davidgow@google.com>,
-        Vitor Massaru Iha <vitor@massaru.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: bdc0077a-ec75-4f46-8989-08d9f1a00932
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1679:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB1679AB74FA166916A0E1FF5BF3359@MWHPR12MB1679.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7E8XM2fyD6C4kQsPeTIQ5M+1uBQYQ0fabWBCVRdT8OJsj/O04fhciBDBP2fBlVcxXk+wCA3lwkoyKxQ4eiD9ObQExvUBxA9JUfZN/xkH3MRxtwwunOPmjo/P+EmIWcOMxbg+B7o15y5y95FeSq/sp7xm7LUlAR2mvlp+WpM/ZHIbBZWN3mYXZpk3k9L1jc7oKEbyQnxF1M6xQWPsHXlZmWu+jcW98WGs4zF1OYvXpGGNyNRppIeV+79bJWxYzDFRv/1xSHRpgGxW9nrtE8I1gUsckm23lnlCu0miQX4Gd6EY43ZqsSKzAOm6R/uUHkhlj4jhg3W9vSwwx08ZwRyX4giyUh8/hyBXoHJw1dj0NmkFX7G7b9s8blDVbJ1p9TMg6xzWnX54Zr4wJLyvp60wSXIO2coZykLaQPxK+nUFi0/ulGgjhi7mBWWeKfkvPq3Fx990ycTvnE5zXWq0r5XuoCRizGPQbNWOrn9J5OqkhpWM/tSBxliiUhVWwAdaNXP/iQTiojh86ODnGd8VvIX8TPoQxgLrT+zthQroKlJD2DB9u6DvE5y9jZfmXnmIa6qUD7hTtj9tAKUfFfi/90a5Ut/wHXxSIg2+vR3iG8UGp7nDQQnVh3fQITTYGWn8HmW+hN0cNKy1zhkNKN9ZiiA6aYJTjnE7YABslNv45xSGg+AUzvR26vcCiQQfxNhY88tmdpDSpvpR/MYEOGs8/SqXKkXKZlhbMd7I1GuLd2ZAgjk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5445.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(8936002)(53546011)(66476007)(36756003)(31696002)(8676002)(86362001)(66556008)(2906002)(4326008)(6666004)(7416002)(83380400001)(66946007)(186003)(6506007)(26005)(508600001)(2616005)(6512007)(31686004)(38100700002)(6486002)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MjF6MjM4cy9tZWNJbGQ2SW0rVU9sVlhHMXlSYmEyZ1VFS0ZJbVBXL0NsU2Z5?=
+ =?utf-8?B?N0t6b2FWVFR4UTNRZUR1RnYzamNGeFZnYWlEbDFRbHd3U0o3c0dsQkovUi9l?=
+ =?utf-8?B?MFFUVzF5YnoxWHJqdEtVQTFBamY3SWplR2FaVjVwUEhxUXFFQWxvSXdacDlH?=
+ =?utf-8?B?NEFJNlBlRTJFM0JuNHZDci9PdGpTeVJ5Tzd4c0RYRkYxZmpzWmluUlVuMVdN?=
+ =?utf-8?B?eWdMeVgyYlVLSkVqbENnMFIzTGlzUG90a1dOZnZra1VwWUc0ZTl2SVFmV04r?=
+ =?utf-8?B?YktIdnptdUVDRGt4eDQ4UEhxVkRaaVNCUVVnQmVCZTFRVm4xanJabFkySjhH?=
+ =?utf-8?B?NlBidDZsaW5sNTlucmhxUG5pNkFFL3J1T3NiRmovTlowQnVXR0F5T1QxeUxY?=
+ =?utf-8?B?cTZkQWkySmFaRUdxSmdaQWNLaS9IQlVDU0VQbzRhTzZMdFpQUEhBZ3dxSWp5?=
+ =?utf-8?B?bWhsdWhaWWZjZXQyT3k1MUxuNnF5RGN3aUZINWxxaGFzblNISmZLNFdKa2RS?=
+ =?utf-8?B?Z01ZOWx2bUQ5Y0JkMENnNlZMMzd1OFl4YnpCVkt1VERuRlR3cXI2aGVyMmor?=
+ =?utf-8?B?anhOeklvUzA2cjdJeFIzUElXS2RDMTQ1RlRzTjF0ai90VnBTSHpDcVQ0Z0gx?=
+ =?utf-8?B?UXBIU1gwUFp5Y2FneGRPZDlHTXhVV2p0ck5kbFR2TTdyT2JmTmlDMUN3TWNs?=
+ =?utf-8?B?aVd4WXN5RjV0RktQYnlKZkY0bnk0T2hJTzByV1lMdHRRRkxYUlo0R0srYjNE?=
+ =?utf-8?B?MGNIZ2wvMVVPQ0pIM1lNaUpjWXNqa2dTTCtMVVJXRWZrTGJ0WHRxRnZhQ2FV?=
+ =?utf-8?B?V0VpRXlIQVp6V01jZ3FzWDFCVUJ5dnJmZmpMMGRnNXgvODFUbUI5bFdwM3Er?=
+ =?utf-8?B?S29hdkdNRE90eHg2eXpYMTVRcTlHMjd5SHdFcldIQXptV0Y1TWplM1h4ZC83?=
+ =?utf-8?B?NjBNU0dtZEVGMFhVcU13MzFiSFBXWlNaazhtdEhNSENMdFprTmtISWY3ZWlX?=
+ =?utf-8?B?R1dWNWZLcVVnL2ZkYlFLcmRhR1FTcjhBYk5yb2tWS2xLelVySmJFQXZUNExU?=
+ =?utf-8?B?eStvOVo3MkQrMjNTYWhINEVIUVkzRFYzRkFzT25YK055WTJOQ3NGY2Y5NENl?=
+ =?utf-8?B?TXgvOFFmbjQ3QTVhNUFEUkpmNWd0bGQ1dW5rODBHUjhyRUhEUXU5ZWdJU2Zn?=
+ =?utf-8?B?S2ZLM3lVSVlEcjBpWTRHSkZ3MldjT2phQmxib0lVZ1ptRlZHd3VYRElRZ1FJ?=
+ =?utf-8?B?WVAxUUZOZlo4S2FwY0s2TUxyU0o5OWxrZG5UeUtXODNFdEhaaTE2MkxDaVBn?=
+ =?utf-8?B?bHlJUllqaGd4ajl2VjVLS1JGOWdHU1c1cXhYVUJGcVNzV1IxWEVTZi95NS9v?=
+ =?utf-8?B?V0NjRlRJVVZ5eERpd04wZHd1Q2xkOGRYZm1xWWNWRmxjU2RSTFRWOVQ1WU8r?=
+ =?utf-8?B?czB4YzVLdkdoVGFITENLQ3QvSTRRNmlvay9PVHZxTnlDVDQzK1VtWVp5MHpa?=
+ =?utf-8?B?YXFxREQyMEpPSkttNk1hZ0xVQ2NzQVJwTURZUkh5cVI0Sko4NXVSMFVxRTFW?=
+ =?utf-8?B?bmNJOU85RVhRZEJlQ0tUUGxYQk9oY2d6LzNLakNwNHpCSE1IUUVtd1dtUUR6?=
+ =?utf-8?B?MWkwdGUrUzFITEVLay9SWHZvWm4xclJGQXB4aktCU1NFUmsxaHlxZnNxM3Ex?=
+ =?utf-8?B?ZVhISHZHNXpvZFlVYlk3OXdoUVVubk9hUjZxdXovRk5uWU9Yd3RDYU95WTND?=
+ =?utf-8?B?UUx0d0RLVTQwK1lPTlVZMHZBRVgxeStMYXUwaGI5ZVErK09Bclh0Z25MeXh2?=
+ =?utf-8?B?U3lUOWY1Mk9mWE85a0IwdGc2VENRc1RwQkpjLzdxWk8rOVJod1VVK2xBQmZV?=
+ =?utf-8?B?cHdRZDBTWGUxaklPcWRXTDhsWGNjTVhzM0pFaXNqSVBwSFIxTS9XVWxLVUJP?=
+ =?utf-8?B?OVRKYkNBaFV3Y0RQV1F0QnlTVlIzNjVVdEF4SFMweFJiYnpuR05Ja3FPcEUy?=
+ =?utf-8?B?N3ZiSWV4V1E3bDNsK2FPZXZPbWhWUEQvTUNBSjlReXhEOWdBenkvaDE5WkM1?=
+ =?utf-8?B?RGhwZHJVWEJHMnVkTnJaY0tZT0IwU3ZpWUhnWFp4K3dFcXlzbXhINHBWV092?=
+ =?utf-8?B?ODJ0Y3czdnk5VFg0SmV6S1FQaVcwRGF5eFpvUW93emM0RGhNeGQ4QTFCT2xy?=
+ =?utf-8?Q?2BwfrjoJ97jWCp4espMwSNg=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bdc0077a-ec75-4f46-8989-08d9f1a00932
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5445.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2022 22:59:50.5847
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qmS/omZuPsJ11zJbB0ITIJCw/J6cMEgBMB2B5l+69rR3awnXGm0dEnk56ra2jkoiwjDMryoqm/eemAVBzOCotw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1679
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,611 +130,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 2:42 PM Kees Cook <keescook@chromium.org> wrote:
->
-> Convert overflow unit tests to KUnit, for better integration into the
-> kernel self test framework. Includes a rename of test_overflow.c to
-> overflow_kunit.c, and CONFIG_TEST_OVERFLOW to CONFIG_OVERFLOW_KUNIT_TEST.
->
-> $ ./tools/testing/kunit/kunit.py config
-> ...
-> $ ./tools/testing/kunit/kunit.py run overflow
+Paolo,
 
-JFYI, you can run this as a one-liner via
+Do you have any other concerns regarding this patch?
 
-$ ./tools/testing/kunit/kunit.py run --kunitconfig /dev/stdin <<EOF
-CONFIG_KUNIT=y
-CONFIG_TEST_OVERFLOW=y
-EOF
+Regards,
+Suravee
 
-The above is taken from my own duplicate version of this patch
-[1] https://lore.kernel.org/linux-kselftest/20210503211536.1384578-1-dlatypov@google.com/
-
-> ...
-> [14:33:51] Starting KUnit Kernel (1/1)...
-> [14:33:51] ============================================================
-> [14:33:51] ================== overflow (11 subtests) ==================
-> [14:33:51] [PASSED] u8_overflow_test
-> [14:33:51] [PASSED] s8_overflow_test
-> [14:33:51] [PASSED] u16_overflow_test
-> [14:33:51] [PASSED] s16_overflow_test
-> [14:33:51] [PASSED] u32_overflow_test
-> [14:33:51] [PASSED] s32_overflow_test
-> [14:33:51] [PASSED] u64_overflow_test
-> [14:33:51] [PASSED] s64_overflow_test
-> [14:33:51] [PASSED] overflow_shift_test
-> [14:33:51] [PASSED] overflow_allocation_test
-> [14:33:51] [PASSED] overflow_size_helpers_test
-> [14:33:51] ==================== [PASSED] overflow =====================
-> [14:33:51] ============================================================
-> [14:33:51] Testing complete. Passed: 11, Failed: 0, Crashed: 0, Skipped: 0, Errors: 0
-> [14:33:51] Elapsed time: 12.525s total, 0.001s configuring, 12.402s building, 0.101s running
->
-> Cc: David Gow <davidgow@google.com>
-> Cc: Vitor Massaru Iha <vitor@massaru.org>
-> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Co-developed-by: Vitor Massaru Iha <vitor@massaru.org>
-> Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
-> Link: https://lore.kernel.org/lkml/20200720224418.200495-1-vitor@massaru.org/
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
-
-Looks good to me, some minor nits/suggestions wrt KUnit usage.
-Nice to see this test converted over!
-
+On 2/11/2022 7:08 AM, Suravee Suthikulpanit wrote:
+> Expand KVM's mask for the AVIC host physical ID to the full 12 bits defined
+> by the architecture.  The number of bits consumed by hardware is model
+> specific, e.g. early CPUs ignored bits 11:8, but there is no way for KVM
+> to enumerate the "true" size.  So, KVM must allow using all bits, else it
+> risks rejecting completely legal x2APIC IDs on newer CPUs.
+> 
+> This means KVM relies on hardware to not assign x2APIC IDs that exceed the
+> "true" width of the field, but presumably hardware is smart enough to tie
+> the width to the max x2APIC ID.  KVM also relies on hardware to support at
+> least 8 bits, as the legacy xAPIC ID is writable by software.  But, those
+> assumptions are unavoidable due to the lack of any way to enumerate the
+> "true" width.
+> 
+> Cc: stable@vger.kernel.org
+> Cc: Maxim Levitsky <mlevitsk@redhat.com>
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
+> Fixes: 44a95dae1d22 ("KVM: x86: Detect and Initialize AVIC support")
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 > ---
-> Assuming no one objects, I'll carry this in my for-next/overflow tree. :)
-> ---
->  lib/Kconfig.debug                         |  16 +-
->  lib/Makefile                              |   2 +-
->  lib/{test_overflow.c => overflow_kunit.c} | 562 ++++++++++------------
->  3 files changed, 270 insertions(+), 310 deletions(-)
->  rename lib/{test_overflow.c => overflow_kunit.c} (54%)
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 14b89aa37c5c..14d90d03bc8d 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2214,9 +2214,6 @@ config TEST_UUID
->  config TEST_XARRAY
->         tristate "Test the XArray code at runtime"
->
-> -config TEST_OVERFLOW
-> -       tristate "Test check_*_overflow() functions at runtime"
-> -
->  config TEST_RHASHTABLE
->         tristate "Perform selftest on resizable hash table"
->         help
-> @@ -2501,6 +2498,19 @@ config MEMCPY_KUNIT_TEST
->
->           If unsure, say N.
->
-> +config OVERFLOW_KUNIT_TEST
-> +       tristate "Test check_*_overflow() functions at runtime" if !KUNIT_ALL_TESTS
-> +       depends on KUNIT
-> +       default KUNIT_ALL_TESTS
-> +       help
-> +         Builds unit tests for the check_*_overflow(), size_*(), allocation, and
-> +         related functions.
-> +
-> +         For more information on KUnit and unit tests in general please refer
-> +         to the KUnit documentation in Documentation/dev-tools/kunit/.
-> +
-> +         If unsure, say N.
-> +
->  config TEST_UDELAY
->         tristate "udelay test driver"
->         help
-> diff --git a/lib/Makefile b/lib/Makefile
-> index 300f569c626b..fdfcbfaff32f 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -77,7 +77,6 @@ obj-$(CONFIG_TEST_LIST_SORT) += test_list_sort.o
->  obj-$(CONFIG_TEST_MIN_HEAP) += test_min_heap.o
->  obj-$(CONFIG_TEST_LKM) += test_module.o
->  obj-$(CONFIG_TEST_VMALLOC) += test_vmalloc.o
-> -obj-$(CONFIG_TEST_OVERFLOW) += test_overflow.o
->  obj-$(CONFIG_TEST_RHASHTABLE) += test_rhashtable.o
->  obj-$(CONFIG_TEST_SORT) += test_sort.o
->  obj-$(CONFIG_TEST_USER_COPY) += test_user_copy.o
-> @@ -363,6 +362,7 @@ obj-$(CONFIG_BITS_TEST) += test_bits.o
->  obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
->  obj-$(CONFIG_SLUB_KUNIT_TEST) += slub_kunit.o
->  obj-$(CONFIG_MEMCPY_KUNIT_TEST) += memcpy_kunit.o
-> +obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
->
->  obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
->
-> diff --git a/lib/test_overflow.c b/lib/overflow_kunit.c
-> similarity index 54%
-> rename from lib/test_overflow.c
-> rename to lib/overflow_kunit.c
-> index f6530fce799d..4cc27b9926a1 100644
-> --- a/lib/test_overflow.c
-> +++ b/lib/overflow_kunit.c
-> @@ -1,9 +1,13 @@
->  // SPDX-License-Identifier: GPL-2.0 OR MIT
->  /*
-> - * Test cases for arithmetic overflow checks.
-> + * Test cases for arithmetic overflow checks. See:
-> + * https://www.kernel.org/doc/html/latest/dev-tools/kunit/kunit-tool.html#configuring-building-and-running-tests
-> + *     ./tools/testing/kunit/kunit.py config
-> + *     ./tools/testing/kunit/kunit.py run overflow [--raw_output]
->   */
->  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-
-We can drop the pr_fmt now, I think
-
->
-> +#include <kunit/test.h>
->  #include <linux/device.h>
->  #include <linux/init.h>
->  #include <linux/kernel.h>
-> @@ -19,7 +23,7 @@
->                 t a, b;                         \
->                 t sum, diff, prod;              \
->                 bool s_of, d_of, p_of;          \
-> -       } t ## _tests[] __initconst
-> +       } t ## _tests[]
->
->  DEFINE_TEST_ARRAY(u8) = {
->         {0, 0, 0, 0, 0, false, false, false},
-> @@ -220,43 +224,31 @@ DEFINE_TEST_ARRAY(s64) = {
->         bool _of;                                               \
->                                                                 \
->         _of = check_ ## op ## _overflow(a, b, &_r);             \
-> -       if (_of != of) {                                        \
-> -               pr_warn("expected "fmt" "sym" "fmt              \
-> -                       " to%s overflow (type %s)\n",           \
-> -                       a, b, of ? "" : " not", #t);            \
-> -               err = 1;                                        \
-> -       }                                                       \
-> -       if (_r != r) {                                          \
-> -               pr_warn("expected "fmt" "sym" "fmt" == "        \
-> -                       fmt", got "fmt" (type %s)\n",           \
-> -                       a, b, r, _r, #t);                       \
-> -               err = 1;                                        \
-> -       }                                                       \
-> +       KUNIT_EXPECT_EQ_MSG(test, _of, of,                      \
-> +               "expected "fmt" "sym" "fmt" to%s overflow (type %s)\n", \
-> +               a, b, of ? "" : " not", #t);                    \
-> +       KUNIT_EXPECT_EQ_MSG(test, _r, r,                        \
-> +               "expected "fmt" "sym" "fmt" == "fmt", got "fmt" (type %s)\n", \
-> +               a, b, r, _r, #t);                               \
->  } while (0)
->
->  #define DEFINE_TEST_FUNC(t, fmt)                                       \
-> -static int __init do_test_ ## t(const struct test_ ## t *p)            \
-> +static void do_test_ ## t(struct kunit *test, const struct test_ ## t *p) \
->  {                                                                      \
-> -       int err = 0;                                                    \
-> -                                                                       \
->         check_one_op(t, fmt, add, "+", p->a, p->b, p->sum, p->s_of);    \
->         check_one_op(t, fmt, add, "+", p->b, p->a, p->sum, p->s_of);    \
->         check_one_op(t, fmt, sub, "-", p->a, p->b, p->diff, p->d_of);   \
->         check_one_op(t, fmt, mul, "*", p->a, p->b, p->prod, p->p_of);   \
->         check_one_op(t, fmt, mul, "*", p->b, p->a, p->prod, p->p_of);   \
-> -                                                                       \
-> -       return err;                                                     \
->  }                                                                      \
->                                                                         \
-> -static int __init test_ ## t ## _overflow(void) {                      \
-> -       int err = 0;                                                    \
-> +static void t ## _overflow_test(struct kunit *test) {                  \
->         unsigned i;                                                     \
->                                                                         \
->         for (i = 0; i < ARRAY_SIZE(t ## _tests); ++i)                   \
-> -               err |= do_test_ ## t(&t ## _tests[i]);                  \
-> -       pr_info("%zu %s arithmetic tests finished\n",                   \
-> +               do_test_ ## t(test, &t ## _tests[i]);                   \
-> +       kunit_info(test, "%zu %s arithmetic tests finished\n",          \
->                 ARRAY_SIZE(t ## _tests), #t);                           \
-> -       return err;                                                     \
->  }
->
->  DEFINE_TEST_FUNC(u8, "%d");
-> @@ -270,198 +262,176 @@ DEFINE_TEST_FUNC(u64, "%llu");
->  DEFINE_TEST_FUNC(s64, "%lld");
->  #endif
->
-> -static int __init test_overflow_calculation(void)
-> -{
-> -       int err = 0;
-> -
-> -       err |= test_u8_overflow();
-> -       err |= test_s8_overflow();
-> -       err |= test_u16_overflow();
-> -       err |= test_s16_overflow();
-> -       err |= test_u32_overflow();
-> -       err |= test_s32_overflow();
-> -#if BITS_PER_LONG == 64
-> -       err |= test_u64_overflow();
-> -       err |= test_s64_overflow();
-> -#endif
-> -
-> -       return err;
-> -}
-> -
-> -static int __init test_overflow_shift(void)
-> +static void overflow_shift_test(struct kunit *test)
->  {
-> -       int err = 0;
->         int count = 0;
->
->  /* Args are: value, shift, type, expected result, overflow expected */
-> -#define TEST_ONE_SHIFT(a, s, t, expect, of) ({                         \
-> -       int __failed = 0;                                               \
-> +#define TEST_ONE_SHIFT(a, s, t, expect, of)    do {                    \
->         typeof(a) __a = (a);                                            \
->         typeof(s) __s = (s);                                            \
->         t __e = (expect);                                               \
->         t __d;                                                          \
->         bool __of = check_shl_overflow(__a, __s, &__d);                 \
->         if (__of != of) {                                               \
-> -               pr_warn("expected (%s)(%s << %s) to%s overflow\n",      \
-> +               KUNIT_EXPECT_EQ_MSG(test, __of, of,                     \
-> +                       "expected (%s)(%s << %s) to%s overflow\n",      \
->                         #t, #a, #s, of ? "" : " not");                  \
-> -               __failed = 1;                                           \
->         } else if (!__of && __d != __e) {                               \
-> -               pr_warn("expected (%s)(%s << %s) == %s\n",              \
-> +               KUNIT_EXPECT_EQ_MSG(test, __d, __e,                     \
-> +                       "expected (%s)(%s << %s) == %s\n",              \
->                         #t, #a, #s, #expect);                           \
->                 if ((t)-1 < 0)                                          \
-> -                       pr_warn("got %lld\n", (s64)__d);                \
-> +                       kunit_info(test, "got %lld\n", (s64)__d);       \
->                 else                                                    \
-> -                       pr_warn("got %llu\n", (u64)__d);                \
-> -               __failed = 1;                                           \
-> +                       kunit_info(test, "got %llu\n", (u64)__d);       \
->         }                                                               \
->         count++;                                                        \
-> -       __failed;                                                       \
-> -})
-> +} while (0)
->
->         /* Sane shifts. */
-> -       err |= TEST_ONE_SHIFT(1, 0, u8, 1 << 0, false);
-> -       err |= TEST_ONE_SHIFT(1, 4, u8, 1 << 4, false);
-> -       err |= TEST_ONE_SHIFT(1, 7, u8, 1 << 7, false);
-> -       err |= TEST_ONE_SHIFT(0xF, 4, u8, 0xF << 4, false);
-> -       err |= TEST_ONE_SHIFT(1, 0, u16, 1 << 0, false);
-> -       err |= TEST_ONE_SHIFT(1, 10, u16, 1 << 10, false);
-> -       err |= TEST_ONE_SHIFT(1, 15, u16, 1 << 15, false);
-> -       err |= TEST_ONE_SHIFT(0xFF, 8, u16, 0xFF << 8, false);
-> -       err |= TEST_ONE_SHIFT(1, 0, int, 1 << 0, false);
-> -       err |= TEST_ONE_SHIFT(1, 16, int, 1 << 16, false);
-> -       err |= TEST_ONE_SHIFT(1, 30, int, 1 << 30, false);
-> -       err |= TEST_ONE_SHIFT(1, 0, s32, 1 << 0, false);
-> -       err |= TEST_ONE_SHIFT(1, 16, s32, 1 << 16, false);
-> -       err |= TEST_ONE_SHIFT(1, 30, s32, 1 << 30, false);
-> -       err |= TEST_ONE_SHIFT(1, 0, unsigned int, 1U << 0, false);
-> -       err |= TEST_ONE_SHIFT(1, 20, unsigned int, 1U << 20, false);
-> -       err |= TEST_ONE_SHIFT(1, 31, unsigned int, 1U << 31, false);
-> -       err |= TEST_ONE_SHIFT(0xFFFFU, 16, unsigned int, 0xFFFFU << 16, false);
-> -       err |= TEST_ONE_SHIFT(1, 0, u32, 1U << 0, false);
-> -       err |= TEST_ONE_SHIFT(1, 20, u32, 1U << 20, false);
-> -       err |= TEST_ONE_SHIFT(1, 31, u32, 1U << 31, false);
-> -       err |= TEST_ONE_SHIFT(0xFFFFU, 16, u32, 0xFFFFU << 16, false);
-> -       err |= TEST_ONE_SHIFT(1, 0, u64, 1ULL << 0, false);
-> -       err |= TEST_ONE_SHIFT(1, 40, u64, 1ULL << 40, false);
-> -       err |= TEST_ONE_SHIFT(1, 63, u64, 1ULL << 63, false);
-> -       err |= TEST_ONE_SHIFT(0xFFFFFFFFULL, 32, u64,
-> -                             0xFFFFFFFFULL << 32, false);
-> +       TEST_ONE_SHIFT(1, 0, u8, 1 << 0, false);
-> +       TEST_ONE_SHIFT(1, 4, u8, 1 << 4, false);
-> +       TEST_ONE_SHIFT(1, 7, u8, 1 << 7, false);
-> +       TEST_ONE_SHIFT(0xF, 4, u8, 0xF << 4, false);
-> +       TEST_ONE_SHIFT(1, 0, u16, 1 << 0, false);
-> +       TEST_ONE_SHIFT(1, 10, u16, 1 << 10, false);
-> +       TEST_ONE_SHIFT(1, 15, u16, 1 << 15, false);
-> +       TEST_ONE_SHIFT(0xFF, 8, u16, 0xFF << 8, false);
-> +       TEST_ONE_SHIFT(1, 0, int, 1 << 0, false);
-> +       TEST_ONE_SHIFT(1, 16, int, 1 << 16, false);
-> +       TEST_ONE_SHIFT(1, 30, int, 1 << 30, false);
-> +       TEST_ONE_SHIFT(1, 0, s32, 1 << 0, false);
-> +       TEST_ONE_SHIFT(1, 16, s32, 1 << 16, false);
-> +       TEST_ONE_SHIFT(1, 30, s32, 1 << 30, false);
-> +       TEST_ONE_SHIFT(1, 0, unsigned int, 1U << 0, false);
-> +       TEST_ONE_SHIFT(1, 20, unsigned int, 1U << 20, false);
-> +       TEST_ONE_SHIFT(1, 31, unsigned int, 1U << 31, false);
-> +       TEST_ONE_SHIFT(0xFFFFU, 16, unsigned int, 0xFFFFU << 16, false);
-> +       TEST_ONE_SHIFT(1, 0, u32, 1U << 0, false);
-> +       TEST_ONE_SHIFT(1, 20, u32, 1U << 20, false);
-> +       TEST_ONE_SHIFT(1, 31, u32, 1U << 31, false);
-> +       TEST_ONE_SHIFT(0xFFFFU, 16, u32, 0xFFFFU << 16, false);
-> +       TEST_ONE_SHIFT(1, 0, u64, 1ULL << 0, false);
-> +       TEST_ONE_SHIFT(1, 40, u64, 1ULL << 40, false);
-> +       TEST_ONE_SHIFT(1, 63, u64, 1ULL << 63, false);
-> +       TEST_ONE_SHIFT(0xFFFFFFFFULL, 32, u64, 0xFFFFFFFFULL << 32, false);
->
->         /* Sane shift: start and end with 0, without a too-wide shift. */
-> -       err |= TEST_ONE_SHIFT(0, 7, u8, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 15, u16, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 31, unsigned int, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 31, u32, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 63, u64, 0, false);
-> +       TEST_ONE_SHIFT(0, 7, u8, 0, false);
-> +       TEST_ONE_SHIFT(0, 15, u16, 0, false);
-> +       TEST_ONE_SHIFT(0, 31, unsigned int, 0, false);
-> +       TEST_ONE_SHIFT(0, 31, u32, 0, false);
-> +       TEST_ONE_SHIFT(0, 63, u64, 0, false);
->
->         /* Sane shift: start and end with 0, without reaching signed bit. */
-> -       err |= TEST_ONE_SHIFT(0, 6, s8, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 14, s16, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 30, int, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 30, s32, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 62, s64, 0, false);
-> +       TEST_ONE_SHIFT(0, 6, s8, 0, false);
-> +       TEST_ONE_SHIFT(0, 14, s16, 0, false);
-> +       TEST_ONE_SHIFT(0, 30, int, 0, false);
-> +       TEST_ONE_SHIFT(0, 30, s32, 0, false);
-> +       TEST_ONE_SHIFT(0, 62, s64, 0, false);
->
->         /* Overflow: shifted the bit off the end. */
-> -       err |= TEST_ONE_SHIFT(1, 8, u8, 0, true);
-> -       err |= TEST_ONE_SHIFT(1, 16, u16, 0, true);
-> -       err |= TEST_ONE_SHIFT(1, 32, unsigned int, 0, true);
-> -       err |= TEST_ONE_SHIFT(1, 32, u32, 0, true);
-> -       err |= TEST_ONE_SHIFT(1, 64, u64, 0, true);
-> +       TEST_ONE_SHIFT(1, 8, u8, 0, true);
-> +       TEST_ONE_SHIFT(1, 16, u16, 0, true);
-> +       TEST_ONE_SHIFT(1, 32, unsigned int, 0, true);
-> +       TEST_ONE_SHIFT(1, 32, u32, 0, true);
-> +       TEST_ONE_SHIFT(1, 64, u64, 0, true);
->
->         /* Overflow: shifted into the signed bit. */
-> -       err |= TEST_ONE_SHIFT(1, 7, s8, 0, true);
-> -       err |= TEST_ONE_SHIFT(1, 15, s16, 0, true);
-> -       err |= TEST_ONE_SHIFT(1, 31, int, 0, true);
-> -       err |= TEST_ONE_SHIFT(1, 31, s32, 0, true);
-> -       err |= TEST_ONE_SHIFT(1, 63, s64, 0, true);
-> +       TEST_ONE_SHIFT(1, 7, s8, 0, true);
-> +       TEST_ONE_SHIFT(1, 15, s16, 0, true);
-> +       TEST_ONE_SHIFT(1, 31, int, 0, true);
-> +       TEST_ONE_SHIFT(1, 31, s32, 0, true);
-> +       TEST_ONE_SHIFT(1, 63, s64, 0, true);
->
->         /* Overflow: high bit falls off unsigned types. */
->         /* 10010110 */
-> -       err |= TEST_ONE_SHIFT(150, 1, u8, 0, true);
-> +       TEST_ONE_SHIFT(150, 1, u8, 0, true);
->         /* 1000100010010110 */
-> -       err |= TEST_ONE_SHIFT(34966, 1, u16, 0, true);
-> +       TEST_ONE_SHIFT(34966, 1, u16, 0, true);
->         /* 10000100000010001000100010010110 */
-> -       err |= TEST_ONE_SHIFT(2215151766U, 1, u32, 0, true);
-> -       err |= TEST_ONE_SHIFT(2215151766U, 1, unsigned int, 0, true);
-> +       TEST_ONE_SHIFT(2215151766U, 1, u32, 0, true);
-> +       TEST_ONE_SHIFT(2215151766U, 1, unsigned int, 0, true);
->         /* 1000001000010000010000000100000010000100000010001000100010010110 */
-> -       err |= TEST_ONE_SHIFT(9372061470395238550ULL, 1, u64, 0, true);
-> +       TEST_ONE_SHIFT(9372061470395238550ULL, 1, u64, 0, true);
->
->         /* Overflow: bit shifted into signed bit on signed types. */
->         /* 01001011 */
-> -       err |= TEST_ONE_SHIFT(75, 1, s8, 0, true);
-> +       TEST_ONE_SHIFT(75, 1, s8, 0, true);
->         /* 0100010001001011 */
-> -       err |= TEST_ONE_SHIFT(17483, 1, s16, 0, true);
-> +       TEST_ONE_SHIFT(17483, 1, s16, 0, true);
->         /* 01000010000001000100010001001011 */
-> -       err |= TEST_ONE_SHIFT(1107575883, 1, s32, 0, true);
-> -       err |= TEST_ONE_SHIFT(1107575883, 1, int, 0, true);
-> +       TEST_ONE_SHIFT(1107575883, 1, s32, 0, true);
-> +       TEST_ONE_SHIFT(1107575883, 1, int, 0, true);
->         /* 0100000100001000001000000010000001000010000001000100010001001011 */
-> -       err |= TEST_ONE_SHIFT(4686030735197619275LL, 1, s64, 0, true);
-> +       TEST_ONE_SHIFT(4686030735197619275LL, 1, s64, 0, true);
->
->         /* Overflow: bit shifted past signed bit on signed types. */
->         /* 01001011 */
-> -       err |= TEST_ONE_SHIFT(75, 2, s8, 0, true);
-> +       TEST_ONE_SHIFT(75, 2, s8, 0, true);
->         /* 0100010001001011 */
-> -       err |= TEST_ONE_SHIFT(17483, 2, s16, 0, true);
-> +       TEST_ONE_SHIFT(17483, 2, s16, 0, true);
->         /* 01000010000001000100010001001011 */
-> -       err |= TEST_ONE_SHIFT(1107575883, 2, s32, 0, true);
-> -       err |= TEST_ONE_SHIFT(1107575883, 2, int, 0, true);
-> +       TEST_ONE_SHIFT(1107575883, 2, s32, 0, true);
-> +       TEST_ONE_SHIFT(1107575883, 2, int, 0, true);
->         /* 0100000100001000001000000010000001000010000001000100010001001011 */
-> -       err |= TEST_ONE_SHIFT(4686030735197619275LL, 2, s64, 0, true);
-> +       TEST_ONE_SHIFT(4686030735197619275LL, 2, s64, 0, true);
->
->         /* Overflow: values larger than destination type. */
-> -       err |= TEST_ONE_SHIFT(0x100, 0, u8, 0, true);
-> -       err |= TEST_ONE_SHIFT(0xFF, 0, s8, 0, true);
-> -       err |= TEST_ONE_SHIFT(0x10000U, 0, u16, 0, true);
-> -       err |= TEST_ONE_SHIFT(0xFFFFU, 0, s16, 0, true);
-> -       err |= TEST_ONE_SHIFT(0x100000000ULL, 0, u32, 0, true);
-> -       err |= TEST_ONE_SHIFT(0x100000000ULL, 0, unsigned int, 0, true);
-> -       err |= TEST_ONE_SHIFT(0xFFFFFFFFUL, 0, s32, 0, true);
-> -       err |= TEST_ONE_SHIFT(0xFFFFFFFFUL, 0, int, 0, true);
-> -       err |= TEST_ONE_SHIFT(0xFFFFFFFFFFFFFFFFULL, 0, s64, 0, true);
-> +       TEST_ONE_SHIFT(0x100, 0, u8, 0, true);
-> +       TEST_ONE_SHIFT(0xFF, 0, s8, 0, true);
-> +       TEST_ONE_SHIFT(0x10000U, 0, u16, 0, true);
-> +       TEST_ONE_SHIFT(0xFFFFU, 0, s16, 0, true);
-> +       TEST_ONE_SHIFT(0x100000000ULL, 0, u32, 0, true);
-> +       TEST_ONE_SHIFT(0x100000000ULL, 0, unsigned int, 0, true);
-> +       TEST_ONE_SHIFT(0xFFFFFFFFUL, 0, s32, 0, true);
-> +       TEST_ONE_SHIFT(0xFFFFFFFFUL, 0, int, 0, true);
-> +       TEST_ONE_SHIFT(0xFFFFFFFFFFFFFFFFULL, 0, s64, 0, true);
->
->         /* Nonsense: negative initial value. */
-> -       err |= TEST_ONE_SHIFT(-1, 0, s8, 0, true);
-> -       err |= TEST_ONE_SHIFT(-1, 0, u8, 0, true);
-> -       err |= TEST_ONE_SHIFT(-5, 0, s16, 0, true);
-> -       err |= TEST_ONE_SHIFT(-5, 0, u16, 0, true);
-> -       err |= TEST_ONE_SHIFT(-10, 0, int, 0, true);
-> -       err |= TEST_ONE_SHIFT(-10, 0, unsigned int, 0, true);
-> -       err |= TEST_ONE_SHIFT(-100, 0, s32, 0, true);
-> -       err |= TEST_ONE_SHIFT(-100, 0, u32, 0, true);
-> -       err |= TEST_ONE_SHIFT(-10000, 0, s64, 0, true);
-> -       err |= TEST_ONE_SHIFT(-10000, 0, u64, 0, true);
-> +       TEST_ONE_SHIFT(-1, 0, s8, 0, true);
-> +       TEST_ONE_SHIFT(-1, 0, u8, 0, true);
-> +       TEST_ONE_SHIFT(-5, 0, s16, 0, true);
-> +       TEST_ONE_SHIFT(-5, 0, u16, 0, true);
-> +       TEST_ONE_SHIFT(-10, 0, int, 0, true);
-> +       TEST_ONE_SHIFT(-10, 0, unsigned int, 0, true);
-> +       TEST_ONE_SHIFT(-100, 0, s32, 0, true);
-> +       TEST_ONE_SHIFT(-100, 0, u32, 0, true);
-> +       TEST_ONE_SHIFT(-10000, 0, s64, 0, true);
-> +       TEST_ONE_SHIFT(-10000, 0, u64, 0, true);
->
->         /* Nonsense: negative shift values. */
-> -       err |= TEST_ONE_SHIFT(0, -5, s8, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, -5, u8, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, -10, s16, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, -10, u16, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, -15, int, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, -15, unsigned int, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, -20, s32, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, -20, u32, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, -30, s64, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, -30, u64, 0, true);
-> +       TEST_ONE_SHIFT(0, -5, s8, 0, true);
-> +       TEST_ONE_SHIFT(0, -5, u8, 0, true);
-> +       TEST_ONE_SHIFT(0, -10, s16, 0, true);
-> +       TEST_ONE_SHIFT(0, -10, u16, 0, true);
-> +       TEST_ONE_SHIFT(0, -15, int, 0, true);
-> +       TEST_ONE_SHIFT(0, -15, unsigned int, 0, true);
-> +       TEST_ONE_SHIFT(0, -20, s32, 0, true);
-> +       TEST_ONE_SHIFT(0, -20, u32, 0, true);
-> +       TEST_ONE_SHIFT(0, -30, s64, 0, true);
-> +       TEST_ONE_SHIFT(0, -30, u64, 0, true);
->
->         /* Overflow: shifted at or beyond entire type's bit width. */
-> -       err |= TEST_ONE_SHIFT(0, 8, u8, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 9, u8, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 8, s8, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 9, s8, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 16, u16, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 17, u16, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 16, s16, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 17, s16, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 32, u32, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 33, u32, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 32, int, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 33, int, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 32, s32, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 33, s32, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 64, u64, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 65, u64, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 64, s64, 0, true);
-> -       err |= TEST_ONE_SHIFT(0, 65, s64, 0, true);
-> +       TEST_ONE_SHIFT(0, 8, u8, 0, true);
-> +       TEST_ONE_SHIFT(0, 9, u8, 0, true);
-> +       TEST_ONE_SHIFT(0, 8, s8, 0, true);
-> +       TEST_ONE_SHIFT(0, 9, s8, 0, true);
-> +       TEST_ONE_SHIFT(0, 16, u16, 0, true);
-> +       TEST_ONE_SHIFT(0, 17, u16, 0, true);
-> +       TEST_ONE_SHIFT(0, 16, s16, 0, true);
-> +       TEST_ONE_SHIFT(0, 17, s16, 0, true);
-> +       TEST_ONE_SHIFT(0, 32, u32, 0, true);
-> +       TEST_ONE_SHIFT(0, 33, u32, 0, true);
-> +       TEST_ONE_SHIFT(0, 32, int, 0, true);
-> +       TEST_ONE_SHIFT(0, 33, int, 0, true);
-> +       TEST_ONE_SHIFT(0, 32, s32, 0, true);
-> +       TEST_ONE_SHIFT(0, 33, s32, 0, true);
-> +       TEST_ONE_SHIFT(0, 64, u64, 0, true);
-> +       TEST_ONE_SHIFT(0, 65, u64, 0, true);
-> +       TEST_ONE_SHIFT(0, 64, s64, 0, true);
-> +       TEST_ONE_SHIFT(0, 65, s64, 0, true);
->
->         /*
->          * Corner case: for unsigned types, we fail when we've shifted
-> @@ -472,17 +442,14 @@ static int __init test_overflow_shift(void)
->          * signed bit). So, for now, we will test this condition but
->          * mark it as not expected to overflow.
->          */
-> -       err |= TEST_ONE_SHIFT(0, 7, s8, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 15, s16, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 31, int, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 31, s32, 0, false);
-> -       err |= TEST_ONE_SHIFT(0, 63, s64, 0, false);
-> -
-> -       pr_info("%d shift tests finished\n", count);
-> +       TEST_ONE_SHIFT(0, 7, s8, 0, false);
-> +       TEST_ONE_SHIFT(0, 15, s16, 0, false);
-> +       TEST_ONE_SHIFT(0, 31, int, 0, false);
-> +       TEST_ONE_SHIFT(0, 31, s32, 0, false);
-> +       TEST_ONE_SHIFT(0, 63, s64, 0, false);
->
-> +       kunit_info(test, "%d shift tests finished\n", count);
->  #undef TEST_ONE_SHIFT
-> -
-> -       return err;
->  }
->
->  /*
-> @@ -502,7 +469,7 @@ static int __init test_overflow_shift(void)
->  #define TEST_SIZE              (5 * 4096)
->
->  #define DEFINE_TEST_ALLOC(func, free_func, want_arg, want_gfp, want_node)\
-> -static int __init test_ ## func (void *arg)                            \
-> +static void test_ ## func (struct kunit *test, void *arg)              \
->  {                                                                      \
->         volatile size_t a = TEST_SIZE;                                  \
->         volatile size_t b = (SIZE_MAX / TEST_SIZE) + 1;                 \
-> @@ -510,30 +477,28 @@ static int __init test_ ## func (void *arg)                               \
->                                                                         \
->         /* Tiny allocation test. */                                     \
->         ptr = alloc ## want_arg ## want_gfp ## want_node (func, arg, 1);\
-> -       if (!ptr) {                                                     \
-> -               pr_warn(#func " failed regular allocation?!\n");        \
-> -               return 1;                                               \
-> -       }                                                               \
-> +       KUNIT_EXPECT_FALSE_MSG(test, !ptr,                              \
-> +                           #func " failed regular allocation?!\n");    \
-
-Optional: we can consider using KUNIT_ASSERT_NOT_ERR_OR_NULL_MSG() here.
-It's a more heavy handed than just a `return` on failure, but if the
-regular allocation failed, we're probably justified in bailing out on
-the whole test case.
-
-> +       if (!ptr)                                                       \
-> +               return;                                                 \
->         free ## want_arg (free_func, arg, ptr);                         \
->                                                                         \
->         /* Wrapped allocation test. */                                  \
->         ptr = alloc ## want_arg ## want_gfp ## want_node (func, arg,    \
->                                                           a * b);       \
-> -       if (!ptr) {                                                     \
-> -               pr_warn(#func " unexpectedly failed bad wrapping?!\n"); \
-> -               return 1;                                               \
-> -       }                                                               \
-> +       KUNIT_EXPECT_FALSE_MSG(test, !ptr,                              \
-> +                           #func " unexpectedly failed bad wrapping?!\n"); \
-> +       if (!ptr)                                                       \
-> +               return;                                                 \
->         free ## want_arg (free_func, arg, ptr);                         \
->                                                                         \
->         /* Saturated allocation test. */                                \
->         ptr = alloc ## want_arg ## want_gfp ## want_node (func, arg,    \
->                                                    array_size(a, b));   \
-> -       if (ptr) {                                                      \
-> -               pr_warn(#func " missed saturation!\n");                 \
-> +       KUNIT_EXPECT_FALSE_MSG(test, ptr,                               \
-> +                           #func " missed saturation!\n");             \
-> +       if (ptr)                                                        \
-
-We can instead do
-
-if (ptr) {
-  KUNIT_FAIL(test, #func "missed saturation!");
- free...()
-}
-
-IMO, it's a bit easier to read that way, but not that important.
-
->                 free ## want_arg (free_func, arg, ptr);                 \
-> -               return 1;                                               \
-> -       }                                                               \
+>   arch/x86/kvm/svm/avic.c | 7 +------
+>   arch/x86/kvm/svm/svm.h  | 2 +-
+>   2 files changed, 2 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index 90364d02f22a..e4cfd8bf4f24 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -974,17 +974,12 @@ avic_update_iommu_vcpu_affinity(struct kvm_vcpu *vcpu, int cpu, bool r)
+>   void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+>   {
+>   	u64 entry;
+> -	/* ID = 0xff (broadcast), ID > 0xff (reserved) */
+>   	int h_physical_id = kvm_cpu_get_apicid(cpu);
+>   	struct vcpu_svm *svm = to_svm(vcpu);
+>   
+>   	lockdep_assert_preemption_disabled();
+>   
+> -	/*
+> -	 * Since the host physical APIC id is 8 bits,
+> -	 * we can support host APIC ID upto 255.
+> -	 */
+> -	if (WARN_ON(h_physical_id > AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK))
+> +	if (WARN_ON(h_physical_id & ~AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK))
+>   		return;
+>   
+>   	/*
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index 47ef8f4a9358..cede59cd8999 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -565,7 +565,7 @@ extern struct kvm_x86_nested_ops svm_nested_ops;
+>   #define AVIC_LOGICAL_ID_ENTRY_VALID_BIT			31
+>   #define AVIC_LOGICAL_ID_ENTRY_VALID_MASK		(1 << 31)
+>   
+> -#define AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK	(0xFFULL)
+> +#define AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK	GENMASK_ULL(11, 0)
+>   #define AVIC_PHYSICAL_ID_ENTRY_BACKING_PAGE_MASK	(0xFFFFFFFFFFULL << 12)
+>   #define AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK		(1ULL << 62)
+>   #define AVIC_PHYSICAL_ID_ENTRY_VALID_MASK		(1ULL << 63)

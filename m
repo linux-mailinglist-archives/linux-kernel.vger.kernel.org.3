@@ -2,142 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 821F04B874D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 13:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2C24B874F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 13:04:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232963AbiBPMCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 07:02:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47604 "EHLO
+        id S232676AbiBPMET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 07:04:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232909AbiBPMCP (ORCPT
+        with ESMTP id S231593AbiBPMEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 07:02:15 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829B8E7F43
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 04:02:03 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3AF0321763;
-        Wed, 16 Feb 2022 12:02:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645012922; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kr9dETkBJpugtcSkfZO+bjcmUGF0KSfTN/IBCGVngP4=;
-        b=nfePnksG+NG2Z0qM7wRUlAloNATUCtIQUk6znsvYEpA4hxSTZsw5bFcerWsG8u8cpTCe8d
-        EFqsssmkAnhb6wUyRkbLkp+4dkvBgCi/kpKbIgjVAoGKU4TP7pL3+kw+KhTuaT2uck89BN
-        RKLIIhI63NxuWfr0co0p9JtcCWR4e6o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645012922;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kr9dETkBJpugtcSkfZO+bjcmUGF0KSfTN/IBCGVngP4=;
-        b=Dd1MZt1sZ8lHTN+X+ydf4DfYr812TeEkgjBiybL0cdX7B9OK5TtVvtm/FEqztwOeS8ZBwR
-        xp+n6JXhvcgHoZDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1A04513AF3;
-        Wed, 16 Feb 2022 12:02:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id H5ShBbrnDGJqQAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 16 Feb 2022 12:02:02 +0000
-Message-ID: <d6f991f6-ce07-853a-e87b-5eda97a35733@suse.cz>
-Date:   Wed, 16 Feb 2022 13:02:01 +0100
+        Wed, 16 Feb 2022 07:04:16 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BCB284236
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 04:04:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645013044; x=1676549044;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=nl8GK8mOI649s6l53KlxFSU4dpekbJIMHhJ7EE7RAqU=;
+  b=LgW0KIy4gS9gaJ28GpBKBu6TnpBphNMXpjk5EbipYTOzcJLAmIFS/hGR
+   ZAuLYw+NfH3oMR5HXsfa7C6WWkaRWfTQ8aK723Y1M4+59Bv6QfiE/kKgY
+   l6EC2/n+QdrKtpOIQ3hf7ddBxtpcTYlt3yL8xAUGfrsk+KRhW31tOOhBq
+   NIutjThu19A4hhjf0X8D9zdwHrzWQPMvFElLkwOfRe1WZr1ZAG3G/1Qsy
+   bd+le6RxuqbSu3xKkTALSxGdVbCTugVHTXKWALv943bi+Vtz3OiA9XSGq
+   BKokOHldz/cYZenhA/oBkXlv/0IsjtOrZhYd/3sQaHuJ/ROFcvc160iw+
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="249420156"
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="249420156"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 04:04:04 -0800
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="502995160"
+Received: from sphadnis-mobl1.amr.corp.intel.com (HELO [10.212.82.113]) ([10.212.82.113])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 04:04:01 -0800
+Message-ID: <7ed77377-1e6e-4329-1fda-87854f9bb938@linux.intel.com>
+Date:   Wed, 16 Feb 2022 12:03:59 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
+ Thunderbird/91.5.0
+Subject: Re: [Intel-gfx] [PATCH v7 1/5] drm/i915/gsc: add gsc as a mei
+ auxiliary device
 Content-Language: en-US
-To:     Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Aaron Lu <aaron.lu@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-References: <20220215145111.27082-1-mgorman@techsingularity.net>
- <20220215145111.27082-3-mgorman@techsingularity.net>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH 2/5] mm/page_alloc: Track range of active PCP lists during
- bulk free
-In-Reply-To: <20220215145111.27082-3-mgorman@techsingularity.net>
-Content-Type: text/plain; charset=UTF-8
+To:     "Usyskin, Alexander" <alexander.usyskin@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Winkler, Tomas" <tomas.winkler@intel.com>,
+        "Lubart, Vitaly" <vitaly.lubart@intel.com>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>
+References: <20220213103215.2440248-1-alexander.usyskin@intel.com>
+ <20220213103215.2440248-2-alexander.usyskin@intel.com>
+ <f88b7780-cf4f-d2f5-f2ba-cd3d7bf2a0d4@linux.intel.com>
+ <MW3PR11MB465112EBAFF7BC9681EF2D03ED349@MW3PR11MB4651.namprd11.prod.outlook.com>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <MW3PR11MB465112EBAFF7BC9681EF2D03ED349@MW3PR11MB4651.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/22 15:51, Mel Gorman wrote:
-> free_pcppages_bulk() frees pages in a round-robin fashion. Originally,
-> this was dealing only with migratetypes but storing high-order pages
-> means that there can be many more empty lists that are uselessly
-> checked. Track the minimum and maximum active pindex to reduce the
-> search space.
-> 
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> ---
->  mm/page_alloc.c | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 08de32cfd9bb..c5110fdeb115 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -1450,6 +1450,8 @@ static void free_pcppages_bulk(struct zone *zone, int count,
->  					struct per_cpu_pages *pcp)
->  {
->  	int pindex = 0;
-> +	int min_pindex = 0;
-> +	int max_pindex = NR_PCP_LISTS - 1;
->  	int batch_free = 0;
->  	int nr_freed = 0;
->  	unsigned int order;
-> @@ -1478,10 +1480,17 @@ static void free_pcppages_bulk(struct zone *zone, int count,
->  			if (++pindex == NR_PCP_LISTS)
 
-Hmm, so in the very first iteration at this point pindex is already 1. This
-looks odd even before the patch, as order 0 MIGRATE_UNMOVABLE list is only
-processed after all the higher orders?
 
->  				pindex = 0;
+On 15/02/2022 15:22, Usyskin, Alexander wrote:
 
-Also shouldn't this wrap-around check also use min_index/max_index instead
-of NR_PCP_LISTS and 0?
+>>> +{
+>>> +	irq_set_chip_and_handler_name(irq, &gsc_irq_chip,
+>>> +				      handle_simple_irq, "gsc_irq_handler");
+>>> +
+>>> +	return irq_set_chip_data(irq, dev_priv);
+>>
+>> I am not familiar with this interrupt scheme - does dev_priv get used at
+>> all by handle_simple_irq, or anyone, after being set here?
 
->  			list = &pcp->lists[pindex];
-> -		} while (list_empty(list));
-> +			if (!list_empty(list))
-> +				break;
-> +
-> +			if (pindex == max_pindex)
-> +				max_pindex--;
-> +			if (pindex == min_pindex)
+What about this? Is dev_priv required or you could pass in NULL just as 
+well?
 
-So with pindex 1 and min_pindex == 0 this will not trigger until
-(eventually) the first pindex wrap around, which seems suboptimal. But I can
-see the later patches change things substantially anyway so it may be moot...
+>>
+>>> +}
+>>> +
+>>> +struct intel_gsc_def {
+>>> +	const char *name;
+>>> +	const unsigned long bar;
+>>
+>> Unusual, why const out of curiosity? And is it "bar" or "base" would be
+>> more accurate?
+>>
+> Some leftover, thanks for spotting this!
+> It is a base of bar. I prefer bar name here. But not really matter.
 
-> +				min_pindex++;
-> +		} while (1);
->  
->  		/* This is the only non-empty list. Free them all. */
-> -		if (batch_free == NR_PCP_LISTS)
-> +		if (batch_free >= max_pindex - min_pindex)
->  			batch_free = count;
->  
->  		order = pindex_to_order(pindex);
+Is it?
 
++	adev->bar.start = def->bar + pdev->resource[0].start;
+
+Looks like offset on top of BAR, no?
+
+>>> +{
+>>> +	struct pci_dev *pdev = to_pci_dev(dev_priv->drm.dev);
+>>> +	struct mei_aux_device *adev;
+>>> +	struct auxiliary_device *aux_dev;
+>>> +	const struct intel_gsc_def *def;
+>>> +	int ret;
+>>> +
+>>> +	intf->irq = -1;
+>>> +	intf->id = intf_id;
+>>> +
+>>> +	if (intf_id == 0 && !HAS_HECI_PXP(dev_priv))
+>>> +		return;
+>>
+>> Isn't inf_id == 0 always a bug with this patch, regardless of
+>> HAS_HECI_PXP, since the support is incomplete in this patch? If so I'd
+>> be more comfortable with a plain drm_WARN_ON_ONCE(intf_id == 0).
+>>
+> There will be patches for other cards that have pxp as soon as this is reviewed.
+> It is better to have infra prepared for two heads.
+
+My point is things are half-prepared since you don't have the id 0 in 
+the array, regardless of the HAS_HECI_PXP. Yes it can't be true now, but 
+if you add a patch which enables it to be true, you have to modify the 
+array at the same time or risk a broken patch in the middle.
+
+I don't see the point of the condition making it sound like there are 
+two criteria to enter below, while in fact there is only one in current 
+code, and that it that it must not be entered because array is incomplete!
+
+>>> +
+>>> +	if (!HAS_HECI_GSC(gt->i915))
+>>> +		return;
+>>
+>> Likewise?
+>>
+>>> +
+>>> +	if (gt->gsc.intf[intf_id].irq <= 0) {
+>>> +		DRM_ERROR_RATELIMITED("error handling GSC irq: irq not
+>> set");
+>>
+>> Like this, but use logging functions which say which device please.
+>>
+> drm_err_ratelimited fits here?
+
+AFAICT it would be a programming bug and not something that can happen 
+at runtime hence drm_warn_on_once sounds correct for both.
+
+>>>    }
+>>> @@ -182,6 +185,8 @@ void gen11_gt_irq_reset(struct intel_gt *gt)
+>>>    	/* Disable RCS, BCS, VCS and VECS class engines. */
+>>>    	intel_uncore_write(uncore, GEN11_RENDER_COPY_INTR_ENABLE,
+>> 0);
+>>>    	intel_uncore_write(uncore, GEN11_VCS_VECS_INTR_ENABLE,	  0);
+>>> +	if (HAS_HECI_GSC(gt->i915))
+>>> +		intel_uncore_write(uncore,
+>> GEN11_GUNIT_CSME_INTR_ENABLE, 0);
+>>>
+>>>    	/* Restore masks irqs on RCS, BCS, VCS and VECS engines. */
+>>>    	intel_uncore_write(uncore, GEN11_RCS0_RSVD_INTR_MASK,	~0);
+>>> @@ -195,6 +200,8 @@ void gen11_gt_irq_reset(struct intel_gt *gt)
+>>>    	intel_uncore_write(uncore, GEN11_VECS0_VECS1_INTR_MASK,
+>> 	~0);
+>>>    	if (HAS_ENGINE(gt, VECS2) || HAS_ENGINE(gt, VECS3))
+>>>    		intel_uncore_write(uncore,
+>> GEN12_VECS2_VECS3_INTR_MASK, ~0);
+>>> +	if (HAS_HECI_GSC(gt->i915))
+>>> +		intel_uncore_write(uncore,
+>> GEN11_GUNIT_CSME_INTR_MASK, ~0);
+>>>
+>>>    	intel_uncore_write(uncore,
+>> GEN11_GPM_WGBOXPERF_INTR_ENABLE, 0);
+>>>    	intel_uncore_write(uncore,
+>> GEN11_GPM_WGBOXPERF_INTR_MASK,  ~0);
+>>> @@ -209,6 +216,7 @@ void gen11_gt_irq_postinstall(struct intel_gt *gt)
+>>>    {
+>>>    	struct intel_uncore *uncore = gt->uncore;
+>>>    	u32 irqs = GT_RENDER_USER_INTERRUPT;
+>>> +	const u32 gsc_mask = GSC_IRQ_INTF(0) | GSC_IRQ_INTF(1);
+>>
+>> Why enable the one which is not supported by the patch? No harm doing it?
+>>
+> No harm and the next patch will be soon, this patch unfortunately is long overdue.
+
+Just feels a bit lazy. You are adding two feature test macros to 
+prepare, so why not use them.
+
+Regards,
+
+Tvrtko

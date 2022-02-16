@@ -2,57 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E304B8E9F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:56:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92CBE4B8EA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:56:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236748AbiBPQ4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 11:56:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41626 "EHLO
+        id S236762AbiBPQ4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 11:56:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233885AbiBPQ4b (ORCPT
+        with ESMTP id S236761AbiBPQ4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 11:56:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFA26294105
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:56:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645030577;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YTqgL2GGRiZHrJiJS8+mQlW1sq4ttz1z3qBJQG2OejY=;
-        b=Vvqpy/MG4ZVhFg7W1pPSuxeDm5QB43CfwWxINmXRghaVdW+uBJ7zZPnL8zFn6yI6H73zx+
-        BCx1td6EtUug2tHcvh5PsEaxTWNboBEGE2vLgobD3o5LPrfgt4w72pDTmihk48Mzt0JXEq
-        wEw82hwPA1dlVUoyt+pWZ9XqvLzQGbk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-359-nDkGpOFbMa6vpwcU0hx26Q-1; Wed, 16 Feb 2022 11:56:16 -0500
-X-MC-Unique: nDkGpOFbMa6vpwcU0hx26Q-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CA23C2F25;
-        Wed, 16 Feb 2022 16:56:14 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.8.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 59F8278AA7;
-        Wed, 16 Feb 2022 16:56:14 +0000 (UTC)
-Date:   Wed, 16 Feb 2022 11:56:12 -0500
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-Subject: Re: [RFC PATCH v6 03/12] livepatch: Add klp-convert tool
-Message-ID: <Yg0srL3wfFb3MuzQ@redhat.com>
-References: <20220216163940.228309-1-joe.lawrence@redhat.com>
- <20220216163940.228309-4-joe.lawrence@redhat.com>
+        Wed, 16 Feb 2022 11:56:46 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2007215A2C
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:56:31 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2d0ede7dd9eso5589907b3.10
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:56:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sEjX8mqvhweVPssQ3aADUg4sgNUOBaiUpJdvZM1UYNE=;
+        b=MmdBO/3AvmjD6OfQEWzFtZWbpNSA/34GdDNHW1q668elbaJZYc+SFo57AjnPwoZPre
+         eQAp39N5LlQ9DGD75Qqle3I3jkUYAhrQ6MmByH/dm7Ev6nFwIbvs+wOeCnncyIiTENb2
+         l3k0FjBPw9rgXCIaVN369t4lehqENpt7ss3HFj3nIU1dCIcG/e+d8ZzhSOIdG3y9iloy
+         fkH2oAg2E3MoPxr39nJx13ZTzdXg/p1hG/Vw65BGOHn81v9ItiMEAYeUN2l9LIKBR/Hi
+         1NcS+mMX0bJKe/JCP6daWS8JzAfQEuX17ZyqKk50cFri0ID3xU/DL/Cuecz6xMSJ2mTK
+         Hn3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sEjX8mqvhweVPssQ3aADUg4sgNUOBaiUpJdvZM1UYNE=;
+        b=PWq8XRIT7fBRJv8YdD04R7VyK4KjbDkVgEglwpUFaxpWjcTlMGr2OdzFOOCLdq8mWm
+         v4x2zxfyT7y2RWR4ddT339fBLCpKkBj/lKfVqqNIEOtM1aP0EqIWJbdHZwQFLrijtEYu
+         zXtORRvfcE/UvAN37/FiMnhXfuf94a+uf+MtGY+F/g03aKZqbwOlZVsTObpyoyg/1oaE
+         GWCTRF1QyRWc22P33tYUnqEo+8lJzFHO/VM3ByZuNo5P7O/I6dvy/s0nXtdVpMoZ55tK
+         NYqj5T0QakhOZdM0uQ8YnsqgAt6myrzmc/aWaSMwcnaXRRE0YgFiiIkp43LT9XZLN4lP
+         u52g==
+X-Gm-Message-State: AOAM533f0HCBTXE1FeImMMZNptjCPhL1rNRaktWTph57taZAeeg2V9Wb
+        QICC7KR/cBOewr3x/bFLB+aWGC94XEdBNB3xo0z/VA==
+X-Google-Smtp-Source: ABdhPJxaNNCJQXu++II+pEhb4hfv3aCcqH6TivF5eQUKW/mkJhVxJAn7xmzhf5aL1uO66wrImJ9m1NqNdRfvCjozGDY=
+X-Received: by 2002:a81:75c6:0:b0:2d0:cbf8:e7b3 with SMTP id
+ q189-20020a8175c6000000b002d0cbf8e7b3mr3167890ywc.255.1645030589922; Wed, 16
+ Feb 2022 08:56:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216163940.228309-4-joe.lawrence@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220216050320.3222-1-kerneljasonxing@gmail.com>
+ <CANn89i+6Hc7q-a=zh_jcTn9_GM5xP6fzv2RcHY+tneqzE3UnHw@mail.gmail.com> <CAL+tcoBnSDjHk_Xhd_ohQjpMu-Ns2Du4mWhUybrK6+VPXHoETQ@mail.gmail.com>
+In-Reply-To: <CAL+tcoBnSDjHk_Xhd_ohQjpMu-Ns2Du4mWhUybrK6+VPXHoETQ@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 16 Feb 2022 08:56:18 -0800
+Message-ID: <CANn89iJTrH1sgstrEw17OUwC8jLBS9_uk_oUd5Hj0-FypTvvPw@mail.gmail.com>
+Subject: Re: [PATCH v2 net-next] net: introduce SO_RCVBUFAUTO to let the
+ rcv_buf tune automatically
+To:     Jason Xing <kerneljasonxing@gmail.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Wei Wang <weiwan@google.com>,
+        Alexander Aring <aahringo@redhat.com>,
+        Yangbo Lu <yangbo.lu@nxp.com>, Florian Westphal <fw@strlen.de>,
+        Tonghao Zhang <xiangxia.m.yue@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Jason Xing <xingwanli@kuaishou.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,55 +84,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 11:39:31AM -0500, Joe Lawrence wrote:
-> diff --git a/include/uapi/linux/livepatch.h b/include/uapi/linux/livepatch.h
-> index e19430918a07..2ee98e985c2a 100644
-> --- a/include/uapi/linux/livepatch.h
-> +++ b/include/uapi/linux/livepatch.h
-> @@ -9,7 +9,17 @@
->  #ifndef _UAPI_LIVEPATCH_H
->  #define _UAPI_LIVEPATCH_H
->  
-> +#include <linux/types.h>
-> +
->  #define KLP_RELA_PREFIX		".klp.rela."
->  #define KLP_SYM_PREFIX		".klp.sym."
->  
-> +struct klp_module_reloc {
-> +	union {
-> +		void *sym;
-> +		__u64 sym64;	/* Force 64-bit width */
-> +	};
-> +	__u32 sympos;
-> +} __packed;
-> +
-> 
-> [ ... snip ... ]
-> 
-> diff --git a/scripts/livepatch/klp-convert.h b/scripts/livepatch/klp-convert.h
-> new file mode 100644
-> index 000000000000..35b9dc4e32c4
-> --- /dev/null
-> +++ b/scripts/livepatch/klp-convert.h
+On Tue, Feb 15, 2022 at 10:58 PM Jason Xing <kerneljasonxing@gmail.com> wrote:
+> Just now, I found out that the latest kernel has merged a similar
+> patch (commit 04190bf89) about three months ago.
+
+There you go :)
+
 >
-> [ ... snip ... ]
->
-> +struct klp_module_reloc {
-> +	union {
-> +		void *sym;
-> +		uint64_t sym64;	/* Force 64-bit width */
-> +	};
-> +	uint32_t sympos;
-> +} __packed;
+> Is it still necessary to add another separate option to clear the
+> SOCK_RCVBUF_LOCK explicitly?
 
-This was a hack I added to force a consistent width for the symbol
-pointer in case the user was building for 32-bit.  The actual void
-*sym64 value itself is not so interesting as it's only needed for the
-compiler to create a relocation (later resolved by klp-convert).  That
-said, sympos is used by klp-convert, and I bet it's not endian-safe
-here.
-
-Better suggestions welcome :)
-
--- Joe
-
+What do you mean, SO_BUF_LOCK is all that is needed.

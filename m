@@ -2,158 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A614B82AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 443AE4B8282
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbiBPIF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 03:05:58 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54574 "EHLO
+        id S231376AbiBPIFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 03:05:39 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbiBPIF5 (ORCPT
+        with ESMTP id S231279AbiBPIFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 03:05:57 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02951235857
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:05:45 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id v186so3697541ybg.1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:05:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sKNzKBb19Do3NGmL01/2ZoAEl367WiU5/pzUcTTd170=;
-        b=Vs36gc3ftF5yVkEl7PjXZQrnqiSL9oAPR1PmipoQVMOA0w+rD3oBNP6pQzK/rZADH3
-         Bk0A7vPTVpmr8Y4S9uEOpwGDZq232z+e9v18C7bAy3SCoHzi1r8E2pOBBowACqQN7WpN
-         0XMs0LATWPNEfJLFqeXftM4qgZuHS7FFtVMrmX2qh1QW8tiTUI44Xss5hoSv7Soh3Lwd
-         /lLqcu/xYrF8Cibm41ZPRqiFjCTo+nTNjDBERw0A9pfK0q7tc0mIoqySOZY0fndicvvg
-         mMWRM/YLGdaGuoNgpfmeYVdC1jDck29WGCmOcojgFIIda8arRXJlNWgBtki73KRdDHCU
-         KkaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sKNzKBb19Do3NGmL01/2ZoAEl367WiU5/pzUcTTd170=;
-        b=XakLawoxlPx6vrAFB6mz14KDBqnsX368JDkxHxl48TgkF/KmjBBC6ObqBu6qJMrX3w
-         eKKw506FlD5rvtL17mBzsoyKwtYb9+vn+faQETV5u6YpiO24FFQPJXCxa9BE5aW+nkwK
-         yVLZHw7zIPKIVnl1xCCshQdxv3WK5Cf0G7I7zxD/j4WC4zBUtY/WqIG7YZjbIbUN/PWc
-         alu073ohH3jSyQJ3O4qj16wxw39hKLrDF/NlNikKAXogpdB50ug6CxD9OSWlA8YJXdIn
-         P4Ei9Q3FZZS5p5DkcpYZjoDsKAx+uLWjppneWgNNsVWJtcbP6PL5fLFEMkNMGFmQufzi
-         i1Yw==
-X-Gm-Message-State: AOAM533rG3k0xi+Yie5WcaWWnlDAHYq790t22t6aj6vMpkUoxQlyinb4
-        HvISvjHS2VCwEjhawIjvUotf7QoGcHQ6zcMiHvCyPg==
-X-Google-Smtp-Source: ABdhPJzjoYb2AkrlJR467OpvCCj/z0HN/EHTUaZqEyMMZ5g5FOHNWEVK5sQaZOhyqd9wQ93nQtdnJNLkwUGeFyk6AHg=
-X-Received: by 2002:a25:e0d0:0:b0:613:e5b1:277e with SMTP id
- x199-20020a25e0d0000000b00613e5b1277emr1198675ybg.132.1644998744242; Wed, 16
- Feb 2022 00:05:44 -0800 (PST)
+        Wed, 16 Feb 2022 03:05:33 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24178225D37;
+        Wed, 16 Feb 2022 00:05:20 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21G85CJB089471;
+        Wed, 16 Feb 2022 02:05:12 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1644998712;
+        bh=3UQwduVUZ+q8wif62BV/grOjAvJhZ7t6eekjdb8k+us=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=dtmziO/5CXQ6QOxqCyUs6sD0TFQNQpbhjo/LSvPWpzGLinggT8s98SI/eZuOyNZyv
+         eVD1vamxdgNHt5jlxOvjJ6YPKv69bdqsyhfxvCXWOB9Lp2Qnjo8+Owt1LIvAjYvL29
+         xy7DErcybvNB1BFZbR7+Wv2XSm6NyROSkVUHAxOM=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21G85Cgo055891
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 16 Feb 2022 02:05:12 -0600
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 16
+ Feb 2022 02:05:12 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 16 Feb 2022 02:05:12 -0600
+Received: from [10.250.148.139] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21G8571R087433;
+        Wed, 16 Feb 2022 02:05:08 -0600
+Message-ID: <a575a328-fb88-5d39-3769-b4c2c4060b47@ti.com>
+Date:   Wed, 16 Feb 2022 13:35:07 +0530
 MIME-Version: 1.0
-References: <20220208054632.66534-1-songmuchun@bytedance.com> <20220208054632.66534-2-songmuchun@bytedance.com>
-In-Reply-To: <20220208054632.66534-2-songmuchun@bytedance.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Wed, 16 Feb 2022 16:05:07 +0800
-Message-ID: <CAMZfGtWzaesaWH7WypRJ+YOmChWh94NU6RzfX86jX9TFOyF0_w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] arm64: mm: hugetlb: add support for free vmemmap
- pages of HugeTLB
-To:     mark.rutland@arm.com, catalin.marinas@arm.com, james.morse@arm.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, duanxiongchun@bytedance.com,
-        fam.zheng@bytedance.com, David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        David Rientjes <rientjes@google.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        "Bodeddula, Balasubramaniam" <bodeddub@amazon.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [EXTERNAL] Re: [PATCH v4 1/2] remoteproc: Introduce
+ deny_sysfs_ops flag
+Content-Language: en-US
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <kishon@ti.com>, <vigneshr@ti.com>, <s-anna@ti.com>,
+        <bjorn.andersson@linaro.org>, <linux-remoteproc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220209090342.13220-1-p-mohan@ti.com>
+ <20220209090342.13220-2-p-mohan@ti.com> <20220210184802.GB3603040@p14s>
+From:   Puranjay Mohan <p-mohan@ti.com>
+In-Reply-To: <20220210184802.GB3603040@p14s>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 1:46 PM Muchun Song <songmuchun@bytedance.com> wrote:
->
-> The feature of minimizing overhead of struct page associated with each
-> HugeTLB page aims to free its vmemmap pages (used as struct page) to
-> save memory, where is ~14GB/16GB per 1TB HugeTLB pages (2MB/1GB type).
-> In short, when a HugeTLB page is allocated or freed, the vmemmap array
-> representing the range associated with the page will need to be remapped.
-> When a page is allocated, vmemmap pages are freed after remapping.
-> When a page is freed, previously discarded vmemmap pages must be
-> allocated before remapping.  More implementations and details can be
-> found here [1].
->
-> The preparation of freeing vmemmap pages associated with each HugeTLB
-> page is ready, so we can support this feature for arm64 now.  The
-> flush_dcache_page() need to be adapted to operate on the head page's
-> flags since the tail vmemmap pages are mapped with read-only after
-> the feature is enabled (clear operation is not permitted).
->
-> There was some discussions about this in the thread [2], but there was
-> no conclusion in the end.  And I copied the concern proposed by Anshuman
-> to here.
->
-> 1st concern:
-> '''
-> But what happens when a hot remove section's vmemmap area (which is
-> being teared down) is nearby another vmemmap area which is either created
-> or being destroyed for HugeTLB alloc/free purpose. As you mentioned
-> HugeTLB pages inside the hot remove section might be safe. But what about
-> other HugeTLB areas whose vmemmap area shares page table entries with
-> vmemmap entries for a section being hot removed ? Massive HugeTLB alloc
-> /use/free test cycle using memory just adjacent to a memory hotplug area,
-> which is always added and removed periodically, should be able to expose
-> this problem.
-> '''
->
-> Answer: At the time memory is removed, all HugeTLB pages either have been
-> migrated away or dissolved.  So there is no race between memory hot remove
-> and free_huge_page_vmemmap().  Therefore, HugeTLB pages inside the hot
-> remove section is safe.  Let's talk your question "what about other
-> HugeTLB areas whose vmemmap area shares page table entries with vmemmap
-> entries for a section being hot removed ?", the question is not
-> established.  The minimal granularity size of hotplug memory 128MB (on
-> arm64, 4k base page), any HugeTLB smaller than 128MB is within a section,
-> then, there is no share PTE page tables between HugeTLB in this section
-> and ones in other sections and a HugeTLB page could not cross two
-> sections.  In this case, the section cannot be freed.  Any HugeTLB bigger
-> than 128MB (section size) whose vmemmap pages is an integer multiple of
-> 2MB (PMD-mapped).  As long as:
->
->   1) HugeTLBs are naturally aligned, power-of-two sizes
->   2) The HugeTLB size >= the section size
->   3) The HugeTLB size >= the vmemmap leaf mapping size
->
-> Then a HugeTLB will not share any leaf page table entries with *anything
-> else*, but will share intermediate entries.  In this case, at the time memory
-> is removed, all HugeTLB pages either have been migrated away or dissolved.
-> So there is also no race between memory hot remove and
-> free_huge_page_vmemmap().
->
-> 2nd concern:
-> '''
-> differently, not sure if ptdump would require any synchronization.
->
-> Dumping an wrong value is probably okay but crashing because a page table
-> entry is being freed after ptdump acquired the pointer is bad. On arm64,
-> ptdump() is protected against hotremove via [get|put]_online_mems().
-> '''
->
-> Answer: The ptdump should be fine since vmemmap_remap_free() only exchanges
-> PTEs or split the PMD entry (which means allocating a PTE page table).  Both
-> operations do not free any page tables (PTE), so ptdump cannot run into a
-> UAF on any page tables.  The wrost case is just dumping an wrong value.
->
-> [1] https://lore.kernel.org/all/20210510030027.56044-1-songmuchun@bytedance.com/
-> [2] https://lore.kernel.org/all/20210518091826.36937-1-songmuchun@bytedance.com/
->
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Hi Mathieu,
 
-Hi Mark,
+On 11/02/22 00:18, Mathieu Poirier wrote:
+> Hi Puranjay,
+> 
+> On Wed, Feb 09, 2022 at 02:33:41PM +0530, Puranjay Mohan wrote:
+>> The remoteproc framework provides sysfs interfaces for changing
+>> the firmware name and for starting/stopping a remote processor
+>> through the sysfs files 'state' and 'firmware'. The 'recovery'
+>> sysfs file can also be used similarly to control the error recovery
+>> state machine of a remoteproc. These interfaces are currently
+>> allowed irrespective of how the remoteprocs were booted (like
+>> remoteproc self auto-boot, remoteproc client-driven boot etc).
+>> These interfaces can adversely affect a remoteproc and its clients
+>> especially when a remoteproc is being controlled by a remoteproc
+>> client driver(s). Also, not all remoteproc drivers may want to
+>> support the sysfs interfaces by default.
+>>
+>> Add support to deny the sysfs state/firmware/recovery change by
+>> introducing a state flag 'deny_sysfs_ops' that the individual
+>> remoteproc drivers can set based on their usage needs. The default
+>> behavior is to allow the sysfs operations as before.
+>>
+>> Implement attribute_group->is_visible() to hide the sysfs
+>> state/firmware/recovery entries when deny_sysfs_ops flag is set.
+>>
+>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+>> ---
+>> Changes in v3->v4:
+>> Use mode = 0444 in rproc_is_visible() to make the sysfs entries
+>> read-only when the deny_sysfs_ops flag is set.
+>> ---
+>>  drivers/remoteproc/remoteproc_sysfs.c | 18 +++++++++++++++++-
+>>  include/linux/remoteproc.h            |  2 ++
+>>  2 files changed, 19 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/remoteproc/remoteproc_sysfs.c b/drivers/remoteproc/remoteproc_sysfs.c
+>> index ea8b89f97d7b..da2d0eecfa44 100644
+>> --- a/drivers/remoteproc/remoteproc_sysfs.c
+>> +++ b/drivers/remoteproc/remoteproc_sysfs.c
+>> @@ -230,6 +230,21 @@ static ssize_t name_show(struct device *dev, struct device_attribute *attr,
+>>  }
+>>  static DEVICE_ATTR_RO(name);
+>>  
+>> +static umode_t rproc_is_visible(struct kobject *kobj, struct attribute *attr,
+>> +				int n)
+>> +{
+>> +	struct device *dev = kobj_to_dev(kobj);
+>> +	struct rproc *rproc = to_rproc(dev);
+>> +	umode_t mode = attr->mode;
+>> +
+>> +	if (rproc->deny_sysfs_ops && (attr == &dev_attr_recovery.attr ||
+>> +				      attr == &dev_attr_firmware.attr ||
+>> +				      attr == &dev_attr_state.attr))
+> 
+> I was wondering if we should also add coredump to this group to make it an all
+> or nothing option (name is already read only).
 
-I have updated the commit suggested from you in the previous version,
-do you (or other maintainers) have any comments on this?
+I have sent a v5 where I have added coredump to this.
+
+> 
+>> +		mode = 0444;
+> 
+> Much better.
+> 
+>> +
+>> +	return mode;
+>> +}
+>> +
+>>  static struct attribute *rproc_attrs[] = {
+>>  	&dev_attr_coredump.attr,
+>>  	&dev_attr_recovery.attr,
+>> @@ -240,7 +255,8 @@ static struct attribute *rproc_attrs[] = {
+>>  };
+>>  
+>>  static const struct attribute_group rproc_devgroup = {
+>> -	.attrs = rproc_attrs
+>> +	.attrs = rproc_attrs,
+>> +	.is_visible = rproc_is_visible,
+>>  };
+>>  
+>>  static const struct attribute_group *rproc_devgroups[] = {
+>> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+>> index e0600e1e5c17..3849c66ce38f 100644
+>> --- a/include/linux/remoteproc.h
+>> +++ b/include/linux/remoteproc.h
+>> @@ -523,6 +523,7 @@ struct rproc_dump_segment {
+>>   * @table_sz: size of @cached_table
+>>   * @has_iommu: flag to indicate if remote processor is behind an MMU
+>>   * @auto_boot: flag to indicate if remote processor should be auto-started
+>> + * @deny_sysfs_ops: flag to not permit sysfs operations on state, firmware and recovery
+>>   * @dump_segments: list of segments in the firmware
+>>   * @nb_vdev: number of vdev currently handled by rproc
+>>   * @elf_class: firmware ELF class
+>> @@ -562,6 +563,7 @@ struct rproc {
+>>  	size_t table_sz;
+>>  	bool has_iommu;
+>>  	bool auto_boot;
+>> +	bool deny_sysfs_ops;
+> 
+> Wouldn't "sysfs_read_only" make more sense?
+
+I agree, I have renamed it to sysfs_read_only in v5 patch
+
+> 
+> 
+> With or without the above and for this set:
+> 
+> Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 
 Thanks.
+Puranjay Mohan
+
+> 
+>>  	struct list_head dump_segments;
+>>  	int nb_vdev;
+>>  	u8 elf_class;
+>> -- 
+>> 2.17.1
+>>

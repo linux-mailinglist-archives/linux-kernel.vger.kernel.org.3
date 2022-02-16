@@ -2,235 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5011D4B7BD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 01:23:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F904B7BF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 01:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240110AbiBPAWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 19:22:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36494 "EHLO
+        id S230043AbiBPAay convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 15 Feb 2022 19:30:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232793AbiBPAW3 (ORCPT
+        with ESMTP id S245186AbiBPAav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 19:22:29 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D24A193F4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 16:22:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644970938; x=1676506938;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=6VpCH1ndIokCM5pDZVCtWOCEs+e0PT4HjNONbhELQAE=;
-  b=d0A1Qq23vjcTY4yt5aMpZhYf6ybgwLMKUeqew5qhwwqN0a+AIwd8M0s0
-   hE/TwJ9a565jZpYknATAG0iJUP0BIzfw8Q84BK+P2KMmU2qQNcMg4fL4e
-   xIME3e5KSm4LwYALMU5eK3A6wjcn+srY0UN1l6RK3rgSCyldpDkFcoVIh
-   1n5G/OTDMpliy2L9XGoAJWCohadlluj17ov3XLFRQy+7PZjwEKDw8rmlf
-   Lk0H8QdP+orVC4xU9Ioq7Wuw4SQ6slzt4i/IucnQFj8vSJFulmtBek8SR
-   APzzZ1IQseygRcAZGl9JFf6iyI/z2df3Qcjm/5b4zRr3ekcKUCE8JIwn+
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="248087179"
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="248087179"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 16:22:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="502745489"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 15 Feb 2022 16:22:16 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nK85H-000ABr-U2; Wed, 16 Feb 2022 00:22:15 +0000
-Date:   Wed, 16 Feb 2022 08:21:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/pasid] BUILD SUCCESS
- 83aa52ffed5d35a08e24452d0471e1684075cdf8
-Message-ID: <620c4391.P8Sq//2J6hmBbWLn%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 15 Feb 2022 19:30:51 -0500
+X-Greylist: delayed 184 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 16:30:39 PST
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D648F7479
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 16:30:39 -0800 (PST)
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 21G0R7mzC019869, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 21G0R7mzC019869
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 16 Feb 2022 08:27:07 +0800
+Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 16 Feb 2022 08:27:07 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 16 Feb 2022 08:27:06 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e]) by
+ RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e%5]) with mapi id
+ 15.01.2308.020; Wed, 16 Feb 2022 08:27:06 +0800
+From:   Pkshih <pkshih@realtek.com>
+To:     Jiri Kosina <jkosina@suse.cz>, Kalle Valo <kvalo@kernel.org>
+CC:     Johannes Berg <johannes@sipsolutions.net>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] rtw89: fix RCU usage in rtw89_core_txq_push()
+Thread-Topic: [PATCH] rtw89: fix RCU usage in rtw89_core_txq_push()
+Thread-Index: AQHYIqOb6vwbbBNtV0K4EdeAWNx0VKyVUlUQ
+Date:   Wed, 16 Feb 2022 00:27:06 +0000
+Message-ID: <58fa5d4b7d794228ad45485ec5b979df@realtek.com>
+References: <nycvar.YFH.7.76.2202152037000.11721@cbobk.fhfr.pm>
+In-Reply-To: <nycvar.YFH.7.76.2202152037000.11721@cbobk.fhfr.pm>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/2/15_=3F=3F_02:07:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/pasid
-branch HEAD: 83aa52ffed5d35a08e24452d0471e1684075cdf8  Documentation/x86: Update documentation for SVA (Shared Virtual Addressing)
 
-elapsed time: 730m
+> -----Original Message-----
+> From: Jiri Kosina <jkosina@suse.cz>
+> Sent: Wednesday, February 16, 2022 3:38 AM
+> To: Kalle Valo <kvalo@kernel.org>
+> Cc: Johannes Berg <johannes@sipsolutions.net>; linux-wireless@vger.kernel.org;
+> linux-kernel@vger.kernel.org; Pkshih <pkshih@realtek.com>
+> Subject: [PATCH] rtw89: fix RCU usage in rtw89_core_txq_push()
+> 
+> From: Jiri Kosina <jkosina@suse.cz>
+> Subject: [PATCH] rtw89: fix RCU usage in rtw89_core_txq_push()
+> 
+> ieee80211_tx_h_select_key() is performing a series of RCU dereferences,
+> but rtw89_core_txq_push() is calling it (via ieee80211_tx_dequeue_ni())
+> without RCU read-side lock held; fix that.
+> 
+> This addresses the splat below.
+> 
+>  =============================
+>  WARNING: suspicious RCU usage
+>  5.17.0-rc4-00003-gccad664b7f14 #3 Tainted: G            E
+>  -----------------------------
+>  net/mac80211/tx.c:593 suspicious rcu_dereference_check() usage!
+> 
+>  other info that might help us debug this:
+> 
+>  rcu_scheduler_active = 2, debug_locks = 1
+>  2 locks held by kworker/u33:0/184:
+>   #0: ffff9c0b14811d38 ((wq_completion)rtw89_tx_wq){+.+.}-{0:0}, at: process_one_work+0x258/0x660
+>   #1: ffffb97380cf3e78 ((work_completion)(&rtwdev->txq_work)){+.+.}-{0:0}, at:
+> process_one_work+0x258/0x660
+> 
+>  stack backtrace:
+>  CPU: 8 PID: 184 Comm: kworker/u33:0 Tainted: G            E     5.17.0-rc4-00003-gccad664b7f14 #3
+> 473b49ab0e7c2d6af2900c756bfd04efd7a9de13
+>  Hardware name: LENOVO 20UJS2B905/20UJS2B905, BIOS R1CET63W(1.32 ) 04/09/2021
+>  Workqueue: rtw89_tx_wq rtw89_core_txq_work [rtw89_core]
+>  Call Trace:
+>   <TASK>
+>   dump_stack_lvl+0x58/0x71
+>   ieee80211_tx_h_select_key+0x2c0/0x530 [mac80211 911c23e2351c0ae60b597a67b1204a5ea955e365]
+>   ieee80211_tx_dequeue+0x1a7/0x1260 [mac80211 911c23e2351c0ae60b597a67b1204a5ea955e365]
+>   rtw89_core_txq_work+0x1a6/0x420 [rtw89_core b39ba493f2e517ad75e0f8187ecc24edf58bbbea]
+>   process_one_work+0x2d8/0x660
+>   worker_thread+0x39/0x3e0
+>   ? process_one_work+0x660/0x660
+>   kthread+0xe5/0x110
+>   ? kthread_complete_and_exit+0x20/0x20
+>   ret_from_fork+0x22/0x30
+>   </TASK>
+> 
+>  =============================
+>  WARNING: suspicious RCU usage
+>  5.17.0-rc4-00003-gccad664b7f14 #3 Tainted: G            E
+>  -----------------------------
+>  net/mac80211/tx.c:607 suspicious rcu_dereference_check() usage!
+> 
+>  other info that might help us debug this:
+> 
+>  rcu_scheduler_active = 2, debug_locks = 1
+>  2 locks held by kworker/u33:0/184:
+>   #0: ffff9c0b14811d38 ((wq_completion)rtw89_tx_wq){+.+.}-{0:0}, at: process_one_work+0x258/0x660
+>   #1: ffffb97380cf3e78 ((work_completion)(&rtwdev->txq_work)){+.+.}-{0:0}, at:
+> process_one_work+0x258/0x660
+> 
+>  stack backtrace:
+>  CPU: 8 PID: 184 Comm: kworker/u33:0 Tainted: G            E     5.17.0-rc4-00003-gccad664b7f14 #3
+> 473b49ab0e7c2d6af2900c756bfd04efd7a9de13
+>  Hardware name: LENOVO 20UJS2B905/20UJS2B905, BIOS R1CET63W(1.32 ) 04/09/2021
+>  Workqueue: rtw89_tx_wq rtw89_core_txq_work [rtw89_core]
+>  Call Trace:
+>   <TASK>
+>   dump_stack_lvl+0x58/0x71
+>   ieee80211_tx_h_select_key+0x464/0x530 [mac80211 911c23e2351c0ae60b597a67b1204a5ea955e365]
+>   ieee80211_tx_dequeue+0x1a7/0x1260 [mac80211 911c23e2351c0ae60b597a67b1204a5ea955e365]
+>   rtw89_core_txq_work+0x1a6/0x420 [rtw89_core b39ba493f2e517ad75e0f8187ecc24edf58bbbea]
+>   process_one_work+0x2d8/0x660
+>   worker_thread+0x39/0x3e0
+>   ? process_one_work+0x660/0x660
+>   kthread+0xe5/0x110
+>   ? kthread_complete_and_exit+0x20/0x20
+>   ret_from_fork+0x22/0x30
+>   </TASK>
+> 
+> Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 
-configs tested: 149
-configs skipped: 3
+Acked-by: Ping-Ke Shih <pkshih@realtek.com>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks for your finding.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20220214
-mips                 randconfig-c004-20220214
-mips                      fuloong2e_defconfig
-sh                        sh7763rdp_defconfig
-arm                        realview_defconfig
-arm                          iop32x_defconfig
-arm                          simpad_defconfig
-mips                         rt305x_defconfig
-sh                           se7206_defconfig
-arm                         axm55xx_defconfig
-powerpc                     pq2fads_defconfig
-mips                         mpc30x_defconfig
-xtensa                         virt_defconfig
-arc                     haps_hs_smp_defconfig
-xtensa                              defconfig
-arm                          lpd270_defconfig
-nios2                               defconfig
-arm                        spear6xx_defconfig
-powerpc                     mpc83xx_defconfig
-arm                        oxnas_v6_defconfig
-sh                     magicpanelr2_defconfig
-powerpc                 mpc8540_ads_defconfig
-arm                       imx_v6_v7_defconfig
-sh                            shmin_defconfig
-powerpc                      arches_defconfig
-arm                          pxa910_defconfig
-arm                            pleb_defconfig
-mips                           xway_defconfig
-mips                          rb532_defconfig
-sh                           se7721_defconfig
-ia64                             allmodconfig
-xtensa                    xip_kc705_defconfig
-mips                         db1xxx_defconfig
-sh                            titan_defconfig
-sparc                               defconfig
-arm64                            alldefconfig
-arm                        mvebu_v7_defconfig
-sh                          kfr2r09_defconfig
-arm                            xcep_defconfig
-m68k                        stmark2_defconfig
-s390                                defconfig
-sh                        edosk7705_defconfig
-arm                         at91_dt_defconfig
-powerpc                    klondike_defconfig
-h8300                               defconfig
-arm                         lpc18xx_defconfig
-powerpc                      bamboo_defconfig
-arc                        nsimosci_defconfig
-sh                          rsk7269_defconfig
-powerpc                      ppc6xx_defconfig
-csky                                defconfig
-microblaze                          defconfig
-arm                  randconfig-c002-20220214
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allmodconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a013-20220214
-x86_64               randconfig-a014-20220214
-x86_64               randconfig-a012-20220214
-x86_64               randconfig-a015-20220214
-x86_64               randconfig-a011-20220214
-x86_64               randconfig-a016-20220214
-i386                 randconfig-a013-20220214
-i386                 randconfig-a016-20220214
-i386                 randconfig-a012-20220214
-i386                 randconfig-a015-20220214
-i386                 randconfig-a011-20220214
-i386                 randconfig-a014-20220214
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                randconfig-r042-20220214
-arc                  randconfig-r043-20220214
-s390                 randconfig-r044-20220214
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-riscv                randconfig-c006-20220214
-i386                 randconfig-c001-20220214
-x86_64               randconfig-c007-20220214
-powerpc              randconfig-c003-20220214
-arm                  randconfig-c002-20220214
-mips                 randconfig-c004-20220214
-arm                                 defconfig
-riscv                    nommu_virt_defconfig
-arm                        neponset_defconfig
-powerpc                      ppc44x_defconfig
-powerpc               mpc834x_itxgp_defconfig
-mips                          rm200_defconfig
-arm                         palmz72_defconfig
-arm                         mv78xx0_defconfig
-powerpc                     kmeter1_defconfig
-powerpc                      obs600_defconfig
-powerpc                     tqm8560_defconfig
-arm                         lpc32xx_defconfig
-mips                     cu1830-neo_defconfig
-x86_64               randconfig-a002-20220214
-x86_64               randconfig-a006-20220214
-x86_64               randconfig-a005-20220214
-x86_64               randconfig-a004-20220214
-x86_64               randconfig-a003-20220214
-x86_64               randconfig-a001-20220214
-i386                 randconfig-a004-20220214
-i386                 randconfig-a002-20220214
-i386                 randconfig-a003-20220214
-i386                 randconfig-a001-20220214
-i386                 randconfig-a005-20220214
-i386                 randconfig-a006-20220214
-hexagon              randconfig-r045-20220214
-hexagon              randconfig-r041-20220214
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+>  drivers/net/wireless/realtek/rtw89/core.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/wireless/realtek/rtw89/core.c b/drivers/net/wireless/realtek/rtw89/core.c
+> index a0737eea9f81..9632e7f218dd 100644
+> --- a/drivers/net/wireless/realtek/rtw89/core.c
+> +++ b/drivers/net/wireless/realtek/rtw89/core.c
+> @@ -1509,11 +1509,12 @@ static void rtw89_core_txq_push(struct rtw89_dev *rtwdev,
+>  	unsigned long i;
+>  	int ret;
+> 
+> +	rcu_read_lock();
+>  	for (i = 0; i < frame_cnt; i++) {
+>  		skb = ieee80211_tx_dequeue_ni(rtwdev->hw, txq);
+>  		if (!skb) {
+>  			rtw89_debug(rtwdev, RTW89_DBG_TXRX, "dequeue a NULL skb\n");
+> -			return;
+> +			goto out;
+>  		}
+>  		rtw89_core_txq_check_agg(rtwdev, rtwtxq, skb);
+>  		ret = rtw89_core_tx_write(rtwdev, vif, sta, skb, NULL);
+> @@ -1523,6 +1524,8 @@ static void rtw89_core_txq_push(struct rtw89_dev *rtwdev,
+>  			break;
+>  		}
+>  	}
+> +out:
+> +	rcu_read_unlock();
+>  }
+> 
+>  static u32 rtw89_check_and_reclaim_tx_resource(struct rtw89_dev *rtwdev, u8 tid)
+> 
+> --
+> Jiri Kosina
+> SUSE Labs
+> 
+> 
+> ------Please consider the environment before printing this e-mail.

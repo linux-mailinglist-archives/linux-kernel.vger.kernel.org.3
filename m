@@ -2,221 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262634B8CFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:56:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 738F74B8D03
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235787AbiBPP4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 10:56:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53174 "EHLO
+        id S235807AbiBPP5K convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 16 Feb 2022 10:57:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235776AbiBPP4W (ORCPT
+        with ESMTP id S235773AbiBPP5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 10:56:22 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D95029690D
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 07:56:09 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id w11so4222163wra.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 07:56:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=f0FWdbh77E3blQAMR3QcsMYv1c4coQIeJz0QwE8ibf8=;
-        b=xSItK/gecaZKTVxhNJvqgdgETgIbztk46Y2DEaANR4HjhLGUVyCfIDJ5NW8LsbPF5B
-         0tHIvQK8LgAP5uyD28dXdVVXdZugwFruUPgin/5+HwBapbDO+IU+roz2GLkMdV1dmYNZ
-         5FE3d9J7kGc48mm/zL3tz34LFdt2FjQNLVms5qziebXK/EwUzof8jFwNZTT6hs1YhUzn
-         488SeTv5cnqIY3JsXU3693ytctMDSXMilqh8RxgkbJMdYGHClxKZBYyaVADqeDnygYmB
-         F36FqJHKkfRQjoHc9ZwVyp8YdCtxC/1Xg5EX6it7lHs2yb/d8YaWIU3dC3aAQjjW4P8+
-         oWqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=f0FWdbh77E3blQAMR3QcsMYv1c4coQIeJz0QwE8ibf8=;
-        b=m+KTPjY2PVf+Q0sVZkkb2F0S5nR4/tfOFPkgeNRu4t79/9XmR6aKyaYaWpz7X4NK2V
-         vdcf/De5CwjWO4GG+5u5kSylrUNhj+8lk5kW2vrDWWQEV3YZo4aILmCVAyGrtUPzTcfR
-         3odioHs8bwqcMb5gLkPeAe6DJCzvnwxgWCMomWQBw95vxQHfk4q7tu5p57H34fA7hDi5
-         0jkGEjDUpDF6a5qWlyXLxDUmwNEYvSBozIavuYHT83ECYvSWFKgUamX/T/Ji+UBxCRBF
-         +1iSl6mqVrXXYxB8KzJhZZInj7HQwh74NsPfxy4mYlkKfdu//ID1Rxf7H1w3Wl5oJlAO
-         2Xdg==
-X-Gm-Message-State: AOAM531RWlG5dhKVukqd0dRG4ZoTxU+YwP6UVZ/80rvUBcj7XQwXiWyA
-        ce/smM087ObnAR2rXwTNuA0i+g==
-X-Google-Smtp-Source: ABdhPJyiohGWEwFqMdnuF3sd5sc2/SSrQk+HKpsVB+VzPtMuigUHX/DKxmI8CX5nEPvKqyXg09VKmQ==
-X-Received: by 2002:adf:fd4b:0:b0:1e4:9a8a:2ef7 with SMTP id h11-20020adffd4b000000b001e49a8a2ef7mr2849248wrs.659.1645026967509;
-        Wed, 16 Feb 2022 07:56:07 -0800 (PST)
-Received: from wkz-x280 (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
-        by smtp.gmail.com with ESMTPSA id f16sm15551442wmg.28.2022.02.16.07.56.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 07:56:06 -0800 (PST)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     Nikolay Aleksandrov <nikolay@nvidia.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org
-Subject: Re: [RFC net-next 0/9] net: bridge: vlan: Multiple Spanning Trees
-In-Reply-To: <d59ee33c-79f9-2622-cec2-987a35f4ec1e@nvidia.com>
-References: <20220216132934.1775649-1-tobias@waldekranz.com>
- <d59ee33c-79f9-2622-cec2-987a35f4ec1e@nvidia.com>
-Date:   Wed, 16 Feb 2022 16:56:04 +0100
-Message-ID: <87mtiqajqj.fsf@waldekranz.com>
+        Wed, 16 Feb 2022 10:57:04 -0500
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C431A1323
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 07:56:49 -0800 (PST)
+Received: from in01.mta.xmission.com ([166.70.13.51]:49644)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nKMfd-001nv3-J2; Wed, 16 Feb 2022 08:56:45 -0700
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37420 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nKMfc-002XrX-IJ; Wed, 16 Feb 2022 08:56:45 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     <linux-kernel@vger.kernel.org>
+Cc:     Alexey Gladkov <legion@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Solar Designer <solar@openwall.com>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
+        <linux-api@vger.kernel.org>
+References: <20220207121800.5079-1-mkoutny@suse.com>
+        <87o83e2mbu.fsf@email.froward.int.ebiederm.org>
+Date:   Wed, 16 Feb 2022 09:56:37 -0600
+In-Reply-To: <87o83e2mbu.fsf@email.froward.int.ebiederm.org> (Eric
+        W. Biederman's message of "Thu, 10 Feb 2022 20:01:25 -0600")
+Message-ID: <87ilteiz4a.fsf_-_@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-XM-SPF: eid=1nKMfc-002XrX-IJ;;;mid=<87ilteiz4a.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+/L9et1C/bHc4Ya5pJzRgmcgiNxBncn0I=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;<linux-kernel@vger.kernel.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 380 ms - load_scoreonly_sql: 0.19 (0.1%),
+        signal_user_changed: 10 (2.7%), b_tie_ro: 8 (2.1%), parse: 1.05 (0.3%),
+         extract_message_metadata: 3.1 (0.8%), get_uri_detail_list: 0.92
+        (0.2%), tests_pri_-1000: 4.5 (1.2%), tests_pri_-950: 1.60 (0.4%),
+        tests_pri_-900: 1.47 (0.4%), tests_pri_-90: 105 (27.6%), check_bayes:
+        103 (27.1%), b_tokenize: 6 (1.6%), b_tok_get_all: 7 (1.8%),
+        b_comp_prob: 2.2 (0.6%), b_tok_touch_all: 84 (22.1%), b_finish: 1.13
+        (0.3%), tests_pri_0: 234 (61.6%), check_dkim_signature: 1.09 (0.3%),
+        check_dkim_adsp: 2.8 (0.7%), poll_dns_idle: 0.83 (0.2%), tests_pri_10:
+        2.4 (0.6%), tests_pri_500: 8 (2.0%), rewrite_mail: 0.00 (0.0%)
+Subject: [PATCH v2 0/5] ucounts: RLIMIT_NPROC fixes
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 17:28, Nikolay Aleksandrov <nikolay@nvidia.com> wrote:
-> On 16/02/2022 15:29, Tobias Waldekranz wrote:
->> The bridge has had per-VLAN STP support for a while now, since:
->> 
->> https://lore.kernel.org/netdev/20200124114022.10883-1-nikolay@cumulusnetworks.com/
->> 
->> The current implementation has some problems:
->> 
->> - The mapping from VLAN to STP state is fixed as 1:1, i.e. each VLAN
->>   is managed independently. This is awkward from an MSTP (802.1Q-2018,
->>   Clause 13.5) point of view, where the model is that multiple VLANs
->>   are grouped into MST instances.
->> 
->>   Because of the way that the standard is written, presumably, this is
->>   also reflected in hardware implementations. It is not uncommon for a
->>   switch to support the full 4k range of VIDs, but that the pool of
->>   MST instances is much smaller. Some examples:
->> 
->>   Marvell LinkStreet (mv88e6xxx): 4k VLANs, but only 64 MSTIs
->>   Marvell Prestera: 4k VLANs, but only 128 MSTIs
->>   Microchip SparX-5i: 4k VLANs, but only 128 MSTIs
->> 
->> - By default, the feature is enabled, and there is no way to disable
->>   it. This makes it hard to add offloading in a backwards compatible
->>   way, since any underlying switchdevs have no way to refuse the
->>   function if the hardware does not support it
->> 
->> - The port-global STP state has precedence over per-VLAN states. In
->>   MSTP, as far as I understand it, all VLANs will use the common
->>   spanning tree (CST) by default - through traffic engineering you can
->>   then optimize your network to group subsets of VLANs to use
->>   different trees (MSTI). To my understanding, the way this is
->>   typically managed in silicon is roughly:
->> 
->>   Incoming packet:
->>   .----.----.--------------.----.-------------
->>   | DA | SA | 802.1Q VID=X | ET | Payload ...
->>   '----'----'--------------'----'-------------
->>                         |
->>                         '->|\     .----------------------------.
->>                            | +--> | VID | Members | ... | MSTI |
->>                    PVID -->|/     |-----|---------|-----|------|
->>                                   |   1 | 0001001 | ... |    0 |
->>                                   |   2 | 0001010 | ... |   10 |
->>                                   |   3 | 0001100 | ... |   10 |
->>                                   '----------------------------'
->>                                                              |
->>                                .-----------------------------'
->>                                |  .------------------------.
->>                                '->| MSTI | Fwding | Lrning |
->>                                   |------|--------|--------|
->>                                   |    0 | 111110 | 111110 |
->>                                   |   10 | 110111 | 110111 |
->>                                   '------------------------'
->> 
->>   What this is trying to show is that the STP state (whether MSTP is
->>   used, or ye olde STP) is always accessed via the VLAN table. If STP
->>   is running, all MSTI pointers in that table will reference the same
->>   index in the STP stable - if MSTP is running, some VLANs may point
->>   to other trees (like in this example).
->> 
->>   The fact that in the Linux bridge, the global state (think: index 0
->>   in most hardware implementations) is supposed to override the
->>   per-VLAN state, is very awkward to offload. In effect, this means
->>   that when the global state changes to blocking, drivers will have to
->>   iterate over all MSTIs in use, and alter them all to match. This
->>   also means that you have to cache whether the hardware state is
->>   currently tracking the global state or the per-VLAN state. In the
->>   first case, you also have to cache the per-VLAN state so that you
->>   can restore it if the global state transitions back to forwarding.
->> 
->> This series adds support for an arbitrary M:N mapping of VIDs to
->> MSTIs, proposing one solution to the first issue. An example of an
->> offload implementation for mv88e6xxx is also provided. Offloading is
->> done on a best-effort basis, i.e. notifications of the relevant events
->> are generated, but there is no way for the user to see whether the
->> per-VLAN state has been offloaded or not. There is also no handling of
->> the relationship between the port-global state the the per-VLAN ditto.
->> 
->> If I was king of net/bridge/*, I would make the following additional
->> changes:
->> 
->> - By default, when a VLAN is created, assign it to MSTID 0, which
->>   would mean that no per-VLAN state is used and that packets belonging
->>   to this VLAN should be filtered according to the port-global state.
->> 
->>   This way, when a VLAN is configured to use a separate tree (setting
->>   a non-zero MSTID), an underlying switchdev could oppose it if it is
->>   not supported.
->> 
->>   Obviously, this adds an extra step for existing users of per-VLAN
->>   STP states and would thus not be backwards compatible. Maybe this
->>   means that that is impossible to do, maybe not.
->> 
->> - Swap the precedence of the port-global and the per-VLAN state,
->>   i.e. the port-global state only applies to packets belonging to
->>   VLANs that does not make use of a per-VLAN state (MSTID != 0).
->> 
->>   This would make the offloading much more natural, as you avoid all
->>   of the caching stuff described above.
->> 
->>   Again, this changes the behavior of the kernel so it is not
->>   backwards compatible. I suspect that this is less of an issue
->>   though, since my guess is that very few people rely on the old
->>   behavior.
->> 
->> Thoughts?
->> 
->
-> Interesting! Would adding a new (e.g. vlan_mst_enable) option which changes the behaviour
-> as described help? It can require that there are no vlans present to change 
-> similar to the per-port vlan stats option.
 
-Great idea, I did not know that that's how vlan stats worked. I will
-definitely look into it, thanks!
+Michal Koutný recently found some bugs in the enforcement of
+RLIMIT_NPROC in the recent ucount rlimit implementation.
 
-> Also based on that option you can alter
-> how the state checks are performed. For example, you can skip the initial port state
-> check, then in br_vlan_allowed_ingress() you can use the port state if vlan filtering
-> is disabled and mst enabled and you can avoid checking it altogether if filter && mst
-> are enabled then always use the vlan mst state. Similar changes would have to happen
-> for the egress path. Since we are talking about multiple tests the new MST logic can
-> be hidden behind a static key for both br_handle_frame() and later stages.
+I saw some additional bugs and some cleaner ways to fix the problem so
+instead of starting with his fixes these are my own.
 
-Makes sense.
+I have rewritten about half my fixes since the last time this was
+posted.  There is this notion (not entirely wrong) that the code should
+be consistent and make sense.  When I dug in I discovered that has not
+been the case for the last 20 years.  Fixing the long standing
+inconsistencies is something that seems to warrent wider vetting on
+linux-api.
 
-So should we keep the current per-VLAN state as-is then?  And bolt the
-MST on to the side? I.e. should `struct net_bridge_vlan` both have `u8
-state` for the current implementation _and_ a `struct br_vlan_mst *`
-that is populated for VLANs tied to a non-zero MSTI?
+So with this set of patches I have developed a very conservative
+approach changing only what is necessary to fix the bugs that I can
+see clearly.  Cleanups and anything that is making the code more
+consistent can follow after we have the code working as it has
+historically.
 
-> This set needs to read a new cache line to fetch mst ptr for all packets in the vlan fast-path,
-> that is definitely undesirable. Please either cache that state in the vlan and update it when
-> something changes, or think of some way which avoids that cache line in fast-path.
-> Alternative would be to make that cache line dependent on the new option, so it's needed
-> only when mst feature is enabled.
+Anyone who can please take a look and tell me if I am doing something silly.
 
-If we go with the approach I suggested above, then the current `u8
-state` on `struct net_bridge_vlan` could be that cache, right?
+Eric W. Biederman (5):
+      rlimit: Fix RLIMIT_NPROC enforcement failure caused by capability calls in set_user
+      ucounts: Enforce RLIMIT_NPROC not RLIMIT_NPROC+1
+      ucounts: Base set_cred_ucounts changes on the real user
+      ucounts: Move RLIMIT_NPROC handling after set_user
+      ucounts: Handle wrapping in is_ucounts_overlimit
 
-With the current implementation, it is set directly - in the new MST
-mode all grouped VLANs would have their states updated when updating the
-MSTI's state.
+ kernel/cred.c   |  9 ++-------
+ kernel/fork.c   | 10 +++++-----
+ kernel/sys.c    | 20 ++++++++++++++------
+ kernel/ucount.c |  3 ++-
+ 4 files changed, 23 insertions(+), 19 deletions(-)
+
+Eric

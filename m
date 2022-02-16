@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D0D4B8DDB
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:23:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 711944B8DD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236381AbiBPQXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 11:23:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37794 "EHLO
+        id S236339AbiBPQXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 11:23:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236358AbiBPQXv (ORCPT
+        with ESMTP id S236371AbiBPQXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 11:23:51 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE4521FC69
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:23:37 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id m14so4819065lfu.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:23:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lzBX1lIAVYZwdECaRMhi8WBrfRP47BlcmzYMUdivK5U=;
-        b=keZIpHeTvTHtXJK9/pje+DNhUxw0b6g+PN/54W4qKYTwwl6ZJRBqCLk+Ha4D0P3YDk
-         keJ+8z+bB0sqMQSQ+0zNF7slV8OZcHf4s6wxH6qzHd5ASQOvrX3XUVvMB5dMNUJyXziA
-         8/qqX1s8UTd9azWkIx/zpio+3RTiTuBAiMGwosSvP/wcs5847OmkKHy14EwFN48ryB4E
-         64rDmMsiuaio/5wVmJJO7FDtXkrk0wMmgMQLSMJE6V5mTwghA43jQn2/N9MJmmr83Owl
-         k1WO7Sozach4DT+6Rqd7bja50HPUyDDTciIU1+cfATD2c66XAcqk/wl4ZwMA8SPq27OV
-         hQ+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lzBX1lIAVYZwdECaRMhi8WBrfRP47BlcmzYMUdivK5U=;
-        b=Jy86jQETSzsdvTM2X2FQmU6kzM5ALa9hzx1pDapMUZ+C+JKgKJnt9F6ofWyv1AcJRq
-         RwG99o8KkCBakxO4JPRYZXYJThC+Z7+8RnoxZyFePgCHKlUWHtu7aO+3yL4VfhgsWINE
-         Jbbd+C2dK323u7ksYLWSVlNxS8uivDYGoK4OK4k/Tb2zlp07cv5Igb0FOYSYm/CKEc1r
-         9pGrheeWYSFdGcbr6ZuJIqPnb6AqW4skmLahw58ejaXRESygpPnrPnBREI7yVsC/KGAN
-         5Wu5sE7dGt3CoEbuOOPJEV7auoF9XGe4g64vZW9QXeMjZWQahMUVeu8YXpMCCoG4yNmf
-         /BgA==
-X-Gm-Message-State: AOAM530pBuk7X5pLoRkd74YdWybkix+frElGFarFOeUdG9kJxl2nzzIz
-        k0qnXwfpGGyUKnPveXNVnO5/k1oUH70VNnWDPNpRaCTR6LA=
-X-Google-Smtp-Source: ABdhPJyUuQz4Diml1VJhvSdyugYzUWtSBf05c5HD9+nNLuAQ4WtatF+oZKRsz3jYwQcAMJd0SuaAXICsTz85sxLyZxc=
-X-Received: by 2002:a19:9144:0:b0:43b:86a4:1497 with SMTP id
- y4-20020a199144000000b0043b86a41497mr2576104lfj.254.1645028615997; Wed, 16
- Feb 2022 08:23:35 -0800 (PST)
+        Wed, 16 Feb 2022 11:23:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD2F215C29;
+        Wed, 16 Feb 2022 08:23:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7423161B14;
+        Wed, 16 Feb 2022 16:23:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5C76C004E1;
+        Wed, 16 Feb 2022 16:23:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645028596;
+        bh=t1UdN8Z5NqtdJPY4399H8c1RO6/wV57dnhQ5F04QgKk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WJvetdb/g2SSTwAcqcimw8jpt+oqnK0ca3HjrlPbdxGkYQQw1RO+ny2b1jYlb6FWm
+         VtPC0B5de/8LFOQcdosILfPSrBAcfAYQ9VpbiR9s72w2byQZDgOf5mPu59pZXr6r8K
+         VW637HBQFTC23qksoH5hZ6lmA/69KmNhkdlic2ZIm32giJ0WXVF7iYqbCYSkvx40j2
+         FLTVG8dhoiigcy7pEW1Qr7u7yc+EEZV6FgNp2gRHDfUL2Vs0RZYTeB9tRjrTIijc7f
+         OSAc78U/hMP7v02559bVLjzRI9XX1HtMOkOXREzZrAovhpEYbK/72kNPZfi5zKauda
+         Ly4vtiEp55jSw==
+Date:   Wed, 16 Feb 2022 16:23:12 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Yun Zhou <yun.zhou@windriver.com>
+Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Xue, Ying" <Ying.Xue@windriver.com>
+Subject: Re: =?utf-8?B?5Zue5aSN?= =?utf-8?Q?=3A?= [PATCH] spi: disable
+ chipselect after complete transfer
+Message-ID: <Yg0k8BH0itmczUDy@sirena.org.uk>
+References: <SN6PR11MB3008AF5619B0B026836FD7429F2F9@SN6PR11MB3008.namprd11.prod.outlook.com>
+ <YgU1+cIlANAkJCAL@sirena.org.uk>
+ <19c69765-8584-2e6b-25b8-7053a5afa5d4@windriver.com>
+ <YgVH310gQ1sK6dlr@sirena.org.uk>
+ <a5aa6dcf-e3dd-e8ff-edcb-edad96f8ddfe@windriver.com>
+ <YgpOzw2rq+vAIPBU@sirena.org.uk>
+ <8fd9c3ef-df64-b8ad-de6e-ef86806d53b5@windriver.com>
+ <Ygpo9YT9PrQAAIH3@sirena.org.uk>
+ <111c2102-5782-2740-65b0-47b0e5194ce9@windriver.com>
 MIME-Version: 1.0
-References: <20220130210210.549877-1-daniel.lezcano@linaro.org> <20220130210210.549877-3-daniel.lezcano@linaro.org>
-In-Reply-To: <20220130210210.549877-3-daniel.lezcano@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 16 Feb 2022 17:22:59 +0100
-Message-ID: <CAPDyKFqV++g63Asax8TNSEgujxJ=uM9XG2_Advu34JidYBCGtg@mail.gmail.com>
-Subject: Re: [PATCH v1 3/7] powercap/dtpm: Fixup kfree for virtual node
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, heiko@sntech.de, lukasz.luba@arm.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="TTJc13uKD0gRs45s"
+Content-Disposition: inline
+In-Reply-To: <111c2102-5782-2740-65b0-47b0e5194ce9@windriver.com>
+X-Cookie: Fremen add life to spice!
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,44 +66,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 30 Jan 2022 at 22:02, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
-> When the node is virtual there is no release function associated which
-> can free the memory.
->
-> Free the memory when no 'ops' exists.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/powercap/dtpm.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
-> index 0b0121c37a1b..7bddd25a6767 100644
-> --- a/drivers/powercap/dtpm.c
-> +++ b/drivers/powercap/dtpm.c
-> @@ -181,12 +181,12 @@ int dtpm_release_zone(struct powercap_zone *pcz)
->
->         if (dtpm->ops)
->                 dtpm->ops->release(dtpm);
-> +       else
-> +               kfree(dtpm);
->
 
-This doesn't look correct. Below you check dtpm against "root", which
-may be after its memory has been freed.
+--TTJc13uKD0gRs45s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-If the ->release() function should be responsible for freeing the
-dtpm, it needs to be called after the check below.
+On Wed, Feb 16, 2022 at 06:41:21PM +0800, Yun Zhou wrote:
+> On 2/14/22 10:36 PM, Mark Brown wrote:
 
->         if (root == dtpm)
->                 root = NULL;
->
-> -       kfree(dtpm);
-> -
->         return 0;
->  }
->
+> > ever or that it'd be done this way if it were new but that doesn't mean
+> > we can just randomly change the interface and potentially disrupt users.
+> > Whatever else is going on the current behaviour is intentional.
 
-Kind regards
-Uffe
+> Although the logic dealing with cs_change in spi_transfer_one_message() has
+> existed a long time and nobody reports issue on it, that doesn't mean it is
+> correct. I think the main reason is, cs_change is only used to change
+
+Please read and engage with what what I said above about not disrupting
+existing users by just randomly changing this, silently changing how the
+parameter operates will break any users that rely on the functionality
+which is not going to help anyone and to the extent there is an issue
+here it is only those users who would be affected in the first place.
+
+This is not a productive discussion, please stop unless you have
+concrete proposals that are considerate of existing users.
+
+--TTJc13uKD0gRs45s
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmINJO8ACgkQJNaLcl1U
+h9C1KAf+PJ+hjgmc8ax0LFniWvgGVMtRikK9+FQzoAMkwPRfaJdqvFwNZt9VjO8o
+xueUEqR/3e4n3P9QzW/kMKHlkX1ZBv0ShQ0uiInAmgo7lhr8a2xL/rMZOGOq2DPi
+mEQQU5xLK6Bx8dobTYkFcOuwT3yg88SySh2QOFxc1c7j4pTvqq1Z4v9OC3vYh64v
+xyLKszUFAxs7FiM3zDrZLjgoKfO53YvpbfNWmAWMe3Gn4pgjSzrjcl6GfkzX9bg9
+NrmdtJoVZyFtj+BHA/tqav93rbPC3dhls1dFlHOUqDdH8LmwC1sHzGvbOnsQx8fU
+zvE16QZMJiCKtQUUFrT5jNbo+bSshQ==
+=mY3I
+-----END PGP SIGNATURE-----
+
+--TTJc13uKD0gRs45s--

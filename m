@@ -2,119 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B704B872E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 12:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6954B8769
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 13:13:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232882AbiBPL4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 06:56:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50482 "EHLO
+        id S233027AbiBPMN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 07:13:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232859AbiBPLzu (ORCPT
+        with ESMTP id S230059AbiBPMNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 06:55:50 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04B326724C
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 03:55:38 -0800 (PST)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JzGWQ3CbjzZfh2;
-        Wed, 16 Feb 2022 19:51:14 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 16 Feb 2022 19:55:36 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 16 Feb 2022 19:55:35 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     <linuxppc-dev@lists.ozlabs.org>, <mpe@ellerman.id.au>,
-        <benh@kernel.crashing.or>, <paulus@samba.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
-CC:     <akpm@linux-foundation.org>, <npiggin@gmail.com>,
-        <christophe.leroy@csgroup.eu>, <songyuanzheng@huawei.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v4 2/2] powerpc: Fix virt_addr_valid() check
-Date:   Wed, 16 Feb 2022 20:11:08 +0800
-Message-ID: <20220216121109.157605-2-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20220216121109.157605-1-wangkefeng.wang@huawei.com>
-References: <20220216121109.157605-1-wangkefeng.wang@huawei.com>
+        Wed, 16 Feb 2022 07:13:25 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B3B2A228E
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 04:13:13 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id bg10so1844715ejb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 04:13:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Jn+zGX1FBd9vuS3OAi6WVZ0soSNdyvhXWR8AhE72jvI=;
+        b=cDwxlDNxUlDIJ9vH2rzXMofLaiR4eDlOVY2DTfpe+3/cvuGEOl72GXzY4g7JK2A93H
+         Wktxo81+/osKy1wWWLCZFOEqheduKb/oSwjHtqtQtImUbEoCP9eDDUHwidHFUG4Jfnp1
+         5MRogANZxCY1mvcTgsleVDbitLGgEtZpgCZVNFSE0+SSLoFQKGSNx4LP79k6sJ8iexdY
+         p3vwwQo6cTMWt4nX8xubUZ+u7q6jEYe/26SST1IDESpxEXMW0kY+LDvxXewIXBjE8N+5
+         phMQS+22eCrZlbq/1qNjW6M8sOlkmXPs6Rm4MKtSWDF/7xxpfLbawrPaHDY5Bwd6TQjJ
+         EFvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Jn+zGX1FBd9vuS3OAi6WVZ0soSNdyvhXWR8AhE72jvI=;
+        b=LI6c8ummEeL83RrE37TcfW3s1aBQx8BoqbPhG6eN51pFHnzBEMpgkzAIcPWdN794DQ
+         l98hnABzW+FNCqi1YsWzkB3lr49I8CZWAkK/HzZRim9kGp1hINLcJzVy3SzoOPoxwFkb
+         eh2XeWDfBRdBi8YhTnLNXDNLGN3O54C2ARz2IEivXV+K6TU1z38jFQB4vUi4WR21C0zG
+         eMd7j/+4jfitLWR9FQG5l3+GwMCnKHIkMByUpNB5zlnq9PyeSZ20F26F9k4qBGnzCRLb
+         YZTjlnl2O59BJQSRecicGD/4FNemJp6nyT6bp3CcHxMbT+81NyUy/l840027BBPe3Hih
+         lErA==
+X-Gm-Message-State: AOAM533wAeVm4ReiciKLa4dXjCBMkT8IpAHA6Q2e6RRWEyhb2m9iYLEh
+        p8CWnnXXEE036d1MmVWB4NASXYUI6Ej9TovyCvU=
+X-Google-Smtp-Source: ABdhPJxoC5M0Rs/v2YU1snALWN0eUF4+bPCK/d9abePkPEdarkXB0MAnNsh3OcL5+o+BDGTnQ1g0U1otBRrNKC1uL8M=
+X-Received: by 2002:a17:906:e92:b0:6ce:3f3a:5e64 with SMTP id
+ p18-20020a1709060e9200b006ce3f3a5e64mr2112607ejf.194.1645013591907; Wed, 16
+ Feb 2022 04:13:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a17:907:6d12:0:0:0:0 with HTTP; Wed, 16 Feb 2022 04:13:11
+ -0800 (PST)
+Reply-To: michellegoodman45@gmail.com
+From:   Michelle Goodman <sarahtage24@gmail.com>
+Date:   Wed, 16 Feb 2022 12:13:11 +0000
+Message-ID: <CAK7Gz5wng-Yx3OTnaV0z+vYnsB_F9_jATXRu9khkArPCxEHFjw@mail.gmail.com>
+Subject: Halllo
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:62a listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4895]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [michellegoodman45[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [sarahtage24[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [sarahtage24[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When run ethtool eth0 on PowerPC64, the BUG occurred,
-
-  usercopy: Kernel memory exposure attempt detected from SLUB object not in SLUB page?! (offset 0, size 1048)!
-  kernel BUG at mm/usercopy.c:99
-  ...
-  usercopy_abort+0x64/0xa0 (unreliable)
-  __check_heap_object+0x168/0x190
-  __check_object_size+0x1a0/0x200
-  dev_ethtool+0x2494/0x2b20
-  dev_ioctl+0x5d0/0x770
-  sock_do_ioctl+0xf0/0x1d0
-  sock_ioctl+0x3ec/0x5a0
-  __se_sys_ioctl+0xf0/0x160
-  system_call_exception+0xfc/0x1f0
-  system_call_common+0xf8/0x200
-
-The code shows below,
-
-  data = vzalloc(array_size(gstrings.len, ETH_GSTRING_LEN));
-  copy_to_user(useraddr, data, gstrings.len * ETH_GSTRING_LEN))
-
-The data is alloced by vmalloc(), virt_addr_valid(ptr) will return true
-on PowerPC64, which leads to the panic.
-
-As commit 4dd7554a6456 ("powerpc/64: Add VIRTUAL_BUG_ON checks for __va
-and __pa addresses") does, make sure the virt addr above PAGE_OFFSET in
-the virt_addr_valid() for PowerPC64, also add upper limit check to make
-sure the virt is below high_memory.
-
-Meanwhile, for PowerPC32 PAGE_OFFSET is the virtual address of the start
-of lowmem, high_memory is the upper low virtual address, the check is
-suitable for PowerPC32, this will fix the issue mentioned in commit
-602946ec2f90 ("powerpc: Set max_mapnr correctly") too.
-
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
-v4:
-- add upper limit check
-v3:
-- update changelog and remove a redundant cast
- arch/powerpc/include/asm/page.h | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/arch/powerpc/include/asm/page.h b/arch/powerpc/include/asm/page.h
-index 254687258f42..7a1ba27a7285 100644
---- a/arch/powerpc/include/asm/page.h
-+++ b/arch/powerpc/include/asm/page.h
-@@ -132,7 +132,11 @@ static inline bool pfn_valid(unsigned long pfn)
- #define virt_to_page(kaddr)	pfn_to_page(virt_to_pfn(kaddr))
- #define pfn_to_kaddr(pfn)	__va((pfn) << PAGE_SHIFT)
- 
--#define virt_addr_valid(kaddr)	pfn_valid(virt_to_pfn(kaddr))
-+#define virt_addr_valid(vaddr)	({					\
-+	unsigned long _addr = (unsigned long)vaddr;			\
-+	_addr >= PAGE_OFFSET && _addr < (unsigned long)high_memory &&	\
-+	pfn_valid(virt_to_pfn(_addr));					\
-+})
- 
- /*
-  * On Book-E parts we need __va to parse the device tree and we can't
--- 
-2.26.2
-
+Hallo, ich hoffe du hast meine Nachricht erhalten.
+Ich brauche schnelle Antworten
+Danke.
+Mchelle

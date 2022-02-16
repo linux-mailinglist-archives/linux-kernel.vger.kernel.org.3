@@ -2,141 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00B64B89BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D1B4B89BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232561AbiBPNXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:23:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56578 "EHLO
+        id S233152AbiBPNXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 08:23:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234073AbiBPNXP (ORCPT
+        with ESMTP id S234076AbiBPNXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:23:15 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2054.outbound.protection.outlook.com [40.107.22.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A38C2AB50A;
-        Wed, 16 Feb 2022 05:22:47 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e2OpuV6nqWBx59HXy2tKOMoUQboqklEgcTRccpZlGVT3hg3Vp+me7zyAt9NaJUox6Njx6YjISwa0wXfjeunu3B1gxVHUuYbv2ARHbpS0+3sqvhz1u/PwkxB6JEJ0aAWBI7RaTPoQfLe+noeTNlJZtyT3mU73PQ3mUhT6MUi6oCE/tDSRzaokCOasJFx6+lchcqj/b/uGCJ8HJuOedcNgSG+bIThTvBhBr5obJshl6zwsoO3O6TIH3z4p7cn1YiyyZ4DeENHxKWVKzPrRPsaAKBznJ1Wq+qjbnVUmeD7oth/Fl2CgF1Q5Sp3gJDPme/E5KUw0jHg62RVFZGv21Hoa3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rIVrQMocBmS2+OWOUHjVQh7x2+pmv8vRRqAoFlJ1WRs=;
- b=jWNI6u0S/GYowesv/DnN84gHGXklwpzUhYv4hu1h+AJ4PGQCAEJvmY9rB0aVL1TkV90LCJE5Xsfe/JaMdAuEUijh8n+TgsO8fHZ5dDFRXpQL9tqL3kk474WE0sGrF1qVxmHAOD8gY6BEWloROOIS3ok/vwo/jcxf3+xSkaHt2S3z4LrTajYcMcIB997H4gvL5dWSArEJKKvpPLxwjTYwmXENRCF8R8a6L/R/qS4toNqpdpUglWVVKN5pu8DZ38M/9Nb1lSK5kClqy9pv1t7kc7QrW6cpUqgGK2AQBEynPDWr79lOFIVgqNelyCKr4BVF/zTjAxPqrZsVCdh3hmBmxw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rIVrQMocBmS2+OWOUHjVQh7x2+pmv8vRRqAoFlJ1WRs=;
- b=qFSnG00f7NxL2ZoyUuN2P427+0JnmzVXGg6NG9Dit3Y0KInROKObEfvim4JN9rcOO15z/NpkfxM2++Uvro7Fvdm0G4xfuIdHdIaTvRQLKPz3qvtwvBH2I+S03gbEjbKMWI71jHLy0e8rlJJcRQuVVLnt7cUkNgASX22HYtvVkLU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
- by AM0PR04MB4738.eurprd04.prod.outlook.com (2603:10a6:208:cc::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.18; Wed, 16 Feb
- 2022 13:22:44 +0000
-Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
- ([fe80::2936:6a6f:6e6f:161f]) by VI1PR04MB4688.eurprd04.prod.outlook.com
- ([fe80::2936:6a6f:6e6f:161f%6]) with mapi id 15.20.4975.019; Wed, 16 Feb 2022
- 13:22:44 +0000
-From:   Abel Vesa <abel.vesa@nxp.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH] MAINTAINERS: clk: imx: add git tree and dt-bindings files
-Date:   Wed, 16 Feb 2022 15:22:14 +0200
-Message-Id: <20220216132214.258865-1-abel.vesa@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: VI1PR08CA0116.eurprd08.prod.outlook.com
- (2603:10a6:800:d4::18) To VI1PR04MB4688.eurprd04.prod.outlook.com
- (2603:10a6:803:6a::30)
+        Wed, 16 Feb 2022 08:23:16 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81DA235
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:23:03 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id c6so1167115edk.12
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:23:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=zXZfl0XIWRjkRZ0dozOmWUjU7MCzgPN2wpHMAJSXPzU=;
+        b=DTVbVHsJ/imRiaAao8Krt2WuQkYi1deLV5YvJ8QYt/rKA6JarTm2cYpNNUI2O8UmvI
+         IhAMXsJcZ7qaNmSIpQ7yFIYFnmVKTxxxgU2Cl+C9Kt5bglq0OqDl5tJd5r6j/SpQtXI1
+         QPe6v1NSYAgxd5tuou6ALOXNpL3dXKbGK37Puj/rC4sF01VECUnsr2ENU0XimMei2NM4
+         7hL1u9MxD5shEKKPUZmbCbK8TJoVu46hdQ2yEp11e2eXZjs06IJOfE4lG8whEp9hMAm2
+         wv/ildB0Og7tr9qFx2eswAGuS0FMZ03AAmDlHAqRPEuNFd+kqsBFnlurxbLtExFUzMw+
+         InCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=zXZfl0XIWRjkRZ0dozOmWUjU7MCzgPN2wpHMAJSXPzU=;
+        b=2RWGZoD5+eD7z35n/VScFexFzK975VqTqpigiced2lOa2uu+K1rvJalf4Ov78wZpZL
+         jI7/SqHWoacwCzopSQ2cSLX2n2v5j+jcsboIw9vcWjJFDge7WwAFES0I4fHjZyaPTi1k
+         gbbltlph6YWz3J/CcnXSLYmkiR7Z4jD6x0TXTQSY8jVXyPRXz5Nnpp4Xi0hOmDAkw6z9
+         wjPY0+sug3KYnzUQKSv0PpCvewbwsK2pQKuuNgnFDAZu1UsZ1bbLHulWidiKDfZQ3GsK
+         XmO2PCjbBxHiDx4LDXL8diyqnmJFyvLLiwtjG9KCe6Ln4/rm29f4VHHoVi2HLW6DBntD
+         4XJw==
+X-Gm-Message-State: AOAM533RkEPmNkEkbEf+jkSEtBlpiCmnv+2nLsUYu4Z8nOUkCrF3M68H
+        mj2f7CkLS+nEyIF+xxr06Sryw6WKvzGHX4oEJqc=
+X-Google-Smtp-Source: ABdhPJxqDHVBb+WqLObOWjeCzZ/I6vQn1Wv22KfI5/XcJQo9FQmzv/4Ipbs/nvrIoTlBuCEk10+sEA==
+X-Received: by 2002:a05:6402:198:b0:410:83e3:21d7 with SMTP id r24-20020a056402019800b0041083e321d7mr2984426edv.159.1645017782121;
+        Wed, 16 Feb 2022 05:23:02 -0800 (PST)
+Received: from leoy-ThinkPad-X240s ([104.245.96.223])
+        by smtp.gmail.com with ESMTPSA id s2sm2127882ejs.113.2022.02.16.05.22.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 05:23:01 -0800 (PST)
+Date:   Wed, 16 Feb 2022 21:22:57 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     German Gomez <german.gomez@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, mark.rutland@arm.com, james.clark@arm.com
+Subject: Re: [RFC PATCH 1/2] perf: arm_spe: Fix consistency of PMSCR register
+ bit CX
+Message-ID: <20220216132257.GB56419@leoy-ThinkPad-X240s>
+References: <20220117124432.3119132-1-german.gomez@arm.com>
+ <20220117124432.3119132-2-german.gomez@arm.com>
+ <20220205153940.GB391033@leoy-ThinkPad-X240s>
+ <4d5951ee-d7d2-1e76-eb24-5f3c46d1662c@arm.com>
+ <20220208130047.GA273989@leoy-ThinkPad-X240s>
+ <e68839bc-b4f0-1fe8-1748-484254ded37a@arm.com>
+ <20220211104528.GA475776@leoy-ThinkPad-X240s>
+ <d59e99ad-dfc6-27ee-d952-7455d8e9fda6@arm.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 903f7d33-f5bb-4225-512b-08d9f14f6aba
-X-MS-TrafficTypeDiagnostic: AM0PR04MB4738:EE_
-X-Microsoft-Antispam-PRVS: <AM0PR04MB47384334C6A0631E015B9FABF6359@AM0PR04MB4738.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1186;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: I0hjyKmmyaDx6y0QpSD0f2HWLPcQoO6iH5XD4iYwvAhyjAcZ2onX0X8/9wUX4Pqqxryc+xuKtywTa2Uyg3Z0Ep3erOegAx1JhSkRkifvXOJzW/ZLG2CJuT77vtQBRYi7J3bImIPcnk29fk0LEaIila+ulde9JRsa83xSK+L7z970pM04tvhClreebT/iiHCP2GomlNbqreadDv56x9Mu1fE0zEe3VlDWh2aSd6q+1auF+fONsl0qVe4mgqDc1dzMqzw3YbOaaz9xzet257Uo6INAqj1isMxIaXExRE2Lsn2nBojaL3vE2R4x3pNyILcdrxnd3kRhBp8gOxtI+D0oePaz+tEfn9CnIKpcZWWO/RyAu+a/g0rUX51ZeVwscr8JyjRqMYmxgBgvjyB7cuoTk0EjVN72CjJd6j2d6NrbvZ55zdsmaQBjxjzZF766YpDhrr+zBeNmFaKJc/M+kwymx1dPwGLvdJflugKvetTLmGo4Y/8+FE2HeqcEJSQDW9HPLyrhX89v7enzRs8rq06uxuksPS0EEIUTiFbzukCwjwtqR8CCbwtPETmqnluNs7U/ZZ6IDyPR19jSEc9KcTpKniWY1EBRoCufSVPU2Z4K/BPGO+ufTDq+K+xPdZ652PkQJ6H8UH4amqywpvIegeQxyCMkbmxvYRgupeVa+XSfE71VcwNuEKnFzvZKOJO39ZA92nqbRC5HzJXeZbl6LPygkQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6916009)(508600001)(186003)(86362001)(6486002)(36756003)(66476007)(83380400001)(54906003)(5660300002)(4744005)(316002)(1076003)(26005)(66946007)(2906002)(8936002)(8676002)(6666004)(66556008)(4326008)(44832011)(2616005)(6506007)(52116002)(38100700002)(38350700002)(6512007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HxcYY1kJvw68YaYoa+Mh20v2c9HFhEwyLVZURNxKjuGXM3ep/45Nb4DvSTBT?=
- =?us-ascii?Q?WTQL0ZTELDT268Vr3vDPp7YrYXshE24ewJm8TPP/GwpLPy+DkkgkYwiBYcGZ?=
- =?us-ascii?Q?B63DdJlUA8ETQhAqwq9gop6KWPcEU7y7/zv4oYl+ACTkPO3lMeH1n3/ZCf3S?=
- =?us-ascii?Q?fEDOk6M+iF6wB6vutastsTCxcOPxDRmsCQcOKRRyxr/7wea/i8MC3ksEcdYC?=
- =?us-ascii?Q?euZJbpp5ILkO0KvMHZa9xK5SxRycbxkHBkaP46muwZMzOmMXm8EOx68/voFT?=
- =?us-ascii?Q?6mNVByAtwNbt4aZxiIIXqODl7IgbbprxlCdau5s9czeeHOtQGMoerHp4i3DQ?=
- =?us-ascii?Q?yhQ6pQ4vlyZ1uRTGJZ2IPA5+3r+O2I7jZC1I5ntgE+8QwgrogChHHPjOeiMR?=
- =?us-ascii?Q?2er/13X3M5nko5PUwiKZUSQXRqK1Ag/a1z53a5CeoysOq276zfWVRMl2v/U9?=
- =?us-ascii?Q?etnIKvsOkL0y7CDXR23zFXqTDuAycbH/oNgEKCtsoXvfwiCcVuJxRtZcPcXW?=
- =?us-ascii?Q?45TF/qE9h0vqTb0IJZw/9YHvQOMSisHBO9ITNnpnwQ30Afb5bdu6HdXF8xVV?=
- =?us-ascii?Q?U6priIeQ0mtNnlmsWdLyTrSgi7WVpmtFZzWG9jbDZES/ZnXrDDuSc1nqvrZz?=
- =?us-ascii?Q?gPfBdlRFF57B+fP/DIuSTVIcxQoC7vobOMSXVf/QMfNBHD6mCGNCC/AgN09i?=
- =?us-ascii?Q?RPplFo2vuAleX0FI8zl7f1uo5cfcCrTjUcPK6EBOr2ysV8kRTLLyHHJ+O3dz?=
- =?us-ascii?Q?/L35eK7vW5F98YQVjgtr125bDMbAVy4+k6vIkvt5K6zVcCt5w3vofbD1M2h4?=
- =?us-ascii?Q?WrEz8Is04wn19kkKL1KYpUrEDrc9R5sk3YTx43FTyR5e4i7pwqOARVh1+W5T?=
- =?us-ascii?Q?7Jcn3xpiQbt4OGvBEsBdXfNtPoPpQfvs+43IxNG+crsOnEQDDrwSxBOlEuSk?=
- =?us-ascii?Q?Ka40BPjYnRzwDpK/GCXILn2ihldOWI9UNRAxfSL6N+AVIGqlPcXe1iOt63oy?=
- =?us-ascii?Q?esfUTeqJh1Q+wFCqulfOwXC/PdxlatUOB1MGAWzxrEUc/Vj8PvgxN5w+qRaP?=
- =?us-ascii?Q?qId8Qvz76ei3E7i8FjM9KBOE93uMJwLGENb6AyKEEhyyOrDF2BRorsQu3K+W?=
- =?us-ascii?Q?rcLoP1qNwE9VNkIULPINpMiptuQcu/3xz6KMUbbGXL17syQbqH3sh9D1eaNs?=
- =?us-ascii?Q?eaVX/pSRWIIDmvGAgE3YYE4bpWgrYIpBjvufsdI3ecwaec/uU/OFyVRXMMjJ?=
- =?us-ascii?Q?BYrdvoi6hwcbYXAINWMIjcUF1idX7TkukUlWIWCsmx9U45tXQM/vfo71ev4n?=
- =?us-ascii?Q?xjfHVNhet80DJerTPLDME+uaEO9IaJQHADCVZMOkbjex7s5ubUcDzaLyZdYM?=
- =?us-ascii?Q?Bdr3dxxyrq7wa5xyIP++FuOzLxWo9rDy+ncuMo7w4lmzHpXBVfZdDfoM8XM8?=
- =?us-ascii?Q?RzpX1zz5OVFuxtw5KgxLeq+EomoEIxHbXC+wprXrwas1SL2QxNTpET6FxHZY?=
- =?us-ascii?Q?FWxSc5+WDZ+zBBOOZp+OGYcA+XgHomwkzYpHdbO8bvwcKjDfhTF1MdJC3m+T?=
- =?us-ascii?Q?CYNz+weEInSZSDncMwN/DyY3WaLGCh+plPebdTMMpazxkTu/VT6gDd9mIsIM?=
- =?us-ascii?Q?GDYA34reYMGTR83EZSRkiYw=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 903f7d33-f5bb-4225-512b-08d9f14f6aba
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2022 13:22:44.6504
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NzjHjZQjIopedmkp8/kY++khR/+fKmP5MljutFSO41pNQNNC1aGABlxpcRUkbZq2RsZU0SdO/HiSLB1LSjVeug==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4738
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d59e99ad-dfc6-27ee-d952-7455d8e9fda6@arm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The i.MX clocks dt-bindings are going through the same tree as
-the drivers, so add them to the same entry. Also add the git
-tree and branch used.
+On Tue, Feb 15, 2022 at 02:29:27PM +0000, German Gomez wrote:
 
-Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
----
- MAINTAINERS | 3 +++
- 1 file changed, 3 insertions(+)
+[...]
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 66aa3a589f6a..277d5626702a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13954,7 +13954,10 @@ M:	Abel Vesa <abel.vesa@nxp.com>
- L:	linux-clk@vger.kernel.org
- L:	linux-imx@nxp.com
- S:	Maintained
-+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git clk/imx
-+F:	Documentation/devicetree/bindings/clock/imx*
- F:	drivers/clk/imx/
-+F:	include/dt-bindings/clock/imx*
- 
- NXP i.MX 8MQ DCSS DRIVER
- M:	Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
--- 
-2.34.1
+> Thanks for the suggestion. I recorded the following stacktrace:
+> 
+>  perf-323841 [052] d.... 3996.528812: arm_spe_pmu_setup_aux: (arm_spe_pmu_setup_aux+0x60/0x1c0 [arm_spe_pmu])
+>  perf-323841 [052] d.... 3996.528813: <stack trace>
 
+Yeah, this show arm_spe_pmu_setup_aux() is called in perf process.
+
+>  => kprobe_dispatcher
+>  => kprobe_breakpoint_handler
+>  => call_break_hook
+>  => brk_handler
+>  => do_debug_exception
+>  => el1_dbg
+>  => el1h_64_sync_handler
+>  => el1h_64_sync
+>  => arm_spe_pmu_setup_aux
+>  => perf_mmap
+>  => mmap_region
+>  => do_mmap
+>  => vm_mmap_pgoff
+>  => ksys_mmap_pgoff
+>  => __arm64_sys_mmap
+>  => invoke_syscall
+>  => el0_svc_common.constprop.0
+>  => do_el0_svc
+>  => el0_svc
+>  => el0t_64_sync_handler
+>  => el0t_64_sync
+> 
+> So for a v2 I may include something like this:
+
+The change looks good to me, please see below minor comment.
+
+> diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
+> index d44bcc29d..aadec5a0e 100644
+> --- a/drivers/perf/arm_spe_pmu.c
+> +++ b/drivers/perf/arm_spe_pmu.c
+> @@ -45,6 +45,7 @@ struct arm_spe_pmu_buf {
+>      int                    nr_pages;
+>      bool                    snapshot;
+>      void                    *base;
+> +    u64                    pmscr;
+>  };
+>  
+>  struct arm_spe_pmu {
+> @@ -748,7 +749,7 @@ static void arm_spe_pmu_start(struct perf_event *event, int flags)
+>          write_sysreg_s(reg, SYS_PMSICR_EL1);
+>      }
+>  
+> -    reg = arm_spe_event_to_pmscr(event);
+> +    reg = ((struct arm_spe_pmu_buf *) perf_get_aux(handle))->pmscr;
+>      isb();
+>      write_sysreg_s(reg, SYS_PMSCR_EL1);
+
+Just nitpick (or it's just my preferring coding style), we can define
+a local pointer variable 'buf':
+
+  struct arm_spe_pmu_buf *buf = perf_get_aux(handle);
+
+  ...
+
+  isb();
+  write_sysreg_s(buf->pmscr, SYS_PMSCR_EL1);
+
+Thanks,
+Leo
+
+>  }
+> @@ -855,6 +856,8 @@ static void *arm_spe_pmu_setup_aux(struct perf_event *event, void **pages,
+>      if (!pglist)
+>          goto out_free_buf;
+>  
+> +    buf->pmscr = arm_spe_event_to_pmscr(event);
+> +
+>      for (i = 0; i < nr_pages; ++i)
+>          pglist[i] = virt_to_page(pages[i]);
+> 
+> >
+> > Thanks,
+> > Leo

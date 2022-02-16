@@ -2,47 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE234B8681
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 12:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC474B8683
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 12:13:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbiBPLNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 06:13:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42314 "EHLO
+        id S231358AbiBPLNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 06:13:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiBPLNr (ORCPT
+        with ESMTP id S231179AbiBPLNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 06:13:47 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65B8E27C230
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 03:13:35 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2CBBDD6E;
-        Wed, 16 Feb 2022 03:13:35 -0800 (PST)
-Received: from [10.57.70.89] (unknown [10.57.70.89])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7A7FF3F66F;
-        Wed, 16 Feb 2022 03:13:33 -0800 (PST)
-Message-ID: <39ed2187-2345-297d-2dd3-0b0974ce8b31@arm.com>
-Date:   Wed, 16 Feb 2022 11:13:12 +0000
+        Wed, 16 Feb 2022 06:13:48 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48CA27C230
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 03:13:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645010016; x=1676546016;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LtIY2/WBqOLZAFvqM3F7RqpSNu/t0VLQ95tM4Zfega4=;
+  b=mGAfvmI6YvuCWethA7Xj/IcXmh+jagula7E7FyUScmyGaagiUd9T8gYK
+   46Q4Wdy1WecmUJ3nuat9ORyH3F4jcB2646JI8nnaTXyplnmeO+hPw1gi7
+   3mOhxJGjVxQn9B+9TBZAHeql6RYUzO3Gz5Z9F94FX6DWwlwBJChsq1Rc4
+   bT0fPbtzrdT5RTHlKLur6yrfR7XFhAHQrqz9S04NwPe3pVKnlTY+mVUgE
+   Cx2aWMpOsc5z51io9WW2x54/VzKkujWlkmfR6pAxV2EljlFxnBOPfG47q
+   2Jhyu+dDaSf6EZgaw64NXnWd5iE1p/ArdDNfSV0qvAH0kxP9kyOhwdqaL
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="250782350"
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="250782350"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 03:13:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="571233106"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 16 Feb 2022 03:13:35 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKIFa-000Ajl-KB; Wed, 16 Feb 2022 11:13:34 +0000
+Date:   Wed, 16 Feb 2022 19:13:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:for-next/kspp-fam0] BUILD SUCCESS
+ 08af3628a0e7581e1cec08885089b860f4338b60
+Message-ID: <620cdc4d.WSrMjzpHm7+Y8PPR%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] dma-contiguous: Prioritize restricted DMA pool over
- shared DMA pool
-Content-Language: en-GB
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     bcm-kernel-feedback-list@broadcom.com, jim2101024@gmail.com,
-        opendmb@gmail.com, robh@kernel.org, will@kernel.org,
-        tientzu@chromium.org, Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        "open list:DMA MAPPING HELPERS" <iommu@lists.linux-foundation.org>
-References: <20220215224344.1779145-1-f.fainelli@gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220215224344.1779145-1-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,103 +62,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-15 22:43, Florian Fainelli wrote:
-> Some platforms might define the same memory region to be suitable for
-> used by a kernel supporting CONFIG_DMA_RESTRICTED_POOL while maintaining
-> compatibility with older kernels that do not support that. This is
-> achieved by declaring the node this way;
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git for-next/kspp-fam0
+branch HEAD: 08af3628a0e7581e1cec08885089b860f4338b60  treewide: Replace zero-length arrays with flexible-array members
 
-Those platforms are doing something inexplicably wrong, then.
+elapsed time: 838m
 
-"restricted-dma-pool" says that DMA for the device has to be bounced 
-through a dedicated pool because it can't be trusted with visibility of 
-regular OS memory. "reusable" tells the OS that it's safe to use the 
-pool as regular OS memory while it's idle. Do you see how those concepts 
-are fundamentally incompatible?
+configs tested: 160
+configs skipped: 4
 
-Linux is right to reject contradictory information rather than attempt 
-to guess at what might be safe or not.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Furthermore, down at the practical level, a SWIOTLB pool is used for 
-bouncing streaming DMA API mappings, while a coherent/CMA pool is used 
-for coherent DMA API allocations; they are not functionally 
-interchangeable either. If a device depends on coherent allocations 
-rather than streaming DMA, it should still have a coherent pool even 
-under a physical memory protection scheme, and if it needs both 
-streaming DMA and coherent buffers then it can have both types of pool - 
-the bindings explicitly call that out. It's true that SWIOTLB pools can 
-act as an emergency fallback for small allocations for I/O-coherent 
-devices, but that's not really intended to be relied upon heavily.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                          randconfig-c001
+i386                 randconfig-c001-20220214
+mips                 randconfig-c004-20220216
+sh                 kfr2r09-romimage_defconfig
+mips                        jmr3927_defconfig
+m68k                            mac_defconfig
+sh                           se7751_defconfig
+sh                  sh7785lcr_32bit_defconfig
+arm                           corgi_defconfig
+arc                      axs103_smp_defconfig
+xtensa                           alldefconfig
+microblaze                      mmu_defconfig
+arm                        spear6xx_defconfig
+mips                         mpc30x_defconfig
+powerpc                     mpc83xx_defconfig
+m68k                       m5475evb_defconfig
+arc                         haps_hs_defconfig
+xtensa                  nommu_kc705_defconfig
+arm                         cm_x300_defconfig
+powerpc                      pcm030_defconfig
+ia64                          tiger_defconfig
+arc                              alldefconfig
+mips                  decstation_64_defconfig
+powerpc                 mpc834x_mds_defconfig
+arm                           sunxi_defconfig
+powerpc                 mpc85xx_cds_defconfig
+parisc                           alldefconfig
+arm                           h5000_defconfig
+mips                        bcm47xx_defconfig
+powerpc                    sam440ep_defconfig
+sparc64                          alldefconfig
+sh                                  defconfig
+m68k                             alldefconfig
+arm                       aspeed_g5_defconfig
+arm                           viper_defconfig
+arm                            mps2_defconfig
+arm                      jornada720_defconfig
+openrisc                  or1klitex_defconfig
+powerpc                        warp_defconfig
+arm                        keystone_defconfig
+powerpc                        cell_defconfig
+sh                             espt_defconfig
+mips                       capcella_defconfig
+arm                        cerfcube_defconfig
+mips                      loongson3_defconfig
+sh                        edosk7705_defconfig
+powerpc                 mpc834x_itx_defconfig
+m68k                        mvme16x_defconfig
+mips                            gpr_defconfig
+arm                          simpad_defconfig
+powerpc                  iss476-smp_defconfig
+arm                  randconfig-c002-20220214
+arm                  randconfig-c002-20220216
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                 randconfig-a013-20220214
+i386                 randconfig-a016-20220214
+i386                 randconfig-a012-20220214
+i386                 randconfig-a015-20220214
+i386                 randconfig-a011-20220214
+i386                 randconfig-a014-20220214
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                randconfig-r042-20220214
+arc                  randconfig-r043-20220214
+s390                 randconfig-r044-20220214
+riscv                randconfig-r042-20220216
+arc                  randconfig-r043-20220216
+s390                 randconfig-r044-20220216
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-So no, I do not see anything wrong with the current handling of 
-nonsensical DTs here, sorry.
+clang tested configs:
+riscv                randconfig-c006-20220216
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220216
+arm                  randconfig-c002-20220216
+i386                          randconfig-c001
+mips                 randconfig-c004-20220216
+powerpc                       ebony_defconfig
+hexagon                             defconfig
+arm                        neponset_defconfig
+powerpc                      ppc44x_defconfig
+powerpc               mpc834x_itxgp_defconfig
+mips                          rm200_defconfig
+arm                         palmz72_defconfig
+arm                         mv78xx0_defconfig
+powerpc                     kmeter1_defconfig
+i386                 randconfig-a004-20220214
+i386                 randconfig-a005-20220214
+i386                 randconfig-a006-20220214
+i386                 randconfig-a002-20220214
+i386                 randconfig-a003-20220214
+i386                 randconfig-a001-20220214
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r045-20220216
+hexagon              randconfig-r041-20220216
+hexagon              randconfig-r045-20220214
+hexagon              randconfig-r041-20220214
+x86_64               randconfig-a002-20220214
+x86_64               randconfig-a006-20220214
+x86_64               randconfig-a005-20220214
+x86_64               randconfig-a004-20220214
+x86_64               randconfig-a003-20220214
+x86_64               randconfig-a001-20220214
 
-Robin.
-
-> 	cma@40000000 {
-> 		compatible = "restricted-dma-pool", "shared-dma-pool";
-> 		reusable;
-> 		...
-> 	};
-> 
-> A newer kernel would leverage the 'restricted-dma-pool' compatible
-> string for that reserved region, while an older kernel would use the
-> 'shared-dma-pool' compatibility string.
-> 
-> Due to the link ordering between files under kernel/dma/ however,
-> contiguous.c would try to claim the region and we would never get a
-> chance for swiotlb.c to claim that reserved memory region.
-> 
-> To that extent, update kernel/dma/contiguous.c in order to check
-> specifically for the 'restricted-dma-pool' compatibility string when
-> CONFIG_DMA_RESTRICTED_POOL is enabled and give up that region such that
-> kernel/dma/swiotlb.c has a chance to claim it.
-> 
-> Similarly, kernel/dma/swiotlb.c is updated to remove the check for the
-> 'reusable' property because that check is not useful. When a region is
-> defined with a compatible string set to 'restricted-dma-pool', no code
-> under kernel/dma/{contiguous,coherent}.c will match that region since
-> there is no 'shared-dma-pool' compatible string. If a
-> region is defined with a compatible string set as above with both
-> 'restricted-dma-pool" *and* 'shared-dma-pool' however, checking for
-> 'reusable' will prevent kernel/dma/swiotlb.c from claiming the region
-> while it is still perfectly suitable since contiguous.c gave it up.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->   kernel/dma/contiguous.c | 7 +++++++
->   kernel/dma/swiotlb.c    | 3 +--
->   2 files changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/dma/contiguous.c b/kernel/dma/contiguous.c
-> index 3d63d91cba5c..3c418af6d306 100644
-> --- a/kernel/dma/contiguous.c
-> +++ b/kernel/dma/contiguous.c
-> @@ -416,6 +416,13 @@ static int __init rmem_cma_setup(struct reserved_mem *rmem)
->   	    of_get_flat_dt_prop(node, "no-map", NULL))
->   		return -EINVAL;
->   
-> +#ifdef CONFIG_DMA_RESTRICTED_POOL
-> +	if (of_flat_dt_is_compatible(node, "restricted-dma-pool")) {
-> +		pr_warn("Giving up %pa for restricted DMA pool\n", &rmem->base);
-> +		return -ENOENT;
-> +	}
-> +#endif
-> +
->   	if ((rmem->base & mask) || (rmem->size & mask)) {
->   		pr_err("Reserved memory: incorrect alignment of CMA region\n");
->   		return -EINVAL;
-> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-> index f1e7ea160b43..9d6e4ae74d04 100644
-> --- a/kernel/dma/swiotlb.c
-> +++ b/kernel/dma/swiotlb.c
-> @@ -883,8 +883,7 @@ static int __init rmem_swiotlb_setup(struct reserved_mem *rmem)
->   {
->   	unsigned long node = rmem->fdt_node;
->   
-> -	if (of_get_flat_dt_prop(node, "reusable", NULL) ||
-> -	    of_get_flat_dt_prop(node, "linux,cma-default", NULL) ||
-> +	if (of_get_flat_dt_prop(node, "linux,cma-default", NULL) ||
->   	    of_get_flat_dt_prop(node, "linux,dma-default", NULL) ||
->   	    of_get_flat_dt_prop(node, "no-map", NULL))
->   		return -EINVAL;
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

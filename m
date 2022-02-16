@@ -2,61 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE11D4B8F93
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 18:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F3E4B8F96
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 18:44:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237317AbiBPRn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 12:43:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46016 "EHLO
+        id S237326AbiBPRo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 12:44:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237310AbiBPRnz (ORCPT
+        with ESMTP id S237289AbiBPRoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 12:43:55 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2752B1007
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:43:43 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nKOKr-0002mV-1E; Wed, 16 Feb 2022 18:43:25 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nKOKn-00H0SM-3Z; Wed, 16 Feb 2022 18:43:20 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nKOKl-003bGa-LT; Wed, 16 Feb 2022 18:43:19 +0100
-Date:   Wed, 16 Feb 2022 18:43:19 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        alexandre.belloni@bootlin.com, mcoquelin.stm32@gmail.com,
-        richard.genoud@gmail.com, festevam@gmail.com,
-        s.hauer@pengutronix.de, linux@armlinux.org.uk,
-        nicolas.ferre@microchip.com, alexandre.torgue@foss.st.com,
-        ludovic.desroches@microchip.com, lukas@wunner.de,
-        linux-imx@nxp.com, kernel@pengutronix.de,
-        linux-serial@vger.kernel.org, shawnguo@kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2 7/9] serial: imx: remove redundant assignment in
- rs485_config
-Message-ID: <20220216174319.rajioisll5b5pfpe@pengutronix.de>
-References: <20220216001803.637-1-LinoSanfilippo@gmx.de>
- <20220216001803.637-8-LinoSanfilippo@gmx.de>
+        Wed, 16 Feb 2022 12:44:24 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE252B100F;
+        Wed, 16 Feb 2022 09:44:11 -0800 (PST)
+Received: from [10.10.2.52] (unknown [10.10.2.52])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 8F88D4076B4F;
+        Wed, 16 Feb 2022 17:44:07 +0000 (UTC)
+Subject: Re: [PATCH] NFS: remove unneeded check in decode_devicenotify_args()
+To:     Anna Schumaker <anna@kernel.org>
+Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ldv-project@linuxtesting.org
+References: <1644920224-24966-1-git-send-email-khoroshilov@ispras.ru>
+ <CAFX2JfkGsjw0PU4LjfFGndQ=Em3o=qobgpQe94bsKHcYuOH_mQ@mail.gmail.com>
+From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
+Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
+ 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
+ kK2E04Fb+Zk1eJvHYRc=
+Message-ID: <ea3c96de-cf01-fd50-5a21-01b07293e922@ispras.ru>
+Date:   Wed, 16 Feb 2022 20:44:07 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="da2lbr7flv5tn5tr"
-Content-Disposition: inline
-In-Reply-To: <20220216001803.637-8-LinoSanfilippo@gmx.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <CAFX2JfkGsjw0PU4LjfFGndQ=Em3o=qobgpQe94bsKHcYuOH_mQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: ru-RU
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,42 +88,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Anna,
 
---da2lbr7flv5tn5tr
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 16.02.2022 18:30, Anna Schumaker wrote:
+> On Tue, Feb 15, 2022 at 5:17 AM Alexey Khoroshilov
+> <khoroshilov@ispras.ru> wrote:
+>>
+>> Overflow check in not needed anymore after we switch to kmalloc_array().
+> 
+> Don't we still need the overflow check since 'n' is used in the
+> for-loop end condition farther down in this function?
 
-On Wed, Feb 16, 2022 at 01:18:01AM +0100, Lino Sanfilippo wrote:
-> In uart_set_rs485_config() the serial core already assigns the passed
-> serial_rs485 struct to the uart port.
->=20
-> So remove the assignment in the drivers rs485_config() function to avoid
-> reduncancy.
->=20
-> Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-Thanks
-Uwe
+It is not, because it will be detected by kmalloc_array(), it returns
+NULL and we will go out before the loop:
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+	args->devs = kmalloc_array(n, sizeof(*args->devs), GFP_KERNEL);
+	if (!args->devs) {
+		status = htonl(NFS4ERR_DELAY);
+		goto out;
+	}
 
---da2lbr7flv5tn5tr
-Content-Type: application/pgp-signature; name="signature.asc"
+Best regards,
+Alexey
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmINN7QACgkQwfwUeK3K
-7AlQGAf/ac6fGA3JlB+w+RAXYkZDqG//NDFsdlUzOp7B8hIJ80nDvlVkn9v/gp57
-rMUw1/NgNSpn7hyc+3oy9WKurjdN9U2jBd9aIjas2NT5aWJv+AOOmere37nv5N0O
-1PUkAm33WZ4vgu9ldLE3al/zvpxjJghaycEZx7+Udtgu7NjtnkMus8XqDQ1TEx6D
-RaucYDkywS0Um62zqye+r9kHxEA9wBvdrsHPRf0cw0SpjU01SQ002+zfgpw0BZNh
-R+Bmr8a/V6ays42x/njh9U5yNI/vJ4xWWMdZUfSz9u9UYTwArtJlh/hid7FQp6AK
-e0RXvaXZKEdVXnU6KKl4m8SoamPP5g==
-=S/7p
------END PGP SIGNATURE-----
+>>
+>> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+>> Fixes: a4f743a6bb20 ("NFSv4.1: Convert open-coded array allocation calls to kmalloc_array()")
+>> ---
+>>  fs/nfs/callback_xdr.c | 4 ----
+>>  1 file changed, 4 deletions(-)
+>>
+>> diff --git a/fs/nfs/callback_xdr.c b/fs/nfs/callback_xdr.c
+>> index f90de8043b0f..8dcb08e1a885 100644
+>> --- a/fs/nfs/callback_xdr.c
+>> +++ b/fs/nfs/callback_xdr.c
+>> @@ -271,10 +271,6 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
+>>         n = ntohl(*p++);
+>>         if (n == 0)
+>>                 goto out;
+>> -       if (n > ULONG_MAX / sizeof(*args->devs)) {
+>> -               status = htonl(NFS4ERR_BADXDR);
+>> -               goto out;
+>> -       }
+>>
+>>         args->devs = kmalloc_array(n, sizeof(*args->devs), GFP_KERNEL);
+>>         if (!args->devs) {
+>> --
+>> 2.7.4
+>>
 
---da2lbr7flv5tn5tr--

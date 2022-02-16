@@ -2,42 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3DF04B7FF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 06:15:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 808414B7FF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 06:18:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344579AbiBPFPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 00:15:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33510 "EHLO
+        id S1344584AbiBPFRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 00:17:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238207AbiBPFPK (ORCPT
+        with ESMTP id S233336AbiBPFRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 00:15:10 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D611C27B2D
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 21:14:58 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9CEFA113E;
-        Tue, 15 Feb 2022 21:14:58 -0800 (PST)
-Received: from [10.163.47.182] (unknown [10.163.47.182])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 696843F66F;
-        Tue, 15 Feb 2022 21:14:57 -0800 (PST)
-Subject: Re: [PATCH] arm64/mm: Drop use_1G_block()
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org
-References: <1644988012-25455-1-git-send-email-anshuman.khandual@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <fbf2d9f5-2226-dbd8-af3b-096fa2020381@arm.com>
-Date:   Wed, 16 Feb 2022 10:44:54 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 16 Feb 2022 00:17:40 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978DD2BB1D;
+        Tue, 15 Feb 2022 21:17:26 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jz5mw2cLbz4xcY;
+        Wed, 16 Feb 2022 16:17:20 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1644988641;
+        bh=ZPDaBiJk/Ek5Bsq6D2wt0Lqku2nuzyvwJLp3pCK+//g=;
+        h=Date:From:To:Cc:Subject:From;
+        b=D053Ti0g+iUW4Upo0l3eOJYpfny7eBOeWqK5Xc8V5cvqDee3CE//eu/kCuEUJQxMX
+         EgTKW4fNkYEpmV+HH55Q3E+/kEjvdFrGt9cV/44JIis9PcKsWDsMkc4Rkw+XvYYeXI
+         R7UE6kQnPDiQUgxkRtjjsth1Z7aztSA0hY5nI0FBs+tp/vSiTCq3ltRQG5CJG2TpiH
+         qRPPbsyUUbFBjp7kkut55lY9CoJj+6dQOkXLz6bUfFjGN7PxHiL7HIs5K1e2zqr6cV
+         2BsKHGgoR87OmP7vyGzGFyY8ck0oN50D3QFeAIROxprZZ6JeU+Zkvp7V+hpGDzCE2e
+         mVzcFFUMpWT6g==
+Date:   Wed, 16 Feb 2022 16:17:18 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     =?UTF-8?B?QW5kcsOp?= Almeida <andrealmeid@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the spi tree
+Message-ID: <20220216161718.2c094b08@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <1644988012-25455-1-git-send-email-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/FGvvKnNVsJrqZ.k9wFXcCc+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,58 +51,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/FGvvKnNVsJrqZ.k9wFXcCc+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 2/16/22 10:36 AM, Anshuman Khandual wrote:
-> pud_sect_supported() already checks for PUD level block mapping support i.e
-> on ARM64_4K_PAGES config. Hence pud_sect_supported(), along with some other
-> required alignment checks can help completely drop use_1G_block().
-> 
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
-> This applies on v5.17-rc4
-> 
->  arch/arm64/mm/mmu.c | 15 ++-------------
->  1 file changed, 2 insertions(+), 13 deletions(-)
-> 
-> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> index acfae9b41cc8..5a7954c9e6ec 100644
-> --- a/arch/arm64/mm/mmu.c
-> +++ b/arch/arm64/mm/mmu.c
-> @@ -294,18 +294,6 @@ static void alloc_init_cont_pmd(pud_t *pudp, unsigned long addr,
->  	} while (addr = next, addr != end);
->  }
->  
-> -static inline bool use_1G_block(unsigned long addr, unsigned long next,
-> -			unsigned long phys)
-> -{
-> -	if (PAGE_SHIFT != 12)
-> -		return false;
-> -
-> -	if (((addr | next | phys) & ~PUD_MASK) != 0)
-> -		return false;
-> -
-> -	return true;
-> -}
-> -
->  static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
->  			   phys_addr_t phys, pgprot_t prot,
->  			   phys_addr_t (*pgtable_alloc)(int),
-> @@ -338,7 +326,8 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
->  		/*
->  		 * For 4K granule only, attempt to put down a 1GB block
->  		 */
-> -		if (use_1G_block(addr, next, phys) &&
-> +		if (pud_sect_supported() &&
-> +		   ((addr | next | phys) & ~PUD_MASK) == 0 &&
->  		    (flags & NO_BLOCK_MAPPINGS) == 0) {
+After merging the spi tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-This is now very similar to init_pmd() block mapping check.
+drivers/spi/spi-amd.c:333:37: error: 'spi_acpi_match' undeclared here (not =
+in a function)
+  333 |                 .acpi_match_table =3D spi_acpi_match,
+      |                                     ^~~~~~~~~~~~~~
 
->  			pud_set_huge(pudp, phys, prot);
->  
-> 
+Caused by commit
+
+  209043554915 ("spi: amd: Add support for version AMDI0062")
+
+CONFIG_ACPI is not set for this build.
+
+I have reverted that commit for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/FGvvKnNVsJrqZ.k9wFXcCc+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIMiN4ACgkQAVBC80lX
+0GxRUgf9G99HdntgwV9aFHsLULxCpRx8owCEIJt/ldzMbedfHKGoTz/IZFbSe1tD
+6/GEFzIhJdMth7BBYTCLnqxSeMNqmzes2n25pkFa/gaYTN1tG4W7X5tojtRLTYbj
+O6FFmF1TfbM4FDlhW/+zJ8v3L15d9Wm3ha/2KtM4DPUOEnaSZt5QR3I7jgOJCrVJ
+I1CKSoyWhvqN+XDYt0XjiVuz4tkR1CP0rjQwNqGVeFyNDvDyYkOVw4uXDPgHNs42
+HdlgNDW4+KpL6tw7NlphXmhMXWQY4VimLiDlCoHA160FGoUjxPWeKMRNRMDSHY4y
+0IFsuUXQ8kMG/z6fnC45JHKQyp1/Tg==
+=DsNP
+-----END PGP SIGNATURE-----
+
+--Sig_/FGvvKnNVsJrqZ.k9wFXcCc+--

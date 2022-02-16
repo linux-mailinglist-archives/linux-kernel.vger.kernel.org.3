@@ -2,70 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B544B815E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:22:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6B94B812E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:18:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbiBPHWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 02:22:45 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:37684 "EHLO
+        id S229769AbiBPHRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 02:17:12 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:32830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbiBPHWl (ORCPT
+        with ESMTP id S229765AbiBPHRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 02:22:41 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC04C114C;
-        Tue, 15 Feb 2022 23:22:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1644996140;
-        bh=qKSX+z1Q8081GjEHMiQiiSJ1N4j1zNYo4KymwWAtCC4=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=g3kJMNiBLEKHjRUBb6+A4cYh8Q07vfqe25MpQMsrf2np+kJPsF2b0/8ODX2mgji05
-         uM3UCQtP8d+eND5Jg+B9Bfv5vB5nSV/Tqe+GqX6OPGNTk1VKRmz0bxZJaY7+yLnTuR
-         54F6x1KCfa7/cIVaKIRLqMBIQFbpxYC5pToVUZ/4=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.128.232]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MFsUv-1nUwrd1UNz-00HM1p; Wed, 16
- Feb 2022 08:16:42 +0100
-Message-ID: <40052108-afe1-b66c-3cca-03e5e92ea688@gmx.de>
-Date:   Wed, 16 Feb 2022 08:16:34 +0100
+        Wed, 16 Feb 2022 02:17:08 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD94C1141;
+        Tue, 15 Feb 2022 23:16:52 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id e6so1426670vsa.8;
+        Tue, 15 Feb 2022 23:16:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=q/fqjdbDD2fyY7moizdQvW5LN8SHN1B18vYdIVedr2w=;
+        b=lp4WomsRpPzMzCV/F2J6D885OSY301v5mrj611CFTqGbzXRTf+SOBP2PYLYgRC9yUa
+         WHIOS/IaZpxaWjwMyQNPP/9enFryKTvsQ0ZMikeEusLJA0mZ/LlWh7KlRi10hz8Z+RIL
+         GznNlJKDuCITsaNcZvzAxeMUIoGnrF4YfIXqanmI/2ZO19eRR7XLy89qEyHoFVhp/9Qg
+         SeJezPoz026JuHNhAkvI+OuDnyNA8WLJK/hPCBNkXcAM7M7psQ9IQHuCgkvgYToCgeiC
+         PehWZyz96DUuVYvnaIVQPDTjFoAX0pXwtgBSGevn4WmxIeP4hn0EfLocbzNVnKg3CkO1
+         qRVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=q/fqjdbDD2fyY7moizdQvW5LN8SHN1B18vYdIVedr2w=;
+        b=3R3/jcUkl6qwjTcCaC0HnwP//4iN74ndUsQWa/mKP6n8NGgT0m/7rQRTIMsAnQN/LF
+         fYmKTVodbJwZvXkwmfv6jixHrtZU8GCjNwi3v7cIpcXnEuijeFveGSz1uipnXPsJy790
+         HafaGGUnGwVkkaPvsn3M1EJXgW/0W6fgjl0/Ixhw53KMJ6wYRq/tgXggVsJAtPM4VRtO
+         fOp5lwMukvJzOWNPHRU/uGS5lDQQKbAE68iS1FOcsgCzeoTh/4Yjv3mVZInInsV5ytYh
+         iZS0Tnm7upUFNV4rz/jTdN+gY4ZBclprJ8K71zct/Kn4dUjEg3NrwcomoViLqRX8+xn3
+         CB1g==
+X-Gm-Message-State: AOAM532YG0jaAi49DDqbxAj8nPq5qUR7j9f/vLk/XZyqKmrbD2ZHYKSw
+        krNcdG/e0xsj08nMqB2LU4qfnFeH7hu98w1glkE=
+X-Google-Smtp-Source: ABdhPJwkuPRp9kDdAIfjm6S9WYhpNKDD1u0NOmPXCGk5CMYW9JB8JYSJ0QQwATAMp2BprXSLKzO08xHwljc4VfAujKc=
+X-Received: by 2002:a05:6102:74c:b0:31b:a815:a83b with SMTP id
+ v12-20020a056102074c00b0031ba815a83bmr480903vsg.17.1644995811769; Tue, 15 Feb
+ 2022 23:16:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: linux-next: build failure after merge of the fbdev tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Yong Wu <yong.wu@mediatek.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220216112934.108a27ad@canb.auug.org.au>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20220216112934.108a27ad@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
+References: <1644949454-814-1-git-send-email-quic_c_sanm@quicinc.com> <1644949454-814-3-git-send-email-quic_c_sanm@quicinc.com>
+In-Reply-To: <1644949454-814-3-git-send-email-quic_c_sanm@quicinc.com>
+From:   Jun Li <lijun.kernel@gmail.com>
+Date:   Wed, 16 Feb 2022 15:16:40 +0800
+Message-ID: <CAKgpwJWEZ7275LihHqxg50cWNVNxUcGR8e7pM-V2bH=aodL7YA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] usb: dwc: host: add xhci_plat_priv quirk XHCI_SKIP_PHY_INIT
+To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Cc:     Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-arm-msm@vger.kernel.org,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:4m3B0S6nHClGaEmC8CdzNrV8+TNDg4BHiCc9W3pxM6uMBcudpwU
- GxB6eu3RBRe8XwyFKUhny88yb5sy+L2lYlAm2sssFhyaCmhGjLtq3G6kEpWwQ71eY4umEp0
- KvPnX6lElr7Z/L34aLgqGX9Uai9PsQMGXBcHybnB2hdRqR0X6Uoo7yHh1mWaXvk3YAm4hgV
- TCLNdeP5LntzrtwVsOAqg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:PRAH5dmLpBA=:CVZ9lQw5IOIlRS+If/s7bx
- 4KxuI+bjMO2pFHTDby4bI7dIMyZtDOi76/0nr21pMc5OOVCUEULoqKCfjy5Z26kpqqMgobinP
- aKFbwHds7vpGPZpxlVLZPVhAM+YMeD548w0MqW4pcKlQ2KYClFNYvafCjF8JOXYFOcZnFNG+0
- iD24cdjovU7tx6SFDfjlD11P3fDm6+rIw2LnUzWIjMfU2S7C6FD2QqoQV6z9ZrIpBNJ9V6BpM
- 9lhmYbpAfCvEUs/1s3NjP8m5+QhHchbIfC3QCuywJ6aw73kPhI9siv3DM2bhAAYHaM5srciEn
- ILWyzG6t0bBq/tKjy5nIRkInYqfME+XCaSwZfM0cDorM3M7Ka/2mSVGtUzoI0rtwFXcN4bHG5
- VjD+fzJYfT4VJ2A3tGdB6oLj1M2/5P4EOzH4qXyZOPdz/KopdlaV+Z3slyxpZ7iGpA84Tr8eR
- NtmbgDB3TDnQ1jLNZVymgQ5h+LdfrC8VtpSNUiwcecEXyzpgYSlgzVHy8GeKw1//U1au4X7+o
- gYSjkBMNEwJmG+O+RARW4ViXahKzqMwPoqzVRcO2K2/ZjDied2maXogA7L/vzG4cKy8rbCYCX
- fRkJo1Pncu4iNn4T0XyuNKiogEyXJuSJ7YnTezDjVWIb8Pp/XuG1rheZOBTdI+8M8yoMZf77f
- vfigb4xdCFbaM39jkmzl/fu3iQyLGfMRBTK3MSXvFWG3YHdaz2qularYgDynm0KQ9qb+Fqgzn
- klQ81EfeJY/sDmgDYEMqGoLuqww0byVKHA89pNJcOQtE6sejar7UPRKxaD4MAwRlzmB7JhO23
- pAuBTJPthxJpr8lK3Lu8gVpqCo/QN6VxvqBWYBpGmyIicmsNKPdSFcT3sUwsnS20vB2zqUQoF
- DzZ25Ff23uM3T3Fi/iPsy9euvq0wUzC9MRg0lKz33dQbzQbAxt9O2voGxYnUk2SHEOgAsmK6M
- 0D1uTm++YI/pF5Axvt7N1epvN1Fb5Z5UwGVbelCvh5hgEAhV7d5eMT+hJaYQm8T4Ig6l6OqZZ
- JfM8YruBv4BpDAjkwTWQ6R8s6WjJp2AVCaCHmehCqu9XZYPxv0UKo4yGNR/o/LBLlJ1nOa1kj
- 5KwoPeO3FsmUDs=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,33 +79,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/16/22 01:29, Stephen Rothwell wrote:
-> Hi all,
+Sandeep Maheswaram <quic_c_sanm@quicinc.com> =E4=BA=8E2022=E5=B9=B42=E6=9C=
+=8816=E6=97=A5=E5=91=A8=E4=B8=89 14:58=E5=86=99=E9=81=93=EF=BC=9A
 >
-> After merging the fbdev tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> dwc3 manages PHY by own DRD driver, so skip the management by
+> HCD core.
+> During runtime suspend phy was not getting suspend because
+> runtime_usage value is 2.
 >
-> drivers/video/fbdev/omap2/omapfb/dss/dss.c: In function 'dss_add_child_c=
-omponent':
-> drivers/video/fbdev/omap2/omapfb/dss/dss.c:1209:49: error: 'component_co=
-mpare_dev' undeclared (first use in this function); did you mean 'componen=
-t_master_del'?
->  1209 |         component_match_add(dev->parent, match, component_compar=
-e_dev, dev);
->       |                                                 ^~~~~~~~~~~~~~~~=
-~~~~~
->       |                                                 component_master=
-_del
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> ---
+>  drivers/usb/dwc3/host.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 >
-> Caused by commit
+> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> index eda8719..4a035a8 100644
+> --- a/drivers/usb/dwc3/host.c
+> +++ b/drivers/usb/dwc3/host.c
+> @@ -13,6 +13,14 @@
+>  #include <linux/platform_device.h>
 >
->   61038027aa13 ("video: fbdev: omapfb: Make use of the helper component_=
-compare_dev")
->
-> I have used the fbdev tree from next-20220215 for today.
+>  #include "core.h"
+> +#include <linux/usb/hcd.h>
+> +#include <linux/usb/xhci-plat.h>
+> +#include <linux/usb/xhci-quirks.h>
+> +
+> +
+> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci =3D {
+> +       .quirks =3D XHCI_SKIP_PHY_INIT,
+> +};
 
-Thanks Steven!
-I've dropped that patch now, so your next pull should be fine.
+It's better to create this xhci_plat_priv by each dwc3 glue layer,
+with that, we can use this priv to pass other flags and possibly
+override APIs by each glue driver which may not apply to all dwc3
+platforms.
 
-Helge
-
+thanks
+Li Jun
+>
+>  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
+>                                         int irq, char *name)
+> @@ -122,6 +130,13 @@ int dwc3_host_init(struct dwc3 *dwc)
+>                 }
+>         }
+>
+> +       ret =3D platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
+> +                       sizeof(struct xhci_plat_priv));
+> +       if (ret) {
+> +               dev_err(dwc->dev, "failed to add data to xHCI\n");
+> +               goto err;
+> +       }
+> +
+>         ret =3D platform_device_add(xhci);
+>         if (ret) {
+>                 dev_err(dwc->dev, "failed to register xHCI device\n");
+> --
+> 2.7.4
+>

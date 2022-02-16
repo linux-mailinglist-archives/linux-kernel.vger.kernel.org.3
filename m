@@ -2,200 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2C24B874F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 13:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 563134B875B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 13:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232676AbiBPMET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 07:04:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58336 "EHLO
+        id S232784AbiBPMJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 07:09:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231593AbiBPMEQ (ORCPT
+        with ESMTP id S232181AbiBPMJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 07:04:16 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BCB284236
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 04:04:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645013044; x=1676549044;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=nl8GK8mOI649s6l53KlxFSU4dpekbJIMHhJ7EE7RAqU=;
-  b=LgW0KIy4gS9gaJ28GpBKBu6TnpBphNMXpjk5EbipYTOzcJLAmIFS/hGR
-   ZAuLYw+NfH3oMR5HXsfa7C6WWkaRWfTQ8aK723Y1M4+59Bv6QfiE/kKgY
-   l6EC2/n+QdrKtpOIQ3hf7ddBxtpcTYlt3yL8xAUGfrsk+KRhW31tOOhBq
-   NIutjThu19A4hhjf0X8D9zdwHrzWQPMvFElLkwOfRe1WZr1ZAG3G/1Qsy
-   bd+le6RxuqbSu3xKkTALSxGdVbCTugVHTXKWALv943bi+Vtz3OiA9XSGq
-   BKokOHldz/cYZenhA/oBkXlv/0IsjtOrZhYd/3sQaHuJ/ROFcvc160iw+
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="249420156"
-X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="249420156"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 04:04:04 -0800
-X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="502995160"
-Received: from sphadnis-mobl1.amr.corp.intel.com (HELO [10.212.82.113]) ([10.212.82.113])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 04:04:01 -0800
-Message-ID: <7ed77377-1e6e-4329-1fda-87854f9bb938@linux.intel.com>
-Date:   Wed, 16 Feb 2022 12:03:59 +0000
+        Wed, 16 Feb 2022 07:09:17 -0500
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D09C5DAA
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 04:09:06 -0800 (PST)
+Received: by mail-oo1-xc32.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso2220316ooi.1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 04:09:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=DNlgyVaU8TjCWNLA871jCHNl9EtR9BXdeye9SGukbxg=;
+        b=eGRtd3uvmkREXDZjnXqRDyIBYLniWrQjkiNjafxwdQsgoyuPolmhW2LLFg4ryrBjoV
+         UrCfYOV53zNpuz8asAc5iR8iHDKUI0XoZg//bLBBuIs2qK3hrrFKIPDhjJBDFWM5+Y3D
+         mxx2Hi0yRImibKBHEIYFfoVgNBT07bsA2CEIRgUXO3fTiB2ijngIw6SefDg54tTkeBsc
+         H7pxXSLq4U6K3vTTU1TSRgqLEvcnHVn92QVvPTAYAJLbId8TmQXaFY7v2iNOXGdffPxq
+         xUmIdpohyOBXrC3ULs9Hpzx2zYb5OaCvZkfJF+J8m/qcloZGJhd9GtCVniWNsNNJd6RE
+         kkag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=DNlgyVaU8TjCWNLA871jCHNl9EtR9BXdeye9SGukbxg=;
+        b=X5DdmWe56h9JtBMsVvnPUqJ5DUGMUf3PKa7p+HjiviMOMo3/zLrj4+xiT0LPmNpTvE
+         Hdzdl+SqD+U6GP4BVe6x+7g5h2pHCRgDQFDFklERdkK7We/r51Y5H4Mr/mv2Il4bYTgt
+         va2qIwnoEjDnzBE+MwqTv62u9ISORBblNBbSagmVE3fCi8olr1mFuv9XOy50oXhml9Gq
+         SIHTaJmjefAkqgki8y2HrWgvU+/eYnDC3xVJwbyBOML9lUZMUXZ+ZwvI0aVR5lmfxxnc
+         U+p+9gTjm2ssIQD6engqkHi1vB15FWxR47Az+sf/BMdJTSpp13wVstzEaLFvO/TDsA7N
+         sWug==
+X-Gm-Message-State: AOAM530e7iSvJA6W1hjOvXsunG4uf6SDRqLUO+V2QiZTYN+vpwIzKQX5
+        rFFK4vbL7Ho/YYnIknOKQ0VryZgW/tKvEJaxXNM=
+X-Google-Smtp-Source: ABdhPJyMyxS0gjF1Vfq6YVT/r95eH7xw9pjzg1ecAmgrtUbSMsESJtYUp7jsR+iiF3Z/F4FjpjjQAnOfgPN1Fg00p1E=
+X-Received: by 2002:a05:6870:30e:b0:bf:9b7f:7c63 with SMTP id
+ m14-20020a056870030e00b000bf9b7f7c63mr326053oaf.84.1645013345405; Wed, 16 Feb
+ 2022 04:09:05 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [Intel-gfx] [PATCH v7 1/5] drm/i915/gsc: add gsc as a mei
- auxiliary device
-Content-Language: en-US
-To:     "Usyskin, Alexander" <alexander.usyskin@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Winkler, Tomas" <tomas.winkler@intel.com>,
-        "Lubart, Vitaly" <vitaly.lubart@intel.com>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>
-References: <20220213103215.2440248-1-alexander.usyskin@intel.com>
- <20220213103215.2440248-2-alexander.usyskin@intel.com>
- <f88b7780-cf4f-d2f5-f2ba-cd3d7bf2a0d4@linux.intel.com>
- <MW3PR11MB465112EBAFF7BC9681EF2D03ED349@MW3PR11MB4651.namprd11.prod.outlook.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <MW3PR11MB465112EBAFF7BC9681EF2D03ED349@MW3PR11MB4651.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Sender: mrazaraibrahim2010@gmail.com
+Received: by 2002:a4a:9621:0:0:0:0:0 with HTTP; Wed, 16 Feb 2022 04:09:04
+ -0800 (PST)
+From:   "Mr.Ibrahim" <ibrahimidewu4@gmail.com>
+Date:   Wed, 16 Feb 2022 13:09:04 +0100
+X-Google-Sender-Auth: bgMI-hpQsgoHN25lVd-BdcGUcS4
+Message-ID: <CAFvumbSsSnf2wrb2ZHa9ni+QixnFbKwNQdMCSwC9VBMWwNhKuw@mail.gmail.com>
+Subject: GREETINGS
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.5 required=5.0 tests=ADVANCE_FEE_2_NEW_FRM_MNY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FILL_THIS_FORM,FILL_THIS_FORM_LONG,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:c32 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ibrahimidewu4[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mrazaraibrahim2010[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
+        *  3.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  1.7 ADVANCE_FEE_2_NEW_FRM_MNY Advance Fee fraud form and lots of
+        *      money
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I have a business proposal in the tune of $19.3m USD for you to handle
+with me. I have opportunity to transfer this abandon fund to your bank
+account in your country which belongs to our client.
 
+I am inviting you in this transaction where this money can be shared
+between us at ratio of 50/50% and help the needy around us don=E2=80=99t be
+afraid of anything I am with you I will instruct you what you will do
+to maintain this fund.
 
-On 15/02/2022 15:22, Usyskin, Alexander wrote:
+Please kindly contact me with your information's if you are interested
+in this tranasction for more details(ibrahimidewu4@gmail.com)
 
->>> +{
->>> +	irq_set_chip_and_handler_name(irq, &gsc_irq_chip,
->>> +				      handle_simple_irq, "gsc_irq_handler");
->>> +
->>> +	return irq_set_chip_data(irq, dev_priv);
->>
->> I am not familiar with this interrupt scheme - does dev_priv get used at
->> all by handle_simple_irq, or anyone, after being set here?
+1. Your Full Name.....................
+2. Your Address......................
+3. Your Country of Origin.............
+4. Your Age..........................
+5. Your ID card copy and telephone number for easy communication...........=
+....
 
-What about this? Is dev_priv required or you could pass in NULL just as 
-well?
-
->>
->>> +}
->>> +
->>> +struct intel_gsc_def {
->>> +	const char *name;
->>> +	const unsigned long bar;
->>
->> Unusual, why const out of curiosity? And is it "bar" or "base" would be
->> more accurate?
->>
-> Some leftover, thanks for spotting this!
-> It is a base of bar. I prefer bar name here. But not really matter.
-
-Is it?
-
-+	adev->bar.start = def->bar + pdev->resource[0].start;
-
-Looks like offset on top of BAR, no?
-
->>> +{
->>> +	struct pci_dev *pdev = to_pci_dev(dev_priv->drm.dev);
->>> +	struct mei_aux_device *adev;
->>> +	struct auxiliary_device *aux_dev;
->>> +	const struct intel_gsc_def *def;
->>> +	int ret;
->>> +
->>> +	intf->irq = -1;
->>> +	intf->id = intf_id;
->>> +
->>> +	if (intf_id == 0 && !HAS_HECI_PXP(dev_priv))
->>> +		return;
->>
->> Isn't inf_id == 0 always a bug with this patch, regardless of
->> HAS_HECI_PXP, since the support is incomplete in this patch? If so I'd
->> be more comfortable with a plain drm_WARN_ON_ONCE(intf_id == 0).
->>
-> There will be patches for other cards that have pxp as soon as this is reviewed.
-> It is better to have infra prepared for two heads.
-
-My point is things are half-prepared since you don't have the id 0 in 
-the array, regardless of the HAS_HECI_PXP. Yes it can't be true now, but 
-if you add a patch which enables it to be true, you have to modify the 
-array at the same time or risk a broken patch in the middle.
-
-I don't see the point of the condition making it sound like there are 
-two criteria to enter below, while in fact there is only one in current 
-code, and that it that it must not be entered because array is incomplete!
-
->>> +
->>> +	if (!HAS_HECI_GSC(gt->i915))
->>> +		return;
->>
->> Likewise?
->>
->>> +
->>> +	if (gt->gsc.intf[intf_id].irq <= 0) {
->>> +		DRM_ERROR_RATELIMITED("error handling GSC irq: irq not
->> set");
->>
->> Like this, but use logging functions which say which device please.
->>
-> drm_err_ratelimited fits here?
-
-AFAICT it would be a programming bug and not something that can happen 
-at runtime hence drm_warn_on_once sounds correct for both.
-
->>>    }
->>> @@ -182,6 +185,8 @@ void gen11_gt_irq_reset(struct intel_gt *gt)
->>>    	/* Disable RCS, BCS, VCS and VECS class engines. */
->>>    	intel_uncore_write(uncore, GEN11_RENDER_COPY_INTR_ENABLE,
->> 0);
->>>    	intel_uncore_write(uncore, GEN11_VCS_VECS_INTR_ENABLE,	  0);
->>> +	if (HAS_HECI_GSC(gt->i915))
->>> +		intel_uncore_write(uncore,
->> GEN11_GUNIT_CSME_INTR_ENABLE, 0);
->>>
->>>    	/* Restore masks irqs on RCS, BCS, VCS and VECS engines. */
->>>    	intel_uncore_write(uncore, GEN11_RCS0_RSVD_INTR_MASK,	~0);
->>> @@ -195,6 +200,8 @@ void gen11_gt_irq_reset(struct intel_gt *gt)
->>>    	intel_uncore_write(uncore, GEN11_VECS0_VECS1_INTR_MASK,
->> 	~0);
->>>    	if (HAS_ENGINE(gt, VECS2) || HAS_ENGINE(gt, VECS3))
->>>    		intel_uncore_write(uncore,
->> GEN12_VECS2_VECS3_INTR_MASK, ~0);
->>> +	if (HAS_HECI_GSC(gt->i915))
->>> +		intel_uncore_write(uncore,
->> GEN11_GUNIT_CSME_INTR_MASK, ~0);
->>>
->>>    	intel_uncore_write(uncore,
->> GEN11_GPM_WGBOXPERF_INTR_ENABLE, 0);
->>>    	intel_uncore_write(uncore,
->> GEN11_GPM_WGBOXPERF_INTR_MASK,  ~0);
->>> @@ -209,6 +216,7 @@ void gen11_gt_irq_postinstall(struct intel_gt *gt)
->>>    {
->>>    	struct intel_uncore *uncore = gt->uncore;
->>>    	u32 irqs = GT_RENDER_USER_INTERRUPT;
->>> +	const u32 gsc_mask = GSC_IRQ_INTF(0) | GSC_IRQ_INTF(1);
->>
->> Why enable the one which is not supported by the patch? No harm doing it?
->>
-> No harm and the next patch will be soon, this patch unfortunately is long overdue.
-
-Just feels a bit lazy. You are adding two feature test macros to 
-prepare, so why not use them.
-
-Regards,
-
-Tvrtko
+Best regards,
+Mr.Ibrahim Idewu.

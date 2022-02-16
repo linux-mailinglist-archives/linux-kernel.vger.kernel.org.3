@@ -2,170 +2,418 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10D54B83F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A764B842F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbiBPJXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 04:23:39 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59602 "EHLO
+        id S232209AbiBPJY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 04:24:29 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:37276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232136AbiBPJXe (ORCPT
+        with ESMTP id S232093AbiBPJY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 04:23:34 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2060.outbound.protection.outlook.com [40.107.236.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C833AE6861;
-        Wed, 16 Feb 2022 01:23:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ka1g/ZPb+v2LQitpeNcrBJU0k4PkNQD+IirugZPhwX/atgHqZ1RqE/jGTPASuK3x08LlP+Vsxy4gnYyMSTLZ3Vx/0PXTA2Rd2VoL83pxwhN4witXjhA1vXWdQB7A9GI7Z/9SBlDcwQ/7UJFGLdswljFIIEcoH+bz84YFOAWMBEmvADXElrxAgajF/2NZD5WHLzc8BJwz6Da0jC/+zUrue19KIdl9BMNoa1uC19xrdBI866JsKG3lbOCbE+d0Z/FLl3AC4aqdn2/WtO2RQO5TvPlU8/dB867V0FtAmf26riB95I3Z79XgxtOwyKAxDhI+BkuD/fHAInwPBH/ZAMA1NA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1E3V/XFXAPpfQGael9rZzRGGmlMpTvUEZcL90X/5EMg=;
- b=oCvPZpQuhopWG6wegtTNz4kX7GxI5gH/DHmntN2ycDA/epqSBTM2fBWyHId2kSAwhGVKCAWeWPTGclUMVbJu5yao5b4+mQoms11cQl8QM0NKjQJzEyuQkvy1pQ4w+jfXy3vJ1vnBHh2+KOSGenUuVgKnzAt4heiJ1Kcz38OVOAqP61ynAPHV4cY57Hr1pdxLObIEnLAO/HQ7eneIsoIKpNU5WtUKWAH+PcKeuMoe5MqMz9z0ydMu0u/XuLHVE40cYm09p2zedbv1olPS7S0NtJAZWs94oTDYGAX2dJVqJacO2TYHoU198h/DMCY5TvbNm3bhPjSTcVrN5AG+3fEQDA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1E3V/XFXAPpfQGael9rZzRGGmlMpTvUEZcL90X/5EMg=;
- b=FzZEKGeEinc8PYt4Cui+BKpo2AgUjwyAxczFCdVSVQG+P5xTGAWonKIdHAIBqwyxMeTeQcnFxWiiOUBTiD+5qb8tZC6uFNku4hTxihcp3KyNci5lUaoSkVlcfXVBKoK5E/yZnUojPirXlHEykiSQGiBzCXYTQkN6jUdmQ36tLUUUdy6jj3G+qZ5P6fxFunImVcfx09xCtjAxEBvc1W766Y2TCHn92/QTxXYBflfTgwcuFFdkAbEbfhP4ScHxd8Jna6O1MaGHbVoQe1TNUTD05+j5tZHsmHwe09cQjq5WmCL0yPudz9gRQVlL1AJbhNjU/EESTIl+FojlG1srFKwx4Q==
-Received: from BN8PR04CA0061.namprd04.prod.outlook.com (2603:10b6:408:d4::35)
- by BL0PR12MB4609.namprd12.prod.outlook.com (2603:10b6:208:8d::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Wed, 16 Feb
- 2022 09:23:10 +0000
-Received: from BN8NAM11FT055.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:d4:cafe::31) by BN8PR04CA0061.outlook.office365.com
- (2603:10b6:408:d4::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.14 via Frontend
- Transport; Wed, 16 Feb 2022 09:23:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.235) by
- BN8NAM11FT055.mail.protection.outlook.com (10.13.177.62) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4975.11 via Frontend Transport; Wed, 16 Feb 2022 09:23:10 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 16 Feb
- 2022 09:23:09 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Wed, 16 Feb 2022
- 01:23:09 -0800
-Received: from mkumard.nvidia.com (10.127.8.13) by mail.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server id 15.2.986.9 via Frontend
- Transport; Wed, 16 Feb 2022 01:23:06 -0800
-From:   Mohan Kumar <mkumard@nvidia.com>
-To:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <robh+dt@kernel.org>,
-        <thierry.reding@gmail.com>, <tiwai@suse.com>,
-        <jonathanh@nvidia.com>, <spujar@nvidia.com>
-CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Mohan Kumar <mkumard@nvidia.com>
-Subject: [PATCH v3 6/6] arm64: tegra: Add hda dts node for Tegra234
-Date:   Wed, 16 Feb 2022 14:52:40 +0530
-Message-ID: <20220216092240.26464-7-mkumard@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220216092240.26464-1-mkumard@nvidia.com>
-References: <20220216092240.26464-1-mkumard@nvidia.com>
+        Wed, 16 Feb 2022 04:24:28 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F3B215C1B;
+        Wed, 16 Feb 2022 01:24:03 -0800 (PST)
+X-UUID: ffdfb0fbf316421c87b5923101cf081a-20220216
+X-UUID: ffdfb0fbf316421c87b5923101cf081a-20220216
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1809854372; Wed, 16 Feb 2022 17:23:50 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 16 Feb 2022 17:23:49 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 16 Feb 2022 17:23:49 +0800
+Message-ID: <3991ff9a505630b90acb4e720a6b73e055347257.camel@mediatek.com>
+Subject: Re: [PATCH v3, 2/5] dt-bindings: display: mediatek: add MT8186 SoC
+ binding
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <airlied@linux.ie>,
+        <jassisinghbrar@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <yongqiang.niu@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <fparent@baylibre.com>, <linux-mediatek@lists.infradead.org>,
+        <hsinyi@chromium.org>, <linux-arm-kernel@lists.infradead.org>
+Date:   Wed, 16 Feb 2022 17:23:49 +0800
+In-Reply-To: <4436154a38bfe7213299a578ff148d9f8223e101.camel@mediatek.com>
+References: <20220216084831.14883-1-rex-bc.chen@mediatek.com>
+         <20220216084831.14883-3-rex-bc.chen@mediatek.com>
+         <4436154a38bfe7213299a578ff148d9f8223e101.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ecb52475-d313-4424-1984-08d9f12df352
-X-MS-TrafficTypeDiagnostic: BL0PR12MB4609:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR12MB4609502B835D465FC345557EC1359@BL0PR12MB4609.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1079;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jDeWuZBIZRTRqEBozAi/VVaapbmcT/bNKsiLR4MsrHzQgJMwLZ5IZO9dqhyCVsqmHaUUOGuBsYyf+CrCejmW/mt1YNpItidtpmmREOBGUdfeOpjV6Jnttqq/9qMlxSpAkmSybvG3PY+gSwbvu8svZUXWbfYbddxd7Zusl8J0ZzNHfrDdOUyS6xD5YPA2nZKfiB6u39Zjqmm1HylC7LlLD8swutkv/sSidOTOJbzsn5QWVDY+e9LSrutPVngTutXwpqW1DKWMZxPpau52yMnujOuQfcxeYRbf4FSFhH/WEXa3Q3VOADdhkbAtq8eKSRPrXcjal9A5gEvcJmw/U7gEXz0P+RXNW+Q1OjEDyiY5ydoef9wQAVL/IhsSMCKLM6wtfuXTU7I4M/EVlXxtv3ixG1jPZ/6wLTzUy/fFuaBoBWFuSi8poMissuAA38pPvFXImt26F1f+D0BqS1R/MuQIGEA2iefzvcrfVcq/Ezme4RO1mWk12Xzmhg/gzh+Yox80PGkJrITCMTr1c+NqGwcxXqAN3RLoWVVOKSiVUFwscyYqMF4Jgko9MyEhxV9dBoW8wGrQ48cC+LDiF9dHSD0McAKSShMAInowwVUwDggO24ln4aOWRAO68X+E7gpH9PdtP6Tu5rX5bKxtl5Ze1iLSMBkZIJ+2h0e6LZmAseXJ0FtJQnjgpJ2UfZv2Y6mo7vTurD8knRoo0HfQWuguvfvqPjF1+XMWgCNq9NuLSbVhvto=
-X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(2906002)(186003)(8936002)(5660300002)(426003)(336012)(26005)(356005)(47076005)(7696005)(54906003)(110136005)(6636002)(36860700001)(2616005)(36756003)(4326008)(8676002)(86362001)(1076003)(6666004)(83380400001)(316002)(40460700003)(81166007)(70206006)(107886003)(508600001)(70586007)(82310400004)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2022 09:23:10.5671
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ecb52475-d313-4424-1984-08d9f12df352
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT055.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4609
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add HDA dts node for Tegra234 chip and for AGX orin platform.
+Hello CK,
 
-Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
----
- .../nvidia/tegra234-p3737-0000+p3701-0000.dts  |  6 ++++++
- arch/arm64/boot/dts/nvidia/tegra234.dtsi       | 18 ++++++++++++++++++
- 2 files changed, 24 insertions(+)
+Thanks for your review.
+I write the reply comments below:
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
-index efbbb878ba5a..792e4a8b272b 100644
---- a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
-+++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
-@@ -21,4 +21,10 @@
- 	serial {
- 		status = "okay";
- 	};
-+
-+	bus@0 {
-+		hda@3510000 {
-+			nvidia,model = "NVIDIA Jetson AGX Orin HDA";
-+		};
-+	};
- };
-diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-index cbebf1ee5958..a5271d33a458 100644
---- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-@@ -4,6 +4,7 @@
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/mailbox/tegra186-hsp.h>
- #include <dt-bindings/memory/tegra234-mc.h>
-+#include <dt-bindings/power/tegra234-powergate.h>
- #include <dt-bindings/reset/tegra234-reset.h>
- 
- / {
-@@ -394,6 +395,23 @@
- 			#interrupt-cells = <3>;
- 			interrupt-controller;
- 		};
-+
-+		hda@3510000 {
-+			compatible = "nvidia,tegra234-hda", "nvidia,tegra30-hda";
-+			reg = <0x3510000 0x10000>;
-+			interrupts = <GIC_SPI 60 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&bpmp TEGRA234_CLK_AZA_BIT>,
-+				 <&bpmp TEGRA234_CLK_AZA_2XBIT>;
-+			clock-names = "hda", "hda2codec_2x";
-+			resets = <&bpmp TEGRA234_RESET_HDA>,
-+				 <&bpmp TEGRA234_RESET_HDACODEC>;
-+			reset-names = "hda", "hda2codec_2x";
-+			power-domains = <&bpmp TEGRA234_POWER_DOMAIN_DISP>;
-+			interconnects = <&mc TEGRA234_MEMORY_CLIENT_HDAR &emc>,
-+					<&mc TEGRA234_MEMORY_CLIENT_HDAW &emc>;
-+			interconnect-names = "dma-mem", "write";
-+			status = "disabled";
-+		};
- 	};
- 
- 	sram@40000000 {
--- 
-2.17.1
+On Wed, 2022-02-16 at 17:17 +0800, CK Hu wrote:
+> Hi, Rex:
+> 
+> On Wed, 2022-02-16 at 16:48 +0800, Rex-BC Chen wrote:
+> > Add MT8186 SoC binding to AAL, CCORR, COLOR, DITHER, DPI, DSI,
+> > GAMMA, MUTEX, OVL, POSTMASK and RDMA.
+> > 
+> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  .../devicetree/bindings/display/mediatek/mediatek,aal.yaml   | 1 +
+> >  .../devicetree/bindings/display/mediatek/mediatek,ccorr.yaml | 5
+> > +++++
+> >  .../devicetree/bindings/display/mediatek/mediatek,color.yaml | 1 +
+> >  .../bindings/display/mediatek/mediatek,dither.yaml           | 1 +
+> >  .../devicetree/bindings/display/mediatek/mediatek,dpi.yaml   | 1 +
+> >  .../devicetree/bindings/display/mediatek/mediatek,dsi.txt    | 2
+> > +-
+> >  .../devicetree/bindings/display/mediatek/mediatek,gamma.yaml | 1 +
+> >  .../devicetree/bindings/display/mediatek/mediatek,mutex.yaml | 2
+> > ++
+> >  .../bindings/display/mediatek/mediatek,ovl-2l.yaml           | 5
+> > +++++
+> >  .../devicetree/bindings/display/mediatek/mediatek,ovl.yaml   | 5
+> > +++++
+> >  .../bindings/display/mediatek/mediatek,postmask.yaml         | 5
+> > +++++
+> >  .../devicetree/bindings/display/mediatek/mediatek,rdma.yaml  | 1 +
+> >  12 files changed, 29 insertions(+), 1 deletion(-)
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.y
+> > am
+> > l
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.y
+> > am
+> > l
+> > index 225f9dd726d2..7c27f61f336b 100644
+> > ---
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.y
+> > am
+> > l
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.y
+> > am
+> > l
+> > @@ -27,6 +27,7 @@ properties:
+> >            - enum:
+> >                - mediatek,mt2712-disp-aal
+> >                - mediatek,mt8183-disp-aal
+> > +              - mediatek,mt8186-disp-aal
+> >                - mediatek,mt8192-disp-aal
+> >                - mediatek,mt8195-disp-aal
+> >            - enum:
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr
+> > .y
+> > aml
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr
+> > .y
+> > aml
+> > index 6894b6999412..8ac87b5896ac 100644
+> > ---
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr
+> > .y
+> > aml
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr
+> > .y
+> > aml
+> > @@ -30,6 +30,11 @@ properties:
+> >                - mediatek,mt8195-disp-ccorr
+> >            - enum:
+> >                - mediatek,mt8192-disp-ccorr
+> > +      - items:
+> > +          - enum:
+> > +              - mediatek,mt8186-disp-ccorr
+> > +          - enum:
+> > +              - mediatek,mt8183-disp-ccorr
+> >  
+> >    reg:
+> >      maxItems: 1
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,color
+> > .y
+> > aml
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,color
+> > .y
+> > aml
+> > index bc83155b3b4c..d0a4b9eb71fd 100644
+> > ---
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,color
+> > .y
+> > aml
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,color
+> > .y
+> > aml
+> > @@ -37,6 +37,7 @@ properties:
+> >        - items:
+> >            - enum:
+> >                - mediatek,mt8183-disp-color
+> > +              - mediatek,mt8186-disp-color
+> >                - mediatek,mt8192-disp-color
+> >                - mediatek,mt8195-disp-color
+> >            - enum:
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dithe
+> > r.
+> > yaml
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dithe
+> > r.
+> > yaml
+> > index 9d89297f5f1d..9a08514ed909 100644
+> > ---
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dithe
+> > r.
+> > yaml
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dithe
+> > r.
+> > yaml
+> > @@ -26,6 +26,7 @@ properties:
+> >            - const: mediatek,mt8183-disp-dither
+> >        - items:
+> >            - enum:
+> > +              - mediatek,mt8186-disp-dither
+> >                - mediatek,mt8192-disp-dither
+> >                - mediatek,mt8195-disp-dither
+> >            - enum:
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
+> > am
+> > l
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
+> > am
+> > l
+> > index dd2896a40ff0..a73044c50b5f 100644
+> > ---
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
+> > am
+> > l
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
+> > am
+> > l
+> > @@ -22,6 +22,7 @@ properties:
+> >        - mediatek,mt7623-dpi
+> >        - mediatek,mt8173-dpi
+> >        - mediatek,mt8183-dpi
+> > +      - mediatek,mt8186-dpi
+> >        - mediatek,mt8192-dpi
+> >  
+> >    reg:
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.t
+> > xt
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.t
+> > xt
+> > index 36b01458f45c..c82b8b20de15 100644
+> > ---
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.t
+> > xt
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.t
+> > xt
+> > @@ -7,7 +7,7 @@ channel output.
+> >  
+> >  Required properties:
+> >  - compatible: "mediatek,<chip>-dsi"
+> > -- the supported chips are mt2701, mt7623, mt8167, mt8173 and
+> > mt8183.
+> > +- the supported chips are mt2701, mt7623, mt8167, mt8173, mt8183
+> > and
+> 
+> This is done in [1], and Xinlei has planed to transfer to yaml
+> format,
+> so I think you could remove this from this patch.
+> 
+> [1] 
+> 
+https://patchwork.kernel.org/project/linux-mediatek/patch/1643283773-7081-2-git-send-email-xinlei.lee@mediatek.com/
+> 
+> Regards,
+> CK
+
+OK.
+I think Xinlei will also push another series for MT8186 DPI.
+I will remove binding of DPI and DSI in next version.
+
+BRs,
+Rex
+> 
+> > mt8186.
+> >  - reg: Physical base address and length of the controller's
+> > registers
+> >  - interrupts: The interrupt signal from the function block.
+> >  - clocks: device clocks
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma
+> > .y
+> > aml
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma
+> > .y
+> > aml
+> > index 247baad147b3..6d96f6736d91 100644
+> > ---
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma
+> > .y
+> > aml
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma
+> > .y
+> > aml
+> > @@ -27,6 +27,7 @@ properties:
+> >            - const: mediatek,mt8183-disp-gamma
+> >        - items:
+> >            - enum:
+> > +              - mediatek,mt8186-disp-gamma
+> >                - mediatek,mt8192-disp-gamma
+> >                - mediatek,mt8195-disp-gamma
+> >            - enum:
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex
+> > .y
+> > aml
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex
+> > .y
+> > aml
+> > index 6eca525eced0..55391b5c08c4 100644
+> > ---
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex
+> > .y
+> > aml
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex
+> > .y
+> > aml
+> > @@ -34,6 +34,8 @@ properties:
+> >            - const: mediatek,mt8173-disp-mutex
+> >        - items:
+> >            - const: mediatek,mt8183-disp-mutex
+> > +      - items:
+> > +          - const: mediatek,mt8186-disp-mutex
+> >        - items:
+> >            - const: mediatek,mt8192-disp-mutex
+> >        - items:
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl-
+> > 2l.yaml
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl-
+> > 2l.yaml
+> > index 611a2dbdefa4..f7f89485a5ae 100644
+> > ---
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl-
+> > 2l.yaml
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl-
+> > 2l.yaml
+> > @@ -25,6 +25,11 @@ properties:
+> >            - const: mediatek,mt8183-disp-ovl-2l
+> >        - items:
+> >            - const: mediatek,mt8192-disp-ovl-2l
+> > +      - items:
+> > +          - enum:
+> > +              - mediatek,mt8186-disp-ovl-2l
+> > +          - enum:
+> > +              - mediatek,mt8192-disp-ovl-2l
+> >  
+> >    reg:
+> >      maxItems: 1
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.y
+> > am
+> > l
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.y
+> > am
+> > l
+> > index e71f79bc2dee..110e6b2747bc 100644
+> > ---
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.y
+> > am
+> > l
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.y
+> > am
+> > l
+> > @@ -40,6 +40,11 @@ properties:
+> >                - mediatek,mt8195-disp-ovl
+> >            - enum:
+> >                - mediatek,mt8183-disp-ovl
+> > +      - items:
+> > +          - enum:
+> > +              - mediatek,mt8186-disp-ovl
+> > +          - enum:
+> > +              - mediatek,mt8192-disp-ovl
+> >  
+> >    reg:
+> >      maxItems: 1
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,postm
+> > as
+> > k.yaml
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,postm
+> > as
+> > k.yaml
+> > index 6ac1da2e8871..22c333d09465 100644
+> > ---
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,postm
+> > as
+> > k.yaml
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,postm
+> > as
+> > k.yaml
+> > @@ -23,6 +23,11 @@ properties:
+> >      oneOf:
+> >        - items:
+> >            - const: mediatek,mt8192-disp-postmask
+> > +      - items:
+> > +          - enum:
+> > +              - mediatek,mt8186-disp-postmask
+> > +          - enum:
+> > +              - mediatek,mt8192-disp-postmask
+> >  
+> >    reg:
+> >      maxItems: 1
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.
+> > ya
+> > ml
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.
+> > ya
+> > ml
+> > index 8ef821641672..4f1c935cdf70 100644
+> > ---
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.
+> > ya
+> > ml
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.
+> > ya
+> > ml
+> > @@ -39,6 +39,7 @@ properties:
+> >                - mediatek,mt2701-disp-rdma
+> >        - items:
+> >            - enum:
+> > +              - mediatek,mt8186-disp-rdma
+> >                - mediatek,mt8192-disp-rdma
+> >            - enum:
+> >                - mediatek,mt8183-disp-rdma
+> 
+> 
 

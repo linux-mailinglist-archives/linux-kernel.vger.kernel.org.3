@@ -2,255 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B18B4B93A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 23:07:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 710674B93A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 23:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236335AbiBPWHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 17:07:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44786 "EHLO
+        id S236538AbiBPWIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 17:08:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbiBPWHG (ORCPT
+        with ESMTP id S229893AbiBPWIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 17:07:06 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD91170D78;
-        Wed, 16 Feb 2022 14:06:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645049213; x=1676585213;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eh2+wIJwPhsyAITQqGz0mlyqdm1obMslzcq+p1zNUzQ=;
-  b=f0jieK8bhAdFI/MKBCWp+pua7WedLsNDK7X0RjpJrS5+atayQZF8/V7G
-   Gz6DtASPwKDRWMl2yUvUT8UTOtKhK4IhgyO5erVo8jmcSCjsPTInyAtEA
-   Ytm8rFE7886kgsBmGJ0pobFS4mKxZI+Zb5gAYK21k/69qBGAJujdO4vO4
-   S7f+q+WNwc+MPVp0ys90/G/2hrFSxb6c+/nwtx/WsA3w6GC4Q9d9Yt8Jd
-   wGyij0crfhGsBdEC+TOLxbldFH91QDXY2RF5iUYavl5XzUYRrF+hh87F+
-   /eIVFrT/0wqYZHbFinjy0Dc7u06z/dPefImDvQc4/A/mOSCceCsUiiLmS
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="311476979"
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="311476979"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 14:06:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="500179434"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 16 Feb 2022 14:06:51 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKSRm-000BAC-JJ; Wed, 16 Feb 2022 22:06:50 +0000
-Date:   Thu, 17 Feb 2022 06:06:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     kbuild-all@lists.01.org, Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] lkdtm/usercopy: Expand size of "out of frame" object
-Message-ID: <202202170604.hO1q7HZU-lkp@intel.com>
-References: <20220216201743.2088344-1-keescook@chromium.org>
+        Wed, 16 Feb 2022 17:08:17 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E635A20190E
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 14:08:03 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id 124so9036150ybn.11
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 14:08:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=isOeCA/lltI/NtMrPVVj1ziTbz6DfftTb3dxLCJueHE=;
+        b=QFTt19Njzzlzy63R6XOWaK+BOF0FOWChqmc/M9e78fPs+omtOYOPssJtA1M1UeMQep
+         fM834StWNdigyWFGhvr0R2wQNODg9ecyoiUDm8MUJEonBw5zQLeq7xpWhpCZJdTQ8A9l
+         VoJoVbkTk1m7114F/QncmxAnD6e3rNlyXAl/IH59X71wOmKhYj1OfY/j1f8feFgS4rHc
+         M5mwG4eFrBr2bsz+BymtZg9vzGToVbefxS9UvQ3A2hn60/xDPSgI5f6fzEKvmABSEe4N
+         /hKHGR5ap0mie91vUbyVDpvUtLtFxXMP1mJX7lkNdcbVtRKPlTcOJMz0Os4boLNISOmL
+         nKeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=isOeCA/lltI/NtMrPVVj1ziTbz6DfftTb3dxLCJueHE=;
+        b=pJdCckIC7IBbRIYwtOKblzZwJ5Zn8QhP7SFBqT7wP/gJFdE9kcpQxXMoaMAYgiNrQE
+         1zfVAZ8JfJ/MKi5yVbSaMlyLCgWcjiUo90OoUHMaiLAJ5IqBQ6wneAjvii3iriqpvRbR
+         v6Gosq44qBzZFHYLHfz2sc6VW0ktqEKnobV8Hnj2hakx4rdmexIV3Q+7Q0AU4hAftqo+
+         KchmrHw4nAHhcLF7+SufgGrjiphTX/1TwLq/e+MZLJ4En9GzX6N/AelCNMliifaG57G/
+         5oUPpn3+/oFKm2LWT/rXvmatajlh2H/LurZGjTGyWDJg3Cii+DZlLEIE0CDsm/Lax/sR
+         /NoA==
+X-Gm-Message-State: AOAM5308KmMPIK1uIkUzwM4m5dsEXgVznB/cw7u+AOv6yre/8f156tkp
+        iu/tMbUljg2D9odisWHwK5Gd3GLW2OS+rSgBr+Cf7Q==
+X-Google-Smtp-Source: ABdhPJyYdk7xvOTu1IxnQ2DqJolSl8njTLOssKQ66A00X+WQV5jwJYz8Z70jBI4ZXbtdLyB7B0F/ENZZ1C8sD+Kcl04=
+X-Received: by 2002:a25:c794:0:b0:61d:7913:cefb with SMTP id
+ w142-20020a25c794000000b0061d7913cefbmr3911838ybe.375.1645049282776; Wed, 16
+ Feb 2022 14:08:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216201743.2088344-1-keescook@chromium.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220211103415.2737789-1-irogers@google.com> <20220211103415.2737789-13-irogers@google.com>
+ <Yg0FXbzNVpsIpS45@kernel.org> <CAP-5=fWkF+J30ixh1iDVGhBBASTgLY9nWbd9ibguRYeyLvpsew@mail.gmail.com>
+ <Yg1ar4/RCCWwQmJ0@kernel.org>
+In-Reply-To: <Yg1ar4/RCCWwQmJ0@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 16 Feb 2022 14:07:49 -0800
+Message-ID: <CAP-5=fXOXkxvPHAYz3xv23FTtJ8gtZ5b7AoGevQVK8k=yKRzFw@mail.gmail.com>
+Subject: Re: [PATCH v3 12/22] perf maps: Remove rb_node from struct map
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>,
+        James Clark <james.clark@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Song Liu <song@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Hao Luo <haoluo@google.com>, eranian@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
+On Wed, Feb 16, 2022 at 12:12 PM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Wed, Feb 16, 2022 at 09:36:20AM -0800, Ian Rogers escreveu:
+> > On Wed, Feb 16, 2022 at 6:08 AM Arnaldo Carvalho de Melo
+> > <acme@kernel.org> wrote:
+> > >
+> > > Em Fri, Feb 11, 2022 at 02:34:05AM -0800, Ian Rogers escreveu:
+> > > > struct map is reference counted, having it also be a node in an
+> > > > red-black tree complicates the reference counting.
+> > >
+> > > In what way?
+> > >
+> > > If I have some refcounted data structure and I want to add it to some
+> > > container (an rb_tree, a list, etc) all I have to do is to grab a
+> > > refcount when adding and dropping it after removing it from the list.
+> > >
+> > > IOW, in other words it is refcounted so that we can add it to a
+> > > red-black tree, amongst other uses.
+> >
+> > Thanks Arnaldo. So I'm not disputing that you can make reference
+> > counted collections. With reference counting every reference should
+> > have a count associated with it. So when symbol.c is using the list, a
+> > node may be referenced from a prev and a next pointer, so being in the
+> > list requires a reference count of 2. When you find something in the
+>
+> Humm, just one reference is needed for being in a list, removing from
+> the list needs locking the access to the list, removing the object,
+> unlocking the list and then dropping the access for the then out of the
+> list refcounted object, no?
 
-I love your patch! Yet something to improve:
+Just one reference count is needed but if we were looking to automate
+reference counting then we'd associate one reference count with every
+pointer to the object. So with the invasive doubly linked list that we
+know as list, there are two pointers to a node and so the reference
+count should really be two. Using just 1 as the reference count is
+really an optimization.
 
-[auto build test ERROR on char-misc/char-misc-testing]
-[also build test ERROR on soc/for-next kees/for-next/pstore v5.17-rc4 next-20220216]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> > list which reference count is that associated with? It doesn't matter
+> > normally as you'd increment the reference count again and return that.
+> > In the perf code find doesn't increment a reference count so I want to
+>
+> I'd say point that out and fix the bug, if you will return an object
+> from a list that is refcounted, grab the refcount before dropping the
+> list lock and then return it, knowing the lookup user will have a
+> refcount that will keep that object alive.
 
-url:    https://github.com/0day-ci/linux/commits/Kees-Cook/lkdtm-usercopy-Expand-size-of-out-of-frame-object/20220217-041936
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git e6cb9c167eeb8f90ab924666c573e69e85e700a0
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20220217/202202170604.hO1q7HZU-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/aa676e88f535bd79a3e22a1cc70c9b6cc51dbbfe
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Kees-Cook/lkdtm-usercopy-Expand-size-of-out-of-frame-object/20220217-041936
-        git checkout aa676e88f535bd79a3e22a1cc70c9b6cc51dbbfe
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash drivers/misc/lkdtm/
+I agree, but in doing that you need to make every user do a put and
+the problem snow balls.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> > return the "get" that belongs to the list. That's "get" singular,
+> > hence wanting to add in the pointer indirection that incurs cost. To
+> > make insertion and deletion work properly on list with a reference
+> > count means reworking list.h.
+> >
+> > The rbtree is the same problem only more-so, as you need pointers for
+> > parent, left and right child.
+> >
+> > > > Switch to having a map_rb_node which is a red-block tree node but
+> > > > points at the reference counted struct map. This reference is
+> > > > responsible for a single reference count.
+> > >
+> > > This makes every insertion incur in an allocation that has to be
+> > > checked, etc, when we know that maps will live in rb_trees, so having
+> > > the node structure allocated at the same time as the map is
+> > > advantageous.
+>
+> perf tries to mimic kernel code, but multithreading didn't come at the
+> very beginning, so, yeah, there are bugs and inconsistencies, which we
+> should fix.
+>
+> This discussion is how to do it, attempts like Masami's years ago
+> uncovered problems that got fixed, your current attempt is also
+> uncovering bugs and those are getting fixed, which is super cool.
 
-All errors (new ones prefixed by >>):
+Thanks. The approach I'm doing is dumb, it is a poor man's smart
+pointer by way of memory allocations and sanitizers. My hope from the
+beginning was that this is something lightweight enough that we can
+get it merged given that sanitizers alone weren't going to save us.
 
-   In file included from include/linux/kernel.h:29,
-                    from drivers/misc/lkdtm/lkdtm.h:7,
-                    from drivers/misc/lkdtm/usercopy.c:6:
-   drivers/misc/lkdtm/usercopy.c: In function 'do_usercopy_stack':
->> drivers/misc/lkdtm/usercopy.c:74:46: error: 'current_stack_pointer' undeclared (first use in this function); did you mean 'kernel_stack_pointer'?
-      74 |         pr_info("stack     : %px\n", (void *)current_stack_pointer);
-         |                                              ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:418:33: note: in definition of macro 'printk_index_wrap'
-     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                                 ^~~~~~~~~~~
-   include/linux/printk.h:519:9: note: in expansion of macro 'printk'
-     519 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~
-   drivers/misc/lkdtm/usercopy.c:74:9: note: in expansion of macro 'pr_info'
-      74 |         pr_info("stack     : %px\n", (void *)current_stack_pointer);
-         |         ^~~~~~~
-   drivers/misc/lkdtm/usercopy.c:74:46: note: each undeclared identifier is reported only once for each function it appears in
-      74 |         pr_info("stack     : %px\n", (void *)current_stack_pointer);
-         |                                              ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:418:33: note: in definition of macro 'printk_index_wrap'
-     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                                 ^~~~~~~~~~~
-   include/linux/printk.h:519:9: note: in expansion of macro 'printk'
-     519 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~
-   drivers/misc/lkdtm/usercopy.c:74:9: note: in expansion of macro 'pr_info'
-      74 |         pr_info("stack     : %px\n", (void *)current_stack_pointer);
-         |         ^~~~~~~
+> > So this pattern is common in other languages, the default kernel style
+> > is what at Google gets called invasive - you put the storage for list
+> > nodes, reference counts, etc. into the referenced object itself. This
+> > lowers the overhead within the struct, and I don't disagree it adds a
+> > cost to insertion, unless maps are shared which isn't a use-case we
+> > have at the moment. So this change is backing out an optimization, but
+> > frankly fixing this properly is a much bigger overhaul than this
+> > already big overhaul and I don't think losing the optimization is
+> > really costing that much performance - a memory allocation costs in
+> > the region of 40 cycles with an optimized implementation like
+> > tcmalloc. We also don't use the invasive style for maps_by_name, it is
+> > just a sorted array.
+> >
+> > A side note, I see a lot of overhead in symbol allocation and part of
+> > that is the size of the two invasive rbtree nodes (2 * 3 * 8 bytes =
+> > 48bytes). Were the symbols just referenced by a sorted array, like
+> > maps_by_name, insertion and sorting would still be O(n*log(n)) but
+> > we'd reduce the memory usage to a third. rbtree is a cool data
+> > structure, but I think we could be over using it.
+>
+> Right, numbers talk, so it would be really nice to use, humm, perf to
+> measure these changes, to help assess the impact and sometimes accept
+> things at first "ugly" versus performance improvements.
 
+Sure. Do you have a benchmark in mind? For cpumap, nsinfo and maps
+there is no overhead when the checking isn't enabled. For map, the
+refactoring of the list and rbtree add an indirection and a memory
+allocation.
 
-vim +74 drivers/misc/lkdtm/usercopy.c
+> > > We don't have to check if adding a data structure to a rbtree works, as
+> > > all that is needed is already preallocated.
+> >
+> > The issue here is that a find, or similar, wants to pass around
+> > something that is owned by a list or an rbtree. We can have the idea
+> > of ownership by adding a token/cookie and passing that around
+> > everywhere, it gets problematic then to spot use after put and I think
+> > that approach is overall more invasive to the APIs than what is in
+> > these changes.
+>
+> > A better solution can be to keep the rbtree being invasive and at all
+> > the find and similar routines, make sure a getted version is returned
+> > - so the code outside of maps is never working with the rbtree's
+> > reference counted version. The problem with this is that it is an
+> > overhaul to all the uses of map. The reference count checker would
+> > find misuse but again it'd be a far large patch series than what is
+> > here - that is trying to fix the code base as it is.
+>
+> I've been trailing on the discussion with Masami, so what you want is to
+> somehow match a get with a put by passing a token returned by a get to
+> the put?
 
-   > 6	#include "lkdtm.h"
-     7	#include <linux/slab.h>
-     8	#include <linux/vmalloc.h>
-     9	#include <linux/sched/task_stack.h>
-    10	#include <linux/mman.h>
-    11	#include <linux/uaccess.h>
-    12	#include <asm/cacheflush.h>
-    13	
-    14	/*
-    15	 * Many of the tests here end up using const sizes, but those would
-    16	 * normally be ignored by hardened usercopy, so force the compiler
-    17	 * into choosing the non-const path to make sure we trigger the
-    18	 * hardened usercopy checks by added "unconst" to all the const copies,
-    19	 * and making sure "cache_size" isn't optimized into a const.
-    20	 */
-    21	static volatile size_t unconst;
-    22	static volatile size_t cache_size = 1024;
-    23	static struct kmem_cache *whitelist_cache;
-    24	
-    25	static const unsigned char test_text[] = "This is a test.\n";
-    26	
-    27	/*
-    28	 * Instead of adding -Wno-return-local-addr, just pass the stack address
-    29	 * through a function to obfuscate it from the compiler.
-    30	 */
-    31	static noinline unsigned char *trick_compiler(unsigned char *stack)
-    32	{
-    33		return stack + unconst;
-    34	}
-    35	
-    36	static noinline unsigned char *do_usercopy_stack_callee(int value)
-    37	{
-    38		unsigned char buf[128];
-    39		int i;
-    40	
-    41		/* Exercise stack to avoid everything living in registers. */
-    42		for (i = 0; i < sizeof(buf); i++) {
-    43			buf[i] = value & 0xff;
-    44		}
-    45	
-    46		/*
-    47		 * Put the target buffer in the middle of stack allocation
-    48		 * so that we don't step on future stack users regardless
-    49		 * of stack growth direction.
-    50		 */
-    51		return trick_compiler(&buf[(128/2)-32]);
-    52	}
-    53	
-    54	static noinline void do_usercopy_stack(bool to_user, bool bad_frame)
-    55	{
-    56		unsigned long user_addr;
-    57		unsigned char good_stack[32];
-    58		unsigned char *bad_stack;
-    59		int i;
-    60	
-    61		/* Exercise stack to avoid everything living in registers. */
-    62		for (i = 0; i < sizeof(good_stack); i++)
-    63			good_stack[i] = test_text[i % sizeof(test_text)];
-    64	
-    65		/* This is a pointer to outside our current stack frame. */
-    66		if (bad_frame) {
-    67			bad_stack = do_usercopy_stack_callee((uintptr_t)&bad_stack);
-    68		} else {
-    69			/* Put start address just inside stack. */
-    70			bad_stack = task_stack_page(current) + THREAD_SIZE;
-    71			bad_stack -= sizeof(unsigned long);
-    72		}
-    73	
-  > 74		pr_info("stack     : %px\n", (void *)current_stack_pointer);
-    75		pr_info("good_stack: %px-%px\n", good_stack, good_stack + sizeof(good_stack));
-    76		pr_info("bad_stack : %px-%px\n", bad_stack, bad_stack + sizeof(good_stack));
-    77	
-    78		user_addr = vm_mmap(NULL, 0, PAGE_SIZE,
-    79				    PROT_READ | PROT_WRITE | PROT_EXEC,
-    80				    MAP_ANONYMOUS | MAP_PRIVATE, 0);
-    81		if (user_addr >= TASK_SIZE) {
-    82			pr_warn("Failed to allocate user memory\n");
-    83			return;
-    84		}
-    85	
-    86		if (to_user) {
-    87			pr_info("attempting good copy_to_user of local stack\n");
-    88			if (copy_to_user((void __user *)user_addr, good_stack,
-    89					 unconst + sizeof(good_stack))) {
-    90				pr_warn("copy_to_user failed unexpectedly?!\n");
-    91				goto free_user;
-    92			}
-    93	
-    94			pr_info("attempting bad copy_to_user of distant stack\n");
-    95			if (copy_to_user((void __user *)user_addr, bad_stack,
-    96					 unconst + sizeof(good_stack))) {
-    97				pr_warn("copy_to_user failed, but lacked Oops\n");
-    98				goto free_user;
-    99			}
-   100		} else {
-   101			/*
-   102			 * There isn't a safe way to not be protected by usercopy
-   103			 * if we're going to write to another thread's stack.
-   104			 */
-   105			if (!bad_frame)
-   106				goto free_user;
-   107	
-   108			pr_info("attempting good copy_from_user of local stack\n");
-   109			if (copy_from_user(good_stack, (void __user *)user_addr,
-   110					   unconst + sizeof(good_stack))) {
-   111				pr_warn("copy_from_user failed unexpectedly?!\n");
-   112				goto free_user;
-   113			}
-   114	
-   115			pr_info("attempting bad copy_from_user of distant stack\n");
-   116			if (copy_from_user(bad_stack, (void __user *)user_addr,
-   117					   unconst + sizeof(good_stack))) {
-   118				pr_warn("copy_from_user failed, but lacked Oops\n");
-   119				goto free_user;
-   120			}
-   121		}
-   122	
-   123	free_user:
-   124		vm_munmap(user_addr, PAGE_SIZE);
-   125	}
-   126	
+Yes, and that's the approach in ref tracker too:
+https://lwn.net/Articles/877603/
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> Wrt patch queue size, we can try to reduce it to series of at most 10
+> patches, that do leg work, rinse, repeat, I recently saw a discussion on
+> netdev, with Jakub Kicinski asking for patchsets to be limited to under
+> 10 patches for this exact same reason.
+>
+> I usually try to cherry pick as much as possible from a series, while it
+> being discussed, so that the patch submitter don't have to suffer too
+> much with keeping a long series building.
+>
+> I'm now willing and able to process things faster, that should help too,
+> I hope.
+
+It does, thanks! The small patch set size causes me a lot of work as I
+have to go and move things into constituent parts. For example:
+https://lore.kernel.org/linux-perf-users/YgaeAAKkdVBNbErT@kernel.org/
+I guess I should have done it from the outset.
+
+> > I think the having our cake and eating solution (best performance +
+> > checking) is that approach, but we need to get to a point where
+> > checking is working. So if we focus on (1) checking and fixing those
+> > bugs (the changes here), then (2) change the APIs so that everything
+> > is getted and fix the leaks that introduces, then (3) go back to being
+> > invasive I think we get to that solution. I like step (2) from a
+> > cleanliness point-of-view, I'm fine with (3) I'm just not sure anybody
+> > would notice the performance difference.
+>
+> I'll continue looking at what you guys did to try to get up to speed and
+> contribute more to this effort, please bear with me a bit more.
+>
+> - Arnaldo
+
+Np, tbh I didn't have some big agenda with this work. I was thinking
+through how I could solve the problem of:
+https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/
+Dmitry Vyukov suggested Eric Dumazet's ref tracker work but in looking
+at ref tracker I was concerned about needing a pair of values for
+every reference counted thing. It would add a lot to the API. The ref
+tracker work allocates a token/cookie for a get and that's where the
+idea of allocating an indirection comes from. It has worked remarkably
+well in combination with address and leak sanitizer, fixing the nsinfo
+issue which actually turned out to be a data race. There weren't any
+known issues with cpumap and maps, but it is good to have the
+reference count checking confirming this. map is a rats nest and I
+purposefully went after it as the worst case of what we could look to
+fix with the approach. I expected it to cause controversy, in
+particular the rbtree and list refactors - but heck, I'd throw away 1%
+performance for something like perf top not consuming gigabytes of RAM
+(not that I have any privilege to throw away performance :-) ).
+
+Anyway, I keep pushing along with the tidy up to the patches as a
+background job. I hope I can get v4 out this week.
+
+Another issue nagging at me from the pre-5.16 reverts is:
+https://lore.kernel.org/lkml/CAP-5=fX4-kmkm+qn9m22O_4A2_8j=uAm=vcXh9x2RqqDKEdnBg@mail.gmail.com/
+This requires a lot of Makefile cleanup. It'd be great if someone
+could take a look. There's also Debian builds being in a mess, I guess
+it is good to be busy.
+
+Thanks,
+Ian

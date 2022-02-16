@@ -2,90 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D78D4B8BD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C3CA4B8BE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235239AbiBPOz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 09:55:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58756 "EHLO
+        id S235270AbiBPO6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 09:58:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232406AbiBPOzz (ORCPT
+        with ESMTP id S232406AbiBPO6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 09:55:55 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C761F6B8E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 06:55:42 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id f17so4390322edd.2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 06:55:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iuYrqVGn1TXdwN+P98XHhqL2+XquzgdKMr559j4kzX0=;
-        b=m7KLBnpGSaAT+kElQbyWCpRqg8l5Xarj7SE9j9Q+Gl2zvdSTaYahgURCT8X5H2Ni2L
-         vKgECZZX8XD2Y+QnZUn27ISb3qicevOkHpXjolTw4zvDUEZ72k1XrDUvmMrxR54sLgeY
-         n13R9STJnkboF2nq0JYVV0CkTfuV7LwJVNvxNS5xWP5B6cH2rixzqtQf2Cdo2K3XlnwY
-         Y3/XG4x8s2oNS9/DZTMyIJntOp4KAtdJtIzNeA4e5c8HhqkwQdzAK+3eH3jMcrW9BiHV
-         j3lDpWbx9LLmAtuLKrS+VdGFzIfr2OJ8Hil2kSdMkWrSio4XnljeNfior5cdXBv/M9nm
-         55Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iuYrqVGn1TXdwN+P98XHhqL2+XquzgdKMr559j4kzX0=;
-        b=VXLP6g8245iT3EoSJ93PGGwZB/yV6shU/Q/AcXnE6QtXbtFz/5UBk8vpDWqrLB48vN
-         wjPDgE6JoKkoY0AfOzVWTZy7G5ej8dg1rrHHoWPhJhA5NmmUkQ/XaJqPZxuvylMRAVWL
-         Ml7W0SB7LTdHu9wd9Apt9k5bjYuvHstxZyRFU8IAcSJn5yKPatRssE5Nn3SjJGx0ZMON
-         iWn02W/+nqgxclLYOcuD5Qygeq/iEEySyDId32YUkFG3GYq245VrFU19nETN6MqjBWBo
-         Or9Rs439ulAc+SH7JBE9e4sA95FzwoWGmBSDlqKQYgDoAXIgroC/sFJmPKP4pD+LEvLI
-         1blA==
-X-Gm-Message-State: AOAM531CWJ7LFqp4QRf+f0rKJpNKxn4tLqGyCFUelxBjxJDYJsq0C5Uu
-        zf8JMo+EnBgcEbytb+k9DpEBBNgBosfqS3AJgMt/gg==
-X-Google-Smtp-Source: ABdhPJzRulNtz/zoAWp3FH3AaM0DWDfR2fpgNtKv4EW2Sx9/HjO3bwTxfgHobgEyuXG7kSkT/MQf3yK3aZjoHeh44u4=
-X-Received: by 2002:a05:6402:5194:b0:409:97ec:3bdc with SMTP id
- q20-20020a056402519400b0040997ec3bdcmr3466054edd.314.1645023340859; Wed, 16
- Feb 2022 06:55:40 -0800 (PST)
+        Wed, 16 Feb 2022 09:58:15 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FF96004F;
+        Wed, 16 Feb 2022 06:58:02 -0800 (PST)
+Date:   Wed, 16 Feb 2022 14:57:58 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1645023479;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EKs0Hzo9s/Ylg3jYir/Ngp+UMB3ioXvWouE0YNl2mtw=;
+        b=H0JXCL5CKMdTxtgvqVGXDPbaIOza7gqedMzvW8PIzxdV8jyP3PlwVkngDxLg1p3yRcEpt5
+        Fd7AtJhBLTrxfwzRBllmJkmcSY9rxm649ETmZD/RqWvAigRADIud8HI667CveUkxYNLHWI
+        iZ3bGlFtJmpwQqaVd9dqF8JwoqpWGD7bWNtgB/evCwjuyF6G8ykeG/HJcl1GcBNMLLIQ/P
+        fgn+tWEmg+VfaEdp8zXtYZd4VRKtbPJq3OulB+mtz+0979mKehzkSX7uSmE0nVVgKmNT1D
+        ATnCz1wwJJ0PdJpkunLs/+TKuditoMiu0o4yAhLQ4HmXcJ6gmYHTMpZwbu+KXQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1645023479;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EKs0Hzo9s/Ylg3jYir/Ngp+UMB3ioXvWouE0YNl2mtw=;
+        b=KhpW36DMpD9ZSF5T/ikpawAFOlI7cGDfBmni34y7FupHJI13rF1DbmYkUGHoj/27J1bt8G
+        8vAnOtt0ZmOQuVAA==
+From:   "tip-bot2 for Alexander Shishkin" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/core] perf/x86/intel/pt: Add a capability and config bit
+ for disabling TNTs
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220126104815.2807416-3-adrian.hunter@intel.com>
+References: <20220126104815.2807416-3-adrian.hunter@intel.com>
 MIME-Version: 1.0
-References: <20220212205048.43862-1-samuel@sholland.org>
-In-Reply-To: <20220212205048.43862-1-samuel@sholland.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 16 Feb 2022 15:55:30 +0100
-Message-ID: <CAMRc=Me8cmiJSu3dKDgzhKZchSYyC0KmnrLSDL0ckr_uASLv-g@mail.gmail.com>
-Subject: Re: [PATCH] gpio: rockchip: Reset int_bothedge when changing trigger
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jianqun Xu <jay.xu@rock-chips.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guillaume Savaton <guillaume@baierouge.fr>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <164502347832.16921.5715898038732914778.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 12, 2022 at 9:50 PM Samuel Holland <samuel@sholland.org> wrote:
->
-> With v2 hardware, an IRQ can be configured to trigger on both edges via
-> a bit in the int_bothedge register. Currently, the driver sets this bit
-> when changing the trigger type to IRQ_TYPE_EDGE_BOTH, but fails to reset
-> this bit if the trigger type is later changed to something else. This
-> causes spurious IRQs, and when using gpio-keys with wakeup-event-action
-> set to EV_ACT_(DE)ASSERTED, those IRQs translate into spurious wakeups.
->
-> Fixes: 3bcbd1a85b68 ("gpio/rockchip: support next version gpio controller")
-> Reported-by: Guillaume Savaton <guillaume@baierouge.fr>
-> Tested-by: Guillaume Savaton <guillaume@baierouge.fr>
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
+The following commit has been merged into the perf/core branch of tip:
 
-Queued for fixes, thanks!
+Commit-ID:     161a9a33702a2e65a4118dacb449505ac8ce3122
+Gitweb:        https://git.kernel.org/tip/161a9a33702a2e65a4118dacb449505ac8ce3122
+Author:        Alexander Shishkin <alexander.shishkin@linux.intel.com>
+AuthorDate:    Wed, 26 Jan 2022 12:48:15 +02:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Tue, 15 Feb 2022 17:47:11 +01:00
 
-Bart
+perf/x86/intel/pt: Add a capability and config bit for disabling TNTs
+
+As of Intel SDM (https://www.intel.com/sdm) version 076, there is a new
+Intel PT feature called TNT-Disable which is enabled config bit 55.
+
+TNT-Disable disables Taken-Not-Taken packets to reduce the tracing
+overhead, but with the result that exact control flow information is
+lost.
+
+Add a capability and config bit for TNT-Disable.
+
+Signed-off-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+Link: https://lore.kernel.org/r/20220126104815.2807416-3-adrian.hunter@intel.com
+---
+ arch/x86/events/intel/pt.c       | 8 ++++++++
+ arch/x86/include/asm/intel_pt.h  | 1 +
+ arch/x86/include/asm/msr-index.h | 1 +
+ 3 files changed, 10 insertions(+)
+
+diff --git a/arch/x86/events/intel/pt.c b/arch/x86/events/intel/pt.c
+index f339c88..aa66c0c 100644
+--- a/arch/x86/events/intel/pt.c
++++ b/arch/x86/events/intel/pt.c
+@@ -60,6 +60,7 @@ static struct pt_cap_desc {
+ 	PT_CAP(ptwrite,			0, CPUID_EBX, BIT(4)),
+ 	PT_CAP(power_event_trace,	0, CPUID_EBX, BIT(5)),
+ 	PT_CAP(event_trace,		0, CPUID_EBX, BIT(7)),
++	PT_CAP(tnt_disable,		0, CPUID_EBX, BIT(8)),
+ 	PT_CAP(topa_output,		0, CPUID_ECX, BIT(0)),
+ 	PT_CAP(topa_multiple_entries,	0, CPUID_ECX, BIT(1)),
+ 	PT_CAP(single_range_output,	0, CPUID_ECX, BIT(2)),
+@@ -112,6 +113,7 @@ PMU_FORMAT_ATTR(noretcomp,	"config:11"	);
+ PMU_FORMAT_ATTR(ptw,		"config:12"	);
+ PMU_FORMAT_ATTR(branch,		"config:13"	);
+ PMU_FORMAT_ATTR(event,		"config:31"	);
++PMU_FORMAT_ATTR(notnt,		"config:55"	);
+ PMU_FORMAT_ATTR(mtc_period,	"config:14-17"	);
+ PMU_FORMAT_ATTR(cyc_thresh,	"config:19-22"	);
+ PMU_FORMAT_ATTR(psb_period,	"config:24-27"	);
+@@ -121,6 +123,7 @@ static struct attribute *pt_formats_attr[] = {
+ 	&format_attr_cyc.attr,
+ 	&format_attr_pwr_evt.attr,
+ 	&format_attr_event.attr,
++	&format_attr_notnt.attr,
+ 	&format_attr_fup_on_ptw.attr,
+ 	&format_attr_mtc.attr,
+ 	&format_attr_tsc.attr,
+@@ -302,6 +305,7 @@ fail:
+ 			RTIT_CTL_MTC		| \
+ 			RTIT_CTL_PWR_EVT_EN	| \
+ 			RTIT_CTL_EVENT_EN	| \
++			RTIT_CTL_NOTNT		| \
+ 			RTIT_CTL_FUP_ON_PTW	| \
+ 			RTIT_CTL_PTW_EN)
+ 
+@@ -360,6 +364,10 @@ static bool pt_event_valid(struct perf_event *event)
+ 	    !intel_pt_validate_hw_cap(PT_CAP_event_trace))
+ 		return false;
+ 
++	if (config & RTIT_CTL_NOTNT &&
++	    !intel_pt_validate_hw_cap(PT_CAP_tnt_disable))
++		return false;
++
+ 	if (config & RTIT_CTL_PTW) {
+ 		if (!intel_pt_validate_hw_cap(PT_CAP_ptwrite))
+ 			return false;
+diff --git a/arch/x86/include/asm/intel_pt.h b/arch/x86/include/asm/intel_pt.h
+index d1ef9cb..c796e9b 100644
+--- a/arch/x86/include/asm/intel_pt.h
++++ b/arch/x86/include/asm/intel_pt.h
+@@ -14,6 +14,7 @@ enum pt_capabilities {
+ 	PT_CAP_ptwrite,
+ 	PT_CAP_power_event_trace,
+ 	PT_CAP_event_trace,
++	PT_CAP_tnt_disable,
+ 	PT_CAP_topa_output,
+ 	PT_CAP_topa_multiple_entries,
+ 	PT_CAP_single_range_output,
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index 79b392d..efd34cf 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -206,6 +206,7 @@
+ #define RTIT_CTL_PTW_EN			BIT(12)
+ #define RTIT_CTL_BRANCH_EN		BIT(13)
+ #define RTIT_CTL_EVENT_EN		BIT(31)
++#define RTIT_CTL_NOTNT			BIT_ULL(55)
+ #define RTIT_CTL_MTC_RANGE_OFFSET	14
+ #define RTIT_CTL_MTC_RANGE		(0x0full << RTIT_CTL_MTC_RANGE_OFFSET)
+ #define RTIT_CTL_CYC_THRESH_OFFSET	19

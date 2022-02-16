@@ -2,171 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75F34B8A7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:42:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 245824B8A7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:42:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233927AbiBPNmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:42:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47522 "EHLO
+        id S234650AbiBPNmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 08:42:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiBPNmN (ORCPT
+        with ESMTP id S234649AbiBPNmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:42:13 -0500
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650787E0B9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:42:00 -0800 (PST)
-Received: by mail-qk1-x731.google.com with SMTP id n185so1676672qke.5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:42:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6j4YO9EeLP9xv8Xofu+6ziA8nbjvJoJDR5KXEsjK89o=;
-        b=yf6JAkflOueXZXjKL+iAIQxIwZIGxKZ7CY258oto5DyyFf5IthKzMVJM2DeQRRhOqk
-         l8ueu39PfduoZtUvNjM9OphHk4pJBh+GyvNFLoGJIMSCyg9q9JxYTE2hoaVuu5iiU+On
-         dbEUrxVOsGwKNq2e8Y5n82fxvVXjPG85mn9ZmvyCiU+ZTG2FgeHe+3gGx0uNeIel9kXv
-         U05clhL49ren8zZ23jryW+YpeFtqO4F7BgH7LO01ddgi+a0kfUFHUTujF/CGFYH1IvC1
-         q9SNuZXU7wBDt2nsjtk5yj1vaXdMK9au30VeEvSihkUlrWXbu21EL0MQl1fjOXovJh1l
-         SPPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6j4YO9EeLP9xv8Xofu+6ziA8nbjvJoJDR5KXEsjK89o=;
-        b=tTwKdwneGpEBwUU2RaVoz57Q2oIFLoEXRPLUqg7BuxCd7rkwkDsDwnGrPEQXt++LYc
-         XtMrNQefBUGrP+VkY6oC13WzxewltZkGQwmeABmC7AOYtVzQ+LAcNjOeNqTVVIfL5T6U
-         M37a35wMkL8Pi5OVFs+3KduxoWQ1vO/WeMenHiVFT0UsjL/CzKoXlmCJITz/WqErQ38l
-         x6Hh+IzOrCPsy82A5zhmba/5YU2ekXkfJ3Nw+hx4ypRbFvjugje13GkSCGB8tH8Slr4a
-         lMTnOdGt/NDGitTbd7Ptzo5uSx1oQ35eCYuFRdX28XIhvj63rPqRAitWUhmSPwKyV0jt
-         eyMw==
-X-Gm-Message-State: AOAM533ajqDnsYCtp4d0FaQxKDLDLaIH9zR4KRhuGHJl8hyL0CP1P1R4
-        JHNEvYiByiqOBWk1GXXNrm16Lw==
-X-Google-Smtp-Source: ABdhPJzFphhQVJqA67KCg9ZUhVDEZdpxfr6kz8Rh2VHfiSVWGlE0XV5lyzkM4ska8HCF3TAoDvKWlQ==
-X-Received: by 2002:a05:620a:991:b0:508:18c1:e4d with SMTP id x17-20020a05620a099100b0050818c10e4dmr1183003qkx.479.1645018919368;
-        Wed, 16 Feb 2022 05:41:59 -0800 (PST)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id t11sm13670938qkp.82.2022.02.16.05.41.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 05:41:58 -0800 (PST)
-Message-ID: <8481b845-31c2-a830-4fe1-27798618fc2e@linaro.org>
-Date:   Wed, 16 Feb 2022 07:41:56 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 01/25] bus: mhi: Fix pm_state conversion to string
+        Wed, 16 Feb 2022 08:42:17 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2059.outbound.protection.outlook.com [40.107.244.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68DA8093F
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:42:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YmrrvS43mSz5mbrN1wtWL4DcOZAe7dIZzTrN47HTVVX/9QDAISoy82wcxOOuZ7WXd0CglhucthPEVx/HwpmOxqvl/V5aw4QXi0TTsEA+bSfMIdSM1TCGL7Vs8jn1ZUUBjNee3F4qVsuHOJZQPzNfEGJY9A1SY5Z8E/ckT54NtESt78AJpLnIWeEdJCEyufmtIYjiDaFGj3H/G3RO5PxxCICBDLoiDT3ldDW4JDeh360cYFaKJ0QBcwsR1SFQhO1GwIKoJz7/AU7usy42YSVnpxNbF0vLkjgchfGBUR9+IMT5Qy8MDml9OYB5OaV+sHw8hGuCmjJc4a/q2CXCUrdJRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MRvHex/P6+IYRzQ+iKoeMyW8iy32HcnEXkeklbzf7rs=;
+ b=HHFtSKX+Jm8vV5I8v0k2EFK8LB3IhsSkDXw0Oluwk7AWw0VlcvAmMgtv+bLZylwdoUdR55ytavB0hvkb8MOlfGarrmyln95WQKC5NoV091P50KQPkY1HHf1i+/4mept9fbeseOHLOnucXtjqFIzswCQY/dbkY09dO53hDLyc8YSC5miiJ/6KVZcpMsn94cHMgbMx5OCnoYJtY2ni0kRhS6GptYWywrzK8Es1grJggls0dQ1l9nhzd1r1RWaOqh4Vk59FBMBypE7+4OyALXSVo8qRqjiFd4jxSbMT2vaa3dwMOUGz8+2uLfzn2lve/+dYe3San+POYj0TKocjJpT9Iw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MRvHex/P6+IYRzQ+iKoeMyW8iy32HcnEXkeklbzf7rs=;
+ b=bfeWC+YojsRi1H19p9/ZLKan14F4OKkr30tYRhsDFAjUKzLzIfRydFMNGeYzqQIZ7xQE9S1AzAxdqyc4DyndUbCQxgLtFkPvDxSN22bd8a1rZ97lw4Vzeuk+EVfIpBMj+8GsuYSlEQQsi77Muosfywrk+Xv/+7z7prHuyEFCQ5c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15)
+ by CH0PR12MB5042.namprd12.prod.outlook.com (2603:10b6:610:e1::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.15; Wed, 16 Feb
+ 2022 13:42:02 +0000
+Received: from BL1PR12MB5157.namprd12.prod.outlook.com
+ ([fe80::692d:9532:906b:2b08]) by BL1PR12MB5157.namprd12.prod.outlook.com
+ ([fe80::692d:9532:906b:2b08%4]) with mapi id 15.20.4995.014; Wed, 16 Feb 2022
+ 13:42:02 +0000
+Message-ID: <579aec6b-78d1-57af-8e17-59cbe59f168a@amd.com>
+Date:   Wed, 16 Feb 2022 07:41:59 -0600
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v4] x86/cpu: clear SME feature flag when not in use
 Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
-        quic_bbhatt@quicinc.com, quic_jhugo@quicinc.com,
-        vinod.koul@linaro.org, bjorn.andersson@linaro.org,
-        dmitry.baryshkov@linaro.org, quic_vbadigan@quicinc.com,
-        quic_cang@quicinc.com, quic_skananth@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Davey <paul.davey@alliedtelesis.co.nz>,
-        Hemant Kumar <hemantk@codeaurora.org>, stable@vger.kernel.org
-References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
- <20220212182117.49438-2-manivannan.sadhasivam@linaro.org>
- <0c95c9a5-cf66-dcec-bfde-0ca201206c8b@linaro.org>
- <20220216113353.GB6225@workstation>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <20220216113353.GB6225@workstation>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Lendacky <Thomas.Lendacky@amd.com>, hughsient@gmail.com,
+        Martin Fernandez <martin.fernandez@eclypsium.com>,
+        linux-kernel@vger.kernel.org, Brijesh Singh <brijesh.singh@amd.com>
+References: <20220216034446.2430634-1-mario.limonciello@amd.com>
+ <YgzTCtlMq9+4IsZ4@zn.tnic>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <YgzTCtlMq9+4IsZ4@zn.tnic>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH2PR19CA0009.namprd19.prod.outlook.com
+ (2603:10b6:610:4d::19) To BL1PR12MB5157.namprd12.prod.outlook.com
+ (2603:10b6:208:308::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 36ad91ea-8c51-4bea-9920-08d9f1521cf9
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5042:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR12MB50422D59F02441C45B1CEF9EE2359@CH0PR12MB5042.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1360;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: J1lZvbsdlP0zxe73h5GjhLsSvA/rxqFhoFUzO1/OMsHakYVWMes6gvBlQAHyRj59QsnrLOeYqVnNSCH2mSG0t3y4WGNxeebldeAD/k8ahxKsKIXjNjYqJCYP948emtIMaYYGbYLH+U5VTJc0luzxi6iIjr8YMcpj6XPHiEpKak8GXVxulSp4H2OJeL/C+ibt6C6M9HiI8g4+9NiWFA5SFmCllbn+8HJ6RC7/sQE7dBCboGxvvuxazjNWCOJm723CE7qr+0qiRx2KmDvvSLNXq3OcbOR9zpov7diTvQURLPIxv1Zf+oY2B3sfVlW4Bn0iaBRUYDMqYeitdLHeJkFsPoJmVav6dQqKYn2e5jzWzcLVRwmUH/BFyM4Y/p4f3e8cS6ZF9+HyzLAjb5kVKWg+5YFqmBhStJzv3BvO945Y/NxLIQ2FfqzoQKLA2/fkraRpOPMlfQBCwpJvY++cJA7XoT5piccBlP8J+WDL6gHSxVUDxbQAUexBaXXQ+czFIiTzKfMt51i5o/ibwsLqMve34aYK5DU4TYo40a62ydyweHALrryAjmmK5Yf5cBn/tJJzgjX9aUznLRHmZ0SZp6jS7d0m8MUugzzauBXRUmfibQVp8q/E8EWJsmFidEpMZrRMSfe5NF6u/c0hPidNQE3yyThrkOU0alFjfM2Mjs+rwZYSTi4qdeeOA7LWL7yXV0ORazl5BqRFZLfRiHhJpqoSt5y1UO4I/dxaeaUpo8EC7LGmWdk8ECtxerhzH9JBR+Ul
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5157.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(8676002)(6486002)(66556008)(4744005)(4326008)(6666004)(31686004)(6506007)(36756003)(66476007)(83380400001)(5660300002)(38100700002)(8936002)(31696002)(2906002)(86362001)(316002)(26005)(508600001)(54906003)(6916009)(2616005)(53546011)(6512007)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UHNCWEpjS2Q5cDExYTZYWm9aMmQ5b0RpSnVscFoxQnp3VHdmTU5KN0xjTWo1?=
+ =?utf-8?B?RnhvSHZ3S0d3QkRnaFJWVW5BbkdORkc3MXBxSiszSDJnQTdDSW1HWkJReDVa?=
+ =?utf-8?B?ZEs1UzN3S2VZcU1adlRkYWNQTEVPWVkrNnBCWU5yMUxTR2hpUlFFUHZaQUNz?=
+ =?utf-8?B?T0t3TnlmblRnbVhFQjE2TG0rYm0ydEo3T0dWREd6dEVpQkpqckwyd0RtWE9y?=
+ =?utf-8?B?WHVzaVd0eVN5U0JudFBoNDdpanRvdDUrS1kzWWJWeEduVmJRaUluSkJsWEFv?=
+ =?utf-8?B?LytUNmZ6aUVCTVdERGdQV2lvcStPVlJFbm0vWUdmTFlpU0QyRVZTREJLdEh0?=
+ =?utf-8?B?SlVBZlovbnlablQycTF4NUs3ZkJmTzc1aklWTEIxQmpHS0FMUWRvQm5MNWFh?=
+ =?utf-8?B?TGwyOVQzMDBXQlgxNXBVcWl6Q3ppRW1mMnNsK0FZT2pXWEFpRzRuWFRoN1lY?=
+ =?utf-8?B?ZFFVakdkSmk0QVVQRVd6ZHFFN0pYYzNzN2ljVHJUMU5nM2EwaUlTM3RBYkxn?=
+ =?utf-8?B?YnlhK2x2QXFZVUFudlJ6NkZKYWFsVXN6SXpHeFZ3NlR6RzZ3Z05wdFFOWE5i?=
+ =?utf-8?B?dHVqSGM2eHgzT2dMOU5EdmUrNFFQR2svV3VBa0lKTFlHaHE3WHBlZlh1bXJX?=
+ =?utf-8?B?SmFrTFR5ZWtvLytmVGtwRkZ3NFZnTWhZTktaMEFtR01vc2RxdnA2aThvSFNF?=
+ =?utf-8?B?VDA3WGZtMzVIWWlsOWQ0dWJ3NklIUldMMVNWRlo0VjJaRXpBd295WkxtSGQx?=
+ =?utf-8?B?eUZXZzFGbXJ5ZTlwbnpHNGpuc0JBWVZtR2RPdVlNaXJFQ3VBcWxZWUVldTFR?=
+ =?utf-8?B?MkloTno3M2dWVkVsTU9ka0E1bHYvbGFydnp5dS9iSmVUQ05QRUdBYkVYUSs1?=
+ =?utf-8?B?OEhxYU9aTGlLaWJSeWFybU4vUUh3cndpNklkNUk0Nm02aXdmSWRXTkZFS0cy?=
+ =?utf-8?B?Zy9PR2JQVkZrMktFeVNjSTdyaGRBZEhOQnNmRlhITEI5M2M3Nk5yVkJSbTQv?=
+ =?utf-8?B?czlFQzEwNFAxdEVuWXViMCtHMnllbGRWYUVjRGU2cHR3VWJWSzh2OUlKWXVp?=
+ =?utf-8?B?Wmd5N09pa1FMc1FCRkRvQVUyTktTcHNuWHdId3BpMmlhQzFBeTVnY0h1ODNJ?=
+ =?utf-8?B?dTFnR3dkSkwzeWJCUldRL254bEozdE02aDFMU2NpN3FaNUFKTzNPVDdTNUZF?=
+ =?utf-8?B?dW5qanlDMkJHUTBFbGVXTk14MHJRQUxuM0FzU0c2K3lUY2xsN0NPVERGZWJN?=
+ =?utf-8?B?M25DR3ExOFd5bStKTUhEellJL2szWS9zOE1DSDZETnpjRnhhRzFJMU15QXVq?=
+ =?utf-8?B?UTNjdGVGNTFSMk9sZmk2NlM0YWxqeFFKUUgrZWZnbVdvL0VmTU1HdzVrYW0y?=
+ =?utf-8?B?REhVbFVpUDZmWXMvdWpPak4zVmpVQTd1aDFaYThVK1ZQS1JLUy9FT3dodVFj?=
+ =?utf-8?B?SDlyR3NsZVRCc2p5NHFjWnRSaTFJUVFkZVVHcXh0S3h0NlRpS3dYbzdKZHVm?=
+ =?utf-8?B?a0JtSmZkUURUcDJBNytHSjUvUlVsVU5qaXkwR1ZWN0VZVWUyNCsrYnFRc1lv?=
+ =?utf-8?B?TStna1ZpTzEwN1dEOEt2MXkvRm0rdlFHSmFKRUZVZVZlVkpVUDZsVkw0SUpp?=
+ =?utf-8?B?VzVtTjU0NkIxMVgwTG1TN2o3Z21FaDRGTlovOGQyMXQ4UDdYVEJSREZjUTZN?=
+ =?utf-8?B?SnA4M0pyeVRJVmVFeXJ0NTVIM2Y2L28zUUdEZk9Kd2s4b3JyYk5UcmtkWVpp?=
+ =?utf-8?B?MjYzTHV2a21jbm1kcWdGQzZmdGZ5TTU0cUpmbmtmMWwrTU1GekFZQ0NFMkdm?=
+ =?utf-8?B?VDNoejl1anRmNHRjMHdaVWhYWEZzYUthT0JaR291VjlWUnE0QnZzZlhNeFY1?=
+ =?utf-8?B?Mkg2Rk13WUlrOFM4czFBT3VjRHpRVEMwbStVSnc4MWVnS3piNS85eFVkU2sy?=
+ =?utf-8?B?RTllRURkcWtRYnNLbTd6QXcxNlhIVFVWcVhUSXBjUDVySkpKV3NBUlIyUG53?=
+ =?utf-8?B?dFNpdlZ1RGFoWWJIbU1tQ2VTRmZCaEhvOFRhVFVUd0ZYOEtVU1k3bS95cUpm?=
+ =?utf-8?B?dXB0RTJmcFJpYXd6THlsa3NIS0luc1R2S09wK3Bod0JFYmgyL0l6b3pmc0w5?=
+ =?utf-8?B?SmtYWTJpT1JSY2VxY28xR3VMNlpvUy9BU0NqUTBTellmUzBZMmExam9ZQklI?=
+ =?utf-8?Q?9yvWvHe//UX1Xa/+LFkyTWc=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36ad91ea-8c51-4bea-9920-08d9f1521cf9
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5157.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2022 13:42:02.7242
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6W51ekiI0ase7Qrbtuuk7sTFULH7al+XCUd0lYQt+0GdC9U/CMw+SfwUBg0GPE9XTWbqpK1JNiqtUX/EOixerg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5042
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/16/22 5:33 AM, Manivannan Sadhasivam wrote:
-> On Tue, Feb 15, 2022 at 02:01:54PM -0600, Alex Elder wrote:
->> On 2/12/22 12:20 PM, Manivannan Sadhasivam wrote:
->>> From: Paul Davey <paul.davey@alliedtelesis.co.nz>
->>>
->>> On big endian architectures the mhi debugfs files which report pm state
->>> give "Invalid State" for all states.  This is caused by using
->>> find_last_bit which takes an unsigned long* while the state is passed in
->>> as an enum mhi_pm_state which will be of int size.
->>
->> I think this would have fixed it too, but your fix is better.
->>
->> 	int index = find_last_bit(&(unsigned long)state, 32);
->>
->>> Fix by using __fls to pass the value of state instead of find_last_bit.
->>>
->>> Fixes: a6e2e3522f29 ("bus: mhi: core: Add support for PM state transitions")
->>> Signed-off-by: Paul Davey <paul.davey@alliedtelesis.co.nz>
->>> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
->>> Reviewed-by: Hemant Kumar <hemantk@codeaurora.org>
->>> Cc: stable@vger.kernel.org
->>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->>> ---
->>>    drivers/bus/mhi/core/init.c | 8 +++++---
->>>    1 file changed, 5 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/bus/mhi/core/init.c b/drivers/bus/mhi/core/init.c
->>> index 046f407dc5d6..af484b03558a 100644
->>> --- a/drivers/bus/mhi/core/init.c
->>> +++ b/drivers/bus/mhi/core/init.c
->>> @@ -79,10 +79,12 @@ static const char * const mhi_pm_state_str[] = {
->>>    const char *to_mhi_pm_state_str(enum mhi_pm_state state)
->>
->> The mhi_pm_state enumerated type is an enumerated sequence, not
->> a bit mask.  So knowing what the last (most significant) set bit
->> is not meaningful.  Or normally it shouldn't be.
->>
->> If mhi_pm_state really were a bit mask, then its values should
->> be defined that way, i.e.,
->>
->> 	MHI_PM_STATE_DISABLE	= 1 << 0,
->> 	MHI_PM_STATE_DISABLE	= 1 << 1,
->> 	. . .
->>
->> What's really going on is that the state value passed here
->> *is* a bitmask, whose bit positions are those mhi_pm_state
->> values.  So the state argument should have type u32.
->>
+On 2/16/2022 04:33, Borislav Petkov wrote:
+> On Tue, Feb 15, 2022 at 09:44:46PM -0600, Mario Limonciello wrote:
+>> @@ -607,6 +609,9 @@ static void early_detect_mem_encrypt(struct cpuinfo_x86 *c)
+>>   		if (IS_ENABLED(CONFIG_X86_32))
+>>   			goto clear_all;
+>>   
+>> +		if (!sme_me_mask)
+>> +			setup_clear_cpu_cap(X86_FEATURE_SME);
 > 
-> I agree with you. It should be u32.
+> Why not "goto clear_all;" ?
 > 
->> This is a *separate* bug/issue.  It could be fixed separately
->> (before this patch), but I'd be OK with just explaining why
->> this change would occur as part of this modified patch.
->>
-> 
-> It makes sense to do it in the same patch itself as the change is
-> minimal and moreover this patch will also get backported to stable.
 
-Sounds good to me.	-Alex
-
->>>    {
->>> -	unsigned long pm_state = state;
->>> -	int index = find_last_bit(&pm_state, 32);
->>> +	int index;
->>> -	if (index >= ARRAY_SIZE(mhi_pm_state_str))
->>> +	if (state)
->>> +		index = __fls(state);
->>> +
->>> +	if (!state || index >= ARRAY_SIZE(mhi_pm_state_str))
->>>    		return "Invalid State";
->>
->> Do this test and return first, and skip the additional
->> check for "if (state)".
->>
-> 
-> We need to calculate index for the second check, so I guess the current
-> code is fine.
-> 
-> Thanks,
-> Mani
-> 
->> 					-Alex
->>
->>>    	return mhi_pm_state_str[index];
->>
-
+"clear_all" clears SEV and SEV_ES as well which as pointed out in v2 is 
+incorrect.

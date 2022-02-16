@@ -2,194 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC424B8C26
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:12:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6464B8C2B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:13:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235427AbiBPPMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 10:12:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55124 "EHLO
+        id S235440AbiBPPNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 10:13:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232938AbiBPPMf (ORCPT
+        with ESMTP id S233779AbiBPPNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 10:12:35 -0500
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E5425E89;
-        Wed, 16 Feb 2022 07:12:23 -0800 (PST)
-Received: by mail-oo1-xc30.google.com with SMTP id s203-20020a4a3bd4000000b003191c2dcbe8so2784030oos.9;
-        Wed, 16 Feb 2022 07:12:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=8EagOatwpnloVBLpvuiKwC6cqbSfSGAyVDbY82VfmWY=;
-        b=jMVJG6jmB956M6R2glFKs7DuDGfAEIwnDxhZnoKiWbN8B5UtumCOqFPrqlRtMkD0hM
-         5ofS1qBPXRvdPdBL3uBDr5BHI0q31ncP7fr3ka1gzZecIcIS8o6f+xW5nma18gR7TIsV
-         FnCpn1czuwMDEIWDEL3+3/BxPIvWOpkG5KEgmodBzqlBT4zlsGUcB3lKIXE42VoGaDC7
-         uouj2+tF00W/LJ1eC/WXF12DJJ7WKQAnQmuiYR3QLdddl+BU+U3sm2Vm88+t8aSyYDpi
-         3obsm1gNbaS1NwK+rfUPV65680+TNuEsqWBOk6SfAF3qzkl2BPYx54gD52QKw1EKfP0I
-         Xd6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=8EagOatwpnloVBLpvuiKwC6cqbSfSGAyVDbY82VfmWY=;
-        b=NfEJ1Q8VVQ5LwC0uCDxbwZ0cfyzkOOv/0FdB4ovMkY32sA9d2GCfQv8FoujcVkO4qf
-         h33RDTt8Ewmh9ajfVzw+2jn8NkZg1CQ3SPBVWuNIqRPOaStM5CkaKoJK+NSzZHkmtBtt
-         xC7c136lvym52c2Fz8E/LmlehBN0XOjlcm3aZPX6TXCdQ5GhppcMU3IaqftgwD51/EbH
-         7+4V5HS1+VF9WL/a8oho6c/qKXfYGUQEDeNCqqvW0K4yg4uZKYc2OqTaqK1X984mUBOx
-         HuCg02aAOv6BtdjdNuE12lfUH6Du7EcnTVtPqGQY/QF6kBQZ9VqFh2T9V2ScvXD6jX2v
-         60gQ==
-X-Gm-Message-State: AOAM532dpQMCIEavnIMDoGcvsgDdLmHnExM2SWtAvVtpTQHeUrzbNEuc
-        whFJt4LJ8yfjLrJHpjMOWKk=
-X-Google-Smtp-Source: ABdhPJw48DZ1orM9cbn6ZFn7AiWfOVbGIy7a36NIzJQkXx0dVyF5qE8kcJHqasvZEJe8HaZY0eeQZw==
-X-Received: by 2002:a05:6870:41d4:b0:d1:2682:277c with SMTP id z20-20020a05687041d400b000d12682277cmr632495oac.206.1645024342369;
-        Wed, 16 Feb 2022 07:12:22 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e11sm2245139oiw.3.2022.02.16.07.12.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 07:12:21 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <130a9cbe-ee0c-1908-1d62-0f3c674ca648@roeck-us.net>
-Date:   Wed, 16 Feb 2022 07:12:19 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Agathe Porte <agathe.porte@nokia.com>, linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Wed, 16 Feb 2022 10:13:32 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C07822495C;
+        Wed, 16 Feb 2022 07:13:18 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 391461F4533A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645024396;
+        bh=ZdwDreTuYZ1OApOlrsy0Ywd+1miJltDsuK0Em6Pe28w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ciKEFCGia4x/X1pwF3ONQMHyF34tZMgVdNyrzojJU8RqlEmdet95xbeYObCPeMFo3
+         T4DmAzAYeMqDX9WNq/ivME0WwJNImP+aZOMGVmamaBlis13UG5yT9bsxIXTCPC2n1T
+         DJoA67AImYpncRvjLAltZjR1MnKJq0MK+NfPYUfCF5HLoQhko15Sl7Q6yycdaiNIsh
+         EXCIqu5+88aRa1sNfRn+YYqM6ju1fJjO6XCrzmV68tYZrlEhECBQLDPNcUELLVhnkY
+         ri6v/qD4pccDQ26Hc8EA2sJC14nK2SYnCqsAt0YNxfEHK1Q+4ZKQEgZNsIOvMKMJ31
+         ASzBBChotutCg==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     vkoul@kernel.org
+Cc:     krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
+        sean.wang@mediatek.com, matthias.bgg@gmail.com,
+        long.cheng@mediatek.com, dmaengine@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Adamski <krzysztof.adamski@nokia.com>
-References: <20220216070720.2131761-1-linux@roeck-us.net>
- <20220216070720.2131761-2-linux@roeck-us.net>
- <2f7780b8-ce67-6cd6-4097-d8113f557444@nokia.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v3 2/2] hwmon: Add driver for Texas Instruments TMP464 and
- TMP468
-In-Reply-To: <2f7780b8-ce67-6cd6-4097-d8113f557444@nokia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2] dt-bindings: dma: Convert mtk-uart-apdma to DT schema
+Date:   Wed, 16 Feb 2022 16:13:09 +0100
+Message-Id: <20220216151309.289348-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.33.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/16/22 04:42, Agathe Porte wrote:
-> Hi Guenter,
-> 
-> Le 16/02/2022 à 08:07, Guenter Roeck a écrit :
->> Add support for Texas Instruments TMP464 and TMP468 temperature sensor
->> ICs.
->>
->> TI's TMP464 is an I2C temperature sensor chip. This chip is
->> similar to TI's TMP421 chip, but with 16bit-wide registers (instead
->> of 8bit-wide registers). The chip has one local sensor and four
->> remote sensors. TMP468 is similar to TMP464 but has one local and
->> eight remote sensors.
->>
->> Originally-from: Agathe Porte <agathe.porte@nokia.com>
->> Cc: Agathe Porte <agathe.porte@nokia.com>
->> Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->> v3:
->> - Added support for TMP468
->> - Added support for various limits, temperature hysteresis, alarm attributes,
->>    and update interval
->> - Use regmap instead of local caching
->> - Use static chip configuration
->> - Unlock check if needed when loading driver, and lock it when unloading it
->>    - Call tmp464_init_client() before calling tmp464_probe_from_dt()
->>      since the latter changes registers, which requires the chip to be
->>      unlocked.
->> - Restore configuration register when unloading driver
->> - ti,n-factor is optional, so don't fail if the property is not present
->>
->> Notes:
->> - Tested with real TMP468. Module tested for TMP464.
->> - I was not able to test with a system supporting devicetree;
->>    especially negative values for "ti,n-factor" need testing
->>    (and I wonder if of_property_read_s8() would be needed to
->>     support this properly).
-> 
-> I just did the test on our system and both positive and negative value n-factor fails.
-> 
-> With the following overlay:
-> 
-> /dts-v1/;
-> /plugin/;
-> / {
->          fragment@0 {
->                  target-path = "/soc/.../i2c@4/tmp464@49";
->                  __overlay__ {
->                          #address-cells = <1>;
->                          #size-cells = <0>;
-> 
->                          channel@0 {
->                                  reg = <0x0>;
->                                  label = "local";
->                                  ti,n-factor = /bits/ 8 <(-10)>;
->                          };
-> 
->                          channel@1 {
->                                  reg = <0x1>;
->                                  label = "ch1";
->                          };
-> 
->                          channel@2 {
->                                  reg = <0x2>;
->                                  label = "ch2";
->                          };
-> 
->                          channel@3 {
->                                  reg = <0x3>;
->                                  label = "ch3";
->                          };
-> 
->                          channel@4 {
->                                  reg = <0x4>;
->                                  label = "ch4";
->                          };
->                  };
->          };
-> 
-> };
-> 
-> I get the following probing error:
-> 
-> [ 3580.557425] tmp464: probe of 16-0049 failed with error -75
-> 
+Convert the MediaTek UART APDMA Controller binding to DT schema.
 
-I think that may be caused by using of_property_read_s32() for reading
-an 8-bit property. Can you try and replace of_property_read_s32()
-with of_property_read_u8() and the variable it points to to s8 ?
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+v2: Fixed interrupt maxItems to 16, added interrupts/reg maxItems constraint
+    to 8 when the dma-requests property is not present
 
-	s8 val;
-	...
-	err = of_property_read_u8(child, "ti,n-factor", &val);
+ .../bindings/dma/mediatek,uart-dma.yaml       | 123 ++++++++++++++++++
+ .../bindings/dma/mtk-uart-apdma.txt           |  56 --------
+ 2 files changed, 123 insertions(+), 56 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
+ delete mode 100644 Documentation/devicetree/bindings/dma/mtk-uart-apdma.txt
 
-There is no of_property_read_s8(), so we can not use that,
-but maybe using of_property_read_u8() does the trick.
-
-Thanks,
-Guenter
-
-> With a positive n-factor in the overlay (<(10)> instead of <(-10)>), the driver *does not load either*, with the same error message.
-> 
-> Without any n-factor set, the v3 driver you proposed loads just fine with the DT.
-> 
-> Any idea of where this could come from? This was probably not working in my own implementation either.
-> 
-> PS: check your spam folder eventually for my mail asking delivery details of the TMP464 samples.
-> 
-> Bests,
-> 
-> Agathe.
-> 
+diff --git a/Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml b/Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
+new file mode 100644
+index 000000000000..67dbb2fed74c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
+@@ -0,0 +1,123 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/dma/mediatek,uart-dma.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MediaTek UART APDMA controller
++
++maintainers:
++  - Long Cheng <long.cheng@mediatek.com>
++
++description: |
++  The MediaTek UART APDMA controller provides DMA capabilities
++  for the UART peripheral bus.
++
++allOf:
++  - $ref: "dma-controller.yaml#"
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - mediatek,mt2712-uart-dma
++              - mediatek,mt8516-uart-dma
++          - const: mediatek,mt6577-uart-dma
++      - enum:
++          - mediatek,mt6577-uart-dma
++
++  reg:
++    minItems: 1
++    maxItems: 16
++
++  interrupts:
++    description: |
++      TX, RX interrupt lines for each UART APDMA channel
++    minItems: 1
++    maxItems: 16
++
++  clocks:
++    description: Must contain one entry for the APDMA main clock
++    maxItems: 1
++
++  clock-names:
++    const: apdma
++
++  "#dma-cells":
++    const: 1
++    description: |
++      The first cell specifies the UART APDMA channel number
++
++  dma-requests:
++    description: |
++      Number of virtual channels of the UART APDMA controller
++    maximum: 16
++
++  mediatek,dma-33bits:
++    type: boolean
++    description: Enable 33-bits UART APDMA support
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++additionalProperties: false
++
++if:
++  not:
++    anyOf:
++      - required:
++          - dma-requests
++then:
++  properties:
++    interrupts:
++      maxItems: 8
++    reg:
++      maxItems: 8
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/mt2712-clk.h>
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        apdma: dma-controller@11000400 {
++            compatible = "mediatek,mt2712-uart-dma",
++                         "mediatek,mt6577-uart-dma";
++            reg = <0 0x11000400 0 0x80>,
++                  <0 0x11000480 0 0x80>,
++                  <0 0x11000500 0 0x80>,
++                  <0 0x11000580 0 0x80>,
++                  <0 0x11000600 0 0x80>,
++                  <0 0x11000680 0 0x80>,
++                  <0 0x11000700 0 0x80>,
++                  <0 0x11000780 0 0x80>,
++                  <0 0x11000800 0 0x80>,
++                  <0 0x11000880 0 0x80>,
++                  <0 0x11000900 0 0x80>,
++                  <0 0x11000980 0 0x80>;
++            interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_LOW>,
++                         <GIC_SPI 104 IRQ_TYPE_LEVEL_LOW>,
++                         <GIC_SPI 105 IRQ_TYPE_LEVEL_LOW>,
++                         <GIC_SPI 106 IRQ_TYPE_LEVEL_LOW>,
++                         <GIC_SPI 107 IRQ_TYPE_LEVEL_LOW>,
++                         <GIC_SPI 108 IRQ_TYPE_LEVEL_LOW>,
++                         <GIC_SPI 109 IRQ_TYPE_LEVEL_LOW>,
++                         <GIC_SPI 110 IRQ_TYPE_LEVEL_LOW>,
++                         <GIC_SPI 111 IRQ_TYPE_LEVEL_LOW>,
++                         <GIC_SPI 112 IRQ_TYPE_LEVEL_LOW>,
++                         <GIC_SPI 113 IRQ_TYPE_LEVEL_LOW>,
++                         <GIC_SPI 114 IRQ_TYPE_LEVEL_LOW>;
++            dma-requests = <12>;
++            clocks = <&pericfg CLK_PERI_AP_DMA>;
++            clock-names = "apdma";
++            mediatek,dma-33bits;
++            #dma-cells = <1>;
++        };
++    };
++
++...
+diff --git a/Documentation/devicetree/bindings/dma/mtk-uart-apdma.txt b/Documentation/devicetree/bindings/dma/mtk-uart-apdma.txt
+deleted file mode 100644
+index fef9c1eeb264..000000000000
+--- a/Documentation/devicetree/bindings/dma/mtk-uart-apdma.txt
++++ /dev/null
+@@ -1,56 +0,0 @@
+-* Mediatek UART APDMA Controller
+-
+-Required properties:
+-- compatible should contain:
+-  * "mediatek,mt2712-uart-dma" for MT2712 compatible APDMA
+-  * "mediatek,mt6577-uart-dma" for MT6577 and all of the above
+-  * "mediatek,mt8516-uart-dma", "mediatek,mt6577" for MT8516 SoC
+-
+-- reg: The base address of the APDMA register bank.
+-
+-- interrupts: A single interrupt specifier.
+- One interrupt per dma-requests, or 8 if no dma-requests property is present
+-
+-- dma-requests: The number of DMA channels
+-
+-- clocks : Must contain an entry for each entry in clock-names.
+-  See ../clocks/clock-bindings.txt for details.
+-- clock-names: The APDMA clock for register accesses
+-
+-- mediatek,dma-33bits: Present if the DMA requires support
+-
+-Examples:
+-
+-	apdma: dma-controller@11000400 {
+-		compatible = "mediatek,mt2712-uart-dma",
+-			     "mediatek,mt6577-uart-dma";
+-		reg = <0 0x11000400 0 0x80>,
+-		      <0 0x11000480 0 0x80>,
+-		      <0 0x11000500 0 0x80>,
+-		      <0 0x11000580 0 0x80>,
+-		      <0 0x11000600 0 0x80>,
+-		      <0 0x11000680 0 0x80>,
+-		      <0 0x11000700 0 0x80>,
+-		      <0 0x11000780 0 0x80>,
+-		      <0 0x11000800 0 0x80>,
+-		      <0 0x11000880 0 0x80>,
+-		      <0 0x11000900 0 0x80>,
+-		      <0 0x11000980 0 0x80>;
+-		interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_LOW>,
+-			     <GIC_SPI 104 IRQ_TYPE_LEVEL_LOW>,
+-			     <GIC_SPI 105 IRQ_TYPE_LEVEL_LOW>,
+-			     <GIC_SPI 106 IRQ_TYPE_LEVEL_LOW>,
+-			     <GIC_SPI 107 IRQ_TYPE_LEVEL_LOW>,
+-			     <GIC_SPI 108 IRQ_TYPE_LEVEL_LOW>,
+-			     <GIC_SPI 109 IRQ_TYPE_LEVEL_LOW>,
+-			     <GIC_SPI 110 IRQ_TYPE_LEVEL_LOW>,
+-			     <GIC_SPI 111 IRQ_TYPE_LEVEL_LOW>,
+-			     <GIC_SPI 112 IRQ_TYPE_LEVEL_LOW>,
+-			     <GIC_SPI 113 IRQ_TYPE_LEVEL_LOW>,
+-			     <GIC_SPI 114 IRQ_TYPE_LEVEL_LOW>;
+-		dma-requests = <12>;
+-		clocks = <&pericfg CLK_PERI_AP_DMA>;
+-		clock-names = "apdma";
+-		mediatek,dma-33bits;
+-		#dma-cells = <1>;
+-	};
+-- 
+2.33.1
 

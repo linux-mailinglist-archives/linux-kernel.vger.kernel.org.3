@@ -2,55 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E921A4B83F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:25:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4184B83FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:25:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbiBPJSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 04:18:12 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:53520 "EHLO
+        id S231978AbiBPJTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 04:19:25 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbiBPJSK (ORCPT
+        with ESMTP id S231768AbiBPJTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 04:18:10 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5190C228CBA;
-        Wed, 16 Feb 2022 01:17:53 -0800 (PST)
-X-UUID: 61623b160754417f95a302ff57099ac5-20220216
-X-UUID: 61623b160754417f95a302ff57099ac5-20220216
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1634852479; Wed, 16 Feb 2022 17:17:49 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 16 Feb 2022 17:17:48 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 16 Feb 2022 17:17:48 +0800
-Message-ID: <4436154a38bfe7213299a578ff148d9f8223e101.camel@mediatek.com>
-Subject: Re: [PATCH v3, 2/5] dt-bindings: display: mediatek: add MT8186 SoC
- binding
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <airlied@linux.ie>,
-        <jassisinghbrar@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <yongqiang.niu@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <fparent@baylibre.com>, <linux-mediatek@lists.infradead.org>,
-        <hsinyi@chromium.org>, <linux-arm-kernel@lists.infradead.org>
-Date:   Wed, 16 Feb 2022 17:17:48 +0800
-In-Reply-To: <20220216084831.14883-3-rex-bc.chen@mediatek.com>
-References: <20220216084831.14883-1-rex-bc.chen@mediatek.com>
-         <20220216084831.14883-3-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 16 Feb 2022 04:19:22 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3092271F1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:19:09 -0800 (PST)
+Received: from kwepemi100018.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JzC442Kv3z8wY0;
+        Wed, 16 Feb 2022 17:15:48 +0800 (CST)
+Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
+ kwepemi100018.china.huawei.com (7.221.188.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 16 Feb 2022 17:19:07 +0800
+Received: from kwepemm600014.china.huawei.com (7.193.23.54) by
+ kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 16 Feb 2022 17:19:07 +0800
+Received: from kwepemm600014.china.huawei.com ([7.193.23.54]) by
+ kwepemm600014.china.huawei.com ([7.193.23.54]) with mapi id 15.01.2308.021;
+ Wed, 16 Feb 2022 17:19:07 +0800
+From:   "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
+To:     Barry Song <21cnbao@gmail.com>,
+        "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+CC:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        yangyicong <yangyicong@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        "Daniel Bristot de Oliveira" <bristot@redhat.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        "ego@linux.vnet.ibm.com" <ego@linux.vnet.ibm.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        Guodong Xu <guodong.xu@linaro.org>
+Subject: RE: [PATCH v2 2/2] sched/fair: Scan cluster before scanning LLC in
+ wake-up path
+Thread-Topic: [PATCH v2 2/2] sched/fair: Scan cluster before scanning LLC in
+ wake-up path
+Thread-Index: AQHYEoxEPt1JVjGTeECFv7fIQnP5T6x2fV2AgABOQwCAALZOgP//LYOAgAdEbYCAALNAAIAD4KCAgAAw74CABQbjAIAA8oyAgAzNYwCAAIYZ8A==
+Date:   Wed, 16 Feb 2022 09:19:07 +0000
+Message-ID: <dd9a5329e35241f6ab0bbb723ad72813@hisilicon.com>
+References: <20220126080947.4529-1-yangyicong@hisilicon.com>
+ <20220126080947.4529-3-yangyicong@hisilicon.com>
+ <YfK9DSMFabjYm/MV@BLR-5CG11610CF.amd.com>
+ <CAGsJ_4xL3tynB9P=rKMoX2otW4bMMU5Z-P9zSudMV3+fr2hpXw@mail.gmail.com>
+ <20220128071337.GC618915@linux.vnet.ibm.com>
+ <CAGsJ_4yoUONACY-j+9XxSNC0VgmdyRdHC=z87dWvZvVSASzXRQ@mail.gmail.com>
+ <20220201093859.GE618915@linux.vnet.ibm.com>
+ <CAGsJ_4z8cer7Y5si+J_=awQetFJZMVeaQ+RDSXQz9EGOPTGMQg@mail.gmail.com>
+ <20220204073317.GG618915@linux.vnet.ibm.com>
+ <CAGsJ_4xjgy3D0VzbTdmJihJ+nut_NeTEb4krh8jup4rbvTY_ww@mail.gmail.com>
+ <YgE3TrBrB0psljDk@BLR-5CG11610CF.amd.com>
+ <CAGsJ_4xg6heV-0yqvcwNNEyOcrfwv3uN45YfR1Jcawys0ROrow@mail.gmail.com>
+ <CAGsJ_4z-YxcPytzmGViRzEueL1F7HEE4OEuezvDg6TvEs1HJEA@mail.gmail.com>
+In-Reply-To: <CAGsJ_4z-YxcPytzmGViRzEueL1F7HEE4OEuezvDg6TvEs1HJEA@mail.gmail.com>
+Accept-Language: en-GB, zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.126.201.242]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,296 +89,206 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Rex:
-
-On Wed, 2022-02-16 at 16:48 +0800, Rex-BC Chen wrote:
-> Add MT8186 SoC binding to AAL, CCORR, COLOR, DITHER, DPI, DSI,
-> GAMMA, MUTEX, OVL, POSTMASK and RDMA.
-> 
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> ---
->  .../devicetree/bindings/display/mediatek/mediatek,aal.yaml   | 1 +
->  .../devicetree/bindings/display/mediatek/mediatek,ccorr.yaml | 5
-> +++++
->  .../devicetree/bindings/display/mediatek/mediatek,color.yaml | 1 +
->  .../bindings/display/mediatek/mediatek,dither.yaml           | 1 +
->  .../devicetree/bindings/display/mediatek/mediatek,dpi.yaml   | 1 +
->  .../devicetree/bindings/display/mediatek/mediatek,dsi.txt    | 2 +-
->  .../devicetree/bindings/display/mediatek/mediatek,gamma.yaml | 1 +
->  .../devicetree/bindings/display/mediatek/mediatek,mutex.yaml | 2 ++
->  .../bindings/display/mediatek/mediatek,ovl-2l.yaml           | 5
-> +++++
->  .../devicetree/bindings/display/mediatek/mediatek,ovl.yaml   | 5
-> +++++
->  .../bindings/display/mediatek/mediatek,postmask.yaml         | 5
-> +++++
->  .../devicetree/bindings/display/mediatek/mediatek,rdma.yaml  | 1 +
->  12 files changed, 29 insertions(+), 1 deletion(-)
-> 
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.yam
-> l
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.yam
-> l
-> index 225f9dd726d2..7c27f61f336b 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.yam
-> l
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.yam
-> l
-> @@ -27,6 +27,7 @@ properties:
->            - enum:
->                - mediatek,mt2712-disp-aal
->                - mediatek,mt8183-disp-aal
-> +              - mediatek,mt8186-disp-aal
->                - mediatek,mt8192-disp-aal
->                - mediatek,mt8195-disp-aal
->            - enum:
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.y
-> aml
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.y
-> aml
-> index 6894b6999412..8ac87b5896ac 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.y
-> aml
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.y
-> aml
-> @@ -30,6 +30,11 @@ properties:
->                - mediatek,mt8195-disp-ccorr
->            - enum:
->                - mediatek,mt8192-disp-ccorr
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt8186-disp-ccorr
-> +          - enum:
-> +              - mediatek,mt8183-disp-ccorr
->  
->    reg:
->      maxItems: 1
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,color.y
-> aml
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,color.y
-> aml
-> index bc83155b3b4c..d0a4b9eb71fd 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,color.y
-> aml
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,color.y
-> aml
-> @@ -37,6 +37,7 @@ properties:
->        - items:
->            - enum:
->                - mediatek,mt8183-disp-color
-> +              - mediatek,mt8186-disp-color
->                - mediatek,mt8192-disp-color
->                - mediatek,mt8195-disp-color
->            - enum:
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dither.
-> yaml
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dither.
-> yaml
-> index 9d89297f5f1d..9a08514ed909 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dither.
-> yaml
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dither.
-> yaml
-> @@ -26,6 +26,7 @@ properties:
->            - const: mediatek,mt8183-disp-dither
->        - items:
->            - enum:
-> +              - mediatek,mt8186-disp-dither
->                - mediatek,mt8192-disp-dither
->                - mediatek,mt8195-disp-dither
->            - enum:
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
-> l
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
-> l
-> index dd2896a40ff0..a73044c50b5f 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
-> l
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
-> l
-> @@ -22,6 +22,7 @@ properties:
->        - mediatek,mt7623-dpi
->        - mediatek,mt8173-dpi
->        - mediatek,mt8183-dpi
-> +      - mediatek,mt8186-dpi
->        - mediatek,mt8192-dpi
->  
->    reg:
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
-> index 36b01458f45c..c82b8b20de15 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
-> @@ -7,7 +7,7 @@ channel output.
->  
->  Required properties:
->  - compatible: "mediatek,<chip>-dsi"
-> -- the supported chips are mt2701, mt7623, mt8167, mt8173 and mt8183.
-> +- the supported chips are mt2701, mt7623, mt8167, mt8173, mt8183 and
-
-This is done in [1], and Xinlei has planed to transfer to yaml format,
-so I think you could remove this from this patch.
-
-[1] 
-https://patchwork.kernel.org/project/linux-mediatek/patch/1643283773-7081-2-git-send-email-xinlei.lee@mediatek.com/
-
-Regards,
-CK
-
-> mt8186.
->  - reg: Physical base address and length of the controller's
-> registers
->  - interrupts: The interrupt signal from the function block.
->  - clocks: device clocks
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma.y
-> aml
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma.y
-> aml
-> index 247baad147b3..6d96f6736d91 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma.y
-> aml
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma.y
-> aml
-> @@ -27,6 +27,7 @@ properties:
->            - const: mediatek,mt8183-disp-gamma
->        - items:
->            - enum:
-> +              - mediatek,mt8186-disp-gamma
->                - mediatek,mt8192-disp-gamma
->                - mediatek,mt8195-disp-gamma
->            - enum:
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex.y
-> aml
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex.y
-> aml
-> index 6eca525eced0..55391b5c08c4 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex.y
-> aml
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex.y
-> aml
-> @@ -34,6 +34,8 @@ properties:
->            - const: mediatek,mt8173-disp-mutex
->        - items:
->            - const: mediatek,mt8183-disp-mutex
-> +      - items:
-> +          - const: mediatek,mt8186-disp-mutex
->        - items:
->            - const: mediatek,mt8192-disp-mutex
->        - items:
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl-
-> 2l.yaml
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl-
-> 2l.yaml
-> index 611a2dbdefa4..f7f89485a5ae 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl-
-> 2l.yaml
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl-
-> 2l.yaml
-> @@ -25,6 +25,11 @@ properties:
->            - const: mediatek,mt8183-disp-ovl-2l
->        - items:
->            - const: mediatek,mt8192-disp-ovl-2l
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt8186-disp-ovl-2l
-> +          - enum:
-> +              - mediatek,mt8192-disp-ovl-2l
->  
->    reg:
->      maxItems: 1
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.yam
-> l
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.yam
-> l
-> index e71f79bc2dee..110e6b2747bc 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.yam
-> l
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.yam
-> l
-> @@ -40,6 +40,11 @@ properties:
->                - mediatek,mt8195-disp-ovl
->            - enum:
->                - mediatek,mt8183-disp-ovl
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt8186-disp-ovl
-> +          - enum:
-> +              - mediatek,mt8192-disp-ovl
->  
->    reg:
->      maxItems: 1
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,postmas
-> k.yaml
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,postmas
-> k.yaml
-> index 6ac1da2e8871..22c333d09465 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,postmas
-> k.yaml
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,postmas
-> k.yaml
-> @@ -23,6 +23,11 @@ properties:
->      oneOf:
->        - items:
->            - const: mediatek,mt8192-disp-postmask
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt8186-disp-postmask
-> +          - enum:
-> +              - mediatek,mt8192-disp-postmask
->  
->    reg:
->      maxItems: 1
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.ya
-> ml
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.ya
-> ml
-> index 8ef821641672..4f1c935cdf70 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.ya
-> ml
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.ya
-> ml
-> @@ -39,6 +39,7 @@ properties:
->                - mediatek,mt2701-disp-rdma
->        - items:
->            - enum:
-> +              - mediatek,mt8186-disp-rdma
->                - mediatek,mt8192-disp-rdma
->            - enum:
->                - mediatek,mt8183-disp-rdma
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQmFycnkgU29uZyBbbWFp
+bHRvOjIxY25iYW9AZ21haWwuY29tXQ0KPiBTZW50OiBXZWRuZXNkYXksIEZlYnJ1YXJ5IDE2LCAy
+MDIyIDEwOjEzIFBNDQo+IFRvOiBHYXV0aGFtIFIuIFNoZW5veSA8Z2F1dGhhbS5zaGVub3lAYW1k
+LmNvbT4NCj4gQ2M6IFNyaWthciBEcm9uYW1yYWp1IDxzcmlrYXJAbGludXgudm5ldC5pYm0uY29t
+PjsgeWFuZ3lpY29uZw0KPiA8eWFuZ3lpY29uZ0BodWF3ZWkuY29tPjsgUGV0ZXIgWmlqbHN0cmEg
+PHBldGVyekBpbmZyYWRlYWQub3JnPjsgSW5nbyBNb2xuYXINCj4gPG1pbmdvQHJlZGhhdC5jb20+
+OyBKdXJpIExlbGxpIDxqdXJpLmxlbGxpQHJlZGhhdC5jb20+OyBWaW5jZW50IEd1aXR0b3QNCj4g
+PHZpbmNlbnQuZ3VpdHRvdEBsaW5hcm8ub3JnPjsgVGltIENoZW4gPHRpbS5jLmNoZW5AbGludXgu
+aW50ZWwuY29tPjsgTEtNTA0KPiA8bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZz47IExBSyA8
+bGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnPjsNCj4gRGlldG1hciBFZ2dlbWFu
+biA8ZGlldG1hci5lZ2dlbWFubkBhcm0uY29tPjsgU3RldmVuIFJvc3RlZHQNCj4gPHJvc3RlZHRA
+Z29vZG1pcy5vcmc+OyBCZW4gU2VnYWxsIDxic2VnYWxsQGdvb2dsZS5jb20+OyBEYW5pZWwgQnJp
+c3RvdCBkZQ0KPiBPbGl2ZWlyYSA8YnJpc3RvdEByZWRoYXQuY29tPjsgWmVuZ3RhbyAoQikgPHBy
+aW1lLnplbmdAaGlzaWxpY29uLmNvbT47DQo+IEpvbmF0aGFuIENhbWVyb24gPGpvbmF0aGFuLmNh
+bWVyb25AaHVhd2VpLmNvbT47IGVnb0BsaW51eC52bmV0LmlibS5jb207DQo+IExpbnV4YXJtIDxs
+aW51eGFybUBodWF3ZWkuY29tPjsgU29uZyBCYW8gSHVhIChCYXJyeSBTb25nKQ0KPiA8c29uZy5i
+YW8uaHVhQGhpc2lsaWNvbi5jb20+OyBHdW9kb25nIFh1IDxndW9kb25nLnh1QGxpbmFyby5vcmc+
+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjIgMi8yXSBzY2hlZC9mYWlyOiBTY2FuIGNsdXN0ZXIg
+YmVmb3JlIHNjYW5uaW5nIExMQyBpbg0KPiB3YWtlLXVwIHBhdGgNCj4gDQo+IE9uIFR1ZSwgRmVi
+IDgsIDIwMjIgYXQgNjo0MiBQTSBCYXJyeSBTb25nIDwyMWNuYmFvQGdtYWlsLmNvbT4gd3JvdGU6
+DQo+ID4NCj4gPiBPbiBUdWUsIEZlYiA4LCAyMDIyIGF0IDQ6MTQgQU0gR2F1dGhhbSBSLiBTaGVu
+b3kgPGdhdXRoYW0uc2hlbm95QGFtZC5jb20+DQo+IHdyb3RlOg0KPiA+ID4NCj4gPiA+DQo+ID4g
+PiBPbiBGcmksIEZlYiAwNCwgMjAyMiBhdCAxMToyODoyNVBNICsxMzAwLCBCYXJyeSBTb25nIHdy
+b3RlOg0KPiA+ID4NCj4gPiA+ID4gPiBXZSBhbHJlYWR5IGZpZ3VyZWQgb3V0IHRoYXQgdGhlcmUg
+YXJlIG5vIGlkbGUgQ1BVcyBpbiB0aGlzIGNsdXN0ZXIuDQo+IFNvIGRvbnQNCj4gPiA+ID4gPiB3
+ZSBnYWluIHBlcmZvcm1hbmNlIGJ5IHBpY2tpbmcgYSBpZGxlIENQVS9jb3JlIGluIHRoZSBuZWln
+aGJvdXJpbmcgY2x1c3Rlci4NCj4gPiA+ID4gPiBJZiB0aGVyZSBhcmUgbm8gaWRsZSBDUFUvY29y
+ZSBpbiB0aGUgbmVpZ2hib3VyaW5nIGNsdXN0ZXIsIHRoZW4gaXQgZG9lcw0KPiBtYWtlDQo+ID4g
+PiA+ID4gc2Vuc2UgdG8gZmFsbGJhY2sgb24gdGhlIGN1cnJlbnQgY2x1c3Rlci4NCj4gPiA+ID4N
+Cj4gPiA+ID4gV2hhdCB5b3Ugc3VnZ2VzdGVkIGlzIGV4YWN0bHkgdGhlIGFwcHJvYWNoIHdlIGhh
+dmUgdHJpZWQgYXQgdGhlIGZpcnN0DQo+IGJlZ2lubmluZw0KPiA+ID4gPiBkdXJpbmcgZGVidWdn
+aW5nLiBidXQgd2UgZGlkbid0IGdhaW4gcGVyZm9ybWFuY2UgYWNjb3JkaW5nIHRvIGJlbmNobWFy
+aywNCj4gd2UNCj4gPiA+ID4gd2VyZSBhY3R1YWxseSBsb3NpbmcuIHRoYXQgaXMgd2h5IHdlIGFk
+ZGVkIHRoaXMgbGluZSB0byBzdG9wIHBpbmctcG9uZzoNCj4gPiA+ID4gICAgICAgICAgLyogRG9u
+J3QgcGluZy1wb25nIHRhc2tzIGluIGFuZCBvdXQgY2x1c3RlciBmcmVxdWVudGx5ICovDQo+ID4g
+PiA+ICAgICAgICAgIGlmIChjcHVzX3NoYXJlX3Jlc291cmNlcyh0YXJnZXQsIHByZXZfY3B1KSkN
+Cj4gPiA+ID4gICAgICAgICAgICAgcmV0dXJuIHRhcmdldDsNCj4gPiA+ID4NCj4gPiA+ID4gSWYg
+d2UgZGVsZXRlIHRoaXMsIHdlIGFyZSBzZWVpbmcgYSBiaWcgbG9zcyBvZiB0YmVuY2ggd2hpbGUg
+c3lzdGVtDQo+ID4gPiA+IGxvYWQgaXMgbWVkaXVtDQo+ID4gPiA+IGFuZCBhYm92ZS4NCj4gPiA+
+DQo+ID4gPiBUaGFua3MgZm9yIGNsYXJpZnlpbmcgdGhpcyBCYXJyeS4gSW5kZWVkLCBpZiB0aGUg
+d29ya2xvYWQgaXMgc2Vuc2l0aXZlDQo+ID4gPiB0byBkYXRhIHBpbmctcG9uZ2luZyBhY3Jvc3Mg
+TDIgY2x1c3RlcnMsIHRoaXMgaGV1cmlzdGljIG1ha2VzIHNlbnNlLiBJDQo+ID4gPiB3YXMgdGhp
+bmtpbmcgb2Ygd29ya2xvYWRzIHRoYXQgcmVxdWlyZSBsb3dlciB0YWlsIGxhdGVuY3ksIGluIHdo
+aWNoDQo+ID4gPiBjYXNlIGV4cGxvcmluZyB0aGUgbGFyZ2VyIExMQyB3b3VsZCBoYXZlIG1hZGUg
+bW9yZSBzZW5zZSwgYXNzdW1pbmcNCj4gPiA+IHRoYXQgdGhlIGxhcmdlciBMTEMgaGFzIGFuIGlk
+bGUgY29yZS9DUFUuDQo+ID4gPg0KPiA+ID4gSW4gdGhlIGFic2VuY2Ugb2YgYW55IGhpbnRzIGZy
+b20gdGhlIHdvcmtsb2FkLCBsaWtlIHNvbWV0aGluZyB0aGF0DQo+ID4gPiBQZXRlciBoYWQgcHJl
+dmlvdXMgc3VnZ2VzdGVkDQo+ID4gPg0KPiAoaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGttbC9Z
+Vnduc3JaV3JuV0hhb3FOQGhpcmV6LnByb2dyYW1taW5nLmtpY2tzLWFzcw0KPiAubmV0LyksDQo+
+ID4gPiBvcHRpbWl6aW5nIGZvciBjYWNoZS1hY2Nlc3Mgc2VlbXMgdG8gYmUgdGhlIHJpZ2h0IHRo
+aW5nIHRvIGRvLg0KPiA+DQo+ID4gVGhhbmtzLCBnYXV0aGFtLg0KPiA+DQo+ID4gWWVwLiBQZXRl
+ciBtZW50aW9uZWQgc29tZSBoaW50cyBsaWtlIFNDSEVEX0JBVENIIGFuZCBTQ0hFRF9JRExFLg0K
+PiA+IFRvIG1lLCB0aGUgY2FzZSB3ZSBhcmUgZGlzY3Vzc2luZyBzZWVtcyB0byBiZSBtb3JlIGNv
+bXBsaWNhdGVkIHRoYW4NCj4gPiBhcHBseWluZyBzb21lIHNjaGVkdWxpbmcgcG9saWN5IG9uIHNl
+cGFyYXRlIHRhc2tzIGJ5IFNDSEVEX0JBVENIDQo+ID4gb3IgSURMRS4NCj4gPg0KPiA+IEZvciBl
+eGFtcGxlLCBpbiBjYXNlIHdlIGhhdmUgYSBwcm9jZXNzLCBhbmQgdGhpcyBwcm9jZXNzIGhhcyAy
+MCB0aHJlYWRzLg0KPiA+IHRocmVhZDAtOSBtaWdodCBjYXJlIGFib3V0IGNhY2hlLWNvaGVyZW5j
+ZSBsYXRlbmN5IGFuZCB3YW50IHRvIGF2b2lkDQo+ID4gcGluZy1wb25naW5nLCBhbmQgdGhyZWFk
+MTAtdGhyZWFkMTkgbWlnaHQgd2FudCB0byBoYXZlIHRhaWwtbGF0ZW5jeQ0KPiA+IGFzIHNtYWxs
+IGFzIHBvc3NpYmxlLiBTbyB3ZSBuZWVkIHNvbWUgd2F5IHRvIHRlbGwga2VybmVsLCAiaGV5LCBi
+cm8sIHBsZWFzZQ0KPiA+IHRyeSB0byBrZWVwIHRocmVhZDAtOSBzdGlsbCBhcyBwaW5nLXBvbmdp
+bmcgd2lsbCBodXJ0IHRoZW0gd2hpbGUgdHJ5aW5nIHlvdXINCj4gPiBiZXN0IHRvIGZpbmQgaWRs
+ZSBjcHUgaW4gYSB3aWRlciByYW5nZSBmb3IgdGhyZWFkMTAtMTkiLiBCdXQgaXQgc2VlbXMNCj4g
+PiBTQ0hFRF9YWFggYXMgYSBzY2hlZHVsZXIgcG9saWN5IGhpbnQgY2FuJ3QgdGVsbCBrZXJuZWwg
+aG93IHRvIG9yZ2FuaXplIHRhc2tzDQo+ID4gaW50byBncm91cHMsIGFuZCBpcyBhbHNvIGluY2Fw
+YWJsZSBvZiB0ZWxsaW5nIGtlcm5lbCBkaWZmZXJlbnQgZ3JvdXBzIGhhdmUNCj4gPiBkaWZmZXJl
+bnQgbmVlZHMuDQo+ID4NCj4gPiBTbyBpdCBzZWVtcyB3ZSB3YW50IHNvbWUgc3BlY2lhbCBjZ3Jv
+dXBzIHRvIG9yZ2FuaXplIHRhc2tzIGFuZCB3ZSBjYW4gYXBwbHkNCj4gPiBzb21lIHNwZWNpYWwg
+aGludHMgb24gZWFjaCBkaWZmZXJlbnQgZ3JvdXAuIGZvciBleGFtcGxlLCBwdXR0aW5nIHRocmVh
+ZDAtOQ0KPiA+IGluIGEgY2dyb3VwIGFuZCB0aHJlYWQxMC0xOSBpbiBhbm90aGVyLCB0aGVuOg0K
+PiA+IDEuIGFwcGx5ICJDT01NVU5DQVRJT04tU0VOU0lUVkUiIG9uIHRoZSAxc3QgZ3JvdXANCj4g
+PiAyLiBhcHBseSAiVEFJTC1MQVRFTkNZLVNFTlRJVkUiIG9uIHRoZSAybmQgb25lLg0KPiA+IEkg
+YW0gbm90IHF1aXRlIHN1cmUgaG93IHRvIGRvIHRoaXMgYW5kIGlmIHRoaXMgY2FuIGZpbmQgaXRz
+IHdheSBpbnRvDQo+ID4gdGhlIG1haW5saW5lLg0KPiA+DQo+ID4gT24gdGhlIG90aGVyIGhhbmQs
+IGZvciB0aGlzIHBhcnRpY3VsYXIgcGF0Y2gsIHRoZSBtb3N0IGNvbnRyb3ZlcnNpYWwNCj4gPiBw
+YXJ0IGlzIHRob3NlDQo+ID4gdHdvIGxpbmVzIHRvIGF2b2lkIHBpbmctcG9uZ2luZywgYW5kIEkg
+YW0gc2VlaW5nIGRyb3BwaW5nIHRoaXMgY2FuIGh1cnQgd29ya2xvYWQNCj4gPiBsaWtlIHRiZW5j
+aCBvbmx5IHdoZW4gc3lzdGVtIGxvYWQgaXMgaGlnaCwgc28gSSB3b25kZXIgaWYgdGhlIGFwcHJv
+YWNoWzFdDQo+IGZyb20NCj4gPiBDaGVuIFl1IGFuZCBUaW0gY2FuIHNvbWVob3cgcmVzb2x2ZSB0
+aGUgcHJvYmxlbSBhbHRlcm5hdGl2ZWx5LCB0aHVzIHdlIGNhbg0KPiA+IGF2b2lkIHRoZSBjb250
+cm92ZXJzaWFsIHBhcnQuDQo+ID4gc2luY2UgdGhlaXIgcGF0Y2ggY2FuIGFsc28gc2hyaW5rIHRo
+ZSBzY2FubmluZyByYW5nZSB3aGlsZSBsbGMgbG9hZCBpcyBoaWdoLg0KPiA+DQo+ID4gWzFdDQo+
+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwvMjAyMjAyMDcwMzQwMTMuNTk5MjE0LTEteXUu
+Yy5jaGVuQGludGVsLmNvbS8NCj4gDQo+IFlpY29uZydzIHRlc3Rpbmcgc2hvd3MgdGhlIHBhdGNo
+IGZyb20gQ2hlbiBZdSBhbmQgVGltIGNhbiBzb21laG93IHJlc29sdmUgdGhlDQo+IHByb2JsZW0g
+YW5kIG1ha2Ugc3VyZSB0aGVyZSBpcyBubyBwZXJmb3JtYW5jZSByZWdyZXNzaW9uIGZvciB0YmVu
+Y2gNCj4gd2hpbGUgbG9hZCBpcw0KPiBoaWdoIGFmdGVyIHdlIHJlbW92ZSB0aGUgY29kZSB0byBh
+dm9pZCBwaW5nLXBvbmc6DQo+IA0KPiA1LjE3LXJjMTogdmFuaWxsYQ0KPiByYzEgKyBjaGVueXU6
+IHZhbmlsbGEgKyBjaGVueXUncyBMTEMgb3ZlcmxvYWQgcGF0Y2gNCj4gcmMxK2NoZW55dStjbHM6
+IHZhbmlsbGEgKyBjaGVueXUncyAgcGF0Y2ggKyBteSB0aGlzIHBhdGNoc2V0DQo+IHJjMStjaGVu
+eXUrY2xzLXBpbmdwb25nOiB2YW5pbGxhICsgY2hlbnl1J3MgcGF0Y2ggKyBteSB0aGlzIHBhdGNo
+c2V0IC0NCj4gdGhlIGNvZGUgYXZvaWRpbmcgcGluZy1wb25nDQo+IHJjMStjbHM6IHZhbmlsbGEg
+KyBteSB0aGlzIHBhdGNoc2V0DQo+IA0KPiB0YmVuY2ggcnVubmluZyBvbiBudW1hIDAgJjE6DQo+
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICA1LjE3LXJjMSAgICAgICAgICByYzEgKyBjaGVu
+eXUNCj4gcmMxK2NoZW55dStjbHMgICAgIHJjMStjaGVueXUrY2xzLXBpbmdwb25nICByYzErY2xz
+DQo+IEhtZWFuICAgICAxICAgICAgICAzMjAuMDEgKCAgIDAuMDAlKSAgICAgIDMxOC4wMyAqICAt
+MC42MiUqDQo+IDM1Ny4xNSAqICAxMS42MSUqICAgICAgMzc1LjQzICogIDE3LjMyJSogICAgICAz
+NzguNDQgKiAgMTguMjYlKg0KPiBIbWVhbiAgICAgMiAgICAgICAgNjQzLjg1ICggICAwLjAwJSkg
+ICAgICA2MzcuNzQgKiAgLTAuOTUlKg0KPiA3MTQuMzYgKiAgMTAuOTUlKiAgICAgIDc0NS44MiAq
+ICAxNS44NCUqICAgICAgNzUyLjUyICogIDE2Ljg4JSoNCj4gSG1lYW4gICAgIDQgICAgICAgMTI4
+Ny4zNiAoICAgMC4wMCUpICAgICAxMjg1LjIwICogIC0wLjE3JSoNCj4gMTQzMS4zNSAqICAxMS4x
+OCUqICAgICAxNDgxLjcxICogIDE1LjEwJSogICAgIDE1MDUuNjIgKiAgMTYuOTUlKg0KPiBIbWVh
+biAgICAgOCAgICAgICAyNTY0LjYwICggICAwLjAwJSkgICAgIDI1NTEuMDIgKiAgLTAuNTMlKg0K
+PiAyODEyLjc0ICogICA5LjY4JSogICAgIDI5MjEuNTEgKiAgMTMuOTIlKiAgICAgMjk1NS4yOSAq
+ICAxNS4yMyUqDQo+IEhtZWFuICAgICAxNiAgICAgIDUxOTUuNjkgKCAgIDAuMDAlKSAgICAgNTE2
+My4zOSAqICAtMC42MiUqDQo+IDU1ODMuMjggKiAgIDcuNDYlKiAgICAgNTcyNi4wOCAqICAxMC4y
+MSUqICAgICA1ODE0Ljc0ICogIDExLjkxJSoNCj4gSG1lYW4gICAgIDMyICAgICAgOTc2OS4xNiAo
+ICAgMC4wMCUpICAgICA5ODE1LjYzICogICAwLjQ4JSoNCj4gMTA1MTguMzUgKiAgIDcuNjclKiAg
+ICAxMDg1Mi44OSAqICAxMS4wOSUqICAgIDEwODcyLjYzICogIDExLjMwJSoNCj4gSG1lYW4gICAg
+IDY0ICAgICAxNTk1Mi41MCAoICAgMC4wMCUpICAgIDE1NzgwLjQxICogIC0xLjA4JSoNCj4gMTA2
+MDguMzYgKiAtMzMuNTAlKiAgICAxNzUwMy40MiAqICAgOS43MiUqICAgIDE3MjgxLjk4ICogICA4
+LjMzJSoNCj4gSG1lYW4gICAgIDEyOCAgICAxMzExMy43NyAoICAgMC4wMCUpICAgIDEyMDAwLjEy
+ICogIC04LjQ5JSoNCj4gMTMwOTUuNTAgKiAgLTAuMTQlKiAgICAxMzk5MS45MCAqICAgNi43MCUq
+ICAgIDEzODk1LjIwICogICA1Ljk2JSoNCj4gSG1lYW4gICAgIDI1NiAgICAxMDk5Ny41OSAoICAg
+MC4wMCUpICAgIDEyMjI5LjIwICogIDExLjIwJSoNCj4gMTE5MDIuNjAgKiAgIDguMjMlKiAgICAx
+MjIxNC4yOSAqICAxMS4wNiUqICAgIDExMjQ0LjY5ICogICAyLjI1JSoNCj4gSG1lYW4gICAgIDUx
+MiAgICAxNDYyMy42MCAoICAgMC4wMCUpICAgIDE1ODYzLjI1ICogICA4LjQ4JSoNCj4gMTQxMDMu
+MzggKiAgLTMuNTYlKiAgICAxNjQyMi41NiAqICAxMi4zMCUqICAgIDE1NTI2LjI1ICogICA2LjE3
+JSoNCj4gDQo+IHRiZW5jaCBydW5uaW5nIG9uIG51bWEgMCBvbmx5Og0KPiANCj4gICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIDUuMTctcmMxICAgICAgICAgIHJjMSArIGNoZW55dQ0KPiByYzEr
+Y2hlbnl1K2NscyAgICAgcmMxK2NoZW55dStjbHMtcGluZ3BvbmcgICByYzErY2xzDQo+IEhtZWFu
+ICAgICAxICAgICAgICAzMjQuNzMgKCAgIDAuMDAlKSAgICAgIDMzMC45NiAqICAgMS45MiUqDQo+
+IDM1OC45NyAqICAxMC41NCUqICAgICAgMzc2LjA1ICogIDE1LjgwJSogICAgICAzNzguMDEgKiAg
+MTYuNDElKg0KPiBIbWVhbiAgICAgMiAgICAgICAgNjQ1LjM2ICggICAwLjAwJSkgICAgICA2NDMu
+MTMgKiAgLTAuMzUlKg0KPiA3MTAuNzggKiAgMTAuMTQlKiAgICAgIDc0NC4zNCAqICAxNS4zNCUq
+ICAgICAgNzU0LjYzICogIDE2LjkzJSoNCj4gSG1lYW4gICAgIDQgICAgICAgMTMwMi4wOSAoICAg
+MC4wMCUpICAgICAxMjk3LjExICogIC0wLjM4JSoNCj4gMTQyNS4yMiAqICAgOS40NiUqICAgICAx
+NDg0LjkyICogIDE0LjA0JSogICAgIDE1MDcuNTQgKiAgMTUuNzglKg0KPiBIbWVhbiAgICAgOCAg
+ICAgICAyNjEyLjAzICggICAwLjAwJSkgICAgIDI2MjMuNjAgKiAgIDAuNDQlKg0KPiAyODQzLjE1
+ICogICA4Ljg1JSogICAgIDI5MzcuODEgKiAgMTIuNDclKiAgICAgMjk4Mi41NyAqICAxNC4xOSUq
+DQo+IEhtZWFuICAgICAxNiAgICAgIDUzMDcuMTIgKCAgIDAuMDAlKSAgICAgNTMwNC4xNCAqICAt
+MC4wNiUqDQo+IDU2MTAuNDYgKiAgIDUuNzIlKiAgICAgNTc2My4yNCAqICAgOC41OSUqICAgICA1
+ODg2LjY2ICogIDEwLjkyJSoNCj4gSG1lYW4gICAgIDMyICAgICAgOTM1NC4yMiAoICAgMC4wMCUp
+ICAgICA5NzM4LjIxICogICA0LjExJSoNCj4gOTM2MC4yMSAqICAgMC4wNiUqICAgICA5Njk5LjA1
+ICogICAzLjY5JSogICAgIDk5MDguMTMgKiAgIDUuOTIlKg0KPiBIbWVhbiAgICAgNjQgICAgICA3
+MjQwLjM1ICggICAwLjAwJSkgICAgIDcyMTAuNzUgKiAgLTAuNDElKg0KPiA2OTkyLjcwICogIC0z
+LjQyJSogICAgIDczMjEuNTIgKiAgIDEuMTIlKiAgICAgNzI3OC43OCAqICAgMC41MyUqDQo+IEht
+ZWFuICAgICAxMjggICAgIDYxODYuNDAgKCAgIDAuMDAlKSAgICAgNjMxNC44OSAqICAgMi4wOCUq
+DQo+IDYxNjYuNDQgKiAgLTAuMzIlKiAgICAgNjI3OS44NSAqICAgMS41MSUqICAgICA2MTg3Ljg1
+ICggICAwLjAyJSkNCj4gSG1lYW4gICAgIDI1NiAgICAgOTIzMS40MCAoICAgMC4wMCUpICAgICA5
+NDY5LjI2ICogICAyLjU4JSoNCj4gOTEzNC40MiAqICAtMS4wNSUqICAgICA5MzIyLjg4ICogICAw
+Ljk5JSogICAgIDk0NDguNjEgKiAgIDIuMzUlKg0KPiBIbWVhbiAgICAgNTEyICAgICA4OTA3LjEz
+ICggICAwLjAwJSkgICAgIDkxMzAuNDYgKiAgIDIuNTElKg0KPiA5MDIzLjg3ICogICAxLjMxJSog
+ICAgIDkyNzYuMTkgKiAgIDQuMTQlKiAgICAgOTM5Ny4yMiAqICAgNS41MCUqDQo+IA0KDQpTb3Jy
+eSwgaXQgc2VlbXMgdGhlIGZvcm1hdCBpcyBicm9rZW4uIExldCBtZSByZS1wb3N0IHRoZSBkYXRh
+Lg0KDQogNS4xNy1yYzE6IHZhbmlsbGENCiByYzEgKyBjaGVueXU6IHZhbmlsbGEgKyBjaGVueXUn
+cyBMTEMgb3ZlcmxvYWQgcGF0Y2gNCiByYzErY2hlbnl1K2NsczogdmFuaWxsYSArIGNoZW55dSdz
+ICBwYXRjaCArIG15IHRoaXMgcGF0Y2hzZXQNCiByYzErY2hlbnl1K2Nscy1waW5ncG9uZzogdmFu
+aWxsYSArIGNoZW55dSdzIHBhdGNoICsgbXkgdGhpcyBwYXRjaHNldCAtIHRoZSBjb2RlIGF2b2lk
+aW5nIHBpbmctcG9uZw0KIHJjMStjbHM6IHZhbmlsbGEgKyBteSB0aGlzIHBhdGNoc2V0DQoNCnRi
+ZW5jaCBydW5uaW5nIG9uIG51bWEgMCYxOg0KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDUu
+MTctcmMxICAgICAgICAgIHJjMSArIGNoZW55dSAgICAgICAgICByYzErY2hlbnl1K2NscyAgICAg
+cmMxK2NoZW55dStjbHMtcGluZ3BvbmcgIHJjMStjbHMNCkhtZWFuICAgICAxICAgICAgICAzMjAu
+MDEgKCAgIDAuMDAlKSAgICAgIDMxOC4wMyAqICAtMC42MiUqICAgICAgMzU3LjE1ICogIDExLjYx
+JSogICAgICAzNzUuNDMgKiAgMTcuMzIlKiAgICAgIDM3OC40NCAqICAxOC4yNiUqDQpIbWVhbiAg
+ICAgMiAgICAgICAgNjQzLjg1ICggICAwLjAwJSkgICAgICA2MzcuNzQgKiAgLTAuOTUlKiAgICAg
+IDcxNC4zNiAqICAxMC45NSUqICAgICAgNzQ1LjgyICogIDE1Ljg0JSogICAgICA3NTIuNTIgKiAg
+MTYuODglKg0KSG1lYW4gICAgIDQgICAgICAgMTI4Ny4zNiAoICAgMC4wMCUpICAgICAxMjg1LjIw
+ICogIC0wLjE3JSogICAgIDE0MzEuMzUgKiAgMTEuMTglKiAgICAgMTQ4MS43MSAqICAxNS4xMCUq
+ICAgICAxNTA1LjYyICogIDE2Ljk1JSoNCkhtZWFuICAgICA4ICAgICAgIDI1NjQuNjAgKCAgIDAu
+MDAlKSAgICAgMjU1MS4wMiAqICAtMC41MyUqICAgICAyODEyLjc0ICogICA5LjY4JSogICAgIDI5
+MjEuNTEgKiAgMTMuOTIlKiAgICAgMjk1NS4yOSAqICAxNS4yMyUqDQpIbWVhbiAgICAgMTYgICAg
+ICA1MTk1LjY5ICggICAwLjAwJSkgICAgIDUxNjMuMzkgKiAgLTAuNjIlKiAgICAgNTU4My4yOCAq
+ICAgNy40NiUqICAgICA1NzI2LjA4ICogIDEwLjIxJSogICAgIDU4MTQuNzQgKiAgMTEuOTElKg0K
+SG1lYW4gICAgIDMyICAgICAgOTc2OS4xNiAoICAgMC4wMCUpICAgICA5ODE1LjYzICogICAwLjQ4
+JSogICAgMTA1MTguMzUgKiAgIDcuNjclKiAgICAxMDg1Mi44OSAqICAxMS4wOSUqICAgIDEwODcy
+LjYzICogIDExLjMwJSoNCkhtZWFuICAgICA2NCAgICAgMTU5NTIuNTAgKCAgIDAuMDAlKSAgICAx
+NTc4MC40MSAqICAtMS4wOCUqICAgIDEwNjA4LjM2ICogLTMzLjUwJSogICAgMTc1MDMuNDIgKiAg
+IDkuNzIlKiAgICAxNzI4MS45OCAqICAgOC4zMyUqDQpIbWVhbiAgICAgMTI4ICAgIDEzMTEzLjc3
+ICggICAwLjAwJSkgICAgMTIwMDAuMTIgKiAgLTguNDklKiAgICAxMzA5NS41MCAqICAtMC4xNCUq
+ICAgIDEzOTkxLjkwICogICA2LjcwJSogICAgMTM4OTUuMjAgKiAgIDUuOTYlKg0KSG1lYW4gICAg
+IDI1NiAgICAxMDk5Ny41OSAoICAgMC4wMCUpICAgIDEyMjI5LjIwICogIDExLjIwJSogICAgMTE5
+MDIuNjAgKiAgIDguMjMlKiAgICAxMjIxNC4yOSAqICAxMS4wNiUqICAgIDExMjQ0LjY5ICogICAy
+LjI1JSoNCkhtZWFuICAgICA1MTIgICAgMTQ2MjMuNjAgKCAgIDAuMDAlKSAgICAxNTg2My4yNSAq
+ICAgOC40OCUqICAgIDE0MTAzLjM4ICogIC0zLjU2JSogICAgMTY0MjIuNTYgKiAgMTIuMzAlKiAg
+ICAxNTUyNi4yNSAqICAgNi4xNyUqDQoNCnRiZW5jaCBydW5uaW5nIG9uIG51bWEgMCBvbmx5Og0K
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIDUuMTctcmMxICAgICAgICAgIHJjMSArIGNoZW55
+dSAgICAgICAgICByYzErY2hlbnl1K2NscyAgICAgcmMxK2NoZW55dStjbHMtcGluZ3BvbmcgICBy
+YzErY2xzDQpIbWVhbiAgICAgMSAgICAgICAgMzI0LjczICggICAwLjAwJSkgICAgICAzMzAuOTYg
+KiAgIDEuOTIlKiAgICAgIDM1OC45NyAqICAxMC41NCUqICAgICAgMzc2LjA1ICogIDE1LjgwJSog
+ICAgICAzNzguMDEgKiAgMTYuNDElKg0KSG1lYW4gICAgIDIgICAgICAgIDY0NS4zNiAoICAgMC4w
+MCUpICAgICAgNjQzLjEzICogIC0wLjM1JSogICAgICA3MTAuNzggKiAgMTAuMTQlKiAgICAgIDc0
+NC4zNCAqICAxNS4zNCUqICAgICAgNzU0LjYzICogIDE2LjkzJSoNCkhtZWFuICAgICA0ICAgICAg
+IDEzMDIuMDkgKCAgIDAuMDAlKSAgICAgMTI5Ny4xMSAqICAtMC4zOCUqICAgICAxNDI1LjIyICog
+ICA5LjQ2JSogICAgIDE0ODQuOTIgKiAgMTQuMDQlKiAgICAgMTUwNy41NCAqICAxNS43OCUqDQpI
+bWVhbiAgICAgOCAgICAgICAyNjEyLjAzICggICAwLjAwJSkgICAgIDI2MjMuNjAgKiAgIDAuNDQl
+KiAgICAgMjg0My4xNSAqICAgOC44NSUqICAgICAyOTM3LjgxICogIDEyLjQ3JSogICAgIDI5ODIu
+NTcgKiAgMTQuMTklKg0KSG1lYW4gICAgIDE2ICAgICAgNTMwNy4xMiAoICAgMC4wMCUpICAgICA1
+MzA0LjE0ICogIC0wLjA2JSogICAgIDU2MTAuNDYgKiAgIDUuNzIlKiAgICAgNTc2My4yNCAqICAg
+OC41OSUqICAgICA1ODg2LjY2ICogIDEwLjkyJSoNCkhtZWFuICAgICAzMiAgICAgIDkzNTQuMjIg
+KCAgIDAuMDAlKSAgICAgOTczOC4yMSAqICAgNC4xMSUqICAgICA5MzYwLjIxICogICAwLjA2JSog
+ICAgIDk2OTkuMDUgKiAgIDMuNjklKiAgICAgOTkwOC4xMyAqICAgNS45MiUqDQpIbWVhbiAgICAg
+NjQgICAgICA3MjQwLjM1ICggICAwLjAwJSkgICAgIDcyMTAuNzUgKiAgLTAuNDElKiAgICAgNjk5
+Mi43MCAqICAtMy40MiUqICAgICA3MzIxLjUyICogICAxLjEyJSogICAgIDcyNzguNzggKiAgIDAu
+NTMlKg0KSG1lYW4gICAgIDEyOCAgICAgNjE4Ni40MCAoICAgMC4wMCUpICAgICA2MzE0Ljg5ICog
+ICAyLjA4JSogICAgIDYxNjYuNDQgKiAgLTAuMzIlKiAgICAgNjI3OS44NSAqICAgMS41MSUqICAg
+ICA2MTg3Ljg1ICggICAwLjAyJSkNCkhtZWFuICAgICAyNTYgICAgIDkyMzEuNDAgKCAgIDAuMDAl
+KSAgICAgOTQ2OS4yNiAqICAgMi41OCUqICAgICA5MTM0LjQyICogIC0xLjA1JSogICAgIDkzMjIu
+ODggKiAgIDAuOTklKiAgICAgOTQ0OC42MSAqICAgMi4zNSUqDQpIbWVhbiAgICAgNTEyICAgICA4
+OTA3LjEzICggICAwLjAwJSkgICAgIDkxMzAuNDYgKiAgIDIuNTElKiAgICAgOTAyMy44NyAqICAg
+MS4zMSUqICAgICA5Mjc2LjE5ICogICA0LjE0JSogICAgIDkzOTcuMjIgKiAgIDUuNTAlKg0KDQo+
+IGxpa2UgcmMxK2NscywgaW4gc29tZQ0KPiBjYXNlcygyNTYsIDUxMiB0aHJlYWRzIG9uIG51bWEw
+JjEpLCBpdCBpcyBldmVuIG11Y2ggYmV0dGVyLg0KPiANCj4gVGhhbmtzDQo+IEJhcnJ5DQo=

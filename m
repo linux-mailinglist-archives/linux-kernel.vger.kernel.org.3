@@ -2,160 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B914B91C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:52:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5CF4B91CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238354AbiBPTwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 14:52:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51680 "EHLO
+        id S238365AbiBPTwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 14:52:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238301AbiBPTwX (ORCPT
+        with ESMTP id S238301AbiBPTwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 14:52:23 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3EDF5430;
-        Wed, 16 Feb 2022 11:52:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645041131; x=1676577131;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=s93+vTrr5XzHX20s9O1Tt6/qzU2nq9cce8yMR5ijcqs=;
-  b=sAg7Jf8//MVqmmmNlI+4GiUboKiPGpOOeIu4lYoCCy4noXMEH4IDbIL3
-   kFQBN48ynf1Gh4kHj8IqCIYFskPfPYWudg1mkajBZD3s8RuuR1uWd0f6B
-   89N+woB6i0BKG+fJjUbH8aNiVGS6E6CL8mQVpnlbu00f09K7lOo9iOxKy
-   I=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 16 Feb 2022 11:52:11 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 11:52:10 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 16 Feb 2022 11:52:10 -0800
-Received: from [10.111.168.21] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 16 Feb
- 2022 11:52:05 -0800
-Message-ID: <12ddd46b-5d7e-03f5-8376-16dc68189257@quicinc.com>
-Date:   Wed, 16 Feb 2022 11:52:03 -0800
+        Wed, 16 Feb 2022 14:52:41 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8BBFABE9;
+        Wed, 16 Feb 2022 11:52:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645041148; x=1676577148;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=4Cr7vmjqZ19YsPqPC5f59BS6ggXP0WOv3DKiSQA5gj0=;
+  b=Wy7pKQKZlKPl5pTw0zWLHu68FeZhPaCEkuFsJb50bLwoDi0F3vPvc1wC
+   LzYhfnMxWW93z8dymlZ7d8tTLw5laH46PXNrBMB8VW5RXSLcgYMO7ar2A
+   81KG6K+wqaPDUZnV2WcIg2Of34d0CjdHGwy6o1lu42fXzrDpG8yLHbwfm
+   Xd6tP9Xq76mWt0+1IeoVIf1ENeSubcsF7BzbNDt/eLfFSi3g5+1DSh7/U
+   D4AAQaTTqK6MoKEvEoxAffqvyTFrOc3chBkAH21DOI443YpKuiXg3wZam
+   J7RfDWbIK+WTi7o1zccbuLG1JIsu6zv6FB/RkyrUqGO0oBuxE75hZAIOr
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="248310663"
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="248310663"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 11:52:28 -0800
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="529677653"
+Received: from ddahlenx-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.148.13])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 11:52:27 -0800
+Message-ID: <1525de98e422b2978f18378c752b92513c328ccd.camel@linux.intel.com>
+Subject: Re: [RFC PATCH 1/4] tools/lib/thermal: Add a thermal library
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Date:   Wed, 16 Feb 2022 11:52:27 -0800
+In-Reply-To: <c5889d73-7acb-a564-b091-44e71ba5ddb3@linaro.org>
+References: <20220214210446.255780-1-daniel.lezcano@linaro.org>
+         <0be77e01c0dc91e227fcb7219cf89d9497b4be39.camel@linux.intel.com>
+         <c5889d73-7acb-a564-b091-44e71ba5ddb3@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [Freedreno] [REPOST PATCH v4 06/13] drm/msm/disp/dpu1: Add DSC
- support in hw_ctl
-Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>
-CC:     Jonathan Marek <jonathan@marek.ca>,
-        David Airlie <airlied@linux.ie>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Abhinav Kumar" <abhinavk@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        <dri-devel@lists.freedesktop.org>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <freedreno@lists.freedesktop.org>
-References: <20220210103423.271016-1-vkoul@kernel.org>
- <20220210103423.271016-7-vkoul@kernel.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20220210103423.271016-7-vkoul@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Daniel,
+
+On Wed, 2022-02-16 at 20:38 +0100, Daniel Lezcano wrote:
+> 
+> Hi Srinivas,
+> 
+> thanks for the review
+> 
+> On 16/02/2022 17:40, srinivas pandruvada wrote:
+> > On Mon, 2022-02-14 at 22:04 +0100, Daniel Lezcano wrote:
+> > > The thermal framework implements a netlink notification mechanism
+> > > to
+> > > be used by the userspace to have a thermal configuration
+> > > discovery,
+> > > trip point changes or violation, cooling device changes
+> > > notifications,
+> > > etc...
+> > > 
+> > > This library provides a level of abstraction for the thermal
+> > > netlink
+> > > notification allowing the userspace to connect to the
+> > > notification
+> > > mechanism more easily. The library is callback oriented.
+> > > 
+> > Some minor comments.
+> > May be better use some defines instead of returning "-1" for error
+> > conditions.
+> 
+> Do you suggest like an enum with different errors or just having -1 
+> replaced by eg. THERMAL_ERROR ?
+This will be fine.
+
+Thanks,
+Srinivas
 
 
-On 2/10/2022 2:34 AM, Vinod Koul wrote:
-> Later gens of hardware have DSC bits moved to hw_ctl, so configure these
-> bits so that DSC would work there as well
 > 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 11 ++++++++++-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h |  2 ++
->   2 files changed, 12 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> index 02da9ecf71f1..49659165cea8 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> @@ -25,6 +25,8 @@
->   #define   CTL_MERGE_3D_ACTIVE           0x0E4
->   #define   CTL_INTF_ACTIVE               0x0F4
->   #define   CTL_MERGE_3D_FLUSH            0x100
-> +#define   CTL_DSC_ACTIVE                0x0E8
-> +#define   CTL_DSC_FLUSH                0x104
->   #define   CTL_INTF_FLUSH                0x110
->   #define   CTL_INTF_MASTER               0x134
->   #define   CTL_FETCH_PIPE_ACTIVE         0x0FC
-> @@ -34,6 +36,7 @@
->   
->   #define DPU_REG_RESET_TIMEOUT_US        2000
->   #define  MERGE_3D_IDX   23
-> +#define  DSC_IDX        22
->   #define  INTF_IDX       31
->   #define CTL_INVALID_BIT                 0xffff
->   #define CTL_DEFAULT_GROUP_ID		0xf
-> @@ -121,7 +124,6 @@ static u32 dpu_hw_ctl_get_pending_flush(struct dpu_hw_ctl *ctx)
->   
->   static inline void dpu_hw_ctl_trigger_flush_v1(struct dpu_hw_ctl *ctx)
->   {
-> -
->   	if (ctx->pending_flush_mask & BIT(MERGE_3D_IDX))
->   		DPU_REG_WRITE(&ctx->hw, CTL_MERGE_3D_FLUSH,
->   				ctx->pending_merge_3d_flush_mask);
-> @@ -506,6 +508,9 @@ static void dpu_hw_ctl_intf_cfg_v1(struct dpu_hw_ctl *ctx,
->   	if ((test_bit(DPU_CTL_VM_CFG, &ctx->caps->features)))
->   		mode_sel = CTL_DEFAULT_GROUP_ID  << 28;
->   
-> +	if (cfg->dsc)
-> +		DPU_REG_WRITE(&ctx->hw, CTL_DSC_FLUSH, cfg->dsc);
-> +
->   	if (cfg->intf_mode_sel == DPU_CTL_MODE_SEL_CMD)
->   		mode_sel |= BIT(17);
->   
-> @@ -517,6 +522,10 @@ static void dpu_hw_ctl_intf_cfg_v1(struct dpu_hw_ctl *ctx,
->   	if (cfg->merge_3d)
->   		DPU_REG_WRITE(c, CTL_MERGE_3D_ACTIVE,
->   			      BIT(cfg->merge_3d - MERGE_3D_0));
-> +	if (cfg->dsc) {
-> +		DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, cfg->dsc);
-> +		DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
-> +	}
->   }
->   
->   static void dpu_hw_ctl_intf_cfg(struct dpu_hw_ctl *ctx,
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-> index 806c171e5df2..9847c9c46d6f 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-> @@ -40,6 +40,7 @@ struct dpu_hw_stage_cfg {
->    * @merge_3d:              3d merge block used
->    * @intf_mode_sel:         Interface mode, cmd / vid
->    * @stream_sel:            Stream selection for multi-stream interfaces
-> + * @dsc:                   DSC BIT masks
->    */
->   struct dpu_hw_intf_cfg {
->   	enum dpu_intf intf;
-> @@ -47,6 +48,7 @@ struct dpu_hw_intf_cfg {
->   	enum dpu_merge_3d merge_3d;
->   	enum dpu_ctl_mode_sel intf_mode_sel;
->   	int stream_sel;
-> +	unsigned int dsc;
->   };
->   
->   /**
+> [ ... ]
+> 
+> > > + * Low level netlink
+> > > + */
+> > > +extern int nl_subscribe_thermal(struct nl_sock *nl_sock, struct
+> > > nl_cb *nl_cb,
+> > > +                               const char *group);
+> > > +
+> > To complete API, don't we need nl_unsubscribe which calls
+> > nl_socket_drop_memberships()?
+> Ah, yes. I'll add it.
+> 
+> Thanks
+> 
+> 
+> 
+

@@ -2,115 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 413A34B7C51
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:12:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA4B4B7C3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245241AbiBPBCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 20:02:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59264 "EHLO
+        id S245245AbiBPBCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 20:02:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245235AbiBPBC3 (ORCPT
+        with ESMTP id S233535AbiBPBCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 20:02:29 -0500
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1748879F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:02:17 -0800 (PST)
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220216010215epoutp044337a28cb135aa681bc0844dca9cc084~UHohwmpF41566215662epoutp04C
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:02:15 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220216010215epoutp044337a28cb135aa681bc0844dca9cc084~UHohwmpF41566215662epoutp04C
+        Tue, 15 Feb 2022 20:02:42 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB60F86E3C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:02:30 -0800 (PST)
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220216010227epoutp0162874000d043a0c1f6547d264a980cb4~UHotGvY1y2383823838epoutp01S
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:02:27 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220216010227epoutp0162874000d043a0c1f6547d264a980cb4~UHotGvY1y2383823838epoutp01S
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1644973335;
-        bh=W76p5lzZuTrN/LwNZhMY5heYVmdXwnLF1jR2bQKZcjo=;
+        s=mail20170921; t=1644973347;
+        bh=6F2pv03rSyb0l3m/G1mhHi3z2iu7pZETXNe3I0pc9+k=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=FXAIq+y8cRIA6LpnoiMatK9GdAARFEDOdeoNWfKvMf2a7vEge3vaFskuwbXZA4D5b
-         lwubJybHcTpg9emuqhAYgaWQimXVaPUl+S32y+epmLjjDGDwFJS6+KkZjpZ0SC0fyB
-         BbbOpbyd/ARsplgLodSfXN6I4QfzyAXA8sNKdZpA=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        b=eK5iZZ8CSbKymNeSrOFHfJAvRTsHxzsISV2UwLebv4KmbDELMAuhFsnmbPDPHQzBt
+         hMUa9yG9nMNi6k3dAChJU6GwEV0o7ohug56Mlc+PUBlRoX8w1AOmD+5mZ8CHG1blik
+         q75rzyrNCZuY0Grs562G/pRaNGqAVYQffh82v+TI=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
         epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220216010214epcas1p2f4e8fe0a9815a2e4f2667ef9daec3820~UHohgW00X0154301543epcas1p2g;
-        Wed, 16 Feb 2022 01:02:14 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.36.136]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4Jz06V1DySz4x9QQ; Wed, 16 Feb
-        2022 01:02:10 +0000 (GMT)
+        20220216010227epcas1p2a51d4e79fd2b04e19953faf779c392a9~UHos08GNd1366313663epcas1p2P;
+        Wed, 16 Feb 2022 01:02:27 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.36.145]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4Jz06j0Lyyz4x9QJ; Wed, 16 Feb
+        2022 01:02:21 +0000 (GMT)
 Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        23.B1.28648.E0D4C026; Wed, 16 Feb 2022 10:02:06 +0900 (KST)
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7C.8F.21932.C1D4C026; Wed, 16 Feb 2022 10:02:20 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220216010206epcas1p3532638080c2ec47aec8add2f126128f8~UHoZvVtk91822018220epcas1p3O;
-        Wed, 16 Feb 2022 01:02:06 +0000 (GMT)
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220216010219epcas1p16a351e60d11478c3f68f23af2891b48d~UHomJm6jA2569825698epcas1p1o;
+        Wed, 16 Feb 2022 01:02:19 +0000 (GMT)
 Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220216010206epsmtrp20792e037782f16ef98bb9cd82ee04ef9~UHoZudLhE1789517895epsmtrp2u;
-        Wed, 16 Feb 2022 01:02:06 +0000 (GMT)
-X-AuditID: b6c32a39-003ff70000006fe8-1d-620c4d0eb184
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        20220216010219epsmtrp20f73d29c32ce3e175d0b3c9747ec3752~UHomIz0X-1789517895epsmtrp26;
+        Wed, 16 Feb 2022 01:02:19 +0000 (GMT)
+X-AuditID: b6c32a38-929ff700000255ac-73-620c4d1cc9ff
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        44.C3.08738.E0D4C026; Wed, 16 Feb 2022 10:02:06 +0900 (KST)
+        7B.C3.08738.B1D4C026; Wed, 16 Feb 2022 10:02:19 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220216010206epsmtip18ff9dd2f9c213256a4ea2d57c17fa31f~UHoZiM0P03127131271epsmtip1L;
-        Wed, 16 Feb 2022 01:02:06 +0000 (GMT)
-Subject: Re: [PATCH][next] extcon: usbc-cros-ec: Use struct_size() helper in
- kzalloc()
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220216010219epsmtip24566ff6c979294f26fa5ea1d8492a855~UHol8aZti0549805498epsmtip2L;
+        Wed, 16 Feb 2022 01:02:19 +0000 (GMT)
+Subject: Re: [PATCH -next] extcon: Fix some kernel-doc comments
+To:     Yang Li <yang.lee@linux.alibaba.com>, myungjoo.ham@samsung.com
+Cc:     linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <3136d3aa-4c01-33be-86de-1a2b3b6b6733@samsung.com>
-Date:   Wed, 16 Feb 2022 10:26:34 +0900
+Message-ID: <2bde97d8-6575-0e0f-81bb-dd98f5b60607@samsung.com>
+Date:   Wed, 16 Feb 2022 10:26:47 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
         Thunderbird/59.0
 MIME-Version: 1.0
-In-Reply-To: <20220125192634.GA70834@embeddedor>
+In-Reply-To: <20220104084359.41051-1-yang.lee@linux.alibaba.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprIJsWRmVeSWpSXmKPExsWy7bCmvi6fL0+SwY8PlhbTn1xmsTj1ahmz
-        xa+L01gt5q3/yWhxedccNovbjSvYHNg8ZjdcZPHYtKqTzaNvyypGj8+b5AJYorJtMlITU1KL
-        FFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4CWKymUJeaUAoUCEouL
-        lfTtbIryS0tSFTLyi0tslVILUnIKTAv0ihNzi0vz0vXyUkusDA0MjEyBChOyM870bGUt6OCu
-        +L7xEVMD4ybOLkZODgkBE4k/TZOYuhi5OIQEdjBKXDz7mxHC+cQo0d2ynh3C+cwo8X0/SAai
-        5fubGcwQiV2MEt/+P2eFcN4zSpybdY8FpEpYIELi/+KHYAkRgeWMElOf32MDSTALOEq0vt4M
-        ZrMJaEnsf3EDzOYXUJS4+uMx2ApeATuJ20dusYLYLAKqEgdnnWUHsUUFwiRObmuBqhGUODnz
-        CdgyTgEDiZsTzrJAzBeXuPVkPhOELS+x/e0csFMlBHo5JN5/vQr1g4tE579DULawxKvjW9gh
-        bCmJz+/2skE0NDNKNLy4zQjh9DBKHH3WxwJRZSyxf+lkoBUcQCs0Jdbv0ocIK0rs/D2XEWIz
-        n8S7rz2sICUSArwSHW1CECXKEpcf3GWCsCUlFrd3sk1gVJqF5J9ZSH6YheSHWQjLFjCyrGIU
-        Sy0ozk1PLTYsMIVHeHJ+7iZGcNrUstzBOP3tB71DjEwcjIcYJTiYlUR4485yJgnxpiRWVqUW
-        5ccXleakFh9iNAWG8ERmKdHkfGDiziuJNzSxNDAxMzI2sTA0M1QS51017XSikEB6Yklqdmpq
-        QWoRTB8TB6dUA9OG3YJ9EdeOJ/7XZQrPl/6ysenr6w0Hw9LKwsVOrJ3xyyplx+ca8apZloVn
-        v1bFVW80+BW+3nmz1qbI1Nlpxqrzppa9LvxWFuB57nHC22nCzG0bftoHP3nvJPTLxl/F2PzC
-        w4bg9Z13D+sr74mw1WFfcbk6I4A3wM+efYY9/yzb77UcG/8H5xf+15nrWx5r8OL2jxzJ8Nlt
-        0obHGcNXXPw18/2iCodLDqL2N3emSf59/+Gn6vXrmwo1U40UiqtX+Bg09B6an9toaLDjfpn9
-        p82Pn6e5st48kH6vk0ExnTHbPo/lpt40lY60ZunwZVFnOP+9sVvdfWPCT+ndaW7vZs7942oS
-        G5PGZLeJ92bgYiWW4oxEQy3mouJEAK7fnyQkBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrFLMWRmVeSWpSXmKPExsWy7bCSnC6fL0+SwazP8hbTn1xmsTj1ahmz
-        xa+L01gt5q3/yWhxedccNovbjSvYHNg8ZjdcZPHYtKqTzaNvyypGj8+b5AJYorhsUlJzMstS
-        i/TtErgyzvRsZS3o4K74vvERUwPjJs4uRk4OCQETie9vZjB3MXJxCAnsYJTY2jSRBSIhKTHt
-        4lGgBAeQLSxx+HAxRM1bRom9P5awgtQIC0RI/F/8kBUkISKwnFHi9YGZYAlmAUeJ1teb2SA6
-        mhklJnffA0uwCWhJ7H9xgw3E5hdQlLj64zEjiM0rYCdx+8gtsBoWAVWJg7POsoPYogJhEjuX
-        PGaCqBGUODnzCdh1nAIGEjcnnGWBWKYu8WfeJWYIW1zi1pP5TBC2vMT2t3OYJzAKz0LSPgtJ
-        yywkLbOQtCxgZFnFKJlaUJybnltsWGCUl1quV5yYW1yal66XnJ+7iREcPVpaOxj3rPqgd4iR
-        iYPxEKMEB7OSCG/cWc4kId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rwXuk7GCwmkJ5akZqemFqQW
-        wWSZODilGpiixc4XzDZd9On0rv13nOu9ItSPm/5d8zoqZA73mz08hZprv8Syq96fufBdfFgI
-        w9wJ3seufhHJYLb/9e1rs/iFW00Sp7Vm52bfYGWqP8kyYe3Mrj28XTemLRHxMHZbsMWrxVH4
-        xz6Hj2KmohJac4rOpt+0Dby4iOVbYYChXcjnrZPE+Teeyp4j/uTHhlzN6w86uaev6eTKDfa4
-        eJt1+12mkJKVbsJMcf0zMz+FNZ0TuZl6Zs3GtFc1ne8Vpb7P537pezA/cc+fFcnLUs/P1ZO4
-        2a++IWtr+vPIHg9lQfcGzQDRX8anliVvWZDZuJHN7sn2H2dk0mXCLTaZrZ2qondhn872hUfu
-        7H8taGjAYaCjxFKckWioxVxUnAgAcHk94Q0DAAA=
-X-CMS-MailID: 20220216010206epcas1p3532638080c2ec47aec8add2f126128f8
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrPKsWRmVeSWpSXmKPExsWy7bCmvq6sL0+SwdcYi3d7p7FZXN41h83i
+        duMKNot3jYcZHVg8dj609OjbsorR4/MmuQDmqGybjNTElNQihdS85PyUzLx0WyXv4HjneFMz
+        A0NdQ0sLcyWFvMTcVFslF58AXbfMHKBdSgpliTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSC
+        lJwC0wK94sTc4tK8dL281BIrQwMDI1OgwoTsjIWb9jAX9AtUXNy8mq2BcTZvFyMnh4SAicSM
+        rT1MXYxcHEICOxgl5mzuY4dwPjFKXNl4nBHC+cwo8fzmHBaYljVLe9ggErsYJc5v2wnV/55R
+        4sTdf4wgVcIC9hK/FywE6xARcJJYvm8PE4jNLOAusfTpfLA4m4CWxP4XN9hAbH4BRYmrPx6D
+        9fIK2En8/buDFcRmEVCVuLTzDViNqECYxMltLVA1ghInZz4Bm8Mp4CDxfs80doj54hK3nsyH
+        2iUvsf3tHGaQ4yQEvrJL7Nm4kRHiBReJFV+uskHYwhKvjm9hh7ClJD6/28sG0dDMKNHw4jYj
+        hNPDKHH0WR80AIwl9i+dDLSCA2iFpsT6XfoQYUWJnb/nMkJs5pN497WHFaREQoBXoqNNCKJE
+        WeLyg7tMELakxOL2TrYJjEqzkPwzC8kPs5D8MAth2QJGllWMYqkFxbnpqcWGBSbw+E7Oz93E
+        CE6JWhY7GOe+/aB3iJGJg/EQowQHs5IIb9xZziQh3pTEyqrUovz4otKc1OJDjKbAEJ7ILCWa
+        nA9Mynkl8YYmlgYmZkbGJhaGZoZK4ry9U08nCgmkJ5akZqemFqQWwfQxcXBKNTDFNFS/ZeI6
+        EN+/xa9gJbdXNceBsklqDlX7bzHmtlb29XyJX5bpW1NqOT2qf07uRIfeRfUR7UG/M4wCNvzd
+        2hXc+G3jgacLFi0N3hMaXNOROimtTm9y8KnKbd72KmUznlyvqHK1rZbe93xL6Hflujv7+uYr
+        dNxqDFpqNKtVcRvr2huSYo9uCm4V+cZ6aWZq2zVz+fUnNPTf8J+bymT/xOhO0p2IycvLZk1+
+        aneXIzuheeZX5djze5ubLgRf4MwJffGvu/PKxWMt7esyFmQseLubcWeMqrph/4Fya/G428kZ
+        J+fwv8hUPfftpldW4cHz0/UCEhwnFYY+/31/O8/3QAneNd1Fu4oinkTr9J88wqTEUpyRaKjF
+        XFScCACKAodrEgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBLMWRmVeSWpSXmKPExsWy7bCSvK60L0+SwdUeY4t3e6exWVzeNYfN
+        4nbjCjaLd42HGR1YPHY+tPTo27KK0ePzJrkA5igum5TUnMyy1CJ9uwSujIWb9jAX9AtUXNy8
+        mq2BcTZvFyMnh4SAicSapT1sXYxcHEICOxglzq4GcUASkhLTLh5l7mLkALKFJQ4fLgYJCwm8
+        ZZQ4uIITxBYWsJf4vWAhC4gtIuAksXzfHiYQm1nAXWLp0/ksEDMnM0oceXobLMEmoCWx/8UN
+        sPn8AooSV388ZgSxeQXsJP7+3cEKYrMIqEpc2vkGrEZUIExi55LHTBA1ghInZz4BW8Yp4CDx
+        fs80dohl6hJ/5l1ihrDFJW49mQ91hLzE9rdzmCcwCs9C0j4LScssJC2zkLQsYGRZxSiZWlCc
+        m55bbFhglJdarlecmFtcmpeul5yfu4kRHBlaWjsY96z6oHeIkYmD8RCjBAezkghv3FnOJCHe
+        lMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJpCeWpGanphakFsFkmTg4pRqYGCrFij4mrOHR
+        Fgvieffdx7Lw0mmX9m1BGxmVTusJfm2UNs1yjn901OF2215hIa3TAmUnvX+fu1a8f97/H5yp
+        tvEi6YIVl+aqRk6+pHB6tZ6rrehUnVzLVcdc3t7OOMgUV5GX9M9mXdm2wyzrM7UXvJpyPvjn
+        /AbWN6t0mxWntbJcXbFls8p3lcpce9X7Cw9t5TLuK64yLHnxKLnY6duuH4fbN+x7I1fBMiNW
+        qnJhp3U2f4ha+4Jkt6l33URaOjgOmb/60HD1l5LKq1NbI7h2Zs/MauU6e0h7TljuMXMtxU5p
+        JwVV9g/Xtdas817npHsoKaBE+L7imXUuD3382/7cS9kitC7hir2aHkf1Pn4lluKMREMt5qLi
+        RACs6M34+wIAAA==
+X-CMS-MailID: 20220216010219epcas1p16a351e60d11478c3f68f23af2891b48d
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220125192140epcas1p27d09a1d2ceaed49dd7c410c0223c51d7
-References: <CGME20220125192140epcas1p27d09a1d2ceaed49dd7c410c0223c51d7@epcas1p2.samsung.com>
-        <20220125192634.GA70834@embeddedor>
+X-CMS-RootMailID: 20220104084415epcas1p3e904babe27a1a45ab66f3793fb68890d
+References: <CGME20220104084415epcas1p3e904babe27a1a45ab66f3793fb68890d@epcas1p3.samsung.com>
+        <20220104084359.41051-1-yang.lee@linux.alibaba.com>
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
@@ -122,33 +118,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/22 4:26 AM, Gustavo A. R. Silva wrote:
-> Make use of the struct_size() helper instead of an open-coded version,
-> in order to avoid any potential type mistakes or integer overflows that,
-> in the worst scenario, could lead to heap overflows.
+On 1/4/22 5:43 PM, Yang Li wrote:
+> Add the description of @id in extcon_sync() kernel-doc comment
+> and @edev, @id, @prop in extcon_set_property_sync() kernel-doc
+> comment to remove warnings found by running scripts/kernel-doc,
+> which is caused by using 'make W=1'.
+> drivers/extcon/extcon.c:409: warning: Function parameter or 
+> member 'id' not described in 'extcon_sync'
+> drivers/extcon/extcon.c:750: warning: Function parameter or 
+> member 'edev' not described in 'extcon_set_property_sync'
+> drivers/extcon/extcon.c:750: warning: Function parameter or 
+> member 'id' not described in 'extcon_set_property_sync'
+> drivers/extcon/extcon.c:750: warning: Function parameter or 
+> member 'prop' not described in 'extcon_set_property_sync'
 > 
-> Also, address the following sparse warnings:
-> drivers/extcon/extcon-usbc-cros-ec.c:71:23: warning: using sizeof on a flexible structure
-> 
-> Link: https://protect2.fireeye.com/v1/url?k=2dc5c327-725efa52-2dc44868-0cc47a31ce4e-cb277ab0badba227&q=1&e=e53efbe1-ab25-4a39-a8b1-9e099fcccde3&u=https%3A%2F%2Fgithub.com%2FKSPP%2Flinux%2Fissues%2F174
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 > ---
->  drivers/extcon/extcon-usbc-cros-ec.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/extcon/extcon.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/extcon/extcon-usbc-cros-ec.c b/drivers/extcon/extcon-usbc-cros-ec.c
-> index 5290cc2d19d9..fde1db62be0d 100644
-> --- a/drivers/extcon/extcon-usbc-cros-ec.c
-> +++ b/drivers/extcon/extcon-usbc-cros-ec.c
-> @@ -68,7 +68,7 @@ static int cros_ec_pd_command(struct cros_ec_extcon_info *info,
->  	struct cros_ec_command *msg;
->  	int ret;
+> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
+> index a09e704fd0fa..1e71ad489a83 100644
+> --- a/drivers/extcon/extcon.c
+> +++ b/drivers/extcon/extcon.c
+> @@ -399,6 +399,7 @@ static ssize_t cable_state_show(struct device *dev,
+>  /**
+>   * extcon_sync() - Synchronize the state for an external connector.
+>   * @edev:	the extcon device
+> + * @id:		the unique id indicating an external connector
+>   *
+>   * Note that this function send a notification in order to synchronize
+>   * the state and property of an external connector.
+> @@ -736,6 +737,9 @@ EXPORT_SYMBOL_GPL(extcon_set_property);
 >  
-> -	msg = kzalloc(sizeof(*msg) + max(outsize, insize), GFP_KERNEL);
-> +	msg = kzalloc(struct_size(msg, data, max(outsize, insize)), GFP_KERNEL);
->  	if (!msg)
->  		return -ENOMEM;
->  
+>  /**
+>   * extcon_set_property_sync() - Set property of an external connector with sync.
+> + * @edev:	the extcon device
+> + * @id:		the unique id indicating an external connector
+> + * @prop:	the property id indicating an extcon property
+>   * @prop_val:	the pointer including the new value of extcon property
+>   *
+>   * Note that when setting the property value of external connector,
 > 
 
 Applied it. Thanks.

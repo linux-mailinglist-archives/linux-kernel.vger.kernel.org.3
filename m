@@ -2,107 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D4D4B85E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 11:37:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4734B85EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 11:37:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbiBPKgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 05:36:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34042 "EHLO
+        id S230061AbiBPKgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 05:36:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbiBPKgQ (ORCPT
+        with ESMTP id S229943AbiBPKgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 05:36:16 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8122B9A3E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 02:36:03 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id p22so3000780lfu.5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 02:36:03 -0800 (PST)
+        Wed, 16 Feb 2022 05:36:18 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFEA2B9A3A;
+        Wed, 16 Feb 2022 02:36:05 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id s1so1597257iob.9;
+        Wed, 16 Feb 2022 02:36:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=DPYWkKQW0nFWmY1xKFD4WRaxOqq/BeFHyxszPN5EPVU=;
-        b=sUG7rjTRD6NrI48dGWwKOWJyGgjS5g2H1DjFZUQiMmRJj/ir9Wv7S+f3pcYhwB3G21
-         jgW2ghTrDeTyWExposS8pU9olgt0OSFSsKqTWvFBrZtYeR1hzrMRB/QHZbRFsmF8Z2S0
-         H/h0PiEEIFA7GmMAI2JMN3sa/fyLmEXYE57MT9xMELnMPIGAArOM53KTMVRbp5J3baMB
-         isLqyWoSSBY1G4sXiIcXWs7lxW91pyd5h21jcWCoFLVEL0Fbk7le1PLdPy5uxaXftMdu
-         5wLQBv6dJWYyW7H1/lavO2wyNL8O5n34jBSkfOXmCyy+T54Vr7Az+AHoRojt+05MRAOP
-         vMsw==
+         :cc;
+        bh=uKJipsq5oe0ZDTEuY+K/upzTvFd2Dsp+kTmSfYWHazI=;
+        b=oB2OvesgzInGIl9/ipqAc83wTh84bdMDXTbti2s/RMWD7Yiaav3MxOilkBjJyROqOq
+         m1OXPDMSixt3+1Jo6RQAUc/mH65M416o76Q4aXyVCFbv7To0jcn13xt3mJhlfJFZJRwI
+         lDyFz7n43fLsrfaTC34ZTkFyYvTzXMrn12U/+L/cLU/9dB3dnjA5r07osvpbBlzMhnxK
+         rY4OgFkI0SV2BvPvLg/o2jXh0k9Y5Tly6svLF5rqLvPTNab6Ob1uM3fDLgo7/+500nIS
+         kZskH1LCBfqsXH8TFSGzlx0+mKy5rnE3fjExDVJOJgT7om7RMOjBGeUNrdtvVWNpBbAj
+         kVEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=DPYWkKQW0nFWmY1xKFD4WRaxOqq/BeFHyxszPN5EPVU=;
-        b=zhYLKPJOwpcrrXScTgN2m7C3LBvEHEVca/i7S4cJH9emTrypJFPkFJmOnLoGuIg0hj
-         ELC25APyfvJPjHBwtZ/16/T0kVVKqJq0Unj79pFVre+hFGdxcQzbForyb2gXOfe4G6Ft
-         DN4hrmfCzkIAiplRh9puv7zHMaf88QalCcCrJ3AkDB3VFaQMvdRfzXzqnhnuOb91YxUq
-         3quS/JA9KbFa+0bTF6kSnhtFPG+sarqbovuZWK4KnOmdbSyLioz2/P8uKVCfWch8Wfh8
-         DBP+Zb7kxepgxua82I0lHIgoYa58+t65XmBRlUFiFoG9UIwgmc1up2jMKqYeTjl92Jli
-         L+bg==
-X-Gm-Message-State: AOAM532m08GSyZ6J1wQRuliMaJ1yrWmzRbJEf6aJfmG9cGro2nmZ1beb
-        zzlJLBDmGg/m2N+1nlYYKC1b6RjafMwUDuGhwB5nEg==
-X-Google-Smtp-Source: ABdhPJz9lTvKXYqNUYEUwJcowusuOCgV3hil3k2PW920Mo0Cq3dd/tLhknO2IA4VJElhIgGQWuFNWTFzEa2t3lXDQAk=
-X-Received: by 2002:a05:6512:388d:b0:443:6066:2c8d with SMTP id
- n13-20020a056512388d00b0044360662c8dmr1552732lft.184.1645007762118; Wed, 16
- Feb 2022 02:36:02 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=uKJipsq5oe0ZDTEuY+K/upzTvFd2Dsp+kTmSfYWHazI=;
+        b=oQUoKoOZpl1LVGKcT6zWEbdAazCL7nnOvpdNSheK4cNSaTRJkUzrsJKqadeACZHAia
+         kwLWqGqCIOxefjfRI7EEF1Q4q+ubnV5Fx/0uoVDxfAiKgBOaarrEq9i6mTtRoxHzjAdi
+         DE0LA9k7MDZCS75ZhVewBOjyh9EgDRuH0UrzGkwzYT95LnpvTq+2vjR1IXutFDj08g2p
+         5HZQMlOT9XtPuzcxdmfZS5QGtcxe0sM4QqS9DCGaqbV3mHsNnQOBSpJFb/bSvchb7ZFf
+         b/uGha0Aaws+kxnpe+/WbEu0eD4Tgoo4TqWynZXt5lcRtBT3hWZr3ZSxZOyUtDBwIkph
+         3EXw==
+X-Gm-Message-State: AOAM530qu1kvWlDZz4EGC9Ad2tagO323HXY+DA4LRKb6FFuZjOz7Jcxw
+        VaS7KAw4Ss1MCk+PZAxrMO04uMg5XvKO+99QlT8=
+X-Google-Smtp-Source: ABdhPJy+nlIuQg/qsfdwCrU+DfJGfoNKRMgf768wo5rWiOwJvwmOAigC+H4fhh7OneJ0TUqJSwNX93shHmq0ywG7gNI=
+X-Received: by 2002:a05:6638:1117:b0:30d:1e9f:26ca with SMTP id
+ n23-20020a056638111700b0030d1e9f26camr1300117jal.256.1645007764490; Wed, 16
+ Feb 2022 02:36:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20220216093112.92469-1-Jerome.Pouiller@silabs.com>
-In-Reply-To: <20220216093112.92469-1-Jerome.Pouiller@silabs.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 16 Feb 2022 11:35:25 +0100
-Message-ID: <CAPDyKFreMJigpAgE95EgkStNrE+r+_k9iRuTXsFk6t9d66e0TQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] staging: wfx: apply SDIO suggestions
-To:     Jerome Pouiller <Jerome.Pouiller@silabs.com>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Kalle Valo <kvalo@codeaurora.org>, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-mmc@vger.kernel.org,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+References: <20220216031957.9761-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20220216031957.9761-1-jiapeng.chong@linux.alibaba.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 16 Feb 2022 11:35:53 +0100
+Message-ID: <CANiq72njcv_MYfTYycMqarEgN0ujKOSvT6OfQxW-kN6FDb5MRw@mail.gmail.com>
+Subject: Re: [PATCH] printk: make suppress_panic_printk static
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Kees Cook <keescook@chromium.org>, anton@enomsg.org,
+        ccross@android.com, Tony Luck <tony.luck@intel.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        Abaci Robot <abaci@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Feb 2022 at 10:31, Jerome Pouiller
-<Jerome.Pouiller@silabs.com> wrote:
+On Wed, Feb 16, 2022 at 4:20 AM Jiapeng Chong
+<jiapeng.chong@linux.alibaba.com> wrote:
 >
-> From: J=C3=A9r=C3=B4me Pouiller <jerome.pouiller@silabs.com>
+> This symbol is not used outside of printk.c, so marks it static.
 >
-> Hi Ulf, Greg,
+> Fix the following sparse warning:
 >
-> The second patch of this series touch to the staging tree and to the MMC
-> framework. I don't know what is the rule for these cases, but I think it
-> makes more sense to carry this patch with the staging tree.
+> kernel/printk/printk.c:100:19: warning: symbol 'suppress_panic_printk'
+> was not declared. Should it be static?
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-I don't believe the changes to the mmc core will cause any merge
-conflict, so feel free to funnel this through whatever tree makes best
-sense.
+It could be good to mention this is based on -next.
 
-For the series:
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
 
-Kind regards
-Uffe
-
->
->
-> J=C3=A9r=C3=B4me Pouiller (2):
->   staging: wfx: WF200 has no official SDIO IDs
->   staging: wfx: apply the necessary SDIO quirks for the Silabs WF200
->
->  drivers/mmc/core/quirks.h      | 5 +++++
->  drivers/staging/wfx/bus_sdio.c | 8 ++------
->  2 files changed, 7 insertions(+), 6 deletions(-)
->
-> --
-> 2.34.1
->
+Cheers,
+Miguel

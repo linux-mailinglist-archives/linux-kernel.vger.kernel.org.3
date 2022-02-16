@@ -2,57 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69C8B4B8B36
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEDA14B8AFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234904AbiBPOSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 09:18:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33044 "EHLO
+        id S234823AbiBPOEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 09:04:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234116AbiBPOSL (ORCPT
+        with ESMTP id S229879AbiBPOEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 09:18:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFDE1B4453
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 06:17:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55DBBB81EDA
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 14:17:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D259DC004E1;
-        Wed, 16 Feb 2022 14:17:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645021076;
-        bh=25WzSdKtFWUOysZRmxAVLJb+CZcoj//JQjD1ChtvlNM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JyFpMMkNVLu4oQG+tcrjlS2O0c2RGmmc4jAVRHRX5cJ49S+5KlwgUSg/lLw9i9VBR
-         HUZ19T20xf6Gz9tIkghUYrISocVbfAc6avwO0iW0IIn4woxVv4fpB7TgnBqQpg9Ql/
-         rN6ipK0H5Ho69WPqVD5vCUqiimT4J0ro7y2Q1TsXIeU41wgXMMuuBoS4bpc07BxAWU
-         s5YS8X4pctUsVoUtjTSNf1zk4HsIKuKq9AzpvPzsuyX4LJ/qmJqLZfVNpZO1iYhjUU
-         M8GhgX/WjCrk8RGG85ZrpIoEx5yTfznHJYwK0ImDp4VfYbmmPCFx8SFAnOZgj2YWZv
-         +FRa8oCRY6MZw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id B4732400FE; Wed, 16 Feb 2022 11:17:53 -0300 (-03)
-Date:   Wed, 16 Feb 2022 11:17:53 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Stephane Eranian <eranian@google.com>
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        kim.phillips@amd.com, acme@redhat.com, jolsa@redhat.com,
-        songliubraving@fb.com
-Subject: Re: [PATCH v6 11/12] perf tools: Improve error handling of AMD
- Branch Sampling
-Message-ID: <Yg0HkUzDlkD4nqNs@kernel.org>
-References: <20220208211637.2221872-1-eranian@google.com>
- <20220208211637.2221872-12-eranian@google.com>
+        Wed, 16 Feb 2022 09:04:08 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656572A39F3;
+        Wed, 16 Feb 2022 06:03:56 -0800 (PST)
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JzKRC35LDzbkNY;
+        Wed, 16 Feb 2022 22:02:47 +0800 (CST)
+Received: from dggpeml500006.china.huawei.com (7.185.36.76) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 16 Feb 2022 22:03:54 +0800
+Received: from compute.huawei.com (10.175.112.70) by
+ dggpeml500006.china.huawei.com (7.185.36.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 16 Feb 2022 22:03:53 +0800
+From:   Zhang Changzhong <zhangchangzhong@huawei.com>
+To:     Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Jeff Garzik <jeff@garzik.org>
+CC:     Zhang Changzhong <zhangchangzhong@huawei.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH net] bonding: force carrier update when releasing slave
+Date:   Wed, 16 Feb 2022 22:18:08 +0800
+Message-ID: <1645021088-38370-1-git-send-email-zhangchangzhong@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220208211637.2221872-12-eranian@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500006.china.huawei.com (7.185.36.76)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,87 +53,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Feb 08, 2022 at 01:16:36PM -0800, Stephane Eranian escreveu:
-> Improve the error message printed by perf when perf_event_open() fails on
-> AMD Zen3 when using the branch sampling feature. In the case of EINVAL, there
-> are two main reasons: frequency mode or period is smaller than the depth of
-> the branch sampling buffer (16). The patch checks the parameters of the call
-> and tries to print a relevant message to explain the error:
-> 
-> $ perf record -b -e cpu/branch-brs/ -c 10 ls
-> Error:
-> AMD Branch Sampling does not support sampling period smaller than what is reported in /sys/devices/cpu/caps/branches.
-> 
-> $ perf record -b -e cpu/branch-brs/ ls
-> Error:
-> AMD Branch Sampling does not support frequency mode sampling, must pass a fixed sampling period via -c option or cpu/branch-brs,period=xxxx/.
-> 
-> Signed-off-by: Stephane Eranian <eranian@google.com>
-> [Rebased on commit 9fe8895a27a84 ("perf env: Add perf_env__cpuid, perf_env__{nr_}pmu_mappings")]
-> Signed-off-by: Kim Phillips <kim.phillips@amd.com>
-> ---
->  tools/perf/util/evsel.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> index d42f63a484df..7311e7b4d34d 100644
-> --- a/tools/perf/util/evsel.c
-> +++ b/tools/perf/util/evsel.c
-> @@ -2857,6 +2857,12 @@ static bool is_amd_ibs(struct evsel *evsel)
->  	return evsel->core.attr.precise_ip || !strncmp(evsel->pmu_name, "ibs", 3);
->  }
->  
-> +static bool is_amd_brs(struct evsel *evsel)
-> +{
-> +	return ((evsel->core.attr.config & 0xff) == 0xc4) &&
-> +	       (evsel->core.attr.sample_type & PERF_SAMPLE_BRANCH_STACK);
-> +}
-> +
+In __bond_release_one(), bond_set_carrier() is only called when bond
+device has no slave. Therefore, if we remove the up slave from a master
+with two slaves and keep the down slave, the master will remain up.
 
-Well, this assumes we're on x86_64, right? Shouldn't we have some extra
-condition using perf_env routines to check we're on x86_64.
+Fix this by moving bond_set_carrier() out of if (!bond_has_slaves(bond))
+statement.
 
-Did a quick check and powerpc also supports PERF_SAMPLE_BRANCH_STACK
+Reproducer:
+$ insmod bonding.ko mode=0 miimon=100 max_bonds=2
+$ ifconfig bond0 up
+$ ifenslave bond0 eth0 eth1
+$ ifconfig eth0 down
+$ ifenslave -d bond0 eth1
+$ cat /proc/net/bonding/bond0
 
-⬢[acme@toolbox perf]$ find arch/ -name "*.c" | xargs grep PERF_SAMPLE_BRANCH_STACK
-arch/powerpc/perf/core-book3s.c:		if (event->attr.sample_type & PERF_SAMPLE_BRANCH_STACK) {
-arch/x86/events/intel/ds.c:	if (sample_type & PERF_SAMPLE_BRANCH_STACK) {
-arch/x86/events/intel/ds.c:					PERF_SAMPLE_BRANCH_STACK |
-arch/x86/events/intel/lbr.c: * in PERF_SAMPLE_BRANCH_STACK sample may vary.
-arch/x86/kvm/vmx/pmu_intel.c:	 * - set 'sample_type = PERF_SAMPLE_BRANCH_STACK' and
-arch/x86/kvm/vmx/pmu_intel.c:		.sample_type = PERF_SAMPLE_BRANCH_STACK,
-⬢[acme@toolbox perf]$
+Fixes: ff59c4563a8d ("[PATCH] bonding: support carrier state for master")
+Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+---
+ drivers/net/bonding/bond_main.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-arch/powerpc/perf/core-book3s.c:
-
-                if (event->attr.sample_type & PERF_SAMPLE_BRANCH_STACK) {
-                        struct cpu_hw_events *cpuhw;
-                        cpuhw = this_cpu_ptr(&cpu_hw_events);
-                        power_pmu_bhrb_read(event, cpuhw);
-                        data.br_stack = &cpuhw->bhrb_stack;
-                }
-
->  int evsel__open_strerror(struct evsel *evsel, struct target *target,
->  			 int err, char *msg, size_t size)
->  {
-> @@ -2971,6 +2977,14 @@ int evsel__open_strerror(struct evsel *evsel, struct target *target,
->  					return scnprintf(msg, size,
->  	"AMD IBS may only be available in system-wide/per-cpu mode.  Try using -a, or -C and workload affinity");
->  			}
-> +			if (is_amd_brs(evsel)) {
-> +				if (evsel->core.attr.freq)
-> +					return scnprintf(msg, size,
-> +	"AMD Branch Sampling does not support frequency mode sampling, must pass a fixed sampling period via -c option or cpu/branch-brs,period=xxxx/.");
-> +				/* another reason is that the period is too small */
-> +				return scnprintf(msg, size,
-> +	"AMD Branch Sampling does not support sampling period smaller than what is reported in /sys/devices/cpu/caps/branches.");
-> +			}
->  		}
->  
->  		break;
-> -- 
-> 2.35.0.263.gb82422642f-goog
-
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index 238b56d..aebeb46 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -2379,10 +2379,9 @@ static int __bond_release_one(struct net_device *bond_dev,
+ 		bond_select_active_slave(bond);
+ 	}
+ 
+-	if (!bond_has_slaves(bond)) {
+-		bond_set_carrier(bond);
++	bond_set_carrier(bond);
++	if (!bond_has_slaves(bond))
+ 		eth_hw_addr_random(bond_dev);
+-	}
+ 
+ 	unblock_netpoll_tx();
+ 	synchronize_rcu();
 -- 
+2.9.5
 
-- Arnaldo

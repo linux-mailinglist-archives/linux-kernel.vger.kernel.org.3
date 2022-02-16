@@ -2,151 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 196614B80BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 07:34:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2ED4B80CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 07:46:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiBPGeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 01:34:03 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35846 "EHLO
+        id S229588AbiBPGqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 01:46:40 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiBPGeC (ORCPT
+        with ESMTP id S229379AbiBPGqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 01:34:02 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869611F3F17;
-        Tue, 15 Feb 2022 22:33:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644993222; x=1676529222;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xhIOhZqbmXasqsL4PSTwgu2wa99Ybi4SJBWDqbME8bE=;
-  b=I1wTLM0qxsO/BxklghI8gVX5h6l3XbgRtsJ0N/wMlsTdCjHA/PFa4Z2m
-   39gMta86brLFdK4h01VjVAyY2hhtMjL8/0yqD6TnrtVA3ZyauaQRYv8Up
-   tt8TQaYYHH4rexpLXVd7bsEp8DtuLBi482DTFmuUCWvk9B36vQ7qiaBgc
-   RWWCMih41HO2wzR6VXL2mSrBmVsMi2ufcgxLrx424iDT18tRuVgrKTo+1
-   jQYddPyZtEtt+kdIWiJbN/H6wO93Rwud2p8/q8fdDh5SAJQdV/yXfRBOh
-   32ItmAyZO2uY4xBeP+p6yAAB48tDY4lmdsOgXlyA07BjV+VhKkMVTwDtb
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="249366366"
-X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="249366366"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 22:29:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="681371490"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Feb 2022 22:29:29 -0800
-Message-ID: <69f26767-66d6-12df-1754-45ee1932d513@linux.intel.com>
-Date:   Wed, 16 Feb 2022 14:28:09 +0800
+        Wed, 16 Feb 2022 01:46:39 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE1A22BDF8;
+        Tue, 15 Feb 2022 22:46:20 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id x5so1211977qtw.10;
+        Tue, 15 Feb 2022 22:46:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6XS4kLUNe+IZUuCNJBO1SJPPEbuousn0y/b6MeXhwcE=;
+        b=U6xlUW2G7CBkjX5Crf4XgUS0U7WRFsrbEUBpEjblJWIu0xtg4LzVxQUehE4ZxbTjv4
+         gayuTt24Ah902YuIOb7MFBeYlC3ryKbGQC7DxEI+NHbp5hQmoVBlLEUHOvbYQUNQF9fM
+         cmMqpKuAEhRFeMu4dOC0dApTv5wEnbshEbQzQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6XS4kLUNe+IZUuCNJBO1SJPPEbuousn0y/b6MeXhwcE=;
+        b=TlyHfma6sOpkDzJchmcjcElMUDuYZWCWPAdWkQNMp4Mpzq1vcnOVXcm7fkPuPC3nLs
+         Sy+OsTihfF1ralu1NZ/44T4i1r5X+jfcLnrBT4MMQ99/uPxO+e/nRntPREcBRlH0BdiI
+         ulaqV0X9UrmhO2ThuzGLGgq8SegSaODKvkqwLV4OJnTrB42/MRr13W5z0y0J58phywux
+         nX1nsWYBFzaaS6pCGGtz3kyRHSfjv2MszNxZQHTYC7kV8OrhCibkQbFVUaOr9AysoBPt
+         E1eiasTxrmpxb4DKX/Nb+dEqKIDJXjbHkHyLchWKXxH96Euvn9yfg6dxDppwQRooU/Bl
+         vQZA==
+X-Gm-Message-State: AOAM532JRXVYM/f5SePKn4HuQ7CBmW6G+pNnjtGR3Pj29GuxqL+P+lb/
+        faCF8kJ8wbSzgrDMf8eUBt0xnUnPmsV493/49MX3Zgiv
+X-Google-Smtp-Source: ABdhPJxR8AyxoX+WWn1H3SzPot8I7lRW3fMjMORcGOksDawBB0Sdpvgh8N+BFtwatYalcZ8srn0jbnH0BlLiKVlVY8s=
+X-Received: by 2002:a37:a147:0:b0:47a:be0e:4a0c with SMTP id
+ k68-20020a37a147000000b0047abe0e4a0cmr577727qke.165.1644993248256; Tue, 15
+ Feb 2022 22:34:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     baolu.lu@linux.intel.com, Stuart Yoder <stuyoder@gmail.com>,
-        rafael@kernel.org, David Airlie <airlied@linux.ie>,
-        linux-pci@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Will Deacon <will@kernel.org>, Ashok Raj <ashok.raj@intel.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        kvm@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
-        iommu@lists.linux-foundation.org,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [PATCH v1 3/8] iommu: Extend iommu_at[de]tach_device() for
- multi-device groups
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>, Joerg Roedel <joro@8bytes.org>
-References: <20220106022053.2406748-1-baolu.lu@linux.intel.com>
- <20220106022053.2406748-4-baolu.lu@linux.intel.com>
- <Ygo/eCRFnraY01WA@8bytes.org> <20220214130313.GV4160@nvidia.com>
- <Ygppub+Wjq6mQEAX@8bytes.org> <08e90a61-8491-acf1-ab0f-f93f97366d24@arm.com>
- <20220214154626.GF4160@nvidia.com> <YgtrJVI9wGMFdPWk@8bytes.org>
- <20220215134744.GO4160@nvidia.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220215134744.GO4160@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220215151022.7498-1-eajames@linux.ibm.com> <20220215151022.7498-5-eajames@linux.ibm.com>
+In-Reply-To: <20220215151022.7498-5-eajames@linux.ibm.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 16 Feb 2022 06:33:56 +0000
+Message-ID: <CACPK8Xe+M97Covu0+Qc9M-8vdCc9pTXfZjJ9y6_Xm-j1E4GUPQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4] hwmon: (occ) Add soft minimum power cap attribute
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/22 9:47 PM, Jason Gunthorpe via iommu wrote:
-> On Tue, Feb 15, 2022 at 09:58:13AM +0100, Joerg Roedel wrote:
->> On Mon, Feb 14, 2022 at 11:46:26AM -0400, Jason Gunthorpe wrote:
->>> On Mon, Feb 14, 2022 at 03:18:31PM +0000, Robin Murphy wrote:
->>>
->>>> Arguably, iommu_attach_device() could be renamed something like
->>>> iommu_attach_group_for_dev(), since that's effectively the semantic that all
->>>> the existing API users want anyway (even VFIO at the high level - the group
->>>> is the means for the user to assign their GPU/NIC/whatever device to their
->>>> process, not the end in itself). That's just a lot more churn.
->>>
->>> Right
->>
->> Okay, good point. I can live with an iommu_attach_group_for_dev()
->> interface, it is still better than making iommu_attach_device() silently
->> operate on whole groups.
-> 
-> I think this is what Lu's series currently does, it just doesn't do
-> the rename churn as Robin noted. Lu, why not add a note like Robin
-> explained to the kdoc so it is clear this api impacts the whole group?
+On Tue, 15 Feb 2022 at 15:11, Eddie James <eajames@linux.ibm.com> wrote:
+>
+> Export the power caps data for the soft minimum power cap through hwmon.
+>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+>  drivers/hwmon/occ/common.c | 19 ++++++++++++++++---
+>  1 file changed, 16 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+> index 0cb4a0a6cbc1..f00cd59f1d19 100644
+> --- a/drivers/hwmon/occ/common.c
+> +++ b/drivers/hwmon/occ/common.c
+> @@ -674,6 +674,9 @@ static ssize_t occ_show_caps_3(struct device *dev,
+>         case 7:
+>                 val = caps->user_source;
+>                 break;
+> +       case 8:
+> +               val = get_unaligned_be16(&caps->soft_min) * 1000000ULL;
+> +               break;
+>         default:
+>                 return -EINVAL;
+>         }
+> @@ -835,12 +838,13 @@ static int occ_setup_sensor_attrs(struct occ *occ)
+>         case 1:
+>                 num_attrs += (sensors->caps.num_sensors * 7);
+>                 break;
+> -       case 3:
+> -               show_caps = occ_show_caps_3;
+> -               fallthrough;
+>         case 2:
+>                 num_attrs += (sensors->caps.num_sensors * 8);
+>                 break;
+> +       case 3:
+> +               show_caps = occ_show_caps_3;
+> +               num_attrs += (sensors->caps.num_sensors * 9);
 
-I feel that the debate here is not about API name, but how should
-iommu_attach/detach_device() be implemented and used.
+How do we know this changed from 8 to 9?
 
-It seems everyone agrees that for device assignment (where the I/O
-address is owned by the user-space application), the iommu_group-based
-APIs should always be used. Otherwise, the isolation and protection are
-not guaranteed.
+We should start adding links to the occ source code, or a similar
+reference, when making these changes so they can be reviewed.
 
-For kernel DMA (where the I/O address space is owned by the kernel
-drivers), the device driver oriented interface should meet below
-expectations:
-
-  - the concept of iommu_group should be transparent to the device
-    drivers;
-  - but internally, iommu core only allows a single domain to attach to
-    a group.
-
-If the device driver uses default domain, the above expectations are
-naturally met. But when the driver wants to attach its own domain, the
-problem arises.
-
-This series tries to use the DMA ownership mechanism to solve this. The
-devices drivers explicitly declare that
-
-  - I know that the device I am driving shares the iommu_group with
-    others;
-  - Other device drivers with the same awareness can only be bound to the
-    devices in the shared group;
-  - We can sync with each other so that only a shared domain could be
-    attached to the devices in the group.
-
-Another proposal (as suggested by Joerg) is to introduce the concept of
-"sub-group". An iommu group could have one or multiple sub-groups with
-non-aliased devices sitting in different sub-groups and use different
-domains.
-
-Above are what I get so far. If there's any misunderstanding, please
-help to correct.
-
-Best regards,
-baolu
+> +               break;
+>         default:
+>                 sensors->caps.num_sensors = 0;
+>         }
+> @@ -1047,6 +1051,15 @@ static int occ_setup_sensor_attrs(struct occ *occ)
+>                         attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+>                                                      show_caps, NULL, 7, 0);
+>                         attr++;
+> +
+> +                       if (sensors->caps.version > 2) {
+> +                               snprintf(attr->name, sizeof(attr->name),
+> +                                        "power%d_cap_min_soft", s);
+> +                               attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+> +                                                            show_caps, NULL,
+> +                                                            8, 0);
+> +                               attr++;
+> +                       }
+>                 }
+>         }
+>
+> --
+> 2.27.0
+>

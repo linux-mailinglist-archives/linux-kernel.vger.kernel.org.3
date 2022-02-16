@@ -2,109 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F76E4B838B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:03:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E964B839F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:08:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbiBPJCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 04:02:54 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:53174 "EHLO
+        id S231839AbiBPJEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 04:04:53 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231836AbiBPJCi (ORCPT
+        with ESMTP id S230491AbiBPJEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 04:02:38 -0500
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEFB8BE35
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:02:23 -0800 (PST)
-Received: by mail-vs1-f54.google.com with SMTP id m24so1681339vsp.7
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:02:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sYjCvPon8yMm63jyhw65liUtpTYKWdTMDUVsDcsDf2Y=;
-        b=bAPOqWfC2wgNDfladvmrs4cuL/IaSyzg26KezZcNSGeG+9hME4DXP5viEcCX4mr+1D
-         q1I72/G/LPxzmARee/RerR0FyftAxFb98u7DnR397k0KsA1E1AzCfGO5FQkosoOqF4OJ
-         vuvsTtTrN5t3rHdZn/FCctPbsG6v2DLgP8UuCta/B1JGdeBaxo0M4iP4Pd/gLmv9Lxka
-         Yxf14yaQrsijpT5iOqrSnRiVZSocR4/0w/YBKoIPWtTCk+ZRw5cv6X6zy/JTt73RYWRR
-         6UXGxHFrpvoibDCySZHPUhvvtnjS3QDZ+uTBDjs3aO/0mhgDzY73Akfl/mcoQZSbSlw7
-         KQcQ==
-X-Gm-Message-State: AOAM530Any4JoUAKQyZ/8A53CcKDnWtrWgW6YRPAN63g6vZiSMjjbdTv
-        KZ853iN7ANZnPVlgpgBEDTz/qDx3iChr7w==
-X-Google-Smtp-Source: ABdhPJwB5U1T4ELThwsktqezn6jNuDcXVXWLdzeOrht3QzjiRyBtkYZfmLslFjXOz9toonIG7TA8Bw==
-X-Received: by 2002:a05:6102:3591:b0:31b:4f52:29f1 with SMTP id h17-20020a056102359100b0031b4f5229f1mr541805vsu.61.1645002142405;
-        Wed, 16 Feb 2022 01:02:22 -0800 (PST)
-Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com. [209.85.217.45])
-        by smtp.gmail.com with ESMTPSA id n8sm293220vsl.8.2022.02.16.01.02.22
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 01:02:22 -0800 (PST)
-Received: by mail-vs1-f45.google.com with SMTP id t22so1699892vsa.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:02:22 -0800 (PST)
-X-Received: by 2002:a05:6102:4411:b0:31b:6df1:3b80 with SMTP id
- df17-20020a056102441100b0031b6df13b80mr548021vsb.5.1645002141827; Wed, 16 Feb
- 2022 01:02:21 -0800 (PST)
+        Wed, 16 Feb 2022 04:04:52 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B375C2AD675
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:04:40 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-195-EET2GjE8Oq-6f4xc2vJeNw-1; Wed, 16 Feb 2022 09:04:37 +0000
+X-MC-Unique: EET2GjE8Oq-6f4xc2vJeNw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Wed, 16 Feb 2022 09:04:35 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Wed, 16 Feb 2022 09:04:35 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Jue Wang' <juew@google.com>, Tony Luck <tony.luck@intel.com>,
+        "Borislav Petkov" <bp@alien8.de>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>
+Subject: RE: [PATCH] x86/mce: work around an erratum on fast string copy
+ instructions.
+Thread-Topic: [PATCH] x86/mce: work around an erratum on fast string copy
+ instructions.
+Thread-Index: AQHYIvoCSX/7pRzFAkuhPX3tNobqJqyV4VTQ
+Date:   Wed, 16 Feb 2022 09:04:35 +0000
+Message-ID: <3288f39e32f04d67a875775414dd1c14@AcuMS.aculab.com>
+References: <CAPcxDJ6bDctjErv4ggtBiJsmPJb2e-3ng12f+hMuJ7SLN-SXOg@mail.gmail.com>
+ <20220216055629.1542654-1-juew@google.com>
+In-Reply-To: <20220216055629.1542654-1-juew@google.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20220215163213.54917-1-andriy.shevchenko@linux.intel.com>
- <87o83859x2.fsf@intel.com> <Ygv32CptVknidyP3@smile.fi.intel.com> <87leyb5gy8.fsf@intel.com>
-In-Reply-To: <87leyb5gy8.fsf@intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 16 Feb 2022 10:02:10 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWbpbY0=Beq6AMLS36oOmQhAmCvg=2WGJdFRz9dSwURiA@mail.gmail.com>
-Message-ID: <CAMuHMdWbpbY0=Beq6AMLS36oOmQhAmCvg=2WGJdFRz9dSwURiA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] drm/i915/selftests: Replace too verbose for-loop
- with simpler while
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 9:55 AM Jani Nikula <jani.nikula@linux.intel.com> wrote:
-> On Tue, 15 Feb 2022, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > On Tue, Feb 15, 2022 at 07:14:49PM +0200, Jani Nikula wrote:
-> >> On Tue, 15 Feb 2022, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> >> > It's hard to parse for-loop which has some magic calculations inside.
-> >> > Much cleaner to use while-loop directly.
-> >>
-> >> I assume you're trying to prove a point following our recent
-> >> for-vs-while loop discussion. I really can't think of any other reason
-> >> you'd end up looking at this file or this loop.
-> >>
-> >> With the change, the loop indeed becomes simpler, but it also runs one
-> >> iteration further than the original. Whoops.
-> >
-> > Yeah, sorry for that, the initial condition should be d = depth - 1,
-> > of course.
->
-> Well, no, the condition should be while (--i) instead to also match the
-> values the original loop takes. ;D
+RnJvbTogSnVlIFdhbmcNCj4gU2VudDogMTYgRmVicnVhcnkgMjAyMiAwNTo1Ng0KPiANCj4gVGhl
+IGZhc3Qgc3RyaW5nIGNvcHkgaW5zdHJ1Y3Rpb25zICgiUkVQOyBNT1ZTKiIpIGNvdWxkIGNvbnN1
+bWUgYW4NCj4gdW5jb3JyZWN0YWJsZSBtZW1vcnkgZXJyb3IgaW4gdGhlIGNhY2hlIGxpbmUgX3Jp
+Z2h0IGFmdGVyXyB0aGUNCj4gZGVzaXJlZCByZWdpb24gdG8gY29weSBhbmQgcmFpc2UgYW4gTUNF
+Lg0KDQpzL2NvbnN1bWUvdHJhcCBkdWUgdG8vDQoNCklzbid0IHRoaXMganVzdCBwdXR0aW5nIG9m
+ZiB0aGUgaW5ldml0YWJsZSBwYW5pYyB3aGVuIHRoZQ0KZm9sbG93aW5nIGNhY2hlIGxpbmUgaXMg
+YWNjZXNzZXMgZm9yIHJlYWw/DQoNCk9yIGlzIHRoaXMgYWxsIGR1ZSB0byB0aGF0IHBzZXVkbyBk
+eW5hbWljIG1lbW9yeSAoeHBvaW50PykgdGhhdCBpcw0KYnl0ZSBhZGRyZXNzYWJsZSBidXQgb25s
+eSByZWFsbHkgaGFzIHRoZSBxdWFsaXR5IG9mIGEgZGlhaz8NCkl0IHdoaWNoIGNhc2UgSSB0aG91
+Z2h0IGl0IHdhc24ndCBhY3R1YWxseSB1c2FibGUgZm9yDQpub3JtYWwgbWVtb3J5IGFueXdheSAt
+IHNvIHRoZSBjb3BpZXMgYXJlIGFsbCBvbmVzIHdoaWNoIGNhbiBmYXVsdC4NCg0KCURhdmlkDQoN
+Ci0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJt
+LCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChX
+YWxlcykNCg==
 
-"There are two hard things in computer science: cache invalidation,
- naming things, and off-by-one errors."
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

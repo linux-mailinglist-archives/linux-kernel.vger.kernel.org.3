@@ -2,103 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5774B8FE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC5E4B8FE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:10:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237452AbiBPSKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 13:10:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49534 "EHLO
+        id S237483AbiBPSKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 13:10:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237442AbiBPSKa (ORCPT
+        with ESMTP id S237442AbiBPSKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 13:10:30 -0500
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7BA2A4A2C
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:10:17 -0800 (PST)
-Received: by mail-oo1-xc2e.google.com with SMTP id w10-20020a4ae08a000000b0031bdf7a6d76so1664633oos.10
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:10:17 -0800 (PST)
+        Wed, 16 Feb 2022 13:10:44 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011C32B0B1C
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:10:31 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id f13so412438ilq.5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:10:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=zVC5cj0z6rMQpOyPOmFfrF76NsP0MR7V60Bxrd230h8=;
-        b=q8IQlHrCXptsSphCoGIR7Lz/Qw8ySxmbDGAVRO4mPP3/HsDpbPi0dH6R3rZYb7CTbj
-         ou7qsm3xMtjsRpCI7hDfZe5dyYBshj3mDeWQC7MGXKrucSIYTX76I/w6j9ZQoglE3qxn
-         gGBRb9lbvPw3ptllWGR3TWspruFJMRtoFGJ/U0db7bpKlTWzSez5629Z3SueBg9xkBMJ
-         +GtzU0/ZCH0ySgTz3rqladIHD+XSurzIcGCEmkvvsTVYnbieK23gTzKm6ccFvlyYnoiR
-         CHg3CgJHqqg/TT5WbA3KtwepYNaqP3kJN84qNyLMIe8KnoTBReIZInqK3NGQm+bbHuW7
-         Y3wg==
+        bh=dhg8ObNqJqU9MXgC8htbZHEYozTLZfTKNUE4M3ppPEQ=;
+        b=X3YBCQPLYrjbSwdYieYTzfp5aHHmxsfeg3RTf4qZg0wFQ6+c9DxcKdaAJmOlc37Dsv
+         CTdEpl0BzCTg87o7PF2lX4vr7saXRgNN4zH/iPLgcyLTPMZGhRdeuiUlyPMWzB1yffkQ
+         L1SizYyjHV+Gfh5MA9OSmEyn4e1glalJ49FS0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=zVC5cj0z6rMQpOyPOmFfrF76NsP0MR7V60Bxrd230h8=;
-        b=AnaF/6Uj0oivIrNPZNMSVPA3K4vlmqz493P5oq35B0p3s0FR1dpQ0R1HZwfmNAQShh
-         CTpryBrGBa4f0nfnVphGjvvofqFobKuHcFCRGwjprRTVw7zyHl6j3EN7udKyfeNKUTIq
-         iNmZhqMWn9WnEDJPAIMR40u7LFnA/xGFTVYyJAIqOXBEaLYtEQk7eS2pn9PhhkOo1hxU
-         pRKEt57ShwLEsXpLu4CKPHYNhnCZaNhHhCu+0c8sxFwRVGcpTy4ztTaX27hinmh0tjUA
-         XkFy94GBxfd7cUNljrD2UOZoU1xQiNwH8VUQ1BMOsL/ZOowX9N8hxsjpb5ovFMgqwBZz
-         WVUQ==
-X-Gm-Message-State: AOAM53020Ik2ioyb/JOurUTmoVSoWCO7zv6DwKh4WrxJIfiTfjMp0Gjo
-        5Z5OcLv2VelFfV+8ttQuPIFp1Ub6VbWjFEELvYI5+A==
-X-Google-Smtp-Source: ABdhPJx+8UjiPN1CieY4Xi5pUk7u/5mk2xIt09T8qbul+0tYqHo1/KGJJDhsJ9CEW8caQBqx6OCrmVhxg6tElA76mdM=
-X-Received: by 2002:a4a:5596:0:b0:2dd:bb93:8800 with SMTP id
- e144-20020a4a5596000000b002ddbb938800mr1290780oob.85.1645035016433; Wed, 16
- Feb 2022 10:10:16 -0800 (PST)
+        bh=dhg8ObNqJqU9MXgC8htbZHEYozTLZfTKNUE4M3ppPEQ=;
+        b=ueoZreMQ1k4DLXCSdUsHQZ2vn7iQ90WHddohi2Vq1KHLJ1thG89EZWEeea9H/TGV9M
+         ROYRiWLJ4SIEXG3Yi1KqZ8+EnsY0nLM3g4GC00VKRsTkjD35DRpouz+AvaEjKwP0/NSs
+         bZGpjcK48O8HEcx293p3joUkSf1TKR/FHNxsb9PB0u2I3fP2p2uSpJxA2s3Jl/UOwaHJ
+         KynwkRCfaX7MPKvbKvxfKmGo9nyYIC/Xfws/HKQRmLGGSkXb5z8LO4M9cjwl2L1Yna75
+         GwffU0U3sQnYus/WlNKVABPZ8ZRLcS46qkrLqiVtcx1g3YS+gdQTk4OyCcq1MSOoaL3u
+         72Gg==
+X-Gm-Message-State: AOAM532fEBhwpXtWsen6Kc831Fb01OLRsJFx9ax9nMFYnKR24E5sAmYC
+        AJ38lmhxggJ06X1Mjwq0KZPlWxYGJUiK9A==
+X-Google-Smtp-Source: ABdhPJyC1DggR2p3sQ6nOYoxwJqirAuyffugkK9LFHAKY1NBaAMwy5VIlMoO6PmDJDGXMNPwp8yW4w==
+X-Received: by 2002:a92:c269:0:b0:2be:795d:abb2 with SMTP id h9-20020a92c269000000b002be795dabb2mr2638878ild.46.1645035031221;
+        Wed, 16 Feb 2022 10:10:31 -0800 (PST)
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com. [209.85.166.179])
+        by smtp.gmail.com with ESMTPSA id w4sm284536ilv.13.2022.02.16.10.10.28
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 10:10:29 -0800 (PST)
+Received: by mail-il1-f179.google.com with SMTP id z7so408410ilb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:10:28 -0800 (PST)
+X-Received: by 2002:a05:6e02:144f:b0:2bd:da3d:f50b with SMTP id
+ p15-20020a056e02144f00b002bdda3df50bmr2425111ilo.165.1645035028535; Wed, 16
+ Feb 2022 10:10:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20220117085307.93030-1-likexu@tencent.com> <CALMp9eS=1U7T39L-vL_cTXTNN2Li8epjtAPoP_+Hwefe9d+teQ@mail.gmail.com>
- <67a731dd-53ba-0eb8-377f-9707e5c9be1b@intel.com> <CABOYuvbPL0DeEgV4gsC+v786xfBAo3T6+7XQr7cVVzbaoFoEAg@mail.gmail.com>
- <7b5012d8-6ae1-7cde-a381-e82685dfed4f@linux.intel.com> <CALMp9eTOaWxQPfdwMSAn-OYAHKPLcuCyse7BpsSOM35vg5d0Jg@mail.gmail.com>
- <e06db1a5-1b67-28ac-ee4c-34ece5857b1f@linux.intel.com> <CALMp9eSjDro169JjTXyCZn=Rf3PT0uHhdNXEifiXGYQK-Zn8LA@mail.gmail.com>
- <d86ba87b-d98a-53a0-b2cd-5bf77b97b592@linux.intel.com> <CABOYuvZ9SZAWeRkrhhhpMM4XwzMzXv9A1WDpc6z8SUBquf0SFQ@mail.gmail.com>
- <6afcec02-fb44-7b72-e527-6517a94855d4@linux.intel.com> <CALMp9eQ79Cnh1aqNGLR8n5MQuHTwuf=DMjJ2cTb9uXu94GGhEA@mail.gmail.com>
- <2180ea93-5f05-b1c1-7253-e3707da29f8c@linux.intel.com> <CALMp9eQiaXtF3S0QZ=2_SWavFnv6zFHqf_zFXBrxXb9pVYh0nQ@mail.gmail.com>
- <8d9149b5-e56f-b397-1527-9f21a26ad95b@linux.intel.com> <CALMp9eTqNyG-ke1Aq72hn0CVXER63SgVPamzXria76PmqiZvJQ@mail.gmail.com>
- <31cd6e81-fd74-daa1-8518-8a8dfc6174d0@gmail.com>
-In-Reply-To: <31cd6e81-fd74-daa1-8518-8a8dfc6174d0@gmail.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 16 Feb 2022 10:10:05 -0800
-Message-ID: <CALMp9eTrKmtP4BHxBNvyG9+bhOAd1jofx0rQz0rF=MtaoShb=w@mail.gmail.com>
-Subject: Re: [PATCH kvm/queue v2 2/3] perf: x86/core: Add interface to query
- perfmon_event_map[] directly
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     "Liang, Kan" <kan.liang@linux.intel.com>,
-        David Dunn <daviddunn@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>,
-        Stephane Eranian <eranian@google.com>
+References: <20211001144212.v2.1.I773a08785666ebb236917b0c8e6c05e3de471e75@changeid>
+ <CAD=FV=XU0bYVZk+-jPWZVoODW79QXOJ=NQy+RH=fYyX+LCZb2Q@mail.gmail.com>
+ <CA+ASDXPXKVwcZGYoagJYPm4E7DzaJmEVEv2FANhLH-juJw+r+Q@mail.gmail.com>
+ <CAD=FV=VYe1rLKANQ8eom7g8x1v6_s_OYnX819Ax4m7O3UwDHmg@mail.gmail.com> <CA+ASDXO8c4dK31p=kvBABJQsDUs20qVHM6NxYf1JQDCr2oswAw@mail.gmail.com>
+In-Reply-To: <CA+ASDXO8c4dK31p=kvBABJQsDUs20qVHM6NxYf1JQDCr2oswAw@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 16 Feb 2022 10:10:16 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=XivCxy-7Wszv9pnHELi=gRCMeVasEweza17XTtEoiT4A@mail.gmail.com>
+Message-ID: <CAD=FV=XivCxy-7Wszv9pnHELi=gRCMeVasEweza17XTtEoiT4A@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/bridge: analogix_dp: Grab runtime PM reference for DP-AUX
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Sean Paul <sean@poorly.run>, Jonas Karlman <jonas@kwiboo.se>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "# 4.0+" <stable@vger.kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 11:36 PM Like Xu <like.xu.linux@gmail.com> wrote:
+Hi,
 
-> Hardware resources will always be limited (the good news is that
-> the number of counters will increase in the future), and when we have
-> a common need for the same hardware, we should prioritize overall
-> fairness over a GUEST-first strategy.
+On Tue, Feb 15, 2022 at 4:41 PM Brian Norris <briannorris@chromium.org> wrote:
+>
+> On Tue, Feb 15, 2022 at 3:46 PM Doug Anderson <dianders@chromium.org> wrote:
+> > On Tue, Feb 15, 2022 at 2:52 PM Brian Norris <briannorris@chromium.org> wrote:
+> > > It still makes me wonder what the point
+> > > of the /dev/drm_dp_aux<N> interface is though, because it seems like
+> > > you're pretty much destined to not have reliable operation through
+> > > that means.
+> >
+> > I can't say I have tons of history for those files. I seem to recall
+> > maybe someone using them to have userspace tweak the embedded
+> > backlight on some external DP connected panels? I think we also might
+> > use it in Chrome OS to update the firmware of panels (dunno if
+> > internal or external) in some cases too? I suspect that it works OK
+> > for certain situations but it's really not going to work in all
+> > cases...
+>
+> Yes, I believe I'm only submitting patches like this because fwupd
+> apparently likes to indiscriminately whack at dpaux devices:
+> https://github.com/fwupd/fwupd/tree/main/plugins/synaptics-mst#kernel-dp-aux-interface
+>
+> That seems like a bad idea.
+>
+> (We've already disabled that plugin on these systems, but it seems
+> wise not to leave the stumbling block here for the next time.)
 
-The bad news about the new counters on Intel is that they are less
-capable than the existing counters. SInce there is no bitmask for GP
-counters in CPUID.0AH, if you give 4 counters to the guest, then the
-host is stuck using the less capable counters.
-
-Overall fairness is definitely not what we want. See the other thread,
-which has a proposal for a more configurable perf subsystem that
-should meet your needs as well as ours.
-
-Can we move all of this discussion to the other thread, BTW?
+Yeah, it doesn't seem great. I guess it's _slightly_ less bad since
+it's for an external device. As I understand it, they never really
+turn off in the same way. It still feels like letting userspace
+indiscriminately whack at DP AUX registers isn't a great idea, though.

@@ -2,66 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B32554B8FD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 355954B8FDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237422AbiBPSIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 13:08:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46692 "EHLO
+        id S237434AbiBPSJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 13:09:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237393AbiBPSIi (ORCPT
+        with ESMTP id S237428AbiBPSJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 13:08:38 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0CB2A4A04;
-        Wed, 16 Feb 2022 10:08:25 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id q5so1973785oij.6;
-        Wed, 16 Feb 2022 10:08:25 -0800 (PST)
+        Wed, 16 Feb 2022 13:09:46 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1510C2A4A16
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:09:34 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id bu29so5474875lfb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:09:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=ynGAPs6vewqkUM+uFjFuuBNNaKXpBR9qE62w23OOkpQ=;
-        b=MFIB/pTbkxtdy+E48fWpYvRcwoXzLYx5CSk/pVrhc5klo71wVI3Ci3cWHfMJ0J9iCP
-         yNlvMC0ixq8vrPztVqYZw4gUlkJnpDm81EOBL+Vq75cVn2NJV+efIwTehzXf/VSIz07s
-         W3LwXxc7hohSkqjntqkXY72k9nJVrHZIRBih49mT+YJDT0wLzn9G8FR0MTt43oOBJi9m
-         7Nq/Ab/VCpsjQ+1Fl2+x/PESySBuG1ThNwzY1NrBUJkzrTc+ocHLi+ygt03NxEWY6Vkz
-         fbStwmVPHC+XLLvfWB1MLaSFMm4XHO4qCzYdgmpM/StmPx+pmqLkp7aOZlwBv2qP89ZJ
-         5t/g==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dsoF6XbVRJnqOxLapkisfvdDBSbyOEKGfv87xWkqHBo=;
+        b=H8EZzc3vbZYf96mKzjlBDBIZSlEvwXS9/cmk8gIRTNI1MAwfaOAbt22JaPzIFJh6SU
+         haljNM84uLArCZw16a7/Bsg1jw9a9dpDJPFefdN6wlu3bpRuDM6rCoTBfs58oYcxVKD3
+         nbRVV3036QZdC6Y3iMcylW2hsU3GnC78jLfj8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition;
-        bh=ynGAPs6vewqkUM+uFjFuuBNNaKXpBR9qE62w23OOkpQ=;
-        b=NHrpBGHpS1L70CL5Ln+AWNECZoVwD0SUP76hty0XQbkOlA5muDsPGWhckoBTFrSng+
-         /QDBoDVXNeIiY3GiUgX7LHGHNFSHU6Nxao/O0qKGlFhLAqqjMl7SvyuFSHxw+5n9+Ach
-         3Mxph9fUQLORDHoG5eCMNDIXEuKNhB3LfBpOLwhgIf9gqRbAq6ltiK0xLff3T81taDTa
-         U/aoNDlwG0ZSmGkTNW0NQDMFfbl6juuNeK5RrGpf5MH1B5Z35tKUhhQYLGztZh+5p3I7
-         O2cNCqbNQvyRWq4wqHgzH9uopBl1JBhc9B8fveFCYiyS7HhK7A8GrifAYrjIDzibKIy4
-         tPag==
-X-Gm-Message-State: AOAM5329w51gDk0wHwgDaimjQv5v+klpxHbdx1KbWZgfTmTDFJcIrLYy
-        Qm8U/lqAigKWnjIu8kUQ8tXXrq0FsFlZ3w==
-X-Google-Smtp-Source: ABdhPJyTvp8Xff06BppHZI0rsKZaIqitugshaW9L52ilAinPQf64JMnMe5Sz1HxGq1lLj3XF6RV3lw==
-X-Received: by 2002:aca:5f42:0:b0:2ce:6ee7:2cb1 with SMTP id t63-20020aca5f42000000b002ce6ee72cb1mr1269764oib.223.1645034904906;
-        Wed, 16 Feb 2022 10:08:24 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w13sm460356ooj.5.2022.02.16.10.08.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 10:08:23 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 16 Feb 2022 10:08:22 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] hwmon: (asus-ec-sensors) merge setup functions
-Message-ID: <20220216180822.GA3300192@roeck-us.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dsoF6XbVRJnqOxLapkisfvdDBSbyOEKGfv87xWkqHBo=;
+        b=pFY+AkXJJkLgK/vp70Czw4hhg+vTgMHjejdnyeVecrQiO0AFl1EaS+BEaWf/Ka+GBR
+         vxXGdfoDJ22Ets9FaIbFOBCStc+ByYrPWnvTiF8Bq3Pnt3TmlnLMy7UjjeKitefomDro
+         ZboQyocSlhaqbfwpPPyhTCUtpCHTKvN2JARRiTcdUScS4ISoRR4QBouIh/SuT3cZA/jf
+         k43cdOJSpVDynQTDqlKEfd7UAqCleJf9JT4fwxBLZqP3beLcF9+s7FzF5t6NKY2Dqpd4
+         sd+0pDgO9bVC9OkaBoihl00G8YWWeCpP7pdbq+lBf/udQrolCGLMxPnImg+ob243eYii
+         xTMA==
+X-Gm-Message-State: AOAM531xM0aI68A9Ce/6mNvUIz8o+Qx1qXVnjdxA7Ao9Rwl3lpoZYT6R
+        HBNlx/PNCJRiW5NbzXF2vC+y5/xKPd4BaKIs
+X-Google-Smtp-Source: ABdhPJw5WodQtqqgGH//8pniBelKJ9n0ZsFX9omN5ALNompeQRfFr0A7TZAsZbmaSng5O3gN9vkmNQ==
+X-Received: by 2002:a19:5212:0:b0:443:5b82:b6b with SMTP id m18-20020a195212000000b004435b820b6bmr2940838lfb.232.1645034972254;
+        Wed, 16 Feb 2022 10:09:32 -0800 (PST)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
+        by smtp.gmail.com with ESMTPSA id b9sm168016lfs.303.2022.02.16.10.09.31
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 10:09:31 -0800 (PST)
+Received: by mail-lf1-f41.google.com with SMTP id d23so5315884lfv.13
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:09:31 -0800 (PST)
+X-Received: by 2002:ac2:5313:0:b0:443:99c1:7e89 with SMTP id
+ c19-20020ac25313000000b0044399c17e89mr289887lfh.531.1645034970931; Wed, 16
+ Feb 2022 10:09:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+References: <1644984747-26706-1-git-send-email-byungchul.park@lge.com>
+ <1644984964-28300-1-git-send-email-byungchul.park@lge.com>
+ <1644984964-28300-3-git-send-email-byungchul.park@lge.com> <94b1cba2-0e78-bbc0-0321-8be70b2b3be2@opensource.wdc.com>
+In-Reply-To: <94b1cba2-0e78-bbc0-0321-8be70b2b3be2@opensource.wdc.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 16 Feb 2022 10:09:14 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgfpfWuNQi2SjXQL1ir6iKCpUdBruJ+kmOQP1frH7Zdig@mail.gmail.com>
+Message-ID: <CAHk-=wgfpfWuNQi2SjXQL1ir6iKCpUdBruJ+kmOQP1frH7Zdig@mail.gmail.com>
+Subject: Re: Report in ata_scsi_port_error_handler()
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Byungchul Park <byungchul.park@lge.com>, linux-ide@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Chris Wilson <chris@chris-wilson.co.uk>, duyuyang@gmail.com,
+        johannes.berg@intel.com, Tejun Heo <tj@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel-team@lge.com, Linux-MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>, sj@kernel.org,
+        Jerome Glisse <jglisse@redhat.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, ngupta@vflare.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, paolo.valente@linaro.org,
+        Josef Bacik <josef@toxicpanda.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Dave Airlie <airlied@linux.ie>, rodrigosiqueiramelo@gmail.com,
+        melissa.srw@gmail.com, hamohammed.sa@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,106 +115,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 06:15:32PM +0100, Eugene Shalygin wrote:
-> Merge configure_sensor_setup() into probe().
-> 
-> Changes:
->  - v2: add local struct device *dev = &pdev->dev;
->  - v3: initialize dev at declaration
->  - v4: fix checkpatch warning
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+On Tue, Feb 15, 2022 at 10:37 PM Damien Le Moal
+<damien.lemoal@opensource.wdc.com> wrote:
+>
+> On 2/16/22 13:16, Byungchul Park wrote:
+> > [    2.051040] ===================================================
+> > [    2.051406] DEPT: Circular dependency has been detected.
+> > [    2.051730] 5.17.0-rc1-00014-gcf3441bb2012 #2 Tainted: G        W
+> > [    2.051991] ---------------------------------------------------
+> > [    2.051991] summary
+> > [    2.051991] ---------------------------------------------------
+> > [    2.051991] *** DEADLOCK ***
+> > [    2.051991]
+> > [    2.051991] context A
+> > [    2.051991]     [S] (unknown)(&(&ap->eh_wait_q)->dmap:0)
+> > [    2.051991]     [W] __raw_spin_lock_irq(&host->lock:0)
+> > [    2.051991]     [E] event(&(&ap->eh_wait_q)->dmap:0)
+> > [    2.051991]
+> > [    2.051991] context B
+> > [    2.051991]     [S] __raw_spin_lock_irqsave(&host->lock:0)
+> > [    2.051991]     [W] wait(&(&ap->eh_wait_q)->dmap:0)
+> > [    2.051991]     [E] spin_unlock(&host->lock:0)
+>
+> Sleeping with a spinlock held would be triggering warnings already, so
+> these reports seem bogus to me.
 
-$ scripts/checkpatch.pl --strict asus-ec
-WARNING: braces {} are not necessary for single statement blocks
-#55: FILE: drivers/hwmon/asus-ec-sensors.c:607:
-+	if (!board_sensors) {
- 		return -ENODEV;
- 	}
+Yeah, Matthew pointed out the same thing for another use-case, where
+it looks like DEPT is looking at the state at the wrong point (not at
+the scheduling point, but at prepare_to_sleep()).
 
-CHECK: Alignment should match open parenthesis
-#60: FILE: drivers/hwmon/asus-ec-sensors.c:612:
-+	ec_data = devm_kzalloc(dev, sizeof(struct ec_sensors_data),
-+			     GFP_KERNEL);
+This ata_port_wait() is the exact same pattern, ie we have
 
-WARNING: braces {} are not necessary for single statement blocks
-#61: FILE: drivers/hwmon/asus-ec-sensors.c:613:
-+	if (!ec_data) {
-+		return -ENOMEM;
-+	}
+        spin_lock_irqsave(ap->lock, flags);
 
-total: 0 errors, 2 warnings, 1 checks, 61 lines checked
+        while (ap->pflags & (ATA_PFLAG_EH_PENDING | ATA_PFLAG_EH_IN_PROGRESS)) {
+                prepare_to_wait(&ap->eh_wait_q, &wait, TASK_UNINTERRUPTIBLE);
+                spin_unlock_irqrestore(ap->lock, flags);
+                schedule();
 
-> ---
->  drivers/hwmon/asus-ec-sensors.c | 38 ++++++++++++++-------------------
->  1 file changed, 16 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-> index bfac08a5dc57..ef887168df20 100644
-> --- a/drivers/hwmon/asus-ec-sensors.c
-> +++ b/drivers/hwmon/asus-ec-sensors.c
-> @@ -589,23 +589,33 @@ get_board_sensors(const struct device *dev)
->  	return (unsigned long)dmi_entry->driver_data;
->  }
->  
-> -static int __init configure_sensor_setup(struct device *dev)
-> +static int __init asus_ec_probe(struct platform_device *pdev)
->  {
-> -	struct ec_sensors_data *ec_data = dev_get_drvdata(dev);
-> +	const struct hwmon_channel_info **ptr_asus_ec_ci;
->  	int nr_count[hwmon_max] = { 0 }, nr_types = 0;
-> -	struct device *hwdev;
->  	struct hwmon_channel_info *asus_ec_hwmon_chan;
-> -	const struct hwmon_channel_info **ptr_asus_ec_ci;
->  	const struct hwmon_chip_info *chip_info;
-> +	struct device *dev = &pdev->dev;
-> +	struct ec_sensors_data *ec_data;
->  	const struct ec_sensor_info *si;
->  	enum hwmon_sensor_types type;
-> +	unsigned long board_sensors;
-> +	struct device *hwdev;
->  	unsigned int i;
->  
-> -	ec_data->board_sensors = get_board_sensors(dev);
-> -	if (!ec_data->board_sensors) {
-> +	board_sensors = get_board_sensors(dev);
-> +	if (!board_sensors) {
->  		return -ENODEV;
->  	}
->  
-> +	ec_data = devm_kzalloc(dev, sizeof(struct ec_sensors_data),
-> +			     GFP_KERNEL);
-> +	if (!ec_data) {
-> +		return -ENOMEM;
-> +	}
-> +
-> +	dev_set_drvdata(dev, ec_data);
-> +	ec_data->board_sensors = board_sensors;
->  	ec_data->nr_sensors = board_sensors_count(ec_data->board_sensors);
->  	ec_data->sensors = devm_kcalloc(dev, ec_data->nr_sensors,
->  					sizeof(struct ec_sensor), GFP_KERNEL);
-> @@ -666,22 +676,6 @@ static int __init configure_sensor_setup(struct device *dev)
->  	return PTR_ERR_OR_ZERO(hwdev);
->  }
->  
-> -static int __init asus_ec_probe(struct platform_device *pdev)
-> -{
-> -	struct ec_sensors_data *state;
-> -	int status = 0;
-> -
-> -	state = devm_kzalloc(&pdev->dev, sizeof(struct ec_sensors_data),
-> -			     GFP_KERNEL);
-> -
-> -	if (!state) {
-> -		return -ENOMEM;
-> -	}
-> -
-> -	dev_set_drvdata(&pdev->dev, state);
-> -	status = configure_sensor_setup(&pdev->dev);
-> -	return status;
-> -}
->  
->  static const struct acpi_device_id acpi_ec_ids[] = {
->  	/* Embedded Controller Device */
-> -- 
-> 2.35.1
-> 
+and DEPT has incorrectly taken it to mean that 'ap->lock' is held
+during the wait, when it is actually released before actually waiting.
+
+For the spin-locks, this is all very obvious (because they'd have been
+caught long ago by much simpler debug code), but the same
+prepare_to_wait -> wait pattern can most definitely happen with
+sleeping locks too, so they are all slightly suspect.
+
+And yes, the detailed reports are hard to read because the locations
+are given as "ata_port_wait_eh+0x52/0xc0". Running them through
+scripts/decode_stacktrace.sh to turn them into filename and line
+numbers - and also sort out inlining - would help a lot.
+
+Byungchul, could you fix those two issues? Some of your reports may
+well be entirely valid, but the hard-to-read hex offsets and the
+knowledge that at least some of them are confused about how
+prepare_to_wait -> wait actually works makes the motivation to look at
+the details much less..
+
+           Linus

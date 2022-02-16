@@ -2,211 +2,695 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46C14B83C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:14:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 376554B8422
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:26:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231929AbiBPJM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 04:12:26 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46816 "EHLO
+        id S232042AbiBPJTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 04:19:52 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:37408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbiBPJMY (ORCPT
+        with ESMTP id S231768AbiBPJTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 04:12:24 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70114.outbound.protection.outlook.com [40.107.7.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A420A2DAA6;
-        Wed, 16 Feb 2022 01:12:11 -0800 (PST)
+        Wed, 16 Feb 2022 04:19:50 -0500
+X-Greylist: delayed 435 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Feb 2022 01:19:35 PST
+Received: from refb02.tmes.trendmicro.eu (refb02.tmes.trendmicro.eu [18.185.115.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E7F228C88
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:19:35 -0800 (PST)
+Received: from 104.47.18.105_.trendmicro.com (unknown [172.21.19.198])
+        by refb02.tmes.trendmicro.eu (Postfix) with ESMTPS id 67483100816B9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:12:20 +0000 (UTC)
+Received: from 104.47.18.105_.trendmicro.com (unknown [172.21.175.6])
+        by repost01.tmes.trendmicro.eu (Postfix) with SMTP id 63A1B100018F9;
+        Wed, 16 Feb 2022 09:12:18 +0000 (UTC)
+X-TM-MAIL-RECEIVED-TIME: 1645002737.667000
+X-TM-MAIL-UUID: 7dab05f6-a733-4e49-aed1-23ce011c0cff
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (unknown [104.47.18.105])
+        by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id A315010000407;
+        Wed, 16 Feb 2022 09:12:17 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jJc9v7h1jugrbCnrm57agS4lFeo3tbGkvXzdbkZh5R6vDCkUzmupJi+HBuzrz4m2VNsinOfIUxgdDjAsa7QzsaTsVUnpBS97dBC/ab25Kg6wa/PUMqtH8ZC1Pfi6SkJHH+8lM681QFdrJYWKbW9AXUS0JVFKk1UFtkm5PnGu3jPlzexK6NGIZT76TYECFUcyLwl5Tef362gDkv3om4fIY4yeQu1xaWk7iO6Y1WbTgJJxrunRGIgOuZKu/BpIpTZCVcYf+puFJYlrH2G396FgiLfXjaPGcFDIGOpHRqWQLnevU7/TlpjyMSTiAXNsCl0BzYu8lEat9tZc39nleyWiuw==
+ b=Ro96Q90qSagR4/PYmtWjQt2xxEjitzeQvfWvixnqJ4FqiO8HYfic5njMMZ0H0OMIdfMxktGt83VYA2XraXZw8JtiVXizmV3AIclZ7OHBpIsx0QBFxVhGJoBDqpJPGF0eC8yOjtxUOOFdzaJkllXL3sAn+Ch9AhFjAdS/p0h6FzzvoV8Tt0XkPRV1T4mrGZAEMYJ3NBKrHbUUhptaK/oEwpKzYCbs8M4M/V5kcAQVQdPGuhB4dIY7Klk6lCcEISuSRp0foSW7pwANqMXNuFoytRDQ74D/eUcaXPP18kHp97/L00O5+1oFJMY42Lrsb+PnyXWN4COkcfFWmO1xyagr5w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZBBrIARNwROdZr29RMGq8yRCx2v19kWFIsPhN293FxE=;
- b=HNaKn2pAfgKWxg9PPC3rTeL2nDrUxeUmgVgafv+bXpUAezDSspUz8VXoO76wbOlBp5ENwLv8GwP/VJiR58LQe3A9/AQBwNDhf0i6ydw5dpyoktT/aVJDW3UMscYXu1LGG2M8Jj42q6UnVfvz2IknhKCc1S6Sf/hL0Zbw4S55Q6tCMf7HxmcSEd2oTFkaKpyUiAWU0Z2cUdvLiUQGcDzjpSBYJyLVkMkTvxVJ1cvseTqcMDXIpiKb8EzGvnxIs3x9IOKh/KQIOAAdKDnUcRXs02tAQI7u1xxGIzX9omnnLv4XqtxZzOIO/9lBNLAHFYftV4XDv+pgrrui7B9kSxdMOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZBBrIARNwROdZr29RMGq8yRCx2v19kWFIsPhN293FxE=;
- b=i/PTKZsV8VbDLOAqOurbO6/CDvknIiRgMG90ws+ho8fI6rkx73SLzu+/KcW2QhP9CnhK+8eLiATeWXMGbdxvW0pZOfM2eB5xRASW9MU7rPrkfGaAntNGTiHmaO1t6iUXSzT0hr30wEyoWas3rXDEYOkFuIusBCmAc8FsrSf3LO0=
+ bh=Ouf+9zHIB50sxj5vL0cFDI2H93oSy/XTmOlmFPf8d9E=;
+ b=d5Bp3fiheaqTBu58R6diTByWeYLKAjwVv8kq1rjnTWrvLq0QUceCwEr8oaEV8k63kgevU9hTb4ezs61fPGeE913RRrXsI0QuTrKahlLM9xycJ+nZvG7S7zLiXX7yjaaDG7/Y+8pnlIygw9eFOlMKhRqykwOgnlKsfHvBCQmO11hc3gXRHTQPSnIDKe5e8XwwkIugxNBo/7kbT1dfhMmcj9Ib8u3Cd0PXgCFbW+h/dvC41WCZaOiFvQX6IDj9/09USCT0GqtWHEktVaOhTSObykGOA1hcLbOzY0PFwyvgLNJPY5bFMQYXQB1RYeMAX00G6JU3CAoX5yQFdwFvub3QMw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nokia.com;
-Received: from AS8PR07MB8104.eurprd07.prod.outlook.com (2603:10a6:20b:373::6)
- by AM8PR07MB7393.eurprd07.prod.outlook.com (2603:10a6:20b:246::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.6; Wed, 16 Feb
- 2022 09:12:08 +0000
-Received: from AS8PR07MB8104.eurprd07.prod.outlook.com
- ([fe80::903c:34b9:dbbf:c1b1]) by AS8PR07MB8104.eurprd07.prod.outlook.com
- ([fe80::903c:34b9:dbbf:c1b1%6]) with mapi id 15.20.4995.006; Wed, 16 Feb 2022
- 09:12:08 +0000
-Date:   Wed, 16 Feb 2022 10:11:59 +0100
-From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Matija Glavinic-Pecotic <matija.glavinic-pecotic.ext@nokia.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>
-Subject: Re: [PATCH v2] arm64: move efi_reboot to restart handler
-Message-ID: <Ygy/30uTImHrKT6p@localhost.localdomain>
-References: <YfP0osb45uJldtM9@localhost.localdomain>
- <YfQTZTUNaeGi+8tG@FVFF77S0Q05N>
- <YfRorCpk0seVGI+5@localhost.localdomain>
- <Yfk8hQB1eon7oeYU@FVFF77S0Q05N>
- <79bcce92-abb2-4c3e-7193-d18e144da8a0@nokia.com>
- <489b76f9-fbaf-dae0-c90d-c52ee0de92a4@roeck-us.net>
- <YgvAO1UbZcbcj5na@localhost.localdomain>
- <be9cc279-1d62-3d57-9347-6cfaffc00cb4@roeck-us.net>
- <CAMj1kXGQhKuwdATd=SrhBFXZkKMHiFWsrq7m+AY-hFLM3Ltcyg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMj1kXGQhKuwdATd=SrhBFXZkKMHiFWsrq7m+AY-hFLM3Ltcyg@mail.gmail.com>
-X-ClientProxiedBy: HE1PR0202CA0028.eurprd02.prod.outlook.com
- (2603:10a6:3:e4::14) To AS8PR07MB8104.eurprd07.prod.outlook.com
- (2603:10a6:20b:373::6)
+ header.d=none;dmarc=none action=none header.from=opensynergy.com;
+Message-ID: <6c3920d9-798b-2a5a-46d1-011152002251@opensynergy.com>
+Date:   Wed, 16 Feb 2022 10:12:10 +0100
+From:   Peter Hilber <peter.hilber@opensynergy.com>
+To:     Cristian Marussi <cristian.marussi@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        souvik.chakravarty@arm.com, igor.skalkin@opensynergy.com,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        virtualization@lists.linux-foundation.org
+References: <20220213195832.27932-1-cristian.marussi@arm.com>
+ <20220213195832.27932-4-cristian.marussi@arm.com>
+Content-Language: en-US
+Subject: Re: [PATCH v4 3/8] firmware: arm_scmi: Add atomic mode support to
+ virtio transport
+In-Reply-To: <20220213195832.27932-4-cristian.marussi@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM6P191CA0004.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:209:8b::17) To AM9PR04MB8084.eurprd04.prod.outlook.com
+ (2603:10a6:20b:3ec::17)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 15bf4e8a-3b89-40c4-4933-08d9f12c682f
-X-MS-TrafficTypeDiagnostic: AM8PR07MB7393:EE_
-X-Microsoft-Antispam-PRVS: <AM8PR07MB73938F4BB7574B864E91BE8BEF359@AM8PR07MB7393.eurprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Office365-Filtering-Correlation-Id: 630b1c34-1886-4a61-f5cf-08d9f12c6c6c
+X-MS-TrafficTypeDiagnostic: DB6PR0402MB2936:EE_
+X-Microsoft-Antispam-PRVS: <DB6PR0402MB2936DE92D53E5F6ABC089E0A8C359@DB6PR0402MB2936.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: K1Xf/z64gFZXb7Smufd57ZjYsj7UWep1n/szPYbiqxMmncC0Ws01Oiq/0U48RlFBElV/YVU8SEJgLq+ZcZjfkYEYqswuK5Qb3nCyxYVEjVy3UFFKZ+3GqcoElwdZf0MITnWWhEIpfZbnC95X72lAg/a0dQpKF2zqbCdU2ZlPybCbmzHdOp7/4SoMVhuAq2K4gVGIrNpiIr1Uj4pic2f+raLRm3UoKJ6zxgxOlfsTmS1UVz1g9AiAVe5K8lj4emkKuebVTfHZ99n5ZXs9u1Wv2NVLMWUkHS7lCM3UI+hykmTN9wsBCKAcDhyvMoplFHmVMK1FtnhgJueUcqKphRGaGrrBC9SHrl5svXHA4by1SxMKxTnd7AfVtxnWJwF9SobImAdmCg7aygZWPsy5CtU22ZdV5xW9XJMQ7AH0ontkgRBne8M03RPbxpDAYEmnm6LR3AJ7zgTH58LcZuU/M7wKz9Qz57VakksPz/sekPeO8rrxHk1sN2CJZQGA88r06A0NYCM7RZhf4/6+dd0JTU8dAKdkjBktkUjzDtuqH0R4ZIoq4y2zvcgY1qkdwx1IHKD/B9owI1SGf8yT8qh0iPzH1dKl1FllVS6guKPfojy669r81jYOkWhIPBnikqJ8dDBplceYwZXuDqE8WZBJNUDov/iDQYG60Arv7jp1fXL706J1X4ozaMaycSTfnw4GTCew8SkiaAcH0twck+iw0IA+2LcJAsWuC86mNZ2Xnii8c2mFKq+U/Dv5vHGCOVqA8xR0
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR07MB8104.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(7416002)(44832011)(8936002)(508600001)(9686003)(52116002)(66476007)(66556008)(4326008)(6512007)(8676002)(2906002)(66946007)(186003)(5660300002)(83380400001)(6486002)(316002)(6506007)(6666004)(82960400001)(86362001)(54906003)(6916009)(38100700002)(38350700002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: tNFPErLogYUaWIz3l4tZCpFTPR4d9QVzze0CKXZDr+i+CI1JnmO5lwmBW2Pwf8aQr4vIXd/4FGcyarnqW9jxqMXjEo8bp4SFFj5gPF7PY5oJ83mbIqWjOqPheswZKPAfPb2SHAcYzXPv5tti1Fr/MGs1EMfnSV3tSyXlHb+rT+Uw6YxClc4VveEKGIfe5kzIN7vCf25hMJ4EX4eHWfhX7LNJvEYk7952UYh9Z7YrTDAsWTQWDBGHViZPsAfa9HdnIgW8dc+oz5ALB8Y+Ka8xiruc4KTHz5F0ohbKsdIMxRAUpQsUyv81JPpMGCfsZJD+AZpPwyk918kBKwmZ7YYq1NdeREKQkjeBNSH707ddgNexIjW1DEeYkLsdiq+0Fa3E8oOq2j4divUUtmAKmD/tMMwVUqzTxKQj3ZHhvJ2VrNXSjJF66g2X2A6cQ/yym7ZRPJM2h430i6/LmnmGyA2yCATuCXJyeRL7qNgI4OJS6/UEr+axeRQf9tI3TRC/1Vc5RKGz6mn02vnz2WsGDXSuhKWvxOZX9J1tYRqN7g8w7fyDl5HueSISpfl56XAemuziCK4OaPxmqzxgC2GUYb1kaKMW63Cte9wTBaDpwer2W/piBIQ9MkxkFRthJK7GqTwQlrCQGJg5UDxtmamH+kKRJw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8084.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(5660300002)(42186006)(66476007)(316002)(66556008)(53546011)(86362001)(4326008)(8676002)(66946007)(83380400001)(36756003)(31696002)(38100700002)(31686004)(44832011)(2616005)(2906002)(8936002)(186003)(508600001)(30864003)(7416002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R1hSVzdiek5kcGN0TG85WEluU0F4QVZtcFh6aGN6RXErMkZyeEQ1TVhYRG5S?=
- =?utf-8?B?S3VWRTdhNkNrbzdMbVB6RUtobzZPV3ZYaEZHd2RwZkY1QnVKRlF4RFpPQWZ4?=
- =?utf-8?B?SmNZRHRuVzYrYnRHV3hKV0poSTZKZkhlUlN5ZHluUm9HTk9TRzR1SVlHTFVD?=
- =?utf-8?B?bE5CQ3RBemdFTUcvM2lDRFdOWTdPU0kzODNMQ2crR1FCcmcvTTNnMEJCOFF2?=
- =?utf-8?B?ZW1JOFg1VDR1Q1c5NEg0Q3d0WTVlOXg5SWlqY1c2S2VGNXZyanhIQzBJQ2Nj?=
- =?utf-8?B?Zy9IM1hNVXplTTlzRG45NU5rYVBhQVZkakM4ejc2dERYNkVxK1A2am9uRUdr?=
- =?utf-8?B?akY0S0FQU2s5eVFPWkhjWStEWjBGdVdEeWQybHU4Q2VJVFFlRDZXL0lFVmhW?=
- =?utf-8?B?WjFGaHNmalRNVjB6cEtQNC9kejJtWm5KUlNPSk9NU3p0eHF6Q2JoV3daUnZW?=
- =?utf-8?B?MTN0ZGg0Z1NFalVER3VVUnF0aHViUVNZYzdBc2IrL0J2QUErRmtkVzVPTHRE?=
- =?utf-8?B?Q1pkQWQ0Rzg5djBXOC9HS29YMDg4WFM0akdUUmZ5NW01dGtuQ3lBSkN6RURq?=
- =?utf-8?B?OHRjVGs4d0J5cHFUVWlBTUZacXk0S29JYmg2ZHBWRVk3MWhWN2VvODhrVUgr?=
- =?utf-8?B?NCtYcEVKUFBBc3B1UVphQUtzeGptbnhMU2tTUGRzYkR1UFFaMUdkbzJuWXVr?=
- =?utf-8?B?c20zVWtGSHJqVDRud3I5d0l2YVNNcks2dWM0dU5qNk50UVErWExRVTRGTXRG?=
- =?utf-8?B?ZDFDMXNvcnR0djZpWm01dXBaWk54RHJUN0ZndGl3ZXFsOVUzR0RaY09EdTF2?=
- =?utf-8?B?R1NyVnBaZ0NENlN0c1Q4YlprUEtZT0dGUUJ3aVoyOFJQNU5MRU5UOFlNeTUr?=
- =?utf-8?B?dm9IWXhubzZCR1dQZXIzZHZBUElFVVVkUTREb01IVnNBWXg5SG0xckNzM3lO?=
- =?utf-8?B?S2s0YzVveHlnR2duU0VuQ0lQODlDNDRNY2dYclRzSHR6WmltY01QREdEMWVo?=
- =?utf-8?B?THRWdHlXeHJUbnZMaG5DbEx0cm4wNitmamhTcjZmMXZTU1p4OHNCeENaNkkv?=
- =?utf-8?B?bGFuRTdaRGNsRFpiZWFvK05TVGxSVEtCSzZTS0JkRnZiSlY2VTh6Yklhc3l1?=
- =?utf-8?B?Rit0dmNVTlRibXlWUythVGs0TFNLQVlEWlpCMy9VL3JkcitaMFRSTC9SbXcw?=
- =?utf-8?B?OEsxSWNTSDI5TjQrQVlYZDE3cVk5NzE3VFFONU11NmVpYjFDOEdpcS9UY1dZ?=
- =?utf-8?B?dWUvR3hoNFYxSlN6WjNvdWFJcWhQb0ZsaFNiVjJkOTJqK2d1UjZPc1NrNXUy?=
- =?utf-8?B?NG1MeUJsSmZ0eWNiSXlCREM1SHBpcW9JTnhGTkJMbnN2U1VMN1BnTk5mUTdJ?=
- =?utf-8?B?bUJXWVlmbUNXUW1DNi9XenIyUUdRZlp6eWsvS041UU4rODhWanl3UHhXSXlT?=
- =?utf-8?B?MDZ6TlJwODhWclFiQ1ZZZnE0TW9NalYzOEZ3VHNTMjlvekFCTUMxZm9iaDZ0?=
- =?utf-8?B?SG9hcE1uZ1BBSEtnK0ZHUHlJcldvRG9vYXk0RDBJWjB4cTk4aDJKWTZhM2F1?=
- =?utf-8?B?YVc5dVZ0V1dtK0xTZnpGaHJDYmFMSElFRFNPL05vK0hqQ3hBMUx5aW1Lb1lx?=
- =?utf-8?B?WE8rWWdYZk1vT3BjYWF5YW10MmcvKzdRd1NpOW1nVWYzZ2FPNkx2eVlGTmJ6?=
- =?utf-8?B?Sjc5Tm5WYXhpTWhZcmFGME5CWExpOGl6VUtyaGhhZTJYajF0THNFL2o5RGQy?=
- =?utf-8?B?dXhCUkNaV0FrUkIzdWtkWUtJTUtUWks5c2dFdHk3cTVVamVkVDl6d1ZHRDRn?=
- =?utf-8?B?eENQRkNLNDhjdG1uSUZsMkdKdUx4UnBaeGo3YSt5WCtnSzlRZ3lEVEpJYlZz?=
- =?utf-8?B?NTJPZ3I4S3E4SlVNQ2FnRlMxbXJGdTdWWmlPRVdnUnd0REc4T2lLcmx5TFlU?=
- =?utf-8?B?TzhiNlcxUzhwOFpFVzRxaU5WVlorM05KcHprdE4xa1NaNFRPbS9BSWNkMVJT?=
- =?utf-8?B?YmI4NUpLeTg2NzU4eTFMNWZyVGI0T2Z6Q3RiNmFLOTJaaGhXdTJLWjN2a1gy?=
- =?utf-8?B?bnBDL21yMjRING40emx3UHdUNnp3bllsdnVoQmVyWm5sVzJOVDhIRk1keGdB?=
- =?utf-8?B?Yzd0STY2U2RZbFJNN2VXYm55NGFUT25CSmRwdTZCc1IwL09WWjhPUGNreHY4?=
- =?utf-8?B?N1FYUnJiYWtJWEgyK1BzUENVMGllcEdxZURKUzJkWUxmZ2JpYURTbm1kTVNL?=
- =?utf-8?B?WHNpSzluSk90azdjQ1p6RTV2cldRPT0=?=
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 15bf4e8a-3b89-40c4-4933-08d9f12c682f
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR07MB8104.eurprd07.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SVptZlBuVjNlRE4yaVFVd0Nkb3NlajZZSEdkb1ArWFYxdWpTNHRYbHN4Mzll?=
+ =?utf-8?B?dWIrQ29DYllubldoNk1jZk1tcitUMEZYYW0xYmlabnE3RW9TK3lVcW5veUJN?=
+ =?utf-8?B?SGRscUZvWVh0ZkttNWE5UmxVOEFQd1VoUlRMdWRKQWh4Q1pTaVhxdUtJRDda?=
+ =?utf-8?B?L0xXZ29oOFFBWFh4RVZaZ3kvdzFRWTV0bEMzOEltRWk1TG9sZHNxZzFxVDg2?=
+ =?utf-8?B?S2VjQ1prUmEzbS9XeUVyaVorWU5GV3RGdUNHaFhrSm9XWUFibytFQWFLc2FO?=
+ =?utf-8?B?aUswL3Nub3E2ZVl1NlB5R1V6V1oxblhWUXQ3cWdBRUEwQllZa1o5dzIyT3ls?=
+ =?utf-8?B?UlN6R1Bsc3pvaVdDUitwMmZVU3pyRWppc3JUNXovenl5WC9lVlo4YlVXTmRr?=
+ =?utf-8?B?ZFQ1K1F2NXVWOWczVExvK0xlOGZBM1VZblMwWlErN0RXdDVhRlVmc2NDZTZx?=
+ =?utf-8?B?a3JycHNEbzV0amw1U2lqNmx4NWpjZ0ZLYnF3VWtWbVprVGM0bmZpN3diZzlK?=
+ =?utf-8?B?c3AzekZjKzBCS1dnT2lWVnAzRUVKSkRMNUlzUEl3clNsNTdIZDRLTTViMzZu?=
+ =?utf-8?B?UHZyUG43L1N0UUZGUHlzb2tSbnVSeXArMDRNbDZ1RkpjZVVJVVRhTk9qaWx2?=
+ =?utf-8?B?SEIwZlExb2NRdU4vbVFsT2o0UG02bUdTZU9RQjNOVWlzQkpRZ3EzOFQ1bitJ?=
+ =?utf-8?B?Yi85Y3NnTWFDcHlmVDZyT2xUbTVrNWoxeWIrRGN1S1g1NmlSUnVOdW4xWmRK?=
+ =?utf-8?B?Y2dqQmJqS3IvTk9VMmp2SHNxR3lDUDhiWXlXcEsydDIyTUNFVkY4ckpRdEtN?=
+ =?utf-8?B?QjQ3YnVZUXBGczdDSzc1T3NWVW52a0ZOdHROOGgvTWtZc3Z6eVhDV0Y5cGg2?=
+ =?utf-8?B?NjliUG14Sks5QXdwNFB4RDgyUFRqNzEvWlpLT3E2R0ZHVFFld3EweEVkekxo?=
+ =?utf-8?B?Z2Y1VHJEdzVMVTllcCtaNzdUREhTbW94Nmh2Z2Rodm5DWnQzWFZWQURoY0tH?=
+ =?utf-8?B?MXFFYythWHR4SWI4T0NJVmNGaENkcmZyNTNOWURiR0lHMUxmRVpVTjZKUXpS?=
+ =?utf-8?B?dm8rSjRNK2FzQkREMVBPaHlTekFIUXExUm5PTFJ5aHBWdWNjdHpjNVRBeEp5?=
+ =?utf-8?B?eDE5Z2hXaTBHSHpQb0JsU1JNdjVZME9pbWpZZXlpTEhndDUzTEViaHJUeEFG?=
+ =?utf-8?B?VGcyTktpekd5ZEtMQmsxK241ay9aTC96MXdESnNwUTdTaDRWaTNQa0FxOWp3?=
+ =?utf-8?B?VlQ0MjRWMlhRRlJIaWxVOVF6RlQ3UHl0c3NIQk9OVHlRWEtlalpZSGFwUnhz?=
+ =?utf-8?B?ZVdLeGRHeHN4bWNDd0MrdEZiTU1ocmt6OWhocHRyTUgxTEQ5dFZUYVRtOFl3?=
+ =?utf-8?B?LzcwcWJUL1RwQ0lzUjU3bVRPOHFMZzlibEV3R0hweFA0QkpibVkrMjFSdGYx?=
+ =?utf-8?B?czZkNjd1MUFON2tVOWxWSTM0WVM1dGhMdllqcy85bWxkbGZkOGt0VGhMOWRn?=
+ =?utf-8?B?NkN2aENlbTJ6U3NaM2JWT2VwUXNybkNsY1h0UFpwaUtoMmNVSThwSVRqc1RH?=
+ =?utf-8?B?Tjd3d3QzbEJhTmZUVmNaMU9VSHpoZXd0WWM2NmlmekpZREppbDVpU0tVbEUv?=
+ =?utf-8?B?NXVzZ3JnRUtzZ25tRlAyT0trUWtUd3hRYjdOcm5mSGZyMWhvMXFwSGVIelI5?=
+ =?utf-8?B?SHFHRVVlWGVvb29GZXVYelNIVUtId24zQXdJbW1CS3NPZkdzeStoSHhEaWM1?=
+ =?utf-8?B?bEI0UWdja29MTmIyVmVBWnlFZDRGbHJFVnFMc05wSjJDd2plS2dNSmJuVHZu?=
+ =?utf-8?B?YVJqSGczYzNWbzIrMTU3UitkNDR2TGRTWHp2bDZEM0gwUm1vdmk3Y01OdjBX?=
+ =?utf-8?B?a3F5clpmTWhkRTVEZGszcHBJcFpRdGVXWndyQXZ0WGtoVVZNVk5VNHM3ZGk0?=
+ =?utf-8?B?QmQ4UEZxa1VLUjRrNFljWnV1aVRqT0Y2SDRvd1JMRmlEY1VPMXNaWGdxSFc3?=
+ =?utf-8?B?eXk2THVEaHJxWm4xYUl1c0NLM3dBZlY4SUtDL2tZUGhtSWU4b0lRc0FUVEVK?=
+ =?utf-8?B?TlJjL2xVaUl5QWplZ2hTd1YrZnlsOGJhNWVnRWxiMHJEdUt0cGtvTFJKcVZE?=
+ =?utf-8?B?MjMyUDZYc2w2NjJrMGgrV2VYUUh6VHlQYzBHNWRWekJBTkNXZmRldU9lTjJl?=
+ =?utf-8?B?NnFSaHNrTVBlYjcwQWE0eWU4NHFpMnFzaE5UcjZaRWUwdldzT0NQbS92cmd5?=
+ =?utf-8?Q?XUVKUyH9CqMZ41q1pWb28G2CiWkLCGClQF9zmDc6ak=3D?=
+X-OriginatorOrg: opensynergy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 630b1c34-1886-4a61-f5cf-08d9f12c6c6c
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8084.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2022 09:12:08.3106
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2022 09:12:15.2685
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-Id: 800fae25-9b1b-4edc-993d-c939c4e84a64
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QnPRu8Kz2Ll2M4pqjuDk1nTz7TaQEXDzfeXq0JesLrIH6B4K5DjKZj0+mDjoyMcZhYwXQWmZXn+R+1biYWO/pHHEMzBjh6DhOYxS0u/bn44=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR07MB7393
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: ve+umHt2keZRS88wXxMsvvTIlFPbOKsx+9+02RiaZheOF+/Me+Uq0PRWkFFRCxmFPABtd1+Ge53gU+Bms3gGbQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0402MB2936
+X-TM-AS-ERS: 104.47.18.105-0.0.0.0
+X-TMASE-Version: StarCloud-1.3-8.8.1001-26718.006
+X-TMASE-Result: 10--26.810800-4.000000
+X-TMASE-MatchedRID: IeZYkn8zfFr/9O/B1c/Qy65i3jK3KDOoC/ExpXrHizzozDhGeQC9Ei1s
+        QGcqD7UtTxtConjUegf08edkgvdYLIIokrTYtYlKuLt50vtxBA4RMzHw4jihuQzvg1/q1MH2F6O
+        OkTiGnXsl14a7266m34kGHsog1/afNtywwIf5ksUdZEkR8Y/meUXmpVQIaHBPuqWf6Nh7tmFyYy
+        YBymq600lEFjVj/aAsP0y1Pz0bU7lxTrZJ5tXplP7FEhWgo0y8tOtXYgbXjddCbDVw9++PqaHqk
+        E8v+LvquqcfFYLigUk+ta/415QhvuvsZywOYvoWVnzlQiaE21oJlr1xKkE5ucC5DTEMxpeQfiq1
+        gj2xET8qqtDuUtwyfMXsLs82j9m1kkkoO5MnH8sB6/aPodnUlv2rswKZpHnRJwONCfZCxNr4e/Z
+        QnTz3TvFf8BZZau/zFgTymD6TsUX1dbp49A+Bwguw+MVcHJpKFlIP4ZuPPchHpEd1UrzmFfIr4I
+        Zl1TqPvqvtzy85XwfFegnzY30iYLgmXJUrLAZXBDoR8w7C9OakLKKtVfPgyqBp/T5dSs2T4VbSI
+        3XTpLw5DMj/FS1NXHsvh3HjP7RA6biOAxfBSkaAO0kpgKezRDRgv1Ik+59fSMg2Oe/b8EyqL3xF
+        H9EqVX+eBHl01dQsCnp+pjL19ZrIW5a7efE77RmCYUYerLHrndls9F9zmi0cCkgotCl7hC2ICLw
+        E7H6XrU9Cd6sBqbpCHX9yHrVBsW6aIrCFAYY9C8FMH3T6F77DvsJEJ3LgvHGYPIreWK3dD2VMA3
+        hbGfGNMoTLhhOqpAHk/roBXG21k6AYSaDLmp9+yskgwrfsC30tCKdnhB58vqq8s2MNhPCy5/tFZ
+        u9S3Ku6xVHLhqfxvECLuM+h4RB+3BndfXUhXQ==
+X-TMASE-XGENCLOUD: ee6eeed0-65d8-4fb3-8af5-c55253e5b8f1-0-0-200-0
+X-TM-Deliver-Signature: FD93331BA250134235F02C31438D93C4
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=opensynergy.com;
+        s=TM-DKIM-20210503141657; t=1645002738;
+        bh=CzocQM7dbDuXck41N9wGZvV/u4b+Uo1dJRCKOgGbyH0=; l=20118;
+        h=Date:From:To;
+        b=itwKJuCD9BUq5M1lPPFPHXpeWQKr884V/UhroqcpJ1c/0Hk8UnPxXIOE2tM+F20kX
+         8HnKUSgnsECsIg/Y7+f5W0MhJppCXIa0N3y8vTv603wEf38UieflupOi+tCTJCuocz
+         IhFnX+7QwhZUX14FOmPZZUtNT94EDox9LZHfDf9ZmX1N/jF3sSdhKhJP0L0n7uAziN
+         Zr9emHobcP/Mtqnh2Co213/Bg7gfelwFTn1grz0ISWp20uA2DivzxZDJ21f3YDsvWV
+         qUxxlcTCo69PadJHERxXdhyGM4q6V0STVRXTGaL1a2x253hOiMwVilEHAEWBlbpqlq
+         rNAR6zllEqW+Q==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dnia Tue, Feb 15, 2022 at 06:03:30PM +0100, Ard Biesheuvel napisał(a):
->> > But if we want to prevent registering some custom code to be run before > efi_reboot(), that new API would have to be rejected as well, for the
->> > same reason. So what is the point?
->> >
->>
->> Ah, yes, you are right. The emmc example does reset the emmc, after all,
->> which one could use as argument that it "violates" the EFI mandate.
->> Sorry, I guess you'll be stuck with out-of-tree code (and, realistically,
->> so is everyone using emmc in an arm64 based system with an EFI restart
->> handler which does not implement emmc reset). Actually, turns out that
->> the emmc restart handling code is not reliable anyway, since for example
->> x86 doesn't use/support the restart handler call chain, and neither
->> do several other architectures.
->>
->
->Rich firmware like EFI and ACPI implies that the firmware knows how to
->manage the hardware.
->
+On 13.02.22 20:58, Cristian Marussi wrote:
+> Add support for .mark_txdone and .poll_done transport operations to SCMI
+> VirtIO transport as pre-requisites to enable atomic operations.
+> 
+> Add a Kernel configuration option to enable SCMI VirtIO transport polling
+> and atomic mode for selected SCMI transactions while leaving it default
+> disabled.
+> 
 
-In an ideal world, probably yes. When I move there, I will probably have
-less concerns :)
+Hi Cristian,
 
->
->> Other options for you might be to disable EFI restart handling in your
->> system (assuming that is possible), or to implement the necessary code
->> as part of the EFI restart handler, ie outside Linux, again if that is
->> possible.
->>
->
->Either implement EFI reset properly, or not at all. Adding code to the
->OS that forces it to reason about whether or not EFI reset can be
->called safely simply means that the EFI implementation is broken and
->should probably be avoided entirely.
+please find some minor remarks below.
 
-That is black-and-white thinking. There are shades of gray, too :)
+Best regards,
 
-Imagine this sitation - you have a SoC and the vendor delivers this SoC
-together with support and code for that SoC. You use it to build some
-platform around that SoC but that platform is much more complicated than
-the basic one. It is custom and specific to your needs. The vendor
-provided firmware, together with the EFI implementation can handle
-reseting the SoC without problems but you also have some additional
-parts in your platform you would like to handle. Why, in such a case, I
-should not use the existing EFI implementation and just build on top of
-that? Avoiding using it entirely does not seem reasonable to me. It
-might also not be possible as you might not know all the details to
-reimplement it.
+Peter
 
-On PC/Server world, that approach might be feasible - the vendor knows
-the usecase for their product well enough to support all the cases. But
-ARM64 is being often used for other, so called "embedded", usecases.
-People working in "embedded" often have unique needs and I do understand
-that mainline kernel cannot support all of them. But when supporting
-them is easy and does not require some ugly hacks to be added, why not?
+> Cc: "Michael S. Tsirkin" <mst@redhat.com>
+> Cc: Igor Skalkin <igor.skalkin@opensynergy.com>
+> Cc: Peter Hilber <peter.hilber@opensynergy.com>
+> Cc: virtualization@lists.linux-foundation.org
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> ---
+> v1 --> v2
+> - shrinked spinlocked section within virtio_poll_done to exclude
+>   virtqueue_poll
+> - removed poll_lock
+> - use vio channel refcount acquire/release logic when polling
+> - using new free_list accessors
+> - added new dedicated pending_lock to access pending_cmds_list
+> - fixed a few comments
+> 
+> v0 --> v1
+> - check for deferred_wq existence before queueing work to avoid
+>   race at driver removal time
+> - changed mark_txdone decision-logic about message release
+> - fixed race while checking for msg polled from another thread
+> - using dedicated poll_status instead of poll_idx upper bits
+> - pick initial poll_idx earlier inside send_message to avoid missing
+>   early replies
+> - removed F_NOTIFY mention in comment
+> - clearing xfer->priv on the IRQ tx path once message has been fetched
+> - added some store barriers
+> - updated some comments
+> ---
+>  drivers/firmware/arm_scmi/Kconfig  |  15 ++
+>  drivers/firmware/arm_scmi/driver.c |   9 +-
+>  drivers/firmware/arm_scmi/virtio.c | 277 ++++++++++++++++++++++++++++-
+>  3 files changed, 291 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/firmware/arm_scmi/Kconfig b/drivers/firmware/arm_scmi/Kconfig
+> index d429326433d1..7794bd41eaa0 100644
+> --- a/drivers/firmware/arm_scmi/Kconfig
+> +++ b/drivers/firmware/arm_scmi/Kconfig
+> @@ -118,6 +118,21 @@ config ARM_SCMI_TRANSPORT_VIRTIO_VERSION1_COMPLIANCE
+>  	  the ones implemented by kvmtool) and let the core Kernel VirtIO layer
+>  	  take care of the needed conversions, say N.
+>  
+> +config ARM_SCMI_TRANSPORT_VIRTIO_ATOMIC_ENABLE
+> +	bool "Enable atomic mode for SCMI VirtIO transport"
+> +	depends on ARM_SCMI_TRANSPORT_VIRTIO
+> +	help
+> +	  Enable support of atomic operation for SCMI VirtIO based transport.
+> +
+> +	  If you want the SCMI VirtIO based transport to operate in atomic
+> +	  mode, avoiding any kind of sleeping behaviour for selected
+> +	  transactions on the TX path, answer Y.
+> +
+> +	  Enabling atomic mode operations allows any SCMI driver using this
+> +	  transport to optionally ask for atomic SCMI transactions and operate
+> +	  in atomic context too, at the price of using a number of busy-waiting
+> +	  primitives all over instead. If unsure say N.
+> +
+>  endif #ARM_SCMI_PROTOCOL
+>  
+>  config ARM_SCMI_POWER_DOMAIN
+> diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
+> index c2e7897ff56e..dc972a54e93e 100644
+> --- a/drivers/firmware/arm_scmi/driver.c
+> +++ b/drivers/firmware/arm_scmi/driver.c
+> @@ -648,7 +648,8 @@ static void scmi_handle_notification(struct scmi_chan_info *cinfo,
+>  
+>  	unpack_scmi_header(msg_hdr, &xfer->hdr);
+>  	if (priv)
+> -		xfer->priv = priv;
+> +		/* Ensure order between xfer->priv store and following ops */
+> +		smp_store_mb(xfer->priv, priv);
+>  	info->desc->ops->fetch_notification(cinfo, info->desc->max_msg_size,
+>  					    xfer);
+>  	scmi_notify(cinfo->handle, xfer->hdr.protocol_id,
+> @@ -680,8 +681,12 @@ static void scmi_handle_response(struct scmi_chan_info *cinfo,
+>  		xfer->rx.len = info->desc->max_msg_size;
+>  
+>  	if (priv)
+> -		xfer->priv = priv;
+> +		/* Ensure order between xfer->priv store and following ops */
+> +		smp_store_mb(xfer->priv, priv);
+>  	info->desc->ops->fetch_response(cinfo, xfer);
+> +	if (priv)
+> +		/* Ensure order between xfer->priv clear and later accesses */
+> +		smp_store_mb(xfer->priv, NULL);
+>  
+>  	trace_scmi_rx_done(xfer->transfer_id, xfer->hdr.id,
+>  			   xfer->hdr.protocol_id, xfer->hdr.seq,
+> diff --git a/drivers/firmware/arm_scmi/virtio.c b/drivers/firmware/arm_scmi/virtio.c
+> index a147fc24c4c0..9fa337a4e464 100644
+> --- a/drivers/firmware/arm_scmi/virtio.c
+> +++ b/drivers/firmware/arm_scmi/virtio.c
+> @@ -3,8 +3,8 @@
+>   * Virtio Transport driver for Arm System Control and Management Interface
+>   * (SCMI).
+>   *
+> - * Copyright (C) 2020-2021 OpenSynergy.
+> - * Copyright (C) 2021 ARM Ltd.
+> + * Copyright (C) 2020-2022 OpenSynergy.
+> + * Copyright (C) 2021-2022 ARM Ltd.
+>   */
+>  
+>  /**
+> @@ -42,6 +42,10 @@
+>   * @cinfo: SCMI Tx or Rx channel
+>   * @free_lock: Protects access to the @free_list.
+>   * @free_list: List of unused scmi_vio_msg, maintained for Tx channels only
+> + * @deferred_tx_work: Worker for TX deferred replies processing
+> + * @deferred_tx_wq: Workqueue for TX deferred replies
+> + * @pending_lock: Protects access to the @pending_cmds_list.
+> + * @pending_cmds_list: List of pre-fetched commands queueud for later processing
+>   * @is_rx: Whether channel is an Rx channel
+>   * @max_msg: Maximum number of pending messages for this channel.
+>   * @lock: Protects access to all members except users, free_list.
 
-For years we were implementing ways to overcome limitations in
-hardware and vendor software implementations. restart_handler mechanism
-is quite pretty example of that, one which isn't really hacky, does not
-introduce maintainabity problems if widely used. Why not support it on
-ARM64 as well? Only because in ideal world it wouldn't be needed? :)
+... and also doesn't protect pending_cmds_list.
 
-I understand it should not be needed in EFI world and there are
-approaches that could be used instead of that one, but they all seem
-like taking a sledgehammer to crack a nut.
+> @@ -54,6 +58,11 @@ struct scmi_vio_channel {
+>  	/* lock to protect access to the free list. */
+>  	spinlock_t free_lock;
+>  	struct list_head free_list;
+> +	/* lock to protect access to the pending list. */
+> +	spinlock_t pending_lock;
+> +	struct list_head pending_cmds_list;
+> +	struct work_struct deferred_tx_work;
+> +	struct workqueue_struct *deferred_tx_wq;
+>  	bool is_rx;
+>  	unsigned int max_msg;
+>  	/* lock to protect access to all members except users, free_list  */
 
-Krzysztof
+... and also doesn't protect pending_cmds_list.
+
+> @@ -62,6 +71,12 @@ struct scmi_vio_channel {
+>  	refcount_t users;
+>  };
+>  
+> +enum poll_states {
+> +	VIO_MSG_NOT_POLLED,
+> +	VIO_MSG_POLLING,
+> +	VIO_MSG_POLL_DONE,
+> +};
+> +
+>  /**
+>   * struct scmi_vio_msg - Transport PDU information
+>   *
+> @@ -69,12 +84,17 @@ struct scmi_vio_channel {
+>   * @input: SDU used for (delayed) responses and notifications
+>   * @list: List which scmi_vio_msg may be part of
+>   * @rx_len: Input SDU size in bytes, once input has been received
+> + * @poll_idx: Last used index registered for polling purposes if this message
+> + *	      transaction reply was configured for polling.
+> + * @poll_status: Polling state for this message.
+>   */
+>  struct scmi_vio_msg {
+>  	struct scmi_msg_payld *request;
+>  	struct scmi_msg_payld *input;
+>  	struct list_head list;
+>  	unsigned int rx_len;
+> +	unsigned int poll_idx;
+> +	enum poll_states poll_status;
+>  };
+>  
+>  /* Only one SCMI VirtIO device can possibly exist */
+> @@ -117,6 +137,7 @@ static void scmi_vio_channel_cleanup_sync(struct scmi_vio_channel *vioch)
+>  {
+>  	unsigned long flags;
+>  	DECLARE_COMPLETION_ONSTACK(vioch_shutdown_done);
+> +	void *deferred_wq = NULL;
+>  
+>  	/*
+>  	 * Prepare to wait for the last release if not already released
+> @@ -127,10 +148,19 @@ static void scmi_vio_channel_cleanup_sync(struct scmi_vio_channel *vioch)
+>  		spin_unlock_irqrestore(&vioch->lock, flags);
+>  		return;
+>  	}
+> +
+>  	vioch->shutdown_done = &vioch_shutdown_done;
+>  	virtio_break_device(vioch->vqueue->vdev);
+> +	if (!vioch->is_rx && vioch->deferred_tx_wq) {
+> +		deferred_wq = vioch->deferred_tx_wq;
+> +		/* Cannot be kicked anymore after this...*/
+> +		vioch->deferred_tx_wq = NULL;
+> +	}
+>  	spin_unlock_irqrestore(&vioch->lock, flags);
+>  
+> +	if (deferred_wq)
+> +		destroy_workqueue(deferred_wq);
+> +
+>  	scmi_vio_channel_release(vioch);
+>  
+>  	/* Let any possibly concurrent RX path release the channel */
+> @@ -163,6 +193,8 @@ static void scmi_virtio_put_free_msg(struct scmi_vio_channel *vioch,
+>  {
+>  	unsigned long flags;
+>  
+> +	msg->poll_status = VIO_MSG_NOT_POLLED;
+> +
+>  	spin_lock_irqsave(&vioch->free_lock, flags);
+>  	list_add_tail(&msg->list, &vioch->free_list);
+>  	spin_unlock_irqrestore(&vioch->free_lock, flags);
+> @@ -233,6 +265,7 @@ static void scmi_vio_complete_cb(struct virtqueue *vqueue)
+>  			virtqueue_disable_cb(vqueue);
+>  			cb_enabled = false;
+>  		}
+> +
+>  		msg = virtqueue_get_buf(vqueue, &length);
+>  		if (!msg) {
+>  			if (virtqueue_enable_cb(vqueue)) {
+> @@ -263,6 +296,40 @@ static void scmi_vio_complete_cb(struct virtqueue *vqueue)
+>  	}
+>  }
+>  
+> +static void scmi_vio_deferred_tx_worker(struct work_struct *work)
+> +{
+> +	unsigned long flags;
+> +	struct scmi_vio_channel *vioch;
+> +	struct scmi_vio_msg *msg, *tmp;
+> +
+> +	vioch = container_of(work, struct scmi_vio_channel, deferred_tx_work);
+> +
+> +	if (!scmi_vio_channel_acquire(vioch))
+> +		return;
+> +
+> +	/* Process pre-fetched messages */
+> +	spin_lock_irqsave(&vioch->pending_lock, flags);
+> +
+> +	/* Scan the list of possibly pre-fetched messages during polling. */
+> +	list_for_each_entry_safe(msg, tmp, &vioch->pending_cmds_list, list) {
+> +		list_del(&msg->list);
+> +
+> +		/* Channel is acquired here and cannot vanish */
+> +		scmi_rx_callback(vioch->cinfo,
+> +				 msg_read_header(msg->input), msg);
+> +
+> +		/* Free the processed message once done */
+> +		scmi_virtio_put_free_msg(vioch, msg);
+> +	}
+> +
+> +	spin_unlock_irqrestore(&vioch->pending_lock, flags);
+> +
+> +	/* Process possibly still pending messages */
+> +	scmi_vio_complete_cb(vioch->vqueue);
+> +
+> +	scmi_vio_channel_release(vioch);
+> +}
+> +
+>  static const char *const scmi_vio_vqueue_names[] = { "tx", "rx" };
+>  
+>  static vq_callback_t *scmi_vio_complete_callbacks[] = {
+> @@ -330,6 +397,19 @@ static int virtio_chan_setup(struct scmi_chan_info *cinfo, struct device *dev,
+>  
+>  	vioch = &((struct scmi_vio_channel *)scmi_vdev->priv)[index];
+>  
+> +	/* Setup a deferred worker for polling. */
+> +	if (tx && !vioch->deferred_tx_wq) {
+> +		vioch->deferred_tx_wq =
+> +			alloc_workqueue(dev_name(&scmi_vdev->dev),
+> +					WQ_UNBOUND | WQ_FREEZABLE | WQ_SYSFS,
+> +					0);
+> +		if (!vioch->deferred_tx_wq)
+> +			return -ENOMEM;
+> +
+> +		INIT_WORK(&vioch->deferred_tx_work,
+> +			  scmi_vio_deferred_tx_worker);
+> +	}
+> +
+>  	for (i = 0; i < vioch->max_msg; i++) {
+>  		struct scmi_vio_msg *msg;
+>  
+> @@ -397,6 +477,18 @@ static int virtio_send_message(struct scmi_chan_info *cinfo,
+>  
+>  	spin_lock_irqsave(&vioch->lock, flags);
+>  
+> +	/*
+> +	 * If polling was requested for this transaction:
+> +	 *  - retrieve last used index (will be used as polling reference)
+> +	 *  - bind the polled message to the xfer via .priv
+> +	 */
+> +	if (xfer->hdr.poll_completion) {
+> +		msg->poll_idx = virtqueue_enable_cb_prepare(vioch->vqueue);
+> +		msg->poll_status = VIO_MSG_POLLING;
+> +		/* Ensure initialized msg is visibly bound to xfer */
+> +		smp_store_mb(xfer->priv, msg);
+> +	}
+> +
+>  	rc = virtqueue_add_sgs(vioch->vqueue, sgs, 1, 1, msg, GFP_ATOMIC);
+>  	if (rc)
+>  		dev_err(vioch->cinfo->dev,
+> @@ -406,8 +498,11 @@ static int virtio_send_message(struct scmi_chan_info *cinfo,
+>  
+>  	spin_unlock_irqrestore(&vioch->lock, flags);
+>  
+> -	if (rc)
+> +	if (rc) {
+> +		/* Ensure order between xfer->priv clear and vq feeding */
+> +		smp_store_mb(xfer->priv, NULL);
+>  		scmi_virtio_put_free_msg(vioch, msg);
+> +	}
+>  
+>  	scmi_vio_channel_release(vioch);
+>  
+> @@ -419,10 +514,8 @@ static void virtio_fetch_response(struct scmi_chan_info *cinfo,
+>  {
+>  	struct scmi_vio_msg *msg = xfer->priv;
+>  
+> -	if (msg) {
+> +	if (msg)
+>  		msg_fetch_response(msg->input, msg->rx_len, xfer);
+> -		xfer->priv = NULL;
+> -	}
+>  }
+>  
+>  static void virtio_fetch_notification(struct scmi_chan_info *cinfo,
+> @@ -430,10 +523,173 @@ static void virtio_fetch_notification(struct scmi_chan_info *cinfo,
+>  {
+>  	struct scmi_vio_msg *msg = xfer->priv;
+>  
+> -	if (msg) {
+> +	if (msg)
+>  		msg_fetch_notification(msg->input, msg->rx_len, max_len, xfer);
+> -		xfer->priv = NULL;
+> +}
+> +
+> +/**
+> + * virtio_mark_txdone  - Mark transmission done
+> + *
+> + * Free only completed polling transfer messages.
+> + *
+> + * Note that in the SCMI VirtIO transport we never explicitly release timed-out
+> + * messages by forcibly re-adding them to the free-list inside the TX code path;
+> + * we instead let IRQ/RX callbacks eventually clean up such messages once,
+> + * finally, a late reply is received and discarded (if ever).
+> + *
+> + * This approach was deemed preferable since those pending timed-out buffers are
+> + * still effectively owned by the SCMI platform VirtIO device even after timeout
+> + * expiration: forcibly freeing and reusing them before they had been returned
+> + * explicitly by the SCMI platform could lead to subtle bugs due to message
+> + * corruption.
+> + * An SCMI platform VirtIO device which never returns message buffers is
+> + * anyway broken and it will quickly lead to exhaustion of available messages.
+> + *
+> + * For this same reason, here, we take care to free only the polled messages
+> + * that had been somehow replied and not by chance processed on the IRQ path,
+> + * since they won't be freed elsewhere; possible late replies to timed-out
+> + * polled messages will be anyway freed by RX callbacks instead.
+> + *
+> + * @cinfo: SCMI channel info
+> + * @ret: Transmission return code
+> + * @xfer: Transfer descriptor
+> + */
+> +static void virtio_mark_txdone(struct scmi_chan_info *cinfo, int ret,
+> +			       struct scmi_xfer *xfer)
+> +{
+> +	struct scmi_vio_channel *vioch = cinfo->transport_info;
+> +	struct scmi_vio_msg *msg = xfer->priv;
+> +
+> +	if (!scmi_vio_channel_acquire(vioch))
+> +		return;
+> +
+> +	/* Must be a polled xfer and not already freed on the IRQ path */
+> +	if (!xfer->hdr.poll_completion || !msg) {
+> +		scmi_vio_channel_release(vioch);
+> +		return;
+>  	}
+> +
+> +	/* Ensure msg is unbound from xfer anyway at this point */
+> +	smp_store_mb(xfer->priv, NULL);
+> +
+> +	/* Do not free timedout polled messages */
+> +	if (ret != -ETIMEDOUT)
+> +		scmi_virtio_put_free_msg(vioch, msg);
+> +
+> +	scmi_vio_channel_release(vioch);
+> +}
+> +
+> +/**
+> + * virtio_poll_done  - Provide polling support for VirtIO transport
+> + *
+> + * @cinfo: SCMI channel info
+> + * @xfer: Reference to the transfer being poll for.
+> + *
+> + * VirtIO core provides a polling mechanism based only on last used indexes:
+> + * this means that it is possible to poll the virtqueues waiting for something
+> + * new to arrive from the host side, but the only way to check if the freshly
+> + * arrived buffer was indeed what we were waiting for is to compare the newly
+> + * arrived message descriptor with the one we are polling on.
+> + *
+> + * As a consequence it can happen to dequeue something different from the buffer
+> + * we were poll-waiting for: if that is the case such early fetched buffers are
+> + * then added to a the @pending_cmds_list list for later processing by a
+> + * dedicated deferred worker.
+> + *
+> + * So, basically, once something new is spotted we proceed to de-queue all the
+> + * freshly received used buffers until we found the one we were polling on, or,
+> + * we have 'seemingly' emptied the virtqueue; if some buffers are still pending
+> + * in the vqueue at the end of the polling loop (possible due to inherent races
+> + * in virtqueues handling mechanisms), we similarly kick the deferred worker
+> + * and let it process those, to avoid indefinitely looping in the .poll_done
+> + * busy-waiting helper.
+> + *
+> + * Note that, since we do NOT have per-message suppress notification mechanism,
+> + * the message we are polling for could be alternatively delivered via usual
+> + * IRQs callbacks on another core which happened to have IRQs enabled while we
+> + * are actively polling for it here: in such a case it will be handled as such
+> + * by scmi_rx_callback() and the polling loop in the SCMI Core TX path will be
+> + * transparently terminated anyway.
+> + *
+> + * Return: True once polling has successfully completed.
+> + */
+> +static bool virtio_poll_done(struct scmi_chan_info *cinfo,
+> +			     struct scmi_xfer *xfer)
+> +{
+> +	bool pending, ret = false;
+> +	unsigned int length, any_prefetched = 0;
+> +	unsigned long flags;
+> +	struct scmi_vio_msg *next_msg, *msg = xfer->priv;
+> +	struct scmi_vio_channel *vioch = cinfo->transport_info;
+> +
+> +	if (!msg)
+> +		return true;
+> +
+> +	/* Processed already by other polling loop on another CPU ? */
+> +	if (msg->poll_status == VIO_MSG_POLL_DONE)
+> +		return true;
+> +
+> +	if (!scmi_vio_channel_acquire(vioch))
+> +		return true;
+> +
+> +	/* Has cmdq index moved at all ? */
+> +	pending = virtqueue_poll(vioch->vqueue, msg->poll_idx);
+> +	if (!pending) {
+> +		scmi_vio_channel_release(vioch);
+> +		return false;
+> +	}
+> +
+> +	spin_lock_irqsave(&vioch->lock, flags);
+> +	virtqueue_disable_cb(vioch->vqueue);
+> +
+> +	/*
+> +	 * Process all new messages till the polled-for message is found OR
+> +	 * the vqueue is empty.
+> +	 */
+> +	while ((next_msg = virtqueue_get_buf(vioch->vqueue, &length))) {
+> +		next_msg->rx_len = length;
+> +		/* Is the message we were polling for ? */
+> +		if (next_msg == msg) {
+> +			ret = true;
+> +			break;
+> +		}
+> +
+> +		if (next_msg->poll_status == VIO_MSG_NOT_POLLED) {
+> +			any_prefetched++;
+> +
+> +			spin_lock(&vioch->pending_lock);
+> +			list_add_tail(&next_msg->list,
+> +				      &vioch->pending_cmds_list);
+> +			spin_unlock(&vioch->pending_lock);
+> +		} else {
+> +			/* We picked another currently polled msg */
+> +			smp_store_mb(next_msg->poll_status, VIO_MSG_POLL_DONE);
+
+What if the polling is just about to time out? Then no thread of execution
+might pick up the message and feed back the buffers.
+
+> +		}
+> +	}
+> +
+> +	/*
+> +	 * When the polling loop has successfully terminated if something
+> +	 * else was queued in the meantime, it will be served by a deferred
+> +	 * worker OR by the normal IRQ/callback OR by other poll loops.
+> +	 *
+> +	 * If we are still looking for the polled reply, the polling index has
+> +	 * to be updated to the current vqueue last used index.
+> +	 */
+> +	if (ret) {
+> +		pending = !virtqueue_enable_cb(vioch->vqueue);
+> +	} else {
+> +		msg->poll_idx = virtqueue_enable_cb_prepare(vioch->vqueue);
+> +		pending = virtqueue_poll(vioch->vqueue, msg->poll_idx);
+> +	}
+> +
+> +	if (vioch->deferred_tx_wq && (any_prefetched || pending))
+> +		queue_work(vioch->deferred_tx_wq, &vioch->deferred_tx_work);
+> +
+> +	spin_unlock_irqrestore(&vioch->lock, flags);
+> +
+> +	scmi_vio_channel_release(vioch);
+> +
+> +	return ret;
+>  }
+>  
+>  static const struct scmi_transport_ops scmi_virtio_ops = {
+> @@ -445,6 +701,8 @@ static const struct scmi_transport_ops scmi_virtio_ops = {
+>  	.send_message = virtio_send_message,
+>  	.fetch_response = virtio_fetch_response,
+>  	.fetch_notification = virtio_fetch_notification,
+> +	.mark_txdone = virtio_mark_txdone,
+> +	.poll_done = virtio_poll_done,
+>  };
+>  
+>  static int scmi_vio_probe(struct virtio_device *vdev)
+> @@ -487,6 +745,8 @@ static int scmi_vio_probe(struct virtio_device *vdev)
+>  		spin_lock_init(&channels[i].lock);
+>  		spin_lock_init(&channels[i].free_lock);
+>  		INIT_LIST_HEAD(&channels[i].free_list);
+> +		spin_lock_init(&channels[i].pending_lock);
+> +		INIT_LIST_HEAD(&channels[i].pending_cmds_list);
+>  		channels[i].vqueue = vqs[i];
+>  
+>  		sz = virtqueue_get_vring_size(channels[i].vqueue);
+> @@ -576,4 +836,5 @@ const struct scmi_desc scmi_virtio_desc = {
+>  	.max_rx_timeout_ms = VIRTIO_MAX_RX_TIMEOUT_MS,
+>  	.max_msg = 0, /* overridden by virtio_get_max_msg() */
+>  	.max_msg_size = VIRTIO_SCMI_MAX_MSG_SIZE,
+> +	.atomic_enabled = IS_ENABLED(CONFIG_ARM_SCMI_TRANSPORT_VIRTIO_ATOMIC_ENABLE),
+>  };
+
+

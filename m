@@ -2,120 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C4B4B8133
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B544B815E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiBPHRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 02:17:24 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33598 "EHLO
+        id S230025AbiBPHWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 02:22:45 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:37684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiBPHRO (ORCPT
+        with ESMTP id S230007AbiBPHWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 02:17:14 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F566286C8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:17:00 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nKEYJ-0007Pg-NX; Wed, 16 Feb 2022 08:16:39 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nKEYE-0000vr-0Z; Wed, 16 Feb 2022 08:16:34 +0100
-Date:   Wed, 16 Feb 2022 08:16:33 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Scott Branden <sbranden@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tony Lindgren <tony@atomide.com>, kernel@pengutronix.de,
-        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v3 4/8] ARM: dts: bcm283x: fix ethernet node name
-Message-ID: <20220216071633.GB19299@pengutronix.de>
-References: <20220215080937.2263111-1-o.rempel@pengutronix.de>
- <20220215080937.2263111-4-o.rempel@pengutronix.de>
- <f5ea3375-0306-e37f-5847-e1472164d7b7@gmail.com>
+        Wed, 16 Feb 2022 02:22:41 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC04C114C;
+        Tue, 15 Feb 2022 23:22:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1644996140;
+        bh=qKSX+z1Q8081GjEHMiQiiSJ1N4j1zNYo4KymwWAtCC4=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=g3kJMNiBLEKHjRUBb6+A4cYh8Q07vfqe25MpQMsrf2np+kJPsF2b0/8ODX2mgji05
+         uM3UCQtP8d+eND5Jg+B9Bfv5vB5nSV/Tqe+GqX6OPGNTk1VKRmz0bxZJaY7+yLnTuR
+         54F6x1KCfa7/cIVaKIRLqMBIQFbpxYC5pToVUZ/4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.128.232]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MFsUv-1nUwrd1UNz-00HM1p; Wed, 16
+ Feb 2022 08:16:42 +0100
+Message-ID: <40052108-afe1-b66c-3cca-03e5e92ea688@gmx.de>
+Date:   Wed, 16 Feb 2022 08:16:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <f5ea3375-0306-e37f-5847-e1472164d7b7@gmail.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 08:10:05 up 67 days, 15:55, 56 users,  load average: 0.27, 0.23,
- 0.18
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: linux-next: build failure after merge of the fbdev tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Yong Wu <yong.wu@mediatek.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220216112934.108a27ad@canb.auug.org.au>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220216112934.108a27ad@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:4m3B0S6nHClGaEmC8CdzNrV8+TNDg4BHiCc9W3pxM6uMBcudpwU
+ GxB6eu3RBRe8XwyFKUhny88yb5sy+L2lYlAm2sssFhyaCmhGjLtq3G6kEpWwQ71eY4umEp0
+ KvPnX6lElr7Z/L34aLgqGX9Uai9PsQMGXBcHybnB2hdRqR0X6Uoo7yHh1mWaXvk3YAm4hgV
+ TCLNdeP5LntzrtwVsOAqg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:PRAH5dmLpBA=:CVZ9lQw5IOIlRS+If/s7bx
+ 4KxuI+bjMO2pFHTDby4bI7dIMyZtDOi76/0nr21pMc5OOVCUEULoqKCfjy5Z26kpqqMgobinP
+ aKFbwHds7vpGPZpxlVLZPVhAM+YMeD548w0MqW4pcKlQ2KYClFNYvafCjF8JOXYFOcZnFNG+0
+ iD24cdjovU7tx6SFDfjlD11P3fDm6+rIw2LnUzWIjMfU2S7C6FD2QqoQV6z9ZrIpBNJ9V6BpM
+ 9lhmYbpAfCvEUs/1s3NjP8m5+QhHchbIfC3QCuywJ6aw73kPhI9siv3DM2bhAAYHaM5srciEn
+ ILWyzG6t0bBq/tKjy5nIRkInYqfME+XCaSwZfM0cDorM3M7Ka/2mSVGtUzoI0rtwFXcN4bHG5
+ VjD+fzJYfT4VJ2A3tGdB6oLj1M2/5P4EOzH4qXyZOPdz/KopdlaV+Z3slyxpZ7iGpA84Tr8eR
+ NtmbgDB3TDnQ1jLNZVymgQ5h+LdfrC8VtpSNUiwcecEXyzpgYSlgzVHy8GeKw1//U1au4X7+o
+ gYSjkBMNEwJmG+O+RARW4ViXahKzqMwPoqzVRcO2K2/ZjDied2maXogA7L/vzG4cKy8rbCYCX
+ fRkJo1Pncu4iNn4T0XyuNKiogEyXJuSJ7YnTezDjVWIb8Pp/XuG1rheZOBTdI+8M8yoMZf77f
+ vfigb4xdCFbaM39jkmzl/fu3iQyLGfMRBTK3MSXvFWG3YHdaz2qularYgDynm0KQ9qb+Fqgzn
+ klQ81EfeJY/sDmgDYEMqGoLuqww0byVKHA89pNJcOQtE6sejar7UPRKxaD4MAwRlzmB7JhO23
+ pAuBTJPthxJpr8lK3Lu8gVpqCo/QN6VxvqBWYBpGmyIicmsNKPdSFcT3sUwsnS20vB2zqUQoF
+ DzZ25Ff23uM3T3Fi/iPsy9euvq0wUzC9MRg0lKz33dQbzQbAxt9O2voGxYnUk2SHEOgAsmK6M
+ 0D1uTm++YI/pF5Axvt7N1epvN1Fb5Z5UwGVbelCvh5hgEAhV7d5eMT+hJaYQm8T4Ig6l6OqZZ
+ JfM8YruBv4BpDAjkwTWQ6R8s6WjJp2AVCaCHmehCqu9XZYPxv0UKo4yGNR/o/LBLlJ1nOa1kj
+ 5KwoPeO3FsmUDs=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 01:01:06PM -0800, Florian Fainelli wrote:
-> On 2/15/22 12:09 AM, Oleksij Rempel wrote:
-> > It should be "ethernet@x" instead of "usbether@x"
-> > 
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> 
-> This looks like, a quick grep on the u-boot source code seems to suggest
-> that only one file is assuming that 'usbether@1' is to be used as a node
-> name and the error message does not even match the code it is patching:
-> 
-> board/liebherr/xea/xea.c:
->   #ifdef CONFIG_OF_BOARD_SETUP
->   static int fdt_fixup_l2switch(void *blob)
->   {
->           u8 ethaddr[6];
->           int ret;
-> 
->           if (eth_env_get_enetaddr("ethaddr", ethaddr)) {
->                   ret = fdt_find_and_setprop(blob,
-> 
-> "/ahb@80080000/switch@800f0000",
->                                              "local-mac-address",
-> ethaddr, 6, 1);
->                   if (ret < 0)
->                           printf("%s: can't find usbether@1 node: %d\n",
->                                  __func__, ret);
->           }
+On 2/16/22 01:29, Stephen Rothwell wrote:
+> Hi all,
+>
+> After merging the fbdev tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> drivers/video/fbdev/omap2/omapfb/dss/dss.c: In function 'dss_add_child_c=
+omponent':
+> drivers/video/fbdev/omap2/omapfb/dss/dss.c:1209:49: error: 'component_co=
+mpare_dev' undeclared (first use in this function); did you mean 'componen=
+t_master_del'?
+>  1209 |         component_match_add(dev->parent, match, component_compar=
+e_dev, dev);
+>       |                                                 ^~~~~~~~~~~~~~~~=
+~~~~~
+>       |                                                 component_master=
+_del
+>
+> Caused by commit
+>
+>   61038027aa13 ("video: fbdev: omapfb: Make use of the helper component_=
+compare_dev")
+>
+> I have used the fbdev tree from next-20220215 for today.
 
-\o/ :)
+Thanks Steven!
+I've dropped that patch now, so your next pull should be fine.
 
->           return 0;
->   }
-> 
-> I will wait for the other maintainers on the other patches to provide
-> some feedback, but if all is well, will apply this one soon.
+Helge
 
-Full path fdt matching has proven to be not stable enough. Especially on
-chips with early DT adaptation like iMX. It is better to use aliases
-where possible. 
-
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

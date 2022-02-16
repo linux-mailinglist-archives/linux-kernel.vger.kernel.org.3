@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD2D4B8CB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:42:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5F74B8CAF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235601AbiBPPmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 10:42:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46938 "EHLO
+        id S235592AbiBPPmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 10:42:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235582AbiBPPm3 (ORCPT
+        with ESMTP id S235580AbiBPPm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 16 Feb 2022 10:42:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB5F74DE2
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFAC26C1CA
         for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 07:42:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DC399B81F3A
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 15:42:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01D98C004E1;
-        Wed, 16 Feb 2022 15:42:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A8B3619A6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 15:42:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0833FC340EF;
+        Wed, 16 Feb 2022 15:42:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645026133;
-        bh=Ejh8UigPECct91CA3z1fN8IKUXAs/cmG4nYA8pD9YEo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fmmd1hBEVTSAElzTCuVsAguuhRKDkEnpbGoXMscYJY4KvF5VW666Nredl530HgDZV
-         BfnoBax+B/sxzj2ZV/yIvNMv4yEsEK9GeBLoWXm2YDjPHVCUQCBiN3n3C/LWE6l8fw
-         6UjyrnI6tBJJP9B7plYyeMUU9wF5u2ku4CHlVir9mEXuKFMS71/0iQSqzSxLuLqNVA
-         tzUhYyUNmqGaQEuKci7oNij8r7H3y1SnuvwkleuVnOtQQwJvruz855b9WmZPBIcV7y
-         Kqtbo+XYb2miiV31UkeyezKZlasfa3X0BDL+/y44zrOCt3keeQynFL4OUelzNq7p8v
-         zEHXEqS/p8FHw==
+        s=k20201202; t=1645026135;
+        bh=6K9657j7gLRwoEvVjac7cH9GcoId6TrWRZBv5kqat48=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=NO7roNpp9rWRvyrCpgkrjVUX1YRucdP9kuRIRaRLVi0c1+ph5QQ6P/9nNtSnvaYQf
+         2n4eP04EWyNX5SAINJXIzIi7FSzz0UsrhxJkpF7yIVeyrDs8+FTXnIreoKSZqCr/tY
+         a0xCXyjVc9e2nLk1PqgeT1m3QRiB+tXGFiHXFQkdZp2cv4K6cf3AaIk2NNezxyYnl8
+         h1etmLR8uYv+MnFigV7fFg6ddzuntFxyI3z3VKl/fbkH4wm9rFNynWne4/YOYI8Q7c
+         hwUAXmVjF8bTkAEUkf2sH+IuZJKvzcOK9vYknv/Uqec8IX/xQK6d39Ncoh6w4/mF5m
+         P5nIeTitQXEzg==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -40,10 +40,12 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>,
         Uladzislau Rezki <uladzislau.rezki@sony.com>,
         Joel Fernandes <joel@joelfernandes.org>
-Subject: [PATCH 0/5] rcu: Bunch of cleanups
-Date:   Wed, 16 Feb 2022 16:42:03 +0100
-Message-Id: <20220216154208.696069-1-frederic@kernel.org>
+Subject: [PATCH 1/5] rcu: Remove rcu_is_nocb_cpu()
+Date:   Wed, 16 Feb 2022 16:42:04 +0100
+Message-Id: <20220216154208.696069-2-frederic@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220216154208.696069-1-frederic@kernel.org>
+References: <20220216154208.696069-1-frederic@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -56,30 +58,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+It's an unused leftover that can now be removed.
 
-Just a bit of housekeeping.
-
-git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-	rcu/dev
-
-HEAD: be4d4c3ba8c4ceeba9dc9df4de5451c7261161f3
-
-Thanks,
-	Frederic
+Reported-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 ---
+ kernel/rcu/rcu.h       | 2 --
+ kernel/rcu/tree_nocb.h | 8 --------
+ 2 files changed, 10 deletions(-)
 
-Frederic Weisbecker (5):
-      rcu: Remove rcu_is_nocb_cpu()
-      rcu/nocb: Move rcu_nocb_is_setup to rcu_state
-      rcu: Assume rcu_init() is called before smp
-      rcu: Initialize boost kthread only for boot node prior SMP initialization
-      rcu/nocb: Initialize nocb kthreads only for boot CPU prior SMP initialization
+diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+index 819f9d979e61..44efedd921d0 100644
+--- a/kernel/rcu/rcu.h
++++ b/kernel/rcu/rcu.h
+@@ -549,10 +549,8 @@ void rcu_gp_slow_unregister(atomic_t *rgssp);
+ #endif /* #else #ifdef CONFIG_TINY_RCU */
+ 
+ #ifdef CONFIG_RCU_NOCB_CPU
+-bool rcu_is_nocb_cpu(int cpu);
+ void rcu_bind_current_to_nocb(void);
+ #else
+-static inline bool rcu_is_nocb_cpu(int cpu) { return false; }
+ static inline void rcu_bind_current_to_nocb(void) { }
+ #endif
+ 
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index 636d0546a4e9..02e1d05a11fc 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -215,14 +215,6 @@ static void rcu_init_one_nocb(struct rcu_node *rnp)
+ 	init_swait_queue_head(&rnp->nocb_gp_wq[1]);
+ }
+ 
+-/* Is the specified CPU a no-CBs CPU? */
+-bool rcu_is_nocb_cpu(int cpu)
+-{
+-	if (cpumask_available(rcu_nocb_mask))
+-		return cpumask_test_cpu(cpu, rcu_nocb_mask);
+-	return false;
+-}
+-
+ static bool __wake_nocb_gp(struct rcu_data *rdp_gp,
+ 			   struct rcu_data *rdp,
+ 			   bool force, unsigned long flags)
+-- 
+2.25.1
 
-
- kernel/rcu/rcu.h         |  2 --
- kernel/rcu/tree.c        | 25 +++++++++++++++++--------
- kernel/rcu/tree.h        |  3 +--
- kernel/rcu/tree_nocb.h   | 41 +++++------------------------------------
- kernel/rcu/tree_plugin.h | 16 ----------------
- 5 files changed, 23 insertions(+), 64 deletions(-)

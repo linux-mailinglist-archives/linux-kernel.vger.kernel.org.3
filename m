@@ -2,101 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2384B8612
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 11:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7304B8609
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 11:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbiBPKm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 05:42:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58274 "EHLO
+        id S229824AbiBPKk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 05:40:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiBPKm2 (ORCPT
+        with ESMTP id S229620AbiBPKkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 05:42:28 -0500
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-eopbgr130110.outbound.protection.outlook.com [40.107.13.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C24219233
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 02:42:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=huEDEHkf5SYnPzrTJEvKGo1U9tqzUVjOJQy0mAuXQZ+2KcNPDfOt7dRRAh/CWo9mDDOl719FDcL9/8IPl3dfU5OYzYrcm4pwh6K+RyVlm29CZSff7Nbd+nEvCKJ1s/VUP5rFt79agw5BUwrGL/Rt4a7DNehLwkjxhaIUgfVl/RPewgnNoORereeAyrTUh+Nvd06QlDaeUouA+lmKxAbJIUyUo7rduc518tgJpcLVU6YBj4tqNEH+FbF8w01+bywR/FaihDHAkb3nCQveFllCT03Uw/ljOpGShhB9Gt7ymFgyI0t2HLjypM8k4O9XuVhhYIGuX8HM6guzU7DBqa/L+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Jbp6VbCklCPB3fvnZP3v0i3TGVe3sB+/Mjvs0Kw5Pqo=;
- b=drYKkWyEGiaX5Vm0tMU4tB4h5fazN+L+6JancCPZ3JOB/mBuwMZXQytHn24/qMLukrL7rjuUyBuBRQ7R+zBhOPMHQAAyCwm0/ULgNJEnn5qH5ccHYF69H2wEOg9LaJOIQmNnou48JJLtGRn+fjPgHQsHJkz7zpdSARh8HGIgPpoOOp0D5TMatsggcNDKC05yph0fsXexcEgwFor51Dd5jxsuGeP+oH/TNjkFvjWlupqUPuBxJ6zLcET5WfpxFlqvuDIX0GrlAZkqAgAG4nctcfT5Dj/lu536BoG1Wa/V4EPS3ABqtEm6uQn+FQXImvU93/oNP1W4wpEUJkHEebAXXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 194.176.121.59) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=sma.de;
- dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=sma.de; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sma.de; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Jbp6VbCklCPB3fvnZP3v0i3TGVe3sB+/Mjvs0Kw5Pqo=;
- b=aSJX3v+82DY90i5T7th00+b0P2feGHvhFoNTOPpD8xzoon951nY2LYD2fQK7CTthXzhgp/cz5ssZcFiWaNpucNczoGWPOeBG+3W6aNYAPgGcdTAB1jfd6v1Xw+vEi2ol5sIHsXuU8NBcrorfLdss5mbkZctOrcv0w4vMDgMtmFc=
-Received: from AS9P194CA0011.EURP194.PROD.OUTLOOK.COM (2603:10a6:20b:46d::16)
- by DB8PR04MB6442.eurprd04.prod.outlook.com (2603:10a6:10:10a::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Wed, 16 Feb
- 2022 10:42:12 +0000
-Received: from AM5EUR02FT044.eop-EUR02.prod.protection.outlook.com
- (2603:10a6:20b:46d:cafe::ea) by AS9P194CA0011.outlook.office365.com
- (2603:10a6:20b:46d::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14 via Frontend
- Transport; Wed, 16 Feb 2022 10:42:12 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
- 194.176.121.59) smtp.mailfrom=sma.de; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=sma.de;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning sma.de
- discourages use of 194.176.121.59 as permitted sender)
-Received: from webmail.sma.de (194.176.121.59) by
- AM5EUR02FT044.mail.protection.outlook.com (10.152.9.101) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4975.11 via Frontend Transport; Wed, 16 Feb 2022 10:42:11 +0000
-Received: from SVR-DE-EXHYB-01.sma.de ([10.0.40.14]) by webmail.sma.de over TLS secured channel with Microsoft SMTPSVC(8.5.9600.16384);
-         Wed, 16 Feb 2022 11:41:39 +0100
-Received: from pc6682 (10.9.12.142) by SVR-DE-EXHYB-01.sma.de (10.0.40.14)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.2176.2; Wed, 16
- Feb 2022 11:41:39 +0100
-Date:   Wed, 16 Feb 2022 11:41:38 +0100
-From:   Andre Kalb <svc.sw.rte.linux@sma.de>
-To:     <pmladek@suse.com>, <senozhatsky@chromium.org>
-CC:     <andre.kalb@sma.de>, <john.ogness@linutronix.de>,
-        <linux-kernel@vger.kernel.org>, <rostedt@goodmis.org>
-Subject: [PATCH v3] printk: Set console_set_on_cmdline=1 when
- __add_preferred_console() is called with user_specified == true
-Message-ID: <YgzU4ho8l6XapyG2@pc6682>
-Reply-To: Andre Kalb <andre.kalb@sma.de>
-References: <YgxtGWh0b9NXTyu8@google.com>
+        Wed, 16 Feb 2022 05:40:52 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484682BA283;
+        Wed, 16 Feb 2022 02:40:40 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id n24so2590213ljj.10;
+        Wed, 16 Feb 2022 02:40:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=/ObOknCuy2uLyXQZw3dTKU5e6KPeVkDnmAFovr9tv14=;
+        b=iF4uu0la2Vj9KB6lrMgavliWjPzVGw8z6EpkrCyNL0OY6t77iWzzE941cD6QHhjuyu
+         4TmHec5PiCQMhX1DABqYrmz5QAtKcGW4iiarraPcByhdPdzpOfkRSV4Cusc+wXJHIQdN
+         WUl3734a2ngzFPaBdheE8J9k3RYmjKlWQioQz7QdkZlcw7KoNUoCXphxXLsUC9cjkgM+
+         njpwK0BZ85UwS42M/dbbEzP1u6JKZkj5ZkolmQPV4WWAjgNE0LpbTJsKBIlKi5zuadIr
+         8waySa2+Zf8QPJGouiY+wceLX3WlxUUYtpL2p8dQ3H6aR25hBklViWFsHtA8vJTMPJ36
+         P9fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/ObOknCuy2uLyXQZw3dTKU5e6KPeVkDnmAFovr9tv14=;
+        b=Q8wkueXRD8dN63d+I+bNYnVphBP2CYKvQxRb8Es72SiEDC014qPAl9mJaIKoprIePX
+         ZqWSlx7uyI86vhZPosEm2z1iQ0kPx6P5RgFR8yftZTgz8V1y39gu8OYIUq9Y2RnTih9d
+         wh/T/DLBtksxjBmFQtIUvHf/XSti6xcd8P7WjFgiyycn46MWUIBV/EKUGW2TN6tnL8HT
+         FOdnl2fCD4V5fRvfcEc+OfA3T1bgcbMPMywhCXCES6FOoT095sd1Vk05m6fp9Rynv/wj
+         0OUbXun02n19QrI5WxuhbHI8ZoQqtHNAW5e9swcXrVa3I5oANhNZXHdlNF6cDwxBKaCr
+         9dNw==
+X-Gm-Message-State: AOAM533zBCBXqAQQtOh20SjarpdY5f4SKX5Wg0sI4CMSg9fcsa12Mqxt
+        Kpk/17NiU5PcYKWZgUI4xkr1EF59CbdDMU0HfVE=
+X-Google-Smtp-Source: ABdhPJwJMI1M1BT0ckwc9FIE6oK8ZjLXO1SoI0KXkJoDldcH6RRuG9yRNglCKuEBQcgCwtQE2QqPIfIt9a3iOhB1/cs=
+X-Received: by 2002:a2e:b90e:0:b0:239:3332:c83c with SMTP id
+ b14-20020a2eb90e000000b002393332c83cmr1561219ljb.426.1645008038470; Wed, 16
+ Feb 2022 02:40:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YgxtGWh0b9NXTyu8@google.com>
-X-Originating-IP: [10.9.12.142]
-X-ClientProxiedBy: SVR-DE-EXHYB-01.sma.de (10.0.40.14) To
- SVR-DE-EXHYB-01.sma.de (10.0.40.14)
-X-OriginalArrivalTime: 16 Feb 2022 10:41:39.0130 (UTC) FILETIME=[C741C9A0:01D82321]
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f4fee116-a79e-42fa-5deb-08d9f138fd4e
-X-MS-TrafficTypeDiagnostic: DB8PR04MB6442:EE_
-X-Microsoft-Antispam-PRVS: <DB8PR04MB64424D5E7746CB1F83E08E75E3359@DB8PR04MB6442.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Q98WPEFmOmPi+iorOrfCfesConfAX0eXMgrEd97U+YN8hiL0zqZM1tWfTiGxMJ28WW08Jg9UefUWXOBzirZGhK6u3xD/IVtagr28JSPPybddrrTgcu0W0uWAWvbtPppjo2+nY9fxa3F7MOFMLr92B08tBu8EOez660c/G9RLxFP+R68lbG51qQwtgg7uK/I1X0WnjC04ZLZkODJdJpeh+SuQkHQkQoLtdfHEqAtb6WJAN3jQSPVWbVuqAdjQL0HXQDxoxpWP60pR3FeP8A2HMQn9vCZW1CzZdIEFiZN+sSsD1tKI3EYl9u3MVwFeSpGWpHfVYpkXcB21pTKsZjiNLAnQPMVJHLNbAVrAagZPdUnKKztMlojnEx4Jo5Q3zW5wxA7hYUbDv2XEhZzvFtc0tyF1dM2OQkvg2kzlpuGJ3yzFe3rU8VRgTgXGLLrzcpkDJnjt+34vNyndKLr0NRTFmt1zHPqlTLHH0AE8mETzAA8eN+iGunjgTGUBPtBQLnkKXfK5DtSAbNIvFXySPJKEmYYGRLzjqVWgXwCdimfLgWqyz8bWPeBpEV58+5qsednh1qiw3gpRrcpqbMR0IdPnn/6V6fF9eB1YmzJB37AqtimiCSGmqXldCVUPTrhtGiPOU14ArjUHTtts4+PF8f4LBtM7wneBaAM48PHgw4cRLe204mboAbDW/B9J54y3uRaUbPPdc1frQ3zwqO3ei/ek+B3aXmajFSnNDqwaKhO0DIoQhdmggQ67JtBIl3IUqmgR1fAl1R6RmaVaowfK/30M1w==
-X-Forefront-Antispam-Report: CIP:194.176.121.59;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:webmail.sma.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(4326008)(8676002)(8936002)(9576002)(16526019)(70206006)(70586007)(26005)(186003)(82310400004)(81166007)(356005)(5660300002)(2906002)(107886003)(9686003)(33716001)(47076005)(36860700001)(54906003)(110136005)(55016003)(83380400001)(426003)(336012)(86362001)(316002)(40460700003)(508600001)(36900700001);DIR:OUT;SFP:1102;
-X-OriginatorOrg: sma.de
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2022 10:42:11.9557
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4fee116-a79e-42fa-5deb-08d9f138fd4e
-X-MS-Exchange-CrossTenant-Id: a059b96c-2829-4d11-8837-4cc1ff84735d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=a059b96c-2829-4d11-8837-4cc1ff84735d;Ip=[194.176.121.59];Helo=[webmail.sma.de]
-X-MS-Exchange-CrossTenant-AuthSource: AM5EUR02FT044.eop-EUR02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6442
+References: <1644827562-17244-1-git-send-email-vincent.sunplus@gmail.com>
+ <1644827562-17244-2-git-send-email-vincent.sunplus@gmail.com> <YgoVBv/z1uCsR1Y0@kroah.com>
+In-Reply-To: <YgoVBv/z1uCsR1Y0@kroah.com>
+From:   =?UTF-8?B?5pa96YyV6bS7?= <vincent.sunplus@gmail.com>
+Date:   Wed, 16 Feb 2022 18:41:46 +0800
+Message-ID: <CAPvp3Rg1BSMFF+gApC+VYyeCT9Qfr5OQEW3nzbc+d_z-GpwcYg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] usb: host: ehci-sunplus: Add driver for ehci in
+ Sunplus SP7021
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     stern@rowland.harvard.edu, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, wells.lu@sunplus.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,85 +70,363 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andre Kalb <andre.kalb@sma.de>
+I am sorry. I did not send the e-mail to others, I reply it again.
 
-In case of using console="" or console=null
-set console_set_on_cmdline=1 to disable "stdout-path" node from DT.
+Greg KH <gregkh@linuxfoundation.org> =E6=96=BC 2022=E5=B9=B42=E6=9C=8814=E6=
+=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=884:38=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Mon, Feb 14, 2022 at 04:32:41PM +0800, Vincent Shih wrote:
+> > Add driver for ehci in Sunplus SP7021
+> >
+> > Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
+> > ---
+> >  MAINTAINERS                     |   6 +
+> >  drivers/usb/host/Kconfig        |  11 +
+> >  drivers/usb/host/Makefile       |   1 +
+> >  drivers/usb/host/ehci-sunplus.c | 527 ++++++++++++++++++++++++++++++++=
+++++++++
+> >  4 files changed, 545 insertions(+)
+> >  create mode 100644 drivers/usb/host/ehci-sunplus.c
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 80eebc1..6c2faf3 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -17947,6 +17947,12 @@ L:   netdev@vger.kernel.org
+> >  S:   Maintained
+> >  F:   drivers/net/ethernet/dlink/sundance.c
+> >
+> > +SUNPLUS USB EHCI DRIVER
+> > +M:   Vincent Shih <vincent.sunplus@gmail.com>
+> > +L:   linux-usb@vger.kernel.org
+> > +S:   Maintained
+> > +F:   drivers/usb/host/ehci-sunplus.c
+> > +
+> >  SUPERH
+> >  M:   Yoshinori Sato <ysato@users.sourceforge.jp>
+> >  M:   Rich Felker <dalias@libc.org>
+> > diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+> > index c4736d1..9728d3b 100644
+> > --- a/drivers/usb/host/Kconfig
+> > +++ b/drivers/usb/host/Kconfig
+> > @@ -339,6 +339,17 @@ config USB_OCTEON_EHCI
+> >         USB 2.0 device support.  All CN6XXX based chips with USB are
+> >         supported.
+> >
+> > +config USB_EHCI_SUNPLUS
+> > +     tristate "EHCI support for Sunplus USB controller"
+> > +     depends on SOC_SP7021
+> > +     select NVMEM_SUNPLUS_OCOTP
+> > +     help
+> > +       Enables support for the on-chip EHCI controller in Sunplus
+> > +       SoCs. It supports 32-bit AHB/AXI config bus and 64-bit AXI
+> > +       data bus.
+> > +       This driver can also be built as a module. If so, the module
+> > +       will be called ehci-sunplus.
+> > +
+> >  endif # USB_EHCI_HCD
+> >
+> >  config USB_OXU210HP_HCD
+> > diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
+> > index 171de4d..7e9b5f1 100644
+> > --- a/drivers/usb/host/Makefile
+> > +++ b/drivers/usb/host/Makefile
+> > @@ -46,6 +46,7 @@ obj-$(CONFIG_USB_EHCI_HCD_STI)      +=3D ehci-st.o
+> >  obj-$(CONFIG_USB_EHCI_EXYNOS)        +=3D ehci-exynos.o
+> >  obj-$(CONFIG_USB_EHCI_HCD_AT91) +=3D ehci-atmel.o
+> >  obj-$(CONFIG_USB_EHCI_BRCMSTB)       +=3D ehci-brcm.o
+> > +obj-$(CONFIG_USB_EHCI_SUNPLUS)       +=3D ehci-sunplus.o
+> >
+> >  obj-$(CONFIG_USB_OXU210HP_HCD)       +=3D oxu210hp-hcd.o
+> >  obj-$(CONFIG_USB_ISP116X_HCD)        +=3D isp116x-hcd.o
+> > diff --git a/drivers/usb/host/ehci-sunplus.c b/drivers/usb/host/ehci-su=
+nplus.c
+> > new file mode 100644
+> > index 0000000..007923a
+> > --- /dev/null
+> > +++ b/drivers/usb/host/ehci-sunplus.c
+> > @@ -0,0 +1,527 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +
+> > +/*
+> > + * The EHCI driver for Sunplus SP7021
+> > + *
+> > + * Copyright (C) 2019 Sunplus Technology Inc., All rights reserved.
+>
+> You have not touched this file since 2019?
+>
+I did not notice it. I will modify it.
+>
+> > + */
+> > +
+> > +#include <linux/bitfield.h>
+> > +#include <linux/clk.h>
+> > +#include <linux/delay.h>
+> > +#include <linux/io.h>
+> > +#include <linux/module.h>
+> > +#include <linux/nvmem-consumer.h>
+> > +#include <linux/of.h>
+> > +#include <linux/of_platform.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/usb.h>
+> > +#include <linux/usb/ehci_pdriver.h>
+> > +#include <linux/usb/hcd.h>
+> > +
+> > +#include "ehci.h"
+> > +
+> > +#define RF_MASK_V(mask, val)                 (((mask) << 16) | (val))
+> > +#define RF_MASK_V_CLR(mask)                  (((mask) << 16) | 0)
+> > +
+> > +#define USB_PORT0_ID                         0
+> > +#define USB_PORT1_ID                         1
+> > +#define USB_PORT_NUM                         2
+> > +
+> > +#define MASK_BITS                            0xffff
+> > +
+> > +#define OTP_DISC_LEVEL_DEFAULT                       0xd
+> > +#define OTP_DISC_LEVEL_BITS                  0x5
+> > +
+> > +// GROUP 140/150 UPHY0/UPHY1
+> > +#define CONFIG1                                      0x4
+> > +#define J_HS_TX_PWRSAV                               BIT(5)
+> > +#define CONFIG3                                      0xc
+> > +#define J_FORCE_DISC_ON                              BIT(5)
+> > +#define J_DEBUG_CTRL_ADDR_MACRO                      BIT(0)
+> > +#define CONFIG7                                      0x1c
+> > +#define J_DISC                                       0X1f
+> > +#define CONFIG9                                      0x24
+> > +#define J_ECO_PATH                           BIT(6)
+> > +#define CONFIG16                             0x40
+> > +#define J_TBCWAIT_MASK                               GENMASK(6, 5)
+> > +#define J_TBCWAIT_1P1_MS                     FIELD_PREP(J_TBCWAIT_MASK=
+, 0)
+> > +#define J_TVDM_SRC_DIS_MASK                  GENMASK(4, 3)
+> > +#define J_TVDM_SRC_DIS_8P2_MS                        FIELD_PREP(J_TVDM=
+_SRC_DIS_MASK, 3)
+> > +#define J_TVDM_SRC_EN_MASK                   GENMASK(2, 1)
+> > +#define J_TVDM_SRC_EN_1P6_MS                 FIELD_PREP(J_TVDM_SRC_EN_=
+MASK, 0)
+> > +#define J_BC_EN                                      BIT(0)
+> > +#define CONFIG17                             0x44
+> > +#define IBG_TRIM0_MASK                               GENMASK(7, 5)
+> > +#define IBG_TRIM0_SSLVHT                     FIELD_PREP(IBG_TRIM0_MASK=
+, 4)
+> > +#define J_VDATREE_TRIM_MASK                  GENMASK(4, 1)
+> > +#define J_VDATREE_TRIM_DEFAULT                       FIELD_PREP(J_VDAT=
+REE_TRIM_MASK, 9)
+> > +#define CONFIG23                             0x5c
+> > +#define PROB_MASK                            GENMASK(5, 3)
+> > +#define PROB                                 FIELD_PREP(PROB_MASK, 7)
+> > +
+> > +// GROUP 0 MOON 0
+> > +#define HARDWARE_RESET_CONTROL2                      0x5c
+> > +#define UPHY1_RESET                          BIT(14)
+> > +#define UPHY0_RESET                          BIT(13)
+> > +#define USBC1_RESET                          BIT(11)
+> > +#define USBC0_RESET                          BIT(10)
+> > +
+> > +// GROUP 4 MOON 4
+> > +#define USBC_CONTROL                         0x44
+> > +#define MO1_USBC1_USB0_SEL                   BIT(13)
+> > +#define MO1_USBC1_USB0_CTRL                  BIT(12)
+> > +#define MO1_USBC0_USB0_SEL                   BIT(5)
+> > +#define MO1_USBC0_USB0_CTRL                  BIT(4)
+> > +#define UPHY0_CONTROL0                               0x48
+> > +#define UPHY0_CONTROL1                               0x4c
+> > +#define UPHY0_CONTROL2                               0x50
+> > +#define MO1_UPHY0_RX_CLK_SEL                 BIT(6)
+> > +#define UPHY0_CONTROL3                               0x54
+> > +#define MO1_UPHY0_PLL_POWER_OFF_SEL          BIT(7)
+> > +#define MO1_UPHY0_PLL_POWER_OFF                      BIT(3)
+> > +#define UPHY1_CONTROL0                               0x58
+> > +#define UPHY1_CONTROL1                               0x5c
+> > +#define UPHY1_CONTROL2                               0x60
+> > +#define MO1_UPHY1_RX_CLK_SEL                 BIT(6)
+> > +#define UPHY1_CONTROL3                               0x64
+> > +#define MO1_UPHY1_PLL_POWER_OFF_SEL          BIT(7)
+> > +#define MO1_UPHY1_PLL_POWER_OFF                      BIT(3)
+> > +
+> > +#define hcd_to_sp_ehci_priv(h) \
+> > +             ((struct sp_ehci_priv *)hcd_to_ehci(h)->priv)
+> > +
+> > +struct sp_ehci_priv {
+> > +     struct resource *uphy_res_mem[USB_PORT_NUM];
+> > +     struct resource *moon0_res_mem;
+> > +     struct resource *moon4_res_mem;
+> > +     struct clk *uphy_clk[USB_PORT_NUM];
+> > +     struct clk *ehci_clk[USB_PORT_NUM];
+> > +     void __iomem *uphy_regs[USB_PORT_NUM];
+> > +     void __iomem *moon0_regs;
+> > +     void __iomem *moon4_regs;
+> > +};
+> > +
+> > +static int ehci_sunplus_reset(struct usb_hcd *hcd)
+> > +{
+> > +     struct platform_device *pdev =3D to_platform_device(hcd->self.con=
+troller);
+> > +     struct usb_ehci_pdata *pdata =3D pdev->dev.platform_data;
+> > +     struct ehci_hcd *ehci =3D hcd_to_ehci(hcd);
+> > +     int retval;
+> > +
+> > +     hcd->has_tt =3D pdata->has_tt;
+> > +     ehci->has_synopsys_hc_bug =3D pdata->has_synopsys_hc_bug;
+> > +     ehci->big_endian_desc =3D pdata->big_endian_desc;
+> > +     ehci->big_endian_mmio =3D pdata->big_endian_mmio;
+> > +
+> > +     ehci->caps =3D hcd->regs + pdata->caps_offset;
+> > +     retval =3D ehci_setup(hcd);
+> > +
+> > +     return retval;
+> > +}
+> > +
+> > +static struct hc_driver __read_mostly ehci_sunplus_driver;
+> > +
+> > +static const struct ehci_driver_overrides ehci_sunplus_overrides __ini=
+tconst =3D {
+> > +     .reset =3D                ehci_sunplus_reset,
+> > +     .extra_priv_size =3D      sizeof(struct sp_ehci_priv),
+> > +};
+> > +
+> > +static int uphy0_init(struct platform_device *pdev, struct sp_ehci_pri=
+v *sp_priv)
+> > +{
+> > +     struct nvmem_cell *cell;
+> > +     char *disc_name =3D "disc_vol";
+> > +     ssize_t otp_l =3D 0;
+> > +     char *otp_v;
+> > +     int port =3D pdev->id - 1;
+> > +     u32 val, set, pll_pwr_on, pll_pwr_off;
+> > +
+> > +     /* Default value modification */
+> > +     writel(RF_MASK_V(MASK_BITS, 0x4002), sp_priv->moon4_regs + UPHY0_=
+CONTROL0);
+> > +     writel(RF_MASK_V(MASK_BITS, 0x8747), sp_priv->moon4_regs + UPHY0_=
+CONTROL1);
+> > +
+> > +     /* PLL power off/on twice */
+> > +     pll_pwr_off =3D (readl(sp_priv->moon4_regs + UPHY0_CONTROL3) & ~M=
+ASK_BITS)
+> > +                     | MO1_UPHY0_PLL_POWER_OFF_SEL | MO1_UPHY0_PLL_POW=
+ER_OFF;
+> > +     pll_pwr_on =3D (readl(sp_priv->moon4_regs + UPHY0_CONTROL3) & ~MA=
+SK_BITS)
+> > +                     | MO1_UPHY0_PLL_POWER_OFF_SEL;
+> > +
+> > +     writel(RF_MASK_V(MASK_BITS, pll_pwr_off), sp_priv->moon4_regs + U=
+PHY0_CONTROL3);
+> > +     mdelay(1);
+> > +     writel(RF_MASK_V(MASK_BITS, pll_pwr_on), sp_priv->moon4_regs + UP=
+HY0_CONTROL3);
+> > +     mdelay(1);
+> > +     writel(RF_MASK_V(MASK_BITS, pll_pwr_off), sp_priv->moon4_regs + U=
+PHY0_CONTROL3);
+> > +     mdelay(1);
+> > +     writel(RF_MASK_V(MASK_BITS, pll_pwr_on), sp_priv->moon4_regs + UP=
+HY0_CONTROL3);
+> > +     mdelay(1);
+> > +     writel(RF_MASK_V(MASK_BITS, 0x0), sp_priv->moon4_regs + UPHY0_CON=
+TROL3);
+> > +
+>
+> Why not just do a read after a write so that you know that is the
+> correct delay?  Doing a sleep like this seems slow and possibly wrong.
+>
+The purposes of these delays are for discharging the voltages of the
+capacitors in the circuit.
+They have nothing to do with the registers.
 
-We basically need to set it every time when __add_preferred_console()
-is called with parameter 'user_specified' set.
-Therefore we can move setting it into a helper function that is
-called from __add_preferred_console().
+> > +     /* reset UPHY0 */
+> > +     writel(RF_MASK_V(UPHY0_RESET, UPHY0_RESET), sp_priv->moon0_regs +=
+ HARDWARE_RESET_CONTROL2);
+> > +     writel(RF_MASK_V_CLR(UPHY0_RESET), sp_priv->moon0_regs + HARDWARE=
+_RESET_CONTROL2);
+> > +     mdelay(1);
+>
+> Again, read()?
+>
+The purpose of the delay is for discharging the voltages of the
+capacitors in the circuit.
+It has nothing to do with the registers.
+> > +
+> > +     /* board uphy 0 internal register modification for tid certificat=
+ion */
+> > +     cell =3D nvmem_cell_get(&pdev->dev, disc_name);
+> > +     if (IS_ERR_OR_NULL(cell)) {
+> > +             if (PTR_ERR(cell) =3D=3D -EPROBE_DEFER)
+> > +                     return -EPROBE_DEFER;
+> > +     }
+> > +
+> > +     otp_v =3D nvmem_cell_read(cell, &otp_l);
+> > +     nvmem_cell_put(cell);
+> > +
+> > +     if (otp_v)
+> > +             set =3D ((*otp_v >> OTP_DISC_LEVEL_BITS) |
+> > +                     (*(otp_v + 1) << (sizeof(char) * 8 - OTP_DISC_LEV=
+EL_BITS))) & J_DISC;
+> > +
+> > +     if (!otp_v || set =3D=3D 0)
+> > +             set =3D OTP_DISC_LEVEL_DEFAULT;
+> > +
+> > +     val =3D readl(sp_priv->uphy_regs[port] + CONFIG7);
+> > +     val =3D (val & ~J_DISC) | set;
+> > +     writel(val, sp_priv->uphy_regs[port] + CONFIG7);
+> > +
+> > +     val =3D readl(sp_priv->uphy_regs[port] + CONFIG9);
+> > +     val &=3D ~(J_ECO_PATH);
+> > +     writel(val, sp_priv->uphy_regs[port] + CONFIG9);
+> > +
+> > +     val =3D readl(sp_priv->uphy_regs[port] + CONFIG1);
+> > +     val &=3D ~(J_HS_TX_PWRSAV);
+> > +     writel(val, sp_priv->uphy_regs[port] + CONFIG1);
+> > +
+> > +     val =3D readl(sp_priv->uphy_regs[port] + CONFIG23);
+> > +     val =3D (val & ~PROB) | PROB;
+> > +     writel(val, sp_priv->uphy_regs[port] + CONFIG23);
+> > +
+> > +     /* USBC 0 reset */
+> > +     writel(RF_MASK_V(USBC0_RESET, USBC0_RESET), sp_priv->moon0_regs +=
+ HARDWARE_RESET_CONTROL2);
+> > +     writel(RF_MASK_V_CLR(USBC0_RESET), sp_priv->moon0_regs + HARDWARE=
+_RESET_CONTROL2);
+> > +
+> > +     /* port 0 uphy clk fix */
+> > +     writel(RF_MASK_V(MO1_UPHY0_RX_CLK_SEL, MO1_UPHY0_RX_CLK_SEL),
+> > +            sp_priv->moon4_regs + UPHY0_CONTROL2);
+> > +
+> > +     /* switch to host */
+> > +     writel(RF_MASK_V(MO1_USBC0_USB0_SEL | MO1_USBC0_USB0_CTRL,
+> > +                      MO1_USBC0_USB0_SEL | MO1_USBC0_USB0_CTRL),
+> > +            sp_priv->moon4_regs + USBC_CONTROL);
+> > +
+> > +     /* battery charger */
+> > +     writel(J_TBCWAIT_1P1_MS | J_TVDM_SRC_DIS_8P2_MS | J_TVDM_SRC_EN_1=
+P6_MS | J_BC_EN,
+> > +            sp_priv->uphy_regs[port] + CONFIG16);
+> > +     writel(IBG_TRIM0_SSLVHT | J_VDATREE_TRIM_DEFAULT, sp_priv->uphy_r=
+egs[port] + CONFIG17);
+> > +     writel(J_FORCE_DISC_ON | J_DEBUG_CTRL_ADDR_MACRO, sp_priv->uphy_r=
+egs[port] + CONFIG3);
+>
+> What about all of these writes, are you sure they made it to the
+> hardware ok?  No need to read?
+>
+Yes, they made it to the hardware and there is no need to read.
+The write command of Sunplus SP7021 is posted write. But it
+has a MSI (Message Signal Interrupt) mechanism to fix the data
+incoherence issue between CPU and other bus masters. The
+steps are shown below.
+1. The master issues a MSI command after the last write command.
+2. When SDCTRL receives the MSI command, the previous write
+    command have been done and SDCTRL would issue an interrupt
+    to interrupt controller.
+3. The inerrupt controller issues a "done" signal to the master.
+4. When the master receives the "done" signal, the write command has
+    been done. Then the master can process the next write command
+    or issue an interrupt.
+> Same for elsewhere in the file.
+>
+> thanks,
+>
+> greg k-h
 
-Suggested-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: Andre Kalb <andre.kalb@sma.de>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
----
-Changelog v1 to v2:
-Move console_set_on_cmdling into separate function set_user_specified(), which is called from
-__add_preferred_console().
-
-The old patch v1 could be used to backport to stable 5.4 and lower.
-
-Changelog v2 to v3:
-Add comment to explain the less obvious behaviour.
----
- kernel/printk/printk.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 82abfaf3c2aa..e4e1a5266108 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -2324,6 +2324,20 @@ asmlinkage __visible void early_printk(const char *fmt, ...)
- }
- #endif
- 
-+static void set_user_specified(struct console_cmdline *c, bool user_specified)
-+{
-+	if (!user_specified)
-+		return;
-+
-+	/*
-+	 * @c console was defined by the user on the command line.
-+	 * Do not clear when added twice also by SPCR or the device tree.
-+	 */
-+	c->user_specified = true;
-+	/* At least one console defined by the user on the command line. */
-+	console_set_on_cmdline = 1;
-+}
-+
- static int __add_preferred_console(char *name, int idx, char *options,
- 				   char *brl_options, bool user_specified)
- {
-@@ -2340,8 +2354,7 @@ static int __add_preferred_console(char *name, int idx, char *options,
- 		if (strcmp(c->name, name) == 0 && c->index == idx) {
- 			if (!brl_options)
- 				preferred_console = i;
--			if (user_specified)
--				c->user_specified = true;
-+			set_user_specified(c, user_specified);
- 			return 0;
- 		}
- 	}
-@@ -2351,7 +2364,7 @@ static int __add_preferred_console(char *name, int idx, char *options,
- 		preferred_console = i;
- 	strlcpy(c->name, name, sizeof(c->name));
- 	c->options = options;
--	c->user_specified = user_specified;
-+	set_user_specified(c, user_specified);
- 	braille_set_options(c, brl_options);
- 
- 	c->index = idx;
-@@ -2417,7 +2430,6 @@ static int __init console_setup(char *str)
- 	*s = 0;
- 
- 	__add_preferred_console(buf, idx, options, brl_options, true);
--	console_set_on_cmdline = 1;
- 	return 1;
- }
- __setup("console=", console_setup);
--- 
-2.31.1
-
+Thanks for your review.

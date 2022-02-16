@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE5B4B841D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 651254B842E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbiBPJPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 04:15:37 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34866 "EHLO
+        id S231996AbiBPJPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 04:15:39 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbiBPJP3 (ORCPT
+        with ESMTP id S231928AbiBPJP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 16 Feb 2022 04:15:29 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64B921CC85
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875C1219C27
         for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:15:17 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JzByP5RRvz1FDBT;
-        Wed, 16 Feb 2022 17:10:53 +0800 (CST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JzC2966Frzcd1q;
+        Wed, 16 Feb 2022 17:14:09 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 16 Feb
@@ -26,9 +26,9 @@ From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH v2 5/8] mm/memory-failure.c: remove PageSlab check in hwpoison_filter_dev
-Date:   Wed, 16 Feb 2022 17:14:28 +0800
-Message-ID: <20220216091431.39406-6-linmiaohe@huawei.com>
+Subject: [PATCH v2 6/8] mm/memory-failure.c: rework the try_to_unmap logic in hwpoison_user_mappings()
+Date:   Wed, 16 Feb 2022 17:14:29 +0800
+Message-ID: <20220216091431.39406-7-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220216091431.39406-1-linmiaohe@huawei.com>
 References: <20220216091431.39406-1-linmiaohe@huawei.com>
@@ -48,33 +48,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 03e5ac2fc3bf ("mm: fix crash when using XFS on loopback"),
-page_mapping() can handle the Slab pages. So remove this unnecessary
-PageSlab check and obsolete comment.
+Only for hugetlb pages in shared mappings, try_to_unmap should take
+semaphore in write mode here. Rework the code to make it clear.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
 ---
- mm/memory-failure.c | 6 ------
- 1 file changed, 6 deletions(-)
+ mm/memory-failure.c | 34 +++++++++++++++-------------------
+ 1 file changed, 15 insertions(+), 19 deletions(-)
 
 diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index d66f642888be..791d89e0c15a 100644
+index 791d89e0c15a..0100d4f9da9a 100644
 --- a/mm/memory-failure.c
 +++ b/mm/memory-failure.c
-@@ -130,12 +130,6 @@ static int hwpoison_filter_dev(struct page *p)
- 	    hwpoison_filter_dev_minor == ~0U)
- 		return 0;
+@@ -1404,26 +1404,22 @@ static bool hwpoison_user_mappings(struct page *p, unsigned long pfn,
+ 	if (kill)
+ 		collect_procs(hpage, &tokill, flags & MF_ACTION_REQUIRED);
  
--	/*
--	 * page_mapping() does not accept slab pages.
--	 */
--	if (PageSlab(p))
--		return -EINVAL;
--
- 	mapping = page_mapping(p);
- 	if (mapping == NULL || mapping->host == NULL)
- 		return -EINVAL;
+-	if (!PageHuge(hpage)) {
+-		try_to_unmap(hpage, ttu);
++	if (PageHuge(hpage) && !PageAnon(hpage)) {
++		/*
++		 * For hugetlb pages in shared mappings, try_to_unmap
++		 * could potentially call huge_pmd_unshare.  Because of
++		 * this, take semaphore in write mode here and set
++		 * TTU_RMAP_LOCKED to indicate we have taken the lock
++		 * at this higher level.
++		 */
++		mapping = hugetlb_page_mapping_lock_write(hpage);
++		if (mapping) {
++			try_to_unmap(hpage, ttu|TTU_RMAP_LOCKED);
++			i_mmap_unlock_write(mapping);
++		} else
++			pr_info("Memory failure: %#lx: could not lock mapping for mapped huge page\n", pfn);
+ 	} else {
+-		if (!PageAnon(hpage)) {
+-			/*
+-			 * For hugetlb pages in shared mappings, try_to_unmap
+-			 * could potentially call huge_pmd_unshare.  Because of
+-			 * this, take semaphore in write mode here and set
+-			 * TTU_RMAP_LOCKED to indicate we have taken the lock
+-			 * at this higher level.
+-			 */
+-			mapping = hugetlb_page_mapping_lock_write(hpage);
+-			if (mapping) {
+-				try_to_unmap(hpage, ttu|TTU_RMAP_LOCKED);
+-				i_mmap_unlock_write(mapping);
+-			} else
+-				pr_info("Memory failure: %#lx: could not lock mapping for mapped huge page\n", pfn);
+-		} else {
+-			try_to_unmap(hpage, ttu);
+-		}
++		try_to_unmap(hpage, ttu);
+ 	}
+ 
+ 	unmap_success = !page_mapped(hpage);
 -- 
 2.23.0
 

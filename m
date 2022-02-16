@@ -2,99 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB694B86BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 12:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D44F4B86C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 12:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231786AbiBPLeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 06:34:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49284 "EHLO
+        id S231808AbiBPLeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 06:34:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbiBPLeH (ORCPT
+        with ESMTP id S231660AbiBPLeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 06:34:07 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7631E1FAA37
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 03:33:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645011234; x=1676547234;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=pmRMfrAsDFhdvjzY4uN2DGJiavIZ2kryDsFQYGeBUyQ=;
-  b=Yl7hGw8QAGcGdMV7WPQwYK3UEfESy0XjDGkX36gNa7DUuQM9TOQpj7d0
-   MpYRXn8k2v0aeK/oABN3tMA7D1lmdSyNBHVnWDtKspIXtPSWFk/GCXNtI
-   7p4BLbX6yWPrOUVwFi0qtH0vu0DGqES/eRnRPx3h44haK1shMb7AjRhoT
-   o=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 16 Feb 2022 03:33:54 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 03:33:54 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 16 Feb 2022 03:33:53 -0800
-Received: from [10.216.55.237] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 16 Feb
- 2022 03:33:50 -0800
-Subject: Re: [PATCH -next] ASoC: codec: wcd938x: Fix NULL but dereferenced
- coccicheck error
-To:     Yang Li <yang.lee@linux.alibaba.com>, <perex@perex.cz>
-CC:     <tiwai@suse.com>, <lgirdwood@gmail.com>, <broonie@kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20220216021116.94384-1-yang.lee@linux.alibaba.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-Message-ID: <6c021509-e29f-2946-b411-64242535a370@quicinc.com>
-Date:   Wed, 16 Feb 2022 17:03:47 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 16 Feb 2022 06:34:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8A51F8C9D;
+        Wed, 16 Feb 2022 03:34:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4CDE8B81E9B;
+        Wed, 16 Feb 2022 11:34:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E7F4C004E1;
+        Wed, 16 Feb 2022 11:33:57 +0000 (UTC)
+Date:   Wed, 16 Feb 2022 17:03:53 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Alex Elder <elder@linaro.org>
+Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
+        quic_bbhatt@quicinc.com, quic_jhugo@quicinc.com,
+        vinod.koul@linaro.org, bjorn.andersson@linaro.org,
+        dmitry.baryshkov@linaro.org, quic_vbadigan@quicinc.com,
+        quic_cang@quicinc.com, quic_skananth@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Davey <paul.davey@alliedtelesis.co.nz>,
+        Hemant Kumar <hemantk@codeaurora.org>, stable@vger.kernel.org
+Subject: Re: [PATCH v3 01/25] bus: mhi: Fix pm_state conversion to string
+Message-ID: <20220216113353.GB6225@workstation>
+References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
+ <20220212182117.49438-2-manivannan.sadhasivam@linaro.org>
+ <0c95c9a5-cf66-dcec-bfde-0ca201206c8b@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20220216021116.94384-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0c95c9a5-cf66-dcec-bfde-0ca201206c8b@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 15, 2022 at 02:01:54PM -0600, Alex Elder wrote:
+> On 2/12/22 12:20 PM, Manivannan Sadhasivam wrote:
+> > From: Paul Davey <paul.davey@alliedtelesis.co.nz>
+> > 
+> > On big endian architectures the mhi debugfs files which report pm state
+> > give "Invalid State" for all states.  This is caused by using
+> > find_last_bit which takes an unsigned long* while the state is passed in
+> > as an enum mhi_pm_state which will be of int size.
+> 
+> I think this would have fixed it too, but your fix is better.
+> 
+> 	int index = find_last_bit(&(unsigned long)state, 32);
+> 
+> > Fix by using __fls to pass the value of state instead of find_last_bit.
+> > 
+> > Fixes: a6e2e3522f29 ("bus: mhi: core: Add support for PM state transitions")
+> > Signed-off-by: Paul Davey <paul.davey@alliedtelesis.co.nz>
+> > Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+> > Reviewed-by: Hemant Kumar <hemantk@codeaurora.org>
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >   drivers/bus/mhi/core/init.c | 8 +++++---
+> >   1 file changed, 5 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/bus/mhi/core/init.c b/drivers/bus/mhi/core/init.c
+> > index 046f407dc5d6..af484b03558a 100644
+> > --- a/drivers/bus/mhi/core/init.c
+> > +++ b/drivers/bus/mhi/core/init.c
+> > @@ -79,10 +79,12 @@ static const char * const mhi_pm_state_str[] = {
+> >   const char *to_mhi_pm_state_str(enum mhi_pm_state state)
+> 
+> The mhi_pm_state enumerated type is an enumerated sequence, not
+> a bit mask.  So knowing what the last (most significant) set bit
+> is not meaningful.  Or normally it shouldn't be.
+> 
+> If mhi_pm_state really were a bit mask, then its values should
+> be defined that way, i.e.,
+> 
+> 	MHI_PM_STATE_DISABLE	= 1 << 0,
+> 	MHI_PM_STATE_DISABLE	= 1 << 1,
+> 	. . .
+> 
+> What's really going on is that the state value passed here
+> *is* a bitmask, whose bit positions are those mhi_pm_state
+> values.  So the state argument should have type u32.
+> 
 
-On 2/16/2022 7:41 AM, Yang Li wrote:
-Thanks for Fix Yang!!!
-We are going to post complete cleaned patch. Shall we ignore this patch 
-for now?
-> Eliminate the following coccicheck warning:
-> ./sound/soc/codecs/wcd938x.c:4210:21-24: ERROR: component is NULL but
-> dereferenced.
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Fixes: 013cc2aea0f6 ("ASoC: codec: wcd938x: Add switch control for selecting CTIA/OMTP Headset")
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->   sound/soc/codecs/wcd938x.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
-> index 2663fe0bf64f..c46c4bfd84f2 100644
-> --- a/sound/soc/codecs/wcd938x.c
-> +++ b/sound/soc/codecs/wcd938x.c
-> @@ -4207,7 +4207,7 @@ static bool wcd938x_swap_gnd_mic(struct snd_soc_component *component, bool activ
->   	struct wcd938x_priv *wcd938x;
->   
->   	if (!component) {
-> -		dev_err(component->dev, "%s component is NULL\n", __func__);
-> +		pr_err("The snd_soc_component is NULL\n");
->   		return false;
->   	}
->   
+I agree with you. It should be u32.
+
+> This is a *separate* bug/issue.  It could be fixed separately
+> (before this patch), but I'd be OK with just explaining why
+> this change would occur as part of this modified patch.
+> 
+
+It makes sense to do it in the same patch itself as the change is
+minimal and moreover this patch will also get backported to stable.
+
+> >   {
+> > -	unsigned long pm_state = state;
+> > -	int index = find_last_bit(&pm_state, 32);
+> > +	int index;
+> > -	if (index >= ARRAY_SIZE(mhi_pm_state_str))
+> > +	if (state)
+> > +		index = __fls(state);
+> > +
+> > +	if (!state || index >= ARRAY_SIZE(mhi_pm_state_str))
+> >   		return "Invalid State";
+> 
+> Do this test and return first, and skip the additional
+> check for "if (state)".
+> 
+
+We need to calculate index for the second check, so I guess the current
+code is fine.
+
+Thanks,
+Mani
+
+> 					-Alex
+> 
+> >   	return mhi_pm_state_str[index];
+> 

@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC5E4B8FE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:10:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 558BE4B8FEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:10:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237483AbiBPSKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 13:10:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49816 "EHLO
+        id S237474AbiBPSK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 13:10:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237442AbiBPSKo (ORCPT
+        with ESMTP id S237473AbiBPSK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 13:10:44 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011C32B0B1C
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:10:31 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id f13so412438ilq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:10:31 -0800 (PST)
+        Wed, 16 Feb 2022 13:10:56 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6ED62B1013
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:10:41 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id h6so4820548wrb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:10:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dhg8ObNqJqU9MXgC8htbZHEYozTLZfTKNUE4M3ppPEQ=;
-        b=X3YBCQPLYrjbSwdYieYTzfp5aHHmxsfeg3RTf4qZg0wFQ6+c9DxcKdaAJmOlc37Dsv
-         CTdEpl0BzCTg87o7PF2lX4vr7saXRgNN4zH/iPLgcyLTPMZGhRdeuiUlyPMWzB1yffkQ
-         L1SizYyjHV+Gfh5MA9OSmEyn4e1glalJ49FS0=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/GDwCmOa4MtdZnSQteLqJB5ggHWRiUbbOudwWhAgHcI=;
+        b=trUphBMT/37EFY19GX1DTH6KJWnDoyi+q8RVMHFeBja8rT3CLmZJKVZokGSaVj1noe
+         SE9Y74qGSA1gl3/C3P3nDNY0ZiO7SAbFFhCMRRHwtNh0MTXGm67xIwY6TzClNNEvohhF
+         Cn365qiU5EKO3MyIWHmio73G4ddp1+p+RpvQ+WphFF1F1GTNx2MAqKy2E1hi+dteQUAO
+         nXGisZxF0F1h1UHECAnXoc10Tu8N+0Gt/IUM/QhRn0npOBWze5HXdcsjrdxGK30PBG3h
+         OI8j/NQS+fFfnJHfrCIP59PMRy/gC47L7SkZt+uCwR1FIqhJkjbMz0vd6kIxnP3xgvmA
+         tlzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dhg8ObNqJqU9MXgC8htbZHEYozTLZfTKNUE4M3ppPEQ=;
-        b=ueoZreMQ1k4DLXCSdUsHQZ2vn7iQ90WHddohi2Vq1KHLJ1thG89EZWEeea9H/TGV9M
-         ROYRiWLJ4SIEXG3Yi1KqZ8+EnsY0nLM3g4GC00VKRsTkjD35DRpouz+AvaEjKwP0/NSs
-         bZGpjcK48O8HEcx293p3joUkSf1TKR/FHNxsb9PB0u2I3fP2p2uSpJxA2s3Jl/UOwaHJ
-         KynwkRCfaX7MPKvbKvxfKmGo9nyYIC/Xfws/HKQRmLGGSkXb5z8LO4M9cjwl2L1Yna75
-         GwffU0U3sQnYus/WlNKVABPZ8ZRLcS46qkrLqiVtcx1g3YS+gdQTk4OyCcq1MSOoaL3u
-         72Gg==
-X-Gm-Message-State: AOAM532fEBhwpXtWsen6Kc831Fb01OLRsJFx9ax9nMFYnKR24E5sAmYC
-        AJ38lmhxggJ06X1Mjwq0KZPlWxYGJUiK9A==
-X-Google-Smtp-Source: ABdhPJyC1DggR2p3sQ6nOYoxwJqirAuyffugkK9LFHAKY1NBaAMwy5VIlMoO6PmDJDGXMNPwp8yW4w==
-X-Received: by 2002:a92:c269:0:b0:2be:795d:abb2 with SMTP id h9-20020a92c269000000b002be795dabb2mr2638878ild.46.1645035031221;
-        Wed, 16 Feb 2022 10:10:31 -0800 (PST)
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com. [209.85.166.179])
-        by smtp.gmail.com with ESMTPSA id w4sm284536ilv.13.2022.02.16.10.10.28
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/GDwCmOa4MtdZnSQteLqJB5ggHWRiUbbOudwWhAgHcI=;
+        b=mTqqsWZtE/6qZo7OgcsTkqtramS9waP1cjnWMUTM9BQb8ejFI4HjwVmE4kkhO6bfNT
+         3StCLrjmOzDeemLTm7K4n7Mhee8rMMyfP7VwDJPhLt4v5ToIppg/fkVdJpZVNnnyUuRQ
+         Jv3UzKWzq2DybiiXTBOLCq52y4xesseZYwDLAljhRuaSPZCE/EqPLduV1K3sEXOs1fuD
+         hPC5EQR70LBvZsOtAzCtlHRRIkYkbVlDrr1WhKQlK/Rp90ZSmjRv59UcBWqvlMSn5Be2
+         XEdLbNRpXbO7tNDUJYf/LnKAWw7t+5CI1VAafH1vOpNkI29ssJjkHtUh0U2V0IL1uRsb
+         AGYg==
+X-Gm-Message-State: AOAM53118naxbdPI/iATNdAB9KqnBP99mREKqkZSN6jjT1dBXH9DNZNv
+        gJXJ9791hkOj6LuttsLZr5B8XA==
+X-Google-Smtp-Source: ABdhPJzCLH7rGMIhynYdNXqwlOOJOhAjOeEZcgG3BuiMskbbYpYgii4hpA1AcoQiMSV2w8e/cc7zQQ==
+X-Received: by 2002:a5d:40ca:0:b0:1e5:1996:fc88 with SMTP id b10-20020a5d40ca000000b001e51996fc88mr3314356wrq.222.1645035040170;
+        Wed, 16 Feb 2022 10:10:40 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:6165:d98a:b553:c3c1? ([2a01:e34:ed2f:f020:6165:d98a:b553:c3c1])
+        by smtp.googlemail.com with ESMTPSA id l12sm18045471wmd.44.2022.02.16.10.10.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 10:10:29 -0800 (PST)
-Received: by mail-il1-f179.google.com with SMTP id z7so408410ilb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:10:28 -0800 (PST)
-X-Received: by 2002:a05:6e02:144f:b0:2bd:da3d:f50b with SMTP id
- p15-20020a056e02144f00b002bdda3df50bmr2425111ilo.165.1645035028535; Wed, 16
- Feb 2022 10:10:28 -0800 (PST)
+        Wed, 16 Feb 2022 10:10:39 -0800 (PST)
+Message-ID: <e44b9c4b-2ac4-4ea4-c771-bde13943af5f@linaro.org>
+Date:   Wed, 16 Feb 2022 19:10:33 +0100
 MIME-Version: 1.0
-References: <20211001144212.v2.1.I773a08785666ebb236917b0c8e6c05e3de471e75@changeid>
- <CAD=FV=XU0bYVZk+-jPWZVoODW79QXOJ=NQy+RH=fYyX+LCZb2Q@mail.gmail.com>
- <CA+ASDXPXKVwcZGYoagJYPm4E7DzaJmEVEv2FANhLH-juJw+r+Q@mail.gmail.com>
- <CAD=FV=VYe1rLKANQ8eom7g8x1v6_s_OYnX819Ax4m7O3UwDHmg@mail.gmail.com> <CA+ASDXO8c4dK31p=kvBABJQsDUs20qVHM6NxYf1JQDCr2oswAw@mail.gmail.com>
-In-Reply-To: <CA+ASDXO8c4dK31p=kvBABJQsDUs20qVHM6NxYf1JQDCr2oswAw@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 16 Feb 2022 10:10:16 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XivCxy-7Wszv9pnHELi=gRCMeVasEweza17XTtEoiT4A@mail.gmail.com>
-Message-ID: <CAD=FV=XivCxy-7Wszv9pnHELi=gRCMeVasEweza17XTtEoiT4A@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/bridge: analogix_dp: Grab runtime PM reference for DP-AUX
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Sean Paul <sean@poorly.run>, Jonas Karlman <jonas@kwiboo.se>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        "# 4.0+" <stable@vger.kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 3/7] powercap/dtpm: Fixup kfree for virtual node
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     rjw@rjwysocki.net, heiko@sntech.de, lukasz.luba@arm.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+References: <20220130210210.549877-1-daniel.lezcano@linaro.org>
+ <20220130210210.549877-3-daniel.lezcano@linaro.org>
+ <CAPDyKFqV++g63Asax8TNSEgujxJ=uM9XG2_Advu34JidYBCGtg@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAPDyKFqV++g63Asax8TNSEgujxJ=uM9XG2_Advu34JidYBCGtg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,35 +78,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 16/02/2022 17:22, Ulf Hansson wrote:
+> On Sun, 30 Jan 2022 at 22:02, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>> When the node is virtual there is no release function associated which
+>> can free the memory.
+>>
+>> Free the memory when no 'ops' exists.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
+>>   drivers/powercap/dtpm.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
+>> index 0b0121c37a1b..7bddd25a6767 100644
+>> --- a/drivers/powercap/dtpm.c
+>> +++ b/drivers/powercap/dtpm.c
+>> @@ -181,12 +181,12 @@ int dtpm_release_zone(struct powercap_zone *pcz)
+>>
+>>          if (dtpm->ops)
+>>                  dtpm->ops->release(dtpm);
+>> +       else
+>> +               kfree(dtpm);
+>>
+> 
+> This doesn't look correct. Below you check dtpm against "root", which
+> may be after its memory has been freed.
+> 
+> If the ->release() function should be responsible for freeing the
+> dtpm, it needs to be called after the check below.
 
-On Tue, Feb 15, 2022 at 4:41 PM Brian Norris <briannorris@chromium.org> wrote:
->
-> On Tue, Feb 15, 2022 at 3:46 PM Doug Anderson <dianders@chromium.org> wrote:
-> > On Tue, Feb 15, 2022 at 2:52 PM Brian Norris <briannorris@chromium.org> wrote:
-> > > It still makes me wonder what the point
-> > > of the /dev/drm_dp_aux<N> interface is though, because it seems like
-> > > you're pretty much destined to not have reliable operation through
-> > > that means.
-> >
-> > I can't say I have tons of history for those files. I seem to recall
-> > maybe someone using them to have userspace tweak the embedded
-> > backlight on some external DP connected panels? I think we also might
-> > use it in Chrome OS to update the firmware of panels (dunno if
-> > internal or external) in some cases too? I suspect that it works OK
-> > for certain situations but it's really not going to work in all
-> > cases...
->
-> Yes, I believe I'm only submitting patches like this because fwupd
-> apparently likes to indiscriminately whack at dpaux devices:
-> https://github.com/fwupd/fwupd/tree/main/plugins/synaptics-mst#kernel-dp-aux-interface
->
-> That seems like a bad idea.
->
-> (We've already disabled that plugin on these systems, but it seems
-> wise not to leave the stumbling block here for the next time.)
+It is harmless, 'root' is not dereferenced but used as an ID
 
-Yeah, it doesn't seem great. I guess it's _slightly_ less bad since
-it's for an external device. As I understand it, they never really
-turn off in the same way. It still feels like letting userspace
-indiscriminately whack at DP AUX registers isn't a great idea, though.
+Moreover, in the patch 5/7 it is moved out this function.
+
+
+>>          if (root == dtpm)
+>>                  root = NULL;
+>>
+>> -       kfree(dtpm);
+>> -
+>>          return 0;
+>>   }
+>>
+> 
+> Kind regards
+> Uffe
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

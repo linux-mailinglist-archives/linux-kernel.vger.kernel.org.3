@@ -2,102 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E874B9311
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 22:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92DED4B930F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 22:19:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234293AbiBPVT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 16:19:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45604 "EHLO
+        id S234006AbiBPVTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 16:19:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiBPVTv (ORCPT
+        with ESMTP id S229939AbiBPVTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 16:19:51 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B418622496F;
-        Wed, 16 Feb 2022 13:19:38 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21GL8WJ2032687;
-        Wed, 16 Feb 2022 21:19:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=U8SNXnoO2x+3jqNdtP8FT7c218Mnv5NRJH1QCjrm+MM=;
- b=bg5Mqq1fDy3Xulmua3Am4/Hj10arF8Q5A+HuUzwou18kBw58FADxXHoqKgWOBn936i++
- sbkN/iW5EgVZCdpTAdR6+lCNWv59y/orhDIg6zpvuZta7nzCvLP5eAXEUUlnxun+mEbn
- ietG1goSA6hJK3i5G6m2zsDacozzyoD9frhttm+Vs8UEOdpC+yDyjFoNVspJJf8vxF0e
- m+9ydXfvjR8ZDsM30b4vWWq0KthlkxV8wPiTNrPe3V0olyHPROX9FhZaE25sol5hM143
- 7vCGVw4x1c6RxlXGlwm3YivlpLYDxltI/oMNizoq5nDoOrRXZ5pqPU1Vt5uDlknyNAMz ng== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e97qc1naj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Feb 2022 21:19:24 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21GLHrk0006808;
-        Wed, 16 Feb 2022 21:19:23 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e97qc1na9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Feb 2022 21:19:23 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21GLHuoT024449;
-        Wed, 16 Feb 2022 21:19:22 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma04dal.us.ibm.com with ESMTP id 3e64hcxb57-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Feb 2022 21:19:22 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21GLJLm035914166
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 16 Feb 2022 21:19:21 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3ECA2BE056;
-        Wed, 16 Feb 2022 21:19:21 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ABF57BE058;
-        Wed, 16 Feb 2022 21:19:19 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 16 Feb 2022 21:19:19 +0000 (GMT)
-Message-ID: <c1a32f5d-c15d-8127-6254-69946f751bdb@linux.ibm.com>
-Date:   Wed, 16 Feb 2022 16:19:19 -0500
+        Wed, 16 Feb 2022 16:19:47 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31ADF224957;
+        Wed, 16 Feb 2022 13:19:34 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id m17so6057262edc.13;
+        Wed, 16 Feb 2022 13:19:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=eJjUepHMJ3XjQahPeLYVJZBCt2LbAJ4aSYQ6YGubxko=;
+        b=DP/QUlXXfeSdvaRKWGaTlc/s7+ZUhVLvX/3c/4fdJGStyXeQaU1jElIqHVWGNMQC54
+         nuroeJ5ffqSGp/e/lNI9mhobmCmgLsUhSWLSqQ6WOFKAAyo4boTA3Oh46Q4eHg8bxGyw
+         Kz77Neo8vLJkADB25RB5Kgsy7keg7F7o8AGWRm/hXEl1gIMOQh2agSoRy/P/uNQMteKR
+         TBJldYdkMDVUgU1W08HVzPeyR/oK5QWr2/Ktx7LC4tjHMtKIzkru+ANkCkwco9XzvbUl
+         1on0ToQ4vm8Y9OZVvyhQYibwkmgghuWgxFMWb4mKFd0PDEc7c3YZfyvryVDP3o71uIm+
+         P5VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=eJjUepHMJ3XjQahPeLYVJZBCt2LbAJ4aSYQ6YGubxko=;
+        b=bEOgIAwV+pNUvkcjly9BEfb8vEaqfxTsVod49re177a/wdUeInqZ7jWGgYyhA4LDM2
+         xXPZbUx0v4YQYpiddWvXSrBRQGA9zNqbawOYj5bUtOWlbcw4tfRZKTjHSk/kB5vo4+zf
+         pQjhoYGCuwUHr6fwy6T02jSHjuWqOV3iDO6M7Kt1S+RLykWMqwKo92PWxH0sbcYwJuyA
+         k3SsLZslkZcGpfYaz7gS7fC4+n6uvBBYGALpvtSuBSAqrllefuOp0ebSp+hjX1dXtwx9
+         ZBxBzmQ//OUSd6bk0rW7oVpPYmZdYfRfoyTsIpF8+Nj19OSC4OYG7gyZ9YHB8X7T7dwn
+         UjYQ==
+X-Gm-Message-State: AOAM53199fkiONPdjoOvWbeofnhYy+/jyjyvYzow3eLvVclq+85aQev5
+        QRTw9gSNrffJs1GTs3Vj/bU=
+X-Google-Smtp-Source: ABdhPJzRG2TfWe37Jh6rpASb5zh3vWrjCq+6dAkgrboDf4ApNeLowDOsR1kV/dtbcxV1Zhw4ujwYkA==
+X-Received: by 2002:aa7:d4ca:0:b0:410:d232:6b76 with SMTP id t10-20020aa7d4ca000000b00410d2326b76mr5105031edr.370.1645046372504;
+        Wed, 16 Feb 2022 13:19:32 -0800 (PST)
+Received: from debian64.daheim (p5b0d7a4c.dip0.t-ipconnect.de. [91.13.122.76])
+        by smtp.gmail.com with ESMTPSA id u2sm336886eje.119.2022.02.16.13.19.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 13:19:31 -0800 (PST)
+Received: from localhost.daheim ([127.0.0.1])
+        by debian64.daheim with esmtp (Exim 4.95)
+        (envelope-from <chunkeey@gmail.com>)
+        id 1nKRhz-0018wB-5X;
+        Wed, 16 Feb 2022 22:19:31 +0100
+Message-ID: <70a8dd7a-851d-686b-3134-50f21af0450c@gmail.com>
+Date:   Wed, 16 Feb 2022 22:19:31 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v10 06/27] ima: Move arch_policy_entry into ima_namespace
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Christian Brauner <brauner@kernel.org>
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
- <20220201203735.164593-7-stefanb@linux.ibm.com>
- <bf435ffa5d176213acabb8c576c159d2cbd4d395.camel@linux.ibm.com>
- <c350ccf1-f968-8b01-2f0d-015cabf39781@linux.ibm.com>
- <c4170de11d64d5927a8e2a2e0f7e8a6e69c6a558.camel@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <c4170de11d64d5927a8e2a2e0f7e8a6e69c6a558.camel@linux.ibm.com>
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] ath10k: support bus and device specific API 1 BDF
+ selection
+Content-Language: de-DE
+To:     Robert Marko <robimarko@gmail.com>, Thibaut <hacks@slashdirt.org>
+Cc:     Kalle Valo <kvalo@kernel.org>, kvalo@codeaurora.org,
+        davem@davemloft.net, kuba@kernel.org, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+References: <20211009221711.2315352-1-robimarko@gmail.com>
+ <163890036783.24891.8718291787865192280.kvalo@kernel.org>
+ <CAOX2RU5mqUfPRDsQNSpVPdiz6sE_68KN5Ae+2bC_t1cQzdzgTA@mail.gmail.com>
+ <09a27912-9ea4-fe75-df72-41ba0fa5fd4e@gmail.com>
+ <CAOX2RU6qaZ7NkeRe1bukgH6OxXOPvJS=z9PRp=UYAxMfzwD2oQ@mail.gmail.com>
+ <EC2778B3-B957-4F3F-B299-CC18805F8381@slashdirt.org>
+ <CAOX2RU7FOdSuo2Jgo0i=8e-4bJwq7ahvQxLzQv_zNCz2HCTBwA@mail.gmail.com>
+ <CAOX2RU7d9amMseczgp-PRzdOvrgBO4ZFM_+hTRSevCU85qT=kA@mail.gmail.com>
+From:   Christian Lamparter <chunkeey@gmail.com>
+In-Reply-To: <CAOX2RU7d9amMseczgp-PRzdOvrgBO4ZFM_+hTRSevCU85qT=kA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: a0JLbt8rZLx9dHrRWrfokUbIihXboZeN
-X-Proofpoint-GUID: ErNdkiqOb-tu9Gv7m0Ilrnm1jO72ttaU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-16_10,2022-02-16_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 adultscore=0 bulkscore=0 clxscore=1015 phishscore=0
- mlxscore=0 impostorscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202160114
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,40 +89,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 2/16/22 15:56, Mimi Zohar wrote:
-> On Wed, 2022-02-16 at 15:48 -0500, Stefan Berger wrote:
->> On 2/16/22 11:39, Mimi Zohar wrote:
->>> On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote
->>>
->>> Let's update the patch description providing a bit more background
->>> info:
->>>
->>> The archictecture specific policy rules, currently defined for EFI and
->>> powerpc, require the kexec kernel image and kernel modules to be
->>> validly signed and measured, based on the system's secure boot and/or
->>> trusted boot mode and the IMA_ARCH_POLICY Kconfig option being enabled.
->>>
->>>> Move the arch_policy_entry pointer into ima_namespace.
->>> Perhaps include something about namespaces being allowed or not allowed
->>> to kexec a new kernel or load kernel modules.
->> Namespaces are not allowed to kexec but special-casing the init_ima_ns
->> in the code to handle namespaces differently makes it much harder to
->> read the code. I would avoid special-casing init_ima_ns as much as
->> possible and therefore I have moved the arch_policy_entry into the
->> ima_namespace.
-> Please include this in the patch description, but re-write the last
-> line in the 3rd person, like:
->
-> To avoid special-casing init_ima_ns, as much as possible, move the
-> arch_policy_entry into the ima_namespace.
+On 16/02/2022 14:38, Robert Marko wrote:
+> Silent ping,
+> 
+> Does anybody have an opinion on this?
 
-I took the paragraph on the background as well as this sentence.
+As a fallback, I've cobbled together from the old scripts that
+"concat board.bin into a board-2.bin. Do this on the device
+in userspace on the fly" idea. This was successfully tested
+on one of the affected devices (MikroTik SXTsq 5 ac (RBSXTsqG-5acD))
+and should work for all MikroTik.
 
+"ipq40xx: dynamically build board-2.bin for Mikrotik"
+<https://git.openwrt.org/?p=openwrt/staging/chunkeey.git;a=commit;h=52f3407d94da62b99ba6c09f3663464cccd29b4f>
+(though I don't think this link will stay active for
+too long.)
 
->
-> thanks,
->
-> Mimi
->
->
+Regards,
+Christian

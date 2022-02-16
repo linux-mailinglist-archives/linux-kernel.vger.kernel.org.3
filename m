@@ -2,212 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1195D4B7B8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 01:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 685E74B7B94
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 01:08:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244957AbiBPADE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 19:03:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47596 "EHLO
+        id S244520AbiBPAJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 19:09:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238224AbiBPADC (ORCPT
+        with ESMTP id S237693AbiBPAJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 19:03:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C1527FEF;
-        Tue, 15 Feb 2022 16:02:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B1D5B81D24;
-        Wed, 16 Feb 2022 00:02:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7AFFC340EB;
-        Wed, 16 Feb 2022 00:02:43 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="f35zvtzb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644969762;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jSS481wVl8zqyIdlIbBq60q/zzn2ipkf0jzq2ad4dkI=;
-        b=f35zvtzbFMMcFnKlOxThurkk8WtIjJj8M9KO6s/sXB1OU+6P/JiSHXPVOF/zaU6zSPMFaL
-        0EDJg3xwhcQUwnv5ideAxirX7uCJy/+AYDDHLeVVantYs6jOb7B2XrmoAN2vKyq+Y/7JGz
-        m90G+iu5MwRUIzCb5DuzNkW2JSQZOrs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 64f85552 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 16 Feb 2022 00:02:41 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     miaoqing@codeaurora.org, rsalvaterra@gmail.com,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        "Sepehrdad, Pouyan" <pouyans@qti.qualcomm.com>,
-        ath9k-devel <ath9k-devel@qca.qualcomm.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Subject: [PATCH v2] ath9k: use hw_random API instead of directly dumping into random.c
-Date:   Wed, 16 Feb 2022 01:02:30 +0100
-Message-Id: <20220216000230.22625-1-Jason@zx2c4.com>
-In-Reply-To: <CAHmME9pZaYW-p=zU4v96TjeSijm-g03cNpvUJcNvhOqh5v+Lwg@mail.gmail.com>
-References: <CAHmME9pZaYW-p=zU4v96TjeSijm-g03cNpvUJcNvhOqh5v+Lwg@mail.gmail.com>
+        Tue, 15 Feb 2022 19:09:00 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85ADEA6516;
+        Tue, 15 Feb 2022 16:08:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644970129; x=1676506129;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YqYpiVm+B3Wt+f+udv15CwLYPoURxRscBxn3BDwDwZo=;
+  b=rF3oeSwW7uM9pMEGPg6SQExi0tsDSzq21eD/o57eFGZOt/X/dRfT42b+
+   YOljIq4sFGX8jm7DRxA+/6z27sf4Wg5QaUKB0t7VTQts6I+uy4hjS3M4v
+   M+i2zq1d6TUrbyRT1BkJoDzXvg3CwGIUD6Uofd9KUYrklQac2I+KqIPPC
+   k=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 15 Feb 2022 16:08:49 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 16:08:48 -0800
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 15 Feb 2022 16:08:48 -0800
+Received: from wcheng-linux.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 15 Feb 2022 16:08:47 -0800
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, <Thinh.Nguyen@synopsys.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [RFC PATCH v2 0/3] Fix enumeration issues during composition switching
+Date:   Tue, 15 Feb 2022 16:08:32 -0800
+Message-ID: <20220216000835.25400-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hardware random number generators are supposed to use the hw_random
-framework. This commit turns ath9k's kthread-based design into a proper
-hw_random driver.
+Changes in v2:
+- Fixed terminology used in commit text to match definitions in DWC3 core.
+- Combined EP0 endtransfer params flags for ForceRM.
 
-This compiles, but I have no hardware or other ability to determine
-whether it works. I'll leave further development up to the ath9k
-and hw_random maintainers.
+This patch series addresses a few enumeration issues being seen during fast
+composition switching test cases:
+  - Missing DWC3 core soft reset before run/stop enable.  Recommended by the
+    Synopsis databook to do this during the pullup enable case.
+  - Endxfer command timeouts leading to controller halt failures in the pullup
+    disable path.
+  - Endxfer command timeouts leading to EP dequeue to never return a completion
+    to the function drivers, which can cause to unbind issues depending on
+    function driver implementation.
 
-Cc: Toke Høiland-Jørgensen <toke@redhat.com>
-Cc: Kalle Valo <kvalo@kernel.org>
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-v2 operates on whole words when possible.
+With regards to the endxfer timeout, it was communicated to us that if there is
+a pending setup/control transfer in progress, the DWC3 controller is unable to
+service the endxfer command for other endpoints.  USB bus sniffer and USB ftrace
+logs confirmed that when the endxfer timeouts occurred, there was a SETUP token
+being sent by the host, while the pullup routine was in progress, as during the
+pullup disable, we should not see any ftrace logs since IRQs are disabled.
 
- drivers/net/wireless/ath/ath9k/ath9k.h |  2 +-
- drivers/net/wireless/ath/ath9k/rng.c   | 72 +++++++++++---------------
- 2 files changed, 30 insertions(+), 44 deletions(-)
+It was recommended by Synopsis to ensure that packets on EP0 are always handled,
+and the only way to drain the dedicated control transfer internal memory is to
+issue a startxfer command.  With this in mind, the pullup disable case is able
+to discard any cached setup packets (as disconnect would pursue), so the
+approach to issue a startxfer after an unsuccessful endxfer is possible.
+Test logs show the subsequent endxfer is successful:
 
-diff --git a/drivers/net/wireless/ath/ath9k/ath9k.h b/drivers/net/wireless/ath/ath9k/ath9k.h
-index ef6f5ea06c1f..142f472903dc 100644
---- a/drivers/net/wireless/ath/ath9k/ath9k.h
-+++ b/drivers/net/wireless/ath/ath9k/ath9k.h
-@@ -1072,7 +1072,7 @@ struct ath_softc {
- 
- #ifdef CONFIG_ATH9K_HWRNG
- 	u32 rng_last;
--	struct task_struct *rng_task;
-+	struct hwrng rng_ops;
- #endif
- };
- 
-diff --git a/drivers/net/wireless/ath/ath9k/rng.c b/drivers/net/wireless/ath/ath9k/rng.c
-index aae2bd3cac69..a0a58f8e08d3 100644
---- a/drivers/net/wireless/ath/ath9k/rng.c
-+++ b/drivers/net/wireless/ath/ath9k/rng.c
-@@ -22,11 +22,6 @@
- #include "hw.h"
- #include "ar9003_phy.h"
- 
--#define ATH9K_RNG_BUF_SIZE	320
--#define ATH9K_RNG_ENTROPY(x)	(((x) * 8 * 10) >> 5) /* quality: 10/32 */
--
--static DECLARE_WAIT_QUEUE_HEAD(rng_queue);
--
- static int ath9k_rng_data_read(struct ath_softc *sc, u32 *buf, u32 buf_size)
- {
- 	int i, j;
-@@ -72,61 +67,52 @@ static u32 ath9k_rng_delay_get(u32 fail_stats)
- 	return delay;
- }
- 
--static int ath9k_rng_kthread(void *data)
-+static int ath9k_rng_read(struct hwrng *rng, void *buf, size_t max, bool wait)
- {
--	int bytes_read;
--	struct ath_softc *sc = data;
--	u32 *rng_buf;
--	u32 delay, fail_stats = 0;
--
--	rng_buf = kmalloc_array(ATH9K_RNG_BUF_SIZE, sizeof(u32), GFP_KERNEL);
--	if (!rng_buf)
--		goto out;
--
--	while (!kthread_should_stop()) {
--		bytes_read = ath9k_rng_data_read(sc, rng_buf,
--						 ATH9K_RNG_BUF_SIZE);
--		if (unlikely(!bytes_read)) {
--			delay = ath9k_rng_delay_get(++fail_stats);
--			wait_event_interruptible_timeout(rng_queue,
--							 kthread_should_stop(),
--							 msecs_to_jiffies(delay));
--			continue;
--		}
--
--		fail_stats = 0;
--
--		/* sleep until entropy bits under write_wakeup_threshold */
--		add_hwgenerator_randomness((void *)rng_buf, bytes_read,
--					   ATH9K_RNG_ENTROPY(bytes_read));
-+	struct ath_softc *sc = container_of(rng, struct ath_softc, rng_ops);
-+	int bytes_read = 0;
-+	u32 fail_stats = 0, word;
-+
-+retry:
-+	if (max & ~3UL)
-+		bytes_read = ath9k_rng_data_read(sc, buf, max >> 2);
-+	if ((max & 3UL) && ath9k_rng_data_read(sc, &word, 1)) {
-+		memcpy(buf + bytes_read, &word, max & 3);
-+		bytes_read += max & 3;
-+		memzero_explicit(&word, sizeof(word));
-+	}
-+	if (max && unlikely(!bytes_read) && wait) {
-+		msleep(ath9k_rng_delay_get(++fail_stats));
-+		goto retry;
- 	}
- 
--	kfree(rng_buf);
--out:
--	sc->rng_task = NULL;
--
--	return 0;
-+	return bytes_read;
- }
- 
- void ath9k_rng_start(struct ath_softc *sc)
- {
- 	struct ath_hw *ah = sc->sc_ah;
-+	int ret;
- 
--	if (sc->rng_task)
-+	if (sc->rng_ops.read)
- 		return;
- 
- 	if (!AR_SREV_9300_20_OR_LATER(ah))
- 		return;
- 
--	sc->rng_task = kthread_run(ath9k_rng_kthread, sc, "ath9k-hwrng");
--	if (IS_ERR(sc->rng_task))
--		sc->rng_task = NULL;
-+	sc->rng_ops.name = "ath9k";
-+	sc->rng_ops.read = ath9k_rng_read;
-+	sc->rng_ops.quality = 320;
-+
-+	ret = devm_hwrng_register(sc->dev, &sc->rng_ops);
-+	if (ret)
-+		sc->rng_ops.read = NULL;
- }
- 
- void ath9k_rng_stop(struct ath_softc *sc)
- {
--	if (sc->rng_task) {
--		kthread_stop(sc->rng_task);
--		sc->rng_task = NULL;
-+	if (sc->rng_ops.read) {
-+		devm_hwrng_unregister(sc->dev, &sc->rng_ops);
-+		sc->rng_ops.read = NULL;
- 	}
- }
--- 
-2.35.0
+[004] d..1 15631.849982: dwc3_gadget_ep_cmd: ep1out: cmd 'End Transfer' [20c08] params 00000000 00000000 00000000 --> status: Timed Out
+[004] d..1 15631.850008: dwc3_prepare_trb: ep0out: trb ffffffc019dad000 (E0:D0) buf 00000000efffa000 size 8 ctrl 00000c23 (HLcs:SC:setup)
+[004] d..1 15631.850024: dwc3_gadget_ep_cmd: ep0out: cmd 'Start Transfer' [406] params 00000000 efffa000 00000000 --> status: Successful
+[004] d..1 15631.857380: dwc3_gadget_ep_cmd: ep1out: cmd 'End Transfer' [20c08] params 00000000 00000000 00000000 --> status: Successful
+[004] d..1 15631.857409: dwc3_gadget_giveback: ep1out: req ffffff8789212300 length 0/16384 zsI ==> -108
+
+Attempts to ensure EP0 transfers don't happen during pullup disable were added
+as well.
+
+For the dequeue path, since usb_ep_dequeue() can be called from the function
+driver at any time, the same approach can not be used.  In this case, if there
+is an endxfer failure observed when dequeuing a request, mark the endpoint w/ a 
+flag, which will be later checked when the control transfer is complete.  From
+there it will traverse through all EPs to service the ones that need to
+re-issue the endxfer command.  This logic will only trigger if there is at least
+one EP that needs servicing.
+
+Wesley Cheng (3):
+  usb: dwc3: Flush pending SETUP data during stop active xfers
+  usb: dwc3: gadget: Wait for ep0 xfers to complete during dequeue
+  usb: dwc3: Issue core soft reset before enabling run/stop
+
+ drivers/usb/dwc3/core.c   |   4 +-
+ drivers/usb/dwc3/core.h   |  14 ++++++
+ drivers/usb/dwc3/ep0.c    |  22 ++++++---
+ drivers/usb/dwc3/gadget.c | 100 +++++++++++++++++++++++++++++++++-----
+ 4 files changed, 117 insertions(+), 23 deletions(-)
 

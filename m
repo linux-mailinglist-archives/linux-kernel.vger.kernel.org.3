@@ -2,99 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3634B8B2D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:13:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B9E4B8B32
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:15:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234848AbiBPON3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 09:13:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46694 "EHLO
+        id S234896AbiBPOPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 09:15:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233931AbiBPON0 (ORCPT
+        with ESMTP id S234917AbiBPOPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 09:13:26 -0500
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2AE221F5F8;
-        Wed, 16 Feb 2022 06:13:11 -0800 (PST)
-HMM_SOURCE_IP: 10.64.8.43:41724.2129254537
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 2B970100238;
-        Wed, 16 Feb 2022 22:13:07 +0800 (CST)
-Received: from  ([172.27.8.53])
-        by gateway-151646-dep-b7fbf7d79-vjdjk with ESMTP id b3dbb3be09af45109d798cf10be5fd16 for daniel@fooishbar.org;
-        Wed, 16 Feb 2022 22:13:09 CST
-X-Transaction-ID: b3dbb3be09af45109d798cf10be5fd16
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 172.27.8.53
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <adec818a-5c66-3b4a-6f27-bcb29b6c67d1@189.cn>
-Date:   Wed, 16 Feb 2022 22:13:05 +0800
+        Wed, 16 Feb 2022 09:15:46 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0AA9C2604DB
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 06:15:34 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B73B9106F;
+        Wed, 16 Feb 2022 06:15:33 -0800 (PST)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EBB7D3F718;
+        Wed, 16 Feb 2022 06:15:31 -0800 (PST)
+Date:   Wed, 16 Feb 2022 14:15:26 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, acme@redhat.com, ardb@kernel.org,
+        bp@alien8.de, broonie@kernel.org, catalin.marinas@arm.com,
+        dave.hansen@linux.intel.com, jslaby@suse.cz,
+        linux-arm-kernel@lists.infradead.org, mingo@redhat.com,
+        ndesaulniers@google.com, peterz@infradead.org, tglx@linutronix.de,
+        will@kernel.org
+Subject: Re: [PATCH v3 5/5] tools: update x86 string routines
+Message-ID: <Yg0G/nr0D2KXHuwA@lakrids>
+References: <20220211151445.2027553-1-mark.rutland@arm.com>
+ <20220211151445.2027553-6-mark.rutland@arm.com>
+ <20220216055952.ovrswb22lm53x5ns@treble>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display
- controller
-Content-Language: en-US
-To:     Daniel Stone <daniel@fooishbar.org>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Roland Scheidegger <sroland@vmware.com>,
-        linux-mips@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Sam Ravnborg <sam@ravnborg.org>
-References: <20220203082546.3099-1-15330273260@189.cn>
- <20220203082546.3099-2-15330273260@189.cn>
- <20220203085851.yqstkfgt4dz7rcnw@houat>
- <f5381561-25da-61e3-5025-fa6dd61dd730@189.cn>
- <20220209084331.fpq5ng3yuqxmby4q@houat>
- <def50622-fe08-01f7-83bd-e6e0bc39fe1b@189.cn>
- <CAPj87rOgk8A8s6MTqxcTO5EkS=ABpHQV3sHsAp7Yn2t3-N_SoQ@mail.gmail.com>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <CAPj87rOgk8A8s6MTqxcTO5EkS=ABpHQV3sHsAp7Yn2t3-N_SoQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216055952.ovrswb22lm53x5ns@treble>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 15, 2022 at 09:59:52PM -0800, Josh Poimboeuf wrote:
+> On Fri, Feb 11, 2022 at 03:14:45PM +0000, Mark Rutland wrote:
+> > When building the perf tool the build system complains that the x86
+> > string routines are out-of-date:
+> > 
+> > | Warning: Kernel ABI header at 'tools/arch/x86/lib/memcpy_64.S' differs from latest version at 'arch/x86/lib/memcpy_64.S'
+> > | diff -u tools/arch/x86/lib/memcpy_64.S arch/x86/lib/memcpy_64.S
+> > | Warning: Kernel ABI header at 'tools/arch/x86/lib/memset_64.S' differs from latest version at 'arch/x86/lib/memset_64.S'
+> > | diff -u tools/arch/x86/lib/memset_64.S arch/x86/lib/memset_64.S
+> > 
+> > This is due to the way the asm-annotations for symbol aliasing were
+> > reworked, which should have no functional/performance impact.
+> > 
+> > Import the latest versions, adding the new style SYM_FUNC_ALIAS(),
+> > SYM_FUNC_ALIAS_LOAD(), SYM_FUNC_ALIAS_WEAK() macros into the perf
+> > <linux/linkage.h> header. The old style SYM_FUNC_START_ALIAS() and
+> > SYM_FUNC_END_ALIAS() macros are removed.
+> > 
+> > Other than removing the build-time warning, there should be no
+> > functional change as a result of this patch.
+> 
+> These changes should probably be squashed with their corresponding
+> original kernel changes to avoid breaking bisection for the warnings.
+> And it helps to keep the interdependent changes together.
 
-On 2022/2/16 21:46, Daniel Stone wrote:
-> On Wed, 9 Feb 2022 at 15:41, Sui Jingfeng <15330273260@189.cn> wrote:
->> On 2022/2/9 16:43, Maxime Ripard wrote:
->>> More fundamentally (and this extends to the CMA, caching and VRAM stuff
->>> you explained above), why can't the driver pick the right decision all
->>> the time and why would that be under the user control?
->> The right decision for ls7a1000 is to use VRAM based helper, But sometimes
->> we need CMA helper based solution. Because: The PRIME support is lost, use
->> lsdc with etnaviv is not possible any more.
->>
->>    Buffer sharing with etnaviv is no longer possible, loongson display controllers
->>    are simple which require scanout buffers to be physically contiguous.
-> Other systems have this limitation, and Mesa's 'kmsro' concept makes
-> this work transparently, as long as your driver can export dmabufs
-> when running in 'VRAM' mode.
->
-> Cheers,
-> Daniel
+Sure; done for v4.
 
-When using vram helper based driver, the framebuffer  is locate at video 
-ram. the backing memory fb is manage by TTM.
+Doing that highlighted a couple of fixups I failed to make to the
+tools/perf/ copy; I've fixed those up.
 
-while bo of etnaviv is locate at system ram. Currently i can't figure 
-out how does the buffer going to be shared.
-
+Thanks,
+Mark.

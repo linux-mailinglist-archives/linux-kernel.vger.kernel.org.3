@@ -2,137 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739A74B9243
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 21:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B37ED4B9247
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 21:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbiBPU0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 15:26:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57490 "EHLO
+        id S231243AbiBPU14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 15:27:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230412AbiBPU0j (ORCPT
+        with ESMTP id S230327AbiBPU1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 15:26:39 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2045E1C118;
-        Wed, 16 Feb 2022 12:26:26 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21GK5tPo021259;
-        Wed, 16 Feb 2022 20:25:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=9k42IwgOqf27OH2lhjxNLaW55lHPjTwx+15DDVudLkE=;
- b=DGI0Kcn1jXyjlOOitPKOK2fyPdQ0eaaPAwhqP1fZYA6Zur+DWrTUi7bYR70LqAta35qy
- jFtWuXzbQYYxugsvRTvfHmhcU8ESx1AtAQ0WEDD69tG9DInho+wBRW/E0J7DysQ38Oav
- PrECtgIZrbQvSgUO5KK9hPo8652N9i/ypxDJvt1y1A1U78geeFy7bLiqj9UX9Kn/rQ9M
- hN0hzVrrfKNo/WIFTB135X6ToPSknsnm8joRoC+d+SJtd2tz0MOvoMPNbuN/w6dsNVm7
- O3Cd1lcvwtaEMaY12Uh0ua/r/PlC6EpoqDPhxiTIfp2cKrBDYoeijliHTRmHSeFY9j59 qw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e953hcjac-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Feb 2022 20:25:54 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21GJjqmG001727;
-        Wed, 16 Feb 2022 20:25:54 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e953hcja3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Feb 2022 20:25:54 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21GK3suW015734;
-        Wed, 16 Feb 2022 20:25:53 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma04dal.us.ibm.com with ESMTP id 3e64hcwaav-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Feb 2022 20:25:52 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21GKPpVx31195646
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 16 Feb 2022 20:25:51 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1BEC96A05D;
-        Wed, 16 Feb 2022 20:25:51 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8120B6A061;
-        Wed, 16 Feb 2022 20:25:49 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 16 Feb 2022 20:25:49 +0000 (GMT)
-Message-ID: <6b81ba48-af34-71ef-8ee7-9526e7f3b073@linux.ibm.com>
-Date:   Wed, 16 Feb 2022 15:25:49 -0500
+        Wed, 16 Feb 2022 15:27:55 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA7C4DF42;
+        Wed, 16 Feb 2022 12:27:41 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: shreeya)
+        with ESMTPSA id F065F1F453B9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645043260;
+        bh=TcGzEzWhEGA7ZhG+nrdWLrKb2z0r4SS8tB5fiOXVUHg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Kw/y/Fdm06VoVfhWPkwb0xWxGzPUC4v6MXGP+uVaVoEGUhKWaXWM3YO54oQa6MP81
+         DgrrmCZMM5V/hcwyE5u1RmywR27r4GgAgDgbCE3FNlhYyCsO1lgc4YHYFcUze1egBa
+         QD47TmmBlkMLRuE2XVnZP4tTfL7lOg8tkU2PCFjf8FGk/Igzo4YOQU7+PQhg9dkl69
+         bVsRX6M/aUb1Tw9CkpvtNal5E+fCBRdxOt5DZv9yILX7VjLsl4twz8e8UZOuNzTNia
+         hktLVFh0pcc0vOdIDzJy0Vz7R28C9GkLS8loJrQiq6VCOB7rCKETSx5d60wa2aaGn9
+         t4QpytcPu5VfA==
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+To:     linus.walleij@linaro.org, brgl@bgdev.pl, bgolaszewski@baylibre.com
+Cc:     krisman@collabora.com, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v5] gpio: Return EPROBE_DEFER if gc->to_irq is NULL
+Date:   Thu, 17 Feb 2022 01:56:55 +0530
+Message-Id: <20220216202655.194795-1-shreeya.patel@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v10 05/27] ima: Define ima_namespace struct and start
- moving variables into it
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Christian Brauner <brauner@kernel.org>
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
- <20220201203735.164593-6-stefanb@linux.ibm.com>
- <429010298df589687e1d1a09bac21e302d642c7e.camel@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <429010298df589687e1d1a09bac21e302d642c7e.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: CeYeWgaRohWnrZpTWAqDZucUOPHvj9BU
-X-Proofpoint-GUID: dtlht7H06heJv2V1YB2nYVuH8U8Pmr9H
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-16_09,2022-02-16_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- spamscore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0 phishscore=0
- impostorscore=0 malwarescore=0 clxscore=1015 mlxlogscore=999
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202160112
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+We are racing the registering of .to_irq when probing the
+i2c driver. This results in random failure of touchscreen
+devices.
 
-On 2/16/22 09:41, Mimi Zohar wrote:
-> On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
->> Define the ima_namespace structure and the ima_namespace variable
->> init_ima_ns for the host's IMA namespace. Implement basic functions for
->> namespacing support.
-> Implement the basic functions - ima_ns_init()  and ima_init_namespace()
-> - for namespacing support.
->
->> Move variables related to the IMA policy into the ima_namespace. This way
->> the IMA policy of an IMA namespace can be set and displayed using a
->> front-end like securityfs.
->> Implement ima_ns_from_file() to get the IMA namespace via the user
->> namespace of the securityfs superblock that a file belongs to.
-> Currently, ima_ns_from_file() doesn't exist in this patch.
-Ah, left-over from previous version. Remove.
->
->> To get the current ima_namespace use &init_ima_ns when a function
->> that is related to a policy rule is called.
-> In preparation for IMA namespacing, update the existing functions to
-> pass the ima_namespace struct.  For now, ...
->
->>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> Acked-by: Christian Brauner <brauner@kernel.org>
-> After addressing the one inline comment,
-Done.
-> 	Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+Following explains the race condition better.
 
-Thanks.
+[gpio driver] gpio driver registers gpio chip
+[gpio consumer] gpio is acquired
+[gpio consumer] gpiod_to_irq() fails with -ENXIO
+[gpio driver] gpio driver registers irqchip
+gpiod_to_irq works at this point, but -ENXIO is fatal
 
+We could see the following errors in dmesg logs when gc->to_irq is NULL
+
+[2.101857] i2c_hid i2c-FTS3528:00: HID over i2c has not been provided an Int IRQ
+[2.101953] i2c_hid: probe of i2c-FTS3528:00 failed with error -22
+
+To avoid this situation, defer probing until to_irq is registered.
+Returning -EPROBE_DEFER would be the first step towards avoiding
+the failure of devices due to the race in registration of .to_irq.
+Final solution to this issue would be to avoid using gc irq members
+until they are fully initialized.
+
+This issue has been reported many times in past and people have been
+using workarounds like changing the pinctrl_amd to built-in instead
+of loading it as a module or by adding a softdep for pinctrl_amd into
+the config file.
+
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=209413
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+
+---
+Changes in v5
+  - Improve explanation in commit message and sending it to the correct
+email address.
+
+Changes in v4
+  - Remove blank line and make the first letter of the sentence
+capital.
+
+Changes in v3
+  - Fix the error reported by kernel test robot.
+
+Changes in v2
+  - Add a condition to check for irq chip to avoid bogus error.
+---
+ drivers/gpio/gpiolib.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index 3859911b61e9..a3d14277f17c 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -3147,6 +3147,16 @@ int gpiod_to_irq(const struct gpio_desc *desc)
+ 
+ 		return retirq;
+ 	}
++#ifdef CONFIG_GPIOLIB_IRQCHIP
++	if (gc->irq.chip) {
++		/*
++		 * Avoid race condition with other code, which tries to lookup
++		 * an IRQ before the irqchip has been properly registered,
++		 * i.e. while gpiochip is still being brought up.
++		 */
++		return -EPROBE_DEFER;
++	}
++#endif
+ 	return -ENXIO;
+ }
+ EXPORT_SYMBOL_GPL(gpiod_to_irq);
+-- 
+2.30.2
 

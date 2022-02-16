@@ -2,101 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3F44B7CCB
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF78F4B7CA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:56:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245717AbiBPBpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 20:45:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58690 "EHLO
+        id S245578AbiBPBpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 20:45:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245618AbiBPBpk (ORCPT
+        with ESMTP id S244340AbiBPBpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 20:45:40 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86847FA218;
-        Tue, 15 Feb 2022 17:45:28 -0800 (PST)
-X-UUID: 6af3a39fced34740b99e1e1ee75b6b69-20220216
-X-UUID: 6af3a39fced34740b99e1e1ee75b6b69-20220216
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 73449647; Wed, 16 Feb 2022 09:45:21 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 16 Feb 2022 09:45:20 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 16 Feb 2022 09:45:20 +0800
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
-        <p.zabel@pengutronix.de>
-CC:     <runyang.chen@mediatek.com>, <linux-watchdog@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: [4/4] watchdog: mediatek: mt8186: add wdt support
-Date:   Wed, 16 Feb 2022 09:45:05 +0800
-Message-ID: <20220216014505.28428-5-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220216014505.28428-1-rex-bc.chen@mediatek.com>
-References: <20220216014505.28428-1-rex-bc.chen@mediatek.com>
+        Tue, 15 Feb 2022 20:45:23 -0500
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E6DF9FB4;
+        Tue, 15 Feb 2022 17:45:11 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R421e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V4akc2F_1644975908;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V4akc2F_1644975908)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 16 Feb 2022 09:45:09 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     davem@davemloft.net
+Cc:     kuba@kernel.org, josright123@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] net: Fix an ignored error return from dm9051_get_regs()
+Date:   Wed, 16 Feb 2022 09:45:07 +0800
+Message-Id: <20220216014507.109117-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Runyang Chen <runyang.chen@mediatek.com>
+The return from the call to dm9051_get_regs() is int, it can be
+a negative error code, however this is being assigned to an unsigned
+int variable 'ret', so making 'ret' an int.
 
-Support MT8186 watchdog device.
+Eliminate the following coccicheck warning:
+./drivers/net/ethernet/davicom/dm9051.c:527:5-8: WARNING: Unsigned
+expression compared with zero: ret < 0
 
-Signed-off-by: Runyang Chen <runyang.chen@mediatek.com>
-Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- drivers/watchdog/mtk_wdt.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/net/ethernet/davicom/dm9051.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-index 4577a76dd464..fe5a2ecba97a 100644
---- a/drivers/watchdog/mtk_wdt.c
-+++ b/drivers/watchdog/mtk_wdt.c
-@@ -11,6 +11,7 @@
+diff --git a/drivers/net/ethernet/davicom/dm9051.c b/drivers/net/ethernet/davicom/dm9051.c
+index d2513c97f83e..8984363624eb 100644
+--- a/drivers/net/ethernet/davicom/dm9051.c
++++ b/drivers/net/ethernet/davicom/dm9051.c
+@@ -519,7 +519,7 @@ static int dm9051_map_init(struct spi_device *spi, struct board_info *db)
+ static int dm9051_map_chipid(struct board_info *db)
+ {
+ 	struct device *dev = &db->spidev->dev;
+-	unsigned int ret;
++	int ret;
+ 	unsigned short wid;
+ 	u8 buff[6];
  
- #include <dt-bindings/reset/mt2712-resets.h>
- #include <dt-bindings/reset/mt8183-resets.h>
-+#include <dt-bindings/reset/mt8186-resets.h>
- #include <dt-bindings/reset/mt8192-resets.h>
- #include <dt-bindings/reset/mt8195-resets.h>
- #include <linux/delay.h>
-@@ -80,6 +81,10 @@ static const struct mtk_wdt_data mt8183_data = {
- 	.toprgu_sw_rst_num = MT8183_TOPRGU_SW_RST_NUM,
- };
- 
-+static const struct mtk_wdt_data mt8186_data = {
-+	.toprgu_sw_rst_num = MT8186_TOPRGU_SW_RST_NUM,
-+};
-+
- static const struct mtk_wdt_data mt8192_data = {
- 	.toprgu_sw_rst_num = MT8192_TOPRGU_SW_RST_NUM,
- };
-@@ -419,6 +424,7 @@ static const struct of_device_id mtk_wdt_dt_ids[] = {
- 	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
- 	{ .compatible = "mediatek,mt6589-wdt" },
- 	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
-+	{ .compatible = "mediatek,mt8186-wdt", .data = &mt8186_data },
- 	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
- 	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
- 	{ /* sentinel */ }
 -- 
-2.18.0
+2.20.1.7.g153144c
 

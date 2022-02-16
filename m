@@ -2,70 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A264B7C46
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:12:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C6B4B7C87
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245383AbiBPBLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 20:11:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37526 "EHLO
+        id S245407AbiBPBTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 20:19:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245410AbiBPBLL (ORCPT
+        with ESMTP id S240360AbiBPBTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 20:11:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9612BF5426;
-        Tue, 15 Feb 2022 17:11:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3512961741;
-        Wed, 16 Feb 2022 01:11:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13C56C340EB;
-        Wed, 16 Feb 2022 01:10:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644973859;
-        bh=IKAdFG1ScRZwrYF3lRBmxcqtvrVn4JWBCrJ3n+qCEio=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L54brTvCDIuxdADxI8jBpQ/9q82/BimAIDjlCe9rJp+li96pSPYjyZPJ2hcPzpRfn
-         /akbESPv5PLlI3x11bpCrORl0N1nvG7IrVLcmzTgc9ZZb/rvimGLwH/cM456pxaTz3
-         oNxXK0pxuwBYkKW9RBuz9b9hx7uTIw2qvzktakQN5zSNgAGg3UehspxnoYf1ztIBSJ
-         +0jo+NIGUq0xfOWWqc29lRgGjueyq3dplnv9Y0RFskNkyoIzP+mmwgi7+W2lR958gc
-         XD9g1/TRbdAq3UbTlWWsso6l4GzkHlV6VrTQtld1VgQQRaNDyHlfgK3CGiNIro+Hn9
-         7hrI76Wi6VBhA==
-Date:   Tue, 15 Feb 2022 19:18:37 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] extcon: usbc-cros-ec: Use struct_size() helper in
- kzalloc()
-Message-ID: <20220216011837.GA890303@embeddedor>
-References: <CGME20220125192140epcas1p27d09a1d2ceaed49dd7c410c0223c51d7@epcas1p2.samsung.com>
- <20220125192634.GA70834@embeddedor>
- <3136d3aa-4c01-33be-86de-1a2b3b6b6733@samsung.com>
+        Tue, 15 Feb 2022 20:19:34 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D59F65EF
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:19:21 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id x4so782648plb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:19:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ozlabs-ru.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=n3HlZeesmoig6AzcEvE+vVMKK5hAX/6KVNpJ5JEyVT0=;
+        b=HErnWS27+ufQ8NMTJ7hAU5qJQcdOuUHum0wucqqZdIejgM4oVbYBv9dz7n+S+NgHgq
+         CtO+qahqEdmzfiHlS/+L5kONAoOcQPK34qrMjCSBSnx49jUEUjcTKMUvz34S8GXpgtDN
+         kSy/ZGxSksJWuYJrmv6TqoBU+iq2cpEZVDn+tl89zjItgRR5iEctXMiyMS1yILvLR9m8
+         jd+bmOOXRfU62lUA4RABx557Fy4+mx9gJj7tA+C/5T8asdWmskTsV8p6Xl5ZlKhz/06L
+         eRAX3Do2/AiPdqaFgKNmXaI3CXIe2qtvdc3MpACpVWFSBhucZGEaASa6D8aI7/03/FOX
+         Qvfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=n3HlZeesmoig6AzcEvE+vVMKK5hAX/6KVNpJ5JEyVT0=;
+        b=xX1OsGQhhzOxTZc16fAqmFrcT67A1qQxdRKZYvfORwlKPyPd7OU8GY8/ajAA4MUSFl
+         Xaixc1QQE9NmCPMTt4LMnxUkdle1K4VRJ+/E8Qq8z+tbFuYw8NfE7we80otOVO7S+nii
+         xINHzOlZAAkkHI9lmGELUwb2NPfI4Pm0w3TRbGYZuDURd87hNICWg9uQEZaTdITqRfow
+         PoYTjapo0DqJ6uWImgIO+RUhBaL/SRS3gBbbKBMpLb4XNV6SSJbDv/pq6Qsv0WOMJlO1
+         4PYmNM7sarTYn8xvK+a38iEK/MfBz46HjK+Xl6WhEKr3Pv9qV2IFdWWEJ/3lRQoLuNNt
+         4Pog==
+X-Gm-Message-State: AOAM532t31RDeUd3bH9rgVLm211tmX2HxvPE6EVTlCRmqKS4zpBOnZ54
+        2Hy5bKEotEK/SK7gKu842NwhuU7lwtshgA==
+X-Google-Smtp-Source: ABdhPJz//7pCe6QfbeIQekjYzgNrs+uHEYNqvhn8Lf50/8/fqgE551gMWzpa1CMDZA/VAoZVPMfivQ==
+X-Received: by 2002:a17:902:e846:b0:14f:4580:4f23 with SMTP id t6-20020a170902e84600b0014f45804f23mr185743plg.63.1644974361125;
+        Tue, 15 Feb 2022 17:19:21 -0800 (PST)
+Received: from [192.168.10.24] (203-7-124-83.dyn.iinet.net.au. [203.7.124.83])
+        by smtp.gmail.com with ESMTPSA id cu21sm17962188pjb.50.2022.02.15.17.19.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 17:19:20 -0800 (PST)
+Message-ID: <8b1d0d57-0bf7-8ca5-8b08-cd5a12f7666f@ozlabs.ru>
+Date:   Wed, 16 Feb 2022 12:19:14 +1100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3136d3aa-4c01-33be-86de-1a2b3b6b6733@samsung.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:97.0) Gecko/20100101
+ Thunderbird/97.0
+Subject: Re: [RFC PATCH kernel] trace: Make FTRACE_MCOUNT_USE_RECORDMCOUNT
+ configurable
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Sami Tolvanen <samitolvanen@google.com>
+References: <20220211014313.1790140-1-aik@ozlabs.ru>
+ <20220211214722.4373ca83@rorschach.local.home>
+From:   Alexey Kardashevskiy <aik@ozlabs.ru>
+In-Reply-To: <20220211214722.4373ca83@rorschach.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 10:26:34AM +0900, Chanwoo Choi wrote:
-> On 1/26/22 4:26 AM, Gustavo A. R. Silva wrote:
+
+
+On 2/12/22 13:47, Steven Rostedt wrote:
+> On Fri, 11 Feb 2022 12:43:13 +1100
+> Alexey Kardashevskiy <aik@ozlabs.ru> wrote:
 > 
-> Applied it. Thanks.
+>> For whatever reason LLVM does not allow LTO (Link Time Optimization) if
+>> FTRACE_MCOUNT_USE_RECORDMCOUNT is enabled.
+>>
+>> This allows disabling just this option instead of disabling all FTRACE
+>> options.
+> 
+> What FTRACE options are you talking about?
 
-Great. :)
+LTO_CLANG_THIN => HAS_LTO_CLANG => !FTRACE_MCOUNT_USE_RECORDMCOUNT =>
 
-Thanks, Chanwoo.
---
-Gustavo
+FTRACE [=y] && !FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY [=n] && 
+!FTRACE_MCOUNT_USE_CC [=n] && !FTRACE_MCOUNT_USE_OBJTOOL [=n] && 
+FTRACE_MCOUNT_RECORD [=y]
+
+A bunch.
+
+
+> 
+>>
+>> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
+>> ---
+>>
+>> Or disabling FTRACE is the right thing to do if HAS_LTO_CLANG=y?
+>>
+>> Came from arch/Kconfig:
+>>
+>> config HAS_LTO_CLANG
+>>          def_bool y
+>>          depends on CC_IS_CLANG && LD_IS_LLD && AS_IS_LLVM
+>>          depends on $(success,$(NM) --help | head -n 1 | grep -qi llvm)
+>>          depends on $(success,$(AR) --help | head -n 1 | grep -qi llvm)
+>>          depends on ARCH_SUPPORTS_LTO_CLANG
+>>          depends on !FTRACE_MCOUNT_USE_RECORDMCOUNT  <======
+>>          depends on !KASAN || KASAN_HW_TAGS
+>>          depends on !GCOV_KERNEL
+>>
+>>
+>> ---
+>>   kernel/trace/Kconfig | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+>> index a5eb5e7fd624..87d82d2b0b0b 100644
+>> --- a/kernel/trace/Kconfig
+>> +++ b/kernel/trace/Kconfig
+>> @@ -704,7 +704,8 @@ config FTRACE_MCOUNT_USE_OBJTOOL
+>>   	depends on FTRACE_MCOUNT_RECORD
+>>   
+>>   config FTRACE_MCOUNT_USE_RECORDMCOUNT
+>> -	def_bool y
+>> +	bool "Enable FTRACE_MCOUNT_USE_RECORDMCOUNT"
+>> +	default y
+> 
+> I don't think this does what you think it does.
+
+Sounds like it.
+
+> This is not something that should be user selectable. What exactly are
+> you trying to accomplish here?
+
+I am trying to
+
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index b779603978e1..91c122224f83 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -153,6 +153,8 @@ config PPC
+         select ARCH_WANT_IRQS_OFF_ACTIVATE_MM
+         select ARCH_WANT_LD_ORPHAN_WARN
+         select ARCH_WEAK_RELEASE_ACQUIRE
++       select ARCH_SUPPORTS_LTO_CLANG          if PPC64
++       select ARCH_SUPPORTS_LTO_CLANG_THIN     if PPC64
+
+
+to get LTO working on powerpc64le with minimal change to 
+ppc64le_defconfig which has all these FTRACE_xxx enabled.
+
+
+> 
+> -- Steve
+> 
+> 
+>>   	depends on !FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+>>   	depends on !FTRACE_MCOUNT_USE_CC
+>>   	depends on !FTRACE_MCOUNT_USE_OBJTOOL
+> 

@@ -2,284 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2064B7D45
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 03:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A25154B7D6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 03:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343518AbiBPCEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 21:04:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58572 "EHLO
+        id S1343526AbiBPCEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 21:04:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242685AbiBPCEC (ORCPT
+        with ESMTP id S233356AbiBPCEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 21:04:02 -0500
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62392D5F75;
-        Tue, 15 Feb 2022 18:03:49 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0V4akhAI_1644977025;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V4akhAI_1644977025)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 16 Feb 2022 10:03:47 +0800
-Date:   Wed, 16 Feb 2022 10:03:45 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     xfs <linux-xfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/3] xfs: introduce xfs_bremapi_from_cowfork()
-Message-ID: <Ygxbge2l2jde8Xcp@B-P7TQMD6M-0146.local>
-Mail-Followup-To: "Darrick J. Wong" <djwong@kernel.org>,
-        xfs <linux-xfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220209073655.22162-1-hsiangkao@linux.alibaba.com>
- <20220209073655.22162-4-hsiangkao@linux.alibaba.com>
- <20220216012433.GI8338@magnolia>
+        Tue, 15 Feb 2022 21:04:54 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B70CFABE8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:04:43 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id x52-20020a05683040b400b0059ea92202daso551481ott.7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:04:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=/tBhDX/ITHqt+Xaf4QurjW8MT9jM8yc7lXHoiZOp3Cg=;
+        b=atjUPY4PqUpqM6boTFlmuPpu2NqNp4C9u3GmxDDa11LaEJYX2FHloxmBBfGPVKLcY7
+         bEoSxe/IISXfe25C/yvH7KSU6klOchVHmOfYuUxraJYv+hL6RXZVCapBEDNsHZgFd7bm
+         AEwaPzeoXka7K++a0++nP7oL9kpy8r2Q1cENc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=/tBhDX/ITHqt+Xaf4QurjW8MT9jM8yc7lXHoiZOp3Cg=;
+        b=cjYqm3YJTFAoU/9v7Tva8IIENrPn697PSriEKj49yVBrINaJEtkSjjAC2xy0oCq5Pa
+         nKwHi8MylsKDYzfyiUZ/YUpLNiLwUSaDWZ8RRoTKAfSfVo3smRQWIJY9wM2a/2NMZJkr
+         m5MWl3uuXvVHgiUYAz47C8izk5kuKCgPwxj1LwZ5ZdAbx5bpAu+Bd6qITrIY0P8h1szz
+         qQcSkRDLgNhyAcUl+G5MzWP18IQqeer/rFDTIVLK/cnyaCECuigErqfGSWZG2OAqJw8j
+         852DwIhyRlHtNrLVxCUhiOPyfpODCpIfibSYCN2/T+FkCXUXKv+hd6f247OSkaAnKOGP
+         5KGw==
+X-Gm-Message-State: AOAM532jY+7Ai/BIDM55CGyCryhgFGEqxZ4ktyOmM8fgcJnmIfE9PIvr
+        B9bXPH0w1KABwUWp5118yMr7fv9udVTFHKW1ezdxSA==
+X-Google-Smtp-Source: ABdhPJx8NyXO2S+5pnQ4E+yS4HiS4D2K1ICpkfdi20xTaewG2/NvlGwgkLI68JBEZ3CJEex1hQ8pG0O2t3F13u0TYWY=
+X-Received: by 2002:a9d:22e9:0:b0:5ac:1754:342c with SMTP id
+ y96-20020a9d22e9000000b005ac1754342cmr151451ota.159.1644977082732; Tue, 15
+ Feb 2022 18:04:42 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 15 Feb 2022 18:04:42 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220216012433.GI8338@magnolia>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1644915231-7308-3-git-send-email-quic_c_skakit@quicinc.com>
+References: <1644915231-7308-1-git-send-email-quic_c_skakit@quicinc.com> <1644915231-7308-3-git-send-email-quic_c_skakit@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 15 Feb 2022 18:04:42 -0800
+Message-ID: <CAE-0n53CLquafH2fOWa2rX1H=q+CvEU2qNwL3TAY+jWkk8q8sQ@mail.gmail.com>
+Subject: Re: [PATCH V6 2/6] dt-bindings: mfd: pm8008: Add regulators node
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Das Srinagesh <gurus@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_collinsd@quicinc.com,
+        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Darrick,
+Quoting Satya Priya (2022-02-15 00:53:47)
+> Add regulators node and their supply nodes. Add separate compatible
+> "qcom,pm8008-regulators" to differentiate between pm8008 infra
+> and pm8008 regulators mfd devices.
+>
+> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
-On Tue, Feb 15, 2022 at 05:24:33PM -0800, Darrick J. Wong wrote:
-> On Wed, Feb 09, 2022 at 03:36:55PM +0800, Gao Xiang wrote:
-> > Previously, xfs_reflink_end_cow_extent() will unconditionally unmap
-> > the corresponding old extent and remap an extent from COW fork.
-> > However, it seems somewhat ineffective since the old bmbt records can
-> > be directly updated for many cases instead.
-> > 
-> > This patch uses introduced xfs_bmap_update_extent_real() in the
-> > previous patch for most extent inclusive cases or it will fall back
-> > to the old way if such replacement is not possible.
-> > 
-> > Actually, we're planing to use a modified alway-cow like atomic write
-> > approach internally, therefore it'd be nice to do some optimization
-> > to reduce some metadata overhead.
-> > 
-> > Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-> > ---
-> >  fs/xfs/libxfs/xfs_bmap.c | 117 ++++++++++++++++++++++++++++++++++++---
-> >  fs/xfs/libxfs/xfs_bmap.h |   3 +
-> >  fs/xfs/xfs_reflink.c     |  19 +------
-> >  3 files changed, 112 insertions(+), 27 deletions(-)
-> > 
-> > diff --git a/fs/xfs/libxfs/xfs_bmap.c b/fs/xfs/libxfs/xfs_bmap.c
-> > index a10476dee701..0e132f811f7a 100644
-> > --- a/fs/xfs/libxfs/xfs_bmap.c
-> > +++ b/fs/xfs/libxfs/xfs_bmap.c
-> > @@ -5880,6 +5880,114 @@ xfs_bmap_collapse_extents(
-> >  	return error;
-> >  }
-> >  
-> > +/* Deferred mapping is only for real extents in the data fork. */
-> > +static bool
-> > +xfs_bmap_is_update_needed(
-> > +	struct xfs_bmbt_irec	*bmap)
-> > +{
-> > +	return  bmap->br_startblock != HOLESTARTBLOCK &&
-> > +		bmap->br_startblock != DELAYSTARTBLOCK;
-> > +}
-> > +
-> > +/* del is an extent from COW fork */
-> > +int
-> > +xfs_bremapi_from_cowfork(
-> > +	struct xfs_trans	*tp,
-> > +	struct xfs_inode	*ip,
-> > +	struct xfs_bmbt_irec	*icow)
-> > +{
-> > +	int			error;
-> > +	xfs_filblks_t		rlen;
-> > +
-> > +	/* Use the old (unmap-remap) way for real-time inodes instead */
-> > +	if (!XFS_IS_REALTIME_INODE(ip) && xfs_bmap_is_update_needed(icow)) {
-> 
-> When would be be remapping a realtime file with a COW fork?
+Please remove my tag.
 
-Sorry, I missed this part, this is a necessary check.
-Thanks for pointing out this.
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+> Changes in V2:
+>  - As per Rob's comments changed "pm8008[a-z]?-regulator" to
+>    "^pm8008[a-z]?-regulators".
+>
+> Changes in V3:
+>  - Fixed bot errors.
+>  - As per stephen's comments, changed "^pm8008[a-z]?-regulators$" to
+>    "regulators".
+>
+> Changes in V4:
+>  - Changed compatible string to "qcom,pm8008-regulators"
+>
+> Changes in V5:
+>  - Remove compatible for regulators node.
+>  - Move supply nodes of the regulators to chip level.
+>
+> Changes in V6:
+>  - No changes.
+>
+>  .../devicetree/bindings/mfd/qcom,pm8008.yaml       | 49 +++++++++++++++++++---
+>  1 file changed, 44 insertions(+), 5 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml b/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml
+> index ec3138c..1ec43f7 100644
+> --- a/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml
+> @@ -44,6 +46,25 @@ properties:
+>    "#size-cells":
+>      const: 0
+>
+> +  vdd_l1_l2-supply:
+> +    description: Input supply phandle of ldo1 and ldo2 regulators.
+> +
+> +  vdd_l3_l4-supply:
+> +    description: Input supply phandle of ldo3 and ldo4 regulators.
+> +
+> +  vdd_l5-supply:
+> +    description: Input supply phandle of ldo5 regulator.
+> +
+> +  vdd_l6-supply:
+> +    description: Input supply phandle of ldo6 regulator.
+> +
+> +  vdd_l7-supply:
+> +    description: Input supply phandle of ldo7 regulator.
+> +
+> +  regulators:
+> +    type: object
+> +    $ref: "../regulator/qcom,pm8008-regulator.yaml#"
+> +
+>  patternProperties:
+>    "^gpio@[0-9a-f]+$":
+>      type: object
+> @@ -88,10 +109,8 @@ patternProperties:
+>  required:
+>    - compatible
+>    - reg
+> -  - interrupts
+>    - "#address-cells"
+>    - "#size-cells"
+> -  - "#interrupt-cells"
 
-> 
-> > +		xfs_fileoff_t		start, end, max_len;
-> > +		struct xfs_bmbt_irec	got;
-> > +		struct xfs_iext_cursor	icur;
-> > +		struct xfs_btree_cur	*cur = NULL;
-> > +		struct xfs_ifork	*ifp = XFS_IFORK_PTR(ip, XFS_DATA_FORK);
-> > +		int			logflags = 0;
-> > +
-> > +		error = xfs_iread_extents(tp, ip, XFS_DATA_FORK);
-> > +		if (error)
-> > +			return error;
-> > +
-> > +		max_len = xfs_refcount_max_unmap(tp->t_log_res);
-> > +		if (max_len < icow->br_blockcount) {
-> > +			icow->br_startoff += icow->br_blockcount - max_len;
-> > +			icow->br_startblock += icow->br_blockcount - max_len;
-> > +			icow->br_blockcount = max_len;
-> > +		}
-> > +
-> > +		end = icow->br_startoff + icow->br_blockcount;
-> > +		if (!xfs_iext_count(ifp) || !xfs_iext_lookup_extent_before(ip,
-> > +				ifp, &end, &icur, &got) ||
-> > +		    isnullstartblock(got.br_startblock) ||
-> > +		    icow->br_startoff + icow->br_blockcount > got.br_startoff +
-> > +				got.br_blockcount) {
-> > +			error = -EAGAIN;
-> > +		} else {
-> > +			end = icow->br_startoff + icow->br_blockcount;
-> > +			start = XFS_FILEOFF_MAX(icow->br_startoff,
-> > +						got.br_startoff);
-> > +			ASSERT(start < end);
-> > +
-> > +			/* Trim the extent to what we need */
-> > +			xfs_trim_extent(icow, start, end - start);
-> > +			xfs_trim_extent(&got, start, end - start);
-> > +
-> > +			if (ifp->if_format == XFS_DINODE_FMT_BTREE) {
-> > +				cur = xfs_bmbt_init_cursor(tp->t_mountp, tp, ip,
-> > +							   XFS_DATA_FORK);
-> > +				cur->bc_ino.flags = 0;
-> > +			}
-> > +
-> > +			/*
-> > +			 * Free the CoW orphan record (it should be done here
-> > +			 * before updating extent due to rmapbt update)
-> > +			 */
-> > +			xfs_refcount_free_cow_extent(tp, icow->br_startblock,
-> > +						     icow->br_blockcount);
-> > +
-> > +			xfs_bmap_update_extent_real(tp, ip, XFS_DATA_FORK,
-> > +					&icur, &cur, icow, &logflags, false);
-> 
-> Hmm... are you directly updating the data fork mapping record from the
-> COW fork mapping record?  Is the performance advantage you mentioned
-> earlier a result of this code no longer logging a bmap map intent item
-> and reducing the transaction roll count by one?
+Shouldn't interrupts and interrupt-cells still be required for
+qcom,pm8008? This binding seems like it is for two different nodes.
 
-Yes, roughly I think it reduces bmap again overhead.
+>
+>  additionalProperties: false
+>
+> @@ -102,7 +121,7 @@ examples:
+>      qupv3_se13_i2c {
+>        #address-cells = <1>;
+>        #size-cells = <0>;
+> -      pm8008i@8 {
+> +      pm8008_infra: pm8008@8 {
+>          compatible = "qcom,pm8008";
+>          reg = <0x8>;
+>          #address-cells = <1>;
+> @@ -123,6 +142,26 @@ examples:
+>            #interrupt-cells = <2>;
+>          };
+>        };
+> -    };
+>
+> +      pm8008_regulators: pm8008@9 {
+> +        compatible = "qcom,pm8008";
 
-Thanks,
-Gao Xiang
+Isn't this supposed to be "qcom,pm8008-regulators"?
 
-> 
-> --D
-> 
-> > +
-> > +			/* Free previous referenced space */
-> > +			xfs_refcount_decrease_extent(tp, &got);
-> > +
-> > +			trace_xfs_reflink_cow_remap(ip, icow);
-> > +			error = 0;
-> > +		}
-> > +		if (cur)
-> > +			xfs_btree_del_cursor(cur, 0);
-> > +		if (logflags)
-> > +			xfs_trans_log_inode(tp, ip, logflags);
-> > +		if (!error)
-> > +			return 0;
-> > +	}
-> > +
-> > +	rlen = icow->br_blockcount;
-> > +	error = __xfs_bunmapi(tp, ip, icow->br_startoff, &rlen, 0, 1);
-> > +	if (error)
-> > +		return error;
-> > +
-> > +	/* Trim the extent to whatever got unmapped. */
-> > +	xfs_trim_extent(icow, icow->br_startoff + rlen,
-> > +			icow->br_blockcount - rlen);
-> > +	/* Free the CoW orphan record. */
-> > +	xfs_refcount_free_cow_extent(tp, icow->br_startblock,
-> > +				     icow->br_blockcount);
-> > +
-> > +	/* Map the new blocks into the data fork. */
-> > +	xfs_bmap_map_extent(tp, ip, icow);
-> > +
-> > +	/* Charge this new data fork mapping to the on-disk quota. */
-> > +	xfs_trans_mod_dquot_byino(tp, ip, XFS_TRANS_DQ_DELBCOUNT,
-> > +			(long)icow->br_blockcount);
-> > +	trace_xfs_reflink_cow_remap(ip, icow);
-> > +	return 0;
-> > +}
-> > +
-> >  /* Make sure we won't be right-shifting an extent past the maximum bound. */
-> >  int
-> >  xfs_bmap_can_insert_extents(
-> > @@ -6123,15 +6231,6 @@ xfs_bmap_split_extent(
-> >  	return error;
-> >  }
-> >  
-> > -/* Deferred mapping is only for real extents in the data fork. */
-> > -static bool
-> > -xfs_bmap_is_update_needed(
-> > -	struct xfs_bmbt_irec	*bmap)
-> > -{
-> > -	return  bmap->br_startblock != HOLESTARTBLOCK &&
-> > -		bmap->br_startblock != DELAYSTARTBLOCK;
-> > -}
-> > -
-> >  /* Record a bmap intent. */
-> >  static int
-> >  __xfs_bmap_add(
-> > diff --git a/fs/xfs/libxfs/xfs_bmap.h b/fs/xfs/libxfs/xfs_bmap.h
-> > index c52ff94786e2..9da1cff41c1c 100644
-> > --- a/fs/xfs/libxfs/xfs_bmap.h
-> > +++ b/fs/xfs/libxfs/xfs_bmap.h
-> > @@ -220,6 +220,9 @@ int	xfs_bmap_update_extent_real(struct xfs_trans *tp,
-> >  		struct xfs_inode *ip, int whichfork,
-> >  		struct xfs_iext_cursor *icur, struct xfs_btree_cur **curp,
-> >  		struct xfs_bmbt_irec *new, int *logflagsp, bool convert);
-> > +int
-> > +xfs_bremapi_from_cowfork(struct xfs_trans *tp, struct xfs_inode *ip,
-> > +		struct xfs_bmbt_irec *icow);
-> >  
-> >  enum xfs_bmap_intent_type {
-> >  	XFS_BMAP_MAP = 1,
-> > diff --git a/fs/xfs/xfs_reflink.c b/fs/xfs/xfs_reflink.c
-> > index 276387a6a85d..75bd2e03cd5b 100644
-> > --- a/fs/xfs/xfs_reflink.c
-> > +++ b/fs/xfs/xfs_reflink.c
-> > @@ -590,7 +590,6 @@ xfs_reflink_end_cow_extent(
-> >  	struct xfs_mount	*mp = ip->i_mount;
-> >  	struct xfs_trans	*tp;
-> >  	struct xfs_ifork	*ifp = XFS_IFORK_PTR(ip, XFS_COW_FORK);
-> > -	xfs_filblks_t		rlen;
-> >  	unsigned int		resblks;
-> >  	int			error;
-> >  
-> > @@ -651,26 +650,10 @@ xfs_reflink_end_cow_extent(
-> >  		goto out_cancel;
-> >  	}
-> >  
-> > -	/* Unmap the old blocks in the data fork. */
-> > -	rlen = del.br_blockcount;
-> > -	error = __xfs_bunmapi(tp, ip, del.br_startoff, &rlen, 0, 1);
-> > +	error = xfs_bremapi_from_cowfork(tp, ip, &del);
-> >  	if (error)
-> >  		goto out_cancel;
-> >  
-> > -	/* Trim the extent to whatever got unmapped. */
-> > -	xfs_trim_extent(&del, del.br_startoff + rlen, del.br_blockcount - rlen);
-> > -	trace_xfs_reflink_cow_remap(ip, &del);
-> > -
-> > -	/* Free the CoW orphan record. */
-> > -	xfs_refcount_free_cow_extent(tp, del.br_startblock, del.br_blockcount);
-> > -
-> > -	/* Map the new blocks into the data fork. */
-> > -	xfs_bmap_map_extent(tp, ip, &del);
-> > -
-> > -	/* Charge this new data fork mapping to the on-disk quota. */
-> > -	xfs_trans_mod_dquot_byino(tp, ip, XFS_TRANS_DQ_DELBCOUNT,
-> > -			(long)del.br_blockcount);
-> > -
-> >  	/* Remove the mapping from the CoW fork. */
-> >  	xfs_bmap_del_extent_cow(ip, &icur, &got, &del);
-> >  
-> > -- 
-> > 2.24.4
-> > 
+> +        reg = <0x9>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        vdd_l1_l2-supply = <&vreg_s8b_1p2>;
+> +        vdd_l3_l4-supply = <&vreg_s1b_1p8>;
+> +        vdd_l5-supply = <&vreg_bob>;
+> +        vdd_l6-supply = <&vreg_bob>;
+> +        vdd_l7-supply = <&vreg_bob>;
+> +
+> +        regulators {
+
+I still don't get the need for this extra container. Please remove it.
+
+> +          pm8008_l1: ldo1 {
+> +            regulator-name = "pm8008_l1";
+> +            regulator-min-microvolt = <950000>;
+> +            regulator-max-microvolt = <1300000>;
+> +          };
+> +        };
+> +      };
+> +    };

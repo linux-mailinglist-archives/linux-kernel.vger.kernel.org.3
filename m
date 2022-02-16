@@ -2,80 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E964B839F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B83DA4B839E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbiBPJEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 04:04:53 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36818 "EHLO
+        id S231849AbiBPJFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 04:05:48 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:40038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbiBPJEw (ORCPT
+        with ESMTP id S231879AbiBPJFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 04:04:52 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B375C2AD675
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:04:40 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-195-EET2GjE8Oq-6f4xc2vJeNw-1; Wed, 16 Feb 2022 09:04:37 +0000
-X-MC-Unique: EET2GjE8Oq-6f4xc2vJeNw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Wed, 16 Feb 2022 09:04:35 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Wed, 16 Feb 2022 09:04:35 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Jue Wang' <juew@google.com>, Tony Luck <tony.luck@intel.com>,
-        "Borislav Petkov" <bp@alien8.de>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: RE: [PATCH] x86/mce: work around an erratum on fast string copy
- instructions.
-Thread-Topic: [PATCH] x86/mce: work around an erratum on fast string copy
- instructions.
-Thread-Index: AQHYIvoCSX/7pRzFAkuhPX3tNobqJqyV4VTQ
-Date:   Wed, 16 Feb 2022 09:04:35 +0000
-Message-ID: <3288f39e32f04d67a875775414dd1c14@AcuMS.aculab.com>
-References: <CAPcxDJ6bDctjErv4ggtBiJsmPJb2e-3ng12f+hMuJ7SLN-SXOg@mail.gmail.com>
- <20220216055629.1542654-1-juew@google.com>
-In-Reply-To: <20220216055629.1542654-1-juew@google.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 16 Feb 2022 04:05:43 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484BC140F8;
+        Wed, 16 Feb 2022 01:05:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645002332; x=1676538332;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qL6XVUtQhDi8JNPHMmUbZrI0/tv/ETzCR2da60ToTa4=;
+  b=H2bJkXOqyf/wIXwm8/6nv5EzonTkxAPsPh1PGQrCRI4m72L6Wucvhk/L
+   FFEv+OWi0Lj7tTd2B9xp/F7wkGKMsqXm3VeKtCgw/rxaYH54WzntXx01I
+   FezeDlBZyIE5mpX6NaenXH4xfJWVAHgEBDJMmi7xoPdB+QUPix7wYwUNz
+   bJJIK7hSsjGWVSHsknSUSymwXf5BCHj2OYufbL8S9j9zMP1n/njDpiQEh
+   5UwdOtZFbqBcd95r4Q+iStoNp7AA1eVKPaKygc0karyHNyeqQWhwL11FN
+   GqnZ8es5In+ZEcHB4wr83jkr73JQRgOVmeeQFZMcLIV27xXJRbkSuBAis
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="249389777"
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="249389777"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 01:05:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="681420548"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 16 Feb 2022 01:05:29 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 16 Feb 2022 11:05:28 +0200
+Date:   Wed, 16 Feb 2022 11:05:28 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] usb: typec: Factor out non-PD fwnode properties
+Message-ID: <Ygy+WOhXNLKjZQfA@kuha.fi.intel.com>
+References: <20220214050118.61015-1-samuel@sholland.org>
+ <20220214050118.61015-4-samuel@sholland.org>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220214050118.61015-4-samuel@sholland.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogSnVlIFdhbmcNCj4gU2VudDogMTYgRmVicnVhcnkgMjAyMiAwNTo1Ng0KPiANCj4gVGhl
-IGZhc3Qgc3RyaW5nIGNvcHkgaW5zdHJ1Y3Rpb25zICgiUkVQOyBNT1ZTKiIpIGNvdWxkIGNvbnN1
-bWUgYW4NCj4gdW5jb3JyZWN0YWJsZSBtZW1vcnkgZXJyb3IgaW4gdGhlIGNhY2hlIGxpbmUgX3Jp
-Z2h0IGFmdGVyXyB0aGUNCj4gZGVzaXJlZCByZWdpb24gdG8gY29weSBhbmQgcmFpc2UgYW4gTUNF
-Lg0KDQpzL2NvbnN1bWUvdHJhcCBkdWUgdG8vDQoNCklzbid0IHRoaXMganVzdCBwdXR0aW5nIG9m
-ZiB0aGUgaW5ldml0YWJsZSBwYW5pYyB3aGVuIHRoZQ0KZm9sbG93aW5nIGNhY2hlIGxpbmUgaXMg
-YWNjZXNzZXMgZm9yIHJlYWw/DQoNCk9yIGlzIHRoaXMgYWxsIGR1ZSB0byB0aGF0IHBzZXVkbyBk
-eW5hbWljIG1lbW9yeSAoeHBvaW50PykgdGhhdCBpcw0KYnl0ZSBhZGRyZXNzYWJsZSBidXQgb25s
-eSByZWFsbHkgaGFzIHRoZSBxdWFsaXR5IG9mIGEgZGlhaz8NCkl0IHdoaWNoIGNhc2UgSSB0aG91
-Z2h0IGl0IHdhc24ndCBhY3R1YWxseSB1c2FibGUgZm9yDQpub3JtYWwgbWVtb3J5IGFueXdheSAt
-IHNvIHRoZSBjb3BpZXMgYXJlIGFsbCBvbmVzIHdoaWNoIGNhbiBmYXVsdC4NCg0KCURhdmlkDQoN
-Ci0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJt
-LCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChX
-YWxlcykNCg==
+On Sun, Feb 13, 2022 at 11:01:16PM -0600, Samuel Holland wrote:
+> Basic programmable non-PD Type-C port controllers do not need the full
+> TCPM library, but they share the same devicetree binding and the same
+> typec_capability structure. Factor out a helper for parsing those
+> properties which map to fields in struct typec_capability, so the code
+> can be shared between TCPM and basic non-TCPM drivers.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+> 
+> Changes in v3:
+>  - Leave the call to fw_devlink_purge_absent_suppliers in its original
+>    place in the TCPM code. It is not needed by the new driver.
+>  - Remove unused variable from TCPM function.
+> 
+> Changes in v2:
+>  - Always put the return values from typec_find_* in a signed variable
+>    for error checking.
+> 
+>  drivers/usb/typec/class.c     | 43 +++++++++++++++++++++++++++++++++++
+>  drivers/usb/typec/tcpm/tcpm.c | 24 +------------------
+>  include/linux/usb/typec.h     |  3 +++
+>  3 files changed, 47 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 45a6f0c807cb..ee0e520707dd 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -1894,6 +1894,49 @@ void *typec_get_drvdata(struct typec_port *port)
+>  }
+>  EXPORT_SYMBOL_GPL(typec_get_drvdata);
+>  
+> +int typec_get_fw_cap(struct typec_capability *cap,
+> +		     struct fwnode_handle *fwnode)
+> +{
+> +	const char *cap_str;
+> +	int ret;
+> +
+> +	cap->fwnode = fwnode;
+> +
+> +	ret = fwnode_property_read_string(fwnode, "power-role", &cap_str);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = typec_find_port_power_role(cap_str);
+> +	if (ret < 0)
+> +		return ret;
+> +	cap->type = ret;
+> +
+> +	/* USB data support is optional */
+> +	ret = fwnode_property_read_string(fwnode, "data-role", &cap_str);
+> +	if (ret == 0) {
+> +		ret = typec_find_port_data_role(cap_str);
+> +		if (ret < 0)
+> +			return ret;
+> +		cap->data = ret;
+> +	}
+> +
+> +	/* Get the preferred power role for a DRP */
+> +	if (cap->type == TYPEC_PORT_DRP) {
+> +		cap->prefer_role = TYPEC_NO_PREFERRED_ROLE;
+> +
+> +		ret = fwnode_property_read_string(fwnode, "try-power-role", &cap_str);
+> +		if (ret == 0) {
+> +			ret = typec_find_power_role(cap_str);
+> +			if (ret < 0)
+> +				return ret;
+> +			cap->prefer_role = ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(typec_get_fw_cap);
+> +
+>  /**
+>   * typec_port_register_altmode - Register USB Type-C Port Alternate Mode
+>   * @port: USB Type-C Port that supports the alternate mode
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 5fce795b69c7..3bc2f4ebd1fe 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -5928,7 +5928,6 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+>  			    struct fwnode_handle *fwnode)
+>  {
+>  	const char *opmode_str;
+> -	const char *cap_str;
+>  	int ret;
+>  	u32 mw, frs_current;
+>  
+> @@ -5944,23 +5943,10 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+>  	 */
+>  	fw_devlink_purge_absent_suppliers(fwnode);
+>  
+> -	/* USB data support is optional */
+> -	ret = fwnode_property_read_string(fwnode, "data-role", &cap_str);
+> -	if (ret == 0) {
+> -		ret = typec_find_port_data_role(cap_str);
+> -		if (ret < 0)
+> -			return ret;
+> -		port->typec_caps.data = ret;
+> -	}
+> -
+> -	ret = fwnode_property_read_string(fwnode, "power-role", &cap_str);
+> +	ret = typec_get_fw_cap(&port->typec_caps, fwnode);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	ret = typec_find_port_power_role(cap_str);
+> -	if (ret < 0)
+> -		return ret;
+> -	port->typec_caps.type = ret;
+>  	port->port_type = port->typec_caps.type;
+>  	port->pd_supported = !fwnode_property_read_bool(fwnode, "pd-disable");
+>  
+> @@ -5997,14 +5983,6 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+>  	if (port->port_type == TYPEC_PORT_SRC)
+>  		return 0;
+>  
+> -	/* Get the preferred power role for DRP */
+> -	ret = fwnode_property_read_string(fwnode, "try-power-role", &cap_str);
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	port->typec_caps.prefer_role = typec_find_power_role(cap_str);
+> -	if (port->typec_caps.prefer_role < 0)
+> -		return -EINVAL;
+>  sink:
+>  	port->self_powered = fwnode_property_read_bool(fwnode, "self-powered");
+>  
+> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+> index 7ba45a97eeae..fdf737d48b3b 100644
+> --- a/include/linux/usb/typec.h
+> +++ b/include/linux/usb/typec.h
+> @@ -295,6 +295,9 @@ int typec_set_mode(struct typec_port *port, int mode);
+>  
+>  void *typec_get_drvdata(struct typec_port *port);
+>  
+> +int typec_get_fw_cap(struct typec_capability *cap,
+> +		     struct fwnode_handle *fwnode);
+> +
+>  int typec_find_pwr_opmode(const char *name);
+>  int typec_find_orientation(const char *name);
+>  int typec_find_port_power_role(const char *name);
+> -- 
+> 2.33.1
+
+thanks,
+
+-- 
+heikki

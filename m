@@ -2,102 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD40F4B90CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:58:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A05E64B90D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237935AbiBPS6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 13:58:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54136 "EHLO
+        id S237937AbiBPTAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 14:00:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233352AbiBPS6g (ORCPT
+        with ESMTP id S233070AbiBPTAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 13:58:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC39E2AD677;
-        Wed, 16 Feb 2022 10:58:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 810E361715;
-        Wed, 16 Feb 2022 18:58:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F18C340ED;
-        Wed, 16 Feb 2022 18:58:22 +0000 (UTC)
-Date:   Wed, 16 Feb 2022 13:58:21 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: ftrace startup tests crashing due to missing rcu_synchronize()
-Message-ID: <20220216135821.67a22c52@gandalf.local.home>
-In-Reply-To: <20220216135419.01d96fe1@gandalf.local.home>
-References: <yt9dilte4px4.fsf@linux.ibm.com>
-        <20220216135419.01d96fe1@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 16 Feb 2022 14:00:05 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3462AD677;
+        Wed, 16 Feb 2022 10:59:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645037993; x=1676573993;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=oDlaYpURS0mY/S93Fxt90FT2dbYdR6j8k4Tu9b37GWU=;
+  b=EMZ8FzBT38yTiJqfojZ8q+3PcMSxud2VMXgPSPxOHBx7WHcnbNr9Aay1
+   KwXhsYAboNolpiZPv4CSpMdaPZFVTmcFNTpqSlqYTpI715ZUI4O9MScrm
+   uOczpNW6oAskj0sRA4lXFjdWMa+P3JdOa68cafLU9h3wskDm1PiYcnAWZ
+   E42nK/jcbFhqqNN2r6psfSkHObFRojutTDYfam91KXsehJ5NBjKZ7NmDQ
+   PoTsMTMcPKT9jl9yTxjpkbjsXAUjWHo/RUiYP90eTPHSVaaOeRnRvcFTU
+   zbS56/XwFoAmKnGpt77b64eNv2nKD655nxx3PtteevvvpFqfMbytEWc3b
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="313971534"
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="313971534"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 10:59:52 -0800
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="529651961"
+Received: from guptapa-mobl1.amr.corp.intel.com ([10.212.185.96])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 10:59:51 -0800
+Date:   Wed, 16 Feb 2022 10:59:50 -0800
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Andrew Cooper <Andrew.Cooper3@citrix.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "antonio.gomez.iglesias@linux.intel.com" 
+        <antonio.gomez.iglesias@linux.intel.com>,
+        "neelima.krishnan@intel.com" <neelima.krishnan@intel.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] x86/tsx: Use MSR_TSX_CTRL to clear CPUID bits
+Message-ID: <20220216185950.6nmkllbgawv5tjd7@guptapa-mobl1.amr.corp.intel.com>
+References: <20220215002014.mb7g4y3hfefmyozx@guptapa-mobl1.amr.corp.intel.com>
+ <Ygt/QSTSMlUJnzFS@zn.tnic>
+ <20220215121103.vhb2lpoygxn3xywy@guptapa-mobl1.amr.corp.intel.com>
+ <YgvVcdpmFCCn20A7@zn.tnic>
+ <20220215181931.wxfsn2a3npg7xmi2@guptapa-mobl1.amr.corp.intel.com>
+ <YgwAHU7gCnik8Kv6@zn.tnic>
+ <20220216003950.5jxecuf773g2kuwl@guptapa-mobl1.amr.corp.intel.com>
+ <6724088f-c7cf-da92-e894-d8970f13bf1e@citrix.com>
+ <20220216012841.vxlnugre2j4pczp7@guptapa-mobl1.amr.corp.intel.com>
+ <a1e836c5-e2d0-3916-ec11-9f8690463c58@citrix.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a1e836c5-e2d0-3916-ec11-9f8690463c58@citrix.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Feb 2022 13:54:19 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On 16.02.2022 11:46, Andrew Cooper wrote:
+>On 16/02/2022 01:28, Pawan Gupta wrote:
+>> On 16.02.2022 00:49, Andrew Cooper wrote:
+>>> On 16/02/2022 00:39, Pawan Gupta wrote:
+>>>> On 15.02.2022 20:33, Borislav Petkov wrote:
+>>>>> On Tue, Feb 15, 2022 at 10:19:31AM -0800, Pawan Gupta wrote:
+>>>>>> I admit it has gotten complicated with so many bits associated with
+>>>>>> TSX.
+>>>>>
+>>>>> Yah, and looka here:
+>>>>>
+>>>>> https://github.com/andyhhp/xen/commit/ad9f7c3b2e0df38ad6d54f4769d4dccf765fbcee
+>>>>>
+>>>>>
+>>>>>
+>>>>> It seems it isn't complicated enough. ;-\
+>>>>>
+>>>>> Andy just made me aware of this thing where you guys have added a new
+>>>>> MSR bit:
+>>>>>
+>>>>> MSR_MCU_OPT_CTRL[1] which is called something like
+>>>>> MCU_OPT_CTRL_RTM_ALLOW or so.
+>>>>
+>>>> RTM_ALLOW bit was added to MSR_MCU_OPT_CTRL, but its not set by
+>>>> default,
+>>>> and it is *not* recommended to be used in production deployments [1]:
+>>>>
+>>>>   Although MSR 0x122 (TSX_CTRL) and MSR 0x123 (IA32_MCU_OPT_CTRL)
+>>>> can be
+>>>>   used to reenable Intel TSX for development, doing so is not
+>>>> recommended
+>>>>   for production deployments. In particular, applying MD_CLEAR flows
+>>>> for
+>>>>   mitigation of the Intel TSX Asynchronous Abort (TAA) transient
+>>>> execution
+>>>>   attack may not be effective on these processors when Intel TSX is
+>>>>   enabled with updated microcode. The processors continue to be
+>>>> mitigated
+>>>>   against TAA when Intel TSX is disabled.
+>>>
+>>> The purpose of setting RTM_ALLOW isn't to enable TSX per say.
+>>>
+>>> The purpose is to make MSR_TSX_CTRL.RTM_DISABLE behaves consistently on
+>>> all hardware, which reduces the complexity and invasiveness of dealing
+>>> with this special case, because the TAA workaround will still turn TSX
+>>> off by default.
+>>>
+>>> The configuration you don't want to be running with is RTM_ALLOW &&
+>>> !RTM_DISABLE, because that is "still vulnerable to TSX Async Abort".
+>>
+>> I am not sure how a system can end up with RTM_ALLOW && !RTM_DISABLE? I
+>> have no problem taking care of this case, I am just debating why we need
+>> it.
+>
+>Well for one, when Linux is starting up as the kexec environment
+>following Xen.
+>
+>You're not coding for "what logic should follow a clean microcode
+>load".  You're coding for "how to take the arbitrary state that my
+>preceding environment left, and turn it into what I want".
 
-> That is, shutdown is called, the item is removed from the list and freed,
-> but something got preempted while on the ftrace trampoline, with a
-> reference to the item, and then woke up and executed the item that was
-> freed.
-> 
-> I'll look into it. Thanks for the report.
+I will add the handling for this case (and I am going to follow these
+words of wisdom in my future work).
 
-OK, I wonder if something changed with "is_kernel_core_date()"?
-
-Because on registering, we have:
-
-	if (!is_kernel_core_data((unsigned long)ops))
-		ops->flags |= FTRACE_OPS_FL_DYNAMIC;
-
-
-and in the shutdown, we have:
-
-	/*
-	 * Dynamic ops may be freed, we must make sure that all
-	 * callers are done before leaving this function.
-	 * The same goes for freeing the per_cpu data of the per_cpu
-	 * ops.
-	 */
-	if (ops->flags & FTRACE_OPS_FL_DYNAMIC) {
-		/*
-		 * We need to do a hard force of sched synchronization.
-		 * This is because we use preempt_disable() to do RCU, but
-		 * the function tracers can be called where RCU is not watching
-		 * (like before user_exit()). We can not rely on the RCU
-		 * infrastructure to do the synchronization, thus we must do it
-		 * ourselves.
-		 */
-		synchronize_rcu_tasks_rude();
-
-		/*
-		 * When the kernel is preemptive, tasks can be preempted
-		 * while on a ftrace trampoline. Just scheduling a task on
-		 * a CPU is not good enough to flush them. Calling
-		 * synchronize_rcu_tasks() will wait for those tasks to
-		 * execute and either schedule voluntarily or enter user space.
-		 */
-		if (IS_ENABLED(CONFIG_PREEMPTION))
-			synchronize_rcu_tasks();
-
- free_ops:
-		ftrace_trampoline_free(ops);
-	}
-
-
-If the ops is not flagged as being allocated, or if one of the rcu
-synchronizations has changed and allowed for us to continue, then this
-would cause what you see.
-
--- Steve
+Thanks,
+Pawan

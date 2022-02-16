@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7844B81D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6344B81DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbiBPHiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 02:38:09 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47402 "EHLO
+        id S230388AbiBPHi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 02:38:27 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbiBPHhu (ORCPT
+        with ESMTP id S230308AbiBPHhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 02:37:50 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2046.outbound.protection.outlook.com [40.107.237.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDE217227C;
+        Wed, 16 Feb 2022 02:37:52 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2089.outbound.protection.outlook.com [40.107.237.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD87171875;
         Tue, 15 Feb 2022 23:37:16 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YbkChu+uc6K3ZF/gOQH09QsZeVwz7bmkmxnXBMme6nQwPnRqyEL7P/snP89a7b33kxx55py69ukmn+PX9y/bHe0/oCnw5zM+KpoeR9UOso/FIk0NtAdi0Zr5WPWeGkuSR8FYPzsDqhjdLKeQhzAykuSGwsncYSqpbFJbG0dY67IcmMDJZsBU5TlYEvWAlwk5D1GXO+fQ67iZYzFBgELBZcRkfRiiCO5KaaurHMdwb3r9+cLl6drNB4GNzPyok2MvskgYxMLt5n5nwY2npNAd8KyvvU66fjBdtATg0MyhJpzHVReuFx/eO2oKKvpCNUftLFRSxHNPRvgUqcPeRLoaIw==
+ b=GxTlKkz8bmnN2o9mnGpEAIBxAnpSp9YysrXoZ/wAClpqj1An40W6sAQ7jWtrm+FzT+mBRKalzCwR+W4k87rRplpqgT6aUCfnD02cx2pUVNRKdIedHSNd82iepwpMauT668+E27r/0jhqfSjnjAwlGOQ/8Zo6KObn/FXsXARERfWc4PwUzYOX0bxBXNhwAbpy1H8/uC/uy4KzR97NqAHaIQWbwKQBLc/jtTxd4/d0p8jeJ9Z/iaUD0UuASlZo5W5ZNqRAtclzvyFjUPvy+WE6KnDTghruvUsM2IsyYO5nTOhW05V4IOP/DxXlNbPBld69q5AnlZHTwiASZBuC6ovOgg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dSbHKoDmmLKln3/kxetImKM8rlt0tRMIUEteL7W0/GY=;
- b=XkRkT4bk/VNSk1o/jZ1EgdTsxhSuveLWsk/xFAK3zjElTRD9QE+OmgUUAw5e61gDTucGiu406yKQT+uvsr20KOuZUyqrozLByI4BA8GFdS9MV4anQlJ+GmI//qxVXhBgG8q4T7LePU+sH23tQqEnfjOHswGknvDm/NAkkPNo5QIUPfNy3wMBTlQVkD2aWrql5dAgpm9OOZW+x0qYxh+r0zLemfc6fwa0Z9wiHwg3preRkChnvaIrrdPaqzq99CS9Rg7+rilfQZRa94uzKzLE+Xpon364WJmbtEHMh/uttlJ9QoICD7t4gmdyn30taF33Yh0Dzv0x2OEfIiFBqldhEw==
+ bh=4RbkQn3dD3s1QYVuk934xqyMRVB5dSeR+NldY7tUrnk=;
+ b=HwEWVBFXl/oUT+WCXaQRh9UL0ge9YvimQOQWZFHc0r+hRzQBxOJTvov+LHseGjDqXWb0IQv1iNCHJ0nfVZOjQd+gF9qRdCL6oLxGGU7y9h6GY9FAFTn0dcN/JGc7JuWyflUi2PX4K3CcabVaSHneCvmPjPVG4KlvZZM7T4MwPBz15cDMXK7hgCckBMEEpwxYUqkAHH42gY7j7nSJwI0Rfhcw2sLW2bGicbY668La4c1/Y3ioRfvXU9TdjL8aRI6XMiJg98vABmhjfeEr3/uwy+qAAcyiDVzgBUHVzMgIIBquf1QD7q8AsksP8ig6AaNMSTOgTiYXtObmleJ5KLvgvQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dSbHKoDmmLKln3/kxetImKM8rlt0tRMIUEteL7W0/GY=;
- b=p7Y85e6ms9/KVZLs38rH9yjqBzMYYKyQ1F5I4fXclVXvkJsv2tEKdnueV7B1MIZXR58ReBf2b+7QDY22r++tNfjeUo3IR9A6SWrXPdN/XRH5o/rQHjCIQEyuhkyppDpWaJ2qaHuff1BAPw+7yS8bZFOBBrUlVau0cCW4AFYEmlI=
-Received: from BN8PR04CA0034.namprd04.prod.outlook.com (2603:10b6:408:70::47)
- by MWHPR12MB1888.namprd12.prod.outlook.com (2603:10b6:300:112::23) with
+ bh=4RbkQn3dD3s1QYVuk934xqyMRVB5dSeR+NldY7tUrnk=;
+ b=lieJObwJSVomQv1LgErQP1mYNQqKaNTT4O/VZd7caq75n9ReSRDZckbavkCkOL/HhmWPVeYSgHhP/aZOk1+GDjUgeT01XCxaw0rzLrwuSiL9uHqlreVEINerACCBA5sPw1XPTGKug1GWiCHSUBiCxJ+2/Axu+vWGuv43mwTvarQ=
+Received: from BN9PR03CA0478.namprd03.prod.outlook.com (2603:10b6:408:139::33)
+ by BY5PR12MB4003.namprd12.prod.outlook.com (2603:10b6:a03:196::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.14; Wed, 16 Feb
- 2022 07:36:45 +0000
-Received: from BN8NAM11FT013.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:70:cafe::7a) by BN8PR04CA0034.outlook.office365.com
- (2603:10b6:408:70::47) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.18; Wed, 16 Feb
+ 2022 07:36:55 +0000
+Received: from BN8NAM11FT045.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:139:cafe::34) by BN9PR03CA0478.outlook.office365.com
+ (2603:10b6:408:139::33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16 via Frontend
- Transport; Wed, 16 Feb 2022 07:36:44 +0000
+ Transport; Wed, 16 Feb 2022 07:36:49 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT013.mail.protection.outlook.com (10.13.176.182) with Microsoft SMTP
+ BN8NAM11FT045.mail.protection.outlook.com (10.13.177.47) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4975.11 via Frontend Transport; Wed, 16 Feb 2022 07:36:44 +0000
+ 15.20.4975.11 via Frontend Transport; Wed, 16 Feb 2022 07:36:49 +0000
 Received: from hr-amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 16 Feb
- 2022 01:36:39 -0600
+ 2022 01:36:44 -0600
 From:   Huang Rui <ray.huang@amd.com>
 To:     Shuah Khan <skhan@linuxfoundation.org>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
@@ -74,9 +74,9 @@ CC:     Deepak Sharma <deepak.sharma@amd.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         "Giovanni Gherdovich" <ggherdovich@suse.cz>,
         <linux-kernel@vger.kernel.org>, Huang Rui <ray.huang@amd.com>
-Subject: [PATCH RESEND v6 3/9] cpupower: Initial AMD P-State capability
-Date:   Wed, 16 Feb 2022 15:35:52 +0800
-Message-ID: <20220216073558.751071-4-ray.huang@amd.com>
+Subject: [PATCH RESEND v6 4/9] cpupower: Add the function to get the sysfs value from specific table
+Date:   Wed, 16 Feb 2022 15:35:53 +0800
+Message-ID: <20220216073558.751071-5-ray.huang@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220216073558.751071-1-ray.huang@amd.com>
 References: <20220216073558.751071-1-ray.huang@amd.com>
@@ -88,25 +88,25 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 525bbadb-4015-44a5-feb0-08d9f11f14d7
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1888:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR12MB188865D102517308437F157CEC359@MWHPR12MB1888.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1923;
+X-MS-Office365-Filtering-Correlation-Id: 0c3324a2-796c-4a90-5461-08d9f11f1799
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4003:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB40034C9CAADE92DDFE0C20C6EC359@BY5PR12MB4003.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3383;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3ssn24aA9FmP5dE+vpi3SAmgImkA7xRgJg2Xj7JV7Ubf2Oa6ZmDt3pd/9HbRq+OWKBzqen+YqeW2pBzBjRgVjdsxrM1F8eRDpdsCEZQDhf5x8Y/YwGFl1Pqhd48H51s7J/bP/HFFg4YOwho6Y9BBLVqu+lS5XHwEGMYOkRmxDPj2s5dG/tYaoED4GPgptJvo+a3Db3LgMNxNVCtLKRbcYxgqHnQ1kUN5Xp/6CmvqeFLd0cre51S0VJkwjZymCYPOoX5vmcNNKJXFZCKZsBd9iCW7F4U2nw6XDAqPPU39U/YEwUd1swgF+By5Umh+RQ1X9F5zOFnjY0mYdFt+02vo1bWwox/GWgfi5uUO/zvnEMnKDguEnOV0sU9JA/p9w7SAmJD+0nUjtP/FbbY9MkqkShUYmabLSqjP0oR7Zm9lgTfaY2Fu3b0BwpjkztIgKGEaDzdUpsH3gr26tAVtgvf+d9ZxWpZ5kiCyIuABDKQNGrestSe5ACr/QwU1xgBCYxlC1WoSklZzsaXYC8j/hp+TdqtRfskCuO3klu0gTeiyFKaJ11WW+nm8d7WE4h41RKOC40MUoppdu5HyQrio7hhqBrg/mxB3h8fBIRHQMOKIlL84BX6HmKJNMSezzzq5w06lbDyrwBQePqxVoNbF8oQssNKqeM4kgNzhxMDNfZLST5BBmQPawwQnSzWi8DAtz5hZNYgpncmJZ9e4PXaTT01RvA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(70586007)(110136005)(4326008)(7416002)(54906003)(356005)(8936002)(316002)(5660300002)(70206006)(2906002)(8676002)(16526019)(186003)(508600001)(36860700001)(6666004)(26005)(1076003)(2616005)(336012)(86362001)(7696005)(47076005)(40460700003)(36756003)(426003)(82310400004)(81166007)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: WiXft6a7JCFyU85DzHC/0Cyf95SAiYd6Ws1+4a3GQRy/MGtJmLhkUvs2ZM4HkwYp8qYf/PZpet+tF8GiBVChl22loZbhZSp6EgMcsTTrWrXqNGXnko0be8DaMzMQnwvga6nkBqENWuu1PKKic0MenFlz2KrbK87XQN7l4br3j0YLeASbIVwIvAkFR7ZV9PjOQJdgwXRzQeELgDhyR1cylfFSBzM+kdIiEkoToerIrtCiwZn50ITtIP2BWJhfNfg+nAfxHUnMZdQfd//aXkZ93bLlKyyR1kVVnk/iraZi5EqU65GXMyjnYTq3STPe37hobmPOnJM2PnAZn9Lz6GdF7ziSAEvyj/OVFEFct9k4hhf1Y0RVwpT3x2E03vws3v+WSO7IJ69bJXBZ9bQEKq+EPmxDpATdm2VoK70otsb5miDZZgMov8oEEUN/P/VmZg/zfd+iOyhxkvXKy3O2AFBFCabd3RRDkCQfODBJxon1c6W0h7RXeHkFmbQxbYpwbc5jHYd0WVB2BHDqWxWevEta5AaVlfPD0tLEC20nzaxEVJSB2B6wBP8/JGyb41EwbOicfRTl4yUC2Pjg9SMHiP2ijwEBBfBQMs5dqlX2yS+PqiMYKhFISTHhOUgxU8YAu42GAWRl96VoxdR5f+8XloWoJwxNHMJUzu+L5EPjSs6UouFJpZ2WuvqvRbqVqZAzd5/Tf/pkY1BbXZbseL+cFSZTk8eFLzPUEyNvUQPDK3MT8CM=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(54906003)(70586007)(336012)(316002)(4326008)(2906002)(8676002)(110136005)(26005)(7696005)(6666004)(1076003)(36860700001)(16526019)(82310400004)(2616005)(186003)(508600001)(426003)(47076005)(83380400001)(36756003)(70206006)(81166007)(5660300002)(7416002)(8936002)(40460700003)(356005)(86362001)(15583001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2022 07:36:44.4990
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2022 07:36:49.1215
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 525bbadb-4015-44a5-feb0-08d9f11f14d7
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c3324a2-796c-4a90-5461-08d9f11f1799
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT013.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT045.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1888
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4003
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -117,40 +117,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If kernel starts the AMD P-State module, the cpupower will initial the
-capability flag as CPUPOWER_CAP_AMD_PSTATE. And once AMD P-State
-capability is set, it won't need to set legacy ACPI relative
-capabilities anymore.
+Expose the helper into cpufreq header, then cpufreq driver can use this
+function to get the sysfs value if it has any specific sysfs interfaces.
 
 Signed-off-by: Huang Rui <ray.huang@amd.com>
 ---
- tools/power/cpupower/utils/helpers/cpuid.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ tools/power/cpupower/lib/cpufreq.c | 21 +++++++++++++++------
+ tools/power/cpupower/lib/cpufreq.h | 12 ++++++++++++
+ 2 files changed, 27 insertions(+), 6 deletions(-)
 
-diff --git a/tools/power/cpupower/utils/helpers/cpuid.c b/tools/power/cpupower/utils/helpers/cpuid.c
-index 72eb43593180..eae91f11d187 100644
---- a/tools/power/cpupower/utils/helpers/cpuid.c
-+++ b/tools/power/cpupower/utils/helpers/cpuid.c
-@@ -149,6 +149,19 @@ int get_cpu_info(struct cpupower_cpu_info *cpu_info)
- 		if (ext_cpuid_level >= 0x80000008 &&
- 		    cpuid_ebx(0x80000008) & (1 << 4))
- 			cpu_info->caps |= CPUPOWER_CAP_AMD_RDPRU;
-+
-+		if (cpupower_amd_pstate_enabled()) {
-+			cpu_info->caps |= CPUPOWER_CAP_AMD_PSTATE;
-+
-+			/*
-+			 * If AMD P-State is enabled, the firmware will treat
-+			 * AMD P-State function as high priority.
-+			 */
-+			cpu_info->caps &= ~CPUPOWER_CAP_AMD_CPB;
-+			cpu_info->caps &= ~CPUPOWER_CAP_AMD_CPB_MSR;
-+			cpu_info->caps &= ~CPUPOWER_CAP_AMD_HW_PSTATE;
-+			cpu_info->caps &= ~CPUPOWER_CAP_AMD_PSTATEDEF;
-+		}
- 	}
+diff --git a/tools/power/cpupower/lib/cpufreq.c b/tools/power/cpupower/lib/cpufreq.c
+index c3b56db8b921..c011bca27041 100644
+--- a/tools/power/cpupower/lib/cpufreq.c
++++ b/tools/power/cpupower/lib/cpufreq.c
+@@ -83,20 +83,21 @@ static const char *cpufreq_value_files[MAX_CPUFREQ_VALUE_READ_FILES] = {
+ 	[STATS_NUM_TRANSITIONS] = "stats/total_trans"
+ };
  
- 	if (cpu_info->vendor == X86_VENDOR_INTEL) {
+-
+-static unsigned long sysfs_cpufreq_get_one_value(unsigned int cpu,
+-						 enum cpufreq_value which)
++unsigned long cpufreq_get_sysfs_value_from_table(unsigned int cpu,
++						 const char **table,
++						 unsigned index,
++						 unsigned size)
+ {
+ 	unsigned long value;
+ 	unsigned int len;
+ 	char linebuf[MAX_LINE_LEN];
+ 	char *endp;
+ 
+-	if (which >= MAX_CPUFREQ_VALUE_READ_FILES)
++	if (!table || index >= size || !table[index])
+ 		return 0;
+ 
+-	len = sysfs_cpufreq_read_file(cpu, cpufreq_value_files[which],
+-				linebuf, sizeof(linebuf));
++	len = sysfs_cpufreq_read_file(cpu, table[index], linebuf,
++				      sizeof(linebuf));
+ 
+ 	if (len == 0)
+ 		return 0;
+@@ -109,6 +110,14 @@ static unsigned long sysfs_cpufreq_get_one_value(unsigned int cpu,
+ 	return value;
+ }
+ 
++static unsigned long sysfs_cpufreq_get_one_value(unsigned int cpu,
++						 enum cpufreq_value which)
++{
++	return cpufreq_get_sysfs_value_from_table(cpu, cpufreq_value_files,
++						  which,
++						  MAX_CPUFREQ_VALUE_READ_FILES);
++}
++
+ /* read access to files which contain one string */
+ 
+ enum cpufreq_string {
+diff --git a/tools/power/cpupower/lib/cpufreq.h b/tools/power/cpupower/lib/cpufreq.h
+index 95f4fd9e2656..107668c0c454 100644
+--- a/tools/power/cpupower/lib/cpufreq.h
++++ b/tools/power/cpupower/lib/cpufreq.h
+@@ -203,6 +203,18 @@ int cpufreq_modify_policy_governor(unsigned int cpu, char *governor);
+ int cpufreq_set_frequency(unsigned int cpu,
+ 				unsigned long target_frequency);
+ 
++/*
++ * get the sysfs value from specific table
++ *
++ * Read the value with the sysfs file name from specific table. Does
++ * only work if the cpufreq driver has the specific sysfs interfaces.
++ */
++
++unsigned long cpufreq_get_sysfs_value_from_table(unsigned int cpu,
++						 const char **table,
++						 unsigned index,
++						 unsigned size);
++
+ #ifdef __cplusplus
+ }
+ #endif
 -- 
 2.25.1
 

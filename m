@@ -2,121 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E694B886A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1744B8877
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:06:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233621AbiBPNGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:06:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47786 "EHLO
+        id S233635AbiBPNHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 08:07:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231666AbiBPNGA (ORCPT
+        with ESMTP id S233634AbiBPNG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:06:00 -0500
-Received: from outbound-smtp04.blacknight.com (outbound-smtp04.blacknight.com [81.17.249.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A9A261214
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:05:46 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
-        by outbound-smtp04.blacknight.com (Postfix) with ESMTPS id 4E964BED69
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 13:05:45 +0000 (GMT)
-Received: (qmail 28902 invoked from network); 16 Feb 2022 13:05:45 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.223])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 16 Feb 2022 13:05:44 -0000
-Date:   Wed, 16 Feb 2022 13:05:43 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Aaron Lu <aaron.lu@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH 2/5] mm/page_alloc: Track range of active PCP lists
- during bulk free
-Message-ID: <20220216130542.GT3366@techsingularity.net>
-References: <20220215145111.27082-1-mgorman@techsingularity.net>
- <20220215145111.27082-3-mgorman@techsingularity.net>
- <d6f991f6-ce07-853a-e87b-5eda97a35733@suse.cz>
+        Wed, 16 Feb 2022 08:06:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77D310FCA;
+        Wed, 16 Feb 2022 05:06:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 526246165D;
+        Wed, 16 Feb 2022 13:06:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5DFCC340FC;
+        Wed, 16 Feb 2022 13:06:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645016803;
+        bh=XpyXyO6XeLPMFwMT57AZNzNQgXnMBZ2Ni2r+dAXZ1s0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=m86IV6YQZzHRJuDux3taFbaRjn+w9RuI6vh4wtLv8qscNybLMG9S7+2rm1PNzrb20
+         Dd5S6VsCYA0xUl1vOFFn3tNcP5kMF/3okjlp1F0h2o1Xvta1epkmZYCJUZnDs3yLoA
+         VzYx4F/n1Ow3YwU1D9VL3p/ZapRwreq4wU2F2zdBEZVDPHlhJZ5UCirUITvqXKP03u
+         mjPPXaT5ZCAExBhxPZs+6x/NgZOCXftC+3jOhCw6lYUHk202K2WWgJTp7zViNeOTI3
+         d6qcX+NrilxdmbmnVfKB2lTecLHUYHmjxyqYH1gVkIK8Gk+2LbSYNZnzPmnsXhuwAQ
+         I1fP9Rg2mGbLg==
+Received: by mail-wm1-f43.google.com with SMTP id l123-20020a1c2581000000b0037b9d960079so3733479wml.0;
+        Wed, 16 Feb 2022 05:06:43 -0800 (PST)
+X-Gm-Message-State: AOAM533suSpGIPZFo6azCEQzN6a4sWKCfT6uZn8ZqdIqnaHa/7jtM2Qg
+        XgW6pdas+HRdBq2uY66T9weLH2VaAJuntcNtlvg=
+X-Google-Smtp-Source: ABdhPJz2fGQt4XBj3ZPZmmV0DF3C11Wmt7pFZ5Wv5cMpV0NQk32vVK4/Sp5p4cooe9t3m3i9Hn5C5g4DuBewCt15hb0=
+X-Received: by 2002:a1c:21c5:0:b0:37d:40d0:94c7 with SMTP id
+ h188-20020a1c21c5000000b0037d40d094c7mr1551416wmh.1.1645016801710; Wed, 16
+ Feb 2022 05:06:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <d6f991f6-ce07-853a-e87b-5eda97a35733@suse.cz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220214163452.1568807-1-arnd@kernel.org> <20220214163452.1568807-12-arnd@kernel.org>
+ <YgqMLYJs0RMecMck@infradead.org>
+In-Reply-To: <YgqMLYJs0RMecMck@infradead.org>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 16 Feb 2022 14:06:25 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0PwjB+KE+j3_sknZuiuY-kUe_J76nYac-mx82dccA3Rw@mail.gmail.com>
+Message-ID: <CAK8P3a0PwjB+KE+j3_sknZuiuY-kUe_J76nYac-mx82dccA3Rw@mail.gmail.com>
+Subject: Re: [PATCH 11/14] sparc64: remove CONFIG_SET_FS support
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rich Felker <dalias@libc.org>, linux-ia64@vger.kernel.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Max Filippov <jcmvbkbc@gmail.com>, Guo Ren <guoren@kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Helge Deller <deller@gmx.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        linux-csky@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Richard Weinberger <richard@nod.at>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        David Miller <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 01:02:01PM +0100, Vlastimil Babka wrote:
-> On 2/15/22 15:51, Mel Gorman wrote:
-> > free_pcppages_bulk() frees pages in a round-robin fashion. Originally,
-> > this was dealing only with migratetypes but storing high-order pages
-> > means that there can be many more empty lists that are uselessly
-> > checked. Track the minimum and maximum active pindex to reduce the
-> > search space.
-> > 
-> > Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> > ---
-> >  mm/page_alloc.c | 13 +++++++++++--
-> >  1 file changed, 11 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index 08de32cfd9bb..c5110fdeb115 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -1450,6 +1450,8 @@ static void free_pcppages_bulk(struct zone *zone, int count,
-> >  					struct per_cpu_pages *pcp)
+On Mon, Feb 14, 2022 at 6:06 PM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> >  void prom_world(int enter)
 > >  {
-> >  	int pindex = 0;
-> > +	int min_pindex = 0;
-> > +	int max_pindex = NR_PCP_LISTS - 1;
-> >  	int batch_free = 0;
-> >  	int nr_freed = 0;
-> >  	unsigned int order;
-> > @@ -1478,10 +1480,17 @@ static void free_pcppages_bulk(struct zone *zone, int count,
-> >  			if (++pindex == NR_PCP_LISTS)
-> 
-> Hmm, so in the very first iteration at this point pindex is already 1. This
-> looks odd even before the patch, as order 0 MIGRATE_UNMOVABLE list is only
-> processed after all the higher orders?
-> 
+> > -     if (!enter)
+> > -             set_fs(get_fs());
+> > -
+> >       __asm__ __volatile__("flushw");
+> >  }
+>
+> The enter argument is now unused.
 
-Yes and this was the behaviour before and after. I don't recall why. It
-might have been to preserve UNMOVABLE pages but after the series is
-finished, the reasoning is weak. I'll add a specific check.
+Right, good point. I'll add a comment, but I think I will leave that
+as this seems
+too hard to change the callers in assembly code for this. If any
+sparc64 developer
+wants to clean that up, I'm happy to integrate the cleanup patch in my series.
 
-> >  				pindex = 0;
-> 
-> Also shouldn't this wrap-around check also use min_index/max_index instead
-> of NR_PCP_LISTS and 0?
-> 
-
-Yes, it should and it's a rebasing error from an earlier prototype that
-I missed. I'll fix it.
-
-> >  			list = &pcp->lists[pindex];
-> > -		} while (list_empty(list));
-> > +			if (!list_empty(list))
-> > +				break;
-> > +
-> > +			if (pindex == max_pindex)
-> > +				max_pindex--;
-> > +			if (pindex == min_pindex)
-> 
-> So with pindex 1 and min_pindex == 0 this will not trigger until
-> (eventually) the first pindex wrap around, which seems suboptimal. But I can
-> see the later patches change things substantially anyway so it may be moot...
-> 
-
-It could potentially be more optimal but at the cost of complexity which
-I wanted to avoid in this path as much as possible. Initialising
-min_pindex == pindex could result in an infinite loop if the lower lists
-need to be cleared.
-
--- 
-Mel Gorman
-SUSE Labs
+         Arnd

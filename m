@@ -2,268 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9950C4B8ACD
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 766A74B8AD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234738AbiBPNwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:52:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54690 "EHLO
+        id S234747AbiBPNyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 08:54:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233689AbiBPNwc (ORCPT
+        with ESMTP id S229742AbiBPNya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:52:32 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3986D2B25A;
-        Wed, 16 Feb 2022 05:52:20 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id t14so3395609ljh.8;
-        Wed, 16 Feb 2022 05:52:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q4EiYPm2+HRbScmOb/jcDnsvCiWEez/3XhwQHbUUhXA=;
-        b=UPAr3hbP4qmCmUzh2N1lcrpDce/QofsGFvr0EOGtApfPjTXGT2StAgdjzFt735kXqg
-         mZEree2WrFpMRPnuU3IYK3hqb3P9miUjJROXFfbODy8h1fLfIyRYextRYlXh2+Rf6PDh
-         fP1d8ni987rFFwkCBetTKrDr9SsRGYpvN0Rw/uunEKQYAlgfwShSW27LU7OcLyPmTCbW
-         beNDTouLUC3FhbVcEM2SgvwjLs3ZreBTRyO5X6lKnv4AFIp2GyMSCVm87kKU39RFftop
-         tLaoj+w95da6LKkKp3L/+rt8aBN9Xrvk8q1SYA2aq94FPSjT6D+noewaToJzD3gSBi9l
-         vbDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q4EiYPm2+HRbScmOb/jcDnsvCiWEez/3XhwQHbUUhXA=;
-        b=ccbVXL1OFyA6Kvm1FOtLc9R1qMJpZzpo6wOdWXSzSPWY5zwzhyDWJ97zk2vNJjFB9j
-         p7FYHeDkSDK3tFj31dVAfbm0YpH2L3a9+C9CmhX6Yz5AH/mvbQWKPAWXjuEt60vqFcgk
-         pHsx7BFHe14/g7Kwu4OBBAbTJIVtoa+kiQmlMlW5xQc+o57Yhn2j+P5GIl2wGON4gBSL
-         KDr0u5gP4BtZrqNcmuYkpPRKUcwZHBJjqkPGCTq+SNZ4Y3FgsoVEMs6icDW0fMqPMa1o
-         8n744PY0aivBiiZnIO3u6BTs6KpvrvRQ1ug28enOK7yTf9xTICRLDlEM0Eo3GwE6AJA9
-         bOxg==
-X-Gm-Message-State: AOAM531/C9BTrevRjGyV/b+MFs/+dmC4W6E+O7/SHhQ7LCv8SLw9zbph
-        oYdYQLkcsMSUTjuKDvW4GeV3NwS96HzYOQ==
-X-Google-Smtp-Source: ABdhPJyXUZm9WRFHJO5mC+6U9BqdYlz5AYmSqaBZHIfudZ8P8JlG5sSmpBrg/AjbXTYHAZNpWmDSKA==
-X-Received: by 2002:a2e:b8c3:0:b0:244:8a88:6bf9 with SMTP id s3-20020a2eb8c3000000b002448a886bf9mr2187033ljp.67.1645019538355;
-        Wed, 16 Feb 2022 05:52:18 -0800 (PST)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id y38sm2923227lfa.145.2022.02.16.05.52.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 05:52:17 -0800 (PST)
-From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-To:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Axtens <dja@axtens.net>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraju@codeaurora.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Theodore Y . Ts'o" <tytso@mit.edu>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>
-Subject: [PATCH 1/1] rcu: Introduce CONFIG_RCU_EXP_CPU_STALL_TIMEOUT
-Date:   Wed, 16 Feb 2022 14:52:09 +0100
-Message-Id: <20220216135209.3070-1-urezki@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 16 Feb 2022 08:54:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3ED11E8BEF;
+        Wed, 16 Feb 2022 05:54:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D3C361842;
+        Wed, 16 Feb 2022 13:54:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6039CC004E1;
+        Wed, 16 Feb 2022 13:54:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645019656;
+        bh=5LiTn6S1BtQcKTOgrNN+zF552+0LYUwUIv2x9y/AqUs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e0oICphKag0wyoyhALIw8XeWx6i+LFa5qFFG9nExd7SgahhHhWGtQyCcZIyhgzsOn
+         DlWr4miMUdixkvvDuA9AHdhZD06Uc8/E+Q47GUVsUIYSsivMOFrjhGAoAF5yz6JZ2h
+         41u/KZVytB2Yo+6u7K+HKhdb3HrbsICvReCz69q/8gDAfPSbIoCPkNVeb/YEKJzh0D
+         6DuM8eFo2iwNCcZIPA7JSt8UaFgyxzHcR4FeCz02Wob2egM8F5agAIYdnOG47J5oz4
+         lS0Zp6nOlzU4rzU/axPSQRx/aGAm3UgcBjMwB/Na4IxWPYBcqOuMr9lPwhtEGOPBX0
+         b7coHIYqg1KlA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id BBCDE400FE; Wed, 16 Feb 2022 10:54:13 -0300 (-03)
+Date:   Wed, 16 Feb 2022 10:54:13 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     "Tzvetomir Stoyanov (VMware)" <tz.stoyanov@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] libperf: Add API for allocating new thread map
+Message-ID: <Yg0CBc4gEQDX4/WD@kernel.org>
+References: <20220210085225.551891-1-tz.stoyanov@gmail.com>
+ <YguaF9kmFyoZ1ZhC@krava>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YguaF9kmFyoZ1ZhC@krava>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uladzislau Rezki <uladzislau.rezki@sony.com>
+Em Tue, Feb 15, 2022 at 01:18:31PM +0100, Jiri Olsa escreveu:
+> On Thu, Feb 10, 2022 at 10:52:25AM +0200, Tzvetomir Stoyanov (VMware) wrote:
+> > The existing API perf_thread_map__new_dummy() allocates new thread map
+> > for one thread. I couldn't find a way to reallocate the map with more
+> > threads, or to allocate a new map for more than one thread. Having
+> > multiple threads in a thread map is essential for some use cases.
+> > That's why a new API is proposed, which allocates a new thread map
+> > for given number of threads:
+> >  perf_thread_map__new()
+> 
+> I'm ok with that, just wondering if we should call it 'perf_thread_map__new_nr'
+> because we already have perf_cpu_map__new(const char *cpu_list) so
+> it might be better to keep perf_cpu_map and perf_thread_map in sync
+ 
+> Arnaldo, thoughts on this?
 
-Currently for both expedited and regular grace periods stall
-warnings are emitted based on one timeout value that is defined
-in seconds. The problem is that, a stall timeout in seconds for
-expedited grace period is a way long.
+Agreed on trying to have similar semantics for the default, main
+constructor, so we probably need perf_thread_map__new(const char *thread_list).
 
-The idea of expedited grace period is to force CPUs to report
-their quiescent states as fast as possible. If in RCU read-side
-critical section, it will request the next rcu_read_unlock() to
-record the quiescent state. If not either it reports immediately
-or set TIF_NEED_RESCHED to initiate the task switch.
+In tools/perf/util/thread_map.c, from where tools/lib/threadmap.c came
+from we have many alternative constructors:
 
-Therefore introduce the CONFIG_RCU_EXP_CPU_STALL_TIMEOUT kernel
-configuration that is set to 20 msec. It also can be changed in
-run-time via: /sys/.../parameters/rcu_exp_cpu_stall_timeout.
+⬢[acme@toolbox perf]$ grep 'struct perf_thread_map \*thread_map__new' tools/perf/util/thread_map.c
+struct perf_thread_map *thread_map__new_by_pid(pid_t pid)
+struct perf_thread_map *thread_map__new_by_tid(pid_t tid)
+struct perf_thread_map *thread_map__new_all_cpus(void)
+struct perf_thread_map *thread_map__new_by_uid(uid_t uid)
+struct perf_thread_map *thread_map__new(pid_t pid, pid_t tid, uid_t uid)
+static struct perf_thread_map *thread_map__new_by_pid_str(const char *pid_str)
+struct perf_thread_map *thread_map__new_by_tid_str(const char *tid_str)
+struct perf_thread_map *thread_map__new_str(const char *pid, const char *tid,
+struct perf_thread_map *thread_map__new_event(struct perf_record_thread_map *event)
+⬢[acme@toolbox perf]$
 
-Signed-off-by: Uladzislau Rezki <uladzislau.rezki@sony.com>
-Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
----
- Documentation/RCU/stallwarn.rst               | 18 +++++++++++++
- .../admin-guide/kernel-parameters.txt         |  6 +++++
- kernel/rcu/Kconfig.debug                      | 12 +++++++++
- kernel/rcu/rcu.h                              |  2 ++
- kernel/rcu/tree_exp.h                         |  4 +--
- kernel/rcu/tree_stall.h                       | 26 +++++++++++++++++++
- kernel/rcu/update.c                           |  2 ++
- 7 files changed, 68 insertions(+), 2 deletions(-)
+The one you want is almost:
 
-diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
-index 78404625bad2..b9ce89980779 100644
---- a/Documentation/RCU/stallwarn.rst
-+++ b/Documentation/RCU/stallwarn.rst
-@@ -162,6 +162,24 @@ CONFIG_RCU_CPU_STALL_TIMEOUT
- 	Stall-warning messages may be enabled and disabled completely via
- 	/sys/module/rcupdate/parameters/rcu_cpu_stall_suppress.
+	thread_map__new_by_tid_str(const char *tid_str)
+
+but perhaps it would be better to have:
+
+struct perf_thread_map *thread_map__new_array(int nr_threads, pid_t *array);
+
+But yeah, if your logic needs to first allocate space for the thread_map
+and then populate it, make it so that array == NULL is supported for
+that case, then thread_map__new_array() will not touch it and set
+everything to -1, to be populated later using perf_thread_map__set_pid().
+
+With that thread_map__new_by_tid_str() could be reimplemented as a
+wrapper around thread_map__new_array(). :-)
+
+While we're on this, shouldn't we rename 'thread' in
+tools/lib/perf/include/perf/threadmap.h and threadmap.c to be 'idx' to
+avoid confusion?
+
+- Arnaldo
  
-+CONFIG_RCU_EXP_CPU_STALL_TIMEOUT
-+--------------------------------
-+
-+	Same as the CONFIG_RCU_CPU_STALL_TIMEOUT parameter but only for
-+	the expedited grace period. This parameter defines the period of
-+	time that RCU will wait from the beginning of an expedited grace
-+	period until it issues an RCU CPU stall warning. This time period
-+	is normally 20 milliseconds.
-+
-+	This configuration parameter may be changed at runtime via the
-+	/sys/module/rcupdate/parameters/rcu_exp_cpu_stall_timeout, however
-+	this parameter is checked only at the beginning of a cycle. If you
-+	are in a current stall cycle, setting it to a new value will change
-+	the timeout for the -next- stall.
-+
-+	Stall-warning messages may be enabled and disabled completely via
-+	/sys/module/rcupdate/parameters/rcu_cpu_stall_suppress.
-+
- RCU_STALL_DELAY_DELTA
- ---------------------
- 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 9ab6a4a5be06..9a32030f5d1e 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -4817,6 +4817,12 @@
- 	rcupdate.rcu_cpu_stall_timeout= [KNL]
- 			Set timeout for RCU CPU stall warning messages.
- 
-+	rcupdate.rcu_exp_cpu_stall_timeout= [KNL]
-+			Set timeout for expedited RCU CPU stall warning messages.
-+			The value is in milliseconds and a maximum allowed parameter
-+			is 21000 milliseconds. Please note, a set value is adjusted
-+			to an arch timer tick resolution.
-+
- 	rcupdate.rcu_expedited= [KNL]
- 			Use expedited grace-period primitives, for
- 			example, synchronize_rcu_expedited() instead
-diff --git a/kernel/rcu/Kconfig.debug b/kernel/rcu/Kconfig.debug
-index 4fd64999300f..e0f2c5edef44 100644
---- a/kernel/rcu/Kconfig.debug
-+++ b/kernel/rcu/Kconfig.debug
-@@ -91,6 +91,18 @@ config RCU_CPU_STALL_TIMEOUT
- 	  RCU grace period persists, additional CPU stall warnings are
- 	  printed at more widely spaced intervals.
- 
-+config RCU_EXP_CPU_STALL_TIMEOUT
-+	int "Expedited RCU CPU stall timeout in milliseconds"
-+	depends on RCU_STALL_COMMON
-+	range 1 21000
-+	default 20
-+
-+	help
-+	  If a given expedited RCU grace period extends more than the
-+	  specified number of milliseconds, a CPU stall warning is printed.
-+	  If the RCU grace period persists, additional CPU stall warnings
-+	  are printed at more widely spaced intervals.
-+
- config RCU_TRACE
- 	bool "Enable tracing for RCU"
- 	depends on DEBUG_KERNEL
-diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-index 819f9d979e61..f8ec1df4b91e 100644
---- a/kernel/rcu/rcu.h
-+++ b/kernel/rcu/rcu.h
-@@ -217,7 +217,9 @@ static inline bool rcu_stall_is_suppressed_at_boot(void)
- extern int rcu_cpu_stall_ftrace_dump;
- extern int rcu_cpu_stall_suppress;
- extern int rcu_cpu_stall_timeout;
-+extern int rcu_exp_cpu_stall_timeout;
- int rcu_jiffies_till_stall_check(void);
-+int rcu_exp_jiffies_till_stall_check(void);
- 
- static inline bool rcu_stall_is_suppressed(void)
- {
-diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-index 404198808683..30f05fd080ca 100644
---- a/kernel/rcu/tree_exp.h
-+++ b/kernel/rcu/tree_exp.h
-@@ -496,7 +496,7 @@ static void synchronize_rcu_expedited_wait(void)
- 	struct rcu_node *rnp_root = rcu_get_root();
- 
- 	trace_rcu_exp_grace_period(rcu_state.name, rcu_exp_gp_seq_endval(), TPS("startwait"));
--	jiffies_stall = rcu_jiffies_till_stall_check();
-+	jiffies_stall = rcu_exp_jiffies_till_stall_check();
- 	jiffies_start = jiffies;
- 	if (tick_nohz_full_enabled() && rcu_inkernel_boot_has_ended()) {
- 		if (synchronize_rcu_expedited_wait_once(1))
-@@ -571,7 +571,7 @@ static void synchronize_rcu_expedited_wait(void)
- 				dump_cpu_task(cpu);
- 			}
- 		}
--		jiffies_stall = 3 * rcu_jiffies_till_stall_check() + 3;
-+		jiffies_stall = 3 * rcu_exp_jiffies_till_stall_check() + 3;
- 	}
- }
- 
-diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
-index 0c5d8516516a..84b812a3ab44 100644
---- a/kernel/rcu/tree_stall.h
-+++ b/kernel/rcu/tree_stall.h
-@@ -25,6 +25,32 @@ int sysctl_max_rcu_stall_to_panic __read_mostly;
- #define RCU_STALL_MIGHT_DIV		8
- #define RCU_STALL_MIGHT_MIN		(2 * HZ)
- 
-+int rcu_exp_jiffies_till_stall_check(void)
-+{
-+	int cpu_stall_timeout = READ_ONCE(rcu_exp_cpu_stall_timeout);
-+	int exp_stall_delay_delta = 0;
-+	int till_stall_check;
-+
-+	/*
-+	 * Limit check must be consistent with the Kconfig limits for
-+	 * CONFIG_RCU_EXP_CPU_STALL_TIMEOUT, so check the allowed range.
-+	 * The minimum clamped value is "2UL", because at least one full
-+	 * tick has to be guaranteed.
-+	 */
-+	till_stall_check = clamp(msecs_to_jiffies(cpu_stall_timeout), 2UL, 21UL * HZ);
-+
-+	if (jiffies_to_msecs(till_stall_check) != cpu_stall_timeout)
-+		WRITE_ONCE(rcu_exp_cpu_stall_timeout, jiffies_to_msecs(till_stall_check));
-+
-+#ifdef CONFIG_PROVE_RCU
-+	/* Add extra ~25% out of till_stall_check. */
-+	exp_stall_delay_delta = ((till_stall_check * 25) / 100) + 1;
-+#endif
-+
-+	return till_stall_check + exp_stall_delay_delta;
-+}
-+EXPORT_SYMBOL_GPL(rcu_exp_jiffies_till_stall_check);
-+
- /* Limit-check stall timeouts specified at boottime and runtime. */
- int rcu_jiffies_till_stall_check(void)
- {
-diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
-index 180ff9c41fa8..fc7fef575606 100644
---- a/kernel/rcu/update.c
-+++ b/kernel/rcu/update.c
-@@ -506,6 +506,8 @@ EXPORT_SYMBOL_GPL(rcu_cpu_stall_suppress);
- module_param(rcu_cpu_stall_suppress, int, 0644);
- int rcu_cpu_stall_timeout __read_mostly = CONFIG_RCU_CPU_STALL_TIMEOUT;
- module_param(rcu_cpu_stall_timeout, int, 0644);
-+int rcu_exp_cpu_stall_timeout __read_mostly = CONFIG_RCU_EXP_CPU_STALL_TIMEOUT;
-+module_param(rcu_exp_cpu_stall_timeout, int, 0644);
- #endif /* #ifdef CONFIG_RCU_STALL_COMMON */
- 
- // Suppress boot-time RCU CPU stall warnings and rcutorture writer stall
+> jirka
+> 
+> > 
+> > Signed-off-by: Tzvetomir Stoyanov (VMware) <tz.stoyanov@gmail.com>
+> > ---
+> >  tools/lib/perf/Documentation/libperf.txt |  1 +
+> >  tools/lib/perf/include/perf/threadmap.h  |  1 +
+> >  tools/lib/perf/libperf.map               |  1 +
+> >  tools/lib/perf/tests/test-threadmap.c    | 27 ++++++++++++++++++++++++
+> >  tools/lib/perf/threadmap.c               | 15 +++++++++----
+> >  5 files changed, 41 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/tools/lib/perf/Documentation/libperf.txt b/tools/lib/perf/Documentation/libperf.txt
+> > index 32c5051c24eb..9cbd41c29bff 100644
+> > --- a/tools/lib/perf/Documentation/libperf.txt
+> > +++ b/tools/lib/perf/Documentation/libperf.txt
+> > @@ -62,6 +62,7 @@ SYNOPSIS
+> >    struct perf_thread_map;
+> >  
+> >    struct perf_thread_map *perf_thread_map__new_dummy(void);
+> > +  struct perf_thread_map *perf_thread_map__new(int nr);
+> >  
+> >    void perf_thread_map__set_pid(struct perf_thread_map *map, int thread, pid_t pid);
+> >    char *perf_thread_map__comm(struct perf_thread_map *map, int thread);
+> > diff --git a/tools/lib/perf/include/perf/threadmap.h b/tools/lib/perf/include/perf/threadmap.h
+> > index a7c50de8d010..47d433416040 100644
+> > --- a/tools/lib/perf/include/perf/threadmap.h
+> > +++ b/tools/lib/perf/include/perf/threadmap.h
+> > @@ -8,6 +8,7 @@
+> >  struct perf_thread_map;
+> >  
+> >  LIBPERF_API struct perf_thread_map *perf_thread_map__new_dummy(void);
+> > +LIBPERF_API struct perf_thread_map *perf_thread_map__new(int nr);
+> >  
+> >  LIBPERF_API void perf_thread_map__set_pid(struct perf_thread_map *map, int thread, pid_t pid);
+> >  LIBPERF_API char *perf_thread_map__comm(struct perf_thread_map *map, int thread);
+> > diff --git a/tools/lib/perf/libperf.map b/tools/lib/perf/libperf.map
+> > index 93696affda2e..240a2f087b70 100644
+> > --- a/tools/lib/perf/libperf.map
+> > +++ b/tools/lib/perf/libperf.map
+> > @@ -11,6 +11,7 @@ LIBPERF_0.0.1 {
+> >  		perf_cpu_map__empty;
+> >  		perf_cpu_map__max;
+> >  		perf_cpu_map__has;
+> > +		perf_thread_map__new;
+> >  		perf_thread_map__new_dummy;
+> >  		perf_thread_map__set_pid;
+> >  		perf_thread_map__comm;
+> > diff --git a/tools/lib/perf/tests/test-threadmap.c b/tools/lib/perf/tests/test-threadmap.c
+> > index 5e2a0291e94c..3388bf36dfc0 100644
+> > --- a/tools/lib/perf/tests/test-threadmap.c
+> > +++ b/tools/lib/perf/tests/test-threadmap.c
+> > @@ -11,9 +11,12 @@ static int libperf_print(enum libperf_print_level level,
+> >  	return vfprintf(stderr, fmt, ap);
+> >  }
+> >  
+> > +#define THREADS_NR	5
+> > +
+> >  int test_threadmap(int argc, char **argv)
+> >  {
+> >  	struct perf_thread_map *threads;
+> > +	int i;
+> >  
+> >  	__T_START;
+> >  
+> > @@ -27,6 +30,30 @@ int test_threadmap(int argc, char **argv)
+> >  	perf_thread_map__put(threads);
+> >  	perf_thread_map__put(threads);
+> >  
+> > +	threads = perf_thread_map__new(THREADS_NR);
+> > +	if (!threads)
+> > +		tests_failed++;
+> > +
+> > +	if (perf_thread_map__nr(threads) != THREADS_NR)
+> > +		tests_failed++;
+> > +
+> > +	for (i = 0; i < THREADS_NR; i++) {
+> > +		if (perf_thread_map__pid(threads, i) != -1)
+> > +			tests_failed++;
+> > +	}
+> > +
+> > +	for (i = 1; i < THREADS_NR; i++)
+> > +		perf_thread_map__set_pid(threads, i, i * 100);
+> > +
+> > +	if (perf_thread_map__pid(threads, 0) != -1)
+> > +		tests_failed++;
+> > +
+> > +	for (i = 1; i < THREADS_NR; i++) {
+> > +		if (perf_thread_map__pid(threads, i) != i * 100)
+> > +			tests_failed++;
+> > +	}
+> > +	perf_thread_map__put(threads);
+> > +
+> >  	__T_END;
+> >  	return tests_failed == 0 ? 0 : -1;
+> >  }
+> > diff --git a/tools/lib/perf/threadmap.c b/tools/lib/perf/threadmap.c
+> > index e92c368b0a6c..843fe1070cc9 100644
+> > --- a/tools/lib/perf/threadmap.c
+> > +++ b/tools/lib/perf/threadmap.c
+> > @@ -42,18 +42,25 @@ char *perf_thread_map__comm(struct perf_thread_map *map, int thread)
+> >  	return map->map[thread].comm;
+> >  }
+> >  
+> > -struct perf_thread_map *perf_thread_map__new_dummy(void)
+> > +struct perf_thread_map *perf_thread_map__new(int nr)
+> >  {
+> > -	struct perf_thread_map *threads = thread_map__alloc(1);
+> > +	struct perf_thread_map *threads = thread_map__alloc(nr);
+> > +	int i;
+> >  
+> >  	if (threads != NULL) {
+> > -		perf_thread_map__set_pid(threads, 0, -1);
+> > -		threads->nr = 1;
+> > +		for (i = 0; i < nr; i++)
+> > +			perf_thread_map__set_pid(threads, i, -1);
+> > +		threads->nr = nr;
+> >  		refcount_set(&threads->refcnt, 1);
+> >  	}
+> >  	return threads;
+> >  }
+> >  
+> > +struct perf_thread_map *perf_thread_map__new_dummy(void)
+> > +{
+> > +	return perf_thread_map__new(1);
+> > +}
+> > +
+> >  static void perf_thread_map__delete(struct perf_thread_map *threads)
+> >  {
+> >  	if (threads) {
+> > -- 
+> > 2.34.1
+> > 
+
 -- 
-2.30.2
 
+- Arnaldo

@@ -2,117 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5FBE4B8D8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 100E54B8D99
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235934AbiBPQNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 11:13:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56878 "EHLO
+        id S236188AbiBPQNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 11:13:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234414AbiBPQNJ (ORCPT
+        with ESMTP id S234566AbiBPQNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 11:13:09 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE62E0AE9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:12:55 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id f17so4786375edd.2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:12:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JbPJ3n5RfOCMAbabRRWgoVSNDfOSeOFNd1MQ9EnXwM4=;
-        b=pC52/Sf3+x/HEtc4q5aCHZJ1FWX7NmmIZXZMex1YSTqhzRovMr5YCowtF7juLMEcck
-         ReYIzWkhCLkS3ECXeHHYgN0Y9ttiWbhnPOTAZGteOYHx86kC56CVi1hQTYJjpSd8/lri
-         /NYi3F6S4F2de5IWONPJi4HkO7MB/g2Kx5Zmmt9uIhArB28YmtUE+PKLyidKPFrIM3C4
-         DPAKTNdxHLNy2J9vDn7cGfiWpzyXWW997NEAKC4W8F7GuIl6p9DlxHyEX4xyTCX3YLRC
-         Ko32/ozfoMc/57SOqyVE9e+M47KiZau2Q/Cdo4Er/H0ekkoeWckWu87jj/qrO8vj5R3l
-         cpBw==
+        Wed, 16 Feb 2022 11:13:48 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FE71767A0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:13:34 -0800 (PST)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8E42B40812
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 16:13:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645028012;
+        bh=yU0JTVfqmMQPB5NQYcUc7rbuKfmUJoXTRDxBU8L652M=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=PGJq69UTsVr7Df6oYusmZeJj0MMeLnvvH9wAornooBuzycN4vIMff1Eo9YXyHSbrB
+         YIak/+pDcAHWTB405AgguBhrUxujPkz8OpfwadyDLbMgQgXRLxnZh1SWjCG5nRiYwm
+         wVEN0B9vE/9Z6VyPrCEbiCtPVuoG5S1YthfgQdID1YFf+kohrL1I5nC52Laixlo0Zo
+         JGQIvxR0PzUoZ/P7ZoT39exgwcpj3eYIusUGoi94NK4MKYoWa0Ak+6uqrIAM4WoSA4
+         RVJbyP1FX55EMfbfALiNJculhLr/3yGx8VIC+wZljn+GGxaOGyU3913AnN+LoBJDrs
+         rcp5T7RuiTYbg==
+Received: by mail-ed1-f70.google.com with SMTP id g5-20020a056402090500b0040f28e1da47so1862047edz.8
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:13:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JbPJ3n5RfOCMAbabRRWgoVSNDfOSeOFNd1MQ9EnXwM4=;
-        b=oQKynu78CSR+YrPCYxLg0Rj2r0Z+Nj1m0eV2Rx7hfXuptQCqOqZhs22/+m8SbVlity
-         qe7w3Ogl3JHIHIU8Jko9lcX/1md9AmvHh8Cwn4FT3jxSc20k9bnpJcaXErfBJYHMeIXj
-         8Z7TsK3VF8sqwHAOM1LgF5WNY7DZG62A8CR9I/tlZsrQ8NWMVaWrEVEFIZdpJiqY/cBr
-         5X+4wy8yVQAKOfQjzlUUWRvWLeOk2tdRnmn+7syiP6GWW9Y8V92MPE3XBr4WqX/01bWJ
-         wh22BI/P3hJh/QDyB06o+zWAAsB4BnZVnXRfILYfB6IwoKsBLh2sosD4X3NyrG6YSIdF
-         PJpA==
-X-Gm-Message-State: AOAM5331sGzXuMU3HkitjDT6Ll8e+O/CsrnHTZmaWkmGNS5gJNFvqAsr
-        D64to56N5epyISJMyUtmxhdZzBkXzXWbwmx+g6Zelw==
-X-Google-Smtp-Source: ABdhPJy1a0u1XwoRZpKXxj1eL9juRcpeRxgjfgjoaYfDrYGvnCCZvt02pHQy1VA0jNtAteH0353up6Iuv2xxrq7kNBI=
-X-Received: by 2002:a05:6402:84b:b0:40f:73ea:c3c1 with SMTP id
- b11-20020a056402084b00b0040f73eac3c1mr3684618edz.169.1645027973442; Wed, 16
- Feb 2022 08:12:53 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yU0JTVfqmMQPB5NQYcUc7rbuKfmUJoXTRDxBU8L652M=;
+        b=TGn7xi5uPG1P0Uzr68caEe641MiGytwGBbuHtM62xoTRKKXuy8Brykoz6HBcN/rMqQ
+         WkB7mbZ9MaKa+5Ve5fD9XMqt6czbRjmumtv0MbVnVkh8aE4ocifqVjQHQsyl7tfqH4jr
+         qnFXW6+8BfywYlSsN6BTGHEP8wQpDsRlF/7Ir3hvwwDB/+dZFgqk6DA8U4Ggtss4/alC
+         YyldYbOmEzS7CxxVdGpg3Hr3zvljRvEz26PFiHmyW7LxOqPIY5bn0PHgVaoodVtMckyd
+         /grFYpSt2/zWnBu9iDP6Jsy1prSuzk7Sx9gUpF7BSXZIOX0glFMhxyWMxfNuY5x+xbu7
+         L6Og==
+X-Gm-Message-State: AOAM531Mt4PLbv3hycJttDCgpx+dAAKIa8sy/aDr8HlF9o3Xmcl3OA8b
+        L5kfRpk4h6CJvILkNMYwOSy7nK5CO14XFk5rceHQVXQKsNymCOiBR4VZOsNfaLb/HptJnqW/3Cc
+        CJBTcOP2OrOKMoMxCBfUg/yxJhQu4qjGzJm67duHLcQ==
+X-Received: by 2002:a17:906:38d2:b0:6b7:9639:fd74 with SMTP id r18-20020a17090638d200b006b79639fd74mr2774315ejd.215.1645028011631;
+        Wed, 16 Feb 2022 08:13:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJymIuMoqXEhQgrqUOZ0+AFR5IMCCCY5eWHy1U9oQcUI27s9rO86CRpktTGFYrnx+rEft91rZw==
+X-Received: by 2002:a17:906:38d2:b0:6b7:9639:fd74 with SMTP id r18-20020a17090638d200b006b79639fd74mr2774299ejd.215.1645028011406;
+        Wed, 16 Feb 2022 08:13:31 -0800 (PST)
+Received: from [192.168.0.110] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id 18sm67785ejj.1.2022.02.16.08.13.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 08:13:30 -0800 (PST)
+Message-ID: <6c51427a-98e2-0bbe-8f4b-37a4d9cacec7@canonical.com>
+Date:   Wed, 16 Feb 2022 17:13:30 +0100
 MIME-Version: 1.0
-References: <20220216062601.779690-1-ztong0001@gmail.com>
-In-Reply-To: <20220216062601.779690-1-ztong0001@gmail.com>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Wed, 16 Feb 2022 08:12:42 -0800
-Message-ID: <CABXOdTcZoGy3w_aVPju0DLr+Ab0C8XUsMs0+XsTW0QacR53iug@mail.gmail.com>
-Subject: Re: [PATCH] platform/chrome: cros_ec: honor acpi=off
-To:     Tong Zhang <ztong0001@gmail.com>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] dt-bindings: dma: Convert mtk-uart-apdma to DT schema
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, vkoul@kernel.org
+Cc:     robh+dt@kernel.org, sean.wang@mediatek.com, matthias.bgg@gmail.com,
+        long.cheng@mediatek.com, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220216151309.289348-1-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220216151309.289348-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 10:26 PM Tong Zhang <ztong0001@gmail.com> wrote:
->
-> when acpi=off is provided in bootarg, kernel crash with
->
->  BUG: kernel NULL pointer dereference, address: 0000000000000018
->  RIP: 0010:acpi_ns_walk_namespace+0x57/0x280
->   <TASK>
->  ? acpi_get_devices+0x140/0x140
->  cros_ec_lpc_init+0x25/0x100
->
-> Driver should check if ACPI is disabled before calling acpi_get_devices(),
-> otherwise acpi_walk_namespace() will dereference null pointer since the
-> acpi_gbl_root_node is not initialized.
-> This is a common pattern and should be fixed in ACPI framework to prevent
-> such crash in the future, but since many drivers are already doing explicit
-> check(acpi_disable) we do the same thing here.
->
-> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+On 16/02/2022 16:13, AngeloGioacchino Del Regno wrote:
+> Convert the MediaTek UART APDMA Controller binding to DT schema.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > ---
->  drivers/platform/chrome/cros_ec_lpc.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
-> index d6306d2a096f..95412a55ed8d 100644
-> --- a/drivers/platform/chrome/cros_ec_lpc.c
-> +++ b/drivers/platform/chrome/cros_ec_lpc.c
-> @@ -550,6 +550,9 @@ static int __init cros_ec_lpc_init(void)
->         int ret;
->         acpi_status status;
->
-> +       if (acpi_disable)
-
-acpi_disabled ?
-
-One does wonder why anyone would disable ACPI on any of the supported
-systems, but in either case this is wrong. The driver should not abort
-if acpi is disabled but just not call acpi_get_devices().
-
-Guenter
-
-> +               return -ENODEV;
+> v2: Fixed interrupt maxItems to 16, added interrupts/reg maxItems constraint
+>     to 8 when the dma-requests property is not present
+> 
+>  .../bindings/dma/mediatek,uart-dma.yaml       | 123 ++++++++++++++++++
+>  .../bindings/dma/mtk-uart-apdma.txt           |  56 --------
+>  2 files changed, 123 insertions(+), 56 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/dma/mtk-uart-apdma.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml b/Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
+> new file mode 100644
+> index 000000000000..67dbb2fed74c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
+> @@ -0,0 +1,123 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/dma/mediatek,uart-dma.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->         status = acpi_get_devices(ACPI_DRV_NAME, cros_ec_lpc_parse_device,
->                                   &cros_ec_lpc_acpi_device_found, NULL);
->         if (ACPI_FAILURE(status))
-> --
-> 2.25.1
->
+> +title: MediaTek UART APDMA controller
+> +
+> +maintainers:
+> +  - Long Cheng <long.cheng@mediatek.com>
+> +
+> +description: |
+> +  The MediaTek UART APDMA controller provides DMA capabilities
+> +  for the UART peripheral bus.
+> +
+> +allOf:
+> +  - $ref: "dma-controller.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt2712-uart-dma
+> +              - mediatek,mt8516-uart-dma
+> +          - const: mediatek,mt6577-uart-dma
+> +      - enum:
+> +          - mediatek,mt6577-uart-dma
+> +
+> +  reg:
+> +    minItems: 1
+> +    maxItems: 16
+> +
+> +  interrupts:
+> +    description: |
+> +      TX, RX interrupt lines for each UART APDMA channel
+> +    minItems: 1
+> +    maxItems: 16
+> +
+> +  clocks:
+> +    description: Must contain one entry for the APDMA main clock
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    const: apdma
+> +
+> +  "#dma-cells":
+> +    const: 1
+> +    description: |
+> +      The first cell specifies the UART APDMA channel number
+> +
+> +  dma-requests:
+> +    description: |
+> +      Number of virtual channels of the UART APDMA controller
+> +    maximum: 16
+> +
+> +  mediatek,dma-33bits:
+> +    type: boolean
+> +    description: Enable 33-bits UART APDMA support
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +if:
+> +  not:
+> +    anyOf:
+
+Thanks for the changes. This "anyOf" you can skip. It was needed in that
+example because multiple properties should trigger restriction of maxItems.
+
+In your case it is sufficient:
+if:
+
+  not:
+
+    required:
+
+      - dma-requests
+
+then:
+....
+
+
+Rest looks good.
+
+> +      - required:
+> +          - dma-requests
+> +then:
+> +  properties:
+> +    interrupts:
+> +      maxItems: 8
+
+
+Best regards,
+Krzysztof

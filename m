@@ -2,87 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCFF4B90E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:05:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB484B9117
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:20:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237986AbiBPTF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 14:05:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49010 "EHLO
+        id S238092AbiBPTU7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 16 Feb 2022 14:20:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235248AbiBPTFZ (ORCPT
+        with ESMTP id S238087AbiBPTUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 14:05:25 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D452599FA
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:05:12 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id v25so1775488oiv.2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:05:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=aVYmbgVTns/qU6vGaPJo+De8qlM44UBRmgs+fYad6dw=;
-        b=khs7wmXDMOrhKc1YljkX/CBjF85HvL3cBs9WN46wnqkX8Tzj8/AP3wK2Ju8tIvx5cC
-         5UGUG1f2Iw4PRGkDYPrkY1pb6Ter8qA2z1GMETDmcKh/a8HU19Z073Ja5Fmaem2ZHG0x
-         KWd4mnM6JlDnSlVcAbvWpU51IQxnK73BdonKo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=aVYmbgVTns/qU6vGaPJo+De8qlM44UBRmgs+fYad6dw=;
-        b=jxShoakK884Gak5o9OKvNmNfq2gSwrXj1LpbH37bNqjWBPxwtzP3yKRWnW82VeL7xN
-         klW+JMJIqGb94apk7p+5Iz70tpg/lmNcTKk4th40k8F4NxxmrFvGGGNu9hJLhOSSRlNt
-         hLhPD0W0MVmvHTnZ8xCYEF9BXGcMmqfBnEAcIS6tiVDWUOE5QhKsooV06JbGn5tTCRVR
-         d+RElEbt8wHPl7Bv/2o0o90+rPgRdKm/h13RbU67f1Ov0ZulfMrMWztn6vuV9npEfaKv
-         IlvVm+nxYLrCPNKvPHDWYxmyCY6PMlFCnkkG4m3Ooh39slHpdeuqTqaPa+DEIoc9OPd9
-         cj9Q==
-X-Gm-Message-State: AOAM531yAb+2xO0DXVkTGx+EZ2gS0cJZb2UW5MKf8Ic3vJSKG5I8fbqr
-        iUoBuxuB+93cUuYc4UBOPPyz0fpAlp4znO5korGF3A==
-X-Google-Smtp-Source: ABdhPJz6oTMx5SDP1atDaHjjBaVtHdu9B64jLra7yXRoRtTP6AwMJCHcJuOUO2BdKPClntlFTZ3K3BiQsE4HR4mzK2Y=
-X-Received: by 2002:a05:6808:30c:b0:2d4:655b:c8c4 with SMTP id
- i12-20020a056808030c00b002d4655bc8c4mr794909oie.90.1645038312158; Wed, 16 Feb
- 2022 11:05:12 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 16 Feb 2022 11:05:11 -0800
-MIME-Version: 1.0
-In-Reply-To: <YgyNScQJNVjJpqEc@google.com>
-References: <20220211012510.1198155-1-swboyd@chromium.org> <20220211012510.1198155-2-swboyd@chromium.org>
- <YgyNScQJNVjJpqEc@google.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 16 Feb 2022 11:05:11 -0800
-Message-ID: <CAE-0n51vdZ=PLXx5Hq+R+F7KwDRPBauN0XjvE_qFtNoHiRWU2w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] Input: Extract ChromeOS vivaldi physmap show function
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     benjamin.tissoires@redhat.com, Jiri Kosina <jikos@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        "Sean O'Brien" <seobrien@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 16 Feb 2022 14:20:54 -0500
+X-Greylist: delayed 857 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Feb 2022 11:20:41 PST
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1963E2AF3C5;
+        Wed, 16 Feb 2022 11:20:40 -0800 (PST)
+Received: from [100.55.237.147] (unknown [106.121.183.245])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxvuACSw1iK0cCAA--.7848S3;
+        Thu, 17 Feb 2022 03:05:39 +0800 (CST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v8 2/3] MIPS: Loongson64: dts: update the display controller device node
+Date:   Thu, 17 Feb 2022 03:05:38 +0800
+Message-Id: <911122E5-27A8-4584-987D-A9F908351800@loongson.cn>
+References: <76e3d3f2-c457-2940-10ea-834f13e526cb@flygoat.com>
+Cc:     Sui Jingfeng <15330273260@189.cn>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>, Li Yi <liyi@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+In-Reply-To: <76e3d3f2-c457-2940-10ea-834f13e526cb@flygoat.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-Mailer: iPhone Mail (18D61)
+X-CM-TRANSID: AQAAf9CxvuACSw1iK0cCAA--.7848S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFy3Aw43tr18AF17Jw43Jrb_yoW8XF4kpw
+        13Ca4fKFsrJF9rG3Z3tF18Wr15ZFWrArnFgFsxtw17WF9xAa1jvr45KFs8XrW3ZFy8AFWj
+        v3yrKrW7KF1UCF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9j14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
+        628vn2kIc2xKxwCY02Avz4vE14v_WwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
+        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
+        67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
+        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1l
+        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
+        C2KfnxnUUI43ZEXa7VUjjYLDUUUUU==
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Dmitry Torokhov (2022-02-15 21:36:09)
-> On Thu, Feb 10, 2022 at 05:25:07PM -0800, Stephen Boyd wrote:
-> >  drivers/input/Kconfig                 |  7 +++++
-> >  drivers/input/Makefile                |  1 +
-> >  drivers/input/keyboard/Kconfig        |  2 ++
-> >  drivers/input/keyboard/atkbd.c        | 22 +++++----------
-> >  drivers/input/keyboard/cros_ec_keyb.c | 32 ++++++++--------------
-> >  drivers/input/vivaldi-keymap.c        | 39 +++++++++++++++++++++++++++
-> >  include/linux/input/vivaldi-keymap.h  | 28 +++++++++++++++++++
->
-> Since you called the config INPUT_VIVALDIFMAP I think we should call
-> these files vivaldi-fmap.(h|c) as well. They are not really keymaps.
+Oh，sorry for that. This is what i am write for our downstream 4.19.190 kernel，I write it long time ago. It shouldn’t be included in this patch set. Please ignore that, I will remove it at next version.
 
-Sure. I used 'f' for 'function'. It could also be INPUT_VIVALDI_PHYSMAP
-and vivaldi-physmap.(h|c) if that's more appropriate. I'll resend this
-with fmap and we can take it from there.
+I am sorry introduce “bug” again.
+
+
+发自我的iPhone
+
+> 在 2022年2月17日，上午2:44，Jiaxun Yang <jiaxun.yang@flygoat.com> 写道：
+> 
+> ﻿
+> 
+>> 在 2022/2/16 18:17, Sui Jingfeng 写道:
+>> From: suijingfeng <suijingfeng@loongson.cn>
+>> 
+>> The display controller is a pci device, its PCI vendor id is 0x0014
+>> its PCI device id is 0x7a06.
+>> 
+>> 1) In order to let the lsdc kms driver to know which chip the DC is
+>>    contained in, we add different compatible for different chip.
+>> 
+>> 2) Add display controller device node for ls2k1000 SoC
+>> 
+>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+>> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+>> ---
+>>  .../loongson/loongson,display-controller.yaml | 114 ++++++++++++++++++
+>>  .../display/loongson/loongson-drm.txt         |  16 +++
+> ^ Is loongson-drm.txt intentional?
+> It seems irrelevant....
+> 
+> Thanks.
+>>  .../boot/dts/loongson/loongson64-2k1000.dtsi  |   8 ++
+>>  arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   7 +-
+>>  4 files changed, 140 insertions(+), 5 deletions(-)
+>>  create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+>>  create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson-drm.txt
+> [...]
+> - Jiaxun
+

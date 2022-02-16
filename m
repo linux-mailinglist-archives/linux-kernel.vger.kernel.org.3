@@ -2,71 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1904B91BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:49:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C9094B917F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238321AbiBPTta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 14:49:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45804 "EHLO
+        id S238183AbiBPTly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 14:41:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238313AbiBPTtY (ORCPT
+        with ESMTP id S237789AbiBPTlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 14:49:24 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3680202068;
-        Wed, 16 Feb 2022 11:49:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645040951; x=1676576951;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=uttn9/DySER6QLvzk9CdFYOB7YGwLWPHJwLCb82MXjs=;
-  b=GeplCpSTgNqI3KyGVX5tJ1AdWTpynDUArU4iE34ooMR4pQTQbEe1/q18
-   x6Y9+QjK0xsx3UBbaDErwX3vE6lOmrPjYCwzd2kSeW2n40cZFkq8aZo1A
-   fX8hSw9azQ8RzfO0P1ag+bQQT+A6RGM752kY1sebmJKXL5ozV5Y1ylh4o
-   4=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 16 Feb 2022 11:49:11 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 11:49:11 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 16 Feb 2022 11:49:10 -0800
-Received: from [10.111.168.21] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 16 Feb
- 2022 11:49:08 -0800
-Message-ID: <a65a62ab-427f-3a5a-b633-2c457f797dab@quicinc.com>
-Date:   Wed, 16 Feb 2022 11:49:03 -0800
+        Wed, 16 Feb 2022 14:41:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAE815A3D;
+        Wed, 16 Feb 2022 11:41:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D55056185A;
+        Wed, 16 Feb 2022 19:41:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F560C004E1;
+        Wed, 16 Feb 2022 19:41:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645040495;
+        bh=kehotYmjeujCHApxl69MP1JNJIRXwFHOlF7rBNyRfaY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=t8YWuJkNOtGY2bo1h6XlXPm7wSf9R9FKNjH3l2wCjM++U+h43Be+QKRqq7qYuF/j9
+         yAvj3FV5G7ZtVSeFsQSTzdMg/p9q0bQr5o/ELPqmuJclkWk2mn1rUfkmL5YZ5QGCEw
+         mEnH88aRVuxrWFuxERh44oYeqrMpnAWwmf+7+81m20DDdOyIf6q1p5Urt8EXT42Omj
+         N1rmfhffK3kFs/TKjATvrKlXIhaOg36YWG/tFv+RZYFlKMGJMgDIa7/Zb4hswn9mfP
+         N/Uipac+7izk+hLnpXKyoGstnrcDBqLosk/yhmoDsNe4zdjIeYiC1woYKn/bvXDvGr
+         6zxEADlSYITsg==
+Date:   Wed, 16 Feb 2022 13:49:15 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] ath: Replace zero-length arrays with flexible-array
+ members
+Message-ID: <20220216194915.GA904081@embeddedor>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [REPOST PATCH v4 04/13] drm/msm/disp/dpu1: Add support for DSC in
- pingpong block
-Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>
-References: <20220210103423.271016-1-vkoul@kernel.org>
- <20220210103423.271016-5-vkoul@kernel.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20220210103423.271016-5-vkoul@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,104 +58,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There is a regular need in the kernel to provide a way to declare
+having a dynamically sized set of trailing elements in a structure.
+Kernel code should always use “flexible array members”[1] for these
+cases. The older style of one-element or zero-length arrays should
+no longer be used[2].
 
+[1] https://en.wikipedia.org/wiki/Flexible_array_member
+[2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
 
-On 2/10/2022 2:34 AM, Vinod Koul wrote:
-> In SDM845, DSC can be enabled by writing to pingpong block registers, so
-> add support for DSC in hw_pp
-> 
-> Reviewed-by: Abhinav Kumar <abhinavk@codeaurora.org>
+Link: https://github.com/KSPP/linux/issues/78
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/net/wireless/ath/spectral_common.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-For the sake of uniformity, please use
+diff --git a/drivers/net/wireless/ath/spectral_common.h b/drivers/net/wireless/ath/spectral_common.h
+index e14f374f97d4..fe187c1fbeb0 100644
+--- a/drivers/net/wireless/ath/spectral_common.h
++++ b/drivers/net/wireless/ath/spectral_common.h
+@@ -108,7 +108,7 @@ struct fft_sample_ath10k {
+ 	u8 avgpwr_db;
+ 	u8 max_exp;
+ 
+-	u8 data[0];
++	u8 data[];
+ } __packed;
+ 
+ struct fft_sample_ath11k {
+@@ -123,7 +123,7 @@ struct fft_sample_ath11k {
+ 	__be32 tsf;
+ 	__be32 noise;
+ 
+-	u8 data[0];
++	u8 data[];
+ } __packed;
+ 
+ #endif /* SPECTRAL_COMMON_H */
+-- 
+2.27.0
 
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->   .../gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c   | 32 +++++++++++++++++++
->   .../gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h   | 14 ++++++++
->   2 files changed, 46 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-> index 55766c97c4c8..47c6ab6caf95 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-> @@ -28,6 +28,9 @@
->   #define PP_FBC_MODE                     0x034
->   #define PP_FBC_BUDGET_CTL               0x038
->   #define PP_FBC_LOSSY_MODE               0x03C
-> +#define PP_DSC_MODE                     0x0a0
-> +#define PP_DCE_DATA_IN_SWAP             0x0ac
-> +#define PP_DCE_DATA_OUT_SWAP            0x0c8
->   
->   #define PP_DITHER_EN			0x000
->   #define PP_DITHER_BITDEPTH		0x004
-> @@ -245,6 +248,32 @@ static u32 dpu_hw_pp_get_line_count(struct dpu_hw_pingpong *pp)
->   	return line;
->   }
->   
-> +static int dpu_hw_pp_dsc_enable(struct dpu_hw_pingpong *pp)
-> +{
-> +	struct dpu_hw_blk_reg_map *c = &pp->hw;
-> +
-> +	DPU_REG_WRITE(c, PP_DSC_MODE, 1);
-> +	return 0;
-> +}
-> +
-> +static void dpu_hw_pp_dsc_disable(struct dpu_hw_pingpong *pp)
-> +{
-> +	struct dpu_hw_blk_reg_map *c = &pp->hw;
-> +
-> +	DPU_REG_WRITE(c, PP_DSC_MODE, 0);
-> +}
-> +
-> +static int dpu_hw_pp_setup_dsc(struct dpu_hw_pingpong *pp)
-> +{
-> +	struct dpu_hw_blk_reg_map *pp_c = &pp->hw;
-> +	int data;
-> +
-> +	data = DPU_REG_READ(pp_c, PP_DCE_DATA_OUT_SWAP);
-> +	data |= BIT(18); /* endian flip */
-> +	DPU_REG_WRITE(pp_c, PP_DCE_DATA_OUT_SWAP, data);
-> +	return 0;
-> +}
-> +
->   static void _setup_pingpong_ops(struct dpu_hw_pingpong *c,
->   				unsigned long features)
->   {
-> @@ -256,6 +285,9 @@ static void _setup_pingpong_ops(struct dpu_hw_pingpong *c,
->   	c->ops.get_autorefresh = dpu_hw_pp_get_autorefresh_config;
->   	c->ops.poll_timeout_wr_ptr = dpu_hw_pp_poll_timeout_wr_ptr;
->   	c->ops.get_line_count = dpu_hw_pp_get_line_count;
-> +	c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
-> +	c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
-> +	c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
->   
->   	if (test_bit(DPU_PINGPONG_DITHER, &features))
->   		c->ops.setup_dither = dpu_hw_pp_setup_dither;
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h
-> index 89d08a715c16..12758468d9ca 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h
-> @@ -124,6 +124,20 @@ struct dpu_hw_pingpong_ops {
->   	 */
->   	void (*setup_dither)(struct dpu_hw_pingpong *pp,
->   			struct dpu_hw_dither_cfg *cfg);
-> +	/**
-> +	 * Enable DSC
-> +	 */
-> +	int (*enable_dsc)(struct dpu_hw_pingpong *pp);
-> +
-> +	/**
-> +	 * Disable DSC
-> +	 */
-> +	void (*disable_dsc)(struct dpu_hw_pingpong *pp);
-> +
-> +	/**
-> +	 * Setup DSC
-> +	 */
-> +	int (*setup_dsc)(struct dpu_hw_pingpong *pp);
->   };
->   
->   struct dpu_hw_merge_3d;

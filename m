@@ -2,180 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 039CC4B8C33
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79ED34B8C31
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235465AbiBPPPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 10:15:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39066 "EHLO
+        id S235451AbiBPPPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 10:15:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235515AbiBPPPs (ORCPT
+        with ESMTP id S231866AbiBPPPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 10:15:48 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64C62A39E8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 07:15:35 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id p15so5308481ejc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 07:15:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=N8yWtnRDmiBWo6FCFDEEJqCLqRrHkWjRAVi+s2lLvSo=;
-        b=f3BAJ3dmwr6zzbFGmJ1HHs6XNKfX2cnRHac2LOuMblS+kKXgin+3mpVmJPnogMaLRf
-         66LRYY89f9h/mtVellTbQy7ovV/L9QoA5GlYu2vTk25iirrtcx+xBih3GxkY7bqwPzhe
-         LdY1iDVoEVR5IVbVqFUAH+oBTC/zcXdvuw+DPR7mMnbwezq1SEVrMtz4kr1s2c+4GlJe
-         A0izkNiPQum40m5xPDgOQEQBQu3HvpenKgh3Z5XOqNhxjwOYDEP+j2eu0utMsqX0Ud+C
-         78ZW4jsF03+fDmeodT7K2ieDUaBhMKOeU6HAg2d7rz8WUdQOe5ZtGo9kyfF7qtfw/IhD
-         zXVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N8yWtnRDmiBWo6FCFDEEJqCLqRrHkWjRAVi+s2lLvSo=;
-        b=L9/kaNmxxamBHZySO4AUlpbxLNMUZWzoA2GgYPwDvxag1HDu0DbvE4j6nt//OLsj6F
-         hf6ugTGxEMZsSQF183g+jVQdY8+z0X4s7ce/5XuGVwo9tnrhV6QIqdcAo2vouoFAR/j2
-         +kOgBpvnkQmZEZgN007XmRMVZluxfbRLOssP414DEeaeZ16r3AVKTUkJH1BWko349Z+3
-         c0eC6rx9M2y8VyshRChUplLmmnM26x3BhP1S6vz+6S55PC2hT3E63MoCH0MeuXY74Bd5
-         BOes8tgLgEOjHFuqqLv9oKrpI2jedVJGK6ZsUbRaFjDyMd/3q8t7lBe+JcPOBe2rI367
-         No3A==
-X-Gm-Message-State: AOAM531wbrxNrTnElJGBMNF38TRo75cMs8a1zBlFrxV3boQwTbKsUtO7
-        j6Q2izsGQAvQEXB/Bpv1yRb22GU3P6lm3NGEkh85+Q==
-X-Google-Smtp-Source: ABdhPJy0CGS84sjL2SjZudEL5ngyzOt2m9B79Og1r9toUHuFOPMSR7rbgPdAC8J/lBTx18bnsymSv3yQyOuGj1IQE9I=
-X-Received: by 2002:a17:907:72c3:b0:6ce:5256:1125 with SMTP id
- du3-20020a17090772c300b006ce52561125mr2616388ejc.697.1645024534258; Wed, 16
- Feb 2022 07:15:34 -0800 (PST)
-MIME-Version: 1.0
-References: <543efc25-9b99-53cd-e305-d8b4d917b64b@intel.com>
- <20220215192233.8717-1-bgeffon@google.com> <YgwCuGcg6adXAXIz@kroah.com>
- <CADyq12wByWhsHNOnokrSwCDeEhPdyO6WNJNjpHE1ORgKwwwXgg@mail.gmail.com> <YgzMTrVMCVt+n7cE@kroah.com>
-In-Reply-To: <YgzMTrVMCVt+n7cE@kroah.com>
-From:   Brian Geffon <bgeffon@google.com>
-Date:   Wed, 16 Feb 2022 10:14:58 -0500
-Message-ID: <CADyq12xwzZG+RZYvXdeB=XT_gyo-YHqqS==91=2=WOmJd4mxiQ@mail.gmail.com>
-Subject: Re: [PATCH stable 5.4,5.10] x86/fpu: Correct pkru/xstate inconsistency
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Wed, 16 Feb 2022 10:15:35 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C521D11C0F;
+        Wed, 16 Feb 2022 07:15:22 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 5D49C218B0;
+        Wed, 16 Feb 2022 15:15:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645024521; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yBnvgUiufkd6hqXyIL1xCUzZ9EdBPJ7jQt3pk+22Jeo=;
+        b=aWHBGySjkoi4X4eJw6em22aIBrUvu9NxLgBGA1YPe5teGkVd+OZMbfz5mAR/H5p27cqtNr
+        eTyibmLvFW46B/0440TTtOsAILpkMgsqB/KGMtndC8IzoufDHI25QQen3Or6hJ/HuWla6K
+        Pa5Mx18v2FogkqbxvqZV2A45oG5hbUQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645024521;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yBnvgUiufkd6hqXyIL1xCUzZ9EdBPJ7jQt3pk+22Jeo=;
+        b=LP1Mp5P/8Rc3AyVBb8kXt+yBGl6ouToT79WXn4Nyw3u61X15U3AEuc87d4w0SeVJ1668cR
+        KD0RqNXhlm6bqmAA==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id EBB23A3B83;
+        Wed, 16 Feb 2022 15:15:20 +0000 (UTC)
+Date:   Wed, 16 Feb 2022 16:15:20 +0100 (CET)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+cc:     =?UTF-8?Q?F=C4=81ng-ru=C3=AC_S=C3=B2ng?= <maskray@google.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Willis Kung <williskung@google.com>,
-        Guenter Roeck <groeck@google.com>,
-        Borislav Petkov <bp@suse.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Andy Lutomirski <luto@kernel.org>,
-        "# v4 . 10+" <stable@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
+ unique-symbol` is available
+In-Reply-To: <20220211183529.q7qi2qmlyuscxyto@treble>
+Message-ID: <alpine.LSU.2.21.2202161606430.1475@pobox.suse.cz>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185752.1226407-3-alexandr.lobakin@intel.com> <20220211174130.xxgjoqr2vidotvyw@treble> <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
+ <20220211183529.q7qi2qmlyuscxyto@treble>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: multipart/mixed; BOUNDARY="1678380546-2016212218-1645024395=:1475"
+Content-ID: <alpine.LSU.2.21.2202161614020.1475@pobox.suse.cz>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 5:05 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Feb 15, 2022 at 04:32:48PM -0500, Brian Geffon wrote:
-> > On Tue, Feb 15, 2022 at 2:45 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--1678380546-2016212218-1645024395=:1475
+Content-Type: text/plain; CHARSET=UTF-8
+Content-Transfer-Encoding: 8BIT
+Content-ID: <alpine.LSU.2.21.2202161614021.1475@pobox.suse.cz>
+
+On Fri, 11 Feb 2022, Josh Poimboeuf wrote:
+
+> On Fri, Feb 11, 2022 at 10:05:02AM -0800, Fāng-ruì Sòng wrote:
+> > On Fri, Feb 11, 2022 at 9:41 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
 > > >
-> > > On Tue, Feb 15, 2022 at 11:22:33AM -0800, Brian Geffon wrote:
-> > > > When eagerly switching PKRU in switch_fpu_finish() it checks that
-> > > > current is not a kernel thread as kernel threads will never use PKRU.
-> > > > It's possible that this_cpu_read_stable() on current_task
-> > > > (ie. get_current()) is returning an old cached value. To resolve this
-> > > > reference next_p directly rather than relying on current.
+> > > On Wed, Feb 09, 2022 at 07:57:39PM +0100, Alexander Lobakin wrote:
+> > > > Position-based search, which means that if there are several symbols
+> > > > with the same name, the user needs to additionally provide the
+> > > > "index" of a desired symbol, is fragile. For example, it breaks
+> > > > when two symbols with the same name are located in different
+> > > > sections.
 > > > >
-> > > > As written it's possible when switching from a kernel thread to a
-> > > > userspace thread to observe a cached PF_KTHREAD flag and never restore
-> > > > the PKRU. And as a result this issue only occurs when switching
-> > > > from a kernel thread to a userspace thread, switching from a non kernel
-> > > > thread works perfectly fine because all that is considered in that
-> > > > situation are the flags from some other non kernel task and the next fpu
-> > > > is passed in to switch_fpu_finish().
-> > > >
-> > > > This behavior only exists between 5.2 and 5.13 when it was fixed by a
-> > > > rewrite decoupling PKRU from xstate, in:
-> > > >   commit 954436989cc5 ("x86/fpu: Remove PKRU handling from switch_fpu_finish()")
-> > > >
-> > > > Unfortunately backporting the fix from 5.13 is probably not realistic as
-> > > > it's part of a 60+ patch series which rewrites most of the PKRU handling.
-> > > >
-> > > > Fixes: 0cecca9d03c9 ("x86/fpu: Eager switch PKRU state")
-> > > > Signed-off-by: Brian Geffon <bgeffon@google.com>
-> > > > Signed-off-by: Willis Kung <williskung@google.com>
-> > > > Tested-by: Willis Kung <williskung@google.com>
-> > > > Cc: <stable@vger.kernel.org> # v5.4.x
-> > > > Cc: <stable@vger.kernel.org> # v5.10.x
-> > > > ---
-> > > >  arch/x86/include/asm/fpu/internal.h | 13 ++++++++-----
-> > > >  arch/x86/kernel/process_32.c        |  6 ++----
-> > > >  arch/x86/kernel/process_64.c        |  6 ++----
-> > > >  3 files changed, 12 insertions(+), 13 deletions(-)
+> > > > Since a while, LD has a flag `-z unique-symbol` which appends
+> > > > numeric suffixes to the functions with the same name (in symtab
+> > > > and strtab). It can be used to effectively prevent from having
+> > > > any ambiguity when referring to a symbol by its name.
 > > >
-> > > So this is ONLY for 5.4.y and 5.10.y?  I'm really really loath to take
-> > > non-upstream changes as 95% of the time (really) it goes wrong.
-> >
-> > That's correct, this bug was introduced in 5.2 and that code was
-> > completely refactored in 5.13 indirectly fixing it.
->
+> > > In the patch description can you also give the version of binutils (and
+> > > possibly other linkers) which have the flag?
+> > 
+> > GNU ld>=2.36 supports -z unique-symbol. ld.lld doesn't support -z unique-symbol.
+> > 
+> > I subscribe to llvm@lists.linux.dev and happen to notice this message
+> > (can't keep up with the changes...)
+> > I am a bit concerned with this option and replied last time on
+> > https://lore.kernel.org/r/20220105032456.hs3od326sdl4zjv4@google.com
+> > 
+> > My full reasoning is on
+> > https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
+> 
+> Ah, right.  Also discussed here:
+> 
+>   https://lore.kernel.org/all/20210123225928.z5hkmaw6qjs2gu5g@google.com/T/#u
+>   https://lore.kernel.org/all/20210125172124.awabevkpvq4poqxf@treble/
+> 
+> I'm not qualified to comment on LTO/PGO stability issues, but it doesn't
+> sound good.  And we want to support livepatch for LTO kernels.
 
-Hi Greg,
+Hm, bear with me, because I am very likely missing something which is 
+clear to everyone else...
 
-> What series of commits contain that work?
+Is the stability really a problem for the live patching (and I am talking 
+about the live patching only here. It may be a problem elsewhere, but I am 
+just trying to understand.)? I understand that two different kernel builds 
+could have a different name mapping between the original symbols and their 
+unique renames. Not nice. But we can prepare two different live patches 
+for these two different kernels. Something one would like to avoid if 
+possible, but it is not impossible. Am I missing something?
+ 
+> Also I realized that this flag would have a negative effect on
+> kpatch-build, as it currently does its analysis on .o files.  So it
+> would have to figure out how to properly detect function renames, to
+> avoid patching the wrong function for example.
 
-This is the series,
-https://lore.kernel.org/all/20210623120127.327154589@linutronix.de/,
-it does quite a bit of cleanup to correct the larger problem of having
-pkru merged into xstate.
+Yes, that is unfortunate. And not only for kpatch-build.
 
-> And again, why not just take them?  What is wrong with that if this is
-> such a big issue?
+> And if LLD doesn't plan to support the flag then it will be a headache
+> for livepatch (and the kernel in general) to deal with the divergent
+> configs.
 
-Anything is possible I suppose but looking through the series it seems
-that it's not going to apply cleanly so we're going to end up with
-something that, if we made it work, would look very different and
-would touch a much larger cross section of code. If the concern here
-is risk of things going wrong, attempting to pull back or cherry-pick
-parts of this series seems riskier. However, if we don't attempt to
-pull back all those patches I will likely be proposing at least one
-more small patch for 5.4 and 5.10 to fix PKRU in these kernels because
-right now it's broken, particularly on AMD processors as Dave
-mentioned.
+True.
 
->
-> > > How was this tested, and what do the maintainers of this subsystem
-> > > think?  And will you be around to fix the bugs in this when they are
-> > > found?
-> >
-> > This has been trivial to reproduce, I've used a small repro which I've
-> > put here: https://gist.github.com/bgaff/9f8cbfc8dd22e60f9492e4f0aff8f04f
-> > , I also was able to reproduce this using the protection_keys self
-> > tests on a 11th Gen Core i5-1135G7. I'm happy to commit to addressing
-> > any bugs that may appear. I'll see what the maintainers say, but there
-> > is also a smaller fix that just involves using this_cpu_read() in
-> > switch_fpu_finish() for this specific issue, although that approach
-> > isn't as clean.
->
-> Can you add the test to the in-kernel tests so that we make sure it is
-> fixed and never comes back?
+The position-based approach clearly shows its limits. I like <file+func> 
+approach based on kallsyms tracking, that you proposed elsewhere in the 
+thread, more.
 
-I'm already able to reproduce it with the kernel selftests. To be
-honest, I'm not sure why this hasn't been reported yet. I could be
-doing something horribly wrong. But it seems the likely reason is that
-my compiler is doing what it's allowed to do, which is optimize the
-load of current_task. current -> get_current() ->
-this_cpu_read_stable(current_task) is allowed to read a cached value.
-Perhaps gcc is just not taking advantage of that optimization, I'm not
-sure. But writing to current_task and then immediately reading it back
-via this_cpu_read_stable() can be problematic for this reason, and the
-disassembled code shows that this happening.
-
-Brian
-
->
-> thanks,
->
-> greg k-h
+Miroslav
+--1678380546-2016212218-1645024395=:1475--

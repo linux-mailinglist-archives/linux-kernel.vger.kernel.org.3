@@ -2,152 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E889A4B913E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 051BE4B9147
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233837AbiBPTeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 14:34:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50908 "EHLO
+        id S234767AbiBPTgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 14:36:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233203AbiBPTeE (ORCPT
+        with ESMTP id S233179AbiBPTga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 14:34:04 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BEC1F464D;
-        Wed, 16 Feb 2022 11:33:51 -0800 (PST)
+        Wed, 16 Feb 2022 14:36:30 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3810291FAE
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:36:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645040031; x=1676576031;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vdbKgdDHdZFkbCvwB5I4kA5Ddz4ZRh56woj0KUxGhj0=;
-  b=hkXPVTUKloqexR8PQHV1/f1mO/4wOO5Xo3HAKCzSQp6t/o1Zd+LpV2/9
-   o07Kx42cWei93bgqOxLgrCS8MkaqzZ7T8MgwTM8dMKtwIMunpO6/JfMaA
-   qs5YsGcgZ/beviocAlX6P/3TBkyDNtQLZscyOvwiCp3m3iM2jskj3wOg7
-   cNOeyprbSe1VQItqEfIwvFo92EM4AlSD2ILMf4v7DVhoXnuwK9sSX0urd
-   kWXwhj1ZCWI6e6pBRbf+uKM/vqBs2JbHpXBv59q+Nizhhh8VbFZJPvJgu
-   WwXjxtt9rANwLlWDTtH4eBxkm14KifdK+bw920L+BRyafObBqqFK4dcQC
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="230669732"
+  t=1645040177; x=1676576177;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5szMQlEDye63aiiwYqhef/hAzPhF9F7nlQ69TY5qzo0=;
+  b=Q8dIEuRKVJZr3/c/x3t2QaCssnt1VelOVfsCUBc3qxjwkGB5jmJHonBF
+   vRxmlx2MsvMXgtbpenP+N6zhFZ34h2iU1lsWiv9t5ABe5GNX9klgfviV7
+   aQtFYWpsR+c17itwvlEEPHYBCwccHTOl+ptYhIbjNMKGS+Q5MX3Siooq2
+   BcqvALbQHwoguBlneUG2QEck4QlHgxo7uI4zDdYyKsD5CiIH+UPyS0xrP
+   9h+r8B7nattM5pS1qSVFqKoB9WMdAFczojZ0MB0gRDunQdyvcsRDvqMxT
+   IJ3giVJDPE6ORQyNf8IKSqonccysMortzw89n35p51dbMYEbpNT/5DV+e
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="275290469"
 X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="230669732"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 11:33:51 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="275290469"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 11:36:17 -0800
 X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="571437048"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 16 Feb 2022 11:33:48 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKQ3f-000B3n-D4; Wed, 16 Feb 2022 19:33:47 +0000
-Date:   Thu, 17 Feb 2022 03:33:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mans Rullgard <mans@mansr.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Juergen Borleis <kernel@pengutronix.de>,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH] net: dsa: lan9303: add VLAN IDs to master device
-Message-ID: <202202170327.RiXqUeGc-lkp@intel.com>
-References: <20220216151111.6376-1-mans@mansr.com>
+   d="scan'208";a="529669418"
+Received: from oux.sc.intel.com ([10.3.52.57])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 11:36:17 -0800
+From:   Yian Chen <yian.chen@intel.com>
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Sohil Mehta <sohil.mehta@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Yian Chen <yian.chen@intel.com>
+Subject: [PATCH] iommu/vt-d: Enable ATS for the devices in SATC table
+Date:   Wed, 16 Feb 2022 11:36:09 -0800
+Message-Id: <20220216193609.686107-1-yian.chen@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216151111.6376-1-mans@mansr.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mans,
+Starting from Intel VT-d v3.2, Intel platform BIOS can provide
+additional SATC table structure. SATC table includes a list of
+SoC integrated devices that support ATC (Address translation
+cache).
 
-Thank you for the patch! Yet something to improve:
+Enabling ATC (via ATS capability) can be a functional requirement
+for SATC device operation or an optional to enhance device
+performance/functionality. This is determined by the bit of
+ATC_REQUIRED in SATC table. When IOMMU is working in scalable
+mode, software chooses to always enable ATS for every device in
+SATC table because Intel SoC devices in SATC table are trusted
+to use ATS.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.17-rc4 next-20220216]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On the other hand, if IOMMU is in legacy mode, ATS of SATC
+capable devices can work transparently to software and be
+automatically enabled by IOMMU hardware. As the result,
+there is no need for software to enable ATS on these devices.
 
-url:    https://github.com/0day-ci/linux/commits/Mans-Rullgard/net-dsa-lan9303-add-VLAN-IDs-to-master-device/20220216-231201
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c5d9ae265b105d9a67575fb67bd4650a6fc08e25
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220217/202202170327.RiXqUeGc-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/960beb0e82f5d219a4f7e8bdcc49fb548a82a69d
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Mans-Rullgard/net-dsa-lan9303-add-VLAN-IDs-to-master-device/20220216-231201
-        git checkout 960beb0e82f5d219a4f7e8bdcc49fb548a82a69d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/dsa/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/dsa/lan9303-core.c:1095:2: error: implicit declaration of function 'vlan_vid_add' [-Werror,-Wimplicit-function-declaration]
-           vlan_vid_add(cpu_dp->master, htons(ETH_P_8021Q), port);
-           ^
->> drivers/net/dsa/lan9303-core.c:1111:2: error: implicit declaration of function 'vlan_vid_del' [-Werror,-Wimplicit-function-declaration]
-           vlan_vid_del(cpu_dp->master, htons(ETH_P_8021Q), port);
-           ^
-   2 errors generated.
-
-
-vim +/vlan_vid_add +1095 drivers/net/dsa/lan9303-core.c
-
-  1082	
-  1083	static int lan9303_port_enable(struct dsa_switch *ds, int port,
-  1084				       struct phy_device *phy)
-  1085	{
-  1086		struct lan9303 *chip = ds->priv;
-  1087		struct dsa_port *cpu_dp;
-  1088	
-  1089		if (!dsa_is_user_port(ds, port))
-  1090			return 0;
-  1091	
-  1092		dsa_switch_for_each_cpu_port(cpu_dp, ds)
-  1093			break;
-  1094	
-> 1095		vlan_vid_add(cpu_dp->master, htons(ETH_P_8021Q), port);
-  1096	
-  1097		return lan9303_enable_processing_port(chip, port);
-  1098	}
-  1099	
-  1100	static void lan9303_port_disable(struct dsa_switch *ds, int port)
-  1101	{
-  1102		struct lan9303 *chip = ds->priv;
-  1103		struct dsa_port *cpu_dp;
-  1104	
-  1105		if (!dsa_is_user_port(ds, port))
-  1106			return;
-  1107	
-  1108		dsa_switch_for_each_cpu_port(cpu_dp, ds)
-  1109			break;
-  1110	
-> 1111		vlan_vid_del(cpu_dp->master, htons(ETH_P_8021Q), port);
-  1112	
-  1113		lan9303_disable_processing_port(chip, port);
-  1114		lan9303_phy_write(ds, chip->phy_addr_base + port, MII_BMCR, BMCR_PDOWN);
-  1115	}
-  1116	
-
+Signed-off-by: Yian Chen <yian.chen@intel.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/iommu/intel/iommu.c | 53 ++++++++++++++++++++++++++++++++++---
+ include/linux/intel-iommu.h |  2 +-
+ 2 files changed, 51 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 92fea3fbbb11..58a80cec50bb 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -872,7 +872,6 @@ static bool iommu_is_dummy(struct intel_iommu *iommu, struct device *dev)
+ 
+ 	return false;
+ }
+-
+ struct intel_iommu *device_to_iommu(struct device *dev, u8 *bus, u8 *devfn)
+ {
+ 	struct dmar_drhd_unit *drhd = NULL;
+@@ -2684,7 +2683,7 @@ static struct dmar_domain *dmar_insert_one_dev_info(struct intel_iommu *iommu,
+ 
+ 		if (ecap_dev_iotlb_support(iommu->ecap) &&
+ 		    pci_ats_supported(pdev) &&
+-		    dmar_find_matched_atsr_unit(pdev))
++		    dmar_ats_supported(pdev, iommu))
+ 			info->ats_supported = 1;
+ 
+ 		if (sm_supported(iommu)) {
+@@ -4020,7 +4019,42 @@ static void intel_iommu_free_dmars(void)
+ 	}
+ }
+ 
+-int dmar_find_matched_atsr_unit(struct pci_dev *dev)
++/* dev_satc_state - Find if dev is in a DMAR SATC table
++ *
++ * return value:
++ *    1: dev is in STAC table and ATS is required
++ *    0: dev is in SATC table and ATS is optional
++ *    -1: dev isn't in SATC table
++ */
++static int dev_satc_state(struct pci_dev *dev)
++{
++	int i, ret = -1;
++	struct device *tmp;
++	struct dmar_satc_unit *satcu;
++	struct acpi_dmar_satc *satc;
++
++	dev = pci_physfn(dev);
++	rcu_read_lock();
++
++	list_for_each_entry_rcu(satcu, &dmar_satc_units, list) {
++		satc = container_of(satcu->hdr, struct acpi_dmar_satc, header);
++		if (satc->segment != pci_domain_nr(dev->bus))
++			continue;
++		for_each_dev_scope(satcu->devices, satcu->devices_cnt, i, tmp)
++			if (to_pci_dev(tmp) == dev) {
++				if (satc->flags)
++					ret = 1;
++				else
++					ret = 0;
++				goto out;
++			}
++	}
++out:
++	rcu_read_unlock();
++	return ret;
++}
++
++int dmar_ats_supported(struct pci_dev *dev, struct intel_iommu *iommu)
+ {
+ 	int i, ret = 1;
+ 	struct pci_bus *bus;
+@@ -4030,6 +4064,19 @@ int dmar_find_matched_atsr_unit(struct pci_dev *dev)
+ 	struct dmar_atsr_unit *atsru;
+ 
+ 	dev = pci_physfn(dev);
++	i = dev_satc_state(dev);
++	if (i >= 0) {
++		/* This dev supports ATS as it is in SATC table!
++		 * When IOMMU is in legacy mode, enabling ATS is done
++		 * automatically by HW for the device that requires
++		 * ATS, hence OS should not enable this device ATS
++		 * to avoid duplicated TLB invalidation
++		 */
++		if (i && !sm_supported(iommu))
++			ret = 0;
++		return ret;
++	}
++
+ 	for (bus = dev->bus; bus; bus = bus->parent) {
+ 		bridge = bus->self;
+ 		/* If it's an integrated device, allow ATS */
+diff --git a/include/linux/intel-iommu.h b/include/linux/intel-iommu.h
+index 69230fd695ea..fe9fd417d611 100644
+--- a/include/linux/intel-iommu.h
++++ b/include/linux/intel-iommu.h
+@@ -717,7 +717,7 @@ static inline int nr_pte_to_next_page(struct dma_pte *pte)
+ }
+ 
+ extern struct dmar_drhd_unit * dmar_find_matched_drhd_unit(struct pci_dev *dev);
+-extern int dmar_find_matched_atsr_unit(struct pci_dev *dev);
++extern int dmar_ats_supported(struct pci_dev *dev, struct intel_iommu *iommu);
+ 
+ extern int dmar_enable_qi(struct intel_iommu *iommu);
+ extern void dmar_disable_qi(struct intel_iommu *iommu);
+-- 
+2.25.1
+

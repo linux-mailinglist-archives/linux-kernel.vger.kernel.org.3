@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 735774B7D51
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 03:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF6D4B7D5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 03:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238422AbiBPCPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 21:15:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39760 "EHLO
+        id S1343628AbiBPCRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 21:17:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235143AbiBPCPh (ORCPT
+        with ESMTP id S235143AbiBPCRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 21:15:37 -0500
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CF5F461E
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:15:26 -0800 (PST)
-Received: by mail-oo1-xc2e.google.com with SMTP id e19-20020a4ab993000000b0031a98fe3a9dso288890oop.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:15:26 -0800 (PST)
+        Tue, 15 Feb 2022 21:17:02 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB17BF97D;
+        Tue, 15 Feb 2022 18:16:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=M7OCdt9OzJxfB2Eo4t5fobnAZWbhP5SYktbi2Ug/8kQ=;
-        b=P6PKoHakA6KYKz3cdvpY0YVGXknfuiYcdWALAvEgODfjlyyz9V2N2Qb+RA/j57AqC5
-         MyDHHo+SFf8ceLcBfKsrx1sUSZWZYE75EpkTtv9vvuxiGNR9REIUwJFV9Aj262rh1A64
-         UJl8/iQXseryz4zkOzIRF9PdKjwtCIG8ztnxg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=M7OCdt9OzJxfB2Eo4t5fobnAZWbhP5SYktbi2Ug/8kQ=;
-        b=vsC79e7r3T35i5L2SpVMu30VO70i0XMbVb8JVts3n3IT4++GSRfexMLoVNHWDPFIxl
-         H7/3bHGqt30+g1IvVuHj4lneEwwOpObKo/3NjqAgxZ9ZkD2pVgYAWTiE4gycunZdbLUr
-         ALI2BPG6qELBdCw87PUlZkVDGu2bQXYg4CTtB4KU06iNixQrcS6A3EKMs7ihDHNJ1kva
-         CDAerAdmhBTQ2oBPzK2RzKWCKxMGqGHhMefzHfxpiRoZ1YH/Nx8Tjz1AK9lhV7DZxhGV
-         RI9jy4s58J65a/ByJiyle2vijrYze/gp2TyFkBEMU9OZ59ZCm5hy2iD8TzHdFz1lEDoJ
-         yp6Q==
-X-Gm-Message-State: AOAM531MBu6QEmFIybLuVb3Sztd+TbG4vTJcgtTkJ89NI8M9UOHiFGDp
-        2hw3SALsZ1A8bJDxQJ/DvGshUE1mHT7+gbh9+AUSxg==
-X-Google-Smtp-Source: ABdhPJzPATiuExoyJI2H1AD/d5xpqqZ+VPI/gySpnVVnoVd6/9h8G/2Com+9XnHedjC/slziZx/LKHdClY23tEw+INo=
-X-Received: by 2002:a05:6870:5829:b0:c8:9f42:f919 with SMTP id
- r41-20020a056870582900b000c89f42f919mr296465oap.54.1644977725284; Tue, 15 Feb
- 2022 18:15:25 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 15 Feb 2022 18:15:24 -0800
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644977810; x=1676513810;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Nf4w5alxBcN8IhONDyerdZKXyOFUjVM7GbSWZYsTNBk=;
+  b=nXKXip3jAsfLyNW3FGt+5mOPybeoGQNDA0x3HY5yP6DK+CPkAAK4ihYt
+   Dkyh9vZksjGyn/78c7hrilhApIhd+VkjyeDXKQeoMtKZDh3PZWkqSWtzW
+   OGZP38rKIn1NMd1C+2HrUr8nPjSvLeNfTt8tzutLfN8QK7U/3JiwXxmgL
+   E=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 15 Feb 2022 18:16:50 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 18:16:50 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 15 Feb 2022 18:16:49 -0800
+Received: from [10.111.168.21] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 15 Feb
+ 2022 18:16:48 -0800
+Message-ID: <7b33c826-b141-c6a2-b0eb-18b99ceeda24@quicinc.com>
+Date:   Tue, 15 Feb 2022 18:16:45 -0800
 MIME-Version: 1.0
-In-Reply-To: <1644949454-814-3-git-send-email-quic_c_sanm@quicinc.com>
-References: <1644949454-814-1-git-send-email-quic_c_sanm@quicinc.com> <1644949454-814-3-git-send-email-quic_c_sanm@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 15 Feb 2022 18:15:24 -0800
-Message-ID: <CAE-0n52WuP68V6jCs1oBud3Tj08TUSXkdSVRNu327EqVprEN8g@mail.gmail.com>
-Subject: Re: [PATCH 2/2] usb: dwc: host: add xhci_plat_priv quirk XHCI_SKIP_PHY_INIT
-To:     Aswath Govindraju <a-govindraju@ti.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [Freedreno] [PATCH v2 2/2] drm/msm/dpu: Add SC8180x to hw catalog
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
+References: <20220215043353.1256754-1-bjorn.andersson@linaro.org>
+ <20220215043353.1256754-2-bjorn.andersson@linaro.org>
+ <be397e2e-05ab-5c18-8e2d-16c443f0a6d1@quicinc.com>
+ <Ygvisfhi0SY6XdAz@builder.lan>
+ <6a3ef247-b26b-d505-cd85-92fb277163dd@quicinc.com>
+ <CAA8EJprCaiPW=Kk0B69RNNwAk0xcqaxQA031sfR0ky+BfzcWKQ@mail.gmail.com>
+ <ceb861e5-b1c8-d33e-c0b0-bea0b4cc0b66@quicinc.com>
+ <CAA8EJppj+OBPVUgvefO38zp1RHpJw5pL0-4DCkgn3iAcPH-ptA@mail.gmail.com>
+ <d0cac12e-7c03-2ba3-fb8d-aee09b72a1b1@quicinc.com>
+ <YgxbYnpbBeOIkGWi@builder.lan>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <YgxbYnpbBeOIkGWi@builder.lan>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,60 +76,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Sandeep Maheswaram (2022-02-15 10:24:14)
-> dwc3 manages PHY by own DRD driver, so skip the management by
-> HCD core.
-> During runtime suspend phy was not getting suspend because
-> runtime_usage value is 2.
->
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 
-Any Fixes tag?
 
-> ---
->  drivers/usb/dwc3/host.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index eda8719..4a035a8 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -13,6 +13,14 @@
->  #include <linux/platform_device.h>
->
->  #include "core.h"
-> +#include <linux/usb/hcd.h>
+On 2/15/2022 6:03 PM, Bjorn Andersson wrote:
+> On Tue 15 Feb 19:34 CST 2022, Abhinav Kumar wrote:
+> 
+>>
+>>
+>> On 2/15/2022 4:20 PM, Dmitry Baryshkov wrote:
+>>> On Tue, 15 Feb 2022 at 23:21, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+>>>> On 2/15/2022 10:42 AM, Dmitry Baryshkov wrote:
+>>>>> On Tue, 15 Feb 2022 at 20:42, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+>>>>>> On 2/15/2022 9:28 AM, Bjorn Andersson wrote:
+>>>>>>> On Tue 15 Feb 11:14 CST 2022, Abhinav Kumar wrote:
+>>>>>>>> On 2/14/2022 8:33 PM, Bjorn Andersson wrote:
+>>>>>>>>> From: Rob Clark <robdclark@chromium.org>
+> [..]
+>>>>> (thus leading us to cases when someone would forget to add INTF_EDP
+>>>>> next to INTF_DP)
+>>>>>
+>>>>> Also, if we are switching from INTF_DP to INTF_EDP, should we stop
+>>>>> using end-to-end numbering (like MSM_DP_CONTROLLER_2 for INTF_5) and
+>>>>> add a separate numbering scheme for INTF_EDP?
+>>>>>
+>>>> We should change the controller ID to match what it actually is.
+>>>>
+>>>> Now that you pointed this out, this looks even more confusing to me to
+>>>> say that  MSM_DP_CONTROLLER_2 is actually a EDP controller because
+>>>> fundamentally and even hardware block wise they are different.
+>>>
+>>> So, do we split msm_priv->dp too? It's indexed using
+>>> MSM_DP_CONTROLLER_n entries.
+>>> Do we want to teach drm/msm/dp code that there are priv->dp[] and
+>>> priv->edp arrays?
+>>
+>> ok so now priv->dp and priv->edp arrays are also in the picture here :)
+>>
+>> Actually all these questions should have probably come when we were figuring
+>> out how best to re-use eDP and DP driver.
+>>
+>> Either way atleast, its good we are documenting all these questions on this
+>> thread so that anyone can refer this to know what all was missed out :)
+>>
+>> priv->dp is of type msm_dp. When re-using DP driver for eDP and since
+>> struct msm_dp is the shared struct between dpu and the msm/dp, I get your
+>> point of re-using MSM_DP_CONTROLLER_* as thats being use to index.
+>>
+>> So MSM_DP_CONTROLLER_* is more of an index into the DP driver and not really
+>> a hardware indexing scheme.
+>>
+>> If we split into two arrays, we need more changes to dpu_encoder too.
+>>
+>> Too instrusive a change at this point, even though probably correct.
+>>
+> 
+> I'm sorry, but performing such a split would create a whole bunch of
+> duplication and I don't see the reasons yet. Can you please give me an
+> example of when the DPU _code_ would benefit from being specifically
+> written for EDP vs DP?
+> 
+> Things where it doesn't make sense to enable certain features in
+> runtime - but really have different implementation for the two interface
+> types.
+> 
 
-What is this include used for now?
+Like I have mentioned in my previous comment, this would be a big change 
+and I am also not in favor of this big change.
 
-> +#include <linux/usb/xhci-plat.h>
-> +#include <linux/usb/xhci-quirks.h>
-> +
-> +
+>> But are you seeing more changes required even if we just change INTF_DP to
+>> INTF_eDP for the eDP entries? What are the challenges there?
+>>
+> 
+> What are the benefits?
 
-Nitpick: Remove one newline.
+In terms of current code, again like I said before in my previous 
+comments several times I do not have an example.
 
-> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
-> +       .quirks = XHCI_SKIP_PHY_INIT,
-> +};
->
->  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
->                                         int irq, char *name)
-> @@ -122,6 +130,13 @@ int dwc3_host_init(struct dwc3 *dwc)
->                 }
->         }
->
-> +       ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
-> +                       sizeof(struct xhci_plat_priv));
+I was keeping the separation in case in future for some features we do 
+need to differentiate eDP and DP.
 
-Nitpick: sizeof(xhci_plat_dwc3_xhci) so the type can change without
-changing this line.
+Somehow I also feel this change and below are interlinked that way.
 
-> +       if (ret) {
-> +               dev_err(dwc->dev, "failed to add data to xHCI\n");
-> +               goto err;
-> +       }
-> +
->         ret = platform_device_add(xhci);
->         if (ret) {
->                 dev_err(dwc->dev, "failed to register xHCI device\n");
+https://patchwork.freedesktop.org/patch/473871/
+
+The only reason we need this change is because both eDP and DP use 
+DRM_MODE_ENCODER_TMDS and specifying the intf_type directly will clear 
+the confusion because DRM_MODE_ENCODER_DSI means DSI and 
+DRM_MODE_ENCODER_VIRTUAL means Writeback but DRM_MODE_ENCODER_TMDS can 
+mean DP OR eDP interface.
+
+The ambiguity was always for eDP and DP.
+
+That led to the discussion about the INTF_* we are specifying in the 
+dpu_hw_catalog only to find the discrepancy.
+
+So now by clearing that ambiguity that change makes sense. That 
+discussion trickled into this one.
+
+> 
+> Regards,
+> Bjorn

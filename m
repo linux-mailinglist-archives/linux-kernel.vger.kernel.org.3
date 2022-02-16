@@ -2,198 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4154B81D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:42:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 517154B826E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbiBPHkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 02:40:32 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34470 "EHLO
+        id S231216AbiBPH6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 02:58:37 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:39904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiBPHkZ (ORCPT
+        with ESMTP id S229992AbiBPH6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 02:40:25 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1789EBA1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:40:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644997203; x=1676533203;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=OLTZxnf5xPbZj+LRRw58ZjFOWu8ol/cmc7XhSDxSJvs=;
-  b=D0EWCSs4fh6bx+pIpIhYrcl2du5RejsNxXaCyCK+vuhNkDWax/mY8YKv
-   YW1XOCEprHlQkzj7WBaKor/37W9R/9FX0TKXsKxSLydpRR5dOBR+S7iuf
-   WZaFJzpq2IRhgoVMqT8NIKxttMo7GiTv0HH3Pspe1/CSkGy8YSqELS8lG
-   4bUGnq509Cv1UhTtQa6QH/RjTYFPjfMT2PMj+5+lL0wG035s31UBlr76z
-   hKiIjyQlzQWkmrqCKymJMD/P9aGQ24XRZ8MzdmoaeiT/cI5lA5e6BHhYV
-   XuT1TKy+QK3JJODx10Q9hwtgKEsDW4IoDUsxGcxJa6Wj09tXU29MEmgyB
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="250487373"
-X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="250487373"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 23:38:44 -0800
-X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="498414981"
-Received: from yhuang6-desk2.sh.intel.com ([10.239.13.11])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 23:38:40 -0800
-From:   Huang Ying <ying.huang@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Feng Tang <feng.tang@intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Rik van Riel <riel@surriel.com>,
-        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>
-Subject: [PATCH -V12 3/3] memory tiering: skip to scan fast memory
-Date:   Wed, 16 Feb 2022 15:38:15 +0800
-Message-Id: <20220216073815.2505536-4-ying.huang@intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220216073815.2505536-1-ying.huang@intel.com>
-References: <20220216073815.2505536-1-ying.huang@intel.com>
+        Wed, 16 Feb 2022 02:58:35 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2DED5DD9;
+        Tue, 15 Feb 2022 23:58:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=YXSZvLdp2WpAvYAgpt65RWGqBzfUFzNyTw8axHgAK10=; b=o3pYssSMY/qnKmyqV5QbRt0DFQ
+        yb5+W59T5AHuXcl8hFjcKbcyFo8ZpPWILUCZWYzfgeRtNGYrMZ04btWArup73rBlL4neEiZJTRjPA
+        XKJ8KvPEt5Fz8U6l4/WAq1zjzAxzU+Vd5XPWtmzDw8Q2S3hhcd08aVvXaw9S/4tapcMk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nKEuC-006BMz-7p; Wed, 16 Feb 2022 08:39:16 +0100
+Date:   Wed, 16 Feb 2022 08:39:16 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>, linux@armlinux.org.uk,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: phy: marvell: Honor phy LED set by system
+ firmware on a Dell hardware
+Message-ID: <YgyqJAokWhXvDPik@lunn.ch>
+References: <YelxMFOiqnfIVmyy@lunn.ch>
+ <CAAd53p7NjvzsBs2aWTP-3GMjoyefMmLB3ou+7fDcrNVfKwALHw@mail.gmail.com>
+ <Yeqzhx3GbMzaIbj6@lunn.ch>
+ <CAAd53p5pF+SRfwGfJaBTPkH7+9Z6vhPHcuk-c=w8aPTzMBxPcg@mail.gmail.com>
+ <YerOIXi7afbH/3QJ@lunn.ch>
+ <3d7b1ff0-6776-6480-ed20-c9ad61b400f7@gmail.com>
+ <Yex0rZ0wRWQH/L4n@lunn.ch>
+ <CAAd53p6pfuYDor3vgm_bHFe_o7urNhv7W6=QGxVz6c=htt7wLg@mail.gmail.com>
+ <YgwMslde2OxOOp9d@lunn.ch>
+ <CAAd53p4QXHe7XTv5ntsdnC1Z9EpDfXQECKHDEsRA++SEQSdbYQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAd53p4QXHe7XTv5ntsdnC1Z9EpDfXQECKHDEsRA++SEQSdbYQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the NUMA balancing isn't used to optimize the page placement among
-sockets but only among memory types, the hot pages in the fast memory
-node couldn't be migrated (promoted) to anywhere.  So it's unnecessary
-to scan the pages in the fast memory node via changing their PTE/PMD
-mapping to be PROT_NONE.  So that the page faults could be avoided
-too.
+> > > This is an ACPI based platform and we are working on new firmware
+> > > property "use-firmware-led" to give driver a hint:
+> > > ...
+> > >     Scope (_SB.PC00.OTN0)
+> > >     {
+> > >         Name (_DSD, Package (0x02)  // _DSD: Device-Specific Data
+> > >         {
+> > >             ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301") /* Device
+> > > Properties for _DSD */,
+> > >             Package (0x01)
+> > >             {
+> > >                 Package (0x02)
+> > >                 {
+> > >                     "use-firmware-led",
+> > >                     One
+> > >                 }
+> > >             }
+> > >         })
+> > >     }
+> > > ...
+> > >
+> > > Because the property is under PCI device namespace, I am not sure how
+> > > to (cleanly) bring the property from the phylink side to phydev side.
+> > > Do you have any suggestion?
+> >
+> > I'm no ACPI expert, but i think
+> > Documentation/firmware-guide/acpi/dsd/phy.rst gives you the basis:
+> >
+> >     During the MDIO bus driver initialization, PHYs on this bus are probed
+> >     using the _ADR object as shown below and are registered on the MDIO bus.
+> >
+> >       Scope(\_SB.MDI0)
+> >       {
+> >         Device(PHY1) {
+> >           Name (_ADR, 0x1)
+> >         } // end of PHY1
+> >
+> >         Device(PHY2) {
+> >           Name (_ADR, 0x2)
+> >         } // end of PHY2
+> >       }
+> >
+> > These are the PHYs on the MDIO bus. I _think_ that next to the Name,
+> > you can add additional properties, like your "use-firmware-led". This
+> > would then be very similar to DT, which is in effect what ACPI is
+> > copying. So you need to update this document with your new property,
+> > making it clear that this property only applies to boot, not
+> > suspend/resume. And fwnode_mdiobus_register_phy() can look for the
+> > property and set a flag in the phydev structure indicating that ACPI
+> > is totally responsible for LEDs at boot time.
+> 
+> The problem here is there's no MDIO bus in ACPI namespace, namely no
+> "Scope(\_SB.MDI0)" on this platform.
 
-In the test, if only the memory tiering NUMA balancing mode is enabled, the
-number of the NUMA balancing hint faults for the DRAM node is reduced to
-almost 0 with the patch.  While the benchmark score doesn't change
-visibly.
+So add it. Basically, copy what DT does. I assume there is a node for
+the Ethernet device? And is the MDIO bus driver instantiated by the
+Ethernet device? So you can add the MDIO node as a sub node of the
+Ethernet device. When you register the MDIO bus using
+acpi_mdiobus_register() pass a pointer to this MDIO sub node.
 
-Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Rik van Riel <riel@surriel.com>
-Cc: Mel Gorman <mgorman@techsingularity.net>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Yang Shi <shy828301@gmail.com>
-Cc: Zi Yan <ziy@nvidia.com>
-Cc: Wei Xu <weixugc@google.com>
-Cc: osalvador <osalvador@suse.de>
-Cc: Shakeel Butt <shakeelb@google.com>
-Cc: zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-mm@kvack.org
----
- mm/huge_memory.c | 30 +++++++++++++++++++++---------
- mm/mprotect.c    | 13 ++++++++++++-
- 2 files changed, 33 insertions(+), 10 deletions(-)
-
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 406a3c28c026..9ce126cb0cfd 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -34,6 +34,7 @@
- #include <linux/oom.h>
- #include <linux/numa.h>
- #include <linux/page_owner.h>
-+#include <linux/sched/sysctl.h>
- 
- #include <asm/tlb.h>
- #include <asm/pgalloc.h>
-@@ -1766,17 +1767,28 @@ int change_huge_pmd(struct vm_area_struct *vma, pmd_t *pmd,
- 	}
- #endif
- 
--	/*
--	 * Avoid trapping faults against the zero page. The read-only
--	 * data is likely to be read-cached on the local CPU and
--	 * local/remote hits to the zero page are not interesting.
--	 */
--	if (prot_numa && is_huge_zero_pmd(*pmd))
--		goto unlock;
-+	if (prot_numa) {
-+		struct page *page;
-+		/*
-+		 * Avoid trapping faults against the zero page. The read-only
-+		 * data is likely to be read-cached on the local CPU and
-+		 * local/remote hits to the zero page are not interesting.
-+		 */
-+		if (is_huge_zero_pmd(*pmd))
-+			goto unlock;
- 
--	if (prot_numa && pmd_protnone(*pmd))
--		goto unlock;
-+		if (pmd_protnone(*pmd))
-+			goto unlock;
- 
-+		page = pmd_page(*pmd);
-+		/*
-+		 * Skip scanning top tier node if normal numa
-+		 * balancing is disabled
-+		 */
-+		if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_NORMAL) &&
-+		    node_is_toptier(page_to_nid(page)))
-+			goto unlock;
-+	}
- 	/*
- 	 * In case prot_numa, we are under mmap_read_lock(mm). It's critical
- 	 * to not clear pmd intermittently to avoid race with MADV_DONTNEED
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index 0138dfcdb1d8..2fe03e695c81 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -29,6 +29,7 @@
- #include <linux/uaccess.h>
- #include <linux/mm_inline.h>
- #include <linux/pgtable.h>
-+#include <linux/sched/sysctl.h>
- #include <asm/cacheflush.h>
- #include <asm/mmu_context.h>
- #include <asm/tlbflush.h>
-@@ -83,6 +84,7 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 			 */
- 			if (prot_numa) {
- 				struct page *page;
-+				int nid;
- 
- 				/* Avoid TLB flush if possible */
- 				if (pte_protnone(oldpte))
-@@ -109,7 +111,16 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 				 * Don't mess with PTEs if page is already on the node
- 				 * a single-threaded process is running on.
- 				 */
--				if (target_node == page_to_nid(page))
-+				nid = page_to_nid(page);
-+				if (target_node == nid)
-+					continue;
-+
-+				/*
-+				 * Skip scanning top tier node if normal numa
-+				 * balancing is disabled
-+				 */
-+				if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_NORMAL) &&
-+				    node_is_toptier(nid))
- 					continue;
- 			}
- 
--- 
-2.30.2
-
+     Andrew

@@ -2,62 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F91D4B7CB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C42C64B7CCF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:56:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245629AbiBPBsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 20:48:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40426 "EHLO
+        id S245624AbiBPBtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 20:49:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243424AbiBPBsb (ORCPT
+        with ESMTP id S236408AbiBPBtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 20:48:31 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E652B276
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:48:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644976100; x=1676512100;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=a+U9kYjINT0TVggGNSEIkCtrmskZlm2d6lqeF9SOxwU=;
-  b=HOk89bKKuACybiwxJZnORbLmSkdugWLAeUozA2GSWqKwbDwULdMgAhbI
-   AYdK3KhBuVyPV5ylfxQI07OOLd5tnWw6pqY8CkHgRq7B23CH57RawWfrR
-   XSm3X4q/BpoOcHaG+DHfZ5QtzFzGoHSeoktjgpdU0I+K8ok312efQ0TLa
-   yYlbRRjbt8+Z1w+abt+xun6zxKKs54/SltzfA8rMesaqLMwbpOUHjMpZh
-   +J6+TQGoH3QThkbRueXbJxSqAS+ICccK57Qib/aUY8/ZckFyCRXjADpWU
-   LDAb3wQmbTxn77wyd1z2J26hbf1WOn/oCIZ2Mdd7VrcAeGhhg7vtCC6gP
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="250238362"
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="250238362"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 17:48:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="704068458"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 15 Feb 2022 17:48:18 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nK9QY-000AGU-4I; Wed, 16 Feb 2022 01:48:18 +0000
-Date:   Wed, 16 Feb 2022 09:47:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 36/43]
- fs/netfs/crypto.c:76:10: warning: comparison of distinct pointer types
- ('typeof (len) *' (aka 'unsigned int *') and 'typeof (((1UL) << (12)) -
- offset) *' (aka 'unsigned long *'))
-Message-ID: <202202160929.hhL3XUja-lkp@intel.com>
+        Tue, 15 Feb 2022 20:49:51 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F146B60055
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:49:39 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id v22so123341pgb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:49:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JqjP6+knVxmjPk+6TmXifMsYagmkY7dGlbu+Cp4tVhU=;
+        b=bqoqzVAheRcyp+ejCrtXym4Z2mkOqeEcWbPXTP4OrhtoSvFe6qeX8Z+qPcG8we/1WU
+         6vbAyx7hqOvrJBnqbsp1sqSNf3F5Sh0/8KdLZhBDYN+20l/T4GsRKpeDia0wfTPIn6h8
+         tAcUGMCYG7vXuKkQnHZAv8O0VoFaWE7ZhzTDN26+PdBRy2vEI0dd6kyetaKcI9xcwcOZ
+         EHP8wxlTGOhAUvtsP7NY3Th5mcnzS+6y2h696Ho+CKjG6t2zUnbt27OQo5fpX0o6+oQW
+         DarJKZu/sVNRGQqf04WmgOdeeT/+QOnl2oPtPQCo18HBMl/o7HhW9fz1Vs0mkfLOXX+D
+         Ig/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JqjP6+knVxmjPk+6TmXifMsYagmkY7dGlbu+Cp4tVhU=;
+        b=dakY8ZFV5bwVnehm1+GHA4gQ9ThFmOKblsW5U9WF+TPdzgVq92ttfAXg3Q2UKjDSXc
+         H2t6mcAe/qkPwYg5p624LLI4qM2c6GjuIDZKUEjp7H72tAS2r6ZweKHKtZAjJwRC16J4
+         h/A6ej6d38AyfSZWZfzR/q9WXMSLWnP9rQFcUq+KHSLtioi6DVxpsAFM+Pz07HqPerns
+         0IYapGhA+X8eGa20ddXXQaHknJSE2E5VJJUz2GE8XAskrAmBzXDrO5bQxyanOLuAo0Yu
+         tvThT6TG1fLTsgeXBEh9TS+XUFzUUL0S7T7bPps6mzJuHYzG0RVqOlIUcrae4+UaLLIm
+         suDg==
+X-Gm-Message-State: AOAM533ol18OqrCKswlqR1TfT7mE9Rrz2xTnXlyxP63d+xDKRCj5y6Qa
+        9c3a35J4+WKwrexc35vqRPxppGnilK44u+bV3r0qLA==
+X-Google-Smtp-Source: ABdhPJzBpx1jse2xbj8mriAE5IRH5N45DhXrywujvPaUi9rvoKWGSdtDsmmftwEW/BKqPOTy/zsrvgbsO0oqrb+xe0E=
+X-Received: by 2002:a05:6a02:283:b0:342:703e:1434 with SMTP id
+ bk3-20020a056a02028300b00342703e1434mr411493pgb.74.1644976179422; Tue, 15 Feb
+ 2022 17:49:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+References: <20220127124058.1172422-1-ruansy.fnst@fujitsu.com> <20220127124058.1172422-8-ruansy.fnst@fujitsu.com>
+In-Reply-To: <20220127124058.1172422-8-ruansy.fnst@fujitsu.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 15 Feb 2022 17:49:33 -0800
+Message-ID: <CAPcyv4h+jQcwSo-CHUhy98xVvjJzvK74-s4uH+Qu-jCr1+zKjw@mail.gmail.com>
+Subject: Re: [PATCH v10 7/9] mm: Introduce mf_dax_kill_procs() for fsdax case
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>, david <david@fromorbit.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jane Chu <jane.chu@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,105 +71,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   d40df0841e9f8de3713a19dd3f0ba283c860cb93
-commit: dcba644aa7bbb5bfb44d4a5c3abd187c51544bcd [36/43] netfs: Perform content encryption
-config: riscv-randconfig-r033-20220214 (https://download.01.org/0day-ci/archive/20220216/202202160929.hhL3XUja-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/dcba644aa7bbb5bfb44d4a5c3abd187c51544bcd
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout dcba644aa7bbb5bfb44d4a5c3abd187c51544bcd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/netfs/
+On Thu, Jan 27, 2022 at 4:41 AM Shiyang Ruan <ruansy.fnst@fujitsu.com> wrote:
+>
+> This function is called at the end of RMAP routine, i.e. filesystem
+> recovery function, to collect and kill processes using a shared page of
+> DAX file.  The difference with mf_generic_kill_procs() is, it accepts
+> file's (mapping,offset) instead of struct page because different files'
+> mappings and offsets may share the same page in fsdax mode.
+> It will be called when filesystem's RMAP results are found.
+>
+> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> ---
+>  include/linux/mm.h  |  4 ++
+>  mm/memory-failure.c | 91 +++++++++++++++++++++++++++++++++++++++------
+>  2 files changed, 84 insertions(+), 11 deletions(-)
+>
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 9b1d56c5c224..0420189e4788 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3195,6 +3195,10 @@ enum mf_flags {
+>         MF_SOFT_OFFLINE = 1 << 3,
+>         MF_UNPOISON = 1 << 4,
+>  };
+> +#if IS_ENABLED(CONFIG_FS_DAX)
+> +int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
+> +                     unsigned long count, int mf_flags);
+> +#endif /* CONFIG_FS_DAX */
+>  extern int memory_failure(unsigned long pfn, int flags);
+>  extern void memory_failure_queue(unsigned long pfn, int flags);
+>  extern void memory_failure_queue_kick(int cpu);
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index b2d13eba1071..8d123cc4102e 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -304,10 +304,9 @@ void shake_page(struct page *p)
+>  }
+>  EXPORT_SYMBOL_GPL(shake_page);
+>
+> -static unsigned long dev_pagemap_mapping_shift(struct page *page,
+> -               struct vm_area_struct *vma)
+> +static unsigned long dev_pagemap_mapping_shift(struct vm_area_struct *vma,
+> +               unsigned long address)
+>  {
+> -       unsigned long address = vma_address(page, vma);
+>         unsigned long ret = 0;
+>         pgd_t *pgd;
+>         p4d_t *p4d;
+> @@ -347,9 +346,8 @@ static unsigned long dev_pagemap_mapping_shift(struct page *page,
+>   * Schedule a process for later kill.
+>   * Uses GFP_ATOMIC allocations to avoid potential recursions in the VM.
+>   */
+> -static void add_to_kill(struct task_struct *tsk, struct page *p,
+> -                      struct vm_area_struct *vma,
+> -                      struct list_head *to_kill)
+> +static void add_to_kill(struct task_struct *tsk, struct page *p, pgoff_t pgoff,
+> +                       struct vm_area_struct *vma, struct list_head *to_kill)
+>  {
+>         struct to_kill *tk;
+>
+> @@ -360,9 +358,15 @@ static void add_to_kill(struct task_struct *tsk, struct page *p,
+>         }
+>
+>         tk->addr = page_address_in_vma(p, vma);
+> -       if (is_zone_device_page(p))
+> -               tk->size_shift = dev_pagemap_mapping_shift(p, vma);
+> -       else
+> +       if (is_zone_device_page(p)) {
+> +               /*
+> +                * Since page->mapping is not used for fsdax, we need
+> +                * calculate the address based on the vma.
+> +                */
+> +               if (p->pgmap->type == MEMORY_DEVICE_FS_DAX)
+> +                       tk->addr = vma_pgoff_address(vma, pgoff);
+> +               tk->size_shift = dev_pagemap_mapping_shift(vma, tk->addr);
+> +       } else
+>                 tk->size_shift = page_shift(compound_head(p));
+>
+>         /*
+> @@ -510,7 +514,7 @@ static void collect_procs_anon(struct page *page, struct list_head *to_kill,
+>                         if (!page_mapped_in_vma(page, vma))
+>                                 continue;
+>                         if (vma->vm_mm == t->mm)
+> -                               add_to_kill(t, page, vma, to_kill);
+> +                               add_to_kill(t, page, 0, vma, to_kill);
+>                 }
+>         }
+>         read_unlock(&tasklist_lock);
+> @@ -546,12 +550,40 @@ static void collect_procs_file(struct page *page, struct list_head *to_kill,
+>                          * to be informed of all such data corruptions.
+>                          */
+>                         if (vma->vm_mm == t->mm)
+> -                               add_to_kill(t, page, vma, to_kill);
+> +                               add_to_kill(t, page, 0, vma, to_kill);
+> +               }
+> +       }
+> +       read_unlock(&tasklist_lock);
+> +       i_mmap_unlock_read(mapping);
+> +}
+> +
+> +#if IS_ENABLED(CONFIG_FS_DAX)
+> +/*
+> + * Collect processes when the error hit a fsdax page.
+> + */
+> +static void collect_procs_fsdax(struct page *page,
+> +               struct address_space *mapping, pgoff_t pgoff,
+> +               struct list_head *to_kill)
+> +{
+> +       struct vm_area_struct *vma;
+> +       struct task_struct *tsk;
+> +
+> +       i_mmap_lock_read(mapping);
+> +       read_lock(&tasklist_lock);
+> +       for_each_process(tsk) {
+> +               struct task_struct *t = task_early_kill(tsk, true);
+> +
+> +               if (!t)
+> +                       continue;
+> +               vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff, pgoff) {
+> +                       if (vma->vm_mm == t->mm)
+> +                               add_to_kill(t, page, pgoff, vma, to_kill);
+>                 }
+>         }
+>         read_unlock(&tasklist_lock);
+>         i_mmap_unlock_read(mapping);
+>  }
+> +#endif /* CONFIG_FS_DAX */
+>
+>  /*
+>   * Collect the processes who have the corrupted page mapped to kill.
+> @@ -1574,6 +1606,43 @@ static int mf_generic_kill_procs(unsigned long long pfn, int flags,
+>         return 0;
+>  }
+>
+> +#if IS_ENABLED(CONFIG_FS_DAX)
+> +/**
+> + * mf_dax_kill_procs - Collect and kill processes who are using this file range
+> + * @mapping:   the file in use
+> + * @index:     start pgoff of the range within the file
+> + * @count:     length of the range, in unit of PAGE_SIZE
+> + * @mf_flags:  memory failure flags
+> + */
+> +int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
+> +               unsigned long count, int mf_flags)
+> +{
+> +       LIST_HEAD(to_kill);
+> +       int rc;
+> +       struct page *page;
+> +       size_t end = index + count;
+> +
+> +       mf_flags |= MF_ACTION_REQUIRED | MF_MUST_KILL;
+> +
+> +       for (; index < end; index++) {
+> +               page = NULL;
+> +               rc = dax_load_page(mapping, index, &page);
+> +               if (rc)
+> +                       return rc;
+> +               if (!page)
+> +                       continue;
+> +
+> +               SetPageHWPoison(page);
+> +
+> +               collect_procs_fsdax(page, mapping, index, &to_kill);
+> +               unmap_and_kill(&to_kill, page_to_pfn(page), mapping,
+> +                               index, mf_flags);
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> fs/netfs/crypto.c:76:10: warning: comparison of distinct pointer types ('typeof (len) *' (aka 'unsigned int *') and 'typeof (((1UL) << (12)) - offset) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-                           seg = min(len, PAGE_SIZE - offset);
-                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +76 fs/netfs/crypto.c
-
-    45	
-    46	/*
-    47	 * Populate a scatterlist from folios in an xarray.
-    48	 */
-    49	static int netfs_xarray_to_sglist(struct xarray *xa, loff_t pos, size_t len,
-    50					  struct scatterlist *sg, unsigned int n_sg)
-    51	{
-    52		struct scatterlist *p = sg;
-    53		struct folio *folio = NULL;
-    54		size_t seg, offset, skip = 0;
-    55		loff_t start = pos;
-    56		pgoff_t index = start >> PAGE_SHIFT;
-    57		int j;
-    58	
-    59		XA_STATE(xas, xa, index);
-    60	
-    61		sg_init_table(sg, n_sg);
-    62	
-    63		rcu_read_lock();
-    64	
-    65		xas_for_each(&xas, folio, ULONG_MAX) {
-    66			if (xas_retry(&xas, folio))
-    67				continue;
-    68			if (WARN_ON(xa_is_value(folio)) || WARN_ON(folio_test_hugetlb(folio)))
-    69				break;
-    70			for (j = (folio_index(folio) < index) ? index - folio_index(folio) : 0;
-    71			     j < folio_nr_pages(folio); j++
-    72			     ) {
-    73				struct page *subpage = folio_file_page(folio, j);
-    74	
-    75				offset = (pos + skip) & ~PAGE_MASK;
-  > 76				seg = min(len, PAGE_SIZE - offset);
-    77	
-    78				sg_set_page(p++, subpage, seg, offset);
-    79	
-    80				len -= seg;
-    81				skip += seg;
-    82				if (len == 0)
-    83					break;
-    84			}
-    85			if (len == 0)
-    86				break;
-    87		}
-    88	
-    89		rcu_read_unlock();
-    90		if (len > 0) {
-    91			kdebug("*** Insufficient source (%zx)", len);
-    92			//WARN_ON(len > 0);
-    93			return -EIO;
-    94		}
-    95	
-    96		sg_mark_end(p - 1);
-    97		return p - sg;
-    98	}
-    99	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Depending on the answer to the question in patch5 there may need to be
+a put_page() or dax_unlock_page() here.

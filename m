@@ -2,168 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A4E4B8D77
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:11:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1AF4B8D83
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:12:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235186AbiBPQLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 11:11:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48894 "EHLO
+        id S236140AbiBPQL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 11:11:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236098AbiBPQK5 (ORCPT
+        with ESMTP id S236139AbiBPQL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 11:10:57 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EB62AD677
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:10:45 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 54DFA2177B;
-        Wed, 16 Feb 2022 16:10:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1645027844; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4bDvymKzSLLrtbDA6EXSQG+NWXMWEYN2CVr6HzbEY3I=;
-        b=kesOboPnTpeky5AGrib1knxPwu5U1RqU3zXLunk0Ju9NTWD1zUaDIJ+uQcDclz32jZImLa
-        N1rN1tfoIzqRs+KUe1ejs3sy+mCkpmh3KYpO87iR9t1mokj01iXwbPokm4FrQS0I0DxZu1
-        PxnaohjTPXFcFpthOeLzwFMptNlHxfk=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 138FAA3B84;
-        Wed, 16 Feb 2022 16:10:43 +0000 (UTC)
-Date:   Wed, 16 Feb 2022 17:10:43 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v1 07/13] printk: move buffer definitions into
- console_emit_next_record() caller
-Message-ID: <Yg0iA/McHYWK6d4D@alley>
-References: <20220207194323.273637-1-john.ogness@linutronix.de>
- <20220207194323.273637-8-john.ogness@linutronix.de>
+        Wed, 16 Feb 2022 11:11:57 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309DA60041
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:11:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645027905; x=1676563905;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QiEFimDzeKGWwLXx9r2Bgeshi0IgC4yuwUNyNN4cbws=;
+  b=aasuoVh5IayuU8+Gq2ImQDSgEdbjtGQ3Pw3M3panBZNt0ax1L0IdM+DP
+   RPZJKLQcLSCgESWLogLfTetSK+ajMEd9WZKRXT2nwMcVRt56E4e5bjoXh
+   FbOScAwTh06J+nRTZoTLIZ5ixxdSrhtJW+FXcs/nBMECM+xb85hYJHM9u
+   2bUhmyVYPR8A0TXGlDUBpqr2BccB+jrptQamYvP+cuyQDbRZttaI6yirJ
+   q8Ze0URgS/bDchhqpBOXCgIKwNk5b7y4/1bPK3eM2GcjsGC+hURmo8FzY
+   Og/UhBTW4/rnLcHpCrgtkNT2lQU7D2RSWwihoRjKd/wtri791KBaFCX7x
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="231281805"
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="231281805"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 08:11:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="571354112"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 16 Feb 2022 08:11:42 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKMu6-000Avw-Ah; Wed, 16 Feb 2022 16:11:42 +0000
+Date:   Thu, 17 Feb 2022 00:10:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vadim Pasternak <vadimp@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jiri Pirko <jiri@nvidia.com>
+Subject: [jpirko-mlxsw:jiri_devel_linecards 29/43]
+ drivers/net/ethernet/mellanox/mlxsw/core_hwmon.c:898:23: error:
+ initialization of 'void (*)(struct mlxsw_core *, u8,  void *, void *)' {aka
+ 'void (*)(struct mlxsw_core *, unsigned char,  void *, void *)'} from
+ incompatible pointer type 'void (*)(struct ml...
+Message-ID: <202202170026.mb9LyVVk-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220207194323.273637-8-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-02-07 20:49:17, John Ogness wrote:
-> Extended consoles print extended messages and do not print messages about
-> dropped records.
-> 
-> Non-extended consoles print "normal" messages as well as extra messages
-> about dropped records.
-> 
-> Currently the buffers for these various message types are defined within
-> the functions that might use them and their usage is based upon the
-> CON_EXTENDED flag. This will be a problem when moving to kthread printers
-> because each printer must be able to provide its own buffers.
-> 
-> Move all the message buffer definitions outside of
-> console_emit_next_record(). The caller knows if extended or dropped
-> messages should be printed and can specify the appropriate buffers to
-> use. The console_emit_next_record() and call_console_driver() functions
-> can know what to print based on whether specified buffers are non-NULL.
-> 
-> With this change, buffer definition/allocation/specification is separated
-> from the code that does the various types of string printing.
-> 
-> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-> index 822b7b6ad6d1..02bde45c1149 100644
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -2597,13 +2611,13 @@ static bool console_emit_next_record(struct console *con, bool *handover)
->  		goto skip;
->  	}
->  
-> -	if (con->flags & CON_EXTENDED) {
-> -		write_text = &ext_text[0];
-> -		len = info_print_ext_header(ext_text, sizeof(ext_text), r.info);
-> -		len += msg_print_ext_body(ext_text + len, sizeof(ext_text) - len,
-> +	if (ext_text) {
-> +		write_text = ext_text;
-> +		len = info_print_ext_header(ext_text, CONSOLE_EXT_LOG_MAX, r.info);
-> +		len += msg_print_ext_body(ext_text + len, CONSOLE_EXT_LOG_MAX - len,
->  					  &r.text_buf[0], r.info->text_len, &r.info->dev_info);
->  	} else {
-> -		write_text = &text[0];
-> +		write_text = text;
->  		len = record_print_text(&r, console_msg_format & MSG_FORMAT_SYSLOG, printk_time);
+tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_linecards
+head:   5cb021512c3be7e03591497caeab474ecccfcd21
+commit: 0733fff985b276239955edfc5a42e929eced7437 [29/43] mlxsw: core_hwmon: Add interfaces for line card initialization and de-initialization
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220217/202202170026.mb9LyVVk-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jpirko/linux_mlxsw/commit/0733fff985b276239955edfc5a42e929eced7437
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw jiri_devel_linecards
+        git checkout 0733fff985b276239955edfc5a42e929eced7437
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/ethernet/mellanox/mlxsw/
 
-@text and @ext_text buffers are never used at the same time. It might
-be enough to use a single text[CONSOLE_EXT_LOG_MAX] buffer. It would
-even slightly simplify the code.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->  	}
->  
-> @@ -2621,7 +2635,7 @@ static bool console_emit_next_record(struct console *con, bool *handover)
->  	console_lock_spinning_enable();
->  
->  	stop_critical_timings();	/* don't trace print latency */
-> -	call_console_driver(con, write_text, len);
-> +	call_console_driver(con, write_text, len, dropped_text);
->  	start_critical_timings();
->  
->  	con->seq++;
-> @@ -2650,6 +2664,9 @@ static bool console_emit_next_record(struct console *con, bool *handover)
->   */
->  static bool console_flush_all(bool do_cond_resched, u64 *next_seq, bool *handover)
->  {
-> +	static char dropped_text[DROPPED_TEXT_MAX];
-> +	static char ext_text[CONSOLE_EXT_LOG_MAX];
-> +	static char text[CONSOLE_LOG_MAX];
+All errors (new ones prefixed by >>):
 
-These buffers are for printing from console_unlock(). The same buffers
-will need to be allocated for each console in the kthreads.
-
-It might make sense to allocate these buffers in register_console()
-and store the pointers in struct console.
-
-Well, we might need extra buffers for atomic console drivers and
-diffent contexts that would be used during panic. But maybe
-they can be allocated in register_console() as well.
+>> drivers/net/ethernet/mellanox/mlxsw/core_hwmon.c:898:23: error: initialization of 'void (*)(struct mlxsw_core *, u8,  void *, void *)' {aka 'void (*)(struct mlxsw_core *, unsigned char,  void *, void *)'} from incompatible pointer type 'void (*)(struct mlxsw_core *, u8,  const struct mlxsw_linecard *, void *)' {aka 'void (*)(struct mlxsw_core *, unsigned char,  const struct mlxsw_linecard *, void *)'} [-Werror=incompatible-pointer-types]
+     898 |         .got_active = mlxsw_hwmon_got_active,
+         |                       ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/mellanox/mlxsw/core_hwmon.c:898:23: note: (near initialization for 'mlxsw_hwmon_event_ops.got_active')
+   drivers/net/ethernet/mellanox/mlxsw/core_hwmon.c:899:25: error: initialization of 'void (*)(struct mlxsw_core *, u8,  void *, void *)' {aka 'void (*)(struct mlxsw_core *, unsigned char,  void *, void *)'} from incompatible pointer type 'void (*)(struct mlxsw_core *, u8,  const struct mlxsw_linecard *, void *)' {aka 'void (*)(struct mlxsw_core *, unsigned char,  const struct mlxsw_linecard *, void *)'} [-Werror=incompatible-pointer-types]
+     899 |         .got_inactive = mlxsw_hwmon_got_inactive,
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/mellanox/mlxsw/core_hwmon.c:899:25: note: (near initialization for 'mlxsw_hwmon_event_ops.got_inactive')
+   cc1: some warnings being treated as errors
 
 
+vim +898 drivers/net/ethernet/mellanox/mlxsw/core_hwmon.c
 
->  	bool any_usable = false;
->  	struct console *con;
->  	bool any_progress;
-> @@ -2667,7 +2684,16 @@ static bool console_flush_all(bool do_cond_resched, u64 *next_seq, bool *handove
->  				continue;
->  			any_usable = true;
->  
-> -			progress = console_emit_next_record(con, handover);
-> +			if (con->flags & CON_EXTENDED) {
-> +				/* Extended consoles do not print "dropped messages". */
-> +				progress = console_emit_next_record(con, &text[0],
+   896	
+   897	static struct mlxsw_linecards_event_ops mlxsw_hwmon_event_ops = {
+ > 898		.got_active = mlxsw_hwmon_got_active,
+   899		.got_inactive = mlxsw_hwmon_got_inactive,
+   900	};
+   901	
 
-IMHO, &text[0] buffer is not used for extended consoles.
-
-> +								    &ext_text[0], NULL,
-> +								    handover);
-> +			} else {
-> +				progress = console_emit_next_record(con, &text[0],
-> +								    NULL, &dropped_text[0],
-> +								    handover);
-> +			}
->  			if (*handover)
->  				return true;
-
-I do not resist on allocating the buffers in register_console(). I am
-not sure if it would really makes things easier.
-
-But I would really like to use the same buffer for normal and extended
-consoles if possible.
-
-Best Regards,
-Petr
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

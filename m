@@ -2,101 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C09DF4B9085
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:42:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95B204B9096
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:44:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237756AbiBPSmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 13:42:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53514 "EHLO
+        id S237759AbiBPSoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 13:44:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237734AbiBPSmN (ORCPT
+        with ESMTP id S233985AbiBPSoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 13:42:13 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD7B9F3B7
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:42:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645036920; x=1676572920;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=xDWjGvsFBrq0ZdxBzAcydsP/AMMl02rxok1sZdO6bbI=;
-  b=eCHADF1nbV2Oi+Bg6dvDXLyUWkOQizz63Ahp0BMSeD2wViFwcjWcuKtt
-   8aceZ8DiMlZNjStj6eVnMqGBylc22Y4bo/mjkVIEHRP8euz0KHNZeS1i5
-   oYHH/pf9PE3Mp891IKEsk/oHQfF654QVSY38Ca119Rs0/p0S6sL2u+RRY
-   QFVXUCpgQo9gqc0qsRONtRkGyvZGZLLTicH/q1eMneOe7YJwRXAYIJn3M
-   jiN1ShS38NpgSSc8AYBBWEqGQ59w/bjvR7GhwD1FW1iMz4bnEgod/Euje
-   wHxt2bR2/CKRV03OyBU/kgukRYHdY1HlQCMCU7qi2MscrcQbOp9iNsDRE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="250432934"
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="250432934"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 10:41:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="774185960"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Feb 2022 10:41:59 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 16 Feb 2022 10:41:59 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 16 Feb 2022 10:41:58 -0800
-Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
- fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.020;
- Wed, 16 Feb 2022 10:41:58 -0800
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>, Jue Wang <juew@google.com>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: RE: [PATCH] x86/mce: Add workaround for SKX/CLX/CPX spurious machine
- checks
-Thread-Topic: [PATCH] x86/mce: Add workaround for SKX/CLX/CPX spurious machine
- checks
-Thread-Index: AQHYHP3vSEwGqGB1nUuCa46AJSTbFqyVvVCA//99xQCAAVDKgIAAWhMAgAAlCgD//4KmEA==
-Date:   Wed, 16 Feb 2022 18:41:58 +0000
-Message-ID: <9f402331d25c47b69349c8171bbd49c1@intel.com>
-References: <CAPcxDJ7nriZEJHF6dMPR7tQ+dGuueyRjw1NC+4CbjxiAT_S+ZA@mail.gmail.com>
- <20220208150945.266978-1-juew@google.com> <Ygwka++3eipjQzB2@zn.tnic>
- <YgwnqTc8FGG3orcE@agluck-desk3.sc.intel.com> <YgzRsfWOmqkNiNI7@zn.tnic>
- <CAPcxDJ4=iknzYbN=b2oQxvJyODkQ_MWEj1wkKEuGwf4HQ3aPZA@mail.gmail.com>
- <Yg08Uhg0fZ9xZuP2@zn.tnic>
-In-Reply-To: <Yg08Uhg0fZ9xZuP2@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.200.16
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 16 Feb 2022 13:44:34 -0500
+Received: from mx1.smtp.larsendata.com (mx1.smtp.larsendata.com [91.221.196.215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B082B222DD9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:44:19 -0800 (PST)
+Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
+        by mx1.smtp.larsendata.com (Halon) with ESMTPS
+        id 7cf017e4-8f58-11ec-baa1-0050568c148b;
+        Wed, 16 Feb 2022 18:44:35 +0000 (UTC)
+Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sam@ravnborg.org)
+        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 3B79C194B3E;
+        Wed, 16 Feb 2022 19:44:17 +0100 (CET)
+Date:   Wed, 16 Feb 2022 19:44:13 +0100
+X-Report-Abuse-To: abuse@mxhotel.dk
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
+        bcain@codeaurora.org, geert@linux-m68k.org, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, nickhu@andestech.com,
+        green.hu@gmail.com, dinguyen@kernel.org, shorne@gmail.com,
+        deller@gmx.de, mpe@ellerman.id.au, peterz@infradead.org,
+        mingo@redhat.com, mark.rutland@arm.com, hca@linux.ibm.com,
+        dalias@libc.org, davem@davemloft.net, richard@nod.at,
+        x86@kernel.org, jcmvbkbc@gmail.com, ebiederm@xmission.com,
+        akpm@linux-foundation.org, ardb@kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH v2 18/18] uaccess: drop maining CONFIG_SET_FS users
+Message-ID: <Yg1F/VT4vRX4aHEt@ravnborg.org>
+References: <20220216131332.1489939-1-arnd@kernel.org>
+ <20220216131332.1489939-19-arnd@kernel.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216131332.1489939-19-arnd@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBXZWxsLCB3ZSBjb3VsZCB0cnkgdG8gZGVjb2RlIHRoZSBpbnN0cnVjdGlvbnMgYXJvdW5kIHJJ
-UCB3aGVuIHRoZSAjTUMNCj4gaXMgcmFpc2VkIGFuZCBzZWUgd2hhdCBjYXVzZWQgdGhlIE1DRSBh
-bmQgcGVyaGFwcyBwaWNrIGFwYXJ0IHdoaWNoIGluc24NCj4gY2F1c2VkIGl0LCBpcyBpdCBhY2Nl
-c3NpbmcgYmVoaW5kIHRoZSBidWZmZXIgYm91bmRhcmllcywgZXRjLg0KDQpJcyB0aGlzIGEgY2Fz
-ZSBvZiAicGVyZmVjdCBpcyB0aGUgZW5lbXkgb2YgZ29vZCBlbm91Z2giPw0KDQpJdCBpcyBhIHJh
-cmUgc2NlbmFyaW8gKG9ubHkgYSBwYWluIHBvaW50IGZvciBKdWUgYmVjYXVzZSBHb29nbGUgaGFz
-IGJpbGxpb25zIGFuZCBiaWxsaW9ucw0Kb2YgY29yZXMgcnVubmluZyB0aGlzIGNvZGUpLiAgWW91
-IG5lZWQ6DQoNCjEpIEFuIHVuY29ycmVjdGVkIGVycm9yDQoyKSBUaGF0IGVycm9yIG11c3QgYmUg
-aW4gZmlyc3QgY2FjaGUgbGluZSBvZiBhIHBhZ2UNCjMpIEtlcm5lbCBtdXN0IGV4ZWN1dGUgcGFn
-ZV9jb3B5IGZyb20gdGhlIHBhZ2UgaW1tZWRpYXRlbHkgYmVmb3JlIHRoYXQgcGFnZQ0KDQoJV2hl
-biBhbGwgdGhyZWUgaGFwcGVuLCBrZXJuZWwgY3Jhc2hlcyBiZWNhdXNlIHdlIGRvbid0DQoJaGF2
-ZSBhIHJlY292ZXIgcGF0aCBmcm9tIGtlcm5lbCBwYWdlX2NvcHkNCg0KLVRvbnkNCg==
+Hi Arnd,
+
+Fix spelling in $subject...
+
+sparc/Kconfig b/arch/sparc/Kconfig
+> index 9f6f9bce5292..9276f321b3e3 100644
+> --- a/arch/sparc/Kconfig
+> +++ b/arch/sparc/Kconfig
+> @@ -46,7 +46,6 @@ config SPARC
+>  	select LOCKDEP_SMALL if LOCKDEP
+>  	select NEED_DMA_MAP_STATE
+>  	select NEED_SG_DMA_LENGTH
+> -	select SET_FS
+>  	select TRACE_IRQFLAGS_SUPPORT
+>  
+>  config SPARC32
+> @@ -101,6 +100,7 @@ config SPARC64
+>  	select HAVE_SETUP_PER_CPU_AREA
+>  	select NEED_PER_CPU_EMBED_FIRST_CHUNK
+>  	select NEED_PER_CPU_PAGE_FIRST_CHUNK
+> +	select SET_FS
+This looks wrong - looks like some merge went wrong here.
+
+>  
+>  config ARCH_PROC_KCORE_TEXT
+>  	def_bool y
+> diff --git a/arch/sparc/include/asm/processor_32.h b/arch/sparc/include/asm/processor_32.h
+> index 647bf0ac7beb..b26c35336b51 100644
+> --- a/arch/sparc/include/asm/processor_32.h
+> +++ b/arch/sparc/include/asm/processor_32.h
+> @@ -32,10 +32,6 @@ struct fpq {
+>  };
+>  #endif
+>  
+> -typedef struct {
+> -	int seg;
+> -} mm_segment_t;
+> -
+>  /* The Sparc processor specific thread struct. */
+>  struct thread_struct {
+>  	struct pt_regs *kregs;
+> @@ -50,11 +46,9 @@ struct thread_struct {
+>  	unsigned long   fsr;
+>  	unsigned long   fpqdepth;
+>  	struct fpq	fpqueue[16];
+> -	mm_segment_t current_ds;
+>  };
+>  
+>  #define INIT_THREAD  { \
+> -	.current_ds = KERNEL_DS, \
+>  	.kregs = (struct pt_regs *)(init_stack+THREAD_SIZE)-1 \
+>  }
+>  
+> diff --git a/arch/sparc/include/asm/uaccess_32.h b/arch/sparc/include/asm/uaccess_32.h
+> index 367747116260..9fd6c53644b6 100644
+> --- a/arch/sparc/include/asm/uaccess_32.h
+> +++ b/arch/sparc/include/asm/uaccess_32.h
+> @@ -12,19 +12,6 @@
+>  #include <linux/string.h>
+>  
+>  #include <asm/processor.h>
+> -
+> -/* Sparc is not segmented, however we need to be able to fool access_ok()
+> - * when doing system calls from kernel mode legitimately.
+> - *
+> - * "For historical reasons, these macros are grossly misnamed." -Linus
+> - */
+> -
+> -#define KERNEL_DS   ((mm_segment_t) { 0 })
+> -#define USER_DS     ((mm_segment_t) { -1 })
+> -
+> -#define get_fs()	(current->thread.current_ds)
+> -#define set_fs(val)	((current->thread.current_ds) = (val))
+> -
+>  #include <asm-generic/access_ok.h>
+>  
+>  /* Uh, these should become the main single-value transfer routines..
+> diff --git a/arch/sparc/kernel/process_32.c b/arch/sparc/kernel/process_32.c
+> index 2dc0bf9fe62e..88c0c14aaff0 100644
+> --- a/arch/sparc/kernel/process_32.c
+> +++ b/arch/sparc/kernel/process_32.c
+> @@ -300,7 +300,6 @@ int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
+>  		extern int nwindows;
+>  		unsigned long psr;
+>  		memset(new_stack, 0, STACKFRAME_SZ + TRACEREG_SZ);
+> -		p->thread.current_ds = KERNEL_DS;
+>  		ti->kpc = (((unsigned long) ret_from_kernel_thread) - 0x8);
+>  		childregs->u_regs[UREG_G1] = sp; /* function */
+>  		childregs->u_regs[UREG_G2] = arg;
+> @@ -311,7 +310,6 @@ int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
+>  	}
+>  	memcpy(new_stack, (char *)regs - STACKFRAME_SZ, STACKFRAME_SZ + TRACEREG_SZ);
+>  	childregs->u_regs[UREG_FP] = sp;
+> -	p->thread.current_ds = USER_DS;
+>  	ti->kpc = (((unsigned long) ret_from_fork) - 0x8);
+>  	ti->kpsr = current->thread.fork_kpsr | PSR_PIL;
+>  	ti->kwim = current->thread.fork_kwim;
+
+Other than the above the sparc32 changes looks fine, and with the Kconf
+stuff fixed:
+Acked-by: Sam Ravnborg <sam@ravnborg.org> # for sparc32 changes

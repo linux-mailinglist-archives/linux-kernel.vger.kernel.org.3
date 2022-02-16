@@ -2,62 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 600684B94A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 00:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F5B4B94A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 00:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238590AbiBPXn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 18:43:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57636 "EHLO
+        id S238597AbiBPXpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 18:45:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236907AbiBPXnY (ORCPT
+        with ESMTP id S229928AbiBPXpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 18:43:24 -0500
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC9E13C38E;
-        Wed, 16 Feb 2022 15:43:11 -0800 (PST)
-Received: by mail-io1-f52.google.com with SMTP id a26so1717299iot.6;
-        Wed, 16 Feb 2022 15:43:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CRjHfQOjI0mmOa6NhLg+/gN/vr6jaESGsMoKgehOdWk=;
-        b=NxJkwvgbiVlL1GMEmDT0NJrKJWumHuWD11F1GcIUn6iZCfmmbO0B1XRrFlk6ihrLiT
-         I8BkcmsuOxVkAI4z85mRnWiTMLgXhNs9NNE0im6xy1jiAyG0V6qDvCz9wbni1ayV+y3i
-         sSz4Ju0WdPrGzAfZgMgUvCycWV7eqYEcW/cWS2k2uSc3pNzO5/5hiepzGIpcvHrWZIKl
-         rFqHaDkkm/9rZBdw8WNKQgQECKGosJgF9a1ckOSy3ll7RWHlV9XLuNuEZuNSLt/1SC8c
-         pJ9MMCf2B3WKoy50DkXs3nxBpVpR4KObVjjpdDJK8Xu/kzFxD0vPh76yNh3KbP8RzzoS
-         Q5sQ==
-X-Gm-Message-State: AOAM531fbcIPVETl/aIibwal8sDsHv2/Jr1CZsZ73Fx+uU6vXVdHjeNe
-        dpGKifclf1JDIfGxQ8bYpBrzJ+bGKg==
-X-Google-Smtp-Source: ABdhPJzYA3SGZs3cIXGfYrgcESqrOx7Ezc+E2xRcM2xfKgqnUewWsDFahrdSZDa1d8exUTaPCL3ZKw==
-X-Received: by 2002:a05:6638:3183:b0:306:7ccc:92af with SMTP id z3-20020a056638318300b003067ccc92afmr153577jak.259.1645054990760;
-        Wed, 16 Feb 2022 15:43:10 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id x15sm906308ilu.11.2022.02.16.15.43.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 15:43:10 -0800 (PST)
-Received: (nullmailer pid 1902474 invoked by uid 1000);
-        Wed, 16 Feb 2022 23:43:08 -0000
-Date:   Wed, 16 Feb 2022 17:43:08 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-i2c@vger.kernel.org
-Subject: Re: [v6 1/3] dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
-Message-ID: <Yg2MDCQNJJBhO5UY@robh.at.kernel.org>
-References: <20220216074613.235725-1-patrick.rudolph@9elements.com>
- <20220216074613.235725-2-patrick.rudolph@9elements.com>
+        Wed, 16 Feb 2022 18:45:39 -0500
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D5024467B;
+        Wed, 16 Feb 2022 15:45:26 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 26BBA784;
+        Wed, 16 Feb 2022 23:45:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 26BBA784
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1645055126; bh=Sau/8cjm8I8qhCKztqdxWnh/G71DxOC+cWRj6cLXdWs=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=AKTZ0g7C8vjqdhi9kWWEzoEe9Y0BVE8ZI4Qn++H8qhAH0hw9tl0l/yu2u7f5U5F0h
+         LycKi5cpybaGfE0hOXC1fj6Q0yCE3exH8DVwfNcGGN/+mcylM7zBzNilSjO+WSI7gm
+         H0inRMW/gkE096yiONRLhc0i72p+LwRM/MCAIHJn7CST++V6NUK+h9QW8jKZ4s4Yf6
+         GLZn8A1pBZHSSQa6pJym5IE/eJzSRjT+ZGxxY28j+LfBE3EY2/HNK8684SuQTYBZRv
+         lfuOx0P9aPBlRYeEj0MkBuA4v8imNjzEd4naVnDBAA/gvsog/+NJPgVUcRpszAd/IO
+         qH2VkHPdTpK5Q==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Tomasz =?utf-8?B?V2FybmllxYLFgm8=?= <tomasz.warniello@gmail.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tomasz =?utf-8?B?V2FybmllxYLFgm8=?= <tomasz.warniello@gmail.com>
+Subject: Re: [RFC] scripts: kernel-doc: Major kernel-doc rework
+In-Reply-To: <20220205233945.7a4d22d8@fuji.fritz.box>
+References: <20220205233945.7a4d22d8@fuji.fritz.box>
+Date:   Wed, 16 Feb 2022 16:45:25 -0700
+Message-ID: <8735ki2x62.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216074613.235725-2-patrick.rudolph@9elements.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,26 +52,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Feb 2022 08:46:10 +0100, Patrick Rudolph wrote:
-> Update the pca954x bindings to add support for the Maxim MAX735x/MAX736x
-> chips. The functionality will be provided by the exisintg pca954x driver.
-> 
-> While on it make the interrupts support conditionally as not all of the
-> existing chips have interrupts.
-> 
-> For chips that are powered off by default add an optional regulator
-> called vdd-supply.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> ---
->  .../bindings/i2c/i2c-mux-pca954x.yaml         | 44 ++++++++++++++-----
->  1 file changed, 34 insertions(+), 10 deletions(-)
-> 
+Tomasz Warnie=C5=82=C5=82o <tomasz.warniello@gmail.com> writes:
 
+> This is in fact a release notification of a major kernel-doc script
+> refurbishment I have done. My work has reached a stage, which can be
+> considered a world sync point and here we are.
+>
+> I'm not sending all the patches to the Linux mailing list, as I prefer
+> to check what you think before I emit about 500 emails.
+>
+> I've parked the lot for you to inspect here:
+> https://salsa.debian.org/guest/kernel-doc
+>
+> This also helps me report the bug fixes. See the issue tracker:
+> https://salsa.debian.org/guest/kernel-doc/-/issues
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
+I've taken a quick look - that's a lot of stuff.  Thanks for not sending
+it all; you would have gotten some unhappy answers.
 
-If a tag was not added on purpose, please state why and what changed.
+Some overall thoughts:
 
+ - Work like this needs to be broken up into digestible batches.  Let's
+   start with the POD stuff that I've (finally) commented on; other
+   stuff can come later.
+
+ - The coding style in the new work is very unkernellike; that will make
+   it harder to get this work merged.
+
+ - But let's take a step back and ask: why are we doing all of this work
+   in the first place?  What is the benefit to the kernel community from
+   all this churn, and a growth of the kernel-doc script by over 2,000
+   lines (even if an awful lot of them are blank)?
+
+I'm serious about that last question; do we really want to invest that
+kind of effort into this nasty old script?  Or, if we're going to do
+such a thing, should we maybe start with Markus's rewrite into Python
+instead?  If we're going to thrash the code and make it unrecognizable,
+perhaps we should move to a language that is consistent with the rest of
+the docs build system and which, I believe, is easier for more kernel
+developers to deal with?
+
+I am *not* saying that this work cannot be accepted, and I certainly do
+not want to alienate somebody who is actually able to look at kernel-doc
+and not have their eyes bleed out.  But I am saying that, before
+launching into a hundreds-of-patches journey, we should know where we're
+going and why we are doing it.
+
+See what I'm getting at?
+
+Thanks,
+
+jon

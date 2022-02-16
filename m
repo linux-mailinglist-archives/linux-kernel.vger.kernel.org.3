@@ -2,110 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EFFB4B868D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 12:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B844B8696
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 12:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbiBPLT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 06:19:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59136 "EHLO
+        id S231463AbiBPLYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 06:24:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbiBPLTz (ORCPT
+        with ESMTP id S230196AbiBPLYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 06:19:55 -0500
-Received: from mail-oo1-xc44.google.com (mail-oo1-xc44.google.com [IPv6:2607:f8b0:4864:20::c44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D13B638F
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 03:19:43 -0800 (PST)
-Received: by mail-oo1-xc44.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso2084177ooi.1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 03:19:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=y/WwzOufdV8bFjC2XhKxeIddPBCZMNKZVHLfMOMvj6I=;
-        b=Xx/gYixp2kwKF9egh8TDvk1y1p4tTmEa5X1oxbDOu3/odXRRwGsRsdB4w6jfHn1o4H
-         8G0M9oSgWO/GuJN8uNu/mHDcvtRCRaz8pDdajJz/boGo/bWT4YO7e+9lRnJTPk1hRb6H
-         LWfKdiSvEglXbstxuqKJldjxJM8MXIvYwwT0HUmfe1FBZt0dZSVsvhnBHpWXmSAshki6
-         hyobDz9KOR22KHly5MuEx6opuSi2evfqdqAOGPd9SYaj/cYIrtTdApAE/kUq+vIZcwGg
-         uwbZsra7C5pEBXb4Tl0m7QvKE1H6wF7Xplo45IHrFFpNj9LjNB6leSyIx25glzCj9XJc
-         QH3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=y/WwzOufdV8bFjC2XhKxeIddPBCZMNKZVHLfMOMvj6I=;
-        b=J7MP5B+ayanI5DsebxUkmO5wUJDHHGfMr+T4IMF9Pz3UVUeNJZkQkXwslvsZHLues3
-         Jo8q9Q2sUObkkFzmoAczCUxPPs7EHVi6JNLsvSNNvQ3vG4Vhcv0yqBc/xxAktW/En6Hi
-         im17l+jsAaMtn63w65m95LjtqdeAmos1zPZGPXkB2tx7Ggq3jbEln0oahMUFEoibr6BQ
-         yxrc8X/9/Lq+4KcPTpxlu0sK1g2Lji3/Ixi2GpPVDbsk49x69BGfs8EHGnpBaf5mLgax
-         2UFqcmzPKdb6vdKgCPSZ4vd5jnH81LLBZfcJg2SyUJ7bQ66YFnSaOwYuQh2fWKyr+NNg
-         1BbA==
-X-Gm-Message-State: AOAM530DQCtuitTKr1E0TXBi8aLgml2u3l+fEHEAIzghFYImUqFnN/5F
-        2W86euwi530K4Du2gPYw9LBzeCaliqAVW3gPtws=
-X-Google-Smtp-Source: ABdhPJx0QVI2C5bWODgIDb5PfTvrV43SkuxpoVlFi3wGeoZTjYu/sAJyK4db32ocwnTU6y9sWxgS3jEDnWG6+OLivyU=
-X-Received: by 2002:a05:6870:2a41:b0:d3:473b:3e96 with SMTP id
- jd1-20020a0568702a4100b000d3473b3e96mr278939oab.38.1645010383049; Wed, 16 Feb
- 2022 03:19:43 -0800 (PST)
+        Wed, 16 Feb 2022 06:24:49 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A60D12A94
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 03:24:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645010677; x=1676546677;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WKeWYo3OrFlbW/B48YGMo66yFGWHV+Gg77NsB+U1VEI=;
+  b=W2BATo8lMgbj3tdkADN+XgqfXtHDuKaUScF3vNRzF0wOmrnDucUswtvQ
+   3JRtGmsZFe8U8102c3SAFaHTX9t431lOYdW0YaHAJbtf2ce0S+4qHcddv
+   ItDKuZDT8BZXvnhKG4fEiYd/loFwVINnti629Un6Ui6v+0E3Zmg3lSgag
+   EjvMmOT0l01GJoIxpQxn5cfmRTSD1T76Aa8hfnl64/2MWzEnsEXlsGhAJ
+   FLBXrVAVvLXrB9kJOfaUZyyMWYwEURJMhX26ITzyUK1kmFowzvv2Uutre
+   Knt81A8TND7pCc+jgKgHmmQGoxjEkoZIBpJxpj9FJIOUz2gU6tQP25ck1
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="313855714"
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="313855714"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 03:24:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="636444901"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 16 Feb 2022 03:24:35 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKIQE-000Akk-UE; Wed, 16 Feb 2022 11:24:34 +0000
+Date:   Wed, 16 Feb 2022 19:24:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tong Zhang <ztong0001@gmail.com>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Tong Zhang <ztong0001@gmail.com>
+Subject: Re: [PATCH] platform/chrome: cros_ec: honor acpi=off
+Message-ID: <202202161903.6YHDLR8F-lkp@intel.com>
+References: <20220216062601.779690-1-ztong0001@gmail.com>
 MIME-Version: 1.0
-Reply-To: drtracywilliams89@gmail.com
-Sender: atminstruction@gmail.com
-Received: by 2002:a9d:2ae4:0:0:0:0:0 with HTTP; Wed, 16 Feb 2022 03:19:42
- -0800 (PST)
-From:   "Dr. Tracy Williams" <tracy0wiliams@gmail.com>
-Date:   Wed, 16 Feb 2022 03:19:42 -0800
-X-Google-Sender-Auth: vU6KKat7LNNlDJdvGSMs--gFupM
-Message-ID: <CAGNbUyGuuvehSKJX=PMgzS4=4HFekWKysE86mE5mVHae5H+NWA@mail.gmail.com>
-Subject: From Dr. Tracy Williams.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:c44 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4106]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [drtracywilliams89[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [tracy0wiliams[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216062601.779690-1-ztong0001@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear,
+Hi Tong,
 
-how are you today,I hope you are doing great. It is my great pleasure
-to contact you,I want to make a new and special friend,I hope you
-don't mind. My name is Tracy Williams
+Thank you for the patch! Perhaps something to improve:
 
-from the United States, Am a french and English nationality. I will
-give you pictures and more details about my self as soon as i hear
-from you in my email account bellow,
-Here is my email address; drtracywilliams89@gmail.com
+[auto build test WARNING on chrome-platform/for-next]
+[also build test WARNING on v5.17-rc4 next-20220216]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Tong-Zhang/platform-chrome-cros_ec-honor-acpi-off/20220216-142709
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git for-next
+config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20220216/202202161903.6YHDLR8F-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/66345a4aecd6e4acba257476c6e44559fccca143
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Tong-Zhang/platform-chrome-cros_ec-honor-acpi-off/20220216-142709
+        git checkout 66345a4aecd6e4acba257476c6e44559fccca143
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/chrome/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/platform/chrome/cros_ec_lpc.c: In function 'cros_ec_lpc_init':
+>> drivers/platform/chrome/cros_ec_lpc.c:553:6: warning: the address of 'acpi_disable' will always evaluate as 'true' [-Waddress]
+     553 |  if (acpi_disable)
+         |      ^~~~~~~~~~~~
 
 
-Please send your reply to my PRIVATE  mail box.
-Thanks,
+vim +553 drivers/platform/chrome/cros_ec_lpc.c
 
-Tracy Williams.
+   547	
+   548	static int __init cros_ec_lpc_init(void)
+   549	{
+   550		int ret;
+   551		acpi_status status;
+   552	
+ > 553		if (acpi_disable)
+   554			return -ENODEV;
+   555	
+   556		status = acpi_get_devices(ACPI_DRV_NAME, cros_ec_lpc_parse_device,
+   557					  &cros_ec_lpc_acpi_device_found, NULL);
+   558		if (ACPI_FAILURE(status))
+   559			pr_warn(DRV_NAME ": Looking for %s failed\n", ACPI_DRV_NAME);
+   560	
+   561		if (!cros_ec_lpc_acpi_device_found &&
+   562		    !dmi_check_system(cros_ec_lpc_dmi_table)) {
+   563			pr_err(DRV_NAME ": unsupported system.\n");
+   564			return -ENODEV;
+   565		}
+   566	
+   567		cros_ec_lpc_mec_init(EC_HOST_CMD_REGION0,
+   568				     EC_LPC_ADDR_MEMMAP + EC_MEMMAP_SIZE);
+   569	
+   570		/* Register the driver */
+   571		ret = platform_driver_register(&cros_ec_lpc_driver);
+   572		if (ret) {
+   573			pr_err(DRV_NAME ": can't register driver: %d\n", ret);
+   574			cros_ec_lpc_mec_destroy();
+   575			return ret;
+   576		}
+   577	
+   578		if (!cros_ec_lpc_acpi_device_found) {
+   579			/* Register the device, and it'll get hooked up automatically */
+   580			ret = platform_device_register(&cros_ec_lpc_device);
+   581			if (ret) {
+   582				pr_err(DRV_NAME ": can't register device: %d\n", ret);
+   583				platform_driver_unregister(&cros_ec_lpc_driver);
+   584				cros_ec_lpc_mec_destroy();
+   585			}
+   586		}
+   587	
+   588		return ret;
+   589	}
+   590	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

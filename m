@@ -2,152 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45BBD4B838D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:03:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A394B8380
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbiBPI64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 03:58:56 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38732 "EHLO
+        id S231247AbiBPI7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 03:59:55 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:44866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231666AbiBPI6y (ORCPT
+        with ESMTP id S230518AbiBPI7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 03:58:54 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0D82ABD1F;
-        Wed, 16 Feb 2022 00:58:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645001922; x=1676537922;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=4y71aus8Ob7SpkYYykXhuO5i7j3UaPqtGgLoekb6pW8=;
-  b=FnKSofJjr8nx6/ik2wBUPfPdtszWqWhUMBl/WIGpvXgXEMIvSqosb5h5
-   y900Rb91wV6E5GW/sWjmgVIq4kEdeTtzGeRkFalq4pF3rbIgMDfXx8Xzv
-   FEihIu8OBwgKubSlK/U5IdAqo8eMJFV8dpU+kx6EwFH9Zwr1YXpfepCnF
-   8=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 16 Feb 2022 00:58:41 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 00:58:41 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 16 Feb 2022 00:58:41 -0800
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 16 Feb 2022 00:58:35 -0800
-Date:   Wed, 16 Feb 2022 14:28:31 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Jun Li <lijun.kernel@gmail.com>
-CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>, Li Jun <jun.li@nxp.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>
-Subject: Re: [PATCH 2/2] usb: dwc: host: add xhci_plat_priv quirk
- XHCI_SKIP_PHY_INIT
-Message-ID: <20220216085831.GA15957@hu-pkondeti-hyd.qualcomm.com>
-References: <1644949454-814-1-git-send-email-quic_c_sanm@quicinc.com>
- <1644949454-814-3-git-send-email-quic_c_sanm@quicinc.com>
- <CAKgpwJWEZ7275LihHqxg50cWNVNxUcGR8e7pM-V2bH=aodL7YA@mail.gmail.com>
- <20220216080028.GA13793@hu-pkondeti-hyd.qualcomm.com>
- <CAKgpwJVwTDd40ZR3tKOgVpRTNs1OjE5ssMM+Lj-Ak0CHPSAWQQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
+        Wed, 16 Feb 2022 03:59:52 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2051.outbound.protection.outlook.com [40.107.21.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925822AC917
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:59:40 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R6WrWP/hv+2FDmWK37kaixbQdPKeh1BR4tErh58D3mS1m4+MWSEukIViRFJhm19BcczSBjHDaKrDE1+DW9oWBBTMQDk3VFvr4yo/99s98h7fDD4Z0ffFRFeIKPJ6XCGbqBt3QYUrbW7D/cMrhmb0bxJ3hIR7E+kz/oFNKSYoQ4pRCrSve9LjZRNcuAPggiOp8D33x98UAW6o3BXSKY8HyoT+7up6fQWW+YhErmlSduArKhJdqw0XoXQtUvz3kcwSI9jQEkkzLdp4VHYny8UBRoBGrMKh/+Dk7t5fCriQ4zLde1Ixt4urFgchHfJRzoIoY2w4fwQCIOy4Mk/RsUdFwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VOnawplqAuAvBAeYlX8xriQ7Rq6wHLANn1LuB6a9yy8=;
+ b=oFvKZoIxxd94iNJam5te675fEFbM3DoQiOcdA9+mzbqsW5v39xg3Osh8rvnwLX0KcGJ/qF5Ph3QU2MdBrqUMNtFJS4H0qin4jRH/Zd3ZzU20Nduw9TvDqS3Uy57BsDTCUkvMlgy0uXA5ybjEALzXXR8TLaPQ+XtczpcO+hhBkBjMzcIwV7Fdfi84JWsKc1yd2xUKP0WtuLdE80x5zsoqZXfA9DQn3kZ+MV4vAIxA1FYfqBiVIWIf6cvOVKeeQGINHGi31xzhJhovoaa4Y50XyGFOwjKB9G2BkUaUJ2yUzS1Ppfs5T8iH8XriuxfCAbycCa5sA7eBdRRW1Ycls7+r6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VOnawplqAuAvBAeYlX8xriQ7Rq6wHLANn1LuB6a9yy8=;
+ b=OVoyBuRHw53ZtmnGWIIVTF5IuA9XKm5dh6qvtEkxvMo9n2O2M3pb3z137sdRs0fsWkCkqxzjHWNv61ntYYDZRRt10eilmc06fueHD3Y6cwCXoFc4gPnny5XsbN768OESG1vAM2JjnPmHvPJYKK1yXErnCgo8UnG8vSxz12W82go=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by VI1PR04MB4078.eurprd04.prod.outlook.com (2603:10a6:803:4e::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Wed, 16 Feb
+ 2022 08:59:38 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::ddca:beb1:95b0:1ae1]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::ddca:beb1:95b0:1ae1%4]) with mapi id 15.20.4995.016; Wed, 16 Feb 2022
+ 08:59:38 +0000
+From:   Liu Ying <victor.liu@nxp.com>
+To:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     agx@sigxcpu.org, robert.foss@linaro.org, linux-imx@nxp.com
+Subject: [PATCH] drm/bridge: nwl-dsi: Remove superfluous write to NWL_DSI_IRQ_MASK register
+Date:   Wed, 16 Feb 2022 16:58:42 +0800
+Message-Id: <20220216085842.1973868-1-victor.liu@nxp.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKgpwJVwTDd40ZR3tKOgVpRTNs1OjE5ssMM+Lj-Ak0CHPSAWQQ@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0041.apcprd02.prod.outlook.com
+ (2603:1096:4:196::20) To AM7PR04MB7046.eurprd04.prod.outlook.com
+ (2603:10a6:20b:113::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7378318f-5d53-49c3-ad30-08d9f12aa910
+X-MS-TrafficTypeDiagnostic: VI1PR04MB4078:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR04MB4078CE7BFE2F8B497293A73798359@VI1PR04MB4078.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2089;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ItmIqHp4FRBVUC2vfEAdWX2Y3gd3aF/8206Z5/5g22U6i/XkkYCkC94IA2ugqlnp78KPcWLSip1j5+oC2c0f23AjRVENNUQLZBXfBEn3AbuaeP0ImUKC/lDPM4RSBUevWaDjNFrTZnyWPfTFhKJ7/I5yXakkAmgZpVcY7Gls5O48nYaalfUDWORHgfBuwLeI+GhM/uCt0YB2jIHLehe/tSB+HppnlICAjwSUZBqdJJNr5wdAbiqYs0G0PYQHjfLFnG3cEd787AMTAgl7fX01x1glgkWjxJeY1lCaWhvDR174DccMSs/MGARTuRQ8L+NjSRGls6YtrawsJRCWB/Fra7QVHmXpbOyYT2vbdf2eSqKHSTbil2uQFElokEYAt/BvyoxHmoSEf6Oc4RJvLnz6TI0Xc8BRo6MKvQ4PKHOp0qghq9MAs3e3QuaGs4ZBfUMH2KS077lrrN/eFW80ZXWAuEkYcw93GN7nshdbgBqmm9szIHZqWO6BPATg77ZdyyHS5/P/JTTSKjqgbUZ0t6V3ZCxIiEYSPhkgPghuszKcQe+2goB2GLtXxF+HrqEXF1e7UQHnQ+IM6Nx4cuC98uaPwuNxtROrKtb1X3CZsGuKqBE8GwMeQxf77xgoQIsGPBRw57foBaz11OUAbZj+Wdvqfo+ryemys6LUWvMeLCUcBDhSULXbjfYLHgMjfn8fDCDdgl0jkYkwensj+Yj0OnnC/A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(508600001)(26005)(1076003)(186003)(2616005)(38100700002)(52116002)(6512007)(6666004)(36756003)(6506007)(8936002)(38350700002)(66946007)(5660300002)(8676002)(66556008)(4326008)(66476007)(86362001)(316002)(2906002)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Dqis+ct8IK+K1ZTngO9z2UbKm4MYmS8hMQp9iZ23FLVDW1ltOWAEHiRoyitj?=
+ =?us-ascii?Q?moc2hn9wj26HtLkfz4OzdaBwDEno/LnIj15oCeip/52OYmS53P0jCADEDR3Y?=
+ =?us-ascii?Q?kFNGGvzECWsPC+7sjTArOcXIYeCbRnVjiNJpnQ7IXAJK8U9Xn3PxhMLqp7cV?=
+ =?us-ascii?Q?MNyF1j6kuEm/kya3sT5SR+aOE6UiDe2d6eg8lnd634KW334IVP2u09QB4t6A?=
+ =?us-ascii?Q?LkvXUxgLLSMmMmlFV8jAnva5nCYx0DLL3l91Xpoal5fnWBBdqtnRO2oOqx9x?=
+ =?us-ascii?Q?8SqqN7wuaWb1YLMc2JO11gPsPZBqH7yy30Y+ayc+BDxJbjPXoSzcgxCiDbjI?=
+ =?us-ascii?Q?XJeJCFX5jfr0H0FBiHp0c1kt2MfG5iiMGGwHUEiz+5HWmbrcYzIqY5Gppyf4?=
+ =?us-ascii?Q?k8R6aVjFL7+ZeImgPSLZQFUO5ycFNdeipSmss9qNYKxd00R4D9vXGq6st9kQ?=
+ =?us-ascii?Q?AcaIy+Ghcm84J8qY9OUCJIUFJ/GkWs4ahV+5pvZ3ZZmFrrshxihDnUWuUWHQ?=
+ =?us-ascii?Q?r5RlSEX+9xxdDkbYINmAKRAJ/6zk1576FzTPQLORSKAZBY/7h66qf2dwwh+7?=
+ =?us-ascii?Q?II9jMct9XglWgc0I7SG83/lUPPWUl96Iw+mMBcNZpBXUJ6bNMBwpB9Q3tmKo?=
+ =?us-ascii?Q?/xyTttJYsMo30bBwJWBPMo++iRc6LDxJhL4WvN+Ystn/f7AebmezVFNE78Mi?=
+ =?us-ascii?Q?2S7jzFoIVxMAcnoD82QCZzznk0gdTazBFKkBz+TKnXF8bhgnFkL3iKpTFXh9?=
+ =?us-ascii?Q?cqr/v/jwbbWOOaBT9UjcFWvuaChVQB4noHjEDPwOHz5fW4Yl60AYYpRl/PjD?=
+ =?us-ascii?Q?HXaQeKCZNPRiqfzTv4IzuK/LIvzOpIEA7UJBtVbrot4OX5PcEA549KZBHazn?=
+ =?us-ascii?Q?XLNeokGl6zy2AObYay2Dkl7CrKwAGXi6t5Trsxom3Cg1G0qI++fcg3EWYlBF?=
+ =?us-ascii?Q?6XfZY57/8bTytu4U5AxzoTcaeDxJRY8eINbDgfQA92kk6hfyGL/wPN5XYCy5?=
+ =?us-ascii?Q?A85NfZlTAWkiWEY8LZSQGEymFDSbgfF3pTBvK67FhFXsuZGE+lkEDQA73sZl?=
+ =?us-ascii?Q?JbjJbJrtGxl59DOZDYAsarhfrNhTHi6DcowbuyOS7XQRmxHCF0JYlpdFeE6K?=
+ =?us-ascii?Q?lYVVLgaEofbaY9ZgUPLobQPWBxpmhmLoyW6qLavS4QYuSJhYG8YRJnH+tUd3?=
+ =?us-ascii?Q?fRERWv0h5zuSPNTz02bSHhOnniFlT/iN9zxCtTQa8n2bValeCJmqvtzySCFX?=
+ =?us-ascii?Q?CEWwZYQIvboF23HCx0Qpj/au4RItzT+D/OmjqKlB1aqGBSXy8VouoVTPLUqw?=
+ =?us-ascii?Q?Ah58hHsoInUzWr+j5kbh+Kz7qo7kagZ8YNiQWTgxaT5NHhXJCqkfXBSut9Y0?=
+ =?us-ascii?Q?PnORFJcNcpHlKD/aGdsIb6tvkOO6Yc/MgzG5FemMIeTNpj4Q5cqvapbFHTdY?=
+ =?us-ascii?Q?C7Gyf7KUkcBI+Ed20E0XFhBR6tgDARcvM6IIyYlAzPtwH0r2dQErGvt58TL+?=
+ =?us-ascii?Q?pxrxL+qddDoUrQhMERQsXnH3CS4UuAxGgJTg8bvOV/+lW0i4kfh2zWybo4t4?=
+ =?us-ascii?Q?9nIfI5aHcgG6oNWZkcjLdaOBsgDqsvAbWFT8o2zNK5Rd8/VdE+q1sGX0rT5Z?=
+ =?us-ascii?Q?9BVnxNS2rC5dj2PBRRVjMN0=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7378318f-5d53-49c3-ad30-08d9f12aa910
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2022 08:59:38.0278
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ABcY6EPFsZh8MfbT8TbYiH7RxvVMU14JwnFsQJa8hw0fCUIgnBrXTaofjadGSrhXeYrTQN8Afhr+Nq/iDIKvTw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4078
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 04:49:32PM +0800, Jun Li wrote:
-> Pavan Kondeti <quic_pkondeti@quicinc.com> 于2022年2月16日周三 16:00写道：
-> >
-> > On Wed, Feb 16, 2022 at 03:16:40PM +0800, Jun Li wrote:
-> > > Sandeep Maheswaram <quic_c_sanm@quicinc.com> 于2022年2月16日周三 14:58写道：
-> > > >
-> > > > dwc3 manages PHY by own DRD driver, so skip the management by
-> > > > HCD core.
-> > > > During runtime suspend phy was not getting suspend because
-> > > > runtime_usage value is 2.
-> > > >
-> > > > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > > > ---
-> > > >  drivers/usb/dwc3/host.c | 15 +++++++++++++++
-> > > >  1 file changed, 15 insertions(+)
-> > > >
-> > > > diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> > > > index eda8719..4a035a8 100644
-> > > > --- a/drivers/usb/dwc3/host.c
-> > > > +++ b/drivers/usb/dwc3/host.c
-> > > > @@ -13,6 +13,14 @@
-> > > >  #include <linux/platform_device.h>
-> > > >
-> > > >  #include "core.h"
-> > > > +#include <linux/usb/hcd.h>
-> > > > +#include <linux/usb/xhci-plat.h>
-> > > > +#include <linux/usb/xhci-quirks.h>
-> > > > +
-> > > > +
-> > > > +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
-> > > > +       .quirks = XHCI_SKIP_PHY_INIT,
-> > > > +};
-> > >
-> > > It's better to create this xhci_plat_priv by each dwc3 glue layer,
-> > > with that, we can use this priv to pass other flags and possibly
-> > > override APIs by each glue driver which may not apply to all dwc3
-> > > platforms.
-> > >
-> >
-> > Do you see a need for any glue driver to know about this xHC platform data?
-> 
-> Yes. I have some xhci quirks which are specifix to NXP iMX platforms.
-> 
-> > AFAICT, glue driver has no direction connection with the dwc3 core. All
-> > the required data is coming from dT on ARM based boards. Adding a private
-> > interface between dwc3 core and glue for passing xhci platform data seems
-> > to be overkill. If there is a pressing need, why not?
-> 
-> And looking at xhci_plat_priv members
-> 
-> -struct xhci_plat_priv {
-> -       const char *firmware_name;
-> -       unsigned long long quirks;
-> -       int (*plat_setup)(struct usb_hcd *);
-> -       void (*plat_start)(struct usb_hcd *);
-> -       int (*init_quirk)(struct usb_hcd *);
-> -       int (*suspend_quirk)(struct usb_hcd *);
-> -       int (*resume_quirk)(struct usb_hcd *);
-> -};
-> 
-> Are we going to share the same all those quirks and APIs
-> implementation across all dwc3 platforms?
-> 
-Currently Yes. Thats why I am asking if there is a pressing need to
-make this more complex than it needs to be..
+To initialize register NWL_DSI_IRQ_MASK, it's enough to write it
+only once in function nwl_dsi_init_interrupts().
 
-Thanks,
-Pavan
+Signed-off-by: Liu Ying <victor.liu@nxp.com>
+---
+ drivers/gpu/drm/bridge/nwl-dsi.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
+index af07eeb47ca0..fcc4a2889ad4 100644
+--- a/drivers/gpu/drm/bridge/nwl-dsi.c
++++ b/drivers/gpu/drm/bridge/nwl-dsi.c
+@@ -333,17 +333,13 @@ static int nwl_dsi_config_dpi(struct nwl_dsi *dsi)
+ 
+ static int nwl_dsi_init_interrupts(struct nwl_dsi *dsi)
+ {
+-	u32 irq_enable;
+-
+-	nwl_dsi_write(dsi, NWL_DSI_IRQ_MASK, 0xffffffff);
+-	nwl_dsi_write(dsi, NWL_DSI_IRQ_MASK2, 0x7);
+-
+-	irq_enable = ~(u32)(NWL_DSI_TX_PKT_DONE_MASK |
+-			    NWL_DSI_RX_PKT_HDR_RCVD_MASK |
+-			    NWL_DSI_TX_FIFO_OVFLW_MASK |
+-			    NWL_DSI_HS_TX_TIMEOUT_MASK);
++	u32 irq_enable = ~(u32)(NWL_DSI_TX_PKT_DONE_MASK |
++				NWL_DSI_RX_PKT_HDR_RCVD_MASK |
++				NWL_DSI_TX_FIFO_OVFLW_MASK |
++				NWL_DSI_HS_TX_TIMEOUT_MASK);
+ 
+ 	nwl_dsi_write(dsi, NWL_DSI_IRQ_MASK, irq_enable);
++	nwl_dsi_write(dsi, NWL_DSI_IRQ_MASK2, 0x7);
+ 
+ 	return nwl_dsi_clear_error(dsi);
+ }
+-- 
+2.25.1
+

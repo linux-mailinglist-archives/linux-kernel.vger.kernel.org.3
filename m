@@ -2,131 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E9F4B7C80
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:37:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 770694B7C82
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245462AbiBPB2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 20:28:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50012 "EHLO
+        id S245474AbiBPBdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 20:33:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238335AbiBPB2y (ORCPT
+        with ESMTP id S234468AbiBPBdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 20:28:54 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EC2CD5C6;
-        Tue, 15 Feb 2022 17:28:43 -0800 (PST)
+        Tue, 15 Feb 2022 20:33:33 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FFD66FA0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:33:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644974923; x=1676510923;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=3f4y2yguXvUrU7lczgu8gh9tQfZt363S1MBqO0zPhoA=;
-  b=I7IRy1s6SkucObgiO4o9dMgmcGx2YFoMCebj9SqXyhAuFo3CLMpDltoj
-   B0IKGiXXYiZTWQZkGruATwWEzLtJYcAHme1wIg+oiIroXWk+1bewTaHvz
-   f85eP63c2g7Wf7VmRxfQNV1zy7OA7Q6SE5SSkYPxv3cWbQx8RwA3KRywP
-   e+R5+xlgPSQpgd6ULiXeugFOOCSQ1nNujeoIPAV74ROW1n7gy5J1+KdPD
-   MQBOk8zOV14WHs14/2HTlSsw0iTqcKg1rgJpfkQsVuhRvLqnyMCxSzfK/
-   SlWgw2wofKPzLVQjgpYS4L8IdyiGCOQkwgDlFVeINNSwN5OKntGYT6gZp
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="311238524"
+  t=1644975202; x=1676511202;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AiIXLQZu8+D8R2OVvFhAZ74QjGlHT0Agn4x8wR/GemA=;
+  b=AU3zAKeReLb+66fJRCBewLZzanaOZUDOvoO42Uo4AsU8fcUaW5KOKYkT
+   ZO1VxpFswhtEv37tcqjuHTeJbboXsyqxBiR6HTejYHntO8uyuurKO6SN1
+   uqvEtQdeND0S+yg2o65HaZA7Dq+/0bfQc/obEll+3YyLUAaAs/h9j+ZJz
+   2JDsT/ExSjum1l7ygvx+w8bY1w3nFHiPg29CZG6Ulj4ZZqx54aMnvxiio
+   5zyUET7UbXnYzmu0bn6bVXQVWyIcR2687/HLx6YWSIGqcRdxbgkqhGIdZ
+   EXG2mbIdATOGPl+tU2Tm4TqyZRiNZGpKLzIWMvuPSCYEjhcN0ZTlq3lAv
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="250699572"
 X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="311238524"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 17:28:43 -0800
+   d="scan'208";a="250699572"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 17:33:22 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="529171432"
-Received: from guptapa-mobl1.amr.corp.intel.com ([10.209.113.151])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 17:28:42 -0800
-Date:   Tue, 15 Feb 2022 17:28:41 -0800
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Andrew Cooper <Andrew.Cooper3@citrix.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "antonio.gomez.iglesias@linux.intel.com" 
-        <antonio.gomez.iglesias@linux.intel.com>,
-        "neelima.krishnan@intel.com" <neelima.krishnan@intel.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] x86/tsx: Use MSR_TSX_CTRL to clear CPUID bits
-Message-ID: <20220216012841.vxlnugre2j4pczp7@guptapa-mobl1.amr.corp.intel.com>
-References: <20220214224121.ilhu23cfjdyhvahk@guptapa-mobl1.amr.corp.intel.com>
- <YgrltbToK8+tG2qK@zn.tnic>
- <20220215002014.mb7g4y3hfefmyozx@guptapa-mobl1.amr.corp.intel.com>
- <Ygt/QSTSMlUJnzFS@zn.tnic>
- <20220215121103.vhb2lpoygxn3xywy@guptapa-mobl1.amr.corp.intel.com>
- <YgvVcdpmFCCn20A7@zn.tnic>
- <20220215181931.wxfsn2a3npg7xmi2@guptapa-mobl1.amr.corp.intel.com>
- <YgwAHU7gCnik8Kv6@zn.tnic>
- <20220216003950.5jxecuf773g2kuwl@guptapa-mobl1.amr.corp.intel.com>
- <6724088f-c7cf-da92-e894-d8970f13bf1e@citrix.com>
+   d="scan'208";a="571080002"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 15 Feb 2022 17:33:19 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nK9C1-000AFV-Kw; Wed, 16 Feb 2022 01:33:17 +0000
+Date:   Wed, 16 Feb 2022 09:32:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 34/43] undefined
+ reference to `xa_store_range'
+Message-ID: <202202160932.EILzLWJZ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6724088f-c7cf-da92-e894-d8970f13bf1e@citrix.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.02.2022 00:49, Andrew Cooper wrote:
->On 16/02/2022 00:39, Pawan Gupta wrote:
->> On 15.02.2022 20:33, Borislav Petkov wrote:
->>> On Tue, Feb 15, 2022 at 10:19:31AM -0800, Pawan Gupta wrote:
->>>> I admit it has gotten complicated with so many bits associated with
->>>> TSX.
->>>
->>> Yah, and looka here:
->>>
->>> https://github.com/andyhhp/xen/commit/ad9f7c3b2e0df38ad6d54f4769d4dccf765fbcee
->>>
->>>
->>> It seems it isn't complicated enough. ;-\
->>>
->>> Andy just made me aware of this thing where you guys have added a new
->>> MSR bit:
->>>
->>> MSR_MCU_OPT_CTRL[1] which is called something like
->>> MCU_OPT_CTRL_RTM_ALLOW or so.
->>
->> RTM_ALLOW bit was added to MSR_MCU_OPT_CTRL, but its not set by default,
->> and it is *not* recommended to be used in production deployments [1]:
->>
->>   Although MSR 0x122 (TSX_CTRL) and MSR 0x123 (IA32_MCU_OPT_CTRL) can be
->>   used to reenable Intel TSX for development, doing so is not recommended
->>   for production deployments. In particular, applying MD_CLEAR flows for
->>   mitigation of the Intel TSX Asynchronous Abort (TAA) transient
->> execution
->>   attack may not be effective on these processors when Intel TSX is
->>   enabled with updated microcode. The processors continue to be mitigated
->>   against TAA when Intel TSX is disabled.
->
->The purpose of setting RTM_ALLOW isn't to enable TSX per say.
->
->The purpose is to make MSR_TSX_CTRL.RTM_DISABLE behaves consistently on
->all hardware, which reduces the complexity and invasiveness of dealing
->with this special case, because the TAA workaround will still turn TSX
->off by default.
->
->The configuration you don't want to be running with is RTM_ALLOW &&
->!RTM_DISABLE, because that is "still vulnerable to TSX Async Abort".
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
+head:   d40df0841e9f8de3713a19dd3f0ba283c860cb93
+commit: 4cfd40116179da8d60f57d8e8c0d19a7514bcc66 [34/43] netfs: Generate a buffered writeback from ->writepages()
+config: parisc-buildonly-randconfig-r006-20220214 (https://download.01.org/0day-ci/archive/20220216/202202160932.EILzLWJZ-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/4cfd40116179da8d60f57d8e8c0d19a7514bcc66
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
+        git checkout 4cfd40116179da8d60f57d8e8c0d19a7514bcc66
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash
 
-I am not sure how a system can end up with RTM_ALLOW && !RTM_DISABLE? I
-have no problem taking care of this case, I am just debating why we need
-it.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-One way to get to this state is BIOS sets RTM_ALLOW (dont know why?) and
-linux cmdline has tsx=on.
+All errors (new ones prefixed by >>):
 
-Thanks,
-Pawan
+   hppa-linux-ld: fs/netfs/flush.o: in function `netfs_flush_get_pages':
+>> (.text+0xfc): undefined reference to `xa_store_range'
+>> hppa-linux-ld: (.text+0x290): undefined reference to `xa_store_range'
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

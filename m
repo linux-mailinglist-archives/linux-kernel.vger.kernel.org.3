@@ -2,123 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 167184B9105
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCFF4B90E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238039AbiBPTMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 14:12:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47006 "EHLO
+        id S237986AbiBPTF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 14:05:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238040AbiBPTM3 (ORCPT
+        with ESMTP id S235248AbiBPTFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 14:12:29 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95316A046
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:12:15 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id a23so1498437eju.3
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:12:15 -0800 (PST)
+        Wed, 16 Feb 2022 14:05:25 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D452599FA
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:05:12 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id v25so1775488oiv.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:05:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MFZAXh0fPBQNBK2R2nIbUxsfdyleJj0WxyfRkLW2ksM=;
-        b=Uluo3RZ4Jb1a8toBJUYIYiZsZX8M8bZSJueR1LtDSK2/kjqFPZc2c843qGVD0412tE
-         SFliv6hazTgZT8N6TuzuCzJcyQvHI2dObibM/hIL7m+6gPVsOUzZllXCXv/NKfiUW3He
-         mdLeagIMwN9s9JKPFRvkLtupmK75oAPH2rWXU=
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=aVYmbgVTns/qU6vGaPJo+De8qlM44UBRmgs+fYad6dw=;
+        b=khs7wmXDMOrhKc1YljkX/CBjF85HvL3cBs9WN46wnqkX8Tzj8/AP3wK2Ju8tIvx5cC
+         5UGUG1f2Iw4PRGkDYPrkY1pb6Ter8qA2z1GMETDmcKh/a8HU19Z073Ja5Fmaem2ZHG0x
+         KWd4mnM6JlDnSlVcAbvWpU51IQxnK73BdonKo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MFZAXh0fPBQNBK2R2nIbUxsfdyleJj0WxyfRkLW2ksM=;
-        b=uoVBRizFxbzTtN6xEt5VdbdcOD6KFDY6kifPkLRu9KflZ67F43HMh0x5E9raagOJw4
-         RMN3372Lx68IEdvjtcbuKTvbSEoNDc5kxFqnjdQ8/rIZPRtosf1Y3LDxKSD3A+HctHCj
-         cLKuUP0x+njDq8cx7T3vk7d3vKsPpVKMeTs87cUTAkmU9MyiKyDGoKEwDJFVL+yNITvJ
-         4sZr8Ity+Ld4aqKLzQ48czYGxHV5fS8XBjrCgk/DrJ9ERXgA3uOKklVnaayulHcEBr3A
-         MsJ+51qJlHtJ6Rt67UUZKROosapP9tJvih8/FIxHMugdbmTxijsumIuT20Y8jLjQxjCy
-         incw==
-X-Gm-Message-State: AOAM530Yo3D2AN8Ox9D2fvIhoZNH1Wu2esyWcQlgtvWJUj3Bu1mA5+es
-        3ETfpvC7oaLLrR5rWAMsf+68hZUpOJATrF0G5xc=
-X-Google-Smtp-Source: ABdhPJxq9IzKaZipdbheGQ4Mo4iOx7R9uciFKGtTasJhRH3bVv3g6QV0/e1r5jr+oap56/mee5Jk6A==
-X-Received: by 2002:a17:906:9947:b0:6cf:e903:fb75 with SMTP id zm7-20020a170906994700b006cfe903fb75mr3362839ejb.400.1645038734067;
-        Wed, 16 Feb 2022 11:12:14 -0800 (PST)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id j8sm2342038edw.40.2022.02.16.11.12.13
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 11:12:13 -0800 (PST)
-Received: by mail-wr1-f41.google.com with SMTP id k1so5063450wrd.8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:12:13 -0800 (PST)
-X-Received: by 2002:a05:651c:549:b0:243:d87d:4f5a with SMTP id
- q9-20020a05651c054900b00243d87d4f5amr3232911ljp.443.1645038284648; Wed, 16
- Feb 2022 11:04:44 -0800 (PST)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=aVYmbgVTns/qU6vGaPJo+De8qlM44UBRmgs+fYad6dw=;
+        b=jxShoakK884Gak5o9OKvNmNfq2gSwrXj1LpbH37bNqjWBPxwtzP3yKRWnW82VeL7xN
+         klW+JMJIqGb94apk7p+5Iz70tpg/lmNcTKk4th40k8F4NxxmrFvGGGNu9hJLhOSSRlNt
+         hLhPD0W0MVmvHTnZ8xCYEF9BXGcMmqfBnEAcIS6tiVDWUOE5QhKsooV06JbGn5tTCRVR
+         d+RElEbt8wHPl7Bv/2o0o90+rPgRdKm/h13RbU67f1Ov0ZulfMrMWztn6vuV9npEfaKv
+         IlvVm+nxYLrCPNKvPHDWYxmyCY6PMlFCnkkG4m3Ooh39slHpdeuqTqaPa+DEIoc9OPd9
+         cj9Q==
+X-Gm-Message-State: AOAM531yAb+2xO0DXVkTGx+EZ2gS0cJZb2UW5MKf8Ic3vJSKG5I8fbqr
+        iUoBuxuB+93cUuYc4UBOPPyz0fpAlp4znO5korGF3A==
+X-Google-Smtp-Source: ABdhPJz6oTMx5SDP1atDaHjjBaVtHdu9B64jLra7yXRoRtTP6AwMJCHcJuOUO2BdKPClntlFTZ3K3BiQsE4HR4mzK2Y=
+X-Received: by 2002:a05:6808:30c:b0:2d4:655b:c8c4 with SMTP id
+ i12-20020a056808030c00b002d4655bc8c4mr794909oie.90.1645038312158; Wed, 16 Feb
+ 2022 11:05:12 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 16 Feb 2022 11:05:11 -0800
 MIME-Version: 1.0
-References: <20200917112538.GD8409@ziepe.ca> <CAHk-=wjtfjB3TqTFRzVmOrB9Mii6Yzc-=wKq0fu4ruDE6AsJgg@mail.gmail.com>
- <20200917193824.GL8409@ziepe.ca> <CAHk-=wiY_g+SSjncZi8sO=LrxXmMox0NO7K34-Fs653XVXheGg@mail.gmail.com>
- <20200918164032.GA5962@xz-x1> <20200918173240.GY8409@ziepe.ca>
- <20200918204048.GC5962@xz-x1> <0af8c77e-ff60-cada-7d22-c7cfcf859b19@nvidia.com>
- <20200919000153.GZ8409@ziepe.ca> <20200921083505.GA5862@quack2.suse.cz>
- <20200921120301.GD8409@ziepe.ca> <CAFCwf10eNmwq2wD71xjUhqkvv5+_pJMR1nPug2RqNDcFT4H86Q@mail.gmail.com>
-In-Reply-To: <CAFCwf10eNmwq2wD71xjUhqkvv5+_pJMR1nPug2RqNDcFT4H86Q@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 16 Feb 2022 11:04:28 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgLk5xWj8v6mQXaWL0zWAf2cis8EpPkQUuEZ7K3LxVQHQ@mail.gmail.com>
-Message-ID: <CAHk-=wgLk5xWj8v6mQXaWL0zWAf2cis8EpPkQUuEZ7K3LxVQHQ@mail.gmail.com>
-Subject: Re: [PATCH 1/4] mm: Trial do_wp_page() simplification
-To:     Oded Gabbay <oded.gabbay@gmail.com>,
-        David Hildenbrand <david@redhat.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Jan Kara <jack@suse.cz>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Maya B . Gokhale" <gokhale2@llnl.gov>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Marty Mcfadden <mcfadden8@llnl.gov>,
-        Kirill Shutemov <kirill@shutemov.name>,
-        Oleg Nesterov <oleg@redhat.com>, Jann Horn <jannh@google.com>,
-        Kirill Tkhai <ktkhai@virtuozzo.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Xu <peterx@redhat.com>
+In-Reply-To: <YgyNScQJNVjJpqEc@google.com>
+References: <20220211012510.1198155-1-swboyd@chromium.org> <20220211012510.1198155-2-swboyd@chromium.org>
+ <YgyNScQJNVjJpqEc@google.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 16 Feb 2022 11:05:11 -0800
+Message-ID: <CAE-0n51vdZ=PLXx5Hq+R+F7KwDRPBauN0XjvE_qFtNoHiRWU2w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] Input: Extract ChromeOS vivaldi physmap show function
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     benjamin.tissoires@redhat.com, Jiri Kosina <jikos@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        "Sean O'Brien" <seobrien@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Added David Hildenbrand to the participants. David, see
-
-    https://bugzilla.kernel.org/show_bug.cgi?id=215616
-
-  for details ]
-
-On Wed, Feb 16, 2022 at 8:59 AM Oded Gabbay <oded.gabbay@gmail.com> wrote:
+Quoting Dmitry Torokhov (2022-02-15 21:36:09)
+> On Thu, Feb 10, 2022 at 05:25:07PM -0800, Stephen Boyd wrote:
+> >  drivers/input/Kconfig                 |  7 +++++
+> >  drivers/input/Makefile                |  1 +
+> >  drivers/input/keyboard/Kconfig        |  2 ++
+> >  drivers/input/keyboard/atkbd.c        | 22 +++++----------
+> >  drivers/input/keyboard/cros_ec_keyb.c | 32 ++++++++--------------
+> >  drivers/input/vivaldi-keymap.c        | 39 +++++++++++++++++++++++++++
+> >  include/linux/input/vivaldi-keymap.h  | 28 +++++++++++++++++++
 >
-> All the details are in the bug, but the bottom line is that somehow,
-> this patch causes corruption when the numa balancing feature is
-> enabled AND we don't use process affinity AND we use GUP to pin pages
-> so our accelerator can DMA to/from system memory.
+> Since you called the config INPUT_VIVALDIFMAP I think we should call
+> these files vivaldi-fmap.(h|c) as well. They are not really keymaps.
 
-Hmm. I thought all the remaining issues were related to THP - and
-David Hildenbrand had a series to fix those up.
-
-The fact that it also shows up with numa balancing is a bit
-unfortunate, because I think that means that that patch series may not
-have caught that case.
-
-That said - what does "we use GUP to pin pages" mean? Does it actually
-use the pinning logic, or just regular old GUP?
-
-I'm assuming this is just the existing pin_user_pages_fast() (ie a
-proper pin) in drivers/misc/habanalabs/common/memory.c. But I wanted
-to confirm that it's not some other situation.
-
-                   Linus
+Sure. I used 'f' for 'function'. It could also be INPUT_VIVALDI_PHYSMAP
+and vivaldi-physmap.(h|c) if that's more appropriate. I'll resend this
+with fmap and we can take it from there.

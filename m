@@ -2,137 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA17F4B90B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BAFF4B90B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:50:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237839AbiBPSt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 13:49:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54406 "EHLO
+        id S237859AbiBPSuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 13:50:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiBPSty (ORCPT
+        with ESMTP id S237844AbiBPSuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 13:49:54 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177B82AD677
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:49:42 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id u18so5505305edt.6
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:49:42 -0800 (PST)
+        Wed, 16 Feb 2022 13:50:11 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7092AE061;
+        Wed, 16 Feb 2022 10:49:59 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id a12-20020a05683012cc00b005acf7c91097so2091881otq.10;
+        Wed, 16 Feb 2022 10:49:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=/COvjkXtEZda9jeXezpZm3EMBCJ6hYD5ta53dGN4wSg=;
-        b=GGcJ4b7eNFAQu7BjZhNj7Y+qpzoMz+YO6vahcslZQlidY8PCZR2CiKKcPcMiV+yVq8
-         pNyidYvGlW74UouySlIBVO3p4EP7oE0hutb+JEapQGUENaFmbrzzHEU/au0QGnU6w7p8
-         LH/4GH/Q89gGFZ7nJMF+ly2CEzivONVr9r1xBFzQ0q2nzXBRKEk+7AcEmU8notoJnoU8
-         smz9qieaiwOtCWuCqzwawTKO5QcfLdThFAhAjZGMuaIH14UYZ+ZQnlYnK4lWKiyvO1Ho
-         m+m39gYnonib0e1dStq61ZX72kVlfK0QedSEsDBQ3gwTcv7tuI5JJmmoRHxjI+HcgTUE
-         N88g==
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=3kLfFSE/C06joF3jS7Z0xiZBbMoPWR9flOrS/8xPo3Y=;
+        b=UGwIKWndo1i98MKsce/34mpGidnESA3+necSuCey7xSjnyt3JFZBIaWINPukmO62uh
+         /n12GlM+8Uj2x8iwsV5dtqznFBb5CmIe9gAA8iUtwI0VOUOga6sJwLJ9xHYzkLVQAI4q
+         YuPxnNT0YGFfJG6lGQmlx+Mgz1fdiBBWpMntHNz7tDKdj3c7K88mQN7hC9OVOH5YtHxq
+         a8CRd7C0ENmgXd1Od+wFHF/ihliDjwWSFH4ZEdssNhmwquhTbgWnYw83ImbmqCIstd+7
+         DrlEldu4lGDg+zboUzFg9MyaRKW6m0LHjUry/inHuhMpqGIjT4MH1YXQoYSmN8vg2gvF
+         APvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=/COvjkXtEZda9jeXezpZm3EMBCJ6hYD5ta53dGN4wSg=;
-        b=xexYoQJMZqHhcJkBi21jH4SqxwA2H1Dy9WSkH3gxg+D/rDLGUe2g8vX6+r0lwW6w1N
-         apmvoOfRh4DC5wDPfyb1nB2acKz+xq8kn02PoawXAYYWJgpTC1V1WTdsi0X78oL9PJFA
-         20HohvfRvcJaFs5zZOa0SazUeHqfHLNhryTUWfyMMzWkmmdODwy0yP27THouBptrVlkO
-         m2owlJSLMbKobscp3qbiZQsWWB9bj9YHNTRZduenQILjl6JwObMywtY2oorDnHpWoop9
-         pzxqeBvfv3XuTKQfdYBpjc+btB36mHsAweIQnwHF3lzBlfF7qJtzi3f7ooppg7nJz1jo
-         hw6Q==
-X-Gm-Message-State: AOAM5315dcoijcVZbbhZiu4f4XVE6uRH2YTinVzLkM37wtvmEiooJQlS
-        36aOvVJQ3CNCpe+0DfBsXIo=
-X-Google-Smtp-Source: ABdhPJx041ZxjVCiSN74SkQP9Cu0BVADSNROH7zpshOsvMs5rKZ0JRbTt+5ScQ6YNIEG8907DKCBdQ==
-X-Received: by 2002:a50:e081:0:b0:401:8823:c9a8 with SMTP id f1-20020a50e081000000b004018823c9a8mr4459340edl.401.1645037380512;
-        Wed, 16 Feb 2022 10:49:40 -0800 (PST)
-Received: from pswork ([62.96.250.75])
-        by smtp.gmail.com with ESMTPSA id m27sm214038ejn.134.2022.02.16.10.49.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 10:49:40 -0800 (PST)
-Date:   Wed, 16 Feb 2022 19:49:39 +0100
-From:   Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
-        paulmck@kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] workqueue: Fix race in schedule and flush work
-Message-ID: <20220216184939.GA3868@pswork>
-References: <20220210184319.25009-1-treasure4paddy@gmail.com>
- <Ygqw+EHo//6VGs6q@slm.duckdns.org>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=3kLfFSE/C06joF3jS7Z0xiZBbMoPWR9flOrS/8xPo3Y=;
+        b=HWhsXsVDnSzbxI/8TIDOql+o3OGYd4ZneXdD6zvSr1eTutNQWfYegn4HPgoQNfl74J
+         EZsYN1mb8p4f+ymGoH/rXVkaa7eOt95N/W2hx7XUTEnsP3Ri7L7VZS5ZGkRA8igP4RI8
+         CtQ4wFB90mnFNj4IFS9fdB5FFEWhg2Aho4U61ehyWvcticMX5MQX1NywZJ1pn0rS7P37
+         QEKtycAovI8aOg/iabdRJ1dKWx2pi6ZrHHKACXFwfX23t4B/cghiZF6BTtHNGMNwmdtI
+         YCHudh5RUJY6W/k1G9Dmuw8EdrzldiOosK60uPtpVKwJbwPiDvDeOMY0vo3r8bmgt/gg
+         neMQ==
+X-Gm-Message-State: AOAM531KOXLTz/ShXBJiu4TfTPSYY9nCDzbHN+nmqdqVL2kE3+7plUap
+        bXUGtDkNz0CQkNRT5AnXIJjenSYtshTFAg==
+X-Google-Smtp-Source: ABdhPJwrTswJ+6WmyZAuaAinv3Q9SzOzN9hFGR1rFu8LQs/67NWsJRHTrkvqI23kXlF5viBk59/U+A==
+X-Received: by 2002:a05:6830:410e:b0:5a1:71ec:7277 with SMTP id w14-20020a056830410e00b005a171ec7277mr1325985ott.136.1645037398534;
+        Wed, 16 Feb 2022 10:49:58 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d20sm5861467otu.61.2022.02.16.10.49.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 10:49:57 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <7f3fc06f-cf4e-2dc6-e68a-917117fe8895@roeck-us.net>
+Date:   Wed, 16 Feb 2022 10:49:56 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ygqw+EHo//6VGs6q@slm.duckdns.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220216180822.GA3300192@roeck-us.net>
+ <CAB95QASWWMvSSuuwQU=TwZX-QcU=hRPCJVQ0E6Bh29sc4d66Ug@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v4] hwmon: (asus-ec-sensors) merge setup functions
+In-Reply-To: <CAB95QASWWMvSSuuwQU=TwZX-QcU=hRPCJVQ0E6Bh29sc4d66Ug@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 09:43:52AM -1000, Tejun Heo wrote:
-> Hello,
+On 2/16/22 10:23, Eugene Shalygin wrote:
+> On Wed, 16 Feb 2022 at 19:08, Guenter Roeck <linux@roeck-us.net> wrote:
+>> $ scripts/checkpatch.pl --strict asus-ec
 > 
-> > diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-> > index 33f1106b4f99..a3f53f859e9d 100644
-> > --- a/kernel/workqueue.c
-> > +++ b/kernel/workqueue.c
-> > @@ -3326,28 +3326,38 @@ EXPORT_SYMBOL(cancel_delayed_work_sync);
-> >   */
-> >  int schedule_on_each_cpu(work_func_t func)
-> >  {
-> > -	int cpu;
-> >  	struct work_struct __percpu *works;
-> > +	cpumask_var_t sched_cpumask;
-> > +	int cpu, ret = 0;
-> >  
-> > -	works = alloc_percpu(struct work_struct);
-> > -	if (!works)
-> > +	if (!alloc_cpumask_var(&sched_cpumask, GFP_KERNEL))
-> >  		return -ENOMEM;
-> >  
-> > +	works = alloc_percpu(struct work_struct);
-> > +	if (!works) {
-> > +		ret = -ENOMEM;
-> > +		goto free_cpumask;
-> > +	}
-> > +
-> >  	cpus_read_lock();
-> >  
-> > -	for_each_online_cpu(cpu) {
-> > +	cpumask_copy(sched_cpumask, cpu_online_mask);
-> > +	for_each_cpu_and(cpu, sched_cpumask, cpu_online_mask) {
+> So, contributors have to use the --strict option?
 > 
-> This definitely would need a comment explaining what's going on cuz it looks
-> weird to be copying the cpumask which is supposed to stay stable due to the
-> cpus_read_lock().Given that it can only happen during early boot and the
-> online cpus can only be expanding, maybe just add sth like:
+>> WARNING: braces {} are not necessary for single statement blocks
 > 
->         if (early_during_boot) {
->                 for_each_possible_cpu(cpu)
->                         INIT_WORK(per_cpu_ptr(works, cpu), func);
->         }
+> The file is full of such braces, because I like them and it is only a
+> warning. How should I proceed with them?
 > 
 
-Thanks tejun for the reply and suggestions.
+Warnings are also seen without --strict; that only adds the CHECK messages.
+You should follow Linux kernel coding style when you write kernel code,
+not your personal preferences. Also please consider reading
+Documentation/hwmon/submitting-patches.rst, which specifically says
 
-Yes, unfortunately cpus_read_lock not keeping cpumask stable at
-secondary boot. Not sure, may be it only gurantee 'cpu' dont go down
-under cpus_read_[lock/unlock].
+* Please run your patch through 'checkpatch --strict'. There should be no
+   errors, no warnings, and few if any check messages. If there are any
+   messages, please be prepared to explain.
 
-As suggested will tryout something like:
-	if (system_state != RUNNING) {
-		:
-	}
-> BTW, who's calling schedule_on_each_cpu() that early during boot. It makes
-> no sense to do this while the cpumasks can't be stabilized.
->
-It is  implemenation of CONFIG_TASKS_RUDE_RCU.
+* If your patch generates checkpatch errors, warnings, or check messages,
+   please refrain from explanations such as "I prefer that coding style".
+   Keep in mind that each unnecessary message helps hiding a real problem,
+   and a consistent coding style makes it easier for others to understand
+   and review the code.
 
-> Thanks.
-> 
-> -- 
-> tejun
+Thanks,
+Guenter

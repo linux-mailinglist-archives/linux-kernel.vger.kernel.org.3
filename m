@@ -2,175 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BF84B807A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 07:19:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 644264B8080
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 07:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344688AbiBPFze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 00:55:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56356 "EHLO
+        id S1344682AbiBPFzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 00:55:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234272AbiBPFzd (ORCPT
+        with ESMTP id S234272AbiBPFzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 00:55:33 -0500
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AF9F4049
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 21:55:21 -0800 (PST)
-Received: from localhost.localdomain (36-229-230-216.dynamic-ip.hinet.net [36.229.230.216])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id E8A1340E38;
-        Wed, 16 Feb 2022 05:55:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644990915;
-        bh=PU5eTj/ytMNtCk92Lx1FCuQEXOf60kKz6t5NLgZnyoA=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=KDeGtw3iZzZ+JLQOk5mRXPFokOCssu5UQ7CXb6dfG1mUeUHPhBkO5EzIM0VSCaXdx
-         NvLRW/i15FkQKT3DX5n9M0/U6StZ8Cme1Wn7K/0JYPYNrrqilxXBqB6GKT1NE3GjZk
-         P9qMdUzQGh4/pleQKyQYtN3eRhfoYlQ2E8lJVkEwtOR+nZ3GefLqO7281DBD3OHUZK
-         39RytLWqhdtWWhQdzq0AhRHPXu4SU8nvspfwAp92kHfcw7mSvJ4rgX8P1NlafYM1GF
-         W9WjOtWkkTisLl9J9ej23FbzAksbtB27wlmXU1DU4peG5knZYoO6ydrIPsZxRQihXo
-         akoLDEiObWDzw==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     ulf.hansson@linaro.org
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Thomas Hebb <tommyhebb@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mmc: rtsx: Let MMC core handle runtime PM
-Date:   Wed, 16 Feb 2022 13:54:31 +0800
-Message-Id: <20220216055435.2335297-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 16 Feb 2022 00:55:22 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA607C12FB;
+        Tue, 15 Feb 2022 21:55:06 -0800 (PST)
+X-UUID: c07bc4593c3b447483f06278c4671c7e-20220216
+X-UUID: c07bc4593c3b447483f06278c4671c7e-20220216
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 138608058; Wed, 16 Feb 2022 13:55:02 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 16 Feb 2022 13:55:01 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 16 Feb 2022 13:54:59 +0800
+Message-ID: <d9637b40196873f392ac9cebfe369106a6f0eee7.camel@mediatek.com>
+Subject: Re: [PATCH v4 08/35] iommu/mediatek: Use kmalloc for protect buffer
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <iommu@lists.linux-foundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>, <youlin.pei@mediatek.com>,
+        <anan.sun@mediatek.com>, <xueqi.zhang@mediatek.com>,
+        <yen-chang.chen@mediatek.com>, <mingyuan.ma@mediatek.com>,
+        <yf.wang@mediatek.com>, <libo.kang@mediatek.com>,
+        <chengci.xu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Will Deacon <will@kernel.org>
+Date:   Wed, 16 Feb 2022 13:54:59 +0800
+In-Reply-To: <ca47becf-adc9-f11e-5e59-03f203920344@collabora.com>
+References: <20220125085634.17972-1-yong.wu@mediatek.com>
+         <20220125085634.17972-9-yong.wu@mediatek.com>
+         <ca47becf-adc9-f11e-5e59-03f203920344@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since MMC core handles runtime PM reference counting, we can avoid doing
-redundant runtime PM work in the driver. That means the only thing
-commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM") misses is
-to always enable runtime PM, to let its parent driver enable ASPM in the
-runtime idle routine.
+On Thu, 2022-01-27 at 12:08 +0100, AngeloGioacchino Del Regno wrote:
+> Il 25/01/22 09:56, Yong Wu ha scritto:
+> > No need zero for the protect buffer that is only accessed by the
+> > IOMMU HW
+> > translation fault happened.
+> > 
+> > Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> 
+> I would rather keep this a devm_kzalloc instead... the cost is very
+> minimal and
+> this will be handy when new hardware will be introduced, as it may
+> require a bigger
+> buffer: in that case, "older" platforms will use only part of it and
+> we may get
+> garbage data at the end.
 
-Fixes: 7499b529d97f ("mmc: rtsx: Use pm_runtime_{get,put}() to handle runtime PM")
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
- drivers/mmc/host/rtsx_pci_sdmmc.c | 18 ------------------
- 1 file changed, 18 deletions(-)
+Currently this is to avoid zero 512 bytes for all the platforms.
 
-diff --git a/drivers/mmc/host/rtsx_pci_sdmmc.c b/drivers/mmc/host/rtsx_pci_sdmmc.c
-index 2a3f14afe9f83..265b3889f9d72 100644
---- a/drivers/mmc/host/rtsx_pci_sdmmc.c
-+++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
-@@ -823,7 +823,6 @@ static void sd_request(struct work_struct *work)
- 	}
- 
- 	mutex_lock(&pcr->pcr_mutex);
--	pm_runtime_get_sync(dev);
- 
- 	rtsx_pci_start_run(pcr);
- 
-@@ -860,8 +859,6 @@ static void sd_request(struct work_struct *work)
- 			data->bytes_xfered = data->blocks * data->blksz;
- 	}
- 
--	pm_runtime_mark_last_busy(dev);
--	pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&pcr->pcr_mutex);
- 
- finish:
-@@ -1093,7 +1090,6 @@ static void sdmmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
- 		return;
- 
- 	mutex_lock(&pcr->pcr_mutex);
--	pm_runtime_get_sync(dev);
- 
- 	rtsx_pci_start_run(pcr);
- 
-@@ -1127,8 +1123,6 @@ static void sdmmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
- 	rtsx_pci_switch_clock(pcr, ios->clock, host->ssc_depth,
- 			host->initial_mode, host->double_clk, host->vpclk);
- 
--	pm_runtime_mark_last_busy(dev);
--	pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&pcr->pcr_mutex);
- }
- 
-@@ -1144,7 +1138,6 @@ static int sdmmc_get_ro(struct mmc_host *mmc)
- 		return -ENOMEDIUM;
- 
- 	mutex_lock(&pcr->pcr_mutex);
--	pm_runtime_get_sync(dev);
- 
- 	rtsx_pci_start_run(pcr);
- 
-@@ -1154,8 +1147,6 @@ static int sdmmc_get_ro(struct mmc_host *mmc)
- 	if (val & SD_WRITE_PROTECT)
- 		ro = 1;
- 
--	pm_runtime_mark_last_busy(dev);
--	pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&pcr->pcr_mutex);
- 
- 	return ro;
-@@ -1173,7 +1164,6 @@ static int sdmmc_get_cd(struct mmc_host *mmc)
- 		return cd;
- 
- 	mutex_lock(&pcr->pcr_mutex);
--	pm_runtime_get_sync(dev);
- 
- 	rtsx_pci_start_run(pcr);
- 
-@@ -1183,8 +1173,6 @@ static int sdmmc_get_cd(struct mmc_host *mmc)
- 	if (val & SD_EXIST)
- 		cd = 1;
- 
--	pm_runtime_mark_last_busy(dev);
--	pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&pcr->pcr_mutex);
- 
- 	return cd;
-@@ -1282,7 +1270,6 @@ static int sdmmc_switch_voltage(struct mmc_host *mmc, struct mmc_ios *ios)
- 		return err;
- 
- 	mutex_lock(&pcr->pcr_mutex);
--	pm_runtime_get_sync(dev);
- 
- 	rtsx_pci_start_run(pcr);
- 
-@@ -1312,8 +1299,6 @@ static int sdmmc_switch_voltage(struct mmc_host *mmc, struct mmc_ios *ios)
- 	err = rtsx_pci_write_register(pcr, SD_BUS_STAT,
- 			SD_CLK_TOGGLE_EN | SD_CLK_FORCE_STOP, 0);
- 
--	pm_runtime_mark_last_busy(dev);
--	pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&pcr->pcr_mutex);
- 
- 	return err;
-@@ -1334,7 +1319,6 @@ static int sdmmc_execute_tuning(struct mmc_host *mmc, u32 opcode)
- 		return err;
- 
- 	mutex_lock(&pcr->pcr_mutex);
--	pm_runtime_get_sync(dev);
- 
- 	rtsx_pci_start_run(pcr);
- 
-@@ -1367,8 +1351,6 @@ static int sdmmc_execute_tuning(struct mmc_host *mmc, u32 opcode)
- 		err = sd_change_phase(host, DDR50_RX_PHASE(pcr), true);
- 
- out:
--	pm_runtime_mark_last_busy(dev);
--	pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&pcr->pcr_mutex);
- 
- 	return err;
--- 
-2.34.1
+Sorry, I don't understand why it is unnecessary when the new hardware
+requires a bigger buffer. If the buffer becomes bigger, then clearing
+it to 0 need more cost. then this patch is more helpful?
+
+The content in this buffer is garbage, we won't care about or analyse
+it.
+
+> 
+> Regards,
+> Angelo
 

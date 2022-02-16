@@ -2,47 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3A84B86EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 12:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1D84B86F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 12:44:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232070AbiBPLoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 06:44:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58838 "EHLO
+        id S232049AbiBPLo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 06:44:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231810AbiBPLoE (ORCPT
+        with ESMTP id S232077AbiBPLoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 06:44:04 -0500
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31BA238;
-        Wed, 16 Feb 2022 03:43:50 -0800 (PST)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nKIim-00075Q-H5; Wed, 16 Feb 2022 12:43:44 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     linux-kernel@vger.kernel.org, Atish Patra <atishp@rivosinc.com>
-Cc:     Atish Patra <atishp@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        devicetree@vger.kernel.org, Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-riscv@lists.infradead.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v4 4/6] RISC-V: Implement multi-letter ISA extension probing framework
-Date:   Wed, 16 Feb 2022 12:43:43 +0100
-Message-ID: <9295809.TOyiF8mCWT@diego>
-In-Reply-To: <20220216002911.1219593-5-atishp@rivosinc.com>
-References: <20220216002911.1219593-1-atishp@rivosinc.com> <20220216002911.1219593-5-atishp@rivosinc.com>
+        Wed, 16 Feb 2022 06:44:22 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4BD1CFDB;
+        Wed, 16 Feb 2022 03:44:07 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id B5D811F45113
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645011846;
+        bh=vMYqlcxJ4lSQwNLunvGOfbKl7psBgbiPHyVvb4L4nwM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RiEn09QgynpodGO9teoyBuAYdsAdJobXsL4dfPAvnBfl1aO2Dk57h5elih2C5oAEp
+         z7nXm4lm3Sm3fycsfqtGwWO+NdI4avvUEUurYHrIvLINcqK05+tsUKvy/99hRADF82
+         s94Y8lfCDZkCpVJU/Gnc6aFBy9CzCfZLByin8zLo3H9REnru3n6DHJHK86n040tR6x
+         eUhtvFuD7FqUIC3/pnYJHypbZw/R8PCs2D3vTjt7xR0T1PydVV49HClwhL9pp/PV/W
+         3zXdi0Lyb2KhXTE5JrXTL8qB7h5UruYseqwUVxY/oZlEZw+ZWWchiij2w+s3LxMvG7
+         5quSnteSnZmag==
+Message-ID: <cc5e7f4b-8a70-01a3-3219-b6b3c825504d@collabora.com>
+Date:   Wed, 16 Feb 2022 12:44:02 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v11 2/3] dt-bindings: pinctrl: mt8195: Add
+ mediatek,drive-strength-adv property
+Content-Language: en-US
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Sean Wang <sean.wang@mediatek.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        ryder.lee@kernel.org, wenst@chromium.org, chunfeng.yun@mediatek.com
+References: <20220216113131.13145-1-tinghan.shen@mediatek.com>
+ <20220216113131.13145-3-tinghan.shen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220216113131.13145-3-tinghan.shen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,124 +65,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, 16. Februar 2022, 01:29:09 CET schrieb Atish Patra:
-> Multi-letter extensions can be probed using exising
-> riscv_isa_extension_available API now. It doesn't support versioning
-> right now as there is no use case for it.
-> Individual extension specific implementation will be added during
-> each extension support.
+Il 16/02/22 12:31, Tinghan Shen ha scritto:
+> Extend driving support for I2C pins on SoC mt8195.
+> This property is already documented in mediatek,mt8183-pinctrl.yaml.
 > 
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-With my in-flight svpbmt series:
-Tested-by: Heiko Stuebner <heiko@sntech.de>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 > ---
->  arch/riscv/include/asm/hwcap.h | 18 ++++++++++++++++++
->  arch/riscv/kernel/cpufeature.c | 24 ++++++++++++++++++------
->  2 files changed, 36 insertions(+), 6 deletions(-)
+>   .../bindings/pinctrl/pinctrl-mt8195.yaml      | 35 +++++++++++++++++++
+>   1 file changed, 35 insertions(+)
 > 
-> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-> index 5ce50468aff1..170bd80da520 100644
-> --- a/arch/riscv/include/asm/hwcap.h
-> +++ b/arch/riscv/include/asm/hwcap.h
-> @@ -34,7 +34,25 @@ extern unsigned long elf_hwcap;
->  #define RISCV_ISA_EXT_s		('s' - 'a')
->  #define RISCV_ISA_EXT_u		('u' - 'a')
->  
-> +/*
-> + * Increse this to higher value as kernel support more ISA extensions.
-> + */
->  #define RISCV_ISA_EXT_MAX	64
-> +#define RISCV_ISA_EXT_NAME_LEN_MAX 32
+> diff --git a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
+> index 8299662c2c09..c5b755514c46 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
+> @@ -98,6 +98,32 @@ patternProperties:
+>             drive-strength:
+>               enum: [2, 4, 6, 8, 10, 12, 14, 16]
+>   
+> +          mediatek,drive-strength-adv:
+> +            description: |
+> +              Describe the specific driving setup property.
+> +              For I2C pins, the existing generic driving setup can only support
+> +              2/4/6/8/10/12/14/16mA driving. But in specific driving setup, they
+> +              can support 0.125/0.25/0.5/1mA adjustment. If we enable specific
+> +              driving setup, the existing generic setup will be disabled.
+> +              The specific driving setup is controlled by E1E0EN.
+> +              When E1=0/E0=0, the strength is 0.125mA.
+> +              When E1=0/E0=1, the strength is 0.25mA.
+> +              When E1=1/E0=0, the strength is 0.5mA.
+> +              When E1=1/E0=1, the strength is 1mA.
+> +              EN is used to enable or disable the specific driving setup.
+> +              Valid arguments are described as below:
+> +              0: (E1, E0, EN) = (0, 0, 0)
+> +              1: (E1, E0, EN) = (0, 0, 1)
+> +              2: (E1, E0, EN) = (0, 1, 0)
+> +              3: (E1, E0, EN) = (0, 1, 1)
+> +              4: (E1, E0, EN) = (1, 0, 0)
+> +              5: (E1, E0, EN) = (1, 0, 1)
+> +              6: (E1, E0, EN) = (1, 1, 0)
+> +              7: (E1, E0, EN) = (1, 1, 1)
+> +              So the valid arguments are from 0 to 7.
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+> +            enum: [0, 1, 2, 3, 4, 5, 6, 7]
 > +
-> +/* The base ID for multi-letter ISA extensions */
-> +#define RISCV_ISA_EXT_BASE 26
+>             bias-pull-down:
+>               oneOf:
+>                 - type: boolean
+> @@ -270,4 +296,13 @@ examples:
+>             bias-pull-down;
+>           };
+>         };
 > +
-> +/*
-> + * This enum represent the logical ID for each multi-letter RISC-V ISA extension.
-> + * The logical ID should start from RISCV_ISA_EXT_BASE and must not exceed
-> + * RISCV_ISA_EXT_MAX. 0-25 range is reserved for single letter
-> + * extensions while all the multi-letter extensions should define the next
-> + * available logical extension id.
-> + */
-> +enum riscv_isa_ext_id {
-> +	RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
-> +};
->  
->  unsigned long riscv_isa_extension_base(const unsigned long *isa_bitmap);
->  
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index cd9eb34f8d11..59c70c104256 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -83,7 +83,7 @@ void __init riscv_fill_hwcap(void)
->  
->  	for_each_of_cpu_node(node) {
->  		unsigned long this_hwcap = 0;
-> -		unsigned long this_isa = 0;
-> +		DECLARE_BITMAP(this_isa, RISCV_ISA_EXT_MAX);
->  
->  		if (riscv_of_processor_hartid(node) < 0)
->  			continue;
-> @@ -100,6 +100,7 @@ void __init riscv_fill_hwcap(void)
->  		if (!strncmp(isa, "rv64", 4))
->  			isa += 4;
->  #endif
-> +		bitmap_zero(this_isa, RISCV_ISA_EXT_MAX);
->  		for (; *isa; ++isa) {
->  			const char *ext = isa++;
->  			const char *ext_end = isa;
-> @@ -167,12 +168,22 @@ void __init riscv_fill_hwcap(void)
->  			if (*isa != '_')
->  				--isa;
->  
-> +#define SET_ISA_EXT_MAP(name, bit)						\
-> +			do {							\
-> +				if ((ext_end - ext == sizeof(name) - 1) &&	\
-> +				     !memcmp(ext, name, sizeof(name) - 1)) {    \
-> +					set_bit(bit, this_isa);			\
-> +					pr_info("Found ISA extension %s", name);\
-> +				}						\
-> +			} while (false)						\
-> +
->  			if (unlikely(ext_err))
->  				continue;
->  			if (!ext_long) {
->  				this_hwcap |= isa2hwcap[(unsigned char)(*ext)];
-> -				this_isa |= (1UL << (*ext - 'a'));
-> +				set_bit(*ext - 'a', this_isa);
->  			}
-> +#undef SET_ISA_EXT_MAP
->  		}
->  
->  		/*
-> @@ -185,10 +196,11 @@ void __init riscv_fill_hwcap(void)
->  		else
->  			elf_hwcap = this_hwcap;
->  
-> -		if (riscv_isa[0])
-> -			riscv_isa[0] &= this_isa;
-> +		if (bitmap_weight(riscv_isa, RISCV_ISA_EXT_MAX))
-> +			bitmap_and(riscv_isa, riscv_isa, this_isa, RISCV_ISA_EXT_MAX);
->  		else
-> -			riscv_isa[0] = this_isa;
-> +			bitmap_copy(riscv_isa, this_isa, RISCV_ISA_EXT_MAX);
-> +
->  	}
->  
->  	/* We don't support systems with F but without D, so mask those out
-> @@ -202,7 +214,7 @@ void __init riscv_fill_hwcap(void)
->  	for (i = 0, j = 0; i < NUM_ALPHA_EXTS; i++)
->  		if (riscv_isa[0] & BIT_MASK(i))
->  			print_str[j++] = (char)('a' + i);
-> -	pr_info("riscv: ISA extensions %s\n", print_str);
-> +	pr_info("riscv: base ISA extensions %s\n", print_str);
->  
->  	memset(print_str, 0, sizeof(print_str));
->  	for (i = 0, j = 0; i < NUM_ALPHA_EXTS; i++)
-> 
-
-
-
-
+> +      i2c0-pins {
+> +        pins {
+> +          pinmux = <PINMUX_GPIO8__FUNC_SDA0>,
+> +                   <PINMUX_GPIO9__FUNC_SCL0>;
+> +          bias-disable;
+> +          mediatek,drive-strength-adv = <7>;
+> +        };
+> +      };
+>       };

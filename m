@@ -2,86 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E6BB4B8C71
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9FA14B8C73
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234269AbiBPPay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 10:30:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38000 "EHLO
+        id S234312AbiBPPa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 10:30:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232213AbiBPPaw (ORCPT
+        with ESMTP id S232213AbiBPPay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 10:30:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABE425A94C;
+        Wed, 16 Feb 2022 10:30:54 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A506D25A94C;
+        Wed, 16 Feb 2022 07:30:42 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id p15so83774ejc.7;
+        Wed, 16 Feb 2022 07:30:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0zjszkS6L6DSZoEqedm7iPNnjeIn+MY1NQcvdazgDhc=;
+        b=gT2fWhDq/JdiRg2VBRoLumjxX/EVuxDes4PsA8gSKKHw5jrCN45wqLTlJRd7/31g7N
+         ie/aGyodDyn4OWM2lABsH2ruq5qqv5XXUCHdgjusimhazi36eoDF8UI80UnNj3WxE0b5
+         hyS0Y0gRD19c4fkpcPBdKhubn4gTbf5DRgd37jZf0QxWdDilt3YPvfJi2lvNPEVgba6G
+         JxWTg7Vy9lowtTG43T/4m80ebSLzSx7/NB86qYea1ftQ3CmCBuB/ceJnOuOyaP4tSIIj
+         Js9GNkUT9a7V/bSvRPZI3uNDFcOlSYXNhFadWYSAbgj+jvcMT95O9dxjM+h0tvJGObEa
+         vDsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0zjszkS6L6DSZoEqedm7iPNnjeIn+MY1NQcvdazgDhc=;
+        b=xjEB7+yK/tweJ27frFNxl7v0Fi8woV614spJiGa25gW+Q7q8+dhzhvTJqmwAtjzEhR
+         P2HtuI3Nl9rZ6i8aauzpV+FwlLhZjpGJQtC6W+oUppsRbpRI207N39E+pJ8SWCsqsTeE
+         dZ5NZTFkiWMTTmn/Lsn1FA76Bv2c7hdG1KCCygv8zGljBZa0D0Di3NcL/TIn7onYXWjV
+         5umUy+MsQwFo3wQo10vZm4GaJHk4bMrqWTLbeodpiFipaNfFoz5khnUom72NgGdmt/i0
+         3uzaZQ8K7Em/HCvJ0MDNQ6GXeUXK98mD7Lk7Fwilb6TOVNXgINbUsgX8CYoJWCMCxnkG
+         FgdA==
+X-Gm-Message-State: AOAM533xyfkDBwWmezd+/1Oxi1igkaL/9TPCT/ja1kjoAMTUvfb6vEpQ
+        2UZ8WDwQmY7IKRJrgJf75lYBLfA4KqU=
+X-Google-Smtp-Source: ABdhPJyaHD3bvBYXztT5gaV68mlWnB1CcFPhW6uRF1Od4ZdC+t9dgdw7kjkwGDoHsdQcoi1XPlxl+A==
+X-Received: by 2002:a17:906:3ad3:b0:6cd:382b:86e5 with SMTP id z19-20020a1709063ad300b006cd382b86e5mr2656336ejd.145.1645025441086;
+        Wed, 16 Feb 2022 07:30:41 -0800 (PST)
+Received: from skbuf ([188.27.184.105])
+        by smtp.gmail.com with ESMTPSA id p18sm22029ejm.63.2022.02.16.07.30.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 16 Feb 2022 07:30:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 487BDB81F21;
-        Wed, 16 Feb 2022 15:30:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFE45C004E1;
-        Wed, 16 Feb 2022 15:30:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645025437;
-        bh=jgVEEH3eNg0tOO+7PuDSL8BiWihVKmlQ7WkA5FiJu0w=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=dg3sua0KUzO571dyptHOqjuqrFYjizmZzSMGR/6M6f9vj/KXQrhv0MhOZF0ZNsdQA
-         uAYDOtWhVFkEm5MxQDlB48+a++0Tdm3J0i0O9kaoUIwg4xdeFhXB9tNZ15oE1wFPOd
-         sRrbPwwGSS3GwfbC3tjHtAAKgVR34ME46Zc6tpHRs1mgITeKEviiZdG0GoL6u1lA20
-         q9KOyM15ToCJWfBw+Rv20HzCxK4FNaNf/gjC8uvzOPaerDiOkQfyzRvtthPv/juoZZ
-         63zeNwbaabz+w4uQPkd6xbFVVtNSv7hxvRwlziYTfvZSTB4dwoB4UQzcvwERK8coEV
-         jnQ8YTTS/pSVg==
-Date:   Wed, 16 Feb 2022 16:30:34 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] HID: i2c-hid: remove unneeded semicolon
-In-Reply-To: <20220216015042.113021-1-yang.lee@linux.alibaba.com>
-Message-ID: <nycvar.YFH.7.76.2202161630200.11721@cbobk.fhfr.pm>
-References: <20220216015042.113021-1-yang.lee@linux.alibaba.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+Date:   Wed, 16 Feb 2022 17:30:39 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Mans Rullgard <mans@mansr.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Juergen Borleis <kernel@pengutronix.de>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: dsa: lan9303: add VLAN IDs to master device
+Message-ID: <20220216153039.ow7gcmfbjjfeekuc@skbuf>
+References: <20220216151111.6376-1-mans@mansr.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216151111.6376-1-mans@mansr.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Feb 2022, Yang Li wrote:
-
-> Eliminate the following coccicheck warning:
-> ./drivers/hid/i2c-hid/i2c-hid-core.c:357:56-57: Unneeded semicolon
+On Wed, Feb 16, 2022 at 03:11:11PM +0000, Mans Rullgard wrote:
+> If the master device does VLAN filtering, the IDs used by the switch
+> must be added for any frames to be received.  Do this in the
+> port_enable() function, and remove them in port_disable().
 > 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> Signed-off-by: Mans Rullgard <mans@mansr.com>
 > ---
->  drivers/hid/i2c-hid/i2c-hid-core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i2c-hid-core.c
-> index 91b2fa0d33c7..c078f09a2318 100644
-> --- a/drivers/hid/i2c-hid/i2c-hid-core.c
-> +++ b/drivers/hid/i2c-hid/i2c-hid-core.c
-> @@ -354,7 +354,7 @@ static int i2c_hid_set_or_send_report(struct i2c_hid *ihid,
->  		 * With simple "send report" all data goes into the output
->  		 * register.
->  		 */
-> -		*(__le16 *)ihid->cmdbuf = ihid->hdesc.wOutputRegister;;
-> +		*(__le16 *)ihid->cmdbuf = ihid->hdesc.wOutputRegister;
->  		length += sizeof(__le16);
->  	}
 
-Thanks, that was me fat-fingering the fixup in the original patch. 
-Applied.
-
--- 
-Jiri Kosina
-SUSE Labs
-
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>

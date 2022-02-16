@@ -2,59 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CEB14B8B80
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A584B8B71
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:32:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235076AbiBPOd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 09:33:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60020 "EHLO
+        id S235050AbiBPOcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 09:32:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235080AbiBPOdX (ORCPT
+        with ESMTP id S235036AbiBPOch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 09:33:23 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF8AC139CFE;
-        Wed, 16 Feb 2022 06:32:50 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D66B106F;
-        Wed, 16 Feb 2022 06:32:50 -0800 (PST)
-Received: from bogus (unknown [10.57.3.35])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 341D43F718;
-        Wed, 16 Feb 2022 06:32:47 -0800 (PST)
-Date:   Wed, 16 Feb 2022 14:31:58 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Liviu Dudau <Liviu.Dudau@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-stable <stable@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        lkft-triage@lists.linaro.org,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH 2/2] arm64: dts: juno: Enable more SMMUs
-Message-ID: <20220216143158.izrmexbqem3l5kz7@bogus>
-References: <720d0a9a42e33148fcac45cd39a727093a32bf32.1614965598.git.robin.murphy@arm.com>
- <a730070d718cb119f77c8ca1782a0d4189bfb3e7.1614965598.git.robin.murphy@arm.com>
- <0a1d437d-9ea0-de83-3c19-e07f560ad37c@arm.com>
- <20210730143431.GB1517404@mutt>
- <8b358507-dbdf-b05b-c1da-2ec9903a2912@arm.com>
- <CADYN=9LE2JnE+vmv_UaeyJj_RpHcp+zZUv711VuQekLSiQ2bJA@mail.gmail.com>
- <CA+G9fYu7ctvOfdvBkDZ1nABz0TaYZ49FUKVTctn+mBTCmk9JCQ@mail.gmail.com>
- <20220214141303.3lmnassl4qibsp3y@bogus>
- <CA+G9fYsUX2vHjNwZ7u=JtACEyfe9SkSHtYnwJXJ1JytF9+pSAQ@mail.gmail.com>
- <CA+G9fYsz89w-4-2GggA4ELOkNJ+pD4+u0=PEBZqiSDJea-aCoA@mail.gmail.com>
+        Wed, 16 Feb 2022 09:32:37 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7409E9F3
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 06:32:24 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id s1so2508411ioe.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 06:32:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=digitalocean.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NE7EY8xDj/IqqOA16SqMQVmbg8CT9KQUqq/vPjFlZhI=;
+        b=I/j6kvCD8Y0jU5HzdduK6zPqGJBLpG2zrXvbLUcD3UZxNBcIQId25DctMd8SoQ42Vm
+         o2otTRInzpGJc+V+B8dHDfk28fmn5DzuUTXtp6oy7v5DmIwhxYQ1HavOOu3fp6N6NP4e
+         quS8iebcC0vkB1q4pAvovLeLidzDnLB3bldNY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NE7EY8xDj/IqqOA16SqMQVmbg8CT9KQUqq/vPjFlZhI=;
+        b=p8jIf3FdFLl4+T4YKGe3qdTPYE+9pV3CwMd1LMRTpTaRzIJvjLJh0AnrB4dCVBWDVm
+         9pL3skCNuh8cXpaJ/nSrY2IEZoA6IRbnRiFsSDnVLjfgM4zjPIx31dyDQ5JvkPbz7YaN
+         eX/BJeY+7pZVfgoFMU0g/Bqy8fCxzhNX1iqSJuoFro4cWGXLXOMWIrTO2toDaiME8ajK
+         b08dQe6lQnNUN6jb0gcEj/eTUY3xGvp8Pfn9sWL2Zy4McZh0Z1NXxYoVeMcG3blaCV1Q
+         imJoPzfaj6rLo9uLkaATHMsluBnswWZd5IThvSHWy0Vcp0h0wNoTWmHcnQKl9W+sKOsB
+         WEYQ==
+X-Gm-Message-State: AOAM533StzMMOqpJoyH3tzjXrPp92ktRsb4OFHYgTOsx/hieoM/EnfWT
+        J2vGhZf1b32KK5N6AUK9UMsgzg==
+X-Google-Smtp-Source: ABdhPJxwl2buTtN73WTffUyIG4lljbaAylrEept42cxMmXsmI3BXhYgn0ZWT3qL5pWwvaSpqxNoxIg==
+X-Received: by 2002:a02:7742:0:b0:311:626c:d554 with SMTP id g63-20020a027742000000b00311626cd554mr1853496jac.134.1645021943659;
+        Wed, 16 Feb 2022 06:32:23 -0800 (PST)
+Received: from localhost ([2605:a601:ac0f:820:35a8:1556:a044:f8bb])
+        by smtp.gmail.com with ESMTPSA id q9sm8926475ilo.56.2022.02.16.06.32.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 06:32:23 -0800 (PST)
+From:   Seth Forshee <sforshee@digitalocean.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] vsock: remove vsock from connected table when connect is interrupted by a signal
+Date:   Wed, 16 Feb 2022 08:32:22 -0600
+Message-Id: <20220216143222.1614690-1-sforshee@digitalocean.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYsz89w-4-2GggA4ELOkNJ+pD4+u0=PEBZqiSDJea-aCoA@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,52 +67,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 05:02:53PM +0530, Naresh Kamboju wrote:
-> Hi Sudeep,
-> 
-> On Mon, 14 Feb 2022 at 20:41, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> >
-> > On Mon, 14 Feb 2022 at 19:43, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > >
-> > > On Mon, Feb 14, 2022 at 07:36:00PM +0530, Naresh Kamboju wrote:
-> > > > Hi Robin,
-> > > >
-> > > > Since we did not get a reply on this email thread.
-> > > > and those intermittent failures are causing a lot of noise in reports summary.
-> > > > We will wait one more week and stop running 64k page size testing on
-> > > > Juno-r2 devices.
-> > > >
-> > > > > > > diff --git a/arch/arm64/boot/dts/arm/juno-base.dtsi b/arch/arm64/boot/dts/arm/juno-base.dtsi
-> > > > > > > index 8e7a66943b01..d3148730e951 100644
-> > > > > > > --- a/arch/arm64/boot/dts/arm/juno-base.dtsi
-> > > > > > > +++ b/arch/arm64/boot/dts/arm/juno-base.dtsi
-> > > > > > > @@ -545,8 +545,7 @@ pcie_ctlr: pcie@40000000 {
-> > > > > > >                           <0x02000000 0x00 0x50000000 0x00 0x50000000 0x0 0x08000000>,
-> > > > > > >                           <0x42000000 0x40 0x00000000 0x40 0x00000000 0x1 0x00000000>;
-> > > > > > >                  /* Standard AXI Translation entries as programmed by EDK2 */
-> > > > > > > -               dma-ranges = <0x02000000 0x0 0x2c1c0000 0x0 0x2c1c0000 0x0 0x00040000>,
-> > > > > > > -                            <0x02000000 0x0 0x80000000 0x0 0x80000000 0x0 0x80000000>,
-> > > > > > > +               dma-ranges = <0x02000000 0x0 0x80000000 0x0 0x80000000 0x0 0x80000000>,
-> > > > > > >                               <0x43000000 0x8 0x00000000 0x8 0x00000000 0x2 0x00000000>;
-> > > > > > >                  #interrupt-cells = <1>;
-> > > > > > >                  interrupt-map-mask = <0 0 0 7>;
-> > > > > > >
-> > > >
-> > > > Reference email thread,
-> > > > https://lore.kernel.org/stable/0a1d437d-9ea0-de83-3c19-e07f560ad37c@arm.com/
-> > > >
-> > >
-> > > I was about to tag the fix for this and was just reading this thread. I will
-> > > send the pull request soon. Sorry for the delay, it is in next for some time
-> > > now. Are you seeing the issue even in linux-next ?
-> 
-> I have tested Linux next arm64 64k page size builds on Juno-r2 and confirm that
-> the reported issue is fixed now.
-> 
-> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+vsock_connect() expects that the socket could already be in the
+TCP_ESTABLISHED state when the connecting task wakes up with a signal
+pending. If this happens the socket will be in the connected table, and
+it is not removed when the socket state is reset. In this situation it's
+common for the process to retry connect(), and if the connection is
+successful the socket will be added to the connected table a second
+time, corrupting the list.
 
-Thanks for testing. I have already sent the pull request to Arnd yesterday.
+Prevent this by calling vsock_remove_connected() if a signal is received
+while waiting for a connection. This is harmless if the socket is not in
+the connected table, and if it is in the table then removing it will
+prevent list corruption from a double add.
 
+Signed-off-by: Seth Forshee <sforshee@digitalocean.com>
+---
+ net/vmw_vsock/af_vsock.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+index 3235261f138d..38baeb189d4e 100644
+--- a/net/vmw_vsock/af_vsock.c
++++ b/net/vmw_vsock/af_vsock.c
+@@ -1401,6 +1401,7 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
+ 			sk->sk_state = sk->sk_state == TCP_ESTABLISHED ? TCP_CLOSING : TCP_CLOSE;
+ 			sock->state = SS_UNCONNECTED;
+ 			vsock_transport_cancel_pkt(vsk);
++			vsock_remove_connected(vsk);
+ 			goto out_wait;
+ 		} else if (timeout == 0) {
+ 			err = -ETIMEDOUT;
 -- 
-Regards,
-Sudeep
+2.32.0
+

@@ -2,158 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 372E84B7CDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:56:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBAC44B7CEC
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343604AbiBPBvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 20:51:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46066 "EHLO
+        id S245696AbiBPBxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 20:53:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343586AbiBPBvR (ORCPT
+        with ESMTP id S235171AbiBPBxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 20:51:17 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF11FA235;
-        Tue, 15 Feb 2022 17:51:06 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id bt13so1637777ybb.2;
-        Tue, 15 Feb 2022 17:51:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=zgZsN7oUvazPcA59OzEiJ3ZRYuzqTaOIlq6Gf9AbiHs=;
-        b=CerpXZ9trzLcnSio8lebrkpKr0iKgIeBUHWagYx6AmkV2p0fH2XUk90jJR1aJ7qenD
-         SLNi8VpVHHW8NTMu4LbSfL5BkQo+aeDwPEyagD5r0sazNmThl1XUm7amKO+e3wFkzjtR
-         Eq7djuNwjREq8C2TOf4Bcz1ACWH7dCJAoSLf5Tq9wJzpIozYhZdBw9kEZ7CnHernaWBl
-         gBWUsXJCL85OAkWBwSM5pl7q0VrXADeoHku13l9TFlwMxSNBPAQV3p27g3YNGbQItnXm
-         /vJSCsb3HbI7gIej6J9F6j1TTfktepD7i1sY6Zz5psSBD9wrbEa9FQ/TvK5TyVAukb0B
-         YWmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=zgZsN7oUvazPcA59OzEiJ3ZRYuzqTaOIlq6Gf9AbiHs=;
-        b=3uw36DvFwejZQEEEnhk3VIwNvyuJA5+ehSs8EHfshU5UORHORTAbnv7vuRZJWUQCyQ
-         6hnEAJSjpjklNtuv7pES1W77UnmdV46Z77LC/s81R/4S6jXs4LhBXa656awZ0DZb7H27
-         T7Muja2+UKYqFkCdwZHgC/Stj9xBkiQ6q3k1pd3qO7kDuD5YKMmYdvWCI5MNaNJeJuJU
-         LN5CRXRW2ZgjD4llOf33QcMwSmNeLjn3ggy8BKJeitqK8nNbdbaEUvaW07a5Vw8wzYua
-         rMktJhVZ8othuZLZ9aydEZU3XK+MuIHpKxatuTPuHXzsrMWb9DFAY4cRk1lZlFlmNxqp
-         k2Vg==
-X-Gm-Message-State: AOAM532K2W1COvFnhT+Ff2gcEmoqmeqLsSH6PBF84AYk4zx41PlT6LPp
-        EUwo0MtEafkW7/BiGGxZs4MYB2BR+U+NW9gvRrLqTeJ2
-X-Google-Smtp-Source: ABdhPJzlFDa6naeVKOpgrMFYKIzN8aBeFhAICkRmdRT7vQxr/k+FFv+b7g3Ocm7b+8ED/BTEGcsf88ctDDcBVClw6yg=
-X-Received: by 2002:a25:6d87:0:b0:60f:fa38:fbd8 with SMTP id
- i129-20020a256d87000000b0060ffa38fbd8mr363321ybc.560.1644976266023; Tue, 15
- Feb 2022 17:51:06 -0800 (PST)
+        Tue, 15 Feb 2022 20:53:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0556C1DC;
+        Tue, 15 Feb 2022 17:53:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D49A3B81D90;
+        Wed, 16 Feb 2022 01:53:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2A46C340EB;
+        Wed, 16 Feb 2022 01:53:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644976386;
+        bh=RpHh2XK3cscZmha2HhZmkS5MLrmpjSMVuJard6nBP7M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=H/HPajPvU7ri60s90Bh8iAi4awFW7WonTf3sq4g+UXfYvPpo7f4ORClQuRXwv8jsb
+         1R9/ooc2UiG2pkAaOBJZg+WWbQuQTJYka0oGvUc0bLJK4I+9kf/N+xi/M0Hke87ZUg
+         4Qannc73uStqzNqbff3G935vnuVPrxptKjbb0HNAArwmBlD5n7WXfHQ+eU2PpbPYmX
+         5BrAzB+tA7V/FqaS46GwiXu7GidNuXJaIA9LLCBuEmYMRZ3+7kIpYwD4qpY3HQYv6v
+         4bpOii1xnGjL51SdxBJ54Tm+gDCOj/kDkzPe1epKqiKS2QNs3NNVp+Ps+PbIbj1bCQ
+         LkmkCg7CLaclw==
+Date:   Tue, 15 Feb 2022 19:53:03 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Nirmal Patel <nirmal.patel@linux.intel.com>,
+        Jonathan Derrick <jonathan.derrick@linux.dev>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] PCI: vmd: Honor ACPI _OSC on PCIe features
+Message-ID: <20220216015303.GA137820@bhelgaas>
 MIME-Version: 1.0
-References: <1644917065-23168-1-git-send-email-hammerh0314@gmail.com>
- <1644917065-23168-2-git-send-email-hammerh0314@gmail.com> <b50bf9ef-eb38-8e86-70f9-7a9a959be67b@canonical.com>
-In-Reply-To: <b50bf9ef-eb38-8e86-70f9-7a9a959be67b@canonical.com>
-From:   hammer hsieh <hammerh0314@gmail.com>
-Date:   Wed, 16 Feb 2022 09:51:21 +0800
-Message-ID: <CAOX-t55+_AE9eKf3OwRb1pos7gZZBa1xVV7EXAEMDQ2mm5VS0Q@mail.gmail.com>
-Subject: Re: [PATCH v8 1/2] dt-bindings:serial:Add bindings doc for Sunplus
- SoC UART Driver
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, robh+dt@kernel.org,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        p.zabel@pengutronix.de, wells.lu@sunplus.com,
-        "hammer.hsieh" <hammer.hsieh@sunplus.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0i6+EMMGuKckhtTdt7TgC3LbofW7oS7B5=McSNjEh1yKA@mail.gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> =E6=96=BC 2022=E5=
-=B9=B42=E6=9C=8815=E6=97=A5
-=E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=8810:53=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On 15/02/2022 10:24, Hammer Hsieh wrote:
-> > Add bindings doc for Sunplus SoC UART Driver
+On Tue, Feb 15, 2022 at 06:09:15PM +0100, Rafael J. Wysocki wrote:
+> On Tue, Feb 15, 2022 at 4:09 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Mon, Feb 14, 2022 at 08:23:05AM +0800, Kai-Heng Feng wrote:
+> > > On Thu, Feb 10, 2022 at 5:36 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > On Tue, Dec 07, 2021 at 02:15:04PM +0100, Rafael J. Wysocki wrote:
+> > > > > On Tue, Dec 7, 2021 at 12:12 AM Keith Busch <kbusch@kernel.org> wrote:
+> > > > > > On Fri, Dec 03, 2021 at 11:15:41AM +0800, Kai-Heng Feng wrote:
+> > > > > > > When Samsung PCIe Gen4 NVMe is connected to Intel ADL VMD, the
+> > > > > > > combination causes AER message flood and drags the system performance
+> > > > > > > down.
+> > > > > > >
+> > > > > > > The issue doesn't happen when VMD mode is disabled in BIOS, since AER
+> > > > > > > isn't enabled by acpi_pci_root_create() . When VMD mode is enabled, AER
+> > > > > > > is enabled regardless of _OSC:
+> > > > > > > [    0.410076] acpi PNP0A08:00: _OSC: platform does not support [AER]
+> > > > > > > ...
+> > > > > > > [    1.486704] pcieport 10000:e0:06.0: AER: enabled with IRQ 146
+> > > > > > >
+> > > > > > > Since VMD is an aperture to regular PCIe root ports, honor ACPI _OSC to
+> > > > > > > disable PCIe features accordingly to resolve the issue.
+> > > > > >
+> > > > > > At least for some versions of this hardare, I recall ACPI is unaware of
+> > > > > > any devices in the VMD domain; the platform can not see past the VMD
+> > > > > > endpoint, so I throught the driver was supposed to always let the VMD
+> > > > > > domain use OS native support regardless of the parent's ACPI _OSC.
+> > > > >
+> > > > > This is orthogonal to whether or not ACPI is aware of the VMD domain
+> > > > > or the devices in it.
+> > > > >
+> > > > > If the platform firmware does not allow the OS to control specific
+> > > > > PCIe features at the physical host bridge level, that extends to the
+> > > > > VMD "bus", because it is just a way to expose a hidden part of the
+> > > > > PCIe hierarchy.
+> > > >
+> > > > I don't understand what's going on here.  Do we understand the AER
+> > > > message flood?  Are we just papering over it by disabling AER?
+> > >
+> > > To be more precise, AER is disabled by the platform vendor in BIOS to
+> > > paper over the issue.
+> > > The only viable solution for us is to follow their settings. We may
+> > > never know what really happens underneath.
+> > >
+> > > Disabling ASPM/AER/PME etc is a normal practice for ODMs unfortunately.
 > >
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > Signed-off-by: Hammer Hsieh <hammerh0314@gmail.com>
-> > ---
-> > Changes in v8:
-> >  - no change.
-> >
-> >  .../bindings/serial/sunplus,sp7021-uart.yaml       | 56 ++++++++++++++=
-++++++++
-> >  MAINTAINERS                                        |  5 ++
-> >  2 files changed, 61 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/serial/sunplus,sp=
-7021-uart.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/serial/sunplus,sp7021-ua=
-rt.yaml b/Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
-> > new file mode 100644
-> > index 0000000..894324c
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
-> > @@ -0,0 +1,56 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +# Copyright (C) Sunplus Co., Ltd. 2021
-> > +%YAML 1.2
-> > +---
-> > +$id: "http://devicetree.org/schemas/serial/sunplus,sp7021-uart.yaml#"
-> > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> > +
-> > +title: Sunplus SoC SP7021 UART Controller Device Tree Bindings
-> > +
-> > +maintainers:
-> > +  - Hammer Hsieh <hammerh0314@gmail.com>
-> > +
-> > +allOf:
-> > +  - $ref: serial.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: sunplus,sp7021-uart
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    maxItems: 1
-> > +
-> > +  resets:
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - clocks
-> > +  - resets
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > +    aliases {
-> > +            serial0 =3D &uart0;
->
-> Incorrect indentation. With this fixed:
->
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->
->
-> Best regards,
-> Krzysztof
+> > OK.  So this patch actually has nothing in particular to do with AER.
+> > It's about making _OSC apply to *all* devices below a host bridge,
+> > even those below a VMD.
+> 
+> Right.
+> 
+> > This is slightly ambiguous because while "_OSC applies to the entire
+> > hierarchy originated by a PCI Host Bridge" (PCI Firmware spec r3.3,
+> > sec 4.5.1), vmd.c creates a logical view where devices below the VMD
+> > are in a separate hierarchy with a separate domain.
+> 
+> But from the HW perspective they still are in the same hierarchy below
+> the original host bridge.
 
-OK, will modify it. Thanks.
+I suppose in some sense it's the same hierarchy because the electrical
+connection all goes through a root port in the original host bridge,
+but it's a little muddy because according to [1], a VMD spawns a new
+hierarchy that can use an entirely new [bus 00-ff] space, and the
+hierarchy below VMD uses a new config access mechanism independent of
+ECAM or whatever the original host bridge uses.
 
-Regards,
-Hammer
+> > The interpretation that _OSC applies to devices below VMD should work,
+> > as long as it is possible for platform firmware to manage services
+> > (AER, pciehp, etc) for things below VMD without getting in the way of
+> > vmd.c.
+> 
+> vmd.c actually exposes things hidden by the firmware and the point of
+> the patch is to still let the firmware control them if it wants/needs
+> to IIUC.
+
+My mental picture is that without vmd.c, Linux would enumerate the VMD
+RCiEP itself, but none of the devices below the VMD would be visible.
+With vmd.c, devices below the VMD RCiEP are visible.  Maybe this
+picture is incorrect or too simple?
+
+Apparently there's a firmware toggle, but I don't know exactly what it
+does.  Maybe if the toggle is set to disable VMD, the VMD device looks
+like a regular Root Port and the devices below are enumerated
+normally even without any vmd.c?
+
+> > But I think one implication of this is that we cannot support
+> > hot-added VMDs.  For example, firmware that wants to manage AER will
+> > use _OSC to retain AER control.  But if the firmware doesn't know how
+> > VMDs work, it will not be able to handle AER for devices below the
+> > VMD.
+> 
+> Well, the firmware needs to know how stuff works to hide it in the
+> first place ...
+
+[1] does also say that VMD is a Root Complex *Integrated* Endpoint,
+which could not be hotplugged.  But I don't see anything in the code
+that actually enforces or requires that, so I don't know what to make
+of it.
+
+If it's possible to hot-add a VMD device, firmware wouldn't be
+involved in configuring it (assuming pciehp hotplug).  I assume the
+new VMD would look like an Endpoint, and if vmd.c is present, maybe it
+could construct a new hierarchy below that Endpoint?  In that case, we
+have to assume firmware doesn't know how to operate VMD, so even if
+firmware manages AER in general, it wouldn't be able to do it for
+things below the VMD.
+
+> > > > If an error occurs below a VMD, who notices and reports it?  If we
+> > > > disable native AER below VMD because of _OSC, as this patch does, I
+> > > > guess we're assuming the platform will handle AER events below VMD.
+> > > > Is that really true?  Does the platform know how to find AER log
+> > > > registers of devices below VMD?
+> > > >
+> > > > > The platform firmware does that through ACPI _OSC under the host
+> > > > > bridge device (not under the VMD device) which it is very well aware
+> > > > > of.
+
+[1] https://git.kernel.org/linus/185a383ada2e

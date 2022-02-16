@@ -2,139 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8284B922B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 21:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0514A4B922C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 21:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbiBPURT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 15:17:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49070 "EHLO
+        id S230325AbiBPUSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 15:18:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbiBPURN (ORCPT
+        with ESMTP id S230250AbiBPUR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 15:17:13 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DABDDF18;
-        Wed, 16 Feb 2022 12:16:59 -0800 (PST)
-Date:   Wed, 16 Feb 2022 20:16:55 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1645042616;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LEhkf5TFb74vC//cbREjUhKy2MSk+J4YMRW+rkjHOsw=;
-        b=cTbX6PbN04iC8T8wiZ+DU8pr6pR4pvGz2oD54a1O35IsiMiaETa4C9P9lcLd6zXKynqgYr
-        ulRu3Ltxga4gUB8+e529q7y8Ffr6g5Gp8crdoLYV8eNkeu4k7z+r26yBvtxzAwtp+Rnla1
-        u+EtxCe86kF2D+zAUqXiK+hbXYQfDjmA5tdb1Z35QYxAzyKkGQk8In+aBpfi12hWvYN9eT
-        1sNWH4bukKwmJk/zITj4XUbwEKANmdZQdOerTV1rOOgUeUkbP1V/ae3WUuqjKbFIE+0sYL
-        Wokhp/qRRK/bOnJYto1R9hwm7GFPABW2mXVnaZmtXruDQk9Hs8c87ARV/GydKA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1645042616;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LEhkf5TFb74vC//cbREjUhKy2MSk+J4YMRW+rkjHOsw=;
-        b=0TJgZHM/VtMcI784PqoutImJ7Wzo3sJHyjje6e9tCfp56RuP+0lxpM/kuT5yyJ3ZyEcoh9
-        8rBiUeyXEeU7KGCA==
-From:   "tip-bot2 for Mario Limonciello" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cpu] x86/cpu: Clear SME feature flag when not in use
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Borislav Petkov <bp@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220216034446.2430634-1-mario.limonciello@amd.com>
-References: <20220216034446.2430634-1-mario.limonciello@amd.com>
+        Wed, 16 Feb 2022 15:17:59 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC30256EC9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:17:46 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id y5so3075302pfe.4
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:17:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1CQ3e4LmGdBNkn8J0Xh4T4TteU4rCgSYMdgdDt/RPvw=;
+        b=lNyV9zSsZq+dmQhzA3T49jEEYBN5Jb7yWT/zVg9vqExqpGD7WQx1SOplo1xG4o73Nv
+         gILh22iN3MXbvISnUP6DL+EmPnRXl8g8kC02mGS37echzeOABVHV3UdcHqyTFrkCLBCs
+         do2CMs0rCFmfa8MswqyeaMg1mrvXei9x4Z1R0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1CQ3e4LmGdBNkn8J0Xh4T4TteU4rCgSYMdgdDt/RPvw=;
+        b=bWmrGXgSjsUSQZHGL6e6tbgyokbV5Hcy6Lo8b+ZFG6ESa/XzykuuR+r044ol981D0X
+         Mgrr4RB3y64vZQ7aMCaIEE6rhdr5PUUWF8l2JBULY3dw30OAkpcwUFuevbektlCaRrc4
+         7tQRkEK0C2CwGtoSAZanKloy84ufxYdEV1QrrMIgOKrvL0+3JzpVDjknk0WxXpOi5S3Z
+         WWOh2ONCagGBmz8ukOQSlx9pH7S83EzuXGt/6bZEUReMEzpA6NXF4/2tFm2c6LkRj4YL
+         Jwy3OW4A1h7qMg4pMuNdtKcHeigklFFzVdF/lY5jjD21UA61XDMBuLYsuH11id7SncQ/
+         mohQ==
+X-Gm-Message-State: AOAM533Yed9/H9l0KdvY8j2eb/oi5sTqT5nC9/FAETIfFSKgvpbLIt7S
+        5TZKHMN9/yDa7HY3IGvkJwEcfQ==
+X-Google-Smtp-Source: ABdhPJyC4Y5JXgGZidIXBFGAp800bP6PQMJWttROYEf/sXG4nwUaecw0o0cVJrygUfpVmp7a0Qfbhg==
+X-Received: by 2002:a63:6d0d:0:b0:370:14d8:5962 with SMTP id i13-20020a636d0d000000b0037014d85962mr3628788pgc.463.1645042665782;
+        Wed, 16 Feb 2022 12:17:45 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y20sm25544608pfi.87.2022.02.16.12.17.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 12:17:45 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] lkdtm/usercopy: Expand size of "out of frame" object
+Date:   Wed, 16 Feb 2022 12:17:43 -0800
+Message-Id: <20220216201743.2088344-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Message-ID: <164504261512.16921.13135643704549193516.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2224; h=from:subject; bh=8yZ/Tdt8BG4aUa0vMrljSrZbhWwVIs3OtFM0Be04X5o=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiDVvmOtNUr/1pMc582pfphqTzlO2/tNfUWNp/07eP RxLKwmuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYg1b5gAKCRCJcvTf3G3AJsz5EA CDVZlagFbsoFvCSozMc5toker3Thm4jAqHp65mLbE4x7bi/ruvQWqlKg0sf1p86bId0kASp8HY+0hX rDzz17rUWVoF8I4QlZuY5YdA5Nl6T+NSYlChzKn75aae0cHqgZ3K4gavZLlyck5/XMeJaJESPB1EKy EwmIgyTcqPSqke0ptePmqK3oUAf6yfyLYiHI6YSRF8/yzoZm/8YLFp7BCaUArhewrgwBqWEqwrdySE YfbwpwxscmC/18Da0I5FNwtcDNUXj0urKK7/uHS/it0bsseI+b6DopdetHp5m2HS3Xatie53pjzb+Z jWZVlZvE3Cx1uhyfkxJae80Sv559aJgeABOIRB1R5DnPwHTdemFFk/ze/hl0LnKma8mEZlDlWtrayH iPo8oPJb3zmXggO86vP/W7IXpsc3jbHRkViucszppZaThJ/Alu9BsmCIbHO9BWQbZ1JLvZpcCh4wRy ANeaYL5IYnfqw+us8gOmFFCX08MwVN5R9LboPt9RQ+LnxdAmVhs3xSj2i3T/qdkvX9rnVYdcz6FytU ouVc7RbAkj4TGwmJFbInCsDh0BbPKnZLBPXaYLQGZcrzPvHQF2Jhmc412cEwcKyo8nfQJiKLL82nYI jW6WV63iUqasstniiJN4Y8owHPJ3m2aENbfI4rixme3SuhhtMVm6hm3PRODQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cpu branch of tip:
+To be sufficient out of range for the usercopy test to see the lifetime
+mismatch, expand the size of the "bad" buffer, which will let it be
+beyond current_stack_pointer regardless of stack growth direction.
+Paired with the recent addition of stack depth checking under
+CONFIG_HARDENED_USERCOPY=y, this will correctly start tripping again.
 
-Commit-ID:     08f253ec3767bcfafc5d32617a92cee57c63968e
-Gitweb:        https://git.kernel.org/tip/08f253ec3767bcfafc5d32617a92cee57c63968e
-Author:        Mario Limonciello <mario.limonciello@amd.com>
-AuthorDate:    Tue, 15 Feb 2022 21:44:46 -06:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 16 Feb 2022 19:45:53 +01:00
-
-x86/cpu: Clear SME feature flag when not in use
-
-Currently, the SME CPU feature flag is reflective of whether the CPU
-supports the feature but not whether it has been activated by the
-kernel.
-
-Change this around to clear the SME feature flag if the kernel is not
-using it so userspace can determine if it is available and in use
-from /proc/cpuinfo.
-
-As the feature flag is cleared on systems where SME isn't active, use
-CPUID 0x8000001f to confirm SME availability before calling
-native_wbinvd().
-
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
-Link: https://lore.kernel.org/r/20220216034446.2430634-1-mario.limonciello@amd.com
+Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/kernel/cpu/amd.c | 5 +++++
- arch/x86/kernel/process.c | 5 ++++-
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ drivers/misc/lkdtm/usercopy.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-index bad0fa4..0c0b097 100644
---- a/arch/x86/kernel/cpu/amd.c
-+++ b/arch/x86/kernel/cpu/amd.c
-@@ -556,6 +556,8 @@ static void early_detect_mem_encrypt(struct cpuinfo_x86 *c)
- 	 *	      the SME physical address space reduction value.
- 	 *	      If BIOS has not enabled SME then don't advertise the
- 	 *	      SME feature (set in scattered.c).
-+	 *	      If the kernel has not enabled SME via any means then
-+	 *	      don't advertise the SME feature.
- 	 *   For SEV: If BIOS has not enabled SEV then don't advertise the
- 	 *            SEV and SEV_ES feature (set in scattered.c).
- 	 *
-@@ -578,6 +580,9 @@ static void early_detect_mem_encrypt(struct cpuinfo_x86 *c)
- 		if (IS_ENABLED(CONFIG_X86_32))
- 			goto clear_all;
+diff --git a/drivers/misc/lkdtm/usercopy.c b/drivers/misc/lkdtm/usercopy.c
+index 9161ce7ed47a..781345ea3b07 100644
+--- a/drivers/misc/lkdtm/usercopy.c
++++ b/drivers/misc/lkdtm/usercopy.c
+@@ -30,12 +30,12 @@ static const unsigned char test_text[] = "This is a test.\n";
+  */
+ static noinline unsigned char *trick_compiler(unsigned char *stack)
+ {
+-	return stack + 0;
++	return stack + unconst;
+ }
  
-+		if (!sme_me_mask)
-+			setup_clear_cpu_cap(X86_FEATURE_SME);
+ static noinline unsigned char *do_usercopy_stack_callee(int value)
+ {
+-	unsigned char buf[32];
++	unsigned char buf[128];
+ 	int i;
+ 
+ 	/* Exercise stack to avoid everything living in registers. */
+@@ -43,7 +43,12 @@ static noinline unsigned char *do_usercopy_stack_callee(int value)
+ 		buf[i] = value & 0xff;
+ 	}
+ 
+-	return trick_compiler(buf);
++	/*
++	 * Put the target buffer in the middle of stack allocation
++	 * so that we don't step on future stack users regardless
++	 * of stack growth direction.
++	 */
++	return trick_compiler(&buf[(128/2)-32]);
+ }
+ 
+ static noinline void do_usercopy_stack(bool to_user, bool bad_frame)
+@@ -66,6 +71,10 @@ static noinline void do_usercopy_stack(bool to_user, bool bad_frame)
+ 		bad_stack -= sizeof(unsigned long);
+ 	}
+ 
++	pr_info("stack     : %px\n", (void *)current_stack_pointer);
++	pr_info("good_stack: %px-%px\n", good_stack, good_stack + sizeof(good_stack));
++	pr_info("bad_stack : %px-%px\n", bad_stack, bad_stack + sizeof(good_stack));
 +
- 		rdmsrl(MSR_K7_HWCR, msr);
- 		if (!(msr & MSR_K7_HWCR_SMMLOCK))
- 			goto clear_sev;
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index 81d8ef0..e131d71 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -765,8 +765,11 @@ void stop_this_cpu(void *dummy)
- 	 * without the encryption bit, they don't race each other when flushed
- 	 * and potentially end up with the wrong entry being committed to
- 	 * memory.
-+	 *
-+	 * Test the CPUID bit directly because the machine might've cleared
-+	 * X86_FEATURE_SME due to cmdline options.
- 	 */
--	if (boot_cpu_has(X86_FEATURE_SME))
-+	if (cpuid_eax(0x8000001f) & BIT(0))
- 		native_wbinvd();
- 	for (;;) {
- 		/*
+ 	user_addr = vm_mmap(NULL, 0, PAGE_SIZE,
+ 			    PROT_READ | PROT_WRITE | PROT_EXEC,
+ 			    MAP_ANONYMOUS | MAP_PRIVATE, 0);
+-- 
+2.30.2
+

@@ -2,228 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476904B8A5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6EB4B8A63
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234598AbiBPNhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:37:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33320 "EHLO
+        id S234606AbiBPNiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 08:38:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbiBPNhm (ORCPT
+        with ESMTP id S233183AbiBPNiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:37:42 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03211CF3D3;
-        Wed, 16 Feb 2022 05:37:29 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id 132so2186103pga.5;
-        Wed, 16 Feb 2022 05:37:29 -0800 (PST)
+        Wed, 16 Feb 2022 08:38:09 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C03E2A39E9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:37:56 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id e13so2518598vsh.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:37:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=jbgmIPg6mcyI2bdNGcYen9hRXeYps+4u66vJjpSYCqo=;
-        b=g0LvFcpYfc7oKzhMCRk4i2KsbfqpzVePasSnwqlU1nMbV74KVDB+36AJlyTA2496qO
-         ZLEg2wfYwmi6/m+xpsunl5atpaURPymBGg3xp9CCJHisBmPeAUWPRQiZFiLA44/FTPhz
-         YN4OVsCAtztUE+uyycA6/o2qyQvjr7gNzVIt62amLCi64Zfd61aDSmPGFB2gkdDfolHU
-         OUYycYU0mSgAPYLCG+HkvJ6cc5hBepOhzSV/UkEp/IkMnN2QFU9kCm48KKs8refwK3jS
-         cbkdflky67qV5jZkthe7l/qsjMCTNwaGsDvcw/jYium4guNC3bkqhuLMxa1TxznE6Xs8
-         stVw==
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rpeVDWXHMTDc+cpXQL9k9Xn0bqj82ewZzqV/e9KI54k=;
+        b=eBP91KuyrWCunQKewYuQ566BwtLHTGen0u7EidMaMnjpn6RJcOvYD/ds1ffBpa6fKR
+         dSgD63hLMBcJkJc440HlL+SqPdlaGd7v1sIVB7aaDNPa5wCTNPkIGhFSgQORgkbSxYKl
+         kcPKHTbf4Zce4lrT8J6L5usvIUb336Bq2PmOg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jbgmIPg6mcyI2bdNGcYen9hRXeYps+4u66vJjpSYCqo=;
-        b=eaz5aDUDvsboQRt85GCAJx8xsbzAYxVxt0dMxFkdr1RVUzssdqRMj7FMM/6o+WP7hW
-         4Fd4uGQGdaAsKhlag3l/Si+dGwuL3vgA8hz/hR2VJmUGanPkvKLVv3w/yHMP5oN5LiaM
-         qwdoxDIS3KduB5u5zmMy50osAeFE67Cb9eprPsrVgp+Gsp4ty05nh1X0HAMQRXurGylq
-         h6AU7p+AEasjgOkPCH1yA5fMPTEJhUK3vXgGMi70HdvN2AzuqA6pHXIjzvcqOO3BOeWx
-         lLdInvfdbmHPQpDcZQCJkO8G0+p6ji5q/WM150MO5LRNQlMmKrIrPVItp06H+q0CxeiI
-         EbZA==
-X-Gm-Message-State: AOAM531pwGVwXDQlqZkNZaG9jZzX/0G1wXXKKyw+BvCci0+OAN8nN9Wg
-        LmkqOhFn0qa+qSswbaEkSYU=
-X-Google-Smtp-Source: ABdhPJx1pTSdzZkre30qEK6d3y5+GESeMMz+HFMsCtfOctCeFFiB6BeYdq9NpF2aEWPvz5qfWhHPNQ==
-X-Received: by 2002:a05:6a00:244b:b0:4c9:319e:ecb7 with SMTP id d11-20020a056a00244b00b004c9319eecb7mr2805177pfj.58.1645018649260;
-        Wed, 16 Feb 2022 05:37:29 -0800 (PST)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id y20sm44412310pfi.78.2022.02.16.05.37.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 05:37:28 -0800 (PST)
-Message-ID: <5d8e8c09-64ca-38cd-591d-c193d1c01c7e@gmail.com>
-Date:   Wed, 16 Feb 2022 22:37:26 +0900
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rpeVDWXHMTDc+cpXQL9k9Xn0bqj82ewZzqV/e9KI54k=;
+        b=pAh7RMJam1zhUQ2zfQFZDSfBDK29rgmHRCgrQ25XI8bF+nLTTXKxYFpp+Jwh9zr/zr
+         PIlhH+Lv/UQrf4+XCFGDxD9zFxmcVmHg1UHfFmI3SFvhK4y2U98q8Fc1srpbypTzAoX3
+         S/Lu8cE8BWNnaWkzB0SFu/MJqbYXOS9vByoX6r+C/yiKyLsXFaVwnG4AlTdU4pLmzRqX
+         yrOg8/GORojg7PLUYirlozwn2GOWRpN4TZIgQESdGR8EkHO2caa0rHj4MHh5k/ZZNBBB
+         5BiSnLfxQjiyHrPfMHuvi6UPreEHVJLrN0eEJwCAhmAevmRDcZZccgt6xs0ibpNRkQFM
+         whCg==
+X-Gm-Message-State: AOAM533YwVeqjCNM3r+0kYOTqr6XKpEoZj29jnH/vlrloUO7hkri23JI
+        tj1auFl3gy9q5bq6bmXRUU11RPe8w1cIU+Yo3tx/jw==
+X-Google-Smtp-Source: ABdhPJx0ME4NtqTHyYhVWQLW19f8lbHkntNGob5sMRy/fhsm1HUPUGe5BQQVLyXtNsfHMp29I0F0DmFm5pfkPVz/CtA=
+X-Received: by 2002:a05:6102:32c7:b0:31b:8f98:5fd with SMTP id
+ o7-20020a05610232c700b0031b8f9805fdmr982294vss.24.1645018675428; Wed, 16 Feb
+ 2022 05:37:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 15/20] docs: add Rust documentation
-Content-Language: en-US
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rust-for-linux@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>
-References: <20220212130410.6901-16-ojeda@kernel.org>
- <8baf7006-90ed-25b8-3005-69b5475215cf@gmail.com>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <8baf7006-90ed-25b8-3005-69b5475215cf@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220214210708.GA2167841@xavier-xps> <CAJfpegvVKWHhhXwOi9jDUOJi2BnYSDxZQrp1_RRrpVjjZ3Rs2w@mail.gmail.com>
+ <YguspMvu6M6NJ1hL@zeniv-ca.linux.org.uk> <YgvPbljmJXsR7ESt@zeniv-ca.linux.org.uk>
+ <YgvSB6CKAhF5IXFj@casper.infradead.org> <YgvS1XOJMn5CjQyw@zeniv-ca.linux.org.uk>
+ <CAJfpegv03YpTPiDnLwbaewQX_KZws5nutays+vso2BVJ1v1+TA@mail.gmail.com>
+ <YgzRwhavapo69CAn@miu.piliscsaba.redhat.com> <20220216131814.GA2463301@xavier-xps>
+In-Reply-To: <20220216131814.GA2463301@xavier-xps>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Wed, 16 Feb 2022 14:37:44 +0100
+Message-ID: <CAJfpegsQO-35p6uoG2ZfuCOLPFwnkbTcLc3K8r+HiS2un9au_w@mail.gmail.com>
+Subject: Re: race between vfs_rename and do_linkat (mv and link)
+To:     Xavier Roche <xavier.roche@algolia.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.vnet.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Dropped most CCs]
+On Wed, 16 Feb 2022 at 14:18, Xavier Roche <xavier.roche@algolia.com> wrote:
+>
+> On Wed, Feb 16, 2022 at 11:28:18AM +0100, Miklos Szeredi wrote:
+> > Something like this:
+> > diff --git a/fs/namei.c b/fs/namei.c
+> > index 3f1829b3ab5b..dd6908cee49d 100644
+>
+> Tested-by: Xavier Roche <xavier.roche@algolia.com>
+>
+> I confirm this completely fixes at least the specific race. Tested on a
+> unpatched and then patched 5.16.5, with the trivial bash test, and then
+> with a C++ torture test.
 
-Hi Miguel.
-I have a follow-up hint on cross referencing for you.  See below.
+Thanks for testing.
 
-On Mon, 14 Feb 2022 19:47:36 +0900,
-Akira Yokosawa wrote:
-> Hi,
-> 
-> Please find inline comments WRT ReST-in-kereneldoc.
-> 
-> Jon, if I'm missing something, please enlighten me.
-> 
-> On Sat, 12 Feb 2022 14:03:41 +0100,
-> Miguel Ojeda <ojeda@kernel.org> wrote:
-[...]
+One issue with the patch is nesting of lock_rename() calls in stacked
+fs (rwsem is not allowed to recurse even for read locks).
 
->> diff --git a/Documentation/rust/general-information.rst b/Documentation/rust/general-information.rst
->> new file mode 100644
->> index 000000000000..9ee4c6994d08
->> --- /dev/null
->> +++ b/Documentation/rust/general-information.rst
->> @@ -0,0 +1,80 @@
->> +.. _rust_general_information:
-> Unnecessary tag.
-> 
->> +
->> +General Information
->> +===================
->> +
->> +This document contains useful information to know when working with
->> +the Rust support in the kernel.
->> +
->> +
->> +Code documentation
->> +------------------
->> +
->> +Rust kernel code is documented using ``rustdoc``, its built-in documentation
->> +generator.
->> +
->> +The generated HTML docs include integrated search, linked items (e.g. types,
->> +functions, constants), source code, etc. They may be read at (TODO: link when
->> +in mainline and generated alongside the rest of the documentation):
->> +
->> +	http://kernel.org/
->> +
->> +The docs can also be easily generated and read locally. This is quite fast
->> +(same order as compiling the code itself) and no special tools or environment
->> +are needed. This has the added advantage that they will be tailored to
->> +the particular kernel configuration used. To generate them, use the ``rustdoc``
->> +target with the same invocation used for compilation, e.g.::
->> +
->> +	make LLVM=1 rustdoc
->> +
->> +To read the docs locally in your web browser, run e.g.::
->> +
->> +	xdg-open rust/doc/kernel/index.html
->> +
->> +To learn about how to write the documentation, please see the coding guidelines
->> +at :ref:`Documentation/rust/coding-guidelines.rst <rust_coding_guidelines>`.
->    at Documentation/rust/coding-guidelines.rst.
+So the lock needs to be per-sb, but then do_linkat() becomes more
+complex due to not being able to use the filename_create() helper.
+But it's still much simpler than the special lookup loop described by
+Al.
 
-Here, the cross reference is internal to Documentation/rust/.
-In this case, a relative path works for both top and subdirectory level build.
-So you can say:
-
-    at coding-guidelines.rst.
-
-> 
->> +
->> +
->> +Extra lints
->> +-----------
->> +
->> +While ``rustc`` is a very helpful compiler, some extra lints and analyses are
->> +available via ``clippy``, a Rust linter. To enable it, pass ``CLIPPY=1`` to
->> +the same invocation used for compilation, e.g.::
->> +
->> +	make LLVM=1 CLIPPY=1
->> +
->> +Please note that Clippy may change code generation, thus it should not be
->> +enabled while building a production kernel.
->> +
->> +
->> +Abstractions vs. bindings
->> +-------------------------
->> +
->> +Abstractions are Rust code wrapping kernel functionality from the C side.
->> +
->> +In order to use functions and types from the C side, bindings are created.
->> +Bindings are the declarations for Rust of those functions and types from
->> +the C side.
->> +
->> +For instance, one may write a ``Mutex`` abstraction in Rust which wraps
->> +a ``struct mutex`` from the C side and calls its functions through the bindings.
->> +
->> +Abstractions are not available for all the kernel internal APIs and concepts,
->> +but it is intended that coverage is expanded as time goes on. "Leaf" modules
->> +(e.g. drivers) should not use the C bindings directly. Instead, subsystems
->> +should provide as-safe-as-possible abstractions as needed.
->> +
->> +
->> +Conditional compilation
->> +-----------------------
->> +
->> +Rust code has access to conditional compilation based on the kernel
->> +configuration:
->> +
->> +.. code-block:: rust
->> +
->> +	#[cfg(CONFIG_X)]       // Enabled               (`y` or `m`)
->> +	#[cfg(CONFIG_X="y")]   // Enabled as a built-in (`y`)
->> +	#[cfg(CONFIG_X="m")]   // Enabled as a module   (`m`)
->> +	#[cfg(not(CONFIG_X))]  // Disabled
->> diff --git a/Documentation/rust/index.rst b/Documentation/rust/index.rst
->> new file mode 100644
->> index 000000000000..6e20af5b723a
->> --- /dev/null
->> +++ b/Documentation/rust/index.rst
->> @@ -0,0 +1,21 @@
->> +Rust
->> +====
->> +
->> +Documentation related to Rust within the kernel. To start using Rust
->> +in the kernel, please read the
->> +:ref:`Documentation/rust/quick-start.rst <rust_quick_start>` guide.
->    in the kernel, please read the guide in Documentation/rust/quick-start.rst.
-    in the kernel, please read the guide in quick-start.rst.
-
-, and so on.
-
-        Thanks, Akira
-
-[...]
-> 
-> 
-> Notes:
-> 
-> Those cross-references of plain path such as
-> 
->    Documentation/rust/general-information.rst
-> 
-> are recognized when you build by the top level "make htmldocs".
-> If you specify a subdirectory by "make SPHINXDIRS=rust htmldocs",
-> current build script can't recognize them.  This is one of (not
-> widely recognized) issues in subdirectory handling of automarkup.py.
-> Hopefully, they can be resolved soon.
-> 
-> Tags at the top of .rst files are redundant and should be avoided.
-> Existing ones can be removed after referencing sites are updated.
-> 
->         Thanks, Akira
+Thanks,
+Miklos
+>
+> Before:
+> -------
+>
+> $ time ./linkbug
+> Failed after 4 with No such file or directory
+>
+> real    0m0,004s
+> user    0m0,000s
+> sys     0m0,004s
+>
+> After:
+> ------
+>
+> (no error after ten minutes of running the program)
+>
+> Torture test program:
+> ---------------------
+>
+> /* Linux rename vs. linkat race condition.
+>  * Rationale: both (1) moving a file to a target and (2) linking the target to a file in parallel leads to a race
+>  * on Linux kernel.
+>  * Sample file courtesy of Xavier Grand at Algolia
+>  * g++ -pthread linkbug.c -o linkbug
+>  */
+>
+> #include <thread>
+> #include <unistd.h>
+> #include <assert.h>
+> #include <sys/types.h>
+> #include <sys/stat.h>
+> #include <fcntl.h>
+> #include <iostream>
+> #include <string.h>
+>
+> static const char* producedDir = "/tmp";
+> static const char* producedFile = "/tmp/file.txt";
+> static const char* producedTmpFile = "/tmp/file.txt.tmp";
+> static const char* producedThreadDir = "/tmp/tmp";
+> static const char* producedThreadFile = "/tmp/file.txt.tmp.2";
+>
+> bool createFile(const char* path)
+> {
+>     const int fdOut = open(path,
+>                            O_WRONLY | O_CREAT | O_TRUNC | O_EXCL | O_CLOEXEC,
+>                            S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+>     assert(fdOut != -1);
+>     assert(write(fdOut, "Foo", 4) == 4);
+>     assert(close(fdOut) == 0);
+>     return true;
+> }
+>
+> void func()
+> {
+>     int nbSuccess = 0;
+>     // Loop producedThread a hardlink of the file
+>     while (true) {
+>         if (link(producedFile, producedThreadFile) != 0) {
+>             std::cout << "Failed after " << nbSuccess << " with " << strerror(errno) << std::endl;
+>             exit(EXIT_FAILURE);
+>         } else {
+>             nbSuccess++;
+>         }
+>         assert(unlink(producedThreadFile) == 0);
+>     }
+> }
+>
+> int main()
+> {
+>     // Setup env
+>     unlink(producedTmpFile);
+>     unlink(producedFile);
+>     unlink(producedThreadFile);
+>     createFile(producedFile);
+>     mkdir(producedThreadDir, 0777);
+>
+>     // Async thread doing a hardlink and moving it
+>     std::thread t(func);
+>     // Loop creating a .tmp and moving it
+>     while (true) {
+>         assert(createFile(producedTmpFile));
+>         assert(rename(producedTmpFile, producedFile) == 0);
+>     }
+>     return 0;
+> }

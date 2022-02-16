@@ -2,135 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA814B93A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 23:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B18B4B93A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 23:07:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbiBPWGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 17:06:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42276 "EHLO
+        id S236335AbiBPWHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 17:07:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236804AbiBPWGB (ORCPT
+        with ESMTP id S231319AbiBPWHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 17:06:01 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9365A2AED90
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 14:05:47 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id z15-20020a25bb0f000000b00613388c7d99so7040676ybg.8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 14:05:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=flQKyFZ9duOPZtd4zXwnyBqVYzgGGyydxhPq51y6plY=;
-        b=YobYbyfeweFubZAvOgK/ACXLIu9QYAmgvkFvi0nLU5nZF8FZ+fc/qzcZGODFOCc5rB
-         rGKb6RGf8Xi8UqhtFxLMQ+d8bEb6w7pe93oYN+9zbacfjyUmJ4lQfICSnt2KCwZrx3tL
-         B9/GzjbK6BdZa/kqEEzzN+TccelXGLIgu8Jut6r7Fmeq7B+97vW5QlCoaBsfeeQdyP8g
-         hovC+Qfn1fNr4RBlQQgMBq3VnH+sjDNyQpVsfD6vgQQcJoDhAtvb7GP0h3gk3GCJuslW
-         lL8XivVVzXUBdZlY87zwktTozYrzhJkhCZSxxUs1dc56gL/FJWpiy391jtAx6DloyaDr
-         6Uvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=flQKyFZ9duOPZtd4zXwnyBqVYzgGGyydxhPq51y6plY=;
-        b=tNxuVNnnkvf78uZSapJOlscguVgYTiYR1/zBVoxTXv9gUfQXvLiz8KC3ZJ6rXnMaUf
-         UjM5+amrzpoZ6tJMsIHu+UfldS65jmMh0G2qe+0TpFpdfBHFzeXy+DhQy1BwP8cZPNBj
-         Sr/+7+ADpLTTgJ96SOmiFXCjHa5iJbD3f1oRHLnXYxwKBEWKhZW6+CF9bIvUZEMjVEIC
-         eGGpAjikN+x5opTCJcsd1WSpHvgbyFbUj6t7AfSqsQojEvkkoWhcoLwm4mYdMis4OefO
-         0vqGOEXcaKh6txdPbr/xhRPJcqcQyjEQwQRSxZjLyidQr+N+A4pCced03k13FEECA6va
-         Depg==
-X-Gm-Message-State: AOAM531fZKsmTZuR4aTzj1JyAF9m8BpsXXybrErcVX5WxG9vJBDBsTym
-        A8Bkxb+zVvUW2Jg5X01qoyTKZwgzq7Kj
-X-Google-Smtp-Source: ABdhPJyFAKeq/HMX/fgmE1eQw0hYq6cqNmThpbybyHXt53ADj9iBuVkiR7I7KvXxgTNs+xHjhaStLlnnKCDr
-X-Received: from rajat2.mtv.corp.google.com ([2620:15c:202:201:f786:406d:21f6:1e1b])
- (user=rajatja job=sendgmr) by 2002:a0d:c441:0:b0:2d0:f04e:a1ee with SMTP id
- g62-20020a0dc441000000b002d0f04ea1eemr4399572ywd.263.1645049146781; Wed, 16
- Feb 2022 14:05:46 -0800 (PST)
-Date:   Wed, 16 Feb 2022 14:05:41 -0800
-Message-Id: <20220216220541.1635665-1-rajatja@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH v3] PCI: ACPI: Support Microsoft's "DmaProperty"
-From:   Rajat Jain <rajatja@google.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Wed, 16 Feb 2022 17:07:06 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD91170D78;
+        Wed, 16 Feb 2022 14:06:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645049213; x=1676585213;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eh2+wIJwPhsyAITQqGz0mlyqdm1obMslzcq+p1zNUzQ=;
+  b=f0jieK8bhAdFI/MKBCWp+pua7WedLsNDK7X0RjpJrS5+atayQZF8/V7G
+   Gz6DtASPwKDRWMl2yUvUT8UTOtKhK4IhgyO5erVo8jmcSCjsPTInyAtEA
+   Ytm8rFE7886kgsBmGJ0pobFS4mKxZI+Zb5gAYK21k/69qBGAJujdO4vO4
+   S7f+q+WNwc+MPVp0ys90/G/2hrFSxb6c+/nwtx/WsA3w6GC4Q9d9Yt8Jd
+   wGyij0crfhGsBdEC+TOLxbldFH91QDXY2RF5iUYavl5XzUYRrF+hh87F+
+   /eIVFrT/0wqYZHbFinjy0Dc7u06z/dPefImDvQc4/A/mOSCceCsUiiLmS
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="311476979"
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="311476979"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 14:06:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="500179434"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 16 Feb 2022 14:06:51 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKSRm-000BAC-JJ; Wed, 16 Feb 2022 22:06:50 +0000
+Date:   Thu, 17 Feb 2022 06:06:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     kbuild-all@lists.01.org, Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatxjain@gmail.com>,
-        Dmitry Torokhov <dtor@google.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Pavel Machek <pavel@denx.de>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     Rajat Jain <rajatja@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] lkdtm/usercopy: Expand size of "out of frame" object
+Message-ID: <202202170604.hO1q7HZU-lkp@intel.com>
+References: <20220216201743.2088344-1-keescook@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216201743.2088344-1-keescook@chromium.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "DmaProperty" is supported and documented by Microsoft here:
-https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports
-They use this property for DMA protection:
-https://docs.microsoft.com/en-us/windows/security/information-protection/kernel-dma-protection-for-thunderbolt
+Hi Kees,
 
-Support the "DmaProperty" with the same semantics. Windows documents the
-property to apply to PCIe root ports only. Extend it to apply to any
-PCI device. This is useful for internal PCI devices that do not hang off
-a PCIe rootport, but offer an attack surface for DMA attacks (e.g.
-internal network devices).
+I love your patch! Yet something to improve:
 
-Signed-off-by: Rajat Jain <rajatja@google.com>
+[auto build test ERROR on char-misc/char-misc-testing]
+[also build test ERROR on soc/for-next kees/for-next/pstore v5.17-rc4 next-20220216]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Kees-Cook/lkdtm-usercopy-Expand-size-of-out-of-frame-object/20220217-041936
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git e6cb9c167eeb8f90ab924666c573e69e85e700a0
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20220217/202202170604.hO1q7HZU-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/aa676e88f535bd79a3e22a1cc70c9b6cc51dbbfe
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Kees-Cook/lkdtm-usercopy-Expand-size-of-out-of-frame-object/20220217-041936
+        git checkout aa676e88f535bd79a3e22a1cc70c9b6cc51dbbfe
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash drivers/misc/lkdtm/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/kernel.h:29,
+                    from drivers/misc/lkdtm/lkdtm.h:7,
+                    from drivers/misc/lkdtm/usercopy.c:6:
+   drivers/misc/lkdtm/usercopy.c: In function 'do_usercopy_stack':
+>> drivers/misc/lkdtm/usercopy.c:74:46: error: 'current_stack_pointer' undeclared (first use in this function); did you mean 'kernel_stack_pointer'?
+      74 |         pr_info("stack     : %px\n", (void *)current_stack_pointer);
+         |                                              ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:418:33: note: in definition of macro 'printk_index_wrap'
+     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                                 ^~~~~~~~~~~
+   include/linux/printk.h:519:9: note: in expansion of macro 'printk'
+     519 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~
+   drivers/misc/lkdtm/usercopy.c:74:9: note: in expansion of macro 'pr_info'
+      74 |         pr_info("stack     : %px\n", (void *)current_stack_pointer);
+         |         ^~~~~~~
+   drivers/misc/lkdtm/usercopy.c:74:46: note: each undeclared identifier is reported only once for each function it appears in
+      74 |         pr_info("stack     : %px\n", (void *)current_stack_pointer);
+         |                                              ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:418:33: note: in definition of macro 'printk_index_wrap'
+     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                                 ^~~~~~~~~~~
+   include/linux/printk.h:519:9: note: in expansion of macro 'printk'
+     519 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~
+   drivers/misc/lkdtm/usercopy.c:74:9: note: in expansion of macro 'pr_info'
+      74 |         pr_info("stack     : %px\n", (void *)current_stack_pointer);
+         |         ^~~~~~~
+
+
+vim +74 drivers/misc/lkdtm/usercopy.c
+
+   > 6	#include "lkdtm.h"
+     7	#include <linux/slab.h>
+     8	#include <linux/vmalloc.h>
+     9	#include <linux/sched/task_stack.h>
+    10	#include <linux/mman.h>
+    11	#include <linux/uaccess.h>
+    12	#include <asm/cacheflush.h>
+    13	
+    14	/*
+    15	 * Many of the tests here end up using const sizes, but those would
+    16	 * normally be ignored by hardened usercopy, so force the compiler
+    17	 * into choosing the non-const path to make sure we trigger the
+    18	 * hardened usercopy checks by added "unconst" to all the const copies,
+    19	 * and making sure "cache_size" isn't optimized into a const.
+    20	 */
+    21	static volatile size_t unconst;
+    22	static volatile size_t cache_size = 1024;
+    23	static struct kmem_cache *whitelist_cache;
+    24	
+    25	static const unsigned char test_text[] = "This is a test.\n";
+    26	
+    27	/*
+    28	 * Instead of adding -Wno-return-local-addr, just pass the stack address
+    29	 * through a function to obfuscate it from the compiler.
+    30	 */
+    31	static noinline unsigned char *trick_compiler(unsigned char *stack)
+    32	{
+    33		return stack + unconst;
+    34	}
+    35	
+    36	static noinline unsigned char *do_usercopy_stack_callee(int value)
+    37	{
+    38		unsigned char buf[128];
+    39		int i;
+    40	
+    41		/* Exercise stack to avoid everything living in registers. */
+    42		for (i = 0; i < sizeof(buf); i++) {
+    43			buf[i] = value & 0xff;
+    44		}
+    45	
+    46		/*
+    47		 * Put the target buffer in the middle of stack allocation
+    48		 * so that we don't step on future stack users regardless
+    49		 * of stack growth direction.
+    50		 */
+    51		return trick_compiler(&buf[(128/2)-32]);
+    52	}
+    53	
+    54	static noinline void do_usercopy_stack(bool to_user, bool bad_frame)
+    55	{
+    56		unsigned long user_addr;
+    57		unsigned char good_stack[32];
+    58		unsigned char *bad_stack;
+    59		int i;
+    60	
+    61		/* Exercise stack to avoid everything living in registers. */
+    62		for (i = 0; i < sizeof(good_stack); i++)
+    63			good_stack[i] = test_text[i % sizeof(test_text)];
+    64	
+    65		/* This is a pointer to outside our current stack frame. */
+    66		if (bad_frame) {
+    67			bad_stack = do_usercopy_stack_callee((uintptr_t)&bad_stack);
+    68		} else {
+    69			/* Put start address just inside stack. */
+    70			bad_stack = task_stack_page(current) + THREAD_SIZE;
+    71			bad_stack -= sizeof(unsigned long);
+    72		}
+    73	
+  > 74		pr_info("stack     : %px\n", (void *)current_stack_pointer);
+    75		pr_info("good_stack: %px-%px\n", good_stack, good_stack + sizeof(good_stack));
+    76		pr_info("bad_stack : %px-%px\n", bad_stack, bad_stack + sizeof(good_stack));
+    77	
+    78		user_addr = vm_mmap(NULL, 0, PAGE_SIZE,
+    79				    PROT_READ | PROT_WRITE | PROT_EXEC,
+    80				    MAP_ANONYMOUS | MAP_PRIVATE, 0);
+    81		if (user_addr >= TASK_SIZE) {
+    82			pr_warn("Failed to allocate user memory\n");
+    83			return;
+    84		}
+    85	
+    86		if (to_user) {
+    87			pr_info("attempting good copy_to_user of local stack\n");
+    88			if (copy_to_user((void __user *)user_addr, good_stack,
+    89					 unconst + sizeof(good_stack))) {
+    90				pr_warn("copy_to_user failed unexpectedly?!\n");
+    91				goto free_user;
+    92			}
+    93	
+    94			pr_info("attempting bad copy_to_user of distant stack\n");
+    95			if (copy_to_user((void __user *)user_addr, bad_stack,
+    96					 unconst + sizeof(good_stack))) {
+    97				pr_warn("copy_to_user failed, but lacked Oops\n");
+    98				goto free_user;
+    99			}
+   100		} else {
+   101			/*
+   102			 * There isn't a safe way to not be protected by usercopy
+   103			 * if we're going to write to another thread's stack.
+   104			 */
+   105			if (!bad_frame)
+   106				goto free_user;
+   107	
+   108			pr_info("attempting good copy_from_user of local stack\n");
+   109			if (copy_from_user(good_stack, (void __user *)user_addr,
+   110					   unconst + sizeof(good_stack))) {
+   111				pr_warn("copy_from_user failed unexpectedly?!\n");
+   112				goto free_user;
+   113			}
+   114	
+   115			pr_info("attempting bad copy_from_user of distant stack\n");
+   116			if (copy_from_user(bad_stack, (void __user *)user_addr,
+   117					   unconst + sizeof(good_stack))) {
+   118				pr_warn("copy_from_user failed, but lacked Oops\n");
+   119				goto free_user;
+   120			}
+   121		}
+   122	
+   123	free_user:
+   124		vm_munmap(user_addr, PAGE_SIZE);
+   125	}
+   126	
+
 ---
-v3: * Use Microsoft's documented property "DmaProperty"
-    * Resctrict to ACPI only
-
- drivers/pci/pci-acpi.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-index a42dbf448860..660baa60c040 100644
---- a/drivers/pci/pci-acpi.c
-+++ b/drivers/pci/pci-acpi.c
-@@ -1350,12 +1350,30 @@ static void pci_acpi_set_external_facing(struct pci_dev *dev)
- 		dev->external_facing = 1;
- }
- 
-+static void pci_acpi_check_for_dma_protection(struct pci_dev *dev)
-+{
-+	u8 val;
-+
-+	/*
-+	 * Microsoft Windows uses this property, and is documented here:
-+	 * https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports
-+	 * While Microsoft documents this property as only applicable to PCIe
-+	 * root ports, we expand it to be applicable to any PCI device.
-+	 */
-+	if (device_property_read_u8(&dev->dev, "DmaProperty", &val))
-+		return;
-+
-+	if (val)
-+		dev->untrusted = 1;
-+}
-+
- void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
- {
- 	struct pci_dev *pci_dev = to_pci_dev(dev);
- 
- 	pci_acpi_optimize_delay(pci_dev, adev->handle);
- 	pci_acpi_set_external_facing(pci_dev);
-+	pci_acpi_check_for_dma_protection(pci_dev);
- 	pci_acpi_add_edr_notifier(pci_dev);
- 
- 	pci_acpi_add_pm_notifier(adev, pci_dev);
--- 
-2.35.1.265.g69c8d7142f-goog
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

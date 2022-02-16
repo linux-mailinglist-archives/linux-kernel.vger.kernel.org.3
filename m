@@ -2,187 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEEFA4B89CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:26:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FFEF4B89E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:28:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234068AbiBPN0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:26:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36450 "EHLO
+        id S234204AbiBPN2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 08:28:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233693AbiBPN0c (ORCPT
+        with ESMTP id S230126AbiBPN2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:26:32 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5CDC1B78C
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:26:17 -0800 (PST)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 545F03F1B6
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 13:26:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645017976;
-        bh=HnLv2sgPTFeJCaPDj49F4ixfOdgITRk3XaxRkpYlXz0=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=d+ytUNIq/+YlMjkBHdiOV8f4oLa5IC3GzB6jvG+C7TfcqFdyX0KOr+USFSxC9EfzW
-         gq4sf5GP+2Y9PEsc59qza/ErxG8NRKgmR8tyS5azhFwTtH329ZDBm2ITajzRbvduwY
-         djHyqSCQsWveL2va2wT/eOz4fRUQ919qHtZ2EAJMnfzUI3Wx3c6Q1V+f7+lSJTGT4Y
-         cV623To1sFST3A04oSdbBkd9Bl541P8v4XHGEujKDhUeevB7FXVse+VpePM30PDXFt
-         yGlxbJTMN8smPmt2kqJYtjVhq3t5quGgig62hqd/H4EX/8G0JdurlhhgrHXxiDxruR
-         SppoGEjyty4Fw==
-Received: by mail-ed1-f70.google.com with SMTP id l24-20020a056402231800b00410f19a3103so1560341eda.5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:26:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HnLv2sgPTFeJCaPDj49F4ixfOdgITRk3XaxRkpYlXz0=;
-        b=peWA4jqdZliCMKOAMQ5mBzf+ZvOaWA2ckOqIk535E36Hb1xfv+2qQ0w2JvaDkyEXzN
-         6Ypi/IZddy6godLV+b2KhfRph/m7P4P3FP5llRaZzbQazi5Q9G81h69dPDMI04+lMKZh
-         uofuGghuiqF8WhecovcnP3k1l4y9dgD3AUoS2GSOQc9OMiY8SPU2QODfyPn88Oa5ZBkg
-         GcwEKPcHscx0oOKW9wYtSNBestXie2tJbYOeLcJIahZDqazEVCGnlB3JFBjSi2b0zmaX
-         UQ46HHStbBHhAfQCkQi90OL2d/52DzE5amyozfkBRwPnnRDBni+uuujatP4ZAjHBbbLs
-         k9Lg==
-X-Gm-Message-State: AOAM533Vo6HQ2sP4vvoc+hl0zF09qP/WyTna/CPXWk5mE2J5oYX5lZcd
-        ccBs6y8SS3+F1QxNk2jBz5zUJu/yx2LvZE6Y4oUqHCC9nvMfCm7r1ecPNQ5l3QkpiKEVtOq5GvD
-        m1T82gkFgrUsOO0qLWBzra5bBybHzgfv0mur7+e967g==
-X-Received: by 2002:a17:906:1be1:b0:6ce:b0a8:17d with SMTP id t1-20020a1709061be100b006ceb0a8017dmr2212959ejg.413.1645017975940;
-        Wed, 16 Feb 2022 05:26:15 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwW6N5tK5VHWBe36Bj5vHHIMzDJlCB0AOnINLyfOUpi+aCPHYXEWQjcBrraceqmA2DJkZ7r6A==
-X-Received: by 2002:a17:906:1be1:b0:6ce:b0a8:17d with SMTP id t1-20020a1709061be100b006ceb0a8017dmr2212939ejg.413.1645017975741;
-        Wed, 16 Feb 2022 05:26:15 -0800 (PST)
-Received: from [192.168.0.110] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id qf12sm1085572ejc.54.2022.02.16.05.26.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 05:26:15 -0800 (PST)
-Message-ID: <79a47f67-bb66-bad4-b6bc-c6a8c0ef25dc@canonical.com>
-Date:   Wed, 16 Feb 2022 14:26:14 +0100
+        Wed, 16 Feb 2022 08:28:43 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB43151D3E;
+        Wed, 16 Feb 2022 05:28:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1645018096;
+        bh=HwNrev1x9N/bAHozCMnHh0/SWdmQxawrVLg0m+YakW0=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=RUtWJPgj02d9RdJYQ7YoSVHPNgdJKkbQLGxH/3959fWlRoxCzs+SEUv8MhF9EIuSd
+         UPOms99OagbeNHn9T2GREA/Kzg1CItzhmNQ9p1MZePz84ZabXDt6BIzIIZkLX4OEiL
+         umm0oSmyex5vNBSnWFCgn2yRL7eID38JcE3sRZpk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.128.232]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MlNtF-1nz7c511Rd-00lnUS; Wed, 16
+ Feb 2022 14:28:16 +0100
+Message-ID: <7c557d0c-6718-4e16-29c6-8b75c704b773@gmx.de>
+Date:   Wed, 16 Feb 2022 14:26:54 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH] dt-bindings: dma: Convert mtk-uart-apdma to DT schema
+Subject: Re: [PATCH v4 00/13] Fix LKDTM for PPC64/IA64/PARISC v4
 Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, vkoul@kernel.org
-Cc:     robh+dt@kernel.org, sean.wang@mediatek.com, matthias.bgg@gmail.com,
-        long.cheng@mediatek.com, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220216114054.269656-1-angelogioacchino.delregno@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220216114054.269656-1-angelogioacchino.delregno@collabora.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+References: <cover.1644928018.git.christophe.leroy@csgroup.eu>
+ <202202150807.D584917D34@keescook>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <202202150807.D584917D34@keescook>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:7WUZ8IdPRgrLzg2kYAsCubjhcGSsfWfnDerK+e6MsDTo0WVtSo1
+ Qo1CSZAO42swRuv6lToQn2mbsuQy/pB029PlMs3UDpE+ADYKs4fY8RkSq6zythe/H0UD0qp
+ PJiEhm1bu11UqjwgQDhFNERLa6KstnkZlTWu4pgSqsVGe95043DiptKYmRvLXMi+S5ig2G7
+ A9mnu9SU2Bsce/RvmK/YQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:HQlDLvllLB4=:zG9VjdQRhRW5zMKE35JAvQ
+ sTaBZEmtmI9M5ryeCAdLypOUp+VWPjwhleh58s4Bx0MfvSQfMtggCwUjcI0R8FJVGQcyqOZIs
+ gqHhsqvhwutFDRldf6md8zmmGtk6TwaVyquzZ1MCESW2SrE6zcGTymzFpltWz+Rdkdm1YFzoa
+ lhTa5F+9uqsO8bDVGoqGaDUIiyihY5hNJSxdBLYV4ERtbrvekgcL3XZjnnhPOTyNx8JQ28Yjp
+ 4fK2TTtL0ghtJ4mnEmXuu4xsl/+m2AaqMf5GyF2X+Gss44eGD/xxCgtYJBPRBw4FbPSnQiUXK
+ ESp0mlJlpOtqulWHrEWJSxblPFaZMQF80liBI30esPGycROuavhe7HL9FL0IPQjGywvwrnUQB
+ YK+pU/QiiMlEJYmZdHT4tV65PWHI4/4wFVfWyEHguIml8zPF+yrR4FQ2LPLOEElJj2ZXmP1Il
+ ptIbyziXpMsIbCltb1QduqrC2jpL8QzlTmh0AO3SaXvAkH12v5CYNAIjLx8CJ7BOOuQlzFA3b
+ 5EF70bAPJl1RszsfR54ncea2HR/kjLjsEjAAnlAyOPytQAbaWqQnzaoirFM9KCpaxCytx71Pk
+ 0Bb+Cvv81aE5/W0KggKYi9IITAtuxBRxtjjoHnTv0CuPXBKjqr8o7rKDbWNaeOBjVtsAXTBIE
+ nfQiRXLcflgKsnrIhrvnwElHTrj4HOnt39TJRk7y3MuTYdx++/uvDNrsBEi4Sm8QW0ZPUCWWC
+ 5d0WWIxb+B84bK4DfWOp7hVVSl/WYpgWqH5b4hU2WVpaBhs3zjSNoE03rlVfqj8Plm/0XcYMn
+ HKbc0j0eIXagEdOr/A8UnONn6xvHzDG6IlK86sNVMaW6miOMxkiqDf4AXt3RcD60mUBOpxWh6
+ hovUfJj4ODRTGQeG6EIMT9I2fWf/qBJtPssP+L6yma1zYEBPucaJAUDCNTf14W8tDovm0ErnO
+ U31rrGLF8j6wf/UYsXTNfyVbf6s0842T9tNF8uum82B211/ALU5kr2q7fOpyto8A6IZl1VN8I
+ U/XrzPQALxcWCHwdRPHpc7x1H1HZuNVH/zyWx8sChgHXxjHJl2Os5vV4IHwWbTE/HLT+foop1
+ IGBNEhLpIEk+tI=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/02/2022 12:40, AngeloGioacchino Del Regno wrote:
-> Convert the MediaTek UART APDMA Controller binding to DT schema.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  .../bindings/dma/mediatek,uart-dma.yaml       | 112 ++++++++++++++++++
->  .../bindings/dma/mtk-uart-apdma.txt           |  56 ---------
->  2 files changed, 112 insertions(+), 56 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
->  delete mode 100644 Documentation/devicetree/bindings/dma/mtk-uart-apdma.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml b/Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
-> new file mode 100644
-> index 000000000000..4583c8f535b2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
-> @@ -0,0 +1,112 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/dma/mediatek,uart-dma.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek UART APDMA controller
-> +
-> +maintainers:
-> +  - Long Cheng <long.cheng@mediatek.com>
-> +
-> +description: |
-> +  The MediaTek UART APDMA controller provides DMA capabilities
-> +  for the UART peripheral bus.
-> +
-> +allOf:
-> +  - $ref: "dma-controller.yaml#"
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt2712-uart-dma
-> +              - mediatek,mt8516-uart-dma
-> +          - const: mediatek,mt6577-uart-dma
-> +      - enum:
-> +          - mediatek,mt6577-uart-dma
-> +
-> +  reg:
-> +    minItems: 1
-> +    maxItems: 16
-> +
-> +  interrupts:
-> +    description: |
-> +      TX, RX interrupt lines for each UART APDMA channel
-> +    minItems: 1
+On 2/15/22 17:07, Kees Cook wrote:
+> On Tue, Feb 15, 2022 at 01:40:55PM +0100, Christophe Leroy wrote:
+>> PPC64/IA64/PARISC have function descriptors. LKDTM doesn't work
+>> on those three architectures because LKDTM messes up function
+>> descriptors with functions.
+>>
+>> This series does some cleanup in the three architectures and
+>> refactors function descriptors so that it can then easily use it
+>> in a generic way in LKDTM.
+>
+> Thanks for doing this! It looks good to me. :)
 
-It would be useful to have an "if:" block constraining the interrupts
-(and reg array?), if the dma-requests is missing. If you need an
-example, see length of "max8997,pmic-buck1-dvs-voltage" array in
-relation to presence of max8997,pmic-buck1-uses-gpio-dvs.
-https://elixir.bootlin.com/linux/v5.17-rc2/source/Documentation/devicetree/bindings/regulator/maxim,max8997.yaml#L259
+I endorse that.
+Thank you, Christophe!
 
-The best would be to restrict number of interrupts to number of
-requests, but I think dtschema cannot express this.
+Acked-by: Helge Deller <deller@gmx.de>
 
-> +    maxItems: 32
-> +
-> +  clocks:
-> +    description: Must contain one entry for the APDMA main clock
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    const: apdma
-> +
-> +  "#dma-cells":
-> +    const: 1
-> +    description: |
-> +      The first cell specifies the UART APDMA channel number
-> +
-> +  dma-requests:
-> +    description: |
-> +      Number of virtual channels of the UART APDMA controller
-> +    maximum: 16
-> +
-> +  mediatek,dma-33bits:
-> +    type: boolean
-> +    description: Enable 33-bits UART APDMA support
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - "#dma-cells"
+Helge
 
-No need for requiring dma-cells. It is coming from dma-common.yaml.
+> -Kees
+>
+>>
+>> Changes in v4:
+>> - Added patch 1 which Fixes 'sparse' for powerpc64le after wrong report=
+ on previous series, refer https://github.com/ruscur/linux-ci/actions/runs=
+/1351427671
+>> - Exported dereference_function_descriptor() to modules
+>> - Addressed other received comments
+>> - Rebased on latest powerpc/next (5a72345e6a78120368fcc841b570331b6c5a5=
+0da)
+>>
+>> Changes in v3:
+>> - Addressed received comments
+>> - Swapped some of the powerpc patches to keep func_descr_t renamed as s=
+truct func_desc and remove 'struct ppc64_opd_entry'
+>> - Changed HAVE_FUNCTION_DESCRIPTORS macro to a config item CONFIG_HAVE_=
+FUNCTION_DESCRIPTORS
+>> - Dropped patch 11 ("Fix lkdtm_EXEC_RODATA()")
+>>
+>> Changes in v2:
+>> - Addressed received comments
+>> - Moved dereference_[kernel]_function_descriptor() out of line
+>> - Added patches to remove func_descr_t and func_desc_t in powerpc
+>> - Using func_desc_t instead of funct_descr_t
+>> - Renamed HAVE_DEREFERENCE_FUNCTION_DESCRIPTOR to HAVE_FUNCTION_DESCRIP=
+TORS
+>> - Added a new lkdtm test to check protection of function descriptors
+>>
+>> Christophe Leroy (13):
+>>   powerpc: Fix 'sparse' checking on PPC64le
+>>   powerpc: Move and rename func_descr_t
+>>   powerpc: Use 'struct func_desc' instead of 'struct ppc64_opd_entry'
+>>   powerpc: Remove 'struct ppc64_opd_entry'
+>>   powerpc: Prepare func_desc_t for refactorisation
+>>   ia64: Rename 'ip' to 'addr' in 'struct fdesc'
+>>   asm-generic: Define CONFIG_HAVE_FUNCTION_DESCRIPTORS
+>>   asm-generic: Define 'func_desc_t' to commonly describe function
+>>     descriptors
+>>   asm-generic: Refactor dereference_[kernel]_function_descriptor()
+>>   lkdtm: Force do_nothing() out of line
+>>   lkdtm: Really write into kernel text in WRITE_KERN
+>>   lkdtm: Fix execute_[user]_location()
+>>   lkdtm: Add a test for function descriptors protection
+>>
+>>  arch/Kconfig                             |  3 +
+>>  arch/ia64/Kconfig                        |  1 +
+>>  arch/ia64/include/asm/elf.h              |  2 +-
+>>  arch/ia64/include/asm/sections.h         | 24 +-------
+>>  arch/ia64/kernel/module.c                |  6 +-
+>>  arch/parisc/Kconfig                      |  1 +
+>>  arch/parisc/include/asm/sections.h       | 16 ++----
+>>  arch/parisc/kernel/process.c             | 21 -------
+>>  arch/powerpc/Kconfig                     |  1 +
+>>  arch/powerpc/Makefile                    |  2 +-
+>>  arch/powerpc/include/asm/code-patching.h |  2 +-
+>>  arch/powerpc/include/asm/elf.h           |  6 ++
+>>  arch/powerpc/include/asm/sections.h      | 29 ++--------
+>>  arch/powerpc/include/asm/types.h         |  6 --
+>>  arch/powerpc/include/uapi/asm/elf.h      |  8 ---
+>>  arch/powerpc/kernel/module_64.c          | 42 ++++++--------
+>>  arch/powerpc/kernel/ptrace/ptrace.c      |  6 ++
+>>  arch/powerpc/kernel/signal_64.c          |  8 +--
+>>  drivers/misc/lkdtm/core.c                |  1 +
+>>  drivers/misc/lkdtm/lkdtm.h               |  1 +
+>>  drivers/misc/lkdtm/perms.c               | 71 +++++++++++++++++++-----
+>>  include/asm-generic/sections.h           | 15 ++++-
+>>  include/linux/kallsyms.h                 |  2 +-
+>>  kernel/extable.c                         | 24 +++++++-
+>>  tools/testing/selftests/lkdtm/tests.txt  |  1 +
+>>  25 files changed, 155 insertions(+), 144 deletions(-)
+>>
+>> --
+>> 2.34.1
+>>
+>
 
-> +
-
-Best regards,
-Krzysztof

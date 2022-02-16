@@ -2,99 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F8B4B7D3B
+	by mail.lfdr.de (Postfix) with ESMTP id 246704B7D39
 	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 03:21:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343497AbiBPCCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 21:02:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52494 "EHLO
+        id S238776AbiBPCDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 21:03:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245754AbiBPCCn (ORCPT
+        with ESMTP id S245754AbiBPCDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 21:02:43 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1774B9F6F0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:02:32 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id qk11so1222133ejb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:02:32 -0800 (PST)
+        Tue, 15 Feb 2022 21:03:30 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD08EB93AD
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:03:18 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id z24so967155oib.6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:03:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oy1YM/HzNdw/9ZFVOisrJV7nT7HM/m+A2J2vkUwfDOQ=;
-        b=iDyrMrL5USelID7ncCPEtS8P1iJHrYtWzRHFXvfjcLZ5sKzz5wxlqfs1s+VKuXUM0H
-         bGgWxmr27jV9NoSeuAb37hoTBfjgUAEcN+piOHr3ZcSuFnR97cd0hhrJloCfcgTixOur
-         HfqfFdKk1epCuLop7JuIGXVestj+xatWHY7ISqaz/6N/em25cnifpHZ2wJJzylKYRyTu
-         cmgDwPQ03pVEoYZlthWznKxroxaO2hwI9DBAVajtQkJgG74Y8T96l69LJD2GcrrVjkER
-         +KLdZqB8AenqHTaxBfKy9OGWUvnl8lk/n6FHGTEFnsOg8XpW7ayjvQjoRYt2nckqjUjf
-         2gQA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fyU/OTkUyEuUQG4MRg7zhhXJejHomtDIZYMm7FS8VaQ=;
+        b=SdpEypARxFwWHtRMsHtdq0Eh50pLyZ/m1DbxP1ydnXK5nbGGgQv6yWoDNeAtpo1R+6
+         f7iIqoFs8ZfQesNEFnwNAq2WjSV9cX7L4Hz8KqUZ4vqqtXwYDh/M0dIaTILiymxjILzw
+         /0DVa6p4+LvWkiE2IeHH4Du1IHnlfrqLL31RiS3t1hk7VFgzPxFzUpawof3GJC7CA2Jj
+         LEkVHrDkmB2zt5eeHJ7QfQ1wp7RRp7e4Epa0lIYAHWqJq39lmqdgLoXGq3D9irtMR7YG
+         +PL9f/jVwtVFul+w3ZOONOqWccFB8aRCjtCbpA1fUOkOoPELkL4C52tRbqnwGNNU9d9a
+         at7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oy1YM/HzNdw/9ZFVOisrJV7nT7HM/m+A2J2vkUwfDOQ=;
-        b=MMHL+9afu68V3B+VSUIm2nLbMkq7PKnktVB3EVqt7YlRpK04vj9TXJf7kSuZyy1MW2
-         hMg3+7Nz9AfGNJn5SLILkVG/OmpaSN/8WQxZm2XW4zNTDZN8x4c+vDz+GPBOdqgW6SSM
-         S9vhPwlgqaqZwMYudCw46wLXwC9HkQqBFZXGGFuaTc8Zj0/v8stQj0Ozl8ZsUiDjc1yy
-         pW3nrq6E7oQf0snywFqnG7o6cZRW+MpvpszV2DCmn7Tj3V8FH1Qtdl43akAfCsFey0cg
-         /xtt24JO1eYE1oh9wEdBfW45ksfvFeF5eLhISWEFH1v6A8dUqqGQU38lTgauYFOuNopw
-         OYkQ==
-X-Gm-Message-State: AOAM533pjl0lxUM0UpdCs3S6lKFg6h7QQMGWn0q/CNTHLLPrYjw+eQwl
-        anBuRiVvLQcMmfuasm6Skx2A1qxgFUusR1A948WRKw==
-X-Google-Smtp-Source: ABdhPJyzj9PoOwCqscEDxQYrkHv3HVEzD3hy4Cgfik4tedxpf27fA2eNn7NTVcXO/NFhy7cKYusXyRRgUtlbqVzts2A=
-X-Received: by 2002:a17:906:c12:b0:6cd:795c:9803 with SMTP id
- s18-20020a1709060c1200b006cd795c9803mr552433ejf.593.1644976950396; Tue, 15
- Feb 2022 18:02:30 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fyU/OTkUyEuUQG4MRg7zhhXJejHomtDIZYMm7FS8VaQ=;
+        b=Mur0cUYKJHw+C+/gNZ2Xw2BmGZoe92B9mCjZgBIaMVJKQ9NNbVCug2jd4ylBGZMuH6
+         GZVRjB0Ks47VdRzg0TbssDzplcELGuJfPH++UDfGsaRM7ipARBcYvM8Y8Njz1S64nRWd
+         wGY2xTsLtkGjT3pj4IWSv1z3aswpxK4xU+nJGWJXjOoX03O7K2WQLGKaN2PsWsTdgaYt
+         DVVeFZ/5QLaK5R84dHUUY1Hd12ZUV+1YDblGRdXL6zA5y6wFceeRif44ArvB2Lx8bJA1
+         S3RKfsV4aAPak5/IZmZ2uuuOl1PeD6trk5tZAEe5ErujRnZ5ShQN/hoY7YvC57gdOobn
+         2iIg==
+X-Gm-Message-State: AOAM530DXjJw3ZFVn+OqSz8q6O3yUe8lv+4b7sLHDgue2OWGTaWj++La
+        MaWUtKJINOaD99rza2Z2eTDs2Mz9O0kc5w==
+X-Google-Smtp-Source: ABdhPJyGYGO4TFM0B7TvlVq7wHeMoHy+oVnJNhmBVb5bhehWE0Jkky7ehV5ykiS70CxF0BYMOvqaFQ==
+X-Received: by 2002:aca:2112:0:b0:2d3:ffce:90c4 with SMTP id 18-20020aca2112000000b002d3ffce90c4mr296649oiz.62.1644976997189;
+        Tue, 15 Feb 2022 18:03:17 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id q28sm702657ots.76.2022.02.15.18.03.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 18:03:16 -0800 (PST)
+Date:   Tue, 15 Feb 2022 20:03:14 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
+Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Add SC8180x to hw catalog
+Message-ID: <YgxbYnpbBeOIkGWi@builder.lan>
+References: <20220215043353.1256754-1-bjorn.andersson@linaro.org>
+ <20220215043353.1256754-2-bjorn.andersson@linaro.org>
+ <be397e2e-05ab-5c18-8e2d-16c443f0a6d1@quicinc.com>
+ <Ygvisfhi0SY6XdAz@builder.lan>
+ <6a3ef247-b26b-d505-cd85-92fb277163dd@quicinc.com>
+ <CAA8EJprCaiPW=Kk0B69RNNwAk0xcqaxQA031sfR0ky+BfzcWKQ@mail.gmail.com>
+ <ceb861e5-b1c8-d33e-c0b0-bea0b4cc0b66@quicinc.com>
+ <CAA8EJppj+OBPVUgvefO38zp1RHpJw5pL0-4DCkgn3iAcPH-ptA@mail.gmail.com>
+ <d0cac12e-7c03-2ba3-fb8d-aee09b72a1b1@quicinc.com>
 MIME-Version: 1.0
-References: <543efc25-9b99-53cd-e305-d8b4d917b64b@intel.com>
- <20220215192233.8717-1-bgeffon@google.com> <YgwCuGcg6adXAXIz@kroah.com>
- <CADyq12wByWhsHNOnokrSwCDeEhPdyO6WNJNjpHE1ORgKwwwXgg@mail.gmail.com> <066c9f4b-b0a3-9343-9db9-1c1c7303da6f@intel.com>
-In-Reply-To: <066c9f4b-b0a3-9343-9db9-1c1c7303da6f@intel.com>
-From:   Brian Geffon <bgeffon@google.com>
-Date:   Tue, 15 Feb 2022 21:01:54 -0500
-Message-ID: <CADyq12yuzOPbv+jrdhf8unzsifVXGw31LbW+Sh2tZ3qG=xjGjg@mail.gmail.com>
-Subject: Re: [PATCH stable 5.4,5.10] x86/fpu: Correct pkru/xstate inconsistency
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Willis Kung <williskung@google.com>,
-        Guenter Roeck <groeck@google.com>,
-        Borislav Petkov <bp@suse.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        "# v4 . 10+" <stable@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d0cac12e-7c03-2ba3-fb8d-aee09b72a1b1@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 4:42 PM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 2/15/22 13:32, Brian Geffon wrote:
-> >> How was this tested, and what do the maintainers of this subsystem
-> >> think?  And will you be around to fix the bugs in this when they are
-> >> found?
-> > This has been trivial to reproduce, I've used a small repro which I've
-> > put here: https://gist.github.com/bgaff/9f8cbfc8dd22e60f9492e4f0aff8f04f
-> > , I also was able to reproduce this using the protection_keys self
-> > tests on a 11th Gen Core i5-1135G7.
->
-> I've got an i7-1165G7, but I'm not seeing any failures on a
-> 5.11 distro kernel.
->
+On Tue 15 Feb 19:34 CST 2022, Abhinav Kumar wrote:
 
-Hi Dave,
-I suspect the reason you're not seeing it is toolchain related, I'm
-building with clang 14.0.0 and it produces the sequence of
-instructions which use the cached value. Let me know if there is
-anything I can do to help you investigate this further.
+> 
+> 
+> On 2/15/2022 4:20 PM, Dmitry Baryshkov wrote:
+> > On Tue, 15 Feb 2022 at 23:21, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+> > > On 2/15/2022 10:42 AM, Dmitry Baryshkov wrote:
+> > > > On Tue, 15 Feb 2022 at 20:42, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+> > > > > On 2/15/2022 9:28 AM, Bjorn Andersson wrote:
+> > > > > > On Tue 15 Feb 11:14 CST 2022, Abhinav Kumar wrote:
+> > > > > > > On 2/14/2022 8:33 PM, Bjorn Andersson wrote:
+> > > > > > > > From: Rob Clark <robdclark@chromium.org>
+[..]
+> > > > (thus leading us to cases when someone would forget to add INTF_EDP
+> > > > next to INTF_DP)
+> > > > 
+> > > > Also, if we are switching from INTF_DP to INTF_EDP, should we stop
+> > > > using end-to-end numbering (like MSM_DP_CONTROLLER_2 for INTF_5) and
+> > > > add a separate numbering scheme for INTF_EDP?
+> > > > 
+> > > We should change the controller ID to match what it actually is.
+> > > 
+> > > Now that you pointed this out, this looks even more confusing to me to
+> > > say that  MSM_DP_CONTROLLER_2 is actually a EDP controller because
+> > > fundamentally and even hardware block wise they are different.
+> > 
+> > So, do we split msm_priv->dp too? It's indexed using
+> > MSM_DP_CONTROLLER_n entries.
+> > Do we want to teach drm/msm/dp code that there are priv->dp[] and
+> > priv->edp arrays?
+> 
+> ok so now priv->dp and priv->edp arrays are also in the picture here :)
+> 
+> Actually all these questions should have probably come when we were figuring
+> out how best to re-use eDP and DP driver.
+> 
+> Either way atleast, its good we are documenting all these questions on this
+> thread so that anyone can refer this to know what all was missed out :)
+> 
+> priv->dp is of type msm_dp. When re-using DP driver for eDP and since
+> struct msm_dp is the shared struct between dpu and the msm/dp, I get your
+> point of re-using MSM_DP_CONTROLLER_* as thats being use to index.
+> 
+> So MSM_DP_CONTROLLER_* is more of an index into the DP driver and not really
+> a hardware indexing scheme.
+> 
+> If we split into two arrays, we need more changes to dpu_encoder too.
+> 
+> Too instrusive a change at this point, even though probably correct.
+> 
 
-Brian
+I'm sorry, but performing such a split would create a whole bunch of
+duplication and I don't see the reasons yet. Can you please give me an
+example of when the DPU _code_ would benefit from being specifically
+written for EDP vs DP?
+
+Things where it doesn't make sense to enable certain features in
+runtime - but really have different implementation for the two interface
+types.
+
+> But are you seeing more changes required even if we just change INTF_DP to
+> INTF_eDP for the eDP entries? What are the challenges there?
+> 
+
+What are the benefits?
+
+Regards,
+Bjorn

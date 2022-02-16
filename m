@@ -2,113 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A08B64B8D46
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C03BF4B8D48
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:07:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235970AbiBPQHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 11:07:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33944 "EHLO
+        id S235977AbiBPQIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 11:08:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235942AbiBPQHT (ORCPT
+        with ESMTP id S232520AbiBPQH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 11:07:19 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0F42DE9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:07:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645027627; x=1676563627;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Gbm/qLf0bhmHpiUm7cUvEmurhPnWsvc5iBPuaTsL0Do=;
-  b=PNYnoeirRyFMQHIcNY0G5ijGbgQlGX6/ErzoH+x+fqgadc2Z+mg52K75
-   jMfao0IbVNnMNTDouxRWy/AGNvXr1ggDAjl+jkI+852x8QoSa5DWw7/mj
-   YZlcosLtbwEagDyegxhq4BFLbBT7IZnmogGIM0r207yUAjI7wQMsQ385M
-   M=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 16 Feb 2022 08:07:07 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 08:07:06 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 16 Feb 2022 08:07:06 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 16 Feb 2022 08:07:06 -0800
-Received: from nalasex01a.na.qualcomm.com ([fe80::a58b:cd8b:e019:f01d]) by
- nalasex01a.na.qualcomm.com ([fe80::a58b:cd8b:e019:f01d%4]) with mapi id
- 15.02.0922.019; Wed, 16 Feb 2022 08:07:06 -0800
-From:   "Nitin Rawat (QUIC)" <quic_nitirawa@quicinc.com>
-To:     Christoph Hellwig <hch@infradead.org>,
-        Vidya Sagar <vidyas@nvidia.com>
-CC:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sajida Bhanu (Temp) (QUIC)" <quic_c_sbhanu@quicinc.com>
-Subject: RE: [PATCH v3] nvme/pci: Add quick suspend quirk for Sc7280 Platform
-Thread-Topic: [PATCH v3] nvme/pci: Add quick suspend quirk for Sc7280 Platform
-Thread-Index: AQHYHsBOpLTvLkaTP0STBN0OK3zww6yOaCmAgAfvxCA=
-Date:   Wed, 16 Feb 2022 16:07:05 +0000
-Message-ID: <9b291987cf914f119788c42b32a08a12@quicinc.com>
-References: <1644526408-10834-1-git-send-email-quic_nitirawa@quicinc.com>
- <YgYAs7R/1G2Y2kpz@infradead.org>
-In-Reply-To: <YgYAs7R/1G2Y2kpz@infradead.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.216.23.73]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 16 Feb 2022 11:07:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF8AB9D72;
+        Wed, 16 Feb 2022 08:07:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DABFD61AC0;
+        Wed, 16 Feb 2022 16:07:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F219C004E1;
+        Wed, 16 Feb 2022 16:07:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645027666;
+        bh=NFkfbdOAbPVQan1POI4dMNk5eBImxr+9OGABQJj8KqM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p5ox1mAQXw5JkoWxJlHhoidcPBAfC65ZPmCHHu83jVRssyUxirECwi5s93HZ7MZRT
+         LRxrQ8JA/fTPdYbY+y4o5TZv6QFMZxhlvbOVX/ZShyWhAuk7tIi7ZhaEntAjdCuKcY
+         GfgEqEVZ0Wp1Yz9xhrJYV1ijypxpcxiyM2dAzZaVSJIj1TfLs+cb5iQkVSQT4eDqV0
+         Zd790p6HyMEgrRbG77Xclxjk4T6P42PbYY0Dni0t/51iyl1/tmjnwqKEI0cVzPneeP
+         Myok8RR0yN8oxf7KiTN53L+X4/fEe+7+4SoBcli5peS2t/cfYGXyTf2IIwThyVl5dS
+         ShtDgvPPdnY9g==
+Date:   Wed, 16 Feb 2022 16:07:41 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the spi tree
+Message-ID: <Yg0hTRF6HsMoVG0Z@sirena.org.uk>
+References: <20220216161718.2c094b08@canb.auug.org.au>
+ <c041df98-fbea-bc76-75c0-42d549248dfd@collabora.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kFuz3fSSNOvX773v"
+Content-Disposition: inline
+In-Reply-To: <c041df98-fbea-bc76-75c0-42d549248dfd@collabora.com>
+X-Cookie: Fremen add life to spice!
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph/Keith/Rafael
 
-Since we are giving control to PCIe (NVMe power rails control), it can vary=
- from platform to platform.
-More over, PCIe driver doesn't control these power rails directly from PCIe=
- driver, they tie nvme supply with one of the pcie supply and control them =
-together.=20
-So i think it would be better to either have quirk based on platform or alw=
-ays setting simple suspend and platform which needs full suspend can update=
- it through some means.=20
+--kFuz3fSSNOvX773v
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Based on below link, Looks like this can be across platform ...vidya also m=
-ention similar concern for tegra platform. =20
-https://lore.kernel.org/lkml/20220209202639.GB1616420@dhcp-10-100-145-180.w=
-dc.com/T/#md10b0108b3ccbb1254fe0ad8dbb6e98044a8820b
+On Wed, Feb 16, 2022 at 09:20:38AM -0300, Andr=E9 Almeida wrote:
 
-Please let me know your opinions.
+> Thanks for input. I'll send a new series with a patch to make this
+> driver depends on ACPI then. My patch touched this line, but this
+> variable was there before, so I think this build breakage is happening
+> for some time.
 
-Thanks,
-Nitin
------Original Message-----
-From: Christoph Hellwig <hch@infradead.org>=20
-Sent: Friday, February 11, 2022 11:53 AM
-To: Nitin Rawat (QUIC) <quic_nitirawa@quicinc.com>
-Cc: Keith Busch <kbusch@kernel.org>; Jens Axboe <axboe@fb.com>; Sagi Grimbe=
-rg <sagi@grimberg.me>; linux-nvme@lists.infradead.org; linux-kernel@vger.ke=
-rnel.org; Sajida Bhanu (Temp) (QUIC) <quic_c_sbhanu@quicinc.com>
-Subject: Re: [PATCH v3] nvme/pci: Add quick suspend quirk for Sc7280 Platfo=
-rm
+No, don't do that - just compile out the ACPI support when not in use
+like other drivers do.  A dependency on ACPI || COMPILE_TEST could be
+useful but you still need to fix the driver.
 
-On Fri, Feb 11, 2022 at 02:23:28AM +0530, Nitin Rawat wrote:
-> Enable quick suspend quirks for Sc7280 platform, where power to nvme=20
-> device is removed during suspend-resume process. This is done to avoid=20
-> the failure dring resume.
+--kFuz3fSSNOvX773v
+Content-Type: application/pgp-signature; name="signature.asc"
 
-You need to sort this out in the PCI and PM layers.  The broken platform wi=
-ll also affect all other PCIe drivers and not just nvme.
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmINIU0ACgkQJNaLcl1U
+h9C+swf/fDU6Dr7pzTsEKLmiksLRgowukAYRIIWxekj6swzwA+nz5DOsTmTvaAfs
+DejqbdEl/sEWqCNG2EB5hNGVHrgQP2aMqPGu5zGsdai9zP76drKi/NSlUv1LJtWf
+q02gWypC61HwBwR/B6Y5YnzhIBSgCMk3a5JcbLuU/7lMkeWaQtk+D57ZRsECvjSe
+vI+mFOgwwRHq2A/ezPI03KUMxaKy5+gPSYj+1l6qSPVexOCvSJMJEQcq5VL3Bnak
+m32DLkNJzJNYziuCo4bM8pM2shoX+0B2Il97avJicGT8JAvUcpNdAurcYJtIz3m2
+rxlu1e/TzeGToRFBa+GeVTo5Oh3RXg==
+=h2Gb
+-----END PGP SIGNATURE-----
+
+--kFuz3fSSNOvX773v--

@@ -2,110 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D030C4B8594
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 11:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 578FA4B8587
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 11:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232399AbiBPKXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 05:23:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35206 "EHLO
+        id S231277AbiBPKYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 05:24:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiBPKXn (ORCPT
+        with ESMTP id S229636AbiBPKYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 05:23:43 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79216206997
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 02:23:30 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id b11so2884409lfb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 02:23:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BgTdt/5Tmin+RrpPEv4f+OmO2PXeyvBfP6PGIN1pw00=;
-        b=ZgyZzKrmMhsvCg4VMfuF0GDqGdzdbOAx4uk46L+7NyKSrkuFJ6DR2tWzprIB09t90F
-         pdEfMTaqxgUhrDo328Woxo49aijQt/PH+5GrkfdtSWRvyq4re5bzLedlwmNSTfT3+kn8
-         Fh2guaKG2mWyijqIWhMdIhxXS1MGbaVDkGR1LWbDV24YlHrSA0CsW/PNLugG+ufy821z
-         QnY+PS1GQuurqd7ygmJgwJZvUwPTLfp5gfntzw00S2My1DCDpGjeRNJeADYNm/a4KfcS
-         zikp3p85IJaJaTZz6K1bUbQMmH7pNCsZYSCy6VpzOAirR9tSzCC+0jVLrKm95rP1yGl4
-         VhOA==
+        Wed, 16 Feb 2022 05:24:51 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA772069BE
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 02:24:39 -0800 (PST)
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 07CBA405E0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:24:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645007078;
+        bh=qXI75zjxBTeJPXxSNeUlZDMty7S4WiqV/haz2dU/d9I=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=PecQq3tejtp5Jau67bo4UcH1/xWqLKGIaCxj45Za9OsRjTsZYh4jBAKs3mfGCaad1
+         KYfdS3py5kfawShnF8DdS1V+YZrrWYjMka3rc8Nbys6n8CwMwRHtvmrQdV+K9aJY6Z
+         9ynjEirNI1CLoFkdY32U1iLTeOEFjvw7g5c0bMsNhaNdo7Bg2sE9ZaFEOoaDS0KDkU
+         r041vpZ5gTXR49mAtz5uzresSC9NmuajfRiGBR9i0WpVLZbz9Q4w1a6GAg0JoGXoE0
+         JLdCWVzsu+Q50uugl63USdWuk/bAoZQ9T3JkBPmLHyPLGabKi4H0BMiusb8fAeLRly
+         UrtSxecSp+FCw==
+Received: by mail-wm1-f69.google.com with SMTP id a8-20020a7bc1c8000000b0037bc4c62e97so294322wmj.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 02:24:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BgTdt/5Tmin+RrpPEv4f+OmO2PXeyvBfP6PGIN1pw00=;
-        b=wLK1bdPXpx5OOo4B7YoiXtOPf92mvRUKJQqdP4xbFy57EBm3aUMnLs+LGDPzHGHd7q
-         hLUsswLo42Kgb2+VGtFsst4+4em6jQ8zxe46XJXQ0ND2497/uZLCEMKDrIE/TZOPIF4Q
-         UCPNiZACgk9FD1K7p4zjZAo7tN6xBglWbHaO7839JXB9qLaMqJhmufxgm+tPVENUaRsx
-         njj6xJDxaqAvYQEzQUu5X+1cjUi/0O8P0K4RDaZmgDu4cOZXaZ18ZqrpP6zdHJvW8cwr
-         U73dV0Pn3+biTpSlNz2cdGBcl2GAAmCDA6sV/89Y1DAMgIHMzOzl52PXYW1K13LoRxA5
-         dI1Q==
-X-Gm-Message-State: AOAM533Yvq4GvwQWDXallLj9Xyh7m0cabtRLAPS8dxLZspwyITSQM8te
-        gfspIc80yMJH5OdJIZzyN9UM67s74wBobrIKd2Xqxw==
-X-Google-Smtp-Source: ABdhPJwgnpPtxD5K4HV7oO6sxOcMCiJwgU1TdTweqVp1m3xG6mpjoIJGR/sO87EROFqrpGyf758QznqJmtiqosajuuk=
-X-Received: by 2002:a05:6512:388d:b0:443:6066:2c8d with SMTP id
- n13-20020a056512388d00b0044360662c8dmr1521088lft.184.1645007008626; Wed, 16
- Feb 2022 02:23:28 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qXI75zjxBTeJPXxSNeUlZDMty7S4WiqV/haz2dU/d9I=;
+        b=H7XZ8p0ebonMs7+9vSrwMS25LjrcwRUNPjgjDLdU2CNokTeBUmLVG5fhONwHD884tR
+         4naUCYEMwDJdS3EdE1j521Gf/a2FNCt9jRGl8V/MiHAzLEwyh3MpZXKdBxPaSRIUh+9n
+         N2LlgeoB93K2KZJpfVc136ESciFC42fQRgBwANhYjEUeF8CXwBh4dscAdb56kEl8PUva
+         zOG8x0RnGUnxcycu9mhQHtKoxaifEC5a8Zqdww8Kz9GfHDGeTnzOc2ykGvgHS4N36IQw
+         5Y/VfXISLvAmXFWL6yLxenkwiCZVYcMm31VVybI/kDjnas8QZsSZO9BD3Kb1J1eEkCf9
+         LZUA==
+X-Gm-Message-State: AOAM532Nde1R/OHq7qWVmbSVm8DjWPm0qQUMIeNR5qQ0gg1p6k1iURmZ
+        p/W8v2HPtJa8IvGaPq49CVMQR9mL2lDZEhO3rfDfFGue1Hfc+XYIQXVAEEHp03/a38T+nuaIbuJ
+        DDd2TVU6lk/8gMZ0v0BLwMKNu2q/oOiuYwdJO/PjCbA==
+X-Received: by 2002:a5d:644b:0:b0:1e3:6a41:d2f4 with SMTP id d11-20020a5d644b000000b001e36a41d2f4mr1739103wrw.356.1645007077751;
+        Wed, 16 Feb 2022 02:24:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyWwVSVkA73YJkXT0kBUhoy4TKJmeRjjeKYqoW7WsaeJTgwFiRf0g49sq90wFOpXdDBBG2d1A==
+X-Received: by 2002:a5d:644b:0:b0:1e3:6a41:d2f4 with SMTP id d11-20020a5d644b000000b001e36a41d2f4mr1739092wrw.356.1645007077612;
+        Wed, 16 Feb 2022 02:24:37 -0800 (PST)
+Received: from [192.168.0.110] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id h2sm1635791wmm.27.2022.02.16.02.24.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 02:24:37 -0800 (PST)
+Message-ID: <435f7269-7f34-ba6a-0219-abcc01ffef88@canonical.com>
+Date:   Wed, 16 Feb 2022 11:24:36 +0100
 MIME-Version: 1.0
-References: <20220121014039.1693208-1-kai.heng.feng@canonical.com>
- <20220125055010.1866563-1-kai.heng.feng@canonical.com> <CAPDyKFrtD28NKTyUAR-6Rt4PwYvkOuWcRhxZZWVAq4KcTNG7QQ@mail.gmail.com>
- <CAAd53p5LxZh6-jZj274g6+PeDpAPWSiwRWXL93dgOg3xpqvu8g@mail.gmail.com>
-In-Reply-To: <CAAd53p5LxZh6-jZj274g6+PeDpAPWSiwRWXL93dgOg3xpqvu8g@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 16 Feb 2022 11:22:52 +0100
-Message-ID: <CAPDyKFpx_H8b1KJ_yZ_3My_nxcC2e9k+wROH7hgfK3LbchQ8iQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/4] mmc: rtsx: Use pm_runtime_{get,put}() to handle
- runtime PM
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
-        linux-pm@vger.kernel.org, Ricky WU <ricky_wu@realtek.com>,
-        Thomas Hebb <tommyhebb@gmail.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [v2,0/4] Convert pwm-mtk-disp.txt to mediatek,pwm-disp.yaml
+ format
+Content-Language: en-US
+To:     xinlei.lee@mediatek.com, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        robh+dt@kernel.org, matthias.bgg@gmail.com, jitao.shi@mediatek.com
+Cc:     allen-kh.cheng@mediatek.com, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Xinlei Lee <xinlei.lee@mediatek.corp-partner.google.com>
+References: <1645003971-16908-1-git-send-email-xinlei.lee@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <1645003971-16908-1-git-send-email-xinlei.lee@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Feb 2022 at 05:21, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
->
-> On Fri, Feb 4, 2022 at 8:28 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> >
-> > On Tue, 25 Jan 2022 at 06:50, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
-> > >
-> > > Commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM") doesn't
-> > > use pm_runtime_{get,put}() helpers when it should, so the RPM refcount
-> > > keeps at zero, hence its parent driver, rtsx_pci, has to do lots of
-> > > weird tricks to keep it from runtime suspending.
-> > >
-> > > So use those helpers at right places to properly manage runtime PM.
-> > >
-> > > Fixes: 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM")
-> > > Cc: Ricky WU <ricky_wu@realtek.com>
-> > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> >
-> > The runtime PM reference counting for the mmc host device is managed
-> > by the mmc core. Have a look at __mmc_claim_host() and
-> > mmc_release_host().
-> >
-> > In other words, the runtime PM reference counting should not be needed
-> > in the mmc host driver, unless there are some specific cases, like for
-> > example during ->probe|remove().
-> >
-> > So perhaps it's only the changes in the ->probe|remove() functions
-> > that you need to fix the problems? No?
->
-> Yes you are right. Let me send a patch to remove redundant PM helpers
-> from this patch.
+On 16/02/2022 10:32, xinlei.lee@mediatek.com wrote:
+> From: Xinlei Lee <xinlei.lee@mediatek.corp-partner.google.com>
+> 
+> Changes since v1:
+> 1. Fixed formatting issues mentioned in the v1.
+> 2. Delete pwm-mtk-disp.txt.
+> 3. Add mtk_pwm dt_maintainers.
+> 4. Add "#pwm-cells" & power-domains properties.
+> 5. Make dt_checking successful.
 
-Ohh, I didn't know that Greg already queued this up. Seems like I
-don't get more than one week to review. :-)
+Any reason in changing your email address in all patches? Maybe some
+mail client misconfiguration?
 
-Alright, I will look at your new patch then.
 
-Kind regards
-Uffe
+Best regards,
+Krzysztof

@@ -2,102 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B32C4B8C10
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:08:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E274B8C1B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:10:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235375AbiBPPIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 10:08:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40466 "EHLO
+        id S235390AbiBPPK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 10:10:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235326AbiBPPIK (ORCPT
+        with ESMTP id S233894AbiBPPKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 10:08:10 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94AE201933;
-        Wed, 16 Feb 2022 07:07:57 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id c14so1637550ilm.4;
-        Wed, 16 Feb 2022 07:07:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bLlHTPf7eon4BbIAezWnNI6iX8qt53HUKJyH0lHJ1kE=;
-        b=FxftwHhVSJtn4s/UQgc74G86BO3nMi1IjDBzf5aiykwhXfuYMQRDh0qTFi2WGmloAd
-         QYzv5E+G0BIW6ouvOWqhvCFaBZ1bZIVxRwwHa19bD39hNy4x9oc7GjQoxBqJHraVNf7e
-         qBEroHtGFtMV+sOO7QIzO7gbL+P05VOytvsM90yBk2751anQqUhybQGu/lbzKrqHaiGT
-         85n2w2fZmSP6Ttr8n8QAonEo2kQerVujdGjKNnWrq2gHg7uSSiFy63pwcd58z1LCEREh
-         DcP897A375D2yO+9pts5uccocLMrEhz+dby9y+xRNew/qZ/YtGWdg6gwsoUBNroc5MBd
-         +3RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bLlHTPf7eon4BbIAezWnNI6iX8qt53HUKJyH0lHJ1kE=;
-        b=XpvfrJsJEpTvKW7QnVuHzN6OFO94S2QGmW20yeHjoOqBxWdKNq6kg1EVxJTZqpRn3h
-         K54RiSP8K9IvWvkEi2J9WJ6oy1xcx/P9ppQdJ3Hj/JI7Nszwb2hVhpYF1ahbMgqllE5K
-         ZD0nV8l6G8CVNkcR/9v0AmoLTjj2ALwyf4U6far5D7JKsLKqbz/TdzuN0ZpPX6sTBgNF
-         vhXrV3MHPmpS8o++j1mkGfaFhA3uQtu6zw3XWEMYavoG/BZ5jA5macElUa1jtSd5rqb8
-         enjzH+KCs8NDrlYRfo1WBjqQ2v2XLSu8jEoWydWztXXDG96yf9ZvPyFOTeNMyRzT+lCQ
-         ktCw==
-X-Gm-Message-State: AOAM531mAL+GM8y17jBUQQpCuyi4UmN4JRFLLSNjuq6Rbv+MC26MQd3E
-        3HFEn8MBmnnINGTG7yh4JpT1/bxJsXrgnBR2IdU=
-X-Google-Smtp-Source: ABdhPJwRp/cm8AHG+LOwLkypP9TU/FUwriNxWg6yltkkZWO+mL0KK86q/TUEgAlFJp7c9ZsxM7VD6m2amC8NH+0/Zvc=
-X-Received: by 2002:a05:6e02:1985:b0:2be:1909:ede5 with SMTP id
- g5-20020a056e02198500b002be1909ede5mr2015977ilf.151.1645024077110; Wed, 16
- Feb 2022 07:07:57 -0800 (PST)
+        Wed, 16 Feb 2022 10:10:55 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB042A64DD
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 07:10:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645024242; x=1676560242;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LG4idFbzqEHVgQ4j1CpjWPu8xIDklGnCfWS0dLUcgKY=;
+  b=cQsBSnBLfIwZ4td7u1yV+PDJPYsA+53u58zErJKmz6g1/PbBYu6l1tKf
+   9ndo/sidJyf80K4Ma7FS0LyAlKeDl1vZXHzFR8G1BmYMAhLJQKN1o6n8A
+   gJKRHrc8uhQoZkm/7uWFK9CBZ1G4yLmLF147IodeaXb/62z2OdZCENYc2
+   6IvnQozB30QXOVAyytEwZ7r0KESB1k6//VXuj4A7FeKlmMIvgiiLmR62r
+   XFPAA1xOH9KGuxcf8OnCw6G4oYmI8czG8df/QGit9XxNm0Tb+ra9ZCoQc
+   MftngwDFdd1RsFV7SjrXKP680Sjb3HX9nkc15sh3O2U90XSeMtuEAMhOO
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="231248574"
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="231248574"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 07:10:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="503058862"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 16 Feb 2022 07:10:40 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKLx2-000Atl-79; Wed, 16 Feb 2022 15:10:40 +0000
+Date:   Wed, 16 Feb 2022 23:09:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vadim Pasternak <vadimp@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jiri Pirko <jiri@nvidia.com>
+Subject: [jpirko-mlxsw:jiri_devel_linecards 28/43]
+ drivers/net/ethernet/mellanox/mlxsw/core_thermal.c:1023:23: error:
+ initialization of 'void (*)(struct mlxsw_core *, u8,  void *, void *)' {aka
+ 'void (*)(struct mlxsw_core *, unsigned char,  void *, void *)'} from
+ incompatible pointer type 'void (*)(struct...
+Message-ID: <202202162311.zXdLiZmj-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220215204947.1719516-1-ndesaulniers@google.com>
-In-Reply-To: <20220215204947.1719516-1-ndesaulniers@google.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 16 Feb 2022 16:07:45 +0100
-Message-ID: <CANiq72kKRFy6jm6L46Tvx11Jo+zwA8NO7f2Bcb17a5jV7BXUTg@mail.gmail.com>
-Subject: Re: [PATCH] Documentation/llvm: refresh docs for LLVM=1
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Yujie Liu <yujie.liu@intel.com>,
-        Philip Li <philip.li@intel.com>, julie.du@intel.com,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>, llvm@lists.linux.dev,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nick,
+tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_linecards
+head:   5cb021512c3be7e03591497caeab474ecccfcd21
+commit: 37b9b28d9ef1e71cb5a449450fbc2ca9e9d6d667 [28/43] mlxsw: core_thermal: Add interfaces for line card initialization and de-initialization
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220216/202202162311.zXdLiZmj-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jpirko/linux_mlxsw/commit/37b9b28d9ef1e71cb5a449450fbc2ca9e9d6d667
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw jiri_devel_linecards
+        git checkout 37b9b28d9ef1e71cb5a449450fbc2ca9e9d6d667
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/ethernet/mellanox/mlxsw/
 
-Thanks for sending this so quickly, no warnings from a quick test:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-    Tested-by: Miguel Ojeda <ojeda@kernel.org>
+All errors (new ones prefixed by >>):
 
-A couple of nits below in case you do a v2.
+>> drivers/net/ethernet/mellanox/mlxsw/core_thermal.c:1023:23: error: initialization of 'void (*)(struct mlxsw_core *, u8,  void *, void *)' {aka 'void (*)(struct mlxsw_core *, unsigned char,  void *, void *)'} from incompatible pointer type 'void (*)(struct mlxsw_core *, u8,  const struct mlxsw_linecard *, void *)' {aka 'void (*)(struct mlxsw_core *, unsigned char,  const struct mlxsw_linecard *, void *)'} [-Werror=incompatible-pointer-types]
+    1023 |         .got_active = mlxsw_thermal_got_active,
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/mellanox/mlxsw/core_thermal.c:1023:23: note: (near initialization for 'mlxsw_thermal_event_ops.got_active')
+   drivers/net/ethernet/mellanox/mlxsw/core_thermal.c:1024:25: error: initialization of 'void (*)(struct mlxsw_core *, u8,  void *, void *)' {aka 'void (*)(struct mlxsw_core *, unsigned char,  void *, void *)'} from incompatible pointer type 'void (*)(struct mlxsw_core *, u8,  const struct mlxsw_linecard *, void *)' {aka 'void (*)(struct mlxsw_core *, unsigned char,  const struct mlxsw_linecard *, void *)'} [-Werror=incompatible-pointer-types]
+    1024 |         .got_inactive = mlxsw_thermal_got_inactive,
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/mellanox/mlxsw/core_thermal.c:1024:25: note: (near initialization for 'mlxsw_thermal_event_ops.got_inactive')
+   cc1: some warnings being treated as errors
 
-On Tue, Feb 15, 2022 at 9:49 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> * Word wrap a few columns over 80 lines.
 
-Top to bottom writing? :P
+vim +1023 drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
 
-> +For example: ::
+  1021	
+  1022	static struct mlxsw_linecards_event_ops mlxsw_thermal_event_ops = {
+> 1023		.got_active = mlxsw_thermal_got_active,
+  1024		.got_inactive = mlxsw_thermal_got_inactive,
+  1025	};
+  1026	
 
-This may be simplified to:
-
-    For example::
-
-Similar applies elsewhere where a colon + :: marker is wanted. Not
-sure what the preferred style is, since the file uses both.
-
-Cheers,
-Miguel
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

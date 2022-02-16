@@ -2,158 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C338D4B87CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 13:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B974B87D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 13:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbiBPMgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 07:36:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55138 "EHLO
+        id S233330AbiBPMh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 07:37:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbiBPMgv (ORCPT
+        with ESMTP id S231156AbiBPMh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 07:36:51 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B06913EA5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 04:36:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645014999; x=1676550999;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4VVNkngBUvjf2UbRLWf5djKaS/NI5B4cK7i5F8dSJ4A=;
-  b=BHqPZMrAZo8Zpn41tUjsyzOXE9w/izmtP5xXJOnn9AwjPXaf7Kh9gmrF
-   JgSU3/dV4BcpbmLoKwHDLwlsoAGq2imBocUzcfU2FadQ1Y6pcCzJjgtV1
-   8N8i5IS+PERWlwo2MKENW439+42Qq2XSPxi9gkouHD2LpCHHbwa3VEhdG
-   dom2MantvM9XrLGIv/DMsNqDWD9OENESsjxCklNT+nrA9CWlOz3bBcWpm
-   e9NYuVzA9IHG4xsQvQNnxSXh2VqC3SVOnFE1aFniTHXJ8ShNmvLXt7f2z
-   /CesbIuUHEK4vOeKc9yrGwGG6BKJklkDlfy60jHx+Mdkl2LmzY2Y/SPFC
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="234131856"
-X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="234131856"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 04:36:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="498967815"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 16 Feb 2022 04:36:37 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKJXw-000Anc-9o; Wed, 16 Feb 2022 12:36:36 +0000
-Date:   Wed, 16 Feb 2022 20:35:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tong Zhang <ztong0001@gmail.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Tong Zhang <ztong0001@gmail.com>
-Subject: Re: [PATCH] platform/chrome: cros_ec: honor acpi=off
-Message-ID: <202202162047.eCFMqb2x-lkp@intel.com>
-References: <20220216062601.779690-1-ztong0001@gmail.com>
+        Wed, 16 Feb 2022 07:37:56 -0500
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FFD1A399;
+        Wed, 16 Feb 2022 04:37:43 -0800 (PST)
+Received: by mail-yb1-f176.google.com with SMTP id a7so2559752ybj.12;
+        Wed, 16 Feb 2022 04:37:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GR3qfBOskF1geBQk+Kw8y3oufWn3aW+k8M3B4Rxy0Ng=;
+        b=mK8wEeYrHXLWQYhC0NEOEJcyWrjWN4JoNtfLkNCGqVNpVtvKgpfrQnLYCd/SwnUa2o
+         VsTQieCcuhmWU+BPdzFngb2ajFqSDiKv7l5Y9HPB4nnyGFtgXDlHnbNIJ2uCrytt+f0o
+         oCQw3w7xuEMuoFbbtCp7LkbPMSY2x6Of2mH1uGNgi+1rO/Nl24OCo1pPw1OiUam2k0ml
+         RpkiU1EhGa4WrgG5j4tHCZt8QDWCxb1r40LGxnAaCS0aI5InxbuKJ8KfFkQtUwvvBGJA
+         Ow/XsUDJd0i/zDaZymbdMI70XHifJCwt8lMVdCwN4BDXLiMb4t3WS/CPI0o/BKWYUqJr
+         NThQ==
+X-Gm-Message-State: AOAM530+Gs5anwefm5EDr56vAIHRSOL8h2CajtyIEmCIGIveQTwyeFqa
+        0C0CKqF/y/0bFUwioOEYzDpVKoKBCFJ2QO3F2JPFA5+rnNk=
+X-Google-Smtp-Source: ABdhPJxy6INMZmU51GIgS8kVS4N2b/ccgnY+ep70go2UqR5ZSwVbcS8Gyqm0t9gs26RJILh7NZt80sIjFCiOY3j0v04=
+X-Received: by 2002:a05:6902:10c7:b0:61e:1639:df86 with SMTP id
+ w7-20020a05690210c700b0061e1639df86mr1967990ybu.78.1645015062762; Wed, 16 Feb
+ 2022 04:37:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216062601.779690-1-ztong0001@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAJZ5v0i6+EMMGuKckhtTdt7TgC3LbofW7oS7B5=McSNjEh1yKA@mail.gmail.com>
+ <20220216015303.GA137820@bhelgaas>
+In-Reply-To: <20220216015303.GA137820@bhelgaas>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 16 Feb 2022 13:37:29 +0100
+Message-ID: <CAJZ5v0irC5WJAKjzR6niY4ai965td_6UqF=KXKhCjxaxBGuNtw@mail.gmail.com>
+Subject: Re: [PATCH v3] PCI: vmd: Honor ACPI _OSC on PCIe features
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Nirmal Patel <nirmal.patel@linux.intel.com>,
+        Jonathan Derrick <jonathan.derrick@linux.dev>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tong,
+On Wed, Feb 16, 2022 at 2:53 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Tue, Feb 15, 2022 at 06:09:15PM +0100, Rafael J. Wysocki wrote:
+> > On Tue, Feb 15, 2022 at 4:09 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > On Mon, Feb 14, 2022 at 08:23:05AM +0800, Kai-Heng Feng wrote:
+> > > > On Thu, Feb 10, 2022 at 5:36 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > On Tue, Dec 07, 2021 at 02:15:04PM +0100, Rafael J. Wysocki wrote:
+> > > > > > On Tue, Dec 7, 2021 at 12:12 AM Keith Busch <kbusch@kernel.org> wrote:
+> > > > > > > On Fri, Dec 03, 2021 at 11:15:41AM +0800, Kai-Heng Feng wrote:
+> > > > > > > > When Samsung PCIe Gen4 NVMe is connected to Intel ADL VMD, the
+> > > > > > > > combination causes AER message flood and drags the system performance
+> > > > > > > > down.
+> > > > > > > >
+> > > > > > > > The issue doesn't happen when VMD mode is disabled in BIOS, since AER
+> > > > > > > > isn't enabled by acpi_pci_root_create() . When VMD mode is enabled, AER
+> > > > > > > > is enabled regardless of _OSC:
+> > > > > > > > [    0.410076] acpi PNP0A08:00: _OSC: platform does not support [AER]
+> > > > > > > > ...
+> > > > > > > > [    1.486704] pcieport 10000:e0:06.0: AER: enabled with IRQ 146
+> > > > > > > >
+> > > > > > > > Since VMD is an aperture to regular PCIe root ports, honor ACPI _OSC to
+> > > > > > > > disable PCIe features accordingly to resolve the issue.
+> > > > > > >
+> > > > > > > At least for some versions of this hardare, I recall ACPI is unaware of
+> > > > > > > any devices in the VMD domain; the platform can not see past the VMD
+> > > > > > > endpoint, so I throught the driver was supposed to always let the VMD
+> > > > > > > domain use OS native support regardless of the parent's ACPI _OSC.
+> > > > > >
+> > > > > > This is orthogonal to whether or not ACPI is aware of the VMD domain
+> > > > > > or the devices in it.
+> > > > > >
+> > > > > > If the platform firmware does not allow the OS to control specific
+> > > > > > PCIe features at the physical host bridge level, that extends to the
+> > > > > > VMD "bus", because it is just a way to expose a hidden part of the
+> > > > > > PCIe hierarchy.
+> > > > >
+> > > > > I don't understand what's going on here.  Do we understand the AER
+> > > > > message flood?  Are we just papering over it by disabling AER?
+> > > >
+> > > > To be more precise, AER is disabled by the platform vendor in BIOS to
+> > > > paper over the issue.
+> > > > The only viable solution for us is to follow their settings. We may
+> > > > never know what really happens underneath.
+> > > >
+> > > > Disabling ASPM/AER/PME etc is a normal practice for ODMs unfortunately.
+> > >
+> > > OK.  So this patch actually has nothing in particular to do with AER.
+> > > It's about making _OSC apply to *all* devices below a host bridge,
+> > > even those below a VMD.
+> >
+> > Right.
+> >
+> > > This is slightly ambiguous because while "_OSC applies to the entire
+> > > hierarchy originated by a PCI Host Bridge" (PCI Firmware spec r3.3,
+> > > sec 4.5.1), vmd.c creates a logical view where devices below the VMD
+> > > are in a separate hierarchy with a separate domain.
+> >
+> > But from the HW perspective they still are in the same hierarchy below
+> > the original host bridge.
+>
+> I suppose in some sense it's the same hierarchy because the electrical
+> connection all goes through a root port in the original host bridge,
+> but it's a little muddy because according to [1], a VMD spawns a new
+> hierarchy that can use an entirely new [bus 00-ff] space, and the
+> hierarchy below VMD uses a new config access mechanism independent of
+> ECAM or whatever the original host bridge uses.
 
-Thank you for the patch! Perhaps something to improve:
+IIUC, that's part of the hiding mechanism.  See below.
 
-[auto build test WARNING on chrome-platform/for-next]
-[also build test WARNING on v5.17-rc4 next-20220216]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> > > The interpretation that _OSC applies to devices below VMD should work,
+> > > as long as it is possible for platform firmware to manage services
+> > > (AER, pciehp, etc) for things below VMD without getting in the way of
+> > > vmd.c.
+> >
+> > vmd.c actually exposes things hidden by the firmware and the point of
+> > the patch is to still let the firmware control them if it wants/needs
+> > to IIUC.
+>
+> My mental picture is that without vmd.c, Linux would enumerate the VMD
+> RCiEP itself, but none of the devices below the VMD would be visible.
+> With vmd.c, devices below the VMD RCiEP are visible.  Maybe this
+> picture is incorrect or too simple?
 
-url:    https://github.com/0day-ci/linux/commits/Tong-Zhang/platform-chrome-cros_ec-honor-acpi-off/20220216-142709
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git for-next
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220216/202202162047.eCFMqb2x-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/66345a4aecd6e4acba257476c6e44559fccca143
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Tong-Zhang/platform-chrome-cros_ec-honor-acpi-off/20220216-142709
-        git checkout 66345a4aecd6e4acba257476c6e44559fccca143
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/platform/chrome/
+It doesn't reflect what really happens AFAICS.  The devices that
+appear to be located below the VMD RCiEP are not there physically.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> Apparently there's a firmware toggle, but I don't know exactly what it
+> does.  Maybe if the toggle is set to disable VMD, the VMD device looks
+> like a regular Root Port and the devices below are enumerated
+> normally even without any vmd.c?
 
-All warnings (new ones prefixed by >>):
+If the toggle is set to disable VMD, all of the devices that would be
+hidden by the firmware and only visible through the VMD mechanisms
+show up in their proper locations in the original PCIe hierarchy that
+they belong to physically.
 
->> drivers/platform/chrome/cros_ec_lpc.c:553:6: warning: address of function 'acpi_disable' will always evaluate to 'true' [-Wpointer-bool-conversion]
-           if (acpi_disable)
-           ~~  ^~~~~~~~~~~~
-   drivers/platform/chrome/cros_ec_lpc.c:553:6: note: prefix with the address-of operator to silence this warning
-           if (acpi_disable)
-               ^
-               &
-   1 warning generated.
+> > > But I think one implication of this is that we cannot support
+> > > hot-added VMDs.  For example, firmware that wants to manage AER will
+> > > use _OSC to retain AER control.  But if the firmware doesn't know how
+> > > VMDs work, it will not be able to handle AER for devices below the
+> > > VMD.
+> >
+> > Well, the firmware needs to know how stuff works to hide it in the
+> > first place ...
+>
+> [1] does also say that VMD is a Root Complex *Integrated* Endpoint,
+> which could not be hotplugged.  But I don't see anything in the code
+> that actually enforces or requires that, so I don't know what to make
+> of it.
 
+[1] is correct.
 
-vim +553 drivers/platform/chrome/cros_ec_lpc.c
+> If it's possible to hot-add a VMD device, firmware wouldn't be
+> involved in configuring it (assuming pciehp hotplug).  I assume the
+> new VMD would look like an Endpoint, and if vmd.c is present, maybe it
+> could construct a new hierarchy below that Endpoint?  In that case, we
+> have to assume firmware doesn't know how to operate VMD, so even if
+> firmware manages AER in general, it wouldn't be able to do it for
+> things below the VMD.
 
-   547	
-   548	static int __init cros_ec_lpc_init(void)
-   549	{
-   550		int ret;
-   551		acpi_status status;
-   552	
- > 553		if (acpi_disable)
-   554			return -ENODEV;
-   555	
-   556		status = acpi_get_devices(ACPI_DRV_NAME, cros_ec_lpc_parse_device,
-   557					  &cros_ec_lpc_acpi_device_found, NULL);
-   558		if (ACPI_FAILURE(status))
-   559			pr_warn(DRV_NAME ": Looking for %s failed\n", ACPI_DRV_NAME);
-   560	
-   561		if (!cros_ec_lpc_acpi_device_found &&
-   562		    !dmi_check_system(cros_ec_lpc_dmi_table)) {
-   563			pr_err(DRV_NAME ": unsupported system.\n");
-   564			return -ENODEV;
-   565		}
-   566	
-   567		cros_ec_lpc_mec_init(EC_HOST_CMD_REGION0,
-   568				     EC_LPC_ADDR_MEMMAP + EC_MEMMAP_SIZE);
-   569	
-   570		/* Register the driver */
-   571		ret = platform_driver_register(&cros_ec_lpc_driver);
-   572		if (ret) {
-   573			pr_err(DRV_NAME ": can't register driver: %d\n", ret);
-   574			cros_ec_lpc_mec_destroy();
-   575			return ret;
-   576		}
-   577	
-   578		if (!cros_ec_lpc_acpi_device_found) {
-   579			/* Register the device, and it'll get hooked up automatically */
-   580			ret = platform_device_register(&cros_ec_lpc_device);
-   581			if (ret) {
-   582				pr_err(DRV_NAME ": can't register device: %d\n", ret);
-   583				platform_driver_unregister(&cros_ec_lpc_driver);
-   584				cros_ec_lpc_mec_destroy();
-   585			}
-   586		}
-   587	
-   588		return ret;
-   589	}
-   590	
+No, this really is only about re-exposing some of the existing PCIe
+hierarchy that was hidden by the firmware from the OS.  Physically, it
+is still the same hierarchy all the time.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> > > > > If an error occurs below a VMD, who notices and reports it?  If we
+> > > > > disable native AER below VMD because of _OSC, as this patch does, I
+> > > > > guess we're assuming the platform will handle AER events below VMD.
+> > > > > Is that really true?  Does the platform know how to find AER log
+> > > > > registers of devices below VMD?
+> > > > >
+> > > > > > The platform firmware does that through ACPI _OSC under the host
+> > > > > > bridge device (not under the VMD device) which it is very well aware
+> > > > > > of.
+>
+> [1] https://git.kernel.org/linus/185a383ada2e

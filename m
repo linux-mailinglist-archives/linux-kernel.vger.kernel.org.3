@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19FCF4B830C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:39:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2C64B832A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbiBPIjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 03:39:35 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:37022 "EHLO
+        id S231588AbiBPIkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 03:40:37 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:39628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiBPIjd (ORCPT
+        with ESMTP id S229455AbiBPIke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 03:39:33 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CE810B201
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:39:21 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id s1so1307880iob.9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:39:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zJXMODhdBkf6vc06+F5pCVIh6APP23M3j8CKu88q15Q=;
-        b=lbe3CEMY4Ub6K+wUXjtSitO/K59lr9Uwcr3f2MOly1/EFqOcdg9hh6zgANZJMnKb5t
-         V0kqoetuywmUQaekwAvi9m9/9QFqN0hdHOU7Mw7h0i2/HgZ+zm+dI9cCWkwJBQZiqbRL
-         e8DC14oGb66dR2Sg2M4m9CoXPiUV1p1EKAPNsHb9Qs9bVQOvzdV3p3Mn0AdMqDR7Qenm
-         NjBRQUispRluhY2+I9XNvnNZ+PLbtHB7Tk0H88qMXvQzksmcbKuCCLGsxnY3ocE0U72W
-         KOY35PYY2qMF/1MOnkfNHnz2hWVP5oy76EFp1eb3SVVS2dFP69GygTzMRJkQn7ACIm6m
-         drXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zJXMODhdBkf6vc06+F5pCVIh6APP23M3j8CKu88q15Q=;
-        b=QPap2JNT90oP5bQbNSYyr53b10vO9P1KhoFOr2QRr4RtWDK6F8/o7KtsRGYXPsISpa
-         zoV6DElii4SPbfa1y5QAr9Df9uHtI0d8q4jtDL3hoEHrfKvU+kr5rlQZc+mP3E4DYFKq
-         3jvzTm8AqWtSFhnMw0GfEo+fR12LGy11OIhhqHERyY3S+ytFXkAnNTYCGcmMP5itYWwN
-         Mric9NRTy6XRJmheCSW2rCUbYq/ZoZoAhUl9MAItWVTsAlsvgH6mZnxIng61LchEOIxq
-         j4VKKEKLwwn625IVIaBM574pH3Wvk8/h3n6o+NeXsWXsMIo8EaZibuSh19YKHz5dtoBt
-         nX5A==
-X-Gm-Message-State: AOAM531t3bVYLNob5mE0FWAtf+XO1I62+/QdanntGj25V7TK26o4eZGq
-        YwnomcGPYy0znJXocYZ2KJXne4FOJAHOPf9rdR8=
-X-Google-Smtp-Source: ABdhPJzsgi7vs4zYUQ1swAAlrRQXus7Yogb4FnBlstHft4Vp4wbVq460y3slrxK9XiJLK3Tu1TfnHv5zSql+Sm8rqrs=
-X-Received: by 2002:a02:a190:0:b0:314:ed7:c072 with SMTP id
- n16-20020a02a190000000b003140ed7c072mr1086474jah.130.1645000760419; Wed, 16
- Feb 2022 00:39:20 -0800 (PST)
+        Wed, 16 Feb 2022 03:40:34 -0500
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768B31C8847;
+        Wed, 16 Feb 2022 00:40:22 -0800 (PST)
+Received: from host-79-2-93-196.business.telecomitalia.it ([79.2.93.196]:33352 helo=[192.168.101.73])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1nKFrH-0005i7-NY; Wed, 16 Feb 2022 09:40:19 +0100
+Message-ID: <f412980a-4e41-54c7-f000-f826e015f6d2@lucaceresoli.net>
+Date:   Wed, 16 Feb 2022 09:40:18 +0100
 MIME-Version: 1.0
-References: <20220111161937.56272-1-pankaj.gupta.linux@gmail.com>
- <20220111161937.56272-3-pankaj.gupta.linux@gmail.com> <CAPcyv4gM99M8Waw9uEZefvpK0BsTkjGznLxUOMcMkGpk6SuHyA@mail.gmail.com>
-In-Reply-To: <CAPcyv4gM99M8Waw9uEZefvpK0BsTkjGznLxUOMcMkGpk6SuHyA@mail.gmail.com>
-From:   Pankaj Gupta <pankaj.gupta.linux@gmail.com>
-Date:   Wed, 16 Feb 2022 09:39:09 +0100
-Message-ID: <CAM9Jb+iYXn+Diq-vou+_hXdxXLR9rEXm6GOsd2tZpAg9zXn1Fw@mail.gmail.com>
-Subject: Re: [RFC v3 2/2] pmem: enable pmem_submit_bio for asynchronous flush
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Linux NVDIMM <nvdimm@lists.linux.dev>,
-        virtualization@lists.linux-foundation.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Subject: Re: [RFCv3 2/6] i2c: add I2C Address Translator (ATR) support
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        jmoyer <jmoyer@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Vishal L Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        Pankaj Gupta <pankaj.gupta@ionos.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Peter Rosin <peda@axentia.se>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+References: <20220206115939.3091265-1-luca@lucaceresoli.net>
+ <20220206115939.3091265-3-luca@lucaceresoli.net>
+ <CAHp75Vejw86kLUJfwXR_kUn+=UCaixbcy=epO8Foe=9S2LqXTQ@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAHp75Vejw86kLUJfwXR_kUn+=UCaixbcy=epO8Foe=9S2LqXTQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,89 +71,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >
-> > Return from "pmem_submit_bio" when asynchronous flush is
-> > still in progress in other context.
-> >
-> > Signed-off-by: Pankaj Gupta <pankaj.gupta.linux@gmail.com>
-> > ---
-> >  drivers/nvdimm/pmem.c        | 15 ++++++++++++---
-> >  drivers/nvdimm/region_devs.c |  4 +++-
-> >  2 files changed, 15 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-> > index fe7ece1534e1..f20e30277a68 100644
-> > --- a/drivers/nvdimm/pmem.c
-> > +++ b/drivers/nvdimm/pmem.c
-> > @@ -201,8 +201,12 @@ static void pmem_submit_bio(struct bio *bio)
-> >         struct pmem_device *pmem = bio->bi_bdev->bd_disk->private_data;
-> >         struct nd_region *nd_region = to_region(pmem);
-> >
-> > -       if (bio->bi_opf & REQ_PREFLUSH)
-> > +       if (bio->bi_opf & REQ_PREFLUSH) {
-> >                 ret = nvdimm_flush(nd_region, bio);
-> > +               /* asynchronous flush completes in other context */
->
-> I think a negative error code is a confusing way to capture the case
-> of "bio successfully coalesced to previously pending flush request.
-> Perhaps reserve negative codes for failure, 0 for synchronously
-> completed, and > 0 for coalesced flush request.
+Hi Andy,
 
-Yes. I implemented this way previously, will revert it to. Thanks!
+thank you for the _very_ detailed review and apologies for not having
+found the time to reply until now.
 
->
-> > +               if (ret == -EINPROGRESS)
-> > +                       return;
-> > +       }
-> >
-> >         do_acct = blk_queue_io_stat(bio->bi_bdev->bd_disk->queue);
-> >         if (do_acct)
-> > @@ -222,13 +226,18 @@ static void pmem_submit_bio(struct bio *bio)
-> >         if (do_acct)
-> >                 bio_end_io_acct(bio, start);
-> >
-> > -       if (bio->bi_opf & REQ_FUA)
-> > +       if (bio->bi_opf & REQ_FUA) {
-> >                 ret = nvdimm_flush(nd_region, bio);
-> > +               /* asynchronous flush completes in other context */
-> > +               if (ret == -EINPROGRESS)
-> > +                       return;
-> > +       }
-> >
-> >         if (ret)
-> >                 bio->bi_status = errno_to_blk_status(ret);
-> >
-> > -       bio_endio(bio);
-> > +       if (bio)
-> > +               bio_endio(bio);
-> >  }
-> >
-> >  static int pmem_rw_page(struct block_device *bdev, sector_t sector,
-> > diff --git a/drivers/nvdimm/region_devs.c b/drivers/nvdimm/region_devs.c
-> > index 9ccf3d608799..8512d2eaed4e 100644
-> > --- a/drivers/nvdimm/region_devs.c
-> > +++ b/drivers/nvdimm/region_devs.c
-> > @@ -1190,7 +1190,9 @@ int nvdimm_flush(struct nd_region *nd_region, struct bio *bio)
-> >         if (!nd_region->flush)
-> >                 rc = generic_nvdimm_flush(nd_region);
-> >         else {
-> > -               if (nd_region->flush(nd_region, bio))
-> > +               rc = nd_region->flush(nd_region, bio);
-> > +               /* ongoing flush in other context */
-> > +               if (rc && rc != -EINPROGRESS)
-> >                         rc = -EIO;
->
-> Why change this to -EIO vs just let the error code through untranslated?
+I'm OK with most of your comments, so I'm not commenting on them for
+brevity. Below my comments on the remaining topics.
 
-The reason was to be generic error code instead of returning host side
-return codes to guest?
+On 08/02/22 12:16, Andy Shevchenko wrote:
+> On Mon, Feb 7, 2022 at 7:55 PM Luca Ceresoli <luca@lucaceresoli.net> wrote:
+>>
+>> An ATR is a device that looks similar to an i2c-mux: it has an I2C
+>> slave "upstream" port and N master "downstream" ports, and forwards
+>> transactions from upstream to the appropriate downstream port. But is
+>> is different in that the forwarded transaction has a different slave
+>> address. The address used on the upstream bus is called the "alias"
+>> and is (potentially) different from the physical slave address of the
+>> downstream chip.
+>>
+>> Add a helper file (just like i2c-mux.c for a mux or switch) to allow
+>> implementing ATR features in a device driver. The helper takes care or
+>> adapter creation/destruction and translates addresses at each transaction.
+> 
+> Why I2C mux driver can't be updated to support this feature?
 
-Thanks!
-Pankaj
->
-> >         }
-> >
-> > --
-> > 2.25.1
-> >
-> >
+My first version did that. But it was very complex to shoehorn the ATR
+features in the i2c-mux code which already handles various [corner]
+cases. If memory serves, code reuse was limited to the trivial code:
+allocations, cleanups and the like.
+
+The root reason is that an atr and a mux have a similar electric
+topology, but they do very different things. An mux need to be commanded
+to switch from one downstream bus to another, an atr does not. An atr
+modifies the transaction, including the speed, a mux does not.
+
+>>  RFCv1 was implemented inside i2c-mux.c and added yet more complexity
+>>  there. RFCv2 creates a new file on its own, i2c-atr.c. Since many ATR
+>>  features are not in a MUX and vice versa, the overlapping is low. This was
+>>  almost a complete rewrite, but for the records here are the main
+>>  differences from the old implementation:
+> 
+> While this is from a code perspective, maybe i2c mux and this one can
+> still share some parts?
+
+Possibly. I'd have to look into that in more detail.
+I must say having a separate file allowed me to be free to implement
+whatever is best for atr. With that done I would certainly make sense to
+check whether there are still enough commonalities to share code, maybe
+in a .c file with shared functions.
+
+>> +config I2C_ATR
+>> +       tristate "I2C Address Translator (ATR) support"
+>> +       help
+>> +         Enable support for I2C Address Translator (ATR) chips.
+>> +
+>> +         An ATR allows accessing multiple I2C busses from a single
+>> +         physical bus via address translation instead of bus selection as
+>> +         i2c-muxes do.
+> 
+> What would be the module name?
+
+Isn't the module name written in Kconfig files just to avoid checkpatch
+complain about "too few doc lines"? :) Oook, it's i2s-atr anyway.
+
+>> +/**
+> 
+> Is this a kernel doc formatted documentation?
+> Haven't you got a warning?
+
+Not from checkpatch, but I got one from the kernel test robot. Will fix.
+
+[...]
+
+>> + *
+>> + * An I2C Address Translator (ATR) is a device with an I2C slave parent
+>> + * ("upstream") port and N I2C master child ("downstream") ports, and
+>> + * forwards transactions from upstream to the appropriate downstream port
+>> + * with a modified slave address. The address used on the parent bus is
+>> + * called the "alias" and is (potentially) different from the physical
+>> + * slave address of the child bus. Address translation is done by the
+>> + * hardware.
+>> + *
+>> + * An ATR looks similar to an i2c-mux except:
+>> + * - the address on the parent and child busses can be different
+>> + * - there is normally no need to select the child port; the alias used on
+>> + *   the parent bus implies it
+>> + *
+>> + * The ATR functionality can be provided by a chip with many other
+>> + * features. This file provides a helper to implement an ATR within your
+>> + * driver.
+>> + *
+>> + * The ATR creates a new I2C "child" adapter on each child bus. Adding
+>> + * devices on the child bus ends up in invoking the driver code to select
+>> + * an available alias. Maintaining an appropriate pool of available aliases
+>> + * and picking one for each new device is up to the driver implementer. The
+>> + * ATR maintains an table of currently assigned alias and uses it to modify
+>> + * all I2C transactions directed to devices on the child buses.
+>> + *
+>> + * A typical example follows.
+>> + *
+>> + * Topology:
+>> + *
+>> + *                       Slave X @ 0x10
+>> + *               .-----.   |
+>> + *   .-----.     |     |---+---- B
+>> + *   | CPU |--A--| ATR |
+>> + *   `-----'     |     |---+---- C
+>> + *               `-----'   |
+>> + *                       Slave Y @ 0x10
+>> + *
+>> + * Alias table:
+>> + *
+>> + *   Client  Alias
+>> + *   -------------
+>> + *      X    0x20
+>> + *      Y    0x30
+>> + *
+>> + * Transaction:
+>> + *
+>> + *  - Slave X driver sends a transaction (on adapter B), slave address 0x10
+>> + *  - ATR driver rewrites messages with address 0x20, forwards to adapter A
+>> + *  - Physical I2C transaction on bus A, slave address 0x20
+>> + *  - ATR chip propagates transaction on bus B with address translated to 0x10
+>> + *  - Slave X chip replies on bus B
+>> + *  - ATR chip forwards reply on bus A
+>> + *  - ATR driver rewrites messages with address 0x10
+>> + *  - Slave X driver gets back the msgs[], with reply and address 0x10
+>> + *
+>> + * Usage:
+>> + *
+>> + *  1. In your driver (typically in the probe function) add an ATR by
+>> + *     calling i2c_atr_new() passing your attach/detach callbacks
+>> + *  2. When the attach callback is called pick an appropriate alias,
+>> + *     configure it in your chip and return the chosen alias in the
+>> + *     alias_id parameter
+>> + *  3. When the detach callback is called, deconfigure the alias from
+>> + *     your chip and put it back in the pool for later usage
+>> + *
+>> + * Originally based on i2c-mux.c
+>> + */
+> 
+> Shouldn't this comment be somewhere under Documentation/ ?
+
+Uhm, yes, I agree it's a good idea to move this entire comment there.
+
+>> +       if (dev->of_node) {
+> 
+> This check can be dropped, also please use device property and fwnode
+> APIs. No good of having OF-centric generic modules nowadays.
+
+Sure! This code was written in another decade and I didn't update it...
+As you noticed elsewhere it also honors the old, strict 80-chars per
+line limit in various places where it makes no sense anymore.
+
+>> +       WARN(sysfs_create_link(&chan->adap.dev.kobj, &dev->kobj, "atr_device"),
+>> +            "can't create symlink to atr device\n");
+>> +       snprintf(symlink_name, sizeof(symlink_name), "channel-%u", chan_id);
+>> +       WARN(sysfs_create_link(&dev->kobj, &chan->adap.dev.kobj, symlink_name),
+>> +            "can't create symlink for channel %u\n", chan_id);
+> 
+> Doesn't sysfs already has a warning when it's really needed?
+
+I have to check that. I usually don't add unnecessary log messages.
+
+[...]
+
+>> +#include <linux/i2c.h>
+>> +#include <linux/mutex.h>
+> 
+> Missed types.h
+> 
+> Missed struct device;
+
+Not sure I got your point here. This file has some 'struct device *',
+which do not need a declaration, and has zero non-pointer uses of
+'struct device'.
+
+-- 
+Luca

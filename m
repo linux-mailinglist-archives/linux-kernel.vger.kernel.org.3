@@ -2,108 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634F34B9046
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D2C4B904F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:35:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237652AbiBPSdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 13:33:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55288 "EHLO
+        id S237667AbiBPSfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 13:35:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbiBPSdk (ORCPT
+        with ESMTP id S237660AbiBPSfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 13:33:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5958F14345C;
-        Wed, 16 Feb 2022 10:33:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 16 Feb 2022 13:35:31 -0500
+Received: from mx2.smtp.larsendata.com (mx2.smtp.larsendata.com [91.221.196.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312672AB523
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:35:16 -0800 (PST)
+Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
+        by mx2.smtp.larsendata.com (Halon) with ESMTPS
+        id 36dbd7e5-8f57-11ec-b2df-0050568cd888;
+        Wed, 16 Feb 2022 18:35:28 +0000 (UTC)
+Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB47D616A4;
-        Wed, 16 Feb 2022 18:33:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE3B5C340E8;
-        Wed, 16 Feb 2022 18:33:19 +0000 (UTC)
-Date:   Wed, 16 Feb 2022 13:33:18 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Byungchul Park <byungchul.park@lge.com>,
-        linux-ide@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Chris Wilson <chris@chris-wilson.co.uk>, duyuyang@gmail.com,
-        johannes.berg@intel.com, Tejun Heo <tj@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel-team@lge.com, Linux-MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>, sj@kernel.org,
-        Jerome Glisse <jglisse@redhat.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, ngupta@vflare.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, paolo.valente@linaro.org,
-        Josef Bacik <josef@toxicpanda.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Dave Airlie <airlied@linux.ie>, rodrigosiqueiramelo@gmail.com,
-        melissa.srw@gmail.com, hamohammed.sa@gmail.com
-Subject: Re: Report in ata_scsi_port_error_handler()
-Message-ID: <20220216133318.204f36ac@gandalf.local.home>
-In-Reply-To: <CAHk-=wgfpfWuNQi2SjXQL1ir6iKCpUdBruJ+kmOQP1frH7Zdig@mail.gmail.com>
-References: <1644984747-26706-1-git-send-email-byungchul.park@lge.com>
-        <1644984964-28300-1-git-send-email-byungchul.park@lge.com>
-        <1644984964-28300-3-git-send-email-byungchul.park@lge.com>
-        <94b1cba2-0e78-bbc0-0321-8be70b2b3be2@opensource.wdc.com>
-        <CAHk-=wgfpfWuNQi2SjXQL1ir6iKCpUdBruJ+kmOQP1frH7Zdig@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        (Authenticated sender: sam@ravnborg.org)
+        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 10F5F194B3E;
+        Wed, 16 Feb 2022 19:35:03 +0100 (CET)
+Date:   Wed, 16 Feb 2022 19:34:59 +0100
+X-Report-Abuse-To: abuse@mxhotel.dk
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
+        bcain@codeaurora.org, geert@linux-m68k.org, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, nickhu@andestech.com,
+        green.hu@gmail.com, dinguyen@kernel.org, shorne@gmail.com,
+        deller@gmx.de, mpe@ellerman.id.au, peterz@infradead.org,
+        mingo@redhat.com, mark.rutland@arm.com, hca@linux.ibm.com,
+        dalias@libc.org, davem@davemloft.net, richard@nod.at,
+        x86@kernel.org, jcmvbkbc@gmail.com, ebiederm@xmission.com,
+        akpm@linux-foundation.org, ardb@kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH v2 15/18] sparc64: remove CONFIG_SET_FS support
+Message-ID: <Yg1D08+olCSGmnYU@ravnborg.org>
+References: <20220216131332.1489939-1-arnd@kernel.org>
+ <20220216131332.1489939-16-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216131332.1489939-16-arnd@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Feb 2022 10:09:14 -0800
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+Hi Arnd.
 
-> Byungchul, could you fix those two issues? Some of your reports may
-> well be entirely valid, but the hard-to-read hex offsets and the
-> knowledge that at least some of them are confused about how
-> prepare_to_wait -> wait actually works makes the motivation to look at
-> the details much less..
+On Wed, Feb 16, 2022 at 02:13:29PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> sparc64 uses address space identifiers to differentiate between kernel
+> and user space, using ASI_P for kernel threads but ASI_AIUS for normal
+> user space, with the option of changing between them.
+> 
+> As nothing really changes the ASI any more, just hardcode ASI_AIUS
+> everywhere. Kernel threads are not allowed to access __user pointers
+> anyway.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/sparc/include/asm/processor_64.h   |  4 ----
+>  arch/sparc/include/asm/switch_to_64.h   |  4 +---
+>  arch/sparc/include/asm/thread_info_64.h |  4 +---
+>  arch/sparc/include/asm/uaccess_64.h     | 20 +-------------------
+>  arch/sparc/kernel/process_64.c          | 12 ------------
+>  arch/sparc/kernel/traps_64.c            |  2 --
+>  arch/sparc/lib/NGmemcpy.S               |  3 +--
+>  arch/sparc/mm/init_64.c                 |  7 ++++---
+>  8 files changed, 8 insertions(+), 48 deletions(-)
 
-Hi Byungchul,
+I think you somehow missed the Kconfig change, and also the related
+sparc32 change which continue to have set_fs() after this patch.
 
-I'm not sure what your tool is using to attach to the kernel to analyze the
-events (perhaps tracepoints?). But you can have the prepare_to_wait event
-just flag the task is about to wait, and then attach to the schedule
-(sched_switch) event to denote that it actually waited.
 
-Of course have the finish_wait() clear the flag.
+I did not manage to review the patch - as I am too unfamiliar with the
+code paths and the set_fs() removal changes.
 
--- Steve
+	Sam

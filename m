@@ -2,121 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38FD34B812B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C4B4B8133
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiBPHQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 02:16:21 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:56792 "EHLO
+        id S229844AbiBPHRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 02:17:24 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiBPHQS (ORCPT
+        with ESMTP id S229765AbiBPHRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 02:16:18 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03212B0A68
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:16:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1644995747;
-        bh=suHsgXH+UCaPUEi9/z5ugIGYdtAIwHSMAlsMljlrGoo=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=Fk8xN8WzP+iC0JHRacbgt3/YFUiTv2Ap6uW7L08ZhMwrRnhIbs68wGHvOjPpNrl7w
-         Vfm3oTEbqIjFpfKagn/LHr+O05+j0OKVoqypM2qopwkC7j+pkiDuu6fAcc9It3zW+c
-         mjGtVBpHMPGS125soe1BQjRPYSjjmkfbNWoi438s=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.128.232]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MZTqW-1noWzk3GcQ-00WYiF; Wed, 16
- Feb 2022 08:15:46 +0100
-Message-ID: <b6632459-92ec-8c79-6221-e0b3754b1f97@gmx.de>
-Date:   Wed, 16 Feb 2022 08:15:38 +0100
+        Wed, 16 Feb 2022 02:17:14 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F566286C8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:17:00 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nKEYJ-0007Pg-NX; Wed, 16 Feb 2022 08:16:39 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nKEYE-0000vr-0Z; Wed, 16 Feb 2022 08:16:34 +0100
+Date:   Wed, 16 Feb 2022 08:16:33 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Scott Branden <sbranden@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tony Lindgren <tony@atomide.com>, kernel@pengutronix.de,
+        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v3 4/8] ARM: dts: bcm283x: fix ethernet node name
+Message-ID: <20220216071633.GB19299@pengutronix.de>
+References: <20220215080937.2263111-1-o.rempel@pengutronix.de>
+ <20220215080937.2263111-4-o.rempel@pengutronix.de>
+ <f5ea3375-0306-e37f-5847-e1472164d7b7@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [deller-fbdev:for-next 51/51]
- drivers/video/fbdev/omap2/omapfb/dss/dss.c:1209:49: error:
- 'component_compare_dev' undeclared; did you mean 'component_master_del'?
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>, Yong Wu <yong.wu@mediatek.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-References: <202202160743.MUYvzd9B-lkp@intel.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <202202160743.MUYvzd9B-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:xdie6Bbv34PAIA1OJ/AkOe0LxEk9/dtU4Q4k/KhjKQuchEkqz83
- M9saUWorgUnmmB2B47tR/QKjzsgv+jCyNO5Vpr8/eE7ASDvc/W0DPeYQ/Tr/Gu0luKItZCh
- e3KxUwlH0KS6IoOvXpbbRtTk0C/wDTudmKDJzFH1VHgeEjGCdKXxK7SUV1ZAF5X8U8ewrgy
- AKCKb2Get4XE0bYCoA8nQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:32wVd1S1KoQ=:GVw57s6Z5RH6wYdti6I31x
- m0Zj9oAHif/tJ8c36Y5oE2ZLtVeWqHiy/7t+uU+Yo+oOF/9k2uk3Z3KVHGJReLW2ycgQkRLKs
- vsVJVtVPQ4vyEHQlPIjQav+NqbzjgkAcQjsApIZA40mRkz56fYAY/zZbvohvQzB6prZD4R7Wa
- 1VTD77UYu65iAiXLHLIOOmkrCoGpT6vexIcavfVtgSHzMBMC9+gPlnB2zwEBsHl6vHi4EgwZd
- QLEmbwm/XWiTnHNiuSh1ns/ToK0Irv4rm5V/KHwRdp2sawh4cdN56KklDOdelHBd7IIg3Nb2Y
- ZIjC5LCu9FlJViuHdwHbj8BlfipnIoXW3Oud19pYs8bJ2+I95xZUjrSh/lTL4mzvZmsU21wB4
- tWUFwyan5VMKhSu1jWdc8lrbl+My1wR+QHZXKr2qU+SisBl7ruOxhTvnksov9gK4FHuYiUz6H
- e/wBOEcAAyRvouuz5gOfAkb40XLG/QpNVB1EavYW1j8vVRJJx5EhkRsog3NzkSsb6RC/vNBvu
- 30cKCGWVsZ5d0df4xt2jVuai5z2VrZ9Ff947uK22PehCpemFN1G/wN7F2BQrGjYXw0pqN2HQw
- 3jRdy1lgnljdCiOpqpCjd94X+t5yp7HMYcbiqjBlzgPPinL0r0Z/WtPcA2gUDNdPyoDWLQz0o
- nqtC7N2E6SU0c7TfEvVfwG09VldBv1wpQjhq94yf7EK2vgnswIYMdzkezKME3F4vD7j+rmoDb
- Td8u47P8m2TOlOjf5zCf1eg9eOVIpepg7v54+EyeZmr9r3Oak0CKTDPrheBKpYixxqDSNRosh
- vXQuV4y4vEI6YrCXlgz0NiHjeL9cGZqpum4j4DFilQ3B30WsrpOnl6eTmG1Ip0xHVT8qNqyyL
- Kms/h/JWzSuyMB5CQ5Zz3RZNMY5I6Y1f4fG9JmhMjXzUhbONXfHdKqT8Ya8iggDkAGwwAFqnC
- RbZ3KFjtv1vvqcRu5czRZqZBAyPlpOOI0UpCNlYwaMYVV9Kn7I712YDwfjGC+CFXqyyQrCzjQ
- A4yKNTh9ANSZPOTMBUsyO0hBLzHeG1qImJ8OtU2JE/IDMlzEJJtACSz4JVA5mF0PoNXv9sXMY
- 6p/BYDjatk/JAE=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <f5ea3375-0306-e37f-5847-e1472164d7b7@gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 08:10:05 up 67 days, 15:55, 56 users,  load average: 0.27, 0.23,
+ 0.18
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/16/22 00:49, kernel test robot wrote:
-> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev=
-.git for-next
-> head:   61038027aa13351c63b452a0d48c805bab1d2ce9
-> commit: 61038027aa13351c63b452a0d48c805bab1d2ce9 [51/51] video: fbdev: o=
-mapfb: Make use of the helper component_compare_dev
-> config: sh-allmodconfig (https://download.01.org/0day-ci/archive/2022021=
-6/202202160743.MUYvzd9B-lkp@intel.com/config)
-> compiler: sh4-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sb=
-in/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-f=
-bdev.git/commit/?id=3D61038027aa13351c63b452a0d48c805bab1d2ce9
->         git remote add deller-fbdev git://git.kernel.org/pub/scm/linux/k=
-ernel/git/deller/linux-fbdev.git
->         git fetch --no-tags deller-fbdev for-next
->         git checkout 61038027aa13351c63b452a0d48c805bab1d2ce9
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-11.2.0 make.cr=
-oss O=3Dbuild_dir ARCH=3Dsh SHELL=3D/bin/bash drivers/video/fbdev/omap2/om=
-apfb/dss/
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
->    drivers/video/fbdev/omap2/omapfb/dss/dss.c: In function 'dss_add_chil=
-d_component':
->>> drivers/video/fbdev/omap2/omapfb/dss/dss.c:1209:49: error: 'component_=
-compare_dev' undeclared (first use in this function); did you mean 'compon=
-ent_master_del'?
->     1209 |         component_match_add(dev->parent, match, component_com=
-pare_dev, dev);
->          |                                                 ^~~~~~~~~~~~~=
-~~~~~~~~
->          |                                                 component_mas=
-ter_del
->    drivers/video/fbdev/omap2/omapfb/dss/dss.c:1209:49: note: each undecl=
-ared identifier is reported only once for each function it appears in
+On Tue, Feb 15, 2022 at 01:01:06PM -0800, Florian Fainelli wrote:
+> On 2/15/22 12:09 AM, Oleksij Rempel wrote:
+> > It should be "ethernet@x" instead of "usbether@x"
+> > 
+> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> 
+> This looks like, a quick grep on the u-boot source code seems to suggest
+> that only one file is assuming that 'usbether@1' is to be used as a node
+> name and the error message does not even match the code it is patching:
+> 
+> board/liebherr/xea/xea.c:
+>   #ifdef CONFIG_OF_BOARD_SETUP
+>   static int fdt_fixup_l2switch(void *blob)
+>   {
+>           u8 ethaddr[6];
+>           int ret;
+> 
+>           if (eth_env_get_enetaddr("ethaddr", ethaddr)) {
+>                   ret = fdt_find_and_setprop(blob,
+> 
+> "/ahb@80080000/switch@800f0000",
+>                                              "local-mac-address",
+> ethaddr, 6, 1);
+>                   if (ret < 0)
+>                           printf("%s: can't find usbether@1 node: %d\n",
+>                                  __func__, ret);
+>           }
 
-Fixed now. I've dropped that patch.
+\o/ :)
 
-Helge
+>           return 0;
+>   }
+> 
+> I will wait for the other maintainers on the other patches to provide
+> some feedback, but if all is well, will apply this one soon.
+
+Full path fdt matching has proven to be not stable enough. Especially on
+chips with early DT adaptation like iMX. It is better to use aliases
+where possible. 
+
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

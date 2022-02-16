@@ -2,44 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B9E4B8B32
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C8B4B8B36
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234896AbiBPOPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 09:15:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54574 "EHLO
+        id S234904AbiBPOSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 09:18:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234917AbiBPOPq (ORCPT
+        with ESMTP id S234116AbiBPOSL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 09:15:46 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0AA9C2604DB
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 06:15:34 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B73B9106F;
-        Wed, 16 Feb 2022 06:15:33 -0800 (PST)
-Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EBB7D3F718;
-        Wed, 16 Feb 2022 06:15:31 -0800 (PST)
-Date:   Wed, 16 Feb 2022 14:15:26 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, acme@redhat.com, ardb@kernel.org,
-        bp@alien8.de, broonie@kernel.org, catalin.marinas@arm.com,
-        dave.hansen@linux.intel.com, jslaby@suse.cz,
-        linux-arm-kernel@lists.infradead.org, mingo@redhat.com,
-        ndesaulniers@google.com, peterz@infradead.org, tglx@linutronix.de,
-        will@kernel.org
-Subject: Re: [PATCH v3 5/5] tools: update x86 string routines
-Message-ID: <Yg0G/nr0D2KXHuwA@lakrids>
-References: <20220211151445.2027553-1-mark.rutland@arm.com>
- <20220211151445.2027553-6-mark.rutland@arm.com>
- <20220216055952.ovrswb22lm53x5ns@treble>
+        Wed, 16 Feb 2022 09:18:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFDE1B4453
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 06:17:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55DBBB81EDA
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 14:17:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D259DC004E1;
+        Wed, 16 Feb 2022 14:17:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645021076;
+        bh=25WzSdKtFWUOysZRmxAVLJb+CZcoj//JQjD1ChtvlNM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JyFpMMkNVLu4oQG+tcrjlS2O0c2RGmmc4jAVRHRX5cJ49S+5KlwgUSg/lLw9i9VBR
+         HUZ19T20xf6Gz9tIkghUYrISocVbfAc6avwO0iW0IIn4woxVv4fpB7TgnBqQpg9Ql/
+         rN6ipK0H5Ho69WPqVD5vCUqiimT4J0ro7y2Q1TsXIeU41wgXMMuuBoS4bpc07BxAWU
+         s5YS8X4pctUsVoUtjTSNf1zk4HsIKuKq9AzpvPzsuyX4LJ/qmJqLZfVNpZO1iYhjUU
+         M8GhgX/WjCrk8RGG85ZrpIoEx5yTfznHJYwK0ImDp4VfYbmmPCFx8SFAnOZgj2YWZv
+         +FRa8oCRY6MZw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id B4732400FE; Wed, 16 Feb 2022 11:17:53 -0300 (-03)
+Date:   Wed, 16 Feb 2022 11:17:53 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Stephane Eranian <eranian@google.com>
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        kim.phillips@amd.com, acme@redhat.com, jolsa@redhat.com,
+        songliubraving@fb.com
+Subject: Re: [PATCH v6 11/12] perf tools: Improve error handling of AMD
+ Branch Sampling
+Message-ID: <Yg0HkUzDlkD4nqNs@kernel.org>
+References: <20220208211637.2221872-1-eranian@google.com>
+ <20220208211637.2221872-12-eranian@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220216055952.ovrswb22lm53x5ns@treble>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220208211637.2221872-12-eranian@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,35 +61,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 09:59:52PM -0800, Josh Poimboeuf wrote:
-> On Fri, Feb 11, 2022 at 03:14:45PM +0000, Mark Rutland wrote:
-> > When building the perf tool the build system complains that the x86
-> > string routines are out-of-date:
-> > 
-> > | Warning: Kernel ABI header at 'tools/arch/x86/lib/memcpy_64.S' differs from latest version at 'arch/x86/lib/memcpy_64.S'
-> > | diff -u tools/arch/x86/lib/memcpy_64.S arch/x86/lib/memcpy_64.S
-> > | Warning: Kernel ABI header at 'tools/arch/x86/lib/memset_64.S' differs from latest version at 'arch/x86/lib/memset_64.S'
-> > | diff -u tools/arch/x86/lib/memset_64.S arch/x86/lib/memset_64.S
-> > 
-> > This is due to the way the asm-annotations for symbol aliasing were
-> > reworked, which should have no functional/performance impact.
-> > 
-> > Import the latest versions, adding the new style SYM_FUNC_ALIAS(),
-> > SYM_FUNC_ALIAS_LOAD(), SYM_FUNC_ALIAS_WEAK() macros into the perf
-> > <linux/linkage.h> header. The old style SYM_FUNC_START_ALIAS() and
-> > SYM_FUNC_END_ALIAS() macros are removed.
-> > 
-> > Other than removing the build-time warning, there should be no
-> > functional change as a result of this patch.
+Em Tue, Feb 08, 2022 at 01:16:36PM -0800, Stephane Eranian escreveu:
+> Improve the error message printed by perf when perf_event_open() fails on
+> AMD Zen3 when using the branch sampling feature. In the case of EINVAL, there
+> are two main reasons: frequency mode or period is smaller than the depth of
+> the branch sampling buffer (16). The patch checks the parameters of the call
+> and tries to print a relevant message to explain the error:
 > 
-> These changes should probably be squashed with their corresponding
-> original kernel changes to avoid breaking bisection for the warnings.
-> And it helps to keep the interdependent changes together.
+> $ perf record -b -e cpu/branch-brs/ -c 10 ls
+> Error:
+> AMD Branch Sampling does not support sampling period smaller than what is reported in /sys/devices/cpu/caps/branches.
+> 
+> $ perf record -b -e cpu/branch-brs/ ls
+> Error:
+> AMD Branch Sampling does not support frequency mode sampling, must pass a fixed sampling period via -c option or cpu/branch-brs,period=xxxx/.
+> 
+> Signed-off-by: Stephane Eranian <eranian@google.com>
+> [Rebased on commit 9fe8895a27a84 ("perf env: Add perf_env__cpuid, perf_env__{nr_}pmu_mappings")]
+> Signed-off-by: Kim Phillips <kim.phillips@amd.com>
+> ---
+>  tools/perf/util/evsel.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> index d42f63a484df..7311e7b4d34d 100644
+> --- a/tools/perf/util/evsel.c
+> +++ b/tools/perf/util/evsel.c
+> @@ -2857,6 +2857,12 @@ static bool is_amd_ibs(struct evsel *evsel)
+>  	return evsel->core.attr.precise_ip || !strncmp(evsel->pmu_name, "ibs", 3);
+>  }
+>  
+> +static bool is_amd_brs(struct evsel *evsel)
+> +{
+> +	return ((evsel->core.attr.config & 0xff) == 0xc4) &&
+> +	       (evsel->core.attr.sample_type & PERF_SAMPLE_BRANCH_STACK);
+> +}
+> +
 
-Sure; done for v4.
+Well, this assumes we're on x86_64, right? Shouldn't we have some extra
+condition using perf_env routines to check we're on x86_64.
 
-Doing that highlighted a couple of fixups I failed to make to the
-tools/perf/ copy; I've fixed those up.
+Did a quick check and powerpc also supports PERF_SAMPLE_BRANCH_STACK
 
-Thanks,
-Mark.
+⬢[acme@toolbox perf]$ find arch/ -name "*.c" | xargs grep PERF_SAMPLE_BRANCH_STACK
+arch/powerpc/perf/core-book3s.c:		if (event->attr.sample_type & PERF_SAMPLE_BRANCH_STACK) {
+arch/x86/events/intel/ds.c:	if (sample_type & PERF_SAMPLE_BRANCH_STACK) {
+arch/x86/events/intel/ds.c:					PERF_SAMPLE_BRANCH_STACK |
+arch/x86/events/intel/lbr.c: * in PERF_SAMPLE_BRANCH_STACK sample may vary.
+arch/x86/kvm/vmx/pmu_intel.c:	 * - set 'sample_type = PERF_SAMPLE_BRANCH_STACK' and
+arch/x86/kvm/vmx/pmu_intel.c:		.sample_type = PERF_SAMPLE_BRANCH_STACK,
+⬢[acme@toolbox perf]$
+
+arch/powerpc/perf/core-book3s.c:
+
+                if (event->attr.sample_type & PERF_SAMPLE_BRANCH_STACK) {
+                        struct cpu_hw_events *cpuhw;
+                        cpuhw = this_cpu_ptr(&cpu_hw_events);
+                        power_pmu_bhrb_read(event, cpuhw);
+                        data.br_stack = &cpuhw->bhrb_stack;
+                }
+
+>  int evsel__open_strerror(struct evsel *evsel, struct target *target,
+>  			 int err, char *msg, size_t size)
+>  {
+> @@ -2971,6 +2977,14 @@ int evsel__open_strerror(struct evsel *evsel, struct target *target,
+>  					return scnprintf(msg, size,
+>  	"AMD IBS may only be available in system-wide/per-cpu mode.  Try using -a, or -C and workload affinity");
+>  			}
+> +			if (is_amd_brs(evsel)) {
+> +				if (evsel->core.attr.freq)
+> +					return scnprintf(msg, size,
+> +	"AMD Branch Sampling does not support frequency mode sampling, must pass a fixed sampling period via -c option or cpu/branch-brs,period=xxxx/.");
+> +				/* another reason is that the period is too small */
+> +				return scnprintf(msg, size,
+> +	"AMD Branch Sampling does not support sampling period smaller than what is reported in /sys/devices/cpu/caps/branches.");
+> +			}
+>  		}
+>  
+>  		break;
+> -- 
+> 2.35.0.263.gb82422642f-goog
+
+-- 
+
+- Arnaldo

@@ -2,107 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293C54B7EB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 04:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4185F4B7EDF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 04:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344394AbiBPDr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 22:47:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36710 "EHLO
+        id S241298AbiBPDuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 22:50:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232299AbiBPDrZ (ORCPT
+        with ESMTP id S229452AbiBPDuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 22:47:25 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34692645;
-        Tue, 15 Feb 2022 19:47:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644983233; x=1676519233;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rpw3z4mr4YAi4etcbDDl1YczzPt53WRqNLudJjmBmrA=;
-  b=qg9NbMBPXHVnYrypqMf4C84dfhWDsa04EtoskBS3uucZsIDv4Y1xfzOz
-   zFv4nkagwIX3g2sbFdnNgXVgWQSSJHLmRGucofgz91oop1QKjbM3uxr+L
-   blytDPBwbSXbj0g8tj0/KQgB8R/x4LAtXDr/CccfY+wg1QB9xlDeK9fPZ
-   A=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 15 Feb 2022 19:47:13 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 19:47:13 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 15 Feb 2022 19:47:12 -0800
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 15 Feb 2022 19:47:06 -0800
-Date:   Wed, 16 Feb 2022 09:17:02 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        <evicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>
-Subject: Re: [PATCH 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
- override params bindings
-Message-ID: <20220216034702.GA8486@hu-pkondeti-hyd.qualcomm.com>
-References: <1644952755-15527-1-git-send-email-quic_c_sanm@quicinc.com>
- <1644952755-15527-2-git-send-email-quic_c_sanm@quicinc.com>
- <f1b4b389-12f9-7c21-b117-f2fe6df58a89@linaro.org>
- <CAE-0n52G6Cu8douv_KuQEeVM-3vnwGT4dhai8kmiLJ4Fd9Qz8A@mail.gmail.com>
+        Tue, 15 Feb 2022 22:50:09 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B4B1FA6F;
+        Tue, 15 Feb 2022 19:49:58 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nKBKG-002AeZ-O2; Wed, 16 Feb 2022 03:49:56 +0000
+Date:   Wed, 16 Feb 2022 03:49:56 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Stephen Brennan <stephen.s.brennan@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v2 1/4] dcache: sweep cached negative dentries to the end
+ of list of siblings
+Message-ID: <Ygx0ZJbn3cdUwnQ1@zeniv-ca.linux.org.uk>
+References: <20220209231406.187668-1-stephen.s.brennan@oracle.com>
+ <20220209231406.187668-2-stephen.s.brennan@oracle.com>
+ <YgSjo5wascR9mfnA@zeniv-ca.linux.org.uk>
+ <875ypf8s5m.fsf@stepbren-lnx.us.oracle.com>
+ <YgxvK03Q3wBVfLYS@zeniv-ca.linux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAE-0n52G6Cu8douv_KuQEeVM-3vnwGT4dhai8kmiLJ4Fd9Qz8A@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YgxvK03Q3wBVfLYS@zeniv-ca.linux.org.uk>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 06:10:45PM -0800, Stephen Boyd wrote:
-> Quoting Dmitry Baryshkov (2022-02-15 11:55:18)
-> > On 15/02/2022 22:19, Sandeep Maheswaram wrote:
-> > > Add support for overriding SNPS phy tuning parameters in device tree
-> > > bindings.
-> >
-> > This does not really benefit the users and does not help developers.
-> > Could you please change the dt bindings to specify values for
-> > thresholds, durations, impedance, etc. The values should be represented
-> > in the human units (e.g. us, Ohms, mV), not in the internal register
-> > 'bits' representation.
+On Wed, Feb 16, 2022 at 03:27:39AM +0000, Al Viro wrote:
+> On Tue, Feb 15, 2022 at 06:24:53PM -0800, Stephen Brennan wrote:
 > 
-> +1
+> > It seems to me that, if we had taken a reference on child by
+> > incrementing the reference count prior to unlocking it, then
+> > dentry_unlist could never have been called, since we would never have
+> > made it into __dentry_kill. child would still be on the list, and any
+> > cursor (or sweep_negative) list updates would now be reflected in
+> > child->d_child.next. But dput is definitely not safe while holding a
+> > lock on a parent dentry (even more so now thanks to my patch), so that
+> > is out of the question.
+> > 
+> > Would dput_to_list be an appropriate solution to that issue? We can
+> > maintain a dispose list in d_walk and then for any dput which really
+> > drops the refcount to 0, we can handle them after d_walk is done. It
+> > shouldn't be that many dentries anyway.
+> 
+> 	Interesting idea, but... what happens to behaviour of e.g.
+> shrink_dcache_parent()?  You'd obviously need to modify the test in
+> select_collect(), but then the selected dentries become likely candidates
+> for d_walk() itself wanting to move them over to its internal shrink list.
+> OTOH, __dput_to_list() will just decrement the count and skip the sucker
+> if it's already on a shrink list...
+> 
+> 	It might work, but it really needs a careful analysis wrt.
+> parallel d_walk().  What happens when you have two threads hitting
+> shrink_dcache_parent() on two different places, one being an ancestor
+> of another?  That can happen in parallel, and currently it does work
+> correctly, but that's fairly delicate and there are places where a minor
+> change could turn O(n) into O(n^2), etc.
+> 
+> 	Let me think about that - I'm not saying it's hopeless, and it
+> would be nice to avoid that subtlety in dentry_unlist(), but there
+> might be dragons.
 
-Agreed to this proposal.
+PS: another obvious change is that d_walk() would become blocking.
+So e.g.
 
-Sandeep,
+int path_has_submounts(const struct path *parent)
+{
+        struct check_mount data = { .mnt = parent->mnt, .mounted = 0 };
 
-We have a similar implemention in QUSB phy driver. can we have something like
-that for SNPSHS PHY too?
+	read_seqlock_excl(&mount_lock);
+	d_walk(parent->dentry, &data, path_check_mount);
+	read_sequnlock_excl(&mount_lock);
 
-Thanks,
-Pavan
+	return data.mounted;
+} 
+
+would need a rework - d_walk() is under a spinlock here.  Another
+potential headache in that respect is d_genocide() - currently non-blocking,
+with this change extremely likely to do evictions.  That, however, is
+not a problem for current in-tree callers - they are all shortly followed
+by shrink_dcache_parent() or equivalents.
+
+path_has_submounts(), though...  I'd really hate to reintroduce the
+"call this on entry/call this on exit" callbacks.  Perhaps it would
+be better to pass the dispose list to d_walk() and have the callers
+deal with evictions?  For that matter, shrink_dcache_parent() and
+friends would be just fine passing the same list they are collecting
+into.
+
+<looks at path_has_submounts() callers>
+*growl*
+autofs_d_automount() has it called under sbi->fs_lock.  So we'd need
+to take the disposal all the way out there, and export shrink_dentry_list()
+while we are at it.  Not pretty ;-/
+
+And no, we can't make the disposal async, so offloading it to a worker or
+thread is not feasible...

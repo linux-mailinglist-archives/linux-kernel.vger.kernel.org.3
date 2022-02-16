@@ -2,263 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6464B8C2B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 039CC4B8C33
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:15:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235440AbiBPPNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 10:13:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59070 "EHLO
+        id S235465AbiBPPPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 10:15:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233779AbiBPPNc (ORCPT
+        with ESMTP id S235515AbiBPPPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 10:13:32 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C07822495C;
-        Wed, 16 Feb 2022 07:13:18 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 391461F4533A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645024396;
-        bh=ZdwDreTuYZ1OApOlrsy0Ywd+1miJltDsuK0Em6Pe28w=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ciKEFCGia4x/X1pwF3ONQMHyF34tZMgVdNyrzojJU8RqlEmdet95xbeYObCPeMFo3
-         T4DmAzAYeMqDX9WNq/ivME0WwJNImP+aZOMGVmamaBlis13UG5yT9bsxIXTCPC2n1T
-         DJoA67AImYpncRvjLAltZjR1MnKJq0MK+NfPYUfCF5HLoQhko15Sl7Q6yycdaiNIsh
-         EXCIqu5+88aRa1sNfRn+YYqM6ju1fJjO6XCrzmV68tYZrlEhECBQLDPNcUELLVhnkY
-         ri6v/qD4pccDQ26Hc8EA2sJC14nK2SYnCqsAt0YNxfEHK1Q+4ZKQEgZNsIOvMKMJ31
-         ASzBBChotutCg==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     vkoul@kernel.org
-Cc:     krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
-        sean.wang@mediatek.com, matthias.bgg@gmail.com,
-        long.cheng@mediatek.com, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2] dt-bindings: dma: Convert mtk-uart-apdma to DT schema
-Date:   Wed, 16 Feb 2022 16:13:09 +0100
-Message-Id: <20220216151309.289348-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.33.1
+        Wed, 16 Feb 2022 10:15:48 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64C62A39E8
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 07:15:35 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id p15so5308481ejc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 07:15:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=N8yWtnRDmiBWo6FCFDEEJqCLqRrHkWjRAVi+s2lLvSo=;
+        b=f3BAJ3dmwr6zzbFGmJ1HHs6XNKfX2cnRHac2LOuMblS+kKXgin+3mpVmJPnogMaLRf
+         66LRYY89f9h/mtVellTbQy7ovV/L9QoA5GlYu2vTk25iirrtcx+xBih3GxkY7bqwPzhe
+         LdY1iDVoEVR5IVbVqFUAH+oBTC/zcXdvuw+DPR7mMnbwezq1SEVrMtz4kr1s2c+4GlJe
+         A0izkNiPQum40m5xPDgOQEQBQu3HvpenKgh3Z5XOqNhxjwOYDEP+j2eu0utMsqX0Ud+C
+         78ZW4jsF03+fDmeodT7K2ieDUaBhMKOeU6HAg2d7rz8WUdQOe5ZtGo9kyfF7qtfw/IhD
+         zXVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=N8yWtnRDmiBWo6FCFDEEJqCLqRrHkWjRAVi+s2lLvSo=;
+        b=L9/kaNmxxamBHZySO4AUlpbxLNMUZWzoA2GgYPwDvxag1HDu0DbvE4j6nt//OLsj6F
+         hf6ugTGxEMZsSQF183g+jVQdY8+z0X4s7ce/5XuGVwo9tnrhV6QIqdcAo2vouoFAR/j2
+         +kOgBpvnkQmZEZgN007XmRMVZluxfbRLOssP414DEeaeZ16r3AVKTUkJH1BWko349Z+3
+         c0eC6rx9M2y8VyshRChUplLmmnM26x3BhP1S6vz+6S55PC2hT3E63MoCH0MeuXY74Bd5
+         BOes8tgLgEOjHFuqqLv9oKrpI2jedVJGK6ZsUbRaFjDyMd/3q8t7lBe+JcPOBe2rI367
+         No3A==
+X-Gm-Message-State: AOAM531wbrxNrTnElJGBMNF38TRo75cMs8a1zBlFrxV3boQwTbKsUtO7
+        j6Q2izsGQAvQEXB/Bpv1yRb22GU3P6lm3NGEkh85+Q==
+X-Google-Smtp-Source: ABdhPJy0CGS84sjL2SjZudEL5ngyzOt2m9B79Og1r9toUHuFOPMSR7rbgPdAC8J/lBTx18bnsymSv3yQyOuGj1IQE9I=
+X-Received: by 2002:a17:907:72c3:b0:6ce:5256:1125 with SMTP id
+ du3-20020a17090772c300b006ce52561125mr2616388ejc.697.1645024534258; Wed, 16
+ Feb 2022 07:15:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <543efc25-9b99-53cd-e305-d8b4d917b64b@intel.com>
+ <20220215192233.8717-1-bgeffon@google.com> <YgwCuGcg6adXAXIz@kroah.com>
+ <CADyq12wByWhsHNOnokrSwCDeEhPdyO6WNJNjpHE1ORgKwwwXgg@mail.gmail.com> <YgzMTrVMCVt+n7cE@kroah.com>
+In-Reply-To: <YgzMTrVMCVt+n7cE@kroah.com>
+From:   Brian Geffon <bgeffon@google.com>
+Date:   Wed, 16 Feb 2022 10:14:58 -0500
+Message-ID: <CADyq12xwzZG+RZYvXdeB=XT_gyo-YHqqS==91=2=WOmJd4mxiQ@mail.gmail.com>
+Subject: Re: [PATCH stable 5.4,5.10] x86/fpu: Correct pkru/xstate inconsistency
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Willis Kung <williskung@google.com>,
+        Guenter Roeck <groeck@google.com>,
+        Borislav Petkov <bp@suse.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        "# v4 . 10+" <stable@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the MediaTek UART APDMA Controller binding to DT schema.
+On Wed, Feb 16, 2022 at 5:05 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Feb 15, 2022 at 04:32:48PM -0500, Brian Geffon wrote:
+> > On Tue, Feb 15, 2022 at 2:45 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Tue, Feb 15, 2022 at 11:22:33AM -0800, Brian Geffon wrote:
+> > > > When eagerly switching PKRU in switch_fpu_finish() it checks that
+> > > > current is not a kernel thread as kernel threads will never use PKRU.
+> > > > It's possible that this_cpu_read_stable() on current_task
+> > > > (ie. get_current()) is returning an old cached value. To resolve this
+> > > > reference next_p directly rather than relying on current.
+> > > >
+> > > > As written it's possible when switching from a kernel thread to a
+> > > > userspace thread to observe a cached PF_KTHREAD flag and never restore
+> > > > the PKRU. And as a result this issue only occurs when switching
+> > > > from a kernel thread to a userspace thread, switching from a non kernel
+> > > > thread works perfectly fine because all that is considered in that
+> > > > situation are the flags from some other non kernel task and the next fpu
+> > > > is passed in to switch_fpu_finish().
+> > > >
+> > > > This behavior only exists between 5.2 and 5.13 when it was fixed by a
+> > > > rewrite decoupling PKRU from xstate, in:
+> > > >   commit 954436989cc5 ("x86/fpu: Remove PKRU handling from switch_fpu_finish()")
+> > > >
+> > > > Unfortunately backporting the fix from 5.13 is probably not realistic as
+> > > > it's part of a 60+ patch series which rewrites most of the PKRU handling.
+> > > >
+> > > > Fixes: 0cecca9d03c9 ("x86/fpu: Eager switch PKRU state")
+> > > > Signed-off-by: Brian Geffon <bgeffon@google.com>
+> > > > Signed-off-by: Willis Kung <williskung@google.com>
+> > > > Tested-by: Willis Kung <williskung@google.com>
+> > > > Cc: <stable@vger.kernel.org> # v5.4.x
+> > > > Cc: <stable@vger.kernel.org> # v5.10.x
+> > > > ---
+> > > >  arch/x86/include/asm/fpu/internal.h | 13 ++++++++-----
+> > > >  arch/x86/kernel/process_32.c        |  6 ++----
+> > > >  arch/x86/kernel/process_64.c        |  6 ++----
+> > > >  3 files changed, 12 insertions(+), 13 deletions(-)
+> > >
+> > > So this is ONLY for 5.4.y and 5.10.y?  I'm really really loath to take
+> > > non-upstream changes as 95% of the time (really) it goes wrong.
+> >
+> > That's correct, this bug was introduced in 5.2 and that code was
+> > completely refactored in 5.13 indirectly fixing it.
+>
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
-v2: Fixed interrupt maxItems to 16, added interrupts/reg maxItems constraint
-    to 8 when the dma-requests property is not present
+Hi Greg,
 
- .../bindings/dma/mediatek,uart-dma.yaml       | 123 ++++++++++++++++++
- .../bindings/dma/mtk-uart-apdma.txt           |  56 --------
- 2 files changed, 123 insertions(+), 56 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
- delete mode 100644 Documentation/devicetree/bindings/dma/mtk-uart-apdma.txt
+> What series of commits contain that work?
 
-diff --git a/Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml b/Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
-new file mode 100644
-index 000000000000..67dbb2fed74c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
-@@ -0,0 +1,123 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/dma/mediatek,uart-dma.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek UART APDMA controller
-+
-+maintainers:
-+  - Long Cheng <long.cheng@mediatek.com>
-+
-+description: |
-+  The MediaTek UART APDMA controller provides DMA capabilities
-+  for the UART peripheral bus.
-+
-+allOf:
-+  - $ref: "dma-controller.yaml#"
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - mediatek,mt2712-uart-dma
-+              - mediatek,mt8516-uart-dma
-+          - const: mediatek,mt6577-uart-dma
-+      - enum:
-+          - mediatek,mt6577-uart-dma
-+
-+  reg:
-+    minItems: 1
-+    maxItems: 16
-+
-+  interrupts:
-+    description: |
-+      TX, RX interrupt lines for each UART APDMA channel
-+    minItems: 1
-+    maxItems: 16
-+
-+  clocks:
-+    description: Must contain one entry for the APDMA main clock
-+    maxItems: 1
-+
-+  clock-names:
-+    const: apdma
-+
-+  "#dma-cells":
-+    const: 1
-+    description: |
-+      The first cell specifies the UART APDMA channel number
-+
-+  dma-requests:
-+    description: |
-+      Number of virtual channels of the UART APDMA controller
-+    maximum: 16
-+
-+  mediatek,dma-33bits:
-+    type: boolean
-+    description: Enable 33-bits UART APDMA support
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+if:
-+  not:
-+    anyOf:
-+      - required:
-+          - dma-requests
-+then:
-+  properties:
-+    interrupts:
-+      maxItems: 8
-+    reg:
-+      maxItems: 8
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/mt2712-clk.h>
-+    soc {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+
-+        apdma: dma-controller@11000400 {
-+            compatible = "mediatek,mt2712-uart-dma",
-+                         "mediatek,mt6577-uart-dma";
-+            reg = <0 0x11000400 0 0x80>,
-+                  <0 0x11000480 0 0x80>,
-+                  <0 0x11000500 0 0x80>,
-+                  <0 0x11000580 0 0x80>,
-+                  <0 0x11000600 0 0x80>,
-+                  <0 0x11000680 0 0x80>,
-+                  <0 0x11000700 0 0x80>,
-+                  <0 0x11000780 0 0x80>,
-+                  <0 0x11000800 0 0x80>,
-+                  <0 0x11000880 0 0x80>,
-+                  <0 0x11000900 0 0x80>,
-+                  <0 0x11000980 0 0x80>;
-+            interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_LOW>,
-+                         <GIC_SPI 104 IRQ_TYPE_LEVEL_LOW>,
-+                         <GIC_SPI 105 IRQ_TYPE_LEVEL_LOW>,
-+                         <GIC_SPI 106 IRQ_TYPE_LEVEL_LOW>,
-+                         <GIC_SPI 107 IRQ_TYPE_LEVEL_LOW>,
-+                         <GIC_SPI 108 IRQ_TYPE_LEVEL_LOW>,
-+                         <GIC_SPI 109 IRQ_TYPE_LEVEL_LOW>,
-+                         <GIC_SPI 110 IRQ_TYPE_LEVEL_LOW>,
-+                         <GIC_SPI 111 IRQ_TYPE_LEVEL_LOW>,
-+                         <GIC_SPI 112 IRQ_TYPE_LEVEL_LOW>,
-+                         <GIC_SPI 113 IRQ_TYPE_LEVEL_LOW>,
-+                         <GIC_SPI 114 IRQ_TYPE_LEVEL_LOW>;
-+            dma-requests = <12>;
-+            clocks = <&pericfg CLK_PERI_AP_DMA>;
-+            clock-names = "apdma";
-+            mediatek,dma-33bits;
-+            #dma-cells = <1>;
-+        };
-+    };
-+
-+...
-diff --git a/Documentation/devicetree/bindings/dma/mtk-uart-apdma.txt b/Documentation/devicetree/bindings/dma/mtk-uart-apdma.txt
-deleted file mode 100644
-index fef9c1eeb264..000000000000
---- a/Documentation/devicetree/bindings/dma/mtk-uart-apdma.txt
-+++ /dev/null
-@@ -1,56 +0,0 @@
--* Mediatek UART APDMA Controller
--
--Required properties:
--- compatible should contain:
--  * "mediatek,mt2712-uart-dma" for MT2712 compatible APDMA
--  * "mediatek,mt6577-uart-dma" for MT6577 and all of the above
--  * "mediatek,mt8516-uart-dma", "mediatek,mt6577" for MT8516 SoC
--
--- reg: The base address of the APDMA register bank.
--
--- interrupts: A single interrupt specifier.
-- One interrupt per dma-requests, or 8 if no dma-requests property is present
--
--- dma-requests: The number of DMA channels
--
--- clocks : Must contain an entry for each entry in clock-names.
--  See ../clocks/clock-bindings.txt for details.
--- clock-names: The APDMA clock for register accesses
--
--- mediatek,dma-33bits: Present if the DMA requires support
--
--Examples:
--
--	apdma: dma-controller@11000400 {
--		compatible = "mediatek,mt2712-uart-dma",
--			     "mediatek,mt6577-uart-dma";
--		reg = <0 0x11000400 0 0x80>,
--		      <0 0x11000480 0 0x80>,
--		      <0 0x11000500 0 0x80>,
--		      <0 0x11000580 0 0x80>,
--		      <0 0x11000600 0 0x80>,
--		      <0 0x11000680 0 0x80>,
--		      <0 0x11000700 0 0x80>,
--		      <0 0x11000780 0 0x80>,
--		      <0 0x11000800 0 0x80>,
--		      <0 0x11000880 0 0x80>,
--		      <0 0x11000900 0 0x80>,
--		      <0 0x11000980 0 0x80>;
--		interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_LOW>,
--			     <GIC_SPI 104 IRQ_TYPE_LEVEL_LOW>,
--			     <GIC_SPI 105 IRQ_TYPE_LEVEL_LOW>,
--			     <GIC_SPI 106 IRQ_TYPE_LEVEL_LOW>,
--			     <GIC_SPI 107 IRQ_TYPE_LEVEL_LOW>,
--			     <GIC_SPI 108 IRQ_TYPE_LEVEL_LOW>,
--			     <GIC_SPI 109 IRQ_TYPE_LEVEL_LOW>,
--			     <GIC_SPI 110 IRQ_TYPE_LEVEL_LOW>,
--			     <GIC_SPI 111 IRQ_TYPE_LEVEL_LOW>,
--			     <GIC_SPI 112 IRQ_TYPE_LEVEL_LOW>,
--			     <GIC_SPI 113 IRQ_TYPE_LEVEL_LOW>,
--			     <GIC_SPI 114 IRQ_TYPE_LEVEL_LOW>;
--		dma-requests = <12>;
--		clocks = <&pericfg CLK_PERI_AP_DMA>;
--		clock-names = "apdma";
--		mediatek,dma-33bits;
--		#dma-cells = <1>;
--	};
--- 
-2.33.1
+This is the series,
+https://lore.kernel.org/all/20210623120127.327154589@linutronix.de/,
+it does quite a bit of cleanup to correct the larger problem of having
+pkru merged into xstate.
 
+> And again, why not just take them?  What is wrong with that if this is
+> such a big issue?
+
+Anything is possible I suppose but looking through the series it seems
+that it's not going to apply cleanly so we're going to end up with
+something that, if we made it work, would look very different and
+would touch a much larger cross section of code. If the concern here
+is risk of things going wrong, attempting to pull back or cherry-pick
+parts of this series seems riskier. However, if we don't attempt to
+pull back all those patches I will likely be proposing at least one
+more small patch for 5.4 and 5.10 to fix PKRU in these kernels because
+right now it's broken, particularly on AMD processors as Dave
+mentioned.
+
+>
+> > > How was this tested, and what do the maintainers of this subsystem
+> > > think?  And will you be around to fix the bugs in this when they are
+> > > found?
+> >
+> > This has been trivial to reproduce, I've used a small repro which I've
+> > put here: https://gist.github.com/bgaff/9f8cbfc8dd22e60f9492e4f0aff8f04f
+> > , I also was able to reproduce this using the protection_keys self
+> > tests on a 11th Gen Core i5-1135G7. I'm happy to commit to addressing
+> > any bugs that may appear. I'll see what the maintainers say, but there
+> > is also a smaller fix that just involves using this_cpu_read() in
+> > switch_fpu_finish() for this specific issue, although that approach
+> > isn't as clean.
+>
+> Can you add the test to the in-kernel tests so that we make sure it is
+> fixed and never comes back?
+
+I'm already able to reproduce it with the kernel selftests. To be
+honest, I'm not sure why this hasn't been reported yet. I could be
+doing something horribly wrong. But it seems the likely reason is that
+my compiler is doing what it's allowed to do, which is optimize the
+load of current_task. current -> get_current() ->
+this_cpu_read_stable(current_task) is allowed to read a cached value.
+Perhaps gcc is just not taking advantage of that optimization, I'm not
+sure. But writing to current_task and then immediately reading it back
+via this_cpu_read_stable() can be problematic for this reason, and the
+disassembled code shows that this happening.
+
+Brian
+
+>
+> thanks,
+>
+> greg k-h

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361094B7F18
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 05:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D174B7F1B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 05:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244047AbiBPEGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 23:06:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46836 "EHLO
+        id S245433AbiBPELm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 23:11:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239345AbiBPEGg (ORCPT
+        with ESMTP id S238867AbiBPELg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 23:06:36 -0500
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292D3326;
-        Tue, 15 Feb 2022 20:06:24 -0800 (PST)
-Received: by mail-io1-f42.google.com with SMTP id x13so901138iop.4;
-        Tue, 15 Feb 2022 20:06:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=+FhN6H4sJdFIwAxrGa45xsxIVEXRnp64Rx9ILQ4TAu4=;
-        b=z5hoQlzp9CmZl/p5Kmt40zWi8Wy5lwbj89y/I6oaGs1ioqxBfedzW7HrFdcxB3dT1M
-         L5T7hbwA2eWl+EiL0AyorUFnsbBLZklZoqAE+108pk8rVCq8/eGH4BBlJw+DpKS2Rjt6
-         JA8NJQuE2Ykui7BcXzBIAbeLOUWpG2861lpt74drquML6Bd03xG7YezWDhC7ASWAUiPC
-         UW1YRf9Ev7Y8wLuuaQedJFjD/3E4L/vWOdX6Ta4qQUQceNeQOSs+gs3h4h8EJesJK67+
-         FHEfKhBgncJ2LDcp9XOKdhD9NdXStFy5lESvSmOAAqwVbmLHwPr4JTxNUX1Rv0ykJ3+E
-         9g0g==
-X-Gm-Message-State: AOAM5312c6a5LIZf1KUZoeeDWyf1M4eAzjl6UKvpTFEYfh9PmTkVh/Tu
-        Gdb039joiMfSowsTIrrPwA==
-X-Google-Smtp-Source: ABdhPJyJENO8J9J/BgMWhhP/uor8Gq356mJ2fVFAnZn6K8d9RLQjrlR5CKBvS9G6tzeoxnb0cijV7w==
-X-Received: by 2002:a05:6638:1409:b0:30f:843:f953 with SMTP id k9-20020a056638140900b0030f0843f953mr586132jad.22.1644984383486;
-        Tue, 15 Feb 2022 20:06:23 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id g19sm3023031iox.39.2022.02.15.20.06.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 20:06:22 -0800 (PST)
-Received: (nullmailer pid 298289 invoked by uid 1000);
-        Wed, 16 Feb 2022 04:06:20 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     xinlei.lee@mediatek.com
-Cc:     u.kleine-koenig@pengutronix.de, robh+dt@kernel.org,
-        thierry.reding@gmail.com, lee.jones@linaro.org,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        matthias.bgg@gmail.com
-In-Reply-To: <1644847276-27622-2-git-send-email-xinlei.lee@mediatek.com>
-References: <1644847276-27622-1-git-send-email-xinlei.lee@mediatek.com> <1644847276-27622-2-git-send-email-xinlei.lee@mediatek.com>
-Subject: Re: [1/1] dt-bindings: pwm:Convert pwm-mtk-disp.txt format file to pwm-mtk-disp.yaml format file
-Date:   Tue, 15 Feb 2022 22:06:20 -0600
-Message-Id: <1644984380.781456.298288.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Tue, 15 Feb 2022 23:11:36 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E9410C8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 20:11:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644984685; x=1676520685;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Gaf+DKBUiRjhu+XVkAHRNKpoZvA+AGo07TJG2OrS/PQ=;
+  b=GaStzUcgHxEuuI18I1A69CIWTBQNMjSl72ImIM6zwmiSmgTB0xh6yqyY
+   j+IGp7DuMZ7xY2uF3gkUFKWEEwu/RDUCcnJ4GjWskUuSQiTxmeT91Sw39
+   g4w3w2a0kOfGq28npFvz6NiRsA09RHDhi+k0eeVUxCDQiok1tdMK1cztO
+   LSxDF+NlNeWQpj1JQe6quoa3rRzP50JiW5eDZra85fD8YkeMKYWO2WMTW
+   vXIX5l1pog2buh7QQq5fBWUUjgBCR4go5mryzcLHFBW2suaYP75AGeagA
+   ZsllfTFMr7caal77RWFwt/ziVXcBGsp8GyY6MdB3d5rGOBPChDXe64aYt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="250462304"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="250462304"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 20:11:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="636312320"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 15 Feb 2022 20:11:23 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKBf1-000AOW-3T; Wed, 16 Feb 2022 04:11:23 +0000
+Date:   Wed, 16 Feb 2022 12:11:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCH] swiotlb: fix alloc_cast.cocci warnings
+Message-ID: <20220216041109.GA35391@22a7a85ba86c>
+References: <202202161256.1zrqppDy-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202202161256.1zrqppDy-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,43 +64,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Feb 2022 22:01:16 +0800, xinlei.lee@mediatek.com wrote:
-> From: xinlei lee <xinlei.lee@mediatek.com>
-> 
-> Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
-> ---
->  .../devicetree/bindings/pwm/pwm-mtk-disp.yaml      | 60 ++++++++++++++++++++++
->  1 file changed, 60 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pwm/pwm-mtk-disp.yaml
-> 
+From: kernel test robot <lkp@intel.com>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+kernel/dma/swiotlb.c:433:15-33: WARNING: casting value returned by memory allocation function to (struct io_tlb_area *) is useless.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/pwm/pwm-mtk-disp.yaml:60:7: [error] no new line character at the end of file (new-line-at-end-of-file)
+ Remove casting the values returned by memory allocation functions
+ like kmalloc, kzalloc, kmem_cache_alloc, kmem_cache_zalloc etc.
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/pwm/pwm-mtk-disp.example.dts:20:18: fatal error: dt-bindings/clock/mt8186-clk.h: No such file or directory
-   20 |         #include <dt-bindings/clock/mt8186-clk.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:378: Documentation/devicetree/bindings/pwm/pwm-mtk-disp.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1398: dt_binding_check] Error 2
+Semantic patch information:
+ This makes an effort to find cases of casting of values returned by
+ kmalloc, kzalloc, kcalloc, kmem_cache_alloc, kmem_cache_zalloc,
+ kmem_cache_alloc_node, kmalloc_node and kzalloc_node and removes
+ the casting as it is not required. The result in the patch case may
+ need some reformatting.
 
-doc reference errors (make refcheckdocs):
+Generated by: scripts/coccinelle/api/alloc/alloc_cast.cocci
 
-See https://patchwork.ozlabs.org/patch/1592602
+Fixes: 77d5cb1c6d4f ("swiotlb: Split up single swiotlb lock")
+CC: Andi Kleen <ak@linux.intel.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+tree:   https://github.com/intel/tdx.git guest-rebased
+head:   36c91f6d572820e8556972fd7644bd96798e85d6
+commit: 77d5cb1c6d4fe32593d65a38b4732da6c90b8f29 [115/133] swiotlb: Split up single swiotlb lock
+:::::: branch date: 19 hours ago
+:::::: commit date: 2 weeks ago
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+ kernel/dma/swiotlb.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+--- a/kernel/dma/swiotlb.c
++++ b/kernel/dma/swiotlb.c
+@@ -430,7 +430,7 @@ swiotlb_late_init_with_tbl(char *tlb, un
+ 		return -ENOMEM;
+ 	}
+ 
+-	mem->areas = (struct io_tlb_area *)kcalloc(num_areas,
++	mem->areas = kcalloc(num_areas,
+ 						   sizeof(struct io_tlb_area),
+ 						   GFP_KERNEL);
+ 	if (!mem->areas) {

@@ -2,70 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94F3E4B833C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B4B4B82BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbiBPIs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 03:48:29 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:55112 "EHLO
+        id S231544AbiBPIOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 03:14:49 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:50994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbiBPIs0 (ORCPT
+        with ESMTP id S231540AbiBPIOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 03:48:26 -0500
-Received: from 9.mo552.mail-out.ovh.net (9.mo552.mail-out.ovh.net [87.98.180.222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679A51A6A7F
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:48:13 -0800 (PST)
-Received: from mxplan5.mail.ovh.net (unknown [10.109.156.219])
-        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id 3D56D24B44;
-        Wed, 16 Feb 2022 08:12:56 +0000 (UTC)
-Received: from kaod.org (37.59.142.96) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 16 Feb
- 2022 09:12:54 +0100
-Authentication-Results: garm.ovh; auth=pass (GARM-96R0010590fb10-4626-4deb-8236-9a8be91dbf44,
-                    CB3E44AF90526EF3DA3218D7163352937EBBBEE5) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 82.64.250.170
-Message-ID: <d517d453-ddd5-8c9e-7b1f-56f5f83d2f1e@kaod.org>
-Date:   Wed, 16 Feb 2022 09:12:48 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 10/10] spi: aspeed: Activate new spi-mem driver
-Content-Language: en-US
-To:     Joel Stanley <joel@jms.id.au>
-CC:     <linux-spi@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Wed, 16 Feb 2022 03:14:39 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEEB251E6C;
+        Wed, 16 Feb 2022 00:14:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=eK7JQP3AD1+05eQk/cFJFk4JohXRVweM/+B5FTB73ng=; b=SvNQmY6s0tTSr74RpoPjpXFknN
+        +ih/jXI0aVHS0v3cvv4SeAQUyxAkHesXys2OtGPFSpuO1g7lhDeXluXHsYHr6jbsd4LKXsV+I+EDS
+        mwITAK1Hdq6ubXuCm+ukvvLFAzw7wkLOUZOVz7PtfrjAMFJvmn0abE44k8/+98JjKBk+OHOA5WwLm
+        M5oRguh70Q5PNjzWhuHMWz4DS8yE7lugU+fx4oC7wzXq9Fqs833hNE19gwmTP31llnRs6XSduqhoE
+        6lVEAooGgzrhF3wUVQz6yZjdhocY2PL+tiQzXzgTtfu+hQ2rkmzkB7ls/4peyTwp1OTzsa9X+Zcy4
+        U6RQMGcg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nKFS2-0063dZ-Js; Wed, 16 Feb 2022 08:14:14 +0000
+Date:   Wed, 16 Feb 2022 00:14:14 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Nirmal Patel <nirmal.patel@linux.intel.com>,
+        Jonathan Derrick <jonathan.derrick@linux.dev>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220214094231.3753686-1-clg@kaod.org>
- <20220214094231.3753686-11-clg@kaod.org>
- <CACPK8XdvczyZ1QHtFm7JJAC7AY+QmWSx0MarUwLjUyOtC9DnSQ@mail.gmail.com>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <CACPK8XdvczyZ1QHtFm7JJAC7AY+QmWSx0MarUwLjUyOtC9DnSQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.59.142.96]
-X-ClientProxiedBy: DAG3EX1.mxp5.local (172.16.2.21) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: 365dd3b7-2a44-4f14-8514-26cf6445fd31
-X-Ovh-Tracer-Id: 12828503540660800388
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrjeehgdduudegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepieegvdffkeegfeetuddttddtveduiefhgeduffekiedtkeekteekhfffleevleelnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrdelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Subject: Re: [PATCH v3] PCI: vmd: Honor ACPI _OSC on PCIe features
+Message-ID: <YgyyVtDVV+0Jrogi@infradead.org>
+References: <CAJZ5v0i6+EMMGuKckhtTdt7TgC3LbofW7oS7B5=McSNjEh1yKA@mail.gmail.com>
+ <20220216015303.GA137820@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216015303.GA137820@bhelgaas>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,91 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/16/22 08:02, Joel Stanley wrote:
-> On Mon, 14 Feb 2022 at 09:43, Cédric Le Goater <clg@kaod.org> wrote:
->>
->> The previous driver using the MTD SPI NOR interface is kept in case we
->> find some issues but we should remove it quickly once the new driver
->> using the spi-mem interface has been sufficiently exposed.
->>
->> Signed-off-by: Cédric Le Goater <clg@kaod.org>
-> 
-> I suggest we drop the defconfig changes from both this patch and the
-> first. This way we'll always have the new driver being built, with
-> less churn.
-> 
-> If you strongly prefer the way you've done it then that's fine too.
+On Tue, Feb 15, 2022 at 07:53:03PM -0600, Bjorn Helgaas wrote:
+> Apparently there's a firmware toggle, but I don't know exactly what it
+> does.  Maybe if the toggle is set to disable VMD, the VMD device looks
+> like a regular Root Port and the devices below are enumerated
+> normally even without any vmd.c?
 
-I am fine with that, but, with only patch 1, the defconfig files would
-be referencing an non-existing CONFIG. Is that ok ?
-
-Thanks,
-
-C.
-
-
-
-> 
->> ---
->>   arch/arm/configs/aspeed_g4_defconfig | 2 +-
->>   arch/arm/configs/aspeed_g5_defconfig | 2 +-
->>   arch/arm/configs/multi_v5_defconfig  | 2 +-
->>   arch/arm/configs/multi_v7_defconfig  | 2 +-
->>   4 files changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/arch/arm/configs/aspeed_g4_defconfig b/arch/arm/configs/aspeed_g4_defconfig
->> index 964536444cd7..b4a1b2ed1a17 100644
->> --- a/arch/arm/configs/aspeed_g4_defconfig
->> +++ b/arch/arm/configs/aspeed_g4_defconfig
->> @@ -64,7 +64,7 @@ CONFIG_MTD_BLOCK=y
->>   CONFIG_MTD_PARTITIONED_MASTER=y
->>   CONFIG_MTD_SPI_NOR=y
->>   # CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
->> -CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=y
->> +CONFIG_SPI_ASPEED_SMC=y
->>   CONFIG_MTD_UBI=y
->>   CONFIG_MTD_UBI_FASTMAP=y
->>   CONFIG_MTD_UBI_BLOCK=y
->> diff --git a/arch/arm/configs/aspeed_g5_defconfig b/arch/arm/configs/aspeed_g5_defconfig
->> index e809236ca88b..ccc4240ee4b5 100644
->> --- a/arch/arm/configs/aspeed_g5_defconfig
->> +++ b/arch/arm/configs/aspeed_g5_defconfig
->> @@ -103,7 +103,7 @@ CONFIG_MTD_BLOCK=y
->>   CONFIG_MTD_PARTITIONED_MASTER=y
->>   CONFIG_MTD_SPI_NOR=y
->>   # CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
->> -CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=y
->> +CONFIG_SPI_ASPEED_SMC=y
->>   CONFIG_MTD_UBI=y
->>   CONFIG_MTD_UBI_FASTMAP=y
->>   CONFIG_MTD_UBI_BLOCK=y
->> diff --git a/arch/arm/configs/multi_v5_defconfig b/arch/arm/configs/multi_v5_defconfig
->> index 49083ef05fb0..80a3ae02d759 100644
->> --- a/arch/arm/configs/multi_v5_defconfig
->> +++ b/arch/arm/configs/multi_v5_defconfig
->> @@ -103,7 +103,7 @@ CONFIG_MTD_RAW_NAND=y
->>   CONFIG_MTD_NAND_ATMEL=y
->>   CONFIG_MTD_NAND_ORION=y
->>   CONFIG_MTD_SPI_NOR=y
->> -CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=y
->> +CONFIG_SPI_ASPEED_SMC=y
->>   CONFIG_MTD_UBI=y
->>   CONFIG_BLK_DEV_LOOP=y
->>   CONFIG_ATMEL_SSC=m
->> diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
->> index fc1b69256b64..33572998dbbe 100644
->> --- a/arch/arm/configs/multi_v7_defconfig
->> +++ b/arch/arm/configs/multi_v7_defconfig
->> @@ -217,7 +217,7 @@ CONFIG_MTD_NAND_DAVINCI=y
->>   CONFIG_MTD_NAND_STM32_FMC2=y
->>   CONFIG_MTD_NAND_PL35X=y
->>   CONFIG_MTD_SPI_NOR=y
->> -CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=m
->> +CONFIG_SPI_ASPEED_SMC=m
->>   CONFIG_MTD_UBI=y
->>   CONFIG_BLK_DEV_LOOP=y
->>   CONFIG_BLK_DEV_RAM=y
->> --
->> 2.34.1
->>
-
+Yes.  VMD is just an intel invention to make the OSes life incredibly
+painful (and to allow Intel to force binding their NVMe driver instead
+of the Microsoft one on windows).

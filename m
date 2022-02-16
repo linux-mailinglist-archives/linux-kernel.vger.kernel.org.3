@@ -2,84 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B04F64B7EBC
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 04:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 293C54B7EB2
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 04:49:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245547AbiBPDqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 22:46:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34724 "EHLO
+        id S1344394AbiBPDr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 22:47:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234860AbiBPDqv (ORCPT
+        with ESMTP id S232299AbiBPDrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 22:46:51 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9A9E05
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 19:46:39 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id u5so1011271ple.3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 19:46:39 -0800 (PST)
+        Tue, 15 Feb 2022 22:47:25 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34692645;
+        Tue, 15 Feb 2022 19:47:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zJZZ+JEvBwB9q8zo9G87rqVvPao4wt79zrPDR0URZQs=;
-        b=HjdvhoRwHsPkQ16tNkW2IiyAHMTGDy1+3w54g0ZrhhyJbAjLMoax+rtJaX9WfcPm9K
-         MA8m/kKSp7FZwuEAm7LLWpaHORtbYgS4sf8TLNayrH1lloGfrjZEbHQ3YYi4omS0e9iY
-         U6N6zDEG3WMxdajDF3z449SYtHJ5mCkoAqMKE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zJZZ+JEvBwB9q8zo9G87rqVvPao4wt79zrPDR0URZQs=;
-        b=PlMucCJFTLEvKLCTXYrdb4REYBYTpU5IhmftsJcllL/r98A/4Ikvl4yTEOCvNX7VLW
-         kkSbTI+H629yF6z+QXRqgQnEdGXpiYp+eiFlF5YxsglnzLmeQD8LKOHLUtbqid6oYjel
-         aJWUUja3FBktl1W/XXgddO3mM6LEz8mwrj+U6Z0mgykBUGNJO6lqHsL9yrJvbt4ys1Qz
-         TZYjRBY7o+otT4zLSfPghKES0mnHKYBsOG1CLVsQKFUQoaOqBmD9BnMknntK1EfwEk+8
-         OiEg7fsxF27GzImYfA/fMlicaxUJNRggg+Vlz84ppjpc0c4z/ul6gf00GgMOT2TXHQZf
-         ZPoQ==
-X-Gm-Message-State: AOAM532J6fU1SsNHgtpfGUREolHKcVaneD7Q8LHgQNxNLgZtZmY4QwMJ
-        qA/XwALa9W9wV91SAb2ObShguw==
-X-Google-Smtp-Source: ABdhPJzRWGqn9Ucp2/c4wH++iZR883Ywc2CjfsVHYVzh8jA8DkVyGoPe1vHRXkmEUyQeuk8yzeH7gQ==
-X-Received: by 2002:a17:902:988c:b0:14f:2934:6838 with SMTP id s12-20020a170902988c00b0014f29346838mr955950plp.47.1644983199097;
-        Tue, 15 Feb 2022 19:46:39 -0800 (PST)
-Received: from google.com ([2401:fa00:8f:203:c926:4ee:add9:bf67])
-        by smtp.gmail.com with ESMTPSA id b21sm19923235pji.22.2022.02.15.19.46.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 19:46:38 -0800 (PST)
-Date:   Wed, 16 Feb 2022 12:46:33 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     pmladek@suse.com, senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, keescook@chromium.org, anton@enomsg.org,
-        ccross@android.com, tony.luck@intel.com, ojeda@kernel.org,
-        alex.gaynor@gmail.com, wedsonaf@google.com,
-        linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] printk: make suppress_panic_printk static
-Message-ID: <YgxzmSBZv5Q3pS9/@google.com>
-References: <20220216031957.9761-1-jiapeng.chong@linux.alibaba.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644983233; x=1676519233;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rpw3z4mr4YAi4etcbDDl1YczzPt53WRqNLudJjmBmrA=;
+  b=qg9NbMBPXHVnYrypqMf4C84dfhWDsa04EtoskBS3uucZsIDv4Y1xfzOz
+   zFv4nkagwIX3g2sbFdnNgXVgWQSSJHLmRGucofgz91oop1QKjbM3uxr+L
+   blytDPBwbSXbj0g8tj0/KQgB8R/x4LAtXDr/CccfY+wg1QB9xlDeK9fPZ
+   A=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 15 Feb 2022 19:47:13 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 19:47:13 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 15 Feb 2022 19:47:12 -0800
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 15 Feb 2022 19:47:06 -0800
+Date:   Wed, 16 Feb 2022 09:17:02 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        <evicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>
+Subject: Re: [PATCH 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
+ override params bindings
+Message-ID: <20220216034702.GA8486@hu-pkondeti-hyd.qualcomm.com>
+References: <1644952755-15527-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1644952755-15527-2-git-send-email-quic_c_sanm@quicinc.com>
+ <f1b4b389-12f9-7c21-b117-f2fe6df58a89@linaro.org>
+ <CAE-0n52G6Cu8douv_KuQEeVM-3vnwGT4dhai8kmiLJ4Fd9Qz8A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220216031957.9761-1-jiapeng.chong@linux.alibaba.com>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAE-0n52G6Cu8douv_KuQEeVM-3vnwGT4dhai8kmiLJ4Fd9Qz8A@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/02/16 11:19), Jiapeng Chong wrote:
-> This symbol is not used outside of printk.c, so marks it static.
+On Tue, Feb 15, 2022 at 06:10:45PM -0800, Stephen Boyd wrote:
+> Quoting Dmitry Baryshkov (2022-02-15 11:55:18)
+> > On 15/02/2022 22:19, Sandeep Maheswaram wrote:
+> > > Add support for overriding SNPS phy tuning parameters in device tree
+> > > bindings.
+> >
+> > This does not really benefit the users and does not help developers.
+> > Could you please change the dt bindings to specify values for
+> > thresholds, durations, impedance, etc. The values should be represented
+> > in the human units (e.g. us, Ohms, mV), not in the internal register
+> > 'bits' representation.
 > 
-> Fix the following sparse warning:
-> 
-> kernel/printk/printk.c:100:19: warning: symbol 'suppress_panic_printk'
-> was not declared. Should it be static?
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> +1
 
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Agreed to this proposal.
+
+Sandeep,
+
+We have a similar implemention in QUSB phy driver. can we have something like
+that for SNPSHS PHY too?
+
+Thanks,
+Pavan

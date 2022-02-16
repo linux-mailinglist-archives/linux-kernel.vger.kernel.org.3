@@ -2,108 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E84164B86A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 12:29:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA344B86A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 12:30:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231542AbiBPL3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 06:29:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33844 "EHLO
+        id S231553AbiBPLak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 06:30:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiBPL3v (ORCPT
+        with ESMTP id S229487AbiBPLag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 06:29:51 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D381168EF;
-        Wed, 16 Feb 2022 03:29:39 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id o9so2814346ljq.4;
-        Wed, 16 Feb 2022 03:29:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YbTDa5I13Ncw8KhJDSpmxu2P37n56Qwaa9F4OpFETGE=;
-        b=gKx7XgpTL3+b/cpnZXxZQMYaZreD93Pl33R+iIY0V9Ac+FMU76BkG+iLkgRj8vY3DC
-         D0lyIAcoUMrUFvB7O6hGiX6TfFieG4eQfW70SChsDnXxIcxMparwoFitNVR0BxLwHgxF
-         GaFNho49XVyBylWnt1mQH/fWmLAem8CnJBi12LPWMuB3E+snDC1XqRosxabhDW2zmW1c
-         AwlO/N2QfeBEDzeam70MPix/zA+gHEe/ityYDmgm1s33FfDY7p7hJzz+AezH7gMlGwEH
-         j2Jdz3grMjuJ+p+T5xLANBfbrcrxj04MNhNRNihmAGxQS7Usw6Nl1s4sM153NMAPFS1J
-         WhLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YbTDa5I13Ncw8KhJDSpmxu2P37n56Qwaa9F4OpFETGE=;
-        b=WumVkQfPvykdX36Iksbok+YX/X9kbH/vGcA2WQp3pz0mAY+tfW/Z8DkfHSC48qYfAz
-         2rtlPitM4xly5b/zjcORERfoBh5AQDgKSaol8TMXgrVm+zaQ86Tsigy5SuUy5L998Ivw
-         ll1mZSUwFBlcw6HLMuS4mtZ0IkCOFYUkwlhTSyidHcBn/bGxpjE85YXOmMcb6e+H8Weq
-         vQfETpDGUF5tk+aklhgkbiMs18sG5zAa40aGuMRCIgs9Loci/bNFDqhK4ScfSL7Un+0U
-         0DYzgaVDz4nJNHC++xvQk68OkUzQpT4J6c6feSBIV0zQzyxVVm1U8LcCSJ8dNdcfsGM2
-         TNEw==
-X-Gm-Message-State: AOAM532dXYZ83777yy/x+VmCAFH2wRUqOdujnFPCK8t0kc2rDcTBJWfu
-        rYV+5SrEt4rRLpEitbJeYyU=
-X-Google-Smtp-Source: ABdhPJwLnwiFO+Ouvb/1/TuiZTBvpRUtpGayQzym76zPnCf0OB46MSeqzZqY09HT2TRqelHPqI/i1Q==
-X-Received: by 2002:a05:651c:12cb:b0:23b:2bfc:8dae with SMTP id 11-20020a05651c12cb00b0023b2bfc8daemr1694502lje.364.1645010977853;
-        Wed, 16 Feb 2022 03:29:37 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id y11sm4690500ljj.122.2022.02.16.03.29.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 03:29:37 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH] dt-bindings: mfd: brcm,cru: rename pinctrl node
-Date:   Wed, 16 Feb 2022 12:29:28 +0100
-Message-Id: <20220216112928.5330-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 16 Feb 2022 06:30:36 -0500
+Received: from out203-205-221-240.mail.qq.com (out203-205-221-240.mail.qq.com [203.205.221.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94993E6DAA
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 03:30:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1645011022;
+        bh=LRvuA6zaN/7u+UfoBDNOpb1E0+Op5j/6aZVhnErHdTs=;
+        h=From:To:Cc:Subject:Date;
+        b=RYKaB7YJeDl4zeo9ul6XPav0gGyTeLD41x2qL/6VA1l/RIUJ1fRsjqBIVw4y9VBXv
+         A1BK3tpiUiAJvbgw+9/81CaTMmVR2Xha8dpM71t2diLHQrf312KSTgtAU2ja8c+FB2
+         FbK8JPbuKNT8en4oeSVBoQfZ0cwNYtAryF7E06Z4=
+Received: from localhost.localdomain ([218.197.153.188])
+        by newxmesmtplogicsvrszc11.qq.com (NewEsmtp) with SMTP
+        id 7930C48A; Wed, 16 Feb 2022 19:30:19 +0800
+X-QQ-mid: xmsmtpt1645011019tdpb7iu80
+Message-ID: <tencent_BD0AC737C546F88052FF7F11881D3350EE06@qq.com>
+X-QQ-XMAILINFO: NOIkHYnr7VzdBovMCoZOh3Dyb6OXUHZGbeNuuwU1kCDUJH+GOLSJFY1cutzjhU
+         3/nnF/y7yLMI04AWSWLj9CqusdbnzxWMwLwIuD4o6qTNR1duj/4mQG7kQu0VMh7kCqnIkMDSKPFi
+         lUMiFhR4gVOm9B41FxabktomW2oD5subWh7kUvgUwzU44L00w3dfcwxAsKuAXNU4h1QoBWfGHu+K
+         WDgyNokPNvlt6Tm9t3uDbvqlSmRfP9Dt8UNqNMSnG9nt3sjcKHzJXrhgPTSGAAW8KNF4SWOldA71
+         Ufufjsb4fenHa/egpuezFMY8XgFKly2Chj+wVIP0w+/iWzgM2UgY36qpr9n2dbhVhesoSm2OWHoF
+         6YfUJExLK8kunN7T3Oi1OEv8nZLsuYTI1LbCZp2c8+OCx6WBVFmV7MyR9oLA5Zh73KMw654yk4N0
+         9Xt07teQQYSAxoJLvvP2AtW80ZxWqBTShOxNI6Xe5fnztBV27wGAEuvvAh6JlStNKEnK//OPv+Tm
+         9QQMWgYgQic7uSeyxmfVOLIzIaeJcGoT4gmfSI8CnUofN6IEDezJZrSjfJHFMhXYltUl9HBUN67F
+         bNflc23eVNxXOx0cMT0pDCx9vSe1iryvz5Tanjv1i/dFzDu2rmFNGKNJqKY/Iq/zuXQQyeSzBNt3
+         3TjFQZVm63+Ud50SZmDPyesaX9CKvn43fw9CbCgiBPiIWs9BP0RZ5S/PBBfMunE6/pHP4QoD4qkr
+         kFFZfJiUSYB3/DRKxBUO+k1kTtdi68jxxPqvbWbstsG/i5Q8Uk6niYzstQ5YCnBzxePxMdLoT3lN
+         atyK9KnV2rNtxnvRZl6Y4dlF1GpBlLLz4xRi55yl/fMHOUMux/xbt9dl18tYTFxtepf/K7J0PWPa
+         BpBaXps6xpDS+V6ztbBW/MgYiw/4k9fg==
+From:   xkernel.wang@foxmail.com
+To:     jerome.pouiller@silabs.com, gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH] staging: wfx: check the return value of devm_kmalloc()
+Date:   Wed, 16 Feb 2022 19:29:50 +0800
+X-OQ-MSGID: <20220216112950.541-1-xkernel.wang@foxmail.com>
+X-Mailer: git-send-email 2.33.0.windows.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-This matches pinctrl.yaml requirement and fixes:
+devm_kmalloc() returns a pointer to allocated memory on success, NULL
+on failure. While there is a memory allocation of devm_kmalloc()
+without proper check. It is better to check the return value of it to
+prevent wrong memory access.
 
-Documentation/devicetree/bindings/mfd/brcm,cru.example.dt.yaml: pin-controller@1c0: $nodename:0: 'pin-controller@1c0' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
-        From schema: Documentation/devicetree/bindings/pinctrl/brcm,ns-pinmux.yaml
-
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 ---
- Documentation/devicetree/bindings/mfd/brcm,cru.yaml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/staging/wfx/main.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mfd/brcm,cru.yaml b/Documentation/devicetree/bindings/mfd/brcm,cru.yaml
-index be4a2df71c25..b85819fbb07c 100644
---- a/Documentation/devicetree/bindings/mfd/brcm,cru.yaml
-+++ b/Documentation/devicetree/bindings/mfd/brcm,cru.yaml
-@@ -39,7 +39,7 @@ patternProperties:
-   '^phy@[a-f0-9]+$':
-     $ref: ../phy/bcm-ns-usb2-phy.yaml
- 
--  '^pin-controller@[a-f0-9]+$':
-+  '^pinctrl@[a-f0-9]+$':
-     $ref: ../pinctrl/brcm,ns-pinmux.yaml
- 
-   '^syscon@[a-f0-9]+$':
-@@ -94,7 +94,7 @@ examples:
-             reg = <0x180 0x4>;
-         };
- 
--        pin-controller@1c0 {
-+        pinctrl@1c0 {
-             compatible = "brcm,bcm4708-pinmux";
-             reg = <0x1c0 0x24>;
-             reg-names = "cru_gpio_control";
+diff --git a/drivers/staging/wfx/main.c b/drivers/staging/wfx/main.c
+index 4b9fdf9..0ef9225 100644
+--- a/drivers/staging/wfx/main.c
++++ b/drivers/staging/wfx/main.c
+@@ -294,6 +294,8 @@ struct wfx_dev *wfx_init_common(struct device *dev,
+ 	hw->wiphy->n_iface_combinations = ARRAY_SIZE(wfx_iface_combinations);
+ 	hw->wiphy->iface_combinations = wfx_iface_combinations;
+ 	hw->wiphy->bands[NL80211_BAND_2GHZ] = devm_kmalloc(dev, sizeof(wfx_band_2ghz), GFP_KERNEL);
++	if (!hw->wiphy->bands[NL80211_BAND_2GHZ])
++		return NULL;
+ 	// FIXME: also copy wfx_rates and wfx_2ghz_chantable
+ 	memcpy(hw->wiphy->bands[NL80211_BAND_2GHZ], &wfx_band_2ghz,
+ 	       sizeof(wfx_band_2ghz));
 -- 
-2.34.1
-

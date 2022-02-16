@@ -2,55 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0124B7EA0
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 04:49:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B524B7E9B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 04:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344195AbiBPDTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 22:19:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43660 "EHLO
+        id S1344203AbiBPDUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 22:20:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233625AbiBPDTQ (ORCPT
+        with ESMTP id S233625AbiBPDUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 22:19:16 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FB7DCE07;
-        Tue, 15 Feb 2022 19:19:05 -0800 (PST)
-Received: from kwepemi100022.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Jz34c1SV7z8wfW;
-        Wed, 16 Feb 2022 11:15:44 +0800 (CST)
-Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
- kwepemi100022.china.huawei.com (7.221.188.126) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 16 Feb 2022 11:19:03 +0800
-Received: from [10.174.176.245] (10.174.176.245) by
- kwepemm600001.china.huawei.com (7.193.23.3) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 16 Feb 2022 11:19:02 +0800
-Subject: Re: [BUG] net: ipv4: The sent udp broadcast message may be converted
- to an arp request message
-To:     Ido Schimmel <idosch@idosch.org>
-CC:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, <edumazet@google.com>,
-        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>,
-        <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <55a04a8f-56f3-f73c-2aea-2195923f09d1@huawei.com>
- <YgIhGhh75mR5uLaS@shredder>
-From:   "wanghai (M)" <wanghai38@huawei.com>
-Message-ID: <f8272cf6-333a-c02a-73bf-35989f709e29@huawei.com>
-Date:   Wed, 16 Feb 2022 11:19:01 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 15 Feb 2022 22:20:18 -0500
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F323EF65CD;
+        Tue, 15 Feb 2022 19:20:06 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V4bIn47_1644981598;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V4bIn47_1644981598)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 16 Feb 2022 11:20:02 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     pmladek@suse.com
+Cc:     senozhatsky@chromium.org, rostedt@goodmis.org,
+        john.ogness@linutronix.de, keescook@chromium.org, anton@enomsg.org,
+        ccross@android.com, tony.luck@intel.com, ojeda@kernel.org,
+        alex.gaynor@gmail.com, wedsonaf@google.com,
+        linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] printk: make suppress_panic_printk static
+Date:   Wed, 16 Feb 2022 11:19:57 +0800
+Message-Id: <20220216031957.9761-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-In-Reply-To: <YgIhGhh75mR5uLaS@shredder>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.245]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600001.china.huawei.com (7.193.23.3)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,111 +44,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This symbol is not used outside of printk.c, so marks it static.
 
-在 2022/2/8 15:51, Ido Schimmel 写道:
-> On Mon, Feb 07, 2022 at 10:09:49PM +0800, wanghai (M) wrote:
->> Hello,
->>
->> I found a bug, but I don't know how to fix it. Anyone have some good ideas?
->>
->> This bug will cause udp broadcast messages not to be sent, but instead send
->> non-expected arp request messages.
->>
->> Deleting the ip while sending udp broadcast messages and then configuring
->> the ip again will probably trigger the bug.
->>
->> The following is the timing diagram of the bug, cpu0 sends a broadcast
->> message and cpu1 deletes the routing table at the appropriate time.
->>
->> cpu0                                        cpu1
->> send()
->>    udp_sendmsg()
->>      ip_route_output_flow()
->>      |  fib_lookup()
->>      udp_send_skb()
->>        ip_send_skb()
->>          ip_finish_output2()
->>
->>                                              ifconfig eth0:2 down
->>                                                fib_del_ifaddr
->>                                                  fib_table_delete // delete
->> fib table
->>
->>            ip_neigh_for_gw()
->>            |  ip_neigh_gw4()
->>            |    __ipv4_neigh_lookup_noref()
->>            |    __neigh_create()
->>            |      tbl->constructor(n) --> arp_constructor()
->>            |        neigh->type = inet_addr_type_dev_table(); // no route,
->> neigh->type = RTN_UNICAST
->>            neigh_output() // unicast, send an arp request and create an
->> exception arp entry
->>
->> After the above operation, an abnormal arp entry will be generated. If
->> the ip is configured again(ifconfig eth0:2 12.0.208.0), the abnormal arp
->> entry will still exist, and the udp broadcast message will be converted
->> to an arp request message when it is sent.
-> Can you try the below? Not really happy with it, but don't have a better
-> idea at the moment. It seemed better to handle it from the control path
-> than augmenting the data path with more checks
->
-> diff --git a/include/net/arp.h b/include/net/arp.h
-> index 031374ac2f22..9e6a1961b64c 100644
-> --- a/include/net/arp.h
-> +++ b/include/net/arp.h
-> @@ -64,6 +64,7 @@ void arp_send(int type, int ptype, __be32 dest_ip,
->   	      const unsigned char *dest_hw,
->   	      const unsigned char *src_hw, const unsigned char *th);
->   int arp_mc_map(__be32 addr, u8 *haddr, struct net_device *dev, int dir);
-> +int arp_invalidate(struct net_device *dev, __be32 ip);
->   void arp_ifdown(struct net_device *dev);
->   
->   struct sk_buff *arp_create(int type, int ptype, __be32 dest_ip,
-> diff --git a/net/ipv4/arp.c b/net/ipv4/arp.c
-> index 4db0325f6e1a..b81665ce2b57 100644
-> --- a/net/ipv4/arp.c
-> +++ b/net/ipv4/arp.c
-> @@ -1116,7 +1116,7 @@ static int arp_req_get(struct arpreq *r, struct net_device *dev)
->   	return err;
->   }
->   
-> -static int arp_invalidate(struct net_device *dev, __be32 ip)
-> +int arp_invalidate(struct net_device *dev, __be32 ip)
->   {
->   	struct neighbour *neigh = neigh_lookup(&arp_tbl, &ip, dev);
->   	int err = -ENXIO;
-> diff --git a/net/ipv4/fib_frontend.c b/net/ipv4/fib_frontend.c
-> index 4d61ddd8a0ec..2d7085232cb5 100644
-> --- a/net/ipv4/fib_frontend.c
-> +++ b/net/ipv4/fib_frontend.c
-> @@ -1112,9 +1112,11 @@ void fib_add_ifaddr(struct in_ifaddr *ifa)
->   		return;
->   
->   	/* Add broadcast address, if it is explicitly assigned. */
-> -	if (ifa->ifa_broadcast && ifa->ifa_broadcast != htonl(0xFFFFFFFF))
-> +	if (ifa->ifa_broadcast && ifa->ifa_broadcast != htonl(0xFFFFFFFF)) {
->   		fib_magic(RTM_NEWROUTE, RTN_BROADCAST, ifa->ifa_broadcast, 32,
->   			  prim, 0);
-> +		arp_invalidate(dev, ifa->ifa_broadcast);
-> +	}
->   
->   	if (!ipv4_is_zeronet(prefix) && !(ifa->ifa_flags & IFA_F_SECONDARY) &&
->   	    (prefix != addr || ifa->ifa_prefixlen < 32)) {
-> @@ -1128,6 +1130,7 @@ void fib_add_ifaddr(struct in_ifaddr *ifa)
->   		if (ifa->ifa_prefixlen < 31) {
->   			fib_magic(RTM_NEWROUTE, RTN_BROADCAST, prefix | ~mask,
->   				  32, prim, 0);
-> +			arp_invalidate(dev, prefix | ~mask);
->   		}
->   	}
->   }
-> .
+Fix the following sparse warning:
 
-Hi, Schimmel.
+kernel/printk/printk.c:100:19: warning: symbol 'suppress_panic_printk'
+was not declared. Should it be static?
 
-can you push this patch to the linux.git tree please?
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ kernel/printk/printk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 7a9eace19191..703397cadd01 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -97,7 +97,7 @@ int __read_mostly suppress_printk;
+  * During panic, heavy printk by other CPUs can delay the
+  * panic and risk deadlock on console resources.
+  */
+-int __read_mostly suppress_panic_printk;
++static int __read_mostly suppress_panic_printk;
+ 
+ #ifdef CONFIG_LOCKDEP
+ static struct lockdep_map console_lock_dep_map = {
 -- 
-Wang Hai
+2.20.1.7.g153144c
 

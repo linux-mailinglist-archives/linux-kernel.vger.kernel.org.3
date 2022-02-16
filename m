@@ -2,69 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A884B8893
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:12:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 392F74B8894
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233631AbiBPNMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:12:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43528 "EHLO
+        id S233718AbiBPNN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 08:13:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233551AbiBPNMt (ORCPT
+        with ESMTP id S233551AbiBPNN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:12:49 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB501A343B
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:12:36 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id y17so3812078edd.10
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:12:36 -0800 (PST)
+        Wed, 16 Feb 2022 08:13:27 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DC026A2D2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:13:14 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id x5so3802203edd.11
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:13:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=m421YRZGEJntA1XH4znYoSO6mB7oCx7u3N2gxq1kXl8=;
-        b=aOXX1rJua9aTg8AxXa9i5j/RrNeJ8pxuXHF6ZRAFhiRvpVqHcKu6sdF8v3yuqEvhZz
-         dfuCOtY2syT4cnOPJ03kMrqcmIXW+VpNH5kcwGYC0m0PKGxdCthSHpXwTqbzkxAGfREd
-         Ox9zBsQGMJZdE/5KrTAyqzsm2d6gLjY19hn2g=
+         :content-disposition:in-reply-to;
+        bh=C2p4IUdETvsJDn4La4k2PCI07l5Bxa5zsybCeAbirFE=;
+        b=cgTmNT+lR7bIEtc+0RAP+11VPLYqnh/5AYxJB7yMRpBjQ4E7jT1GDIbYfOvueK0OGj
+         ezlXhWvCIyOfOIoK9wPgSJW5Qvz/Tq6u5h2BHhHxA3/M9FjYgCtvpraidt0TcJvapxBP
+         PSGEHjx8CPFzhxjV/xFtu0YKK3FRIyafADQKj33KP8ehSq3QyLbQ80nv3lfGkGZy9f/e
+         8kQ7cTK1XsTlQXalf/x5+5L17ozGIHBzyLvlGsemDJy2T8DzllilABCyKj6Q53kFjDb3
+         RQSuQSmRXKPAT2IGMBr2NO6prlzGpfdzqmcWk3/hpqV03GHQ07FnrM1zwgr+L9AvVUxb
+         x2+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=m421YRZGEJntA1XH4znYoSO6mB7oCx7u3N2gxq1kXl8=;
-        b=q11zLL+yRNnAGyIgpPjm99q0A5pKXmBVa2KflhNDkevE2MxkDthVL+/1Tkls2XNmgS
-         4ihM4qnitN0oB8PFwtSL1Jr9YUmn2T7npurEhd+nGuO5VxX+WKlomyJd2t8BxciqHIjc
-         Sh9SsLPSqLBC/1o4W4eHOT88xS9CkKuySaQqeCJ8zX+2nmRTkE/2lydB/dUgBx6CEve/
-         eu7Mf5OIOmMHN88E/qEP31ZrPKQqYE8nq/4rhYnEPbJALo11gJ0xzPiRreTtTOISZbUL
-         GqCa2EAC/aF2dgdkcExaNTuNRATI58+Yy4T3vYF33YQ4xyc42/KzA8/9RZy0HLU7B5p8
-         qczQ==
-X-Gm-Message-State: AOAM533flsnWFu644sNPtFkN3TplmeMc/gfsUlj+FNxCBgiEX5eBAnN9
-        2V9CRtrnJ8uUi/eWOvgj/usvamMK/PRh3AXp
-X-Google-Smtp-Source: ABdhPJy4+BOqL1A5ydec/gIJxjR2gGyCphXlGTfzjc+DNWQTHybHfqoIr+VeBuTkK4KODG+Bv1ICWA==
-X-Received: by 2002:a05:6402:268c:b0:411:e086:b7d1 with SMTP id w12-20020a056402268c00b00411e086b7d1mr2797303edd.111.1645017154635;
-        Wed, 16 Feb 2022 05:12:34 -0800 (PST)
-Received: from localhost ([2620:10d:c093:400::5:279b])
-        by smtp.gmail.com with ESMTPSA id t26sm745556edv.50.2022.02.16.05.12.33
+         :mime-version:content-disposition:in-reply-to;
+        bh=C2p4IUdETvsJDn4La4k2PCI07l5Bxa5zsybCeAbirFE=;
+        b=QSCxPikc5qYf0MQDzQrffwlg+WSuMiUBp6IxSDS4Tyf+aHBsXbQcTrOflpjwyiKDC/
+         SVTCHP5K3B8rn7oK5oprxDm7Nx8hqEDF57TEjrQgCYbQg58jNLTqAOjr3nTQnD7zhW5y
+         xTzSWbtSzB3bq1ZclR0APeqFcwP/dF4GS4d6JP7CUTo89a7d82mhv/lsj8D4ht2usyZ5
+         I/IrgnufHEkMUDh5tzDMGdXzCwBKZv/VIgy7oDfkxM44JU9JjyhU/Ni96n3pUUs1r5dd
+         QSkD4YwaqMofknZ66D4RgJ3R/kRhCrpcbjjWU2UoJK/MJrV5AmZ0a82NqJRBKYkhCdeM
+         XDGw==
+X-Gm-Message-State: AOAM532Nql+rJRyPO0n2gmZoNn/+23e64XXVFb6z1hbYoZnc/3ne/4pr
+        rYoZzXvlCr3o4sL4pmsUfPRgUA==
+X-Google-Smtp-Source: ABdhPJytGpaXpnUA2XqnoVWtsq4DkTHuirdUMy5k13A5Kf2GGU7VKMXxrZ1WP9LXlvA/21mEfeqgSA==
+X-Received: by 2002:a05:6402:742:b0:410:a427:3634 with SMTP id p2-20020a056402074200b00410a4273634mr2941621edy.304.1645017193316;
+        Wed, 16 Feb 2022 05:13:13 -0800 (PST)
+Received: from leoy-ThinkPad-X240s ([104.245.96.223])
+        by smtp.gmail.com with ESMTPSA id h5sm4817787ejo.124.2022.02.16.05.13.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 05:12:34 -0800 (PST)
-Date:   Wed, 16 Feb 2022 13:12:33 +0000
-From:   Chris Down <chris@chrisdown.name>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 4/4] memcg: synchronously enforce memory.high for
- large overcharges
-Message-ID: <Ygz4QQmtrhXwCpG4@chrisdown.name>
-References: <20220211064917.2028469-1-shakeelb@google.com>
- <20220211064917.2028469-5-shakeelb@google.com>
- <YgZS+YijLo0/WmEd@chrisdown.name>
- <CALvZod6FwcSyi3B-3fkw4e+7BGrjFF2iRLEZVeurLp2+v-k-dg@mail.gmail.com>
+        Wed, 16 Feb 2022 05:13:12 -0800 (PST)
+Date:   Wed, 16 Feb 2022 21:13:06 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
+        Marco Elver <elver@google.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, svens@linux.ibm.com, gor@linux.ibm.com,
+        sumanthk@linux.ibm.com, hca@linux.ibm.com,
+        Mark Rutland <mark.rutland@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: Test 73 Sig_trap fails on arm64 (was Re: [PATCH] perf test: Test
+ 73 Sig_trap fails on s390)
+Message-ID: <20220216131306.GA56419@leoy-ThinkPad-X240s>
+References: <CANpmjNNMWtjcKa961SjEvRbbPXyw5M5SkrXbb3tnyL3_XyniCw@mail.gmail.com>
+ <90efb5a9-612a-919e-cf2f-c528692d61e2@huawei.com>
+ <20220118091827.GA98966@leoy-ThinkPad-X240s>
+ <CANpmjNMPoU+1b1fKFuYDYwisW2YfjQHxGt5hgLp1tioG7C2jmg@mail.gmail.com>
+ <20220118124343.GC98966@leoy-ThinkPad-X240s>
+ <bfa0af18-04ac-857d-d3d8-ad9290f912c8@huawei.com>
+ <06412caf-42e4-5c4b-c9b3-9691075405bd@huawei.com>
+ <20220215143459.GB7592@willie-the-truck>
+ <8c582e45-0954-a2ea-764a-4dd78a464988@huawei.com>
+ <CACT4Y+Z8pKXw=8nwVtdo2W=hu_rBk1ws-Q=7-tBkLGTcD85NaA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALvZod6FwcSyi3B-3fkw4e+7BGrjFF2iRLEZVeurLp2+v-k-dg@mail.gmail.com>
-User-Agent: Mutt/2.2 (7160e05a) (2022-02-12)
+In-Reply-To: <CACT4Y+Z8pKXw=8nwVtdo2W=hu_rBk1ws-Q=7-tBkLGTcD85NaA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -75,38 +87,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shakeel Butt writes:
->> Thanks, I was going to comment on v1 that I prefer to keep the implementation
->> of mem_cgroup_handle_over_high if possible since we know that the mechanism has
->> been safe in production over the past few years.
->>
->> One question I have is about throttling. It looks like this new
->> mem_cgroup_handle_over_high callsite may mean that throttling is invoked more
->> than once on a misbehaving workload that's failing to reclaim since the
->> throttling could be invoked both here and in return to userspace, right? That
->> might not be a problem, but we should think about the implications of that,
->> especially in relation to MEMCG_MAX_HIGH_DELAY_JIFFIES.
->>
->
->Please note that mem_cgroup_handle_over_high() clears
->memcg_nr_pages_over_high and if on the return-to-userspace path
->mem_cgroup_handle_over_high() finds that memcg_nr_pages_over_high is
->non-zero, then it means the task has further accumulated the charges
->over high limit after a possibly synchronous
->memcg_nr_pages_over_high() call.
+On Wed, Feb 16, 2022 at 12:54:16PM +0100, Dmitry Vyukov wrote:
+> On Wed, 16 Feb 2022 at 12:47, John Garry <john.garry@huawei.com> wrote:
 
-Oh sure, my point was only that MEMCG_MAX_HIGH_DELAY_JIFFIES was to more 
-reliably ensure we are returning to userspace at some point in the near future 
-to allow the task to have another chance at good behaviour instead of being 
-immediately whacked with whatever is monitoring PSI -- for example, in the case 
-where we have a daemon which is monitoring its own PSI contributions and will 
-make a proactive attempt to free structures in userspace.
+[...]
 
-That said, the throttling here still isn't unbounded, and it's not likely that 
-anyone doing such large allocations after already exceeding memory.high is 
-being a good citizen, so I think the patch makes sense as long as the change is 
-understood and documented internally.
+> > > Signals make this messy, as the step logic will step_into_  the signal
+> > > handler -- we have to do this, otherwise we would miss break/watchpoints
+> > > triggered by the signal handler if we had disabled them for the step.
+> > > However, it means that when we return back from the signal handler we will
+> > > run back into the break/watchpoint which we initially stepped over. When
+> > > perf uses SIGTRAP to notify userspace that we hit a break/watchpoint,
+> > > then we'll get stuck because we'll step into the handler every time.
+> > >
+> > > Hopefully that clears things up a bit. Ideally, the kernel wouldn't
+> > > pretend to handle this stepping at all for arm64 as it adds a bunch of
+> > > complexity, overhead to our context-switch and I don't think the current
+> > > behaviour is particularly useful.
+> > >
+> >
+> > Right, so what I am hearing altogether is that for now we should just
+> > skip this test.
+> >
+> > And since the kernel does not seem to advertise this capability we need
+> > to disable for specific architectures.
+> 
+> It does and fwiw I am just trying to use it. Things work only on x86 so far.
 
-Thanks!
+So here we have agreement to disable the cases for Arm64/Arm.
 
-Acked-by: Chris Down <chris@chrisdown.name>
+John, since you put much efforts to follow up the issue, I'd like to
+leave decision to you if you want to proceed for patches?  Otherwise,
+I will send patches to disable cases in perf.
+
+Thanks,
+Leo

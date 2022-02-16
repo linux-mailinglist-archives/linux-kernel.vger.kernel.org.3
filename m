@@ -2,57 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5945D4B9220
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 21:13:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35FA44B9223
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 21:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiBPUN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 15:13:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39200 "EHLO
+        id S230123AbiBPUPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 15:15:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiBPUN2 (ORCPT
+        with ESMTP id S230083AbiBPUPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 15:13:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8451131101
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:13:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1890BB81FFE
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 20:13:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF8A4C004E1;
-        Wed, 16 Feb 2022 20:13:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645042392;
-        bh=OqVzJczwrQtqanb6wDQA2guNoUrRRzDNhq79/DBeIgc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ity1oWy27aKHzyc/PV2YZg3eHIUbH+2CZ2D0NA4ZrcQqM7QU2LlBl09cLzzpD6lQN
-         aNUDsLpZdp304wopAi1Mmwbq+RVh6s1i824+Pv8SOozs7ENs+z0NXhaTwL1sKtThrI
-         NOh7RKV/Hg9/686w2vxoj5UOhfCWcoKMIXNsfONZLTjvFBQzTsnA2xZi8uqct/cgXw
-         cTgIT6rClBEctaxWcGsal0tdMEUUjO/bgD0hgUpI9ghDL6Gt4hNLZKMIAJ0IdN9Ydo
-         33e33GabnzhE0Tu4GSxVWHMA+csKdbJsK7+XksJhHIlgnmCNeDGnLpnVj9HaFNWWWl
-         qidJyNFRQWcCw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7A8915C064D; Wed, 16 Feb 2022 12:13:12 -0800 (PST)
-Date:   Wed, 16 Feb 2022 12:13:12 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 0/5] rcu: Bunch of cleanups
-Message-ID: <20220216201312.GN4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220216154208.696069-1-frederic@kernel.org>
+        Wed, 16 Feb 2022 15:15:05 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3966D235865
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:14:52 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id x11so2831762pll.10
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:14:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xqE2BW0tKVRqM9ZhCDPXCovwSbjof6cI+9q/oGqooSk=;
+        b=NR7TiaIkVeb6mYv4qWdPa8tE15JoCJw13yejHxDLUfmlF0RP3HlJZPJp7inuchCg3k
+         bLOz3ieHHziV0osXGKcv6SubQC2ZeptScXKgpr+t4GS9WZQjM/OHtElPdNEb4YVPKp3C
+         BgrrSZdkcsm8IgTQG6Cl2WHciGSaYcw2pV+NY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xqE2BW0tKVRqM9ZhCDPXCovwSbjof6cI+9q/oGqooSk=;
+        b=ssX9heMZwi5r9j3pwWnuOVIyHYdyHXruTHeL10mCu7QwffcGuRJMMfXglHA2PrYe0j
+         4uLfbGNep9189iZ83hrFLLaToJ1+/5scC670mW6X4SuW4oRGE4j8z5MDFDuumSVVrocY
+         8rerUMYykqFrLKsnXw1/3v0DEV15qCkG2tYe5C+0mD/GmK5FQGGtmFoes1YZ2ng15seq
+         U/4JIokIXxbLtHJMshuWMqPZP3C2hhMSMKZ+3+JO1LcfT6SpID83clFBq/Nh5A3yxKtN
+         +9X4B4oElIURA5MzP2NQh1hLTUH/d+tmIj5so+UGJ+Shue4GiCpBkesJPcvskKvk5whp
+         j3gg==
+X-Gm-Message-State: AOAM530eUtg5wGqJFtgR9YavONKLXKNzZIMLqfO8+4SKvgIg2M37Uj7H
+        IwgcrD+x7QrKppuREEhO20xnxg==
+X-Google-Smtp-Source: ABdhPJwIU2Fu/iRv2C0QJmBs5y1p/RE21NXtauVHjHeLf70sjR3+jCzd9e3ecNuE5/iHmiiSBEDwiQ==
+X-Received: by 2002:a17:90b:4004:b0:1b8:b2eb:4b83 with SMTP id ie4-20020a17090b400400b001b8b2eb4b83mr3691254pjb.149.1645042491710;
+        Wed, 16 Feb 2022 12:14:51 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t1sm5964516pgj.43.2022.02.16.12.14.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 12:14:51 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] usercopy: Check valid lifetime via stack depth
+Date:   Wed, 16 Feb 2022 12:14:49 -0800
+Message-Id: <20220216201449.2087956-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216154208.696069-1-frederic@kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2777; h=from:subject; bh=jr1yKp0UMwd5gvvB/ePD/2FkWdtbd+ZCUu7BnVQyulA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiDVs4Hh87CYY9W3rMbKqyfd7+UszuGa3FFWxH8s9m q2FNCVaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYg1bOAAKCRCJcvTf3G3AJttLD/ wNKTVOmCoYdtqtUSIlcd62hL/1Pq8cEu2EynIeBUQSn25cWzaTcMQu47PDzckY8hcz2F6ZCQSrlf2s EGpOHPUFK6E+Yk7LHpnLGg7P/NS3DzdGE7uixLZmooHCROncIbDIsvWDDpX5rKKNACSRKVf9Rx/1PI pnLyZUzDNVtwQK9XDphmrat0BKjWb3OTB7vbbtDz8bkVZnN1IS+eMSbEraPpeRY6Vl0jwktEK5jTRm q29MZlM2AB9X/EuFrzaoR6jXQ7CDtPg7klR/gSM/eQht6pH7UY6HsUqofFfbYziHjFCMzYnxMRZHf6 Cx0cXvZbjrOnzsyoVBdhM1003MSKtlEuUVT8p31J88qXf5d9uvRK/Sj9gFvBWiyxtcpV8Lwf4pOsb1 sBFN0hJ6kaIZoYi+LNf3K2QLBfXymjowRa5WKzhKzzQQxlBdTr5Gt+0UWcyyvjAK4J9IB3BEuo8sbT RAzGeMq122044mgIkhYN7M7rvd5stZnzgA0BOMpFQjvJsdSso5ovUlW46vqQYpWAxEEPhsFNKaICo8 hRnGOa70iGY7KvgyEt/0ePSl2MlN8s2gfyv5dDPGwbjmN/05WKk3zYB2hFPEjZ0uVY19Rv8G13AaMs xHMo/2VEcpc4rQd9KR0qW3usVDOF84bmQwX5tD/twu+aFsKbBov8rVBuORNg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,40 +70,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 04:42:03PM +0100, Frederic Weisbecker wrote:
-> Hi,
-> 
-> Just a bit of housekeeping.
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-> 	rcu/dev
-> 
-> HEAD: be4d4c3ba8c4ceeba9dc9df4de5451c7261161f3
+Under CONFIG_HARDENED_USERCOPY=y, when exact stack frame boundary checking
+is not available (i.e. everything except x86 with FRAME_POINTER), check
+a stack object as being at least "current depth valid", in the sense
+that any object within the stack region but not between start-of-stack
+and current_stack_pointer should be considered unavailable (i.e. its
+lifetime is from a call no longer present on the stack).
 
-Queued and pushed, thank you!  I reworked 3/5 to make it clear that the
-preceding (existing) block comment still applieds to that whole section
-of code and did the usual wordsmithing.
+Additionally report usercopy bounds checking failures with an offset
+from current_stack_pointer, which may assist with diagnosing failures.
 
-Nice to get rid of those unused functions and to avoid the unnecessary
-for_each_online_cpu() loops!
+The LKDTM USERCOPY_STACK_FRAME_TO and USERCOPY_STACK_FRAME_FROM tests
+(once slightly adjusted in a separate patch) will pass again with
+this fixed.
 
-							Thanx, Paul
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-mm@kvack.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ mm/usercopy.c | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
-> Thanks,
-> 	Frederic
-> ---
-> 
-> Frederic Weisbecker (5):
->       rcu: Remove rcu_is_nocb_cpu()
->       rcu/nocb: Move rcu_nocb_is_setup to rcu_state
->       rcu: Assume rcu_init() is called before smp
->       rcu: Initialize boost kthread only for boot node prior SMP initialization
->       rcu/nocb: Initialize nocb kthreads only for boot CPU prior SMP initialization
-> 
-> 
->  kernel/rcu/rcu.h         |  2 --
->  kernel/rcu/tree.c        | 25 +++++++++++++++++--------
->  kernel/rcu/tree.h        |  3 +--
->  kernel/rcu/tree_nocb.h   | 41 +++++------------------------------------
->  kernel/rcu/tree_plugin.h | 16 ----------------
->  5 files changed, 23 insertions(+), 64 deletions(-)
+diff --git a/mm/usercopy.c b/mm/usercopy.c
+index d0d268135d96..3846c1634dca 100644
+--- a/mm/usercopy.c
++++ b/mm/usercopy.c
+@@ -29,13 +29,20 @@
+  * Returns:
+  *	NOT_STACK: not at all on the stack
+  *	GOOD_FRAME: fully within a valid stack frame
+- *	GOOD_STACK: fully on the stack (when can't do frame-checking)
++ *	GOOD_STACK: within the current stack (when can't frame-check exactly)
+  *	BAD_STACK: error condition (invalid stack position or bad stack frame)
+  */
+ static noinline int check_stack_object(const void *obj, unsigned long len)
+ {
+ 	const void * const stack = task_stack_page(current);
+ 	const void * const stackend = stack + THREAD_SIZE;
++#ifndef CONFIG_STACK_GROWSUP
++	const void * const high = stackend;
++	const void * const low = (void *)current_stack_pointer;
++#else
++	const void * const high = (void *)current_stack_pointer;
++	const void * const low = stack;
++#endif
+ 	int ret;
+ 
+ 	/* Object is not on the stack at all. */
+@@ -55,6 +62,12 @@ static noinline int check_stack_object(const void *obj, unsigned long len)
+ 	if (ret)
+ 		return ret;
+ 
++	/*
++	 * Reject: object not within current stack depth.
++	 */
++	if (obj < low || high < obj + len)
++		return BAD_STACK;
++
+ 	return GOOD_STACK;
+ }
+ 
+@@ -280,7 +293,13 @@ void __check_object_size(const void *ptr, unsigned long n, bool to_user)
+ 		 */
+ 		return;
+ 	default:
+-		usercopy_abort("process stack", NULL, to_user, 0, n);
++		usercopy_abort("process stack", NULL, to_user,
++#ifndef CONFIG_STACK_GROWSUP
++				(void *)current_stack_pointer - ptr,
++#else
++				ptr - (void *)current_stack_pointer,
++#endif
++				n);
+ 	}
+ 
+ 	/* Check for bad heap object. */
+-- 
+2.30.2
+

@@ -2,106 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198E44B805D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 06:49:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3A44B8053
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 06:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344631AbiBPFig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 00:38:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39216 "EHLO
+        id S241261AbiBPFjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 00:39:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiBPFif (ORCPT
+        with ESMTP id S230002AbiBPFjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 00:38:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9A7B8236;
-        Tue, 15 Feb 2022 21:38:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 16 Feb 2022 00:39:00 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AC5BB0AD;
+        Tue, 15 Feb 2022 21:38:47 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F829619FC;
-        Wed, 16 Feb 2022 05:38:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B5EEC340E8;
-        Wed, 16 Feb 2022 05:38:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644989902;
-        bh=P7No01mWTKTK8n7XDrHDJxfmk9w1GcNv6CSOAUyAhM8=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=cJ7R+z9PZat/2UJpKAXS/9gITtDX2by/uEFgAoBc8g/SB1OnjJ1uNI1qHGadq8LRX
-         N0u/xHxg1x+aG2v+u2LtlSFP+FMEidRMdgjtPYcOwjDMKr6xOz9aKxBqc/eJZsc2HS
-         b1nYfY/JZhz1+TZMTJczVQVvjTSEysQiwXlnqVRmQbR6qNwC29RKXYq0FBGi+M369I
-         q8nkO6ZfQahcclabOmzoWFL9upUirIkNjhpmNZQWQ83nlsL6P2Qs77oWpBOK4IcWtR
-         Cjx0UNmbZcBwasm1dsIBd8Kxhwm9WDuOVURK9kq0I7jFrsbm3UGRFrvhHZOx36NaNR
-         7TSEzEZfU/ouQ==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     miaoqing@codeaurora.org, rsalvaterra@gmail.com,
-        Toke =?utf-8?Q?H?= =?utf-8?Q?=C3=B8iland-J=C3=B8rgensen?= 
-        <toke@toke.dk>, "Sepehrdad\, Pouyan" <pouyans@qti.qualcomm.com>,
-        ath9k-devel <ath9k-devel@qca.qualcomm.com>,
-        "linux-wireless\@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Subject: Re: [PATCH v2] ath9k: use hw_random API instead of directly dumping into random.c
-References: <CAHmME9pZaYW-p=zU4v96TjeSijm-g03cNpvUJcNvhOqh5v+Lwg@mail.gmail.com>
-        <20220216000230.22625-1-Jason@zx2c4.com>
-Date:   Wed, 16 Feb 2022 07:38:17 +0200
-In-Reply-To: <20220216000230.22625-1-Jason@zx2c4.com> (Jason A. Donenfeld's
-        message of "Wed, 16 Feb 2022 01:02:30 +0100")
-Message-ID: <87mtir9xrq.fsf@tynnyri.adurom.net>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jz6Fc4W95z4xcl;
+        Wed, 16 Feb 2022 16:38:44 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1644989926;
+        bh=dYPjtCeRuoZsilIwQN5iPJw6Z/a+raiWjMK5T5Ra708=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qttjlqgPbNvvyqf9w/l3y0XzTetYrJfMTuShi/emEjpMLo+31WvBpKki9waqEXYDC
+         Qx/CMmuXFdTi2Wfdzo5fZZNdsj6Q23AjyU7ANB6wTsHUKk9PyPNKR27eK0v/sfZNeb
+         R530qmJ2aqMFLxslMgrYHHQi/ZDW7wNFp+sQCzgsgnn3p+omVm5jlBLm7vaFY9bGpX
+         oBxlHyGMDqyARZuYcPWroMAmUE39Os/zLOgPbhPHJBVTF1EtCBIpI7KKCbCHfSt7KU
+         hnZbB/iTlvP5TnDiL7HQ695uiw3F4UgymHIwGK3B9laqnEN2SM5R7YMdb1AeskfvLl
+         1n4whylYoACEQ==
+Date:   Wed, 16 Feb 2022 16:38:43 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     "Huang, Ying" <ying.huang@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the akpm-current tree with the tip tree
+Message-ID: <20220216163843.5293ff58@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/+D4MrK85CR90.IYz61zptjj";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Jason A. Donenfeld" <Jason@zx2c4.com> writes:
+--Sig_/+D4MrK85CR90.IYz61zptjj
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Hardware random number generators are supposed to use the hw_random
-> framework. This commit turns ath9k's kthread-based design into a proper
-> hw_random driver.
->
-> This compiles, but I have no hardware or other ability to determine
-> whether it works. I'll leave further development up to the ath9k
-> and hw_random maintainers.
->
-> Cc: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Hi all,
 
-[...]
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-> +retry:
-> +	if (max & ~3UL)
-> +		bytes_read =3D ath9k_rng_data_read(sc, buf, max >> 2);
-> +	if ((max & 3UL) && ath9k_rng_data_read(sc, &word, 1)) {
-> +		memcpy(buf + bytes_read, &word, max & 3);
-> +		bytes_read +=3D max & 3;
-> +		memzero_explicit(&word, sizeof(word));
-> +	}
-> +	if (max && unlikely(!bytes_read) && wait) {
-> +		msleep(ath9k_rng_delay_get(++fail_stats));
-> +		goto retry;
->  	}
+  Documentation/admin-guide/sysctl/kernel.rst
 
-Wouldn't a while loop be cleaner? With a some kind limit for the number
-of loops, to avoid a neverending loop.
+between commit:
+
+  3624ba7b5e2a ("sched/numa-balancing: Move some document to make it consis=
+tent with the code")
+
+from the tip tree and commit:
+
+  2dc52f4f86f9 ("NUMA balancing: optimize page placement for memory tiering=
+ system")
+
+from the akpm-current tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
-https://patchwork.kernel.org/project/linux-wireless/list/
+Cheers,
+Stephen Rothwell
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes
+diff --cc Documentation/admin-guide/sysctl/kernel.rst
+index 8551aeca1574,59c3b4ce37cd..000000000000
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@@ -609,8 -616,56 +616,14 @@@ being accessed should be migrated to a=20
+  The unmapping of pages and trapping faults incur additional overhead that
+  ideally is offset by improved memory locality but there is no universal
+  guarantee. If the target workload is already bound to NUMA nodes then this
+ -feature should be disabled. Otherwise, if the system overhead from the
+ -feature is too high then the rate the kernel samples for NUMA hinting
+ -faults may be controlled by the `numa_balancing_scan_period_min_ms,
+ -numa_balancing_scan_delay_ms, numa_balancing_scan_period_max_ms,
+ -numa_balancing_scan_size_mb`_, and numa_balancing_settle_count sysctls.
+ +feature should be disabled.
+ =20
++ Or NUMA_BALANCING_MEMORY_TIERING to optimize page placement among
++ different types of memory (represented as different NUMA nodes) to
++ place the hot pages in the fast memory.  This is implemented based on
++ unmapping and page fault too.
+ -
+ -numa_balancing_scan_period_min_ms, numa_balancing_scan_delay_ms, numa_bal=
+ancing_scan_period_max_ms, numa_balancing_scan_size_mb
+ -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+ -
+ -
+ -Automatic NUMA balancing scans tasks address space and unmaps pages to
+ -detect if pages are properly placed or if the data should be migrated to a
+ -memory node local to where the task is running.  Every "scan delay" the t=
+ask
+ -scans the next "scan size" number of pages in its address space. When the
+ -end of the address space is reached the scanner restarts from the beginni=
+ng.
+ -
+ -In combination, the "scan delay" and "scan size" determine the scan rate.
+ -When "scan delay" decreases, the scan rate increases.  The scan delay and
+ -hence the scan rate of every task is adaptive and depends on historical
+ -behaviour. If pages are properly placed then the scan delay increases,
+ -otherwise the scan delay decreases.  The "scan size" is not adaptive but
+ -the higher the "scan size", the higher the scan rate.
+ -
+ -Higher scan rates incur higher system overhead as page faults must be
+ -trapped and potentially data must be migrated. However, the higher the sc=
+an
+ -rate, the more quickly a tasks memory is migrated to a local node if the
+ -workload pattern changes and minimises performance impact due to remote
+ -memory accesses. These sysctls control the thresholds for scan delays and
+ -the number of pages scanned.
+ -
+ -``numa_balancing_scan_period_min_ms`` is the minimum time in milliseconds=
+ to
+ -scan a tasks virtual memory. It effectively controls the maximum scanning
+ -rate for each task.
+ -
+ -``numa_balancing_scan_delay_ms`` is the starting "scan delay" used for a =
+task
+ -when it initially forks.
+ -
+ -``numa_balancing_scan_period_max_ms`` is the maximum time in milliseconds=
+ to
+ -scan a tasks virtual memory. It effectively controls the minimum scanning
+ -rate for each task.
+ -
+ -``numa_balancing_scan_size_mb`` is how many megabytes worth of pages are
+ -scanned for a given scan.
++=20
++=20
+  oops_all_cpu_backtrace
+  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ =20
+
+--Sig_/+D4MrK85CR90.IYz61zptjj
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIMjeMACgkQAVBC80lX
+0GwKqwf/fR+BJILM/wGXW4ZPsFE8d5XuiuDvYoAMxyW7wsNfFe7mTxB5iAGDGqr2
+2NMk+bP0gxF28oS0qJxWRjHA7BaRwb879uNapPHyitg9Sql3K6s12lUND/D/gX5P
+SzxaX0pBxWiQp2XGDoBY85kFN3xmOUxE5FZVkpW0naXP5Tq2qMW39Akx9BguLiA4
+Lm9iFfyEdHNiui3eT848/rn9/mTs8cBUzrzqJNlT1z79DH2ezfSbKwby91hplZpR
+O63o5QjW7mABhKOauZ3m0WCNTmJPF0yIYYOJFEYCh5cpWtvVhmS/ZTaTTWXpW+I0
+8eS1FGqSaX1qA/NOcQFT2L4uHOyduA==
+=fvfZ
+-----END PGP SIGNATURE-----
+
+--Sig_/+D4MrK85CR90.IYz61zptjj--

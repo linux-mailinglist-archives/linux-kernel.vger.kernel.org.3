@@ -2,171 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A11D74B8197
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38FD34B812B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:16:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbiBPHck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 02:32:40 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52350 "EHLO
+        id S229766AbiBPHQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 02:16:21 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:56792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbiBPHcf (ORCPT
+        with ESMTP id S229539AbiBPHQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 02:32:35 -0500
-Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777BF12E16A;
-        Tue, 15 Feb 2022 23:32:21 -0800 (PST)
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
-        by isilmar-4.linta.de (Postfix) with ESMTPSA id DD8062013FE;
-        Wed, 16 Feb 2022 07:15:43 +0000 (UTC)
-Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
-        id D322A807CC; Wed, 16 Feb 2022 08:15:25 +0100 (CET)
-Date:   Wed, 16 Feb 2022 08:15:25 +0100
-From:   Dominik Brodowski <linux@dominikbrodowski.net>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     miaoqing@codeaurora.org, rsalvaterra@gmail.com,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@toke.dk>,
-        "Sepehrdad, Pouyan" <pouyans@qti.qualcomm.com>,
-        ath9k-devel <ath9k-devel@qca.qualcomm.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
-Subject: Re: [PATCH v2] ath9k: use hw_random API instead of directly dumping
- into random.c
-Message-ID: <YgykjbhgdqeYyiY5@owl.dominikbrodowski.net>
-References: <CAHmME9pZaYW-p=zU4v96TjeSijm-g03cNpvUJcNvhOqh5v+Lwg@mail.gmail.com>
- <20220216000230.22625-1-Jason@zx2c4.com>
+        Wed, 16 Feb 2022 02:16:18 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03212B0A68
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:16:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1644995747;
+        bh=suHsgXH+UCaPUEi9/z5ugIGYdtAIwHSMAlsMljlrGoo=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=Fk8xN8WzP+iC0JHRacbgt3/YFUiTv2Ap6uW7L08ZhMwrRnhIbs68wGHvOjPpNrl7w
+         Vfm3oTEbqIjFpfKagn/LHr+O05+j0OKVoqypM2qopwkC7j+pkiDuu6fAcc9It3zW+c
+         mjGtVBpHMPGS125soe1BQjRPYSjjmkfbNWoi438s=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.128.232]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MZTqW-1noWzk3GcQ-00WYiF; Wed, 16
+ Feb 2022 08:15:46 +0100
+Message-ID: <b6632459-92ec-8c79-6221-e0b3754b1f97@gmx.de>
+Date:   Wed, 16 Feb 2022 08:15:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220216000230.22625-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [deller-fbdev:for-next 51/51]
+ drivers/video/fbdev/omap2/omapfb/dss/dss.c:1209:49: error:
+ 'component_compare_dev' undeclared; did you mean 'component_master_del'?
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>, Yong Wu <yong.wu@mediatek.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+References: <202202160743.MUYvzd9B-lkp@intel.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <202202160743.MUYvzd9B-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:xdie6Bbv34PAIA1OJ/AkOe0LxEk9/dtU4Q4k/KhjKQuchEkqz83
+ M9saUWorgUnmmB2B47tR/QKjzsgv+jCyNO5Vpr8/eE7ASDvc/W0DPeYQ/Tr/Gu0luKItZCh
+ e3KxUwlH0KS6IoOvXpbbRtTk0C/wDTudmKDJzFH1VHgeEjGCdKXxK7SUV1ZAF5X8U8ewrgy
+ AKCKb2Get4XE0bYCoA8nQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:32wVd1S1KoQ=:GVw57s6Z5RH6wYdti6I31x
+ m0Zj9oAHif/tJ8c36Y5oE2ZLtVeWqHiy/7t+uU+Yo+oOF/9k2uk3Z3KVHGJReLW2ycgQkRLKs
+ vsVJVtVPQ4vyEHQlPIjQav+NqbzjgkAcQjsApIZA40mRkz56fYAY/zZbvohvQzB6prZD4R7Wa
+ 1VTD77UYu65iAiXLHLIOOmkrCoGpT6vexIcavfVtgSHzMBMC9+gPlnB2zwEBsHl6vHi4EgwZd
+ QLEmbwm/XWiTnHNiuSh1ns/ToK0Irv4rm5V/KHwRdp2sawh4cdN56KklDOdelHBd7IIg3Nb2Y
+ ZIjC5LCu9FlJViuHdwHbj8BlfipnIoXW3Oud19pYs8bJ2+I95xZUjrSh/lTL4mzvZmsU21wB4
+ tWUFwyan5VMKhSu1jWdc8lrbl+My1wR+QHZXKr2qU+SisBl7ruOxhTvnksov9gK4FHuYiUz6H
+ e/wBOEcAAyRvouuz5gOfAkb40XLG/QpNVB1EavYW1j8vVRJJx5EhkRsog3NzkSsb6RC/vNBvu
+ 30cKCGWVsZ5d0df4xt2jVuai5z2VrZ9Ff947uK22PehCpemFN1G/wN7F2BQrGjYXw0pqN2HQw
+ 3jRdy1lgnljdCiOpqpCjd94X+t5yp7HMYcbiqjBlzgPPinL0r0Z/WtPcA2gUDNdPyoDWLQz0o
+ nqtC7N2E6SU0c7TfEvVfwG09VldBv1wpQjhq94yf7EK2vgnswIYMdzkezKME3F4vD7j+rmoDb
+ Td8u47P8m2TOlOjf5zCf1eg9eOVIpepg7v54+EyeZmr9r3Oak0CKTDPrheBKpYixxqDSNRosh
+ vXQuV4y4vEI6YrCXlgz0NiHjeL9cGZqpum4j4DFilQ3B30WsrpOnl6eTmG1Ip0xHVT8qNqyyL
+ Kms/h/JWzSuyMB5CQ5Zz3RZNMY5I6Y1f4fG9JmhMjXzUhbONXfHdKqT8Ya8iggDkAGwwAFqnC
+ RbZ3KFjtv1vvqcRu5czRZqZBAyPlpOOI0UpCNlYwaMYVV9Kn7I712YDwfjGC+CFXqyyQrCzjQ
+ A4yKNTh9ANSZPOTMBUsyO0hBLzHeG1qImJ8OtU2JE/IDMlzEJJtACSz4JVA5mF0PoNXv9sXMY
+ 6p/BYDjatk/JAE=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Wed, Feb 16, 2022 at 01:02:30AM +0100 schrieb Jason A. Donenfeld:
-> Hardware random number generators are supposed to use the hw_random
-> framework. This commit turns ath9k's kthread-based design into a proper
-> hw_random driver.
-> 
-> This compiles, but I have no hardware or other ability to determine
-> whether it works. I'll leave further development up to the ath9k
-> and hw_random maintainers.
-> 
-> Cc: Toke Høiland-Jørgensen <toke@redhat.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
-> v2 operates on whole words when possible.
-> 
->  drivers/net/wireless/ath/ath9k/ath9k.h |  2 +-
->  drivers/net/wireless/ath/ath9k/rng.c   | 72 +++++++++++---------------
->  2 files changed, 30 insertions(+), 44 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/ath/ath9k/ath9k.h b/drivers/net/wireless/ath/ath9k/ath9k.h
-> index ef6f5ea06c1f..142f472903dc 100644
-> --- a/drivers/net/wireless/ath/ath9k/ath9k.h
-> +++ b/drivers/net/wireless/ath/ath9k/ath9k.h
-> @@ -1072,7 +1072,7 @@ struct ath_softc {
->  
->  #ifdef CONFIG_ATH9K_HWRNG
->  	u32 rng_last;
-> -	struct task_struct *rng_task;
-> +	struct hwrng rng_ops;
->  #endif
->  };
->  
-> diff --git a/drivers/net/wireless/ath/ath9k/rng.c b/drivers/net/wireless/ath/ath9k/rng.c
-> index aae2bd3cac69..a0a58f8e08d3 100644
-> --- a/drivers/net/wireless/ath/ath9k/rng.c
-> +++ b/drivers/net/wireless/ath/ath9k/rng.c
-> @@ -22,11 +22,6 @@
->  #include "hw.h"
->  #include "ar9003_phy.h"
->  
-> -#define ATH9K_RNG_BUF_SIZE	320
-> -#define ATH9K_RNG_ENTROPY(x)	(((x) * 8 * 10) >> 5) /* quality: 10/32 */
-> -
-> -static DECLARE_WAIT_QUEUE_HEAD(rng_queue);
-> -
->  static int ath9k_rng_data_read(struct ath_softc *sc, u32 *buf, u32 buf_size)
->  {
->  	int i, j;
-> @@ -72,61 +67,52 @@ static u32 ath9k_rng_delay_get(u32 fail_stats)
->  	return delay;
->  }
->  
-> -static int ath9k_rng_kthread(void *data)
-> +static int ath9k_rng_read(struct hwrng *rng, void *buf, size_t max, bool wait)
->  {
-> -	int bytes_read;
-> -	struct ath_softc *sc = data;
-> -	u32 *rng_buf;
-> -	u32 delay, fail_stats = 0;
-> -
-> -	rng_buf = kmalloc_array(ATH9K_RNG_BUF_SIZE, sizeof(u32), GFP_KERNEL);
-> -	if (!rng_buf)
-> -		goto out;
-> -
-> -	while (!kthread_should_stop()) {
-> -		bytes_read = ath9k_rng_data_read(sc, rng_buf,
-> -						 ATH9K_RNG_BUF_SIZE);
-> -		if (unlikely(!bytes_read)) {
-> -			delay = ath9k_rng_delay_get(++fail_stats);
-> -			wait_event_interruptible_timeout(rng_queue,
-> -							 kthread_should_stop(),
-> -							 msecs_to_jiffies(delay));
-> -			continue;
-> -		}
-> -
-> -		fail_stats = 0;
-> -
-> -		/* sleep until entropy bits under write_wakeup_threshold */
-> -		add_hwgenerator_randomness((void *)rng_buf, bytes_read,
-> -					   ATH9K_RNG_ENTROPY(bytes_read));
-> +	struct ath_softc *sc = container_of(rng, struct ath_softc, rng_ops);
-> +	int bytes_read = 0;
-> +	u32 fail_stats = 0, word;
-> +
-> +retry:
-> +	if (max & ~3UL)
-> +		bytes_read = ath9k_rng_data_read(sc, buf, max >> 2);
-> +	if ((max & 3UL) && ath9k_rng_data_read(sc, &word, 1)) {
-> +		memcpy(buf + bytes_read, &word, max & 3);
-> +		bytes_read += max & 3;
-> +		memzero_explicit(&word, sizeof(word));
-> +	}
-> +	if (max && unlikely(!bytes_read) && wait) {
-> +		msleep(ath9k_rng_delay_get(++fail_stats));
-> +		goto retry;
->  	}
+On 2/16/22 00:49, kernel test robot wrote:
+> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev=
+.git for-next
+> head:   61038027aa13351c63b452a0d48c805bab1d2ce9
+> commit: 61038027aa13351c63b452a0d48c805bab1d2ce9 [51/51] video: fbdev: o=
+mapfb: Make use of the helper component_compare_dev
+> config: sh-allmodconfig (https://download.01.org/0day-ci/archive/2022021=
+6/202202160743.MUYvzd9B-lkp@intel.com/config)
+> compiler: sh4-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sb=
+in/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-f=
+bdev.git/commit/?id=3D61038027aa13351c63b452a0d48c805bab1d2ce9
+>         git remote add deller-fbdev git://git.kernel.org/pub/scm/linux/k=
+ernel/git/deller/linux-fbdev.git
+>         git fetch --no-tags deller-fbdev for-next
+>         git checkout 61038027aa13351c63b452a0d48c805bab1d2ce9
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-11.2.0 make.cr=
+oss O=3Dbuild_dir ARCH=3Dsh SHELL=3D/bin/bash drivers/video/fbdev/omap2/om=
+apfb/dss/
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>    drivers/video/fbdev/omap2/omapfb/dss/dss.c: In function 'dss_add_chil=
+d_component':
+>>> drivers/video/fbdev/omap2/omapfb/dss/dss.c:1209:49: error: 'component_=
+compare_dev' undeclared (first use in this function); did you mean 'compon=
+ent_master_del'?
+>     1209 |         component_match_add(dev->parent, match, component_com=
+pare_dev, dev);
+>          |                                                 ^~~~~~~~~~~~~=
+~~~~~~~~
+>          |                                                 component_mas=
+ter_del
+>    drivers/video/fbdev/omap2/omapfb/dss/dss.c:1209:49: note: each undecl=
+ared identifier is reported only once for each function it appears in
 
-Potentially, this waits forever, if wait is set and no data is returned.
-Instead, it should return to the main kthread loop every once in a while.
+Fixed now. I've dropped that patch.
 
-Thanks,
-	Dominik
+Helge

@@ -2,76 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6149C4B8090
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 07:19:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4738C4B8077
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 07:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233212AbiBPGBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 01:01:00 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33980 "EHLO
+        id S236880AbiBPGCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 01:02:42 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:39774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344695AbiBPGA6 (ORCPT
+        with ESMTP id S229561AbiBPGCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 01:00:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 023A4114FE4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 22:00:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644991244;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IVtJkDtiTB1hKGv+nXnAAOQ1ug5ffDsOB5NetPRTYrI=;
-        b=OBUXTng6yCQiEr9eA3P+wwM3/INm97u5pLhTWF0BYxQtH/DK0b+myHECMSaQCTJ0Wm61yn
-        hvC6GoKZBuweXqU/jM1U2AR2DNo/x7pef4PTjuDDgzaqdCcbjPjCjnw3f+IUdDy0fA/nPV
-        8m560xSQzvIwTrZQICZgF6zjjItQT/8=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-103-qJuA9c3jPJmxl9iFY_GXDw-1; Wed, 16 Feb 2022 01:00:43 -0500
-X-MC-Unique: qJuA9c3jPJmxl9iFY_GXDw-1
-Received: by mail-qt1-f198.google.com with SMTP id e13-20020ac85dcd000000b002dcecef260cso800005qtx.19
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 22:00:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IVtJkDtiTB1hKGv+nXnAAOQ1ug5ffDsOB5NetPRTYrI=;
-        b=V0fWzOrlwL+i6mg/wL7ovwBlHC4WMuDNrExZOLH0wHfziIDkzRnFIM4dxNpuccyvdU
-         msV++65nOOGNPESK4HBd/Ex2+5NND60yNpvDD4FLe2uY7rMnaJffyoeB4nwlAo3cZIoN
-         rPPgqjXGLnEdpzDccFUUHIn9Xvw1DyfJUyzpIHLGIHjuVMyM7/TvJVEpmGT1Q4iSl+dl
-         gQK+zcZBtQqwAoSg+qIBh8Wyg8PsE6u+JJEyOwRfrGC8J0T/W79pdfObmWiLA3KXkPCX
-         iZ2AbXdDXB0dSnmbNiiGxeybE6gHWd0JcPIzXoqYz9/qFbL44YKtYQ0FYXnUW1uKhCd+
-         wY4g==
-X-Gm-Message-State: AOAM532LzeWISpMXwtrJs3O5RGQjeBHMjqx7/5v2onXNQTHhzLeMXeSj
-        vfUki2KuUJS8w9hPtdQBHyoXbbyoWOXNKCrBI86sSZXDBjTlIOePJwGwOZuHzaipWlzh+kSq5vJ
-        wc3df5BTjIEDPPQ+qVja+rvog
-X-Received: by 2002:a05:622a:44b:b0:2cf:4b06:5cfa with SMTP id o11-20020a05622a044b00b002cf4b065cfamr933677qtx.595.1644991242530;
-        Tue, 15 Feb 2022 22:00:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzP20QF+Q5eFtyMeIFg2UCeRyv1GHv40qRujvMy8pTnMtYrubrkmL/yeqzjO/CN2P5nYzN+uw==
-X-Received: by 2002:a05:622a:44b:b0:2cf:4b06:5cfa with SMTP id o11-20020a05622a044b00b002cf4b065cfamr933669qtx.595.1644991242291;
-        Tue, 15 Feb 2022 22:00:42 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::e])
-        by smtp.gmail.com with ESMTPSA id j15sm17160411qkp.88.2022.02.15.22.00.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 22:00:41 -0800 (PST)
-Date:   Tue, 15 Feb 2022 22:00:38 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, acme@redhat.com, ardb@kernel.org,
-        bp@alien8.de, broonie@kernel.org, catalin.marinas@arm.com,
-        dave.hansen@linux.intel.com, jslaby@suse.cz,
-        linux-arm-kernel@lists.infradead.org, mingo@redhat.com,
-        ndesaulniers@google.com, peterz@infradead.org, tglx@linutronix.de,
-        will@kernel.org
-Subject: Re: [PATCH v3 0/5] linkage: better symbol aliasing
-Message-ID: <20220216060038.s2ymjrfghokzmwp4@treble>
-References: <20220211151445.2027553-1-mark.rutland@arm.com>
+        Wed, 16 Feb 2022 01:02:41 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8649412F437
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 22:02:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644991349; x=1676527349;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IVPlreFyMESNWqix37VZqoKjgqwMLI/tR34nJqXP0qY=;
+  b=PeMSL6h/Piu3vKzNCKtdRmB+pwxFvP+/b/aiuy5xyY9uSoXMzsK+3PWm
+   xofn4l6CyjMAShpuYTMDLECCI4M4AJ+Ayb/JUGqQDHXv9dj6ez9EKmRyN
+   OdJ1oMqvcdkhLxOybucwtMEpMktioWGPyJk9r0BlMIU63e057yeWwp96H
+   UuPjrqeZZz1UbSydzns8RVspfsp1eWMEENXwsvgvhNx8qCcHrNA0NMFrb
+   FjCvMBcaHs+egXCWkO32qqu4dNgDRnbC5FNgrlaAIAfsVse8aBIKP9iIq
+   319s0UB/CQSg4Arm72F7zGaFMOP/ur8ICVCViceq6KT5K1+8GhlFC/u3h
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="336963601"
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="336963601"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 22:02:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="498267307"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 15 Feb 2022 22:02:27 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKDOU-000AUp-OI; Wed, 16 Feb 2022 06:02:26 +0000
+Date:   Wed, 16 Feb 2022 14:01:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [ammarfaizi2-block:axboe/linux-block/m1-test 248/382] undefined
+ reference to `apple_sart_add_allowed_region'
+Message-ID: <202202161307.qyEsGhGi-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220211151445.2027553-1-mark.rutland@arm.com>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,44 +63,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 03:14:40PM +0000, Mark Rutland wrote:
-> This series aims to make symbol aliasing simpler and more consistent.
-> The basic idea is to replace SYM_FUNC_START_ALIAS(alias) and
-> SYM_FUNC_END_ALIAS(alias) with a new SYM_FUNC_ALIAS(alias, name), so
-> that e.g.
-> 
->     SYM_FUNC_START(func)
->     SYM_FUNC_START_ALIAS(alias1)
->     SYM_FUNC_START_ALIAS(alias2)
->         ... asm insns ...
->     SYM_FUNC_END(func)
->     SYM_FUNC_END_ALIAS(alias1)
->     SYM_FUNC_END_ALIAS(alias2)
->     EXPORT_SYMBOL(alias1)
->     EXPORT_SYMBOL(alias2)
-> 
-> ... can become:
-> 
->     SYM_FUNC_START(name)
->         ... asm insns ...
->     SYM_FUNC_END(name)
-> 
->     SYM_FUNC_ALIAS(alias1, func)
->     EXPORT_SYMBOL(alias1)
-> 
->     SYM_FUNC_ALIAS(alias2, func)
->     EXPORT_SYMBOL(alias2)
-> 
-> This avoids repetition and hopefully make it easier to ensure
-> consistency (e.g. so each function has a single canonical name and
-> associated metadata).
+tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/m1-test
+head:   5adfbb595194191bad98c47447ddbee7d3b60b8f
+commit: 4af74948141263ed097ad48f8845871d16410b08 [248/382] WIP: nvme-apple: add initial Apple SoC NVMe driver
+config: parisc-randconfig-r015-20220216 (https://download.01.org/0day-ci/archive/20220216/202202161307.qyEsGhGi-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/4af74948141263ed097ad48f8845871d16410b08
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block axboe/linux-block/m1-test
+        git checkout 4af74948141263ed097ad48f8845871d16410b08
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash
 
-Nice!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Other than the minor comment to squash the synced header changes,
+All errors (new ones prefixed by >>):
 
-Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+   hppa-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_sart_dma_alloc':
+>> (.text+0x6f0): undefined reference to `apple_sart_add_allowed_region'
+   hppa-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_probe':
+>> (.text+0x9d0): undefined reference to `apple_sart_get'
+>> hppa-linux-ld: (.text+0xcc0): undefined reference to `devm_apple_rtkit_init'
+   hppa-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_disable':
+>> (.text+0x1248): undefined reference to `apple_rtkit_is_crashed'
+   hppa-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_shutdown':
+>> (.text+0x1400): undefined reference to `apple_rtkit_is_running'
+>> hppa-linux-ld: (.text+0x1410): undefined reference to `apple_rtkit_shutdown'
+   hppa-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_remove':
+   (.text+0x1484): undefined reference to `apple_rtkit_is_running'
+   hppa-linux-ld: (.text+0x1494): undefined reference to `apple_rtkit_shutdown'
+   hppa-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_timeout':
+   (.text+0x15c8): undefined reference to `apple_rtkit_is_crashed'
+   hppa-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_reset_work':
+   (.text+0x1738): undefined reference to `apple_rtkit_is_crashed'
+>> hppa-linux-ld: (.text+0x175c): undefined reference to `apple_rtkit_is_running'
+   hppa-linux-ld: (.text+0x1790): undefined reference to `apple_rtkit_shutdown'
+>> hppa-linux-ld: (.text+0x17a8): undefined reference to `apple_rtkit_reinit'
+>> hppa-linux-ld: (.text+0x17e0): undefined reference to `apple_rtkit_boot'
+   hppa-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_sart_dma_free':
+>> (.text+0x1bbc): undefined reference to `apple_sart_remove_allowed_region'
 
--- 
-Josh
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,187 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 051BE4B9147
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F268D4B9150
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234767AbiBPTgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 14:36:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55072 "EHLO
+        id S235381AbiBPTig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 14:38:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233179AbiBPTga (ORCPT
+        with ESMTP id S235008AbiBPTif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 14:36:30 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3810291FAE
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:36:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645040177; x=1676576177;
-  h=from:to:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5szMQlEDye63aiiwYqhef/hAzPhF9F7nlQ69TY5qzo0=;
-  b=Q8dIEuRKVJZr3/c/x3t2QaCssnt1VelOVfsCUBc3qxjwkGB5jmJHonBF
-   vRxmlx2MsvMXgtbpenP+N6zhFZ34h2iU1lsWiv9t5ABe5GNX9klgfviV7
-   aQtFYWpsR+c17itwvlEEPHYBCwccHTOl+ptYhIbjNMKGS+Q5MX3Siooq2
-   BcqvALbQHwoguBlneUG2QEck4QlHgxo7uI4zDdYyKsD5CiIH+UPyS0xrP
-   9h+r8B7nattM5pS1qSVFqKoB9WMdAFczojZ0MB0gRDunQdyvcsRDvqMxT
-   IJ3giVJDPE6ORQyNf8IKSqonccysMortzw89n35p51dbMYEbpNT/5DV+e
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="275290469"
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="275290469"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 11:36:17 -0800
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="529669418"
-Received: from oux.sc.intel.com ([10.3.52.57])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 11:36:17 -0800
-From:   Yian Chen <yian.chen@intel.com>
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Sohil Mehta <sohil.mehta@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Yian Chen <yian.chen@intel.com>
-Subject: [PATCH] iommu/vt-d: Enable ATS for the devices in SATC table
-Date:   Wed, 16 Feb 2022 11:36:09 -0800
-Message-Id: <20220216193609.686107-1-yian.chen@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 16 Feb 2022 14:38:35 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0F1C1C8A
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:38:22 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id l67-20020a1c2546000000b00353951c3f62so2390334wml.5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:38:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AboYQV2RRhiS2OKfRcBDf/ccoxDOeEWOpFppYBuvgvk=;
+        b=ryR1LNxBvxTutflq6/ZAK/VSNEBUDY90SvMHGDbVxBNdR8XNrYjOnz6er4FgMSW+Ck
+         tTyUsoxgRelVS98PGMem3pCBZbqflM+Q02eMM6fYZrTzPlCmIZ2AImyhVk4lT1+oJ1nm
+         7DCM6yH3cX2c2DcifjzTmsNZ7kSVpYbQrC30Ei2HvLB/NvpAbSEfp4OrAYLaVhEtz7zm
+         bLhkFqMpfQg0OL2l0bYnpAvFxInuahOtgLENmWanXEv6MQDY9jpVgSgRxMS8wj/9Fekm
+         CoUQcgKuuDDwIBtdrOLm2MAtXGdgER0OwX5lg/7BQLpxvILm9gkkAyaSY3DE2zqQ23EP
+         sMRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AboYQV2RRhiS2OKfRcBDf/ccoxDOeEWOpFppYBuvgvk=;
+        b=tsRJFsbM4n5f98rks98xfseo6oMQ9R+6i72I90rY8VLK8b6Y3mlPfz88qzUALVVx8H
+         z9v5RzjXDA+RQT3piU1p2fPu/tvlIAF6z+5uZt81NZX0TLTuMoEv15Y1hx1S9bUzxAXn
+         6bYR4WcTFaPv8C1g+swzmJWv8OTVa6KE/+Yz+q+m+AnH7Dm6Ym42IWATzLPD6lALn6nY
+         x0NVqzU4CdSUvILMbu9C1xcfxnw42nzsMxh5Izb9UQrnootBbUYmL3xfDC/hKuEAXvjO
+         9vmLEMyh9graV/lSUR7gEJQFqCf45AO3Yf1Z5xYZWBB/BpTCtouprqKfxw7+HtXKkXvC
+         4xTA==
+X-Gm-Message-State: AOAM532NrjzRRrU4LB0137bbRdVdNHTzc+Rx+q56ohuFwLO1pKWF7Kqz
+        pifKOlUr6j7ZTXKdlev9S3s5DQ==
+X-Google-Smtp-Source: ABdhPJy0s8CbGeNQcCY6w7+9P457Aw/4bTVPptVdV2BwSq/JHweN4+iYBukfoCWnlvuC4Z5NybVEtg==
+X-Received: by 2002:a05:600c:384b:b0:37b:fda9:a5e2 with SMTP id s11-20020a05600c384b00b0037bfda9a5e2mr3051329wmr.62.1645040300881;
+        Wed, 16 Feb 2022 11:38:20 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:6165:d98a:b553:c3c1? ([2a01:e34:ed2f:f020:6165:d98a:b553:c3c1])
+        by smtp.googlemail.com with ESMTPSA id l9sm18850870wrt.29.2022.02.16.11.38.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 11:38:20 -0800 (PST)
+Message-ID: <c5889d73-7acb-a564-b091-44e71ba5ddb3@linaro.org>
+Date:   Wed, 16 Feb 2022 20:38:18 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PATCH 1/4] tools/lib/thermal: Add a thermal library
+Content-Language: en-US
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+References: <20220214210446.255780-1-daniel.lezcano@linaro.org>
+ <0be77e01c0dc91e227fcb7219cf89d9497b4be39.camel@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <0be77e01c0dc91e227fcb7219cf89d9497b4be39.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Starting from Intel VT-d v3.2, Intel platform BIOS can provide
-additional SATC table structure. SATC table includes a list of
-SoC integrated devices that support ATC (Address translation
-cache).
 
-Enabling ATC (via ATS capability) can be a functional requirement
-for SATC device operation or an optional to enhance device
-performance/functionality. This is determined by the bit of
-ATC_REQUIRED in SATC table. When IOMMU is working in scalable
-mode, software chooses to always enable ATS for every device in
-SATC table because Intel SoC devices in SATC table are trusted
-to use ATS.
+Hi Srinivas,
 
-On the other hand, if IOMMU is in legacy mode, ATS of SATC
-capable devices can work transparently to software and be
-automatically enabled by IOMMU hardware. As the result,
-there is no need for software to enable ATS on these devices.
+thanks for the review
 
-Signed-off-by: Yian Chen <yian.chen@intel.com>
----
- drivers/iommu/intel/iommu.c | 53 ++++++++++++++++++++++++++++++++++---
- include/linux/intel-iommu.h |  2 +-
- 2 files changed, 51 insertions(+), 4 deletions(-)
+On 16/02/2022 17:40, srinivas pandruvada wrote:
+> On Mon, 2022-02-14 at 22:04 +0100, Daniel Lezcano wrote:
+>> The thermal framework implements a netlink notification mechanism to
+>> be used by the userspace to have a thermal configuration discovery,
+>> trip point changes or violation, cooling device changes
+>> notifications,
+>> etc...
+>>
+>> This library provides a level of abstraction for the thermal netlink
+>> notification allowing the userspace to connect to the notification
+>> mechanism more easily. The library is callback oriented.
+>>
+> Some minor comments.
+> May be better use some defines instead of returning "-1" for error
+> conditions.
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 92fea3fbbb11..58a80cec50bb 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -872,7 +872,6 @@ static bool iommu_is_dummy(struct intel_iommu *iommu, struct device *dev)
- 
- 	return false;
- }
--
- struct intel_iommu *device_to_iommu(struct device *dev, u8 *bus, u8 *devfn)
- {
- 	struct dmar_drhd_unit *drhd = NULL;
-@@ -2684,7 +2683,7 @@ static struct dmar_domain *dmar_insert_one_dev_info(struct intel_iommu *iommu,
- 
- 		if (ecap_dev_iotlb_support(iommu->ecap) &&
- 		    pci_ats_supported(pdev) &&
--		    dmar_find_matched_atsr_unit(pdev))
-+		    dmar_ats_supported(pdev, iommu))
- 			info->ats_supported = 1;
- 
- 		if (sm_supported(iommu)) {
-@@ -4020,7 +4019,42 @@ static void intel_iommu_free_dmars(void)
- 	}
- }
- 
--int dmar_find_matched_atsr_unit(struct pci_dev *dev)
-+/* dev_satc_state - Find if dev is in a DMAR SATC table
-+ *
-+ * return value:
-+ *    1: dev is in STAC table and ATS is required
-+ *    0: dev is in SATC table and ATS is optional
-+ *    -1: dev isn't in SATC table
-+ */
-+static int dev_satc_state(struct pci_dev *dev)
-+{
-+	int i, ret = -1;
-+	struct device *tmp;
-+	struct dmar_satc_unit *satcu;
-+	struct acpi_dmar_satc *satc;
-+
-+	dev = pci_physfn(dev);
-+	rcu_read_lock();
-+
-+	list_for_each_entry_rcu(satcu, &dmar_satc_units, list) {
-+		satc = container_of(satcu->hdr, struct acpi_dmar_satc, header);
-+		if (satc->segment != pci_domain_nr(dev->bus))
-+			continue;
-+		for_each_dev_scope(satcu->devices, satcu->devices_cnt, i, tmp)
-+			if (to_pci_dev(tmp) == dev) {
-+				if (satc->flags)
-+					ret = 1;
-+				else
-+					ret = 0;
-+				goto out;
-+			}
-+	}
-+out:
-+	rcu_read_unlock();
-+	return ret;
-+}
-+
-+int dmar_ats_supported(struct pci_dev *dev, struct intel_iommu *iommu)
- {
- 	int i, ret = 1;
- 	struct pci_bus *bus;
-@@ -4030,6 +4064,19 @@ int dmar_find_matched_atsr_unit(struct pci_dev *dev)
- 	struct dmar_atsr_unit *atsru;
- 
- 	dev = pci_physfn(dev);
-+	i = dev_satc_state(dev);
-+	if (i >= 0) {
-+		/* This dev supports ATS as it is in SATC table!
-+		 * When IOMMU is in legacy mode, enabling ATS is done
-+		 * automatically by HW for the device that requires
-+		 * ATS, hence OS should not enable this device ATS
-+		 * to avoid duplicated TLB invalidation
-+		 */
-+		if (i && !sm_supported(iommu))
-+			ret = 0;
-+		return ret;
-+	}
-+
- 	for (bus = dev->bus; bus; bus = bus->parent) {
- 		bridge = bus->self;
- 		/* If it's an integrated device, allow ATS */
-diff --git a/include/linux/intel-iommu.h b/include/linux/intel-iommu.h
-index 69230fd695ea..fe9fd417d611 100644
---- a/include/linux/intel-iommu.h
-+++ b/include/linux/intel-iommu.h
-@@ -717,7 +717,7 @@ static inline int nr_pte_to_next_page(struct dma_pte *pte)
- }
- 
- extern struct dmar_drhd_unit * dmar_find_matched_drhd_unit(struct pci_dev *dev);
--extern int dmar_find_matched_atsr_unit(struct pci_dev *dev);
-+extern int dmar_ats_supported(struct pci_dev *dev, struct intel_iommu *iommu);
- 
- extern int dmar_enable_qi(struct intel_iommu *iommu);
- extern void dmar_disable_qi(struct intel_iommu *iommu);
+Do you suggest like an enum with different errors or just having -1 
+replaced by eg. THERMAL_ERROR ?
+
+
+[ ... ]
+
+>> + * Low level netlink
+>> + */
+>> +extern int nl_subscribe_thermal(struct nl_sock *nl_sock, struct
+>> nl_cb *nl_cb,
+>> +                               const char *group);
+>> +
+> To complete API, don't we need nl_unsubscribe which calls
+> nl_socket_drop_memberships()?
+Ah, yes. I'll add it.
+
+Thanks
+
+
+
 -- 
-2.25.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

@@ -2,53 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0975C4B8EDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 18:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05EED4B8EDF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 18:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236903AbiBPRKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 12:10:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49598 "EHLO
+        id S236912AbiBPRMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 12:12:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236575AbiBPRKE (ORCPT
+        with ESMTP id S236904AbiBPRMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 12:10:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDF32A7957
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:09:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 16 Feb 2022 12:12:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42913158E94
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:12:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645031539;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=trNnuhj3H8o+H+1AZglqTOecwQUhO1rBcjpEVqGZc1Q=;
+        b=VReuBWr30kyOUFrHnf3UdLtZpwhIzpJWnGb7QXC3BawTqJn4TQoBp+Jc3+oSwtKbz+0RAM
+        qKQFMkZrrZR8s+5lE2VjizJUeWEfUPe5JwJHzyw6XPQsJupoW9G5/9wFVgkKHm9A80V4on
+        m+CwJNQSoer34NYKj6vy88UhgKLSrkk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-256-YwLc1HjRME2tzsKEzIe1tg-1; Wed, 16 Feb 2022 12:12:16 -0500
+X-MC-Unique: YwLc1HjRME2tzsKEzIe1tg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64F0661BA6
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 17:09:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D29ADC004E1;
-        Wed, 16 Feb 2022 17:09:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645031391;
-        bh=mC1Fks7IJyldNKvSocN4kpd3GRB2OB/Ri6oYSh4ZU0U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CVRG844dJm/53DJkdf9KNjs4psuCCL/81ATTFydbMCDLfGMDsx1k3wlMu5XbshbHk
-         zu1DiOg/FsylEsEcy350txBeCl1GuUpj9D/cCwmtCYBsbdLFjOS8W+zu6IN/9hGRTn
-         i8HN0DCB4b3NCJ/U694UXog8WnlGu216TW6Oa06JrbpIL743YO4RYUCB0pdFDbeUCT
-         dTaBddfXxShB5Z2zx4GmNbVPMQqInEDsbJ8i9nFKGpEprSoypcMLOAHK79zUkpv67G
-         vFtyRX1OwxEVRu8TGsEZyEL069GvWBf2KypMsYAhne7yw9hQmGqDNEMI1QOOe6ZDzY
-         BqlFMV+CUggKQ==
-Date:   Wed, 16 Feb 2022 17:09:47 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Jisheng Zhang <Jisheng.Zhang@synaptics.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: Add read_mostly declaration/definition to irq
- stack ptr
-Message-ID: <20220216170947.GB10784@willie-the-truck>
-References: <8798a3cc-6e64-6966-d5ad-fadca79d92ba@synaptics.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C873B80D680;
+        Wed, 16 Feb 2022 17:12:14 +0000 (UTC)
+Received: from redhat.com (unknown [10.22.8.49])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 40FBB62D58;
+        Wed, 16 Feb 2022 17:12:14 +0000 (UTC)
+Date:   Wed, 16 Feb 2022 12:12:12 -0500
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+To:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org
+Subject: Re: [RFC PATCH v6 11/12] livepatch/selftests: add data relocations
+ test
+Message-ID: <Yg0wbJNYeFIwaisP@redhat.com>
+References: <20220216163940.228309-1-joe.lawrence@redhat.com>
+ <20220216163940.228309-12-joe.lawrence@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8798a3cc-6e64-6966-d5ad-fadca79d92ba@synaptics.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220216163940.228309-12-joe.lawrence@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,47 +61,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 04:46:42PM +0800, Jisheng Zhang wrote:
-> Add "read-mostly" qualifier to irq_stack_ptr and
-> irq_shadow_call_stack_ptr. This is to prevent the false sharing.
+On Wed, Feb 16, 2022 at 11:39:39AM -0500, Joe Lawrence wrote:
 > 
-> Before the patch, I got below percpu layout with one defconfig:
-> ffffffc008723050 <mde_ref_count>:
-> ffffffc008723050:       00 00 00 00
-> ....
+> [ ... snip ... ]
 > 
-> ffffffc008723054 <kde_ref_count>:
-> ffffffc008723054:       00 00 00 00
-> ....
-> 
-> ffffffc008723058 <irq_stack_ptr>:
->         ...
-> 
-> ffffffc008723060 <nmi_contexts>:
->         ...
-> 
-> ffffffc008723070 <fpsimd_last_state>:
-> 
-> As can be seen, the irq_stack_ptr sits with the heavy read/write percpu
-> vars such as fpsimd_last_state etc. at the same cacheline.
-> 
-> After the patch:
-> 
-> ffffffc008723000 <irq_stack_ptr>:
->         ...
-> 
-> ffffffc008723008 <cpu_number>:
->         ...
-> 
-> ffffffc008723010 <arm64_ssbd_callback_required>:
->         ...
-> 
-> ffffffc008723018 <bp_hardening_data>:
->         ...
-> 
-> Now, the irq_stack_ptr sits with read mostly percpu vars such as
-> cpu_number etc. at the same cacheline.
+> diff --git a/lib/livepatch/test_klp_convert_data.c b/lib/livepatch/test_klp_convert_data.c
+> new file mode 100644
+> index 000000000000..142422664159
+> --- /dev/null
+> +++ b/lib/livepatch/test_klp_convert_data.c
+> @@ -0,0 +1,190 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +// Copyright (C) 2021 Joe Lawrence <joe.lawrence@redhat.com>
+> +
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <linux/module.h>
+> +#include <linux/kernel.h>
+> +#include <linux/cache.h>
+> +#include <linux/livepatch.h>
+> +#include "test_klp_convert.h"
+> +
+> +/* Small global */
+> +int *p_global_small = &global_small;
+> +
+> +/* Small global (const) */
+> +// .rela.data.rel.ro, .rela.rodata supported ???:
+> +int * const p_const_global_small = &const_global_small;
+> +
+> +/* Small file-static */
+> +static int *p_static_small = &static_small;
+> +
+> +/* Small file-static (constant) */
+> +static int * const p_static_const_small = &static_const_small;
+> +
+> +/* Large global */
+> +int *p_global_large[4] = {
+> +	&global_large[0], &global_large[1],
+> +	&global_large[2], &global_large[3],
+> +};
+> +
+> +/* Large global (const) */
+> +// .rela.data.rel.ro, .rela.rodata supported ???:
+> +int * const p_const_global_large[4] = {
+> +	&const_global_large[0], &const_global_large[1],
+> +	&const_global_large[2], &const_global_large[3],
+> +};
+> +
+> +/* Large file-static global */
+> +static int *p_static_large[4] = {
+> +	&static_large[0], &static_large[1],
+> +	&static_large[2], &static_large[3],
+> +};
+> +
+> +/* Large file-static (const) */
+> +static int * const p_static_const_large[4] = {
+> +	&static_const_large[0], &static_const_large[1],
+> +	&static_const_large[2], &static_const_large[3],
+> +};
+> +
+> +// .rela.data.rel.ro, .rela.rodata supported ???:
+> +static int * __ro_after_init p_static_ro_after_init = &static_ro_after_init;
+> +static int * __read_mostly p_static_read_mostly = &static_read_mostly;
 
-Were you able to measure any performance difference after this change?
+This started getting a bit repetitive, and maybe belongs to its own set
+of klp-convert unit tests (as the selftests seem closer to integration
+type tests).
 
-Will
+Anyway, I left in the .rela.<read-only> type relocations as mentioned in
+the [RFC PATCH v6 03/12] livepatch: Add klp-convert tool [1].  We can
+talk about whether such sections should be supported over there.
+
+As for this test, it currently crashes ppc64le as it generates a late
+klp-relocation type R_PPC64_ADDR64 in a section that was marked RO.
+(IIRC such ppc64le data relocations to other .rela.<text> sections are
+safe as they aren't marked RO.)
+
+[1] https://lore.kernel.org/lkml/Yg0qgtSFNQx5Mo1i@redhat.com/
+
+-- Joe
+

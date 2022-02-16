@@ -2,103 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736DF4B8B1D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:11:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3634B8B2D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234874AbiBPOLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 09:11:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39470 "EHLO
+        id S234848AbiBPON3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 09:13:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233931AbiBPOLn (ORCPT
+        with ESMTP id S233931AbiBPON0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 09:11:43 -0500
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8B163F2;
-        Wed, 16 Feb 2022 06:11:29 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 48E4D580790;
-        Wed, 16 Feb 2022 09:11:29 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 16 Feb 2022 09:11:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=i2qG2nO4rS4VmdzOeglqVq9vsAN10ZORWEZaYZ
-        TfUK8=; b=pSrwM38yuMw01iuenrss84p89r/K8SzJ/EPX2kdCW/uKq44b3bFEk2
-        ne/VfaKSDxLaMY5X8TQduLAycXwsvJG0gcNdql9jYIAOOSWT7PWyyvmZKHVz3/+w
-        ovDxvwgag/EV6e2ZBBCHFgaVcSjjGddXk7yJckRxktRKl4ABa1J4Wo0F3AtdNt5o
-        JU3BqE+2FZ0lYPCRhlUigozQTfr1yBvRTbJusknLN93XC626NHwM8Hw28Q9+d7go
-        rxeADLhY+bJ9Bk/KBOtoiS/PiowmnpM4uD+Hezp74IKtEEZfsIoZ8qM5h96fN/Ty
-        fC850dzW6mf8tfsa2rQtuIz6/MSAIxXA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=i2qG2nO4rS4VmdzOe
-        glqVq9vsAN10ZORWEZaYZTfUK8=; b=ihcbqs4iq5kxd5MoQKrvNwO5Ov2/WjbOI
-        Y/4CGWIOC49uLE71AN3EDNOHEbEPEo1Afec80qmZms6Qiby6amGxcisqyaLSOymb
-        AG2o7qI+oMW+Y9Ru2rVZ+yyCn4MDoIThv+pAGY7R6dknG1lZTO8pLCV53aOCtbgo
-        vfuyMhsat9TS8u7I2Ma5f8lfvtNXQCNX9xnHZ08XgcBKTckVVOd48YFBVre3asBc
-        jRZXpDvQQfGC84uRno1oryfNvLc8D4tGiRnB0AqHIjZES/JvXE/ZEAFNV1VW/eXh
-        TGmZUVCfBrt4NEbo1AzMfzjnIf84kTJLLqvrVibaJEaGiED85E8WA==
-X-ME-Sender: <xms:EAYNYgwvQMCuukwKZ-NAHNU7ufMTpc9hPTT2Xq3eMGch4JL3MqBPxg>
-    <xme:EAYNYkTsnpRiqBJ6BerqJv8AfclvHKo95shZOuWZufUWvQqGKRifR0yQfjcBp2Bhy
-    4tibwybRres5-rie8c>
-X-ME-Received: <xmr:EAYNYiUJAM4sz6QirEELh6vpb1FJAXGbsSv0AtGhqwa1bWm27G8fux-N1qvPyEcU-EEL6GydFPql3l2eHBRr3Jn37s8JOaNZ-8XTHnc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjeeigdehlecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
-    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
-    igihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:EAYNYuiOOofO1KkIBSV0qM2vdAyCzgWkba4S2fYUA2xw-Z1bDrrByg>
-    <xmx:EAYNYiANd1pzR0_uYXHToXYpa8nuDZbsaZaFP_38JoIc46m1QDVBew>
-    <xmx:EAYNYvLy4dQbFSsEBvyIdbZnnJlTEs-0IY38DgNKvXm9kBb0OR5UwQ>
-    <xmx:EQYNYq3_8gjpMTBgDnj1yX6shnqxPPKyK-flH6l35MEfzRAEfYaLUg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 16 Feb 2022 09:11:28 -0500 (EST)
-Date:   Wed, 16 Feb 2022 15:11:27 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Randy Dunlap <rdunlap@infradead.org>
+        Wed, 16 Feb 2022 09:13:26 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2AE221F5F8;
+        Wed, 16 Feb 2022 06:13:11 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.43:41724.2129254537
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id 2B970100238;
+        Wed, 16 Feb 2022 22:13:07 +0800 (CST)
+Received: from  ([172.27.8.53])
+        by gateway-151646-dep-b7fbf7d79-vjdjk with ESMTP id b3dbb3be09af45109d798cf10be5fd16 for daniel@fooishbar.org;
+        Wed, 16 Feb 2022 22:13:09 CST
+X-Transaction-ID: b3dbb3be09af45109d798cf10be5fd16
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 172.27.8.53
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <adec818a-5c66-3b4a-6f27-bcb29b6c67d1@189.cn>
+Date:   Wed, 16 Feb 2022 22:13:05 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
 Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display
  controller
-Message-ID: <20220216141127.2b7frii62w7xp3tu@houat>
+Content-Language: en-US
+To:     Daniel Stone <daniel@fooishbar.org>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Roland Scheidegger <sroland@vmware.com>,
+        linux-mips@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Sam Ravnborg <sam@ravnborg.org>
 References: <20220203082546.3099-1-15330273260@189.cn>
  <20220203082546.3099-2-15330273260@189.cn>
  <20220203085851.yqstkfgt4dz7rcnw@houat>
- <11ac5696-29e3-fefa-31c0-b7b86c88bbdc@189.cn>
- <20220209084908.kub4bs64rzhvpvon@houat>
- <84bfb2fc-595c-3bae-e8a0-c19ccbcfcfd8@189.cn>
- <20220209161624.42ijbnhanaaari46@houat>
- <965ca520-229f-5729-bf06-ae64ed3af383@189.cn>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="if4dkzifithtnd47"
-Content-Disposition: inline
-In-Reply-To: <965ca520-229f-5729-bf06-ae64ed3af383@189.cn>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+ <f5381561-25da-61e3-5025-fa6dd61dd730@189.cn>
+ <20220209084331.fpq5ng3yuqxmby4q@houat>
+ <def50622-fe08-01f7-83bd-e6e0bc39fe1b@189.cn>
+ <CAPj87rOgk8A8s6MTqxcTO5EkS=ABpHQV3sHsAp7Yn2t3-N_SoQ@mail.gmail.com>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <CAPj87rOgk8A8s6MTqxcTO5EkS=ABpHQV3sHsAp7Yn2t3-N_SoQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -106,43 +73,28 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---if4dkzifithtnd47
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2022/2/16 21:46, Daniel Stone wrote:
+> On Wed, 9 Feb 2022 at 15:41, Sui Jingfeng <15330273260@189.cn> wrote:
+>> On 2022/2/9 16:43, Maxime Ripard wrote:
+>>> More fundamentally (and this extends to the CMA, caching and VRAM stuff
+>>> you explained above), why can't the driver pick the right decision all
+>>> the time and why would that be under the user control?
+>> The right decision for ls7a1000 is to use VRAM based helper, But sometimes
+>> we need CMA helper based solution. Because: The PRIME support is lost, use
+>> lsdc with etnaviv is not possible any more.
+>>
+>>    Buffer sharing with etnaviv is no longer possible, loongson display controllers
+>>    are simple which require scanout buffers to be physically contiguous.
+> Other systems have this limitation, and Mesa's 'kmsro' concept makes
+> this work transparently, as long as your driver can export dmabufs
+> when running in 'VRAM' mode.
+>
+> Cheers,
+> Daniel
 
+When using vram helper based driver, the framebuffer  is locate at video 
+ram. the backing memory fb is manage by TTM.
 
+while bo of etnaviv is locate at system ram. Currently i can't figure 
+out how does the buffer going to be shared.
 
-On Wed, Feb 16, 2022 at 09:34:47PM +0800, Sui Jingfeng wrote:
-> On 2022/2/10 00:16, Maxime Ripard wrote:
-> > And, to reinstate, we already have a mechanism to set an EDID, and if it
-> > wasn't an option, the DT is not the place to store an EDID blob.
->=20
-> Hi,
->=20
->=20
-> if DT is not the place to store EDID blob, why nvidia can do that ?
->=20
-> output->edid =3D of_get_property(output->of_node, "nvidia,edid", &size);
-> [1][2]
-
-Because that binding is 10 years old and never got reviewed by a DT maintai=
-ner.
-
-Things change, some things we did in the past have been mistakes that we
-don't want to repeat, can we move forward?
-
-Maxime
-
---if4dkzifithtnd47
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYg0GDwAKCRDj7w1vZxhR
-xfrUAQDoc1GrrZYHXc7NMWEIsyPQ1lsWTu8qjcZQon9X0OfsPgEAwkVb2Uv/vcHy
-dC/YeqCI6cZBcH7PZOIyLedrztqdEgA=
-=ryuu
------END PGP SIGNATURE-----
-
---if4dkzifithtnd47--

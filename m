@@ -2,103 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A06C4B84DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BACD54B84E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232518AbiBPJvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 04:51:13 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47750 "EHLO
+        id S232562AbiBPJvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 04:51:42 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232520AbiBPJvJ (ORCPT
+        with ESMTP id S232464AbiBPJvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 04:51:09 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB272B4079
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:50:45 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id c10so2396348ljr.9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:50:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5BSEQWlpqzUNC7cde1R/udWhNZ/HbmdZRR8iTULYXlQ=;
-        b=QE29adL5btNluj+3qUfq1CYwY0DrPQHuRx6PkLyu+fXmQ1T5ixOOnHG5wDFt2FBVVX
-         l56hP8Da+r2H1KEnMaRO/piSebG92stURNx3gtaA4KmOoEisT4yr47IEzS7cGlRNnmF0
-         KkEF0z+sQbSapCgNtDsFW5+FJeX28glmDHN+biX7B5dMIC2Xup1lqufrvq8MMjnXgcZc
-         i0efQNA5OpVzDD2eU9TujFZQQ6yKHb8QSgikwBh/82vUQBkeFEf/5s1aYcL/eJXxOIJy
-         yyAtUKvYn84hc4/J54m88HVyGZM1bJJ7iLXGFvNeNOj+GxFi3cVAyisWspXlUzo85wmI
-         GJSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5BSEQWlpqzUNC7cde1R/udWhNZ/HbmdZRR8iTULYXlQ=;
-        b=JTXW5tRXXx5Bypuf6CGMNhgYWy/9tax1UOqRkjUIBmc9Kn+pdsBci1RPc93w85NfZt
-         y4iCnMMwYUSMztsXahTO61nMC/mII3B0DvEEol+ZixZo1Y3v1SsYYQqRD3PQpXJ3WLFF
-         DOx/T9v4SFIhZg9k+9huu6WEXe5S9CmaXJ7u8WH6/1LZaDyb8PP4PxzWwZpZMgGu2La2
-         vmPta+FVh7DDcTdCWT7WteU3ixN5siVEIVTRXjWShYh9u5sHfzPyf+bkyT5LdsPmVTYe
-         wcbY9Wm2ef4dgbt1X+XTOsf3ewM6X9gl+NzSDIEMCZu+97BzsWlOFyzNKJ6ZtIYKM1rF
-         DSEA==
-X-Gm-Message-State: AOAM5314c1q8JjzCyoXnhPe47C+xZYkafxH4mVCOEqxTGWMzFGbGWk3c
-        BZoCs3lfET3SHFUxTSLrLUQ=
-X-Google-Smtp-Source: ABdhPJwMpnx9ZO+IdlvQw5i56UM/gTv6nAVkEK2NfXUX8SBX6DfFhJN3S4zO6dATaFZIZzewh8t9rg==
-X-Received: by 2002:a2e:bd84:0:b0:244:c1e5:c6a7 with SMTP id o4-20020a2ebd84000000b00244c1e5c6a7mr1438956ljq.228.1645005043169;
-        Wed, 16 Feb 2022 01:50:43 -0800 (PST)
-Received: from [192.168.1.11] ([217.117.245.154])
-        by smtp.gmail.com with ESMTPSA id v11sm1248197lfp.95.2022.02.16.01.50.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 01:50:42 -0800 (PST)
-Message-ID: <85740a8e-e654-7742-642f-44d01c323c26@gmail.com>
-Date:   Wed, 16 Feb 2022 12:50:41 +0300
+        Wed, 16 Feb 2022 04:51:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF6A2B521C;
+        Wed, 16 Feb 2022 01:51:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9D87616FE;
+        Wed, 16 Feb 2022 09:51:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33E9FC004E1;
+        Wed, 16 Feb 2022 09:51:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645005062;
+        bh=0bBP7O0XYxaCF8Oh+43Ozdh5BeoEzCfjshF6waVQ+Z8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qiTQeEptSGPhGAmMwAq5weoKundd9sfyhN+N0YuW+E2XJRjI+hGiVcu7/jN+JFamV
+         wGQ7U/pkpUUF/IGwRwXnzeJLN4A9qdlPNrD7scXVQ9SPRLBWUdypgqTdF77JJK78NA
+         dma6fFibmgbGMDed0l2rs98/DkcxdCZR745MtkcKX5nykDbW88s7f5blDzsStPRdQK
+         NeX8ceRdo9p8G/8PFaj7TCCKyB7w2h/T64DLuTw/fMYEljoOadrvdroUPmvK6wVJQi
+         e3p/LZT/f8nsdv1zvkqQGfusmIH3DkuoyXvZfzc6Oaf5Iztm+Odq5/uIfhiJgUCT3Y
+         2GYUSWfiWsjEQ==
+Received: by pali.im (Postfix)
+        id CDC1B7F4; Wed, 16 Feb 2022 10:50:59 +0100 (CET)
+Date:   Wed, 16 Feb 2022 10:50:59 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Jerome Pouiller <Jerome.Pouiller@silabs.com>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-mmc@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH 1/2] staging: wfx: WF200 has no official SDIO IDs
+Message-ID: <20220216095059.how2bexndwenhs6h@pali>
+References: <20220216093112.92469-1-Jerome.Pouiller@silabs.com>
+ <20220216093112.92469-2-Jerome.Pouiller@silabs.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2 03/15] staging: r8188eu: remove converted DBG_88E calls
- from core/rtw_mlme_ext.c
-Content-Language: en-US
-To:     Phillip Potter <phil@philpotter.co.uk>, gregkh@linuxfoundation.org
-Cc:     dan.carpenter@oracle.com, Larry.Finger@lwfinger.net,
-        straube.linux@gmail.com, martin@kaiser.cx,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220216010709.791-1-phil@philpotter.co.uk>
- <20220216010709.791-4-phil@philpotter.co.uk>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20220216010709.791-4-phil@philpotter.co.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220216093112.92469-2-Jerome.Pouiller@silabs.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Phillip,
-
-On 2/16/22 04:06, Phillip Potter wrote:
-> Remove all the netdev_dbg/pr_debug calls that were previously converted
-> from DBG_88E inside core/rtw_mlme_ext.c. Due to the sheer number of
-> lines, this patch is separated out for ease of review. After some thought,
-> it makes more sense to just entirely strip all of these calls, so that
-> debugging code in the driver can be more consistent and useful going
-> forwards.
+On Wednesday 16 February 2022 10:31:11 Jerome Pouiller wrote:
+> From: Jérôme Pouiller <jerome.pouiller@silabs.com>
 > 
-> Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
+> Some may think that SDIO_VENDOR_ID_SILABS / SDIO_DEVICE_ID_SILABS_WF200
+> are official SDIO IDs. However, it is not the case, the values used by
+> WF200 are not official (BTW, the driver rely on the DT rather than on
+> the SDIO IDs to probe the device).
+> 
+> To avoid any confusion, remove the definitions SDIO_*_ID_SILABS* and use
+> raw values.
+> 
+> Signed-off-by: Jérôme Pouiller <jerome.pouiller@silabs.com>
 
-[code snip]
+Reviewed-by: Pali Rohár <pali@kernel.org>
 
->   	if (pstat->aid > 0) {
-> -		netdev_dbg(padapter->pnetdev, "old AID %d\n", pstat->aid);
->   	} else {
-
-Ok, this one has same issues as 2nd one. I am going to stop reviewing 
-this series for now, because looks like I am missing some context...
-
-
-
-With regards,
-Pavel Skripkin
+> ---
+>  drivers/staging/wfx/bus_sdio.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/staging/wfx/bus_sdio.c b/drivers/staging/wfx/bus_sdio.c
+> index bc3df85a05b6..312d2d391a24 100644
+> --- a/drivers/staging/wfx/bus_sdio.c
+> +++ b/drivers/staging/wfx/bus_sdio.c
+> @@ -257,10 +257,9 @@ static void wfx_sdio_remove(struct sdio_func *func)
+>  	sdio_release_host(func);
+>  }
+>  
+> -#define SDIO_VENDOR_ID_SILABS        0x0000
+> -#define SDIO_DEVICE_ID_SILABS_WF200  0x1000
+>  static const struct sdio_device_id wfx_sdio_ids[] = {
+> -	{ SDIO_DEVICE(SDIO_VENDOR_ID_SILABS, SDIO_DEVICE_ID_SILABS_WF200) },
+> +	/* WF200 does not have official VID/PID */
+> +	{ SDIO_DEVICE(0x0000, 0x1000) },
+>  	{ },
+>  };
+>  MODULE_DEVICE_TABLE(sdio, wfx_sdio_ids);
+> -- 
+> 2.34.1
+> 

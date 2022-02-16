@@ -2,79 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D4974B9021
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:24:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 525EB4B9024
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237598AbiBPSYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 13:24:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57216 "EHLO
+        id S237607AbiBPSZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 13:25:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237593AbiBPSYP (ORCPT
+        with ESMTP id S233767AbiBPSZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 13:24:15 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D729F1F5C80;
-        Wed, 16 Feb 2022 10:24:02 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id bn33so4659292ljb.6;
-        Wed, 16 Feb 2022 10:24:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BS9zAD2XVBFWxic3VwORgp8dzUF13FMIDSu6Qx4V5Ek=;
-        b=OVD1wZDgcZe2+pLUyaO4o7MllaPc/DWUq9UZrsIj43k4823o2K0jvmPokIGg1wjDaa
-         XC5AkQOvWFEVCeSkYkefyz9+RXgQcQHbhcqbM1GBSf8YH0CwPiw6IJBWS3dzngxjimXo
-         TPOitl/ievDCdOydijfH6qoNZxdPjND3oVCdGIJKs89QEKdssAmypfrRbBM2gRKGV+XI
-         Id5qhV2e3y2wJr83sl9IeYFhRN+XFix6UHcyQf/MNbao+IeQff90Xs8/2v0toDHZoFdk
-         ykIqJ6OGq49CoMaOQsiTvIaYjoy3cFENlpUUy0IPmCuJxHLDn+SgX9lK3IudOiN7CxnZ
-         N7nw==
+        Wed, 16 Feb 2022 13:25:37 -0500
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23371F4667;
+        Wed, 16 Feb 2022 10:25:25 -0800 (PST)
+Received: by mail-pl1-f172.google.com with SMTP id z17so2625979plb.9;
+        Wed, 16 Feb 2022 10:25:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BS9zAD2XVBFWxic3VwORgp8dzUF13FMIDSu6Qx4V5Ek=;
-        b=xnCAjOoVyhmgUJ5KQzbBWxoVMHYiiuiAh4kIUu/aC7o1ohc7D9usDeNSa+3v4ehqf9
-         upV1k5LVXR/gz1925CMomKNJHzACh0iE0nxItgZ0PbYbEQVsSomjKeYMKiSlE5pOzDFL
-         8+J/yhGCHGX+uqMxLdgFpqr0q1cp/LcKvUCWG53qhVNDYSRK7ASz2HmHkiPKuGjZqhIT
-         QPtVPrO8BFRMT8uxTzw+/ENAS8SzUuRI0bI6eX2/o4J1E2XURYAaEYjJWuqIsp7J0TDc
-         U6dLeRrFl/0XzSI9O+NAmgzsGbpwSpa196gigj2eWrsENMh3EGODPUp9oL5M7xGrgScq
-         wy+g==
-X-Gm-Message-State: AOAM530Mz8noKZBQkLftIQgDkGgC8F29Tm3cOSj1UJgjXYlZHjfu5msK
-        3Tk3wMGyUy74rZZcCFGgPdJCekkGRAW9irWLAx6g0upNq78=
-X-Google-Smtp-Source: ABdhPJyW85sYjKwSJln2OjkRx+OgPHaYOgb1eb0nO6QQSH9Fk3i7hLST3LjRyk5UY3AUPSCp+FUibDzN7fZ/0kZjOLk=
-X-Received: by 2002:a2e:bf25:0:b0:240:c5b5:88d1 with SMTP id
- c37-20020a2ebf25000000b00240c5b588d1mr3023795ljr.117.1645035841046; Wed, 16
- Feb 2022 10:24:01 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AqCCqD9wQtmLixx1NU1hD0/tMIkij5uZp5ylQh1zyYg=;
+        b=zD2W6fsinWWH4ZEts3PiehaT/9NAlqsdCKuZI+Lr72H2pkVnrSfAj1qOWSl6YqmBNX
+         BT3vMFCdsTmpYwQg89BW7xvrAq1/L0LCr3UpkDgQ8aITrkVWaYs4OvxF9Ytz7N5YPE8o
+         LB5Nbhk8o5Fi7DSSjfA4neniSvSe2t+Qp/oWvmGk/njMX1VQ1RyXGPlKY31eKANfcQeI
+         Y6rDL5UBlakXhjrt5wMOKDIuuuHTi0RvdQLbdmhYDhIQtRp3usWVrFCP/nP2UXorv23a
+         I/VYOj0D8L2ebS/crIkMOYppvSj/o1sAOEpODd/MrP2SNphpVxGjvKwmbdX+6NNeWD2N
+         n+9Q==
+X-Gm-Message-State: AOAM5319xxGHFmd80hKlMTw4xul4HeF2vlH+U52qv5o1UgvGnnkqz4Yv
+        zadsohxpkxthWzaIBb7rNUPu8G6SW9C5MA==
+X-Google-Smtp-Source: ABdhPJzUE42b9zqdrUfxN/gy0jGb7fxgXJOJ1IWVGd5qNCtJWkmLDd9WPweBESPzYeP3ZwyNzEnfkg==
+X-Received: by 2002:a17:902:650e:b0:14f:21e:d088 with SMTP id b14-20020a170902650e00b0014f021ed088mr114393plk.61.1645035925039;
+        Wed, 16 Feb 2022 10:25:25 -0800 (PST)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id rm8sm11776960pjb.5.2022.02.16.10.25.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 10:25:24 -0800 (PST)
+Message-ID: <3b1f616b-7d76-1dd9-0e8f-3a40bb2f5b35@acm.org>
+Date:   Wed, 16 Feb 2022 10:25:22 -0800
 MIME-Version: 1.0
-References: <20220216180822.GA3300192@roeck-us.net>
-In-Reply-To: <20220216180822.GA3300192@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Wed, 16 Feb 2022 19:23:49 +0100
-Message-ID: <CAB95QASWWMvSSuuwQU=TwZX-QcU=hRPCJVQ0E6Bh29sc4d66Ug@mail.gmail.com>
-Subject: Re: [PATCH v4] hwmon: (asus-ec-sensors) merge setup functions
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] blk: do rq_qos_exit in blk_cleanup_queue
+Content-Language: en-US
+To:     "Wang Jianchao (Kuaishou)" <jianchao.wan9@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     hch@infradead.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220216113212.83000-1-jianchao.wan9@gmail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220216113212.83000-1-jianchao.wan9@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Feb 2022 at 19:08, Guenter Roeck <linux@roeck-us.net> wrote:
-> $ scripts/checkpatch.pl --strict asus-ec
+On 2/16/22 03:32, Wang Jianchao (Kuaishou) wrote:
+> From: Wang Jianchao <wangjianchao@kuaishou.com>
+> 
+> When __alloc_disk_node() failed, there will not not del_gendisk()
 
-So, contributors have to use the --strict option?
+Please use the present tense for patch descriptions (failed -> fails).
 
-> WARNING: braces {} are not necessary for single statement blocks
+Anyway:
 
-The file is full of such braces, because I like them and it is only a
-warning. How should I proceed with them?
-
-Regards,
-Eugene
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>

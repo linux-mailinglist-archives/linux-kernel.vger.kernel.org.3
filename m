@@ -2,161 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFA64B8D9C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DAEE4B8D7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236200AbiBPQOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 11:14:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60310 "EHLO
+        id S236131AbiBPQLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 11:11:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236177AbiBPQNy (ORCPT
+        with ESMTP id S234846AbiBPQLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 11:13:54 -0500
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9325E1F6B91;
-        Wed, 16 Feb 2022 08:13:41 -0800 (PST)
-Received: by mail-qv1-f41.google.com with SMTP id p7so2766105qvk.11;
-        Wed, 16 Feb 2022 08:13:41 -0800 (PST)
+        Wed, 16 Feb 2022 11:11:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F6AB1DA51
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:11:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645027892;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TWp8XfA6tyc//eVPa5BXVi9Z+b2Xu2vCpHljwlzLi0E=;
+        b=H9QynJK4i83pOcYnelDVUoJVDdAUETwjirjuU0ENWH5T+MPLvHAwq8Ma3LLAB2486BuXwh
+        8MduTXe9S5Pr5xcaWhjjuddXkHJbyX2RHR4uyXFwXFu6MKric8YacprGhjJn3LiCPcsjf2
+        PdhRGui7gUD9LhUCNfBPSoYZmd5dC5o=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-418-LESS_FvgMwuQpKbKeXUW8w-1; Wed, 16 Feb 2022 11:11:31 -0500
+X-MC-Unique: LESS_FvgMwuQpKbKeXUW8w-1
+Received: by mail-ot1-f70.google.com with SMTP id s3-20020a9d58c3000000b005ad0c01d2dcso99199oth.12
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:11:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=azl/iLsb26myp3zpwyeRv5JZYujJh0LXxE2G7XtXIR8=;
-        b=ZlI6F6ExorJPmowwEofDsxizZXSD4b+rtVpSdBigUkE8c6NnxouQ222XUwPOjpUkms
-         b+hO+m0ixieNNJbrWhlZ0Acd0KICXpNjn5rNxLJwrMzIsHwAzMUmwvW9gW9D4Y4wH1vE
-         P1Ky6g20NDOPhfXQn/PXKHnttIBF9X8P+WfQP4i8OXb/taIo2SDxV0YnaV/vUiHZa3e9
-         4yk5A2t2+QIGQvLmcS9X5RqBS3eMfXvmRSuFZJQO9sav1IdC97W9FhExWi9RZ2rdMug9
-         crLS2JOFMhPLCUTw1gaSdLwInGIHSRTWdzO/Xy6jSYTK5I9J+/HsshsF4zvnank2nwEq
-         cU6A==
-X-Gm-Message-State: AOAM533+Ua4s1SNaDyTtuByUPkMI4CL3N453Z19qJKl0xCfkG9P/PZPv
-        JApBx6JF8/LGvSGHr2081h/XSWlmsTCdzg==
-X-Google-Smtp-Source: ABdhPJyGH0FygRPJsxuUBPWKFoFaQdmcFa2SP2guTbMOLt2/LvJ9Z/RVSzok6rD0gGaujjxNiwM3bQ==
-X-Received: by 2002:a05:622a:196:b0:2ce:c222:b601 with SMTP id s22-20020a05622a019600b002cec222b601mr2507862qtw.179.1645028020167;
-        Wed, 16 Feb 2022 08:13:40 -0800 (PST)
-Received: from localhost (fwdproxy-ash-024.fbsv.net. [2a03:2880:20ff:18::face:b00c])
-        by smtp.gmail.com with ESMTPSA id e9sm22957221qtx.37.2022.02.16.08.13.38
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TWp8XfA6tyc//eVPa5BXVi9Z+b2Xu2vCpHljwlzLi0E=;
+        b=sFOWfIj5GXOaYanx0r/uPdt4YpzzeM3D5/6wgx3++Umlzjb09Hv2lz9snt4ymFokfy
+         XMSN6TkGFX36hb9uyg9CqGcehkLMiYhMXccg9rNsB4PFGG6Hmqbp057McylZs013NL5W
+         oNF1+NxAAyNbiSzNUm5om8U6Do2soS0bPDvAf9TtGnNo63LNQcI/f0KgAkDLEvsY+Eax
+         URf4zON/QhTHZnLOyMaMWzlxwVpGfH+XVW8NG3sfXLequJQvQCT7qMtfD9BeXIgA/Ky+
+         HuNgVj6ByNRNgBNjmYRF7KpVqzrX/k4oqVF6YJzk+2X8JXQKtwWLkz3Yv45fURCej6rK
+         wHlw==
+X-Gm-Message-State: AOAM533vyRRqGxe3B49TadWFuGQ7K3E7n4n7m96H2amFDG+6opi2jXV7
+        92curIt66/2UD2hGNd1ot6Ok+lJRrMIeCuIOIddtshYhQMvBHTPMNqeidYXihwUNVJ2MJGx5zSo
+        +YSuBS4yY5pXDLN7qjp4s4KW5
+X-Received: by 2002:a05:6808:19a5:b0:2cf:3047:e78f with SMTP id bj37-20020a05680819a500b002cf3047e78fmr1017619oib.43.1645027890110;
+        Wed, 16 Feb 2022 08:11:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxt+YgdfI5Fk0Xh7kX7VKIgYAe4XUjIZjnwAnXycbpxMk9pjuatlkjUMY0+5sKDhCNzHWL9NA==
+X-Received: by 2002:a05:6808:19a5:b0:2cf:3047:e78f with SMTP id bj37-20020a05680819a500b002cf3047e78fmr1017598oib.43.1645027889848;
+        Wed, 16 Feb 2022 08:11:29 -0800 (PST)
+Received: from sgarzare-redhat (host-95-248-229-156.retail.telecomitalia.it. [95.248.229.156])
+        by smtp.gmail.com with ESMTPSA id bg30sm2235654oib.4.2022.02.16.08.11.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 08:13:38 -0800 (PST)
-From:   David Vernet <void@manifault.com>
-To:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jpoimboe@redhat.com, pmladek@suse.com, jikos@kernel.org,
-        mbenes@suse.cz, joe.lawrence@redhat.com, corbet@lwn.net
-Cc:     void@manifault.com, kernel-team@fb.com
-Subject: [PATCH v3] livepatch: Skip livepatch tests if ftrace cannot be configured
-Date:   Wed, 16 Feb 2022 08:11:01 -0800
-Message-Id: <20220216161100.3243100-1-void@manifault.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 16 Feb 2022 08:11:29 -0800 (PST)
+Date:   Wed, 16 Feb 2022 17:11:22 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Seth Forshee <sforshee@digitalocean.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] vsock: remove vsock from connected table when connect is
+ interrupted by a signal
+Message-ID: <20220216161122.eacdfgljg2c6yeby@sgarzare-redhat>
+References: <20220216143222.1614690-1-sforshee@digitalocean.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220216143222.1614690-1-sforshee@digitalocean.com>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-livepatch has a set of selftests that are used to validate the behavior of
-the livepatching subsystem.  One of the testcases in the livepatch
-testsuite is test-ftrace.sh, which among other things, validates that
-livepatching gracefully fails when ftrace is disabled.  In the event that
-ftrace cannot be disabled using 'sysctl kernel.ftrace_enabled=0', the test
-will fail later due to it unexpectedly successfully loading the
-test_klp_livepatch module.
+Hi Seth,
 
-While the livepatch selftests are careful to remove any of the livepatch
-test modules between testcases to avoid this situation, ftrace may still
-fail to be disabled if another trace is active on the system that was
-enabled with FTRACE_OPS_FL_PERMANENT.  For example, any active BPF programs
-that use trampolines will cause this test to fail due to the trampoline
-being implemented with register_ftrace_direct().  The following is an
-example of such a trace:
+On Wed, Feb 16, 2022 at 08:32:22AM -0600, Seth Forshee wrote:
+>vsock_connect() expects that the socket could already be in the
+>TCP_ESTABLISHED state when the connecting task wakes up with a signal
+>pending. If this happens the socket will be in the connected table, and
+>it is not removed when the socket state is reset. In this situation it's
+>common for the process to retry connect(), and if the connection is
+>successful the socket will be added to the connected table a second
+>time, corrupting the list.
+>
+>Prevent this by calling vsock_remove_connected() if a signal is received
+>while waiting for a connection. This is harmless if the socket is not in
+>the connected table, and if it is in the table then removing it will
+>prevent list corruption from a double add.
+>
+>Signed-off-by: Seth Forshee <sforshee@digitalocean.com>
+>---
+> net/vmw_vsock/af_vsock.c | 1 +
+> 1 file changed, 1 insertion(+)
+>
+>diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>index 3235261f138d..38baeb189d4e 100644
+>--- a/net/vmw_vsock/af_vsock.c
+>+++ b/net/vmw_vsock/af_vsock.c
+>@@ -1401,6 +1401,7 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
+> 			sk->sk_state = sk->sk_state == TCP_ESTABLISHED ? TCP_CLOSING : TCP_CLOSE;
+> 			sock->state = SS_UNCONNECTED;
+> 			vsock_transport_cancel_pkt(vsk);
+>+			vsock_remove_connected(vsk);
+> 			goto out_wait;
+> 		} else if (timeout == 0) {
+> 			err = -ETIMEDOUT;
+>-- 
+>2.32.0
+>
 
-tcp_drop (1) R I D      tramp: ftrace_regs_caller+0x0/0x58
-(call_direct_funcs+0x0/0x30)
-        direct-->bpf_trampoline_6442550536_0+0x0/0x1000
+Thanks for this fix! The patch LGTM:
 
-In order to make the test more resilient to system state that is out of its
-control, this patch updates set_ftrace_enabled() to detect sysctl failures,
-and skip the testrun when appropriate.
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
-Suggested-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: David Vernet <void@manifault.com>
----
-v3:
-  - Fixed a bug in v1 and v2 pointed out by Petr in
-    https://lore.kernel.org/all/20220209154934.5w5k5tqcqldbfjt3@dev0025.ash9.facebook.com/
-    wherein we'd incorrectly skip() in test-ftrace.sh when we expected to
-    fail to set sysctl due to ftrace being in-use by livepatch.
-  - Applied Petr's suggestions for the patch, which address the
-    aforementioned issue by adding a --fail flag to set_ftrace_enabled().
-    This allows callers to signal that they expect an invocation to fail.
-  - Updates the caller in test-ftrace.sh that expects the call to
-    set_ftrace_enabled() to fail, to pass this --fail flag.
-  - Slightly updates the commit summary to reflect that we only skip the
-    test "when appropriate" rather than if the call to sysctl fails.
 
-v2:
-  - Fix typo in newly added comment (s/permament/permanent).
-  - Adjust the location of the added newline to be before the new comment
-    rather than that the end of the function.
-  - Make the failure-path check a bit less brittle by checking for the
-    exact expected string, rather than specifically for "Device or resource
-    busy".
+@Dave, @Jakub, since we need this also in stable branches, I was going 
+to suggest adding a Fixes tag, but I'm a little confused: the issue 
+seems to have always been there, so from commit d021c344051a ("VSOCK: 
+Introduce VM Sockets"), but to use vsock_remove_connected() as we are 
+using in this patch, we really need commit d5afa82c977e ("vsock: correct 
+removal of socket from the list").
 
- .../testing/selftests/livepatch/functions.sh  | 22 ++++++++++++++++---
- .../selftests/livepatch/test-ftrace.sh        |  3 ++-
- 2 files changed, 21 insertions(+), 4 deletions(-)
+Commit d5afa82c977e was introduces in v5.3 and it was backported in 
+v4.19 and v4.14, but not in v4.9.
+So if we want to backport this patch also for v4.9, I think we need 
+commit d5afa82c977e as well.
 
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index 846c7ed71556..9230b869371d 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -75,9 +75,25 @@ function set_dynamic_debug() {
- }
- 
- function set_ftrace_enabled() {
--	result=$(sysctl -q kernel.ftrace_enabled="$1" 2>&1 && \
--		 sysctl kernel.ftrace_enabled 2>&1)
--	echo "livepatch: $result" > /dev/kmsg
-+	local can_fail=0
-+	if [[ "$1" == "--fail" ]] ; then
-+		can_fail=1
-+		shift
-+	fi
-+
-+	local err=$(sysctl -q kernel.ftrace_enabled="$1" 2>&1)
-+	local result=$(sysctl --values kernel.ftrace_enabled)
-+
-+	if [[ "$result" != "$1" ]] ; then
-+		if [[ $can_fail -eq 1 ]] ; then
-+			echo "livepatch: $err" > /dev/kmsg
-+			return
-+		fi
-+
-+		skip "failed to set kernel.ftrace_enabled = $1"
-+	fi
-+
-+	echo "livepatch: kernel.ftrace_enabled = $result" > /dev/kmsg
- }
- 
- function cleanup() {
-diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
-index 552e165512f4..825540a5194d 100755
---- a/tools/testing/selftests/livepatch/test-ftrace.sh
-+++ b/tools/testing/selftests/livepatch/test-ftrace.sh
-@@ -25,7 +25,8 @@ if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]]
- 	die "livepatch kselftest(s) failed"
- fi
- 
--set_ftrace_enabled 0
-+# Check that ftrace could not get disabled when a livepatch is enabled
-+set_ftrace_enabled --fail 0
- if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]] ; then
- 	echo -e "FAIL\n\n"
- 	die "livepatch kselftest(s) failed"
--- 
-2.30.2
+Thanks,
+Stefano
 

@@ -2,88 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E074B81FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:49:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C89234B81ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbiBPHoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 02:44:44 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59590 "EHLO
+        id S230449AbiBPHpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 02:45:08 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230409AbiBPHoi (ORCPT
+        with ESMTP id S230439AbiBPHpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 02:44:38 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0F018B326;
-        Tue, 15 Feb 2022 23:44:23 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id b8so1698275pjb.4;
-        Tue, 15 Feb 2022 23:44:23 -0800 (PST)
+        Wed, 16 Feb 2022 02:45:04 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634F019FB1C;
+        Tue, 15 Feb 2022 23:44:48 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id f19so1397421qvb.6;
+        Tue, 15 Feb 2022 23:44:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=KjyiB4oe2UgRaagEunQWB/cqQBQkKmQNg7Q7gBoEQ8Y=;
-        b=PAi4F0tNpJVGT+YHKu1FhHsi0Zuw065ICyGZuy8CZbf4wVdz4C5i3MS8Lqt7GEkPJU
-         t87l6ZNbOQaXqGjNm7XxHbPLXWnAWDPd5ZiQWcGGGaFXvOPhHkoxZnDuPIretW3gmJZL
-         kn1dInwOAKfwzPxVuSAojkZdK4Jr5GOEupbnGZEyibMA/7FBVNs0UhMACWY730FVr3FC
-         gORr6LzITU8f/METwHdsayXhT2+onP+unXqjDroLPBidvv5sEQPyQHdJkyesodaYgH3o
-         Xa+vVH1xWlS32p8YGuxNn2fQhpCxPqvJuEbDdzy1JSy08DeTenzmLxbZ1GgePKTWJx6D
-         RAJA==
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=UWEGrk+MNpARhvbHzf+0g0kbbtIVAtwr34HOg+Y5lQ8=;
+        b=C+OB9n0G4yzpDcvquHEP75OsJsd5/Q+aKf3O2aGNS0GlZ97qy1HxD1ckACWlyc3FiA
+         Lbezk2QubuMq2BNnYZrR2Z8ADcD/4bDIO/LwjCTqFfPR47svSBnASq2GWjFwuSnuy0Bq
+         cveZvmB6FJEsIjpAXOY85UfCMsm2/EYzL+aq9wmKJcMZrYxZKqjO/sxT/DanTJHrFlov
+         K05/jvbD8IwKK9xRcpAPqr5tfjlA37IQfnK4K01hzjS8mR+6pRuJAUDZYF8jjLxwDUjc
+         2iLydAyhPf1B39aGhsQkldKZV1buNO8KifSBpvB2+o+2bFSJhf0I2jpQvGjvlTYPQflo
+         vUmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=KjyiB4oe2UgRaagEunQWB/cqQBQkKmQNg7Q7gBoEQ8Y=;
-        b=n44qgXXUJYxkmlglvLcbhig9XQduspqIQpkh1nUeFWVMP59T+FrnUHybZazgNrK7wT
-         5cuo/NHz78jcLpkijXX5rXhy4cx1HQ1pkDeknZocVoxEJBoYh7FkF0i2DqSV7kb8C9KW
-         f+CGrw1e0IkOHUGhBf9sOR0r4g9c5EsgiEm1zBMHk3r1FqahfcOnHlXLzChabOSfyO4d
-         DpFq1/pSZiImWJHoPoyN5OP7jPvCeBEgCl0kh/FvV0p6I7Js927IB7XQSAdlRZMJaplr
-         EAJnIPYoIZBNZWOnOsN7XWBCZYIS3SuDzrZLCiCTOYdPQHDRwmLxZ9kGnFSoL8tiN9t4
-         P1FA==
-X-Gm-Message-State: AOAM5300/k7G1q9OYmKRydVuGjRT/chSgZFsvt4K2ttrU94I6jsNoy7L
-        WcQ+vANatnMXPTWClXpvcjU=
-X-Google-Smtp-Source: ABdhPJwQdilXqV6xdeV2/P8S1VH9zYJZCsJE2ZmXd8ova9N24AJUwvcr9N4ZfXc0kFk+lowwj/WGoQ==
-X-Received: by 2002:a17:902:d886:b0:14d:5b6f:5bbe with SMTP id b6-20020a170902d88600b0014d5b6f5bbemr1315538plz.127.1644997454528;
-        Tue, 15 Feb 2022 23:44:14 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id f8sm43168547pfv.24.2022.02.15.23.44.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 23:44:14 -0800 (PST)
-Message-ID: <71689d29-caf8-ed7e-2cd7-61cbab0fc7e0@gmail.com>
-Date:   Wed, 16 Feb 2022 15:44:04 +0800
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=UWEGrk+MNpARhvbHzf+0g0kbbtIVAtwr34HOg+Y5lQ8=;
+        b=yvZr3naBitOupErgThEpMYq6qloqV2rvmtae5WKiT0mnq3zfPabRTJHS/cvGofikBU
+         WEvhsiK4bfhB26WQonh9U20QaxkPhNKPT65dRNGW1Bd/YAllomG/dkE7auaOg/vdNpuj
+         4ZupyKDAxf2DcbaNYTDBp1lO+yJTYDZ9ftFPkrC2pXWVhieLcnCZgwoPxa9FI3MgIHaJ
+         823ZUclplNYUjYl+wHXvfq3KFdE+1FeAaLFLeD9NQdRnClIIrSeaYeod0kyZDQ/NwXWr
+         nrc4IE4sMXDgb9wCFH4cj92jhpR5Zns+VR9/fVhBaGQpnblVICWmRhYDsSqRWCZUwAP9
+         dLYw==
+X-Gm-Message-State: AOAM5305XDuFRKqxfpFHCXQdFnqCfaAQHOJ43BZOyUS5y/qtYEDcInRk
+        7ByoHRHrJrErkEaaDYtB+XJVVKmFYA==
+X-Google-Smtp-Source: ABdhPJxsbDjRuJvF5LEmbr3ifWA1U3ttEPmd/+1OwW5iNVilh29ICip3BeCVK7EhOlE8lF4p+wS6Pw==
+X-Received: by 2002:ad4:4f83:0:b0:42f:5997:d3de with SMTP id em3-20020ad44f83000000b0042f5997d3demr1034511qvb.82.1644997478729;
+        Tue, 15 Feb 2022 23:44:38 -0800 (PST)
+Received: from zaphod.evilpiepirate.org (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
+        by smtp.gmail.com with ESMTPSA id 22sm22037811qtw.75.2022.02.15.23.44.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 23:44:37 -0800 (PST)
+Date:   Wed, 16 Feb 2022 02:44:33 -0500
+From:   Kent Overstreet <kent.overstreet@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        lsf-pc@lists.linux-foundation.org
+Subject: [LSF/MM/BPF TOPIC] bcachefs
+Message-ID: <20220216074433.u726dkh2q2wdtwne@zaphod.evilpiepirate.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [PATCH v2 2/6] KVM: x86/pmu: Refactoring find_arch_event() to
- pmc_perf_hw_id()
-Content-Language: en-US
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Dunn <daviddunn@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jim Mattson <jmattson@google.com>
-References: <20211130074221.93635-1-likexu@tencent.com>
- <20211130074221.93635-3-likexu@tencent.com>
- <CALMp9eQG7eqq+u3igApsRDV=tt0LdjZzmD_dC8zw=gt=f5NjSA@mail.gmail.com>
- <7de112b2-e6d1-1f9d-a040-1c4cfee40b22@gmail.com>
- <CALMp9eTVxN34fCV8q53_38R2DxNdR9_1aSoRmF8gKt2yhOMndg@mail.gmail.com>
- <3bedc79a-5e60-677c-465b-3bc8aa2daad8@gmail.com>
- <d4dae262-3063-3225-c6e1-3a8513a497ec@amd.com>
- <CALMp9eShc-o+OZ3j4kDkTbXmY58wQu6Rq6qviZAHsDr4X21a5Q@mail.gmail.com>
- <4373e8d7-e3e8-164c-75e3-6ca495a79167@amd.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-Organization: Tencent
-In-Reply-To: <4373e8d7-e3e8-164c-75e3-6ca495a79167@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,40 +66,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/2/2022 6:14 pm, Ravi Bangoria wrote:
-> 
-> 
-> On 11-Feb-22 11:46 PM, Jim Mattson wrote:
->> On Fri, Feb 11, 2022 at 1:56 AM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
->>>
->>>
->>>
->>> On 10-Feb-22 4:58 PM, Like Xu wrote:
->>>> cc Kim and Ravi to help confirm more details about this change.
->>>>
->>>> On 10/2/2022 3:30 am, Jim Mattson wrote:
->>>>> By the way, the following events from amd_event_mapping[] are not
->>>>> listed in the Milan PPR:
->>>>> { 0x7d, 0x07, PERF_COUNT_HW_CACHE_REFERENCES }
->>>>> { 0x7e, 0x07, PERF_COUNT_HW_CACHE_MISSES }
->>>>> { 0xd0, 0x00, PERF_COUNT_HW_STALLED_CYCLES_FRONTEND }
->>>>> { 0xd1, 0x00, PERF_COUNT_HW_STALLED_CYCLES_BACKEND }
->>>>>
->>>>> Perhaps we should build a table based on amd_f17h_perfmon_event_map[]
->>>>> for newer AMD processors?
+Hi, I'd like to come give an update on bcachefs.
 
-So do we need another amd_f19h_perfmon_event_map[] in the host perf code ?
+It's been a long road going from bcache, and starting with what was essentially
+a prototype for a new filesystem, and turning it into a real (scalable, robust,
+full featured) filesystem.
 
->>>
->>> I think Like's other patch series to unify event mapping across kvm
->>> and host will fix it. No?
->>> https://lore.kernel.org/lkml/20220117085307.93030-4-likexu@tencent.com
->>
->> Yes, that should fix it. But why do we even bother? What is the
->> downside of using PERF_TYPE_RAW all of the time?
-> 
-> There are few places where PERF_TYPE_HARDWARE and PERF_TYPE_RAW are treated
-> differently. Ex, x86_pmu_event_init(), perf_init_event(). So I think it makes
-> sense to keep using PERF_TYPE_HARDWARE for generalized events?
-> 
-> Ravi
+Over the past few years, we've added reflink, subvolumes and snapshots. I'm
+particularly proud of how snapshots turned out - it's roughly a versioned btree
+approach, and it's scalable and fast, even fsck is O(number of keys of
+metadata), not O(number of snapshots). I've got it up to a million snapshots in
+a test VM.
+
+The bigger thing though is that the core fundamentals are pretty close to done -
+replacing all the "periodically walk the world" algorigthms with real persistent
+data structures that scale. A big allocator rewrite is about to land, and after
+that will be backpointers - to fix copygc scanning.
+
+Things are in flux lately with all the allocator work, but I'm hoping once that
+settles down and I've worked through the backlog of bug reports and performance
+regressions, we might be ready for upstreaming sometime this year...

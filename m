@@ -2,105 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 921674B8AE1
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:58:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 446C64B8AED
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:01:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234601AbiBPN6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:58:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47304 "EHLO
+        id S234796AbiBPOBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 09:01:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiBPN6e (ORCPT
+        with ESMTP id S233496AbiBPOBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:58:34 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0F3202078
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:58:22 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id B24531F383;
-        Wed, 16 Feb 2022 13:58:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1645019900; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DqOZ17CHnbukiCYIjaxIWPCj5ALuNzzFRQbLP+J147I=;
-        b=P6Nr/r40FO9yOHz/eLYE5pU3+qheXMnCjjj0mkbURoM9y0DeZz1sZ083HIyxXGd0RCv/dt
-        GZO4BhECKT9M50z0B1ErQoiN0ROtRJ5BLrWdGbWoYuNqDKFq2Tet9BIqrcD5xWzKX7sGXb
-        9RNxs0PB/vTcARDtQcfa9qEC2Y9Bl9I=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6054EA3B84;
-        Wed, 16 Feb 2022 13:58:20 +0000 (UTC)
-Date:   Wed, 16 Feb 2022 14:58:17 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: two locations: was: Re: [PATCH printk v1 03/13] printk: use percpu
- flag instead of cpu_online()
-Message-ID: <Yg0C+UtoegnybA4q@alley>
-References: <20220207194323.273637-1-john.ogness@linutronix.de>
- <20220207194323.273637-4-john.ogness@linutronix.de>
+        Wed, 16 Feb 2022 09:01:33 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E862220BC3;
+        Wed, 16 Feb 2022 06:01:20 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.31:52036.771379645
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id 5D5DA100249;
+        Wed, 16 Feb 2022 22:01:17 +0800 (CST)
+Received: from  ([172.27.8.53])
+        by gateway-151646-dep-b7fbf7d79-bwdqx with ESMTP id 548e00fac09a411c85fa6fb7ab0cae38 for krzk@kernel.org;
+        Wed, 16 Feb 2022 22:01:19 CST
+X-Transaction-ID: 548e00fac09a411c85fa6fb7ab0cae38
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 172.27.8.53
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <3e34a508-3969-80d9-4ef7-7cb358c0147d@189.cn>
+Date:   Wed, 16 Feb 2022 22:01:13 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207194323.273637-4-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v6 2/3] dt-bindings: ls2k1000: add the display controller
+ device node
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        linux-mips@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org
+References: <20220203082546.3099-1-15330273260@189.cn>
+ <20220203082546.3099-3-15330273260@189.cn>
+ <CAJKOXPfN+Ax8i_Mcax9LfbSG8VwM86YgUxuRUfSF_YEx4z0EaQ@mail.gmail.com>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <CAJKOXPfN+Ax8i_Mcax9LfbSG8VwM86YgUxuRUfSF_YEx4z0EaQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-02-07 20:49:13, John Ogness wrote:
-> The CON_ANYTIME console flag is used to label consoles that will
-> work correctly before percpu resources are allocated. To check
-> the condition, cpu_online(raw_smp_processor_id()) was used.
-> However, this is odd because CPUs can go offline at a later point.
-> Also, the function is forced to use the raw_ variant because
-> migration is not disabled.
-> 
-> Since commit ab6f762f0f53 ("printk: queue wake_up_klogd irq_work
-> only if per-CPU areas are ready") there is a variable to identify
-> if percpu resources have been allocated. Use that variable instead
-> of cpu_online(raw_smp_processor_id()).
 
-> --- a/include/linux/console.h
-> +++ b/include/linux/console.h
-> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-> index d1b773823d63..b346e60e9e51 100644
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -2577,11 +2577,11 @@ static int have_callable_console(void)
->   *
->   * Console drivers may assume that per-cpu resources have been allocated. So
->   * unless they're explicitly marked as being able to cope (CON_ANYTIME) don't
-> - * call them until this CPU is officially up.
-> + * call them until per-cpu resources have been allocated.
->   */
->  static inline int can_use_console(void)
->  {
-> -	return cpu_online(raw_smp_processor_id()) || have_callable_console();
-> +	return (printk_percpu_data_ready() || have_callable_console());
->  }
+On 2022/2/3 16:50, Krzysztof Kozlowski wrote:
+> On Thu, 3 Feb 2022 at 09:26, Sui Jingfeng <15330273260@189.cn> wrote:
+>> From: suijingfeng <suijingfeng@loongson.cn>
+>>
+>> The display controller is a pci device, its vendor id is 0x0014
+>> its device id is 0x7a06.
+> The same as your patch 3 - these are not bindings.
+>
+> Best regards,
+> Krzysztof
 
-cpu_online(raw_smp_processor_id()) check is used also in
-call_console_drivers(). The same logic should be used in both
-locations.
+Yes, you are right. As there is no compatible string in my driver to match against the compatible
+in the dc@6,1 device node.
 
-I found this when reviewing 6th patch that replaced both checks
-with a single one.
+I don't know how to write YAML document now, it seems no similar case can be reference?
 
-Note that I am still not sure if this change is correct at all.
-It will allow to always call the console during CPU hotplug
-and I am not sure if it is safe. IMHO, it might cause problems when
-a console driver uses, for example, CPU-bound workqueues.
-
-Best Regards,
-Petr

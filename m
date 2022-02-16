@@ -2,137 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F6B94B812E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B7D4B8165
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiBPHRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 02:17:12 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:32830 "EHLO
+        id S229875AbiBPHUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 02:20:04 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:50004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiBPHRI (ORCPT
+        with ESMTP id S229596AbiBPHUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 02:17:08 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD94C1141;
-        Tue, 15 Feb 2022 23:16:52 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id e6so1426670vsa.8;
-        Tue, 15 Feb 2022 23:16:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=q/fqjdbDD2fyY7moizdQvW5LN8SHN1B18vYdIVedr2w=;
-        b=lp4WomsRpPzMzCV/F2J6D885OSY301v5mrj611CFTqGbzXRTf+SOBP2PYLYgRC9yUa
-         WHIOS/IaZpxaWjwMyQNPP/9enFryKTvsQ0ZMikeEusLJA0mZ/LlWh7KlRi10hz8Z+RIL
-         GznNlJKDuCITsaNcZvzAxeMUIoGnrF4YfIXqanmI/2ZO19eRR7XLy89qEyHoFVhp/9Qg
-         SeJezPoz026JuHNhAkvI+OuDnyNA8WLJK/hPCBNkXcAM7M7psQ9IQHuCgkvgYToCgeiC
-         PehWZyz96DUuVYvnaIVQPDTjFoAX0pXwtgBSGevn4WmxIeP4hn0EfLocbzNVnKg3CkO1
-         qRVg==
+        Wed, 16 Feb 2022 02:20:02 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBB3DBD04
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:19:48 -0800 (PST)
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2489F40333
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 07:19:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644995987;
+        bh=3QteeCZRrYGG8lRD/0x4vggPgtmzvyjVPqyeuzYI/CI=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=amsve6dJUYAvb9iA92K/zo+JR23UrvQuNPZ5wtE/CVmmvVK9rP6rg5TpvNDhVuNk3
+         g8BDuylbvJb6eikk0E4urKjlTmrtnkEXaZXsi5589rUeh2XU+t3A2oCVcLA9pkPz6E
+         iAdxGY80N8yisxMl/0BgRY8BMpQWNFObIoFuKsTcPi+Yyt9yW7X/XdUtKezZxRa1XF
+         YNESHwwFqyXgxJdXdmNXm76pEkh62yr0ccWxPH/aym+xVKeZq0uqj4QwoSpAUP5YtK
+         rVWvl7B6dIIEEOE0JZObENMJwhVDKBa79Zw0S1u7peohPC65SeaAkzGNLyX8HZ7AhG
+         4Kc9KuUNB/gKQ==
+Received: by mail-wr1-f69.google.com with SMTP id e11-20020adf9bcb000000b001e316b01456so663258wrc.21
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:19:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=q/fqjdbDD2fyY7moizdQvW5LN8SHN1B18vYdIVedr2w=;
-        b=3R3/jcUkl6qwjTcCaC0HnwP//4iN74ndUsQWa/mKP6n8NGgT0m/7rQRTIMsAnQN/LF
-         fYmKTVodbJwZvXkwmfv6jixHrtZU8GCjNwi3v7cIpcXnEuijeFveGSz1uipnXPsJy790
-         HafaGGUnGwVkkaPvsn3M1EJXgW/0W6fgjl0/Ixhw53KMJ6wYRq/tgXggVsJAtPM4VRtO
-         fOp5lwMukvJzOWNPHRU/uGS5lDQQKbAE68iS1FOcsgCzeoTh/4Yjv3mVZInInsV5ytYh
-         iZS0Tnm7upUFNV4rz/jTdN+gY4ZBclprJ8K71zct/Kn4dUjEg3NrwcomoViLqRX8+xn3
-         CB1g==
-X-Gm-Message-State: AOAM532YG0jaAi49DDqbxAj8nPq5qUR7j9f/vLk/XZyqKmrbD2ZHYKSw
-        krNcdG/e0xsj08nMqB2LU4qfnFeH7hu98w1glkE=
-X-Google-Smtp-Source: ABdhPJwkuPRp9kDdAIfjm6S9WYhpNKDD1u0NOmPXCGk5CMYW9JB8JYSJ0QQwATAMp2BprXSLKzO08xHwljc4VfAujKc=
-X-Received: by 2002:a05:6102:74c:b0:31b:a815:a83b with SMTP id
- v12-20020a056102074c00b0031ba815a83bmr480903vsg.17.1644995811769; Tue, 15 Feb
- 2022 23:16:51 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3QteeCZRrYGG8lRD/0x4vggPgtmzvyjVPqyeuzYI/CI=;
+        b=5PStHAWD/Y0OLTkK1dCcHMPTw6tJMPUe2zSEBWKlqYShDBLnZ4kRh8rHev/VgxyWKe
+         abj3hvVhqGcJXrKf16Xo+KHogKjun8pgE3YMY+D3uk7jLVCyL7sDuWXw5oRMAA0LlOPO
+         BeuclNqPwtabR9WCmy5uOArhTYPGLFmX4cGy9OwF/ztQ7vJCTyf0BkABJhpwMnUJdbqA
+         IBGjcDduFdEPiy6qQ6vCFQ2pVBYcZSdwbBrKgEUfkcEdsKByA8RwxwHf1qN6z17ZgL92
+         ovxCwZi0AQx5VXhzFOz78YrZNd01jUB7qTyUzauOz0uXQl7+WE4XEqNlh1lGTrSenOMS
+         0RTA==
+X-Gm-Message-State: AOAM531W6tlVEm1Gb2+MiLL/ip4haCUzZ0LkDsRvTRJGaEHmvasB/iI3
+        p0mO871r7QBcsRVIk5iY3G44OhdYHqWTncXPihJqtXkd1gl48qk+eEU/hJk/Fl/KH2moUImbgDA
+        YVGBtSU7k6VDCg7UyQX5stJBhstUxUJoyfO2FMRNsKQ==
+X-Received: by 2002:a05:600c:2502:b0:37b:ce43:9ac0 with SMTP id d2-20020a05600c250200b0037bce439ac0mr251772wma.37.1644995986825;
+        Tue, 15 Feb 2022 23:19:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz0qUMxjV+5o8oLXBCBqBJN8fqGl7V096OWi35LZe9vA29ZRLzI2LtWlImYQream3SgUc8SdQ==
+X-Received: by 2002:a05:600c:2502:b0:37b:ce43:9ac0 with SMTP id d2-20020a05600c250200b0037bce439ac0mr251757wma.37.1644995986615;
+        Tue, 15 Feb 2022 23:19:46 -0800 (PST)
+Received: from [192.168.0.110] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id az2sm26332158wmb.2.2022.02.15.23.19.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 23:19:46 -0800 (PST)
+Message-ID: <275a4a2e-e8e2-b398-3574-73eae7cc6505@canonical.com>
+Date:   Wed, 16 Feb 2022 08:19:45 +0100
 MIME-Version: 1.0
-References: <1644949454-814-1-git-send-email-quic_c_sanm@quicinc.com> <1644949454-814-3-git-send-email-quic_c_sanm@quicinc.com>
-In-Reply-To: <1644949454-814-3-git-send-email-quic_c_sanm@quicinc.com>
-From:   Jun Li <lijun.kernel@gmail.com>
-Date:   Wed, 16 Feb 2022 15:16:40 +0800
-Message-ID: <CAKgpwJWEZ7275LihHqxg50cWNVNxUcGR8e7pM-V2bH=aodL7YA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] usb: dwc: host: add xhci_plat_priv quirk XHCI_SKIP_PHY_INIT
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-arm-msm@vger.kernel.org,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 1/3] dt-bindings: ps2-gpio: convert binding to
+ json-schema
+Content-Language: en-US
+To:     Danilo Krummrich <danilokrummrich@dk-develop.de>,
+        dmitry.torokhov@gmail.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linus.walleij@linaro.org
+References: <20220215180829.63543-1-danilokrummrich@dk-develop.de>
+ <20220215180829.63543-2-danilokrummrich@dk-develop.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220215180829.63543-2-danilokrummrich@dk-develop.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sandeep Maheswaram <quic_c_sanm@quicinc.com> =E4=BA=8E2022=E5=B9=B42=E6=9C=
-=8816=E6=97=A5=E5=91=A8=E4=B8=89 14:58=E5=86=99=E9=81=93=EF=BC=9A
->
-> dwc3 manages PHY by own DRD driver, so skip the management by
-> HCD core.
-> During runtime suspend phy was not getting suspend because
-> runtime_usage value is 2.
->
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+On 15/02/2022 19:08, Danilo Krummrich wrote:
+> Convert the ps2-gpio dt-binding documentation to DT schema format using
+> the json-schema.
+> 
+> Signed-off-by: Danilo Krummrich <danilokrummrich@dk-develop.de>
 > ---
->  drivers/usb/dwc3/host.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index eda8719..4a035a8 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -13,6 +13,14 @@
->  #include <linux/platform_device.h>
->
->  #include "core.h"
-> +#include <linux/usb/hcd.h>
-> +#include <linux/usb/xhci-plat.h>
-> +#include <linux/usb/xhci-quirks.h>
-> +
-> +
-> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci =3D {
-> +       .quirks =3D XHCI_SKIP_PHY_INIT,
-> +};
+>  .../devicetree/bindings/serio/ps2-gpio.txt    | 23 --------
+>  .../devicetree/bindings/serio/ps2-gpio.yaml   | 58 +++++++++++++++++++
+>  2 files changed, 58 insertions(+), 23 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/serio/ps2-gpio.txt
+>  create mode 100644 Documentation/devicetree/bindings/serio/ps2-gpio.yaml
+> 
 
-It's better to create this xhci_plat_priv by each dwc3 glue layer,
-with that, we can use this priv to pass other flags and possibly
-override APIs by each glue driver which may not apply to all dwc3
-platforms.
 
-thanks
-Li Jun
->
->  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
->                                         int irq, char *name)
-> @@ -122,6 +130,13 @@ int dwc3_host_init(struct dwc3 *dwc)
->                 }
->         }
->
-> +       ret =3D platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
-> +                       sizeof(struct xhci_plat_priv));
-> +       if (ret) {
-> +               dev_err(dwc->dev, "failed to add data to xHCI\n");
-> +               goto err;
-> +       }
-> +
->         ret =3D platform_device_add(xhci);
->         if (ret) {
->                 dev_err(dwc->dev, "failed to register xHCI device\n");
-> --
-> 2.7.4
->
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+
+Best regards,
+Krzysztof

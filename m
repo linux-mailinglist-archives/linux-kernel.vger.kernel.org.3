@@ -2,163 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BCC4B8EBA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 18:01:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A53FD4B8EC3
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 18:03:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236832AbiBPRBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 12:01:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54876 "EHLO
+        id S236869AbiBPRD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 12:03:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236457AbiBPRBw (ORCPT
+        with ESMTP id S236862AbiBPRDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 12:01:52 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F3894965
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:01:39 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id q8so445552iod.2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:01:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=I5FGz9UopDmOr/sS+hUAyFgI3PwHIeG5FXWhjwGlyJI=;
-        b=GcZdvidaiUJh4QJe+8knJfUEKZ0kHu1Ekr7Fo/prc3WQlwk5azLOhn2N99tiJ9KyqC
-         BRkRSS3c9Dqv7LlyetYkHxm1DUijOeBruzahYgv4QAUclx4iFN1jef3U+Lv1YU6WveS2
-         0LyiMYhUsTil26XK8Vw7ZyqH/3QPg21CoHIHEW97CgZzYZacGpLar/wPlxeUgji34ELu
-         cc3fNOn8UudSzs1eZT9yUYDDcL31fxZyor0Hly0uxoXwxw548ce+RVQ+SQdanEzwrFRn
-         PCsU77mVX/1LvHrMZs8uieuHXsc7loALHhc7rZu06F+9nuAPHEMkizvNdmela1m/Uzf5
-         Jy1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=I5FGz9UopDmOr/sS+hUAyFgI3PwHIeG5FXWhjwGlyJI=;
-        b=DjqLqzCg/eG35a4vIUX7+GU/HNSG6BgRCyDTPw1orzzLZaKClFNvss99+EccxmDjCe
-         6DZe3xHyvxzW8CULp4diceZib0pbSSlTGZ7mQQI2wt6IcZKKUa5TV4pYM7U1icfPRz5d
-         U7sg6yxuxne2PTpn3Lt+wIgw8Rb7ex6hcYZBDWomKP00YCHd0UGU0KEV3O5UiEicuZO0
-         MMr7s4lsQJDpc0N4R+pcLcfQdRrYCfPD7PWs5qtsTBPmJJg0fatHPvd7XooF+jP2+A/O
-         vVCkrnewXOYFWSySvSQGlrzH18dW8xVroWD58bwkqWwsHnmKYBh8g5wPgzF6kK/dHHbq
-         abfQ==
-X-Gm-Message-State: AOAM533qgYPTcFlJGUpwIubU/sHqYvgFjlux+dO/OCQjJIuS6D3UA1t6
-        F65Ln6CmZ4r3zn9bFWnIA5B8CsXRw2pHIF+vCRw=
-X-Google-Smtp-Source: ABdhPJzr7cU4QtjSQruJcWOgXa70ZC97Rs4vkdBEVjN4FdiXcQIJTnXQyNRfRuCN+qgNR3EKTpFdrSCgTjHah089l7E=
-X-Received: by 2002:a5e:8c15:0:b0:634:478e:450e with SMTP id
- n21-20020a5e8c15000000b00634478e450emr2495232ioj.56.1645030898651; Wed, 16
- Feb 2022 09:01:38 -0800 (PST)
+        Wed, 16 Feb 2022 12:03:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F384A16201F
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:03:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645030990;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XwunH2DjI7pFdcpeiWUDm/kpK6CfJVOijKSMOBToDFg=;
+        b=FbRjioSM/omvO1tgMXjZO3tzANXj6Sk2llkpc+ut/ijuxGcuL2DvZ+PVqoaBZdOIvSNG9Q
+        8rvfxsH7NuHiE43PxdeKmJoqTfi5RVpvGxEqR53URx5JQYlAISqZBPnDhSFwIv1F0ZBGPl
+        mUEEbelz24CE7K6z3Ttxflczmo90e7Q=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-81-gQYbUko9OWOMsN9ib_JuJg-1; Wed, 16 Feb 2022 12:03:06 -0500
+X-MC-Unique: gQYbUko9OWOMsN9ib_JuJg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9760E1800D50;
+        Wed, 16 Feb 2022 17:03:05 +0000 (UTC)
+Received: from redhat.com (unknown [10.22.8.49])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 17B22753EA;
+        Wed, 16 Feb 2022 17:03:04 +0000 (UTC)
+Date:   Wed, 16 Feb 2022 12:03:03 -0500
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+To:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org
+Subject: Re: [RFC PATCH v6 10/12] livepatch/selftests: add __asm__ symbol
+ renaming examples
+Message-ID: <Yg0uR+OhVqTU5XhX@redhat.com>
+References: <20220216163940.228309-1-joe.lawrence@redhat.com>
+ <20220216163940.228309-11-joe.lawrence@redhat.com>
 MIME-Version: 1.0
-References: <20220111161937.56272-1-pankaj.gupta.linux@gmail.com>
- <20220111161937.56272-3-pankaj.gupta.linux@gmail.com> <CAPcyv4gM99M8Waw9uEZefvpK0BsTkjGznLxUOMcMkGpk6SuHyA@mail.gmail.com>
- <CAM9Jb+iYXn+Diq-vou+_hXdxXLR9rEXm6GOsd2tZpAg9zXn1Fw@mail.gmail.com> <CAPcyv4iPhtbhAfpjCtbt9RGFOXuGCj-q3Gm_y7zaNk44Z7uq9Q@mail.gmail.com>
-In-Reply-To: <CAPcyv4iPhtbhAfpjCtbt9RGFOXuGCj-q3Gm_y7zaNk44Z7uq9Q@mail.gmail.com>
-From:   Pankaj Gupta <pankaj.gupta.linux@gmail.com>
-Date:   Wed, 16 Feb 2022 18:01:27 +0100
-Message-ID: <CAM9Jb+i_p44q=sS4P=B3Pr-T_jsM9Q-mUHg6i657dT7bSqKULw@mail.gmail.com>
-Subject: Re: [RFC v3 2/2] pmem: enable pmem_submit_bio for asynchronous flush
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Linux NVDIMM <nvdimm@lists.linux.dev>,
-        virtualization@lists.linux-foundation.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        jmoyer <jmoyer@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Vishal L Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        Pankaj Gupta <pankaj.gupta@ionos.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216163940.228309-11-joe.lawrence@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > > Return from "pmem_submit_bio" when asynchronous flush is
-> > > > still in progress in other context.
-> > > >
-> > > > Signed-off-by: Pankaj Gupta <pankaj.gupta.linux@gmail.com>
-> > > > ---
-> > > >  drivers/nvdimm/pmem.c        | 15 ++++++++++++---
-> > > >  drivers/nvdimm/region_devs.c |  4 +++-
-> > > >  2 files changed, 15 insertions(+), 4 deletions(-)
-> > > >
-> > > > diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-> > > > index fe7ece1534e1..f20e30277a68 100644
-> > > > --- a/drivers/nvdimm/pmem.c
-> > > > +++ b/drivers/nvdimm/pmem.c
-> > > > @@ -201,8 +201,12 @@ static void pmem_submit_bio(struct bio *bio)
-> > > >         struct pmem_device *pmem = bio->bi_bdev->bd_disk->private_data;
-> > > >         struct nd_region *nd_region = to_region(pmem);
-> > > >
-> > > > -       if (bio->bi_opf & REQ_PREFLUSH)
-> > > > +       if (bio->bi_opf & REQ_PREFLUSH) {
-> > > >                 ret = nvdimm_flush(nd_region, bio);
-> > > > +               /* asynchronous flush completes in other context */
-> > >
-> > > I think a negative error code is a confusing way to capture the case
-> > > of "bio successfully coalesced to previously pending flush request.
-> > > Perhaps reserve negative codes for failure, 0 for synchronously
-> > > completed, and > 0 for coalesced flush request.
-> >
-> > Yes. I implemented this way previously, will revert it to. Thanks!
-> >
-> > >
-> > > > +               if (ret == -EINPROGRESS)
-> > > > +                       return;
-> > > > +       }
-> > > >
-> > > >         do_acct = blk_queue_io_stat(bio->bi_bdev->bd_disk->queue);
-> > > >         if (do_acct)
-> > > > @@ -222,13 +226,18 @@ static void pmem_submit_bio(struct bio *bio)
-> > > >         if (do_acct)
-> > > >                 bio_end_io_acct(bio, start);
-> > > >
-> > > > -       if (bio->bi_opf & REQ_FUA)
-> > > > +       if (bio->bi_opf & REQ_FUA) {
-> > > >                 ret = nvdimm_flush(nd_region, bio);
-> > > > +               /* asynchronous flush completes in other context */
-> > > > +               if (ret == -EINPROGRESS)
-> > > > +                       return;
-> > > > +       }
-> > > >
-> > > >         if (ret)
-> > > >                 bio->bi_status = errno_to_blk_status(ret);
-> > > >
-> > > > -       bio_endio(bio);
-> > > > +       if (bio)
-> > > > +               bio_endio(bio);
-> > > >  }
-> > > >
-> > > >  static int pmem_rw_page(struct block_device *bdev, sector_t sector,
-> > > > diff --git a/drivers/nvdimm/region_devs.c b/drivers/nvdimm/region_devs.c
-> > > > index 9ccf3d608799..8512d2eaed4e 100644
-> > > > --- a/drivers/nvdimm/region_devs.c
-> > > > +++ b/drivers/nvdimm/region_devs.c
-> > > > @@ -1190,7 +1190,9 @@ int nvdimm_flush(struct nd_region *nd_region, struct bio *bio)
-> > > >         if (!nd_region->flush)
-> > > >                 rc = generic_nvdimm_flush(nd_region);
-> > > >         else {
-> > > > -               if (nd_region->flush(nd_region, bio))
-> > > > +               rc = nd_region->flush(nd_region, bio);
-> > > > +               /* ongoing flush in other context */
-> > > > +               if (rc && rc != -EINPROGRESS)
-> > > >                         rc = -EIO;
-> > >
-> > > Why change this to -EIO vs just let the error code through untranslated?
-> >
-> > The reason was to be generic error code instead of returning host side
-> > return codes to guest?
->
-> Ok, maybe a comment to indicate the need to avoid exposing these error
-> codes toa guest so someone does not ask the same question in the
-> future?
+On Wed, Feb 16, 2022 at 11:39:38AM -0500, Joe Lawrence wrote:
+> GCC can rename symbols like static data and optimized functions, adding
+> a suffix that includes illegal C characters.  Extend the klp-convert
+> examples to demonstrate how to use __asm__ renaming from C code to
+> create klp-relocations to such renamed symbols.
+> 
+> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+> ---
+>  lib/livepatch/test_klp_convert.h                    | 2 ++
+>  lib/livepatch/test_klp_convert1.c                   | 8 ++++++++
+>  lib/livepatch/test_klp_convert_mod_a.c              | 6 ++++++
+>  lib/livepatch/test_klp_convert_mod_b.c              | 6 ++++++
+>  tools/testing/selftests/livepatch/test-livepatch.sh | 4 ++++
+>  5 files changed, 26 insertions(+)
+> 
+> diff --git a/lib/livepatch/test_klp_convert.h b/lib/livepatch/test_klp_convert.h
+> index 5d97bc546d6e..42befbfd63cb 100644
+> --- a/lib/livepatch/test_klp_convert.h
+> +++ b/lib/livepatch/test_klp_convert.h
+> @@ -10,5 +10,7 @@ extern char driver_name[];
+>  extern char homonym_string[];
+>  extern const char *get_homonym_string(void);
+>  extern const char *test_klp_get_driver_name(void);
+> +extern char klp_string_a[] __asm__("klp_string.12345");
+> +extern char klp_string_b[] __asm__("klp_string.67890");
+>  
+>  #endif
+> diff --git a/lib/livepatch/test_klp_convert1.c b/lib/livepatch/test_klp_convert1.c
+> index cd2d3c638258..06926cf1c609 100644
+> --- a/lib/livepatch/test_klp_convert1.c
+> +++ b/lib/livepatch/test_klp_convert1.c
+> @@ -25,6 +25,12 @@ void print_homonym_string(void)
+>  	pr_info("get_homonym_string(), 1: %s\n", get_homonym_string());
+>  }
+>  
+> +void print_static_strings(void)
+> +{
+> +	pr_info("klp_string.12345 = %s\n", klp_string_a);
+> +	pr_info("klp_string.67890 = %s\n", klp_string_b);
+> +}
+> +
+>  /* provide a sysfs handle to invoke debug functions */
+>  static int print_debug;
+>  static int print_debug_set(const char *val, const struct kernel_param *kp)
+> @@ -32,6 +38,7 @@ static int print_debug_set(const char *val, const struct kernel_param *kp)
+>  	print_saved_command_line();
+>  	print_driver_name();
+>  	print_homonym_string();
+> +	print_static_strings();
+>  
+>  	return 0;
+>  }
+> @@ -67,6 +74,7 @@ KLP_MODULE_RELOC(test_klp_convert_mod) test_klp_convert_mod_relocs_a[] = {
+>  	KLP_SYMPOS(homonym_string, 1),
+>  	KLP_SYMPOS(get_homonym_string, 1),
+>  	KLP_SYMPOS(test_klp_get_driver_name, 0),
+> +	KLP_SYMPOS(klp_string_b, 1),
+>  };
+>  
+>  static struct klp_func funcs[] = {
+> diff --git a/lib/livepatch/test_klp_convert_mod_a.c b/lib/livepatch/test_klp_convert_mod_a.c
+> index ae5e911fbb9b..9af0fcab0c8d 100644
+> --- a/lib/livepatch/test_klp_convert_mod_a.c
+> +++ b/lib/livepatch/test_klp_convert_mod_a.c
+> @@ -20,6 +20,12 @@ __used static const char *get_homonym_string(void)
+>  	return homonym_string;
+>  }
+>  
+> +__used static void static_string_function(void)
+> +{
+> +	__used static char klp_string[] __asm__("klp_string.12345") =
+> +		__FILE__ " static string";
+> +}
+> +
+>  MODULE_LICENSE("GPL");
+>  MODULE_AUTHOR("Joe Lawrence <joe.lawrence@redhat.com>");
+>  MODULE_DESCRIPTION("Livepatch test: klp-convert module");
+> diff --git a/lib/livepatch/test_klp_convert_mod_b.c b/lib/livepatch/test_klp_convert_mod_b.c
+> index 5eca8a4cae38..0a68e898fe03 100644
+> --- a/lib/livepatch/test_klp_convert_mod_b.c
+> +++ b/lib/livepatch/test_klp_convert_mod_b.c
+> @@ -11,3 +11,9 @@ __used static const char *get_homonym_string(void)
+>  {
+>  	return homonym_string;
+>  }
+> +
+> +__used static void static_string_function(void)
+> +{
+> +	__used static char klp_string[] __asm__("klp_string.67890") =
+> +		__FILE__ " static string";
+> +}
+> diff --git a/tools/testing/selftests/livepatch/test-livepatch.sh b/tools/testing/selftests/livepatch/test-livepatch.sh
+> index bcb8b468b80a..ec3b6c919b01 100755
+> --- a/tools/testing/selftests/livepatch/test-livepatch.sh
+> +++ b/tools/testing/selftests/livepatch/test-livepatch.sh
+> @@ -200,6 +200,8 @@ $MOD_KLP_CONVERT1: driver_name, 0: $MOD_KLP_CONVERT_MOD
+>  $MOD_KLP_CONVERT1: test_klp_get_driver_name(), 0: $MOD_KLP_CONVERT_MOD
+>  $MOD_KLP_CONVERT1: homonym_string, 1: homonym string A
+>  $MOD_KLP_CONVERT1: get_homonym_string(), 1: homonym string A
+> +test_klp_convert1: klp_string.12345 = lib/livepatch/test_klp_convert_mod_a.c static string
+> +test_klp_convert1: klp_string.67890 = lib/livepatch/test_klp_convert_mod_b.c static string
+>  % echo 0 > /sys/kernel/livepatch/$MOD_KLP_CONVERT1/enabled
+>  livepatch: '$MOD_KLP_CONVERT1': initializing unpatching transition
+>  livepatch: '$MOD_KLP_CONVERT1': starting unpatching transition
+> @@ -265,6 +267,8 @@ $MOD_KLP_CONVERT1: driver_name, 0: $MOD_KLP_CONVERT_MOD
+>  $MOD_KLP_CONVERT1: test_klp_get_driver_name(), 0: $MOD_KLP_CONVERT_MOD
+>  $MOD_KLP_CONVERT1: homonym_string, 1: homonym string A
+>  $MOD_KLP_CONVERT1: get_homonym_string(), 1: homonym string A
+> +test_klp_convert1: klp_string.12345 = lib/livepatch/test_klp_convert_mod_a.c static string
+> +test_klp_convert1: klp_string.67890 = lib/livepatch/test_klp_convert_mod_b.c static string
+>  % echo 0 > /sys/kernel/livepatch/$MOD_KLP_CONVERT1/enabled
+>  livepatch: '$MOD_KLP_CONVERT1': initializing unpatching transition
+>  livepatch: '$MOD_KLP_CONVERT1': starting unpatching transition
+> -- 
+> 2.26.3
+> 
 
-Sure.
+I'm not sure how portable it is using __asm__("new.name"), but it seems
+to work with versions of GCC that I've tried.  Other tools like
+kpatch-build can manipulate such symbols directly, but for anything that
+needs to feed the C compiler, some kind of workaround is needed to
+create klp-relocations for them.
 
-Thanks,
-Pankaj
+FWIW, the trick works through the KLP_SYMPOS macro annotations as well,
+for example:
+
+  void pfn_valid_part_0(void) __asm__("pfn_valid.part.0");
+  KLP_MODULE_RELOC(kvm) kvm_main_relocs[] = {
+  	KLP_SYMPOS(pfn_valid_part_0, 0),
+  };
+
+-- Joe
+

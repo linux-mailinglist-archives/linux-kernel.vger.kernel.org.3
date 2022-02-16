@@ -2,315 +2,347 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5124B8B6E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1941D4B8B91
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235030AbiBPOat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 09:30:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51194 "EHLO
+        id S235101AbiBPOhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 09:37:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235050AbiBPOar (ORCPT
+        with ESMTP id S233864AbiBPOhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 09:30:47 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15476293B62
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 06:30:35 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id k18so1522495ils.11
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 06:30:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dwLzMfgNOWmPItYOyAcXlCBWmY3dWHk4dvllDYGGKro=;
-        b=dSxb8Nr+ifXWcZ0I82j4ax+ByfppReil7K8ujbNKL6eXDywtEFRQKzyxi51Nj9/69i
-         7vTlIFJJnyMqDHCr2sUy3FdkC6RTJoC5PbeiV0ESZFAfx0LKgm8q/xepRzC7t/IaCwvm
-         1dx7GRSl9juxHh8nSSXZhMDJZ7Im02Dl/T6r/5fqQ7P2s03F3bz0ARILUzI9ADkTDofY
-         dJiouJBNVUNa7BjnSTj5DGgZ5pVVETa/8+Urd50gc1UqXk7yC94t3HoZAsWibiZJV/8S
-         TgnyjKgTpaoqR/HXz4Fzt6apOXvga7w7h5numvVR3b9f4o/PtP5j2tu1QgPp/5IMMbYX
-         sj7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dwLzMfgNOWmPItYOyAcXlCBWmY3dWHk4dvllDYGGKro=;
-        b=7erFkcsfjofoKeekrqowFQ/HZZ4KiE7HtpXmj6O+l0DlWt9Np6H07ikEpYZpNzk2MJ
-         NcCi9is9OLB4v+4xtGS7tG/2yVBGaTRPhx7wWPqOZmB/GaIpfAK8vzwPb0U0UCX0iSZ/
-         L0GYoi9Kn9d17qdjJqwlE4FxxQazaKWjhMmPTB42g+sg7kJXktez8cAL85A9GIY8+XJQ
-         9qBa9KP94zSCc5RvCOfj9/+UIqg1TcIU+SxKhEuYsJiyaTESy2ZRsz5RX4yDCVyzSUN6
-         yQnPB1zxNOndMGtGblndRG6dcH4WU/o19VDbcfujnpGL/5WtVX3zSUHpwOte3y6NgU5T
-         6S+w==
-X-Gm-Message-State: AOAM530tozlIK3MVOkWcm+NbwXao5zzEvw33BOF39XJmgbGs8OAbCKoi
-        iiATFX7RyhmJP522xCyQBENmcw==
-X-Google-Smtp-Source: ABdhPJxnk7ohLYgxeus111vwVw6vOxg/Z6Csxrw8XxEvSKc50SMWXaCimdxVwcp1YuGMSmpzFML95w==
-X-Received: by 2002:a05:6e02:54e:b0:2be:8108:c0dc with SMTP id i14-20020a056e02054e00b002be8108c0dcmr2010087ils.65.1645021834217;
-        Wed, 16 Feb 2022 06:30:34 -0800 (PST)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id v62sm19625810iof.26.2022.02.16.06.30.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 06:30:33 -0800 (PST)
-Message-ID: <d0557bb0-7d9f-2abc-2b78-7d7ab078a2e0@linaro.org>
-Date:   Wed, 16 Feb 2022 08:30:32 -0600
+        Wed, 16 Feb 2022 09:37:21 -0500
+X-Greylist: delayed 325 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Feb 2022 06:37:08 PST
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5655D2A64D1;
+        Wed, 16 Feb 2022 06:37:07 -0800 (PST)
+Received: from [192.168.100.1] ([82.142.13.146]) by mrelayeu.kundenserver.de
+ (mreue010 [213.165.67.103]) with ESMTPSA (Nemesis) id
+ 1M5Q2f-1nIyQR0pXx-001SW8; Wed, 16 Feb 2022 15:31:14 +0100
+Message-ID: <1a0f23f2-361a-25d1-b371-7a229758d248@vivier.eu>
+Date:   Wed, 16 Feb 2022 15:31:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v3 05/25] bus: mhi: Make mhi_state_str[] array static
- inline and move to common.h
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
-        quic_bbhatt@quicinc.com, quic_jhugo@quicinc.com,
-        vinod.koul@linaro.org, bjorn.andersson@linaro.org,
-        dmitry.baryshkov@linaro.org, quic_vbadigan@quicinc.com,
-        quic_cang@quicinc.com, quic_skananth@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
- <20220212182117.49438-6-manivannan.sadhasivam@linaro.org>
- <f5222344-b74f-083c-d0f6-48fb3f034542@linaro.org>
- <20220216113942.GC6225@workstation>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <20220216113942.GC6225@workstation>
+Subject: Re: [PATCH v14 4/5] clocksource/drivers: Add a goldfish-timer
+ clocksource
+Content-Language: fr
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+References: <20220130143333.552646-1-laurent@vivier.eu>
+ <20220130143333.552646-5-laurent@vivier.eu>
+From:   Laurent Vivier <laurent@vivier.eu>
+In-Reply-To: <20220130143333.552646-5-laurent@vivier.eu>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:7JSXb+0iPWC1kUoDSy+e0pd80DU2qFPw7Rc/A8oDGjFlcgAJFy7
+ kzKNq77rh+TkVUg+/qKTeOBHMKjkYsr71BjVI+X3gh6a4lSIR7bhTvrqYqmzaVAMSKdWSYG
+ h70Y55KueTU0qolvsRfHIRNDLzf/i5FzRt7afiex5KD5eD/ta2CggiXV2p9pYiyR0tFg1ka
+ KF4yFXU7iM/ZdQEGvWFyg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WJR0F7P8k/c=:q9M000AaJrC8fNch58wOhx
+ 37ZHoUNZdFi85SbI88MtO0VUV5jL11t9f58PaUCQY6j1ApdpdnMH5Am/WhREb3jVV7iq5zKlb
+ SLi/a+t/DDDIu3x4O6tJZiSkbCMlzMuL2LdN9E2Ui2SB/KfXj1qEHjdG+gVvni72tuBBDUJoY
+ aEKdg/COPhEqTaNGT5u0cagI+BIIpy/f5P9Zl0EQubs0+GZrd4THWq12PQxQyk1vyn8Om4/r7
+ 7SZPYwC2evKkukOBeaTZF6boJiNuqnhcc/RBJVUOi6iWA40dHduPv99Or1Ib9zCMKdueosv4L
+ h07MW8+x6e/1PsMBQVYmGsVg+1ESRVqDSYZCVPIQNQEPo7ccwc8iDB/gCH8TRaNde1Ub43gvj
+ DNhPJC9zshdhE8JnhlBX3jTaxnulVYU6Xm+TAkVS6jJUOR+WanZ8ZtLHXl+5HkJ1PwGsZ9hx0
+ DLEOtyq2x4Ff80qOejCtaxEzzYAm8UbIgJZS9kJ1wAI+TI4ykffVytLLtUDBXHy7mpOez4HDc
+ enMFvNq1tz5BpKbRNjkMvF62Dm2B+125+BfC8Py2KD37nYybpJGUxHRF5RCTWXkr7HK3MVJpE
+ jxyYbGtRrMFbhsBIVgX1fCeis/l3p0LiDWER/rlQCoc8OkoccesxRWuFW7jxJFQzhUiGEuYc4
+ OYdOON/AKsQ3wfwITajS5Cc/7KRPmARXnrlE/TCZdPzc7oHofgk74TcuPeyTPTKSo4uc=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/16/22 5:39 AM, Manivannan Sadhasivam wrote:
-> On Tue, Feb 15, 2022 at 02:02:21PM -0600, Alex Elder wrote:
->> On 2/12/22 12:20 PM, Manivannan Sadhasivam wrote:
->>> mhi_state_str[] array could be used by MHI endpoint stack also. So let's
->>> make the array as "static inline function" and move it inside the
->>> "common.h" header so that the endpoint stack could also make use of it.
->>>
->>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->>
->> I like the use of a function to encapsulate this rather than
->> using the array as before.
->>
->> But I still don't like declaring this much static data in a static inline
->> function in a header file.  Define it as a "real" function
->> somewhere common and declare it here instead.
->>
-> 
-> The problem is we don't have a common c file to define this as a
-> function. Even if we add one, then it would be an overkill.
+Daniel,
 
-OK, I accept that.	-Alex
+as you reviewed the v12, could you review this version to see if I have addressed your comments?
 
+Thanks,
+Laurent
+
+Le 30/01/2022 à 15:33, Laurent Vivier a écrit :
+> Add a clocksource based on the goldfish-rtc device.
 > 
-> This pattern is more commonly used throughout the kernel source.
+> Move the timer register definition to <clocksource/timer-goldfish.h>
 > 
->> One more minor comment below.
->>
->> 					-Alex
->>
->>> ---
->>>    drivers/bus/mhi/common.h       | 29 +++++++++++++++++++++++++----
->>>    drivers/bus/mhi/host/boot.c    |  2 +-
->>>    drivers/bus/mhi/host/debugfs.c |  6 +++---
->>>    drivers/bus/mhi/host/init.c    | 12 ------------
->>>    drivers/bus/mhi/host/main.c    |  8 ++++----
->>>    drivers/bus/mhi/host/pm.c      | 14 +++++++-------
->>>    6 files changed, 40 insertions(+), 31 deletions(-)
->>>
->>> diff --git a/drivers/bus/mhi/common.h b/drivers/bus/mhi/common.h
->>> index 0d13a202d334..288e47168649 100644
->>> --- a/drivers/bus/mhi/common.h
->>> +++ b/drivers/bus/mhi/common.h
->>> @@ -159,9 +159,30 @@ struct mhi_cmd_ctxt {
->>>    	__le64 wp __packed __aligned(4);
->>>    };
->>> -extern const char * const mhi_state_str[MHI_STATE_MAX];
->>> -#define TO_MHI_STATE_STR(state) ((state >= MHI_STATE_MAX || \
->>> -				  !mhi_state_str[state]) ? \
->>> -				"INVALID_STATE" : mhi_state_str[state])
->>> +static inline const char * const mhi_state_str(enum mhi_state state)
->>> +{
->>> +	switch (state) {
->>> +	case MHI_STATE_RESET:
->>> +		return "RESET";
->>> +	case MHI_STATE_READY:
->>> +		return "READY";
->>> +	case MHI_STATE_M0:
->>> +		return "M0";
->>> +	case MHI_STATE_M1:
->>> +		return "M1";
->>> +	case MHI_STATE_M2:
->>> +		return"M2";
->>
->> Add space after "return" here and in a few places below.
->>
+> This kernel implementation is based on the QEMU upstream implementation:
 > 
-> Ack.
+>     https://git.qemu.org/?p=qemu.git;a=blob_plain;f=hw/rtc/goldfish_rtc.c
 > 
-> Thanks,
-> Mani
+> Details related to Goldfish devices can be found in:
 > 
->>> +	case MHI_STATE_M3:
->>> +		return"M3";
->>> +	case MHI_STATE_M3_FAST:
->>> +		return"M3 FAST";
->>> +	case MHI_STATE_BHI:
->>> +		return"BHI";
->>> +	case MHI_STATE_SYS_ERR:
->>> +		return "SYS ERROR";
->>> +	default:
->>> +		return "Unknown state";
->>> +	}
->>> +};
->>>    #endif /* _MHI_COMMON_H */
->>> diff --git a/drivers/bus/mhi/host/boot.c b/drivers/bus/mhi/host/boot.c
->>> index 74295d3cc662..93cb705614c6 100644
->>> --- a/drivers/bus/mhi/host/boot.c
->>> +++ b/drivers/bus/mhi/host/boot.c
->>> @@ -68,7 +68,7 @@ static int __mhi_download_rddm_in_panic(struct mhi_controller *mhi_cntrl)
->>>    	dev_dbg(dev, "Entered with pm_state:%s dev_state:%s ee:%s\n",
->>>    		to_mhi_pm_state_str(mhi_cntrl->pm_state),
->>> -		TO_MHI_STATE_STR(mhi_cntrl->dev_state),
->>> +		mhi_state_str(mhi_cntrl->dev_state),
->>>    		TO_MHI_EXEC_STR(mhi_cntrl->ee));
->>>    	/*
->>> diff --git a/drivers/bus/mhi/host/debugfs.c b/drivers/bus/mhi/host/debugfs.c
->>> index d818586c229d..399d0db1f1eb 100644
->>> --- a/drivers/bus/mhi/host/debugfs.c
->>> +++ b/drivers/bus/mhi/host/debugfs.c
->>> @@ -20,7 +20,7 @@ static int mhi_debugfs_states_show(struct seq_file *m, void *d)
->>>    	seq_printf(m, "PM state: %s Device: %s MHI state: %s EE: %s wake: %s\n",
->>>    		   to_mhi_pm_state_str(mhi_cntrl->pm_state),
->>>    		   mhi_is_active(mhi_cntrl) ? "Active" : "Inactive",
->>> -		   TO_MHI_STATE_STR(mhi_cntrl->dev_state),
->>> +		   mhi_state_str(mhi_cntrl->dev_state),
->>>    		   TO_MHI_EXEC_STR(mhi_cntrl->ee),
->>>    		   mhi_cntrl->wake_set ? "true" : "false");
->>> @@ -206,13 +206,13 @@ static int mhi_debugfs_regdump_show(struct seq_file *m, void *d)
->>>    	seq_printf(m, "Host PM state: %s Device state: %s EE: %s\n",
->>>    		   to_mhi_pm_state_str(mhi_cntrl->pm_state),
->>> -		   TO_MHI_STATE_STR(mhi_cntrl->dev_state),
->>> +		   mhi_state_str(mhi_cntrl->dev_state),
->>>    		   TO_MHI_EXEC_STR(mhi_cntrl->ee));
->>>    	state = mhi_get_mhi_state(mhi_cntrl);
->>>    	ee = mhi_get_exec_env(mhi_cntrl);
->>>    	seq_printf(m, "Device EE: %s state: %s\n", TO_MHI_EXEC_STR(ee),
->>> -		   TO_MHI_STATE_STR(state));
->>> +		   mhi_state_str(state));
->>>    	for (i = 0; regs[i].name; i++) {
->>>    		if (!regs[i].base)
->>> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
->>> index 4bd62f32695d..0e301f3f305e 100644
->>> --- a/drivers/bus/mhi/host/init.c
->>> +++ b/drivers/bus/mhi/host/init.c
->>> @@ -44,18 +44,6 @@ const char * const dev_state_tran_str[DEV_ST_TRANSITION_MAX] = {
->>>    	[DEV_ST_TRANSITION_DISABLE] = "DISABLE",
->>>    };
->>> -const char * const mhi_state_str[MHI_STATE_MAX] = {
->>> -	[MHI_STATE_RESET] = "RESET",
->>> -	[MHI_STATE_READY] = "READY",
->>> -	[MHI_STATE_M0] = "M0",
->>> -	[MHI_STATE_M1] = "M1",
->>> -	[MHI_STATE_M2] = "M2",
->>> -	[MHI_STATE_M3] = "M3",
->>> -	[MHI_STATE_M3_FAST] = "M3 FAST",
->>> -	[MHI_STATE_BHI] = "BHI",
->>> -	[MHI_STATE_SYS_ERR] = "SYS ERROR",
->>> -};
->>> -
->>>    const char * const mhi_ch_state_type_str[MHI_CH_STATE_TYPE_MAX] = {
->>>    	[MHI_CH_STATE_TYPE_RESET] = "RESET",
->>>    	[MHI_CH_STATE_TYPE_STOP] = "STOP",
->>> diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
->>> index 85f4f7c8d7c6..e436c2993d97 100644
->>> --- a/drivers/bus/mhi/host/main.c
->>> +++ b/drivers/bus/mhi/host/main.c
->>> @@ -479,8 +479,8 @@ irqreturn_t mhi_intvec_threaded_handler(int irq_number, void *priv)
->>>    	ee = mhi_get_exec_env(mhi_cntrl);
->>>    	dev_dbg(dev, "local ee: %s state: %s device ee: %s state: %s\n",
->>>    		TO_MHI_EXEC_STR(mhi_cntrl->ee),
->>> -		TO_MHI_STATE_STR(mhi_cntrl->dev_state),
->>> -		TO_MHI_EXEC_STR(ee), TO_MHI_STATE_STR(state));
->>> +		mhi_state_str(mhi_cntrl->dev_state),
->>> +		TO_MHI_EXEC_STR(ee), mhi_state_str(state));
->>>    	if (state == MHI_STATE_SYS_ERR) {
->>>    		dev_dbg(dev, "System error detected\n");
->>> @@ -846,7 +846,7 @@ int mhi_process_ctrl_ev_ring(struct mhi_controller *mhi_cntrl,
->>>    			new_state = MHI_TRE_GET_EV_STATE(local_rp);
->>>    			dev_dbg(dev, "State change event to state: %s\n",
->>> -				TO_MHI_STATE_STR(new_state));
->>> +				mhi_state_str(new_state));
->>>    			switch (new_state) {
->>>    			case MHI_STATE_M0:
->>> @@ -873,7 +873,7 @@ int mhi_process_ctrl_ev_ring(struct mhi_controller *mhi_cntrl,
->>>    			}
->>>    			default:
->>>    				dev_err(dev, "Invalid state: %s\n",
->>> -					TO_MHI_STATE_STR(new_state));
->>> +					mhi_state_str(new_state));
->>>    			}
->>>    			break;
->>> diff --git a/drivers/bus/mhi/host/pm.c b/drivers/bus/mhi/host/pm.c
->>> index c35c5ddc7220..088ade0f3e0b 100644
->>> --- a/drivers/bus/mhi/host/pm.c
->>> +++ b/drivers/bus/mhi/host/pm.c
->>> @@ -545,7 +545,7 @@ static void mhi_pm_disable_transition(struct mhi_controller *mhi_cntrl)
->>>    	dev_dbg(dev, "Exiting with PM state: %s, MHI state: %s\n",
->>>    		to_mhi_pm_state_str(mhi_cntrl->pm_state),
->>> -		TO_MHI_STATE_STR(mhi_cntrl->dev_state));
->>> +		mhi_state_str(mhi_cntrl->dev_state));
->>>    	mutex_unlock(&mhi_cntrl->pm_mutex);
->>>    }
->>> @@ -689,7 +689,7 @@ static void mhi_pm_sys_error_transition(struct mhi_controller *mhi_cntrl)
->>>    exit_sys_error_transition:
->>>    	dev_dbg(dev, "Exiting with PM state: %s, MHI state: %s\n",
->>>    		to_mhi_pm_state_str(mhi_cntrl->pm_state),
->>> -		TO_MHI_STATE_STR(mhi_cntrl->dev_state));
->>> +		mhi_state_str(mhi_cntrl->dev_state));
->>>    	mutex_unlock(&mhi_cntrl->pm_mutex);
->>>    }
->>> @@ -864,7 +864,7 @@ int mhi_pm_suspend(struct mhi_controller *mhi_cntrl)
->>>    	if (!ret || MHI_PM_IN_ERROR_STATE(mhi_cntrl->pm_state)) {
->>>    		dev_err(dev,
->>>    			"Did not enter M3 state, MHI state: %s, PM state: %s\n",
->>> -			TO_MHI_STATE_STR(mhi_cntrl->dev_state),
->>> +			mhi_state_str(mhi_cntrl->dev_state),
->>>    			to_mhi_pm_state_str(mhi_cntrl->pm_state));
->>>    		return -EIO;
->>>    	}
->>> @@ -890,7 +890,7 @@ static int __mhi_pm_resume(struct mhi_controller *mhi_cntrl, bool force)
->>>    	dev_dbg(dev, "Entered with PM state: %s, MHI state: %s\n",
->>>    		to_mhi_pm_state_str(mhi_cntrl->pm_state),
->>> -		TO_MHI_STATE_STR(mhi_cntrl->dev_state));
->>> +		mhi_state_str(mhi_cntrl->dev_state));
->>>    	if (mhi_cntrl->pm_state == MHI_PM_DISABLE)
->>>    		return 0;
->>> @@ -900,7 +900,7 @@ static int __mhi_pm_resume(struct mhi_controller *mhi_cntrl, bool force)
->>>    	if (mhi_get_mhi_state(mhi_cntrl) != MHI_STATE_M3) {
->>>    		dev_warn(dev, "Resuming from non M3 state (%s)\n",
->>> -			 TO_MHI_STATE_STR(mhi_get_mhi_state(mhi_cntrl)));
->>> +			 mhi_state_str(mhi_get_mhi_state(mhi_cntrl)));
->>>    		if (!force)
->>>    			return -EINVAL;
->>>    	}
->>> @@ -937,7 +937,7 @@ static int __mhi_pm_resume(struct mhi_controller *mhi_cntrl, bool force)
->>>    	if (!ret || MHI_PM_IN_ERROR_STATE(mhi_cntrl->pm_state)) {
->>>    		dev_err(dev,
->>>    			"Did not enter M0 state, MHI state: %s, PM state: %s\n",
->>> -			TO_MHI_STATE_STR(mhi_cntrl->dev_state),
->>> +			mhi_state_str(mhi_cntrl->dev_state),
->>>    			to_mhi_pm_state_str(mhi_cntrl->pm_state));
->>>    		return -EIO;
->>>    	}
->>> @@ -1088,7 +1088,7 @@ int mhi_async_power_up(struct mhi_controller *mhi_cntrl)
->>>    	state = mhi_get_mhi_state(mhi_cntrl);
->>>    	dev_dbg(dev, "Attempting power on with EE: %s, state: %s\n",
->>> -		TO_MHI_EXEC_STR(current_ee), TO_MHI_STATE_STR(state));
->>> +		TO_MHI_EXEC_STR(current_ee), mhi_state_str(state));
->>>    	if (state == MHI_STATE_SYS_ERR) {
->>>    		mhi_set_mhi_state(mhi_cntrl, MHI_STATE_RESET);
->>
+>    https://android.googlesource.com/platform/external/qemu/+/master/docs/GOLDFISH-VIRTUAL-HARDWARE.TXT
+> 
+> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+> ---
+>   drivers/clocksource/Kconfig          |   7 ++
+>   drivers/clocksource/Makefile         |   1 +
+>   drivers/clocksource/timer-goldfish.c | 153 +++++++++++++++++++++++++++
+>   drivers/rtc/rtc-goldfish.c           |  13 +--
+>   include/clocksource/timer-goldfish.h |  31 ++++++
+>   5 files changed, 193 insertions(+), 12 deletions(-)
+>   create mode 100644 drivers/clocksource/timer-goldfish.c
+>   create mode 100644 include/clocksource/timer-goldfish.h
+> 
+> diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+> index cfb8ea0df3b1..94f00374cebb 100644
+> --- a/drivers/clocksource/Kconfig
+> +++ b/drivers/clocksource/Kconfig
+> @@ -721,4 +721,11 @@ config MICROCHIP_PIT64B
+>   	  modes and high resolution. It is used as a clocksource
+>   	  and a clockevent.
+>   
+> +config GOLDFISH_TIMER
+> +	bool "Clocksource using goldfish-rtc"
+> +	depends on M68K || COMPILE_TEST
+> +	depends on RTC_DRV_GOLDFISH
+> +	help
+> +	  Support for the timer/counter of goldfish-rtc
+> +
+>   endmenu
+> diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
+> index fa5f624eadb6..12f5d7e8cc2d 100644
+> --- a/drivers/clocksource/Makefile
+> +++ b/drivers/clocksource/Makefile
+> @@ -89,3 +89,4 @@ obj-$(CONFIG_GX6605S_TIMER)		+= timer-gx6605s.o
+>   obj-$(CONFIG_HYPERV_TIMER)		+= hyperv_timer.o
+>   obj-$(CONFIG_MICROCHIP_PIT64B)		+= timer-microchip-pit64b.o
+>   obj-$(CONFIG_MSC313E_TIMER)		+= timer-msc313e.o
+> +obj-$(CONFIG_GOLDFISH_TIMER)		+= timer-goldfish.o
+> diff --git a/drivers/clocksource/timer-goldfish.c b/drivers/clocksource/timer-goldfish.c
+> new file mode 100644
+> index 000000000000..0512d5eabc82
+> --- /dev/null
+> +++ b/drivers/clocksource/timer-goldfish.c
+> @@ -0,0 +1,153 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/interrupt.h>
+> +#include <linux/ioport.h>
+> +#include <linux/clocksource.h>
+> +#include <linux/clockchips.h>
+> +#include <linux/module.h>
+> +#include <linux/slab.h>
+> +#include <linux/goldfish.h>
+> +#include <clocksource/timer-goldfish.h>
+> +
+> +struct goldfish_timer {
+> +	struct clocksource cs;
+> +	struct clock_event_device ced;
+> +	struct resource res;
+> +	void __iomem *base;
+> +};
+> +
+> +static struct goldfish_timer *ced_to_gf(struct clock_event_device *ced)
+> +{
+> +	return container_of(ced, struct goldfish_timer, ced);
+> +}
+> +
+> +static struct goldfish_timer *cs_to_gf(struct clocksource *cs)
+> +{
+> +	return container_of(cs, struct goldfish_timer, cs);
+> +}
+> +
+> +static u64 goldfish_timer_read(struct clocksource *cs)
+> +{
+> +	struct goldfish_timer *timerdrv = cs_to_gf(cs);
+> +	void __iomem *base = timerdrv->base;
+> +	u32 time_low, time_high;
+> +	u64 ticks;
+> +
+> +	/*
+> +	 * time_low: get low bits of current time and update time_high
+> +	 * time_high: get high bits of time at last time_low read
+> +	 */
+> +	time_low = gf_ioread32(base + TIMER_TIME_LOW);
+> +	time_high = gf_ioread32(base + TIMER_TIME_HIGH);
+> +
+> +	ticks = ((u64)time_high << 32) | time_low;
+> +
+> +	return ticks;
+> +}
+> +
+> +static int goldfish_timer_set_oneshot(struct clock_event_device *evt)
+> +{
+> +	struct goldfish_timer *timerdrv = ced_to_gf(evt);
+> +	void __iomem *base = timerdrv->base;
+> +
+> +	gf_iowrite32(0, base + TIMER_ALARM_HIGH);
+> +	gf_iowrite32(0, base + TIMER_ALARM_LOW);
+> +	gf_iowrite32(1, base + TIMER_IRQ_ENABLED);
+> +
+> +	return 0;
+> +}
+> +
+> +static int goldfish_timer_shutdown(struct clock_event_device *evt)
+> +{
+> +	struct goldfish_timer *timerdrv = ced_to_gf(evt);
+> +	void __iomem *base = timerdrv->base;
+> +
+> +	gf_iowrite32(0, base + TIMER_IRQ_ENABLED);
+> +
+> +	return 0;
+> +}
+> +
+> +static int goldfish_timer_next_event(unsigned long delta,
+> +				     struct clock_event_device *evt)
+> +{
+> +	struct goldfish_timer *timerdrv = ced_to_gf(evt);
+> +	void __iomem *base = timerdrv->base;
+> +	u64 now;
+> +
+> +	now = goldfish_timer_read(&timerdrv->cs);
+> +
+> +	now += delta;
+> +
+> +	gf_iowrite32(upper_32_bits(now), base + TIMER_ALARM_HIGH);
+> +	gf_iowrite32(lower_32_bits(now), base + TIMER_ALARM_LOW);
+> +
+> +	return 0;
+> +}
+> +
+> +static irqreturn_t goldfish_timer_irq(int irq, void *dev_id)
+> +{
+> +	struct goldfish_timer *timerdrv = dev_id;
+> +	struct clock_event_device *evt = &timerdrv->ced;
+> +	void __iomem *base = timerdrv->base;
+> +
+> +	gf_iowrite32(1, base + TIMER_CLEAR_INTERRUPT);
+> +
+> +	evt->event_handler(evt);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +int __init goldfish_timer_init(int irq, void __iomem *base)
+> +{
+> +	struct goldfish_timer *timerdrv;
+> +	int ret;
+> +
+> +	timerdrv = kzalloc(sizeof(*timerdrv), GFP_KERNEL);
+> +	if (!timerdrv)
+> +		return -ENOMEM;
+> +
+> +	timerdrv->base = base;
+> +
+> +	timerdrv->ced = (struct clock_event_device){
+> +		.name			= "goldfish_timer",
+> +		.features		= CLOCK_EVT_FEAT_ONESHOT,
+> +		.set_state_shutdown	= goldfish_timer_shutdown,
+> +		.set_state_oneshot      = goldfish_timer_set_oneshot,
+> +		.set_next_event		= goldfish_timer_next_event,
+> +	};
+> +
+> +	timerdrv->res = (struct resource){
+> +		.name  = "goldfish_timer",
+> +		.start = (unsigned long)base,
+> +		.end   = (unsigned long)base + 0xfff,
+> +	};
+> +
+> +	ret = request_resource(&iomem_resource, &timerdrv->res);
+> +	if (ret) {
+> +		pr_err("Cannot allocate '%s' resource\n", timerdrv->res.name);
+> +		return ret;
+> +	}
+> +
+> +	timerdrv->cs = (struct clocksource){
+> +		.name		= "goldfish_timer",
+> +		.rating		= 400,
+> +		.read		= goldfish_timer_read,
+> +		.mask		= CLOCKSOURCE_MASK(64),
+> +		.flags		= 0,
+> +		.max_idle_ns	= LONG_MAX,
+> +	};
+> +
+> +	clocksource_register_hz(&timerdrv->cs, NSEC_PER_SEC);
+> +
+> +	ret = request_irq(irq, goldfish_timer_irq, IRQF_TIMER,
+> +			  "goldfish_timer", timerdrv);
+> +	if (ret) {
+> +		pr_err("Couldn't register goldfish-timer interrupt\n");
+> +		return ret;
+> +	}
+> +
+> +	clockevents_config_and_register(&timerdrv->ced, NSEC_PER_SEC,
+> +					1, 0xffffffff);
+> +
+> +	return 0;
+> +}
+> diff --git a/drivers/rtc/rtc-goldfish.c b/drivers/rtc/rtc-goldfish.c
+> index eb1929b0cbb6..59c0f38cc08d 100644
+> --- a/drivers/rtc/rtc-goldfish.c
+> +++ b/drivers/rtc/rtc-goldfish.c
+> @@ -11,18 +11,7 @@
+>   #include <linux/platform_device.h>
+>   #include <linux/rtc.h>
+>   #include <linux/goldfish.h>
+> -
+> -#define TIMER_TIME_LOW		0x00	/* get low bits of current time  */
+> -					/*   and update TIMER_TIME_HIGH  */
+> -#define TIMER_TIME_HIGH	0x04	/* get high bits of time at last */
+> -					/*   TIMER_TIME_LOW read         */
+> -#define TIMER_ALARM_LOW	0x08	/* set low bits of alarm and     */
+> -					/*   activate it                 */
+> -#define TIMER_ALARM_HIGH	0x0c	/* set high bits of next alarm   */
+> -#define TIMER_IRQ_ENABLED	0x10
+> -#define TIMER_CLEAR_ALARM	0x14
+> -#define TIMER_ALARM_STATUS	0x18
+> -#define TIMER_CLEAR_INTERRUPT	0x1c
+> +#include <clocksource/timer-goldfish.h>
+>   
+>   struct goldfish_rtc {
+>   	void __iomem *base;
+> diff --git a/include/clocksource/timer-goldfish.h b/include/clocksource/timer-goldfish.h
+> new file mode 100644
+> index 000000000000..d39097729b1d
+> --- /dev/null
+> +++ b/include/clocksource/timer-goldfish.h
+> @@ -0,0 +1,31 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * goldfish-timer clocksource
+> + * Registers definition for the goldfish-timer device
+> + */
+> +
+> +#ifndef _CLOCKSOURCE_TIMER_GOLDFISH_H
+> +#define _CLOCKSOURCE_TIMER_GOLDFISH_H
+> +
+> +/*
+> + * TIMER_TIME_LOW	 get low bits of current time and update TIMER_TIME_HIGH
+> + * TIMER_TIME_HIGH	 get high bits of time at last TIMER_TIME_LOW read
+> + * TIMER_ALARM_LOW	 set low bits of alarm and activate it
+> + * TIMER_ALARM_HIGH	 set high bits of next alarm
+> + * TIMER_IRQ_ENABLED	 enable alarm interrupt
+> + * TIMER_CLEAR_ALARM	 disarm an existin alarm
+> + * TIMER_ALARM_STATUS	 alarm status (running or not)
+> + * TIMER_CLEAR_INTERRUPT clear interrupt
+> + */
+> +#define TIMER_TIME_LOW		0x00
+> +#define TIMER_TIME_HIGH		0x04
+> +#define TIMER_ALARM_LOW		0x08
+> +#define TIMER_ALARM_HIGH	0x0c
+> +#define TIMER_IRQ_ENABLED	0x10
+> +#define TIMER_CLEAR_ALARM	0x14
+> +#define TIMER_ALARM_STATUS	0x18
+> +#define TIMER_CLEAR_INTERRUPT	0x1c
+> +
+> +extern int goldfish_timer_init(int irq, void __iomem *base);
+> +
+> +#endif /* _CLOCKSOURCE_TIMER_GOLDFISH_H */
 

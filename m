@@ -2,98 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6801F4B8A97
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 836D14B8A99
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:47:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234696AbiBPNqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:46:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34532 "EHLO
+        id S234703AbiBPNrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 08:47:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234073AbiBPNqo (ORCPT
+        with ESMTP id S233598AbiBPNrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:46:44 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6C2F1F
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:46:30 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id p5so5994271ybd.13
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:46:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fooishbar-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HmFgTFOaUrdQsLp+zoYLJYAEZzFKWR4iy8oL8R7YJhA=;
-        b=piQF2bXbfQ3jAL9Wl9KHIEI/BE7pYDU1IMut0lIzmEScSrQTTjteMmCEzJpApNZRX4
-         MiSZndY1LTZdnjzdE1PtqAozUueAsk+eHh1cDep+IbGnB9QWT9qZ4gaC5sqvfGpS3BE9
-         bR1twOpbY9SOcG8uuHnhoXL91tdBw9gU9UmxqJIwGeWaiNwWUjTkd+EOa9X7qSRiP4Ic
-         m8Zx0IpBhy5xVNK8CZj7uL7qa6SdAHfv0MJRk3F6unvP/KZRr7iVVemKX545Vw1/i6nD
-         UkmckP1LIoEqUm8uWPqlNTOC8MeC8E9tZaCEeo4E97rXfUl6R7bkc7GrBneAs4SoAtK4
-         JANA==
+        Wed, 16 Feb 2022 08:47:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41B1413F67
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:47:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645019220;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/viJHST1z9zD64KMBaMBA5BOjVQloi17QEdRKdLQtOY=;
+        b=GRM7/m+bjzZJdiYNVR9iJAcdVTPUGZjbhCFtrlyP/7RYzQsOWuEYmFD/31V899oGMUVVtO
+        GOsPXYp7R4Nr7khvWy0amQ1FWS27lINprMaaaVDO6lh8LlcGPeJy9fZlh7WOGaseWUFi3V
+        cJ06FS8etm3qrVsV1bcUlqxJ9viileM=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-575-FYwnBy1xMuGcMybxId4W3Q-1; Wed, 16 Feb 2022 08:46:59 -0500
+X-MC-Unique: FYwnBy1xMuGcMybxId4W3Q-1
+Received: by mail-wm1-f70.google.com with SMTP id k30-20020a05600c1c9e00b0037d1bee4847so2909393wms.9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:46:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HmFgTFOaUrdQsLp+zoYLJYAEZzFKWR4iy8oL8R7YJhA=;
-        b=MhI5bG4Uk822UJPnIWswJMIL5xZ9XDqvAnULQ6ahq6oZ5rPAMYa9nzu6Q4di3n3+Yl
-         NzhrixHS6KSr635wEbg1OgT1jZYoCyXksKxaRTUnrie0ddEnKA4fgfxt07WXlAhFRYVS
-         R5Rk0Y3M2po/53E2OTiDsggXaC04gbp/44VzOnXf346WciaQITR1ZI0zrstZsuYQd8z9
-         bhczmBGimRVpTkUTto/cSqn0RHNEbRgVtAGnIL1MBKnm+RNxDkrbOk/fAvL5pUzafyBw
-         JfE24fj03g1YkYWi2CR1nVLJ5FQ1WVUaWikDkkRFwFIzXdNln6HW/wRtQLzBxoqFa03c
-         9tiQ==
-X-Gm-Message-State: AOAM532+B+cABc8zilXqwCqcWnSx9YW7fEHU5ZRLH7OI0y1KHj8zCpOG
-        L0As+syM+vtUvFnyjis+3djT5XPoTCdL53HCUlsN9A==
-X-Google-Smtp-Source: ABdhPJwDrfO0XNqq06G1iySq3VTrmWTvdn5Z6vOL0Eb4ZcCuGh6EN5CLGZDUWZYdveKOCjkOHjTGRR1Iq8a+ERSnC3g=
-X-Received: by 2002:a25:6807:0:b0:61a:79a9:526e with SMTP id
- d7-20020a256807000000b0061a79a9526emr1995117ybc.376.1645019190069; Wed, 16
- Feb 2022 05:46:30 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=/viJHST1z9zD64KMBaMBA5BOjVQloi17QEdRKdLQtOY=;
+        b=cv0TYjaYxeTw11TtyzV1o16pBjn5T71E8uaAd8VjqcQ6NqAUmRDKFeRDqmP0BbUfIR
+         23ZQGlNLgwOIBe3FfA6XvU6T1e9DTJVt4UjS0HVPvdLAyZyctPdvxBk5lBu7LmrIPaNj
+         Sn7PFMCIxX3kclAc7thX1s2bKwGNIA7IX6jzkIUSVUjZf+k65z6FXqDB8jFaj3vHAN4N
+         VdDkdlTKdwORNl47dUECqBNnJYQwsARBXehcPFQEGgHqcJ1vWcGiGhD2v4c3eNe8Gu5X
+         Ok5X+3oxyCtbaDdqXJExXdKuHeOJCDUZOnHPBDgl+U4yL7X9PDwz65zN5tE7ppnavBCs
+         Bv+A==
+X-Gm-Message-State: AOAM530cuaXoC4QnlVX3CEczlbb2IzMcjys/fuHypvwCCkfNgxquozdp
+        MeJ2UIiDDwhpiVhvTaV5NG9c2rdWZKj7aPH7aTu40BrlXJGQoTb0GFgUTyTFiW+JY0p/vQcSqTL
+        vTl1dd1gMYEaicHRmtrCSC5kZ
+X-Received: by 2002:adf:b645:0:b0:1e3:bab:7594 with SMTP id i5-20020adfb645000000b001e30bab7594mr2431180wre.346.1645019218055;
+        Wed, 16 Feb 2022 05:46:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyXN+PGgiUh4jnY/IHW6kWYB+oyHZfFkJJcHP/ie9LhxwJ94HR5UHGasOFkSazLdIrHd1wXpw==
+X-Received: by 2002:adf:b645:0:b0:1e3:bab:7594 with SMTP id i5-20020adfb645000000b001e30bab7594mr2431161wre.346.1645019217772;
+        Wed, 16 Feb 2022 05:46:57 -0800 (PST)
+Received: from ?IPV6:2003:cb:c70b:600:4ff7:25c:5aad:2711? (p200300cbc70b06004ff7025c5aad2711.dip0.t-ipconnect.de. [2003:cb:c70b:600:4ff7:25c:5aad:2711])
+        by smtp.gmail.com with ESMTPSA id l26sm18554970wms.24.2022.02.16.05.46.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 05:46:57 -0800 (PST)
+Message-ID: <9738c049-a6a2-19f7-f9be-e7ae98c2c66b@redhat.com>
+Date:   Wed, 16 Feb 2022 14:46:56 +0100
 MIME-Version: 1.0
-References: <20220203082546.3099-1-15330273260@189.cn> <20220203082546.3099-2-15330273260@189.cn>
- <20220203085851.yqstkfgt4dz7rcnw@houat> <f5381561-25da-61e3-5025-fa6dd61dd730@189.cn>
- <20220209084331.fpq5ng3yuqxmby4q@houat> <def50622-fe08-01f7-83bd-e6e0bc39fe1b@189.cn>
-In-Reply-To: <def50622-fe08-01f7-83bd-e6e0bc39fe1b@189.cn>
-From:   Daniel Stone <daniel@fooishbar.org>
-Date:   Wed, 16 Feb 2022 13:46:18 +0000
-Message-ID: <CAPj87rOgk8A8s6MTqxcTO5EkS=ABpHQV3sHsAp7Yn2t3-N_SoQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display controller
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Roland Scheidegger <sroland@vmware.com>,
-        linux-mips@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Sam Ravnborg <sam@ravnborg.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     osalvador <osalvador@suse.de>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Rafael Parra <rparrazo@redhat.com>
+References: <20220210184359.235565-1-david@redhat.com>
+ <20220210184359.235565-3-david@redhat.com>
+ <YguFFRiNIktJhGnT@localhost.localdomain>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v2 2/2] drivers/base/memory: determine and store zone for
+ single-zone memory blocks
+In-Reply-To: <YguFFRiNIktJhGnT@localhost.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Feb 2022 at 15:41, Sui Jingfeng <15330273260@189.cn> wrote:
-> On 2022/2/9 16:43, Maxime Ripard wrote:
-> > More fundamentally (and this extends to the CMA, caching and VRAM stuff
-> > you explained above), why can't the driver pick the right decision all
-> > the time and why would that be under the user control?
->
-> The right decision for ls7a1000 is to use VRAM based helper, But sometimes
-> we need CMA helper based solution. Because: The PRIME support is lost, use
-> lsdc with etnaviv is not possible any more.
->
->   Buffer sharing with etnaviv is no longer possible, loongson display controllers
->   are simple which require scanout buffers to be physically contiguous.
+> Hi David
+> 
+> Reviewed-by: Oscar Salvador <osalvador@suse.de>
+> 
+> One minor thing below: 
+> 
+>> @@ -663,6 +743,17 @@ static int init_memory_block(unsigned long block_id, unsigned long state,
+>>  	mem->nr_vmemmap_pages = nr_vmemmap_pages;
+>>  	INIT_LIST_HEAD(&mem->group_next);
+>>  
+>> +#ifndef CONFIG_NUMA
+>> +	if (state == MEM_ONLINE)
+>> +		/*
+>> +		 * MEM_ONLINE at this point implies early memory. With NUMA,
+>> +		 * we'll determine the zone when setting the node id via
+>> +		 * memory_block_add_nid(). Memory hotplug updated the zone
+>> +		 * manually when memory onlining/offlining succeeds.
+>> +		 */
+>> +		mem->zone = early_node_zone_for_memory_block(mem, NUMA_NO_NODE);
+> 
+> I took me a couple of minutes to figure out that MEM_ONLINE implies
+> early memory at this point because 1) of course early memory must be
+> online and 2) the only caller that passes MEM_ONLINE to
+> init_memory_block() is add_memory_block(), which only gets called at
+> boot time. (btw, add_memory_block() really should use __init, right?)
+> 
+> I guess what I am saying here is: I really like the comment, but I am not sure
+> whether other people with a drifting brain like mine will also wonder about
+> that.
 
-Other systems have this limitation, and Mesa's 'kmsro' concept makes
-this work transparently, as long as your driver can export dmabufs
-when running in 'VRAM' mode.
+Thanks for the review!
 
-Cheers,
-Daniel
+I originally planned on passing "enum meminit_context context" here, but
+it just uglifies the function without any real added value. MEM_ONLINE
+is fully expressive.
+
+In general:
+a) Boot memory always starts out online.
+b) Hotplugged memory always starts out offline.
+
+
+And yes, add_memory_block() chould __init, that would also make it
+clearer out of which context init_memory_block() is called with
+MEM_ONLINE. I can send an addon patch for that!
+
+-- 
+Thanks,
+
+David / dhildenb
+

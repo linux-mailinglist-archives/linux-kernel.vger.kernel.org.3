@@ -2,91 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B837D4B7FDF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 06:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F1B84B7FE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 06:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344544AbiBPFH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 00:07:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42984 "EHLO
+        id S1344548AbiBPFJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 00:09:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236562AbiBPFHX (ORCPT
+        with ESMTP id S234289AbiBPFJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 00:07:23 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1DE561D326
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 21:07:07 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2118D113E;
-        Tue, 15 Feb 2022 21:07:07 -0800 (PST)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.47.182])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id EB18B3F66F;
-        Tue, 15 Feb 2022 21:07:04 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64/mm: Drop use_1G_block()
-Date:   Wed, 16 Feb 2022 10:36:52 +0530
-Message-Id: <1644988012-25455-1-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 16 Feb 2022 00:09:12 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D02F955C;
+        Tue, 15 Feb 2022 21:09:01 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id q132so1142519pgq.7;
+        Tue, 15 Feb 2022 21:09:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=ed0DvBP+K1f3QF5Ewx4kaCIp7iK5SB0WDtzvGvgXR8Y=;
+        b=Tavmo/STkPM87v5QvmnaIJA9uwaiGi094499+s5845fdSfeqBajvmQp2MnCGYsM/gp
+         6pTatN8kwqiRx8xgMDpt34sdD2tn8PWJ6P6aWd2HB6wxhOqX4IeQmgx5giXhSURu3HNr
+         CgWvDx1McGECUfzE23JM7X+2AXOQ7RWo/eNWYU/8+VEYeMKENQ1iPm5T5s7HCkpZd9cO
+         tuAEhaCW7GPrHBA+jHv79k1GivJwU+46Hu9QvF4EiNgUjSviPDZ933a//HqAfgazd4Z9
+         pm7y+aezZsCjEREXf9gAIJLqa/43UtKHRgI87qBkJVcGOjpyLaOg+sTV99eA1HXy1vJy
+         p39w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=ed0DvBP+K1f3QF5Ewx4kaCIp7iK5SB0WDtzvGvgXR8Y=;
+        b=4y3uAflFV93NETNdUOurf+gTqKy9j4wfDwPteSbqCgYDcdFM7Mt+cjyvbWaQyVyUST
+         QXEtoELb6SgCsn5L/OBBEwRA3tQ1MfSZTbhHcGpDqP4XG06Du76KAqYBTuBuvITfAtRz
+         slEmaf91hLtu+TEvd+f+nspUPWYI5afjb8DrhoZRBuZityjy9+PlCSzkMcu1Cqrw4Qb3
+         0M5TvCmr5u5iYfWe1iESoJZ4pPjDjUCCLKxG8TgF2yXGVno5/5ZNI/Gkp/3uATn1tcHN
+         MIyDLCfRu32ARAFMxb8/r/wMs4esUBJWGd9l074+SE00skf7Uv7wNsVSBIQVRptKiWFx
+         uzsQ==
+X-Gm-Message-State: AOAM532hJt8qE135isvWOTQyZOZuyulVUyZxbn6S9KGlynY2dlhuqmh5
+        8qrLUn7Hbakxh/B9UrIz0TI=
+X-Google-Smtp-Source: ABdhPJzkqudfNEvGNM4ofBoq97r0Ol89SosLVDk+DXzSa8YLZpX3vbRrSSyDLNOUFg9K8+6G4xvThA==
+X-Received: by 2002:a63:9dc3:0:b0:373:5fac:6063 with SMTP id i186-20020a639dc3000000b003735fac6063mr852210pgd.531.1644988140627;
+        Tue, 15 Feb 2022 21:09:00 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id 13sm28423111pfx.122.2022.02.15.21.08.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 21:09:00 -0800 (PST)
+Message-ID: <ca93d33d-a25c-ac04-5b4c-b60380cd4e97@gmail.com>
+Date:   Wed, 16 Feb 2022 13:08:49 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [PATCH kvm/queue v2 2/3] perf: x86/core: Add interface to query
+ perfmon_event_map[] directly
+Content-Language: en-US
+To:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Dave Hansen <dave.hansen@intel.com>
+References: <20220117085307.93030-1-likexu@tencent.com>
+ <20220117085307.93030-3-likexu@tencent.com>
+ <20220202144308.GB20638@worktop.programming.kicks-ass.net>
+ <CALMp9eRBOmwz=mspp0m5Q093K3rMUeAsF3vEL39MGV5Br9wEQQ@mail.gmail.com>
+ <YgO/3usazae9rCEh@hirez.programming.kicks-ass.net>
+ <69c0fc41-a5bd-fea9-43f6-4724368baf66@intel.com>
+ <CALMp9eS=1U7T39L-vL_cTXTNN2Li8epjtAPoP_+Hwefe9d+teQ@mail.gmail.com>
+ <67a731dd-53ba-0eb8-377f-9707e5c9be1b@intel.com>
+ <CABOYuvbPL0DeEgV4gsC+v786xfBAo3T6+7XQr7cVVzbaoFoEAg@mail.gmail.com>
+ <7b5012d8-6ae1-7cde-a381-e82685dfed4f@linux.intel.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+In-Reply-To: <7b5012d8-6ae1-7cde-a381-e82685dfed4f@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pud_sect_supported() already checks for PUD level block mapping support i.e
-on ARM64_4K_PAGES config. Hence pud_sect_supported(), along with some other
-required alignment checks can help completely drop use_1G_block().
+On 10/2/2022 11:34 pm, Liang, Kan wrote:
+> For the current perf subsystem, a PMU should be shared among different users via 
+> the multiplexing mechanism if the resource is limited. No one has full control 
+> of a PMU for lifetime. A user can only have the PMU in its given period.
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
-This applies on v5.17-rc4
+Off-topic, does perf has knobs to disable the default multiplexing mechanism
+for individual tasks and enforce a first-come, first-served policy for same 
+priority ?
 
- arch/arm64/mm/mmu.c | 15 ++-------------
- 1 file changed, 2 insertions(+), 13 deletions(-)
-
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index acfae9b41cc8..5a7954c9e6ec 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -294,18 +294,6 @@ static void alloc_init_cont_pmd(pud_t *pudp, unsigned long addr,
- 	} while (addr = next, addr != end);
- }
- 
--static inline bool use_1G_block(unsigned long addr, unsigned long next,
--			unsigned long phys)
--{
--	if (PAGE_SHIFT != 12)
--		return false;
--
--	if (((addr | next | phys) & ~PUD_MASK) != 0)
--		return false;
--
--	return true;
--}
--
- static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
- 			   phys_addr_t phys, pgprot_t prot,
- 			   phys_addr_t (*pgtable_alloc)(int),
-@@ -338,7 +326,8 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
- 		/*
- 		 * For 4K granule only, attempt to put down a 1GB block
- 		 */
--		if (use_1G_block(addr, next, phys) &&
-+		if (pud_sect_supported() &&
-+		   ((addr | next | phys) & ~PUD_MASK) == 0 &&
- 		    (flags & NO_BLOCK_MAPPINGS) == 0) {
- 			pud_set_huge(pudp, phys, prot);
- 
--- 
-2.20.1
-
+The reported perf data from the multiplexing mechanism may even mislead
+the conclusions of subsequent statistically based performance analysis.

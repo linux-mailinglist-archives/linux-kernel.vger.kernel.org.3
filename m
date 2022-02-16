@@ -2,254 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2470A4B7E47
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 04:15:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6D44B7E43
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 04:15:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344099AbiBPDJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 22:09:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39420 "EHLO
+        id S1344104AbiBPDJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 22:09:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344065AbiBPDJW (ORCPT
+        with ESMTP id S1344074AbiBPDJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 22:09:22 -0500
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438C7C4843;
-        Tue, 15 Feb 2022 19:09:09 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V4b8YJf_1644980946;
-Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V4b8YJf_1644980946)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 16 Feb 2022 11:09:07 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     xfs <linux-xfs@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>
-Subject: [PATCH v2 3/3] xfs: introduce xfs_bremapi_from_cowfork()
-Date:   Wed, 16 Feb 2022 11:08:54 +0800
-Message-Id: <20220216030854.30180-4-hsiangkao@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.4
-In-Reply-To: <20220216030854.30180-1-hsiangkao@linux.alibaba.com>
-References: <20220216030854.30180-1-hsiangkao@linux.alibaba.com>
+        Tue, 15 Feb 2022 22:09:25 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E885FF65EB
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 19:09:12 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id h7-20020a17090a648700b001b927560c2bso1179544pjj.1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 19:09:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=k7acGQ+aoEgDpTruS21+hEnSk9frdpzFJnwztD0cF2g=;
+        b=hNE5p/Jo5xvwKQMU14u/yTNHol24XinfEBPd0Xnkxx8ckko4WXoFz8bpeB/FIumjPj
+         vCYmfonysPB1PYbjzSO8rGqKsshAXZl+chAocxjI/LgI+ScIrFr1zVkj9o6FHx2QLqcU
+         MZpp/uX3NB6q3uSF+zs0RUw8FgNRIDAvUDfBMb9xplYZ+DMkaUzDvPqkJ3DmUp4yxBpx
+         YHBa7WvldPJF321ZSnrRJGCNkeQFvKbacsQoZdjjc/nCNkR0TsapOD+/7ExjAEbdD3Ow
+         1+uNI99qHAm2pHuLdJuysPYCQcc2to7OVPDLrq02dFyiziZ54eFI/aIf8H3oJH307IW/
+         QIIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=k7acGQ+aoEgDpTruS21+hEnSk9frdpzFJnwztD0cF2g=;
+        b=uyJAbwrDArwD50ZLoUikUJ+hMhWt4OEhdB2TWQJHcoakE3l/GgelX6DPHvF3JQk4FE
+         Medz4e0lr5QtDtoogvan9HEpZRfp2PVSc51PuGlQ1Vzq+FvdKzAU2V2hSemxCvtwrUts
+         aq7ThIOaNoSIQ5u4f4V9yQaxmnAysO+UImVLT5sCFa4+q3Lxb8B6hS13B8whywFG9y8t
+         2HmusBTbdMnfrC5oI4iEXvj0lfMuzEtJ6XkqbXn9v3AFdExs8ehcW+S9+M4hK2kkTlbF
+         dhhqKRHDEBeIv+DEmqr0qxlcJhbIQat7s0HydsliknCo55jhndbdIuT5vp76RKfpjUhB
+         YzYA==
+X-Gm-Message-State: AOAM5305+BeMegKpQXv6F3zIPxmTmaTZrQbgE2GJe3BB77qQEMI1teo4
+        AvtwPaPNf5SPXkCU3kkTDtmMf5vbtr57AiBVa7+bJg==
+X-Google-Smtp-Source: ABdhPJxAp+sSnyv767mDuMDX/8tJW2jOYmiVjf2IgQHEv02eYqaN3IQQZHeRuIl68bmli9Ok0+bdx7i1Re2Il51WFsw=
+X-Received: by 2002:a17:90a:f28d:b0:1b9:975f:1a9f with SMTP id
+ fs13-20020a17090af28d00b001b9975f1a9fmr591684pjb.220.1644980952458; Tue, 15
+ Feb 2022 19:09:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220127124058.1172422-1-ruansy.fnst@fujitsu.com>
+ <20220127124058.1172422-10-ruansy.fnst@fujitsu.com> <CAPcyv4iTO55BX+_v2yHRBjSppPgT23JsHg-Oagb6RwHMj-W+Ug@mail.gmail.com>
+ <ff0f0d8c-a4a3-6dbf-8358-67c3bb11c2d6@fujitsu.com>
+In-Reply-To: <ff0f0d8c-a4a3-6dbf-8358-67c3bb11c2d6@fujitsu.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 15 Feb 2022 19:09:01 -0800
+Message-ID: <CAPcyv4h7zVYu7K3j2JNEd7jTHJRvVDwqhhRCBbq6ru4+QGY9Hg@mail.gmail.com>
+Subject: Re: [PATCH v10 9/9] fsdax: set a CoW flag when associate reflink mappings
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>, david <david@fromorbit.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jane Chu <jane.chu@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, xfs_reflink_end_cow_extent() will unconditionally unmap
-the corresponding old extent and remap an extent from COW fork.
-However, it seems somewhat ineffective since the old bmbt records can
-be directly updated for many cases instead.
+On Tue, Feb 15, 2022 at 6:55 PM Shiyang Ruan <ruansy.fnst@fujitsu.com> wrot=
+e:
+>
+>
+>
+> =E5=9C=A8 2022/2/16 10:09, Dan Williams =E5=86=99=E9=81=93:
+> > On Thu, Jan 27, 2022 at 4:41 AM Shiyang Ruan <ruansy.fnst@fujitsu.com> =
+wrote:
+> >>
+> >> Introduce a PAGE_MAPPING_DAX_COW flag to support association with CoW =
+file
+> >> mappings.  In this case, the dax-RMAP already takes the responsibility
+> >> to look up for shared files by given dax page.  The page->mapping is n=
+o
+> >> longer to used for rmap but for marking that this dax page is shared.
+> >> And to make sure disassociation works fine, we use page->index as
+> >> refcount, and clear page->mapping to the initial state when page->inde=
+x
+> >> is decreased to 0.
+> >>
+> >> With the help of this new flag, it is able to distinguish normal case
+> >> and CoW case, and keep the warning in normal case.
+> >>
+> >> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> >> ---
+> >>   fs/dax.c                   | 65 ++++++++++++++++++++++++++++++++----=
+--
+> >>   include/linux/page-flags.h |  6 ++++
+> >>   2 files changed, 62 insertions(+), 9 deletions(-)
+> >>
+> >> diff --git a/fs/dax.c b/fs/dax.c
+> >> index 250794a5b789..88879c579c1f 100644
+> >> --- a/fs/dax.c
+> >> +++ b/fs/dax.c
+> >> @@ -334,13 +334,46 @@ static unsigned long dax_end_pfn(void *entry)
+> >>          for (pfn =3D dax_to_pfn(entry); \
+> >>                          pfn < dax_end_pfn(entry); pfn++)
+> >>
+> >> +static inline void dax_mapping_set_cow_flag(struct address_space *map=
+ping)
+> >> +{
+> >> +       mapping =3D (struct address_space *)PAGE_MAPPING_DAX_COW;
+> >> +}
+> >> +
+> >> +static inline bool dax_mapping_is_cow(struct address_space *mapping)
+> >> +{
+> >> +       return (unsigned long)mapping =3D=3D PAGE_MAPPING_DAX_COW;
+> >> +}
+> >> +
+> >>   /*
+> >> - * TODO: for reflink+dax we need a way to associate a single page wit=
+h
+> >> - * multiple address_space instances at different linear_page_index()
+> >> - * offsets.
+> >> + * Set or Update the page->mapping with FS_DAX_MAPPING_COW flag.
+> >> + * Return true if it is an Update.
+> >> + */
+> >> +static inline bool dax_mapping_set_cow(struct page *page)
+> >> +{
+> >> +       if (page->mapping) {
+> >> +               /* flag already set */
+> >> +               if (dax_mapping_is_cow(page->mapping))
+> >> +                       return false;
+> >> +
+> >> +               /*
+> >> +                * This page has been mapped even before it is shared,=
+ just
+> >> +                * need to set this FS_DAX_MAPPING_COW flag.
+> >> +                */
+> >> +               dax_mapping_set_cow_flag(page->mapping);
+> >> +               return true;
+> >> +       }
+> >> +       /* Newly associate CoW mapping */
+> >> +       dax_mapping_set_cow_flag(page->mapping);
+> >> +       return false;
+> >> +}
+> >> +
+> >> +/*
+> >> + * When it is called in dax_insert_entry(), the cow flag will indicat=
+e that
+> >> + * whether this entry is shared by multiple files.  If so, set the pa=
+ge->mapping
+> >> + * to be FS_DAX_MAPPING_COW, and use page->index as refcount.
+> >>    */
+> >>   static void dax_associate_entry(void *entry, struct address_space *m=
+apping,
+> >> -               struct vm_area_struct *vma, unsigned long address)
+> >> +               struct vm_area_struct *vma, unsigned long address, boo=
+l cow)
+> >>   {
+> >>          unsigned long size =3D dax_entry_size(entry), pfn, index;
+> >>          int i =3D 0;
+> >> @@ -352,9 +385,17 @@ static void dax_associate_entry(void *entry, stru=
+ct address_space *mapping,
+> >>          for_each_mapped_pfn(entry, pfn) {
+> >>                  struct page *page =3D pfn_to_page(pfn);
+> >>
+> >> -               WARN_ON_ONCE(page->mapping);
+> >> -               page->mapping =3D mapping;
+> >> -               page->index =3D index + i++;
+> >> +               if (cow) {
+> >> +                       if (dax_mapping_set_cow(page)) {
+> >> +                               /* Was normal, now updated to CoW */
+> >> +                               page->index =3D 2;
+> >> +                       } else
+> >> +                               page->index++;
+> >> +               } else {
+> >> +                       WARN_ON_ONCE(page->mapping);
+> >> +                       page->mapping =3D mapping;
+> >> +                       page->index =3D index + i++;
+> >> +               }
+> >>          }
+> >>   }
+> >>
+> >> @@ -370,7 +411,12 @@ static void dax_disassociate_entry(void *entry, s=
+truct address_space *mapping,
+> >>                  struct page *page =3D pfn_to_page(pfn);
+> >>
+> >>                  WARN_ON_ONCE(trunc && page_ref_count(page) > 1);
+> >> -               WARN_ON_ONCE(page->mapping && page->mapping !=3D mappi=
+ng);
+> >> +               if (!dax_mapping_is_cow(page->mapping)) {
+> >> +                       /* keep the CoW flag if this page is still sha=
+red */
+> >> +                       if (page->index-- > 0)
+> >> +                               continue;
+> >> +               } else
+> >> +                       WARN_ON_ONCE(page->mapping && page->mapping !=
+=3D mapping);
+> >>                  page->mapping =3D NULL;
+> >>                  page->index =3D 0;
+> >>          }
+> >> @@ -810,7 +856,8 @@ static void *dax_insert_entry(struct xa_state *xas=
+,
+> >>                  void *old;
+> >>
+> >>                  dax_disassociate_entry(entry, mapping, false);
+> >> -               dax_associate_entry(new_entry, mapping, vmf->vma, vmf-=
+>address);
+> >> +               dax_associate_entry(new_entry, mapping, vmf->vma, vmf-=
+>address,
+> >> +                               false);
+> >
+> > Where is the caller that passes 'true'? Also when that caller arrives
+> > introduce a separate dax_associate_cow_entry() as that's easier to
+> > read than dax_associate_entry(..., true) in case someone does not
+> > remember what that boolean flag means.
+>
+> This flag is supposed to be used when CoW support is introduced.
 
-This patch uses introduced xfs_bmap_update_extent_real() in the
-previous patch for most extent inclusive cases or it will fall back
-to the old way if such replacement is not possible.
+Ok, so should this patch wait and be a part of that series? It's
+otherwise confusing to introduce a new capability in a patch set and
+not take advantage of it until a separate / later patch set.
 
-Actually, we're planing to use a modified alway-cow like atomic write
-approach internally, therefore it'd be nice to do some optimization
-to reduce some metadata overhead.
+> When
+> it is a CoW operation, which is decided by iomap & srcmap's flag, this
+> flag will be set true.
+>
+> I think I should describe it in detail in the commit message.
 
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
----
- fs/xfs/libxfs/xfs_bmap.c | 116 ++++++++++++++++++++++++++++++++++++---
- fs/xfs/libxfs/xfs_bmap.h |   3 +
- fs/xfs/xfs_reflink.c     |  19 +------
- 3 files changed, 111 insertions(+), 27 deletions(-)
+That could help, or move it to the COW support series.
 
-diff --git a/fs/xfs/libxfs/xfs_bmap.c b/fs/xfs/libxfs/xfs_bmap.c
-index 8eb1d1ed7b75..f74ab489d9c8 100644
---- a/fs/xfs/libxfs/xfs_bmap.c
-+++ b/fs/xfs/libxfs/xfs_bmap.c
-@@ -5880,6 +5880,113 @@ xfs_bmap_collapse_extents(
- 	return error;
- }
- 
-+/* Deferred mapping is only for real extents in the data fork. */
-+static bool
-+xfs_bmap_is_update_needed(
-+	struct xfs_bmbt_irec	*bmap)
-+{
-+	return  bmap->br_startblock != HOLESTARTBLOCK &&
-+		bmap->br_startblock != DELAYSTARTBLOCK;
-+}
-+
-+/* del is an extent from COW fork */
-+int
-+xfs_bremapi_from_cowfork(
-+	struct xfs_trans	*tp,
-+	struct xfs_inode	*ip,
-+	struct xfs_bmbt_irec	*icow)
-+{
-+	int			error;
-+	xfs_filblks_t		rlen;
-+
-+	if (xfs_bmap_is_update_needed(icow)) {
-+		xfs_fileoff_t		start, end, max_len;
-+		struct xfs_bmbt_irec	got;
-+		struct xfs_iext_cursor	icur;
-+		struct xfs_btree_cur	*cur = NULL;
-+		struct xfs_ifork	*ifp = XFS_IFORK_PTR(ip, XFS_DATA_FORK);
-+		int			logflags = 0;
-+
-+		error = xfs_iread_extents(tp, ip, XFS_DATA_FORK);
-+		if (error)
-+			return error;
-+
-+		max_len = xfs_refcount_max_unmap(tp->t_log_res);
-+		if (max_len < icow->br_blockcount) {
-+			icow->br_startoff += icow->br_blockcount - max_len;
-+			icow->br_startblock += icow->br_blockcount - max_len;
-+			icow->br_blockcount = max_len;
-+		}
-+
-+		end = icow->br_startoff + icow->br_blockcount;
-+		if (!xfs_iext_count(ifp) || !xfs_iext_lookup_extent_before(ip,
-+				ifp, &end, &icur, &got) ||
-+		    isnullstartblock(got.br_startblock) ||
-+		    icow->br_startoff + icow->br_blockcount > got.br_startoff +
-+				got.br_blockcount) {
-+			error = -EAGAIN;
-+		} else {
-+			end = icow->br_startoff + icow->br_blockcount;
-+			start = XFS_FILEOFF_MAX(icow->br_startoff,
-+						got.br_startoff);
-+			ASSERT(start < end);
-+
-+			/* Trim the extent to what we need */
-+			xfs_trim_extent(icow, start, end - start);
-+			xfs_trim_extent(&got, start, end - start);
-+
-+			if (ifp->if_format == XFS_DINODE_FMT_BTREE) {
-+				cur = xfs_bmbt_init_cursor(tp->t_mountp, tp, ip,
-+							   XFS_DATA_FORK);
-+				cur->bc_ino.flags = 0;
-+			}
-+
-+			/*
-+			 * Free the CoW orphan record (it should be done here
-+			 * before updating extent due to rmapbt update)
-+			 */
-+			xfs_refcount_free_cow_extent(tp, icow->br_startblock,
-+						     icow->br_blockcount);
-+
-+			xfs_bmap_update_extent_real(tp, ip, XFS_DATA_FORK,
-+					&icur, &cur, icow, &logflags, false);
-+
-+			/* Free previous referenced space */
-+			xfs_refcount_decrease_extent(tp, &got);
-+
-+			trace_xfs_reflink_cow_remap(ip, icow);
-+			error = 0;
-+		}
-+		if (cur)
-+			xfs_btree_del_cursor(cur, 0);
-+		if (logflags)
-+			xfs_trans_log_inode(tp, ip, logflags);
-+		if (!error)
-+			return 0;
-+	}
-+
-+	rlen = icow->br_blockcount;
-+	error = __xfs_bunmapi(tp, ip, icow->br_startoff, &rlen, 0, 1);
-+	if (error)
-+		return error;
-+
-+	/* Trim the extent to whatever got unmapped. */
-+	xfs_trim_extent(icow, icow->br_startoff + rlen,
-+			icow->br_blockcount - rlen);
-+	/* Free the CoW orphan record. */
-+	xfs_refcount_free_cow_extent(tp, icow->br_startblock,
-+				     icow->br_blockcount);
-+
-+	/* Map the new blocks into the data fork. */
-+	xfs_bmap_map_extent(tp, ip, icow);
-+
-+	/* Charge this new data fork mapping to the on-disk quota. */
-+	xfs_trans_mod_dquot_byino(tp, ip, XFS_TRANS_DQ_DELBCOUNT,
-+			(long)icow->br_blockcount);
-+	trace_xfs_reflink_cow_remap(ip, icow);
-+	return 0;
-+}
-+
- /* Make sure we won't be right-shifting an extent past the maximum bound. */
- int
- xfs_bmap_can_insert_extents(
-@@ -6123,15 +6230,6 @@ xfs_bmap_split_extent(
- 	return error;
- }
- 
--/* Deferred mapping is only for real extents in the data fork. */
--static bool
--xfs_bmap_is_update_needed(
--	struct xfs_bmbt_irec	*bmap)
--{
--	return  bmap->br_startblock != HOLESTARTBLOCK &&
--		bmap->br_startblock != DELAYSTARTBLOCK;
--}
--
- /* Record a bmap intent. */
- static int
- __xfs_bmap_add(
-diff --git a/fs/xfs/libxfs/xfs_bmap.h b/fs/xfs/libxfs/xfs_bmap.h
-index c52ff94786e2..9da1cff41c1c 100644
---- a/fs/xfs/libxfs/xfs_bmap.h
-+++ b/fs/xfs/libxfs/xfs_bmap.h
-@@ -220,6 +220,9 @@ int	xfs_bmap_update_extent_real(struct xfs_trans *tp,
- 		struct xfs_inode *ip, int whichfork,
- 		struct xfs_iext_cursor *icur, struct xfs_btree_cur **curp,
- 		struct xfs_bmbt_irec *new, int *logflagsp, bool convert);
-+int
-+xfs_bremapi_from_cowfork(struct xfs_trans *tp, struct xfs_inode *ip,
-+		struct xfs_bmbt_irec *icow);
- 
- enum xfs_bmap_intent_type {
- 	XFS_BMAP_MAP = 1,
-diff --git a/fs/xfs/xfs_reflink.c b/fs/xfs/xfs_reflink.c
-index 276387a6a85d..75bd2e03cd5b 100644
---- a/fs/xfs/xfs_reflink.c
-+++ b/fs/xfs/xfs_reflink.c
-@@ -590,7 +590,6 @@ xfs_reflink_end_cow_extent(
- 	struct xfs_mount	*mp = ip->i_mount;
- 	struct xfs_trans	*tp;
- 	struct xfs_ifork	*ifp = XFS_IFORK_PTR(ip, XFS_COW_FORK);
--	xfs_filblks_t		rlen;
- 	unsigned int		resblks;
- 	int			error;
- 
-@@ -651,26 +650,10 @@ xfs_reflink_end_cow_extent(
- 		goto out_cancel;
- 	}
- 
--	/* Unmap the old blocks in the data fork. */
--	rlen = del.br_blockcount;
--	error = __xfs_bunmapi(tp, ip, del.br_startoff, &rlen, 0, 1);
-+	error = xfs_bremapi_from_cowfork(tp, ip, &del);
- 	if (error)
- 		goto out_cancel;
- 
--	/* Trim the extent to whatever got unmapped. */
--	xfs_trim_extent(&del, del.br_startoff + rlen, del.br_blockcount - rlen);
--	trace_xfs_reflink_cow_remap(ip, &del);
--
--	/* Free the CoW orphan record. */
--	xfs_refcount_free_cow_extent(tp, del.br_startblock, del.br_blockcount);
--
--	/* Map the new blocks into the data fork. */
--	xfs_bmap_map_extent(tp, ip, &del);
--
--	/* Charge this new data fork mapping to the on-disk quota. */
--	xfs_trans_mod_dquot_byino(tp, ip, XFS_TRANS_DQ_DELBCOUNT,
--			(long)del.br_blockcount);
--
- 	/* Remove the mapping from the CoW fork. */
- 	xfs_bmap_del_extent_cow(ip, &icur, &got, &del);
- 
--- 
-2.24.4
-
+> > However, it's not clear to me that this approach is a good idea given
+> > that the filesystem is the source of truth for how many address_spaces
+> > this page mapping might be duplicated. What about a iomap_page_ops for
+> > fsdax to ask the filesystem when it is ok to clear the mapping
+> > association for a page?
+>
+> I'll think how to implement it in this way.
+>
+>
+> --
+> Thanks,
+> Ruan.
+>
+> >
+> >>                  /*
+> >>                   * Only swap our new entry into the page cache if the=
+ current
+> >>                   * entry is a zero page or an empty entry.  If a norm=
+al PTE or
+> >> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> >> index 1c3b6e5c8bfd..6370d279795a 100644
+> >> --- a/include/linux/page-flags.h
+> >> +++ b/include/linux/page-flags.h
+> >> @@ -572,6 +572,12 @@ __PAGEFLAG(Reported, reported, PF_NO_COMPOUND)
+> >>   #define PAGE_MAPPING_KSM       (PAGE_MAPPING_ANON | PAGE_MAPPING_MOV=
+ABLE)
+> >>   #define PAGE_MAPPING_FLAGS     (PAGE_MAPPING_ANON | PAGE_MAPPING_MOV=
+ABLE)
+> >>
+> >> +/*
+> >> + * Different with flags above, this flag is used only for fsdax mode.=
+  It
+> >> + * indicates that this page->mapping is now under reflink case.
+> >> + */
+> >> +#define PAGE_MAPPING_DAX_COW   0x1
+> >> +
+> >>   static __always_inline int PageMappingFlags(struct page *page)
+> >>   {
+> >>          return ((unsigned long)page->mapping & PAGE_MAPPING_FLAGS) !=
+=3D 0;
+> >> --
+> >> 2.34.1
+> >>
+> >>
+> >>
+>
+>

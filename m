@@ -2,87 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BB44B853E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 11:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A2C4B853F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 11:11:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232691AbiBPKH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 05:07:28 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46498 "EHLO
+        id S232672AbiBPKJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 05:09:05 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:56494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232660AbiBPKH0 (ORCPT
+        with ESMTP id S229482AbiBPKJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 05:07:26 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41CA1B85A3
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 02:07:13 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 614A41EC04C1;
-        Wed, 16 Feb 2022 11:07:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1645006028;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Mc1byk01SMNlUFOzzBp9ZSJPPb31u5PB8VWGi7eix5E=;
-        b=Z0zaQ3nbJ1YzlRMd4uKT4BEkM8VbIWo5VeAxr/dS5ZVBnKq+WYSOCRgQEtRseB00CnpPFV
-        TBXzGqsZfLiTVfCAVPNivNdefp+hgFsC4WoR7Ch0iJ827aTBCrMSiGVwAk+3Nzr+SRseCb
-        3EBUIDPrq8bvl9zxAQF5XDkq2fK5yhQ=
-Date:   Wed, 16 Feb 2022 11:07:15 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     "Kuppuswamy, Sathyanarayanan" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Kai Huang <kai.huang@intel.com>
-Subject: Re: [PATCHv2 16/29] x86/boot: Add a trampoline for booting APs via
- firmware handoff
-Message-ID: <YgzM03ovVdaXhT39@zn.tnic>
-References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
- <20220124150215.36893-17-kirill.shutemov@linux.intel.com>
- <Yfpqk0amEbcyte+w@zn.tnic>
- <25fec256-7feb-e94d-5e37-3a174b6c6a66@linux.intel.com>
- <Yf0vB+TBR2AjHmV5@zn.tnic>
- <20220215213624.tzdahmbhucupwtqe@black.fi.intel.com>
+        Wed, 16 Feb 2022 05:09:03 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F2E2B7618
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 02:08:51 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 9A76D3201FEA;
+        Wed, 16 Feb 2022 05:08:50 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 16 Feb 2022 05:08:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; bh=1FMOJ9Hsby6+vC
+        NKbH8TDqnGPVVr5E1r2KGYfIIa3mM=; b=CDQA3YZYoLCp0EJpXzRG+mnkWcHWgL
+        Wc5yh1cesHtBvUeYIKVDGpkUErCCZLMJZSgQJTWN4+e9e39eLRSsTBJ5xkO/9tvh
+        R7YtYNowtpaBxQCy9OGMdL7HRG8xJEmK3RcXvuADHLuSykVq5m87GGShfO8YI2L7
+        NZovLgo0ZbR6OIGQcMiSawgWUI1qVv2qTGZIpby/iXI62yrbvOgf7oVcR+NzVLJ4
+        YSmC1DzP/8bLCsNL9Dk20vK9SRMh54D2qVyTp5JnkGD8niF/Pzr3lI0SyaXHrKhc
+        so3qZBqsoSiUX4fzbrXfJv+HrJTr53g92iNwfa6U+YOqBgEv5Ush4TTA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; bh=1FMOJ9Hsby6+vCNKbH8TDqnGPVVr5E1r2KGYfIIa3
+        mM=; b=CVsFF5OK+e5ZpTsQGHHJYw7uT9TBilLKUP75bytItVflxN0Beo+nGOY+f
+        a6tDgLYjf1t6nD7iYtuw7bEonPjsnai1Xn1IF7tIq9uNfkX+8/n/tfS29SfyqaA1
+        mY10FBMo4YbUB37rdAxTCmEH4jOhUED8R9EGom3HXXbTQnUWC2Wgjm2FBbvEr6gK
+        othmdGLrKGPbQ58d34GR0miOGPLsHluYyheQW6yNlSkQl2hAzZzkpToBsPaErGCc
+        eLkx0TYj+sbNl69Gpz62dFIj0f5YO+lrZvq/U3pIERHJ/wlan1Encd1ESjH2loX5
+        kIA5vZQIBGNL9c7tgZN131ZYMOBmA==
+X-ME-Sender: <xms:Mc0MYmDCsgiV-mUrRvU9oDQC3xmmQlKDuW1hzK2ABYJRQTNgEkQlzQ>
+    <xme:Mc0MYggfNQfA6RMjmb5Ce02f9yYKwwVb4jVrJ5O9CBrgTR52zupnXyL_ylo8fsRfB
+    orxZGwGThsohjOBGmo>
+X-ME-Received: <xmr:Mc0MYpm-P06Z1Of7xjrX-B17BsqZ97fkqJK60CLKjE0bkbNkqM71jvRtrEYFAK-ZEU0nmsQwME3P8j4tXHbMJAz8aE8baK4cjTyHl1A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjeeigdduudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvffufffkofgjfhggtgfgsehtkeertdertdejnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepjeeugfegkeffgfeuvedtvddufffhjeffjeejvddvudduteehhfefhfefgeei
+    keeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:Mc0MYkwJUT4cYzoVhm4ZwDGCRkp4aCxR_V5OFuVOfPMM0GaJ7pb1Ew>
+    <xmx:Mc0MYrQBLw3Ltkf05HoZahjcHI9k35YW2VTJWNor3RuZ7w719KxBqw>
+    <xmx:Mc0MYvYNYgPIER3HLxrXZuvNf_m98KVZDz5u7JPXx03SxNYmWWTafQ>
+    <xmx:Ms0MYmF_r1K8DKw45f5mJAiEbMIivZAZBhMpyLoalWcD-wN__T-blA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 16 Feb 2022 05:08:49 -0500 (EST)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     cgel.zte@gmail.com, emma@anholt.net
+Cc:     Maxime Ripard <maxime@cerno.tech>, dri-devel@lists.freedesktop.org,
+        Zeal Robot <zealci@zte.com.cn>, airlied@linux.ie,
+        mripard@kernel.org, linux-kernel@vger.kernel.org,
+        "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>, daniel@ffwll.ch
+Subject: Re: (subset) [PATCH] drm/vc4: Use of_device_get_match_data()
+Date:   Wed, 16 Feb 2022 11:08:46 +0100
+Message-Id: <164500612144.612087.11811919459235760311.b4-ty@cerno.tech>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220214020530.1714631-1-chi.minghao@zte.com.cn>
+References: <20220214020530.1714631-1-chi.minghao@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220215213624.tzdahmbhucupwtqe@black.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 12:36:24AM +0300, Kirill A. Shutemov wrote:
-> How can signle trampoline_start cover all cases?
+On Mon, 14 Feb 2022 02:05:30 +0000, cgel.zte@gmail.com wrote:
+> From: "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>
+> 
+> Use of_device_get_match_data() to simplify the code.
+> 
+> 
 
-All I'm saying is that the real mode header should have a single
+Applied to drm/drm-misc (drm-misc-next).
 
-	u32     trampoline_start;
-
-instead of:
-
-	u32     trampoline_start;
-	u32     sev_es_trampoline_start;
-	u32     trampoline_start64;
-
-which all are the same thing on a single system.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks!
+Maxime

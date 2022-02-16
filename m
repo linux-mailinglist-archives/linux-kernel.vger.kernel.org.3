@@ -2,59 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719594B940A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 23:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F89A4B943E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 23:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237628AbiBPWwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 17:52:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45140 "EHLO
+        id S238088AbiBPW6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 17:58:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231648AbiBPWwJ (ORCPT
+        with ESMTP id S236590AbiBPW6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 17:52:09 -0500
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B98945AE7;
-        Wed, 16 Feb 2022 14:51:56 -0800 (PST)
-Received: by mail-io1-f53.google.com with SMTP id e79so1568808iof.13;
-        Wed, 16 Feb 2022 14:51:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=3r6h2sBdcW1kkCKh7UVq3dUjkuKu9ak2ZM+xBcxiBd0=;
-        b=PrjSbjFYBRZsSCFrFuV2l25GRfp9peqpmZ6iroyZ3V49mVfkkgr5bCMjHTz9pNjTuU
-         OB7AfsdusJQSXIrwTuOqQ8lXITNJw24kxDmiOSo3SPWQAlSfnQMzGi2rkknvzPwm598f
-         oF84/lW1G6ws1U/hS0ufWKY8mB9+aBFAqe031n7KAh6EaBydGQ2GlfK2QPaLAm99nYmK
-         prtiDmSGjYJSM7NT07smUG9HMvjWRRxgacq/J/w0BUCdBIPrzsaJD0WEAkcSCGdxLSNf
-         NC+OkX790A2uF+Fh1PX2CMOvBg2X5i/M81r6aY0vxH/Wqy/quL67bfjHfm89mO3xhAyb
-         +okg==
-X-Gm-Message-State: AOAM533ty24nQPm6kuyzRXDPxkmoFZ0BVnFdBfUXWVEiR7QS9wFOMyI5
-        xJGkf/2xwBVB7OVqW7na2w==
-X-Google-Smtp-Source: ABdhPJyhkxR5J8ILPyX1MmO7R0auSfTU9wY7qKGqq0W+NoKQgFqJrxA0ffZkJwTt3tb0CM71gtO84A==
-X-Received: by 2002:a05:6638:1241:b0:311:b694:ef58 with SMTP id o1-20020a056638124100b00311b694ef58mr70606jas.88.1645051915548;
-        Wed, 16 Feb 2022 14:51:55 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id i13sm762384ilv.58.2022.02.16.14.51.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 14:51:54 -0800 (PST)
-Received: (nullmailer pid 1825831 invoked by uid 1000);
-        Wed, 16 Feb 2022 22:51:53 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Sergiu Moga <sergiu.moga@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        ludovic.desroches@microchip.com, linux-rtc@vger.kernel.org,
-        a.zummo@towertech.it, robh+dt@kernel.org,
-        nicolas.ferre@microchip.com, devicetree@vger.kernel.org,
-        alexandre.belloni@bootlin.com
-In-Reply-To: <20220215144649.14378-1-sergiu.moga@microchip.com>
-References: <20220215144649.14378-1-sergiu.moga@microchip.com>
-Subject: Re: [PATCH] dt-bindings: rtc: convert at91sam9 bindings to json-schema
-Date:   Wed, 16 Feb 2022 16:51:53 -0600
-Message-Id: <1645051913.059197.1825830.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Wed, 16 Feb 2022 17:58:09 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0952A22BF;
+        Wed, 16 Feb 2022 14:57:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645052276; x=1676588276;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3nDVg0ZMV12L+QQ0qFHSYQQ0u6Vucqad2IoLdsACIeQ=;
+  b=T1nhiLlG2X+sqAxzlF6xxpIWUb9yUg9qTXAQK6ISPvO/PaaZ/5rX85rX
+   cwyjZJnveIE+fD0Sq8j2uX0SjN5cpdEwUAuhztIeggOUfwlcr53OTUgEx
+   wWneJGe/BcWkqSG+dEv0BoqPedV22fDatAoGBJ51+0VsKT2bHI3FIBETl
+   oEGv2HSjAJOaKZjzt09ODw3SvqqEk+cVfR30C2QyJzwBcjlj4duV4q9lZ
+   C7xZTar2/OOE/zV3JIvAb3tjop1x3uY1ZmCKvmuadkAHJ6/ujbUFYuouV
+   L1hMzMXijJW3pF73TAgE3e8prbj3eL5I2+bWMjHdB+s3lSSY14cfN97qL
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="250684025"
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="250684025"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 14:57:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="625651573"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Feb 2022 14:57:53 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKTFA-000BDA-UF; Wed, 16 Feb 2022 22:57:52 +0000
+Date:   Thu, 17 Feb 2022 06:56:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] lkdtm/usercopy: Expand size of "out of frame" object
+Message-ID: <202202170613.eIFMv4np-lkp@intel.com>
+References: <20220216201743.2088344-1-keescook@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216201743.2088344-1-keescook@chromium.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,44 +68,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022 16:46:49 +0200, Sergiu Moga wrote:
-> Convert RTC binding for Atmel/Microchip SoCs to Device Tree Schema
-> format.
-> 
-> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
-> ---
->  .../bindings/rtc/atmel,at91sam9-rtc.txt       | 25 --------
->  .../bindings/rtc/atmel,at91sam9-rtc.yaml      | 61 +++++++++++++++++++
->  2 files changed, 61 insertions(+), 25 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.txt
->  create mode 100644 Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml
-> 
+Hi Kees,
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+I love your patch! Yet something to improve:
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml:20:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
-./Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml:22:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+[auto build test ERROR on char-misc/char-misc-testing]
+[also build test ERROR on soc/for-next kees/for-next/pstore v5.17-rc4 next-20220216]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.example.dt.yaml: rtt@fffffd20: $nodename:0: 'rtt@fffffd20' does not match '^rtc(@.*|-[0-9a-f])*$'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.example.dt.yaml: rtt@fffffd20: atmel,rtt-rtc-time-reg:0: [4294967295, 0] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml
+url:    https://github.com/0day-ci/linux/commits/Kees-Cook/lkdtm-usercopy-Expand-size-of-out-of-frame-object/20220217-041936
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git e6cb9c167eeb8f90ab924666c573e69e85e700a0
+config: hexagon-randconfig-r045-20220216 (https://download.01.org/0day-ci/archive/20220217/202202170613.eIFMv4np-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/aa676e88f535bd79a3e22a1cc70c9b6cc51dbbfe
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Kees-Cook/lkdtm-usercopy-Expand-size-of-out-of-frame-object/20220217-041936
+        git checkout aa676e88f535bd79a3e22a1cc70c9b6cc51dbbfe
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/misc/lkdtm/
 
-doc reference errors (make refcheckdocs):
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-See https://patchwork.ozlabs.org/patch/1593106
+All errors (new ones prefixed by >>):
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+>> drivers/misc/lkdtm/usercopy.c:74:39: error: use of undeclared identifier 'current_stack_pointer'
+           pr_info("stack     : %px\n", (void *)current_stack_pointer);
+                                                ^
+   1 error generated.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
 
-pip3 install dtschema --upgrade
+vim +/current_stack_pointer +74 drivers/misc/lkdtm/usercopy.c
 
-Please check and re-submit.
+    53	
+    54	static noinline void do_usercopy_stack(bool to_user, bool bad_frame)
+    55	{
+    56		unsigned long user_addr;
+    57		unsigned char good_stack[32];
+    58		unsigned char *bad_stack;
+    59		int i;
+    60	
+    61		/* Exercise stack to avoid everything living in registers. */
+    62		for (i = 0; i < sizeof(good_stack); i++)
+    63			good_stack[i] = test_text[i % sizeof(test_text)];
+    64	
+    65		/* This is a pointer to outside our current stack frame. */
+    66		if (bad_frame) {
+    67			bad_stack = do_usercopy_stack_callee((uintptr_t)&bad_stack);
+    68		} else {
+    69			/* Put start address just inside stack. */
+    70			bad_stack = task_stack_page(current) + THREAD_SIZE;
+    71			bad_stack -= sizeof(unsigned long);
+    72		}
+    73	
+  > 74		pr_info("stack     : %px\n", (void *)current_stack_pointer);
+    75		pr_info("good_stack: %px-%px\n", good_stack, good_stack + sizeof(good_stack));
+    76		pr_info("bad_stack : %px-%px\n", bad_stack, bad_stack + sizeof(good_stack));
+    77	
+    78		user_addr = vm_mmap(NULL, 0, PAGE_SIZE,
+    79				    PROT_READ | PROT_WRITE | PROT_EXEC,
+    80				    MAP_ANONYMOUS | MAP_PRIVATE, 0);
+    81		if (user_addr >= TASK_SIZE) {
+    82			pr_warn("Failed to allocate user memory\n");
+    83			return;
+    84		}
+    85	
+    86		if (to_user) {
+    87			pr_info("attempting good copy_to_user of local stack\n");
+    88			if (copy_to_user((void __user *)user_addr, good_stack,
+    89					 unconst + sizeof(good_stack))) {
+    90				pr_warn("copy_to_user failed unexpectedly?!\n");
+    91				goto free_user;
+    92			}
+    93	
+    94			pr_info("attempting bad copy_to_user of distant stack\n");
+    95			if (copy_to_user((void __user *)user_addr, bad_stack,
+    96					 unconst + sizeof(good_stack))) {
+    97				pr_warn("copy_to_user failed, but lacked Oops\n");
+    98				goto free_user;
+    99			}
+   100		} else {
+   101			/*
+   102			 * There isn't a safe way to not be protected by usercopy
+   103			 * if we're going to write to another thread's stack.
+   104			 */
+   105			if (!bad_frame)
+   106				goto free_user;
+   107	
+   108			pr_info("attempting good copy_from_user of local stack\n");
+   109			if (copy_from_user(good_stack, (void __user *)user_addr,
+   110					   unconst + sizeof(good_stack))) {
+   111				pr_warn("copy_from_user failed unexpectedly?!\n");
+   112				goto free_user;
+   113			}
+   114	
+   115			pr_info("attempting bad copy_from_user of distant stack\n");
+   116			if (copy_from_user(bad_stack, (void __user *)user_addr,
+   117					   unconst + sizeof(good_stack))) {
+   118				pr_warn("copy_from_user failed, but lacked Oops\n");
+   119				goto free_user;
+   120			}
+   121		}
+   122	
+   123	free_user:
+   124		vm_munmap(user_addr, PAGE_SIZE);
+   125	}
+   126	
 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

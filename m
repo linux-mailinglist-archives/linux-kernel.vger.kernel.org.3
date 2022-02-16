@@ -2,108 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7C64B9203
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 21:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C904B920B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 21:01:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238549AbiBPUAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 15:00:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53316 "EHLO
+        id S229757AbiBPUCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 15:02:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238509AbiBPT7x (ORCPT
+        with ESMTP id S229664AbiBPUCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 14:59:53 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA3E225D3C
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:59:41 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id x4so2820247plb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:59:41 -0800 (PST)
+        Wed, 16 Feb 2022 15:02:01 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE75EA741
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:01:47 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id u16so5053663ljk.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:01:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gKkiGODEySwn5Ud6cwmFKt9S5uiVPYEjk/1FwzY1D7M=;
-        b=FbCQhqCgY7+53halAemFJqR+/yEcT2gQBP93JU9UC8PAh275Z04yeP2cnPk8Byycoa
-         /6zwqH/8Dl7HBUIlAHe1l1LWGmjjWLR4OXWCNR8gwqRgFZXOvrZ0JahDSAUi2NXaAJf3
-         UKiz/7cjikcMEKRvFhkHpKC42JAbLsbQvj5zA=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hW2pDFteIc4gQMKS0FzR4fHrP7ssO0bJIUo/j6LOQw4=;
+        b=YMh744M7SDKa0Wrw7hsPPJv/kOsDGzkF/tKe34isF3+hpPzwq4TF4fUASJ3Ykcm9YY
+         3V2dlBXE61N2W+UnD430bOwEuHuomHRbsvAlESi8v+1J9eL8yyd6RXYDhUjU2krZDFS2
+         v2TeUPyZhyWH0Pgiy7r0KT9eAqJxIVMnboK2Ezitk5Bd8f4Iujod0y2S3QEi62Pj16VZ
+         v+0D4GO4BD9VkhuPmq1ITiZzO1+QNMNNonLMwRWrw8ToyxB4nOFiCwFY5rcyP7JzjUml
+         W1N+6ZXDHtQ8fntAy1kAmzSR9dZwdmBdv0SlLiu9OkqnaHx4P5VFJQN9cpFhxM3IAQvr
+         xG8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gKkiGODEySwn5Ud6cwmFKt9S5uiVPYEjk/1FwzY1D7M=;
-        b=JteN8Z3Lym1fw1sOTrcWH3pOdZgYhJFp4hR0jy/wHstSJf2epURMGkS8U9g57QBLLy
-         9sMPb13uiUfl5xLCgUw8SA4T9w1GmAv6VX47el1euCxnlh5yWzgZa+ffOA/Jl2OJtwzG
-         gy2kirWc6iEF8XqUhuKt6TUfaldcWcQYWyVqWFr8zO1+rJsCDi+zzYNLn3ly3yDcvcEy
-         AEgQPTmuDaPw8xmV2D3tHbaA/RjCWsqAkqUh/mJ+6tA/lHH77xHcPSFMULCgpofNz/sY
-         8vpj69N/S0eej3wD520+WvJhw6M658ztsc777PhunJdhPVpwN/9bACiwao/ydbRDV2bv
-         tElw==
-X-Gm-Message-State: AOAM533c6igDf+RrwCpe20m/8UCABEl2qPJNUee/NocNgNlFU9vwB5mo
-        FEhe/Gg1nGlWT393cag2IKyqDqfWnAFMOA==
-X-Google-Smtp-Source: ABdhPJwjYxlN7gSR+7kFrYETcwqEK3eVK6gnPbD8ydzhwRC3qOldpUKOhhtBXZcjj79BjVyZBXsn2w==
-X-Received: by 2002:a17:902:b116:b0:14f:460d:bf42 with SMTP id q22-20020a170902b11600b0014f460dbf42mr4195532plr.108.1645041580606;
-        Wed, 16 Feb 2022 11:59:40 -0800 (PST)
-Received: from smtp.gmail.com ([2620:15c:202:201:5f39:68a1:3c2b:3486])
-        by smtp.gmail.com with ESMTPSA id u16sm6078840pgh.54.2022.02.16.11.59.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 11:59:40 -0800 (PST)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>,
-        linux-kernel@vger.kernel.org, benjamin.tissoires@redhat.com,
-        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
-        "Sean O'Brien" <seobrien@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH v4 4/4] HID: google: modify HID device groups of eel
-Date:   Wed, 16 Feb 2022 11:59:01 -0800
-Message-Id: <20220216195901.1326924-5-swboyd@chromium.org>
-X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-In-Reply-To: <20220216195901.1326924-1-swboyd@chromium.org>
-References: <20220216195901.1326924-1-swboyd@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hW2pDFteIc4gQMKS0FzR4fHrP7ssO0bJIUo/j6LOQw4=;
+        b=YrGV64XQPIAd7DxmuOYbogMPxkOhaUQpazXFRFWgOiXRIoMsU/0v+LtsP+/Dcj94TX
+         w62og3yQ1VjjN1IJzXd9U5MpAWj9dnCxo/GrXyRXj2R23CCXa7Br/giQZyPjdk9RH6Wa
+         hWkmTQ6fehRakX/1td29TgldWfrkWcFfMLrKmm4F8e1Cq1FCOZMiCws1UQ/eL11PoEJC
+         DyTlNJLKT5bY5WiYRpYig2PpSM4szYjFRCznRr5vztcYaC8Oey8HNp0seyc+xM2z/Yg4
+         YEyizA0VY3BpXptShYpms6QwkQfdVJx8VdbUNFgl+RpatBx/pG+c4tMK0Ma+G8fk3wlG
+         IgnQ==
+X-Gm-Message-State: AOAM531nwpOM9PN3WqvKD87hP1HUON/dje/PHC1AnuQOd234UQBjs9SI
+        ktQO6oMygKqIvWUXiTIF9UkCcMFdNOAxdr2Iann92g==
+X-Google-Smtp-Source: ABdhPJwEBo1EH1FqftO2DluuT2fzFZom+MP66NKbpaTW+1EXirX6GeDIxV2dmpPMLpj+B1br1BaMVkUfxEHGNxAp5ok=
+X-Received: by 2002:a2e:a886:0:b0:244:de6f:1bf6 with SMTP id
+ m6-20020a2ea886000000b00244de6f1bf6mr3320011ljq.375.1645041705935; Wed, 16
+ Feb 2022 12:01:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAHmME9pO41uwYExSROc5X2+RE=a5tZfE=c=bAxVbhCHfa7=zSA@mail.gmail.com>
+ <20220204155142.56419-1-Jason@zx2c4.com> <Yf1M3YGVq71oC9BM@linutronix.de>
+In-Reply-To: <Yf1M3YGVq71oC9BM@linutronix.de>
+From:   Jann Horn <jannh@google.com>
+Date:   Wed, 16 Feb 2022 21:01:19 +0100
+Message-ID: <CAG48ez1ucJikx_6GzK2XUfCGoTeL+R418riTn+ECj_ud5BSFow@mail.gmail.com>
+Subject: Re: [PATCH v3] random: remove batched entropy locking
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Andy Lutomirski <luto@kernel.org>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
+On Fri, Feb 4, 2022 at 4:57 PM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+> On 2022-02-04 16:51:42 [+0100], Jason A. Donenfeld wrote:
+> > index 455615ac169a..3e54b90a3ff8 100644
+> > --- a/drivers/char/random.c
+> > +++ b/drivers/char/random.c
+> > @@ -1759,41 +1762,54 @@ u64 get_random_u64(void)
+> >       unsigned long flags;
+> >       struct batched_entropy *batch;
+> >       static void *previous;
+> > +     int next_gen;
+> >
+> >       warn_unseeded_randomness(&previous);
+> >
+> > -     batch = raw_cpu_ptr(&batched_entropy_u64);
+> > -     spin_lock_irqsave(&batch->batch_lock, flags);
+> > -     if (batch->position % ARRAY_SIZE(batch->entropy_u64) == 0) {
+> > +     batch = this_cpu_ptr(&batched_entropy_u64);
+> > +     local_lock_irqsave(&batch->lock, flags);
+>
+> Does this compile and work? From the looks of it, this should be:
+>
+>         local_lock_irqsave(&batched_entropy_u64.lock, flags);
+>         batch = this_cpu_ptr(&batched_entropy_u64);
+>
+> and we could do s/this_cpu_ptr/raw_cpu_ptr/
 
-If HID_GROUP of eel is set to HID_GROUP_GENERIC, Whiskers Tablet Mode
-Switch of eel hammer will not be detected by system because the
-hid-vivaldi driver probes the device. When it is set to
-HID_GROUP_VIVALDI, system will detect Whiskers Tablet Mode Switch
-successfully and also support the vivaldi keyboard layout.
+Why raw_cpu_ptr? include/linux/percpu-defs.h says about raw_*() operations:
 
-Cc: Jiri Kosina <jikos@kernel.org>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Tested-by: "Sean O'Brien" <seobrien@chromium.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Acked-by: Jiri Kosina <jkosina@suse.cz>
-Signed-off-by: Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
-[swboyd@chromium.org: Expand on commit text]
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/hid/hid-google-hammer.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ * Operations for contexts where we do not want to do any checks for
+ * preemptions.  Unless strictly necessary, always use [__]this_cpu_*()
+ * instead.
 
-diff --git a/drivers/hid/hid-google-hammer.c b/drivers/hid/hid-google-hammer.c
-index f8e6dccf6ed8..8c4881796a0c 100644
---- a/drivers/hid/hid-google-hammer.c
-+++ b/drivers/hid/hid-google-hammer.c
-@@ -636,7 +636,7 @@ static void hammer_remove(struct hid_device *hdev)
- static const struct hid_device_id hammer_devices[] = {
- 	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
- 		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_DON) },
--	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
-+	{ HID_DEVICE(BUS_USB, HID_GROUP_VIVALDI,
- 		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_EEL) },
- 	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
- 		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_HAMMER) },
--- 
-https://chromeos.dev
-
+So when I see a raw_*() percpu thing, I read it as "it is expected
+that we can migrate after this point (or we're in some really weird
+context where the normal context check doesn't work)". Is that
+incorrect?

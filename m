@@ -2,106 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEAE54B8C51
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D14B4B8C53
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:23:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233142AbiBPPWc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 16 Feb 2022 10:22:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60784 "EHLO
+        id S233697AbiBPPYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 10:24:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231898AbiBPPWa (ORCPT
+        with ESMTP id S231898AbiBPPYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 10:22:30 -0500
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A90CF4D3D;
-        Wed, 16 Feb 2022 07:22:17 -0800 (PST)
-Received: from in02.mta.xmission.com ([166.70.13.52]:59752)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nKM8E-00FUVx-J8; Wed, 16 Feb 2022 08:22:14 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:35816 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nKM8D-00AnNX-Kw; Wed, 16 Feb 2022 08:22:14 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     linux-kernel@vger.kernel.org, Alexey Gladkov <legion@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Solar Designer <solar@openwall.com>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        containers@lists.linux-foundation.org, stable@vger.kernel.org
-References: <87o83e2mbu.fsf@email.froward.int.ebiederm.org>
-        <20220211021324.4116773-1-ebiederm@xmission.com>
-        <20220214183727.GA10803@blackbody.suse.cz>
-Date:   Wed, 16 Feb 2022 09:22:06 -0600
-In-Reply-To: <20220214183727.GA10803@blackbody.suse.cz> ("Michal
- =?utf-8?Q?Koutn=C3=BD=22's?=
-        message of "Mon, 14 Feb 2022 19:37:27 +0100")
-Message-ID: <87bkz6n8f5.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 16 Feb 2022 10:24:00 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2FB25A33B;
+        Wed, 16 Feb 2022 07:23:47 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id v12so4076208wrv.2;
+        Wed, 16 Feb 2022 07:23:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FveRsyn6G+AiS/67uc2i7UcswT5E00/72XjPpLnE4PU=;
+        b=d8/oHYZiL5fPjypqzqC21dxn9m+5MWflaSyB57w2/iyRfc81j2rJneQta5DNxCIf10
+         ofV5Ts/su54o7RROgrg7VuNlmzGdZbgtbP3ni3hgC2jJmZ5qPW1gB55J99ozYpeV1I3F
+         WdNZpsM8tz6qz21zaM7MjSzToTMQnJIQJkXZ8CyOiMKd7yoLOT28Dbw439CGWCwNIZZd
+         rDWijBfvh4ZtuNQ9kIj0cvuXeAl0vyOv/HlkgP9uxv+haYuv3G44NtvTYATrvWsWzg4v
+         ZXWxn6SzZ+ualDt7vaYRSkygzCz77iFv2OjgNPePBaJTknwCKKn6me6jwawZMPVscMOH
+         aNDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FveRsyn6G+AiS/67uc2i7UcswT5E00/72XjPpLnE4PU=;
+        b=1WnBr0z8rQLXjDPRgzkloFtiLOvyQVGxAQL/Bhg6Zr5PdvZsXnAHIP3xLdpXJmt4jX
+         SwR66ubaGBAxrYJ0b8dNKdV5LZ24mu6VfZmLTvP2o4+EjTK3bZ1+92erS5oRnVr1JlCM
+         gGtAk13ctYgAPPyGokKFhaj5lmG3fmVkt2iYeO5xT82mTWIx57GFKmbLs0cuAwsRgVLz
+         hweTFsqT6Yji+MRY8txFJqzg2EKkzVx/60YaMoL+YV0gWdpwwq3J7mJh6TBFd2oy2BSK
+         LuiGqGENjukyw1TuCG0DADK8UXHtzpnh3hj7Pa4nuD+kR/DtpSrgF9jikM63WC+TjGkZ
+         WODQ==
+X-Gm-Message-State: AOAM532OdhlGqXR5CEIkCgyReQWjHmNKIMaSPR8x9V/eJOTELuCN5NUf
+        x7XcD7UJ82tDXy0k+ExhA79zX88yGbE=
+X-Google-Smtp-Source: ABdhPJyD/zn/Q853EHIU6kOwRmhyWrIBSXkmeOd2MBDDMvbqV7244T6J6otJbW+HnYFfrz//bDDJrQ==
+X-Received: by 2002:a5d:51c1:0:b0:1e3:45bf:da38 with SMTP id n1-20020a5d51c1000000b001e345bfda38mr2695639wrv.144.1645025024872;
+        Wed, 16 Feb 2022 07:23:44 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id w18sm19030411wrl.62.2022.02.16.07.23.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 07:23:44 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scripts/spelling.txt: add more spellings to spelling.txt
+Date:   Wed, 16 Feb 2022 15:23:43 +0000
+Message-Id: <20220216152343.105546-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1nKM8D-00AnNX-Kw;;;mid=<87bkz6n8f5.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18GHd2u5OO43mJ7g75YNTvv6XIKXa6NCZc=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAD_ENC_HEADER,BAYES_00,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: =?ISO-8859-1?Q?;Michal Koutn=c3=bd <mkoutny@suse.com>?=
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 382 ms - load_scoreonly_sql: 0.08 (0.0%),
-        signal_user_changed: 11 (3.0%), b_tie_ro: 9 (2.5%), parse: 2.2 (0.6%),
-        extract_message_metadata: 24 (6.4%), get_uri_detail_list: 2.0 (0.5%),
-        tests_pri_-1000: 39 (10.2%), tests_pri_-950: 1.69 (0.4%),
-        tests_pri_-900: 1.33 (0.3%), tests_pri_-90: 69 (18.1%), check_bayes:
-        67 (17.4%), b_tokenize: 7 (1.9%), b_tok_get_all: 6 (1.5%),
-        b_comp_prob: 2.5 (0.6%), b_tok_touch_all: 47 (12.4%), b_finish: 1.25
-        (0.3%), tests_pri_0: 214 (55.9%), check_dkim_signature: 0.92 (0.2%),
-        check_dkim_adsp: 3.6 (0.9%), poll_dns_idle: 0.97 (0.3%), tests_pri_10:
-        2.2 (0.6%), tests_pri_500: 12 (3.2%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 1/8] ucounts: Fix RLIMIT_NPROC regression
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Michal Koutný <mkoutny@suse.com> writes:
+Some of the more common spelling mistakes and typos that I've found
+while fixing up spelling mistakes in the kernel in the past four months.
 
-> On Thu, Feb 10, 2022 at 08:13:17PM -0600, "Eric W. Biederman" <ebiederm@xmission.com> wrote:
->> This can be fixed either by fixing the test or by moving the increment
->> to be before the test.  Fix it my moving copy_creds which contains
->> the increment before is_ucounts_overlimit.
->
-> This is simpler than my approach and I find it correct too.
->
->> Both the test in fork and the test in set_user were semantically
->> changed when the code moved to ucounts.  The change of the test in
->> fork was bad because it was before the increment.
->>
->> The test in set_user was wrong and the change to ucounts fixed it.  So
->> this fix is only restore the old behavior in one lcatio not two.
->
-> Whom should be the task accounted to in the case of set*uid? (The change
-> to ucounts made the check against the pre-switch user's ucounts.)
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ scripts/spelling.txt | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-It needs to be post-switch in the case of set*id().
+diff --git a/scripts/spelling.txt b/scripts/spelling.txt
+index 0c8b79cfb1bb..8435b99452b6 100644
+--- a/scripts/spelling.txt
++++ b/scripts/spelling.txt
+@@ -180,6 +180,7 @@ asuming||assuming
+ asycronous||asynchronous
+ asychronous||asynchronous
+ asynchnous||asynchronous
++asynchronus||asynchronous
+ asynchromous||asynchronous
+ asymetric||asymmetric
+ asymmeric||asymmetric
+@@ -231,6 +232,7 @@ baloons||balloons
+ bandwith||bandwidth
+ banlance||balance
+ batery||battery
++battey||battery
+ beacuse||because
+ becasue||because
+ becomming||becoming
+@@ -333,6 +335,7 @@ commoditiy||commodity
+ comsume||consume
+ comsumer||consumer
+ comsuming||consuming
++comaptible||compatible
+ compability||compatibility
+ compaibility||compatibility
+ comparsion||comparison
+@@ -353,7 +356,9 @@ compoment||component
+ comppatible||compatible
+ compres||compress
+ compresion||compression
++compresser||compressor
+ comression||compression
++comsumed||consumed
+ comunicate||communicate
+ comunication||communication
+ conbination||combination
+@@ -530,6 +535,7 @@ dissconect||disconnect
+ distiction||distinction
+ divisable||divisible
+ divsiors||divisors
++dsiabled||disabled
+ docuentation||documentation
+ documantation||documentation
+ documentaion||documentation
+@@ -677,6 +683,7 @@ frequence||frequency
+ frequncy||frequency
+ frequancy||frequency
+ frome||from
++fronend||frontend
+ fucntion||function
+ fuction||function
+ fuctions||functions
+@@ -761,6 +768,7 @@ implmentation||implementation
+ implmenting||implementing
+ incative||inactive
+ incomming||incoming
++incompaitiblity||incompatibility
+ incompatabilities||incompatibilities
+ incompatable||incompatible
+ incompatble||incompatible
+@@ -942,6 +950,7 @@ metdata||metadata
+ micropone||microphone
+ microprocesspr||microprocessor
+ migrateable||migratable
++millenium||millennium
+ milliseonds||milliseconds
+ minium||minimum
+ minimam||minimum
+@@ -1007,6 +1016,7 @@ notity||notify
+ nubmer||number
+ numebr||number
+ numner||number
++nunber||number
+ obtaion||obtain
+ obusing||abusing
+ occassionally||occasionally
+@@ -1136,6 +1146,7 @@ preprare||prepare
+ pressre||pressure
+ presuambly||presumably
+ previosuly||previously
++previsously||previously
+ primative||primitive
+ princliple||principle
+ priorty||priority
+@@ -1297,6 +1308,7 @@ routins||routines
+ rquest||request
+ runing||running
+ runned||ran
++runnnig||running
+ runnning||running
+ runtine||runtime
+ sacrifying||sacrificing
+@@ -1353,6 +1365,7 @@ similiar||similar
+ simlar||similar
+ simliar||similar
+ simpified||simplified
++simultanous||simultaneous
+ singaled||signaled
+ singal||signal
+ singed||signed
+@@ -1461,6 +1474,7 @@ syste||system
+ sytem||system
+ sythesis||synthesis
+ taht||that
++tained||tainted
+ tansmit||transmit
+ targetted||targeted
+ targetting||targeting
+@@ -1489,6 +1503,7 @@ timout||timeout
+ tmis||this
+ toogle||toggle
+ torerable||tolerable
++torlence||tolerance
+ traget||target
+ traking||tracking
+ tramsmitted||transmitted
+@@ -1503,6 +1518,7 @@ transferd||transferred
+ transfered||transferred
+ transfering||transferring
+ transision||transition
++transistioned||transitioned
+ transmittd||transmitted
+ transormed||transformed
+ trasfer||transfer
+-- 
+2.34.1
 
-I have that fixed in the next version of my patchset.
-
->> ---
->>  kernel/fork.c | 10 +++++-----
->>  1 file changed, 5 insertions(+), 5 deletions(-)
->
-> Reviewed-by: Michal Koutný <mkoutny@suse.com>

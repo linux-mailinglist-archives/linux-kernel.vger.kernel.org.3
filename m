@@ -2,445 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC274B81A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCF44B81CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbiBPHea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 02:34:30 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60596 "EHLO
+        id S230259AbiBPHhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 02:37:41 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbiBPHe2 (ORCPT
+        with ESMTP id S230230AbiBPHhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 02:34:28 -0500
-Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.140.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E2A12AA6;
-        Tue, 15 Feb 2022 23:34:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
-  t=1644996855; x=1645601655;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=2PBUfrZ9SAuqH80hj/mUdCSR3usd4enZGMdcy+DYL8s=;
-  b=rF7LDZDazbifN9Kd9oX+g9cmLc6E5Y79WHYKXMCNpkRBzt3LIBq3HQKN
-   3nls6JAoU33QoVp9FiGFFLPXol9w++RJtVK6CINN9nmossDEdBjbR+fmL
-   KVi7kiEa7mIrl4Olu0fdYni5zOmiGpCbWFEWHokY/JYsUuYluI6mbynTC
-   c=;
-Received: from mail-mw2nam10lp2108.outbound.protection.outlook.com (HELO NAM10-MW2-obe.outbound.protection.outlook.com) ([104.47.55.108])
-  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 07:34:14 +0000
+        Wed, 16 Feb 2022 02:37:32 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2074.outbound.protection.outlook.com [40.107.243.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D27A1728A8;
+        Tue, 15 Feb 2022 23:37:09 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fOsWcCIcS+XUvkniqQxaDzj/PMNWTCpgzyUaacuauYpD9C2xh4QdiMgIaj+M52OpeFTVKZBC77fyrZniDrQJxqh/HRgzzR3NclEwx+F03fA98sKSHbMCmZpY864nmcCNxfu3A0kWgOcBtrXHWqoxYDz03NMW1gZ1nkUh1y2gIssOZRFkPpD75gXYJOWj5FjMOdDm40St1bPM9u15eTnjInqks6P2mOeWfUWlWugFrdIvyQyCwtRsyka4ToejjGgqzBAPRY0JXqxGVf6CJISqY3wl8v3DaRvlKmWvGxRuqVPd4bkfqYpFQnqr3Iq0vycauHR+Peo1w5cS8ICdEpv31A==
+ b=b2Gauxt8ej0Pk0fk24o84BmjhML985j0dhUWDYW2rsKy/V48WHcBCt55Fw9vRUz9VaN/oUYsBxnozDGwxbj7RVjSCM3Gif7RqieUIugXIBwidSL0W5Q7W4WkHSl2Z5B04TiavhAfLBqIqppcgp2ZdWXdiVzA9pyOKHn+56EyiskkoPbUhSr24Uun5F4aLzYI9yLFH29GaIX19nF68HhaDBuBamuj0FTAIVlnvmELehaLUVuTmuinGTW/ivNZa8oxygl4udDHRLXJm6WDrY0XkYG/FxhBF1Bg2a5JLtar62DtnO3uyiQqdGHC4VaZxuBKBvZpH4fExkNQJRv2Oe5liA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2PBUfrZ9SAuqH80hj/mUdCSR3usd4enZGMdcy+DYL8s=;
- b=OZRW9BkRY55iCRVIfUjrDdn3FCB4Nx3ktanDsTcIAWGdO1H0OfPFUgZ6XLDls3W1bEra/aIblO80rqlguC/hqTNBcyWYtQCZZsh1DTbfr+tM5ARCtv1SqKroO+flj5ehA5GQVyqahpJG02YU704XTNtVZWPlSbNyyxOoDUCsCuRq5PwlKAquAcAHdkPrjjeYKirURLndNqD2ePmr/4HOj36eP00eJPn/2cFAdvanf0JeUoibCJhplBc+O5/3A8dp6+aNoNWSphZAttwV00TnwxHtmZqzK7t9BQRjvvgEz6FiMCI5xDNC6gPy3s3RM6z5NdVeMoAUvkxjwOggqxb0wQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from SJ0PR02MB8449.namprd02.prod.outlook.com (2603:10b6:a03:3f5::8)
- by MWHPR02MB2799.namprd02.prod.outlook.com (2603:10b6:300:107::15) with
+ bh=djRypXxTLk6ZjhGKCuPiHPY0DgZR1990aUJn35Xwvbk=;
+ b=B1vyLW5oNYzFsvcBFZBsZN+wmH8e+7u3eF7dkowwG4LFSr8gExz9mxrLkOfV8uTKOPFIi1gtPaP37Oq8WnohEpat/o/CGfy77ExyppGMhK5pSan9YrmEpJAz+SUUUIG0lXtPhyQW7a7G6EzyqO7K5lyUgpA4gAQRh+BrZPkDtf8fyzOPGHvNkdQcYQtWyyGTLHAWTWTho+l+prBoNzy4lwj60dyClrUlSz8YnUPy4PWJPezZcHFGe8MtCLZY5L47x2oEK1D+ogia89mLB/MXj4/WPS3Gj7kl4YB/i6ax2R+3uBGwGdE2VAfThCVzYHe52iAQmrsTS5IRP59VcKf/oA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=djRypXxTLk6ZjhGKCuPiHPY0DgZR1990aUJn35Xwvbk=;
+ b=ocv6G4VnYgeC9kSiDuSSd9noSmAKnfnVGCbZ1Wn+JJlRKXCYkjAjeWXVvpSYdC8oqYm9RkUjsbNj8MDNvZUFLnvCKiYoh2zf7lo+MMB5pClxF8ABOKSD6m4nclSmRenAlw8LpeTf7UH2dCygO25s2FVQghT7kHQl5sNZhNDZcr4=
+Received: from BN8PR12CA0030.namprd12.prod.outlook.com (2603:10b6:408:60::43)
+ by MN0PR12MB5930.namprd12.prod.outlook.com (2603:10b6:208:37d::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.17; Wed, 16 Feb
- 2022 07:34:11 +0000
-Received: from SJ0PR02MB8449.namprd02.prod.outlook.com
- ([fe80::481d:88c5:eab3:21c7]) by SJ0PR02MB8449.namprd02.prod.outlook.com
- ([fe80::481d:88c5:eab3:21c7%7]) with mapi id 15.20.4995.016; Wed, 16 Feb 2022
- 07:34:11 +0000
-From:   "Sajida Bhanu (Temp) (QUIC)" <quic_c_sbhanu@quicinc.com>
-To:     "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "Sajida Bhanu (Temp) (QUIC)" <quic_c_sbhanu@quicinc.com>
-CC:     "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "Asutosh Das (QUIC)" <quic_asutoshd@quicinc.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stummala@codeaurora.org" <stummala@codeaurora.org>,
-        "vbadigan@codeaurora.org" <vbadigan@codeaurora.org>,
-        "Ram Prakash Gupta (QUIC)" <quic_rampraka@quicinc.com>,
-        "Pradeep Pragallapati (QUIC)" <quic_pragalla@quicinc.com>,
-        "sartgarg@codeaurora.org" <sartgarg@codeaurora.org>,
-        "nitirawa@codeaurora.org" <nitirawa@codeaurora.org>,
-        "sayalil@codeaurora.org" <sayalil@codeaurora.org>,
-        Liangliang Lu <luliang@codeaurora.org>,
-        "Bao D . Nguyen" <nguyenb@codeaurora.org>
-Subject: RE: [PATCH V3 1/4] mmc: sdhci: Capture eMMC and SD card errors
-Thread-Topic: [PATCH V3 1/4] mmc: sdhci: Capture eMMC and SD card errors
-Thread-Index: AQHYDiMD5UGg5mvpCkudYe96kOYBs6yU/m6AgAD0c/A=
-Date:   Wed, 16 Feb 2022 07:34:11 +0000
-Message-ID: <SJ0PR02MB8449D9BD92EE38A4FEDDEE03CD359@SJ0PR02MB8449.namprd02.prod.outlook.com>
-References: <1642699582-14785-1-git-send-email-quic_c_sbhanu@quicinc.com>
- <1642699582-14785-2-git-send-email-quic_c_sbhanu@quicinc.com>
- <Ygvb38vVeafYS4O0@yoga>
-In-Reply-To: <Ygvb38vVeafYS4O0@yoga>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=quicinc.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b4fd9888-cf12-45ee-1c8a-08d9f11eb9b7
-x-ms-traffictypediagnostic: MWHPR02MB2799:EE_
-x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
-x-microsoft-antispam-prvs: <MWHPR02MB2799B3CAC54A671F9B6183A3B1359@MWHPR02MB2799.namprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1013;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: f5ndO8LfIkUfHpyjgfgiUlC+dJH0WTsn6iToFHuivcXx3Ed5TollkxAelECCrwWEUYiUauEg29lMrJS07+qmrDR3veGqkxuYsFltyj3ymfvcBl8GFUsWlUE2+WvDsP917UI7SDPozWo/kQW8pRjcMmBbDmeuxTj45XcQfnWZnitNLXCM6aGtX5IgdACkj1Ltijn3618aCut9cBQX5scCguVIESLiCD0VoFJwkOlLoPt0iqx04q42rgrEHn65Owi3DzhRurjbPow4hT+AZVEgTwohDZbXy8dmH/1OQqfox1F3bcSR9FLGKHuG0ogtnKH3KL475fzEiBgyq405la2Czs3HaRsFzgDTHF7aLZv1XWl8oAtRDhK7x0ym20Bb7lDy/9NCPbUZARGQHGOLCZy2+QiTuT0/ixmUApvEjteyBTawzEwfuV2I/DQeJ3bzuXy7xB7HOsL+9hE2TeJgSld8J0ujEot79ufsR/gg9cK99UCYJy8qP1PSylfh4F8rqUSiOEYRL3Z4rfoyPRhvSLhbtp2JgcWrW3xbCYSg4ps0vBm5mRbibv3gn8IgG1Bw9HRTJ4mwBXpA5W/L4XoiIc4fRGW2+1URkRgh/SCXVj8WresoRYZUzyrBeNbjaoyugIoAeYyDZZUpis0DYIJAdlK0qQUD5F75HHhzj/X/8pM404riJiJf5N+T9ChiWYWzCVUF08J0DUjjlwIKDuv4wZ9V8Acsdbn0yvKn5k8wFdGXI4n2MlQDaKWc3bzmiyq06kJq6dxpDKGnUsTRYFZqp01/O23wsENGOW2x4qPABUhKVc4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR02MB8449.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(9686003)(122000001)(53546011)(7696005)(6506007)(83380400001)(2906002)(26005)(33656002)(508600001)(186003)(55016003)(966005)(38070700005)(8936002)(66446008)(54906003)(64756008)(110136005)(86362001)(8676002)(66946007)(66556008)(71200400001)(52536014)(5660300002)(38100700002)(316002)(66476007)(4326008)(7416002)(76116006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?jorRjlg7pK8hDOZJlztSbN516lQ5rodKZj5woz3ZQuQIkDnWJpMo5Sx/ZBLr?=
- =?us-ascii?Q?1MCE/532u5PtQc6O1JgsdQ5TiusnN5DSLheD8XZqD5smyBfBFBvmWEozXIzB?=
- =?us-ascii?Q?yHmSxahKmTZb5JBJ1L9qSOdPpWH6A0VX4VcFJbhVPcUmT2kee13ulUVY1chA?=
- =?us-ascii?Q?M9ztGbwPCJw0KnfyzD7LgpHrt076dT0CJz6R30Re+lkUy/EDpPdcjLBXT5J1?=
- =?us-ascii?Q?wPRLFHdZsEPbhahQhDw2nlPsmEFHetSOnnsxtjsP6MMO5t8kPaananYpTQDC?=
- =?us-ascii?Q?rjTlYR9uwO3nk6gOlp8mR0fPaTho94Pox7W4diQc2RWLGi0yBvZYzvCF0dMh?=
- =?us-ascii?Q?CWLICl53J5SI5BcybPlSywJj94Vl+51a2xCgD6U3A56kQnzN2VtJYnocSagH?=
- =?us-ascii?Q?d/XD5sPb/JQ+4Ty+hA5vsArbWsFc3PDcSRxZFsBfBMsFXmec0BtbwTZm9883?=
- =?us-ascii?Q?O1snOQgZM6x7rRnChYQ9pRGGwYfEBd3a3JlKDjzs95HDIp3ygrfD6Op2hQ+t?=
- =?us-ascii?Q?kC3PJA5Tigw/6N/tdHRKfSloPj8yywssm/2fYioyt3KhT3egGjzGJIxLTUHn?=
- =?us-ascii?Q?cvo/x6moNOkIJOx6kq0UqLMa2OnjUtrYmqG09yn9YFg2ZUvsMLIi0NSSyYeA?=
- =?us-ascii?Q?MWCOcKFtmImFm77lQX8ggM3AA+0bVqdux/uEgqifTLY03H1c5rRYRSBPCYvA?=
- =?us-ascii?Q?BlT3AXqBY3cgEh6wyqt7LHUGbGeSxYDz+UtjOeXXz6Plyu5I/nA88PRhLITU?=
- =?us-ascii?Q?svh/viEFA66DTXvhiVKeW8Tn5Px0plu1as76lHwq/MdfSd+xbJQOjdIBsyl5?=
- =?us-ascii?Q?z5N4kdaSdAQaqcSEN4dmCgLnvmj6mo6RgZipYzceyhKDFLau5iCjQACqqNG/?=
- =?us-ascii?Q?EDetL/vxKnfCBpbDrToqUv9kYcMOr9gFKCxAaVW6D3myQKOmuJsHI0/F2KSM?=
- =?us-ascii?Q?It0BhuDru02u2TemcEKMPRJeB6HrnKo5deFR5D0YDGmOUbRCOAWeZFCZy+v7?=
- =?us-ascii?Q?gCgAZKl9UWbAOjLuvwKzxtV4zKIwL5BrzlG+B2nnBX+Uoc7tAY7gK5/LS+pG?=
- =?us-ascii?Q?QD/pvw0XYvZZiY2dQuR+ru4SVlJT/qLryT8xi36cNRfeBsHPyf2A3v17v9Op?=
- =?us-ascii?Q?fNET5ORqUJ1vcrZMNbDohDxbwY0Ojg/rrveGSIduyxxVzJUDU5HGQ8PmOgVe?=
- =?us-ascii?Q?Drf5UCaFdlIatX+NniA7uyIByWNLo91h8hLfcP/8Cg0j4lY5B3LKjJyjBgwm?=
- =?us-ascii?Q?oIKMOoe8J+ycBV5Z4S9eOv1nLG6ONbQO0XsZUgDd/oLEQvpmWaGGNAOMYEKF?=
- =?us-ascii?Q?WMERW3xyxZ0cFgn8dEH6XfyqSc4bjvaz2nxMzy1tP0cJuez20PzmDPztxmGM?=
- =?us-ascii?Q?7aSI+pSgPL7LekqxrtsHNxG17uHP65ynBkVffQsOn8wJ+IUspsqnYAbn31U7?=
- =?us-ascii?Q?wcNn+AWntDdEZfXpFO83YVRMljqGwcrgWxv7OFuSzVw8z+NHkNuk3cEqU0nS?=
- =?us-ascii?Q?QIBhRRjA8e0cA/fwUFzMS7KmxG/1VlOmVbJlVQiK/hfPV7ZmS2WQn+Q/2LR0?=
- =?us-ascii?Q?PLP46qKpU2Gs04iNo3cA5N8rd6fHAoru1p6ZeqYuJ0DYybprWW3k/FyQ8gqV?=
- =?us-ascii?Q?3r/v6JZtcZDF2VmMtRwRZGEnLYJaJZ46FYcy6WMwQMtSPAx8wVfrJ0ei7PhJ?=
- =?us-ascii?Q?rTqo9w=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14; Wed, 16 Feb
+ 2022 07:36:30 +0000
+Received: from BN8NAM11FT032.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:60:cafe::22) by BN8PR12CA0030.outlook.office365.com
+ (2603:10b6:408:60::43) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14 via Frontend
+ Transport; Wed, 16 Feb 2022 07:36:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT032.mail.protection.outlook.com (10.13.177.88) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4975.11 via Frontend Transport; Wed, 16 Feb 2022 07:36:30 +0000
+Received: from hr-amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 16 Feb
+ 2022 01:36:25 -0600
+From:   Huang Rui <ray.huang@amd.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        <linux-pm@vger.kernel.org>
+CC:     Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Steven Noonan <steven@valvesoftware.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Jassmine Meng <li.meng@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Giovanni Gherdovich" <ggherdovich@suse.cz>,
+        <linux-kernel@vger.kernel.org>, Huang Rui <ray.huang@amd.com>
+Subject: [PATCH RESEND v6 0/9] cpupower: Add AMD P-State Support
+Date:   Wed, 16 Feb 2022 15:35:49 +0800
+Message-ID: <20220216073558.751071-1-ray.huang@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: quicinc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR02MB8449.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b4fd9888-cf12-45ee-1c8a-08d9f11eb9b7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Feb 2022 07:34:11.5483
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 611f41ac-a3a6-4df3-e354-08d9f11f0c60
+X-MS-TrafficTypeDiagnostic: MN0PR12MB5930:EE_
+X-Microsoft-Antispam-PRVS: <MN0PR12MB5930E2981E3A217557A82635EC359@MN0PR12MB5930.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fHdbOaK96CuP/dpGJqmVTNMJnukmEzg6AvwJEy9KP+FJgmveXN6z+iiTLNtqxg3ByNFGPElRzOeGS0nYeCf1nV6cDd42rtC7ULC5QPZmyMko66au2C5nEbBglaDLOR64tKyHH31oRQQgx6akH8gySEq1EYMVJkqf5Kc3N8Zq9cGEimplyOwgXENs8OvlPV+aH85/DVNsFR8khbUW0+8CShzut0dT9oIVHQNq6kvkcCX8NCKH53lDjM1bmHyPTeBa0CFhaSkhB9lvCA7i6mdLgGoJ/HYKHDTt/sk6V+Q/A9BHR0BT5PZf28KBt3jCz5d+evwUVhQgCgSVHudz3tvkXlgR8cDdKbw6d9QHND2rzmbAYRcF8FL/4QuzNhos14tMLoatWEXiWhOGiN/PAzesu1nyUAOKv0WxjkThpiIeaKWvsNtcPDjB2cyGl4ifsCoT2oSxGoDOZC5WHq1QGis7Jy7D1UcP8C7ktpfsfWjBNdx0B5bDRY/wyDu3XedYEenIni3OqSOo+Nn1lEtHgMkNHbQr5IXlZLk/PTAxp6Khs3ZoIN9aL23BU+GG8QERteVmhPIRRPOwuw5zDTmjPO8JGGHwCTBmnU9z5PZtXAlTE88oT8ARZ4ZWFs7V80tVpXsswjGDCEyaBEKA/TcWBgB7mZeE4hFQ4g8NYk879j68e0E39qdTdpwHeW1s7QJRKablDP/1GdU54kYYQbVzZssOGMqmCUNOkKsP98xDqefC+pIn4cUr2nkAVbo5Dic8cyXfG5verMWLw7B9vaeYLoqe3eugSBBizrADMyD64fuhl0TPTopv8ImLk65W+au58Z6pkJP1oLYUnjDrYtnOBPMTuA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(336012)(4326008)(5660300002)(8676002)(7696005)(7416002)(8936002)(186003)(36756003)(426003)(1076003)(36860700001)(16526019)(26005)(356005)(86362001)(2616005)(81166007)(6666004)(110136005)(83380400001)(316002)(47076005)(966005)(2906002)(82310400004)(40460700003)(70206006)(70586007)(508600001)(54906003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2022 07:36:30.2811
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GK54/rbEiWhnTcTansqdrDDrqJgbf1ZoOi/enbIkN2C3/5tnNRjrNI/aa3PTtbbATKidR3hUYy1zFQ0YfaIUekdO+IYgifmXWBfu1RVJG7Q=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB2799
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 611f41ac-a3a6-4df3-e354-08d9f11f0c60
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT032.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5930
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+Hi Shuah,
 
-Thank you.
+Since AMD P-State kernel is merged into 5.17-rc1, I would like to continue
+revising the AMD P-State support for the CPUPower tool. These series are
+rebased on latest bleeding-edge, any comments are warm for me.
 
-Sure will address this in patch set.
+See patch series of CPUPower in below git repo:
+V1: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v1
+V2: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v2
+V3: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v3
+V4: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v4
+V5: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v5
+V6: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=cpupower-amd-pstate
+
+Changes from V1 -> V2:
+- Refine the commit log for cpupower patches.
+- Expose a function to get the sysfs value from specific table.
+- Move AMD P-State sysfs definitions and functions into AMD helper file.
+- Move the boost init function into AMD helper file and explain the
+details in the commit log.
+- Remove the amd_pstate_get_data in the lib/cpufreq.c to keep the lib as
+common operations.
+- Move print_speed function into misc helper file.
+- Add amd_pstate_show_perf_and_freq() function in AMD helper for
+  cpufreq-info print.
+
+Changes from V2 -> V3:
+- Revise the cpupower_amd_pstate_enabled() function to use
+cpufreq_get_driver helper instead of read sysfs.
+- Clean up the AMD P-State max/min frequency APIs, because they are
+actually the same with cpufreq info sysfs.
+
+Changes from V3 -> V4:
+- Introduce ACPI CPPC library support.
+- Clean up the duplicated AMD specific perf/frequency.
+
+Changes from V4 -> V5:
+- Fix the table check condition at cpufreq_get_sysfs_value_from_table.
+
+Changes from V5 -> V6:
+- Revise the minor commit and subject descriptions.
 
 Thanks,
-Sajida
------Original Message-----
-From: Bjorn Andersson <bjorn.andersson@linaro.org>=20
-Sent: Tuesday, February 15, 2022 10:29 PM
-To: Sajida Bhanu (Temp) (QUIC) <quic_c_sbhanu@quicinc.com>
-Cc: adrian.hunter@intel.com; Asutosh Das (QUIC) <quic_asutoshd@quicinc.com>=
-; ulf.hansson@linaro.org; agross@kernel.org; linux-mmc@vger.kernel.org; lin=
-ux-arm-msm@vger.kernel.org; linux-kernel@vger.kernel.org; stummala@codeauro=
-ra.org; vbadigan@codeaurora.org; Ram Prakash Gupta (QUIC) <quic_rampraka@qu=
-icinc.com>; Pradeep Pragallapati (QUIC) <quic_pragalla@quicinc.com>; sartga=
-rg@codeaurora.org; nitirawa@codeaurora.org; sayalil@codeaurora.org; Liangli=
-ang Lu <luliang@codeaurora.org>; Bao D . Nguyen <nguyenb@codeaurora.org>
-Subject: Re: [PATCH V3 1/4] mmc: sdhci: Capture eMMC and SD card errors
+Ray
 
-On Thu 20 Jan 11:26 CST 2022, Shaik Sajida Bhanu wrote:
+Huang Rui (9):
+  cpupower: Add AMD P-State capability flag
+  cpupower: Add the function to check AMD P-State enabled
+  cpupower: Initial AMD P-State capability
+  cpupower: Add the function to get the sysfs value from specific table
+  cpupower: Introduce ACPI CPPC library
+  cpupower: Add AMD P-State sysfs definition and access helper
+  cpupower: Enable boost state support for AMD P-State module
+  cpupower: Move print_speed function into misc helper
+  cpupower: Print AMD P-State information on cpupower
 
-> Add changes to capture eMMC and SD card errors.
-> This is useful for debug and testing.
->=20
-> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-> Signed-off-by: Liangliang Lu <luliang@codeaurora.org>
-> Signed-off-by: Sayali Lokhande <sayalil@codeaurora.org>
-> Signed-off-by: Bao D. Nguyen <nguyenb@codeaurora.org>
+ tools/power/cpupower/Makefile                |  6 +-
+ tools/power/cpupower/lib/acpi_cppc.c         | 59 +++++++++++++++
+ tools/power/cpupower/lib/acpi_cppc.h         | 21 ++++++
+ tools/power/cpupower/lib/cpufreq.c           | 21 ++++--
+ tools/power/cpupower/lib/cpufreq.h           | 12 +++
+ tools/power/cpupower/utils/cpufreq-info.c    | 68 +++++------------
+ tools/power/cpupower/utils/helpers/amd.c     | 77 ++++++++++++++++++++
+ tools/power/cpupower/utils/helpers/cpuid.c   | 13 ++++
+ tools/power/cpupower/utils/helpers/helpers.h | 22 ++++++
+ tools/power/cpupower/utils/helpers/misc.c    | 62 ++++++++++++++++
+ 10 files changed, 301 insertions(+), 60 deletions(-)
+ create mode 100644 tools/power/cpupower/lib/acpi_cppc.c
+ create mode 100644 tools/power/cpupower/lib/acpi_cppc.h
 
-Please read
-https://docs.kernel.org/process/submitting-patches.html#sign-your-work-the-=
-developer-s-certificate-of-origin
-and the one section below on what your S-o-b actually means.
+-- 
+2.25.1
 
-In particular this does not say "the four of us authored this patch", it do=
-cuments the path the patch took to this point. In which case Bao is the las=
-t one stating that he _handled_ the patch - but then somehow it came out of=
- your mailbox.
-
-You're probably looking for Co-developed-by, which is described just below =
-that.
-
-Regards,
-Bjorn
-
-> ---
->  drivers/mmc/host/sdhci-msm.c |  3 ++
->  drivers/mmc/host/sdhci.c     | 72 ++++++++++++++++++++++++++++++++++++--=
-------
->  include/linux/mmc/host.h     | 31 +++++++++++++++++++
->  3 files changed, 94 insertions(+), 12 deletions(-)
->=20
-> diff --git a/drivers/mmc/host/sdhci-msm.c=20
-> b/drivers/mmc/host/sdhci-msm.c index 50c71e0..309eb7b 100644
-> --- a/drivers/mmc/host/sdhci-msm.c
-> +++ b/drivers/mmc/host/sdhci-msm.c
-> @@ -128,6 +128,8 @@
-> =20
->  #define MSM_MMC_AUTOSUSPEND_DELAY_MS	50
-> =20
-> +#define MSM_MMC_ERR_STATS_ENABLE 1
-> +
->  /* Timeout value to avoid infinite waiting for pwr_irq */  #define=20
-> MSM_PWR_IRQ_TIMEOUT_MS 5000
-> =20
-> @@ -2734,6 +2736,7 @@ static int sdhci_msm_probe(struct platform_device *=
-pdev)
->  	if (ret)
->  		goto pm_runtime_disable;
-> =20
-> +	host->mmc->err_stats_enabled =3D MSM_MMC_ERR_STATS_ENABLE;
->  	pm_runtime_mark_last_busy(&pdev->dev);
->  	pm_runtime_put_autosuspend(&pdev->dev);
-> =20
-> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c index=20
-> 07c6da1..74b356e 100644
-> --- a/drivers/mmc/host/sdhci.c
-> +++ b/drivers/mmc/host/sdhci.c
-> @@ -113,6 +113,8 @@ void sdhci_dumpregs(struct sdhci_host *host)
->  	if (host->ops->dump_vendor_regs)
->  		host->ops->dump_vendor_regs(host);
-> =20
-> +	if (host->mmc->err_stats_enabled)
-> +		mmc_debugfs_err_stats_enable(host->mmc);
->  	SDHCI_DUMP("=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-\n");
->  }
->  EXPORT_SYMBOL_GPL(sdhci_dumpregs);
-> @@ -3159,6 +3161,8 @@ static void sdhci_timeout_timer(struct timer_list *=
-t)
->  	spin_lock_irqsave(&host->lock, flags);
-> =20
->  	if (host->cmd && !sdhci_data_line_cmd(host->cmd)) {
-> +		if (host->mmc && host->mmc->err_stats_enabled)
-> +			mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_REQ_TIMEOUT);
->  		pr_err("%s: Timeout waiting for hardware cmd interrupt.\n",
->  		       mmc_hostname(host->mmc));
->  		sdhci_dumpregs(host);
-> @@ -3181,6 +3185,8 @@ static void sdhci_timeout_data_timer(struct=20
-> timer_list *t)
-> =20
->  	if (host->data || host->data_cmd ||
->  	    (host->cmd && sdhci_data_line_cmd(host->cmd))) {
-> +		if (host->mmc && host->mmc->err_stats_enabled)
-> +			mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_REQ_TIMEOUT);
->  		pr_err("%s: Timeout waiting for hardware interrupt.\n",
->  		       mmc_hostname(host->mmc));
->  		sdhci_dumpregs(host);
-> @@ -3240,11 +3246,18 @@ static void sdhci_cmd_irq(struct sdhci_host=20
-> *host, u32 intmask, u32 *intmask_p)
-> =20
->  	if (intmask & (SDHCI_INT_TIMEOUT | SDHCI_INT_CRC |
->  		       SDHCI_INT_END_BIT | SDHCI_INT_INDEX)) {
-> -		if (intmask & SDHCI_INT_TIMEOUT)
-> +		if (intmask & SDHCI_INT_TIMEOUT) {
->  			host->cmd->error =3D -ETIMEDOUT;
-> -		else
-> +			if (host->mmc && host->mmc->err_stats_enabled)
-> +				mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_CMD_TIMEOUT);
-> +		} else {
->  			host->cmd->error =3D -EILSEQ;
-> -
-> +			if (host->cmd->opcode !=3D MMC_SEND_TUNING_BLOCK ||
-> +					host->cmd->opcode !=3D MMC_SEND_TUNING_BLOCK_HS200) {
-> +				if (host->mmc && host->mmc->err_stats_enabled)
-> +					mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_CMD_CRC);
-> +			}
-> +		}
->  		/* Treat data command CRC error the same as data CRC error */
->  		if (host->cmd->data &&
->  		    (intmask & (SDHCI_INT_CRC | SDHCI_INT_TIMEOUT)) =3D=3D @@ -3265,6=
-=20
-> +3278,8 @@ static void sdhci_cmd_irq(struct sdhci_host *host, u32 intmask=
-, u32 *intmask_p)
->  		int err =3D (auto_cmd_status & SDHCI_AUTO_CMD_TIMEOUT) ?
->  			  -ETIMEDOUT :
->  			  -EILSEQ;
-> +		if (host->mmc && host->mmc->err_stats_enabled)
-> +			mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_AUTO_CMD);
-> =20
->  		if (sdhci_auto_cmd23(host, mrq)) {
->  			mrq->sbc->error =3D err;
-> @@ -3342,6 +3357,8 @@ static void sdhci_data_irq(struct sdhci_host *host,=
- u32 intmask)
->  			if (intmask & SDHCI_INT_DATA_TIMEOUT) {
->  				host->data_cmd =3D NULL;
->  				data_cmd->error =3D -ETIMEDOUT;
-> +				if (host->mmc && host->mmc->err_stats_enabled)
-> +					mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_CMD_TIMEOUT);
->  				__sdhci_finish_mrq(host, data_cmd->mrq);
->  				return;
->  			}
-> @@ -3375,18 +3392,29 @@ static void sdhci_data_irq(struct sdhci_host *hos=
-t, u32 intmask)
->  		return;
->  	}
-> =20
-> -	if (intmask & SDHCI_INT_DATA_TIMEOUT)
-> +	if (intmask & SDHCI_INT_DATA_TIMEOUT) {
->  		host->data->error =3D -ETIMEDOUT;
-> +		if (host->mmc && host->mmc->err_stats_enabled)
-> +			mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_DAT_TIMEOUT);
-> +	}
->  	else if (intmask & SDHCI_INT_DATA_END_BIT)
->  		host->data->error =3D -EILSEQ;
->  	else if ((intmask & SDHCI_INT_DATA_CRC) &&
->  		SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND))
-> -			!=3D MMC_BUS_TEST_R)
-> +			!=3D MMC_BUS_TEST_R) {
->  		host->data->error =3D -EILSEQ;
-> +		if (host->cmd->opcode !=3D MMC_SEND_TUNING_BLOCK ||
-> +				host->cmd->opcode !=3D MMC_SEND_TUNING_BLOCK_HS200) {
-> +			if (host->mmc && host->mmc->err_stats_enabled)
-> +				mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_DAT_CRC);
-> +		}
-> +	}
->  	else if (intmask & SDHCI_INT_ADMA_ERROR) {
->  		pr_err("%s: ADMA error: 0x%08x\n", mmc_hostname(host->mmc),
->  		       intmask);
->  		sdhci_adma_show_error(host);
-> +		if (host->mmc && host->mmc->err_stats_enabled)
-> +			mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_ADMA);
->  		host->data->error =3D -EIO;
->  		if (host->ops->adma_workaround)
->  			host->ops->adma_workaround(host, intmask); @@ -3905,20 +3933,40 @@=20
-> bool sdhci_cqe_irq(struct sdhci_host *host, u32 intmask, int *cmd_error,
->  	if (!host->cqe_on)
->  		return false;
-> =20
-> -	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC))
-> +	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC))=20
-> +{
->  		*cmd_error =3D -EILSEQ;
-> -	else if (intmask & SDHCI_INT_TIMEOUT)
-> +		if (intmask & SDHCI_INT_CRC) {
-> +			if (host->cmd->opcode !=3D MMC_SEND_TUNING_BLOCK ||
-> +					host->cmd->opcode !=3D MMC_SEND_TUNING_BLOCK_HS200) {
-> +				if (host->mmc && host->mmc->err_stats_enabled)
-> +					mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_CMD_CRC);
-> +			}
-> +		}
-> +	} else if (intmask & SDHCI_INT_TIMEOUT) {
->  		*cmd_error =3D -ETIMEDOUT;
-> -	else
-> +		if (host->mmc && host->mmc->err_stats_enabled)
-> +			mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_CMD_TIMEOUT);
-> +	} else
->  		*cmd_error =3D 0;
-> =20
-> -	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC))
-> +	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC)) {
->  		*data_error =3D -EILSEQ;
-> -	else if (intmask & SDHCI_INT_DATA_TIMEOUT)
-> +		if (intmask & SDHCI_INT_DATA_CRC) {
-> +			if (host->cmd->opcode !=3D MMC_SEND_TUNING_BLOCK ||
-> +					host->cmd->opcode !=3D MMC_SEND_TUNING_BLOCK_HS200) {
-> +				if (host->mmc && host->mmc->err_stats_enabled)
-> +					mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_DAT_CRC);
-> +			}
-> +		}
-> +	} else if (intmask & SDHCI_INT_DATA_TIMEOUT) {
->  		*data_error =3D -ETIMEDOUT;
-> -	else if (intmask & SDHCI_INT_ADMA_ERROR)
-> +		if (host->mmc && host->mmc->err_stats_enabled)
-> +			mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_DAT_TIMEOUT);
-> +	} else if (intmask & SDHCI_INT_ADMA_ERROR) {
->  		*data_error =3D -EIO;
-> -	else
-> +		if (host->mmc && host->mmc->err_stats_enabled)
-> +			mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_ADMA);
-> +	} else
->  		*data_error =3D 0;
-> =20
->  	/* Clear selected interrupts. */
-> diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h index=20
-> 7afb57c..883b50b 100644
-> --- a/include/linux/mmc/host.h
-> +++ b/include/linux/mmc/host.h
-> @@ -93,6 +93,23 @@ struct mmc_clk_phase_map {
-> =20
->  struct mmc_host;
-> =20
-> +enum mmc_err_stat {
-> +	MMC_ERR_CMD_TIMEOUT,
-> +	MMC_ERR_CMD_CRC,
-> +	MMC_ERR_DAT_TIMEOUT,
-> +	MMC_ERR_DAT_CRC,
-> +	MMC_ERR_AUTO_CMD,
-> +	MMC_ERR_ADMA,
-> +	MMC_ERR_TUNING,
-> +	MMC_ERR_CMDQ_RED,
-> +	MMC_ERR_CMDQ_GCE,
-> +	MMC_ERR_CMDQ_ICCE,
-> +	MMC_ERR_REQ_TIMEOUT,
-> +	MMC_ERR_CMDQ_REQ_TIMEOUT,
-> +	MMC_ERR_ICE_CFG,
-> +	MMC_ERR_MAX,
-> +};
-> +
->  struct mmc_host_ops {
->  	/*
->  	 * It is optional for the host to implement pre_req and post_req in=20
-> @@ -500,6 +517,9 @@ struct mmc_host {
-> =20
->  	/* Host Software Queue support */
->  	bool			hsq_enabled;
-> +	u32                     err_stats[MMC_ERR_MAX];
-> +	bool 			err_stats_enabled;
-> +	bool			err_state;
-> =20
->  	unsigned long		private[] ____cacheline_aligned;
->  };
-> @@ -635,6 +655,17 @@ static inline enum dma_data_direction mmc_get_dma_di=
-r(struct mmc_data *data)
->  	return data->flags & MMC_DATA_WRITE ? DMA_TO_DEVICE :=20
-> DMA_FROM_DEVICE;  }
-> =20
-> +static inline void mmc_debugfs_err_stats_enable(struct mmc_host *mmc)=20
-> +{
-> +	mmc->err_state =3D true;
-> +}
-> +
-> +static inline void mmc_debugfs_err_stats_inc(struct mmc_host *mmc,
-> +		enum mmc_err_stat stat) {
-> +
-> +	mmc->err_stats[stat] +=3D 1;
-> +}
-> +
->  int mmc_send_tuning(struct mmc_host *host, u32 opcode, int=20
-> *cmd_error);  int mmc_send_abort_tuning(struct mmc_host *host, u32=20
-> opcode);  int mmc_get_ext_csd(struct mmc_card *card, u8=20
-> **new_ext_csd);
-> --
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a=20
-> member of Code Aurora Forum, hosted by The Linux Foundation
->=20

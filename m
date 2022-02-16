@@ -2,171 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947BA4B80A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 07:26:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4524B809C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 07:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiBPGZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 01:25:27 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:41208 "EHLO
+        id S229938AbiBPG0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 01:26:30 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:48680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiBPGZZ (ORCPT
+        with ESMTP id S229497AbiBPG02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 01:25:25 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBEDE1D1790
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 22:25:09 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id c6so3068681ybk.3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 22:25:09 -0800 (PST)
+        Wed, 16 Feb 2022 01:26:28 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F35D1D6869
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 22:26:11 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id c10so1338894pfv.8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 22:26:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PF60trGTwto+G7FK7KYiFR5q+c9AYVK17+VWNcK7qFA=;
-        b=CVeoJoRFtyPTieVAqzhRJI9uCBlv2cAsoTo9f6L1KFm/XI1BBDdawqJqhnapwnGN7x
-         CrWgXqUu11eVpXZpwBWWKQa1je4W/YN8lvBifzIzAtjEjj7igUtiYaoXTEK2wsIN1IPM
-         qB7EUrmOGX1POXWRk7Bk5iyeispWLytE2G++4+Ypwc67+CYn2dqJ5058i0lDF0QmJdN8
-         EDoofx6NLfA45iOeCH4yPHf5CC3ViI216hJJ3susQcaGspi7YoQLhg6AqpnBIo/xKNmt
-         Dth8rNMLFJEDbhnPVxCElDtdu43wTp9sgsey0LL4jsXcUtkEHnGo2lLNGfznzBRcfaO0
-         m9mA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OvKU87ZuZVBNlgRFBm0eK1EY/vXmrbJUx8OOhh6O4Fw=;
+        b=VNEOZaNjA8eSHMhScLGO1U7A14vrcKc3V+O17T0GPa4CA7I0gu8ccEAHfW/N/i8FEZ
+         worTZCDDMQ0FYDxMqxuc0U1mf+F9uAEEBWmuMq0TfXN0GSQ7DaDNA7fSHtzUBC6w26Iw
+         v2ZACq1ukUzkORWOFfKm7Q6XWsDy5CkdRfPaVc7IZCS7ssRpCA5mD4kqJHhbI/m26N4c
+         qE5qXRQo3YG15e/CBehLRHNN0P40WBx5XXe6N8elYULUv+zylyn8RcYEjuNIg8xk5mXH
+         cEnyKxxF+TVvNIQF3ZTcBbCqUd1VoAWn+tpUpNsbjho2ZI3txmXc6WcG+bnO/VHqS7T9
+         skfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PF60trGTwto+G7FK7KYiFR5q+c9AYVK17+VWNcK7qFA=;
-        b=VYNd43cqwkvAR+GF3kelrSXFLeUmrwEo44bRlVTudwdppSqa/b0JJVnFwkMneDLOZR
-         0+I7EHhqwQCVqxlkT4V5yjTQtnP70yt0Bz99o7Nugf/FXXzgVYwK8+O+WkOE5hmQ9cNa
-         Rbx2TgC2Xr8ayHD6WqZ4eGkKfSQTYUH6ZPTesxq/tYYplbhBnY6CPcSYV74SqWSUrvkZ
-         uv4KG+U7/z8GYIv1PQX1h6qMTMfJ2EujWLHxHQ6Gn4sr0upMFgqpFO46NstHQcLPGH0t
-         0EixvEZWdxoewZREelO+vqV/4P1MtLKMUodGHoQQS84NIRmqYBMkuEslFBsbYWnum4dS
-         C9dQ==
-X-Gm-Message-State: AOAM532ckK+s8/s184hbU3cDKBmTMt4edRRysR9vTRlcIhcJDizeimqh
-        3jhy8T6AgWJSZ17metYY2BlB5SnOO4MCBZJQyxhEzA==
-X-Google-Smtp-Source: ABdhPJynAeAmgmRPW+V1S0j1QGe6ldhjYB54wvC7i3FRdnJzWd1P6SPZx8zi7cLfDcfpBM3EQ7Wmu6HzbawhPIipehY=
-X-Received: by 2002:a81:347:0:b0:2d2:bca7:fe7f with SMTP id
- 68-20020a810347000000b002d2bca7fe7fmr1070261ywd.467.1644992708711; Tue, 15
- Feb 2022 22:25:08 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OvKU87ZuZVBNlgRFBm0eK1EY/vXmrbJUx8OOhh6O4Fw=;
+        b=faKP/ulJi7NCaY5WUGLDJDVdy+iN3jAwPagkc9/IX0j3bat9KzcZANajIX0JdIYY9R
+         J7uUP8LcBtDFklvZDLcHPtW+5jZqRZheUD+FgFwFdOg11XSgKtxYp05K1E4ZxXG+f1qo
+         hwo9nAb9J7QhGwB8e570uAOsEmDLR/fKvQ5XUabioAHiicDjMWDn0bVF6JJeh6h87ZlQ
+         XbylMC9V5xdHmitvs1qNsSWTQzjyaRmyi6d78h5kyIsDj5Iv9IAFWmZgy382o2Twm9NL
+         h5JNyjp3NBxU+an2EV2zUnf222eoz1qGkAERE2pyM94IzmBEJe8VPSIvrFyXayQYAu+E
+         tysw==
+X-Gm-Message-State: AOAM530ieohfuDn8PX/GfDXQpoIdiMd1cs/m9zzqXx5vto7e6c2kw8YF
+        Qc3MGQqRQ5+PpilFF0dW4GY=
+X-Google-Smtp-Source: ABdhPJzQ8AwLjhZi76l0VaynoH2aURGnmi8K2tncLmHhiuqRQj23xU8ennGPDAs232lXurmGTokPyg==
+X-Received: by 2002:a63:f20d:0:b0:372:c9bf:eaad with SMTP id v13-20020a63f20d000000b00372c9bfeaadmr1083890pgh.308.1644992769244;
+        Tue, 15 Feb 2022 22:26:09 -0800 (PST)
+Received: from ubuntu-server.local ([2600:1700:3ec7:421f:fd1e:ea7b:d4f8:959b])
+        by smtp.googlemail.com with ESMTPSA id k4sm11321864pff.39.2022.02.15.22.26.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 22:26:08 -0800 (PST)
+From:   Tong Zhang <ztong0001@gmail.com>
+To:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Tong Zhang <ztong0001@gmail.com>
+Subject: [PATCH] platform/chrome: cros_ec: honor acpi=off
+Date:   Tue, 15 Feb 2022 22:26:01 -0800
+Message-Id: <20220216062601.779690-1-ztong0001@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220216050320.3222-1-kerneljasonxing@gmail.com>
-In-Reply-To: <20220216050320.3222-1-kerneljasonxing@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 15 Feb 2022 22:24:57 -0800
-Message-ID: <CANn89i+6Hc7q-a=zh_jcTn9_GM5xP6fzv2RcHY+tneqzE3UnHw@mail.gmail.com>
-Subject: Re: [PATCH v2 net-next] net: introduce SO_RCVBUFAUTO to let the
- rcv_buf tune automatically
-To:     Jason Xing <kerneljasonxing@gmail.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Wei Wang <weiwan@google.com>,
-        Alexander Aring <aahringo@redhat.com>,
-        Yangbo Lu <yangbo.lu@nxp.com>, Florian Westphal <fw@strlen.de>,
-        Tonghao Zhang <xiangxia.m.yue@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Jason Xing <xingwanli@kuaishou.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 9:03 PM <kerneljasonxing@gmail.com> wrote:
->
-> From: Jason Xing <xingwanli@kuaishou.com>
->
-> Normally, user doesn't care the logic behind the kernel if they're
-> trying to set receive buffer via setsockopt. However, once the new
-> value of the receive buffer is set even though it's not smaller than
-> the initial value which is sysctl_tcp_rmem[1] implemented in
-> tcp_rcv_space_adjust(),, the server's wscale will shrink and then
-> lead to the bad bandwidth as intended.
+when acpi=off is provided in bootarg, kernel crash with
 
-Quite confusing changelog, honestly.
+ BUG: kernel NULL pointer dereference, address: 0000000000000018
+ RIP: 0010:acpi_ns_walk_namespace+0x57/0x280
+  <TASK>
+ ? acpi_get_devices+0x140/0x140
+ cros_ec_lpc_init+0x25/0x100
 
-Users of SO_RCVBUF specifically told the kernel : I want to use _this_
-buffer size, I do not want the kernel to decide for me.
+Driver should check if ACPI is disabled before calling acpi_get_devices(),
+otherwise acpi_walk_namespace() will dereference null pointer since the
+acpi_gbl_root_node is not initialized.
+This is a common pattern and should be fixed in ACPI framework to prevent
+such crash in the future, but since many drivers are already doing explicit
+check(acpi_disable) we do the same thing here.
 
-Also, I think your changelog does not really explain that _if_ you set
-SO_RCVBUF to a small value before
-connect() or in general the 3WHS, the chosen wscale will be small, and
-this won't allow future 10x increase
-of the effective RWIN.
+Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+---
+ drivers/platform/chrome/cros_ec_lpc.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
+diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
+index d6306d2a096f..95412a55ed8d 100644
+--- a/drivers/platform/chrome/cros_ec_lpc.c
++++ b/drivers/platform/chrome/cros_ec_lpc.c
+@@ -550,6 +550,9 @@ static int __init cros_ec_lpc_init(void)
+ 	int ret;
+ 	acpi_status status;
+ 
++	if (acpi_disable)
++		return -ENODEV;
++
+ 	status = acpi_get_devices(ACPI_DRV_NAME, cros_ec_lpc_parse_device,
+ 				  &cros_ec_lpc_acpi_device_found, NULL);
+ 	if (ACPI_FAILURE(status))
+-- 
+2.25.1
 
->
-> For now, introducing a new socket option to let the receive buffer
-> grow automatically no matter what the new value is can solve
-> the bad bandwidth issue meanwhile it's not breaking the application
-> with SO_RCVBUF option set.
->
-> Here are some numbers:
-> $ sysctl -a | grep rmem
-> net.core.rmem_default = 212992
-> net.core.rmem_max = 40880000
-> net.ipv4.tcp_rmem = 4096        425984  40880000
->
-> Case 1
-> on the server side
->     # iperf -s -p 5201
-> on the client side
->     # iperf -c [client ip] -p 5201
-> It turns out that the bandwidth is 9.34 Gbits/sec while the wscale of
-> server side is 10. It's good.
->
-> Case 2
-> on the server side
->     #iperf -s -p 5201 -w 425984
-> on the client side
->     # iperf -c [client ip] -p 5201
-> It turns out that the bandwidth is reduced to 2.73 Gbits/sec while the
-> wcale is 2, even though the receive buffer is not changed at all at the
-> very beginning.
->
-> After this patch is applied, the bandwidth of case 2 is recovered to
-> 9.34 Gbits/sec as expected at the cost of consuming more memory per
-> socket.
-
-How does your patch allow wscale to increase after flow is established ?
-
-I would remove from the changelog these experimental numbers that look
-quite wrong,
-maybe copy/pasted from your prior version.
-
-Instead I would describe why an application might want to clear the
-'receive buffer size is locked' socket attribute.
-
->
-> Signed-off-by: Jason Xing <xingwanli@kuaishou.com>
-> --
-> v2: suggested by Eric
-> - introduce new socket option instead of breaking the logic in SO_RCVBUF
-> - Adjust the title and description of this patch
-> link: https://lore.kernel.org/lkml/CANn89iL8vOUOH9bZaiA-cKcms+PotuKCxv7LpVx3RF0dDDSnmg@mail.gmail.com/
-> ---
->
-
-I think adding another parallel SO_RCVBUF option is not good. It is
-adding confusion (and net/core/filter.c has been unchanged)
-
-Also we want CRIU to work correctly.
-
-So if you have a SO_XXXX setsockopt() call, you also need to provide
-getsockopt() implementation.
-
-I would suggest an option to clear or set SOCK_RCVBUF_LOCK,  and
-getsockopt() would return if the bit is currently set or not.
-
-Something clearly describing the intent, like SO_RCVBUF_LOCK maybe.

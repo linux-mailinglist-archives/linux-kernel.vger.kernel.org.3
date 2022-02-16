@@ -2,191 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D424B92D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 22:04:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E874B9311
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 22:21:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234292AbiBPVEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 16:04:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52386 "EHLO
+        id S234293AbiBPVT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 16:19:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233677AbiBPVEA (ORCPT
+        with ESMTP id S229939AbiBPVTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 16:04:00 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5F42AFE9E;
-        Wed, 16 Feb 2022 13:03:32 -0800 (PST)
-Received: from [192.168.1.107] ([37.4.249.169]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MLyzP-1nbh6k1HSz-00HzMp; Wed, 16 Feb 2022 21:57:59 +0100
-Subject: Re: [PATCH v5 00/11] Add support for BCM2835 camera interface
- (unicam)
-To:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
-        kernel-list@raspberrypi.com, laurent.pinchart@ideasonboard.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
-        robh@kernel.org, tomi.valkeinen@ideasonboard.com,
-        bcm-kernel-feedback-list@broadcom.com
-References: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-Autocrypt: addr=stefan.wahren@i2se.com; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tClZlcnNpb246IEdudVBHIHYy
- CgptUUlOQkZ0NmdCTUJFQUN1Yi9wQmV2SHhidkplZnlaRzMySklObW4yYnNFUFgyNVY2ZmVq
- bXlZd21DR0tqRnRMCi9Eb1VNRVZIRHhDSjQ3Qk1YbzM0NGZIVjFDM0FudWRnTjFCZWhMb0J0
- TEh4bW5lQ3pnSDNLY1B0V1c3cHRqNEcKdEp2OUNRRFp5MjdTS29FUHh5YUk4Q0YweWdSeEpj
- NzJNOUk5d21zUFo1YlVIc0x1WVdNcVE3SmNSbVBzNkQ4ZwpCa2srOC95bmdFeU5FeHd4SnBS
- MXlsajVianhXREh5WVF2dUo1THpaS3VPOUxCM2xYVnNjNGJxWEVqYzZWRnVaCkZDQ2svc3lp
- by9ZaHNlOE4rUXN4N01RYWd6NHdLVWtRUWJmWGcxVnFrVG5BaXZYczQyVm5Ja211NWd6SXcv
- MHQKUkp2NTBGUmhIaHhweUtBSThCOG5oTjhRdng3TVZrUGM1dkRmZDN1R1lXNDdKUGhWUUJj
- VXdKd05rLzQ5RjllQQp2ZzJtdE1QRm5GT1JrV1VSdlArRzZGSmZtNitDdk92N1lmUDF1ZXdB
- aTRsbitKTzFnK2dqVklXbC9XSnB5MG5UCmlwZGZlSDlkSGtnU2lmUXVuWWN1Y2lzTXlvUmJG
- OTU1dENna0VZOUVNRWRZMXQ4aUdEaUNnWDZzNTBMSGJpM2sKNDUzdWFjcHhmUVhTYUF3UGtz
- bDhNa0NPc3YyZUVyNElOQ0hZUUR5WmljbEJ1dUNnOEVOYlI2QUdWdFpTUGNRYgplbnpTektS
- Wm9POUNhcUlEK2ZhdkxpQi9kaHptSEErOWJnSWhtWGZ2WFJMRFp6ZThwbzFkeXQzRTFzaFhp
- ZGRaClBBOE51SlZ6RUl0MmxtSTZWOHBaRHBuMjIxcmZLaml2UlFpYW9zNTRUZ1pqak1ZSTdu
- bko3ZTZ4endBUkFRQUIKdENCVGRHVm1ZVzRnVjJGb2NtVnVJRHgzWVdoeVpXNXpkRUJuYlhn
- dWJtVjBQb2tDTndRVEFRZ0FJUVVDWElkYwo0Z0liQXdVTENRZ0hBZ1lWQ0FrS0N3SUVGZ0lE
- QVFJZUFRSVhnQUFLQ1JDVWdld1BFWkR5MjFPVEQvOUdpWkxkCnRSWWNteVJKZ2x0aVFRekFp
- UWRjSUQ3OGxHb1dwL3grci92Y1U2YjZqdVl1ZVR3Z1Iwclc3djdsMklSQnlEN24KSEp4YSt0
- SVNvUVpCZ2hvbE1JZmI5TXRoR09KTENZNzdrL1FoQWhuMzJOR1prZWp3OXR6a3MvNDBtclpT
- VVQ4NApaeWJzUVhyTE0vSFI2VElJL0RlUEIwbktEM0ppcHBzMlVIUUQ5cUQySWpFd1NRUGxI
- akNPckVaaDQ1UFo3bTkrClo5M0x6aVRlc1dabFlRdUxpSndzNHJLcHRIVzFkL3dSZWxzaG1t
- NlFxY0wybDRDL2U0MGVEQjlncTRkU1poOVgKUEVZbGxpeU5RaDdhMkxTZHVtRTFyK2NTd0lq
- RS91ZHRSdmRPOWFLb0psT2JVSzVkTmpTUEg3d0tUYndkWGRZRApHUHdEaFhkNThOQXdyK1BY
- QmxQajB0STFMQ3ErTEJ4ZUt6aFdYK0dWcTlEb2pWanlVREV4Rk5Ga1h1b0M3ZzhtClY5VDB0
- ZUJpdVpSbm91WEt3VjJGcHRaT0hIN0JVRVd0a0t0aGgxZXRmT1dwaWdCemtVN2JQc2ZJWVQr
- cnk5dGIKMW9KK3Y0MVBOYXFaRW1QVXBKeHZmek5UN3Ayd01lRDdaajlmMHJ1YlJQdExBSjJR
- R2pyRkhzdVh3QU9xcHl6ZQoxOEVidHNZazBOMHp1SEVoY2orUEJJQmZoMFlJWWQ1MW9mNkdJ
- aU95UjlxMFhYdHBsVUo3VDIvSDF1UXFrWGxwCitnVzRWa2lmc2NJckl1eWZueFpXMTJlSXZq
- NnlicVdMN2FZS0dZbVQ2aUxDUGJIWXlZY2F5bDRFa0ZjckNGN0UKZTBXVC9zY1ZNaE8vNVgv
- SGFOQTVIQngvcjUycGdMY3Y0aTlNeExRbVUzUmxabUZ1SUZkaGFISmxiaUE4YzNSbApabUZ1
- TG5kaGFISmxia0JwTW5ObExtTnZiVDZKQWpnRUV3RUNBQ0lGQWx0NmdCTUNHd01HQ3drSUJ3
- TUNCaFVJCkFna0tDd1FXQWdNQkFoNEJBaGVBQUFvSkVKU0I3QThSa1BMYmpic1AvamdqYVNz
- NUh0bGtBSXZXUytGcm15N2MKaG5jT0F4TFRWL0Q2UkV3SU95R0poRkt3d29pck55UTJnOXZV
- YTNZQ1lDZjFmSjh3RWhhS09COWQwTHBNUm5MNApkRVQ4ZDgyMzhFL3BLK0hxTktpSXNKaHM2
- SnNLOFpnalZRR3JtbWZua0dyWisxdjBIQnV4ZGljZ0duUC9XdHVBClVsOGw2Mi9BTGJheXlq
- KzYxQ2xyc0V0UklhcU82N0xJWXdQaVBEUkkrWGlNek5pR3pIRi8xUTZHUjAyUkg2YTMKRjg5
- ejhhUHhjSGkxWnZDdDJ5a3o2VUVjaHpQMHI1Z3FGSisvTC9VcHU4ME1YaVk0djVlSWFCNTJn
- VlBnaXlNQQpsTDJkRHMxbUladm5yUkxSWTJ0YjNtQVlOa1Y1QjVJRFQzcGtXeTZrS281T0Nn
- SytZZFlPUjhGTloyb04ydDhPCnJLK1ZudGFLN01NU0tIbG1ZL3NPd3RSbEVoMU9CbXJjQ3dH
- d21wLzA1R2tSNDZmL0lzaFJWZUZPUmF3K0dBcXQKUDIrQ0ZhMkNOQS9JSG5aTm95aWtsRHpQ
- UUhVVUdzck5wcERyaFg5Sm1oQm1nMXYyeXdIMU5YdTFpRGZQMUJBdwpLZ29rdDVmNVVhUkY5
- c0FBNTN2V0V2YlVVTjllZXNGR0x6UFdkSkdRNWhwZC9WSDVJUXk5U0JyaC93SWNla3E1Cm4w
- a042cGJUSHhHRTUyU2kvTVZJa05UdURaM2FwbjJqbERaNHBPdHBCWEkydlAzYlBPK05pcUJa
- anNVM3R4TGkKV2R2MkZqeXp6NlhMUndlV1JZVkw1SGE2TER0eG9yMnZ1NlVQMDdwOXh6MXhS
- WmFPRFczb1lsSEZ6WXBhNFc1ZwpMSGIybEVrSXVVZlNjaWNHYmpqQXRDbFRkR1ZtWVc0Z1Yy
- Rm9jbVZ1SUR4emRHVm1ZVzR1ZDJGb2NtVnVRR2x1CkxYUmxZMmd1WTI5dFBva0NOd1FUQVFn
- QUlRVUNYSWRlaHdJYkF3VUxDUWdIQWdZVkNBa0tDd0lFRmdJREFRSWUKQVFJWGdBQUtDUkNV
- Z2V3UEVaRHkyeUhURC85VUY3UWxEa0d4elE3QWFDSTZOOTVpUWY4LzFvU1VhRE51Mlk2SQpL
- K0R6UXBiMVRiVE9yM1ZKd3dZOGEzT1d6NU5MU09MTVdlVnh0K29zTW1sUUlHdWJEM09EWko4
- aXpQbEcvSnJOCnQ1elNkbU41SUE1ZjNlc1dXUVZLdmdoWkFnVERxZHB2K1pIVzJFbXhuQUox
- dUxGWFhlUWQzVVpjQzVyMy9nL3YKU2FNbzl4ZWszSjVtTnVEbTcxbEVXc0FzL0JBY0ZjK3lu
- TGh4d0JXQld3c3Z3UjhiSHRKNURPTVd2YUt1RHNrcApJR0ZVZS9LYjJCK2pyYXZRM1RuNnMv
- SHFKTTBjZXhTSHo1cGUrMHNHdlArdDlKNzIzNEJGUXdlRkV4cmlleThVCkl4T3I0WEFiYWFi
- U3J5WW5VL3pWSDlVMWkyQUlRWk1XSkFldkN2VmdRL1UrTmVSaFh1ZGU5WVVtRE1EbzJzQjIK
- VkFGRUFxaUYyUVVIUEEybThhN0VPM3lmTDRyTWswaUh6TElLdmg2L3JIOFFDWThpM1h4VE5M
- OWlDTHpCV3UvTgpPbkNBYlMremx2TFphaVNNaDVFZnV4VHR2NFBsVmRFamY2MlArWkhJRDE2
- Z1VEd0VtYXpMQU1yeDY2NmpINWt1ClVDVFZ5bWJMMFR2Qis2TDZBUmw4QU55TTRBRG1rV2tw
- eU0yMmtDdUlTWUFFZlFSM3VXWFo5WWd4YVBNcWJWK3cKQnJoSmc0SGFONkM2eFRxR3YzcjRC
- MmFxYjc3L0NWb1JKMVo5Y3BIQ3dpT3pJYUFtdnl6UFU2TXhDRFhaOEZnWQpsVDR2MjNHNWlt
- SlAyemdYNXMrRjZBQ1VKOVVRUEQwdVRmK0o5RGEycitza2gvc1dPbloreWNvSE5CUXZvY1pF
- Ck5BSFFmN2tDRFFSYmVvQVRBUkFBMkhkMGZzRFZLNzJSTFNESGJ5ME9oZ0RjRGxWQk0yTSto
- WVlwTzNmWDFyKysKc2hpcVBLQ0hWQXNRNWJ4ZTdIbUppbUhhNEtLWXMya3YvbWx0L0NhdUNK
- Ly9wbWN5Y0JNN0d2d25Lem11WHp1QQpHbVZUWkM2V1I1TGtha0ZydEhPelZtc0VHcE52NVJj
- OWw2SFlGcExrYlNrVmk1U1BRWkp5K0VNZ01DRmdqclpmClZGNnlvdHdFMWFmN0hOdE1oTlBh
- TEROMW9VS0Y1aitSeVJnNWl3SnVDRGtuSGp3QlFWNHBndzIvNXZTOEE3WlEKdjJNYlcvVExF
- eXBLWGlmNzhJaGdBelh0RTJYck0xbi9vNlpINzFvUkZGS096NDJsRmR6ZHJTWDBZc3FYZ0hD
- WAo1Z0l0TGZxemoxcHNNYTlvMWVpTlRFbTFkVlFyVHFueXMwbDE4b2FsUk5zd1lsUW1uWUJ3
- cHdDa2FUSExNSHdLCmZHQmJvNWRMUEVzaHRWb3dJNm5zZ3FMVHlRSG1xSFlxVVpZSXBpZ21t
- QzNTd0JXWTFWNmZmVUVta3FwQUFDRW4KTDQvZ1Vnbjd5US81ZDBzZXFuQXEycFNCSE1VVW9D
- Y1R6RVFVV1ZraUR2M1JrN2hURm1oVHNNcTc4eHYyWFJzWApNUjZ5UWhTVFBGWkNZRFVFeEVs
- RXNTbzlGV0hXcjZ6SHlZY2M4cURMRnZHOUZQaG1RdVQyczlCbHg2Z0kzMjNHCm5FcTFsd1dQ
- SlZ6UDRqUWtKS0lBWHdGcHYrVzhDV0xxekRXT3ZkbHJEYVRhVk1zY0ZUZUg1VzZVcHJsNjVq
- cUYKUUdNcGNSR0NzOEdDVVcxM0gwSXlPdFF0d1dYQTRueStTTDgxcHZpQW1hU1hVOGxhS2FS
- dTkxVk9WYUY5ZjRzQQpFUUVBQVlrQ0h3UVlBUUlBQ1FVQ1czcUFFd0liREFBS0NSQ1VnZXdQ
- RVpEeTIrb1hELzljSEhSa0JaT2ZrbVNxCjE0U3Z4MDYyUHRVMEtWNDcwVFNucC9qV29ZSm5L
- SXczRzBtWElSZ3J0SDJkUHdwSWdWanNZeVJTVk1LbVNwdDUKWnJEZjlOdFRiTldnazhWb0xl
- WnpZRW8rSjNvUHFGclRNczNhWVl2N2U0K0pLNjk1WW5tUSttT0Q5bmlhOTE1dApyNUFaajk1
- VWZTVGx5VW15aWMxZDhvdnNmMWZQN1hDVVZSRmNSamZOZkRGMW9ML3BEZ01QNUdaMk93YVRl
- am15CkN1SGpNOElSMUNpYXZCcFlEbUJuVFlrN1B0aHk2YXRXdllsMGZ5L0NxYWpUS3N4Nytw
- OXh6aXU4WmZWWCtpS0IKQ2MrSGUrRURFZEdJRGh2TlovSVFIZk9CMlBVWFdHUytzOUZOVHhy
- L0E2bkxHWG5BOVk2dzkzaVBkWUl3eFM3SwpYTG9LSmVlMTBEamx6c1lzUmZsRk9XMFpPaVNp
- aElDWGlRVjF1cU02dHpGRzlndFJjaXVzNVVBdGhXYU8xT3dVClNDUW1mQ09tNGZ2TUlKSUE5
- cnh0b1M2T3FSUWNpRjNjcm1vMHJKQ3ROMmF3WmZnaThYRWlmN2Q2aGp2MEVLTTkKWFpvaUFa
- WVpEKy9pTG01VGFLV042b0dJdGkwVmpKdjhaWk9aT2ZDYjZ2cUZJa0pXK2FPdTRvclRMRk16
- MjhhbwpVM1F5V3BOQzhGRm1kWXNWdWE4czZnTjFOSWE2eTNxYS9aQjhiQS9pa3k1OUFFejRp
- RElScmdVek1FZzhBazdUCmZtMUtpWWVpVHRCRENvMjVCdlhqYnFzeXhrUUQxbmtSbTZGQVZ6
- RXVPUEllOEp1cVcyeEQ5aXhHWXZqVTVoa1IKZ0pwM2dQNWIrY25HM0xQcXF1UTJFNmdvS1VN
- TEFia0NEUVJiZmw5REFSQUFzRExjYStMbFAydm5mdEVHaHBjQQpCR1ZOUUVGbkdQckNhdVU2
- SGhOODA1V3RQVHRtc1JPdUp6cWdVVDBtcHFXSWZacTZzTXd5dkhLOVRzL0tIM0paClVWYlJD
- M3oyaDNLZmhIL0RhZjk1cGQ2bVBjL2g5dkYvT3kzK2VUV2hnR25QNmNBNWtsUitmTzFXaEc4
- VnJpWHYKck5lUkcyMHN6emplSG9jblNJY1Q1WHVaUjB1REhPaUd4T2l6MXNNUkZUR3h6R095
- MTlSOXJ2dTYzdGlJM2Q3dgpnYzc1T0NBZGtlQi9TZUNFbGFSdzBUZjdMWmJQampzRjI2M0JZ
- bk1mNGtrTkVLdnFXY1UyaWNNcCtxZXpqeW5CCnB2ZXVlMHJDVFFCWUFRbG9GQ1ZUR0hyV1dB
- NkQ0VzVPMkFmSWRJYzF1MUpDWnAyZjVMV1ZvVUZUVklyUW5RUVUKU0hDaWZyOU1aeExUdFBK
- ZFU1Mm9TUHczZGs0aExQOGlKSUx1dnYvYXZhakNzUVlIRXR3WXNiZUZaeGl1TGdscApBN1lj
- Sk5ObXBnQ3BNRDR3VWh2bEN0QUtOQlFXeXIyOTc2OThFUVRuNDZlQmVVNkttMkNpaFhrZ3dD
- eWY4ZXlLCkxFM3NYZXdhcTVrZ1pXdk5xNml1NXFZSVJCOXl3K2NYYzYwZE9aRE9scTkzWDVT
- QVJZemFvZXBrSHo0cmtMa1AKUG8rdENIeUhRUHNHblBYYzlXVDgwREM5Tm5KR2R2VWx5NXJk
- TUk0eHBaeWdlb2tqd293VlFsUFV1Y1M2TXluNwpmOHc4Y2dmQjdDMklBSWNEeDJwUC9IendY
- dmtDT1FOQTdtVjFsTTA4bitnVmtUcnpweGlwNURicTRDSW9ZeDJNCkpaVDhiR1JINlhqY1VE
- S2EwOVFoeVpzQUVRRUFBWWtFUkFRWUFRZ0FEd1VDVzM1ZlF3SWJBZ1VKQThKbkFBSXAKQ1JD
- VWdld1BFWkR5MjhGZElBUVpBUWdBQmdVQ1czNWZRd0FLQ1JCVnhETFBjVk1NamNkc0QvMFJo
- QXN1UVlPeQpyMTNCbDNOaFhrWUFaR3AyWkZER3VrZTdPU2tWOG9qT09UZFR5ei9jT1JHQ2J5
- ZEQrRGd2cUZ5VmRuT1hLZ08wCmxKbUd3ckdlTGRnZ0F2aDBpaHJwNU8wWVVKOWJCU1htR01t
- UVRZSC9BbUxUR2FkYnVqQ1dqNWZGVWtDeXd4aW0KSHV5MFBiMjRwelR2UzUwR1k1WStxSDBG
- SE5haWdka2tpV04zcnVnN0haRXUvQ3lsUFpqT1h6K0QxUVBNckV4dwo3ZC9NS2FiVis5YU5i
- UVlabGRJajk4UXd2VUYxS1N6YThqbFVJdnBoUnEyN0FUOGZER1lHUGZERU1nMmNCT2FlCkty
- N29uUXM0YjdhV082aWZEbHhRVHB6c3pvK0FuODA3Tk1TdFZFRmYrczNBaFZEM2U3bmY4SkJh
- dmJWckFlMGsKb20yNm96elBubnh6K2xxVlZ0dzZVazRYTUl6dGl4L0h3SFl3dUNuY1VYWndL
- MEkzeUFKd2pZd29vck9DaEozUwpFVWJKUVB0R3NneFJERXhWQkZlNk5MUC82MnhQOU82dGFj
- d09kYjBNbVAxYjM5cFJBVEM3YmdkMWxkVUxpNzVaCmxKckowL1NpVkVyb3FOWXk3OXRmbWdB
- WjJVeFptczlTckV5Nm85UVNmc24xYVh2K01QTDlKYUNHbWtQNnpiTFEKTm5kajBKY2FRbmtD
- MHZneWRPMUJtNk11OTZQOXVmbEtaY0FTNndtTE01SWRIT3lqTDg4d0h3anVjakFPQnRjdwpw
- MG9HVG5WT25Sc05ZU084VzhZWi9LZGJ1Nzg1ZGF6TXFKMmlOakFEdUJiZG02TjRqNUVkTW5r
- TG4wQklmUEpwCmRnbTR2bDJVcExqd1JHci9NM3dtbTVwdnMrNnVCN2hrL0ZKaUQvNGxsRU5Q
- NGVNMWg3U200aitWcTZOMSt6VEIKSVhKQWViSXFhc0RwNXlaUzdYcnk0STM2bjg1WEVZZkcw
- MWx0QXlob05WMkRPOFNJUlFwdWkydHErOVJQM1JLMQpKREJ4eEVKWTJFTzVKWjhNeGFQSFEw
- RFQwNWxSRmpLMkFsaGRFSXRqTGpwSjNmVW05c3FMeE1XeHpQNlV6M2lpCjJ1YTR1bnJ0Nk9D
- VHFRd2lqRi8zYlRXaXd2VkFBSG5NRlVpb1hzaEhhb2hWRGNWZm5lSU1mVjBiUUNYWWkzTnAK
- WTB2MFp3Y2lGSCtnU0M3cUQ2WE51aHBWR1NMNElpbGlGeS9TemNhSkV6QUhlTERTaFpQMkNX
- ZG5DNHZnbDM3dApocHg4aDU1WWhKbjZIU3VVelBnaGFLdFZCMmsrajdaZXlaK1NGeHA3SXVi
- SEN3TEhsUWhUNzVSd1EzaUF4S242CjBxajUxY1lUbnF4ZFpYVzZmSDNQa3VNellVNUdwcVIv
- MU9sNWMvd2ZJNmc2QW04eUtXLzBFVUx0K0tuNExGc1MKbTdZM201SDV2MTJVNkpCWXZWK3Ix
- M2paaW9zNEVFREU5M0Q1c05IMk1JeVJ6Q0RxMXpkZHQ0WHV5S0ZqUEtXMQo5aWJaRGZGVjdL
- dUNzdnVMMjNzQmMxc0NNb3ArRTFtVC9ReE9JQTZvRFQxTVFzdHdPVnVReURDdi9PdktTZ2Z6
- CjhGWEdMNkFQY2xqQ3FqOEFKaHhReXN4ZG9pUVA4bS92dStialdHR3Z4dzVzMWxncGlSRFRS
- VVBnY0pKTmFHWTIKVklEclpRaTROU2lOUTBOSWkrZGp1NGZOTW1DcFFxZzh0YkMzY0FhNnl3
- bTZvUUIxU0JobURYMmUxMWdSbGx1SQpPblRHUEUwSFRvM2w3MmxoYmc9PQo9cVpNVgotLS0t
- LUVORCBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCg==
-Message-ID: <a7a6f1fe-c2f0-f545-1da3-a7685fdb63d5@i2se.com>
-Date:   Wed, 16 Feb 2022 21:57:57 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 16 Feb 2022 16:19:51 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B418622496F;
+        Wed, 16 Feb 2022 13:19:38 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21GL8WJ2032687;
+        Wed, 16 Feb 2022 21:19:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=U8SNXnoO2x+3jqNdtP8FT7c218Mnv5NRJH1QCjrm+MM=;
+ b=bg5Mqq1fDy3Xulmua3Am4/Hj10arF8Q5A+HuUzwou18kBw58FADxXHoqKgWOBn936i++
+ sbkN/iW5EgVZCdpTAdR6+lCNWv59y/orhDIg6zpvuZta7nzCvLP5eAXEUUlnxun+mEbn
+ ietG1goSA6hJK3i5G6m2zsDacozzyoD9frhttm+Vs8UEOdpC+yDyjFoNVspJJf8vxF0e
+ m+9ydXfvjR8ZDsM30b4vWWq0KthlkxV8wPiTNrPe3V0olyHPROX9FhZaE25sol5hM143
+ 7vCGVw4x1c6RxlXGlwm3YivlpLYDxltI/oMNizoq5nDoOrRXZ5pqPU1Vt5uDlknyNAMz ng== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e97qc1naj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Feb 2022 21:19:24 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21GLHrk0006808;
+        Wed, 16 Feb 2022 21:19:23 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e97qc1na9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Feb 2022 21:19:23 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21GLHuoT024449;
+        Wed, 16 Feb 2022 21:19:22 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma04dal.us.ibm.com with ESMTP id 3e64hcxb57-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Feb 2022 21:19:22 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21GLJLm035914166
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 16 Feb 2022 21:19:21 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3ECA2BE056;
+        Wed, 16 Feb 2022 21:19:21 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ABF57BE058;
+        Wed, 16 Feb 2022 21:19:19 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 16 Feb 2022 21:19:19 +0000 (GMT)
+Message-ID: <c1a32f5d-c15d-8127-6254-69946f751bdb@linux.ibm.com>
+Date:   Wed, 16 Feb 2022 16:19:19 -0500
 MIME-Version: 1.0
-In-Reply-To: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: base64
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v10 06/27] ima: Move arch_policy_entry into ima_namespace
 Content-Language: en-US
-X-Provags-ID: V03:K1:OF5oNU5A4qCvpIlo95Az8jD2/LW/VxDZ7B6ue3KVH5q7t64nA0Q
- MywCBdxHPYWZjmu+cIDy7jIOtKU/gNiqrI42twOjWxVy9NvXaeAW/XDhwkgd7jw1/U4RfYK
- +J670XDtytb4SJn8Kvj0UbiOMUPlLZ03iBjW6l8vVokxzSyVtlMDAZvMX+KKajQ53WCystE
- 0cbOn+VsRNUPtuFXCkvRQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lIx9pDdyDX8=:dFLCNUm4mz0NEpgGu9zpux
- 4fSweIKzCWxpMn3tF3p6veSmxA+b8MC6FAByp7rhy/uzMqxMNnV0vbJPwlNLRIJqOy5+AUWtV
- 5ATOe/aOqyXq8FbAi9aHyK1CNtkoFEO/ATFuaZyi1Q4Wo52OkPDFoi5vOyuG5YHU+fPAlyPY2
- I/IM63/uw9qfg7/9qcK8AlxidUVMDyQ+pKK7Ua8IWA6a1D7F6t1KnbXhcIN8NcT/uFzIeYxQu
- KQT74CpO9aMCdfaZzhR3lmjav/vp+2hG7KBG3tGmQWmuRWvqnO8t63i9Wh2rPVGwy6pFkA7yo
- NPGjZsxJOgzayXPR3d+G4JYw0kExoXDwTg0DjJ2hV3fy5H3+a5tAHDK0cgNqRfeFXKBtPibjW
- CVzDhK5IQKMbQAfeAl2rUvdKv+30/GR8YxGQKKfDz/OShKdCD6xmDDc+ChdYD00+xmyBndigg
- Ga9uyZv9Y+ggtnprETG6nOxFwY9mWC2hWRdRaz8c7YRek5dSeRaPvnSgt1J4jQc09tBpJ9m3/
- mT0YL/VlA35hXQtME/u5tdVJJw38zk8v1lpV8NSz7BNg8ttJs8aJoRnL8C71/wesEhAi58Mk7
- NdwcfhnEKIXOSsgEfPL2HAqzNJX78mA/EBjNUwTByajVWlZhpXxnWtAVzMoLMuJJDcQv5sAG1
- ubKWfBkJmCj+T480wcleAYgFJpL1gqtDTITtTXT0eMn0HhOzGuIBExsuLZYwg8cyYNVqs5oO4
- urnKRGHeNY9nUf0c
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Christian Brauner <brauner@kernel.org>
+References: <20220201203735.164593-1-stefanb@linux.ibm.com>
+ <20220201203735.164593-7-stefanb@linux.ibm.com>
+ <bf435ffa5d176213acabb8c576c159d2cbd4d395.camel@linux.ibm.com>
+ <c350ccf1-f968-8b01-2f0d-015cabf39781@linux.ibm.com>
+ <c4170de11d64d5927a8e2a2e0f7e8a6e69c6a558.camel@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <c4170de11d64d5927a8e2a2e0f7e8a6e69c6a558.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: a0JLbt8rZLx9dHrRWrfokUbIihXboZeN
+X-Proofpoint-GUID: ErNdkiqOb-tu9Gv7m0Ilrnm1jO72ttaU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-16_10,2022-02-16_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 adultscore=0 bulkscore=0 clxscore=1015 phishscore=0
+ mlxscore=0 impostorscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202160114
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -194,64 +105,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgSmVhbi1NaWNoZWwsCgpBbSAwOC4wMi4yMiB1bSAxNjo1MCBzY2hyaWViIEplYW4tTWlj
-aGVsIEhhdXRib2lzOgo+IEhlbGxvICEKPgo+IC4uLgo+Cj4gSW4gb3JkZXIgdG8gcHJvcGVy
-bHkgY29uZmlndXJlIHRoZSBtZWRpYSBwaXBlbGluZSwgaXQgaXMgbmVlZGVkIHRvIGNhbGwK
-PiB0aGUgdXN1YWwgaW9jdGxzLCBhbmQgY29uZmlndXJlIHJvdXRpbmcgaW4gb3JkZXIgdG8g
-c2VuZCB0aGUgZW1iZWRkZWQKPiBkYXRhIGZyb20gdGhlIHNlbnNvciB0byB0aGUgInVuaWNh
-bS1lbWJlZGRlZCIgZGV2aWNlIG5vZGUgOgo+Cj4gYGBgCj4gbWVkaWE9MAo+IG1lZGlhLWN0
-bCAtZCR7bWVkaWF9IC1sICInaW14MjE5IDItMDAxMCc6MC0+J3VuaWNhbS1zdWJkZXYnOjAg
-WzFdIgo+IG1lZGlhLWN0bCAtZCR7bWVkaWF9IC1sICIndW5pY2FtLXN1YmRldic6MS0+J3Vu
-aWNhbS1pbWFnZSc6MCBbMV0iCj4gbWVkaWEtY3RsIC1kJHttZWRpYX0gLXYgLVIgIid1bmlj
-YW0tc3ViZGV2JyBbMC8wLT4xLzBbMV0sMC8xLT4yLzBbMV1dIgo+IG1lZGlhLWN0bCAtZCR7
-bWVkaWF9IC1WICInaW14MjE5IDItMDAxMCc6MC8wIFtmbXQ6U1JHR0IxMF8xWDEwLzMyODB4
-MjQ2NCBmaWVsZDpub25lXSIKPiB2NGwyLWN0bCAtZDAgLS1zZXQtZm10LXZpZGVvIHdpZHRo
-PTMyODAsaGVpZ2h0PTI0NjQscGl4ZWxmb3JtYXQ9J3BSQUEnLGZpZWxkPW5vbmUKPiBtZWRp
-YS1jdGwgLWQke21lZGlhfSAtdiAtViAiJ2lteDIxOSAyLTAwMTAnOjAvMSBbZm10Ok1FVEFE
-QVRBXzgvMTYzODR4MSBmaWVsZDpub25lXSIKPiBtZWRpYS1jdGwgLWQke21lZGlhfSAtcAo+
-IGBgYAoKaSB0cmllZCB0byB0ZXN0IHRoZSB1bmljYW0gZHJpdmVyIG9uIGEgUmFzcGJlcnJ5
-IFBpIDQgd2l0aCB0aGUgaW14MjE5CmNhbWVyYSAoYmFzZWQgb24gNS4xNy1yYzQpLiBUaGUg
-dW5pY2FtICYgaW14MjE5IGRyaXZlciBwcm9iZXMgYW5kCi9kZXYvdmlkZW8wIGlzIGNyZWF0
-ZWQuCgpJZiBhIGV4ZWN1dGUgdGhlIGZpcnN0IG1lZGlhLWN0bCBjb21tYW5kLCBpdCBjb21w
-bGFpbnMgd2l0aCBpbnZhbGlkCmFyZ3VtZW50IDIyLiBJcyB0aGVyZSBhIG1vcmUgZm9vbC1w
-cm9vZiB2YXJpYW50IHRvIGNvbmZpZ3VyZSB0aGlzIChhCnNjcmlwdCBvciBzb21ldGhpbmcg
-ZWxzZSk/IEkgbmV2ZXIgdXNlZCB0aGUgdW5pY2FtIGRyaXZlciBiZWZvcmUuCgpIZXJlIGlz
-IHRoZSBvdXRwdXQgb2YKCiQgbWVkaWFjdGwgLWQwIC1wCgpNZWRpYSBjb250cm9sbGVyIEFQ
-SSB2ZXJzaW9uIDUuMTcuMAoKTWVkaWEgZGV2aWNlIGluZm9ybWF0aW9uCi0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLQpkcml2ZXLCoMKgwqDCoMKgwqDCoMKgwqAgdW5pY2FtCm1vZGVswqDC
-oMKgwqDCoMKgwqDCoMKgwqAgdW5pY2FtCnNlcmlhbMKgwqDCoMKgwqDCoMKgwqDCoApidXMg
-aW5mb8KgwqDCoMKgwqDCoMKgIHBsYXRmb3JtOmZlODAxMDAwLmNzaQpodyByZXZpc2lvbsKg
-wqDCoMKgIDB4MApkcml2ZXIgdmVyc2lvbsKgIDUuMTcuMAoKRGV2aWNlIHRvcG9sb2d5Ci0g
-ZW50aXR5IDE6IHVuaWNhbS1zdWJkZXYgKDMgcGFkcywgMyBsaW5rcywgMiByb3V0ZXMpCsKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgdHlwZSBWNEwyIHN1YmRldiBzdWJ0eXBlIFVua25vd24g
-ZmxhZ3MgMArCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGRldmljZSBub2RlIG5hbWUgL2Rldi92
-NGwtc3ViZGV2MArCoMKgwqAgcm91dGVzOgrCoMKgwqAgwqDCoMKgIDAvMCAtPiAxLzAgW0FD
-VElWRV0KwqDCoMKgIMKgwqDCoCAwLzEgLT4gMi8wIFtBQ1RJVkVdCsKgwqDCoCBwYWQwOiBT
-aW5rCsKgwqDCoCDCoMKgwqAgW3N0cmVhbTowIGZtdDp1bmtub3duLzB4MF0KwqDCoMKgIMKg
-wqDCoCBbc3RyZWFtOjEgZm10OnVua25vd24vMHgwXQrCoMKgwqAgwqDCoMKgIDwtICJpbXgy
-MTkgNS0wMDEwIjowIFtFTkFCTEVELElNTVVUQUJMRV0KwqDCoMKgIHBhZDE6IFNvdXJjZQrC
-oMKgwqAgwqDCoMKgIFtzdHJlYW06MCBmbXQ6dW5rbm93bi8weDBdCsKgwqDCoCDCoMKgwqAg
-LT4gInVuaWNhbS1pbWFnZSI6MCBbRU5BQkxFRCxJTU1VVEFCTEVdCsKgwqDCoCBwYWQyOiBT
-b3VyY2UKwqDCoMKgIMKgwqDCoCBbc3RyZWFtOjAgZm10OnVua25vd24vMHgwXQrCoMKgwqAg
-wqDCoMKgIC0+ICJ1bmljYW0tZW1iZWRkZWQiOjAgW0VOQUJMRUQsSU1NVVRBQkxFXQoKLSBl
-bnRpdHkgNTogaW14MjE5IDUtMDAxMCAoMSBwYWQsIDEgbGluaywgMiByb3V0ZXMpCsKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgdHlwZSBWNEwyIHN1YmRldiBzdWJ0eXBlIFNlbnNvciBmbGFn
-cyAwCsKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZGV2aWNlIG5vZGUgbmFtZSAvZGV2L3Y0bC1z
-dWJkZXYxCsKgwqDCoCByb3V0ZXM6CsKgwqDCoCDCoMKgwqAgMC8wIC0+IDAvMCBbQUNUSVZF
-LCBJTU1VVEFCTEUsIFNPVVJDRV0KwqDCoMKgIMKgwqDCoCAwLzAgLT4gMC8xIFtBQ1RJVkUs
-IFNPVVJDRV0KwqDCoMKgIHBhZDA6IFNvdXJjZQrCoMKgwqAgwqDCoMKgIFtzdHJlYW06MCBm
-bXQ6U1JHR0IxMF8xWDEwLzMyODB4MjQ2NCBmaWVsZDpub25lIGNvbG9yc3BhY2U6cmF3CsKg
-wqDCoCDCoMKgwqAgwqBjcm9wLmJvdW5kczooOCw4KS8zMjgweDI0NjQKwqDCoMKgIMKgwqDC
-oCDCoGNyb3A6KDgsOCkvMzI4MHgyNDY0XQrCoMKgwqAgwqDCoMKgIFtzdHJlYW06MSBmbXQ6
-TUVUQURBVEFfOC8xNjM4NHgxIGZpZWxkOm5vbmUKwqDCoMKgIMKgwqDCoCDCoGNyb3AuYm91
-bmRzOig4LDgpLzMyODB4MjQ2NArCoMKgwqAgwqDCoMKgIMKgY3JvcDooOCw4KS8zMjgweDI0
-NjRdCsKgwqDCoCDCoMKgwqAgLT4gInVuaWNhbS1zdWJkZXYiOjAgW0VOQUJMRUQsSU1NVVRB
-QkxFXQoKLSBlbnRpdHkgOTogdW5pY2FtLWltYWdlICgxIHBhZCwgMSBsaW5rLCAwIHJvdXRl
-KQrCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHR5cGUgTm9kZSBzdWJ0eXBlIFY0TCBmbGFncyAx
-CsKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZGV2aWNlIG5vZGUgbmFtZSAvZGV2L3ZpZGVvMArC
-oMKgwqAgcGFkMDogU2luawrCoMKgwqAgwqDCoMKgIDwtICJ1bmljYW0tc3ViZGV2IjoxIFtF
-TkFCTEVELElNTVVUQUJMRV0KCi0gZW50aXR5IDE1OiB1bmljYW0tZW1iZWRkZWQgKDEgcGFk
-LCAxIGxpbmssIDAgcm91dGUpCsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB0eXBlIE5vZGUg
-c3VidHlwZSBWNEwgZmxhZ3MgMArCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZGV2aWNlIG5v
-ZGUgbmFtZSAvZGV2L3ZpZGVvMQrCoMKgwqAgcGFkMDogU2luawrCoMKgwqAgwqDCoMKgIDwt
-ICJ1bmljYW0tc3ViZGV2IjoyIFtFTkFCTEVELElNTVVUQUJMRV0KCg==
+
+On 2/16/22 15:56, Mimi Zohar wrote:
+> On Wed, 2022-02-16 at 15:48 -0500, Stefan Berger wrote:
+>> On 2/16/22 11:39, Mimi Zohar wrote:
+>>> On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote
+>>>
+>>> Let's update the patch description providing a bit more background
+>>> info:
+>>>
+>>> The archictecture specific policy rules, currently defined for EFI and
+>>> powerpc, require the kexec kernel image and kernel modules to be
+>>> validly signed and measured, based on the system's secure boot and/or
+>>> trusted boot mode and the IMA_ARCH_POLICY Kconfig option being enabled.
+>>>
+>>>> Move the arch_policy_entry pointer into ima_namespace.
+>>> Perhaps include something about namespaces being allowed or not allowed
+>>> to kexec a new kernel or load kernel modules.
+>> Namespaces are not allowed to kexec but special-casing the init_ima_ns
+>> in the code to handle namespaces differently makes it much harder to
+>> read the code. I would avoid special-casing init_ima_ns as much as
+>> possible and therefore I have moved the arch_policy_entry into the
+>> ima_namespace.
+> Please include this in the patch description, but re-write the last
+> line in the 3rd person, like:
+>
+> To avoid special-casing init_ima_ns, as much as possible, move the
+> arch_policy_entry into the ima_namespace.
+
+I took the paragraph on the background as well as this sentence.
+
+
+>
+> thanks,
+>
+> Mimi
+>
+>

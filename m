@@ -2,176 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2B14B81EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B304B81FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbiBPHre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 02:47:34 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49454 "EHLO
+        id S230473AbiBPHsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 02:48:08 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:55020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbiBPHrR (ORCPT
+        with ESMTP id S230518AbiBPHsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 02:47:17 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1387CD30F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:46:54 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id q17so2448822edd.4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:46:54 -0800 (PST)
+        Wed, 16 Feb 2022 02:48:04 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E5FF1E8C;
+        Tue, 15 Feb 2022 23:47:47 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id w1so1382588plb.6;
+        Tue, 15 Feb 2022 23:47:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UXFVdha6mdWIMpTuHA+4tNIC4aJVupleztPzYIr+WPI=;
-        b=IWGOoTDEmlPr6DtIASuFxDjhqh5/L0fV+GCo/Si5iX3xTv5LSIB/gHCtw/jl/17UhV
-         o8B9B91aM7Ay2uW/kJkTld1BNFL8oQhsz/JzoOEV2Ei6Gb1f6ABBYu1E1nnPcm4c3AIx
-         KccTMJdDOg/2rXec48mltO60Om5XKWGSqP4QgjOa8MB7Txybrkb5eEEp6v0A1xxEfPQp
-         gxaLx82Pjmh48q9sLqqU0AWpZ7yB6VUubrSnYaLCwXEdpGfJC2ZvQapy80SraRdztfHE
-         Z/gDKy7aeJLNWkgdpmhD1a6m6J0FkxFZ4ThoST3TJhNenyVJjVgslooDOSULFlv94OCZ
-         IEBA==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=JNZGxYeAs+ebgnSneE63ZkZJqPvz5hHBdDJ16ah7/no=;
+        b=g0pxtZ/LcPE/VkC8NIHWOab7GsA5PlzOOmyV0w7a3vIHjWyb+39GnPx/hDjBkDBJv1
+         oCq9SFr8D3NiXQ+XXjsuY3ut8UXvHUcVG7XSWrugbzw3z+qiEFEGzsf4m32fsVLFMsao
+         IbPmYF7IL0c0bhrK6M+keI8w4/FYNfbJf+t2bkwkoZ67JsOO0AYezhuD3JEMNnaWqJ6O
+         DdiCG1lItb583sciYzG00ZcoQcR2IwdtKUB04Hk0GWNlGYOo8DcrM0pLF/NnVvqZuDj2
+         NmlM6UKM1H5tMErGp3bYHH+6P9ENkBrwkbAQB9fhTuBrC5ORqN+QvraPPAWzfY92GTl4
+         VTXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UXFVdha6mdWIMpTuHA+4tNIC4aJVupleztPzYIr+WPI=;
-        b=tnUJlrx4vSmY6KD6cu9Z9RCuDWkXOHGFFP1ETg8pdQkezZBH23pTKWIGSIm/KdAaO5
-         dY7owMZmV5jUoRCUagJ4aL/OKA5NIoHtBMNFAcADDFnAbJBKRc00ZoWhdPebuz/HQwU5
-         MbqvwJqrXjmP9+MCI8ByvqYG6KXKeYLeFERPJeJSni3qccZ5hf00Z5Xg7XGvPGzZKXKe
-         ++C20qqiDREe8gLQ6Fh5Up/DDNpdSdZeNi4WyFa3G6Vbl3psmJ2uEgQ95tAADtHqio6p
-         /5Si+GttHqMQcMb/h5QyD/QAm1BG8tRXIvNNyrtRFJCpcVO6dIoKs7w3Sjd7Yx1zPBUN
-         gJ4w==
-X-Gm-Message-State: AOAM531Ufgjn4nC4lTRpmXzLCRBNJWq7+1m+iVAZMLknhGjsgziPPiOY
-        MONzdW3frfDy1un6KcCAHHD7qQ==
-X-Google-Smtp-Source: ABdhPJw0NxKrW2MThGN7NIdtD3nPnvUA7EhJt3HLsCndpIsnFXXpAl9ArWuefX/23/LbYnF2kNOFJw==
-X-Received: by 2002:aa7:c793:0:b0:408:4a69:90b4 with SMTP id n19-20020aa7c793000000b004084a6990b4mr1608214eds.58.1644997613266;
-        Tue, 15 Feb 2022 23:46:53 -0800 (PST)
-Received: from fedora.sec.9e.network (ip-088-153-139-166.um27.pools.vodafone-ip.de. [88.153.139.166])
-        by smtp.gmail.com with ESMTPSA id gq1sm11615202ejb.58.2022.02.15.23.46.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 23:46:52 -0800 (PST)
-From:   Patrick Rudolph <patrick.rudolph@9elements.com>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [v6 3/3] i2c: muxes: pca954x: Add regulator support
-Date:   Wed, 16 Feb 2022 08:46:12 +0100
-Message-Id: <20220216074613.235725-4-patrick.rudolph@9elements.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220216074613.235725-1-patrick.rudolph@9elements.com>
-References: <20220216074613.235725-1-patrick.rudolph@9elements.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=JNZGxYeAs+ebgnSneE63ZkZJqPvz5hHBdDJ16ah7/no=;
+        b=DrotAgNwdpxwlidpHxREdo7sLweiXdyj8xPB3uZsA2FN1h/82Rrq7opQhL5/J2H+2D
+         NIOD3WMNdUFZPAqzkZs6EjAZv8aEAqM9qPfc7BhzwgIS+v0ZSF4qGH2VoV69PnLSrSU2
+         pZ3DdLGompUX3Z5bwKKeJsjqHp4uxkQBdVec2ghjdA9YjIph1agN/ukxtLpGaTwScAJn
+         deRAcqrAMJtrR2JuY3URYizjsmVYuw59nzpoD27aX1J0oljK7p0RvbRocGf7H+3yhLbD
+         67+wFZ8EulIRiftBJt7o/VPr+hw52BRUdsKnIHQNJpK+eBXR0QqvDnSv3NmK7ah3ySrE
+         quug==
+X-Gm-Message-State: AOAM532HQMfwvISpHebOuaY+06Kyx7hAvBSMBZtuvOiSOuxDdhciDLXF
+        HhPGFVSz3RsbkNhhQsOYPPrj8/PHJSt7gQac
+X-Google-Smtp-Source: ABdhPJzJDV20aZH2aZdkxUCNUDkxJ7owWjX/WIshNLFlpi4S0dP/BWhdLksIrzEUf6K5EWhLO3YLKA==
+X-Received: by 2002:a17:902:f082:b0:14e:e477:5125 with SMTP id p2-20020a170902f08200b0014ee4775125mr1396673pla.104.1644997662542;
+        Tue, 15 Feb 2022 23:47:42 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id p27sm6704232pfh.98.2022.02.15.23.47.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 23:47:42 -0800 (PST)
+Message-ID: <dc14c98c-e35a-95c0-83dd-13b5f7cffc03@gmail.com>
+Date:   Wed, 16 Feb 2022 15:47:33 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [PATCH] KVM: x86/pmu: Fix reserved bits for AMD PerfEvtSeln
+ register
+Content-Language: en-US
+To:     Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211118130320.95997-1-likexu@tencent.com>
+ <CALMp9eTONaviuz-NnPUP2=MEOb8ZBkZ7u_ZQBWBUne-i6cRUkA@mail.gmail.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+In-Reply-To: <CALMp9eTONaviuz-NnPUP2=MEOb8ZBkZ7u_ZQBWBUne-i6cRUkA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a vdd regulator and enable it for boards that have the
-mux powered off by default.
+On 12/2/2022 4:39 pm, Jim Mattson wrote:
+>> -       pmu->reserved_bits = 0xffffffff00200000ull;
+>> +       pmu->reserved_bits = 0xfffffff000280000ull;
+> Bits 40 and 41 are guest mode and host mode. They cannot be reserved
+> if the guest supports nested SVM.
+> 
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
----
- drivers/i2c/muxes/i2c-mux-pca954x.c | 34 ++++++++++++++++++++++++-----
- 1 file changed, 29 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-index 33b9a6a1fffa..e25383752616 100644
---- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-+++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-@@ -49,6 +49,7 @@
- #include <linux/module.h>
- #include <linux/pm.h>
- #include <linux/property.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <dt-bindings/mux/mux.h>
-@@ -119,6 +120,7 @@ struct pca954x {
- 	struct irq_domain *irq;
- 	unsigned int irq_mask;
- 	raw_spinlock_t lock;
-+	struct regulator *supply;
- };
- 
- /* Provide specs for the PCA954x and MAX735x types we know about */
-@@ -459,6 +461,9 @@ static void pca954x_cleanup(struct i2c_mux_core *muxc)
- 	struct pca954x *data = i2c_mux_priv(muxc);
- 	int c, irq;
- 
-+	if (!IS_ERR_OR_NULL(data->supply))
-+		regulator_disable(data->supply);
-+
- 	if (data->irq) {
- 		for (c = 0; c < data->chip->nchans; c++) {
- 			irq = irq_find_mapping(data->irq, c);
-@@ -513,15 +518,32 @@ static int pca954x_probe(struct i2c_client *client,
- 			     pca954x_select_chan, pca954x_deselect_mux);
- 	if (!muxc)
- 		return -ENOMEM;
-+
- 	data = i2c_mux_priv(muxc);
- 
- 	i2c_set_clientdata(client, muxc);
- 	data->client = client;
- 
-+	data->supply = devm_regulator_get(dev, "vdd");
-+	if (IS_ERR(data->supply)) {
-+		ret = PTR_ERR(data->supply);
-+		if (ret != -EPROBE_DEFER)
-+			dev_err(dev, "Failed to request regulator: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = regulator_enable(data->supply);
-+	if (ret) {
-+		dev_err(dev, "Failed to enable regulator: %d\n", ret);
-+		return ret;
-+	}
-+
- 	/* Reset the mux if a reset GPIO is specified. */
- 	gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
--	if (IS_ERR(gpio))
--		return PTR_ERR(gpio);
-+	if (IS_ERR(gpio)) {
-+		ret = PTR_ERR(gpio);
-+		goto fail_cleanup;
-+	}
- 	if (gpio) {
- 		udelay(1);
- 		gpiod_set_value_cansleep(gpio, 0);
-@@ -538,7 +560,7 @@ static int pca954x_probe(struct i2c_client *client,
- 
- 		ret = i2c_get_device_id(client, &id);
- 		if (ret && ret != -EOPNOTSUPP)
--			return ret;
-+			goto fail_cleanup;
- 
- 		if (!ret &&
- 		    (id.manufacturer_id != data->chip->id.manufacturer_id ||
-@@ -546,7 +568,8 @@ static int pca954x_probe(struct i2c_client *client,
- 			dev_warn(dev, "unexpected device id %03x-%03x-%x\n",
- 				 id.manufacturer_id, id.part_id,
- 				 id.die_revision);
--			return -ENODEV;
-+			ret = -ENODEV;
-+			goto fail_cleanup;
- 		}
- 	}
- 
-@@ -565,7 +588,8 @@ static int pca954x_probe(struct i2c_client *client,
- 	ret = pca954x_init(client, data);
- 	if (ret < 0) {
- 		dev_warn(dev, "probe failed\n");
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto fail_cleanup;
- 	}
- 
- 	ret = pca954x_irq_setup(muxc);
--- 
-2.34.1
-
+Indeed, we need (some hands) to do more pmu tests on nested SVM.

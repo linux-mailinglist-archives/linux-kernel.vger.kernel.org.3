@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2104B7E38
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 04:15:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0679A4B7E31
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 04:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343909AbiBPCzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 21:55:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52558 "EHLO
+        id S1343910AbiBPCzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 21:55:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343900AbiBPCzJ (ORCPT
+        with ESMTP id S1343919AbiBPCzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 21:55:09 -0500
+        Tue, 15 Feb 2022 21:55:15 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42AFFBF1C
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:54:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD1DFCB55
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:55:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644980097; x=1676516097;
+  t=1644980102; x=1676516102;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=uXrn14nMTQITQECZX3ONrx8+Lps8fl1/nT7YqPDyvjs=;
-  b=BsUI4BPlz0pIa2L7jbpHfmoSMjgqisEzD9U76oXiMAkmp67nKuY0k7i8
-   wOPzH5oYgi/l5nQJTbQPvJt0LBHHgU2ZtHUC/GXnsZenmwlWX26i1FoSI
-   udW7U+CWMeI4FDEjDOrm6/+efvt2W5jE4/4LalJ3jSlKEIubIbuT2+hnu
-   RyxwoN7AMB/MZ+mJQPesQnhEGOjZT/9pUjdsvrJdNmihCM3oQfSO9S7ID
-   OUKDdBKiC/j9AM77kixWDb+/xgSadItV//Ajm2cwvvRiyKadR6WDetLNQ
-   ZnsXOw1GEuolDSeKov84gLiqB8xWKZfHpCxTDPQ+QJvCPzNGYxNnp2aPm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="336940659"
+  bh=XpIxu7uYd7PFgmPJeVxNoGIeAwpN+dcjvGXhEso3oLQ=;
+  b=nBKFQ93K15Eko7Wa8SxQrfIB9Pl8Xl2Rm015TsEaUo1dYFlBk2pPXroJ
+   FsLXygR7r2YBwu2yRgAv2Q1NUHIc0jXvDGrRpqu0QL4kvj/fdb2FcnVSk
+   4hh7wG8PGG6l3OHfjX3VwFYcd6x3MP1+ldWE+lAzQaScPHNM2ap1+aJxh
+   9wiqJnMFYMsLFHIq9c2PmvuyYO9+4pJaL10KSxqi0QBi0XxgsnCIpYbg/
+   FgX8qpCY8gEM2Ur5Sn1d706kCYvp5VRnBIY/Z8hy8SbnVSUKCuzwblx5Z
+   OidgokxIW7E0rtRDU8I92KPNIu8f2bWnDU9oBb3uQ/nGAJxx09jQgrc9a
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="336940663"
 X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="336940659"
+   d="scan'208";a="336940663"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 18:54:57 -0800
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 18:55:01 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="681312533"
+   d="scan'208";a="681312561"
 Received: from allen-box.sh.intel.com ([10.239.159.118])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Feb 2022 18:54:53 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 15 Feb 2022 18:54:57 -0800
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
         Christoph Hellwig <hch@infradead.org>,
@@ -56,9 +56,9 @@ Cc:     Alex Williamson <alex.williamson@redhat.com>,
         iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
         Lu Baolu <baolu.lu@linux.intel.com>,
         Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v4 7/9] iommu: Use right way to retrieve iommu_ops
-Date:   Wed, 16 Feb 2022 10:52:47 +0800
-Message-Id: <20220216025249.3459465-8-baolu.lu@linux.intel.com>
+Subject: [PATCH v4 8/9] iommu: Remove unused argument in is_attach_deferred
+Date:   Wed, 16 Feb 2022 10:52:48 +0800
+Message-Id: <20220216025249.3459465-9-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220216025249.3459465-1-baolu.lu@linux.intel.com>
 References: <20220216025249.3459465-1-baolu.lu@linux.intel.com>
@@ -74,206 +74,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The common iommu_ops is hooked to both device and domain. When a helper
-has both device and domain pointer, the way to get the iommu_ops looks
-messy in iommu core. This sorts out the way to get iommu_ops. The device
-related helpers go through device pointer, while the domain related ones
-go through domain pointer.
+The is_attach_deferred iommu_ops callback is a device op. The domain
+argument is unnecessary and never used. Remove it to make code clean.
 
+Suggested-by: Robin Murphy <robin.murphy@arm.com>
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
- include/linux/iommu.h | 11 ++++++++++
- drivers/iommu/iommu.c | 50 +++++++++++++++++++++----------------------
- 2 files changed, 36 insertions(+), 25 deletions(-)
+ include/linux/iommu.h         |  2 +-
+ drivers/iommu/amd/amd_iommu.h |  3 +--
+ drivers/iommu/amd/iommu.c     |  3 +--
+ drivers/iommu/amd/iommu_v2.c  |  2 +-
+ drivers/iommu/intel/iommu.c   |  3 +--
+ drivers/iommu/iommu.c         | 15 ++++++---------
+ 6 files changed, 11 insertions(+), 17 deletions(-)
 
 diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 9ffa2e88f3d0..90f1b5e3809d 100644
+index 90f1b5e3809d..1ded6076a75c 100644
 --- a/include/linux/iommu.h
 +++ b/include/linux/iommu.h
-@@ -381,6 +381,17 @@ static inline void iommu_iotlb_gather_init(struct iommu_iotlb_gather *gather)
- 	};
+@@ -269,7 +269,7 @@ struct iommu_ops {
+ 	void (*put_resv_regions)(struct device *dev, struct list_head *list);
+ 
+ 	int (*of_xlate)(struct device *dev, struct of_phandle_args *args);
+-	bool (*is_attach_deferred)(struct iommu_domain *domain, struct device *dev);
++	bool (*is_attach_deferred)(struct device *dev);
+ 
+ 	/* Per device IOMMU features */
+ 	bool (*dev_has_feat)(struct device *dev, enum iommu_dev_features f);
+diff --git a/drivers/iommu/amd/amd_iommu.h b/drivers/iommu/amd/amd_iommu.h
+index bb95edf74415..982798c7a3c8 100644
+--- a/drivers/iommu/amd/amd_iommu.h
++++ b/drivers/iommu/amd/amd_iommu.h
+@@ -117,8 +117,7 @@ void amd_iommu_domain_clr_pt_root(struct protection_domain *domain)
+ 
+ 
+ extern bool translation_pre_enabled(struct amd_iommu *iommu);
+-extern bool amd_iommu_is_attach_deferred(struct iommu_domain *domain,
+-					 struct device *dev);
++extern bool amd_iommu_is_attach_deferred(struct device *dev);
+ extern int __init add_special_device(u8 type, u8 id, u16 *devid,
+ 				     bool cmd_line);
+ 
+diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+index a18b549951bb..7e4e82158a80 100644
+--- a/drivers/iommu/amd/iommu.c
++++ b/drivers/iommu/amd/iommu.c
+@@ -2221,8 +2221,7 @@ static void amd_iommu_get_resv_regions(struct device *dev,
+ 	list_add_tail(&region->list, head);
  }
  
-+static inline const struct iommu_ops *dev_iommu_ops(struct device *dev)
-+{
-+	/*
-+	 * Assume that valid ops must be installed if iommu_probe_device()
-+	 * has succeeded. The device ops are essentially for internal use
-+	 * within the IOMMU subsystem itself, so we should be able to trust
-+	 * ourselves not to misuse the helper.
-+	 */
-+	return dev->iommu->iommu_dev->ops;
-+}
-+
- #define IOMMU_GROUP_NOTIFY_ADD_DEVICE		1 /* Device added */
- #define IOMMU_GROUP_NOTIFY_DEL_DEVICE		2 /* Pre Device removed */
- #define IOMMU_GROUP_NOTIFY_BIND_DRIVER		3 /* Pre Driver bind */
+-bool amd_iommu_is_attach_deferred(struct iommu_domain *domain,
+-				  struct device *dev)
++bool amd_iommu_is_attach_deferred(struct device *dev)
+ {
+ 	struct iommu_dev_data *dev_data = dev_iommu_priv_get(dev);
+ 
+diff --git a/drivers/iommu/amd/iommu_v2.c b/drivers/iommu/amd/iommu_v2.c
+index 58da08cc3d01..7c94ec05d289 100644
+--- a/drivers/iommu/amd/iommu_v2.c
++++ b/drivers/iommu/amd/iommu_v2.c
+@@ -537,7 +537,7 @@ static int ppr_notifier(struct notifier_block *nb, unsigned long e, void *data)
+ 	ret = NOTIFY_DONE;
+ 
+ 	/* In kdump kernel pci dev is not initialized yet -> send INVALID */
+-	if (amd_iommu_is_attach_deferred(NULL, &pdev->dev)) {
++	if (amd_iommu_is_attach_deferred(&pdev->dev)) {
+ 		amd_iommu_complete_ppr(pdev, iommu_fault->pasid,
+ 				       PPR_INVALID, tag);
+ 		goto out;
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 2b5f4e57a8bb..80f1294be634 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -5052,8 +5052,7 @@ intel_iommu_dev_disable_feat(struct device *dev, enum iommu_dev_features feat)
+ 	}
+ }
+ 
+-static bool intel_iommu_is_attach_deferred(struct iommu_domain *domain,
+-					   struct device *dev)
++static bool intel_iommu_is_attach_deferred(struct device *dev)
+ {
+ 	return attach_deferred(dev);
+ }
 diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index 7cf073c56036..7af0ee670deb 100644
+index 7af0ee670deb..27276421d253 100644
 --- a/drivers/iommu/iommu.c
 +++ b/drivers/iommu/iommu.c
-@@ -323,13 +323,14 @@ int iommu_probe_device(struct device *dev)
+@@ -831,13 +831,12 @@ static int iommu_create_device_direct_mappings(struct iommu_group *group,
+ 	return ret;
+ }
  
- void iommu_release_device(struct device *dev)
+-static bool iommu_is_attach_deferred(struct iommu_domain *domain,
+-				     struct device *dev)
++static bool iommu_is_attach_deferred(struct device *dev)
  {
--	const struct iommu_ops *ops = dev->bus->iommu_ops;
-+	const struct iommu_ops *ops;
+ 	const struct iommu_ops *ops = dev_iommu_ops(dev);
  
- 	if (!dev->iommu)
- 		return;
- 
- 	iommu_device_unlink(dev->iommu->iommu_dev, dev);
- 
-+	ops = dev_iommu_ops(dev);
- 	ops->release_device(dev);
- 
- 	iommu_group_remove_device(dev);
-@@ -833,8 +834,10 @@ static int iommu_create_device_direct_mappings(struct iommu_group *group,
- static bool iommu_is_attach_deferred(struct iommu_domain *domain,
- 				     struct device *dev)
- {
--	if (domain->ops->is_attach_deferred)
--		return domain->ops->is_attach_deferred(domain, dev);
-+	const struct iommu_ops *ops = dev_iommu_ops(dev);
-+
-+	if (ops->is_attach_deferred)
-+		return ops->is_attach_deferred(domain, dev);
+ 	if (ops->is_attach_deferred)
+-		return ops->is_attach_deferred(domain, dev);
++		return ops->is_attach_deferred(dev);
  
  	return false;
  }
-@@ -1252,10 +1255,10 @@ int iommu_page_response(struct device *dev,
- 	struct iommu_fault_event *evt;
- 	struct iommu_fault_page_request *prm;
- 	struct dev_iommu *param = dev->iommu;
-+	const struct iommu_ops *ops = dev_iommu_ops(dev);
- 	bool has_pasid = msg->flags & IOMMU_PAGE_RESP_PASID_VALID;
--	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
+@@ -894,7 +893,7 @@ int iommu_group_add_device(struct iommu_group *group, struct device *dev)
  
--	if (!domain || !domain->ops->page_response)
-+	if (!ops->page_response)
- 		return -ENODEV;
+ 	mutex_lock(&group->mutex);
+ 	list_add_tail(&device->list, &group->devices);
+-	if (group->domain  && !iommu_is_attach_deferred(group->domain, dev))
++	if (group->domain  && !iommu_is_attach_deferred(dev))
+ 		ret = __iommu_attach_device(group->domain, dev);
+ 	mutex_unlock(&group->mutex);
+ 	if (ret)
+@@ -1745,7 +1744,7 @@ static int iommu_group_do_dma_attach(struct device *dev, void *data)
+ 	struct iommu_domain *domain = data;
+ 	int ret = 0;
  
- 	if (!param || !param->fault_param)
-@@ -1296,7 +1299,7 @@ int iommu_page_response(struct device *dev,
- 			msg->pasid = 0;
- 		}
+-	if (!iommu_is_attach_deferred(domain, dev))
++	if (!iommu_is_attach_deferred(dev))
+ 		ret = __iommu_attach_device(domain, dev);
  
--		ret = domain->ops->page_response(dev, evt, msg);
-+		ret = ops->page_response(dev, evt, msg);
- 		list_del(&evt->list);
- 		kfree(evt);
- 		break;
-@@ -1521,7 +1524,7 @@ EXPORT_SYMBOL_GPL(fsl_mc_device_group);
- 
- static int iommu_get_def_domain_type(struct device *dev)
- {
--	const struct iommu_ops *ops = dev->bus->iommu_ops;
-+	const struct iommu_ops *ops = dev_iommu_ops(dev);
- 
- 	if (dev_is_pci(dev) && to_pci_dev(dev)->untrusted)
- 		return IOMMU_DOMAIN_DMA;
-@@ -1580,7 +1583,7 @@ static int iommu_alloc_default_domain(struct iommu_group *group,
-  */
- static struct iommu_group *iommu_group_get_for_dev(struct device *dev)
- {
--	const struct iommu_ops *ops = dev->bus->iommu_ops;
-+	const struct iommu_ops *ops = dev_iommu_ops(dev);
- 	struct iommu_group *group;
- 	int ret;
- 
-@@ -1588,9 +1591,6 @@ static struct iommu_group *iommu_group_get_for_dev(struct device *dev)
- 	if (group)
- 		return group;
- 
--	if (!ops)
--		return ERR_PTR(-EINVAL);
--
- 	group = ops->device_group(dev);
- 	if (WARN_ON_ONCE(group == NULL))
- 		return ERR_PTR(-EINVAL);
-@@ -1759,10 +1759,10 @@ static int __iommu_group_dma_attach(struct iommu_group *group)
- 
- static int iommu_group_do_probe_finalize(struct device *dev, void *data)
- {
--	struct iommu_domain *domain = data;
-+	const struct iommu_ops *ops = dev_iommu_ops(dev);
- 
--	if (domain->ops->probe_finalize)
--		domain->ops->probe_finalize(dev);
-+	if (ops->probe_finalize)
-+		ops->probe_finalize(dev);
- 
- 	return 0;
- }
-@@ -2020,7 +2020,7 @@ EXPORT_SYMBOL_GPL(iommu_attach_device);
+ 	return ret;
+@@ -2020,9 +2019,7 @@ EXPORT_SYMBOL_GPL(iommu_attach_device);
  
  int iommu_deferred_attach(struct device *dev, struct iommu_domain *domain)
  {
--	const struct iommu_ops *ops = domain->ops;
-+	const struct iommu_ops *ops = dev_iommu_ops(dev);
- 
- 	if (ops->is_attach_deferred && ops->is_attach_deferred(domain, dev))
+-	const struct iommu_ops *ops = dev_iommu_ops(dev);
+-
+-	if (ops->is_attach_deferred && ops->is_attach_deferred(domain, dev))
++	if (iommu_is_attach_deferred(dev))
  		return __iommu_attach_device(domain, dev);
-@@ -2579,17 +2579,17 @@ EXPORT_SYMBOL_GPL(iommu_set_pgtable_quirks);
  
- void iommu_get_resv_regions(struct device *dev, struct list_head *list)
+ 	return 0;
+@@ -2031,7 +2028,7 @@ int iommu_deferred_attach(struct device *dev, struct iommu_domain *domain)
+ static void __iommu_detach_device(struct iommu_domain *domain,
+ 				  struct device *dev)
  {
--	const struct iommu_ops *ops = dev->bus->iommu_ops;
-+	const struct iommu_ops *ops = dev_iommu_ops(dev);
- 
--	if (ops && ops->get_resv_regions)
-+	if (ops->get_resv_regions)
- 		ops->get_resv_regions(dev, list);
- }
- 
- void iommu_put_resv_regions(struct device *dev, struct list_head *list)
- {
--	const struct iommu_ops *ops = dev->bus->iommu_ops;
-+	const struct iommu_ops *ops = dev_iommu_ops(dev);
- 
--	if (ops && ops->put_resv_regions)
-+	if (ops->put_resv_regions)
- 		ops->put_resv_regions(dev, list);
- }
- 
-@@ -2794,9 +2794,9 @@ iommu_sva_bind_device(struct device *dev, struct mm_struct *mm, void *drvdata)
- {
- 	struct iommu_group *group;
- 	struct iommu_sva *handle = ERR_PTR(-EINVAL);
--	const struct iommu_ops *ops = dev->bus->iommu_ops;
-+	const struct iommu_ops *ops = dev_iommu_ops(dev);
- 
--	if (!ops || !ops->sva_bind)
-+	if (!ops->sva_bind)
- 		return ERR_PTR(-ENODEV);
- 
- 	group = iommu_group_get(dev);
-@@ -2837,9 +2837,9 @@ void iommu_sva_unbind_device(struct iommu_sva *handle)
- {
- 	struct iommu_group *group;
- 	struct device *dev = handle->dev;
--	const struct iommu_ops *ops = dev->bus->iommu_ops;
-+	const struct iommu_ops *ops = dev_iommu_ops(dev);
- 
--	if (!ops || !ops->sva_unbind)
-+	if (!ops->sva_unbind)
+-	if (iommu_is_attach_deferred(domain, dev))
++	if (iommu_is_attach_deferred(dev))
  		return;
  
- 	group = iommu_group_get(dev);
-@@ -2856,9 +2856,9 @@ EXPORT_SYMBOL_GPL(iommu_sva_unbind_device);
- 
- u32 iommu_sva_get_pasid(struct iommu_sva *handle)
- {
--	const struct iommu_ops *ops = handle->dev->bus->iommu_ops;
-+	const struct iommu_ops *ops = dev_iommu_ops(handle->dev);
- 
--	if (!ops || !ops->sva_get_pasid)
-+	if (!ops->sva_get_pasid)
- 		return IOMMU_PASID_INVALID;
- 
- 	return ops->sva_get_pasid(handle);
+ 	if (unlikely(domain->ops->detach_dev == NULL))
 -- 
 2.25.1
 

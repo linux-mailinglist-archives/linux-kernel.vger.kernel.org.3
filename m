@@ -2,101 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE374B89DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:28:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D19F4B89E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233788AbiBPN2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:28:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40098 "EHLO
+        id S234241AbiBPN3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 08:29:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234152AbiBPN2G (ORCPT
+        with ESMTP id S231593AbiBPN26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:28:06 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6F7151D3E;
-        Wed, 16 Feb 2022 05:27:54 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id p7so2451142vsg.2;
-        Wed, 16 Feb 2022 05:27:54 -0800 (PST)
+        Wed, 16 Feb 2022 08:28:58 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399BA163D79
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:28:44 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id 132so2164254pga.5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:28:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W4NWQ4O/W36pB+bOALZ9wlT2YlOr6PG7OHv6tykJwH0=;
-        b=lAHHTLBXwuKLLUHWaLseZjIP5cTvJsu69Q9thecmcZ3q0ffGHTCcOfDZJgQ+BsaU7X
-         VJaGthSGbyLDnlUhzTNOirmBB5F7Qt2EEk+RrmOT7+T5WuR8cdDnJMknl0tWouNlGuVh
-         9mhATRhNi19QIAqUZHBI9t2YXVYTD5EUoVudmzAEgZdEoVQTZuF+8xlDPDcIFRRwOn8g
-         aUi/maLv8i6RYOy6i+1AX3tkKmgBfUDfKVKAYtOhjVYzCjYnN86wGxGPqUL7SqtqgDe1
-         SUnNRDnQa+P+Bx++qp0oDSbhsRilT2mpDr7NtF0lcnwKAsJa1C4D94jqqd9Cy1g/0u0G
-         Sy+g==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=ZHriclNHcfARQz6gk+CKow6808MH12Lwf6CagzPJ1w4=;
+        b=S33hEt2BQqVZwAaMgLA3TC48JP7dGWC8DEtm950f/BsYz9JouJKrpFDIJFRlIh2REH
+         SYCjtdDGjxf95DrVarpNfYrRsLEVu14eOpD+EiN4Gt8YytXbmmFPuoICt9mDoAzHKDeR
+         Ot6M7gQuDlbfMNZVxApkzWiAjIzAG354CFIWlHNrhe/sbZDS+AKEqDZGOkGZR42WYdEN
+         M/mDcDHNYybR8Urc5J8oZs37i6wYlFmRjCfB9FtGjrlxjhvXdIYUWoWudFFizPx97OsI
+         bMhvghSPYSqKW/ZnB6xrA4qqZHf7BDkJiZUT/UP6W4jHFoitvdoZBob7l5zXDJmpnhHW
+         +Yjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W4NWQ4O/W36pB+bOALZ9wlT2YlOr6PG7OHv6tykJwH0=;
-        b=V2sejGUzsw+owRORLV0RcJtv+W8tZmQP0luzIB7ny4catcJ5jZgLqKjNXO0zosbK8Z
-         K9hz4BZsoreztivnSTFi4YhG/x4c1v8caRdZnfqhVjsGDhWhAzmlCd6yyNrJBnIDbwkR
-         Imoty/50X/c4hwfA0K1O9H/kMDCFCOkpV9DE0dik+zrT34d6Y2NGlsf6KtyW+E6F+uPW
-         W6GF/AWvtnDxYgwOQmpdLhXuskmifoOEz29o+M0tO/nYXBSp7v9hFsIRKmR1d4QK9VGk
-         L566R+wTVlfyXGayKgf7PDWb5WS99xR2sxWPmB7kYoFr5AuO1ZSdiCDwTntwzCYPw+Sm
-         Q3Rw==
-X-Gm-Message-State: AOAM533xgAr5V0CWj2R4dQOnW2i3tVFTg4nRvA+kG13wwux6+KwMFHJj
-        qQytLTX6qLDlU+GCoyVOcQPzAZ2QFLAj8YMy6A==
-X-Google-Smtp-Source: ABdhPJzJi19YNpCvzYwvosnnahkfB/aXCpYLA6aGj448BMw2ojTugtbCg0yk1f4Aj5s3nazDJ7Aob0vZmEcsqQKZVb8=
-X-Received: by 2002:a05:6102:2912:b0:31a:5ab3:f44b with SMTP id
- cz18-20020a056102291200b0031a5ab3f44bmr1066907vsb.53.1645018073916; Wed, 16
- Feb 2022 05:27:53 -0800 (PST)
-MIME-Version: 1.0
-References: <CAHmME9rkDXbeNbe1uehoVONioy=pa8oBtJEW22Afbp=86A9SUQ@mail.gmail.com>
- <20220216113323.53332-1-Jason@zx2c4.com>
-In-Reply-To: <20220216113323.53332-1-Jason@zx2c4.com>
-From:   Rui Salvaterra <rsalvaterra@gmail.com>
-Date:   Wed, 16 Feb 2022 13:27:42 +0000
-Message-ID: <CALjTZvbS8OuDkAZ+3M9dwTzRd6Rd77dnd4nUdMhUA9BJgYWYEA@mail.gmail.com>
-Subject: Re: [PATCH v3] ath9k: use hw_random API instead of directly dumping
- into random.c
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     miaoqing@codeaurora.org,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
-        "Sepehrdad, Pouyan" <pouyans@qti.qualcomm.com>,
-        ath9k-devel <ath9k-devel@qca.qualcomm.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=ZHriclNHcfARQz6gk+CKow6808MH12Lwf6CagzPJ1w4=;
+        b=7my3aomoqJX1uldg4dinUe9gVPlOzYsEFqDWGdDO8dKaIXpx3+XU+nO2ETLeXWQtpn
+         AXemQEmqMUIVWseWvDcSClXb+pcVZFtinonc+H+R1VuU2EkWejQGYcdJw3023GsrIkzp
+         6yPj0Ic0w3tXsE2KYhje+Kj6Wwjwr2Cavy9gBwvz/sYj7SK+vfaBT52Sa2Nh3mefmYhm
+         EFQl2ai03GQIgpc0mNUbvVWwhKQ6XjP1PR3qJJgXGrCfNtgBVjWY6GxSqtQEbEq2sgQo
+         /PmLk4TvPb2wO0KPNX1hCvDZQj1GrHqXuecNStKK6VEPBstuZgp2RyCvDzXHIu7tGhkF
+         5WhQ==
+X-Gm-Message-State: AOAM5322yQRTFEir+cMkOf+42pSU9nlx1ztcJbXGIPGJ+FyRtJRc6eip
+        rsg1Y40sBNFSZI9dFU/jqHC52fUka+nJZw==
+X-Google-Smtp-Source: ABdhPJwt9lYtZUjk6IffBKsOdSQJFfowDAqL0A2WjhfYRVtb1TKU9CDq9yu7NN64OkGcK133Cy+bYw==
+X-Received: by 2002:a63:e817:0:b0:373:8abb:2c51 with SMTP id s23-20020a63e817000000b003738abb2c51mr215900pgh.185.1645018123746;
+        Wed, 16 Feb 2022 05:28:43 -0800 (PST)
+Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id c68sm5431002pga.1.2022.02.16.05.28.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 05:28:42 -0800 (PST)
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
+Cc:     Maulik Shah <quic_mkshah@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shawn Guo <shawn.guo@linaro.org>
+Subject: [PATCH v5 0/3] Add Qualcomm MPM irqchip driver support
+Date:   Wed, 16 Feb 2022 21:28:27 +0800
+Message-Id: <20220216132830.32490-1-shawn.guo@linaro.org>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi again, Jason,
+It starts from updating cpuidle-psci driver to send CPU_CLUSTER_PM_ENTER
+notification, and then adds DT binding and driver support for Qualcomm
+MPM (MSM Power Manager) interrupt controller.
 
-On Wed, 16 Feb 2022 at 11:33, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+Changes for v5:
+- Drop inline attributes and let compiler to decide
+- Use _irqsave/_irqrestore flavour for spin lock
+- Assignment on a single for irq_resolve_mapping() call
+- Add documentation to explain vMPM ownership transition
+- Move MPM pin map data into device tree and so use a generic compatible
+- Drop the code that counts CPUs in PM and use CPU_CLUSTER_PM_ENTER
+  notification instead
 
-[snipped]
+Changes for v4:
+- Add the missing include of <linux/interrupt.h> to fix build errors
+  on arm architecture.
+- Leave IRQCHIP_PLATFORM_DRIVER infrastructural unchanged, and use
+  of_find_device_by_node() to get platform_device pointer.
 
-> Changes v2->v3:
-> - Use msleep_interruptable like other hwrng drivers.
-> - Give up after 110 tries.
-> - Return -EIO after giving up like other hwrng drivers.
-> - Use for loop for style nits.
-> - Append serial number for driver in case of multiple cards.
+Changes for v3:
+- Support module build
+- Use relaxed accessors
+- Add barrier call to ensure MMIO write completes
+- Use d->chip_data to pass driver private data
+- Use raw spinlock
+- USe BIT() for bit shift
+- Create a single irq domain to cover both types of MPM pins
+- Call irq_resolve_mapping() to find out Linux irq number
+- Save the use of ternary conditional operator and use switch/case for
+  .irq_set_type call
+- Drop unnecessary .irq_disable hook
+- Align qcom_mpm_chip and qcom_mpm_ops members vertically
+- Use helper irq_domain_translate_twocell()
+- Move mailbox requesting forward in probe function
+- Improve the documentation on qcm2290_gic_pins[]
+- Use IRQCHIP_PLATFORM_DRIVER infrastructural
+- Use cpu_pm notifier instead of .suspend_late hook to write MPM for
+  sleep, so that MPM can be set up for both suspend and idle context.
+  The TIMER0/1 setup is currently omitted for idle use case though,
+  as I haven't been able to successfully test the idle context.
 
-[snipped]
+Shawn Guo (3):
+  cpuidle: psci: Call cpu_cluster_pm_enter() on the last CPU
+  dt-bindings: interrupt-controller: Add Qualcomm MPM support
+  irqchip: Add Qualcomm MPM controller driver
 
-Everything working as expected here, so this patch (v3) is also
+ .../interrupt-controller/qcom,mpm.yaml        |  94 ++++
+ drivers/cpuidle/cpuidle-psci.c                |  13 +
+ drivers/irqchip/Kconfig                       |   8 +
+ drivers/irqchip/Makefile                      |   1 +
+ drivers/irqchip/qcom-mpm.c                    | 440 ++++++++++++++++++
+ 5 files changed, 556 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
+ create mode 100644 drivers/irqchip/qcom-mpm.c
 
-Tested-by: Rui Salvaterra <rsalvaterra@gmail.com>
+-- 
+2.17.1
 
-Thanks,
-Rui

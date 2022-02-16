@@ -2,177 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF6D4B7D5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 03:21:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE944B7D41
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 03:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343628AbiBPCRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 21:17:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42280 "EHLO
+        id S1343712AbiBPCU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 21:20:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235143AbiBPCRC (ORCPT
+        with ESMTP id S1343668AbiBPCUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 21:17:02 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB17BF97D;
-        Tue, 15 Feb 2022 18:16:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644977810; x=1676513810;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Nf4w5alxBcN8IhONDyerdZKXyOFUjVM7GbSWZYsTNBk=;
-  b=nXKXip3jAsfLyNW3FGt+5mOPybeoGQNDA0x3HY5yP6DK+CPkAAK4ihYt
-   Dkyh9vZksjGyn/78c7hrilhApIhd+VkjyeDXKQeoMtKZDh3PZWkqSWtzW
-   OGZP38rKIn1NMd1C+2HrUr8nPjSvLeNfTt8tzutLfN8QK7U/3JiwXxmgL
-   E=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 15 Feb 2022 18:16:50 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 18:16:50 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 15 Feb 2022 18:16:49 -0800
-Received: from [10.111.168.21] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 15 Feb
- 2022 18:16:48 -0800
-Message-ID: <7b33c826-b141-c6a2-b0eb-18b99ceeda24@quicinc.com>
-Date:   Tue, 15 Feb 2022 18:16:45 -0800
+        Tue, 15 Feb 2022 21:20:54 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B29EBF97D;
+        Tue, 15 Feb 2022 18:20:43 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4C1B45C02A2;
+        Tue, 15 Feb 2022 21:20:42 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 15 Feb 2022 21:20:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; bh=J5AXj40E9HqNRYqC6qIeTjIFyzcv3BtezY5WnWbvfpw=; b=dSnhO
+        hAcBaMdsg196yB6uJSkxx3i/iqh8MVN9FeKqijDbzSf54bYb0t0elDQiYMU9XY8I
+        abJbTc7NSqVKGYO29yse+KeF6rfesq64z70Lciw1W0FTycsLjX1CHTT83T6az+Yf
+        0EM4RNOrret58YAb3MOcsj8RFatEIrPEWj8y+bw3PzBAU9Ib8TR2v41RKE20+bCJ
+        aQS1BBSnh/KyZVO4FYubCsrqFyvrHjbVoPPcKVFsHn0oMtwwUY63PzEV1AKdHM4M
+        5BnlA3yyGC9Mqngo20HG7/8BDE2YGgh81gLdq9VettGJ9X1nnUCtlfHKSE/ck+OX
+        H99tfWW5Qvb2fPamg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; bh=J5AXj40E9HqNRYqC6qIeTjIFyzcv3
+        BtezY5WnWbvfpw=; b=a+SAvR9DBP7Yl0cPtoXJLFYiDQTiDpOOGhn4we3e0epTm
+        3Fv8L7wam0//iditANPmyKV08rcwHKx+ZtHtSI5of/VV+sO/NUVyKAmj1fJZDlVZ
+        ZVTQvDYuWARpmKM43oNl/aCpzAZLjmnRhwGFQ7YL3GZdOWEkjSb0+JoAISpSEL62
+        jfw0YcsIYwn4EoQtvhtp8sYGLfm4XGSYyH2A/uWLPbDl06MQOufOiT2PoFZ2wkrf
+        OPLwrZOZ1dVY9d/0hnfmRbXUXMDUPnNFXi+crb2GFGY1lGXSG6elnV5FmK2gHa1+
+        z8u+jsiE/+xZJVc0CJ4+FNE6NxagkChxMDdDvrLIQ==
+X-ME-Sender: <xms:el8MYl0hjAeAjS6M8WG82e3etGsrV3Q9dQhie4e2JKDRFwb5yhTBDg>
+    <xme:el8MYsHeVcyZ4-71Q58nKsCHQN_bPGNakMLtEPidcxYuAkl82-SdnUh5i6Cq30raC
+    oNLScdHQz3SDxr6UQ>
+X-ME-Received: <xmr:el8MYl6W_dWrPAI9fuVJVicjKLPSkv_ZI621UM2NFmi-NrZSbne6NV_hDN7ezRz-TGYpF4jAK3cs9n1kas_S_0d7JLOceMhgsZebChvbxHB2ifjqPagKrXeFaOrMsIRWqAH67Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjeehgdeggecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghlucfj
+    ohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrfgrth
+    htvghrnhepieetkefhheduudfgledtudefjeejfeegveehkeeufffhhfejkeehiefftdev
+    tdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsh
+    grmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:el8MYi3mnFnEa5-loOj-fsfg_9wJtPyOJYC6vSdTAGswbVTWug-ktg>
+    <xmx:el8MYoEzWpLcUompitbfHuadznVzu85ty8qYAmvY1czBhRXxSibFcw>
+    <xmx:el8MYj9wgDT80sUB4wbzs_GYU4s-BBcMjIsDhRVH0qo-GTdIntDWTg>
+    <xmx:el8MYtMPfM1mB9ETFnU3SEx4kUSNHqpv89HpFnuw-FjpSJyJMEBmVg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 15 Feb 2022 21:20:41 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Samuel Holland <samuel@sholland.org>
+Subject: [PATCH v2] of/irq: Use interrupts-extended to find parent
+Date:   Tue, 15 Feb 2022 20:20:39 -0600
+Message-Id: <20220216022040.61532-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [Freedreno] [PATCH v2 2/2] drm/msm/dpu: Add SC8180x to hw catalog
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
-References: <20220215043353.1256754-1-bjorn.andersson@linaro.org>
- <20220215043353.1256754-2-bjorn.andersson@linaro.org>
- <be397e2e-05ab-5c18-8e2d-16c443f0a6d1@quicinc.com>
- <Ygvisfhi0SY6XdAz@builder.lan>
- <6a3ef247-b26b-d505-cd85-92fb277163dd@quicinc.com>
- <CAA8EJprCaiPW=Kk0B69RNNwAk0xcqaxQA031sfR0ky+BfzcWKQ@mail.gmail.com>
- <ceb861e5-b1c8-d33e-c0b0-bea0b4cc0b66@quicinc.com>
- <CAA8EJppj+OBPVUgvefO38zp1RHpJw5pL0-4DCkgn3iAcPH-ptA@mail.gmail.com>
- <d0cac12e-7c03-2ba3-fb8d-aee09b72a1b1@quicinc.com>
- <YgxbYnpbBeOIkGWi@builder.lan>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <YgxbYnpbBeOIkGWi@builder.lan>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Some OF irqchips, such as the RISC-V PLIC, use interrupts-extended to
+specify their parent domain(s). That binding does not allow using the
+interrupt-parent property in the irqchip node, which prevents
+of_irq_init from properly detecting the irqchip hierarchy.
 
+If no interrupt-parent property is present in the enclosing bus or root
+node, then desc->interrupt_parent will be NULL for both the per-CPU
+RISC-V INTCs (the actual root domains) and the RISC-V PLIC. Similarly,
+if the bus or root node specifies `interrupt-parent = <&plic>`, then
+of_irq_init will hit the `desc->interrupt_parent == np` check, and again
+all parents will be NULL. So things happen to work today for some boards
+due to Makefile ordering.
 
-On 2/15/2022 6:03 PM, Bjorn Andersson wrote:
-> On Tue 15 Feb 19:34 CST 2022, Abhinav Kumar wrote:
-> 
->>
->>
->> On 2/15/2022 4:20 PM, Dmitry Baryshkov wrote:
->>> On Tue, 15 Feb 2022 at 23:21, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
->>>> On 2/15/2022 10:42 AM, Dmitry Baryshkov wrote:
->>>>> On Tue, 15 Feb 2022 at 20:42, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
->>>>>> On 2/15/2022 9:28 AM, Bjorn Andersson wrote:
->>>>>>> On Tue 15 Feb 11:14 CST 2022, Abhinav Kumar wrote:
->>>>>>>> On 2/14/2022 8:33 PM, Bjorn Andersson wrote:
->>>>>>>>> From: Rob Clark <robdclark@chromium.org>
-> [..]
->>>>> (thus leading us to cases when someone would forget to add INTF_EDP
->>>>> next to INTF_DP)
->>>>>
->>>>> Also, if we are switching from INTF_DP to INTF_EDP, should we stop
->>>>> using end-to-end numbering (like MSM_DP_CONTROLLER_2 for INTF_5) and
->>>>> add a separate numbering scheme for INTF_EDP?
->>>>>
->>>> We should change the controller ID to match what it actually is.
->>>>
->>>> Now that you pointed this out, this looks even more confusing to me to
->>>> say that  MSM_DP_CONTROLLER_2 is actually a EDP controller because
->>>> fundamentally and even hardware block wise they are different.
->>>
->>> So, do we split msm_priv->dp too? It's indexed using
->>> MSM_DP_CONTROLLER_n entries.
->>> Do we want to teach drm/msm/dp code that there are priv->dp[] and
->>> priv->edp arrays?
->>
->> ok so now priv->dp and priv->edp arrays are also in the picture here :)
->>
->> Actually all these questions should have probably come when we were figuring
->> out how best to re-use eDP and DP driver.
->>
->> Either way atleast, its good we are documenting all these questions on this
->> thread so that anyone can refer this to know what all was missed out :)
->>
->> priv->dp is of type msm_dp. When re-using DP driver for eDP and since
->> struct msm_dp is the shared struct between dpu and the msm/dp, I get your
->> point of re-using MSM_DP_CONTROLLER_* as thats being use to index.
->>
->> So MSM_DP_CONTROLLER_* is more of an index into the DP driver and not really
->> a hardware indexing scheme.
->>
->> If we split into two arrays, we need more changes to dpu_encoder too.
->>
->> Too instrusive a change at this point, even though probably correct.
->>
-> 
-> I'm sorry, but performing such a split would create a whole bunch of
-> duplication and I don't see the reasons yet. Can you please give me an
-> example of when the DPU _code_ would benefit from being specifically
-> written for EDP vs DP?
-> 
-> Things where it doesn't make sense to enable certain features in
-> runtime - but really have different implementation for the two interface
-> types.
-> 
+However, things break when another irqchip ("foo") is stacked on top of
+the PLIC. The bus/root node will have `interrupt-parent = <&foo>`,
+since that is what all of the other peripherals need. When of_irq_init
+runs, it will try to find the PLIC's parent domain. But because
+of_irq_find_parent ignores interrupts-extended, it will fall back to
+using the interrupt-parent property of the PLIC's parent node (i.e. the
+bus or root node), and see "foo" as the PLIC's parent domain. But this
+is wrong, because "foo" is actually the PLIC's child domain!
 
-Like I have mentioned in my previous comment, this would be a big change 
-and I am also not in favor of this big change.
+So of_irq_init wrongly attempts to init the stacked irqchip before the
+PLIC. This fails and breaks boot.
 
->> But are you seeing more changes required even if we just change INTF_DP to
->> INTF_eDP for the eDP entries? What are the challenges there?
->>
-> 
-> What are the benefits?
+Fix this by having of_irq_find_parent return the first node referenced
+by interrupts-extended when that property is present. Even if the
+property references multiple different IRQ domains, this will still work
+reliably in of_irq_init as long as all referenced domains are the same
+distance away from some root domain (e.g. the RISC-V INTCs referenced by
+the PLIC's interrupts-extended are always all root domains).
 
-In terms of current code, again like I said before in my previous 
-comments several times I do not have an example.
+Acked-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
-I was keeping the separation in case in future for some features we do 
-need to differentiate eDP and DP.
+Changes in v2:
+ - Add comments noting the assumptions made here
 
-Somehow I also feel this change and below are interlinked that way.
+ drivers/of/irq.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-https://patchwork.freedesktop.org/patch/473871/
+diff --git a/drivers/of/irq.c b/drivers/of/irq.c
+index 2b07677a386b..c7d14f5c4660 100644
+--- a/drivers/of/irq.c
++++ b/drivers/of/irq.c
+@@ -60,7 +60,12 @@ struct device_node *of_irq_find_parent(struct device_node *child)
+ 		return NULL;
+ 
+ 	do {
+-		if (of_property_read_u32(child, "interrupt-parent", &parent)) {
++		/*
++		 * interrupts-extended can reference multiple parent domains.
++		 * This only returns the first one.
++		 */
++		if (of_property_read_u32(child, "interrupt-parent", &parent) &&
++		    of_property_read_u32(child, "interrupts-extended", &parent)) {
+ 			p = of_get_parent(child);
+ 		} else	{
+ 			if (of_irq_workarounds & OF_IMAP_NO_PHANDLE)
+@@ -560,6 +565,11 @@ void __init of_irq_init(const struct of_device_id *matches)
+ 	 * The root irq controller is the one without an interrupt-parent.
+ 	 * That one goes first, followed by the controllers that reference it,
+ 	 * followed by the ones that reference the 2nd level controllers, etc.
++	 *
++	 * Controllers using the interrupts-extended property may have multiple
++	 * parents; interrupt_parent always references the first one. The order
++	 * used here assumes that other parents are no farther away from a root
++	 * irq controller than the first parent.
+ 	 */
+ 	while (!list_empty(&intc_desc_list)) {
+ 		/*
+-- 
+2.33.1
 
-The only reason we need this change is because both eDP and DP use 
-DRM_MODE_ENCODER_TMDS and specifying the intf_type directly will clear 
-the confusion because DRM_MODE_ENCODER_DSI means DSI and 
-DRM_MODE_ENCODER_VIRTUAL means Writeback but DRM_MODE_ENCODER_TMDS can 
-mean DP OR eDP interface.
-
-The ambiguity was always for eDP and DP.
-
-That led to the discussion about the INTF_* we are specifying in the 
-dpu_hw_catalog only to find the discrepancy.
-
-So now by clearing that ambiguity that change makes sense. That 
-discussion trickled into this one.
-
-> 
-> Regards,
-> Bjorn

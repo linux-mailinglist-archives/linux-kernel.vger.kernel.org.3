@@ -2,110 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1AF4B8D83
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAFA64B8D9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236140AbiBPQL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 11:11:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51448 "EHLO
+        id S236200AbiBPQOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 11:14:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236139AbiBPQL5 (ORCPT
+        with ESMTP id S236177AbiBPQNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 11:11:57 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309DA60041
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:11:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645027905; x=1676563905;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QiEFimDzeKGWwLXx9r2Bgeshi0IgC4yuwUNyNN4cbws=;
-  b=aasuoVh5IayuU8+Gq2ImQDSgEdbjtGQ3Pw3M3panBZNt0ax1L0IdM+DP
-   RPZJKLQcLSCgESWLogLfTetSK+ajMEd9WZKRXT2nwMcVRt56E4e5bjoXh
-   FbOScAwTh06J+nRTZoTLIZ5ixxdSrhtJW+FXcs/nBMECM+xb85hYJHM9u
-   2bUhmyVYPR8A0TXGlDUBpqr2BccB+jrptQamYvP+cuyQDbRZttaI6yirJ
-   q8Ze0URgS/bDchhqpBOXCgIKwNk5b7y4/1bPK3eM2GcjsGC+hURmo8FzY
-   Og/UhBTW4/rnLcHpCrgtkNT2lQU7D2RSWwihoRjKd/wtri791KBaFCX7x
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="231281805"
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="231281805"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 08:11:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="571354112"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 16 Feb 2022 08:11:42 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKMu6-000Avw-Ah; Wed, 16 Feb 2022 16:11:42 +0000
-Date:   Thu, 17 Feb 2022 00:10:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vadim Pasternak <vadimp@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jiri Pirko <jiri@nvidia.com>
-Subject: [jpirko-mlxsw:jiri_devel_linecards 29/43]
- drivers/net/ethernet/mellanox/mlxsw/core_hwmon.c:898:23: error:
- initialization of 'void (*)(struct mlxsw_core *, u8,  void *, void *)' {aka
- 'void (*)(struct mlxsw_core *, unsigned char,  void *, void *)'} from
- incompatible pointer type 'void (*)(struct ml...
-Message-ID: <202202170026.mb9LyVVk-lkp@intel.com>
+        Wed, 16 Feb 2022 11:13:54 -0500
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9325E1F6B91;
+        Wed, 16 Feb 2022 08:13:41 -0800 (PST)
+Received: by mail-qv1-f41.google.com with SMTP id p7so2766105qvk.11;
+        Wed, 16 Feb 2022 08:13:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=azl/iLsb26myp3zpwyeRv5JZYujJh0LXxE2G7XtXIR8=;
+        b=ZlI6F6ExorJPmowwEofDsxizZXSD4b+rtVpSdBigUkE8c6NnxouQ222XUwPOjpUkms
+         b+hO+m0ixieNNJbrWhlZ0Acd0KICXpNjn5rNxLJwrMzIsHwAzMUmwvW9gW9D4Y4wH1vE
+         P1Ky6g20NDOPhfXQn/PXKHnttIBF9X8P+WfQP4i8OXb/taIo2SDxV0YnaV/vUiHZa3e9
+         4yk5A2t2+QIGQvLmcS9X5RqBS3eMfXvmRSuFZJQO9sav1IdC97W9FhExWi9RZ2rdMug9
+         crLS2JOFMhPLCUTw1gaSdLwInGIHSRTWdzO/Xy6jSYTK5I9J+/HsshsF4zvnank2nwEq
+         cU6A==
+X-Gm-Message-State: AOAM533+Ua4s1SNaDyTtuByUPkMI4CL3N453Z19qJKl0xCfkG9P/PZPv
+        JApBx6JF8/LGvSGHr2081h/XSWlmsTCdzg==
+X-Google-Smtp-Source: ABdhPJyGH0FygRPJsxuUBPWKFoFaQdmcFa2SP2guTbMOLt2/LvJ9Z/RVSzok6rD0gGaujjxNiwM3bQ==
+X-Received: by 2002:a05:622a:196:b0:2ce:c222:b601 with SMTP id s22-20020a05622a019600b002cec222b601mr2507862qtw.179.1645028020167;
+        Wed, 16 Feb 2022 08:13:40 -0800 (PST)
+Received: from localhost (fwdproxy-ash-024.fbsv.net. [2a03:2880:20ff:18::face:b00c])
+        by smtp.gmail.com with ESMTPSA id e9sm22957221qtx.37.2022.02.16.08.13.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 08:13:38 -0800 (PST)
+From:   David Vernet <void@manifault.com>
+To:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@redhat.com, pmladek@suse.com, jikos@kernel.org,
+        mbenes@suse.cz, joe.lawrence@redhat.com, corbet@lwn.net
+Cc:     void@manifault.com, kernel-team@fb.com
+Subject: [PATCH v3] livepatch: Skip livepatch tests if ftrace cannot be configured
+Date:   Wed, 16 Feb 2022 08:11:01 -0800
+Message-Id: <20220216161100.3243100-1-void@manifault.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_linecards
-head:   5cb021512c3be7e03591497caeab474ecccfcd21
-commit: 0733fff985b276239955edfc5a42e929eced7437 [29/43] mlxsw: core_hwmon: Add interfaces for line card initialization and de-initialization
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220217/202202170026.mb9LyVVk-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jpirko/linux_mlxsw/commit/0733fff985b276239955edfc5a42e929eced7437
-        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
-        git fetch --no-tags jpirko-mlxsw jiri_devel_linecards
-        git checkout 0733fff985b276239955edfc5a42e929eced7437
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/ethernet/mellanox/mlxsw/
+livepatch has a set of selftests that are used to validate the behavior of
+the livepatching subsystem.  One of the testcases in the livepatch
+testsuite is test-ftrace.sh, which among other things, validates that
+livepatching gracefully fails when ftrace is disabled.  In the event that
+ftrace cannot be disabled using 'sysctl kernel.ftrace_enabled=0', the test
+will fail later due to it unexpectedly successfully loading the
+test_klp_livepatch module.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+While the livepatch selftests are careful to remove any of the livepatch
+test modules between testcases to avoid this situation, ftrace may still
+fail to be disabled if another trace is active on the system that was
+enabled with FTRACE_OPS_FL_PERMANENT.  For example, any active BPF programs
+that use trampolines will cause this test to fail due to the trampoline
+being implemented with register_ftrace_direct().  The following is an
+example of such a trace:
 
-All errors (new ones prefixed by >>):
+tcp_drop (1) R I D      tramp: ftrace_regs_caller+0x0/0x58
+(call_direct_funcs+0x0/0x30)
+        direct-->bpf_trampoline_6442550536_0+0x0/0x1000
 
->> drivers/net/ethernet/mellanox/mlxsw/core_hwmon.c:898:23: error: initialization of 'void (*)(struct mlxsw_core *, u8,  void *, void *)' {aka 'void (*)(struct mlxsw_core *, unsigned char,  void *, void *)'} from incompatible pointer type 'void (*)(struct mlxsw_core *, u8,  const struct mlxsw_linecard *, void *)' {aka 'void (*)(struct mlxsw_core *, unsigned char,  const struct mlxsw_linecard *, void *)'} [-Werror=incompatible-pointer-types]
-     898 |         .got_active = mlxsw_hwmon_got_active,
-         |                       ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/mellanox/mlxsw/core_hwmon.c:898:23: note: (near initialization for 'mlxsw_hwmon_event_ops.got_active')
-   drivers/net/ethernet/mellanox/mlxsw/core_hwmon.c:899:25: error: initialization of 'void (*)(struct mlxsw_core *, u8,  void *, void *)' {aka 'void (*)(struct mlxsw_core *, unsigned char,  void *, void *)'} from incompatible pointer type 'void (*)(struct mlxsw_core *, u8,  const struct mlxsw_linecard *, void *)' {aka 'void (*)(struct mlxsw_core *, unsigned char,  const struct mlxsw_linecard *, void *)'} [-Werror=incompatible-pointer-types]
-     899 |         .got_inactive = mlxsw_hwmon_got_inactive,
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/mellanox/mlxsw/core_hwmon.c:899:25: note: (near initialization for 'mlxsw_hwmon_event_ops.got_inactive')
-   cc1: some warnings being treated as errors
+In order to make the test more resilient to system state that is out of its
+control, this patch updates set_ftrace_enabled() to detect sysctl failures,
+and skip the testrun when appropriate.
 
-
-vim +898 drivers/net/ethernet/mellanox/mlxsw/core_hwmon.c
-
-   896	
-   897	static struct mlxsw_linecards_event_ops mlxsw_hwmon_event_ops = {
- > 898		.got_active = mlxsw_hwmon_got_active,
-   899		.got_inactive = mlxsw_hwmon_got_inactive,
-   900	};
-   901	
-
+Suggested-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: David Vernet <void@manifault.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+v3:
+  - Fixed a bug in v1 and v2 pointed out by Petr in
+    https://lore.kernel.org/all/20220209154934.5w5k5tqcqldbfjt3@dev0025.ash9.facebook.com/
+    wherein we'd incorrectly skip() in test-ftrace.sh when we expected to
+    fail to set sysctl due to ftrace being in-use by livepatch.
+  - Applied Petr's suggestions for the patch, which address the
+    aforementioned issue by adding a --fail flag to set_ftrace_enabled().
+    This allows callers to signal that they expect an invocation to fail.
+  - Updates the caller in test-ftrace.sh that expects the call to
+    set_ftrace_enabled() to fail, to pass this --fail flag.
+  - Slightly updates the commit summary to reflect that we only skip the
+    test "when appropriate" rather than if the call to sysctl fails.
+
+v2:
+  - Fix typo in newly added comment (s/permament/permanent).
+  - Adjust the location of the added newline to be before the new comment
+    rather than that the end of the function.
+  - Make the failure-path check a bit less brittle by checking for the
+    exact expected string, rather than specifically for "Device or resource
+    busy".
+
+ .../testing/selftests/livepatch/functions.sh  | 22 ++++++++++++++++---
+ .../selftests/livepatch/test-ftrace.sh        |  3 ++-
+ 2 files changed, 21 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index 846c7ed71556..9230b869371d 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -75,9 +75,25 @@ function set_dynamic_debug() {
+ }
+ 
+ function set_ftrace_enabled() {
+-	result=$(sysctl -q kernel.ftrace_enabled="$1" 2>&1 && \
+-		 sysctl kernel.ftrace_enabled 2>&1)
+-	echo "livepatch: $result" > /dev/kmsg
++	local can_fail=0
++	if [[ "$1" == "--fail" ]] ; then
++		can_fail=1
++		shift
++	fi
++
++	local err=$(sysctl -q kernel.ftrace_enabled="$1" 2>&1)
++	local result=$(sysctl --values kernel.ftrace_enabled)
++
++	if [[ "$result" != "$1" ]] ; then
++		if [[ $can_fail -eq 1 ]] ; then
++			echo "livepatch: $err" > /dev/kmsg
++			return
++		fi
++
++		skip "failed to set kernel.ftrace_enabled = $1"
++	fi
++
++	echo "livepatch: kernel.ftrace_enabled = $result" > /dev/kmsg
+ }
+ 
+ function cleanup() {
+diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
+index 552e165512f4..825540a5194d 100755
+--- a/tools/testing/selftests/livepatch/test-ftrace.sh
++++ b/tools/testing/selftests/livepatch/test-ftrace.sh
+@@ -25,7 +25,8 @@ if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]]
+ 	die "livepatch kselftest(s) failed"
+ fi
+ 
+-set_ftrace_enabled 0
++# Check that ftrace could not get disabled when a livepatch is enabled
++set_ftrace_enabled --fail 0
+ if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]] ; then
+ 	echo -e "FAIL\n\n"
+ 	die "livepatch kselftest(s) failed"
+-- 
+2.30.2
+

@@ -2,104 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946EF4B7D5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 03:21:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC404B7CEE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343499AbiBPCBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 21:01:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47626 "EHLO
+        id S245723AbiBPB4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 20:56:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245757AbiBPCA6 (ORCPT
+        with ESMTP id S243224AbiBPB42 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 21:00:58 -0500
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97490FBA42;
-        Tue, 15 Feb 2022 18:00:47 -0800 (PST)
-Received: by mail-ed1-x542.google.com with SMTP id q17so1372811edd.4;
-        Tue, 15 Feb 2022 18:00:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sconlSkVQr84rv45aJ7gGXdI67TbSdkvanV4Zo/rcjc=;
-        b=hLZszkoPv+HNK6bt+me14aeW2OrbCDmi6YgRFKks65sbnzrkpb91K6m5v47kmrVn1+
-         BCm+PpfO8XPVgQu2vGltQ6ptoytIAOjRZ27ZkQXHNtV4rjhuXFoHptYxZk7BwoO54NCm
-         6k4CA9cdCN2svdGlYES5pL/awM5kmlvGLYpiM1CJ2hW9yk8M3udRN2p4jo9xhZoDAMQ2
-         mNcKyRFxfoYkGA2xYIICvx8Lhbs2HgWDFhgR4/bpaVITfcONhl9+h+g9woXRqcIIxNVs
-         dN/VO4ZP0LVuuVlZJfGFFAoJJvBmb548eJ4cuC6dj7ZhwoBaAHPzjEE6xSf/IAjkyFSg
-         E3Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sconlSkVQr84rv45aJ7gGXdI67TbSdkvanV4Zo/rcjc=;
-        b=Kbl+P/A2whR/gueRExCWNrooLbLGjCzlYx5Lfv5ifik+Fxfz2JZZiOzG1AjPvEVeeS
-         4jF6zzpJ4zyFjZ3Zmpn9gCyV1jbKXAwEhDtx42D6RlJMV2l7hx3USyffJ1mKX2QaFo/Y
-         oHxCo9yrt1BbzORQsKDoArvSbpjeLYf9f//tQ9otMjBvr+jU7cp5WvVtuVt4i2L2qtiT
-         tBkTUAkuPEpgLWntokHr2DtLCFW2Bt0OCtWjBkP1HNB+SuQhXagzV5PrYQFGb0OXf0Qt
-         93+7P36PACoByXCQV7Pk/cO4Nsb2p9vR+tS9DC6iTWKf5tzNFvhYygco7bpREwhGpiDG
-         vNbQ==
-X-Gm-Message-State: AOAM532LbVAc+Aawj83qrfvlcSBd7luIVMI94x5KP2+Bn4pbEnUoheB7
-        11hfZoxh4MoixaTHx0SahkFstlbkHLP5z0NUq3E=
-X-Google-Smtp-Source: ABdhPJwyUho5csN/Qney7PVE0iId1O0lOc2NtN7/RpdmKciiVquz11cDbaMpq6sMoo0cOYsdD+kNlv6zhxD//ya0Fck=
-X-Received: by 2002:aa7:d7c8:0:b0:3f9:3b65:f2b3 with SMTP id
- e8-20020aa7d7c8000000b003f93b65f2b3mr603272eds.389.1644976846121; Tue, 15 Feb
- 2022 18:00:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20220215112812.2093852-1-imagedong@tencent.com>
- <20220215080452.2898495a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com> <71823500-3947-0b9a-d53f-5406feb244ac@kernel.org>
-In-Reply-To: <71823500-3947-0b9a-d53f-5406feb244ac@kernel.org>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Wed, 16 Feb 2022 09:55:34 +0800
-Message-ID: <CADxym3baA1j6soeS9frXd4Qi=7pG83jgdjJm5jj8MQ4oT16Lag@mail.gmail.com>
-Subject: Re: [PATCH net-next 00/19] net: add skb drop reasons for TCP, IP, dev
- and neigh
-To:     David Ahern <dsahern@kernel.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        David Miller <davem@davemloft.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, hawk@kernel.org,
-        John Fastabend <john.fastabend@gmail.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        Talal Ahmad <talalahmad@google.com>,
-        Kees Cook <keescook@chromium.org>, ilias.apalodimas@linaro.org,
-        Alexander Lobakin <alobakin@pm.me>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        atenart@kernel.org, bigeasy@linutronix.de,
-        Paolo Abeni <pabeni@redhat.com>, linyunsheng@huawei.com,
-        arnd@arndb.de, yajun.deng@linux.dev,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Willem de Bruijn <willemb@google.com>, vvs@virtuozzo.com,
-        Cong Wang <cong.wang@bytedance.com>, luiz.von.dentz@intel.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        flyingpeng@tencent.com
+        Tue, 15 Feb 2022 20:56:28 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8656BFABD7;
+        Tue, 15 Feb 2022 17:56:16 -0800 (PST)
+X-UUID: 3078d079a04c464ea31133e843022fb0-20220216
+X-UUID: 3078d079a04c464ea31133e843022fb0-20220216
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 891655515; Wed, 16 Feb 2022 09:56:13 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 16 Feb 2022 09:56:12 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 16 Feb 2022 09:56:12 +0800
+Message-ID: <3691cb945fdec02271d06cdb5fb8fac1350b49c8.camel@mediatek.com>
+Subject: Re: [v2,6/6] drm/mediatek: add display support for MT8186
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <airlied@linux.ie>,
+        <jassisinghbrar@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <yongqiang.niu@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <fparent@baylibre.com>, <linux-mediatek@lists.infradead.org>,
+        <hsinyi@chromium.org>, <linux-arm-kernel@lists.infradead.org>
+Date:   Wed, 16 Feb 2022 09:56:12 +0800
+In-Reply-To: <20220215075953.3310-7-rex-bc.chen@mediatek.com>
+References: <20220215075953.3310-1-rex-bc.chen@mediatek.com>
+         <20220215075953.3310-7-rex-bc.chen@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 12:09 AM David Ahern <dsahern@kernel.org> wrote:
->
-> On 2/15/22 9:04 AM, Jakub Kicinski wrote:
-> > There's no reason to send 19 patches at a time. Please try to send
-> > smaller series, that's are easier to review, under 10 patches
-> > preferably, certainly under 15.
->
-> +1. It takes time to review code paths and make sure the changes are
-> correct.
->
-> Send the first 9 as set; those target the TCP stack and then wait for
-> them to be merged before sending more.
+Hi, Rex:
 
-Ok, I'll make the amount of patches at a proper level, thanks!
+On Tue, 2022-02-15 at 15:59 +0800, Rex-BC Chen wrote:
+> From: Yongqiang Niu <yongqiang.niu@mediatek.com>
+> 
+> - Add driver data for MT8186 in mtk_drm_drv.c.
+> - Add mtk-disp-ovl and mt-disp-ovl-2l support for MT8186.
+> 
+> Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_disp_ovl.c | 20 +++++++++++++
+>  drivers/gpu/drm/mediatek/mtk_drm_drv.c  | 39
+> +++++++++++++++++++++++++
+>  2 files changed, 59 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+> b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+> index 2146299e5f52..5fa56c7b9f5f 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+> @@ -456,6 +456,22 @@ static const struct mtk_disp_ovl_data
+> mt8183_ovl_2l_driver_data = {
+>  	.fmt_rgb565_is_0 = true,
+>  };
+>  
+> +static const struct mtk_disp_ovl_data mt8186_ovl_driver_data = {
+> +	.addr = DISP_REG_OVL_ADDR_MT8173,
+> +	.gmc_bits = 10,
+> +	.layer_nr = 4,
+> +	.fmt_rgb565_is_0 = true,
+> +	.smi_id_en = true,
+> +};
+
+
+mt8186_ovl_driver_data is identical to  mt8192_ovl_driver_data, so drop
+this one and use mt8192_ovl_driver_data instead.
+
+> +
+> +static const struct mtk_disp_ovl_data mt8186_ovl_2l_driver_data = {
+> +	.addr = DISP_REG_OVL_ADDR_MT8173,
+> +	.gmc_bits = 10,
+> +	.layer_nr = 2,
+> +	.fmt_rgb565_is_0 = true,
+> +	.smi_id_en = true,
+> +};
+
+Ditto.
+
+Regards,
+CK
+
+> +
+>  static const struct mtk_disp_ovl_data mt8192_ovl_driver_data = {
+>  	.addr = DISP_REG_OVL_ADDR_MT8173,
+>  	.gmc_bits = 10,
+> @@ -479,8 +495,12 @@ static const struct of_device_id
+> mtk_disp_ovl_driver_dt_match[] = {
+>  	  .data = &mt8173_ovl_driver_data},
+>  	{ .compatible = "mediatek,mt8183-disp-ovl",
+>  	  .data = &mt8183_ovl_driver_data},
+> +	{ .compatible = "mediatek,mt8186-disp-ovl",
+> +	  .data = &mt8186_ovl_driver_data},
+>  	{ .compatible = "mediatek,mt8183-disp-ovl-2l",
+>  	  .data = &mt8183_ovl_2l_driver_data},
+> +	{ .compatible = "mediatek,mt8186-disp-ovl-2l",
+> +	  .data = &mt8186_ovl_2l_driver_data},
+>  	{ .compatible = "mediatek,mt8192-disp-ovl",
+>  	  .data = &mt8192_ovl_driver_data},
+>  	{ .compatible = "mediatek,mt8192-disp-ovl-2l",
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> index 6efb423ccc92..754b1be25d0d 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> @@ -158,6 +158,24 @@ static const enum mtk_ddp_comp_id
+> mt8183_mtk_ddp_ext[] = {
+>  	DDP_COMPONENT_DPI0,
+>  };
+>  
+> +static const enum mtk_ddp_comp_id mt8186_mtk_ddp_main[] = {
+> +	DDP_COMPONENT_OVL0,
+> +	DDP_COMPONENT_RDMA0,
+> +	DDP_COMPONENT_COLOR0,
+> +	DDP_COMPONENT_CCORR,
+> +	DDP_COMPONENT_AAL0,
+> +	DDP_COMPONENT_GAMMA,
+> +	DDP_COMPONENT_POSTMASK0,
+> +	DDP_COMPONENT_DITHER,
+> +	DDP_COMPONENT_DSI0,
+> +};
+> +
+> +static const enum mtk_ddp_comp_id mt8186_mtk_ddp_ext[] = {
+> +	DDP_COMPONENT_OVL_2L0,
+> +	DDP_COMPONENT_RDMA1,
+> +	DDP_COMPONENT_DPI0,
+> +};
+> +
+>  static const enum mtk_ddp_comp_id mt8192_mtk_ddp_main[] = {
+>  	DDP_COMPONENT_OVL0,
+>  	DDP_COMPONENT_OVL_2L0,
+> @@ -221,6 +239,13 @@ static const struct mtk_mmsys_driver_data
+> mt8183_mmsys_driver_data = {
+>  	.ext_len = ARRAY_SIZE(mt8183_mtk_ddp_ext),
+>  };
+>  
+> +static const struct mtk_mmsys_driver_data mt8186_mmsys_driver_data =
+> {
+> +	.main_path = mt8186_mtk_ddp_main,
+> +	.main_len = ARRAY_SIZE(mt8186_mtk_ddp_main),
+> +	.ext_path = mt8186_mtk_ddp_ext,
+> +	.ext_len = ARRAY_SIZE(mt8186_mtk_ddp_ext),
+> +};
+> +
+>  static const struct mtk_mmsys_driver_data mt8192_mmsys_driver_data =
+> {
+>  	.main_path = mt8192_mtk_ddp_main,
+>  	.main_len = ARRAY_SIZE(mt8192_mtk_ddp_main),
+> @@ -463,6 +488,8 @@ static const struct of_device_id
+> mtk_ddp_comp_dt_ids[] = {
+>  	  .data = (void *)MTK_DISP_MUTEX },
+>  	{ .compatible = "mediatek,mt8183-disp-mutex",
+>  	  .data = (void *)MTK_DISP_MUTEX },
+> +	{ .compatible = "mediatek,mt8186-disp-mutex",
+> +	  .data = (void *)MTK_DISP_MUTEX },
+>  	{ .compatible = "mediatek,mt8192-disp-mutex",
+>  	  .data = (void *)MTK_DISP_MUTEX },
+>  	{ .compatible = "mediatek,mt8173-disp-od",
+> @@ -475,14 +502,20 @@ static const struct of_device_id
+> mtk_ddp_comp_dt_ids[] = {
+>  	  .data = (void *)MTK_DISP_OVL },
+>  	{ .compatible = "mediatek,mt8183-disp-ovl",
+>  	  .data = (void *)MTK_DISP_OVL },
+> +	{ .compatible = "mediatek,mt8186-disp-ovl",
+> +	  .data = (void *)MTK_DISP_OVL },
+>  	{ .compatible = "mediatek,mt8192-disp-ovl",
+>  	  .data = (void *)MTK_DISP_OVL },
+>  	{ .compatible = "mediatek,mt8183-disp-ovl-2l",
+>  	  .data = (void *)MTK_DISP_OVL_2L },
+> +	{ .compatible = "mediatek,mt8186-disp-ovl-2l",
+> +	  .data = (void *)MTK_DISP_OVL_2L },
+>  	{ .compatible = "mediatek,mt8192-disp-ovl-2l",
+>  	  .data = (void *)MTK_DISP_OVL_2L },
+>  	{ .compatible = "mediatek,mt8192-disp-postmask",
+>  	  .data = (void *)MTK_DISP_POSTMASK },
+> +	{ .compatible = "mediatek,mt8186-disp-postmask",
+> +	  .data = (void *)MTK_DISP_POSTMASK},
+>  	{ .compatible = "mediatek,mt2701-disp-pwm",
+>  	  .data = (void *)MTK_DISP_BLS },
+>  	{ .compatible = "mediatek,mt8167-disp-pwm",
+> @@ -511,12 +544,16 @@ static const struct of_device_id
+> mtk_ddp_comp_dt_ids[] = {
+>  	  .data = (void *)MTK_DPI },
+>  	{ .compatible = "mediatek,mt8183-dpi",
+>  	  .data = (void *)MTK_DPI },
+> +	{ .compatible = "mediatek,mt8186-dpi",
+> +	  .data = (void *)MTK_DPI },
+>  	{ .compatible = "mediatek,mt2701-dsi",
+>  	  .data = (void *)MTK_DSI },
+>  	{ .compatible = "mediatek,mt8173-dsi",
+>  	  .data = (void *)MTK_DSI },
+>  	{ .compatible = "mediatek,mt8183-dsi",
+>  	  .data = (void *)MTK_DSI },
+> +	{ .compatible = "mediatek,mt8186-dsi",
+> +	  .data = (void *)MTK_DSI },
+>  	{ }
+>  };
+>  
+> @@ -533,6 +570,8 @@ static const struct of_device_id mtk_drm_of_ids[]
+> = {
+>  	  .data = &mt8173_mmsys_driver_data},
+>  	{ .compatible = "mediatek,mt8183-mmsys",
+>  	  .data = &mt8183_mmsys_driver_data},
+> +	{ .compatible = "mediatek,mt8186-mmsys",
+> +	  .data = &mt8186_mmsys_driver_data},
+>  	{ .compatible = "mediatek,mt8192-mmsys",
+>  	  .data = &mt8192_mmsys_driver_data},
+>  	{ }
+

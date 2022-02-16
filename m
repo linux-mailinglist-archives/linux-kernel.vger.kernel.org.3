@@ -2,107 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CA74B8D42
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:06:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A08B64B8D46
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:07:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235965AbiBPQGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 11:06:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60006 "EHLO
+        id S235970AbiBPQHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 11:07:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235944AbiBPQGn (ORCPT
+        with ESMTP id S235942AbiBPQHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 11:06:43 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939024925A;
-        Wed, 16 Feb 2022 08:06:27 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id A46EF1F450A4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645027586;
-        bh=aefrMXzupsLGu5Ex9arbBV1OgQCjmS+CBwjP8HtAD84=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cqo4f+MCDMkcgOCnLgpDF2cDT0hDDpHza/7IDHJhLT5XOWGpgB/i9ooaOOmglHiE0
-         WaErsHsIw1PiM+OynCDAdzSo2fYKAvgRhAS+sb6RUiaoGMrtKktkH6mWP1Tr56h4qG
-         GdzKJPC8yN7m49uYqOCrJAlNkXWcZVIPe6zPk/SYqv5qyK0OxaDfPmeTwINA8c+cZV
-         221lkdkjEwWk2dMlc/XpBKJulMep5vaFWrVu0HlvpCY2Ag3bu/s9XQtcxi3mQGtU9K
-         4dwcRMqLI2pLQNXphjzNhsOUfG77I/4QiHZukTz3u5qJv59xvdEiS5GBYYxkrPuIIE
-         YwjpvwvjGFLuQ==
-Message-ID: <b531eeca-40e8-d759-5579-59567eb5af84@collabora.com>
-Date:   Wed, 16 Feb 2022 17:06:22 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] rpmsg: mtk_rpmsg: Fix circular locking dependency
+        Wed, 16 Feb 2022 11:07:19 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0F42DE9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:07:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645027627; x=1676563627;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Gbm/qLf0bhmHpiUm7cUvEmurhPnWsvc5iBPuaTsL0Do=;
+  b=PNYnoeirRyFMQHIcNY0G5ijGbgQlGX6/ErzoH+x+fqgadc2Z+mg52K75
+   jMfao0IbVNnMNTDouxRWy/AGNvXr1ggDAjl+jkI+852x8QoSa5DWw7/mj
+   YZlcosLtbwEagDyegxhq4BFLbBT7IZnmogGIM0r207yUAjI7wQMsQ385M
+   M=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 16 Feb 2022 08:07:07 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 08:07:06 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 16 Feb 2022 08:07:06 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 16 Feb 2022 08:07:06 -0800
+Received: from nalasex01a.na.qualcomm.com ([fe80::a58b:cd8b:e019:f01d]) by
+ nalasex01a.na.qualcomm.com ([fe80::a58b:cd8b:e019:f01d%4]) with mapi id
+ 15.02.0922.019; Wed, 16 Feb 2022 08:07:06 -0800
+From:   "Nitin Rawat (QUIC)" <quic_nitirawa@quicinc.com>
+To:     Christoph Hellwig <hch@infradead.org>,
+        Vidya Sagar <vidyas@nvidia.com>
+CC:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Sajida Bhanu (Temp) (QUIC)" <quic_c_sbhanu@quicinc.com>
+Subject: RE: [PATCH v3] nvme/pci: Add quick suspend quirk for Sc7280 Platform
+Thread-Topic: [PATCH v3] nvme/pci: Add quick suspend quirk for Sc7280 Platform
+Thread-Index: AQHYHsBOpLTvLkaTP0STBN0OK3zww6yOaCmAgAfvxCA=
+Date:   Wed, 16 Feb 2022 16:07:05 +0000
+Message-ID: <9b291987cf914f119788c42b32a08a12@quicinc.com>
+References: <1644526408-10834-1-git-send-email-quic_nitirawa@quicinc.com>
+ <YgYAs7R/1G2Y2kpz@infradead.org>
+In-Reply-To: <YgYAs7R/1G2Y2kpz@infradead.org>
+Accept-Language: en-US
 Content-Language: en-US
-To:     bjorn.andersson@linaro.org
-Cc:     mathieu.poirier@linaro.org, matthias.bgg@gmail.com,
-        pihsun@chromium.org, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20220114144737.375621-1-angelogioacchino.delregno@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220114144737.375621-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.216.23.73]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 14/01/22 15:47, AngeloGioacchino Del Regno ha scritto:
-> During execution of the worker that's used to register rpmsg devices
-> we are safely locking the channels mutex but, when creating a new
-> endpoint for such devices, we are registering a IPI on the SCP, which
-> then makes the SCP to trigger an interrupt, lock its own mutex and in
-> turn register more subdevices.
-> This creates a circular locking dependency situation, as the mtk_rpmsg
-> channels_lock will then depend on the SCP IPI lock.
-> 
-> [   18.014514]  Possible unsafe locking scenario:
-> [   18.014515]        CPU0                    CPU1
-> [   18.014517]        ----                    ----
-> [   18.045467]   lock(&mtk_subdev->channels_lock);
-> [   18.045474]                                lock(&scp->ipi_desc[i].lock);
-> [   18.228399]                                lock(&mtk_subdev->channels_lock);
-> [   18.228405]   lock(&scp->ipi_desc[i].lock);
-> [   18.264405]
-> 
-> To solve this, simply unlock the channels_lock mutex before calling
-> mtk_rpmsg_register_device() and relock it right after, as safety is
-> still ensured by the locking mechanism that happens right after
-> through SCP.
-> Notably, mtk_rpmsg_register_device() does not even require locking.
-> 
-> Fixes: 7017996951fd ("rpmsg: add rpmsg support for mt8183 SCP.")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Hi Christoph/Keith/Rafael
 
-Friendly ping for an important fix... :)
+Since we are giving control to PCIe (NVMe power rails control), it can vary=
+ from platform to platform.
+More over, PCIe driver doesn't control these power rails directly from PCIe=
+ driver, they tie nvme supply with one of the pcie supply and control them =
+together.=20
+So i think it would be better to either have quirk based on platform or alw=
+ays setting simple suspend and platform which needs full suspend can update=
+ it through some means.=20
 
-> ---
->   drivers/rpmsg/mtk_rpmsg.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/rpmsg/mtk_rpmsg.c b/drivers/rpmsg/mtk_rpmsg.c
-> index 5b4404b8be4c..d1213c33da20 100644
-> --- a/drivers/rpmsg/mtk_rpmsg.c
-> +++ b/drivers/rpmsg/mtk_rpmsg.c
-> @@ -234,7 +234,9 @@ static void mtk_register_device_work_function(struct work_struct *register_work)
->   		if (info->registered)
->   			continue;
->   
-> +		mutex_unlock(&subdev->channels_lock);
->   		ret = mtk_rpmsg_register_device(subdev, &info->info);
-> +		mutex_lock(&subdev->channels_lock);
->   		if (ret) {
->   			dev_err(&pdev->dev, "Can't create rpmsg_device\n");
->   			continue;
+Based on below link, Looks like this can be across platform ...vidya also m=
+ention similar concern for tegra platform. =20
+https://lore.kernel.org/lkml/20220209202639.GB1616420@dhcp-10-100-145-180.w=
+dc.com/T/#md10b0108b3ccbb1254fe0ad8dbb6e98044a8820b
 
+Please let me know your opinions.
 
+Thanks,
+Nitin
+-----Original Message-----
+From: Christoph Hellwig <hch@infradead.org>=20
+Sent: Friday, February 11, 2022 11:53 AM
+To: Nitin Rawat (QUIC) <quic_nitirawa@quicinc.com>
+Cc: Keith Busch <kbusch@kernel.org>; Jens Axboe <axboe@fb.com>; Sagi Grimbe=
+rg <sagi@grimberg.me>; linux-nvme@lists.infradead.org; linux-kernel@vger.ke=
+rnel.org; Sajida Bhanu (Temp) (QUIC) <quic_c_sbhanu@quicinc.com>
+Subject: Re: [PATCH v3] nvme/pci: Add quick suspend quirk for Sc7280 Platfo=
+rm
+
+On Fri, Feb 11, 2022 at 02:23:28AM +0530, Nitin Rawat wrote:
+> Enable quick suspend quirks for Sc7280 platform, where power to nvme=20
+> device is removed during suspend-resume process. This is done to avoid=20
+> the failure dring resume.
+
+You need to sort this out in the PCI and PM layers.  The broken platform wi=
+ll also affect all other PCIe drivers and not just nvme.

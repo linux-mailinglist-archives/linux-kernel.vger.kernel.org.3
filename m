@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD4774B7F86
+	by mail.lfdr.de (Postfix) with ESMTP id 51E444B7F85
 	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 05:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344407AbiBPEhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 23:37:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52122 "EHLO
+        id S1344409AbiBPEhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 23:37:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344376AbiBPEhL (ORCPT
+        with ESMTP id S1344406AbiBPEhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 23:37:11 -0500
+        Tue, 15 Feb 2022 23:37:15 -0500
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAE2EFF99
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 20:37:00 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id x1-20020a25a001000000b0061c64ee0196so1873816ybh.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 20:37:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721DEF1EBB
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 20:37:04 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id h6-20020a253a06000000b0061de83305f2so1802853yba.19
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 20:37:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=3psUtytUo6C/8Z0JrCprvFcq0BsJKPsjqLf/EYmVQiY=;
-        b=R61yA4MuvnJnZisJJDkQCcKXaqxVdWCN7piOxfw0ApsloLfargZcrWV2ECFhBjxk5L
-         FW/60zSo83AP+wRNDJX2qCoAJtiG8S9DheCMRJfV5gmAT9KJjstOQsoq4ZLCQdtJkEW3
-         v6Y9Qutmhj1MnWkFdlZiyRPVD/QitEae4P5kqAT5+1ornj2CGcEaN0vPO6Vd80EjsGXC
-         w/Vo2xHAV3FVNI8no0ogSAdiYl+38s3jflv7tasY9iVoyk4g2ztRcHV8pVS/QxnIu5Ky
-         ceJBeKzQ0joXBKCkmrBZ+MZWJFGsvF1iOVWjhfFqFOZPK/SrIkKehcHel5rjRu4FcQap
-         f4YA==
+        bh=bYXXjRPc3+amq4nUn2zKlGGGB3ySddzbVS7PLxHhbGI=;
+        b=AnyhfMfehc17BivQ/iPlxJOqaloiNeAlCKUVWzYDr2j6PopYBv8Ng6e396M+41Lo5/
+         ILN70TE/GTQs8eFLLcavMUNDqUGxPrHfzJ7YhTtbNYkMJ2eUH0Ae7YmulGlJXed4VqyF
+         NVb5MISdL6pKgQvJlo81UCNr+3s3SYhuVpy/fMyq03OJp4kWieR/Kmh81YxFDIBi0UlN
+         Hxcr2DDYcw4mbQia8Zofh0E1kzQmGU000vSekQM2eWUqdQX8oA1fHt4l32Gsv7yNduzr
+         HkBmRDzMTk4XP1Qe/QaDdnDlYyQuWKhyTtMugsLmbAkXF9QgnvEtuAL+4uXLl89ZF3n3
+         3cDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=3psUtytUo6C/8Z0JrCprvFcq0BsJKPsjqLf/EYmVQiY=;
-        b=rKOheypZZWqQES01r2f1zBlGUVpRh8R9GC6NGIV3I1PoFJKvZvd2xJM7BCxexc+dcL
-         cBhcLA2JNc9uEFmruZf0nVlPrN92aUWAUURNgx/mxhw8rpifOd8x0gNAzr5htMicCS5Q
-         wmord15L+lX70hCJuvl/AWjA0FECVePTSo0haOeKrWN5KmL5ceYB4/l2sZ7lChQcT+5Q
-         plhwhj4X2NTcp7kWqppOA0KhnKyxptjj5iF+2wfqlb3dYLa0j2UCTEbLuIB6Ozq2t2IV
-         agBGISM+HZDbjPtL47rPX3PvZm3DsfPmlCc1VfkM0a0/QmTTKXIu9MtIwXBOTjacmZZA
-         KLnQ==
-X-Gm-Message-State: AOAM532wgCQhjrc+BW7QkOacd9pL+HhOlW6tspsHr0ABCkxvLhJcm5Do
-        oRYtRLI0FWvLNBFEl9ZyMAerIoPVEfbI
-X-Google-Smtp-Source: ABdhPJyXmG4jjevHJQteNz+ljtX+93eYeDh1wIh5I4xce+CKQryCSEl6xChYGFlGey+mXlpDLbDktU12iaDR
+        bh=bYXXjRPc3+amq4nUn2zKlGGGB3ySddzbVS7PLxHhbGI=;
+        b=qPxVFeXNOSF8uu3maDpa/0GYlQWLASdYMCJrES1J2jhgJGa1X+QwbOIjouPp3xXZUM
+         Kvkm+AkmYOMoljj+IkZKw7O2yZsOs4esAQ4o2PeYNi93LK4U+XVhdcz/f01AGis/FH7Y
+         ccVRm0CHHdTReruPtkA1Wq8I9xaRoAzEn6VGHqPyXpEO06KX0btlUNguvbk93ruWh663
+         EXWdoAtga904uj5Y2WMowA0gWQBfKsxgdNUhfpRolvKe02snp///dCb5IfzV5+lAo7JN
+         9beCpIofWePGFIjkGWPNG7nENPHcIjFhMvW1lR6/6Bj9yHCtO7ueCze3Qf3iDZX5pKAL
+         kCPQ==
+X-Gm-Message-State: AOAM533DvZMp9gInBWh7qhbzm2qJjwUV452dPvtZdqsiS+w31Jya/Jbj
+        3G+cdG9hqZAG4jRjBPbp5dURV4OvGE/B
+X-Google-Smtp-Source: ABdhPJw95YErySPO3wArh7ukWmaemcssepqzKqsZZ6nlYXHHAxFhSFXHWC8WbsD9bG5pE/NAuv1pbQV0/6MJ
 X-Received: from tzungbi-z840.tpe.corp.google.com ([2401:fa00:1:10:8ce7:5b2:9787:1a0b])
- (user=tzungbi job=sendgmr) by 2002:a05:6902:110b:b0:61b:3576:95d1 with SMTP
- id o11-20020a056902110b00b0061b357695d1mr692277ybu.694.1644986219311; Tue, 15
- Feb 2022 20:36:59 -0800 (PST)
-Date:   Wed, 16 Feb 2022 12:36:36 +0800
+ (user=tzungbi job=sendgmr) by 2002:a25:dfd0:0:b0:61e:1ddf:a07e with SMTP id
+ w199-20020a25dfd0000000b0061e1ddfa07emr756178ybg.242.1644986223292; Tue, 15
+ Feb 2022 20:37:03 -0800 (PST)
+Date:   Wed, 16 Feb 2022 12:36:37 +0800
 In-Reply-To: <20220216043639.3839185-1-tzungbi@google.com>
-Message-Id: <20220216043639.3839185-3-tzungbi@google.com>
+Message-Id: <20220216043639.3839185-4-tzungbi@google.com>
 Mime-Version: 1.0
 References: <20220216043639.3839185-1-tzungbi@google.com>
 X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH v4 2/5] platform/chrome: cros_ec: remove unused variable `was_wake_device`
+Subject: [PATCH v4 3/5] platform/chrome: cros_ec: initialize `wake_enabled` in cros_ec_register()
 From:   Tzung-Bi Shih <tzungbi@google.com>
 To:     bleung@chromium.org, groeck@chromium.org
 Cc:     chrome-platform@lists.linux.dev, tzungbi@google.com,
@@ -68,57 +68,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Prashant Malani <pmalani@chromium.org>
+`wake_enabled` indicates cros_ec_resume() needs to call
+disable_irq_wake() to undo enable_irq_wake() in cros_ec_suspend().
+
+Initialize `wake_enabled` in cros_ec_register() and determine the flag
+in cros_ec_suspend() instead of reset-after-used in cros_ec_resume().
+
 Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
 ---
-No changes from v3.
+Changes from v3:
+(https://patchwork.kernel.org/project/chrome-platform/patch/20220209095703.517608-4-tzungbi@google.com/)
+- Change the patch title.
+- Simplify by initializing wake_enabled in cros_ec_register().
 
-Changes from v2:
-(https://patchwork.kernel.org/project/chrome-platform/patch/20220209045035.380615-3-tzungbi@google.com/)
-- Add pmalani's R-b tag.
-- Remove redundant commit message.
+No changes from v2.
 
 Changes from v1:
 (https://lore.kernel.org/lkml/20220125101527.1812887-1-tzungbi@google.com/T/#u)
 - Use imperative mood in commit message.
 
- drivers/platform/chrome/cros_ec.c           | 1 -
- include/linux/platform_data/cros_ec_proto.h | 3 ---
- 2 files changed, 4 deletions(-)
+ drivers/platform/chrome/cros_ec.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
-index ff2a24b0c611..25cd8df6e7b0 100644
+index 25cd8df6e7b0..b6604a9ab315 100644
 --- a/drivers/platform/chrome/cros_ec.c
 +++ b/drivers/platform/chrome/cros_ec.c
-@@ -344,7 +344,6 @@ int cros_ec_suspend(struct cros_ec_device *ec_dev)
- 		ec_dev->wake_enabled = !enable_irq_wake(ec_dev->irq);
+@@ -191,6 +191,7 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
+ 	ec_dev->max_passthru = 0;
+ 	ec_dev->ec = NULL;
+ 	ec_dev->pd = NULL;
++	ec_dev->wake_enabled = false;
  
- 	disable_irq(ec_dev->irq);
--	ec_dev->was_wake_device = ec_dev->wake_enabled;
- 	ec_dev->suspended = true;
+ 	ec_dev->din = devm_kzalloc(dev, ec_dev->din_size, GFP_KERNEL);
+ 	if (!ec_dev->din)
+@@ -383,10 +384,9 @@ int cros_ec_resume(struct cros_ec_device *ec_dev)
+ 		dev_dbg(ec_dev->dev, "Error %d sending resume event to ec",
+ 			ret);
  
- 	return 0;
-diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
-index df3c78c92ca2..c65971ec90ea 100644
---- a/include/linux/platform_data/cros_ec_proto.h
-+++ b/include/linux/platform_data/cros_ec_proto.h
-@@ -76,8 +76,6 @@ struct cros_ec_command {
-  * struct cros_ec_device - Information about a ChromeOS EC device.
-  * @phys_name: Name of physical comms layer (e.g. 'i2c-4').
-  * @dev: Device pointer for physical comms device
-- * @was_wake_device: True if this device was set to wake the system from
-- *                   sleep at the last suspend.
-  * @cros_class: The class structure for this device.
-  * @cmd_readmem: Direct read of the EC memory-mapped region, if supported.
-  *     @offset: Is within EC_LPC_ADDR_MEMMAP region.
-@@ -137,7 +135,6 @@ struct cros_ec_device {
- 	/* These are used by other drivers that want to talk to the EC */
- 	const char *phys_name;
- 	struct device *dev;
--	bool was_wake_device;
- 	struct class *cros_class;
- 	int (*cmd_readmem)(struct cros_ec_device *ec, unsigned int offset,
- 			   unsigned int bytes, void *dest);
+-	if (ec_dev->wake_enabled) {
++	if (ec_dev->wake_enabled)
+ 		disable_irq_wake(ec_dev->irq);
+-		ec_dev->wake_enabled = 0;
+-	}
++
+ 	/*
+ 	 * Let the mfd devices know about events that occur during
+ 	 * suspend. This way the clients know what to do with them.
 -- 
 2.35.1.265.g69c8d7142f-goog
 

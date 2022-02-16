@@ -2,144 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218144B8A76
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F8A4B8A77
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234635AbiBPNjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:39:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43258 "EHLO
+        id S234644AbiBPNj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 08:39:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234008AbiBPNje (ORCPT
+        with ESMTP id S229850AbiBPNj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:39:34 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8C02ABD13;
-        Wed, 16 Feb 2022 05:39:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=tjvtg6e6rfEBajxf7gEQ25jMTSa3cr331jVbNJooOA0=; b=fRzh+dlUNwjRlxwNg3p81SGp3B
-        iStgmRxGiJO6bKTyqJwOLl8g3KNUsuNbBJrLRQ7UilHK2F8X5sVUfqqLvgT4IA+wsrJTra5I0v0qY
-        dyZ7dqySINcTzpwqnM0bGq/bbzCr879Q3scd+JS3+0YPwLeEp9erYpO0YXsup7ValRWBOpdquQBjz
-        iFOyTAvMnuNfMkyx+WuYaKrh39IiHrhOcAKz5cLMGwOkIAMjOHDgej31lVHn85+QZtw0iya38+4ti
-        pbyviRSYF7YV5Wuln6MXHB4eQXiXuZyPeAkYP2kV5rkjGEdQPeho+Dsp3yOU3Ccq5Yqw6OonUeJHf
-        BSJUVR5g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57284)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nKKWP-0003ue-5J; Wed, 16 Feb 2022 13:39:05 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nKKWK-00006Q-7J; Wed, 16 Feb 2022 13:39:00 +0000
-Date:   Wed, 16 Feb 2022 13:39:00 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [RFC net-next 9/9] net: dsa: mv88e6xxx: MST Offloading
-Message-ID: <Ygz+dNz1YvyiFpxa@shell.armlinux.org.uk>
-References: <20220216132934.1775649-1-tobias@waldekranz.com>
- <20220216132934.1775649-10-tobias@waldekranz.com>
+        Wed, 16 Feb 2022 08:39:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380C82AB53F;
+        Wed, 16 Feb 2022 05:39:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0D82617C5;
+        Wed, 16 Feb 2022 13:39:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22F37C004E1;
+        Wed, 16 Feb 2022 13:39:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645018783;
+        bh=fZOgObgmg56ZT81wOV/Cmg29xsNwt6wScoUupkYUFKM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L2xORViD3f7Lvsd9z6F42fZWrXWpJ0ruxfaptxIeD4trXCGvefnIK6GvLJ1m3LhK2
+         IeX86mrq9t2tQqgNNXPv5Pz43u0my9zZzdtE1tew6+MPwLXM5RCPuKpdmex6ImhDOX
+         fYR0X/XZZLfQZDWXlY4OADzbuJ4z0+1JWhSLBSsZRe7h4gQbGSwsWVv11jyuPo7S77
+         tYBPp4xfTLq0kVCH7ueBCZgiLhZgBb+VqNNbuvfI86zWwyTw3aud5YXQ0OUZKasclS
+         kKxejozS7lb1T5DfSULXkKByJ7WzNyoMpI3xD6AMDUzDZx0Jd7I+cXE1tbQcWinXhs
+         db4GcfBbBJcGA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 94D03400FE; Wed, 16 Feb 2022 10:39:41 -0300 (-03)
+Date:   Wed, 16 Feb 2022 10:39:41 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     tangmeng <tangmeng@uniontech.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] perf tools: Remove redundant ret variable
+Message-ID: <Ygz+nQksMpsorTC8@kernel.org>
+References: <20220216030425.27779-1-tangmeng@uniontech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220216132934.1775649-10-tobias@waldekranz.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220216030425.27779-1-tangmeng@uniontech.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Em Wed, Feb 16, 2022 at 11:04:24AM +0800, tangmeng escreveu:
+> Return value from hist_entry_iter__add() directly instead
+> of taking this in another redundant variable.
 
-On Wed, Feb 16, 2022 at 02:29:34PM +0100, Tobias Waldekranz wrote:
-> +static int mv88e6xxx_sid_new(struct mv88e6xxx_chip *chip, u8 *sid)
-> +{
-> +	DECLARE_BITMAP(busy, MV88E6XXX_N_SID) = { 0 };
-> +	struct mv88e6xxx_mst *mst;
-> +
-> +	set_bit(0, busy);
-> +
-> +	list_for_each_entry(mst, &chip->msts, node) {
-> +		set_bit(mst->stu.sid, busy);
-> +	}
+Thanks, applied.
 
-Do you need these set_bit() operations to be atomic? Would __set_bit()
-produce better code?
+- Arnaldo
 
-> +
-> +	*sid = find_first_zero_bit(busy, MV88E6XXX_N_SID);
-> +
-> +	return (*sid >= mv88e6xxx_max_sid(chip)) ? -ENOSPC : 0;
-
-Hmm. Let's hope that mv88e6xxx_max_sid() never returns a value larger
-than MV88E6XXX_N_SID.
-
-> +}
-> +
-...
-> +static int mv88e6xxx_sid_get(struct mv88e6xxx_chip *chip, struct net_device *br,
-> +			     u16 mstid, u8 *sid)
-> +{
-> +	struct mv88e6xxx_mst *mst;
-> +	int err;
-> +
-> +	if (!br)
-> +		return 0;
-> +
-> +	if (!mv88e6xxx_has_stu(chip))
-> +		return -EOPNOTSUPP;
-> +
-> +	list_for_each_entry(mst, &chip->msts, node) {
-> +		if (mst->br == br && mst->mstid == mstid) {
-> +			refcount_inc(&mst->refcnt);
-> +			*sid = mst->stu.sid;
-> +			return 0;
-> +		}
-> +	}
-> +
-> +	err = mv88e6xxx_sid_new(chip, sid);
-> +	if (err)
-> +		return err;
-> +
-> +	mst = kzalloc(sizeof(*mst), GFP_KERNEL);
-> +	if (!mst)
-> +		return -ENOMEM;
-> +
-> +	INIT_LIST_HEAD(&mst->node);
-
-There is no need to initialise the node if you're then going to be
-adding it to the list.
-
-> +	refcount_set(&mst->refcnt, 1);
-> +	mst->br = br;
-> +	mst->mstid = mstid;
-> +	mst->stu.valid = true;
-> +	mst->stu.sid = *sid;
-> +	list_add_tail(&mst->node, &chip->msts);
-> +	return mv88e6xxx_stu_loadpurge(chip, &mst->stu);
-
-I haven't checked what the locking is here - I hope it's not possible
-for two of these to run concurrently.
-
-Thanks.
+ 
+> Signed-off-by: tangmeng <tangmeng@uniontech.com>
+> ---
+>  tools/perf/builtin-annotate.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
+> index 490bb9b8cf17..e347b8ef088f 100644
+> --- a/tools/perf/builtin-annotate.c
+> +++ b/tools/perf/builtin-annotate.c
+> @@ -190,7 +190,6 @@ static int process_branch_callback(struct evsel *evsel,
+>  	};
+>  
+>  	struct addr_location a;
+> -	int ret;
+>  
+>  	if (machine__resolve(machine, &a, sample) < 0)
+>  		return -1;
+> @@ -203,8 +202,7 @@ static int process_branch_callback(struct evsel *evsel,
+>  
+>  	hist__account_cycles(sample->branch_stack, al, sample, false, NULL);
+>  
+> -	ret = hist_entry_iter__add(&iter, &a, PERF_MAX_STACK_DEPTH, ann);
+> -	return ret;
+> +	return hist_entry_iter__add(&iter, &a, PERF_MAX_STACK_DEPTH, ann);
+>  }
+>  
+>  static bool has_annotation(struct perf_annotate *ann)
+> -- 
+> 2.20.1
+> 
+> 
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+
+- Arnaldo

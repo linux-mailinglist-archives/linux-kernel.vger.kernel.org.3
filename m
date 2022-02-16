@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC7D4B82E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9184B82F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbiBPIZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 03:25:46 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34914 "EHLO
+        id S230181AbiBPI1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 03:27:47 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:43840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiBPIZo (ORCPT
+        with ESMTP id S229851AbiBPI1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 03:25:44 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5B927B990
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:25:32 -0800 (PST)
+        Wed, 16 Feb 2022 03:27:44 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950D3CA
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:27:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644999932; x=1676535932;
+  t=1645000052; x=1676536052;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7siHgFyWk7oT11ovp/rh7WSrJ8iwJmc0MEtzfxP97Ng=;
-  b=LDERVOFD6+r71NmoO+Iv03bVeqautU1poA0u5KqvDaJpuoBH0Ga+Tytq
-   ncMQ2sT15c+jq4o0TsarHyXtR/y7uvvTsLit6shJ9bRNnjAkyI0Wuqk+K
-   r00GMhvajc0ctUhnDoasZht5FwncNIumyyh9wy2C92kXS7KwzkUS4XU8+
-   6X8W3qXwgqB4o3dK7kfFoS/+9Tvs7TP1W61YXeCoYjLfsl8SYvKOsdY9I
-   ienr3mETA31yTrWzmEWx07qgs4a9XAHJdawHAcBrr21luavCRTq6jW0Q8
-   qxrWliHTc3A5u84T5qpYKww6Fts0sH2r/GxEdySUKoHQP2KTjwqxKFVnD
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="237956198"
+  bh=dA/rS+M9aCB3qdQBqlUeUkzdz4VMGgfW2hykH5H4eMU=;
+  b=BrBiPeucQcrsoeLCtGgX8qGOSdMxJTiuC/J4dgaY8ijqQj9bTb4yzjWO
+   6ey493Ft9WEi6seRzg1FjEyIXOcWDQhqLEoWLCh2PFcCg7t5LWIEw+c2L
+   LYZZo/9EEEv2AcBOdhcsNpeUCniHexJC1oUoHglGBY97gvmXkZjVNIDOb
+   zVU0aos3Dtwg6sC8OGJ2eVO9JYj/Gvn75H/vkyzxX4p1FcHLs/fyLZ1Gc
+   Q7xfTICnaBzQ2kE4KlSVAF9ZnnHepP/G1TLA4AG7gcb9ZaeZgXbcPgY7c
+   IxSpCi8odWPW6Lb1iC3zV6+NVTvgZ5m65iWaMBoQwBUCa0OxsqypK53VG
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="275131378"
 X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="237956198"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 00:25:32 -0800
+   d="scan'208";a="275131378"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 00:27:32 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="625284297"
+   d="scan'208";a="704207154"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 16 Feb 2022 00:25:30 -0800
+  by orsmga005.jf.intel.com with ESMTP; 16 Feb 2022 00:27:30 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nKFcv-000Abg-VB; Wed, 16 Feb 2022 08:25:29 +0000
-Date:   Wed, 16 Feb 2022 16:25:14 +0800
+        id 1nKFes-000Abt-1A; Wed, 16 Feb 2022 08:27:30 +0000
+Date:   Wed, 16 Feb 2022 16:26:30 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [ast-bpf:ptr 1/1] kernel/bpf/helpers.c:1395:36: warning: unused
- variable 'bpf_kptr_get_proto'
-Message-ID: <202202161630.kf6vptKz-lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [arnd-playground:set_fs-2 12/17] lib/test_lockup.c:422:13: sparse:
+ sparse: incorrect type in initializer (different address spaces)
+Message-ID: <202202161630.LUggdKp0-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,88 +61,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git ptr
-head:   c49309ef3e137c753d1a87de044f007655fb9958
-commit: c49309ef3e137c753d1a87de044f007655fb9958 [1/1] bpf: kptr
-config: hexagon-randconfig-r001-20220216 (https://download.01.org/0day-ci/archive/20220216/202202161630.kf6vptKz-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
-reproduce (this is a W=1 build):
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git set_fs-2
+head:   cb5b88c78bb9c229c93bf11ea66d622a3ba4bf2d
+commit: 5c46fbe679aaca0b693101e743e46ba571403b7c [12/17] uaccess: fix type mismatch warnings from access_ok()
+config: mips-randconfig-s031-20220216 (https://download.01.org/0day-ci/archive/20220216/202202161630.LUggdKp0-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
+reproduce:
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git/commit/?id=c49309ef3e137c753d1a87de044f007655fb9958
-        git remote add ast-bpf https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git
-        git fetch --no-tags ast-bpf ptr
-        git checkout c49309ef3e137c753d1a87de044f007655fb9958
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/commit/?id=5c46fbe679aaca0b693101e743e46ba571403b7c
+        git remote add arnd-playground https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git
+        git fetch --no-tags arnd-playground set_fs-2
+        git checkout 5c46fbe679aaca0b693101e743e46ba571403b7c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/bpf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
 
->> kernel/bpf/helpers.c:1395:36: warning: unused variable 'bpf_kptr_get_proto' [-Wunused-const-variable]
-   static const struct bpf_func_proto bpf_kptr_get_proto = {
-                                      ^
->> kernel/bpf/helpers.c:1411:36: warning: unused variable 'bpf_kptr_xchg_proto' [-Wunused-const-variable]
-   static const struct bpf_func_proto bpf_kptr_xchg_proto = {
-                                      ^
->> kernel/bpf/helpers.c:1433:36: warning: unused variable 'bpf_kptr_try_set_proto' [-Wunused-const-variable]
-   static const struct bpf_func_proto bpf_kptr_try_set_proto = {
-                                      ^
-   3 warnings generated.
+sparse warnings: (new ones prefixed by >>)
+   command-line: note: in included file:
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
+   builtin:0:0: sparse: this was the original definition
+>> lib/test_lockup.c:422:13: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected char const *__gk_ptr @@     got void [noderef] __user *ptr @@
+   lib/test_lockup.c:422:13: sparse:     expected char const *__gk_ptr
+   lib/test_lockup.c:422:13: sparse:     got void [noderef] __user *ptr
+>> lib/test_lockup.c:423:13: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected char const *__gk_ptr @@     got void [noderef] __user * @@
+   lib/test_lockup.c:423:13: sparse:     expected char const *__gk_ptr
+   lib/test_lockup.c:423:13: sparse:     got void [noderef] __user *
+   lib/test_lockup.c:230:9: sparse: sparse: context imbalance in 'test_lock' - wrong count at exit
+   lib/test_lockup.c:250:25: sparse: sparse: context imbalance in 'test_unlock' - unexpected unlock
 
+vim +422 lib/test_lockup.c
 
-vim +/bpf_kptr_get_proto +1395 kernel/bpf/helpers.c
+30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  410  
+30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  411  static bool test_kernel_ptr(unsigned long addr, int size)
+30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  412  {
+5c46fbe679aaca Arnd Bergmann         2022-02-14  413  	void __user *ptr = (void __user *)addr;
+30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  414  	char buf;
+30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  415  
+30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  416  	if (!addr)
+30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  417  		return false;
+30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  418  
+30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  419  	/* should be at least readable kernel address */
+30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  420  	if (access_ok(ptr, 1) ||
+30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  421  	    access_ok(ptr + size - 1, 1) ||
+25f12ae45fc193 Christoph Hellwig     2020-06-17 @422  	    get_kernel_nofault(buf, ptr) ||
+25f12ae45fc193 Christoph Hellwig     2020-06-17 @423  	    get_kernel_nofault(buf, ptr + size - 1)) {
+30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  424  		pr_err("invalid kernel ptr: %#lx\n", addr);
+30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  425  		return true;
+30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  426  	}
+30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  427  
+30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  428  	return false;
+30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  429  }
+30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  430  
 
-  1394	
-> 1395	static const struct bpf_func_proto bpf_kptr_get_proto = {
-  1396		.func		= bpf_kptr_get,
-  1397		.gpl_only	= false,
-  1398		.ret_type	= RET_PTR_TO_BTF_ID_OR_NULL,
-  1399		.arg1_type	= ARG_PTR_TO_MAP_VALUE,
-  1400	};
-  1401	
-  1402	BPF_CALL_2(bpf_kptr_xchg, void **, kptr, void *, ptr)
-  1403	{
-  1404		/* ptr is ptr_to_btf_id returned from bpf_*_lookup() with ptr->refcnt >= 1
-  1405		 * or ptr == NULL.
-  1406		 * returns ptr_to_btf_id with refcnt >= 1 or NULL
-  1407		 */
-  1408		return (long) xchg(kptr, ptr);
-  1409	}
-  1410	
-> 1411	static const struct bpf_func_proto bpf_kptr_xchg_proto = {
-  1412		.func		= bpf_kptr_xchg,
-  1413		.gpl_only	= false,
-  1414		.ret_type	= RET_PTR_TO_BTF_ID_OR_NULL,
-  1415		.arg1_type	= ARG_PTR_TO_MAP_VALUE,
-  1416	};
-  1417	
-  1418	BPF_CALL_3(bpf_kptr_try_set, void **, kptr, void *, ptr, int, refcnt_off)
-  1419	{
-  1420		/* ptr is ptr_to_btf_id returned from bpf_*_lookup() with ptr->refcnt >= 1
-  1421		 * refcount_inc() has to be done before cmpxchg() because
-  1422		 * another cpu might do bpf_kptr_xchg+release.
-  1423		 */
-  1424		refcount_inc((refcount_t *)(ptr + refcnt_off));
-  1425		if (cmpxchg(kptr, NULL, ptr)) {
-  1426			/* refcnt >= 2 here */
-  1427			refcount_dec((refcount_t *)(ptr + refcnt_off));
-  1428			return -EBUSY;
-  1429		}
-  1430		return 0;
-  1431	}
-  1432	
-> 1433	static const struct bpf_func_proto bpf_kptr_try_set_proto = {
-  1434		.func		= bpf_kptr_try_set,
-  1435		.gpl_only	= false,
-  1436		.ret_type	= RET_INTEGER,
-  1437		.arg1_type	= ARG_PTR_TO_MAP_VALUE,
-  1438		.arg2_type	= ARG_PTR_TO_BTF_ID,
-  1439	};
-  1440	
+:::::: The code at line 422 was first introduced by commit
+:::::: 25f12ae45fc1931a1dce3cc59f9989a9d87834b0 maccess: rename probe_kernel_address to get_kernel_nofault
+
+:::::: TO: Christoph Hellwig <hch@lst.de>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

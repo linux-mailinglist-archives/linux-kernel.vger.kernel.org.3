@@ -2,60 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1BA4B805A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 06:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33BF84B807A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 07:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344683AbiBPFre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 00:47:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36878 "EHLO
+        id S1344688AbiBPFze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 00:55:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235893AbiBPFrc (ORCPT
+        with ESMTP id S234272AbiBPFzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 00:47:32 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AED3F1AF6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 21:47:21 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id bt13so2861070ybb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 21:47:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=elu8Ka2cZem2k4zQRGJEv65TLQWlji0lH04NXcgaWoI=;
-        b=LVuSa+60cggKNTvJ1zIakxD1VIAn5f/pbblK/YjQD5LI7TD31BHIqZ24c6BKqeGFCI
-         OaEmU2yh7N6fQW6FBGELn61X/aBcQctz+GZJlD44yKuQ8BpCCCk9taP4fVgo/fJyMHo+
-         exJd028Ht/JAdX4P236LDPuuUXUe1VYdLdI4Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=elu8Ka2cZem2k4zQRGJEv65TLQWlji0lH04NXcgaWoI=;
-        b=KZqUg80iElXq/6h09imNaCYhaCpFP1ICzFJ8ji3Z6/aLe3k097l7xas/3zaGnUJLfA
-         zvIRzf+pfqQXk6SRH/eFs+QvEepDr0CAoxB9ehD8iu2kk2tnTlw6sSBHCnPhZAFSSn6b
-         sadHEYFIxOnMr0PiWWsxaPWIwe/4LWup7LvXrQeX/bH4zowJ8nsFMIiGgAJDZWdWDT3H
-         S4vfYOXd1EmCo9Loh2a+litNF26og3jRJ5PQmD5nl6J2DoN7D7yT52TeeWps+umGQ35m
-         rnfFj0Mk09kRK6SBh/WDT1KvRQ/gSEIMlofhAsxK7C78wWacs7OmxCs8icELO6CO4Zkf
-         eV1w==
-X-Gm-Message-State: AOAM530hbNVws+1T9p6jhZDuqFkpUQgwlOP9In5mxg9MX8gk9xoYxBdB
-        cTvEX8AELQ8ZPnbxD/Li64sKy+Fr+b+uzfJw+UjjZQ==
-X-Google-Smtp-Source: ABdhPJwHGG5NOl9rUjmJ5FIROtsaZzXi5k/xwDtwVPIUKH4MttQH+YypSdaXae9uXC3An9ibKfa1nMBwNwSdBnnhYtI=
-X-Received: by 2002:a25:8b0a:0:b0:61a:4aab:3e78 with SMTP id
- i10-20020a258b0a000000b0061a4aab3e78mr880886ybl.619.1644990440308; Tue, 15
- Feb 2022 21:47:20 -0800 (PST)
+        Wed, 16 Feb 2022 00:55:33 -0500
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AF9F4049
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 21:55:21 -0800 (PST)
+Received: from localhost.localdomain (36-229-230-216.dynamic-ip.hinet.net [36.229.230.216])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id E8A1340E38;
+        Wed, 16 Feb 2022 05:55:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644990915;
+        bh=PU5eTj/ytMNtCk92Lx1FCuQEXOf60kKz6t5NLgZnyoA=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=KDeGtw3iZzZ+JLQOk5mRXPFokOCssu5UQ7CXb6dfG1mUeUHPhBkO5EzIM0VSCaXdx
+         NvLRW/i15FkQKT3DX5n9M0/U6StZ8Cme1Wn7K/0JYPYNrrqilxXBqB6GKT1NE3GjZk
+         P9qMdUzQGh4/pleQKyQYtN3eRhfoYlQ2E8lJVkEwtOR+nZ3GefLqO7281DBD3OHUZK
+         39RytLWqhdtWWhQdzq0AhRHPXu4SU8nvspfwAp92kHfcw7mSvJ4rgX8P1NlafYM1GF
+         W9WjOtWkkTisLl9J9ej23FbzAksbtB27wlmXU1DU4peG5knZYoO6ydrIPsZxRQihXo
+         akoLDEiObWDzw==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     ulf.hansson@linaro.org
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Thomas Hebb <tommyhebb@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mmc: rtsx: Let MMC core handle runtime PM
+Date:   Wed, 16 Feb 2022 13:54:31 +0800
+Message-Id: <20220216055435.2335297-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220216043639.3839185-1-tzungbi@google.com> <20220216043639.3839185-4-tzungbi@google.com>
-In-Reply-To: <20220216043639.3839185-4-tzungbi@google.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Tue, 15 Feb 2022 21:47:09 -0800
-Message-ID: <CACeCKacKtJ50b2TuuhcVYPq0Fd0unVJdMuNDk1PLNK_r2JHZ+A@mail.gmail.com>
-Subject: Re: [PATCH v4 3/5] platform/chrome: cros_ec: initialize
- `wake_enabled` in cros_ec_register()
-To:     Tzung-Bi Shih <tzungbi@google.com>
-Cc:     bleung@chromium.org, groeck@chromium.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,61 +53,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 8:37 PM Tzung-Bi Shih <tzungbi@google.com> wrote:
->
-> `wake_enabled` indicates cros_ec_resume() needs to call
-> disable_irq_wake() to undo enable_irq_wake() in cros_ec_suspend().
->
-> Initialize `wake_enabled` in cros_ec_register() and determine the flag
-> in cros_ec_suspend() instead of reset-after-used in cros_ec_resume().
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
+Since MMC core handles runtime PM reference counting, we can avoid doing
+redundant runtime PM work in the driver. That means the only thing
+commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM") misses is
+to always enable runtime PM, to let its parent driver enable ASPM in the
+runtime idle routine.
 
-One minor thing to consider, but regardless:
+Fixes: 7499b529d97f ("mmc: rtsx: Use pm_runtime_{get,put}() to handle runtime PM")
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+ drivers/mmc/host/rtsx_pci_sdmmc.c | 18 ------------------
+ 1 file changed, 18 deletions(-)
 
-Reviewed-by: Prashant Malani <pmalani@chromium.org>
+diff --git a/drivers/mmc/host/rtsx_pci_sdmmc.c b/drivers/mmc/host/rtsx_pci_sdmmc.c
+index 2a3f14afe9f83..265b3889f9d72 100644
+--- a/drivers/mmc/host/rtsx_pci_sdmmc.c
++++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
+@@ -823,7 +823,6 @@ static void sd_request(struct work_struct *work)
+ 	}
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
+-	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -860,8 +859,6 @@ static void sd_request(struct work_struct *work)
+ 			data->bytes_xfered = data->blocks * data->blksz;
+ 	}
+ 
+-	pm_runtime_mark_last_busy(dev);
+-	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ finish:
+@@ -1093,7 +1090,6 @@ static void sdmmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+ 		return;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
+-	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1127,8 +1123,6 @@ static void sdmmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+ 	rtsx_pci_switch_clock(pcr, ios->clock, host->ssc_depth,
+ 			host->initial_mode, host->double_clk, host->vpclk);
+ 
+-	pm_runtime_mark_last_busy(dev);
+-	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ }
+ 
+@@ -1144,7 +1138,6 @@ static int sdmmc_get_ro(struct mmc_host *mmc)
+ 		return -ENOMEDIUM;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
+-	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1154,8 +1147,6 @@ static int sdmmc_get_ro(struct mmc_host *mmc)
+ 	if (val & SD_WRITE_PROTECT)
+ 		ro = 1;
+ 
+-	pm_runtime_mark_last_busy(dev);
+-	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ 	return ro;
+@@ -1173,7 +1164,6 @@ static int sdmmc_get_cd(struct mmc_host *mmc)
+ 		return cd;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
+-	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1183,8 +1173,6 @@ static int sdmmc_get_cd(struct mmc_host *mmc)
+ 	if (val & SD_EXIST)
+ 		cd = 1;
+ 
+-	pm_runtime_mark_last_busy(dev);
+-	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ 	return cd;
+@@ -1282,7 +1270,6 @@ static int sdmmc_switch_voltage(struct mmc_host *mmc, struct mmc_ios *ios)
+ 		return err;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
+-	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1312,8 +1299,6 @@ static int sdmmc_switch_voltage(struct mmc_host *mmc, struct mmc_ios *ios)
+ 	err = rtsx_pci_write_register(pcr, SD_BUS_STAT,
+ 			SD_CLK_TOGGLE_EN | SD_CLK_FORCE_STOP, 0);
+ 
+-	pm_runtime_mark_last_busy(dev);
+-	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ 	return err;
+@@ -1334,7 +1319,6 @@ static int sdmmc_execute_tuning(struct mmc_host *mmc, u32 opcode)
+ 		return err;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
+-	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1367,8 +1351,6 @@ static int sdmmc_execute_tuning(struct mmc_host *mmc, u32 opcode)
+ 		err = sd_change_phase(host, DDR50_RX_PHASE(pcr), true);
+ 
+ out:
+-	pm_runtime_mark_last_busy(dev);
+-	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ 	return err;
+-- 
+2.34.1
 
-> ---
-> Changes from v3:
-> (https://patchwork.kernel.org/project/chrome-platform/patch/20220209095703.517608-4-tzungbi@google.com/)
-> - Change the patch title.
-> - Simplify by initializing wake_enabled in cros_ec_register().
->
-> No changes from v2.
->
-> Changes from v1:
-> (https://lore.kernel.org/lkml/20220125101527.1812887-1-tzungbi@google.com/T/#u)
-> - Use imperative mood in commit message.
->
->  drivers/platform/chrome/cros_ec.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
-> index 25cd8df6e7b0..b6604a9ab315 100644
-> --- a/drivers/platform/chrome/cros_ec.c
-> +++ b/drivers/platform/chrome/cros_ec.c
-> @@ -191,6 +191,7 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
->         ec_dev->max_passthru = 0;
->         ec_dev->ec = NULL;
->         ec_dev->pd = NULL;
-> +       ec_dev->wake_enabled = false;
->
->         ec_dev->din = devm_kzalloc(dev, ec_dev->din_size, GFP_KERNEL);
->         if (!ec_dev->din)
-> @@ -383,10 +384,9 @@ int cros_ec_resume(struct cros_ec_device *ec_dev)
->                 dev_dbg(ec_dev->dev, "Error %d sending resume event to ec",
->                         ret);
->
-> -       if (ec_dev->wake_enabled) {
-> +       if (ec_dev->wake_enabled)
->                 disable_irq_wake(ec_dev->irq);
-> -               ec_dev->wake_enabled = 0;
-> -       }
-> +
-
-Better to leave it as is, and ensure "wake_enabled" is cleared after resume?
-Will result in a smaller diff.
-
-I'll leave it up to you.
-
--Prashant

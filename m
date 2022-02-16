@@ -2,155 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 825004B8F18
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 18:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC8D4B8F1C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 18:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237077AbiBPRZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 12:25:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41622 "EHLO
+        id S237088AbiBPR2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 12:28:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiBPRZW (ORCPT
+        with ESMTP id S229934AbiBPR2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 12:25:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F412B049F
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:25:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D602C61BC8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 17:25:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ACE8C340FA
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 17:25:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645032309;
-        bh=50gayj5BhaFY1KfY4J6wEv9LL/2KBrv3TJsZgjwCNeI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=s12B1+AOmXryDhSPknuKL8IzRS63FtY1jW4IQTcFUQFmxCB1bHM2/Ad46I49kwf/J
-         1N4t3B+0pmEk+VM3RGTCCPp4BMoEKUD4OApK6MSr126ucgMlswQUB5BXx26xHHuTIN
-         nIDMmz2bSNAvv2YwZvqQkNZ1VSjzEi+/bEnRawkliB/xPF6w5v2/ZpnWvzzcu60YAt
-         b0tbgWWS2iDyu+FNJTDx6MhZ0bonly7bCCQI8ozxMfHHeK9T6LKrcaRKo68YMdnAGW
-         SkkcTyfQRZRWBGGpnaiNe0OT4YNd8PPdnGpvOZ+aTT7Oxn7WeP/AbgH0K6UKXbmysP
-         GFlbvOO46XMmw==
-Received: by mail-yb1-f180.google.com with SMTP id y6so7568380ybc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:25:09 -0800 (PST)
-X-Gm-Message-State: AOAM531kavWc+RfPi8mDyGCz2maxcxFdAd1GV+EdzGhbyHDbNzlJ1w0E
-        YoAVejm2Be20iwmOsJXdqq9UdMJ+A2FUcPzkQGs=
-X-Google-Smtp-Source: ABdhPJxjMQo5IVyxb0rl98kvZVGHXXkUZT6SL5l1mKrh+QNt5m3z6iWux2+7Z+U/R+Y+NG64b+eQtIGkKKWMvR0XD9c=
-X-Received: by 2002:a5b:5d0:0:b0:623:c68d:d473 with SMTP id
- w16-20020a5b05d0000000b00623c68dd473mr2991953ybp.506.1645032308053; Wed, 16
- Feb 2022 09:25:08 -0800 (PST)
+        Wed, 16 Feb 2022 12:28:50 -0500
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295C120206B
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:28:37 -0800 (PST)
+Received: by mail-oo1-xc2c.google.com with SMTP id o192-20020a4a2cc9000000b00300af40d795so3224065ooo.13
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:28:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9MTakSYd53t34R0cyYVe+0pdA5hAXTrGisq8/AtE8bY=;
+        b=DPPjIZfSFOecn19FZTl4ORN4p58dli1n1BuYxmImPMtl4+gJTi3k5+lzdQHdsvkTv1
+         dWP0bjICnHBFUQcMIMSelizKfRsRlgStn07af7cm1qRqbwU+n0P0D2GX+TldIYbIxWaJ
+         fwoCuTxMOzWU8Y1jydUF/08UpstaObnClmFlw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9MTakSYd53t34R0cyYVe+0pdA5hAXTrGisq8/AtE8bY=;
+        b=5ccLXPR9L7XLQDjAsnxb7eXkihK8uPigK07/4b/tcwzjSyDCrd4RR+bDllp6EUvdIk
+         bReIev7x9Aov8INnrNDIraANNjP19XWGm4wRYbdNZjZ4LDJc5M2iUulaFGHFncGva5XE
+         900Wcv0pENA+HBqckpraLv5ezWtUEI7ksCk6DhS/4xCmFldXXZZph8eluwINliBSgOGp
+         EI7cyxmn+t1108ScxPEPhe9Go0hS9Gs0Atf48P5W4Le0kWdgePcJEAZbke3bmlgEW73g
+         prcmwmqMQEqbTBzLPYmD59tWonqhSOFMNDmrJlxr8UuhRTQEduT3NOcIno3acrz7sx6I
+         w4GA==
+X-Gm-Message-State: AOAM532qjveCwmxt0NGhLSuURFZ2xYuELKaCfvbIO/1LMKieIWedj+Ly
+        4kw5z0yLoAVYU3xV8YgbPZ33scAW6Q/OMw==
+X-Google-Smtp-Source: ABdhPJyShlU/g48khtcUjhWKWDzQCiVsyvmr+ae3Lat2Rc9hLmhLqeYcshScLBld5g+g0YPNzqlUhg==
+X-Received: by 2002:a05:6870:d620:b0:d0:ee38:dd65 with SMTP id a32-20020a056870d62000b000d0ee38dd65mr889156oaq.301.1645032516474;
+        Wed, 16 Feb 2022 09:28:36 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id ek4sm17407139oab.23.2022.02.16.09.28.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 09:28:36 -0800 (PST)
+Subject: Re: [PATCH v2 5/5] ucounts: Handle wrapping in is_ucounts_overlimit
+To:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Alexey Gladkov <legion@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Solar Designer <solar@openwall.com>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        containers@lists.linux-foundation.org,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        linux-api@vger.kernel.org, stable@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <87ilteiz4a.fsf_-_@email.froward.int.ebiederm.org>
+ <20220216155832.680775-5-ebiederm@xmission.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <a616b08c-dcec-4a00-ca55-a333063157e9@linuxfoundation.org>
+Date:   Wed, 16 Feb 2022 10:28:35 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20200917112538.GD8409@ziepe.ca> <CAHk-=wjtfjB3TqTFRzVmOrB9Mii6Yzc-=wKq0fu4ruDE6AsJgg@mail.gmail.com>
- <20200917193824.GL8409@ziepe.ca> <CAHk-=wiY_g+SSjncZi8sO=LrxXmMox0NO7K34-Fs653XVXheGg@mail.gmail.com>
- <20200918164032.GA5962@xz-x1> <20200918173240.GY8409@ziepe.ca>
- <20200918204048.GC5962@xz-x1> <0af8c77e-ff60-cada-7d22-c7cfcf859b19@nvidia.com>
- <20200919000153.GZ8409@ziepe.ca> <20200921083505.GA5862@quack2.suse.cz>
- <20200921120301.GD8409@ziepe.ca> <CAFCwf10eNmwq2wD71xjUhqkvv5+_pJMR1nPug2RqNDcFT4H86Q@mail.gmail.com>
-In-Reply-To: <CAFCwf10eNmwq2wD71xjUhqkvv5+_pJMR1nPug2RqNDcFT4H86Q@mail.gmail.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Wed, 16 Feb 2022 19:24:41 +0200
-X-Gmail-Original-Message-ID: <CAFCwf12KNkd43U8+hcfSL9RuT-T=7RrDExOK0eD4fe+3XiUrhw@mail.gmail.com>
-Message-ID: <CAFCwf12KNkd43U8+hcfSL9RuT-T=7RrDExOK0eD4fe+3XiUrhw@mail.gmail.com>
-Subject: Re: [PATCH 1/4] mm: Trial do_wp_page() simplification
-To:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jan Kara <jack@suse.cz>, John Hubbard <jhubbard@nvidia.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Maya B . Gokhale" <gokhale2@llnl.gov>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Marty Mcfadden <mcfadden8@llnl.gov>,
-        Kirill Shutemov <kirill@shutemov.name>,
-        Oleg Nesterov <oleg@redhat.com>, Jann Horn <jannh@google.com>,
-        Kirill Tkhai <ktkhai@virtuozzo.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Xu <peterx@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220216155832.680775-5-ebiederm@xmission.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 6:59 PM Oded Gabbay <oded.gabbay@gmail.com> wrote:
->
-> On Mon, Sep 21, 2020 at 3:03 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> >
-> > On Mon, Sep 21, 2020 at 10:35:05AM +0200, Jan Kara wrote:
-> > > > My thinking is to hit this issue you have to already be doing
-> > > > FOLL_LONGTERM, and if some driver hasn't been properly marked and
-> > > > regresses, the fix is to mark it.
-> > > >
-> > > > Remember, this use case requires the pin to extend after a system
-> > > > call, past another fork() system call, and still have data-coherence.
-> > > >
-> > > > IMHO that can only happen in the FOLL_LONGTERM case as it inhernetly
-> > > > means the lifetime of the pin is being controlled by userspace, not by
-> > > > the kernel. Otherwise userspace could not cause new DMA touches after
-> > > > fork.
-> > >
-> > > I agree that the new aggressive COW behavior is probably causing issues
-> > > only for FOLL_LONGTERM users. That being said it would be nice if even
-> > > ordinary threaded FOLL_PIN users would not have to be that careful about
-> > > fork(2) and possible data loss due to COW - we had certainly reports of
-> > > O_DIRECT IO loosing data due to fork(2) and COW exactly because it is very
-> > > subtle how it behaves... But as I wrote above this is not urgent since that
-> > > problematic behavior exists since the beginning of O_DIRECT IO in Linux.
-> >
-> > Yes, I agree - what I was thinking is to do this FOLL_LONGTERM for the
-> > rc and then a small patch to make it wider for the next cycle so it
-> > can test in linux-next for a responsible time period.
-> >
-> > Interesting to hear you confirm block has also seen subtle user
-> > problems with this as well.
-> >
-> > Jason
-> >
->
-> Hi Jason, Linus,
-> Sorry for waking up this thread, but I've filed a bug against this change:
-> https://bugzilla.kernel.org/show_bug.cgi?id=215616
->
-> In the past week, I've bisected a problem we have in one of our new
-> demos running on our Gaudi accelerator, and after a very long
-> bisection, I've come to this commit.
-> All the details are in the bug, but the bottom line is that somehow,
-> this patch causes corruption when the numa balancing feature is
-> enabled AND we don't use process affinity AND we use GUP to pin pages
-> so our accelerator can DMA to/from system memory.
->
-> Either disabling numa balancing, using process affinity to bind to
-> specific numa-node or reverting this patch causes the bug to
-> disappear.
-> I validated the bug and the revert on kernels 5.9, 5.11 and 5.17-rc4.
->
-> You can see our GUP code in the driver in get_user_memory() in
-> drivers/misc/habanalabs/common/memory.c.
-> It is fairly standard and I think I got that line from Daniel (cc'ed
-> on this email).
->
-> I would appreciate help from the mm experts here to understand how to
-> fix this, but it looks as if this simplification caused or exposed
-> some race between numa migration code and GUP.
->
-> Thanks,
-> Oded
+On 2/16/22 8:58 AM, Eric W. Biederman wrote:
+> While examining is_ucounts_overlimit and reading the various messages
+> I realized that is_ucounts_overlimit fails to deal with counts that
+> may have wrapped.
+> 
+> Being wrapped should be a transitory state for counts and they should
+> never be wrapped for long, but it can happen so handle it.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of ucounts")
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> ---
+>   kernel/ucount.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/ucount.c b/kernel/ucount.c
+> index 65b597431c86..06ea04d44685 100644
+> --- a/kernel/ucount.c
+> +++ b/kernel/ucount.c
+> @@ -350,7 +350,8 @@ bool is_ucounts_overlimit(struct ucounts *ucounts, enum ucount_type type, unsign
+>   	if (rlimit > LONG_MAX)
+>   		max = LONG_MAX;
+>   	for (iter = ucounts; iter; iter = iter->ns->ucounts) {
+> -		if (get_ucounts_value(iter, type) > max)
+> +		long val = get_ucounts_value(iter, type);
+> +		if (val < 0 || val > max)
+>   			return true;
+>   		max = READ_ONCE(iter->ns->ucount_max[type]);
+>   	}
+> 
 
-Although I wrote it inside the bug, I just wanted to specify here the
-exact commit id in the tree:
+This addresses the concerns about overflow.
 
-2020-09-04 - 09854ba94c6aad7886996bfbee2530b3d8a7f4f4 -  mm:
-do_wp_page() simplification <Linus Torvalds>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Thanks,
-Oded
+thanks,
+-- Shuah

@@ -2,146 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05E64B90D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:59:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70CCA4B90D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237937AbiBPTAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 14:00:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60878 "EHLO
+        id S237948AbiBPTA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 14:00:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233070AbiBPTAF (ORCPT
+        with ESMTP id S237950AbiBPTAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 14:00:05 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3462AD677;
-        Wed, 16 Feb 2022 10:59:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645037993; x=1676573993;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=oDlaYpURS0mY/S93Fxt90FT2dbYdR6j8k4Tu9b37GWU=;
-  b=EMZ8FzBT38yTiJqfojZ8q+3PcMSxud2VMXgPSPxOHBx7WHcnbNr9Aay1
-   KwXhsYAboNolpiZPv4CSpMdaPZFVTmcFNTpqSlqYTpI715ZUI4O9MScrm
-   uOczpNW6oAskj0sRA4lXFjdWMa+P3JdOa68cafLU9h3wskDm1PiYcnAWZ
-   E42nK/jcbFhqqNN2r6psfSkHObFRojutTDYfam91KXsehJ5NBjKZ7NmDQ
-   PoTsMTMcPKT9jl9yTxjpkbjsXAUjWHo/RUiYP90eTPHSVaaOeRnRvcFTU
-   zbS56/XwFoAmKnGpt77b64eNv2nKD655nxx3PtteevvvpFqfMbytEWc3b
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="313971534"
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="313971534"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 10:59:52 -0800
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="529651961"
-Received: from guptapa-mobl1.amr.corp.intel.com ([10.212.185.96])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 10:59:51 -0800
-Date:   Wed, 16 Feb 2022 10:59:50 -0800
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Andrew Cooper <Andrew.Cooper3@citrix.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "antonio.gomez.iglesias@linux.intel.com" 
-        <antonio.gomez.iglesias@linux.intel.com>,
-        "neelima.krishnan@intel.com" <neelima.krishnan@intel.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] x86/tsx: Use MSR_TSX_CTRL to clear CPUID bits
-Message-ID: <20220216185950.6nmkllbgawv5tjd7@guptapa-mobl1.amr.corp.intel.com>
-References: <20220215002014.mb7g4y3hfefmyozx@guptapa-mobl1.amr.corp.intel.com>
- <Ygt/QSTSMlUJnzFS@zn.tnic>
- <20220215121103.vhb2lpoygxn3xywy@guptapa-mobl1.amr.corp.intel.com>
- <YgvVcdpmFCCn20A7@zn.tnic>
- <20220215181931.wxfsn2a3npg7xmi2@guptapa-mobl1.amr.corp.intel.com>
- <YgwAHU7gCnik8Kv6@zn.tnic>
- <20220216003950.5jxecuf773g2kuwl@guptapa-mobl1.amr.corp.intel.com>
- <6724088f-c7cf-da92-e894-d8970f13bf1e@citrix.com>
- <20220216012841.vxlnugre2j4pczp7@guptapa-mobl1.amr.corp.intel.com>
- <a1e836c5-e2d0-3916-ec11-9f8690463c58@citrix.com>
+        Wed, 16 Feb 2022 14:00:25 -0500
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838C12B100E
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:00:12 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id u10so3538377vsu.13
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:00:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=S5BSR6cJxy3OIvfsMR+O/vOvcelF9SA+qkn/HKZco3Y=;
+        b=pJZEPf7Kl86YFfMRtKeB4nfuiB3C1EHAHkDlTTaudqjfpSYETB8NiUGs1gpdRJ2BoN
+         JDJTGcw8UHBQZxjG+6PAiA1EBsXT63a55qxlKJWNxUpS9qEoBtmC0ttxpCk1ALzpYlww
+         1LqxJi8+uVmwy7hChpHr8VsoaqPUwnZajxLgoyrTgP0R6/l46hRBpvKCtD9/DUjHROCp
+         4RNnONCunQGzd8kziLrLCoETzTfqzlDrRDEhr5IvI5OxMGb0zrRHSCS32Hf95GkAYXD+
+         lIWAkfdrPQ5R3+s5EoOUMANqAljP1BNwsIYbt2hM4sz40rj0xj5+LiguFL7KEYW2dQvx
+         SEzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=S5BSR6cJxy3OIvfsMR+O/vOvcelF9SA+qkn/HKZco3Y=;
+        b=b0VQDLMnkpqveDvSeglTFmfvIligbv9Iv2840+RwLQ0pIiHfoST141REjOg0ebR2+d
+         E72Dq4I4uexVcOBwRhk5h10PMUTJpE29jlgi0jSPNGoMJJiZyGfO3UeJPHvXWLiySPqA
+         q+tI3T0pneEwt2h4i/CZvpgqZAUGn9tfeNCpaiJg5hU60AjFjUKsk+3D16Xs68G031zF
+         XQ9ev6mI3XKEtWjiUmmRLHVpxC7IcrNMrJn/Ps+oGOJ/MQKbGRxbDsAfKF6ogUqwri3q
+         yo1OFxtUN8QgBs5W9xPIMob4q+jkrvySrFmCYQt4Cw/0fubEXpjLuXz3zEIqDCCOHsQX
+         pjQg==
+X-Gm-Message-State: AOAM531Qczr/wi3d3mCYXLCS/NCd0tVvK+3FVD2xCIAnYOPUsvFiwrgI
+        La2OYuJmyJ5N5+0q5x4R7xEIo65+OJyMRgqTB8QtGw==
+X-Google-Smtp-Source: ABdhPJwk7yxK99Lm08CHdUF76ZrAthD1mX/3wkVG+nZM+tQ93MpiegxE69ayG2fXpIM8XyQLobOKlFLiSqpNIXgbiPU=
+X-Received: by 2002:a05:6102:374e:b0:31b:956a:b0da with SMTP id
+ u14-20020a056102374e00b0031b956ab0damr1948636vst.35.1645038011504; Wed, 16
+ Feb 2022 11:00:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a1e836c5-e2d0-3916-ec11-9f8690463c58@citrix.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAPcxDJ7nriZEJHF6dMPR7tQ+dGuueyRjw1NC+4CbjxiAT_S+ZA@mail.gmail.com>
+ <20220208150945.266978-1-juew@google.com> <Ygwka++3eipjQzB2@zn.tnic>
+ <YgwnqTc8FGG3orcE@agluck-desk3.sc.intel.com> <YgzRsfWOmqkNiNI7@zn.tnic>
+ <CAPcxDJ4=iknzYbN=b2oQxvJyODkQ_MWEj1wkKEuGwf4HQ3aPZA@mail.gmail.com>
+ <Yg08Uhg0fZ9xZuP2@zn.tnic> <9f402331d25c47b69349c8171bbd49c1@intel.com>
+ <Yg1ICgHfMYxwHyig@zn.tnic> <7931e48318d64e808a2ccb30ab6f7995@intel.com>
+In-Reply-To: <7931e48318d64e808a2ccb30ab6f7995@intel.com>
+From:   Jue Wang <juew@google.com>
+Date:   Wed, 16 Feb 2022 10:59:59 -0800
+Message-ID: <CAPcxDJ5t47M-+Bn_D+Vj7zbJTxhjrx=HsLX=iQj-EF_h2oVTsg@mail.gmail.com>
+Subject: Re: [PATCH] x86/mce: Add workaround for SKX/CLX/CPX spurious machine checks
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.02.2022 11:46, Andrew Cooper wrote:
->On 16/02/2022 01:28, Pawan Gupta wrote:
->> On 16.02.2022 00:49, Andrew Cooper wrote:
->>> On 16/02/2022 00:39, Pawan Gupta wrote:
->>>> On 15.02.2022 20:33, Borislav Petkov wrote:
->>>>> On Tue, Feb 15, 2022 at 10:19:31AM -0800, Pawan Gupta wrote:
->>>>>> I admit it has gotten complicated with so many bits associated with
->>>>>> TSX.
->>>>>
->>>>> Yah, and looka here:
->>>>>
->>>>> https://github.com/andyhhp/xen/commit/ad9f7c3b2e0df38ad6d54f4769d4dccf765fbcee
->>>>>
->>>>>
->>>>>
->>>>> It seems it isn't complicated enough. ;-\
->>>>>
->>>>> Andy just made me aware of this thing where you guys have added a new
->>>>> MSR bit:
->>>>>
->>>>> MSR_MCU_OPT_CTRL[1] which is called something like
->>>>> MCU_OPT_CTRL_RTM_ALLOW or so.
->>>>
->>>> RTM_ALLOW bit was added to MSR_MCU_OPT_CTRL, but its not set by
->>>> default,
->>>> and it is *not* recommended to be used in production deployments [1]:
->>>>
->>>>   Although MSR 0x122 (TSX_CTRL) and MSR 0x123 (IA32_MCU_OPT_CTRL)
->>>> can be
->>>>   used to reenable Intel TSX for development, doing so is not
->>>> recommended
->>>>   for production deployments. In particular, applying MD_CLEAR flows
->>>> for
->>>>   mitigation of the Intel TSX Asynchronous Abort (TAA) transient
->>>> execution
->>>>   attack may not be effective on these processors when Intel TSX is
->>>>   enabled with updated microcode. The processors continue to be
->>>> mitigated
->>>>   against TAA when Intel TSX is disabled.
->>>
->>> The purpose of setting RTM_ALLOW isn't to enable TSX per say.
->>>
->>> The purpose is to make MSR_TSX_CTRL.RTM_DISABLE behaves consistently on
->>> all hardware, which reduces the complexity and invasiveness of dealing
->>> with this special case, because the TAA workaround will still turn TSX
->>> off by default.
->>>
->>> The configuration you don't want to be running with is RTM_ALLOW &&
->>> !RTM_DISABLE, because that is "still vulnerable to TSX Async Abort".
->>
->> I am not sure how a system can end up with RTM_ALLOW && !RTM_DISABLE? I
->> have no problem taking care of this case, I am just debating why we need
->> it.
+On Wed, Feb 16, 2022 at 10:58 AM Luck, Tony <tony.luck@intel.com> wrote:
 >
->Well for one, when Linux is starting up as the kexec environment
->following Xen.
+> > You should've lead with that - this is basically one of those "under a
+> > complex set of conditions" things.
+> >
+> > Anything against me adding them to the commit message?
 >
->You're not coding for "what logic should follow a clean microcode
->load".  You're coding for "how to take the arbitrary state that my
->preceding environment left, and turn it into what I want".
+> Add the three conditions. Not the "Google has billions and billions" joke.
 
-I will add the handling for this case (and I am going to follow these
-words of wisdom in my future work).
-
-Thanks,
-Pawan
+Thanks for adding this important context.
+>
+> -Tony

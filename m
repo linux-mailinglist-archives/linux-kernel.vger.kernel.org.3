@@ -2,346 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 340054B8B4C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E67A34B8B55
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234969AbiBPOVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 09:21:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45948 "EHLO
+        id S234979AbiBPOXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 09:23:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233843AbiBPOV2 (ORCPT
+        with ESMTP id S232782AbiBPOW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 09:21:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E690265514
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 06:21:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22408618CA
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 14:21:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 356F6C004E1;
-        Wed, 16 Feb 2022 14:21:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645021274;
-        bh=OIOfydG+W8At/Cke+P/C0ORx7P52hAsyWQXnEy6XZts=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tslxXkakSAeDBz23ul7wQXfZZnmLcOVxx7DSUp0FKUH5dMPIFVdgT00DuHE7ZsIrw
-         lgbmWzt9sYkF5XZCn//7c0D/cs9uPCjwxFryGUftlrmlY/8rvGAjQhFI1mJRu/BKBg
-         aHuLWPg/r05ZMrZe5UjFs4M7lrRSvCSj3CEBqAuZ7NSl8xvzoEW0bEjPNKv+kPs0Q5
-         2OwyOIaMQXr0cdqtHdW1lStlhKmc4i3V++mCNaZhONx6rrsf9veCcSpQo1hoNvqzsr
-         iFdL44IOcy8iB63dk5wjghB+qa8RiXgkclRKB0K8eYE1bwBo70gXO+goUyTvBsFy66
-         S/VHouiGiKWTA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 7C6D0400FE; Wed, 16 Feb 2022 11:21:12 -0300 (-03)
-Date:   Wed, 16 Feb 2022 11:21:12 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Stephane Eranian <eranian@google.com>
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        kim.phillips@amd.com, acme@redhat.com, jolsa@redhat.com,
-        songliubraving@fb.com
-Subject: Re: [PATCH v6 12/12] perf report: add addr_from/addr_to sort
- dimensions
-Message-ID: <Yg0IWIjgpRcb8bZX@kernel.org>
-References: <20220208211637.2221872-1-eranian@google.com>
- <20220208211637.2221872-13-eranian@google.com>
+        Wed, 16 Feb 2022 09:22:59 -0500
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2761AE2F6;
+        Wed, 16 Feb 2022 06:22:46 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 49B585806FC;
+        Wed, 16 Feb 2022 09:22:45 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 16 Feb 2022 09:22:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=zk/ftbifk89CxK9Kf4RzXPm5fU1M7n+kkegVce
+        MJzJg=; b=abZu3XduReeCd/BnAt58NPZqVMZW+Lqg/jW1zopFwMm/zqgSgiaHZ1
+        eRzAa/mRCXUYZcnfyku8PKRPiP+volDr1uRsxyral4Vl+PjQwB1ZjYUgletnOEYk
+        RvEG61PUCVaoRt3y6+e9MbTSrwOrNguLgy9TifzqwPzvjSEsvdKAK4ugYFhPSSf+
+        olQ89kA6R9TuXive47gKRI/Ryciw3f+PgBuQR7srw0unkwp2rr7m16SQ0vAqHBwa
+        2JBBq926K25uERC1TnfGxUOo6fNfP0+oyVFbfvVKAjmOgmoogfMLUcnzR6L7xJqa
+        IkFSYfjkGWZN48Li1B+nHYgVmMTGL+7Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=zk/ftbifk89CxK9Kf
+        4RzXPm5fU1M7n+kkegVceMJzJg=; b=b2yJiclOgGnImqmZRmqQMmtjr69RUD7W1
+        b/NjKgIFNInRoeyj9AfhPgWBrd/1nJler8uCnxjTDAiDr8IrqoVQIhNMLqb1wVL+
+        MoPRc9KsH6UtNn0Ngu9hczIv+rH8JL7DO2mKL8Gn3b1kTRd6ERivTZhO81K2vin/
+        BBD5fDkU9l5GkdJLxYkj8w5JukiH4nEIYj955XrmTN90ywOPoBe7XVmUuCP1S9VM
+        n27D5CXtZ0GZVVC9VVD188mj1YvtyMQ/EOvqemwXsOY8DcjOddgplS7BL1mC3poC
+        nPEgdWXH/I48Qw5avear2GL09Fi3B8i86feGCrpKLbdnK502/gvVA==
+X-ME-Sender: <xms:swgNYu8tzqHFUzHUc4GTKl2_2kn50l_EeeMkdtEQfV9ChtEUHqKnIg>
+    <xme:swgNYutkWAQzZ9-l8hhxI68dyZAE8eF-cV-vsfSXzCOAyxDNyySrdElWLf-mK21o_
+    WAEsrhPB0P9aewvDgk>
+X-ME-Received: <xmr:swgNYkByUg7JG4Yd5eEuqh7sg0wlHHldTkXR6hrZJSpnXexNkPoEk97PfCF7mn22T-tBJwLUo9kTQI8OgqOlmw0Z7co57UN1oTo00LA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjeeigdeivdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeduvdduhfekkeehgffftefflefgffdtheffudffgeevteffheeuiedvvdejvdfg
+    veenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
+    igihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:swgNYmeRo0MzfBMpMbMaAKCFloTEHo9hEmiERYmDmZKijwSo5mljhw>
+    <xmx:swgNYjM3f1q9h4XkTFFftfsuIkWNdlPGc_YTcAiR0uuuLGcJJgpt2Q>
+    <xmx:swgNYgnvrHFgos9GQywWns2P1nsPHZyeS1NHxQ0dgSc3M9LZVtn0DA>
+    <xmx:tQgNYtXWgu0BSfe_y3-H3EWRklwlDoG4yMqJfK8rFwjZnBnN7VFHZQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 16 Feb 2022 09:22:43 -0500 (EST)
+Date:   Wed, 16 Feb 2022 15:22:41 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Sui Jingfeng <15330273260@189.cn>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>, Li Yi <liyi@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v7 1/7] drm/lsdc: add drm driver for loongson display
+ controller
+Message-ID: <20220216142241.vqizcrovxpurm7yx@houat>
+References: <20220213141649.1115987-1-15330273260@189.cn>
+ <20220213141649.1115987-2-15330273260@189.cn>
+ <20220214101031.kerresldiuopil6l@houat>
+ <afeeabbe-29ba-2878-c0c5-78f576f7865f@189.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ugefweottf2rvhh5"
 Content-Disposition: inline
-In-Reply-To: <20220208211637.2221872-13-eranian@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <afeeabbe-29ba-2878-c0c5-78f576f7865f@189.cn>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Feb 08, 2022 at 01:16:37PM -0800, Stephane Eranian escreveu:
-> With the existing symbol_from/symbol_to, branches captured in the same
-> function would be collapsed into a single function if the latencies associated
-> with the each branch (cycles) were all the same.  That is the case on Intel
-> Broadwell, for instance. Since Intel Skylake, the latency is captured by
-> hardware and therefore is used to disambiguate branches.
-> 
-> Add addr_from/addr_to sort dimensions to sort branches based on their
-> addresses and not the function there are in. The output is still the function
-> name but the offset within the function is provided to uniquely identify each
-> branch.  These new sort dimensions also help with annotate because they create
-> different entries in the histogram which, in turn, generates proper branch
-> annotations.
-> 
-> Here is an example using AMD's branch sampling:
 
-This can be cherry picked from this patchset, I'll try to do it now, and
-also add the above explanation for the new sort dimensions to:
+--ugefweottf2rvhh5
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-tools/perf/Documentation/perf-report.txt
+On Mon, Feb 14, 2022 at 06:50:36PM +0800, Sui Jingfeng wrote:
+>=20
+> On 2022/2/14 18:10, Maxime Ripard wrote:
+> > On Sun, Feb 13, 2022 at 10:16:43PM +0800, Sui Jingfeng wrote:
+> > > From: suijingfeng <suijingfeng@loongson.cn>
+> > >=20
+> > > There is a display controller in loongson's LS2K1000 SoC and LS7A1000
+> > > bridge chip, the DC is a PCI device in those chips. It has two display
+> > > pipes but with only one hardware cursor. Each way has a DVO interface
+> > > which provide RGB888 signals, vertical & horizontal synchronisations,
+> > > data enable and the pixel clock. Each CRTC is able to scanout from
+> > > 1920x1080 resolution at 60Hz. The maxmium resolution is 2048x2048
+> > > according to the hardware spec.
+> > >=20
+> > > Loongson display controllers are simple which require scanout buffers
+> > > to be physically contiguous. LS2K1000 is a SOC, Only system memory is
+> > > available. Therefore CMA helper based driver is intended to be use,
+> > > although it is possible to use VRAM helper based solution by carving
+> > > out part of system memory as VRAM.
+> > >=20
+> > > On LS7A1000/LS7A2000 bridge chip, the DC is equipped with a dedicated
+> > > video memory which is typically 64MB or more. In this case, VRAM help=
+er
+> > > based solution which scanout from local VRAM is reconmended to use.
+> > > It is reliable to use for massive production, but CMA based helper
+> > > solution is still usable on ls7a1000 and ls7a2000, at the price of
+> > > the CRTC must access the FB in RAM through the PCIe bus and HT3.0 bus.
+> > > This causes continuous traffic on the bus regardless of whether the FB
+> > > image is updating or not. Sadly, it suffer from screen flickering und=
+er
+> > > RAM pressure on LS7A1000. Luckily, It show extremely good condition on
+> > > LS7A2000 even under stressapptest, Maybe the hardware engineer resolve
+> > > this issue. Integrating two distict helpers based driver into one pie=
+ce
+> > > allow code sharing.
+> > >=20
+> > > We have also implemented demage update on top of CMA helper which copy
+> > > the demaged region from the shadow framebuffer in system RAM to the r=
+eal
+> > > framebuffer in VRAM manually. This is intend to overcome the screen
+> > > flicking issue on LS7A1000, but the performance is not good.
+> > > Using "lsdc.dirty_update=3D1" in the kernel commmand line if you woul=
+d like
+> > > to have a try.
+> > >=20
+> > > For LS7A1000, there are 4 dedicated GPIOs whose control register is
+> > > located at the DC register space, They are used to emulate two way i2=
+c.
+> > > One for DVO0, another for DVO1. This is the reason why this driver is
+> > > not switch to drm bridge framework yet. LS2K1000 and LS2K0500 SoC don=
+'t
+> > > have such GPIO hardwared, they grab i2c adapter from other module,
+> > > either general purpose GPIO emulated i2c or hardware i2c adapter.
+> > > Drm bridge and drm panel driver for the external encoder is suitable =
+for
+> > > those SoC. We have already implemented this on our downstream 4.19.190
+> > > kernel. But due to the GPIO, PWM and I2C device driver support for
+> > > LS2K1000 is not upstreamed yet, this driver still can be use to bring
+> > > the graphic environment up by providing display timings or similar th=
+ings
+> > > in the device tree.
+> > >=20
+> > > The DC in LS7A1000 has only one hardware cursor, we simply let the two
+> > > CRTC share it. The DC in LS7A2000 have two cursor, two built-in hdmi
+> > > encoder and one transparent vga encoder and more, surport for LS7A2000
+> > > is on the way. In short, we have built-in gpio emulated i2c support,
+> > > we also have hardware cursor support. LS7A2000 The kind of tiny drive=
+rs
+> > > in drm/tiny is not suitable for us.
+> > >=20
+> > >      +------+            +-----------------------------------+
+> > >      | DDR4 |            |  +-------------------+            |
+> > >      +------+            |  | PCIe Root complex |   LS7A1000 |
+> > >         || MC0           |  +--++---------++----+            |
+> > >    +----------+  HT 3.0  |     ||         ||                 |
+> > >    | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +---=
+---+
+> > >    |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VR=
+AM |
+> > >    +----------+          | +--------+  +-+--+-+    +---------+   +---=
+---+
+> > >         || MC1           +---------------|--|----------------+
+> > >      +------+                            |  |
+> > >      | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
+> > >      +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI=
+/HDMI
+> > >                        +-------+                      +------+
+> > >=20
+> > > The above picture give a simple usage of LS7A1000, note that the enco=
+der
+> > > is not necessary adv7125 or tfp410, it is a choice of the downstream =
+board
+> > > manufacturer. Other candicate encoders can be ch7034b, sil9022 and it=
+e66121
+> > > lt8618 etc. Besides, the DC in both ls2k1000 and ls7k1000 has the sam=
+e of
+> > > PCI vendor id and pci device id. Both is 0x0014:0x7a06, the reverison=
+ id
+> > > is also same. This is the firmware engineer's mistake, but such firmw=
+are
+> > > and various boards ship with such firmware already released. We choos=
+e to
+> > > deduce the chip's identification from information provided by device =
+tree.
+> > > For lsdc, there is only a 1:1 mapping of encoders and connectors.
+> > >=20
+> > > v2: fixup warnings reported by kernel test robot
+> > >=20
+> > > v3: fix more grammar mistakes in Kconfig reported by Randy Dunlap and=
+ give
+> > >      more details about lsdc.
+> > >=20
+> > > v4:
+> > >     1) Add dts required and explain why device tree is required.
+> > >     2) Give more description about lsdc and vram helper base driver.
+> > >     3) Fix warnings reported by kernel test robot.
+> > >     4) Introduce stride_alignment member into struct lsdc_chip_desc, =
+the
+> > >        stride alignment is 256 bytes for ls7a1000, ls2k1000 and ls2k0=
+500.
+> > >        But ls7a2000 improve it to 32 bytes, for extend the support fo=
+r the
+> > >        device on coming
+> > >=20
+> > > v5:
+> > >     1) using writel and readl replace writeq and readq, to fix kernel=
+ test
+> > >        robot report build error on other archtecture
+> > >     2) set default fb format to XRGB8888 at crtc reset time.
+> > >     3) fix typos.
+> > >=20
+> > > v6:
+> > >     1) Explain why we are not switch to drm dridge subsystem on ls2k1=
+000.
+> > >     2) Explain why tiny drm driver is not suitable for us.
+> > >     3) Give a short description of the trival dirty uppdate implement=
+ based
+> > >        on CMA helper.
+> > >     4) code clean up
+> > >=20
+> > > v7:
+> > >     1) Remove select I2C_GPIO and I2C_LS2X in Kconfig, it is not read=
+y now
+> > >     2) Licensing issues are fixed suggested by Krzysztof Kozlowski.
+> > >     3) lsdc_pixpll_print() is removed, part of it move to debugfs.
+> > >     4) Set prefer_shadow to true if vram based driver is in using.
+> > >     5) Replace double blank lines with single line in all files
+> > >     6) Verbose cmd line parameter is replaced with drm_dbg()
+> > >     7) All warnnings reported by ./scripts/checkpatch.pl --strict are=
+ fixed
+> > >     8) Get edid from dtb support is removed as suggested by Maxime Ri=
+pard
+> > >     9) Fix typos and various improvement
+> > A lot of the major comments I had haven't been fixed though: you *need*
+> > to have a DT bindings description,
+>=20
+> This driver works on most of board even no device tree is supplied,
+> the dts are mainly supplement purpose. For example, it supports let
+> you to tell which DVO is not get used. Even no device tree is
+> provided, the driver still works.
 
-Please update the documentation in the future when adding new sort
-dimensions.
+That's irrelevant, really. The DT is considered an ABI, and thus any
+introduction of new DT bindings need to be properly documented and
+reviewed. It's not negotiable.
 
-Thanks,
+If your bindings is not always used, is of secondary secondary to you,
+and you don't want to bother with that discussion, then you always have
+the option to remove it from the next version of your series.
 
-- Arnaldo
- 
-> $ perf record -a -b -c 1000037 -e cpu/branch-brs/ test_prg
-> 
-> $ perf report
-> Samples: 6M of event 'cpu/branch-brs/', Event count (approx.): 6901276
-> Overhead  Command          Source Shared Object  Source Symbol                                   Target Symbol                                   Basic Block Cycle
->   99.65%  test_prg	   test_prg              [.] test_thread                                 [.] test_thread                                 -
->    0.02%  test_prg         [kernel.vmlinux]      [k] asm_sysvec_apic_timer_interrupt             [k] error_entry                                 -
-> 
-> $ perf report -F overhead,comm,dso,addr_from,addr_to
-> Samples: 6M of event 'cpu/branch-brs/', Event count (approx.): 6901276
-> Overhead  Command          Shared Object     Source Address          Target Address
->    4.22%  test_prg         test_prg          [.] test_thread+0x3c    [.] test_thread+0x4
->    4.13%  test_prg         test_prg          [.] test_thread+0x4     [.] test_thread+0x3a
->    4.09%  test_prg         test_prg          [.] test_thread+0x3a    [.] test_thread+0x6
->    4.08%  test_prg         test_prg          [.] test_thread+0x2     [.] test_thread+0x3c
->    4.06%  test_prg         test_prg          [.] test_thread+0x3e    [.] test_thread+0x2
->    3.87%  test_prg         test_prg          [.] test_thread+0x6     [.] test_thread+0x38
->    3.84%  test_prg         test_prg          [.] test_thread         [.] test_thread+0x3e
->    3.76%  test_prg         test_prg          [.] test_thread+0x1e    [.] test_thread
->    3.76%  test_prg         test_prg          [.] test_thread+0x38    [.] test_thread+0x8
->    3.56%  test_prg         test_prg          [.] test_thread+0x22    [.] test_thread+0x1e
->    3.54%  test_prg         test_prg          [.] test_thread+0x8     [.] test_thread+0x36
->    3.47%  test_prg         test_prg          [.] test_thread+0x1c    [.] test_thread+0x22
->    3.45%  test_prg         test_prg          [.] test_thread+0x36    [.] test_thread+0xa
->    3.28%  test_prg         test_prg          [.] test_thread+0x24    [.] test_thread+0x1c
->    3.25%  test_prg         test_prg          [.] test_thread+0xa     [.] test_thread+0x34
->    3.24%  test_prg         test_prg          [.] test_thread+0x1a    [.] test_thread+0x24
->    3.20%  test_prg         test_prg          [.] test_thread+0x34    [.] test_thread+0xc
->    3.04%  test_prg         test_prg          [.] test_thread+0x26    [.] test_thread+0x1a
->    3.01%  test_prg         test_prg          [.] test_thread+0xc     [.] test_thread+0x32
->    2.98%  test_prg         test_prg          [.] test_thread+0x18    [.] test_thread+0x26
->    2.94%  test_prg         test_prg          [.] test_thread+0x32    [.] test_thread+0xe
->    2.76%  test_prg         test_prg          [.] test_thread+0x28    [.] test_thread+0x18
->    2.73%  test_prg         test_prg          [.] test_thread+0xe     [.] test_thread+0x30
->    2.67%  test_prg         test_prg          [.] test_thread+0x30    [.] test_thread+0x10
->    2.67%  test_prg         test_prg          [.] test_thread+0x16    [.] test_thread+0x28
->    2.46%  test_prg         test_prg          [.] test_thread+0x10    [.] test_thread+0x2e
->    2.44%  test_prg         test_prg          [.] test_thread+0x2a    [.] test_thread+0x16
->    2.38%  test_prg         test_prg          [.] test_thread+0x14    [.] test_thread+0x2a
->    2.32%  test_prg         test_prg          [.] test_thread+0x2e    [.] test_thread+0x12
->    2.28%  test_prg         test_prg          [.] test_thread+0x12    [.] test_thread+0x2c
->    2.16%  test_prg         test_prg          [.] test_thread+0x2c    [.] test_thread+0x14
->    0.02%  test_prg         [kernel.vmlinux]  [k] asm_sysvec_apic_ti+0x5  [k] error_entry
-> 
-> Signed-off-by: Stephane Eranian <eranian@google.com>
-> ---
->  tools/perf/util/hist.c |   2 +
->  tools/perf/util/hist.h |   2 +
->  tools/perf/util/sort.c | 128 +++++++++++++++++++++++++++++++++++++++++
->  tools/perf/util/sort.h |   2 +
->  4 files changed, 134 insertions(+)
-> 
-> diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
-> index 0a8033b09e28..1c085ab56534 100644
-> --- a/tools/perf/util/hist.c
-> +++ b/tools/perf/util/hist.c
-> @@ -124,6 +124,7 @@ void hists__calc_col_len(struct hists *hists, struct hist_entry *h)
->  		} else {
->  			symlen = unresolved_col_width + 4 + 2;
->  			hists__new_col_len(hists, HISTC_SYMBOL_FROM, symlen);
-> +			hists__new_col_len(hists, HISTC_ADDR_FROM, symlen);
->  			hists__set_unres_dso_col_len(hists, HISTC_DSO_FROM);
->  		}
->  
-> @@ -138,6 +139,7 @@ void hists__calc_col_len(struct hists *hists, struct hist_entry *h)
->  		} else {
->  			symlen = unresolved_col_width + 4 + 2;
->  			hists__new_col_len(hists, HISTC_SYMBOL_TO, symlen);
-> +			hists__new_col_len(hists, HISTC_ADDR_TO, symlen);
->  			hists__set_unres_dso_col_len(hists, HISTC_DSO_TO);
->  		}
->  
-> diff --git a/tools/perf/util/hist.h b/tools/perf/util/hist.h
-> index 2a15e22fb89c..7ed4648d2fc2 100644
-> --- a/tools/perf/util/hist.h
-> +++ b/tools/perf/util/hist.h
-> @@ -77,6 +77,8 @@ enum hist_column {
->  	HISTC_GLOBAL_INS_LAT,
->  	HISTC_LOCAL_P_STAGE_CYC,
->  	HISTC_GLOBAL_P_STAGE_CYC,
-> +	HISTC_ADDR_FROM,
-> +	HISTC_ADDR_TO,
->  	HISTC_NR_COLS, /* Last entry */
->  };
->  
-> diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
-> index 2da081ef532b..6d5588e80935 100644
-> --- a/tools/perf/util/sort.c
-> +++ b/tools/perf/util/sort.c
-> @@ -990,6 +990,128 @@ struct sort_entry sort_sym_to = {
->  	.se_width_idx	= HISTC_SYMBOL_TO,
->  };
->  
-> +static int _hist_entry__addr_snprintf(struct map_symbol *ms,
-> +				     u64 ip, char level, char *bf, size_t size,
-> +				     unsigned int width)
-> +{
-> +	struct symbol *sym = ms->sym;
-> +	struct map *map = ms->map;
-> +	size_t ret = 0, offs;
-> +
-> +	ret += repsep_snprintf(bf + ret, size - ret, "[%c] ", level);
-> +	if (sym && map) {
-> +		if (sym->type == STT_OBJECT) {
-> +			ret += repsep_snprintf(bf + ret, size - ret, "%s", sym->name);
-> +			ret += repsep_snprintf(bf + ret, size - ret, "+0x%llx",
-> +					ip - map->unmap_ip(map, sym->start));
-> +		} else {
-> +			ret += repsep_snprintf(bf + ret, size - ret, "%.*s",
-> +					       width - ret,
-> +					       sym->name);
-> +			offs = ip - sym->start;
-> +			if (offs)
-> +				ret += repsep_snprintf(bf + ret, size - ret, "+0x%llx", offs);
-> +		}
-> +	} else {
-> +		size_t len = BITS_PER_LONG / 4;
-> +		ret += repsep_snprintf(bf + ret, size - ret, "%-#.*llx",
-> +				       len, ip);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int hist_entry__addr_from_snprintf(struct hist_entry *he, char *bf,
-> +					 size_t size, unsigned int width)
-> +{
-> +	if (he->branch_info) {
-> +		struct addr_map_symbol *from = &he->branch_info->from;
-> +
-> +		return _hist_entry__addr_snprintf(&from->ms, from->al_addr,
-> +						 he->level, bf, size, width);
-> +	}
-> +
-> +	return repsep_snprintf(bf, size, "%-*.*s", width, width, "N/A");
-> +}
-> +
-> +static int hist_entry__addr_to_snprintf(struct hist_entry *he, char *bf,
-> +				       size_t size, unsigned int width)
-> +{
-> +	if (he->branch_info) {
-> +		struct addr_map_symbol *to = &he->branch_info->to;
-> +
-> +		return _hist_entry__addr_snprintf(&to->ms, to->al_addr,
-> +						 he->level, bf, size, width);
-> +	}
-> +
-> +	return repsep_snprintf(bf, size, "%-*.*s", width, width, "N/A");
-> +}
-> +
-> +static int64_t
-> +sort__addr_from_cmp(struct hist_entry *left, struct hist_entry *right)
-> +{
-> +	struct addr_map_symbol *from_l;
-> +	struct addr_map_symbol *from_r;
-> +	int64_t ret;
-> +
-> +	if (!left->branch_info || !right->branch_info)
-> +		return cmp_null(left->branch_info, right->branch_info);
-> +
-> +	from_l = &left->branch_info->from;
-> +	from_r = &right->branch_info->from;
-> +
-> +	/*
-> +	 * comparing symbol address alone is not enough since it's a
-> +	 * relative address within a dso.
-> +	 */
-> +	ret = _sort__dso_cmp(from_l->ms.map, from_r->ms.map);
-> +	if (ret != 0)
-> +		return ret;
-> +
-> +	return _sort__addr_cmp(from_l->addr, from_r->addr);
-> +}
-> +
-> +static int64_t
-> +sort__addr_to_cmp(struct hist_entry *left, struct hist_entry *right)
-> +{
-> +	struct addr_map_symbol *to_l;
-> +	struct addr_map_symbol *to_r;
-> +	int64_t ret;
-> +
-> +	if (!left->branch_info || !right->branch_info)
-> +		return cmp_null(left->branch_info, right->branch_info);
-> +
-> +	to_l = &left->branch_info->to;
-> +	to_r = &right->branch_info->to;
-> +
-> +	/*
-> +	 * comparing symbol address alone is not enough since it's a
-> +	 * relative address within a dso.
-> +	 */
-> +	ret = _sort__dso_cmp(to_l->ms.map, to_r->ms.map);
-> +	if (ret != 0)
-> +		return ret;
-> +
-> +	return _sort__addr_cmp(to_l->addr, to_r->addr);
-> +}
-> +
-> +struct sort_entry sort_addr_from = {
-> +	.se_header	= "Source Address",
-> +	.se_cmp		= sort__addr_from_cmp,
-> +	.se_snprintf	= hist_entry__addr_from_snprintf,
-> +	.se_filter	= hist_entry__sym_from_filter, /* shared with sym_from */
-> +	.se_width_idx	= HISTC_ADDR_FROM,
-> +};
-> +
-> +struct sort_entry sort_addr_to = {
-> +	.se_header	= "Target Address",
-> +	.se_cmp		= sort__addr_to_cmp,
-> +	.se_snprintf	= hist_entry__addr_to_snprintf,
-> +	.se_filter	= hist_entry__sym_to_filter, /* shared with sym_to */
-> +	.se_width_idx	= HISTC_ADDR_TO,
-> +};
-> +
-> +
->  static int64_t
->  sort__mispredict_cmp(struct hist_entry *left, struct hist_entry *right)
->  {
-> @@ -1893,6 +2015,8 @@ static struct sort_dimension bstack_sort_dimensions[] = {
->  	DIM(SORT_SRCLINE_FROM, "srcline_from", sort_srcline_from),
->  	DIM(SORT_SRCLINE_TO, "srcline_to", sort_srcline_to),
->  	DIM(SORT_SYM_IPC, "ipc_lbr", sort_sym_ipc),
-> +	DIM(SORT_ADDR_FROM, "addr_from", sort_addr_from),
-> +	DIM(SORT_ADDR_TO, "addr_to", sort_addr_to),
->  };
->  
->  #undef DIM
-> @@ -3126,6 +3250,10 @@ static bool get_elide(int idx, FILE *output)
->  		return __get_elide(symbol_conf.dso_from_list, "dso_from", output);
->  	case HISTC_DSO_TO:
->  		return __get_elide(symbol_conf.dso_to_list, "dso_to", output);
-> +	case HISTC_ADDR_FROM:
-> +		return __get_elide(symbol_conf.sym_from_list, "addr_from", output);
-> +	case HISTC_ADDR_TO:
-> +		return __get_elide(symbol_conf.sym_to_list, "addr_to", output);
->  	default:
->  		break;
->  	}
-> diff --git a/tools/perf/util/sort.h b/tools/perf/util/sort.h
-> index f994261888e1..2ddc00d1c464 100644
-> --- a/tools/perf/util/sort.h
-> +++ b/tools/perf/util/sort.h
-> @@ -251,6 +251,8 @@ enum sort_type {
->  	SORT_SRCLINE_FROM,
->  	SORT_SRCLINE_TO,
->  	SORT_SYM_IPC,
-> +	SORT_ADDR_FROM,
-> +	SORT_ADDR_TO,
->  
->  	/* memory mode specific sort keys */
->  	__SORT_MEMORY_MODE,
-> -- 
-> 2.35.0.263.gb82422642f-goog
+> > Kconfig isn't the proper place to set the VRAM preference,
+>=20
+> It mainly helps=A0you to code review, to tell you which function is VRAM
+> helper related. DRM_LSDC_VRAM_DRIVER option is mean to be always
+> enabled. It can be deselected if you only want CMA based solution. On
+> LS2K1000, select this or deselect this doesn't matter.
 
--- 
+Don't worry about us then, we'll be fine reviewing this, it can be
+removed.
 
-- Arnaldo
+> > the command line isn't either, the command line
+> > isn't the solution for all your parameters, etc.
+>=20
+> The command line may not be a blocker, why support a command
+> line=A0block this driver be merged? You do NOT need to touch it, this
+> driver will pick up the right driver instance to use.
+
+I mean, if it's not important and we'll always work by default, why are
+you so against removing it then?
+
+I've told you already why we don't like kernel parameters and thus our
+motivations against it, but it seems like you don't have any to keep
+them?
+
+Maxime
+
+--ugefweottf2rvhh5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYg0IsQAKCRDj7w1vZxhR
+xQ9iAP9m/V3eOSPQ+OrY6c3HKCGMBU7MiRETFaPzAqbdwtW6+wEA4A/lJrBVqn4L
+mWgjeVvaCjd+OoRY12iGKhgNUsg9owI=
+=OnyB
+-----END PGP SIGNATURE-----
+
+--ugefweottf2rvhh5--

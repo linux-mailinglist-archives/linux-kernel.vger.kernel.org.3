@@ -2,159 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E6CF4B91E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF754B91D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238527AbiBPT4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 14:56:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37514 "EHLO
+        id S238390AbiBPTzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 14:55:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238541AbiBPTz6 (ORCPT
+        with ESMTP id S229690AbiBPTzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 14:55:58 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E4B2B102E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:55:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645041345; x=1676577345;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=NFyNtQKWDp3IIFDAVEo3H6lES2jCE7CpykVW6rQ2YFg=;
-  b=nqMJjNJ7XpNdLUTnHItFxQ0xeH8sOPIlc1sK1xthPftO7NwIrLS8K7VM
-   gZiHMB1ZO9GT4+l1xNQX2gZwNe3yGkzlbcXImvEYB7vutLE52XJ4k30s1
-   9tvU267CaE+/gwKeiguIFYTdBHRYcrzNWlHxlyjER+hp7l+2sLIl6DRRg
-   pXMnw/tpBxZYj68VOkhKiBfcx32yNyRIu3cC5oVY4V8QUlT2EL3s260L+
-   0BvJsHjNsOeZ3+So/pJnHC3yV3saL4SwtbXoPvasNe+noJW6s4sC5pm2N
-   KkzqIb/RXN0Ydm1YjQqmXSpDMuW3DW8Txt9evZbrRocERKb7DOkvozD6d
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="275294487"
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="275294487"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 11:55:45 -0800
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="545140497"
-Received: from sannilnx.jer.intel.com ([10.12.231.79])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 11:55:41 -0800
-From:   Alexander Usyskin <alexander.usyskin@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Tomas Winkler <tomas.winkler@intel.com>,
-        Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Ashutosh Dixit <ashutosh.dixit@intel.com>
-Subject: [PATCH v8 5/5] mei: gsc: retrieve the firmware version
-Date:   Wed, 16 Feb 2022 21:54:59 +0200
-Message-Id: <20220216195459.3918414-6-alexander.usyskin@intel.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220216195459.3918414-1-alexander.usyskin@intel.com>
-References: <20220216195459.3918414-1-alexander.usyskin@intel.com>
+        Wed, 16 Feb 2022 14:55:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A712A2B102A;
+        Wed, 16 Feb 2022 11:55:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36733618EA;
+        Wed, 16 Feb 2022 19:55:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97472C004E1;
+        Wed, 16 Feb 2022 19:55:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645041308;
+        bh=Fj3UWxjV9XWJYiEhuSSxup1YiZMb8KRq8pwYLIGWps0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=qKTvPz7iNaM2s/9mScgqoOQKapzR6Vz1ZJEilHsKjvOLbVpGvB/CMBb3DNbFbSLA7
+         64Qe4vFgYXt4OsU9sWOHQ4ZwfZxPBAJWKRwrKfdPcF9bh0hdTukjJdhzA2u1g7zNOx
+         zlsT1Aj/+LCJ+mFLypxRQyfDSIDRnhnInwJonSKAJ0j+nMykmjZjETxfPwUPOksEVu
+         CK2TS44ubCJNmuoMD4XKZwwF7yVRtkJU9Ze05r1cKpZuiZZ3Ul2buiaIKfLSpoCouC
+         Xivyspp3jwsXjy4dce+GU5Tk+day1NMhalpsINbRVuA+fNbxsjaYIMwEcJAh2dQp9t
+         RfIhdmEPQI0OA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 56C645C064D; Wed, 16 Feb 2022 11:55:08 -0800 (PST)
+Date:   Wed, 16 Feb 2022 11:55:08 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Axtens <dja@axtens.net>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraju@codeaurora.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Theodore Y . Ts'o" <tytso@mit.edu>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>
+Subject: Re: [PATCH 1/1] rcu: Introduce CONFIG_RCU_EXP_CPU_STALL_TIMEOUT
+Message-ID: <20220216195508.GM4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220216135209.3070-1-urezki@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216135209.3070-1-urezki@gmail.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a hook to retrieve the firmware version of the
-GSC devices to bus-fixup.
-GSC has a different MKHI clients GUIDs but the same message structure
-to retrieve the firmware version as MEI so mei_fwver() can be reused.
+On Wed, Feb 16, 2022 at 02:52:09PM +0100, Uladzislau Rezki (Sony) wrote:
+> From: Uladzislau Rezki <uladzislau.rezki@sony.com>
+> 
+> Currently for both expedited and regular grace periods stall
+> warnings are emitted based on one timeout value that is defined
+> in seconds. The problem is that, a stall timeout in seconds for
+> expedited grace period is a way long.
+> 
+> The idea of expedited grace period is to force CPUs to report
+> their quiescent states as fast as possible. If in RCU read-side
+> critical section, it will request the next rcu_read_unlock() to
+> record the quiescent state. If not either it reports immediately
+> or set TIF_NEED_RESCHED to initiate the task switch.
+> 
+> Therefore introduce the CONFIG_RCU_EXP_CPU_STALL_TIMEOUT kernel
+> configuration that is set to 20 msec. It also can be changed in
+> run-time via: /sys/.../parameters/rcu_exp_cpu_stall_timeout.
+> 
+> Signed-off-by: Uladzislau Rezki <uladzislau.rezki@sony.com>
+> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 
-CC: Ashutosh Dixit <ashutosh.dixit@intel.com>
-Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
-Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
----
-V5: Rebase
-V6: Rebase
-V7: add Greg KH Reviewed-by
-V8: Rebase
----
- drivers/misc/mei/bus-fixup.c | 25 +++++++++++++++++++++++++
- drivers/misc/mei/hw-me.c     |  2 ++
- 2 files changed, 27 insertions(+)
+Nice, thank you!
 
-diff --git a/drivers/misc/mei/bus-fixup.c b/drivers/misc/mei/bus-fixup.c
-index 67844089db21..59506ba6fc48 100644
---- a/drivers/misc/mei/bus-fixup.c
-+++ b/drivers/misc/mei/bus-fixup.c
-@@ -30,6 +30,12 @@ static const uuid_le mei_nfc_info_guid = MEI_UUID_NFC_INFO;
- #define MEI_UUID_MKHIF_FIX UUID_LE(0x55213584, 0x9a29, 0x4916, \
- 			0xba, 0xdf, 0xf, 0xb7, 0xed, 0x68, 0x2a, 0xeb)
- 
-+#define MEI_UUID_IGSC_MKHI UUID_LE(0xE2C2AFA2, 0x3817, 0x4D19, \
-+			0x9D, 0x95, 0x06, 0xB1, 0x6B, 0x58, 0x8A, 0x5D)
-+
-+#define MEI_UUID_IGSC_MKHI_FIX UUID_LE(0x46E0C1FB, 0xA546, 0x414F, \
-+			0x91, 0x70, 0xB7, 0xF4, 0x6D, 0x57, 0xB4, 0xAD)
-+
- #define MEI_UUID_HDCP UUID_LE(0xB638AB7E, 0x94E2, 0x4EA2, \
- 			      0xA5, 0x52, 0xD1, 0xC5, 0x4B, 0x62, 0x7F, 0x04)
- 
-@@ -241,6 +247,23 @@ static void mei_mkhi_fix(struct mei_cl_device *cldev)
- 	mei_cldev_disable(cldev);
- }
- 
-+static void mei_gsc_mkhi_ver(struct mei_cl_device *cldev)
-+{
-+	int ret;
-+
-+	/* No need to enable the client if nothing is needed from it */
-+	if (!cldev->bus->fw_f_fw_ver_supported)
-+		return;
-+
-+	ret = mei_cldev_enable(cldev);
-+	if (ret)
-+		return;
-+
-+	ret = mei_fwver(cldev);
-+	if (ret < 0)
-+		dev_err(&cldev->dev, "FW version command failed %d\n", ret);
-+	mei_cldev_disable(cldev);
-+}
- /**
-  * mei_wd - wd client on the bus, change protocol version
-  *   as the API has changed.
-@@ -492,6 +515,8 @@ static struct mei_fixup {
- 	MEI_FIXUP(MEI_UUID_NFC_HCI, mei_nfc),
- 	MEI_FIXUP(MEI_UUID_WD, mei_wd),
- 	MEI_FIXUP(MEI_UUID_MKHIF_FIX, mei_mkhi_fix),
-+	MEI_FIXUP(MEI_UUID_IGSC_MKHI, mei_gsc_mkhi_ver),
-+	MEI_FIXUP(MEI_UUID_IGSC_MKHI_FIX, mei_gsc_mkhi_ver),
- 	MEI_FIXUP(MEI_UUID_HDCP, whitelist),
- 	MEI_FIXUP(MEI_UUID_ANY, vt_support),
- 	MEI_FIXUP(MEI_UUID_PAVP, whitelist),
-diff --git a/drivers/misc/mei/hw-me.c b/drivers/misc/mei/hw-me.c
-index 9748d14849a1..7e77328142ff 100644
---- a/drivers/misc/mei/hw-me.c
-+++ b/drivers/misc/mei/hw-me.c
-@@ -1577,12 +1577,14 @@ static const struct mei_cfg mei_me_pch15_sps_cfg = {
- static const struct mei_cfg mei_me_gsc_cfg = {
- 	MEI_CFG_TYPE_GSC,
- 	MEI_CFG_PCH8_HFS,
-+	MEI_CFG_FW_VER_SUPP,
- };
- 
- /* Graphics System Controller Firmware Interface */
- static const struct mei_cfg mei_me_gscfi_cfg = {
- 	MEI_CFG_TYPE_GSCFI,
- 	MEI_CFG_PCH8_HFS,
-+	MEI_CFG_FW_VER_SUPP,
- };
- 
- /*
--- 
-2.32.0
+I have queued this, with the usual wordsmithing.
 
+I also changed the CONFIG_RCU_EXP_CPU_STALL_TIMEOUT kconfig option's
+default to be 20 milliseconds only no CONFIG_ANDROID=y kernel builds.  For
+one, rcutorture gets expedited stall warnings even at 200 milliseconds,
+and for another, larger systems often have longer-running readers.
+It might be a very good thing to decrease the non-Android default
+expedited stall warning timeout, but 20 milliseconds is not likely the
+place to start that effort.  Though it would be one way to find out
+when in the process large-system users started testing.  ;-)
+
+My guess is that this change will result in some breakage even on Android,
+and that adjustments will be needed.  Once that effort is complete,
+it would probably make sense to take another look at the non-Android
+default for CONFIG_RCU_EXP_CPU_STALL_TIMEOUT.
+
+							Thanx, Paul
+
+> ---
+>  Documentation/RCU/stallwarn.rst               | 18 +++++++++++++
+>  .../admin-guide/kernel-parameters.txt         |  6 +++++
+>  kernel/rcu/Kconfig.debug                      | 12 +++++++++
+>  kernel/rcu/rcu.h                              |  2 ++
+>  kernel/rcu/tree_exp.h                         |  4 +--
+>  kernel/rcu/tree_stall.h                       | 26 +++++++++++++++++++
+>  kernel/rcu/update.c                           |  2 ++
+>  7 files changed, 68 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
+> index 78404625bad2..b9ce89980779 100644
+> --- a/Documentation/RCU/stallwarn.rst
+> +++ b/Documentation/RCU/stallwarn.rst
+> @@ -162,6 +162,24 @@ CONFIG_RCU_CPU_STALL_TIMEOUT
+>  	Stall-warning messages may be enabled and disabled completely via
+>  	/sys/module/rcupdate/parameters/rcu_cpu_stall_suppress.
+>  
+> +CONFIG_RCU_EXP_CPU_STALL_TIMEOUT
+> +--------------------------------
+> +
+> +	Same as the CONFIG_RCU_CPU_STALL_TIMEOUT parameter but only for
+> +	the expedited grace period. This parameter defines the period of
+> +	time that RCU will wait from the beginning of an expedited grace
+> +	period until it issues an RCU CPU stall warning. This time period
+> +	is normally 20 milliseconds.
+> +
+> +	This configuration parameter may be changed at runtime via the
+> +	/sys/module/rcupdate/parameters/rcu_exp_cpu_stall_timeout, however
+> +	this parameter is checked only at the beginning of a cycle. If you
+> +	are in a current stall cycle, setting it to a new value will change
+> +	the timeout for the -next- stall.
+> +
+> +	Stall-warning messages may be enabled and disabled completely via
+> +	/sys/module/rcupdate/parameters/rcu_cpu_stall_suppress.
+> +
+>  RCU_STALL_DELAY_DELTA
+>  ---------------------
+>  
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 9ab6a4a5be06..9a32030f5d1e 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -4817,6 +4817,12 @@
+>  	rcupdate.rcu_cpu_stall_timeout= [KNL]
+>  			Set timeout for RCU CPU stall warning messages.
+>  
+> +	rcupdate.rcu_exp_cpu_stall_timeout= [KNL]
+> +			Set timeout for expedited RCU CPU stall warning messages.
+> +			The value is in milliseconds and a maximum allowed parameter
+> +			is 21000 milliseconds. Please note, a set value is adjusted
+> +			to an arch timer tick resolution.
+> +
+>  	rcupdate.rcu_expedited= [KNL]
+>  			Use expedited grace-period primitives, for
+>  			example, synchronize_rcu_expedited() instead
+> diff --git a/kernel/rcu/Kconfig.debug b/kernel/rcu/Kconfig.debug
+> index 4fd64999300f..e0f2c5edef44 100644
+> --- a/kernel/rcu/Kconfig.debug
+> +++ b/kernel/rcu/Kconfig.debug
+> @@ -91,6 +91,18 @@ config RCU_CPU_STALL_TIMEOUT
+>  	  RCU grace period persists, additional CPU stall warnings are
+>  	  printed at more widely spaced intervals.
+>  
+> +config RCU_EXP_CPU_STALL_TIMEOUT
+> +	int "Expedited RCU CPU stall timeout in milliseconds"
+> +	depends on RCU_STALL_COMMON
+> +	range 1 21000
+> +	default 20
+> +
+> +	help
+> +	  If a given expedited RCU grace period extends more than the
+> +	  specified number of milliseconds, a CPU stall warning is printed.
+> +	  If the RCU grace period persists, additional CPU stall warnings
+> +	  are printed at more widely spaced intervals.
+> +
+>  config RCU_TRACE
+>  	bool "Enable tracing for RCU"
+>  	depends on DEBUG_KERNEL
+> diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+> index 819f9d979e61..f8ec1df4b91e 100644
+> --- a/kernel/rcu/rcu.h
+> +++ b/kernel/rcu/rcu.h
+> @@ -217,7 +217,9 @@ static inline bool rcu_stall_is_suppressed_at_boot(void)
+>  extern int rcu_cpu_stall_ftrace_dump;
+>  extern int rcu_cpu_stall_suppress;
+>  extern int rcu_cpu_stall_timeout;
+> +extern int rcu_exp_cpu_stall_timeout;
+>  int rcu_jiffies_till_stall_check(void);
+> +int rcu_exp_jiffies_till_stall_check(void);
+>  
+>  static inline bool rcu_stall_is_suppressed(void)
+>  {
+> diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+> index 404198808683..30f05fd080ca 100644
+> --- a/kernel/rcu/tree_exp.h
+> +++ b/kernel/rcu/tree_exp.h
+> @@ -496,7 +496,7 @@ static void synchronize_rcu_expedited_wait(void)
+>  	struct rcu_node *rnp_root = rcu_get_root();
+>  
+>  	trace_rcu_exp_grace_period(rcu_state.name, rcu_exp_gp_seq_endval(), TPS("startwait"));
+> -	jiffies_stall = rcu_jiffies_till_stall_check();
+> +	jiffies_stall = rcu_exp_jiffies_till_stall_check();
+>  	jiffies_start = jiffies;
+>  	if (tick_nohz_full_enabled() && rcu_inkernel_boot_has_ended()) {
+>  		if (synchronize_rcu_expedited_wait_once(1))
+> @@ -571,7 +571,7 @@ static void synchronize_rcu_expedited_wait(void)
+>  				dump_cpu_task(cpu);
+>  			}
+>  		}
+> -		jiffies_stall = 3 * rcu_jiffies_till_stall_check() + 3;
+> +		jiffies_stall = 3 * rcu_exp_jiffies_till_stall_check() + 3;
+>  	}
+>  }
+>  
+> diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
+> index 0c5d8516516a..84b812a3ab44 100644
+> --- a/kernel/rcu/tree_stall.h
+> +++ b/kernel/rcu/tree_stall.h
+> @@ -25,6 +25,32 @@ int sysctl_max_rcu_stall_to_panic __read_mostly;
+>  #define RCU_STALL_MIGHT_DIV		8
+>  #define RCU_STALL_MIGHT_MIN		(2 * HZ)
+>  
+> +int rcu_exp_jiffies_till_stall_check(void)
+> +{
+> +	int cpu_stall_timeout = READ_ONCE(rcu_exp_cpu_stall_timeout);
+> +	int exp_stall_delay_delta = 0;
+> +	int till_stall_check;
+> +
+> +	/*
+> +	 * Limit check must be consistent with the Kconfig limits for
+> +	 * CONFIG_RCU_EXP_CPU_STALL_TIMEOUT, so check the allowed range.
+> +	 * The minimum clamped value is "2UL", because at least one full
+> +	 * tick has to be guaranteed.
+> +	 */
+> +	till_stall_check = clamp(msecs_to_jiffies(cpu_stall_timeout), 2UL, 21UL * HZ);
+> +
+> +	if (jiffies_to_msecs(till_stall_check) != cpu_stall_timeout)
+> +		WRITE_ONCE(rcu_exp_cpu_stall_timeout, jiffies_to_msecs(till_stall_check));
+> +
+> +#ifdef CONFIG_PROVE_RCU
+> +	/* Add extra ~25% out of till_stall_check. */
+> +	exp_stall_delay_delta = ((till_stall_check * 25) / 100) + 1;
+> +#endif
+> +
+> +	return till_stall_check + exp_stall_delay_delta;
+> +}
+> +EXPORT_SYMBOL_GPL(rcu_exp_jiffies_till_stall_check);
+> +
+>  /* Limit-check stall timeouts specified at boottime and runtime. */
+>  int rcu_jiffies_till_stall_check(void)
+>  {
+> diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
+> index 180ff9c41fa8..fc7fef575606 100644
+> --- a/kernel/rcu/update.c
+> +++ b/kernel/rcu/update.c
+> @@ -506,6 +506,8 @@ EXPORT_SYMBOL_GPL(rcu_cpu_stall_suppress);
+>  module_param(rcu_cpu_stall_suppress, int, 0644);
+>  int rcu_cpu_stall_timeout __read_mostly = CONFIG_RCU_CPU_STALL_TIMEOUT;
+>  module_param(rcu_cpu_stall_timeout, int, 0644);
+> +int rcu_exp_cpu_stall_timeout __read_mostly = CONFIG_RCU_EXP_CPU_STALL_TIMEOUT;
+> +module_param(rcu_exp_cpu_stall_timeout, int, 0644);
+>  #endif /* #ifdef CONFIG_RCU_STALL_COMMON */
+>  
+>  // Suppress boot-time RCU CPU stall warnings and rcutorture writer stall
+> -- 
+> 2.30.2
+> 

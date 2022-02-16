@@ -2,81 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C404B9132
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0980D4B913A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232638AbiBPTcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 14:32:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43388 "EHLO
+        id S232976AbiBPTdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 14:33:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbiBPTcL (ORCPT
+        with ESMTP id S232083AbiBPTdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 14:32:11 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6067CDFC;
-        Wed, 16 Feb 2022 11:31:59 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21GJHekl025850;
-        Wed, 16 Feb 2022 19:31:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=7eSi80sucexNTq5VTd+FJqwj5S44r/5XDWArAHdBcgE=;
- b=Lp9CbHCT2JEEKJS6guX1c8c+bem6OCUGFxBBdSwH5xDMSUkH97kqjEQeLHlIyqB+82nM
- mTgkfDMw6nOMVxfywDQRMudEstBdPujfJPM2h6UTb3WbKLiw9Y0m6MUNUzFFC5o8MI7u
- rzVC+LrK8NUOIvxhZIZfSE2d4m4dmgp8q8Lc+EkbSiPtPbyXKLZGSgRKM+91885HBOn7
- zn4X8cd+SmaKiSPM0HXBFUkiQzr62Sx3GcDyMQoOZNHeLILcVJb9/5Q247dz7geGj2ur
- JrRU7Z4BNxF1OOG/jM5fgrRpgtUjcKv6Y/73VPolRELQgYZaLE1ikX7EynctvxC9zJyS yQ== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e950tuukv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Feb 2022 19:31:43 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21GJS8FV029970;
-        Wed, 16 Feb 2022 19:31:40 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06fra.de.ibm.com with ESMTP id 3e645k2319-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Feb 2022 19:31:40 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21GJVcKN40763862
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 16 Feb 2022 19:31:38 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4D6FD11C052;
-        Wed, 16 Feb 2022 19:31:38 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 291E311C05E;
-        Wed, 16 Feb 2022 19:31:38 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed, 16 Feb 2022 19:31:38 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: ftrace startup tests crashing due to missing rcu_synchronize()
-References: <yt9dilte4px4.fsf@linux.ibm.com>
-        <20220216135419.01d96fe1@gandalf.local.home>
-        <20220216135821.67a22c52@gandalf.local.home>
-Date:   Wed, 16 Feb 2022 20:31:37 +0100
-In-Reply-To: <20220216135821.67a22c52@gandalf.local.home> (Steven Rostedt's
-        message of "Wed, 16 Feb 2022 13:58:21 -0500")
-Message-ID: <yt9da6eq4nhi.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Wed, 16 Feb 2022 14:33:04 -0500
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13BAE1F3F1A
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:32:52 -0800 (PST)
+Received: by mail-oo1-xc35.google.com with SMTP id 189-20020a4a03c6000000b003179d7b30d8so3717641ooi.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:32:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=2WrcofDXNq4fQvSh+Kgl5hWSou8+2EddXrcFZuX0Coc=;
+        b=RQVD6Spf4AVQMUKOvOtdRaF6z6yGnhjSw8BOFMzXDxDLTsIV7N90lSsRuK7rkB89zP
+         nWfOiGR4LbcGTUwut8aVKi2UOfIKbHGA0/KjIHo602H/Yfh6a6jQwRADuwfaxyxeWTtW
+         H5l6f/e8+KGiQ8AvZ5yO3THM3fAuwp1xg9Vws=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=2WrcofDXNq4fQvSh+Kgl5hWSou8+2EddXrcFZuX0Coc=;
+        b=XzmWHJO6gEFd5bmBMMMJRaVclJVCKkrebMsBWdf3b2LMx2L4lSXbRLgiV6E23EOLC1
+         PNvCAAVHIGkC/ClNP6Zw948F+O6SFuGarnOFHtNvtGTO2B4ShDwCS+q09JBm1eoLf9ZE
+         M7A5yjQL5nCYYMNabXfgHffVLKHQp9KEYroyeJYWBtrDrQ6mkHTlVUGyCVRyN3LNzsQN
+         dq7BvmXFrH11GJwXPQhKxtsYbErmvmacV18AAwSCMqgUghRtz/QnD4MbMjZ6DuScElfh
+         1i3i0fLDJamoI1tGrwziRIey7yolDZrDm9oZOby0s310+3GJQU4mH6aSb6WQd8kDMzlH
+         aesg==
+X-Gm-Message-State: AOAM533px8IIbnusjqGcpDqulRk/knuMyO0PwQdef8VUZkmjb3NahIEw
+        3ytyYlSDgDcYlgHONs+B78/oS7ucPL3RWZcC/42R8Q==
+X-Google-Smtp-Source: ABdhPJx3zyPVZHUH69iPnA4f7fxjaXMj27nLEaHyAfo/3Oh4oEDYw/v72mxHVfbQirS6DyQb4puuq4DHvHwI5ooAV3c=
+X-Received: by 2002:a05:6870:5829:b0:c8:9f42:f919 with SMTP id
+ r41-20020a056870582900b000c89f42f919mr1130229oap.54.1645039971470; Wed, 16
+ Feb 2022 11:32:51 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 16 Feb 2022 11:32:50 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: VVYir-Eh-pwmDtOVaJejuq5TvIGaxO8Z
-X-Proofpoint-ORIG-GUID: VVYir-Eh-pwmDtOVaJejuq5TvIGaxO8Z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-16_09,2022-02-16_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- suspectscore=0 spamscore=0 phishscore=0 bulkscore=0 priorityscore=1501
- lowpriorityscore=0 adultscore=0 clxscore=1015 mlxlogscore=615
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202160109
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+In-Reply-To: <1643066274-25814-1-git-send-email-quic_khsieh@quicinc.com>
+References: <1643066274-25814-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 16 Feb 2022 11:32:50 -0800
+Message-ID: <CAE-0n52uYJ-E2HZnwjJL5VfXnVjiSGJ5MnZG827i=3NP7QNm1g@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/msm/dp: always add fail-safe mode into connector
+ mode list
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dmitry.baryshkov@linaro.org, robdclark@gmail.com, sean@poorly.run,
+        vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
+        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,24 +71,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Steven Rostedt <rostedt@goodmis.org> writes:
+Quoting Kuogee Hsieh (2022-01-24 15:17:54)
+> Some of DP link compliant test expects to return fail-safe mode
+> if prefer detailed timing mode can not be supported by mainlink's
+> lane and rate after link training. Therefore add fail-safe mode
+> into connector mode list as backup mode. This patch fixes test
+> case 4.2.2.1.
+>
+> Changes in v2:
+> -- add Fixes text string
+>
+> Fixes: 4b85d405cfe9 ( "drm/msm/dp: reduce link rate if failed at link training 1")
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
 
-> On Wed, 16 Feb 2022 13:54:19 -0500
-> Steven Rostedt <rostedt@goodmis.org> wrote:
->
->> That is, shutdown is called, the item is removed from the list and freed,
->> but something got preempted while on the ftrace trampoline, with a
->> reference to the item, and then woke up and executed the item that was
->> freed.
->> 
->> I'll look into it. Thanks for the report.
->
-> OK, I wonder if something changed with "is_kernel_core_date()"?
->
-> Because on registering, we have:
->
-> 	if (!is_kernel_core_data((unsigned long)ops))
-> 		ops->flags |= FTRACE_OPS_FL_DYNAMIC;
-
-I checked, and the flag gets set here. I cannot say whether it
-is also set when the system crashes, but i would expect it.
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

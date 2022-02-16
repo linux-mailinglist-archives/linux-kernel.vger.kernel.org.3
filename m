@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D9F4B7F89
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 05:37:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A774B7F8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 05:39:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344423AbiBPEh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 23:37:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52722 "EHLO
+        id S1344436AbiBPEhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 23:37:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234726AbiBPEhT (ORCPT
+        with ESMTP id S1344419AbiBPEhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 23:37:19 -0500
+        Tue, 15 Feb 2022 23:37:23 -0500
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B91F4063
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 20:37:08 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id c10-20020a251c0a000000b0062272fc32bfso1821033ybc.17
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 20:37:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E934F1EBB
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 20:37:12 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id x1-20020a25a001000000b0061c64ee0196so1874474ybh.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 20:37:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=OKBUHG1lRWv0hIHjB+K86/IQNwkPb8MQNKlRJE3S5/M=;
-        b=VUKQadDEbJa7NbTRkkm9nXOiw5f7n4c/vBTT4/HCJWwWVQPU0Hjj5/WouVFgkdx5r0
-         5HaPzh3tug4Nku+8HqNjqBnLZItmom14x7t1m6cm4N0zVIgXoKyRrluJCmlSMKeqD/UK
-         Za0giSQCOFnj+d6ofgO3QQVjdR+6tDdSU8xbQLEZ+Symgkh1gEcRuoNrkMxTUY1UIuWF
-         MatIw38UqS1LYMThe7hED4+dLLc5p+CSgkFORU/SiXdNOewheb0cvViesjOGgoxcTlgO
-         VAFKdNQRjz6+JUmG0cYis3eP8Nnwwxr4ZALSNHtrNuzM09shesfSvxvSGF39jKC0uDVj
-         B+bg==
+        bh=ZVCaTafRnnf5d3inHCDQdPKKWocYJyu5eiZME/8lYHM=;
+        b=Lp0pe85DVhHiZL5qfP+SkXpvO95oZbjOtle8vsjMApUQZu9ZrMDoRO2I1jat8A3GSt
+         JSgLehb4yIHAaOsjvDi/3eTh10v1ZIPQf3VcR/ny+oli7hkGoio2fvuYcvF1YSTUzv/X
+         PWccAqwLhuZ2HAoGJshdp1qFnzAoIHBAaK46WlfCmKj/QlbjIqR6zN/FqaXLuR4eYDKM
+         rUcfNpxKQVvUW0bzhxvUQFN7gmk40k1O8ELDrbI7NmnfWWbB4GTGSWfJgC28KYyEBti8
+         aujsN3ee+Cq/E4h6enmRBnyJqaXFH1gukgjCDLDb14XslPquNSHnKEalKMkIEuBW5WgM
+         PqTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=OKBUHG1lRWv0hIHjB+K86/IQNwkPb8MQNKlRJE3S5/M=;
-        b=bZr8tnue6jqA+vXBbK92MucgOltk2lz4HNCSKaM6JH140r++zZVh9cSUHtaR2Jcj7B
-         x5aFc7As65pcEMCba3W+KIWQRpqY1aCo6mKFYzFcWkVEi8iRnezX3dkvBIcG6onlMLCH
-         i7CQAcrog3DGNijBD31vXhAMdWH20Juh4EbnhlzAo24OIOMaFZyFpLJcr9K7xGvLnbFj
-         I7X7VpDJm5q+uT6O/G8DvXndOBdcxdbOenPNxqnG4J8kD7MotIRO5m7s2Io14y5Y0/ed
-         L2/RyBa+ka4S54P67RMQ3gi5baB4/jlRA4KMrz9LPXWq4C5k8STkvGbIQ/kwVZhtxWDL
-         pkwA==
-X-Gm-Message-State: AOAM533olVzZd9+cd8mpFdkCBswsMOUFcGum32EBaPPNPrA3/v+Psbfn
-        vSH0w1jUrWS/R/T0BCn0BFOYBRm/eXOD
-X-Google-Smtp-Source: ABdhPJzsgKkCNM0CwKrs5c/H0XxeTDPiDod5RuJfAv1iM/iFm/zfXxW9uh5NrhHf0S5CbIQ38ur+wObnWL3B
+        bh=ZVCaTafRnnf5d3inHCDQdPKKWocYJyu5eiZME/8lYHM=;
+        b=vo/7W38pQAhYXGNxrNu4fSTwMdWKwySVi4XnnVr0cI7WVDgaEPy9uTGxz4Rg0LBate
+         lWr0YEt3LdP5JJULL+4+7GF0vNemRPoOWqQHVy2VaDUGgDfT2+RF4N+PZ4RJlzZkqBjJ
+         lGXb3tQJP0jR7LIiiIYdyvewlHSYalM3bzEN5gmQBtofGneBRKC7tvP+2zC1fY64hvwm
+         Vu2xTJF9ufLCU6C7icRRIDfkHAJiN2TtaKH84FD5Vre3MtjnzFwbpodNV3nXV31xLEow
+         fp+BEAbqhGpo7KnFUzreaPsL7bjgTvs/hqqtac8ndXAH5GXumIJ1zstpOKHKxmuTNY+x
+         16og==
+X-Gm-Message-State: AOAM531GFhSGAIQb1wwZ9MEFcKEWzQBJh/JH8rjj2lPZMTij4B/VqEmA
+        AqdW1ZSK6f6zEDnzF/Ys+LNo3QhMYASJ
+X-Google-Smtp-Source: ABdhPJxkeYjK1cD1AfT1ZUclFMK0x5SOz6XYbqagS0Uf3dXTfmZJWGMDkeXbVnqZ4XYm/AJO4n05WNGK12zi
 X-Received: from tzungbi-z840.tpe.corp.google.com ([2401:fa00:1:10:8ce7:5b2:9787:1a0b])
- (user=tzungbi job=sendgmr) by 2002:a81:49c8:0:b0:2d0:ad27:5be5 with SMTP id
- w191-20020a8149c8000000b002d0ad275be5mr895168ywa.27.1644986227331; Tue, 15
- Feb 2022 20:37:07 -0800 (PST)
-Date:   Wed, 16 Feb 2022 12:36:38 +0800
+ (user=tzungbi job=sendgmr) by 2002:a25:20c5:0:b0:61d:eeef:cc53 with SMTP id
+ g188-20020a2520c5000000b0061deeefcc53mr751041ybg.150.1644986231395; Tue, 15
+ Feb 2022 20:37:11 -0800 (PST)
+Date:   Wed, 16 Feb 2022 12:36:39 +0800
 In-Reply-To: <20220216043639.3839185-1-tzungbi@google.com>
-Message-Id: <20220216043639.3839185-5-tzungbi@google.com>
+Message-Id: <20220216043639.3839185-6-tzungbi@google.com>
 Mime-Version: 1.0
 References: <20220216043639.3839185-1-tzungbi@google.com>
 X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH v4 4/5] platform/chrome: cros_ec: sort header inclusion alphabetically
+Subject: [PATCH v4 5/5] platform/chrome: cros_ec: append newline to all logs
 From:   Tzung-Bi Shih <tzungbi@google.com>
 To:     bleung@chromium.org, groeck@chromium.org
 Cc:     chrome-platform@lists.linux.dev, tzungbi@google.com,
@@ -69,14 +69,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sort header inclusion alphabetically.
+To be consistent, append newline ("\n") to all logs.
 
 Reviewed-by: Guenter Roeck <groeck@google.com>
 Reviewed-by: Prashant Malani <pmalani@chromium.org>
 Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
 ---
 Changes from v3:
-(https://patchwork.kernel.org/project/chrome-platform/patch/20220209095703.517608-6-tzungbi@google.com/)
+(https://patchwork.kernel.org/project/chrome-platform/patch/20220209095703.517608-7-tzungbi@google.com/)
 - Add R-b tags.
 
 No changes from v2.
@@ -85,28 +85,49 @@ Changes from v1:
 (https://lore.kernel.org/lkml/20220125101527.1812887-1-tzungbi@google.com/T/#u)
 - Use imperative mood in commit message.
 
- drivers/platform/chrome/cros_ec.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/platform/chrome/cros_ec.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
-index b6604a9ab315..a3921fe5813a 100644
+index a3921fe5813a..a45bbc589928 100644
 --- a/drivers/platform/chrome/cros_ec.c
 +++ b/drivers/platform/chrome/cros_ec.c
-@@ -9,12 +9,12 @@
-  * battery charging and regulator control, firmware update.
-  */
+@@ -216,7 +216,7 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
+ 						IRQF_TRIGGER_LOW | IRQF_ONESHOT,
+ 						"chromeos-ec", ec_dev);
+ 		if (err) {
+-			dev_err(dev, "Failed to request IRQ %d: %d",
++			dev_err(dev, "Failed to request IRQ %d: %d\n",
+ 				ec_dev->irq, err);
+ 			return err;
+ 		}
+@@ -267,7 +267,7 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
+ 	 */
+ 	err = cros_ec_sleep_event(ec_dev, 0);
+ 	if (err < 0)
+-		dev_dbg(ec_dev->dev, "Error %d clearing sleep event to ec",
++		dev_dbg(ec_dev->dev, "Error %d clearing sleep event to ec\n",
+ 			err);
  
--#include <linux/of_platform.h>
- #include <linux/interrupt.h>
--#include <linux/slab.h>
- #include <linux/module.h>
-+#include <linux/of_platform.h>
- #include <linux/platform_data/cros_ec_commands.h>
- #include <linux/platform_data/cros_ec_proto.h>
-+#include <linux/slab.h>
- #include <linux/suspend.h>
+ 	if (ec_dev->mkbp_event_supported) {
+@@ -338,7 +338,7 @@ int cros_ec_suspend(struct cros_ec_device *ec_dev)
  
- #include "cros_ec.h"
+ 	ret = cros_ec_sleep_event(ec_dev, sleep_event);
+ 	if (ret < 0)
+-		dev_dbg(ec_dev->dev, "Error %d sending suspend event to ec",
++		dev_dbg(ec_dev->dev, "Error %d sending suspend event to ec\n",
+ 			ret);
+ 
+ 	if (device_may_wakeup(dev))
+@@ -381,7 +381,7 @@ int cros_ec_resume(struct cros_ec_device *ec_dev)
+ 
+ 	ret = cros_ec_sleep_event(ec_dev, sleep_event);
+ 	if (ret < 0)
+-		dev_dbg(ec_dev->dev, "Error %d sending resume event to ec",
++		dev_dbg(ec_dev->dev, "Error %d sending resume event to ec\n",
+ 			ret);
+ 
+ 	if (ec_dev->wake_enabled)
 -- 
 2.35.1.265.g69c8d7142f-goog
 

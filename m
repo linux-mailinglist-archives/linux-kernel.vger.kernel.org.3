@@ -2,108 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D76294B8D1F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C29314B8D10
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235874AbiBPP7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 10:59:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38526 "EHLO
+        id S235830AbiBPP66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 10:58:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235841AbiBPP7a (ORCPT
+        with ESMTP id S233829AbiBPP65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 10:59:30 -0500
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012012A797F;
-        Wed, 16 Feb 2022 07:59:17 -0800 (PST)
-Received: from in01.mta.xmission.com ([166.70.13.51]:58066)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nKMi4-009INm-QR; Wed, 16 Feb 2022 08:59:16 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37452 helo=localhost.localdomain)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nKMi3-002YPH-F4; Wed, 16 Feb 2022 08:59:16 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Alexey Gladkov <legion@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Solar Designer <solar@openwall.com>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        containers@lists.linux-foundation.org,
-        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-        linux-api@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>, stable@vger.kernel.org
-Date:   Wed, 16 Feb 2022 09:58:32 -0600
-Message-Id: <20220216155832.680775-5-ebiederm@xmission.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <87ilteiz4a.fsf_-_@email.froward.int.ebiederm.org>
-References: <87ilteiz4a.fsf_-_@email.froward.int.ebiederm.org>
+        Wed, 16 Feb 2022 10:58:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9262A39CB;
+        Wed, 16 Feb 2022 07:58:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6500161A7B;
+        Wed, 16 Feb 2022 15:58:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5CBFC004E1;
+        Wed, 16 Feb 2022 15:58:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645027123;
+        bh=x+vLuZ6qACLHw+sLfjBq8yrKs8jSFGmNBWNxitqLCPI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YXq4+Cu5BTKJCAIYpl8Om38gt6TRAZ7RDgGJaLS6Ed4wLwUI6/rqjix65MqIt3oYq
+         h0dr21ioQtYJPnV2HPEqVE+kfvevipqUr+u6QWwNeMfKXqZDQroX1VbxvUUPm6wgEb
+         FC3MpjAx2aWhgSznoUcRbHg57d64FvnmKk2PEB/z4E6ZJyHYasfx/G9/fZEN9yV2qB
+         JOm/cob+gCNOpo3LadAbV69FJ1VtTRbA43KHUjnbzZKeMo7IXT5szCuaQ26YUBhY7+
+         4ZAghXPtr7m694iZugo9KqtffHovVoVT7ENkeAb5TIK+nHEXu++UJD9n2Q/FUS67ET
+         96GJBGCT7Uc6Q==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nKMhV-008Mjp-Nm; Wed, 16 Feb 2022 15:58:41 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1nKMi3-002YPH-F4;;;mid=<20220216155832.680775-5-ebiederm@xmission.com>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/+Ki8jT8CUWv1olHpIGtHW6IqQTF2AmAU=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Date:   Wed, 16 Feb 2022 15:58:41 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Shawn Guo <shawn.guo@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/3] cpuidle: psci: Call cpu_cluster_pm_enter() on the
+ last CPU
+In-Reply-To: <20220216144937.znsba7zbdenl7427@bogus>
+References: <20220216132830.32490-1-shawn.guo@linaro.org>
+ <20220216132830.32490-2-shawn.guo@linaro.org>
+ <20220216144937.znsba7zbdenl7427@bogus>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <9bda65e5bb85b00eaca71d95ad78e93b@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: sudeep.holla@arm.com, shawn.guo@linaro.org, tglx@linutronix.de, quic_mkshah@quicinc.com, ulf.hansson@linaro.org, bjorn.andersson@linaro.org, lorenzo.pieralisi@arm.com, rafael@kernel.org, daniel.lezcano@linaro.org, robh+dt@kernel.org, devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;linux-kernel@vger.kernel.org
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 452 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 3.9 (0.9%), b_tie_ro: 2.7 (0.6%), parse: 0.71
-        (0.2%), extract_message_metadata: 8 (1.7%), get_uri_detail_list: 0.73
-        (0.2%), tests_pri_-1000: 11 (2.3%), tests_pri_-950: 1.35 (0.3%),
-        tests_pri_-900: 0.81 (0.2%), tests_pri_-90: 241 (53.4%), check_bayes:
-        240 (53.1%), b_tokenize: 4.4 (1.0%), b_tok_get_all: 5 (1.2%),
-        b_comp_prob: 1.35 (0.3%), b_tok_touch_all: 226 (49.9%), b_finish: 0.85
-        (0.2%), tests_pri_0: 176 (38.9%), check_dkim_signature: 0.39 (0.1%),
-        check_dkim_adsp: 1.70 (0.4%), poll_dns_idle: 0.39 (0.1%),
-        tests_pri_10: 1.77 (0.4%), tests_pri_500: 6 (1.3%), rewrite_mail: 0.00
-        (0.0%)
-Subject: [PATCH v2 5/5] ucounts: Handle wrapping in is_ucounts_overlimit
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While examining is_ucounts_overlimit and reading the various messages
-I realized that is_ucounts_overlimit fails to deal with counts that
-may have wrapped.
+On 2022-02-16 14:49, Sudeep Holla wrote:
+> +Ulf (as you he is the author of cpuidle-psci-domains.c and can help 
+> you
+> with that if you require)
+> 
+> On Wed, Feb 16, 2022 at 09:28:28PM +0800, Shawn Guo wrote:
+>> Make a call to cpu_cluster_pm_enter() on the last CPU going to low 
+>> power
+>> state (and cpu_cluster_pm_exit() on the firt CPU coming back), so that
+>> platforms can be notified to set up hardware for getting into the 
+>> cluster
+>> low power state.
+>> 
+> 
+> NACK. We are not getting the notion of CPU cluster back to cpuidle 
+> again.
+> That must die. Remember the cluster doesn't map to idle states 
+> especially
+> in the DSU systems where HMP CPUs are in the same cluster but can be in
+> different power domains.
+> 
+> You need to decide which PSCI CPU_SUSPEND mode you want to use first. 
+> If it is
+> Platform Co-ordinated(PC), then you need not notify anything to the 
+> platform.
+> Just request the desired idle state on each CPU and platform will take 
+> care
+> from there.
+> 
+> If for whatever reason you have chosen OS initiated mode(OSI), then 
+> specify
+> the PSCI power domains correctly in the DT which will make use of the
+> cpuidle-psci-domains and handle the so called "cluster" state 
+> correctly.
 
-Being wrapped should be a transitory state for counts and they should
-never be wrapped for long, but it can happen so handle it.
+My understanding is that what Shawn is after is a way to detect the 
+"last
+man standing" on the system to kick off some funky wake-up controller 
+that
+really should be handled by the power controller (because only that guy
+knows for sure who is the last CPU on the block).
 
-Cc: stable@vger.kernel.org
-Fixes: 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of ucounts")
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
----
- kernel/ucount.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+There was previously some really funky stuff (copy pasted from the 
+existing
+rpmh_rsc_cpu_pm_callback()), which I totally objected to having hidden 
+in
+an irqchip driver.
 
-diff --git a/kernel/ucount.c b/kernel/ucount.c
-index 65b597431c86..06ea04d44685 100644
---- a/kernel/ucount.c
-+++ b/kernel/ucount.c
-@@ -350,7 +350,8 @@ bool is_ucounts_overlimit(struct ucounts *ucounts, enum ucount_type type, unsign
- 	if (rlimit > LONG_MAX)
- 		max = LONG_MAX;
- 	for (iter = ucounts; iter; iter = iter->ns->ucounts) {
--		if (get_ucounts_value(iter, type) > max)
-+		long val = get_ucounts_value(iter, type);
-+		if (val < 0 || val > max)
- 			return true;
- 		max = READ_ONCE(iter->ns->ucount_max[type]);
- 	}
+My ask was that if we needed such information, and assuming that it is
+possible to obtain it in a reliable way, this should come from the core
+code, and not be invented by random drivers.
+
+Thanks,
+
+         M.
 -- 
-2.29.2
-
+Jazz is not dead. It just smells funny...

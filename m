@@ -2,149 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D80494B8352
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3281C4B8353
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbiBPItA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 03:49:00 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:56032 "EHLO
+        id S231715AbiBPItT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 03:49:19 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:57740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbiBPIsw (ORCPT
+        with ESMTP id S231689AbiBPItS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 03:48:52 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553082A4A14;
-        Wed, 16 Feb 2022 00:48:40 -0800 (PST)
-X-UUID: b3d30a3623c543f6876361772a58e209-20220216
-X-UUID: b3d30a3623c543f6876361772a58e209-20220216
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 683093040; Wed, 16 Feb 2022 16:48:34 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 16 Feb 2022 16:48:34 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 16 Feb 2022 16:48:33 +0800
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <matthias.bgg@gmail.com>,
-        <robh+dt@kernel.org>
-CC:     <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <jassisinghbrar@gmail.com>, <fparent@baylibre.com>,
-        <yongqiang.niu@mediatek.com>, <hsinyi@chromium.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH v3,5/5] drm/mediatek: add display support for MT8186
-Date:   Wed, 16 Feb 2022 16:48:31 +0800
-Message-ID: <20220216084831.14883-6-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220216084831.14883-1-rex-bc.chen@mediatek.com>
-References: <20220216084831.14883-1-rex-bc.chen@mediatek.com>
+        Wed, 16 Feb 2022 03:49:18 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F2E25A95F
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:49:06 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4ED9F1F383;
+        Wed, 16 Feb 2022 08:49:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1645001345; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fz8Fcg3DetJc33zyxaPnbTe2xNfylmTXx0ZDiKry/OI=;
+        b=NXSh1XpyU7pEPODc/7T4RBPIq4il7OEqZH2+lAc+NGFH4eR1YdFLOAs0UHaw9Gv6oDGT2K
+        lblF2PWUXBasw66aDJUnli6wX8CQO/tQ+HfzWamm0CLZXRqau2tHWUY86Y/hm6+6tRTGw0
+        jgiYpTmlAvTFnZqWCLpISMtAwuyEUds=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1645001345;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fz8Fcg3DetJc33zyxaPnbTe2xNfylmTXx0ZDiKry/OI=;
+        b=QmkOCE2qEjbi3r8p55Qzv9QCmnF/f6hylmXm6JLXOIkpELVdGQbtEywORsipnAkYiB3gLz
+        xknEmHcJgkHMxZAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3E7CC13A7C;
+        Wed, 16 Feb 2022 08:49:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id w+DjCoC6DGKjWgAAMHmgww
+        (envelope-from <osalvador@suse.de>); Wed, 16 Feb 2022 08:49:04 +0000
+Date:   Wed, 16 Feb 2022 09:49:02 +0100
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Huang Ying <ying.huang@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Rik van Riel <riel@surriel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Zi Yan <ziy@nvidia.com>, Wei Xu <weixugc@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>
+Subject: Re: [PATCH -V12 1/3] NUMA Balancing: add page promotion counter
+Message-ID: <Ygy6fg/KOTikCgLW@localhost.localdomain>
+References: <20220216073815.2505536-1-ying.huang@intel.com>
+ <20220216073815.2505536-2-ying.huang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216073815.2505536-2-ying.huang@intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yongqiang Niu <yongqiang.niu@mediatek.com>
+On Wed, Feb 16, 2022 at 03:38:13PM +0800, Huang Ying wrote:
+> In a system with multiple memory types, e.g. DRAM and PMEM, the CPU
+> and DRAM in one socket will be put in one NUMA node as before, while
+> the PMEM will be put in another NUMA node as described in the
+> description of the commit c221c0b0308f ("device-dax: "Hotplug"
+> persistent memory for use like normal RAM").  So, the NUMA balancing
+> mechanism will identify all PMEM accesses as remote access and try to
+> promote the PMEM pages to DRAM.
+> 
+> To distinguish the number of the inter-type promoted pages from that
+> of the inter-socket migrated pages.  A new vmstat count is added.  The
+> counter is per-node (count in the target node).  So this can be used
+> to identify promotion imbalance among the NUMA nodes.
+> 
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Reviewed-by: Yang Shi <shy828301@gmail.com>
+> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: Rik van Riel <riel@surriel.com>
+> Cc: Mel Gorman <mgorman@techsingularity.net>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Zi Yan <ziy@nvidia.com>
+> Cc: Wei Xu <weixugc@google.com>
+> Cc: osalvador <osalvador@suse.de>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Cc: zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-mm@kvack.org
+> ---
+...
 
-Add mmsys driver data and compatible for MT8186 in mtk_drm_drv.c.
+> @@ -2072,6 +2072,7 @@ int migrate_misplaced_page(struct page *page, struct vm_area_struct *vma,
+>  	pg_data_t *pgdat = NODE_DATA(node);
+>  	int isolated;
+>  	int nr_remaining;
+> +	int nr_succeeded;
 
-Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
-Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
----
- drivers/gpu/drm/mediatek/mtk_drm_drv.c | 33 ++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+I think we should make this consistent and make it "unsigned int".
+That is what migrate_pages() expects, and what the other caller using
+nr_succeeded (demote_page_list()) already uses.
+Unless there is a strong reason not to do so.
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-index 56ff8c57ef8f..be582e64d067 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-@@ -158,6 +158,24 @@ static const enum mtk_ddp_comp_id mt8183_mtk_ddp_ext[] = {
- 	DDP_COMPONENT_DPI0,
- };
- 
-+static const enum mtk_ddp_comp_id mt8186_mtk_ddp_main[] = {
-+	DDP_COMPONENT_OVL0,
-+	DDP_COMPONENT_RDMA0,
-+	DDP_COMPONENT_COLOR0,
-+	DDP_COMPONENT_CCORR,
-+	DDP_COMPONENT_AAL0,
-+	DDP_COMPONENT_GAMMA,
-+	DDP_COMPONENT_POSTMASK0,
-+	DDP_COMPONENT_DITHER,
-+	DDP_COMPONENT_DSI0,
-+};
-+
-+static const enum mtk_ddp_comp_id mt8186_mtk_ddp_ext[] = {
-+	DDP_COMPONENT_OVL_2L0,
-+	DDP_COMPONENT_RDMA1,
-+	DDP_COMPONENT_DPI0,
-+};
-+
- static const enum mtk_ddp_comp_id mt8192_mtk_ddp_main[] = {
- 	DDP_COMPONENT_OVL0,
- 	DDP_COMPONENT_OVL_2L0,
-@@ -221,6 +239,13 @@ static const struct mtk_mmsys_driver_data mt8183_mmsys_driver_data = {
- 	.ext_len = ARRAY_SIZE(mt8183_mtk_ddp_ext),
- };
- 
-+static const struct mtk_mmsys_driver_data mt8186_mmsys_driver_data = {
-+	.main_path = mt8186_mtk_ddp_main,
-+	.main_len = ARRAY_SIZE(mt8186_mtk_ddp_main),
-+	.ext_path = mt8186_mtk_ddp_ext,
-+	.ext_len = ARRAY_SIZE(mt8186_mtk_ddp_ext),
-+};
-+
- static const struct mtk_mmsys_driver_data mt8192_mmsys_driver_data = {
- 	.main_path = mt8192_mtk_ddp_main,
- 	.main_len = ARRAY_SIZE(mt8192_mtk_ddp_main),
-@@ -463,6 +488,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
- 	  .data = (void *)MTK_DISP_MUTEX },
- 	{ .compatible = "mediatek,mt8183-disp-mutex",
- 	  .data = (void *)MTK_DISP_MUTEX },
-+	{ .compatible = "mediatek,mt8186-disp-mutex",
-+	  .data = (void *)MTK_DISP_MUTEX },
- 	{ .compatible = "mediatek,mt8192-disp-mutex",
- 	  .data = (void *)MTK_DISP_MUTEX },
- 	{ .compatible = "mediatek,mt8173-disp-od",
-@@ -511,12 +538,16 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
- 	  .data = (void *)MTK_DPI },
- 	{ .compatible = "mediatek,mt8183-dpi",
- 	  .data = (void *)MTK_DPI },
-+	{ .compatible = "mediatek,mt8186-dpi",
-+	  .data = (void *)MTK_DPI },
- 	{ .compatible = "mediatek,mt2701-dsi",
- 	  .data = (void *)MTK_DSI },
- 	{ .compatible = "mediatek,mt8173-dsi",
- 	  .data = (void *)MTK_DSI },
- 	{ .compatible = "mediatek,mt8183-dsi",
- 	  .data = (void *)MTK_DSI },
-+	{ .compatible = "mediatek,mt8186-dsi",
-+	  .data = (void *)MTK_DSI },
- 	{ }
- };
- 
-@@ -533,6 +564,8 @@ static const struct of_device_id mtk_drm_of_ids[] = {
- 	  .data = &mt8173_mmsys_driver_data},
- 	{ .compatible = "mediatek,mt8183-mmsys",
- 	  .data = &mt8183_mmsys_driver_data},
-+	{ .compatible = "mediatek,mt8186-mmsys",
-+	  .data = &mt8186_mmsys_driver_data},
- 	{ .compatible = "mediatek,mt8192-mmsys",
- 	  .data = &mt8192_mmsys_driver_data},
- 	{ }
+Reviewed-by: Oscar Salvador <osalvador@suse.de>
+
+
 -- 
-2.18.0
-
+Oscar Salvador
+SUSE Labs

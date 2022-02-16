@@ -2,183 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7E64B89A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:21:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAFFF4B897C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:19:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234038AbiBPNVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:21:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35448 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231818AbiBPNTc (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S234264AbiBPNTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 16 Feb 2022 08:19:32 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BD5C29B9C2;
-        Wed, 16 Feb 2022 05:18:45 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 87532106F;
-        Wed, 16 Feb 2022 05:18:45 -0800 (PST)
-Received: from [10.1.31.148] (e127744.cambridge.arm.com [10.1.31.148])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 017123F66F;
-        Wed, 16 Feb 2022 05:18:41 -0800 (PST)
-Subject: Re: [PATCH] perf test: update arm64 perf_event_attr tests for
- --call-graph
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, irogers@google.com
-References: <20220125104435.2737-1-german.gomez@arm.com>
-From:   German Gomez <german.gomez@arm.com>
-Message-ID: <622a42bd-69da-0df4-bbf3-7d21de77c73b@arm.com>
-Date:   Wed, 16 Feb 2022 13:17:56 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34642 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234133AbiBPNSt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 16 Feb 2022 08:18:49 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646EC2AC925
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:18:17 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso3730667wmj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:18:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=algolia.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PlNi9ciElPwEs1LJoEB8xZkE+EnHB0mIZHsYC5NhAsY=;
+        b=w0jBpzaR5vaPbYOcj2spBHJfOMj3nwWNKsycXYvill3tWXFQ4LXr+vaDsKxJLBa9Ev
+         MdZYWVsdfvgjdAXBoJdyOPeH0kafRB9UvrpwMIucZ4/rjHH/BVKe4kuVFw8Pf8OFEJLo
+         P5EU0NQTIwXw7KDM4xH/9O9Uxes+q5KPbRKtg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PlNi9ciElPwEs1LJoEB8xZkE+EnHB0mIZHsYC5NhAsY=;
+        b=hnOFMSxwBB2QbL/58EhMfngJWe8t2P5uF24vgFN7IrimxN9+ZCBF7YVIGrQ0GNGkr5
+         VM8NbM4cits5Sa+Zf+KFCBTnRRnF/AYPTHBQupkfzXkRR2SYnT4iTO9gicgfZ6qPzfZ1
+         k6Uwz5GNnjTpW3CVufkISdGqmwinhIbfuqV3tevEdsz4HN8VFLFZaSh8ZgIrNk4oRaTL
+         AQ5/NpjLTgLUCzzFSnvD+pRmqNEEQdfyQGsHFf1peELmkECt3jmeYw/BEjglY2wHmfjI
+         6ITJnxeIuB+AByEEB1tBBnlM0FEYfN1ZBEmqIuRlVL/ohrSNRqizjWmH0cGIY8Lh239q
+         W2hQ==
+X-Gm-Message-State: AOAM530AjU9d+xNPwhCdnyq4eIXh0rRnIB/EXAhHH21ELjt2soeTI6X2
+        fdgXsJTlj1zoZkuLrfwwprabgSuqSBJARecw
+X-Google-Smtp-Source: ABdhPJy0vRrYV6duj8pGGxIELNPUfCUwW0eEI7uQbDouSdpL6nweY9x4I6bCFDU/V85DPITDc0BgTw==
+X-Received: by 2002:a05:600c:20c7:b0:37b:b739:8177 with SMTP id y7-20020a05600c20c700b0037bb7398177mr1605527wmm.121.1645017495859;
+        Wed, 16 Feb 2022 05:18:15 -0800 (PST)
+Received: from xavier-xps ([2a01:e0a:830:d971:752e:e19b:a691:2171])
+        by smtp.gmail.com with ESMTPSA id x7sm28339793wro.21.2022.02.16.05.18.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 05:18:15 -0800 (PST)
+Date:   Wed, 16 Feb 2022 14:18:14 +0100
+From:   Xavier Roche <xavier.roche@algolia.com>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.vnet.ibm.com>
+Subject: Re: race between vfs_rename and do_linkat (mv and link)
+Message-ID: <20220216131814.GA2463301@xavier-xps>
+References: <20220214210708.GA2167841@xavier-xps>
+ <CAJfpegvVKWHhhXwOi9jDUOJi2BnYSDxZQrp1_RRrpVjjZ3Rs2w@mail.gmail.com>
+ <YguspMvu6M6NJ1hL@zeniv-ca.linux.org.uk>
+ <YgvPbljmJXsR7ESt@zeniv-ca.linux.org.uk>
+ <YgvSB6CKAhF5IXFj@casper.infradead.org>
+ <YgvS1XOJMn5CjQyw@zeniv-ca.linux.org.uk>
+ <CAJfpegv03YpTPiDnLwbaewQX_KZws5nutays+vso2BVJ1v1+TA@mail.gmail.com>
+ <YgzRwhavapo69CAn@miu.piliscsaba.redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20220125104435.2737-1-german.gomez@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgzRwhavapo69CAn@miu.piliscsaba.redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Feb 16, 2022 at 11:28:18AM +0100, Miklos Szeredi wrote:
+> Something like this:
+> diff --git a/fs/namei.c b/fs/namei.c
+> index 3f1829b3ab5b..dd6908cee49d 100644
 
-Friendly ping on this perf-test fix for arm64
+Tested-by: Xavier Roche <xavier.roche@algolia.com>
 
-I will include some quick test notes:
+I confirm this completely fixes at least the specific race. Tested on a
+unpatched and then patched 5.16.5, with the trivial bash test, and then
+with a C++ torture test.
+
 Before:
+-------
 
-$ ./perf test 17 -v
-17: Setup struct perf_event_attr
-[...]
-running './tests/attr/test-record-graph-default'
-expected sample_type=295, got 4391
-expected sample_regs_user=0, got 1073741824
-FAILED './tests/attr/test-record-graph-default' - match failure
-test child finished with -1
----- end ----
+$ time ./linkbug
+Failed after 4 with No such file or directory
+
+real	0m0,004s
+user	0m0,000s
+sys	0m0,004s
 
 After:
+------
 
-[...]
-running './tests/attr/test-record-graph-default-aarch64'
-test limitation 'aarch64'
-running './tests/attr/test-record-graph-fp-aarch64'
-test limitation 'aarch64'
-running './tests/attr/test-record-graph-default'
-test limitation '!aarch64'
-excluded architecture list ['aarch64']
-skipped [aarch64] './tests/attr/test-record-graph-default'
-running './tests/attr/test-record-graph-fp'
-test limitation '!aarch64'
-excluded architecture list ['aarch64']
-skipped [aarch64] './tests/attr/test-record-graph-fp'
-[...]
+(no error after ten minutes of running the program)
 
-Thanks,
-German
+Torture test program:
+---------------------
 
-On 25/01/2022 10:44, German Gomez wrote:
-> The struct perf_event_attr is initialised differently in Arm64 when
-> recording in call-graph fp mode, so update the relevant tests, and add
-> two extra arm64-only tests.
->
-> Fixes: 7248e308a575 ("perf tools: Record ARM64 LR register automatically")
-> Signed-off-by: German Gomez <german.gomez@arm.com>
-> ---
->  tools/perf/tests/attr/README                            | 2 ++
->  tools/perf/tests/attr/test-record-graph-default         | 2 ++
->  tools/perf/tests/attr/test-record-graph-default-aarch64 | 9 +++++++++
->  tools/perf/tests/attr/test-record-graph-fp              | 2 ++
->  tools/perf/tests/attr/test-record-graph-fp-aarch64      | 9 +++++++++
->  5 files changed, 24 insertions(+)
->  create mode 100644 tools/perf/tests/attr/test-record-graph-default-aarch64
->  create mode 100644 tools/perf/tests/attr/test-record-graph-fp-aarch64
->
-> diff --git a/tools/perf/tests/attr/README b/tools/perf/tests/attr/README
-> index a36f49fb4dbe..1116fc6bf2ac 100644
-> --- a/tools/perf/tests/attr/README
-> +++ b/tools/perf/tests/attr/README
-> @@ -45,8 +45,10 @@ Following tests are defined (with perf commands):
->    perf record -d kill                           (test-record-data)
->    perf record -F 100 kill                       (test-record-freq)
->    perf record -g kill                           (test-record-graph-default)
-> +  perf record -g kill                           (test-record-graph-default-aarch64)
->    perf record --call-graph dwarf kill		(test-record-graph-dwarf)
->    perf record --call-graph fp kill              (test-record-graph-fp)
-> +  perf record --call-graph fp kill              (test-record-graph-fp-aarch64)
->    perf record --group -e cycles,instructions kill (test-record-group)
->    perf record -e '{cycles,instructions}' kill   (test-record-group1)
->    perf record -e '{cycles/period=1/,instructions/period=2/}:S' kill (test-record-group2)
-> diff --git a/tools/perf/tests/attr/test-record-graph-default b/tools/perf/tests/attr/test-record-graph-default
-> index 5d8234d50845..f0a18b4ea4f5 100644
-> --- a/tools/perf/tests/attr/test-record-graph-default
-> +++ b/tools/perf/tests/attr/test-record-graph-default
-> @@ -2,6 +2,8 @@
->  command = record
->  args    = --no-bpf-event -g kill >/dev/null 2>&1
->  ret     = 1
-> +# arm64 enables registers in the default mode (fp)
-> +arch    = !aarch64
->  
->  [event:base-record]
->  sample_type=295
-> diff --git a/tools/perf/tests/attr/test-record-graph-default-aarch64 b/tools/perf/tests/attr/test-record-graph-default-aarch64
-> new file mode 100644
-> index 000000000000..e98d62efb6f7
-> --- /dev/null
-> +++ b/tools/perf/tests/attr/test-record-graph-default-aarch64
-> @@ -0,0 +1,9 @@
-> +[config]
-> +command = record
-> +args    = --no-bpf-event -g kill >/dev/null 2>&1
-> +ret     = 1
-> +arch    = aarch64
-> +
-> +[event:base-record]
-> +sample_type=4391
-> +sample_regs_user=1073741824
-> diff --git a/tools/perf/tests/attr/test-record-graph-fp b/tools/perf/tests/attr/test-record-graph-fp
-> index 5630521c0b0f..a6e60e839205 100644
-> --- a/tools/perf/tests/attr/test-record-graph-fp
-> +++ b/tools/perf/tests/attr/test-record-graph-fp
-> @@ -2,6 +2,8 @@
->  command = record
->  args    = --no-bpf-event --call-graph fp kill >/dev/null 2>&1
->  ret     = 1
-> +# arm64 enables registers in fp mode
-> +arch    = !aarch64
->  
->  [event:base-record]
->  sample_type=295
-> diff --git a/tools/perf/tests/attr/test-record-graph-fp-aarch64 b/tools/perf/tests/attr/test-record-graph-fp-aarch64
-> new file mode 100644
-> index 000000000000..cbeea9971285
-> --- /dev/null
-> +++ b/tools/perf/tests/attr/test-record-graph-fp-aarch64
-> @@ -0,0 +1,9 @@
-> +[config]
-> +command = record
-> +args    = --no-bpf-event --call-graph fp kill >/dev/null 2>&1
-> +ret     = 1
-> +arch    = aarch64
-> +
-> +[event:base-record]
-> +sample_type=4391
-> +sample_regs_user=1073741824
+/* Linux rename vs. linkat race condition.
+ * Rationale: both (1) moving a file to a target and (2) linking the target to a file in parallel leads to a race
+ * on Linux kernel.
+ * Sample file courtesy of Xavier Grand at Algolia
+ * g++ -pthread linkbug.c -o linkbug
+ */
+
+#include <thread>
+#include <unistd.h>
+#include <assert.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <iostream>
+#include <string.h>
+
+static const char* producedDir = "/tmp";
+static const char* producedFile = "/tmp/file.txt";
+static const char* producedTmpFile = "/tmp/file.txt.tmp";
+static const char* producedThreadDir = "/tmp/tmp";
+static const char* producedThreadFile = "/tmp/file.txt.tmp.2";
+
+bool createFile(const char* path)
+{
+    const int fdOut = open(path,
+                           O_WRONLY | O_CREAT | O_TRUNC | O_EXCL | O_CLOEXEC,
+                           S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+    assert(fdOut != -1);
+    assert(write(fdOut, "Foo", 4) == 4);
+    assert(close(fdOut) == 0);
+    return true;
+}
+
+void func()
+{
+    int nbSuccess = 0;
+    // Loop producedThread a hardlink of the file
+    while (true) {
+        if (link(producedFile, producedThreadFile) != 0) {
+            std::cout << "Failed after " << nbSuccess << " with " << strerror(errno) << std::endl;
+            exit(EXIT_FAILURE);
+        } else {
+            nbSuccess++;
+        }
+        assert(unlink(producedThreadFile) == 0);
+    }
+}
+
+int main()
+{
+    // Setup env
+    unlink(producedTmpFile);
+    unlink(producedFile);
+    unlink(producedThreadFile);
+    createFile(producedFile);
+    mkdir(producedThreadDir, 0777);
+
+    // Async thread doing a hardlink and moving it
+    std::thread t(func);
+    // Loop creating a .tmp and moving it
+    while (true) {
+        assert(createFile(producedTmpFile));
+        assert(rename(producedTmpFile, producedFile) == 0);
+    }
+    return 0;
+}

@@ -2,168 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 783254B7EB3
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 04:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2890B4B7ED9
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 04:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344274AbiBPDWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 22:22:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52058 "EHLO
+        id S243920AbiBPD00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 22:26:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344278AbiBPDWj (ORCPT
+        with ESMTP id S229526AbiBPD0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 22:22:39 -0500
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F7869289
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 19:22:23 -0800 (PST)
-Received: by mail-oo1-xc2b.google.com with SMTP id e19-20020a4ab993000000b0031a98fe3a9dso431176oop.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 19:22:23 -0800 (PST)
+        Tue, 15 Feb 2022 22:26:24 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFD0FEB32
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 19:26:10 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id x3-20020a05600c21c300b0037c01ad715bso649084wmj.2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 19:26:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1UE5mxJJnwzOyLPJKQRyZVhIVlOta3ZlkgAHdJG/ons=;
-        b=c8nILGB/vkXbwXmQNrD1XfFv4PsbmcvPox9DWoBvaa5KFr//oCPe/HBc7V1xMDki6V
-         rxJKcDFS9QKbWinbfQzZL0hcFDZml2XCVki2ksrTj0nyk14LovCKxxP1Wm3gOWFqq3ca
-         nwZ+HUZDdSOkO1VXXT+H8aszhZ68/VVgegb24evWrooUJDirVAp3y/ocAS7Zrq96NEnK
-         dm3+8AtWXl+NK63qRLcNgtMhXgMxvQzwATepWM7rz+D8HoXgWXBcaA9zN3v7EPLLQ4Nz
-         ELwyRnGVzqdus62zJ1+pscdJwYqSXODohDsUjLssFJHc15UCLYRIrfVlSpz6i+G80n65
-         0lRQ==
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jwhFIm2pjxqH4S1QMmhp69WD0Yx/q3G7DzS41sze+Fs=;
+        b=riYhJ/NFDeUTP+27duj6KaHVTshaiOQWoiNe0wD5HsocnEG4P2zjeu1WJJDyF+7tg8
+         HCeN+YgLtAuAqFdXC5u5r4J1kreE47Ve+t4e9Tzc3e/bR6dW6cfCEx+AULlAjs0UFA7b
+         5iYtqizK/2DbwQ3MdQzFC5ShahlfHXfxfbRTyv3sjEKEHhbO96isAQ/oJlBBafJ4RfO6
+         Ik2sa+YCrQVXyZRleWwPOmZS9xfiQMBjan/DE793V7AulbEAwpf909pO0yRuMLybh51Z
+         HNPSzg49iXmvLcs5NFrZBcGz1w3jwq6ATwFOagq0fPdiZtS5k3qPuXa39lc6+Ewfq3Uz
+         nhCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1UE5mxJJnwzOyLPJKQRyZVhIVlOta3ZlkgAHdJG/ons=;
-        b=WZZejVl1XBOd9EwajkVJjtrN74mCyKEEb/IK3ngbfT/UFxU2wqj344GRbxp2ZZRAx1
-         9wtj9GdyD38gmQkzxc1jgKbqPzkk7Yy3ZscytLnDR0xunznZ1LFYRVSLAT+fJnDa6l7l
-         bBVk8kE/uNrpYNRwE3xLOhwJmso0APkK1eaTYuAM/M594LDEskTzvMeWhPKs0LFaK0nE
-         Bl04+BtqFyzkrrzKyjPOtq4QbshkOB4eAWHqpGbfBVdePxn5uy+Wzfv4/oU4scVzl7zv
-         nVCLoBn00xD4PALxVzryUSroYUUP7qFdf1RuBU0xbmNBTfd4H3g+fKrKr2ReRPiIIyCz
-         kQ0Q==
-X-Gm-Message-State: AOAM532v0Ua9gxTUN/5jxVAE0d1ht0Fuj86kuqp27i05d07llIgDEGjM
-        puwwe4uBymhcfY45RBbQJDsjHQ==
-X-Google-Smtp-Source: ABdhPJxNTbE35rjOZUVQXv0RMxWaa9rztzoP+D5KoISvvHkCMF49ddlGEIsYPQW0xXvoXKAmBm7jhg==
-X-Received: by 2002:a05:6870:7884:b0:d3:1509:b400 with SMTP id hc4-20020a056870788400b000d31509b400mr323676oab.292.1644981742656;
-        Tue, 15 Feb 2022 19:22:22 -0800 (PST)
-Received: from [192.168.11.51] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
-        by smtp.gmail.com with ESMTPSA id l14sm14267638ooq.12.2022.02.15.19.22.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 19:22:22 -0800 (PST)
-Message-ID: <47ae3e73-5880-bfb7-fc14-7dd95a75ce14@kali.org>
-Date:   Tue, 15 Feb 2022 21:22:20 -0600
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jwhFIm2pjxqH4S1QMmhp69WD0Yx/q3G7DzS41sze+Fs=;
+        b=NA5Y5R/XGxmMoAMYgqmP3N0YygCPNquckYyJ8Q183vPSbce9XtUVcYXzH1A0Hc6jLo
+         zKTGfmFnXUNaFNZ08crEUrN68W+oABtEBnB0zyRAF+XbQRaX+tYlNC0svXD45v1RLVob
+         RT5UhRWKQ0K5Mhj28wg0+unp1Lz/yW+ojF9XPdZvV0V1dxSUGB7YxoPr6AKzJOzDM38o
+         LNvXVywIdSFNKP95F3wtR5Goc3eOT1resbXabXzdLEPb1Dl7jn7tycxZAsxi9c35bA+5
+         IXjoZ7ZLaAfDaCjzmlYWhw8HaPy5ciO5GsO9lZQxI1LcFxUHQhmkSujP30zdpGTKnygR
+         QT2g==
+X-Gm-Message-State: AOAM532/iewXHkRKY/bSJQs5HqYsdkPhhX6w8I0V5dE1CpQpAGHkTsVs
+        CqN74V4YUsZyeph7K1wotiPsRGexmAn6RXP+ckmq3A==
+X-Google-Smtp-Source: ABdhPJyRrOhHG9NugLem/Yuo2TIr9R5jqud/r7I7SljQVLpVr4bWltjwldVI0/2cSoJTehq0BS93uj6Y8dpcZ9dYSY0=
+X-Received: by 2002:a7b:cf16:0:b0:37b:c4c9:96c6 with SMTP id
+ l22-20020a7bcf16000000b0037bc4c996c6mr683144wmg.59.1644981969162; Tue, 15 Feb
+ 2022 19:26:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [PATCH v10 6/6] usb: dwc3: qcom: Enable the interrupts during
- probe
-Content-Language: en-US
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com
-References: <1642398248-21753-1-git-send-email-quic_c_sanm@quicinc.com>
- <1642398248-21753-7-git-send-email-quic_c_sanm@quicinc.com>
- <93b68251-7e7e-ac92-fb47-346c410744b2@kali.org>
- <20220118095255.GB11385@hu-pkondeti-hyd.qualcomm.com>
- <78c90e46-666b-bc9b-235d-ae4c69e19929@quicinc.com>
- <601cdc74-392f-dd4f-7ea0-8e65c6b6d7e2@quicinc.com>
- <52b37547-3e78-b18c-307d-7eedf5baab0d@kali.org>
- <0e006cc0-2760-195a-35b9-0a2f6e8452c5@quicinc.com>
-From:   Steev Klimaszewski <steev@kali.org>
-In-Reply-To: <0e006cc0-2760-195a-35b9-0a2f6e8452c5@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220216031528.92558-1-chao.gao@intel.com> <20220216031528.92558-3-chao.gao@intel.com>
+In-Reply-To: <20220216031528.92558-3-chao.gao@intel.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Wed, 16 Feb 2022 08:55:55 +0530
+Message-ID: <CAAhSdy0PfCegu9vQY76pD-cLfP_S1xnyWARdinG4jbuJ_eVQkg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/6] Partially revert "KVM: Pass kvm_init()'s opaque
+ param to additional arch funcs"
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        KVM General <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, kevin.tian@intel.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
+        Bharata B Rao <bharata@linux.ibm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sandeep,
-
-On 2/15/22 3:40 AM, Sandeep Maheswaram wrote:
-> Hi Steev,
+On Wed, Feb 16, 2022 at 8:46 AM Chao Gao <chao.gao@intel.com> wrote:
 >
->>>>
->>> Can you try with IRQ_TYPE_EDGE_BOTH in your device tree and see if 
->>> you are getting the issue.
->>>
->>> Regards
->>>
->>> Sandeep
->>>
->> I just tested here, changing both of the IRQ_TYPE_LEVEL_HIGH in the 
->> yoga's dts to EDGE_BOTH and I still do not get a booting system.
->>
->> -- Steev
->>
-> Please let us know what devices are connected to your setup and share 
-> the device tree file you are using.
+> This partially reverts commit b99040853738 ("KVM: Pass kvm_init()'s opaque
+> param to additional arch funcs") remove opaque from
+> kvm_arch_check_processor_compat because no one uses this opaque now.
+> Address conflicts for ARM (due to file movement) and manually handle RISC-V
+> which comes after the commit.
 >
-> Please share the failure logs also,
+> And changes about kvm_arch_hardware_setup() in original commit are still
+> needed so they are not reverted.
 >
-> Regards
+> Signed-off-by: Chao Gao <chao.gao@intel.com>
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
+
+For KVM RISC-V:
+Acked-by: Anup Patel <anup@brainfault.org>
+
+Regards,
+Anup
+
+
+> ---
+>  arch/arm64/kvm/arm.c       |  2 +-
+>  arch/mips/kvm/mips.c       |  2 +-
+>  arch/powerpc/kvm/powerpc.c |  2 +-
+>  arch/riscv/kvm/main.c      |  2 +-
+>  arch/s390/kvm/kvm-s390.c   |  2 +-
+>  arch/x86/kvm/x86.c         |  2 +-
+>  include/linux/kvm_host.h   |  2 +-
+>  virt/kvm/kvm_main.c        | 16 +++-------------
+>  8 files changed, 10 insertions(+), 20 deletions(-)
 >
-> Sandeep
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index ecc5958e27fe..0165cf3aac3a 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -73,7 +73,7 @@ int kvm_arch_hardware_setup(void *opaque)
+>         return 0;
+>  }
 >
-The setup is a Lenovo Yoga C630 (Windows on ARM laptop).  I do not have 
-any sort of serial console access to the device, unfortunately.  Even 
-when taking it apart, it seems to have some sort of 26pin debug adapter 
-port that I've never seen before which you can see on the far right in 
-this picture of the motherboard at 
-https://i.ebayimg.com/images/g/a2EAAOSwwzZiCxPM/s-l1600.jpg
-
-I do not have anything plugged in to the USB ports (sometimes the power 
-adapter, but I have tried both on mains as well as off.)
-
-I am using this diff
-
-
-diff --git a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-index eab3f00c603235..c54042b9e21df2 100644
---- a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-@@ -370,7 +370,7 @@
-  		reg = <0x15>;
-  		hid-descr-addr = <0x1>;
-  
--		interrupts-extended = <&tlmm 37 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupts-extended = <&tlmm 37 IRQ_TYPE_EDGE_BOTH>;
-  	};
-  
-  	tsc2: hid@2c {
-@@ -378,7 +378,7 @@
-  		reg = <0x2c>;
-  		hid-descr-addr = <0x20>;
-  
--		interrupts-extended = <&tlmm 37 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupts-extended = <&tlmm 37 IRQ_TYPE_EDGE_BOTH>;
-  	};
-  };
-
-Which I added as a commit to my kernel tree, and pushed so you can see 
-the full dts here: 
-https://github.com/steev/linux/blob/c8234e664491e35e3edcd211f3b78c04436402b0/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-
-I am booting with the command line arguments of
-
-clk_ignore_unused verbose module_blacklist=msm video=efifb 
-earlyconsole=efifb
-
-I can't provide a boot log, because I'm not actually getting anything.  
-Booting a different kernel, and it doesn't appear that anything is 
-logged at all.
-
-
--- steev
-
+> -int kvm_arch_check_processor_compat(void *opaque)
+> +int kvm_arch_check_processor_compat(void)
+>  {
+>         return 0;
+>  }
+> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+> index a25e0b73ee70..092d09fb6a7e 100644
+> --- a/arch/mips/kvm/mips.c
+> +++ b/arch/mips/kvm/mips.c
+> @@ -140,7 +140,7 @@ int kvm_arch_hardware_setup(void *opaque)
+>         return 0;
+>  }
+>
+> -int kvm_arch_check_processor_compat(void *opaque)
+> +int kvm_arch_check_processor_compat(void)
+>  {
+>         return 0;
+>  }
+> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+> index 2ad0ccd202d5..30c817f3fa0c 100644
+> --- a/arch/powerpc/kvm/powerpc.c
+> +++ b/arch/powerpc/kvm/powerpc.c
+> @@ -423,7 +423,7 @@ int kvm_arch_hardware_setup(void *opaque)
+>         return 0;
+>  }
+>
+> -int kvm_arch_check_processor_compat(void *opaque)
+> +int kvm_arch_check_processor_compat(void)
+>  {
+>         return kvmppc_core_check_processor_compat();
+>  }
+> diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
+> index 2e5ca43c8c49..992877e78393 100644
+> --- a/arch/riscv/kvm/main.c
+> +++ b/arch/riscv/kvm/main.c
+> @@ -20,7 +20,7 @@ long kvm_arch_dev_ioctl(struct file *filp,
+>         return -EINVAL;
+>  }
+>
+> -int kvm_arch_check_processor_compat(void *opaque)
+> +int kvm_arch_check_processor_compat(void)
+>  {
+>         return 0;
+>  }
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 577f1ead6a51..0053b81c6b02 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -252,7 +252,7 @@ int kvm_arch_hardware_enable(void)
+>         return 0;
+>  }
+>
+> -int kvm_arch_check_processor_compat(void *opaque)
+> +int kvm_arch_check_processor_compat(void)
+>  {
+>         return 0;
+>  }
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 9b484ed61f37..ffb88f0b7265 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -11509,7 +11509,7 @@ void kvm_arch_hardware_unsetup(void)
+>         static_call(kvm_x86_hardware_unsetup)();
+>  }
+>
+> -int kvm_arch_check_processor_compat(void *opaque)
+> +int kvm_arch_check_processor_compat(void)
+>  {
+>         struct cpuinfo_x86 *c = &cpu_data(smp_processor_id());
+>
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index f11039944c08..2ad78e729bf7 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1413,7 +1413,7 @@ int kvm_arch_hardware_enable(void);
+>  void kvm_arch_hardware_disable(void);
+>  int kvm_arch_hardware_setup(void *opaque);
+>  void kvm_arch_hardware_unsetup(void);
+> -int kvm_arch_check_processor_compat(void *opaque);
+> +int kvm_arch_check_processor_compat(void);
+>  int kvm_arch_vcpu_runnable(struct kvm_vcpu *vcpu);
+>  bool kvm_arch_vcpu_in_kernel(struct kvm_vcpu *vcpu);
+>  int kvm_arch_vcpu_should_kick(struct kvm_vcpu *vcpu);
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 83c57bcc6eb6..ee47d33d69e1 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -5643,22 +5643,14 @@ void kvm_unregister_perf_callbacks(void)
+>  }
+>  #endif
+>
+> -struct kvm_cpu_compat_check {
+> -       void *opaque;
+> -       int *ret;
+> -};
+> -
+> -static void check_processor_compat(void *data)
+> +static void check_processor_compat(void *rtn)
+>  {
+> -       struct kvm_cpu_compat_check *c = data;
+> -
+> -       *c->ret = kvm_arch_check_processor_compat(c->opaque);
+> +       *(int *)rtn = kvm_arch_check_processor_compat();
+>  }
+>
+>  int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
+>                   struct module *module)
+>  {
+> -       struct kvm_cpu_compat_check c;
+>         int r;
+>         int cpu;
+>
+> @@ -5686,10 +5678,8 @@ int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
+>         if (r < 0)
+>                 goto out_free_1;
+>
+> -       c.ret = &r;
+> -       c.opaque = opaque;
+>         for_each_online_cpu(cpu) {
+> -               smp_call_function_single(cpu, check_processor_compat, &c, 1);
+> +               smp_call_function_single(cpu, check_processor_compat, &r, 1);
+>                 if (r < 0)
+>                         goto out_free_2;
+>         }
+> --
+> 2.25.1
+>

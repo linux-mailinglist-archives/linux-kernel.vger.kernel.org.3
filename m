@@ -2,116 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1E64B93AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 23:13:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 374794B93B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 23:14:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236747AbiBPWNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 17:13:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37356 "EHLO
+        id S236902AbiBPWOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 17:14:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbiBPWNr (ORCPT
+        with ESMTP id S230121AbiBPWOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 17:13:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 469C42AED84
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 14:13:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645049612;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GInsY8EWMmzWnfSQud73Z6xT/DOtOKlNQiWr2Elb/hk=;
-        b=gt5ZzQS+E8Z3cPcIVhuK8DF2rNR9fyTOuDz3K96kuuPwEroSyKNmOLex9kHvGVOJo5oiyF
-        +ywTazmMs0hwVa1svmxjp7UxiSqntfingy5+UVIe0/B8uuqkOj5LQJJvjZ5xBvHe9tIyai
-        0cH+sGqwyxebOoafOky5qYzJRNFEeos=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-361-XqZoNk50PnGIiLlt3NMvWQ-1; Wed, 16 Feb 2022 17:13:31 -0500
-X-MC-Unique: XqZoNk50PnGIiLlt3NMvWQ-1
-Received: by mail-qk1-f199.google.com with SMTP id l82-20020a37a255000000b0060dd39f5d87so901279qke.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 14:13:31 -0800 (PST)
+        Wed, 16 Feb 2022 17:14:14 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3D72AED8A
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 14:14:01 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id r64-20020a17090a43c600b001b8854e682eso3725470pjg.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 14:14:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4VcCHzkbx92lKzN5iSgXZZP1r2m6Tf5NY9ub+af1qNE=;
+        b=alnOtElqFTR7tub9zwA5y2rQNa2AuphIVynD+IFhZH5iTb2z4/Tz/fN30KE3MZ/Hs0
+         wPLl+MGfJqBc2Fp0hgok4YyGs29o6EMznRGh17e/uDhTHstLK+SUCtPhefSOr1rcfQHw
+         GzRNELKEkw8tlB/4BtEPzfOVB6f2wrBZyKp1o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=GInsY8EWMmzWnfSQud73Z6xT/DOtOKlNQiWr2Elb/hk=;
-        b=2pgnPhUyVZdiXzQ06xXygLQjNJbZNSmYJLhiac1l4gX4TnS9OFxcssWkre7GVUT/JX
-         i9S/HLzVvKCMY/MpxanXk2CRLdsKDbldDVJ/duPrwPojb0XcxBfE6qzI/pd36Jv3Cevn
-         TD+ayYXDxsxDzCMDpo0Pd0pSfhmx7R7A4cQaB2LekylRcjXSB8QLSUnmFWl6pjPiyuei
-         LqHYJYh+nx6Prb/Al6l8qhh4YAwpyocCxZfMU33zPUxCcDkuSqMzU9SCvneyXpREao7S
-         OCnJNJGasK3cbFI9CSGKE4OnJUXfjp3EFSMmhFOGd3uqMYafXKiZA+bWfatV+OJC7d53
-         hiPg==
-X-Gm-Message-State: AOAM530HZz5FpltfIYQZrPhJqaMtWugJJ+ogZZ0O2AMXdFVVks+2At+v
-        ssHoHVGm3QioSLxHa9opyroFlLUaahfWbIlEEN3XOm9XHZd5RwxXIN2UoATxLDGeEhZ+zjS+HQR
-        AqXc2jdwt2RhGav84f0B61YDx
-X-Received: by 2002:a37:bcd:0:b0:508:19df:59ac with SMTP id 196-20020a370bcd000000b0050819df59acmr2498049qkl.227.1645049610689;
-        Wed, 16 Feb 2022 14:13:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJylNMRi17SxjrpZK57rI6C9v3gwc8m6LOiygd1+pTiydJMqSsqj+XSkhj9zykPsZ8CKxgwdIw==
-X-Received: by 2002:a37:bcd:0:b0:508:19df:59ac with SMTP id 196-20020a370bcd000000b0050819df59acmr2497996qkl.227.1645049610346;
-        Wed, 16 Feb 2022 14:13:30 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::15])
-        by smtp.gmail.com with ESMTPSA id m22sm19966780qkn.35.2022.02.16.14.13.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 14:13:29 -0800 (PST)
-Date:   Wed, 16 Feb 2022 14:13:24 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
- unique-symbol` is available
-Message-ID: <20220216221324.4b4avd5l3qdmqfcv@treble>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
- <20220209185752.1226407-3-alexandr.lobakin@intel.com>
- <20220211174130.xxgjoqr2vidotvyw@treble>
- <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
- <20220211183529.q7qi2qmlyuscxyto@treble>
- <20220214122433.288910-1-alexandr.lobakin@intel.com>
- <20220214181000.xln2qgyzgswjxwcz@treble>
- <Yg1fab6h1rTjVbYO@redhat.com>
+        bh=4VcCHzkbx92lKzN5iSgXZZP1r2m6Tf5NY9ub+af1qNE=;
+        b=1HCHSO671kNwLyo/R/DO5fnI5ht5YFI55Vn98sSnoTBNJvr364SvzjL79wV5lkwNPy
+         nEnJ1VBs2A9B+cWcErEYOXfdIKjDHXTiOubToCawPbTlqwRdGWsPtUU/u/XS9Yf2lydV
+         DbOYVr+fJlgJ5+LCKeiSoGBFG520gK266LBTEslWU3HjmC9uVML3b+KBAHdUSc0gYnqy
+         vbMN8X0hidyQdaujZYE9oolXjVH9RzJWQZXVpjLqIVopxaip7EPmE/Bof0LweoElCyq+
+         X8CPFs0/jSgOFrZ9LhnTHxnN4xnRkQk2odAkbmy2zbXUyRZm4BP985VvPYA8d55oHuf5
+         tIkg==
+X-Gm-Message-State: AOAM531FdjpXLqPteSpdB3ycd9SdJouVjFpGo3PV9bKbE3jJUAFlChY9
+        kEphwP6L5G6+NxNyshkMfHZHvw==
+X-Google-Smtp-Source: ABdhPJwFkhpu+gfz4+Q3Zh6Blan0TvjKrac1gpFy9X+Ca8I2pJuSpvGTKbw6B6DwuXIf8uZU8jEMeg==
+X-Received: by 2002:a17:902:ab92:b0:14d:8c80:dbff with SMTP id f18-20020a170902ab9200b0014d8c80dbffmr20543plr.89.1645049641286;
+        Wed, 16 Feb 2022 14:14:01 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:20:e0d2:8c14:1e68])
+        by smtp.gmail.com with UTF8SMTPSA id mz16sm55296pjb.53.2022.02.16.14.13.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 14:14:00 -0800 (PST)
+Date:   Wed, 16 Feb 2022 14:13:58 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        amit daniel kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+Message-ID: <Yg13JoHLmeFGPOAW@google.com>
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+ <20220207073036.14901-2-lukasz.luba@arm.com>
+ <YgG+TmLrCSXX4Bvt@google.com>
+ <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com>
+ <YgKnnFl7Gp8AS30X@google.com>
+ <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com>
+ <YgQ9XLcto9v0fyTf@google.com>
+ <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
+ <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yg1fab6h1rTjVbYO@redhat.com>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,63 +87,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 03:32:41PM -0500, Joe Lawrence wrote:
-> > Right, so we'd have to abandon position-based search in favor of
-> > file+func based search.
-> > 
-> > It's not perfect because there are still a few file+func duplicates.
-> > But it might be good enough.  We would presumably just refuse to patch a
-> > duplicate.  Or we could remove them (and enforce their continued removal
-> > with tooling-based warnings).
-> > 
+On Wed, Feb 16, 2022 at 09:33:50AM -0800, Doug Anderson wrote:
+> Hi,
 > 
-> You're talking about duplicate file+func combinations as stored in the
-> symbol table?
+> On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+> >
+> > Hi Matthias,
+> >
+> > On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
+> > > On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
+> > >>
+> > >>
+> > >> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
+> > >>> On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
+> > >>>>
+> > >>>>
+> >
+> > [snip]
+> >
+> > >>>> Could you point me to those devices please?
+> > >>>
+> > >>> arch/arm64/boot/dts/qcom/sc7180-trogdor-*
+> > >>>
+> > >>> Though as per above they shouldn't be impacted by your change, since the
+> > >>> CPUs always pretend to use milli-Watts.
+> > >>>
+> > >>> [skipped some questions/answers since sc7180 isn't actually impacted by
+> > >>>    the change]
+> > >>
+> > >> Thank you Matthias. I will investigate your setup to get better
+> > >> understanding.
+> > >
+> > > Thanks!
+> > >
+> >
+> > I've checked those DT files and related code.
+> > As you already said, this patch is safe for them.
+> > So we can apply it IMO.
+> >
+> >
+> > -------------Off-topic------------------
+> > Not in $subject comments:
+> >
+> > AFAICS based on two files which define thermal zones:
+> > sc7180-trogdor-homestar.dtsi
+> > sc7180-trogdor-coachz.dtsi
+> >
+> > only the 'big' cores are used as cooling devices in the
+> > 'skin_temp_thermal' - the CPU6 and CPU7.
+> >
+> > I assume you don't want to model at all the power usage
+> > from the Little cluster (which is quite big: 6 CPUs), do you?
+> > I can see that the Little CPUs have small dyn-power-coeff
+> > ~30% of the big and lower max freq, but still might be worth
+> > to add them to IPA. You might give them more 'weight', to
+> > make sure they receive more power during power split.
 
-Right.
+In experiments we saw that including the little cores as cooling
+devices for 'skin_temp_thermal' didn't have a significant impact on
+thermals, so we left them out.
 
-> ...
->       6 OBJECT core.c::__func__.3
->       6 OBJECT core.c::__func__.5
->       7 OBJECT core.c::__func__.1
->       8 OBJECT core.c::__func__.0
->       8 OBJECT core.c::__func__.2
+> > You also don't have GPU cooling device in that thermal zone.
+> > Based on my experience if your GPU is a power hungry one,
+> > e.g. 2-4Watts, you might get better results when you model
+> > this 'hot' device (which impacts your temp sensor reported value).
 > 
-> We could probably minimize the FUNC duplicates with unique names, but
-> I'm not as optimistic about the OBJECTs as most are created via macros
-> like __already_done.X.  Unless clever macro magic?
+> I think the two boards you point at (homestar and coachz) are just the
+> two that override the default defined in the SoC dtsi file. If you
+> look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
+> map. You can also see the cooling maps for the littles.
 
-Good point about objects, as we rely on disambiguating them for klp
-relocations.  Luckily, the fact that most of them are created by macros
-is largely a good thing.  We consider most of those to be "special"
-static locals, which don't actually need to be correlated or referenced
-with a klp reloc.
+Yep, plus thermal zones with cooling maps for the big cores.
 
-For example:
+> I guess we don't have a `dynamic-power-coefficient` for the GPU,
+> though? Seems like we should, but I haven't dug through all the code
+> here...
 
-- '__func__' is just the function name.  The patched function shouldn't
-  need to reference the original function's function name string.
-
-- '__already_done' is used for printk_once(); no harm in making a new
-  variable initialized to false and printing it again; or converting
-  printk_once() to just printk() to avoid an extra print.
-
-- '__key' is used by lockdep to track lock usage and validate locking
-  order.  It probably makes sense to use a new key in the patched
-  function, since the new function might have different locking
-  behavior.
-
-> Next question: what are the odds that these entries, at least the ones
-> we can't easily rename, need disambiguity for livepatching?  or
-> kpatch-build for related purposes?
-
-I would guess the odds are rather low, given the fact that there are so
-few functions, and we don't care about most of the objects on the list.
-
-If duplicates were to become problematic then we could consider adding
-tooling which warns on a duplicate file:sym pair with the goal of
-eliminating duplicates (exculding the "special" objects).
-
--- 
-Josh
-
+To my knowledge the SC7x80 GPU doesn't register an energy model, which is
+one of the reasons the GPU wasn't included as cooling device for
+'skin_temp_thermal'.

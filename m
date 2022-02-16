@@ -2,74 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29314B8D10
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF5C4B8D29
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235830AbiBPP66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 10:58:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35812 "EHLO
+        id S235880AbiBPQDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 11:03:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233829AbiBPP65 (ORCPT
+        with ESMTP id S233934AbiBPQDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 10:58:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9262A39CB;
-        Wed, 16 Feb 2022 07:58:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6500161A7B;
-        Wed, 16 Feb 2022 15:58:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5CBFC004E1;
-        Wed, 16 Feb 2022 15:58:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645027123;
-        bh=x+vLuZ6qACLHw+sLfjBq8yrKs8jSFGmNBWNxitqLCPI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YXq4+Cu5BTKJCAIYpl8Om38gt6TRAZ7RDgGJaLS6Ed4wLwUI6/rqjix65MqIt3oYq
-         h0dr21ioQtYJPnV2HPEqVE+kfvevipqUr+u6QWwNeMfKXqZDQroX1VbxvUUPm6wgEb
-         FC3MpjAx2aWhgSznoUcRbHg57d64FvnmKk2PEB/z4E6ZJyHYasfx/G9/fZEN9yV2qB
-         JOm/cob+gCNOpo3LadAbV69FJ1VtTRbA43KHUjnbzZKeMo7IXT5szCuaQ26YUBhY7+
-         4ZAghXPtr7m694iZugo9KqtffHovVoVT7ENkeAb5TIK+nHEXu++UJD9n2Q/FUS67ET
-         96GJBGCT7Uc6Q==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nKMhV-008Mjp-Nm; Wed, 16 Feb 2022 15:58:41 +0000
-MIME-Version: 1.0
-Date:   Wed, 16 Feb 2022 15:58:41 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Shawn Guo <shawn.guo@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wed, 16 Feb 2022 11:03:01 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51AAA1ED1F4
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:02:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645027369; x=1676563369;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Go6SPGW0Dhq+tJy23R6dUPUDSfYPivomuuhjvNdQh5c=;
+  b=Uv0vmORc0YDRObansTT5UgQI0WqFZFHPGQvE1vsjX8hCZK+G05knt8r/
+   Xr8FYoUnIXrQOq/LR0U+9QtxxKWwbbWChuQYVOiEVj5z9H7euwBB5Y79O
+   2KLRWM6K9/uNrRy4qaa4NV9B0e7j/963YIL+IrD8qvKLpDV+uFqlgb/yg
+   goHETzqV8xJqk8Celh88qgMiDSzAyKpuj15cABHeac3JlGa61dUlF6zJl
+   G3WadJMAHKba8yLvbhFvP+9dmQJqak2qPHfVe+qbmrPCwoH2P7hODq0WB
+   seGBZIqFMbLvpR88+zZ0Ln7iAcqSI263VMJf0tuwpBsqSV61lkbIMzIvB
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="249483777"
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="249483777"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 08:00:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="503088259"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 16 Feb 2022 08:00:42 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKMjR-000Av6-HK; Wed, 16 Feb 2022 16:00:41 +0000
+Date:   Thu, 17 Feb 2022 00:00:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/3] cpuidle: psci: Call cpu_cluster_pm_enter() on the
- last CPU
-In-Reply-To: <20220216144937.znsba7zbdenl7427@bogus>
-References: <20220216132830.32490-1-shawn.guo@linaro.org>
- <20220216132830.32490-2-shawn.guo@linaro.org>
- <20220216144937.znsba7zbdenl7427@bogus>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <9bda65e5bb85b00eaca71d95ad78e93b@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: sudeep.holla@arm.com, shawn.guo@linaro.org, tglx@linutronix.de, quic_mkshah@quicinc.com, ulf.hansson@linaro.org, bjorn.andersson@linaro.org, lorenzo.pieralisi@arm.com, rafael@kernel.org, daniel.lezcano@linaro.org, robh+dt@kernel.org, devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: coreboot_table.c:undefined reference to `memremap'
+Message-ID: <202202162338.iHngg0KZ-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,60 +63,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-16 14:49, Sudeep Holla wrote:
-> +Ulf (as you he is the author of cpuidle-psci-domains.c and can help 
-> you
-> with that if you require)
-> 
-> On Wed, Feb 16, 2022 at 09:28:28PM +0800, Shawn Guo wrote:
->> Make a call to cpu_cluster_pm_enter() on the last CPU going to low 
->> power
->> state (and cpu_cluster_pm_exit() on the firt CPU coming back), so that
->> platforms can be notified to set up hardware for getting into the 
->> cluster
->> low power state.
->> 
-> 
-> NACK. We are not getting the notion of CPU cluster back to cpuidle 
-> again.
-> That must die. Remember the cluster doesn't map to idle states 
-> especially
-> in the DSU systems where HMP CPUs are in the same cluster but can be in
-> different power domains.
-> 
-> You need to decide which PSCI CPU_SUSPEND mode you want to use first. 
-> If it is
-> Platform Co-ordinated(PC), then you need not notify anything to the 
-> platform.
-> Just request the desired idle state on each CPU and platform will take 
-> care
-> from there.
-> 
-> If for whatever reason you have chosen OS initiated mode(OSI), then 
-> specify
-> the PSCI power domains correctly in the DT which will make use of the
-> cpuidle-psci-domains and handle the so called "cluster" state 
-> correctly.
+Hi Arnd,
 
-My understanding is that what Shawn is after is a way to detect the 
-"last
-man standing" on the system to kick off some funky wake-up controller 
-that
-really should be handled by the power controller (because only that guy
-knows for sure who is the last CPU on the block).
+FYI, the error/warning still remains.
 
-There was previously some really funky stuff (copy pasted from the 
-existing
-rpmh_rsc_cpu_pm_callback()), which I totally objected to having hidden 
-in
-an irqchip driver.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c5d9ae265b105d9a67575fb67bd4650a6fc08e25
+commit: 951cd3a0866d29cb9c01ebc1d9c17590e598226e firmware: include drivers/firmware/Kconfig unconditionally
+date:   4 months ago
+config: s390-randconfig-r023-20220216 (https://download.01.org/0day-ci/archive/20220216/202202162338.iHngg0KZ-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=951cd3a0866d29cb9c01ebc1d9c17590e598226e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 951cd3a0866d29cb9c01ebc1d9c17590e598226e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
 
-My ask was that if we needed such information, and assuming that it is
-possible to obtain it in a reliable way, this should come from the core
-code, and not be invented by random drivers.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
+All errors (new ones prefixed by >>):
 
-         M.
--- 
-Jazz is not dead. It just smells funny...
+   s390-linux-ld: drivers/clk/clk-fixed-mmio.o: in function `fixed_mmio_clk_setup':
+   clk-fixed-mmio.c:(.text+0x96): undefined reference to `of_iomap'
+   s390-linux-ld: clk-fixed-mmio.c:(.text+0x118): undefined reference to `iounmap'
+   s390-linux-ld: drivers/dma/fsl-edma.o: in function `fsl_edma_probe':
+   fsl-edma.c:(.text+0x10ee): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: fsl-edma.c:(.text+0x181c): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/dma/idma64.o: in function `idma64_platform_probe':
+   idma64.c:(.text+0x38bc): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/dma/qcom/hidma.o: in function `hidma_probe':
+   hidma.c:(.text+0x28ec): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: hidma.c:(.text+0x2934): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/char/xillybus/xillybus_of.o: in function `xilly_drv_probe':
+   xillybus_of.c:(.text+0x2c0): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/net/ethernet/altera/altera_tse_main.o: in function `request_and_map':
+   altera_tse_main.c:(.text+0x1b98): undefined reference to `devm_ioremap'
+   s390-linux-ld: drivers/firmware/google/coreboot_table.o: in function `coreboot_table_probe':
+>> coreboot_table.c:(.text+0x596): undefined reference to `memremap'
+>> s390-linux-ld: coreboot_table.c:(.text+0x646): undefined reference to `memunmap'
+>> s390-linux-ld: coreboot_table.c:(.text+0x692): undefined reference to `memremap'
+   s390-linux-ld: coreboot_table.c:(.text+0x6dc): undefined reference to `memunmap'
+   s390-linux-ld: drivers/firmware/google/memconsole-coreboot.o: in function `memconsole_probe':
+>> memconsole-coreboot.c:(.text+0x2f6): undefined reference to `memremap'
+>> s390-linux-ld: memconsole-coreboot.c:(.text+0x3ca): undefined reference to `devm_memremap'
+>> s390-linux-ld: memconsole-coreboot.c:(.text+0x3da): undefined reference to `memunmap'
+   s390-linux-ld: drivers/firmware/google/vpd.o: in function `vpd_section_destroy.isra.0':
+   vpd.c:(.text+0x812): undefined reference to `memunmap'
+   s390-linux-ld: drivers/firmware/google/vpd.o: in function `vpd_section_init':
+   vpd.c:(.text+0x986): undefined reference to `memremap'
+   s390-linux-ld: vpd.c:(.text+0xc04): undefined reference to `memunmap'
+   s390-linux-ld: drivers/firmware/google/vpd.o: in function `vpd_probe':
+   vpd.c:(.text+0xe0c): undefined reference to `memremap'
+   s390-linux-ld: vpd.c:(.text+0xe32): undefined reference to `memunmap'
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

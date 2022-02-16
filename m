@@ -2,274 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B66D4B815B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A01CB4B8153
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:22:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229979AbiBPHU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 02:20:26 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52098 "EHLO
+        id S229924AbiBPHUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 02:20:17 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:51432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiBPHUU (ORCPT
+        with ESMTP id S229926AbiBPHUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 02:20:20 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AACE6D87;
-        Tue, 15 Feb 2022 23:20:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644996004; x=1676532004;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=E8zZRmeJ9OwBsBpP0tYM0smOGLQGbiEJVRVolFrNMWE=;
-  b=SHEtOXaT+LKc5oPZ5mwa7T1LJB23fnc2Q3ulTbHhhdI8v6bHMrtSidio
-   wj2PvlPXuAQDlIS/lWEN/aGsBhr2w9R7JUBHs9YGUW/ehIwgwBTKLn9CI
-   VElS+jjDKDujTfPJQqiuhAIxABKhJq/E3pis+a85mq2Tvnsr1QHTM2sKe
-   s=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 15 Feb 2022 23:20:04 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 23:20:01 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 15 Feb 2022 23:20:00 -0800
-Received: from [10.111.168.21] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 15 Feb
- 2022 23:19:58 -0800
-Message-ID: <fcf676d0-1e25-aeda-ce6f-f051d34e0bbe@quicinc.com>
-Date:   Tue, 15 Feb 2022 23:19:55 -0800
+        Wed, 16 Feb 2022 02:20:13 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F1DE3C62
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:20:01 -0800 (PST)
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 172533F4BA
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 07:20:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644996000;
+        bh=7w2DeuDBNiRSAXfzi3M+RcvsldsGybZXzRUnLDhYfvo=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=YjEcJCttEwoc00rju/iqMCvGrK0JtWIo9G5/brW50HPJRO2IfWVOradwpsL63TPcA
+         gh4Uk98I2laeUsfHprNok0b5PJ7ZaEpJV3kAgEtpqFObyEvKzzSqlo+ielVWXWaShb
+         dbPZ22KkPx+abbGJnpYOSspf6ZI7vJyX8D1L6njmytuy/8OGt2FpuK2vDBHpESE7gJ
+         nA5nsCrEPkI/osg2ljvS+otrhU23p3qEVCM16fgbncA2TFFpatscA4KzLjUrPu5ODW
+         zm7b+uCf9gEsnAVOBy3qhp8/DHeCk+ofJD2TGXzMFcKNjbr2UlQXwPn3GMA+hVpx08
+         /rdEm55j7UiTQ==
+Received: by mail-wr1-f69.google.com with SMTP id q8-20020adfb188000000b001e33a8cdbf4so669714wra.16
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:20:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7w2DeuDBNiRSAXfzi3M+RcvsldsGybZXzRUnLDhYfvo=;
+        b=NsS92/SUOxs8SSC95rAc5uEf7kAw5hFZ+VOgCMP2+md8n5RNF4j58U10R7bcT3MCEt
+         RKufohqMqlCBWw7uiYa5pLNNXZugAdbZTB87uHz79bfaxFgJruAb2MT+X175EvKCigQj
+         10NB2eEawLBAVlln9aTOb7/3EHjGXgdSfSj+c7d+lQQ6ed8vfx+K9qqMoDn59RZeCYSp
+         4l5p3/OPNOjKG/ilqcdcz/U50GRchortcZdo4rZHEcPXGwOXznOkYx9EzeJzaf+cIP53
+         OoO7lb782Gp4sJgLrn8WQtaCXj9ZCZyecx1l1EQus/tYc53En3AmS/tBYYk94O/N3+Jj
+         tzRQ==
+X-Gm-Message-State: AOAM53021AxkdXcD60kEFDoSMnDl7WqeHuluXAoVv8YdfGUPmwMbEfQh
+        4mlAV15umbEJXr5gAnF7VttAxIF5FR5zptQ5evhS6zNbSP+EM82ukJytve6GtiFkFhkepbj4xrw
+        QvhmHr7P4QHB6rHInwTPRrJoqS0o8SqxY+TSxHoqsUw==
+X-Received: by 2002:a5d:5045:0:b0:1e3:20ed:4386 with SMTP id h5-20020a5d5045000000b001e320ed4386mr1219898wrt.262.1644995999856;
+        Tue, 15 Feb 2022 23:19:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxb1VVbNY7bGK3DwOXT5yvrd8OpjtnZcWQy8cN8iBkRu2VOhrUSKcPJ5EqScPCYI1d3U5+FbA==
+X-Received: by 2002:a5d:5045:0:b0:1e3:20ed:4386 with SMTP id h5-20020a5d5045000000b001e320ed4386mr1219896wrt.262.1644995999743;
+        Tue, 15 Feb 2022 23:19:59 -0800 (PST)
+Received: from [192.168.0.110] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id d6sm34450578wrs.85.2022.02.15.23.19.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 23:19:59 -0800 (PST)
+Message-ID: <81b4dc29-1402-7eb8-d2d9-c2f09af4c1ab@canonical.com>
+Date:   Wed, 16 Feb 2022 08:19:58 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [Freedreno] [PATCH v2 2/2] drm/msm/dpu: Add SC8180x to hw catalog
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 2/3] dt-bindings: ps2-gpio: document bus signals open
+ drain
 Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
-        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
-        <freedreno@lists.freedesktop.org>
-References: <20220215043353.1256754-1-bjorn.andersson@linaro.org>
- <20220215043353.1256754-2-bjorn.andersson@linaro.org>
- <be397e2e-05ab-5c18-8e2d-16c443f0a6d1@quicinc.com>
- <Ygvisfhi0SY6XdAz@builder.lan>
- <6a3ef247-b26b-d505-cd85-92fb277163dd@quicinc.com>
- <YgxeCHi5AsYPTmeZ@builder.lan>
- <51675806-641d-c57e-ada7-a044e37ad808@quicinc.com> <YgyIPnc/sZLE0ABn@yoga>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <YgyIPnc/sZLE0ABn@yoga>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Danilo Krummrich <danilokrummrich@dk-develop.de>,
+        dmitry.torokhov@gmail.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linus.walleij@linaro.org
+References: <20220215180829.63543-1-danilokrummrich@dk-develop.de>
+ <20220215180829.63543-3-danilokrummrich@dk-develop.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220215180829.63543-3-danilokrummrich@dk-develop.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 15/02/2022 19:08, Danilo Krummrich wrote:
+> The PS/2 bus defines data and clock line to be open drain, this should
+> be reflected in the gpio flags set in the binding.
+> 
+> Especially, this is important since the clock line sometimes is driven
+> by the host while being used as interrupt source.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Signed-off-by: Danilo Krummrich <danilokrummrich@dk-develop.de>
+> ---
+>  .../devicetree/bindings/serio/ps2-gpio.yaml        | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
+> 
 
 
-On 2/15/2022 9:14 PM, Bjorn Andersson wrote:
-> On Tue 15 Feb 20:38 CST 2022, Abhinav Kumar wrote:
-> 
->>
->>
->> On 2/15/2022 6:14 PM, Bjorn Andersson wrote:
->>> On Tue 15 Feb 11:42 CST 2022, Abhinav Kumar wrote:
->>>
->>>>
->>>>
->>>> On 2/15/2022 9:28 AM, Bjorn Andersson wrote:
->>>>> On Tue 15 Feb 11:14 CST 2022, Abhinav Kumar wrote:
->>>>>
->>>>>>
->>>>>>
->>>>>> On 2/14/2022 8:33 PM, Bjorn Andersson wrote:
->>>>>>> From: Rob Clark <robdclark@chromium.org>
->>>>>>>
->>>>>>> Add SC8180x to the hardware catalog, for initial support for the
->>>>>>> platform. Due to limitations in the DP driver only one of the four DP
->>>>>>> interfaces is left enabled.
->>>>>>>
->>>>>>> The SC8180x platform supports the newly added DPU_INTF_WIDEBUS flag and
->>>>>>> the Windows-on-Snapdragon bootloader leaves the widebus bit set, so this
->>>>>>> is flagged appropriately to ensure widebus is disabled - for now.
->>>>>>>
->>>>>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
->>>>>>> [bjorn: Reworked intf and irq definitions]
->>>>>>> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->>>>>>> ---
->>>>>>>
->>>>>>> Changes since v1:
->>>>>>> - Dropped widebus flag
->>>>>>>
->>>>>>>      .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 129 ++++++++++++++++++
->>>>>>>      .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |   1 +
->>>>>>>      drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |   1 +
->>>>>>>      drivers/gpu/drm/msm/msm_drv.c                 |   1 +
->>>>>>>      4 files changed, 132 insertions(+)
->>>>>>>
->>>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>>> index aa75991903a6..7ac0fe32df49 100644
->>>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>>> @@ -90,6 +90,17 @@
->>>>>>>      			 BIT(MDP_INTF3_INTR) | \
->>>>>>>      			 BIT(MDP_INTF4_INTR))
->>>>>>> +#define IRQ_SC8180X_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
->>>>>>> +			  BIT(MDP_SSPP_TOP0_INTR2) | \
->>>>>>> +			  BIT(MDP_SSPP_TOP0_HIST_INTR) | \
->>>>>>> +			  BIT(MDP_INTF0_INTR) | \
->>>>>>> +			  BIT(MDP_INTF1_INTR) | \
->>>>>>> +			  BIT(MDP_INTF2_INTR) | \
->>>>>>> +			  BIT(MDP_INTF3_INTR) | \
->>>>>>> +			  BIT(MDP_INTF4_INTR) | \
->>>>>>> +			  BIT(MDP_INTF5_INTR) | \
->>>>>>> +			  BIT(MDP_AD4_0_INTR) | \
->>>>>>> +			  BIT(MDP_AD4_1_INTR))
->>>>>>>      #define DEFAULT_PIXEL_RAM_SIZE		(50 * 1024)
->>>>>>>      #define DEFAULT_DPU_LINE_WIDTH		2048
->>>>>>> @@ -225,6 +236,22 @@ static const struct dpu_caps sm8150_dpu_caps = {
->>>>>>>      	.max_vdeci_exp = MAX_VERT_DECIMATION,
->>>>>>>      };
->>>>>>> +static const struct dpu_caps sc8180x_dpu_caps = {
->>>>>>> +	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
->>>>>>> +	.max_mixer_blendstages = 0xb,
->>>>>>> +	.qseed_type = DPU_SSPP_SCALER_QSEED3,
->>>>>>> +	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
->>>>>>> +	.ubwc_version = DPU_HW_UBWC_VER_30,
->>>>>>> +	.has_src_split = true,
->>>>>>> +	.has_dim_layer = true,
->>>>>>> +	.has_idle_pc = true,
->>>>>>> +	.has_3d_merge = true,
->>>>>>> +	.max_linewidth = 4096,
->>>>>>> +	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
->>>>>>> +	.max_hdeci_exp = MAX_HORZ_DECIMATION,
->>>>>>> +	.max_vdeci_exp = MAX_VERT_DECIMATION,
->>>>>>> +};
->>>>>>> +
->>>>>>>      static const struct dpu_caps sm8250_dpu_caps = {
->>>>>>>      	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
->>>>>>>      	.max_mixer_blendstages = 0xb,
->>>>>>> @@ -293,6 +320,31 @@ static const struct dpu_mdp_cfg sc7180_mdp[] = {
->>>>>>>      	},
->>>>>>>      };
->>>>>>> +static const struct dpu_mdp_cfg sc8180x_mdp[] = {
->>>>>>> +	{
->>>>>>> +	.name = "top_0", .id = MDP_TOP,
->>>>>>> +	.base = 0x0, .len = 0x45C,
->>>>>>> +	.features = 0,
->>>>>>> +	.highest_bank_bit = 0x3,
->>>>>>> +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = {
->>>>>>> +			.reg_off = 0x2AC, .bit_off = 0},
->>>>>>> +	.clk_ctrls[DPU_CLK_CTRL_VIG1] = {
->>>>>>> +			.reg_off = 0x2B4, .bit_off = 0},
->>>>>>> +	.clk_ctrls[DPU_CLK_CTRL_VIG2] = {
->>>>>>> +			.reg_off = 0x2BC, .bit_off = 0},
->>>>>>> +	.clk_ctrls[DPU_CLK_CTRL_VIG3] = {
->>>>>>> +			.reg_off = 0x2C4, .bit_off = 0},
->>>>>>> +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = {
->>>>>>> +			.reg_off = 0x2AC, .bit_off = 8},
->>>>>>> +	.clk_ctrls[DPU_CLK_CTRL_DMA1] = {
->>>>>>> +			.reg_off = 0x2B4, .bit_off = 8},
->>>>>>> +	.clk_ctrls[DPU_CLK_CTRL_CURSOR0] = {
->>>>>>> +			.reg_off = 0x2BC, .bit_off = 8},
->>>>>>> +	.clk_ctrls[DPU_CLK_CTRL_CURSOR1] = {
->>>>>>> +			.reg_off = 0x2C4, .bit_off = 8},
->>>>>>> +	},
->>>>>>> +};
->>>>>>> +
->>>>>>>      static const struct dpu_mdp_cfg sm8250_mdp[] = {
->>>>>>>      	{
->>>>>>>      	.name = "top_0", .id = MDP_TOP,
->>>>>>> @@ -861,6 +913,16 @@ static const struct dpu_intf_cfg sc7280_intf[] = {
->>>>>>>      	INTF_BLK("intf_5", INTF_5, 0x39000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
->>>>>>>      };
->>>>>>> +static const struct dpu_intf_cfg sc8180x_intf[] = {
->>>>>>> +	INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
->>>>>>> +	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
->>>>>>> +	INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
->>>>>>> +	/* INTF_3 is for MST, wired to INTF_DP 0 and 1, use dummy index until this is supported */
->>>>>>> +	INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_DP, 999, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
->>>>>>> +	INTF_BLK("intf_4", INTF_4, 0x6C000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 20, 21),
->>>>>>> +	INTF_BLK("intf_5", INTF_5, 0x6C800, INTF_DP, MSM_DP_CONTROLLER_2, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
->>>>>>
->>>>>> This is a continued discussion from
->>>>>> https://patchwork.freedesktop.org/patch/474179/.
->>>>>>
->>>>>> Shouldnt INTF_5 be marked as INTF_eDP?
->>>>>>
->>>>>
->>>>> Might be, I didn't even know we had an INTF_EDP define...
->>>>>
->>>>> Is there any reason to distinguish DP and EDP in the DPU?  I see sc7280
->>>>> doesn't distinguish the DP and EDP interfaces.
->>>>>
->>>>> Regards,
->>>>> Bjorn
->>>>>
->>>>
->>>> Like I have mentioned in the other patch, I think we have enough confusion
->>>> between eDP and DP with the common driver. Since DPU does have separate
->>>> interfaces I think we should fix that.
->>>>
->>>> Regarding sc7280 using INTF_DP, I synced up with Sankeerth. He referred to
->>>> your change
->>>> https://patchwork.freedesktop.org/patch/457776/?series=92992&rev=5 as it was
->>>> posted earlier and ended up using the same INTF_DP macro. So its turning out
->>>> to be a cyclical error.
->>>>
->>>
->>> That made me take a second look at the HPG, and sure enough INTF_5 on
->>> SC7280 is connected to a eDP/DP Combo PHY. We have the same setup in
->>> SC8280XP.
->>>
->>> In SC8180X, INTF_5 is documented as being connected to a eDP (only) PHY,
->>> so perhaps it makes sense to do it there, but for the others its wrong.
->>>
->>
->> Here you are specifying the controller in the catalog.
-> 
-> No, I'm specifying the type of the INTF. We then use the type of the
-> intf and the index to match that to a particular DP TX block.
-> 
->> So independent of the PHY thats being used, shouldnt this remain
->> INTF_eDP?
->>
-> 
-> I don't think it's going to help anyone to say that an interface
-> connected to a PHY that can be either DP or EDP, should be INTF_EDP.
-> 
-> People are going to make assumptions in the code such as INTF_EDP does
-> not have audio and then someone designs a board based on SC7280 with DP
-> output where they expect audio. Or assumptions about HPD, panel etc...
-> 
-> I'm not saying that we have all the details figured out on how that's
-> going to be controlled, but until there's a reason to distinguish
-> INTF_DP from INTF_EDP I think we should not make one up. And I don't see
-> that those differences should be hard coded in the DPU driver.
-> 
-> 
-> If it's confusing to people that DP might be driving an EDP output, then
-> perhaps we can just name it TMDS again? ;)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-If you prefer to have TMDS, then like I commented earlier we dont really 
-need this change https://patchwork.freedesktop.org/patch/474271/ :)
 
-Whats the benefit of making that change? DRM_ENCODER_TMDS_* can be eDP 
-and DP . Then there is no confusion or guess work in the encoder.
-
-DRM_ENCODER_DSI - INTF_DSI
-DRM_ENCODER_VIRTUAL - INTF_WB
-DRM_ENCODER_TMDS - INTF_DP OR INTF_eDP ( doesnt matter )
-
-> 
-> Regards,
-> Bjorn
+Best regards,
+Krzysztof

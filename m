@@ -2,63 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 398844B8482
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A094B8487
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232296AbiBPJfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 04:35:48 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:43928 "EHLO
+        id S232263AbiBPJgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 04:36:14 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbiBPJfj (ORCPT
+        with ESMTP id S229660AbiBPJgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 04:35:39 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482122731C6;
-        Wed, 16 Feb 2022 01:35:27 -0800 (PST)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JzCQs6kvHz8wj1;
-        Wed, 16 Feb 2022 17:32:05 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 16 Feb 2022 17:35:24 +0800
-CC:     <yangyicong@hisilicon.com>, <mark.rutland@arm.com>,
-        <prime.zeng@huawei.com>, <alexander.shishkin@linux.intel.com>,
-        <linux-pci@vger.kernel.org>, <linuxarm@huawei.com>,
-        <daniel.thompson@linaro.org>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <helgaas@kernel.org>, <liuqi115@huawei.com>,
-        <mike.leach@linaro.org>, <suzuki.poulose@arm.com>,
-        <coresight@lists.linaro.org>, <acme@kernel.org>,
-        <zhangshaokun@hisilicon.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <mathieu.poirier@linaro.org>, <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <iommu@lists.linux-foundation.org>, <leo.yan@linaro.org>
-Subject: Re: [PATCH v3 8/8] iommu/arm-smmu-v3: Make default domain type of
- HiSilicon PTT device to identity
-To:     Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>
-References: <20220124131118.17887-1-yangyicong@hisilicon.com>
- <20220124131118.17887-9-yangyicong@hisilicon.com>
- <e58888c1-5448-77c7-7f6c-f5db999a888f@huawei.com>
- <20220215130044.GA7154@willie-the-truck>
- <9018a1d9-4d42-3a99-dbc6-c55139abcb1e@arm.com>
- <20220215134232.GA7592@willie-the-truck>
- <161e5005-ea12-fde4-0e31-ec871d2fe591@arm.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <ab91cc5b-625e-c90b-7ab8-a0144a9b1a92@huawei.com>
-Date:   Wed, 16 Feb 2022 17:35:24 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Wed, 16 Feb 2022 04:36:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B391D2A82EC
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:35:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645004157;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wuRCqHtrGnCNe4lFzhUlKSmhRtzzz/eDauDhTkRgdqU=;
+        b=MZqSIL9hQyB0BKX+W/24iR2QV9G/5YCiuEtwcbFzYJfGkQpI/j0dICJvyFKMpukPz0FuSR
+        I8/1aX3e1VndM0Ua8Ta1WphW4XdJObroYUB1e//2PyJ4RmsexkqUoBw/gkoKa9ESadkdtX
+        gxeKi5g46OYNqCOr9gOj6lJeG1BhyDE=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-312-HRokvN2kNGa5tuBEWjT44Q-1; Wed, 16 Feb 2022 04:35:56 -0500
+X-MC-Unique: HRokvN2kNGa5tuBEWjT44Q-1
+Received: by mail-wm1-f70.google.com with SMTP id b17-20020a05600c4e1100b0037cc0d56524so2692996wmq.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:35:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wuRCqHtrGnCNe4lFzhUlKSmhRtzzz/eDauDhTkRgdqU=;
+        b=euqVWqGJ78UDQq7sBd9JcRx3NC3jzeD54yDzx2eqLazWG19w7w/lbf4m0e7/te8emk
+         pPhMOIIp5876wXh4xuydLuYtNmijxPKfB7NWkYL/WflLlWnJkZOiGYtMpbbutbiETaMK
+         wfD9ZNlLJNzKHI2Ob1ZSRdGgtzEETiEXcZ3xchix8A7TnQj5JQeZHq/TN06PPaqvI4mg
+         NC3Nnp4RhgCEQU6ktN3A0YX6v969NVa89/uqoT2bkk1I3WVNnhnJ5HUG0yoyPLZZGB6i
+         EAiOpKWYbpmlMUhRKbZekYLoSfcn6PtSoHLF+P4tfXNzJIz6/WG6IK5heEfqOUXBJz1h
+         4Dng==
+X-Gm-Message-State: AOAM532S+IQ4cpU7BBwcGNVDnMVhTQ8Awkv1RJh74UemrlCO4MzToTnn
+        KrvR5fkc5T75DhGGeoKxnoJ+P1MNfKTBm67/phTtSG+QY90xIMqDGjECp69afoAlOww8T+pzqqI
+        TlAsLHVM4XnFLIMofmjYNLm2a
+X-Received: by 2002:a7b:c4d5:0:b0:37b:ffb9:bb6a with SMTP id g21-20020a7bc4d5000000b0037bffb9bb6amr727583wmk.89.1645004155041;
+        Wed, 16 Feb 2022 01:35:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzqfTxyIwHKGURmvfa8yIzjAYthlgNAnwVa9jRIycXk3slfzdebWzRK+l4sr6w0evO2C94Sgg==
+X-Received: by 2002:a7b:c4d5:0:b0:37b:ffb9:bb6a with SMTP id g21-20020a7bc4d5000000b0037bffb9bb6amr727553wmk.89.1645004154754;
+        Wed, 16 Feb 2022 01:35:54 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id b16sm26397520wrj.26.2022.02.16.01.35.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 01:35:54 -0800 (PST)
+Message-ID: <ce339fc7-b6bf-b19a-be10-54ee86487b96@redhat.com>
+Date:   Wed, 16 Feb 2022 10:35:53 +0100
 MIME-Version: 1.0
-In-Reply-To: <161e5005-ea12-fde4-0e31-ec871d2fe591@arm.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/3] drm: Plumb debugfs_init through to panels
+Content-Language: en-US
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>
+Cc:     Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        David Airlie <airlied@linux.ie>,
+        Robert Foss <robert.foss@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>, lschyi@chromium.org,
+        Sam Ravnborg <sam@ravnborg.org>, jjsu@chromium.org
+References: <20220205001342.3155839-1-dianders@chromium.org>
+ <20220204161245.v2.2.Ib0bd5346135cbb0b63006b69b61d4c8af6484740@changeid>
+ <5d60473d-be8f-e2dc-2ce9-bc0b9056e4b4@redhat.com>
+ <e6670fd7-1f75-56f7-b668-20db9902cac6@intel.com>
+ <CAD=FV=Ut3N9syXbN7i939mNsx3h7-u9cU9j6=XFkz9vrh0Vseg@mail.gmail.com>
+ <87ee435fjs.fsf@intel.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <87ee435fjs.fsf@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,114 +97,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/2/15 22:29, Robin Murphy wrote:
-> On 2022-02-15 13:42, Will Deacon wrote:
->> On Tue, Feb 15, 2022 at 01:30:26PM +0000, Robin Murphy wrote:
->>> On 2022-02-15 13:00, Will Deacon wrote:
->>>> On Mon, Feb 14, 2022 at 08:55:20PM +0800, Yicong Yang wrote:
->>>>> On 2022/1/24 21:11, Yicong Yang wrote:
->>>>>> The DMA of HiSilicon PTT device can only work with identical
->>>>>> mapping. So add a quirk for the device to force the domain
->>>>>> passthrough.
->>>>>>
->>>>>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
->>>>>> ---
->>>>>>    drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 16 ++++++++++++++++
->>>>>>    1 file changed, 16 insertions(+)
->>>>>>
->>>>>> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->>>>>> index 6dc6d8b6b368..6f67a2b1dd27 100644
->>>>>> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->>>>>> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->>>>>> @@ -2838,6 +2838,21 @@ static int arm_smmu_dev_disable_feature(struct device *dev,
->>>>>>        }
->>>>>>    }
->>>>>> +#define IS_HISI_PTT_DEVICE(pdev)    ((pdev)->vendor == PCI_VENDOR_ID_HUAWEI && \
->>>>>> +                     (pdev)->device == 0xa12e)
->>>>>> +
->>>>>> +static int arm_smmu_def_domain_type(struct device *dev)
->>>>>> +{
->>>>>> +    if (dev_is_pci(dev)) {
->>>>>> +        struct pci_dev *pdev = to_pci_dev(dev);
->>>>>> +
->>>>>> +        if (IS_HISI_PTT_DEVICE(pdev))
->>>>>> +            return IOMMU_DOMAIN_IDENTITY;
->>>>>> +    }
->>>>>> +
->>>>>> +    return 0;
->>>>>> +}
->>>>>> +
->>>>>>    static struct iommu_ops arm_smmu_ops = {
->>>>>>        .capable        = arm_smmu_capable,
->>>>>>        .domain_alloc        = arm_smmu_domain_alloc,
->>>>>> @@ -2863,6 +2878,7 @@ static struct iommu_ops arm_smmu_ops = {
->>>>>>        .sva_unbind        = arm_smmu_sva_unbind,
->>>>>>        .sva_get_pasid        = arm_smmu_sva_get_pasid,
->>>>>>        .page_response        = arm_smmu_page_response,
->>>>>> +    .def_domain_type    = arm_smmu_def_domain_type,
->>>>>>        .pgsize_bitmap        = -1UL, /* Restricted during device attach */
->>>>>>        .owner            = THIS_MODULE,
->>>>>>    };
->>>>>>
->>>>>
->>>>> Is this quirk ok with the SMMU v3 driver? Just want to confirm that I'm on the
->>>>> right way to dealing with the issue of our device.
->>>>
->>>> I don't think the quirk should be in the SMMUv3 driver. Assumedly, you would
->>>> have the exact same problem if you stuck the PTT device behind a different
->>>> type of IOMMU, and so the quirk should be handled by a higher level of the
->>>> stack.
->>>
->>> Conceptually, yes, but I'm inclined to be pragmatic here. Default domain
->>> quirks could only move out as far as the other end of the call from
->>> iommu_get_def_domain_type() - it's not like we could rely on some flag in a
->>> driver which may not even be loaded yet, let alone matched to the device.
->>> And even then there's an equal and opposite argument for why the core code
->>> should have to maintain a list of platform-specific quirks rather than code
->>> specific to the relevant platforms. The fact is that a HiSilicon RCiEP is
->>> not going to end up behind anything other than a HiSilicon IOMMU, and if
->>> those ever stop being SMMUv3 *and* such a quirk still exists we can worry
->>> about it then.
+On 2/16/22 10:25, Jani Nikula wrote:
+
+[snip]
+
 >>
-
-That's true that this RCiEP only appears behind the HiSilicon's IOMMU which using
-SMMU v3 driver.
-
->> Perhaps, but you know that by adding this hook it's only a matter of time
->> before we get random compatible string matches in there, so I'd rather keep
->> the flood gates closed as long as we can.
+>> I actually wrote said follow-up patches and they were ready to go, but
+>> when I was trying to come up with the right "Fixes" tag I found commit
+>> b792e64021ec ("drm: no need to check return value of debugfs_create
+>> functions"). So what's being requested is nearly the opposite of what
+>> Greg did there.
 >>
->> Given that this is a PCI device, why can't we have a PCI quirk for devices
->> which require an identity mapping and then handle that in the IOMMU core?
-> 
-
-As Robin mentioned below, not only PCI devices but some platform devices also want
-to passthrough the IOMMU. I noticed there're already some fields describe the device's
-DMA information in struct device, so follow your point can it go there if we're going
-to make it more generic?
-
-Anyway if we're going to make all these quirks in a more generic place, I'll willing
-to add this device there and have a test.
-
-> Oh, don't think I *like* having quirks in the driver, it just seems like the least-worst choice from a bad bunch. All of the default domain quirks so far (including this one) exist for integrated devices and/or dodgy firmware setups such that they are platform-specific, so there is no technical reason for trying to split *some* of them off into a generic mechanism when the driver-based platform-specific mechanism still needs to exist anyway (some of them do depend on driver state as well).
-> 
-> Feel free to test the waters with a patch punting qcom_smmu_def_domain_type() to core code, but I think you'll struggle to find a reason to give in the commit message other than "I don't like it".
-> 
->>> Ugly as it is, this is the status quo. I don't recall anyone ever arguing
->>> that the equivalent quirks for Intel integrated graphics should be made
->>> generic ;)
+>> I thought about perhaps only checking for directories but even that
+>> type of check was removed by Greg's patch. Further checking shows that
+>> start_creating() actually has:
 >>
->> I don't know anything about Intel integrated graphics. Have they solved this
->> problem in a better way, or could they equally make use of a generic quirk?
+>> if (IS_ERR(parent))
+>>   return parent;
+>>
+>> ...so I guess that explains why it's fine to skip the check even for parents?
+>>
+>> Sure enough I confirmed that if I pass `ERR_PTR(-EINVAL)` as the root
+>> for `panel->funcs->debugfs_init()` that nothing bad seems to happen...
 > 
-> See intel-iommu's device_def_domain_type() implementation. The shape of it may seem quite familiar...
+> Yeah, the idea is that you don't need to check for debugfs function
+> return values and you can safely pass error pointers to debugfs
+> functions. The worst that can happen is you don't get the debugfs, but
+> hey, it's debugfs so you shouldn't fail anything else because of that
+> anyway.
 > 
 
-Yes Intel's IOMMU passthrough some PCI devices in this way and this patch imitates that.
-https://github.com/torvalds/linux/blob/master/drivers/iommu/intel/iommu.c#L2959
+Thanks a lot Doug and Jani for the explanations. That makes sense and it
+explains why most code I looked was not checking for the return value.
 
-btw Will, much appreciated if you could have a look at the perf and PMU part of this driver.:)
+I guess we should write something about this in the debugfs functions
+kernel doc so it's mentioned explicitly and people don't have to guess. 
 
-Thanks,
-Yicong
+Best regards,
+-- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

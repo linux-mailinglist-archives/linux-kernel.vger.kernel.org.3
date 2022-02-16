@@ -2,106 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1EA4B8073
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 07:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E82514B8076
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 07:19:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiBPGRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 01:17:06 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46318 "EHLO
+        id S230307AbiBPGRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 01:17:47 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiBPGRE (ORCPT
+        with ESMTP id S229671AbiBPGRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 01:17:04 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FD363C9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 22:16:51 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id 124so2912201ybn.11
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 22:16:51 -0800 (PST)
+        Wed, 16 Feb 2022 01:17:43 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206CD181A7E;
+        Tue, 15 Feb 2022 22:17:29 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id m7so1592931pjk.0;
+        Tue, 15 Feb 2022 22:17:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fj0gD7ulTBZq25O5ipO8sbzaZnByNFYzTOaIrem2GJI=;
-        b=v/JgsETLxe0/hm/AA5GsACF8WbkW5lYlBICmSCPBJRwkdphqlFcGSU4zn7Uia3n8l8
-         ChzEAUcPZ8tPWX133x+zQZ8B+u5NtXXDbp7FYSXcEv7HM5SI2nn3hfgt3lVy6mXrYbwB
-         8RvU1KZw+re5hvp27VM8b4Sp8KuYugX2l3Eqg9B3Oc5fd8+SjF7zzRi51zscms/4Ap+O
-         crduJSOlnNUMP1ARucXq1AXRo3bF1P4ntDGqJW6JqO11TK/+ldRM31w5a5NLQQDcVyTE
-         LhLIHUUFBR/J/s7Uk7MF3Bf1nGumQ+tDNUD7qv/oMVJ/PP/uz0quLcmV9DRfKouQxVhq
-         /XQg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=g8AXXaCbWDKs31CgLebuGmStUm/FmRBk00TmO1ilxqk=;
+        b=R6nU26LUyVGWcht213mcG0DzZPYJrA/r9XHRnfh0VrXRstESq1JU7dhPLXjABQTfQf
+         XRnaTbExMVWuF4l6fBKKRF897bvQfTh8LbG/OeRARgMDAr/shIxij+6y6sbDncoHCuXr
+         VDR9pYGQ8HLfA+qjc85STW58BZbSI6hBRToQXdsaw2xPrcZqY8xP3G3LwXzWbeF1BS3I
+         15M6mOZ17tFn4bKQl7Q35KUneB7dfS8vifFA17EubwTm0qfpAEA4ga1xryir0vyNCk1b
+         5D/SskQXUvlPW2tlse6HWGhFXXMnebn5BYeTybwuFGVhO3O/zL6z+VEoUAY/jwgmxpKH
+         3ESA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fj0gD7ulTBZq25O5ipO8sbzaZnByNFYzTOaIrem2GJI=;
-        b=nQ32f3Trmd7wPPLJEvHVCt2rL9PDbOXrPapNI/lj9Qun7drJUbUUWyjBZGfUofrerR
-         vJnl5l+M2AMDVQgBVYVxbT2p6MzRPp5a8ngDb/rDkEO2i64XPW/lDpIpE0PcPFpS+r6I
-         pz1BL/x1jYxqFWyzB3hMVWSNmuiMYhzDDpRTrr1mFXuMT7tVKiNTUr36x3qi6Pt0wyDN
-         HAyUjSDv1MSIkThFzkZvRD2OqnQFFlloKj0kkWfeyQVfZ5BZqyvB9nQ7y/s46al73nbI
-         pIkzNvkD7KsqYnicrt4y2etKXYPaK55R2ZLHWl8y+j4SllTz2gwKkwoVBl0qvwpOgSd/
-         5VCg==
-X-Gm-Message-State: AOAM530RVpYTVsKRxz8O+ISkWDOgr2PG7ACP2Hxamn6xi/1xt779OU9r
-        Dmr5bZvFES/7u3Imp/2opp+HmQcr3wLQUeAWDa5Jpw==
-X-Google-Smtp-Source: ABdhPJzX2bajWAwxTro869+zweYxCrKF4uoJ8QpyUAt4H2OSUROm/o52wbTCM4bT6j0jOd2XreydTzdDFgOhQz8gl1w=
-X-Received: by 2002:a25:d145:0:b0:611:c6ef:7c0d with SMTP id
- i66-20020a25d145000000b00611c6ef7c0dmr830341ybg.703.1644992210451; Tue, 15
- Feb 2022 22:16:50 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=g8AXXaCbWDKs31CgLebuGmStUm/FmRBk00TmO1ilxqk=;
+        b=GLXwSRC7NRKr1EaZlLcBDRkNHq4yb/2HLPGrGkiSS9Faed+8WZ3Tz7R6lMpa290+pE
+         bZ4F4bgQMSRkgxgX2hUY5z3LDo6jp1GG6u2JRicYSWYLDjOjv1TKyMt9Pe7+rwewBaUM
+         DXNz72XBavegxpAGluBfV8P73P5CSrYT4vV1RE9ymNkMWceUnHtaFmn+Hz00GrSTdUgb
+         PNhsdepmljUoRWUuvc7sT7xByyBaV2PmJtqKsiVy2yIu+UUOBZx5uyBZFDGbnTqQKdCZ
+         ejiUYLI4PRHB8XjfXq0Ch2LJmWuPA3xdN5WrJs8NAusT2NneU/f5Q/ygenhBt1lx1Rui
+         qJVw==
+X-Gm-Message-State: AOAM530m3PHH3Aqft1fKqaw6KO+BZw7FaxkwB6XOzHYcA8iw7oDqZOkx
+        r0P606LIddcj/qaxu9L91es=
+X-Google-Smtp-Source: ABdhPJz4qCOhIHKQZlLMOdwf+jbGDDpDv/+LYhv3pmYR+wR13k8rTjkrKJ32IqrWI9FTLunrx02EkA==
+X-Received: by 2002:a17:903:1249:b0:14e:e053:c8b6 with SMTP id u9-20020a170903124900b0014ee053c8b6mr1107309plh.132.1644992248523;
+        Tue, 15 Feb 2022 22:17:28 -0800 (PST)
+Received: from [192.168.43.80] (subs02-180-214-232-81.three.co.id. [180.214.232.81])
+        by smtp.gmail.com with ESMTPSA id h5sm636480pfi.18.2022.02.15.22.17.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 22:17:27 -0800 (PST)
+Message-ID: <8e4d9a65-7da0-c79e-a3e9-792d30d141e7@gmail.com>
+Date:   Wed, 16 Feb 2022 13:17:22 +0700
 MIME-Version: 1.0
-References: <20220210123058.79206-1-songmuchun@bytedance.com>
- <20220210123058.79206-6-songmuchun@bytedance.com> <39ab53c4-cb2f-82f4-1097-65d000284b23@oracle.com>
-In-Reply-To: <39ab53c4-cb2f-82f4-1097-65d000284b23@oracle.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Wed, 16 Feb 2022 14:16:13 +0800
-Message-ID: <CAMZfGtVQYvqNcNLggUdnbL9oDuYgPhA40caTV2afwmtSgzJCRg@mail.gmail.com>
-Subject: Re: [PATCH v5 5/7] mm: shmem: fix missing cache flush in shmem_mfill_atomic_pte()
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, zi.yan@cs.rutgers.edu,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Lars Persson <lars.persson@axis.com>, Zi Yan <ziy@nvidia.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Fam Zheng <fam.zheng@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH 5.10 000/116] 5.10.101-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220214092458.668376521@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 3:12 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
->
-> On 2/10/22 04:30, Muchun Song wrote:
-> > The userfaultfd calls shmem_mfill_atomic_pte() which does not do any
-> > cache flushing for the target page.  Then the target page will be mapped
-> > to the user space with a different address (user address), which might
-> > have an alias issue with the kernel address used to copy the data from the
-> > user to.  Insert flush_dcache_page() in non-zero-page case.  And replace
-> > clear_highpage() with clear_user_highpage() which already considers
-> > the cache maintenance.
-> >
-> > Fixes: 8d1039634206 ("userfaultfd: shmem: add shmem_mfill_zeropage_pte for userfaultfd support")
-> > Fixes: 4c27fe4c4c84 ("userfaultfd: shmem: add shmem_mcopy_atomic_pte for userfaultfd support")
-> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> > ---
-> >  mm/shmem.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> Thanks,
->
-> It might have been better to combine this and the next patch.  When looking
-> at this, I noted the 'fallback to copy_from_user outside mmap_lock' case needs
-> to be addressed as well.  It is in the next patch.  No need to change.
+On 14/02/22 16.24, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.101 release.
+> There are 116 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
 
-I separate those changes into 2 patches since the fixed patch
-is different. This patch is fixing linux 4.13 and later, while next
-patch is fixing linux 4.2 and later. Maybe it is hard to backport
-if combining those two patches.
+Successfully cross-compiled for arm64 (bcm2711_defconfig, clang 13.0.1)
+and powerpc (ps3_defconfig, gcc 11.2.0).
 
->
-> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-Thanks Mike.
+-- 
+An old man doll... just what I always wanted! - Clara

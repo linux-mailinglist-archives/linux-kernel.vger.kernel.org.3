@@ -2,64 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1E34B7DBF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 03:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FB34B7DA9
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 03:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343763AbiBPCee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 21:34:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40158 "EHLO
+        id S1343780AbiBPCgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 21:36:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232760AbiBPCec (ORCPT
+        with ESMTP id S244735AbiBPCgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 21:34:32 -0500
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 666449A4EA;
-        Tue, 15 Feb 2022 18:34:19 -0800 (PST)
-Received: by ajax-webmail-mail-app2 (Coremail) ; Wed, 16 Feb 2022 10:34:00
- +0800 (GMT+08:00)
-X-Originating-IP: [180.169.129.130]
-Date:   Wed, 16 Feb 2022 10:34:00 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5Ya36Z2Z?= <3090101217@zju.edu.cn>
-To:     "Greg KH" <gregkh@linuxfoundation.org>
-Cc:     balbi@kernel.org, jleng@ambarella.com,
-        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: f_uvc: fix superspeedplus transfer
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <Yguzht2JJtF+8N76@kroah.com>
-References: <Ygow+EB1P84VflBb@kroah.com>
- <20220215021647.4316-1-3090101217@zju.edu.cn> <Yguzht2JJtF+8N76@kroah.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
-MIME-Version: 1.0
-Message-ID: <6ca9a5a8.ae1fb.17f0061243d.Coremail.3090101217@zju.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID: by_KCgBHRFCYYgxiFbnrAQ--.40657W
-X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwIDBVNG3Fih1gAAsh
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW7Jw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 15 Feb 2022 21:36:19 -0500
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79255F5412;
+        Tue, 15 Feb 2022 18:36:07 -0800 (PST)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app2 (Coremail) with SMTP id by_KCgAX_nAGYwxi0LrrAQ--.36391S2;
+        Wed, 16 Feb 2022 10:35:55 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-hams@vger.kernel.org
+Cc:     ajk@comnets.uni-bremen.de, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH] drivers: hamradio: 6pack: fix UAF bug caused by mod_timer()
+Date:   Wed, 16 Feb 2022 10:35:49 +0800
+Message-Id: <20220216023549.50223-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgAX_nAGYwxi0LrrAQ--.36391S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kr45Zr1rJr1DtrWxCFy3Jwb_yoW8try3pr
+        Z8Jryftw4ktrW5tw4kAFs5Wrn5uFs5J3yxCrsag3sIvFnxJr1YgFyqvryUXFW2kFZ5Aa47
+        AF4rZr9xAF15C3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkF1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2
+        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
+        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
+        GwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv
+        6cx26r4fKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
+        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48J
+        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMI
+        IF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgwNAVZdtYEE3QAes6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgR3JlZyBLSCwKClNvcnJ5IGZvciB0aGUgdHJvdWJsZSwgYXMgYSBuZXcgY29udHJpYnV0b3Ig
-dG8ga2VybmVsLgpBbHRob3VnaCBJIGhhdmUgcmVhZGVkIHRoZSBkb2N1bWVudCB0aGF0IGhvdyB0
-byBzdWJtaXQgcGF0Y2hlcywKSSdtIHN0aWxsIG1pc3Npbmcgc29tZSBkZXRhaWxzLgoKPiBXaGF0
-IGRvZXMgImNhbGwgdHJhY2UiIGhlcmUgbWVhbj8gIElzIHRoaXMgYW4gZXJyb3I/ICBTb21ldGhp
-bmcgZWxzZT8KSXQgaXMgImNhbGwgdHJhY2UiIHdoZW4gdGhlIGtlcm5lbCBhY2Nlc3NlZCBOVUxM
-IHBvaW50ZXIgYW5kIGhhbmRlZC4KCj4gWW91IGRpZCBub3QgcmVhZCB0aGUgaW5mb3JtYXRpb24g
-dGhhdCBteSBib3QgdG9sZCB5b3UgdG8gcmVhZCwgZm9yIGhvdwo+IHRvIHByb3Blcmx5IHZlcnNp
-b24geW91ciBwYXRjaGVzIDooCj4gCj4gUGxlYXNlIGdvIGJhY2sgYW5kIGRvIHNvIHdoZW4geW91
-IHJlc2VuZCBhbGwgb2YgdGhlbS4KPiAKPiBBbHNvIHRoaXMgaXMgbm90IGEgcGF0Y2ggc2VyaWVz
-PyAgV2h5IG5vdD8KCkkgcmVhZGVkIHRoZSBib3QgdG9sZCwgYnV0IEkgc3RpbGwgbWlzc2VkIGl0
-LgpUaGUgbmV3IHBhdGNoIG9ubHkgYWRkcyBtb3JlIGRldGFpbGVkIHBhdGNoIGRlc2NyaXB0aW9u
-LgpTbyBpdCBpcyBub3QgYSBwYXRjaCBzZXJpZXMuCgp0aGFua3MsCgpKaW5nIExlbmc=
+Although del_timer_sync() in sixpack_close() waits for the timer handler
+to finish its execution and then releases the timer, the mod_timer()
+in sp_xmit_on_air() could be called by userspace syscall such as
+ax25_sendmsg(), ax25_connect() and ax25_ioctl() and wakes up the timer
+again. If the timer uses sp_xmit_on_air() to write data on pty work queue
+that already released by unregister_netdev(), the UAF bug will happen.
+
+One of the possible race conditions is shown below:
+
+      (USE)                     |      (FREE)
+ax25_sendmsg()                  |
+  ax25_queue_xmit()             |
+    ...                         |
+    sp_encaps()                 |  sixpack_close()
+      sp_xmit_on_air()          |    del_timer_sync(&sp->tx_t)
+        mod_timer(&sp->tx_t,..) |    ...
+        (wait a while)          |    unregister_netdev(sp->dev)) //FREE
+      sp_xmit_on_air()          |    ...
+        pty_write()             |
+          queue_work_on() //USE |
+
+The corresponding fail log is shown below:
+===============================================================
+BUG: KASAN: use-after-free in __run_timers.part.0+0x170/0x470
+Write of size 8 at addr ffff88800a652ab8 by task swapper/2/0
+...
+Call Trace:
+  ...
+  queue_work_on+0x3f/0x50
+  pty_write+0xcd/0xe0pty_write+0xcd/0xe0
+  sp_xmit_on_air+0xb2/0x1f0
+  call_timer_fn+0x28/0x150
+  __run_timers.part.0+0x3c2/0x470
+  run_timer_softirq+0x3b/0x80
+  __do_softirq+0xf1/0x380
+  ...
+
+This patch add condition check in sp_xmit_on_air(). If the
+registration status of net_device is not equal to NETREG_REGISTERED,
+the sp_xmit_on_air() will not write data to pty work queue and
+return instead.
+
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+ drivers/net/hamradio/6pack.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/hamradio/6pack.c b/drivers/net/hamradio/6pack.c
+index b1fc153125d..7ee25e06915 100644
+--- a/drivers/net/hamradio/6pack.c
++++ b/drivers/net/hamradio/6pack.c
+@@ -141,7 +141,8 @@ static void sp_xmit_on_air(struct timer_list *t)
+ 	struct sixpack *sp = from_timer(sp, t, tx_t);
+ 	int actual, when = sp->slottime;
+ 	static unsigned char random;
+-
++	if (sp->dev->reg_state !=  NETREG_REGISTERED)
++		return;
+ 	random = random * 17 + 41;
+ 
+ 	if (((sp->status1 & SIXP_DCD_MASK) == 0) && (random < sp->persistence)) {
+-- 
+2.17.1
+

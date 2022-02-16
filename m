@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 866434B7F9E
+	by mail.lfdr.de (Postfix) with ESMTP id 37C5E4B7F9D
 	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 05:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344492AbiBPEm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 23:42:58 -0500
+        id S1344513AbiBPEnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 23:43:07 -0500
 Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344490AbiBPEmp (ORCPT
+        with ESMTP id S1344489AbiBPEnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 23:42:45 -0500
-Received: from lgeamrelo11.lge.com (lgeamrelo13.lge.com [156.147.23.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1AE1FF4063
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 20:42:32 -0800 (PST)
-Received: from unknown (HELO lgeamrelo01.lge.com) (156.147.1.125)
-        by 156.147.23.53 with ESMTP; 16 Feb 2022 13:12:31 +0900
-X-Original-SENDERIP: 156.147.1.125
+        Tue, 15 Feb 2022 23:43:04 -0500
+Received: from lgeamrelo11.lge.com (lgeamrelo11.lge.com [156.147.23.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F447F4072
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 20:42:52 -0800 (PST)
+Received: from unknown (HELO lgeamrelo04.lge.com) (156.147.1.127)
+        by 156.147.23.51 with ESMTP; 16 Feb 2022 13:12:52 +0900
+X-Original-SENDERIP: 156.147.1.127
 X-Original-MAILFROM: byungchul.park@lge.com
 Received: from unknown (HELO localhost.localdomain) (10.177.244.38)
-        by 156.147.1.125 with ESMTP; 16 Feb 2022 13:12:31 +0900
+        by 156.147.1.127 with ESMTP; 16 Feb 2022 13:12:52 +0900
 X-Original-SENDERIP: 10.177.244.38
 X-Original-MAILFROM: byungchul.park@lge.com
 From:   Byungchul Park <byungchul.park@lge.com>
-To:     damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org
+To:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org
 Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
         linux-kernel@vger.kernel.org, peterz@infradead.org,
         will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
@@ -46,20 +46,21 @@ Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
         dri-devel@lists.freedesktop.org, airlied@linux.ie,
         rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
         hamohammed.sa@gmail.com
-Subject: [REPORT] libata deadlock possibilities by DEPT
-Date:   Wed, 16 Feb 2022 13:12:27 +0900
-Message-Id: <1644984747-26706-1-git-send-email-byungchul.park@lge.com>
+Subject: [REPORT] net deadlock possibilities by DEPT
+Date:   Wed, 16 Feb 2022 13:12:47 +0900
+Message-Id: <1644984767-26886-1-git-send-email-byungchul.park@lge.com>
 X-Mailer: git-send-email 1.9.1
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Damien and libata folks,
+Hi David, Jakub and net folks,
 
 I've been developing a tool for detecting deadlock possibilities by
 tracking wait/event rather than lock(?) acquisition order to try to

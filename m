@@ -2,116 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D46474B9208
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 21:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C884B9214
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 21:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbiBPUBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 15:01:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57140 "EHLO
+        id S229806AbiBPUEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 15:04:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiBPUBn (ORCPT
+        with ESMTP id S229664AbiBPUEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 15:01:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C12D415A3A
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:01:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645041689;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2VxECJm9oCcTZNF1nwOOvaIbVoK8MPKCQvBO1i/w1TA=;
-        b=Vv04gAFQhoWwfU+yN7IgPFVA7reZejSm41Gjb6s5qCL20RHqfdq2S33RQxUCD5zeN8WeWY
-        iABJqtnhI1kQzOOR9bUmxJm81nVv7RgHO1GV9rEk6gnrUo4TB2yuIoz2UL8xgxQTSTigUO
-        /WMChSjEwy2rpkdFCDuwUmrgza2GLwA=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-383-XrXaT839PzilHh95xRbOsw-1; Wed, 16 Feb 2022 15:01:27 -0500
-X-MC-Unique: XrXaT839PzilHh95xRbOsw-1
-Received: by mail-qk1-f199.google.com with SMTP id bi17-20020a05620a319100b0050850bdcbb2so2127406qkb.17
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:01:27 -0800 (PST)
+        Wed, 16 Feb 2022 15:04:54 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E22E2B165A
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:04:41 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id p15so2172535oip.3
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:04:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=p2YTwFNc3ICXWv/s85vDqxZ1xSdkq0Hufu5d0bc0A8Y=;
+        b=ShDIiG7IqOeZlZJd+lOTHVz4sQnn4UTTgLdoXPvdbfFg4sB5Jx184dwnyM7TXIyDAC
+         WXTyRl2Xxk2ILmfzsohfmL/pHi3wV2l2fa4wIkrSe6j0+miNDN9LO5lwzt3HnFRi0P30
+         MHHVgwAHu6lpcWSmvOLlRsK2k3JhNNH7x3M2exo7YeoPGuGGQOONu3qlOrJosNgyfI9N
+         Tt6ZG9qwubzj9RSqE6JVmuK9p2DFwuGpHOLov4d3x6EfffdpiiQAlAQzbxrk64XPQCXd
+         Yx5ds9BwjkzP4sw33ZuEd4vXjvIDEb6dj5hI6bue5Deafp+sUmtTkX7a3W0p8FBrrEzV
+         yltQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=2VxECJm9oCcTZNF1nwOOvaIbVoK8MPKCQvBO1i/w1TA=;
-        b=7ejIyh4qC4Fh/cOURdeO2rz8LeFe4pXxaHRHoJFxOROiudsA0msXK1B02Uy+um75SY
-         ykDEpsw/NcoVlUqy+GL9rwCi4bB+S5AL8yrzNed9fqP9Ig9NWSpyB702t1I7PV4wNe/Q
-         kIqXOGvUoSRVS27oD/t7oY3MDXf9kMyymUBl1MKudUldyW9Hgt7XHpRHBDnYZbRYnMiL
-         Wo1s/dXcfZ4agNJ2Wy1bOdrtGfvNFIweozoOeYvQ6yqxyNCtI7cCH7rbSB1Ln9LA2iuM
-         L43CgUGKt2SmiHOQIyfJtgBIJ4YEMi2XGP0clw+1OnZAMaSKWEScnF0gkxbmIDOTcnkE
-         FVdw==
-X-Gm-Message-State: AOAM533aGR1M7ix1j6X/sxQGb2Bo8FNAcMsO3fv6ywpNWkXGXlHnyCfW
-        /bIvMgQnlxP2ASPGjGaKJKx2NfNm4wt20H+Ac8xwkq7Z5gKP/8VlP5radbH2d2lcIKDKZoOqBXd
-        g+VhEt9IsxDiQJsR1V3UuTsmA
-X-Received: by 2002:ae9:eb12:0:b0:608:4151:c70f with SMTP id b18-20020ae9eb12000000b006084151c70fmr1842269qkg.281.1645041686720;
-        Wed, 16 Feb 2022 12:01:26 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzcmcVnXIz7khB34mtSJ5XeCHKuXXwpaasMWVF3vmW0irrcQH4GnwIH7nMDtcIH2X2ytZ5b9A==
-X-Received: by 2002:ae9:eb12:0:b0:608:4151:c70f with SMTP id b18-20020ae9eb12000000b006084151c70fmr1842215qkg.281.1645041686423;
-        Wed, 16 Feb 2022 12:01:26 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::15])
-        by smtp.gmail.com with ESMTPSA id p6sm8916153qkg.33.2022.02.16.12.01.22
+         :mime-version:content-disposition:in-reply-to;
+        bh=p2YTwFNc3ICXWv/s85vDqxZ1xSdkq0Hufu5d0bc0A8Y=;
+        b=KoDiSMFSCAmV533ylUcWEyD6KHqc8pLMDhMMmFlvk8Rr9vNT8gp4K5gNNdJ6V+kev/
+         NSZDUtwf0YrszhYqe0gpoKT2kRkln7TlMzB2ftEhJ2pqwcBGDvPOW6JlSnruFDteXFz6
+         5wHlW32EkgHmYMS7yVMhDqX+oQNmN00AFzBcOUozKjvQaNix9UJx+n9xgyxRusvnilTR
+         Uykyjimz8T8U1/ZDARV25mS82XwoZ20QqudF0qiQKRRKdsW3UKgf7AQSBZaUd9L+QPc5
+         J6mUVg9jKuCLsnkqeTg2CRbLX+/jXQ4hmKj8xTvi8xNvju3nEhTQ67T73M7WvktVwzAo
+         WAfw==
+X-Gm-Message-State: AOAM530r4n3YMpafE9flQwE4NhXEX46jyCkKix9QFcow3ayhRWZie050
+        dfvw5kNd/v58gaUVIgXCzxQtEWZvowz2iQ==
+X-Google-Smtp-Source: ABdhPJyfFXY8f2acavlDqsG3T3QaNMqhHhohq4+eKFpTxvCuif/UZ/sHPs8HMl5vC/5Yf/qifBqBTg==
+X-Received: by 2002:aca:1a17:0:b0:2bc:a78c:7ba2 with SMTP id a23-20020aca1a17000000b002bca78c7ba2mr1414813oia.120.1645041880944;
+        Wed, 16 Feb 2022 12:04:40 -0800 (PST)
+Received: from yoga (rrcs-97-77-166-58.sw.biz.rr.com. [97.77.166.58])
+        by smtp.gmail.com with ESMTPSA id w7sm15506869oou.13.2022.02.16.12.04.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 12:01:25 -0800 (PST)
-Date:   Wed, 16 Feb 2022 12:01:20 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
- unique-symbol` is available
-Message-ID: <20220216200120.djt6ijjenmcxmko6@treble>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
- <20220209185752.1226407-3-alexandr.lobakin@intel.com>
- <20220211174130.xxgjoqr2vidotvyw@treble>
- <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
- <20220211183529.q7qi2qmlyuscxyto@treble>
- <alpine.LSU.2.21.2202161606430.1475@pobox.suse.cz>
+        Wed, 16 Feb 2022 12:04:40 -0800 (PST)
+Date:   Wed, 16 Feb 2022 14:04:37 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Puranjay Mohan <p-mohan@ti.com>
+Cc:     kishon@ti.com, vigneshr@ti.com, s-anna@ti.com,
+        mathieu.poirier@linaro.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 1/2] remoteproc: Introduce sysfs_read_only flag
+Message-ID: <Yg1Y1dtT9CjZTxgW@yoga>
+References: <20220216081224.9956-1-p-mohan@ti.com>
+ <20220216081224.9956-2-p-mohan@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <alpine.LSU.2.21.2202161606430.1475@pobox.suse.cz>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220216081224.9956-2-p-mohan@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,38 +72,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 04:15:20PM +0100, Miroslav Benes wrote:
-> > > I subscribe to llvm@lists.linux.dev and happen to notice this message
-> > > (can't keep up with the changes...)
-> > > I am a bit concerned with this option and replied last time on
-> > > https://lore.kernel.org/r/20220105032456.hs3od326sdl4zjv4@google.com
-> > > 
-> > > My full reasoning is on
-> > > https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
-> > 
-> > Ah, right.  Also discussed here:
-> > 
-> >   https://lore.kernel.org/all/20210123225928.z5hkmaw6qjs2gu5g@google.com/T/#u
-> >   https://lore.kernel.org/all/20210125172124.awabevkpvq4poqxf@treble/
-> > 
-> > I'm not qualified to comment on LTO/PGO stability issues, but it doesn't
-> > sound good.  And we want to support livepatch for LTO kernels.
+On Wed 16 Feb 02:12 CST 2022, Puranjay Mohan wrote:
+
+> The remoteproc framework provides sysfs interfaces for changing
+> the firmware name and for starting/stopping a remote processor
+> through the sysfs files 'state' and 'firmware'. The 'coredump'
+> file is used to set the coredump configuration. The 'recovery'
+> sysfs file can also be used similarly to control the error recovery
+> state machine of a remoteproc. These interfaces are currently
+> allowed irrespective of how the remoteprocs were booted (like
+> remoteproc self auto-boot, remoteproc client-driven boot etc).
+> These interfaces can adversely affect a remoteproc and its clients
+> especially when a remoteproc is being controlled by a remoteproc
+> client driver(s). Also, not all remoteproc drivers may want to
+> support the sysfs interfaces by default.
 > 
-> Hm, bear with me, because I am very likely missing something which is 
-> clear to everyone else...
+> Add support to make the remoteproc sysfs files read only by
+> introducing a state flag 'sysfs_read_only' that the individual
+> remoteproc drivers can set based on their usage needs. The default
+> behavior is to allow the sysfs operations as before.
 > 
-> Is the stability really a problem for the live patching (and I am talking 
-> about the live patching only here. It may be a problem elsewhere, but I am 
-> just trying to understand.)? I understand that two different kernel builds 
-> could have a different name mapping between the original symbols and their 
-> unique renames. Not nice. But we can prepare two different live patches 
-> for these two different kernels. Something one would like to avoid if 
-> possible, but it is not impossible. Am I missing something?
+> Implement attribute_group->is_visible() to make the sysfs
+> entries read only when 'sysfs_read_only' flag is set.
+> 
+> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> ---
+> Changes in v4->v5:
+> Rename deny_sysfs_ops to sysfs_read_only.
+> Make coredump readonly with other files.
+> 
+> Changes in v3->v4:
+> Use mode = 0444 in rproc_is_visible() to make the sysfs entries
+> read-only when the deny_sysfs_ops flag is set.
+> ---
+>  drivers/remoteproc/remoteproc_sysfs.c | 19 ++++++++++++++++++-
+>  include/linux/remoteproc.h            |  2 ++
+>  2 files changed, 20 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_sysfs.c b/drivers/remoteproc/remoteproc_sysfs.c
+> index ea8b89f97d7b..abf0cd05d5e1 100644
+> --- a/drivers/remoteproc/remoteproc_sysfs.c
+> +++ b/drivers/remoteproc/remoteproc_sysfs.c
+> @@ -230,6 +230,22 @@ static ssize_t name_show(struct device *dev, struct device_attribute *attr,
+>  }
+>  static DEVICE_ATTR_RO(name);
+>  
+> +static umode_t rproc_is_visible(struct kobject *kobj, struct attribute *attr,
+> +				int n)
+> +{
+> +	struct device *dev = kobj_to_dev(kobj);
+> +	struct rproc *rproc = to_rproc(dev);
+> +	umode_t mode = attr->mode;
+> +
+> +	if (rproc->sysfs_read_only && (attr == &dev_attr_recovery.attr ||
+> +				       attr == &dev_attr_firmware.attr ||
+> +				       attr == &dev_attr_state.attr ||
+> +				       attr == &dev_attr_coredump.attr))
+> +		mode = 0444;
 
-Maybe Fāng-ruì can clarify, but my understanding was that the stability
-issue affects the kernel in general (particularly if LTO or PGO is
-enabled) and isn't necessarily specific to livepatch itself.
+Change looks good now, but just to make sure, you actually care about
+the content of these files for the Wakup M3? Read-only vs hiding them...
 
--- 
-Josh
+regards,
+Bjorn
 
+> +
+> +	return mode;
+> +}
+> +
+>  static struct attribute *rproc_attrs[] = {
+>  	&dev_attr_coredump.attr,
+>  	&dev_attr_recovery.attr,
+> @@ -240,7 +256,8 @@ static struct attribute *rproc_attrs[] = {
+>  };
+>  
+>  static const struct attribute_group rproc_devgroup = {
+> -	.attrs = rproc_attrs
+> +	.attrs = rproc_attrs,
+> +	.is_visible = rproc_is_visible,
+>  };
+>  
+>  static const struct attribute_group *rproc_devgroups[] = {
+> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> index e0600e1e5c17..93a1d0050fbc 100644
+> --- a/include/linux/remoteproc.h
+> +++ b/include/linux/remoteproc.h
+> @@ -523,6 +523,7 @@ struct rproc_dump_segment {
+>   * @table_sz: size of @cached_table
+>   * @has_iommu: flag to indicate if remote processor is behind an MMU
+>   * @auto_boot: flag to indicate if remote processor should be auto-started
+> + * @sysfs_read_only: flag to make remoteproc sysfs files read only
+>   * @dump_segments: list of segments in the firmware
+>   * @nb_vdev: number of vdev currently handled by rproc
+>   * @elf_class: firmware ELF class
+> @@ -562,6 +563,7 @@ struct rproc {
+>  	size_t table_sz;
+>  	bool has_iommu;
+>  	bool auto_boot;
+> +	bool sysfs_read_only;
+>  	struct list_head dump_segments;
+>  	int nb_vdev;
+>  	u8 elf_class;
+> -- 
+> 2.17.1
+> 

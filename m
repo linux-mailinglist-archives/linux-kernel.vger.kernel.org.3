@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70CCA4B90D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3224B90D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237948AbiBPTA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 14:00:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34042 "EHLO
+        id S237955AbiBPTAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 14:00:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237950AbiBPTAZ (ORCPT
+        with ESMTP id S237940AbiBPTAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 14:00:25 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838C12B100E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:00:12 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id u10so3538377vsu.13
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:00:12 -0800 (PST)
+        Wed, 16 Feb 2022 14:00:36 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2B52B100B;
+        Wed, 16 Feb 2022 11:00:24 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id q8so883926iod.2;
+        Wed, 16 Feb 2022 11:00:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=S5BSR6cJxy3OIvfsMR+O/vOvcelF9SA+qkn/HKZco3Y=;
-        b=pJZEPf7Kl86YFfMRtKeB4nfuiB3C1EHAHkDlTTaudqjfpSYETB8NiUGs1gpdRJ2BoN
-         JDJTGcw8UHBQZxjG+6PAiA1EBsXT63a55qxlKJWNxUpS9qEoBtmC0ttxpCk1ALzpYlww
-         1LqxJi8+uVmwy7hChpHr8VsoaqPUwnZajxLgoyrTgP0R6/l46hRBpvKCtD9/DUjHROCp
-         4RNnONCunQGzd8kziLrLCoETzTfqzlDrRDEhr5IvI5OxMGb0zrRHSCS32Hf95GkAYXD+
-         lIWAkfdrPQ5R3+s5EoOUMANqAljP1BNwsIYbt2hM4sz40rj0xj5+LiguFL7KEYW2dQvx
-         SEzA==
+        bh=XRfU/8ZpzajpOdrIHDPlVGXjOKFOtVhm1MloPuHIYhE=;
+        b=poTcBF2RbMylQfU29vedWqgqM3RFbQQ19N9qIT/WoO8Nt6WpxKJYlfsnK4ImJDPmWo
+         sHugeYzO7wTebnZ3pJ1X6cZV7cOymQ6SKfm5Gwj+eyWvJBMi8SuirPzTsshvhmfRFQaT
+         LU994oMgQoqWm+3d9psg2kTeBsYUA4kPeF8z9b6lgU0K/TeiHqYViAHsPNtltOdSNPyJ
+         zsIm+IWxgSscr8gEVsXFmZGRNJHwY82f/t/FbVF88w6BSV237soo1VXZzKhgHvGJcP0o
+         ppz3cIZm8LcGTOiyoPmnFmIG6Bi9KYz96dOdQj3ZRXixzv1RNNHjs5HKOXsX7othOEGg
+         /ESg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=S5BSR6cJxy3OIvfsMR+O/vOvcelF9SA+qkn/HKZco3Y=;
-        b=b0VQDLMnkpqveDvSeglTFmfvIligbv9Iv2840+RwLQ0pIiHfoST141REjOg0ebR2+d
-         E72Dq4I4uexVcOBwRhk5h10PMUTJpE29jlgi0jSPNGoMJJiZyGfO3UeJPHvXWLiySPqA
-         q+tI3T0pneEwt2h4i/CZvpgqZAUGn9tfeNCpaiJg5hU60AjFjUKsk+3D16Xs68G031zF
-         XQ9ev6mI3XKEtWjiUmmRLHVpxC7IcrNMrJn/Ps+oGOJ/MQKbGRxbDsAfKF6ogUqwri3q
-         yo1OFxtUN8QgBs5W9xPIMob4q+jkrvySrFmCYQt4Cw/0fubEXpjLuXz3zEIqDCCOHsQX
-         pjQg==
-X-Gm-Message-State: AOAM531Qczr/wi3d3mCYXLCS/NCd0tVvK+3FVD2xCIAnYOPUsvFiwrgI
-        La2OYuJmyJ5N5+0q5x4R7xEIo65+OJyMRgqTB8QtGw==
-X-Google-Smtp-Source: ABdhPJwk7yxK99Lm08CHdUF76ZrAthD1mX/3wkVG+nZM+tQ93MpiegxE69ayG2fXpIM8XyQLobOKlFLiSqpNIXgbiPU=
-X-Received: by 2002:a05:6102:374e:b0:31b:956a:b0da with SMTP id
- u14-20020a056102374e00b0031b956ab0damr1948636vst.35.1645038011504; Wed, 16
- Feb 2022 11:00:11 -0800 (PST)
+        bh=XRfU/8ZpzajpOdrIHDPlVGXjOKFOtVhm1MloPuHIYhE=;
+        b=7YuOVO15WV+ZxlaR9R07DKgIB8LRHmNcVMqNeeisO2nNvqXoSOlYehwVVGNLnkcJbL
+         tN4mlP249V6K8hTiEFDLmshvgEyITpJ3sbipYA9trahTYo8+XoxvNaRGmwXONafd+Ajv
+         YXxym6bA1PyFP7KHvVm3xZIbyO6UKl19biswTn9d3vKbBdMoDzq5b4q4tTvvUIaaDFkg
+         FjPJlyHjL9qv3pbUqr2cyHN+w2Jpo8cvZKeYNpdK/Agp6qQpjKaeyUSWqcdqlY+kBGwg
+         o4C3T1HIj9ty4mobFxn7ri3lq8Dc9EjFaO1eK72vnUc29M5Ok/z3f/CWe7ds4x0GMWJt
+         DSVw==
+X-Gm-Message-State: AOAM532V6Z72RROPAEhoQzcc8BUXEecfcNMlhmvyDsxvzx9PUWpQG390
+        Zp6Ne1DL7vgqnNhSDIdf2EF5j0JE5d3pUkwDlkio1DI4Ess=
+X-Google-Smtp-Source: ABdhPJwgrHWX2ov5UFIJ65bqUIOkMLpSE4GM2Tgf2hLPD/WxEll+Muyi9W2xXqzclOszW7naBoCqkzdTgqoC74OB5Tg=
+X-Received: by 2002:a05:6602:154c:b0:63d:a762:bd0d with SMTP id
+ h12-20020a056602154c00b0063da762bd0dmr2759798iow.192.1645038023539; Wed, 16
+ Feb 2022 11:00:23 -0800 (PST)
 MIME-Version: 1.0
-References: <CAPcxDJ7nriZEJHF6dMPR7tQ+dGuueyRjw1NC+4CbjxiAT_S+ZA@mail.gmail.com>
- <20220208150945.266978-1-juew@google.com> <Ygwka++3eipjQzB2@zn.tnic>
- <YgwnqTc8FGG3orcE@agluck-desk3.sc.intel.com> <YgzRsfWOmqkNiNI7@zn.tnic>
- <CAPcxDJ4=iknzYbN=b2oQxvJyODkQ_MWEj1wkKEuGwf4HQ3aPZA@mail.gmail.com>
- <Yg08Uhg0fZ9xZuP2@zn.tnic> <9f402331d25c47b69349c8171bbd49c1@intel.com>
- <Yg1ICgHfMYxwHyig@zn.tnic> <7931e48318d64e808a2ccb30ab6f7995@intel.com>
-In-Reply-To: <7931e48318d64e808a2ccb30ab6f7995@intel.com>
-From:   Jue Wang <juew@google.com>
-Date:   Wed, 16 Feb 2022 10:59:59 -0800
-Message-ID: <CAPcxDJ5t47M-+Bn_D+Vj7zbJTxhjrx=HsLX=iQj-EF_h2oVTsg@mail.gmail.com>
-Subject: Re: [PATCH] x86/mce: Add workaround for SKX/CLX/CPX spurious machine checks
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>
+References: <20220216180822.GA3300192@roeck-us.net> <CAB95QASWWMvSSuuwQU=TwZX-QcU=hRPCJVQ0E6Bh29sc4d66Ug@mail.gmail.com>
+ <7f3fc06f-cf4e-2dc6-e68a-917117fe8895@roeck-us.net>
+In-Reply-To: <7f3fc06f-cf4e-2dc6-e68a-917117fe8895@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Wed, 16 Feb 2022 20:00:12 +0100
+Message-ID: <CAB95QARa=XQ0LEEqM0R6YvBDrK1GRn=R+jszagMuzBKdo3pBZw@mail.gmail.com>
+Subject: Re: [PATCH v4] hwmon: (asus-ec-sensors) merge setup functions
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,15 +67,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 10:58 AM Luck, Tony <tony.luck@intel.com> wrote:
->
-> > You should've lead with that - this is basically one of those "under a
-> > complex set of conditions" things.
-> >
-> > Anything against me adding them to the commit message?
->
-> Add the three conditions. Not the "Google has billions and billions" joke.
+On Wed, 16 Feb 2022 at 19:49, Guenter Roeck <linux@roeck-us.net> wrote:
 
-Thanks for adding this important context.
->
-> -Tony
+> * If your patch generates checkpatch errors, warnings, or check messages,
+>    please refrain from explanations such as "I prefer that coding style".
+>    Keep in mind that each unnecessary message helps hiding a real problem,
+>    and a consistent coding style makes it easier for others to understand
+>    and review the code.
+
+Yes, of course. My question is what do I do with 6 other braces single
+statement if's now?
+
+Thanks,
+Eugene

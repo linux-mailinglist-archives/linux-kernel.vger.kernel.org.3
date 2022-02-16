@@ -2,134 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF664B8A3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A64764B8A4A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:35:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234547AbiBPNf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:35:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55432 "EHLO
+        id S234230AbiBPNgB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 16 Feb 2022 08:36:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiBPNf1 (ORCPT
+        with ESMTP id S234579AbiBPNfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:35:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD9912AB52E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:35:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645018514;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G9T93yMBwuHLVmetsIOIm5pO6KhHwAkYrHBQX/7ceMw=;
-        b=YUq2SVIygpWIJP6K6yfehXC5+CpXAJJDYIsL0G78Nbt0OXe4vhfCalFp6pLRizfI8Em7t6
-        eKGGxGw/AWeMKwjvDId8Bkv0RrHKeVYcsACpLrVZ2YNW2Rb8wdg66qME08AvSoLzzt8XLe
-        Vr/O7XFUbNzPkvpt8Rxizy3JCh4qOCo=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-511-13UOEvIQOHmC2DyRoQbQoA-1; Wed, 16 Feb 2022 08:35:13 -0500
-X-MC-Unique: 13UOEvIQOHmC2DyRoQbQoA-1
-Received: by mail-ej1-f72.google.com with SMTP id m12-20020a1709062acc00b006cfc98179e2so848431eje.6
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:35:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=G9T93yMBwuHLVmetsIOIm5pO6KhHwAkYrHBQX/7ceMw=;
-        b=CzaP/bPWmZZCoicOQZcKXLjEEiHcg6KCndHdrI8PE7A4walGMQZG6mBtHqsLDYxwyt
-         mXVf+qmfF7TKw5ARYP4mlWTrP+3H1t5AV39nNt8WC4dZx1U1M7ep7lpsr60bsDOjxTz4
-         mugSc7LiB/bJBvrhMEYdle350UFQQ/+s4wrgYJQ01lMkw6sCYcxwonJ9+iIL1bCzbpid
-         inp78oc6t+uUlAc9YvZl3A7L1oAdxhuKI0hqzKweZ0jj50vCZQG1AbR8h3TEj/WUZhK5
-         V5eXVe58koS5WLgtAhVSfxDq5ctWhR/xjCGurn/d8XTlQhg1iJkax9WRHpX45QO8wwcT
-         WovQ==
-X-Gm-Message-State: AOAM530fLYVWMHsZSdrqrLqm4UrGLTYX1WLXnc3EIzaOrIpG+6iLJWel
-        6u2n10OU0s4tWLlwOL5fGpwRaGVZ4zxXJ57JheGrV3M5A7+cqcvVU1zbC9qvk2hzipnMG1mZGHE
-        IOzJ2w7VU9uEEhM/Qec8yxwFR
-X-Received: by 2002:a17:906:5f96:b0:6bb:3024:9444 with SMTP id a22-20020a1709065f9600b006bb30249444mr2532981eju.298.1645018512456;
-        Wed, 16 Feb 2022 05:35:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxBYvQds+5YgvW96nRohBbndSrcG5IzmjDlT+RvWYFJV9kYVpohRBiVwfSqqB5r5UNO9L/MOQ==
-X-Received: by 2002:a17:906:5f96:b0:6bb:3024:9444 with SMTP id a22-20020a1709065f9600b006bb30249444mr2532963eju.298.1645018512231;
-        Wed, 16 Feb 2022 05:35:12 -0800 (PST)
-Received: from [192.168.1.173] ([78.157.137.28])
-        by smtp.gmail.com with ESMTPSA id e26sm5398696ejl.139.2022.02.16.05.35.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 05:35:11 -0800 (PST)
-Subject: Re: [PATCH] x86, vmlinux.lds: Add debug option to force all data
- sections aligned
-To:     Feng Tang <feng.tang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        H Peter Anvin <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>
-References: <20220216082802.96054-1-feng.tang@intel.com>
-From:   Denys Vlasenko <dvlasenk@redhat.com>
-Message-ID: <1f0b2e18-5fad-7ef2-bbfb-d6662ecad252@redhat.com>
-Date:   Wed, 16 Feb 2022 14:35:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Wed, 16 Feb 2022 08:35:45 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FF152AB53E
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:35:30 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mtapsc-5-x7kvjQ_dNbmfJSCohruuVA-1; Wed, 16 Feb 2022 13:35:28 +0000
+X-MC-Unique: x7kvjQ_dNbmfJSCohruuVA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Wed, 16 Feb 2022 13:35:25 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Wed, 16 Feb 2022 13:35:25 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Arnd Bergmann' <arnd@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>
+CC:     "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "will@kernel.org" <will@kernel.org>,
+        "guoren@kernel.org" <guoren@kernel.org>,
+        "bcain@codeaurora.org" <bcain@codeaurora.org>,
+        "geert@linux-m68k.org" <geert@linux-m68k.org>,
+        "monstr@monstr.eu" <monstr@monstr.eu>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "nickhu@andestech.com" <nickhu@andestech.com>,
+        "green.hu@gmail.com" <green.hu@gmail.com>,
+        "dinguyen@kernel.org" <dinguyen@kernel.org>,
+        "shorne@gmail.com" <shorne@gmail.com>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "dalias@libc.org" <dalias@libc.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "richard@nod.at" <richard@nod.at>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "jcmvbkbc@gmail.com" <jcmvbkbc@gmail.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>
+Subject: RE: [PATCH v2 02/18] uaccess: fix nios2 and microblaze get_user_8()
+Thread-Topic: [PATCH v2 02/18] uaccess: fix nios2 and microblaze get_user_8()
+Thread-Index: AQHYIzdfY+IsqXyFuUGlEUsFmAHn6KyWK9Eg
+Date:   Wed, 16 Feb 2022 13:35:25 +0000
+Message-ID: <4a7e026b07c94668a18cb4857ad6b7a5@AcuMS.aculab.com>
+References: <20220216131332.1489939-1-arnd@kernel.org>
+ <20220216131332.1489939-3-arnd@kernel.org>
+In-Reply-To: <20220216131332.1489939-3-arnd@kernel.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-In-Reply-To: <20220216082802.96054-1-feng.tang@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/16/22 9:28 AM, Feng Tang wrote:
-> 0day has reported many strange performance changes (regression or
-> improvement), in which there was no obvious relation between the culprit
-> commit and the benchmark at the first look, and it causes people to doubt
-> the test itself is wrong.
+From: Arnd Bergmann
+> Sent: 16 February 2022 13:13
 > 
-> Upon further check, many of these cases are caused by the change to the
-> alignment of kernel text or data, as whole text/data of kernel are linked
-> together, change in one domain can affect alignments of other domains.
+> These two architectures implement 8-byte get_user() through
+> a memcpy() into a four-byte variable, which won't fit.
 > 
-> To help quickly identifying if the strange performance change is caused
-> by _data_ alignment, add a debug option to force the data sections from
-> all .o files aligned on THREAD_SIZE, so that change in one domain won't
-> affect other modules' data alignment.
+> Use a temporary 64-bit variable instead here, and use a double
+> cast the way that risc-v and openrisc do to avoid compile-time
+> warnings.
 > 
-> We have used this option to check some strange kernel changes [1][2][3],
-> and those performance changes were gone after enabling it, which proved
-> they are data alignment related. Besides these publicly reported cases,
-> recently there are other similar cases found by 0day, and this option
-> has been actively used by 0Day for analyzing strange performance changes.
 ...
-> +	.data : AT(ADDR(.data) - LOAD_OFFSET)
-> +#ifdef CONFIG_DEBUG_FORCE_DATA_SECTION_ALIGNED
-> +	/* Use the biggest alignment of below sections */
-> +	SUBALIGN(THREAD_SIZE)
-> +#endif
+>  	case 4:								\
+> -		__get_user_asm("lw", (ptr), __gu_val, __gu_err);	\
+> +		__get_user_asm("lw", (ptr), x, __gu_err);		\
+>  		break;							\
+> -	case 8:								\
+> -		__gu_err = __copy_from_user(&__gu_val, ptr, 8);		\
+> -		if (__gu_err)						\
+> -			__gu_err = -EFAULT;				\
+> +	case 8: {							\
+> +		__u64 __x = 0;						\
+> +		__gu_err = raw_copy_from_user(&__x, ptr, 8) ?		\
+> +							-EFAULT : 0;	\
+> +		(x) = (typeof(x))(typeof((x) - (x)))__x;		\
+>  		break;							\
 
-"Align every input section to 4096 bytes" ?
+Wouldn't it be better to just fetch two 32bit values:
+Something like (for LE - nios2 is definitely LE:
+		__u32 val_lo, val_hi;
+		__get_user_asm("lw", (ptr), val_lo, __gu_err);
+		__get_user_asm("lw", (ptr) + 4, val_hi, __gu_err);
+		x = val_lo | val_hi << 32;
+		break;
 
-This is way, way, WAY too much. The added padding will be very wasteful.
+	David
 
-Performance differences are likely to be caused by cacheline alignment.
-Factoring in an odd hardware prefetcher grabbing an additional
-cacheline after every accessed one, I'd say alignment to 128 bytes
-(on x86) should suffice for almost any scenario. Even 64 bytes
-would almost always work fine.
-
-The hardware prefetcher grabbing an additional cacheline was seen
-adversely affecting locking performance in a structure - developers
-thought two locks are not in the same cacheline, but because of
-this "optimization" they effectively are, and thus they bounce
-between CPUs. (1) Linker script can't help with this, since it was
-struct layout issue, not section alignment issue.
-(2) This "optimization" (unconditional fetch of next cacheline)
-might be bad enough to warrant detecting and disabling on boot.
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

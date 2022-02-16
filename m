@@ -2,157 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD4C4B7C91
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:37:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA364B7CAC
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:56:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245502AbiBPBex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 20:34:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33088 "EHLO
+        id S245561AbiBPBjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 20:39:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245497AbiBPBeu (ORCPT
+        with ESMTP id S238697AbiBPBjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 20:34:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3EC73F70CE
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:34:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644975278;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=TxaBIMaSmpGvEpUN6pnfgExDYJwGH+sDt4Nge7L+SbE=;
-        b=RXFA4DKEAybAHrLPsmOEZ7wTfOpjVQxtLSl3Ww4vR5FXE45OaumCFfQJv79N9ySSry7Mi/
-        ILT2Wp8yUQCHN0oxcllXkwtRqygCScHgEYrgue7qMV07pSwXgOvVNEaQ09OcfuGN3/uahO
-        AKaH7/GmZV0kcFr3NimGeDq8kCDsans=
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
- [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-8-Ffw9vDB2PD-WR-lmhMpCFA-1; Tue, 15 Feb 2022 20:34:37 -0500
-X-MC-Unique: Ffw9vDB2PD-WR-lmhMpCFA-1
-Received: by mail-oo1-f70.google.com with SMTP id t14-20020a4a96ce000000b00318605258dbso399217ooi.21
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:34:36 -0800 (PST)
+        Tue, 15 Feb 2022 20:39:20 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF376237E2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:39:08 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id v4so1104519pjh.2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:39:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4IkDugObOHw/CxlumnAa9V9g2g9OJVY9HrD6pEfE2lM=;
+        b=P61cP+b5/QdSjJQm9e3zgGhGrgdXFH3lfZfyCCnrtJvrS2+7Cgg/dK89cqyX5yiXdM
+         aRg6deIkdutkpSXDRfq1SNB/AVdg67oJTEfGuZzvMRJv/p9e6KRJLEXzcrjwLer7bRSl
+         5Hqbc6Y4GJ7wXys6sEIq6kO2AwpaP3Ih1QhqmQi2Ibob5FqsJtnc7XS9CJrZc/tNAlgN
+         jpKWExv6vcU/EcHtH4LDz+fQj1sM9wpY6DQprEJuyOb0+OgqwL842EHBvA+fLBpyfLcO
+         VgwsmOlwkj6aVXkg+59IM7suM4/u86uaKECJ+K6z9bKeydZ0ploCky1eRev1yrcrzvLq
+         wZTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=TxaBIMaSmpGvEpUN6pnfgExDYJwGH+sDt4Nge7L+SbE=;
-        b=BrqdQdwS6atKREc12WA6twOJR8xnCpHDqG4pn2KgMxs0IY+hKZ5cW0rlk6nQdaC4+G
-         1DC/XX5CWpCPpehCBzal4duO6b8cpElDxL4bRNfroEyaQukadvRmxkFYSh0AnFaBgGHc
-         ZM4Nc945WV1ShCcdphaXdfZ+Td6BPk/Xb5IZH+KjQNdNOwzwytq1Tjw71LbuoP78tgsB
-         cDTFYudSHBgoQ4DMYvF0j7JIMQi/pzfCNuXySBMJdoxC9b1FpfF2cDt+AX/lR7XMYt/O
-         eVSsLkDyC4aM5GYYFMbyDRZOOPwD7EEdm7yb6YCI0+dOsVFqttsjLGgzDs/wLzu4n/+D
-         5ayg==
-X-Gm-Message-State: AOAM531/6jhMkqVMpAjoP0Rh9QffPE165NaYpkvOLyGmvYeYuRSBufsc
-        SAwc6XmBSRdpK7hENFU5wey1KhARSz2aAPRBqzjlJC17OlNIuZqwPFP+Ycwb4tIUrCWC0YOCsYh
-        5OX7Iow1YtA6HG/Y+AVyFvbcb
-X-Received: by 2002:a05:6870:e749:b0:d3:4ada:380e with SMTP id t9-20020a056870e74900b000d34ada380emr244596oak.206.1644975276300;
-        Tue, 15 Feb 2022 17:34:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxIWFPq8WR/J0ftst2Qc1PQDGPtfYiYgOJVkBhQLwJvoEFneclhBD3/SN4zuCWYCBqLlE5zJw==
-X-Received: by 2002:a05:6870:e749:b0:d3:4ada:380e with SMTP id t9-20020a056870e74900b000d34ada380emr244588oak.206.1644975276058;
-        Tue, 15 Feb 2022 17:34:36 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id 100sm14574391oth.75.2022.02.15.17.34.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 17:34:35 -0800 (PST)
-From:   trix@redhat.com
-To:     ysato@users.sourceforge.jp, dalias@libc.org
-Cc:     linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] sh: cleanup comments
-Date:   Tue, 15 Feb 2022 17:34:24 -0800
-Message-Id: <20220216013424.3062140-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        bh=4IkDugObOHw/CxlumnAa9V9g2g9OJVY9HrD6pEfE2lM=;
+        b=bWECYKNmU+tMCnSDDDGCAcLM7Qu4Po5eidXvU+Mb/GlpPZMjF1Mm9qCT+ynNvArv4Z
+         I7REIuwgltDzFpW8H4eewlUi73eTqmtlpPUfU7L9bbxyFNnTXwhdiYn5p4pUU5HsDp7s
+         apDCg+ky+SznzHUW1A3blwLGstspfkSiITdHpdNKNp3wZHOg4p6l4PmnEDokRDEK+Uov
+         GopJRostOTEUu6/AkPI+VwZuziDuLNAkc6gh2yDCCQ6A+Z199eIJLPuUp08f0R3mrFVc
+         UDAjq1Q5CNxyi4AyNGP5d3L4P0OG8fAfkVzmNcRNWF5gBG6K68b1oG6ITNOtVDRXSj0s
+         Tr3Q==
+X-Gm-Message-State: AOAM531eUqDyWYRhf18q2RkLJ/EeGKwk0++z/uf66wWPf8ZUVlpQL12m
+        1htEgp/9lmMb1FeXPm07NB7Qhg==
+X-Google-Smtp-Source: ABdhPJyVcEQPG2VDaGKPFncTObF/Wmp+3tHQlHV4luaY2AjnKJkKFGfI/nUrfIAuuNsLJkHuYb42pA==
+X-Received: by 2002:a17:90b:2390:b0:1b9:c392:ab8d with SMTP id mr16-20020a17090b239000b001b9c392ab8dmr293672pjb.30.1644975548318;
+        Tue, 15 Feb 2022 17:39:08 -0800 (PST)
+Received: from [10.76.15.169] ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id j12sm35873328pfu.79.2022.02.15.17.39.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 17:39:07 -0800 (PST)
+Subject: PING: [PATCH v2 0/3] Introduce akcipher service for virtio-crypto
+To:     arei.gonglei@huawei.com
+Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        helei.sig11@bytedance.com, herbert@gondor.apana.org.au,
+        mst@redhat.com
+References: <20220211084108.1254218-1-pizhenwei@bytedance.com>
+From:   zhenwei pi <pizhenwei@bytedance.com>
+Message-ID: <cf1c6a2e-92a1-06f7-8f1b-be823c21ab5a@bytedance.com>
+Date:   Wed, 16 Feb 2022 09:36:17 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220211084108.1254218-1-pizhenwei@bytedance.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+Hi, Lei
 
-Replacements:
-SPDX--License-Identifier to SPDX-License-Identifier
-incase to in case
-Adaptor to Adapter
-overruning to overrunning
+Could you please review the V2 version?
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- arch/sh/drivers/dma/dma-sh.c           | 2 +-
- arch/sh/drivers/pci/fixups-dreamcast.c | 2 +-
- arch/sh/drivers/pci/pci-dreamcast.c    | 2 +-
- arch/sh/drivers/pci/pci-sh7751.c       | 2 +-
- arch/sh/drivers/platform_early.c       | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+On 2/11/22 4:41 PM, zhenwei pi wrote:
+> v1 -> v2:
+> - Fix 1 compiling warning reported by kernel test robot <lkp@intel.com>
+> - Put "__le32 akcipher_algo;" instead of "__le32 reserve;" field of
+>     struct virtio_crypto_config directly without size change.
+> - Add padding in struct virtio_crypto_ecdsa_session_para to keep
+>     64-bit alignment.
+> - Remove irrelevant change by code format alignment.
+> 
+> - Also CC crypto gurus Herbert and linux-crypto@vger.kernel.org.
+> 
+> - Test with QEMU(patched by the v2 version), works fine.
+> 
+> v1:
+> - Introduce akcipher service, implement RSA algorithm, and a minor fix.
+> 
+> zhenwei pi (3):
+>    virtio_crypto: Introduce VIRTIO_CRYPTO_NOSPC
+>    virtio-crypto: introduce akcipher service
+>    virtio-crypto: implement RSA algorithm
+> 
+>   drivers/crypto/virtio/Makefile                |   1 +
+>   .../virtio/virtio_crypto_akcipher_algo.c      | 584 ++++++++++++++++++
+>   drivers/crypto/virtio/virtio_crypto_common.h  |   3 +
+>   drivers/crypto/virtio/virtio_crypto_core.c    |   6 +-
+>   drivers/crypto/virtio/virtio_crypto_mgr.c     |  11 +
+>   include/uapi/linux/virtio_crypto.h            |  82 ++-
+>   6 files changed, 685 insertions(+), 2 deletions(-)
+>   create mode 100644 drivers/crypto/virtio/virtio_crypto_akcipher_algo.c
+> 
 
-diff --git a/arch/sh/drivers/dma/dma-sh.c b/arch/sh/drivers/dma/dma-sh.c
-index 96c626c2cd0a..38e2d62c330c 100644
---- a/arch/sh/drivers/dma/dma-sh.c
-+++ b/arch/sh/drivers/dma/dma-sh.c
-@@ -261,7 +261,7 @@ static inline int dmaor_reset(int no)
- {
- 	unsigned long dmaor = dmaor_read_reg(no);
- 
--	/* Try to clear the error flags first, incase they are set */
-+	/* Try to clear the error flags first, in case they are set */
- 	dmaor &= ~(DMAOR_NMIF | DMAOR_AE);
- 	dmaor_write_reg(no, dmaor);
- 
-diff --git a/arch/sh/drivers/pci/fixups-dreamcast.c b/arch/sh/drivers/pci/fixups-dreamcast.c
-index 41e4daee8f04..2e8a1e2233a3 100644
---- a/arch/sh/drivers/pci/fixups-dreamcast.c
-+++ b/arch/sh/drivers/pci/fixups-dreamcast.c
-@@ -9,7 +9,7 @@
-  *
-  * This file originally bore the message (with enclosed-$):
-  *	Id: pci.c,v 1.3 2003/05/04 19:29:46 lethal Exp
-- *	Dreamcast PCI: Supports SEGA Broadband Adaptor only.
-+ *	Dreamcast PCI: Supports SEGA Broadband Adapter only.
-  */
- 
- #include <linux/sched.h>
-diff --git a/arch/sh/drivers/pci/pci-dreamcast.c b/arch/sh/drivers/pci/pci-dreamcast.c
-index 4cff2a8107bf..c48ae4576d24 100644
---- a/arch/sh/drivers/pci/pci-dreamcast.c
-+++ b/arch/sh/drivers/pci/pci-dreamcast.c
-@@ -7,7 +7,7 @@
-  *
-  * This file originally bore the message (with enclosed-$):
-  *	Id: pci.c,v 1.3 2003/05/04 19:29:46 lethal Exp
-- *	Dreamcast PCI: Supports SEGA Broadband Adaptor only.
-+ *	Dreamcast PCI: Supports SEGA Broadband Adapter only.
-  */
- 
- #include <linux/sched.h>
-diff --git a/arch/sh/drivers/pci/pci-sh7751.c b/arch/sh/drivers/pci/pci-sh7751.c
-index 11ed21c2e9bb..0324ab2564d8 100644
---- a/arch/sh/drivers/pci/pci-sh7751.c
-+++ b/arch/sh/drivers/pci/pci-sh7751.c
-@@ -170,7 +170,7 @@ static int __init sh7751_pci_init(void)
- 	pci_fixup_pcic(chan);
- 
- 	/* SH7751 init done, set central function init complete */
--	/* use round robin mode to stop a device starving/overruning */
-+	/* use round robin mode to stop a device starving/overrunning */
- 	word = SH4_PCICR_PREFIX | SH4_PCICR_CFIN | SH4_PCICR_ARBM;
- 	pci_write_reg(chan, word, SH4_PCICR);
- 
-diff --git a/arch/sh/drivers/platform_early.c b/arch/sh/drivers/platform_early.c
-index 143747c45206..1c2a571a8ab8 100644
---- a/arch/sh/drivers/platform_early.c
-+++ b/arch/sh/drivers/platform_early.c
-@@ -1,4 +1,4 @@
--// SPDX--License-Identifier: GPL-2.0
-+// SPDX-License-Identifier: GPL-2.0
- 
- #include <asm/platform_early.h>
- #include <linux/mod_devicetable.h>
 -- 
-2.26.3
-
+zhenwei pi

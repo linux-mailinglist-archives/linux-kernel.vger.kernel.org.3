@@ -2,588 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707C94B89F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1794B89E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:28:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234408AbiBPN3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:29:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41454 "EHLO
+        id S233847AbiBPN2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 08:28:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234330AbiBPN3M (ORCPT
+        with ESMTP id S233815AbiBPN2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:29:12 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D574F16EAA1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:28:56 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id q132so2156446pgq.7
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:28:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Pkf5RyRv4TjCa25aN4iJ4g0kpEYRhMD0UlbOP1N34aQ=;
-        b=S/R7ZLX+/SEvS5gX/f//zqWXoQ95QPioA3BIbOQfLAX0ArRH+8eQXwMeomcsdNiSJc
-         CLyu/Kg7cssWUwXwe9CYE3MyczPj1WRLo1odDdpXbz2w4RpxBT9o6+HB94kEkYumz8bN
-         71T+EoMmFMd8cdyLqSLgr5et5qfQf4SMhb/TPhFJXE01JPGHNk9Nm1gEpEXZdw/lsmco
-         5i49xoIH+yJ26G91g6YL8HMGiVBTfltyHdDzYUMYwHDFZBVKy2NtZiae3dMBx154RN3D
-         NiBgA/xrSqqfASQj6tTZ+mPRvObIEW7INhyJLKajCwYIOKLRbjC3VkmdkMc9S9qZM/tJ
-         I/Jg==
+        Wed, 16 Feb 2022 08:28:52 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133DE163D79
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:28:39 -0800 (PST)
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A35B13F328
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 13:28:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645018118;
+        bh=uvLbH9+eJYb169S0u8GtDlmAGmS1dovfO9ippBhbjag=;
+        h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+         In-Reply-To:Content-Type;
+        b=VejuCDpk73LG2nSO+2rGaItSvInGFyiLk8/FjmKsNurHWHsrMRcYo8To5xh/A+jIE
+         IX2lYOOF/WyTAHohGvKbDMUv4htj9odDx9MzadfRubhRiIvBncc16EJPfPNZ6z9Ewt
+         uE5PwJEsjsw8gXqyQbhHb0ijBvATeW4T8wCLLmk+9bJ5fKLSrcHfdabHtb3jJCLA/O
+         UFHS2w0kiVbaAxmfd4Si8WjE3309eem459svAGdSCkcbXYZH1sO8guEO4NL//B1F4S
+         8IlZO+K5+AjcEl1oYZYsxrgTGO+CrjhsekL+jnoYffWo5BCxsB1drx+m6i4laEGH6Z
+         Iykgx6EuYnV2g==
+Received: by mail-ej1-f72.google.com with SMTP id d7-20020a1709061f4700b006bbf73a7becso828109ejk.17
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:28:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=Pkf5RyRv4TjCa25aN4iJ4g0kpEYRhMD0UlbOP1N34aQ=;
-        b=Tilacr6up0rMjV5zurtl0iLyRhcFeZhsSGRHnPohNH+6VSe4UZlfFrSGUEZrAx6lIo
-         7kxUECnb1PSn9jXYlFB+s8tZkbJToCVz+lV33vdwxz9tTvUqag87sUvAxYUFdeExzK7Q
-         FoIO0gZRPax3jsJNk28U5JJ9sR7+F7TRX0hXtXlRsokPfAnliLN60uIH/wBCpKlskmr3
-         ZRiGSJ369C/rFzUTxr8QucRHUetPz1RoDrBo6vDNyPpmannQp1jLzaOeX+/OyuXL8TzF
-         txj1Ol6Gk/0SuyKLfpc5bKd0Gn82AqQ5C3Vkk2JPhTTSriQYDVpN8kjcvP82cdaeLQV7
-         g6Sw==
-X-Gm-Message-State: AOAM532CtcqJ4jxzIlfLUs/KKbBk8b/yAkjP2gkVFavckdXg6sXSTVQz
-        a6AqM76Ocb8g54O8TdFxDWeAxA==
-X-Google-Smtp-Source: ABdhPJwjYBUeM0PLRh0MzFdrZ5T0u8MNxcL8h/Vuf50NYcrBrBhiesUQGJBjCbiwXH8ScJBa7PQs6g==
-X-Received: by 2002:a05:6a02:18b:b0:362:c8e4:d8f4 with SMTP id bj11-20020a056a02018b00b00362c8e4d8f4mr2311019pgb.86.1645018135992;
-        Wed, 16 Feb 2022 05:28:55 -0800 (PST)
-Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id c68sm5431002pga.1.2022.02.16.05.28.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 05:28:55 -0800 (PST)
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
-Cc:     Maulik Shah <quic_mkshah@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shawn Guo <shawn.guo@linaro.org>
-Subject: [PATCH v5 3/3] irqchip: Add Qualcomm MPM controller driver
-Date:   Wed, 16 Feb 2022 21:28:30 +0800
-Message-Id: <20220216132830.32490-4-shawn.guo@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220216132830.32490-1-shawn.guo@linaro.org>
-References: <20220216132830.32490-1-shawn.guo@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=uvLbH9+eJYb169S0u8GtDlmAGmS1dovfO9ippBhbjag=;
+        b=6O/yNLTQ2aPc7GDVqCW2Yrq/6yS6HVs8vboh/+b2eOrLn02ruryyNZYEgr9PiQDWbC
+         KRxsBmPfFMnOFPmEqzHqZRthDUBGT8htE9ksBfVisJtsqtfYW21vu+ORDRo6Xyv5i4m4
+         JRxI6BN++3zNMhuQUFyXnvrsFAEAYd1lKOPerWCLhE+PrSbO22edbbMlAi/nhD8UcDDy
+         MVa/DmYo4e+5Pl3G7wROku1GddTCbljIjKc02eURUbOM8Bu6d56yv7qeF/VA0kvL/P1A
+         rTObmdUnJUPTZbK/x794spmOstSOK7nkSYTO7vSETC6W8h+Tfujgt0s+WOv/xVBmKIGU
+         3ddQ==
+X-Gm-Message-State: AOAM533Jxi4u+LSBCKpKdX7OE0Yc2PVnDYXMM2UVCLGM1FORTigKQm1f
+        CBvvx7uTFDndaqsD4iddkdd5xEG5uwCa3YMaDiqEYUk1PJa3dvSCBMvNlbFbvA7rGKyn04WSPin
+        bCG5D0zHS9dswkCE7CZxc+vgB2eCBJmdsQDyJUM1LxA==
+X-Received: by 2002:aa7:db94:0:b0:410:f0e8:c39e with SMTP id u20-20020aa7db94000000b00410f0e8c39emr3081987edt.14.1645018117956;
+        Wed, 16 Feb 2022 05:28:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyDjLnVqY6woKkNirfpbndg7T+yQE6xw/kqrdiC2tPwlz5D4kqZP8qH23TQVUGR9vke/u8BEQ==
+X-Received: by 2002:aa7:db94:0:b0:410:f0e8:c39e with SMTP id u20-20020aa7db94000000b00410f0e8c39emr3081967edt.14.1645018117815;
+        Wed, 16 Feb 2022 05:28:37 -0800 (PST)
+Received: from [192.168.0.110] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id s9sm1645056edj.48.2022.02.16.05.28.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 05:28:37 -0800 (PST)
+Message-ID: <9f90a0d0-20fe-d191-e6e9-23d794fb4efe@canonical.com>
+Date:   Wed, 16 Feb 2022 14:28:36 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] dt-bindings: dma: Convert mtk-uart-apdma to DT schema
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, vkoul@kernel.org
+Cc:     robh+dt@kernel.org, sean.wang@mediatek.com, matthias.bgg@gmail.com,
+        long.cheng@mediatek.com, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220216114054.269656-1-angelogioacchino.delregno@collabora.com>
+ <79a47f67-bb66-bad4-b6bc-c6a8c0ef25dc@canonical.com>
+In-Reply-To: <79a47f67-bb66-bad4-b6bc-c6a8c0ef25dc@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qualcomm SoCs based on the RPM architecture have a MSM Power Manager (MPM)
-in always-on domain. In addition to managing resources during sleep, the
-hardware also has an interrupt controller that monitors the interrupts
-when the system is asleep, wakes up the APSS when one of these interrupts
-occur and replays it to GIC after it becomes operational.
+On 16/02/2022 14:26, Krzysztof Kozlowski wrote:
+> On 16/02/2022 12:40, AngeloGioacchino Del Regno wrote:
+>> Convert the MediaTek UART APDMA Controller binding to DT schema.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>  .../bindings/dma/mediatek,uart-dma.yaml       | 112 ++++++++++++++++++
+>>  .../bindings/dma/mtk-uart-apdma.txt           |  56 ---------
+>>  2 files changed, 112 insertions(+), 56 deletions(-)
+>>  create mode 100644 Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
+>>  delete mode 100644 Documentation/devicetree/bindings/dma/mtk-uart-apdma.txt
+>>
+>> diff --git a/Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml b/Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
+>> new file mode 100644
+>> index 000000000000..4583c8f535b2
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
+>> @@ -0,0 +1,112 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/dma/mediatek,uart-dma.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: MediaTek UART APDMA controller
+>> +
+>> +maintainers:
+>> +  - Long Cheng <long.cheng@mediatek.com>
 
-It adds an irqchip driver for this interrupt controller, and here are
-some notes about it.
+Is this still up-to-date? Emails bounce:
 
-- For given SoC, a fixed number of MPM pins are supported, e.g. 96 pins
-  on QCM2290.  Each of these MPM pins can be either a MPM_GIC pin or
-  a MPM_GPIO pin. The mapping between MPM_GIC pin and GIC interrupt
-  is defined by SoC, as well as the mapping between MPM_GPIO pin and
-  GPIO number.  The former mapping is retrieved from device tree, while
-  the latter is defined in TLMM pinctrl driver.
+  smtp; 550 Relaying mail to long.cheng@mediatek.com is not allowed
 
-- Different from vendor driver that handles MPM_GIC and MPM_GPIO pin
-  with separate irq_domain (and irq_chip), it handles both with a single
-  irq_domain, and distinguishes them by checking parent IRQ, since only
-  MPM_GIC pin has a parent GIC SPI number.
 
-- When SoC gets awake from sleep mode, the driver will receive an
-  interrupt from RPM, so that it can replay interrupt for particular
-  polarity.
-
-Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
----
- drivers/irqchip/Kconfig    |   8 +
- drivers/irqchip/Makefile   |   1 +
- drivers/irqchip/qcom-mpm.c | 440 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 449 insertions(+)
- create mode 100644 drivers/irqchip/qcom-mpm.c
-
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 7038957f4a77..680d2fcf2686 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -430,6 +430,14 @@ config QCOM_PDC
- 	  Power Domain Controller driver to manage and configure wakeup
- 	  IRQs for Qualcomm Technologies Inc (QTI) mobile chips.
- 
-+config QCOM_MPM
-+	tristate "QCOM MPM"
-+	depends on ARCH_QCOM
-+	select IRQ_DOMAIN_HIERARCHY
-+	help
-+	  MSM Power Manager driver to manage and configure wakeup
-+	  IRQs for Qualcomm Technologies Inc (QTI) mobile chips.
-+
- config CSKY_MPINTC
- 	bool
- 	depends on CSKY
-diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
-index c1f611cbfbf8..0e2e10467e28 100644
---- a/drivers/irqchip/Makefile
-+++ b/drivers/irqchip/Makefile
-@@ -94,6 +94,7 @@ obj-$(CONFIG_MESON_IRQ_GPIO)		+= irq-meson-gpio.o
- obj-$(CONFIG_GOLDFISH_PIC) 		+= irq-goldfish-pic.o
- obj-$(CONFIG_NDS32)			+= irq-ativic32.o
- obj-$(CONFIG_QCOM_PDC)			+= qcom-pdc.o
-+obj-$(CONFIG_QCOM_MPM)			+= qcom-mpm.o
- obj-$(CONFIG_CSKY_MPINTC)		+= irq-csky-mpintc.o
- obj-$(CONFIG_CSKY_APB_INTC)		+= irq-csky-apb-intc.o
- obj-$(CONFIG_RISCV_INTC)		+= irq-riscv-intc.o
-diff --git a/drivers/irqchip/qcom-mpm.c b/drivers/irqchip/qcom-mpm.c
-new file mode 100644
-index 000000000000..06c2ed14635f
---- /dev/null
-+++ b/drivers/irqchip/qcom-mpm.c
-@@ -0,0 +1,440 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2021, Linaro Limited
-+ * Copyright (c) 2010-2020, The Linux Foundation. All rights reserved.
-+ */
-+
-+#include <linux/cpu_pm.h>
-+#include <linux/delay.h>
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/irqchip.h>
-+#include <linux/irqchip/arm-gic-v3.h>
-+#include <linux/irqdomain.h>
-+#include <linux/mailbox_client.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+#include <linux/soc/qcom/irq.h>
-+#include <linux/spinlock.h>
-+
-+/*
-+ * This is the driver for Qualcomm MPM (MSM Power Manager) interrupt controller,
-+ * which is commonly found on Qualcomm SoCs built on the RPM architecture.
-+ * Sitting in always-on domain, MPM monitors the wakeup interrupts when SoC is
-+ * asleep, and wakes up the AP when one of those interrupts occurs.  This driver
-+ * doesn't directly access physical MPM registers though.  Instead, the access
-+ * is bridged via a piece of internal memory (SRAM) that is accessible to both
-+ * AP and RPM.  This piece of memory is called 'vMPM' in the driver.
-+ *
-+ * When SoC is awake, the vMPM is owned by AP and the register setup by this
-+ * driver all happens on vMPM.  When AP is about to get power collapsed, the
-+ * driver sends a mailbox notification to RPM, which will take over the vMPM
-+ * ownership and dump vMPM into physical MPM registers.  On wakeup, AP is woken
-+ * up by a MPM pin/interrupt, and RPM will copy STATUS registers into vMPM.
-+ * Then AP start owning vMPM again.
-+ *
-+ * vMPM register map:
-+ *
-+ *    31                              0
-+ *    +--------------------------------+
-+ *    |            TIMER0              | 0x00
-+ *    +--------------------------------+
-+ *    |            TIMER1              | 0x04
-+ *    +--------------------------------+
-+ *    |            ENABLE0             | 0x08
-+ *    +--------------------------------+
-+ *    |              ...               | ...
-+ *    +--------------------------------+
-+ *    |            ENABLEn             |
-+ *    +--------------------------------+
-+ *    |          FALLING_EDGE0         |
-+ *    +--------------------------------+
-+ *    |              ...               |
-+ *    +--------------------------------+
-+ *    |            STATUSn             |
-+ *    +--------------------------------+
-+ *
-+ *    n = DIV_ROUND_UP(pin_cnt, 32)
-+ *
-+ */
-+
-+#define MPM_REG_ENABLE		0
-+#define MPM_REG_FALLING_EDGE	1
-+#define MPM_REG_RISING_EDGE	2
-+#define MPM_REG_POLARITY	3
-+#define MPM_REG_STATUS		4
-+
-+#define MPM_NO_PARENT_IRQ	~0UL
-+
-+/* MPM pin map to GIC hwirq */
-+struct mpm_gic_map {
-+	int pin;
-+	irq_hw_number_t hwirq;
-+};
-+
-+struct qcom_mpm_priv {
-+	void __iomem *base;
-+	raw_spinlock_t lock;
-+	struct mbox_client mbox_client;
-+	struct mbox_chan *mbox_chan;
-+	struct mpm_gic_map *maps;
-+	unsigned int map_cnt;
-+	unsigned int reg_stride;
-+	struct irq_domain *domain;
-+	struct notifier_block pm_nb;
-+};
-+
-+static u32 qcom_mpm_read(struct qcom_mpm_priv *priv, unsigned int reg,
-+			 unsigned int index)
-+{
-+	unsigned int offset = (reg * priv->reg_stride + index + 2) * 4;
-+
-+	return readl_relaxed(priv->base + offset);
-+}
-+
-+static void qcom_mpm_write(struct qcom_mpm_priv *priv, unsigned int reg,
-+			   unsigned int index, u32 val)
-+{
-+	unsigned int offset = (reg * priv->reg_stride + index + 2) * 4;
-+
-+	writel_relaxed(val, priv->base + offset);
-+
-+	/* Ensure the write is completed */
-+	wmb();
-+}
-+
-+static void qcom_mpm_enable_irq(struct irq_data *d, bool en)
-+{
-+	struct qcom_mpm_priv *priv = d->chip_data;
-+	int pin = d->hwirq;
-+	unsigned int index = pin / 32;
-+	unsigned int shift = pin % 32;
-+	unsigned long flags;
-+	u32 val;
-+
-+	raw_spin_lock_irqsave(&priv->lock, flags);
-+
-+	val = qcom_mpm_read(priv, MPM_REG_ENABLE, index);
-+	if (en)
-+		val |= BIT(shift);
-+	else
-+		val &= ~BIT(shift);
-+	qcom_mpm_write(priv, MPM_REG_ENABLE, index, val);
-+
-+	raw_spin_unlock_irqrestore(&priv->lock, flags);
-+}
-+
-+static void qcom_mpm_mask(struct irq_data *d)
-+{
-+	qcom_mpm_enable_irq(d, false);
-+
-+	if (d->parent_data)
-+		irq_chip_mask_parent(d);
-+}
-+
-+static void qcom_mpm_unmask(struct irq_data *d)
-+{
-+	qcom_mpm_enable_irq(d, true);
-+
-+	if (d->parent_data)
-+		irq_chip_unmask_parent(d);
-+}
-+
-+static void mpm_set_type(struct qcom_mpm_priv *priv, bool set, unsigned int reg,
-+			 unsigned int index, unsigned int shift)
-+{
-+	unsigned long flags;
-+	u32 val;
-+
-+	raw_spin_lock_irqsave(&priv->lock, flags);
-+
-+	val = qcom_mpm_read(priv, reg, index);
-+	if (set)
-+		val |= BIT(shift);
-+	else
-+		val &= ~BIT(shift);
-+	qcom_mpm_write(priv, reg, index, val);
-+
-+	raw_spin_unlock_irqrestore(&priv->lock, flags);
-+}
-+
-+static int qcom_mpm_set_type(struct irq_data *d, unsigned int type)
-+{
-+	struct qcom_mpm_priv *priv = d->chip_data;
-+	int pin = d->hwirq;
-+	unsigned int index = pin / 32;
-+	unsigned int shift = pin % 32;
-+
-+	switch (type & IRQ_TYPE_SENSE_MASK) {
-+	case IRQ_TYPE_EDGE_RISING:
-+		mpm_set_type(priv, !!(type & IRQ_TYPE_EDGE_RISING),
-+			     MPM_REG_RISING_EDGE, index, shift);
-+		break;
-+	case IRQ_TYPE_EDGE_FALLING:
-+		mpm_set_type(priv, !!(type & IRQ_TYPE_EDGE_FALLING),
-+			     MPM_REG_FALLING_EDGE, index, shift);
-+		break;
-+	case IRQ_TYPE_LEVEL_HIGH:
-+		mpm_set_type(priv, !!(type & IRQ_TYPE_LEVEL_HIGH),
-+			     MPM_REG_POLARITY, index, shift);
-+		break;
-+	}
-+
-+	if (!d->parent_data)
-+		return 0;
-+
-+	if (type & IRQ_TYPE_EDGE_BOTH)
-+		type = IRQ_TYPE_EDGE_RISING;
-+
-+	if (type & IRQ_TYPE_LEVEL_MASK)
-+		type = IRQ_TYPE_LEVEL_HIGH;
-+
-+	return irq_chip_set_type_parent(d, type);
-+}
-+
-+static struct irq_chip qcom_mpm_chip = {
-+	.name			= "mpm",
-+	.irq_eoi		= irq_chip_eoi_parent,
-+	.irq_mask		= qcom_mpm_mask,
-+	.irq_unmask		= qcom_mpm_unmask,
-+	.irq_retrigger		= irq_chip_retrigger_hierarchy,
-+	.irq_set_type		= qcom_mpm_set_type,
-+	.irq_set_affinity	= irq_chip_set_affinity_parent,
-+	.flags			= IRQCHIP_MASK_ON_SUSPEND |
-+				  IRQCHIP_SKIP_SET_WAKE,
-+};
-+
-+static irq_hw_number_t get_parent_hwirq(struct qcom_mpm_priv *priv, int pin)
-+{
-+	const struct mpm_gic_map *maps = priv->maps;
-+	int i;
-+
-+	for (i = 0; i < priv->map_cnt; i++) {
-+		if (maps[i].pin == pin)
-+			return maps[i].hwirq;
-+	}
-+
-+	return MPM_NO_PARENT_IRQ;
-+}
-+
-+static int qcom_mpm_alloc(struct irq_domain *domain, unsigned int virq,
-+			  unsigned int nr_irqs, void *data)
-+{
-+	struct qcom_mpm_priv *priv = domain->host_data;
-+	struct irq_fwspec *fwspec = data;
-+	struct irq_fwspec parent_fwspec;
-+	irq_hw_number_t parent_hwirq;
-+	irq_hw_number_t hwirq;
-+	unsigned int type;
-+	int  ret;
-+
-+	ret = irq_domain_translate_twocell(domain, fwspec, &hwirq, &type);
-+	if (ret)
-+		return ret;
-+
-+	ret = irq_domain_set_hwirq_and_chip(domain, virq, hwirq,
-+					    &qcom_mpm_chip, priv);
-+	if (ret)
-+		return ret;
-+
-+	parent_hwirq = get_parent_hwirq(priv, hwirq);
-+	if (parent_hwirq == MPM_NO_PARENT_IRQ)
-+		return irq_domain_disconnect_hierarchy(domain->parent, virq);
-+
-+	if (type & IRQ_TYPE_EDGE_BOTH)
-+		type = IRQ_TYPE_EDGE_RISING;
-+
-+	if (type & IRQ_TYPE_LEVEL_MASK)
-+		type = IRQ_TYPE_LEVEL_HIGH;
-+
-+	parent_fwspec.fwnode = domain->parent->fwnode;
-+	parent_fwspec.param_count = 3;
-+	parent_fwspec.param[0] = 0;
-+	parent_fwspec.param[1] = parent_hwirq;
-+	parent_fwspec.param[2] = type;
-+
-+	return irq_domain_alloc_irqs_parent(domain, virq, nr_irqs,
-+					    &parent_fwspec);
-+}
-+
-+static const struct irq_domain_ops qcom_mpm_ops = {
-+	.alloc		= qcom_mpm_alloc,
-+	.free		= irq_domain_free_irqs_common,
-+	.translate	= irq_domain_translate_twocell,
-+};
-+
-+/* Triggered by RPM when system resumes from deep sleep */
-+static irqreturn_t qcom_mpm_handler(int irq, void *dev_id)
-+{
-+	struct qcom_mpm_priv *priv = dev_id;
-+	unsigned long enable, pending;
-+	int i, j;
-+
-+	for (i = 0; i < priv->reg_stride; i++) {
-+		enable = qcom_mpm_read(priv, MPM_REG_ENABLE, i);
-+		pending = qcom_mpm_read(priv, MPM_REG_STATUS, i);
-+		pending &= enable;
-+
-+		for_each_set_bit(j, &pending, 32) {
-+			unsigned int pin = 32 * i + j;
-+			struct irq_desc *desc = irq_resolve_mapping(priv->domain, pin);
-+			struct irq_data *d = &desc->irq_data;
-+
-+			if (!irqd_is_level_type(d))
-+				irq_set_irqchip_state(d->irq,
-+						IRQCHIP_STATE_PENDING, true);
-+
-+		}
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int qcom_mpm_enter_sleep(struct qcom_mpm_priv *priv)
-+{
-+	int i, ret;
-+
-+	for (i = 0; i < priv->reg_stride; i++)
-+		qcom_mpm_write(priv, MPM_REG_STATUS, i, 0);
-+
-+	/* Notify RPM to write vMPM into HW */
-+	ret = mbox_send_message(priv->mbox_chan, NULL);
-+	if (ret < 0)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int qcom_mpm_cpu_pm_callback(struct notifier_block *nb,
-+				    unsigned long action, void *data)
-+{
-+	struct qcom_mpm_priv *priv = container_of(nb, struct qcom_mpm_priv,
-+						  pm_nb);
-+	int ret = NOTIFY_OK;
-+
-+	switch (action) {
-+	case CPU_CLUSTER_PM_ENTER:
-+		if (qcom_mpm_enter_sleep(priv))
-+			ret = NOTIFY_BAD;
-+		break;
-+	default:
-+		return NOTIFY_DONE;
-+	}
-+
-+	return ret;
-+}
-+
-+static int qcom_mpm_init(struct device_node *np, struct device_node *parent)
-+{
-+	struct platform_device *pdev = of_find_device_by_node(np);
-+	struct device *dev = &pdev->dev;
-+	struct irq_domain *parent_domain;
-+	struct qcom_mpm_priv *priv;
-+	unsigned int pin_cnt;
-+	int i, irq;
-+	int ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	ret = of_property_read_u32(np, "qcom,mpm-pin-count", &pin_cnt);
-+	if (ret) {
-+		dev_err(dev, "failed to read qcom,mpm-pin-count: %d\n", ret);
-+		return ret;
-+	}
-+
-+	priv->reg_stride = DIV_ROUND_UP(pin_cnt, 32);
-+
-+	ret = of_property_count_u32_elems(np, "qcom,mpm-pin-map");
-+	if (ret < 0) {
-+		dev_err(dev, "failed to read qcom,mpm-pin-map: %d\n", ret);
-+		return ret;
-+	}
-+
-+	if (ret % 2) {
-+		dev_err(dev, "invalid qcom,mpm-pin-map\n");
-+		return -EINVAL;
-+	}
-+
-+	priv->map_cnt = ret / 2;
-+	priv->maps = devm_kcalloc(dev, priv->map_cnt, sizeof(*priv->maps),
-+				  GFP_KERNEL);
-+	if (!priv->maps)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < priv->map_cnt; i++) {
-+		of_property_read_u32_index(np, "qcom,mpm-pin-map", i * 2,
-+					   &priv->maps[i].pin);
-+		of_property_read_u32_index(np, "qcom,mpm-pin-map", i * 2 + 1,
-+					   (u32 *) &priv->maps[i].hwirq);
-+	}
-+
-+	raw_spin_lock_init(&priv->lock);
-+
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (!priv->base)
-+		return PTR_ERR(priv->base);
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
-+
-+	priv->mbox_client.dev = dev;
-+	priv->mbox_chan = mbox_request_channel(&priv->mbox_client, 0);
-+	if (IS_ERR(priv->mbox_chan)) {
-+		ret = PTR_ERR(priv->mbox_chan);
-+		dev_err(dev, "failed to acquire IPC channel: %d\n", ret);
-+		return ret;
-+	}
-+
-+	parent_domain = irq_find_host(parent);
-+	if (!parent_domain) {
-+		dev_err(dev, "failed to find MPM parent domain\n");
-+		ret = -ENXIO;
-+		goto free_mbox;
-+	}
-+
-+	priv->domain = irq_domain_create_hierarchy(parent_domain,
-+				IRQ_DOMAIN_FLAG_QCOM_MPM_WAKEUP, pin_cnt,
-+				of_node_to_fwnode(np), &qcom_mpm_ops, priv);
-+	if (!priv->domain) {
-+		dev_err(dev, "failed to create MPM domain\n");
-+		ret = -ENOMEM;
-+		goto free_mbox;
-+	}
-+
-+	irq_domain_update_bus_token(priv->domain, DOMAIN_BUS_WAKEUP);
-+
-+	ret = devm_request_irq(dev, irq, qcom_mpm_handler,
-+			       IRQF_TRIGGER_RISING | IRQF_NO_SUSPEND,
-+			       "qcom_mpm", priv);
-+	if (ret) {
-+		dev_err(dev, "failed to request irq: %d\n", ret);
-+		goto remove_domain;
-+	}
-+
-+	priv->pm_nb.notifier_call = qcom_mpm_cpu_pm_callback;
-+	cpu_pm_register_notifier(&priv->pm_nb);
-+
-+	dev_set_drvdata(dev, priv);
-+
-+	return 0;
-+
-+remove_domain:
-+	irq_domain_remove(priv->domain);
-+free_mbox:
-+	mbox_free_channel(priv->mbox_chan);
-+	return ret;
-+}
-+
-+IRQCHIP_PLATFORM_DRIVER_BEGIN(qcom_mpm)
-+IRQCHIP_MATCH("qcom,mpm", qcom_mpm_init)
-+IRQCHIP_PLATFORM_DRIVER_END(qcom_mpm)
-+MODULE_DESCRIPTION("Qualcomm Technologies, Inc. MSM Power Manager");
-+MODULE_LICENSE("GPL v2");
--- 
-2.17.1
-
+Best regards,
+Krzysztof

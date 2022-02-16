@@ -2,98 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 731944B877B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 13:22:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D33084B877C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 13:22:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233117AbiBPMW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 07:22:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45274 "EHLO
+        id S233133AbiBPMXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 07:23:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232537AbiBPMWx (ORCPT
+        with ESMTP id S229790AbiBPMWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 16 Feb 2022 07:22:53 -0500
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CE3E0ACD;
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2D3D1D6A;
         Wed, 16 Feb 2022 04:22:41 -0800 (PST)
-Received: by mail-yb1-f179.google.com with SMTP id y6so5472316ybc.5;
-        Wed, 16 Feb 2022 04:22:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iyLKMy9mx/11boOTHLHDZ1fvODjQEjXMH8nu+p70vJs=;
-        b=fu7P9kBBg/MMvjWN/lY+KqPqg5ZeeTgIhKde0G5jS4IReQm1ayXYZDJIXQDu7eYx5W
-         UDzC6byGHhB+AD3r9ZJoqVe7O6CbkRwqAKncma2EVVgZxlVs14zHjsxraT6+UUcYggFF
-         JFonXefseGKRWL5X9FAaucy6a85Z4N9QkvGI1uVpC3TNWBYtCQBNK+xOEPbGEPjQow2c
-         kRw1wTu+1pukSE9JYFmy5EVxrRAzZueZmXnoJwNFkkBl3XIliQ2l/VSj6aVCTKuMKjNQ
-         PA7i2rlCMN5ZEihsll8X604d+1/3bCi/jrHcEh4OkM51ZfX2qJ3mFhVB+lHP5Tn42IMx
-         tCmw==
-X-Gm-Message-State: AOAM532OsAeIAILBZEos0gr54EgTTkJYNXDN7/ujBaq2yATtJ4qbEI72
-        B10MyvVHdZS5eNSJPtuxLXi1AZYnRJYk/13Z+xg=
-X-Google-Smtp-Source: ABdhPJyJxNNVakBSB/WLvTRdrGZ9BXqx/DQIqoqFOGeLTAEwWDJchTaLwydj6Vd4o58xgwmHfILAH+X1f5I0myuczl4=
-X-Received: by 2002:a0d:d5d6:0:b0:2d1:51e2:5a09 with SMTP id
- x205-20020a0dd5d6000000b002d151e25a09mr2027246ywd.149.1645014161118; Wed, 16
- Feb 2022 04:22:41 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JzHCd2Q32z4xcP;
+        Wed, 16 Feb 2022 23:22:37 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1645014159;
+        bh=b5eBM0apAamYiz9FmsL/tdSBnGcg3AeLZmO6Sx4f7CI=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=TMxJSrmZkyabs6lKbBV2TP83SZhbStzLgUK6grRi9ZcKO7+n12nPpEJHnpP9OCnY8
+         8/bVkXeSr4TuornxqhL4RcEJrh5rUkChWpyGLeNFcP3Fu87/lxk921secNCIk3zvXn
+         BlugRQjvtHFZmPYTcTXBw7d7BsSBvevEK4rNDjwe4nPGbzuq+EGD1vma1jJ/4Dgehe
+         sxUPxAJ2AFXp33B1HKQXCUuBwuY1vMQ9z/9K1vmjr0O+WWlzXUtQEA/4e7zkVvD8JR
+         25CCKfBbyRgfLd8CdMrj1LnmkMIF+epDwaFgwNX5TeFYQN4QCzduAchXgnbefq4FDq
+         CcGqmYN75RJWA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Kees Cook <keescook@chromium.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v4 00/13] Fix LKDTM for PPC64/IA64/PARISC v4
+In-Reply-To: <202202150807.D584917D34@keescook>
+References: <cover.1644928018.git.christophe.leroy@csgroup.eu>
+ <202202150807.D584917D34@keescook>
+Date:   Wed, 16 Feb 2022 23:22:33 +1100
+Message-ID: <87y22bm25y.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <20220216062615.779778-1-ztong0001@gmail.com>
-In-Reply-To: <20220216062615.779778-1-ztong0001@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 16 Feb 2022 13:22:27 +0100
-Message-ID: <CAJZ5v0hsDVqZM=iP=4CYhGT99ScQ1xQNYHKcdJHHCscEhXOoCA@mail.gmail.com>
-Subject: Re: [PATCH] ACPICA: proactively check null ptr to avoid API misuse
-To:     Tong Zhang <ztong0001@gmail.com>
-Cc:     Robert Moore <robert.moore@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 7:26 AM Tong Zhang <ztong0001@gmail.com> wrote:
+Kees Cook <keescook@chromium.org> writes:
+> On Tue, Feb 15, 2022 at 01:40:55PM +0100, Christophe Leroy wrote:
+>> PPC64/IA64/PARISC have function descriptors. LKDTM doesn't work
+>> on those three architectures because LKDTM messes up function
+>> descriptors with functions.
+>> 
+>> This series does some cleanup in the three architectures and
+>> refactors function descriptors so that it can then easily use it
+>> in a generic way in LKDTM.
 >
-> There are some cases that user use acpi_ns_walk_namespace() without
-> checking acpi_disable flag. When acpi=off is provided in boot cmdline,
-> acpi_gbl_root_node is NULL and calling acpi_ns_walk_namespace() will
-> crash kernel. In order to avoid such misuse, we proactively check null ptr
-> and return an error when we know ACPI is disabled.
+> Thanks for doing this! It looks good to me. :)
 
-The issue should be fixed by this commit in the upstream ACPICA code
-base: https://github.com/acpica/acpica/commit/b1c3656ef4950098e530be68d4b589584f06cddc
+How should we merge this series, it's a bit all over the map.
 
->
-> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
-> ---
->  drivers/acpi/acpica/nswalk.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/acpi/acpica/nswalk.c b/drivers/acpi/acpica/nswalk.c
-> index 915c2433463d..9ae45db16d86 100644
-> --- a/drivers/acpi/acpica/nswalk.c
-> +++ b/drivers/acpi/acpica/nswalk.c
-> @@ -171,6 +171,13 @@ acpi_ns_walk_namespace(acpi_object_type type,
->                 start_node = acpi_gbl_root_node;
->         }
->
-> +       /* acpi_gbl_root_node is NULL when acpi=off is provided.
-> +        * We proactively check nulliness here and return an error if user call
-> +        * this function without checking acpi_disabled
-> +        */
-> +       if (start_node == NULL)
-> +               return_ACPI_STATUS(AE_ERROR);
-> +
->         /* Null child means "get first node" */
->
->         parent_node = start_node;
-> --
-> 2.25.1
->
+I could put it in a topic branch?
+
+cheers

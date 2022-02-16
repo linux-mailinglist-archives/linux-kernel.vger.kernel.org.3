@@ -2,237 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB074B8337
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:47:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F21F34B833A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbiBPIrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 03:47:09 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:50860 "EHLO
+        id S231644AbiBPIrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 03:47:33 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:53028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiBPIrI (ORCPT
+        with ESMTP id S231625AbiBPIrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 03:47:08 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5005F18CC60;
-        Wed, 16 Feb 2022 00:46:56 -0800 (PST)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21G8Sqeo005841;
-        Wed, 16 Feb 2022 09:46:20 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=/7nixD/n01nc+BoZwZ9R1YyOe5pCnVpSW4p/rLQTcvM=;
- b=GMjvUOyE3cbd/56o+dFiFWF7O5Dm4Rd9Pir1K8KbyGzxeOhZS+kKeAp2+CVxHrOPXhow
- s1L0wvso3CwX7ORZHpr5SoFOOCnkXCDs7f3u6ycQJ8wPfxeDoxGYfSRS3wdTTSIp9Awl
- etgH2OJcCoc5/2rG9AadjREsVrSnbNhaxPL4hKZ5A6k21hEs2EtaLWeCouCx5h+iWiV/
- CntlODSuAyrHnEWJivUGlX1NwVWKjsPuxVnu9agPoFWTd5Rda9JFftkyv3u6grT4SD8K
- xFzcR0j56TDlOof8MdfxnVv5mazGJ6x72UtoXBw03aDYWC/zLlvX7gTbb2cCnZeTrZdE gA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e8n20tega-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Feb 2022 09:46:20 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 82FD110002A;
-        Wed, 16 Feb 2022 09:46:18 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6C9E8214D3B;
-        Wed, 16 Feb 2022 09:46:18 +0100 (CET)
-Received: from [10.48.0.175] (10.75.127.46) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 16 Feb
- 2022 09:46:17 +0100
-Message-ID: <f6687807-607c-f672-2394-ad463735d597@foss.st.com>
-Date:   Wed, 16 Feb 2022 09:46:17 +0100
+        Wed, 16 Feb 2022 03:47:32 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044F618D018
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:47:20 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id o10so970753ilh.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:47:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nB6wLJxeL9331zrH9OmKZTrfg56pynJrLVvetUJChCg=;
+        b=FpkzP6+voqC5VXMfC6oZxzJTtQv/idk0vcbpoeWIbj/pmSnIITaj+6KDkzIfPnoa9a
+         q1RKQ7taEWsfV6RG4MBYbQ858KxlO7QZeMBhJMmo9FD1NRMirvyapnw4rjQIMOJuGBgP
+         6UzMULyNATkqbFoDq/uX+sGhQdbIwJftr88ZqCuNSXCoSYZyBF7q///6t4Dgby6m6B4g
+         366xtDO7ni1/xxVZMOStgRqo2h7qyXVAPAU6MFI00LB9MdFvU4vD0kJDTkbhsKconWUK
+         vHaFnsICSqTre8Yg900WInYHPoTuWDxH04sU2Q+PTUlgh5DKC78cDP3vOAA6/s76DnJZ
+         hCfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nB6wLJxeL9331zrH9OmKZTrfg56pynJrLVvetUJChCg=;
+        b=S668I23PqA6ArnO+id8SDJmTo338dtRzhwJ4w8u59pTxCk4o5ihcyIlPqpcfKSDD/8
+         4sHhCdpplOh3+b0y4ilXWuC39Y+9AKI79zbX/ZtLblwfkxGtmszdnss6lGa/zzNlO53N
+         ukaBvM3RmapcvrttnHRTVxogK5/1zcUTOkkQa8QuSZjK8FJOTx+Gcwtgj305p3ztTPG2
+         SuWgPgMfMYWjm1JdBE7tTPEQMKE9yJkdO11mJDV99TJsDnZnhrqtxdJ42HplyzuwO6Hz
+         HQLKUwHH0cLx2vluGeS/kJiMDWRlM07w5127UAeG6bGaW0T1hM/QncBpnIm7DFpmSZD/
+         7OKA==
+X-Gm-Message-State: AOAM530EYkxoaPlajvKQeX4LSmeDOFmsu6P+JgrQ8zYKPdYUkj0cNRmB
+        RFQv3CfNivpviMW2w4pPxGL6jSHrgHGP2oVLbrI=
+X-Google-Smtp-Source: ABdhPJxeADlV+pkxePZ6vUBJ4xRfgj2IR/BT1L/ygiYbFzT/vJwX/tLnY2CtttF0CWUK1RwiD20jQouSVgKl2rU1DDg=
+X-Received: by 2002:a05:6e02:17ca:b0:2be:8b06:eb67 with SMTP id
+ z10-20020a056e0217ca00b002be8b06eb67mr1126006ilu.247.1645001239363; Wed, 16
+ Feb 2022 00:47:19 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 4/4] mtd: core: Fix a conflict between MTD and NVMEM on
- wp-gpios property
-Content-Language: en-US
-To:     Pratyush Yadav <p.yadav@ti.com>
-CC:     Miquel Raynal <miquel.raynal@bootlin.com>, <richard@nod.at>,
-        <vigneshr@ti.com>, <robh+dt@kernel.org>,
-        <srinivas.kandagatla@linaro.org>, <linux-mtd@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <devicetree@vger.kernel.org>, <chenshumin86@sina.com>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Khouloud Touil <ktouil@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-References: <20220131095755.8981-1-christophe.kerello@foss.st.com>
- <20220131095755.8981-5-christophe.kerello@foss.st.com>
- <20220131144309.0ffe7cc8@xps13> <20220201104727.7xvcyexf3yucegcb@ti.com>
- <eebfa629-ead2-d63f-9cfb-4cafc1534678@foss.st.com>
- <20220202115327.53oqg5n7tx6b6q7u@ti.com>
-From:   Christophe Kerello <christophe.kerello@foss.st.com>
-In-Reply-To: <20220202115327.53oqg5n7tx6b6q7u@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-16_04,2022-02-14_04,2021-12-02_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220111161937.56272-1-pankaj.gupta.linux@gmail.com>
+ <20220111161937.56272-2-pankaj.gupta.linux@gmail.com> <CAPcyv4jrVJ_B0N_-vtqgXaOMovUgnSLCNj228nWMRhGAC5PDhA@mail.gmail.com>
+In-Reply-To: <CAPcyv4jrVJ_B0N_-vtqgXaOMovUgnSLCNj228nWMRhGAC5PDhA@mail.gmail.com>
+From:   Pankaj Gupta <pankaj.gupta.linux@gmail.com>
+Date:   Wed, 16 Feb 2022 09:47:08 +0100
+Message-ID: <CAM9Jb+i0B2jZ0uCEDyiz8ujuMkioFgOA0r7Lz9wDK026Vq1Hxg@mail.gmail.com>
+Subject: Re: [RFC v3 1/2] virtio-pmem: Async virtio-pmem flush
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Linux NVDIMM <nvdimm@lists.linux.dev>,
+        virtualization@lists.linux-foundation.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        jmoyer <jmoyer@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Vishal L Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        Pankaj Gupta <pankaj.gupta@ionos.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miquel, Pratyush, Srinivas,
+> >
+> > Enable asynchronous flush for virtio pmem using work queue. Also,
+> > coalesce the flush requests when a flush is already in process.
+> > This functionality is copied from md/RAID code.
+> >
+> > When a flush is already in process, new flush requests wait till
+> > previous flush completes in another context (work queue). For all
+> > the requests come between ongoing flush and new flush start time, only
+> > single flush executes, thus adhers to flush coalscing logic. This is
+>
+> s/adhers/adheres/
+>
+> s/coalscing/coalescing/
+>
+> > important for maintaining the flush request order with request coalscing.
+>
+> s/coalscing/coalescing/
 
-On 2/2/22 12:53, Pratyush Yadav wrote:
-> + Khouloud, Linus, Bartosz
-> 
-> On 02/02/22 11:44AM, Christophe Kerello wrote:
->> Hi,
->>
->> On 2/1/22 11:47, Pratyush Yadav wrote:
->>> On 31/01/22 02:43PM, Miquel Raynal wrote:
->>>> Hi Vignesh, Tudory, Pratyush,
->>>>
->>>> + Tudor and Pratyush
->>>>
->>>> christophe.kerello@foss.st.com wrote on Mon, 31 Jan 2022 10:57:55 +0100:
->>>>
->>>>> Wp-gpios property can be used on NVMEM nodes and the same property can
->>>>> be also used on MTD NAND nodes. In case of the wp-gpios property is
->>>>> defined at NAND level node, the GPIO management is done at NAND driver
->>>>> level. Write protect is disabled when the driver is probed or resumed
->>>>> and is enabled when the driver is released or suspended.
->>>>>
->>>>> When no partitions are defined in the NAND DT node, then the NAND DT node
->>>>> will be passed to NVMEM framework. If wp-gpios property is defined in
->>>>> this node, the GPIO resource is taken twice and the NAND controller
->>>>> driver fails to probe.
->>>>>
->>>>> A new Boolean flag named skip_wp_gpio has been added in nvmem_config.
->>>>> In case skip_wp_gpio is set, it means that the GPIO is handled by the
->>>>> provider. Lets set this flag in MTD layer to avoid the conflict on
->>>>> wp_gpios property.
->>>>>
->>>>> Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
->>>>> ---
->>>>>    drivers/mtd/mtdcore.c | 2 ++
->>>>>    1 file changed, 2 insertions(+)
->>>>>
->>>>> diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
->>>>> index 70f492dce158..e6d251594def 100644
->>>>> --- a/drivers/mtd/mtdcore.c
->>>>> +++ b/drivers/mtd/mtdcore.c
->>>>> @@ -546,6 +546,7 @@ static int mtd_nvmem_add(struct mtd_info *mtd)
->>>>>    	config.stride = 1;
->>>>>    	config.read_only = true;
->>>>>    	config.root_only = true;
->>>>> +	config.skip_wp_gpio = true;
->>>>>    	config.no_of_node = !of_device_is_compatible(node, "nvmem-cells");
->>>>>    	config.priv = mtd;
->>>>> @@ -833,6 +834,7 @@ static struct nvmem_device *mtd_otp_nvmem_register(struct mtd_info *mtd,
->>>>>    	config.owner = THIS_MODULE;
->>>>>    	config.type = NVMEM_TYPE_OTP;
->>>>>    	config.root_only = true;
->>>>> +	config.skip_wp_gpio = true;
->>>>>    	config.reg_read = reg_read;
->>>>>    	config.size = size;
->>>>>    	config.of_node = np;
->>>>
->>>> TLDR: There is a conflict between MTD and NVMEM, who should handle the
->>>> WP pin when there is one? At least for raw NAND devices, I don't want
->>>> the NVMEM core to handle the wp pin. So we've introduced this
->>>> skip_wp_gpio nvmem config option. But there are two places where this
->>>> boolean can be set and one of these is for otp regions (see above). In
->>>> this case, I don't know if it is safe or if CFI/SPI-NOR rely on the
->>>> nvmem protection. Please tell us if you think this is fine for you.
->>>
->>> Why does NVMEM touch hardware write protection in the first place? The
->>> purpose of the framework is to provide a way to retrieve config stored
->>> in memory. It has no business dealing with details of the chip like the
->>> WP line. That should be MTD's job (which it should delegate to SPI NOR,
->>> SPI NAND, etc.). If you want to write protect a cell then do it in
->>> software. I don't see why NVMEM should be dealing with hardware directly
->>> at all.
->>>
->>> That is my mental model of how things _should_ work. I have not spent
->>> much time digging into how things actually work currently.
->>>
->>
->> Wp-gpios property management was added in MVMEM framework in January 2020 =>
->> sha1: 2a127da461a9d8d97782d6e82b227041393eb4d2
->> "
->>      nvmem: add support for the write-protect pin
->>
->>      The write-protect pin handling looks like a standard property that
->>      could benefit other users if available in the core nvmem framework.
->>
->>      Instead of modifying all the memory drivers to check this pin, make
->>      the NVMEM subsystem check if the write-protect GPIO being passed
->>      through the nvmem_config or defined in the device tree and pull it
->>      low whenever writing to the memory.
->> "
->>
->> And this modification was done for EEPROMs flashes => sha1:
->> 1c89074bf85068d1b86f2e0f0c2110fdd9b83c9f
->> "
->>      eeprom: at24: remove the write-protect pin support
->>
->>      NVMEM framework is an interface for the at24 EEPROMs as well as for
->>      other drivers, instead of passing the wp-gpios over the different
->>      drivers each time, it would be better to pass it over the NVMEM
->>      subsystem once and for all.
->>
->>      Removing the support for the write-protect pin after adding it to
->>      the NVMEM subsystem.
->> "
->>
->> Current NVMEM framework implementation toggles the WP GPIO when reg_write
->> nvmem_config API is defined. In case of MTD framework, reg_write is not
->> defined in nvmem_config.
-> 
-> Thanks for digging these up. I think this was the wrong decision to
-> make. NVMEM should just provide the APIs for handling read/write, and
-> leave the rest to the drivers.
-> 
-> It might be convenient for some drivers to put the WP GPIO handling to
-> NVMEM core but I just don't think it is the job of the framework to deal
-> with this, and it just does not know enough about the device to deal
-> with correctly and completely anyway. For example, wp-gpio is only one
-> of the ways to write protect a chip. SPI NOR flashes have a WP# pin that
-> is often toggled via the SPI controller. There could also be registers
-> that do the write protection.
-> 
-> One would have to make strong justifications for making nvmem directly
-> deal with hardware level details to convince me it is a good idea. IMHO
-> if AT24 EEPROM is the only driver relying on this as of now then we
-> should just revert the patches and not have to deal with the
-> skip_wp_gpio hackery.
-> 
+o.k. Sorry for the spelling mistakes.
 
-Based on the  bindings documentation, AT24 EEPROM driver is not the only
-driver relying on this implementation. At least, AT25 EEPROM driver will
-have to be modified to handle the Write Protect management, and there is
-probably others drivers relying on this implementation.
+>
+> >
+> > Signed-off-by: Pankaj Gupta <pankaj.gupta.linux@gmail.com>
+> > ---
+> >  drivers/nvdimm/nd_virtio.c   | 74 +++++++++++++++++++++++++++---------
+> >  drivers/nvdimm/virtio_pmem.c | 10 +++++
+> >  drivers/nvdimm/virtio_pmem.h | 16 ++++++++
+> >  3 files changed, 83 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/drivers/nvdimm/nd_virtio.c b/drivers/nvdimm/nd_virtio.c
+> > index 10351d5b49fa..179ea7a73338 100644
+> > --- a/drivers/nvdimm/nd_virtio.c
+> > +++ b/drivers/nvdimm/nd_virtio.c
+> > @@ -100,26 +100,66 @@ static int virtio_pmem_flush(struct nd_region *nd_region)
+> >  /* The asynchronous flush callback function */
+> >  int async_pmem_flush(struct nd_region *nd_region, struct bio *bio)
+> >  {
+> > -       /*
+> > -        * Create child bio for asynchronous flush and chain with
+> > -        * parent bio. Otherwise directly call nd_region flush.
+> > +       /* queue asynchronous flush and coalesce the flush requests */
+> > +       struct virtio_device *vdev = nd_region->provider_data;
+> > +       struct virtio_pmem *vpmem  = vdev->priv;
+> > +       ktime_t req_start = ktime_get_boottime();
+> > +       int ret = -EINPROGRESS;
+> > +
+> > +       spin_lock_irq(&vpmem->lock);
+>
+> Why a new lock and not continue to use ->pmem_lock?
 
-So, should we keep the legacy and apply the proposal patch to fix this
-conflict (I can send a V3 with a fixes tag on patch 3 and 4 as
-recommended by Miquel)?
-Or should we revert the Write Protect management in NVMEM framework
-but in this case I will not be able to handle such modifications (I am
-not able to test those drivers).
+This spinlock is to protect entry in 'wait_event_lock_irq'
+and the Other spinlock is to protect virtio queue data.
+>
+> Have you tested this with CONFIG_PROVE_LOCKING?
+No, I only ran xfs tests and some of my unit test program.
+Will enable and test with CONFIG_PROVE_LOCKING.
 
-Regards,
-Christophe Kerello.
+>
+> Along those lines do you have a selftest that can be added to the
+> kernel as well so that 0day or other bots could offer early warnings
+> on regressions?
 
->>
->> Based on the comments made, it seems that we also agree that this write
->> protection should be handled by MTD subsystems or associated drivers and not
->> by MVMEN framework for MTD use cases.
->>
->> The proposal implementation should solve this conflict for MTD framework
->> without breaking anything for others NVMEM users (EEPROMs flashes for
->> example).
-> 
+Will try to add one.
+
+Thank you Dan for the feedback!
+
+Best regards,
+Pankaj
+>
+> > +       /* flush requests wait until ongoing flush completes,
+> > +        * hence coalescing all the pending requests.
+> >          */
+> > -       if (bio && bio->bi_iter.bi_sector != -1) {
+> > -               struct bio *child = bio_alloc(GFP_ATOMIC, 0);
+> > -
+> > -               if (!child)
+> > -                       return -ENOMEM;
+> > -               bio_copy_dev(child, bio);
+> > -               child->bi_opf = REQ_PREFLUSH;
+> > -               child->bi_iter.bi_sector = -1;
+> > -               bio_chain(child, bio);
+> > -               submit_bio(child);
+> > -               return 0;
+> > +       wait_event_lock_irq(vpmem->sb_wait,
+> > +                           !vpmem->flush_bio ||
+> > +                           ktime_before(req_start, vpmem->prev_flush_start),
+> > +                           vpmem->lock);
+> > +       /* new request after previous flush is completed */
+> > +       if (ktime_after(req_start, vpmem->prev_flush_start)) {
+> > +               WARN_ON(vpmem->flush_bio);
+> > +               vpmem->flush_bio = bio;
+> > +               bio = NULL;
+> > +       }
+> > +       spin_unlock_irq(&vpmem->lock);
+> > +
+> > +       if (!bio)
+> > +               queue_work(vpmem->pmem_wq, &vpmem->flush_work);
+> > +       else {
+> > +       /* flush completed in other context while we waited */
+> > +               if (bio && (bio->bi_opf & REQ_PREFLUSH))
+> > +                       bio->bi_opf &= ~REQ_PREFLUSH;
+> > +               else if (bio && (bio->bi_opf & REQ_FUA))
+> > +                       bio->bi_opf &= ~REQ_FUA;
+> > +
+> > +               ret = vpmem->prev_flush_err;
+> >         }
+> > -       if (virtio_pmem_flush(nd_region))
+> > -               return -EIO;
+> >
+> > -       return 0;
+> > +       return ret;
+> >  };
+> >  EXPORT_SYMBOL_GPL(async_pmem_flush);
+> > +
+> > +void submit_async_flush(struct work_struct *ws)
+>
+> This name is too generic to be exported from drivers/nvdimm/nd_virtio.c
+>
+> ...it strikes me that there is little reason for nd_virtio and
+> virtio_pmem to be separate modules. They are both enabled by the same
+> Kconfig, so why not combine them into one module and drop the exports?
+
+makes sense.
+>
+> > +{
+> > +       struct virtio_pmem *vpmem = container_of(ws, struct virtio_pmem, flush_work);
+> > +       struct bio *bio = vpmem->flush_bio;
+> > +
+> > +       vpmem->start_flush = ktime_get_boottime();
+> > +       vpmem->prev_flush_err = virtio_pmem_flush(vpmem->nd_region);
+> > +       vpmem->prev_flush_start = vpmem->start_flush;
+> > +       vpmem->flush_bio = NULL;
+> > +       wake_up(&vpmem->sb_wait);
+> > +
+> > +       if (vpmem->prev_flush_err)
+> > +               bio->bi_status = errno_to_blk_status(-EIO);
+> > +
+> > +       /* Submit parent bio only for PREFLUSH */
+> > +       if (bio && (bio->bi_opf & REQ_PREFLUSH)) {
+> > +               bio->bi_opf &= ~REQ_PREFLUSH;
+> > +               submit_bio(bio);
+> > +       } else if (bio && (bio->bi_opf & REQ_FUA)) {
+> > +               bio->bi_opf &= ~REQ_FUA;
+> > +               bio_endio(bio);
+> > +       }
+> > +}
+> > +EXPORT_SYMBOL_GPL(submit_async_flush);
+> >  MODULE_LICENSE("GPL");
+> > diff --git a/drivers/nvdimm/virtio_pmem.c b/drivers/nvdimm/virtio_pmem.c
+> > index 726c7354d465..75ed9b7ddea1 100644
+> > --- a/drivers/nvdimm/virtio_pmem.c
+> > +++ b/drivers/nvdimm/virtio_pmem.c
+> > @@ -24,6 +24,7 @@ static int init_vq(struct virtio_pmem *vpmem)
+> >                 return PTR_ERR(vpmem->req_vq);
+> >
+> >         spin_lock_init(&vpmem->pmem_lock);
+> > +       spin_lock_init(&vpmem->lock);
+> >         INIT_LIST_HEAD(&vpmem->req_list);
+> >
+> >         return 0;
+> > @@ -57,7 +58,14 @@ static int virtio_pmem_probe(struct virtio_device *vdev)
+> >                 dev_err(&vdev->dev, "failed to initialize virtio pmem vq's\n");
+> >                 goto out_err;
+> >         }
+> > +       vpmem->pmem_wq = alloc_workqueue("vpmem_wq", WQ_MEM_RECLAIM, 0);
+> > +       if (!vpmem->pmem_wq) {
+> > +               err = -ENOMEM;
+> > +               goto out_err;
+> > +       }
+> >
+> > +       INIT_WORK(&vpmem->flush_work, submit_async_flush);
+> > +       init_waitqueue_head(&vpmem->sb_wait);
+> >         virtio_cread_le(vpmem->vdev, struct virtio_pmem_config,
+> >                         start, &vpmem->start);
+> >         virtio_cread_le(vpmem->vdev, struct virtio_pmem_config,
+> > @@ -90,10 +98,12 @@ static int virtio_pmem_probe(struct virtio_device *vdev)
+> >                 goto out_nd;
+> >         }
+> >         nd_region->provider_data = dev_to_virtio(nd_region->dev.parent->parent);
+> > +       vpmem->nd_region = nd_region;
+> >         return 0;
+> >  out_nd:
+> >         nvdimm_bus_unregister(vpmem->nvdimm_bus);
+> >  out_vq:
+> > +       destroy_workqueue(vpmem->pmem_wq);
+> >         vdev->config->del_vqs(vdev);
+> >  out_err:
+> >         return err;
+> > diff --git a/drivers/nvdimm/virtio_pmem.h b/drivers/nvdimm/virtio_pmem.h
+> > index 0dddefe594c4..495dc20e1cdb 100644
+> > --- a/drivers/nvdimm/virtio_pmem.h
+> > +++ b/drivers/nvdimm/virtio_pmem.h
+> > @@ -35,9 +35,24 @@ struct virtio_pmem {
+> >         /* Virtio pmem request queue */
+> >         struct virtqueue *req_vq;
+> >
+> > +       struct bio *flush_bio;
+> > +       /* last_flush is when the last completed flush was started */
+> > +       ktime_t prev_flush_start, start_flush;
+> > +       int prev_flush_err;
+> > +
+> > +       /* work queue for deferred flush */
+> > +       struct work_struct flush_work;
+> > +       struct workqueue_struct *pmem_wq;
+> > +
+> > +       /* Synchronize flush wait queue data */
+> > +       spinlock_t lock;
+> > +       /* for waiting for previous flush to complete */
+> > +       wait_queue_head_t sb_wait;
+> > +
+> >         /* nvdimm bus registers virtio pmem device */
+> >         struct nvdimm_bus *nvdimm_bus;
+> >         struct nvdimm_bus_descriptor nd_desc;
+> > +       struct nd_region *nd_region;
+> >
+> >         /* List to store deferred work if virtqueue is full */
+> >         struct list_head req_list;
+> > @@ -52,4 +67,5 @@ struct virtio_pmem {
+> >
+> >  void virtio_pmem_host_ack(struct virtqueue *vq);
+> >  int async_pmem_flush(struct nd_region *nd_region, struct bio *bio);
+> > +void submit_async_flush(struct work_struct *ws);
+> >  #endif
+> > --
+> > 2.25.1
+> >
+> >
